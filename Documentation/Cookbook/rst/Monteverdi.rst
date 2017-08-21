@@ -72,11 +72,11 @@ Image displaying
 This part of the main window is intended to display the images loaded by
 the user. There are many nice keyboard shortcuts or mouse tricks that
 let the user have a better experience in navigating throughout the
-loaded images. These shortcuts and tricks are given within the Help item
-of the main menu, by clicking Keymap; here is a short list of the most
-useful ones:
+loaded images. These shortcuts and tricks are provided within the Help item
+of the main menu under Keymap. Here is a short list of the most
+commonly used ones:
 
-The classical ones:
+The standard ones:
 
 -  CTRL+O = Open file(s)
 
@@ -108,8 +108,8 @@ Right side dock
 
 The dock on the right side is divided into four tabs:
 
--  Quicklook: gives the user a degraded view of the whole extent,
-   letting him/her easily select the area to be displayed
+-  Quicklook: provides an overview of the full extent of the image,
+   and allows one to easily select the area to be displayed.
 
 -  Histogram: gives the user information about the value distribution
    of the selected channels. By clicking the mouse’s left button, user
@@ -220,7 +220,7 @@ placed exactly at the same position in the screenshots).
 
 Segmentation
 ~~~~~~~~~~~~
-From within Monteverdi, the Segmentation application can by launched using the 
+From within Monteverdi, the Segmentation application can be launched using the 
 shortcut CTRL+A. We let the user take a look at the application’s documentation;
 let’s simply say that as we wish we could display the segmentation with
 , we must tell the application to output the segmentation in raster

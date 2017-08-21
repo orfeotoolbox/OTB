@@ -87,14 +87,14 @@ Pan-sharpening
 
 Because of physical constrains on the sensor design, it is difficult to
 achieve high spatial and spectral resolution at the same time: a better
-spatial resolution means a smaller detector, which in turns means lesser
+spatial resolution means a smaller detector, which in turn means lesser
 optical flow on the detector surface. On the contrary, spectral bands
 are obtained through filters applied on the detector surface, that
 lowers the optical flow, so that it is necessary to increase the
 detector size to achieve an acceptable signal to noise ratio.
 
 For these reasons, many high resolution satellite payload are composed
-of two sets of detectors, which in turns delivers two different kind of
+of two sets of detectors, which in turn delivers two different kind of
 images:
 
 -  The multi-spectral (XS) image, composed of 3 to 8 spectral bands
@@ -194,7 +194,7 @@ Figure 5: Pan-sharpened image using Orfeo ToolBox.
 Please also note that since registration and zooming of the
 multi-spectral image with the panchromatic image relies on sensor
 modelling, this tool will work only for images whose sensor models is
-available in **Orfeo Toolbox** (see :ref:`section3` for a detailed
+available in **Orfeo ToolBox** (see :ref:`section3` for a detailed
 list). It will also work with ortho-ready products in cartographic
 projection.
 
@@ -207,37 +207,37 @@ A Digital Elevation Model (DEM) is a georeferenced image (or collection
 of images) where each pixel corresponds to a local elevation. DEM are
 useful for tasks involving sensor to ground and ground to sensor
 coordinate transforms, like during ortho-rectification (see :ref:`section3`). These transforms need to find the intersection
-between the line of sight of the sensor and the earth geoid. If a simple
-spheroid is used as the earth model, potentially high localisation
+between the line of sight of the sensor and the Earth geoid. If a simple
+spheroid is used as the Earth model, potentially high localisation
 errors can be made in areas where elevation is high or perturbed. Of
 course, DEM accuracy and resolution have a great impact on the precision
-of these transforms.
+of these transformations.
 
 Two main available DEM, free of charges, and with worldwide cover, are
 both delivered as 1 degree by 1 degree tiles:
 
 -  `The Shuttle Radar topographic Mission
-   (SRTM) <http://www2.jpl.nasa.gov/srtm/>`_  is a 90 meters resolution
-   DEM, obtained by radar interferometry during a campaign of the
+   (SRTM) <http://www2.jpl.nasa.gov/srtm/>`_  is a DEM with a resolution of 90 metres,
+   obtained by radar interferometry during a campaign of the
    Endeavour space shuttle from NASA in 2000.
 
 -  The `Advanced Spaceborne Thermal Emission and Reflection Radiometer
-   (ASTER) <http://www.ersdac.or.jp/GDEM/E/2.html>`_  is a 30 meters
-   resolution DEM obtained by stereoscopic processing of the archive of
+   (ASTER) <http://www.ersdac.or.jp/GDEM/E/2.html>`_  is a DEM with a resolution of 
+   30 metres obtained by stereoscopic processing of the archive of
    the ASTER instrument.
 
-The **Orfeo Toolbox** relies on `OSSIM <http://www.ossim.org/>`_
+The **Orfeo ToolBox** relies on `OSSIM <http://www.ossim.org/>`_
 capabilities for sensor modelling and DEM handling. Tiles of a given DEM
 are supposed to be located within a single directory. General elevation
 support is also supported from GeoTIFF files.
 
 Whenever an application or **Monteverdi** module requires a DEM, the
 option **elev.dem** allows set the DEM directory. This directory must
-contains the DEM tiles, either in DTED or SRTM format, either as GeoTIFF
-files. Subdirectories are not supported.
+contain the DEM tiles, either in DTED or SRTM format or as a GeoTIFF.
+Subdirectories are not supported.
 
 Depending on the reference of the elevation, you also need to use a
-geoid to manage elevation accurately. For this, you need to specify a
+geoid to accurately manage the elevation. For this, you need to specify a
 path to a file which contains the geoid. `Geoid <http://en.wikipedia.org/wiki/Geoid>`_
 corresponds to the equipotential surface that would coincide with the mean ocean surface of
 the Earth.
@@ -290,7 +290,7 @@ Ortho-rectification can be performed either with **OTB Applications** or
 **Monteverdi** . Sensor parameters and image meta-data are seamlessly
 read from the image files without needing any user interaction, provided
 that all auxiliary files are available. The sensor for which **Orfeo
-Toolbox** supports ortho-rectification of raw products are the
+ToolBox** supports ortho-rectification of raw products are the
 following:
 
 -  Pleiades
@@ -306,7 +306,7 @@ following:
 -  WorldView
 
 In addition, GeoTiff and other file format with geographical information
-are seamlessly read by **Orfeo Toolbox** , and the ortho-rectification
+are seamlessly read by **Orfeo ToolBox** , and the ortho-rectification
 tools can be used to re-sample these images in another map projection.
 
 Beware of “ortho-ready” products
@@ -331,7 +331,7 @@ it. Obviously, this map projection is not as accurate as the sensor
 parameters of the raw geometry. In addition, the impact of the elevation
 model can’t be observed if the map projection is used. In order to
 perform an ortho-rectification on this type of product, the map
-projection has to be hidden from **Orfeo Toolbox** .
+projection has to be hidden from **Orfeo ToolBox** .
 
 You can see if a product is an “ortho-ready” product by using ``gdalinfo`` or
 OTB ReadImageInfo application.
@@ -343,7 +343,7 @@ Check if your product verifies following two conditions:
 -  The product has a map projection: you should see a projection name
    with physical origin and spacing.
 
-In that case, you can hide the map projection from the **Orfeo Toolbox**
+In that case, you can hide the map projection from the **Orfeo ToolBox**
 by using *extended* filenames. Instead of using the plain input image
 path, you append a specific key at the end:
 

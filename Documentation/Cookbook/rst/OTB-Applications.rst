@@ -3,15 +3,16 @@ A brief tour of OTB Applications
 
 OTB ships with more than 90 ready to use applications for remote sensing tasks.
 They usually expose existing processing functions from the underlying C++
-library, or compose them into high level pipelines. OTB applications allow to:
+library, or integrate them into high level pipelines. OTB applications allow the user 
+to:
 
--  Combine together two or more functions from the Orfeo Toolbox,
+-  Combine two or more functions from the Orfeo ToolBox,
 
--  Provide a nice high level interface to handle: parameters, input
-   data, output data and communication with the user.
+-  Provide a high level interface to handle: input and output data, 
+   definition of parameters and communication with the user.
 
 OTB applications can be launched in different ways, and accessed from different
-entry points. The framework can be extended, but Orfeo Toolbox ships with the following:
+entry points. While the framework can be extended, the Orfeo ToolBox ships with the following:
 
 -  A command-line launcher, to call applications from the terminal,
 
@@ -50,16 +51,15 @@ results in the following help to be displayed:
     Usage: ./otbApplicationLauncherCommandLine module_name [MODULEPATH] [arguments]
 
 The ``module_name`` parameter corresponds to the application name. The
-``[MODULEPATH]`` argument is optional and allows to pass to the launcher
-a path where the shared library (or plugin) corresponding to
-``module_name`` is.
+``[MODULEPATH]`` argument is optional and allows the path to the shared library 
+(or plugin) correpsonding to the ``module_name`` to be passed to the launcher.
 
 It is also possible to set this path with the environment variable
 ``OTB_APPLICATION_PATH``, making the ``[MODULEPATH]`` optional. This
 variable is checked by default when no ``[MODULEPATH]`` argument is
 given. When using multiple paths in ``OTB_APPLICATION_PATH``, one must
 make sure to use the standard path separator of the target system, which
-is ``:`` on Unix, and ``;`` on Windows.
+is ``:`` on Unix and ``;`` on Windows.
 
 An error in the application name (i.e. in parameter ``module_name``)
 will make the ``otbApplicationLauncherCommandLine`` lists the name of
@@ -73,12 +73,12 @@ standard application installation path to the ``OTB_APPLICATION_PATH``
 environment variable.
 
 These scripts are named ``otbcli_<ApplicationName>`` and do not need any
-path settings. For example you can start the Orthorectification
+path settings. For example, you can start the Orthorectification
 application with the script called ``otbcli_Orthorectification``.
 
-Launching an application with no or incomplete parameters will make the
-launcher display a summary of the parameters, indicating the mandatory
-parameters missing to allow for application execution. Here is an
+Launching an application without parameters, or with incomplete parameters, will cause the
+launcher to display a summary of the parameters. This summary will display the minimum set
+of parameters that are required to execute the application. Here is an
 example with the OrthoRectification application:
 
 ::
@@ -129,7 +129,7 @@ chapter [chap:apprefdoc], page  or follow the ``DOCUMENTATION``
 hyperlink provided in ``otbApplicationLauncherCommandLine`` output.
 Parameters are passed to the application using the parameter key (which
 might include one or several ``.`` character), prefixed by a ``-``.
-Command-line examples are provided in chapter [chap:apprefdoc], page .
+Command-line examples are provided in chapter [chap:apprefdoc], page.
 
 Graphical launcher
 ------------------
@@ -138,8 +138,7 @@ The graphical interface for the applications provides a useful
 interactive user interface to set the parameters, choose files, and
 monitor the execution progress.
 
-This launcher needs the same two arguments as the command line launcher
-:
+This launcher needs the same two arguments as the command line launcher:
 
 ::
 
@@ -207,10 +206,10 @@ configured automatically so you don’t need to tweak
 In the ``otbApplication`` module, two main classes can be manipulated :
 
 -  ``Registry``, which provides access to the list of available
-   applications, and can create applications
+   applications, and can create applications.
 
 -  ``Application``, the base class for all applications. This allows to
-   interact with an application instance created by the ``Registry``
+   interact with an application instance created by the ``Registry``.
 
 Here is one example of how to use Python to run the ``Smoothing``
 application, changing the algorithm at each iteration.
@@ -372,7 +371,7 @@ The processing toolbox
 
 OTB applications are available from QGIS. Use them from the processing
 toolbox, which is accessible with Processing :math:`\rightarrow`
-Toolbox. Switch to “advanced interface” in the bottom of the application
+ToolBox. Switch to “advanced interface” in the bottom of the application
 widget and OTB applications will be there.
 
 .. figure:: Art/QtImages/qgis-otb.png
