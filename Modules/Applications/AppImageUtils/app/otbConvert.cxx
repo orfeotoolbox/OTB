@@ -386,8 +386,8 @@ private:
   }
 
 
-// TODO comment function
-void GetChannels()
+  // TODO comment function
+  void GetChannels()
   {
     m_Channels.clear();
 
@@ -419,37 +419,37 @@ void GetChannels()
     }
   }
 
-// TODO comment
-void GetSelectedChannels()
-{
-  const bool monoChannel = IsParameterEnabled("channels.mono");
-  if (IsParameterEnabled("channels.rgb") || monoChannel)
+  // TODO comment
+  void GetSelectedChannels()
+  {
+    const bool monoChannel = IsParameterEnabled("channels.mono");
+    if (IsParameterEnabled("channels.rgb") || monoChannel)
     {
-    otbAppLogINFO( << "Select channels ...");
-    GetChannels();
+      otbAppLogINFO( << "Select channels ...");
+      GetChannels();
 
-    m_Input->UpdateOutputInformation();
+      m_Input->UpdateOutputInformation();
 
-    for (std::vector<int>::iterator j=m_Channels.begin(); j!=m_Channels.end(); ++j)
+      for (std::vector<int>::iterator j=m_Channels.begin(); j!=m_Channels.end(); ++j)
       {
-      ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-      extractROIFilter->SetInput(m_Input);
+        ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+        extractROIFilter->SetInput(m_Input);
 
-      if (!monoChannel) extractROIFilter->SetChannel((*j)+1);
-      extractROIFilter->UpdateOutputInformation();
-      m_ExtractorList->PushBack(extractROIFilter);
-      m_ImageList->PushBack(extractROIFilter->GetOutput());
+        if (!monoChannel) extractROIFilter->SetChannel((*j)+1);
+        extractROIFilter->UpdateOutputInformation();
+        m_ExtractorList->PushBack(extractROIFilter);
+        m_ImageList->PushBack(extractROIFilter->GetOutput());
       }
-    m_Concatener->SetInput(m_ImageList);
-    m_Concatener->UpdateOutputInformation();
+      m_Concatener->SetInput(m_ImageList);
+      m_Concatener->UpdateOutputInformation();
 
-    m_TempImage = m_Concatener->GetOutput();
+      m_TempImage = m_Concatener->GetOutput();
     }
-  else
+    else
     {
-    m_TempImage = m_Input;
+      m_TempImage = m_Input;
     }
-}
+  }
 
   void DoExecute() ITK_OVERRIDE
   {
