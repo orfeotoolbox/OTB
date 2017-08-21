@@ -247,6 +247,41 @@ ListEditWidget
   );
 }
 
+/*******************************************************************************/
+void
+ListEditWidget
+::on_downButton_clicked()
+{
+  // qDebug() << this << "::on_downButton_clicked()";
+
+  assert( m_UI!=nullptr );
+  assert( m_UI->treeView!=nullptr );
+  assert( m_UI->treeView->selectionModel()!=nullptr );
+
+
+  QModelIndexList indexes(
+    m_UI->treeView->selectionModel()->selectedRows()
+  );
+
+  if( indexes.empty() )
+    return;
+
+  assert( indexes.size()==1 );
+
+
+  const QModelIndex & front = indexes.front();
+
+  if( front.row() >= GetItemModel()->rowCount() - 1 )
+    return;
+
+
+  Swap(
+    front.row(),
+    front.row() + 1,
+    RIGHT
+  );
+}
+
 } // end namespace 'Wrapper'
 
 } // end namespace 'otb'
