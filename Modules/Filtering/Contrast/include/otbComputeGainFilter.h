@@ -96,9 +96,6 @@ protected :
 
   // void AfterThreadedGenerateData();
 
-  float Postprocess( const LutPixelType & lut ,
-                     int pixelValue );
-
   float InterpoleGain( typename LutType::ConstPointer gridLut ,
                        int pixelValue , 
                        typename InputImageType::IndexType index);

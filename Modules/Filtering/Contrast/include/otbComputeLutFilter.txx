@@ -39,6 +39,18 @@ ComputeLutFilter < TInputImage , TOutputImage >
 }
 
 template <class TInputImage, class TOutputImage >
+typename TOutputImage::InternalPixelType ComputeLutFilter < TInputImage , TOutputImage >
+::PostProcess( int countMapValue ,
+               int countValue )
+{ 
+  float denum = countValue * m_Step + m_Min;
+  if ( denum == 0 )
+    denum = 1.0;
+  return static_cast< OutputPixelType > ((countMapValue * m_Step + m_Min) \
+          / denum );
+}
+
+template <class TInputImage, class TOutputImage >
 void ComputeLutFilter < TInputImage , TOutputImage >
 ::GenerateData()
 {
@@ -82,6 +94,8 @@ void ComputeLutFilter <TInputImage , TOutputImage >
 ::BeforeThreadedGenerateData()
 {
   m_NbBin = this->GetInput()->GetNumberOfComponentsPerPixel();
+  m_Step = static_cast<double>( m_Max - m_Min ) \
+                / static_cast<double>( m_NbBin -1 );
 }
 
 template <class TInputImage , class TOutputImage >
@@ -137,10 +151,10 @@ void ComputeLutFilter < TInputImage , TOutputImage >
 {
   int countMapValue = 0;
   int countValue = 0;
-  lut[countValue] = 0; // Black stays black
+  lut[countValue] = 1; // Black stays black
   ++countValue;
   int countInput  = inputHisto[ 0 ] + inputHisto[ countValue ];
-  lut[m_NbBin - 1 ] = m_NbBin - 1 ; // White stays white
+  lut[m_NbBin - 1 ] = 1 ; // White stays white
   int countTarget = targetHisto[ countMapValue ];
 
   while ( countMapValue< (m_NbBin) && countValue< ( m_NbBin - 1 ) )
@@ -152,7 +166,7 @@ void ComputeLutFilter < TInputImage , TOutputImage >
       }
     else
       { 
-      lut[countValue] =  countMapValue ;
+      lut[countValue] =  PostProcess( countValue ,countMapValue );
       ++countValue;
       countInput  += inputHisto[ countValue ];
       }
@@ -161,7 +175,7 @@ void ComputeLutFilter < TInputImage , TOutputImage >
     {
     if (lut[i] == -1)
       {
-      lut[i] = lut[i-1];  
+      lut[i] = 1;
       } 
     }
 }
@@ -184,6 +198,7 @@ void ComputeLutFilter < TInputImage , TOutputImage >
     ++targetHisto[(m_NbBin - rest)/2 + i];
     }  
 }
+
   // End namespace otb
 }
 

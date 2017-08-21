@@ -40,14 +40,20 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef typename InputImageType::InternalPixelType InputPixelType;
+  typedef typename OutputImageType::PixelType HistoType;
+
+  typedef typename OutputImageType::InternalPixelType OutputPixelType;
 
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
-  typedef typename TInputImage::PixelType HistoType;
 
   typedef unsigned int ThreadIdType;
 
+  itkSetMacro(Min, double);
+  itkGetMacro(Min, double);
+
+  itkSetMacro(Max, double);
+  itkGetMacro(Max, double);
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
@@ -56,6 +62,9 @@ public:
 protected:
   ComputeLutFilter();
   ~ComputeLutFilter() ITK_OVERRIDE {}
+
+  OutputPixelType PostProcess( int countMapValue ,
+                               int countValue );
 
   // Call  BeforeThreadedGenerateData after getting the number of thread
   void GenerateData();
@@ -79,6 +88,9 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   int m_NbBin;
+  double m_Min;
+  double m_Max;
+  double m_Step;
 
 };
 

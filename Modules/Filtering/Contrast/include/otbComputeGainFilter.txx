@@ -128,7 +128,7 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
                                                     outputRegionForThread );
   it.GoToBegin();
   oit.GoToBegin();
-  int pixelValue = 0;
+  int pixelLutValue = 0;
   float gain = 0.0;
   while ( !oit.IsAtEnd() )
     {
@@ -139,8 +139,8 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
       ++oit;
       continue;
       }
-    pixelValue = static_cast<int>( std::round( ( it.Get() - m_Min ) / m_Step ) );
-    gain = InterpoleGain( lut , pixelValue , it.GetIndex() );
+    pixelLutValue = static_cast<int>( std::round( ( it.Get() - m_Min ) / m_Step ) );
+    gain = InterpoleGain( lut , pixelLutValue , it.GetIndex() );
     oit.Set( static_cast<OutputPixelType>( gain * it.Get() ) );
     ++it;
     ++oit;
@@ -150,20 +150,8 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
 
 template <class TInputImage , class TLut , class TOutputImage >
 float ComputeGainFilter < TInputImage , TLut , TOutputImage >
-::Postprocess( const LutPixelType & lut ,
-               int pixelValue )
-{ 
-  float denum = pixelValue * m_Step + m_Min;
-  if ( denum == 0 )
-    denum = 1.0;
-  return (lut[ pixelValue ] * m_Step + m_Min) \
-          / denum ;
-}
-
-template <class TInputImage , class TLut , class TOutputImage >
-float ComputeGainFilter < TInputImage , TLut , TOutputImage >
 ::InterpoleGain( typename LutType::ConstPointer gridLut,
-                 int pixelValue ,
+                 int pixelLutValue ,
                  typename InputImageType::IndexType index)
 {
   LutIndexType lutIndex;
@@ -176,7 +164,7 @@ float ComputeGainFilter < TInputImage , TLut , TOutputImage >
   float disty = std::abs(y - 0.5);
   float distx = std::abs(x - 0.5);
   float w = (1 - distx )*(1 - disty );
-  float gain = Postprocess( gridLut->GetPixel(lutIndex) , pixelValue ) * \
+  float gain = gridLut->GetPixel(lutIndex)[pixelLutValue] * \
               (1 - distx ) * (1 - disty ) ;
   typename LutType::OffsetType rightOffSet , upOffSet , leftOffSet , downOffSet;
   rightOffSet.Fill(0);
@@ -197,50 +185,50 @@ float ComputeGainFilter < TInputImage , TLut , TOutputImage >
         ( ( downOffSet[1] + lutIndex[1] ) < static_cast<int>( m_LutSize[1] ) );
   if ( right )
     {
-    gain += Postprocess( gridLut->GetPixel(lutIndex + rightOffSet) , pixelValue ) \
+    gain += ( gridLut->GetPixel(lutIndex + rightOffSet)[pixelLutValue] ) \
             * (1 - disty ) * distx;
     w += (1 - disty ) * distx;
     }
   if ( left )
     {
-    gain += Postprocess( gridLut->GetPixel(lutIndex + leftOffSet) , pixelValue ) \
+    gain += ( gridLut->GetPixel(lutIndex + leftOffSet)[pixelLutValue] ) \
             * (1 - disty ) * distx;
     w += (1 - disty ) * distx;
     }
   if ( up )
     {
-    gain += Postprocess( gridLut->GetPixel(lutIndex + upOffSet) , pixelValue ) \
+    gain += ( gridLut->GetPixel(lutIndex + upOffSet)[pixelLutValue] ) \
             * disty * (1 - distx );
     w += disty * (1 - distx );
     }
   if ( down )
     {
-    gain += Postprocess( gridLut->GetPixel(lutIndex + downOffSet) , pixelValue ) \
+    gain += ( gridLut->GetPixel(lutIndex + downOffSet)[pixelLutValue] ) \
             * disty * (1 - distx );
     w += disty * (1 - distx );
     }
   if ( up && left )
     {
-    gain += Postprocess( gridLut->GetPixel(lutIndex + upOffSet + leftOffSet) , 
-                         pixelValue ) * disty * distx;
+    gain += gridLut->GetPixel(lutIndex + upOffSet + leftOffSet)[pixelLutValue] \
+              * disty * distx;
     w += disty * distx;
     }
   if ( down && left )
     {
-    gain += Postprocess( gridLut->GetPixel(lutIndex + downOffSet + leftOffSet) ,
-                         pixelValue ) * disty * distx;
+    gain += gridLut->GetPixel(lutIndex + downOffSet + leftOffSet)[pixelLutValue] \
+              * disty * distx;
     w += disty * distx;
     }
   if ( up && right )
     {
-    gain += Postprocess( gridLut->GetPixel(lutIndex + upOffSet + rightOffSet) ,
-                         pixelValue ) * disty * distx;
+    gain += gridLut->GetPixel(lutIndex + upOffSet + rightOffSet)[pixelLutValue] \
+              * disty * distx;
     w += disty * distx ;
     }
   if ( down && right )
     {
-    gain += Postprocess( gridLut->GetPixel(lutIndex + downOffSet + rightOffSet) ,
-                         pixelValue ) * disty * distx;
+    gain += gridLut->GetPixel(lutIndex + downOffSet + rightOffSet)[pixelLutValue] \
+              * disty * distx;
     w += disty * distx;
     }
 
