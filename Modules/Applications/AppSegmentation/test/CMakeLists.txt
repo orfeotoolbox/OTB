@@ -302,7 +302,8 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                               -minsize 16
                               -tilesizex 100
                               -tilesizey 100
-                              -out ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
+                              -mode vector
+                              -mode.vector.out ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
                      VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
                               ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
