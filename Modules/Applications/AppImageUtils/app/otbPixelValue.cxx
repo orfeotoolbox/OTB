@@ -22,6 +22,7 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbMultiChannelExtractROI.h"
+#include "otbGenericRSTransform.h"
 
 namespace otb
 {
@@ -32,14 +33,15 @@ class PixelValue : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef PixelValue                     Self;
+  typedef PixelValue                    Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef otb::MultiChannelExtractROI<FloatVectorImageType::InternalPixelType,
-                                      FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
+              FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
 
+  typedef otb::GenericRSTransform<>  RSTransformType;                                    
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -63,16 +65,24 @@ private:
     AddDocTag("Coordinates");
     AddDocTag("Raster");
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image");
+    AddParameter(ParameterType_InputImage , "in", "Input Image");
+    SetParameterDescription("in" , "Input image");
+    SetParameterString("in" , "/home/antoine/dev/otb-data/Examples/QB_1_ortho.tif");
 
-    AddParameter(ParameterType_Int,"coordx","Col index");
-    SetParameterDescription("coordx","Column index of the wanted pixel (starts at 0).");
-    SetMinimumParameterIntValue("coordx", 0);
+    AddParameter(ParameterType_Float , "coordx" , "X coordinate" );
+    SetParameterDescription("coordx" , " ");
+    AddParameter(ParameterType_Float , "coordy" , "Y coordinate" );
+    SetParameterDescription("coordy" , " ");
 
-    AddParameter(ParameterType_Int,"coordy","Line index");
-    SetParameterDescription("coordy","Line index of the wanted pixel (starts at 0).");
-    SetMinimumParameterIntValue("coordy", 0);
+    AddParameter(ParameterType_Choice , "mode" , 
+          "Coordinate system used to designate the pixel");
+    AddChoice( "mode.ind" , "Index");
+    AddChoice( "mode.phy" , "Image physical space");
+    AddChoice( "mode.epsg" , "EPSG coordinates");
+
+    AddParameter(ParameterType_Int , "epsg" , "EPSG code");
+    SetParameterDescription("epsg" , "EPSG code");
+    MandatoryOff("epsg");
 
     AddParameter(ParameterType_ListView,"cl","Channels");
     SetParameterDescription("cl","Displayed channels");
@@ -108,9 +118,10 @@ private:
         AddChoice(key.str(), item.str());
         }
 
-      ExtractROIFilterType::InputImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
-      SetMaximumParameterIntValue("coordx", largestRegion.GetSize(0)-1);
-      SetMaximumParameterIntValue("coordy", largestRegion.GetSize(1)-1);
+      ExtractROIFilterType::InputImageType::RegionType  
+                      largestRegion = inImage->GetLargestPossibleRegion();
+      // SetMaximumParameterIntValue("coordx", largestRegion.GetSize(0)-1);
+      // SetMaximumParameterIntValue("coordy", largestRegion.GetSize(1)-1);
       }
   }
 
@@ -121,11 +132,45 @@ private:
 
     ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
     extractor->SetInput(inImage);
-
-    // Create the region
     FloatVectorImageType::IndexType id;
-    id[0] = GetParameterInt("coordx");
-    id[1] = GetParameterInt("coordy");
+    bool isPixelIn = false;
+    if (GetParameterString( "mode" ) == "ind" )
+      {
+      id[0] = static_cast< int >( GetParameterFloat( "coordx" ) );
+      id[1] = static_cast< int >( GetParameterFloat( "coordy" ) );
+      if (id[0] >= inImage->GetLargestPossibleRegion().GetSize()[0] 
+       || id[1] >= inImage->GetLargestPossibleRegion().GetSize()[1]
+       || id[0] < 0 || id[1] < 0 )
+        {
+        isPixelIn = false;
+        }
+      else
+        {
+        isPixelIn = true;
+        }
+      }
+
+    if (GetParameterString( "mode" ) == "phy" )
+      {
+      itk::Point<float, 2> pixel;
+      pixel[ 0 ] = GetParameterFloat( "coordx" );
+      pixel[ 1 ] = GetParameterFloat( "coordy" );
+      isPixelIn = inImage->TransformPhysicalPointToIndex(pixel,id);
+      }
+    
+    if (GetParameterString( "mode" ) == "epsg" )
+      {
+      RSTransformType::Pointer rsTransform = RSTransformType::New();
+      rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
+      rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
+      rsTransform->InstantiateTransform();
+      itk::Point<float, 2> pixelIn , pixelOut;
+      pixelIn[ 0 ] = GetParameterFloat( "coordx" );
+      pixelIn[ 1 ] = GetParameterFloat( "coordy" );
+      rsTransform->InstantiateTransform();
+      pixelOut = rsTransform->TransformPoint(pixelIn);
+      isPixelIn = inImage->TransformPhysicalPointToIndex(pixelOut,id);
+      }
 
     FloatVectorImageType::SizeType size;
     size.Fill(0);
@@ -134,8 +179,13 @@ private:
     region.SetSize(size);
     region.SetIndex(id);
 
-    extractor->SetExtractionRegion(region);
 
+    if ( !isPixelIn )
+      {
+      otbAppLogFATAL(<<"Specified position out of the input image");
+      }
+
+    extractor->SetExtractionRegion(region);
     // Extract the channels if needed
     if ( GetParameterByKey("cl")->GetActive() )
       {
@@ -144,16 +194,15 @@ private:
         extractor->SetChannel(GetSelectedItems("cl")[idx] + 1 );
         }
       }
-
+    
     extractor->Update();
-
+    
     // Display the pixel value
     id.Fill(0);
     std::ostringstream oss;
     oss << extractor->GetOutput()->GetPixel(id)<<std::endl;
-
+    
     SetParameterString("value", oss.str(), false);
-
     //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );
   }
