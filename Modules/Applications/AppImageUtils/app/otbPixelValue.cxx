@@ -55,7 +55,11 @@ private:
 
     // Documentation
     SetDocName("Pixel Value");
-    SetDocLongDescription("Get the value of a pixel.\nPay attention, index starts at 0.");
+    SetDocLongDescription("This application gives the value of a selected "
+      "pixel. There are three way of designate a pixel, with its index, "
+      "its physical coordinate (in the physical space attached to the image), "
+      "and with geographical coordinate system. Coordinates will be "
+      "interpreted differently depending on which mode is chosen.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -67,21 +71,37 @@ private:
 
     AddParameter(ParameterType_InputImage , "in", "Input Image");
     SetParameterDescription("in" , "Input image");
-    SetParameterString("in" , "/home/antoine/dev/otb-data/Examples/QB_1_ortho.tif");
+    // SetParameterString("in" , "/home/antoine/dev/otb-data/Examples/QB_1_ortho.tif");
 
     AddParameter(ParameterType_Float , "coordx" , "X coordinate" );
-    SetParameterDescription("coordx" , " ");
+    SetParameterDescription("coordx" ,
+          "This will be the X coordinate interpreted depending on the "
+          "chosen mode");
     AddParameter(ParameterType_Float , "coordy" , "Y coordinate" );
-    SetParameterDescription("coordy" , " ");
+    SetParameterDescription("coordy" ,
+          "This will be the Y coordinate interpreted depending on the "
+          "chosen mode");
 
     AddParameter(ParameterType_Choice , "mode" , 
           "Coordinate system used to designate the pixel");
+    SetParameterDescription( "mode" , 
+          "Different mode can be selected, default mode is Index.");
     AddChoice( "mode.ind" , "Index");
+    SetParameterDescription( "mode.ind" , 
+          "This mode use the given coordinates as index to locate the pixel.");
     AddChoice( "mode.phy" , "Image physical space");
+    SetParameterDescription( "mode.phy" , 
+          "This mode interpret the given coordinates in the image "
+          "physical space.");
     AddChoice( "mode.epsg" , "EPSG coordinates");
+    SetParameterDescription( "mode.epsg" , 
+          "This mode interpret the given coordinates in the specified "
+          "geographical coordinate system by the EPSG code.");
 
     AddParameter(ParameterType_Int , "epsg" , "EPSG code");
-    SetParameterDescription("epsg" , "EPSG code");
+    SetParameterDescription("epsg" ,
+          "This code is used to define a geographical coordinate system. "
+          "If no system is specified, WGS84 (EPSG : 3857) is used by default.");
     MandatoryOff("epsg");
 
     AddParameter(ParameterType_ListView,"cl","Channels");
@@ -117,36 +137,79 @@ private:
         item<<"Channel"<<idx+1;
         AddChoice(key.str(), item.str());
         }
+      }
+  }
 
-      ExtractROIFilterType::InputImageType::RegionType  
-                      largestRegion = inImage->GetLargestPossibleRegion();
-      // SetMaximumParameterIntValue("coordx", largestRegion.GetSize(0)-1);
-      // SetMaximumParameterIntValue("coordy", largestRegion.GetSize(1)-1);
-      if ( GetParameterString( "mode" ) == "epsg" )
+  std::string CreateBoundaryBox( std::string mode )
+  {
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+    FloatVectorImageType::IndexType min , max;
+    min.Fill(0);
+    max[0] = inImage->GetLargestPossibleRegion().GetSize()[0] - 1;
+    max[1] = inImage->GetLargestPossibleRegion().GetSize()[1] - 1;
+    std::string boundaries[4];
+    if (mode == "ind")
+      {
+      boundaries[0] = std::to_string(max[0]);
+      boundaries[1] = std::to_string(max[1]);
+      boundaries[2] = std::to_string(min[0]);
+      boundaries[3] = std::to_string(min[1]);
+      }
+    if (mode == "phy")
+      {
+      itk::Point<float, 2> minP , maxP;
+      inImage->TransformIndexToPhysicalPoint(min,minP);
+      inImage->TransformIndexToPhysicalPoint(max,maxP);
+      boundaries[0] = std::to_string(std::max(minP[0],maxP[0]));
+      boundaries[1] = std::to_string(std::max(minP[1],maxP[1]));
+      boundaries[2] = std::to_string(std::min(minP[0],maxP[0]));
+      boundaries[3] = std::to_string(std::min(minP[1],maxP[1]));
+      }
+    if (mode == "epsg")
+      {
+      RSTransformType::Pointer inverse = RSTransformType::New();
+      if ( HasUserValue("epsg") )
         {
-        MandatoryOn("epsg");
-        if ( !HasUserValue("epsg") )
+        std::string wktFromEpsg = 
+          otb::GeoInformationConversion::ToWKT(GetParameterInt( "epsg" ));
+        inverse->SetOutputProjectionRef(wktFromEpsg);
+        }
+      inverse->SetInputKeywordList( inImage->GetImageKeywordlist() );
+      inverse->SetInputProjectionRef( inImage->GetProjectionRef() );
+      inverse->InstantiateTransform();
+      itk::Point<float, 2> minPOut , maxPOut , minP , maxP;
+      inImage->TransformIndexToPhysicalPoint(min,minP);
+      inImage->TransformIndexToPhysicalPoint(max,maxP);
+      minPOut = inverse->TransformPoint( minP );
+      maxPOut = inverse->TransformPoint( maxP );
+      boundaries[0] = std::to_string(std::max(minP[0],maxP[0]));
+      boundaries[1] = std::to_string(std::max(minP[1],maxP[1]));
+      boundaries[2] = std::to_string(std::min(minP[0],maxP[0]));
+      boundaries[3] = std::to_string(std::min(minP[1],maxP[1]));
+      }
+    if ( mode != "ind" )
+      {
+      for (int i = 0 ; i<4 ; i++)
+        {
+        while (boundaries[i].back() == '0' && boundaries[i].size() > 1)
           {
-          SetDefaultParameterInt("epsg" , 0);
+          boundaries[i].pop_back();
           }
         }
-
       }
+    
+    std::string box = "";
+    box += "["+boundaries[2]+" , "+boundaries[0]+"] x ";
+    box += "["+boundaries[3]+" , "+boundaries[1]+"]";
+    return box;
   }
 
   void DoExecute() ITK_OVERRIDE
   {
-    std::ostringstream ossOutput;
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-
-    ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
-    extractor->SetInput(inImage);
-    FloatVectorImageType::IndexType id , min , max;
-    min.Fill(0);
-    max[0] = inImage->GetLargestPossibleRegion().GetSize()[0];
-    max[1] = inImage->GetLargestPossibleRegion().GetSize()[1];
+    FloatVectorImageType::IndexType id ;
+    id.Fill(0);
     bool isPixelIn = false;
-    std::string box = "";
     if (GetParameterString( "mode" ) == "ind" )
       {
       id[0] = static_cast< int >( GetParameterFloat( "coordx" ) );
@@ -157,34 +220,32 @@ private:
                     inImage->GetLargestPossibleRegion().GetSize()[1]
        || id[0] < 0 || id[1] < 0 )
         {
+        id.Fill(0);
         isPixelIn = false;
         }
       else
         {
         isPixelIn = true;
         }
-      box += "[" + std::to_string(min[0]) + ":" + std::to_string( max[0] ) + "]x";
-      box += "[" + std::to_string(min[1]) + ":" + std::to_string( max[1] ) + "].";
       }
 
     if (GetParameterString( "mode" ) == "phy" )
       {
-      itk::Point<float, 2> pixel , minP , maxP;
+      itk::Point<float, 2> pixel;
       pixel[ 0 ] = GetParameterFloat( "coordx" );
       pixel[ 1 ] = GetParameterFloat( "coordy" );
       isPixelIn = inImage->TransformPhysicalPointToIndex(pixel,id);
-      inImage->TransformIndexToPhysicalPoint(min,minP);
-      inImage->TransformIndexToPhysicalPoint(max,maxP);
-      box += "[" + std::to_string(minP[0]) + ":" + std::to_string( maxP[0] ) + "]x";
-      box += "[" + std::to_string(minP[1]) + ":" + std::to_string( maxP[1] ) + "].";
       }
     
     if (GetParameterString( "mode" ) == "epsg" )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
-      std::string wktFromEpsg = 
-            otb::GeoInformationConversion::ToWKT(GetParameterInt( "epsg" ));
-      rsTransform->SetInputProjectionRef(wktFromEpsg);
+      if ( HasUserValue("epsg") )
+        {
+        std::string wktFromEpsg = 
+          otb::GeoInformationConversion::ToWKT(GetParameterInt( "epsg" ));
+        rsTransform->SetInputProjectionRef(wktFromEpsg);
+        }      
       rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
       rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
       rsTransform->InstantiateTransform();
@@ -194,33 +255,19 @@ private:
       rsTransform->InstantiateTransform();
       pixelOut = rsTransform->TransformPoint(pixelIn);
       isPixelIn = inImage->TransformPhysicalPointToIndex(pixelOut,id);
-      RSTransformType::InverseTransformBasePointer inverse = rsTransform->GetInverseTransform();
-      // inverse->InstantiateTransform();
-      itk::Point<float, 2> minPOut , maxPOut , minP , maxP;
-      inImage->TransformIndexToPhysicalPoint(min,minP);
-      inImage->TransformIndexToPhysicalPoint(max,maxP);
-      minPOut = inverse->TransformPoint( minP) ;
-      maxPOut = inverse->TransformPoint( maxP );
-      box += "[" + std::to_string(minPOut[0]) + ":" + std::to_string( maxPOut[0] ) + "]x";
-      box += "[" + std::to_string(minPOut[1]) + ":" + std::to_string( maxPOut[1] ) + "].";
       }
-
-    FloatVectorImageType::SizeType size;
-    size.Fill(0);
-
-    FloatVectorImageType::RegionType region;
-    region.SetSize(size);
-    region.SetIndex(id);
-
 
     if ( !isPixelIn )
       {
-      std::string why = "Accessible region is in " + box;
-      otbAppLogFATAL(<<"Specified position out of the input image.\n" + why);
-
+      std::string why = "Accessible pixels are in ";
+      why += CreateBoundaryBox( GetParameterString( "mode" ) );
+      why += " for the selected mode.";
+      otbAppLogFATAL(<<"Specified position out of bound.\n" + why);
       }
 
-    extractor->SetExtractionRegion(region);
+    ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
+    extractor->SetInput(inImage);
+
     // Extract the channels if needed
     if ( GetParameterByKey("cl")->GetActive() )
       {
@@ -229,14 +276,20 @@ private:
         extractor->SetChannel(GetSelectedItems("cl")[idx] + 1 );
         }
       }
-    
-    extractor->Update();
-    
+
+    FloatVectorImageType::SizeType size;
+    size.Fill(0);
+    FloatVectorImageType::RegionType region;
+    region.SetSize(size);
+    region.SetIndex(id);
+
+    extractor->SetExtractionRegion(region);
+    extractor->Update();   
+
     // Display the pixel value
     id.Fill(0);
     std::ostringstream oss;
     oss << extractor->GetOutput()->GetPixel(id)<<std::endl;
-    
     SetParameterString("value", oss.str(), false);
     //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );
