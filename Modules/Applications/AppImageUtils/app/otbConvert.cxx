@@ -81,20 +81,8 @@ public:
                                                  FloatVectorImageType,
                                                  TransferLogFunctor>   TransferLogType;
 
-  typedef otb::ImageList<FloatImageType>                               ImageListType;
-  typedef ImageListToVectorImageFilter<ImageListType,
-                                       FloatVectorImageType >          ListConcatenerFilterType;
-  typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
-                                       FloatImageType::PixelType>      ExtractROIFilterType;
-  typedef ObjectList<ExtractROIFilterType>                             ExtractROIFilterListType;
-
 
 private:
-
-  std::string m_channelMode;
-
-  Convert() : m_channelMode("default") {}
-
 
   void DoInit() ITK_OVERRIDE
   {
@@ -178,10 +166,6 @@ private:
     SetParameterDescription("channels.rgb.blue", "TODO");
     SetDefaultParameterInt("channels.rgb.blue", 3);
 
-    m_ExtractorList = ExtractROIFilterListType::New();
-    m_ImageList = ImageListType::New();
-    m_Concatener = ListConcatenerFilterType::New();
-
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -195,18 +179,15 @@ private:
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    m_ImageList = ImageListType::New();
-    m_Concatener = ListConcatenerFilterType::New();
-    m_ExtractorList = ExtractROIFilterListType::New();
+
   }
 
   template<class TImageType>
   void GenericDoExecute()
   {
-    m_channelMode = GetParameterString("channels");
     std::string rescaleType = this->GetParameterString("type");
 
-    typename TImageType::Pointer castIm;
+    GetParameterImage("in")->UpdateOutputInformation();
 
     if( (rescaleType != "none") && (rescaleType != "linear") && (rescaleType != "log2") )
       {
@@ -215,12 +196,15 @@ private:
 
     if( rescaleType == "none" )
       {
-      castIm = this->GetParameterImage<TImageType>("in");
+      // selected channel
+      typename TImageType::Pointer tempImage = TImageType::New();
+      tempImage = GetSelectedChannels<TImageType>();
+
+      SetParameterOutputImage<TImageType>("out", tempImage);
+
       }
     else // linear or log2
       {
-      m_Input = this->GetParameterImage("in");
-
       FloatVectorImageType::Pointer mask;
       bool useMask = false;
       if (IsParameterEnabled("mask"))
@@ -229,10 +213,11 @@ private:
         useMask = true;
         }
 
-      // seleted channel
-      GetSelectedChannels();
+      // selected channel
+      typename FloatVectorImageType::Pointer tempImage = FloatVectorImageType::New();
+      tempImage = GetSelectedChannels<FloatVectorImageType>();
 
-      const unsigned int nbComp(m_TempImage->GetNumberOfComponentsPerPixel());
+      const unsigned int nbComp(tempImage->GetNumberOfComponentsPerPixel());
 
       typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType, TImageType> RescalerType;
       typename TImageType::PixelType minimum;
@@ -254,7 +239,7 @@ private:
 
       // Shrink factor is computed so as to load a quicklook of 1000
       // pixels square at most
-      typename FloatVectorImageType::SizeType imageSize = m_TempImage->GetLargestPossibleRegion().GetSize();
+      typename FloatVectorImageType::SizeType imageSize = tempImage->GetLargestPossibleRegion().GetSize();
       unsigned int shrinkFactor =
         std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
 
@@ -270,7 +255,7 @@ private:
         {
         //define the transfer log
         m_TransferLog = TransferLogType::New();
-        m_TransferLog->SetInput(m_TempImage);
+        m_TransferLog->SetInput(tempImage);
         m_TransferLog->UpdateOutputInformation();
 
         shrinkFilter->SetInput(m_TransferLog->GetOutput());
@@ -279,8 +264,8 @@ private:
         }
       else
         {
-        shrinkFilter->SetInput(m_TempImage);
-        rescaler->SetInput(m_TempImage);
+        shrinkFilter->SetInput(tempImage);
+        rescaler->SetInput(tempImage);
         shrinkFilter->Update();
         }
 
@@ -307,7 +292,7 @@ private:
         }
 
       typename ListSampleType::Pointer listSample = ListSampleType::New();
-      listSample->SetMeasurementVectorSize(m_TempImage->GetNumberOfComponentsPerPixel());
+      listSample->SetMeasurementVectorSize(tempImage->GetNumberOfComponentsPerPixel());
 
       // Now we generate the list of samples
       if (useMask)
@@ -378,78 +363,88 @@ private:
         }
 
       m_TmpFilter = rescaler;
-      castIm = rescaler->GetOutput();
 
+      SetParameterOutputImage<TImageType>("out", rescaler->GetOutput());
       }
-
-    SetParameterOutputImage<TImageType>("out", castIm);
   }
 
 
   // TODO comment function
-  void GetChannels()
+  std::vector<int> GetChannels()
   {
-    m_Channels.clear();
+    std::vector<int> channels;
 
-    m_Input->UpdateOutputInformation();
     int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+    std::string channelMode = GetParameterString("channels");
 
-    if(m_channelMode == "mono")
+      if(channelMode == "mono")
     {
-      m_Channels = {1,1,1};
+      channels = {1,1,1};
     }
-    else if (m_channelMode == "rgb")
+    else if (channelMode == "rgb")
     {
       if ((GetParameterInt("channels.rgb.red") <= nbChan)
       && ( GetParameterInt("channels.rgb.green") <= nbChan)
       && ( GetParameterInt("channels.rgb.blue")   <= nbChan))
       {
-        m_Channels = {GetParameterInt("channels.rgb.red"),
-                      GetParameterInt("channels.rgb.green"),
-                      GetParameterInt("channels.rgb.blue")};
+        channels = {GetParameterInt("channels.rgb.red"),
+                    GetParameterInt("channels.rgb.green"),
+                    GetParameterInt("channels.rgb.blue")};
       }
       else
       {
         itkExceptionMacro(<< "At least one needed channel has an invalid index");
       }
     }
-    else if (m_channelMode == "default")
+    else if (channelMode == "default")
     {
       // take all bands
+      for(auto i=1; i<=nbChan; ++i) channels.push_back(i);
     }
+    return channels;
   }
 
   // TODO comment
-  void GetSelectedChannels()
+  template<class TImageType>
+  typename TImageType::Pointer GetSelectedChannels()
   {
+    typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
+                                         typename TImageType::InternalPixelType>  ExtractROIFilterType;
+    typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
+    typedef otb::ImageList<otb::Image<typename TImageType::InternalPixelType> >   ImageListType;
+    typedef ImageListToVectorImageFilter<ImageListType,
+                                         TImageType >                             ListConcatenerFilterType;
+
+    typename ImageListType::Pointer             m_ImageList;
+    typename ListConcatenerFilterType::Pointer  m_Concatener;
+    typename ExtractROIFilterListType::Pointer  m_ExtractorList;
+
+    m_ImageList = ImageListType::New();
+    m_Concatener = ListConcatenerFilterType::New();
+    m_ExtractorList = ExtractROIFilterListType::New();
+
     const bool monoChannel = IsParameterEnabled("channels.mono");
-    if (IsParameterEnabled("channels.rgb") || monoChannel)
+
+    // get band order
+    std::vector<int> channels = GetChannels();
+
+    for (std::vector<int>::iterator j=channels.begin(); j!=channels.end(); ++j)
     {
-      otbAppLogINFO( << "Select channels ...");
-      GetChannels();
-
-      m_Input->UpdateOutputInformation();
-
-      for (std::vector<int>::iterator j=m_Channels.begin(); j!=m_Channels.end(); ++j)
-      {
-        ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-        extractROIFilter->SetInput(m_Input);
-
-        if (!monoChannel) extractROIFilter->SetChannel((*j)+1);
-        extractROIFilter->UpdateOutputInformation();
-        m_ExtractorList->PushBack(extractROIFilter);
-        m_ImageList->PushBack(extractROIFilter->GetOutput());
-      }
-      m_Concatener->SetInput(m_ImageList);
-      m_Concatener->UpdateOutputInformation();
-
-      m_TempImage = m_Concatener->GetOutput();
+      typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+      extractROIFilter->SetInput(GetParameterImage("in"));
+      if (!monoChannel) extractROIFilter->SetChannel((*j));
+      extractROIFilter->UpdateOutputInformation();
+      m_ExtractorList->PushBack(extractROIFilter);
+      m_ImageList->PushBack(extractROIFilter->GetOutput());
     }
-    else
-    {
-      m_TempImage = m_Input;
-    }
+
+    m_Concatener->SetInput(m_ImageList);
+    m_Concatener->UpdateOutputInformation();
+    m_Concatener->Update();
+
+    return m_Concatener->GetOutput();
   }
+
 
   void DoExecute() ITK_OVERRIDE
   {
@@ -484,12 +479,6 @@ private:
 
   itk::ProcessObject::Pointer m_TmpFilter;
   TransferLogType::Pointer m_TransferLog;
-  std::vector<int> m_Channels;
-  FloatVectorImageType::Pointer m_Input;
-  FloatVectorImageType::Pointer m_TempImage;
-  ImageListType::Pointer        m_ImageList;
-  ListConcatenerFilterType::Pointer  m_Concatener;
-  ExtractROIFilterListType::Pointer  m_ExtractorList;
 };
 
 }
