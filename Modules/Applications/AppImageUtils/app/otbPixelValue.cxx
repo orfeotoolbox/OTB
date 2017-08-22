@@ -56,7 +56,7 @@ private:
     // Documentation
     SetDocName("Pixel Value");
     SetDocLongDescription("This application gives the value of a selected "
-      "pixel. There are three way of designate a pixel, with its index, "
+      "pixel. There are three ways of designate a pixel, with its index, "
       "its physical coordinate (in the physical space attached to the image), "
       "and with geographical coordinate system. Coordinates will be "
       "interpreted differently depending on which mode is chosen.");
