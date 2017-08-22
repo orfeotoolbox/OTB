@@ -33,10 +33,9 @@ set(OTBTestKernelTests
 add_executable(otbTestKernelTestDriver ${OTBTestKernelTests})
 target_link_libraries(otbTestKernelTestDriver ${OTBTestKernel-Test_LIBRARIES})
 
-So the story here is that -Wl,-no-needed is a default linker flag on only on Ubuntu
-(debian or archlinux does not use this). This will exclude a lot of libraries from linking into
-executable.
-
+# So the story here is that -Wl,-no-needed is a default linker flag on only on Ubuntu
+# (debian or archlinux does not use this). This will exclude a lot of libraries from linking into
+# executable.
 # #ITK_LIBRARIES in a superbuild now contains the following libraries.
 # "itkdouble-conversion itksys itkvcl itknetlib itkv3p_netlib itkvnl itkvnl_algo
 # ITKVNLInstantiation ITKCommon itkNetlibSlatec ITKStatistics ITKTransform ITKLabelMap
