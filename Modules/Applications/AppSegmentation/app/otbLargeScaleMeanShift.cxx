@@ -100,7 +100,7 @@ private:
     AddParameter(ParameterType_Choice, "mode","Output mode");
     SetParameterDescription("mode", "Type of segmented output");
 
-    AddChoice("mode.vector", "Segmentation as vector output.");
+    AddChoice("mode.vector", "Segmentation as vector output");
     SetParameterDescription("mode.vector","In this mode, the application will "
       "produce a vector file or database and compute field values for each "
       "region");
@@ -116,7 +116,9 @@ private:
     AddChoice("mode.raster", "Standard segmentation with labeled raster output");
     SetParameterDescription("mode.raster","In this mode, the application will produce a standard labeled raster.");
 
-    ShareParameter("mode.raster.out","merging.out");
+    ShareParameter("mode.raster.out","merging.out",
+      "The output raster image",
+      "It corresponds to the output of the small region merging step.");
 
     AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
     EnableParameter( "cleanup" );
