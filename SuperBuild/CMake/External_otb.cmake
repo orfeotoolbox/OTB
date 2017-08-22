@@ -140,12 +140,13 @@ add_custom_target(OTB_DEPENDS
   VERBATIM
   )
 
+set(OTB_CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS})
 if(LINUX)
   string(REGEX REPLACE
     "-Wl,--no-undefined"
     "-Wl,--no-undefined -Wl,-no-as-needed"
     OTB_CMAKE_CACHE_ARGS
-    "${SB_CMAKE_CACHE_ARGS}")
+    "${OTB_CMAKE_CACHE_ARGS}")
 endif()
 
 ExternalProject_Add(OTB
