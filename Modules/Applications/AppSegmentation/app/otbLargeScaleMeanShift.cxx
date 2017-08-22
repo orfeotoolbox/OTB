@@ -146,11 +146,9 @@ private:
     SetDocExampleParameterValue("spatialr", "4");
     SetDocExampleParameterValue("ranger", "80");
     SetDocExampleParameterValue("minsize", "16");
-    SetDocExampleParameterValue("out", "regions.shp");
+    SetDocExampleParameterValue("mode.vector.out", "regions.shp");
 
     SetOfficialDocLink();
-
-    DebugOn();
     }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -158,9 +156,13 @@ private:
 
   void DoExecute() ITK_OVERRIDE
     {
+    bool isVector(GetParameterString("mode") == "vector");
+    std::string outPath(isVector ?
+      GetParameterString("mode.vector.out"):
+      GetParameterString("mode.raster.out"));
     std::vector<std::string> tmpFilenames;
-    tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap.tif"));
-    tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap.geom"));
+    tmpFilenames.push_back(outPath+std::string("_labelmap.tif"));
+    tmpFilenames.push_back(outPath+std::string("_labelmap.geom"));
     ExecuteInternal("smoothing");
     // in-memory connexion here (saves 1 additional update for foutpos)
     GetInternalApplication("segmentation")->SetParameterInputImage("in",
@@ -180,10 +182,10 @@ private:
     GetInternalApplication("merging")->SetParameterString("inseg",
       tmpFilenames[0]);
     EnableParameter("mode.raster.out");
-    if (GetParameterString("mode") == "vector")
+    if (isVector)
       {
-      tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap_merged.tif"));
-      tmpFilenames.push_back(GetParameterString("out")+std::string("_labelmap_merged.geom"));
+      tmpFilenames.push_back(outPath+std::string("_labelmap_merged.tif"));
+      tmpFilenames.push_back(outPath+std::string("_labelmap_merged.geom"));
       GetInternalApplication("merging")->SetParameterString("out",
         tmpFilenames[2]);
       GetInternalApplication("merging")->ExecuteAndWriteOutput();
