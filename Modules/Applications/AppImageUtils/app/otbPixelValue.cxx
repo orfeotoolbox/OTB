@@ -101,7 +101,7 @@ private:
     AddParameter(ParameterType_Int , "epsg" , "EPSG code");
     SetParameterDescription("epsg" ,
           "This code is used to define a geographical coordinate system. "
-          "If no system is specified, WGS84 (EPSG : 3857) is used by default.");
+          "If no system is specified, WGS84 (EPSG : 4326) is used by default.");
     MandatoryOff("epsg");
 
     AddParameter(ParameterType_ListView,"cl","Channels");
@@ -144,7 +144,7 @@ private:
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
     FloatVectorImageType::IndexType min , max;
-    min.Fill(0);
+    min.Fill(30);
     max[0] = inImage->GetLargestPossibleRegion().GetSize()[0] - 1;
     max[1] = inImage->GetLargestPossibleRegion().GetSize()[1] - 1;
     std::string boundaries[4];
@@ -182,10 +182,10 @@ private:
       inImage->TransformIndexToPhysicalPoint(max,maxP);
       minPOut = inverse->TransformPoint( minP );
       maxPOut = inverse->TransformPoint( maxP );
-      boundaries[0] = std::to_string(std::max(minP[0],maxP[0]));
-      boundaries[1] = std::to_string(std::max(minP[1],maxP[1]));
-      boundaries[2] = std::to_string(std::min(minP[0],maxP[0]));
-      boundaries[3] = std::to_string(std::min(minP[1],maxP[1]));
+      boundaries[0] = std::to_string(std::max(minPOut[0],maxPOut[0]));
+      boundaries[1] = std::to_string(std::max(minPOut[1],maxPOut[1]));
+      boundaries[2] = std::to_string(std::min(minPOut[0],maxPOut[0]));
+      boundaries[3] = std::to_string(std::min(minPOut[1],maxPOut[1]));
       }
     if ( mode != "ind" )
       {
@@ -243,7 +243,7 @@ private:
       if ( HasUserValue("epsg") )
         {
         std::string wktFromEpsg = 
-          otb::GeoInformationConversion::ToWKT(GetParameterInt( "epsg" ));
+          otb::GeoInformationConversion::ToWKT( GetParameterInt( "epsg" ) );
         rsTransform->SetInputProjectionRef(wktFromEpsg);
         }      
       rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
@@ -256,7 +256,6 @@ private:
       pixelOut = rsTransform->TransformPoint(pixelIn);
       isPixelIn = inImage->TransformPhysicalPointToIndex(pixelOut,id);
       }
-
     if ( !isPixelIn )
       {
       std::string why = "Accessible pixels are in ";
@@ -276,7 +275,6 @@ private:
         extractor->SetChannel(GetSelectedItems("cl")[idx] + 1 );
         }
       }
-
     FloatVectorImageType::SizeType size;
     size.Fill(0);
     FloatVectorImageType::RegionType region;

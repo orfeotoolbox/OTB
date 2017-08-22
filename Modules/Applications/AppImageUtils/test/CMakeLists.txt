@@ -236,16 +236,43 @@ otb_test_application(NAME apTvUtConcatenateImages_1Image
 #----------- MultiResolutionPyramid TESTS ----------------
 
 #----------- PixelValue TESTS ----------------
-OTB_TEST_APPLICATION(NAME apTvUtPixelValue
+OTB_TEST_APPLICATION(NAME apTvUtPixelValueIndex
                      APP PixelValue
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                              -coordx 30
                              -coordy 30
+                             -mode ind
                              -cl Channel1 Channel3 Channel4
-                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValue.txt
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValueIndex.txt
                        VALID --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtPixelValue.txt
-                	     ${TEMP}/apTvUtPixelValue.txt
+                	     ${TEMP}/apTvUtPixelValueIndex.txt
+                             )
+OTB_TEST_APPLICATION(NAME apTvUtPixelValuePhys
+                     APP PixelValue
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -coordx 374168
+                             -coordy 4829165.5
+                             -mode phy
+                             -cl Channel1 Channel3 Channel4
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValuePhys.txt
+                       VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtPixelValue.txt
+                         ${TEMP}/apTvUtPixelValuePhys.txt
+                             )
+
+OTB_TEST_APPLICATION(NAME apTvUtPixelValueEpsg
+                     APP PixelValue
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -coordx 1.4408400058746337890625
+                             -coordy 43.604839324951171875
+                             -mode epsg
+                             -epsg 4326
+                             -cl Channel1 Channel3 Channel4
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValueEpsg.txt
+                       VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtPixelValue.txt
+                         ${TEMP}/apTvUtPixelValueEpsg.txt
                              )
 
 #----------- ColorMapping TESTS ----------------
