@@ -284,8 +284,21 @@ public:
 
   void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
+  /** Checks if the application is ready to be executed. It checks that there
+   *  is no parameter missing
+   */
   bool IsApplicationReady();
 
+  /** Checks if a parameter 'key' is missing.
+   *
+   * A parameter is missing when all the following conditions are true :
+   *   - the parameter is mandatory
+   *   - the parameter has Role_Input
+   *   - the parameter is not a group
+   *   - the parameter has no value
+   *   - the parameter ancestors are mandatory or enabled.
+   */
+  bool IsParameterMissing(const std::string &key) const;
 
   /* Set an default integer value, must used in the
    * DoInit when setting a value by default
