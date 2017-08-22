@@ -167,7 +167,7 @@ public:
   /* Get the internal application parameter specified
    *
    * WARNING: this method may disappear from the API */
-  const Parameter* GetParameterByKey(std::string parameter) const;
+  const Parameter* GetParameterByKey(std::string parameter, bool follow=true) const;
 
   /* Returns the description of a parameter */
   std::string GetParameterName(std::string paramKey);

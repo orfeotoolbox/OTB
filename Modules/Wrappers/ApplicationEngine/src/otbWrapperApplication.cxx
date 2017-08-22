@@ -297,11 +297,11 @@ void Application::SetParameterUserValue(std::string paramKey, bool value)
   GetParameterByKey(paramKey)->SetUserValue(value);
 }
 
-const Parameter* Application::GetParameterByKey(std::string name) const
+const Parameter* Application::GetParameterByKey(std::string name, bool follow) const
 {
   // GetParameterList is non const...
   Application* _this = const_cast<Application*>(this);
-  return _this->GetParameterByKey(name);
+  return _this->GetParameterByKey(name,follow);
 }
 
 void Application::Init()
