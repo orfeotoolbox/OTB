@@ -32,6 +32,39 @@ set(OTBTestKernelTests
 
 add_executable(otbTestKernelTestDriver ${OTBTestKernelTests})
 target_link_libraries(otbTestKernelTestDriver ${OTBTestKernel-Test_LIBRARIES})
+
+So the story here is that -Wl,-no-needed is a default linker flag on only on Ubuntu
+(debian or archlinux does not use this). This will exclude a lot of libraries from linking into
+executable.
+
+# #ITK_LIBRARIES in a superbuild now contains the following libraries.
+# "itkdouble-conversion itksys itkvcl itknetlib itkv3p_netlib itkvnl itkvnl_algo
+# ITKVNLInstantiation ITKCommon itkNetlibSlatec ITKStatistics ITKTransform ITKLabelMap
+# ITKMesh ITKMetaIO ITKSpatialObjects ITKPath ITKQuadEdgeMesh ITKIOImageBase ITKOptimizers
+# ITKPolynomials ITKBiasCorrection ITKFFT ITKKLMRegionGrowing ITKOptimizersv4 ITKWatersheds"
+
+# OTBITK module will find all of these components in Modules/ThirdParty/ITK/otb-module-init.cmake
+# But due to default -Wl,-as-needed flag many of them are ignored.
+# see the documentation of GNU ld -as-needed for details on this behaviour.
+
+# Our problem is that we need these ignored ones in the some header-only modules.
+# Eg: Modules/Core/LabelMap
+# This module depends on ITKLabelMap but does not link with it as it doesn't create any module (lib, exe)
+# All it use is a couple of headers from ITKLabelMap. So removing that dependency is out of question.
+
+# At this point, possible solution are follows:
+# 1. use -Wl,-as-no-needed to CMAKE_LINKER FLAGS and be done with it. (all executable contains many used libs)
+# 2. glob all libITK*, libitk* in the package script. (ugly and I don't agree)
+# 3. make a dummy executable and link that with all of OTB libs and use -Wl,-no-as-needed in that
+# 4. pick one of the random test executable and only add -Wl,-no-as-needed to it. (still a hack)
+# ..
+# ...
+# RK: I finally decided to go with 4th option.
+# Take an existing test executable otbTestKernelTestDriver and force -Wl,-no-as-needed.
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  set_target_properties(otbTestKernelTestDriver PROPERTIES LINK_FLAGS "-Wl,-no-as-needed")
+endif()
+
 otb_module_target_label(otbTestKernelTestDriver)
 otb_add_test(NAME tsTvCompareAscii2 COMMAND otbTestKernelTestDriver
   --compare-ascii ${NOTOL}
