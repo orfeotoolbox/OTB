@@ -55,12 +55,9 @@ find_library( SHARK_LIBRARY
 
 mark_as_advanced( SHARK_INCLUDE_DIR  SHARK_LIBRARY )
 
-find_package( Boost 1.48.0 REQUIRED QUIET COMPONENTS
-	system date_time filesystem
-	program_options serialization thread
-	unit_test_framework
-	)
-
+find_package( Boost 1.48.0 REQUIRED QUIET
+  COMPONENTS serialization
+  )
 if(NOT Boost_FOUND)
   message(FATAL_ERROR "Please make sure Boost 1.48.0 is installed on your system")
 endif()
