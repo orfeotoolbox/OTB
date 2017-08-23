@@ -32,7 +32,7 @@ set OTB_XDK_DIR=%CURRENT_SCRIPT_DIR:\=/%
 ::dir %OTB_VS_TEMPLATE_DIR%
 if exist "%VSDEV_ENV%" (
 if not exist "%OTB_VS_TEMPLATE_DIR%" (   md "%OTB_VS_TEMPLATE_DIR%" )
-copy "%CURRENT_SCRIPT_DIR%OTB Project.zip" "%OTB_VS_TEMPLATE_DIR%"
+copy "%CURRENT_SCRIPT_DIR%\OTB Project.zip" "%OTB_VS_TEMPLATE_DIR%"
 START "" "%VSDEV_ENV%"
 ) else (
 echo "%VSDEV_ENV% not found"
