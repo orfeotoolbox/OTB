@@ -103,7 +103,7 @@ namespace Wrapper
     SetParameterDescription("classifier.libsvm.nu",
         "Cost parameter Nu, in the range 0..1, the larger the value, "
         "the smoother the decision.");
-    
+
     // It seems that it miss a nu parameter for the nu-SVM use. 
     AddParameter(ParameterType_Empty, "classifier.libsvm.opt", "Parameters optimization");
     MandatoryOff("classifier.libsvm.opt");
@@ -120,11 +120,6 @@ namespace Wrapper
         "The distance between feature vectors from the training set and "
         "the fitting hyper-plane must be less than Epsilon. For outliers"
         "the penalty mutliplier is set by C.");
-      // AddParameter(ParameterType_Float, "classifier.libsvm.nu", "Nu");
-      // SetParameterFloat("classifier.libsvm.nu",0.5, false);
-      // SetParameterDescription("classifier.libsvm.nu", 
-      //   "Cost parameter Nu, in the range 0..1, the larger the value, "
-      //   "the smoother the decision.");
       }
   }
 

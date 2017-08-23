@@ -18,11 +18,10 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Basic filters application.")
+set(DOCUMENTATION "Image filtering application.")
 
 otb_module(OTBAppFiltering
   DEPENDS
-    OTBImageNoise
     OTBImageManipulation
     OTBITK
     OTBApplicationEngine
