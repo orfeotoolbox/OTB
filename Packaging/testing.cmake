@@ -3,7 +3,6 @@
 #          [WORKING_DIRECTORY <dir>])
 
 set(testing_dir ${CMAKE_BINARY_DIR}/tests)
-
 if(EXISTS "${testing_dir}")
   execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${testing_dir})
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory   ${testing_dir})
@@ -11,36 +10,33 @@ else()
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory   ${testing_dir})
 endif()
 
+set(install_package_ARGS)
+set(selftester_ARGS)
 set(pkg_extracted_dir "${testing_dir}/${PKG_STAGE_DIR}")
 if(WIN32)
-  set(extract_opts "x;${PACKAGE_OUTPUT_FILE}")
-  set(extract_cmd "${ZIP_EXECUTABLE}")
-  set(my_ext ".bat")
+  set(install_package_ARGS "x;${PACKAGE_OUTPUT_FILE}")
+  set(install_package_CMD "${ZIP_EXECUTABLE}")
+  #selftester
+  set(selftester_CMD ${pkg_extracted_dir}/tools/selftester.bat)
+  set(selftester_ARGS "/q")
 else()
-  set(extract_opts "--target;${pkg_extracted_dir}")
-  set(extract_cmd "${PACKAGE_OUTPUT_FILE}")
-  set(my_ext ".sh")
+  set(install_package_ARGS "--target;${pkg_extracted_dir};--no-progress")
+  set(install_package_CMD "${PACKAGE_OUTPUT_FILE}")
+  #selftester
+  set(selftester_CMD ${pkg_extracted_dir}/tools/selftester.sh)
+  set(selftester_ARGS)
 endif()
-
 add_test(
   NAME Tu_install_package
-  COMMAND ${extract_cmd}
-  ${extract_opts}
+  COMMAND ${install_package_CMD} ${install_package_ARGS}
   WORKING_DIRECTORY ${testing_dir}
   )
 
-set(Tu_selftester_ARGS)
-if(WIN32)
-  set(Tu_selftester_ARGS "/q")
-endif()
-
 add_test(
   NAME Tu_selftester
-  COMMAND ${pkg_extracted_dir}/tools/selftester${my_ext}
-  ${Tu_selftester_ARGS}
+  COMMAND ${selftester_CMD} ${selftester_ARGS}
   WORKING_DIRECTORY ${pkg_extracted_dir}
   )
-
 
 add_test(
   NAME Tu_build_examples
