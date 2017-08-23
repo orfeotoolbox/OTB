@@ -20,7 +20,7 @@ if(WIN32)
   set(selftester_CMD ${pkg_extracted_dir}/tools/selftester.bat)
   set(selftester_ARGS "/q")
 else()
-  set(install_package_ARGS "--target;${pkg_extracted_dir};--no-progress")
+  set(install_package_ARGS "--noprogress;--target;${pkg_extracted_dir}")
   set(install_package_CMD "${PACKAGE_OUTPUT_FILE}")
   #selftester
   set(selftester_CMD ${pkg_extracted_dir}/tools/selftester.sh)
