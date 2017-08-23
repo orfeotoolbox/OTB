@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Makeself version 2.2.x
+# Makeself version 2.3.x
 #  by Stephane Peter <megastep@megastep.org>
 #
 # Utility to create self-extracting tar.gz archives.
@@ -8,7 +8,7 @@
 # a small Shell script stub that uncompresses the archive to a temporary
 # directory and then executes a given script from withing that directory.
 #
-# Makeself home page: http://www.megastep.org/makeself/
+# Makeself home page: http://makeself.io/
 #
 # Version 2.0 is a rewrite of version 1.0 to make the code easier to read and maintain.
 #
@@ -66,14 +66,15 @@
 #           Added --noprogress to prevent showing the progress during the decompression (Guy Baconniere)
 #           Added --target dir to allow extracting directly to a target directory (Guy Baconniere)
 # - 2.2.0 : Many bugfixes, updates and contributions from users. Check out the project page on Github for the details.
+# - 2.3.0 : Option to specify packaging date to enable byte-for-byte reproducibility. (Marc Pawlowsky)
 #
-# (C) 1998-2013 by Stephane Peter <megastep@megastep.org>
+# (C) 1998-2017 by Stephane Peter <megastep@megastep.org>
 #
 # This software is released under the terms of the GNU GPL version 2 and above
 # Please read the license at http://www.gnu.org/copyleft/gpl.html
 #
 
-MS_VERSION=2.2.0
+MS_VERSION=2.3.1
 MS_COMMAND="$0"
 unset CDPATH
 
@@ -82,44 +83,69 @@ for f in "${1+"$@"}"; do
     \\\"$f\\\""
 done
 
+# For Solaris systems
+if test -d /usr/xpg4/bin; then
+    PATH=/usr/xpg4/bin:$PATH
+    export PATH
+fi
+
 # Procedures
 
 MS_Usage()
 {
-    echo "Usage: $0 [params] archive_dir file_name label [startup_script] [args]"
+    echo "Usage: $0 [params] archive_dir file_name label startup_script [args]"
     echo "params can be one or more of the following :"
-    echo "    --version | -v  : Print out Makeself version number and exit"
-    echo "    --help | -h     : Print out this help message"
-    echo "    --quiet | -q    : Do not print any messages other than errors."
-    echo "    --gzip          : Compress using gzip (default if detected)"
-    echo "    --bzip2         : Compress using bzip2 instead of gzip"
-    echo "    --pbzip2        : Compress using pbzip2 instead of gzip"
-    echo "    --xz            : Compress using xz instead of gzip"
-    echo "    --compress      : Compress using the UNIX 'compress' command"
-    echo "    --complevel lvl : Compression level for gzip xz bzip2 and pbzip2 (default 9)"
-    echo "    --base64        : Instead of compressing, encode the data using base64"
-    echo "    --nocomp        : Do not compress the data"
-    echo "    --notemp        : The archive will create archive_dir in the"
-    echo "                      current directory and uncompress in ./archive_dir"
-    echo "    --copy          : Upon extraction, the archive will first copy itself to"
-    echo "                      a temporary directory"
-    echo "    --append        : Append more files to an existing Makeself archive"
-    echo "                      The label and startup scripts will then be ignored"
-    echo "    --target dir    : Extract directly to a target directory"
-    echo "                      directory path can be either absolute or relative"
-    echo "    --current       : Files will be extracted to the current directory"
-    echo "                      Both --current and --target imply --notemp"
-    echo "    --tar-extra opt : Append more options to the tar command line"
-    echo "    --nomd5         : Don't calculate an MD5 for archive"
-    echo "    --nocrc         : Don't calculate a CRC for archive"
-    echo "    --header file   : Specify location of the header script"
-    echo "    --follow        : Follow the symlinks in the archive"
-    echo "    --noprogress    : Do not show the progress during the decompression"
-    echo "    --nox11         : Disable automatic spawn of a xterm"
-    echo "    --nowait        : Do not wait for user input after executing embedded"
-    echo "                      program from an xterm"
-    echo "    --lsm file      : LSM file describing the package"
-    echo "    --license file  : Append a license file"
+    echo "    --version | -v     : Print out Makeself version number and exit"
+    echo "    --help | -h        : Print out this help message"
+    echo "    --tar-quietly      : Suppress verbose output from the tar command"
+    echo "    --quiet | -q       : Do not print any messages other than errors."
+    echo "    --gzip             : Compress using gzip (default if detected)"
+    echo "    --pigz             : Compress with pigz"
+    echo "    --bzip2            : Compress using bzip2 instead of gzip"
+    echo "    --pbzip2           : Compress using pbzip2 instead of gzip"
+    echo "    --xz               : Compress using xz instead of gzip"
+    echo "    --lzo              : Compress using lzop instead of gzip"
+    echo "    --lz4              : Compress using lz4 instead of gzip"
+    echo "    --compress         : Compress using the UNIX 'compress' command"
+    echo "    --complevel lvl    : Compression level for gzip pigz xz lzo lz4 bzip2 and pbzip2 (default 9)"
+    echo "    --base64           : Instead of compressing, encode the data using base64"
+    echo "    --gpg-encrypt      : Instead of compressing, encrypt the data using GPG"
+    echo "    --gpg-asymmetric-encrypt-sign"
+    echo "                       : Instead of compressing, asymmetrically encrypt and sign the data using GPG"
+    echo "    --gpg-extra opt    : Append more options to the gpg command line"
+    echo "    --ssl-encrypt      : Instead of compressing, encrypt the data using OpenSSL"
+    echo "    --nocomp           : Do not compress the data"
+    echo "    --notemp           : The archive will create archive_dir in the"
+    echo "                         current directory and uncompress in ./archive_dir"
+    echo "    --needroot         : Check that the root user is extracting the archive before proceeding"
+    echo "    --copy             : Upon extraction, the archive will first copy itself to"
+    echo "                         a temporary directory"
+    echo "    --append           : Append more files to an existing Makeself archive"
+    echo "                         The label and startup scripts will then be ignored"
+    echo "    --target dir       : Extract directly to a target directory"
+    echo "                         directory path can be either absolute or relative"
+    echo "    --nooverwrite      : Do not extract the archive if the specified target directory exists"
+    echo "    --current          : Files will be extracted to the current directory"
+    echo "                         Both --current and --target imply --notemp"
+    echo "    --tar-extra opt    : Append more options to the tar command line"
+    echo "    --untar-extra opt  : Append more options to the during the extraction of the tar archive"
+    echo "    --nomd5            : Don't calculate an MD5 for archive"
+    echo "    --nocrc            : Don't calculate a CRC for archive"
+    echo "    --header file      : Specify location of the header script"
+    echo "    --follow           : Follow the symlinks in the archive"
+    echo "    --noprogress       : Do not show the progress during the decompression"
+    echo "    --nox11            : Disable automatic spawn of a xterm"
+    echo "    --nowait           : Do not wait for user input after executing embedded"
+    echo "                         program from an xterm"
+    echo "    --lsm file         : LSM file describing the package"
+    echo "    --license file     : Append a license file"
+    echo "    --help-header file : Add a header to the archive's --help output"
+    echo "    --packaging-date date"
+    echo "                       : Use provided string as the packaging date"
+    echo "                         instead of the current date."
+    echo
+    echo "    --keep-umask       : Keep the umask set to shell default, rather than overriding when executing self-extracting archive."
+    echo "    --export-conf      : Export configuration variables to startup_script"
     echo
     echo "Do not forget to give a fully qualified startup script name"
     echo "(i.e. with a ./ prefix if inside the archive)."
@@ -136,15 +162,23 @@ COMPRESS_LEVEL=9
 KEEP=n
 CURRENT=n
 NOX11=n
+NOWAIT=n
 APPEND=n
+TAR_QUIETLY=n
+KEEP_UMASK=n
 QUIET=n
 NOPROGRESS=n
 COPY=none
+NEED_ROOT=n
 TAR_ARGS=cvf
 TAR_EXTRA=""
+GPG_EXTRA=""
 DU_ARGS=-ks
 HEADER=`dirname "$0"`/makeself-header.sh
 TARGETDIR=""
+NOOVERWRITE=n
+DATE=`LC_ALL=C date`
+EXPORT_CONF=n
 
 # LSM file stuff
 LSM_CMD="echo No LSM. >> \"\$archname\""
@@ -168,8 +202,20 @@ do
 	COMPRESS=gzip
 	shift
 	;;
+    --pigz)
+    	COMPRESS=pigz
+    	shift
+    	;;
     --xz)
 	COMPRESS=xz
+	shift
+	;;
+    --lzo)
+	COMPRESS=lzo
+	shift
+	;;
+    --lz4)
+	COMPRESS=lz4
 	shift
 	;;
     --compress)
@@ -180,10 +226,22 @@ do
 	COMPRESS=base64
 	shift
 	;;
-    --encrypt)
+    --gpg-encrypt)
 	COMPRESS=gpg
 	shift
 	;;
+    --gpg-asymmetric-encrypt-sign)
+  COMPRESS=gpg-asymmetric
+  shift
+  ;;
+    --gpg-extra)
+  GPG_EXTRA="$2"
+  if ! shift 2; then MS_Help; exit 1; fi
+  ;;
+    --ssl-encrypt)
+  COMPRESS=openssl
+  shift
+  ;;
     --nocomp)
 	COMPRESS=none
 	shift
@@ -207,23 +265,35 @@ do
 	;;
     --tar-extra)
 	TAR_EXTRA="$2"
-	if ! shift 2; then MS_Help; exit 1; fi
+        if ! shift 2; then MS_Help; exit 1; fi
+        ;;
+    --untar-extra)
+        UNTAR_EXTRA="$2"
+        if ! shift 2; then MS_Help; exit 1; fi
         ;;
     --target)
 	TARGETDIR="$2"
 	KEEP=y
-    if ! shift 2; then MS_Help; exit 1; fi
+        if ! shift 2; then MS_Help; exit 1; fi
+	;;
+    --nooverwrite)
+        NOOVERWRITE=y
+	shift
+        ;;
+    --needroot)
+	NEED_ROOT=y
+	shift
 	;;
     --header)
 	HEADER="$2"
-    if ! shift 2; then MS_Help; exit 1; fi
+        if ! shift 2; then MS_Help; exit 1; fi
 	;;
     --license)
-    LICENSE=`cat $2`
-    if ! shift 2; then MS_Help; exit 1; fi
-    ;;
+        LICENSE=`cat $2`
+        if ! shift 2; then MS_Help; exit 1; fi
+	;;
     --follow)
-	TAR_ARGS=cvfh
+	TAR_ARGS=cvhf
 	DU_ARGS=-ksL
 	shift
 	;;
@@ -236,6 +306,7 @@ do
 	shift
 	;;
     --nowait)
+	NOWAIT=y
 	shift
 	;;
     --nomd5)
@@ -254,6 +325,28 @@ do
 	LSM_CMD="cat \"$2\" >> \"\$archname\""
     if ! shift 2; then MS_Help; exit 1; fi
 	;;
+    --packaging-date)
+	DATE="$2"
+	if ! shift 2; then MS_Help; exit 1; fi
+        ;;
+    --help-header)
+	HELPHEADER=`sed -e "s/'/'\\\\\''/g" $2`
+    if ! shift 2; then MS_Help; exit 1; fi
+	[ -n "$HELPHEADER" ] && HELPHEADER="$HELPHEADER
+"
+    ;;
+    --tar-quietly)
+	TAR_QUIETLY=y
+	shift
+	;;
+	--keep-umask)
+	KEEP_UMASK=y
+	shift
+	;;
+    --export-conf)
+    EXPORT_CONF=y
+    shift
+    ;;
     -q | --quiet)
 	QUIET=y
 	shift
@@ -283,11 +376,11 @@ else
 fi
 archname="$2"
 
-if test "$QUIET" = "y"; then
+if test "$QUIET" = "y" || test "$TAR_QUIETLY" = "y"; then
     if test "$TAR_ARGS" = "cvf"; then
 	TAR_ARGS="cf"
-    elif test "$TAR_ARGS" = "cvfh";then
-	TAR_ARGS="cfh"
+    elif test "$TAR_ARGS" = "cvhf";then
+	TAR_ARGS="chf"
     fi
 fi
 
@@ -325,7 +418,7 @@ else
 
     LABEL="$3"
     SCRIPT="$4"
-    test x$SCRIPT = x || shift 1
+    test "x$SCRIPT" = x || shift 1
     shift 3
     SCRIPTARGS="$*"
 fi
@@ -340,6 +433,10 @@ gzip)
     GZIP_CMD="gzip -c$COMPRESS_LEVEL"
     GUNZIP_CMD="gzip -cd"
     ;;
+pigz) 
+    GZIP_CMD="pigz -$COMPRESS_LEVEL"
+    GUNZIP_CMD="gzip -cd"
+    ;;
 pbzip2)
     GZIP_CMD="pbzip2 -c$COMPRESS_LEVEL"
     GUNZIP_CMD="bzip2 -d"
@@ -352,13 +449,29 @@ xz)
     GZIP_CMD="xz -c$COMPRESS_LEVEL"
     GUNZIP_CMD="xz -d"
     ;;
+lzo)
+    GZIP_CMD="lzop -c$COMPRESS_LEVEL"
+    GUNZIP_CMD="lzop -d"
+    ;;
+lz4)
+    GZIP_CMD="lz4 -c$COMPRESS_LEVEL"
+    GUNZIP_CMD="lz4 -d"
+    ;;
 base64)
     GZIP_CMD="base64"
     GUNZIP_CMD="base64 -d -i"
     ;;
 gpg)
-    GZIP_CMD="gpg -ac -z$COMPRESS_LEVEL"
+    GZIP_CMD="gpg $GPG_EXTRA -ac -z$COMPRESS_LEVEL"
     GUNZIP_CMD="gpg -d"
+    ;;
+gpg-asymmetric)
+    GZIP_CMD="gpg $GPG_EXTRA -z$COMPRESS_LEVEL -es"
+    GUNZIP_CMD="gpg --yes -d"
+    ;;
+openssl)
+    GZIP_CMD="openssl aes-256-cbc -a -salt"
+    GUNZIP_CMD="openssl aes-256-cbc -d -a"
     ;;
 Unix)
     GZIP_CMD="compress -cf"
@@ -403,7 +516,6 @@ if test "$APPEND" = n; then
 fi
 
 USIZE=`du $DU_ARGS "$archdir" | awk '{print $1}'`
-DATE=`LC_ALL=C date`
 
 if test "." = "$archdirname"; then
 	if test "$KEEP" = n; then
@@ -417,7 +529,8 @@ if test "$QUIET" = "n";then
    echo Adding files to archive named \"$archname\"...
 fi
 exec 3<> "$tmpfile"
-(cd "$archdir" && ( tar $TAR_ARGS $TAR_EXTRA - . | eval "$GZIP_CMD" >&3 ) ) || { echo Aborting: Archive directory not found or temporary file: "$tmpfile" could not be created.; exec 3>&-; rm -f "$tmpfile"; exit 1; }
+( cd "$archdir" && ( tar $TAR_EXTRA -$TAR_ARGS - . | eval "$GZIP_CMD" >&3 ) ) || \
+    { echo Aborting: archive directory not found or temporary file: "$tmpfile" could not be created.; exec 3>&-; rm -f "$tmpfile"; exit 1; }
 exec 3>&- # try to close the archive
 
 fsize=`cat "$tmpfile" | wc -c | tr -d " "`
@@ -447,9 +560,9 @@ else
 	OLD_PATH=$PATH
 	PATH=${GUESS_MD5_PATH:-"$OLD_PATH:/bin:/usr/bin:/sbin:/usr/local/ssl/bin:/usr/local/bin:/opt/openssl/bin"}
 	MD5_ARG=""
-	MD5_PATH=`exec <&- 2>&-; which md5sum || type md5sum`
-	test -x "$MD5_PATH" || MD5_PATH=`exec <&- 2>&-; which md5 || type md5`
-	test -x "$MD5_PATH" || MD5_PATH=`exec <&- 2>&-; which digest || type digest`
+	MD5_PATH=`exec <&- 2>&-; which md5sum || command -v md5sum || type md5sum`
+	test -x "$MD5_PATH" || MD5_PATH=`exec <&- 2>&-; which md5 || command -v md5 || type md5`
+	test -x "$MD5_PATH" || MD5_PATH=`exec <&- 2>&-; which digest || command -v digest || type digest`
 	PATH=$OLD_PATH
 	if test -x "$MD5_PATH"; then
 		if test `basename ${MD5_PATH}`x = digestx; then
