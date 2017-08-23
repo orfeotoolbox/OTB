@@ -354,6 +354,7 @@ private:
     std::vector < FilterHistoType::Pointer > filterHisto;
     std::vector < FilterLutType::Pointer > filterLut;
     std::vector < FilterGainType::Pointer > filterGain;
+
     if ( GetParameterString("mode") == "each")
       {
       // Each channel will be equalized
@@ -369,7 +370,7 @@ private:
         // std::cout<<"channel m ="<<m<<std::endl;
         SetUpPipeline ( filterHisto[chanel] , filterLut[chanel] ,
                         inputImageList->GetNthElement(chanel) );
-        
+        std::cout<<"End of multithread"<<std::endl;
         if( HasUserValue("nodata") )
           {
           filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
@@ -378,6 +379,7 @@ private:
         filterGain[chanel]->SetMax( filterLut[chanel]->GetMax() );
         filterGain[chanel]->SetInputLut( filterLut[chanel]->GetOutput() );
         filterGain[chanel]->SetInputImage( vectorToImageListFilter->GetOutput()->GetNthElement(chanel) );
+        filterGain[chanel]->SetNumberOfThreads(1);
         outputImageList->PushBack( filterGain[chanel]->GetOutput() );
         }
       }
@@ -430,13 +432,26 @@ private:
         filterGain[chanel]->SetMin( filterLut[0]->GetMin() );
         filterGain[chanel]->SetMax( filterLut[0]->GetMax() );
         filterGain[chanel]->SetInputImage( inputImageList->GetNthElement(chanel) );
-
         outputImageList->PushBack( filterGain[chanel]->GetOutput() );
         }
       }
+    
     imageListToVectorFilterOut->SetInput(outputImageList);
     imageListToVectorFilterOut->UpdateOutputInformation();
-    imageListToVectorFilterOut->Update();
+    std::cout<<"vectortoimagelist R"<<vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"vectortoimagelist B"<<vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"vectortoimagelist L"<<vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut R"<<filterLut[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut B"<<filterLut[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut L"<<filterLut[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain R"<<filterGain[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain B"<<filterGain[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain L"<<filterGain[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"outputImageList R"<<outputImageList->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"outputImageList B"<<outputImageList->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"outputImageList L"<<outputImageList->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
+    imageListToVectorFilterOut->SetNumberOfThreads(1);
+    // imageListToVectorFilterOut->Update();
     SetParameterOutputImage( "out" , imageListToVectorFilterOut->GetOutput() );
   }
 };
