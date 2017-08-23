@@ -53,6 +53,7 @@ namespace Wrapper
       }
     AddParameter(ParameterType_Choice, "classifier.svm.k", "SVM Kernel Type");
     AddChoice("classifier.svm.k.linear", "Linear");
+
     AddChoice("classifier.svm.k.rbf", "Gaussian radial basis function");
     AddChoice("classifier.svm.k.poly", "Polynomial");
     AddChoice("classifier.svm.k.sigmoid", "Sigmoid");
@@ -60,52 +61,71 @@ namespace Wrapper
     SetParameterDescription("classifier.svm.k", "SVM Kernel Type.");
     AddParameter(ParameterType_Float, "classifier.svm.c", "Cost parameter C");
     SetParameterFloat("classifier.svm.c",1.0, false);
-    SetParameterDescription(
-        "classifier.svm.c",
-        "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
+    SetParameterDescription("classifier.svm.c",
+        "SVM models have a cost parameter C (1 by default) to control the trade-off"
+        " between training errors and forcing rigid margins.");
     AddParameter(ParameterType_Float, "classifier.svm.nu",
                  "Parameter nu of a SVM optimization problem (NU_SVC / ONE_CLASS)");
     SetParameterFloat("classifier.svm.nu",0.0, false);
-    SetParameterDescription("classifier.svm.nu", "Parameter nu of a SVM optimization problem.");
+    SetParameterDescription("classifier.svm.nu", 
+      "Parameter nu of a SVM optimization problem.");
     if (this->m_RegressionFlag)
       {
       AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR)");
       SetParameterFloat("classifier.svm.p",1.0, false);
       SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
 
-      AddParameter(ParameterType_Choice, "classifier.svm.term", "Termination criteria");
-      SetParameterDescription("classifier.svm.term","Termination criteria for iterative algorithm");
-      AddChoice("classifier.svm.term.iter", "Stops when maximum iteration is reached.");
-      AddChoice("classifier.svm.term.eps", "Stops when accuracy is lower than epsilon.");
-      AddChoice("classifier.svm.term.all", "Stops when either iteration or epsilon criteria is true");
+      AddParameter(ParameterType_Choice, 
+        "classifier.svm.term", "Termination criteria");
+      SetParameterDescription("classifier.svm.term",
+        "Termination criteria for iterative algorithm");
+      AddChoice("classifier.svm.term.iter", 
+        "Stops when maximum iteration is reached.");
+      AddChoice("classifier.svm.term.eps", 
+        "Stops when accuracy is lower than epsilon.");
+      AddChoice("classifier.svm.term.all", 
+        "Stops when either iteration or epsilon criteria is true");
 
       AddParameter(ParameterType_Float, "classifier.svm.iter", "Maximum iteration");
       SetParameterFloat("classifier.svm.iter",1000, false);
-      SetParameterDescription("classifier.svm.iter", "Maximum number of iterations (corresponds to the termination criteria 'iter').");
+      SetParameterDescription("classifier.svm.iter", 
+        "Maximum number of iterations (corresponds to the termination criteria 'iter').");
 
-      AddParameter(ParameterType_Float, "classifier.svm.eps", "Epsilon accuracy threshold");
+      AddParameter(ParameterType_Float, "classifier.svm.eps", 
+        "Epsilon accuracy threshold");
       SetParameterFloat("classifier.svm.eps",FLT_EPSILON, false);
-      SetParameterDescription("classifier.svm.eps", "Epsilon accuracy (corresponds to the termination criteria 'eps').");
+      SetParameterDescription("classifier.svm.eps", 
+        "Epsilon accuracy (corresponds to the termination criteria 'eps').");
       }
-    AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID)");
+    AddParameter(ParameterType_Float, "classifier.svm.coef0", 
+      "Parameter coef0 of a kernel function (POLY / SIGMOID)");
     SetParameterFloat("classifier.svm.coef0",0.0, false);
-    SetParameterDescription("classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
+    SetParameterDescription("classifier.svm.coef0", 
+      "Parameter coef0 of a kernel function (POLY / SIGMOID).");
     AddParameter(ParameterType_Float, "classifier.svm.gamma",
                  "Parameter gamma of a kernel function (POLY / RBF / SIGMOID)");
     SetParameterFloat("classifier.svm.gamma",1.0, false);
-    SetParameterDescription("classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
-    AddParameter(ParameterType_Float, "classifier.svm.degree", "Parameter degree of a kernel function (POLY)");
+    SetParameterDescription("classifier.svm.gamma", 
+      "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
+    AddParameter(ParameterType_Float, "classifier.svm.degree", 
+      "Parameter degree of a kernel function (POLY)");
     SetParameterFloat("classifier.svm.degree",1.0, false);
-    SetParameterDescription("classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
-    AddParameter(ParameterType_Empty, "classifier.svm.opt", "Parameters optimization");
+    SetParameterDescription("classifier.svm.degree", 
+      "Parameter degree of a kernel function (POLY).");
+    AddParameter(ParameterType_Empty, "classifier.svm.opt", 
+      "Parameters optimization");
     MandatoryOff("classifier.svm.opt");
-    SetParameterDescription("classifier.svm.opt", "SVM parameters optimization flag.\n-If set to True, then the optimal SVM parameters will be estimated. "
-                            "Parameters are considered optimal by OpenCV when the cross-validation estimate of the test set error is minimal. "
-                            "Finally, the SVM training process is computed 10 times with these optimal parameters over subsets corresponding to 1/10th of "
-                            "the training samples using the k-fold cross-validation (with k = 10).\n-If set to False, the SVM classification process will be "
-                            "computed once with the currently set input SVM parameters over the training samples.\n-Thus, even with identical input SVM "
-                            "parameters and a similar random seed, the output SVM models will be different according to the method used (optimized or not) "
-                            "because the samples are not identically processed within OpenCV.");
+    SetParameterDescription("classifier.svm.opt", "SVM parameters optimization flag.\n"
+      "-If set to True, then the optimal SVM parameters will be estimated. "
+      "Parameters are considered optimal by OpenCV when the cross-validation estimate of "
+      "the test set error is minimal. Finally, the SVM training process is computed "
+      "10 times with these optimal parameters over subsets corresponding to 1/10th of "
+      "the training samples using the k-fold cross-validation (with k = 10).\n-If set "
+      "to False, the SVM classification process will be computed once with the "
+      "currently set input SVM parameters over the training samples.\n-Thus, even "
+      "with identical input SVM parameters and a similar random seed, the output "
+      "SVM models will be different according to the method used (optimized or not) "
+      "because the samples are not identically processed within OpenCV.");
   }
 
   template <class TInputValue, class TOutputValue>

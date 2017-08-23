@@ -58,19 +58,38 @@ private:
     SetDescription("Generate a 3D Ply file from a DEM and a color image.");
 
     SetDocName("Ply 3D files generation");
-    SetDocLongDescription("Generate a 3D Ply file from a DEM and a color image.");
-    SetDocLimitations(" ");
+    SetDocLongDescription("The application converts an image containing "
+      "elevations into a PLY file, which is a file format to store 3D models. "
+      "This format is adpated for visualization on software such as MeshLab [2]"
+      " or CloudCompare [3]\n\n"
+      "This application is part of the stereo reconstruction framework. The "
+      "input data can be produced by the application DisparityMapToElevationMap.\n\n"
+      "There are two types of supported input images:\n"
+      "  * A DEM image, with a ground projection, containing elevation values. "
+      "Each elevation value can be considered as a 3D point.\n"
+      "  * A 3D grid image, containing 5 bands (the first 3 are the 3D "
+      "coordinates of each point, the 5th is a validity mask where valid values"
+      " are larger or equal to 1)\n"
+      "\n"
+      "The user shall also give a support image that contains color values for"
+      " each 3D point. The color values will be embedded in the PLY file.");
+    SetDocLimitations("The input DEM image has to entirely fit into memory.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("- [1] DisparityMapToElevationMap \n"
+      "- [2] http://www.meshlab.net/ \n"
+      "- [3] http://www.cloudcompare.org/");
 
     AddDocTag(Tags::Geometry);
 
-    AddParameter(ParameterType_InputImage,"indem","The input DEM");
-    SetParameterDescription("indem", "The input DEM");
+    AddParameter(ParameterType_InputImage,"indem","The input DEM image");
+    SetParameterDescription("indem", "The image should be either a projected "
+      "DEM or a 3D grid containing 3D point coordinates and a validity mask.");
 
     AddParameter(ParameterType_Choice,"mode", "Conversion Mode");
     AddChoice("mode.dem","DEM");
-    SetParameterDescription("mode.dem","DEM conversion mode");
+    SetParameterDescription("mode.dem","DEM conversion mode (the projection "
+      "information of the DEM is used to derive the X and Y coordinates of each"
+      " point)");
 
     AddChoice("mode.3dgrid","3D grid");
     SetParameterDescription("mode.3dgrid","3D grid conversion mode");
@@ -79,10 +98,14 @@ private:
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
 
     AddParameter(ParameterType_InputImage,"incolor","The input color image");
-    SetParameterDescription("incolor", "The input color image");
+    SetParameterDescription("incolor", "If the color image has 4 bands it will "
+      "be interpreted as Red, Green, Blue, NIR. In other cases, only the first "
+      "one is used (gray scale colors). The color values are expected in the "
+      "range 0 - 255, and will be embedded with each 3D ""point of the PLY file.");
 
     AddParameter(ParameterType_OutputFilename,"out","The output Ply file");
-    SetParameterDescription("out","The output Ply file");
+    SetParameterDescription("out","The output Ply file will contain as many 3D "
+      "points as pixels in the input DEM.");
 
     // Doc example
     SetDocExampleParameterValue("indem","image_dem.tif");

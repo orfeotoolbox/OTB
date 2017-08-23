@@ -108,7 +108,7 @@ private:
         "confusion matrix file for the Dempster Shafer fusion.\n"
         "  - Input pixels with the NODATA label are not handled in the fusion of classification maps. Moreover, pixels for which all the input classifiers are set to NODATA "
         "keep this value in the output fused image.\n"
-        "  - In case of number of votes equality, the UNDECIDED label is attributed to the pixel.\n");
+        "  - In case of number of votes equality, the UNDECIDED label is attributed to the pixel.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageClassifier application");

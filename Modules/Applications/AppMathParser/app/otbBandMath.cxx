@@ -55,38 +55,72 @@ public:
 private:
   void DoInit() ITK_OVERRIDE
   {
-    SetName("BandMath");
-    SetDescription("Perform a mathematical operation on monoband images");
+    SetName( "BandMath" );
 
-    SetDocName("Band Math");
-    SetDocLongDescription("This application performs a mathematical operation on monoband images."
-      "Mathematical formula interpretation is done via MuParser libraries.\n"
-      "For MuParser version superior to 2.0 uses '&&' and '||' logical operators, and ternary operator 'boolean_expression ? if_true : if_false'\n"
-      "For older version of MuParser (prior to v2) use 'and' and 'or' logical operators, and ternary operator 'if(; ; )'.\n"
-      "The list of features and operators is available on MuParser website: http://muparser.sourceforge.net/\n"
+    SetDescription(
+      "Outputs a monoband image which is the result of a mathematical operation "
+      "on several multi-band images."
+    );
+
+    SetDocName( "Band Math" );
+
+    SetDocLongDescription(
+      "This application performs a mathematical operation on several multi-band "
+      "images and outputs the result into a monoband image. Evaluation of the "
+      "mathematical formula is done by the muParser libraries.\n\n"
+
+      "muParser version superior to 2.0, provides the '&&' and '||' logical "
+      "operators, and a ternary operator 'boolean_expression ? if_true : "
+      "if_false'.\n\n"
+
+      "Older versions of muParser (prior to v-2.0) provides only the 'and' and "
+      "'or' logical operators, and a ternary operator 'if(; ; )'.\n\n"
+
+      "The list of features and operators is available on the muParser website [1]."
       );
 
-    SetDocLimitations("None");
-    SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
-    AddDocTag("Miscellaneous");
+    SetDocLimitations( "None" );
+    SetDocAuthors( "OTB-Team" );
+    SetDocSeeAlso("[1] http://muparser.sourceforge.net/");
+    AddDocTag( "Miscellaneous" );
 
-    AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
-    SetParameterDescription("il", "Image list to perform computation on.");
+    AddParameter( ParameterType_InputImageList, "il", "Input image-list" );
+    SetParameterDescription(
+      "il",
+      "Image-list of operands to the mathematical expression."
+    );
 
-    AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Output image.");
+    AddParameter( ParameterType_OutputImage, "out", "Output Image" );
+    SetParameterDescription(
+      "out",
+      "Output image which is the result of the mathematical expressions on input"
+      " image-list operands.");
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_String, "exp", "Expression");
-    SetParameterDescription("exp",
-                            "The mathematical expression to apply. \nUse im1b1 for the first band, im1b2 for the second one...");
+    AddParameter( ParameterType_String, "exp", "Expression");
+    SetParameterDescription(
+      "exp",
+      "The muParser mathematical expression to apply on input images.\n"
+      "Use im1b1 as first band of first image, im1b2 for the second band of "
+      "first image.\n"
+      "Use im2b1 as first band of second image, im2b2 for the second band of "
+      "second image.\n"
+      "etc."
+    );
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("il", "verySmallFSATSW_r.tif verySmallFSATSW_nir.tif verySmallFSATSW.tif");
-    SetDocExampleParameterValue("out", "apTvUtBandMathOutput.tif");
-    SetDocExampleParameterValue("exp", "\"cos(im1b1) > cos(im2b1) ? im3b1 : im3b2\"");
+    SetDocExampleParameterValue(
+      "il",
+      "verySmallFSATSW_r.tif verySmallFSATSW_nir.tif verySmallFSATSW.tif"
+    );
+    SetDocExampleParameterValue(
+      "out",
+      "apTvUtBandMathOutput.tif"
+    );
+    SetDocExampleParameterValue(
+      "exp", "'cos( im1b1 ) > cos( im2b1 ) ? im3b1 : im3b2'"
+    );
 
     SetOfficialDocLink();
   }
@@ -222,5 +256,3 @@ private:
 } // namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::BandMath)
-
-
