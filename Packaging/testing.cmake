@@ -19,12 +19,16 @@ if(WIN32)
   #selftester
   set(selftester_CMD ${pkg_extracted_dir}/tools/selftester.bat)
   set(selftester_ARGS "/q")
+  #uninstall OTB
+  set(uninstall_otb_CMD ${pkg_extracted_dir}/tools/uninstall_otb.bat)
 else()
   set(install_package_ARGS "--noprogress;--target;${pkg_extracted_dir}")
   set(install_package_CMD "${PACKAGE_OUTPUT_FILE}")
   #selftester
   set(selftester_CMD ${pkg_extracted_dir}/tools/selftester.sh)
   set(selftester_ARGS)
+  #uninstall OTB
+  set(uninstall_otb_CMD ${pkg_extracted_dir}/tools/uninstall_otb.sh)
 endif()
 add_test(
   NAME Tu_install_package
@@ -49,7 +53,7 @@ add_test(
 
 add_test(
   NAME Tu_uninstall_otb
-  COMMAND ${pkg_extracted_dir}/tools/uninstall_otb${my_ext}
+  COMMAND ${uninstall_otb_CMD}
   WORKING_DIRECTORY ${testing_dir}
   )
 
