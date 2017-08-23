@@ -422,7 +422,7 @@ protected:
 // Software Guide : BeginLatex
 //
 // \code{TernaryFunctorImageFilterWithNBands} class is defined here.
-// This class inherits form \doxygen{itk::TernaryFunctorImageFilter} with additional nuber of band parameters.
+// This class inherits form \doxygen{itk}{TernaryFunctorImageFilter} with additional nuber of band parameters.
 // It's implementation is done to process Label, LAI, and mask image with Simulation functor.
 // Software Guide : EndLatex
 
@@ -595,7 +595,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // Acquisition parameters are loaded using text file. A detailed definition of acquisition parameters can
-  // be found in class \doxygen{SailModel}.
+  // be found in class \doxygen{otb}{SailModel}.
   //
   // Software Guide : EndLatex
 

@@ -1,0 +1,32 @@
+diff -burN gdal-2.2.1-orig/frmts/raw/envidataset.cpp gdal-2.2.1/frmts/raw/envidataset.cpp
+--- gdal-2.2.1-orig/frmts/raw/envidataset.cpp	2017-06-23 14:18:43.000000000 +0200
++++ gdal-2.2.1/frmts/raw/envidataset.cpp	2017-07-20 18:25:05.373655046 +0200
+@@ -620,10 +620,13 @@
+         adfGeoTransform[4] != 0.0 || adfGeoTransform[5] != 1.0;
+     if( bHasNonDefaultGT )
+     {
++        const double dfDet = adfGeoTransform[1] * adfGeoTransform[5] -
++                             adfGeoTransform[2] * adfGeoTransform[4];
++        const double dfSign = (dfDet>0.0 ? 1.0 : -1.0);
+         const double dfRotation1 =
+-            -atan2(-adfGeoTransform[2], adfGeoTransform[1]) * kdfRadToDeg;
++            -atan2(dfSign * adfGeoTransform[2], adfGeoTransform[1]) * kdfRadToDeg;
+         const double dfRotation2 =
+-            -atan2(-adfGeoTransform[4], -adfGeoTransform[5]) * kdfRadToDeg;
++            -atan2(-adfGeoTransform[4], dfSign * adfGeoTransform[5]) * kdfRadToDeg;
+         const double dfRotation = (dfRotation1 + dfRotation2) / 2.0;
+ 
+         if( fabs(dfRotation1 - dfRotation2) > 1e-5 )
+@@ -1534,7 +1537,12 @@
+ 
+     // Fallback to localcs if we don't recognise things.
+     if( oSRS.GetRoot() == NULL )
++        {
+         oSRS.SetLocalCS(papszFields[0]);
++        // assume that the Y axis isn't flipped
++        adfGeoTransform[2] *= -1.0;
++        adfGeoTransform[5] *= -1.0;
++        }
+ 
+     // Try to set datum from projection info line if we have a
+     // projected coordinate system without a GEOGCS.

@@ -120,7 +120,7 @@ private:
       "polygons, lines, points. \nThe behavior of this application is different for each type of geometry : \n\n"
       "  - polygon: select points whose center is inside the polygon\n"
       "  - lines  : select points intersecting the line\n"
-      "  - points : select closest point to the provided point\n");
+      "  - points : select closest point to the provided point");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

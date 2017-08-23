@@ -53,6 +53,7 @@ otb_module(OTBAppClassification
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
+    OTBAppProjection
 
   DESCRIPTION
     "${DOCUMENTATION}"

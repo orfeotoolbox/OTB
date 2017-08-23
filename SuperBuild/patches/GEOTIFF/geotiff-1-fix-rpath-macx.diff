@@ -1,0 +1,22 @@
+diff -burN libgeotiff-1.4.2.orig/CMakeLists.txt libgeotiff-1.4.2/CMakeLists.txt
+--- libgeotiff-1.4.2.orig/CMakeLists.txt	Tue Jul 25 17:16:02 2017
++++ libgeotiff-1.4.2/CMakeLists.txt	Tue Jul 25 17:16:40 2017
+@@ -451,12 +451,12 @@
+       VERSION ${LINK_VERSION}
+       SOVERSION ${LINK_SOVERSION}
+       CLEAN_DIRECT_OUTPUT 1 )
+-   if (APPLE)
+-      set_target_properties(
+-        ${GEOTIFF_LIBRARY_TARGET}
+-        PROPERTIES
+-        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+-   endif()
++   # if (APPLE)
++   #    set_target_properties(
++   #      ${GEOTIFF_LIBRARY_TARGET}
++   #      PROPERTIES
++   #      INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
++   # endif()
+ 
+ ELSE(UNIX)
+ # Default:

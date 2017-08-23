@@ -35,3 +35,6 @@ otb_create_application(
   NAME           Pansharpening
   SOURCES        otbPansharpening.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+# Mantis-1427 : temporary fix
+add_dependencies(${otb-module}-all otbapp_Superimpose)

@@ -24,7 +24,7 @@ SETUP_SUPERBUILD(TINYXML)
 
 ExternalProject_Add(TINYXML
   PREFIX TINYXML
-  URL "http://sourceforge.net/projects/tinyxml/files/tinyxml/2.6.2/tinyxml_2_6_2.tar.gz/download"
+  URL "http://downloads.sourceforge.net/project/tinyxml/tinyxml/2.6.2/tinyxml_2_6_2.tar.gz"
   URL_MD5 c1b864c96804a10526540c664ade67f0
   BINARY_DIR ${TINYXML_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -35,6 +35,10 @@ ExternalProject_Add(TINYXML
   ${TINYXML_SB_SRC}
   CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 SUPERBUILD_UPDATE_CMAKE_VARIABLES(TINYXML FALSE)
