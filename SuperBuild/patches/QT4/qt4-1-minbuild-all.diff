@@ -1,6 +1,18 @@
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/projects.pro qt-everywhere-opensource-src-4.8.7/projects.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/projects.pro	2017-08-18 10:54:46.519887277 +0200
++++ qt-everywhere-opensource-src-4.8.7/projects.pro	2017-08-23 14:33:05.289398427 +0200
+@@ -11,7 +11,7 @@
+     symbian|integrity {
+        QT_BUILD_PARTS = libs tools examples demos
+     } else {
+-       QT_BUILD_PARTS = libs tools examples demos docs translations
++       QT_BUILD_PARTS = libs tools examples demos translations
+     }
+ } else { #make sure the order makes sense
+    contains(QT_BUILD_PARTS, translations) {
 diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pri qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri
 --- qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pri	2017-08-18 10:54:45.407880063 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri	2017-08-21 16:51:31.977064035 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri	2017-08-23 14:32:27.641149748 +0200
 @@ -4,7 +4,7 @@
  SOURCES += $$PWD/qjpeghandler.cpp
  contains(QT_CONFIG, system-jpeg) {
@@ -12,7 +24,7 @@ diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pr
  }
 diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro
 --- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro	2017-08-18 10:54:45.583881205 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro	2017-08-21 16:51:32.037064450 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro	2017-08-23 14:32:27.661149879 +0200
 @@ -1,5 +1,4 @@
  TEMPLATE = subdirs
 -SUBDIRS += trace
@@ -21,7 +33,7 @@ diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/g
      SUBDIRS += openvg
 diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/imageformats/imageformats.pro qt-everywhere-opensource-src-4.8.7/src/plugins/imageformats/imageformats.pro
 --- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/imageformats/imageformats.pro	2017-08-18 10:54:45.583881205 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/plugins/imageformats/imageformats.pro	2017-08-21 16:51:32.037064450 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/imageformats/imageformats.pro	2017-08-23 14:32:27.661149879 +0200
 @@ -3,7 +3,7 @@
  !contains(QT_CONFIG, no-jpeg):!contains(QT_CONFIG, jpeg):SUBDIRS += jpeg
  !contains(QT_CONFIG, no-gif):!contains(QT_CONFIG, gif):SUBDIRS += gif
@@ -33,7 +45,7 @@ diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/imageformats/imag
  !contains(QT_CONFIG, no-tga):SUBDIRS += tga
 diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro
 --- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro	2017-08-18 10:54:45.599881309 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro	2017-08-21 16:51:32.037064450 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro	2017-08-23 14:32:27.661149879 +0200
 @@ -1,16 +1,16 @@
  TEMPLATE = subdirs
  
@@ -62,7 +74,7 @@ diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro qt-ev
  contains(QT_CONFIG, declarative): SUBDIRS *= qmltooling
 diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/src.pro qt-everywhere-opensource-src-4.8.7/src/src.pro
 --- qt-everywhere-opensource-src-4.8.7.orig/src/src.pro	2017-08-18 10:54:46.487887069 +0200
-+++ qt-everywhere-opensource-src-4.8.7/src/src.pro	2017-08-21 16:52:29.237459465 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/src.pro	2017-08-23 14:32:27.661149879 +0200
 @@ -4,7 +4,7 @@
  unset(SRC_SUBDIRS)
  win32:SRC_SUBDIRS += src_winmain
