@@ -214,9 +214,9 @@ private:
       {
       id[0] = static_cast< int >( GetParameterFloat( "coordx" ) );
       id[1] = static_cast< int >( GetParameterFloat( "coordy" ) );
-      if (static_cast< uint >( id[0] ) >= 
+      if (static_cast< unsigned int >( id[0] ) >= 
                     inImage->GetLargestPossibleRegion().GetSize()[0]
-       || static_cast< uint >( id[1] ) >=
+       || static_cast< unsigned int >( id[1] ) >=
                     inImage->GetLargestPossibleRegion().GetSize()[1]
        || id[0] < 0 || id[1] < 0 )
         {
