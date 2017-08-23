@@ -59,9 +59,8 @@ add_test(
 
 #configure test dependencies..
 set_tests_properties ( Tu_selftester PROPERTIES DEPENDS Tu_install_package)
-set_tests_properties ( Tu_build_examples PROPERTIES DEPENDS Tu_install_package)
-set_tests_properties ( Tu_uninstall_otb PROPERTIES DEPENDS Tu_install_package)
-
+set_tests_properties ( Tu_build_examples PROPERTIES DEPENDS Tu_selftester)
+set_tests_properties ( Tu_uninstall_otb PROPERTIES DEPENDS Tu_build_examples)
 
 #if(UNIX)
   #TODO: add test with shellcheck for script files
