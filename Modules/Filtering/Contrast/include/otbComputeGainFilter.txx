@@ -106,7 +106,7 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
 template <class TInputImage , class TLut , class TOutputImage >
 void ComputeGainFilter < TInputImage , TLut , TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
-                             ThreadIdType threadId )
+                             ThreadIdType itkNotUsed(threadId) )
 {
   typename InputImageType::ConstPointer input = GetInputImage();
   typename LutType::ConstPointer lut = GetInputLut();
@@ -118,8 +118,8 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
   // Is it usefull???
 
   // support progress methods/callbacks
-  itk::ProgressReporter progress(this , threadId , 
-                outputRegionForThread.GetNumberOfPixels() );
+  // itk::ProgressReporter progress(this , threadId , 
+  //               outputRegionForThread.GetNumberOfPixels() );
 
   itk::ImageRegionConstIterator < InputImageType > it ( input , 
                                                         inputRegionForThread );

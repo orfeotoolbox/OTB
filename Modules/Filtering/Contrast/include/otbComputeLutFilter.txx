@@ -40,12 +40,12 @@ ComputeLutFilter < TInputImage , TOutputImage >
 
 template <class TInputImage, class TOutputImage >
 typename TOutputImage::InternalPixelType ComputeLutFilter < TInputImage , TOutputImage >
-::PostProcess( int countMapValue ,
-               int countValue )
+::PostProcess( int countValue ,
+               int countMapValue )
 { 
   float denum = countValue * m_Step + m_Min;
   if ( denum == 0 )
-    denum = 1.0;
+    return 0;
   return static_cast< OutputPixelType > ((countMapValue * m_Step + m_Min) \
           / denum );
 }
@@ -86,7 +86,6 @@ void ComputeLutFilter < TInputImage , TOutputImage >
   // multithread the execution
   this->GetMultiThreader()->SingleMethodExecute();
 
-  this->AfterThreadedGenerateData();
 }
 
 template <class TInputImage , class TOutputImage >
@@ -104,7 +103,7 @@ void ComputeLutFilter <TInputImage , TOutputImage >
                        ThreadIdType threadId)
 {
   typename InputImageType::ConstPointer input = this->GetInput();
-  typename InputImageType::Pointer output = this->GetOutput();
+  typename OutputImageType::Pointer output = this->GetOutput();
 
   typename InputImageType::RegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread , outputRegionForThread);
@@ -119,7 +118,8 @@ void ComputeLutFilter <TInputImage , TOutputImage >
 
   itk::ImageRegionIterator <OutputImageType > oit ( output ,
                                                     outputRegionForThread );
-  HistoType target , lut ;
+  HistoType target;
+  LutType lut;
   target.SetSize( m_NbBin );
   lut.SetSize( m_NbBin );
   it.GoToBegin();
@@ -127,7 +127,7 @@ void ComputeLutFilter <TInputImage , TOutputImage >
   while ( !oit.IsAtEnd() )
     {
       target.Fill(0);
-      lut.Fill(0);
+      lut.Fill(-1);
       CreateTarget( it.Get() , target );
       Equalized( it.Get() , target , lut );
       oit.Set(lut);
@@ -136,18 +136,11 @@ void ComputeLutFilter <TInputImage , TOutputImage >
     }
 }
 
-template <class TInputImage , class TOutputImage >
-void ComputeLutFilter <TInputImage , TOutputImage >
-::AfterThreadedGenerateData()
-{
-
-}
-
 template <class TInputImage, class TOutputImage >
 void ComputeLutFilter < TInputImage , TOutputImage >
 ::Equalized( const HistoType & inputHisto ,
              HistoType & targetHisto ,
-             HistoType & lut)
+             LutType & lut)
 {
   int countMapValue = 0;
   int countValue = 0;

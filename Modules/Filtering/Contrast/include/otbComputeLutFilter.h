@@ -40,7 +40,9 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef typename OutputImageType::PixelType HistoType;
+  typedef typename InputImageType::PixelType HistoType;
+
+  typedef typename OutputImageType::PixelType LutType;
 
   typedef typename OutputImageType::InternalPixelType OutputPixelType;
 
@@ -74,14 +76,12 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
                             ThreadIdType threadId);
 
-  void AfterThreadedGenerateData();
-
   void CreateTarget( const HistoType & inputHisto ,
                            HistoType & targetHisto );
 
   void Equalized( const HistoType & inputHisto ,
                         HistoType & targetHisto ,
-                        HistoType & lut);
+                        LutType & lut);
 
 private:
   ComputeLutFilter(const Self &); //purposely not implemented
