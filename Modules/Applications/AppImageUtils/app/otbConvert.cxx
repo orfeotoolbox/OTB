@@ -205,7 +205,7 @@ private:
     if( rescaleType == "none" )
       {
       // selected channel
-      typename TImageType::Pointer tempImage = TImageType::New();
+      typename TImageType::Pointer tempImage;
       tempImage = GetSelectedChannels<TImageType>();
 
       SetParameterOutputImage<TImageType>("out", tempImage);
@@ -214,15 +214,11 @@ private:
     else // linear or log2
       {
       FloatVectorImageType::Pointer mask;
-      bool useMask = false;
-      if (IsParameterEnabled("mask"))
-        {
-        mask = this->GetParameterImage("mask");
-        useMask = true;
-        }
+
+      if (IsParameterEnabled("mask")) mask = this->GetParameterImage("mask");
 
       // selected channel
-      typename FloatVectorImageType::Pointer tempImage = FloatVectorImageType::New();
+      typename FloatVectorImageType::Pointer tempImage;
       tempImage = GetSelectedChannels<FloatVectorImageType>();
 
       const unsigned int nbComp(tempImage->GetNumberOfComponentsPerPixel());
@@ -278,7 +274,7 @@ private:
         }
 
       ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
-      if (useMask)
+      if (IsParameterEnabled("mask"))
         {
         maskShrinkFilter->SetShrinkFactor(shrinkFactor);
         maskShrinkFilter->SetInput(mask);
@@ -293,7 +289,7 @@ private:
       itk::ImageRegionConstIterator<FloatVectorImageType>
         it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
       itk::ImageRegionConstIterator<FloatVectorImageType> itMask;
-      if (useMask)
+      if (IsParameterEnabled("mask"))
         {
         itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
           maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
@@ -303,7 +299,7 @@ private:
       listSample->SetMeasurementVectorSize(tempImage->GetNumberOfComponentsPerPixel());
 
       // Now we generate the list of samples
-      if (useMask)
+      if (IsParameterEnabled("mask"))
         {
         // Remove masked pixels
         it.GoToBegin();
@@ -384,7 +380,7 @@ private:
     int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
     std::string channelMode = GetParameterString("channels");
 
-      if(channelMode == "mono")
+    if(channelMode == "mono")
     {
       channels = {1,1,1};
     }
@@ -406,7 +402,8 @@ private:
     else if (channelMode == "default")
     {
       // take all bands
-      for(auto i=1; i<=nbChan; ++i) channels.push_back(i);
+      channels.resize(nbChan);
+      std::iota(channels.begin(), channels.end(), 1);
     }
     return channels;
   }
@@ -422,13 +419,13 @@ private:
     typedef ImageListToVectorImageFilter<ImageListType,
                                          TImageType >                             ListConcatenerFilterType;
 
-    typename ImageListType::Pointer             m_ImageList;
-    typename ListConcatenerFilterType::Pointer  m_Concatener;
-    typename ExtractROIFilterListType::Pointer  m_ExtractorList;
+    typename ImageListType::Pointer             imageList;
+    typename ListConcatenerFilterType::Pointer  concatener;
+    typename ExtractROIFilterListType::Pointer  extractorList;
 
-    m_ImageList = ImageListType::New();
-    m_Concatener = ListConcatenerFilterType::New();
-    m_ExtractorList = ExtractROIFilterListType::New();
+    imageList = ImageListType::New();
+    concatener = ListConcatenerFilterType::New();
+    extractorList = ExtractROIFilterListType::New();
 
     const bool monoChannel = IsParameterEnabled("channels.mono");
 
@@ -441,15 +438,15 @@ private:
       extractROIFilter->SetInput(GetParameterImage("in"));
       if (!monoChannel) extractROIFilter->SetChannel((*j));
       extractROIFilter->UpdateOutputInformation();
-      m_ExtractorList->PushBack(extractROIFilter);
-      m_ImageList->PushBack(extractROIFilter->GetOutput());
+      extractorList->PushBack(extractROIFilter);
+      imageList->PushBack(extractROIFilter->GetOutput());
     }
 
-    m_Concatener->SetInput(m_ImageList);
-    m_Concatener->UpdateOutputInformation();
-    m_Concatener->Update();
+    concatener->SetInput(imageList);
+    concatener->UpdateOutputInformation();
+    concatener->Update();
 
-    return m_Concatener->GetOutput();
+    return concatener->GetOutput();
   }
 
 
