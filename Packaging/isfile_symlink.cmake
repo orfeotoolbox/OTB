@@ -1,5 +1,22 @@
-# The below function is modified from GetPrerequisities.cmake
-# which is distributed with CMake.
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 function(isfile_symlink file result_var1 result_var2)
   #
   # A file is not executable until proven otherwise:
@@ -68,38 +85,5 @@ function(isfile_symlink file result_var1 result_var2)
   set(${result_var2} "${symlinked_to}" PARENT_SCOPE)
 
   return()
-
-  #  message(FATAL_ERROR "xx${READLINK} failed on '${file_full}' \nExit status: '${readlink_rv}' \nOutput: '${readlink_ov}' \nError status: '${readlink_ev}'")
-
-
-  # # Replace the name of the file in the output with a placeholder token
-  # # (the string " _file_full_ ") so that just in case the path name of
-  # # the file contains the word "text" or "executable" we are not fooled
-  # # into thinking "the wrong thing" because the file name matches the
-  # # other 'file' command output we are looking for...
-  # #
-  # string(REPLACE "${file_full}" " _file_full_ " file_ov "${file_ov}")
-  # string(TOLOWER "${file_ov}" file_ov_lower)
-
-  # # message(FATAL_ERROR "file_ov='${file_ov}'")
-  # if("${file_ov_lower}" MATCHES "symbolic link")
-  #   set(${result_var1} 1 PARENT_SCOPE)
-  #   #Now find where the symlink is linked to.
-  #   #Do a regex replace
-  #   string(REGEX REPLACE "_file_full_*.*symbolic.link.to." "" symlinked_to ${file_ov})
-
-  #   #older version of file command output has  [`} character(remove it).
-  #   string(REPLACE "`" "" symlinked_to ${symlinked_to} )
-
-  #   #older version of file command output has  {'} character(remove it).
-  #   string(REPLACE "'" "" symlinked_to "${symlinked_to}")
-
-  #   #strip final output
-  #   string(STRIP ${symlinked_to} symlinked_to)
-  #   set(${result_var2} "${symlinked_to}" PARENT_SCOPE)
-
-  #   #message(FATAL_ERROR "${file_full} is symlinked_to ${symlinked_to}")
-  #   return()
-  # endif()
 
 endfunction()
