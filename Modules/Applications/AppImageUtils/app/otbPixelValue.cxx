@@ -64,14 +64,13 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-	AddDocTag("Miscellaneous");
+    AddDocTag("Miscellaneous");
     AddDocTag("Utilities");
     AddDocTag("Coordinates");
     AddDocTag("Raster");
 
     AddParameter(ParameterType_InputImage , "in", "Input Image");
     SetParameterDescription("in" , "Input image");
-    // SetParameterString("in" , "/home/antoine/dev/otb-data/Examples/QB_1_ortho.tif");
 
     AddParameter(ParameterType_Float , "coordx" , "X coordinate" );
     SetParameterDescription("coordx" ,
@@ -86,11 +85,11 @@ private:
           "Coordinate system used to designate the pixel");
     SetParameterDescription( "mode" , 
           "Different mode can be selected, default mode is Index.");
-    AddChoice( "mode.ind" , "Index");
-    SetParameterDescription( "mode.ind" , 
+    AddChoice( "mode.index" , "Index");
+    SetParameterDescription( "mode.index" , 
           "This mode use the given coordinates as index to locate the pixel.");
-    AddChoice( "mode.phy" , "Image physical space");
-    SetParameterDescription( "mode.phy" , 
+    AddChoice( "mode.physical" , "Image physical space");
+    SetParameterDescription( "mode.physical" , 
           "This mode interpret the given coordinates in the image "
           "physical space.");
     AddChoice( "mode.epsg" , "EPSG coordinates");
@@ -125,7 +124,7 @@ private:
   {
     if ( HasValue("in") )
       {
-      ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
+      ExtractROIFilterType::InputImageType * inImage = GetParameterImage("in");
 
       // Update the values of the channels to be selected
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
@@ -140,24 +139,24 @@ private:
       }
   }
 
-  std::string CreateBoundaryBox( std::string mode )
+  std::string CreateBoundaryBox( const std::string & mode )
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
     FloatVectorImageType::IndexType min , max;
-    min.Fill(30);
+    min.Fill(0);
     max[0] = inImage->GetLargestPossibleRegion().GetSize()[0] - 1;
     max[1] = inImage->GetLargestPossibleRegion().GetSize()[1] - 1;
-    std::string boundaries[4];
-    if (mode == "ind")
+    std::string boundaries[4]("");
+    if (mode == "index")
       {
       boundaries[0] = std::to_string(max[0]);
       boundaries[1] = std::to_string(max[1]);
       boundaries[2] = std::to_string(min[0]);
       boundaries[3] = std::to_string(min[1]);
       }
-    if (mode == "phy")
+    else if (mode == "physical")
       {
-      itk::Point<float, 2> minP , maxP;
+      itk::Point< float, 2 > minP(0) , maxP(0);
       inImage->TransformIndexToPhysicalPoint(min,minP);
       inImage->TransformIndexToPhysicalPoint(max,maxP);
       boundaries[0] = std::to_string(std::max(minP[0],maxP[0]));
@@ -165,7 +164,7 @@ private:
       boundaries[2] = std::to_string(std::min(minP[0],maxP[0]));
       boundaries[3] = std::to_string(std::min(minP[1],maxP[1]));
       }
-    if (mode == "epsg")
+    else if (mode == "epsg")
       {
       RSTransformType::Pointer inverse = RSTransformType::New();
       if ( HasUserValue("epsg") )
@@ -177,7 +176,7 @@ private:
       inverse->SetInputKeywordList( inImage->GetImageKeywordlist() );
       inverse->SetInputProjectionRef( inImage->GetProjectionRef() );
       inverse->InstantiateTransform();
-      itk::Point<float, 2> minPOut , maxPOut , minP , maxP;
+      itk::Point< float, 2 > minPOut(0) , maxPOut(0) , minP(0) , maxP(0);
       inImage->TransformIndexToPhysicalPoint(min,minP);
       inImage->TransformIndexToPhysicalPoint(max,maxP);
       minPOut = inverse->TransformPoint( minP );
@@ -187,17 +186,20 @@ private:
       boundaries[2] = std::to_string(std::min(minPOut[0],maxPOut[0]));
       boundaries[3] = std::to_string(std::min(minPOut[1],maxPOut[1]));
       }
-    if ( mode != "ind" )
+
+    for (int i = 0 ; i<4 ; i++)
       {
-      for (int i = 0 ; i<4 ; i++)
+      std::size_t coma = boundaries[i].find(".");
+      if ( coma != std::string::npos )
         {
-        while (boundaries[i].back() == '0' && boundaries[i].size() > 1)
-          {
-          boundaries[i].pop_back();
-          }
+        std::size_t zero = boundaries[i].find_last_not_of("0");
+        if ( zero != std::string::npos ) 
+          boundaries[i].erase(zero + 1);
+        else
+          boundaries[i] = "0";
         }
       }
-    
+  
     std::string box = "";
     box += "["+boundaries[2]+" , "+boundaries[0]+"] x ";
     box += "["+boundaries[3]+" , "+boundaries[1]+"]";
@@ -206,11 +208,12 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+    std::string mode = GetParameterString( "mode" );
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
     FloatVectorImageType::IndexType id ;
     id.Fill(0);
-    bool isPixelIn = false;
-    if (GetParameterString( "mode" ) == "ind" )
+    bool isPixelIn( false );
+    if ( mode == "index" )
       {
       id[0] = static_cast< int >( GetParameterFloat( "coordx" ) );
       id[1] = static_cast< int >( GetParameterFloat( "coordy" ) );
@@ -229,15 +232,15 @@ private:
         }
       }
 
-    if (GetParameterString( "mode" ) == "phy" )
+    else if ( mode == "physical" )
       {
-      itk::Point<float, 2> pixel;
+      itk::Point<float, 2> pixel(0);
       pixel[ 0 ] = GetParameterFloat( "coordx" );
       pixel[ 1 ] = GetParameterFloat( "coordy" );
       isPixelIn = inImage->TransformPhysicalPointToIndex(pixel,id);
       }
     
-    if (GetParameterString( "mode" ) == "epsg" )
+    else if ( mode == "epsg" )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       if ( HasUserValue("epsg") )
@@ -249,13 +252,14 @@ private:
       rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
       rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
       rsTransform->InstantiateTransform();
-      itk::Point<float, 2> pixelIn , pixelOut;
+      itk::Point<float, 2> pixelIn(0) , pixelOut(0);
       pixelIn[ 0 ] = GetParameterFloat( "coordx" );
       pixelIn[ 1 ] = GetParameterFloat( "coordy" );
       rsTransform->InstantiateTransform();
       pixelOut = rsTransform->TransformPoint(pixelIn);
       isPixelIn = inImage->TransformPhysicalPointToIndex(pixelOut,id);
       }
+
     if ( !isPixelIn )
       {
       std::string why = "Accessible pixels are in ";
@@ -270,13 +274,13 @@ private:
     // Extract the channels if needed
     if ( GetParameterByKey("cl")->GetActive() )
       {
-      for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx)
+      for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx) 
         {
         extractor->SetChannel(GetSelectedItems("cl")[idx] + 1 );
         }
       }
     FloatVectorImageType::SizeType size;
-    size.Fill(0);
+    size.Fill(1);
     FloatVectorImageType::RegionType region;
     region.SetSize(size);
     region.SetIndex(id);
@@ -287,7 +291,7 @@ private:
     // Display the pixel value
     id.Fill(0);
     std::ostringstream oss;
-    oss << extractor->GetOutput()->GetPixel(id)<<std::endl;
+    oss << extractor->GetOutput()->GetPixel(id);
     SetParameterString("value", oss.str(), false);
     //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );

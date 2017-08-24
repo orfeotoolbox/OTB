@@ -241,7 +241,7 @@ OTB_TEST_APPLICATION(NAME apTvUtPixelValueIndex
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                              -coordx 30
                              -coordy 30
-                             -mode ind
+                             -mode index
                              -cl Channel1 Channel3 Channel4
                        TESTENVOPTIONS ${TEMP}/apTvUtPixelValueIndex.txt
                        VALID --compare-ascii ${EPSILON_7}
@@ -253,7 +253,7 @@ OTB_TEST_APPLICATION(NAME apTvUtPixelValuePhys
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                              -coordx 374168
                              -coordy 4829165.5
-                             -mode phy
+                             -mode physical
                              -cl Channel1 Channel3 Channel4
                        TESTENVOPTIONS ${TEMP}/apTvUtPixelValuePhys.txt
                        VALID --compare-ascii ${EPSILON_7}
