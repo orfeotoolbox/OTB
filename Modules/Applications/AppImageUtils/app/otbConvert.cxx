@@ -333,14 +333,15 @@ private:
       // And extract the lower and upper quantile
       typename FloatVectorImageType::PixelType inputMin(nbComp), inputMax(nbComp);
 
+      auto histOutput = histogramsGenerator->GetOutput();
+      assert(histOutput);
+
       for(unsigned int i = 0; i < nbComp; ++i)
         {
-        inputMin[i] =
-          histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0,
-                                                                0.01 * GetParameterFloat("hcp.low"));
-        inputMax[i] =
-          histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0,
-                                                                1.0 - 0.01 * GetParameterFloat("hcp.high"));
+        auto && elm = histOutput->GetNthElement(i);
+        assert(elm);
+        inputMin[i] = elm->Quantile(0, 0.01 * GetParameterFloat("hcp.low"));
+        inputMax[i] = elm->Quantile(0, 1.0 - 0.01 * GetParameterFloat("hcp.high"));
         }
 
       otbAppLogDEBUG( << std::setprecision(5) << "Min/Max computation done : min=" << inputMin
