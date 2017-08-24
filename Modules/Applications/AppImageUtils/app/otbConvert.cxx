@@ -94,11 +94,10 @@ private:
       " (short, ushort, uchar, int, uint, float and double types are handled). "
       "The output image is written in the specified format (ie. that corresponds "
       "to the given extension).\n The conversion can include a rescale of the data range, "
-      "by default it's set from 2% to 98% of the data values. The rescale can be linear or log2. "
-      "The rescale can be linear or log2. \n "
+      "by default it's set from 2% to 98% of the data values. The rescale can be linear or log2. \n "
       "The choice of the output channels can be done with the extended filename, "
       "but less easy to handle. To do this, a 'channels' parameter allows you to select "
-      "the desired bands at the output. There are 3 modes, the available choices are: "
+      "the desired bands at the output. There are 3 modes, the available choices are: \n"
         " * mono : select first band in the 3 output channels. \n"
         " * rgb : select 3 bands in the input image (multi-bands). \n"
         " * default : keep all bands. \n");
@@ -152,7 +151,6 @@ private:
     SetParameterDescription("out", "Output image");
     SetDefaultOutputPixelType("out",ImagePixelType_uint8);
 
-    // TODO add parameter descriptions 
     AddParameter(ParameterType_Choice, "channels", "Channels selection");
     SetParameterDescription("channels", "It's possible to select the channels "
       "of the output image. There are 3 modes, the available choices are:");
@@ -378,8 +376,7 @@ private:
       }
   }
 
-
-  // TODO comment function
+  // Get the bands order
   std::vector<int> GetChannels()
   {
     std::vector<int> channels;
@@ -414,7 +411,7 @@ private:
     return channels;
   }
 
-  // TODO comment
+  // return an image with the bands order modified of the input image
   template<class TImageType>
   typename TImageType::Pointer GetSelectedChannels()
   {
