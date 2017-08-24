@@ -22,7 +22,7 @@ if(WIN32)
   #uninstall OTB
   set(uninstall_otb_CMD ${pkg_extracted_dir}/tools/uninstall_otb.bat)
 else()
-  set(install_package_ARGS "--noprogress;--target;${pkg_extracted_dir}")
+  set(install_package_ARGS "--noprogress;--nox11;--target;${pkg_extracted_dir}")
   set(install_package_CMD "${PACKAGE_OUTPUT_FILE}")
   #selftester
   set(selftester_CMD ${pkg_extracted_dir}/tools/selftester.sh)
