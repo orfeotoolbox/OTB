@@ -427,23 +427,11 @@ ListEditItemModel
 
   assert( row1!=row2 );
 
-  {
-    emit layoutAboutToBeChanged();
+  emit layoutAboutToBeChanged();
 
-    m_StringList->Swap( row1, row2 );
+  m_StringList->Swap( row1, row2 );
 
-  // emit dataChanged(
-  //   createIndex( row1, 0  ),
-  //   createIndex( row1, ListEditItemModel::COLUMN_COUNT - 1 )
-  // );
-
-  // emit dataChanged(
-  //   createIndex( row2, 0  ),
-  //   createIndex( row2, ListEditItemModel::COLUMN_COUNT - 1 )
-  // );
-
-    emit layoutChanged();
-  }
+  emit layoutChanged();
 
   return true;
 }
