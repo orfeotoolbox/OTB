@@ -422,11 +422,11 @@ private:
     // get band order
     std::vector<int> channels = GetChannels();
 
-    for (std::vector<int>::iterator j=channels.begin(); j!=channels.end(); ++j)
+    for (auto && channel : channels)
     {
       typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
       extractROIFilter->SetInput(GetParameterImage("in"));
-      if (!monoChannel) extractROIFilter->SetChannel((*j));
+      if (!monoChannel) extractROIFilter->SetChannel(channel);
       extractROIFilter->UpdateOutputInformation();
       extractorList->PushBack(extractROIFilter);
       imageList->PushBack(extractROIFilter->GetOutput());
