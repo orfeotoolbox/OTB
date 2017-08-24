@@ -274,26 +274,11 @@ private:
         }
 
       ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
-      if (IsParameterEnabled("mask"))
-        {
-        maskShrinkFilter->SetShrinkFactor(shrinkFactor);
-        maskShrinkFilter->SetInput(mask);
-        maskShrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
-        maskShrinkFilter->Update();
-        }
-
-      otbAppLogDEBUG( << "Shrink done" );
-
 
       otbAppLogDEBUG( << "Evaluating input Min/Max..." );
       itk::ImageRegionConstIterator<FloatVectorImageType>
         it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
       itk::ImageRegionConstIterator<FloatVectorImageType> itMask;
-      if (IsParameterEnabled("mask"))
-        {
-        itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
-          maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
-        }
 
       typename ListSampleType::Pointer listSample = ListSampleType::New();
       listSample->SetMeasurementVectorSize(tempImage->GetNumberOfComponentsPerPixel());
@@ -301,6 +286,14 @@ private:
       // Now we generate the list of samples
       if (IsParameterEnabled("mask"))
         {
+        maskShrinkFilter->SetShrinkFactor(shrinkFactor);
+        maskShrinkFilter->SetInput(mask);
+        maskShrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+        maskShrinkFilter->Update();
+
+        itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
+          maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
+
         // Remove masked pixels
         it.GoToBegin();
         itMask.GoToBegin();
