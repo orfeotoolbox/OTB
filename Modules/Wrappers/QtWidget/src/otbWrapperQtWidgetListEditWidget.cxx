@@ -298,6 +298,18 @@ ListEditWidget
 /*******************************************************************************/
 void
 ListEditWidget
+::on_browseButton_clicked()
+{
+  // qDebug() << this << "::on_browseButton_clicked()";
+
+  assert( m_UI!=nullptr );
+  assert( m_UI->treeView!=nullptr );
+  assert( m_UI->treeView->selectionModel()!=nullptr );
+}
+
+/*******************************************************************************/
+void
+ListEditWidget
 ::onSelectionChanged( const QItemSelection & selected,
 		      const QItemSelection & deselected )
 {
