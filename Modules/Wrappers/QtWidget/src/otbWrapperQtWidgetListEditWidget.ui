@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>122</width>
-    <height>126</height>
+    <height>152</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,6 +51,19 @@
        </property>
        <property name="text">
         <string>+</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="browseButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>...</string>
        </property>
       </widget>
      </item>
