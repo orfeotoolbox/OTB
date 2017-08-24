@@ -74,12 +74,9 @@ ListEditWidget
   m_UI->setupUi( this );
 
   {
-  QItemSelectionModel * ism = m_UI->treeView->selectionModel();
+  assert( m_UI->treeView->selectionModel()==nullptr );
 
   m_UI->treeView->setModel( new ListEditItemModel( m_UI->treeView ) );
-
-  delete ism;
-  ism = NULL;
   }
 }
 
