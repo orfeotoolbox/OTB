@@ -72,9 +72,9 @@ done
 
 REPORT_SIZE=$(nb_report_lines)
 if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
-  echo "Check 1/3 : FAIL"
+  echo "Check 1/4 : FAIL"
 else
-  echo "Check 1/3 : PASS"
+  echo "Check 1/4 : PASS"
 fi
 REF_SIZE=$REPORT_SIZE
 
@@ -137,9 +137,9 @@ fi
 
 REPORT_SIZE=$(nb_report_lines)
 if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
-  echo "Check 2/3 : FAIL"
+  echo "Check 2/4 : FAIL"
 else
-  echo "Check 2/3 : PASS"
+  echo "Check 2/4 : PASS"
 fi
 REF_SIZE=$REPORT_SIZE
 
@@ -181,10 +181,13 @@ fi
 
 REPORT_SIZE=$(nb_report_lines)
 if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
-  echo "Check 3/3 : FAIL"
+  echo "Check 3/4 : FAIL"
 else
-  echo "Check 3/3 : PASS"
+  echo "Check 3/4 : PASS"
 fi
+
+GREP=$(which grep)
+RES=$($GREP -Rs "/usr/" > /dev/null)
 
 # clean any background process
 ps_children $$ >tmp.log
@@ -192,3 +195,14 @@ for pid in $(cut -d ' ' -f 1 < tmp.log); do
   kill -9 "$pid"
 done
 rm -f tmp.log
+
+grep_cmd=$(which grep)
+grep_out=$($grep_cmd -Rs "/usr/" "$CUR_DIR/lib/cmake/")
+grep_ret=$?
+if [ $grep_ret -ne 1 ]; then
+    echo "Check 4/4 : FAIL"
+    echo "ERROR: your cmake files contains references to /usr. Is this normal?"
+    echo "$grep_out"
+else
+    echo "Check 4/4 : PASS"
+fi
