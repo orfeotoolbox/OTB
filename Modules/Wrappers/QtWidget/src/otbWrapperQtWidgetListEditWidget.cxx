@@ -305,6 +305,46 @@ ListEditWidget
   assert( m_UI!=nullptr );
   assert( m_UI->treeView!=nullptr );
   assert( m_UI->treeView->selectionModel()!=nullptr );
+
+
+  //
+  // Pick-up first item of selection.
+  QModelIndexList indexes(
+    m_UI->treeView->selectionModel()->selectedRows()
+  );
+
+  assert( indexes.size()==1 );
+
+  const QModelIndex & front = indexes.front();
+
+  //
+  // Get item-model.
+  ListEditItemModel * itemModel = GetItemModel();
+  assert( itemModel!=nullptr );
+
+  //
+  // Pick-up filename.
+  QString selectedFilter;
+
+  QString filename(
+    QFileDialog::getSaveFileName(
+      this,
+      tr( "Select filename..." ),
+      QDir::current().filePath( itemModel->data( front ).toString() ),
+      tr( "PNG File (*.png);;"
+	  "JPEG File (*.jpg);;"
+	  "TIFF file (*tif);;"
+	  "All files (*)" ),
+      &selectedFilter
+    )
+  );
+
+  if( filename.isEmpty() )
+    return;
+
+  //
+  // Foo.
+  itemModel->setData( front, filename );
 }
 
 /*******************************************************************************/
