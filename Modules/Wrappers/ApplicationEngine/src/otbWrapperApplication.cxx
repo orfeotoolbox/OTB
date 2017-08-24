@@ -74,9 +74,17 @@ Application::~Application()
 {
 }
 
-otb::Logger* Application::GetLogger()
+otb::Logger* Application::GetLogger() const
 {
   return m_Logger;
+}
+
+void Application::SetLogger(otb::Logger *logger)
+{
+  if (m_Logger != logger)
+    {
+    m_Logger = logger;
+    }
 }
 
 std::vector<std::string>
