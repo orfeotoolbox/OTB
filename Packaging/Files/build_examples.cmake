@@ -2,12 +2,7 @@ if(NOT SRC_DIR)
   message(FATAL_ERROR "SRC_DIR is not set")
 endif()
 
-if(NOT MAKE_PROGRAM)
-  message(FATAL_ERROR "MAKE_PROGRAM is not set")
-endif()
-
 set(PKG_DIR)
-
 get_filename_component(PKG_DIR ${CMAKE_CURRENT_LIST_DIR} PATH)
 set(TEST_DIR ${PKG_DIR}/ex_build)
 
@@ -20,7 +15,6 @@ endif()
 message("TEST_DIR=${TEST_DIR}")
 message("PKG_DIR=${PKG_DIR}")
 message("SRC_DIR=${SRC_DIR}")
-message("MAKE_PROGRAM=${MAKE_PROGRAM}")
 
 # if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
 #   find_program(GREP grep)
@@ -58,7 +52,9 @@ endif()
 # If you want to test building a third targert, use foreach.
 # the code is written in a way that it is easy to stuff these two
 # into a cmake foreach
-execute_process(COMMAND ${MAKE_PROGRAM} HelloWorldOTB
+execute_process(COMMAND ${CMAKE_COMMAND}
+  --build ${TEST_DIR}
+  --target HelloWorldOTB
   WORKING_DIRECTORY ${TEST_DIR}
   RESULT_VARIABLE build_HelloWorldOTB_rv
   OUTPUT_VARIABLE build_HelloWorldOTB_ov
@@ -72,7 +68,9 @@ else()
   message("Build PASSED. build_HelloWorldOTB_ov:\n${build_HelloWorldOTB_ov}")
 endif()
 
-execute_process(COMMAND ${MAKE_PROGRAM} Pipeline
+execute_process(COMMAND ${CMAKE_COMMAND}
+  --build ${TEST_DIR}
+  --target Pipeline
   WORKING_DIRECTORY ${TEST_DIR}
   RESULT_VARIABLE build_Pipeline_rv
   OUTPUT_VARIABLE build_Pipeline_ov
