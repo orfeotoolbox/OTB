@@ -165,6 +165,8 @@ private slots:
   void on_removeButton_clicked();
   void on_upButton_clicked();
   void on_downButton_clicked();
+
+  void onSelectionChanged( const QItemSelection &, const QItemSelection & );
 };
 
 } // end namespace 'Wrapper'

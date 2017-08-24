@@ -77,6 +77,20 @@ ListEditWidget
   assert( m_UI->treeView->selectionModel()==nullptr );
 
   m_UI->treeView->setModel( new ListEditItemModel( m_UI->treeView ) );
+
+  assert( m_UI->treeView->selectionModel()!=nullptr );
+
+  QObject::connect(
+    m_UI->treeView->selectionModel(),
+    SIGNAL(
+      selectionChanged( const QItemSelection & , const QItemSelection & )
+    ),
+    // to:
+    this,
+    SLOT(
+      onSelectionChanged( const QItemSelection & , const QItemSelection & )
+    )
+  );
   }
 }
 
@@ -147,6 +161,8 @@ ListEditWidget
     assert( m_UI->treeView->selectionModel()!=nullptr );
 
     QItemSelectionModel * ism =  m_UI->treeView->selectionModel();
+
+    assert( ism!=nullptr );
 
     ism->clear();
 
@@ -277,6 +293,17 @@ ListEditWidget
     front.row() + 1,
     RIGHT
   );
+}
+
+/*******************************************************************************/
+void
+ListEditWidget
+::onSelectionChanged( const QItemSelection & selected,
+		      const QItemSelection & deselected )
+{
+  qDebug()
+    << this
+    << "::onSelectionChanged(" << selected << "," << deselected << ")";
 }
 
 } // end namespace 'Wrapper'
