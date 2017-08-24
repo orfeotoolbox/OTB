@@ -202,7 +202,7 @@ grep_ret=$?
 if [ $grep_ret -ne 1 ]; then
     echo "Check 4/4 : FAIL"
     echo "ERROR: your cmake files contains references to /usr. Is this normal?"
-    echo "$grep_out"
+    echo_and_report "$grep_out"
 else
     echo "Check 4/4 : PASS"
 fi
