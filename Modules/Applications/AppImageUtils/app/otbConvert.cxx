@@ -22,7 +22,6 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "itkCastImageFilter.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkListSample.h"
@@ -94,8 +93,15 @@ private:
     SetDocLongDescription("This application performs an image pixel type conversion "
       " (short, ushort, uchar, int, uint, float and double types are handled). "
       "The output image is written in the specified format (ie. that corresponds "
-      "to the given extension).\n The conversion can include a rescale using "
-      "the image 2 percent minimum and maximum values. The rescale can be linear or log2.");
+      "to the given extension).\n The conversion can include a rescale of the data range, "
+      "by default it's set from 2% to 98% of the data values. The rescale can be linear or log2. "
+      "The rescale can be linear or log2. \n "
+      "The choice of the output channels can be done with the extended filename, "
+      "but less easy to handle. To do this, a 'channels' parameter allows you to select "
+      "the desired bands at the output. There are 3 modes, the available choices are: "
+        " * mono : select first band in the 3 output channels. \n"
+        " * rgb : select 3 bands in the input image (multi-bands). \n"
+        " * default : keep all bands. \n");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
@@ -104,7 +110,7 @@ private:
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input image");
+    AddParameter(ParameterType_InputImage, "in", "Input image");
     SetParameterDescription("in", "Input image");
 
     AddParameter(ParameterType_Choice, "type", "Rescale type");
@@ -148,22 +154,26 @@ private:
 
     // TODO add parameter descriptions 
     AddParameter(ParameterType_Choice, "channels", "Channels selection");
-    SetParameterDescription("channels", "Channels selection");
+    SetParameterDescription("channels", "It's possible to select the channels "
+      "of the output image. There are 3 modes, the available choices are:");
 
     AddChoice("channels.default", "Default mode");
-    SetParameterDescription("channels.default", "Select all bands in the input image.");
+    SetParameterDescription("channels.default", "Select all bands in the input image, (1,1,1).");
 
-    AddChoice("channels.mono", "Channels selection ...");
+    AddChoice("channels.mono", "Select first band in the 3 output channels.");
 
     AddChoice("channels.rgb", "Channels selection RGB");
+    SetParameterDescription("channels.rgb", "Select 3 bands in the input image "
+      "(multi-bands), by default (1,2,3).");
+
     AddParameter(ParameterType_Int, "channels.rgb.red", "Red Channel");
-    SetParameterDescription("channels.rgb.red", "TODO");
+    SetParameterDescription("channels.rgb.red", "Red channel index.");
     SetDefaultParameterInt("channels.rgb.red", 1);
     AddParameter(ParameterType_Int, "channels.rgb.green", "Green Channel");
-    SetParameterDescription("channels.rgb.green", "TODO");
+    SetParameterDescription("channels.rgb.green", "Green channel index.");
     SetDefaultParameterInt("channels.rgb.green", 2);
     AddParameter(ParameterType_Int, "channels.rgb.blue", "Blue Channel");
-    SetParameterDescription("channels.rgb.blue", "TODO");
+    SetParameterDescription("channels.rgb.blue", "Blue channel index.");
     SetDefaultParameterInt("channels.rgb.blue", 3);
 
     AddRAMParameter();
@@ -179,7 +189,7 @@ private:
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-
+    // Nothing to do here for the parameters : all are independent
   }
 
   template<class TImageType>
