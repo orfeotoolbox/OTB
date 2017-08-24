@@ -307,20 +307,16 @@ private:
           ++it;
           ++itMask;
           }
-        }
-      else
-        {
-        for(it.GoToBegin(); !it.IsAtEnd(); ++it)
+        if (listSample->Size() == 0)
           {
-          listSample->PushBack(it.Get());
+          otbAppLogINFO( << "All pixels were masked, the application assume a wrong mask "
+            "and include all the image");
           }
         }
 
-      // if all pixels were masked, we assume a wrong mask and then include all image
-      if (listSample->Size() == 0)
+      // if mask is disable and all pixels were masked
+      if ((!IsParameterEnabled("mask")) || (listSample->Size() == 0))
         {
-        otbAppLogINFO( << "All pixels were masked, the application assume a wrong mask "
-          "and include all the image");
         for(it.GoToBegin(); !it.IsAtEnd(); ++it)
           {
           listSample->PushBack(it.Get());
