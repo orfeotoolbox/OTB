@@ -146,7 +146,7 @@ private:
     min.Fill(0);
     max[0] = inImage->GetLargestPossibleRegion().GetSize()[0] - 1;
     max[1] = inImage->GetLargestPossibleRegion().GetSize()[1] - 1;
-    std::string boundaries[4]("");
+    std::string boundaries[4];
     if (mode == "index")
       {
       boundaries[0] = std::to_string(max[0]);
