@@ -48,7 +48,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
-
+option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
 
 if(APPLE)

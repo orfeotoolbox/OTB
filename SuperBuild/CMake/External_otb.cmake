@@ -128,6 +128,17 @@ ADD_SUPERBUILD_CMAKE_VAR(OTB TINYXML_LIBRARY)
 ADD_SUPERBUILD_CMAKE_VAR(OTB Boost_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(OTB Boost_LIBRARY_DIR)
 
+
+set(OTB_MODULES_CONFIG)
+if(WITH_REMOTE_MODULES)
+  foreach(remote_module SertitObject Mosaic otbGRM)
+    list(APPEND OTB_MODULES_CONFIG -DModule_${remote_module}:BOOL=ON)
+  endforeach()
+else()
+  set(OTB_MODULES_CONFIG)
+endif()
+
+
 add_custom_command(OUTPUT otb_depends_done.txt
   COMMAND cmake -E touch otb_depends_done.txt
   DEPENDS ${OTB_DEPENDENCIES}
@@ -140,14 +151,6 @@ add_custom_target(OTB_DEPENDS
   VERBATIM
   )
 
-# set(OTB_CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS})
-# if(LINUX)
-#   string(REGEX REPLACE
-#     "-Wl,--no-undefined"
-#     "-Wl,--no-undefined -Wl,-no-as-needed"
-#     OTB_CMAKE_CACHE_ARGS
-#     "${OTB_CMAKE_CACHE_ARGS}")
-# endif()
 
 ExternalProject_Add(OTB
   DEPENDS ${OTB_DEPENDENCIES}
@@ -159,7 +162,7 @@ ExternalProject_Add(OTB
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CMAKE_CACHE_ARGS
   ${SB_CMAKE_CACHE_ARGS}
-  ${OTB_SB_COMPILATION_FLAGS}
+  ${OTB_MODULES_CONFIG}
   -DBUILD_TESTING:BOOL=${BUILD_TESTING}
   -DBUILD_EXAMPLES:BOOL=${BUILD_EXAMPLES}
   -DOTB_DATA_ROOT:STRING=${OTB_DATA_ROOT}
