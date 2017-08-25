@@ -195,17 +195,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #set_target_properties(siftfast PROPERTIES COMPILE_FLAGS "-DDVPROFILE")
 #target_link_libraries(siftfast libsiftfast)
 
-# check for OpenMP
-find_package(OpenMP)
-if(OPENMP_FOUND)
-  message(STATUS "Enabling OpenMP support")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-else()
-  message(STATUS "Disabling OpenMP support")
-endif()
-
 #Install TARGET & FILES for otb-lib
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otbsiftfast PROPERTIES ${OTB_LIBRARY_PROPERTIES})
