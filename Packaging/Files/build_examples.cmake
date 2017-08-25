@@ -57,8 +57,8 @@ endif()
 # the code is written in a way that it is easy to stuff these two
 # into a cmake foreach
 execute_process(COMMAND ${CMAKE_COMMAND}
-  --config RelWithDebInfo
   --build ${TEST_DIR}
+  --config RelWithDebInfo
   --target HelloWorldOTB
   WORKING_DIRECTORY ${TEST_DIR}
   RESULT_VARIABLE build_HelloWorldOTB_rv
@@ -74,8 +74,8 @@ else()
 endif()
 
 execute_process(COMMAND ${CMAKE_COMMAND}
-  --config RelWithDebInfo
   --build ${TEST_DIR}
+  --config RelWithDebInfo
   --target Pipeline
   WORKING_DIRECTORY ${TEST_DIR}
   RESULT_VARIABLE build_Pipeline_rv
