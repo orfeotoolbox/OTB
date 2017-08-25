@@ -214,7 +214,7 @@ option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 mark_as_advanced(OTB_USE_DEPRECATED)
 
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" ON)
-option(OTB_USE_SSE_FLAGS "Enable SIMD optimisations (hardware dependant)." OFF)
+option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependant)." OFF)
 #-----------------------------------------------------------------------------
 # SHOW_ALL_MSG_DEBUG option
 option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
