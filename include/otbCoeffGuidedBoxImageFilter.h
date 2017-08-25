@@ -14,7 +14,6 @@
 namespace otb
 {
 
-
 template <class TInputImage , class TOutputImage >  
 class ITK_EXPORT CoeffGuidedBoxImageFilter :
     public itk::ImageToImageFilter<TInputImage,TOutputImage>
@@ -45,9 +44,7 @@ public:
 
   
 /**  iterators */ 
-  typedef typename itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
-
-    
+  typedef typename itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;   
 
 // ====================== Geters ==============================================================================
 

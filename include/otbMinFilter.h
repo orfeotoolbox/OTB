@@ -3,7 +3,7 @@
 
 /*===================================================================================================
 
-implémentation du minimum entre deux pixels de deux images et calcul de la carte de disparité 
+Implementation of the minimum between two pixels of two images and calculation of the disparity map
 
 =====================================================================================================*/
 
@@ -33,7 +33,7 @@ int m_disp;
 public:
   MinImageOperator() { }
   virtual ~MinImageOperator() { }
-  int SetDisp(int disp){ m_disp = disp; return m_disp;} //-disp pour avoir l ameme norme avec les resulats de ipol
+  int SetDisp(int disp){ m_disp = disp; return m_disp;} //-disp To have the same standard with the results of ipol
   
   
  TOutput operator() (TInput  input,const TInputCost & Cost )
@@ -97,13 +97,11 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
-  //typedef typename InputImageType::RegionType               RegionType;
+
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** Creation through object factory macro */
- // itkTypeMacro(MinFilter, BinaryFunctorImageFilter);
     /** Creation through object factory macro */
   itkTypeMacro(MinFilter, ImageToImageFilter);
 

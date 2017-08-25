@@ -61,11 +61,6 @@ CoefOfThePatchFilter<TInputImage, TOutputImage >
 {
  
   this->SetNthInput(0, const_cast<TInputImage *>( image ));
-}
-
-
-
-
 //================================== Geters ====================================================
 template <class TInputImage, class TOutputImage >
 const TInputImage *
@@ -78,9 +73,6 @@ CoefOfThePatchFilter<TInputImage,  TOutputImage >
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
 }
-
-
-
 
 template <class TInputImage,  class TOutputImage >
 TOutputImage *
@@ -104,10 +96,7 @@ CoefOfThePatchFilter<TInputImage,  TOutputImage >
     return ITK_NULLPTR;
     }
   return static_cast< TOutputImage *>(this->itk::ProcessObject::GetOutput(1));
-}
-
-
-    
+}   
     
 //============================================  GenerateOutputInformation  ========================================================
 template <class TInputImage,  class TOutputImage >
@@ -121,8 +110,6 @@ CoefOfThePatchFilter<TInputImage,  TOutputImage >
   this->GetOutputCoefImage()->SetNumberOfComponentsPerPixel(3);
    this->GetOutputNormalAndZValueImage()->SetNumberOfComponentsPerPixel(4);
 }
-
-
 //============================================  ThreadedGenerateData  ========================================================
 template <class TInputImage,  class TOutputImage >
 void
@@ -132,9 +119,7 @@ CoefOfThePatchFilter<TInputImage,  TOutputImage >
  
 PixelType coeffs(3);
  coeffs.Fill(0);
- 
- 
- //double d(0.);
+
  
  PixelType NormalAndZValue(4);
  NormalAndZValue.Fill(0);
@@ -142,7 +127,7 @@ PixelType coeffs(3);
 double z(0.),nx(0.),ny(0.),nz(0.),NormalNorm(0.);
 
 itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-//créer l'intérator  
+//Itérator  
 itk::ImageRegionIterator<TOutputImage> outputIt ( this->GetOutputCoefImage(), outputRegionForThread );
 outputIt.GoToBegin(); 
    	      
@@ -155,7 +140,7 @@ while ( !outputIt.IsAtEnd() && !InputImageIt.IsAtEnd() ){
 		 z = ( rand()/(double)RAND_MAX )*(m_DispMax - m_DispMin) + m_DispMin;	
 		 
 		  
-		// le vecteur normal au plan valeurs aléatoires
+		// The vector normal to the plane with random values
 			
 		
 		//std::cout<< "d =  " <<d << std::endl;		

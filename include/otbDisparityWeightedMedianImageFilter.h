@@ -48,12 +48,12 @@ public:
  TOutput operator() (  const TInput & input)
   {	 
 
-   // unsigned int Nband = input.GetPixel(0).Size(); // nbr de bande 4
+   // unsigned int Nband = input.GetPixel(0).Size(); // nbr of bands 4
     TOutput output ( 1);
     output.Fill(0); 
      
      
-    unsigned int Wsize = input.Size();  //taille de la fenetre ipol 19*19 ;
+    unsigned int Wsize = input.Size();  //Size of the window
    
    
    	// std::cout << " Nband = "<< Nband; 

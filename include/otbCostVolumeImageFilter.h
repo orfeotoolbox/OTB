@@ -93,7 +93,7 @@ protected:
   ~CostVolumeImageFilter() ITK_OVERRIDE;
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE; // meme taille de sortie, 1 composante
+  void GenerateOutputInformation() ITK_OVERRIDE; 
 
   /** Generate input requested region */
   void GenerateInputRequestedRegion() ITK_OVERRIDE; 

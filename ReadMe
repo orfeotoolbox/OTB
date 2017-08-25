@@ -1,0 +1,33 @@
+Cost-volume filtering parameters:
+
+
+     radius: radius of the guided filter (1)
+     alpha: value of alpha (0.9)
+     epsilon: regularization parameter (6.5025)
+     tau1: max for color difference (7)
+     tau2: max for gradient difference (2)
+
+     radius: radius of the weighted median filter (1)
+     sigmac: value of sigma_color (25.5)
+     sigmas: value of sigma_space (9)
+
+Execution:
+ ./bin/otbStereoFiltersTestDriver main_CVF Radius Min_Disp Max_Disp
+ Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images/ 
+
+
+
+Patch Match Stéréo parameters:
+
+  radius: size of patch (35)
+  alpha: value of alpha (0.9) 
+  tau1: max for color difference (10)
+  tau2: max for gradient difference (2)
+
+Execution:
+./bin/otbStereoFiltersTestDriver main_PatchMatch radius dispMin dispMax
+  Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images/
+
+
+ 
+

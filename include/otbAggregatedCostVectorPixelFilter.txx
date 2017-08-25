@@ -200,8 +200,7 @@ typename TInputImage::Pointer  inRightGradientXPtr = const_cast<InputImageType *
 typename TInputImage::Pointer  inPatchPtr = const_cast<InputImageType *>(this->GetPatchInputImage());
 
 typename TOutputImage::ConstPointer outputPtr = this->GetOutput();
-				
-//Vérification de pointeur non null            
+				           
 if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr ||!outputPtr || !inPatchPtr)
     {
     return;
@@ -329,8 +328,7 @@ Somme[p] = 0;
 							this->GetPatchInputImage()->GetPixel(NewIndexList[p])[2] ) ;				   
 											   
 						ShiftedIndex[1] = NeighborhoodIndex[1];	
-						
-		
+
 				
 		if( ShiftedIndex[0] < (unsigned)ImageSize[0] && ShiftedIndex[1] < (unsigned)ImageSize[1] 
 			&& ShiftedIndex[0] >=0 && ShiftedIndex[1] >= 0 ){

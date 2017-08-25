@@ -58,10 +58,7 @@ public:
   const TInputImage * GetRightInputImage() const;
   const TInputImage * GetLeftGradientXInput() const;
   const TInputImage * GetRightGradientXInput() const;
-   TInputImage * GetPatchInputImage();
-
-
-     
+  TInputImage * GetPatchInputImage();
 
  /** Get  Patch Size */
  SizeType GetPatchSize() const
@@ -86,8 +83,7 @@ public:
     m_Index[0]  = x;
     m_Index[1]  = y;
   }
-  
- 
+
     /** Set unsigned int Patch offset */
   void SetOffsetPatch(OffsetType Offset0, OffsetType Offset1, OffsetType Offset2)
   {
@@ -128,9 +124,6 @@ protected:
 private:
  AggregatedCostVectorPixelFilter(const Self&); //purposely not implemented
  void operator=(const Self&); //purposely not implemeFnted  
- 
-
-
 
     /** The offset of patch */
   OffsetType					m_PatchOffset0;

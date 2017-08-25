@@ -43,12 +43,9 @@ public:
   
   typedef TOutputImage										OutputImageType;
 
-  
-  
   typedef typename itk::ConstantBoundaryCondition<TInputImage>  BoundaryConditionType;
 
 
-  
 /**  iterators */ 
   typedef typename itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
   typedef typename itk::NeighborhoodIterator<TInputImage, BoundaryConditionType> NeighborhoodIteratorType; 

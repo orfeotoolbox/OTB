@@ -42,10 +42,6 @@ public:
   typedef typename InputImageType::PixelType                PixelType;
   
   typedef TOutputImage										OutputImageType;
-  
-
- 
-
 // ====================== Geters ==============================================================================
 
   /** Get the inputs */
@@ -54,9 +50,7 @@ public:
   /** Get the metric output */
 
  TOutputImage * GetOutputCoefImage();
- TOutputImage * GetOutputNormalAndZValueImage();
- 
-     
+ TOutputImage * GetOutputNormalAndZValueImage();    
       
 //=============== Seters ====================================================================================
   /** Set  inputs */

@@ -124,15 +124,18 @@ RMSEVectorImageFilter<TInputImage,  TOutputImage >
 {
 	
  
-itk::ImageRegionIterator<TOutputImage> EstimatedInIt ( this->GetEstimatedInputImage(), outputRegionForThread );
+itk::ImageRegionIterator<TInputImage> EstimatedInIt ( this->GetEstimatedInputImage(), outputRegionForThread );
 EstimatedInIt.GoToBegin(); 
 
-itk::ImageRegionIterator<TOutputImage> InIt ( this->GetInputImage(), outputRegionForThread );
+itk::ImageRegionIterator<TInputImage> InIt ( this->GetInputImage(), outputRegionForThread );
 InIt.GoToBegin(); 
   
 	
 IndexType Index =  {{0,0}};		
-SizeType ImageSize = this->GetInputImage()->GetLargestPossibleRegion().GetSize();
+SizeType ImageSize = this->GetEstimatedInputImage()->GetLargestPossibleRegion().GetSize();
+
+ std::cout << "ImageSize  = " << ImageSize << std::endl;
+         
 		  
 itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -142,23 +145,28 @@ OutPixel.Fill(0);
 
 double somme(0.),temp(0.), m(0.);
 
-while ( !EstimatedInIt.IsAtEnd() && !InIt.IsAtEnd() ){
+while( !EstimatedInIt.IsAtEnd() ){
 		  
 				
 temp = (EstimatedInIt.Get()[0] - EstimatedInIt.Get()[0])*(EstimatedInIt.Get()[0] - EstimatedInIt.Get()[0] ) ; 
 somme +=temp ;  							           						
 		
-          
+    std::cout << "somme  = " << EstimatedInIt.Get()[0] << std::endl;
+         
+    
+         
+         
         ++InIt;
-		++EstimatedInIt;	     
-
-        progress.CompletedPixel();
-      }  // end of while 
+		++EstimatedInIt;
+		  progress.CompletedPixel();
+       
+}  // end of while 
       
-    m = std::sqrt (somme/ (ImageSize[0]*ImageSize[1]) );
+         m = std::sqrt (somme/ (ImageSize[0]*ImageSize[1]) );
     OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>(m) ;
       
       this->GetOutput()->SetPixel(Index, OutPixel);
+     
      
 } //end of threaded generate data
 

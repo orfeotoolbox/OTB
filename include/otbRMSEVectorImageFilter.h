@@ -47,8 +47,7 @@ public:
   typedef TOutputImage										OutputImageType;
   
   
-  /**  iterators */ 
-  typedef typename itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
+
   
 // ====================== Geters ==============================================================================
 

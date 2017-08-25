@@ -206,7 +206,7 @@ CoeffGuidedBoxImageFilter<TInputImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {	
 
-//créer l'intérator 
+//Iterator 
 
 ConstNeighborhoodIteratorType InputImageIt( this->GetRadius(), this->GetLeftImageInput(), outputRegionForThread   );
 InputImageIt.GoToBegin(); 

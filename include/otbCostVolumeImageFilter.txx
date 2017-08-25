@@ -217,7 +217,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 {
  Superclass::GenerateInputRequestedRegion();	
  
-// Pointeurs 
+// 
 typename TInputImage::Pointer  inLeftPtr = const_cast<InputImageType *>(this->GetLeftInputImage());
 typename TInputImage::Pointer  inRightPtr = const_cast<InputImageType *>(this->GetRightInputImage());
 typename TInputImage::Pointer  inLeftGradientXPtr = const_cast<InputImageType *>(this->GetLeftGradientXInput());
@@ -228,7 +228,7 @@ typename TInputImage::Pointer  inRightGradientXPtr = const_cast<InputImageType *
 
 typename TOutputImage::ConstPointer outputPtr = this->GetOutputImage();
 				
-//Vérification de pointeur non null            
+//Non-null Pointer Verification           
 if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr /*|| !inLeftGradientYPtr  || !inRightGradientYPtr */||!outputPtr )
     {
     return;
@@ -243,7 +243,7 @@ RegionType inputLeftRequestedRegion;
 ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRightRequestedRegion );	 
   
  
-// le calcul des entrées non shiftées
+// The calculation of the non-shifted inputs
     if(inLeftPtr)
       {
       inLeftPtr->SetRequestedRegion( outputRequestedRegion);
@@ -258,7 +258,7 @@ ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRight
       //~ }
 
 
-// le calcul des entrées shiftées    
+//    The calculation of the shifted inputs
 
    inRightPtr->SetRequestedRegion(inputRightRequestedRegion);
   
@@ -281,15 +281,15 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 {	
  RegionType LeftRegionForThread;
  RegionType RightRegionForThread; 
-// int NComponents = m_MaxHDisp - m_MinHDisp+1;
+
  typename TOutputImage::PixelType OutPixel(1);
  OutPixel.Fill(0);
-// int i(0); //indice de l'image dans le cube
+
  
- //  Réglage des paramètres	
-	double alpha = 0.9; // faire le lien avec ipol
-	double taux1 = 7; // 
-	double taux2 = 2; // 	
+ //  Setting parameters
+	double alpha = 0.9; 
+	double taux1 = 7;  
+	double taux2 = 2;  	
 
 
 	 
@@ -348,14 +348,14 @@ outputIt.GoToBegin();
 								
 									if(costColorNorm > taux1) 
 										costColorNorm = taux1;
-									 	 // if pour prendre que le min			
+									 	 // if	To take the minimum 	
 								
 			costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
 			costGradientNorm=	costGradient.GetNorm () ;								
 									
 									if(costGradientNorm > taux2) 
 										costGradientNorm = taux2;
-									  // if pour prendre le min  
+									  // if To take the minimum  
 									  
 							  
 									  
@@ -392,7 +392,7 @@ void
 CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion )
 {
-//  Recupérer les pointeurs  
+//   
 
 typename TInputImage::Pointer  inLeftPtr = const_cast<InputImageType *>(this->GetLeftInputImage());
 typename TInputImage::Pointer  inRightPtr = const_cast<InputImageType *>(this->GetRightInputImage());
