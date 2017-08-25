@@ -22,7 +22,6 @@
 #define otbComputeGainFilter_txx
 
 #include "otbComputeGainFilter.h"
-#include "itkImageSource.h"
 #include "itkImageRegionIterator.h"
 
 #include <limits>

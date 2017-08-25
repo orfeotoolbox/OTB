@@ -100,6 +100,8 @@ public:
           ImageListToVectorFilterType;
   typedef otb::StreamingStatisticsImageFilter< FloatImageType >
           StatsFilterType;
+  typedef itk::UnaryFunctorImageFilter < FloatVectorImageType ,
+          FloatImageType , Functor::LuminanceOperator > LuminanceFilter;
 
   /** Standard macro */
   itkNewMacro( Self );
@@ -340,57 +342,53 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    ImageListToVectorFilterType::Pointer 
-          imageListToVectorFilterOut( ImageListToVectorFilterType::New() );
+    
     FloatVectorImageType * inImage = GetParameterImage("in");
-    ImageListType::Pointer outputImageList ( ImageListType::New() );
-    VectorToImageListFilterType::Pointer 
-          vectorToImageListFilter ( VectorToImageListFilterType::New() );
-    vectorToImageListFilter->SetInput( inImage );
-    vectorToImageListFilter->UpdateOutputInformation();
+    ImageListType::Pointer outputImageList ( ImageListType::New() ); 
+    m_vectorToImageListFilter = VectorToImageListFilterType::New() ;
+    m_vectorToImageListFilter->SetInput( inImage );
+    m_vectorToImageListFilter->UpdateOutputInformation();
 
-    ImageListType::Pointer inputImageList = vectorToImageListFilter->GetOutput();
+    ImageListType::Pointer inputImageList = m_vectorToImageListFilter->GetOutput();
 
-    std::vector < FilterHistoType::Pointer > filterHisto;
-    std::vector < FilterLutType::Pointer > filterLut;
-    std::vector < FilterGainType::Pointer > filterGain;
+
 
     if ( GetParameterString("mode") == "each")
       {
       // Each channel will be equalized
       int m = inImage->GetVectorLength ();
-      filterHisto.resize(m);
-      filterLut.resize(m);
-      filterGain.resize(m);
+      m_filterHisto.resize(m);
+      m_filterLut.resize(m);
+      m_filterGain.resize(m);
       for (int chanel = 0 ; chanel<m ; chanel++ ) 
         {
-        filterHisto[chanel] = FilterHistoType::New();
-        filterLut[chanel] = FilterLutType::New();
-        filterGain[chanel] = FilterGainType::New();
+        m_filterHisto[chanel] = FilterHistoType::New();
+        m_filterLut[chanel] = FilterLutType::New();
+        m_filterGain[chanel] = FilterGainType::New();
         // std::cout<<"channel m ="<<m<<std::endl;
-        SetUpPipeline ( filterHisto[chanel] , filterLut[chanel] ,
+        SetUpPipeline ( m_filterHisto[chanel] , m_filterLut[chanel] ,
                         inputImageList->GetNthElement(chanel) );
         std::cout<<"End of multithread"<<std::endl;
         if( HasUserValue("nodata") )
           {
-          filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
+          m_filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
           }
-        filterGain[chanel]->SetMin( filterLut[chanel]->GetMin() );
-        filterGain[chanel]->SetMax( filterLut[chanel]->GetMax() );
-        filterGain[chanel]->SetInputLut( filterLut[chanel]->GetOutput() );
-        filterGain[chanel]->SetInputImage( vectorToImageListFilter->GetOutput()->GetNthElement(chanel) );
-        filterGain[chanel]->SetNumberOfThreads(1);
-        outputImageList->PushBack( filterGain[chanel]->GetOutput() );
+        m_filterGain[chanel]->SetMin( m_filterLut[chanel]->GetMin() );
+        m_filterGain[chanel]->SetMax( m_filterLut[chanel]->GetMax() );
+        m_filterGain[chanel]->SetInputLut( m_filterLut[chanel]->GetOutput() );
+        m_filterGain[chanel]->SetInputImage( m_vectorToImageListFilter->GetOutput()->GetNthElement(chanel) );
+        m_filterGain[chanel]->SetNumberOfThreads(1);
+        outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
         }
       }
 
     if ( GetParameterString("mode") == "lum")
       {
-      filterHisto.resize(1);
-      filterLut.resize(1);
-      filterGain.resize(3);
-      filterHisto[0] = FilterHistoType::New();
-      filterLut[0] = FilterLutType::New();
+      m_filterHisto.resize(1);
+      m_filterLut.resize(1);
+      m_filterGain.resize(3);
+      m_filterHisto[0] = FilterHistoType::New();
+      m_filterLut[0] = FilterLutType::New();
       // Retreive order of the RGB channels
       int rgb[3];
       rgb[0] = GetParameterInt("mode.lum.red.ch");
@@ -412,49 +410,58 @@ private:
         {
         lumCoef[i] /= sum;
         }
-      typedef itk::UnaryFunctorImageFilter < FloatVectorImageType ,
-              FloatImageType , Functor::LuminanceOperator > LuminanceFilter;
-      LuminanceFilter::Pointer luminanceFilter ( LuminanceFilter::New() );
-      luminanceFilter->GetFunctor().SetRgb(rgb);
-      luminanceFilter->GetFunctor().SetLumCoef(lumCoef);
-      luminanceFilter->SetInput( inImage );
       
-      SetUpPipeline ( filterHisto[0] , filterLut[0] ,
-                      luminanceFilter->GetOutput() );
+      m_luminanceFilter=  LuminanceFilter::New() ;
+      m_luminanceFilter->GetFunctor().SetRgb(rgb);
+      m_luminanceFilter->GetFunctor().SetLumCoef(lumCoef);
+      m_luminanceFilter->SetInput( inImage );
+      
+      SetUpPipeline ( m_filterHisto[0] , m_filterLut[0] ,
+                      m_luminanceFilter->GetOutput() );
       for ( int chanel : rgb ) 
         {
-        filterGain[chanel] = FilterGainType::New();
-        filterGain[chanel]->SetInputLut( filterLut[0]->GetOutput() );
+        m_filterGain[chanel] = FilterGainType::New();
+        m_filterGain[chanel]->SetInputLut( m_filterLut[0]->GetOutput() );
         if( HasUserValue("nodata") )
           {
-          filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
+          m_filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
           }
-        filterGain[chanel]->SetMin( filterLut[0]->GetMin() );
-        filterGain[chanel]->SetMax( filterLut[0]->GetMax() );
-        filterGain[chanel]->SetInputImage( inputImageList->GetNthElement(chanel) );
-        outputImageList->PushBack( filterGain[chanel]->GetOutput() );
+        m_filterGain[chanel]->SetMin( m_filterLut[0]->GetMin() );
+        m_filterGain[chanel]->SetMax( m_filterLut[0]->GetMax() );
+        m_filterGain[chanel]->SetInputImage( inputImageList->GetNthElement(chanel) );
+        outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
         }
       }
-    
-    imageListToVectorFilterOut->SetInput(outputImageList);
-    imageListToVectorFilterOut->UpdateOutputInformation();
-    std::cout<<"vectortoimagelist R"<<vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"vectortoimagelist B"<<vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"vectortoimagelist L"<<vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut R"<<filterLut[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut B"<<filterLut[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut L"<<filterLut[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain R"<<filterGain[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain B"<<filterGain[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain L"<<filterGain[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+    m_imageListToVectorFilterOut = ImageListToVectorFilterType::New() ;
+    m_imageListToVectorFilterOut->SetInput(outputImageList);
+    // m_imageListToVectorFilterOut->UpdateOutputInformation();
+    // m_imageListToVectorFilterOut->SetNumberOfThreads(1);
+    // imageListToVectorFilterOut->Update();
+    std::cout<<"vectortoimagelist R"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"vectortoimagelist B"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"vectortoimagelist L"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut R"<<m_filterLut[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut B"<<m_filterLut[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut L"<<m_filterLut[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain R"<<m_filterGain[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain B"<<m_filterGain[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain L"<<m_filterGain[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
     std::cout<<"outputImageList R"<<outputImageList->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
     std::cout<<"outputImageList B"<<outputImageList->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
     std::cout<<"outputImageList L"<<outputImageList->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
-    imageListToVectorFilterOut->SetNumberOfThreads(1);
-    // imageListToVectorFilterOut->Update();
-    SetParameterOutputImage( "out" , imageListToVectorFilterOut->GetOutput() );
+    SetParameterOutputImage( "out" , m_imageListToVectorFilterOut->GetOutput() );
   }
+
+protected:
+  ImageListToVectorFilterType::Pointer m_imageListToVectorFilterOut;
+  LuminanceFilter::Pointer m_luminanceFilter;
+  VectorToImageListFilterType::Pointer m_vectorToImageListFilter;
+  std::vector < FilterHistoType::Pointer > m_filterHisto;
+  std::vector < FilterLutType::Pointer > m_filterLut;
+  std::vector < FilterGainType::Pointer > m_filterGain;
+
 };
+
 
 } //End namespace Wrapper
 } //End namespace otb
