@@ -47,4 +47,17 @@ function(patch_cmake_files)
 
   install_without_message("${PATCH_STAGE_DIR}" "lib/cmake")
 
+  file( GLOB otb_opengl
+    "${SUPERBUILD_INSTALL_DIR}/lib/cmake/OTB*/Modules/OTBOpenGL.cmake" )
+  if(EXISTS ${otb_opengl})
+    file(STRINGS "${otb_opengl}" otb_opengl_cmake)
+    set(otb_opengl_cmake_NEW)
+    foreach(line ${otb_opengl_cmake})
+      if( NOT line MATCHES "/usr")
+	list(APPEND otb_opengl_cmake_NEW "${line}\n")
+      endif()
+    endforeach()
+  endif()
+  file(WRITE "${otb_opengl}" ${otb_opengl_cmake_NEW})
+  
 endfunction()
