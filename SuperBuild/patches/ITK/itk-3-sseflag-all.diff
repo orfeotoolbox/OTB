@@ -1,0 +1,28 @@
+diff -burN InsightToolkit-4.12.0.orig/CMakeLists.txt InsightToolkit-4.12.0/CMakeLists.txt
+--- InsightToolkit-4.12.0.orig/CMakeLists.txt	2017-08-22 11:53:54.920931663 +0200
++++ InsightToolkit-4.12.0/CMakeLists.txt	2017-08-25 17:45:01.603901798 +0200
+@@ -146,6 +146,9 @@
+ option(ITK_DYNAMIC_LOADING "Support run-time loading of shared libraries" ON)
+ mark_as_advanced(ITK_DYNAMIC_LOADING)
+ 
++option(ITK_USE_SSE_FLAGS "Enable SIMD optimization flags (hardware dependant)." ON)
++mark_as_advanced(ITK_USE_SSE_FLAGS)
++
+ #-----------------------------------------------------------------------------
+ # Wrapping options
+ option(ITK_WRAP_PYTHON "Build Python support" OFF)
+diff -burN InsightToolkit-4.12.0.orig/Modules/Core/Common/CMakeLists.txt InsightToolkit-4.12.0/Modules/Core/Common/CMakeLists.txt
+--- InsightToolkit-4.12.0.orig/Modules/Core/Common/CMakeLists.txt	2017-08-22 11:53:56.200940262 +0200
++++ InsightToolkit-4.12.0/Modules/Core/Common/CMakeLists.txt	2017-08-25 17:45:30.636094558 +0200
+@@ -42,8 +42,9 @@
+ 
+ 
+ # Check if this platform support the sse2 rounding functions for 32 and 64 bits
+-include(CheckSupportForSSERounding)
+-
++if(ITK_USE_SSE_FLAGS)
++  include(CheckSupportForSSERounding)
++endif()
+ 
+ # Test for atomics and other compiler intrinsics
+ include(itkCheckBuiltins)
