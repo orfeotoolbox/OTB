@@ -98,9 +98,9 @@ private:
       "The choice of the output channels can be done with the extended filename, "
       "but less easy to handle. To do this, a 'channels' parameter allows you to select "
       "the desired bands at the output. There are 3 modes, the available choices are: \n"
-        " * mono : select first band in the 3 output channels. \n"
+        " * grayscale :  to display mono image as standard color image. \n"
         " * rgb : select 3 bands in the input image (multi-bands). \n"
-        " * default : keep all bands. \n");
+        " * all : keep all bands. \n");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
@@ -155,10 +155,12 @@ private:
     SetParameterDescription("channels", "It's possible to select the channels "
       "of the output image. There are 3 modes, the available choices are:");
 
-    AddChoice("channels.default", "Default mode");
-    SetParameterDescription("channels.default", "Select all bands in the input image, (1,1,1).");
+    AddChoice("channels.all", "Default mode");
+    SetParameterDescription("channels.all", "Select all bands in the input image, (1,1,1).");
 
-    AddChoice("channels.mono", "Select first band in the 3 output channels.");
+    AddChoice("channels.grayscale", "Display mono image as standard color image.");
+    AddParameter(ParameterType_Int, "channels.grayscale.channel", "Grayscale channel");
+    SetDefaultParameterInt("channels.grayscale.channel", 1);
 
     AddChoice("channels.rgb", "Channels selection RGB");
     SetParameterDescription("channels.rgb", "Select 3 bands in the input image "
@@ -370,9 +372,18 @@ private:
     int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
     std::string channelMode = GetParameterString("channels");
 
-    if(channelMode == "mono")
+    if(channelMode == "grayscale")
     {
-      channels = {1,1,1};
+      if (GetParameterInt("channels.grayscale.channel") <= nbChan)
+      {
+        channels = {GetParameterInt("channels.grayscale.channel"),
+                    GetParameterInt("channels.grayscale.channel"),
+                    GetParameterInt("channels.grayscale.channel")};
+      }
+      else
+      {
+        itkExceptionMacro(<< "The channel has an invalid index");
+      }
     }
     else if (channelMode == "rgb")
     {
@@ -389,7 +400,7 @@ private:
         itkExceptionMacro(<< "At least one needed channel has an invalid index");
       }
     }
-    else if (channelMode == "default")
+    else if (channelMode == "all")
     {
       // take all bands
       channels.resize(nbChan);
@@ -417,7 +428,7 @@ private:
     concatener = ListConcatenerFilterType::New();
     extractorList = ExtractROIFilterListType::New();
 
-    const bool monoChannel = IsParameterEnabled("channels.mono");
+    const bool monoChannel = IsParameterEnabled("channels.grayscale");
 
     // get band order
     std::vector<int> channels = GetChannels();

@@ -81,7 +81,7 @@ otb_test_application(NAME apTvUtConvertMonoChannel
                      APP Convert
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                              -out ${TEMP}/apTvUtConvertMonoChannelOutput.tif
-                             -channels mono
+                             -channels grayscale
                              -type linear
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtConvertMonoChannelOutput.tif
