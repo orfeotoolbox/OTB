@@ -23,7 +23,7 @@ INCLUDE_ONCE_MACRO(GDAL)
 SETUP_SUPERBUILD(GDAL)
 
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT HDF5 NETCDF HDF4)
 
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL TIFF_ROOT     --with-libtiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOTIFF_ROOT  --with-geotiff)
@@ -35,6 +35,9 @@ ADD_SUPERBUILD_CONFIGURE_VAR(GDAL ZLIB_ROOT     --with-libz)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL EXPAT_ROOT    --with-expat)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL CURL_ROOT     --with-curl "/bin/curl-config")
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOS_ROOT     --with-geos "/bin/geos-config")
+ADD_SUPERBUILD_CONFIGURE_VAR(GDAL HDF5_ROOT     --with-hdf5)
+ADD_SUPERBUILD_CONFIGURE_VAR(GDAL NETCDF_ROOT   --with-netcdf)
+ADD_SUPERBUILD_CONFIGURE_VAR(GDAL HDF4_ROOT     --with-hdf4)
 
 set(GDAL_CONFIGURE_COMMAND)
 set(GDAL_BUILD_COMMAND)
@@ -71,8 +74,6 @@ if(UNIX)
     --with-gif=no
     --with-grass=no
     --with-gta=no
-    --with-hdf4=no
-    --with-hdf5=no
     --with-idb=no
     --with-ingres=no
     --with-jp2mrsid=no
@@ -82,7 +83,6 @@ if(UNIX)
     --with-mrsid=no
     --with-msg=no
     --with-mysql=no
-    --with-netcdf=no
     --with-oci=no
     --with-odbc=no
     --with-ogdi=no
