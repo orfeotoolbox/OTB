@@ -45,8 +45,8 @@ ExternalProject_Add(HDF5
     -DHDF5_BUILD_CPP_LIB:BOOL=OFF
     -DHDF5_BUILD_EXAMPLES:BOOL=ON
     -DHDF5_BUILD_FORTRAN:BOOL=OFF
-    -DHDF5_BUILD_HL_LIB:BOOL=ON                                                                                                                                        
-    -DHDF5_BUILD_JAVA:BOOL=OFF                                                                                                                                       
+    -DHDF5_BUILD_HL_LIB:BOOL=ON
+    -DHDF5_BUILD_JAVA:BOOL=OFF
     -DHDF5_BUILD_TOOLS:BOOL=OFF
     -DHDF5_ENABLE_SZIP_SUPPORT:BOOL=OFF
     -DHDF5_ENABLE_Z_LIB_SUPPORT:BOOL=ON
