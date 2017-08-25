@@ -38,6 +38,7 @@ message("SRC_DIR=${SRC_DIR}")
 execute_process(
   COMMAND ${CMAKE_COMMAND}
   -DCMAKE_INSTALL_PREFIX=${PKG_DIR}
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo
   ${SRC_DIR}
   WORKING_DIRECTORY ${TEST_DIR}
   RESULT_VARIABLE configure_rv
@@ -56,6 +57,7 @@ endif()
 # the code is written in a way that it is easy to stuff these two
 # into a cmake foreach
 execute_process(COMMAND ${CMAKE_COMMAND}
+  --config RelWithDebInfo
   --build ${TEST_DIR}
   --target HelloWorldOTB
   WORKING_DIRECTORY ${TEST_DIR}
@@ -72,6 +74,7 @@ else()
 endif()
 
 execute_process(COMMAND ${CMAKE_COMMAND}
+  --config RelWithDebInfo
   --build ${TEST_DIR}
   --target Pipeline
   WORKING_DIRECTORY ${TEST_DIR}
