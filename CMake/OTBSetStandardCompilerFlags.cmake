@@ -285,6 +285,19 @@ macro(check_compiler_platform_flags)
     message(STATUS "Disabling OpenMP support")
   endif()
 
+  set(OTB_SSE_FLAGS)
+ if(OTB_USE_SSE_FLAGS)
+    include(OTBCheckSSEFeatures)
+    check_sse_features(OTB_SSE_FLAGS)
+  endif()
+
+  if(OTB_SSE_FLAGS)
+    message(STATUS "Using SSE2 extensions")
+    set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${OTB_SSE_FLAGS}")
+  else()
+    message(STATUS "Not using SSE2 extensions")
+  endif()
+
   #-----------------------------------------------------------------------------
   # The frename-registers option does not work due to a bug in the gnu compiler.
   # It must be removed or data errors will be produced and incorrect results
