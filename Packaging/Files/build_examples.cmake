@@ -35,10 +35,16 @@ message("TEST_DIR=${TEST_DIR}")
 message("PKG_DIR=${PKG_DIR}")
 message("SRC_DIR=${SRC_DIR}")
 
+set(cmake_gen)
+if(WIN32)
+  set(cmake_gen "-GNinja")
+endif()
+
 execute_process(
   COMMAND ${CMAKE_COMMAND}
   -DCMAKE_INSTALL_PREFIX=${PKG_DIR}
   -DCMAKE_BUILD_TYPE=RelWithDebInfo
+  ${cmake_gen}
   ${SRC_DIR}
   WORKING_DIRECTORY ${TEST_DIR}
   RESULT_VARIABLE configure_rv
