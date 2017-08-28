@@ -185,6 +185,16 @@ ListEditItemModel
 	}
       break;
 
+    case USER_ROLE_DIRECTION:
+      assert( idx.row()>=0 );
+      return stringList->GetDirection( idx.row() );
+      break;
+
+    case USER_ROLE_FILTER:
+      assert( idx.row()>=0 );
+      return QString::fromStdString( stringList->GetFilenameFilter( idx.row() ) );
+      break;
+
     default:
       break;
     }
@@ -398,6 +408,9 @@ ListEditItemModel
 	  break;
 
 	case Qt::CheckStateRole:
+	  break;
+
+	case USER_ROLE_DIRECTION:
 	  break;
 
 	default:

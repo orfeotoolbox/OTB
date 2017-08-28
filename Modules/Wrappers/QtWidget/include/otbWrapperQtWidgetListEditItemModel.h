@@ -106,6 +106,13 @@ public:
     COLUMN_COUNT,
   };
 
+  enum UserRole
+  {
+    USER_ROLE_NONE = Qt::UserRole,
+    USER_ROLE_DIRECTION,
+    USER_ROLE_FILTER,
+  };
+
 //
 // Public methods.
 public:
