@@ -31,9 +31,8 @@ ADD_SUPERBUILD_CMAKE_VAR(HDF5 ZLIB_LIBRARY)
 
 ExternalProject_Add(HDF5
   PREFIX HDF5
-  URL "https://www.hdfgroup.org/package/gzip/?wpdmdl=4301"
+  URL "http://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.10.1.tar.gz"
   URL_MD5 43a2f9466702fb1db31df98ae6677f15
-  DOWNLOAD_NAME "hdf5-1.10.1.tar.gz"
   SOURCE_DIR ${HDF5_SB_SRC}
   BINARY_DIR ${HDF5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

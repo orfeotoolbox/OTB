@@ -33,7 +33,7 @@ ADD_SUPERBUILD_CMAKE_VAR(HDF4 JPEG_LIBRARY)
 
 ExternalProject_Add(HDF4
   PREFIX HDF4
-  URL "https://support.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.gz"
+  URL "http://support.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.gz"
   URL_MD5 a6aa950b3fce5162b96496d8ea0b82bf
   SOURCE_DIR ${HDF4_SB_SRC}
   BINARY_DIR ${HDF4_SB_BUILD_DIR}
