@@ -1,0 +1,16 @@
+diff -burN hdf-4.2.13.orig/CMakeLists.txt hdf-4.2.13/CMakeLists.txt
+--- hdf-4.2.13.orig/CMakeLists.txt	2017-08-28 11:51:04.115548046 +0200
++++ hdf-4.2.13/CMakeLists.txt	2017-08-28 16:57:09.495243479 +0200
+@@ -119,10 +119,10 @@
+ #-----------------------------------------------------------------------------
+ # Set the core names of all the libraries
+ #-----------------------------------------------------------------------------
+-set (HDF4_SRC_LIB_CORENAME          "hdf")
++set (HDF4_SRC_LIB_CORENAME          "hdf" CACHE STRING "Name of the HDF library")
+ set (HDF4_SRC_FCSTUB_LIB_CORENAME   "hdf_fcstub")
+ set (HDF4_SRC_FORTRAN_LIB_CORENAME  "hdf_fortran")
+-set (HDF4_MF_LIB_CORENAME           "mfhdf")
++set (HDF4_MF_LIB_CORENAME           "mfhdf" CACHE STRING "Name of the MFHDF library")
+ set (HDF4_MF_XDR_LIB_CORENAME       "xdr")
+ set (HDF4_HDF_TEST_LIB_CORENAME     "hdf_test")
+ set (HDF4_HDF_TEST_FCSTUB_LIB_CORENAME     "hdf_test_fcstub")
