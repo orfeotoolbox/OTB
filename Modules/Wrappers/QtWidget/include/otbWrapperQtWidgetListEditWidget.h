@@ -147,6 +147,7 @@ private:
 // Private methods.
 private:
   void Swap( int, int, SwapSelection = NONE );
+  QString browseFilename( const QModelIndex & );
 
 //
 // Private attributes.

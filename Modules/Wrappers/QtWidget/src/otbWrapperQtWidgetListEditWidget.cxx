@@ -38,7 +38,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbWrapperQtWidgetListEditItemModel.h"
-
+#include "otbWrapperTypes.h"
 
 namespace otb
 {
@@ -174,6 +174,64 @@ ListEditWidget
       QItemSelectionModel::Rows
     );
   }
+}
+
+
+/*******************************************************************************/
+QString
+ListEditWidget
+::browseFilename( const QModelIndex & index )
+{
+  assert( index.isValid() );
+  assert( index.row()>=0 );
+  assert( index.column()>=0 );
+
+  //
+  // Get item-model.
+  const ListEditItemModel * itemModel = GetItemModel();
+  assert( itemModel!=nullptr );
+
+  //
+  // Pick-up filename.
+  QString selectedFilter;
+
+  assert(
+    itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION ).isValid()
+  );
+
+  assert(
+    itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION )==Role_Input
+    ||
+    itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION )==Role_Output
+  );
+
+  QString filePath(
+    QDir::current().filePath(
+      itemModel->data( index ).toString()
+    )
+  );
+
+  QString filter(
+    itemModel->data( index, ListEditItemModel::USER_ROLE_FILTER ).toString()
+  );
+
+  return
+    ( itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION )==
+      Role_Input )
+    ? QFileDialog::getOpenFileName(
+        this,
+	tr( "Select input filename..." ),
+	filePath,
+	filter,
+	&selectedFilter
+      )
+    : QFileDialog::getSaveFileName(
+        this,
+	tr( "Select output filename..." ),
+	filePath,
+	filter,
+	&selectedFilter
+      );
 }
 
 
@@ -326,18 +384,7 @@ ListEditWidget
   // Pick-up filename.
   QString selectedFilter;
 
-  QString filename(
-    QFileDialog::getSaveFileName(
-      this,
-      tr( "Select filename..." ),
-      QDir::current().filePath( itemModel->data( front ).toString() ),
-      tr( "PNG File (*.png);;"
-	  "JPEG File (*.jpg);;"
-	  "TIFF file (*tif);;"
-	  "All files (*)" ),
-      &selectedFilter
-    )
-  );
+  QString filename( browseFilename( front ) );
 
   if( filename.isEmpty() )
     return;
