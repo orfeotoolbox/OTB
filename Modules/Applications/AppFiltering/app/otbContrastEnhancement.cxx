@@ -23,8 +23,10 @@
 
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToVectorImageFilter.h"
-#include "otbStreamingStatisticsImageFilter.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
+#include "otbStreamingImageVirtualWriter.h"
+#include "otbStreamingImageRAMWriter.h"
 
 #include "otbComputeHistoFilter.h"
 #include "otbComputeLutFilter.h"
@@ -98,10 +100,13 @@ public:
           VectorToImageListFilterType;
   typedef otb::ImageListToVectorImageFilter< ImageListType, FloatVectorImageType > 
           ImageListToVectorFilterType;
-  typedef otb::StreamingStatisticsImageFilter< FloatImageType >
+  typedef otb::StreamingStatisticsVectorImageFilter< FloatVectorImageType >
           StatsFilterType;
   typedef itk::UnaryFunctorImageFilter < FloatVectorImageType ,
           FloatImageType , Functor::LuminanceOperator > LuminanceFilter;
+  typedef otb::StreamingImageVirtualWriter < FloatVectorImageType > 
+          VirtualWriter;
+  typedef otb::StreamingImageRAMWriter < FloatVectorImageType > RAMWriter;
 
   /** Standard macro */
   itkNewMacro( Self );
@@ -126,10 +131,10 @@ private:
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
-    SetParameterString("in", "/home/antoine/dev/my_data/lena/lena.jpg");
+    SetParameterString("in", "/home/antoine/dev/my_data/anaglyphInput2.tif");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
-    SetParameterString("out", "/home/antoine/dev/my_data/lenaapp.jpg");
+    SetParameterString("out", "/home/antoine/dev/my_data/anaglypheq.tif");
 
 
     AddParameter(ParameterType_Int,"bin","Bin number");
@@ -162,29 +167,29 @@ private:
     MandatoryOff("max");
 
     AddParameter(ParameterType_Choice , "mode" , "What to equalized");
-    AddChoice( "mode.each" , "Channels" );
+    AddChoice( "mode.each" , "Chanels" );
     SetParameterDescription( "mode.each" ,
-                "Each channel are equalized independently" );
+                "Each chanel are equalized independently" );
     AddChoice( "mode.lum" , "Luminance" );
     SetParameterDescription( "mode.lum" ,
                 "The luminance is equalized and then a gain is applied "
-                "on the channels." );
-    AddParameter(ParameterType_Group , "mode.lum.red" , "Red Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Channel" );
+                "on the chanels." );
+    AddParameter(ParameterType_Group , "mode.lum.red" , "Red Chanel" );
+    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Chanel" );
     SetDefaultParameterInt("mode.lum.red.ch", 0 );
     AddParameter(ParameterType_Float , "mode.lum.red.coef" ,
                  "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.red.coef", 0.21 );
 
-    AddParameter(ParameterType_Group , "mode.lum.gre" , "Green Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.gre.ch" , "Green Channel" );
+    AddParameter(ParameterType_Group , "mode.lum.gre" , "Green Chanel" );
+    AddParameter(ParameterType_Int , "mode.lum.gre.ch" , "Green Chanel" );
     SetDefaultParameterInt("mode.lum.gre.ch", 1 );
     AddParameter(ParameterType_Float , "mode.lum.gre.coef" ,
                  "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.gre.coef", 0.71 );
 
-    AddParameter(ParameterType_Group , "mode.lum.blu" , "Blue Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.blu.ch" , "Blue Channel" );
+    AddParameter(ParameterType_Group , "mode.lum.blu" , "Blue Chanel" );
+    AddParameter(ParameterType_Int , "mode.lum.blu.ch" , "Blue Chanel" );
     SetDefaultParameterInt("mode.lum.blu.ch", 2 );
     AddParameter(ParameterType_Float , "mode.lum.blu.coef" ,
                  "Value for luminance computation" );
@@ -295,30 +300,11 @@ private:
 
   void SetUpPipeline( const FilterHistoType::Pointer filterHisto ,
                       const FilterLutType::Pointer filterLut ,
-                      const FloatImageType::Pointer input )
+                      const RAMWriter::Pointer ramWriter ,
+                      const FloatImageType::Pointer input ,
+                      float max ,
+                      float min)
   {
-    float min = 0.0;
-    float max = 0.0;
-    if ( GetParameterString("minmax") == "man" )
-      {
-      min = GetParameterFloat("min");
-      max = GetParameterFloat("max");
-      }
-    if ( GetParameterString("minmax") == "auto" )
-      {
-      StatsFilterType::Pointer statFilter ( StatsFilterType::New() );
-      statFilter->SetIgnoreInfiniteValues(true);
-      if( HasUserValue("nodata") )
-        {
-        statFilter->SetIgnoreUserDefinedValue(true);
-        statFilter->SetUserIgnoredValue( GetParameterFloat("nodata") );
-        }
-      statFilter->SetInput( input );
-      statFilter->Update();
-      min = statFilter->GetMinimum();
-      max = statFilter->GetMaximum();
-      }
-    filterHisto->SetInput( input ) ;
     if ( HasValue("hfact") )
       {
       filterHisto->SetThreshold( GetParameterInt("hfact") );
@@ -336,38 +322,67 @@ private:
     thumbSize[0] = GetParameterInt("thumb.w");
     thumbSize[1] = GetParameterInt("thumb.h");
     filterHisto->SetThumbSize( thumbSize );
-    filterLut->SetInput(filterHisto->GetOutput());
-    filterLut->Update();
+    filterHisto->SetInput( input ) ;
+    filterLut->SetInput( filterHisto->GetOutput() );
+    ramWriter->SetInput( filterLut->GetOutput() );
+    VirtualWriter::Pointer virtualWriter ( VirtualWriter::New() );
+    virtualWriter->SetInput( ramWriter->GetOutput() );
+    virtualWriter->Update();
+
   }
 
   void DoExecute() ITK_OVERRIDE
   {
     
     FloatVectorImageType * inImage = GetParameterImage("in");
+    FloatVectorImageType::PixelType min(0.0);
+    FloatVectorImageType::PixelType max(0.0);
+    if ( GetParameterString("minmax") == "man" )
+      {
+      min.Fill( GetParameterFloat("min") );
+      max.Fill( GetParameterFloat("max") );
+      }
+    else if ( GetParameterString("minmax") == "auto" )
+      {
+      StatsFilterType::Pointer statFilter ( StatsFilterType::New() );
+      statFilter->SetIgnoreInfiniteValues(true);
+      if( HasUserValue("nodata") )
+        {
+        statFilter->SetIgnoreUserDefinedValue(true);
+        statFilter->SetUserIgnoredValue( GetParameterFloat("nodata") );
+        }
+      statFilter->SetInput( inImage );
+      statFilter->Update();
+      min = statFilter->GetMinimum();
+      max = statFilter->GetMaximum();
+      }
+
     ImageListType::Pointer outputImageList ( ImageListType::New() ); 
     m_vectorToImageListFilter = VectorToImageListFilterType::New() ;
     m_vectorToImageListFilter->SetInput( inImage );
     m_vectorToImageListFilter->UpdateOutputInformation();
-
-    ImageListType::Pointer inputImageList = m_vectorToImageListFilter->GetOutput();
-
-
-
+    ImageListType::Pointer inputImageList = 
+                  m_vectorToImageListFilter->GetOutput();
+                  
     if ( GetParameterString("mode") == "each")
       {
-      // Each channel will be equalized
+      // Each chanel will be equalized
       int m = inImage->GetVectorLength ();
       m_filterHisto.resize(m);
       m_filterLut.resize(m);
       m_filterGain.resize(m);
+      m_RAMWriter.resize(m);
       for (int chanel = 0 ; chanel<m ; chanel++ ) 
         {
         m_filterHisto[chanel] = FilterHistoType::New();
         m_filterLut[chanel] = FilterLutType::New();
         m_filterGain[chanel] = FilterGainType::New();
-        // std::cout<<"channel m ="<<m<<std::endl;
+        m_RAMWriter[chanel] = RAMWriter::New();
+
         SetUpPipeline ( m_filterHisto[chanel] , m_filterLut[chanel] ,
-                        inputImageList->GetNthElement(chanel) );
+                        m_RAMWriter[chanel] ,
+                        inputImageList->GetNthElement(chanel) ,
+                        max[chanel] , min[chanel] );
         std::cout<<"End of multithread"<<std::endl;
         if( HasUserValue("nodata") )
           {
@@ -377,7 +392,7 @@ private:
         m_filterGain[chanel]->SetMax( m_filterLut[chanel]->GetMax() );
         m_filterGain[chanel]->SetInputLut( m_filterLut[chanel]->GetOutput() );
         m_filterGain[chanel]->SetInputImage( m_vectorToImageListFilter->GetOutput()->GetNthElement(chanel) );
-        m_filterGain[chanel]->SetNumberOfThreads(1);
+        // m_filterGain[chanel]->SetNumberOfThreads(1);
         outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
         }
       }
@@ -386,15 +401,17 @@ private:
       {
       m_filterHisto.resize(1);
       m_filterLut.resize(1);
+      m_RAMWriter.resize(1);
       m_filterGain.resize(3);
       m_filterHisto[0] = FilterHistoType::New();
       m_filterLut[0] = FilterLutType::New();
-      // Retreive order of the RGB channels
+      m_RAMWriter[0] = RAMWriter::New();
+      // Retreive order of the RGB chanels
       int rgb[3];
       rgb[0] = GetParameterInt("mode.lum.red.ch");
       rgb[1] = GetParameterInt("mode.lum.gre.ch");
       rgb[2] = GetParameterInt("mode.lum.blu.ch");
-      // Retreive the coeff for each channel
+      // Retreive the coeff for each chanel
       float lumCoef[3];
       lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
       lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
@@ -417,7 +434,9 @@ private:
       m_luminanceFilter->SetInput( inImage );
       
       SetUpPipeline ( m_filterHisto[0] , m_filterLut[0] ,
-                      m_luminanceFilter->GetOutput() );
+                      m_RAMWriter[0] ,
+                      m_luminanceFilter->GetOutput() ,
+                      max[0] , min[0]);
       for ( int chanel : rgb ) 
         {
         m_filterGain[chanel] = FilterGainType::New();
@@ -452,13 +471,13 @@ private:
     SetParameterOutputImage( "out" , m_imageListToVectorFilterOut->GetOutput() );
   }
 
-protected:
   ImageListToVectorFilterType::Pointer m_imageListToVectorFilterOut;
   LuminanceFilter::Pointer m_luminanceFilter;
   VectorToImageListFilterType::Pointer m_vectorToImageListFilter;
   std::vector < FilterHistoType::Pointer > m_filterHisto;
   std::vector < FilterLutType::Pointer > m_filterLut;
   std::vector < FilterGainType::Pointer > m_filterGain;
+  std::vector < RAMWriter::Pointer > m_RAMWriter;
 
 };
 
