@@ -420,12 +420,20 @@ InputImageListParameter
 
 Role
 InputImageListParameter
-::GetDirection( unsigned int i ) const
+::GetDirection( unsigned int ) const
 {
+#if 0
   assert( i<m_InputImageParameterVector.size() );
   assert( !m_InputImageParameterVector[ i ].IsNull() );
 
   return m_InputImageParameterVector[ i ]->GetRole();
+
+#else
+  // otb::Parameter::GetRole() does not necessarily stand for
+  // direction of parameter.
+  return Role_Input;
+
+#endif
 }
 
 
