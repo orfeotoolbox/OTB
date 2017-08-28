@@ -97,7 +97,6 @@ if(OTB_DATA_USE_LARGEINPUT)
   mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
 endif()
 
-
 option(BUILD_EXAMPLES " Build the OTB Examples directory" OFF)
 
 option(USE_DEFAULT_INSTALL_PREFIX "Install superbuild to default prefix /usr/local for unix" OFF)
@@ -159,12 +158,6 @@ if(MSVC)
   endif()
 endif()
 
-# if(LINUX)
-#   list(APPEND CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
-#   list(APPEND CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined")
-#   list(APPEND CMAKE_EXE_LINKER_FLAGS "-Wl,--no-undefined")
-# endif()
-
 if(DEFINED ENV{CMAKE_PREFIX_PATH})
   set(SB_CMAKE_PREFIX_PATH "$ENV{CMAKE_PREFIX_PATH};${SB_INSTALL_PREFIX}")
 else()
@@ -203,7 +196,6 @@ foreach(cmake_var
     list(APPEND SB_CMAKE_CACHE_ARGS "-D${cmake_var}:STRING=${${cmake_var}}")
   endif()
 endforeach()
-
 
 if(CMAKE_VERBOSE_MAKEFILE)
   list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON")

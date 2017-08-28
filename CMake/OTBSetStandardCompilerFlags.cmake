@@ -272,6 +272,13 @@ macro(check_compiler_platform_flags)
     set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -mthreads")
   endif()
 
+  if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-undefined")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined")
+    set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -Wl,--no-undefined")
+  endif()
+
   # check for OpenMP
   if(OTB_USE_OPENMP)
     find_package(OpenMP QUIET)
