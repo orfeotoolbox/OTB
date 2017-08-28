@@ -256,7 +256,9 @@ option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
 option(USE_SYSTEM_GLUT  "Use a system build of glut" OFF)
 option(USE_SYSTEM_FREETYPE "Use a system build of freetype" OFF)
 option(USE_SYSTEM_SHARK "Use a system build of Shark" OFF)
-
+option(USE_SYSTEM_HDF4 "Use a system build of HDF4" OFF)
+option(USE_SYSTEM_HDF5 "Use a system build of HDF5" OFF)
+option(USE_SYSTEM_NETCDF "Use a system build of NetCDF" OFF)
 
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
