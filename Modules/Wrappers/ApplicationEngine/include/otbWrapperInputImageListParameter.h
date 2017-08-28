@@ -121,6 +121,12 @@ public:
   /** */
   void Swap( unsigned int, unsigned int ) ITK_OVERRIDE;
 
+  /** */
+  Role GetDirection( unsigned int ) const ITK_OVERRIDE;
+
+  /** */
+  const std::string & GetFilenameFilter( unsigned int ) const ITK_OVERRIDE;
+
 protected:
   /** Constructor */
   InputImageListParameter();

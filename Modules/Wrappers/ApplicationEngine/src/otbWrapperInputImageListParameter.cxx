@@ -23,8 +23,19 @@
 
 namespace otb
 {
+
 namespace Wrapper
 {
+
+
+const std::string
+IMAGES_FILTER(
+  "All files (*);;"
+  "TIFF file (*tif);;"
+  "PNG File (*.png);;"
+  "JPEG File (*.jpg);;"
+);
+
 
 InputImageListParameter::InputImageListParameter()
   : m_InputImageParameterVector(),
@@ -406,6 +417,24 @@ InputImageListParameter
   );
 }
 
+
+Role
+InputImageListParameter
+::GetDirection( unsigned int i ) const
+{
+  assert( i<m_InputImageParameterVector.size() );
+  assert( !m_InputImageParameterVector[ i ].IsNull() );
+
+  return m_InputImageParameterVector[ i ]->GetRole();
+}
+
+
+const std::string &
+InputImageListParameter
+::GetFilenameFilter( unsigned int ) const
+{
+  return IMAGES_FILTER;
+}
 
 }
 

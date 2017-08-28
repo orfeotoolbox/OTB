@@ -27,6 +27,8 @@
 
 #include "OTBApplicationEngineExport.h"
 
+#include "otbWrapperTypes.h"
+
 
 namespace otb
 {
@@ -42,6 +44,7 @@ namespace Wrapper
 class OTBApplicationEngine_EXPORT StringListInterface
 {
 public:
+  /** */
   typedef std::vector< std::string > StringVector;
 
   /** Set file form a list of filenames */
@@ -85,6 +88,12 @@ public:
 
   /** */
   virtual void Swap( unsigned int, unsigned int ) = 0;
+
+  /** */
+  virtual Role GetDirection( unsigned int ) const = 0;
+
+  /** */
+  virtual const std::string & GetFilenameFilter( unsigned int ) const = 0;
 
 protected:
   /** Constructor */
