@@ -49,13 +49,8 @@ endif()
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
+option(OTB_USE_OPENMP "use openmp" OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
-
-option(OTB_USE_OPENMP "use openmp" ON)
-if(WIN32)
-  option(OTB_USE_OPENMP "use openmp" OFF)
-endif()
-
 
 if(APPLE)
   if(POLICY CMP0042)
