@@ -1,0 +1,147 @@
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/config.tests/unix/freetype/freetype.pri qt-everywhere-opensource-src-4.8.7/config.tests/unix/freetype/freetype.pri
+--- qt-everywhere-opensource-src-4.8.7.orig/config.tests/unix/freetype/freetype.pri	2017-08-18 10:54:50.327911982 +0200
++++ qt-everywhere-opensource-src-4.8.7/config.tests/unix/freetype/freetype.pri	2017-08-23 15:20:17.132268013 +0200
+@@ -1,5 +1,5 @@
+ !cross_compile {
+-    TRY_INCLUDEPATHS = /include /usr/include $$QMAKE_INCDIR $$QMAKE_INCDIR_X11 $$INCLUDEPATH
++    TRY_INCLUDEPATHS = $$INCLUDEPATH $$QMAKE_INCDIR $$QMAKE_INCDIR_X11
+     # LSB doesn't allow using headers from /include or /usr/include
+     linux-lsb-g++:TRY_INCLUDEPATHS = $$QMAKE_INCDIR $$QMAKE_INCDIR_X11 $$INCLUDEPATH
+     for(p, TRY_INCLUDEPATHS) {
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/projects.pro qt-everywhere-opensource-src-4.8.7/projects.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/projects.pro	2017-08-18 10:54:46.519887277 +0200
++++ qt-everywhere-opensource-src-4.8.7/projects.pro	2017-08-23 15:20:03.224174152 +0200
+@@ -11,7 +11,7 @@
+     symbian|integrity {
+        QT_BUILD_PARTS = libs tools examples demos
+     } else {
+-       QT_BUILD_PARTS = libs tools examples demos docs translations
++       QT_BUILD_PARTS = libs tools examples demos translations
+     }
+ } else { #make sure the order makes sense
+    contains(QT_BUILD_PARTS, translations) {
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pri qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri
+--- qt-everywhere-opensource-src-4.8.7.orig/src/gui/image/qjpeghandler.pri	2017-08-18 10:54:45.407880063 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/gui/image/qjpeghandler.pri	2017-08-23 15:20:03.292174610 +0200
+@@ -4,7 +4,7 @@
+ SOURCES += $$PWD/qjpeghandler.cpp
+ contains(QT_CONFIG, system-jpeg) {
+     if(unix|win32-g++*): LIBS += -ljpeg
+-    else:win32:          LIBS += libjpeg.lib
++    else:win32:          LIBS += jpeg.lib
+ } else {
+     include($$PWD/../../3rdparty/libjpeg.pri)
+ }
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/graphicssystems/graphicssystems.pro	2017-08-18 10:54:45.583881205 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/graphicssystems/graphicssystems.pro	2017-08-23 15:20:03.292174610 +0200
+@@ -1,5 +1,4 @@
+ TEMPLATE = subdirs
+-SUBDIRS += trace
+ !wince*:contains(QT_CONFIG, opengl):SUBDIRS += opengl
+ contains(QT_CONFIG, openvg):contains(QT_CONFIG, egl) {
+     SUBDIRS += openvg
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/imageformats/imageformats.pro qt-everywhere-opensource-src-4.8.7/src/plugins/imageformats/imageformats.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/imageformats/imageformats.pro	2017-08-18 10:54:45.583881205 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/imageformats/imageformats.pro	2017-08-23 15:20:03.292174610 +0200
+@@ -3,7 +3,7 @@
+ !contains(QT_CONFIG, no-jpeg):!contains(QT_CONFIG, jpeg):SUBDIRS += jpeg
+ !contains(QT_CONFIG, no-gif):!contains(QT_CONFIG, gif):SUBDIRS += gif
+ !contains(QT_CONFIG, no-mng):!contains(QT_CONFIG, mng):SUBDIRS += mng
+-contains(QT_CONFIG, svg):SUBDIRS += svg
++# contains(QT_CONFIG, svg):SUBDIRS += svg
+ !contains(QT_CONFIG, no-tiff):!contains(QT_CONFIG, tiff):SUBDIRS += tiff
+ !contains(QT_CONFIG, no-ico):SUBDIRS += ico
+ !contains(QT_CONFIG, no-tga):SUBDIRS += tga
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/src/plugins/plugins.pro	2017-08-18 10:54:45.599881309 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/plugins/plugins.pro	2017-08-23 15:20:03.292174610 +0200
+@@ -1,16 +1,16 @@
+ TEMPLATE = subdirs
+ 
+-SUBDIRS	*= sqldrivers script bearer
+-unix:!symbian {
+-        contains(QT_CONFIG,iconv)|contains(QT_CONFIG,gnu-libiconv)|contains(QT_CONFIG,sun-libiconv):SUBDIRS *= codecs
+-} else {
+-        SUBDIRS *= codecs
+-}
+-!contains(QT_CONFIG, no-gui): SUBDIRS *= imageformats iconengines
++# SUBDIRS	*= sqldrivers
++# unix:!symbian {
++#        contains(QT_CONFIG,iconv)|contains(QT_CONFIG,gnu-libiconv)|contains(QT_CONFIG,sun-libiconv):SUBDIRS *= codecs
++# } else {
++#         SUBDIRS *= codecs
++# }
++!contains(QT_CONFIG, no-gui): SUBDIRS *= imageformats
+ !embedded:!qpa:!contains(QT_CONFIG, no-gui):SUBDIRS *= graphicssystems
+ embedded:SUBDIRS *=  gfxdrivers decorations mousedrivers kbddrivers
+-!win32:!embedded:!mac:!symbian:!contains(QT_CONFIG, no-gui):SUBDIRS *= inputmethods
+-!symbian:!contains(QT_CONFIG, no-gui):SUBDIRS += accessible
++# !win32:!embedded:!mac:!symbian:!contains(QT_CONFIG, no-gui):SUBDIRS *= inputmethods
++# !symbian:!contains(QT_CONFIG, no-gui):SUBDIRS += accessible
+ contains(QT_CONFIG, phonon): SUBDIRS *= phonon
+ qpa:SUBDIRS += platforms
+ contains(QT_CONFIG, declarative): SUBDIRS *= qmltooling
+diff -burN qt-everywhere-opensource-src-4.8.7.orig/src/src.pro qt-everywhere-opensource-src-4.8.7/src/src.pro
+--- qt-everywhere-opensource-src-4.8.7.orig/src/src.pro	2017-08-18 10:54:46.487887069 +0200
++++ qt-everywhere-opensource-src-4.8.7/src/src.pro	2017-08-23 15:20:03.292174610 +0200
+@@ -4,7 +4,7 @@
+ unset(SRC_SUBDIRS)
+ win32:SRC_SUBDIRS += src_winmain
+ symbian:SRC_SUBDIRS += src_s60main
+-SRC_SUBDIRS += src_corelib src_xml src_network src_sql src_testlib
++SRC_SUBDIRS += src_corelib
+ nacl: SRC_SUBDIRS -= src_network src_testlib
+ !symbian:contains(QT_CONFIG, dbus):SRC_SUBDIRS += src_dbus
+ !contains(QT_CONFIG, no-gui): SRC_SUBDIRS += src_gui
+@@ -18,7 +18,7 @@
+ contains(QT_CONFIG, xmlpatterns): SRC_SUBDIRS += src_xmlpatterns
+ contains(QT_CONFIG, phonon): SRC_SUBDIRS += src_phonon
+ contains(QT_CONFIG, multimedia): SRC_SUBDIRS += src_multimedia
+-contains(QT_CONFIG, svg): SRC_SUBDIRS += src_svg
++# contains(QT_CONFIG, svg): SRC_SUBDIRS += src_svg
+ contains(QT_CONFIG, script): SRC_SUBDIRS += src_script
+ contains(QT_CONFIG, declarative): SRC_SUBDIRS += src_declarative
+ contains(QT_CONFIG, webkit)  {
+@@ -52,8 +52,8 @@
+ src_sql.target = sub-sql
+ src_network.subdir = $$QT_SOURCE_TREE/src/network
+ src_network.target = sub-network
+-src_svg.subdir = $$QT_SOURCE_TREE/src/svg
+-src_svg.target = sub-svg
++# src_svg.subdir = $$QT_SOURCE_TREE/src/svg
++# src_svg.target = sub-svg
+ src_script.subdir = $$QT_SOURCE_TREE/src/script
+ src_script.target = sub-script
+ src_scripttools.subdir = $$QT_SOURCE_TREE/src/scripttools
+@@ -89,7 +89,7 @@
+    src_xml.depends = src_corelib
+    src_xmlpatterns.depends = src_corelib src_network
+    src_dbus.depends = src_corelib src_xml
+-   src_svg.depends = src_corelib src_gui
++   # src_svg.depends = src_corelib src_gui
+    src_script.depends = src_corelib
+    src_scripttools.depends = src_script src_gui src_network
+    src_network.depends = src_corelib
+@@ -105,7 +105,7 @@
+    contains(QT_CONFIG, opengl):src_multimedia.depends += src_opengl
+    src_activeqt.depends = src_tools_idc src_gui
+    src_declarative.depends = src_gui src_script src_network
+-   src_plugins.depends = src_gui src_sql src_svg
++   src_plugins.depends = src_gui
+    contains(QT_CONFIG, multimedia):src_plugins.depends += src_multimedia
+    contains(QT_CONFIG, declarative):src_plugins.depends += src_declarative
+    src_s60installs.depends = $$TOOLS_SUBDIRS $$SRC_SUBDIRS
+@@ -130,9 +130,9 @@
+       src_declarative.depends += src_xmlpatterns
+       src_webkit.depends += src_xmlpatterns
+    }
+-   contains(QT_CONFIG, svg) {
+-      src_declarative.depends += src_svg
+-   }
++   # contains(QT_CONFIG, svg) {
++   # src_declarative.depends += src_svg
++   # }
+ }
+ 
+ 

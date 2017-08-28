@@ -41,9 +41,15 @@ include(ExternalProject)
 
 include(OTBCheckTargetSystemArch)
 
+set(LINUX FALSE)
+if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+  set(LINUX TRUE)
+endif()
+
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
-
+option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
+option(OTB_USE_OPENMP "use openmp" OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
 
 if(APPLE)
@@ -147,10 +153,16 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Ox /FC /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE")
   if(MSVC_VERSION GREATER 1310)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
   endif()
+endif()
+
+if(LINUX)
+  list(APPEND CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+  list(APPEND CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined")
+  list(APPEND CMAKE_EXE_LINKER_FLAGS "-Wl,--no-undefined")
 endif()
 
 if(DEFINED ENV{CMAKE_PREFIX_PATH})
@@ -176,6 +188,25 @@ if(UNIX)
   list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=${CMAKE_BUILD_WITH_INSTALL_RPATH}")
   list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=${CMAKE_INSTALL_RPATH_USE_LINK_PATH}")
   list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_RPATH:PATH=${CMAKE_INSTALL_RPATH}")
+endif()
+
+foreach(cmake_var
+    CMAKE_C_FLAGS
+    CMAKE_CXX_FLAGS
+    CMAKE_EXE_LINKER_FLAGS
+    CMAKE_SHARED_LINKER_FLAGS
+    CMAKE_MODULE_LINKER_FLAGS
+    CMAKE_STATIC_LINKER_FLAGS
+    )
+  if(${cmake_var})
+    list(APPEND SB_CMAKE_CACHE_ARGS "-D${cmake_var}:STRING=${${cmake_var}}")
+    list(APPEND SB_CMAKE_CACHE_ARGS "-D${cmake_var}:STRING=${${cmake_var}}")
+  endif()
+endforeach()
+
+
+if(CMAKE_VERBOSE_MAKEFILE)
+  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON")
 endif()
 
 set(SB_CMAKE_ARGS "-G${CMAKE_GENERATOR}")
@@ -216,6 +247,25 @@ else()
   #windows
   set(SB_CMAKE_COMMAND ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
 endif()
+
+if(CMAKE_C_FLAGS)
+  list(APPEND SB_ENV_CONFIGURE_CMD "CFLAGS=${CMAKE_C_FLAGS}")
+endif()
+if(CMAKE_CXX_FLAGS)
+  list(APPEND SB_ENV_CONFIGURE_CMD "CXXFLAGS=${CMAKE_CXX_FLAGS}")
+endif()
+if(CMAKE_EXE_LINKER_FLAGS)
+  list(APPEND SB_ENV_CONFIGURE_CMD "LDFLAGS=${CMAKE_EXE_LINKER_FLAGS}")
+endif()
+if(CMAKE_SHARED_LINKER_FLAGS)
+  list(APPEND SB_ENV_CONFIGURE_CMD "LDFLAGS=${CMAKE_SHARED_LINKER_FLAGS}")
+endif()
+if(CMAKE_MODULE_LINKER_FLAGS)
+  list(APPEND SB_ENV_CONFIGURE_CMD "LDFLAGS=${CMAKE_MODULE_LINKER_FLAGS}")
+endif()
+
+list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
+
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
 
 set(FROM_SYSTEM_LIST)
@@ -276,28 +326,30 @@ option(OTB_USE_QT4 "Enable module QT4 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
-option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
 
 #Cannot activate GLUT on OSX. See manits issue #1194")
+# do not activate GLFW by default on osx. see failing test 
+# https://dash.orfeo-toolbox.org/testDetails.php?test=59844554&build=287120
 if(APPLE)
   option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+  option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 else()
   option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
+  option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
 endif()
 
 option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
 option(OTB_USE_QWT "Enable module QWT in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
-find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
-
+find_path(OTB_DATA_ROOT README-OTB-Data
+  PATHS
+  $ENV{OTB_DATA_ROOT}
+  ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
 
 # SWIG Wrapping
-option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
+option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
-
-option(GENERATE_PACKAGE "Generate a portable .run package of OTB (only Unix)." OFF)
-option(GENERATE_XDK "Generate an XDK. This files provides all headers and libraries to build and or develop OTB (only Unix)." OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
@@ -324,27 +376,23 @@ endforeach()
 
 include(External_otb)
 
-
-if(UNIX OR MSVC)
-  add_subdirectory(Packaging)
-endif()
-
 if(FROM_SYSTEM_LIST)
   list(SORT FROM_SYSTEM_LIST)
   foreach( item ${FROM_SYSTEM_LIST})
-    message(STATUS "  Using system version of ${item}")
+    message(STATUS "Using system version of ${item}")
   endforeach()
 endif()
 
 if(FROM_SUPERBUILD_LIST)
   list(SORT FROM_SUPERBUILD_LIST)
   foreach( item ${FROM_SUPERBUILD_LIST})
-    message(STATUS "  Using SuperBuild version of ${item}")
+    message(STATUS "Using SuperBuild version of ${item}")
   endforeach()
 endif()
 
 message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
 message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
+
 if(DOWNLOAD_LOCATION)
   message(STATUS "DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION}")
   message(STATUS "Source archives for dependencies will be taken from '${DOWNLOAD_LOCATION}'")

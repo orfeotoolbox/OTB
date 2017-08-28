@@ -26,6 +26,11 @@
 # to load OTB's settings for an external project.
 @OTB_CONFIG_CODE@
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+#RK: TODO: add sse2, see4, see4.1, openmp flags
+
 # The C and C++ flags added by OTB to the cmake-configured flags.
 set(OTB_REQUIRED_C_FLAGS "@OTB_REQUIRED_C_FLAGS@")
 set(OTB_REQUIRED_CXX_FLAGS "@OTB_REQUIRED_CXX_FLAGS@")
@@ -39,11 +44,17 @@ set(OTB_VERSION_PATCH "@OTB_VERSION_PATCH@")
 # OTB's CMake directory with modules OTB uses.
 set(OTB_CMAKE_DIR "@OTB_CONFIG_CMAKE_DIR@")
 
+# use Find*.cmake files included in OTB package for external dependencies. (OpenCV, GDAL etc..)
+set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
+
 # The location of the UseOTB.cmake file.
 set(OTB_USE_FILE "@OTB_USE_FILE@")
 
 # Whether OTB was built with shared libraries.
 set(OTB_BUILD_SHARED "@BUILD_SHARED_LIBS@")
+
+# Default value for WINDOWS_EXPORT_ALL_SYMBOLS target property
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "@OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS@")
 
 # List of available OTB modules.
 set(OTB_MODULES_ENABLED "@OTB_CONFIG_MODULES_ENABLED@")
