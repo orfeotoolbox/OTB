@@ -75,3 +75,8 @@ otb_create_application(
   NAME           MeanShiftSmoothing
   SOURCES        otbMeanShiftSmoothing.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           LargeScaleMeanShift
+  SOURCES        otbLargeScaleMeanShift.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
