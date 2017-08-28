@@ -44,6 +44,12 @@ set(OTB_VERSION_PATCH "@OTB_VERSION_PATCH@")
 # OTB's CMake directory with modules OTB uses.
 set(OTB_CMAKE_DIR "@OTB_CONFIG_CMAKE_DIR@")
 
+# OTB uses OPENMP
+set(OTB_USE_OPENMP "@OTB_USE_OPENMP@")
+
+# OTB uses SSE optim
+set(OTB_USE_SSE_FLAGS "@OTB_USE_SSE_FLAGS@")
+
 # use Find*.cmake files included in OTB package for external dependencies. (OpenCV, GDAL etc..)
 set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
 
