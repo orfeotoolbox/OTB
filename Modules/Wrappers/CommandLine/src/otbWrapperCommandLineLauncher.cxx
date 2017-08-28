@@ -582,99 +582,23 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
   for (unsigned int i = 0; i < appKeyList.size(); i++)
     {
     const std::string paramKey(appKeyList[i]);
-    Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
     ParameterType type = m_Application->GetParameterType(paramKey);
-    const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression));
-    std::vector<std::string> values;
-
-    // When a parameter is mandatory :
-    // it must be set if :
-    //  - The param is root
-    //  - The param is not root and belonging to a Mandatory Group
-    //    which is activated
-    bool mustBeSet = false;
-    const bool hasValue = m_Application->HasValue(paramKey);
-
-    //skip if mandatory parameters are missing because we have it already in XML
-    if(!paramInXMLExists)
+    if (m_Application->IsParameterMissing(paramKey))
       {
-      if( param->GetMandatory() == true && param->GetRole() != Role_Output && type != ParameterType_Group)
-        {
-        // check if the parameter is linked to a root parameter with a chain of active parameters
-        if( param->IsRoot() || param->GetRoot()->IsRoot())
-          {
-          // the parameter is a root or inside a group at root level
-          mustBeSet = true;
-          }
-        else
-          {
-          Parameter* currentParam = param->GetRoot();
-          while (!currentParam->IsRoot())
-            {
-            if (!currentParam->GetActive())
-              {
-              // the missing parameter is not on an active branch : we can ignore it
-              break;
-              }
-            currentParam = currentParam->GetRoot();
-
-            if (currentParam->IsRoot())
-              {
-              // the missing parameter is on an active branch : we need it
-              mustBeSet = true;
-              }
-            }
-          }
-        }
-      }
-
-    if( mustBeSet )
-    {
-      if (!paramExists)
-      {
-        // If key doesn't exist and parameter hasn't default value set...
-        if (!hasValue)
-        {
-          std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
-          return MISSINGMANDATORYPARAMETER;
-        }
-      }
-      else
-      {
-        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
-        if (values.size() == 0 && !m_Application->HasValue(paramKey))
-        {
-          std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
-          return MISSINGPARAMETERVALUE;
-        }
-      }
-    }
-    // Check if non mandatory parameter have values
-    else
-      {
-      if( paramExists )
-        {
-        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
-        if (values.size() == 0)
-          {
-          std::cerr << "ERROR: Missing non-mandatory parameter -" << paramKey << "." << std::endl;
-          return MISSINGPARAMETERVALUE;
-          }
-        }
+      std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
+      return MISSINGMANDATORYPARAMETER;
       }
 
     // Check output paths validity
-    if (hasValue)
+    if (m_Application->HasValue(paramKey) &&
+        type == ParameterType_OutputFilename)
       {
-      if (type == ParameterType_OutputFilename)
+      std::string filename = m_Application->GetParameterString(paramKey);
+      itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
+      if (path!="" && !itksys::SystemTools::FileIsDirectory(path.c_str()))
         {
-        std::string filename = m_Application->GetParameterString(paramKey);
-        itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
-        if (path!="" && !itksys::SystemTools::FileIsDirectory(path.c_str()))
-          {
-          std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
-          return WRONGPARAMETERVALUE;
-          }
+        std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
+        return WRONGPARAMETERVALUE;
         }
       }
     }
@@ -813,47 +737,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 
   std::ostringstream oss;
 
-  // When a parameter is mandatory :
-  // it must be set if :
-  //  - The param is root
-  //  - The param is not root and belonging to a Mandatory Group
-  //    which is activated
-  bool isMissing = false;
-  if (!m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression))
-    {
-    if (!m_Application->HasValue(paramKey))
-      {
-      if( param->GetMandatory() && param->GetRole() != Role_Output )
-        {
-        if( param->IsRoot() || param->GetRoot()->IsRoot())
-          {
-          // the parameter is a root or inside a group at root level
-          isMissing = true;
-          }
-        else
-          {
-          Parameter* currentParam = param->GetRoot();
-          while (!currentParam->IsRoot())
-            {
-            if (!currentParam->GetActive())
-              {
-              // the missing parameter is not on an active branch : we can ignore it
-              break;
-              }
-            currentParam = currentParam->GetRoot();
-
-            if (currentParam->IsRoot())
-              {
-              // the missing parameter is on an active branch : we need it
-              isMissing = true;
-              }
-            }
-          }
-        }
-      }
-    }
-
-  if( isMissing )
+  if( m_Application->IsParameterMissing(paramKey) )
     {
     oss << "MISSING ";
     }
