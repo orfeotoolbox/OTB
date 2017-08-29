@@ -104,15 +104,10 @@ string(REGEX MATCH
   "#define.SHARK_USE_OPENMP"
   SHARK_USE_OPENMP_matched "${SHARK_H_CONTENTS}")
 
-
-set(SHARK_USE_OPENMP FALSE CACHE BOOL "shark is built with OpenMP")
 if(SHARK_USE_OPENMP_matched)
-  #TODO: remove the previous set(SHARK_USE_OPENMP..
-  # and force OTB_USE_OPENMP
-  set(SHARK_USE_OPENMP TRUE CACHE BOOL "shark is built with OpenMP" FORCE)
-  message(STATUS "Shark is built with OpenMP: SHARK_USE_OPENMP = TRUE")
-else()
-  message(STATUS "Shark is built without OpenMP: SHARK_USE_OPENMP = FALSE")
+  if(NOT OTB_USE_OPENMP)
+    message(WARNING "Shark library is built with OpenMP and you have OTB_USE_OPENMP set to OFF.")
+  endif()
 endif()
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
