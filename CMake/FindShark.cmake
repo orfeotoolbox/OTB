@@ -104,11 +104,11 @@ string(REGEX MATCH
   "#define.SHARK_USE_OPENMP"
   SHARK_USE_OPENMP_matched "${SHARK_H_CONTENTS}")
 
-#this variable is added in cache but not used now
-# you can use it to see if shark installation has openMP
-# later if needed in other places..
+
 set(SHARK_USE_OPENMP FALSE CACHE BOOL "shark is built with OpenMP")
 if(SHARK_USE_OPENMP_matched)
+  #TODO: remove the previous set(SHARK_USE_OPENMP..
+  # and force OTB_USE_OPENMP
   set(SHARK_USE_OPENMP TRUE CACHE BOOL "shark is built with OpenMP" FORCE)
   message(STATUS "Shark is built with OpenMP: SHARK_USE_OPENMP = TRUE")
 else()
