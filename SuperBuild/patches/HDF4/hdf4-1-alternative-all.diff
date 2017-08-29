@@ -14,3 +14,25 @@ diff -burN hdf-4.2.13.orig/CMakeLists.txt hdf-4.2.13/CMakeLists.txt
  set (HDF4_MF_XDR_LIB_CORENAME       "xdr")
  set (HDF4_HDF_TEST_LIB_CORENAME     "hdf_test")
  set (HDF4_HDF_TEST_FCSTUB_LIB_CORENAME     "hdf_test_fcstub")
+diff -burN hdf-4.2.13.orig/hdf/src/CMakeLists.txt hdf-4.2.13/hdf/src/CMakeLists.txt
+--- hdf-4.2.13.orig/hdf/src/CMakeLists.txt	2017-08-28 11:51:04.123547659 +0200
++++ hdf-4.2.13/hdf/src/CMakeLists.txt	2017-08-29 11:54:50.984708306 +0200
+@@ -145,6 +145,7 @@
+       COMPILE_DEFINITIONS "H4_BUILT_AS_DYNAMIC_LIB"
+       INTERFACE_INCLUDE_DIRECTORIES "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>"
+       INTERFACE_COMPILE_DEFINITIONS H4_BUILT_AS_DYNAMIC_LIB=1
++      DEFINE_SYMBOL "hdf_shared_EXPORTS"
+   )
+   if (WIN32)
+     set_property (TARGET ${HDF4_SRC_LIBSH_TARGET} APPEND PROPERTY COMPILE_DEFINITIONS "DOS_FS")
+diff -burN hdf-4.2.13.orig/mfhdf/libsrc/CMakeLists.txt hdf-4.2.13/mfhdf/libsrc/CMakeLists.txt
+--- hdf-4.2.13.orig/mfhdf/libsrc/CMakeLists.txt	2017-08-28 11:51:04.131547427 +0200
++++ hdf-4.2.13/mfhdf/libsrc/CMakeLists.txt	2017-08-29 14:09:23.159803355 +0200
+@@ -92,6 +92,7 @@
+       COMPILE_DEFINITIONS "HDF;H4_BUILT_AS_DYNAMIC_LIB"
+       INTERFACE_INCLUDE_DIRECTORIES "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>"
+       INTERFACE_COMPILE_DEFINITIONS H4_BUILT_AS_DYNAMIC_LIB=1
++      DEFINE_SYMBOL "mfhdf_shared_EXPORTS"
+   )
+   if (WIN32)
+     set_property (TARGET ${HDF4_MF_LIBSH_TARGET} APPEND PROPERTY COMPILE_DEFINITIONS "DOS_FS;SWAP")
