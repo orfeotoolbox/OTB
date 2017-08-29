@@ -92,11 +92,21 @@ ZLIB_INC = -I@SB_INSTALL_PREFIX_NATIVE@\include
 ZLIB_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\zlib.lib
 
 # Uncomment the following and update to enable NCSA HDF Release 4 support.
-#HDF4_PLUGIN = NO
-#HDF4_DIR =	D:\warmerda\HDF41r5
+HDF4_PLUGIN = YES
+HDF4_DIR =	@SB_INSTALL_PREFIX_NATIVE@
 #HDF4_LIB =	/LIBPATH:$(HDF4_DIR)\lib Ws2_32.lib
+HDF4_LIB =	$(HDF4_DIR)\lib\libdfalt.lib
+HDF4_INCLUDE = $(HDF4_DIR)\include
+HDF4_HAS_MAXOPENFILES = YES
 
 # Uncomment the following and update to enable NCSA HDF Release 5 support.
-#HDF5_PLUGIN = NO
-#HDF5_DIR =	c:\warmerda\supportlibs\hdf5\5-164-win
-#HDF5_LIB =	$(HDF5_DIR)\dll\hdf5dll.lib
+HDF5_PLUGIN = YES
+HDF5_DIR =	@SB_INSTALL_PREFIX_NATIVE@
+HDF5_LIB =	$(HDF5_DIR)\lib\libhdf5.lib
+
+NETCDF_PLUGIN = YES
+NETCDF_SETTINGS = YES
+NETCDF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\netcdf.lib
+NETCDF_INC_DIR = @SB_INSTALL_PREFIX_NATIVE@\include
+NETCDF_HAS_NC4 = YES
+NETCDF_HAS_HDF4 = YES

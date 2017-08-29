@@ -59,8 +59,8 @@ ExternalProject_Add(HDF5
 
 set(_SB_HDF5_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
-  set(_SB_HDF5_LIBRARY ${SB_INSTALL_PREFIX}/lib/hdf5_i.lib)
-  set(_SB_HDF5_HL_LIBRARY ${SB_INSTALL_PREFIX}/lib/hdf5_hl_i.lib)
+  set(_SB_HDF5_LIBRARY ${SB_INSTALL_PREFIX}/lib/libhdf5.lib)
+  set(_SB_HDF5_HL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libhdf5_hl.lib)
 elseif(UNIX)
   set(_SB_HDF5_LIBRARY ${SB_INSTALL_PREFIX}/lib/libhdf5${CMAKE_SHARED_LIBRARY_SUFFIX})
   set(_SB_HDF5_HL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libhdf5_hl${CMAKE_SHARED_LIBRARY_SUFFIX})
