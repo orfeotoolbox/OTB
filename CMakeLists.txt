@@ -506,6 +506,8 @@ foreach(otb_option
     OTB_WRAP_PYTHON
     OTB_WRAP_JAVA
     OTB_DATA_ROOT
+    OTB_USE_OPENMP
+    OTB_USE_SSE_FLAGS
     )
     get_white_spaces("${otb_option}" spaces)
   message("${otb_option} ${spaces} = ${${otb_option}}")

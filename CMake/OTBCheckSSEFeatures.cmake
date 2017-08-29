@@ -1,10 +1,7 @@
 function(check_sse_features sse_flags )
-  include(CheckIncludeFile)
-  include(CheckLibraryExists)
   include(CheckCXXSourceRuns)
   include(CheckCXXCompilerFlag)
 
-  set(has_sse FALSE)
   set(${sse_flags} "0" PARENT_SCOPE)
   # For apple assume sse2 is on for all intel builds, check for 64 and 32 bit versions
   if(APPLE)
@@ -24,14 +21,11 @@ function(check_sse_features sse_flags )
         b = _mm_add_pd(a,a);
         _mm_storeu_pd(vals,b);
         return 0;
-     }"
-      has_sse)
+     }" HAVE_SSE2_FLAGS)
  
-    if(has_sse)
-      message(STATUS "Performing Test CXX_HAS_SSE2 - Success")
+    if(HAVE_SSE2_FLAGS)
       set(${sse_flags} "-msse2 -mfpmath=sse" PARENT_SCOPE)
-    else()
-      message(STATUS "Performing Test CXX_HAS_SSE2 - Failed")
+      return()
     endif()
 
     set(CMAKE_REQUIRED_FLAGS "-msse")
@@ -46,18 +40,13 @@ function(check_sse_features sse_flags )
         b = _mm_add_ps(a,b);
         _mm_storeu_ps(vals,b);
         return 0;
-    }"
-      has_sse)
+    }" HAVE_SSE_FLAGS)
     
-    if(has_sse)
-      message(STATUS "Performing Test CXX_HAS_SSE - Success")
+    if(HAVE_SSE_FLAGS)
       set(${sse_flags} "-msse -mfpmath=sse" PARENT_SCOPE)
       return()
-    else()
-      message(STATUS "Performing Test CXX_HAS_SSE - Failed")
-      return()
     endif()
-    
+
   elseif(MSVC)
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
       return()
@@ -73,15 +62,14 @@ function(check_sse_features sse_flags )
           b = _mm_add_pd(a,a);
           _mm_storeu_pd(vals,b);
           return 0;
-        }"
-      has_sse)
+        }" HAVE_SSE_FLAGS)
     
-    if(has_sse)
-      message(STATUS "Performing Test CXX_HAS_SSE - Success")
+    if(HAVE_SSE_FLAGS)
+      message(STATUS "Performing Test HAVE_SSE_FLAGS - Success")
       set(${sse_flags} "/arch:SSE2 /fp:fast -D__SSE__ -D__SSE2__" PARENT_SCOPE)
       return()
     else()
-      message(STATUS "Performing Test CXX_HAS_SSE - Failed")
+      message(STATUS "Performing Test HAVE_SSE_FLAGS - Failed")
       return()
     endif()
 endif()
