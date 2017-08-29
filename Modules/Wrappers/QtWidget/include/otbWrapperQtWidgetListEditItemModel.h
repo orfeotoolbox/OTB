@@ -209,6 +209,12 @@ public:
   /** */
   virtual bool Swap( int, int );
 
+  /** */
+  virtual bool IsInput() const;
+
+  /** */
+  virtual QString GetFilter() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

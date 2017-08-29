@@ -450,6 +450,26 @@ ListEditItemModel
 }
 
 /*******************************************************************************/
+bool
+ListEditItemModel
+::IsInput() const
+{
+  assert( m_StringList!=nullptr );
+
+  return m_StringList->GetDirection()==Role_Input;
+}
+
+/*******************************************************************************/
+QString
+ListEditItemModel
+::GetFilter() const
+{
+  assert( m_StringList!=nullptr );
+
+  return QString::fromStdString( m_StringList->GetFilenameFilter() );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 
