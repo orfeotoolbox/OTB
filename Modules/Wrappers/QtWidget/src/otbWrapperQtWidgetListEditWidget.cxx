@@ -176,6 +176,39 @@ ListEditWidget
   }
 }
 
+/*******************************************************************************/
+QString
+ListEditWidget
+::browseFilename( const QString & filename )
+{
+  const ListEditItemModel * itemModel = GetItemModel();
+  assert( itemModel!=nullptr );
+
+  QString filePath(
+    QDir::current().filePath(
+      filename
+    )
+  );
+
+  QString selectedFilter;
+
+  return
+    itemModel->IsInput()
+    ? QFileDialog::getOpenFileName(
+        this,
+	tr( "Select input filename..." ),
+	filePath,
+	itemModel->GetFilter(),
+	&selectedFilter
+      )
+    : QFileDialog::getSaveFileName(
+        this,
+	tr( "Select output filename..." ),
+	filePath,
+	itemModel->GetFilter(),
+	&selectedFilter
+      );
+}
 
 /*******************************************************************************/
 QString
@@ -193,8 +226,6 @@ ListEditWidget
 
   //
   // Pick-up filename.
-  QString selectedFilter;
-
   assert(
     itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION ).isValid()
   );
@@ -205,33 +236,8 @@ ListEditWidget
     itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION )==Role_Output
   );
 
-  QString filePath(
-    QDir::current().filePath(
-      itemModel->data( index ).toString()
-    )
-  );
-
-  QString filter(
-    itemModel->data( index, ListEditItemModel::USER_ROLE_FILTER ).toString()
-  );
-
   return
-    ( itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION )==
-      Role_Input )
-    ? QFileDialog::getOpenFileName(
-        this,
-	tr( "Select input filename..." ),
-	filePath,
-	filter,
-	&selectedFilter
-      )
-    : QFileDialog::getSaveFileName(
-        this,
-	tr( "Select output filename..." ),
-	filePath,
-	filter,
-	&selectedFilter
-      );
+    browseFilename( itemModel->data( index ).toString() );
 }
 
 
@@ -244,12 +250,21 @@ ListEditWidget
 {
   // qDebug() << this << "::on_addButton_clicked()";
 
-  ListEditItemModel * itemModel = GetItemModel();
+  QString filename( browseFilename() );
 
+  ListEditItemModel * itemModel = GetItemModel();
   assert( itemModel!=nullptr );
 
-  if( !GetItemModel()->insertRow( itemModel->rowCount() ) )
+  int row = itemModel->rowCount();
+  assert( row>=0 );
+
+  if( !itemModel->insertRow( row ) )
     return;
+
+  itemModel->setData(
+    itemModel->index( row, ListEditItemModel::COLUMN_NAME ),
+    filename
+  );
 }
 
 /*******************************************************************************/
