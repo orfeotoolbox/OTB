@@ -218,8 +218,8 @@ ListEditItemModel
 
   if( idx.column()==COLUMN_NAME )
     iflags |=
-        Qt::ItemIsUserCheckable
-      | Qt::ItemIsEditable
+      Qt::ItemIsEditable
+      // | Qt::ItemIsUserCheckable
       // | Qt::ItemIsDragEnabled
       ;
 
@@ -403,7 +403,7 @@ ListEditItemModel
 	    idx.row(),
 	    QFile::encodeName( value.toString() ).data()
 	  );
-
+	  emit dataChanged( idx, idx );
 	  return true;
 	  break;
 
