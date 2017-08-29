@@ -204,16 +204,6 @@ else
   echo "Check 3/4 : PASS"
 fi
 
-GREP=$(which grep)
-RES=$($GREP -Rs "/usr/" > /dev/null)
-
-# clean any background process
-ps_children $$ >tmp.log
-for pid in $(cut -d ' ' -f 1 < tmp.log); do
-  kill -9 "$pid"
-done
-rm -f tmp.log
-
 grep_cmd=$(which grep)
 grep_out=$($grep_cmd -Rs "/usr/" "$CUR_DIR/lib/cmake/")
 grep_ret=$?
@@ -224,3 +214,10 @@ if [ $grep_ret -ne 1 ]; then
 else
     echo "Check 4/4 : PASS"
 fi
+
+# clean any background process
+ps_children $$ >tmp.log
+for pid in $(cut -d ' ' -f 1 < tmp.log); do
+  kill -9 "$pid"
+done
+rm -f tmp.log
