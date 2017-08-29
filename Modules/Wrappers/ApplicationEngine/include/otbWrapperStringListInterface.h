@@ -93,7 +93,13 @@ public:
   virtual Role GetDirection( unsigned int ) const = 0;
 
   /** */
+  virtual Role GetDirection() const = 0;
+
+  /** */
   virtual const std::string & GetFilenameFilter( unsigned int ) const = 0;
+
+  /** */
+  virtual const std::string & GetFilenameFilter() const = 0;
 
 protected:
   /** Constructor */

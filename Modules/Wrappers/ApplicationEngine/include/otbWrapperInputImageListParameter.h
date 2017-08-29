@@ -125,7 +125,13 @@ public:
   Role GetDirection( unsigned int ) const ITK_OVERRIDE;
 
   /** */
+  Role GetDirection() const ITK_OVERRIDE;
+
+  /** */
   const std::string & GetFilenameFilter( unsigned int ) const ITK_OVERRIDE;
+
+  /** */
+  const std::string & GetFilenameFilter() const ITK_OVERRIDE;
 
 protected:
   /** Constructor */

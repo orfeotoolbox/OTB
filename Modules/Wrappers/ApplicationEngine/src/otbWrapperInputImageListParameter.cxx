@@ -431,15 +431,31 @@ InputImageListParameter
 #else
   // otb::Parameter::GetRole() does not necessarily stand for
   // direction of parameter.
-  return Role_Input;
+  return GetDirection();
 
 #endif
+}
+
+
+Role
+InputImageListParameter
+::GetDirection() const
+{
+  return Role_Input;
 }
 
 
 const std::string &
 InputImageListParameter
 ::GetFilenameFilter( unsigned int ) const
+{
+  return GetFilenameFilter();
+}
+
+
+const std::string &
+InputImageListParameter
+::GetFilenameFilter() const
 {
   return IMAGES_FILTER;
 }
