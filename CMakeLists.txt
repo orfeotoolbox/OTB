@@ -213,6 +213,8 @@ endif()
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 mark_as_advanced(OTB_USE_DEPRECATED)
 
+option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
+option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependant)." ON)
 #-----------------------------------------------------------------------------
 # SHOW_ALL_MSG_DEBUG option
 option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
@@ -504,6 +506,8 @@ foreach(otb_option
     OTB_WRAP_PYTHON
     OTB_WRAP_JAVA
     OTB_DATA_ROOT
+    OTB_USE_OPENMP
+    OTB_USE_SSE_FLAGS
     )
     get_white_spaces("${otb_option}" spaces)
   message("${otb_option} ${spaces} = ${${otb_option}}")

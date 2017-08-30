@@ -1,0 +1,11 @@
+HOW TO UPDATE MAKESELF
+
+#If makEself version with your required bug fix is 2.3.1
+# cd to otb/sources/Packaging/
+
+wget https://github.com/megastep/makeself/archive/release-2.3.1.tar.gz
+tar xzf release-2.3.1.tar.gz
+mv makeself-release-2.3.1 makeself
+rm -fr release-2.3.1.tar.gz
+
+run git diff to check if everything is in place and git commit 
