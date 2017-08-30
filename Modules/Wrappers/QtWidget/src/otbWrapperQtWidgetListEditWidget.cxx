@@ -386,6 +386,9 @@ ListEditWidget
     m_UI->treeView->selectionModel()->selectedRows()
   );
 
+  if( indexes.isEmpty() )
+    return;
+
   assert( indexes.size()==1 );
 
   const QModelIndex & front = indexes.front();
