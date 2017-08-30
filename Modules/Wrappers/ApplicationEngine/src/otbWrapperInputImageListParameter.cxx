@@ -33,7 +33,7 @@ IMAGES_FILTER(
   "All files (*);;"
   "TIFF file (*tif);;"
   "PNG File (*.png);;"
-  "JPEG File (*.jpg);;"
+  "JPEG File (*.jpg)"
 );
 
 
