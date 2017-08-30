@@ -237,12 +237,3 @@ add_custom_target(
     "${CMAKE_BINARY_DIR}"
     COMMENT "dummy target PACKAGE-OTB"
     )
-
-add_custom_target(
-  PACKAGE-XDK
-  COMMAND
-  "${CMAKE_COMMAND}" --build . --target install
-  WORKING_DIRECTORY
-  "${CMAKE_BINARY_DIR}"
-  COMMENT "dummy target PACKAGE-XDK"
-  )
