@@ -37,6 +37,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbQtAdapters.h"
 #include "otbWrapperQtWidgetListEditItemModel.h"
 #include "otbWrapperTypes.h"
 
@@ -194,14 +195,14 @@ ListEditWidget
 
   return
     itemModel->IsInput()
-    ? QFileDialog::getOpenFileName(
+    ? GetOpenFileName(
         this,
 	tr( "Select input filename..." ),
 	filePath,
 	itemModel->GetFilter(),
 	&selectedFilter
       )
-    : QFileDialog::getSaveFileName(
+    : GetSaveFileName(
         this,
 	tr( "Select output filename..." ),
 	filePath,
@@ -415,8 +416,8 @@ ListEditWidget
 /*******************************************************************************/
 void
 ListEditWidget
-::onSelectionChanged( const QItemSelection & selected,
-		      const QItemSelection & deselected )
+::onSelectionChanged( const QItemSelection & /* selected */,
+		      const QItemSelection & /* deselected */ )
 {
   // qDebug()
   //   << this
