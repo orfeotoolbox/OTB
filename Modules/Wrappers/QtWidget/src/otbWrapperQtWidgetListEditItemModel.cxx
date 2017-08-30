@@ -146,6 +146,7 @@ ListEditItemModel
 #endif
       break;
 
+    case Qt::EditRole:
     case Qt::DisplayRole:
       switch( idx.column() )
         {
@@ -161,7 +162,7 @@ ListEditItemModel
 
 	  return
 	    filename.empty()
-	    ? "EMPTY"
+	    ? ( role==Qt::EditRole ? QString() : "EMPTY" )
 	    : QFile::decodeName( filename.c_str()
 	    );
 	  }
