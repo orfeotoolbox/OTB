@@ -26,5 +26,5 @@ median, variance, kurtosis, skewness. The result could be use to perform further
 object-oriented image analysis.
 "
   GIT_REPOSITORY https://github.com/sertit/SertitObject.git
-  GIT_TAG 9088356af5835e0a8de9946bd508735f3e55cb83
+  GIT_TAG 49b6540c774ddb7c2d56e39f6f118c4dfb9b8bd3
 )
