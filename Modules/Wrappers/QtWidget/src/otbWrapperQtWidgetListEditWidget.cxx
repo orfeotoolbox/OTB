@@ -418,9 +418,9 @@ ListEditWidget
 ::onSelectionChanged( const QItemSelection & selected,
 		      const QItemSelection & deselected )
 {
-  qDebug()
-    << this
-    << "::onSelectionChanged(" << selected << "," << deselected << ")";
+  // qDebug()
+  //   << this
+  //   << "::onSelectionChanged(" << selected << "," << deselected << ")";
 }
 
 } // end namespace 'Wrapper'
