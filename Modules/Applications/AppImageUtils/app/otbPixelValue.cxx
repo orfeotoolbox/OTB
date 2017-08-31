@@ -56,7 +56,7 @@ private:
     // Documentation
     SetDocName("Pixel Value");
     SetDocLongDescription("This application gives the value of a selected "
-      "pixel. There are three ways of designate a pixel, with its index, "
+      "pixel. There are three ways to designate a pixel, with its index, "
       "its physical coordinate (in the physical space attached to the image), "
       "and with geographical coordinate system. Coordinates will be "
       "interpreted differently depending on which mode is chosen.");
@@ -84,17 +84,17 @@ private:
     AddParameter(ParameterType_Choice , "mode" , 
           "Coordinate system used to designate the pixel");
     SetParameterDescription( "mode" , 
-          "Different mode can be selected, default mode is Index.");
+          "Different modes can be selected, default mode is Index.");
     AddChoice( "mode.index" , "Index");
     SetParameterDescription( "mode.index" , 
-          "This mode use the given coordinates as index to locate the pixel.");
+          "This mode uses the given coordinates as index to locate the pixel.");
     AddChoice( "mode.physical" , "Image physical space");
     SetParameterDescription( "mode.physical" , 
-          "This mode interpret the given coordinates in the image "
+          "This mode interprets the given coordinates in the image "
           "physical space.");
     AddChoice( "mode.epsg" , "EPSG coordinates");
     SetParameterDescription( "mode.epsg" , 
-          "This mode interpret the given coordinates in the specified "
+          "This mode interprets the given coordinates in the specified "
           "geographical coordinate system by the EPSG code.");
 
     AddParameter(ParameterType_Int , "epsg" , "EPSG code");
