@@ -84,7 +84,7 @@ for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
   elif echo "$F_OUTPUT" | grep -q ': symbolic link'; then
     :
   else
-    echo_and_report "Unkown file type : $F_OUTPUT"
+    echo_and_report "Unknown file type : $F_OUTPUT"
   fi
 done
 
