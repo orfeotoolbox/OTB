@@ -464,7 +464,7 @@ otb_add_test(NAME ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetTile
   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
   ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming.tif
   SetTileDimensionTiledStreaming
-  32
+  256
   )
 
 otb_add_test(NAME ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsTiledStreamingS COMMAND otbImageIOTestDriver
