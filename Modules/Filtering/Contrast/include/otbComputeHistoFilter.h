@@ -46,11 +46,9 @@ public:
 
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
-  typedef unsigned int ThreadIdType;
-
-
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
+  
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComputeHistoFilter, ImageToImageFilter);
 
@@ -70,9 +68,12 @@ public:
   itkGetMacro(ThumbSize, SizeType);
 
   itkGetMacro(TargetHisto, typename OutputImageType::Pointer);
+  //Give the opportunity to choose the histogram target
 
   itkSetMacro(Threshold , float);
   itkGetMacro(Threshold , float);
+
+  typename OutputImageType::Pointer GetHistoOutput();
 
 protected:
   ComputeHistoFilter();
@@ -85,12 +86,17 @@ protected:
   // Call  BeforeThreadedGenerateData after getting the number of thread
   void GenerateData();
 
+  itk::DataObject::Pointer MakeOutput(unsigned int idx);
+  
   void BeforeThreadedGenerateData();
 
-  void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
-                            ThreadIdType threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
+                            itk::ThreadIdType threadId);
 
   void AfterThreadedGenerateData();
+
+  void GenerateOutputRequestedRegion( itk::DataObject *output );
+
 
 private:
   ComputeHistoFilter(const Self &); //purposely not implemented
@@ -105,6 +111,7 @@ private:
   int m_NbBin;
   float m_Threshold;
   double m_Step;
+  unsigned int m_ValidThreads;
 
 };
 

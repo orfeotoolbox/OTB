@@ -24,6 +24,7 @@
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbStreamingStatisticsImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbStreamingImageVirtualWriter.h"
 #include "otbStreamingImageRAMWriter.h"
@@ -101,6 +102,8 @@ public:
   typedef otb::ImageListToVectorImageFilter< ImageListType, FloatVectorImageType > 
           ImageListToVectorFilterType;
   typedef otb::StreamingStatisticsVectorImageFilter< FloatVectorImageType >
+          VectorStatsFilterType;
+  typedef otb::StreamingStatisticsImageFilter< FloatImageType >
           StatsFilterType;
   typedef itk::UnaryFunctorImageFilter < FloatVectorImageType ,
           FloatImageType , Functor::LuminanceOperator > LuminanceFilter;
@@ -131,10 +134,10 @@ private:
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
-    SetParameterString("in", "/home/antoine/dev/my_data/anaglyphInput2.tif");
+    SetParameterString("in", "/home/antoine/dev/my_data/DATA_PHR/PHR1B_MS_SENSOR_20170521_103758/IMG_PHR1B_MS_201705211037588_SEN_2323292101-004_R1C1.JP2");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
-    SetParameterString("out", "/home/antoine/dev/my_data/anaglypheq.tif");
+    SetParameterString("out", "/home/antoine/dev/my_data/bigbigtest.tif");
 
 
     AddParameter(ParameterType_Int,"bin","Bin number");
@@ -199,8 +202,8 @@ private:
     SetMinimumParameterIntValue("mode.lum.gre.ch", 0);
     SetMinimumParameterIntValue("mode.lum.blu.ch", 0);
     SetMinimumParameterIntValue("bin", 2);
-    SetMinimumParameterIntValue("thumb.h", 0);
-    SetMinimumParameterIntValue("thumb.w", 0);
+    SetMinimumParameterIntValue("thumb.h", 1);
+    SetMinimumParameterIntValue("thumb.w", 1);
 
     AddRAMParameter(); 
   }
@@ -210,94 +213,161 @@ private:
     if (HasValue("in") )
       {
       FloatVectorImageType * inImage = GetParameterImage("in");
+      FloatVectorImageType::RegionType::SizeType size;
+      size = inImage->GetLargestPossibleRegion().GetSize() ;
+
       if ( !HasUserValue("thumb.w") )
-        {
-        SetParameterInt( "thumb.w" , 
-                      inImage->GetLargestPossibleRegion().GetSize()[0] );
-        }
+        SetParameterInt( "thumb.w" , size[0] );
+        
       if ( !HasUserValue("thumb.h") )
-        {
-        SetParameterInt( "thumb.h" , 
-                      inImage->GetLargestPossibleRegion().GetSize()[1] );
-        }
+        SetParameterInt( "thumb.h" , size[1] );
       
+      if ( HasUserValue("thumb.h") || HasUserValue("thumb.w") )
+        CheckValidity( size );
+      
+      
+      if ( !HasUserValue("nodata") )
+        SetDefaultValue( inImage , "NODATA" );
+
+      if ( GetParameterString( "mode" ) == "lum" && 
+           !HasUserValue("mode.lum.red.ch") &&
+           !HasUserValue("mode.lum.gre.ch") &&
+           !HasUserValue("mode.lum.blu.ch") )
+        SetDefaultValue( inImage , "RGB" );
+
+      }
+
+    if ( GetParameterString("minmax") == "man" )
       {
-      std::ostringstream oss;
-      if ( HasUserValue("thumb.h") && 
-        GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]%GetParameterInt("thumb.h") != 0 )
+      MandatoryOn("min");
+      MandatoryOn("max");
+      }
+    else if ( GetParameterString("minmax") == "auto" )
+      {
+      MandatoryOff("min");
+      MandatoryOff("max");
+      }
+  }
+
+  void DoExecute() ITK_OVERRIDE
+  {
+    std::string mode = GetParameterString("mode");
+    FloatVectorImageType * inImage = GetParameterImage("in");
+    ImageListType::Pointer outputImageList ( ImageListType::New() ); 
+    m_vectorToImageListFilter = VectorToImageListFilterType::New() ;
+    m_vectorToImageListFilter->SetInput( inImage );
+    m_vectorToImageListFilter->UpdateOutputInformation();
+    ImageListType::Pointer inputImageList = 
+                  m_vectorToImageListFilter->GetOutput();
+    int nbChanel = inImage->GetVectorLength ();
+
+    if ( mode == "each")
+      {
+      // Each chanel will be equalized
+      PerBandEqualization( inImage , inputImageList , 
+                           nbChanel , outputImageList );
+      }
+
+    else if ( mode == "lum")
+      {
+      int rgb[3];
+      rgb[0] = GetParameterInt("mode.lum.red.ch");
+      rgb[1] = GetParameterInt("mode.lum.gre.ch");
+      rgb[2] = GetParameterInt("mode.lum.blu.ch");
+      ComputeLuminance( inImage , rgb );
+      LuminanceEqualization( inputImageList , rgb , outputImageList );
+      }
+
+    m_imageListToVectorFilterOut = ImageListToVectorFilterType::New() ;
+    m_imageListToVectorFilterOut->SetInput(outputImageList);
+
+    #ifdef DEBUG
+    std::cout<<"vectortoimagelist R"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"vectortoimagelist B"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"vectortoimagelist L"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut R"<<m_filterLut[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut B"<<m_filterLut[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut L"<<m_filterLut[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain R"<<m_filterGain[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain B"<<m_filterGain[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"filterGain L"<<m_filterGain[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"outputImageList R"<<outputImageList->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"outputImageList B"<<outputImageList->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"outputImageList L"<<outputImageList->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
+    #endif
+
+    SetParameterOutputImage( "out" , m_imageListToVectorFilterOut->GetOutput() );
+  }
+
+  // Look for default values in the image metadata
+  void SetDefaultValue( const FloatVectorImageType * inImage ,
+                        std::string what)
+  {
+    typedef ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+    ImageMetadataInterfaceType::Pointer metadataInterface = 
+          ImageMetadataInterfaceFactory
+                ::CreateIMI(inImage->GetMetaDataDictionary());
+    if ( what == "NODATA" )
+      {
+      std::vector<double> values;
+      std::vector<bool> flags;
+
+      bool ret = metadataInterface->GetNoDataFlags(flags,values);
+
+      if(ret && !values.empty() && !flags.empty() && flags[0])
         {
-        oss <<"error : hThumbnail = "<<GetParameterInt("thumb.h")<<
-              " is not a divider of the input's height"<<std::endl;
-        oss<<"Image Height = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
-        // std::cout<<"error : hThumbnail = "<<GetParameterInt("thumb.h")<<" is not a divider of the input's height"<<std::endl;
-        // std::cout<<"Image Height = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
+        SetParameterFloat( "nodata" , static_cast<float>( values[0] ) );
         }
+      }
+    else if ( what == "RGB" )
+      {
+      std::vector<unsigned int> rgb = 
+                    metadataInterface->GetDefaultDisplay() ;
+      unsigned int m = inImage->GetVectorLength ();
+      SetParameterInt( "mode.lum.red.ch" , rgb[0] );
+      SetParameterInt( "mode.lum.gre.ch" , rgb[1] );
+      SetParameterInt( "mode.lum.blu.ch" , rgb[2] );
+      if( m < rgb[ 0 ] )
+        {
+        SetParameterFloat ("mode.lum.red.coef" , 0.0 );
+        SetParameterInt( "mode.lum.red.ch" , 0 );
+        }
+      if( m < rgb[ 1 ] )
+        {
+        SetParameterFloat ("mode.lum.gre.coef" , 0.0 );
+        SetParameterInt( "mode.lum.gre.ch" , 0 );
+        }
+      if( m < rgb[ 2 ] )
+        {
+        SetParameterFloat ("mode.lum.blu.coef" , 0.0 );
+        SetParameterInt( "mode.lum.blu.ch" , 0 );
+        }
+      }
+  }
+
+  // Check if the image size is a multiple of the thumbnail size
+  void CheckValidity( const FloatVectorImageType::RegionType::SizeType size )
+  {
+    std::ostringstream oss;
       if ( HasUserValue("thumb.w") && 
-        GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[0]%GetParameterInt("thumb.w") != 0 )
+           size[0]%GetParameterInt("thumb.w") != 0 )
         {   
         oss <<"error : wThumbnail = "<<GetParameterInt("thumb.w")<<
               " is not a divider of the input's width"<<std::endl;
-        oss<<"Image Width = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[1]<<std::endl;
-        // std::cout<<"error : wThumbnail = "<<GetParameterInt("thumb.w")<<"is not a divider of the input's width"<<std::endl;
-        // std::cout<<"Image Width = "<<GetParameterImage("in")->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
+        oss<<"Image Width = "<<size[0]<<std::endl;
+        }
+      if ( HasUserValue("thumb.h") && 
+           size[1]%GetParameterInt("thumb.h") != 0 )
+        {
+        oss <<"error : hThumbnail = "<<GetParameterInt("thumb.h")<<
+              " is not a divider of the input's height"<<std::endl;
+        oss<<"Image Height = "<<size[1]<<std::endl;
         }
       otbAppLogINFO( << oss.str() );
-      }
-      if ( !HasUserValue("nodata") )
-        {
-        typedef ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-        ImageMetadataInterfaceType::Pointer metadataInterface = 
-            ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
-        std::vector<double> values;
-        std::vector<bool> flags;
-
-        bool ret = metadataInterface->GetNoDataFlags(flags,values);
-
-        if(ret && !values.empty() && !flags.empty() && flags[0])
-          {
-          SetParameterFloat( "nodata" , static_cast<float>( values[0] ) );
-          }
-        if ( GetParameterString( "mode" ) == "lum" && 
-             !HasUserValue("mode.lum.red.ch") &&
-             !HasUserValue("mode.lum.gre.ch") &&
-             !HasUserValue("mode.lum.blu.ch") )
-          {
-          std::vector<uint> rgb = metadataInterface->GetDefaultDisplay() ;
-          uint m = inImage->GetVectorLength ();
-          SetParameterInt( "mode.lum.red.ch" , rgb[0] );
-          SetParameterInt( "mode.lum.gre.ch" , rgb[1] );
-          SetParameterInt( "mode.lum.blu.ch" , rgb[2] );
-          if( m < rgb[ 0 ] )
-            {
-            SetParameterFloat ("mode.lum.red.coef" , 0.0 );
-            SetParameterInt( "mode.lum.red.ch" , 0 );
-            }
-          if( m < rgb[ 1 ] )
-            {
-            SetParameterFloat ("mode.lum.gre.coef" , 0.0 );
-            SetParameterInt( "mode.lum.gre.ch" , 0 );
-            }
-          if( m < rgb[ 2 ] )
-            {
-            SetParameterFloat ("mode.lum.blu.coef" , 0.0 );
-            SetParameterInt( "mode.lum.blu.ch" , 0 );
-            }
-          }
-        }
-      }
-
-      if ( GetParameterString("minmax") == "man" )
-        {
-        MandatoryOn("min");
-        MandatoryOn("max");
-        }
-      if ( GetParameterString("minmax") == "auto" )
-        {
-        MandatoryOff("min");
-        MandatoryOff("max");
-        }
   }
 
+  // Prepare the first half of the pipe that is common to every methode of 
+  // equalization
   void SetUpPipeline( const FilterHistoType::Pointer filterHisto ,
                       const FilterLutType::Pointer filterLut ,
                       const RAMWriter::Pointer ramWriter ,
@@ -323,20 +393,19 @@ private:
     thumbSize[1] = GetParameterInt("thumb.h");
     filterHisto->SetThumbSize( thumbSize );
     filterHisto->SetInput( input ) ;
-    filterLut->SetInput( filterHisto->GetOutput() );
-    ramWriter->SetInput( filterLut->GetOutput() );
+    ramWriter->SetInput( filterHisto->GetHistoOutput() );
     VirtualWriter::Pointer virtualWriter ( VirtualWriter::New() );
     virtualWriter->SetInput( ramWriter->GetOutput() );
     virtualWriter->Update();
-
+    filterLut->SetInput( ramWriter->GetOutput() );
+    filterLut->Update();
   }
 
-  void DoExecute() ITK_OVERRIDE
+  // Compute min max from a vector image
+  void ComputeVectorMinMax( const FloatVectorImageType::Pointer inImage ,
+                            FloatVectorImageType::PixelType & max ,
+                            FloatVectorImageType::PixelType & min )
   {
-    
-    FloatVectorImageType * inImage = GetParameterImage("in");
-    FloatVectorImageType::PixelType min(0.0);
-    FloatVectorImageType::PixelType max(0.0);
     if ( GetParameterString("minmax") == "man" )
       {
       min.Fill( GetParameterFloat("min") );
@@ -344,7 +413,7 @@ private:
       }
     else if ( GetParameterString("minmax") == "auto" )
       {
-      StatsFilterType::Pointer statFilter ( StatsFilterType::New() );
+      VectorStatsFilterType::Pointer statFilter ( VectorStatsFilterType::New() );
       statFilter->SetIgnoreInfiniteValues(true);
       if( HasUserValue("nodata") )
         {
@@ -356,119 +425,147 @@ private:
       min = statFilter->GetMinimum();
       max = statFilter->GetMaximum();
       }
+  }
 
-    ImageListType::Pointer outputImageList ( ImageListType::New() ); 
-    m_vectorToImageListFilter = VectorToImageListFilterType::New() ;
-    m_vectorToImageListFilter->SetInput( inImage );
-    m_vectorToImageListFilter->UpdateOutputInformation();
-    ImageListType::Pointer inputImageList = 
-                  m_vectorToImageListFilter->GetOutput();
-                  
-    if ( GetParameterString("mode") == "each")
+  // Compute min miac from an image
+  void ComputeFloatMinMax( const FloatImageType::Pointer luminance ,
+                           FloatImageType::PixelType & max ,
+                           FloatImageType::PixelType & min )
+  {
+    if ( GetParameterString("minmax") == "man" )
       {
-      // Each chanel will be equalized
-      int m = inImage->GetVectorLength ();
-      m_filterHisto.resize(m);
-      m_filterLut.resize(m);
-      m_filterGain.resize(m);
-      m_RAMWriter.resize(m);
-      for (int chanel = 0 ; chanel<m ; chanel++ ) 
-        {
-        m_filterHisto[chanel] = FilterHistoType::New();
-        m_filterLut[chanel] = FilterLutType::New();
-        m_filterGain[chanel] = FilterGainType::New();
-        m_RAMWriter[chanel] = RAMWriter::New();
-
-        SetUpPipeline ( m_filterHisto[chanel] , m_filterLut[chanel] ,
-                        m_RAMWriter[chanel] ,
-                        inputImageList->GetNthElement(chanel) ,
-                        max[chanel] , min[chanel] );
-        std::cout<<"End of multithread"<<std::endl;
-        if( HasUserValue("nodata") )
-          {
-          m_filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
-          }
-        m_filterGain[chanel]->SetMin( m_filterLut[chanel]->GetMin() );
-        m_filterGain[chanel]->SetMax( m_filterLut[chanel]->GetMax() );
-        m_filterGain[chanel]->SetInputLut( m_filterLut[chanel]->GetOutput() );
-        m_filterGain[chanel]->SetInputImage( m_vectorToImageListFilter->GetOutput()->GetNthElement(chanel) );
-        // m_filterGain[chanel]->SetNumberOfThreads(1);
-        outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
-        }
+      min = GetParameterFloat("min") ;
+      max =  GetParameterFloat("max") ;
       }
-
-    if ( GetParameterString("mode") == "lum")
+    else if ( GetParameterString("minmax") == "auto" )
       {
-      m_filterHisto.resize(1);
-      m_filterLut.resize(1);
-      m_RAMWriter.resize(1);
-      m_filterGain.resize(3);
-      m_filterHisto[0] = FilterHistoType::New();
-      m_filterLut[0] = FilterLutType::New();
-      m_RAMWriter[0] = RAMWriter::New();
-      // Retreive order of the RGB chanels
-      int rgb[3];
-      rgb[0] = GetParameterInt("mode.lum.red.ch");
-      rgb[1] = GetParameterInt("mode.lum.gre.ch");
-      rgb[2] = GetParameterInt("mode.lum.blu.ch");
-      // Retreive the coeff for each chanel
-      float lumCoef[3];
-      lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
-      lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
-      lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
-      // Normalize those coeff
-      float sum = 0.0;
-      for (float f : lumCoef)
+      StatsFilterType::Pointer statFilter ( StatsFilterType::New() );
+      statFilter->SetIgnoreInfiniteValues(true);
+      if( HasUserValue("nodata") )
         {
-        sum +=f;
+        statFilter->SetIgnoreUserDefinedValue(true);
+        statFilter->SetUserIgnoredValue( GetParameterFloat("nodata") );
         }
-      assert(sum>0);
-      for (int i = 0 ; i<3 ; i++ )
-        {
-        lumCoef[i] /= sum;
-        }
-      
-      m_luminanceFilter=  LuminanceFilter::New() ;
-      m_luminanceFilter->GetFunctor().SetRgb(rgb);
-      m_luminanceFilter->GetFunctor().SetLumCoef(lumCoef);
-      m_luminanceFilter->SetInput( inImage );
-      
-      SetUpPipeline ( m_filterHisto[0] , m_filterLut[0] ,
-                      m_RAMWriter[0] ,
-                      m_luminanceFilter->GetOutput() ,
-                      max[0] , min[0]);
-      for ( int chanel : rgb ) 
-        {
-        m_filterGain[chanel] = FilterGainType::New();
-        m_filterGain[chanel]->SetInputLut( m_filterLut[0]->GetOutput() );
-        if( HasUserValue("nodata") )
-          {
-          m_filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
-          }
-        m_filterGain[chanel]->SetMin( m_filterLut[0]->GetMin() );
-        m_filterGain[chanel]->SetMax( m_filterLut[0]->GetMax() );
-        m_filterGain[chanel]->SetInputImage( inputImageList->GetNthElement(chanel) );
-        outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
-        }
+      statFilter->SetInput( luminance );
+      statFilter->Update();
+      min = statFilter->GetMinimum();
+      max = statFilter->GetMaximum();
       }
-    m_imageListToVectorFilterOut = ImageListToVectorFilterType::New() ;
-    m_imageListToVectorFilterOut->SetInput(outputImageList);
-    // m_imageListToVectorFilterOut->UpdateOutputInformation();
-    // m_imageListToVectorFilterOut->SetNumberOfThreads(1);
-    // imageListToVectorFilterOut->Update();
-    std::cout<<"vectortoimagelist R"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"vectortoimagelist B"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"vectortoimagelist L"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut R"<<m_filterLut[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut B"<<m_filterLut[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut L"<<m_filterLut[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain R"<<m_filterGain[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain B"<<m_filterGain[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain L"<<m_filterGain[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"outputImageList R"<<outputImageList->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"outputImageList B"<<outputImageList->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"outputImageList L"<<outputImageList->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
-    SetParameterOutputImage( "out" , m_imageListToVectorFilterOut->GetOutput() );
+  }
+
+  // Function corresponding to the "each" mode
+  void PerBandEqualization( FloatVectorImageType::Pointer inImage ,
+                            const ImageListType::Pointer inputImageList ,
+                            const int nbChanel,
+                            ImageListType::Pointer outputImageList )
+  {
+    FloatVectorImageType::PixelType min(nbChanel) , max(nbChanel);
+    min.Fill(0);
+    max.Fill(0);
+    ComputeVectorMinMax( inImage , max , min );
+
+    m_filterHisto.resize(nbChanel);
+    m_filterLut.resize(nbChanel);
+    m_filterGain.resize(nbChanel);
+    m_RAMWriter.resize(nbChanel);
+
+    for (int chanel = 0 ; chanel<nbChanel ; chanel++ ) 
+      {
+      m_filterHisto[chanel] = FilterHistoType::New();
+      m_filterLut[chanel] = FilterLutType::New();
+      m_filterGain[chanel] = FilterGainType::New();
+      m_RAMWriter[chanel] = RAMWriter::New();
+
+      if ( min[chanel] == max[chanel] )
+        {
+          //TODO Warn user through log
+          std::cout<<"Chanel constant"<<std::endl;
+          std::cout<<"min "<<min[chanel]<<std::endl;
+          std::cout<<"max "<<max[chanel]<<std::endl;
+          outputImageList->PushBack( inputImageList->GetNthElement(chanel) );
+          continue;
+        }
+        
+      SetUpPipeline ( m_filterHisto[chanel] , m_filterLut[chanel] ,
+                      m_RAMWriter[chanel] ,
+                      inputImageList->GetNthElement(chanel) ,
+                      max[chanel] , min[chanel] );
+
+      if( HasUserValue("nodata") )
+        {
+        m_filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
+        }
+      m_filterGain[chanel]->SetMin( m_filterLut[chanel]->GetMin() );
+      m_filterGain[chanel]->SetMax( m_filterLut[chanel]->GetMax() );
+      m_filterGain[chanel]->SetInputLut( m_filterLut[chanel]->GetOutput() );
+      m_filterGain[chanel]->SetInputImage( 
+      m_vectorToImageListFilter->GetOutput()->GetNthElement(chanel) );
+      outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
+      }
+  }
+
+  // Compute the luminance with user parameters
+  void ComputeLuminance( const FloatVectorImageType::Pointer inImage ,
+                         int rgb[] )
+  {
+    // Retreive the coeff for each chanel
+    float lumCoef[3];
+    lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
+    lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
+    lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
+    // Normalize those coeff
+    float sum = 0.0;
+    for (float f : lumCoef)
+      {
+      sum +=f;
+      }
+    assert(sum>0);
+    for (int i = 0 ; i<3 ; i++ )
+      {
+      lumCoef[i] /= sum;
+      }
+    m_luminanceFilter =  LuminanceFilter::New() ;
+    m_luminanceFilter->GetFunctor().SetRgb(rgb);
+    m_luminanceFilter->GetFunctor().SetLumCoef(lumCoef);
+    m_luminanceFilter->SetInput( inImage );
+  }
+
+  // Equalize the lumiance and apply the corresponding gain on each chanel
+  // used to compute this luminance
+  void LuminanceEqualization( const ImageListType::Pointer inputImageList ,
+                              const int rgb[] ,
+                              ImageListType::Pointer outputImageList )
+  {
+    m_filterHisto.resize(1);
+    m_filterLut.resize(1);
+    m_RAMWriter.resize(1);
+    m_filterGain.resize(3);
+    m_filterHisto[0] = FilterHistoType::New();
+    m_filterLut[0] = FilterLutType::New();
+    m_RAMWriter[0] = RAMWriter::New();
+    // Retreive order of the RGB chanels
+    FloatImageType::PixelType min(0) , max(0);
+    ComputeFloatMinMax( m_luminanceFilter->GetOutput() , max , min );
+
+    SetUpPipeline ( m_filterHisto[0] , m_filterLut[0] ,
+                    m_RAMWriter[0] ,
+                    m_luminanceFilter->GetOutput() ,
+                    max , min);
+
+    for ( int chanel = 0 ; chanel < 3 ; chanel++ ) 
+      {
+      m_filterGain[chanel] = FilterGainType::New();
+      m_filterGain[chanel]->SetInputLut( m_filterLut[0]->GetOutput() );
+      if( HasUserValue("nodata") )
+        {
+        m_filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
+        }
+      m_filterGain[chanel]->SetMin( min );
+      m_filterGain[chanel]->SetMax( max );
+      m_filterGain[chanel]->SetInputImage( 
+                    inputImageList->GetNthElement(rgb[chanel]) );
+      outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
+      }
   }
 
   ImageListToVectorFilterType::Pointer m_imageListToVectorFilterOut;
