@@ -39,26 +39,24 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename TInputImage::RegionType InputImageRegionType;
+  typedef typename TInputImage::RegionType OutputImageRegionType;
 
   itkNewMacro(Self);
 
   itkTypeMacro(StreamingImageRAMWriter, itk::ImageToImageFilter);
 
-  typedef unsigned int ThreadIdType;
-
 protected:
 
-  StreamingImageRAMWriter();
+  StreamingImageRAMWriter(){};
 
   ~StreamingImageRAMWriter() ITK_OVERRIDE {};
-
-  void ThreadedGenerateData(const InputImageRegionType & outputRegionForThread,
-                            ThreadIdType threadId);
 
   void AllocateOutputs();
 
   void GenerateOutputInformation();
+
+  void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
+                            itk::ThreadIdType threadId);
 
 private:
 

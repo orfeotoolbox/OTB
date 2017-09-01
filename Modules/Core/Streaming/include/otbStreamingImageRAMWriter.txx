@@ -27,13 +27,6 @@
 
 namespace otb
 {
-
-template< typename TInputImage >
-StreamingImageRAMWriter < TInputImage >
-::StreamingImageRAMWriter()
-{
-}
-
 template< typename TInputImage >
 void StreamingImageRAMWriter < TInputImage >
 ::AllocateOutputs()
@@ -51,10 +44,11 @@ void StreamingImageRAMWriter < TInputImage >
     // static_casts the input to an TInputImage).
     outputPtr = dynamic_cast< ImageBaseType * >( it.GetOutput() );
 
-    if ( outputPtr )
+    if ( outputPtr && 
+      !outputPtr->GetRequestedRegion().IsInside(outputPtr->GetBufferedRegion() ) )
       {
-      // outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );
-      // outputPtr->Allocate();
+      outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );
+      outputPtr->Allocate();
       }
     }
 }
@@ -71,36 +65,22 @@ void StreamingImageRAMWriter < TInputImage >
     {
     return;
     }
-
-  // typename TInputImage::IndexType start;
-  // typename TInputImage::SizeType size;
-  // start[0] = 0;
-  // start[1] = 0;
-  // size[0] = input->GetLargestPossibleRegion().GetSize()[0];
-  // size[1] = input->GetLargestPossibleRegion().GetSize()[1];
-  // typename TInputImage::RegionType region;
-  // region.SetSize( size );
-  // region.SetIndex( start );
   output->SetLargestPossibleRegion( input->GetLargestPossibleRegion() );
-  output->SetRequestedRegion( input->GetRequestedRegion() );
   output->SetBufferedRegion( input->GetLargestPossibleRegion() );
+  output->SetRequestedRegion( input->GetRequestedRegion() );
   output->Allocate();
-
 }
 
 template< typename TInputImage >
 void StreamingImageRAMWriter < TInputImage >
-::ThreadedGenerateData(const InputImageRegionType & outputRegionForThread,
-                       ThreadIdType itkNotUsed( threadId ) )
+::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
+                       itk::ThreadIdType itkNotUsed( threadId ) )
 {
   typename TInputImage::ConstPointer input = this->GetInput();
   typename TInputImage::Pointer output = this->GetOutput();
 
-  typename TInputImage::RegionType inputRegionForThread;
-  this->CallCopyOutputRegionToInputRegion(inputRegionForThread , outputRegionForThread);
-
   itk::ImageRegionConstIterator < TInputImage > it ( input , 
-                                      inputRegionForThread );
+                                      outputRegionForThread );
   itk::ImageRegionIterator < TInputImage > oit ( output , 
                                       outputRegionForThread );
   it.GoToBegin();
