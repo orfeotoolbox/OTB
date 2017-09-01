@@ -45,15 +45,7 @@ public :
   typedef typename InputImageType::InternalPixelType InputPixelType;
   typedef typename OutputImageType::InternalPixelType OutputPixelType;
 
-  typedef typename LutType::PixelType LutPixelType;
-  typedef typename LutType::SizeType LutSizeType;
-  typedef typename LutType::IndexType LutIndexType;
-
-  typedef typename InputImageType::SizeType InputSizeType;
-
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-
-  typedef unsigned int ThreadIdType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -77,24 +69,17 @@ protected :
   ApplyGainFilter();
   ~ApplyGainFilter() ITK_OVERRIDE {}
   
-  const TInputImage * GetInputImage() const;
+  const InputImageType * GetInputImage() const;
 
   
-  const TLut * GetInputLut() const;
+  const LutType * GetInputLut() const;
 
-
-  // void GenerateOutputInformation();
   void GenerateInputRequestedRegion();
-
-    // Call  BeforeThreadedGenerateData after getting the number of thread
-  // void GenerateData();
 
   void BeforeThreadedGenerateData();
 
   void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            ThreadIdType threadId);
-
-  // void AfterThreadedGenerateData();
+                            itk::ThreadIdType threadId);
 
   float InterpoleGain( typename LutType::ConstPointer gridLut ,
                        int pixelValue , 
@@ -108,8 +93,8 @@ private :
   InputPixelType m_Min;
   InputPixelType m_Max;
   double m_Step;
-  LutSizeType m_LutSize;
-  InputSizeType m_ThumbSize;
+  typename LutType::SizeType m_LutSize;
+  typename InputImageType::SizeType m_ThumbSize;
 
 
 };

@@ -37,6 +37,7 @@ ApplyGainFilter < TInputImage , TLut , TOutputImage >
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
+  m_Step = -1;
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
@@ -83,9 +84,7 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 
   input->SetRequestedRegion( output->GetRequestedRegion() );
   lut->SetRequestedRegion( lut->GetLargestPossibleRegion() );
-
 }
-
 
 template <class TInputImage , class TLut , class TOutputImage >
 void ApplyGainFilter < TInputImage , TLut , TOutputImage >
@@ -105,8 +104,14 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 template <class TInputImage , class TLut , class TOutputImage >
 void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
-                             ThreadIdType itkNotUsed(threadId) )
+                             itk::ThreadIdType threadId )
 {
+  assert(m_Step>0);
+
+  // support progress methods/callbacks
+  itk::ProgressReporter progress(this , threadId , 
+                outputRegionForThread.GetNumberOfPixels() );
+
   typename InputImageType::ConstPointer input = GetInputImage();
   typename LutType::ConstPointer lut = GetInputLut();
   typename OutputImageType::Pointer output = this->GetOutput();
@@ -116,9 +121,6 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
                                           outputRegionForThread);
   // Is it usefull???
 
-  // support progress methods/callbacks
-  // itk::ProgressReporter progress(this , threadId , 
-  //               outputRegionForThread.GetNumberOfPixels() );
 
   itk::ImageRegionConstIterator < InputImageType > it ( input , 
                                                         inputRegionForThread );
@@ -127,8 +129,8 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
                                                     outputRegionForThread );
   it.GoToBegin();
   oit.GoToBegin();
-  int pixelLutValue = 0;
-  float gain = 0.0;
+  int pixelLutValue(0);
+  float gain(0.0);
   while ( !oit.IsAtEnd() )
     {
     if( it.Get() == m_NoData || it.Get() > m_Max || it.Get() < m_Min )
@@ -138,13 +140,13 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
       ++oit;
       continue;
       }
-    pixelLutValue = static_cast<int>( std::round( ( it.Get() - m_Min ) / m_Step ) );
+    pixelLutValue = static_cast<int>( std::round( ( it.Get() - m_Min ) 
+                                                    / m_Step ) );
     gain = InterpoleGain( lut , pixelLutValue , it.GetIndex() );
     oit.Set( static_cast<OutputPixelType>( gain * it.Get() ) );
     ++it;
     ++oit;
     }
-
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
@@ -153,7 +155,7 @@ float ApplyGainFilter < TInputImage , TLut , TOutputImage >
                  int pixelLutValue ,
                  typename InputImageType::IndexType index)
 {
-  LutIndexType lutIndex;
+  typename LutType::IndexType lutIndex;
   lutIndex[0] = index[0]/m_ThumbSize[0];
   lutIndex[1] = index[1]/m_ThumbSize[1];
   float x = static_cast< float >(index[0]%m_ThumbSize[0]) \
@@ -169,7 +171,7 @@ float ApplyGainFilter < TInputImage , TLut , TOutputImage >
   rightOffSet.Fill(0);
   rightOffSet[0] = 1 ;
   bool right = x>=0.5 && 
-        ( ( rightOffSet[0] + lutIndex[0] ) < static_cast<int>( m_LutSize[0] ) );
+    ( ( rightOffSet[0] + lutIndex[0] ) < static_cast<int>( m_LutSize[0] ) );
   leftOffSet.Fill(0);
   leftOffSet[0] = -1 ;
   bool left = x<=0.5 && 
@@ -181,52 +183,56 @@ float ApplyGainFilter < TInputImage , TLut , TOutputImage >
   downOffSet.Fill(0);
   downOffSet[1] = 1 ;
   bool down = y>=0.5 && 
-        ( ( downOffSet[1] + lutIndex[1] ) < static_cast<int>( m_LutSize[1] ) );
+    ( ( downOffSet[1] + lutIndex[1] ) < static_cast<int>( m_LutSize[1] ) );
   if ( right )
     {
-    gain += ( gridLut->GetPixel(lutIndex + rightOffSet)[pixelLutValue] ) \
+    gain += gridLut->GetPixel(lutIndex + rightOffSet)[pixelLutValue]
             * (1 - disty ) * distx;
     w += (1 - disty ) * distx;
     }
   if ( left )
     {
-    gain += ( gridLut->GetPixel(lutIndex + leftOffSet)[pixelLutValue] ) \
+    gain += gridLut->GetPixel(lutIndex + leftOffSet)[pixelLutValue]
             * (1 - disty ) * distx;
     w += (1 - disty ) * distx;
     }
   if ( up )
     {
-    gain += ( gridLut->GetPixel(lutIndex + upOffSet)[pixelLutValue] ) \
+    gain += gridLut->GetPixel(lutIndex + upOffSet)[pixelLutValue]
             * disty * (1 - distx );
     w += disty * (1 - distx );
     }
   if ( down )
     {
-    gain += ( gridLut->GetPixel(lutIndex + downOffSet)[pixelLutValue] ) \
+    gain += gridLut->GetPixel(lutIndex + downOffSet)[pixelLutValue]
             * disty * (1 - distx );
     w += disty * (1 - distx );
     }
   if ( up && left )
     {
-    gain += gridLut->GetPixel(lutIndex + upOffSet + leftOffSet)[pixelLutValue] \
+    gain += gridLut->
+            GetPixel(lutIndex + upOffSet + leftOffSet)[pixelLutValue]
               * disty * distx;
     w += disty * distx;
     }
   if ( down && left )
     {
-    gain += gridLut->GetPixel(lutIndex + downOffSet + leftOffSet)[pixelLutValue] \
+    gain += gridLut->
+            GetPixel(lutIndex + downOffSet + leftOffSet)[pixelLutValue]
               * disty * distx;
     w += disty * distx;
     }
   if ( up && right )
     {
-    gain += gridLut->GetPixel(lutIndex + upOffSet + rightOffSet)[pixelLutValue] \
+    gain += gridLut->
+            GetPixel(lutIndex + upOffSet + rightOffSet)[pixelLutValue]
               * disty * distx;
     w += disty * distx ;
     }
   if ( down && right )
     {
-    gain += gridLut->GetPixel(lutIndex + downOffSet + rightOffSet)[pixelLutValue] \
+    gain += gridLut->
+            GetPixel(lutIndex + downOffSet + rightOffSet)[pixelLutValue]
               * disty * distx;
     w += disty * distx;
     }
