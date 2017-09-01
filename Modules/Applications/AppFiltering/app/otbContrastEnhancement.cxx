@@ -140,32 +140,42 @@ private:
     SetParameterString("out", "/home/antoine/dev/my_data/bigbigtest.tif");
 
 
-    AddParameter(ParameterType_Int,"bin","Bin number");
+    AddParameter(ParameterType_Int , "bin" , "Number of bin");
     SetDefaultParameterInt("bin", 256);
-    SetParameterDescription("bin","Number of bin in the histogram");
+    SetParameterDescription("bin","Number of bin used to create the histogram");
 
-    AddParameter(ParameterType_Float,"hfact","contrast Limitation");  
+    AddParameter(ParameterType_Float , "hfact" , "Contrast Limitation");  
     SetParameterDescription("hfact","This parameter will set the maximum "
-      "height accepted in a bin on the histogram of the input image. "
-      "the height will be computated as hfact*eqHeight where eqHeight "
-      "is the height of the theorical flat histogram");
+      "height accepted in a bin on the input image histogram. "
+      "The maximem height will be computated as hfact*eqHeight where eqHeight "
+      "is the height of the theorical flat histogram. ");
     MandatoryOff("hfact");
 
-    AddParameter(ParameterType_Float,"nodata","nodata value");
+    AddParameter(ParameterType_Float , "nodata" , "Nodata Value");
+    SetParameterDescription("nodata","If there is a value in the "
+      "image that has no visualization it is ignored by the algorithm.");
     MandatoryOff("nodata");
 
     AddParameter(ParameterType_Group, "thumb", "Thumbnail size");
-
+    SetParameterDescription("thumb","The algorithm can be local : "
+      "in each of those thumbnails a histogram will be computed "
+      "and equalized. The result gain will be interpolated.");
+ 
     AddParameter(ParameterType_Int,"thumb.h","Thumbnail height in pixel");
     AddParameter(ParameterType_Int,"thumb.w","Thumbnail width in pixel");
 
     AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum definition");
+    SetParameterDescription("minmax","Minimum and maximum value that will "
+      "bound the histogram.");
     AddChoice( "minmax.auto" , "Automatique" );
+    SetParameterDescription("minmax.auto","Minimum and maximum value will be "
+      "the real one computed on the image (nodata value won't be taken into "
+      "account) .");
     AddChoice( "minmax.man" , "Manuel" );
+    SetParameterDescription("minmax.auto","Minimum and maximum value will be "
+      "set by the user");
     AddParameter(ParameterType_Float , "min" , "Minimum");
     AddParameter(ParameterType_Float , "max" , "Maximum");
-    // SetDefaultParameterFloat("min", 0.0 );
-    // SetDefaultParameterFloat("max", 0.0 );
     MandatoryOff("min");
     MandatoryOff("max");
 
@@ -234,6 +244,14 @@ private:
            !HasUserValue("mode.lum.gre.ch") &&
            !HasUserValue("mode.lum.blu.ch") )
         SetDefaultValue( inImage , "RGB" );
+
+      if ( HasUserValue("min") && HasUserValue("max") )
+        {
+        // if ( GetParameterFloat("max") < GetParameterFloat("min") )
+        //   {
+        //     continue;
+        //   }
+        }
 
       }
 

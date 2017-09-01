@@ -22,7 +22,6 @@
 #define otbComputeHistoFilter_txx
 
 #include "otbComputeHistoFilter.h"
-#include "itkImageSource.h"
 #include "itkImageRegionIterator.h"
 
 #include <limits>
@@ -50,8 +49,9 @@ ComputeHistoFilter < TInputImage , TOutputImage >
 }
 
 template <class TInputImage, class TOutputImage >
-itk::DataObject::Pointer ComputeHistoFilter < TInputImage , TOutputImage >
-::MakeOutput(unsigned int idx)
+itk::ProcessObject::DataObjectPointer 
+ComputeHistoFilter < TInputImage , TOutputImage >
+::MakeOutput(itk::ProcessObject::DataObjectPointerArraySizeType idx)
 {
   itk::DataObject::Pointer output;
  
@@ -69,6 +69,14 @@ itk::DataObject::Pointer ComputeHistoFilter < TInputImage , TOutputImage >
       break;
     }
   return output.GetPointer();
+}
+
+template <class TInputImage, class TOutputImage >
+itk::ProcessObject::DataObjectPointer 
+ComputeHistoFilter < TInputImage , TOutputImage >
+::MakeOutput(const itk::ProcessObject::DataObjectIdentifierType & name)
+{
+  return Superclass::MakeOutput( name );
 }
 
 template <class TInputImage, class TOutputImage >
@@ -168,7 +176,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
-::GenerateOutputRequestedRegion( itk::DataObject *output )
+::GenerateOutputRequestedRegion( itk::DataObject * itkNotUsed(output) )
 {
   #ifdef DEBUG
   std::cout<<"###########GenerateOutputRequestedRegion###########"<<std::endl;

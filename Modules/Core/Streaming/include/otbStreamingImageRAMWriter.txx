@@ -91,7 +91,7 @@ void StreamingImageRAMWriter < TInputImage >
 template< typename TInputImage >
 void StreamingImageRAMWriter < TInputImage >
 ::ThreadedGenerateData(const InputImageRegionType & outputRegionForThread,
-                       ThreadIdType threadId)
+                       ThreadIdType itkNotUsed( threadId ) )
 {
   typename TInputImage::ConstPointer input = this->GetInput();
   typename TInputImage::Pointer output = this->GetOutput();

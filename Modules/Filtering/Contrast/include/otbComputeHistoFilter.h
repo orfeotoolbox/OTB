@@ -48,7 +48,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComputeHistoFilter, ImageToImageFilter);
 
@@ -75,6 +75,13 @@ public:
 
   typename OutputImageType::Pointer GetHistoOutput();
 
+  virtual itk::ProcessObject::DataObjectPointer 
+    MakeOutput(itk::ProcessObject::DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+
+  virtual itk::ProcessObject::DataObjectPointer 
+    MakeOutput(const itk::ProcessObject::DataObjectIdentifierType &) ITK_OVERRIDE;
+
+
 protected:
   ComputeHistoFilter();
   ~ComputeHistoFilter() ITK_OVERRIDE {}
@@ -86,7 +93,6 @@ protected:
   // Call  BeforeThreadedGenerateData after getting the number of thread
   void GenerateData();
 
-  itk::DataObject::Pointer MakeOutput(unsigned int idx);
   
   void BeforeThreadedGenerateData();
 
