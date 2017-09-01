@@ -22,8 +22,8 @@
 #define otbMachineLearningModel_h
 
 #include "itkObject.h"
-#include "itkVariableLengthVector.h"
 #include "itkListSample.h"
+#include "otbMachineLearningModelTraits.h"
 
 namespace otb
 {
@@ -66,6 +66,7 @@ namespace otb
  *
  * \ingroup OTBLearningBase
  */
+
 template <class TInputValue, class TTargetValue, class TConfidenceValue = double >
 class ITK_EXPORT MachineLearningModel
   : public itk::Object
@@ -81,22 +82,22 @@ public:
 
   /**\name Input related typedefs */
   //@{
-  typedef TInputValue                                   InputValueType;
-  typedef itk::VariableLengthVector<InputValueType>     InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType>  InputListSampleType;
+  typedef typename MLMSampleTraits<TInputValue>::ValueType  InputValueType;
+  typedef typename MLMSampleTraits<TInputValue>::SampleType InputSampleType;
+  typedef itk::Statistics::ListSample<InputSampleType>      InputListSampleType;
   //@}
 
   /**\name Target related typedefs */
   //@{
-  typedef TTargetValue                                  TargetValueType;
-  typedef itk::FixedArray<TargetValueType,1>            TargetSampleType;
-  typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
+  typedef typename MLMTargetTraits<TTargetValue>::ValueType  TargetValueType;
+  typedef typename MLMTargetTraits<TTargetValue>::SampleType TargetSampleType;
+  typedef itk::Statistics::ListSample<TargetSampleType>      TargetListSampleType;
   //@}
 
   /**\name Confidence value typedef */
-  typedef TConfidenceValue                                  ConfidenceValueType;
-  typedef itk::FixedArray<ConfidenceValueType,1>            ConfidenceSampleType;
-  typedef itk::Statistics::ListSample<ConfidenceSampleType> ConfidenceListSampleType;
+  typedef typename MLMTargetTraits<TConfidenceValue>::ValueType  ConfidenceValueType;
+  typedef typename MLMTargetTraits<TConfidenceValue>::SampleType ConfidenceSampleType;
+  typedef itk::Statistics::ListSample<ConfidenceSampleType>      ConfidenceListSampleType;
 
   /**\name Standard macros */
   //@{

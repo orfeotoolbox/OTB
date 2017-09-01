@@ -69,31 +69,46 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("LSMSVectorization");
-    SetDescription("Fourth step of the exact Large-Scale Mean-Shift segmentation workflow.");
+    SetDescription("This application performs the fourth step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
 
     SetDocName("Exact Large-Scale Mean-Shift segmentation, step 4");
-    SetDocLongDescription("This application performs the fourth step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS). Given a segmentation result (label image), that may have been processed for small regions merging or not, it will convert it to a GIS vector file containing one polygon per segment. Each polygon contains additional fields: mean and variance of each channels from input image (in parameter), segmentation image label, number of pixels in the polygon. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results.");
+    SetDocLongDescription("Given a segmentation result (label image), that may come from the"
+                          " LSMSSegmentation [2] application (out parameter) or have been"
+                          " processed for small regions merging [3] (out parameter), it will"
+                          " convert it to a GIS vector file containing one polygon per"
+                          " segment. Each polygon contains additional fields: mean and variance of"
+                          " each channels from input image (in parameter), segmentation image"
+                          " label, number of pixels in the polygon. For large images one can use"
+                          " the tilesizex and tilesizey parameters for tile-wise processing, with"
+                          " the guarantees of identical results.");
     SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) and may not be suited for any other purpose.");
     SetDocAuthors("David Youssefi");
-    SetDocSeeAlso("MeanShiftSmoothing, LSMSSegmentation, LSMSSmallRegionsMerging");
+
+    SetDocSeeAlso( "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
+                   " mean-shift algorithm and its application to the segmentation of"
+                   " arbitrarily large remote sensing images. IEEE Transactions on"
+                   " Geoscience and Remote Sensing, 53(2), 952-964.\n"
+                   "[2] LSMSegmentation\n"
+                   "[3] LSMSmallRegionMerging");
+
     AddDocTag(Tags::Segmentation);
     AddDocTag("LSMS");
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription( "in", "The input image." );
+    SetParameterDescription( "in", "The input image, containing initial spectral signatures corresponding to the segmented image (inseg)." );
     AddParameter(ParameterType_InputImage,  "inseg",    "Segmented image");
-    SetParameterDescription( "inseg", " The segmented image input. Segmented image input is the segmentation of the input image." );
+    SetParameterDescription( "inseg", "Segmented image where each pixel value is the unique integer label of the segment it belongs to.");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output GIS vector file");
     SetParameterDescription( "out", "The output GIS vector file, representing the vectorized version of the segmented image where the features of the polygons are the radiometric means and variances." );
 
     AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
-    SetParameterDescription("tilesizex", "Size of tiles along the X-axis.");
+    SetParameterDescription("tilesizex", "Size of tiles along the X-axis for tile-wise processing.");
     SetDefaultParameterInt("tilesizex", 500);
     SetMinimumParameterIntValue("tilesizex", 1);
 
     AddParameter(ParameterType_Int, "tilesizey", "Size of tiles in pixel (Y-axis)");
-    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis.");
+    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis for tile-wise processing.");
     SetDefaultParameterInt("tilesizey", 500);
     SetMinimumParameterIntValue("tilesizey", 1);
 

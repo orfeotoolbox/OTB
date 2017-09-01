@@ -97,7 +97,7 @@ private:
                           "In the coherent case, only the Pauli decomposition is available.\n"
                           "In the incoherent case, there the decompositions available : Huynen, Barnes, and H-alpha-A.\n"   
 						  "User must provide three one-band complex images HH, HV or VH, and VV (mono-static case <=> HV = VH).\n"
-						  "Incoherent decompositions consist in averaging 3x3 complex coherency/covariance matrices; the user must provide the size of the averaging window, thanks to the parameter inco.kernelsize.\n "
+						  "Incoherent decompositions consist in averaging 3x3 complex coherency/covariance matrices; the user must provide the size of the averaging window, thanks to the parameter inco.kernelsize."
 						  );
 						  
 						  

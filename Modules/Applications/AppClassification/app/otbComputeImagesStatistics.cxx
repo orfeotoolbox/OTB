@@ -48,12 +48,19 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("ComputeImagesStatistics");
-    SetDescription("Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.");
     SetDocName("Compute Images second order statistics");
-    SetDocLongDescription("This application computes a global mean and standard deviation for each band of a set of images and optionally saves the results in an XML file. The output XML is intended to be used an input for the TrainImagesClassifier application to normalize samples before learning.");
-    SetDocLimitations("Each image of the set must contain the same bands as the others (i.e. same types, in the same order).");
+    SetDescription("Computes global mean and standard deviation for each band "
+      "from a set of images and optionally saves the results in an XML file.");
+    SetDocLongDescription("This application computes a global mean and standard deviation "
+      "for each band of a set of images and optionally saves the results in an XML file."
+      " The output XML is intended to be used an input "
+      "for the TrainImagesClassifier application to normalize samples before learning. "
+      "You can also normalize the image with the XML file in the ImageClassifier application.");
+
+    SetDocLimitations("Each image of the set must contain the same bands as the others"
+                      " (i.e. same types, in the same order).");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Documentation of the TrainImagesClassifier application.");
+    SetDocSeeAlso("Documentation of the TrainImagesClassifier and ImageClassifier application.");
 
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);

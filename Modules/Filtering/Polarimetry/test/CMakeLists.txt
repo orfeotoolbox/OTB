@@ -74,7 +74,7 @@ otb_add_test(NAME saTvVectorMultiChannelsPolarimetricSynthesisFilter COMMAND otb
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvMultiPolarimetricSynthesis1.tif
   ${TEMP}/resMultiPolarimetricSynthesis1.tif
   otbVectorMultiChannelsPolarimetricSynthesisFilter
-  ${INPUTDATA}/RSAT2_AltonaExtract_1000_1000_100_100.hdr
+  ${INPUTDATA}/RSAT2_AltonaExtract_1000_1000_100_100.tif
   ${TEMP}/resMultiPolarimetricSynthesis1.tif
   10.0     # PsiI
   0.0     # KhiI
