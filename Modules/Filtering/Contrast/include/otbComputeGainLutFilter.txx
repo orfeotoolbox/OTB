@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef otbComputeLutFilter_txx
-#define otbComputeLutFilter_txx
+#ifndef otbComputeGainLutFilter_txx
+#define otbComputeGainLutFilter_txx
 
-#include "otbComputeLutFilter.h"
+#include "otbComputeGainLutFilter.h"
 #include "itkThresholdImageFilter.h"
 #include "itkImageRegionIterator.h"
 
@@ -32,8 +32,8 @@ namespace otb
 {
 
 template < class TInputImage, class TOutputImage >
-ComputeLutFilter < TInputImage , TOutputImage >
-::ComputeLutFilter()
+ComputeGainLutFilter < TInputImage , TOutputImage >
+::ComputeGainLutFilter()
 {
   m_NbBin = 256;
   m_Min = std::numeric_limits< double >::quiet_NaN();
@@ -42,7 +42,7 @@ ComputeLutFilter < TInputImage , TOutputImage >
 }
 
 template <class TInputImage , class TOutputImage >
-void ComputeLutFilter <TInputImage , TOutputImage >
+void ComputeGainLutFilter <TInputImage , TOutputImage >
 ::BeforeThreadedGenerateData()
 {
   m_NbBin = this->GetInput()->GetNumberOfComponentsPerPixel();
@@ -51,7 +51,7 @@ void ComputeLutFilter <TInputImage , TOutputImage >
 }
 
 template <class TInputImage , class TOutputImage >
-void ComputeLutFilter <TInputImage , TOutputImage >
+void ComputeGainLutFilter <TInputImage , TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
                        itk::ThreadIdType threadId)
 {
@@ -91,7 +91,7 @@ void ComputeLutFilter <TInputImage , TOutputImage >
 }
 
 template <class TInputImage, class TOutputImage >
-typename TOutputImage::InternalPixelType ComputeLutFilter < TInputImage , TOutputImage >
+typename TOutputImage::InternalPixelType ComputeGainLutFilter < TInputImage , TOutputImage >
 ::PostProcess( int countValue ,
                int countMapValue )
 { 
@@ -103,7 +103,7 @@ typename TOutputImage::InternalPixelType ComputeLutFilter < TInputImage , TOutpu
 }
 
 template <class TInputImage, class TOutputImage >
-void ComputeLutFilter < TInputImage , TOutputImage >
+void ComputeGainLutFilter < TInputImage , TOutputImage >
 ::Equalized( const HistoType & inputHisto ,
              HistoType & targetHisto ,
              LutType & lut)
@@ -140,7 +140,7 @@ void ComputeLutFilter < TInputImage , TOutputImage >
 }
 
 template <class TInputImage, class TOutputImage >
-void ComputeLutFilter < TInputImage , TOutputImage >
+void ComputeGainLutFilter < TInputImage , TOutputImage >
 ::CreateTarget( const HistoType & inputHisto ,
                 HistoType & targetHisto )
 {

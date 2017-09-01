@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbComputeLutFilter_h
-#define otbComputeLutFilter_h
+#ifndef otbComputeGainLutFilter_h
+#define otbComputeGainLutFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbImage.h"
@@ -28,14 +28,14 @@ namespace otb
 {
 
 template <class TInputImage , class TOutputImage >
-class ITK_EXPORT ComputeLutFilter :
+class ITK_EXPORT ComputeGainLutFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public:
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
   /** typedef for standard classes. */
-  typedef ComputeLutFilter Self;
+  typedef ComputeGainLutFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
@@ -56,11 +56,11 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComputeLutFilter, ImageToImageFilter);
+  itkTypeMacro(ComputeGainLutFilter, ImageToImageFilter);
 
 protected:
-  ComputeLutFilter();
-  ~ComputeLutFilter() ITK_OVERRIDE {}
+  ComputeGainLutFilter();
+  ~ComputeGainLutFilter() ITK_OVERRIDE {}
 
   void BeforeThreadedGenerateData();
 
@@ -78,7 +78,7 @@ protected:
                            HistoType & targetHisto );
 
 private:
-  ComputeLutFilter(const Self &); //purposely not implemented
+  ComputeGainLutFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   int m_NbBin;
@@ -92,7 +92,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComputeLutFilter.txx"
+#include "otbComputeGainLutFilter.txx"
 #endif
 
 #endif

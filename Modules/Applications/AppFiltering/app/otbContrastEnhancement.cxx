@@ -30,7 +30,7 @@
 #include "otbStreamingImageRAMWriter.h"
 
 #include "otbComputeHistoFilter.h"
-#include "otbComputeLutFilter.h"
+#include "otbComputeGainLutFilter.h"
 #include "otbComputeGainFilter.h"
 
 namespace otb
@@ -92,7 +92,7 @@ public:
 
   typedef otb::ComputeHistoFilter < FloatImageType , FloatVectorImageType > 
           FilterHistoType;
-  typedef otb::ComputeLutFilter < FloatVectorImageType , FloatVectorImageType > 
+  typedef otb::ComputeGainLutFilter < FloatVectorImageType , FloatVectorImageType > 
           FilterLutType;
   typedef otb::ComputeGainFilter < FloatImageType , FloatVectorImageType , FloatImageType > 
           FilterGainType;
