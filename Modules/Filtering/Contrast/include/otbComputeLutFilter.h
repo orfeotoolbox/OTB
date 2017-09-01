@@ -48,9 +48,6 @@ public:
 
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
-
-  typedef unsigned int ThreadIdType;
-
   itkSetMacro(Min, double);
   itkGetMacro(Min, double);
 
@@ -65,23 +62,20 @@ protected:
   ComputeLutFilter();
   ~ComputeLutFilter() ITK_OVERRIDE {}
 
-  OutputPixelType PostProcess( int countMapValue ,
-                               int countValue );
-
-  // Call  BeforeThreadedGenerateData after getting the number of thread
-  void GenerateData();
-
   void BeforeThreadedGenerateData();
 
   void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            ThreadIdType threadId);
+                            itk::ThreadIdType threadId);
 
-  void CreateTarget( const HistoType & inputHisto ,
-                           HistoType & targetHisto );
+  OutputPixelType PostProcess( int countMapValue ,
+                               int countValue );
 
   void Equalized( const HistoType & inputHisto ,
                         HistoType & targetHisto ,
                         LutType & lut);
+
+  void CreateTarget( const HistoType & inputHisto ,
+                           HistoType & targetHisto );
 
 private:
   ComputeLutFilter(const Self &); //purposely not implemented

@@ -36,56 +36,9 @@ ComputeLutFilter < TInputImage , TOutputImage >
 ::ComputeLutFilter()
 {
   m_NbBin = 256;
-}
-
-template <class TInputImage, class TOutputImage >
-typename TOutputImage::InternalPixelType ComputeLutFilter < TInputImage , TOutputImage >
-::PostProcess( int countValue ,
-               int countMapValue )
-{ 
-  float denum = countValue * m_Step + m_Min;
-  if ( denum == 0 )
-    return 0;
-  return static_cast< OutputPixelType > ((countMapValue * m_Step + m_Min) \
-          / denum );
-}
-
-template <class TInputImage, class TOutputImage >
-void ComputeLutFilter < TInputImage , TOutputImage >
-::GenerateData()
-{
-  #ifdef DEBUG
-  std::cout<<"output requested "<<this->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-  std::cout<<"output Largest "<<this->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-  std::cout<<"output Buffered "<<this->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-  #endif
-  this->AllocateOutputs();
-  #ifdef DEBUG
-  std::cout<<"After Allocate"<<std::endl;
-  std::cout<<"output requested "<<this->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-  std::cout<<"output Largest "<<this->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-  std::cout<<"output Buffered "<<this->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-  #endif
-
-  // Set up the multithreaded processing
-  typename itk::ImageSource<OutputImageType>::ThreadStruct str;
-  str.Filter = this;
-
-  // Get the output pointer
-  const OutputImageType *outputPtr = this->GetOutput();
-  const itk::ImageRegionSplitterBase * splitter = this->GetImageRegionSplitter();
-  const unsigned int validThreads = 
-    splitter->GetNumberOfSplits( outputPtr->GetRequestedRegion() , 
-                                 this->GetNumberOfThreads() );
-
-  this->BeforeThreadedGenerateData();
-
-  this->GetMultiThreader()->SetNumberOfThreads( validThreads );
-  this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
-
-  // multithread the execution
-  this->GetMultiThreader()->SingleMethodExecute();
-
+  m_Min = std::numeric_limits< double >::quiet_NaN();
+  m_Max = std::numeric_limits< double >::quiet_NaN();
+  m_Step = -1;
 }
 
 template <class TInputImage , class TOutputImage >
@@ -100,8 +53,13 @@ void ComputeLutFilter <TInputImage , TOutputImage >
 template <class TInputImage , class TOutputImage >
 void ComputeLutFilter <TInputImage , TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                       ThreadIdType threadId)
+                       itk::ThreadIdType threadId)
 {
+  assert(m_Step>0);
+    // support progress methods/callbacks
+  itk::ProgressReporter progress(this , threadId , 
+                outputRegionForThread.GetNumberOfPixels() );
+
   typename InputImageType::ConstPointer input = this->GetInput();
   typename OutputImageType::Pointer output = this->GetOutput();
 
@@ -109,18 +67,14 @@ void ComputeLutFilter <TInputImage , TOutputImage >
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread , outputRegionForThread);
   // Is it usefull???
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this , threadId , 
-                outputRegionForThread.GetNumberOfPixels() );
-
   itk::ImageRegionConstIterator < InputImageType > it ( input , 
                                                         inputRegionForThread );
 
   itk::ImageRegionIterator <OutputImageType > oit ( output ,
                                                     outputRegionForThread );
   HistoType target;
-  LutType lut;
   target.SetSize( m_NbBin );
+  LutType lut;
   lut.SetSize( m_NbBin );
   it.GoToBegin();
   oit.GoToBegin();
@@ -134,6 +88,18 @@ void ComputeLutFilter <TInputImage , TOutputImage >
       ++oit;
       ++it;
     }
+}
+
+template <class TInputImage, class TOutputImage >
+typename TOutputImage::InternalPixelType ComputeLutFilter < TInputImage , TOutputImage >
+::PostProcess( int countValue ,
+               int countMapValue )
+{ 
+  float denum = countValue * m_Step + m_Min;
+  if ( denum == 0 )
+    return 0;
+  return static_cast< OutputPixelType > ((countMapValue * m_Step + m_Min) \
+          / denum );
 }
 
 template <class TInputImage, class TOutputImage >
