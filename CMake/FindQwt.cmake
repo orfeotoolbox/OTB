@@ -31,7 +31,7 @@
 #  QWT_MINOR_VERSION - minor version
 #  QWT_PATCH_VERSION - patch version
 #  QWT_VERSION_STRING - version (ex. 5.2.1)
-#  QWT_ROOT_DIR - root dir (ex. /usr/local)
+#  QWT_ROOT_DIR - root dir
 
 #=============================================================================
 # Copyright 2010-2013, Julien Schueller
