@@ -386,13 +386,13 @@ private:
 
   // Prepare the first half of the pipe that is common to every methode of 
   // equalization
-  void SetUpPipeline( const FilterHistoType::Pointer filterHisto ,
-                      const FilterLutType::Pointer filterLut ,
+  void SetUpPipeline( const FilterLutType::Pointer filterLut ,
                       const RAMWriter::Pointer ramWriter ,
                       const FloatImageType::Pointer input ,
                       float max ,
                       float min)
   {
+    FilterHistoType::Pointer filterHisto( FilterHistoType::New() );
     if ( HasValue("hfact") )
       {
       filterHisto->SetThreshold( GetParameterInt("hfact") );
@@ -482,14 +482,12 @@ private:
     max.Fill(0);
     ComputeVectorMinMax( inImage , max , min );
 
-    m_filterHisto.resize(nbChanel);
     m_filterLut.resize(nbChanel);
     m_filterGain.resize(nbChanel);
     m_RAMWriter.resize(nbChanel);
 
     for (int chanel = 0 ; chanel<nbChanel ; chanel++ ) 
       {
-      m_filterHisto[chanel] = FilterHistoType::New();
       m_filterLut[chanel] = FilterLutType::New();
       m_filterGain[chanel] = FilterGainType::New();
       m_RAMWriter[chanel] = RAMWriter::New();
@@ -504,7 +502,7 @@ private:
           continue;
         }
         
-      SetUpPipeline ( m_filterHisto[chanel] , m_filterLut[chanel] ,
+      SetUpPipeline ( m_filterLut[chanel] ,
                       m_RAMWriter[chanel] ,
                       inputImageList->GetNthElement(chanel) ,
                       max[chanel] , min[chanel] );
@@ -554,18 +552,16 @@ private:
                               const int rgb[] ,
                               ImageListType::Pointer outputImageList )
   {
-    m_filterHisto.resize(1);
     m_filterLut.resize(1);
     m_RAMWriter.resize(1);
     m_filterGain.resize(3);
-    m_filterHisto[0] = FilterHistoType::New();
     m_filterLut[0] = FilterLutType::New();
     m_RAMWriter[0] = RAMWriter::New();
     // Retreive order of the RGB chanels
     FloatImageType::PixelType min(0) , max(0);
     ComputeFloatMinMax( m_luminanceFilter->GetOutput() , max , min );
 
-    SetUpPipeline ( m_filterHisto[0] , m_filterLut[0] ,
+    SetUpPipeline ( m_filterLut[0] ,
                     m_RAMWriter[0] ,
                     m_luminanceFilter->GetOutput() ,
                     max , min);
@@ -589,7 +585,6 @@ private:
   ImageListToVectorFilterType::Pointer m_imageListToVectorFilterOut;
   LuminanceFilter::Pointer m_luminanceFilter;
   VectorToImageListFilterType::Pointer m_vectorToImageListFilter;
-  std::vector < FilterHistoType::Pointer > m_filterHisto;
   std::vector < FilterLutType::Pointer > m_filterLut;
   std::vector < FilterGainType::Pointer > m_filterGain;
   std::vector < RAMWriter::Pointer > m_RAMWriter;
