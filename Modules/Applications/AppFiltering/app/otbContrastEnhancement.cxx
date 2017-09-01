@@ -32,6 +32,7 @@
 #include "otbComputeHistoFilter.h"
 #include "otbComputeGainLutFilter.h"
 #include "otbApplyGainFilter.h"
+#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -47,35 +48,35 @@ class LuminanceOperator
 typedef FloatImageType::PixelType OutPixel;
 typedef FloatVectorImageType::PixelType InPixel;
 public:
-  LuminanceOperator()
-    {
-    m_Rgb = new int [3] ;
-    m_LumCoef = new float [3] ;
-    }
+  LuminanceOperator() {}
   virtual ~LuminanceOperator() { }
 
  OutPixel operator() (  InPixel  input )
-  {  
+  { 
   OutPixel out;  
-  out = (m_LumCoef[0]*input[m_Rgb[0]] + \
-         m_LumCoef[1]*input[m_Rgb[1]] + \
-         m_LumCoef[2]*input[m_Rgb[2]] ) ;
+  out = m_LumCoef[0] * input[m_Rgb[0]] + 
+        m_LumCoef[1] * input[m_Rgb[1]] + 
+        m_LumCoef[2] * input[m_Rgb[2]] ;
   return out;
   } // end operator ()
 
 
-  void SetRgb( int rgb[])
+  void SetRgb( std::vector<int> rgb)
     {
     m_Rgb = rgb;
     }
 
-  void SetLumCoef(float lumCoef[])
+  void SetLumCoef(std::vector<float> lumCoef)
     {
     m_LumCoef = lumCoef;
     }
+  std::vector<float> GetLumCoef()
+    {
+    return m_LumCoef;
+    }
 private:
-  int * m_Rgb;
-  float * m_LumCoef;
+  std::vector<int> m_Rgb;
+  std::vector<float> m_LumCoef;
 
 }; // end of functor class  MultiplyOperator
 
@@ -288,7 +289,7 @@ private:
 
     else if ( mode == "lum")
       {
-      int rgb[3];
+      std::vector<int> rgb( 3 , 0 );
       rgb[0] = GetParameterInt("mode.lum.red.ch");
       rgb[1] = GetParameterInt("mode.lum.gre.ch");
       rgb[2] = GetParameterInt("mode.lum.blu.ch");
@@ -522,10 +523,10 @@ private:
 
   // Compute the luminance with user parameters
   void ComputeLuminance( const FloatVectorImageType::Pointer inImage ,
-                         int rgb[] )
+                         std::vector < int > rgb )
   {
     // Retreive the coeff for each chanel
-    float lumCoef[3];
+    std::vector < float > lumCoef( 3 , 0.0 );
     lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
     lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
     lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
@@ -543,13 +544,16 @@ private:
     m_luminanceFilter =  LuminanceFilter::New() ;
     m_luminanceFilter->GetFunctor().SetRgb(rgb);
     m_luminanceFilter->GetFunctor().SetLumCoef(lumCoef);
+    // std::cout<<m_luminanceFilter->GetFunctor().GetLumCoef()[0]<<std::endl;
+    // std::cout<<m_luminanceFilter->GetFunctor().GetLumCoef()[1]<<std::endl;
+    // std::cout<<m_luminanceFilter->GetFunctor().GetLumCoef()[2]<<std::endl;
     m_luminanceFilter->SetInput( inImage );
   }
 
   // Equalize the lumiance and apply the corresponding gain on each chanel
   // used to compute this luminance
   void LuminanceEqualization( const ImageListType::Pointer inputImageList ,
-                              const int rgb[] ,
+                              const std::vector < int > rgb ,
                               ImageListType::Pointer outputImageList )
   {
     m_filterLut.resize(1);
@@ -565,7 +569,10 @@ private:
                     m_RAMWriter[0] ,
                     m_luminanceFilter->GetOutput() ,
                     max , min);
-
+    ImageFileWriter<FloatImageType>::Pointer writer(ImageFileWriter<FloatImageType>::New());
+    writer->SetInput(m_luminanceFilter->GetOutput());
+    writer->SetFileName("/home/antoine/dev/my_data/anaglum.tif");
+    writer->Update();
     for ( int chanel = 0 ; chanel < 3 ; chanel++ ) 
       {
       m_filterGain[chanel] = FilterGainType::New();
