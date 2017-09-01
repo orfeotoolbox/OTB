@@ -97,11 +97,11 @@ private:
           "This mode interprets the given coordinates in the specified "
           "geographical coordinate system by the EPSG code.");
 
-    AddParameter(ParameterType_Int , "epsg" , "EPSG code");
-    SetParameterDescription("epsg" ,
+    AddParameter(ParameterType_Int , "mode.epsg.code" , "EPSG code");
+    SetParameterDescription("mode.epsg.code" ,
           "This code is used to define a geographical coordinate system. "
           "If no system is specified, WGS84 (EPSG : 4326) is used by default.");
-    MandatoryOff("epsg");
+    MandatoryOff("mode.epsg.code");
 
     AddParameter(ParameterType_ListView,"cl","Channels");
     SetParameterDescription("cl","Displayed channels");
@@ -167,10 +167,10 @@ private:
     else if (mode == "epsg")
       {
       RSTransformType::Pointer inverse = RSTransformType::New();
-      if ( HasUserValue("epsg") )
+      if ( HasUserValue("mode.epsg.code") )
         {
         std::string wktFromEpsg = 
-          otb::GeoInformationConversion::ToWKT(GetParameterInt( "epsg" ));
+          otb::GeoInformationConversion::ToWKT(GetParameterInt( "mode.epsg.code" ));
         inverse->SetOutputProjectionRef(wktFromEpsg);
         }
       inverse->SetInputKeywordList( inImage->GetImageKeywordlist() );
@@ -243,10 +243,10 @@ private:
     else if ( mode == "epsg" )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
-      if ( HasUserValue("epsg") )
+      if ( HasUserValue("mode.epsg.code") )
         {
         std::string wktFromEpsg = 
-          otb::GeoInformationConversion::ToWKT( GetParameterInt( "epsg" ) );
+          otb::GeoInformationConversion::ToWKT( GetParameterInt( "mode.epsg.code" ) );
         rsTransform->SetInputProjectionRef(wktFromEpsg);
         }      
       rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );

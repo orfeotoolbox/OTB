@@ -267,7 +267,7 @@ OTB_TEST_APPLICATION(NAME apTvUtPixelValueEpsg
                              -coordx 1.4408400058746337890625
                              -coordy 43.604839324951171875
                              -mode epsg
-                             -epsg 4326
+                             -mode.epsg.code 4326
                              -cl Channel1 Channel3 Channel4
                        TESTENVOPTIONS ${TEMP}/apTvUtPixelValueEpsg.txt
                        VALID --compare-ascii ${EPSILON_7}
