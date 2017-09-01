@@ -31,7 +31,7 @@
 
 #include "otbComputeHistoFilter.h"
 #include "otbComputeGainLutFilter.h"
-#include "otbComputeGainFilter.h"
+#include "otbApplyGainFilter.h"
 
 namespace otb
 {
@@ -94,7 +94,7 @@ public:
           FilterHistoType;
   typedef otb::ComputeGainLutFilter < FloatVectorImageType , FloatVectorImageType > 
           FilterLutType;
-  typedef otb::ComputeGainFilter < FloatImageType , FloatVectorImageType , FloatImageType > 
+  typedef otb::ApplyGainFilter < FloatImageType , FloatVectorImageType , FloatImageType > 
           FilterGainType;
   typedef otb :: ImageList< FloatImageType > ImageListType;
   typedef otb::VectorImageToImageListFilter< FloatVectorImageType, ImageListType > 

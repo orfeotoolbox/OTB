@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbComputeGainFilter_h
-#define otbComputeGainFilter_h
+#ifndef otbApplyGainFilter_h
+#define otbApplyGainFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbImage.h"
@@ -28,7 +28,7 @@ namespace otb
 {
 
 template < class TInputImage , class TLut , class TOutputImage >
-class ITK_EXPORT ComputeGainFilter :
+class ITK_EXPORT ApplyGainFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public :
@@ -37,7 +37,7 @@ public :
   typedef TLut LutType;
 
   /** typedef for standard classes. */
-  typedef ComputeGainFilter Self;
+  typedef ApplyGainFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
@@ -74,8 +74,8 @@ public :
   void SetInputImage( const InputImageType * input) ;
 
 protected :
-  ComputeGainFilter();
-  ~ComputeGainFilter() ITK_OVERRIDE {}
+  ApplyGainFilter();
+  ~ApplyGainFilter() ITK_OVERRIDE {}
   
   const TInputImage * GetInputImage() const;
 
@@ -101,7 +101,7 @@ protected :
                        typename InputImageType::IndexType index);
 
 private :
-  ComputeGainFilter(const Self &); //purposely not implemented
+  ApplyGainFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   InputPixelType m_NoData;
@@ -117,7 +117,7 @@ private :
 }  // End namespace otb
   
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComputeGainFilter.txx"
+#include "otbApplyGainFilter.txx"
 #endif
 
 

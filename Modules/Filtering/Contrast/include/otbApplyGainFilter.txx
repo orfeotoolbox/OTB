@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef otbComputeGainFilter_txx
-#define otbComputeGainFilter_txx
+#ifndef otbApplyGainFilter_txx
+#define otbApplyGainFilter_txx
 
-#include "otbComputeGainFilter.h"
+#include "otbApplyGainFilter.h"
 #include "itkImageRegionIterator.h"
 
 #include <limits>
@@ -30,8 +30,8 @@
 namespace otb
 {
 template <class TInputImage , class TLut , class TOutputImage >
-ComputeGainFilter < TInputImage , TLut , TOutputImage >
-::ComputeGainFilter()
+ApplyGainFilter < TInputImage , TLut , TOutputImage >
+::ApplyGainFilter()
 {
   this->SetNumberOfRequiredInputs(2);
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
@@ -40,7 +40,7 @@ ComputeGainFilter < TInputImage , TLut , TOutputImage >
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
-void ComputeGainFilter < TInputImage , TLut , TOutputImage >
+void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::SetInputImage(const InputImageType * input)
 {
   // Process object is not const-correct so the const casting is required.
@@ -48,7 +48,7 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
-const TInputImage * ComputeGainFilter < TInputImage , TLut , TOutputImage >
+const TInputImage * ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::GetInputImage() const
 {
   return static_cast< const InputImageType * >
@@ -56,7 +56,7 @@ const TInputImage * ComputeGainFilter < TInputImage , TLut , TOutputImage >
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
-void ComputeGainFilter < TInputImage , TLut , TOutputImage >
+void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::SetInputLut(const LutType * lut)
 {
   // Process object is not const-correct so the const casting is required.
@@ -64,7 +64,7 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
-const TLut * ComputeGainFilter < TInputImage , TLut , TOutputImage >
+const TLut * ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::GetInputLut() const
 {
   return static_cast< const LutType * >
@@ -72,7 +72,7 @@ const TLut * ComputeGainFilter < TInputImage , TLut , TOutputImage >
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
-void ComputeGainFilter < TInputImage , TLut , TOutputImage >
+void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
@@ -88,7 +88,7 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
 
 
 template <class TInputImage , class TLut , class TOutputImage >
-void ComputeGainFilter < TInputImage , TLut , TOutputImage >
+void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::BeforeThreadedGenerateData()
 {
   typename InputImageType::ConstPointer input = GetInputImage();
@@ -103,7 +103,7 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
-void ComputeGainFilter < TInputImage , TLut , TOutputImage >
+void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
                              ThreadIdType itkNotUsed(threadId) )
 {
@@ -148,7 +148,7 @@ void ComputeGainFilter < TInputImage , TLut , TOutputImage >
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
-float ComputeGainFilter < TInputImage , TLut , TOutputImage >
+float ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::InterpoleGain( typename LutType::ConstPointer gridLut,
                  int pixelLutValue ,
                  typename InputImageType::IndexType index)
