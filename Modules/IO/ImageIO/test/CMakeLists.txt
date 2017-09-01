@@ -458,10 +458,10 @@ otb_add_test(NAME ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetNumb
   )
 
 otb_add_test(NAME ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN_WGS84.tif
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
   ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming.tif
   otbImageFileWriterTestCalculateNumberOfDivisions
-  ${INPUTDATA}/QB_Toulouse_Ortho_PAN_WGS84.tif
+  ${INPUTDATA}/QB_Toulouse_ortho_labelImage.tif
   ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming.tif
   SetTileDimensionTiledStreaming
   256
