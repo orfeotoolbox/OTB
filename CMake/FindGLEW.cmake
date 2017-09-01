@@ -28,54 +28,33 @@
 #
 # Try to find GLEW library and include path.
 # Once done this will define
+#rewritten for OTB by Rashad Kanavath
 #
 # GLEW_FOUND
 # GLEW_INCLUDE_PATH
 # GLEW_LIBRARY
 #
 
-IF (WIN32)
-	FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
-		$ENV{PROGRAMFILES}/GLEW/include
-		${GLEW_ROOT_DIR}/include
-		DOC "The directory where GL/glew.h resides")
+find_path(
+  GLEW_INCLUDE_DIR GL/glew.h
+  DOC "The directory where GL/glew.h resides"
+  )
 
-    FIND_LIBRARY( GLEW_LIBRARY
-        NAMES glew GLEW glew32 glew32s
-        PATHS
-        $ENV{PROGRAMFILES}/GLEW/lib
-        ${GLEW_ROOT_DIR}/lib
-        ${PROJECT_SOURCE_DIR}/src/nvgl/glew/bin
-        ${PROJECT_SOURCE_DIR}/src/nvgl/glew/lib
-        DOC "The GLEW library")
-ELSE (WIN32)
-	FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
-		/usr/include
-		/usr/local/include
-		/sw/include
-		/opt/local/include
-		${GLEW_ROOT_DIR}/include
-		DOC "The directory where GL/glew.h resides")
+if(WIN32)
+  set(GLEW_LIB_NAMES glew GLEW glew32 glew32s)
+else()
+  set(GLEW_LIB_NAMES libGLEW GLEW)
+endif()
 
-	# Prefer the static library.
-	FIND_LIBRARY( GLEW_LIBRARY
-		NAMES libGLEW.so GLEW
-		PATHS
-		/usr/lib64
-		/usr/lib
-		/usr/local/lib64
-		/usr/local/lib
-		/sw/lib
-		/opt/local/lib
-		${GLEW_ROOT_DIR}/lib
-		DOC "The GLEW library")
-ENDIF (WIN32)
+FIND_LIBRARY( GLEW_LIBRARY
+  NAMES ${GLEW_LIB_NAMES}
+  DOC "The GLEW library")
 
-SET(GLEW_FOUND "NO")
-IF (GLEW_INCLUDE_DIR AND GLEW_LIBRARY)
-	SET(GLEW_LIBRARIES ${GLEW_LIBRARY})
-	SET(GLEW_FOUND "YES")
-ENDIF ()
+set(GLEW_FOUND FALSE)
+if (GLEW_INCLUDE_DIR AND GLEW_LIBRARY)
+  set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+  set(GLEW_FOUND TRUE)
+endif()
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(GLEW
