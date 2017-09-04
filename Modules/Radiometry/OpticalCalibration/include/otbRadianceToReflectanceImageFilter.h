@@ -34,7 +34,7 @@ namespace Functor
 {
 /**
    * \class RadianceToReflectanceImageFunctor
-   * \brief Compupute reflectance from the radiance value
+   * \brief Compute reflectance from the radiance value
    *
    *  Multiply by Pi and by an illumination correction coefficient the
    *  quotient between the input and the given solar illumination.
