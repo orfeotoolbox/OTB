@@ -35,7 +35,7 @@ namespace Functor
 {
 /**
    * \class ReflectanceToRadianceImageFunctor
-   * \brief Compupute luminance from the reflectance value
+   * \brief Compupute radiance from the reflectance value
    *
    *  Divide by Pi and multiply by an illumination correction coefficient
    *  and the given solar illumination.
@@ -98,9 +98,9 @@ private:
 }
 
 /** \class ReflectanceToRadianceImageFilter
- *  \brief Convert reflectance value into luminance value
+ *  \brief Convert reflectance value into radiance value
  *
- * Transform a reflectance image into the luminance. For this it uses the
+ * Transform a reflectance image into the radiance. For this it uses the
  * functor ReflectanceToRadianceImageFunctor calling for each component of each pixel.
  *
  *

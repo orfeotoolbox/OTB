@@ -109,7 +109,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
         /*
         In order to simplify the computation for the reflectance mode,
         we introduce the solar irradiance in the general formula with
-        a value of 1.0 for the luminance case.
+        a value of 1.0 for the radiance case.
 
         In this way the formula is the same if we weight the RSR by
         the solar irradiance before the integration.

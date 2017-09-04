@@ -38,8 +38,8 @@
 // an optical multispectral image similar to Pleiades.
 // These corrections are made in four steps :
 // \begin{itemize}
-// \item digital number to luminance correction;
-// \item luminance to refletance image conversion;
+// \item digital number to radiance correction;
+// \item radiance to refletance image conversion;
 // \item atmospheric correction for TOA (top of atmosphere) to TOC (top of canopy)
 // reflectance estimation;
 // \item correction of the adjacency effects taking into account the neighborhood contribution.
@@ -61,7 +61,7 @@
 // Let's look at the minimal code required to use this
 // algorithm. First, the following header defining the
 // \doxygen{otb}{AtmosphericCorrectionSequencement} class must be
-// included.  For the numerical to luminance image, luminance to
+// included.  For the numerical to radiance image, radiance to
 // refletance image, and reflectance to atmospheric correction image
 // corrections and the neighborhood correction, four header files are
 // required.
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
   //
   // Where :
   // \begin{itemize}
-  // \item $\mathbf{L_{TOA}^{k}}$ is the incident luminance (in
+  // \item $\mathbf{L_{TOA}^{k}}$ is the incident radiance (in
   // $W.m^{-2}.sr^{-1}.\mu m^{-1}$);
   // \item $\mathbf{X^{k}}$ is the measured digital number (ie. the input image pixel component);
   // \item $\alpha_{k}$ is the absolute calibration gain for the channel k;
@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
   // The \doxygen{otb}{RadianceToReflectanceImageFilter}
   // type is defined and instancied.
   // This class used a functor applied to each component of each pixel
-  // of the luminance filter output ($\mathbf{L_{TOA}^{k}}$):
+  // of the radiance filter output ($\mathbf{L_{TOA}^{k}}$):
   //
   // \begin{equation}
   // \rho_{TOA}^{k} = \frac{ \pi.\mathbf{L_{TOA}^{k}} } { E_{S}^{k}.cos(\theta_{S}).d/d_{0} }.
