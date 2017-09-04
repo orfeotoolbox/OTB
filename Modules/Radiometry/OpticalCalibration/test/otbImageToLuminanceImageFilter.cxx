@@ -20,11 +20,11 @@
 
 #include "itkMacro.h"
 
-#include "otbImageToLuminanceImageFilter.h"
+#include "otbImageToRadianceImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageToLuminanceImageFilter(int itkNotUsed(argc), char * argv[])
+int otbImageToRadianceImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -35,8 +35,8 @@ int otbImageToLuminanceImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>                            OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                              ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::ImageToLuminanceImageFilter<InputImageType, OutputImageType> ImageToLuminanceImageFilterType;
-  typedef ImageToLuminanceImageFilterType::VectorType                       VectorType;
+  typedef otb::ImageToRadianceImageFilter<InputImageType, OutputImageType> ImageToRadianceImageFilterType;
+  typedef ImageToRadianceImageFilterType::VectorType                       VectorType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -58,7 +58,7 @@ int otbImageToLuminanceImageFilter(int itkNotUsed(argc), char * argv[])
     }
 
   // Instantiating object
-  ImageToLuminanceImageFilterType::Pointer filter = ImageToLuminanceImageFilterType::New();
+  ImageToRadianceImageFilterType::Pointer filter = ImageToRadianceImageFilterType::New();
   filter->SetAlpha(alpha);
   filter->SetBeta(beta);
   filter->SetInput(reader->GetOutput());

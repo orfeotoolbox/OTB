@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLuminanceToReflectanceImageFilter_h
-#define otbLuminanceToReflectanceImageFilter_h
+#ifndef otbRadianceToReflectanceImageFilter_h
+#define otbRadianceToReflectanceImageFilter_h
 
 #include "otbVarSol.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
@@ -33,14 +33,14 @@ namespace otb
 namespace Functor
 {
 /**
-   * \class LuminanceToReflectanceImageFunctor
+   * \class RadianceToReflectanceImageFunctor
    * \brief Compupute reflectance from the luminance value
    *
    *  Multiply by Pi and by an illumination correction coefficient the
    *  quotient between the input and the given solar illumination.
    *
    *
-   * \sa LuminanceToReflectanceImageFilter
+   * \sa RadianceToReflectanceImageFilter
    *
    * \ingroup Functor
    * \ingroup Radiometry
@@ -49,16 +49,16 @@ namespace Functor
  * \ingroup OTBOpticalCalibration
  */
 template <class TInput, class TOutput>
-class LuminanceToReflectanceImageFunctor
+class RadianceToReflectanceImageFunctor
 {
 public:
-  LuminanceToReflectanceImageFunctor() :
+  RadianceToReflectanceImageFunctor() :
     m_SolarIllumination(1.0),
     m_IlluminationCorrectionCoefficient(1.0),
     m_UseClamp(true)
   {}
 
-  virtual ~LuminanceToReflectanceImageFunctor() {}
+  virtual ~RadianceToReflectanceImageFunctor() {}
 
   void SetSolarIllumination(double solarIllumination)
   {
@@ -112,17 +112,17 @@ private:
 };
 }
 
-/** \class LuminanceToReflectanceImageFilter
+/** \class RadianceToReflectanceImageFilter
  *  \brief Convert luminance value into reflectance value
  *
  * Transform a luminance image into the reflectance. For this it uses the
- * functor LuminanceToReflectanceImageFunctor calling for each component of each pixel.
+ * functor RadianceToReflectanceImageFunctor calling for each component of each pixel.
  *
  *
  * For Spot image in the dimap format, the correction parameters are
  * retrieved automatically from the metadata
  *
- * \ingroup ImageToLuminanceImageFunctor
+ * \ingroup ImageToRadianceImageFunctor
  * \ingroup Radiometry
  *
  * \example Radiometry/AtmosphericCorrectionSequencement.cxx
@@ -130,10 +130,10 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LuminanceToReflectanceImageFilter :
+class ITK_EXPORT RadianceToReflectanceImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
       TOutputImage,
-      typename Functor::LuminanceToReflectanceImageFunctor<typename
+      typename Functor::RadianceToReflectanceImageFunctor<typename
           TInputImage::
           InternalPixelType,
           typename
@@ -148,12 +148,12 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
-  typedef typename Functor::LuminanceToReflectanceImageFunctor<typename InputImageType::InternalPixelType,
+  typedef typename Functor::RadianceToReflectanceImageFunctor<typename InputImageType::InternalPixelType,
       typename OutputImageType::InternalPixelType>
   FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef LuminanceToReflectanceImageFilter                                                    Self;
+  typedef RadianceToReflectanceImageFilter                                                    Self;
   typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>                                                              Pointer;
   typedef itk::SmartPointer<const Self>                                                        ConstPointer;
@@ -162,7 +162,7 @@ public:
   itkNewMacro(Self);
 
   /** return class name. */
-  itkTypeMacro(LuminanceToReflectanceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
+  itkTypeMacro(RadianceToReflectanceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
 
   /** Supported images definition. */
   typedef typename InputImageType::PixelType          InputPixelType;
@@ -235,7 +235,7 @@ public:
 
 protected:
   /** Constructor */
-  LuminanceToReflectanceImageFilter() :
+  RadianceToReflectanceImageFilter() :
     m_ZenithalSolarAngle(120.0), //invalid value which will lead to negative radiometry
     m_FluxNormalizationCoefficient(1.),
     m_Day(0),
@@ -247,7 +247,7 @@ protected:
     };
 
   /** Destructor */
-  ~LuminanceToReflectanceImageFilter() ITK_OVERRIDE {}
+  ~RadianceToReflectanceImageFilter() ITK_OVERRIDE {}
 
   /** Update the functor list and input parameters */
   void BeforeThreadedGenerateData(void) ITK_OVERRIDE

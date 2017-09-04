@@ -197,7 +197,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
      os <<indent << "[Center Wavelength (micrometers), Reflectance (percent)]" << std::endl;
      }
    else{
-   os <<indent << "[Center Wavelength (micrometers), Luminance (percent)]" << std::endl;
+   os <<indent << "[Center Wavelength (micrometers), Radiance (percent)]" << std::endl;
    }
 
    for(typename VectorPairType::const_iterator it = m_ReduceResponse->GetResponse().begin(); it != m_ReduceResponse->GetResponse().end(); ++it)

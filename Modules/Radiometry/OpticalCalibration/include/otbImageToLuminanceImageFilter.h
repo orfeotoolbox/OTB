@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToLuminanceImageFilter_h
-#define otbImageToLuminanceImageFilter_h
+#ifndef otbImageToRadianceImageFilter_h
+#define otbImageToRadianceImageFilter_h
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "itkNumericTraits.h"
@@ -34,10 +34,10 @@ namespace otb
 namespace Functor
 {
 /**
-   * \class ImageToLuminanceImageFunctor
+   * \class ImageToRadianceImageFunctor
    * \brief Add beta to the quotient Input over alpha.
    *
-   * \sa ImageToLuminanceImageFilter
+   * \sa ImageToRadianceImageFilter
    * \ingroup Functor
    * \ingroup Radiometry
  *
@@ -45,15 +45,15 @@ namespace Functor
  */
 
 template <class TInput, class TOutput>
-class ImageToLuminanceImageFunctor
+class ImageToRadianceImageFunctor
 {
 public:
-  ImageToLuminanceImageFunctor() :
+  ImageToRadianceImageFunctor() :
     m_Alpha(1.),
     m_Beta(0.)
   {}
 
-  virtual ~ImageToLuminanceImageFunctor() {}
+  virtual ~ImageToRadianceImageFunctor() {}
 
   void SetAlpha(double alpha)
   {
@@ -87,17 +87,17 @@ private:
 };
 }
 
-/** \class ImageToLuminanceImageFilter
+/** \class ImageToRadianceImageFilter
  *  \brief Convert a raw value into a luminance value
  *
  * Transform a classical image into the luminance image. For this it
- * uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel.
+ * uses the functor ImageToRadianceImageFunctor calling for each component of each pixel.
  *
  *
  * For Spot image in the dimap format, the correction parameters are
  * retrieved automatically from the metadata
  *
- * \ingroup ImageToLuminanceImageFunctor
+ * \ingroup ImageToRadianceImageFunctor
  * \ingroup Radiometry
  *
  * \example Radiometry/AtmosphericCorrectionSequencement.cxx
@@ -105,10 +105,10 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageToLuminanceImageFilter :
+class ITK_EXPORT ImageToRadianceImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
       TOutputImage,
-      typename Functor::ImageToLuminanceImageFunctor<typename
+      typename Functor::ImageToRadianceImageFunctor<typename
           TInputImage::
           InternalPixelType,
           typename
@@ -123,11 +123,11 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
-  typedef typename Functor::ImageToLuminanceImageFunctor<typename InputImageType::InternalPixelType,
+  typedef typename Functor::ImageToRadianceImageFunctor<typename InputImageType::InternalPixelType,
       typename OutputImageType::InternalPixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef ImageToLuminanceImageFilter                                                          Self;
+  typedef ImageToRadianceImageFilter                                                          Self;
   typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>                                                              Pointer;
   typedef itk::SmartPointer<const Self>                                                        ConstPointer;
@@ -136,7 +136,7 @@ public:
   itkNewMacro(Self);
 
   /** return class name. */
-  itkTypeMacro(ImageToLuminanceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
+  itkTypeMacro(ImageToRadianceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
 
   /** Supported images definition. */
   typedef typename InputImageType::PixelType          InputPixelType;
@@ -164,14 +164,14 @@ public:
 
 protected:
   /** Constructor */
-  ImageToLuminanceImageFilter()
+  ImageToRadianceImageFilter()
     {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
     };
 
   /** Destructor */
-  ~ImageToLuminanceImageFilter() ITK_OVERRIDE {}
+  ~ImageToRadianceImageFilter() ITK_OVERRIDE {}
 
   /** Update the functor list and input parameters */
   void BeforeThreadedGenerateData(void) ITK_OVERRIDE

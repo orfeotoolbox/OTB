@@ -68,8 +68,8 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbImageToLuminanceImageFilter.h"
-#include "otbLuminanceToReflectanceImageFilter.h"
+#include "otbImageToRadianceImageFilter.h"
+#include "otbRadianceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 // Software Guide : EndCodeSnippet
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
   //-------------------------------
   // Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{ImageToLuminanceImageFilter}
+  // The \doxygen{otb}{ImageToRadianceImageFilter}
   // type is defined and instancied. This class uses a functor applied
   // to each component of each pixel ($\mathbf{X^{k}}$) whose formula is:
   //
@@ -198,13 +198,13 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageToLuminanceImageFilter<ImageType, ImageType>
-  ImageToLuminanceImageFilterType;
+  typedef otb::ImageToRadianceImageFilter<ImageType, ImageType>
+  ImageToRadianceImageFilterType;
 
-  ImageToLuminanceImageFilterType::Pointer filterImageToLuminance
-    = ImageToLuminanceImageFilterType::New();
+  ImageToRadianceImageFilterType::Pointer filterImageToRadiance
+    = ImageToRadianceImageFilterType::New();
 // Software Guide : EndCodeSnippet
-  typedef ImageToLuminanceImageFilterType::VectorType VectorType;
+  typedef ImageToRadianceImageFilterType::VectorType VectorType;
   VectorType alpha(nbOfComponent);
   VectorType beta(nbOfComponent);
   alpha.Fill(0);
@@ -227,14 +227,14 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filterImageToLuminance->SetAlpha(alpha);
-  filterImageToLuminance->SetBeta(beta);
+  filterImageToRadiance->SetAlpha(alpha);
+  filterImageToRadiance->SetBeta(beta);
   // Software Guide : EndCodeSnippet
 
   //-------------------------------
   // Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{LuminanceToReflectanceImageFilter}
+  // The \doxygen{otb}{RadianceToReflectanceImageFilter}
   // type is defined and instancied.
   // This class used a functor applied to each component of each pixel
   // of the luminance filter output ($\mathbf{L_{TOA}^{k}}$):
@@ -259,13 +259,13 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LuminanceToReflectanceImageFilter<ImageType, ImageType>
-  LuminanceToReflectanceImageFilterType;
-  LuminanceToReflectanceImageFilterType::Pointer filterLuminanceToReflectance
-    = LuminanceToReflectanceImageFilterType::New();
+  typedef otb::RadianceToReflectanceImageFilter<ImageType, ImageType>
+  RadianceToReflectanceImageFilterType;
+  RadianceToReflectanceImageFilterType::Pointer filterRadianceToReflectance
+    = RadianceToReflectanceImageFilterType::New();
 // Software Guide : EndCodeSnippet
 
-  typedef LuminanceToReflectanceImageFilterType::VectorType VectorType;
+  typedef RadianceToReflectanceImageFilterType::VectorType VectorType;
 
   VectorType solarIllumination(nbOfComponent);
   solarIllumination.Fill(0);
@@ -287,11 +287,11 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filterLuminanceToReflectance->SetZenithalSolarAngle(
+  filterRadianceToReflectance->SetZenithalSolarAngle(
     static_cast<double>(atof(argv[6])));
-  filterLuminanceToReflectance->SetDay(atoi(argv[7]));
-  filterLuminanceToReflectance->SetMonth(atoi(argv[8]));
-  filterLuminanceToReflectance->SetSolarIllumination(solarIllumination);
+  filterRadianceToReflectance->SetDay(atoi(argv[7]));
+  filterRadianceToReflectance->SetMonth(atoi(argv[8]));
+  filterRadianceToReflectance->SetSolarIllumination(solarIllumination);
   // Software Guide : EndCodeSnippet
 
 //-------------------------------
@@ -635,10 +635,10 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   writer->SetFileName(argv[2]);
 
-  filterImageToLuminance->SetInput(reader->GetOutput());
-  filterLuminanceToReflectance->SetInput(filterImageToLuminance->GetOutput());
+  filterImageToRadiance->SetInput(reader->GetOutput());
+  filterRadianceToReflectance->SetInput(filterImageToRadiance->GetOutput());
   filterReflectanceToSurfaceReflectanceImageFilter->SetInput(
-    filterLuminanceToReflectance->GetOutput());
+    filterRadianceToReflectance->GetOutput());
   filterSurfaceAdjacencyEffectCorrectionSchemeFilter->SetInput(
     filterReflectanceToSurfaceReflectanceImageFilter->GetOutput());
 

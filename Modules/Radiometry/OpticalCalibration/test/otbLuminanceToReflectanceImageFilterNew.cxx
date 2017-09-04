@@ -20,19 +20,19 @@
 
 #include "itkMacro.h"
 
-#include "otbLuminanceToReflectanceImageFilter.h"
+#include "otbRadianceToReflectanceImageFilter.h"
 #include "otbVectorImage.h"
 
-int otbLuminanceToReflectanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbRadianceToReflectanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;
   typedef otb::VectorImage<PixelType, Dimension> InputImageType;
 
-  typedef otb::LuminanceToReflectanceImageFilter<InputImageType, InputImageType> LuminanceToReflectanceImageFilterType;
+  typedef otb::RadianceToReflectanceImageFilter<InputImageType, InputImageType> RadianceToReflectanceImageFilterType;
 
   // Instantiating object
-  LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
+  RadianceToReflectanceImageFilterType::Pointer filter = RadianceToReflectanceImageFilterType::New();
 
   std::cout << filter << std::endl;
 

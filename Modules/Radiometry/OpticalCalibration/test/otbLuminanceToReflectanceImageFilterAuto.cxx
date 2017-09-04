@@ -19,13 +19,13 @@
  */
 
 
-#include "otbImageToLuminanceImageFilter.h"
-#include "otbLuminanceToReflectanceImageFilter.h"
+#include "otbImageToRadianceImageFilter.h"
+#include "otbRadianceToReflectanceImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbLuminanceToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
+int otbRadianceToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -36,9 +36,9 @@ int otbLuminanceToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[]
   typedef otb::VectorImage<PixelType, Dimension>                            OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                              ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::ImageToLuminanceImageFilter<InputImageType, OutputImageType> ImageToLuminanceImageFilterType;
-  typedef otb::LuminanceToReflectanceImageFilter<OutputImageType,
-      OutputImageType> LuminanceToReflectanceImageFilterType;
+  typedef otb::ImageToRadianceImageFilter<InputImageType, OutputImageType> ImageToRadianceImageFilterType;
+  typedef otb::RadianceToReflectanceImageFilter<OutputImageType,
+      OutputImageType> RadianceToReflectanceImageFilterType;
   typedef otb::MultiChannelExtractROI<PixelType, PixelType> RoiFilterType;
 
   ReaderType::Pointer reader  = ReaderType::New();
@@ -48,11 +48,11 @@ int otbLuminanceToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[]
   reader->UpdateOutputInformation();
 
   // Instantiating object
-  ImageToLuminanceImageFilterType::Pointer filterToLuminance = ImageToLuminanceImageFilterType::New();
-  filterToLuminance->SetInput(reader->GetOutput());
+  ImageToRadianceImageFilterType::Pointer filterToRadiance = ImageToRadianceImageFilterType::New();
+  filterToRadiance->SetInput(reader->GetOutput());
 
-  LuminanceToReflectanceImageFilterType::Pointer filterToReflectance = LuminanceToReflectanceImageFilterType::New();
-  filterToReflectance->SetInput(filterToLuminance->GetOutput());
+  RadianceToReflectanceImageFilterType::Pointer filterToReflectance = RadianceToReflectanceImageFilterType::New();
+  filterToReflectance->SetInput(filterToRadiance->GetOutput());
   filterToReflectance->SetUseClamp(false);
 
   RoiFilterType::Pointer roiFilter = RoiFilterType::New();

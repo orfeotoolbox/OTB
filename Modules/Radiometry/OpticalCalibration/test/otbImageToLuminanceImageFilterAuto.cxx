@@ -19,13 +19,13 @@
  */
 
 
-#include "otbImageToLuminanceImageFilter.h"
+#include "otbImageToRadianceImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 
 //Test the retrieval of parameters from the image metadata
-int otbImageToLuminanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
+int otbImageToRadianceImageFilterAuto(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -36,7 +36,7 @@ int otbImageToLuminanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>                            OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                              ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::ImageToLuminanceImageFilter<InputImageType, OutputImageType> ImageToLuminanceImageFilterType;
+  typedef otb::ImageToRadianceImageFilter<InputImageType, OutputImageType> ImageToRadianceImageFilterType;
   typedef otb::MultiChannelExtractROI<PixelType, PixelType>                 RoiFilterType;
 
   ReaderType::Pointer reader  = ReaderType::New();
@@ -46,7 +46,7 @@ int otbImageToLuminanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
   reader->UpdateOutputInformation();
 
   // Instantiating object
-  ImageToLuminanceImageFilterType::Pointer filter = ImageToLuminanceImageFilterType::New();
+  ImageToRadianceImageFilterType::Pointer filter = ImageToRadianceImageFilterType::New();
   filter->SetInput(reader->GetOutput());
 
   RoiFilterType::Pointer roiFilter = RoiFilterType::New();
