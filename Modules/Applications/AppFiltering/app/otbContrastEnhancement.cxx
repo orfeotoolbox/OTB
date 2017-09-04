@@ -388,7 +388,6 @@ private:
   // Prepare the first half of the pipe that is common to every methode of 
   // equalization
   void SetUpPipeline( const FilterLutType::Pointer filterLut ,
-                      const RAMWriter::Pointer ramWriter ,
                       const FloatImageType::Pointer input ,
                       float max ,
                       float min)
@@ -412,6 +411,7 @@ private:
     thumbSize[1] = GetParameterInt("thumb.h");
     filterHisto->SetThumbSize( thumbSize );
     filterHisto->SetInput( input ) ;
+    RAMWriter::Pointer ramWriter ( RAMWriter::New() );
     ramWriter->SetInput( filterHisto->GetHistoOutput() );
     VirtualWriter::Pointer virtualWriter ( VirtualWriter::New() );
     virtualWriter->SetInput( ramWriter->GetOutput() );
@@ -485,13 +485,11 @@ private:
 
     m_filterLut.resize(nbChanel);
     m_filterGain.resize(nbChanel);
-    m_RAMWriter.resize(nbChanel);
 
     for (int chanel = 0 ; chanel<nbChanel ; chanel++ ) 
       {
       m_filterLut[chanel] = FilterLutType::New();
       m_filterGain[chanel] = FilterGainType::New();
-      m_RAMWriter[chanel] = RAMWriter::New();
 
       if ( min[chanel] == max[chanel] )
         {
@@ -504,7 +502,6 @@ private:
         }
         
       SetUpPipeline ( m_filterLut[chanel] ,
-                      m_RAMWriter[chanel] ,
                       inputImageList->GetNthElement(chanel) ,
                       max[chanel] , min[chanel] );
 
@@ -557,16 +554,13 @@ private:
                               ImageListType::Pointer outputImageList )
   {
     m_filterLut.resize(1);
-    m_RAMWriter.resize(1);
     m_filterGain.resize(3);
     m_filterLut[0] = FilterLutType::New();
-    m_RAMWriter[0] = RAMWriter::New();
     // Retreive order of the RGB chanels
     FloatImageType::PixelType min(0) , max(0);
     ComputeFloatMinMax( m_luminanceFilter->GetOutput() , max , min );
 
     SetUpPipeline ( m_filterLut[0] ,
-                    m_RAMWriter[0] ,
                     m_luminanceFilter->GetOutput() ,
                     max , min);
     ImageFileWriter<FloatImageType>::Pointer writer(ImageFileWriter<FloatImageType>::New());
@@ -594,7 +588,6 @@ private:
   VectorToImageListFilterType::Pointer m_vectorToImageListFilter;
   std::vector < FilterLutType::Pointer > m_filterLut;
   std::vector < FilterGainType::Pointer > m_filterGain;
-  std::vector < RAMWriter::Pointer > m_RAMWriter;
 
 };
 
