@@ -28,7 +28,11 @@ set(OTBSPTW_MAIN_SRCS sptw.cc)
 
 
 add_library(otbSPTW ${OTBSPTW_MAIN_SRCS})
-target_link_libraries(otbSPTW)
+target_link_libraries(otbSPTW
+  ${OTBMPI_LIBRARIES}
+  ${OTBGDAL_LIBRARIES}
+  ${OTBTIFF_LIBRARIES}
+  )
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 #Install TARGET & FILES for otb-lib
