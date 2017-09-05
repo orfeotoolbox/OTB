@@ -60,6 +60,9 @@
 			       OTB_VERSION_MINOR==(m) && OTB_VERSION_PATH>=(p))))
 
 //
+#define QWT_IS_ABOVE_6_1 ( QWT_VERSION >= 0x060100 )
+
+//
 // Sub-directories
 #define Monteverdi_INSTALL_DATA_I18N_DIR Monteverdi_INSTALL_DATA_DIR "/i18n"
 
