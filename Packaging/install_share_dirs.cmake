@@ -50,7 +50,7 @@ function(install_share_dirs)
   endif()
   set(MVD_I18N_DEST_DIR ${PKG_SHARE_DEST_DIR}/${OTB_I18N_DIRNAME})
   file(GLOB MVD_APP_TS_FILES ${PACKAGE_OTB_SRC_DIR}/i18n/*.ts) # qm files
-  foreach(APP_TS_FILE ${APP_TS_FILES})
+  foreach(APP_TS_FILE ${MVD_APP_TS_FILES})
     get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
     install(FILES ${MVD_I18N_SOURCE_DIR}/${APP_TS_FILENAME}.qm
       DESTINATION ${MVD_I18N_DEST_DIR}

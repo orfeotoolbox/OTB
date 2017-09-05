@@ -36,36 +36,47 @@ configure_file(${CMAKE_SOURCE_DIR}/patches/QWT/qwtconfig.pri
 
 if(_SB_QT_QMAKE_EXECUTABLE)
   set(QWT_SB_CONFIGURE_PROGRAM ${_SB_QT_QMAKE_EXECUTABLE})
+
 elseif(QT_QMAKE_EXECUTABLE)
   set(QWT_SB_CONFIGURE_PROGRAM ${QT_QMAKE_EXECUTABLE})
+
 else()
-  set(QT_QMAKE_EXECUTABLE "" CACHE FILEPATH "Path to qmake executable")
-  message(FATAL_ERROR "Please set the qmake executable to use (QT_QMAKE_EXECUTABLE)")
+  find_program( QT_QMAKE_EXECUTABLE "qmake" )
+
+  if( NOT QT_QMAKE_EXECUTABLE )
+    set(QT_QMAKE_EXECUTABLE "" CACHE FILEPATH "Path to qmake executable")
+    message(FATAL_ERROR "Please set the qmake executable to use (QT_QMAKE_EXECUTABLE)")
+
+  else()
+    set( QWT_SB_CONFIGURE_PROGRAM ${QT_QMAKE_EXECUTABLE} )
+
+  endif()
 endif()
 
 ExternalProject_Add(QWT
   PREFIX QWT
-  URL "http://downloads.sourceforge.net/project/qwt/qwt/5.2.3/qwt-5.2.3.zip"
-  URL_MD5 310a1c8ab831f4b2219505dcb7691cf1
+  URL "http://downloads.sourceforge.net/project/qwt/qwt/6.1.3/qwt-6.1.3.zip"
+  URL_MD5 558911df37aee4c0c3049860e967401c
   SOURCE_DIR ${QWT_SB_SRC}
-  BINARY_DIR ${QWT_SB_BUILD_DIR}
+  BINARY_DIR ${QWT_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   DEPENDS ${QWT_DEPENDENCIES}
-  PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory ${QWT_SB_SRC} ${QWT_SB_BUILD_DIR}
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/qwtconfig.pri ${QWT_SB_BUILD_DIR}
-  CONFIGURE_COMMAND ${QWT_SB_CONFIGURE_PROGRAM} ${QWT_SB_BUILD_DIR}/qwt.pro
+PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/patches/QWT/qwtconfig.pri ${QWT_SB_SRC}
+  CONFIGURE_COMMAND
+${QWT_SB_CONFIGURE_PROGRAM} ${QWT_SB_SRC}/qwt.pro
   BUILD_COMMAND ${QWT_SB_MAKE_PROGRAM}
-  INSTALL_COMMAND ${QWT_SB_MAKE_PROGRAM} install
-  LOG_DOWNLOAD 1
-  LOG_CONFIGURE 1    
-  LOG_BUILD 1
-  LOG_INSTALL 1     
+  INSTALL_COMMAND ${QWT_SB_MAKE_PROGRAM} install INSTALL_ROOT=${SB_INSTALL_PREFIX}
+  LOG_CONFIGURE 0
+  LOG_BUILD 0
+  LOG_INSTALL 0
   )
 
-set(_SB_QWT_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-if(WIN32)
-  set(_SB_QWT_LIBRARY ${SB_INSTALL_PREFIX}/lib/qwt5.lib)
-elseif(UNIX)
-  set(_SB_QWT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libqwt${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif()
+#SUPERBUILD_PATCH_SOURCE(QWT)
+
+# set(_SB_QWT_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+# if(WIN32)
+#   set(_SB_QWT_LIBRARY ${SB_INSTALL_PREFIX}/lib/qwt5.lib)
+# elseif(UNIX)
+#   set(_SB_QWT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libqwt${CMAKE_SHARED_LIBRARY_SUFFIX})
+# endif()
