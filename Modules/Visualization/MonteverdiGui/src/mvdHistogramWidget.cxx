@@ -19,7 +19,18 @@
  */
 
 #include "mvdHistogramWidget.h"
+
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+# pragma GCC diagnostic ignored "-Wshadow"
+#endif
+
 #include "ui_mvdHistogramWidget.h"
+
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
 
 
 /*****************************************************************************/
@@ -33,26 +44,26 @@
 // Qwt includes
 
 #if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Wshadow"
-#include <qwt_plot_curve.h>
-#include <qwt_plot_grid.h>
-#include <qwt_plot_magnifier.h>
-#include <qwt_plot_marker.h>
-#include <qwt_plot_panner.h>
-// #include <qwt_plot_zoomer.h>
-#include <qwt_scale_engine.h>
-#pragma GCC diagnostic pop
-#else
-#include <qwt_plot_curve.h>
-#include <qwt_plot_grid.h>
-#include <qwt_plot_magnifier.h>
-#include <qwt_plot_marker.h>
-#include <qwt_plot_panner.h>
-// #include <qwt_plot_zoomer.h>
-#include <qwt_scale_engine.h>
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+# pragma GCC diagnostic ignored "-Wshadow"
 #endif
+
+#if QWT_IS_ABOVE_6_1
+# include <qwt_plot_canvas.h>
+#endif // QWT_IS_ABOVE_6_1
+#include <qwt_plot_curve.h>
+#include <qwt_plot_grid.h>
+#include <qwt_plot_magnifier.h>
+#include <qwt_plot_marker.h>
+#include <qwt_plot_panner.h>
+// #include <qwt_plot_zoomer.h>
+#include <qwt_scale_engine.h>
+
+#if defined(__GNUC__) || defined(__clang__)
+# pragma GCC diagnostic pop
+#endif
+
 //
 // System includes (sorted by alphabetic order)
 
@@ -94,7 +105,7 @@ HistogramWidget::CURVE_NAMES[ HistogramWidget::CURVE_COUNT ] =
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Red" ),
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Green" ),
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Blue" ),
-  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Gray" ), 
+  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Gray" ),
 };
 
 const QColor
@@ -151,7 +162,7 @@ const QColor RUBBER_BAND_COLOR( 0xFF, 0xFF, 0x00, 0xAA );
 
 /*******************************************************************************/
 HistogramWidget
-::HistogramWidget( QWidget* p, Qt::WindowFlags flags  ):
+::HistogramWidget( QWidget* p, Qt::WindowFlags flags  ) :
   QWidget( p, flags ),
   m_UI( new mvd::Ui::HistogramWidget() ),
   m_PlotGrid( NULL ),
@@ -177,8 +188,14 @@ HistogramWidget
   m_PlotGrid = new QwtPlotGrid();
   m_PlotGrid->attach( m_UI->histogramPlot );
 
+#if QWT_IS_ABOVE_6_1
+  m_PlotGrid->setMajorPen( GRID_MAJ_PEN_COLOR );
+  m_PlotGrid->setMinorPen( GRID_MIN_PEN_COLOR );
+
+#else // QWT_IS_ABOVE_6_1
   m_PlotGrid->setMajPen( GRID_MAJ_PEN_COLOR );
   m_PlotGrid->setMinPen( GRID_MIN_PEN_COLOR );
+#endif // QWT_IS_ABOVE_6_1
 
   //
   // ZOOMER.
@@ -252,9 +269,22 @@ HistogramWidget
 
   //
   // PICKER.
+  assert(
+    dynamic_cast< QwtPlotCanvas * >( m_UI->histogramPlot->canvas() )!=nullptr
+  );
 
   m_PlotPicker =
-    new HistogramPlotPicker( curves, m_UI->histogramPlot->canvas() );
+    new HistogramPlotPicker(
+      curves,
+#if QWT_IS_ABOVE_6_1
+      dynamic_cast< QwtPlotCanvas * >(
+#endif // QWT_IS_ABOVE_6_1
+	m_UI->histogramPlot->canvas()
+#if QWT_IS_ABOVE_6_1
+        )
+#endif // QWT_IS_ABOVE_6_1
+      );
+
   m_PlotPicker->setTrackerMode( QwtPicker::ActiveOnly );
   m_PlotPicker->setRubberBandPen( RUBBER_BAND_COLOR );
   m_PlotPicker->setTrackerPen( QColor( Qt::yellow ) );
@@ -273,8 +303,8 @@ HistogramWidget
   //
   //
   QObject::connect(
-    m_PlotPicker, SIGNAL( appended( const QwtDoublePoint& ) ),
-    this, SLOT( OnAppended( const QwtDoublePoint& ) )
+    m_PlotPicker, SIGNAL( appended( const QPointF& ) ),
+    this, SLOT( OnAppended( const QPointF& ) )
   );
   QObject::connect(
     m_PlotPicker, SIGNAL( appended( const QPoint& ) ),
@@ -282,25 +312,25 @@ HistogramWidget
   );
   //
   QObject::connect(
-    m_PlotPicker, SIGNAL( changed( const QwtPolygon& ) ),
-    this, SLOT( OnChanged( const QwtPolygon& ) )
+    m_PlotPicker, SIGNAL( changed( const QPolygon& ) ),
+    this, SLOT( OnChanged( const QPolygon& ) )
   );
   //
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtDoublePoint& ) ),
-    this, SLOT( OnSelected( const QwtDoublePoint& ) )
+    m_PlotPicker, SIGNAL( selected( const QPointF& ) ),
+    this, SLOT( OnSelected( const QPointF& ) )
   );
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtDoubleRect& ) ),
-    this, SLOT( OnSelected( const QwtDoubleRect& ) )
+    m_PlotPicker, SIGNAL( selected( const QRectF& ) ),
+    this, SLOT( OnSelected( const QRectF& ) )
   );
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtPolygon& ) ),
-    this, SLOT( OnSelected( const QwtPolygon& ) )
+    m_PlotPicker, SIGNAL( selected( const QPolygon& ) ),
+    this, SLOT( OnSelected( const QPolygon& ) )
   );
   QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QwtArray< QwtDoublePoint >& ) ),
-    this, SLOT( OnSelected( const QwtArray< QwtDoublePoint >& ) )
+    m_PlotPicker, SIGNAL( selected( const QVector< QPointF >& ) ),
+    this, SLOT( OnSelected( const QVector< QPointF >& ) )
   );
 }
 
@@ -404,7 +434,7 @@ HistogramWidget
     assert( i<HistogramWidget::CURVE_COUNT );
     assert( m_PlotCurves[ i ]!=NULL );
 
-    m_PlotCurves[ i ]->setData( xVal, yVal, sizeVal );
+    m_PlotCurves[ i ]->setSamples( xVal, yVal, sizeVal );
 
     if( xVal==NULL && yVal==NULL )
       m_PlotCurves[ i ]->setVisible( false );
@@ -486,7 +516,7 @@ HistogramWidget
   /*
   for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
     {
-    bool isVisible = 
+    bool isVisible =
       i<RGBW_CHANNEL_WHITE
       ? !activated
       : activated;
@@ -555,7 +585,7 @@ HistogramWidget
       ? i==RGBW_CHANNEL_WHITE
       : ( index==RGBW_CHANNEL_WHITE
 	  ? i<RGBW_CHANNEL_WHITE
-	  : i==index ); 
+	  : i==index );
 
     assert( i<HistogramWidget::CURVE_COUNT );
 
@@ -700,9 +730,9 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::OnAppended( const QwtDoublePoint & )
+::OnAppended( const QPointF & )
 {
-  // qDebug() << this << "::OnAppended(" << pos.x() << ", " << pos.y() << ")";
+  // qDebug() << this << "::OnAppended(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -710,23 +740,23 @@ void
 HistogramWidget
 ::OnAppended( const QPoint & )
 {
-  // qDebug() << this << "::OnAppended(" << pos << ")";
+  // qDebug() << this << "::OnAppended(" << p << ")";
 }
 
 /*******************************************************************************/
 void
 HistogramWidget
-::OnChanged( const QwtPolygon & )
+::OnChanged( const QPolygon & )
 {
-  // qDebug() << this << "::OnChanged(" << pa << ")";
+  // qDebug() << this << "::OnChanged(" << p << ")";
 }
 
 /*******************************************************************************/
 void
 HistogramWidget
-::OnMoved( const QwtDoublePoint & )
+::OnMoved( const QPointF & )
 {
-  // qDebug() << this << "::OnMoved(" << pos.x() << ", " << pos.y() << ")";
+  // qDebug() << this << "::OnMoved(" << p << ")";
 }
 
 /*******************************************************************************/
@@ -734,39 +764,39 @@ void
 HistogramWidget
 ::OnMoved( const QPoint & )
 {
-  // qDebug() << this << "::OnMoved(" << pos << ")";
+  // qDebug() << this << "::OnMoved(" << p << ")";
 }
 
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtDoublePoint & )
+::OnSelected( const QPointF & )
 {
-  // qDebug() << this << "::OnSelected(" << pos.x() << ", " << pos.y() << ")";
+  // qDebug() << this << "::OnSelected(" << p << ")";
 }
 
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtDoubleRect & )
+::OnSelected( const QRectF & )
 {
-  // qDebug() << this << "::OnSelected(" << rect.x() << ", " << rect.y() << ")";
+  // qDebug() << this << "::OnSelected(" << r << ")";
 }
 
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtPolygon & )
+::OnSelected( const QPolygon & )
 {
-  // qDebug() << this << "::OnSelected(" << pa << ")";
+  // qDebug() << this << "::OnSelected(" << p << ")";
 }
 
 /*******************************************************************************/
 void
 HistogramWidget
-::OnSelected( const QwtArray< QwtDoublePoint > & )
+::OnSelected( const QVector< QPointF > & )
 {
-  // qDebug() << this << "::OnSelected(" << pa << ")";
+  // qDebug() << this << "::OnSelected(" << v << ")";
 }
 
 } // end namespace 'mvd'

@@ -161,7 +161,7 @@ protected:
 
   using QwtPlotPicker::trackerText;
 
-  QwtText trackerText( const QwtDoublePoint & ) const ITK_OVERRIDE;
+  QwtText trackerTextF( const QPointF & ) const ITK_OVERRIDE;
 
 //
 // Protected attributes.
