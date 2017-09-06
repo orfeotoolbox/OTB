@@ -41,6 +41,8 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   , m_OutLayerName(std::string("output"))
   , m_OGRLayerCreationOptions()
   , m_AdditionalFields()
+  , m_InMemoryInputs()
+  , m_InMemoryOutputs()
 {
   this->SetNthOutput(0,TInputImage::New());
 }
