@@ -103,10 +103,10 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   size[1] = histoRegion.GetSize()[1] * m_ThumbSize[1];
 
   #ifdef DEBUG
-  std::cout<<"start "<<start<<std::endl;
-  std::cout<<"size "<<size<<std::endl;
-  std::cout<<"Requested Index  "<<this->GetHistoOutput()->GetRequestedRegion().GetIndex()<<std::endl;
-  std::cout<<"Requested Size "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
+  std::cout<<"input requested start "<<start<<std::endl;
+  std::cout<<"input requested size "<<size<<std::endl;
+  std::cout<<"HistoOutput Requested Index  "<<this->GetHistoOutput()->GetRequestedRegion().GetIndex()<<std::endl;
+  std::cout<<"HistoOutput Requested Size "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
   #endif
 
   typename InputImageType::RegionType inputRequestedRegion;
@@ -168,7 +168,10 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   output->SetNumberOfComponentsPerPixel(m_NbBin);
   output->SetLargestPossibleRegion(region);
 
-  
+  #ifdef DEBUG
+  std::cout<<"HistoOutput Requested Index  "<<this->GetHistoOutput()->GetRequestedRegion().GetIndex()<<std::endl;
+  std::cout<<"HistoOutput Requested Size "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
+  #endif
   #ifdef DEBUG
   std::cout<<"###############End GenerateOutputInformation###############"<<std::endl;
   #endif
@@ -180,8 +183,8 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 {
   #ifdef DEBUG
   std::cout<<"###########GenerateOutputRequestedRegion###########"<<std::endl;
-  std::cout<<"Requested Output index : "<<this->GetHistoOutput()->GetRequestedRegion().GetIndex()<<std::endl;
-  std::cout<<"Requested Output size : "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
+  std::cout<<"HistoOutput Requested Output index : "<<this->GetHistoOutput()->GetRequestedRegion().GetIndex()<<std::endl;
+  std::cout<<"HistoOutput Requested Output size : "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
   #endif
 
   typename OutputImageType::Pointer outImage = this->GetOutput();
@@ -276,7 +279,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   output->FillBuffer( zeroPixel );
   #ifdef DEBUG
   std::cout<<"Vector length "<<output->GetVectorLength()<<std::endl;
-  std::cout<<"zeroPixel length "<<zeroPixel.GetSize()<<std::endl;
+  // std::cout<<"zeroPixel length "<<zeroPixel.GetSize()<<std::endl;
   #endif
 
   // Initializing shared variable with thread number parameter

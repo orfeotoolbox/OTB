@@ -158,14 +158,14 @@ float ApplyGainFilter < TInputImage , TLut , TOutputImage >
   typename LutType::IndexType lutIndex;
   lutIndex[0] = index[0]/m_ThumbSize[0];
   lutIndex[1] = index[1]/m_ThumbSize[1];
-  float x = static_cast< float >(index[0]%m_ThumbSize[0]) \
+  float x = static_cast< float >(index[0]%m_ThumbSize[0])
             / static_cast< float >(m_ThumbSize[0]);
-  float y = static_cast< float >(index[1]%m_ThumbSize[1]) \
+  float y = static_cast< float >(index[1]%m_ThumbSize[1])
             / static_cast< float >(m_ThumbSize[1]);
   float disty = std::abs(y - 0.5);
   float distx = std::abs(x - 0.5);
   float w = (1 - distx )*(1 - disty );
-  float gain = gridLut->GetPixel(lutIndex)[pixelLutValue] * \
+  float gain = gridLut->GetPixel(lutIndex)[pixelLutValue] *
               (1 - distx ) * (1 - disty ) ;
   typename LutType::OffsetType rightOffSet , upOffSet , leftOffSet , downOffSet;
   rightOffSet.Fill(0);
@@ -178,12 +178,12 @@ float ApplyGainFilter < TInputImage , TLut , TOutputImage >
               ( ( leftOffSet[0] + lutIndex[0] ) >= 0 );
   upOffSet.Fill(0);
   upOffSet[1] = -1 ;
-  bool up = y<=0.5 && 
-              ( ( upOffSet[1] + lutIndex[1] ) >= 0 );
+  bool up ( y<=0.5 && 
+              ( ( upOffSet[1] + lutIndex[1] ) >= 0 ) );
   downOffSet.Fill(0);
   downOffSet[1] = 1 ;
-  bool down = y>=0.5 && 
-    ( ( downOffSet[1] + lutIndex[1] ) < static_cast<int>( m_LutSize[1] ) );
+  bool down ( y>=0.5 && 
+     ( downOffSet[1] + lutIndex[1] ) < static_cast<int>( m_LutSize[1] ) );
   if ( right )
     {
     gain += gridLut->GetPixel(lutIndex + rightOffSet)[pixelLutValue]
@@ -236,7 +236,10 @@ float ApplyGainFilter < TInputImage , TLut , TOutputImage >
               * disty * distx;
     w += disty * distx;
     }
-
+  // if ( w == 1 )
+  //   std::cout<<"Warning"<<std::endl;
+  // std::cout<<"gain = "<<gain<<std::endl;
+  // std::cout<<"weight = "<<w<<std::endl;
   return gain/w;
 }
 

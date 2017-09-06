@@ -135,7 +135,7 @@ private:
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
-    SetParameterString("in", "/home/antoine/dev/my_data/DATA_PHR/PHR1B_MS_SENSOR_20170521_103758/IMG_PHR1B_MS_201705211037588_SEN_2323292101-004_R1C1.JP2");
+    SetParameterString("in", "/home/antoine/dev/my_data/biginput.tif");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
     SetParameterString("out", "/home/antoine/dev/my_data/bigbigtest.tif");
@@ -299,7 +299,6 @@ private:
 
     m_imageListToVectorFilterOut = ImageListToVectorFilterType::New() ;
     m_imageListToVectorFilterOut->SetInput(outputImageList);
-
     #ifdef DEBUG
     std::cout<<"vectortoimagelist R"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
     std::cout<<"vectortoimagelist B"<<m_vectorToImageListFilter->GetOutput()->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
@@ -388,6 +387,7 @@ private:
   // Prepare the first half of the pipe that is common to every methode of 
   // equalization
   void SetUpPipeline( const FilterLutType::Pointer filterLut ,
+                      const RAMWriter::Pointer ramWriter ,
                       const FloatImageType::Pointer input ,
                       float max ,
                       float min)
@@ -411,13 +411,18 @@ private:
     thumbSize[1] = GetParameterInt("thumb.h");
     filterHisto->SetThumbSize( thumbSize );
     filterHisto->SetInput( input ) ;
-    RAMWriter::Pointer ramWriter ( RAMWriter::New() );
-    ramWriter->SetInput( filterHisto->GetHistoOutput() );
+    // RAMWriter::Pointer ramWriter ( RAMWriter::New() );
+    // ramWriter->SetInput( filterHisto->GetHistoOutput() );
     VirtualWriter::Pointer virtualWriter ( VirtualWriter::New() );
+    // virtualWriter->SetInput( ramWriter->GetOutput() );
+    // virtualWriter->Update();
+    // filterLut->SetInput( ramWriter->GetOutput() );
+    // filterLut->Update();
+    filterLut->SetInput( filterHisto->GetHistoOutput() );
+    ramWriter->SetInput( filterLut->GetOutput() );
     virtualWriter->SetInput( ramWriter->GetOutput() );
     virtualWriter->Update();
-    filterLut->SetInput( ramWriter->GetOutput() );
-    filterLut->Update();
+
   }
 
   // Compute min max from a vector image
@@ -485,11 +490,13 @@ private:
 
     m_filterLut.resize(nbChanel);
     m_filterGain.resize(nbChanel);
+    m_RAMWriter.resize(nbChanel);
 
     for (int chanel = 0 ; chanel<nbChanel ; chanel++ ) 
       {
       m_filterLut[chanel] = FilterLutType::New();
       m_filterGain[chanel] = FilterGainType::New();
+      m_RAMWriter[chanel] = RAMWriter::New();
 
       if ( min[chanel] == max[chanel] )
         {
@@ -500,18 +507,19 @@ private:
           outputImageList->PushBack( inputImageList->GetNthElement(chanel) );
           continue;
         }
-        
+      std::cout<<"Setup"<<std::endl;
       SetUpPipeline ( m_filterLut[chanel] ,
+                      m_RAMWriter[chanel] ,
                       inputImageList->GetNthElement(chanel) ,
                       max[chanel] , min[chanel] );
-
+      std::cout<<"Setup done"<<std::endl;
       if( HasUserValue("nodata") )
         {
         m_filterGain[chanel]->SetNoData( GetParameterFloat("nodata") ); 
         }
-      m_filterGain[chanel]->SetMin( m_filterLut[chanel]->GetMin() );
-      m_filterGain[chanel]->SetMax( m_filterLut[chanel]->GetMax() );
-      m_filterGain[chanel]->SetInputLut( m_filterLut[chanel]->GetOutput() );
+      m_filterGain[chanel]->SetMin( min[chanel] );
+      m_filterGain[chanel]->SetMax( max[chanel] );
+      m_filterGain[chanel]->SetInputLut( m_RAMWriter[chanel]->GetOutput() );
       m_filterGain[chanel]->SetInputImage( 
       m_vectorToImageListFilter->GetOutput()->GetNthElement(chanel) );
       outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
@@ -554,13 +562,16 @@ private:
                               ImageListType::Pointer outputImageList )
   {
     m_filterLut.resize(1);
+    m_RAMWriter.resize(1);
     m_filterGain.resize(3);
     m_filterLut[0] = FilterLutType::New();
+    m_RAMWriter[0] = RAMWriter::New();
     // Retreive order of the RGB chanels
     FloatImageType::PixelType min(0) , max(0);
     ComputeFloatMinMax( m_luminanceFilter->GetOutput() , max , min );
 
     SetUpPipeline ( m_filterLut[0] ,
+                    m_RAMWriter[0] ,
                     m_luminanceFilter->GetOutput() ,
                     max , min);
     ImageFileWriter<FloatImageType>::Pointer writer(ImageFileWriter<FloatImageType>::New());
@@ -579,6 +590,7 @@ private:
       m_filterGain[chanel]->SetMax( max );
       m_filterGain[chanel]->SetInputImage( 
                     inputImageList->GetNthElement(rgb[chanel]) );
+      m_filterGain[chanel]->SetNumberOfThreads(1);
       outputImageList->PushBack( m_filterGain[chanel]->GetOutput() );
       }
   }
@@ -588,6 +600,8 @@ private:
   VectorToImageListFilterType::Pointer m_vectorToImageListFilter;
   std::vector < FilterLutType::Pointer > m_filterLut;
   std::vector < FilterGainType::Pointer > m_filterGain;
+  std::vector < RAMWriter::Pointer > m_RAMWriter;
+
 
 };
 
