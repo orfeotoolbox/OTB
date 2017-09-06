@@ -26,21 +26,27 @@ SETUP_SUPERBUILD(ZLIB)
 # Try official release 1.2.8
 ExternalProject_Add(ZLIB
   PREFIX ZLIB
-  URL "http://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz/download"
+  URL "http://downloads.sourceforge.net/project/libpng/zlib/1.2.8/zlib-1.2.8.tar.gz"
   URL_MD5 44d667c142d7cda120332623eab69f40
   BINARY_DIR ${ZLIB_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
+#patch zlib cmake to disable static build on request
 if(UNIX)
   ExternalProject_Add_Step(ZLIB remove_static
     COMMAND ${CMAKE_COMMAND} -E remove ${SB_INSTALL_PREFIX}/lib/libz.a
     DEPENDEES install)
 endif()
 
+#check who uses zdll.lib and remove this hack
 if(MSVC)
   ExternalProject_Add_Step(ZLIB msvc_copy_hell
     COMMAND ${CMAKE_COMMAND} -E copy ${ZLIB_SB_BUILD_DIR}/zlib.lib ${SB_INSTALL_PREFIX}/lib/zdll.lib

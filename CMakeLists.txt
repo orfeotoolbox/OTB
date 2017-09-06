@@ -99,7 +99,7 @@ find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
   HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
 )
-mark_as_advanced(OTB_DATA_ROOT)
+#mark_as_advanced(OTB_DATA_ROOT)
 
 if(OTB_DATA_ROOT)
   repository_status(${OTB_DATA_ROOT} OTB_DATA_GIT_STATUS_MESSAGE)
@@ -213,10 +213,12 @@ endif()
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 mark_as_advanced(OTB_USE_DEPRECATED)
 
+option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
+option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
 #-----------------------------------------------------------------------------
 # SHOW_ALL_MSG_DEBUG option
 option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
-mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
+#mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------
@@ -504,6 +506,8 @@ foreach(otb_option
     OTB_WRAP_PYTHON
     OTB_WRAP_JAVA
     OTB_DATA_ROOT
+    OTB_USE_OPENMP
+    OTB_USE_SSE_FLAGS
     )
     get_white_spaces("${otb_option}" spaces)
   message("${otb_option} ${spaces} = ${${otb_option}}")

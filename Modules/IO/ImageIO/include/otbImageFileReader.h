@@ -54,19 +54,14 @@ public:
 
   /** Constructor. */
   ImageFileReaderException(const char *file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
+                           const std::string& desc = "",
+                           const std::string& filename = "") :
+    ExceptionObject(file, line, desc),
+    m_Filename(filename)
   {
   }
 
-  /** Constructor. */
-  ImageFileReaderException(const std::string &file, unsigned int line,
-                           const char* message = "Error in IO",
-                           const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-  {
-  }
+  std::string m_Filename;
 };
 
 /** \class ImageFileReader
@@ -170,12 +165,10 @@ protected:
   void DoConvertBuffer(void* buffer, size_t numberOfPixels);
 
 private:
-  /** Test whether the given filename exist and it is readable,
-      this is intended to be called before attempting to use
-      ImageIO classes for actually reading the file. If the file
-      doesn't exist or it is not readable, and exception with an
-      appropriate message will be thrown. */
-  void TestFileExistenceAndReadability();
+  /** Test whether m_ImageIO is valid (not NULL). This is intended to be called
+   * after trying to create it via an ImageIOFactory. Throws an exception with
+   * an appropriate message otherwise. */
+  void TestValidImageIO();
 
   /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
@@ -195,8 +188,6 @@ private:
   std::string m_FileName; // The file to be read
 
   bool m_UseStreaming;
-
-  std::string   m_ExceptionMessage;
 
   // The region that the ImageIO class will return when we ask to
   // produce the requested region.

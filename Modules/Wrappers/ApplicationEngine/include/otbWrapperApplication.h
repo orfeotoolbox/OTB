@@ -26,7 +26,7 @@
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"
 
-#include "itkLogger.h"
+#include "otbLogger.h"
 #include "itkTimeProbe.h"
 #include "otbWrapperMacros.h"
 #include "otbWrapperInputImageParameter.h"
@@ -40,6 +40,37 @@
 
 namespace otb
 {
+
+/** \class ApplicationException
+ *  \brief Exception for runtime errors in OTB Applications
+ *
+ *  Usually thrown with the otbAppLogFATAL macro
+ *
+ * \ingroup OTBApplicationEngine
+ */
+class ApplicationException : public itk::ExceptionObject
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro( ApplicationException, ExceptionObject );
+
+  /** Constructor. */
+  ApplicationException(const char *file, unsigned int line,
+                       const char* message = "Application error.",
+                       const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+  {
+  }
+
+  /** Constructor. */
+  ApplicationException(const std::string &file, unsigned int line,
+                       const char* message = "Application error.",
+                       const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+  {
+  }
+};
+
 namespace Wrapper
 {
 
@@ -70,6 +101,7 @@ public:
     m_Name = name;
     GetDocExample()->SetApplicationName(name);
     this->Modified();
+    m_Logger->SetName(name);
   }
 
   itkGetStringMacro(Name);
@@ -135,7 +167,7 @@ public:
   /* Get the internal application parameter specified
    *
    * WARNING: this method may disappear from the API */
-  const Parameter* GetParameterByKey(std::string parameter) const;
+  const Parameter* GetParameterByKey(std::string parameter, bool follow=true) const;
 
   /* Returns the description of a parameter */
   std::string GetParameterName(std::string paramKey);
@@ -252,8 +284,21 @@ public:
 
   void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
+  /** Checks if the application is ready to be executed. It checks that there
+   *  is no parameter missing
+   */
   bool IsApplicationReady();
 
+  /** Checks if a parameter 'key' is missing.
+   *
+   * A parameter is missing when all the following conditions are true :
+   *   - the parameter is mandatory
+   *   - the parameter has Role_Input
+   *   - the parameter is not a group
+   *   - the parameter has no value
+   *   - the parameter ancestors are mandatory or enabled.
+   */
+  bool IsParameterMissing(const std::string &key) const;
 
   /* Set an default integer value, must used in the
    * DoInit when setting a value by default
@@ -663,7 +708,10 @@ public:
    */
   ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
-  itk::Logger* GetLogger();
+  otb::Logger* GetLogger() const;
+
+  /** Sets the logger instance of the application (use with caution) */
+  void SetLogger(otb::Logger *logger);
 
   itk::ProcessObject* GetProgressSource() const;
 
@@ -916,7 +964,6 @@ protected:
       }
   }
 
-
 private:
   /* Implement this method to add parameters */
   virtual void DoInit() = 0;
@@ -938,7 +985,7 @@ private:
   std::string                       m_Name;
   std::string                       m_Description;
   ParameterGroup::Pointer           m_ParameterList;
-  itk::Logger::Pointer              m_Logger;
+  otb::Logger::Pointer              m_Logger;
 
   itk::ProcessObject::Pointer       m_ProgressSource;
   std::string                       m_ProgressSourceDescription;

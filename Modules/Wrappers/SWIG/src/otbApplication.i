@@ -576,7 +576,7 @@ class ApplicationProxy(object):
 		    if attr in key_list:
 		      return self.GetParameterValue(attr.lower())
 		    else:
-		      raise AttributeError
+		      raise AttributeError("Parameter {} does not exist in the application.".format(attr.lower()))
 
 		def __setattr__(self, attr, value):
 		  """
@@ -593,7 +593,7 @@ class ApplicationProxy(object):
 		    if attr in key_list:
 		      self.SetParameterValue(attr.lower(), value)
 		    else:
-		      raise AttributeError
+		      raise AttributeError("Parameter {} does not exist in the application.".format(attr.lower()))
 
     }
 }

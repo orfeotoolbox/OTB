@@ -160,7 +160,7 @@ I18nCoreApplication
 
   // get the md5 of the filename
   QByteArray result =
-    QCryptographicHash::hash( fileInfo.absoluteFilePath().toAscii(), 
+    QCryptographicHash::hash( fileInfo.absoluteFilePath().toAscii(),
 			      QCryptographicHash::Md5 );
 
   // MD5 hash-code.
@@ -606,7 +606,7 @@ I18nCoreApplication
 
   // Begin from the executable path
   QDir bin_dir( QDir::cleanPath(QCoreApplication::applicationDirPath()) );
-  
+
   // Go up in the directory hierarchy until we have a candidate install prefix
   bool prefixFound = false;
   QDir prefix( bin_dir );
@@ -618,7 +618,7 @@ I18nCoreApplication
       break;
       }
     }
-  
+
   if( !prefixFound )
     throw std::runtime_error(
       ToStdString(
@@ -647,7 +647,7 @@ I18nCoreApplication
   else
     {
     m_IsRunningFromBuildDir = false;
-    
+
     // Report found install prefix
     qDebug()
       << tr( "Running from install directory '%1'." )
