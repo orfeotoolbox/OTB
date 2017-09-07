@@ -23,6 +23,7 @@
 
 
 #include "otbWrapperParameter.h"
+#include "otbWrapperStringListInterface.h"
 
 
 namespace otb
@@ -37,8 +38,13 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT ParameterList : public Parameter
+template< typename T >
+class OTBApplicationEngine_EXPORT ParameterList :
+    public Parameter,
+    public StringListInterface
 {
+//
+// Public types.
 public:
   /** Standard class typedef */
   typedef ParameterList Self;
@@ -47,28 +53,108 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef itk::ImageBase< 2 > ImageBaseType;
+  /** Custom types */
+  typedef T ParameterType;
+  typedef std::vector< typename T::Pointer > ParameterVector;
 
-  /** Defining ::New() static method */
-  itkNewMacro( Self );
+//
+// Public methods.
+public:
 
   /** RTTI support */
   itkTypeMacro( ParameterList, Parameter );
 
+  /** */
+  const ParameterVector & GetParameters() const;
 
+  /** */
+  typename ParameterVector::const_iterator begin() const;
+
+  /** */
+  typename ParameterVector::const_iterator end() const;
+
+  /** */
+  void ClearValue() override;
+
+  /** */
+  bool HasValue() const override;
+
+  /** Set file form a list of filenames */
+  void SetListFromFileName( const StringVector & ) override;
+
+  /** */
+  void InsertNullElement( std::size_t = -1 ) override;
+
+  /** Add a filename from a filename */
+  void AddFromFileName( const std::string & ) override;
+
+  /** */
+  void Insert( const std::string &, std::size_t = -1 ) override;
+
+  /** Set one specific stored filename. */
+  void SetNthFileName( std::size_t, const std::string & ) override;
+
+  /** */
+  std::size_t GetStrings( StringVector & ) const override;
+
+  /** Get the stored image filename list */
+  StringVector GetFileNameList() const override;
+
+ /** Get one specific stored image filename. */
+  const std::string & GetNthFileName( std::size_t ) const override;
+
+  /** */
+  const std::string & GetToolTip( std::size_t ) const override;
+
+  /** */
+  using StringListInterface::Erase;
+  void Erase( std::size_t start, std::size_t count ) override;
+
+  /** Retrieve number of elements */
+  std::size_t Size() const override;
+
+  /** */
+  bool IsActive( size_t ) const override;
+
+  /** */
+  void Swap( std::size_t, std::size_t ) override;
+
+//
+// Protected methods.
 protected:
   /** Constructor */
   ParameterList();
 
   /** Destructor */
-  ~ParameterList() ITK_OVERRIDE;
+  ~ParameterList() override;
 
+//
+// Private methods.
 private:
   ParameterList( const Parameter & ); // purposely not implemented
   void operator = ( const Parameter & ); // purposely not implemented
 
-}; // End class InputImage Parameter
+//
+// Protected methods.
+protected:
+  /** ParameterType::ValueType -> std::string protocol */
+  virtual
+    const std::string &
+    ToString( const typename ParameterType::Pointer & ) const = 0;
 
+  /** std::string -> ParameterType::ValueType protocol */
+  virtual
+    void
+    FromString( const typename ParameterType::Pointer &,
+		const std::string & ) const = 0;
+
+//
+// Private attributes.
+private:
+  /** */
+  ParameterVector m_Parameters;
+
+}; // End class InputImage Parameter
 
 } // End namespace Wrapper
 

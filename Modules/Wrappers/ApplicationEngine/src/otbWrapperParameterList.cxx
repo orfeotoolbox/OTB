@@ -29,18 +29,6 @@ namespace Wrapper
 {
 
 
-ParameterList
-::ParameterList()
-{
-}
-
-
-ParameterList
-::~ParameterList()
-{
-}
-
-
 } // End of namespace 'Wrapper'
 
 
