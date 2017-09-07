@@ -89,6 +89,9 @@ private:
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     MandatoryOff("il");
 
+    AddParameter( ParameterType_InputFilenameList, "fl", "Input filename list" );
+    MandatoryOff( "fl" );
+
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
     AddChoice("cl.choice1", "Choice1");
     AddChoice("cl.choice2", "Choice2");
