@@ -168,7 +168,8 @@ public:
 
   virtual void ClearValue()
   {
-    itkExceptionMacro(<<"ClearValue() method must be re-implemented by sub-classes.");
+    SetActive( false );
+    Modified();
   }
 
   /** Set/Get the root of the current parameter (direct parent) */
