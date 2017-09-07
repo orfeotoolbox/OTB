@@ -162,6 +162,7 @@ private:
     SetParameterDescription("channels.grayscale", "Display single channel as standard color image.");
     AddParameter(ParameterType_Int, "channels.grayscale.channel", "Grayscale channel");
     SetDefaultParameterInt("channels.grayscale.channel", 1);
+    SetMinimumParameterIntValue("channels.grayscale.channel", 1);
 
     AddChoice("channels.rgb", "RGB composition");
     SetParameterDescription("channels.rgb", "Select 3 bands in the input image "
@@ -170,12 +171,15 @@ private:
     AddParameter(ParameterType_Int, "channels.rgb.red", "Red Channel");
     SetParameterDescription("channels.rgb.red", "Red channel index.");
     SetDefaultParameterInt("channels.rgb.red", 1);
+    SetMinimumParameterIntValue("channels.rgb.red", 1);
     AddParameter(ParameterType_Int, "channels.rgb.green", "Green Channel");
     SetParameterDescription("channels.rgb.green", "Green channel index.");
     SetDefaultParameterInt("channels.rgb.green", 2);
+    SetMinimumParameterIntValue("channels.rgb.green", 1);
     AddParameter(ParameterType_Int, "channels.rgb.blue", "Blue Channel");
     SetParameterDescription("channels.rgb.blue", "Blue channel index.");
     SetDefaultParameterInt("channels.rgb.blue", 3);
+    SetMinimumParameterIntValue("channels.rgb.blue", 1);
 
     AddRAMParameter();
 
@@ -197,8 +201,6 @@ private:
   void GenericDoExecute()
   {
     std::string rescaleType = this->GetParameterString("type");
-
-    GetParameterImage("in")->UpdateOutputInformation();
 
     if( (rescaleType != "none") && (rescaleType != "linear") && (rescaleType != "log2") )
       {
