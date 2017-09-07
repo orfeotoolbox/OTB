@@ -48,63 +48,69 @@ public:
   typedef std::vector< std::string > StringVector;
 
   /** Set file form a list of filenames */
-  virtual bool SetListFromFileName( const StringVector & filenames ) = 0;
+  virtual void SetListFromFileName( const StringVector & ) = 0;
 
   /** Add null element to lists. */
-  virtual void AddNullElement() = 0;
+  virtual void AddNullElement();
 
   /** */
-  virtual void InsertNullElement( int = -1 ) = 0;
+  virtual void InsertNullElement( std::size_t = -1 ) = 0;
 
   /** Add a filename from a filename */
-  virtual bool AddFromFileName( const std::string & filename ) = 0;
+  virtual void AddFromFileName( const std::string & ) = 0;
 
   /** */
-  virtual bool Insert( const std::string & filename, int = -1 ) = 0;
+  virtual void Insert( const std::string & filename, std::size_t = -1 ) = 0;
 
   /** Set one specific stored filename. */
-  virtual bool SetNthFileName( const unsigned int id, const std::string & filename ) = 0;
+  virtual void SetNthFileName( std::size_t, const std::string & ) = 0;
+
+  /** */
+  virtual std::size_t GetStrings( StringVector & ) const
+  {
+    // TODO: Make method virtual! (temporary)
+    return 0;
+  }
 
   /** Get the stored filename list */
   virtual StringVector GetFileNameList() const = 0;
 
   /** Get one specific stored filename. */
-  virtual const std::string & GetNthFileName( unsigned int i ) const = 0;
+  virtual const std::string & GetNthFileName( std::size_t i ) const = 0;
 
   /** Erase one element of the list. */
-  virtual void Erase( unsigned int id ) = 0;
+  virtual void Erase( std::size_t id );
 
   /** */
-  virtual void Erase( unsigned int start, unsigned int count ) = 0;
+  virtual void Erase( std::size_t start, std::size_t count ) = 0;
 
   /** Retrieve number of elements */
-  virtual unsigned int Size() const = 0;
+  virtual std::size_t Size() const = 0;
 
   /** */
-  virtual bool IsActive( unsigned int i ) const = 0;
+  virtual bool IsActive( std::size_t ) const = 0;
 
   /** */
-  virtual const std::string & GetToolTip( unsigned int ) const = 0;
+  virtual const std::string & GetToolTip( std::size_t ) const = 0;
 
   /** */
-  virtual void Swap( unsigned int, unsigned int ) = 0;
+  virtual void Swap( std::size_t, std::size_t ) = 0;
 
   /** */
-  virtual Role GetDirection( unsigned int ) const = 0;
+  virtual Role GetDirection( std::size_t ) const = 0;
 
   /** */
   virtual Role GetDirection() const = 0;
 
   /** */
-  virtual const std::string & GetFilenameFilter( unsigned int ) const = 0;
+  virtual const std::string & GetFilenameFilter( std::size_t ) const;
 
   /** */
-  virtual const std::string & GetFilenameFilter() const = 0;
+  virtual const std::string & GetFilenameFilter() const;
 
 protected:
   /** Constructor */
   StringListInterface() {};
-
 
 private:
 

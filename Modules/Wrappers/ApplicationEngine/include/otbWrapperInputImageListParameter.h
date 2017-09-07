@@ -57,28 +57,25 @@ public:
   itkTypeMacro( InputImageListParameter, Parameter );
 
   /** Set image form a list of filename */
-  bool SetListFromFileName( const StringVector & filenames ) ITK_OVERRIDE;
-
-  /** Add null element to lists. */
-  void AddNullElement() ITK_OVERRIDE;
+  void SetListFromFileName( const StringVector & filenames ) ITK_OVERRIDE;
 
   /** */
-  void InsertNullElement( int = -1 ) ITK_OVERRIDE;
+  void InsertNullElement( std::size_t = -1 ) ITK_OVERRIDE;
 
   /** Add an image from a filename */
-  bool AddFromFileName( const std::string & filename ) ITK_OVERRIDE;
+  void AddFromFileName( const std::string & filename ) ITK_OVERRIDE;
 
   /** */
-  bool Insert( const std::string &, int = -1 ) ITK_OVERRIDE;
+  void Insert( const std::string &, std::size_t = -1 ) ITK_OVERRIDE;
 
   /** Set one specific stored image filename. */
-  bool SetNthFileName( const unsigned int id, const std::string & filename ) ITK_OVERRIDE;
+  void SetNthFileName( std::size_t, const std::string & ) ITK_OVERRIDE;
 
   /** Get the stored image filename list */
   StringVector GetFileNameList() const ITK_OVERRIDE;
 
  /** Get one specific stored image filename. */
-  const std::string & GetNthFileName( unsigned int i ) const ITK_OVERRIDE;
+  const std::string & GetNthFileName( std::size_t i ) const ITK_OVERRIDE;
 
   /** Get one list of the stored image. WARNING : if the parameter list changes,
    *  the returned image list may become obsolete. You should call
@@ -92,7 +89,7 @@ public:
   void SetNthImage( unsigned int i, ImageBaseType * img );
 
   /** */
-  const std::string & GetToolTip( unsigned int ) const ITK_OVERRIDE;
+  const std::string & GetToolTip( std::size_t ) const ITK_OVERRIDE;
 
   /** Set the list of image. */
   void SetImageList( FloatVectorImageListType * imList );
@@ -103,32 +100,30 @@ public:
   /** */
   bool HasValue() const ITK_OVERRIDE;
 
-  /** Erase one element of the list. */
-  void Erase( unsigned int id ) ITK_OVERRIDE;
-
   /** */
-  void Erase( unsigned int start, unsigned int count ) ITK_OVERRIDE;
+  using StringListInterface::Erase;
+  void Erase( std::size_t start, std::size_t count ) ITK_OVERRIDE;
 
   /** Clear all the list. */
   void ClearValue() ITK_OVERRIDE;
 
   /** Retrieve number of elements */
-  unsigned int Size() const ITK_OVERRIDE;
+  std::size_t Size() const ITK_OVERRIDE;
 
   /** */
-  bool IsActive( unsigned int ) const ITK_OVERRIDE;
+  bool IsActive( size_t ) const ITK_OVERRIDE;
 
   /** */
-  void Swap( unsigned int, unsigned int ) ITK_OVERRIDE;
+  void Swap( std::size_t, std::size_t ) ITK_OVERRIDE;
 
   /** */
-  Role GetDirection( unsigned int ) const ITK_OVERRIDE;
+  Role GetDirection( std::size_t ) const ITK_OVERRIDE;
 
   /** */
   Role GetDirection() const ITK_OVERRIDE;
 
   /** */
-  const std::string & GetFilenameFilter( unsigned int ) const ITK_OVERRIDE;
+  const std::string & GetFilenameFilter( std::size_t ) const ITK_OVERRIDE;
 
   /** */
   const std::string & GetFilenameFilter() const ITK_OVERRIDE;
@@ -140,7 +135,8 @@ protected:
   /** Destructor */
   ~InputImageListParameter() ITK_OVERRIDE;
 
-
+//
+// Private attributes.
 private:
   InputImageListParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented

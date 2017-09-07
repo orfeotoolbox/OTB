@@ -25,8 +25,45 @@
 namespace otb
 {
 
+
 namespace Wrapper
 {
+
+const std::string
+NULL_STRING;
+
+
+void
+StringListInterface
+::AddNullElement()
+{
+  InsertNullElement();
+}
+
+
+const std::string &
+StringListInterface
+::GetFilenameFilter( std::size_t ) const
+{
+  return GetFilenameFilter();
+}
+
+
+const std::string &
+StringListInterface
+::GetFilenameFilter() const
+{
+  return NULL_STRING;
+}
+
+
+void
+StringListInterface
+::Erase( std::size_t id )
+{
+  Erase( id, 1 );
+}
+
 
 } // End of Namespace 'Wrapper'
 

@@ -49,8 +49,9 @@ InputImageListParameter::~InputImageListParameter()
 {
 }
 
-bool
-InputImageListParameter::SetListFromFileName(const std::vector<std::string> & filenames)
+void
+InputImageListParameter
+::SetListFromFileName( const StringVector & filenames )
 {
   // First clear previous file chosen
   this->ClearValue();
@@ -74,21 +75,12 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
 
   this->Modified();
   SetActive(true);
-  return true;
 }
 
 
 void
 InputImageListParameter
-::AddNullElement()
-{
-  InsertNullElement();
-}
-
-
-void
-InputImageListParameter
-::InsertNullElement( int index )
+::InsertNullElement( std::size_t index )
 {
   InputImageParameterVectorType::iterator it1( m_InputImageParameterVector.begin() );
 
@@ -102,36 +94,35 @@ InputImageListParameter
   Modified();
 }
 
-bool
+
+void
 InputImageListParameter
-::Insert( const std::string & filename, int index )
+::Insert( const std::string & filename, std::size_t index )
 {
-  InputImageParameter::Pointer image(
+  InputImageParameter::Pointer parameter(
     InputImageParameter::New()
   );
 
-  image->SetDescription( "Image filename" );
+  parameter->SetDescription( "Image filename" );
 
   if( !filename.empty() )
-    image->SetFromFileName( filename );
+    parameter->SetFromFileName( filename );
 
   m_InputImageParameterVector.insert(
     index<0
     ? m_InputImageParameterVector.end()
     : m_InputImageParameterVector.begin() + index,
-    image
+    parameter
   );
 
 
   SetActive( true );
 
   Modified();
-
-  return true;
 }
 
 
-bool
+void
 InputImageListParameter::AddFromFileName(const std::string & filename)
 {
   // File existence checked by the reader
@@ -146,15 +137,13 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
 
     this->Modified();
     SetActive(true);
-    return true;
     }
-
-  return false;
 }
 
-bool
+void
 InputImageListParameter
-::SetNthFileName( const unsigned int id, const std::string & filename )
+::SetNthFileName( std::size_t id,
+		  const std::string & filename )
 {
 #if 0
   if( m_InputImageParameterVector.size()<id )
@@ -190,15 +179,17 @@ InputImageListParameter
     SetActive( true );
     }
 
-  return m_InputImageParameterVector[ id ]->SetFromFileName( filename );
+  m_InputImageParameterVector[ id ]->SetFromFileName( filename );
+
 #endif
 }
 
 
-std::vector<std::string>
-InputImageListParameter::GetFileNameList() const
+InputImageListParameter::StringVector
+InputImageListParameter
+::GetFileNameList() const
 {
-  std::vector<std::string> filenames;
+  StringVector filenames;
 
   for(InputImageParameterVectorType::const_iterator it = m_InputImageParameterVector.begin();
       it!=m_InputImageParameterVector.end();++it)
@@ -211,7 +202,8 @@ InputImageListParameter::GetFileNameList() const
 
 
 const std::string &
-InputImageListParameter::GetNthFileName( unsigned int i ) const
+InputImageListParameter
+::GetNthFileName( std::size_t i ) const
 {
     if(m_InputImageParameterVector.size()<i)
       {
@@ -329,22 +321,8 @@ InputImageListParameter::HasValue() const
 
 
 void
-InputImageListParameter::Erase( unsigned int id )
-{
-  if(this->Size()<id)
-    {
-    itkExceptionMacro(<< "No image "<<id<<". Only "<<this->Size()<<" images available.");
-    }
-
-  m_InputImageParameterVector.erase(m_InputImageParameterVector.begin()+id);
-
-  this->Modified();
-}
-
-
-void
 InputImageListParameter
-::Erase( unsigned int start, unsigned int count )
+::Erase( std::size_t start, std::size_t count )
 {
   assert( start<m_InputImageParameterVector.size() );
   assert( start+count<=m_InputImageParameterVector.size() );
@@ -358,8 +336,9 @@ InputImageListParameter
 }
 
 
-unsigned int
-InputImageListParameter::Size() const
+std::size_t
+InputImageListParameter
+::Size() const
 {
   return m_InputImageParameterVector.size();
 }
@@ -377,7 +356,7 @@ InputImageListParameter::ClearValue()
 
 bool
 InputImageListParameter
-::IsActive( unsigned int i ) const
+::IsActive( std::size_t i ) const
 {
   assert( i<m_InputImageParameterVector.size() );
   assert( !m_InputImageParameterVector[ i ].IsNull() );
@@ -388,7 +367,7 @@ InputImageListParameter
 
 const std::string &
 InputImageListParameter
-::GetToolTip( unsigned int i ) const
+::GetToolTip( std::size_t i ) const
 {
   assert( i<m_InputImageParameterVector.size() );
   assert( !m_InputImageParameterVector[ i ].IsNull() );
@@ -399,7 +378,7 @@ InputImageListParameter
 
 void
 InputImageListParameter
-::Swap( unsigned int i1, unsigned int i2 )
+::Swap( std::size_t i1, std::size_t i2 )
 {
   assert( !m_InputImageParameterVector.empty() );
 
@@ -420,7 +399,7 @@ InputImageListParameter
 
 Role
 InputImageListParameter
-::GetDirection( unsigned int ) const
+::GetDirection( std::size_t ) const
 {
 #if 0
   assert( i<m_InputImageParameterVector.size() );
@@ -447,7 +426,7 @@ InputImageListParameter
 
 const std::string &
 InputImageListParameter
-::GetFilenameFilter( unsigned int ) const
+::GetFilenameFilter( std::size_t ) const
 {
   return GetFilenameFilter();
 }
