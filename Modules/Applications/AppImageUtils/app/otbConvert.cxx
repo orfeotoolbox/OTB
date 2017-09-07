@@ -156,13 +156,14 @@ private:
       "of the output image. There are 3 modes, the available choices are:");
 
     AddChoice("channels.all", "Default mode");
-    SetParameterDescription("channels.all", "Select all bands in the input image, (1,1,1).");
+    SetParameterDescription("channels.all", "Select all bands in the input image, (1,...,n).");
 
-    AddChoice("channels.grayscale", "Display mono image as standard color image.");
+    AddChoice("channels.grayscale", "Grayscale mode");
+    SetParameterDescription("channels.grayscale", "Display single channel as standard color image.");
     AddParameter(ParameterType_Int, "channels.grayscale.channel", "Grayscale channel");
     SetDefaultParameterInt("channels.grayscale.channel", 1);
 
-    AddChoice("channels.rgb", "Channels selection RGB");
+    AddChoice("channels.rgb", "RGB composition");
     SetParameterDescription("channels.rgb", "Select 3 bands in the input image "
       "(multi-bands), by default (1,2,3).");
 
