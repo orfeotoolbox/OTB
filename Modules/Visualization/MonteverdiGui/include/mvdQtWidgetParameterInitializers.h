@@ -763,13 +763,29 @@ SetupForFilenameDrop( W* widget, const char* text )
 
   lineEdit->installEventFilter( eventFilter );
 
-  QObject::connect(
-    eventFilter,
-    SIGNAL( FilenameDropped( const QString& ) ),
-    // to:
-    lineEdit,
-    SLOT( setText( const QString& ) )
-  );
+  // BUG : temporary fix for drag & drop in InputImageParameter
+  // in the future, all "filename" parameters should have the same behaviour
+  if (dynamic_cast<otb::Wrapper::QtWidgetInputImageParameter*>(widget) ||
+      dynamic_cast<otb::Wrapper::QtFileSelectionWidget*>(widget))
+    {
+    QObject::connect(
+      eventFilter,
+      SIGNAL( FilenameDropped( const QString& ) ),
+      // to:
+      widget,
+      SLOT( SetFileName( const QString& ) )
+    );
+    }
+  else
+    {
+    QObject::connect(
+      eventFilter,
+      SIGNAL( FilenameDropped( const QString& ) ),
+      // to:
+      lineEdit,
+      SLOT( setText( const QString& ) )
+    );
+    }
 }
 
 /*****************************************************************************/
