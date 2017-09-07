@@ -23,185 +23,104 @@
 
 namespace otb
 {
+
+
 namespace Wrapper
 {
 
-InputFilenameListParameter::InputFilenameListParameter()
+
+const std::string FILENAME_FILTER(
+  "All files (*);;"
+  "CSV files (.csv);;"
+  "Text files (.txt);;"
+  "XML files (.xml)"
+);
+
+
+/*****************************************************************************/
+InputFilenameListParameter
+::InputFilenameListParameter()
 {
-  this->SetName("Input Filename List");
-  this->SetKey("inList");
-  m_FilenameList = StringParameterListType::New();
-}
-
-InputFilenameListParameter::~InputFilenameListParameter()
-{
-}
-
-bool
-InputFilenameListParameter::SetListFromFileName(const std::vector<std::string> & filenames)
-{
-  // First clear previous file chosen
-  this->ClearValue();
-
-  for(unsigned int i=0; i<filenames.size(); i++)
-    {
-    std::string filename = filenames[i];
-    // File existence checked by the reader
-    if (!filename.empty())
-      {
-      StringParameter::Pointer strParameter = StringParameter::New();
-      strParameter->SetValue(filename);
-      strParameter->HasValue();
-
-      // everything went fine, store the object reference
-      m_FilenameList->PushBack(strParameter);
-      }
-    }
-
-  SetActive(true);
-  this->Modified();
-  return true;
+  SetName( "Input Filename List" );
+  SetKey( "inList" );
 }
 
 
+/*****************************************************************************/
+InputFilenameListParameter
+::~InputFilenameListParameter()
+{
+}
+
+
+/*****************************************************************************/
+Role
+InputFilenameListParameter
+::GetDirection( std::size_t ) const
+{
+#if 0
+  assert( i<m_FilenameList->Size() );
+  assert( !m_FilenameList->GetNthElement( i ).IsNull() );
+
+  return m_FilenameList->GetNthElement( i )->GetRole();
+
+#else
+  // otb::Parameter::GetRole() does not necessarily stand for
+  // direction of parameter.
+  return GetDirection();
+
+#endif
+}
+
+
+/*****************************************************************************/
+Role
+InputFilenameListParameter
+::GetDirection() const
+{
+  return Role_Input;
+}
+
+
+/*****************************************************************************/
+const std::string &
+InputFilenameListParameter
+::GetFilenameFilter( std::size_t ) const
+{
+  return GetFilenameFilter();
+}
+
+
+/*****************************************************************************/
+const std::string &
+InputFilenameListParameter
+::GetFilenameFilter() const
+{
+  return FILENAME_FILTER;
+}
+
+
+/*****************************************************************************/
+const std::string &
+InputFilenameListParameter
+::ToString( const ParameterType::Pointer & p ) const
+{
+  assert( !p.IsNull() );
+
+  return p->GetValue();
+}
+
+/*****************************************************************************/
 void
-InputFilenameListParameter::AddNullElement()
+InputFilenameListParameter
+::FromString( const ParameterType::Pointer & p,
+	      const std::string & s ) const
 {
-  m_FilenameList->PushBack(ITK_NULLPTR);
-  SetActive(false);
-  this->Modified();
+  assert( !p.IsNull() );
+
+  p->SetValue( s );
 }
 
-bool
-InputFilenameListParameter::AddFromFileName(const std::string & filename)
-{
-  // File existence checked by the reader
-  if (!filename.empty())
-    {
-    StringParameter::Pointer strParameter = StringParameter::New();
-    strParameter->SetValue(filename);
-    strParameter->HasValue();
-
-    // everything went fine, store the object references
-    m_FilenameList->PushBack(strParameter);
-    SetActive(true);
-    this->Modified();
-    return true;
-    }
-
-  return false;
 }
 
-bool
-InputFilenameListParameter::SetNthFileName( const unsigned int id, const std::string & filename )
-{
-  if( m_FilenameList->Size()<id )
-    {
-    itkExceptionMacro(<< "No file "<<id<<". Only "<<m_FilenameList->Size()<<" filenames available.");
-    }
-
-  // File existence checked by the reader
-  if (!filename.empty())
-    {
-    StringParameter::Pointer strParameter = StringParameter::New();
-    strParameter->SetValue(filename);
-    strParameter->HasValue();
-
-    m_FilenameList->SetNthElement(id, strParameter);
-    SetActive(true);
-    this->Modified();
-    return true;
-    }
-
-  return false;
 }
-
-
-std::vector<std::string>
-InputFilenameListParameter::GetFileNameList() const
-{
-  if (m_FilenameList)
-    {
-    std::vector<std::string> filenames;
-    for(unsigned int i=0; i<m_FilenameList->Size(); i++)
-      {
-      if( m_FilenameList->GetNthElement(i) )
-        filenames.push_back( m_FilenameList->GetNthElement(i)->GetValue() );
-      }
-
-    return filenames;
-    }
-
-  itkExceptionMacro(<< "No filename value");
-}
-
-
-std::string
-InputFilenameListParameter::GetNthFileName( unsigned int i ) const
-{
-  if (m_FilenameList)
-    {
-    if(m_FilenameList->Size()<i)
-      {
-      itkExceptionMacro(<< "No file "<<i<<". Only "<<m_FilenameList->Size()<<" filenames available.");
-      }
-
-    return m_FilenameList->GetNthElement(i)->GetValue();
-    }
-
-  itkExceptionMacro(<< "No filename value");
-}
-
-
-InputFilenameListParameter::StringParameterListPointerType
-InputFilenameListParameter::GetFileList() const
-{
-  return m_FilenameList;
-}
-
-bool
-InputFilenameListParameter::HasValue() const
-{
-  if(m_FilenameList->Size() == 0)
-    {
-    return false;
-    }
-
-  bool res(true);
-  unsigned int i(0);
-  while(i < m_FilenameList->Size() && res == true)
-    {
-    res = m_FilenameList->GetNthElement(i).IsNotNull();
-    i++;
-    }
-
-  return res;
-}
-
-
-void
-InputFilenameListParameter::Erase( unsigned int id )
-{
-  if(m_FilenameList->Size()<id)
-    {
-    itkExceptionMacro(<< "No file "<<id<<". Only "<<m_FilenameList->Size()<<" filenames available.");
-    }
-
-  m_FilenameList->Erase( id );
-
-  this->Modified();
-}
-
-void
-InputFilenameListParameter::ClearValue()
-{
-  m_FilenameList->Clear();
-
-  SetActive(false);
-  this->Modified();
-}
-
-
-}
-}
-
