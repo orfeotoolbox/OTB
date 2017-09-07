@@ -26,6 +26,7 @@
 
 namespace otb
 {
+
 namespace Wrapper
 {
 
