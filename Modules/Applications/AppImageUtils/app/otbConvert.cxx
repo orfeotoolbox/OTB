@@ -170,15 +170,12 @@ private:
 
     AddParameter(ParameterType_Int, "channels.rgb.red", "Red Channel");
     SetParameterDescription("channels.rgb.red", "Red channel index.");
-    SetDefaultParameterInt("channels.rgb.red", 1);
     SetMinimumParameterIntValue("channels.rgb.red", 1);
     AddParameter(ParameterType_Int, "channels.rgb.green", "Green Channel");
     SetParameterDescription("channels.rgb.green", "Green channel index.");
-    SetDefaultParameterInt("channels.rgb.green", 2);
     SetMinimumParameterIntValue("channels.rgb.green", 1);
     AddParameter(ParameterType_Int, "channels.rgb.blue", "Blue Channel");
     SetParameterDescription("channels.rgb.blue", "Blue channel index.");
-    SetDefaultParameterInt("channels.rgb.blue", 3);
     SetMinimumParameterIntValue("channels.rgb.blue", 1);
 
     AddRAMParameter();
@@ -194,7 +191,27 @@ private:
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    // Nothing to do here for the parameters : all are independent
+    // Read information
+    typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+    ImageMetadataInterfaceType::Pointer metadataInterface = 
+      ImageMetadataInterfaceFactory::CreateIMI(GetParameterImage("in")->GetMetaDataDictionary());
+
+    int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+    SetMaximumParameterIntValue("channels.grayscale.channel", nbBand);
+    SetMaximumParameterIntValue("channels.rgb.red", nbBand);
+    SetMaximumParameterIntValue("channels.rgb.green", nbBand);
+    SetMaximumParameterIntValue("channels.rgb.blue", nbBand);
+
+    if (nbBand > 1)
+    {
+      // get band index : Red/Green/Blue
+      int bandRed = metadataInterface->GetDefaultDisplay()[0];
+      int bandGreen = metadataInterface->GetDefaultDisplay()[1];
+      int bandBlue = metadataInterface->GetDefaultDisplay()[2];
+      SetDefaultParameterInt("channels.rgb.red", bandRed);
+      SetDefaultParameterInt("channels.rgb.green", bandGreen);
+      SetDefaultParameterInt("channels.rgb.blue", bandBlue);
+    }
   }
 
   template<class TImageType>
