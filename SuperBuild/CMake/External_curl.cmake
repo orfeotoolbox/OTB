@@ -46,8 +46,8 @@ endif()
 
 ExternalProject_Add(CURL
   PREFIX CURL
-  URL "http://curl.haxx.se/download/curl-7.40.0.tar.gz"
-  URL_MD5 58943642ea0ed050ab0431ea1caf3a6f
+  URL "http://curl.haxx.se/download/curl-7.54.1.tar.gz"
+  URL_MD5 21a6e5658fd55103a90b11de7b2a8a8c
   BINARY_DIR ${CURL_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -98,7 +98,7 @@ ExternalProject_Add(CURL
   LOG_INSTALL 1
   )
 
-SUPERBUILD_PATCH_SOURCE(CURL)
+# SUPERBUILD_PATCH_SOURCE(CURL)
 
 set(_SB_CURL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
