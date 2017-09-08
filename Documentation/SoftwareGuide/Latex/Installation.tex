@@ -128,7 +128,7 @@ See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \hline
 \textbf{Qt} & \url{http://qt-project.org} & no  & 4 \\
 \hline
-\textbf{QWT} & \url{http://qwt.sourceforge.net} & no  & 5 \\
+\textbf{QWT} & \url{http://qwt.sourceforge.net} & no  & 6 \\
 \hline
 \textbf{Shark} & \url{http://image.diku.dk/shark/} & no & 3.1 \\
 \hline
@@ -404,15 +404,23 @@ $ make install
 \hline
 \textbf{OTB\_USE\_QT4} & OTBQt4 & OTBQtWidget \\
 \hline
-\textbf{OTB\_USE\_OPENCV} & OTBOpenCV & \\
+\textbf{OTB\_USE\_QWT} & OTBQwt & OTBMonteverdiGUI OTBMonteverdi \\
 \hline
-\textbf{OTB\_USE\_MUPARSERX} & OTBMuParserX & OTBMathParserX OTBAppMathParserX \\
+\textbf{OTB\_USE\_GLEW} & OTBGlew & OTBIce OTBMonteverdiGUI OTBMonteverdi \\
+\hline
+\textbf{OTB\_USE\_OPENGL} & OTBOpenGL & OTBIce OTBMonteverdiGUI OTBMonteverdi \\
 \hline
 \textbf{OTB\_USE\_CURL} & OTBCurl & \\
 \hline
 \textbf{OTB\_USE\_MUPARSER} & OTBMuParser & OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBAppClassification OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBAppSegmentation OTBMeanShift OTBAppSegmentation OTBMeanShift OTBAppSegmentation \\
 \hline
-\textbf{OTB\_USE\_LIBSVM} & OTBLibSVM & OTBSVMLearning \\
+\textbf{OTB\_USE\_MUPARSERX} & OTBMuParserX & OTBMathParserX OTBAppMathParserX \\
+\hline
+\textbf{OTB\_USE\_LIBSVM} & OTBLibSVM & optional for OTBSupervised OTBAppClassification \\
+\hline
+\textbf{OTB\_USE\_OPENCV} & OTBOpenCV & optional for OTBSupervised OTBAppClassification \\
+\hline
+\textbf{OTB\_USE\_SHARK} & OTBShark & optional for OTBSupervised OTBAppClassification \\
 \hline
 \textbf{OTB\_USE\_MAPNIK} & OTBMapnik & OTBVectorDataRendering \\
 \hline
