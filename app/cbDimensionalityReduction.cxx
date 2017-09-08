@@ -118,7 +118,7 @@ private:
     // Documentation
     SetDocName("DimensionalityReduction");
     SetDocLongDescription("This application reduces the dimension of an input"
-                          " image, based on a dimensionality reduction model file produced by"
+                          " image, based on a machine learning model file produced by"
                           " the DimensionalityReductionTrainer application. Pixels of the "
                           "output image will contain the reduced values from"
                           "the model. The input pixels"
@@ -129,8 +129,8 @@ private:
     SetDocLimitations("The input image must contain the feature bands used for"
                       " the model training. "
                       "If a statistics file was used during training by the "
-                      "TrainRegression, it is mandatory to use the same "
-                      "statistics file for prediction.");
+                      "Training application, it is mandatory to use the same "
+                      "statistics file for reduction.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("DimensionalityReductionTrainer, ComputeImagesStatistics");
 
