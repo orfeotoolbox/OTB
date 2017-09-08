@@ -46,7 +46,7 @@ using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTa
 */
 
 template <class TInputValue, class TTargetValue>
-using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TanhNeuron>  ;
+using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::LogisticNeuron>  ;
 
 
 template <class TInputValue, class TTargetValue>

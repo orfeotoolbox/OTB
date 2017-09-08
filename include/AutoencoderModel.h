@@ -36,6 +36,7 @@ public:
 	typedef typename Superclass::ConfidenceListSampleType      		ConfidenceListSampleType;
 
 	/// Neural network related typedefs
+	//typedef shark::Autoencoder<NeuronType,shark::LinearNeuron> OutAutoencoderType;
 	typedef shark::Autoencoder<NeuronType,shark::LinearNeuron> OutAutoencoderType;
 	typedef shark::Autoencoder<NeuronType,NeuronType> AutoencoderType;
 	typedef shark::FFNet<NeuronType,shark::LinearNeuron> NetworkType;
