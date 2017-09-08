@@ -55,12 +55,9 @@ find_library( SHARK_LIBRARY
 
 mark_as_advanced( SHARK_INCLUDE_DIR  SHARK_LIBRARY )
 
-find_package( Boost 1.48.0 REQUIRED QUIET COMPONENTS
-	system date_time filesystem
-	program_options serialization thread
-	unit_test_framework
-	)
-
+find_package( Boost 1.48.0 REQUIRED QUIET
+  COMPONENTS serialization
+  )
 if(NOT Boost_FOUND)
   message(FATAL_ERROR "Please make sure Boost 1.48.0 is installed on your system")
 endif()
@@ -107,28 +104,12 @@ string(REGEX MATCH
   "#define.SHARK_USE_OPENMP"
   SHARK_USE_OPENMP_matched "${SHARK_H_CONTENTS}")
 
-#this variable is added in cache but not used now
-# you can use it to see if shark installation has openMP
-# later if needed in other places..
-set(SHARK_USE_OPENMP FALSE CACHE BOOL "shark is built with OpenMP")
 if(SHARK_USE_OPENMP_matched)
-  set(SHARK_USE_OPENMP TRUE CACHE BOOL "shark is built with OpenMP" FORCE)
+  if(NOT OTB_USE_OPENMP)
+    message(WARNING "Shark library is built with OpenMP and you have OTB_USE_OPENMP set to OFF.")
+  endif()
 endif()
 
-if(SHARK_USE_OPENMP)
-  message(STATUS "Shark is built with OpenMP: SHARK_USE_OPENMP = TRUE")
-  find_package(OpenMP REQUIRED QUIET)
-  if(OPENMP_FOUND)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-  else()
-    message(FATAL_ERROR "Your shark libraries are compiled with it OpenMP")
-    set(SHARK_FOUND FALSE)
-  endif()
-else()
-  message(STATUS "Shark is built without OpenMP: SHARK_USE_OPENMP = FALSE")
-endif()
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Shark
   REQUIRED_VARS SHARK_LIBRARY SHARK_INCLUDE_DIR

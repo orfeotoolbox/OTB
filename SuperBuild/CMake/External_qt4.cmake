@@ -33,10 +33,6 @@ SETUP_SUPERBUILD(QT4)
 
 set(QT4_SB_ENABLE_GTK OFF CACHE INTERNAL "Enable GTK+ style with qt using -gtkstlye. Default is OFF")
 
-if(NOT DEFINED git_protocol)
-  set(git_protocol "git")
-endif()
-
 #NOTE: make sure your superbuild install directory does not contain any
 #Qt files from previous install of superbuild QT.
 # declare dependencies
@@ -136,20 +132,6 @@ add_custom_target(QT4-uninstall
     LOG_BUILD 1
     LOG_INSTALL 1    
     )
-
-
- if(MSVC)
-   #Q: why this copy here?.
-   #RK: Because QT4 sucks with qmake -query.
-   ExternalProject_Add_Step(QT4 patches
-     COMMAND ${CMAKE_COMMAND} -E copy_directory
-     ${QT4_SB_SRC}/mkspecs ${SB_INSTALL_PREFIX}/mkspecs
-     COMMAND ${CMAKE_COMMAND} -E copy
-     ${CMAKE_SOURCE_DIR}/patches/QT4/qjpeghandler.pri
-     ${QT4_SB_SRC}/src/gui/image/
-     DEPENDEES patch update
-     DEPENDERS configure )
-endif()
 
 SUPERBUILD_PATCH_SOURCE(QT4)
 

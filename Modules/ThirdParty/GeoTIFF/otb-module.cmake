@@ -27,4 +27,6 @@ otb_module(OTBGeoTIFF
     
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  EXCLUDE_FROM_DEFAULT
   )

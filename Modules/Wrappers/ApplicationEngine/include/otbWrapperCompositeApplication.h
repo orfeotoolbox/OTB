@@ -149,10 +149,6 @@ private:
 
   InternalAppContainer m_AppContainer;
 
-  itk::StdStreamLogOutput::Pointer  m_LogOutput;
-
-  std::ostringstream m_Oss;
-
   AddProcessCommandType::Pointer    m_AddProcessCommand;
 };
 

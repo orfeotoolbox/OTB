@@ -31,54 +31,70 @@ void TrainVectorBase::DoInit()
 {
   // Common Parameters for all Learning Application
   AddParameter( ParameterType_Group, "io", "Input and output data" );
-  SetParameterDescription( "io", "This group of parameters allows setting input and output data." );
+  SetParameterDescription( "io", 
+    "This group of parameters allows setting input and output data." );
 
   AddParameter( ParameterType_InputVectorDataList, "io.vd", "Input Vector Data" );
   SetParameterDescription( "io.vd",
-                           "Input geometries used for training (note : all geometries from the layer will be used)" );
+    "Input geometries used for training (note : all geometries from the layer will be used)" );
 
   AddParameter( ParameterType_InputFilename, "io.stats", "Input XML image statistics file" );
   MandatoryOff( "io.stats" );
-  SetParameterDescription( "io.stats", "XML file containing mean and variance of each feature." );
+  SetParameterDescription( "io.stats", 
+    "XML file containing mean and variance of each feature." );
 
   AddParameter( ParameterType_OutputFilename, "io.out", "Output model" );
-  SetParameterDescription( "io.out", "Output file containing the model estimated (.txt format)." );
+  SetParameterDescription( "io.out", 
+    "Output file containing the model estimated (.txt format)." );
 
   AddParameter( ParameterType_Int, "layer", "Layer Index" );
-  SetParameterDescription( "layer", "Index of the layer to use in the input vector file." );
+  SetParameterDescription( "layer", 
+    "Index of the layer to use in the input vector file." );
   MandatoryOff( "layer" );
   SetDefaultParameterInt( "layer", 0 );
 
   AddParameter(ParameterType_ListView,  "feat", "Field names for training features.");
-  SetParameterDescription("feat","List of field names in the input vector data to be used as features for training.");
+  SetParameterDescription("feat",
+    "List of field names in the input vector data to be used as features for training.");
 
   // Add validation data used to compute confusion matrix or contingency table
   AddParameter( ParameterType_Group, "valid", "Validation data" );
-  SetParameterDescription( "valid", "This group of parameters defines validation data." );
+  SetParameterDescription( "valid", 
+    "This group of parameters defines validation data." );
 
-  AddParameter( ParameterType_InputVectorDataList, "valid.vd", "Validation Vector Data" );
+  AddParameter( ParameterType_InputVectorDataList, "valid.vd", 
+    "Validation Vector Data" );
   SetParameterDescription( "valid.vd", "Geometries used for validation "
           "(must contain the same fields used for training, all geometries from the layer will be used)" );
   MandatoryOff( "valid.vd" );
 
   AddParameter( ParameterType_Int, "valid.layer", "Layer Index" );
-  SetParameterDescription( "valid.layer", "Index of the layer to use in the validation vector file." );
+  SetParameterDescription( "valid.layer", 
+    "Index of the layer to use in the validation vector file." );
   MandatoryOff( "valid.layer" );
   SetDefaultParameterInt( "valid.layer", 0 );
 
   // Add class field if we used validation
-  AddParameter( ParameterType_ListView, "cfield", "Field containing the class integer label for supervision" );
-  SetParameterDescription( "cfield", "Field containing the class id for supervision. "
-          "The values in this field shall be cast into integers. "
-          "Only geometries with this field available will be taken into account." );
+  AddParameter( ParameterType_ListView, "cfield",
+    "Field containing the class integer label for supervision" );
+  SetParameterDescription( "cfield", 
+    "Field containing the class id for supervision. "
+    "The values in this field shall be cast into integers. "
+    "Only geometries with this field available will be taken into account." );
   SetListViewSingleSelectionMode( "cfield", true );
 
   // Add a new parameter to compute confusion matrix / contingency table
-  AddParameter( ParameterType_OutputFilename, "io.confmatout", "Output confusion matrix or contingency table" );
-  SetParameterDescription( "io.confmatout", "Output file containing the confusion matrix or contingency table (.csv format)."
-          "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output." );
+  AddParameter( ParameterType_OutputFilename, "io.confmatout", 
+    "Output confusion matrix or contingency table" );
+  SetParameterDescription( "io.confmatout", 
+    "Output file containing the confusion matrix or contingency table (.csv format)."
+    "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output." );
   MandatoryOff( "io.confmatout" );
 
+  AddParameter(ParameterType_Empty, "v", "Verbose mode");
+  EnableParameter("v");
+  SetParameterDescription("v", "Verbose mode, display the contingency table result.");
+  MandatoryOff("v");
 
   // Doc example parameter settings
   SetDocExampleParameterValue( "io.vd", "vectorData.shp" );
