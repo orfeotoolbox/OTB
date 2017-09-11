@@ -260,7 +260,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
       }
 
       // Close
-      OGRFree(wkt);
+      CPLFree(wkt);
       GDALClose(VRTOutput);
     }
   }
