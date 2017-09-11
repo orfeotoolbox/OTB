@@ -35,15 +35,6 @@ enum
 
 const std::string SRTMServerPath = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 
-const char* USGSContinentDir[] = {"Africa",
-                                  "Australia",
-                                  "Eurasia",
-                                  "Islands",
-                                  "North_America",
-                                  "South_America"};
-
-const std::vector<std::string> USGSContinentList(USGSContinentDir, USGSContinentDir + sizeof(USGSContinentDir)/sizeof(USGSContinentDir[0]));
-
 const std::string HGTZIPExtension = ".hgt.zip";
 const std::string HGTExtension = ".hgt";
 const std::string ZIPExtension = ".zip";
@@ -64,34 +55,26 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::GenericRSTransform<>     RSTransformType;
+  using RSTransformType = otb::GenericRSTransform<>;
+  using IndexType = FloatVectorImageType::IndexType;
+  using PointType = FloatVectorImageType::PointType;
+  using SizeType = FloatVectorImageType::SizeType;
+  using SpacingType = FloatVectorImageType::SpacingType;
 
-  typedef FloatVectorImageType::IndexType    IndexType;
-  typedef FloatVectorImageType::PointType    PointType;
-  typedef FloatVectorImageType::SizeType     SizeType;
-  typedef FloatVectorImageType::SpacingType  SpacingType;
   /** Standard macro */
   itkNewMacro(Self);
 
   itkTypeMacro(DownloadSRTMTiles, otb::Application);
 
-private:
-
-  typedef enum {
-    SRTM_Unknown = 0,
-    SRTM_Africa,
-    SRTM_Australia,
-    SRTM_Eurasia,
-    SRTM_Islands,
-    SRTM_North_America,
-    SRTM_South_America
-  } SRTMContinent;
-
-  typedef struct {
+  typedef struct
+    {
     int Lon : 9;
     int Lat : 8;
     unsigned int Conti : 3;
-  } SRTMTileId;
+    } SRTMTileId;
+
+private:
+  DownloadSRTMTiles();
 
   class TileIdComparator
     {
@@ -123,17 +106,20 @@ private:
     {
     switch (id.Conti)
       {
-      case SRTM_Africa:
+      case 0:
+        // this tile is unknown, return an empty string.
+        break;
+      case 1:
         return std::string("Africa");
-      case SRTM_Australia:
+      case 2:
         return std::string("Australia");
-      case SRTM_Eurasia:
+      case 3:
         return std::string("Eurasia");
-      case SRTM_Islands:
+      case 4:
         return std::string("Islands");
-      case SRTM_North_America:
+      case 5:
         return std::string("North_America");
-      case SRTM_South_America:
+      case 6:
         return std::string("South_America");
       default:
         break;
@@ -143,7 +129,7 @@ private:
 
   bool SRTMTileExists(const SRTMTileId & tile, std::string & continent) const
   {
-    SRTMTileSet::const_iterator pos = m_SRTMTileList.find(tile);
+    auto pos = m_SRTMTileList.find(tile);
     if (pos != m_SRTMTileList.end())
       {
       continent = this->SRTMIdToContinent(*pos);
@@ -202,7 +188,7 @@ private:
     return true;
     }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DownloadSRTMTiles");
     SetDescription("Download or list SRTM tiles");
@@ -258,23 +244,23 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     //Get the mode
     int mode = GetParameterInt("mode");
 
     // Get the inputs
-    FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
-    std::vector<std::string> vectorDataList = this->GetParameterStringList("vl");
-    std::vector<std::string> nameList = this->GetParameterStringList("names");
+    auto inList = this->GetParameterImageList("il");
+    auto vectorDataList = this->GetParameterStringList("vl");
+    auto nameList = this->GetParameterStringList("names");
 
-    const std::string tileDir = this->GetParameterString("tiledir");
+    std::string tileDir = this->GetParameterString("tiledir");
 
     if( inList->Size() + vectorDataList.size() + nameList.size() == 0 )
       {
@@ -286,9 +272,9 @@ private:
     // Check input images
     for( unsigned int i=0; i<inList->Size(); i++ )
       {
-      FloatVectorImageType::Pointer inImage = inList->GetNthElement(i);
+      auto inImage = inList->GetNthElement(i);
 
-      RSTransformType::Pointer rsTransformToWGS84 = RSTransformType::New();
+      auto rsTransformToWGS84 = RSTransformType::New();
       rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
       rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
       rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
@@ -312,18 +298,10 @@ private:
       inImage->TransformContinuousIndexToPhysicalPoint(index,tmpPoint);
       PointType ll = rsTransformToWGS84->TransformPoint(tmpPoint);
 
-      int floorMinLong = std::floor(std::min(
-        std::min(ul[0],ur[0]),
-        std::min(ll[0],lr[0])));
-      int floorMaxLong = std::floor(std::max(
-        std::max(ul[0],ur[0]),
-        std::max(ll[0],lr[0])));
-      int floorMinLat = std::floor(std::min(
-        std::min(ul[1],ur[1]),
-        std::min(ll[1],lr[1])));
-      int floorMaxLat = std::floor(std::max(
-        std::max(ul[1],ur[1]),
-        std::max(ll[1],lr[1])));
+      int floorMinLong = std::floor(std::min( {ul[0],ur[0],ll[0],lr[0]} ));
+      int floorMaxLong = std::floor(std::max( {ul[0],ur[0],ll[0],lr[0]} ));
+      int floorMinLat = std::floor(std::min( {ul[1],ur[1],ll[1],lr[1]} ));
+      int floorMaxLat = std::floor(std::max( {ul[1],ur[1],ll[1],lr[1]} ));
 
       //Construct SRTM tile filename based on min/max lat/long
       for (int k = floorMinLat; k <= floorMaxLat; ++k)
@@ -338,7 +316,7 @@ private:
     // Check input vector files
     for( unsigned int i=0; i<vectorDataList.size(); i++ )
       {
-      ogr::DataSource::Pointer source = ogr::DataSource::New(
+      auto source = ogr::DataSource::New(
         vectorDataList[i],
         ogr::DataSource::Modes::Read);
       OGREnvelope envelope;
@@ -361,7 +339,7 @@ private:
           }
         }
 
-      RSTransformType::Pointer rsTransformToWGS84 = RSTransformType::New();
+      auto rsTransformToWGS84 = RSTransformType::New();
       rsTransformToWGS84->SetInputProjectionRef(currentWkt);
       rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
       rsTransformToWGS84->InstantiateTransform();
@@ -444,12 +422,12 @@ private:
     std::vector<std::string> localTiles;
     std::vector<std::string> missingTiles;
     std::vector<std::string> continentList;
-    for(SRTMTileSet::iterator it= tiles.begin(); it!=tiles.end(); ++it)
+    for(auto const& tileId : tiles)
       {
-      std::string curName(this->SRTMIdToName(*it));
+      std::string curName(this->SRTMIdToName(tileId));
       std::string continent;
       // Check 1 : does the tile exists in SRTM ? If yes, get the continent
-      if (SRTMTileExists(*it,continent))
+      if (SRTMTileExists(tileId,continent))
         {
         // Check 2 : is the tile already downloaded
         if (SRTMTileDownloaded(curName,tileDir))
@@ -478,17 +456,17 @@ private:
     if (mode == Mode_List)
       {
       std::ostringstream oss;
-      for (unsigned int i=0 ; i<nonSRTMTiles.size() ; ++i)
+      for (auto const& tileName : nonSRTMTiles)
         {
-        oss << "  " << nonSRTMTiles[i] << " = NotSRTM\n";
+        oss << "  " << tileName << " = NotSRTM\n";
         }
-      for (unsigned int i=0 ; i<localTiles.size() ; ++i)
+      for (auto const& tileName : localTiles)
         {
-        oss << "  " << localTiles[i] << " = Local\n";
+        oss << "  " << tileName << " = Local\n";
         }
-      for (unsigned int i=0 ; i<missingTiles.size() ; ++i)
+      for (auto const& tileName : missingTiles)
         {
-        oss << "  " << missingTiles[i] << " = Missing\n";
+        oss << "  " << tileName << " = Missing\n";
         }
       otbAppLogINFO(<< "Status of each tile (NotSRTM/Local/Missing):\n" << oss.str());
       }
@@ -500,9 +478,13 @@ private:
         otbAppLogFATAL(<< "Can't write into directory : '"<< tileDir <<"'");
         }
       std::vector<std::string>::const_iterator it,itConti;
-      CurlHelper::Pointer curl = CurlHelper::New();
+      auto curl = CurlHelper::New();
       curl->SetTimeout(0);
       std::string request;
+      if (!tileDir.empty() && tileDir.back() != Sep)
+        {
+        tileDir += Sep;
+        }
       for (it=missingTiles.begin(), itConti=continentList.begin() ;
            it!=missingTiles.end() && itConti!=continentList.end() ;
            ++it, ++itConti)
@@ -514,22 +496,18 @@ private:
           otbAppLogWARNING(<< "Can't access tile : "<< request);
           continue;
           }
-        std::string outputFile(tileDir);
-        if (!outputFile.empty() && outputFile.back() != Sep)
-          {
-          outputFile += Sep;
-          }
-        outputFile += *it + HGTZIPExtension;
-        curl->RetrieveFile(request, outputFile);
+        curl->RetrieveFile(request, std::string(tileDir + *it + HGTZIPExtension));
         }
       }
   }
 
   SRTMTileSet m_SRTMTileList;
+};
 
-  DownloadSRTMTiles()
-    {
-    static SRTMTileId staticTileList[] =
+} // end of namespace Wrapper
+} // end of namespace otb
+
+const otb::Wrapper::DownloadSRTMTiles::SRTMTileId staticTileList[] =
 {{6,0,1},{9,0,1},{10,0,1},{11,0,1},{12,0,1},{13,0,1},{14,0,1},{15,0,1}
 ,{16,0,1},{17,0,1},{18,0,1},{19,0,1},{20,0,1},{21,0,1},{22,0,1},{23,0,1}
 ,{24,0,1},{25,0,1},{26,0,1},{27,0,1},{28,0,1},{29,0,1},{30,0,1},{31,0,1}
@@ -2286,12 +2264,10 @@ private:
 ,{-75,-54,6},{-64,-55,6},{-65,-55,6},{-66,-55,6},{-67,-55,6},{-68,-55,6},{-69,-55,6},{-70,-55,6}
 ,{-71,-55,6},{-72,-55,6},{-73,-55,6},{-74,-55,6},{-67,-56,6},{-68,-56,6},{-69,-56,6},{-70,-56,6}
 };
-    // initialize the default set of SRTM tiles
-    m_SRTMTileList = SRTMTileSet(staticTileList,staticTileList+14042);
-    }
-};
 
-}
-}
+otb::Wrapper::DownloadSRTMTiles
+::DownloadSRTMTiles()
+  : m_SRTMTileList(std::begin(staticTileList),std::end(staticTileList))
+{}
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::DownloadSRTMTiles)
