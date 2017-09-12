@@ -198,7 +198,6 @@ prepare_search_dirs(PKG_SEARCHDIRS)
 set(PKG_PEFILES)
 prepare_file_list(PKG_PEFILES)
 foreach(pfile ${PKG_PEFILES})
-  get_filename_component(pfile_name ${pfile} NAME)
   process_file_recurse(${pfile_name})
 endforeach()
 

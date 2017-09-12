@@ -29,22 +29,23 @@ function(prepare_file_list file_list_result)
     return()
   endif()
 
-  set(file_list "${otbapp_launcher}")
+  # find OTB targets
+  set(_otb_targets_path
+    "${SUPERBUILD_INSTALL_DIR}/lib/cmake/OTB-${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}")
+  file(GLOB _targets_config_files "${_otb_targets_path}/OTBTargets-*.cmake")
+  set(_IMPORT_PREFIX ${SUPERBUILD_INSTALL_DIR})
+  foreach(f ${_targets_config_files})
+    file(STRINGS ${f} _f_content REGEX " IMPORTED_LOCATION_[A-Z]+ ")
+    string(REGEX REPLACE " +IMPORTED_LOCATION_[A-Z]+ (\"[^\"]+\")" "\\1;" _filtered ${_f_content})
+    string(CONFIGURE "${_filtered}" _configured)
+    list(APPEND file_list "${_configured}")
+  endforeach()
 
-  if(HAVE_QT4)
-    list(APPEND file_list "otbApplicationLauncherQt${EXE_EXT}")
-  endif()
-
-  if(HAVE_MVD)
-    list(APPEND file_list "monteverdi${EXE_EXT}")
-    list(APPEND file_list "mapla${EXE_EXT}")
-  endif()
-  
   if(HAVE_PYTHON)
     list(APPEND file_list "_otbApplication${PYMODULE_EXT}")
   endif()
   
-  foreach(exe_file "iceViewer" "otbTestDriver" "SharkVersion")
+  foreach(exe_file "SharkVersion")
     if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/${exe_file}${EXE_EXT}")
       list(APPEND file_list "${exe_file}${EXE_EXT}")
     else()
@@ -88,12 +89,7 @@ function(prepare_file_list file_list_result)
   if(MSVC)
     list(APPEND file_list "ucrtbase.dll")
     list(APPEND file_list "proj.dll")
-  endif()  
-
-  set(otb_applications_dir "${SUPERBUILD_INSTALL_DIR}/lib/otb/applications")
-  file(GLOB OTB_APPS_LIST "${otb_applications_dir}/otbapp_*${LIB_EXT}") # /lib/otb
-  list(APPEND  file_list ${OTB_APPS_LIST})
-
+  endif()
 
   set(${file_list_result} ${file_list} PARENT_SCOPE)
 endfunction()
