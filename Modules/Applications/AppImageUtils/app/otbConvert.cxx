@@ -208,11 +208,9 @@ private:
       int bandRed = metadataInterface->GetDefaultDisplay()[0] + 1;
       int bandGreen = metadataInterface->GetDefaultDisplay()[1] + 1;
       int bandBlue = metadataInterface->GetDefaultDisplay()[2] + 1;
-
-      if (!IsParameterEnabled("channels.rgb.red")) SetDefaultParameterInt("channels.rgb.red", bandRed);
-      if (!IsParameterEnabled("channels.rgb.green")) SetDefaultParameterInt("channels.rgb.green", bandGreen);
-      if (!IsParameterEnabled("channels.rgb.blue")) SetDefaultParameterInt("channels.rgb.blue", bandBlue);
-
+      SetDefaultParameterInt("channels.rgb.red", bandRed);
+      SetDefaultParameterInt("channels.rgb.green", bandGreen);
+      SetDefaultParameterInt("channels.rgb.blue", bandBlue);
     }
 
   }
