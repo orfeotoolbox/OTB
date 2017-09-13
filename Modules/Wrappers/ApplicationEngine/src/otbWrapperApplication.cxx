@@ -752,30 +752,31 @@ std::vector<std::string> Application::GetChoiceNames(std::string name)
 void Application::SetDefaultParameterInt(std::string parameter, int value)
 {
   Parameter* param = GetParameterByKey(parameter);
+  bool hasUserValue = param->HasUserValue();
 
   if (dynamic_cast<RadiusParameter*>(param))
     {
     RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
     paramRadius->SetDefaultValue(value);
-    paramRadius->SetValue(value);
+    if (!hasUserValue) paramRadius->SetValue(value);
     }
    else if (dynamic_cast<IntParameter*>(param))
     {
     IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
     paramInt->SetDefaultValue(value);
-    paramInt->SetValue(value);
+    if (!hasUserValue) paramInt->SetValue(value);
     }
   else if (dynamic_cast<FloatParameter*>(param))
     {
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     paramFloat->SetDefaultValue(static_cast<float>(value));
-    paramFloat->SetValue(static_cast<float>(value));
+    if (!hasUserValue) paramFloat->SetValue(static_cast<float>(value));
     }
   else if (dynamic_cast<RAMParameter*>(param))
     {
     RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
     paramRAM->SetDefaultValue(static_cast<unsigned int>(value));
-    paramRAM->SetValue(static_cast<unsigned int>(value));
+    if (!hasUserValue) paramRAM->SetValue(static_cast<unsigned int>(value));
     }
 }
 
@@ -787,7 +788,7 @@ void Application::SetDefaultParameterFloat(std::string parameter, float value)
     {
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     paramFloat->SetDefaultValue(value);
-    paramFloat->SetValue(value);
+    if (!param->HasUserValue()) paramFloat->SetValue(value);
     }
 }
 

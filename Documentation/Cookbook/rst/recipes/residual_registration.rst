@@ -173,7 +173,7 @@ Orthorecrtify image using the affine geometry
 
 Now we will show how we can use this new sensor model. In our case we’ll
 use this sensor model to orthorectify the image over the Pléiades
-reference. **Orfeo Toolbox** offers since version 3.16 the possibility
+reference. **Orfeo ToolBox** offers since version 3.16 the possibility
 to use
 hrefhttp://wiki.orfeo-toolbox.org/index.php/ExtendedFileNameextend image
 path to use different metadata file as input. That’s what we are going

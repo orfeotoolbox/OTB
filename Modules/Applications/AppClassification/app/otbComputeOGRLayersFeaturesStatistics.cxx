@@ -94,12 +94,23 @@ private:
 
        otb::ogr::Feature feature = layer.ogr().GetNextFeature();
        ClearChoices("feat");
+
+       std::vector<std::string> choiceKeys;
+
        for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
          {
            std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
            key = item;
-           key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
+
+           // Transform chain : lowercase and alphanumerical
+           key.erase(std::remove_if(key.begin(), key.end(), std::not1(std::ptr_fun(::isalnum))), key.end());
            std::transform(key.begin(), key.end(), key.begin(), tolower);
+
+           // Key must be unique
+           choiceKeys = GetChoiceKeys("feat");
+           while(choiceKeys.end() != std::find(choiceKeys.begin(), choiceKeys.end(), key) )
+             key.append("0");
+
            key="feat."+key;
            AddChoice(key,item);
          }

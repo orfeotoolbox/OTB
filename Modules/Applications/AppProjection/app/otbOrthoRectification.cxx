@@ -91,7 +91,7 @@ private:
   {
     SetName("OrthoRectification");
     std::ostringstream oss;
-    oss << "This application allows ortho-rectification of optical images from supported sensors." << std::endl;
+    oss << "This application allows ortho-rectification of optical and radar images from supported sensors." << std::endl;
     SetDescription(oss.str());
     // Documentation
     SetDocName("Ortho-rectification");
@@ -101,7 +101,7 @@ private:
     oss<<"A Digital Elevation Model can be specified to account for terrain deformations. "<<std::endl;
     oss<<"In case of SPOT5 images, the sensor model can be approximated by an RPC model in order to speed-up computation.";
     SetDocLongDescription(oss.str());
-    SetDocLimitations("Supported sensors are Pleiades, SPOT5 (TIF format), SPOT6/7, Ikonos, Quickbird, Worldview2, Worldview3, GeoEye, Sentinel1.");
+    SetDocLimitations("Supported sensors (both optical and radar) are: GeoEye, Ikonos, Pleiades, Quickbird, RadarSat, Sentinel-1, SPOT5 (TIF format), SPOT6/7, TerraSAR-X, Worldview 1/2/3.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
 
