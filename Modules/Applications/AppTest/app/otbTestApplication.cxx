@@ -20,6 +20,7 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
+#include "otbWrapperInputFilenameListParameter.h"
 
 namespace otb
 {
@@ -114,13 +115,66 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    FloatVectorImageListType* imgList = GetParameterImageList("il");
-    SetParameterOutputImage("outgroup.outputimage", imgList->GetNthElement(0));
-    SetParameterComplexOutputImage("cout", GetParameterComplexImage("cin"));
-    //std::cout << "TestApplication::DoExecute" << std::endl;
+    {
+      Parameter * p = GetParameterByKey( "il" );
+
+      assert( p!=nullptr );
+
+      if( p->IsChecked() )
+	{
+	FloatVectorImageListType * imgList = GetParameterImageList( "il" );
+
+	SetParameterOutputImage(
+	  "outgroup.outputimage",
+	  imgList->GetNthElement( 0 )
+	);
+
+	SetParameterComplexOutputImage(
+	  "cout",
+	  GetParameterComplexImage( "cin" )
+	);
+
+	//std::cout << "TestApplication::DoExecute" << std::endl;
+	}
+    }
+
+    PrintStrings( "fl" );
+  }
+
+private:
+  void
+  PrintStrings( const std::string & key ) const
+  {
+    const Parameter * p = GetParameterByKey( key );
+
+    assert( p!=nullptr );
+
+    if( !p->IsChecked() )
+      return;
+
+
+    const StringListInterface * sli =
+      dynamic_cast< const StringListInterface * >(
+	p
+      );
+
+    assert( sli!=nullptr );
+
+    StringListInterface::StringVector strings;
+
+    sli->GetStrings( strings );
+
+    std::cout << "{" << std::endl;
+    {
+      for( auto s : strings )
+	std::cout << "'" << s << "'" << std::endl;
+    }
+    std::cout << "}"<< std::endl;
   }
 };
-}
+
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::TestApplication)
+}
+
+OTB_APPLICATION_EXPORT( otb::Wrapper::TestApplication )
