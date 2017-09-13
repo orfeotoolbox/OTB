@@ -32,8 +32,13 @@
 namespace otb
 {
 
+
 namespace Wrapper
 {
+
+
+class InputImageListParameter;
+
 
 /** \class QtWidgetInputImageListParameter
  * \brief
