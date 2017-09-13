@@ -22,7 +22,7 @@
 #define otbWrapperParameterList_h
 
 
-#include "otbWrapperParameter.h"
+#include "otbWrapperAbstractParameterList.h"
 #include "otbWrapperStringListInterface.h"
 
 
@@ -40,15 +40,14 @@ namespace Wrapper
  */
 template< typename T >
 class OTBApplicationEngine_EXPORT ParameterList :
-    public Parameter,
-    public StringListInterface
+    public AbstractParameterList
 {
 //
 // Public types.
 public:
   /** Standard class typedef */
   typedef ParameterList Self;
-  typedef Parameter Superclass;
+  typedef AbstractParameterList Superclass;
 
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
@@ -62,7 +61,7 @@ public:
 public:
 
   /** RTTI support */
-  itkTypeMacro( ParameterList, Parameter );
+  itkTypeMacro( ParameterList, AbstractParameterList );
 
   /** */
   const ParameterVector & GetParameters() const;
