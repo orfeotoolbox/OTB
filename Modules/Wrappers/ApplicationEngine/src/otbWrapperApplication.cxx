@@ -1108,14 +1108,16 @@ std::string Application::GetParameterString(std::string parameter)
   return ret;
 }
 
-std::vector<std::string> Application::GetParameterStringList(std::string parameter)
+std::vector< std::string >
+Application
+::GetParameterStringList( const std::string & parameter )
 {
   std::vector<std::string> ret;
-  Parameter* param = GetParameterByKey(parameter);
+  Parameter * param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputImageListParameter*> (param))
     {
-    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*> (param);
+    InputImageListParameter * paramDown = dynamic_cast<InputImageListParameter*> (param);
     ret = paramDown->GetFileNameList();
     }
   else
@@ -1127,13 +1129,13 @@ std::vector<std::string> Application::GetParameterStringList(std::string paramet
     else
       if (dynamic_cast<InputFilenameListParameter*> (param))
         {
-        InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*> (param);
+	InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*> (param);
         ret = paramDown->GetFileNameList();
         }
       else
         if (dynamic_cast<StringListParameter*> (param))
           {
-          StringListParameter* paramDown = dynamic_cast<StringListParameter*> (param);
+	  StringListParameter* paramDown = dynamic_cast<StringListParameter*> (param);
           ret = paramDown->GetValue();
           }
         else

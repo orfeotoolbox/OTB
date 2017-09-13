@@ -362,7 +362,7 @@ public:
   /**
    * Enable single selection mode for list view if status in true
    * (default is false).
-   * 
+   *
    * Can be called for types:
    * \li ParameterType_ListView
    */
@@ -442,10 +442,18 @@ public:
    * \li ParameterType_InputImageList
    * \li ParameterType_InputFilenameList
    */
-  std::vector<std::string> GetParameterStringList(std::string parameter);
+  // TODO: Should be rewritten:
+  //
+  // std::size_t
+  // GetParameterStringList( const std::vector< String > & v,
+  //                         const std::string & parameter ) const;
+  //
+  // to avoid useless memory allocations.
+  std::vector< std::string >
+    GetParameterStringList( const std::string & parameter );
 
 
-  /** 
+  /**
    * Set the input image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
    * application instances.
@@ -467,7 +475,7 @@ public:
    */
   OutputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
 
-  /** 
+  /**
    * Set the input complex image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
    * application instances.
@@ -497,7 +505,7 @@ public:
    * \in img The ImageBase * of the image to add
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
-   */ 
+   */
   void AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img);
 
   /**
@@ -509,7 +517,7 @@ public:
    * \in img The ImageBase * of the image to add
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter or if id is out of bounds
-   */ 
+   */
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
 
 /**
@@ -517,12 +525,12 @@ public:
    *
    * Can be called for parameter types:
    * \li ParameterType_InputImageList
-   * 
+   *
    * \in parameter The parameter key
    * \in str The string
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
-   */ 
+   */
   void AddParameterStringList(std::string parameter, const std::string & str);
 
   /**
@@ -530,15 +538,15 @@ public:
    *
    * Can be called for parameter types:
    * \li ParameterType_InputImageList
-   *  
+   *
    * \in parameter The parameter key
    * \in id Position at which to set the ImageBase pointer
    * \in str The string
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter or if id is out of bounds
-   */ 
+   */
   void SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string& str);
-  
+
 
   /**
    * Clear all images from an InputImageList parameter.
@@ -546,7 +554,7 @@ public:
    * \in parameter The parameter key
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
-   */ 
+   */
   void ClearParameterInputImageList(std::string parameter);
 
   /**
@@ -555,10 +563,10 @@ public:
    * \return The number of images
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
-   */ 
+   */
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
-  
+
   /* Get an image value
    *
    * Can be called for types :
