@@ -20,7 +20,7 @@ If SARimg.tif is a TerraSAR-X or a COSMO-SkyMed image:
     otbcli_SarRadiometricCalibration -in SARimg.tif 
                                      -out SARimg-calibrated.tif 
 
-If SARimg.tif is a RadarSat2 or a Sentinel1 image, it ’s possible to
+If SARimg.tif is a RadarSat2 or a Sentinel1 image, it is possible to
 specify the look-up table (automatically found in the metadata provided
 with such image):
 

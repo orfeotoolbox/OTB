@@ -1,24 +1,24 @@
 We provide a binary package for GNU/Linux x86_64. This package includes
-all of OTB applications along with commandline and graphical launchers.
-Download it from `OTB's download page
+all of the OTB applications along with command line and graphical launchers.
+It can be downloaded from `OTB's download page
 <https://www.orfeo-toolbox.org/download>`__.
 
-This package is a self-extractible archive. You may uncompress it with a
-double-click on the file, or with the command line:
+This package is a self-extractable archive. You may uncompress it with a
+double-click on the file, or from the command line as follows:
 
 .. parsed-literal::
 
    chmod +x OTB-|release|-Linux64.run
    ./OTB-|release|-Linux64.run
 
-The self-extractible archive only needs common tools found on most Linux
+The self-extractable archive only needs common tools found on most Linux
 distributions ("sed", "grep", "find", "cat", "printf", "ln", ...). However, be
 aware that it requires tools such as "which" and "file" (they are not always
 present, for instance when building a container).
 
 Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
-archive is extracted, the directory structure is made of:
+archive is extracted, the directory structure consists of:
 
 -  ``monteverdi.sh``: A launcher script for Monteverdi
 
@@ -38,9 +38,9 @@ archive is extracted, the directory structure is made of:
 
 In order to run the command line launchers, this package doesn’t require
 any special library that is not present in most modern Linux
-distributions. There is a small caveat for "expat" though. The binaries depend
+distributions. There is a small caveat for "expat" though as these binaries depend
 on "libexpat.so", which can be supplied by most package managers (apt, yum, ...).
-If not already present, look for one of the following packages:
+If not already present, it is necessary to install one of the following packages:
 
 ::
 
@@ -65,14 +65,14 @@ with ``source otbenv.profile``.
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
-currently only Python 2.x is supported. If no compatible python is found, installation
-notify you about it. If everything works fine, you will be given information about
-using python bindings.
+Starting from OTB 5.8.0, OTB Python bindings are distributed with binary package.
+Currently only Python 2.x is supported and if no compatible Python version is found a
+notification is generated during the installation process.  If the installation completes
+without issue, information relating to your Python bindings will be provided. 
 
-You must have python numpy bindings installed in your system. you can install it locally
-without admin rights with "pip install --user numpy". This is to give users to choose
-their own existing python installation rather than distributing one in OTB package
+You must have Python numpy bindings installed in your system. They can be installed locally
+without admin rights as follows: "pip install --user numpy". This is to give users the option 
+to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
 
 Notes:
