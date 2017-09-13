@@ -208,7 +208,7 @@ public:
   /** Store the state of the check box relative to this parameter (TO
     * BE MOVED to QtWrapper Model )
     */
-  virtual bool IsChecked()
+  virtual bool IsChecked() const
   {
     return m_IsChecked;
   }
