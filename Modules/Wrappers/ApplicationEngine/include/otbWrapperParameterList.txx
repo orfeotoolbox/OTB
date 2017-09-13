@@ -39,6 +39,7 @@ namespace Wrapper
 template< typename T >
 ParameterList< T >
 ::ParameterList() :
+  AbstractParameterList(),
   m_Parameters()
 {
 }
