@@ -56,6 +56,7 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetInputImageListParameter.cxx
   otbWrapperQtWidgetListEditWidget.cxx
   otbWrapperQtWidgetListEditItemModel.cxx
+  otbWrapperQtWidgetParameterList.cxx
   )
 
 set(OTBQtWidget_MOC_HDR
@@ -95,6 +96,7 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetRAMParameter.h
   ../include/otbWrapperQtWidgetListEditWidget.h
   ../include/otbWrapperQtWidgetListEditItemModel.h
+  ../include/otbWrapperQtWidgetParameterList.h
   )
 
 set( OTBQtWidget_FORMS
