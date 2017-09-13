@@ -22,22 +22,22 @@
 #ifndef otbImageToReflectanceImageFilter_h
 #define otbImageToReflectanceImageFilter_h
 
-#include "otbImageToLuminanceImageFilter.h"
-#include "otbLuminanceToReflectanceImageFilter.h"
+#include "otbImageToRadianceImageFilter.h"
+#include "otbRadianceToReflectanceImageFilter.h"
 
 namespace otb
 {
 namespace Functor
 {
 /** \class ImageToReflectanceImageFunctor
-   *  \brief Call the ImageToLuminanceFunctor over the input and the LuminanceToReflectanceFunctor to this result.
+   *  \brief Call the ImageToRadianceFunctor over the input and the RadianceToReflectanceFunctor to this result.
    *
    *
    * \sa ImageToReflectanceImageFilter
    *
    * \ingroup Functor
-   * \ingroup ImageToLuminanceFunctor
-   * \ingroup LuminanceToReflectanceFunctor
+   * \ingroup ImageToRadianceFunctor
+   * \ingroup RadianceToReflectanceFunctor
    * \ingroup Radiometry
  *
  * \ingroup OTBOpticalCalibration
@@ -49,8 +49,8 @@ public:
   ImageToReflectanceImageFunctor() {}
   virtual ~ImageToReflectanceImageFunctor() {}
 
-  typedef Functor::ImageToLuminanceImageFunctor<TInput, TOutput>       ImToLumFunctorType;
-  typedef Functor::LuminanceToReflectanceImageFunctor<TInput, TOutput> LumToReflecFunctorType;
+  typedef Functor::ImageToRadianceImageFunctor<TInput, TOutput>       ImToLumFunctorType;
+  typedef Functor::RadianceToReflectanceImageFunctor<TInput, TOutput> LumToReflecFunctorType;
 
   void SetAlpha(double alpha)
   {
@@ -124,8 +124,8 @@ private:
  * retrieved automatically from the metadata
  *
  * \ingroup ImageToReflectanceImageFunctor
- * \ingroup ImageToLuminanceImageFilter
- * \ingroup ReflectanceToLuminanceImageFilter
+ * \ingroup ImageToRadianceImageFilter
+ * \ingroup ReflectanceToRadianceImageFilter
  * \ingroup Radiometry
  *
  * \ingroup OTBOpticalCalibration
