@@ -49,6 +49,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperApplicationFactoryBase.cxx
   otbWrapperCompositeApplication.cxx
   otbWrapperStringListInterface.cxx
+  otbWrapperAbstractParameterList.cxx
   otbWrapperParameterList.cxx
   otbLogger.cxx
   )
