@@ -65,6 +65,12 @@ public:
   /** */
   Role GetDirection() const override;
 
+  /** */
+  const std::string & GetFilenameFilter( std::size_t ) const override;
+
+  /** */
+  const std::string & GetFilenameFilter() const override;
+
 
 //
 // Protected methods.
@@ -74,12 +80,6 @@ protected:
 
   /** Destructor */
   ~InputFilenameListParameter() override;
-
-  /** */
-  const std::string & GetFilenameFilter( std::size_t ) const override;
-
-  /** */
-  const std::string & GetFilenameFilter() const override;
 
   /** */
   const std::string & ToString( const ParameterType::Pointer & ) const override;
