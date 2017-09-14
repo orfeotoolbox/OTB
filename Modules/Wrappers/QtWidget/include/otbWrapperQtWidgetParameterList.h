@@ -52,6 +52,11 @@ public:
   ~QtWidgetParameterList() override;
 
 //
+// Signals.
+signals:
+  void NotifyUpdate();
+
+//
 // Private methods.
 private:
   QtWidgetParameterList( const QtWidgetParameterList & ); // purposely not implemented
@@ -64,6 +69,14 @@ private:
 //
 // Private attributes.
 private:
+
+//
+// Private slots.
+private slots:
+  void OnDataChanged( const QModelIndex &, const QModelIndex & );
+  void OnModelReset();
+  void OnRowsInserted( const QModelIndex &, int, int );
+  void OnRowsRemoved( const QModelIndex &, int, int );
 };
 
 } // Wrapper
