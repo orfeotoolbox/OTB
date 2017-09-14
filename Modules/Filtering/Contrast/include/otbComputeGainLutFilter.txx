@@ -81,8 +81,11 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
     {
       target.Fill(0);
       lut.Fill(-1);
-      CreateTarget( it.Get() , target );
-      Equalized( it.Get() , target , lut );
+      if ( IsValide( it.Get() ) )
+        {
+        CreateTarget( it.Get() , target );
+        Equalized( it.Get() , target , lut ); 
+        }
       oit.Set(lut);
       ++oit;
       ++it;
@@ -156,8 +159,20 @@ void ComputeGainLutFilter < TInputImage , TOutputImage >
     ++targetHisto[(m_NbBin - rest)/2 + i];
     }  
 }
-
-  // End namespace otb
+template <class TInputImage, class TOutputImage >
+bool ComputeGainLutFilter < TInputImage , TOutputImage >
+::IsValide( const HistoType & inputHisto )
+{
+  long acc(0);
+  for ( int i = 0 ; i < m_NbBin ; i++ )
+  {
+    acc+= inputHisto[i] ;
+  }
+  if ( acc < 0.5*m_NbPixel )
+    return false;
+  return true;
 }
+
+} // End namespace otb
 
 #endif

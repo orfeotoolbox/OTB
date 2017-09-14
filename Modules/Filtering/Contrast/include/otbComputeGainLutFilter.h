@@ -53,6 +53,8 @@ public:
 
   itkSetMacro(Max, double);
   itkGetMacro(Max, double);
+
+  itkSetMacro(NbPixel, long);
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
@@ -77,6 +79,8 @@ protected:
   void CreateTarget( const HistoType & inputHisto ,
                            HistoType & targetHisto );
 
+  bool IsValide(const HistoType & inputHisto );
+
 private:
   ComputeGainLutFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -85,6 +89,7 @@ private:
   double m_Min;
   double m_Max;
   double m_Step;
+  long m_NbPixel;
 
 };
 
