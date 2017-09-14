@@ -22,7 +22,6 @@
 #define otbComputeGainLutFilter_txx
 
 #include "otbComputeGainLutFilter.h"
-#include "itkThresholdImageFilter.h"
 #include "itkImageRegionIterator.h"
 
 #include <limits>
@@ -57,8 +56,8 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
 {
   assert(m_Step>0);
     // support progress methods/callbacks
-  itk::ProgressReporter progress(this , threadId , 
-                outputRegionForThread.GetNumberOfPixels() );
+  // itk::ProgressReporter progress(this , threadId , 
+  //               outputRegionForThread.GetNumberOfPixels() );
 
   typename InputImageType::ConstPointer input = this->GetInput();
   typename OutputImageType::Pointer output = this->GetOutput();

@@ -68,6 +68,8 @@ void StreamingImageRAMWriter < TInputImage >
   output->SetLargestPossibleRegion( input->GetLargestPossibleRegion() );
   output->SetBufferedRegion( input->GetLargestPossibleRegion() );
   output->SetRequestedRegion( input->GetRequestedRegion() );
+  std::cout<<"Ram writer output Largest :"<<output->GetLargestPossibleRegion().GetSize()<<std::endl;
+  std::cout<<"Ram writer output Requested :"<<output->GetRequestedRegion().GetSize()<<std::endl;
   output->Allocate();
 }
 

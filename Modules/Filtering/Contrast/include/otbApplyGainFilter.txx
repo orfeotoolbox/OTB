@@ -26,7 +26,6 @@
 
 #include <limits>
 
-// #define DEBUG
 namespace otb
 {
 template <class TInputImage , class TLut , class TOutputImage >
@@ -80,10 +79,19 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
   typename InputImageType::Pointer input = const_cast<InputImageType *>( GetInputImage() );
   typename LutType::Pointer lut = const_cast<LutType *>( GetInputLut() );
 
-  typename OutputImageType::Pointer output =( this->GetOutput() );
-
+  typename OutputImageType::Pointer output = ( this->GetOutput() );
+  #ifdef DEBUGGING
+  std::cout<<"before"<<std::endl;
+  std::cout<<"lut largest :"<<lut->GetLargestPossibleRegion().GetSize()<<std::endl;
+  std::cout<<"lut requested :"<<lut->GetRequestedRegion().GetSize()<<std::endl;
+  #endif
   input->SetRequestedRegion( output->GetRequestedRegion() );
   lut->SetRequestedRegion( lut->GetLargestPossibleRegion() );
+  #ifdef DEBUGGING
+  std::cout<<"after"<<std::endl;
+  std::cout<<"lut largest :"<<lut->GetLargestPossibleRegion().GetSize()<<std::endl;
+  std::cout<<"lut requested :"<<lut->GetRequestedRegion().GetSize()<<std::endl;
+  #endif
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
@@ -107,10 +115,11 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
                              itk::ThreadIdType threadId )
 {
   assert(m_Step>0);
-
+  // if ( threadId != 1 )
+  //   return ;
   // support progress methods/callbacks
-  itk::ProgressReporter progress(this , threadId , 
-                outputRegionForThread.GetNumberOfPixels() );
+  // itk::ProgressReporter progress(this , threadId , 
+  //               outputRegionForThread.GetNumberOfPixels() );
 
   typename InputImageType::ConstPointer input = GetInputImage();
   typename LutType::ConstPointer lut = GetInputLut();
@@ -236,10 +245,6 @@ float ApplyGainFilter < TInputImage , TLut , TOutputImage >
               * disty * distx;
     w += disty * distx;
     }
-  // if ( w == 1 )
-  //   std::cout<<"Warning"<<std::endl;
-  // std::cout<<"gain = "<<gain<<std::endl;
-  // std::cout<<"weight = "<<w<<std::endl;
   return gain/w;
 }
 
