@@ -45,17 +45,15 @@ public:
   itkTypeMacro(BufferFilter, InPlaceImageFilter);
 
 protected:
-  BufferFilter() {
-    std::cout<<"BufferFilter"<<std::endl;
-  };
+  BufferFilter() {};
   ~BufferFilter() ITK_OVERRIDE {}
 
   virtual void ThreadedGenerateData(const typename InputImageType::RegionType & outputRegionForThread ,
                             itk::ThreadIdType threadId)
     {
+    #ifdef DEBUGGING
     typename InputImageType::ConstPointer input = this->GetInput();
     typename InputImageType::Pointer output = this->GetOutput();
-    #if 1
     std::cout<<"########################BufferFilter##########################"<<std::endl;
     std::cout<<"input requested index "<<input->GetRequestedRegion().GetIndex()<<std::endl;
     std::cout<<"input requested size "<<input->GetRequestedRegion().GetSize()<<std::endl;

@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#define DEBUGGING
+// #define DEBUGGING
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -456,7 +456,6 @@ private:
       statFilter->SetIgnoreInfiniteValues(true);
       if( IsParameterEnabled("nodata") )
         {
-        std::cout<<"it's on"<<std::endl;
         statFilter->SetIgnoreUserDefinedValue(true);
         statFilter->SetUserIgnoredValue( GetParameterFloat("nodata") );
         }
@@ -480,8 +479,6 @@ private:
         max.Fill(temp);
         }
       }
-    std::cout<<max<<std::endl;
-    std::cout<<min<<std::endl;
   }
 
   // Compute min miac from an image
@@ -547,13 +544,13 @@ private:
           outputImageList->PushBack( m_BufferFilter[chanel]->GetOutput() );
           continue;
         }
-      std::cout<<"Setup"<<std::endl;
+
       SetUpPipeline ( m_HistoFilter[chanel] ,
                       m_LutFilter[chanel] ,
                       m_StreamingFilter[chanel] ,
                       inputImageList->GetNthElement(chanel) ,
                       max[chanel] , min[chanel] );
-      std::cout<<"Setup done"<<std::endl;
+
       if( IsParameterEnabled("nodata") )
         {
         m_GainFilter[chanel]->SetNoData( GetParameterFloat("nodata") ); 
@@ -608,16 +605,16 @@ private:
   {
     m_LutFilter.resize( 1 , LutFilterType::New() );
     m_HistoFilter.resize( 1 , HistoFilterType::New() );
-    m_GainFilter.resize(3);
     m_StreamingFilter.resize( 1 , StreamingImageFilterType::New() );
+    m_GainFilter.resize(3);
     m_BufferFilter.resize(3);
     // m_RAMWriter.resize(1);
     // m_LutFilter[0] = LutFilterType::New();
     // m_RAMWriter[0] = RAMWriter::New();
 
-    // Retreive order of the RGB chanels
     FloatImageType::PixelType min(0) , max(0);
     ComputeFloatMinMax( m_LuminanceFunctor->GetOutput() , max , min );
+    // ComputeFloatMinMax( inputImageList->GetNthElement(0) , max , min );
 
     SetUpPipeline ( m_HistoFilter[0] ,
                     m_LutFilter[0] ,
@@ -634,13 +631,14 @@ private:
       {
       m_GainFilter[chanel] = GainFilterType::New();
       m_BufferFilter[chanel] = BufferFilterType::New();
-      m_GainFilter[chanel]->SetInputLut( m_LutFilter[0]->GetOutput() );
       if( IsParameterEnabled("nodata") )
         {
         m_GainFilter[chanel]->SetNoData( GetParameterFloat("nodata") ); 
         }
       m_GainFilter[chanel]->SetMin( min );
       m_GainFilter[chanel]->SetMax( max );
+      m_GainFilter[chanel]->SetInputLut( 
+        m_StreamingFilter[0]->GetOutput() );
       m_BufferFilter[chanel]->SetInput(
                     inputImageList->GetNthElement(rgb[chanel]) );
       m_GainFilter[chanel]->SetInputImage( 
