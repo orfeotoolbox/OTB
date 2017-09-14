@@ -301,7 +301,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
-::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
+::ThreadedGenerateData(const OutputImageRegionType & itkNotUsed(outputRegionForThread) ,
                        itk::ThreadIdType threadId )
 {
   assert(m_Step>0);

@@ -112,7 +112,7 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 template <class TInputImage , class TLut , class TOutputImage >
 void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
-                             itk::ThreadIdType threadId )
+                             itk::ThreadIdType itkNotUsed(threadId) )
 {
   assert(m_Step>0);
   // if ( threadId != 1 )

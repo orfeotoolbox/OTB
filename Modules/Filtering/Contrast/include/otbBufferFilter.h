@@ -48,8 +48,8 @@ protected:
   BufferFilter() {};
   ~BufferFilter() ITK_OVERRIDE {}
 
-  virtual void ThreadedGenerateData(const typename InputImageType::RegionType & outputRegionForThread ,
-                            itk::ThreadIdType threadId)
+  virtual void ThreadedGenerateData(const typename InputImageType::RegionType & itkNotUsed(outputRegionForThread) ,
+                            itk::ThreadIdType itkNotUsed(threadId) )
     {
     #ifdef DEBUGGING
     typename InputImageType::ConstPointer input = this->GetInput();
