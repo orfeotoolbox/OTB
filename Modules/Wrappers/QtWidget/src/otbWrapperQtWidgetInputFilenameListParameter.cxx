@@ -28,19 +28,16 @@ namespace otb
 namespace Wrapper
 {
 
+/*****************************************************************************/
 QtWidgetInputFilenameListParameter
 ::QtWidgetInputFilenameListParameter( InputFilenameListParameter * param,
 				      QtWidgetModel * m ) :
   QtWidgetParameterList( param, m )
 {
- connect(
-   this, SIGNAL( Change() ),
-   // to:
-   GetModel(), SLOT( NotifyUpdate() )
- );
 }
 
 
+/*****************************************************************************/
 QtWidgetInputFilenameListParameter
 ::~QtWidgetInputFilenameListParameter()
 {
