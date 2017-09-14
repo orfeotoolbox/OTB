@@ -148,8 +148,8 @@ protected:
 		const std::string & ) const = 0;
 
 //
-// Private attributes.
-private:
+// Protected attributes.
+protected:
   /** */
   ParameterVector m_Parameters;
 
