@@ -81,6 +81,7 @@ ParameterList< T >
       end(),
       []( auto p ) -> bool
       {
+        assert( p!=nullptr );
         return !p && p->HasValue();
       }
     );
