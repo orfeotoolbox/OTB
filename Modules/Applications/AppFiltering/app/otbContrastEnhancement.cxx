@@ -168,16 +168,21 @@ private:
       "in each of those thumbnails a histogram will be computed "
       "and equalized. The result gain will be interpolated.");
  
-    AddParameter(ParameterType_Int,"thumb.h","Thumbnail height in pixel");
-    AddParameter(ParameterType_Int,"thumb.w","Thumbnail width in pixel");
+    AddParameter(ParameterType_Int,"thumb.h" , "Thumbnail height in pixel");
+    AddParameter(ParameterType_Int,"thumb.w" , "Thumbnail width in pixel");
 
     AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum definition");
     SetParameterDescription("minmax","Minimum and maximum value that will "
       "bound the histogram.");
     AddChoice( "minmax.auto" , "Automatique" );
-    SetParameterDescription("minmax.auto","Minimum and maximum value will be "
-      "the real one computed on the image (nodata value won't be taken into "
-      "account) .");
+    SetParameterDescription("minmax.auto" , "Minimum and maximum value will "
+      "be the real one computed on the image (nodata value won't be taken "
+      "into account) .");
+    AddParameter(ParameterType_Empty, "minmax.auto.global", "Global");
+    SetParameterDescription("minmax.auto.global" , "Automatique "
+      "min/max computation will result in the same minimum and maximum for "
+      "all the bands. Otherwise it is one minimum and one maximum "
+      "for each band.");
     AddChoice( "minmax.man" , "Manuel" );
     SetParameterDescription("minmax.auto","Minimum and maximum value will be "
       "set by the user");
@@ -243,7 +248,7 @@ private:
         CheckValidity( size );
       
       
-      if ( !HasUserValue("nodata") )
+      if ( !HasUserValue("nodata") && IsParameterEnabled("nodata"))
         SetDefaultValue( inImage , "NODATA" );
 
       if ( GetParameterString( "mode" ) == "lum" && 
@@ -342,6 +347,10 @@ private:
         {
         SetParameterFloat( "nodata" , static_cast<float>( values[0] ) );
         }
+      else
+        {
+        SetParameterFloat( "nodata" , 0 );
+        }
       }
     else if ( what == "RGB" )
       {
@@ -403,7 +412,7 @@ private:
       {
       histoFilter->SetThreshold( GetParameterInt("hfact") );
       }
-    if ( HasUserValue("nodata") )
+    if ( IsParameterEnabled("nodata") )
       {
       histoFilter->SetNoData( GetParameterFloat("nodata") );
       }
@@ -445,8 +454,9 @@ private:
       {
       VectorStatsFilterType::Pointer statFilter ( VectorStatsFilterType::New() );
       statFilter->SetIgnoreInfiniteValues(true);
-      if( HasUserValue("nodata") )
+      if( IsParameterEnabled("nodata") )
         {
+        std::cout<<"it's on"<<std::endl;
         statFilter->SetIgnoreUserDefinedValue(true);
         statFilter->SetUserIgnoredValue( GetParameterFloat("nodata") );
         }
@@ -454,7 +464,24 @@ private:
       statFilter->Update();
       min = statFilter->GetMinimum();
       max = statFilter->GetMaximum();
+      if ( IsParameterEnabled("minmax.auto.global") )
+        {
+        float temp(min[0]);
+        for (unsigned int i = 0 ; i < min.GetSize() ; i++ )
+          {
+          temp = std::min(temp , min[i]);
+          }
+        min.Fill(temp);
+        temp = max[0];
+        for (unsigned int i = 0 ; i < max.GetSize() ; i++ )
+          {
+          temp = std::max(temp , max[i]);
+          }
+        max.Fill(temp);
+        }
       }
+    std::cout<<max<<std::endl;
+    std::cout<<min<<std::endl;
   }
 
   // Compute min miac from an image
@@ -471,7 +498,7 @@ private:
       {
       StatsFilterType::Pointer statFilter ( StatsFilterType::New() );
       statFilter->SetIgnoreInfiniteValues(true);
-      if( HasUserValue("nodata") )
+      if( IsParameterEnabled("nodata") )
         {
         statFilter->SetIgnoreUserDefinedValue(true);
         statFilter->SetUserIgnoredValue( GetParameterFloat("nodata") );
@@ -527,7 +554,7 @@ private:
                       inputImageList->GetNthElement(chanel) ,
                       max[chanel] , min[chanel] );
       std::cout<<"Setup done"<<std::endl;
-      if( HasUserValue("nodata") )
+      if( IsParameterEnabled("nodata") )
         {
         m_GainFilter[chanel]->SetNoData( GetParameterFloat("nodata") ); 
         }
@@ -608,7 +635,7 @@ private:
       m_GainFilter[chanel] = GainFilterType::New();
       m_BufferFilter[chanel] = BufferFilterType::New();
       m_GainFilter[chanel]->SetInputLut( m_LutFilter[0]->GetOutput() );
-      if( HasUserValue("nodata") )
+      if( IsParameterEnabled("nodata") )
         {
         m_GainFilter[chanel]->SetNoData( GetParameterFloat("nodata") ); 
         }
@@ -618,7 +645,6 @@ private:
                     inputImageList->GetNthElement(rgb[chanel]) );
       m_GainFilter[chanel]->SetInputImage( 
                     m_BufferFilter[chanel]->GetOutput() );
-      m_GainFilter[chanel]->SetNumberOfThreads(1);
       outputImageList->PushBack( m_GainFilter[chanel]->GetOutput() );
       }
   }
