@@ -39,7 +39,7 @@ namespace otb
    * compute the satellite spectral bands.
    *
    * There are 2 operating modes:
-   * - luminance mode (default): integrates the spectral response over each band
+   * - radiance mode (default): integrates the spectral response over each band
    * - reflectance mode (needs to call SetReflectanceMode(true)): takes into account
    *   the solar irradiance in the integration
    *
@@ -154,7 +154,7 @@ private:
   /** the computed response */
   InputSpectralResponsePointerType m_ReduceResponse;
 
-  /** Choose between reflectance or luminance mode */
+  /** Choose between reflectance or radiance mode */
   bool m_ReflectanceMode;
 };
 

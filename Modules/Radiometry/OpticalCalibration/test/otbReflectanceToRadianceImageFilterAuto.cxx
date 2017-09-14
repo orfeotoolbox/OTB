@@ -19,12 +19,12 @@
  */
 
 
-#include "otbReflectanceToLuminanceImageFilter.h"
+#include "otbReflectanceToRadianceImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbReflectanceToLuminanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
+int otbReflectanceToRadianceImageFilterAuto(int itkNotUsed(argc), char * argv[])
 {
 
 const char * inputFileName  = argv[1];
@@ -36,8 +36,8 @@ const char * inputFileName  = argv[1];
   typedef otb::VectorImage<PixelType, Dimension>                            OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                              ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::ReflectanceToLuminanceImageFilter<OutputImageType,
-      OutputImageType> ReflectanceToLuminanceImageFilterType;
+  typedef otb::ReflectanceToRadianceImageFilter<OutputImageType,
+      OutputImageType> ReflectanceToRadianceImageFilterType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -46,10 +46,10 @@ const char * inputFileName  = argv[1];
   reader->UpdateOutputInformation();
 
   // Instantiating object
-  ReflectanceToLuminanceImageFilterType::Pointer filterToLuminance = ReflectanceToLuminanceImageFilterType::New();
+  ReflectanceToRadianceImageFilterType::Pointer filterToRadiance = ReflectanceToRadianceImageFilterType::New();
 
-  filterToLuminance->SetInput(reader->GetOutput());
-  writer->SetInput(filterToLuminance->GetOutput());
+  filterToRadiance->SetInput(reader->GetOutput());
+  writer->SetInput(filterToRadiance->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

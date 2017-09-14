@@ -38,8 +38,8 @@
 // an optical multispectral image similar to Pleiades.
 // These corrections are made in four steps :
 // \begin{itemize}
-// \item digital number to luminance correction;
-// \item luminance to refletance image conversion;
+// \item digital number to radiance correction;
+// \item radiance to refletance image conversion;
 // \item atmospheric correction for TOA (top of atmosphere) to TOC (top of canopy)
 // reflectance estimation;
 // \item correction of the adjacency effects taking into account the neighborhood contribution.
@@ -61,15 +61,15 @@
 // Let's look at the minimal code required to use this
 // algorithm. First, the following header defining the
 // \doxygen{otb}{AtmosphericCorrectionSequencement} class must be
-// included.  For the numerical to luminance image, luminance to
+// included.  For the numerical to radiance image, radiance to
 // refletance image, and reflectance to atmospheric correction image
 // corrections and the neighborhood correction, four header files are
 // required.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbImageToLuminanceImageFilter.h"
-#include "otbLuminanceToReflectanceImageFilter.h"
+#include "otbImageToRadianceImageFilter.h"
+#include "otbRadianceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 // Software Guide : EndCodeSnippet
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
   //-------------------------------
   // Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{ImageToLuminanceImageFilter}
+  // The \doxygen{otb}{ImageToRadianceImageFilter}
   // type is defined and instancied. This class uses a functor applied
   // to each component of each pixel ($\mathbf{X^{k}}$) whose formula is:
   //
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
   //
   // Where :
   // \begin{itemize}
-  // \item $\mathbf{L_{TOA}^{k}}$ is the incident luminance (in
+  // \item $\mathbf{L_{TOA}^{k}}$ is the incident radiance (in
   // $W.m^{-2}.sr^{-1}.\mu m^{-1}$);
   // \item $\mathbf{X^{k}}$ is the measured digital number (ie. the input image pixel component);
   // \item $\alpha_{k}$ is the absolute calibration gain for the channel k;
@@ -198,13 +198,13 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageToLuminanceImageFilter<ImageType, ImageType>
-  ImageToLuminanceImageFilterType;
+  typedef otb::ImageToRadianceImageFilter<ImageType, ImageType>
+  ImageToRadianceImageFilterType;
 
-  ImageToLuminanceImageFilterType::Pointer filterImageToLuminance
-    = ImageToLuminanceImageFilterType::New();
+  ImageToRadianceImageFilterType::Pointer filterImageToRadiance
+    = ImageToRadianceImageFilterType::New();
 // Software Guide : EndCodeSnippet
-  typedef ImageToLuminanceImageFilterType::VectorType VectorType;
+  typedef ImageToRadianceImageFilterType::VectorType VectorType;
   VectorType alpha(nbOfComponent);
   VectorType beta(nbOfComponent);
   alpha.Fill(0);
@@ -227,17 +227,17 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filterImageToLuminance->SetAlpha(alpha);
-  filterImageToLuminance->SetBeta(beta);
+  filterImageToRadiance->SetAlpha(alpha);
+  filterImageToRadiance->SetBeta(beta);
   // Software Guide : EndCodeSnippet
 
   //-------------------------------
   // Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{LuminanceToReflectanceImageFilter}
+  // The \doxygen{otb}{RadianceToReflectanceImageFilter}
   // type is defined and instancied.
   // This class used a functor applied to each component of each pixel
-  // of the luminance filter output ($\mathbf{L_{TOA}^{k}}$):
+  // of the radiance filter output ($\mathbf{L_{TOA}^{k}}$):
   //
   // \begin{equation}
   // \rho_{TOA}^{k} = \frac{ \pi.\mathbf{L_{TOA}^{k}} } { E_{S}^{k}.cos(\theta_{S}).d/d_{0} }.
@@ -259,13 +259,13 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LuminanceToReflectanceImageFilter<ImageType, ImageType>
-  LuminanceToReflectanceImageFilterType;
-  LuminanceToReflectanceImageFilterType::Pointer filterLuminanceToReflectance
-    = LuminanceToReflectanceImageFilterType::New();
+  typedef otb::RadianceToReflectanceImageFilter<ImageType, ImageType>
+  RadianceToReflectanceImageFilterType;
+  RadianceToReflectanceImageFilterType::Pointer filterRadianceToReflectance
+    = RadianceToReflectanceImageFilterType::New();
 // Software Guide : EndCodeSnippet
 
-  typedef LuminanceToReflectanceImageFilterType::VectorType VectorType;
+  typedef RadianceToReflectanceImageFilterType::VectorType VectorType;
 
   VectorType solarIllumination(nbOfComponent);
   solarIllumination.Fill(0);
@@ -287,11 +287,11 @@ int main(int argc, char *argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filterLuminanceToReflectance->SetZenithalSolarAngle(
+  filterRadianceToReflectance->SetZenithalSolarAngle(
     static_cast<double>(atof(argv[6])));
-  filterLuminanceToReflectance->SetDay(atoi(argv[7]));
-  filterLuminanceToReflectance->SetMonth(atoi(argv[8]));
-  filterLuminanceToReflectance->SetSolarIllumination(solarIllumination);
+  filterRadianceToReflectance->SetDay(atoi(argv[7]));
+  filterRadianceToReflectance->SetMonth(atoi(argv[8]));
+  filterRadianceToReflectance->SetSolarIllumination(solarIllumination);
   // Software Guide : EndCodeSnippet
 
 //-------------------------------
@@ -635,10 +635,10 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   writer->SetFileName(argv[2]);
 
-  filterImageToLuminance->SetInput(reader->GetOutput());
-  filterLuminanceToReflectance->SetInput(filterImageToLuminance->GetOutput());
+  filterImageToRadiance->SetInput(reader->GetOutput());
+  filterRadianceToReflectance->SetInput(filterImageToRadiance->GetOutput());
   filterReflectanceToSurfaceReflectanceImageFilter->SetInput(
-    filterLuminanceToReflectance->GetOutput());
+    filterRadianceToReflectance->GetOutput());
   filterSurfaceAdjacencyEffectCorrectionSchemeFilter->SetInput(
     filterReflectanceToSurfaceReflectanceImageFilter->GetOutput());
 

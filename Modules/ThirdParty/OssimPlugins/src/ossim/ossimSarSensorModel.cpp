@@ -996,7 +996,7 @@ namespace ossimplugins
          std::vector<ossimSarSensorModel::OrbitRecordType> & orbitRecords)
    {
       char orbit_prefix_[256];
-      std::size_t nbOrbits;
+      std::size_t nbOrbits(0);
       try {
          get(kwl, "orbitList.nb_orbits", nbOrbits);
       } catch (kw_runtime_error const& e) {
@@ -1042,7 +1042,7 @@ namespace ossimplugins
          std::vector<ossimSarSensorModel::BurstRecordType> & burstRecords)
    {
       char burstPrefix_[1024];
-      std::size_t nbBursts ;
+      std::size_t nbBursts(0);
       get(kwl, BURST_NUMBER_KEY, nbBursts);
       for (std::size_t burstId=0; burstId!=nbBursts ; ++burstId) {
          const int pos = s_printf(burstPrefix_, "%s[%d].", BURST_PREFIX.c_str(), burstId);
@@ -1063,7 +1063,7 @@ namespace ossimplugins
          std::vector<ossimSarSensorModel::GCPRecordType> & gcpRecords)
    {
       char prefix_[1024];
-      std::size_t nbGCPs ;
+      std::size_t nbGCPs(0);
       get(kwl, GCP_NUMBER_KEY, nbGCPs);
       for (std::size_t gcpId=0; gcpId!=nbGCPs ; ++gcpId) {
          const int pos = s_printf(prefix_, "%s[%d].", GCP_PREFIX.c_str(), gcpId);
@@ -1089,7 +1089,7 @@ namespace ossimplugins
          std::vector<ossimSarSensorModel::CoordinateConversionRecordType> & outputRecords)
    {
       char prefix_[1024];
-      std::size_t nbCoords ;
+      std::size_t nbCoords(0);
       get(kwl, sr_gr_prefix +"."+ NUMBER_KEY, nbCoords);
 
       for (std::size_t idx=0 ; idx!=nbCoords ; ++idx)
@@ -1102,7 +1102,7 @@ namespace ossimplugins
          get(kwl, prefix + keyAzimuthTime,  coordRecord.azimuthTime);
          get(kwl, prefix + rg0,             coordRecord.rg0);
 
-         std::size_t nbCoeffs;
+         std::size_t nbCoeffs(0);
          get(kwl, prefix + NUMBER_KEY,      nbCoeffs);
          for (std::size_t coeff_idx=0; coeff_idx!=nbCoeffs ; ++coeff_idx) {
             const int pos2 = s_printf(prefix_+pos, sizeof(prefix_)-pos, "coeff[%d]", coeff_idx);

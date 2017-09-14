@@ -19,16 +19,18 @@
  */
 
 
-#include "otbImageToLuminanceImageFilter.h"
-#include "otbLuminanceToReflectanceImageFilter.h"
+#include "otbRadianceToImageImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbLuminanceToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
+//Test the retrieval of parameters from the image metadata
+int otbRadianceToImageImageFilterAuto(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
-  const char * outputFileName = argv[2];
+  const char * inputFileName2  = argv[2];
+  const char * outputFileName = argv[3];
+  const char * outputFileName2 = argv[4];
 
   const unsigned int Dimension = 2;
   typedef double                                                            PixelType;
@@ -36,10 +38,8 @@ int otbLuminanceToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[]
   typedef otb::VectorImage<PixelType, Dimension>                            OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                              ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::ImageToLuminanceImageFilter<InputImageType, OutputImageType> ImageToLuminanceImageFilterType;
-  typedef otb::LuminanceToReflectanceImageFilter<OutputImageType,
-      OutputImageType> LuminanceToReflectanceImageFilterType;
-  typedef otb::MultiChannelExtractROI<PixelType, PixelType> RoiFilterType;
+  typedef otb::RadianceToImageImageFilter<InputImageType, OutputImageType> RadianceToImageImageFilterType;
+  typedef otb::MultiChannelExtractROI<PixelType, PixelType>                 RoiFilterType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -47,23 +47,27 @@ int otbLuminanceToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[]
   writer->SetFileName(outputFileName);
   reader->UpdateOutputInformation();
 
-  // Instantiating object
-  ImageToLuminanceImageFilterType::Pointer filterToLuminance = ImageToLuminanceImageFilterType::New();
-  filterToLuminance->SetInput(reader->GetOutput());
+  ReaderType::Pointer reader2  = ReaderType::New();
+  WriterType::Pointer writer2 = WriterType::New();
+  reader2->SetFileName(inputFileName2);
+  writer2->SetFileName(outputFileName2);
+  reader2->UpdateOutputInformation();
 
-  LuminanceToReflectanceImageFilterType::Pointer filterToReflectance = LuminanceToReflectanceImageFilterType::New();
-  filterToReflectance->SetInput(filterToLuminance->GetOutput());
-  filterToReflectance->SetUseClamp(false);
+  // Instantiating object
+  RadianceToImageImageFilterType::Pointer filter = RadianceToImageImageFilterType::New();
+
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
+  writer->Update();
 
   RoiFilterType::Pointer roiFilter = RoiFilterType::New();
   roiFilter->SetStartX(1000);
   roiFilter->SetStartY(1000);
   roiFilter->SetSizeX(100);
   roiFilter->SetSizeY(100);
-  roiFilter->SetInput(filterToReflectance->GetOutput());
-
-  writer->SetInput(roiFilter->GetOutput());
-  writer->Update();
+  roiFilter->SetInput(reader2->GetOutput());
+  writer2->SetInput(roiFilter->GetOutput());
+  writer2->Update();
 
   return EXIT_SUCCESS;
 }
