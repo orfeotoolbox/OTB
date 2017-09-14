@@ -21,8 +21,8 @@ if exist %CURRENT_SCRIPT_DIR%..\@OTB_INSTALL_APP_DIR_NATIVE@ (
 )
 
 ::set GDAL_DATA, EPSG_CSV and update PATH
-if exist %CURRENT_SCRIPT_DIR%\..\otbenv.cmd (
-    call %CURRENT_SCRIPT_DIR%\..\otbenv.cmd
+if exist %CURRENT_SCRIPT_DIR%\..\otbenv.bat (
+    call %CURRENT_SCRIPT_DIR%\..\otbenv.bat
 )
 
 set LC_NUMERIC=C

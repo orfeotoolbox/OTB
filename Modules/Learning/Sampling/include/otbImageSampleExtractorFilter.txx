@@ -175,6 +175,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
   IndexType imgIndex;
   PixelType imgPixel;
   double imgComp;
+
   ogr::Layer::const_iterator featIt = layerForThread.begin();
   for(; featIt!=layerForThread.end(); ++featIt)
     {

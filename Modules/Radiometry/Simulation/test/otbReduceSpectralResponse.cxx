@@ -62,7 +62,7 @@ int otbReduceSpectralResponse(int argc, char * argv[])
   myReduceResponse->SetInputSatRSR(myRSR);
   /** Load the spectral response of the object in the simulator*/
   myReduceResponse->SetInputSpectralResponse(mySpectralResponse);
-  /** Set the reflectance or luminance mode */
+  /** Set the reflectance or radiance mode */
   myReduceResponse->SetReflectanceMode(reflectanceMode);
   myReduceResponse->CalculateResponse();
   /** Print the Reduce SR*/
@@ -194,7 +194,7 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
 
   if(fabs(b0Result-b0Expected)>tolerance)
     {
-    std::cout << "Wrong value for B0: expected eq. luminance = " << b0Expected
+    std::cout << "Wrong value for B0: expected eq. radiance = " << b0Expected
               << "; got " << b0Result
               << std::endl;
     return EXIT_FAILURE;
@@ -207,7 +207,7 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
 
   if(fabs(b1Result-b1Expected)>tolerance)
     {
-    std::cout << "Wrong value for B1: expected eq. luminance = " << b1Expected
+    std::cout << "Wrong value for B1: expected eq. radiance = " << b1Expected
               << "; got " << b1Result
               << std::endl;
     return EXIT_FAILURE;

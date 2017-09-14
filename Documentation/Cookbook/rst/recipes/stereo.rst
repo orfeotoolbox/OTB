@@ -194,7 +194,7 @@ can be directly linked to the local elevation
 An almost complete spectrum of `stereo correspondence algorithms
 <http://vision.middlebury.edu/stereo/eval3/>`_ has been
 published and it is still augmented at a significant rate!
-The **Orfeo Toolbox** implements different local strategies for block
+The **Orfeo ToolBox** implements different local strategies for block
 matching:
 
 -  Sum of Square Distances block-matching (SSD)

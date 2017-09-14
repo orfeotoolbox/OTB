@@ -84,8 +84,8 @@ otb_add_test(NAME raTeAtmosphericCorrectionSequencementTest COMMAND ${OTB_TEST_D
     ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
     ${INPUTDATA}/atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt
 
-    # ImageToLuminance parameters
-    # LuminanceToReflectance parameters
+    # ImageToRadiance parameters
+    # RadianceToReflectance parameters
     27.3    #solar azimuthal elevation
     4       #day
     12      #month
