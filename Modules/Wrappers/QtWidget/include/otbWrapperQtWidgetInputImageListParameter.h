@@ -22,11 +22,11 @@
 #define otbWrapperQtWidgetInputImageListParameter_h
 
 
-#include "OTBQtWidgetExport.h"
-#include "otbWrapperQtWidgetParameterBase.h"
-
-
 #include <QtGui>
+
+
+#include "OTBQtWidgetExport.h"
+#include "otbWrapperQtWidgetParameterList.h"
 
 
 namespace otb
@@ -46,44 +46,24 @@ class InputImageListParameter;
  * \ingroup OTBQtWidget
  */
 class OTBQtWidget_EXPORT QtWidgetInputImageListParameter :
-    public QtWidgetParameterBase
+    public QtWidgetParameterList
 {
-  Q_OBJECT
+  Q_OBJECT;
 
+//
+// Public methods.
 public:
   QtWidgetInputImageListParameter( InputImageListParameter *, QtWidgetModel * );
-  ~QtWidgetInputImageListParameter() ITK_OVERRIDE;
+  ~QtWidgetInputImageListParameter() override;
 
-
-signals:
-  void Change();
-  void FileSelectionWidgetAdded( QWidget * );
-
-protected slots:
-  //void SetFileName( const QString& value );
-  //virtual void SelectFile();
-  virtual void UpFile();
-  virtual void DownFile();
-  virtual void AddFile();
-  virtual void SuppressFile();
-  virtual void EraseFile();
-  virtual void UpdateImageList();
-
+//
+// Private methods.
 private:
-  QtWidgetInputImageListParameter(const QtWidgetInputImageListParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageListParameter&); //purposely not implemented
+  // Purposely not implemented
+  QtWidgetInputImageListParameter( const QtWidgetInputImageListParameter & );
 
-  void DoCreateWidget() ITK_OVERRIDE;
-
-  void DoUpdateGUI() ITK_OVERRIDE;
-
-  void RecreateImageList();
-  void UpdateFileList( std::map<unsigned int, unsigned int> idMap );
-
-  InputImageListParameter::Pointer m_InputImageListParam;
-
-
-private:
+  // Purposely not implemented
+  void operator = ( const QtWidgetInputImageListParameter & );
 };
 
 
