@@ -57,25 +57,25 @@ public:
   itkTypeMacro( InputImageListParameter, Parameter );
 
   /** Set image form a list of filename */
-  void SetListFromFileName( const StringVector & filenames ) ITK_OVERRIDE;
+  void SetListFromFileName( const StringVector & filenames ) override;
 
   /** */
-  void InsertNullElement( std::size_t = -1 ) ITK_OVERRIDE;
+  void InsertNullElement( std::size_t = -1 ) override;
 
   /** Add an image from a filename */
-  void AddFromFileName( const std::string & filename ) ITK_OVERRIDE;
+  void AddFromFileName( const std::string & filename ) override;
 
   /** */
-  void Insert( const std::string &, std::size_t = -1 ) ITK_OVERRIDE;
+  void Insert( const std::string &, std::size_t = -1 ) override;
 
   /** Set one specific stored image filename. */
-  void SetNthFileName( std::size_t, const std::string & ) ITK_OVERRIDE;
+  void SetNthFileName( std::size_t, const std::string & ) override;
 
   /** Get the stored image filename list */
-  StringVector GetFileNameList() const ITK_OVERRIDE;
+  StringVector GetFileNameList() const override;
 
  /** Get one specific stored image filename. */
-  const std::string & GetNthFileName( std::size_t i ) const ITK_OVERRIDE;
+  const std::string & GetNthFileName( std::size_t i ) const override;
 
   /** Get one list of the stored image. WARNING : if the parameter list changes,
    *  the returned image list may become obsolete. You should call
@@ -89,7 +89,7 @@ public:
   void SetNthImage( unsigned int i, ImageBaseType * img );
 
   /** */
-  const std::string & GetToolTip( std::size_t ) const ITK_OVERRIDE;
+  const std::string & GetToolTip( std::size_t ) const override;
 
   /** Set the list of image. */
   void SetImageList( FloatVectorImageListType * imList );
@@ -98,42 +98,42 @@ public:
   void AddImage( ImageBaseType * image );
 
   /** */
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
   /** */
   using StringListInterface::Erase;
-  void Erase( std::size_t start, std::size_t count ) ITK_OVERRIDE;
+  void Erase( std::size_t start, std::size_t count ) override;
 
   /** Clear all the list. */
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
   /** Retrieve number of elements */
-  std::size_t Size() const ITK_OVERRIDE;
+  std::size_t Size() const override;
 
   /** */
-  bool IsActive( size_t ) const ITK_OVERRIDE;
+  bool IsActive( size_t ) const override;
 
   /** */
-  void Swap( std::size_t, std::size_t ) ITK_OVERRIDE;
+  void Swap( std::size_t, std::size_t ) override;
 
   /** */
-  Role GetDirection( std::size_t ) const ITK_OVERRIDE;
+  Role GetDirection( std::size_t ) const override;
 
   /** */
-  Role GetDirection() const ITK_OVERRIDE;
+  Role GetDirection() const override;
 
   /** */
-  const std::string & GetFilenameFilter( std::size_t ) const ITK_OVERRIDE;
+  const std::string & GetFilenameFilter( std::size_t ) const override;
 
   /** */
-  const std::string & GetFilenameFilter() const ITK_OVERRIDE;
+  const std::string & GetFilenameFilter() const override;
 
 protected:
   /** Constructor */
   InputImageListParameter();
 
   /** Destructor */
-  ~InputImageListParameter() ITK_OVERRIDE;
+  ~InputImageListParameter() override;
 
 //
 // Private attributes.
