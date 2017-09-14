@@ -35,6 +35,7 @@ ComputeGainLutFilter < TInputImage , TOutputImage >
 ::ComputeGainLutFilter()
 {
   m_NbBin = 256;
+  m_NbPixel = 0;
   m_Min = std::numeric_limits< double >::quiet_NaN();
   m_Max = std::numeric_limits< double >::quiet_NaN();
   m_Step = -1;
@@ -52,7 +53,7 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
 template <class TInputImage , class TOutputImage >
 void ComputeGainLutFilter <TInputImage , TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                       itk::ThreadIdType threadId)
+                       itk::ThreadIdType itkNotUsed(threadId) )
 {
   assert(m_Step>0);
     // support progress methods/callbacks

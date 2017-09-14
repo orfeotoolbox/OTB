@@ -96,7 +96,7 @@ public:
   typedef otb::ComputeHistoFilter < FloatImageType , FloatVectorImageType > 
           HistoFilterType;
   typedef otb::ComputeGainLutFilter < FloatVectorImageType , FloatVectorImageType > 
-          LutFilterType;
+          GainLutFilterType;
   typedef otb::ApplyGainFilter < FloatImageType , FloatVectorImageType , FloatImageType > 
           GainFilterType;
   typedef otb::ImageList< FloatImageType > ImageListType;
@@ -314,9 +314,9 @@ private:
     std::cout<<"vectortoimagelist R"<<m_VectorToImageListFilter->GetOutput()->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
     std::cout<<"vectortoimagelist B"<<m_VectorToImageListFilter->GetOutput()->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
     std::cout<<"vectortoimagelist L"<<m_VectorToImageListFilter->GetOutput()->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut R"<<m_LutFilter[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut B"<<m_LutFilter[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut L"<<m_LutFilter[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut R"<<m_GainLutFilter[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut B"<<m_GainLutFilter[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
+    std::cout<<"filterLut L"<<m_GainLutFilter[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
     std::cout<<"filterGain R"<<m_GainFilter[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
     std::cout<<"filterGain B"<<m_GainFilter[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
     std::cout<<"filterGain L"<<m_GainFilter[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
@@ -402,7 +402,7 @@ private:
   // Prepare the first half of the pipe that is common to every methode of 
   // equalization
   void SetUpPipeline( const HistoFilterType::Pointer histoFilter ,
-                      const LutFilterType::Pointer lutFilter ,
+                      const GainLutFilterType::Pointer lutFilter ,
                       const StreamingImageFilterType::Pointer streamingFilter ,
                       const FloatImageType::Pointer input ,
                       float max ,
@@ -420,6 +420,8 @@ private:
     histoFilter->SetMax( max );
     lutFilter->SetMin( min );
     lutFilter->SetMax( max );
+    lutFilter->SetNbPixel( 
+      GetParameterInt("thumb.h") * GetParameterInt("thumb.w") );
     histoFilter->SetNbBin(GetParameterInt("bin"));
     FloatImageType::SizeType thumbSize;
     thumbSize[0] = GetParameterInt("thumb.w");
@@ -518,7 +520,7 @@ private:
     max.Fill(0);
     ComputeVectorMinMax( inImage , max , min );
 
-    m_LutFilter.resize(nbChanel);
+    m_GainLutFilter.resize(nbChanel);
     m_HistoFilter.resize(nbChanel);
     m_GainFilter.resize(nbChanel);
     m_BufferFilter.resize(nbChanel);
@@ -527,7 +529,7 @@ private:
 
     for (int chanel = 0 ; chanel<nbChanel ; chanel++ ) 
       {
-      m_LutFilter[chanel] = LutFilterType::New();
+      m_GainLutFilter[chanel] = GainLutFilterType::New();
       m_HistoFilter[chanel] = HistoFilterType::New();
       m_GainFilter[chanel] = GainFilterType::New();
       m_StreamingFilter[chanel] = StreamingImageFilterType::New();
@@ -546,7 +548,7 @@ private:
         }
 
       SetUpPipeline ( m_HistoFilter[chanel] ,
-                      m_LutFilter[chanel] ,
+                      m_GainLutFilter[chanel] ,
                       m_StreamingFilter[chanel] ,
                       inputImageList->GetNthElement(chanel) ,
                       max[chanel] , min[chanel] );
@@ -603,13 +605,13 @@ private:
                               const std::vector < int > rgb ,
                               ImageListType::Pointer outputImageList )
   {
-    m_LutFilter.resize( 1 , LutFilterType::New() );
+    m_GainLutFilter.resize( 1 , GainLutFilterType::New() );
     m_HistoFilter.resize( 1 , HistoFilterType::New() );
     m_StreamingFilter.resize( 1 , StreamingImageFilterType::New() );
     m_GainFilter.resize(3);
     m_BufferFilter.resize(3);
     // m_RAMWriter.resize(1);
-    // m_LutFilter[0] = LutFilterType::New();
+    // m_GainLutFilter[0] = GainLutFilterType::New();
     // m_RAMWriter[0] = RAMWriter::New();
 
     FloatImageType::PixelType min(0) , max(0);
@@ -617,7 +619,7 @@ private:
     // ComputeFloatMinMax( inputImageList->GetNthElement(0) , max , min );
 
     SetUpPipeline ( m_HistoFilter[0] ,
-                    m_LutFilter[0] ,
+                    m_GainLutFilter[0] ,
                     m_StreamingFilter[0] ,
                     m_LuminanceFunctor->GetOutput() ,
                     max , min);
@@ -650,7 +652,7 @@ private:
   ImageListToVectorFilterType::Pointer m_ImageListToVectorFilterOut;
   LuminanceFunctorType::Pointer m_LuminanceFunctor;
   VectorToImageListFilterType::Pointer m_VectorToImageListFilter;
-  std::vector < LutFilterType::Pointer > m_LutFilter;
+  std::vector < GainLutFilterType::Pointer > m_GainLutFilter;
   std::vector < HistoFilterType::Pointer > m_HistoFilter;
   std::vector < GainFilterType::Pointer > m_GainFilter;
   std::vector < StreamingImageFilterType::Pointer > m_StreamingFilter;
