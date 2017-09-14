@@ -19,7 +19,13 @@
  */
 
 #include "otbWrapperInputImageListParameter.h"
-#include "itksys/SystemTools.hxx"
+
+
+#include <itksys/SystemTools.hxx>
+
+
+#include "otbCast.h"
+
 
 namespace otb
 {
@@ -37,84 +43,147 @@ IMAGES_FILTER(
 );
 
 
-InputImageListParameter::InputImageListParameter()
-  : m_InputImageParameterVector(),
-    m_ImageList(FloatVectorImageListType::New())
-{
-  this->SetName("Input Image List");
-  this->SetKey("inList");
-}
-
-InputImageListParameter::~InputImageListParameter()
-{
-}
-
-void
+/*****************************************************************************/
+InputImageParameter::Pointer
 InputImageListParameter
-::SetListFromFileName( const StringVector & filenames )
+::FromImage( ImageBaseType * image )
 {
-  // First clear previous file chosen
-  this->ClearValue();
+    assert( image!=nullptr );
 
-  for(unsigned int i=0; i<filenames.size(); i++)
+    InputImageParameter::Pointer p;
+
+    return FromImage( p, image );
+}
+
+
+/*****************************************************************************/
+InputImageParameter::Pointer &
+InputImageListParameter
+::FromImage( InputImageParameter::Pointer & parameter,
+	     ImageBaseType * image )
+{
+    assert( image!=nullptr );
+
+    parameter = InputImageParameter::New();
+
+    parameter->SetImage( image );
+    parameter->SetDescription( "Image filename" );
+
+    assert( parameter->GetImage()!=nullptr );
+
+    return parameter;
+}
+
+
+/*****************************************************************************/
+InputImageListParameter
+::InputImageListParameter() :
+  m_ImageList( FloatVectorImageListType::New() )
+{
+  SetName( "Input Image List" );
+  SetKey( "inList" );
+}
+
+
+/*****************************************************************************/
+InputImageListParameter
+::~InputImageListParameter()
+{
+}
+
+
+/*****************************************************************************/
+const FloatVectorImageListType *
+InputImageListParameter
+::GetImageList() const
+{
+  return const_cast< InputImageListParameter * >( this )->GetImageList();
+}
+
+
+/*****************************************************************************/
+FloatVectorImageListType *
+InputImageListParameter
+::GetImageList()
+{
+  m_ImageList->Clear();
+
+  std::for_each(
+    begin(),
+    end(),
+    [ this ]( auto parameter ) -> void
     {
-    const std::string filename = filenames[i];
+      assert( !parameter.IsNull() );
 
-    // File existence checked by the reader
-    if (!filename.empty())
-      {
-      // Try to build a new ParameterInputImage
-      InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
+      assert( parameter==otb::DynamicCast< InputImageParameter >( parameter ) );
 
-      tmpInputImageParameter->SetFromFileName(filename);
-      tmpInputImageParameter->SetDescription( "Image filename" );
+      assert(
+	DynamicCast< InputImageParameter >( parameter )
+	->GetFloatVectorImage()!=nullptr
+      );
 
-      m_InputImageParameterVector.push_back(tmpInputImageParameter);
-      }
+      m_ImageList->PushBack(
+	DynamicCast< InputImageParameter >( parameter )
+	->GetFloatVectorImage()
+      );
     }
+  );
 
-  this->Modified();
-  SetActive(true);
+  return m_ImageList;
 }
 
 
-void
+/*****************************************************************************/
+const FloatVectorImageType *
 InputImageListParameter
-::InsertNullElement( std::size_t index )
+::GetNthImage( std::size_t i ) const
 {
-  InputImageParameterVectorType::iterator it1( m_InputImageParameterVector.begin() );
-
-  if( index>=0 )
-    it1 += index;
-
-  m_InputImageParameterVector.insert( it1, ITK_NULLPTR );
-
-  SetActive( false );
-
-  Modified();
+  return const_cast< InputImageListParameter * >( this )->GetNthImage( i );
 }
 
 
+/*****************************************************************************/
+FloatVectorImageType *
+InputImageListParameter::GetNthImage( std::size_t i )
+{
+  assert( i<Size() );
+  assert( !m_Parameters[ i ].IsNull() );
+  assert( m_Parameters[ i ]->GetFloatVectorImage()!=nullptr );
+
+  return m_Parameters[ i ]->GetFloatVectorImage();
+}
+
+
+/*****************************************************************************/
 void
 InputImageListParameter
-::Insert( const std::string & filename, std::size_t index )
+::SetImageList( FloatVectorImageListType * imList )
 {
-  InputImageParameter::Pointer parameter(
-    InputImageParameter::New()
-  );
+  // Check input availability
+  for( std::size_t i=0; i<imList->Size(); i++ )
+  {
+    assert( imList->GetNthElement( i )!=nullptr );
 
-  parameter->SetDescription( "Image filename" );
+    imList->GetNthElement( i )->UpdateOutputInformation();
+  }
 
-  if( !filename.empty() )
-    parameter->SetFromFileName( filename );
+  // Clear previous values
+  ClearValue();
 
-  m_InputImageParameterVector.insert(
-    index<0
-    ? m_InputImageParameterVector.end()
-    : m_InputImageParameterVector.begin() + index,
-    parameter
-  );
+  for( std::size_t i=0; i<imList->Size(); i++ )
+    {
+    assert( imList->GetNthElement( i )!=nullptr );
 
+    InputImageParameter::Pointer parameter;
+
+    FromImage( parameter, imList->GetNthElement( i ) );
+
+    assert( parameter->GetFloatVectorImage()!=nullptr );
+
+    m_Parameters.push_back( parameter );
+
+    m_ImageList->PushBack( parameter->GetFloatVectorImage() );
+    }
 
   SetActive( true );
 
@@ -122,281 +191,50 @@ InputImageListParameter
 }
 
 
-void
-InputImageListParameter::AddFromFileName(const std::string & filename)
-{
-  // File existence checked by the reader
-  if (!filename.empty())
-    {
-    InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
-    tmpInputImageParameter->SetFromFileName(filename);
-    tmpInputImageParameter->SetDescription( "Image filename" );
-
-    m_InputImageParameterVector.push_back(tmpInputImageParameter);
-
-    this->Modified();
-    SetActive(true);
-    }
-}
-
+/*****************************************************************************/
 void
 InputImageListParameter
-::SetNthFileName( std::size_t id,
-		  const std::string & filename )
+::SetNthImage( std::size_t i, ImageBaseType * image )
 {
-#if 0
-  if( m_InputImageParameterVector.size()<id )
-    {
-    itkExceptionMacro(<< "No image "<<id<<". Only "<<m_InputImageParameterVector.size()<<" images available.");
-    }
+  assert( i<Size() );
+  assert( image!=nullptr );
 
-  // File existence checked by the reader
-  if (!filename.empty())
-    {
-    InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
-    tmpInputImageParameter->SetFromFileName(filename);
-    tmpInputImageParameter->SetDescription( "Image filename" );
-
-    m_InputImageParameterVector[id] = tmpInputImageParameter;
-
-    this->Modified();
-    SetActive(true);
-    return true;
-    }
-
-  return false;
-
-#else
-  assert( id<m_InputImageParameterVector.size() );
-  assert( !m_InputImageParameterVector[ id ].IsNull() );
-
-  if( !filename.empty() )
-    {
-    Modified();
-
-    SetActive( true );
-    }
-
-  m_InputImageParameterVector[ id ]->SetFromFileName( filename );
-
-#endif
-}
-
-
-InputImageListParameter::StringVector
-InputImageListParameter
-::GetFileNameList() const
-{
-  StringVector filenames;
-
-  for(InputImageParameterVectorType::const_iterator it = m_InputImageParameterVector.begin();
-      it!=m_InputImageParameterVector.end();++it)
-    {
-    filenames.push_back( (*it)->GetFileName() );
-    }
-
-  return filenames;
-}
-
-
-const std::string &
-InputImageListParameter
-::GetNthFileName( std::size_t i ) const
-{
-    if(m_InputImageParameterVector.size()<i)
-      {
-      itkExceptionMacro(<< "No image "<<i<<". Only "<<m_InputImageParameterVector.size()<<" images available.");
-      }
-
-    return m_InputImageParameterVector[i]->GetFileName();
-}
-
-FloatVectorImageListType*
-InputImageListParameter::GetImageList() const
-{
-  m_ImageList->Clear();
-  for (unsigned int i=0 ; i < this->Size() ; ++i)
-    {
-    m_ImageList->PushBack(m_InputImageParameterVector[i]->GetFloatVectorImage());
-    }
-  return m_ImageList;
-}
-
-FloatVectorImageType*
-InputImageListParameter::GetNthImage(unsigned int i) const
-{
-  if(this->Size()<=i)
-    {
-    itkExceptionMacro(<< "No image "<<i<<". Only "<<this->Size()<<" images available.");
-    }
-  return m_InputImageParameterVector[i]->GetFloatVectorImage();
-}
-
-void
-InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
-{
-  // Check input availability
-  for(unsigned int i = 0; i < imList->Size(); i++)
-  {
-    imList->GetNthElement(i)->UpdateOutputInformation();
-  }
-
-  // Clear previous values
-  this->ClearValue();
-
-  for(unsigned int i = 0; i<imList->Size(); i++)
-    {
-    // Try to build a new ParameterInputImage
-    InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
-    tmpInputImageParameter->SetImage(imList->GetNthElement(i));
-    tmpInputImageParameter->SetDescription( "Image filename" );
-
-    m_InputImageParameterVector.push_back(tmpInputImageParameter);
-    m_ImageList->PushBack(tmpInputImageParameter->GetFloatVectorImage());
-    }
-
-  SetActive(true);
-  this->Modified();
-}
-
-void InputImageListParameter::SetNthImage(unsigned int i, ImageBaseType * img)
-{
-  if(this->Size()<i)
-  {
-    itkExceptionMacro(<< "No image "<<i<<". Only "<<this->Size()<<" images available.");
-  }
-
-  // Check input availability
-  img->UpdateOutputInformation();
-
-  // Try to build a new ParameterInputImage
-  InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
-  tmpInputImageParameter->SetImage(img);
-  tmpInputImageParameter->SetDescription( "Image filename" );
-
-  m_InputImageParameterVector[i] = tmpInputImageParameter;
-}
-
-
-void
-InputImageListParameter::AddImage(ImageBaseType* image)
-{
   // Check input availability
   image->UpdateOutputInformation();
 
-  InputImageParameter::Pointer tmpInputImageParameter = InputImageParameter::New();
-
-  tmpInputImageParameter->SetImage(image);
-  tmpInputImageParameter->SetDescription( "Image filename" );
-
-  m_InputImageParameterVector.push_back(tmpInputImageParameter);
-
-  this->Modified();
-}
-
-bool
-InputImageListParameter::HasValue() const
-{
-  if(this->Size() == 0)
-    {
-    return false;
-    }
-
-  bool res(true);
-  unsigned int i(0);
-  while(i < this->Size() && res == true)
-    {
-    res = (m_InputImageParameterVector[i] ?
-           m_InputImageParameterVector[i]->HasValue() :
-           false);
-    i++;
-    }
-
-  return res;
+  // Build parameter.
+  FromImage( m_Parameters[ i ], image );
 }
 
 
+/*****************************************************************************/
 void
 InputImageListParameter
-::Erase( std::size_t start, std::size_t count )
+::AddImage( ImageBaseType * image )
 {
-  assert( start<m_InputImageParameterVector.size() );
-  assert( start+count<=m_InputImageParameterVector.size() );
+  assert( image!=nullptr );
 
-  m_InputImageParameterVector.erase(
-    m_InputImageParameterVector.begin() + start,
-    m_InputImageParameterVector.begin() + start + count
-  );
+  // Check input availability
+  image->UpdateOutputInformation();
+
+  // Build & add parameter.
+  m_Parameters.push_back( FromImage( image ) );
 
   Modified();
 }
 
 
-std::size_t
-InputImageListParameter
-::Size() const
-{
-  return m_InputImageParameterVector.size();
-}
-
-
+/*****************************************************************************/
 void
 InputImageListParameter::ClearValue()
 {
+  Superclass::ClearValue();
+
   m_ImageList->Clear();
-  m_InputImageParameterVector.clear();
-
-  SetActive(false);
-  this->Modified();
-}
-
-bool
-InputImageListParameter
-::IsActive( std::size_t i ) const
-{
-  assert( i<m_InputImageParameterVector.size() );
-  assert( !m_InputImageParameterVector[ i ].IsNull() );
-
-  return m_InputImageParameterVector[ i ]->GetActive();
 }
 
 
-const std::string &
-InputImageListParameter
-::GetToolTip( std::size_t i ) const
-{
-  assert( i<m_InputImageParameterVector.size() );
-  assert( !m_InputImageParameterVector[ i ].IsNull() );
-
-  return m_InputImageParameterVector[ i ]->GetDescription();
-}
-
-
-void
-InputImageListParameter
-::Swap( std::size_t i1, std::size_t i2 )
-{
-  assert( !m_InputImageParameterVector.empty() );
-
-  auto clamp = [ this ]( unsigned int i ) -> unsigned int
-  {
-    return
-    i>=m_InputImageParameterVector.size()
-    ? m_InputImageParameterVector.size() - 1
-    : i;
-  };
-
-  std::swap(
-    m_InputImageParameterVector[ clamp( i1 ) ],
-    m_InputImageParameterVector[ clamp( i2 ) ]
-  );
-}
-
-
+/*****************************************************************************/
 Role
 InputImageListParameter
 ::GetDirection( std::size_t ) const
@@ -416,6 +254,7 @@ InputImageListParameter
 }
 
 
+/*****************************************************************************/
 Role
 InputImageListParameter
 ::GetDirection() const
@@ -424,6 +263,7 @@ InputImageListParameter
 }
 
 
+/*****************************************************************************/
 const std::string &
 InputImageListParameter
 ::GetFilenameFilter( std::size_t ) const
@@ -432,12 +272,36 @@ InputImageListParameter
 }
 
 
+/*****************************************************************************/
 const std::string &
 InputImageListParameter
 ::GetFilenameFilter() const
 {
   return IMAGES_FILTER;
 }
+
+
+/*****************************************************************************/
+const std::string &
+InputImageListParameter
+::ToString( const ParameterType::Pointer & p ) const
+{
+  assert( !p.IsNull() );
+
+  return p->GetFileName();
+}
+
+/*****************************************************************************/
+void
+InputImageListParameter
+::FromString( const ParameterType::Pointer & p,
+	      const std::string & s ) const
+{
+  assert( !p.IsNull() );
+
+  p->SetFromFileName( s );
+}
+
 
 }
 

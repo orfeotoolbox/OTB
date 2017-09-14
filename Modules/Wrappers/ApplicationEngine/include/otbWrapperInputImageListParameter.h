@@ -21,14 +21,19 @@
 #ifndef otbWrapperInputImageListParameter_h
 #define otbWrapperInputImageListParameter_h
 
-#include "otbWrapperParameter.h"
+
 #include "otbWrapperInputImageParameter.h"
-#include "otbWrapperStringListInterface.h"
+#include "otbWrapperParameterList.h"
+
 
 namespace otb
 {
+
+
 namespace Wrapper
 {
+
+
 /** \class InputImageListParameter
  *  \brief This class represents a list of InputImage parameter
  *
@@ -36,8 +41,7 @@ namespace Wrapper
  */
 
 class OTBApplicationEngine_EXPORT InputImageListParameter :
-    public Parameter,
-    public StringListInterface
+    public ParameterList< InputImageParameter >
 {
 public:
   /** Standard class typedef */
@@ -46,75 +50,35 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef std::vector< InputImageParameter::Pointer > InputImageParameterVectorType;
-
   typedef itk::ImageBase< 2 > ImageBaseType;
 
   /** Defining ::New() static method */
   itkNewMacro( Self );
 
   /** RTTI support */
-  itkTypeMacro( InputImageListParameter, Parameter );
-
-  /** Set image form a list of filename */
-  void SetListFromFileName( const StringVector & filenames ) override;
-
-  /** */
-  void InsertNullElement( std::size_t = -1 ) override;
-
-  /** Add an image from a filename */
-  void AddFromFileName( const std::string & filename ) override;
-
-  /** */
-  void Insert( const std::string &, std::size_t = -1 ) override;
-
-  /** Set one specific stored image filename. */
-  void SetNthFileName( std::size_t, const std::string & ) override;
-
-  /** Get the stored image filename list */
-  StringVector GetFileNameList() const override;
-
- /** Get one specific stored image filename. */
-  const std::string & GetNthFileName( std::size_t i ) const override;
+  itkTypeMacro( InputImageListParameter, ParameterList );
 
   /** Get one list of the stored image. WARNING : if the parameter list changes,
    *  the returned image list may become obsolete. You should call
    *  GetImageList() again to make sure your image list is up-to-date. */
-  FloatVectorImageListType* GetImageList() const;
+  const FloatVectorImageListType * GetImageList() const;
+  FloatVectorImageListType * GetImageList();
 
   /** Get one specific stored image. */
-  FloatVectorImageType * GetNthImage( unsigned int i ) const;
+  const FloatVectorImageType * GetNthImage( std::size_t ) const;
+  FloatVectorImageType * GetNthImage( std::size_t );
 
   /** Set one specific image. */
-  void SetNthImage( unsigned int i, ImageBaseType * img );
-
-  /** */
-  const std::string & GetToolTip( std::size_t ) const override;
+  void SetNthImage( std::size_t, ImageBaseType * );
 
   /** Set the list of image. */
-  void SetImageList( FloatVectorImageListType * imList );
+  void SetImageList( FloatVectorImageListType * );
 
   /** Add an image to the list. */
-  void AddImage( ImageBaseType * image );
-
-  /** */
-  bool HasValue() const override;
-
-  /** */
-  using StringListInterface::Erase;
-  void Erase( std::size_t start, std::size_t count ) override;
+  void AddImage( ImageBaseType * );
 
   /** Clear all the list. */
   void ClearValue() override;
-
-  /** Retrieve number of elements */
-  std::size_t Size() const override;
-
-  /** */
-  bool IsActive( size_t ) const override;
-
-  /** */
-  void Swap( std::size_t, std::size_t ) override;
 
   /** */
   Role GetDirection( std::size_t ) const override;
@@ -136,18 +100,40 @@ protected:
   ~InputImageListParameter() override;
 
 //
-// Private attributes.
-private:
-  InputImageListParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+// Protected methods.
+protected:
 
-  InputImageParameterVectorType m_InputImageParameterVector;
+  /** */
+  const std::string & ToString( const ParameterType::Pointer & ) const override;
+
+  /** */
+  void FromString( const ParameterType::Pointer &,
+		   const std::string & ) const override;
+
+//
+// Private methods.
+private:
+  InputImageListParameter( const Parameter & ); //purposely not implemented
+  void operator = ( const Parameter & ); //purposely not implemented
+
+  static
+    InputImageParameter::Pointer
+    FromImage( ImageBaseType * );
+
+  static
+    InputImageParameter::Pointer &
+    FromImage( InputImageParameter::Pointer &, ImageBaseType * );
+
+//
+// Private attributes
+private:
   FloatVectorImageListType::Pointer m_ImageList;
 
 
 }; // End class InputImage Parameter
 
 } // End namespace Wrapper
+
 } // End namespace otb
 
 #endif
