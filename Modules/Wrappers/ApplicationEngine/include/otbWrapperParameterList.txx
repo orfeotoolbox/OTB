@@ -76,13 +76,15 @@ ParameterList< T >
 ::HasValue() const
 {
   return
+    Size()>0
+    &&
     std::all_of(
       begin(),
       end(),
       []( auto p ) -> bool
       {
         assert( p!=nullptr );
-        return !p && p->HasValue();
+        return p && p->HasValue();
       }
     );
 }
