@@ -39,10 +39,26 @@ set(QT4_SB_ENABLE_GTK OFF CACHE INTERNAL "Enable GTK+ style with qt using -gtkst
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT4 ZLIB PNG JPEG FREETYPE)
 
 #use system libs always for Qt4 as we build them from source or have already in system
-set(QT4_SB_CONFIG)
+
+if(SB_INSTALL_PREFIX)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT4_INSTALL_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include QT4_INCLUDE_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/lib QT4_LIB_PREFIX_NATIVE)
+endif()
+
+#Common options for all cases
+set(QT4_SB_CONFIG
+"-prefix ${QT4_INSTALL_PREFIX_NATIVE} -L ${QT4_LIB_PREFIX_NATIVE} \
+-I ${QT4_INCLUDE_PREFIX_NATIVE} -I ${QT4_INCLUDE_PREFIX_NATIVE}\freetype2 \
+-opensource -confirm-license -release -shared -nomake demos \
+-nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script \
+-no-scripttools -no-multimedia -no-audio-backend -no-webkit -no-declarative \
+-no-accessibility -no-qt3support -no-xmlpatterns -no-sql-sqlite -no-openssl \
+-no-libtiff -no-libmng -system-libpng -system-libjpeg -system-zlib")
+
 #RK: building faling on mac. png include is in a macframework
 if(USE_SYSTEM_PNG)
-  set(QT4_SB_CONFIG "-I ${PNG_PNG_INCLUDE_DIR}")
+  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -I ${PNG_PNG_INCLUDE_DIR}")
 endif()
 
 if(UNIX)
@@ -57,15 +73,9 @@ if(UNIX)
     endif()
   endif()
   #common for all unix
-  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-nis -no-javascript-jit -no-icu -v")
+  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-dbus -no-nis -no-javascript-jit -no-icu -v")
 elseif(MSVC)
   set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -mp")
-endif()
-
-if(SB_INSTALL_PREFIX)
-  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT4_INSTALL_PREFIX_NATIVE)
-  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include QT4_INCLUDE_PREFIX_NATIVE)
-  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/lib QT4_LIB_PREFIX_NATIVE)
 endif()
 
 if(WIN32)
