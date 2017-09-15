@@ -84,10 +84,6 @@ public:
   itkSetMacro(ThumbSize, SizeType);
   itkGetMacro(ThumbSize, SizeType);
 
-  /** Get macro to get the histogram target*/
-  itkGetMacro(TargetHisto, typename OutputImageType::Pointer);
-  //TODO Give the opportunity to choose the histogram target
-
   /** Get/Set macro to get/set the threshold parameter */
   itkSetMacro(Threshold , float);
   itkGetMacro(Threshold , float);
@@ -127,7 +123,6 @@ private:
   ComputeHistoFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  typename OutputImageType::Pointer m_TargetHisto;
   std::vector< typename OutputImageType::PixelType > m_HistoThread;
   InputPixelType m_Min;
   InputPixelType m_Max;

@@ -26,7 +26,6 @@
 
 #include <limits>
 
-// #define DEBUGGING
 namespace otb
 {
 
@@ -37,7 +36,6 @@ ComputeHistoFilter < TInputImage , TOutputImage >
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput( 0, this->MakeOutput(0) );
   this->SetNthOutput( 1, this->MakeOutput(1) );
-  //m_TargetHisto =  OutputImageType::New() ;
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
@@ -83,14 +81,9 @@ template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateInputRequestedRegion()
 {
-  #ifdef DEBUGGING
-  std::cout<<"##################GenerateInputRequestedRegion################"<<std::endl;
-  #endif
-  // Same region as the virtual output : when bug corrected factorize this!!!
   assert( m_ThumbSize[0]>0);
   assert( m_ThumbSize[1]>0);
 
-  // Superclass::GenerateInputRequestedRegion();
   typename Superclass::InputImagePointer inputPtr =
                   const_cast<InputImageType *>(this->GetInput());
   OutputImageRegionType histoRegion = 
@@ -132,28 +125,16 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
     e.SetDataObject(inputPtr);
     throw e;
     }
-  #ifdef DEBUGGING
-  std::cout<<"##################End GenerateInputRequestedRegion################"<<std::endl;
-  #endif
 }
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateOutputInformation()
 {
-  #ifdef DEBUGGING
-  std::cout<<"###############GenerateOutputInformation###############"<<std::endl;
-  #endif
-
   Superclass::GenerateOutputInformation();
   typename InputImageType::ConstPointer input = this->GetInput();
   typename OutputImageType::Pointer output = this->GetHistoOutput();
   typename OutputImageType::Pointer outImage = this->GetOutput();
-
-  // if ( !input || !output || !outImage )
-  //   {
-  //   return;
-  //   }
 
   outImage->SetLargestPossibleRegion(input->GetLargestPossibleRegion());
 
@@ -167,26 +148,12 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   region.SetIndex(start);
   output->SetNumberOfComponentsPerPixel(m_NbBin);
   output->SetLargestPossibleRegion(region);
-
-  #ifdef DEBUGGING
-  std::cout<<"HistoOutput Requested Index  "<<this->GetHistoOutput()->GetRequestedRegion().GetIndex()<<std::endl;
-  std::cout<<"HistoOutput Requested Size "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
-  #endif
-  #ifdef DEBUGGING
-  std::cout<<"###############End GenerateOutputInformation###############"<<std::endl;
-  #endif
 }
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateOutputRequestedRegion( itk::DataObject * itkNotUsed(output) )
 {
-  #ifdef DEBUGGING
-  std::cout<<"###########GenerateOutputRequestedRegion###########"<<std::endl;
-  std::cout<<"HistoOutput Requested Output index : "<<this->GetHistoOutput()->GetRequestedRegion().GetIndex()<<std::endl;
-  std::cout<<"HistoOutput Requested Output size : "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
-  #endif
-
   typename OutputImageType::Pointer outImage = this->GetOutput();
   IndexType start ;
   OutputImageRegionType histoRegion = 
@@ -218,28 +185,13 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
     e.SetDataObject(outImage);
     throw e;
     }
-  #ifdef DEBUGGING
-  std::cout<<"###########End GenerateOutputRequestedRegion###########"<<std::endl;
-  #endif
 }
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateData()
 {
-  #ifdef DEBUGGING
-  std::cout<<"##############GenerateData################"<<std::endl;
-  std::cout<<"output requested "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
-  std::cout<<"output Largest "<<this->GetHistoOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-  std::cout<<"output Buffered "<<this->GetHistoOutput()->GetBufferedRegion().GetSize()<<std::endl;
-  #endif
   this->AllocateOutputs();
-  #ifdef DEBUGGING
-  std::cout<<"After Allocate"<<std::endl;
-  std::cout<<"output requested "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
-  std::cout<<"output Largest "<<this->GetHistoOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-  std::cout<<"output Buffered "<<this->GetHistoOutput()->GetBufferedRegion().GetSize()<<std::endl;
-  #endif
 
   // Set up the multithreaded processing
   typename itk::ImageSource<OutputImageType>::ThreadStruct str;
@@ -260,43 +212,24 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   this->GetMultiThreader()->SingleMethodExecute();
 
   this->AfterThreadedGenerateData();
-  #ifdef DEBUGGING
-  std::cout<<"##############End GenerateData################"<<std::endl;
-  #endif
 }
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::BeforeThreadedGenerateData()
 {
-  #ifdef DEBUGGING
-  std::cout<<"##############BeforeThreadedGenerateData################"<<std::endl;
-  #endif
   // Initializing output
   typename OutputImageType::Pointer output = this->GetHistoOutput();
   typename OutputImageType::PixelType zeroPixel(m_NbBin) ;
   zeroPixel.Fill(0);
   output->FillBuffer( zeroPixel );
-  #ifdef DEBUGGING
-  std::cout<<"Vector length "<<output->GetVectorLength()<<std::endl;
-  // std::cout<<"zeroPixel length "<<zeroPixel.GetSize()<<std::endl;
-  #endif
 
   // Initializing shared variable with thread number parameter
   SizeType outSize = output->GetRequestedRegion().GetSize();
   m_HistoThread.resize( m_ValidThreads * outSize[0] * outSize[1] , zeroPixel );
 
-  #ifdef DEBUGGING
-  std::cout<<"NbThread "<<m_ValidThreads<<std::endl;
-  std::cout<<"vector size "<<m_HistoThread.size()<<std::endl;
-  std::cout<<"Vector's pixel "<<m_HistoThread[0]<<std::endl;
-  #endif
-
   m_Step = static_cast<double>( m_Max - m_Min ) \
                 / static_cast<double>( m_NbBin -1 );
-  #ifdef DEBUGGING
-  std::cout<<"##############End BeforeThreadedGenerateData################"<<std::endl;
-  #endif
 }
 
 template <class TInputImage, class TOutputImage >
@@ -305,12 +238,9 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
                        itk::ThreadIdType threadId )
 {
   assert(m_Step>0);
-  #ifdef DEBUGGING
-  std::cout<<"##############ThreadedGenerateData################"<<std::endl;
-  std::cout<<"ID : "<<threadId<<std::endl;
-  #endif
   // itk::ProgressReporter progress(this , threadId , 
   //               outputRegionForThread.GetNumberOfPixels() );
+
   typename InputImageType::ConstPointer input = this->GetInput();
   OutputImageRegionType histoRegion = 
                             GetHistoOutput()->GetRequestedRegion();
@@ -341,18 +271,12 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
       ++it;
       }
     }
-  #ifdef DEBUGGING
-  std::cout<<"##############End ThreadedGenerateData################"<<std::endl;
-  #endif
 }
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::AfterThreadedGenerateData()
 {
-  #ifdef DEBUGGING
-  std::cout<<"after histo"<<std::endl;
-  #endif
   typename OutputImageType::Pointer output = this->GetHistoOutput();
   typename itk::ImageRegionIterator < OutputImageType > 
       oit( output , output->GetRequestedRegion() );

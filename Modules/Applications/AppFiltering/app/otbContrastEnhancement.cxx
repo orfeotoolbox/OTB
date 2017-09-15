@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// #define DEBUGGING
+
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -109,10 +109,7 @@ public:
   typedef otb::StreamingStatisticsImageFilter< FloatImageType >
           StatsFilterType;
   typedef itk::UnaryFunctorImageFilter < FloatVectorImageType ,
-          FloatImageType , Functor::LuminanceOperator > LuminanceFunctorType;
-  typedef otb::StreamingImageVirtualWriter < FloatVectorImageType > 
-          VirtualWriter;
-  // typedef otb::StreamingImageRAMWriter < FloatVectorImageType > RAMWriter;
+          FloatImageType , Functor::LuminanceOperator > LuminanceFunctorType; 
   typedef itk::StreamingImageFilter < FloatVectorImageType , FloatVectorImageType > 
           StreamingImageFilterType;
   typedef otb::BufferFilter < FloatImageType > BufferFilterType;
@@ -126,7 +123,6 @@ private:
 
 	void DoInit() ITK_OVERRIDE
 	{
-    // itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
 		SetName("Contrast Enhancement");
     SetDescription("");
 
@@ -259,10 +255,8 @@ private:
 
       if ( HasUserValue("min") && HasUserValue("max") )
         {
-        // if ( GetParameterFloat("max") < GetParameterFloat("min") )
-        //   {
-        //     continue;
-        //   }
+        // TODO log warning and switch
+        // if equal log warning
         }
 
       }
@@ -310,20 +304,6 @@ private:
 
     m_ImageListToVectorFilterOut = ImageListToVectorFilterType::New() ;
     m_ImageListToVectorFilterOut->SetInput(outputImageList);
-    #ifdef DEBUG
-    std::cout<<"vectortoimagelist R"<<m_VectorToImageListFilter->GetOutput()->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"vectortoimagelist B"<<m_VectorToImageListFilter->GetOutput()->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"vectortoimagelist L"<<m_VectorToImageListFilter->GetOutput()->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut R"<<m_GainLutFilter[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut B"<<m_GainLutFilter[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"filterLut L"<<m_GainLutFilter[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain R"<<m_GainFilter[0]->GetOutput()->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain B"<<m_GainFilter[0]->GetOutput()->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"filterGain L"<<m_GainFilter[0]->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
-    std::cout<<"outputImageList R"<<outputImageList->GetNthElement(0)->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"outputImageList B"<<outputImageList->GetNthElement(0)->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"outputImageList L"<<outputImageList->GetNthElement(0)->GetLargestPossibleRegion().GetSize()<<std::endl;
-    #endif
 
     SetParameterOutputImage( "out" , m_ImageListToVectorFilterOut->GetOutput() );
   }
@@ -428,18 +408,8 @@ private:
     thumbSize[1] = GetParameterInt("thumb.h");
     histoFilter->SetThumbSize( thumbSize );
     histoFilter->SetInput( input );
-    // RAMWriter::Pointer ramWriter ( RAMWriter::New() );
-    // ramWriter->SetInput( histoFilter->GetHistoOutput() );
-    // VirtualWriter::Pointer virtualWriter ( VirtualWriter::New() );
-    // virtualWriter->SetInput( ramWriter->GetOutput() );
-    // virtualWriter->Update();
-    // lutFilter->SetInput( ramWriter->GetOutput() );
-    // lutFilter->Update();
     lutFilter->SetInput( histoFilter->GetHistoOutput() );
     streamingFilter->SetInput( lutFilter->GetOutput() );
-    // ramWriter->SetInput( lutFilter->GetOutput() );
-    // virtualWriter->SetInput( ramWriter->GetOutput() );
-    // virtualWriter->Update();
   }
 
   // Compute min max from a vector image
@@ -525,7 +495,6 @@ private:
     m_GainFilter.resize(nbChanel);
     m_BufferFilter.resize(nbChanel);
     m_StreamingFilter.resize(nbChanel);
-    // m_RAMWriter.resize(nbChanel);
 
     for (int chanel = 0 ; chanel<nbChanel ; chanel++ ) 
       {
@@ -534,7 +503,6 @@ private:
       m_GainFilter[chanel] = GainFilterType::New();
       m_StreamingFilter[chanel] = StreamingImageFilterType::New();
       m_BufferFilter[chanel] = BufferFilterType::New();
-      // m_RAMWriter[chanel] = RAMWriter::New();
 
       if ( min[chanel] == max[chanel] )
         {
@@ -561,7 +529,6 @@ private:
       m_GainFilter[chanel]->SetMax( max[chanel] );
       m_GainFilter[chanel]->SetInputLut( 
         m_StreamingFilter[chanel]->GetOutput() );
-      // m_GainFilter[chanel]->SetNumberOfThreads(1);
       m_BufferFilter[chanel] -> SetInput ( 
         m_VectorToImageListFilter->GetOutput()->GetNthElement( chanel ) );
       m_BufferFilter[chanel]->InPlaceOn();
@@ -574,12 +541,12 @@ private:
   void ComputeLuminance( const FloatVectorImageType::Pointer inImage ,
                          std::vector < int > rgb )
   {
-    // Retreive the coeff for each chanel
+    // Retreive coeffs for each chanel
     std::vector < float > lumCoef( 3 , 0.0 );
     lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
     lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
     lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
-    // Normalize those coeff
+    // Normalize those coeffs
     float sum = 0.0;
     for (float f : lumCoef)
       {
@@ -593,9 +560,6 @@ private:
     m_LuminanceFunctor =  LuminanceFunctorType::New() ;
     m_LuminanceFunctor->GetFunctor().SetRgb(rgb);
     m_LuminanceFunctor->GetFunctor().SetLumCoef(lumCoef);
-    // std::cout<<m_LuminanceFunctor->GetFunctor().GetLumCoef()[0]<<std::endl;
-    // std::cout<<m_LuminanceFunctor->GetFunctor().GetLumCoef()[1]<<std::endl;
-    // std::cout<<m_LuminanceFunctor->GetFunctor().GetLumCoef()[2]<<std::endl;
     m_LuminanceFunctor->SetInput( inImage );
   }
 
@@ -610,24 +574,15 @@ private:
     m_StreamingFilter.resize( 1 , StreamingImageFilterType::New() );
     m_GainFilter.resize(3);
     m_BufferFilter.resize(3);
-    // m_RAMWriter.resize(1);
-    // m_GainLutFilter[0] = GainLutFilterType::New();
-    // m_RAMWriter[0] = RAMWriter::New();
 
     FloatImageType::PixelType min(0) , max(0);
     ComputeFloatMinMax( m_LuminanceFunctor->GetOutput() , max , min );
-    // ComputeFloatMinMax( inputImageList->GetNthElement(0) , max , min );
 
     SetUpPipeline ( m_HistoFilter[0] ,
                     m_GainLutFilter[0] ,
                     m_StreamingFilter[0] ,
                     m_LuminanceFunctor->GetOutput() ,
                     max , min);
-
-    // ImageFileWriter<FloatImageType>::Pointer writer(ImageFileWriter<FloatImageType>::New());
-    // writer->SetInput(m_LuminanceFunctor->GetOutput());
-    // writer->SetFileName("/home/antoine/dev/my_data/anaglum.tif");
-    // writer->Update();
 
     for ( int chanel = 0 ; chanel < 3 ; chanel++ ) 
       {

@@ -35,7 +35,7 @@ namespace otb
  *  branch 2 (B). Problem is after updating and generating data on branch 1 
  *  branch 2 will not propagate its region B again,and will use region A 
  *  instead. By memorizing the region this buffer filter can be placed in 
- *  in front of each branch so that the requested region will be saved.
+ *  in front of each branch so that the requested region will be saved.v
  *
  * \ingroup OTBContrast
  */
@@ -64,19 +64,7 @@ protected:
   ~BufferFilter() ITK_OVERRIDE {}
 
   virtual void ThreadedGenerateData(const typename InputImageType::RegionType & itkNotUsed(outputRegionForThread) ,
-                            itk::ThreadIdType itkNotUsed(threadId) )
-    {
-    #ifdef DEBUGGING
-    typename InputImageType::ConstPointer input = this->GetInput();
-    typename InputImageType::Pointer output = this->GetOutput();
-    std::cout<<"########################BufferFilter##########################"<<std::endl;
-    std::cout<<"input requested index "<<input->GetRequestedRegion().GetIndex()<<std::endl;
-    std::cout<<"input requested size "<<input->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"output requested index "<<output->GetRequestedRegion().GetIndex()<<std::endl;
-    std::cout<<"output requested size "<<output->GetRequestedRegion().GetSize()<<std::endl;
-    std::cout<<"########################BufferFilter##########################"<<std::endl;
-    #endif
-    };
+                            itk::ThreadIdType itkNotUsed(threadId) ){};
 
 private:
   BufferFilter(const Self &); //purposely not implemented

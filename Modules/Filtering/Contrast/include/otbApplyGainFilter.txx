@@ -78,20 +78,10 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
   Superclass::GenerateInputRequestedRegion();
   typename InputImageType::Pointer input = const_cast<InputImageType *>( GetInputImage() );
   typename LutType::Pointer lut = const_cast<LutType *>( GetInputLut() );
-
   typename OutputImageType::Pointer output = ( this->GetOutput() );
-  #ifdef DEBUGGING
-  std::cout<<"before"<<std::endl;
-  std::cout<<"lut largest :"<<lut->GetLargestPossibleRegion().GetSize()<<std::endl;
-  std::cout<<"lut requested :"<<lut->GetRequestedRegion().GetSize()<<std::endl;
-  #endif
+  
   input->SetRequestedRegion( output->GetRequestedRegion() );
   lut->SetRequestedRegion( lut->GetLargestPossibleRegion() );
-  #ifdef DEBUGGING
-  std::cout<<"after"<<std::endl;
-  std::cout<<"lut largest :"<<lut->GetLargestPossibleRegion().GetSize()<<std::endl;
-  std::cout<<"lut requested :"<<lut->GetRequestedRegion().GetSize()<<std::endl;
-  #endif
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
@@ -115,8 +105,6 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
                              itk::ThreadIdType itkNotUsed(threadId) )
 {
   assert(m_Step>0);
-  // if ( threadId != 1 )
-  //   return ;
   // support progress methods/callbacks
   // itk::ProgressReporter progress(this , threadId , 
   //               outputRegionForThread.GetNumberOfPixels() );

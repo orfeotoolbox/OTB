@@ -56,7 +56,6 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
                        itk::ThreadIdType itkNotUsed(threadId) )
 {
   assert(m_Step>0);
-    // support progress methods/callbacks
   // itk::ProgressReporter progress(this , threadId , 
   //               outputRegionForThread.GetNumberOfPixels() );
 
@@ -160,6 +159,7 @@ void ComputeGainLutFilter < TInputImage , TOutputImage >
     ++targetHisto[(m_NbBin - rest)/2 + i];
     }  
 }
+
 template <class TInputImage, class TOutputImage >
 bool ComputeGainLutFilter < TInputImage , TOutputImage >
 ::IsValide( const HistoType & inputHisto )
