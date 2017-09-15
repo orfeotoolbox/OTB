@@ -58,7 +58,7 @@ if(UNIX)
     endif()
   endif()
   #common for all unix
-  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-nis -no-javascript-jit -v")
+  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-nis -no-javascript-jit -no-icu -v")
 elseif(MSVC)
   set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -mp")
 endif()
