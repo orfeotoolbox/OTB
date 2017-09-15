@@ -189,6 +189,7 @@ AbstractLayerModel
   if (name != m_Name)
     {
     m_Name = name;
+    emit NameChanged();
     }
 }
 

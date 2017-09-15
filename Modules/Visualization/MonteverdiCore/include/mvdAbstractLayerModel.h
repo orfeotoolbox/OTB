@@ -161,6 +161,9 @@ signals:
   void VisibilityChanged( bool =true );
   void VisibilityChanged( AbstractLayerModel *, bool );
 
+  /** Signal to other components that the name has changed */
+  void NameChanged();
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
