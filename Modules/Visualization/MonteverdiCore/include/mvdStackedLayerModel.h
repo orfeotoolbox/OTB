@@ -254,6 +254,8 @@ signals:
 
   void ResolutionsChanged( const PixelInfo::Vector & );
 
+  void LayerRenamed();
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
