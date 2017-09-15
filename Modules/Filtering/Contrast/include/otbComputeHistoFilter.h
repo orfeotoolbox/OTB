@@ -27,14 +27,27 @@
 namespace otb
 {
 
+/** \class ComputeHistoFilter
+ *  \brief Compute local histogram with several parameter
+ *
+ *  This class implements the first part of the CLAHE algorithm. It's aim 
+ *  is to compute local histogram with several input parameters such as 
+ *  nodata value, threshold, thumbnail size and number of bin. Mandatory parameters are min 
+ *  and max value as it will be used in the histogram computation.
+ *
+ * \ingroup OTBContrast
+ */
+
 template < class TInputImage , class TOutputImage >
 class ITK_EXPORT ComputeHistoFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public:
+  /** typedef for standard classes. */
+
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
-  /** typedef for standard classes. */
+
   typedef ComputeHistoFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
@@ -43,7 +56,6 @@ public:
   typedef typename InputImageType::InternalPixelType InputPixelType;
   typedef typename InputImageType::IndexType IndexType;
   typedef typename InputImageType::SizeType SizeType;
-
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Method for creation through the object factory. */
@@ -52,24 +64,31 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComputeHistoFilter, ImageToImageFilter);
 
+  /** Get/Set macro to get/set the number of bin. Default value is 256 */
   itkSetMacro(NbBin, int);
   itkGetMacro(NbBin, int);
 
+  /** Get/Set macro to get/set the minimum value */
   itkSetMacro(Min, InputPixelType);
   itkGetMacro(Min, InputPixelType);
 
+  /** Get/Set macro to get/set the maximum value */
   itkSetMacro(Max, InputPixelType);
   itkGetMacro(Max, InputPixelType);
 
+  /** Get/Set macro to get/set the nodata value */
   itkSetMacro(NoData, InputPixelType);
   itkGetMacro(NoData, InputPixelType);
 
+  /** Get/Set macro to get/set the thumbnail's size */
   itkSetMacro(ThumbSize, SizeType);
   itkGetMacro(ThumbSize, SizeType);
 
+  /** Get macro to get the histogram target*/
   itkGetMacro(TargetHisto, typename OutputImageType::Pointer);
-  //Give the opportunity to choose the histogram target
+  //TODO Give the opportunity to choose the histogram target
 
+  /** Get/Set macro to get/set the threshold parameter */
   itkSetMacro(Threshold , float);
   itkGetMacro(Threshold , float);
 

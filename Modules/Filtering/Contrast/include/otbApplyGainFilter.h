@@ -27,24 +27,35 @@
 namespace otb
 {
 
+/** \class ApplyGainFilter
+ *  \brief Apply gain on the input image with a bilineare interpolation
+ *
+ *  This class implements the third part of the CLAHE algorithm. It's aim 
+ *  is to apply the computed gain with a bilineare interpolation. The gain 
+ *  is in a look up table, and the minimum and maximum asked by the filter
+ *  should be the same as the one used to compute those look up table.
+ *
+ * \ingroup OTBContrast
+ */
+
 template < class TInputImage , class TLut , class TOutputImage >
 class ITK_EXPORT ApplyGainFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public :
+  /** typedef for standard classes. */
+
   typedef TInputImage InputImageType;
   typedef TOutputImage OutputImageType;
-  typedef TLut LutType;
 
-  /** typedef for standard classes. */
   typedef ApplyGainFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
+  typedef TLut LutType;
   typedef typename InputImageType::InternalPixelType InputPixelType;
   typedef typename OutputImageType::InternalPixelType OutputPixelType;
-
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Method for creation through the object factory. */
@@ -52,26 +63,32 @@ public :
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComputeHistoFilter, ImageToImageFilter);
 
+  /** Get/Set macro to get/set the nodata value */
   itkSetMacro(NoData, InputPixelType);
   itkGetMacro(NoData, InputPixelType);
 
+  /** Get/Set macro to get/set the minimum value */
   itkSetMacro(Min, InputPixelType);
   itkGetMacro(Min, InputPixelType);
 
+  /** Get/Set macro to get/set the maximum value */
   itkSetMacro(Max, InputPixelType);
   itkGetMacro(Max, InputPixelType);
 
+  /** Set the input look up table*/
   void SetInputLut( const LutType * lut) ;
 
+  /** Set the input image*/
   void SetInputImage( const InputImageType * input) ;
 
 protected :
   ApplyGainFilter();
   ~ApplyGainFilter() ITK_OVERRIDE {}
   
+  /** Get the input image*/  
   const InputImageType * GetInputImage() const;
 
-  
+  /** Get the input look up table*/
   const LutType * GetInputLut() const;
 
   void GenerateInputRequestedRegion();
@@ -81,6 +98,7 @@ protected :
   void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
                             itk::ThreadIdType threadId);
 
+  /** Bilineare interpolation of the gain beetween the different window.*/
   float InterpoleGain( typename LutType::ConstPointer gridLut ,
                        int pixelValue , 
                        typename InputImageType::IndexType index);

@@ -26,13 +26,28 @@
 namespace otb
 {
 
+/** \class BufferFilter
+ *  \brief This filter has the only purpose to recall regions
+ *
+ *  This class is implemented to recall regions. Due to ITK implementation 
+ *  if the pipeline of the algorithm has branch (diamond) one might have 
+ *  an input with two requested regions : one from branch 1 (A) and one from 
+ *  branch 2 (B). Problem is after updating and generating data on branch 1 
+ *  branch 2 will not propagate its region B again,and will use region A 
+ *  instead. By memorizing the region this buffer filter can be placed in 
+ *  in front of each branch so that the requested region will be saved.
+ *
+ * \ingroup OTBContrast
+ */
+
 template < class TInputImage >
 class ITK_EXPORT BufferFilter :
   public itk::InPlaceImageFilter < TInputImage , TInputImage >
 {
 public:
-  typedef TInputImage InputImageType;
   /** typedef for standard classes. */
+  typedef TInputImage InputImageType;
+
   typedef BufferFilter Self;
   typedef itk::InPlaceImageFilter< InputImageType, InputImageType > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
