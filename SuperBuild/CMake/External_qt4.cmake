@@ -44,12 +44,13 @@ if(SB_INSTALL_PREFIX)
   file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT4_INSTALL_PREFIX_NATIVE)
   file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include QT4_INCLUDE_PREFIX_NATIVE)
   file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/lib QT4_LIB_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include/freetype2 QT4_INCLUDE_FREETYPE_NATIVE)
 endif()
 
 #Common options for all cases
 set(QT4_SB_CONFIG
 "-prefix ${QT4_INSTALL_PREFIX_NATIVE} -L ${QT4_LIB_PREFIX_NATIVE} \
--I ${QT4_INCLUDE_PREFIX_NATIVE} -I ${QT4_INCLUDE_PREFIX_NATIVE}\freetype2 \
+-I ${QT4_INCLUDE_PREFIX_NATIVE} -I ${QT4_INCLUDE_FREETYPE_NATIVE} \
 -opensource -confirm-license -release -shared -nomake demos \
 -nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script \
 -no-scripttools -no-multimedia -no-audio-backend -no-webkit -no-declarative \
