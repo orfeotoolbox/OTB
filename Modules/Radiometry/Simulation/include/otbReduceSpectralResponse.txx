@@ -109,7 +109,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
         /*
         In order to simplify the computation for the reflectance mode,
         we introduce the solar irradiance in the general formula with
-        a value of 1.0 for the luminance case.
+        a value of 1.0 for the radiance case.
 
         In this way the formula is the same if we weight the RSR by
         the solar irradiance before the integration.
@@ -197,7 +197,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
      os <<indent << "[Center Wavelength (micrometers), Reflectance (percent)]" << std::endl;
      }
    else{
-   os <<indent << "[Center Wavelength (micrometers), Luminance (percent)]" << std::endl;
+   os <<indent << "[Center Wavelength (micrometers), Radiance (percent)]" << std::endl;
    }
 
    for(typename VectorPairType::const_iterator it = m_ReduceResponse->GetResponse().begin(); it != m_ReduceResponse->GetResponse().end(); ++it)

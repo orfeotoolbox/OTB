@@ -423,6 +423,7 @@ LayerStackItemModel
         }
       break;
 
+    case Qt::EditRole:
     case Qt::DisplayRole:
       switch( idx.column() )
         {
@@ -447,21 +448,7 @@ LayerStackItemModel
 	break;
 
         case COLUMN_NAME:
-          if( layer->inherits(
-                VectorImageModel::staticMetaObject.className() ) )
-            {
-            const VectorImageModel * vectorImageModel =
-              qobject_cast< const VectorImageModel * >( layer );
-            assert( vectorImageModel!=NULL );
-
-            // qDebug() << "filename:" << vectorImageModel->GetFilename();
-
-            return QFileInfo( vectorImageModel->GetFilename() ).fileName();
-            }
-          else
-            {
-            qDebug() << "Unhandled AbstractLayerModel subclass.";
-            }
+          return layer->GetName();
           break;
 
 	case COLUMN_EFFECT:
@@ -842,7 +829,7 @@ LayerStackItemModel
   // qDebug()
   //   << this << "::setData(" << idx << "," << value << "," << role << ")";
 
-  if( idx.column()==COLUMN_NAME && role==Qt::CheckStateRole )
+  if( idx.column()==COLUMN_NAME )
     {
     // qDebug() << idx.row() << "check-state:" << value;
 
@@ -856,30 +843,45 @@ LayerStackItemModel
 
     assert( layer!=NULL );
     assert( layer==dynamic_cast< VisibleInterface * >( layer ) );
-
     VisibleInterface * interface = dynamic_cast< VisibleInterface * >( layer );
     assert( interface!=NULL );
 
-    switch( value.toInt() )
+    switch( role )
       {
-      case Qt::Checked:
-        interface->SetVisible( true );
+      case Qt::EditRole:
+        {
+        QString strValue = value.toString();
+        if( !strValue.isEmpty() )
+          {
+          layer->SetName( strValue );
+          emit dataChanged( idx, idx );
+          return true;
+          }
+        }
         break;
+      case Qt::CheckStateRole:
+        switch( value.toInt() )
+          {
+          case Qt::Checked:
+            interface->SetVisible( true );
+            break;
 
-      case Qt::Unchecked:
-        interface->SetVisible( false );
+          case Qt::Unchecked:
+            interface->SetVisible( false );
+            break;
+
+          default:
+            assert( false && "Unhandled Qt::CheckedState value." );
+            break;
+          }
+        emit dataChanged( idx, idx );
+        return true;
         break;
 
       default:
-        assert( false && "Unhandled Qt::CheckedState value." );
         break;
       }
-
-    emit dataChanged( idx, idx );
-
-    return true;
     }
-
   return false;
 }
 

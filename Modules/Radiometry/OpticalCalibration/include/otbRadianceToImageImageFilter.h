@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLuminanceToImageImageFilter_h
-#define otbLuminanceToImageImageFilter_h
+#ifndef otbRadianceToImageImageFilter_h
+#define otbRadianceToImageImageFilter_h
 
 #include "otb_6S.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
@@ -35,10 +35,10 @@ namespace otb
 namespace Functor
 {
 /**
-   * \class LuminanceToImageImageFunctor
+   * \class RadianceToImageImageFunctor
    * \brief Subtract beta to the Input and multiply by alpha.
    *
-   * \sa LuminanceToImageImageFilter
+   * \sa RadianceToImageImageFilter
    * \ingroup Functor
    * \ingroup Radiometry
  *
@@ -46,15 +46,15 @@ namespace Functor
  */
 
 template <class TInput, class TOutput>
-class LuminanceToImageImageFunctor
+class RadianceToImageImageFunctor
 {
 public:
-  LuminanceToImageImageFunctor() :
+  RadianceToImageImageFunctor() :
     m_Alpha(1.),
     m_Beta(0.)
   {}
 
-  virtual ~LuminanceToImageImageFunctor() {}
+  virtual ~RadianceToImageImageFunctor() {}
 
   void SetAlpha(double alpha)
   {
@@ -88,17 +88,17 @@ private:
 };
 }
 
-/** \class LuminanceToImageImageFilter
- *  \brief Convert a raw value into a luminance value
+/** \class RadianceToImageImageFilter
+ *  \brief Convert a raw value into a radiance value
  *
- * Transform a luminance image into a classical image. For this it
- * uses the functor LuminanceToImageImageFunctor calling for each component of each pixel.
+ * Transform a radiance image into a classical image. For this it
+ * uses the functor RadianceToImageImageFunctor calling for each component of each pixel.
  *
  *
  * For Spot image in the dimap format, the correction parameters are
  * retrieved automatically from the metadata
  *
- * \ingroup LuminanceToImageImageFunctor
+ * \ingroup RadianceToImageImageFunctor
  * \ingroup Radiometry
  *
  * \example Radiometry/AtmosphericCorrectionSequencement.cxx
@@ -106,10 +106,10 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LuminanceToImageImageFilter :
+class ITK_EXPORT RadianceToImageImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
       TOutputImage,
-      typename Functor::LuminanceToImageImageFunctor<typename
+      typename Functor::RadianceToImageImageFunctor<typename
           TInputImage::
           InternalPixelType,
           typename
@@ -124,11 +124,11 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
-  typedef typename Functor::LuminanceToImageImageFunctor<typename InputImageType::InternalPixelType,
+  typedef typename Functor::RadianceToImageImageFunctor<typename InputImageType::InternalPixelType,
       typename OutputImageType::InternalPixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef LuminanceToImageImageFilter                                                          Self;
+  typedef RadianceToImageImageFilter                                                          Self;
   typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>                                                              Pointer;
   typedef itk::SmartPointer<const Self>                                                        ConstPointer;
@@ -137,7 +137,7 @@ public:
   itkNewMacro(Self);
 
   /** return class name. */
-  itkTypeMacro(LuminanceToImageImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
+  itkTypeMacro(RadianceToImageImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
 
   /** Supported images definition. */
   typedef typename InputImageType::PixelType          InputPixelType;
@@ -165,14 +165,14 @@ public:
 
 protected:
   /** Constructor */
-  LuminanceToImageImageFilter()
+  RadianceToImageImageFilter()
     {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
     };
 
   /** Destructor */
-  ~LuminanceToImageImageFilter() ITK_OVERRIDE {}
+  ~RadianceToImageImageFilter() ITK_OVERRIDE {}
 
   /** Update the functor list and input parameters */
   void BeforeThreadedGenerateData(void) ITK_OVERRIDE

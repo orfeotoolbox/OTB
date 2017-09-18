@@ -734,7 +734,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // TODO:
   // Pass down the PixelType (RGB, VECTOR, etc.) so that any vector to
   // scalar conversion be type specific. i.e. RGB to scalar would use
-  // a formula to convert to luminance, VECTOR to scalar would use
+  // a formula to convert to radiance, VECTOR to scalar would use
   // vector magnitude.
 
 

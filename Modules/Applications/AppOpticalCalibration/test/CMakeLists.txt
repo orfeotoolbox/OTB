@@ -27,7 +27,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_QuickbirdXS
                              -clamp false
                              -out ${TEMP}/apTvRaOpticalCalibration_QuickbirdXS.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
+                             ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoQuickbirdXS.tif
                              ${TEMP}/apTvRaOpticalCalibration_QuickbirdXS.tif )
 
 otb_test_application(NAME apTvRaOpticalCalibration_WV2PAN
@@ -36,7 +36,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_WV2PAN
                              -level toa
                              -out ${TEMP}/apTvRaOpticalCalibration_WV2PAN.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif
+                             ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoWV2PAN.tif
                              ${TEMP}/apTvRaOpticalCalibration_WV2PAN.tif )
 
 otb_test_application(NAME apTvRaOpticalCalibration_WV2Multi
@@ -45,7 +45,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_WV2Multi
                              -level toa
                              -out ${TEMP}/apTvRaOpticalCalibration_WV2Multi.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif
+                             ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoWV2Multi.tif
                              ${TEMP}/apTvRaOpticalCalibration_WV2Multi.tif )
 
 otb_test_application(NAME apTvRaOpticalCalibration_Formosat
@@ -54,7 +54,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_Formosat
                              -level toa
                              -out ${TEMP}/apTvRaOpticalCalibration_Formosat.img
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
+                             ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoFormosat.tif
                              ${TEMP}/apTvRaOpticalCalibration_Formosat.img )
 
 otb_test_application(NAME apTvRaOpticalCalibration_QuickbirdPAN
@@ -63,7 +63,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_QuickbirdPAN
                              -level toa
                              -out ${TEMP}/apTvRaOpticalCalibration_QuickbirdPAN.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdPAN.tif
+                             ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoQuickbirdPAN.tif
                              ${TEMP}/apTvRaOpticalCalibration_QuickbirdPAN.tif )
 
 otb_test_application(NAME apTvRaOpticalCalibration_Spot5
@@ -72,7 +72,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_Spot5
                              -level toa
                              -out ${TEMP}/apTvRaOpticalCalibration_Spot5.img
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
+                             ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoSpot5.tif
                              ${TEMP}/apTvRaOpticalCalibration_Spot5.img )
 
 otb_test_application(NAME apTvRaOpticalCalibration_UnknownSensor
@@ -106,7 +106,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_UnknownSensor
 otb_test_application(NAME apTvRaOpticalCalibration_Reverse_UnknownSensor
                      APP  OpticalCalibration
                      OPTIONS 
-			     -in ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
+			     -in ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoQuickbirdXS.tif
 			     -out ${TEMP}/apTvRaOpticalCalibration_Rev_QB-XS_UnknownSensor_test.tif
 			     -level toatoim 
 			     -acqui.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt
@@ -126,6 +126,6 @@ otb_test_application(NAME apTvRaOpticalCalibration_Ikonos
                              -level toa
                              -out ${TEMP}/apTvRaOpticalCalibration_Ikonos.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
+                             ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoIkonos.tif
                              ${TEMP}/apTvRaOpticalCalibration_Ikonos.tif )
 

@@ -131,7 +131,7 @@ ADD_SUPERBUILD_CMAKE_VAR(OTB Boost_LIBRARY_DIR)
 
 set(OTB_MODULES_CONFIG)
 if(WITH_REMOTE_MODULES)
-  foreach(remote_module SertitObject Mosaic otbGRM)
+  foreach(remote_module SertitObject Mosaic otbGRM OTBFFSforGMM)
     list(APPEND OTB_MODULES_CONFIG -DModule_${remote_module}:BOOL=ON)
   endforeach()
 else()

@@ -87,7 +87,7 @@ You can add it by using these command-lines:
     sudo aptitude install add-apt-repository
     sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
 
-After you can run:
+You will then need to run:
 
 ::
 
@@ -114,8 +114,8 @@ OpenSuse 12.X and higher
 For OpenSuse 12.X and higher, OTB Applications packages are available
 through *zypper*.
 
-First, you need to add the appropriate repositories with these
-command-lines (please replace :math:`11.4` by your OpenSuse version):
+First, you need to add the appropriate repositories with the following
+commands (please replace :math:`11.4` with your version of OpenSuse):
 
 ::
 
@@ -126,7 +126,7 @@ command-lines (please replace :math:`11.4` by your OpenSuse version):
     sudo zypper ar
     http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_11.4/ tzotsos
 
-Now run:
+You should then run:
 
 ::
 
