@@ -20,8 +20,8 @@
 
 
 
-#include "otbImageToLuminanceImageFilter.h"
-#include "otbLuminanceToReflectanceImageFilter.h"
+#include "otbImageToRadianceImageFilter.h"
+#include "otbRadianceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 
@@ -63,9 +63,9 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
 
 //-------------------------------
 
-  typedef otb::ImageToLuminanceImageFilter<ImageType, ImageType>
-  ImageToLuminanceImageFilterType;
-  typedef ImageToLuminanceImageFilterType::VectorType VectorType;
+  typedef otb::ImageToRadianceImageFilter<ImageType, ImageType>
+  ImageToRadianceImageFilterType;
+  typedef ImageToRadianceImageFilterType::VectorType VectorType;
 
   VectorType alpha(nbOfComponent);
   VectorType beta(nbOfComponent);
@@ -84,16 +84,16 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
     }
   fin.close();
 
-  ImageToLuminanceImageFilterType::Pointer filterImageToLuminance = ImageToLuminanceImageFilterType::New();
-  filterImageToLuminance->SetAlpha(alpha);
-  filterImageToLuminance->SetBeta(beta);
-  filterImageToLuminance->SetInput(reader->GetOutput());
+  ImageToRadianceImageFilterType::Pointer filterImageToRadiance = ImageToRadianceImageFilterType::New();
+  filterImageToRadiance->SetAlpha(alpha);
+  filterImageToRadiance->SetBeta(beta);
+  filterImageToRadiance->SetInput(reader->GetOutput());
 
 //-------------------------------
-  typedef otb::LuminanceToReflectanceImageFilter<ImageType, ImageType>
-  LuminanceToReflectanceImageFilterType;
+  typedef otb::RadianceToReflectanceImageFilter<ImageType, ImageType>
+  RadianceToReflectanceImageFilterType;
 
-  typedef LuminanceToReflectanceImageFilterType::VectorType VectorType;
+  typedef RadianceToReflectanceImageFilterType::VectorType VectorType;
 
   VectorType solarIllumination(nbOfComponent);
   solarIllumination.Fill(0);
@@ -107,16 +107,16 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
     }
   fin.close();
 
-  LuminanceToReflectanceImageFilterType::Pointer filterLuminanceToReflectance =
-    LuminanceToReflectanceImageFilterType::New();
+  RadianceToReflectanceImageFilterType::Pointer filterRadianceToReflectance =
+    RadianceToReflectanceImageFilterType::New();
   const int day(atoi(argv[5]));
   const int month(atoi(argv[6]));
 
-  filterLuminanceToReflectance->SetZenithalSolarAngle(static_cast<double>(atof(argv[4])));
-  filterLuminanceToReflectance->SetDay(day);
-  filterLuminanceToReflectance->SetMonth(month);
-  filterLuminanceToReflectance->SetSolarIllumination(solarIllumination);
-  filterLuminanceToReflectance->SetInput(filterImageToLuminance->GetOutput());
+  filterRadianceToReflectance->SetZenithalSolarAngle(static_cast<double>(atof(argv[4])));
+  filterRadianceToReflectance->SetDay(day);
+  filterRadianceToReflectance->SetMonth(month);
+  filterRadianceToReflectance->SetSolarIllumination(solarIllumination);
+  filterRadianceToReflectance->SetInput(filterImageToRadiance->GetOutput());
 
 //-------------------------------
   /*typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms  RadiometryCorrectionParametersToRadiativeTermsType;
@@ -189,7 +189,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
   fin.close();
 
   // Set parameters
-  /*dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(filterLuminanceToReflectance->GetZenithalSolarAngle());
+  /*dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(filterRadianceToReflectance->GetZenithalSolarAngle());
   dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(static_cast<double>(atof(argv[8])));
   dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(static_cast<double>(atof(argv[9])));
   dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(static_cast<double>(atof(argv[10])));
@@ -208,7 +208,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput(dataAtmosphericCorrectionParameters);
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->Update(); */
 
-  paramAcqui->SetSolarZenithalAngle(filterLuminanceToReflectance->GetZenithalSolarAngle());
+  paramAcqui->SetSolarZenithalAngle(filterRadianceToReflectance->GetZenithalSolarAngle());
   paramAcqui->SetSolarAzimutalAngle(static_cast<double>(atof(argv[8])));
   paramAcqui->SetViewingZenithalAngle(static_cast<double>(atof(argv[9])));
   paramAcqui->SetViewingAzimutalAngle(static_cast<double>(atof(argv[10])));
@@ -231,7 +231,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
     ReflectanceToSurfaceReflectanceImageFilterType::New();
 
   filterReflectanceToSurfaceReflectanceImageFilter->SetAtmosphericRadiativeTerms(radiative);
-  filterReflectanceToSurfaceReflectanceImageFilter->SetInput(filterLuminanceToReflectance->GetOutput());
+  filterReflectanceToSurfaceReflectanceImageFilter->SetInput(filterRadianceToReflectance->GetOutput());
 
 //-------------------------------
   typedef otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<ImageType,

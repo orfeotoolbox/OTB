@@ -1,11 +1,10 @@
 Recipes
 =======
 
-This chapter presents guideline to perform various remote sensing and
+This chapter presents guidelines to perform various remote sensing and
 image processing tasks with either , or both. Its goal is not to be
-exhaustive, but rather to help the non-developer user to get familiar
-with these two packages, so that he can use and explore them for his
-future needs.
+exhaustive, but rather to familiarise users with the OTB package functionality
+and demonstrate how the can be applied. 
 
 .. toctree::
    :maxdepth: 6

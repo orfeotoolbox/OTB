@@ -33,7 +33,9 @@ namespace otb
  *  \brief Helper functions to do the geo information conversions used frequently.
  *
  *  This namespace provides helpers functions to build a WKT from a valid EPSG number using
- *  the method ToWKT(int srid).
+ *  the method ToWKT(int srid), and also to retrieve an EPSG number from a WKT
+ *  using the method ToEPSG(const std::string &)
+ *
  */
 namespace GeoInformationConversion
 {
@@ -43,6 +45,13 @@ namespace GeoInformationConversion
 
   /** this method try to morph a wkt to ESRI WKT format and returns the error code**/
   OTBTransform_EXPORT bool IsESRIValidWKT(const std::string &Wkt);
+
+  /** Function used to get an epsg number from a wkt string.
+   *  Returns -1 if the wkt is neither a PROJCS nor a GEOGCS.
+   *  Returns 0 if no authority code is found but wkt has a PROJCS or a GEOGCS.
+   *  Otherwise the EPSG authority code is returned
+   */
+  OTBTransform_EXPORT int ToEPSG(const std::string &wkt);
 }
 
 } // End namespace otb
