@@ -89,7 +89,7 @@ private:
 }
 
 /** \class RadianceToImageImageFilter
- *  \brief Convert a raw value into a radiance value
+ *  \brief Convert a radiance value into raw image value
  *
  * Transform a radiance image into a classical image. For this it
  * uses the functor RadianceToImageImageFunctor calling for each component of each pixel.
