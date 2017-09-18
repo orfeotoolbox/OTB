@@ -266,8 +266,7 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
   else if (dynamic_cast<InputVectorDataListParameter*>(param))
     {
     InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-    if( !paramDown->SetListFromFileName(values)  )
-    otbAppLogCRITICAL( <<"At least one vector data filename is invalid..");
+    paramDown->SetListFromFileName( values );
     }
   else if (dynamic_cast<InputFilenameListParameter*>(param))
     {

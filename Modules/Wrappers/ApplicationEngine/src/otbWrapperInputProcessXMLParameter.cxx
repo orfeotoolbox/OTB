@@ -398,10 +398,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     else if (dynamic_cast<InputVectorDataListParameter*>(param))
       {
       InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-      if ( !paramDown->SetListFromFileName(values) )
-	{
-	ret = -1;
-	}
+      paramDown->SetListFromFileName( values );
       }
     else if (dynamic_cast<InputFilenameListParameter*>(param))
       {
