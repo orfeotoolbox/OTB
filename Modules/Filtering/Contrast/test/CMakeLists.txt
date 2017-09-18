@@ -19,3 +19,14 @@
 #
 
 otb_module_test()
+
+set(OTBContrastTests
+otbContrastTestDriver.cxx
+otbComputeHistoFilterNew.cxx
+otbApplyGainFilterNew.cxx
+otbComputeGainLutFilterNew.cxx
+)
+
+add_executable(otbContrastTestDriver ${OTBContrastTests})
+target_link_libraries(otbContrastTestDriver ${OTBContrast-Test_LIBRARIES})
+otb_module_target_label(otbContrastTestDriver)
