@@ -84,6 +84,7 @@ public :
 protected :
   ApplyGainFilter();
   ~ApplyGainFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
   
   /** Get the input image*/  
   const InputImageType * GetInputImage() const;

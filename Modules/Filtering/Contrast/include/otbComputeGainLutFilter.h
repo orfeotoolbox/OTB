@@ -60,11 +60,14 @@ public:
   typedef typename OutputImageType::InternalPixelType OutputPixelType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
-  itkSetMacro(NbPixel, long);
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComputeGainLutFilter, ImageToImageFilter);
+
+  /** Get/Set macro to get/set the number of pixel by histogram */
+  itkSetMacro(NbPixel, long);
+  itkGetMacro(NbPixel, long);
 
   /** Get/Set macro to get/set the minimum value */
   itkSetMacro(Min, double);
@@ -77,6 +80,7 @@ public:
 protected:
   ComputeGainLutFilter();
   ~ComputeGainLutFilter() ITK_OVERRIDE {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   void BeforeThreadedGenerateData();
 
@@ -105,10 +109,10 @@ private:
   ComputeGainLutFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  int m_NbBin;
   double m_Min;
   double m_Max;
   double m_Step;
+  int m_NbBin;
   long m_NbPixel;
 
 };

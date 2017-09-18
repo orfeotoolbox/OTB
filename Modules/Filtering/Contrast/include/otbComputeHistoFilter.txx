@@ -340,6 +340,20 @@ typename TOutputImage::Pointer ComputeHistoFilter < TInputImage , TOutputImage >
   return dynamic_cast< TOutputImage * >(
            this->itk::ProcessObject::GetOutput(1) );
 }
+
+template <class TInputImage , class TOutputImage >
+void ComputeHistoFilter < TInputImage , TOutputImage >
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "No Data: " << m_NoData << std::endl;
+  os << indent << "Minimum: " << m_Min << std::endl;
+  os << indent << "Maximum: " << m_Max << std::endl;
+  os << indent << "Step: " << m_Step << std::endl;
+  os << indent << "Number of bin: " << m_NbBin << std::endl;
+  os << indent << "Thumbnail size: " << m_ThumbSize << std::endl;
+  os << indent << "Threshold value: " << m_Threshold << std::endl;
+}
   
 } // End namespace otb
 

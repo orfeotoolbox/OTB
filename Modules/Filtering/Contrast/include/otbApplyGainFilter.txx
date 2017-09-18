@@ -257,6 +257,22 @@ float ApplyGainFilter < TInputImage , TLut , TOutputImage >
   return gain/w;
 }
 
+/**
+ * Standard "PrintSelf" method
+ */
+template <class TInputImage , class TLut , class TOutputImage >
+void ApplyGainFilter < TInputImage , TLut , TOutputImage >
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "No Data: " << m_NoData << std::endl;
+  os << indent << "Minimum: " << m_Min << std::endl;
+  os << indent << "Maximum: " << m_Max << std::endl;
+  os << indent << "Step: " << m_Step << std::endl;
+  os << indent << "Look up table size: " << m_LutSize << std::endl;
+  os << indent << "Thumbnail size: " << m_ThumbSize << std::endl;
+}
+
   
 }  // End namespace otb
 

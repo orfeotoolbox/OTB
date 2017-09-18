@@ -174,6 +174,21 @@ bool ComputeGainLutFilter < TInputImage , TOutputImage >
   return true;
 }
 
+/**
+ * Standard "PrintSelf" method
+ */
+template <class TInputImage , class TOutputImage >
+void ComputeGainLutFilter < TInputImage , TOutputImage >
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Minimum: " << m_Min << std::endl;
+  os << indent << "Maximum: " << m_Max << std::endl;
+  os << indent << "Step: " << m_Step << std::endl;
+  os << indent << "Number of bin: " << m_NbBin << std::endl;
+  os << indent << "Number of pixel by histogram: " << m_NbPixel << std::endl;
+}
+
 } // End namespace otb
 
 #endif
