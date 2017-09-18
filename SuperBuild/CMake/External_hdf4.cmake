@@ -27,8 +27,8 @@ ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(HDF4 ZLIB JPEG)
 
 set(HDF4_SB_CONFIG)
 
-set(HDF4_SB_DF_LIB df)
-set(HDF4_SB_MF_LIB mfhdf)
+set(HDF4_SB_DF_LIB dfalt)
+set(HDF4_SB_MF_LIB mfhdfalt)
 
 ExternalProject_Add(HDF4
   PREFIX HDF4
