@@ -41,9 +41,10 @@ ComputeHistoFilter < TInputImage , TOutputImage >
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NbBin = 256;
   m_Threshold = std::numeric_limits< float >::max();
-  m_ThumbSize.Fill(-1);
+  m_ThumbSize.Fill(0);
   m_ValidThreads = 1;
   m_Step = -1;
+  m_NoDataFlag = false;
 }
 
 template <class TInputImage, class TOutputImage >
@@ -81,9 +82,6 @@ template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateInputRequestedRegion()
 {
-  assert( m_ThumbSize[0]>0);
-  assert( m_ThumbSize[1]>0);
-
   typename Superclass::InputImagePointer inputPtr =
                   const_cast<InputImageType *>(this->GetInput());
   OutputImageRegionType histoRegion = 
@@ -94,13 +92,6 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   SizeType size ;
   size[0] = histoRegion.GetSize()[0] * m_ThumbSize[0];
   size[1] = histoRegion.GetSize()[1] * m_ThumbSize[1];
-
-  #ifdef DEBUGGING
-  std::cout<<"input requested start "<<start<<std::endl;
-  std::cout<<"input requested size "<<size<<std::endl;
-  std::cout<<"HistoOutput Requested Index  "<<this->GetHistoOutput()->GetRequestedRegion().GetIndex()<<std::endl;
-  std::cout<<"HistoOutput Requested Size "<<this->GetHistoOutput()->GetRequestedRegion().GetSize()<<std::endl;
-  #endif
 
   typename InputImageType::RegionType inputRequestedRegion;
   inputRequestedRegion.SetIndex(start);
@@ -140,9 +131,19 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
   typename OutputImageType::IndexType start;
   typename OutputImageType::SizeType size;
+
   start.Fill(0);
+
+  assert( m_ThumbSize[0] != 0 );
+  assert( m_ThumbSize[1] != 0 );
+
+  // if( m_ThumbSize[0] == 0 ||
+  //     m_ThumbSize[1] == 0 )
+      
+
   size[0] = input->GetLargestPossibleRegion().GetSize()[0]/m_ThumbSize[0];
   size[1] = input->GetLargestPossibleRegion().GetSize()[1]/m_ThumbSize[1];
+
   typename OutputImageType::RegionType region;
   region.SetSize(size);
   region.SetIndex(start);
@@ -261,7 +262,8 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
     it.GoToBegin();
     while ( !it.IsAtEnd() )
       {
-      if( it.Get() == m_NoData || it.Get() > m_Max || it.Get() < m_Min )
+      if( (it.Get() == m_NoData && m_NoDataFlag) || 
+           it.Get() > m_Max || it.Get() < m_Min )
         {
         ++it;
         continue;
@@ -346,6 +348,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << "Is no data activated: " << m_NoDataFlag << std::endl;
   os << indent << "No Data: " << m_NoData << std::endl;
   os << indent << "Minimum: " << m_Min << std::endl;
   os << indent << "Maximum: " << m_Max << std::endl;

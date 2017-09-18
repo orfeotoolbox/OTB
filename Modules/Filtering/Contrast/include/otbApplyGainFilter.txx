@@ -130,7 +130,8 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
   float gain(0.0);
   while ( !oit.IsAtEnd() )
     {
-    if( it.Get() == m_NoData || it.Get() > m_Max || it.Get() < m_Min )
+    if( ( it.Get() == m_NoData && m_NoDataFlag ) ||
+          it.Get() > m_Max || it.Get() < m_Min )
       {
       oit.Set( static_cast<OutputPixelType>( it.Get() ) );
       ++it;
@@ -265,6 +266,7 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << "Is no data activated: " << m_NoDataFlag << std::endl;
   os << indent << "No Data: " << m_NoData << std::endl;
   os << indent << "Minimum: " << m_Min << std::endl;
   os << indent << "Maximum: " << m_Max << std::endl;

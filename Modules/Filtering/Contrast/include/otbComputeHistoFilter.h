@@ -80,6 +80,11 @@ public:
   itkSetMacro(NoData, InputPixelType);
   itkGetMacro(NoData, InputPixelType);
 
+  /** Get/Set macro to get/set the nodata flag value */
+  itkBooleanMacro(NoDataFlag);
+  itkGetMacro(NoDataFlag, bool);
+  itkSetMacro(NoDataFlag, bool);
+
   /** Get/Set macro to get/set the thumbnail's size */
   itkSetMacro(ThumbSize, SizeType);
   itkGetMacro(ThumbSize, SizeType);
@@ -129,6 +134,7 @@ private:
   InputPixelType m_Max;
   InputPixelType m_NoData;
   SizeType m_ThumbSize;
+  bool m_NoDataFlag;
   int m_NbBin;
   float m_Threshold;
   double m_Step;

@@ -394,7 +394,12 @@ private:
       }
     if ( IsParameterEnabled("nodata") )
       {
+      histoFilter->NoDataFlagOn();
       histoFilter->SetNoData( GetParameterFloat("nodata") );
+      }
+    else
+      {
+      histoFilter->NoDataFlagOff();
       }
     histoFilter->SetMin( min );
     histoFilter->SetMax( max );
@@ -523,7 +528,12 @@ private:
 
       if( IsParameterEnabled("nodata") )
         {
+        m_GainFilter[chanel]->NoDataFlagOn();
         m_GainFilter[chanel]->SetNoData( GetParameterFloat("nodata") ); 
+        }
+      else
+        {
+        m_GainFilter[chanel]->NoDataFlagOff();
         }
       m_GainFilter[chanel]->SetMin( min[chanel] );
       m_GainFilter[chanel]->SetMax( max[chanel] );
@@ -590,7 +600,12 @@ private:
       m_BufferFilter[chanel] = BufferFilterType::New();
       if( IsParameterEnabled("nodata") )
         {
+        m_GainFilter[chanel]->NoDataFlagOn();
         m_GainFilter[chanel]->SetNoData( GetParameterFloat("nodata") ); 
+        }
+      else
+        {
+        m_GainFilter[chanel]->NoDataFlagOff();
         }
       m_GainFilter[chanel]->SetMin( min );
       m_GainFilter[chanel]->SetMax( max );

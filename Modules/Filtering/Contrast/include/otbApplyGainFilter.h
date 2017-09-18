@@ -67,6 +67,11 @@ public :
   itkSetMacro(NoData, InputPixelType);
   itkGetMacro(NoData, InputPixelType);
 
+  /** Get/Set macro to get/set the nodata flag value */
+  itkBooleanMacro(NoDataFlag);
+  itkGetMacro(NoDataFlag, bool);
+  itkSetMacro(NoDataFlag, bool);
+
   /** Get/Set macro to get/set the minimum value */
   itkSetMacro(Min, InputPixelType);
   itkGetMacro(Min, InputPixelType);
@@ -111,6 +116,7 @@ private :
   InputPixelType m_NoData;
   InputPixelType m_Min;
   InputPixelType m_Max;
+  bool m_NoDataFlag;
   double m_Step;
   typename LutType::SizeType m_LutSize;
   typename InputImageType::SizeType m_ThumbSize;
