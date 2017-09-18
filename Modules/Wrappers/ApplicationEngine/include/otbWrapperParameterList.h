@@ -136,6 +136,31 @@ private:
 //
 // Protected methods.
 protected:
+  /** Utility method to factorize some code */
+  template< typename L, typename From, typename Get >
+    void
+    SetObjectList( L &,  const L &, From, Get );
+
+  /** */
+  template< typename D, typename From >
+    void
+    AddData( D *, From );
+
+  /** */
+  template< typename D, typename Set >
+    typename T::Pointer
+    FromData( D *,
+	      Set,
+	      const std::string & description = std::string() );
+
+  /** */
+  template< typename D, typename Set >
+    typename T::Pointer &
+    FromData( typename T::Pointer &,
+	      D *,
+	      Set,
+	      const std::string & description = std::string() );
+
   /** ParameterType::ValueType -> std::string protocol */
   virtual
     const std::string &

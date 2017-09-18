@@ -304,6 +304,100 @@ ParameterList< T >
   );
 }
 
+/*****************************************************************************/
+template< typename T >
+template< typename L, typename From, typename Get >
+void
+ParameterList< T >
+::SetObjectList( L & this_list,
+		 const L & list,
+		 From from,
+		 Get get )
+{
+  // Force update of input-list elements.
+  for( std::size_t i=0; i<list.Size(); i++ )
+  {
+    assert( list.GetNthElement( i )!=nullptr );
+
+    list.GetNthElement( i )->UpdateOutputInformation();
+  }
+
+  // Clear previous target list.
+  ClearValue();
+
+  for( std::size_t i=0; i<list.Size(); i++ )
+    {
+    assert( list.GetNthElement( i )!=nullptr );
+
+    typename T::Pointer parameter;
+
+    from( parameter, list.GetNthElement( i ) );
+
+    m_Parameters.push_back( parameter );
+
+    assert( get( parameter )!=nullptr );
+
+    this_list.PushBack( get( parameter ) );
+    }
+
+  SetActive( true );
+
+  Modified();
+}
+
+/*****************************************************************************/
+template< typename T >
+template< typename D, typename From >
+void
+ParameterList< T >
+::AddData( D * data, From from )
+{
+  assert( data!=nullptr );
+
+  // Check input availability
+  data->UpdateOutputInformation();
+
+  // Build & add parameter.
+  m_Parameters.push_back( from( data ) );
+
+  Modified();
+}
+
+/*****************************************************************************/
+template< typename T >
+template< typename D, typename Set >
+typename T::Pointer
+ParameterList< T >
+::FromData( D * data,
+	    Set set,
+	    const std::string & description )
+{
+  assert( data!=nullptr );
+
+  typename T::Pointer p;
+
+  return From( p, data, set, description );
+}
+
+/*****************************************************************************/
+template< typename T >
+template< typename D, typename Set >
+typename T::Pointer &
+ParameterList< T >
+::FromData( typename T::Pointer & parameter,
+	    D * data,
+	    Set set,
+	    const std::string & description )
+{
+  assert( data!=nullptr );
+
+  parameter = T::New();
+
+  set( parameter, data );
+  parameter->SetDescription( description );
+
+  return parameter;
+}
 
 } // End namespace Wrapper
 
