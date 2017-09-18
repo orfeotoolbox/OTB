@@ -121,30 +121,16 @@ FloatVectorImageListType *
 InputImageListParameter
 ::GetImageList()
 {
-  m_ImageList->Clear();
+  return
+    GetObjectList(
+      m_ImageList,
+      []( auto param ) -> auto
+      {
+        assert( param );
 
-  std::for_each(
-    begin(),
-    end(),
-    [ this ]( auto parameter ) -> void
-    {
-      assert( !parameter.IsNull() );
-
-      assert( parameter==otb::DynamicCast< InputImageParameter >( parameter ) );
-
-      assert(
-	DynamicCast< InputImageParameter >( parameter )
-	->GetFloatVectorImage()!=nullptr
-      );
-
-      m_ImageList->PushBack(
-	DynamicCast< InputImageParameter >( parameter )
-	->GetFloatVectorImage()
-      );
-    }
-  );
-
-  return m_ImageList;
+        return param->GetFloatVectorImage();
+      }
+    );
 }
 
 

@@ -98,32 +98,16 @@ VectorDataListType *
 InputVectorDataListParameter
 ::GetVectorDataList()
 {
-  assert( !m_VectorDataList.IsNull() );
+  return
+    GetObjectList(
+      m_VectorDataList,
+      []( auto param ) -> auto
+      {
+        assert( param );
 
-  m_VectorDataList->Clear();
-
-  std::for_each(
-    begin(),
-    end(),
-    [ this ]( auto parameter ) -> void
-    {
-      assert( !parameter.IsNull() );
-
-      assert( parameter==otb::DynamicCast< InputVectorDataParameter >( parameter ) );
-
-      assert(
-	DynamicCast< InputVectorDataParameter >( parameter )
-	->GetVectorData()!=nullptr
-      );
-
-      m_VectorDataList->PushBack(
-	DynamicCast< InputVectorDataParameter >( parameter )
-	->GetVectorData()
-      );
-    }
-  );
-
-  return m_VectorDataList;
+	return param->GetVectorData();
+      }
+    );
 }
 
 /*****************************************************************************/
