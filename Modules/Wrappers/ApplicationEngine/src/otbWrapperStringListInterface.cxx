@@ -33,6 +33,7 @@ const std::string
 NULL_STRING;
 
 
+/*****************************************************************************/
 void
 StringListInterface
 ::AddNullElement()
@@ -41,6 +42,16 @@ StringListInterface
 }
 
 
+/*****************************************************************************/
+Role
+StringListInterface
+::GetDirection( std::size_t ) const
+{
+  return GetDirection();
+}
+
+
+/*****************************************************************************/
 const std::string &
 StringListInterface
 ::GetFilenameFilter( std::size_t ) const
@@ -49,6 +60,7 @@ StringListInterface
 }
 
 
+/*****************************************************************************/
 const std::string &
 StringListInterface
 ::GetFilenameFilter() const
@@ -57,6 +69,7 @@ StringListInterface
 }
 
 
+/*****************************************************************************/
 void
 StringListInterface
 ::Erase( std::size_t id )

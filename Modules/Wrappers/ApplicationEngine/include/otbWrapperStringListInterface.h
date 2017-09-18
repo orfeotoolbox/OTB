@@ -97,7 +97,7 @@ public:
   virtual void Swap( std::size_t, std::size_t ) = 0;
 
   /** */
-  virtual Role GetDirection( std::size_t ) const = 0;
+  virtual Role GetDirection( std::size_t ) const;
 
   /** */
   virtual Role GetDirection() const = 0;
