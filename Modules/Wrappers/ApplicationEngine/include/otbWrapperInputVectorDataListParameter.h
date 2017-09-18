@@ -21,13 +21,15 @@
 #ifndef otbWrapperInputVectorDataListParameter_h
 #define otbWrapperInputVectorDataListParameter_h
 
-#include "otbVectorDataFileReader.h"
 
-#include "otbWrapperParameter.h"
-#include "otbObjectList.h"
+#include "otbWrapperInputVectorDataParameter.h"
+#include "otbWrapperParameterList.h"
+
 
 namespace otb
 {
+
+
 namespace Wrapper
 {
 /** \class InputVectorDataListParameter
@@ -35,64 +37,48 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-
-class OTBApplicationEngine_EXPORT InputVectorDataListParameter : public Parameter
+class OTBApplicationEngine_EXPORT InputVectorDataListParameter :
+    public ParameterList< InputVectorDataParameter >
 {
 public:
   /** Standard class typedef */
-  typedef InputVectorDataListParameter           Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  typedef otb::VectorDataFileReader<VectorDataType>  VectorDataFileReaderType;
-  typedef otb::ObjectList<VectorDataFileReaderType>  VectorDataFileReaderListType;
+  typedef InputVectorDataListParameter Self;
+  typedef Parameter Superclass;
+  typedef itk::SmartPointer< Self > Pointer;
+  typedef itk::SmartPointer< const Self > ConstPointer;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  itkNewMacro( Self );
 
   /** RTTI support */
-  itkTypeMacro(InputVectorDataListParameter, Parameter);
-
-  /** Set image form a list of filename */
-  bool SetListFromFileName(const std::vector<std::string> & filenames);
-
-  /** Add null element to lists. */
-  void AddNullElement();
-
-  /** Add an image from a filename */
-  bool AddFromFileName(const std::string & filename);
-
-  /** Set one specific stored image filename. */
-  bool SetNthFileName( const unsigned int id, const std::string & filename );
-
-
-  /** Get the stored image filename list */
-  std::vector<std::string> GetFileNameList() const;
-
- /** Get one specific stored image filename. */
-  std::string GetNthFileName( unsigned int i ) const;
+  itkTypeMacro( InputVectorDataListParameter, ParameterList );
 
   /** Get one list of the stored image. */
-  VectorDataListType* GetVectorDataList() const;
+  const VectorDataListType * GetVectorDataList() const;
+  VectorDataListType * GetVectorDataList();
 
   /** Get one specific stored image. */
-  VectorDataType* GetNthVectorData(unsigned int i) const;
+  //
+  // FIXME: Definition is not const-correct because
+  // InputVectorDataParameter::GetVectorData() is not const-correct!
+  const VectorDataType * GetNthVectorData( std::size_t );
 
   /** Set the list of image. */
-  void SetVectorDataList(VectorDataListType* vdList);
+  void SetVectorDataList( VectorDataListType * );
 
   /** Add an image to the list. */
-  void AddVectorData(VectorDataType* image);
-
-  bool HasValue() const ITK_OVERRIDE;
-
-
-  /** Erase one element of the list. */
-  void Erase( unsigned int id );
+  void AddVectorData( VectorDataType * );
 
  /** Clear all the list. */
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
+
+  /** */
+  using StringListInterface::GetDirection;
+  virtual Role GetDirection() const override;
+
+  /** */
+  using StringListInterface::GetFilenameFilter;
+  const std::string & GetFilenameFilter() const override;
 
 
 protected:
@@ -100,18 +86,37 @@ protected:
   InputVectorDataListParameter();
 
   /** Destructor */
-  ~InputVectorDataListParameter() ITK_OVERRIDE;
+  ~InputVectorDataListParameter() override;
 
-  VectorDataListType::Pointer m_VectorDataList;
-  VectorDataFileReaderListType::Pointer  m_ReaderList;
+  /** */
+  const std::string & ToString( const ParameterType::Pointer & ) const override;
+
+  /** */
+  void FromString( const ParameterType::Pointer &,
+		   const std::string & ) const override;
 
 private:
-  InputVectorDataListParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  // Purposely not implemented
+  InputVectorDataListParameter( const Parameter & );
+
+  // Purposely not implemented
+  void operator = ( const Parameter & );
+
+  InputVectorDataParameter::Pointer
+    FromVectorData( VectorDataType * );
+
+  InputVectorDataParameter::Pointer &
+    FromVectorData( InputVectorDataParameter::Pointer &, VectorDataType * );
+
+//
+// Private attributes
+private:
+  VectorDataListType::Pointer m_VectorDataList;
 
 }; // End class InputVectorDataList Parameter
 
 } // End namespace Wrapper
+
 } // End namespace otb
 
 #endif

@@ -68,7 +68,14 @@ InputVectorDataParameter::SetFromFileName(const std::string& filename)
 }
 
 
-VectorDataType*
+const VectorDataType *
+InputVectorDataParameter
+::GetVectorData() const
+{
+  return const_cast< InputVectorDataParameter * >( this )->GetVectorData();
+}
+
+VectorDataType *
 InputVectorDataParameter::GetVectorData()
 {
   // 2 cases : the user sets a filename vs. the user sets a vector data
@@ -131,5 +138,3 @@ InputVectorDataParameter::ClearValue()
 
 }
 }
-
-

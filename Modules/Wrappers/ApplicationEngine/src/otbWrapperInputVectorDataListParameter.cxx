@@ -19,291 +19,215 @@
  */
 
 #include "otbWrapperInputVectorDataListParameter.h"
-#include "itksys/SystemTools.hxx"
 
-#include "otbWrapperMacros.h"
 
 namespace otb
 {
+
+
 namespace Wrapper
 {
 
-InputVectorDataListParameter::InputVectorDataListParameter()
+
+const std::string
+VECTOR_DATA_FILTER(
+  "All files (*);;"
+  "Shape file (*shp)"
+);
+
+
+/*****************************************************************************/
+InputVectorDataParameter::Pointer
+InputVectorDataListParameter
+::FromVectorData( VectorDataType * data )
 {
-  this->SetName("Input VectorData List");
-  this->SetKey("vdList");
-  m_VectorDataList = VectorDataListType::New();
-  m_ReaderList = VectorDataFileReaderListType::New();
+  assert( data!=nullptr );
+
+  InputVectorDataParameter::Pointer p;
+
+  return FromVectorData( p, data );
 }
 
-InputVectorDataListParameter::~InputVectorDataListParameter()
+/*****************************************************************************/
+InputVectorDataParameter::Pointer &
+InputVectorDataListParameter
+::FromVectorData( InputVectorDataParameter::Pointer & parameter,
+		  VectorDataType * data )
 {
-}
-
-bool
-InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string> & filenames)
-{
-  // First clear previous file chosen
-  this->ClearValue();
-
-  bool isOk = true;
-  for(unsigned int i=0; i<filenames.size(); i++)
-    {
-    const std::string filename = filenames[i];
-    // TODO : when the logger will be available, redirect the exception
-    // in the logger (like what is done in MsgReporter)
-    if (!filename.empty())
+  return
+    FromData(
+      parameter,
+      data,
+      []( auto p, auto d ) -> void
       {
-      VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
-      try
-        {
-        reader->SetFileName(filename);
-        reader->UpdateOutputInformation();
-        }
-      catch(itk::ExceptionObject & /*err*/)
-        {
-        this->ClearValue();
-        isOk = false;
-        break;
-        }
+        assert( p );
 
-      // everything went fine, store the object references
-      m_ReaderList->PushBack(reader);
-      m_VectorDataList->PushBack(reader->GetOutput());
-      }
-    }
-
-  if( !isOk )
-    {
-    return false;
-    }
-
-  SetActive(true);
-  this->Modified();
-  return true;
+	p->SetVectorData( d );
+      },
+      "Vector-data filename"
+    );
 }
 
-
-void
-InputVectorDataListParameter::AddNullElement()
+/*****************************************************************************/
+InputVectorDataListParameter
+::InputVectorDataListParameter() :
+  m_VectorDataList( VectorDataListType::New() )
 {
-  m_ReaderList->PushBack(ITK_NULLPTR);
-  m_VectorDataList->PushBack(ITK_NULLPTR);
-  SetActive(false);
-  this->Modified();
+  SetName( "Input VectorData List" );
+  SetKey( "vdList" );
 }
 
-bool
-InputVectorDataListParameter::AddFromFileName(const std::string & filename)
+/*****************************************************************************/
+InputVectorDataListParameter
+::~InputVectorDataListParameter()
 {
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  if (!filename.empty())
-    {
-    VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
-    reader->SetFileName(filename);
-    try
-      {
-      reader->UpdateOutputInformation();
-      }
-    catch(itk::ExceptionObject & /*err*/)
-      {
-      this->ClearValue();
-      return false;
-      }
-
-    // everything went fine, store the object references
-    m_ReaderList->PushBack(reader);
-    m_VectorDataList->PushBack(reader->GetOutput());
-    SetActive(true);
-    this->Modified();
-    return true;
-    }
-
-  return false;
 }
 
-bool
-InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::string & filename )
+/*****************************************************************************/
+const VectorDataListType *
+InputVectorDataListParameter
+::GetVectorDataList() const
 {
-  if( m_ReaderList->Size()<id )
-    {
-    itkExceptionMacro(<< "No vectordata "<<id<<". Only "<<m_ReaderList->Size()<<" vector data available.");
-    }
-
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  if (!filename.empty())
-    {
-    VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
-    reader->SetFileName(filename);
-    try
-      {
-      reader->UpdateOutputInformation();
-      }
-    catch(itk::ExceptionObject &)
-      {
-      this->ClearValue();
-      return false;
-      }
-
-    m_ReaderList->SetNthElement(id, reader);
-    m_VectorDataList->SetNthElement(id, reader->GetOutput());
-
-    this->Modified();
-    return true;
-    }
-
-  return false;
+  return
+    const_cast< InputVectorDataListParameter * >( this )
+    ->GetVectorDataList();
 }
 
-
-std::vector<std::string>
-InputVectorDataListParameter::GetFileNameList() const
+/*****************************************************************************/
+VectorDataListType *
+InputVectorDataListParameter
+::GetVectorDataList()
 {
-  if (m_ReaderList)
+  assert( !m_VectorDataList.IsNull() );
+
+  m_VectorDataList->Clear();
+
+  std::for_each(
+    begin(),
+    end(),
+    [ this ]( auto parameter ) -> void
     {
-    std::vector<std::string> filenames;
-    for(unsigned int i=0; i<m_ReaderList->Size(); i++)
-      {
-      if( m_ReaderList->GetNthElement(i) )
-        filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
-      }
+      assert( !parameter.IsNull() );
 
-    return filenames;
+      assert( parameter==otb::DynamicCast< InputVectorDataParameter >( parameter ) );
+
+      assert(
+	DynamicCast< InputVectorDataParameter >( parameter )
+	->GetVectorData()!=nullptr
+      );
+
+      m_VectorDataList->PushBack(
+	DynamicCast< InputVectorDataParameter >( parameter )
+	->GetVectorData()
+      );
     }
+  );
 
-  itkExceptionMacro(<< "No filename value");
-}
-
-
-std::string
-InputVectorDataListParameter::GetNthFileName( unsigned int i ) const
-{
-  if (m_ReaderList)
-    {
-    if(m_ReaderList->Size()<i)
-      {
-      itkExceptionMacro(<< "No vector data "<<i<<". Only "<<m_ReaderList->Size()<<" vector data available.");
-      }
-
-    return m_ReaderList->GetNthElement(i)->GetFileName();
-    }
-
-  itkExceptionMacro(<< "No filename value");
-}
-
-VectorDataListType*
-InputVectorDataListParameter::GetVectorDataList() const
-{
   return m_VectorDataList;
 }
 
-VectorDataType*
-InputVectorDataListParameter::GetNthVectorData(unsigned int i) const
+/*****************************************************************************/
+const VectorDataType *
+InputVectorDataListParameter
+::GetNthVectorData( std::size_t i )
 {
-  if(m_VectorDataList->Size()<i)
-    {
-    itkExceptionMacro(<< "No vector data "<<i<<". Only "<<m_VectorDataList->Size()<<" vector data available.");
-    }
-  return m_VectorDataList->GetNthElement(i);
+  assert( i<m_Parameters.size() );
+  assert( !m_Parameters[ i ].IsNull() );
+  assert( m_Parameters[ i ]->GetVectorData()!=nullptr );
+
+  return m_Parameters[ i ]->GetVectorData();
 }
 
+/*****************************************************************************/
 void
-InputVectorDataListParameter::SetVectorDataList(VectorDataListType* vdList)
+InputVectorDataListParameter
+::SetVectorDataList( VectorDataListType * vdList )
 {
-  // Check input availability
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  try
-    {
-    for(unsigned int i=0; i<vdList->Size(); i++)
-      {
-      vdList->GetNthElement( i )->UpdateOutputInformation();
-      }
-    }
-  catch(itk::ExceptionObject &)
-    {
-    return;
-    }
+  assert( vdList!=nullptr );
+  assert( !m_VectorDataList.IsNull() );
 
-  m_VectorDataList = vdList;
-  m_ReaderList = VectorDataFileReaderListType::Pointer();
-  for(unsigned int i=0; i<m_VectorDataList->Size(); i++)
+  SetObjectList(
+    *m_VectorDataList,
+    *vdList,
+    //
+    [ this ]( auto p, auto vd ) -> auto
     {
-    m_ReaderList->PushBack( VectorDataFileReaderType::Pointer() );
-    }
+      this->FromVectorData( p, vd );
+    },
+    //
+    []( auto p ) -> auto
+    {
+      assert( p );
 
-  SetActive(true);
-  this->Modified();
+      return p->GetVectorData();
+    }
+  );
 }
 
+/*****************************************************************************/
 void
-InputVectorDataListParameter::AddVectorData(VectorDataType* vectorData)
+InputVectorDataListParameter
+::AddVectorData( VectorDataType * vectorData )
 {
-  // Check input availability
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  try
+  AddData(
+    vectorData,
+    [ this ]( auto d ) -> auto
     {
-    vectorData->UpdateOutputInformation();
+      return this->FromVectorData( d );
     }
-  catch(itk::ExceptionObject &)
-    {
-    return;
-    }
-
-  m_VectorDataList->PushBack( vectorData );
-  m_ReaderList->PushBack( VectorDataFileReaderType::Pointer() );
-
-  this->Modified();
+  );
 }
 
-bool
-InputVectorDataListParameter::HasValue() const
-{
-  if (m_VectorDataList->Size() == 0)
-    {
-    return false;
-    }
-
-  bool res(true);
-  unsigned int i(0);
-  while (i < m_VectorDataList->Size() && res == true)
-    {
-    res = m_VectorDataList->GetNthElement(i).IsNotNull();
-    i++;
-    }
-
-  return res;
-}
-
-
+/*****************************************************************************/
 void
-InputVectorDataListParameter::Erase( unsigned int id )
+InputVectorDataListParameter
+::ClearValue()
 {
-  if(m_VectorDataList->Size()<id)
-    {
-    itkExceptionMacro(<< "No vector data "<<id<<". Only "<<m_VectorDataList->Size()<<" vector data available.");
-    }
+  Superclass::ClearValue();
 
-  m_VectorDataList->Erase( id );
-  m_ReaderList->Erase( id );
+  assert( m_VectorDataList );
 
-  this->Modified();
-}
-
-void
-InputVectorDataListParameter::ClearValue()
-{
   m_VectorDataList->Clear();
-  m_ReaderList->Clear();
+}
 
-  SetActive(false);
-  this->Modified();
+/*****************************************************************************/
+Role
+InputVectorDataListParameter
+::GetDirection() const
+{
+  return Role_Input;
+}
+
+/*****************************************************************************/
+const std::string &
+InputVectorDataListParameter
+::GetFilenameFilter() const
+{
+  return VECTOR_DATA_FILTER;
+}
+
+/*****************************************************************************/
+const std::string &
+InputVectorDataListParameter
+::ToString( const ParameterType::Pointer & p ) const
+{
+  assert( !p.IsNull() );
+
+  return p->GetFileName();
+}
+
+/*****************************************************************************/
+void
+InputVectorDataListParameter
+::FromString( const ParameterType::Pointer & p,
+	      const std::string & s ) const
+{
+  assert( !p.IsNull() );
+
+  p->SetFromFileName( s );
 }
 
 
 }
-}
 
+}
