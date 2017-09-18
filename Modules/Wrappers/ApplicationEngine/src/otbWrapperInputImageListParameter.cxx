@@ -48,13 +48,12 @@ InputImageParameter::Pointer
 InputImageListParameter
 ::FromImage( ImageBaseType * image )
 {
-    assert( image!=nullptr );
+  assert( image!=nullptr );
 
-    InputImageParameter::Pointer p;
+  InputImageParameter::Pointer p;
 
-    return FromImage( p, image );
+  return FromImage( p, image );
 }
-
 
 /*****************************************************************************/
 InputImageParameter::Pointer &
@@ -62,16 +61,32 @@ InputImageListParameter
 ::FromImage( InputImageParameter::Pointer & parameter,
 	     ImageBaseType * image )
 {
-    assert( image!=nullptr );
+#if 0
+  assert( image!=nullptr );
 
-    parameter = InputImageParameter::New();
+  parameter = InputImageParameter::New();
 
-    parameter->SetImage( image );
-    parameter->SetDescription( "Image filename" );
+  parameter->SetImage( image );
+  parameter->SetDescription( "Image filename" );
 
-    assert( parameter->GetImage()!=nullptr );
+  assert( parameter->GetImage()!=nullptr );
 
-    return parameter;
+  return parameter;
+
+#else
+  return
+    FromData(
+      parameter,
+      image,
+      []( auto p, auto i ) -> void
+      {
+        assert( p );
+
+	p->SetImage( i );
+      },
+      "Image filename"
+    );
+#endif
 }
 
 
@@ -153,12 +168,12 @@ InputImageListParameter::GetNthImage( std::size_t i )
   return m_Parameters[ i ]->GetFloatVectorImage();
 }
 
-
 /*****************************************************************************/
 void
 InputImageListParameter
 ::SetImageList( FloatVectorImageListType * imList )
 {
+#if 0
   // Check input availability
   for( std::size_t i=0; i<imList->Size(); i++ )
   {
@@ -188,6 +203,28 @@ InputImageListParameter
   SetActive( true );
 
   Modified();
+
+#else
+  assert( imList!=nullptr );
+  assert( !m_ImageList.IsNull() );
+
+  SetObjectList(
+    *m_ImageList,
+    *imList,
+    [ this ]( auto p, auto image ) -> auto
+    {
+      this->FromImage( p, image );
+    },
+    //
+    []( auto p ) -> auto
+    {
+      assert( p );
+
+      return p->GetFloatVectorImage();
+    }
+  );
+
+#endif
 }
 
 
@@ -212,6 +249,7 @@ void
 InputImageListParameter
 ::AddImage( ImageBaseType * image )
 {
+#if 0
   assert( image!=nullptr );
 
   // Check input availability
@@ -221,36 +259,30 @@ InputImageListParameter
   m_Parameters.push_back( FromImage( image ) );
 
   Modified();
+
+#else
+  AddData(
+    image,
+    [ this ]( auto i ) -> auto
+    {
+      return this->FromImage( i );
+    }
+  );
+
+#endif
 }
 
 
 /*****************************************************************************/
 void
-InputImageListParameter::ClearValue()
+InputImageListParameter
+::ClearValue()
 {
   Superclass::ClearValue();
 
+  assert( m_ImageList );
+
   m_ImageList->Clear();
-}
-
-
-/*****************************************************************************/
-Role
-InputImageListParameter
-::GetDirection( std::size_t ) const
-{
-#if 0
-  assert( i<m_InputImageParameterVector.size() );
-  assert( !m_InputImageParameterVector[ i ].IsNull() );
-
-  return m_InputImageParameterVector[ i ]->GetRole();
-
-#else
-  // otb::Parameter::GetRole() does not necessarily stand for
-  // direction of parameter.
-  return GetDirection();
-
-#endif
 }
 
 
@@ -260,15 +292,6 @@ InputImageListParameter
 ::GetDirection() const
 {
   return Role_Input;
-}
-
-
-/*****************************************************************************/
-const std::string &
-InputImageListParameter
-::GetFilenameFilter( std::size_t ) const
-{
-  return GetFilenameFilter();
 }
 
 

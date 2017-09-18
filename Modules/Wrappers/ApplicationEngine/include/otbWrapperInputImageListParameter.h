@@ -81,15 +81,11 @@ public:
   void ClearValue() override;
 
   /** */
-  Role GetDirection( std::size_t ) const override;
-
-  /** */
+  using StringListInterface::GetDirection;
   Role GetDirection() const override;
 
   /** */
-  const std::string & GetFilenameFilter( std::size_t ) const override;
-
-  /** */
+  using StringListInterface::GetFilenameFilter;
   const std::string & GetFilenameFilter() const override;
 
 protected:
@@ -116,12 +112,10 @@ private:
   InputImageListParameter( const Parameter & ); //purposely not implemented
   void operator = ( const Parameter & ); //purposely not implemented
 
-  static
-    InputImageParameter::Pointer
+  InputImageParameter::Pointer
     FromImage( ImageBaseType * );
 
-  static
-    InputImageParameter::Pointer &
+  InputImageParameter::Pointer &
     FromImage( InputImageParameter::Pointer &, ImageBaseType * );
 
 //
