@@ -347,6 +347,50 @@ ParameterList< T >
 
 /*****************************************************************************/
 template< typename T >
+template< typename L, typename Get >
+typename L::ObjectType *
+ParameterList< T >
+::GetObjectList( L & this_list, Get get )
+{
+  assert( this_list );
+
+  this_list->Clear();
+
+  std::for_each(
+    begin(),
+    end(),
+    [ this_list, get ]( auto parameter ) -> void
+    {
+      assert( parameter );
+      assert( parameter==otb::DynamicCast< T >( parameter ) );
+
+      assert( get( DynamicCast< T >( parameter ) ) );
+
+      this_list->PushBack(
+	get(
+	  DynamicCast< T >( parameter )
+	)
+      );
+    }
+  );
+
+  return this_list;
+}
+
+/*****************************************************************************/
+template< typename T >
+template< typename L, typename Get >
+const typename L::ObjectType *
+ParameterList< T >
+::GetObjectList( L & this_list, Get get ) const
+{
+  return
+    const_cast< ParameterList< T > * >( this )
+    ->GetObjectList( this_list, get );
+}
+
+/*****************************************************************************/
+template< typename T >
 template< typename D, typename From >
 void
 ParameterList< T >

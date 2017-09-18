@@ -141,6 +141,16 @@ protected:
     void
     SetObjectList( L &,  const L &, From, Get );
 
+  /** Utility method to factorize some code */
+  template< typename L, typename Get >
+    typename L::ObjectType *
+    GetObjectList( L &, Get );
+
+  /** */
+  template< typename L, typename Get >
+    const typename L::ObjectType *
+    GetObjectList( L &, Get ) const;
+
   /** */
   template< typename D, typename From >
     void
