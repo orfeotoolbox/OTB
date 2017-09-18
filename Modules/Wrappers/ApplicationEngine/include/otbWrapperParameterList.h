@@ -153,8 +153,7 @@ protected:
 
   /** */
   template< typename D, typename From >
-    void
-    AddData( D *, From );
+    void AddData( D *, From );
 
   /** */
   template< typename D, typename Set >
