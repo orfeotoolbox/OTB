@@ -32,7 +32,7 @@ int otbComputeGainLutFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   typedef otb::ComputeGainLutFilter< HistoImageType , LutImageType > FilterType;
 
 
-  FilterType::Pointer computeGainLut = FilterType::New();
+  FilterType::Pointer computeGainLut ( FilterType::New() );
 
   std::cout << computeGainLut << std::endl;
 

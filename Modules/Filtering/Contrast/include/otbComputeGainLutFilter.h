@@ -61,58 +61,59 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  itkNewMacro(Self)
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComputeGainLutFilter, ImageToImageFilter);
+  itkTypeMacro(ComputeGainLutFilter, ImageToImageFilter)
 
   /** Get/Set macro to get/set the number of pixel by histogram */
-  itkSetMacro(NbPixel, long);
-  itkGetMacro(NbPixel, long);
+  itkSetMacro(NbPixel, unsigned long)
+  itkGetMacro(NbPixel, unsigned long)
 
   /** Get/Set macro to get/set the minimum value */
-  itkSetMacro(Min, double);
-  itkGetMacro(Min, double);
+  itkSetMacro(Min, double)
+  itkGetMacro(Min, double)
 
   /** Get/Set macro to get/set the maximum value */
-  itkSetMacro(Max, double);
-  itkGetMacro(Max, double);
+  itkSetMacro(Max, double)
+  itkGetMacro(Max, double)
 
 protected:
-  ComputeGainLutFilter();
-  ~ComputeGainLutFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ComputeGainLutFilter() ;
+  ~ComputeGainLutFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() override ;
 
-  void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            itk::ThreadIdType threadId);
+  void ThreadedGenerateData(
+        const OutputImageRegionType & outputRegionForThread ,
+        itk::ThreadIdType threadId) override ;
 
   /** Post-process the look up tabe to get a gain instead of a simple value */
-  OutputPixelType PostProcess( int countMapValue ,
-                               int countValue );
+  OutputPixelType PostProcess( unsigned int countMapValue ,
+                               unsigned int countValue ) ;
 
   /** Equalized input histogram regarding the target and filling the 
     * corresponding look up table */
   void Equalized( const HistoType & inputHisto ,
-                        HistoType & targetHisto ,
-                        LutType & lut);
+                  HistoType & targetHisto ,
+                  LutType & lut) ;
 
   /** Create target depending on the number of pixel in the input histogram */
   void CreateTarget( const HistoType & inputHisto ,
-                           HistoType & targetHisto );
+                     HistoType & targetHisto ) ;
   //TODO Give the opportunity to choose the histogram target
   
   /** Check whether the input histogram has enought pixel to be meaningful */
-  bool IsValide(const HistoType & inputHisto );
+  bool IsValide(const HistoType & inputHisto ) ;
 
 private:
-  ComputeGainLutFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ComputeGainLutFilter(const Self &) ; //purposely not implemented
+  void operator =(const Self&) ; //purposely not implemented
 
   double m_Min;
   double m_Max;
   double m_Step;
-  int m_NbBin;
+  unsigned int m_NbBin;
   long m_NbPixel;
 
 };

@@ -22,7 +22,6 @@
 #define otbComputeHistoFilter_txx
 
 #include "otbComputeHistoFilter.h"
-#include "itkImageRegionIterator.h"
 
 #include <limits>
 
@@ -38,13 +37,13 @@ ComputeHistoFilter < TInputImage , TOutputImage >
   this->SetNthOutput( 1, this->MakeOutput(1) );
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
+  m_NoDataFlag = false;
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NbBin = 256;
   m_Threshold = std::numeric_limits< float >::max();
   m_ThumbSize.Fill(0);
   m_ValidThreads = 1;
   m_Step = -1;
-  m_NoDataFlag = false;
 }
 
 template <class TInputImage, class TOutputImage >
@@ -82,13 +81,14 @@ template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateInputRequestedRegion()
 {
-  typename Superclass::InputImagePointer inputPtr =
-                  const_cast<InputImageType *>(this->GetInput());
-  OutputImageRegionType histoRegion = 
-                    GetHistoOutput()->GetRequestedRegion();
+  typename Superclass::InputImagePointer inputPtr (
+                  const_cast<InputImageType *>( this->GetInput() ) );
+  OutputImageRegionType histoRegion ( 
+                    GetHistoOutput()->GetRequestedRegion() );
   IndexType start ;
   start[0] = histoRegion.GetIndex()[0] * m_ThumbSize[0];
   start[1] = histoRegion.GetIndex()[1] * m_ThumbSize[1];
+
   SizeType size ;
   size[0] = histoRegion.GetSize()[0] * m_ThumbSize[0];
   size[1] = histoRegion.GetSize()[1] * m_ThumbSize[1];
@@ -123,11 +123,11 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  typename InputImageType::ConstPointer input = this->GetInput();
-  typename OutputImageType::Pointer output = this->GetHistoOutput();
-  typename OutputImageType::Pointer outImage = this->GetOutput();
+  typename InputImageType::ConstPointer input ( this->GetInput() );
+  typename OutputImageType::Pointer output ( this->GetHistoOutput() );
+  typename OutputImageType::Pointer outImage ( this->GetOutput() );
 
-  outImage->SetLargestPossibleRegion(input->GetLargestPossibleRegion());
+  outImage->SetLargestPossibleRegion( input->GetLargestPossibleRegion() );
 
   typename OutputImageType::IndexType start;
   typename OutputImageType::SizeType size;
@@ -137,12 +137,10 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   assert( m_ThumbSize[0] != 0 );
   assert( m_ThumbSize[1] != 0 );
 
-  // if( m_ThumbSize[0] == 0 ||
-  //     m_ThumbSize[1] == 0 )
-      
+  //TODO throw error if 0  
 
-  size[0] = input->GetLargestPossibleRegion().GetSize()[0]/m_ThumbSize[0];
-  size[1] = input->GetLargestPossibleRegion().GetSize()[1]/m_ThumbSize[1];
+  size[0] = input->GetLargestPossibleRegion().GetSize()[0] / m_ThumbSize[0];
+  size[1] = input->GetLargestPossibleRegion().GetSize()[1] / m_ThumbSize[1];
 
   typename OutputImageType::RegionType region;
   region.SetSize(size);
@@ -155,18 +153,22 @@ template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateOutputRequestedRegion( itk::DataObject * itkNotUsed(output) )
 {
-  typename OutputImageType::Pointer outImage = this->GetOutput();
+  typename OutputImageType::Pointer outImage ( this->GetOutput() );
+  OutputImageRegionType histoRegion ( 
+                      GetHistoOutput()->GetRequestedRegion() );
+
   IndexType start ;
-  OutputImageRegionType histoRegion = 
-                      GetHistoOutput()->GetRequestedRegion();
   start[0] = histoRegion.GetIndex()[0] * m_ThumbSize[0];
   start[1] = histoRegion.GetIndex()[1] * m_ThumbSize[1];
+
   SizeType size ;
   size[0] = histoRegion.GetSize()[0] * m_ThumbSize[0];
   size[1] = histoRegion.GetSize()[1] * m_ThumbSize[1];
+
   typename OutputImageType::RegionType outputRequestedRegion;
   outputRequestedRegion.SetIndex(start);
   outputRequestedRegion.SetSize(size);
+
   if (outputRequestedRegion.Crop(outImage->GetLargestPossibleRegion()))
     {
     outImage->SetRequestedRegion(outputRequestedRegion);
@@ -199,8 +201,9 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   str.Filter = this;
 
   // Get the output pointer
-  const OutputImageType *outputPtr = this->GetOutput();
-  const itk::ImageRegionSplitterBase * splitter = this->GetImageRegionSplitter();
+  const OutputImageType * outputPtr ( this->GetOutput() );
+  const itk::ImageRegionSplitterBase * splitter ( 
+    this->GetImageRegionSplitter() );
   m_ValidThreads = 
     splitter->GetNumberOfSplits( outputPtr->GetRequestedRegion() , 
                                  this->GetNumberOfThreads() );
@@ -220,13 +223,13 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 ::BeforeThreadedGenerateData()
 {
   // Initializing output
-  typename OutputImageType::Pointer output = this->GetHistoOutput();
+  typename OutputImageType::Pointer output ( this->GetHistoOutput() );
   typename OutputImageType::PixelType zeroPixel(m_NbBin) ;
   zeroPixel.Fill(0);
   output->FillBuffer( zeroPixel );
 
   // Initializing shared variable with thread number parameter
-  SizeType outSize = output->GetRequestedRegion().GetSize();
+  SizeType outSize ( output->GetRequestedRegion().GetSize() );
   m_HistoThread.resize( m_ValidThreads * outSize[0] * outSize[1] , zeroPixel );
 
   m_Step = static_cast<double>( m_Max - m_Min ) \
@@ -239,36 +242,43 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
                        itk::ThreadIdType threadId )
 {
   assert(m_Step>0);
+  // TODO throw error
+
   // itk::ProgressReporter progress(this , threadId , 
   //               outputRegionForThread.GetNumberOfPixels() );
 
-  typename InputImageType::ConstPointer input = this->GetInput();
-  OutputImageRegionType histoRegion = 
-                            GetHistoOutput()->GetRequestedRegion();
-  SizeType outSize = histoRegion.GetSize();
-  IndexType outIndex = histoRegion.GetIndex();
-  int threadIndex = ( threadId ) * outSize[0] * outSize[1];
-  int pixel = 0;
+  typename InputImageType::ConstPointer input ( this->GetInput() );
+  OutputImageRegionType histoRegion ( 
+                            GetHistoOutput()->GetRequestedRegion() );
+  SizeType outSize ( histoRegion.GetSize() );
+  IndexType outIndex ( histoRegion.GetIndex() );
+  
   typename InputImageType::RegionType region;
   region.SetSize(m_ThumbSize);
+
+  unsigned int threadIndex ( threadId  * outSize[0] * outSize[1] ) , pixel(0) ;
+
   for ( unsigned int nthHisto = 0 ; nthHisto < outSize[0] * outSize[1] ; nthHisto++ )
     {
     IndexType start;
     start[0] = (outIndex[0] +  nthHisto % outSize[0] ) * m_ThumbSize[0];
     start[1] = (outIndex[1] +  nthHisto / outSize[0] ) * m_ThumbSize[1];
     region.SetIndex(start);
+
     typename itk::ImageRegionConstIterator < InputImageType > 
       it( input ,region );
     it.GoToBegin();
+
     while ( !it.IsAtEnd() )
       {
-      if( (it.Get() == m_NoData && m_NoDataFlag) || 
-           it.Get() > m_Max || it.Get() < m_Min )
+      if( ( it.Get() == m_NoData && m_NoDataFlag ) || 
+            it.Get() > m_Max || it.Get() < m_Min )
         {
         ++it;
         continue;
         }
-      pixel = static_cast<int>( std::round( ( it.Get() - m_Min ) / m_Step ) );
+      pixel = static_cast< unsigned int >( 
+        std::round( ( it.Get() - m_Min ) / m_Step ) );
       ++m_HistoThread[threadIndex + nthHisto][pixel];
       ++it;
       }
@@ -279,19 +289,22 @@ template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::AfterThreadedGenerateData()
 {
-  typename OutputImageType::Pointer output = this->GetHistoOutput();
+  typename OutputImageType::Pointer output ( this->GetHistoOutput() );
   typename itk::ImageRegionIterator < OutputImageType > 
       oit( output , output->GetRequestedRegion() );
-  OutputImageRegionType histoRegion = 
-                        GetHistoOutput()->GetRequestedRegion();
-  SizeType outSize = histoRegion.GetSize();
-  IndexType outIndex = histoRegion.GetIndex();
-  int agreg(0) , total(0) , height(0) , rest(0);
+  OutputImageRegionType histoRegion ( 
+                        GetHistoOutput()->GetRequestedRegion() );
+  SizeType outSize ( histoRegion.GetSize() );
+  IndexType outIndex ( histoRegion.GetIndex() );
   oit.GoToBegin();
+
+  unsigned int agreg(0) , total(0) ;
+
   while ( !oit.IsAtEnd() )
     {
     total = 0;
-    for (int i = 0 ; i<m_NbBin ; i++)
+
+    for ( unsigned int i = 0 ; i < m_NbBin ; i++ )
       {
       agreg = 0;
 
@@ -304,34 +317,44 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
       oit.Get()[i] = agreg;
       total += agreg;
       }
-    height = 0;
-    rest = 0;
     if ( m_Threshold == std::numeric_limits< float >::max() )
       {
       ++oit;
       continue;
       }
-    height = static_cast<int>( m_Threshold * ( total / m_NbBin ) );
-    // Warning!!!! Need to handle out of bound int!!!
-    for( int i = 0 ; i < m_NbBin ; i++ )
-      {
-      if ( oit.Get()[i] > height )
-        {
-        rest += oit.Get()[i] - height ;
-        oit.Get()[i] = height ;
-        }
-      }
-    height = rest / m_NbBin;
-    rest = rest % m_NbBin;
-    for( int i = 0 ; i < m_NbBin ; i++ )
-      {
-      oit.Get()[i] += height ;
-      if ( i > (m_NbBin - rest)/2 && i <= (m_NbBin - rest)/2 + rest )
-        {
-        ++oit.Get()[i];
-        }
-      }
+    ApplyThreshold( oit , total );
     ++oit;
+    }
+}
+
+template <class TInputImage, class TOutputImage >
+void ComputeHistoFilter < TInputImage , TOutputImage >
+::ApplyThreshold( typename itk::ImageRegionIterator < OutputImageType > oit ,
+                  unsigned int total )
+{
+  unsigned int rest(0);
+  unsigned int height ( static_cast<unsigned int>( 
+        m_Threshold * ( total / m_NbBin ) ) );
+  // Do i need to static_cast in a an assignation?
+  // Warning!!!! Need to handle out of bound int!!!
+
+  for( unsigned int i = 0 ; i < m_NbBin ; i++ )
+    {
+    if ( oit.Get()[i] > height )
+      {
+      rest += oit.Get()[i] - height ;
+      oit.Get()[i] = height ;
+      }
+    }
+  height = rest / m_NbBin;
+  rest = rest % m_NbBin;
+  for( unsigned int i = 0 ; i < m_NbBin ; i++ )
+    {
+    oit.Get()[i] += height ;
+    if ( i > (m_NbBin - rest)/2 && i <= (m_NbBin - rest)/2 + rest )
+      {
+      ++oit.Get()[i];
+      }
     }
 }
 

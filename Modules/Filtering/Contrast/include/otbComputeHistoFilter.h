@@ -23,6 +23,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbImage.h"
+#include "itkImageRegionIterator.h"
 
 namespace otb
 {
@@ -59,71 +60,77 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  itkNewMacro(Self)
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComputeHistoFilter, ImageToImageFilter);
+  itkTypeMacro(ComputeHistoFilter, ImageToImageFilter)
 
   /** Get/Set macro to get/set the number of bin. Default value is 256 */
-  itkSetMacro(NbBin, int);
-  itkGetMacro(NbBin, int);
+  itkSetMacro(NbBin, unsigned int)
+  itkGetMacro(NbBin, unsigned int)
 
   /** Get/Set macro to get/set the minimum value */
-  itkSetMacro(Min, InputPixelType);
-  itkGetMacro(Min, InputPixelType);
+  itkSetMacro(Min, InputPixelType)
+  itkGetMacro(Min, InputPixelType)
 
   /** Get/Set macro to get/set the maximum value */
-  itkSetMacro(Max, InputPixelType);
-  itkGetMacro(Max, InputPixelType);
+  itkSetMacro(Max, InputPixelType)
+  itkGetMacro(Max, InputPixelType)
 
   /** Get/Set macro to get/set the nodata value */
-  itkSetMacro(NoData, InputPixelType);
-  itkGetMacro(NoData, InputPixelType);
+  itkSetMacro(NoData, InputPixelType)
+  itkGetMacro(NoData, InputPixelType)
 
   /** Get/Set macro to get/set the nodata flag value */
-  itkBooleanMacro(NoDataFlag);
-  itkGetMacro(NoDataFlag, bool);
-  itkSetMacro(NoDataFlag, bool);
+  itkBooleanMacro(NoDataFlag)
+  itkGetMacro(NoDataFlag, bool)
+  itkSetMacro(NoDataFlag, bool)
 
   /** Get/Set macro to get/set the thumbnail's size */
-  itkSetMacro(ThumbSize, SizeType);
-  itkGetMacro(ThumbSize, SizeType);
+  itkSetMacro(ThumbSize, SizeType)
+  itkGetMacro(ThumbSize, SizeType)
 
   /** Get/Set macro to get/set the threshold parameter */
-  itkSetMacro(Threshold , float);
-  itkGetMacro(Threshold , float);
+  itkSetMacro(Threshold , float)
+  itkGetMacro(Threshold , float)
 
   typename OutputImageType::Pointer GetHistoOutput();
 
   virtual itk::ProcessObject::DataObjectPointer 
-    MakeOutput(itk::ProcessObject::DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+    MakeOutput(itk::ProcessObject::DataObjectPointerArraySizeType idx) 
+      override;
 
   virtual itk::ProcessObject::DataObjectPointer 
-    MakeOutput(const itk::ProcessObject::DataObjectIdentifierType &) ITK_OVERRIDE;
+    MakeOutput(const itk::ProcessObject::DataObjectIdentifierType &) 
+      override;
 
 
 protected:
   ComputeHistoFilter();
-  ~ComputeHistoFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ComputeHistoFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() override;
 
-  void GenerateOutputInformation();
+  void GenerateOutputInformation() override;
 
   // Call  BeforeThreadedGenerateData after getting the number of thread
-  void GenerateData();
+  void GenerateData() override;
 
   
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() override;
 
-  virtual void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread ,
-                            itk::ThreadIdType threadId);
+  virtual void ThreadedGenerateData(
+          const OutputImageRegionType & outputRegionForThread ,
+          itk::ThreadIdType threadId) override;
 
-  void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() override;
 
-  void GenerateOutputRequestedRegion( itk::DataObject *output );
+  void GenerateOutputRequestedRegion( itk::DataObject *output ) override;
 
+  void ApplyThreshold( 
+       typename itk::ImageRegionIterator < OutputImageType > oit ,
+       unsigned int total );
 
 private:
   ComputeHistoFilter(const Self &); //purposely not implemented
@@ -135,9 +142,9 @@ private:
   InputPixelType m_NoData;
   SizeType m_ThumbSize;
   bool m_NoDataFlag;
-  int m_NbBin;
-  float m_Threshold;
   double m_Step;
+  float m_Threshold;
+  unsigned int m_NbBin;
   unsigned int m_ValidThreads;
 
 };

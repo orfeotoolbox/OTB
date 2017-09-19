@@ -54,17 +54,19 @@ public:
   typedef itk::SmartPointer< const Self > ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  itkNewMacro(Self)
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BufferFilter, InPlaceImageFilter);
+  itkTypeMacro(BufferFilter, InPlaceImageFilter)
 
 protected:
-  BufferFilter() {};
-  ~BufferFilter() ITK_OVERRIDE {}
+  BufferFilter() {}
+  ~BufferFilter() override {}
 
-  virtual void ThreadedGenerateData(const typename InputImageType::RegionType & itkNotUsed(outputRegionForThread) ,
-                            itk::ThreadIdType itkNotUsed(threadId) ){};
+  virtual void ThreadedGenerateData(
+      const typename InputImageType::RegionType & 
+        itkNotUsed(outputRegionForThread) ,
+      itk::ThreadIdType itkNotUsed(threadId) ) override{}
 
 private:
   BufferFilter(const Self &); //purposely not implemented

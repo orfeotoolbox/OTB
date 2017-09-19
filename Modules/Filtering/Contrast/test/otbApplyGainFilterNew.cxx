@@ -38,7 +38,7 @@ int otbApplyGainFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       < InputImageType , LutImageType , OutputImageType > FilterType;
 
 
-  FilterType::Pointer appGain = FilterType::New();
+  FilterType::Pointer appGain ( FilterType::New() );
 
   std::cout << appGain << std::endl;
 

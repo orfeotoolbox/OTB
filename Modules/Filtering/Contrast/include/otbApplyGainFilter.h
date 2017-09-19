@@ -59,26 +59,26 @@ public :
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  itkNewMacro(Self)
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComputeHistoFilter, ImageToImageFilter);
+  itkTypeMacro(ComputeHistoFilter, ImageToImageFilter)
 
   /** Get/Set macro to get/set the nodata value */
-  itkSetMacro(NoData, InputPixelType);
-  itkGetMacro(NoData, InputPixelType);
+  itkSetMacro(NoData, InputPixelType)
+  itkGetMacro(NoData, InputPixelType)
 
   /** Get/Set macro to get/set the nodata flag value */
-  itkBooleanMacro(NoDataFlag);
-  itkGetMacro(NoDataFlag, bool);
-  itkSetMacro(NoDataFlag, bool);
+  itkBooleanMacro(NoDataFlag)
+  itkGetMacro(NoDataFlag, bool)
+  itkSetMacro(NoDataFlag, bool)
 
   /** Get/Set macro to get/set the minimum value */
-  itkSetMacro(Min, InputPixelType);
-  itkGetMacro(Min, InputPixelType);
+  itkSetMacro(Min, InputPixelType)
+  itkGetMacro(Min, InputPixelType)
 
   /** Get/Set macro to get/set the maximum value */
-  itkSetMacro(Max, InputPixelType);
-  itkGetMacro(Max, InputPixelType);
+  itkSetMacro(Max, InputPixelType)
+  itkGetMacro(Max, InputPixelType)
 
   /** Set the input look up table*/
   void SetInputLut( const LutType * lut) ;
@@ -88,8 +88,8 @@ public :
 
 protected :
   ApplyGainFilter();
-  ~ApplyGainFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ApplyGainFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   
   /** Get the input image*/  
   const InputImageType * GetInputImage() const;
@@ -97,16 +97,16 @@ protected :
   /** Get the input look up table*/
   const LutType * GetInputLut() const;
 
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() override;
 
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() override;
 
   void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            itk::ThreadIdType threadId);
+                            itk::ThreadIdType threadId) override;
 
   /** Bilineare interpolation of the gain beetween the different window.*/
   float InterpoleGain( typename LutType::ConstPointer gridLut ,
-                       int pixelValue , 
+                       unsigned int pixelValue , 
                        typename InputImageType::IndexType index);
 
 private :

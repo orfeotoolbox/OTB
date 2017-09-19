@@ -35,7 +35,7 @@ int otbComputeHistoFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   typedef otb::ComputeHistoFilter< InputImageType , HistoImageType > FilterType;
 
 
-  FilterType::Pointer computeHisto = FilterType::New();
+  FilterType::Pointer computeHisto ( FilterType::New() );
 
   std::cout << computeHisto << std::endl;
 
