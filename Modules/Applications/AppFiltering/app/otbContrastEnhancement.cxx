@@ -188,29 +188,29 @@ private:
     MandatoryOff("max");
 
     AddParameter(ParameterType_Choice , "mode" , "What to equalized");
-    AddChoice( "mode.each" , "Chanels" );
+    AddChoice( "mode.each" , "Channels" );
     SetParameterDescription( "mode.each" ,
-                "Each chanel are equalized independently" );
+                "Each channel are equalized independently" );
     AddChoice( "mode.lum" , "Luminance" );
     SetParameterDescription( "mode.lum" ,
                 "The luminance is equalized and then a gain is applied "
-                "on the chanels." );
-    AddParameter(ParameterType_Group , "mode.lum.red" , "Red Chanel" );
-    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Chanel" );
+                "on the channels." );
+    AddParameter(ParameterType_Group , "mode.lum.red" , "Red Channel" );
+    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Channel" );
     SetDefaultParameterInt("mode.lum.red.ch", 0 );
     AddParameter(ParameterType_Float , "mode.lum.red.coef" ,
                  "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.red.coef", 0.21 );
 
-    AddParameter(ParameterType_Group , "mode.lum.gre" , "Green Chanel" );
-    AddParameter(ParameterType_Int , "mode.lum.gre.ch" , "Green Chanel" );
+    AddParameter(ParameterType_Group , "mode.lum.gre" , "Green Channel" );
+    AddParameter(ParameterType_Int , "mode.lum.gre.ch" , "Green Channel" );
     SetDefaultParameterInt("mode.lum.gre.ch", 1 );
     AddParameter(ParameterType_Float , "mode.lum.gre.coef" ,
                  "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.gre.coef", 0.71 );
 
-    AddParameter(ParameterType_Group , "mode.lum.blu" , "Blue Chanel" );
-    AddParameter(ParameterType_Int , "mode.lum.blu.ch" , "Blue Chanel" );
+    AddParameter(ParameterType_Group , "mode.lum.blu" , "Blue Channel" );
+    AddParameter(ParameterType_Int , "mode.lum.blu.ch" , "Blue Channel" );
     SetDefaultParameterInt("mode.lum.blu.ch", 2 );
     AddParameter(ParameterType_Float , "mode.lum.blu.coef" ,
                  "Value for luminance computation" );
@@ -283,13 +283,13 @@ private:
     m_VectorToImageListFilter->UpdateOutputInformation();
     ImageListType::Pointer inputImageList = 
                   m_VectorToImageListFilter->GetOutput();
-    int nbChanel = inImage->GetVectorLength ();
+    int nbChannel = inImage->GetVectorLength ();
 
     if ( mode == "each")
       {
-      // Each chanel will be equalized
+      // Each channel will be equalized
       PerBandEqualization( inImage , inputImageList , 
-                           nbChanel , outputImageList );
+                           nbChannel , outputImageList );
       }
 
     else if ( mode == "lum")
@@ -487,63 +487,63 @@ private:
   // Function corresponding to the "each" mode
   void PerBandEqualization( const FloatVectorImageType::Pointer inImage ,
                             const ImageListType::Pointer inputImageList ,
-                            const int nbChanel,
+                            const int nbChannel,
                             ImageListType::Pointer outputImageList )
   {
-    FloatVectorImageType::PixelType min(nbChanel) , max(nbChanel);
+    FloatVectorImageType::PixelType min(nbChannel) , max(nbChannel);
     min.Fill(0);
     max.Fill(0);
     ComputeVectorMinMax( inImage , max , min );
 
-    m_GainLutFilter.resize(nbChanel);
-    m_HistoFilter.resize(nbChanel);
-    m_GainFilter.resize(nbChanel);
-    m_BufferFilter.resize(nbChanel);
-    m_StreamingFilter.resize(nbChanel);
+    m_GainLutFilter.resize(nbChannel);
+    m_HistoFilter.resize(nbChannel);
+    m_GainFilter.resize(nbChannel);
+    m_BufferFilter.resize(nbChannel);
+    m_StreamingFilter.resize(nbChannel);
 
-    for (int chanel = 0 ; chanel<nbChanel ; chanel++ ) 
+    for (int channel = 0 ; channel<nbChannel ; channel++ ) 
       {
-      m_GainLutFilter[chanel] = GainLutFilterType::New();
-      m_HistoFilter[chanel] = HistoFilterType::New();
-      m_GainFilter[chanel] = GainFilterType::New();
-      m_StreamingFilter[chanel] = StreamingImageFilterType::New();
-      m_BufferFilter[chanel] = BufferFilterType::New();
+      m_GainLutFilter[channel] = GainLutFilterType::New();
+      m_HistoFilter[channel] = HistoFilterType::New();
+      m_GainFilter[channel] = GainFilterType::New();
+      m_StreamingFilter[channel] = StreamingImageFilterType::New();
+      m_BufferFilter[channel] = BufferFilterType::New();
 
-      if ( min[chanel] == max[chanel] )
+      if ( min[channel] == max[channel] )
         {
           //TODO Warn user through log
-          std::cout<<"Chanel constant"<<std::endl;
-          std::cout<<"min "<<min[chanel]<<std::endl;
-          std::cout<<"max "<<max[chanel]<<std::endl;
-          m_BufferFilter[chanel]->SetInput( inputImageList->GetNthElement(chanel) );
-          outputImageList->PushBack( m_BufferFilter[chanel]->GetOutput() );
+          std::cout<<"Channel constant"<<std::endl;
+          std::cout<<"min "<<min[channel]<<std::endl;
+          std::cout<<"max "<<max[channel]<<std::endl;
+          m_BufferFilter[channel]->SetInput( inputImageList->GetNthElement(channel) );
+          outputImageList->PushBack( m_BufferFilter[channel]->GetOutput() );
           continue;
         }
 
-      SetUpPipeline ( m_HistoFilter[chanel] ,
-                      m_GainLutFilter[chanel] ,
-                      m_StreamingFilter[chanel] ,
-                      inputImageList->GetNthElement(chanel) ,
-                      max[chanel] , min[chanel] );
+      SetUpPipeline ( m_HistoFilter[channel] ,
+                      m_GainLutFilter[channel] ,
+                      m_StreamingFilter[channel] ,
+                      inputImageList->GetNthElement(channel) ,
+                      max[channel] , min[channel] );
 
       if( IsParameterEnabled("nodata") )
         {
-        m_GainFilter[chanel]->NoDataFlagOn();
-        m_GainFilter[chanel]->SetNoData( GetParameterFloat("nodata") ); 
+        m_GainFilter[channel]->NoDataFlagOn();
+        m_GainFilter[channel]->SetNoData( GetParameterFloat("nodata") ); 
         }
       else
         {
-        m_GainFilter[chanel]->NoDataFlagOff();
+        m_GainFilter[channel]->NoDataFlagOff();
         }
-      m_GainFilter[chanel]->SetMin( min[chanel] );
-      m_GainFilter[chanel]->SetMax( max[chanel] );
-      m_GainFilter[chanel]->SetInputLut( 
-        m_StreamingFilter[chanel]->GetOutput() );
-      m_BufferFilter[chanel] -> SetInput ( 
-        m_VectorToImageListFilter->GetOutput()->GetNthElement( chanel ) );
-      m_BufferFilter[chanel]->InPlaceOn();
-      m_GainFilter[chanel]->SetInputImage( m_BufferFilter[chanel]->GetOutput() );
-      outputImageList->PushBack( m_GainFilter[chanel]->GetOutput() );
+      m_GainFilter[channel]->SetMin( min[channel] );
+      m_GainFilter[channel]->SetMax( max[channel] );
+      m_GainFilter[channel]->SetInputLut( 
+        m_StreamingFilter[channel]->GetOutput() );
+      m_BufferFilter[channel] -> SetInput ( 
+        m_VectorToImageListFilter->GetOutput()->GetNthElement( channel ) );
+      m_BufferFilter[channel]->InPlaceOn();
+      m_GainFilter[channel]->SetInputImage( m_BufferFilter[channel]->GetOutput() );
+      outputImageList->PushBack( m_GainFilter[channel]->GetOutput() );
       }
   }
 
@@ -551,7 +551,7 @@ private:
   void ComputeLuminance( const FloatVectorImageType::Pointer inImage ,
                          std::vector < int > rgb )
   {
-    // Retreive coeffs for each chanel
+    // Retreive coeffs for each channel
     std::vector < float > lumCoef( 3 , 0.0 );
     lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
     lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
@@ -573,7 +573,7 @@ private:
     m_LuminanceFunctor->SetInput( inImage );
   }
 
-  // Equalize the lumiance and apply the corresponding gain on each chanel
+  // Equalize the lumiance and apply the corresponding gain on each channel
   // used to compute this luminance
   void LuminanceEqualization( const ImageListType::Pointer inputImageList ,
                               const std::vector < int > rgb ,
@@ -594,28 +594,28 @@ private:
                     m_LuminanceFunctor->GetOutput() ,
                     max , min);
 
-    for ( int chanel = 0 ; chanel < 3 ; chanel++ ) 
+    for ( int channel = 0 ; channel < 3 ; channel++ ) 
       {
-      m_GainFilter[chanel] = GainFilterType::New();
-      m_BufferFilter[chanel] = BufferFilterType::New();
+      m_GainFilter[channel] = GainFilterType::New();
+      m_BufferFilter[channel] = BufferFilterType::New();
       if( IsParameterEnabled("nodata") )
         {
-        m_GainFilter[chanel]->NoDataFlagOn();
-        m_GainFilter[chanel]->SetNoData( GetParameterFloat("nodata") ); 
+        m_GainFilter[channel]->NoDataFlagOn();
+        m_GainFilter[channel]->SetNoData( GetParameterFloat("nodata") ); 
         }
       else
         {
-        m_GainFilter[chanel]->NoDataFlagOff();
+        m_GainFilter[channel]->NoDataFlagOff();
         }
-      m_GainFilter[chanel]->SetMin( min );
-      m_GainFilter[chanel]->SetMax( max );
-      m_GainFilter[chanel]->SetInputLut( 
+      m_GainFilter[channel]->SetMin( min );
+      m_GainFilter[channel]->SetMax( max );
+      m_GainFilter[channel]->SetInputLut( 
         m_StreamingFilter[0]->GetOutput() );
-      m_BufferFilter[chanel]->SetInput(
-                    inputImageList->GetNthElement(rgb[chanel]) );
-      m_GainFilter[chanel]->SetInputImage( 
-                    m_BufferFilter[chanel]->GetOutput() );
-      outputImageList->PushBack( m_GainFilter[chanel]->GetOutput() );
+      m_BufferFilter[channel]->SetInput(
+                    inputImageList->GetNthElement(rgb[channel]) );
+      m_GainFilter[channel]->SetInputImage( 
+                    m_BufferFilter[channel]->GetOutput() );
+      outputImageList->PushBack( m_GainFilter[channel]->GetOutput() );
       }
   }
 

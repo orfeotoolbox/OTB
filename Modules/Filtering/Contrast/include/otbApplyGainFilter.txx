@@ -143,7 +143,7 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
       }
     pixelLutValue =  static_cast< unsigned int > (
                     std::round( ( it.Get() - m_Min ) / m_Step ) );
-    gain = InterpoleGain( lut , pixelLutValue , it.GetIndex() );
+    gain = InterpolateGain( lut , pixelLutValue , it.GetIndex() );
     oit.Set( static_cast<OutputPixelType>( gain * it.Get() ) );
     ++it;
     ++oit;
@@ -152,7 +152,7 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 
 template <class TInputImage , class TLut , class TOutputImage >
 float ApplyGainFilter < TInputImage , TLut , TOutputImage >
-::InterpoleGain( typename LutType::ConstPointer gridLut,
+::InterpolateGain( typename LutType::ConstPointer gridLut,
                  unsigned int pixelLutValue ,
                  typename InputImageType::IndexType index)
 {

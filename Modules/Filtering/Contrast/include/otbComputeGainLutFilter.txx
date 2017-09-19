@@ -86,7 +86,7 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
     {
       target.Fill(0);
       lut.Fill(-1);
-      if ( IsValide( it.Get() ) )
+      if ( IsValid( it.Get() ) )
         {
         CreateTarget( it.Get() , target );
         Equalized( it.Get() , target , lut ); 
@@ -166,7 +166,7 @@ void ComputeGainLutFilter < TInputImage , TOutputImage >
 
 template <class TInputImage, class TOutputImage >
 bool ComputeGainLutFilter < TInputImage , TOutputImage >
-::IsValide( const HistoType & inputHisto )
+::IsValid( const HistoType & inputHisto )
 {
   unsigned long acc(0);
   for ( unsigned int i = 0 ; i < m_NbBin ; i++ )

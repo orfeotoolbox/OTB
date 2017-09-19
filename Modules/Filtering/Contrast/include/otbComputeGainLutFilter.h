@@ -104,7 +104,7 @@ protected:
   //TODO Give the opportunity to choose the histogram target
   
   /** Check whether the input histogram has enought pixel to be meaningful */
-  bool IsValide(const HistoType & inputHisto ) ;
+  bool IsValid(const HistoType & inputHisto ) ;
 
 private:
   ComputeGainLutFilter(const Self &) ; //purposely not implemented

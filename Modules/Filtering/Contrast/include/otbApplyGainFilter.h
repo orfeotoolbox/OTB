@@ -105,7 +105,7 @@ protected :
                             itk::ThreadIdType threadId) override;
 
   /** Bilineare interpolation of the gain beetween the different window.*/
-  float InterpoleGain( typename LutType::ConstPointer gridLut ,
+  float InterpolateGain( typename LutType::ConstPointer gridLut ,
                        unsigned int pixelValue , 
                        typename InputImageType::IndexType index);
 
