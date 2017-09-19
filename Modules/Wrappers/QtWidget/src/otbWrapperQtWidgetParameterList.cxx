@@ -117,7 +117,7 @@ void
 QtWidgetParameterList
 ::OnDataChanged( const QModelIndex &, const QModelIndex & )
 {
-  qDebug() << this << "::OnDataChanged()";
+  // qDebug() << this << "::OnDataChanged()";
 
   assert( GetModel()!=nullptr );
 
@@ -129,7 +129,7 @@ void
 QtWidgetParameterList
 ::OnModelReset()
 {
-  qDebug() << this << "::OnModelReset()";
+  // qDebug() << this << "::OnModelReset()";
 
   emit NotifyUpdate();
 }
@@ -139,7 +139,7 @@ void
 QtWidgetParameterList
 ::OnRowsInserted( const QModelIndex &, int, int )
 {
-  qDebug() << this << "::OnRowsInserted()";
+  // qDebug() << this << "::OnRowsInserted()";
 
   emit NotifyUpdate();
 }
@@ -149,7 +149,7 @@ void
 QtWidgetParameterList
 ::OnRowsRemoved( const QModelIndex &, int, int )
 {
-  qDebug() << this << "::OnRowsRemoved()";
+  // qDebug() << this << "::OnRowsRemoved()";
 
   emit NotifyUpdate();
 }
