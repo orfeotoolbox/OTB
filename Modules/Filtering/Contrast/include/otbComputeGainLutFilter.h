@@ -107,8 +107,8 @@ protected:
   bool IsValid(const HistoType & inputHisto ) ;
 
 private:
-  ComputeGainLutFilter(const Self &) ; //purposely not implemented
-  void operator =(const Self&) ; //purposely not implemented
+  ComputeGainLutFilter(const Self &) = delete ;
+  void operator =(const Self&) = delete ;
 
   double m_Min;
   double m_Max;

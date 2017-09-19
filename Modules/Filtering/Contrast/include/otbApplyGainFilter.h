@@ -110,8 +110,8 @@ protected :
                        typename InputImageType::IndexType index);
 
 private :
-  ApplyGainFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ApplyGainFilter(const Self &) = delete ;
+  void operator =(const Self&) = delete ; 
 
   InputPixelType m_NoData;
   InputPixelType m_Min;

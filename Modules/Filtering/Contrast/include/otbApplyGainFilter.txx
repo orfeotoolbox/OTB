@@ -131,20 +131,22 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 
   unsigned int pixelLutValue(0);
   float gain(0.0);
+  InputPixelType currentPixel(0);
   while ( !oit.IsAtEnd() )
     {
-    if( ( it.Get() == m_NoData && m_NoDataFlag ) ||
-          it.Get() > m_Max || it.Get() < m_Min )
+    currentPixel = it.Get();
+    if( !(( currentPixel == m_NoData && m_NoDataFlag ) ||
+              currentPixel > m_Max || currentPixel < m_Min ))
       {
-      oit.Set( static_cast<OutputPixelType>( it.Get() ) );
+      oit.Set( static_cast<OutputPixelType>( currentPixel ) );
       ++it;
       ++oit;
       continue;
       }
     pixelLutValue =  static_cast< unsigned int > (
-                    std::round( ( it.Get() - m_Min ) / m_Step ) );
+                    std::round( ( currentPixel - m_Min ) / m_Step ) );
     gain = InterpolateGain( lut , pixelLutValue , it.GetIndex() );
-    oit.Set( static_cast<OutputPixelType>( gain * it.Get() ) );
+    oit.Set( static_cast<OutputPixelType>( gain * currentPixel ) );
     ++it;
     ++oit;
     }

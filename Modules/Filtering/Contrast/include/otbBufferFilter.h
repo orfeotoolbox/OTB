@@ -69,8 +69,8 @@ protected:
       itk::ThreadIdType itkNotUsed(threadId) ) override{}
 
 private:
-  BufferFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BufferFilter(const Self &) = delete ;
+  void operator =(const Self&) = delete ;
 
 };
 

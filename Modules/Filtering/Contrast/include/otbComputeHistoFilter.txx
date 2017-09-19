@@ -268,17 +268,19 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
     typename itk::ImageRegionConstIterator < InputImageType > 
       it( input ,region );
     it.GoToBegin();
+    InputPixelType currentPixel(0);
 
     while ( !it.IsAtEnd() )
       {
-      if( ( it.Get() == m_NoData && m_NoDataFlag ) || 
-            it.Get() > m_Max || it.Get() < m_Min )
+      currentPixel = it.Get();
+      if( ( currentPixel == m_NoData && m_NoDataFlag ) || 
+            currentPixel > m_Max || currentPixel < m_Min )
         {
         ++it;
         continue;
         }
       pixel = static_cast< unsigned int >( 
-        std::round( ( it.Get() - m_Min ) / m_Step ) );
+        std::round( ( currentPixel - m_Min ) / m_Step ) );
       ++m_HistoThread[threadIndex + nthHisto][pixel];
       ++it;
       }

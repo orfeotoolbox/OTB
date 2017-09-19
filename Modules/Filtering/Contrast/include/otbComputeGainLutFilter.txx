@@ -173,9 +173,7 @@ bool ComputeGainLutFilter < TInputImage , TOutputImage >
   {
     acc+= inputHisto[i] ;
   }
-  if ( acc < 0.5 * m_NbPixel )
-    return false;
-  return true;
+  return acc >= (0.5 * m_NbPixel);
 }
 
 /**

@@ -133,8 +133,8 @@ protected:
        unsigned int total );
 
 private:
-  ComputeHistoFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ComputeHistoFilter(const Self &) = delete ;
+  void operator =(const Self&) = delete ;
 
   std::vector< typename OutputImageType::PixelType > m_HistoThread;
   InputPixelType m_Min;
