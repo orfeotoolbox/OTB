@@ -21,38 +21,43 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 
 #include "otbWrapperParameter.h"
-#include "otbWrapperQtWidgetModel.h"
+#include "otbWrapperInputFilenameListParameter.h"
+#include "otbWrapperInputVectorDataListParameter.h"
 
-#include "otbWrapperQtWidgetParameterBase.h"
-
-#include "otbWrapperQtWidgetEmptyParameter.h"
-#include "otbWrapperQtWidgetIntParameter.h"
-#include "otbWrapperQtWidgetFloatParameter.h"
-#include "otbWrapperQtWidgetStringParameter.h"
-#include "otbWrapperQtWidgetStringListParameter.h"
 #include "otbWrapperQtWidgetChoiceParameter.h"
-#include "otbWrapperQtWidgetListViewParameter.h"
-#include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetComplexInputImageParameter.h"
 #include "otbWrapperQtWidgetComplexOutputImageParameter.h"
-#include "otbWrapperQtWidgetInputImageListParameter.h"
-#include "otbWrapperQtWidgetOutputImageParameter.h"
-#include "otbWrapperQtWidgetOutputVectorDataParameter.h"
+#include "otbWrapperQtWidgetDirectoryParameter.h"
+#include "otbWrapperQtWidgetEmptyParameter.h"
+#include "otbWrapperQtWidgetFloatParameter.h"
+#include "otbWrapperQtWidgetIntParameter.h"
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
 #include "otbWrapperQtWidgetInputFilenameListParameter.h"
-#include "otbWrapperQtWidgetOutputFilenameParameter.h"
-#include "otbWrapperQtWidgetDirectoryParameter.h"
-#include "otbWrapperQtWidgetParameterGroup.h"
+#include "otbWrapperQtWidgetInputImageParameter.h"
+#include "otbWrapperQtWidgetInputImageListParameter.h"
+#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
-#include "otbWrapperQtWidgetRAMParameter.h"
+#include "otbWrapperQtWidgetListViewParameter.h"
+#include "otbWrapperQtWidgetModel.h"
+#include "otbWrapperQtWidgetOutputFilenameParameter.h"
+#include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
-#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
+#include "otbWrapperQtWidgetOutputVectorDataParameter.h"
+#include "otbWrapperQtWidgetParameterBase.h"
+#include "otbWrapperQtWidgetParameterGroup.h"
+#include "otbWrapperQtWidgetRAMParameter.h"
+#include "otbWrapperQtWidgetStringParameter.h"
+#include "otbWrapperQtWidgetStringListParameter.h"
+
 
 namespace otb
 {
+
+
 namespace Wrapper
 {
+
 
 template <class TParameterType, class TQtWidget>
 class QtWidgetParameterGenericFactory
