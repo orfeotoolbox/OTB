@@ -61,19 +61,6 @@ InputImageListParameter
 ::FromImage( InputImageParameter::Pointer & parameter,
 	     ImageBaseType * image )
 {
-#if 0
-  assert( image!=nullptr );
-
-  parameter = InputImageParameter::New();
-
-  parameter->SetImage( image );
-  parameter->SetDescription( "Image filename" );
-
-  assert( parameter->GetImage()!=nullptr );
-
-  return parameter;
-
-#else
   return
     FromData(
       parameter,
@@ -86,7 +73,6 @@ InputImageListParameter
       },
       "Image filename"
     );
-#endif
 }
 
 
@@ -159,38 +145,6 @@ void
 InputImageListParameter
 ::SetImageList( FloatVectorImageListType * imList )
 {
-#if 0
-  // Check input availability
-  for( std::size_t i=0; i<imList->Size(); i++ )
-  {
-    assert( imList->GetNthElement( i )!=nullptr );
-
-    imList->GetNthElement( i )->UpdateOutputInformation();
-  }
-
-  // Clear previous values
-  ClearValue();
-
-  for( std::size_t i=0; i<imList->Size(); i++ )
-    {
-    assert( imList->GetNthElement( i )!=nullptr );
-
-    InputImageParameter::Pointer parameter;
-
-    FromImage( parameter, imList->GetNthElement( i ) );
-
-    assert( parameter->GetFloatVectorImage()!=nullptr );
-
-    m_Parameters.push_back( parameter );
-
-    m_ImageList->PushBack( parameter->GetFloatVectorImage() );
-    }
-
-  SetActive( true );
-
-  Modified();
-
-#else
   assert( imList!=nullptr );
   assert( !m_ImageList.IsNull() );
 
@@ -209,8 +163,6 @@ InputImageListParameter
       return p->GetFloatVectorImage();
     }
   );
-
-#endif
 }
 
 
