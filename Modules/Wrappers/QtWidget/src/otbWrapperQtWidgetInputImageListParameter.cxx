@@ -20,9 +20,6 @@
 
 #include "otbWrapperQtWidgetInputImageListParameter.h"
 
-#include "otbWrapperQtWidgetListEditItemModel.h"
-#include "otbWrapperQtWidgetListEditWidget.h"
-
 
 namespace otb
 {
