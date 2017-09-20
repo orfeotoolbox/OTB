@@ -77,6 +77,21 @@ StringListInterface
   Erase( id, 1 );
 }
 
+/*****************************************************************************/
+std::size_t
+StringListInterface
+::SetStrings( const StringVector & )
+{
+  return 0;
+}
+
+/*****************************************************************************/
+std::size_t
+StringListInterface
+::GetStrings( StringVector & ) const
+{
+  return 0;
+}
 
 } // End of Namespace 'Wrapper'
 

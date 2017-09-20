@@ -66,11 +66,10 @@ public:
   virtual void SetNthFileName( std::size_t, const std::string & ) = 0;
 
   /** */
-  virtual std::size_t GetStrings( StringVector & ) const
-  {
-    // TODO: Make method virtual! (temporary)
-    return 0;
-  }
+  virtual std::size_t SetStrings( const StringVector & );
+
+  /** */
+  virtual std::size_t GetStrings( StringVector & ) const;
 
   /** Get the stored filename list */
   virtual StringVector GetFileNameList() const = 0;
