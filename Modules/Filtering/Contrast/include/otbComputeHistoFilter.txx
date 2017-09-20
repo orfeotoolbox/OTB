@@ -127,7 +127,9 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   typename OutputImageType::Pointer output ( this->GetHistoOutput() );
   typename OutputImageType::Pointer outImage ( this->GetOutput() );
 
-  outImage->SetLargestPossibleRegion( input->GetLargestPossibleRegion() );
+  typename InputImageType::RegionType inputLargestRegion (
+        input->GetLargestPossibleRegion());
+  outImage->SetLargestPossibleRegion( inputLargestRegion );
 
   typename OutputImageType::IndexType start;
   typename OutputImageType::SizeType size;
@@ -139,8 +141,10 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
   //TODO throw error if 0  
 
-  size[0] = input->GetLargestPossibleRegion().GetSize()[0] / m_ThumbSize[0];
-  size[1] = input->GetLargestPossibleRegion().GetSize()[1] / m_ThumbSize[1];
+  size[0] = std::ceil( inputLargestRegion.GetSize()[0] / 
+        static_cast< double > ( m_ThumbSize[0] ) );
+  size[1] = std::ceil( inputLargestRegion.GetSize()[1] / 
+        static_cast< double > ( m_ThumbSize[1] ) );
 
   typename OutputImageType::RegionType region;
   region.SetSize(size);
@@ -238,7 +242,8 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
-::ThreadedGenerateData(const OutputImageRegionType & itkNotUsed(outputRegionForThread) ,
+::ThreadedGenerateData(const OutputImageRegionType & 
+                          itkNotUsed(outputRegionForThread) ,
                        itk::ThreadIdType threadId )
 {
   assert(m_Step>0);
@@ -254,19 +259,30 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   IndexType outIndex ( histoRegion.GetIndex() );
   
   typename InputImageType::RegionType region;
-  region.SetSize(m_ThumbSize);
+  region.SetSize( m_ThumbSize );
 
   unsigned int threadIndex ( threadId  * outSize[0] * outSize[1] ) , pixel(0) ;
 
-  for ( unsigned int nthHisto = 0 ; nthHisto < outSize[0] * outSize[1] ; nthHisto++ )
+  for ( unsigned int nthHisto = 0 ;
+        nthHisto < outSize[0] * outSize[1] ; nthHisto++ )
     {
     IndexType start;
     start[0] = (outIndex[0] +  nthHisto % outSize[0] ) * m_ThumbSize[0];
     start[1] = (outIndex[1] +  nthHisto / outSize[0] ) * m_ThumbSize[1];
     region.SetIndex(start);
-
+    if ( !region.Crop( input->GetRequestedRegion() ) )
+    {
+    // Couldn't crop the region (region is outside the requested
+    // region).  Throw an exception.
+    // build an exception
+    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Asked region is outside requested region");
+    // e.SetDataObject( input );
+    throw e;
+    }
     typename itk::ImageRegionConstIterator < InputImageType > 
-      it( input ,region );
+      it( input , region );
     it.GoToBegin();
     InputPixelType currentPixel(0);
 

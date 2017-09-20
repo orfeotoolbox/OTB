@@ -89,17 +89,10 @@ template <class TInputImage , class TLut , class TOutputImage >
 void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::BeforeThreadedGenerateData()
 {
-  typename InputImageType::ConstPointer input ( GetInputImage() );
   typename LutType::ConstPointer lut ( GetInputLut() );
 
-  m_LutSize = lut->GetLargestPossibleRegion().GetSize();
-  m_ThumbSize[0] = input->GetLargestPossibleRegion().GetSize()[0] 
-                    / m_LutSize[0];
-  m_ThumbSize[1] = input->GetLargestPossibleRegion().GetSize()[1] 
-                    / m_LutSize[1];
-
   m_Step = static_cast<double>( m_Max - m_Min ) \
-                / static_cast<double>( lut->GetVectorLength() -1 );
+                / static_cast<double>( lut->GetVectorLength() - 1 );
 }
 
 template <class TInputImage , class TLut , class TOutputImage >

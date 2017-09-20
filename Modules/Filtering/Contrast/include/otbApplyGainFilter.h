@@ -80,6 +80,10 @@ public :
   itkSetMacro(Max, InputPixelType)
   itkGetMacro(Max, InputPixelType)
 
+  /** Get/Set macro to get/set the thumbnail's size */
+  itkSetMacro(ThumbSize, typename InputImageType::SizeType)
+  itkGetMacro(ThumbSize, typename InputImageType::SizeType)
+
   /** Set the input look up table*/
   void SetInputLut( const LutType * lut) ;
 

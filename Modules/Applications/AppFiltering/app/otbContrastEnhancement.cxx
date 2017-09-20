@@ -137,10 +137,10 @@ private:
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
-    SetParameterString("in", "/home/antoine/dev/my_data/biginput.tif");
+    SetParameterString("in", "/home/antoine/dev/my_data/smallinput.tif");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
-    SetParameterString("out", "/home/antoine/dev/my_data/bigbigtest.tif");
+    SetParameterString("out", "/home/antoine/dev/my_data/smallsmalltest.tif");
 
 
     AddParameter(ParameterType_Int , "bin" , "Number of bin");
@@ -240,8 +240,8 @@ private:
       if ( !HasUserValue("thumb.h") )
         SetParameterInt( "thumb.h" , size[1] );
       
-      if ( HasUserValue("thumb.h") || HasUserValue("thumb.w") )
-        CheckValidity( size );
+      if ( HasValue("thumb.h") && HasValue("thumb.w") && HasValue("bin") )
+        CheckValidity();
       
       
       if ( !HasUserValue("nodata") && IsParameterEnabled("nodata"))
@@ -275,6 +275,8 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+    m_ThumbSize[0] = GetParameterInt("thumb.w");
+    m_ThumbSize[1] = GetParameterInt("thumb.h");
     std::string mode = GetParameterString("mode");
     FloatVectorImageType * inImage = GetParameterImage("in");
     ImageListType::Pointer outputImageList ( ImageListType::New() ); 
@@ -359,24 +361,18 @@ private:
   }
 
   // Check if the image size is a multiple of the thumbnail size
-  void CheckValidity( const FloatVectorImageType::RegionType::SizeType size )
+  void CheckValidity()
   {
     std::ostringstream oss;
-      if ( HasUserValue("thumb.w") && 
-           size[0]%GetParameterInt("thumb.w") != 0 )
-        {   
-        oss <<"error : wThumbnail = "<<GetParameterInt("thumb.w")<<
-              " is not a divider of the input's width"<<std::endl;
-        oss<<"Image Width = "<<size[0]<<std::endl;
-        }
-      if ( HasUserValue("thumb.h") && 
-           size[1]%GetParameterInt("thumb.h") != 0 )
-        {
-        oss <<"error : hThumbnail = "<<GetParameterInt("thumb.h")<<
-              " is not a divider of the input's height"<<std::endl;
-        oss<<"Image Height = "<<size[1]<<std::endl;
-        }
-      otbAppLogINFO( << oss.str() );
+    long nbPixel = GetParameterInt("thumb.w") * GetParameterInt("thumb.h");
+    if ( nbPixel < 10 * GetParameterInt("bin"))
+      {   
+      oss<<"Warning in parameters selection the thumbnail size is small "
+      "in comparison with the number of bin. Histogram may not have much sens. "
+      "For better result enlarge thumbnail size or reduce number of bin."
+      <<std::endl;
+      }
+    otbAppLogINFO( << oss.str() );
   }
 
   // Prepare the first half of the pipe that is common to every methode of 
@@ -408,10 +404,7 @@ private:
     lutFilter->SetNbPixel( 
       GetParameterInt("thumb.h") * GetParameterInt("thumb.w") );
     histoFilter->SetNbBin(GetParameterInt("bin"));
-    FloatImageType::SizeType thumbSize;
-    thumbSize[0] = GetParameterInt("thumb.w");
-    thumbSize[1] = GetParameterInt("thumb.h");
-    histoFilter->SetThumbSize( thumbSize );
+    histoFilter->SetThumbSize( m_ThumbSize );
     histoFilter->SetInput( input );
     lutFilter->SetInput( histoFilter->GetHistoOutput() );
     streamingFilter->SetInput( lutFilter->GetOutput() );
@@ -537,6 +530,7 @@ private:
         }
       m_GainFilter[channel]->SetMin( min[channel] );
       m_GainFilter[channel]->SetMax( max[channel] );
+      m_GainFilter[channel]->SetThumbSize(m_ThumbSize);
       m_GainFilter[channel]->SetInputLut( 
         m_StreamingFilter[channel]->GetOutput() );
       m_BufferFilter[channel] -> SetInput ( 
@@ -609,6 +603,7 @@ private:
         }
       m_GainFilter[channel]->SetMin( min );
       m_GainFilter[channel]->SetMax( max );
+      m_GainFilter[channel]->SetThumbSize( m_ThumbSize );
       m_GainFilter[channel]->SetInputLut( 
         m_StreamingFilter[0]->GetOutput() );
       m_BufferFilter[channel]->SetInput(
@@ -619,6 +614,7 @@ private:
       }
   }
 
+  FloatImageType::SizeType m_ThumbSize;
   ImageListToVectorFilterType::Pointer m_ImageListToVectorFilterOut;
   LuminanceFunctorType::Pointer m_LuminanceFunctor;
   VectorToImageListFilterType::Pointer m_VectorToImageListFilter;
