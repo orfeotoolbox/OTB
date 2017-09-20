@@ -46,7 +46,7 @@ class OTBApplicationEngine_EXPORT InputImageListParameter :
 public:
   /** Standard class typedef */
   typedef InputImageListParameter Self;
-  typedef Parameter Superclass;
+  typedef ParameterList< InputImageParameter > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
@@ -103,6 +103,7 @@ protected:
   const std::string & ToString( const ParameterType::Pointer & ) const override;
 
   /** */
+  using Superclass::FromString;
   void FromString( const ParameterType::Pointer &,
 		   const std::string & ) const override;
 
