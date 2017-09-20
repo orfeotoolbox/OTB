@@ -270,19 +270,16 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
     it.GoToBegin();
     InputPixelType currentPixel(0);
 
-    while ( !it.IsAtEnd() )
+    for ( ; !it.IsAtEnd() ; ++it )
       {
       currentPixel = it.Get();
       if( ( currentPixel == m_NoData && m_NoDataFlag ) || 
             currentPixel > m_Max || currentPixel < m_Min )
-        {
-        ++it;
         continue;
-        }
+
       pixel = static_cast< unsigned int >( 
         std::round( ( currentPixel - m_Min ) / m_Step ) );
       ++m_HistoThread[threadIndex + nthHisto][pixel];
-      ++it;
       }
     }
 }

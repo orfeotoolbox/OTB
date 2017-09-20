@@ -73,27 +73,28 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
 
   itk::ImageRegionIterator <OutputImageType > oit ( output ,
                                                     outputRegionForThread );
-  it.GoToBegin();
-  oit.GoToBegin();
 
   HistoType target;
   target.SetSize( m_NbBin );
 
+  HistoType currentHisto;
+
   LutType lut;
   lut.SetSize( m_NbBin );
 
-  while ( !oit.IsAtEnd() )
+  it.GoToBegin();
+  oit.GoToBegin();
+  for (; !oit.IsAtEnd() && !it.IsAtEnd() ; ++oit , ++it )
     {
-      target.Fill(0);
-      lut.Fill(-1);
-      if ( IsValid( it.Get() ) )
-        {
-        CreateTarget( it.Get() , target );
-        Equalized( it.Get() , target , lut ); 
-        }
-      oit.Set( lut );
-      ++oit;
-      ++it;
+    currentHisto = it.Get();
+    target.Fill(0);
+    lut.Fill(-1);
+    if ( IsValid( currentHisto ) )
+      {
+      CreateTarget( currentHisto , target );
+      Equalized( currentHisto , target , lut ); 
+      }
+    oit.Set( lut );
     }
 }
 
@@ -168,11 +169,9 @@ template <class TInputImage, class TOutputImage >
 bool ComputeGainLutFilter < TInputImage , TOutputImage >
 ::IsValid( const HistoType & inputHisto )
 {
-  unsigned long acc(0);
-  for ( unsigned int i = 0 ; i < m_NbBin ; i++ )
-  {
-    acc+= inputHisto[i] ;
-  }
+  long acc = std::accumulate( &inputHisto[0] , 
+                              &inputHisto[ m_NbBin - 1 ] ,
+                              0);
   return acc >= (0.5 * m_NbPixel);
 }
 

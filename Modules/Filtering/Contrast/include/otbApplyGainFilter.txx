@@ -126,29 +126,25 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
                                                         inputRegionForThread );
   itk::ImageRegionIterator <OutputImageType > oit ( output ,
                                                     outputRegionForThread );
-  it.GoToBegin();
-  oit.GoToBegin();
 
   unsigned int pixelLutValue(0);
   float gain(0.0);
   InputPixelType currentPixel(0);
-  while ( !oit.IsAtEnd() )
+
+  for(it.GoToBegin() , oit.GoToBegin() ; !oit.IsAtEnd() , !it.IsAtEnd() ;
+      ++oit , ++it )
     {
     currentPixel = it.Get();
-    if( !(( currentPixel == m_NoData && m_NoDataFlag ) ||
-              currentPixel > m_Max || currentPixel < m_Min ))
+    if( ( currentPixel == m_NoData && m_NoDataFlag ) ||
+              currentPixel > m_Max || currentPixel < m_Min  )
       {
       oit.Set( static_cast<OutputPixelType>( currentPixel ) );
-      ++it;
-      ++oit;
       continue;
       }
     pixelLutValue =  static_cast< unsigned int > (
                     std::round( ( currentPixel - m_Min ) / m_Step ) );
     gain = InterpolateGain( lut , pixelLutValue , it.GetIndex() );
     oit.Set( static_cast<OutputPixelType>( gain * currentPixel ) );
-    ++it;
-    ++oit;
     }
 }
 
