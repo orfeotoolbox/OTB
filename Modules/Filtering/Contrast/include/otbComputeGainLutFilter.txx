@@ -65,7 +65,7 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
   typename OutputImageType::Pointer output ( this->GetOutput() );
 
   typename InputImageType::RegionType inputRegionForThread;
-  this->CallCopyOutputRegionToInputRegion(inputRegionForThread , outputRegionForThread);
+  inputRegionForThread = outputRegionForThread;
   // Is it usefull???
 
   itk::ImageRegionConstIterator < InputImageType > it ( input , 
@@ -82,9 +82,8 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
   LutType lut;
   lut.SetSize( m_NbBin );
 
-  it.GoToBegin();
-  oit.GoToBegin();
-  for (; !oit.IsAtEnd() && !it.IsAtEnd() ; ++oit , ++it )
+  for (it.GoToBegin() , oit.GoToBegin() ; !oit.IsAtEnd() || !it.IsAtEnd() ;
+       ++oit , ++it )
     {
     currentHisto = it.Get();
     target.Fill(0);
@@ -96,6 +95,7 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
       }
     oit.Set( lut );
     }
+  assert ( oit.IsAtEnd() && it.IsAtEnd() );
 }
 
 template <class TInputImage, class TOutputImage >

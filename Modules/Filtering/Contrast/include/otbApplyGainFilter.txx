@@ -23,6 +23,7 @@
 
 #include "otbApplyGainFilter.h"
 #include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 #include <limits>
 
@@ -111,38 +112,37 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
   typename OutputImageType::Pointer output ( this->GetOutput() );
   typename InputImageType::RegionType inputRegionForThread;
 
-  this->CallCopyOutputRegionToInputRegion(inputRegionForThread ,
-                                          outputRegionForThread);
-  // Is it usefull???
+  inputRegionForThread = outputRegionForThread ;
 
-  itk::ImageRegionConstIterator < InputImageType > it ( input , 
+  itk::ImageRegionConstIteratorWithIndex < InputImageType > it ( input , 
                                                         inputRegionForThread );
   itk::ImageRegionIterator <OutputImageType > oit ( output ,
                                                     outputRegionForThread );
 
   unsigned int pixelLutValue(0);
-  float gain(0.0);
+  double gain(0.0) , newValue(0);
   InputPixelType currentPixel(0);
 
-  for(it.GoToBegin() , oit.GoToBegin() ; !oit.IsAtEnd() , !it.IsAtEnd() ;
+  for( it.GoToBegin() , oit.GoToBegin() ; !oit.IsAtEnd() || !it.IsAtEnd() ;
       ++oit , ++it )
     {
     currentPixel = it.Get();
-    if( ( currentPixel == m_NoData && m_NoDataFlag ) ||
-              currentPixel > m_Max || currentPixel < m_Min  )
+    newValue = static_cast< double > ( currentPixel );
+    if( !( ( currentPixel == m_NoData && m_NoDataFlag ) ||
+              currentPixel > m_Max || currentPixel < m_Min ) )
       {
-      oit.Set( static_cast<OutputPixelType>( currentPixel ) );
-      continue;
+      pixelLutValue =  static_cast< unsigned int > (
+                      std::round( ( currentPixel - m_Min ) / m_Step ) );
+      gain = InterpolateGain( lut , pixelLutValue , it.GetIndex() );
+      newValue *= gain;
       }
-    pixelLutValue =  static_cast< unsigned int > (
-                    std::round( ( currentPixel - m_Min ) / m_Step ) );
-    gain = InterpolateGain( lut , pixelLutValue , it.GetIndex() );
-    oit.Set( static_cast<OutputPixelType>( gain * currentPixel ) );
+    oit.Set( static_cast<OutputPixelType>( newValue ) );
     }
+    assert ( oit.IsAtEnd() && it.IsAtEnd() );
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
-float ApplyGainFilter < TInputImage , TLut , TOutputImage >
+double ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::InterpolateGain( typename LutType::ConstPointer gridLut,
                  unsigned int pixelLutValue ,
                  typename InputImageType::IndexType index)

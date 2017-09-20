@@ -128,13 +128,13 @@ protected:
 
   void GenerateOutputRequestedRegion( itk::DataObject *output ) override;
 
-  void ApplyThreshold( 
-       typename itk::ImageRegionIterator < OutputImageType > oit ,
-       unsigned int total );
-
 private:
   ComputeHistoFilter(const Self &) = delete ;
   void operator =(const Self&) = delete ;
+
+  void ApplyThreshold( 
+       typename itk::ImageRegionIterator < OutputImageType > oit ,
+       unsigned int total );
 
   std::vector< typename OutputImageType::PixelType > m_HistoThread;
   InputPixelType m_Min;

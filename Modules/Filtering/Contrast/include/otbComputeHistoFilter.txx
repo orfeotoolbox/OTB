@@ -283,10 +283,9 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
     }
     typename itk::ImageRegionConstIterator < InputImageType > 
       it( input , region );
-    it.GoToBegin();
     InputPixelType currentPixel(0);
 
-    for ( ; !it.IsAtEnd() ; ++it )
+    for ( it.GoToBegin() ; !it.IsAtEnd() ; ++it )
       {
       currentPixel = it.Get();
       if( ( currentPixel == m_NoData && m_NoDataFlag ) || 
@@ -311,11 +310,10 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
                         GetHistoOutput()->GetRequestedRegion() );
   SizeType outSize ( histoRegion.GetSize() );
   IndexType outIndex ( histoRegion.GetIndex() );
-  oit.GoToBegin();
 
   unsigned int agreg(0) , total(0) ;
 
-  while ( !oit.IsAtEnd() )
+  for ( oit.GoToBegin() ; !oit.IsAtEnd() ; ++oit )
     {
     total = 0;
 
@@ -323,22 +321,17 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
       {
       agreg = 0;
 
-      for (unsigned int threadId = 0 ; threadId<m_ValidThreads ; threadId++ )
+      for ( unsigned int threadId = 0 ; threadId < m_ValidThreads ; threadId++ )
         {
-        agreg += m_HistoThread[threadId * outSize[0] * outSize[1] \
-          + ( ( oit.GetIndex()[0] - outIndex[0] )  ) \
-          + ( oit.GetIndex()[1] - outIndex[1] ) * outSize[0]][i]; 
+        agreg += m_HistoThread[ threadId * outSize[0] * outSize[1]
+          + ( ( oit.GetIndex()[0] - outIndex[0] )  )
+          + ( oit.GetIndex()[1] - outIndex[1] ) * outSize[0] ][i] ; 
         }
       oit.Get()[i] = agreg;
       total += agreg;
       }
-    if ( m_Threshold == std::numeric_limits< float >::max() )
-      {
-      ++oit;
-      continue;
-      }
-    ApplyThreshold( oit , total );
-    ++oit;
+    if ( m_Threshold != std::numeric_limits< float >::max() )
+      ApplyThreshold( oit , total );
     }
 }
 

@@ -108,14 +108,15 @@ protected :
   void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
                             itk::ThreadIdType threadId) override;
 
-  /** Bilineare interpolation of the gain beetween the different window.*/
-  float InterpolateGain( typename LutType::ConstPointer gridLut ,
-                       unsigned int pixelValue , 
-                       typename InputImageType::IndexType index);
 
 private :
   ApplyGainFilter(const Self &) = delete ;
   void operator =(const Self&) = delete ; 
+
+  /** Bilinear interpolation of the gain between the different window.*/
+  double InterpolateGain( typename LutType::ConstPointer gridLut ,
+                       unsigned int pixelValue , 
+                       typename InputImageType::IndexType index);
 
   InputPixelType m_NoData;
   InputPixelType m_Min;

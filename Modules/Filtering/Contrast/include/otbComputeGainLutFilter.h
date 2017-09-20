@@ -88,6 +88,10 @@ protected:
         const OutputImageRegionType & outputRegionForThread ,
         itk::ThreadIdType threadId) override ;
 
+private:
+  ComputeGainLutFilter(const Self &) = delete ;
+  void operator =(const Self&) = delete ;
+
   /** Post-process the look up tabe to get a gain instead of a simple value */
   OutputPixelType PostProcess( unsigned int countMapValue ,
                                unsigned int countValue ) ;
@@ -105,10 +109,6 @@ protected:
   
   /** Check whether the input histogram has enought pixel to be meaningful */
   bool IsValid(const HistoType & inputHisto ) ;
-
-private:
-  ComputeGainLutFilter(const Self &) = delete ;
-  void operator =(const Self&) = delete ;
 
   double m_Min;
   double m_Max;

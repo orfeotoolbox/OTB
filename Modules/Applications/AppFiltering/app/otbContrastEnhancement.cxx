@@ -285,7 +285,7 @@ private:
     m_VectorToImageListFilter->UpdateOutputInformation();
     ImageListType::Pointer inputImageList = 
                   m_VectorToImageListFilter->GetOutput();
-    int nbChannel = inImage->GetVectorLength ();
+    unsigned int nbChannel = inImage->GetVectorLength ();
 
     if ( mode == "each")
       {
@@ -436,13 +436,13 @@ private:
       if ( IsParameterEnabled("minmax.auto.global") )
         {
         float temp(min[0]);
-        for (unsigned int i = 0 ; i < min.GetSize() ; i++ )
+        for ( unsigned int i = 0 ; i < min.GetSize() ; i++ )
           {
           temp = std::min(temp , min[i]);
           }
         min.Fill(temp);
         temp = max[0];
-        for (unsigned int i = 0 ; i < max.GetSize() ; i++ )
+        for ( unsigned int i = 0 ; i < max.GetSize() ; i++ )
           {
           temp = std::max(temp , max[i]);
           }
@@ -480,7 +480,7 @@ private:
   // Function corresponding to the "each" mode
   void PerBandEqualization( const FloatVectorImageType::Pointer inImage ,
                             const ImageListType::Pointer inputImageList ,
-                            const int nbChannel,
+                            const unsigned int nbChannel,
                             ImageListType::Pointer outputImageList )
   {
     FloatVectorImageType::PixelType min(nbChannel) , max(nbChannel);
@@ -494,7 +494,7 @@ private:
     m_BufferFilter.resize(nbChannel);
     m_StreamingFilter.resize(nbChannel);
 
-    for (int channel = 0 ; channel<nbChannel ; channel++ ) 
+    for ( unsigned int channel = 0 ; channel < nbChannel ; channel++ ) 
       {
       m_GainLutFilter[channel] = GainLutFilterType::New();
       m_HistoFilter[channel] = HistoFilterType::New();
@@ -551,11 +551,7 @@ private:
     lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
     lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
     // Normalize those coeffs
-    float sum = 0.0;
-    for (float f : lumCoef)
-      {
-      sum +=f;
-      }
+    float sum = std::accumulate( lumCoef.begin() , lumCoef.end() , 0 );
     assert(sum>0);
     for (int i = 0 ; i<3 ; i++ )
       {
