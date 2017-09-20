@@ -23,6 +23,7 @@
 #include "otbWrapperParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
+#include "otbWrapperStringListParameter.h"
 
 #include "otbWrapperQtWidgetChoiceParameter.h"
 #include "otbWrapperQtWidgetComplexInputImageParameter.h"

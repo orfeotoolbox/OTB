@@ -20,109 +20,34 @@
 
 #include "otbWrapperQtWidgetStringListParameter.h"
 
+
+#include "otbWrapperStringListParameter.h"
+
+
 namespace otb
 {
+
+
 namespace Wrapper
 {
 
-QtWidgetStringListParameter::QtWidgetStringListParameter(StringListParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
-  m_StringListParam(param)
-{
- connect( this,
-          SIGNAL(Change()),
-          GetModel(),
-          SLOT(NotifyUpdate()) );
-}
 
-QtWidgetStringListParameter::~QtWidgetStringListParameter()
+/*****************************************************************************/
+QtWidgetStringListParameter
+::QtWidgetStringListParameter( StringListParameter * param,
+			       QtWidgetModel * m ) :
+  QtWidgetParameterList( param, m )
 {
 }
 
-void QtWidgetStringListParameter::DoUpdateGUI()
-{
-  if(!m_StringListParam)
-    return;
 
-  std::vector<std::string> strList = m_StringListParam->GetValue();
-  for( unsigned int i = m_LineEditList.size(); i < strList.size(); i++ )
-    {
-      this->AddString();
-    }
-  int i = 0;
-  std::vector<std::string>::iterator it;
-  for (it = strList.begin(); it != strList.end(); ++it)
-    {
-      m_LineEditList[i++]->SetText(QString( (*it).c_str() ));
-    }
+/*****************************************************************************/
+QtWidgetStringListParameter
+::~QtWidgetStringListParameter()
+{
 }
 
-void QtWidgetStringListParameter::DoCreateWidget()
-{
-  m_LineEditList.clear();
-  const unsigned int sp(2);
-  const unsigned int buttonSize(30);
-
-  // Global layout
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  hLayout->setSpacing(sp);
-  hLayout->setContentsMargins(sp, sp, sp, sp);
-
-  if( m_StringListParam->GetRole() != Role_Output )
-    {
-    // Button layout
-    QVBoxLayout * buttonLayout = new QVBoxLayout;
-    buttonLayout->setSpacing(sp);
-    buttonLayout->setContentsMargins(sp, sp, sp, sp);
-
-    QHBoxLayout * addSupLayout = new QHBoxLayout;
-    addSupLayout->setSpacing(sp);
-    addSupLayout->setContentsMargins(sp, sp, sp, sp);
-
-    QHBoxLayout * upDownLayout = new QHBoxLayout;
-    upDownLayout->setSpacing(sp);
-    upDownLayout->setContentsMargins(sp, sp, sp, sp);
-
-    // Add file button
-    QPushButton * addButton = new QPushButton;
-    addButton->setText("+");
-    addButton->setFixedWidth(buttonSize);
-    addButton->setToolTip("Add a string selector...");
-    connect( addButton, SIGNAL(clicked()), this, SLOT(AddString()) );
-    addSupLayout->addWidget(addButton);
-
-    // Suppress file button
-    QPushButton * supButton = new QPushButton;
-    supButton->setText("-");
-    supButton->setFixedWidth(buttonSize);
-    supButton->setToolTip("Suppress the selected string...");
-    connect( supButton, SIGNAL(clicked()), this, SLOT(SuppressString()) );
-    addSupLayout->addWidget(supButton);
-    buttonLayout->addLayout(addSupLayout);
-
-    hLayout->addLayout(buttonLayout);
-    }
-
-  QVBoxLayout * fileLayout = new QVBoxLayout();
-  fileLayout->setSpacing(0);
-
-  QGroupBox *mainGroup = new QGroupBox();
-  mainGroup->setLayout(fileLayout);
-  QScrollArea * s = new QScrollArea();
-  s->setWidget(mainGroup);
-  s->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  s->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  s->setWidgetResizable(true);
-
-  hLayout->addWidget(s);
-
-
-  this->setLayout(hLayout);
-
-  m_HLayout = hLayout;
-  m_Scroll = s;
-
-}
+#if 0
 
 void
 QtWidgetStringListParameter::UpdateStringList()
@@ -206,5 +131,8 @@ QtWidgetStringListParameter::SuppressString()
   this->update();
 }
 
+#endif
+
 }
+
 }
