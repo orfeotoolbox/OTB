@@ -96,6 +96,9 @@ private:
     AddParameter( ParameterType_InputVectorDataList, "vdl", "Input vector-data list" );
     MandatoryOff( "vdl" );
 
+    AddParameter( ParameterType_StringList, "sl", "Input string list" );
+    MandatoryOff( "sl" );
+
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
     AddChoice("cl.choice1", "Choice1");
     AddChoice("cl.choice2", "Choice2");
