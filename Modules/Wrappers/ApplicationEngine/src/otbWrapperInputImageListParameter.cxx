@@ -21,9 +21,6 @@
 #include "otbWrapperInputImageListParameter.h"
 
 
-#include <itksys/SystemTools.hxx>
-
-
 #include "otbCast.h"
 
 
@@ -187,18 +184,6 @@ void
 InputImageListParameter
 ::AddImage( ImageBaseType * image )
 {
-#if 0
-  assert( image!=nullptr );
-
-  // Check input availability
-  image->UpdateOutputInformation();
-
-  // Build & add parameter.
-  m_Parameters.push_back( FromImage( image ) );
-
-  Modified();
-
-#else
   AddData(
     image,
     [ this ]( auto i ) -> auto
@@ -206,8 +191,6 @@ InputImageListParameter
       return this->FromImage( i );
     }
   );
-
-#endif
 }
 
 

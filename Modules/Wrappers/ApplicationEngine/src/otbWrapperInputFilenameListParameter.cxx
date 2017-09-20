@@ -19,7 +19,7 @@
  */
 
 #include "otbWrapperInputFilenameListParameter.h"
-#include "itksys/SystemTools.hxx"
+
 
 namespace otb
 {
