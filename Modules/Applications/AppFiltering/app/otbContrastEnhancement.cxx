@@ -27,7 +27,7 @@
 #include "otbStreamingStatisticsImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkStreamingImageFilter.h"
-#include "otbBufferFilter.h"
+#include "otbInPlacePassFilter.h"
 
 #include "otbComputeHistoFilter.h"
 #include "otbComputeGainLutFilter.h"

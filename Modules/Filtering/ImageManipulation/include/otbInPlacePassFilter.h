@@ -60,7 +60,9 @@ public:
   itkTypeMacro(BufferFilter, InPlaceImageFilter)
 
 protected:
-  BufferFilter() {}
+  BufferFilter() {
+    this->InPlaceOn();
+  }
   ~BufferFilter() override {}
 
   virtual void ThreadedGenerateData(
