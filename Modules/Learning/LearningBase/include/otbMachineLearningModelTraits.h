@@ -37,7 +37,7 @@ namespace otb
  * and ValueType.
  *
  * \tparam TInput : input sample type (can be either a scalar type or
- * a VariableLenghtVector
+ * a VariableLengthVector
  * \tparam isNumber either TrueType or FalseType for partial
  * specialization
   
@@ -71,7 +71,7 @@ template <typename TInput> using MLMSampleTraits = MLMSampleTraitsImpl< TInput, 
  * and ValueType.
  *
  * \tparam TInput : input sample type (can be either a scalar type or
- * a VariableLenghtVector or a FixedArray
+ * a VariableLengthVector or a FixedArray
  * \tparam isNumber either TrueType or FalseType for partial
  * specialization
   
