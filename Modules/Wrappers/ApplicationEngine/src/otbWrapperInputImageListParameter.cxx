@@ -125,6 +125,10 @@ InputImageListParameter::GetFileNameList() const
   for(InputImageParameterVectorType::const_iterator it = m_InputImageParameterVector.begin();
       it!=m_InputImageParameterVector.end();++it)
     {
+    if(it->IsNull())
+      {
+      itkExceptionMacro(<< "Empty image in InputImageListParameter.");
+      }
     filenames.push_back( (*it)->GetFileName() );
     }
 
@@ -139,7 +143,10 @@ InputImageListParameter::GetNthFileName( unsigned int i ) const
       {
       itkExceptionMacro(<< "No image "<<i<<". Only "<<m_InputImageParameterVector.size()<<" images available.");
       }
-
+    if(m_InputImageParameterVector[i].IsNull())
+      {
+      itkExceptionMacro(<< "Requested image "<<i<<" has no filename");
+      }
     return m_InputImageParameterVector[i]->GetFileName();
 }
 
@@ -149,6 +156,10 @@ InputImageListParameter::GetImageList() const
   m_ImageList->Clear();
   for (unsigned int i=0 ; i < this->Size() ; ++i)
     {
+    if(m_InputImageParameterVector[i].IsNull())
+      {
+      itkExceptionMacro(<< "Image "<<i<<" is empty.");
+      }
     m_ImageList->PushBack(m_InputImageParameterVector[i]->GetFloatVectorImage());
     }
   return m_ImageList;
@@ -160,6 +171,10 @@ InputImageListParameter::GetNthImage(unsigned int i) const
   if(this->Size()<=i)
     {
     itkExceptionMacro(<< "No image "<<i<<". Only "<<this->Size()<<" images available.");
+    }
+  if(m_InputImageParameterVector[i].IsNull())
+    {
+    itkExceptionMacro(<< "Image "<<i<<" is empty.");
     }
   return m_InputImageParameterVector[i]->GetFloatVectorImage();
 }
