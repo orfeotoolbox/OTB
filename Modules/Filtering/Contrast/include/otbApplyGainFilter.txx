@@ -25,6 +25,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
+
 #include <limits>
 
 namespace otb
@@ -37,6 +38,7 @@ ApplyGainFilter < TInputImage , TLut , TOutputImage >
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
+
   m_Step = -1;
 }
 
