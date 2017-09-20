@@ -150,6 +150,8 @@ ParameterList< T >
   m_Parameters.push_back( p );
 
   assert( !m_Parameters.back().IsNull() );
+
+  SetActive( true );
 }
 
 /*****************************************************************************/
@@ -187,6 +189,27 @@ ParameterList< T >
   Modified();
 
   SetActive( true );
+}
+
+/*****************************************************************************/
+template< typename T >
+std::size_t
+ParameterList< T >
+::SetStrings( const StringVector & strings )
+{
+  ClearValue();
+
+  std::transform(
+    strings.begin(),
+    strings.end(),
+    std::back_inserter( m_Parameters ),
+    [ this ]( auto s ) -> auto
+    {
+      return this->FromString( s );
+    }
+  );
+
+  return strings.size();
 }
 
 /*****************************************************************************/
@@ -439,6 +462,19 @@ ParameterList< T >
 
   set( parameter, data );
   parameter->SetDescription( description );
+
+  return parameter;
+}
+
+/*****************************************************************************/
+template< typename T >
+typename T::Pointer
+ParameterList< T >
+::FromString( const std::string & s ) const
+{
+  typename T::Pointer parameter;
+
+  FromString( s );
 
   return parameter;
 }

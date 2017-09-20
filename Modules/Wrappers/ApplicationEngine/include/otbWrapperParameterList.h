@@ -94,6 +94,9 @@ public:
   void SetNthFileName( std::size_t, const std::string & ) override;
 
   /** */
+  std::size_t SetStrings( const StringVector & );
+
+  /** */
   std::size_t GetStrings( StringVector & ) const override;
 
   /** Get the stored image filename list */
@@ -180,6 +183,11 @@ protected:
     void
     FromString( const typename ParameterType::Pointer &,
 		const std::string & ) const = 0;
+
+  /** Utility method to use std::string -> conversion in lambdas. */
+  virtual
+    typename ParameterType::Pointer
+    FromString( const std::string & ) const;
 
 //
 // Protected attributes.
