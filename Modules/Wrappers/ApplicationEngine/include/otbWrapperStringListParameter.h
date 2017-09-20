@@ -21,127 +21,93 @@
 #ifndef otbWrapperStringListParameter_h
 #define otbWrapperStringListParameter_h
 
-#include <string>
-#include "otbWrapperParameter.h"
+
+#include "otbWrapperParameterList.h"
+#include "otbWrapperStringParameter.h"
+
 
 namespace otb
 {
+
+
 namespace Wrapper
 {
+
 
 /** \class StringListParameter
  *  \brief This class represent a list of string parameter for the wrapper framework
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT StringListParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT StringListParameter :
+    public ParameterList< StringParameter >
 {
+//
+// Public methods.
 public:
   /** Standard class typedef */
   typedef StringListParameter Self;
-  typedef Parameter Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef ParameterList< StringParameter > Superclass;
+  typedef itk::SmartPointer< Self > Pointer;
+  typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef std::vector<std::string> StringListType;
+  typedef StringListInterface::StringVector StringListType;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self)
-;
+  itkNewMacro( Self );
 
   /** RTTI support */
-  itkTypeMacro(StringListParameter, Parameter)
-;
+  itkTypeMacro( StringListParameter, ParameterList );
 
   /** Set the value */
-  void SetValue(StringListType sList)
-  {
-    m_Value.clear();
-    for(unsigned int i=0; i<sList.size(); i++)
-      {
-      this->AddString(sList[i]);
-      }
-  }
+  void SetValue( const StringListInterface::StringVector & );
 
-  void AddString(std::string value)
-  {
-    if(!value.empty())
-      {
-      m_Value.push_back(value);
-      if(!this->GetActive())
-        {
-        this->SetActive(true);
-        }
-      }
-  }
+  /** */
+  void AddString( const std::string & value );
 
   /** Get the value */
-  StringListType GetValue() const
-  {
-    return m_Value;
-  }
+  StringListInterface::StringVector GetValue() const;
 
   /** Get the value */
-  std::string GetNthElement(unsigned int i) const
-  {
-    if (m_Value.size() < i)
-      {
-      itkExceptionMacro( "Invalid index "<<i<<" the string list has only "<<m_Value.size()<<" elements...")
-      }
-
-    return m_Value[i];
-  }
+  const std::string & GetNthElement( std::size_t ) const;
 
   /** Get the value */
-  void SetNthElement(unsigned int i, std::string value)
-  {
-    if (m_Value.size() < i)
-      {
-      itkExceptionMacro( "Invalid index "<<i<<" the string list has only "<<m_Value.size()<<" elements...")
-      }
-    m_Value[i] = value;
-  }
+  void SetNthElement( std::size_t, const std::string & );
 
-  bool HasValue() const ITK_OVERRIDE
-  {
-    return !m_Value.empty();
-  }
+  /** */
+  using StringListInterface::GetDirection;
+  Role GetDirection() const override;
 
-  void ClearValue() ITK_OVERRIDE
-  {
-    m_Value.clear();
-  }
-
-  void AddNullElement()
-  {
-    m_Value.push_back("");
-    SetActive(false);
-    this->Modified();
-  }
-
+//
+// Protected methods.
 protected:
   /** Constructor */
-  StringListParameter()
-  {
-    this->SetName("String List");
-    this->SetKey("strList");
-  }
+  StringListParameter();
 
   /** Destructor */
-  ~StringListParameter() ITK_OVERRIDE
-  {
-  }
+  ~StringListParameter() override;
 
-  StringListType m_Value;
+  /** */
+  const std::string & ToString( const ParameterType::Pointer & ) const override;
 
+  /** */
+  using Superclass::FromString;
+  void FromString( const ParameterType::Pointer &,
+		   const std::string & ) const override;
+
+//
+// Private methods.
 private:
-  StringListParameter(const StringListParameter &); //purposely not implemented
-  void operator =(const StringListParameter&); //purposely not implemented
+  // Purposely not implemented
+  StringListParameter ( const StringListParameter & );
+
+  // Purposely not implemented
+  void operator = ( const StringListParameter & );
 
 }; // End class Parameter
 
 } // End namespace Wrapper
+
 } // End namespace otb
 
 #endif
