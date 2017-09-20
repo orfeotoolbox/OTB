@@ -23,6 +23,7 @@
 
 
 #include <algorithm>
+#include <iterator>
 
 #include "otbCast.h"
 #include "otbWrapperParameterList.h"
