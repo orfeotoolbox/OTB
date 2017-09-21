@@ -124,7 +124,6 @@ segmentation of very large image with theoretical guarantees of getting
 identical results to those without tiling.
 
 It has been developed by David Youssefi and Julien Michel during David
-
 internship at CNES.
 
 For more a complete description of the LSMS method, please refer to the
@@ -261,6 +260,35 @@ resources usage low, with the guarantee of identical results. You can
 set the tile size using the *tilesizex* and *tilesizey* parameters.
 However unlike the *LSMSSegmentation* application, it does not require
 to write any temporary file to disk.
+
+All-in-one
+~~~~~~~~~~
+
+The *LargeScaleMeanShift* application is a composite application that chains
+all the previous steps:
+
+- Mean-Shift Smoothing
+- Segmentation
+- Small region merging
+- Vectorization
+
+Most of the settings from the previous applications are also exposed in this
+composite application. The range and spatial radius used for the segmentation
+step are half the values used for Mean-Shift smooting, which are obtained from
+LargeScaleMeanShift parameters. There are two output modes: vector (default)
+and raster. When the raster output is chosen, last step (vectorization) is
+skipped.
+
+::
+
+    otbcli_LargeScaleMeanShift -in input_image.tif
+                               -spatialr 5
+                               -ranger 30
+                               -minsize 10
+                               -mode.vector.out segmentation_merged.shp
+
+There is a cleanup option that can be disabled in order to check intermediate
+outputs of this composite application.
 
 Dempster Shafer based Classifier Fusion
 ---------------------------------------
