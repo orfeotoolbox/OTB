@@ -256,9 +256,16 @@ private:
     int mode = GetParameterInt("mode");
 
     // Get the inputs
-    auto inList = this->GetParameterImageList("il");
-    auto vectorDataList = this->GetParameterStringList("vl");
-    auto nameList = this->GetParameterStringList("names");
+    auto inList = FloatVectorImageListType::New();
+    std::vector<std::string> vectorDataList;
+    std::vector<std::string> nameList;
+
+    if (IsParameterEnabled("il") && HasValue("il"))
+      inList = this->GetParameterImageList("il");
+    if (IsParameterEnabled("vl") && HasValue("vl"))
+      vectorDataList = this->GetParameterStringList("vl");
+    if (IsParameterEnabled("names") && HasValue("names"))
+      nameList = this->GetParameterStringList("names");
 
     std::string tileDir = this->GetParameterString("tiledir");
 
