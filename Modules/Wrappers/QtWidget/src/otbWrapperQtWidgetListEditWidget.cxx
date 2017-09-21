@@ -68,18 +68,17 @@ namespace Wrapper
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 ListEditWidget
-::ListEditWidget( QWidget * p, Qt::WindowFlags flags ) :
+::ListEditWidget( StringListInterface * sli,
+		  QWidget * p,
+		  Qt::WindowFlags flags ) :
   QWidget( p, flags ),
   m_UI( new otb::Wrapper::Ui::ListEditWidget() )
 {
   m_UI->setupUi( this );
 
-  assert( m_UI->browseButton!=nullptr );
-
-  {
   assert( m_UI->treeView->selectionModel()==nullptr );
 
-  m_UI->treeView->setModel( new ListEditItemModel( m_UI->treeView ) );
+  m_UI->treeView->setModel( new ListEditItemModel( sli, m_UI->treeView ) );
 
   assert( m_UI->treeView->selectionModel()!=nullptr );
 
@@ -94,7 +93,11 @@ ListEditWidget
       onSelectionChanged( const QItemSelection & , const QItemSelection & )
     )
   );
-  }
+
+  assert( GetItemModel()!=nullptr );
+  assert( m_UI->browseButton!=nullptr );
+
+  m_UI->browseButton->setEnabled( GetItemModel()->IsBrowsable() );
 }
 
 /*******************************************************************************/
@@ -104,6 +107,8 @@ ListEditWidget
   delete m_UI;
   m_UI = nullptr;
 }
+
+#if 0
 
 /*****************************************************************************/
 void
@@ -126,6 +131,8 @@ ListEditWidget
 
   return m_UI->browseButton->isEnabled();
 }
+
+#endif
 
 /*******************************************************************************/
 const ListEditItemModel *

@@ -64,18 +64,11 @@ QtWidgetParameterList
 {
   //
   // List-edit widget.
-  ListEditWidget * widget = new ListEditWidget();
+  assert( dynamic_cast< StringListInterface * >( GetParam() )!=nullptr );
 
-  assert( widget->GetItemModel()!=nullptr );
-
-  StringListInterface * sli =
-    dynamic_cast< StringListInterface * >( GetParam() );
-
-  assert( sli!=nullptr );
-
-  widget->GetItemModel()->SetStringList( sli );
-
-  widget->SetBrowseEnabled( sli->IsFilename() );
+  ListEditWidget * widget = new ListEditWidget(
+    dynamic_cast< StringListInterface * >( GetParam() )
+  );
 
   //
   // Global Layout

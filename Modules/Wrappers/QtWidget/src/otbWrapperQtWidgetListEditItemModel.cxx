@@ -80,24 +80,18 @@ HEADERS[ ListEditItemModel::COLUMN_COUNT ] =
 
 /*******************************************************************************/
 ListEditItemModel
-::ListEditItemModel( QObject * p ) :
+::ListEditItemModel( StringListInterface * sli,
+		     QObject * p ) :
   QAbstractItemModel( p ),
-  m_StringList( nullptr )
+  m_StringList( sli )
 {
+  assert( sli!=nullptr );
 }
 
 /*******************************************************************************/
 ListEditItemModel
 ::~ListEditItemModel()
 {
-}
-
-/*******************************************************************************/
-void
-ListEditItemModel
-::SetStringList( StringListInterface * stringList )
-{
-  m_StringList = stringList;
 }
 
 /*****************************************************************************/

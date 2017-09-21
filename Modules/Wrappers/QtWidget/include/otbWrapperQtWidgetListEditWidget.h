@@ -64,6 +64,7 @@ namespace Wrapper
 //
 // Internal classes pre-declaration.
 class ListEditItemModel;
+class StringListInterface;
 
 namespace Ui
 {
@@ -96,7 +97,9 @@ class OTBQtWidget_EXPORT ListEditWidget :
 public:
 
   /** \brief Constructor. */
-  ListEditWidget( QWidget * p =NULL, Qt::WindowFlags flags =0 );
+  ListEditWidget( StringListInterface *,
+		  QWidget * p =NULL,
+		  Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~ListEditWidget();
@@ -109,11 +112,14 @@ public:
    */
   ListEditItemModel * GetItemModel();
 
+#if 0
+
   /** */
   void SetBrowseEnabled( bool );
 
   /** */
   bool IsBrowseEnabled() const;
+#endif
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

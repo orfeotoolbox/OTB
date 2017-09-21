@@ -118,13 +118,11 @@ public:
 public:
 
   /** \brief Constructor. */
-  ListEditItemModel( QObject * p = nullptr );
+  ListEditItemModel( StringListInterface *,
+		     QObject * p = nullptr );
 
   /** \brief Destructor. */
   ~ListEditItemModel() ITK_OVERRIDE;
-
-  /** */
-  void SetStringList( StringListInterface * );
 
   //
   // QAbstractItemModel overloads.
