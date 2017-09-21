@@ -461,6 +461,16 @@ ListEditItemModel
 }
 
 /*******************************************************************************/
+bool
+ListEditItemModel
+::IsBrowsable() const
+{
+  assert( m_StringList!=nullptr );
+
+  return m_StringList->IsFilename();
+}
+
+/*******************************************************************************/
 QString
 ListEditItemModel
 ::GetFilter() const

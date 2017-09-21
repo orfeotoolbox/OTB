@@ -215,6 +215,9 @@ public:
   /** */
   virtual QString GetFilter() const;
 
+  /** */
+  virtual bool IsBrowsable() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
