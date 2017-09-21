@@ -35,7 +35,6 @@ python_check_failed() {
     printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
     printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
     printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python2.7 ./OTB-X.Y-Linux64.run"
-    exit 1;
 }
 if [ "$python_major_version" -gt 2 ]; then
 python_check_failed
@@ -64,17 +63,17 @@ do
 done
 
 if [ "$found_python_lib" -eq "1" ]; then
-    numpy_import_result="$($OTB_PYTHON_EXE -c 'import numpy' 2>&1)"
+    numpy_import_result="$($OTB_PYTHON_EXE -c 'import numpy' 2>&1)" || numpy_ret=$?
     if [ ! -z "$numpy_import_result" ]; then
-	printf %s\\n "*****Error occurred during installation******"
-	printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"	
-	printf %s\\n "numpy not installed with '$OTB_PYTHON_EXE'"
-	printf %s\\n "Check failed with result:"
-	printf %s\\n "$numpy_import_result"
-	exit 1;
-    fi;
-    printf %s\\n "OTB python bindings will be configured for $OTB_PYTHON_EXE ( version: $python_version )"
-    printf %s\\n "Found python library: $python_lib_file_path"
+      printf %s\\n "*****Error occurred during installation******"
+      printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
+      printf %s\\n "numpy not installed with '$OTB_PYTHON_EXE'"
+      printf %s\\n "Check failed with result:"
+      printf %s\\n "$numpy_import_result"
+    else
+      printf %s\\n "OTB python bindings will be configured for $OTB_PYTHON_EXE ( version: $python_version )"
+      printf %s\\n "Found python library: $python_lib_file_path"
+    fi
     #ln -sf "$python_lib_file_path" "OUT_DIR/lib/$python_INSTALLED_SONAME"
 else
     printf %s\\n "*****Error occurred during installation******"
