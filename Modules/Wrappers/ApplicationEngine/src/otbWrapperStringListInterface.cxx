@@ -68,6 +68,13 @@ StringListInterface
   return NULL_STRING;
 }
 
+/*****************************************************************************/
+bool
+StringListInterface
+::IsFilename() const
+{
+  return true;
+}
 
 /*****************************************************************************/
 void

@@ -107,6 +107,9 @@ public:
   /** */
   virtual const std::string & GetFilenameFilter() const;
 
+  /** */
+  virtual bool IsFilename() const;
+
 protected:
   /** Constructor */
   StringListInterface() {};
