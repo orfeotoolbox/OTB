@@ -78,6 +78,9 @@ public:
   using StringListInterface::GetDirection;
   Role GetDirection() const override;
 
+  /** */
+  bool IsFilename() const override;
+
 //
 // Protected methods.
 protected:

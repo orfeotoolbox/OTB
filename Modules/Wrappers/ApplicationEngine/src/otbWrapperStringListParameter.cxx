@@ -97,6 +97,14 @@ StringListParameter
 }
 
 /*****************************************************************************/
+bool
+StringListParameter
+::IsFilename() const
+{
+  return false;
+}
+
+/*****************************************************************************/
 const std::string &
 StringListParameter
 ::ToString( const ParameterType::Pointer & p ) const
