@@ -530,7 +530,6 @@ private:
         }
       m_GainFilter[channel]->SetMin( min[channel] );
       m_GainFilter[channel]->SetMax( max[channel] );
-      m_GainFilter[channel]->SetThumbSize(m_ThumbSize);
       m_GainFilter[channel]->SetInputLut( 
         m_StreamingFilter[channel]->GetOutput() );
       m_BufferFilter[channel] -> SetInput ( 
@@ -599,7 +598,6 @@ private:
         }
       m_GainFilter[channel]->SetMin( min );
       m_GainFilter[channel]->SetMax( max );
-      m_GainFilter[channel]->SetThumbSize( m_ThumbSize );
       m_GainFilter[channel]->SetInputLut( 
         m_StreamingFilter[0]->GetOutput() );
       m_BufferFilter[channel]->SetInput(

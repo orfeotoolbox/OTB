@@ -72,6 +72,15 @@ public :
   itkGetMacro(NoDataFlag, bool)
   itkSetMacro(NoDataFlag, bool)
 
+  /** Get/Set macro to get/set the ThumbSizeFromSpacing flag value */
+  itkBooleanMacro(ThumbSizeFromSpacing)
+  itkGetMacro(ThumbSizeFromSpacing, bool)
+  itkSetMacro(ThumbSizeFromSpacing, bool)
+
+  /** Get/Set macro to get/set the thumbnail's size */
+  itkSetMacro(ThumbSize, typename InputImageType::SizeType)
+  itkGetMacro(ThumbSize, typename InputImageType::SizeType)
+
   /** Get/Set macro to get/set the minimum value */
   itkSetMacro(Min, InputPixelType)
   itkGetMacro(Min, InputPixelType)
@@ -79,10 +88,6 @@ public :
   /** Get/Set macro to get/set the maximum value */
   itkSetMacro(Max, InputPixelType)
   itkGetMacro(Max, InputPixelType)
-
-  /** Get/Set macro to get/set the thumbnail's size */
-  itkSetMacro(ThumbSize, typename InputImageType::SizeType)
-  itkGetMacro(ThumbSize, typename InputImageType::SizeType)
 
   /** Set the input look up table*/
   void SetInputLut( const LutType * lut) ;
@@ -107,7 +112,7 @@ protected :
 
   void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
                             itk::ThreadIdType threadId) override;
-
+  void VerifyInputInformation() override {} ;
 
 private :
   ApplyGainFilter(const Self &) = delete ;
@@ -122,6 +127,7 @@ private :
   InputPixelType m_Min;
   InputPixelType m_Max;
   bool m_NoDataFlag;
+  bool m_ThumbSizeFromSpacing;
   double m_Step;
   typename LutType::SizeType m_LutSize;
   typename InputImageType::SizeType m_ThumbSize;

@@ -151,6 +151,19 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   region.SetIndex(start);
   output->SetNumberOfComponentsPerPixel(m_NbBin);
   output->SetLargestPossibleRegion(region);
+  typename InputImageType::SpacingType inputSpacing ( input->GetSpacing() );
+  typename InputImageType::PointType inputOrigin ( input->GetOrigin() );
+
+  typename OutputImageType::SpacingType histoSpacing ;
+  histoSpacing[0] = inputSpacing[0] * m_ThumbSize[0] ;
+  histoSpacing[1] = inputSpacing[1] * m_ThumbSize[1] ;
+  output->SetSpacing( histoSpacing ) ;
+
+  typename OutputImageType::PointType histoOrigin ;
+  histoOrigin[0] = histoSpacing[0] / 2 +  inputOrigin[0] - inputSpacing[0] / 2 ;
+  histoOrigin[1] = histoSpacing[1] / 2 +  inputOrigin[1] - inputSpacing[1] / 2 ;
+  output->SetOrigin( histoOrigin );
+
 }
 
 template <class TInputImage, class TOutputImage >
