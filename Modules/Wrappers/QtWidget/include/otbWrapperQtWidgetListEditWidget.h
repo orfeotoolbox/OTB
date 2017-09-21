@@ -109,6 +109,12 @@ public:
    */
   ListEditItemModel * GetItemModel();
 
+  /** */
+  void SetBrowseEnabled( bool );
+
+  /** */
+  bool IsBrowseEnabled() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

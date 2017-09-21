@@ -74,6 +74,8 @@ ListEditWidget
 {
   m_UI->setupUi( this );
 
+  assert( m_UI->browseButton!=nullptr );
+
   {
   assert( m_UI->treeView->selectionModel()==nullptr );
 
@@ -101,6 +103,28 @@ ListEditWidget
 {
   delete m_UI;
   m_UI = nullptr;
+}
+
+/*****************************************************************************/
+void
+ListEditWidget
+::SetBrowseEnabled( bool enabled )
+{
+  assert( m_UI!=nullptr );
+  assert( m_UI->browseButton );
+
+  m_UI->browseButton->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+bool
+ListEditWidget
+::IsBrowseEnabled() const
+{
+  assert( m_UI!=nullptr );
+  assert( m_UI->browseButton );
+
+  return m_UI->browseButton->isEnabled();
 }
 
 /*******************************************************************************/
@@ -251,10 +275,24 @@ ListEditWidget
 {
   // qDebug() << this << "::on_addButton_clicked()";
 
-  QString filename( browseFilename() );
-
   ListEditItemModel * itemModel = GetItemModel();
   assert( itemModel!=nullptr );
+
+  //
+  // When not browsable
+  if( !itemModel->IsBrowsable() )
+    {
+    itemModel->insertRow( itemModel->rowCount() );
+
+    return;
+    }
+
+  //
+  // When browsable.
+  QString filename( browseFilename() );
+
+  if( filename.isEmpty() )
+    return;
 
   int row = itemModel->rowCount();
   assert( row>=0 );
