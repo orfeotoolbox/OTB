@@ -132,6 +132,8 @@ private:
   ComputeHistoFilter(const Self &) = delete ;
   void operator =(const Self&) = delete ;
 
+  void SetRequestedRegion( itk::ImageBase<2> * image ) ;
+
   void ApplyThreshold( 
        typename itk::ImageRegionIterator < OutputImageType > oit ,
        unsigned int total );
