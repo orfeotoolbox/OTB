@@ -192,26 +192,30 @@ private:
   void DoUpdateParameters() ITK_OVERRIDE
   {
     // Read information
-    typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-    ImageMetadataInterfaceType::Pointer metadataInterface = 
+    if ( HasValue("in") )
+      {
+      typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+      ImageMetadataInterfaceType::Pointer metadataInterface = 
       ImageMetadataInterfaceFactory::CreateIMI(GetParameterImage("in")->GetMetaDataDictionary());
 
-    int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
-    SetMaximumParameterIntValue("channels.grayscale.channel", nbBand);
-    SetMaximumParameterIntValue("channels.rgb.red", nbBand);
-    SetMaximumParameterIntValue("channels.rgb.green", nbBand);
-    SetMaximumParameterIntValue("channels.rgb.blue", nbBand);
+      int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+      SetMaximumParameterIntValue("channels.grayscale.channel", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.red", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.green", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.blue", nbBand);
 
-    if (nbBand > 1)
-    {
-      // get band index : Red/Green/Blue
-      int bandRed = metadataInterface->GetDefaultDisplay()[0] + 1;
-      int bandGreen = metadataInterface->GetDefaultDisplay()[1] + 1;
-      int bandBlue = metadataInterface->GetDefaultDisplay()[2] + 1;
-      SetDefaultParameterInt("channels.rgb.red", bandRed);
-      SetDefaultParameterInt("channels.rgb.green", bandGreen);
-      SetDefaultParameterInt("channels.rgb.blue", bandBlue);
-    }
+      if (nbBand > 1)
+        {
+        // get band index : Red/Green/Blue
+        int bandRed = metadataInterface->GetDefaultDisplay()[0] + 1;
+        int bandGreen = metadataInterface->GetDefaultDisplay()[1] + 1;
+        int bandBlue = metadataInterface->GetDefaultDisplay()[2] + 1;
+        SetDefaultParameterInt("channels.rgb.red", bandRed);
+        SetDefaultParameterInt("channels.rgb.green", bandGreen);
+        SetDefaultParameterInt("channels.rgb.blue", bandBlue);
+        }
+      }
+    
 
   }
 
