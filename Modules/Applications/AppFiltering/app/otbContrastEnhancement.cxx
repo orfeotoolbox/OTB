@@ -550,7 +550,7 @@ private:
     lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
     lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
     // Normalize those coeffs
-    float sum = std::accumulate( lumCoef.begin() , lumCoef.end() , 0 );
+    float sum = std::accumulate( lumCoef.begin() , lumCoef.end() , 0.0 );
     assert(sum>0);
     for (int i = 0 ; i<3 ; i++ )
       {
