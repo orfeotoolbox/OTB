@@ -83,72 +83,10 @@ QtWidgetParameterList
 
   //
   // Connections.
-  {
-    QAbstractItemModel * model = widget->GetItemModel();
-    assert( model!=nullptr );
-
-    QObject::connect(
-      model, SIGNAL( dataChanged( const QModelIndex &, const QModelIndex & ) ),
-      this, SLOT( OnDataChanged( const QModelIndex &, const QModelIndex & ) )
-    );
-
-    QObject::connect(
-      model, SIGNAL( modelReset() ),
-      this, SLOT( OnModelReset() )
-    );
-
-    QObject::connect(
-      model, SIGNAL( rowsInserted( const QModelIndex &, int, int ) ),
-      this, SLOT( OnRowsInserted( const QModelIndex &, int, int ) )
-    );
-
-    QObject::connect(
-      model, SIGNAL( rowsRemoved( const QModelIndex &, int, int ) ),
-      this, SLOT( OnRowsRemoved( const QModelIndex &, int, int ) )
-    );
-  }
-}
-
-/*****************************************************************************/
-void
-QtWidgetParameterList
-::OnDataChanged( const QModelIndex &, const QModelIndex & )
-{
-  // qDebug() << this << "::OnDataChanged()";
-
-  assert( GetModel()!=nullptr );
-
-  emit NotifyUpdate();
-}
-
-/*****************************************************************************/
-void
-QtWidgetParameterList
-::OnModelReset()
-{
-  // qDebug() << this << "::OnModelReset()";
-
-  emit NotifyUpdate();
-}
-
-/*****************************************************************************/
-void
-QtWidgetParameterList
-::OnRowsInserted( const QModelIndex &, int, int )
-{
-  // qDebug() << this << "::OnRowsInserted()";
-
-  emit NotifyUpdate();
-}
-
-/*****************************************************************************/
-void
-QtWidgetParameterList
-::OnRowsRemoved( const QModelIndex &, int, int )
-{
-  // qDebug() << this << "::OnRowsRemoved()";
-
-  emit NotifyUpdate();
+  QObject::connect(
+    widget, SIGNAL( Updated() ),
+    this, SIGNAL( NotifyUpdate() )
+  );
 }
 
 }
