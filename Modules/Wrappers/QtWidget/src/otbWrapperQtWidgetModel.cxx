@@ -166,13 +166,6 @@ QtWidgetModel
 
   // launch the output image writing
   AppliThread * taskAppli = new AppliThread( m_Application );
-  #ifdef __APPLE__
-  /* bug mantis 1422 :
-     X Mb *1024*1024 (bytes)
-     X = 9 to get 9M stacksize!
-   */
-  taskAppli->setStackSize(static_cast<uint>(9*1024*1024));
-  #endif
 
   QObject::connect(
     taskAppli,
