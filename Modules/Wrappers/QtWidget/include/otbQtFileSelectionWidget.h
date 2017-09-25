@@ -87,6 +87,7 @@ signals:
 protected slots:
   void SelectFile();
   void CallFilenameChanged();
+  void SetFileName(const QString &);
 
 private:
   QtFileSelectionWidget(const QtFileSelectionWidget&); //purposely not implemented
