@@ -93,16 +93,21 @@ public:
   typedef itk::SmartPointer < Self >	      Pointer;
   typedef itk::SmartPointer < const Self >	ConstPointer;
 
-  typedef otb::ComputeHistoFilter < FloatImageType , FloatVectorImageType > 
+  typedef otb::ComputeHistoFilter < FloatImageType , 
+                                    FloatVectorImageType > 
           HistoFilterType;
-  typedef otb::ComputeGainLutFilter < FloatVectorImageType , FloatVectorImageType > 
+  typedef otb::ComputeGainLutFilter < FloatVectorImageType , 
+                                      FloatVectorImageType > 
           GainLutFilterType;
-  typedef otb::ApplyGainFilter < FloatImageType , FloatVectorImageType , FloatImageType > 
+  typedef otb::ApplyGainFilter < FloatImageType , 
+                                 FloatVectorImageType , FloatImageType > 
           GainFilterType;
   typedef otb::ImageList< FloatImageType > ImageListType;
-  typedef otb::VectorImageToImageListFilter< FloatVectorImageType, ImageListType > 
+  typedef otb::VectorImageToImageListFilter< FloatVectorImageType, 
+                                             ImageListType > 
           VectorToImageListFilterType;
-  typedef otb::ImageListToVectorImageFilter< ImageListType, FloatVectorImageType > 
+  typedef otb::ImageListToVectorImageFilter< ImageListType, 
+                                             FloatVectorImageType > 
           ImageListToVectorFilterType;
   typedef otb::StreamingStatisticsVectorImageFilter< FloatVectorImageType >
           VectorStatsFilterType;
@@ -110,7 +115,8 @@ public:
           StatsFilterType;
   typedef itk::UnaryFunctorImageFilter < FloatVectorImageType ,
           FloatImageType , Functor::LuminanceOperator > LuminanceFunctorType; 
-  typedef itk::StreamingImageFilter < FloatVectorImageType , FloatVectorImageType > 
+  typedef itk::StreamingImageFilter < FloatVectorImageType , 
+                                      FloatVectorImageType > 
           StreamingImageFilterType;
   typedef otb::BufferFilter < FloatImageType > BufferFilterType;
 
@@ -167,7 +173,8 @@ private:
     AddParameter(ParameterType_Int,"thumb.h" , "Thumbnail height in pixel");
     AddParameter(ParameterType_Int,"thumb.w" , "Thumbnail width in pixel");
 
-    AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum definition");
+    AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum "
+      "definition");
     SetParameterDescription("minmax","Minimum and maximum value that will "
       "bound the histogram.");
     AddChoice( "minmax.auto" , "Automatique" );
@@ -307,7 +314,8 @@ private:
     m_ImageListToVectorFilterOut = ImageListToVectorFilterType::New() ;
     m_ImageListToVectorFilterOut->SetInput(outputImageList);
 
-    SetParameterOutputImage( "out" , m_ImageListToVectorFilterOut->GetOutput() );
+    SetParameterOutputImage( "out" , 
+        m_ImageListToVectorFilterOut->GetOutput() );
   }
 
   // Look for default values in the image metadata
@@ -422,7 +430,8 @@ private:
       }
     else if ( GetParameterString("minmax") == "auto" )
       {
-      VectorStatsFilterType::Pointer statFilter ( VectorStatsFilterType::New() );
+      VectorStatsFilterType::Pointer 
+                statFilter ( VectorStatsFilterType::New() );
       statFilter->SetIgnoreInfiniteValues(true);
       if( IsParameterEnabled("nodata") )
         {
@@ -508,7 +517,8 @@ private:
           std::cout<<"Channel constant"<<std::endl;
           std::cout<<"min "<<min[channel]<<std::endl;
           std::cout<<"max "<<max[channel]<<std::endl;
-          m_BufferFilter[channel]->SetInput( inputImageList->GetNthElement(channel) );
+          m_BufferFilter[channel]->SetInput( 
+                inputImageList->GetNthElement(channel) );
           outputImageList->PushBack( m_BufferFilter[channel]->GetOutput() );
           continue;
         }
@@ -535,7 +545,8 @@ private:
       m_BufferFilter[channel] -> SetInput ( 
         m_VectorToImageListFilter->GetOutput()->GetNthElement( channel ) );
       m_BufferFilter[channel]->InPlaceOn();
-      m_GainFilter[channel]->SetInputImage( m_BufferFilter[channel]->GetOutput() );
+      m_GainFilter[channel]->SetInputImage( 
+                m_BufferFilter[channel]->GetOutput() );
       outputImageList->PushBack( m_GainFilter[channel]->GetOutput() );
       }
   }
