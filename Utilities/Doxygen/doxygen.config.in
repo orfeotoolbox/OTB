@@ -1121,7 +1121,7 @@ HTML_COLORSTYLE_HUE    = 220
 HTML_COLORSTYLE_SAT    = 100
 
 # The HTML_COLORSTYLE_GAMMA tag controls the gamma correction applied to the
-# luminance component of the colors in the HTML output. Values below 100
+# radiance component of the colors in the HTML output. Values below 100
 # gradually make the output lighter, whereas values above 100 make the output
 # darker. The value divided by 100 is the actual gamma applied, so 80 represents
 # a gamma of 0.8, The value 220 represents a gamma of 2.2, and 100 does not

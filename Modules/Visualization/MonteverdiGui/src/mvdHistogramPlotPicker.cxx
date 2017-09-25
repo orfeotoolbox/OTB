@@ -169,9 +169,9 @@ HistogramPlotPicker
 /*******************************************************************************/
 void
 HistogramPlotPicker
-::SetGrayscaleActivated( bool activated )
+::SetGrayscaleActivated( bool isGrayscale )
 {
-  m_IsGrayscaleActivated = activated;
+  m_IsGrayscaleActivated = isGrayscale;
 }
 
 /*******************************************************************************/

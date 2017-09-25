@@ -110,7 +110,7 @@ protected:
       "By default, hidden pixels will have the assigned label 0 in the output image. "
       "It's possible to define the label mask by another value, "
       "but be careful to not take a label from another class. "
-      "This application initalize the labels from 0 to N-1, "
+      "This application initialize the labels from 0 to N-1, "
       "N is the number of class (defined by 'nc' parameter).");
   }
 

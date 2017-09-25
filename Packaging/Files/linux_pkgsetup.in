@@ -32,12 +32,12 @@ PATCH_ELF_EXE="$OUT_DIR/patchelf"
 
 #do not move below block. it must be before "unset LD_LIBRARY_PATH" code
 #check if we have any python bindings
-set OTB_PYTHON_LIB_PATH=
+OTB_PYTHON_LIB_PATH=
 if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ] ; then
     sed -i "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/setup_python.sh"
     chmod +x $OUT_DIR/setup_python.sh
     . ./setup_python.sh
-    set OTB_PYTHON_LIB_PATH=$OUT_DIR/lib/python
+    OTB_PYTHON_LIB_PATH=$OUT_DIR/lib/python
 fi
 
 # No no interference with LD_LIBRARY_PATH

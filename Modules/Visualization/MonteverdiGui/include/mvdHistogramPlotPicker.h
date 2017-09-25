@@ -131,7 +131,7 @@ public:
 
   /**
    */
-  void SetGrayscaleActivated( bool activated );
+  void SetGrayscaleActivated( bool isGrayscale );
 
   //
   // QwtPlotPicker methods.

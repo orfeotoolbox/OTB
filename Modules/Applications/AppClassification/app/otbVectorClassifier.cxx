@@ -62,7 +62,7 @@ public:
   itkTypeMacro(Self, Application)
 
   /** Filters typedef */
-  typedef double                                        ValueType;
+  typedef float                                         ValueType;
   typedef unsigned int                                  LabelType;
   typedef itk::FixedArray<LabelType,1>                  LabelSampleType;
   typedef itk::Statistics::ListSample<LabelSampleType>  LabelListSampleType;
@@ -223,7 +223,7 @@ private:
         unsigned int itemIndex = GetSelectedItems("feat")[idx];
         std::string fieldName = GetChoiceNames( "feat" )[itemIndex];
         
-        mv[idx] = (*it)[fieldName].GetValue<double>();
+        mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<double>());
         }
       input->PushBack(mv);
       }
