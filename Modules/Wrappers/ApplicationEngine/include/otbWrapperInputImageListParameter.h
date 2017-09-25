@@ -33,13 +33,16 @@ namespace otb
 namespace Wrapper
 {
 
+#if ( defined( WIN32 ) || defined( _WIN32 ) )
+template OTBApplicationEngine_EXPORT class ParameterList< InputImageParameter >;
+#endif // Windows
+
 
 /** \class InputImageListParameter
  *  \brief This class represents a list of InputImage parameter
  *
  * \ingroup OTBApplicationEngine
  */
-
 class OTBApplicationEngine_EXPORT InputImageListParameter :
     public ParameterList< InputImageParameter >
 {
