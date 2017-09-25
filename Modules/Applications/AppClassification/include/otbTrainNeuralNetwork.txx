@@ -48,7 +48,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
     "in the network to optimize the result.");
   AddChoice("classifier.ann.t.reg", "Resilient Back-propagation algorithm");
   SetParameterDescription("classifier.ann.t.reg",
-    "Almost the same as the Back-prop algorithm exept that it does not "
+    "Almost the same as the Back-prop algorithm except that it does not "
     "take into account the magnitude of the partial derivative (coordinate "
     "of the gradient) but only its sign.");
 

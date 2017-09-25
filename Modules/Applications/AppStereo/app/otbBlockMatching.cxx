@@ -139,7 +139,7 @@ private:
       " and resampled each input image into epipolar geometry (with "
       "GridBasedImageResampling).\n\n"
       "The application searches locally for the displacement between a reference"
-      " image and a secondary image. The correspondance is evaluated for each "
+      " image and a secondary image. The correspondence is evaluated for each "
       "pixel, based on a pair of local neighborhood windows. The displacement "
       "evaluated can be 1D (along lines) or 2D. Parameters allows to set the "
       "minimum and maximum disparities to search (both for horizontal and "
