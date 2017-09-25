@@ -124,7 +124,7 @@ ListEditWidget
   // Browse-button.
   assert( m_UI->browseButton!=nullptr );
 
-  m_UI->browseButton->setEnabled( false );
+  m_UI->browseButton->setEnabled( model->IsBrowsable() );
 }
 
 /*******************************************************************************/
