@@ -78,8 +78,34 @@ ListEditWidget
 
   assert( m_UI->treeView->selectionModel()==nullptr );
 
-  m_UI->treeView->setModel( new ListEditItemModel( sli, m_UI->treeView ) );
+  //
+  // Item-model.
+  ListEditItemModel * model = new ListEditItemModel( sli, m_UI->treeView );
 
+  m_UI->treeView->setModel( model );
+
+  QObject::connect(
+    model, SIGNAL( dataChanged( const QModelIndex &, const QModelIndex & ) ),
+    this, SLOT( OnDataChanged( const QModelIndex &, const QModelIndex & ) )
+  );
+
+  QObject::connect(
+    model, SIGNAL( modelReset() ),
+    this, SLOT( OnModelReset() )
+  );
+
+  QObject::connect(
+    model, SIGNAL( rowsInserted( const QModelIndex &, int, int ) ),
+    this, SLOT( OnRowsInserted( const QModelIndex &, int, int ) )
+  );
+
+  QObject::connect(
+    model, SIGNAL( rowsRemoved( const QModelIndex &, int, int ) ),
+    this, SLOT( OnRowsRemoved( const QModelIndex &, int, int ) )
+  );
+
+  //
+  // Selection-model.
   assert( m_UI->treeView->selectionModel()!=nullptr );
 
   QObject::connect(
@@ -90,14 +116,15 @@ ListEditWidget
     // to:
     this,
     SLOT(
-      onSelectionChanged( const QItemSelection & , const QItemSelection & )
+      OnSelectionChanged( const QItemSelection & , const QItemSelection & )
     )
   );
 
-  assert( GetItemModel()!=nullptr );
+  //
+  // Browse-button.
   assert( m_UI->browseButton!=nullptr );
 
-  m_UI->browseButton->setEnabled( GetItemModel()->IsBrowsable() );
+  m_UI->browseButton->setEnabled( false );
 }
 
 /*******************************************************************************/
@@ -461,12 +488,87 @@ ListEditWidget
 /*******************************************************************************/
 void
 ListEditWidget
-::onSelectionChanged( const QItemSelection & /* selected */,
+::OnSelectionChanged( const QItemSelection & /* selected */,
 		      const QItemSelection & /* deselected */ )
 {
   // qDebug()
   //   << this
   //   << "::onSelectionChanged(" << selected << "," << deselected << ")";
+
+  // Experimental code.
+  // assert( selected.indexes().size()>=0 && selected.indexes().size()<=1 );
+
+  // assert( m_UI->upButton );
+  // assert( m_UI->downButton );
+  // assert( m_UI->browseButton );
+  // assert( m_UI->removeButton );
+
+  // if( selected.empty() )
+  //   {
+  //   m_UI->browseButton->setEnabled( false );
+  //   m_UI->removeButton->setEnabled( false );
+
+  //   m_UI->upButton->setEnabled( false );
+  //   m_UI->downButton->setEnabled( false );
+
+  //   return;
+  //   }
+
+  // assert( GetItemModel() );
+
+  // m_UI->browseButton->setEnabled( GetItemModel()->IsBrowsable() );
+  // m_UI->removeButton->setEnabled( true );
+
+  // const QModelIndex & index = selected.indexes().front();
+
+  // m_UI->upButton->setEnabled( index.isValid() && index.row()>0 );
+
+  // m_UI->downButton->setEnabled(
+  //   index.isValid() &&
+  //   index.sibling( index.row() + 1, index.column() ).isValid()
+  // );
+}
+
+/*****************************************************************************/
+void
+ListEditWidget
+::OnDataChanged( const QModelIndex &, const QModelIndex & )
+{
+  // qDebug() << this << "::OnDataChanged()";
+
+  assert( GetItemModel()!=nullptr );
+
+  emit Updated();
+}
+
+/*****************************************************************************/
+void
+ListEditWidget
+::OnModelReset()
+{
+  // qDebug() << this << "::OnModelReset()";
+
+  emit Updated();
+}
+
+/*****************************************************************************/
+void
+ListEditWidget
+::OnRowsInserted( const QModelIndex &, int, int )
+{
+  // qDebug() << this << "::OnRowsInserted()";
+
+  emit Updated();
+}
+
+/*****************************************************************************/
+void
+ListEditWidget
+::OnRowsRemoved( const QModelIndex &, int, int )
+{
+  // qDebug() << this << "::OnRowsRemoved()";
+
+  emit Updated();
 }
 
 } // end namespace 'Wrapper'

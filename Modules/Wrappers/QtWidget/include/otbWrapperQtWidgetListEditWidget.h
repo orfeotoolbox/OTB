@@ -132,6 +132,8 @@ public slots:
 //
 // Signals.
 signals:
+  /** */
+  void Updated();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -183,7 +185,11 @@ private slots:
   void on_removeButton_clicked();
   void on_upButton_clicked();
 
-  void onSelectionChanged( const QItemSelection &, const QItemSelection & );
+  void OnDataChanged( const QModelIndex &, const QModelIndex & );
+  void OnModelReset();
+  void OnRowsInserted( const QModelIndex &, int, int );
+  void OnRowsRemoved( const QModelIndex &, int, int );
+  void OnSelectionChanged( const QItemSelection &, const QItemSelection & );
 };
 
 } // end namespace 'Wrapper'
