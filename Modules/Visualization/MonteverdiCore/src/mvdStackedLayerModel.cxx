@@ -270,6 +270,15 @@ StackedLayerModel
   // Remove layer-model.
   AbstractLayerModel * layer = it->second;
 
+  // Disconnect the renaming signals
+  QObject::disconnect(
+    layer,
+    SIGNAL( NameChanged() ),
+    // from:
+    this,
+    SIGNAL( LayerRenamed() )
+  );
+
   m_LayerModels.erase( it );
 
   m_Keys.erase( m_Keys.begin() + index );
@@ -393,6 +402,15 @@ StackedLayerModel
   // Insert model.
   m_LayerModels.insert( LayerModelMap::value_type( key, model ) );
   m_Keys.insert( m_Keys.begin() + index, key );
+
+  // Connect the renaming signals
+  QObject::connect(
+    model,
+    SIGNAL( NameChanged() ),
+    // to:
+    this,
+    SIGNAL( LayerRenamed() )
+  );
 
   //
   // Update pointer to current.

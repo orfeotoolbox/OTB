@@ -24,7 +24,7 @@ otb_test_application(NAME apTuUtDownloadSRTMTiles
                      APP  DownloadSRTMTiles
                      OPTIONS -il LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
                              -mode list
-                             -mode.list.indir ${INPUTDATA}/DEM/srtm_directory
+                             -tiledir ${INPUTDATA}/DEM/srtm_directory
                      )
 
 
@@ -258,16 +258,43 @@ otb_test_application(NAME apTvUtConcatenateImages_1Image
 #----------- MultiResolutionPyramid TESTS ----------------
 
 #----------- PixelValue TESTS ----------------
-OTB_TEST_APPLICATION(NAME apTvUtPixelValue
+OTB_TEST_APPLICATION(NAME apTvUtPixelValueIndex
                      APP PixelValue
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                              -coordx 30
                              -coordy 30
+                             -mode index
                              -cl Channel1 Channel3 Channel4
-                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValue.txt
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValueIndex.txt
                        VALID --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtPixelValue.txt
-                	     ${TEMP}/apTvUtPixelValue.txt
+                	     ${TEMP}/apTvUtPixelValueIndex.txt
+                             )
+OTB_TEST_APPLICATION(NAME apTvUtPixelValuePhys
+                     APP PixelValue
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -coordx 374168
+                             -coordy 4829165.5
+                             -mode physical
+                             -cl Channel1 Channel3 Channel4
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValuePhys.txt
+                       VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtPixelValue.txt
+                         ${TEMP}/apTvUtPixelValuePhys.txt
+                             )
+
+OTB_TEST_APPLICATION(NAME apTvUtPixelValueEpsg
+                     APP PixelValue
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -coordx 1.4408400058746337890625
+                             -coordy 43.604839324951171875
+                             -mode epsg
+                             -mode.epsg.code 4326
+                             -cl Channel1 Channel3 Channel4
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValueEpsg.txt
+                       VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtPixelValue.txt
+                         ${TEMP}/apTvUtPixelValueEpsg.txt
                              )
 
 #----------- ColorMapping TESTS ----------------

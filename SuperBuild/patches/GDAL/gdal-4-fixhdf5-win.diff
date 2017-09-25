@@ -1,0 +1,11 @@
+--- GDAL-orig/frmts/hdf5/makefile.vc	2017-08-30 18:45:33.632677939 +0200
++++ GDAL/frmts/hdf5/makefile.vc	2017-08-30 18:46:05.316972947 +0200
+@@ -7,7 +7,7 @@
+ 
+ PLUGIN_DLL 	=	gdal_HDF5.dll
+ 
+-EXTRAFLAGS 	= 	-I$(HDF5_DIR)\include -DWIN32 -D_HDF5USEDLL_ 
++EXTRAFLAGS 	= 	-I$(HDF5_DIR)\include -DWIN32 -DH5_BUILT_AS_DYNAMIC_LIB 
+ 
+ !IF "$(HDF5_PLUGIN)" == "YES"
+ EXTRAFLAGS = $(EXTRAFLAGS) -DHDF5_PLUGIN

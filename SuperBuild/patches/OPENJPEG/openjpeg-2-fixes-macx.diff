@@ -1,7 +1,7 @@
 diff -burN openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592.orig/CMakeLists.txt openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592/CMakeLists.txt
 --- openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592.orig/CMakeLists.txt	2016-07-01 12:37:01.000000000 +0200
 +++ openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592/CMakeLists.txt	2016-07-01 12:37:20.000000000 +0200
-@@ -151,7 +151,7 @@
+@@ -153,7 +153,7 @@
  endif()
  
  if (APPLE)
@@ -31,9 +31,12 @@ diff -burN openjpeg-d0babeb6f6cdd1887308137df37bb2b4724a6592.orig/thirdparty/CMa
    find_package(LCMS2)
    if(LCMS2_FOUND)
      message(STATUS "Your system seems to have a LCMS2 lib available, we will use it")
-@@ -115,4 +115,4 @@
+@@ -115,7 +115,7 @@
        message(STATUS "LCMS2 or LCMS lib not found, activate BUILD_THIRDPARTY if you want build it")
      endif(LCMS_FOUND)
    endif(LCMS2_FOUND)
 -endif(BUILD_THIRDPARTY)
 +endif()
+ 
+ 
+ #------------

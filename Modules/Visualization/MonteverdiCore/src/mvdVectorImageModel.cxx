@@ -94,6 +94,7 @@ VectorImageModel
 ::SetFilename( const QString& filename , int w, int h)
 {
   setObjectName( filename );
+  SetName( QFileInfo( filename ).fileName() );
 
   // 1. store the input filename
   FilenameInterface::SetFilename( filename );

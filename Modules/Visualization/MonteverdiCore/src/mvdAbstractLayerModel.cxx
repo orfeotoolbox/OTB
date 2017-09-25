@@ -114,7 +114,8 @@ GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
 AbstractLayerModel
 ::AbstractLayerModel( QObject* p ) :
   AbstractModel( p ),
-  VisibleInterface()
+  VisibleInterface(),
+  m_Name(QString())
 {
 }
 
@@ -178,6 +179,26 @@ AbstractLayerModel
 ::ToWgs84( const PointType & p, PointType & wgs84, double & alt) const
 {
   virtual_ToWgs84( p, wgs84, alt );
+}
+
+/*****************************************************************************/
+void
+AbstractLayerModel
+::SetName(const QString & name)
+{
+  if (name != m_Name)
+    {
+    m_Name = name;
+    emit NameChanged();
+    }
+}
+
+/*****************************************************************************/
+const QString &
+AbstractLayerModel
+::GetName() const
+{
+  return m_Name;
 }
 
 /*******************************************************************************/
