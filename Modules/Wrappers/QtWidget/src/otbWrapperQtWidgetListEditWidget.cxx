@@ -374,6 +374,36 @@ ListEditWidget
 /*******************************************************************************/
 void
 ListEditWidget
+::on_removeAllButton_clicked()
+{
+  // qDebug() << this << "::on_removeAllButton_clicked()";
+
+  ListEditItemModel * model = GetItemModel();
+  assert( model );
+
+  if( model->rowCount()<1 )
+    return;
+
+  assert( qApp );
+  assert( !qApp->applicationName().isEmpty() );
+
+  if( QMessageBox::question(
+	this,
+	qApp->applicationName(),
+	tr("Are you sure you want to delete all (%1) item(s)?")
+	.arg( model->rowCount() ),
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::No
+      )
+      ==QMessageBox::No )
+    return;
+
+  model->removeRows( 0, model->rowCount() );
+}
+
+/*******************************************************************************/
+void
+ListEditWidget
 ::on_upButton_clicked()
 {
   // qDebug() << this << "::on_upButton_clicked()";

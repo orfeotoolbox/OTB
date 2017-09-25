@@ -183,6 +183,7 @@ private slots:
   void on_browseButton_clicked();
   void on_downButton_clicked();
   void on_removeButton_clicked();
+  void on_removeAllButton_clicked();
   void on_upButton_clicked();
 
   void OnDataChanged( const QModelIndex &, const QModelIndex & );
