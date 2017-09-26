@@ -72,8 +72,15 @@ classify a set of features on a new vector data file using the
                             -out     classifiedData.shp
 
 This application outputs a vector data file storing sample values
-and classification labels. The output is optional, in this case the
-input vector data classification label field is updated.
+and classification labels. The output vector file is optional. If no output is
+given to the application, the input vector data classification label field is
+updated. If a statistics file was used to normalize the features during
+training, it shall also be used here, during classification.
+
+Note that with this application, the machine learning model may come from a
+training on image or vector data, it doesn't matter. The only requirement is
+that the chosen features to use should be the same as the one used during
+training.
 
 Validating classification
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -534,6 +541,27 @@ and this image is produced with the commands inside this
 +---------------------------+---------------------------+---------------------------+
 
 Figure 2: From left to right: Original image, result image with fusion (with monteverdi viewer) of original image and fancy classification and input image with fancy color classification from labeled image.
+
+Unsupervised learning
+---------------------
+
+Using the same machine learning framework, it is also possible to perform
+unsupervised classification. In this case, the main difference is that
+the training samples don't need a real class label. However, in order to use
+the same *TrainImagesClassifier* application, you still need to
+provide a vector data file with a label field. This vector file will be
+used to extract samples for the training. Each label value is can be considered
+as a source area for samples, the same logic as in supervised learning is
+applied for the computation of extracted samples per area. Hence, for
+unsupervised classification :
+
+- if there is a unique label in the vector data, samples will be selected as if
+they come from a single class or set
+
+- if multiple labels are present, samples will be selected so that every
+samples in the smallest class are selected, and the same number of sample from
+each class
+
 
 
 Fusion of classification maps
