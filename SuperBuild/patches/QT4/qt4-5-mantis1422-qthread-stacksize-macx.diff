@@ -1,5 +1,5 @@
---- src/corelib/thread/qthread_unix.cpp.orig	2015-11-23 19:05:40.000000000 +0100
-+++ src/corelib/thread/qthread_unix.cpp	2015-11-24 11:22:31.000000000 +0100
+--- qt-everywhere-opensource-src-4.8.7.orig/src/corelib/thread/qthread_unix.cpp	2015-11-23 19:05:40.000000000 +0100
++++ qt-everywhere-opensource-src-4.8.7/src/corelib/thread/qthread_unix.cpp	2015-11-24 11:22:31.000000000 +0100
 @@ -79,6 +79,7 @@
  #endif
  
