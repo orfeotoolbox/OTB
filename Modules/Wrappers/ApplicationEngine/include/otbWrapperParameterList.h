@@ -64,9 +64,6 @@ public:
   itkTypeMacro( ParameterList, AbstractParameterList );
 
   /** */
-  const ParameterVector & GetParameters() const;
-
-  /** */
   typename ParameterVector::const_iterator begin() const;
 
   /** */
