@@ -111,7 +111,7 @@ InputFilenameListParameter
 }
 
 /*****************************************************************************/
-void
+const InputFilenameListParameter::ParameterType::Pointer &
 InputFilenameListParameter
 ::FromString( const ParameterType::Pointer & p,
 	      const std::string & s ) const
@@ -119,6 +119,8 @@ InputFilenameListParameter
   assert( !p.IsNull() );
 
   p->SetValue( s );
+
+  return p;
 }
 
 }

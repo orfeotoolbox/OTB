@@ -473,11 +473,9 @@ typename T::Pointer
 ParameterList< T >
 ::FromString( const std::string & s ) const
 {
-  typename T::Pointer parameter;
+  typename T::Pointer parameter( T::New() );
 
-  FromString( s );
-
-  return parameter;
+  return FromString( parameter, s );
 }
 
 } // End namespace Wrapper

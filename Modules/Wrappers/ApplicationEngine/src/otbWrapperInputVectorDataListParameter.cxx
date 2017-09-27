@@ -201,7 +201,7 @@ InputVectorDataListParameter
 }
 
 /*****************************************************************************/
-void
+const InputVectorDataListParameter::ParameterType::Pointer &
 InputVectorDataListParameter
 ::FromString( const ParameterType::Pointer & p,
 	      const std::string & s ) const
@@ -209,6 +209,8 @@ InputVectorDataListParameter
   assert( !p.IsNull() );
 
   p->SetFromFileName( s );
+
+  return p;
 }
 
 

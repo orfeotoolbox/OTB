@@ -98,8 +98,9 @@ protected:
 
   /** */
   using Superclass::FromString;
-  void FromString( const ParameterType::Pointer &,
-		   const std::string & ) const override;
+  const ParameterType::Pointer &
+    FromString( const ParameterType::Pointer &,
+		const std::string & ) const override;
 
 //
 // Private methods.

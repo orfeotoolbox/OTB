@@ -177,7 +177,7 @@ protected:
 
   /** std::string -> ParameterType::ValueType protocol */
   virtual
-    void
+    const typename ParameterType::Pointer &
     FromString( const typename ParameterType::Pointer &,
 		const std::string & ) const = 0;
 

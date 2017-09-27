@@ -115,7 +115,7 @@ StringListParameter
 }
 
 /*****************************************************************************/
-void
+const StringListParameter::ParameterType::Pointer &
 StringListParameter
 ::FromString( const ParameterType::Pointer & p,
 	      const std::string & s ) const
@@ -123,6 +123,8 @@ StringListParameter
   assert( !p.IsNull() );
 
   p->SetValue( s );
+
+  return p;
 }
 
 

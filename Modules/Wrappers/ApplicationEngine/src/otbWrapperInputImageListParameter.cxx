@@ -236,7 +236,7 @@ InputImageListParameter
 }
 
 /*****************************************************************************/
-void
+const InputImageListParameter::ParameterType::Pointer &
 InputImageListParameter
 ::FromString( const ParameterType::Pointer & p,
 	      const std::string & s ) const
@@ -244,6 +244,8 @@ InputImageListParameter
   assert( !p.IsNull() );
 
   p->SetFromFileName( s );
+
+  return p;
 }
 
 
