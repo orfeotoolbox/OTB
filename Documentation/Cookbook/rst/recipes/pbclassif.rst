@@ -553,16 +553,42 @@ provide a vector data file with a label field. This vector file will be
 used to extract samples for the training. Each label value is can be considered
 as a source area for samples, the same logic as in supervised learning is
 applied for the computation of extracted samples per area. Hence, for
-unsupervised classification :
+unsupervised classification, the samples are selected based on classes that are
+not actually used during the training. For the moment, only the KMeans
+algorithm is proposed in this framework.
 
-- if there is a unique label in the vector data, samples will be selected as if
-they come from a single class or set
+::
 
-- if multiple labels are present, samples will be selected so that every
-samples in the smallest class are selected, and the same number of sample from
-each class
+    otbcli_TrainImageClassifier
+      -io.il                image.tif
+      -io.vd                training_areas.shp
+      -io.out               model.txt
+      -sample.vfn           Class
+      -classifier           sharkkm
+      -classifier.sharkkm.k 4
 
+If your training samples are in a vector data file, you can use the application
+*TrainVectorClassifier*. In this case, you don't need a fake label field. You
+just need to specify which fields shall be used to do the training.
 
+::
+
+    otbcli_TrainVectorClassifier
+      -io.vd                training_samples.shp
+      -io.out               model.txt
+      -feat                 perimeter area width red nir
+      -classifier           sharkkm
+      -classifier.sharkkm.k 4
+
+Once you have the model file, the actual classification step is the same as
+the supervised case. The model will predict labels on your input data.
+
+::
+
+    otbcli_ImageClassifier
+      -in input_image.tif
+      -model model.txt
+      -out kmeans_labels.tif
 
 Fusion of classification maps
 -----------------------------
