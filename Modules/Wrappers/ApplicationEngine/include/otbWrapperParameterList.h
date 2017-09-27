@@ -130,8 +130,8 @@ protected:
 //
 // Private methods.
 private:
-  ParameterList( const Parameter & ); // purposely not implemented
-  void operator = ( const Parameter & ); // purposely not implemented
+  // ParameterList( const Parameter & ); // purposely not implemented
+  // void operator = ( const Parameter & ); // purposely not implemented
 
 //
 // Protected methods.
