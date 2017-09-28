@@ -33,8 +33,9 @@
 #include "otbComputeGainLutFilter.h"
 #include "otbApplyGainFilter.h"
 #include "otbImageFileWriter.h"
+#include "itkImageRegionIterator.h"
 
-
+#include "otbStreamingHistogramVectorImageFilter.h"
 
 namespace otb
 {
@@ -119,6 +120,8 @@ public:
                                       FloatVectorImageType > 
           StreamingImageFilterType;
   typedef otb::BufferFilter < FloatImageType > BufferFilterType;
+  typedef otb::StreamingHistogramVectorImageFilter < FloatVectorImageType > 
+      HistoPersistentFilterType;
 
   /** Standard macro */
   itkNewMacro( Self );
@@ -164,6 +167,9 @@ private:
     SetParameterDescription("nodata","If there is a value in the "
       "image that has no visualization it is ignored by the algorithm.");
     MandatoryOff("nodata");
+
+    AddParameter(ParameterType_Empty , "global" , "Global equalization" );
+    SetParameterDescription("global","");
 
     AddParameter(ParameterType_Group, "thumb", "Thumbnail size");
     SetParameterDescription("thumb","The algorithm can be local : "
@@ -300,7 +306,6 @@ private:
       PerBandEqualization( inImage , inputImageList , 
                            nbChannel , outputImageList );
       }
-
     else if ( mode == "lum")
       {
       std::vector<int> rgb( 3 , 0 );
@@ -389,32 +394,45 @@ private:
                       const GainLutFilterType::Pointer lutFilter ,
                       const StreamingImageFilterType::Pointer streamingFilter ,
                       const FloatImageType::Pointer input ,
+                      // unsigned int channel ,
+                      FloatVectorImageType::Pointer histogram ,
                       float max ,
                       float min)
   {
-    if ( HasValue("hfact") )
+    if ( !IsParameterEnabled("global") ) //!HasValue("global") )
       {
-      histoFilter->SetThreshold( GetParameterInt("hfact") );
+      if ( HasValue("hfact") )
+        {
+        histoFilter->SetThreshold( GetParameterInt("hfact") );
+        }
+      if ( IsParameterEnabled("nodata") )
+        {
+        histoFilter->NoDataFlagOn();
+        histoFilter->SetNoData( GetParameterFloat("nodata") );
+        }
+      else
+        {
+        histoFilter->NoDataFlagOff();
+        }
+      histoFilter->SetMin( min );
+      histoFilter->SetMax( max );
+      histoFilter->SetNbBin( GetParameterInt("bin") );
+      histoFilter->SetThumbSize( m_ThumbSize );
+      histoFilter->SetInput( input );
+      histoFilter->Update();
+      if ( !TemporaryTest( histoFilter->GetHistoOutput() , histogram ) )
+        std::cout<<"not equal"<<std::endl;
+      else
+        std::cout<<"Alles gut"<<std::endl;
+      histogram = histoFilter->GetHistoOutput();
       }
-    if ( IsParameterEnabled("nodata") )
-      {
-      histoFilter->NoDataFlagOn();
-      histoFilter->SetNoData( GetParameterFloat("nodata") );
-      }
-    else
-      {
-      histoFilter->NoDataFlagOff();
-      }
-    histoFilter->SetMin( min );
-    histoFilter->SetMax( max );
     lutFilter->SetMin( min );
     lutFilter->SetMax( max );
     lutFilter->SetNbPixel( 
-      GetParameterInt("thumb.h") * GetParameterInt("thumb.w") );
-    histoFilter->SetNbBin(GetParameterInt("bin"));
-    histoFilter->SetThumbSize( m_ThumbSize );
-    histoFilter->SetInput( input );
-    lutFilter->SetInput( histoFilter->GetHistoOutput() );
+      m_ThumbSize[0] * m_ThumbSize[1] );
+
+    // lutFilter->SetInput( m_Histogram[channel] );
+    lutFilter->SetInput( histogram );
     streamingFilter->SetInput( lutFilter->GetOutput() );
   }
 
@@ -498,18 +516,22 @@ private:
     ComputeVectorMinMax( inImage , max , min );
 
     m_GainLutFilter.resize(nbChannel);
-    m_HistoFilter.resize(nbChannel);
     m_GainFilter.resize(nbChannel);
     m_BufferFilter.resize(nbChannel);
     m_StreamingFilter.resize(nbChannel);
+    m_Histogram.resize(nbChannel);
+    m_HistoFilter.resize(nbChannel);
+
+    if ( true )
+      PersistentComputation( inImage , nbChannel , max , min );
 
     for ( unsigned int channel = 0 ; channel < nbChannel ; channel++ ) 
       {
       m_GainLutFilter[channel] = GainLutFilterType::New();
-      m_HistoFilter[channel] = HistoFilterType::New();
       m_GainFilter[channel] = GainFilterType::New();
       m_StreamingFilter[channel] = StreamingImageFilterType::New();
       m_BufferFilter[channel] = BufferFilterType::New();
+      m_HistoFilter[channel] = HistoFilterType::New();
 
       if ( min[channel] == max[channel] )
         {
@@ -527,8 +549,9 @@ private:
                       m_GainLutFilter[channel] ,
                       m_StreamingFilter[channel] ,
                       inputImageList->GetNthElement(channel) ,
+                      // channel ,
+                      m_Histogram[channel],
                       max[channel] , min[channel] );
-
       if( IsParameterEnabled("nodata") )
         {
         m_GainFilter[channel]->NoDataFlagOn();
@@ -592,6 +615,8 @@ private:
                     m_GainLutFilter[0] ,
                     m_StreamingFilter[0] ,
                     m_LuminanceFunctor->GetOutput() ,
+                    // 0 ,
+                    m_Histogram[0] ,
                     max , min);
 
     for ( int channel = 0 ; channel < 3 ; channel++ ) 
@@ -619,17 +644,167 @@ private:
       }
   }
 
+  void PersistentComputation( const FloatVectorImageType::Pointer inImage ,
+                              const unsigned int nbChannel ,
+                              const FloatVectorImageType::PixelType & max ,
+                              const FloatVectorImageType::PixelType & min)
+  { 
+
+    HistoPersistentFilterType::Pointer histoPersistent (
+        HistoPersistentFilterType::New());
+    unsigned int nbBin ( GetParameterInt( "bin" ) );
+    histoPersistent->SetInput( inImage );
+    FloatVectorImageType::PixelType pixel ( nbChannel ) , step( nbChannel );
+    pixel.Fill( nbBin );
+    histoPersistent->GetFilter()->SetNumberOfBins( pixel );
+    if ( IsParameterEnabled("nodata") )
+      {
+      histoPersistent->GetFilter()->NoDataFlagOn();
+      histoPersistent->GetFilter()->SetNoDataValue( 
+                GetParameterFloat( "nodata" ) );
+      }
+    step = ( max - min ) / nbBin;
+    pixel = min - 0.5 * step;
+    histoPersistent->GetFilter()->SetHistogramMin(pixel);
+    pixel = max + 0.5 * step;
+    histoPersistent->GetFilter()->SetHistogramMax(pixel);
+    histoPersistent->Update();
+    HistoPersistentFilterType::HistogramListType * histotest = 
+            histoPersistent->GetHistogramList();
+    // std::cout<<"test "<< histotest->GetNthElement(0)<<std::endl;
+    // std::cout<<"test "<< histotest->GetNthElement(0)->GetSize()<<std::endl;
+    Transfert( histotest );
+    // HistoPersistentFilterType::HistogramType::IndexType index(1);
+    // for ( int i = 0 ; i < 256 ; i++)
+    //   {
+    //   index[0] = i;
+    //   std::cout<<histotest->GetNthElement(0)->GetFrequency(index)<<std::endl;
+    //   std::cout<<histotest->GetNthElement(0)->GetMeasurementVector(index)<<std::endl;
+    //   std::cout<<histotest->GetNthElement(0)->GetHistogramMinFromIndex(index)<<std::endl;
+    //   std::cout<<histotest->GetNthElement(0)->GetHistogramMaxFromIndex(index)<<std::endl;
+    //   }
+    if ( HasValue("hfact") )
+    {
+    for ( auto j = 0 ; j < m_Histogram.size() ; j++ )
+      {
+      unsigned int rest(0);
+      unsigned int height ( static_cast<unsigned int>( 
+          GetParameterFloat( "hfact" ) * 
+          ( histotest->GetNthElement(j)->GetTotalFrequency() / nbBin ) ) );
+      // Do i need to static_cast in a an assignation?
+      // Warning!!!! Need to handle out of bound int!!!
+      FloatVectorImageType::IndexType zero;
+      FloatVectorImageType::Pointer & histoToThresh = m_Histogram[j];
+      zero.Fill(0);
+      for( unsigned int i = 0 ; i < nbBin ; i++ )
+        {
+        if ( histoToThresh->GetPixel(zero)[i] > height )
+          {
+          rest += histoToThresh->GetPixel(zero)[i] - height ;
+          histoToThresh->GetPixel(zero)[i] = height ;
+          }
+        }
+      height = rest / nbBin;
+      rest = rest % nbBin;
+      for( unsigned int i = 0 ; i < nbBin ; i++ )
+        {
+        histoToThresh->GetPixel(zero)[i] += height ;
+        if ( i > (nbBin - rest)/2 && i <= (nbBin - rest)/2 + rest )
+          {
+          ++histoToThresh->GetPixel(zero)[i];
+          }
+        }
+      }
+    }
+  }
+
+  void Transfert( HistoPersistentFilterType::HistogramListType * histoList )
+  {
+    int nbBin( GetParameterInt( "bin" ) );
+    m_Histogram.resize(0);
+
+    FloatVectorImageType::SizeType sizeOne;
+    sizeOne.Fill( 1 );
+
+    FloatVectorImageType::PixelType histoPixel( nbBin );
+
+    FloatVectorImageType::IndexType index;
+    index.Fill(0);
+    HistoPersistentFilterType::HistogramType::Pointer histo;
+    FloatImageType::SpacingType inputSpacing ( GetParameterImage("in")->GetSpacing() );
+    FloatImageType::PointType inputOrigin ( GetParameterImage("in")->GetOrigin() );
+
+    FloatVectorImageType::SpacingType histoSpacing ;
+    histoSpacing[0] = inputSpacing[0] * m_ThumbSize[0] ;
+    histoSpacing[1] = inputSpacing[1] * m_ThumbSize[1] ;
+    FloatVectorImageType::PointType histoOrigin ;
+    histoOrigin[0] = histoSpacing[0] / 2 +  inputOrigin[0] - inputSpacing[0] / 2 ;
+    histoOrigin[1] = histoSpacing[1] / 2 +  inputOrigin[1] - inputSpacing[1] / 2 ;
+
+    for ( unsigned int i = 0 ; i < histoList->Size() ; i++ )
+      {
+      FloatVectorImageType::Pointer histoVectorImage ( 
+            FloatVectorImageType::New() );
+      histoVectorImage->SetVectorLength( nbBin );
+      histoVectorImage->SetBufferedRegion( sizeOne );
+      histoVectorImage->SetRequestedRegion( sizeOne );
+      histoVectorImage->SetLargestPossibleRegion( sizeOne );
+      histoVectorImage->SetSpacing( histoSpacing ) ;
+      histoVectorImage->SetOrigin( histoOrigin );
+      histoVectorImage->Allocate();
+      histo  = histoList->GetNthElement( i );
+      for (int j = 0 ; j < nbBin ; j++ )
+        {
+        histoPixel[j] = histo->GetFrequency( j );
+        }
+      histoVectorImage->SetPixel( index , histoPixel );
+      m_Histogram.push_back( histoVectorImage );
+      }
+  }
+
+  bool TemporaryTest( FloatVectorImageType::Pointer output ,
+                      FloatVectorImageType::Pointer histogram )
+  {
+    bool result ( true );
+    auto sizeh ( histogram->GetVectorLength() );
+    auto sizeo ( output->GetVectorLength() );
+    if ( sizeo != sizeh )
+      result = false;
+    itk::ImageRegionIterator < FloatVectorImageType > 
+        hit( histogram , histogram->GetLargestPossibleRegion() );
+    itk::ImageRegionIterator < FloatVectorImageType > 
+        oit( output , output->GetLargestPossibleRegion() );
+    for ( hit.GoToBegin() , oit.GoToBegin() ; !hit.IsAtEnd() || !oit.IsAtEnd() ;
+          ++oit , ++hit )
+      {
+        for ( auto i = 0 ; i < sizeh && i < sizeo ; i++ )
+          {
+          if ( oit.Get()[i] != hit.Get()[i] )
+            {
+            std::cout<<"bin n_ "<<i<<std::endl;
+            std::cout<<"histoFilter says : "<<oit.Get()[i]<<std::endl;
+            std::cout<<"persistentFilter says : "<<hit.Get()[i]<<std::endl;
+            result = false;
+            }
+          }
+      }
+    return result;
+  }
+
+
   FloatImageType::SizeType m_ThumbSize;
   ImageListToVectorFilterType::Pointer m_ImageListToVectorFilterOut;
   LuminanceFunctorType::Pointer m_LuminanceFunctor;
   VectorToImageListFilterType::Pointer m_VectorToImageListFilter;
   std::vector < GainLutFilterType::Pointer > m_GainLutFilter;
   std::vector < HistoFilterType::Pointer > m_HistoFilter;
+  std::vector < FloatVectorImageType::Pointer > m_Histogram;
   std::vector < GainFilterType::Pointer > m_GainFilter;
   std::vector < StreamingImageFilterType::Pointer > m_StreamingFilter;
   std::vector < BufferFilterType::Pointer > m_BufferFilter;
 
 };
+
 
 
 } //End namespace Wrapper
