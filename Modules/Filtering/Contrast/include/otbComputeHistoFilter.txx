@@ -66,7 +66,7 @@ ComputeHistoFilter < TInputImage , TOutputImage >
       output = NULL;
       break;
     }
-  return output.GetPointer();
+  return output;
 }
 
 template <class TInputImage, class TOutputImage >
@@ -107,7 +107,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   assert( m_ThumbSize[0] != 0 );
   assert( m_ThumbSize[1] != 0 );
 
-  //TODO throw error if 0  
+  //TODO throw error if 0
 
   size[0] = std::ceil( inputLargestRegion.GetSize()[0] / 
         static_cast< double > ( m_ThumbSize[0] ) );
@@ -131,13 +131,16 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   histoOrigin[0] = histoSpacing[0] / 2 +  inputOrigin[0] - inputSpacing[0] / 2 ;
   histoOrigin[1] = histoSpacing[1] / 2 +  inputOrigin[1] - inputSpacing[1] / 2 ;
   output->SetOrigin( histoOrigin );
-
 }
 
 template <class TInputImage, class TOutputImage >
 void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateOutputRequestedRegion( itk::DataObject * itkNotUsed(output) )
 {
+  if ( GetHistoOutput()->GetRequestedRegion().GetNumberOfPixels() == 0 )
+  {
+  GetHistoOutput()->SetRequestedRegionToLargestPossibleRegion();
+  }
   typename OutputImageType::Pointer outImage ( this->GetOutput() );
   SetRequestedRegion( outImage );
 }
@@ -313,6 +316,8 @@ template <class TInputImage, class TOutputImage >
 typename TOutputImage::Pointer ComputeHistoFilter < TInputImage , TOutputImage >
 ::GetHistoOutput()
 {
+  assert( this->itk::ProcessObject::GetOutput( 1 ) );
+
   return dynamic_cast< TOutputImage * >(
            this->itk::ProcessObject::GetOutput(1) );
 }
@@ -336,25 +341,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   outputRequestedRegion.SetIndex(start);
   outputRequestedRegion.SetSize(size);
 
-  if (outputRequestedRegion.Crop(image->GetLargestPossibleRegion()))
-    {
-    image->SetRequestedRegion(outputRequestedRegion);
-    }
-  else
-    {
-    // Couldn't crop the region (requested region is outside the largest
-    // possible region).  Throw an exception.
-
-    // store what we tried to request (prior to trying to crop)
-    image->SetRequestedRegion(outputRequestedRegion);
-
-    // build an exception
-    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    e.SetLocation(ITK_LOCATION);
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-    e.SetDataObject(image);
-    throw e;
-    }
+  outputRequestedRegion.Crop(image->GetLargestPossibleRegion());
 }
 
 template <class TInputImage , class TOutputImage >
