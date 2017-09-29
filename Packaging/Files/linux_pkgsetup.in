@@ -21,8 +21,8 @@
 set -e
 
 # verify basic tools are here
-which 2>/dev/null || ret=$?
-if [ ! $ret -eq 0 ] ; then echo "ERROR: Missing tool 'which'"; exit 1 ; fi
+which sh >/dev/null 2>&1 || ret=$?
+if [ ! -z "$ret" ] ; then echo "ERROR: Missing tool 'which'"; exit 1 ; fi
 for tool in dirname find file grep cut sed chmod cat readlink ; do
   if [ -z "$(which $tool)" ] ; then
     echo "ERROR: Missing tool '${tool}'"
