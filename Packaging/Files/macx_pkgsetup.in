@@ -59,9 +59,9 @@ for input_file in $LIB_FILES $BIN_FILES; do
     if [ -f "$input_file" ]; then
       input_file_old_rpaths=$(otool -l "$input_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
       for rpath_old in $input_file_old_rpaths; do
-        $INSTALL_NAME_TOOL "-delete_rpath" "$rpath_old" "$input_file"
+        install_name_tool "-delete_rpath" "$rpath_old" "$input_file"
       done
-      $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$input_file"
+      install_name_tool "-add_rpath" "$OUT_DIR/lib" "$input_file"
     fi
 done
 
