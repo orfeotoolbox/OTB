@@ -50,11 +50,9 @@ prefix.
     // All variables related to anotherImage (input 2) will have the prefix im3
     filter->SetNthInput(2, anotherImage);
 
-In this document, we will keep the default convention. Following list
-summaries the available variables for input #0 (and so on for every
-input).
-
-Variables and their descriptions:
+In this document, we will keep the default convention. The following table 
+summarises the available variables for input #0 (and so on for every
+input) and includes a brief description:
 
 +-----------------------+--------------------------------------------------------------------------------------+----------+
 | Variables             | Description                                                                          | Type     |
@@ -80,7 +78,7 @@ Variables and their descriptions:
 
 [variables]
 
-Moreover, we also have the generic variables idxX and idxY that
+In addition, we also have the generic variables idxX and idxY that
 represent the indices of the current pixel (scalars).
 
 Note that the use of a global statistics will automatically make the
@@ -99,19 +97,18 @@ represents a pixel of an image made of only one band:
 
 .. math:: im1+1
 
-A scalar can’t be added to a vector. The right formula is instead (one
-can notice the way that muParserX allows to define vectors on the fly):
+A scalar can’t be added to a vector, therefore the correct syntax for the formulta is as follows (one
+can notice the approach that muParserX allows vectors to be defined on the fly):
 
 .. math:: im1+\{ 1 \}
 
-or
+or, if im1 is made of n components, the formula is:
 
 .. math:: im1 + \{1,1,1,...,1\}
 
-if im1 is made of n components.
 
-On the other hand, the variable im1b1 for instance is represented as a
-scalar; so we have the following different possibilities:
+On the other hand, if the variable im1b1 is represented as a
+scalar; we have the following different possibilities:
 
 Correct / incorrect expressions:
 
@@ -148,19 +145,18 @@ two vectors (see next section “New operators and functions”
 -[ssec:operators]-).
 
 Now, let’s go back to the first formula: this one specifies the addition
-of two images band to band. With muParserX lib, we can now define such
-operation with only one formula, instead of many formulas (as many as
+of two images band to band. With muParserX lib, we can now define such an
+operation with only one formula, instead of multiple formulae (as many as
 the number of bands). We call this new functionality the **batch mode**,
-which directly arises from the introduction of vectors within muParserX
+which arises directly from the introduction of vectors within the muParserX
 framework.
 
-Finally, let’s say a few words about neighbourhood variables. These
-variables are defined for each particular input, and for each particular
-band. The two last numbers, kxp, indicate the size of the neighbourhood.
-All neighbourhoods are centred: this means that k and p can only be odd
-numbers. Moreover, k represents the dimension in the x direction (number
-of columns), and p the dimension in the y direction (number of rows).
-For instance, im1b3N3x5 represents the following neighbourhood:
+Finally, it is worth briefly discussing neighbourhood variables, which are
+defined for each specific input and band. The two last numbers, kxp, indicate 
+the size of the neighbourhood. All neighbourhoods are centred: this means 
+that k and p can only be odd numbers. In addition, k represents the dimension 
+in the x direction (number of columns), and p the dimension in the y direction 
+(number of rows). For instance, im1b3N3x5 represents the following neighbourhood:
 
 +-----+-----+-----+
 | .   | .   | .   |
@@ -178,7 +174,7 @@ For instance, im1b3N3x5 represents the following neighbourhood:
 
 Fundamentally, a neighbourhood is represented as a matrix inside the
 muParserX framework; so the remark about mathematically well-defined
-formulas still stands.
+formulae still stands.
 
 New operators and functions
 ---------------------------
@@ -215,8 +211,8 @@ ones. For instance:
 .. math:: im1 ~  mlt ~ 2.0
 
 Note that the operator ’\*’ could have been used instead of ’pw’ one.
-But ’pw’ is a little bit more permisive, and can tolerate
-one-dimensional vector as right element.
+But ’pw’ is a little bit more permisive, and can tolerate a
+one-dimensional vector as a right element.
 
 **Operators pow and pw** The first operator allows the definition of an
 element-wise exponentiation of two vectors (and even matrices), provided
@@ -228,7 +224,7 @@ exponentiated by the same unique value). For instance:
 
 .. math:: im1 ~ pw ~ 2.0
 
-**Function bands** This function allows to select specific bands from an
+**Function bands** This function selects specific bands from an
 image, and/or to rearrange them in a new vector; for instance:
 
 .. math:: bands(im1,\{1,2,1,1\})
@@ -237,7 +233,7 @@ produces a vector of 4 components made of band 1, band 2, band 1 and
 band 1 values from the first input. Note that curly brackets must be
 used in order to select the desired band indices.
 
-** Function dotpr ** This function allows the dot product between two
+**Function dotpr** This function calculates the dot product between two
 vectors or matrices (actually in our case, a kernel and a neighbourhood
 of pixels):
 
@@ -250,7 +246,7 @@ For instance:
 is correct provided that kernel1 and im1b1N3x5 have the same dimensions.
 The function can take as many neighbourhoods as needed in inputs.
 
-**Function mean** This function allows to compute the mean value of a
+**Function mean** This function computes the mean value of a
 given vector or neighborhood (the function can take as many inputs as
 needed; one mean value is computed per input). For instance:
 
@@ -259,46 +255,46 @@ needed; one mean value is computed per input). For instance:
 Note: a limitation coming from muparserX itself makes impossible to pass
 all those neighborhoods with a unique variable.
 
-**Function var** This function allows to compute the variance of a given
+**Function var** This function computes the variance of a given
 vector or neighborhood (the function can take as many inputs as needed;
 one var value is computed per input). For instance:
 
 .. math:: var(im1b1N3x3)
 
-**Function median** This function allows to compute the median value of
+**Function median** This function computes the median value of
 a given vector or neighborhood (the function can take as many inputs as
 needed; one median value is computed per input). For instance:
 
 .. math:: median(im1b1N3x3)
 
-**Function corr** This function allows to compute the correlation
+**Function corr** This function computes the correlation
 between two vectors or matrices of the same dimensions (the function
 takes two inputs). For instance:
 
 .. math:: corr(im1b1N3x3,im1b2N3x3)
 
-**Function maj** This function allows to compute the most represented
+**Function maj** This function computes the most represented
 element within a vector or a matrix (the function can take as many
 inputs as needed; one maj element value is computed per input). For
 instance:
 
 .. math:: maj(im1b1N3x3,im1b2N3x3)
 
-**Function vmin and vmax** These functions allow to compute the min or
+**Function vmin and vmax** These functions compute the min or
 max value of a given vector or neighborhood (only one input). For
 instance:
 
 .. math:: (vmax(im3b1N3x5)+vmin(im3b1N3x5)) ~ div ~ \{2.0\}
 
-**Function cat** This function allows to concatenate the results of
-several expressions into a multidimensional vector, whatever their
+**Function cat** This function concatenates the results of
+several expressions into a multidimensional vector regardless of their
 respective dimensions (the function can take as many inputs as needed).
 For instance:
 
 .. math:: cat(im3b1,vmin(im3b1N3x5),median(im3b1N3x5),vmax(im3b1N3x5))
 
 Note: the user should prefer the use of semi-colons (;) when setting
-expressions, instead of directly use this function. The filter or the
+expressions, instead of directly using this function. The filter or the
 application will call the function ’cat’ automatically. For instance:
 
 .. math:: filter->SetExpression("im3b1 ; vmin(im3b1N3x5) ; median(im3b1N3x5) ; vmax(im3b1N3x5)");
@@ -307,16 +303,14 @@ Please, also refer to the next section “Application Programming
 Interface” ([ssec:API]).
 
 **Function ndvi** This function implements the classical normalized
-difference vegetation index; it takes two inputs. For instance:
+difference vegetation index and takes two inputs. For instance:
 
 .. math:: ndvi(im1b1,im1b4)
 
-First argument is related to the visible red band, and the second one to
-the near-infrareds band.
+The first argument is related to the visible red band, and the second one to
+the near-infra red band.
 
-The table below summarises the different functions and operators.
-
-Functions and operators summary:
+The table below summarises the different available functions and operators.
 
 +----------------+-------------------------------------------------------------------------------+
 | Variables      | Remark                                                                        |
@@ -430,9 +424,9 @@ This function allows the user to get any expression by its ID number.
     /** Set a matrix (or a vector) */
     void SetMatrix(const std::string& name, const std::string& definition);
 
-This function allows the user to set new vectors or matrices. This is
+This function allows the user to set new vectors or matrices, which is
 particularly useful when the user wants to use the dotpr function (see
-previous section). First argument is related to the name of the
+previous section). The first argument is related to the name of the
 variable, and the second one to the definition of the vector/matrix. The
 definition is done by a string, where first and last elements must be
 curly brackets (“{” and “}”). Different elements of a row are separated

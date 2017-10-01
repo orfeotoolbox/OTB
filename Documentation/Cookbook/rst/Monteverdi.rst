@@ -30,8 +30,8 @@ Main menu
 ~~~~~~~~~
 
 The main menu is made up of four items. The main one is the File item,
-from which you can: open a image, load the otb applications, and
-finally quit. The Edit item lets the user change his/her preferences.
+from which you can: open an image, load the OTB applications, and
+exit the application. The Edit item lets the user change his/her preferences.
 The view item is intended to let the user display or hide different
 parts of the main window. Finally, the Help item lets the user know the
 ’About’ information of the software, and also can display an useful

@@ -9,7 +9,7 @@ perform band operations. The command line application and the
 corresponding Monteverdi module (shown in the section [Band:sub:`m`\ ath
 module]) are based on the same standards. It computes a band wise
 operation according to a user defined mathematical expression. The
-following code computes the absolute difference between first bands of
+following code computes the absolute difference between the first bands of
 two images.
 
 ::
@@ -21,9 +21,9 @@ two images.
 The naming convention “im[x]b[y]” designates the yth band of the xth
 input image.
 
-The *BandMath* application embeds built-in operators and functions
-listed in `muparser documentation <http://muparser.sourceforge.net/mup_features.html#idDef2>`_ thus
-allowing a vast choice of possible operations.
+The *BandMath* application contains built-in operators and functions
+listed in the `muparser documentation <http://muparser.sourceforge.net/mup_features.html#idDef2>`_ 
+providing a vast choice of possible operations.
 
 Images with no-data values
 --------------------------
@@ -38,13 +38,13 @@ each band. The case of an image with no-data values defined only for a
 subset of its bands is supported.
 
 This metadata is now handled by OTB image readers and writer (using the
-GDAL driver). The no-data value can be read from an image files and
-stored in the image metadata dictionary. It can also be exported by
+GDAL driver). The no-data value can be read from an image file and
+stored in the image metadata dictionary, but it can also be exported by
 image writers. The OTB filters that produce a no-data value are able to
 export this value so that the output file will store it.
 
-An application has been created to manage the no-data value. The
-application has the following features:
+An application has been created to manage the no-data value and it contains 
+the following features:
 
 -  Build a mask corresponding to the no-data pixels in the input image:
    it gives you a binary image of the no-data pixels in your input
@@ -91,8 +91,8 @@ For instance:
                         -mode.apply.mask mask.tif
 
 You can also use this “apply” mode with an additional parameter
-“mode.apply.ndval”. This parameter allow to set the output nodata value
-applying according to your input mask.
+“mode.apply.ndval”. This parameter can set the output nodata value
+ according to the input mask.
 
 Segmentation
 ------------
@@ -105,7 +105,7 @@ Even if we leave aside the question of segmentation quality and consider
 that we have a method performing reasonably well on our data and objects
 of interest, the task of scaling up segmentation to real very high
 resolution data is itself challenging. First, we can not load the whole
-data into memory, and there is a need for on the flow processing which
+data into memory, and there is a need for on the fly processing which
 does not cope well with traditional segmentation algorithms. Second, the
 result of the segmentation process itself is difficult to represent and
 manipulate efficiently.
@@ -123,18 +123,17 @@ LSMS is a segmentation workflow which allows to perform tile-wise
 segmentation of very large image with theoretical guarantees of getting
 identical results to those without tiling.
 
-It has been developed by David Youssefi and Julien Michel during David
+It has been developed by David Youssefi and Julien Michel during David's internship 
+at CNES.
 
-internship at CNES.
-
-For more a complete description of the LSMS method, please refer to the
+For a more complete description of the LSMS method, please refer to the
 following publication, *J. Michel, D. Youssefi and M. Grizonnet, “Stable
 Mean-Shift Algorithm and Its Application to the Segmentation of
 Arbitrarily Large Remote Sensing Images,” in IEEE Transactions on
 Geoscience and Remote Sensing, vol. 53, no. 2, pp. 952-964, Feb. 2015.*
-The workflow consists in chaining 3 or 4 dedicated applications and
+The workflow consists of chaining 3 or 4 dedicated applications and
 produces a GIS vector file with artifact-free polygons corresponding to
-the segmented image, as well as mean and variance of the radiometry of
+the segmented image, as well as the mean and variances of the radiometry of
 each band for each polygon.
 
 Step 1: Mean-Shift Smoothing
@@ -172,8 +171,8 @@ smoothed images produced by the *MeanShiftSmoothing* application. To do
 so, the *LSMSSegmentation* will process them by tiles whose dimensions
 are defined by the *tilesizex* and *tilesizey* parameters, and by
 writing intermediate images to disk, thus keeping the memory consumption
-very low throughout the process. The segmentation will group together
-neighboring pixels whose range distance is below the *ranger* parameter and
+very low throughout the process. The segmentation will group 
+neighboring pixels together whose range distance is below the *ranger* parameter and
 (optionally) spatial distance is below the *spatialr* parameter.
 
 ::
@@ -195,22 +194,21 @@ its value, and their labels will be set to 0 (nodata).
 
 Please note that the output segmented image may look patchy, as if there
 were tiling artifacts: this is because segments are numbered
-sequentially with respect to the order in which tiles are processed. You
-will see after the result of the vectorization step that there are no
-artifacts in the results.
+sequentially with respect to the order in which tiles are processed. However, 
+all of the artefacts will be removed after the vectorization setp. 
 
 The *LSMSSegmentation* application will write as many intermediate files
-as tiles needed during processing. As such, it may require twice as free
-disk space as the final size of the final image. The *cleanup* option
+as tiles needed during processing. As such, it will sufficient disk space, typically
+twice the size of the final image. The *cleanup* option
 (active by default) will clear the intermediate files during the
 processing as soon as they are not needed anymore. By default, files
-will be written to the current directory. The *tmpdir* option allows to
-specify a different directory for these intermediate files.
+will be written to the current directory. The *tmpdir* option allows 
+a different directory to be specified for these intermediate files.
 
 Step 3 (optional): Merging small regions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The *LSMSSegmentation* application allows to filter out small segments.
+The *LSMSSegmentation* application filters out small segments.
 In the output segmented image, those segments will be removed and
 replaced by the background label (0). Another solution to deal with the
 small regions is to merge them with the closest big enough adjacent
@@ -230,10 +228,10 @@ type is advised for this output image.
 
 The *minsize* parameter allows to specify the threshold on the size of
 the regions to be merged. Like the *LSMSSegmentation* application, this
-application will process the input images tile-wise to keep resources
+application will process the input images tile-wise to keep resource
 usage low, with the guarantee of identical results. You can set the tile
 size using the *tilesizex* and *tilesizey* parameters. However unlike
-the *LSMSSegmentation* application, it does not require to write any
+the *LSMSSegmentation* application, it does not write any
 temporary file to disk.
 
 Step 4: Vectorization
@@ -245,8 +243,8 @@ one polygon per segment, and each of these polygons will hold additional
 attributes denoting the label of the original segment, the size of the
 segment in pixels, and the mean and variance of each band over the
 segment. The projection of the output GIS vector file will be the same
-as the projection from the input image (if input image has no
-projection, so does the output GIS file).
+as the projection from the input image (if the input image does not have a
+projection, than the output GIS files won't either).
 
 ::
 
@@ -257,10 +255,10 @@ projection, so does the output GIS file).
                              -tilesizey 256
 
 This application will process the input images tile-wise to keep
-resources usage low, with the guarantee of identical results. You can
+resource usage low, with the guarantee of identical results. You can
 set the tile size using the *tilesizex* and *tilesizey* parameters.
-However unlike the *LSMSSegmentation* application, it does not require
-to write any temporary file to disk.
+However unlike the *LSMSSegmentation* application, it does not 
+write any temporary file to disk.
 
 Dempster Shafer based Classifier Fusion
 ---------------------------------------
