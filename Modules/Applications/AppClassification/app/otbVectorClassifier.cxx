@@ -228,7 +228,6 @@ private:
       input->PushBack(mv);
       }
 
-	std::cout << input->GetMeasurementVector(0) << std::endl;
     // Statistics for shift/scale
     MeasurementType meanMeasurementVector;
     MeasurementType stddevMeasurementVector;
@@ -259,7 +258,6 @@ private:
     otbAppLogINFO("Loading model");
     m_Model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("model"),
                                                 MachineLearningModelFactoryType::ReadMode);
-	std::cout << "model_loaded" << std::endl;
 	
     if (m_Model.IsNull())
       {
