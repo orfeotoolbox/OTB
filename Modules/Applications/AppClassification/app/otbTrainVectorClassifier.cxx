@@ -110,9 +110,12 @@ protected:
     contingencyTableCalculator->Compute(performanceLabeledListSample->Begin(),
                                         performanceLabeledListSample->End(),predictedListSample->Begin(), predictedListSample->End());
 
-    otbAppLogINFO( "Training performances:" );
-
-    otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"<<contingencyTableCalculator->BuildContingencyTable());
+    if(IsParameterEnabled("v"))
+    {
+      otbAppLogINFO( "Training performances:" );
+      otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"
+        <<contingencyTableCalculator->BuildContingencyTable());
+    }
 
     return contingencyTableCalculator->BuildContingencyTable();
   }

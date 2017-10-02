@@ -72,11 +72,11 @@ Image displaying
 This part of the main window is intended to display the images loaded by
 the user. There are many nice keyboard shortcuts or mouse tricks that
 let the user have a better experience in navigating throughout the
-loaded images. These shortcuts and tricks are given within the Help item
-of the main menu, by clicking Keymap; here is a short list of the most
-useful ones:
+loaded images. These shortcuts and tricks are provided within the Help item
+of the main menu under Keymap. Here is a short list of the most
+commonly used ones:
 
-The classical ones:
+The standard ones:
 
 -  CTRL+O = Open file(s)
 
@@ -108,8 +108,8 @@ Right side dock
 
 The dock on the right side is divided into four tabs:
 
--  Quicklook: gives the user a degraded view of the whole extent,
-   letting him/her easily select the area to be displayed
+-  Quicklook: provides an overview of the full extent of the image,
+   and allows one to easily select the area to be displayed.
 
 -  Histogram: gives the user information about the value distribution
    of the selected channels. By clicking the mouse’s left button, user
@@ -208,21 +208,20 @@ BandMath
 BandMath application is intended to apply mathematical operations on
 pixels (launch it with shortcut CTRL+A). In this example, we are going
 to use this application to change the dynamics of an image, and check
-the result by looking at histogram tab, in the right side dock. The
+the result by looking at the histogram tab on the right-hand side of the GUI. The
 formula used is the following: :math:`\text{im1b1} \times 1000`. In the
 figures below ( [fig:BM]), one can notice that the mode of the
 distribution is located at position :math:`356.0935`, whereas in the
 transformed image, the mode is located at position :math:`354737.1454`,
-that’s to say 1000 times farther away approximately (the cursors aren’t
+that’s to say approximately 1000 times further away (the cursors aren’t
 placed exactly at the same position in the screenshots).
 
 .. figure:: Art/MonteverdiImages/BM.png
 
 Segmentation
 ~~~~~~~~~~~~
-
-Now, let’s use the segmentation application (launch it with shortcut
-CTRL+A). We let the user take a look at the application’s documentation;
+From within Monteverdi, the Segmentation application can be launched using the 
+shortcut CTRL+A. We let the user take a look at the application’s documentation;
 let’s simply say that as we wish we could display the segmentation with
 , we must tell the application to output the segmentation in raster
 format. Thus, the value of the mode option must be set to raster. The

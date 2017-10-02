@@ -46,8 +46,8 @@ else
     VERSION="develop"
 fi
 CMAKE_FILES=$(find $SB_CMAKE_DIR -maxdepth 1 -type f -name "External_*")
-DOWNLOAD_LIST=$(grep -h -E '^[^#]*\"https?://.*(\.tar\.gz|\.tar\.bz2|\.tgz|\.tar\.xz|\.zip|export=download).*\"' ${CMAKE_FILES} |
-		    grep -o -E 'https?://[^\"]*' | sort | uniq)
+DOWNLOAD_LIST=$(grep -h -E '^[^#]*\"(ftp|http|https)://.*(\.tar\.gz|\.tar\.bz2|\.tgz|\.tar\.xz|\.zip|export=download).*\"' ${CMAKE_FILES} |
+		    grep -o -E '(ftp|http|https)://[^\"]*' | sort | uniq)
 
 DOWNLOAD_NAMES=
 

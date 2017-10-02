@@ -62,7 +62,7 @@ public:
   itkTypeMacro(Self, Application)
 
   /** Filters typedef */
-  typedef double                                        ValueType;
+  typedef float                                         ValueType;
   typedef unsigned int                                  LabelType;
   typedef itk::FixedArray<LabelType,1>                  LabelSampleType;
   typedef itk::Statistics::ListSample<LabelSampleType>  LabelListSampleType;
@@ -210,7 +210,7 @@ private:
 
     const int nbFeatures = GetSelectedItems("feat").size();
     input->SetMeasurementVectorSize(nbFeatures);
-
+  
     otb::ogr::Layer::const_iterator it = layer.cbegin();
     otb::ogr::Layer::const_iterator itEnd = layer.cend();
     for( ; it!=itEnd ; ++it)
@@ -219,7 +219,11 @@ private:
       mv.SetSize(nbFeatures);
       for(int idx=0; idx < nbFeatures; ++idx)
         {
-        mv[idx] = (*it)[GetSelectedItems("feat")[idx]].GetValue<double>();
+        // Beware that itemIndex differs from ogr layer field index
+        unsigned int itemIndex = GetSelectedItems("feat")[idx];
+        std::string fieldName = GetChoiceNames( "feat" )[itemIndex];
+        
+        mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<double>());
         }
       input->PushBack(mv);
       }

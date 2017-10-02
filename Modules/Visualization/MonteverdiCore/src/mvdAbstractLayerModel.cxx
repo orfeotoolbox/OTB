@@ -37,7 +37,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
+#include "otbGeoInformationConversion.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
@@ -62,6 +62,7 @@ namespace
 {
 char const * const STR_SENSOR = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "Sensor" );
 char const * const STR_UNKNOWN = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "Unknown" );
+char const * const STR_NOEPSG = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "No EPSG" );
 } // end of anonymous namespace.
 
 
@@ -98,15 +99,11 @@ GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
 
   OGRSpatialReference ogr_sr( wkt.c_str() );
 
-  const char * epsg = ogr_sr.GetAuthorityCode( "PROJCS" );
-
-  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
-    return SRT_CARTO;
-
-  epsg = ogr_sr.GetAuthorityCode( "GEOGCS" );
-
-  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
+  if(ogr_sr.IsGeographic())
     return SRT_GEO;
+
+  if(ogr_sr.IsProjected())
+    return SRT_CARTO;
 
   return SRT_UNKNOWN;
 }
@@ -117,7 +114,8 @@ GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
 AbstractLayerModel
 ::AbstractLayerModel( QObject* p ) :
   AbstractModel( p ),
-  VisibleInterface()
+  VisibleInterface(),
+  m_Name(QString())
 {
 }
 
@@ -158,19 +156,13 @@ AbstractLayerModel
 	  ? ToStdString( tr( STR_SENSOR ) )
 	  : ToStdString( tr( STR_UNKNOWN ) ) );
 
-  OGRSpatialReference ogr_sr( wkt.c_str() );
-
-  const char * epsg = ogr_sr.GetAuthorityCode( "PROJCS" );
-
-  if( epsg!=NULL && strcmp( epsg, "" )!=0 )
-    return epsg;
-
-  epsg = ogr_sr.GetAuthorityCode( "GEOGCS" );
-
-  if( epsg==NULL || strcmp( epsg, "" )==0 )
+  int code = otb::GeoInformationConversion::ToEPSG(wkt);
+  if(code < 0)
     return ToStdString( tr( STR_UNKNOWN ) );
+  else if(code == 0)
+    return ToStdString( tr( STR_NOEPSG ) );
 
-  return epsg;
+  return boost::lexical_cast<std::string>(code);
 }
 
 /*******************************************************************************/
@@ -187,6 +179,26 @@ AbstractLayerModel
 ::ToWgs84( const PointType & p, PointType & wgs84, double & alt) const
 {
   virtual_ToWgs84( p, wgs84, alt );
+}
+
+/*****************************************************************************/
+void
+AbstractLayerModel
+::SetName(const QString & name)
+{
+  if (name != m_Name)
+    {
+    m_Name = name;
+    emit NameChanged();
+    }
+}
+
+/*****************************************************************************/
+const QString &
+AbstractLayerModel
+::GetName() const
+{
+  return m_Name;
 }
 
 /*******************************************************************************/

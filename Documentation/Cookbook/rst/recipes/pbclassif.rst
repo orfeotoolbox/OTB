@@ -33,7 +33,7 @@ model algorithm to train. You have the possibility to do the unsupervised
 classification,for it, you must to choose the Shark kmeans classifier.
 Please refer to the ``TrainVectorClassifier`` application reference documentation.
 
-In case of multiple samples files, you can add them to the ``-io.vd``
+In case of multiple sample files, you can add them to the ``-io.vd``
 parameter.
 
 The feature to be used for training must be explicitly listed using
@@ -49,14 +49,14 @@ can be set using the ``-cfield`` option.
 
 By default, the application will estimate the trained classifier
 performances on the same set of samples that has been used for
-training. The ``-io.vd`` parameter allows to specify a different
-samples file for this purpose, for a more fair estimation of the
-performances. Note that this performances estimation scheme can also
-be estimated afterward (see `Validating the classification model`_
+training. The ``-io.vd`` parameter allows for the specification of different
+sample files for this purpose, for a more fair estimation of the
+performances. Note that this scheme to estimate the performance can also
+be carried out afterwards (see `Validating the classification model`_
 section).
 
 
-Features classification
+Feature classification
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Once the classifier has been trained, one can apply the model to
@@ -71,9 +71,16 @@ classify a set of features on a new vector data file using the
                             -cfield  predicted
                             -out     classifiedData.shp
 
-This application output a vector data file storing sample values
-and classification label. The output is optional, in this case the
-input vector data classification label field is updated.
+This application outputs a vector data file storing sample values
+and classification labels. The output vector file is optional. If no output is
+given to the application, the input vector data classification label field is
+updated. If a statistics file was used to normalize the features during
+training, it shall also be used here, during classification.
+
+Note that with this application, the machine learning model may come from a
+training on image or vector data, it doesn't matter. The only requirement is
+that the chosen features to use should be the same as the one used during
+training.
 
 Validating classification
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -83,7 +90,7 @@ or *TrainImagesClassifier* applications is directly estimated by the
 application itself, which displays the precision, recall and F-score
 of each class, and can generate the global confusion matrix for
 supervised algorithms. For unsupervised algorithms a contingency table
-is generated. Those results are output as an \*.CSV file.
+is generated. These results are output as an \*.CSV file.
 
 Pixel based classification
 --------------------------
@@ -173,13 +180,13 @@ The output XML file will look like this::
 
 
 
-Samples selection
+Sample selection
 ~~~~~~~~~~~~~~~~~
 
 Now, we know exactly how many samples are available in the image for
-each class and each geometry in the training set. From this
+each class and each geometry in the training set. From these
 statistics, we can now compute the sampling rates to apply for each
-classes, and perform the sample selection. This will be done by the
+class, and perform the sample selection. This will be done by the
 ``SampleSelection`` application.
 
 There are several strategies to compute those sampling rates:
@@ -192,27 +199,27 @@ There are several strategies to compute those sampling rates:
 * **Percent strategy:** Each class will be sampled with a user-defined
   percentage (same value for all classes) of samples available in this
   class.
-* **Total strategy:** A global number of samples to generate is
-  divided proportionally among each class (classes proportions are
+* **Total strategy:** A global number of samples to select is
+  divided proportionally among each class (class proportions are
   enforced).
-* **Take all strategy:** Take all the available samples
+* **Take all strategy:** Take all the available samples.
 * **By class strategy:** Set a target number of samples for each
   class. The number of samples for each class is read from a CSV file.
 
 To actually select the sample positions, there are two available
-sampler:
+sampling techniques:
 
 * **Random:** Randomly select samples while respecting the sampling
-  rate
-* **Periodic:** Sample periodically using the sampling rate
+  rate.
+* **Periodic:** Sample periodically using the sampling rate.
 
 The application will make sure that samples spans the whole training
 set extent by adjusting the sampling rate. Depending on the strategy
 to determine the sampling rate, some geometries of the training set
-might not be sampled.
+may not be sampled.
 
 The application will accept as input the input image and training
-geometries, as well class statistics XML file computed during previous
+geometries, as well class statistics XML file computed during the previous
 step. It will output a vector file containing point geometries which
 indicate the location of the samples.
 
@@ -227,7 +234,7 @@ indicate the location of the samples.
                           -out samples.sqlite
     
 The csv file written by the optional ``-outrates`` parameter sums-up what
-has been done during samples selection::
+has been done during sample selection::
      
      #className requiredSamples totalSamples rate
      11	 941	56774	0.0165745
@@ -253,8 +260,8 @@ has been done during samples selection::
 Samples extraction
 ~~~~~~~~~~~~~~~~~~
 
-Now that we selected the location of the samples, we will attach
-measurement to them. This is the purpose of the ``SampleExtraction``
+Now that the locations of the samples are selected, we will attach
+measurements to them. This is the purpose of the ``SampleExtraction``
 application. It will walk through the list of samples and extract the
 underlying pixel values. If no ``-out`` parameter is given, the
 ``SampleExtraction`` application can work in update mode, thus allowing
@@ -286,8 +293,7 @@ Working with several images
 
 If the training set spans several images, the ``MultiImageSamplingRate``
 application allows to compute the appropriate sampling rates per image
-and per class, in order to get samples that spans the whole images
-coverage.
+and per class, in order to get samples that span the entire extents of the images.
 
 It is first required to run the ``PolygonClassStatistics`` application
 on each image of the set separately. The ``MultiImageSamplingRate``
@@ -536,6 +542,53 @@ and this image is produced with the commands inside this
 
 Figure 2: From left to right: Original image, result image with fusion (with monteverdi viewer) of original image and fancy classification and input image with fancy color classification from labeled image.
 
+Unsupervised learning
+---------------------
+
+Using the same machine learning framework, it is also possible to perform
+unsupervised classification. In this case, the main difference is that
+the training samples don't need a real class label. However, in order to use
+the same *TrainImagesClassifier* application, you still need to
+provide a vector data file with a label field. This vector file will be
+used to extract samples for the training. Each label value is can be considered
+as a source area for samples, the same logic as in supervised learning is
+applied for the computation of extracted samples per area. Hence, for
+unsupervised classification, the samples are selected based on classes that are
+not actually used during the training. For the moment, only the KMeans
+algorithm is proposed in this framework.
+
+::
+
+    otbcli_TrainImageClassifier
+      -io.il                image.tif
+      -io.vd                training_areas.shp
+      -io.out               model.txt
+      -sample.vfn           Class
+      -classifier           sharkkm
+      -classifier.sharkkm.k 4
+
+If your training samples are in a vector data file, you can use the application
+*TrainVectorClassifier*. In this case, you don't need a fake label field. You
+just need to specify which fields shall be used to do the training.
+
+::
+
+    otbcli_TrainVectorClassifier
+      -io.vd                training_samples.shp
+      -io.out               model.txt
+      -feat                 perimeter area width red nir
+      -classifier           sharkkm
+      -classifier.sharkkm.k 4
+
+Once you have the model file, the actual classification step is the same as
+the supervised case. The model will predict labels on your input data.
+
+::
+
+    otbcli_ImageClassifier
+      -in input_image.tif
+      -model model.txt
+      -out kmeans_labels.tif
 
 Fusion of classification maps
 -----------------------------

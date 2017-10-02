@@ -32,7 +32,7 @@ namespace otb
  * Add the capability to change the number of channel when operation on
  * VectorImage compared to the itk::UnaryFunctorImageFilter
  *
- * The number of channel is provided by the functor: TFunction::OutputSize. If
+ * The number of channel is provided by the functor: TFunction::GetOutputSize. If
  * this number is lower or equal to zero, the behavior of the itk::UnaryFunctorImageFilter
  * remains unchanged.
  *

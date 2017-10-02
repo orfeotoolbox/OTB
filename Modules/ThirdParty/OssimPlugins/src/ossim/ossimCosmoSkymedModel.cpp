@@ -99,7 +99,7 @@ bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const 
 
 
   /**
-  * @todo : see on real products (for exemple DESCENDING and ASCENDING)
+  * @todo : see on real products (for example DESCENDING and ASCENDING)
   */
   const char* orbitDirection_str = kwl.find(prefix,"orbitDirection");
   std::string orbitDirection(orbitDirection_str) ;

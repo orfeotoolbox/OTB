@@ -22,8 +22,8 @@
 
 #include "otbReflectanceToImageImageFilter.h"
 
-//#include "otbReflectanceToLuminanceImageFilter.h"
-//#include "otbLuminanceToImageImageFilter.h"
+//#include "otbReflectanceToRadianceImageFilter.h"
+//#include "otbRadianceToImageImageFilter.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -129,10 +129,10 @@ int otbReflectanceToImageImageFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>                                ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
 
-typedef otb::ReflectanceToLuminanceImageFilter<InputImageType, InputImageType> ReflectanceToLuminanceImageFilterType;
-typedef otb::LuminanceToImageImageFilter<InputImageType, OutputImageType> LuminanceToImageImageFilterType;
+typedef otb::ReflectanceToRadianceImageFilter<InputImageType, InputImageType> ReflectanceToRadianceImageFilterType;
+typedef otb::RadianceToImageImageFilter<InputImageType, OutputImageType> RadianceToImageImageFilterType;
 
-  typedef ReflectanceToLuminanceImageFilterType::VectorType                       VectorType;
+  typedef ReflectanceToRadianceImageFilterType::VectorType                       VectorType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -158,8 +158,8 @@ typedef otb::LuminanceToImageImageFilter<InputImageType, OutputImageType> Lumina
 
   // Instantiating object
 
-ReflectanceToLuminanceImageFilterType::Pointer filter = ReflectanceToLuminanceImageFilterType::New();
-LuminanceToImageImageFilterType::Pointer filter2 = LuminanceToImageImageFilterType::New();
+ReflectanceToRadianceImageFilterType::Pointer filter = ReflectanceToRadianceImageFilterType::New();
+RadianceToImageImageFilterType::Pointer filter2 = RadianceToImageImageFilterType::New();
 
   filter2->SetAlpha(alpha);
   filter2->SetBeta(beta);
