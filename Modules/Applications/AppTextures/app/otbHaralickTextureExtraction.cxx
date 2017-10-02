@@ -74,7 +74,7 @@ SetDescription("Computes Haralick textural features on the selected channel of t
 
 // Documentation
 SetDocName("Haralick Texture Extraction");
-SetDocLongDescription("This application computes three sets of Haralick features [1].\n"
+SetDocLongDescription("This application computes three sets of Haralick features [1][2].\n"
     "  * simple: a set of 8 local Haralick features: Energy (texture uniformity) , "
     "Entropy (measure of randomness of intensity image), Correlation (how "
     "correlated a pixel is to its neighborhood), Inverse Difference Moment (measures "
