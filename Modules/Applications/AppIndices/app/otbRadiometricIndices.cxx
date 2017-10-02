@@ -136,7 +136,15 @@ private:
 
     // Documentation
     SetDocName("Radiometric Indices");
-    SetDocLongDescription("This application computes radiometric indices using the relevant channels from the input image. The application provides the user with a pre-defined set of radiometric indices for three domains: Vegetation, Water and Soil. It can be run for a single radiometric index or for a set of indices defined with the -list option. The resulting output is a multi band image containing a separate channel for each of the selected indices.");
+    SetDocLongDescription("This application computes radiometric indices using the " 
+	"relevant channels from the input image. The application provides the user "
+	"with a pre-defined set of radiometric indices for three domains: "
+	"* Vegetation, \n"
+	"* Water, and \n"
+	"* Soil. \n"
+	"It can be run for a single radiometric index or for a set of indices defined with "
+	"the -list option. The resulting output is a multi band image containing a separate "
+	"channel for each of the selected indices.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVegetationIndicesFunctor, otbWaterIndicesFunctor and otbSoilIndicesFunctor classes");
