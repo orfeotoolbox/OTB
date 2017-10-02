@@ -668,12 +668,6 @@ void CommandLineLauncher::DisplayHelp(bool longHelp)
   for(unsigned int i=0; i<maxKeySize-std::string("progress").size(); i++)
     bigKey.append(" ");
 
-  std::cerr << "        -"<<bigKey<<" <boolean>        Report progress " << std::endl;
-  bigKey = "help";
-  for(unsigned int i=0; i<maxKeySize-std::string("help").size(); i++)
-    bigKey.append(" ");
-  std::cerr << "        -"<<bigKey<<" <string list>    Display long help (empty list), or help for given parameters keys" << std::endl;
-
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
     Parameter::Pointer param = m_Application->GetParameterByKey(appKeyList[i]);
@@ -682,6 +676,12 @@ void CommandLineLauncher::DisplayHelp(bool longHelp)
       std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
       }
     }
+
+  std::cerr << "        -"<<bigKey<<" <boolean>        Report progress " << std::endl;
+  bigKey = "help";
+  for(unsigned int i=0; i<maxKeySize-std::string("help").size(); i++)
+    bigKey.append(" ");
+  std::cerr << "        -"<<bigKey<<" <string list>    Display long help (empty list), or help for given parameters keys" << std::endl;
 
   std::cerr<<std::endl;
   //std::string cl(m_Application->GetCLExample());
