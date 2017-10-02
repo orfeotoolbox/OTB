@@ -721,11 +721,9 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   // Display the type the type
   ParameterType type = m_Application->GetParameterType(paramKey);
 
-  // Discard Group parameters (they don't need a value)
-  if (type == ParameterType_Group)
-    {
-    return "";
-    }
+  std::string bigKey = paramKey;
+  
+  unsigned int maxKeySize = GetMaxKeySize();
 
   bool singleSelectionForListView = false;
 
@@ -745,10 +743,6 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "        ";
     }
-
-  std::string bigKey = paramKey;
-
-  unsigned int maxKeySize = GetMaxKeySize();
   
   for(unsigned int i=0; i<maxKeySize-paramKey.size(); i++)
     bigKey.append(" ");
@@ -783,6 +777,10 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
            type == ParameterType_StringList )
     {
     oss << "<string list>   ";
+    }
+  else if(type == ParameterType_Group)
+    {
+    oss<< "<group>         ";
     }
   else
     itkExceptionMacro("Not handled parameter type.");
@@ -831,30 +829,33 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     oss << "]";
     }
 
-  if(m_Application->IsMandatory(paramKey))
+  if(type != ParameterType_Group)
     {
-    oss<<" (mandatory";
-    }
-  else
-    {
-    oss<<" (optional";
 
-    if(m_Application->IsParameterEnabled(paramKey))
+    if(m_Application->IsMandatory(paramKey))
       {
-      oss<<", on by default";
+      oss<<" (mandatory";
       }
     else
       {
-      oss<<", off by default";
+      oss<<" (optional";
+
+      if(m_Application->IsParameterEnabled(paramKey))
+        {
+        oss<<", on by default";
+        }
+      else
+        {
+        oss<<", off by default";
+        }
       }
+    
+    if(m_Application->HasValue(paramKey))
+      {
+      oss<<", default value is "<<m_Application->GetParameterAsString(paramKey);
+      }
+    oss<<")";
     }
-
-  if(m_Application->HasValue(paramKey))
-    {
-    oss<<", default value is "<<m_Application->GetParameterAsString(paramKey);
-    }
-  oss<<")";
-
   oss << std::endl;
 
   if(longHelp)
