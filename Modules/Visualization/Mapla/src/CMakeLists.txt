@@ -72,7 +72,6 @@ add_to_qt4_i18n_forms( ${OTBMapla_FORMS} )
 
 ##########################[Mapla library]####################################
 add_library( OTBMapla
-  STATIC
   ${OTBMapla_SRCS}
   ${OTBMapla_FORMS_HEADERS}
   ${OTBMapla_SRC_MOC}

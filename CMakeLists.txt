@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.1.0)
 
 foreach(p
     CMP0025 # CMake 3.0
@@ -42,6 +42,10 @@ if(POLICY CMP0054)
 endif()
 
 project(OTB)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(CMakeDependentOption)
 #
@@ -95,7 +99,7 @@ find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
   HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
 )
-mark_as_advanced(OTB_DATA_ROOT)
+#mark_as_advanced(OTB_DATA_ROOT)
 
 if(OTB_DATA_ROOT)
   repository_status(${OTB_DATA_ROOT} OTB_DATA_GIT_STATUS_MESSAGE)
@@ -106,7 +110,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "1")
+set(OTB_VERSION_MINOR "3")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -209,10 +213,12 @@ endif()
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 mark_as_advanced(OTB_USE_DEPRECATED)
 
+option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
+option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
 #-----------------------------------------------------------------------------
 # SHOW_ALL_MSG_DEBUG option
 option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
-mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
+#mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------
@@ -226,9 +232,6 @@ set(CMAKE_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS}")
 set(CMAKE_MODULE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
-
-# detect some C++11 keywords
-include(OTBCheckCpp11Keywords)
 
 # TODO BUILD_TESTING is created by default by CTest.cmake, and is ON by default.
 option(BUILD_TESTING "Build the testing tree." OFF)
@@ -332,12 +335,7 @@ if(OTB_WRAP_PYTHON)
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_PYTHONPATH \"${OTB_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}\")")
 endif()
-if(OTB_HAS_CXX11)
-  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
-     "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set(OTB_REQUIRED_CXX_FLAGS " -std=c++11")
-  endif()
-endif()
+
 set(OTB_CONFIG_APPLICATION_PATH "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION " AND NOT OTB_BINARY_DIR")
 set(OTB_CONFIG_TARGETS_FILE "${OTB_BINARY_DIR}/OTBTargets.cmake")
@@ -385,6 +383,8 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               ${OTB_BINARY_DIR}/OTBConfigVersion.cmake
               CMake/OTBApplicationMacros.cmake
               CMake/OTBModuleAPI.cmake
+              CMake/OTBStandaloneModuleMacros.cmake
+              CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
@@ -502,11 +502,12 @@ foreach(otb_option
     CMAKE_BUILD_TYPE
     CMAKE_C_FLAGS
     CMAKE_CXX_FLAGS
-    OTB_HAS_CXX11
     ${option_list}
     OTB_WRAP_PYTHON
     OTB_WRAP_JAVA
     OTB_DATA_ROOT
+    OTB_USE_OPENMP
+    OTB_USE_SSE_FLAGS
     )
     get_white_spaces("${otb_option}" spaces)
   message("${otb_option} ${spaces} = ${${otb_option}}")

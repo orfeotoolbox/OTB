@@ -1562,6 +1562,14 @@ MainWindow
     this,
     SLOT( OnReferenceLayerChanged( size_t ) )
   );
+
+  QObject::connect(
+    model,
+    SIGNAL( LayerRenamed() ),
+    // to:
+    this,
+    SLOT( RefreshReferenceLayerComboBox() )
+  );
 }
 
 /*****************************************************************************/
@@ -1597,21 +1605,11 @@ MainWindow
     AbstractLayerModel * layer = model->At( i );
     assert( layer!=NULL );
 
-    if( layer->inherits( VectorImageModel::staticMetaObject.className() ) )
-      {
-      const VectorImageModel * vectorImageModel =
-        qobject_cast< const VectorImageModel * >( layer );
-
-      assert( vectorImageModel!=NULL );
-
-      comboBox->addItem(
-        QString( "%1 (%2)" )
-        .arg( layer->GetAuthorityCode( true ).c_str()  )
-        .arg( QFileInfo( vectorImageModel->GetFilename() ).fileName() )
-      );
-      }
-    else
-      qDebug() << "Unhandled AbstractLayerModel subclass.";
+    comboBox->addItem(
+      QString( "%1 (%2)" )
+      .arg( layer->GetAuthorityCode( true ).c_str()  )
+      .arg( layer->GetName() )
+    );
     }
 
   {
@@ -1682,6 +1680,14 @@ MainWindow
       // to:
       this,
       SLOT( OnReferenceLayerChanged( size_t ) )
+    );
+
+    QObject::connect(
+      model,
+      SIGNAL( LayerRenamed() ),
+      // to:
+      this,
+      SLOT( RefreshReferenceLayerComboBox() )
     );
     }
 

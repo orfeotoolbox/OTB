@@ -109,7 +109,10 @@ public:
   bool BeforeExecute();
 
   /** Create and display the help of the application */
-  void DisplayHelp();
+  void DisplayHelp(bool longHelp=false);
+
+   /** Create and display the long help of the application */
+  void DisplayLongHelp();
 
   /** Performs specific action for testing environment */
   void LoadTestEnv();
@@ -131,7 +134,7 @@ protected:
     * Pay attention, the executable paths have to be loaded or set in
     * the environment before calling the function.
     */
-  void LoadApplication();
+  bool LoadApplication();
 
   /** Parse the user expression, extract the key and the associated
     * string and set it as value of each corresponding application
@@ -141,7 +144,7 @@ protected:
 
   /** Create and display the help of the application */
   std::string DisplayParameterHelp( const Parameter::Pointer & param,
-                                    const std::string paramKey );
+                                    const std::string paramKey, bool longHelp = false);
 
   /** Check if each key is unique in the expression. */
   bool CheckUnicity();
@@ -161,6 +164,8 @@ protected:
   /** Clear watcher list, deleting its pointers. */
   void DeleteWatcherList();
 
+  /** Returns the width of the longest key (in number of chars) */
+  unsigned int GetMaxKeySize() const;
 
 private:
 
@@ -181,7 +186,6 @@ private:
   AddProcessCommandType::Pointer    m_AddProcessCommand;
   bool                              m_ReportProgress;
 
-  unsigned int m_MaxKeySize;
 }; //end class
 
 } // end namespace Wrapper

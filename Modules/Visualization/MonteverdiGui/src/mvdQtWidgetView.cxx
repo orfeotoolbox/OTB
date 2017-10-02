@@ -348,6 +348,7 @@ QtWidgetView
   SetupWidget( widget, InputFilenameListInitializer( this ) );
   SetupWidget( widget, InputImageInitializer() );
   SetupWidget( widget, InputImageListInitializer( this ) );
+  SetupWidget( widget, ComplexInputImageInitializer() );
   SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
   SetupWidget( widget, InputVectorDataListInitializer( this ) );
@@ -361,6 +362,10 @@ QtWidgetView
   SetupWidget(
     widget,
     OutputImageInitializer( m_Application->GetName() )
+  );
+  SetupWidget(
+    widget,
+    ComplexOutputImageInitializer( m_Application->GetName() )
   );
 
   SetupWidget( widget, OutputVectorDataInitializer() );

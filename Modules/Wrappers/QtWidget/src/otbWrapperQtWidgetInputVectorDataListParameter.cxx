@@ -168,6 +168,10 @@ QtWidgetInputVectorDataListParameter::UpdateVectorDataList()
     }
 
   emit Change();
+
+  // notify of value change
+  QString key(m_InputVectorDataListParam->GetKey());
+  emit ParameterChanged(key);
 }
 
 

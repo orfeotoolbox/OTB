@@ -36,9 +36,9 @@ bool CMP(std::vector<float>  a, std::vector<float>  b)
   return lexicographical_compare(a.begin(), a.begin() + 2, b.begin(), b.begin() + 2);
 }
 
-int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int itkNotUsed(argc), char * argv[])
+int
+otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii( int itkNotUsed( argc ), char * argv[] )
 {
-
   const char * infname = argv[1];
   const char * outfname = argv[2];
 
@@ -59,7 +59,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int itkNotUsed(a
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
 
-  typedef std::vector<float>          siftDataVector;
+  typedef std::vector< RealType > siftDataVector;
   typedef std::vector<siftDataVector> ImageDataType;   //Kind of PointSet with vectors
 
   // Instantiating object
@@ -76,10 +76,29 @@ int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int itkNotUsed(a
   PointsIteratorType    pIt = filter->GetOutput()->GetPoints()->Begin();
   PointDataIteratorType pDataIt = filter->GetOutput()->GetPointData()->Begin();
 
+  assert(
+    filter->GetOutput()->GetPoints()->Size() ==
+    filter->GetOutput()->GetPointData()->Size() );
+
   std::ofstream outfile(outfname);
 
   outfile << "Number of scales: " << scales << std::endl;
-  outfile << "Number of SIFT key points: " << filter->GetOutput()->GetNumberOfPoints() << std::endl;
+
+  outfile << "Number of SIFT key points: "
+	  << filter->GetOutput()->GetNumberOfPoints()
+	  << std::endl;
+
+  outfile << "Number of points: "
+	  << filter->GetOutput()->GetPoints()->Size()
+	  << std::endl;
+
+  outfile << "Number of points data: "
+	  << filter->GetOutput()->GetPointData()->Size()
+	  << std::endl;
+
+  if( filter->GetOutput()->GetPoints()->Size() !=
+      filter->GetOutput()->GetPointData()->Size() )
+    return EXIT_FAILURE;
 
   // Copy the PointSet to std::vector< std::vector >
   while (pIt != filter->GetOutput()->GetPoints()->End())

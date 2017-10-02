@@ -48,9 +48,15 @@ public:
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
 
+signals:
+  void FileNameIsSet();
+
 protected slots:
-  bool SetFileName( const QString& value );
+  bool SetFileName(const QString& value);
   void SelectFile();
+
+private slots:
+  void OnEditingFinished();
 
 private:
   QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented

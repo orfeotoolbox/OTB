@@ -233,7 +233,7 @@ void VCAImageFilter<TImage>::GenerateData()
   vnl_matrix<PrecisionType> A(m_NumberOfEndmembers, m_NumberOfEndmembers);
   A.fill(0);
   A(m_NumberOfEndmembers - 1, 0) = 1;
-  typename RandomVariateGeneratorType::Pointer randomGen = RandomVariateGeneratorType::New();
+  typename RandomVariateGeneratorType::Pointer randomGen = RandomVariateGeneratorType::GetInstance();
 
   for (unsigned int i = 0; i < m_NumberOfEndmembers; ++i)
     {

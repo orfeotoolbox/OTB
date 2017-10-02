@@ -50,4 +50,5 @@ void RegisterTests()
   REGISTER_TEST(otbSailReflHTest);
   REGISTER_TEST(otbFilterFunctionValuesSpectralResponseTest);
   REGISTER_TEST(otbFilterFunctionValuesTest);
+  REGISTER_TEST(otbSoilDataBaseParseFile);
 }

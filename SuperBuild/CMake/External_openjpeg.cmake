@@ -38,8 +38,8 @@ ADD_SUPERBUILD_CMAKE_VAR(OPENJPEG PNG_LIBRARY)
 
 ExternalProject_Add(OPENJPEG
   PREFIX OPENJPEG
-  URL "https://github.com/uclouvain/openjpeg/archive/d0babeb6f6cdd1887308137df37bb2b4724a6592.zip"
-  URL_MD5 e84a8cca9892a5f80ce91c1174c3fd41
+  URL "https://github.com/uclouvain/openjpeg/archive/v2.2.0.tar.gz"
+  URL_MD5 269bb0b175476f3addcc0d03bd9a97b6
   BINARY_DIR ${OPENJPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -56,9 +56,13 @@ ExternalProject_Add(OPENJPEG
   ${OPENJPEG_SB_CONFIG}
   DEPENDS ${OPENJPEG_DEPENDENCIES}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 SUPERBUILD_UPDATE_CMAKE_VARIABLES(OPENJPEG FALSE)
 
-#Apply patches to openjpeg (for now Even Roualt optim)
+#Apply patches to openjpeg (for now Even Rouault optimizations)
 SUPERBUILD_PATCH_SOURCE(OPENJPEG "-ut")

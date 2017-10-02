@@ -256,24 +256,28 @@ std::string CleanWord(const std::string & word)
   return res;
 }
 
+void ShowUsage(char* argv[])
+{
+  std::cerr << "Usage: " << argv[0] << " module_name [MODULEPATH] [arguments]" << std::endl;
+}
+
 int main(int argc, char* argv[])
 {
   #ifdef OTB_USE_MPI
   otb::MPIConfig::Instance()->Init(argc,argv);
   #endif
-  
+
   if (argc < 2)
-    {
-    std::cerr << "Usage : " << argv[0] << " module_name [MODULEPATH] [arguments]" << std::endl;
-    return EXIT_FAILURE;
-    }
+  {
+      ShowUsage(argv);
+      return false;
+  }
 
   std::vector<std::string> vexp;
 
   std::string exp;
   if (strcmp(argv[1], "-inxml") == 0)
     {
-    //exp = PrepareExpressionFromXML(argv[2]);
     vexp = PrepareVectorExpressionFromXML(argv[2]);
     }
   else
@@ -281,15 +285,6 @@ int main(int argc, char* argv[])
     // Construct the string expression
     for (int i = 1; i < argc; i++)
       {
-      /*if (i != argc - 1)
-        {
-        exp.append(argv[i]);
-        exp.append(" ");
-        }
-      else
-        {
-        exp.append(argv[i]);
-        }*/
       std::string strarg(argv[i]);
       std::string cleanArg = CleanWord(strarg);
       if (cleanArg.empty())
@@ -300,12 +295,16 @@ int main(int argc, char* argv[])
       vexp.push_back(cleanArg);
       }
     }
-  //  std::cerr << exp << ":\n";
 
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
 
-  //if (launcher->Load(exp) == true)
+  if (vexp.empty())
+  {
+    ShowUsage(argv);
+    return false;
+  }
+
   bool success = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();
 
   // shutdown MPI after application finished

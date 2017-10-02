@@ -62,7 +62,7 @@ public:
   itkTypeMacro(Self, Application)
 
   /** Filters typedef */
-  typedef double                                        ValueType;
+  typedef float                                         ValueType;
   typedef unsigned int                                  LabelType;
   typedef itk::FixedArray<LabelType,1>                  LabelSampleType;
   typedef itk::Statistics::ListSample<LabelSampleType>  LabelListSampleType;
@@ -89,39 +89,52 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("VectorClassifier");
-    SetDescription("Performs a classification of the input vector data according to a model file."
-      "Features of the vector data output will contain the class labels decided by the classifier (maximal class label = 65535).");
+    SetDescription("Performs a classification of the input vector data according to a model file.");
 
     SetDocName("Vector Classification");
     SetDocAuthors("OTB-Team");
-    SetDocLongDescription("This application performs a vector data classification based on a model file produced by the TrainVectorClassifier application.");
+    SetDocLongDescription("This application performs a vector data classification "
+      "based on a model file produced by the TrainVectorClassifier application."
+      "Features of the vector data output will contain the class labels decided by the classifier "
+      "(maximal class label = 65535). \n"
+      "There are two modes: \n"
+        "1) Update mode: add of the 'cfield' field containing the predicted class in the input file. \n"
+        "2) Write mode: copies the existing fields of the input file in the output file "
+           " and add the 'cfield' field containing the predicted class. \n"
+      "If you have declared the output file, the write mode applies. "
+      "Otherwise, the input file update mode will be applied.");
+
     SetDocLimitations("Shapefiles are supported. But the SQLite format is only supported in update mode.");
     SetDocSeeAlso("TrainVectorClassifier");
     AddDocTag(Tags::Learning);
 
     AddParameter(ParameterType_InputVectorData, "in", "Name of the input vector data");
-    SetParameterDescription("in","The input vector data to classify.");
+    SetParameterDescription("in","The input vector data file to classify.");
 
     AddParameter(ParameterType_InputFilename, "instat", "Statistics file");
     SetParameterDescription("instat", "A XML file containing mean and standard deviation to center"
-      "and reduce samples before classification (produced by ComputeImagesStatistics application).");
+      "and reduce samples before classification, produced by ComputeImagesStatistics application.");
     MandatoryOff("instat");
 
     AddParameter(ParameterType_InputFilename, "model", "Model file");
-    SetParameterDescription("model", "A model file (produced by TrainVectorClassifier application,"
-      "maximal class label = 65535).");
+    SetParameterDescription("model", "Model file produced by TrainVectorClassifier application.");
 
-    AddParameter(ParameterType_String,"cfield","Field containing the predicted class");
+    AddParameter(ParameterType_String,"cfield","Field class");
     SetParameterDescription("cfield","Field containing the predicted class."
-      "Only geometries with this field available will be taken into account.");
+      "Only geometries with this field available will be taken into account.\n"
+      "The field is added either in the input file (if 'out' off) or in the output file.\n"
+      "Caution, the 'cfield' must not exist in the input file if you are updating the file.");
     SetParameterString("cfield","predicted", false);
 
-    AddParameter(ParameterType_ListView, "feat", "Field names to be calculated."); //
-    SetParameterDescription("feat","List of field names in the input vector data used as features for training."); //
+    AddParameter(ParameterType_ListView, "feat", "Field names to be calculated.");
+    SetParameterDescription("feat","List of field names in the input vector data used as features for training. "
+      "Put the same field names as the TrainVectorClassifier application.");
 
     AddParameter(ParameterType_Empty, "confmap",  "Confidence map");
-    SetParameterDescription( "confmap", "Confidence map of the produced classification. The confidence index depends on the model : \n"
-      "  - LibSVM : difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
+    SetParameterDescription( "confmap", "Confidence map of the produced classification. "
+      "The confidence index depends on the model : \n"
+      "  - LibSVM : difference between the two highest probabilities "
+           "(needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
       "  - OpenCV\n"
       "    * Boost : sum of votes\n"
       "    * DecisionTree : (not supported)\n"
@@ -129,8 +142,9 @@ private:
       "    * KNearestNeighbors : number of neighbors with the same label\n"
       "    * NeuralNetwork : difference between the two highest responses\n"
       "    * NormalBayes : (not supported)\n"
-      "    * RandomForest : Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.\n"
-      "    * SVM : distance to margin (only works for 2-class models)\n");
+      "    * RandomForest : Confidence (proportion of votes for the majority class). "
+             "Margin (normalized difference of the votes of the 2 majority classes) is not available for now.\n"
+      "    * SVM : distance to margin (only works for 2-class models).\n");
     MandatoryOff("confmap");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output vector data file containing class labels");
@@ -142,7 +156,7 @@ private:
     SetDocExampleParameterValue("in", "vectorData.shp");
     SetDocExampleParameterValue("instat", "meanVar.xml");
     SetDocExampleParameterValue("model", "svmModel.svm");
-    SetDocExampleParameterValue("out", "svmModel.svm");
+    SetDocExampleParameterValue("out", "vectorDataLabeledVector.shp");
     SetDocExampleParameterValue("feat", "perimeter  area  width");
     SetDocExampleParameterValue("cfield", "predicted");
 
@@ -196,7 +210,7 @@ private:
 
     const int nbFeatures = GetSelectedItems("feat").size();
     input->SetMeasurementVectorSize(nbFeatures);
-
+  
     otb::ogr::Layer::const_iterator it = layer.cbegin();
     otb::ogr::Layer::const_iterator itEnd = layer.cend();
     for( ; it!=itEnd ; ++it)
@@ -205,7 +219,11 @@ private:
       mv.SetSize(nbFeatures);
       for(int idx=0; idx < nbFeatures; ++idx)
         {
-        mv[idx] = (*it)[GetSelectedItems("feat")[idx]].GetValue<double>();
+        // Beware that itemIndex differs from ogr layer field index
+        unsigned int itemIndex = GetSelectedItems("feat")[idx];
+        std::string fieldName = GetChoiceNames( "feat" )[itemIndex];
+        
+        mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<double>());
         }
       input->PushBack(mv);
       }

@@ -1,0 +1,177 @@
+Index: gdal/configure
+===================================================================
+--- gdal/configure	(revision 39820)
++++ gdal/configure	(revision 39821)
+@@ -25116,10 +25116,10 @@
+ elif test "$with_openjpeg" = "yes" -o "$with_openjpeg" = "" ; then
+ 
+-  for ac_header in openjpeg-2.0/openjpeg.h
++  for ac_header in openjpeg-2.2/openjpeg.h
+ do :
+-  ac_fn_c_check_header_mongrel "$LINENO" "openjpeg-2.0/openjpeg.h" "ac_cv_header_openjpeg_2_0_openjpeg_h" "$ac_includes_default"
+-if test "x$ac_cv_header_openjpeg_2_0_openjpeg_h" = xyes; then :
++  ac_fn_c_check_header_mongrel "$LINENO" "openjpeg-2.2/openjpeg.h" "ac_cv_header_openjpeg_2_2_openjpeg_h" "$ac_includes_default"
++if test "x$ac_cv_header_openjpeg_2_2_openjpeg_h" = xyes; then :
+   cat >>confdefs.h <<_ACEOF
+-#define HAVE_OPENJPEG_2_0_OPENJPEG_H 1
++#define HAVE_OPENJPEG_2_2_OPENJPEG_H 1
+ _ACEOF
+ 
+@@ -25128,5 +25128,5 @@
+ done
+ 
+-  if test "$ac_cv_header_openjpeg_2_0_openjpeg_h" = "yes"; then
++  if test "$ac_cv_header_openjpeg_2_2_openjpeg_h" = "yes"; then
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for opj_stream_set_user_data_length in -lopenjp2" >&5
+ $as_echo_n "checking for opj_stream_set_user_data_length in -lopenjp2... " >&6; }
+@@ -25172,4 +25172,5 @@
+ 
+     if test "$HAVE_OPENJPEG" = "yes"; then
++        OPENJPEG_VERSION=20200
+         LIBS="-lopenjp2 $LIBS"
+     fi
+@@ -25234,4 +25235,64 @@
+             LIBS="-lopenjp2 $LIBS"
+         fi
++    else
++        for ac_header in openjpeg-2.0/openjpeg.h
++do :
++  ac_fn_c_check_header_mongrel "$LINENO" "openjpeg-2.0/openjpeg.h" "ac_cv_header_openjpeg_2_0_openjpeg_h" "$ac_includes_default"
++if test "x$ac_cv_header_openjpeg_2_0_openjpeg_h" = xyes; then :
++  cat >>confdefs.h <<_ACEOF
++#define HAVE_OPENJPEG_2_0_OPENJPEG_H 1
++_ACEOF
++
++fi
++
++done
++
++        if test "$ac_cv_header_openjpeg_2_0_openjpeg_h" = "yes"; then
++            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for opj_stream_set_user_data_length in -lopenjp2" >&5
++$as_echo_n "checking for opj_stream_set_user_data_length in -lopenjp2... " >&6; }
++if ${ac_cv_lib_openjp2_opj_stream_set_user_data_length+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  ac_check_lib_save_LIBS=$LIBS
++LIBS="-lopenjp2  $LIBS"
++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++
++/* Override any GCC internal prototype to avoid an error.
++   Use char because int might match the return type of a GCC
++   builtin and then its argument prototype would still apply.  */
++#ifdef __cplusplus
++extern "C"
++#endif
++char opj_stream_set_user_data_length ();
++int
++main ()
++{
++return opj_stream_set_user_data_length ();
++  ;
++  return 0;
++}
++_ACEOF
++if ac_fn_c_try_link "$LINENO"; then :
++  ac_cv_lib_openjp2_opj_stream_set_user_data_length=yes
++else
++  ac_cv_lib_openjp2_opj_stream_set_user_data_length=no
++fi
++rm -f core conftest.err conftest.$ac_objext \
++    conftest$ac_exeext conftest.$ac_ext
++LIBS=$ac_check_lib_save_LIBS
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_openjp2_opj_stream_set_user_data_length" >&5
++$as_echo "$ac_cv_lib_openjp2_opj_stream_set_user_data_length" >&6; }
++if test "x$ac_cv_lib_openjp2_opj_stream_set_user_data_length" = xyes; then :
++  HAVE_OPENJPEG=yes
++else
++  HAVE_OPENJPEG=no
++fi
++
++            if test "$HAVE_OPENJPEG" = "yes"; then
++                LIBS="-lopenjp2 $LIBS"
++            fi
++        fi
+     fi
+   fi
+@@ -25244,6 +25305,9 @@
+     OPENJPEG_VERSION=20100
+     EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
++  elif test -r $with_openjpeg/include/openjpeg-2.2/openjpeg.h ; then
++    OPENJPEG_VERSION=20200
++    EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
+   else
+-    as_fn_error $? "openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1" "$LINENO" 5
++    as_fn_error $? "openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1 or $with_openjpeg/include/openjpeg-2.2" "$LINENO" 5
+   fi
+ 
+Index: gdal/configure.ac
+===================================================================
+--- gdal/configure.ac	(revision 39820)
++++ gdal/configure.ac	(revision 39821)
+@@ -2540,8 +2540,9 @@
+ elif test "$with_openjpeg" = "yes" -o "$with_openjpeg" = "" ; then
+ 
+-  AC_CHECK_HEADERS([openjpeg-2.0/openjpeg.h])
+-  if test "$ac_cv_header_openjpeg_2_0_openjpeg_h" = "yes"; then
++  AC_CHECK_HEADERS([openjpeg-2.2/openjpeg.h])
++  if test "$ac_cv_header_openjpeg_2_2_openjpeg_h" = "yes"; then
+     AC_CHECK_LIB(openjp2,opj_stream_set_user_data_length,HAVE_OPENJPEG=yes,HAVE_OPENJPEG=no,)
+     if test "$HAVE_OPENJPEG" = "yes"; then
++        OPENJPEG_VERSION=20200
+         LIBS="-lopenjp2 $LIBS"
+     fi
+@@ -2554,4 +2555,12 @@
+             LIBS="-lopenjp2 $LIBS"
+         fi
++    else
++        AC_CHECK_HEADERS([openjpeg-2.0/openjpeg.h])
++        if test "$ac_cv_header_openjpeg_2_0_openjpeg_h" = "yes"; then
++            AC_CHECK_LIB(openjp2,opj_stream_set_user_data_length,HAVE_OPENJPEG=yes,HAVE_OPENJPEG=no,)
++            if test "$HAVE_OPENJPEG" = "yes"; then
++                LIBS="-lopenjp2 $LIBS"
++            fi
++        fi
+     fi
+   fi
+@@ -2564,6 +2573,9 @@
+     OPENJPEG_VERSION=20100
+     EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
+-  else
+-    AC_MSG_ERROR([openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1])
++  elif test -r $with_openjpeg/include/openjpeg-2.2/openjpeg.h ; then
++    OPENJPEG_VERSION=20200
++    EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
++  else
++    AC_MSG_ERROR([openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1 or $with_openjpeg/include/openjpeg-2.2])
+   fi
+ 
+Index: gdal/frmts/openjpeg/openjpegdataset.cpp
+===================================================================
+--- gdal/frmts/openjpeg/openjpegdataset.cpp	(revision 39820)
++++ gdal/frmts/openjpeg/openjpegdataset.cpp	(revision 39821)
+@@ -35,5 +35,7 @@
+ #endif
+ 
+-#if defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20100
++#if defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20200
++#include <openjpeg-2.2/openjpeg.h>
++#elif defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20100
+ #include <openjpeg-2.1/openjpeg.h>
+ #else
+Index: gdal/nmake.opt
+===================================================================
+--- gdal/nmake.opt	(revision 39820)
++++ gdal/nmake.opt	(revision 39821)
+@@ -608,6 +608,8 @@
+ #OPENJPEG_CFLAGS = -IC:\openjpeg\include
+ #OPENJPEG_LIB = C:\openjpeg\lib\openjp2.lib
+-# For OpenJpeg >= 2.1, uncomment
++# For OpenJpeg 2.1.x, uncomment
+ #OPENJPEG_VERSION = 20100
++# For OpenJpeg 2.2.x, uncomment
++#OPENJPEG_VERSION = 20200
+ 
+ #if using an external zlib uncomment the following lines
+

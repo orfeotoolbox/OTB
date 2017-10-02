@@ -139,6 +139,12 @@ public:
    */
   void ToWgs84( const PointType &, PointType & wgs84, double & alt ) const;
 
+  /** Setter for the m_Name attribute ( should be initialized by subclasses )*/
+  void SetName(const QString & name);
+
+  /** Getter for the m_Name attribute */
+  const QString & GetName() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -154,6 +160,9 @@ signals:
    */
   void VisibilityChanged( bool =true );
   void VisibilityChanged( AbstractLayerModel *, bool );
+
+  /** Signal to other components that the name has changed */
+  void NameChanged();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -198,6 +207,7 @@ private:
 // Private attributes.
 private:
 
+  QString m_Name;
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //

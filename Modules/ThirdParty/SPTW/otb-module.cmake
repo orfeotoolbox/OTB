@@ -24,6 +24,7 @@ otb_module(OTBSPTW
   DEPENDS
     OTBMPI
     OTBGDAL
+    OTBTIFF
 
   TEST_DEPENDS
 

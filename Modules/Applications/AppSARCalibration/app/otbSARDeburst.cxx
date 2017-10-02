@@ -47,23 +47,38 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("SARDeburst");
-    SetDescription("This application performs a deburst operation by removing redundant lines. \n");
+    SetDescription("This application performs deburst of Sentinel1 IW SLC images by removing redundant lines.\n");
 
     // Documentation
     SetDocName("SAR Deburst");
-    SetDocLongDescription("This application performs a deburst operation by removing redundant lines between burst. This operation is useful when dealing with Sentinel1 IW SLC products, where each subswath is composed of several overlapping burst separated by black lines. Lines to remove are computed by SAR sensor model in OSSIM plugins. The output image is smaller in azimuth direction than the input line, because of removed lines. Note that the output sensor model is updated accordingly. This deburst filter is the perfect preprocessing step to orthorectify S1 IW SLC product with OTB without suffering from artifacts caused by bursts separation.\n");
-    SetDocLimitations("Only Sentinel1 IW SLC products are supported for now.");
+    SetDocLongDescription("Sentinel1 IW SLC products are composed of several burst overlapping in"
+                          " azimuth time for each subswath, separated by black lines [1]. The deburst"
+                          " operation consist in generating a continuous image in terms of azimuth"
+                          " time, by removing black separation lines as well as redundant lines"
+                          " between bursts.\n\n"
+                          
+                          "Note that the output sensor model is updated accordingly. This deburst"
+                          " operation is the perfect preprocessing step to orthorectify S1 IW SLC"
+                          " product with OTB [2] without suffering from artifacts caused by"
+                          " bursts separation.");
+    
+    SetDocLimitations("Only Sentinel1 IW SLC products are supported for now. Processing of"
+                      " other Sentinel1 modes or TerrasarX images will result in no changes in"
+                      " the image and metadata. Images from other sensors will lead to an"
+                      " error.");
+    
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("OrthoRectification");
+    SetDocSeeAlso("[1] Sentinel1 User Handbook, p. 52: https://sentinel.esa.int/documents/247904/685163/Sentinel-1_User_Handbook\n"
+                  "[2] OrthoRectification application");
 
-    AddDocTag(Tags::Calibration);
     AddDocTag(Tags::SAR);
+    AddDocTag(Tags::Calibration);
 
-    AddParameter(ParameterType_InputImage,  "in", "Input Image");
-    SetParameterDescription("in", "Input image");
+    AddParameter(ParameterType_InputImage,  "in", "Input Sentinel1 IW SLC Image");
+    SetParameterDescription("in", "Raw Sentinel1 IW SLC image, or any extract of such made by OTB (geom file needed)");
 
     AddParameter(ParameterType_OutputImage,  "out", "Output Image");
-    SetParameterDescription("out", "Output deburst image");
+    SetParameterDescription("out", "Deburst image, with updated geom file that can be further used by Orthorectification application. If the input image is a raw Sentinel1 product, uint16 output type should be used (encoding of S1 product). Otherwise, output type should match type of input image.");
 
     AddRAMParameter();
 

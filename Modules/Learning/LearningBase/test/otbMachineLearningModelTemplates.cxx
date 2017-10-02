@@ -28,7 +28,7 @@ typedef MachineLearningModelType1::TargetValueType      TargetValueType1;
 typedef MachineLearningModelType1::TargetSampleType     TargetSampleType1;
 typedef MachineLearningModelType1::TargetListSampleType TargetListSampleType1;
 
-typedef otb::MachineLearningModel<float,itk::VariableLengthVector<double>> MachineLearningModelType2;
+typedef otb::MachineLearningModel<float,itk::VariableLengthVector<double> > MachineLearningModelType2;
 typedef MachineLearningModelType2::InputValueType       InputValueType2;
 typedef MachineLearningModelType2::InputSampleType      InputSampleType2;
 typedef MachineLearningModelType2::InputListSampleType  InputListSampleType2;

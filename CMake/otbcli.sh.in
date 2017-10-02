@@ -16,15 +16,6 @@ else
   OTB_CLI_LAUNCHER=otbApplicationLauncherCommandLine
 fi
 
-# works for install tree
-if [ -d "$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@" ]
-then
-  OTB_APPLICATION_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@:$OTB_APPLICATION_PATH
-fi
-
-# export it to make it available to otbApplicationLauncherCommandLine environment
-export OTB_APPLICATION_PATH
-
 # avoid numerical issues caused by locale
 export LC_NUMERIC=C
 
@@ -32,6 +23,13 @@ export LC_NUMERIC=C
 # Note that OTB_APPLICATION_PATH is reset here.
 if [ -f "$CURRENT_SCRIPT_DIR/../otbenv.profile" ]; then
     . "$CURRENT_SCRIPT_DIR/../otbenv.profile"
+else
+    # works for install tree
+    if [ -d "$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@" ]; then
+	OTB_APPLICATION_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR@:$OTB_APPLICATION_PATH
+    fi
+    # export it to make it available to otbApplicationLauncherCommandLine environment
+    export OTB_APPLICATION_PATH
 fi
 
 # start the application
