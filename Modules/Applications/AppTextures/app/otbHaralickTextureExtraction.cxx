@@ -70,17 +70,36 @@ private:
 void DoInit() ITK_OVERRIDE
 {
 SetName("HaralickTextureExtraction");
-SetDescription("Computes textures on every pixel of the input image selected channel");
+SetDescription("Computes Haralick textural features on the selected channel of the input image");
 
 // Documentation
 SetDocName("Haralick Texture Extraction");
-SetDocLongDescription("This application computes Haralick, advanced and higher order textures on a mono band image");
-SetDocLimitations("None");
+SetDocLongDescription("This application computes three sets of Haralick features [2].\n"
+    "-simple: a set of 8 local Haralick features: Energy (texture uniformity) , "
+    "Entropy (measure of randomness of intensity image), Correlation (how "
+    "correlated a pixel is to its neighborhood), Inverse Difference Moment (measures "
+    "the texture homogeneity), Inertia (intensity contrast between a pixel and its "
+    "neighborhood), Cluster Shade, Cluster Prominence, Haralick Correlation;\n"
+    "-advanced: a set of 10 advanced Haralick features : Mean, Variance (measures the "
+    "texture heterogeneity), Dissimilarity, Sum Average, Sum Variance, Sum Entropy, "
+    "Difference of Entropies, Difference of Variances, IC1, IC2;\n"
+    "-higher: a set of 11 higher Haralick features : Short Run Emphasis (measures the "
+    "texture sharpness), Long Run Emphasis (measures the texture roughness), Grey-Level "
+    "Nonuniformity, Run Length Nonuniformity, Run Percentage (measures the texture "
+    "sharpness homogeneity), Low Grey-Level Run Emphasis, High Grey-Level Run Emphasis, "
+    "Short Run Low Grey-Level Emphasis, Short Run High Grey-Level Emphasis, Long Run Low "
+    "Grey-Level Emphasis and Long Run High Grey-Level Emphasis.");
+SetDocLimitations("The computation of the features is based on a Gray Level Co-occurrence "
+    "matrix (GLCM) from the quantized input image. Consequently the quantization "
+    "parameters (min, max, nbbin) must be appropriate to the range of the pixel values.");
 SetDocAuthors("OTB-Team");
-SetDocSeeAlso("otbScalarImageToTexturesFilter, otbScalarImageToAdvancedTexturesFilter and otbScalarImageToHigherOrderTexturesFilter classes");
+SetDocSeeAlso("[1] HARALICK, Robert M., SHANMUGAM, Karthikeyan, et al. "
+    "Textural features for image classification. IEEE Transactions on systems, "
+    "man, and cybernetics, 1973, no 6, p. 610-621.\n"
+    "[2] otbScalarImageToTexturesFilter, otbScalarImageToAdvancedTexturesFilter and "
+    "otbScalarImageToHigherOrderTexturesFilter classes");
 
 AddDocTag(Tags::FeatureExtraction);
-AddDocTag("Textures");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");
