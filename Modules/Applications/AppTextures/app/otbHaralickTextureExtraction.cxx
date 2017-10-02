@@ -119,7 +119,8 @@ MandatoryOff("step");
 AddRAMParameter();
 
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
-SetParameterDescription("parameters","This group of parameters allows one to define texture parameters.");
+SetParameterDescription("parameters","This group of parameters allows one to define "
+    "texture parameters.");
 
 AddParameter(ParameterType_Int,"parameters.xrad","X Radius");
 SetParameterDescription("parameters.xrad", "X Radius");
@@ -153,20 +154,25 @@ AddParameter(ParameterType_Choice, "texture", "Texture Set Selection");
 SetParameterDescription("texture", "Choice of The Texture Set");
 
 AddChoice("texture.simple", "Simple Haralick Texture Features");
-SetParameterDescription("texture.simple","This group of parameters defines the 8 local Haralick texture feature output image.\
-    The image channels are: Energy, Entropy, Correlation, Inverse Difference Moment,\
-    Inertia, Cluster Shade, Cluster Prominence and Haralick Correlation");
+SetParameterDescription("texture.simple", "This group of parameters defines "
+    "the 8 local Haralick texture feature output image. The image channels are: "
+    "Energy, Entropy, Correlation, Inverse Difference Moment, Inertia, Cluster "
+    "Shade, Cluster Prominence and Haralick Correlation");
 
 AddChoice("texture.advanced", "Advanced Texture Features");
-SetParameterDescription("texture.advanced","This group of parameters defines the 10 advanced texture feature output image.\
-    The image channels are: Mean, Variance, Dissimilarity, Sum Average, Sum Variance,\
-    Sum Entropy, Difference of Entropies, Difference of Variances, IC1 and IC2");
+SetParameterDescription("texture.advanced", "This group of parameters defines "
+    "the 10 advanced texture feature output image. The image channels are: Mean, "
+    "Variance, Dissimilarity, Sum Average, Sum Variance, Sum Entropy, Difference "
+    "of Entropies, Difference of Variances, IC1 and IC2");
 
 AddChoice("texture.higher", "Higher Order Texture Features");
-SetParameterDescription("texture.higher","This group of parameters defines the 11 higher order texture feature output image.\
-    The image channels are: Short Run Emphasis, Long Run Emphasis, Grey-Level Nonuniformity, Run Length Nonuniformity, Run Percentage, \
-    Low Grey-Level Run Emphasis, High Grey-Level Run Emphasis, Short Run Low Grey-Level Emphasis, Short Run High Grey-Level Emphasis, \
-    Long Run Low Grey-Level Emphasis and Long Run High Grey-Level Emphasis");
+SetParameterDescription("texture.higher", "This group of parameters defines the "
+    "11 higher order texture feature output image. The image channels are: "
+    "Short Run Emphasis, Long Run Emphasis, Grey-Level Nonuniformity, "
+    "Run Length Nonuniformity, Run Percentage, Low Grey-Level Run Emphasis, "
+    "High Grey-Level Run Emphasis, Short Run Low Grey-Level Emphasis, "
+    "Short Run High Grey-Level Emphasis, Long Run Low Grey-Level Emphasis and "
+    "Long Run High Grey-Level Emphasis");
 
 AddParameter(ParameterType_OutputImage, "out", "Output Image");
 SetParameterDescription("out", "Output image containing the selected texture features.");
