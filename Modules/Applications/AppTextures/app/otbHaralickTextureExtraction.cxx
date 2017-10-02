@@ -74,16 +74,16 @@ SetDescription("Computes Haralick textural features on the selected channel of t
 
 // Documentation
 SetDocName("Haralick Texture Extraction");
-SetDocLongDescription("This application computes three sets of Haralick features [2].\n"
-    "-simple: a set of 8 local Haralick features: Energy (texture uniformity) , "
+SetDocLongDescription("This application computes three sets of Haralick features [1].\n"
+    "  * simple: a set of 8 local Haralick features: Energy (texture uniformity) , "
     "Entropy (measure of randomness of intensity image), Correlation (how "
     "correlated a pixel is to its neighborhood), Inverse Difference Moment (measures "
     "the texture homogeneity), Inertia (intensity contrast between a pixel and its "
     "neighborhood), Cluster Shade, Cluster Prominence, Haralick Correlation;\n"
-    "-advanced: a set of 10 advanced Haralick features : Mean, Variance (measures the "
+    "  * advanced: a set of 10 advanced Haralick features : Mean, Variance (measures the "
     "texture heterogeneity), Dissimilarity, Sum Average, Sum Variance, Sum Entropy, "
     "Difference of Entropies, Difference of Variances, IC1, IC2;\n"
-    "-higher: a set of 11 higher Haralick features : Short Run Emphasis (measures the "
+    "  * higher: a set of 11 higher Haralick features : Short Run Emphasis (measures the "
     "texture sharpness), Long Run Emphasis (measures the texture roughness), Grey-Level "
     "Nonuniformity, Run Length Nonuniformity, Run Percentage (measures the texture "
     "sharpness homogeneity), Low Grey-Level Run Emphasis, High Grey-Level Run Emphasis, "
@@ -100,6 +100,7 @@ SetDocSeeAlso("[1] HARALICK, Robert M., SHANMUGAM, Karthikeyan, et al. "
     "otbScalarImageToHigherOrderTexturesFilter classes");
 
 AddDocTag(Tags::FeatureExtraction);
+AddDocTag("Textures");
 
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");
