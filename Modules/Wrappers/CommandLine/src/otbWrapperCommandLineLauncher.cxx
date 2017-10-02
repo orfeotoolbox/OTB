@@ -865,8 +865,25 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     oss<<"                   ";
     oss<<m_Application->GetParameterDescription(paramKey)<<std::endl;
 
+
+    if (type == ParameterType_Choice)
+      {
+      std::vector<std::string> keys = dynamic_cast<ChoiceParameter*>(param.GetPointer())->GetChoiceKeys();
+      std::vector<std::string> names = dynamic_cast<ChoiceParameter*>(param.GetPointer())->GetChoiceNames();
+      
+      auto keyIt = keys.begin();
+      auto nameIt = names.begin();
+      
+      for( ; keyIt!=keys.end()&&nameIt!=names.end();++keyIt,++nameIt)
+        {
+        oss << "        ";
+        for(unsigned int i=0; i<maxKeySize;++i)
+          oss<<" ";
+        oss<<"                   ";
+        oss<<"- "<<*nameIt<<" ("<<*keyIt<<"): "<<m_Application->GetParameterDescription(paramKey+"."+(*keyIt))<<std::endl;
+        }
+      }
     }
-  
   return oss.str();
 }
 
