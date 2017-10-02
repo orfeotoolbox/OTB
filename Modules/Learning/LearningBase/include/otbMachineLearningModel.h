@@ -116,11 +116,11 @@ public:
      */
   TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const;
 
+  /**\name Set and get the dimension of the model for dimensionality reduction models */
+  //@{
   itkSetMacro(Dimension,unsigned int);
   itkGetMacro(Dimension,unsigned int);
-		
- // virtual unsigned int GetDimension() {return 1;}; /// This method is used to determine the output vector size after dimensionality reduction, and should be overrided for all machine learning models used for dimensionality reduction. This method is not used for classification and regression
-
+  //@}		
 
   /** Predict a batch of samples (InputListSampleType)
     * \param input The batch of sample to predict
@@ -132,29 +132,29 @@ public:
      */
   typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
   
-  /**\name Classification model file manipulation */
-  //@{
-  /** Save the model to file */
+/**\name Classification model file manipulation */
+//@{
+/** Save the model to file */
   virtual void Save(const std::string & filename, const std::string & name="") = 0;
 
-  /** Load the model from file */
+/** Load the model from file */
   virtual void Load(const std::string & filename, const std::string & name="") = 0;
-  //@}
+//@}
 
-  /**\name Classification model file compatibility tests */
-  //@{
-  /** Is the input model file readable and compatible with the corresponding classifier ? */
+/**\name Classification model file compatibility tests */
+//@{
+/** Is the input model file readable and compatible with the corresponding classifier ? */
   virtual bool CanReadFile(const std::string &) = 0;
 
-  /** Is the input model file writable and compatible with the corresponding classifier ? */
+/** Is the input model file writable and compatible with the corresponding classifier ? */
   virtual bool CanWriteFile(const std::string &)  = 0;
-  //@}
+//@}
 
-  /** Query capacity to produce a confidence index */
+/** Query capacity to produce a confidence index */
   bool HasConfidenceIndex() const {return m_ConfidenceIndex;}
 
-  /**\name Input list of samples accessors */
-  //@{
+/**\name Input list of samples accessors */
+//@{
   itkSetObjectMacro(InputListSample,InputListSampleType);
   itkGetObjectMacro(InputListSample,InputListSampleType);
   itkGetConstObjectMacro(InputListSample,InputListSampleType);
@@ -188,7 +188,8 @@ protected:
 
   /** Input list sample */
   typename InputListSampleType::Pointer m_InputListSample;
-  
+
+  /** Validation list sample if provided for some models */  
   typename InputListSampleType::Pointer m_ValidationListSample; 
   
   /** Target list sample */
@@ -198,10 +199,7 @@ protected:
   
   /** flag to choose between classification and regression modes */
   bool m_RegressionMode;
-  
-  /** Output Dimension of the model, used by Dimensionality Reduction models*/
-  
-  
+    
   /** flag that indicates if the model supports regression, child
    *  classes should modify it in their constructor if they support
    *  regression mode */
@@ -212,8 +210,10 @@ protected:
 
   /** Is DoPredictBatch multi-threaded ? */
   bool m_IsDoPredictBatchMultiThreaded;
-  unsigned int m_Dimension;
   
+  /** Output Dimension of the model, used by Dimensionality Reduction models*/
+  unsigned int m_Dimension;
+
 private:
   /**  Actual implementation of BatchPredicition
     *  Default implementation will call DoPredict iteratively 
