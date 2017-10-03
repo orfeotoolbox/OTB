@@ -1,6 +1,6 @@
 set(DOCUMENTATION "Dimensionality reduction application")
-otb_module(CbDimensionalityReduction
-	DEPENDS
+otb_module(OTBDimensionalityReductionLearning
+  DEPENDS
 		OTBCommon
 		OTBApplicationEngine
 		OTBITK
@@ -9,6 +9,6 @@ otb_module(CbDimensionalityReduction
 		OTBAppClassification
 		OTBSOM
 		OTBLearningBase
-	DESCRIPTION 
-		"${DOCUMENTATION}"
+        DESCRIPTION 
+	"${DOCUMENTATION}"
 )
