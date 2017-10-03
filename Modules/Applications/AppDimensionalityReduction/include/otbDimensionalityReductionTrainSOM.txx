@@ -1,7 +1,7 @@
 
 #ifndef cbTrainSOM_txx
 #define cbTrainSOM_txx
-#include "cbLearningApplicationBaseDR.h"
+#include "otbTrainDimensionalityReductionApplicationBase.h"
 
 namespace otb
 {
@@ -10,7 +10,7 @@ namespace Wrapper
 
 template <class TInputValue, class TOutputValue>
 void
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::InitSOMParams()
 {
 
@@ -76,7 +76,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 
 template <class TInputValue, class TOutputValue>
 void
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample,
         std::string modelPath)
 {		
@@ -111,7 +111,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 
 template <class TInputValue, class TOutputValue>
 template <typename somchoice>
-void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::TrainSOM(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
 		using TemplateEstimatorType = typename somchoice::EstimatorType;

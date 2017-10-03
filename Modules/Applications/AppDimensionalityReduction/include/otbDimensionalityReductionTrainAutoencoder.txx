@@ -2,7 +2,7 @@
 #ifndef cbTrainAutoencoder_txx
 #define cbTrainAutoencoder_txx
 
-#include "cbLearningApplicationBaseDR.h"
+#include "otbTrainDimensionalityReductionApplicationBase.h"
 
 namespace otb
 {
@@ -11,7 +11,7 @@ namespace Wrapper
 
 template <class TInputValue, class TOutputValue>
 void
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::InitAutoencoderParams()
 {
 
@@ -103,9 +103,9 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 
 template <class TInputValue, class TOutputValue>
 void
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::BeforeTrainAutoencoder(typename ListSampleType::Pointer trainingListSample,
-        std::string modelPath)
+                         std::string modelPath)
 {		
 	std::string TiedWeigth = GetParameterString("model.autoencoder.istied");
 	std::cout << TiedWeigth << std::endl;
@@ -130,8 +130,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 
 template <class TInputValue, class TOutputValue>
 template <typename autoencoderchoice>
-void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
-::TrainAutoencoder(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
+void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>::TrainAutoencoder(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
 		typename autoencoderchoice::Pointer dimredTrainer = autoencoderchoice::New();
 		itk::Array<unsigned int> nb_neuron;

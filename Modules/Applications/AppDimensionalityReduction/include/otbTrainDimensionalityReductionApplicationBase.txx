@@ -17,7 +17,7 @@
 #ifndef cbLearningApplicationBaseDR_txx
 #define cbLearningApplicationBaseDR_txx
 
-#include "cbLearningApplicationBaseDR.h"
+#include "otbTrainDimensionalityReductionApplicationBase.h"
 
 namespace otb
 {
@@ -25,21 +25,21 @@ namespace Wrapper
 {
 
 template <class TInputValue, class TOutputValue>
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
-::cbLearningApplicationBaseDR() 
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
+::TrainDimensionalityReductionApplicationBase() 
 {
 }
 
 template <class TInputValue, class TOutputValue>
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
-::~cbLearningApplicationBaseDR()
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
+::~TrainDimensionalityReductionApplicationBase()
 {
   ModelFactoryType::CleanFactories();
 }
 
 template <class TInputValue, class TOutputValue>
 void
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::DoInit()
 {
   AddDocTag(Tags::Learning);
@@ -60,14 +60,14 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 
 template <class TInputValue, class TOutputValue>
 void
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::Reduce(typename ListSampleType::Pointer validationListSample,std::string modelPath)
 {
 }
 
 template <class TInputValue, class TOutputValue>
 void
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::Train(typename ListSampleType::Pointer trainingListSample,
         std::string modelPath)
 {
@@ -84,10 +84,10 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
  if(modelName == "autoencoder")
     {
 		#ifdef OTB_USE_SHARK
-		BeforeTrainAutoencoder(trainingListSample,modelPath);
-		#else
-		otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-		#endif
+    BeforeTrainAutoencoder(trainingListSample,modelPath);
+#else
+    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+#endif
     }
     /*
   if(modelName == "tiedautoencoder")

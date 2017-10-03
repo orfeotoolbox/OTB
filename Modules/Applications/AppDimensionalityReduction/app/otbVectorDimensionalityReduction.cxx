@@ -26,8 +26,7 @@
 #include "otbStatisticsXMLFileReader.h"
 #include "itkListSample.h"
 #include "otbShiftScaleSampleListFilter.h"
-#include "DimensionalityReductionModelFactory.h"
-//#include "DimensionalityReductionModel.h"
+#include "otbDimensionalityReductionModelFactory.h"
 #include <time.h>
 
 namespace otb

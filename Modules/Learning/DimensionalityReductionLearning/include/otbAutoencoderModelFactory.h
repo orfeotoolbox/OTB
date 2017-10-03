@@ -62,7 +62,7 @@ using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTa
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "AutoencoderModelFactory.txx"
+#include "otbAutoencoderModelFactory.txx"
 #endif
 
 #endif

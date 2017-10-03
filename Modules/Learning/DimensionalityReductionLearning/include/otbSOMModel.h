@@ -132,7 +132,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "SOMModel.txx"
+#include "otbSOMModel.txx"
 #endif
 
 

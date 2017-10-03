@@ -73,18 +73,18 @@ void AutoencoderModel<TInputValue,NeuronType>::Train()
 
 	/// Training of the first Autoencoder (first and last layer of the FF network)
 	if (m_Epsilon > 0){
-		shark::TrainingProgress<> criterion(5,m_Epsilon);
+        shark::TrainingProgress<> criterion(5,m_Epsilon);
 		
-		OutAutoencoderType net;
-		if (m_Noise[0] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
-		{
-			TrainOneLayer(criterion,net,0 , m_NumberOfHiddenNeurons[0],m_Noise[0],m_Regularization[0], inputSamples,ofs);
-		}
-		else
-		{
-			TrainOneSparseLayer( criterion, net , 0 , m_NumberOfHiddenNeurons[0],m_Rho[0],m_Beta[0],m_Regularization[0],inputSamples, ofs);
-		}
-		criterion.reset();
+        OutAutoencoderType net;
+        if (m_Noise[0] != 0)   // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. (shark::SparseAutoencoderError takes an autoen
+          {
+          TrainOneLayer(criterion,net,0 , m_NumberOfHiddenNeurons[0],m_Noise[0],m_Regularization[0], inputSamples,ofs);
+          }
+        else
+          {
+          TrainOneSparseLayer( criterion, net , 0 , m_NumberOfHiddenNeurons[0],m_Rho[0],m_Beta[0],m_Regularization[0],inputSamples, ofs);
+          }
+        criterion.reset();
 	}
 	
 	else {

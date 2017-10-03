@@ -23,10 +23,10 @@
 #include "otbStandardWriterWatcher.h"
 #include "otbStatisticsXMLFileReader.h"
 #include "otbShiftScaleVectorImageFilter.h"
-#include "ImageDimensionalityReductionFilter.h"
+#include "otbImageDimensionalityReductionFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbImageToVectorImageCastFilter.h"
-#include "DimensionalityReductionModelFactory.h"
+#include "otbDimensionalityReductionModelFactory.h"
 
 namespace otb
 {

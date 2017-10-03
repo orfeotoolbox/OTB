@@ -19,11 +19,10 @@
 #define SOMFactory_txx
 
 
-#include "SOMModelFactory.h"
+#include "otbSOMModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
-#include "SOMModel.h"
-//#include <shark/Algorithms/Trainers/PCA.h>
+#include "otbSOMModel.h"
 #include "itkVersion.h"
 
 namespace otb
@@ -39,8 +38,8 @@ SOMModelFactory<TInputValue,TOutputValue,MapDimension>::SOMModelFactory()
                          subclass.c_str(),
                          "SOM DR Model",
                          1,
-                      //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
-						itk::CreateObjectFunction<SOMModel<TInputValue,  MapDimension>>::New());
+
+                         itk::CreateObjectFunction<SOMModel<TInputValue,  MapDimension>>::New());
 }
 
 template <class TInputValue, class TOutputValue, unsigned int MapDimension>

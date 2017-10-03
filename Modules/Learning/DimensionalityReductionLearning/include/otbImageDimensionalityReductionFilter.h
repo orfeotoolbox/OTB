@@ -139,7 +139,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "ImageDimensionalityReductionFilter.txx"
+#include "otbImageDimensionalityReductionFilter.txx"
 #endif
 
 #endif

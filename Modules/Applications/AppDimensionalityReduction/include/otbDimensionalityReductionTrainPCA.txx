@@ -2,7 +2,7 @@
 #ifndef cbTrainPCA_txx
 #define cbTrainPCA_txx
 
-#include "cbLearningApplicationBaseDR.h"
+#include "otbTrainDimensionalityReductionApplicationBase.h"
 
 namespace otb
 {
@@ -11,7 +11,7 @@ namespace Wrapper
 
 template <class TInputValue, class TOutputValue>
 void
-cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::InitPCAParams()
 {
 
@@ -34,7 +34,7 @@ cbLearningApplicationBaseDR<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void cbLearningApplicationBaseDR<TInputValue,TOutputValue>
+void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::TrainPCA(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
 		typename PCAModelType::Pointer dimredTrainer = PCAModelType::New();

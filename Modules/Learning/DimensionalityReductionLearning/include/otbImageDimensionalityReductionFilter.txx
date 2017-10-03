@@ -18,7 +18,7 @@
 #ifndef otbImageClassificationFilter_txx
 #define otbImageClassificationFilter_txx
 
-#include "ImageDimensionalityReductionFilter.h"
+#include "otbImageDimensionalityReductionFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 

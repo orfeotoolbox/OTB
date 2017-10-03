@@ -19,10 +19,10 @@
 #define AutoencoderModelFactory_txx
 
 
-#include "AutoencoderModelFactory.h"
+#include "otbAutoencoderModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
-#include "AutoencoderModel.h"
+#include "otbAutoencoderModel.h"
 #include "itkVersion.h"
 
 namespace otb
@@ -38,8 +38,8 @@ AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::AutoencoderMo
                          subclass.c_str(),
                          "Shark AE ML Model",
                          1,
-                      //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
-						itk::CreateObjectFunction<AutoencoderModel<TInputValue,NeuronType > >::New());
+                         //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
+                         itk::CreateObjectFunction<AutoencoderModel<TInputValue,NeuronType > >::New());
 }
 
 template <class TInputValue, class TOutputValue, class NeuronType>

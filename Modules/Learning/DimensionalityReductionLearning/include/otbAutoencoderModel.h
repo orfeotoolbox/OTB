@@ -16,8 +16,8 @@ class ITK_EXPORT AutoencoderModel: public  MachineLearningModel<itk::VariableLen
 
 public:
 	
-	typedef AutoencoderModel Self;
-	typedef MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>> Superclass;
+  typedef AutoencoderModel Self;
+  typedef MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TInputValue>> Superclass;
 	typedef itk::SmartPointer<Self> Pointer;
 	typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -131,7 +131,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "AutoencoderModel.txx"
+#include "otbAutoencoderModel.txx"
 #endif
 
 

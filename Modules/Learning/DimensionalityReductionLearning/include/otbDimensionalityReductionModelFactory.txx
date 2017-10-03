@@ -18,14 +18,14 @@
 #ifndef DimensionalityReductionModelFactory_txx
 #define DimensionalityReductionFactory_txx
 
-#include "DimensionalityReductionModelFactory.h"
+#include "otbDimensionalityReductionModelFactory.h"
 #include "otbConfigure.h"
 
-#include "SOMModelFactory.h"
+#include "otbSOMModelFactory.h"
 
 #ifdef OTB_USE_SHARK
-#include "AutoencoderModelFactory.h"
-#include "PCAModelFactory.h"
+#include "otbAutoencoderModelFactory.h"
+#include "otbPCAModelFactory.h"
 #endif
 
 #include "itkMutexLockHolder.h"
@@ -34,16 +34,6 @@
 namespace otb
 {
 
-/*
-template <class TInputValue, class TTargetValue>
-// using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder<shark::TanhNeuron, shark::LinearNeuron>>  ;
-using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::Autoencoder<shark::TanhNeuron, shark::TanhNeuron>>  ;
-
-
-template <class TInputValue, class TTargetValue>
-// using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron>>  ;
-using TiedAutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::TiedAutoencoder< shark::TanhNeuron, shark::TanhNeuron>>  ;
-*/
 
 template <class TInputValue, class TTargetValue>
 using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::LogisticNeuron>  ;
@@ -130,7 +120,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
 #ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(AutoencoderModelFactory<TInputValue,TOutputValue>::New());
- // RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
+  // RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
 #endif
   
 }
@@ -196,8 +186,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       
 #ifdef OTB_USE_SHARK
 	
-	// Autoencoder
-	AutoencoderModelFactory<TInputValue,TOutputValue> *aeFactory =
+    AutoencoderModelFactory<TInputValue,TOutputValue> *aeFactory =
       dynamic_cast<AutoencoderModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (aeFactory)
       {

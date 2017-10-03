@@ -13,19 +13,19 @@
 
 #include <fstream> // write the model file
 
-#include "DimensionalityReductionModelFactory.h"
-#include "cbLearningApplicationBaseDR.h"
+#include "otbDimensionalityReductionModelFactory.h"
+#include "otbTrainDimensionalityReductionApplicationBase.h"
 
 
 namespace otb
 {
 namespace Wrapper
 {
-class TrainDimensionalityReduction : public cbLearningApplicationBaseDR<float,float>
+class TrainDimensionalityReduction : public TrainDimensionalityReductionApplicationBase<float,float>
 {
 public:
   typedef TrainDimensionalityReduction Self;
-  typedef cbLearningApplicationBaseDR<float, float> Superclass;
+  typedef TrainDimensionalityReductionApplicationBase<float, float> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 	

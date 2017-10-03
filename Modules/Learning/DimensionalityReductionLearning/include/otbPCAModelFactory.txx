@@ -19,11 +19,10 @@
 #define PCAFactory_txx
 
 
-#include "PCAModelFactory.h"
+#include "otbPCAModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
-#include "PCAModel.h"
-//#include <shark/Algorithms/Trainers/PCA.h>
+#include "otbPCAModel.h"
 #include "itkVersion.h"
 
 namespace otb
@@ -39,8 +38,7 @@ PCAModelFactory<TInputValue,TOutputValue>::PCAModelFactory()
                          subclass.c_str(),
                          "Shark PCA ML Model",
                          1,
-                      //   itk::CreateObjectFunction<AutoencoderModel<TInputValue,TOutputValue> >::New());
-						itk::CreateObjectFunction<PCAModel<TInputValue>>::New());
+                         itk::CreateObjectFunction<PCAModel<TInputValue>>::New());
 }
 
 template <class TInputValue, class TOutputValue>
