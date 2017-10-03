@@ -36,10 +36,14 @@ archive is extracted, the directory structure consists of:
 -  ``share``: A folder containing common resources and copyright
    mentions.
 
+-  ``tool``: A folder containing usefull scripts to test the installation or
+   to uninstall OTB libraries and headers while keeping all the depedencies.
+
 In order to run the command line launchers, this package doesn’t require
 any special library that is not present in most modern Linux
 distributions. There is a small caveat for "expat" though as these binaries depend
 on "libexpat.so", which can be supplied by most package managers (apt, yum, ...).
+Note that this problem only affects versions 6.0 and older.
 If not already present, it is necessary to install one of the following packages:
 
 ::
@@ -108,9 +112,9 @@ A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk
 Q: Monteverdi and Mapla applications look different from my other applications.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-A: By default, Monteverdi, Mapla and otbapplication (otbgui\_\*) uses a the
-system gtk theme. If you can't install GTK on your system you can use the
-distributed with the OTB package. Note that using system GTK is the preferred
+A: In versions 6.0 and older, Monteverdi, Mapla and otbapplication (otbgui\_\*)
+use the system gtk theme. If you can't install GTK on your system you can use the
+one distributed with the OTB package. Note that using system GTK is the preferred
 way with the OTB standalone package as the distributed version of GTK do not
 work on recent Linux distributions. 
 
@@ -122,3 +126,6 @@ To use the distributed GTK libraries you need to set the OTB_USE_LOCAL_GTK:
 
 And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-|release|-Linux64
 To get back default behaviour, unset OTB_USE_LOCAL_GTK=1 or set OTB_USE_LOCAL_GTK=0
+
+In version 6.2, the Linux binaries are built without GTK support to cut some
+dependencies.
