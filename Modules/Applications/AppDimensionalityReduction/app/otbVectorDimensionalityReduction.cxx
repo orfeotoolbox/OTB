@@ -41,13 +41,13 @@ bool IsNotAlphaNum(char c)
 return !std::isalnum(c);
 }
 
-class CbDimensionalityReductionVector : public Application
+class VectorDimensionalityReduction : public Application
 {
 	public:
 	
 		/** Standard class typedefs. */
-		typedef CbDimensionalityReductionVector Self;
-		typedef Application Superclass;
+  typedef VectorDimensionalityReduction Self;
+  typedef Application Superclass;
 		typedef itk::SmartPointer<Self> Pointer;
 		typedef itk::SmartPointer<const Self> ConstPointer;
 		
@@ -68,8 +68,8 @@ class CbDimensionalityReductionVector : public Application
 		typedef itk::VariableLengthVector<ValueType> 										MeasurementType;
 		typedef otb::StatisticsXMLFileReader<MeasurementType> 								StatisticsReader;
 		typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
-		~CbDimensionalityReductionVector() ITK_OVERRIDE
-		{
+  ~VectorDimensionalityReduction() ITK_OVERRIDE
+  {
 		DimensionalityReductionModelFactoryType::CleanFactories();
 		}
 		
@@ -81,8 +81,8 @@ class CbDimensionalityReductionVector : public Application
 		SetDescription("Performs dimensionality reduction of the input vector data according to a model file.");
 		SetDocName("Vector Dimensionality Reduction");
 		SetDocAuthors("OTB-Team");
-		SetDocLongDescription("This application performs a vector data dimensionality reduction based on a model file produced by the cbDimensionalityReductionTrainer application.");
-		SetDocSeeAlso("cbDimensionalityReductionTrainer");
+		SetDocLongDescription("This application performs a vector data dimensionality reduction based on a model file produced by the TrainDimensionalityReduction application.");
+		SetDocSeeAlso("TrainDimensionalityReduction");
 		AddDocTag(Tags::Learning);
 		
 		AddParameter(ParameterType_InputVectorData, "in", "Name of the input vector data");
@@ -94,13 +94,13 @@ class CbDimensionalityReductionVector : public Application
 		MandatoryOff("instat");
 		
 		AddParameter(ParameterType_InputFilename, "model", "Model file");
-		SetParameterDescription("model", "A model file (produced by cbDimensionalityReduction application,");
+		SetParameterDescription("model", "A model file (produced by the TrainDimensionalityReduction application,");
 		
 		AddParameter(ParameterType_ListView, "feat", "Field names to be calculated."); //
-		SetParameterDescription("feat","List of field names in the input vector data used as features for training."); //
+		SetParameterDescription("feat","List of field names in the input vector data used as features for reduction."); //
 		
 		AddParameter(ParameterType_StringList, "featout", "Field names to be calculated."); //
-		SetParameterDescription("featout","List of field names in the input vector data used as features for training."); //
+		SetParameterDescription("featout","List of field names in the input vector data used as features for reduction."); //
 		
 		AddParameter(ParameterType_OutputFilename, "out", "Output vector data file containing the reduced vector");
 		SetParameterDescription("out","Output vector data file storing sample values (OGR format)."
@@ -388,4 +388,4 @@ class CbDimensionalityReductionVector : public Application
 };
 }
 }
-OTB_APPLICATION_EXPORT(otb::Wrapper::CbDimensionalityReductionVector)
+OTB_APPLICATION_EXPORT(otb::Wrapper::VectorDimensionalityReduction)

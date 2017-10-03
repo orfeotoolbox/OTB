@@ -71,11 +71,11 @@ private:
 namespace Wrapper
 {
 
-class CbDimensionalityReduction : public Application
+class ImageDimensionalityReduction : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef CbDimensionalityReduction             Self;
+  typedef ImageDimensionalityReduction             Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -83,7 +83,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(CbDimensionalityReduction, otb::Application);
+  itkTypeMacro(ImageDimensionalityReduction, otb::Application);
 
   /** Filters typedef */
   typedef UInt8ImageType                                                                       MaskImageType;
@@ -104,10 +104,10 @@ public:
 
 protected:
 
-  ~CbDimensionalityReduction() ITK_OVERRIDE
-    {
+  ~ImageDimensionalityReduction() ITK_OVERRIDE
+  {
     DimensionalityReductionModelFactoryType::CleanFactories();
-    }
+  }
 
 private:
   void DoInit() ITK_OVERRIDE
@@ -119,7 +119,7 @@ private:
     SetDocName("DimensionalityReduction");
     SetDocLongDescription("This application reduces the dimension of an input"
                           " image, based on a machine learning model file produced by"
-                          " the DimensionalityReductionTrainer application. Pixels of the "
+                          " the TrainDimensionalityReduction application. Pixels of the "
                           "output image will contain the reduced values from"
                           "the model. The input pixels"
                           " can be optionally centered and reduced according "
@@ -132,7 +132,7 @@ private:
                       "Training application, it is mandatory to use the same "
                       "statistics file for reduction.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("DimensionalityReductionTrainer, ComputeImagesStatistics");
+    SetDocSeeAlso("TrainDimensionalityReduction, ComputeImagesStatistics");
 
     AddDocTag(Tags::Learning);
 
@@ -146,27 +146,27 @@ private:
     MandatoryOff("mask");
 
     AddParameter(ParameterType_InputFilename, "model", "Model file");
-    SetParameterDescription("model", "A regression model file (produced by "
-      "TrainRegression application).");
+    SetParameterDescription("model", "A dimensionality reduction model file (produced by "
+                            "TrainRegression application).");
 
     AddParameter(ParameterType_InputFilename, "imstat", "Statistics file");
     SetParameterDescription("imstat", "A XML file containing mean and standard"
       " deviation to center and reduce samples before prediction "
       "(produced by ComputeImagesStatistics application). If this file contains"
-      "one more band than the sample size, the last stat of last band will be"
-      "applied to expand the output predicted value");
+                            "one more bands than the sample size, the last stat of last band will be"
+                            "applied to expand the output predicted value");
     MandatoryOff("imstat");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription( "out", "Output image containing predicted values");
+    SetParameterDescription( "out", "Output image containing reduced values");
 
     AddRAMParameter();
 
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("imstat", "EstimateImageStatisticsQB1.xml");
-    SetDocExampleParameterValue("model", "clsvmModelQB1.svm");
-    SetDocExampleParameterValue("out", "clLabeledImageQB1.tif");
+    SetDocExampleParameterValue("model", "clsvmModelQB1.model");
+    SetDocExampleParameterValue("out", "ReducedImageQB1.tif");
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
@@ -258,4 +258,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::CbDimensionalityReduction)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ImageDimensionalityReduction)

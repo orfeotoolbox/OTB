@@ -31,20 +31,20 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 OTB_CREATE_APPLICATION(
-  NAME CbDimensionalityReductionTrainer
-  SOURCES cbDimensionalityReductionTrainer.cxx
+  NAME TrainDimensionalityReduction
+  SOURCES otbTrainDimensionalityReduction.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES} ${OTBBoost_LIBRARIES} ${OTBShark_LIBRARIES} 
   )
 
 OTB_CREATE_APPLICATION(
-  NAME CbDimensionalityReduction
-  SOURCES cbDimensionalityReduction.cxx
+  NAME ImageDimensionalityReduction
+  SOURCES otbImageDimensionalityReduction.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES} ${OTBBoost_LIBRARIES} ${OTBShark_LIBRARIES} 
   )
 
 OTB_CREATE_APPLICATION(
-  NAME CbDimensionalityReductionVector
-  SOURCES cbDimensionalityReductionVector.cxx
+  NAME VectorDimensionalityReduction
+  SOURCES otbVectorDimensionalityReduction.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES} ${OTBBoost_LIBRARIES} ${OTBShark_LIBRARIES} 
   )
 
