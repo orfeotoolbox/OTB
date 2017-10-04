@@ -150,8 +150,8 @@ else()
 
   ExternalProject_Add(${proj}
     PREFIX ${proj}
-    URL "http://sourceforge.net/projects/itk/files/itk/4.11/InsightToolkit-4.11.0.tar.gz/download"
-    URL_MD5 1a71ae9d2f7b3140ac17e8bbb0602c8a
+    URL "http://sourceforge.net/projects/itk/files/itk/4.12/InsightToolkit-4.12.0.tar.gz/download"
+    URL_MD5 561a403f93c88c64085b5623e8e61f79
     SOURCE_DIR ${ITK_SB_SRC}
     BINARY_DIR ${ITK_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -183,7 +183,7 @@ else()
   #  "configure_file(${CMAKE_SOURCE_DIR}/patches_ITK/hashtable.hxx.in
   #   ${ITK_SB_SRC}/Modules/ThirdParty/KWSys/src/KWSys/hashtable.hxx.in COPYONLY)")
 
-  set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-4.6)
+  set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-4.12)
 
 endif()
 endif()
