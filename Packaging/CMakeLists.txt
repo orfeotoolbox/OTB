@@ -93,13 +93,10 @@ set(PKG_OTB_VERSION_STRING ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${P
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 set(NAME_SUFFIX "" CACHE STRING "extra suffix for package name")
 set(PACKAGE_NAME OTB)
-if(NAME_SUFFIX)
-  set(PACKAGE_NAME OTB${NAME_SUFFIX})
-endif()
 if(APPLE)
   set(PACKAGE_PLATFORM_NAME "Darwin")
 elseif(WIN32)
-  set(PACKAGE_PLATFORM_NAME "win")
+  set(PACKAGE_PLATFORM_NAME "Win")
 elseif(LINUX)
   set(PACKAGE_PLATFORM_NAME "Linux")
 endif()
@@ -110,7 +107,7 @@ endif()
 
 # This directory is important.
 # We stage/keep files that goes into final package in this directory
-set(PKG_STAGE_DIR ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+set(PKG_STAGE_DIR ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH}${NAME_SUFFIX})
 
 set(PATCHELF_PROGRAM "${CMAKE_BINARY_DIR}/PATCHELF/src/patchelf/src/patchelf")
 include(External_patchelf)
