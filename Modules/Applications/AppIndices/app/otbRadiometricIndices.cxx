@@ -136,7 +136,15 @@ private:
 
     // Documentation
     SetDocName("Radiometric Indices");
-    SetDocLongDescription("This application computes radiometric indices using the relevant channels of the input image. The output is a multi band image into which each channel is one of the selected indices.");
+    SetDocLongDescription("This application computes radiometric indices using the " 
+	"relevant channels from the input image. The application provides the user "
+	"with a pre-defined set of radiometric indices for three domains: "
+	"* Vegetation, \n"
+	"* Water, and \n"
+	"* Soil. \n"
+	"It can be run for a single radiometric index or for a set of indices defined with "
+	"the -list option. The resulting output is a multi band image containing a separate "
+	"channel for each of the selected indices.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVegetationIndicesFunctor, otbWaterIndicesFunctor and otbSoilIndicesFunctor classes");
@@ -152,8 +160,8 @@ private:
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_Group, "channels", "Channels selection");
-    SetParameterDescription("channels", "Channels selection");
+    AddParameter(ParameterType_Group, "channels", "Channel selections");
+    SetParameterDescription("channels", "Channel selections");
 
     AddParameter(ParameterType_Int,  "channels.blue",  "Blue Channel");
     SetParameterDescription("channels.blue", "Blue channel index");
@@ -168,7 +176,7 @@ private:
     SetParameterDescription("channels.nir", "NIR channel index");
     SetDefaultParameterInt("channels.nir", 1);
     AddParameter(ParameterType_Int,  "channels.mir",  "Mir Channel");
-    SetParameterDescription("channels.mir", "Mir channel index");
+    SetParameterDescription("channels.mir", "MIR channel index");
     SetDefaultParameterInt("channels.mir", 1);
     //AddParameter(ParameterType_Int,  "channels.rho860",  "Rho860 Channel");
     //SetParameterDescription("channels.rho860", "860nm band channel index");
@@ -179,26 +187,26 @@ private:
 
     AddParameter(ParameterType_ListView,  "list", "Available Radiometric Indices");
     SetParameterDescription("list","List of available radiometric indices with their relevant channels in brackets:\n\
-        Vegetation:NDVI - Normalized difference vegetation index (Red, NIR)\n\
-        Vegetation:TNDVI - Transformed normalized difference vegetation index (Red, NIR)\n\
-        Vegetation:RVI - Ratio vegetation index (Red, NIR)\n\
-        Vegetation:SAVI - Soil adjusted vegetation index (Red, NIR)\n\
-        Vegetation:TSAVI - Transformed soil adjusted vegetation index (Red, NIR)\n\
-        Vegetation:MSAVI - Modified soil adjusted vegetation index (Red, NIR)\n\
-        Vegetation:MSAVI2 - Modified soil adjusted vegetation index 2 (Red, NIR)\n\
-        Vegetation:GEMI - Global environment monitoring index (Red, NIR)\n\
-        Vegetation:IPVI - Infrared percentage vegetation index (Red, NIR)\n\
+        Vegetation:NDVI - Normalized Difference Vegetation Index (Red, NIR)\n\
+        Vegetation:TNDVI - Transformed Normalized Difference Vegetation Index (Red, NIR)\n\
+        Vegetation:RVI - Ratio Vegetation Index (Red, NIR)\n\
+        Vegetation:SAVI - Soil Adjusted Vegetation Index (Red, NIR)\n\
+        Vegetation:TSAVI - Transformed Soil Adjusted Vegetation Index (Red, NIR)\n\
+        Vegetation:MSAVI - Modified Soil Adjusted Vegetation Index (Red, NIR)\n\
+        Vegetation:MSAVI2 - Modified Soil Adjusted Vegetation Index 2 (Red, NIR)\n\
+        Vegetation:GEMI - Global Environment Monitoring Index (Red, NIR)\n\
+        Vegetation:IPVI - Infrared Percentage Vegetation Index (Red, NIR)\n\
         \n\
-        Water:NDWI - Normalized difference water index (Gao 1996) (NIR, MIR)\n\
-        Water:NDWI2 - Normalized difference water index (Mc Feeters 1996) (Green, NIR)\n\
-        Water:MNDWI - Modified normalized difference water index (Xu 2006) (Green, MIR)\n\
-        Water:NDPI - Normalized difference pond index (Lacaux et al.) (MIR, Green)\n\
-        Water:NDTI - Normalized difference turbidity index (Lacaux et al.) (Red, Green)\n\
+        Water:NDWI - Normalized Difference Water Index (Gao 1996) (NIR, MIR)\n\
+        Water:NDWI2 - Normalized Difference Water Index (McFeeters 1996) (Green, NIR)\n\
+        Water:MNDWI - Modified Normalized Difference Water Index (Xu 2006) (Green, MIR)\n\
+        Water:NDPI - Normalized Difference Pond Index (Lacaux et al., 2006) (MIR, Green)\n\
+        Water:NDTI - Normalized Difference Turbidity Index (Lacaux et al., 2006) (Red, Green)\n\
         \n\
-        Soil:RI - Redness index (Red, Green)\n\
-        Soil:CI - Color index (Red, Green)\n\
-        Soil:BI - Brightness index (Red, Green)\n\
-        Soil:BI2 - Brightness index 2 (NIR, Red, Green)");
+        Soil:RI - Redness Index (Red, Green)\n\
+        Soil:CI - Color Index (Red, Green)\n\
+        Soil:BI - Brightness Index (Red, Green)\n\
+        Soil:BI2 - Brightness Index 2 (NIR, Red, Green)");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
