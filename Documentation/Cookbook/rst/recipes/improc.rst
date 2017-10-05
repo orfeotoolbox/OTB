@@ -198,7 +198,7 @@ sequentially with respect to the order in which tiles are processed. However,
 all of the artefacts will be removed after the vectorization setp. 
 
 The *LSMSSegmentation* application will write as many intermediate files
-as tiles needed during processing. As such, it will sufficient disk space, typically
+as tiles needed during processing. As such, it will require sufficient disk space, typically
 twice the size of the final image. The *cleanup* option
 (active by default) will clear the intermediate files during the
 processing as soon as they are not needed anymore. By default, files
@@ -244,7 +244,7 @@ attributes denoting the label of the original segment, the size of the
 segment in pixels, and the mean and variance of each band over the
 segment. The projection of the output GIS vector file will be the same
 as the projection from the input image (if the input image does not have a
-projection, than the output GIS files won't either).
+projection, then the output GIS files won't either).
 
 ::
 

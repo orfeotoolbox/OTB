@@ -97,7 +97,7 @@ represents a pixel of an image made of only one band:
 
 .. math:: im1+1
 
-A scalar can’t be added to a vector, therefore the correct syntax for the formulta is as follows (one
+A scalar can’t be added to a vector, therefore the correct syntax for the formula is as follows (one
 can notice the approach that muParserX allows vectors to be defined on the fly):
 
 .. math:: im1+\{ 1 \}
