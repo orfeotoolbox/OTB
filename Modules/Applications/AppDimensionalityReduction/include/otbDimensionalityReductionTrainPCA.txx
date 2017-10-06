@@ -16,18 +16,18 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 {
 
 
-  AddChoice("model.pca", "Shark PCA");
-  SetParameterDescription("model.pca",
+  AddChoice("algorithm.pca", "Shark PCA");
+  SetParameterDescription("algorithm.pca",
                           "This group of parameters allows setting Shark PCA parameters. "
                           );
   
   
    //Output Dimension
-  AddParameter(ParameterType_Int, "model.pca.dim",
+  AddParameter(ParameterType_Int, "algorithm.pca.dim",
                "Dimension of the output of the pca transformation");
-  SetParameterInt("model.pca.dim",10, false);
+  SetParameterInt("algorithm.pca.dim",10, false);
   SetParameterDescription(
-    "model.pca.dim",
+    "algorithm.pca.dim",
     "Dimension of the output of the pca transformation.");
   
  
@@ -38,7 +38,7 @@ void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::TrainPCA(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
 		typename PCAModelType::Pointer dimredTrainer = PCAModelType::New();
-		dimredTrainer->SetDimension(GetParameterInt("model.pca.dim"));
+		dimredTrainer->SetDimension(GetParameterInt("algorithm.pca.dim"));
 		dimredTrainer->SetInputListSample(trainingListSample);
 		dimredTrainer->SetWriteEigenvectors(true);
 		dimredTrainer->Train();

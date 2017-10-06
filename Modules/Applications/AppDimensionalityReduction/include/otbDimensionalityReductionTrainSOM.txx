@@ -14,62 +14,62 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::InitSOMParams()
 {
 
-  AddChoice("model.som", "OTB SOM");
-  SetParameterDescription("model.som",
+  AddChoice("algorithm.som", "OTB SOM");
+  SetParameterDescription("algorithm.som",
                           "This group of parameters allows setting SOM parameters. "
                           );
 
-	AddParameter(ParameterType_Int, "model.som.dim","Dimension of the map");
-	SetParameterDescription("model.som.dim","Dimension of the SOM map.");
+	AddParameter(ParameterType_Int, "algorithm.som.dim","Dimension of the map");
+	SetParameterDescription("algorithm.som.dim","Dimension of the SOM map.");
   
-	AddParameter(ParameterType_StringList ,  "model.som.s",   "Size");
-    SetParameterDescription("model.som.s", "Size of the SOM map");
-    MandatoryOff("model.som.s");
+	AddParameter(ParameterType_StringList ,  "algorithm.som.s",   "Size");
+    SetParameterDescription("algorithm.som.s", "Size of the SOM map");
+    MandatoryOff("algorithm.som.s");
     
-	AddParameter(ParameterType_StringList ,  "model.som.n",   "Size Neighborhood");
-    SetParameterDescription("model.som.n", "Size of the initial neighborhood in the SOM map");
-    MandatoryOff("model.som.n");
+	AddParameter(ParameterType_StringList ,  "algorithm.som.n",   "Size Neighborhood");
+    SetParameterDescription("algorithm.som.n", "Size of the initial neighborhood in the SOM map");
+    MandatoryOff("algorithm.som.n");
     
-    AddParameter(ParameterType_Int,  "model.som.sx",   "SizeX");
-    SetParameterDescription("model.som.sx", "X size of the SOM map");
-    MandatoryOff("model.som.sx");
+    AddParameter(ParameterType_Int,  "algorithm.som.sx",   "SizeX");
+    SetParameterDescription("algorithm.som.sx", "X size of the SOM map");
+    MandatoryOff("algorithm.som.sx");
 
-    AddParameter(ParameterType_Int,  "model.som.sy",   "SizeY");
-    SetParameterDescription("model.som.sy", "Y size of the SOM map");
-    MandatoryOff("model.som.sy");
+    AddParameter(ParameterType_Int,  "algorithm.som.sy",   "SizeY");
+    SetParameterDescription("algorithm.som.sy", "Y size of the SOM map");
+    MandatoryOff("algorithm.som.sy");
 
-    AddParameter(ParameterType_Int,  "model.som.nx",   "NeighborhoodX");
-    SetParameterDescription("model.som.nx", "X size of the initial neighborhood in the SOM map");
-    MandatoryOff("model.som.nx");
+    AddParameter(ParameterType_Int,  "algorithm.som.nx",   "NeighborhoodX");
+    SetParameterDescription("algorithm.som.nx", "X size of the initial neighborhood in the SOM map");
+    MandatoryOff("algorithm.som.nx");
 
-    AddParameter(ParameterType_Int,  "model.som.ny",   "NeighborhoodY");
-    SetParameterDescription("model.som.ny", "Y size of the initial neighborhood in the SOM map");
-    MandatoryOff("model.som.nx");
+    AddParameter(ParameterType_Int,  "algorithm.som.ny",   "NeighborhoodY");
+    SetParameterDescription("algorithm.som.ny", "Y size of the initial neighborhood in the SOM map");
+    MandatoryOff("algorithm.som.nx");
 
-    AddParameter(ParameterType_Int,  "model.som.ni",   "NumberIteration");
-    SetParameterDescription("model.som.ni", "Number of iterations for SOM learning");
-    MandatoryOff("model.som.ni");
+    AddParameter(ParameterType_Int,  "algorithm.som.ni",   "NumberIteration");
+    SetParameterDescription("algorithm.som.ni", "Number of iterations for SOM learning");
+    MandatoryOff("algorithm.som.ni");
 
-    AddParameter(ParameterType_Float,  "model.som.bi",   "BetaInit");
-    SetParameterDescription("model.som.bi", "Initial learning coefficient");
-    MandatoryOff("model.som.bi");
+    AddParameter(ParameterType_Float,  "algorithm.som.bi",   "BetaInit");
+    SetParameterDescription("algorithm.som.bi", "Initial learning coefficient");
+    MandatoryOff("algorithm.som.bi");
 
-    AddParameter(ParameterType_Float,  "model.som.bf",   "BetaFinal");
-    SetParameterDescription("model.som.bf", "Final learning coefficient");
-    MandatoryOff("model.som.bf");
+    AddParameter(ParameterType_Float,  "algorithm.som.bf",   "BetaFinal");
+    SetParameterDescription("algorithm.som.bf", "Final learning coefficient");
+    MandatoryOff("algorithm.som.bf");
 
-    AddParameter(ParameterType_Float,  "model.som.iv",   "InitialValue");
-    SetParameterDescription("model.som.iv", "Maximum initial neuron weight");
-    MandatoryOff("model.som.iv");
+    AddParameter(ParameterType_Float,  "algorithm.som.iv",   "InitialValue");
+    SetParameterDescription("algorithm.som.iv", "Maximum initial neuron weight");
+    MandatoryOff("algorithm.som.iv");
     
-    SetDefaultParameterInt("model.som.sx", 32);
-    SetDefaultParameterInt("model.som.sy", 32);
-    SetDefaultParameterInt("model.som.nx", 10);
-    SetDefaultParameterInt("model.som.ny", 10);
-    SetDefaultParameterInt("model.som.ni", 5);
-    SetDefaultParameterFloat("model.som.bi", 1.0);
-    SetDefaultParameterFloat("model.som.bf", 0.1);
-    SetDefaultParameterFloat("model.som.iv", 10.0);
+    SetDefaultParameterInt("algorithm.som.sx", 32);
+    SetDefaultParameterInt("algorithm.som.sy", 32);
+    SetDefaultParameterInt("algorithm.som.nx", 10);
+    SetDefaultParameterInt("algorithm.som.ny", 10);
+    SetDefaultParameterInt("algorithm.som.ni", 5);
+    SetDefaultParameterFloat("algorithm.som.bi", 1.0);
+    SetDefaultParameterFloat("algorithm.som.bf", 0.1);
+    SetDefaultParameterFloat("algorithm.som.iv", 10.0);
 
  
 }
@@ -80,10 +80,10 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample,
         std::string modelPath)
 {		
-	int SomDim = GetParameterInt("model.som.dim");
-	std::cout << SomDim << std::endl;
+  int SomDim = GetParameterInt("algorithm.som.dim");
+  std::cout << SomDim << std::endl;
 		
-	if(SomDim == 2)
+  if(SomDim == 2)
 		{
 		TrainSOM<SOM2DModelType >(trainingListSample,modelPath);
 		}
@@ -118,23 +118,23 @@ void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 		typename somchoice::Pointer dimredTrainer = somchoice::New();
 		unsigned int dim = dimredTrainer->GetDimension();
 		std::cout << dim << std::endl;
-		dimredTrainer->SetNumberOfIterations(GetParameterInt("model.som.ni"));
-		dimredTrainer->SetBetaInit(GetParameterFloat("model.som.bi"));
+		dimredTrainer->SetNumberOfIterations(GetParameterInt("algorithm.som.ni"));
+		dimredTrainer->SetBetaInit(GetParameterFloat("algorithm.som.bi"));
 		dimredTrainer->SetWriteMap(true);
-		dimredTrainer->SetBetaEnd(GetParameterFloat("model.som.bf"));
-		dimredTrainer->SetMaxWeight(GetParameterFloat("model.som.iv"));
+		dimredTrainer->SetBetaEnd(GetParameterFloat("algorithm.som.bf"));
+		dimredTrainer->SetMaxWeight(GetParameterFloat("algorithm.som.iv"));
 		typename TemplateEstimatorType::SizeType size;
-		std::vector<std::basic_string<char>> s= GetParameterStringList("model.som.s");
+		std::vector<std::basic_string<char>> s= GetParameterStringList("algorithm.som.s");
 		for (int i=0; i<dim; i++){ 
 			size[i]=std::stoi(s[i]);
 		}
 		
         dimredTrainer->SetMapSize(size);
         typename TemplateEstimatorType::SizeType radius;
-		std::vector<std::basic_string<char>> n= GetParameterStringList("model.som.n");
-		for (int i=0; i<dim; i++){ 
-			radius[i]=std::stoi(n[i]);
-		}
+        std::vector<std::basic_string<char>> n= GetParameterStringList("algorithm.som.n");
+        for (int i=0; i<dim; i++){ 
+        radius[i]=std::stoi(n[i]);
+        }
         dimredTrainer->SetNeighborhoodSizeInit(radius);
         dimredTrainer->SetListSample(trainingListSample);
 		dimredTrainer->Train();

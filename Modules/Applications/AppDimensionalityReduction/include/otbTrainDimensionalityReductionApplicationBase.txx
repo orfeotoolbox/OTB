@@ -45,8 +45,8 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
   AddDocTag(Tags::Learning);
 
   // main choice parameter that will contain all dimensionality reduction options
-  AddParameter(ParameterType_Choice, "model", "model to use for the training");
-  SetParameterDescription("model", "Choice of the dimensionality reduction model to use for the training.");
+  AddParameter(ParameterType_Choice, "algorithm", "algorithm to use for the training");
+  SetParameterDescription("algorithm", "Choice of the dimensionality reduction algorithm to use for the training.");
   
 
   InitSOMParams();
@@ -73,10 +73,10 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 {
  
  // get the name of the chosen machine learning model
- const std::string modelName = GetParameterString("model");
- // call specific train function
+  const std::string modelName = GetParameterString("algorithm");
+  // call specific train function
  
- if(modelName == "som")
+  if(modelName == "som")
 	{
 		BeforeTrainSOM(trainingListSample,modelPath);
 	}
