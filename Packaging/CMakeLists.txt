@@ -63,7 +63,7 @@ find_program(ZIP_EXECUTABLE NAMES 7z 7za)
 set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
 
 #set CMAKE_MODULE_PATH to be the current source directory.
-# This will allow to include all cmake files without full path and .cmake extension!
+# This will allow including all cmake files without full path and .cmake extension!
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 #include superbuild_macro for get_version()

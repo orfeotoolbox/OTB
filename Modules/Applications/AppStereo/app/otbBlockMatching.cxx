@@ -141,7 +141,7 @@ private:
       "The application searches locally for the displacement between a reference"
       " image and a secondary image. The correspondence is evaluated for each "
       "pixel, based on a pair of local neighborhood windows. The displacement "
-      "evaluated can be 1D (along lines) or 2D. Parameters allows to set the "
+      "evaluated can be 1D (along lines) or 2D. Parameters allow setting the "
       "minimum and maximum disparities to search (both for horizontal and "
       "vertical directions). A winner-take-all approach is used to select the "
       "best match. There are different metrics implemented to evaluate the "

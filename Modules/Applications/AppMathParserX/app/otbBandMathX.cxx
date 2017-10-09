@@ -74,7 +74,7 @@ private:
       "The list of features and the syntax of muParserX is available at [1].\n\n"
 
       "As opposed to muParser (and thus the BandMath OTB-application [2]), "
-      "muParserX supports vector expressions which allows to output multi-band "
+      "muParserX supports vector expressions which allows outputting multi-band "
       "images.\n\n"
 
       "Hereafter is a brief reference of the muParserX syntax\n\n"
