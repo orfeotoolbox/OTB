@@ -71,71 +71,37 @@ macro(otb_create_application)
              COMPONENT RuntimeLibraries)
    endif()
 
-   # Generate a quickstart script in the build dir
-   #if (NOT WIN32)
+   # What is the path to the applications
+   # a MODULE target is always treated as LIBRARY
+   get_target_property(APPLICATION_BINARY_PATH ${APPLICATION_TARGET_NAME} LIBRARY_OUTPUT_DIRECTORY)
 
-      # What is the path to the applications
-      # a MODULE target is always treated as LIBRARY
-      get_target_property(APPLICATION_BINARY_PATH ${APPLICATION_TARGET_NAME} LIBRARY_OUTPUT_DIRECTORY)
+   if (NOT APPLICATION_BINARY_PATH)
+     set(APPLICATION_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR})
+   endif()
 
-      if (NOT APPLICATION_BINARY_PATH)
-        set(APPLICATION_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR})
-      endif()
+   set(INTERMEDIATE_DIR ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY})
+   set(SCRIPT_EXT "")
+   if (WIN32)
+     set(SCRIPT_EXT ".bat")
+   endif()
 
-      if (WIN32)
-        set(SCRIPT_CLI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbcli_app.bat.in)
-        set(SCRIPT_CLI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME}.bat)
-        set(SCRIPT_CLI_INSTALLABLE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/otbcli_${APPLICATION_NAME}.bat)
-      else()
-        set(SCRIPT_CLI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbcli_app.sh.in)
-        set(SCRIPT_CLI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME})
-        set(SCRIPT_CLI_INSTALLABLE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/otbcli_${APPLICATION_NAME})
-      endif()
-
-      if (EXISTS ${SCRIPT_CLI_SOURCE})
-          # Generate a script in the build dir, next to the cli launcher
-          configure_file( ${SCRIPT_CLI_SOURCE}
-                          ${SCRIPT_CLI_INTERMEDIATE}
-                          @ONLY )
-
-          # Copy it next to the application shared lib, and give executable rights
-          file(COPY ${SCRIPT_CLI_INTERMEDIATE}
-               DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-               FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
-          # Install a version of this script if we are inside the OTB build
-          install(PROGRAMS ${SCRIPT_CLI_INSTALLABLE}
-                  DESTINATION ${OTB_INSTALL_RUNTIME_DIR}
-                  COMPONENT Runtime)
-      endif()
-
-      if (WIN32)
-        set(SCRIPT_GUI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbgui_app.bat.in)
-        set(SCRIPT_GUI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME}.bat)
-        set(SCRIPT_GUI_INSTALLABLE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/otbgui_${APPLICATION_NAME}.bat)
-      else()
-        set(SCRIPT_GUI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbgui_app.sh.in)
-        set(SCRIPT_GUI_INTERMEDIATE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME})
-        set(SCRIPT_GUI_INSTALLABLE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/otbgui_${APPLICATION_NAME})
-      endif()
-
-      if (EXISTS ${SCRIPT_GUI_SOURCE})
-          # Generate a script in the build dir, next to the cli launcher
-          configure_file( ${SCRIPT_GUI_SOURCE}
-                          ${SCRIPT_GUI_INTERMEDIATE}
-                          @ONLY )
-
-          # Copy it next to the application shared lib, and give executable rights
-          file(COPY ${SCRIPT_GUI_INTERMEDIATE}
-               DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-               FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
-          # Install a version of this script if we are inside the OTB build
-          install(PROGRAMS ${SCRIPT_GUI_INSTALLABLE}
-                  DESTINATION ${OTB_INSTALL_RUNTIME_DIR}
-                  COMPONENT Runtime)
-      endif()
-   #endif()
+   # ----- Create and install launcher scripts ------
+   foreach(type CLI GUI)
+     string(TOLOWER "${type}" type_lower)
+     set(SCRIPT_NAME otb${type_lower}_${APPLICATION_NAME}${SCRIPT_EXT})
+     otb_write_app_launcher(
+       NAME ${APPLICATION_NAME}
+       OUTPUT ${INTERMEDIATE_DIR}/${SCRIPT_NAME}
+       TYPE ${type})
+     # Copy it next to the application shared lib, and give executable rights
+     file(COPY ${INTERMEDIATE_DIR}/${SCRIPT_NAME}
+          DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+          FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+     # Install a version of this script if we are inside the OTB build
+     install(PROGRAMS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${SCRIPT_NAME}
+             DESTINATION ${OTB_INSTALL_RUNTIME_DIR}
+             COMPONENT Runtime)
+   endforeach()
 
    list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
    list(REMOVE_DUPLICATES OTB_APPLICATIONS_NAME_LIST)
@@ -168,5 +134,58 @@ macro(otb_test_application)
             $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
             ${TESTAPPLICATION_OPTIONS}
             -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
+  endif()
+endmacro()
+
+macro(otb_write_app_launcher)
+  cmake_parse_arguments(APPLAUNCHER  "" "NAME;OUTPUT;TYPE" "" ${ARGN} )
+  if("${APPLAUNCHER_TYPE}" STREQUAL "CLI")
+    set(_launcher_type "otbcli")
+  elseif("${APPLAUNCHER_TYPE}" STREQUAL "GUI")
+    set(_launcher_type "otbgui")
+  else()
+    message(FATAL_ERROR "Unknown launcher type : ${APPLAUNCHER_TYPE}, only support CLI and GUI")
+  endif()
+
+  if(WIN32)
+    # Launcher script in Batch format
+    file(WRITE "${APPLAUNCHER_OUTPUT}"
+"@echo off
+::
+:: Autogenerated by OTB installation process
+:: DO NOT MODIFY
+::
+set CURRENT_SCRIPT_DIR=%~dp0
+if exist %CURRENT_SCRIPT_DIR%${_launcher_type}.bat (
+  :: Prefer using the launcher inside the script dir
+  set OTB_LAUNCHER=%CURRENT_SCRIPT_DIR%${_launcher_type}.bat
+) else (
+  :: Use the one from the PATH
+  set OTB_LAUNCHER=${_launcher_type}.bat
+)
+
+:: start the application
+%OTB_LAUNCHER% ${APPLAUNCHER_NAME} %*
+")
+  else()
+    # Launcher script in Shell format
+    file(WRITE "${APPLAUNCHER_OUTPUT}"
+"#!/bin/sh
+#
+# Autogenerated by OTB installation process
+# DO NOT MODIFY
+#
+CURRENT_SCRIPT_DIR=$(dirname \"\$0\")
+if [ -e \"\$CURRENT_SCRIPT_DIR/${_launcher_type}\" ] ; then
+  # Prefer using the launcher inside the script dir
+  OTB_LAUNCHER=$CURRENT_SCRIPT_DIR/${_launcher_type}
+else
+  # Use the one from the PATH
+  OTB_LAUNCHER=${_launcher_type}
+fi
+
+# start the application
+\$OTB_LAUNCHER ${APPLAUNCHER_NAME} \"$@\"
+")
   endif()
 endmacro()
