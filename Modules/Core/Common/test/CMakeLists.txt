@@ -37,6 +37,7 @@ otbConfigurationManagerTest.cxx
 otbStandardFilterWatcherNew.cxx
 otbStandardOneLineFilterWatcherTest.cxx
 otbStandardWriterWatcher.cxx
+otbStopwatchTest.cxx
 )
 
 add_executable(otbCommonTestDriver ${OTBCommonTests})
@@ -166,6 +167,9 @@ otb_add_test(NAME coTuSystemTests_IsA_Methods COMMAND otbCommonTestDriver
   ${OTB_DATA_ROOT}/README-OTB-Data
   ${OTB_DATA_ROOT}
   )
+
+otb_add_test(NAME coTuStopwatchTests COMMAND otbCommonTestDriver
+  otbStopwatchTest)
 
 otb_add_test(NAME coTvParseHdfSubsetName COMMAND otbCommonTestDriver
   otbParseHdfSubsetName)
