@@ -67,7 +67,7 @@ macro(otb_create_application)
      endif()
    else()
      install(TARGETS ${APPLICATION_TARGET_NAME}
-             LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+             LIBRARY DESTINATION lib
              COMPONENT RuntimeLibraries)
    endif()
 
@@ -79,9 +79,19 @@ macro(otb_create_application)
      set(APPLICATION_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR})
    endif()
 
+   if(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+     set(_script_output_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+   else()
+     set(_script_output_dir ${CMAKE_BINARY_DIR}/bin)
+   endif()
+   if(OTB_INSTALL_RUNTIME_DIR)
+     set(_script_install_dir ${OTB_INSTALL_RUNTIME_DIR})
+   else()
+     set(_script_install_dir bin)
+   endif()
    set(INTERMEDIATE_DIR ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY})
    set(SCRIPT_EXT "")
-   if (WIN32)
+   if(WIN32)
      set(SCRIPT_EXT ".bat")
    endif()
 
@@ -95,11 +105,11 @@ macro(otb_create_application)
        TYPE ${type})
      # Copy it next to the application shared lib, and give executable rights
      file(COPY ${INTERMEDIATE_DIR}/${SCRIPT_NAME}
-          DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+          DESTINATION ${_script_output_dir}
           FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
      # Install a version of this script if we are inside the OTB build
-     install(PROGRAMS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${SCRIPT_NAME}
-             DESTINATION ${OTB_INSTALL_RUNTIME_DIR}
+     install(PROGRAMS ${_script_output_dir}/${SCRIPT_NAME}
+             DESTINATION ${_script_install_dir}
              COMPONENT Runtime)
    endforeach()
 
