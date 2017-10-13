@@ -106,10 +106,10 @@ private:
       "im1b2Mean\n"
       "  mean of the 2nd component of the 1st input (global statistics)\n\n"
 
-      "im1b2Min\n"
+      "im1b2Mini\n"
       "  minimum of the 2nd component of the 1st input (global statistics)\n\n"
 
-      "im1b2Max\n"
+      "im1b2Maxi\n"
       "  minimum of the 2nd component of the 1st input (global statistics)\n\n"
 
       "im1b2Sum\n"
