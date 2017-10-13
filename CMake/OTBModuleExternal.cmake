@@ -76,6 +76,9 @@ else()
   if(NOT OTB_INSTALL_PACKAGE_DIR)
     set(OTB_INSTALL_PACKAGE_DIR "lib/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
   endif()
+  if(NOT OTB_INSTALL_APP_DIR)
+    set(OTB_INSTALL_APP_DIR lib/otb/applications)
+  endif()
 
   # Use OTB's flags.
   set(CMAKE_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_C_FLAGS}")
