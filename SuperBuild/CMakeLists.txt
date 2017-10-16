@@ -227,7 +227,7 @@ if(UNIX)
   message(STATUS "Environment setup for Configure (SB_ENV_CONFIGURE_CMD): ${SB_ENV_CONFIGURE_CMD}")
 else()
   #windows
-  set(SB_CMAKE_COMMAND ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
+  set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
 endif()
 
 if(CMAKE_C_FLAGS)
