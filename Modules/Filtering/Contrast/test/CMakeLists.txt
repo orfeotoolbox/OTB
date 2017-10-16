@@ -25,8 +25,12 @@ otbContrastTestDriver.cxx
 otbComputeHistoFilterNew.cxx
 otbApplyGainFilterNew.cxx
 otbComputeGainLutFilterNew.cxx
+otbCLHistogramEqualizationFilterNew.cxx
 )
 
 add_executable(otbContrastTestDriver ${OTBContrastTests})
 target_link_libraries(otbContrastTestDriver ${OTBContrast-Test_LIBRARIES})
 otb_module_target_label(otbContrastTestDriver)
+
+otb_add_test(NAME bfTuCLHistogramEqualizationFilterNew COMMAND otbContrastTestDriver
+  otbCLHistogramEqualizationFilterNew)

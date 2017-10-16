@@ -18,13 +18,35 @@
  * limitations under the License.
  */
 
-#include "otbTestMain.h"
+#ifndef otbCLHistogramEqualizationFilter_txx
+#define otbCLHistogramEqualizationFilter_txx
 
-void RegisterTests()
+#include "otbCLHistogramEqualizationFilter.h"
+#include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
+
+#include <limits>
+
+namespace otb
 {
-  REGISTER_TEST(otbComputeHistoFilterNew);
-  REGISTER_TEST(otbComputeGainLutFilterNew);
-  REGISTER_TEST(otbApplyGainFilterNew);
-  REGISTER_TEST(otbCLHistogramEqualizationFilterNew);
-  // REGISTER_TEST(otbHistogramEqualizationFilterValidation);
+template < class TInputImage , class TOutputImage >
+CLHistogramEqualizationFilter < TInputImage , TOutputImage >
+::CLHistogramEqualizationFilter()
+{
+  
 }
+
+/**
+ * Standard "PrintSelf" method
+ */
+template <class TInputImage , class TOutputImage >
+void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+}
+
+  
+}  // End namespace otb
+
+#endif

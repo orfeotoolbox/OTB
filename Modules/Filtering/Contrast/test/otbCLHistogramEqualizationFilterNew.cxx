@@ -18,13 +18,24 @@
  * limitations under the License.
  */
 
-#include "otbTestMain.h"
 
-void RegisterTests()
+
+#include "otbImage.h"
+#include "otbCLHistogramEqualizationFilter.h"
+
+int otbCLHistogramEqualizationFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  REGISTER_TEST(otbComputeHistoFilterNew);
-  REGISTER_TEST(otbComputeGainLutFilterNew);
-  REGISTER_TEST(otbApplyGainFilterNew);
-  REGISTER_TEST(otbCLHistogramEqualizationFilterNew);
-  // REGISTER_TEST(otbHistogramEqualizationFilterValidation);
+  typedef double InputPixelType;
+  const unsigned int Dimension = 2;
+
+  typedef otb::Image< InputPixelType ,  Dimension > InputImageType;
+  typedef otb::CLHistogramEqualizationFilter< InputImageType , InputImageType > 
+    FilterType;
+
+
+  FilterType::Pointer histoEqualize ( FilterType::New() );
+
+  std::cout << histoEqualize << std::endl;
+
+  return EXIT_SUCCESS;
 }
