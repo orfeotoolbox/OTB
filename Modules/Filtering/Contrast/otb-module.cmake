@@ -22,6 +22,7 @@ set(DOCUMENTATION "work in progress")
 
 otb_module(OTBContrast
   DEPENDS
+    OTBImageManipulation
     OTBITK
   	OTBCommon
   	OTBImageBase  

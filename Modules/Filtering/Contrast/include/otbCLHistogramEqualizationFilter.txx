@@ -31,9 +31,42 @@ namespace otb
 {
 template < class TInputImage , class TOutputImage >
 CLHistogramEqualizationFilter < TInputImage , TOutputImage >
-::CLHistogramEqualizationFilter()
+::CLHistogramEqualizationFilter():
+m_HistoFilter( HistoFilter::New() ) ,
+m_GainLutFilter ( GainLutFilter::New() ) ,
+m_ApplyGainFilter ( ApplyGainFilter::New() ) ,
+m_StreamingImageFilter ( StreamingImageFilter::New() ) ,
+m_BufferFilter ( BufferFilter::New() )
 {
-  
+  m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
+  m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
+  m_NbBin = 256;
+  m_Threshold = std::numeric_limits< double >::max();
+  m_NoDataFlag = false;
+  m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
+  m_ThumbSize.Fill(0);
+  m_Step = -1;
+  m_HistoFilter->SetInput( this->GetInput() );
+  m_GainLutFilter->SetInput( m_HistoFilter->GetOutput() );
+  m_StreamingImageFilter->SetInput( m_GainLutFilter->GetOutput() );
+  m_BufferFilter->SetInput( this->GetInput() );
+  m_ApplyGainFilter->SetInputLut( m_StreamingImageFilter->GetOutput() );
+  m_ApplyGainFilter->SetInputImage( m_BufferFilter->GetOutput() );
+}
+
+template < class TInputImage , class TOutputImage >
+void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
+::BeforeGenerateData()
+{
+
+}
+
+template < class TInputImage , class TOutputImage >
+void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
+::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
+                            itk::ThreadIdType threadId)
+{
+
 }
 
 /**
@@ -44,6 +77,14 @@ void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << "Minimum : " << m_Min << std::endl;
+  os << indent << "Maximum : " << m_Max << std::endl;
+  os << indent << "Bin Number : " << m_NbBin << std::endl;
+  os << indent << "Thumbnail size : " << m_ThumbSize << std::endl;
+  os << indent << "Threshold value : " << m_Threshold << std::endl;
+  os << indent << "Is no data activated : " << m_NoDataFlag << std::endl;
+  os << indent << "No Data : " << m_NoData << std::endl;
+  os << indent << "Step : " << m_Step << std::endl;
 }
 
   

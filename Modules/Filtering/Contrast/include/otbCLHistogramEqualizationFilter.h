@@ -23,9 +23,12 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbComputeHistoFilter.h"
 #include "otbComputeGainLutFilter.h"
 #include "otbApplyGainFilter.h"
+#include "itkStreamingImageFilter.h"
+#include "otbInPlacePassFilter.h"
 
 namespace otb
 {
@@ -50,20 +53,77 @@ public :
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
+  typedef otb::VectorImage< int , 2 > HistogramType;
+
+  typedef itk::StreamingImageFilter< HistogramType , HistogramType >
+    StreamingImageFilter;
+
+  typedef otb::InPlacePassFilter < InputImageType > BufferFilter;
+
+  typedef otb::ComputeHistoFilter< InputImageType , HistogramType >
+    HistoFilter;
+
+  typedef otb::ComputeGainLutFilter< HistogramType , HistogramType >
+    GainLutFilter;
+
+  typedef otb::ApplyGainFilter< InputImageType , HistogramType , OutputImageType >
+    ApplyGainFilter;
+
+  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
   /** Method for creation through the object factory. */
   itkNewMacro(Self)
   /** Run-time type information (and related methods). */
   itkTypeMacro(CLHistogramEqualizationFilter, ImageToImageFilter)
 
+  itkGetMacro(Min, InputPixelType)
+  itkSetMacro(Min, InputPixelType)
+
+  itkGetMacro(Max, InputPixelType)
+  itkSetMacro(Max, InputPixelType)
+
+  itkGetMacro(NbBin, unsigned long)
+  itkSetMacro(NbBin, unsigned long)
+
+  itkSetMacro(ThumbSize, typename InputImageType::SizeType)
+  itkGetMacro(ThumbSize, typename InputImageType::SizeType)
+
+  itkGetMacro(Threshold, double)
+  itkSetMacro(Threshold, double)
+
+  itkGetMacro(NoData, InputPixelType)
+  itkSetMacro(NoData, InputPixelType)
+
+  itkBooleanMacro(NoDataFlag)
+  itkGetMacro(NoDataFlag, bool)
+  itkSetMacro(NoDataFlag, bool)
+
 
 protected :
   CLHistogramEqualizationFilter();
   ~CLHistogramEqualizationFilter() override {}
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const override ;
+
+  void BeforeThreadedGenerateData() override;
+  
+  void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
+                            itk::ThreadIdType threadId) override;
 
 private :
   CLHistogramEqualizationFilter(const Self &) = delete ;
-  void operator =(const Self&) = delete ; 
+  void operator =(const Self&) = delete ;
+
+  typename HistoFilter::Pointer m_HistoFilter;
+  typename GainLutFilter::Pointer m_GainLutFilter;
+  typename ApplyGainFilter::Pointer m_ApplyGainFilter;
+  typename StreamingImageFilter::Pointer m_StreamingImageFilter;
+  typename BufferFilter::Pointer m_BufferFilter;
+  InputPixelType m_Min , m_Max , m_NoData;
+  unsigned long m_NbBin;
+  typename InputImageType::SizeType m_ThumbSize;
+  double m_Threshold , m_Step;
+  bool m_NoDataFlag;
 
 };
 
