@@ -95,15 +95,15 @@ class VectorDimensionalityReduction : public Application
 		AddParameter(ParameterType_InputFilename, "model", "Model file");
 		SetParameterDescription("model", "A model file (produced by the TrainDimensionalityReduction application,");
 		
-		AddParameter(ParameterType_ListView, "feat", "Field names to be calculated."); //
+		AddParameter(ParameterType_ListView, "feat", "Input features to use for reduction."); //
 		SetParameterDescription("feat","List of field names in the input vector data used as features for reduction."); //
 		
-		AddParameter(ParameterType_StringList, "featout", "Field names to be calculated."); //
-		SetParameterDescription("featout","List of field names in the input vector data used as features for reduction."); //
+		AddParameter(ParameterType_StringList, "featout", "Names of the new output features."); //
+		SetParameterDescription("featout","List of field names for the output features which result from the reduction."); //
 		
 		AddParameter(ParameterType_OutputFilename, "out", "Output vector data file containing the reduced vector");
 		SetParameterDescription("out","Output vector data file storing sample values (OGR format)."
-		"If not given, the input vector data file is updated.");
+                                        "If not given, the input vector data file is used. In overwrite mode, the original features will be lost.");
 		MandatoryOff("out");
 				
 		AddParameter(ParameterType_Int, "indim", "Dimension of the input vector");
@@ -117,7 +117,7 @@ class VectorDimensionalityReduction : public Application
 		
 		AddParameter(ParameterType_String, "mode", "Writting mode"); //
 		SetParameterString("mode","overwrite", false);
-		SetParameterDescription("mode","This parameter determines if the output file is overwritten or updated [overwrite/update]"); //
+		SetParameterDescription("mode","This parameter determines if the output file is overwritten or updated [overwrite/update]. If an output file name is given, the original file is copied before creating the new features."); //
 
 		
 		// Doc example parameter settings
@@ -270,17 +270,17 @@ class VectorDimensionalityReduction : public Application
 				// Create new OGRDataSource
 				if (GetParameterString("mode")=="overwrite")
 				{
-					output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
-					otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"),
-					 const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
-					 layer.GetGeomType());
-					// Copy existing fields
-					OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
-					for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbBands ; k++) // we don't copy the original bands 
-					{
-						OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
-						newLayer.CreateField(fieldDefn);
-					}
+                                output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
+                                otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"),
+                                                                               const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
+                                                                               layer.GetGeomType());
+                                // Copy existing fields
+                                OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
+                                for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbBands ; k++) // we don't copy the original bands 
+                                  {
+                                  OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
+                                  newLayer.CreateField(fieldDefn);
+                                  }
 				}
 				else if (GetParameterString("mode")=="update")
 				{
