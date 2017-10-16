@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
-#ifndef otbBufferFilter_h
-#define otbBufferFilter_h
+#ifndef otbInPlacePassFilter_h
+#define otbInPlacePassFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "otbImage.h"
 namespace otb
 {
 
-/** \class BufferFilter
+/** \class InPlacePassFilter
  *  \brief This filter has the only purpose to recall regions
  *
  *  This class is implemented to recall regions. Due to ITK implementation 
@@ -41,14 +41,14 @@ namespace otb
  */
 
 template < class TInputImage >
-class ITK_EXPORT BufferFilter :
+class ITK_EXPORT InPlacePassFilter :
   public itk::InPlaceImageFilter < TInputImage , TInputImage >
 {
 public:
   /** typedef for standard classes. */
   typedef TInputImage InputImageType;
 
-  typedef BufferFilter Self;
+  typedef InPlacePassFilter Self;
   typedef itk::InPlaceImageFilter< InputImageType, InputImageType > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
@@ -57,13 +57,13 @@ public:
   itkNewMacro(Self)
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(BufferFilter, InPlaceImageFilter)
+  itkTypeMacro(InPlacePassFilter, InPlaceImageFilter)
 
 protected:
-  BufferFilter() {
+  InPlacePassFilter() {
     this->InPlaceOn();
   }
-  ~BufferFilter() override {}
+  ~InPlacePassFilter() override {}
 
   virtual void ThreadedGenerateData(
       const typename InputImageType::RegionType & 
@@ -71,7 +71,7 @@ protected:
       itk::ThreadIdType itkNotUsed(threadId) ) override{}
 
 private:
-  BufferFilter(const Self &) = delete ;
+  InPlacePassFilter(const Self &) = delete ;
   void operator =(const Self&) = delete ;
 
 };

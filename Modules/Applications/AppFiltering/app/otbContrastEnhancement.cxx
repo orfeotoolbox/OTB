@@ -119,7 +119,7 @@ public:
   typedef itk::StreamingImageFilter < FloatVectorImageType , 
                                       FloatVectorImageType > 
           StreamingImageFilterType;
-  typedef otb::BufferFilter < FloatImageType > BufferFilterType;
+  typedef otb::InPlacePassFilter < FloatImageType > BufferFilterType;
   typedef otb::StreamingHistogramVectorImageFilter < FloatVectorImageType > 
       HistoPersistentFilterType;
 
