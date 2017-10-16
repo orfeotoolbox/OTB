@@ -29,7 +29,6 @@
 // Statistic XML Reader
 #include "otbStatisticsXMLFileReader.h"
 
-#include "itkTimeProbe.h"
 #include "otbStandardFilterWatcher.h"
 
 // Normalize the samples

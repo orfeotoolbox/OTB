@@ -22,7 +22,6 @@
 #define otbOGRDataToSamplePositionFilter_txx
 
 #include "otbOGRDataToSamplePositionFilter.h"
-#include "itkTimeProbe.h"
 
 namespace otb
 {
@@ -272,7 +271,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   typedef std::vector<unsigned long> LoadVectorType;
   LoadVectorType currentLoad;
   currentLoad.resize(numberOfThreads, 0UL);
-  
+
   ClassCountMapType::iterator largestClass;
   unsigned long minLoad;
   unsigned int destThread;

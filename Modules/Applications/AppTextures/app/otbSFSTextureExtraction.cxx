@@ -28,8 +28,6 @@
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 
-#include "itkTimeProbe.h"
-
 namespace otb
 {
 namespace Wrapper

@@ -81,7 +81,7 @@ FilterWatcherBase
     }
 
   // Initialize state
-  m_TimeProbe = watch.m_TimeProbe;
+  m_Stopwatch = watch.m_Stopwatch;
   m_Process = watch.m_Process;
   m_Comment = watch.m_Comment;
 
@@ -125,7 +125,7 @@ FilterWatcherBase
     }
 
   // Initialize state
-  m_TimeProbe = watch.m_TimeProbe;
+  m_Stopwatch = watch.m_Stopwatch;
   m_Process = watch.m_Process;
   m_Comment = watch.m_Comment;
 
