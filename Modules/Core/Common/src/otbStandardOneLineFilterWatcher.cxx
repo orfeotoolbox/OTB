@@ -94,19 +94,19 @@ void
 StandardOneLineFilterWatcher
 ::StartFilter()
 {
-  m_TimeProbe.Start();
+  m_Stopwatch.Start();
 }
 
 void
 StandardOneLineFilterWatcher
 ::EndFilter()
 {
-  m_TimeProbe.Stop();
+  m_Stopwatch.Stop();
 
   // Ensure we don't depend on std::cout configuration
   std::ostringstream elapsedTime;
   elapsedTime.precision(1);
-  elapsedTime << m_TimeProbe.GetMean();
+  elapsedTime << m_Stopwatch.GetElapsedMilliseconds() / 1000;
 
   std::cout << " ("
             << elapsedTime.str()

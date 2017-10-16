@@ -25,11 +25,11 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbStopwatch.h"
 #include "otbConvolutionImageFilter.h"
 #include "otbOverlapSaveConvolutionImageFilter.h"
 #include "otbGaborFilterGenerator.h"
 #include "itkConstantBoundaryCondition.h"
-#include "itkTimeProbe.h"
 
 int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *argv[])
 {
@@ -82,8 +82,6 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
-  itk::TimeProbe probe1, probe2;
-
   ConvolutionFilterType::Pointer convolution = ConvolutionFilterType::New();
   convolution->SetRadius(radius);
   convolution->SetFilter(filter);
@@ -93,11 +91,10 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *
   writer1->SetInput(convolution->GetOutput());
   writer1->SetFileName(outfname1);
 
-  probe1.Start();
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   writer1->Update();
-  probe1.Stop();
 
-  std::cout << "Classical convolution algorithm took " << probe1.GetMean() << " seconds." << std::endl;
+  std::cout << "Classical convolution algorithm took " << chrono.GetElapsedMilliseconds() << " ms." << std::endl;
 
   OSConvolutionFilterType::Pointer osconvolution = OSConvolutionFilterType::New();
   osconvolution->SetRadius(radius);
@@ -108,11 +105,10 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *
   writer2->SetInput(osconvolution->GetOutput());
   writer2->SetFileName(outfname2);
 
-  probe2.Start();
+  chrono.Restart();
   writer2->Update();
-  probe2.Stop();
 
-  std::cout << "Overlap-save convolution algorithm took " << probe2.GetMean() << " seconds." << std::endl;
+  std::cout << "Overlap-save convolution algorithm took " << chrono.GetElapsedMilliseconds() << " ms." << std::endl;
 
   return EXIT_SUCCESS;
 }

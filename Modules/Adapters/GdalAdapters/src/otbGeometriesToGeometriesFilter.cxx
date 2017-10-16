@@ -25,7 +25,7 @@
 #include "otbGeometriesToGeometriesFilter.h"
 #include <cassert>
 #include "otbGeometriesSet.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 #include "otbMacro.h"
 
 /*===========================================================================*/
@@ -200,8 +200,7 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void )
   assert(output && "Cann't filter a nil geometries set");
 
   // Start recursive processing
-  itk::TimeProbe chrono;
-  chrono.Start();
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   if (input)
     {
     this->Process(*input, *output);
@@ -212,7 +211,7 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void )
     }
 
   chrono.Stop();
-  otbMsgDevMacro(<< "GeometriesToGeometriesFilter: geometries processed in " << chrono.GetMean() << " seconds.");
+  otbMsgDevMacro(<< "GeometriesToGeometriesFilter: geometries processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }
 
 /*virtual*/

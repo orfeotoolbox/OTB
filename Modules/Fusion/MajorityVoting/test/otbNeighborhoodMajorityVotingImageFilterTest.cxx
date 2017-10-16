@@ -28,8 +28,6 @@
 
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
-#include "itkTimeProbe.h"
-
 
 int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
 {
@@ -160,7 +158,7 @@ int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int itkNotUsed(argc), c
 
 
   NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
-    
+
   rad[0] = 1;
   rad[1] = 1;
   NeighMajVotingFilter->SetLabelForNoDataPixels(10);
