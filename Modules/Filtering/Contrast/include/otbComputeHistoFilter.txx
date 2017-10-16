@@ -83,7 +83,11 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 {
   typename Superclass::InputImagePointer inputPtr (
                   const_cast<InputImageType *>( this->GetInput() ) );
-  SetRequestedRegion( inputPtr );
+  inputPtr->SetRequestedRegion( this->GetOutput()->GetRequestedRegion() );
+  if ( inputPtr->GetRequestedRegion().GetNumberOfPixels() == 0 )
+  {
+  inputPtr->SetRequestedRegionToLargestPossibleRegion();
+  }
 }
 
 template <class TInputImage, class TOutputImage >
@@ -138,9 +142,9 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 ::GenerateOutputRequestedRegion( itk::DataObject * itkNotUsed(output) )
 {
   if ( GetHistoOutput()->GetRequestedRegion().GetNumberOfPixels() == 0 )
-  {
-  GetHistoOutput()->SetRequestedRegionToLargestPossibleRegion();
-  }
+    {
+    GetHistoOutput()->SetRequestedRegionToLargestPossibleRegion();
+    }
   typename OutputImageType::Pointer outImage ( this->GetOutput() );
   SetRequestedRegion( outImage );
 }
@@ -338,10 +342,11 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
   size[1] = histoRegion.GetSize()[1] * m_ThumbSize[1];
 
   typename OutputImageType::RegionType outputRequestedRegion;
-  outputRequestedRegion.SetIndex(start);
-  outputRequestedRegion.SetSize(size);
+  outputRequestedRegion.SetIndex( start );
+  outputRequestedRegion.SetSize( size );
 
-  outputRequestedRegion.Crop(image->GetLargestPossibleRegion());
+  outputRequestedRegion.Crop( image->GetLargestPossibleRegion() );
+  image->SetRequestedRegion( outputRequestedRegion );
 }
 
 template <class TInputImage , class TOutputImage >

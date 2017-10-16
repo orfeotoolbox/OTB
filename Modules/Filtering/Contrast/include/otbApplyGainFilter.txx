@@ -79,14 +79,17 @@ template <class TInputImage , class TLut , class TOutputImage >
 void ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::GenerateInputRequestedRegion()
 {
-  Superclass::GenerateInputRequestedRegion();
   typename InputImageType::Pointer input ( 
     const_cast<InputImageType *>( GetInputImage() ) );
   typename LutType::Pointer lut ( const_cast<LutType *>( GetInputLut() ) );
   typename OutputImageType::Pointer output ( this->GetOutput() );
   
-  input->SetRequestedRegion( output->GetRequestedRegion() );
   lut->SetRequestedRegion( lut->GetLargestPossibleRegion() );
+  input->SetRequestedRegion( output->GetRequestedRegion() );
+  if ( input->GetRequestedRegion().GetNumberOfPixels() == 0 )
+  {
+  input->SetRequestedRegionToLargestPossibleRegion();
+  }
 }
 
 template <class TInputImage , class TLut , class TOutputImage >
