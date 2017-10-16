@@ -70,7 +70,7 @@ for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
   elif echo "$F_OUTPUT" | grep -q ': broken symbolic link'; then
     echo_and_report "$F_OUTPUT"
   elif echo "$F_OUTPUT" | grep -q -i -e ': ELF .*shared object' -e ': ELF .*executable'; then
-    LDD_ERRORS=$(ldd "$name" | grep -i -e '=> not found' -e 'not a dynamic executable')
+    LDD_ERRORS=$(ldd "$name" 2>&1 | grep -v 'you do not have execution permission' | grep -i -e '=> not found' -e 'not a dynamic executable')
     if [ -n "$LDD_ERRORS" ]; then
       echo_and_report "ldd $name"
       echo_and_report "$LDD_ERRORS"
