@@ -19,9 +19,18 @@
 # limitations under the License.
 #
 
+# get current working dir (this should be the install directory)
+CWD=$(pwd)
+
 # Setup python environment
 if [ ! -f "$OTB_PYTHON_EXE" ] ; then
     OTB_PYTHON_EXE=$(which python)
+fi
+
+if [ ! -f "$OTB_PYTHON_EXE" ] ; then
+    printf %s\\n "*****Error occurred during installation******"
+    printf %s\\n "Python executable not found"
+    exit 1
 fi
 
 python_major_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[0])")
@@ -35,6 +44,7 @@ python_check_failed() {
     printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
     printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
     printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python2.7 ./OTB-X.Y-Linux64.run"
+    exit 1
 }
 if [ "$python_major_version" -gt 2 ]; then
 python_check_failed
@@ -70,11 +80,12 @@ if [ "$found_python_lib" -eq "1" ]; then
       printf %s\\n "numpy not installed with '$OTB_PYTHON_EXE'"
       printf %s\\n "Check failed with result:"
       printf %s\\n "$numpy_import_result"
+      exit 1
     else
       printf %s\\n "OTB python bindings will be configured for $OTB_PYTHON_EXE ( version: $python_version )"
       printf %s\\n "Found python library: $python_lib_file_path"
     fi
-    #ln -sf "$python_lib_file_path" "OUT_DIR/lib/$python_INSTALLED_SONAME"
+    #ln -sf "$python_lib_file_path" "$CWD/lib/$python_INSTALLED_SONAME"
 else
     printf %s\\n "*****Error occurred during installation******"
     printf %s\\n "Python interpreter detected is : $OTB_PYTHON_EXE ( version: $python_version )"
@@ -82,5 +93,6 @@ else
     printf %s\\n "We had searched following directories $python_lib_dirs"
     printf %s\\n "If you don't have python-dev package installed, install it and make a symlink"
     printf %s\\n "If you don't have python headers and so installed on a custom location, then make a symlink"
-    printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME OUT_DIR/lib/$python_INSTSONAME"
+    printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME $CWD/lib/$python_INSTSONAME"
+    exit 1
 fi

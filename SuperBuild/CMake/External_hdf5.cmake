@@ -54,3 +54,10 @@ ExternalProject_Add(HDF5
   LOG_BUILD 1
   LOG_INSTALL 1
   )
+
+# this should not be needed but see Mantis-1457
+if(UNIX)
+  set(_SB_HDF5_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+  set(_SB_HDF5_C_LIBRARY ${SB_INSTALL_PREFIX}/lib/libhdf5${CMAKE_SHARED_LIBRARY_SUFFIX})
+  set(_SB_HDF5_HL_LIBRARY ${SB_INSTALL_PREFIX}/lib/libhdf5_hl${CMAKE_SHARED_LIBRARY_SUFFIX})
+endif()

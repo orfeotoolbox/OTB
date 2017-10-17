@@ -20,6 +20,17 @@
 #
 set -e
 
+# verify basic tools are here (install_name_tool is specific macOS)
+which sh >/dev/null 2>&1 || ret=$?
+if [ ! -z "$ret" ] ; then echo "ERROR: Missing tool 'which'"; exit 1 ; fi
+for tool in dirname find file grep cut sed chmod cat readlink install_name_tool ; do
+  if [ -z "$(which $tool)" ] ; then
+    echo "ERROR: Missing tool '${tool}'"
+    echo "Please install it and make sure it can be found from PATH"
+    exit 1;
+  fi
+done
+
 DIRNAME_0=$(dirname "$0")
 cd  "$DIRNAME_0" || exit 1
 
@@ -29,16 +40,9 @@ cd  "$DIRNAME_0" || exit 1
 OUT_DIR=$(pwd)
 
 #do not move below 3 lines. it must be before "unset LD_LIBRARY_PATH" code
-sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/setup_python.sh"
-chmod +x $OUT_DIR/setup_python.sh
-./setup_python.sh
-
-# find install_name_tool
-INSTALL_NAME_TOOL=$(which install_name_tool)
-if [ -z "$INSTALL_NAME_TOOL" ]; then
-    echo "install_name_tool does not exists.."
-    echo "please install install_name_tool and make sure it can be found from PATH"
-    exit 1;
+if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ] ; then
+  chmod +x "$OUT_DIR/setup_python.sh"
+  ./setup_python.sh || setup_python_ret=$?
 fi
 
 # no interference with DYLD_LIBRARY_PATH and DYLD_FALLBACK_LIBRARY_PATH
@@ -55,9 +59,9 @@ for input_file in $LIB_FILES $BIN_FILES; do
     if [ -f "$input_file" ]; then
       input_file_old_rpaths=$(otool -l "$input_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
       for rpath_old in $input_file_old_rpaths; do
-        $INSTALL_NAME_TOOL "-delete_rpath" "$rpath_old" "$input_file"
+        install_name_tool "-delete_rpath" "$rpath_old" "$input_file"
       done
-      $INSTALL_NAME_TOOL "-add_rpath" "$OUT_DIR/lib" "$input_file"
+      install_name_tool "-add_rpath" "$OUT_DIR/lib" "$input_file"
     fi
 done
 

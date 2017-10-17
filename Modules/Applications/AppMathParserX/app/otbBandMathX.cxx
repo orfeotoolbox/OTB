@@ -74,7 +74,7 @@ private:
       "The list of features and the syntax of muParserX is available at [1].\n\n"
 
       "As opposed to muParser (and thus the BandMath OTB-application [2]), "
-      "muParserX supports vector expressions which allows to output multi-band "
+      "muParserX supports vector expressions which allows outputting multi-band "
       "images.\n\n"
 
       "Hereafter is a brief reference of the muParserX syntax\n\n"
@@ -106,10 +106,10 @@ private:
       "im1b2Mean\n"
       "  mean of the 2nd component of the 1st input (global statistics)\n\n"
 
-      "im1b2Min\n"
+      "im1b2Mini\n"
       "  minimum of the 2nd component of the 1st input (global statistics)\n\n"
 
-      "im1b2Max\n"
+      "im1b2Maxi\n"
       "  minimum of the 2nd component of the 1st input (global statistics)\n\n"
 
       "im1b2Sum\n"

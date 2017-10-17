@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
   int ret = qtApp.exec();
 
   // Clean resources
-  if (mainWindow) delete mainWindow;
+  delete mainWindow;
   app = ITK_NULLPTR;
   ApplicationRegistry::CleanRegistry();
 

@@ -249,7 +249,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
   if(inRes>inThreshold)
     {
     failed = true;
-    std::cerr<<"Input residual ("<<outRes<<") outpasses the threshold ("<<inThreshold<<")"<<std::endl;
+    std::cerr<<"Input residual ("<<inRes<<") outpasses the threshold ("<<inThreshold<<")"<<std::endl;
     std::cerr<<std::endl;
     }
 

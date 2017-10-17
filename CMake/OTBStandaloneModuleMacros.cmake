@@ -262,7 +262,7 @@ macro(otb_module_impl)
   set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
   set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
   
-  if(${BUILD_TESTING})
+  if(BUILD_TESTING)
     enable_testing()
   endif()
   

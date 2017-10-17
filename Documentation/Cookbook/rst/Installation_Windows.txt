@@ -18,6 +18,9 @@ and their launchers (both command line and graphical launchers are provided):
 
 -  ``lib``: A folder containing application DLLs.
 
+-  ``tool``: A folder containing usefull scripts to test the installation or
+   to uninstall OTB libraries and headers while keeping all the depedencies.
+
 The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize a command prompt
 with ``otbenv.bat``.

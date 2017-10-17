@@ -817,18 +817,22 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 
   if (type == ParameterType_Choice)
     {
-    std::vector<std::string> keys = dynamic_cast<ChoiceParameter*>(param.GetPointer())->GetChoiceKeys();
-    std::vector<std::string> names = dynamic_cast<ChoiceParameter*>(param.GetPointer())->GetChoiceNames();
-
-    oss << "[";
-    for(unsigned int i=0; i<keys.size(); i++)
+    ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param.GetPointer());
+    if (paramDown)
       {
-      oss<<keys[i];
-      if( i != keys.size()-1 )
-        oss << "/";
+      std::vector<std::string> keys = paramDown->GetChoiceKeys();
+      std::vector<std::string> names = paramDown->GetChoiceNames();
+
+      oss << "[";
+      for(unsigned int i=0; i<keys.size(); i++)
+      {
+        oss<<keys[i];
+        if( i != keys.size()-1 )
+          oss << "/";
       }
 
-    oss << "]";
+      oss << "]";
+      }
     }
 
   if(m_Application->IsMandatory(paramKey))
