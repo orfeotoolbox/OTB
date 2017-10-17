@@ -128,7 +128,7 @@ void TrainImagesBase::InitClassification()
   AddApplication( "TrainVectorClassifier", "training", "Model training" );
 
   AddParameter( ParameterType_InputVectorDataList, "io.valid", "Validation Vector Data List" );
-  SetParameterDescription( "io.valid", "A list of vector data to select the training samples." );
+  SetParameterDescription( "io.valid", "A list of vector data to select the validation samples." );
   MandatoryOff( "io.valid" );
 
   ShareClassificationParams();
