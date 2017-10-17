@@ -49,7 +49,7 @@ public:
   typedef struct Parameter
     {
     /** Maximum size of the internal patterns */
-    unsigned long MaxPatternSize;
+    unsigned long MaxPatternSize = 0;
 
     /** First sampling pattern */
     std::vector<bool> Pattern1;
@@ -59,7 +59,7 @@ public:
     std::vector<bool> Pattern2;
 
     /** Seed used to randomly generate patterns (used only if greater than 0) */
-    unsigned int Seed;
+    unsigned int Seed = 0;
 
     bool operator!=(const struct Parameter  & param) const;
     } ParameterType; 

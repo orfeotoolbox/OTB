@@ -114,7 +114,7 @@ int parseCommandLine(int ac, char * av[], std::vector<char *>& remainingArgs)
         if (oldenv2)
           {
           libpath64 += KWSYS_SHARED_FORWARD_PATH_SEP;
-          libpath64 += oldenv;
+          libpath64 += oldenv2;
           }
         itksys::SystemTools::PutEnv(libpath64.c_str());
         }
