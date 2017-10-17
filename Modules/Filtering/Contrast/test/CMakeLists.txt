@@ -26,6 +26,8 @@ otbComputeHistoFilterNew.cxx
 otbApplyGainFilterNew.cxx
 otbComputeGainLutFilterNew.cxx
 otbCLHistogramEqualizationFilterNew.cxx
+otbCLHistogramEqualizationFilter.cxx
+otbHelperCLAHE.cxx
 )
 
 add_executable(otbContrastTestDriver ${OTBContrastTests})
