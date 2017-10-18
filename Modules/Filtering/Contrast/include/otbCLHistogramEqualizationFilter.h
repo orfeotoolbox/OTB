@@ -54,8 +54,9 @@ public :
   typedef itk::SmartPointer< const Self > ConstPointer;
 
   typedef otb::VectorImage< int , 2 > HistogramType;
+  typedef otb::VectorImage< double , 2 > LutType;
 
-  typedef itk::StreamingImageFilter< HistogramType , HistogramType >
+  typedef itk::StreamingImageFilter< LutType , LutType >
     StreamingImageFilter;
 
   typedef otb::InPlacePassFilter < InputImageType > BufferFilter;
@@ -63,10 +64,10 @@ public :
   typedef otb::ComputeHistoFilter< InputImageType , HistogramType >
     HistoFilter;
 
-  typedef otb::ComputeGainLutFilter< HistogramType , HistogramType >
+  typedef otb::ComputeGainLutFilter< HistogramType , LutType >
     GainLutFilter;
 
-  typedef otb::ApplyGainFilter< InputImageType , HistogramType , OutputImageType >
+  typedef otb::ApplyGainFilter< InputImageType , LutType , OutputImageType >
     ApplyGainFilter;
 
   typedef typename InputImageType::PixelType InputPixelType;
@@ -141,14 +142,6 @@ public :
     m_NoDataFlag = flag;
     }
 
-  void SetInput( const OutputImageType * input )
-    {
-    this->itk::ProcessObject::SetNthInput( 0,
-      const_cast< InputImageType * >( input ) );
-    m_HistoFilter->SetInput( input );
-    m_BufferFilter->SetInput( input );
-    }
-
 protected :
   CLHistogramEqualizationFilter();
   ~CLHistogramEqualizationFilter() override {}
@@ -173,7 +166,7 @@ private :
   InputPixelType m_Min , m_Max , m_NoData;
   unsigned long m_NbBin;
   typename InputImageType::SizeType m_ThumbSize;
-  double m_Threshold , m_Step;
+  double m_Threshold;
   bool m_NoDataFlag;
 
 };

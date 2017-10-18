@@ -40,8 +40,9 @@ int otbHelperCLAHE(int itkNotUsed(argc), char * argv [])
   reader->UpdateOutputInformation();
 
   typedef otb::VectorImage< int , 2 > HistogramType;
+  typedef otb::VectorImage< double , 2 > LutType;
 
-  typedef itk::StreamingImageFilter< HistogramType , HistogramType >
+  typedef itk::StreamingImageFilter< LutType , LutType >
     StreamingImageFilter;
 
   typedef otb::InPlacePassFilter < InputImageType > BufferFilter;
@@ -49,10 +50,10 @@ int otbHelperCLAHE(int itkNotUsed(argc), char * argv [])
   typedef otb::ComputeHistoFilter< InputImageType , HistogramType >
     HistoFilter;
 
-  typedef otb::ComputeGainLutFilter< HistogramType , HistogramType >
+  typedef otb::ComputeGainLutFilter< HistogramType , LutType >
     GainLutFilter;
 
-  typedef otb::ApplyGainFilter< InputImageType , HistogramType , InputImageType >
+  typedef otb::ApplyGainFilter< InputImageType , LutType , InputImageType >
     ApplyGainFilter;
 
   HistoFilter::Pointer histoFilter( HistoFilter::New() );

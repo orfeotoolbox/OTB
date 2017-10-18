@@ -44,7 +44,6 @@ m_BufferFilter ( BufferFilter::New() )
   m_NoDataFlag = false;
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_ThumbSize.Fill(0);
-  m_Step = -1;
   m_GainLutFilter->SetInput( m_HistoFilter->GetHistoOutput() );
   m_StreamingImageFilter->SetInput( m_GainLutFilter->GetOutput() );
   m_ApplyGainFilter->SetInputLut( m_StreamingImageFilter->GetOutput() );
@@ -54,7 +53,10 @@ m_BufferFilter ( BufferFilter::New() )
 template < class TInputImage , class TOutputImage >
 void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
 ::UpdateOutputInformation()
-{
+{ 
+  const InputImageType * input =  this->GetInput() ;
+  m_HistoFilter->SetInput( input );
+  m_BufferFilter->SetInput( input );
   m_ApplyGainFilter->GetOutput()->UpdateOutputInformation();
   this->GetOutput()->CopyInformation( m_ApplyGainFilter->GetOutput() );
 }
@@ -74,6 +76,7 @@ void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
   m_ApplyGainFilter->GraftOutput( this->GetOutput() );
   m_ApplyGainFilter->Update();
   this->GraftOutput( m_ApplyGainFilter->GetOutput() );
+  
 }
 
 /**
@@ -91,7 +94,6 @@ void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
   os << indent << "Threshold value : " << m_Threshold << std::endl;
   os << indent << "Is no data activated : " << m_NoDataFlag << std::endl;
   os << indent << "No Data : " << m_NoData << std::endl;
-  os << indent << "Step : " << m_Step << std::endl;
 }
 
   

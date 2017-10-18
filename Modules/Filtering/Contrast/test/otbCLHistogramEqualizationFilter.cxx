@@ -36,8 +36,8 @@ int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char * argv [])
 
   ReaderType::Pointer reader ( ReaderType::New() );
   WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( "/home/antoine/dev/my_data/smallinputmono.tif" );
-  writer->SetFileName( "/home/antoine/dev/my_data/smallnewtest.tif" );
+  reader->SetFileName( "/home/antoine/dev/my_data/test/smallinput.tif" );
+  writer->SetFileName( "/home/antoine/dev/my_data/test/small_glob_clahe.tif" );
   reader->UpdateOutputInformation();
   FilterType::Pointer histoEqualize ( FilterType::New() );
   histoEqualize->SetInput( reader->GetOutput() );
