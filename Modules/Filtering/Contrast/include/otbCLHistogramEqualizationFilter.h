@@ -76,28 +76,78 @@ public :
   /** Run-time type information (and related methods). */
   itkTypeMacro(CLHistogramEqualizationFilter, ImageToImageFilter)
 
-  itkGetMacro(Min, InputPixelType)
-  itkSetMacro(Min, InputPixelType)
+  itkGetMacro(Min , InputPixelType)
+  // itkSetMacro(Min, InputPixelType)
+  void SetMin( InputPixelType min )
+    {
+    m_HistoFilter->SetMin(min);
+    m_GainLutFilter->SetMin(min);
+    m_ApplyGainFilter->SetMin(min);
+    m_Min = min;
+    };
 
-  itkGetMacro(Max, InputPixelType)
-  itkSetMacro(Max, InputPixelType)
+  itkGetMacro(Max , InputPixelType)
+  // itkSetMacro(Max, InputPixelType)
+  void SetMax( InputPixelType max )
+    {
+    m_HistoFilter->SetMax(max);
+    m_GainLutFilter->SetMax(max);
+    m_ApplyGainFilter->SetMax(max);
+    m_Max = max;
+    };
 
-  itkGetMacro(NbBin, unsigned long)
-  itkSetMacro(NbBin, unsigned long)
+  itkGetMacro(NbBin , unsigned long)
+  // itkSetMacro(NbBin, unsigned long)
+  void SetNbBin( unsigned long bin )
+    {
+    m_HistoFilter->SetNbBin(bin);
+    m_NbBin = bin;
+    };
 
-  itkSetMacro(ThumbSize, typename InputImageType::SizeType)
-  itkGetMacro(ThumbSize, typename InputImageType::SizeType)
+  itkGetMacro(ThumbSize , typename InputImageType::SizeType)
+  // itkSetMacro(ThumbSize, typename InputImageType::SizeType)
+  void SetThumbSize( typename InputImageType::SizeType size )
+    {
+    m_HistoFilter->SetThumbSize(size);
+    m_ApplyGainFilter->SetThumbSize(size);
+    m_GainLutFilter->SetNbPixel(size[0]*size[1]);
+    m_ThumbSize = size;
+    };
 
-  itkGetMacro(Threshold, double)
-  itkSetMacro(Threshold, double)
+  itkGetMacro(Threshold , double)
+  // itkSetMacro(Threshold, double)
+  void SetThreshold( double t )
+    {
+    m_HistoFilter->SetThreshold(t);
+    m_Threshold = t;
+    };
 
-  itkGetMacro(NoData, InputPixelType)
-  itkSetMacro(NoData, InputPixelType)
+  itkGetMacro(NoData , InputPixelType)
+  // itkSetMacro(NoData, InputPixelType)
+  void SetNoData( InputPixelType n )
+    {
+    m_HistoFilter->SetNoData(n);
+    m_ApplyGainFilter->SetNoData(n);
+    m_NoData = n;
+    }
 
-  itkBooleanMacro(NoDataFlag)
-  itkGetMacro(NoDataFlag, bool)
-  itkSetMacro(NoDataFlag, bool)
 
+  itkGetMacro(NoDataFlag , bool)
+  // itkSetMacro(NoDataFlag, bool)
+  void SetNoDataFlag( bool flag )
+    {
+    m_HistoFilter->SetNoDataFlag(flag);
+    m_ApplyGainFilter->SetNoDataFlag(flag);
+    m_NoDataFlag = flag;
+    }
+
+  void SetInput( const OutputImageType * input )
+    {
+    this->itk::ProcessObject::SetNthInput( 0,
+      const_cast< InputImageType * >( input ) );
+    m_HistoFilter->SetInput( input );
+    m_BufferFilter->SetInput( input );
+    }
 
 protected :
   CLHistogramEqualizationFilter();
@@ -105,10 +155,11 @@ protected :
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override ;
 
-  void BeforeThreadedGenerateData() override;
-  
-  void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void UpdateOutputInformation() override;
+
+  void PropagateRequestedRegion( itk::DataObject * output  ) override;
+
+  void GenerateData() override;
 
 private :
   CLHistogramEqualizationFilter(const Self &) = delete ;

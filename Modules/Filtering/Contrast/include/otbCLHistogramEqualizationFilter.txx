@@ -23,7 +23,6 @@
 
 #include "otbCLHistogramEqualizationFilter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIteratorWithIndex.h"
 
 #include <limits>
 
@@ -41,32 +40,40 @@ m_BufferFilter ( BufferFilter::New() )
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NbBin = 256;
-  m_Threshold = std::numeric_limits< double >::max();
+  m_Threshold = -1;
   m_NoDataFlag = false;
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_ThumbSize.Fill(0);
   m_Step = -1;
-  m_HistoFilter->SetInput( this->GetInput() );
-  m_GainLutFilter->SetInput( m_HistoFilter->GetOutput() );
+  m_GainLutFilter->SetInput( m_HistoFilter->GetHistoOutput() );
   m_StreamingImageFilter->SetInput( m_GainLutFilter->GetOutput() );
-  m_BufferFilter->SetInput( this->GetInput() );
   m_ApplyGainFilter->SetInputLut( m_StreamingImageFilter->GetOutput() );
   m_ApplyGainFilter->SetInputImage( m_BufferFilter->GetOutput() );
 }
 
 template < class TInputImage , class TOutputImage >
 void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
-::BeforeGenerateData()
+::UpdateOutputInformation()
 {
-
+  m_ApplyGainFilter->GetOutput()->UpdateOutputInformation();
+  this->GetOutput()->CopyInformation( m_ApplyGainFilter->GetOutput() );
 }
 
 template < class TInputImage , class TOutputImage >
 void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
-::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            itk::ThreadIdType threadId)
-{
+::PropagateRequestedRegion( itk::DataObject * output )
+{ 
+  m_ApplyGainFilter->GetOutput()->SetRequestedRegion( static_cast<OutputImageType *>(output)->GetRequestedRegion() );
+  m_ApplyGainFilter->GetOutput()->PropagateRequestedRegion();
+}
 
+template < class TInputImage , class TOutputImage >
+void CLHistogramEqualizationFilter < TInputImage , TOutputImage >
+::GenerateData()
+{
+  m_ApplyGainFilter->GraftOutput( this->GetOutput() );
+  m_ApplyGainFilter->Update();
+  this->GraftOutput( m_ApplyGainFilter->GetOutput() );
 }
 
 /**

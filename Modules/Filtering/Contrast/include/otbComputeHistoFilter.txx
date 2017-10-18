@@ -40,7 +40,7 @@ ComputeHistoFilter < TInputImage , TOutputImage >
   m_NoDataFlag = false;
   m_NoData = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NbBin = 256;
-  m_Threshold = std::numeric_limits< float >::max();
+  m_Threshold = -1;
   m_ThumbSize.Fill(0);
   m_ValidThreads = 1;
   m_Step = -1;
@@ -280,7 +280,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
       oit.Get()[i] = agreg;
       total += agreg;
       }
-    if ( m_Threshold != std::numeric_limits< float >::max() )
+    if ( m_Threshold != -1 )
       ApplyThreshold( oit , total );
     }
 }
