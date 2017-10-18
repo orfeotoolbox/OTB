@@ -23,6 +23,7 @@ otb_module_test()
 set(OTBContrastTests
 otbContrastTestDriver.cxx
 otbComputeHistoFilterNew.cxx
+otbComputeHistoFilter.cxx
 otbApplyGainFilterNew.cxx
 otbComputeGainLutFilterNew.cxx
 otbCLHistogramEqualizationFilterNew.cxx

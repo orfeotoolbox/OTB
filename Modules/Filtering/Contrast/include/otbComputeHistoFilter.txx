@@ -280,7 +280,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
       oit.Get()[i] = agreg;
       total += agreg;
       }
-    if ( m_Threshold != -1 )
+    if ( m_Threshold > 0 )
       ApplyThreshold( oit , total );
     }
 }
