@@ -25,6 +25,7 @@ otbContrastTestDriver.cxx
 otbComputeHistoFilterNew.cxx
 otbComputeHistoFilter.cxx
 otbApplyGainFilterNew.cxx
+otbApplyGainFilter.cxx
 otbComputeGainLutFilterNew.cxx
 otbComputeGainLutFilter.cxx
 otbCLHistogramEqualizationFilterNew.cxx
