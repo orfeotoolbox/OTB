@@ -186,7 +186,7 @@ private:
     AddDocTag(Tags::Calibration);
 
     AddParameter(ParameterType_InputImage,  "in",  "Input");
-    SetParameterDescription("in", "Input image filename (values in DN)");
+    SetParameterDescription("in", "Input image filename");
 
     AddParameter(ParameterType_OutputImage, "out", "Output");
     SetParameterDescription("out","Output calibrated image filename");
@@ -205,8 +205,8 @@ private:
     DisableParameter("milli");
     MandatoryOff("milli");
 
-    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0, 100]");
-    SetParameterDescription("clamp", "Clamping in the range [0, 100]. It can be useful to preserve area with specular reflectance.");
+    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0, 1]");
+    SetParameterDescription("clamp", "Clamping in the range [0, 1]. It can be useful to preserve area with specular reflectance.");
     EnableParameter("clamp");
     MandatoryOff("clamp");
 
