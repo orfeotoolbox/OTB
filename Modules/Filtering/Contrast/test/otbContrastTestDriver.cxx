@@ -25,6 +25,7 @@ void RegisterTests()
   REGISTER_TEST(otbComputeHistoFilterNew);
   REGISTER_TEST(otbComputeHistoFilter);
   REGISTER_TEST(otbComputeGainLutFilterNew);
+  REGISTER_TEST(otbComputeGainLutFilter);
   REGISTER_TEST(otbApplyGainFilterNew);
   REGISTER_TEST(otbCLHistogramEqualizationFilterNew);
   REGISTER_TEST(otbCLHistogramEqualizationFilter);

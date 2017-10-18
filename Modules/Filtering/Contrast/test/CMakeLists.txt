@@ -26,6 +26,7 @@ otbComputeHistoFilterNew.cxx
 otbComputeHistoFilter.cxx
 otbApplyGainFilterNew.cxx
 otbComputeGainLutFilterNew.cxx
+otbComputeGainLutFilter.cxx
 otbCLHistogramEqualizationFilterNew.cxx
 otbCLHistogramEqualizationFilter.cxx
 otbHelperCLAHE.cxx
