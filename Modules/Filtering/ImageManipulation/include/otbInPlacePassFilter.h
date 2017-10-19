@@ -23,6 +23,8 @@
 
 #include "itkInPlaceImageFilter.h"
 #include "otbImage.h"
+#include "itkImageRegionIterator.h"
+
 namespace otb
 {
 
@@ -63,13 +65,26 @@ protected:
   InPlacePassFilter() {
     this->InPlaceOn();
   }
+
   ~InPlacePassFilter() override {}
 
-  virtual void ThreadedGenerateData(
+  void ThreadedGenerateData(
       const typename InputImageType::RegionType & 
-        itkNotUsed(outputRegionForThread) ,
-      itk::ThreadIdType itkNotUsed(threadId) ) override{}
-
+        outputRegionForThread ,
+      itk::ThreadIdType itkNotUsed(threadId) ) override
+  {
+    typename InputImageType::ConstPointer input ( this->GetInput() );
+    typename InputImageType::Pointer output ( this->GetOutput() );
+    itk::ImageRegionConstIterator < InputImageType > it ( input , 
+                                                          outputRegionForThread );
+    itk::ImageRegionIterator < InputImageType > oit ( output ,
+                                                      outputRegionForThread );
+    for ( oit.GoToBegin() , it.GoToBegin() ; !oit.IsAtEnd() || !it.IsAtEnd() ;
+      ++it , ++oit )
+      {
+      oit.Set(it.Get());
+      }
+  }
 private:
   InPlacePassFilter(const Self &) = delete ;
   void operator =(const Self&) = delete ;
