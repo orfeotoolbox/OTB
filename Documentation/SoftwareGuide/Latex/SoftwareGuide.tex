@@ -33,6 +33,13 @@
 \definecolor{listwhite}{gray}{1.0}
 
 \usepackage{minted}
+\newminted{cpp}{fontsize=\small}
+\newminted{cmake}{fontsize=\small}
+\newminted{bat}{fontsize=\small}
+
+\usepackage{mdframed}
+\BeforeBeginEnvironment{cppcode}{\begin{mdframed}[leftline=false,rightline=false,backgroundcolor=listlightgray]}
+\AfterEndEnvironment{cppcode}{\end{mdframed}}
 
 \newif\ifitkFullVersion
 \itkFullVersiontrue

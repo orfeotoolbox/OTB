@@ -92,7 +92,7 @@ sub ParseCxxFile {
       $tagfound = 1;
       $dumpinglatex = 0;
       $dumpingcode  = 1;
-      print OUTFILE "\\begin{minted}{cpp}\n";
+      print OUTFILE "\\begin{cppcode}\n";
       }
     elsif( /$endlatextag/ ) {
       $tagfound = 1;
@@ -101,7 +101,7 @@ sub ParseCxxFile {
     elsif( /$endcodesnippettag/ ) {
       $tagfound = 1;
       $dumpingcode = 0;
-      print OUTFILE "\\end{minted}\n";
+      print OUTFILE "\\end{cppcode}\n";
       }
     if( !$tagfound ) {
       if( $dumpinglatex ) {
