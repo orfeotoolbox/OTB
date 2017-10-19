@@ -112,17 +112,17 @@ section~\ref{chapter:WriteAFilter}, page~\pageref{chapter:WriteAFilter}.
 The first step is to write a persistent mean image filter. We need to
 include the appropriate header :
 
-\begin{minted}{cpp}
+\begin{cppcode}
 #include "otbPersistentImageFilter.h"
-\end{minted}
+\end{cppcode}
 
 Then, we declare the class prototype as follows:
 
-\begin{minted}{cpp}
+\begin{cppcode}
 template<class TInputImage >
   class ITK_EXPORT PersistentMeanImageFilter :
     public PersistentImageFilter<TInputImage, TInputImage>
-\end{minted}
+\end{cppcode}
 
 Since the output image will only be used for streaming purpose, we do
 not need to declare different input and output template types.
@@ -131,14 +131,14 @@ In the \emph{private} section of the class, we will declare a member which
 will be used to store temporary results, and a member which will be
 used to store the final result.
 
-\begin{minted}{cpp}
+\begin{cppcode}
 private:
   // Temporary results container
   std::vector<PixelType> m_TemporarySums;
 
   // Final result member
   double m_Mean;
-\end{minted}
+\end{cppcode}
 
 Next, we will write the \verb?Reset()? method implementation in the
 \emph{protected} section of the class. Proper allocation of the
@@ -146,7 +146,7 @@ temporary results container with respect to the number of threads is
 handled here.
 
 
-\begin{minted}{cpp}
+\begin{cppcode}
 protected:
   virtual void Reset()
   {
@@ -160,13 +160,13 @@ protected:
   // Reset the final result
   m_Mean = 0.;
   }
-\end{minted}
+\end{cppcode}
 
 Now, we need to write the \verb?ThreadedGenerateData()? methods (also
 in the \emph{protected} section), were
 temporary results will be computed for each piece of stream.
 
-\begin{minted}{cpp}
+\begin{cppcode}
 virtual void ThreadedGenerateData(const RegionType&
                                   outputRegionForThread, itk::ThreadIdType threadId)
 {
@@ -190,12 +190,12 @@ for (it.GoToBegin(); !it.IsAtEnd(); ++it, progress.CompletedPixel())
   m_TemporarySums[threadId]+= value;
 }
 
-\end{minted}
+\end{cppcode}
 
 Last, we need to define the \verb?Synthetize()? method (still in the
 \emph{protected} section), which will yield the final results:
 
-\begin{minted}{cpp}
+\begin{cppcode}
 virtual void Synthetize()
 {
 // For each thread
@@ -214,7 +214,7 @@ if(nbPixels!=0)
   m_Mean/=nbPixels;
   }  
 }
-\end{minted}
+\end{cppcode}
 
 \subsection{Second step: Decorating the filter and using it}
 
@@ -222,41 +222,41 @@ Now, to use the filter, one only has to decorate it with the
 \doxygen{otb}{PersistentFilterStreamingDecorator}. First step is
 to include the appropriate header:
 
-\begin{minted}{cpp}
+\begin{cppcode}
 #include "otbPersistentMeanImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-\end{minted}
+\end{cppcode}
 
 Then, we decorate the filter with some typedefs:
 
-\begin{minted}{cpp}
+\begin{cppcode}
 typedef otb::PersistentMeanImageFilter<ImageType>
   PersitentMeanFilterType;
 typedef otb::PersistentFilterStreamingDecorator
   < PersitentMeanFilterType> StreamingMeanFilterType;
-\end{minted}
+\end{cppcode}
 
 Now, the decorated filter can be used like any standard filter:
 
-\begin{minted}{cpp}
+\begin{cppcode}
 StreamingMeanFilterType::Pointer filter =
   StreamingMeanFilterType::New();
 
 filter->SetInput(reader->GetOutput());
 filter->Update();
-\end{minted}
+\end{cppcode}
 
 \subsection{Third step: one class to rule them all}
 
 It is often convenient to avoid the few typedefs of the previous
 section by deriving a new class from the decorated filter:
 
-\begin{minted}{cpp}
+\begin{cppcode}
 template<class TInputImage >
   class ITK_EXPORT StreamingMeanImageFilter :
     public PersistentFilterStreamingDecorator<
            PersistentImageFilter<TInputImage, TInputImage> >
-\end{minted}
+\end{cppcode}
 
 This also allows to redefine setters and getters for parameters,
 avoiding to call the \verb?GetFilter()? method to set them.
