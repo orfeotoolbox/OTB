@@ -123,9 +123,9 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
   typename InputImageType::ConstPointer input ( GetInputImage() );
   typename LutType::ConstPointer lut ( GetInputLut() );
   typename OutputImageType::Pointer output ( this->GetOutput() );
-  typename InputImageType::RegionType inputRegionForThread;
+  typename InputImageType::RegionType inputRegionForThread( 
+    outputRegionForThread );
 
-  inputRegionForThread = outputRegionForThread ;
 
   itk::ImageRegionConstIteratorWithIndex < InputImageType > it ( input , 
                                                         inputRegionForThread );
