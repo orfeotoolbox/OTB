@@ -103,6 +103,8 @@ namespace {// Anonymous namespace
 
 namespace ossimplugins
 {
+   RTTI_DEF1(ossimSarSensorModel, "ossimSarSensorModel", ossimSensorModel);
+
    const double ossimSarSensorModel::C = 299792458;
 
    ossimSarSensorModel::ProductType::ProductType(string_view const& s)

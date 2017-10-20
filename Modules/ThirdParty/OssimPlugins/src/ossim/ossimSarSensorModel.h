@@ -313,6 +313,7 @@ public:
 
    virtual std::ostream& print(std::ostream& out) const override;
 protected:
+   TYPE_DATA;
 
    /**
     * Compute range and doppler frequency from an input point, sensor
