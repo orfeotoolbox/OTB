@@ -216,9 +216,9 @@ public:
    virtual ~ossimSarSensorModel() = default;
 #endif
 
-   virtual void lineSampleHeightToWorld(const ossimDpt& imPt, const double & heightEllipsoid, ossimGpt& worldPt) const;
+   virtual void lineSampleHeightToWorld(const ossimDpt& imPt, const double & heightEllipsoid, ossimGpt& worldPt) const override;
 
-   virtual void lineSampleToWorld(const ossimDpt& imPt, ossimGpt& worldPt) const;
+   virtual void lineSampleToWorld(const ossimDpt& imPt, ossimGpt& worldPt) const override;
 
 
    /** This method implement inverse sar geolocation using method found
@@ -229,7 +229,7 @@ public:
     * \param[in] worldPt World point to geocode
     * \param[out] imPt Corresponding estimated image point
     */
-   virtual void worldToLineSample(const ossimGpt& worldPt, ossimDpt & imPt) const;
+   virtual void worldToLineSample(const ossimGpt& worldPt, ossimDpt & imPt) const override;
 
    /**
     * Sub-routine of lineSampleToWorld that computes azimuthTime and
@@ -288,16 +288,16 @@ public:
     * \param deburstLine The output original image line
     */
    static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
-   
+
    /**
     * Returns pointer to a new instance, copy of this.
     */
-   virtual ossimObject* dup() const;
+   virtual ossimObject* dup() const override;
 
    //TODO: Add virtual method readAnnotationFile?
 
-   virtual bool saveState(ossimKeywordlist      & kwl, const char* prefix=NULL) const;
-   virtual bool loadState(ossimKeywordlist const& kwl, const char* prefix=NULL);
+   virtual bool saveState(ossimKeywordlist      & kwl, const char* prefix=NULL) const override;
+   virtual bool loadState(ossimKeywordlist const& kwl, const char* prefix=NULL) override;
 
    bool isGRD() const {
       switch (theProductType.ToInternal()) {
@@ -311,7 +311,7 @@ public:
       }
    }
 
-   virtual std::ostream& print(std::ostream& out) const;
+   virtual std::ostream& print(std::ostream& out) const override;
 protected:
 
    /**
