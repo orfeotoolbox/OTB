@@ -41,15 +41,13 @@ namespace Functor
 {
   template< class TScalar >
 class ITK_EXPORT LogFunctor
+{
+public:
+  TScalar operator() (const TScalar& v) const
   {
-  public:
-    LogFunctor(){};
-    ~LogFunctor(){};
-    TScalar operator() (const TScalar& v) const
-    {
-      return vcl_log(v);
-    }
-  };
+    return vcl_log(v);
+  }
+};
 } // end namespace Functor
 
 
@@ -239,15 +237,14 @@ private:
     typename RescalerType::Pointer rescaler = RescalerType::New();
 
     // selected channel
-    typename FloatVectorImageType::Pointer tempImage;
-    tempImage = GetSelectedChannels<FloatVectorImageType>();
+    auto tempImage = GetSelectedChannels<FloatVectorImageType>();
 
     const unsigned int nbComp(tempImage->GetNumberOfComponentsPerPixel());
 
     // We need to subsample the input image in order to estimate its histogram
     // Shrink factor is computed so as to load a quicklook of 1000
     // pixels square at most
-    typename FloatVectorImageType::SizeType imageSize = tempImage->GetLargestPossibleRegion().GetSize();
+    auto imageSize = tempImage->GetLargestPossibleRegion().GetSize();
     unsigned int shrinkFactor =
       std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
     otbAppLogDEBUG( << "Shrink factor used to compute Min/Max: "<<shrinkFactor );
@@ -279,7 +276,6 @@ private:
     otbAppLogDEBUG( << "Evaluating input Min/Max..." );
     itk::ImageRegionConstIterator<FloatVectorImageType>
       it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
-    itk::ImageRegionConstIterator<FloatVectorImageType> itMask;
 
     typename ListSampleType::Pointer listSample = ListSampleType::New();
     listSample->SetMeasurementVectorSize(tempImage->GetNumberOfComponentsPerPixel());
@@ -287,30 +283,28 @@ private:
     // Now we generate the list of samples
     if (IsParameterEnabled("mask"))
     {
-      FloatVectorImageType::Pointer mask;
-      mask = this->GetParameterImage("mask");
+      FloatVectorImageType::Pointer mask = this->GetParameterImage("mask");
       ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
       maskShrinkFilter->SetShrinkFactor(shrinkFactor);
       maskShrinkFilter->SetInput(mask);
       maskShrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
       maskShrinkFilter->Update();
 
-      itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
-        maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
+      auto itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(maskShrinkFilter->GetOutput(),
+        maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
 
       // Remove masked pixels
       it.GoToBegin();
       itMask.GoToBegin();
-      while (!it.IsAtEnd())
+      for(; !it.IsAtEnd(); ++it, ++itMask)
       {
         // float values, so the threshold is set to 0.5
         if (itMask.Get()[0] < 0.5)
         {
           listSample->PushBack(it.Get());
         }
-        ++it;
-        ++itMask;
       }
+      // if listSample is empty
       if (listSample->Size() == 0)
       {
         otbAppLogINFO( << "All pixels were masked, the application assume a wrong mask "
@@ -362,6 +356,7 @@ private:
     typename TImageType::PixelType minimum(nbComp);
     typename TImageType::PixelType maximum(nbComp);
 
+    /*
     float outminvalue = itk::NumericTraits<typename TImageType::InternalPixelType>::min();
     float outmaxvalue = itk::NumericTraits<typename TImageType::InternalPixelType>::max();
     // TODO test outmin/outmax values
@@ -371,6 +366,7 @@ private:
     if ( outmaxvalue < GetParameterFloat("outmax") )
       itkExceptionMacro("The outmax value at " << GetParameterFloat("outmax") << 
                         " is too high, select a value in "<< outmaxvalue <<" max.");
+    */
     maximum.Fill( GetParameterFloat("outmax") );
     minimum.Fill( GetParameterFloat("outmin") );
 
@@ -382,7 +378,7 @@ private:
   }
 
   // Get the bands order
-  std::vector<int> GetChannels()
+  std::vector<int> const GetChannels()
   {
     std::vector<int> channels;
 
@@ -436,11 +432,8 @@ private:
     typedef ImageListToVectorImageFilter<ImageListType,
                                          TImageType >                             ListConcatenerFilterType;
 
-    typename ImageListType::Pointer             imageList;
-    typename ListConcatenerFilterType::Pointer  concatener;
-
-    imageList = ImageListType::New();
-    concatener = ListConcatenerFilterType::New();
+    typename ImageListType::Pointer             imageList  = ImageListType::New();
+    typename ListConcatenerFilterType::Pointer  concatener = ListConcatenerFilterType::New();
 
     //m_Filters.push_back(imageList.GetPointer());
     m_Filters.push_back(concatener.GetPointer());
@@ -448,7 +441,7 @@ private:
     const bool monoChannel = IsParameterEnabled("channels.grayscale");
 
     // get band order
-    std::vector<int> channels = GetChannels();
+    const std::vector<int> channels = GetChannels();
 
     for (auto && channel : channels)
     {
@@ -467,7 +460,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
     {
