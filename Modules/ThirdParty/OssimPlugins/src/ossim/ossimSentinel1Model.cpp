@@ -151,26 +151,7 @@ namespace ossimplugins
       kwl.addList(theManifestKwl, true);
       kwl.addList(theProductKwl,  true);
 
-      // Rewrite burst records since model could have been debursted
-      kwl.removeKeysThatMatch(BURST_PREFIX+"*");
-      
-      add(kwl,BURST_NUMBER_KEY.c_str(),(unsigned int)theBurstRecords.size());
-
-      unsigned int burstId(0);
-      char burstPrefix[1024];
-      
-      for(std::vector<BurstRecordType>::const_iterator burstIt = theBurstRecords.begin();
-          burstIt!=theBurstRecords.end();++burstIt)
-        {
-        s_printf(burstPrefix, "%s[%d].", BURST_PREFIX.c_str(), burstId);
-        add(kwl,burstPrefix+keyStartLine,(ossim_uint32)burstIt->startLine);
-        add(kwl,burstPrefix+keyEndLine,(ossim_uint32)burstIt->endLine);
-        add(kwl,burstPrefix+keyAzimuthStartTime,burstIt->azimuthStartTime);
-        add(kwl,burstPrefix+keyAzimuthStopTime,burstIt->azimuthStopTime);
-        ++burstId;
-        }
-      
-      return ossimSarSensorModel::saveState(kwl, prefix);
+      return ossimSensorModel::saveState(kwl, prefix);
    }
 
 
