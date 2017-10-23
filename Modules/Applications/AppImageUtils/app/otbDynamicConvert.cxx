@@ -45,7 +45,7 @@ class ITK_EXPORT LogFunctor
 public:
   TScalar operator() (const TScalar& v) const
   {
-    return vcl_log(v);
+    return std::log(v);
   }
 };
 } // end namespace Functor
@@ -70,14 +70,14 @@ public:
   typedef itk::Statistics::ListSample<FloatVectorImageType::PixelType> ListSampleType;
   typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
   typedef ListSampleToHistogramListGenerator<ListSampleType,
-               FloatVectorImageType::InternalPixelType,
-               DFContainerType>          HistogramsGeneratorType;
+                                             FloatVectorImageType::InternalPixelType,
+                                             DFContainerType>          HistogramsGeneratorType;
   typedef StreamingShrinkImageFilter<FloatVectorImageType,
-             FloatVectorImageType>             ShrinkFilterType;
+                                     FloatVectorImageType>             ShrinkFilterType;
   typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
   typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
-             FloatVectorImageType,
-             TransferLogFunctor>   TransferLogType;
+                                                 FloatVectorImageType,
+                                                 TransferLogFunctor>   TransferLogType;
 
 private:
 
@@ -216,12 +216,10 @@ private:
       if (nbBand > 1)
       {
         // get band index : Red/Green/Blue, in depending on the sensor
-        int bandRed = metadataInterface->GetDefaultDisplay()[0] + 1;
-        int bandGreen = metadataInterface->GetDefaultDisplay()[1] + 1;
-        int bandBlue = metadataInterface->GetDefaultDisplay()[2] + 1;
-        SetDefaultParameterInt("channels.rgb.red", bandRed);
-        SetDefaultParameterInt("channels.rgb.green", bandGreen);
-        SetDefaultParameterInt("channels.rgb.blue", bandBlue);
+        auto const& display = metadataInterface->GetDefaultDisplay();
+        SetDefaultParameterInt("channels.rgb.red", display[0] + 1);
+        SetDefaultParameterInt("channels.rgb.green", display[1] + 1);
+        SetDefaultParameterInt("channels.rgb.blue", display[2] + 1);
       }
     }
   }
@@ -357,8 +355,8 @@ private:
     typename TImageType::PixelType maximum(nbComp);
 
     /*
-    float outminvalue = itk::NumericTraits<typename TImageType::InternalPixelType>::min();
-    float outmaxvalue = itk::NumericTraits<typename TImageType::InternalPixelType>::max();
+    float outminvalue = std::numeric_limits<typename TImageType::InternalPixelType>::min();
+    float outmaxvalue = std::numeric_limits<typename TImageType::InternalPixelType>::max();
     // TODO test outmin/outmax values
     if (outminvalue > GetParameterFloat("outmin"))
       itkExceptionMacro("The outmin value at " << GetParameterFloat("outmin") << 
