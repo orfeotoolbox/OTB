@@ -243,8 +243,7 @@ private:
     // Shrink factor is computed so as to load a quicklook of 1000
     // pixels square at most
     auto imageSize = tempImage->GetLargestPossibleRegion().GetSize();
-    unsigned int shrinkFactor =
-      std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
+    unsigned int shrinkFactor = std::max({int(imageSize[0])/1000, int(imageSize[1])/1000, 1});
     otbAppLogDEBUG( << "Shrink factor used to compute Min/Max: "<<shrinkFactor );
 
     otbAppLogDEBUG( << "Shrink starts..." );
