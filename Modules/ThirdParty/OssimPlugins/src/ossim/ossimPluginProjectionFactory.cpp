@@ -40,8 +40,10 @@
 #include "ossimTileMapModel.h"
 #include "ossimSpot6Model.h"
 #include "ossimSentinel1Model.h"
-#include "ossimStringUtilities.h"
-#include "ossimTraceHelpers.h"
+
+#include "ossim/ossimStringUtilities.h"
+#include "ossim/ossimTraceHelpers.h"
+
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/projection/ossimProjection.h>

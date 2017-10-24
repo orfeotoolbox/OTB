@@ -24,10 +24,10 @@
 
 
 #include "ossimSentinel1Model.h"
-#include "ossimTraceHelpers.h"
-#include "ossimXmlTools.h"
-#include "ossimKeyWordListUtilities.h"
-#include "ossimSarSensorModelPathsAndKeys.h"
+#include "ossim/ossimTraceHelpers.h"
+#include "ossim/ossimXmlTools.h"
+#include "ossim/ossimKeyWordListUtilities.h"
+#include "ossim/ossimSarSensorModelPathsAndKeys.h"
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimXmlNode.h>
