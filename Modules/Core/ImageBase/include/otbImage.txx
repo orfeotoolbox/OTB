@@ -149,6 +149,74 @@ Image<TPixel, VImageDimension>::GetLowerRightCorner(void) const
 }
 
 template <class TPixel, unsigned int VImageDimension>
+typename Image<TPixel, VImageDimension>::SpacingType
+Image<TPixel, VImageDimension>::GetSignedSpacing() const
+{
+  auto spacing = this->GetSpacing();
+  for ( unsigned int i = 0; i < Image::ImageDimension; ++i )
+    {
+    if (this->m_Direction[i][i] < 0 )
+      spacing[i] = - spacing[i];
+    }
+  return spacing;
+}
+
+template <class TPixel, unsigned int VImageDimension>
+void Image<TPixel, VImageDimension>
+::SetSignedSpacing( SpacingType spacing)
+{
+
+  for ( unsigned int i = 0; i < VImageDimension; i++ )
+    {
+    if ( spacing[i] < 0.0 )
+      {
+        for ( unsigned j = 0; j < VImageDimension; ++j )
+          {
+          this->m_Direction[j][i] = - this->m_Direction[j][i];
+          }
+        spacing[i] = - spacing[i];
+      }
+    }
+  this->SetSpacing(spacing);
+}
+
+template <class TPixel, unsigned int VImageDimension>
+void Image<TPixel, VImageDimension>
+::SetSignedSpacing( double spacing[ VImageDimension ])
+{
+  for ( unsigned int i = 0; i < VImageDimension; i++ )
+    {
+    if ( spacing[i] < 0.0 )
+      {
+      for ( unsigned j = 0; j < VImageDimension; ++j )
+        {
+        this->m_Direction[j][i] = - this->m_Direction[j][i];
+        }
+      spacing[i] = - spacing[i];
+      }
+    }
+  this->SetSpacing(spacing);
+}
+
+template <class TPixel, unsigned int VImageDimension>
+void Image<TPixel, VImageDimension>
+::SetSignedSpacing( float spacing[ VImageDimension ])
+{
+  for ( unsigned int i = 0; i < VImageDimension; i++ )
+    {
+    if ( spacing[i] < 0.0 )
+      {
+      for ( unsigned j = 0; j < ImageDimension; ++j )
+        {
+        this->m_Direction[j][i] = - this->m_Direction[j][i];
+        }
+      spacing[i] = - spacing[i];
+      }
+    }
+  this->SetSpacing(spacing);
+}
+
+template <class TPixel, unsigned int VImageDimension>
 typename Image<TPixel, VImageDimension>::ImageKeywordlistType
 Image<TPixel, VImageDimension>::GetImageKeywordlist(void)
 {

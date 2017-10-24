@@ -151,6 +151,74 @@ VectorImage<TPixel, VImageDimension>::GetLowerRightCorner(void) const
 }
 
 template <class TPixel, unsigned int VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::SpacingType
+VectorImage<TPixel, VImageDimension>::GetSignedSpacing() const
+{
+  auto spacing = this->GetSpacing();
+  for ( unsigned int i = 0; i < VImageDimension; ++i )
+    {
+    if (this->m_Direction[i][i] < 0 )
+      spacing[i] = - spacing[i];
+    }
+  return spacing;
+}
+
+template <class TPixel, unsigned int VImageDimension>
+void VectorImage<TPixel, VImageDimension>
+::SetSignedSpacing( SpacingType spacing)
+{
+
+  for ( unsigned int i = 0; i < VImageDimension; i++ )
+    {
+    if ( spacing[i] < 0.0 )
+      {
+        for ( unsigned j = 0; j < VImageDimension; ++j )
+          {
+          this->m_Direction[j][i] = - this->m_Direction[j][i];
+          }
+        spacing[i] = - spacing[i];
+      }
+    }
+  this->SetSpacing(spacing);
+}
+
+template <class TPixel, unsigned int VImageDimension>
+void VectorImage<TPixel, VImageDimension>
+::SetSignedSpacing( double spacing[ VImageDimension ])
+{
+  for ( unsigned int i = 0; i < VImageDimension; i++ )
+    {
+    if ( spacing[i] < 0.0 )
+      {
+      for ( unsigned j = 0; j < VImageDimension; ++j )
+        {
+        this->m_Direction[j][i] = - this->m_Direction[j][i];
+        }
+      spacing[i] = - spacing[i];
+      }
+    }
+  this->SetSpacing(spacing);
+}
+
+template <class TPixel, unsigned int VImageDimension>
+void VectorImage<TPixel, VImageDimension>
+::SetSignedSpacing( float spacing[ VImageDimension ])
+{
+  for ( unsigned int i = 0; i < VImageDimension; i++ )
+    {
+    if ( spacing[i] < 0.0 )
+      {
+      for ( unsigned j = 0; j < VImageDimension; ++j )
+        {
+        this->m_Direction[j][i] = - this->m_Direction[j][i];
+        }
+      spacing[i] = - spacing[i];
+      }
+    }
+  this->SetSpacing(spacing);
+}
+
+template <class TPixel, unsigned int VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType
 VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void)
 {
