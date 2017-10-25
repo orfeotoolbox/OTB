@@ -18,8 +18,7 @@
 # limitations under the License.
 #
 
-function(sanitize_system_paths)
-  cmake_parse_arguments(SANITIZE  "" "SOURCE" "" ${ARGN} )
+function(sanitize_system_paths input_file)
   # does not support Windows ...
   if(APPLE)
     set(SHARED_EXT "\\.dylib")
@@ -28,7 +27,7 @@ function(sanitize_system_paths)
   endif()
   set(filtered_content)
 
-  file(STRINGS "${SANITIZE_SOURCE}" source_file_content NEWLINE_CONSUME)
+  file(STRINGS "${input_file}" source_file_content NEWLINE_CONSUME)
   string(REGEX REPLACE "\n" "\n;" source_file_content "${source_file_content}")
   set(SEARCH_REGEX "(^[^#\"]+(LIBRARIES|INCLUDE_DIR[A-Z]*) +\")(.+)(\"[^\"]*)")
 
@@ -65,7 +64,7 @@ function(sanitize_system_paths)
   endforeach()
 
   string(REGEX REPLACE "\n;" "\n" filtered_content "${filtered_content}")
-  file(WRITE "${SANITIZE_SOURCE}" "${filtered_content}")
+  file(WRITE "${input_file}" "${filtered_content}")
 endfunction()
 
 #check variables are set
@@ -93,7 +92,7 @@ foreach( p_dir ${P_DIRS} )
       \n${cmake_file_CONTENTS}")
     endif()
     if(UNIX)
-      sanitize_system_paths(SOURCE ${cmake_file})
+      sanitize_system_paths(${cmake_file})
     endif()
   endforeach() # foreach( cmake_file
 endforeach() # foreach( p_dir
