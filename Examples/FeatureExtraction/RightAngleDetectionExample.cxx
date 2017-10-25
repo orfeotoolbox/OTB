@@ -179,7 +179,7 @@ int main(int argc, char * argv[])
 
   vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
   vectorDataRenderer->SetOrigin(reader->GetOutput()->GetOrigin());
-  vectorDataRenderer->SetSpacing(reader->GetOutput()->GetSpacing());
+  vectorDataRenderer->SetSpacing(reader->GetOutput()->GetSignedSpacing());
   vectorDataRenderer->SetRenderingStyleType(VectorDataRendererType::Binary);
 
   blendingFilter->SetInput1(reader->GetOutput());

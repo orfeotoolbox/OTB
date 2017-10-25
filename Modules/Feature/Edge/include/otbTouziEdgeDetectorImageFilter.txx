@@ -115,7 +115,7 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
   region.SetIndex(output->GetRequestedRegion().GetIndex());
   direction->SetRegions(region);
   direction->SetOrigin(output->GetOrigin());
-  direction->SetSpacing(output->GetSpacing());
+  direction->SetSignedSpacing(output->GetSignedSpacing());
   direction->Allocate();
 }
 

@@ -435,7 +435,7 @@ double
 ListSampleGenerator<TImage, TVectorData>
 ::GetPolygonAreaInPixelsUnits(DataNodeType* polygonDataNode, ImageType* image)
 {
-  const double pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
+  const double pixelArea = vcl_abs(image->GetSignedSpacing()[0] * image->GetSignedSpacing()[1]);
 
   // Compute area of exterior ring in pixels
   PolygonPointerType exteriorRing = polygonDataNode->GetPolygonExteriorRing();

@@ -554,7 +554,7 @@ ImageFileWriter<TInputImage>
   // Setup the ImageIO with information from inputPtr
   //
   m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
-  const typename TInputImage::SpacingType&   spacing = inputPtr->GetSpacing();
+  const typename TInputImage::SpacingType&   spacing = inputPtr->GetSignedSpacing();
   const typename TInputImage::PointType&     origin = inputPtr->GetOrigin();
   const typename TInputImage::DirectionType& direction = inputPtr->GetDirection();
 

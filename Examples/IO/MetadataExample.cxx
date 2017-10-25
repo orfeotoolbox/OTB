@@ -116,7 +116,7 @@ int main(int itkNotUsed(argc), char* argv[])
 //  SoftwareGuide: EndLatex
 
 // SoftwareGuide : BeginCodeSnippet
-  file << "Spacing " << image->GetSpacing() << std::endl;
+  file << "Spacing " << image->GetSignedSpacing() << std::endl;
   file << "Origin " << image->GetOrigin() << std::endl;
 
   file << "Projection REF " << image->GetProjectionRef() << std::endl;

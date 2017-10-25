@@ -688,8 +688,8 @@ private:
       epipolarGridSource->Update();
 
       FloatImageType::SpacingType epiSpacing;
-      epiSpacing[0] = 0.5 * (vcl_abs(inleft->GetSpacing()[0]) + vcl_abs(inleft->GetSpacing()[1]));
-      epiSpacing[1] = 0.5 * (vcl_abs(inleft->GetSpacing()[0]) + vcl_abs(inleft->GetSpacing()[1]));
+      epiSpacing[0] = 0.5 * (vcl_abs(inleft->GetSignedSpacing()[0]) + vcl_abs(inleft->GetSignedSpacing()[1]));
+      epiSpacing[1] = 0.5 * (vcl_abs(inleft->GetSignedSpacing()[0]) + vcl_abs(inleft->GetSignedSpacing()[1]));
 
       FloatImageType::SizeType epiSize;
       epiSize = epipolarGridSource->GetRectifiedImageSize();
@@ -721,7 +721,7 @@ private:
       leftInverseDisplacementFieldFilter->SetInput(leftDisplacement);
 
       FloatVectorImageType::PointType lorigin = inleft->GetOrigin();
-      FloatVectorImageType::SpacingType lspacing = inleft->GetSpacing();
+      FloatVectorImageType::SpacingType lspacing = inleft->GetSignedSpacing();
       FloatVectorImageType::SizeType lsize = inleft->GetLargestPossibleRegion().GetSize();
       double gridStep = epipolarGridSource->GetGridStep();
       lspacing[0] *= gridStep;

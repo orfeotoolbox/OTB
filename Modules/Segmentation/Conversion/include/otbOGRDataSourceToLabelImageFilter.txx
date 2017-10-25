@@ -126,7 +126,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
     this->SetOutputOrigin ( image->GetOrigin() );
-    this->SetOutputSpacing ( image->GetSpacing() );
+    this->SetOutputSpacing ( image->GetSignedSpacing() );
     this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
     
     ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(image->GetMetaDataDictionary());
@@ -153,7 +153,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
   outputPtr->SetLargestPossibleRegion(outputLargestPossibleRegion);
 
   // Set spacing and origin
-  outputPtr->SetSpacing(m_OutputSpacing);
+  outputPtr->SetSignedSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
 
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
@@ -229,10 +229,10 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
   OutputIndexType  bufferIndexOrigin = bufferedRegion.GetIndex();
   OutputOriginType bufferOrigin;
   this->GetOutput()->TransformIndexToPhysicalPoint(bufferIndexOrigin, bufferOrigin);
-  geoTransform[0] = bufferOrigin[0] - 0.5 * this->GetOutput()->GetSpacing()[0];
-  geoTransform[3] = bufferOrigin[1] - 0.5 * this->GetOutput()->GetSpacing()[1];
-  geoTransform[1] = this->GetOutput()->GetSpacing()[0];
-  geoTransform[5] = this->GetOutput()->GetSpacing()[1];
+  geoTransform[0] = bufferOrigin[0] - 0.5 * this->GetOutput()->GetSignedSpacing()[0];
+  geoTransform[3] = bufferOrigin[1] - 0.5 * this->GetOutput()->GetSignedSpacing()[1];
+  geoTransform[1] = this->GetOutput()->GetSignedSpacing()[0];
+  geoTransform[5] = this->GetOutput()->GetSignedSpacing()[1];
 
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;

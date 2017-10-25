@@ -279,7 +279,7 @@ public:
         spacing.Fill( 1.0 );                                            \
         direction.SetIdentity();                                        \
         output->SetOrigin( origin );                                    \
-        output->SetSpacing( spacing );                                  \
+        output->SetSignedSpacing( spacing );                                  \
         output->SetDirection(direction);                                \
         output->SetLargestPossibleRegion(region);                       \
         output->SetRequestedRegion(output->GetLargestPossibleRegion()); \

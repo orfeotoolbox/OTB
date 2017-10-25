@@ -69,7 +69,7 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   inputImage->SetNumberOfComponentsPerPixel(3);
   inputImage->SetLargestPossibleRegion(region);
   inputImage->SetOrigin(origin);
-  inputImage->SetSpacing(spacing);
+  inputImage->SetSignedSpacing(spacing);
   // Don't allocate the input image, the filter should not need it
   //inputImage->Allocate();
   //inputImage->FillBuffer(pixel);
@@ -77,7 +77,7 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   MaskImageType::Pointer mask = MaskImageType::New();
   mask->SetRegions(region);
   mask->SetOrigin(origin);
-  mask->SetSpacing(spacing);
+  mask->SetSignedSpacing(spacing);
   mask->Allocate();
   itk::ImageRegionIterator<MaskImageType> it(mask,region);
   unsigned int count = 0;

@@ -182,7 +182,7 @@ VectorDataToMapFilter<TVectorData, TImage>
   outputPtr->SetLargestPossibleRegion(outputLargestPossibleRegion);
 
   // Set spacing and origin
-  outputPtr->SetSpacing(m_Spacing);
+  outputPtr->SetSignedSpacing(m_Spacing);
   outputPtr->SetOrigin(m_Origin);
   outputPtr->SetDirection(m_Direction);
 

@@ -127,7 +127,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
 ::SetOutputParametersFromImage(const ImageBaseType * src)
 {
   this->SetOutputOrigin ( src->GetOrigin() );
-  this->SetOutputSpacing ( src->GetSpacing() );
+  this->SetOutputSpacing ( src->GetSignedSpacing() );
   this->SetOutputSize ( src->GetLargestPossibleRegion().GetSize() );
   ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(src->GetMetaDataDictionary());
   this->SetOutputProjectionRef(imi->GetProjectionRef());
@@ -152,7 +152,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
   outputPtr->SetLargestPossibleRegion(outputLargestPossibleRegion);
 
   // Set spacing and origin
-  outputPtr->SetSpacing(m_OutputSpacing);
+  outputPtr->SetSignedSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
 
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
@@ -301,10 +301,10 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   OutputIndexType  bufferIndexOrigin = bufferedRegion.GetIndex();
   OutputOriginType bufferOrigin;
   this->GetOutput()->TransformIndexToPhysicalPoint(bufferIndexOrigin, bufferOrigin);
-  geoTransform[0] = bufferOrigin[0] - 0.5 * this->GetOutput()->GetSpacing()[0];
-  geoTransform[3] = bufferOrigin[1] - 0.5 * this->GetOutput()->GetSpacing()[1];
-  geoTransform[1] = this->GetOutput()->GetSpacing()[0];
-  geoTransform[5] = this->GetOutput()->GetSpacing()[1];
+  geoTransform[0] = bufferOrigin[0] - 0.5 * this->GetOutput()->GetSignedSpacing()[0];
+  geoTransform[3] = bufferOrigin[1] - 0.5 * this->GetOutput()->GetSignedSpacing()[1];
+  geoTransform[1] = this->GetOutput()->GetSignedSpacing()[0];
+  geoTransform[5] = this->GetOutput()->GetSignedSpacing()[1];
 
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;

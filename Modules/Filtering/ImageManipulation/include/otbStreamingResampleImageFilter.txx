@@ -121,7 +121,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );
-  this->SetOutputSpacing ( image->GetSpacing() );
+  this->SetOutputSpacing ( image->GetSignedSpacing() );
   this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
 }

@@ -210,12 +210,12 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
 
       // Set GeoTransform
       double gt[6];
-      gt[0] = img->GetOrigin()[0] - 0.5*img->GetSpacing()[0];
-      gt[1] = img->GetSpacing()[0];
+      gt[0] = img->GetOrigin()[0] - 0.5*img->GetSignedSpacing()[0];
+      gt[1] = img->GetSignedSpacing()[0];
       gt[2] = 0.0;
-      gt[3] = img->GetOrigin()[1] - 0.5*img->GetSpacing()[1];
+      gt[3] = img->GetOrigin()[1] - 0.5*img->GetSignedSpacing()[1];
       gt[4] = 0.0;
-      gt[5] = img->GetSpacing()[1];
+      gt[5] = img->GetSignedSpacing()[1];
       VRTOutput->SetGeoTransform(gt);
 
       // Set projection

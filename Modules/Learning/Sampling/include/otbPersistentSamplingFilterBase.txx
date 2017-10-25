@@ -135,7 +135,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       itkGenericExceptionMacro("Mask and input image have a different origin!");
       }
-    if (mask->GetSpacing() != input->GetSpacing())
+    if (mask->GetSignedSpacing() != input->GetSignedSpacing())
       {
       itkGenericExceptionMacro("Mask and input image have a different spacing!");
       }
@@ -472,7 +472,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
   typename TInputImage::IndexType imgIndex;
   typename TInputImage::PointType imgPoint;
-  typename TInputImage::SpacingType imgAbsSpacing = img->GetSpacing();
+  typename TInputImage::SpacingType imgAbsSpacing = img->GetSignedSpacing();
   if (imgAbsSpacing[0] < 0) imgAbsSpacing[0] = -imgAbsSpacing[0];
   if (imgAbsSpacing[1] < 0) imgAbsSpacing[1] = -imgAbsSpacing[1];
 

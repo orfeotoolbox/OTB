@@ -152,7 +152,7 @@ public:
   itkGetConstReferenceMacro(Origin, OriginType);
 
   /** Set the spacing (size of a pixel) of the vector data.
-  * \sa GetSpacing() */
+  * \sa GetSignedSpacing() */
   virtual void SetSpacing(const SpacingType& spacing);
   virtual void SetSpacing(const double spacing[2]);
   virtual void SetSpacing(const float spacing[2]);

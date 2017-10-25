@@ -140,8 +140,8 @@ private:
     parameters[1] = CONST_PI * GetParameterFloat("transform.ro")/180.;
     parameters[2] = GetParameterFloat("transform.centerx");
     parameters[3] = GetParameterFloat("transform.centery");
-    parameters[4] = inImage->GetSpacing()[0] * GetParameterFloat("transform.tx");
-    parameters[5] = vcl_abs(inImage->GetSpacing()[1]) * GetParameterFloat("transform.ty");
+    parameters[4] = inImage->GetSignedSpacing()[0] * GetParameterFloat("transform.tx");
+    parameters[5] = vcl_abs(inImage->GetSignedSpacing()[1]) * GetParameterFloat("transform.ty");
 
     // Set the parameters to the transform
     m_Transform->SetParameters(parameters);

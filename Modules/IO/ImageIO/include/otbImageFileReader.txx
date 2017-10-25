@@ -385,10 +385,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     }
 
-  output->SetSpacing(spacing);       // Set the image spacing
   output->SetOrigin(origin);         // Set the image origin
   output->SetDirection(direction);   // Set the image direction cosines
-
+  output->SetSignedSpacing(spacing); // Set the image spacing
+  // Need to set spacing after direction as we are setting a signed spacing
+  // it might change signes of direction column
+  
   if(!m_KeywordListUpToDate && !m_FilenameHelper->GetSkipGeom())
     {
 

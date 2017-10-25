@@ -177,6 +177,14 @@ public:
   /** Get signed spacing */
   SpacingType GetSignedSpacing() const;
 
+  // SpacingType GetSpacing() const
+  //   {
+  //     PixelType a;
+  //     a.toto();
+  //     SpacingType t = this->GetSignedSpacing();
+  //     return t ;
+  //   };
+
   /** Set signed spacing */
   virtual void SetSignedSpacing( SpacingType spacing );
   virtual void SetSignedSpacing( double spacing[ VImageDimension ] );

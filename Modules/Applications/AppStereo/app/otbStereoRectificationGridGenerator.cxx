@@ -229,7 +229,7 @@ private:
       {
       FloatImageType::PointType   origin  = GetParameterImage("io.inleft")->GetOrigin();
       FloatImageType::SizeType    size    = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
-      FloatImageType::SpacingType spacing = GetParameterImage("io.inleft")->GetSpacing();
+      FloatImageType::SpacingType spacing = GetParameterImage("io.inleft")->GetSignedSpacing();
 
       size[0]/=GetParameterInt("epi.elevation.avgdem.step");
       size[1]/=GetParameterInt("epi.elevation.avgdem.step");
@@ -289,7 +289,7 @@ private:
       m_LeftInvertDisplacementFieldFilter->SetInput(m_LeftDisplacementFieldCaster->GetOutput());
 
       FloatVectorImageType::PointType lorigin = GetParameterImage("io.inleft")->GetOrigin();
-      FloatVectorImageType::SpacingType lspacing = GetParameterImage("io.inleft")->GetSpacing();
+      FloatVectorImageType::SpacingType lspacing = GetParameterImage("io.inleft")->GetSignedSpacing();
       FloatVectorImageType::SizeType lsize = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
 
       if (lsize[0]*lsize[1]>256*256)
@@ -331,7 +331,7 @@ private:
 
       m_RightInvertDisplacementFieldFilter->SetInput(m_RightDisplacementFieldCaster->GetOutput());
       FloatVectorImageType::PointType rorigin = GetParameterImage("io.inright")->GetOrigin();
-      FloatVectorImageType::SpacingType rspacing = GetParameterImage("io.inright")->GetSpacing();
+      FloatVectorImageType::SpacingType rspacing = GetParameterImage("io.inright")->GetSignedSpacing();
       FloatVectorImageType::SizeType rsize = GetParameterImage("io.inright")->GetLargestPossibleRegion().GetSize();
 
       if (rsize[0]*rsize[1]>256*256)
