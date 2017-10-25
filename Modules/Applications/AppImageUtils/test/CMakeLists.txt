@@ -53,7 +53,7 @@ otb_test_application(NAME apTvUtConvertWithScaling
                              -type linear
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtConvertWithScalingOutput.tif
-                	     ${TEMP}/apTvUtConvertWithScalingOutput.tif
+                             ${TEMP}/apTvUtConvertWithScalingOutput.tif
 )
 
 otb_test_application(NAME apTvUtConvertExtendedFilename_readerGEOM
@@ -86,6 +86,43 @@ otb_test_application(NAME apTvUtConvertMonoChannel
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtConvertMonoChannelOutput.tif
                              ${TEMP}/apTvUtConvertMonoChannelOutput.tif)
+
+#----------- DynamicConvert TESTS ------------
+otb_test_application(NAME apTvUtDynamicConvertBasic
+                     APP DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out ${TEMP}/apTvUtDynamicConvertOutput.tif
+                             -type linear
+                             -channels rgb
+                             -channels.rgb.red 2
+                             -channels.rgb.green 3
+                             -channels.rgb.blue 1
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtConvertSelectChannelsRgbOutput.tif
+                             ${TEMP}/apTvUtDynamicConvertOutput.tif)
+
+otb_test_application(NAME apTvUtDynamicConvertLog2
+                     APP DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out ${TEMP}/apTvUtDynamicConvertLog2Output.tif
+                             -type log2
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtDynamicConvertLog2Output.tif
+                             ${TEMP}/apTvUtDynamicConvertLog2Output.tif)
+
+otb_test_application(NAME apTvUtDynamicConvertFloat
+                     APP DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                             -out ${TEMP}/apTvUtDynamicConvertFloatOutput.tif float
+                             -type linear
+                             -type.linear.gamma 2.2
+                             -outmin 0.0
+                             -outmax 1.0
+                             -quantile.low 0
+                             -quantile.high 4
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtDynamicConvertFloatOutput.tif
+                             ${TEMP}/apTvUtDynamicConvertFloatOutput.tif)
 
 #----------- PixelInfo TESTS ----------------
 
