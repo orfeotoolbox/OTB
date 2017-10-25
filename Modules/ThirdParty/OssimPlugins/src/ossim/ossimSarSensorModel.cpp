@@ -1046,7 +1046,7 @@ namespace ossimplugins
    {
      char orbit_prefix_[256];
 
-     add(kwl,ORBIT_NUMBER_KEY,orbitRecords.size());
+     add(kwl,ORBIT_NUMBER_KEY,(ossim_uint32)orbitRecords.size());
 
      for(std::size_t i = 0; i!=orbitRecords.size();++i)
        {
@@ -1090,7 +1090,7 @@ namespace ossimplugins
      const std::vector<ossimSarSensorModel::BurstRecordType> & burstRecords)
    {
      char burstPrefix_[1024];
-     add(kwl, BURST_NUMBER_KEY, burstRecords.size());
+     add(kwl, BURST_NUMBER_KEY, (ossim_uint32)burstRecords.size());
      for (std::size_t burstId=0; burstId!=burstRecords.size() ; ++burstId) {
      const int pos = s_printf(burstPrefix_, "%s[%d].", BURST_PREFIX.c_str(), burstId);
      assert(pos > 0 && pos < sizeof(burstPrefix_));
@@ -1132,7 +1132,7 @@ namespace ossimplugins
      const std::vector<ossimSarSensorModel::GCPRecordType> & gcpRecords)
    {
      char prefix_[1024];
-     add(kwl, GCP_NUMBER_KEY, gcpRecords.size());
+     add(kwl, GCP_NUMBER_KEY, (ossim_uint32)gcpRecords.size());
      for (std::size_t gcpId=0; gcpId!=gcpRecords.size() ; ++gcpId) {
      const int pos = s_printf(prefix_, "%s[%d].", GCP_PREFIX.c_str(), gcpId);
      assert(pos > 0 && pos < sizeof(prefix_));
@@ -1190,7 +1190,7 @@ namespace ossimplugins
      const std::vector<ossimSarSensorModel::CoordinateConversionRecordType> & conversionRecords)
    {
      char prefix_[1024];
-     add(kwl, sr_gr_prefix +"."+ NUMBER_KEY, conversionRecords.size());
+     add(kwl, sr_gr_prefix +"."+ NUMBER_KEY, (ossim_uint32)conversionRecords.size());
 
      for (std::size_t idx=0 ; idx!=conversionRecords.size() ; ++idx)
        {
@@ -1203,7 +1203,7 @@ namespace ossimplugins
        add(kwl, prefix + rg0,             conversionRecords[idx].rg0);
 
        std::size_t nbCoeffs = conversionRecords[idx].coefs.size();
-       add(kwl, prefix + NUMBER_KEY,      nbCoeffs);
+       add(kwl, prefix + NUMBER_KEY,      (ossim_uint32)nbCoeffs);
        for (std::size_t coeff_idx=0; coeff_idx!=nbCoeffs ; ++coeff_idx)
          {
          const int pos2 = s_printf(prefix_+pos, sizeof(prefix_)-pos, "coeff[%d]", coeff_idx);
