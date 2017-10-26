@@ -298,7 +298,7 @@ void ComputeHistoFilter < TInputImage , TOutputImage >
 
   for( unsigned int i = 0 ; i < m_NbBin ; i++ )
     {
-    if ( oit.Get()[i] > height )
+    if ( static_cast<unsigned int>( oit.Get()[i] ) > height )
       {
       rest += oit.Get()[i] - height ;
       oit.Get()[i] = height ;

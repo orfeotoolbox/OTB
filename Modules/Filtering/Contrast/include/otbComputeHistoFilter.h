@@ -29,10 +29,10 @@ namespace otb
 {
 
 /** \class ComputeHistoFilter
- *  \brief Compute local histogram with several parameter
+ *  \brief Compute local histogram with several parameters
  *
- *  This class implements the first part of the CLAHE algorithm. It's aim 
- *  is to compute local histogram with several input parameters such as 
+ *  This class implements the first part of the CLAHE algorithm. It aims 
+ *  to compute local histogram with several input parameters such as 
  *  nodata value, threshold, thumbnail size and number of bin. Mandatory parameters are min 
  *  and max value as it will be used in the histogram computation.
  *

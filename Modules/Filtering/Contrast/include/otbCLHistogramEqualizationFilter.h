@@ -34,7 +34,12 @@ namespace otb
 {
 
 /** \class CLHistogramEqualizationFilter
- *  \brief 
+ *  \brief Implement CLAHE algorithm
+ *  
+ *  This class implement CLAHE algorithm. It is a composite filter that gathers
+ *  the 3 filters (ComputeHisto, ComputeGainLut, ApplyGain) and pipes them with
+ *  additional filters (InPlacePass and StreamingImage) in order to make 
+ *  streaming available. 
  * \ingroup OTBContrast
  */
 
