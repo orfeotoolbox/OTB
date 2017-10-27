@@ -1,4 +1,4 @@
-OTB-v.6.2.0 - Changes since version 6.0.0 (October 4th, 2017)
+OTB-v.6.2.0 - Changes since version 6.0.0 (October 26th, 2017)
 ----------------------------------------------------------
 
 * Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
@@ -31,6 +31,7 @@ OTB-v.6.2.0 - Changes since version 6.0.0 (October 4th, 2017)
   * Documentation
     * 0001434: Bibliography references are not set in the Software Guide (PDF version)
     * 0001400: Training  applications reference documentation do not include shark parameters
+    * 0001471: Issue with Boolean parameter in the Python application API documentation
 
   * Monteverdi
     * 0001431: RGE Alti files inverted on Monteverdi
@@ -41,6 +42,8 @@ OTB-v.6.2.0 - Changes since version 6.0.0 (October 4th, 2017)
     * 0001449: Issues with OTB 6.1 standalone packages (Linux)
     * 0001404: OTB xdk 5.10.1 is not able to compile a simple program on a Ubuntu 16.04 VM
     * 0001430: building 6.0.0 fails at otbSFSTextureExtraction.cxx.o
+    * 0001474: OTB XDK is not working on Linux
+    * 0001460: Unable to compile OTB  6.2.0 RC1 with superbuild (CURL issue)
 
   * Orfeo Toolbox (OTB)
     * 0001453: Applications crash with inxml paramter (GUI mode)
@@ -70,11 +73,16 @@ OTB-v.6.2.0 - Changes since version 6.0.0 (October 4th, 2017)
     * 0001426: GUI TrainimagesClassifier resets "field name" parameter when another parameter is set
     * 0001421: otbenv.bash has windows endline
     * 0001402: 404 link on otb-users
+    * 0001469: Superbuild with Visual Studio 15 2017
+    * 0001464: otb_module_impl() called twice in ExternalModuleTemplate
+    * 0001459: Patch to fix spelling errors
 
   * OTB-applications
     * 0001441: Error in param in template otbTrainLibSVM.txx
     * 0001411: Training applications  needs field name of type integer
     * 0001410: BundleToPerfectSensor composite application does not expose parameters of internal applications
+    * 0001467: Convert application memory allocation issue
+    * 0001463: BandMathX not accepting global statistics
 
 
 OTB-v.6.0.0 - Changes since version 5.10.1 (May 2th, 2017)
