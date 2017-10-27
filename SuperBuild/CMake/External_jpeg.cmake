@@ -24,6 +24,7 @@ SETUP_SUPERBUILD(JPEG)
 
 if(WIN32)
   set(JPEG_CONFIGURE_COMMAND "${SB_CMAKE_COMMAND}"
+    ${SB_CMAKE_ARGS}
     ${SB_CMAKE_CACHE_ARGS}
     -DENABLE_SHARED=TRUE
     -DENABLE_STATIC=FALSE
@@ -45,15 +46,26 @@ endif()
 
 ExternalProject_Add(JPEG
   PREFIX JPEG
-  URL "http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
+  URL "http://downloads.sourceforge.net/project/libjpeg-turbo/1.4.1/libjpeg-turbo-1.4.1.tar.gz"
   URL_MD5 b1f6b84859a16b8ebdcda951fa07c3f2
   SOURCE_DIR ${JPEG_SB_SRC}
   BINARY_DIR ${JPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CONFIGURE_COMMAND ${JPEG_CONFIGURE_COMMAND}
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 SUPERBUILD_PATCH_SOURCE(JPEG)
 
 SUPERBUILD_UPDATE_CMAKE_VARIABLES(JPEG FALSE)
+
+set(_SB_JPEGLIB_H_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+if(WIN32)
+  set(_SB_JPEG_LIB ${SB_INSTALL_PREFIX}/lib/jpeg_i.lib)
+elseif(UNIX)
+  set(_SB_JPEG_LIB ${SB_INSTALL_PREFIX}/lib/libjpeg${CMAKE_SHARED_LIBRARY_SUFFIX})
+endif()

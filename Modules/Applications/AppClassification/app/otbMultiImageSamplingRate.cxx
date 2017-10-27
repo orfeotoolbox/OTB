@@ -110,7 +110,7 @@ private:
       "  * strategy = smallest class\n\n"
       "    - if mim = proportional, then the smallest class size (computed globally) is used for the strategy constant+proportional.\n\n"
       "    - if mim = equal       , then the smallest class size (computed globally) is used for the strategy constant+equal.\n\n"
-      "    - if mim = custom      , then the smallest class is computed and used for each image separately.\n\n"
+      "    - if mim = custom      , then the smallest class is computed and used for each image separately."
       );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

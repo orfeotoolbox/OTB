@@ -26,14 +26,14 @@ void RegisterTests()
   REGISTER_TEST(otbSpectralSensitivityReaderTest);
   REGISTER_TEST(otbSpectralSensitivityReaderGenericTest);
   REGISTER_TEST(otbReflectanceToImageImageFilter);
-  REGISTER_TEST(otbReflectanceToLuminanceImageFilterNew);
-  REGISTER_TEST(otbLuminanceToReflectanceImageFilterNew);
-  REGISTER_TEST(otbLuminanceToReflectanceImageFilterAuto);
-  REGISTER_TEST(otbImageToLuminanceImageFilterNew);
+  REGISTER_TEST(otbReflectanceToRadianceImageFilterNew);
+  REGISTER_TEST(otbRadianceToReflectanceImageFilterNew);
+  REGISTER_TEST(otbRadianceToReflectanceImageFilterAuto);
+  REGISTER_TEST(otbImageToRadianceImageFilterNew);
   REGISTER_TEST(otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew);
-  REGISTER_TEST(otbLuminanceToImageImageFilterAuto);
-  REGISTER_TEST(otbLuminanceToImageImageFilterNew);
-  REGISTER_TEST(otbReflectanceToLuminanceImageFilterAuto);
+  REGISTER_TEST(otbRadianceToImageImageFilterAuto);
+  REGISTER_TEST(otbRadianceToImageImageFilterNew);
+  REGISTER_TEST(otbReflectanceToRadianceImageFilterAuto);
   REGISTER_TEST(otbAeronetExtractDataBadData);
   REGISTER_TEST(otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter);
   REGISTER_TEST(otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms);
@@ -47,7 +47,7 @@ void RegisterTests()
   REGISTER_TEST(otbAtmosphericRadiativeTermsSingleChannelNew);
   REGISTER_TEST(otbAtmosphericRadiativeTermsTest);
   REGISTER_TEST(otbImageToReflectanceImageFilter);
-  REGISTER_TEST(otbLuminanceToReflectanceImageFilter);
+  REGISTER_TEST(otbRadianceToReflectanceImageFilter);
   REGISTER_TEST(otbReflectanceToImageImageFilterAuto);
   REGISTER_TEST(otbAeronetNew);
   REGISTER_TEST(otbAeronetExtractData);
@@ -55,13 +55,13 @@ void RegisterTests()
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterTest);
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterTest2);
   REGISTER_TEST(otbImageMetadataCorrectionParametersNew);
-  REGISTER_TEST(otbImageToLuminanceImageFilterAuto);
+  REGISTER_TEST(otbImageToRadianceImageFilterAuto);
   REGISTER_TEST(otbAtmosphericCorrectionSequencementTest);
   REGISTER_TEST(otbSIXSTraitsTest);
   REGISTER_TEST(otbSIXSTraitsComputeAtmosphericParametersTest);
   REGISTER_TEST(otbReflectanceToImageImageFilterNew);
   REGISTER_TEST(otbSurfaceAdjacencyEffectCorrectionSchemeFilter);
-  REGISTER_TEST(otbLuminanceToImageImageFilter);
-  REGISTER_TEST(otbReflectanceToLuminanceImageFilter);
-  REGISTER_TEST(otbImageToLuminanceImageFilter);
+  REGISTER_TEST(otbRadianceToImageImageFilter);
+  REGISTER_TEST(otbReflectanceToRadianceImageFilter);
+  REGISTER_TEST(otbImageToRadianceImageFilter);
 }

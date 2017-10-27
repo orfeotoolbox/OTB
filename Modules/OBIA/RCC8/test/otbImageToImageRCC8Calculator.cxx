@@ -94,7 +94,7 @@ int otbImageToImageRCC8Calculator(int itkNotUsed(argc), char* argv[])
           {
           std::cout << "Test failed: Result with level3AprioriKnowledge ";
           std::cout << "different from result without a priori knowledge" << std::endl;
-          std::cout << calc->GetValue() << "!=" << calc1->GetValue() << std::endl;
+          std::cout << calc->GetValue() << "!=" << calc2->GetValue() << std::endl;
           return EXIT_FAILURE;
           }
         }

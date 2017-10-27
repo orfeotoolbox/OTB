@@ -168,6 +168,7 @@ foreach(classifier ${classifierList})
     -io.out ${TEMP}/${OUTMODELFILE}
     -sample.vfn Class
     -rand 121212
+    -outxml ${TEMP}/cl${classifier}_OutXML1.xml
 
     VALID    ${valid}
   )
@@ -179,40 +180,15 @@ foreach(classifier ${classifierList})
   endif()
 
   otb_test_application(
-    NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
-    APP      TrainImagesClassifier
-    OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-    -classifier ${lclassifier}
-    ${${lclassifier}_parameters}
-    -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
-    -rand 121212
-    -sample.vfn Class
-    -outxml ${TEMP}/cl${classifier}_OutXML1.xml
-
-    VALID ${valid}
-  )
-
-  if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML2_${OUTMODELFILE})
-  else()
-    set(valid "")
-  endif()
-
-  otb_test_application(
     NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
     APP      TrainImagesClassifier
-    OPTIONS  -inxml ${INPUTDATA}/cl${classifier}_OutXML1.xml
-    -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-    -io.out ${TEMP}/OutXML2_${OUTMODELFILE}
-    -sample.vfn Class
+    OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
+    -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
+
     VALID    ${valid}
   )
 
-  #set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1)
+  set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1)
 
   list(FIND classifier_with_confmap ${classifier} _classifier_has_confmap)
   if(${_classifier_has_confmap} EQUAL -1)
@@ -653,55 +629,37 @@ if(OTB_DATA_USE_LARGEINPUT)
 endif()
 
 #----------- KMeansClassification TESTS ----------------
-otb_test_application(NAME apTvClKMeansImageClassification
-  APP  KMeansClassification
-  OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
-  -vm ${INPUTDATA}/qb_RoadExtract_mask.png
-  -ts 30000
-  -nc 5
-  -maxit 10000
-  -ct 0.0000001
-  -rand 121212
-  -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif
-  VALID   --compare-image ${NOTOL}
-  ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif
-  ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif )
-
+if(OTB_USE_SHARK)
+  otb_test_application(NAME apTvClKMeansImageClassification_composite
+    APP  KMeansClassification
+    OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
+    -vm ${INPUTDATA}/qb_RoadExtract_mask_binary.png
+    -ts 30000
+    -nc 5
+    -maxit 10000
+    -sampler periodic
+    -rand 121212
+    -nodatalabel 255
+    -outmeans ${TEMP}/apTvClKMeansImageClassificationFilterOutMeans.txt
+    -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif uint8
+    -cleanup 0
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif
+    ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif )
+endif()
 
 #----------- TrainImagesClassifier TESTS ----------------
 if(OTB_USE_LIBSVM)
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
     APP  TrainImagesClassifier
     OPTIONS
-    -inxml ${INPUTDATA}/clsvmModelQB1_OutXML.xml
-    -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
-    -sample.mv 100
-    -sample.mt 100
-    -sample.vtr 0.5
-    -sample.vfn Class
-    -classifier.libsvm.opt true
-    -rand 121212
+    -inxml ${TEMP}/clsvmModelQB1_allOpt.xml
     -io.out ${TEMP}/clsvmModelQB1_allOpt_InXML.svm
     VALID   ${ascii_comparison}
     ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
     ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
 
-  otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
-    APP  TrainImagesClassifier
-    OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
-    -sample.vfn Class
-    -classifier libsvm
-    -classifier.libsvm.opt true
-    -io.out ${TEMP}/clsvmModelQB1_OutXML.svm
-    -rand 121212
-    -outxml ${TEMP}/clsvmModelQB1_OutXML.xml
-    VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
-    ${TEMP}/clsvmModelQB1_OutXML.svm)
+  set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1_allOpt)
 
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB123
     APP  TrainImagesClassifier
@@ -769,6 +727,7 @@ if(OTB_USE_LIBSVM)
     -classifier.libsvm.opt true
     -rand 121212
     -io.out ${TEMP}/clsvmModelQB1_allOpt.svm
+    -outxml ${TEMP}/clsvmModelQB1_allOpt.xml
     VALID   ${ascii_comparison}
     ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
     ${TEMP}/clsvmModelQB1_allOpt.svm)

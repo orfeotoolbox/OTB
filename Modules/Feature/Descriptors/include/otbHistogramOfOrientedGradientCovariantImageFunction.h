@@ -59,7 +59,7 @@ namespace otb
  * all lie in the range $[0, 1]$.
  *
  * This class is templated over the input image type, the output
- * precision (e.g. float ou double) and the
+ * precision (e.g. float or double) and the
  * coordinate representation type (e.g. float or double).
 
  * \ingroup ImageFunctions

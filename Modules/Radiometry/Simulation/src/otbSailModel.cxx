@@ -34,22 +34,22 @@ namespace otb
 /** Constructor */
 SailModel
 ::SailModel() : m_LAI(2), m_Angl(50), m_PSoil(1), m_Skyl(70), m_HSpot(0.2),
-                m_TTS(30), m_TTO(0), m_PSI(0), m_FCoverView(0.0)
+                m_TTS(30), m_TTO(0), m_PSI(0), m_FCoverView(0.0), m_UseSoilFile(false), m_SoilIndex(0)
 {
-   this->ProcessObject::SetNumberOfRequiredInputs(2);
-   this->ProcessObject::SetNumberOfRequiredOutputs(4);
+  this->ProcessObject::SetNumberOfRequiredInputs(2);
+  this->ProcessObject::SetNumberOfRequiredOutputs(4);
 
-   SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(0, vRefl.GetPointer());
+  SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(0, vRefl.GetPointer());
 
-   SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(1, hRefl.GetPointer());
+  SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(1, hRefl.GetPointer());
 
-   SpectralResponseType::Pointer vAbs = static_cast<SpectralResponseType *>(this->MakeOutput(2).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(2, vAbs.GetPointer());
+  SpectralResponseType::Pointer vAbs = static_cast<SpectralResponseType *>(this->MakeOutput(2).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(2, vAbs.GetPointer());
 
-   SpectralResponseType::Pointer hAbs = static_cast<SpectralResponseType *>(this->MakeOutput(3).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(3, hAbs.GetPointer());
+  SpectralResponseType::Pointer hAbs = static_cast<SpectralResponseType *>(this->MakeOutput(3).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(3, hAbs.GetPointer());
 }
 
 /** Destructor */
@@ -62,112 +62,112 @@ void
 SailModel
 ::SetReflectance(const SpectralResponseType * object)
 {
-   this->itk::ProcessObject::SetNthInput(0, const_cast<SpectralResponseType *>(object));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<SpectralResponseType *>(object));
 }
 
 SailModel::SpectralResponseType *
 SailModel
 ::GetReflectance()
-{
-   if(this->GetNumberOfInputs() != 2)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(0));
-}
+                  {
+                    if(this->GetNumberOfInputs() != 2)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(0));
+                  }
 
 /** Set/Get input transmittance */
-void
-SailModel
-::SetTransmittance(const SpectralResponseType * object)
-{
-   this->itk::ProcessObject::SetNthInput(1, const_cast<SpectralResponseType *>(object));
-}
+                  void
+                  SailModel
+                  ::SetTransmittance(const SpectralResponseType * object)
+                  {
+                    this->itk::ProcessObject::SetNthInput(1, const_cast<SpectralResponseType *>(object));
+                  }
 
-SailModel::SpectralResponseType *
-SailModel
-::GetTransmittance()
-{
-   if(this->GetNumberOfInputs() != 2)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(1));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetTransmittance()
+                  {
+                    if(this->GetNumberOfInputs() != 2)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetInput(1));
+                  }
 
 /** Make output */
-SailModel::DataObjectPointer
-SailModel
-::MakeOutput(DataObjectPointerArraySizeType)
-{
-   return static_cast<itk::DataObject*>(SpectralResponseType::New().GetPointer());
-}
+                  SailModel::DataObjectPointer
+                  SailModel
+                  ::MakeOutput(DataObjectPointerArraySizeType)
+                  {
+                    return static_cast<itk::DataObject*>(SpectralResponseType::New().GetPointer());
+                  }
 
 /** Get output viewing reflectance */
-SailModel::SpectralResponseType *
-SailModel
-::GetViewingReflectance()
-{
-   if(this->GetNumberOfOutputs() < 4)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetViewingReflectance()
+                  {
+                    if(this->GetNumberOfOutputs() < 4)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
+                  }
 
 /** Get output hemispherical reflectance */
-SailModel::SpectralResponseType *
-SailModel
-::GetHemisphericalReflectance()
-{
-   if(this->GetNumberOfOutputs() < 4)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetHemisphericalReflectance()
+                  {
+                    if(this->GetNumberOfOutputs() < 4)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
+                  }
 
 /** Get output viewing absorptance */
-SailModel::SpectralResponseType *
-SailModel
-::GetViewingAbsorptance()
-{
-   if(this->GetNumberOfOutputs() < 4)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(2));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetViewingAbsorptance()
+                  {
+                    if(this->GetNumberOfOutputs() < 4)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(2));
+                  }
 
 /** Get output hemispherical absorptance */
-SailModel::SpectralResponseType *
-SailModel
-::GetHemisphericalAbsorptance()
-{
-   if(this->GetNumberOfOutputs() < 4)
-   {
-      //exit
-      return ITK_NULLPTR;
-   }
-   return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(3));
-}
+                  SailModel::SpectralResponseType *
+                  SailModel
+                  ::GetHemisphericalAbsorptance()
+                  {
+                    if(this->GetNumberOfOutputs() < 4)
+                      {
+                      //exit
+                      return ITK_NULLPTR;
+                      }
+                    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(3));
+                  }
 
 
 /** Set Parameters */
-void
-SailModel
-::SetInput(const ParametersType & params)
-{
+                  void
+                  SailModel
+                  ::SetInput(const ParametersType & params)
+                  {
 
-   if(params.Size()!=8) itkExceptionMacro( << "Must have 8 parameters in that order : LAI, Angl, PSoil, Skyl, HSpot, TTS, TTO, PSI" );
-   this->SetParameters(params);
-   m_LAI=params[0];
-   m_Angl=params[1];
+                    if(params.Size()!=8) itkExceptionMacro( << "Must have 8 parameters in that order : LAI, Angl, PSoil, Skyl, HSpot, TTS, TTO, PSI" );
+                    this->SetParameters(params);
+                    m_LAI=params[0];
+                    m_Angl=params[1];
    m_PSoil=params[2];
    m_Skyl=params[3];
    m_HSpot=params[4];
@@ -319,7 +319,14 @@ SailModel
       // Soil Reflectance Properties
       //rsoil1 = dry soil
       //rsoil2 = wet soil
-      rsoil0 = m_PSoil*Rsoil1+(1-m_PSoil)*Rsoil2;
+      if(!m_UseSoilFile)
+        {
+        rsoil0 = m_PSoil*Rsoil1+(1-m_PSoil)*Rsoil2;
+        }
+      else
+        {
+        rsoil0 = m_SoilDataBase->GetReflectance(m_SoilIndex, lambda)*m_PSoil;
+        }
 
       // Here rho and tau come in
       sigb = ddb*rho+ddf*tau;
@@ -339,94 +346,94 @@ SailModel
       // Here the LAI comes in
       // Outputs for the case LAI = 0
       if (m_LAI<0)
-      {
-         //tss = 1;
-         too = 1;
-         tsstoo = 1;
-         rdd = 0;
-         tdd = 1;
-         rsd = 0;
-         tsd = 0;
-         rdo = 0;
-         tdo = 0;
-         //rso = 0;
-         rsos = 0;
-         rsod = 0;
+          {
+          //tss = 1;
+          too = 1;
+          tsstoo = 1;
+          rdd = 0;
+          tdd = 1;
+          rsd = 0;
+          tsd = 0;
+          rdo = 0;
+          tdo = 0;
+          //rso = 0;
+          rsos = 0;
+          rsod = 0;
 
-         rddt = rsoil0;
-         rsdt = rsoil0;
-         rdot = rsoil0;
-         rsodt = 0;
-         rsost = rsoil0;
-         //rsot = rsoil0;
-      }
+          rddt = rsoil0;
+          rsdt = rsoil0;
+          rdot = rsoil0;
+          rsodt = 0;
+          rsost = rsoil0;
+          //rsot = rsoil0;
+          }
 
-      // Other cases (LAI > 0)
-      e1 = exp(-m*m_LAI);
-      e2 = e1*e1;
-      rinf = (att-m)/sigb;
-      rinf2 = rinf*rinf;
-      re = rinf*e1;
-      denom = 1.-rinf2*e2;
+        // Other cases (LAI > 0)
+        e1 = exp(-m*m_LAI);
+        e2 = e1*e1;
+        rinf = (att-m)/sigb;
+        rinf2 = rinf*rinf;
+        re = rinf*e1;
+        denom = 1.-rinf2*e2;
 
-      J1ks=Jfunc1(ks, m, m_LAI);
-      J2ks=Jfunc2(ks, m, m_LAI);
-      J1ko=Jfunc1(ko, m, m_LAI);
-      J2ko=Jfunc2(ko, m, m_LAI);
+        J1ks=Jfunc1(ks, m, m_LAI);
+        J2ks=Jfunc2(ks, m, m_LAI);
+        J1ko=Jfunc1(ko, m, m_LAI);
+        J2ko=Jfunc2(ko, m, m_LAI);
 
-      Ps = (sf+sb*rinf)*J1ks;
-      Qs = (sf*rinf+sb)*J2ks;
-      Pv = (vf+vb*rinf)*J1ko;
-      Qv = (vf*rinf+vb)*J2ko;
+        Ps = (sf+sb*rinf)*J1ks;
+        Qs = (sf*rinf+sb)*J2ks;
+        Pv = (vf+vb*rinf)*J1ko;
+        Qv = (vf*rinf+vb)*J2ko;
 
-      rdd = rinf*(1.-e2)/denom;
-      tdd = (1.-rinf2)*e1/denom;
-      tsd = (Ps-re*Qs)/denom;
-      rsd = (Qs-re*Ps)/denom;
-      tdo = (Pv-re*Qv)/denom;
-      rdo = (Qv-re*Pv)/denom;
+        rdd = rinf*(1.-e2)/denom;
+        tdd = (1.-rinf2)*e1/denom;
+        tsd = (Ps-re*Qs)/denom;
+        rsd = (Qs-re*Ps)/denom;
+        tdo = (Pv-re*Qv)/denom;
+        rdo = (Qv-re*Pv)/denom;
 
-      tss = exp(-ks*m_LAI);
-      too = exp(-ko*m_LAI);
-      z = Jfunc3(ks, ko, m_LAI);
-      g1 = (z-J1ks*too)/(ko+m);
-      g2 = (z-J1ko*tss)/(ks+m);
+        tss = exp(-ks*m_LAI);
+        too = exp(-ko*m_LAI);
+        z = Jfunc3(ks, ko, m_LAI);
+        g1 = (z-J1ks*too)/(ko+m);
+        g2 = (z-J1ko*tss)/(ks+m);
 
-      Tv1 = (vf*rinf+vb)*g1;
-      Tv2 = (vf+vb*rinf)*g2;
-      T1 = Tv1*(sf+sb*rinf);
-      T2 = Tv2*(sf*rinf+sb);
-      T3 = (rdo*Qs+tdo*Ps)*rinf;
+        Tv1 = (vf*rinf+vb)*g1;
+        Tv2 = (vf+vb*rinf)*g2;
+        T1 = Tv1*(sf+sb*rinf);
+        T2 = Tv2*(sf*rinf+sb);
+        T3 = (rdo*Qs+tdo*Ps)*rinf;
 
-      // Multiple scattering contribution to bidirectional canopy reflectance
-      rsod = (T1+T2-T3)/(1.-rinf2);
+        // Multiple scattering contribution to bidirectional canopy reflectance
+        rsod = (T1+T2-T3)/(1.-rinf2);
 
-      // Treatment of the hotspot-effect
-      alf=1e6;
-      // Apply correction 2/(K+k) suggested by F.-M. Bron
-      if (m_HSpot>0) alf=(dso/m_HSpot)*2./(ks+ko);
-      if (alf>200) alf=200;
-      if (alf==0)
-      {
-         // The pure hotspot - no shadow
-         tsstoo = tss;
-         sumint = (1-tss)/(ks*m_LAI);
-      }
-      else
-      {
-         // Outside the hotspot
-         fhot=m_LAI*vcl_sqrt(ko*ks);
-         // Integrate by exponential Simpson method in 20 steps
-         // the steps are arranged according to equal partitioning
-         // of the slope of the joint probability function
-         x1=0;
-         y1=0;
-         f1=1;
-         fint=(1.-exp(-alf))*0.05;
-         sumint=0;
+        // Treatment of the hotspot-effect
+        alf=1e6;
+        // Apply correction 2/(K+k) suggested by F.-M. Bron
+        if (m_HSpot>0) alf=(dso/m_HSpot)*2./(ks+ko);
+        if (alf>200) alf=200;
+        if (alf==0)
+          {
+          // The pure hotspot - no shadow
+          tsstoo = tss;
+          sumint = (1-tss)/(ks*m_LAI);
+          }
+        else
+          {
+          // Outside the hotspot
+          fhot=m_LAI*vcl_sqrt(ko*ks);
+          // Integrate by exponential Simpson method in 20 steps
+          // the steps are arranged according to equal partitioning
+          // of the slope of the joint probability function
+          x1=0;
+          y1=0;
+          f1=1;
+          fint=(1.-exp(-alf))*0.05;
+          sumint=0;
 
-         for(unsigned int j=1; j<=20; ++j)
-         {
+          for(unsigned int j=1; j<=20; ++j)
+            {
             if (j<20) x2 = -vcl_log(1.-j*fint)/alf;
             else x2 = 1;
             y2 = -(ko+ks)*m_LAI*x2+fhot*(1.-exp(-alf*x2))/alf;
@@ -435,13 +442,13 @@ SailModel
             x1=x2;
             y1=y2;
             f1=f2;
-         }
-         tsstoo=f1;
-      }
+            }
+          tsstoo=f1;
+          }
 
-      // Bidirectional reflectance
-      // Single scattering contribution
-      rsos = w*m_LAI*sumint;
+        // Bidirectional reflectance
+        // Single scattering contribution
+        rsos = w*m_LAI*sumint;
       // Total canopy contribution
       // rso=rsos+rsod;
       //Interaction with the soil
@@ -478,7 +485,7 @@ SailModel
 
 void
 SailModel
-::Calc_LIDF(const double a, VectorType &lidf)
+::Calc_LIDF(const double a, VectorType &lidf) const
 {
    int ala=a;
    VectorType freq;
@@ -490,7 +497,7 @@ SailModel
 
 void
 SailModel
-::Campbell(const double ala, VectorType &freq)
+::Campbell(const double ala, VectorType &freq) const
 {
    unsigned int n=18;
    double excent = exp(-1.6184e-5*vcl_pow(ala, 3)+2.1145e-3*ala*ala-1.2390e-1*ala+3.2491);
@@ -552,7 +559,7 @@ SailModel
 
 void
 SailModel
-::Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result)
+::Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result) const
 {
 
    double rd = CONST_PI/180;
@@ -666,7 +673,7 @@ SailModel
 
 double
 SailModel
-::Jfunc1(const double k, const double l, const double t)
+::Jfunc1(const double k, const double l, const double t) const
 {
    //J1 function with avoidance of singularity problem
    double v;
@@ -686,7 +693,7 @@ SailModel
 
 double
 SailModel
-::Jfunc2(const double k, const double l, const double t)
+::Jfunc2(const double k, const double l, const double t) const
 {
    double v;
    v = (1.-exp(-(k+l)*t))/(k+l);
@@ -696,7 +703,7 @@ SailModel
 
 double
 SailModel
-::Jfunc3(const double k, const double l, const double t)
+::Jfunc3(const double k, const double l, const double t) const
 {
    double v;
    v =  (1.-exp(-(k+l)*t))/(k+l);
@@ -710,5 +717,13 @@ SailModel
 {
    Superclass::PrintSelf(os, indent);
 
+}
+
+void SailModel::UseExternalSoilDB(std::shared_ptr<SoilDataBase> SoilDB, 
+                                  size_t SoilIndex)
+{
+  m_UseSoilFile = true;
+  m_SoilIndex = SoilIndex;
+  m_SoilDataBase = SoilDB;
 }
 } // end namespace otb

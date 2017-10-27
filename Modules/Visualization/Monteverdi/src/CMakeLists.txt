@@ -55,7 +55,6 @@ add_to_qt4_i18n_forms( ${OTBMonteverdi_FORMS} )
 
 #############################################################################
 add_library( OTBMonteverdi
-  STATIC
   ${OTBMonteverdi_SRCS}
   ${OTBMonteverdi_FORMS_HEADERS}
   ${OTBMonteverdi_SRC_MOC}

@@ -101,7 +101,10 @@ void TrainImagesBase::ShareSamplingParameters()
   //ShareParameter("sample.mim","rates.mim");
   ShareParameter( "ram", "polystat.ram" );
   ShareParameter( "elev", "polystat.elev" );
-  ShareParameter( "sample.vfn", "polystat.field" );
+  ShareParameter( "sample.vfn", "polystat.field",
+    "Field containing the class integer label for supervision" ,
+    "Field containing the class id for supervision. "
+      "The values in this field shall be cast into integers.");
 }
 
 void TrainImagesBase::ConnectSamplingParameters()
@@ -125,7 +128,7 @@ void TrainImagesBase::InitClassification()
   AddApplication( "TrainVectorClassifier", "training", "Model training" );
 
   AddParameter( ParameterType_InputVectorDataList, "io.valid", "Validation Vector Data List" );
-  SetParameterDescription( "io.valid", "A list of vector data to select the training samples." );
+  SetParameterDescription( "io.valid", "A list of vector data to select the validation samples." );
   MandatoryOff( "io.valid" );
 
   ShareClassificationParams();

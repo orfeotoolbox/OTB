@@ -40,13 +40,31 @@ QtWidgetListViewParameter::~QtWidgetListViewParameter()
 
 void QtWidgetListViewParameter::DoUpdateGUI()
 {
-  size_t numSelected = m_ListViewParam->GetSelectedItems().size();
-
-  //Clear m_ListView add re-add choices only if no items selected.
-  //Otherwise results in mantis #1025
-
-  if(numSelected < 1)
+  bool resetNeeded = false;
+  if (m_ListViewParam->GetNbChoices() != (unsigned int) m_ListView->count())
     {
+    resetNeeded = true;
+    }
+  else
+    {
+    for (unsigned int i = 0; i < m_ListViewParam->GetNbChoices(); ++i)
+      {
+      QString key = m_ListViewParam->GetChoiceName(i).c_str();
+      if (key != m_ListView->item(i)->text() )
+        {
+        resetNeeded = true;
+        break;
+        }
+      }
+    }
+
+  // save selected choices
+  std::vector<int> selected = m_ListViewParam->GetSelectedItems();
+
+  //Beware of mantis #1025 and #1403
+  if(resetNeeded)
+    {
+    m_SelectedItems.clear();
     while(m_ListView->takeItem(0))
       {
       m_ListView->removeItemWidget( m_ListView->takeItem(0) );
@@ -55,18 +73,30 @@ void QtWidgetListViewParameter::DoUpdateGUI()
     for (unsigned int i = 0; i < m_ListViewParam->GetNbChoices(); ++i)
       {
       // Add listBox items
-      QString key = m_ListViewParam->GetChoiceKey(i).c_str();
+      QString key = m_ListViewParam->GetChoiceName(i).c_str();
       m_ListView->addItem( key);
       }
     }
 
-  //I can't find any reason for calling m_ListView->setCurrentRow(value) in this
-  //case because QListWidget is a MultiSelection widget.
-  if (m_ListView->selectionMode() == QAbstractItemView::SingleSelection)
+  // test if selection has to be updated
+  if (selected != m_SelectedItems)
     {
-    unsigned int value = m_ListViewParam->GetValue( );
-    m_ListView->setCurrentRow(value);
+    for (int idx = 0; idx < m_ListView->count(); ++idx)
+      {
+      // check if this item is selected
+      bool isSelected = false;
+      for (unsigned int k = 0 ; k < selected.size() ; ++k)
+        {
+        if (selected[k] == idx)
+          {
+          isSelected = true;
+          break;
+          }
+        }
+      m_ListView->item(idx)->setSelected(isSelected);
+      }
     }
+
 }
 
 void QtWidgetListViewParameter::DoCreateWidget()
@@ -100,7 +130,7 @@ void QtWidgetListViewParameter::SelectedItems()
   m_SelectedItems.clear();
 
   // Item changed (check if selected or not)
-  for (int idx = 0; idx < m_ListView->count(); ++idx)
+  for (int idx = 0; idx < m_ListView->count() && idx < (int) m_ListViewParam->GetNbChoices(); ++idx)
     {
     if (m_ListView->item(idx)->isSelected())
       {

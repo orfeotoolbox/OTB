@@ -81,8 +81,13 @@ public:
   void SetIOMode( IOMode );
   IOMode GetIOMode() const;
 
+signals:
+  void FilenameChanged();
+
 protected slots:
   void SelectFile();
+  void CallFilenameChanged();
+  void SetFileName(const QString &);
 
 private:
   QtFileSelectionWidget(const QtFileSelectionWidget&); //purposely not implemented

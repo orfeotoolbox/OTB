@@ -2763,7 +2763,7 @@ namespace ossimplugins
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       //---
-      // Fetch the mission index (1A ou 1B) ?
+      // Fetch the mission index (1A or 1B) ?
       // and generate theSensorID
       //---
       if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
@@ -2791,7 +2791,7 @@ namespace ossimplugins
       }
 
       //---
-      // Fetch the mission index (1A ou 1B) ?
+      // Fetch the mission index (1A or 1B) ?
       // and generate theSensorID
       //---
       if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)

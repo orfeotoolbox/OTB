@@ -36,6 +36,7 @@
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperProxyParameter.h"
+#include "otbWrapperParameterKey.h"
 
 
 #include "otbWrapperAddProcessToWatchEvent.h"
@@ -53,7 +54,7 @@ namespace Wrapper
 Application::Application()
   : m_Name(""),
     m_Description(""),
-    m_Logger(itk::Logger::New()),
+    m_Logger(otb::Logger::New()),
     m_ProgressSourceDescription(""),
     m_DocName(""),
     m_DocLongDescription(""),
@@ -68,17 +69,23 @@ Application::Application()
 {
   // Don't call Init from the constructor, since it calls a virtual method !
   m_Logger->SetName("Application.logger");
-  m_Logger->SetPriorityLevel(itk::LoggerBase::DEBUG);
-  m_Logger->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
 }
 
 Application::~Application()
 {
 }
 
-itk::Logger* Application::GetLogger()
+otb::Logger* Application::GetLogger() const
 {
   return m_Logger;
+}
+
+void Application::SetLogger(otb::Logger *logger)
+{
+  if (m_Logger != logger)
+    {
+    m_Logger = logger;
+    }
 }
 
 std::vector<std::string>
@@ -199,9 +206,7 @@ void Application::SetParameterString(std::string parameter, std::string value, b
   else if (dynamic_cast<InputImageParameter*>(param))
     {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    if ( !paramDown->SetFromFileName(value) )
-    otbAppLogCRITICAL( <<"Invalid image filename " << value <<".");
-
+    paramDown->SetFromFileName(value);
     }
   else if (dynamic_cast<ComplexInputImageParameter*>(param))
     {
@@ -244,6 +249,10 @@ void Application::SetParameterString(std::string parameter, std::string value, b
     InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
     if ( !paramDown->SetFileName(value) )
     otbAppLogCRITICAL( <<"Invalid XML parameter filename " << value <<".");
+    }
+  else
+    {
+    otbAppLogWARNING( <<"This parameter can't be set using SetParameterString().");
     }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
@@ -301,11 +310,11 @@ void Application::SetParameterUserValue(std::string paramKey, bool value)
   GetParameterByKey(paramKey)->SetUserValue(value);
 }
 
-const Parameter* Application::GetParameterByKey(std::string name) const
+const Parameter* Application::GetParameterByKey(std::string name, bool follow) const
 {
   // GetParameterList is non const...
   Application* _this = const_cast<Application*>(this);
-  return _this->GetParameterByKey(name);
+  return _this->GetParameterByKey(name,follow);
 }
 
 void Application::Init()
@@ -340,8 +349,9 @@ void Application::UpdateParameters()
       InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
       if(inXMLParam!=ITK_NULLPTR)
         {
-        inXMLParam->Read(this);
+        // switch on 'm_IsInXMLParsed' before Read() to avoid cyclic calls
         m_IsInXMLParsed = true;
+        inXMLParam->Read(this);
         }
       }
     }
@@ -464,7 +474,7 @@ int Application::ExecuteAndWriteOutput()
             std::string checkReturn = outputParam->CheckFileName(true);
             if (!checkReturn.empty())
               {
-              otbAppLogWARNING("Check filename : "<<checkReturn);
+              otbAppLogWARNING("Check filename: "<<checkReturn);
               }
             if (useRAM)
               {
@@ -775,30 +785,31 @@ std::vector<std::string> Application::GetChoiceNames(std::string name)
 void Application::SetDefaultParameterInt(std::string parameter, int value)
 {
   Parameter* param = GetParameterByKey(parameter);
+  bool hasUserValue = param->HasUserValue();
 
   if (dynamic_cast<RadiusParameter*>(param))
     {
     RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
     paramRadius->SetDefaultValue(value);
-    paramRadius->SetValue(value);
+    if (!hasUserValue) paramRadius->SetValue(value);
     }
    else if (dynamic_cast<IntParameter*>(param))
     {
     IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
     paramInt->SetDefaultValue(value);
-    paramInt->SetValue(value);
+    if (!hasUserValue) paramInt->SetValue(value);
     }
   else if (dynamic_cast<FloatParameter*>(param))
     {
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     paramFloat->SetDefaultValue(static_cast<float>(value));
-    paramFloat->SetValue(static_cast<float>(value));
+    if (!hasUserValue) paramFloat->SetValue(static_cast<float>(value));
     }
   else if (dynamic_cast<RAMParameter*>(param))
     {
     RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
     paramRAM->SetDefaultValue(static_cast<unsigned int>(value));
-    paramRAM->SetValue(static_cast<unsigned int>(value));
+    if (!hasUserValue) paramRAM->SetValue(static_cast<unsigned int>(value));
     }
 }
 
@@ -810,7 +821,7 @@ void Application::SetDefaultParameterFloat(std::string parameter, float value)
     {
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     paramFloat->SetDefaultValue(value);
-    paramFloat->SetValue(value);
+    if (!param->HasUserValue()) paramFloat->SetValue(value);
     }
 }
 
@@ -1631,57 +1642,50 @@ Application::IsApplicationReady()
        it != paramList.end();
        ++it)
     {
-    // Check all Input Parameters with Input Role
-    if (GetParameterByKey(*it)->GetRole() == Role_Input)
+    // Check all parameters
+    if (IsParameterMissing(*it))
       {
-      // When a parameter is mandatory :
-      // return false when does not have value and:
-      //  - The param is root
-      //  - The param is not root and belonging to a Mandatory Group
-      //    which is activated
-      if ( !this->HasValue(*it)  && IsMandatory(*it) )
-        {
-        if( GetParameterByKey(*it)->IsRoot() )
-          {
-          otbDebugMacro("MISSING : "<< (*it).c_str() << " ( Is Root)");
-          return false;
-          }
-        else
-          {
-          // check if the parameter is linked to a root parameter with a chain of active parameters
-          Parameter* currentParam = GetParameterByKey(*it)->GetRoot();
-          if (currentParam->IsRoot())
-            {
-            otbDebugMacro("MISSING : "<< (*it).c_str() << " ( Is Level 1)");
-            return false;
-            }
-
-          int level = 1;
-
-          while (!currentParam->IsRoot())
-            {
-            if (!currentParam->GetActive())
-              {
-              // the missing parameter is not on an active branch : we can ignore it
-              break;
-              }
-            currentParam = currentParam->GetRoot();
-
-            level++;
-
-            if (currentParam->IsRoot())
-              {
-              // the missing parameter is on an active branch : we need it
-              otbDebugMacro("MISSING : "<< (*it).c_str() << " ( Is Level "<< level<<")");
-              return false;
-              }
-            }
-          }
-        }
+      ready = false;
+      break;
       }
     }
-
   return ready;
+}
+
+bool
+Application::IsParameterMissing(const std::string &key) const
+{
+  bool ret(false);
+  const Parameter* param = GetParameterByKey(key);
+  if (param->GetRole() == Role_Input &&
+      GetParameterType(key) != ParameterType_Group &&
+      param->GetMandatory() &&
+      !param->HasValue())
+    {
+    ret = true;
+    ParameterKey paramKey(key);
+    std::vector<std::string> split = paramKey.Split();
+    std::string currentRoot(key);
+    unsigned int level = 1;
+    while (level < split.size())
+      {
+      currentRoot.resize(currentRoot.find_last_of("."));
+      param = GetParameterByKey(currentRoot);
+      if (!param->GetActive() && !param->GetMandatory())
+        {
+        // the missing parameter is not on an active branch : we can ignore it
+        ret = false;
+        break;
+        }
+      level++;
+      }
+    if (ret)
+      {
+      // the missing parameter is on an active branch : we need it
+      otbDebugMacro("MISSING : "<< key << " (Level "<< split.size()<<")");
+      }
+    }
+  return ret;
 }
 
 void

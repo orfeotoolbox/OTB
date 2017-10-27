@@ -4,15 +4,12 @@
 TEXINPUTS=$TEXINPUTS:${ITK_TEXINPUTS}
 export TEXINPUTS
 
-mkdir ${HTML_OUTPUT}
+mkdir -p ${HTML_OUTPUT}
 cd ${HTML_OUTPUT}
 ${TEX4HT_COMPILER} "$@" ${TEX4HT_OPTIONS}
 
 # Make an index.html symlink pointing to the root page
 ${LN_COMMAND} -nsf SoftwareGuide.html index.html
-
-# Make a FAQ.html symlink pointing to the correct SoftwareGuide chapter
-${LN_COMMAND} -nsf `${GREP_COMMAND} -El "<head><title>[0-9]+ Frequently Asked Questions</title>" *` FAQ.html
 
 cd ..
 

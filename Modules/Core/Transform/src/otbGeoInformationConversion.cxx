@@ -73,4 +73,35 @@ bool GeoInformationConversion::IsESRIValidWKT(const std::string &wkt)
   return SRS.Validate()==OGRERR_NONE;
 }
 
+int GeoInformationConversion::ToEPSG(const std::string &wkt)
+{
+  int code = -1;
+  OGRSpatialReference srs(wkt.c_str());
+  srs.Fixup();
+  srs.AutoIdentifyEPSG();
+  const char * epsg = nullptr;
+  if (srs.IsGeographic())
+    {
+    code = 0;
+    epsg = srs.GetAuthorityCode("GEOGCS");
+    }
+  else if (srs.IsProjected())
+    {
+    code = 0;
+    epsg = srs.GetAuthorityCode("PROJCS");
+    }
+  if (epsg!=nullptr && strcmp( epsg, "" )!=0 )
+    {
+    try
+      {
+      code = boost::lexical_cast<int>(epsg);
+      }
+    catch(boost::bad_lexical_cast &)
+      {
+      code = 0;
+      }
+    }
+  return code;
+}
+
 } // End namespace otb

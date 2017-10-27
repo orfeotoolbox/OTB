@@ -23,6 +23,8 @@
 //Use to create command line from the application parameters
 #include "otbWrapperOutputProcessXMLParameter.h"
 
+using std::string;
+
 namespace otb
 {
 
@@ -44,7 +46,6 @@ QtWidgetModel
   m_LogOutput = QtLogOutput::New();
 
   // Attach log output to the Application logger
-  m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
   m_Application->GetLogger()->AddLogOutput(m_LogOutput);
 
   m_Timer = new QTimer(this);
@@ -266,41 +267,44 @@ AppliThread
 {
   int result = -1;
 
-  //
-  // Try to execute OTB-application.
   try
-    {
+  {
     result = m_Application->ExecuteAndWriteOutput();
-    }
-  //
-  // Catch standard exceptions.
-  catch( std::exception& err )
-    {
-    std::ostringstream message;
-
-    message
-      << "The following error occurred during OTB-application execution: "
-      << err.what()
-      << std::endl;
-
-    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() );
-
-    // Signal exception.
+  }
+  catch(otb::ApplicationException& err)
+  {
+    // These are thrown with otbAppLogFATAL, a macro which logs a user
+    // friendly error message before throwing. So log exception details only
+    // in debug.
+    m_Application->GetLogger()->Debug("Caught otb::ApplicationException during application execution:\n");
+    m_Application->GetLogger()->Debug(string(err.what()) + "\n");
     emit ExceptionRaised( err.what() );
-    }
-  //
-  // Catch other exceptions.
-  catch( ... )
-    {
-    m_Application->GetLogger()->Write(
-      itk::LoggerBase::FATAL,
-      "An unknown exception has been raised during OTB-application execution"
-    );
+  }
+  catch(otb::ImageFileReaderException& err)
+  {
+    m_Application->GetLogger()->Debug("Caught otb::ImageFileReaderException during application execution:\n");
+    m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+    m_Application->GetLogger()->Fatal(string("Cannot open image ") + err.m_Filename + string(". ") + err.GetDescription() + string("\n"));
+    emit ExceptionRaised( err.what() );
+  }
+  catch(itk::ExceptionObject& err)
+  {
+    m_Application->GetLogger()->Debug("Caught itk::ExceptionObject during application execution:\n");
+    m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+    m_Application->GetLogger()->Fatal(string(err.GetDescription()) + "\n");
+    emit ExceptionRaised( err.what() );
+  }
+  catch(std::exception& err)
+  {
+    m_Application->GetLogger()->Fatal(string("Caught std::exception during application execution: ") + err.what() + "\n");
+    emit ExceptionRaised( err.what() );
+  }
+  catch(...)
+  {
+    m_Application->GetLogger()->Fatal("Caught unknown exception during application execution.\n");
+    emit ExceptionRaised("Unknown exception.");
+  }
 
-    // Signal exception.
-    emit ExceptionRaised( "Exception raised by OTB-application." );
-    }
-  //
   // Signal OTB-application has ended with result status.
   emit ApplicationExecutionDone( result );
 }

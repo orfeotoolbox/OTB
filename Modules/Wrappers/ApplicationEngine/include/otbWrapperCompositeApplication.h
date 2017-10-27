@@ -32,7 +32,7 @@ namespace Wrapper
 /** \class CompositeApplication
  *  \brief This class is a base class for composite applications
  *
- * This class allows to create & store internal applications with the same logic
+ * This class allows creating & storing internal applications with the same logic
  * as parameters. You choose the application type to create, you choose an
  * identifier (alphanumeric string), and you can give a short description.
  * Later, you will refer to this application using the identifier. In the
@@ -148,10 +148,6 @@ private:
   void operator =(const CompositeApplication&); //purposely not implemented
 
   InternalAppContainer m_AppContainer;
-
-  itk::StdStreamLogOutput::Pointer  m_LogOutput;
-
-  std::ostringstream m_Oss;
 
   AddProcessCommandType::Pointer    m_AddProcessCommand;
 };

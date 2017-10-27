@@ -2,14 +2,14 @@ From raw image to calibrated product
 ====================================
 
 This section presents various pre-processing tasks that are presented in
-a classical order to obtain a calibrated, pan-sharpened image.
+a standard order to obtain a calibrated, pan-sharpened image.
 
 Optical radiometric calibration
 -------------------------------
 
-In remote sensing imagery, pixel values are called DN (for Digital
-Numbers) and can not be physically interpreted and compared: they are
-influenced by various factors such as the amount of light flowing trough
+In remote sensing imagery, pixel values are referred to as Digital
+Numbers (DN) and they cannot be physically interpreted or compared. They are
+influenced by various factors such as the amount of light flowing through
 the sensor, the gain of the detectors and the analogic to numeric
 converter.
 
@@ -47,7 +47,7 @@ This transformation can be done either with **OTB Applications** or with
 **Monteverdi** . Sensor-related parameters such as gain, date, spectral
 sensitivity and sensor position are seamlessly read from the image
 metadata. Atmospheric parameters can be tuned by the user. Supported
-sensors are :
+sensors are:
 
 -  Pleiades
 
@@ -86,16 +86,16 @@ Pan-sharpening
 --------------
 
 Because of physical constrains on the sensor design, it is difficult to
-achieve high spatial and spectral resolution at the same time : a better
-spatial resolution means a smaller detector, which in turns means lesser
+achieve high spatial and spectral resolution at the same time: a better
+spatial resolution means a smaller detector, which in turn means lesser
 optical flow on the detector surface. On the contrary, spectral bands
 are obtained through filters applied on the detector surface, that
 lowers the optical flow, so that it is necessary to increase the
 detector size to achieve an acceptable signal to noise ratio.
 
 For these reasons, many high resolution satellite payload are composed
-of two sets of detectors, which in turns delivers two different kind of
-images :
+of two sets of detectors, which in turn delivers two different kind of
+images:
 
 -  The multi-spectral (XS) image, composed of 3 to 8 spectral bands
    containing usually blue, green, red and near infra-red bands at a
@@ -115,7 +115,7 @@ multi-spectral one so as to get an image combining the spatial
 resolution of the panchromatic image with the spectral richness of the
 multi-spectral image. This operation is called pan-sharpening.
 
-This fusion operation requires two different steps :
+This fusion operation requires two different steps:
 
 #. The multi-spectral (XS) image is zoomed and registered to the
    panchromatic image,
@@ -131,7 +131,7 @@ described in the above sections.
 The *BundleToPerfectSensor* application allows to perform both steps in
 a row. Seamless sensor modelling is used to perform zooming and
 registration of the multi-spectral image on the panchromatic image. In
-the case of a Pléiades bundle, a different approach is used : an affine
+the case of a Pléiades bundle, a different approach is used: an affine
 transform is used to zoom the multi-spectral image and apply a residual
 translation. This translation is computed based on metadata about the
 geometric processing of the bundle. This zooming and registration of the
@@ -189,12 +189,12 @@ Default value is 256 Mb.
 
 .. figure:: ../Art/MonteverdiImages/monteverdi_QB_XS_pan-sharpened.png
 
-Figure 5 : Pan-sharpened image using Orfeo ToolBox. 
+Figure 5: Pan-sharpened image using Orfeo ToolBox.
 
 Please also note that since registration and zooming of the
 multi-spectral image with the panchromatic image relies on sensor
 modelling, this tool will work only for images whose sensor models is
-available in **Orfeo Toolbox** (see :ref:`section3` for a detailed
+available in **Orfeo ToolBox** (see :ref:`section3` for a detailed
 list). It will also work with ortho-ready products in cartographic
 projection.
 
@@ -207,40 +207,40 @@ A Digital Elevation Model (DEM) is a georeferenced image (or collection
 of images) where each pixel corresponds to a local elevation. DEM are
 useful for tasks involving sensor to ground and ground to sensor
 coordinate transforms, like during ortho-rectification (see :ref:`section3`). These transforms need to find the intersection
-between the line of sight of the sensor and the earth geoid. If a simple
-spheroid is used as the earth model, potentially high localisation
+between the line of sight of the sensor and the Earth geoid. If a simple
+spheroid is used as the Earth model, potentially high localisation
 errors can be made in areas where elevation is high or perturbed. Of
 course, DEM accuracy and resolution have a great impact on the precision
-of these transforms.
+of these transformations.
 
 Two main available DEM, free of charges, and with worldwide cover, are
 both delivered as 1 degree by 1 degree tiles:
 
 -  `The Shuttle Radar topographic Mission
-   (SRTM) <http://www2.jpl.nasa.gov/srtm/>`_  is a 90 meters resolution
-   DEM, obtained by radar interferometry during a campaign of the
+   (SRTM) <http://www2.jpl.nasa.gov/srtm/>`_  is a DEM with a resolution of 90 metres,
+   obtained by radar interferometry during a campaign of the
    Endeavour space shuttle from NASA in 2000.
 
 -  The `Advanced Spaceborne Thermal Emission and Reflection Radiometer
-   (ASTER) <http://www.ersdac.or.jp/GDEM/E/2.html>`_  is a 30 meters
-   resolution DEM obtained by stereoscopic processing of the archive of
+   (ASTER) <http://www.ersdac.or.jp/GDEM/E/2.html>`_  is a DEM with a resolution of 
+   30 metres obtained by stereoscopic processing of the archive of
    the ASTER instrument.
 
-The **Orfeo Toolbox** relies on `OSSIM <http://www.ossim.org/>`_ 
+The **Orfeo ToolBox** relies on `OSSIM <http://www.ossim.org/>`_
 capabilities for sensor modelling and DEM handling. Tiles of a given DEM
 are supposed to be located within a single directory. General elevation
 support is also supported from GeoTIFF files.
 
 Whenever an application or **Monteverdi** module requires a DEM, the
 option **elev.dem** allows set the DEM directory. This directory must
-contains the DEM tiles, either in DTED or SRTM format, either as GeoTIFF
-files. Subdirectories are not supported.
+contain the DEM tiles, either in DTED or SRTM format or as a GeoTIFF.
+Subdirectories are not supported.
 
 Depending on the reference of the elevation, you also need to use a
-geoid to manage elevation accurately. For this, you need to specify a
-path to a file which contains the geoid. `Geoid <http://en.wikipedia.org/wiki/Geoid>`_ 
+geoid to accurately manage the elevation. For this, you need to specify a
+path to a file which contains the geoid. `Geoid <http://en.wikipedia.org/wiki/Geoid>`_
 corresponds to the equipotential surface that would coincide with the mean ocean surface of
-the Earth . 
+the Earth.
 
 We provide one geoid in the `OTB-Data  <http://hg.orfeo-toolbox.org/OTB-Data/file/4722d9e672c6/Input/DEM/egm96.grd>`_ repository.
 
@@ -290,7 +290,7 @@ Ortho-rectification can be performed either with **OTB Applications** or
 **Monteverdi** . Sensor parameters and image meta-data are seamlessly
 read from the image files without needing any user interaction, provided
 that all auxiliary files are available. The sensor for which **Orfeo
-Toolbox** supports ortho-rectification of raw products are the
+ToolBox** supports ortho-rectification of raw products are the
 following:
 
 -  Pleiades
@@ -306,7 +306,7 @@ following:
 -  WorldView
 
 In addition, GeoTiff and other file format with geographical information
-are seamlessly read by **Orfeo Toolbox** , and the ortho-rectification
+are seamlessly read by **Orfeo ToolBox** , and the ortho-rectification
 tools can be used to re-sample these images in another map projection.
 
 Beware of “ortho-ready” products
@@ -314,7 +314,7 @@ Beware of “ortho-ready” products
 
 There are some image products, called “ortho-ready”, that should be
 processed carefully. They are actual products in raw geometry, but their
-metadata also contains projection data :
+metadata also contains projection data:
 
 -  a map projection
 
@@ -331,31 +331,31 @@ it. Obviously, this map projection is not as accurate as the sensor
 parameters of the raw geometry. In addition, the impact of the elevation
 model can’t be observed if the map projection is used. In order to
 perform an ortho-rectification on this type of product, the map
-projection has to be hidden from **Orfeo Toolbox** .
+projection has to be hidden from **Orfeo ToolBox** .
 
 You can see if a product is an “ortho-ready” product by using ``gdalinfo`` or
 OTB ReadImageInfo application.
-Check if your product verifies following two conditions :
+Check if your product verifies following two conditions:
 
--  The product is in raw geometry : you should expect the presence of
+-  The product is in raw geometry: you should expect the presence of
    RPC coefficients and a non-empty OSSIM keywordlist.
 
--  The product has a map projection : you should see a projection name
+-  The product has a map projection: you should see a projection name
    with physical origin and spacing.
 
-In that case, you can hide the map projection from the **Orfeo Toolbox**
+In that case, you can hide the map projection from the **Orfeo ToolBox**
 by using *extended* filenames. Instead of using the plain input image
-path, you append a specific key at the end :
+path, you append a specific key at the end:
 
 ::
 
     "path_to_image?&skipcarto=true"
 
 The double quote can be necessary for a successful parsing. More details
-about the extended filenames can be found in the `wiki page <http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName>`_ , and
-also in the `OTB Software Guide <http://orfeo-toolbox.org/SoftwareGuide>`_  .
+about the extended filenames can be found in the :ref:`extended-filenames`
+section.
 
-Ortho-rectification with **OTB Applications** 
+Ortho-rectification with **OTB Applications**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The *OrthoRectification* application allows to perform
@@ -402,7 +402,7 @@ used (example with *lambert93* map projection):
 Map projections handled by the application are the following (please
 note that the ellipsoid is always WGS84):
 
--  | UTM : ``-map utm``  | The UTM zone and hemisphere can be set by the options ``-map.utm.zone`` and ``-map.utm.northhem``.
+-  | UTM: ``-map utm``  | The UTM zone and hemisphere can be set by the options ``-map.utm.zone`` and ``-map.utm.northhem``.
 
 -  Lambert 2 etendu: ``-map lambert2``
 
@@ -410,9 +410,9 @@ note that the ellipsoid is always WGS84):
 
 -  | TransMercator: ``-map transmercator`` | The related parameters (false easting, false northing and scale factor) can be set by the options    ``-map.transmercator.falseeasting``, ``-map.transmercator.falsenorthing`` and ``-map.transmercator.scale``
 
--  WGS : ``-map wgs``
+-  WGS: ``-map wgs``
 
--  | Any map projection system with an EPSG code : ``-map epsg`` | The EPSG code is set with the option ``-map.epsg.code``
+-  | Any map projection system with an EPSG code: ``-map epsg`` | The EPSG code is set with the option ``-map.epsg.code``
 
 The group ``outputs`` contains parameters to set the origin, size and
 spacing of the output image. For instance, the ground spacing can be

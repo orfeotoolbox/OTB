@@ -230,9 +230,12 @@ macro(otb_module_impl)
     if (BUILD_SHARED_LIBS)
       # export flags are only added when building shared libs, they cause
       # mismatched visibility warnings when building statically.
-      add_compiler_export_flags(my_abi_flags)
-      set_property(TARGET ${otb-module} APPEND
-        PROPERTY COMPILE_FLAGS "${my_abi_flags}")
+      if (USE_COMPILER_HIDDEN_VISIBILITY)
+        # Prefer to use target properties supported by newer cmake
+        set_target_properties(${otb-module} PROPERTIES CXX_VISIBILITY_PRESET hidden)
+        set_target_properties(${otb-module} PROPERTIES C_VISIBILITY_PRESET hidden)
+        set_target_properties(${otb-module} PROPERTIES VISIBILITY_INLINES_HIDDEN 1)
+      endif()
     endif()
   endif()
 
@@ -356,5 +359,6 @@ macro(otb_module_target _name)
 endmacro()
 
 macro(otb_module_requires_cxx11)
+  message(WARNING "otb_module_requires_cxx11 is deprecated since OTB version 6.2 which build with c++14 by default. You can safely remove the call to this macro.")
   set(OTB_MODULE_${otb-module}_REQUIRES_CXX11 1)
 endmacro()

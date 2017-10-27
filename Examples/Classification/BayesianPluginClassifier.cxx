@@ -32,7 +32,7 @@
 // all the components of the classifier system and the data flow. This system
 // differs with the previous k-means clustering algorithms in several
 // ways. The biggest difference is that this classifier uses the
-// \subdoxygen{itk}{Statistics}{itkGaussianMembershipFunction} as membership functions
+// \subdoxygen{itk}{Statistics}{GaussianMembershipFunction} as membership functions
 // instead of the \subdoxygen{itk}{Statistics}{EuclideanDistanceMetric}. Since the
 // membership function is different, the membership function requires a
 // different set of parameters, mean vectors and covariance matrices. We

@@ -64,6 +64,8 @@ public:
   typedef std::vector<LinePointType>                     PointListType;
   typedef itk::VectorContainer<unsigned long, PointType> PointContainerType;
   typedef itk::SmartPointer<PointContainerType>          PointContainerPointer;
+  typedef itk::SizeValueType SizeValueType;
+  typedef itk::IdentifierType IdentifierType;
 
   /** Returns a reference to the list of the Line points.*/
   PointListType& GetPoints(void);
@@ -72,19 +74,19 @@ public:
   void SetPoints(PointListType& newPoints);
 
   /** Return a point in the list given the index */
-  const SpatialObjectPointType* GetPoint(unsigned long id) const ITK_OVERRIDE
+  const SpatialObjectPointType* GetPoint(IdentifierType id) const ITK_OVERRIDE
   {
     return &(m_Points[id]);
   }
 
   /** Return a point in the list given the index */
-  SpatialObjectPointType* GetPoint(unsigned long id) ITK_OVERRIDE
+  SpatialObjectPointType* GetPoint(IdentifierType id) ITK_OVERRIDE
   {
     return &(m_Points[id]);
   }
 
   /** Return the number of points in the list */
-  itk::SizeValueType GetNumberOfPoints(void) const ITK_OVERRIDE
+  SizeValueType GetNumberOfPoints(void) const ITK_OVERRIDE
   {
     return m_Points.size();
   }

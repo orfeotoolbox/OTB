@@ -33,20 +33,33 @@ SETUP_SUPERBUILD(QT4)
 
 set(QT4_SB_ENABLE_GTK OFF CACHE INTERNAL "Enable GTK+ style with qt using -gtkstlye. Default is OFF")
 
-if(NOT DEFINED git_protocol)
-  set(git_protocol "git")
-endif()
-
 #NOTE: make sure your superbuild install directory does not contain any
 #Qt files from previous install of superbuild QT.
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT4 ZLIB PNG JPEG SQLITE FREETYPE)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT4 ZLIB PNG JPEG FREETYPE)
 
 #use system libs always for Qt4 as we build them from source or have already in system
-set(QT4_SB_CONFIG)
+
+if(SB_INSTALL_PREFIX)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT4_INSTALL_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include QT4_INCLUDE_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/lib QT4_LIB_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include/freetype2 QT4_INCLUDE_FREETYPE_NATIVE)
+endif()
+
+#Common options for all cases
+set(QT4_SB_CONFIG
+"-prefix ${QT4_INSTALL_PREFIX_NATIVE} -L ${QT4_LIB_PREFIX_NATIVE} \
+-I ${QT4_INCLUDE_PREFIX_NATIVE} -I ${QT4_INCLUDE_FREETYPE_NATIVE} \
+-opensource -confirm-license -release -shared -nomake demos \
+-nomake examples -nomake tools -no-phonon-backend -no-phonon -no-script \
+-no-scripttools -no-multimedia -no-audio-backend -no-webkit -no-declarative \
+-no-accessibility -no-qt3support -no-xmlpatterns -no-sql-sqlite -no-openssl \
+-no-libtiff -no-libmng -system-libpng -system-libjpeg -system-zlib")
+
 #RK: building faling on mac. png include is in a macframework
 if(USE_SYSTEM_PNG)
-  set(QT4_SB_CONFIG "-I ${PNG_PNG_INCLUDE_DIR}")
+  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -I ${PNG_PNG_INCLUDE_DIR}")
 endif()
 
 if(UNIX)
@@ -55,22 +68,15 @@ if(UNIX)
   else() #Linux
     if(QT4_SB_ENABLE_GTK)
       message(WARNING "QT4_SB_ENABLE_GTK support is experimental")
-
       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
     else()
-      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle")
+      set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle -no-glib -no-fontconfig")
     endif()
   endif()
   #common for all unix
-  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-nis -no-javascript-jit -v")
+  set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-dbus -no-nis -no-javascript-jit -no-icu -v")
 elseif(MSVC)
   set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -mp")
-endif()
-
-if(SB_INSTALL_PREFIX)
-  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT4_INSTALL_PREFIX_NATIVE)
-  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include QT4_INCLUDE_PREFIX_NATIVE)
-  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/lib QT4_LIB_PREFIX_NATIVE)
 endif()
 
 if(WIN32)
@@ -105,10 +111,12 @@ add_custom_target(QT4-uninstall
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtSvg"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtTest"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/QtXml"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/include/Qt"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/mkspecs"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/plugins"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${SB_INSTALL_PREFIX}/translations"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/lib/libQt*"
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/lib/pkgconfig/Qt*"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/qmake${QT4_BIN_EXT}"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/lrelease${QT4_BIN_EXT}"
   COMMAND ${CMAKE_COMMAND} -E remove -f "${SB_INSTALL_PREFIX}/bin/moc${QT4_BIN_EXT}"
@@ -130,24 +138,11 @@ add_custom_target(QT4-uninstall
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     CONFIGURE_COMMAND ${QT4_CONFIGURE_COMMAND}
     DEPENDS ${QT4_DEPENDENCIES}
+    LOG_DOWNLOAD 1
     LOG_CONFIGURE 1    
     LOG_BUILD 1
     LOG_INSTALL 1    
     )
-
-
- if(MSVC)
-   #Q: why this copy here?.
-   #RK: Because QT4 sucks with qmake -query.
-   ExternalProject_Add_Step(QT4 patches
-     COMMAND ${CMAKE_COMMAND} -E copy_directory
-     ${QT4_SB_SRC}/mkspecs ${SB_INSTALL_PREFIX}/mkspecs
-     COMMAND ${CMAKE_COMMAND} -E copy
-     ${CMAKE_SOURCE_DIR}/patches/QT4/qjpeghandler.pri
-     ${QT4_SB_SRC}/src/gui/image/
-     DEPENDEES patch update
-     DEPENDERS configure )
-endif()
 
 SUPERBUILD_PATCH_SOURCE(QT4)
 

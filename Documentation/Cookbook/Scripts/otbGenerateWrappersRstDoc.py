@@ -27,6 +27,12 @@ def ConvertString(s):
     s = s.replace('*','\*')
     return s
 
+def ConvertToLineBlock(s):
+    '''Convert a string into a line bloc (prefix with |) '''
+    s = s.strip()
+    s = s.replace('*','\*')
+    s = "  | " + s.replace('\n','\n  | ')
+    return s
 
 def EncloseString(s):
     if not s.startswith("\"") :
@@ -144,8 +150,8 @@ def FindLengthOfLargestColumnText(app,paramlist):
                 if colLength[0] < lenp:
                     colLength[0] = lenp
                 lenpdescr = len(choicename)
-                if colLength[2] < lenpdescr:
-                    colLength[2] = lenpdescr
+                if colLength[1] < lenpdescr:
+                    colLength[1] = lenpdescr
         else:
             if colLength[0] < len(param):
                 colLength[0] = len(param)
@@ -194,8 +200,8 @@ def GenerateParametersTable(app,paramlist):
         if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
             for (choicekey,choicename) in zip(app.GetChoiceKeys(param),app.GetChoiceNames(param)):
                 output += MakeText(param + " " + choicekey, colLength[0])
-                output += MakeText(" *Choice*" ,colLength[1])
-                output += MakeText(choicename, colLength[2])
+                output += MakeText(choicename,colLength[1])
+                output += MakeText(" *Choice*", colLength[2])
                 output += '|' + linesep
                 output += RstTableHeaderLine(headerlist, colLength, '-')
     return output
@@ -338,8 +344,8 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
             #app.SetParameterString(param,value)
             output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")" + linesep
         if paramtype == otbApplication.ParameterType_Empty:
-            app.SetParameterString(param,"1")
-            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+",\"1\")" + linesep
+            app.EnableParameter(param)
+            output+= "\t" + appname + ".EnableParameter("+EncloseString(param)+")" + linesep
         if paramtype == otbApplication.ParameterType_Int \
                 or paramtype == otbApplication.ParameterType_Radius \
                 or paramtype == otbApplication.ParameterType_RAM:
@@ -422,8 +428,11 @@ def GetApplicationExamplePython(app,idx):
     output+= linesep
     return output
 
-def RstHeading(text, delimiter):
-    heading = text + linesep
+def RstHeading(text, delimiter, ref=None):
+    heading = ""
+    if ref:
+        heading += ".. _" + ref + ":" + linesep + linesep
+    heading += text + linesep
     heading += delimiter * len(text)  + linesep
     heading += linesep
     return heading
@@ -481,7 +490,7 @@ def ApplicationToRst(appname):
         output += "These additional resources can be useful for further information: " + linesep
         # hlink="<http://www.readthedocs.org/" + ConvertString(app.GetDocSeeAlso()) + ".html>`_ "
         # output += linesep + "`" + ConvertString(app.GetDocSeeAlso()) + " " + hlink + linesep + linesep
-        output += linesep + ConvertString(app.GetDocSeeAlso()) + linesep + linesep
+        output += ConvertToLineBlock(app.GetDocSeeAlso()) + linesep + linesep
 
     return output
 
@@ -491,8 +500,8 @@ def GetApplicationTags(appname):
 
 import shutil
 
-def RstPageHeading(text, maxdepth):
-    output = RstHeading(text, "=") + linesep
+def RstPageHeading(text, maxdepth, ref=None):
+    output = RstHeading(text, "=", ref=ref) + linesep
     output += ".. toctree::" + linesep
     output += "\t:maxdepth: " + maxdepth + linesep
     output += linesep + linesep
@@ -502,53 +511,30 @@ def GenerateRstForApplications():
     out = ""
     blackList = ["TestApplication", "Example", "ApplicationExample"]
     allApps = None
-    try: 
+    try:
         allApps = otbApplication.Registry.GetAvailableApplications( )
-    except e:
+    except:
         print 'error in otbApplication.Registry.GetAvailableApplications()'
         sys.exit(1)
 
-#    appNames = [app for app in otbApplication.Registry.GetAvailableApplications() if app not in blackList]
     if not allApps:
 	print 'No OTB applications available. Please check OTB_APPLICATION_PATH env variable'
 	sys.exit(1)
 
-    # sectionTags = ["Image Manipulation",
-    #                "Vector Data Manipulation",
-    #                "Calibration","Geometry", "Image Filtering","Feature Extraction",
-    #                "Stereo","Learning","Segmentation", "Miscellaneous"]
-    # for tag in sectionTags:
-    #     #directory= "Applications/" + tag
-    #     # if not os.path.exists(directory):
-    #     #     os.makedirs(directory)
-    #     appIndexFile.write('\tApplications/' + tag.replace(' ', '_') + '.rst' + linese)
-    #     #chapterIndexFile = open('Applications/' + tag + '.rst', 'w')
-    #     #chapterIndexFile.write(RstPageHeading(tag))
-    #     #print linesep + RstHeading(tag, '=')
-
-
-    #miscFile = open('Applications/Miscellaneous.rst', 'w')
-    # misctag = "Miscellaneous" #should this be Utilities
-    # if not os.path.exists("Applications/" + misctag):
-    #     os.makedirs("Applications/" + misctag)
-
-#    appIndexFile.write('\tApplications/' + misctag + linesep)
-
-        
-    writtenTags = []    
+    writtenTags = []
     appNames = [app for app in allApps if app not in blackList]
 
     print "All apps: %s" % (appNames,)
 
-    appIndexFile = open(RST_DIR + '/Applications.rst', 'w')    
-    appIndexFile.write(RstPageHeading("Applications", "2"))
+    appIndexFile = open(RST_DIR + '/Applications.rst', 'w')
+    appIndexFile.write(RstPageHeading("Applications Reference Documentation", "2", ref="apprefdoc"))
     for appName in appNames:
         tags = GetApplicationTags(appName)
 
         if not tags:
             print "No tags for application: "  +  appName
             sys.exit(1)
-            
+
         tag = tags[0]
 
         tag_ = tag
@@ -557,11 +543,11 @@ def GenerateRstForApplications():
 
         if not tag_:
             print 'empty tag found for ' + appName
-            
+
         if not tag_ in writtenTags:
             appIndexFile.write('\tApplications/' + tag_ + '.rst' + linesep)
             writtenTags.append(tag_)
-            
+
         tagFileName = RST_DIR + '/Applications/'  + tag_ + '.rst'
         if os.path.isfile(tagFileName):
             tagFile = open(tagFileName, 'a')
@@ -572,15 +558,13 @@ def GenerateRstForApplications():
             tagFile.write( RstPageHeading(tag, "1") )
             tagFile.write("\tapp_" + appName + linesep)
             tagFile.close()
-        
+
         print "Generating " + appName + ".rst" +  " on tag " + tag_
         appFile = open(RST_DIR + '/Applications/app_'  + appName + '.rst', 'w')
         out = ApplicationToRst(appName)
         appFile.write(out)
         appFile.close()
 
-    appIndexFile.close()
-    
     return out
 
 

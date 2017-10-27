@@ -242,7 +242,7 @@ int main(int argc, char * argv[])
   monoWriterType::Pointer monoWriter = monoWriterType::New();
 
   monoReader->SetFileName(inputFilename);
-  monoReader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
+  monoReader->Update(); // Needed to know the number of channels in the image
   monoWriter->SetFileName(outputFilenameMIR);
   extractROIMonoFilter->SetInput(monoReader->GetOutput());
 

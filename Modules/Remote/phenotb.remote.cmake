@@ -27,5 +27,5 @@ A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/jordi/phenotb
 "
   GIT_REPOSITORY http://tully.ups-tlse.fr/jordi/phenotb.git
-  GIT_TAG master
+  GIT_TAG c9349eb89a652a18b28a40dfb3fa352b76388527
 )

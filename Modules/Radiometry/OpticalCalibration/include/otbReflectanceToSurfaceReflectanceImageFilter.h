@@ -119,7 +119,7 @@ private:
  *
  * \ingroup AtmosphericRadiativeTerms
  * \ingroup AtmosphericCorrectionParameters
- * \ingroup LuminanceToReflectanceImageFilter
+ * \ingroup RadianceToReflectanceImageFilter
  * \ingroup ImageToReflectanceImageFilter
  * \ingroup ImageMetadataCorrectionParameters
  * \ingroup otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms

@@ -1,46 +1,50 @@
 We provide a binary package for GNU/Linux x86_64. This package includes
-all of OTB applications along with commandline and graphical launchers.
-Download it from `OTB's download page
+all of the OTB applications along with command line and graphical launchers.
+It can be downloaded from `OTB's download page
 <https://www.orfeo-toolbox.org/download>`__.
 
-This package is a self-extractible archive. You may uncompress it with a
-double-click on the file, or with the command line :
+This package is a self-extractable archive. You may uncompress it with a
+double-click on the file, or from the command line as follows:
 
 .. parsed-literal::
 
    chmod +x OTB-|release|-Linux64.run
    ./OTB-|release|-Linux64.run
 
-The self-extractible archive only needs common tools found on most Linux
+The self-extractable archive only needs common tools found on most Linux
 distributions ("sed", "grep", "find", "cat", "printf", "ln", ...). However, be
 aware that it requires tools such as "which" and "file" (they are not always
 present, for instance when building a container).
 
 Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
-archive is extracted, the directory structure is made of:
+archive is extracted, the directory structure consists of:
 
--  ``monteverdi.sh`` : A launcher script for Monteverdi
+-  ``monteverdi.sh``: A launcher script for Monteverdi
 
--  ``mapla.sh`` : A launcher script for Mapla
+-  ``mapla.sh``: A launcher script for Mapla
 
--  ``otbenv.profile`` : A script to initialize the environment for OTB
+-  ``otbenv.profile``: A script to initialize the environment for OTB
    executables
 
--  ``bin`` : A folder containing application launchers (otbcli.sh,
+-  ``bin``: A folder containing application launchers (otbcli.sh,
    otbgui.sh), Monteverdi and Mapla.
 
--  ``lib`` : A folder containing all shared libraries and OTB
+-  ``lib``: A folder containing all shared libraries and OTB
    applications.
 
--  ``share`` : A folder containing common resources and copyright
+-  ``share``: A folder containing common resources and copyright
    mentions.
+
+-  ``tool``: A folder containing usefull scripts to test the installation or
+   to uninstall OTB libraries and headers while keeping all the depedencies.
 
 In order to run the command line launchers, this package doesn’t require
 any special library that is not present in most modern Linux
-distributions. There is a small caveat for "expat" though. The binaries depend
+distributions. There is a small caveat for "expat" though as these binaries depend
 on "libexpat.so", which can be supplied by most package managers (apt, yum, ...).
-If not already present, look for one of the following packages :
+Note that this problem only affects versions 6.0 and older.
+If not already present, it is necessary to install one of the following packages:
 
 ::
 
@@ -48,7 +52,7 @@ If not already present, look for one of the following packages :
 
 The graphical executable (otbgui launchers, Monteverdi
 and Mapla) use the X11 libraries, which are widely used in a lot of
-distributions :
+distributions:
 
 ::
 
@@ -63,15 +67,16 @@ use the otbcli and otbgui launchers, you can initialize your environment
 with ``source otbenv.profile``.
 
 Python bindings
----------------
-Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
-currently only Python 2.x is supported. If no compatible python is found, installation
-notify you about it. If everything works fine, you will be given information about
-using python bindings.
+~~~~~~~~~~~~~~~
 
-You must have python numpy bindings installed in your system. you can install it locally
-without admin rights with "pip install --user numpy". This is to give users to choose
-their own existing python installation rather than distributing one in OTB package
+Starting from OTB 5.8.0, OTB Python bindings are distributed with binary package.
+Currently only Python 2.x is supported and if no compatible Python version is found a
+notification is generated during the installation process.  If the installation completes
+without issue, information relating to your Python bindings will be provided. 
+
+You must have Python numpy bindings installed in your system. They can be installed locally
+without admin rights as follows: "pip install --user numpy". This is to give users the option 
+to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
 
 Notes:
@@ -86,11 +91,12 @@ Notes:
 
 - Multiple installation of OTB can exists in same system without one conflicting the other!
 
-FAQ for Packaging
------------------
+FAQ
+~~~
 
 Q: I am getting an error message...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++++++
+
 ::
 
    Cannot mix incompatible Qt library (version 0x40806) with this library (version 0x40807)
@@ -104,11 +110,11 @@ A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk
    rm -f lib/libQt* && rm -fr lib/gtk
 
 Q: Monteverdi and Mapla applications look different from my other applications.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-A: By default, Monteverdi, Mapla and otbapplication (otbgui\_\*) uses a the
-system gtk theme. If you can't install GTK on your system you can use the
-distributed with the OTB package. Note that using system GTK is the preferred
+A: In versions 6.0 and older, Monteverdi, Mapla and otbapplication (otbgui\_\*)
+use the system gtk theme. If you can't install GTK on your system you can use the
+one distributed with the OTB package. Note that using system GTK is the preferred
 way with the OTB standalone package as the distributed version of GTK do not
 work on recent Linux distributions. 
 
@@ -120,3 +126,6 @@ To use the distributed GTK libraries you need to set the OTB_USE_LOCAL_GTK:
 
 And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-|release|-Linux64
 To get back default behaviour, unset OTB_USE_LOCAL_GTK=1 or set OTB_USE_LOCAL_GTK=0
+
+In version 6.2, the Linux binaries are built without GTK support to cut some
+dependencies.

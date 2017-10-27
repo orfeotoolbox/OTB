@@ -36,9 +36,7 @@ directory. The \code{CMakeLists.txt} will be very similar between your projects.
 
 Open the \code{CMakeLists.txt} file and write in the few lines:
 
-
-\begin{small}
-\begin{verbatim}
+\begin{cmakecode}
 PROJECT(Tutorials)
 
 cmake_minimum_required(VERSION 2.6)
@@ -53,8 +51,7 @@ ENDIF(OTB_FOUND)
 
 ADD_EXECUTABLE(HelloWorldOTB HelloWorldOTB.cxx )
 TARGET_LINK_LIBRARIES(HelloWorldOTB ${OTB_LIBRARIES})
-\end{verbatim}
-\end{small}
+\end{cmakecode}
 
 
 The first line defines the name of your project as it appears in Visual Studio
@@ -102,8 +99,7 @@ Follow the following steps:
 \item Create a CMakeLists.txt into the src repository with the following lines:
 
 
-\begin{verbatim}
-
+\begin{cmakecode}
 project(MyFirstProcessing)
 
 cmake_minimum_required(VERSION 2.8)
@@ -114,10 +110,11 @@ include(${OTB_USE_FILE})
 add_executable(MyFirstProcessing MyFirstProcessing.cxx )
 
 target_link_libraries(MyFirstProcessing ${OTB_LIBRARIES} )
-\end{verbatim}
+\end{cmakecode}
 
 \item Create a MyFirstProcessing.cxx into the src repository with the following lines:
-\begin{verbatim}
+
+\begin{cppcode}
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -151,9 +148,9 @@ int main(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-\end{verbatim}
+\end{cppcode}
 \item create a file named BuildMyFirstProcessing.bat into the MyFirstCode directory with the following lines:
-\begin{verbatim}
+\begin{batcode}
 @echo off
 
 set /A ARGS_COUNT=0    
@@ -193,7 +190,7 @@ echo You need to run this script from an OSGeo4W shell
 GOTO :END
 
 :END
-\end{verbatim}
+\end{batcode}
 \item into a OSGEo4W shell, run the configure.bat with the right arguments: full path to your src directory, full path to your build directory, full path to the place where find OTBConfig.cmake file (should be C:\textbackslash path\textbackslash to\textbackslash MyOTBDir\textbackslash install\textbackslash lib\textbackslash otb).
 \item into the OSGeo4W shell, open the MyFirstProcessing.sln
 \item build the solution
@@ -212,12 +209,10 @@ write images and the basics of the pipeline system.
 First, let's add the following lines at the end of the \code{CMakeLists.txt}
 file:
 
-\begin{small}
-\begin{verbatim}
+\begin{cmakecode}
 ADD_EXECUTABLE(Pipeline Pipeline.cxx )
 TARGET_LINK_LIBRARIES(Pipeline ${OTB_LIBRARIES})
-\end{verbatim}
-\end{small}
+\end{cmakecode}
 
 
 Now, create a \code{Pipeline.cxx} file.
@@ -264,12 +259,10 @@ reader and the writer.
 
 Let's first add the 2 following lines to the \code{CMakeLists.txt} file:
 
-\begin{small}
-\begin{verbatim}
+\begin{cmakecode}
 ADD_EXECUTABLE(FilteringPipeline FilteringPipeline.cxx )
 TARGET_LINK_LIBRARIES(FilteringPipeline ${OTB_LIBRARIES})
-\end{verbatim}
-\end{small}
+\end{cmakecode}
 
 \input{FilteringPipeline.tex}
 
@@ -303,12 +296,10 @@ To realize this conversion, we will use the
 
 Add the two lines to the \code{CMakeLists.txt} file:
 
-\begin{small}
-\begin{verbatim}
+\begin{cmakecode}
 ADD_EXECUTABLE(ScalingPipeline ScalingPipeline.cxx )
 TARGET_LINK_LIBRARIES(ScalingPipeline ${OTB_LIBRARIES})
-\end{verbatim}
-\end{small}
+\end{cmakecode}
 
 \input{ScalingPipeline}
 
@@ -331,12 +322,10 @@ process multispectral images.
 
 Add the following lines in the \code{CMakeLists.txt} file:
 
-\begin{small}
-\begin{verbatim}
+\begin{cmakecode}
 ADD_EXECUTABLE(Multispectral Multispectral.cxx )
 TARGET_LINK_LIBRARIES(Multispectral ${OTB_LIBRARIES})
-\end{verbatim}
-\end{small}
+\end{cmakecode}
 
 \input{Multispectral}
 
@@ -355,12 +344,10 @@ try it!
 
 Add the following lines in the \code{CMakeLists.txt} file:
 
-\begin{small}
-\begin{verbatim}
+\begin{cmakecode}
 ADD_EXECUTABLE(SmarterFilteringPipeline SmarterFilteringPipeline.cxx )
 TARGET_LINK_LIBRARIES(SmarterFilteringPipeline ${OTB_LIBRARIES})
-\end{verbatim}
-\end{small}
+\end{cmakecode}
 
 \input{SmarterFilteringPipeline}
 
@@ -410,12 +397,10 @@ To get the best of the image processing algorithms, you want to combine these da
 
 First you need to add the following lines in the \code{CMakeLists.txt} file:
 
-\begin{small}
-\begin{verbatim}
+\begin{cmakecode}
 ADD_EXECUTABLE(OrthoFusion  OrthoFusion.cxx)
 TARGET_LINK_LIBRARIES(OrthoFusion ${OTB_LIBRARIES})
-\end{verbatim}
-\end{small}
+\end{cmakecode}
 
 \input{OrthoFusion}
 

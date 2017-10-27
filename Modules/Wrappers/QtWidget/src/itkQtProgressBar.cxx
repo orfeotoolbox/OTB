@@ -62,10 +62,12 @@ QtProgressBar::ProcessEvent( itk::Object * caller,
     ::itk::ProcessObject::Pointer  process =
       dynamic_cast< itk::ProcessObject *>( caller );
 
-    const int value2 = static_cast<int>(
-      process->GetProgress() * this->maximum() );
-
-    emit SetValueChanged( value2 );
+    if (process)
+      {
+      const int value2 = static_cast<int>(
+        process->GetProgress() * this->maximum() );
+      emit SetValueChanged( value2 );
+      }
     }
 }
 
@@ -78,10 +80,13 @@ QtProgressBar::ConstProcessEvent( const itk::Object * caller,
     itk::ProcessObject::ConstPointer  process =
       dynamic_cast< const itk::ProcessObject *>( caller );
 
-    const int v = static_cast<int>(
-      process->GetProgress() * this->maximum() );
+    if (process)
+      {
+      const int v = static_cast<int>(
+        process->GetProgress() * this->maximum() );
 
-    emit SetValueChanged( v );
+      emit SetValueChanged( v );
+      }
     }
 }
 

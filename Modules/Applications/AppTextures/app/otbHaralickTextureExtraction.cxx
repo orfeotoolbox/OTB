@@ -139,8 +139,8 @@ SetParameterDescription("texture.simple","This group of parameters defines the 8
     Inertia, Cluster Shade, Cluster Prominence and Haralick Correlation");
 
 AddChoice("texture.advanced", "Advanced Texture Features");
-SetParameterDescription("texture.advanced","This group of parameters defines the 9 advanced texture feature output image.\
-    The image channels are: Mean, Variance, Sum Average, Sum Variance,\
+SetParameterDescription("texture.advanced","This group of parameters defines the 10 advanced texture feature output image.\
+    The image channels are: Mean, Variance, Dissimilarity, Sum Average, Sum Variance,\
     Sum Entropy, Difference of Entropies, Difference of Variances, IC1 and IC2");
 
 AddChoice("texture.higher", "Higher Order Texture Features");

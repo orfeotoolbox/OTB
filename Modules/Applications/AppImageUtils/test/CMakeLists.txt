@@ -24,7 +24,7 @@ otb_test_application(NAME apTuUtDownloadSRTMTiles
                      APP  DownloadSRTMTiles
                      OPTIONS -il LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
                              -mode list
-                             -mode.list.indir ${INPUTDATA}/DEM/srtm_directory
+                             -tiledir ${INPUTDATA}/DEM/srtm_directory
                      )
 
 
@@ -34,7 +34,7 @@ otb_test_application(NAME apTuUtDownloadSRTMTiles
 otb_test_application(NAME apTvUtConvertBasic
                      APP Convert
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertBasicOutput.tif
+                             -out ${TEMP}/apTvUtConvertBasicOutput.tif float
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtConvertBasicOutput.tif
                 	     ${TEMP}/apTvUtConvertBasicOutput.tif
@@ -49,7 +49,7 @@ otb_test_application(NAME apTuUtConvertExtendedFilename_writer
 otb_test_application(NAME apTvUtConvertWithScaling
                      APP Convert
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertWithScalingOutput.tif uint8
+                             -out ${TEMP}/apTvUtConvertWithScalingOutput.tif
                              -type linear
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtConvertWithScalingOutput.tif
@@ -64,6 +64,28 @@ otb_test_application(NAME apTvUtConvertExtendedFilename_readerGEOM
                              ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
                              ${TEMP}/apTvUtGeomExtendedFilename.geom)
 
+otb_test_application(NAME apTvUtConvertSelectChannels
+                     APP Convert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif
+                             -channels rgb
+                             -channels.rgb.red 2
+                             -channels.rgb.green 3
+                             -channels.rgb.blue 1
+                             -type linear
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtConvertSelectChannelsRgbOutput.tif
+                             ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif)
+
+otb_test_application(NAME apTvUtConvertMonoChannel
+                     APP Convert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -out ${TEMP}/apTvUtConvertMonoChannelOutput.tif
+                             -channels grayscale
+                             -type linear
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtConvertMonoChannelOutput.tif
+                             ${TEMP}/apTvUtConvertMonoChannelOutput.tif)
 
 #----------- PixelInfo TESTS ----------------
 
@@ -76,6 +98,26 @@ otb_test_application(NAME apTvUtExtractROISizeTooBig
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/couleurs_extrait.png
                              ${TEMP}/apTvUtExtractROISizeTooBig.tif)
+
+otb_test_application(NAME apTvUtExtractROISizeTooBigExtent
+                     APP  ExtractROI
+                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
+                             -out ${TEMP}/apTvUtExtractROISizeTooBigExtent.tif
+                             -mode extent
+                             -mode.extent.lrx 1000000
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/couleurs_extrait.png
+                             ${TEMP}/apTvUtExtractROISizeTooBigExtent.tif)
+
+otb_test_application(NAME apTvUtExtractROISizeTooBigRadius
+                     APP  ExtractROI
+                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
+                             -out ${TEMP}/apTvUtExtractROISizeTooBigRadius.tif
+                             -mode radius
+                             -mode.radius.r 1000000
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/couleurs_extrait.png
+                             ${TEMP}/apTvUtExtractROISizeTooBigRadius.tif)
 
 otb_test_application(NAME apTvUtExtractROISizeNULL
                      APP  ExtractROI
@@ -216,16 +258,43 @@ otb_test_application(NAME apTvUtConcatenateImages_1Image
 #----------- MultiResolutionPyramid TESTS ----------------
 
 #----------- PixelValue TESTS ----------------
-OTB_TEST_APPLICATION(NAME apTvUtPixelValue
+OTB_TEST_APPLICATION(NAME apTvUtPixelValueIndex
                      APP PixelValue
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                              -coordx 30
                              -coordy 30
+                             -mode index
                              -cl Channel1 Channel3 Channel4
-                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValue.txt
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValueIndex.txt
                        VALID --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtPixelValue.txt
-                	     ${TEMP}/apTvUtPixelValue.txt
+                	     ${TEMP}/apTvUtPixelValueIndex.txt
+                             )
+OTB_TEST_APPLICATION(NAME apTvUtPixelValuePhys
+                     APP PixelValue
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -coordx 374168
+                             -coordy 4829165.5
+                             -mode physical
+                             -cl Channel1 Channel3 Channel4
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValuePhys.txt
+                       VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtPixelValue.txt
+                         ${TEMP}/apTvUtPixelValuePhys.txt
+                             )
+
+OTB_TEST_APPLICATION(NAME apTvUtPixelValueEpsg
+                     APP PixelValue
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -coordx 1.4408400058746337890625
+                             -coordy 43.604839324951171875
+                             -mode epsg
+                             -mode.epsg.code 4326
+                             -cl Channel1 Channel3 Channel4
+                       TESTENVOPTIONS ${TEMP}/apTvUtPixelValueEpsg.txt
+                       VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtPixelValue.txt
+                         ${TEMP}/apTvUtPixelValueEpsg.txt
                              )
 
 #----------- ColorMapping TESTS ----------------

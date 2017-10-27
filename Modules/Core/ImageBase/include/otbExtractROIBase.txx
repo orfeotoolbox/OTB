@@ -307,10 +307,13 @@ ExtractROIBase<TInputImage, TOutputImage>
   outputPtr->SetSpacing(outputSpacing);
   outputPtr->SetDirection(outputDirection);
   outputPtr->SetOrigin(outputOrigin);
-// THOMAS : dans ITK ce code est present, mais pas dans notre cas, car le nombre de composantes/pixel depend des canaux selectionnes par l'utilisateur
-//          ce parametre est renseignes dans les classes sous-jacentes
+
+// Thomas Feuvrier:
+// ITK has this code. But not in our case, because the number of component per pixel depends on the bands selected by the user.
+// This parameter is given in the underlying classes.
 //    outputPtr->SetNumberOfComponentsPerPixel(
 //       inputPtr->GetNumberOfComponentsPerPixel() );
+//
 }
 
 } // end namespace otb

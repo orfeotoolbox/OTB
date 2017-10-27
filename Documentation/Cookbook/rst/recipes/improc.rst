@@ -44,22 +44,22 @@ image writers. The OTB filters that produce a no-data value are able to
 export this value so that the output file will store it.
 
 An application has been created to manage the no-data value. The
-application has the following features :
+application has the following features:
 
--  Build a mask corresponding to the no-data pixels in the input image :
+-  Build a mask corresponding to the no-data pixels in the input image:
    it gives you a binary image of the no-data pixels in your input
    image.
 
--  Change the no-data value of the input image : it will change all
+-  Change the no-data value of the input image: it will change all
    pixels that carry the old no-data value to the new one and update the
    metadata
 
--  Apply an external mask to the input image as no-data : all the pixels
+-  Apply an external mask to the input image as no-data: all the pixels
    that corresponds have a null mask value are flagged as no-data in the
    output image.
 
 For instance, the following command converts the no-data value of the
-input image to the default value for DEM (which is -32768) :
+input image to the default value for DEM (which is -32768):
 
 ::
 
@@ -124,7 +124,6 @@ segmentation of very large image with theoretical guarantees of getting
 identical results to those without tiling.
 
 It has been developed by David Youssefi and Julien Michel during David
-
 internship at CNES.
 
 For more a complete description of the LSMS method, please refer to the
@@ -262,6 +261,35 @@ set the tile size using the *tilesizex* and *tilesizey* parameters.
 However unlike the *LSMSSegmentation* application, it does not require
 to write any temporary file to disk.
 
+All-in-one
+~~~~~~~~~~
+
+The *LargeScaleMeanShift* application is a composite application that chains
+all the previous steps:
+
+- Mean-Shift Smoothing
+- Segmentation
+- Small region merging
+- Vectorization
+
+Most of the settings from the previous applications are also exposed in this
+composite application. The range and spatial radius used for the segmentation
+step are half the values used for Mean-Shift smooting, which are obtained from
+LargeScaleMeanShift parameters. There are two output modes: vector (default)
+and raster. When the raster output is chosen, last step (vectorization) is
+skipped.
+
+::
+
+    otbcli_LargeScaleMeanShift -in input_image.tif
+                               -spatialr 5
+                               -ranger 30
+                               -minsize 10
+                               -mode.vector.out segmentation_merged.shp
+
+There is a cleanup option that can be disabled in order to check intermediate
+outputs of this composite application.
+
 Dempster Shafer based Classifier Fusion
 ---------------------------------------
 
@@ -276,7 +304,7 @@ Fuzzy Model (requisite)
 
 The *DSFuzzyModelEstimation* application performs the fuzzy model
 estimation (once by use case: descriptor set / Belief support /
-Plausibility support). It has the following input parameters :
+Plausibility support). It has the following input parameters:
 
 -  ``-psin`` a vector data of positive samples enriched according to the
    “Compute Descriptors” part
@@ -311,7 +339,7 @@ First Step: Compute Descriptors
 The first step in the classifier fusion based validation is to compute,
 for each studied polyline, the chosen descriptors. In this context, the
 *ComputePolylineFeatureFromImage* application can be used for a large
-range of descriptors. It has the following inputs :
+range of descriptors. It has the following inputs:
 
 -  ``-in`` an image (of the sudied scene) corresponding to the chosen
    descriptor (NDVI, building Mask…)
@@ -327,7 +355,7 @@ range of descriptors. It has the following inputs :
 The output is a vector data containing polylines with a new field
 containing the descriptor value. In order to add the “NONDVI” descriptor
 to an input vector data (“inVD.shp”) corresponding to the percentage of
-pixels along a polyline that verifies the formula “NDVI >0.4” :
+pixels along a polyline that verifies the formula “NDVI >0.4”:
 
 ::
 
@@ -368,7 +396,7 @@ Second Step: Feature Validation
 The final application (*VectorDataDSValidation* ) will validate or
 unvalidate the studied samples using `the Dempster-Shafer
 theory <http://en.wikipedia.org/wiki/Dempster%E2%80%93Shafer_theory>`_ 
-. Its inputs are :
+. Its inputs are:
 
 -  ``-in`` an enriched vector data “VD\_NONDVI\_ROADSA\_NOBUIL.shp”
 

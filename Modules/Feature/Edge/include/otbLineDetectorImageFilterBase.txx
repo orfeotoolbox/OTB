@@ -52,7 +52,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   m_Threshold = 0;
   m_NumberOfDirections = 4;
   m_FaceList.Fill(0);
-// THOMAS : donc contructeur de base
+// THOMAS : hence base constructor
 //  this->SetNthOutput(0, OutputImageType::New());
 //  this->SetNthOutput(1, OutputImageType::New());
 }

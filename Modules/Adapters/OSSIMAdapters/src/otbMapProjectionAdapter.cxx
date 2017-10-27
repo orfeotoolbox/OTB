@@ -195,9 +195,16 @@ std::string MapProjectionAdapter::GetParameter(const std::string& key) const
   if (projectionName.compare("ossimTransMercatorProjection") == 0)
     {
     const ossimTransMercatorProjection* tmProjection = dynamic_cast<const ossimTransMercatorProjection*>(this->GetMapProjection());
-    if (key.compare("ScaleFactor") == 0)
+    if (!tmProjection)
       {
-      return Utils::ConvertToString(tmProjection->getScaleFactor());
+      itkExceptionMacro("Error casting object to ossimTransMercatorProjection.");
+      }
+    else
+      {
+      if (key.compare("ScaleFactor") == 0)
+        {
+        return Utils::ConvertToString(tmProjection->getScaleFactor());
+        }
       }
     }
 

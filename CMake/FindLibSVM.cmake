@@ -14,7 +14,7 @@
 #  LIBSVM_MINOR_VERSION - minor version
 #  LIBSVM_PATCH_VERSION - patch version
 #  LIBSVM_VERSION_STRING - version (ex. 2.9.0)
-#  LIBSVM_ROOT_DIR - root dir (ex. /usr/local)
+#  LIBSVM_ROOT_DIR - libsvm install directory
 
 #=============================================================================
 # Copyright 2000-2009 Kitware, Inc., Insight Software Consortium

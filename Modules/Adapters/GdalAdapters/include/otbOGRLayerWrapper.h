@@ -242,7 +242,7 @@ public:
    * underlying \c OGRLayer is required.
    * \pre The underlying \c OGRLayer must be valid, i.e.
    * <tt>m_Layer != 0</tt>, an assertion is fired otherwise.
-   * \warning You must under no circonstance try to delete the \c OGRLayer
+   * \warning You must under no circumstance try to delete the \c OGRLayer
    * obtained this way.
    */
   OGRLayer & ogr();

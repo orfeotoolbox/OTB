@@ -278,8 +278,8 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <translation>Version OTB M.m.pl (nom_de_code)</translation>
     </message>
     <message>
-        <source>&lt;p&gt;Copyright (C) 2005-2017 Centre National d&apos;Etudes Spatiales (CNES)&lt;/p&gt;&lt;p&gt;Monteverdi is part of Orfeo Toolbox&lt;/p&gt;&lt;a href=&quot;https://www.orfeo-toolbox.org/&quot;&gt;https://www.orfeo-toolbox.org/&lt;/a&gt;&lt;p&gt;Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  You may obtain a copy of the License at&lt;/p&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/a&gt;&lt;p&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.&lt;/p&gt;</source>
-        <translation></translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2005-2017 Centre National d&apos;Etudes Spatiales (CNES)&lt;/p&gt;&lt;p&gt;Monteverdi is part of Orfeo Toolbox&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.orfeo-toolbox.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.orfeo-toolbox.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licensed under the Apache License, Version 2.0 (the &amp;quot;License&amp;quot;); you may not use this file except in compliance with&lt;br/&gt;the License. You may obtain a copy of the License at:&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &lt;br/&gt;&amp;quot;AS IS&amp;quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License&lt;br/&gt;for the specific language governing permissions and limitations under the License.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -356,6 +356,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <message>
         <source>Unknown</source>
         <translation>Inconnu</translation>
+    </message>
+    <message>
+        <source>No EPSG</source>
+        <translation>Pas d&apos;EPSG</translation>
     </message>
 </context>
 <context>
@@ -4607,6 +4611,10 @@ Merci d&apos;en sélectionner un autre.</translation>
         <source>pixel(s)</source>
         <translation>pixel(s)</translation>
     </message>
+    <message>
+        <source>When the image width or height is lower than this minimum, overview generation is not proposed</source>
+        <translation>Lorsque la hauteur ou la largeur d&apos;une image est inférieure à ce minimum, la génération des aperçus n&apos;est pas proposée</translation>
+    </message>
 </context>
 <context>
     <name>mvd::ProcessObjectObserver</name>
@@ -5083,7 +5091,7 @@ Le(s) résultat(s) vont être importés en tant que jeu de données.</translatio
     </message>
     <message>
         <source>OTB-Application &apos;%1&apos; cannot be closed while running!</source>
-        <translation>Impossible de fermer l&apos;OTB-Application &apos;%1&apos; pendant sont exéution !</translation>
+        <translation>Impossible de fermer l&apos;OTB-Application &apos;%1&apos; pendant sont exécution !</translation>
     </message>
     <message>
         <source>Following files will be overwritten. Are you sure you want to continue?

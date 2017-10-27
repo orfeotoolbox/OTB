@@ -29,6 +29,7 @@ otbDecisionTreeWithRealValues.cxx
 otbSEMClassifierNew.cxx
 otbDecisionTreeNew.cxx
 otbKMeansImageClassificationFilterNew.cxx
+otbMachineLearningModelTemplates.cxx
 )
 
 add_executable(otbLearningBaseTestDriver ${OTBLearningBaseTests})
