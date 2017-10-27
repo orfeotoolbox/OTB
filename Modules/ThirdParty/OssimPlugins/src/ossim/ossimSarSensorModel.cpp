@@ -1096,8 +1096,8 @@ namespace ossimplugins
      assert(pos > 0 && pos < sizeof(burstPrefix_));
      const std::string burstPrefix(burstPrefix_, pos);
 
-     add(kwl, burstPrefix + keyStartLine,        burstRecords[burstId].startLine);
-     add(kwl, burstPrefix + keyEndLine,          burstRecords[burstId].endLine);
+     add(kwl, burstPrefix + keyStartLine, (ossim_uint32) burstRecords[burstId].startLine);
+     add(kwl, burstPrefix + keyEndLine, (ossim_uint32) burstRecords[burstId].endLine);
      add(kwl, burstPrefix + keyAzimuthStartTime, burstRecords[burstId].azimuthStartTime);
      add(kwl, burstPrefix + keyAzimuthStopTime,  burstRecords[burstId].azimuthStopTime);
      }
