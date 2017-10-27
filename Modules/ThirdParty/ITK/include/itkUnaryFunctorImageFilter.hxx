@@ -87,7 +87,7 @@ UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
     // dimensions to copy
     unsigned int i, j;
     const typename InputImageType::SpacingType &
-    inputSpacing = inputPtr->GetSignedSpacing();
+    inputSpacing = inputPtr->GetSpacing();
     const typename InputImageType::PointType &
     inputOrigin = inputPtr->GetOrigin();
     const typename InputImageType::DirectionType &
@@ -133,7 +133,7 @@ UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
       }
 
     // set the spacing and origin
-    outputPtr->SetSignedSpacing(outputSpacing);
+    outputPtr->SetSpacing( outputSpacing );
     outputPtr->SetOrigin(outputOrigin);
     outputPtr->SetDirection(outputDirection);
     outputPtr->SetNumberOfComponentsPerPixel(  // propagate vector length info

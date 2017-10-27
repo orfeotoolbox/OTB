@@ -170,11 +170,14 @@ void Image<TPixel, VImageDimension>
     {
     if ( spacing[i] < 0.0 )
       {
+      if ( this->m_Direction[i][i] > 0 )
+        {
         for ( unsigned j = 0; j < VImageDimension; ++j )
           {
           this->m_Direction[j][i] = - this->m_Direction[j][i];
-          }
-        spacing[i] = - spacing[i];
+          }  
+        }
+      spacing[i] = - spacing[i];
       }
     }
   this->SetSpacing(spacing);
@@ -188,9 +191,12 @@ void Image<TPixel, VImageDimension>
     {
     if ( spacing[i] < 0.0 )
       {
-      for ( unsigned j = 0; j < VImageDimension; ++j )
+      if ( this->m_Direction[i][i] > 0 )
         {
-        this->m_Direction[j][i] = - this->m_Direction[j][i];
+        for ( unsigned j = 0; j < VImageDimension; ++j )
+          {
+          this->m_Direction[j][i] = - this->m_Direction[j][i];
+          }  
         }
       spacing[i] = - spacing[i];
       }
@@ -206,9 +212,12 @@ void Image<TPixel, VImageDimension>
     {
     if ( spacing[i] < 0.0 )
       {
-      for ( unsigned j = 0; j < ImageDimension; ++j )
+      if ( this->m_Direction[i][i] > 0 )
         {
-        this->m_Direction[j][i] = - this->m_Direction[j][i];
+        for ( unsigned j = 0; j < VImageDimension; ++j )
+          {
+          this->m_Direction[j][i] = - this->m_Direction[j][i];
+          }  
         }
       spacing[i] = - spacing[i];
       }

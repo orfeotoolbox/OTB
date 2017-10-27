@@ -23,6 +23,7 @@
 
 #include "otbStreamingResampleImageFilter.h"
 #include "itkProgressAccumulator.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -121,7 +122,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );
-  this->SetOutputSpacing ( image->GetSignedSpacing() );
+  this->SetOutputSpacing ( internal::GetSignedSpacing( image ) );
   this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
 }

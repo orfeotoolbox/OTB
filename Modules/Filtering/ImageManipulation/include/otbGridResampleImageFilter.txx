@@ -24,6 +24,7 @@
 #include "otbGridResampleImageFilter.h"
 
 #include "otbStreamingTraits.h"
+#include "otbImage.h"
 
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
@@ -68,7 +69,7 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );
-  this->SetOutputSpacing ( image->GetSignedSpacing() );
+  this->SetOutputSpacing ( internal::GetSignedSpacing( image ) );
   this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
 }

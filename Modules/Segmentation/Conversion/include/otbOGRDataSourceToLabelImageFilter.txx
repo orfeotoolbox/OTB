@@ -27,6 +27,7 @@
 #include "otbImageMetadataInterfaceFactory.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
+#include "otbImage.h"
 
 #include "gdal_alg.h"
 #include "stdint.h" //needed for uintptr_t
@@ -126,7 +127,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
     this->SetOutputOrigin ( image->GetOrigin() );
-    this->SetOutputSpacing ( image->GetSignedSpacing() );
+    this->SetOutputSpacing ( internal::GetSignedSpacing( image ) );
     this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
     
     ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(image->GetMetaDataDictionary());

@@ -34,6 +34,49 @@
 
 namespace otb
 {
+namespace internal
+{
+  template < class ImageType >
+  typename ImageType::SpacingType GetSignedSpacing( ImageType * input)
+  {
+    typename ImageType::SpacingType spacing = input->GetSpacing();
+    typename ImageType::DirectionType direction = input->GetDirection();
+    for ( unsigned int i = 0 ; i < ImageType::ImageDimension ; i++ )
+      {
+      spacing[i] *= direction[i][i] ;
+      }
+    return spacing;
+  }
+
+  template < class InputImage , typename SpacingType >
+  void SetSignedSpacing( InputImage input , SpacingType spacing )
+  {
+    // TODO check for spacing size ==> error
+    typename InputImage::DirectionType direction = input->GetDirection();
+    for ( unsigned int i = 0 ; i < InputImage::VImageDimension ; i++ )
+      {
+      // TODO check if spacing[i] = 0 ==> error
+      if ( spacing[ i ] < 0 )
+        {
+        if ( direction[i][i] > 0 )
+          {
+          for ( unsigned int j = 0 ; j < InputImage::VImageDimension ; j++ )
+            {
+            direction[j][i] = - direction[j][i];
+            }
+          }
+        spacing[i] = -spacing[i];
+        }
+      }
+    input->SetDirection( direction );
+    input->SetSpacing( spacing );
+  }
+}
+}
+
+
+namespace otb
+{
 /** \class Image
  * \brief Creation of an "otb" image which contains metadata.
  *

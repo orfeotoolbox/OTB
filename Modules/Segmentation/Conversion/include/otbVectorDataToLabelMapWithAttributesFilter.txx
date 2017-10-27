@@ -148,7 +148,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
 
     // Compute origin and size
     SizeType size;
-    SpacingType spacing = this->GetInput()->GetSignedSpacing();
+    SpacingType spacing = this->GetInput()->GetSpacing();
     OriginType origin = m_VectorDataProperties->GetBoundingRegion().GetOrigin();
     for (unsigned int i=0; i<2; ++i)
       {

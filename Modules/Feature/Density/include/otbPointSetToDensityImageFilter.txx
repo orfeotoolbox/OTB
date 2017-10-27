@@ -113,7 +113,7 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
   region.SetIndex(start);
 
   outputPtr->SetOrigin(this->GetOrigin());
-  outputPtr->SetSignedSpacing(this->GetSignedSpacing());
+  outputPtr->SetSignedSpacing(this->GetSpacing());
   outputPtr->SetRegions(region);
 }
 

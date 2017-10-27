@@ -554,15 +554,19 @@ ImageFileWriter<TInputImage>
   // Setup the ImageIO with information from inputPtr
   //
   m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
-  const typename TInputImage::SpacingType&   spacing = inputPtr->GetSignedSpacing();
+  const typename TInputImage::SpacingType&   spacing = inputPtr->GetSpacing();
   const typename TInputImage::PointType&     origin = inputPtr->GetOrigin();
   const typename TInputImage::DirectionType& direction = inputPtr->GetDirection();
-
+  int direction_sign(0);
   for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
     {
+    if ( direction[i][i] < 0 )
+      direction_sign = -1;
+    else
+      direction_sign = 1;
     // Final image size
     m_ImageIO->SetDimensions(i, inputRegion.GetSize(i));
-    m_ImageIO->SetSpacing(i, spacing[i]);
+    m_ImageIO->SetSpacing(i, direction_sign * spacing[i]);
     m_ImageIO->SetOrigin(i, origin[i] + static_cast<double>(inputRegion.GetIndex()[i]) * spacing[i]);
 
     vnl_vector<double> axisDirection(TInputImage::ImageDimension);
@@ -570,7 +574,7 @@ ImageFileWriter<TInputImage>
     // direction matrix
     for (unsigned int j = 0; j < TInputImage::ImageDimension; ++j)
       {
-      axisDirection[j] = direction[j][i];
+      axisDirection[j] = direction_sign * direction[j][i];
       }
     m_ImageIO->SetDirection(i, axisDirection);
     }

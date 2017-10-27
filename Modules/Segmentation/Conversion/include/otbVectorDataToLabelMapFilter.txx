@@ -305,17 +305,17 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap>
         VertexType vertex;
         otbMsgDevMacro( "Polygon bounding region " << polygonExtRingBoundReg);
         otbMsgDevMacro( "output origin " << this->GetOutput()->GetOrigin());
-        otbMsgDevMacro( "spacing " << this->GetOutput()->GetSignedSpacing());
+        otbMsgDevMacro( "spacing " << this->GetOutput()->GetSpacing());
         // For each position in the bounding region of the polygon
 
         for (double i = polygonExtRingBoundReg.GetOrigin(0);
              i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0);
-             i += this->GetOutput()->GetSignedSpacing()[0])
+             i += this->GetOutput()->GetSpacing()[0])
           {
           vertex[0] = static_cast<VertexValueType>(i);
           for (double j = polygonExtRingBoundReg.GetOrigin(1);
                j < polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1);
-               j += this->GetOutput()->GetSignedSpacing()[1])
+               j += this->GetOutput()->GetSpacing()[1])
             {
             vertex[1] = static_cast<VertexValueType>(j);
 
