@@ -117,15 +117,12 @@ public:
   otbGetObjectMemberConstMacro(DisplacementFilter, Transform, const TransformType*);
 
   /** The Displacement field spacing & size */
-  void SetDisplacementFieldSpacing(const SpacingType & spacing)
-  {
-    m_DisplacementFilter->SetOutputSpacing(spacing);
-    this->Modified();
-  }
+  void SetDisplacementFieldSpacing( SpacingType spacing);
+
   const SpacingType & GetDisplacementFieldSpacing() const
   {
-   return m_DisplacementFilter->GetOutputSpacing();
-  }
+    return m_SignedOutputSpacing;
+  };
 
   /** The resampled image parameters */
   // Output Origin
@@ -192,6 +189,10 @@ protected:
 private:
   StreamingResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  //We need this to respect ConstRef macro and to be compliant with itk positive 
+  //spacing
+  SpacingType m_SignedOutputSpacing;
 
   typename DisplacementFieldGeneratorType::Pointer   m_DisplacementFilter;
   typename WarpImageFilterType::Pointer             m_WarpFilter;

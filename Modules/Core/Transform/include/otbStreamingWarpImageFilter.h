@@ -72,6 +72,7 @@ public:
   typedef typename OutputImageType::PointType       PointType;
   typedef typename OutputImageType::IndexType       IndexType;
   typedef typename OutputImageType::PixelType       PixelType;
+  typedef typename OutputImageType::SpacingType     SpacingType;
   typedef typename OutputImageType::Pointer         OutputImagePointerType;
   typedef typename OutputImageType::RegionType      OutputImageRegionType;
   typedef TDisplacementField                         DisplacementFieldType;
@@ -82,6 +83,14 @@ public:
   /** Accessors */
   itkSetMacro(MaximumDisplacement, DisplacementValueType);
   itkGetConstReferenceMacro(MaximumDisplacement, DisplacementValueType);
+
+  const SpacingType & GetOutputSpacing() const override
+  {
+    return m_OutputSignedSpacing;
+  };
+
+  void SetOutputSpacing( SpacingType OutputSpacing ) override ;
+  void SetOutputSpacing( const double *values ) override ;
 
 protected:
   /** Constructor */
@@ -107,6 +116,10 @@ protected:
 private:
   StreamingWarpImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  //Because of itk positive spacing we need this member to be compliant with otb
+  //signed spacing
+  SpacingType m_OutputSignedSpacing;
 
   // Assessment of the maximum displacement for streaming
   DisplacementValueType m_MaximumDisplacement;

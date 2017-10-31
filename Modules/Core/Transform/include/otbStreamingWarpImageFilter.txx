@@ -39,6 +39,45 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
   m_MaximumDisplacement.Fill(1);
  }
 
+
+template<class TInputImage, class TOutputImage, class TDisplacementField>
+void
+StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
+::SetOutputSpacing( SpacingType outputSpacing )
+{
+  m_OutputSignedSpacing = outputSpacing;
+  typename TInputImage::DirectionType direction = this->GetOutput()->GetDirection();
+  for(unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
+    {
+    if ( outputSpacing[i] < 0 )
+      {
+      if ( direction[i][i] > 0 )
+        {
+        for(unsigned int j = 0; j < TInputImage::ImageDimension; ++j)
+          {
+          direction[j][i] = - direction[j][i];
+          }
+        }
+      outputSpacing[i] = - outputSpacing[i];
+      }
+    }
+  this->Superclass::SetOutputSpacing( outputSpacing );
+  this->Superclass::SetOutputDirection( direction );
+}
+
+template<class TInputImage, class TOutputImage, class TDisplacementField>
+void
+StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
+::SetOutputSpacing( const double *values )
+{
+  SpacingType s;
+  for(unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
+    {
+    s[i] = static_cast< typename SpacingType::ValueType >(values[i]);
+    }
+  this->SetOutputSpacing(s);
+}
+
 template<class TInputImage, class TOutputImage, class TDisplacementField>
 void
 StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
