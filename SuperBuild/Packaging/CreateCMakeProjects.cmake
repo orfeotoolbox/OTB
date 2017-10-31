@@ -38,9 +38,9 @@ macro(macro_setup_cmake_project pkg)
   endif()
  
   if(PKG_GENERATE_XDK)
-    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-xdk-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH}${NAME_SUFFIX})
   else()
-    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH})
+    set(archive_name ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH}${NAME_SUFFIX})
   endif()
     
   #set archive name inside loop
