@@ -150,7 +150,8 @@ Resampler<TInputImage, TOutputImage>
   resampler->SetInterpolator(interpolator);
   resampler->SetOutputOrigin(this->GetInput()->GetOrigin());
   resampler->SetSize(this->GetSize());
-  resampler->SetOutputSpacing(inputSpacing);
+  resampler->SetOutputSpacing( this->GetInput()->GetSpacing() );
+  resampler->SetOutputDirection( this->GetInput()->GetDirection() );
   resampler->ReleaseDataFlagOn();
 
   // Progress accumulator
