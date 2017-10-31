@@ -35,7 +35,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   // internal filters instantiation
   m_DisplacementFilter = DisplacementFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
-
+  m_SignedOutputSpacing = m_DisplacementFilter->GetOutputSpacing();
   // Initialize the displacement field spacing to zero : inconsistent
   // value
   this->SetDisplacementFieldSpacing(itk::NumericTraits<SpacingType>::ZeroValue());

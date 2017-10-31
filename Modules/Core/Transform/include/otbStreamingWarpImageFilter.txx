@@ -37,6 +37,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
  {
   // Fill the default maximum displacement
   m_MaximumDisplacement.Fill(1);
+  m_OutputSignedSpacing = this->Superclass::GetOutputSpacing();
  }
 
 
@@ -63,6 +64,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
     }
   this->Superclass::SetOutputSpacing( outputSpacing );
   this->Superclass::SetOutputDirection( direction );
+  this->Modified();
 }
 
 template<class TInputImage, class TOutputImage, class TDisplacementField>
