@@ -231,8 +231,6 @@ public:
   /** Set signed spacing */
   virtual void SetSignedSpacing( SpacingType spacing );
   virtual void SetSignedSpacing( double spacing[ VImageDimension ] );
-  virtual void SetSignedSpacing( float spacing[ VImageDimension ] );
-
 
   /** Get image corners. */
   virtual VectorType GetUpperLeftCorner(void) const;

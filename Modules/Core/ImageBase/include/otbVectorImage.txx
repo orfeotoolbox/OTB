@@ -183,48 +183,16 @@ void VectorImage<TPixel, VImageDimension>
       }
     }
   this->SetSpacing(spacing);
+  this->ComputeIndexToPhysicalPointMatrices();
+  this->Modified();
 }
 
 template <class TPixel, unsigned int VImageDimension>
 void VectorImage<TPixel, VImageDimension>
 ::SetSignedSpacing( double spacing[ VImageDimension ])
 {
-  for ( unsigned int i = 0; i < VImageDimension; i++ )
-    {
-    if ( spacing[i] < 0.0 )
-      {
-      if ( this->m_Direction[i][i] > 0 )
-        {
-        for ( unsigned j = 0; j < VImageDimension; ++j )
-          {
-          this->m_Direction[j][i] = - this->m_Direction[j][i];
-          }  
-        }
-      spacing[i] = - spacing[i];
-      }
-    }
-  this->SetSpacing(spacing);
-}
-
-template <class TPixel, unsigned int VImageDimension>
-void VectorImage<TPixel, VImageDimension>
-::SetSignedSpacing( float spacing[ VImageDimension ])
-{
-  for ( unsigned int i = 0; i < VImageDimension; i++ )
-    {
-    if ( spacing[i] < 0.0 )
-      {
-      if ( this->m_Direction[i][i] > 0 )
-        {
-        for ( unsigned j = 0; j < VImageDimension; ++j )
-          {
-          this->m_Direction[j][i] = - this->m_Direction[j][i];
-          }  
-        }
-      spacing[i] = - spacing[i];
-      }
-    }
-  this->SetSpacing(spacing);
+  SpacingType s(spacing);
+  this->SetSignedSpacing(s);
 }
 
 template <class TPixel, unsigned int VImageDimension>
