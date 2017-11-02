@@ -103,7 +103,7 @@ private:
     "spectrum associated with each pixel is a linear combination of pure"
     "materials in the recovery area, commonly known as endmembers. Endmembers can"
     "be estimated using the VertexComponentAnalysis application.\n\n"
-    "The application allows to estimate the abundance maps with several algorithms :\n"
+    "The application allows estimating the abundance maps with several algorithms :\n"
     "  * Unconstrained Least Square (ucls)\n"
                           //"  * Fully Constrained Least Square (fcls)\n"
     "  * Image Space Reconstruction Algorithm (isra)\n"

@@ -32,40 +32,14 @@
 \definecolor{listlightgray}{gray}{0.955}
 \definecolor{listwhite}{gray}{1.0}
 
-\usepackage{listings}
-\newcommand{\lstsetcpp}
-{
-\lstset{frame = tb,
-       framerule = 0.25pt,
-       float,
-       fontadjust,
-       backgroundcolor={\color{listlightgray}},
-       basicstyle = {\ttfamily\footnotesize},
-       keywordstyle = {\ttfamily\color{listkeyword}\textbf},
-       identifierstyle = {\ttfamily},
-       commentstyle = {\ttfamily\color{listcomment}\textit},
-       stringstyle = {\ttfamily},
-       showstringspaces = false,
-       showtabs = false,
-       numbers = none,
-       numbersep = 6pt,
-       numberstyle={\ttfamily\color{listnumbers}},
-       tabsize = 2,
-       language=[ANSI]C++,
-       floatplacement=!h
-       }
-}
-\newcommand{\lstsetpython}
-{
-\lstset{language=Python
-        }
-}
-\newcommand{\lstsetjava}
-{
-\lstset{language=Java
-        }
-}
+\usepackage{minted}
+\newminted{cpp}{fontsize=\small}
+\newminted{cmake}{fontsize=\small}
+\newminted{bat}{fontsize=\small}
 
+\usepackage{mdframed}
+\BeforeBeginEnvironment{cppcode}{\begin{mdframed}[leftline=false,rightline=false,backgroundcolor=listlightgray]}
+\AfterEndEnvironment{cppcode}{\end{mdframed}}
 
 \newif\ifitkFullVersion
 \itkFullVersiontrue
@@ -169,8 +143,6 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \frontmatter
 
 \hyperbaseurl{http://www.orfeo-toolbox.org}
-
-\lstsetcpp
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

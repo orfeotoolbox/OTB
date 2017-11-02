@@ -26,5 +26,5 @@ A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/jordi/temporalgapfilling
 "
   GIT_REPOSITORY http://tully.ups-tlse.fr/jordi/temporalgapfilling.git
-  GIT_TAG master
+  GIT_TAG 4180f28091fb10029860ada2dcf9c9526d3a55d2
 )

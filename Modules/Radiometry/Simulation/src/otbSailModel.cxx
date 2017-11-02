@@ -34,7 +34,7 @@ namespace otb
 /** Constructor */
 SailModel
 ::SailModel() : m_LAI(2), m_Angl(50), m_PSoil(1), m_Skyl(70), m_HSpot(0.2),
-                m_TTS(30), m_TTO(0), m_PSI(0), m_FCoverView(0.0), m_UseSoilFile(false)
+                m_TTS(30), m_TTO(0), m_PSI(0), m_FCoverView(0.0), m_UseSoilFile(false), m_SoilIndex(0)
 {
   this->ProcessObject::SetNumberOfRequiredInputs(2);
   this->ProcessObject::SetNumberOfRequiredOutputs(4);

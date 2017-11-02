@@ -622,9 +622,9 @@ public:
     {                                                                   \
     Image##Type::Pointer ret;                                           \
     Parameter* param = GetParameterByKey(parameter);                    \
-    if (dynamic_cast<ComplexInputImageParameter*>(param))               \
+    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param); \
+    if (paramDown)                                                      \
       {                                                                 \
-      ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param); \
       ret = paramDown->Get##Image();                                    \
       }                                                                 \
     return ret;                                                         \

@@ -69,7 +69,7 @@ class ProjectionBarWidget;
  * \ingroup OTBMonteverdiGUI
  * \brief ProjectionBarWidget widget class.
  *
- * This Widget allow to change the zoom level of the current selected projection.
+ * This Widget allows changing the zoom level of the current selected projection.
  */
 class OTBMonteverdiGUI_EXPORT ProjectionBarWidget : public QWidget
 {

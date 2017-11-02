@@ -64,7 +64,7 @@ private:
       "This application can be a preliminary step for an object-based analysis.\n\n"
       "It generates a vector data file containing the regions extracted with "
       "the MeanShift algorithm. The spatial and range radius parameters allow "
-      "to adapt the sensitivity of the algorithm depending on the image dynamic "
+      "adapting the sensitivity of the algorithm depending on the image dynamic "
       "and resolution. There is a step to remove small regions whose size "
       "(in pixels) is less than the given 'minsize' parameter. These regions "
       "are merged to a similar neighbor region. In the output vectors, there "

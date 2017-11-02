@@ -1,3 +1,90 @@
+OTB-v.6.2.0 - Changes since version 6.0.0 (October 26th, 2017)
+----------------------------------------------------------
+
+* Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
+  * Request for Changes-91: Better error messages (adopted, merged)
+  * Request for Changes-92: Build remote modules as standalone cmake projects (adopted, merged)
+  * Request for Changes-93: Update third party versions in Superbuild for 6.2 (adopted, merged)
+  * Request for Changes-94: CookBook licensed under cc-by-sa (adopted, merged)
+  * Request for Changes-95: Compile OTB with C++14 by default (adopted, merged)
+  * Request for Changes-96: Long help in otbcli (adopted, merged)
+  * Request for Changes-97: KMeansClassification reimplemented (adopted, merged)
+  * Request for Changes-98: Upgrade Monteverdi dependency from QWT 5 to QWT 6 (adopted, merged)
+  * Request for Changes-99: Refactor ExtractROI application (adopted, merged)
+  * Request for Changes-100: Add external soil file to Sail model (adopted, merged)
+  * Request for changes-102: Extend MachineLearningModel sample and target types (adopted, merged)
+  * Request for changes-103: Improve OTB Applications documentation (part 1) (adopted, merged)
+  * Request for changes-105: Simplify logging of composite applications (adopted, merged)
+  * Request for changes-106: All-in-one LSMS application (adopted, merged)
+  * Request for changes-107: Refactor Convert application (adopted, merged)
+  * Request for changes-108: Make OTB package great again (adopted, merged)
+  * Request for changes-109: Refactor PixelValue application (adopted, merged)
+  * Request for changes-111: SuperBuild dependencies additions for GDAL (adopted, merged)
+  * Request for changes-112: New-functor-filters (adopted, merged)
+  * Request for changes-114: Add Daniel McInerney as a new committer (adopted)
+  * Request for changes-115: Refactoring of DownloadSRTMTiles (adopted, merged)
+
+* Bugfixes :
+  * OTB-Qgis
+    * 0001445: Mean shift segmentation ignoring mask OTB QGIS
+
+  * Documentation
+    * 0001434: Bibliography references are not set in the Software Guide (PDF version)
+    * 0001400: Training  applications reference documentation do not include shark parameters
+    * 0001471: Issue with Boolean parameter in the Python application API documentation
+
+  * Monteverdi
+    * 0001431: RGE Alti files inverted on Monteverdi
+    * 0001432: RGE Alti files inverted on Monteverdi
+    * 0001408: Issue in Monteverdi French translation (typo)
+
+  * OTB-Packaging
+    * 0001449: Issues with OTB 6.1 standalone packages (Linux)
+    * 0001404: OTB xdk 5.10.1 is not able to compile a simple program on a Ubuntu 16.04 VM
+    * 0001430: building 6.0.0 fails at otbSFSTextureExtraction.cxx.o
+    * 0001474: OTB XDK is not working on Linux
+    * 0001460: Unable to compile OTB  6.2.0 RC1 with superbuild (CURL issue)
+
+  * Orfeo Toolbox (OTB)
+    * 0001453: Applications crash with inxml paramter (GUI mode)
+    * 0001405: Crash on optical calibration, TOC mode, GUI only (command line works), only on Mac
+    * 0001422: Optical Calibration application crash on MacOSX
+    * 0001401: ktrace reports too many file open for any otbapplication
+    * 0001439: GUI of ComputeOGRLayersFeaturesStatistics and OGRLayerClassifier crash on certain shape files
+    * 0001399: missing include_directories call when building external projects
+    * 0001438: Input Value Type of Classification apps
+    * 0001420: Change layer name in Monteverdi has no effect
+    * 0001446: Write mode on the SampleExtraction application
+    * 0001435: Performance issue on OTB 6.0 otbcli_MeanShiftSmoothing
+    * 0001407: In TrainImagesClassifier, field selection gets reset all the time
+    * 0001448: VectorClassifier isn't working for me...
+    * 0001397: OTBIOkml links only with base, dom, and engine but cmake includes all kml libs
+    * 0001413: set GDAL_DRIVER_PATH to avoid autoload of gdal driver from another installation
+    * 0001443: Fails to build with cmake 3.9.0
+    * 0001444: cmake fails if OTB_DATA_LARGEINPUT_ROOT is set and OTB_DATA_ROOT is not set
+    * 0001398: OTB won't parse *.xml metadata file on newest Pleiades data
+    * 0001418: Two more InXML incorrect tests
+    * 0001416: Parameter names different in cli and gui version
+    * 0001417: In windows packages otbenv.cmd and otbenv.bat, GDAL_DATA is set to a folder that does not exist
+    * 0001425: Cli Command line produced by otbgui_TrainImagesClassifier is wrong
+    * 0001424: ComputeConfusionMatrix crashes because proj.dll is missing
+    * 0001403: InXML1 tests fail but report as passed
+    * 0001419: Fix detection of OpenCV on i386 architecture.
+    * 0001426: GUI TrainimagesClassifier resets "field name" parameter when another parameter is set
+    * 0001421: otbenv.bash has windows endline
+    * 0001402: 404 link on otb-users
+    * 0001469: Superbuild with Visual Studio 15 2017
+    * 0001464: otb_module_impl() called twice in ExternalModuleTemplate
+    * 0001459: Patch to fix spelling errors
+
+  * OTB-applications
+    * 0001441: Error in param in template otbTrainLibSVM.txx
+    * 0001411: Training applications  needs field name of type integer
+    * 0001410: BundleToPerfectSensor composite application does not expose parameters of internal applications
+    * 0001467: Convert application memory allocation issue
+    * 0001463: BandMathX not accepting global statistics
+
+
 OTB-v.6.0.0 - Changes since version 5.10.1 (May 2th, 2017)
 ----------------------------------------------------------
 

@@ -222,6 +222,10 @@ private:
   template<class TImageType>
   void GenericDoExecute()
   {
+
+    // Clear previously registered filters
+    m_Filters.clear();
+    
     std::string rescaleType = this->GetParameterString("type");
 
     if( (rescaleType != "none") && (rescaleType != "linear") && (rescaleType != "log2") )
@@ -383,7 +387,7 @@ private:
         rescaler->SetGamma(GetParameterFloat("type.linear.gamma"));
         }
 
-      m_TmpFilter = rescaler;
+      m_Filters.push_back(rescaler.GetPointer());
 
       SetParameterOutputImage<TImageType>("out", rescaler->GetOutput());
       }
@@ -440,19 +444,19 @@ private:
   {
     typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
                                          typename TImageType::InternalPixelType>  ExtractROIFilterType;
-    typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
     typedef otb::ImageList<otb::Image<typename TImageType::InternalPixelType> >   ImageListType;
     typedef ImageListToVectorImageFilter<ImageListType,
                                          TImageType >                             ListConcatenerFilterType;
 
     typename ImageListType::Pointer             imageList;
     typename ListConcatenerFilterType::Pointer  concatener;
-    typename ExtractROIFilterListType::Pointer  extractorList;
 
     imageList = ImageListType::New();
     concatener = ListConcatenerFilterType::New();
-    extractorList = ExtractROIFilterListType::New();
 
+    //m_Filters.push_back(imageList.GetPointer());
+    m_Filters.push_back(concatener.GetPointer());
+    
     const bool monoChannel = IsParameterEnabled("channels.grayscale");
 
     // get band order
@@ -461,16 +465,15 @@ private:
     for (auto && channel : channels)
     {
       typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+      m_Filters.push_back(extractROIFilter.GetPointer());
       extractROIFilter->SetInput(GetParameterImage("in"));
       if (!monoChannel) extractROIFilter->SetChannel(channel);
       extractROIFilter->UpdateOutputInformation();
-      extractorList->PushBack(extractROIFilter);
       imageList->PushBack(extractROIFilter->GetOutput());
     }
 
     concatener->SetInput(imageList);
     concatener->UpdateOutputInformation();
-    concatener->Update();
 
     return concatener->GetOutput();
   }
@@ -507,8 +510,8 @@ private:
       }
   }
 
-  itk::ProcessObject::Pointer m_TmpFilter;
   TransferLogType::Pointer m_TransferLog;
+  std::vector<itk::LightObject::Pointer> m_Filters;
 };
 
 }

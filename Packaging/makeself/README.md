@@ -128,7 +128,7 @@ Archives generated with Makeself can be passed the following arguments:
 
   * _--keep_ : Prevent the files to be extracted in a temporary directory that will be removed after the embedded script's execution. The files will then be extracted in the current working directory and will stay here until you remove them.
   * _--verbose_ : Will prompt the user before executing the embedded command
-  * _--target dir_ : Allows to extract the archive in an arbitrary place.
+  * _--target dir_ : Allows extracting the archive in an arbitrary place.
   * _--nox11_ : Do not spawn a X11 terminal.
   * _--confirm_ : Prompt the user for confirmation before running the embedded command.
   * _--info_ : Print out general information about the archive (does not extract).
