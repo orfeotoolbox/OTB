@@ -253,9 +253,7 @@ class VectorDimensionalityReduction : public Application
 			ListSampleType::Pointer target = m_Model->PredictBatch(listSample);
 			
 			/** Create/Update Output Shape file */
-			
-			std::cout << GetParameterStringList("featout").size() << std::endl;
-			
+						
 			ogr::DataSource::Pointer output;
 			ogr::DataSource::Pointer buffer = ogr::DataSource::New();
 			bool updateMode = false;

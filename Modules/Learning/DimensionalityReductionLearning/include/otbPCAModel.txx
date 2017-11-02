@@ -93,9 +93,8 @@ void PCAModel<TInputValue>::Save(const std::string & filename, const std::string
 		Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
 		shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
 		otxt << "Reconstruction error : " << loss.eval(inputSamples,m_decoder(m_encoder(inputSamples))) << std::endl;
-		std::cout << "Reconstruction error : " << loss.eval(inputSamples,m_decoder(m_encoder(inputSamples))) << std::endl;
-		otxt.close();
-	}
+otxt.close();
+}
 }
 
 template <class TInputValue>
@@ -175,9 +174,8 @@ void PCAModel<TInputValue>
 		
 			//target.SetElement(a,p[a]);
 		}
-		//std::cout << p << std::endl;
-		targets->SetMeasurementVector(id,target);
-		++id;
+targets->SetMeasurementVector(id,target);
+++id;
 		
     }
 
