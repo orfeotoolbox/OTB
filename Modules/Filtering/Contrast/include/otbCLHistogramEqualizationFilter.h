@@ -58,7 +58,7 @@ public :
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef otb::VectorImage< int , 2 > HistogramType;
+  typedef otb::VectorImage< unsigned int , 2 > HistogramType;
   typedef otb::VectorImage< double , 2 > LutType;
 
   typedef itk::StreamingImageFilter< LutType , LutType >
