@@ -79,6 +79,8 @@ protected:
 
   std::string m_FileName;
 
+  std::string m_PreviousFileName;
+
 private:
   InputVectorDataParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
