@@ -162,7 +162,7 @@ private:
 private:
   void Swap( int, int, SwapSelection = NONE );
 
-  QString browseFilename( const QString & filename = QString() );
+  QStringList browseFilenames( bool multi = false, const QString & filename = QString());
 
   QString browseFilename( const QModelIndex & );
 

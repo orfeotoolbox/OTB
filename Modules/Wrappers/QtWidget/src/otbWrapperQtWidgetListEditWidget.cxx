@@ -238,9 +238,9 @@ ListEditWidget
 }
 
 /*******************************************************************************/
-QString
+QStringList
 ListEditWidget
-::browseFilename( const QString & filename )
+::browseFilenames( bool multi , const QString & filename )
 {
   const ListEditItemModel * itemModel = GetItemModel();
   assert( itemModel!=nullptr );
@@ -252,23 +252,45 @@ ListEditWidget
   );
 
   QString selectedFilter;
-
-  return
-    itemModel->IsInput()
-    ? GetOpenFileName(
+  QStringList output;
+  if(itemModel->IsInput())
+    {
+    if (multi)
+      {
+      output = GetOpenFileNames(
         this,
-	tr( "Select input filename..." ),
-	filePath,
-	itemModel->GetFilter(),
-	&selectedFilter
-      )
-    : GetSaveFileName(
+        tr( "Select input filename..." ),
+        filePath,
+        itemModel->GetFilter(),
+        &selectedFilter
+        );
+      }
+    else
+      {
+      output.push_back(
+        GetOpenFileName(
+          this,
+          tr( "Select input filename..." ),
+          filePath,
+          itemModel->GetFilter(),
+          &selectedFilter
+          )
+        );
+      }
+    }
+  else
+    {
+    output.push_back(
+      GetSaveFileName(
         this,
-	tr( "Select output filename..." ),
-	filePath,
-	itemModel->GetFilter(),
-	&selectedFilter
+        tr( "Select output filename..." ),
+        filePath,
+        itemModel->GetFilter(),
+        &selectedFilter
+        )
       );
+    }
+  return output;
 }
 
 /*******************************************************************************/
@@ -298,7 +320,7 @@ ListEditWidget
   );
 
   return
-    browseFilename( itemModel->data( index ).toString() );
+    (browseFilenames( false, itemModel->data( index ).toString() )).front();
 }
 
 
@@ -348,21 +370,25 @@ ListEditWidget
 
   //
   // When browsable.
-  QString filename( browseFilename() );
+  QStringList filenames( browseFilenames(true) );
 
-  if( filename.isEmpty() )
+  if( filenames.isEmpty() )
     return;
 
   int row = itemModel->rowCount();
   assert( row>=0 );
 
-  if( !itemModel->insertRow( row ) )
-    return;
+  for (int i=0 ; i<filenames.size() ; i++)
+    {
+    if( !itemModel->insertRow( row ) )
+      return;
 
-  itemModel->setData(
-    itemModel->index( row, ListEditItemModel::COLUMN_NAME ),
-    filename
-  );
+    itemModel->setData(
+      itemModel->index( row, ListEditItemModel::COLUMN_NAME ),
+      filenames[i]
+    );
+    row++;
+    }
 }
 
 /*******************************************************************************/
