@@ -34,7 +34,7 @@ namespace Wrapper
 
 
 /** \class AbstractParameterList
- *  \brief This class represents a InputImage parameter
+ *  \brief This class is a base class for list-type parameters
  *
  * \ingroup OTBApplicationEngine
  */

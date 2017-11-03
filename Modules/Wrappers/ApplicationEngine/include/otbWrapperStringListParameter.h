@@ -33,10 +33,6 @@ namespace otb
 namespace Wrapper
 {
 
-// #if ( defined( WIN32 ) || defined( _WIN32 ) )
-// template OTBApplicationEngine_EXPORT class ParameterList< StringParameter >;
-// #endif // Windows
-
 /** \class StringListParameter
  *  \brief This class represent a list of string parameter for the wrapper framework
  *

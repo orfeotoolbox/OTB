@@ -33,10 +33,6 @@ namespace otb
 namespace Wrapper
 {
 
-// #if ( defined( WIN32 ) || defined( _WIN32 ) )
-// template OTBApplicationEngine_EXPORT class ParameterList< InputVectorDataParameter >;
-// #endif // Windows
-
 /** \class InputVectorDataListParameter
  *  \brief This class represents a list of VectorData parameter
  *

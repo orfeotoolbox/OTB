@@ -32,10 +32,6 @@ namespace otb
 namespace Wrapper
 {
 
-// #if ( defined( WIN32 ) || defined( _WIN32 ) )
-// template OTBApplicationEngine_EXPORT class ParameterList< StringParameter >;
-// #endif
-
 /** \class InputFilenameListParameter
  *  \brief This class represents a list of InputFilename parameter
  *
