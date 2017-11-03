@@ -192,32 +192,40 @@ private:
   void DoUpdateParameters() ITK_OVERRIDE
   {
     // Read information
-    typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-    ImageMetadataInterfaceType::Pointer metadataInterface = 
+    if ( HasValue("in") )
+      {
+      typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+      ImageMetadataInterfaceType::Pointer metadataInterface = 
       ImageMetadataInterfaceFactory::CreateIMI(GetParameterImage("in")->GetMetaDataDictionary());
 
-    int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
-    SetMaximumParameterIntValue("channels.grayscale.channel", nbBand);
-    SetMaximumParameterIntValue("channels.rgb.red", nbBand);
-    SetMaximumParameterIntValue("channels.rgb.green", nbBand);
-    SetMaximumParameterIntValue("channels.rgb.blue", nbBand);
+      int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+      SetMaximumParameterIntValue("channels.grayscale.channel", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.red", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.green", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.blue", nbBand);
 
-    if (nbBand > 1)
-    {
-      // get band index : Red/Green/Blue
-      int bandRed = metadataInterface->GetDefaultDisplay()[0] + 1;
-      int bandGreen = metadataInterface->GetDefaultDisplay()[1] + 1;
-      int bandBlue = metadataInterface->GetDefaultDisplay()[2] + 1;
-      SetDefaultParameterInt("channels.rgb.red", bandRed);
-      SetDefaultParameterInt("channels.rgb.green", bandGreen);
-      SetDefaultParameterInt("channels.rgb.blue", bandBlue);
-    }
+      if (nbBand > 1)
+        {
+        // get band index : Red/Green/Blue
+        int bandRed = metadataInterface->GetDefaultDisplay()[0] + 1;
+        int bandGreen = metadataInterface->GetDefaultDisplay()[1] + 1;
+        int bandBlue = metadataInterface->GetDefaultDisplay()[2] + 1;
+        SetDefaultParameterInt("channels.rgb.red", bandRed);
+        SetDefaultParameterInt("channels.rgb.green", bandGreen);
+        SetDefaultParameterInt("channels.rgb.blue", bandBlue);
+        }
+      }
+    
 
   }
 
   template<class TImageType>
   void GenericDoExecute()
   {
+
+    // Clear previously registered filters
+    m_Filters.clear();
+    
     std::string rescaleType = this->GetParameterString("type");
 
     if( (rescaleType != "none") && (rescaleType != "linear") && (rescaleType != "log2") )
@@ -379,7 +387,7 @@ private:
         rescaler->SetGamma(GetParameterFloat("type.linear.gamma"));
         }
 
-      m_TmpFilter = rescaler;
+      m_Filters.push_back(rescaler.GetPointer());
 
       SetParameterOutputImage<TImageType>("out", rescaler->GetOutput());
       }
@@ -436,19 +444,19 @@ private:
   {
     typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
                                          typename TImageType::InternalPixelType>  ExtractROIFilterType;
-    typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
     typedef otb::ImageList<otb::Image<typename TImageType::InternalPixelType> >   ImageListType;
     typedef ImageListToVectorImageFilter<ImageListType,
                                          TImageType >                             ListConcatenerFilterType;
 
     typename ImageListType::Pointer             imageList;
     typename ListConcatenerFilterType::Pointer  concatener;
-    typename ExtractROIFilterListType::Pointer  extractorList;
 
     imageList = ImageListType::New();
     concatener = ListConcatenerFilterType::New();
-    extractorList = ExtractROIFilterListType::New();
 
+    //m_Filters.push_back(imageList.GetPointer());
+    m_Filters.push_back(concatener.GetPointer());
+    
     const bool monoChannel = IsParameterEnabled("channels.grayscale");
 
     // get band order
@@ -457,16 +465,15 @@ private:
     for (auto && channel : channels)
     {
       typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+      m_Filters.push_back(extractROIFilter.GetPointer());
       extractROIFilter->SetInput(GetParameterImage("in"));
       if (!monoChannel) extractROIFilter->SetChannel(channel);
       extractROIFilter->UpdateOutputInformation();
-      extractorList->PushBack(extractROIFilter);
       imageList->PushBack(extractROIFilter->GetOutput());
     }
 
     concatener->SetInput(imageList);
     concatener->UpdateOutputInformation();
-    concatener->Update();
 
     return concatener->GetOutput();
   }
@@ -503,8 +510,8 @@ private:
       }
   }
 
-  itk::ProcessObject::Pointer m_TmpFilter;
   TransferLogType::Pointer m_TransferLog;
+  std::vector<itk::LightObject::Pointer> m_Filters;
 };
 
 }

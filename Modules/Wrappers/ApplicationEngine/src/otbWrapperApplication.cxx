@@ -250,6 +250,10 @@ void Application::SetParameterString(std::string parameter, std::string value, b
     if ( !paramDown->SetFileName(value) )
     otbAppLogCRITICAL( <<"Invalid XML parameter filename " << value <<".");
     }
+  else
+    {
+    otbAppLogWARNING( <<"This parameter can't be set using SetParameterString().");
+    }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
 }

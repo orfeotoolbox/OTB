@@ -89,7 +89,6 @@ InputImageListParameter
 {
 }
 
-
 /*****************************************************************************/
 const FloatVectorImageListType *
 InputImageListParameter

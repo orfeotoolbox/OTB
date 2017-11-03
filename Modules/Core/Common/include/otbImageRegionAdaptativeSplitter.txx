@@ -25,7 +25,7 @@
 #include "otbMath.h"
 #include "otbMacro.h"
 
-// Defaut when no tile hint available
+// Default when no tile hint available
 #include "otbImageRegionSquareTileSplitter.h"
 
 namespace otb

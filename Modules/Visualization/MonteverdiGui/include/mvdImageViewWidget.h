@@ -163,7 +163,7 @@ public:
   void SetPickingEnabled( bool );
 
   /**
-   * This allows to set the fallback behaviour for picking
+   * This allows setting the fallback behaviour for picking
    */
   void SetPickingDefaultStatus( bool );
   /**

@@ -72,8 +72,15 @@ classify a set of features on a new vector data file using the
                             -out     classifiedData.shp
 
 This application outputs a vector data file storing sample values
-and classification labels. The output is optional, in this case the
-input vector data classification label field is updated.
+and classification labels. The output vector file is optional. If no output is
+given to the application, the input vector data classification label field is
+updated. If a statistics file was used to normalize the features during
+training, it shall also be used here, during classification.
+
+Note that with this application, the machine learning model may come from a
+training on image or vector data, it doesn't matter. The only requirement is
+that the chosen features to use should be the same as the one used during
+training.
 
 Validating classification
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -535,6 +542,53 @@ and this image is produced with the commands inside this
 
 Figure 2: From left to right: Original image, result image with fusion (with monteverdi viewer) of original image and fancy classification and input image with fancy color classification from labeled image.
 
+Unsupervised learning
+---------------------
+
+Using the same machine learning framework, it is also possible to perform
+unsupervised classification. In this case, the main difference is that
+the training samples don't need a real class label. However, in order to use
+the same *TrainImagesClassifier* application, you still need to
+provide a vector data file with a label field. This vector file will be
+used to extract samples for the training. Each label value is can be considered
+as a source area for samples, the same logic as in supervised learning is
+applied for the computation of extracted samples per area. Hence, for
+unsupervised classification, the samples are selected based on classes that are
+not actually used during the training. For the moment, only the KMeans
+algorithm is proposed in this framework.
+
+::
+
+    otbcli_TrainImageClassifier
+      -io.il                image.tif
+      -io.vd                training_areas.shp
+      -io.out               model.txt
+      -sample.vfn           Class
+      -classifier           sharkkm
+      -classifier.sharkkm.k 4
+
+If your training samples are in a vector data file, you can use the application
+*TrainVectorClassifier*. In this case, you don't need a fake label field. You
+just need to specify which fields shall be used to do the training.
+
+::
+
+    otbcli_TrainVectorClassifier
+      -io.vd                training_samples.shp
+      -io.out               model.txt
+      -feat                 perimeter area width red nir
+      -classifier           sharkkm
+      -classifier.sharkkm.k 4
+
+Once you have the model file, the actual classification step is the same as
+the supervised case. The model will predict labels on your input data.
+
+::
+
+    otbcli_ImageClassifier
+      -in input_image.tif
+      -model model.txt
+      -out kmeans_labels.tif
 
 Fusion of classification maps
 -----------------------------

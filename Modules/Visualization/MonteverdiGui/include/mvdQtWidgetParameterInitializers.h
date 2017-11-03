@@ -59,6 +59,8 @@
 #include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
+#include "otbWrapperQtWidgetComplexInputImageParameter.h"
+#include "otbWrapperQtWidgetComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperQtWidgetListEditWidget.h"
 #endif //tag=QT4-boost-compatibility
@@ -170,6 +172,22 @@ public:
 };
 
 /**
+ * \class ComplexInputImageInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
+ *
+ * \brief WIP.
+ */
+class ComplexInputImageInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetComplexInputImageParameter*,
+  void
+  >
+{
+public:
+  inline result_type operator () ( argument_type widget ) const;
+};
+
+/**
  * \class InputVectorDataInitializer
  *
  * \ingroup OTBMonteverdiGUI
@@ -259,6 +277,26 @@ class OutputImageInitializer : public std::unary_function<
 public:
   inline OutputImageInitializer( const QString & prefix );
 
+  inline result_type operator () ( argument_type widget ) const;
+
+private:
+  QString m_Prefix;
+};
+
+/**
+ * \class ComplexOutputImageInitializer
+ *
+ * \ingroup OTBMonteverdiGUI
+ *
+ * \brief WIP.
+ */
+class ComplexOutputImageInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetComplexOutputImageParameter*,
+  void
+  >
+{
+public:
+  inline ComplexOutputImageInitializer( const QString & prefix );
   inline result_type operator () ( argument_type widget ) const;
 
 private:
@@ -409,6 +447,17 @@ InputImageListInitializer
 
 /*****************************************************************************/
 inline
+ComplexInputImageInitializer::result_type
+ComplexInputImageInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop filename here." );
+}
+
+/*****************************************************************************/
+inline
 InputFilenameInitializer::result_type
 InputFilenameInitializer
 ::operator () ( argument_type widget ) const
@@ -493,6 +542,41 @@ OutputImageInitializer
 inline
 OutputImageInitializer::result_type
 OutputImageInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+  assert( I18nCoreApplication::ConstInstance()!=NULL );
+
+  if( m_Prefix.isEmpty() )
+    {
+    SetupForFilenameDrop( widget, "You can drop filename here." );
+
+    assert( qApp!=NULL );
+    assert( !qApp->arguments().empty() );
+
+    SetupOutputFilename( widget );
+    }
+  else
+    SetupOutputFilename(
+      widget,
+      I18nCoreApplication::ConstInstance()->GetResultsDir(),
+      m_Prefix,
+      ".tif"
+    );
+}
+
+/*****************************************************************************/
+inline
+ComplexOutputImageInitializer
+::ComplexOutputImageInitializer( const QString& prefix) :
+  m_Prefix( prefix )
+{
+}
+
+/*****************************************************************************/
+inline
+ComplexOutputImageInitializer::result_type
+ComplexOutputImageInitializer
 ::operator () ( argument_type widget ) const
 {
   assert( widget!=NULL );
@@ -639,13 +723,29 @@ SetupForFilenameDrop( W* widget, const char* text )
 
   lineEdit->installEventFilter( eventFilter );
 
-  QObject::connect(
-    eventFilter,
-    SIGNAL( FilenameDropped( const QString& ) ),
-    // to:
-    lineEdit,
-    SLOT( setText( const QString& ) )
-  );
+  // BUG : temporary fix for drag & drop in InputImageParameter
+  // in the future, all "filename" parameters should have the same behaviour
+  if (dynamic_cast<otb::Wrapper::QtWidgetInputImageParameter*>(widget) ||
+      dynamic_cast<otb::Wrapper::QtFileSelectionWidget*>(widget))
+    {
+    QObject::connect(
+      eventFilter,
+      SIGNAL( FilenameDropped( const QString& ) ),
+      // to:
+      widget,
+      SLOT( SetFileName( const QString& ) )
+    );
+    }
+  else
+    {
+    QObject::connect(
+      eventFilter,
+      SIGNAL( FilenameDropped( const QString& ) ),
+      // to:
+      lineEdit,
+      SLOT( setText( const QString& ) )
+    );
+    }
 }
 
 /*****************************************************************************/

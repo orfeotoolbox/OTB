@@ -68,19 +68,13 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
   m_Input = new QLineEdit;
+
   m_Input->setToolTip(
     QString::fromStdString( m_InputImageParam->GetDescription() )
   );
 
-  connect(
-    m_Input, SIGNAL( editingFinished() ),
-    this, SLOT( SetFileName() )
-  );
-
-  connect(
-    this, SIGNAL( FileNameIsSet() ),
-    GetModel(), SLOT( NotifyUpdate() )
-  );
+  connect( m_Input, SIGNAL(editingFinished()), this, SLOT(OnEditingFinished()) );
+  connect( this, SIGNAL(FileNameIsSet()), GetModel(), SLOT(NotifyUpdate()) );
 
   m_HLayout->addWidget(m_Input);
 
@@ -115,9 +109,7 @@ QtWidgetInputImageParameter
   if( filename.isEmpty() )
     return;
 
-  m_Input->setText( filename  );
-
-  if( !SetFileName() )
+  if( !SetFileName(filename) )
     {
     std::ostringstream oss;
 
@@ -133,13 +125,14 @@ QtWidgetInputImageParameter
     }
 }
 
-bool QtWidgetInputImageParameter::SetFileName()
+bool QtWidgetInputImageParameter::SetFileName(const QString& value)
 {
   bool res = true;
   // save value
   if( m_InputImageParam->SetFromFileName(
-	QFile::encodeName( m_Input->text() ).constData() ) == true )
+	QFile::encodeName( value ).constData() ) == true )
     {
+    m_Input->setText( value  );
     // notify of value change
     QString key( m_InputImageParam->GetKey() );
 
@@ -150,6 +143,11 @@ bool QtWidgetInputImageParameter::SetFileName()
     res = false;
 
   return res;
+}
+
+void QtWidgetInputImageParameter::OnEditingFinished()
+{
+  SetFileName( m_Input->text() );
 }
 
 }

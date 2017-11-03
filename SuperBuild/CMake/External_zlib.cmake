@@ -49,7 +49,7 @@ endif()
 #check who uses zdll.lib and remove this hack
 if(MSVC)
   ExternalProject_Add_Step(ZLIB msvc_copy_hell
-    COMMAND ${CMAKE_COMMAND} -E copy ${ZLIB_SB_BUILD_DIR}/zlib.lib ${SB_INSTALL_PREFIX}/lib/zdll.lib
+    COMMAND ${CMAKE_COMMAND} -E copy ${SB_INSTALL_PREFIX}/lib/zlib.lib ${SB_INSTALL_PREFIX}/lib/zdll.lib
     DEPENDEES install)
 endif()
 

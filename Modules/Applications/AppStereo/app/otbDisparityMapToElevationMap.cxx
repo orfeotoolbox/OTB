@@ -124,7 +124,7 @@ private:
 
     AddParameter(ParameterType_InputImage,"io.rgrid","Right Grid");
     SetParameterDescription("io.rgrid","Right epipolar grid (deformation grid "
-      "between rigth sensor et disparity spaces)");
+      "between right sensor et disparity spaces)");
 
     AddParameter(ParameterType_OutputImage,"io.out","Output elevation map");
     SetParameterDescription("io.out", "Output elevation map in ground "

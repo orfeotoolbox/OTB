@@ -76,12 +76,12 @@ private:
                           " will speed-up convergence, at the expense of stability of the result.\n\n"
 
                           "The application outputs the image of the final averaged spectral"
-                          " signatures (fout), and can also optionnaly output the 2D"
+                          " signatures (fout), and can also optionally output the 2D"
                           " displacement field between input pixel position and final pixel"
                           " position after convergence (foutpos).\n\n"
 
                           "Note that computing an euclidean distance between spectral signatures"
-                          " may be innacurate and that techniques such as color space transform or image"
+                          " may be inaccurate and that techniques such as color space transform or image"
                           " normalisation could be applied before using this application. Also"
                           " note that most satellite images noise model is not gaussian, since"
                           " noise variance linearly depends on radiance (the higher the"
