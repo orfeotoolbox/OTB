@@ -426,8 +426,8 @@ private:
       "in comparison with the number of bin. Histogram may not have much sens. "
       "For better result enlarge thumbnail size or reduce number of bin."
       <<std::endl;
+      otbAppLogINFO( << oss.str() );
       }
-    otbAppLogINFO( << oss.str() );
   }
 
   // Compute min max from a vector image
@@ -451,6 +451,7 @@ private:
         statFilter->SetUserIgnoredValue( GetParameterFloat("nodata") );
         }
       statFilter->SetInput( inImage );
+      AddProcess(statFilter->GetStreamer(), "Computing statistics");
       statFilter->Update();
       min = statFilter->GetMinimum();
       max = statFilter->GetMaximum();
@@ -671,6 +672,7 @@ private:
     histoPersistent->GetFilter()->SetHistogramMin(pixel);
     pixel = max + 0.5 * step;
     histoPersistent->GetFilter()->SetHistogramMax(pixel);
+    AddProcess(histoPersistent->GetStreamer(), "Computing histogram");
     histoPersistent->Update();
     HistoPersistentFilterType::HistogramListType * histoList = 
             histoPersistent->GetHistogramList();
