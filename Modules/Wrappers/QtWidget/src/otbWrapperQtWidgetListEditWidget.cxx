@@ -76,6 +76,8 @@ ListEditWidget
 {
   m_UI->setupUi( this );
 
+  setAcceptDrops(true);
+
   assert( m_UI->treeView->selectionModel()==nullptr );
 
   //
@@ -303,6 +305,29 @@ ListEditWidget
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+ListEditWidget
+::OnFilenameDropped(const QString & filename)
+{
+  ListEditItemModel * itemModel = GetItemModel();
+  assert( itemModel!=nullptr );
+
+  if( filename.isEmpty() )
+    return;
+
+  int row = itemModel->rowCount();
+  assert( row>=0 );
+
+  if( !itemModel->insertRow( row ) )
+    return;
+
+  itemModel->setData(
+    itemModel->index( row, ListEditItemModel::COLUMN_NAME ),
+    filename
+  );
+}
+
+
 void
 ListEditWidget
 ::on_addButton_clicked()

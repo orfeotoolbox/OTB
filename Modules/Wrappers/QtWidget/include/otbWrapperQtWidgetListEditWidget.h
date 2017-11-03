@@ -126,7 +126,7 @@ public:
 //
 // Public SLOTS.
 public slots:
-
+  void OnFilenameDropped(const QString &);
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
