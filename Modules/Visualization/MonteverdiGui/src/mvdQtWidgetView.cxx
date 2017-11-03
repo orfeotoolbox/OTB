@@ -345,12 +345,13 @@ QtWidgetView
   assert( widget!=NULL );
 
   SetupWidget( widget, InputFilenameInitializer() );
-  SetupWidget( widget, InputFilenameListInitializer( this ) );
+  //SetupWidget( widget, InputFilenameListInitializer() );
   SetupWidget( widget, InputImageInitializer() );
-  SetupWidget( widget, InputImageListInitializer( this ) );
+  //SetupWidget( widget, InputImageListInitializer() );
   SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
-  SetupWidget( widget, InputVectorDataListInitializer( this ) );
+  //SetupWidget( widget, InputVectorDataListInitializer() );
+  SetupWidget( widget, ParameterListInitializer() );
 #if defined( OTB_DEBUG )
   SetupWidget( widget, ToolTipInitializer() );
 #endif
