@@ -89,7 +89,7 @@ public:
     return m_OutputSignedSpacing;
   };
 
-  void SetOutputSpacing( SpacingType OutputSpacing ) override ;
+  void SetOutputSpacing( const SpacingType OutputSpacing ) override ;
   void SetOutputSpacing( const double *values ) override ;
 
 protected:

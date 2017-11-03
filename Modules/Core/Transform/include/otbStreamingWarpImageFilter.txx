@@ -44,25 +44,27 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 template<class TInputImage, class TOutputImage, class TDisplacementField>
 void
 StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
-::SetOutputSpacing( SpacingType outputSpacing )
+::SetOutputSpacing( const SpacingType outputSpacing )
 {
   m_OutputSignedSpacing = outputSpacing;
-  typename TInputImage::DirectionType direction = this->GetOutput()->GetDirection();
-  for(unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
+  SpacingType spacing = outputSpacing;
+  typename TInputImage::DirectionType direction = 
+      this->GetOutput()->GetDirection();
+  for( unsigned int i = 0 ; i < TInputImage::ImageDimension ; ++i )
     {
-    if ( outputSpacing[i] < 0 )
+    if ( spacing[i] < 0 )
       {
       if ( direction[i][i] > 0 )
         {
-        for(unsigned int j = 0; j < TInputImage::ImageDimension; ++j)
+        for( unsigned int j = 0 ; j < TInputImage::ImageDimension ; ++j )
           {
           direction[j][i] = - direction[j][i];
           }
         }
-      outputSpacing[i] = - outputSpacing[i];
+      spacing[i] = - spacing[i];
       }
     }
-  this->Superclass::SetOutputSpacing( outputSpacing );
+  this->Superclass::SetOutputSpacing( spacing );
   this->Superclass::SetOutputDirection( direction );
   this->Modified();
 }
