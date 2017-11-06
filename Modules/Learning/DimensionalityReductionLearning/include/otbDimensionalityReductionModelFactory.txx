@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #ifndef DimensionalityReductionModelFactory_txx
-#define DimensionalityReductionFactory_txx
+#define DimensionalityReductionModelFactory_txx
 
 #include "otbDimensionalityReductionModelFactory.h"
 #include "otbConfigure.h"
