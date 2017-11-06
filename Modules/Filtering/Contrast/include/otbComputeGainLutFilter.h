@@ -114,7 +114,7 @@ private:
   double m_Max;
   double m_Step;
   unsigned int m_NbBin;
-  long m_NbPixel;
+  unsigned long m_NbPixel;
 
 };
 
