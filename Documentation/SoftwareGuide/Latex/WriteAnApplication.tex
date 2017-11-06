@@ -248,14 +248,12 @@ in order to launch each internal application. The order should be compatible wit
 image parameter connexions. If you want to do "in-memory" connexions, you can do it between
 two calls to \code{ExecuteInternal()}, for instance :
 
-\small
-\begin{lstlisting}
+\begin{cppcode}
 ExecuteInternal("a");
 GetInternalApplication("b")->SetParameterInputImage("in",
   GetInternalApplication("a")->GetParameterOutputImage("out"));
 ExecuteInternal("b");
-\end{lstlisting}
-\normalsize
+\end{cppcode}
 
 The application BundleToPerfectSensor is a simple example of composite applications.
 For a more complex example, you can check the application TrainImagesClassifier.

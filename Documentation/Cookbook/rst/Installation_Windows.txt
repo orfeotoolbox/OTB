@@ -18,6 +18,9 @@ and their launchers (both command line and graphical launchers are provided):
 
 -  ``lib``: A folder containing application DLLs.
 
+-  ``tool``: A folder containing usefull scripts to test the installation or
+   to uninstall OTB libraries and headers while keeping all the depedencies.
+
 The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize a command prompt
 with ``otbenv.bat``.
@@ -25,14 +28,14 @@ with ``otbenv.bat``.
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Starting from OTB 5.8.0, OTB python bindings are distributed with binary package.
-currently only Python 2.x is supported. If no compatible python is found, installation
-notify you about it. If everything works fine, you will be given information about
-using python bindings.
+Starting from OTB 5.8.0, OTB Python bindings are distributed with binary package.
+Currently only Python 2.x is supported and if no compatible Python version is found a
+notification is generated during the installation process.  If the installation completes
+without issue, information relating to your Python bindings will be provided. 
 
-You must have python numpy bindings installed in your system. you can install it locally
-without admin rights with "pip install --user numpy". This is to give users to choose
-their own existing python installation rather than distributing one in OTB package
+You must have Python numpy bindings installed in your system. They can be installed locally
+without admin rights as follows: "pip install --user numpy". This is to give users the option 
+to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
 Notes
 ~~~~~

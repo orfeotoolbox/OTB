@@ -320,7 +320,10 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
            //Nothing to do. copy emptyValue
            value = emptyValue;
            }
-
+         else if (type == ParameterType_InputProcessXML)
+           {
+             continue;
+           }
          //get only file name
     /*
       if(type == ParameterType_InputFilename || type == ParameterType_InputImage ||

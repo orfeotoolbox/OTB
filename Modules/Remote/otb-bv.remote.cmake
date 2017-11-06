@@ -25,5 +25,5 @@ A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/jordi/otb-bv
 "
   GIT_REPOSITORY http://tully.ups-tlse.fr/jordi/otb-bv.git
-  GIT_TAG master
+  GIT_TAG 0e56e487aebc4a493e25223960560e9ef0ca27ec
 )

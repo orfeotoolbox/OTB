@@ -25,6 +25,9 @@ Contents of OTB-|release|-Darwin64 is briefly listed below:
 -  ``share``: A folder containing common resources and copyright
    mentions.
 
+-  ``tool``: A folder containing usefull scripts to test the installation or
+   to uninstall OTB libraries and headers while keeping all the depedencies.
+
 Python bindings
 ~~~~~~~~~~~~~~~
 
@@ -35,7 +38,7 @@ using python bindings.
 
 You must have python numpy bindings installed in your system. you can install it locally
 without admin rights with "pip install --user numpy". This is to give users to choose
-their own existing python installation rather than distributing one in OTB package
+their own existing python installation rather than distributing one in OTB package.
 
 Notes:
 

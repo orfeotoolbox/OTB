@@ -23,10 +23,10 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbImageToLuminanceImageFilter.h"
-#include "otbLuminanceToReflectanceImageFilter.h"
-#include "otbLuminanceToImageImageFilter.h"
-#include "otbReflectanceToLuminanceImageFilter.h"
+#include "otbImageToRadianceImageFilter.h"
+#include "otbRadianceToReflectanceImageFilter.h"
+#include "otbRadianceToImageImageFilter.h"
+#include "otbReflectanceToRadianceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "itkMultiplyImageFilter.h"
 #include "otbClampVectorImageFilter.h"
@@ -78,17 +78,17 @@ public:
 
   itkTypeMacro(OpticalCalibration, Application);
 
-  typedef ImageToLuminanceImageFilter<FloatVectorImageType,
-                                      DoubleVectorImageType>              ImageToLuminanceImageFilterType;
+  typedef ImageToRadianceImageFilter<FloatVectorImageType,
+                                      DoubleVectorImageType>              ImageToRadianceImageFilterType;
 
-  typedef LuminanceToReflectanceImageFilter<DoubleVectorImageType,
-                                            DoubleVectorImageType>        LuminanceToReflectanceImageFilterType;
+  typedef RadianceToReflectanceImageFilter<DoubleVectorImageType,
+                                            DoubleVectorImageType>        RadianceToReflectanceImageFilterType;
 
-  typedef LuminanceToImageImageFilter<DoubleVectorImageType,
-                                            DoubleVectorImageType>        LuminanceToImageImageFilterType;
+  typedef RadianceToImageImageFilter<DoubleVectorImageType,
+                                            DoubleVectorImageType>        RadianceToImageImageFilterType;
 
-  typedef ReflectanceToLuminanceImageFilter<FloatVectorImageType,
-                                            DoubleVectorImageType>        ReflectanceToLuminanceImageFilterType;
+  typedef ReflectanceToRadianceImageFilter<FloatVectorImageType,
+                                            DoubleVectorImageType>        ReflectanceToRadianceImageFilterType;
 
   typedef itk::MultiplyImageFilter<DoubleVectorImageType,DoubleImageType,DoubleVectorImageType>         ScaleFilterOutDoubleType;
 
@@ -186,7 +186,7 @@ private:
     AddDocTag(Tags::Calibration);
 
     AddParameter(ParameterType_InputImage,  "in",  "Input");
-    SetParameterDescription("in", "Input image filename (values in DN)");
+    SetParameterDescription("in", "Input image filename");
 
     AddParameter(ParameterType_OutputImage, "out", "Output");
     SetParameterDescription("out","Output calibrated image filename");
@@ -205,8 +205,8 @@ private:
     DisableParameter("milli");
     MandatoryOff("milli");
 
-    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0, 100]");
-    SetParameterDescription("clamp", "Clamping in the range [0, 100]. It can be useful to preserve area with specular reflectance.");
+    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0, 1]");
+    SetParameterDescription("clamp", "Clamping in the range [0, 1]. It can be useful to preserve area with specular reflectance.");
     EnableParameter("clamp");
     MandatoryOff("clamp");
 
@@ -381,7 +381,7 @@ private:
       {
         ossOutput << std::endl << "File: " << m_inImageName << std::endl;
 
-        //Check if valid metadata information are available to compute ImageToLuminance and LuminanceToReflectance
+        //Check if valid metadata information are available to compute ImageToRadiance and RadianceToReflectance
         FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
         itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
         OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
@@ -566,11 +566,11 @@ private:
   void DoExecute() ITK_OVERRIDE
   {
     //Main filters instantiations
-    m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
-    m_LuminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
+    m_ImageToRadianceFilter                = ImageToRadianceImageFilterType::New();
+    m_RadianceToReflectanceFilter          = RadianceToReflectanceImageFilterType::New();
     m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
-    m_ReflectanceToLuminanceFilter          = ReflectanceToLuminanceImageFilterType::New();
-    m_LuminanceToImageFilter                = LuminanceToImageImageFilterType::New();
+    m_ReflectanceToRadianceFilter          = ReflectanceToRadianceImageFilterType::New();
+    m_RadianceToImageFilter                = RadianceToImageImageFilterType::New();
 
     //Other instantiations
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
@@ -590,22 +590,22 @@ private:
     // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters
     if ( !IsParameterEnabled("acqui.fluxnormcoeff") )
     {
-      m_LuminanceToReflectanceFilter->SetDay(GetParameterInt("acqui.day"));
-      m_LuminanceToReflectanceFilter->SetMonth(GetParameterInt("acqui.month"));
+      m_RadianceToReflectanceFilter->SetDay(GetParameterInt("acqui.day"));
+      m_RadianceToReflectanceFilter->SetMonth(GetParameterInt("acqui.month"));
 
-      m_ReflectanceToLuminanceFilter->SetDay(GetParameterInt("acqui.day"));
-      m_ReflectanceToLuminanceFilter->SetMonth(GetParameterInt("acqui.month"));
+      m_ReflectanceToRadianceFilter->SetDay(GetParameterInt("acqui.day"));
+      m_ReflectanceToRadianceFilter->SetMonth(GetParameterInt("acqui.month"));
     }
     else
     {
-      m_LuminanceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
+      m_RadianceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
 
-      m_ReflectanceToLuminanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
+      m_ReflectanceToRadianceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
     }
 
     // Set Sun Elevation Angle to corresponding filters
-    m_LuminanceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acqui.sun.elev"));
-    m_ReflectanceToLuminanceFilter->SetElevationSolarAngle(GetParameterFloat("acqui.sun.elev"));
+    m_RadianceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acqui.sun.elev"));
+    m_ReflectanceToRadianceFilter->SetElevationSolarAngle(GetParameterFloat("acqui.sun.elev"));
 
     // Set Gain and Bias to corresponding filters
     if (IsParameterEnabled("acqui.gainbias") && HasValue("acqui.gainbias"))
@@ -644,14 +644,14 @@ private:
             switch (numLine)
             {
               case 1 :
-              m_ImageToLuminanceFilter->SetAlpha(vlvector);
-              m_LuminanceToImageFilter->SetAlpha(vlvector);
+              m_ImageToRadianceFilter->SetAlpha(vlvector);
+              m_RadianceToImageFilter->SetAlpha(vlvector);
               GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
               break;
 
               case 2 :
-              m_ImageToLuminanceFilter->SetBeta(vlvector);
-              m_LuminanceToImageFilter->SetBeta(vlvector);
+              m_ImageToRadianceFilter->SetBeta(vlvector);
+              m_RadianceToImageFilter->SetBeta(vlvector);
               GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
               break;
 
@@ -669,11 +669,11 @@ private:
       //Try to retrieve information from image metadata
       if (IMIName != IMIOptDfltName)
       {
-        m_ImageToLuminanceFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
-        m_LuminanceToImageFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
+        m_ImageToRadianceFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
+        m_RadianceToImageFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
 
-        m_ImageToLuminanceFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
-        m_LuminanceToImageFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
+        m_ImageToRadianceFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
+        m_RadianceToImageFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
       }
       else
         itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! ");
@@ -711,8 +711,8 @@ private:
             itk::VariableLengthVector<double> vlvector;
             vlvector.SetData(values.data(),values.size(),false);
 
-            m_LuminanceToReflectanceFilter->SetSolarIllumination(vlvector);
-            m_ReflectanceToLuminanceFilter->SetSolarIllumination(vlvector);
+            m_RadianceToReflectanceFilter->SetSolarIllumination(vlvector);
+            m_ReflectanceToRadianceFilter->SetSolarIllumination(vlvector);
           }
         }
         file.close();
@@ -725,8 +725,8 @@ private:
       //Try to retrieve information from image metadata
       if (IMIName != IMIOptDfltName)
       {
-        m_LuminanceToReflectanceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
-        m_ReflectanceToLuminanceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
+        m_RadianceToReflectanceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
+        m_ReflectanceToRadianceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
       }
       else
         itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! ");
@@ -748,17 +748,17 @@ private:
         GetLogger()->Info("Compute Top of Atmosphere reflectance\n");
 
         //Pipeline
-        m_ImageToLuminanceFilter->SetInput(inImage);
-        m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
+        m_ImageToRadianceFilter->SetInput(inImage);
+        m_RadianceToReflectanceFilter->SetInput(m_ImageToRadianceFilter->GetOutput());
 
         if (IsParameterEnabled("clamp"))
           {
           GetLogger()->Info("Clamp values between [0, 100]\n");
           }
 
-        m_LuminanceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
-        m_LuminanceToReflectanceFilter->UpdateOutputInformation();
-        m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
+        m_RadianceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
+        m_RadianceToReflectanceFilter->UpdateOutputInformation();
+        m_ScaleFilter->SetInput(m_RadianceToReflectanceFilter->GetOutput());
       }
       break;
       case Level_TOA_IM:
@@ -766,10 +766,10 @@ private:
         GetLogger()->Info("Convert Top of Atmosphere reflectance to image DN\n");
 
         //Pipeline
-        m_ReflectanceToLuminanceFilter->SetInput(inImage);
-        m_LuminanceToImageFilter->SetInput(m_ReflectanceToLuminanceFilter->GetOutput());
-        m_LuminanceToImageFilter->UpdateOutputInformation();
-        m_ScaleFilter->SetInput(m_LuminanceToImageFilter->GetOutput());
+        m_ReflectanceToRadianceFilter->SetInput(inImage);
+        m_RadianceToImageFilter->SetInput(m_ReflectanceToRadianceFilter->GetOutput());
+        m_RadianceToImageFilter->UpdateOutputInformation();
+        m_ScaleFilter->SetInput(m_RadianceToImageFilter->GetOutput());
       }
       break;
       case Level_TOC:
@@ -777,9 +777,9 @@ private:
         GetLogger()->Info("Compute Top of Canopy reflectance\n");
 
         //Pipeline
-        m_ImageToLuminanceFilter->SetInput(inImage);
-        m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
-        m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
+        m_ImageToRadianceFilter->SetInput(inImage);
+        m_RadianceToReflectanceFilter->SetInput(m_ImageToRadianceFilter->GetOutput());
+        m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_RadianceToReflectanceFilter->GetOutput());
         m_ReflectanceToSurfaceReflectanceFilter->SetAcquiCorrectionParameters(m_paramAcqui);
         m_ReflectanceToSurfaceReflectanceFilter->SetAtmoCorrectionParameters(m_paramAtmo);
 
@@ -934,10 +934,10 @@ private:
   }
 
   //Keep object references as a members of the class, else the pipeline will be broken after exiting DoExecute().
-  ImageToLuminanceImageFilterType ::Pointer               m_ImageToLuminanceFilter;
-  LuminanceToReflectanceImageFilterType::Pointer          m_LuminanceToReflectanceFilter;
-  ReflectanceToLuminanceImageFilterType::Pointer          m_ReflectanceToLuminanceFilter;
-  LuminanceToImageImageFilterType::Pointer                m_LuminanceToImageFilter;
+  ImageToRadianceImageFilterType ::Pointer               m_ImageToRadianceFilter;
+  RadianceToReflectanceImageFilterType::Pointer          m_RadianceToReflectanceFilter;
+  ReflectanceToRadianceImageFilterType::Pointer          m_ReflectanceToRadianceFilter;
+  RadianceToImageImageFilterType::Pointer                m_RadianceToImageFilter;
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer m_ReflectanceToSurfaceReflectanceFilter;
   ScaleFilterOutDoubleType::Pointer                       m_ScaleFilter;
   AtmoCorrectionParametersPointerType                     m_paramAtmo;

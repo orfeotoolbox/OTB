@@ -20,12 +20,12 @@
 
 #include "itkMacro.h"
 
-#include "otbLuminanceToReflectanceImageFilter.h"
+#include "otbRadianceToReflectanceImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
+int otbRadianceToReflectanceImageFilter(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -50,8 +50,8 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>                                  OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                                    ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                                   WriterType;
-  typedef otb::LuminanceToReflectanceImageFilter<InputImageType, OutputImageType> LuminanceToReflectanceImageFilterType;
-  typedef LuminanceToReflectanceImageFilterType::VectorType                       VectorType;
+  typedef otb::RadianceToReflectanceImageFilter<InputImageType, OutputImageType> RadianceToReflectanceImageFilterType;
+  typedef RadianceToReflectanceImageFilterType::VectorType                       VectorType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -69,7 +69,7 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   solarIllumination[3] = static_cast<double>(atof(argv[7]));
 
   // Instantiating object
-  LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
+  RadianceToReflectanceImageFilterType::Pointer filter = RadianceToReflectanceImageFilterType::New();
 
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);

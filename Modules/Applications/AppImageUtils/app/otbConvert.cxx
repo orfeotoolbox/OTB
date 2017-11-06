@@ -21,17 +21,16 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "itkCastImageFilter.h"
-
-
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "itkCastImageFilter.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
 #include "itkImageRegionConstIterator.h"
 
+#include "otbImageListToVectorImageFilter.h"
+#include "otbMultiToMonoChannelExtractROI.h"
+#include "otbImageList.h"
 
 namespace otb
 {
@@ -71,13 +70,19 @@ public:
   /** Filters typedef */
   typedef itk::Statistics::ListSample<FloatVectorImageType::PixelType> ListSampleType;
   typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
-  typedef ListSampleToHistogramListGenerator<ListSampleType, FloatVectorImageType::InternalPixelType, DFContainerType> HistogramsGeneratorType;
-  typedef StreamingShrinkImageFilter<FloatVectorImageType, FloatVectorImageType> ShrinkFilterType;
+  typedef ListSampleToHistogramListGenerator<ListSampleType,
+                                             FloatVectorImageType::InternalPixelType,
+                                             DFContainerType> HistogramsGeneratorType;
+  typedef StreamingShrinkImageFilter<FloatVectorImageType,
+                                     FloatVectorImageType> ShrinkFilterType;
   typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
-  typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType, FloatVectorImageType, TransferLogFunctor> TransferLogType;
+  typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
+                                                 FloatVectorImageType,
+                                                 TransferLogFunctor>   TransferLogType;
 
 
 private:
+
   void DoInit() ITK_OVERRIDE
   {
     SetName("Convert");
@@ -85,16 +90,26 @@ private:
                    " and/or changing the pixel type.");
     // Documentation
     SetDocName("Image Conversion");
-    SetDocLongDescription("This application performs an image pixel type conversion (short, ushort, uchar, int, uint, float and double types are handled). The output image is written in the specified format (ie. that corresponds to the given extension).\n The conversion can include a rescale using the image 2 percent minimum and maximum values. The rescale can be linear or log2.");
+    SetDocLongDescription("This application performs an image pixel type conversion "
+      "(short, ushort, uchar, int, uint, float and double types are handled). "
+      "The output image is written in the specified format (ie. that corresponds "
+      "to the given extension).\n The conversion can include a rescale of the data range, "
+      "by default it's set from 2% to 98% of the data values. The rescale can be linear or log2. \n "
+      "The choice of the output channels can be done with the extended filename, "
+      "but less easy to handle. To do this, a 'channels' parameter allows you to select "
+      "the desired bands at the output. There are 3 modes, the available choices are: \n"
+        " * grayscale :  to display mono image as standard color image \n"
+        " * rgb : select 3 bands in the input image (multi-bands) \n"
+        " * all : keep all bands.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
 
-	AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input image");
+    AddParameter(ParameterType_InputImage, "in", "Input image");
     SetParameterDescription("in", "Input image");
 
     AddParameter(ParameterType_Choice, "type", "Rescale type");
@@ -110,7 +125,8 @@ private:
     MandatoryOff("type.linear.gamma");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
-    SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic (the mask must have the same dimensions as the input image)");
+    SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic "
+      "(the mask must have the same dimensions as the input image)");
     MandatoryOff("mask");
     DisableParameter("mask");
 
@@ -118,40 +134,98 @@ private:
     SetParameterDescription("hcp","Parameters to cut the histogram edges before rescaling");
 
     AddParameter(ParameterType_Float, "hcp.high", "High Cut Quantile");
-    SetParameterDescription("hcp.high", "Quantiles to cut from histogram high values before computing min/max rescaling (in percent, 2 by default)");
+    SetParameterDescription("hcp.high", "Quantiles to cut from histogram high values "
+      "before computing min/max rescaling (in percent, 2 by default)");
     MandatoryOff("hcp.high");
     SetDefaultParameterFloat("hcp.high", 2.0);
     DisableParameter("hcp.high");
 
     AddParameter(ParameterType_Float, "hcp.low", "Low Cut Quantile");
-    SetParameterDescription("hcp.low", "Quantiles to cut from histogram low values before computing min/max rescaling (in percent, 2 by default)");
+    SetParameterDescription("hcp.low", "Quantiles to cut from histogram low values "
+      "before computing min/max rescaling (in percent, 2 by default)");
     MandatoryOff("hcp.low");
     SetDefaultParameterFloat("hcp.low", 2.0);
     DisableParameter("hcp.low");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
+    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
+
+    AddParameter(ParameterType_Choice, "channels", "Channels selection");
+    SetParameterDescription("channels", "It's possible to select the channels "
+      "of the output image. There are 3 modes, the available choices are:");
+
+    AddChoice("channels.all", "Default mode");
+    SetParameterDescription("channels.all", "Select all bands in the input image, (1,...,n).");
+
+    AddChoice("channels.grayscale", "Grayscale mode");
+    SetParameterDescription("channels.grayscale", "Display single channel as standard color image.");
+    AddParameter(ParameterType_Int, "channels.grayscale.channel", "Grayscale channel");
+    SetDefaultParameterInt("channels.grayscale.channel", 1);
+    SetMinimumParameterIntValue("channels.grayscale.channel", 1);
+
+    AddChoice("channels.rgb", "RGB composition");
+    SetParameterDescription("channels.rgb", "Select 3 bands in the input image "
+      "(multi-bands), by default (1,2,3).");
+
+    AddParameter(ParameterType_Int, "channels.rgb.red", "Red Channel");
+    SetParameterDescription("channels.rgb.red", "Red channel index.");
+    SetMinimumParameterIntValue("channels.rgb.red", 1);
+    AddParameter(ParameterType_Int, "channels.rgb.green", "Green Channel");
+    SetParameterDescription("channels.rgb.green", "Green channel index.");
+    SetMinimumParameterIntValue("channels.rgb.green", 1);
+    AddParameter(ParameterType_Int, "channels.rgb.blue", "Blue Channel");
+    SetParameterDescription("channels.rgb.blue", "Blue channel index.");
+    SetMinimumParameterIntValue("channels.rgb.blue", 1);
 
     AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
-    SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png uint8");
+    SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png");
     SetDocExampleParameterValue("type", "linear");
+    SetDocExampleParameterValue("channels", "rgb");
 
     SetOfficialDocLink();
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
   {
-    // Nothing to do here for the parameters : all are independent
+    // Read information
+    if ( HasValue("in") )
+      {
+      typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+      ImageMetadataInterfaceType::Pointer metadataInterface = 
+      ImageMetadataInterfaceFactory::CreateIMI(GetParameterImage("in")->GetMetaDataDictionary());
+
+      int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+      SetMaximumParameterIntValue("channels.grayscale.channel", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.red", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.green", nbBand);
+      SetMaximumParameterIntValue("channels.rgb.blue", nbBand);
+
+      if (nbBand > 1)
+        {
+        // get band index : Red/Green/Blue
+        int bandRed = metadataInterface->GetDefaultDisplay()[0] + 1;
+        int bandGreen = metadataInterface->GetDefaultDisplay()[1] + 1;
+        int bandBlue = metadataInterface->GetDefaultDisplay()[2] + 1;
+        SetDefaultParameterInt("channels.rgb.red", bandRed);
+        SetDefaultParameterInt("channels.rgb.green", bandGreen);
+        SetDefaultParameterInt("channels.rgb.blue", bandBlue);
+        }
+      }
+    
+
   }
 
   template<class TImageType>
   void GenericDoExecute()
   {
-    typename TImageType::Pointer castIm;
 
+    // Clear previously registered filters
+    m_Filters.clear();
+    
     std::string rescaleType = this->GetParameterString("type");
 
     if( (rescaleType != "none") && (rescaleType != "linear") && (rescaleType != "log2") )
@@ -161,21 +235,24 @@ private:
 
     if( rescaleType == "none" )
       {
-      castIm = this->GetParameterImage<TImageType>("in");
+      // selected channel
+      typename TImageType::Pointer tempImage;
+      tempImage = GetSelectedChannels<TImageType>();
+
+      SetParameterOutputImage<TImageType>("out", tempImage);
+
       }
-    else
+    else // linear or log2
       {
-      FloatVectorImageType::Pointer input = this->GetParameterImage("in");
-
       FloatVectorImageType::Pointer mask;
-      bool useMask = false;
-      if (IsParameterEnabled("mask"))
-        {
-        mask = this->GetParameterImage("mask");
-        useMask = true;
-        }
 
-      const unsigned int nbComp(input->GetNumberOfComponentsPerPixel());
+      if (IsParameterEnabled("mask")) mask = this->GetParameterImage("mask");
+
+      // selected channel
+      typename FloatVectorImageType::Pointer tempImage;
+      tempImage = GetSelectedChannels<FloatVectorImageType>();
+
+      const unsigned int nbComp(tempImage->GetNumberOfComponentsPerPixel());
 
       typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType, TImageType> RescalerType;
       typename TImageType::PixelType minimum;
@@ -197,8 +274,9 @@ private:
 
       // Shrink factor is computed so as to load a quicklook of 1000
       // pixels square at most
-      typename FloatVectorImageType::SizeType imageSize = input->GetLargestPossibleRegion().GetSize();
-      unsigned int shrinkFactor = std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
+      typename FloatVectorImageType::SizeType imageSize = tempImage->GetLargestPossibleRegion().GetSize();
+      unsigned int shrinkFactor =
+        std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
 
       otbAppLogDEBUG( << "Shrink factor used to compute Min/Max: "<<shrinkFactor );
 
@@ -212,7 +290,7 @@ private:
         {
         //define the transfer log
         m_TransferLog = TransferLogType::New();
-        m_TransferLog->SetInput(input);
+        m_TransferLog->SetInput(tempImage);
         m_TransferLog->UpdateOutputInformation();
 
         shrinkFilter->SetInput(m_TransferLog->GetOutput());
@@ -221,37 +299,32 @@ private:
         }
       else
         {
-        shrinkFilter->SetInput(input);
-        rescaler->SetInput(input);
+        shrinkFilter->SetInput(tempImage);
+        rescaler->SetInput(tempImage);
         shrinkFilter->Update();
         }
 
       ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
-      if (useMask)
+
+      otbAppLogDEBUG( << "Evaluating input Min/Max..." );
+      itk::ImageRegionConstIterator<FloatVectorImageType>
+        it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
+      itk::ImageRegionConstIterator<FloatVectorImageType> itMask;
+
+      typename ListSampleType::Pointer listSample = ListSampleType::New();
+      listSample->SetMeasurementVectorSize(tempImage->GetNumberOfComponentsPerPixel());
+
+      // Now we generate the list of samples
+      if (IsParameterEnabled("mask"))
         {
         maskShrinkFilter->SetShrinkFactor(shrinkFactor);
         maskShrinkFilter->SetInput(mask);
         maskShrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
         maskShrinkFilter->Update();
-        }
 
-      otbAppLogDEBUG( << "Shrink done" );
+        itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
+          maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
 
-
-      otbAppLogDEBUG( << "Evaluating input Min/Max..." );
-      itk::ImageRegionConstIterator<FloatVectorImageType> it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
-      itk::ImageRegionConstIterator<FloatVectorImageType> itMask;
-      if (useMask)
-        {
-        itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(maskShrinkFilter->GetOutput(),maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
-        }
-
-      typename ListSampleType::Pointer listSample = ListSampleType::New();
-      listSample->SetMeasurementVectorSize(input->GetNumberOfComponentsPerPixel());
-
-      // Now we generate the list of samples
-      if (useMask)
-        {
         // Remove masked pixels
         it.GoToBegin();
         itMask.GoToBegin();
@@ -265,19 +338,16 @@ private:
           ++it;
           ++itMask;
           }
-        }
-      else
-        {
-        for(it.GoToBegin(); !it.IsAtEnd(); ++it)
+        if (listSample->Size() == 0)
           {
-          listSample->PushBack(it.Get());
+          otbAppLogINFO( << "All pixels were masked, the application assume a wrong mask "
+            "and include all the image");
           }
         }
 
-      // if all pixels were masked, we assume a wrong mask and then include all image
-      if (listSample->Size() == 0)
+      // if mask is disable and all pixels were masked
+      if ((!IsParameterEnabled("mask")) || (listSample->Size() == 0))
         {
-        otbAppLogINFO( << "All pixels were masked, the application assume a wrong mask and include all the image");
         for(it.GoToBegin(); !it.IsAtEnd(); ++it)
           {
           listSample->PushBack(it.Get());
@@ -294,10 +364,15 @@ private:
       // And extract the lower and upper quantile
       typename FloatVectorImageType::PixelType inputMin(nbComp), inputMax(nbComp);
 
+      auto histOutput = histogramsGenerator->GetOutput();
+      assert(histOutput);
+
       for(unsigned int i = 0; i < nbComp; ++i)
         {
-        inputMin[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 0.01 * GetParameterFloat("hcp.low"));
-        inputMax[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 1.0 - 0.01 * GetParameterFloat("hcp.high"));
+        auto && elm = histOutput->GetNthElement(i);
+        assert(elm);
+        inputMin[i] = elm->Quantile(0, 0.01 * GetParameterFloat("hcp.low"));
+        inputMax[i] = elm->Quantile(0, 1.0 - 0.01 * GetParameterFloat("hcp.high"));
         }
 
       otbAppLogDEBUG( << std::setprecision(5) << "Min/Max computation done : min=" << inputMin
@@ -312,16 +387,99 @@ private:
         rescaler->SetGamma(GetParameterFloat("type.linear.gamma"));
         }
 
-      m_TmpFilter = rescaler;
-      castIm = rescaler->GetOutput();
+      m_Filters.push_back(rescaler.GetPointer());
+
+      SetParameterOutputImage<TImageType>("out", rescaler->GetOutput());
       }
+  }
 
+  // Get the bands order
+  std::vector<int> GetChannels()
+  {
+    std::vector<int> channels;
 
-    SetParameterOutputImage<TImageType>("out", castIm);
+    int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+    std::string channelMode = GetParameterString("channels");
+
+    if(channelMode == "grayscale")
+    {
+      if (GetParameterInt("channels.grayscale.channel") <= nbChan)
+      {
+        channels = {GetParameterInt("channels.grayscale.channel"),
+                    GetParameterInt("channels.grayscale.channel"),
+                    GetParameterInt("channels.grayscale.channel")};
+      }
+      else
+      {
+        itkExceptionMacro(<< "The channel has an invalid index");
+      }
+    }
+    else if (channelMode == "rgb")
+    {
+      if ((GetParameterInt("channels.rgb.red") <= nbChan)
+      && ( GetParameterInt("channels.rgb.green") <= nbChan)
+      && ( GetParameterInt("channels.rgb.blue")   <= nbChan))
+      {
+        channels = {GetParameterInt("channels.rgb.red"),
+                    GetParameterInt("channels.rgb.green"),
+                    GetParameterInt("channels.rgb.blue")};
+      }
+      else
+      {
+        itkExceptionMacro(<< "At least one needed channel has an invalid index");
+      }
+    }
+    else if (channelMode == "all")
+    {
+      // take all bands
+      channels.resize(nbChan);
+      std::iota(channels.begin(), channels.end(), 1);
+    }
+    return channels;
+  }
+
+  // return an image with the bands order modified of the input image
+  template<class TImageType>
+  typename TImageType::Pointer GetSelectedChannels()
+  {
+    typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
+                                         typename TImageType::InternalPixelType>  ExtractROIFilterType;
+    typedef otb::ImageList<otb::Image<typename TImageType::InternalPixelType> >   ImageListType;
+    typedef ImageListToVectorImageFilter<ImageListType,
+                                         TImageType >                             ListConcatenerFilterType;
+
+    typename ImageListType::Pointer             imageList;
+    typename ListConcatenerFilterType::Pointer  concatener;
+
+    imageList = ImageListType::New();
+    concatener = ListConcatenerFilterType::New();
+
+    //m_Filters.push_back(imageList.GetPointer());
+    m_Filters.push_back(concatener.GetPointer());
+    
+    const bool monoChannel = IsParameterEnabled("channels.grayscale");
+
+    // get band order
+    std::vector<int> channels = GetChannels();
+
+    for (auto && channel : channels)
+    {
+      typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+      m_Filters.push_back(extractROIFilter.GetPointer());
+      extractROIFilter->SetInput(GetParameterImage("in"));
+      if (!monoChannel) extractROIFilter->SetChannel(channel);
+      extractROIFilter->UpdateOutputInformation();
+      imageList->PushBack(extractROIFilter->GetOutput());
+    }
+
+    concatener->SetInput(imageList);
+    concatener->UpdateOutputInformation();
+
+    return concatener->GetOutput();
   }
 
 
- void DoExecute() ITK_OVERRIDE
+  void DoExecute() ITK_OVERRIDE
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {
@@ -352,8 +510,8 @@ private:
       }
   }
 
-  itk::ProcessObject::Pointer m_TmpFilter;
   TransferLogType::Pointer m_TransferLog;
+  std::vector<itk::LightObject::Pointer> m_Filters;
 };
 
 }

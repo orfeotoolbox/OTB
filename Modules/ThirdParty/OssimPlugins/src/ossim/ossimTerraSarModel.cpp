@@ -2400,56 +2400,36 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
    }
    else
    {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimplugins::ossimTerraSarModel::findTSXLeader "
-            << " directory scan turned off.  This is killing the factory open."
-            << " We should never scan a directory.  Need to resolve. "
-            << std::endl;
-      }
+      ossimFilename imagePath = file.expand().path();
 
-//#if 0
-      ossimFilename imagePath = file.path();
-      if (imagePath.empty())
-         imagePath = ossimEnvironmentUtility::instance()->getCurrentWorkingDir();
-
-      ossimDirectory directory = ossimDirectory(imagePath.path());
-      std::vector<ossimFilename> vectName;
-      ossimString reg = ".xml";
-      directory.findAllFilesThatMatch( vectName, reg, 1 );
-
-      bool goodFileFound = false;
-      unsigned int loop = 0;
-      while(loop<vectName.size() && !goodFileFound)
+      if (imagePath.file() == ossimString("IMAGEDATA"))
       {
-         ossimFilename curFile = vectName[loop];
-         if(curFile.file().beforePos(3) == ossimString("TSX"))
-            goodFileFound = true;
-         else
-            loop++;
+        std::cerr << "SCANNING DIRECTORY" << std::endl;
+        ossimFilename productPath = imagePath.path();
+        ossimDirectory directory = ossimDirectory(productPath);
+        std::vector<ossimFilename> vectName;
+        ossimString reg = "^T(S|D)X1_SAR__.*\\.xml$";
+        directory.findAllFilesThatMatch( vectName, reg, 1 );
+        if (vectName.size())
+        {
+          metadataFile = vectName[0];
+          res = true;
+        }
+        else
+        {
+           if (traceDebug())
+           {
+              if (res)
+              {
+                 this->print(ossimNotify(ossimNotifyLevel_DEBUG));
+              }
+              ossimNotify(ossimNotifyLevel_DEBUG)
+                 << "ossimplugins::ossimTerraSarModel::findTSXLeader "
+                 << " exit status = " << (res?"true":"false\n")
+                 << std::endl;
+           }
+        }
       }
-      if(goodFileFound)
-      {
-         metadataFile = vectName[loop];
-         res = true;
-      }
-      else
-      {
-         if (traceDebug())
-         {
-            if (res)
-            {
-               this->print(ossimNotify(ossimNotifyLevel_DEBUG));
-            }
-            
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimplugins::ossimTerraSarModel::findTSXLeader "
-               << " exit status = " << (res?"true":"false\n")
-               << std::endl;
-         }
-      }
-//#endif
    }
 
    return res;

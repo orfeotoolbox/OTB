@@ -116,15 +116,22 @@ QtFileSelectionWidget
   if( filename.isEmpty() )
     return;
 
-  m_Input->setText( filename  );
-
-  emit FilenameChanged();
+  SetFileName(filename);
 }
 
 void
 QtFileSelectionWidget
 ::CallFilenameChanged()
 {
+  emit FilenameChanged();
+}
+
+void
+QtFileSelectionWidget
+::SetFileName(const QString & filename)
+{
+  m_Input->setText( filename  );
+
   emit FilenameChanged();
 }
 

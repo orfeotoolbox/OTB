@@ -52,8 +52,11 @@ signals:
   void FileNameIsSet();
 
 protected slots:
-  bool SetFileName();
+  bool SetFileName(const QString& value);
   void SelectFile();
+
+private slots:
+  void OnEditingFinished();
 
 private:
   QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented

@@ -45,11 +45,16 @@ public:
   QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*);
   ~QtWidgetComplexOutputImageParameter() ITK_OVERRIDE;
 
+  inline const QLineEdit* GetInput() const;
+  inline QLineEdit* GetInput();
+
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
 
-protected slots:
+public slots:
   void SetFileName( const QString& value );
+
+protected slots:
   void SelectFile();
   void SetPixelType(int pixelType);
 
@@ -72,6 +77,21 @@ private:
 
 };
 
+inline
+const QLineEdit*
+QtWidgetComplexOutputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+inline
+QLineEdit*
+QtWidgetComplexOutputImageParameter
+::GetInput()
+{
+  return m_Input;
+}
 
 }
 }

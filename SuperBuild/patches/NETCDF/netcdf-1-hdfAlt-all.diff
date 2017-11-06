@@ -1,0 +1,26 @@
+diff -burN netcdf-4.4.1.1-orig/CMakeLists.txt netcdf-4.4.1.1/CMakeLists.txt
+--- netcdf-4.4.1.1-orig/CMakeLists.txt	2017-09-18 19:22:31.832817084 +0200
++++ netcdf-4.4.1.1/CMakeLists.txt	2017-09-30 20:40:55.921482581 +0200
+@@ -76,6 +76,7 @@
+ 
+ # For CMAKE_INSTALL_LIBDIR
+ INCLUDE(GNUInstallDirs)
++SET(CMAKE_INSTALL_LIBDIR lib)
+ 
+ IF(MSVC)
+   SET(GLOBAL PROPERTY USE_FOLDERS ON)
+@@ -434,12 +435,12 @@
+     INCLUDE_DIRECTORIES(${MFHDF_H_INCLUDE_DIR})
+   ENDIF()
+ 
+-  FIND_LIBRARY(HDF4_DF_LIB NAMES df libdf hdf)
++  FIND_LIBRARY(HDF4_DF_LIB NAMES dfalt df libdf hdf)
+   IF(NOT HDF4_DF_LIB)
+     MESSAGE(FATAL_ERROR "Can't find or link to the hdf4 df library.")
+   ENDIF()
+ 
+-  FIND_LIBRARY(HDF4_MFHDF_LIB NAMES mfhdf libmfhdf)
++  FIND_LIBRARY(HDF4_MFHDF_LIB NAMES mfhdfalt mfhdf libmfhdf)
+   IF(NOT HDF4_MFHDF_LIB)
+     MESSAGE(FATAL_ERROR "Can't find or link to the hdf4 mfhdf library.")
+   ENDIF()

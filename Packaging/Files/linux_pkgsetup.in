@@ -20,6 +20,17 @@
 #
 set -e
 
+# verify basic tools are here
+which sh >/dev/null 2>&1 || ret=$?
+if [ ! -z "$ret" ] ; then echo "ERROR: Missing tool 'which'"; exit 1 ; fi
+for tool in dirname find file grep cut sed chmod cat readlink ; do
+  if [ -z "$(which $tool)" ] ; then
+    echo "ERROR: Missing tool '${tool}'"
+    echo "Please install it and make sure it can be found from PATH"
+    exit 1;
+  fi
+done
+
 DIRNAME_0=$(dirname "$0")
 cd  "$DIRNAME_0"
 
@@ -32,20 +43,16 @@ PATCH_ELF_EXE="$OUT_DIR/patchelf"
 
 #do not move below block. it must be before "unset LD_LIBRARY_PATH" code
 #check if we have any python bindings
-set OTB_PYTHON_LIB_PATH=
 if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ] ; then
-    sed -i "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/setup_python.sh"
-    chmod +x $OUT_DIR/setup_python.sh
-    . ./setup_python.sh
-    set OTB_PYTHON_LIB_PATH=$OUT_DIR/lib/python
+    chmod +x "$OUT_DIR/setup_python.sh"
+    ./setup_python.sh || setup_python_ret=$?
 fi
 
 # No no interference with LD_LIBRARY_PATH
 unset LD_LIBRARY_PATH
 
-#RK: We cannot avoid -maxdepth 1 option in find command below because,
-# there are files in $OUT_DIR/lib/gtk which we CANNOT add new rpath
-BINARY_FILES=$(find $OTB_PYTHON_LIB_PATH $OUT_DIR/lib $OUT_DIR/bin $OUT_DIR/lib/otb/applications -maxdepth 1 -type f -exec file {} \; | grep -i elf|cut -f1 -d':')
+# we remove files in $OUT_DIR/lib/gtk which we CANNOT add new rpath
+BINARY_FILES=$(find "$OUT_DIR/lib" "$OUT_DIR/bin" -type f -exec file {} \; | grep -v '/lib/gtk/' | grep -i elf|cut -f1 -d':')
 # run patchelf
 for bin_file in $BINARY_FILES; do
     #echo "adding rpath to $bin_file"

@@ -139,8 +139,8 @@ relevant channels in brackets are:
     Soil:BI - Brightness index (Red, Green)
     Soil:BI2 - Brightness index 2 (NIR, Red, Green)
 
-The application can be used like this, which leads to an output image
-with 3 bands, respectively with the Vegetation:NDVI, Vegetation:RVI and
+The application can be used as follows, which would produce an output image
+containing 3 bands, respectively with the Vegetation:NDVI, Vegetation:RVI and
 Vegetation:IPVI radiometric indices in this exact order:
 
 ::
@@ -153,8 +153,8 @@ Vegetation:IPVI radiometric indices in this exact order:
                               -list           Vegetation:NDVI Vegetation:RVI
                                               Vegetation:IPVI 
 
-or like this, which leads to a single band output image with the
-Water:NDWI2 radiometric indice:
+or as follows, which would produce a single band output image with the
+Water:NDWI2 radiometric index:
 
 ::
 
