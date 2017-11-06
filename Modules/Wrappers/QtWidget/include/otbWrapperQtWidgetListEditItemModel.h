@@ -78,7 +78,7 @@ class StringListInterface;
 /**
  * \class ListEditItemModel
  *
- * \ingroup OTBMonteverdiCore
+ * \ingroup OTBQtWidget
  *
  * \brief WIP.
  */
