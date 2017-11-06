@@ -47,7 +47,6 @@ private:
     SetName("TestApplication");
     SetDescription("This application helps developers to test parameters types");
 
-
     SetDocName("Test");
     SetDocLongDescription("The purpose of this application is to test parameters types.");
     SetDocLimitations("None");
@@ -76,7 +75,6 @@ private:
     SetDefaultParameterFloat("choice.choice1.floatchoice1",   0.125);
     AddParameter(ParameterType_Float,  "choice.choice3.floatchoice3", "Float of choice3");
     SetDefaultParameterFloat("choice.choice3.floatchoice3",   5.0);
-
 
     AddParameter(ParameterType_Group, "ingroup", "Input Group");
     MandatoryOff("ingroup");
@@ -115,55 +113,47 @@ private:
   }
 
   void DoUpdateParameters() ITK_OVERRIDE
-  {
-    //std::cout << "TestApplication::DoUpdateParameters" << std::endl;
-  }
+  {}
 
   void DoExecute() ITK_OVERRIDE
   {
-    {
-      Parameter * p = GetParameterByKey( "il" );
+    if( HasValue("il") && IsParameterEnabled("il") )
+      {
+      FloatVectorImageListType * imgList = GetParameterImageList( "il" );
+      SetParameterOutputImage(
+        "outgroup.outputimage",
+        imgList->GetNthElement( 0 )
+      );
+      }
+    else if (HasValue("ingroup.images.inputimage") &&
+      IsParameterEnabled("ingroup.images.inputimage",true) )
+      {
+      SetParameterOutputImage("outgroup.outputimage",
+        GetParameterImage("ingroup.images.inputimage"));
+      }
+    else
+      {
+      otbAppLogFATAL("Waiting at least one input image");
+      }
 
-      assert( p!=nullptr );
-
-      if( p->IsChecked() )
-	{
-	FloatVectorImageListType * imgList = GetParameterImageList( "il" );
-
-	SetParameterOutputImage(
-	  "outgroup.outputimage",
-	  imgList->GetNthElement( 0 )
-	);
-
-	SetParameterComplexOutputImage(
-	  "cout",
-	  GetParameterComplexImage( "cin" )
-	);
-
-	//std::cout << "TestApplication::DoExecute" << std::endl;
-	}
-    }
+    SetParameterComplexOutputImage(
+      "cout",
+      GetParameterComplexImage( "cin" )
+    );
 
     PrintStrings( "fl" );
   }
 
 private:
-  void
-  PrintStrings( const std::string & key ) const
+  void PrintStrings( const std::string & key ) const
   {
-    const Parameter * p = GetParameterByKey( key );
-
-    assert( p!=nullptr );
-
-    if( !p->IsChecked() )
+    if( !IsParameterEnabled(key) )
       return;
 
-
+    const Parameter * p = GetParameterByKey( key );
+    assert( p!=nullptr );
     const StringListInterface * sli =
-      dynamic_cast< const StringListInterface * >(
-	p
-      );
-
+      dynamic_cast< const StringListInterface * >(p);
     assert( sli!=nullptr );
 
     StringListInterface::StringVector strings;
@@ -173,14 +163,13 @@ private:
     std::cout << "{" << std::endl;
     {
       for( auto s : strings )
-	std::cout << "'" << s << "'" << std::endl;
+        std::cout << "'" << s << "'" << std::endl;
     }
     std::cout << "}"<< std::endl;
   }
 };
 
-}
-
-}
+} // end of namespace Wrapper
+} // end of namespace otb
 
 OTB_APPLICATION_EXPORT( otb::Wrapper::TestApplication )
