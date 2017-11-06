@@ -125,8 +125,7 @@ private:
         imgList->GetNthElement( 0 )
       );
       }
-    else if (HasValue("ingroup.images.inputimage") &&
-      IsParameterEnabled("ingroup.images.inputimage",true) )
+    else if (HasValue("ingroup.images.inputimage") && IsParameterEnabled("ingroup") )
       {
       SetParameterOutputImage("outgroup.outputimage",
         GetParameterImage("ingroup.images.inputimage"));
