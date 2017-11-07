@@ -25,7 +25,7 @@
 #include "itkImageRegionIterator.h"
 
 #include <limits>
-
+#include <numeric>
 
 namespace otb
 {
