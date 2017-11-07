@@ -107,15 +107,7 @@ void
 ParameterList< T >
 ::SetListFromFileName( const StringVector & strings )
 {
-  // First clear previous file chosen
-  ClearValue();
-
-  for( const StringVector::value_type & s : strings )
-    AddFromFileName( s );
-
-  Modified();
-
-  SetActive( true );
+  this->SetStrings(strings);
 }
 
 /*****************************************************************************/
@@ -153,6 +145,8 @@ ParameterList< T >
   assert( !m_Parameters.back().IsNull() );
 
   SetActive( true );
+
+  Modified();
 }
 
 /*****************************************************************************/
@@ -187,9 +181,9 @@ ParameterList< T >
   // Should throw exception when failed.
   FromString( m_Parameters[ i ], filename );
 
-  Modified();
-
   SetActive( true );
+
+  Modified();
 }
 
 /*****************************************************************************/
@@ -198,18 +192,24 @@ std::size_t
 ParameterList< T >
 ::SetStrings( const StringVector & strings )
 {
+  // First clear previous file chosen
   ClearValue();
 
-  std::transform(
-    strings.begin(),
-    strings.end(),
-    std::back_inserter( m_Parameters ),
-    [ this ]( auto s ) -> auto
+  if ( !strings.empty() )
     {
-      return this->FromString( s );
-    }
-  );
+    std::transform(
+      strings.begin(),
+      strings.end(),
+      std::back_inserter( m_Parameters ),
+      [ this ]( auto s ) -> auto
+      {
+        return this->FromString( s );
+      }
+    );
 
+    SetActive( true );
+    Modified();
+    }
   return strings.size();
 }
 
