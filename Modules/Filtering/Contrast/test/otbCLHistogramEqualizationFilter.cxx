@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbCLHistogramEqualizationFilter.h"
 
-int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char * argv [])
+int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef int InputPixelType;
   const unsigned int Dimension = 2;

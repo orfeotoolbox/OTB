@@ -25,7 +25,7 @@
 #include "itkImageRegionIterator.h"
 #include "otbCLHistogramEqualizationFilter.h"
 
-int otbHelperCLAHE(int itkNotUsed(argc), char * argv [])
+int otbHelperCLAHE(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef int InputPixelType;
   const unsigned int Dimension = 2;
