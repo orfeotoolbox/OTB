@@ -1453,7 +1453,10 @@ std::string Application::GetParameterAsString(std::string paramKey)
       oss << this->GetParameterFloat( paramKey );
       ret = oss.str();
     }
-  else if( type == ParameterType_StringList )
+  else if( type == ParameterType_StringList ||
+    type == ParameterType_InputImageList ||
+    type == ParameterType_InputVectorDataList ||
+    type == ParameterType_InputFilenameList)
     {
       std::ostringstream oss;
       oss << std::setprecision(10);
