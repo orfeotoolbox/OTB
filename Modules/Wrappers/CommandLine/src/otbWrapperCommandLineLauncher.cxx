@@ -425,6 +425,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             type == ParameterType_Int ||
             type == ParameterType_Radius ||
             type == ParameterType_Directory ||
+            type == ParameterType_String ||
             type == ParameterType_InputFilename ||
             type == ParameterType_OutputFilename ||
             type == ParameterType_ComplexInputImage ||
