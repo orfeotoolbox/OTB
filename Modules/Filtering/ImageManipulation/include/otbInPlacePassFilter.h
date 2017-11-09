@@ -39,7 +39,7 @@ namespace otb
  *  instead. By memorizing the region this buffer filter can be placed in 
  *  in front of each branch so that the requested region will be saved.v
  *
- * \ingroup OTBContrast
+ * \ingroup OTBImageManipulation
  */
 
 template < class TInputImage >
