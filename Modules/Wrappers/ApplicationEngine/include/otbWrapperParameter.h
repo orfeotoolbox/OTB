@@ -70,9 +70,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Defining ::New() static method */
-  itkNewMacro(Self);
-
   /** RTTI support */
   itkTypeMacro(Parameter, itk::Object);
 
@@ -151,14 +148,11 @@ public:
   {
   }
 
-  virtual bool HasValue() const
-  {
-    itkExceptionMacro(<<"HasValue() method must be re-implemented by sub-classes.");
-  }
+  virtual bool HasValue() const = 0;
 
   virtual bool HasUserValue() const
   {
-    return HasValue() && m_UserValue;
+    return this->HasValue() && m_UserValue;
   }
 
   virtual void SetUserValue(bool isUserValue)
