@@ -18,14 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppFusion_LINK_LIBS
-  ${OTBImageBase_LIBRARIES}
-  ${OTBInterpolation_LIBRARIES}
-  ${OTBPanSharpening_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBProjection_LIBRARIES}
-)
-
 otb_create_application(
   NAME           BundleToPerfectSensor
   SOURCES        otbBundleToPerfectSensor.cxx

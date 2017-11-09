@@ -18,15 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppVectorUtils_LINK_LIBS
-  ${OTBVectorDataBase_LIBRARIES}
-  ${OTBProjection_LIBRARIES}
-  ${OTBVectorDataManipulation_LIBRARIES}
-  ${OTBCarto_LIBRARIES}
-  ${OTBCommon_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-)
-
 otb_create_application(
   NAME           VectorDataTransform
   SOURCES        otbVectorDataTransform.cxx
