@@ -295,21 +295,21 @@ ListEditItemModel
 /*****************************************************************************/
 bool
 ListEditItemModel
-::insertRow( int row, const QModelIndex & parent )
+::insertRow( int row, const QModelIndex & idxParent )
 {
-  return insertRows( row, 1, parent );
+  return insertRows( row, 1, idxParent );
 }
 
 /*****************************************************************************/
 bool
 ListEditItemModel
-::insertRows( int row, int count, const QModelIndex & parent )
+::insertRows( int row, int count, const QModelIndex & idxParent )
 {
-  // qDebug() << this << "::insertRows(" << row << "," << count << "," << parent << ")";
+  // qDebug() << this << "::insertRows(" << row << "," << count << "," << idxParent << ")";
 
   assert( m_StringList!=nullptr );
 
-  beginInsertRows( parent, row, count );
+  beginInsertRows( idxParent, row, count );
   {
     for( int r=row; r<row+count; ++r )
       m_StringList->Insert( "", r );

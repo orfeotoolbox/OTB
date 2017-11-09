@@ -194,7 +194,7 @@ void QtWidgetView::UnhandledException(QString message)
   m_LogText->append(message);
 }
 
-void QtWidgetView::OnExceptionRaised(QString message)
+void QtWidgetView::OnExceptionRaised(QString /*message*/)
 {
   m_TabWidget->setCurrentIndex(1);
 }
