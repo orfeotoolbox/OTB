@@ -49,9 +49,6 @@ public:
   typedef AbstractParameterList Self;
   typedef Parameter Superclass;
 
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
-
 //
 // Public methods.
 public:
@@ -71,8 +68,8 @@ protected:
 //
 // Private methods.
 private:
-  AbstractParameterList( const Parameter & ); // purposely not implemented
-  void operator = ( const Parameter & ); // purposely not implemented
+  AbstractParameterList( const Parameter & ) = delete; // purposely not implemented
+  void operator = ( const Parameter & ) = delete; // purposely not implemented
 
 //
 // Protected methods.
