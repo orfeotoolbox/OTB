@@ -438,9 +438,9 @@ InputImageInitializer
 inline
 InputImageListInitializer::result_type
 InputImageListInitializer
-::operator () ( argument_type widget ) const
+::operator () ( argument_type /* widget */ ) const
 {
-  assert( widget!=NULL );
+  // assert( widget!=NULL );
 
   // Drop support is done by ParameterListInitializer
 }
@@ -471,9 +471,9 @@ InputFilenameInitializer
 inline
 InputFilenameListInitializer::result_type
 InputFilenameListInitializer
-::operator () ( argument_type widget ) const
+::operator () ( argument_type /* widget */) const
 {
-  assert( widget!=NULL );
+  // assert( widget!=NULL );
 
   // Drop support is done by ParameterListInitializer
 }
@@ -493,9 +493,9 @@ InputVectorDataInitializer
 inline
 InputVectorDataListInitializer::result_type
 InputVectorDataListInitializer
-::operator () ( argument_type widget ) const
+::operator () ( argument_type /* widget */) const
 {
-  assert( widget!=NULL );
+  // assert( widget!=NULL );
 
   // Drop support is done by ParameterListInitializer
 }
