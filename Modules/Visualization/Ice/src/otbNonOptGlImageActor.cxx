@@ -101,7 +101,7 @@ void NonOptGlImageActor::Initialize(const std::string & filename)
     }
 
   m_Origin = m_FileReader->GetOutput()->GetOrigin();
-  m_Spacing = m_FileReader->GetOutput()->GetSpacing();
+  m_Spacing = m_FileReader->GetOutput()->GetSignedSpacing();
   m_NumberOfComponents = m_FileReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
   unsigned int ovrCount = m_FileReader->GetOverviewsCount();

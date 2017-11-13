@@ -37,7 +37,7 @@ namespace otb
 namespace internal
 {
   template < class ImageType >
-  typename ImageType::SpacingType GetSignedSpacing( ImageType * input)
+  typename ImageType::SpacingType GetSignedSpacing( const ImageType * input)
   {
     typename ImageType::SpacingType spacing = input->GetSpacing();
     typename ImageType::DirectionType direction = input->GetDirection();
