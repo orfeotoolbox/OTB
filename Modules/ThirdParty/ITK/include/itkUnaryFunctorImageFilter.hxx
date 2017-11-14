@@ -133,7 +133,7 @@ UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
       }
 
     // set the spacing and origin
-    outputPtr->SetSpacing(outputSpacing);
+    outputPtr->SetSpacing( outputSpacing );
     outputPtr->SetOrigin(outputOrigin);
     outputPtr->SetDirection(outputDirection);
     outputPtr->SetNumberOfComponentsPerPixel(  // propagate vector length info

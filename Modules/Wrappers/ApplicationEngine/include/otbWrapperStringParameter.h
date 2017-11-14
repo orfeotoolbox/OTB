@@ -51,14 +51,14 @@ public:
   itkTypeMacro(StringParameter, Parameter);
 
   /** Set the value */
-  void SetValue( std::string value)
+  void SetValue( const std::string & value )
   {
     m_Value = value;
-    SetActive(true);
+    SetActive( true );
   }
 
   /** Get the value */
-  std::string GetValue() const
+  const std::string & GetValue() const
   {
     return m_Value;
   }

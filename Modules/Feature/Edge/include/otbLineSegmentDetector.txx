@@ -323,7 +323,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   this->GetOutput(0)->GetDataTree()->Add(folder, document);
   this->GetOutput(0)->SetProjectionRef(this->GetInput()->GetProjectionRef());
 
-  SpacingType spacing = this->GetInput()->GetSpacing();
+  SpacingType spacing = this->GetInput()->GetSignedSpacing();
   OriginType  origin  = this->GetInput()->GetOrigin();
 
   /** store the lines*/

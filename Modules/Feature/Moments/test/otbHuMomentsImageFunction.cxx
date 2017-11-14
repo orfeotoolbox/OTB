@@ -204,7 +204,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char * argv
   filter->SetInterpolator(interpolator);
   filter->SetDefaultPixelValue( 100 );
 
-  const InputImageType::SpacingType & spacing = reader->GetOutput()->GetSpacing();
+  const InputImageType::SpacingType & spacing = reader->GetOutput()->GetSignedSpacing();
   const InputImageType::PointType & origin  = reader->GetOutput()->GetOrigin();
   InputImageType::SizeType size =
       reader->GetOutput()->GetLargestPossibleRegion().GetSize();

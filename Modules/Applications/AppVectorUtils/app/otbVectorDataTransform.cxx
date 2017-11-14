@@ -60,46 +60,64 @@ private:
     SetDescription("Apply a transform to each vertex of the input VectorData");
 
     SetDocName("Vector Data Transformation");
-    SetDocLongDescription("This application performs a transformation of an input vector data transforming each vertex in the vector data. The applied transformation manages translation, rotation and scale, and can be centered or not.");
+    SetDocLongDescription("This application iterates over each vertex in the "
+      "input vector data file and performs a transformation on this vertex.\n\n"
+      "It is the equivalent of [1] that transforms images. For instance, if you"
+      " extract the envelope of an image with [2], and you transform this image"
+      " with [1], you may want to use this application to operate the same "
+      "transform on the envelope.\n\n"
+      "The applied transformation is a 2D similarity. It manages translation, "
+      "rotation, scaling, and can be centered or not. Note that the support "
+      "image is used to define the reference coordinate system in which the "
+      "transform is applied. For instance the input vector data can have WGS84"
+      " coordinates, the support image is in UTM, so a translation of 1 pixel "
+      "along X corresponds to the X pixel size of the input image along the "
+      "X axis of the UTM coordinates frame. This image can also be in sensor "
+      "geometry.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("[1] RigidTransformResample\n"
+      "[2] ImageEnvelope");
 
     AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_InputVectorData, "vd", "Input Vector data");
-    SetParameterDescription("vd", "Input vector data to transform");
+    SetParameterDescription("vd", "Input vector data file to transform");
 
     AddParameter(ParameterType_OutputVectorData,"out","Output Vector data");
-    SetParameterDescription("out", "Output transformed vector data");
+    SetParameterDescription("out", "Output vector data with ");
 
     AddParameter(ParameterType_InputImage, "in", "Support image");
-    SetParameterDescription("in","Image needed as a support to the vector data");
+    SetParameterDescription("in","Image defining the reference coordinate "
+      "system in which the tranform is applied. Both projected and sensor "
+      "images are supported.");
 
     // Transform Group
     AddParameter(ParameterType_Group, "transform", "Transform parameters");
     SetParameterDescription("transform", "Group of parameters to define the transform");
 
-    AddParameter(ParameterType_Float, "transform.tx", "Translation X");
+    AddParameter(ParameterType_Float, "transform.tx", "X Translation");
     SetParameterDescription("transform.tx","Translation in the X direction (in pixels)");
-    AddParameter(ParameterType_Float, "transform.ty", "Translation Y");
+    AddParameter(ParameterType_Float, "transform.ty", "Y Translation");
     SetParameterDescription("transform.ty","Translation in the Y direction (in pixels)");
     SetDefaultParameterFloat("transform.tx", 0.);
     SetDefaultParameterFloat("transform.ty", 0.);
 
     AddParameter(ParameterType_Float, "transform.ro", "Rotation Angle");
-    SetParameterDescription("transform.ro","Angle of the rotation to apply in degrees");
+    SetParameterDescription("transform.ro","Angle of the rotation (in degrees)");
     SetDefaultParameterFloat("transform.ro", 0.);
 
     AddParameter(ParameterType_Float, "transform.centerx", "Center X");
-    SetParameterDescription("transform.centerx","X coordinate of the rotation center (in physical units)");
+    SetParameterDescription("transform.centerx","X coordinate of the rotation "
+      "and scaling center (in physical units)");
     AddParameter(ParameterType_Float, "transform.centery", "Center Y");
-    SetParameterDescription("transform.centery","Y coordinate of the rotation center (in physical units)");
+    SetParameterDescription("transform.centery","Y coordinate of the rotation "
+      "and scaling center (in physical units)");
     SetDefaultParameterFloat("transform.centerx", 0.);
     SetDefaultParameterFloat("transform.centery", 0.);
 
     AddParameter(ParameterType_Float, "transform.scale", "Scale");
-    SetParameterDescription("transform.scale","The scale to apply");
+    SetParameterDescription("transform.scale","The scale coefficient to apply");
     SetDefaultParameterFloat("transform.scale", 1.);
 
     // Doc example parameter settings
@@ -140,8 +158,8 @@ private:
     parameters[1] = CONST_PI * GetParameterFloat("transform.ro")/180.;
     parameters[2] = GetParameterFloat("transform.centerx");
     parameters[3] = GetParameterFloat("transform.centery");
-    parameters[4] = inImage->GetSpacing()[0] * GetParameterFloat("transform.tx");
-    parameters[5] = vcl_abs(inImage->GetSpacing()[1]) * GetParameterFloat("transform.ty");
+    parameters[4] = inImage->GetSignedSpacing()[0] * GetParameterFloat("transform.tx");
+    parameters[5] = vcl_abs(inImage->GetSignedSpacing()[1]) * GetParameterFloat("transform.ty");
 
     // Set the parameters to the transform
     m_Transform->SetParameters(parameters);

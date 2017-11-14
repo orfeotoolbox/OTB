@@ -82,7 +82,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
 ::BeforeGenerateData()
 {
   /** Calculation of resolution value */
-  typename InputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
+  typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
   // Getting x Spacing for the resolution
   m_Resolution = static_cast<double>(spacing[0]);
   if (m_Resolution == 0.)

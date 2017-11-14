@@ -70,7 +70,42 @@ QtWidgetModel
 ::NotifyUpdate()
 {
   // Update the parameters
-  m_Application->UpdateParameters();
+  try
+  {
+    m_Application->UpdateParameters();
+  }
+  catch(otb::ApplicationException& err)
+  {
+    m_Application->GetLogger()->Debug("Caught otb::ApplicationException during application update:\n");
+    m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+    emit ExceptionRaised( err.what() );
+  }
+  catch(otb::ImageFileReaderException& err)
+  {
+    m_Application->GetLogger()->Debug("Caught otb::ImageFileReaderException during application update:\n");
+    m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+    string message( string("Cannot open image ") + err.m_Filename + string(". ") + err.GetDescription() );
+    m_Application->GetLogger()->Fatal( message + string("\n"));
+    emit ExceptionRaised( message.c_str() );
+  }
+  catch(itk::ExceptionObject& err)
+  {
+    m_Application->GetLogger()->Debug("Caught itk::ExceptionObject during application update:\n");
+    m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+    m_Application->GetLogger()->Fatal(string(err.GetDescription()) + "\n");
+    emit ExceptionRaised( err.GetDescription() );
+  }
+  catch(std::exception& err)
+  {
+    m_Application->GetLogger()->Fatal(string("Caught std::exception during application update: ") + err.what() + "\n");
+    emit ExceptionRaised( err.what() );
+  }
+  catch(...)
+  {
+    m_Application->GetLogger()->Fatal("Caught unknown exception during application update.\n");
+    emit ExceptionRaised("Unknown exception");
+  }
+
   emit UpdateGui();
 
   // Notify all

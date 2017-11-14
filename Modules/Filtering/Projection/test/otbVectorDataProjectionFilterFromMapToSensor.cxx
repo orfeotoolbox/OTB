@@ -60,7 +60,7 @@ int otbVectorDataProjectionFilterFromMapToSensor(int argc, char * argv[])
 
   vectorDataProjection->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
   vectorDataProjection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
-  vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
+  vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
 
   typedef otb::VectorDataFileWriter<OutputVectorDataType> VectorDataFileWriterType;
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();

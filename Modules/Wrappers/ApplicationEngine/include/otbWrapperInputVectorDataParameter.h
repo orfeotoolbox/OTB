@@ -55,9 +55,10 @@ public:
 
   /** Set value from filename */
   bool SetFromFileName(const std::string& filename);
-  itkGetConstMacro(FileName, std::string);
+  itkGetConstReferenceMacro( FileName, std::string );
 
-  VectorDataType* GetVectorData();
+  const VectorDataType * GetVectorData() const;
+  VectorDataType * GetVectorData();
 
   void SetVectorData(VectorDataType* vectorData);
 
@@ -77,6 +78,8 @@ protected:
   VectorDataFileReaderType::Pointer m_Reader;
 
   std::string m_FileName;
+
+  std::string m_PreviousFileName;
 
 private:
   InputVectorDataParameter(const Parameter &); //purposely not implemented

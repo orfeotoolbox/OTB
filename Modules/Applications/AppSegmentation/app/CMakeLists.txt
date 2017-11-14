@@ -18,29 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppSegmentation_LINK_LIBS
-  ${OTBVectorDataBase_LIBRARIES}
-  ${OTBLabelMap_LIBRARIES}
-  ${OTBConversion_LIBRARIES}
-  ${OTBImageManipulation_LIBRARIES}
-  ${OTBImageIO_LIBRARIES}
-  ${OTBProjection_LIBRARIES}
-  ${OTBImageBase_LIBRARIES}
-  ${OTBWatersheds_LIBRARIES}
-  ${OTBGdalAdapters_LIBRARIES}
-  ${OTBSmoothing_LIBRARIES}
-  ${OTBMetrics_LIBRARIES}
-  ${OTBOGRProcessing_LIBRARIES}
-  ${OTBStatistics_LIBRARIES}
-  ${OTBMeanShift_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBCCOBIA_LIBRARIES}
-  ${OTBMathParser_LIBRARIES}
-  ${OTBMorphologicalProfiles_LIBRARIES}
-  ${OTBTransform_LIBRARIES}
-  ${OTBCommon_LIBRARIES}
-)
-
 otb_create_application(
   NAME           Segmentation
   SOURCES        otbSegmentation.cxx

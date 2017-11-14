@@ -211,11 +211,13 @@ SetWorkingDir( const QString & filepath )
   QFileInfo finfo( filepath );
 
 #if 0
-  return QDir::setCurrent(
-    finfo.isDir()
-    ? filepath
-    : finfo.path()
-  );
+  return
+    QDir::setCurrent(
+      finfo.isDir()
+      ? filepath
+      : finfo.path()
+    );
+
 #else
   // TODO : add mutex if needed
   QString dir = finfo.isDir() ? filepath : finfo.path();
@@ -223,6 +225,7 @@ SetWorkingDir( const QString & filepath )
     return false;
   RecentDirectory = finfo.isDir() ? filepath : finfo.path();
   return true;
+
 #endif
 }
 

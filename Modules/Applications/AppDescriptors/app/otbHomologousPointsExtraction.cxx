@@ -281,7 +281,7 @@ private:
           pprime1 = rsTransform->TransformPoint(point1);
           error = vcl_sqrt((point2[0]-pprime1[0])*(point2[0]-pprime1[0])+(point2[1]-pprime1[1])*(point2[1]-pprime1[1]));
 
-          if(error>GetParameterFloat("precision")*vcl_sqrt(vcl_abs(im2->GetSpacing()[0]*im2->GetSpacing()[1])))
+          if(error>GetParameterFloat("precision")*vcl_sqrt(vcl_abs(im2->GetSignedSpacing()[0]*im2->GetSignedSpacing()[1])))
             {
             filtered = true;
             }

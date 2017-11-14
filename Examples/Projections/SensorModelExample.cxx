@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
   reader->GenerateOutputInformation();
 
   std::cout << "Original input imagine spacing: " <<
-  reader->GetOutput()->GetSpacing() << std::endl;
+  reader->GetOutput()->GetSignedSpacing() << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -197,7 +197,7 @@ int main(int argc, char* argv[])
 
   outputImage->SetOrigin(origin);
   outputImage->SetRegions(region);
-  outputImage->SetSpacing(spacing);
+  outputImage->SetSignedSpacing(spacing);
   outputImage->Allocate();
 // Software Guide : EndCodeSnippet
 

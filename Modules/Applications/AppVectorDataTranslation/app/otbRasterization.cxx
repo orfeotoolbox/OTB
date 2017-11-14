@@ -233,7 +233,7 @@ private:
 
       origin = referenceImage->GetOrigin();
 
-      spacing = referenceImage->GetSpacing();
+      spacing = referenceImage->GetSignedSpacing();
       }
     else if (HasValue("spx") && HasValue("spy"))
       {
