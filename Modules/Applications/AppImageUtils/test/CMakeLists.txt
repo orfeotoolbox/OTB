@@ -112,7 +112,7 @@ otb_test_application(NAME apTvUtDynamicConvertLog2
 
 otb_test_application(NAME apTvUtDynamicConvertFloat
                      APP DynamicConvert
-                     OPTIONS -in ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                              -out ${TEMP}/apTvUtDynamicConvertFloatOutput.tif float
                              -type linear
                              -type.linear.gamma 2.2
