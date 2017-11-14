@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
   // necessary for sensors
   filter->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   // necessary for sensors
-  filter->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
+  filter->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
   // ~ wkt
   filter->SetOutputProjectionRef( imageReader->GetOutput()->GetProjectionRef());
   // Software Guide : EndCodeSnippet

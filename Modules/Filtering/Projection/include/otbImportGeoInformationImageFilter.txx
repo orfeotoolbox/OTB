@@ -102,7 +102,7 @@ ImportGeoInformationImageFilter<TImage, TSourceImage>
 //   outputPtr->CopyInformation(sourcePtr);
 //   // Don't forget to copy also the origin and spacing, not handled by the CopyInformation method.
 //   outputPtr->SetOrigin(sourcePtr->GetOrigin());
-//   outputPtr->SetSpacing(sourcePtr->GetSpacing());
+//   outputPtr->SetSignedSpacing(sourcePtr->GetSignedSpacing());
 // }
 
 /**

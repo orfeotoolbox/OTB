@@ -374,7 +374,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   generator->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
-  generator->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
+  generator->SetOutputSpacing(fixedReader->GetOutput()->GetSignedSpacing());
   generator->SetOutputSize(fixedReader->GetOutput()
                            ->GetLargestPossibleRegion().GetSize());
   // Software Guide : EndCodeSnippet
@@ -439,7 +439,7 @@ int main(int argc, char* argv[])
   warper->SetInput(movingReader->GetOutput());
   warper->SetDisplacementField(generator->GetOutput());
   warper->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
-  warper->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
+  warper->SetOutputSpacing(fixedReader->GetOutput()->GetSignedSpacing());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

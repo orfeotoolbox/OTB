@@ -121,7 +121,7 @@ VectorImageModel
       m_ImageFileReader->GetOutput()->GetLargestPossibleRegion();
 
   // Remember native spacing
-  m_NativeSpacing = m_ImageFileReader->GetOutput()->GetSpacing();
+  m_NativeSpacing = m_ImageFileReader->GetOutput()->GetSignedSpacing();
 
   // qDebug()
   //   << filename
@@ -813,8 +813,8 @@ VectorImageModel
 
     // index in current Lod image
     IndexType currentLodIndex;
-    currentLodIndex[0] = (point[ 0 ] - ToImage()->GetOrigin()[0]) / ToImage()->GetSpacing()[0];
-    currentLodIndex[1] = (point[ 1 ] - ToImage()->GetOrigin()[1]) / ToImage()->GetSpacing()[1];
+    currentLodIndex[0] = (point[ 0 ] - ToImage()->GetOrigin()[0]) / ToImage()->GetSignedSpacing()[0];
+    currentLodIndex[1] = (point[ 1 ] - ToImage()->GetOrigin()[1]) / ToImage()->GetSignedSpacing()[1];
 
     //
     // get the LatLong

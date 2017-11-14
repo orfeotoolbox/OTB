@@ -343,17 +343,17 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   outVDispPtr->SetLargestPossibleRegion(outputLargest);
 
   // Adapt spacing
-  SpacingType outSpacing = inLeftPtr->GetSpacing();
+  SpacingType outSpacing = inLeftPtr->GetSignedSpacing();
   outSpacing[0] *= static_cast<double>(this->m_Step);
   outSpacing[1] *= static_cast<double>(this->m_Step);
 
-  outMetricPtr->SetSpacing(outSpacing);
-  outHDispPtr->SetSpacing(outSpacing);
-  outVDispPtr->SetSpacing(outSpacing);
+  outMetricPtr->SetSignedSpacing(outSpacing);
+  outHDispPtr->SetSignedSpacing(outSpacing);
+  outVDispPtr->SetSignedSpacing(outSpacing);
 
   // Adapt origin
   PointType outOrigin = inLeftPtr->GetOrigin();
-  SpacingType inSpacing = inLeftPtr->GetSpacing();
+  SpacingType inSpacing = inLeftPtr->GetSignedSpacing();
   outOrigin[0] += inSpacing[0] * static_cast<double>(this->m_GridIndex[0]);
   outOrigin[1] += inSpacing[1] * static_cast<double>(this->m_GridIndex[1]);
 

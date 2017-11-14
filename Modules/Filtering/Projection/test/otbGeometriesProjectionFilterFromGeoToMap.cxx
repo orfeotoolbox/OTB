@@ -65,7 +65,7 @@ int otbGeometriesProjectionFilterFromGeoToMap(int argc, char * argv[])
   filter->SetOutput(out_set);
   filter->SetOutputProjectionRef(imageReader->GetOutput()->GetProjectionRef());
   filter->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
-  filter->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
+  filter->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
 
   filter->Update();
 

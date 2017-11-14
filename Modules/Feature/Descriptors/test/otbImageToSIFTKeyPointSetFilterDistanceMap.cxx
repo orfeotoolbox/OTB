@@ -74,7 +74,7 @@ OutputImageType::Pointer sift(ImageType::Pointer input,
   pointSetFilter->SetOutsideValue(0);
   pointSetFilter->SetInsideValue(255);
   pointSetFilter->SetSize(input->GetLargestPossibleRegion().GetSize());
-  pointSetFilter->SetSpacing(input->GetSpacing());
+  pointSetFilter->SetSpacing(input->GetSignedSpacing());
   pointSetFilter->SetOrigin(input->GetOrigin());
   pointSetFilter->Update();
 
@@ -116,7 +116,7 @@ ImageType::Pointer rotate(ImageType::Pointer input,
   TransformType::OutputVectorType translation1;
   TransformType::OutputVectorType translation2;
 
-  const ImageType::SpacingType& spacing = input->GetSpacing();
+  const ImageType::SpacingType& spacing = input->GetSignedSpacing();
   const ImageType::PointType&   origin  = input->GetOrigin();
   ImageType::SizeType           size = input->GetLargestPossibleRegion().GetSize();
 
@@ -155,7 +155,7 @@ OutputImageType::Pointer invRotate(OutputImageType::Pointer input,
   TransformType::OutputVectorType translation1;
   TransformType::OutputVectorType translation2;
 
-  const ImageType::SpacingType& spacing = input->GetSpacing();
+  const ImageType::SpacingType& spacing = input->GetSignedSpacing();
   const ImageType::PointType&   origin  = input->GetOrigin();
   ImageType::SizeType           size = input->GetLargestPossibleRegion().GetSize();
 

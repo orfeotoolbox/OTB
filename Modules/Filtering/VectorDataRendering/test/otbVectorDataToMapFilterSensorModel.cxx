@@ -65,7 +65,7 @@ int otbVectorDataToMapFilterSensorModel(int argc, char * argv [])
 
   projection->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
   projection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
-  projection->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
+  projection->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
 
   //Convert the vector data into an image
   typedef itk::RGBAPixel<unsigned char> PixelType;

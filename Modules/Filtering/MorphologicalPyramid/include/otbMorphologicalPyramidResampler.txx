@@ -96,7 +96,7 @@ Resampler<TInputImage, TOutputImage>
     }
   unsigned int i;
   // Computing output spacing, size and index from input data
-  const typename InputImageType::SpacingType& inputSpacing    = inputPtr->GetSpacing();
+  const typename InputImageType::SpacingType& inputSpacing    = inputPtr->GetSignedSpacing();
   const typename InputImageType::IndexType&   inputStartIndex = inputPtr->GetLargestPossibleRegion().GetIndex();
   typename OutputImageType::IndexType         outputStartIndex;
   typename OutputImageType::SpacingType       spacing;
@@ -105,7 +105,7 @@ Resampler<TInputImage, TOutputImage>
     outputStartIndex[i] =  inputStartIndex[i];
     }
 
-  outputPtr->SetSpacing(inputSpacing);
+  outputPtr->SetSignedSpacing(inputSpacing);
   typename OutputImageType::RegionType outputLargestPossibleRegion;
   outputLargestPossibleRegion.SetSize(this->GetSize());
   outputLargestPossibleRegion.SetIndex(outputStartIndex);
@@ -134,7 +134,7 @@ Resampler<TInputImage, TOutputImage>
   // Scale parameters computation
   typename TransformType::InputVectorType scales;
   typename InputImageType::SizeType    inputSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
-  typename InputImageType::SpacingType inputSpacing = this->GetInput()->GetSpacing();
+  typename InputImageType::SpacingType inputSpacing = this->GetInput()->GetSignedSpacing();
   scales[0] = static_cast<double>(inputSize[0]) / static_cast<double>(m_Size[0]);
   scales[1] = static_cast<double>(inputSize[1]) / static_cast<double>(m_Size[1]);
   transform->SetScale(scales);
@@ -150,7 +150,8 @@ Resampler<TInputImage, TOutputImage>
   resampler->SetInterpolator(interpolator);
   resampler->SetOutputOrigin(this->GetInput()->GetOrigin());
   resampler->SetSize(this->GetSize());
-  resampler->SetOutputSpacing(inputSpacing);
+  resampler->SetOutputSpacing( this->GetInput()->GetSpacing() );
+  resampler->SetOutputDirection( this->GetInput()->GetDirection() );
   resampler->ReleaseDataFlagOn();
 
   // Progress accumulator

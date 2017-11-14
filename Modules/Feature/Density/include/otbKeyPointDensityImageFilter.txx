@@ -70,7 +70,7 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
   /** Applying the pointsetTodensityImageFilter*/
   m_PointSetToDensityImageFilter->SetInput(m_Detector->GetOutput());
   m_PointSetToDensityImageFilter->SetRadius(m_NeighborhoodRadius);
-  m_PointSetToDensityImageFilter->SetSpacing(ptr->GetSpacing());
+  m_PointSetToDensityImageFilter->SetSpacing(ptr->GetSignedSpacing());
   m_PointSetToDensityImageFilter->SetSize(ptr->GetLargestPossibleRegion().GetSize());
   m_PointSetToDensityImageFilter->SetOrigin(ptr->GetOrigin());
   m_PointSetToDensityImageFilter->Update();

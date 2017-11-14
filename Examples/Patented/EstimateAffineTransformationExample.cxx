@@ -321,7 +321,7 @@ int main(int argc, char* argv[])
   resampler->SetTransform(estimator->GetAffineTransform());
   resampler->SetSize(fixedImage->GetLargestPossibleRegion().GetSize());
   resampler->SetOutputOrigin(fixedImage->GetOrigin());
-  resampler->SetOutputSpacing(fixedImage->GetSpacing());
+  resampler->SetOutputSpacing(fixedImage->GetSignedSpacing());
   resampler->SetDefaultPixelValue(100);
   // Software Guide : EndCodeSnippet
 

@@ -181,7 +181,7 @@ void BandMathImageFilter<TImage>
     }
 
   // Store images specs
-  m_Spacing = this->GetNthInput(0)->GetSpacing();
+  m_Spacing = this->GetNthInput(0)->GetSignedSpacing();
   m_Origin = this->GetNthInput(0)->GetOrigin();
 
   // Allocate and initialize the thread temporaries

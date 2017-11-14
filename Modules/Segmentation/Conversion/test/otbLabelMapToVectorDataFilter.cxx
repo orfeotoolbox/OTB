@@ -79,7 +79,7 @@ int otbLabelMapToVectorDataFilter(int argc, char * argv[])
 
   VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
   vectorDataProjection->SetInputOrigin(lreader->GetOutput()->GetOrigin());
-  vectorDataProjection->SetInputSpacing(lreader->GetOutput()->GetSpacing());
+  vectorDataProjection->SetInputSpacing(lreader->GetOutput()->GetSignedSpacing());
   vectorDataProjection->SetInput(MyFilter->GetOutput());
 
   writer->SetFileName(outfname);

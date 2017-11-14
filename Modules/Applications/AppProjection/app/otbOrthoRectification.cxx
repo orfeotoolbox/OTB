@@ -534,7 +534,7 @@ private:
             FloatVectorImageType::Pointer inOrtho = GetParameterImage("outputs.ortho");
 
             ResampleFilterType::OriginType orig = inOrtho->GetOrigin();
-            ResampleFilterType::SpacingType spacing = inOrtho->GetSpacing();
+            ResampleFilterType::SpacingType spacing = inOrtho->GetSignedSpacing();
             ResampleFilterType::SizeType size = inOrtho->GetLargestPossibleRegion().GetSize();
 
             SetParameterInt("outputs.sizex",size[0]);
