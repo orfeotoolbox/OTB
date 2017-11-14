@@ -600,12 +600,6 @@ void CommandLineLauncher::DisplayHelp(bool longHelp)
   for(unsigned int i=0; i<maxKeySize-std::string("progress").size(); i++)
     bigKey.append(" ");
 
-  std::cerr << "        -"<<bigKey<<" <boolean>        Report progress " << std::endl;
-  bigKey = "help";
-  for(unsigned int i=0; i<maxKeySize-std::string("help").size(); i++)
-    bigKey.append(" ");
-  std::cerr << "        -"<<bigKey<<" <string list>    Display long help (empty list), or help for given parameters keys" << std::endl;
-
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
     Parameter::Pointer param = m_Application->GetParameterByKey(appKeyList[i]);
@@ -614,6 +608,12 @@ void CommandLineLauncher::DisplayHelp(bool longHelp)
       std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
       }
     }
+
+  std::cerr << "        -"<<bigKey<<" <boolean>        Report progress " << std::endl;
+  bigKey = "help";
+  for(unsigned int i=0; i<maxKeySize-std::string("help").size(); i++)
+    bigKey.append(" ");
+  std::cerr << "        -"<<bigKey<<" <string list>    Display long help (empty list), or help for given parameters keys" << std::endl;
 
   std::cerr<<std::endl;
   //std::string cl(m_Application->GetCLExample());
@@ -653,11 +653,9 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   // Display the type the type
   ParameterType type = m_Application->GetParameterType(paramKey);
 
-  // Discard Group parameters (they don't need a value)
-  if (type == ParameterType_Group)
-    {
-    return "";
-    }
+  std::string bigKey = paramKey;
+  
+  unsigned int maxKeySize = GetMaxKeySize();
 
   bool singleSelectionForListView = false;
 
@@ -677,10 +675,6 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "        ";
     }
-
-  std::string bigKey = paramKey;
-
-  unsigned int maxKeySize = GetMaxKeySize();
   
   for(unsigned int i=0; i<maxKeySize-paramKey.size(); i++)
     bigKey.append(" ");
@@ -715,6 +709,10 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
            type == ParameterType_StringList )
     {
     oss << "<string list>   ";
+    }
+  else if(type == ParameterType_Group)
+    {
+    oss<< "<group>         ";
     }
   else
     itkExceptionMacro("Not handled parameter type.");
@@ -767,30 +765,33 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
       }
     }
 
-  if(m_Application->IsMandatory(paramKey))
+  if(type != ParameterType_Group)
     {
-    oss<<" (mandatory";
-    }
-  else
-    {
-    oss<<" (optional";
 
-    if(m_Application->IsParameterEnabled(paramKey))
+    if(m_Application->IsMandatory(paramKey))
       {
-      oss<<", on by default";
+      oss<<" (mandatory";
       }
     else
       {
-      oss<<", off by default";
+      oss<<" (optional";
+
+      if(m_Application->IsParameterEnabled(paramKey))
+        {
+        oss<<", on by default";
+        }
+      else
+        {
+        oss<<", off by default";
+        }
       }
+    
+    if(m_Application->HasValue(paramKey))
+      {
+      oss<<", default value is "<<m_Application->GetParameterAsString(paramKey);
+      }
+    oss<<")";
     }
-
-  if(m_Application->HasValue(paramKey))
-    {
-    oss<<", default value is "<<m_Application->GetParameterAsString(paramKey);
-    }
-  oss<<")";
-
   oss << std::endl;
 
   if(longHelp)
@@ -801,8 +802,25 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     oss<<"                   ";
     oss<<m_Application->GetParameterDescription(paramKey)<<std::endl;
 
+
+    if (type == ParameterType_Choice)
+      {
+      std::vector<std::string> keys = dynamic_cast<ChoiceParameter*>(param.GetPointer())->GetChoiceKeys();
+      std::vector<std::string> names = dynamic_cast<ChoiceParameter*>(param.GetPointer())->GetChoiceNames();
+      
+      auto keyIt = keys.begin();
+      auto nameIt = names.begin();
+      
+      for( ; keyIt!=keys.end()&&nameIt!=names.end();++keyIt,++nameIt)
+        {
+        oss << "        ";
+        for(unsigned int i=0; i<maxKeySize;++i)
+          oss<<" ";
+        oss<<"                   ";
+        oss<<"- "<<*nameIt<<" ("<<*keyIt<<"): "<<m_Application->GetParameterDescription(paramKey+"."+(*keyIt))<<std::endl;
+        }
+      }
     }
-  
   return oss.str();
 }
 
