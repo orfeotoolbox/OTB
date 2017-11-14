@@ -52,13 +52,16 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("SplitImage");
-    SetDescription("Split a N multiband image into N images");
+    SetDescription("Split a N multiband image into N images.");
 
     SetDocName("Split Image");
-    SetDocLongDescription("This application splits a N-bands image into N mono-band images. The output images filename will be generated from the output parameter. Thus if the input image has 2 channels, and the user has set an output outimage.tif, the generated images will be outimage_0.tif and outimage_1.tif");
+    SetDocLongDescription("This application splits a N-bands image into N mono-band images. "
+      "The output images filename will be generated from the output parameter. "
+      "Thus, if the input image has 2 channels, and the user has set as output parameter, outimage.tif, "
+      "the generated images will be outimage_0.tif and outimage_1.tif.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("ConcatenateImages");
 
     AddDocTag(Tags::Manip);
 
@@ -66,8 +69,10 @@ private:
     SetParameterDescription("in","Input multiband image filename.");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out",
-                            "Output filename that will be used to get the prefix and the extension of the output images to write");
+    SetParameterDescription("out", "The output filename will be used to get the prefix "
+    "an the extension of the output written's image. For example with outimage.tif as output filename, "
+    "the generated images will had an indice (corresponding at each bands) "
+    "between the prefix and the extension, such as: outimage_0.tif  and outimage_1.tif (if 2 bands).");
 
     AddRAMParameter();
 

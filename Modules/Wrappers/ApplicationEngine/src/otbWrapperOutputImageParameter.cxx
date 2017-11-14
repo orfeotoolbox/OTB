@@ -98,6 +98,28 @@ std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
   return ret;
 }
 
+bool
+OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePixelType &type)
+{
+  if (value == "uint8")
+    type = ImagePixelType_uint8;
+  else if (value == "int16")
+    type = ImagePixelType_int16;
+  else if (value == "uint16")
+    type = ImagePixelType_uint16;
+  else if (value == "int32")
+    type = ImagePixelType_int32;
+  else if (value == "uint32")
+    type = ImagePixelType_uint32;
+  else if (value == "float")
+    type = ImagePixelType_float;
+  else if (value == "double")
+    type = ImagePixelType_double;
+  else
+    return false;
+  return true;
+}
+
 void OutputImageParameter::InitializeWriters()
 {
   m_UInt8Writer = UInt8WriterType::New();

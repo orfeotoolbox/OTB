@@ -18,11 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppSARCalibration_LINK_LIBS
-  ${OTBSARCalibration_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-)
-
 otb_create_application(
   NAME           SARCalibration
   SOURCES        otbSARCalibration.cxx

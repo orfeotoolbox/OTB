@@ -21,4 +21,10 @@
 project(OTBQtWidget)
 
 set(OTBQtWidget_LIBRARIES OTBQtWidget)
+
+# folder where ui headers are generated
+set( OTBQtWidget_INCLUDE_DIRS
+  ${OTBQtWidget_BINARY_DIR}/src
+  )
+
 otb_module_impl()

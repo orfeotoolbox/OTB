@@ -82,6 +82,8 @@ void QtWidgetView::CreateGui()
   QVBoxLayout  *finalLayout = new QVBoxLayout();
   finalLayout->addWidget(mainGroup);
 
+  connect( m_Model, SIGNAL(ExceptionRaised(QString)), this, SLOT(OnExceptionRaised(QString)) );
+
   // Make the final layout to the widget
   this->setLayout(finalLayout);
 }
@@ -188,8 +190,13 @@ void QtWidgetView::CloseSlot()
 
 void QtWidgetView::UnhandledException(QString message)
 {
-  m_TabWidget->setCurrentIndex(1);
+  this->OnExceptionRaised(message);
   m_LogText->append(message);
+}
+
+void QtWidgetView::OnExceptionRaised(QString /*message*/)
+{
+  m_TabWidget->setCurrentIndex(1);
 }
 
 }

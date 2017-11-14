@@ -70,6 +70,11 @@ public:
     return m_Target;
     }
 
+  bool HasValue() const override
+    {
+    return m_Target.first.IsNotNull();
+    }
+
 protected:
   ProxyParameter() {}
   ~ProxyParameter() ITK_OVERRIDE {}

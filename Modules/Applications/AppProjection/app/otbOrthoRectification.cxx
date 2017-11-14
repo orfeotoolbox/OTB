@@ -91,17 +91,18 @@ private:
   {
     SetName("OrthoRectification");
     std::ostringstream oss;
-    oss << "This application allows ortho-rectification of optical and radar images from supported sensors." << std::endl;
+    oss << "This application allows to ortho-rectify optical and radar images from supported sensors." << std::endl;
     SetDescription(oss.str());
     // Documentation
     SetDocName("Ortho-rectification");
     oss.str("");
-    oss<<"An inverse sensor model is built from the input image metadata to convert geographical to raw geometry coordinates. ";
-    oss<<"This inverse sensor model is then combined with the chosen map projection to build a global coordinate mapping grid. Last, this grid is used to resample using the chosen interpolation algorithm. ";
-    oss<<"A Digital Elevation Model can be specified to account for terrain deformations. "<<std::endl;
+    oss<<"This application uses inverse sensor modelling combined with a choice of interpolation functions to resample a sensor geometry image into a ground geometry regular grid. ";
+    oss<<"The ground geometry regular grid is defined with respect to a map projection (see map parameter). The application offers several modes to estimate the output grid parameters (origin and ground sampling distance), including automatic estimation of image size, ground sampling distance, or both, from image metadata, user-defined ROI corners, or another ortho-image.";
+    oss<<"A digital Elevation Model along with a geoid file can be specified to account for terrain deformations.";
     oss<<"In case of SPOT5 images, the sensor model can be approximated by an RPC model in order to speed-up computation.";
+    
     SetDocLongDescription(oss.str());
-    SetDocLimitations("Supported sensors (both optical and radar) are: GeoEye, Ikonos, Pleiades, Quickbird, RadarSat, Sentinel-1, SPOT5 (TIF format), SPOT6/7, TerraSAR-X, Worldview 1/2/3.");
+    SetDocLimitations("Supported sensors (both optical and radar) are: GeoEye, Ikonos, Pleiades, Quickbird, RadarSat, Sentinel-1, SPOT5 (TIF format), SPOT6/7, TerraSAR-X, Worldview 1/2/3, and any TIF image with embedded RPC tags.\n Also note that the opt.gridspacing default value may not be suitable for all sensors. In particular, if this value is lower than the target ground sampling distance, the processing time may increase a lot. A warning is issued in this case. Typical values should be half the DEM ground sampling distance.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
 

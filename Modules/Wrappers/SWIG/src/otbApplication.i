@@ -128,7 +128,7 @@ namespace Wrapper
 
   typedef enum
   {
-    Role_Input,
+    Role_Input = 0,
     Role_Output
   } Role;
 
@@ -198,7 +198,7 @@ public:
   std::string GetParameterString(std::string parameter);
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
-  
+
   InputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
   void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
   ComplexInputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
@@ -211,7 +211,7 @@ public:
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
 
-  
+
   itkProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;
@@ -562,38 +562,53 @@ class ApplicationProxy(object):
 			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
 			return None
 
-		def __getattr__(self,attr):
-		  """
-		  __get_attribute__ is called whenever an instance request an attribute.
-		  eg: App.SetParameterString(), App.GetName() ..
-		  __getattr__ is only called if the attribute is not found by __get_attribute__ call
-		  So we keep hide the GetParameter** calls within this method so that it seems like
-		  an obivous call for users. App.IN , App.OUT , where 'in' and 'out' are
-		  parameters in the 'otb application' with instance App
-		  """
-		  if attr is not None:
-		    key_list = [k.upper() for k in self.GetParametersKeys(True)]
-		    if attr in key_list:
-		      return self.GetParameterValue(attr.lower())
-		    else:
-		      raise AttributeError("Parameter {} does not exist in the application.".format(attr.lower()))
+		def __getattr__(self,name):
+			"""
+			__get_attribute__ is called whenever an instance request an attribute.
+			eg: App.SetParameterString(), App.GetName() ..
+			__getattr__ is only called if the attribute is not found by __get_attribute__ call
+			So we keep hide the GetParameter** calls within this method so that it seems like
+			an obivous call for users. App.IN , App.OUT , where 'in' and 'out' are
+			parameters in the 'otb application' with instance App
+			Since SWIG also uses this function, we have to copy their code before
+			using custom OTB behaviour
+			"""
+			if (name == "thisown"):
+				return self.this.own()
+			method = Application.__swig_getmethods__.get(name, None)
+			if method:
+				return method(self)
+			key_list = [k.upper() for k in self.GetParametersKeys(True)]
+			if name in key_list:
+				return self.GetParameterValue(name.lower())
+			raise AttributeError("'%s' object has no attribute '%s'" % (Application.__name__, name))
 
-		def __setattr__(self, attr, value):
-		  """
-		  __setattr__ is called if the attribute requested is not found in the attribute list.
-		  So these attributes are supposed to be 'key' of parameters used. Here we
-		  keep hide the SetParameter** calls within this method so that it seems like
-		  an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'w
-		  here 'in' and 'out' are    parameters in the 'otb application' with instance App
-		  Ofcourse, we don't blindly accept any attributes as python, we check them against
-		  list of existing parameters for application with 'self.GetParametersKeys(True)'
-		  """
-		  if attr is not None:
-		    key_list = [k.upper() for k in self.GetParametersKeys(True)]
-		    if attr in key_list:
-		      self.SetParameterValue(attr.lower(), value)
-		    else:
-		      raise AttributeError("Parameter {} does not exist in the application.".format(attr.lower()))
+		def __setattr__(self, name, value):
+			"""
+			__setattr__ is called if the attribute requested is not found in the attribute list.
+			So these attributes are supposed to be 'key' of parameters used. Here we
+			keep hide the SetParameter** calls within this method so that it seems like
+			an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'w
+			here 'in' and 'out' are    parameters in the 'otb application' with instance App
+			Ofcourse, we don't blindly accept any attributes as python, we check them against
+			list of existing parameters for application with 'self.GetParametersKeys(True)'
+			Since SWIG also uses this function, we have to copy their code before
+			using custom OTB behaviour
+			"""
+			if (name == "thisown"):
+				return self.this.own(value)
+			if (name == "this"):
+				if type(value).__name__ == 'SwigPyObject':
+					self.__dict__[name] = value
+					return
+			method = Application.__swig_setmethods__.get(name, None)
+			if method:
+				return method(self, value)
+			key_list = [k.upper() for k in self.GetParametersKeys(True)]
+			if name in key_list:
+				self.SetParameterValue(name.lower(), value)
+			else:
+				raise AttributeError("You cannot add attributes to %s" % self)
 
     }
 }

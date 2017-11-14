@@ -53,8 +53,8 @@ public:
   itkTypeMacro(InputImageParameter, Parameter);
 
   /** Set value from filename */
-  bool SetFromFileName(const std::string& filename);
-  itkGetConstMacro(FileName, std::string);
+  bool SetFromFileName( const std::string & filename );
+  itkGetConstReferenceMacro( FileName, std::string );
 
 
   /** Get the input image as FloatVectorImageType. */
@@ -96,7 +96,7 @@ public:
   /** Generic cast method that will be specified for each image type. */
   template <class TInputImage, class TOutputImage>
   TOutputImage*  CastImage();
-    
+
   /** Cast an image to an image of the same type
   * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
   template <class TInputImage, class TOutputImage>
@@ -177,7 +177,7 @@ private:
   otbDeclareCastImageMacro(InputImageType, Float##prefix##ImageType) \
   otbDeclareCastImageMacro(InputImageType, Double##prefix##ImageType)
 
-  
+
 /*********************************************************************
 ********************** Image -> Image
 **********************************************************************/

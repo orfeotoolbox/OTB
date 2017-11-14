@@ -52,7 +52,7 @@ private:
 
     // Documentation
     SetDocName("Image Tile Fusion");
-    SetDocLongDescription("Concatenate several tile files into a single image file.");
+    SetDocLongDescription("Automatically mosaic a set of non overlapping tile files into a single image. Images must have a matching number of bands and they must be listed in lexicographic order.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -60,7 +60,7 @@ private:
     AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input Tile Images");
-    SetParameterDescription("il", "Input tiles to concatenate (in lexicographic order : (0,0) (1,0) (0,1) (1,1)).");
+    SetParameterDescription("il", "Input images to concatenate (in lexicographic order, for instance : (0,0) (1,0) (0,1) (1,1)).");
 
     AddParameter(ParameterType_Int, "cols", "Number of tile columns");
     SetParameterDescription("cols", "Number of columns in the tile array");

@@ -72,7 +72,11 @@ void QtWidgetFloatParameter::DoCreateWidget()
   m_QDoubleSpinBox->setDecimals(5);
   m_QDoubleSpinBox->setSingleStep(0.1);
   m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(), m_FloatParam->GetMaximumValue());
-  m_QDoubleSpinBox->setToolTip(m_FloatParam->GetDescription());
+  m_QDoubleSpinBox->setToolTip(
+    QString::fromStdString(
+      m_FloatParam->GetDescription()
+    )
+  );
 
   connect( m_QDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(SetValue(double)) );
   connect( m_QDoubleSpinBox, SIGNAL(valueChanged(double)), GetModel(), SLOT(NotifyUpdate()) );

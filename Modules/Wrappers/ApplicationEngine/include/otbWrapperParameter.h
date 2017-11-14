@@ -70,9 +70,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Defining ::New() static method */
-  itkNewMacro(Self);
-
   /** RTTI support */
   itkTypeMacro(Parameter, itk::Object);
 
@@ -86,7 +83,7 @@ public:
   itkSetStringMacro(Description);
 
   /** Get the parameter description */
-  itkGetStringMacro(Description);
+  itkGetConstReferenceMacro( Description, std::string );
 
   /** Set the parameter key */
   itkSetStringMacro(Key);
@@ -151,14 +148,11 @@ public:
   {
   }
 
-  virtual bool HasValue() const
-  {
-    itkExceptionMacro(<<"HasValue() method must be re-implemented by sub-classes.");
-  }
+  virtual bool HasValue() const = 0;
 
   virtual bool HasUserValue() const
   {
-    return HasValue() && m_UserValue;
+    return this->HasValue() && m_UserValue;
   }
 
   virtual void SetUserValue(bool isUserValue)
@@ -168,7 +162,8 @@ public:
 
   virtual void ClearValue()
   {
-    itkExceptionMacro(<<"ClearValue() method must be re-implemented by sub-classes.");
+    SetActive( false );
+    Modified();
   }
 
   /** Set/Get the root of the current parameter (direct parent) */
@@ -207,7 +202,7 @@ public:
   /** Store the state of the check box relative to this parameter (TO
     * BE MOVED to QtWrapper Model )
     */
-  virtual bool IsChecked()
+  virtual bool IsChecked() const
   {
     return m_IsChecked;
   }
@@ -220,23 +215,23 @@ public:
 
 protected:
   /** Constructor */
-  Parameter() : m_Name(""),
-                m_Description(""),
-                m_Key(""),
-                m_Mandatory(true),
-                m_Active(false),
-                m_UserValue(false),
-                m_AutomaticValue(false),
-                m_DefaultValueMode(DefaultValueMode_UNKNOWN),
-                m_UserLevel(UserLevel_Basic),
-                m_Role(Role_Input),
-                m_Root(this),
-                m_IsChecked(false)
+  Parameter() :
+    m_Name( "" ),
+    m_Description( "" ),
+    m_Key( "" ),
+    m_Mandatory( true ),
+    m_Active( false ),
+    m_UserValue( false ),
+    m_AutomaticValue( false ),
+    m_DefaultValueMode( DefaultValueMode_UNKNOWN ),
+    m_UserLevel( UserLevel_Basic ),
+    m_Role( Role_Input ),
+    m_Root( this ),
+    m_IsChecked( false )
   {}
 
   /** Destructor */
-  ~Parameter() ITK_OVERRIDE
-  {}
+  ~Parameter() ITK_OVERRIDE {}
 
   /** Name of the parameter */
   std::string                        m_Name;

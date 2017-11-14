@@ -22,7 +22,7 @@
 #  Example on the use of otb "pythonization"
 #
 def cm_assert(a,b):
-	print "debug print before assert check: '%s'== '%s'" %(a, b)
+	print("debug print before assert check: '%s'== '%s'" %(a, b))
 	assert a == b
 
 def test(otb, argv):

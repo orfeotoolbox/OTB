@@ -89,7 +89,7 @@ SET(DVIPS_CONVERTER_OPTIONS  -D600)
 
 
 # Option for html generation
-SET(TEX4HT_OPTIONS html,2,sections+)
+SET(TEX4HT_OPTIONS "html,2,sections+ \"\" \"\" -shell-escape")
 SET (HTML_OUTPUT "SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 
 # Copy RELEASE_NOTES.txt from OTB source tree to Software Guide build directory
