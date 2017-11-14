@@ -34,6 +34,12 @@ package, you should first uninstall the specific OTB files from the package to
 leave only the dependencies (what we call an XDK). You can do it using the
 supplied script ``tools/uninstall_otb.bat``.
 
+In the package you also have a template project for Visual 2015
+``OTB Project.zip``. This template can be placed in your user Visual 2015 template
+directory : ``%USERPROFILE%\Documents\Visual Studio 2015\Templates\ProjectTemplates``.
+The script ``start_devenv.bat`` allows to copy the template in that folder and
+start Visual Studio.
+
 Python bindings
 ~~~~~~~~~~~~~~~
 
