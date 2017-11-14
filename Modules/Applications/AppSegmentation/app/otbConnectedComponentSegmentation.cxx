@@ -173,7 +173,7 @@ private:
       m_Vproj->SetInput(m_Connected->GetFilter()->GetOutputVectorData());
       m_Vproj->SetInputKeywordList(inputImage->GetImageKeywordlist());
       //m_Vproj->SetInputOrigin(inputImage->GetOrigin());
-      //m_Vproj->SetInputSpacing(inputImage->GetSpacing());
+      //m_Vproj->SetInputSpacing(inputImage->GetSignedSpacing());
 
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");

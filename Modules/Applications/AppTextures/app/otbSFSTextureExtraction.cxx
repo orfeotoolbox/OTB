@@ -61,14 +61,24 @@ private:
 void DoInit() ITK_OVERRIDE
 {
 SetName("SFSTextureExtraction");
-SetDescription("Computes Structural Feature Set textures on every pixel of the input image selected channel");
+SetDescription("Computes Structural Feature Set textures on every pixel of the "
+    "input image selected channel");
 
 // Documentation
 SetDocName("SFS Texture Extraction");
-SetDocLongDescription("This application computes SFS textures on a mono band image");
+SetDocLongDescription("Structural Feature Set [1] are based on the histograms of "
+    "the pixels in multiple directions of the image. The SFSTextureExtraction application "
+    "computes the  6 following features: SFS'Length, SFS'Width, SFS'PSI, SFS'W-Mean, "
+    "SFS'Ratio and SFS'SD (Standard Deviation). The texture indices are computed from "
+    "the neighborhood of each pixel. It is possible to change the length of the calculation "
+    "line (spatial threshold), as well as the maximum difference between a pixel of the line "
+    "and the pixel at the center of the neighborhood (spectral threshold) [2].");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
-SetDocSeeAlso("otbSFSTexturesImageFilter class");
+SetDocSeeAlso("[1] HUANG, Xin, ZHANG, Liangpei, et LI, Pingxiang. Classification and extraction "
+    "of spatial features in urban areas using high-resolution multispectral imagery. "
+    "IEEE Geoscience and Remote Sensing Letters, 2007, vol. 4, no 2, p. 260-264.\n"
+    "[2] otbSFSTexturesImageFilter class");
 
 AddDocTag(Tags::FeatureExtraction);
 AddDocTag("Textures");
@@ -84,9 +94,9 @@ SetMinimumParameterIntValue("channel", 1);
 AddRAMParameter();
 
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
-SetParameterDescription("parameters","This group of parameters allows one to define SFS texture parameters.\
-    The available texture features are SFS'Length, SFS'Width, SFS'PSI, SFS'W-Mean, SFS'Ratio and SFS'SD.\
-    They are provided in this exact order in the output image.");
+SetParameterDescription("parameters","This group of parameters allows one to define SFS texture "
+    "parameters. The available texture features are SFS'Length, SFS'Width, SFS'PSI, SFS'W-Mean, "
+    "SFS'Ratio and SFS'SD. They are provided in this exact order in the output image.");
 
 AddParameter(ParameterType_Float,"parameters.spethre","Spectral Threshold");
 SetParameterDescription("parameters.spethre", "Spectral Threshold");

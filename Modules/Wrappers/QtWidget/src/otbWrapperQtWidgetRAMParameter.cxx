@@ -43,7 +43,9 @@ void QtWidgetRAMParameter::DoCreateWidget()
   m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
   m_QSpinBox = new QSpinBox;
-  m_QSpinBox->setToolTip(m_RAMParam->GetDescription());
+  m_QSpinBox->setToolTip(
+    QString::fromStdString( m_RAMParam->GetDescription() )
+  );
 
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );

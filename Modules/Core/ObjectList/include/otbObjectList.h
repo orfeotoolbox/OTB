@@ -200,7 +200,6 @@ public:
       Iterator lIter(m_Iter + i);
       return lIter;
     }
-
     /**
        * Remove
        */
@@ -208,6 +207,20 @@ public:
     {
       Iterator lIter(m_Iter - i);
       return lIter;
+    }
+    /**
+     */
+    Iterator
+      operator += ( int i )
+    {
+      return m_Iter + i;
+    }
+    /**
+     */
+    Iterator
+      operator -= ( int i )
+    {
+      return m_Iter - i;
     }
     /**
        * Difference comparison operator.

@@ -178,10 +178,10 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
   InputIndexType  bufferIndexOrigin = bufferedRegion.GetIndex();
   InputPointType  bufferOrigin;
   this->GetOutput()->TransformIndexToPhysicalPoint(bufferIndexOrigin, bufferOrigin);
-  geoTransform[0] = bufferOrigin[0] - 0.5 * this->GetOutput()->GetSpacing()[0];
-  geoTransform[3] = bufferOrigin[1] - 0.5 * this->GetOutput()->GetSpacing()[1];
-  geoTransform[1] = this->GetOutput()->GetSpacing()[0];
-  geoTransform[5] = this->GetOutput()->GetSpacing()[1];
+  geoTransform[0] = bufferOrigin[0] - 0.5 * this->GetOutput()->GetSignedSpacing()[0];
+  geoTransform[3] = bufferOrigin[1] - 0.5 * this->GetOutput()->GetSignedSpacing()[1];
+  geoTransform[1] = this->GetOutput()->GetSignedSpacing()[0];
+  geoTransform[5] = this->GetOutput()->GetSignedSpacing()[1];
 
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;

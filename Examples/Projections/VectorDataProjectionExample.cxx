@@ -143,7 +143,7 @@ int main(int argc, char* argv[])
   vectorDataProjection->SetOutputOrigin(
     imageReader->GetOutput()->GetOrigin());
   vectorDataProjection->SetOutputSpacing(
-    imageReader->GetOutput()->GetSpacing());
+    imageReader->GetOutput()->GetSignedSpacing());
   vectorDataProjection->SetOutputProjectionRef(
     imageReader->GetOutput()->GetProjectionRef());
   // Software Guide : EndCodeSnippet

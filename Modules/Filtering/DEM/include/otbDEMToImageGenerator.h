@@ -165,7 +165,7 @@ public:
   template <class TImageType> void SetOutputParametersFromImage(const TImageType * image)
     {
     this->SetOutputOrigin ( image->GetOrigin() );
-    this->SetOutputSpacing ( image->GetSpacing() );
+    this->SetOutputSpacing ( image->GetSignedSpacing() );
     //this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
     this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
     this->SetOutputProjectionRef(image->GetProjectionRef());

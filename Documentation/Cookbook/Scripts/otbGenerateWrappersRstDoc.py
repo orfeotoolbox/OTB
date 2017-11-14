@@ -344,8 +344,8 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
             #app.SetParameterString(param,value)
             output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")" + linesep
         if paramtype == otbApplication.ParameterType_Empty:
-            app.SetParameterString(param,"1")
-            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+",\"1\")" + linesep
+            app.EnableParameter(param)
+            output+= "\t" + appname + ".EnableParameter("+EncloseString(param)+")" + linesep
         if paramtype == otbApplication.ParameterType_Int \
                 or paramtype == otbApplication.ParameterType_Radius \
                 or paramtype == otbApplication.ParameterType_RAM:

@@ -101,7 +101,7 @@ NCCRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>
     }
 
   // cache fixed image information
-  m_FixedImageSpacing    = this->m_FixedImage->GetSpacing();
+  m_FixedImageSpacing    = this->m_FixedImage->GetSignedSpacing();
   m_FixedImageOrigin     = this->m_FixedImage->GetOrigin();
 
   // setup gradient calculator

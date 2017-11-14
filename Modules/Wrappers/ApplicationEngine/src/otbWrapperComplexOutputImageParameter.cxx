@@ -73,6 +73,18 @@ ComplexOutputImageParameter::ConvertPixelTypeToString(ComplexImagePixelType type
   return ret;
 }
 
+bool
+ComplexOutputImageParameter::ConvertStringToPixelType(const std::string &value, ComplexImagePixelType &type)
+{
+  if (value == "cfloat")
+    type = ComplexImagePixelType_float;
+  else if (value == "cdouble")
+    type = ComplexImagePixelType_double;
+  else
+    return false;
+  return true;
+}
+
 void ComplexOutputImageParameter::InitializeWriters()
 {
   m_ComplexFloatWriter = ComplexFloatWriterType::New();

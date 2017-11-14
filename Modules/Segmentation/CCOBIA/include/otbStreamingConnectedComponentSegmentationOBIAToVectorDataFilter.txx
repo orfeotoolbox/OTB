@@ -138,10 +138,10 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
 
   typename TransformType::ParametersType params;
   params.SetSize(6);
-  params[0] = this->GetInput()->GetSpacing()[0];
+  params[0] = this->GetInput()->GetSignedSpacing()[0];
   params[1] = 0;
   params[2] = 0;
-  params[3] = this->GetInput()->GetSpacing()[1];
+  params[3] = this->GetInput()->GetSignedSpacing()[1];
   params[4] = this->GetInput()->GetOrigin()[0];
   params[5] = this->GetInput()->GetOrigin()[1];
 

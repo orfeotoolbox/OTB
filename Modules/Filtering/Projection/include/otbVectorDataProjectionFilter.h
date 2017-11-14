@@ -150,7 +150,7 @@ public:
   itkGetConstReferenceMacro(InputOrigin, OriginType);
 
   /** Set the spacing (size of a pixel) of the vector data.
-   * \sa GetSpacing() */
+   * \sa GetSignedSpacing() */
   virtual void SetInputSpacing(const SpacingType& spacing);
   virtual void SetInputSpacing(const double spacing[2]);
   virtual void SetInputSpacing(const float spacing[2]);
@@ -166,7 +166,7 @@ public:
   itkGetConstReferenceMacro(OutputOrigin, OriginType);
 
   /** Set the spacing (size of a pixel) of the vector data.
-   * \sa GetSpacing() */
+   * \sa GetSignedSpacing() */
   virtual void SetOutputSpacing(const SpacingType& spacing);
   virtual void SetOutputSpacing(const double spacing[2]);
   virtual void SetOutputSpacing(const float spacing[2]);

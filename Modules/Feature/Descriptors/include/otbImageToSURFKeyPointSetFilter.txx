@@ -94,7 +94,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 
     sigma_in = 2.;
     m_ImageList = ImageListType::New();
-        spacing = this->GetInput()->GetSpacing();
+        spacing = this->GetInput()->GetSignedSpacing();
 
     /*--------------------------------------------------------
     Octave per octave

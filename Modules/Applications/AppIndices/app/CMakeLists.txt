@@ -18,12 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppIndices_LINK_LIBS
-  ${OTBIndices_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBObjectList_LIBRARIES}
-)
-
 otb_create_application(
   NAME           RadiometricIndices
   SOURCES        otbRadiometricIndices.cxx

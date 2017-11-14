@@ -60,6 +60,7 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int itkNotUsed(argc), c
   GradientFilterType::Pointer gradient = GradientFilterType::New();
   gradient->SetInput(reader->GetOutput());
   gradient->SetUseImageSpacing(false);
+  gradient->SetUseImageDirection(false);
   gradient->Update();
 
   // Instantiating object
