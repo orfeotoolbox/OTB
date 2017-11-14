@@ -18,91 +18,95 @@
  * limitations under the License.
  */
 
-#include "otbWrapperInputFilenameListParameter.h"
+#include "otbWrapperStringListParameter.h"
+
+
+#include "otbCast.h"
 
 
 namespace otb
 {
 
-
 namespace Wrapper
 {
 
 
-const std::string FILENAME_FILTER(
-  "All files (*);;"
-  "CSV files (.csv);;"
-  "Text files (.txt);;"
-  "XML files (.xml)"
-);
-
-
 /*****************************************************************************/
-InputFilenameListParameter
-::InputFilenameListParameter()
+StringListParameter
+::StringListParameter()
 {
-  SetName( "Input Filename List" );
-  SetKey( "inList" );
+  SetName( "String List" );
+  SetKey( "strList" );
 }
 
 
 /*****************************************************************************/
-InputFilenameListParameter
-::~InputFilenameListParameter()
+StringListParameter
+::~StringListParameter()
 {
 }
 
+
+/*****************************************************************************/
+void
+StringListParameter
+::SetValue( const StringListInterface::StringVector & strings )
+{
+  SetStrings( strings );
+}
+
+/*****************************************************************************/
+StringListInterface::StringVector
+StringListParameter
+::GetValue() const
+{
+  // Should get benefit of C++11 move constructor.
+  return GetFileNameList();
+}
+
+/*****************************************************************************/
+void
+StringListParameter
+::AddString( const std::string & s )
+{
+  AddFromFileName( s );
+}
+
+/*****************************************************************************/
+const std::string &
+StringListParameter
+::GetNthElement( std::size_t i ) const
+{
+  return GetNthFileName( i );
+}
+
+/*****************************************************************************/
+void
+StringListParameter
+::SetNthElement( std::size_t i, const std::string & string )
+{
+  SetNthFileName( i, string );
+}
 
 /*****************************************************************************/
 Role
-InputFilenameListParameter
-::GetDirection( std::size_t ) const
-{
-#if 0
-  assert( i<m_FilenameList->Size() );
-  assert( !m_FilenameList->GetNthElement( i ).IsNull() );
-
-  return m_FilenameList->GetNthElement( i )->GetRole();
-
-#else
-  // otb::Parameter::GetRole() does not necessarily stand for
-  // direction of parameter.
-  return GetDirection();
-
-#endif
-}
-
-
-/*****************************************************************************/
-Role
-InputFilenameListParameter
+StringListParameter
 ::GetDirection() const
 {
-  return Role_Input;
+  return GetRole();
 }
 
-
 /*****************************************************************************/
-const std::string &
-InputFilenameListParameter
-::GetFilenameFilter( std::size_t ) const
+bool
+StringListParameter
+::IsFilename() const
 {
-  return GetFilenameFilter();
+  return false;
 }
-
 
 /*****************************************************************************/
 const std::string &
-InputFilenameListParameter
-::GetFilenameFilter() const
-{
-  return FILENAME_FILTER;
-}
-
-
-/*****************************************************************************/
-const std::string &
-InputFilenameListParameter
+StringListParameter
 ::ToString( const ParameterType::Pointer & p ) const
 {
   assert( !p.IsNull() );
@@ -111,8 +115,8 @@ InputFilenameListParameter
 }
 
 /*****************************************************************************/
-const InputFilenameListParameter::ParameterType::Pointer &
-InputFilenameListParameter
+const StringListParameter::ParameterType::Pointer &
+StringListParameter
 ::FromString( const ParameterType::Pointer & p,
 	      const std::string & s ) const
 {
@@ -122,6 +126,7 @@ InputFilenameListParameter
 
   return p;
 }
+
 
 }
 

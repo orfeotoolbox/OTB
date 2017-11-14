@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#include "otbWrapperInputFilenameListParameter.h"
+
+#include "otbWrapperStringListInterface.h"
 
 
 namespace otb
@@ -28,63 +29,31 @@ namespace otb
 namespace Wrapper
 {
 
-
-const std::string FILENAME_FILTER(
-  "All files (*);;"
-  "CSV files (.csv);;"
-  "Text files (.txt);;"
-  "XML files (.xml)"
-);
+const std::string
+NULL_STRING;
 
 
 /*****************************************************************************/
-InputFilenameListParameter
-::InputFilenameListParameter()
+void
+StringListInterface
+::AddNullElement()
 {
-  SetName( "Input Filename List" );
-  SetKey( "inList" );
-}
-
-
-/*****************************************************************************/
-InputFilenameListParameter
-::~InputFilenameListParameter()
-{
+  InsertNullElement();
 }
 
 
 /*****************************************************************************/
 Role
-InputFilenameListParameter
+StringListInterface
 ::GetDirection( std::size_t ) const
 {
-#if 0
-  assert( i<m_FilenameList->Size() );
-  assert( !m_FilenameList->GetNthElement( i ).IsNull() );
-
-  return m_FilenameList->GetNthElement( i )->GetRole();
-
-#else
-  // otb::Parameter::GetRole() does not necessarily stand for
-  // direction of parameter.
   return GetDirection();
-
-#endif
-}
-
-
-/*****************************************************************************/
-Role
-InputFilenameListParameter
-::GetDirection() const
-{
-  return Role_Input;
 }
 
 
 /*****************************************************************************/
 const std::string &
-InputFilenameListParameter
+StringListInterface
 ::GetFilenameFilter( std::size_t ) const
 {
   return GetFilenameFilter();
@@ -93,36 +62,44 @@ InputFilenameListParameter
 
 /*****************************************************************************/
 const std::string &
-InputFilenameListParameter
+StringListInterface
 ::GetFilenameFilter() const
 {
-  return FILENAME_FILTER;
-}
-
-
-/*****************************************************************************/
-const std::string &
-InputFilenameListParameter
-::ToString( const ParameterType::Pointer & p ) const
-{
-  assert( !p.IsNull() );
-
-  return p->GetValue();
+  return NULL_STRING;
 }
 
 /*****************************************************************************/
-const InputFilenameListParameter::ParameterType::Pointer &
-InputFilenameListParameter
-::FromString( const ParameterType::Pointer & p,
-	      const std::string & s ) const
+bool
+StringListInterface
+::IsFilename() const
 {
-  assert( !p.IsNull() );
-
-  p->SetValue( s );
-
-  return p;
+  return true;
 }
 
+/*****************************************************************************/
+void
+StringListInterface
+::Erase( std::size_t id )
+{
+  Erase( id, 1 );
 }
 
+/*****************************************************************************/
+std::size_t
+StringListInterface
+::SetStrings( const StringVector & )
+{
+  return 0;
 }
+
+/*****************************************************************************/
+std::size_t
+StringListInterface
+::GetStrings( StringVector & ) const
+{
+  return 0;
+}
+
+} // End of Namespace 'Wrapper'
+
+} // End of Namespace 'otb'

@@ -18,11 +18,7 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperQtWidgetStringListParameter_h
-#define otbWrapperQtWidgetStringListParameter_h
-
-
-#include "otbWrapperQtWidgetParameterList.h"
+#include "otbWrapperParameterList.h"
 
 
 namespace otb
@@ -33,39 +29,7 @@ namespace Wrapper
 {
 
 
-class StringListParameter;
+} // End of namespace 'Wrapper'
 
 
-/** \class QtWidgetStringListParameter
- * \brief
- *
- * \ingroup OTBQtWidget
- */
-class OTBQtWidget_EXPORT QtWidgetStringListParameter :
-    public QtWidgetParameterList
-{
-  Q_OBJECT;
-
-
-//
-// Public methods.
-public:
-  QtWidgetStringListParameter( StringListParameter *, QtWidgetModel * );
-  ~QtWidgetStringListParameter() override;
-
-
-//
-// Private methods.
-private:
-   // Purposely not implemented.
-  QtWidgetStringListParameter( const QtWidgetStringListParameter & );
-
-  // Purposely not implemented
-  void operator = ( const QtWidgetStringListParameter & );
-};
-
-
-}
-}
-
-#endif
+} // End of namespace 'otb'

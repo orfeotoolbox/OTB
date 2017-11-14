@@ -44,7 +44,9 @@ void QtWidgetIntParameter::DoCreateWidget()
 
   m_QSpinBox = new QSpinBox;
   m_QSpinBox->setRange(m_IntParam->GetMinimumValue(), m_IntParam->GetMaximumValue());
-  m_QSpinBox->setToolTip(m_IntParam->GetDescription());
+  m_QSpinBox->setToolTip(
+    QString::fromStdString( m_IntParam->GetDescription() )
+  );
 
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );

@@ -128,7 +128,7 @@ namespace Wrapper
 
   typedef enum
   {
-    Role_Input,
+    Role_Input = 0,
     Role_Output
   } Role;
 
@@ -198,7 +198,7 @@ public:
   std::string GetParameterString(std::string parameter);
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
-  
+
   InputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
   void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
   ComplexInputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
@@ -211,7 +211,7 @@ public:
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
 
-  
+
   itkProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;

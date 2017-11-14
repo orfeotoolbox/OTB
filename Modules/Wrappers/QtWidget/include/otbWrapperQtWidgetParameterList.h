@@ -18,16 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperQtWidgetInputVectorDataListParameter_h
-#define otbWrapperQtWidgetInputVectorDataListParameter_h
-
+#ifndef otbWrapperQtWidgetParameterList_h
+#define otbWrapperQtWidgetParameterList_h
 
 #include <QtGui>
-
-
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#  include "otbWrapperQtWidgetParameterList.h"
+#  include "otbWrapperQtWidgetParameterBase.h"
 #endif //tag=QT4-boost-compatibility
+
 
 namespace otb
 {
@@ -36,41 +34,49 @@ namespace otb
 namespace Wrapper
 {
 
+class AbstractParameterList;
 
-class InputVectorDataListParameter;
-
-
-/** \class QtWidgetInputVectorDataListParameter
+/** \class QtWidgetParameterList
  * \brief
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter
-  : public QtWidgetParameterList
+class OTBQtWidget_EXPORT QtWidgetParameterList : public QtWidgetParameterBase
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 //
 // Public methods.
 public:
-  QtWidgetInputVectorDataListParameter( InputVectorDataListParameter *,
-					QtWidgetModel * );
+  QtWidgetParameterList( AbstractParameterList *, QtWidgetModel * );
+  ~QtWidgetParameterList() override;
 
-  ~QtWidgetInputVectorDataListParameter() override;
-
+//
+// Signals.
+signals:
+  void NotifyUpdate();
 
 //
 // Private methods.
 private:
-  // Purposely not implemented
-  QtWidgetInputVectorDataListParameter( const QtWidgetInputVectorDataListParameter & );
+  QtWidgetParameterList( const QtWidgetParameterList & ); // purposely not implemented
+  void operator = (const QtWidgetParameterList & ); // purposely not implemented
 
-  // Purposely not implemented
-  void operator = ( const QtWidgetInputVectorDataListParameter & );
+  void DoCreateWidget() override;
+
+  void DoUpdateGUI() override;
+
+//
+// Private attributes.
+private:
+
+//
+// Private slots.
+private slots:
 };
 
+} // Wrapper
 
-}
-}
+} // otb
 
 #endif

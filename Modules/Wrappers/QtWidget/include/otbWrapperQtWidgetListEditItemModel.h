@@ -18,14 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef mvdLayerStackItemModel_h
-#define mvdLayerStackItemModel_h
+#ifndef otbListEditItemModel_h
+#define otbListEditItemModel_h
 
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#include "ConfigureMonteverdi.h"
+#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include "otbMacro.h"
+#endif //tag=QT4-boost-compatibility
 
+#include "OTBQtWidgetExport.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -43,10 +46,9 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "OTBMonteverdiGUIExport.h"
+
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -56,27 +58,31 @@
 // External classes pre-declaration.
 namespace
 {
+
 }
 
-namespace mvd
+namespace otb
 {
+
+namespace Wrapper
+{
+
 //
 // Internal classes pre-declaration.
-class AbstractImageModel;
-class AbstractLayerModel;
-class StackedLayerModel;
+class StringListInterface;
+
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class LayerStackItemModel
+ * \class ListEditItemModel
  *
- * \ingroup OTBMonteverdiGUI
+ * \ingroup OTBQtWidget
  *
  * \brief WIP.
  */
-class OTBMonteverdiGUI_EXPORT LayerStackItemModel :
+class OTBQtWidget_EXPORT ListEditItemModel :
     public QAbstractItemModel
 {
 
@@ -94,57 +100,29 @@ public:
   {
     COLUMN_NONE = -1,
     //
-    COLUMN_PROJ = 0,
-    COLUMN_RESOLUTION,
-    COLUMN_NAME,
-    COLUMN_EFFECT,
-    COLUMN_I,
-    COLUMN_J,
-    COLUMN_R,
-    COLUMN_G,
-    COLUMN_B,
-    COLUMN_X,
-    COLUMN_Y,
+    COLUMN_NAME = 0,
+    // COLUMN_BROWSE = 1,
     //
     COLUMN_COUNT,
   };
 
-  /*
-  enum ItemRole
+  enum UserRole
   {
-    ITEM_ROLE_INDEX = Qt::UserRole + 1
-    ITEM_ROLE_NAME,
-    ITEM_ROLE_I,
-    ITEM_ROLE_J,
-    ITEM_ROLE_R,
-    ITEM_ROLE_G,
-    ITEM_ROLE_B,
-    ITEM_ROLE_X,
-    ITEM_ROLE_Y,
-    //
-    ITEM_ROLE_NONE,
-    //
-    ITEM_ROLE_COUNT = ITEM_ROLE_NONE - Qt::UserRole,
+    USER_ROLE_NONE = Qt::UserRole,
+    USER_ROLE_DIRECTION,
+    USER_ROLE_FILTER,
   };
-  */
 
 //
 // Public methods.
 public:
 
   /** \brief Constructor. */
-  LayerStackItemModel( QObject* p =NULL );
+  ListEditItemModel( StringListInterface *,
+		     QObject * p = nullptr );
 
   /** \brief Destructor. */
-  ~LayerStackItemModel() ITK_OVERRIDE;
-
-  /**
-   */
-  static const AbstractLayerModel * GetLayer( const QModelIndex & );
-
-  /**
-   */
-  void SetStack( StackedLayerModel * );
+  ~ListEditItemModel() ITK_OVERRIDE;
 
   //
   // QAbstractItemModel overloads.
@@ -158,17 +136,8 @@ public:
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
    */
   QVariant
-    data( const QModelIndex & index, int role = Qt::DisplayRole ) const ITK_OVERRIDE;
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#dropMimeData
-   */
-  bool
-    dropMimeData( const QMimeData * data,
-                  Qt::DropAction action,
-                  int row,
-                  int column,
-                  const QModelIndex & p ) ITK_OVERRIDE;
+    data( const QModelIndex & index,
+	  int role = Qt::DisplayRole ) const ITK_OVERRIDE;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
@@ -196,22 +165,18 @@ public:
            const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
 
   /**
+   * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#insertRow
+   */
+  bool
+    insertRow( int row, const QModelIndex & parent = QModelIndex() );
+
+  /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
    */
   bool
     insertRows( int row,
                 int count,
                 const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
-
-  /**
-   * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeData
-   */
-  QMimeData * mimeData( const QModelIndexList & indexes ) const ITK_OVERRIDE;
-
-  /**
-   * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeTypes
-   */
-  QStringList mimeTypes() const ITK_OVERRIDE;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
@@ -239,10 +204,17 @@ public:
              const QVariant & value,
              int role = Qt::EditRole ) ITK_OVERRIDE;
 
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#supportedDropActions
-   */
-  Qt::DropActions supportedDropActions() const ITK_OVERRIDE;
+  /** */
+  virtual bool Swap( int, int );
+
+  /** */
+  virtual bool IsInput() const;
+
+  /** */
+  virtual QString GetFilter() const;
+
+  /** */
+  virtual bool IsBrowsable() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -272,44 +244,23 @@ protected:
 // Private methods.
 private:
 
-  /**
-   */
-  void Connect( AbstractLayerModel * );
-
-  /**
-   */
-  void Disconnect( AbstractLayerModel * );
-
 
 //
 // Private attributes.
 private:
-  /**
-   */
-  StackedLayerModel * m_StackedLayerModel;
+  /** */
+  StringListInterface * m_StringList;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
-  /**
-   */
-  // void OnContentAboutToBeChanged();
-  // void OnContentChanged();
-  // void OnModelAboutToBeReset();
-  // void OnModelReset();
-  void OnLayerAboutToBeDeleted( size_t );
-  void OnLayerAdded( size_t );
-  void OnLayerDeleted( size_t );
-  void OnLayerVisibilityChanged( AbstractLayerModel *, bool );
-  void OnReferenceChanged( size_t );
-  void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
-  void OnImageSettingsUpdated( AbstractImageModel * );
-  void OnResolutionsChanged( const PixelInfo::Vector & );
 };
 
-} // end namespace 'mvd'.
+} // end namespace 'Wrapper'.
+
+} // end namespace 'otb'.
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
@@ -330,8 +281,8 @@ private slots:
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-namespace mvd
+namespace otb
 {
-} // end namespace 'mvd'
+} // end namespace 'otb'
 
-#endif // mvdLayerStackItemModel_h
+#endif // otbListEditItemModel_h
