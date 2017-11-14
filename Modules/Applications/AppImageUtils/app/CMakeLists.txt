@@ -18,24 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppImageUtils_LINK_LIBS
-  ${OTBStatistics_LIBRARIES}
-  ${OTBColorMap_LIBRARIES}
-  ${OTBImageBase_LIBRARIES}
-  ${OTBTransform_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBStreaming_LIBRARIES}
-  ${OTBCarto_LIBRARIES}
-  ${OTBImageManipulation_LIBRARIES}
-  ${OTBCurlAdapters_LIBRARIES}
-  ${OTBProjection_LIBRARIES}
-  ${OTBMathParser_LIBRARIES}
-  ${OTBCommon_LIBRARIES}
-  ${OTBInterpolation_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
-  ${OTBObjectList_LIBRARIES}
-)
-
 otb_create_application(
   NAME           DownloadSRTMTiles
   SOURCES        otbDownloadSRTMTiles.cxx

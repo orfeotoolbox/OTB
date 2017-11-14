@@ -103,7 +103,7 @@ public:
 
   /** Set the spacing of the vector data to put it in the corresponding
    * image coordinates
-   * \sa GetSpacing() */
+   * \sa GetSignedSpacing() */
   virtual void SetSpacing(const SpacingType& spacing);
   virtual void SetSpacing(const double spacing[2]);
   virtual void SetSpacing(const float spacing[2]);

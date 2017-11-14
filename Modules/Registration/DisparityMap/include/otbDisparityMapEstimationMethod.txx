@@ -189,9 +189,9 @@ DisparityMapEstimationMethod<TFixedImage, TMovingImage, TPointSet>
     movingExtractor->Update();
 
 //     std::cout<<"Fixed extract origin: "<<fixedExtractor->GetOutput()->GetOrigin()<<std::endl;
-//     std::cout<<"Fixed extract spacing: "<<fixedExtractor->GetOutput()->GetSpacing()<<std::endl;
+//     std::cout<<"Fixed extract spacing: "<<fixedExtractor->GetOutput()->GetSignedSpacing()<<std::endl;
 //     std::cout<<"Moving extract origin: "<<movingExtractor->GetOutput()->GetOrigin()<<std::endl;
-//     std::cout<<"Moving extract spacing: "<<movingExtractor->GetOutput()->GetSpacing()<<std::endl;
+//     std::cout<<"Moving extract spacing: "<<movingExtractor->GetOutput()->GetSignedSpacing()<<std::endl;
 
 //     typedef otb::ImageFileWriter<FixedImageType> FixedWriterType;
 //      typedef otb::ImageFileWriter<MovingImageType> MovingWriterType;

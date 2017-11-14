@@ -182,9 +182,12 @@ VectorDataToMapFilter<TVectorData, TImage>
   outputPtr->SetLargestPossibleRegion(outputLargestPossibleRegion);
 
   // Set spacing and origin
-  outputPtr->SetSpacing(m_Spacing);
+  outputPtr->SetSignedSpacing(m_Spacing);
   outputPtr->SetOrigin(m_Origin);
-  outputPtr->SetDirection(m_Direction);
+  // outputPtr->SetDirection(m_Direction);
+  // As the direction cannot be changed in this filter there is no need to set
+  // the direction in the output image. Moreover, setting the direction to
+  // identity no that we enforce positive spacing leads to incoherences 
 
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,

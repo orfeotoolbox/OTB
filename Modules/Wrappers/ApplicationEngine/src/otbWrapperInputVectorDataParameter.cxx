@@ -43,53 +43,37 @@ InputVectorDataParameter::SetFromFileName(const std::string& filename)
   // First clear previous file chosen
   this->ClearValue();
 
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  if (!filename.empty()
-      && itksys::SystemTools::FileExists(filename.c_str()))
-    {
-    VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
-    try
-      {
-      reader->SetFileName(filename);
-      reader->UpdateOutputInformation();
-      }
-    catch(itk::ExceptionObject & /*err*/)
-      {
-      return false;
-      }
+  // No file existence is done here :
+  m_FileName = filename;
+  SetActive( true );
 
-    // the specified filename is valid => store the value
-    m_FileName = filename;
-    SetActive(true);
-    return true;
-    }
- return false;
+  return true;
 }
 
 
-VectorDataType*
+const VectorDataType *
+InputVectorDataParameter
+::GetVectorData() const
+{
+  return const_cast< InputVectorDataParameter * >( this )->GetVectorData();
+}
+
+VectorDataType *
 InputVectorDataParameter::GetVectorData()
 {
   // 2 cases : the user sets a filename vs. the user sets a vector data
   //////////////////////// Filename case:
-  if (!m_FileName.empty())
+  if (!m_FileName.empty() && m_PreviousFileName!=m_FileName)
     {
-    //typedef otb::ImageFileReader<TOutputImage> ReaderType;
-    //typename ReaderType::Pointer reader = ReaderType::New();
-    m_Reader = VectorDataFileReaderType::New();
-    m_Reader->SetFileName(m_FileName);
-    try
-      {
-      // Update the viewer here to load the file => no streaming for VectorData
-      m_Reader->Update();
-      }
-    catch (itk::ExceptionObject &)
-      {
-      this->ClearValue();
-      }
+    VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+    reader->SetFileName(m_FileName);
+    // Update the viewer here to load the file => no streaming for VectorData
+    reader->Update();
 
-    m_VectorData = m_Reader->GetOutput();
+    m_VectorData = reader->GetOutput();
+    m_Reader = reader;
+
+    m_PreviousFileName = m_FileName;
     }
   //////////////////////// VectorData case:
   else
@@ -97,7 +81,7 @@ InputVectorDataParameter::GetVectorData()
     if (m_VectorData.IsNull())
       {
       // Else : error
-      itkExceptionMacro("No input vector data or filename detected...");
+      itkExceptionMacro("No input vector data detected...");
       }
     }
 
@@ -131,5 +115,3 @@ InputVectorDataParameter::ClearValue()
 
 }
 }
-
-

@@ -21,61 +21,52 @@
 #ifndef otbWrapperQtWidgetInputVectorDataListParameter_h
 #define otbWrapperQtWidgetInputVectorDataListParameter_h
 
+
 #include <QtGui>
+
+
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "otbWrapperInputVectorDataListParameter.h"
-#include "otbQtFileSelectionWidget.h"
+#  include "otbWrapperQtWidgetParameterList.h"
 #endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
+
+
 namespace Wrapper
 {
+
+
+class InputVectorDataListParameter;
+
 
 /** \class QtWidgetInputVectorDataListParameter
  * \brief
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter
+  : public QtWidgetParameterList
 {
-  Q_OBJECT
+  Q_OBJECT;
+
+//
+// Public methods.
 public:
-  QtWidgetInputVectorDataListParameter(InputVectorDataListParameter*, QtWidgetModel*);
-  ~QtWidgetInputVectorDataListParameter() ITK_OVERRIDE;
+  QtWidgetInputVectorDataListParameter( InputVectorDataListParameter *,
+					QtWidgetModel * );
+
+  ~QtWidgetInputVectorDataListParameter() override;
 
 
-signals:
-  void Change();
-  void FileSelectionWidgetAdded( QWidget * );
-
-protected slots:
-  //void SetFileName( const QString& value );
-  //virtual void SelectFile();
-  virtual void UpFile();
-  virtual void DownFile();
-  virtual void AddFile();
-  virtual void SuppressFile();
-  virtual void EraseFile();
-  virtual void UpdateVectorDataList();
-
+//
+// Private methods.
 private:
-  QtWidgetInputVectorDataListParameter(const QtWidgetInputVectorDataListParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputVectorDataListParameter&); //purposely not implemented
+  // Purposely not implemented
+  QtWidgetInputVectorDataListParameter( const QtWidgetInputVectorDataListParameter & );
 
-  void DoCreateWidget() ITK_OVERRIDE;
-
-  void DoUpdateGUI() ITK_OVERRIDE;
-
-  void RecreateVectorDataList();
-  void UpdateFileList( std::map<unsigned int, unsigned int> idMap );
-
-  InputVectorDataListParameter::Pointer m_InputVectorDataListParam;
-
-  QHBoxLayout * m_HLayout;
-  QVBoxLayout * m_FileLayout;
-  QScrollArea * m_Scroll;
-  std::vector<QtFileSelectionWidget *> m_FileSelectionList;
+  // Purposely not implemented
+  void operator = ( const QtWidgetInputVectorDataListParameter & );
 };
 
 

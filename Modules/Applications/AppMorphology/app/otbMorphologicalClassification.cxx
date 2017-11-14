@@ -74,64 +74,75 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName( "MorphologicalClassification" );
-    SetDescription( "Performs morphological convex, concave and flat classification on an input image channel" );
+    SetDescription( "Performs morphological convex, concave and flat "
+      "classification on an input image channel" );
 
     // Documentation
     SetDocName( "Morphological Classification" );
-    SetDocLongDescription( "This algorithm is based on the following publication:\n"
-                                   "\n"
-                                   "Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach\n"
-                                   "for the morphological segmentation of high resolution satellite imagery.\n"
-                                   "IEEE Transactions on geoscience and remote sensing, vol. 39, NO. 2,\n"
-                                   "February 2001, p. 309-320.\n"
-                                   "\n"
-                                   "This application perform the following decision rule to classify a pixel\n"
-                                   "between the three classes Convex, Concave and Flat. Let :math:`f` denote\n"
-                                   "the input image and :math:`\\psi_{N}(f)` the geodesic leveling of\n"
-                                   ":math:`f` with a structuring element of size :math:`N`. One can derive\n"
-                                   "the following decision rule to classify :math:`f` into Convex (label\n"
-                                   ":math:`\\stackrel{\\smile}{k}`), Concave (label\n"
-                                   ":math:`\\stackrel{\\frown}{k}`) and Flat (label :math:`\\bar{k}`): \n"
-                                   "\n"
-                                   ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} & : f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} & : \\psi_{N}(f)-f>\\sigma \\\\ \\bar{k} & : \\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
-                                   "\n\n"
-                                   "This output is a labeled image (0 : Flat, 1 : Convex, 2 : Concave)" );
-    SetDocLimitations( "Generation of the morphological classification is not streamable, pay attention to this fact when setting the radius size of the structuring element." );
+    SetDocLongDescription( 
+    "This algorithm is based on the following publication:\n"
+    "Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach "
+    "for the morphological segmentation of high resolution satellite imagery.\n"
+    "IEEE Transactions on geoscience and remote sensing, vol. 39, NO. 2, "
+    "February 2001, p. 309-320.\n"
+    "\n"
+    "This application perform the following decision rule to classify a pixel "
+    "between the three classes Convex, Concave and Flat. Let :math:`f` denote "
+    "the input image and :math:`\\psi_{N}(f)` the geodesic leveling of "
+    ":math:`f` with a structuring element of size :math:`N`. One can derive "
+    "the following decision rule to classify :math:`f` into Convex (label "
+    ":math:`\\stackrel{\\smile}{k}`), Concave (label "
+    ":math:`\\stackrel{\\frown}{k}`) and Flat (label :math:`\\bar{k}`):  "
+    "\n"
+    ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} & : f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} & : \\psi_{N}(f)-f>\\sigma \\\\ \\bar{k} & : \\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
+    "\n\n"
+    "The output is a labeled image (0 : Flat, 1 : Convex, 2 : Concave)" );
+    SetDocLimitations( 
+      "Generation of the morphological classification is not streamable, "
+      "pay attention to this fact when setting the radius size of the "
+      "structuring element." );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "otbConvexOrConcaveClassificationFilter class" );
 
-    AddDocTag(Tags::FeatureExtraction);
-    AddDocTag("Morphology");
+    AddDocTag( Tags::FeatureExtraction );
+    AddDocTag( "Morphology" );
 
-    AddParameter( ParameterType_InputImage, "in", "Input Image" );
-    SetParameterDescription( "in", "The input image to be classified." );
+    AddParameter( ParameterType_InputImage , "in" , "Input Image" );
+    SetParameterDescription( "in" , "The input image to be classified." );
 
-    AddParameter( ParameterType_OutputImage, "out", "Output Image" );
+    AddParameter( ParameterType_OutputImage , "out" , "Output Image" );
     SetParameterDescription( "out",
-                             "The output classified image with 3 different values (0 : Flat, 1 : Convex, 2 : Concave)" );
+      "The output classified image with 3 different values (0 : Flat, "
+      "1 : Convex, 2 : Concave)" );
 
-    AddParameter( ParameterType_Int, "channel", "Selected Channel" );
-    SetParameterDescription( "channel", "The selected channel index for input image" );
-    SetDefaultParameterInt( "channel", 1 );
-    SetMinimumParameterIntValue( "channel", 1 );
+    AddParameter( ParameterType_Int , "channel" , "Selected Channel" );
+    SetParameterDescription( "channel" , 
+      "The selected channel index for input image" );
+    SetDefaultParameterInt( "channel" , 1 );
+    SetMinimumParameterIntValue( "channel" , 1 );
 
     AddRAMParameter();
 
     // Structuring Element (Ball | Cross)
-    AddParameter( ParameterType_Choice, "structype", "Structuring Element Type" );
-    SetParameterDescription( "structype", "Choice of the structuring element type" );
-    AddChoice( "structype.ball", "Ball" );
-    AddChoice( "structype.cross", "Cross" );
+    AddParameter( ParameterType_Choice , "structype" ,
+     "Structuring Element Type" );
+    SetParameterDescription( "structype" , 
+      "Choice of the structuring element type" );
+    AddChoice( "structype.ball" , "Ball" );
+    AddChoice( "structype.cross" , "Cross" );
 
-    AddParameter( ParameterType_Int, "radius", "Radius" );
-    SetParameterDescription( "radius", "Radius of the structuring element (in pixels)" );
-    SetDefaultParameterInt( "radius", 5 );
-    SetMinimumParameterIntValue( "radius", 1 );
+    AddParameter( ParameterType_Int , "radius" , "Radius" );
+    SetParameterDescription( "radius" ,
+      "Radius of the structuring element (in pixels), default value is 5." );
+    SetDefaultParameterInt( "radius" , 5 );
+    SetMinimumParameterIntValue( "radius" , 1 );
 
-    AddParameter( ParameterType_Float, "sigma", "Sigma value for leveling tolerance" );
-    SetParameterDescription( "sigma", "Sigma value for leveling tolerance" );
-    SetDefaultParameterFloat( "sigma", 0.5 );
-    SetMinimumParameterFloatValue( "sigma", 0 );
+    AddParameter( ParameterType_Float , "sigma" , 
+      "Sigma value for leveling tolerance" );
+    SetParameterDescription( "sigma" , 
+      "Sigma value for leveling tolerance, default value is 0.5." );
+    SetDefaultParameterFloat( "sigma" , 0.5 );
+    SetMinimumParameterFloatValue( "sigma" , 0 );
 
     SetDocExampleParameterValue( "in", "ROI_IKO_PAN_LesHalles.tif" );
     SetDocExampleParameterValue( "channel", "1" );

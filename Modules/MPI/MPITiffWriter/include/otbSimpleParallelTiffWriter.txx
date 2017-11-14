@@ -546,12 +546,12 @@ SimpleParallelTiffWriter<TInputImage>
     {
     // Set geotransform
     double geotransform[6];
-    geotransform[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSpacing()[0];
-    geotransform[1] = inputPtr->GetSpacing()[0];
+    geotransform[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSignedSpacing()[0];
+    geotransform[1] = inputPtr->GetSignedSpacing()[0];
     geotransform[2] = 0.0;
-    geotransform[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSpacing()[1];
+    geotransform[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSignedSpacing()[1];
     geotransform[4] = 0.0;
-    geotransform[5] = inputPtr->GetSpacing()[1];
+    geotransform[5] = inputPtr->GetSignedSpacing()[1];
 
     // Call SPTW routine that creates the output raster
     SPTW_ERROR sperr = create_generic_raster(m_FileName,

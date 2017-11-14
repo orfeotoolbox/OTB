@@ -1529,11 +1529,11 @@ int TestHelper::RegressionTestMetaData(const char *testImageFilename, const char
     }
 
   // test spacing
-  if (blImPtr->GetSpacing() != testImPtr->GetSpacing())
+  if (blImPtr->GetSignedSpacing() != testImPtr->GetSignedSpacing())
     {
     std::cerr << "The spacing of the baseline image and Test image do not match!" << std::endl;
-    std::cerr << "baseline image: " << baselineImageFilename << " has spacing " << blImPtr->GetSpacing() << std::endl;
-    std::cerr << "Test image:     " << testImageFilename << " has spacing " << testImPtr->GetSpacing() << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename << " has spacing " << blImPtr->GetSignedSpacing() << std::endl;
+    std::cerr << "Test image:     " << testImageFilename << " has spacing " << testImPtr->GetSignedSpacing() << std::endl;
     errcount++;
     }
 

@@ -33,6 +33,8 @@ namespace Wrapper
 {
 
 
+#define INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION 0
+
 template <class TImageType>
 TImageType*
 InputImageParameter::GetImage()
@@ -45,27 +47,35 @@ InputImageParameter::GetImage()
   // Only one image type can be used
 
   // 2 cases : the user set a filename vs. the user set an image
-  if (m_UseFilename)
+  if( m_UseFilename )
     {
-    if( m_PreviousFileName!=m_FileName && !m_FileName.empty() )
+    if( m_PreviousFileName!=m_FileName &&
+	!m_FileName.empty() )
       {
       //////////////////////// Filename case:
       // A new valid filename has been given : a reader is created
-      m_PreviousFileName = m_FileName;
       typedef otb::ImageFileReader<TImageType> ReaderType;
+
       typename ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(m_FileName);
+
+      reader->SetFileName( m_FileName );
 
       reader->UpdateOutputInformation();
 
       m_Image = reader->GetOutput();
       m_Reader = reader;
 
+      m_PreviousFileName = m_FileName;
+
       // Pay attention, don't return m_Image because it is a ImageBase...
       return reader->GetOutput();
       }
     else
       {
+#if INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
+      return dynamic_cast< TImageType* >( m_Image.GetPointer() );
+
+#else // INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
       // In this case, the reader and the image should already be there
       if (m_Image.IsNull())
         {
@@ -83,14 +93,20 @@ InputImageParameter::GetImage()
           itkExceptionMacro("Cannot ask a different image type");
           }
         }
+#endif // INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
       }
     }
+
   else
     {
     //////////////////////// Image case:
     if (m_Image.IsNull())
       {
+#if INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
       itkExceptionMacro("No input image or filename detected...");
+#else
+      return nullptr;
+#endif
       }
     else
       {
@@ -160,7 +176,11 @@ InputImageParameter::GetImage()
         }
       else
         {
+#if INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
         itkExceptionMacro("Unknown image type");
+#else
+	return nullptr;
+#endif
         }
       }
     }

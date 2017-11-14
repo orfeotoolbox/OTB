@@ -86,6 +86,10 @@ public:
   /** Static method to convert pixel type into string */
   static std::string ConvertPixelTypeToString(ImagePixelType type);
 
+  /** Converts a string into a pixel type (returns false if the conversion
+   *  fails) */
+  static bool ConvertStringToPixelType(const std::string &value, ImagePixelType &type);
+
   /** Return true if a filename is set */
   bool HasValue() const ITK_OVERRIDE;
 

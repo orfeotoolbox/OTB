@@ -37,7 +37,9 @@ QtWidgetStringParameter::~QtWidgetStringParameter()
 
 void QtWidgetStringParameter::DoUpdateGUI()
 {
-  m_Input->setToolTip(m_StringParam->GetDescription());
+  m_Input->setToolTip(
+    QString::fromStdString( m_StringParam->GetDescription() )
+  );
 
   // Update the lineEdit only if there is a change and that's not empty or whitespaces
   QString text( m_StringParam->GetValue().c_str() );
@@ -55,7 +57,9 @@ void QtWidgetStringParameter::DoCreateWidget()
   m_HLayout->setContentsMargins(0, 0, 0, 0);
 
   m_Input = new QLineEdit;
-  m_Input->setToolTip(m_StringParam->GetDescription());
+  m_Input->setToolTip(
+    QString::fromStdString( m_StringParam->GetDescription() )
+  );
   m_HLayout->addWidget(m_Input);
 
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetValue(const QString&)) );

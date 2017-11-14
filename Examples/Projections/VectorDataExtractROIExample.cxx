@@ -105,13 +105,13 @@ int main(int argc, char* argv[])
   TypedRegion::IndexType index;
 
   size[0]  = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
-             * imageReader->GetOutput()->GetSpacing()[0];
+             * imageReader->GetOutput()->GetSignedSpacing()[0];
   size[1]  = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]
-             * imageReader->GetOutput()->GetSpacing()[1];
+             * imageReader->GetOutput()->GetSignedSpacing()[1];
   index[0] = imageReader->GetOutput()->GetOrigin()[0]
-             - 0.5 * imageReader->GetOutput()->GetSpacing()[0];
+             - 0.5 * imageReader->GetOutput()->GetSignedSpacing()[0];
   index[1] = imageReader->GetOutput()->GetOrigin()[1]
-             - 0.5 * imageReader->GetOutput()->GetSpacing()[1];
+             - 0.5 * imageReader->GetOutput()->GetSignedSpacing()[1];
   region.SetSize(size);
   region.SetOrigin(index);
 

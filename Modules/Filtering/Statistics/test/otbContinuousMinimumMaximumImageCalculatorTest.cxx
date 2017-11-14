@@ -54,7 +54,7 @@ otbContinuousMinimumMaximumImageCalculatorTest(int, char *[])
 
   // Set origin and spacing of physical coordinates
   image->SetOrigin(origin);
-  image->SetSpacing(spacing);
+  image->SetSignedSpacing(spacing);
 
   PixelType minimum = -52;
   PixelType maximum = 103;

@@ -155,7 +155,7 @@ TransformToDisplacementFieldSource< TOutputImage, TTransformPrecisionType >
     }
 
   this->SetOutputOrigin( image->GetOrigin() );
-  this->SetOutputSpacing( image->GetSpacing() );
+  this->SetOutputSpacing( image->GetSignedSpacing() );
   this->SetOutputDirection( image->GetDirection() );
   this->SetOutputRegion( image->GetLargestPossibleRegion() );
 } // end SetOutputParametersFromImage()
@@ -352,7 +352,7 @@ TransformToDisplacementFieldSource< TOutputImage, TTransformPrecisionType >
 
   outputPtr->SetLargestPossibleRegion(m_OutputRegion);
 
-  outputPtr->SetSpacing(m_OutputSpacing);
+  outputPtr->SetSignedSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
   outputPtr->SetDirection(m_OutputDirection);
 } // end GenerateOutputInformation()

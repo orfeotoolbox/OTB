@@ -144,6 +144,13 @@ public:
   /** Get the six coefficients of affine geoTtransform. */
   virtual VectorType GetGeoTransform(void) const;
 
+    /** Get signed spacing */
+  SpacingType GetSignedSpacing() const;
+
+  /** Set signed spacing */
+  virtual void SetSignedSpacing( SpacingType spacing );
+  virtual void SetSignedSpacing( double spacing[ VImageDimension ] );
+
   /** Get image corners. */
   virtual VectorType GetUpperLeftCorner(void) const;
   virtual VectorType GetUpperRightCorner(void) const;
