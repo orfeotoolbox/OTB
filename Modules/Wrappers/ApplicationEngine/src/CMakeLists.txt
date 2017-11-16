@@ -38,6 +38,8 @@ set( OTBApplicationEngine_SRC
   otbWrapperInputImageParameterUInt32.cxx
   otbWrapperInputImageParameterFloat.cxx
   otbWrapperInputImageParameterDouble.cxx
+  otbWrapperInputImageParameterCFloat.cxx
+  otbWrapperInputImageParameterCDouble.cxx
   otbWrapperParameterKey.cxx
   otbWrapperDocExampleStructure.cxx
   otbWrapperInputVectorDataParameter.cxx

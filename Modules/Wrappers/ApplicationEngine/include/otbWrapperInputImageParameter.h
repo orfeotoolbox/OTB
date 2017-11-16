@@ -80,6 +80,12 @@ public:
   UInt8RGBImageType* GetUInt8RGBImage();
   UInt8RGBAImageType* GetUInt8RGBAImage();
 
+  // Complex image 
+  ComplexFloatImageType*  GetComplexFloatImage();
+  ComplexDoubleImageType* GetComplexDoubleImage();
+
+  ComplexFloatVectorImageType*  GetComplexFloatVectorImage();
+  ComplexDoubleVectorImageType* GetComplexDoubleVectorImage();
 
   /** Get the input image as templated image type. */
   template <class TImageType>
@@ -145,6 +151,13 @@ protected:
   typedef otb::ImageFileReader<UInt8RGBImageType>  UInt8RGBReaderType;
   typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
 
+  // Complex
+  typedef otb::ImageFileReader<ComplexFloatImageType> ComplexFloatReaderType;
+  typedef otb::ImageFileReader<ComplexDoubleImageType> ComplexDoubleReaderType;
+
+  typedef otb::ImageFileReader<ComplexFloatVectorImageType> ComplexFloatVectorReaderType;
+  typedef otb::ImageFileReader<ComplexDoubleVectorImageType> ComplexDoubleVectorReaderType;
+
   itk::ProcessObject::Pointer m_Reader;
   itk::ProcessObject::Pointer m_Caster;
 
@@ -189,6 +202,11 @@ otbGenericDeclareCastImageMacro(UInt32ImageType, )
 otbGenericDeclareCastImageMacro(FloatImageType, )
 otbGenericDeclareCastImageMacro(DoubleImageType, )
 
+otbDeclareCastImageMacro( ComplexDoubleImageType , ComplexDoubleImageType )
+otbDeclareCastImageMacro( ComplexDoubleImageType , ComplexFloatImageType )
+
+otbDeclareCastImageMacro( ComplexFloatImageType , ComplexDoubleImageType )
+otbDeclareCastImageMacro( ComplexFloatImageType , ComplexFloatImageType )
 
 /*********************************************************************
 ********************** VectorImage -> VectorImage
@@ -201,6 +219,15 @@ otbGenericDeclareCastImageMacro(UInt32VectorImageType, Vector)
 otbGenericDeclareCastImageMacro(FloatVectorImageType, Vector)
 otbGenericDeclareCastImageMacro(DoubleVectorImageType, Vector)
 
+otbDeclareCastImageMacro( ComplexDoubleVectorImageType , 
+  ComplexDoubleVectorImageType )
+otbDeclareCastImageMacro( ComplexDoubleVectorImageType ,
+  ComplexFloatVectorImageType )
+
+otbDeclareCastImageMacro( ComplexFloatVectorImageType ,
+  ComplexDoubleVectorImageType )
+otbDeclareCastImageMacro( ComplexFloatVectorImageType ,
+  ComplexFloatVectorImageType )
 
 /*********************************************************************
 ********************** Image -> VectorImage
@@ -212,6 +239,15 @@ otbGenericDeclareCastImageMacro(Int32ImageType, Vector)
 otbGenericDeclareCastImageMacro(UInt32ImageType, Vector)
 otbGenericDeclareCastImageMacro(FloatImageType, Vector)
 otbGenericDeclareCastImageMacro(DoubleImageType, Vector)
+
+otbDeclareCastImageMacro( ComplexDoubleImageType , 
+  ComplexDoubleVectorImageType )
+otbDeclareCastImageMacro( ComplexDoubleImageType , 
+  ComplexFloatVectorImageType )
+
+otbDeclareCastImageMacro( ComplexFloatImageType , ComplexDoubleVectorImageType )
+otbDeclareCastImageMacro( ComplexFloatImageType , ComplexFloatVectorImageType )
+
 
 #undef otbDeclareCastImageMacro
 #undef otbGenericDeclareCastImageMacro

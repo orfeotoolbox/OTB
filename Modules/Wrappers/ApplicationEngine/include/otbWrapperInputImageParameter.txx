@@ -174,6 +174,22 @@ InputImageParameter::GetImage()
         {
         return CastImage<UInt8RGBImageType, TImageType> ();
         }
+      else if (dynamic_cast<ComplexFloatVectorImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexFloatVectorImageType, TImageType>();
+        }
+      else if (dynamic_cast<ComplexDoubleVectorImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexDoubleVectorImageType, TImageType>();
+        }
+      else if (dynamic_cast<ComplexFloatImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexFloatImageType, TImageType>();
+        }
+      else if (dynamic_cast<ComplexDoubleImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexDoubleImageType, TImageType>();
+        }
       else
         {
 #if INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION

@@ -619,12 +619,19 @@ public:
   otbGetParameterImageMacro(UInt8RGBImage);
   otbGetParameterImageMacro(UInt8RGBAImage);
 
+  // Complex image 
+  otbGetParameterImageMacro(ComplexFloatImage);
+  otbGetParameterImageMacro(ComplexDoubleImage);
+
+  otbGetParameterImageMacro(ComplexFloatVectorImage);
+  otbGetParameterImageMacro(ComplexDoubleVectorImage);
+
   /* Get a complex image value
    *
    * Can be called for types :
    * \li ParameterType_ComplexInputImage
    */
-
+/*
 #define otbGetParameterComplexImageMacro( Image )                       \
   Image##Type * GetParameter##Image( std::string parameter )            \
     {                                                                   \
@@ -642,7 +649,7 @@ public:
   otbGetParameterComplexImageMacro(ComplexDoubleImage);
 
   otbGetParameterComplexImageMacro(ComplexFloatVectorImage);
-  otbGetParameterComplexImageMacro(ComplexDoubleVectorImage);
+  otbGetParameterComplexImageMacro(ComplexDoubleVectorImage);*/
 
   /* Get an image list value
    *
