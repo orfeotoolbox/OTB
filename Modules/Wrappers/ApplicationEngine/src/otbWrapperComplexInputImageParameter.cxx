@@ -133,6 +133,35 @@ ComplexInputImageParameter::ClearValue()
   m_UseFilename = true;
 }
 
+/* Support for ComplexInputImageParameter. This has been done to support 
+the macro otbGetParameterImageMacro of otbWrapperApplication.h */
+#define otbGetFalseImageMacro(image)                  \
+  image##Type *                                       \
+  ComplexInputImageParameter::Get##image ()           \
+  {                                                   \
+    return nullptr;                                   \
+  }
+
+otbGetFalseImageMacro(DoubleImage);
+otbGetFalseImageMacro(DoubleVectorImage);
+
+otbGetFalseImageMacro(FloatImage);
+otbGetFalseImageMacro(FloatVectorImage);
+
+otbGetFalseImageMacro(Int16Image);
+otbGetFalseImageMacro(Int16VectorImage);
+
+otbGetFalseImageMacro(UInt16Image);
+otbGetFalseImageMacro(UInt16VectorImage);
+
+otbGetFalseImageMacro(Int32Image);
+otbGetFalseImageMacro(Int32VectorImage);
+
+otbGetFalseImageMacro(UInt32Image);
+otbGetFalseImageMacro(UInt32VectorImage);
+
+otbGetFalseImageMacro(UInt8Image);
+otbGetFalseImageMacro(UInt8VectorImage);
 
 }
 }

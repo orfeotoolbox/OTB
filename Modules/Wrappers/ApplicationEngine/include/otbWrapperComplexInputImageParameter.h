@@ -66,6 +66,27 @@ public:
   ComplexFloatVectorImageType*  GetComplexFloatVectorImage();
   ComplexDoubleVectorImageType* GetComplexDoubleVectorImage();
 
+/* Support for ComplexInputImageParameter. This has been done to support 
+the macro otbGetParameterImageMacro of otbWrapperApplication.h */
+  UInt8ImageType* GetUInt8Image();
+  UInt16ImageType* GetUInt16Image();
+  Int16ImageType* GetInt16Image();
+  UInt32ImageType* GetUInt32Image();
+  Int32ImageType* GetInt32Image();
+  FloatImageType* GetFloatImage();
+  DoubleImageType* GetDoubleImage();
+
+  UInt8VectorImageType* GetUInt8VectorImage();
+  UInt16VectorImageType* GetUInt16VectorImage();
+  Int16VectorImageType* GetInt16VectorImage();
+  UInt32VectorImageType* GetUInt32VectorImage();
+  Int32VectorImageType* GetInt32VectorImage();
+  FloatVectorImageType* GetFloatVectorImage();
+  DoubleVectorImageType* GetDoubleVectorImage();
+
+  UInt8RGBImageType* GetUInt8RGBImage();
+  UInt8RGBAImageType* GetUInt8RGBAImage();
+
   /** Get the input image as templated image type. */
   template <class TImageType>
     TImageType* GetImage();

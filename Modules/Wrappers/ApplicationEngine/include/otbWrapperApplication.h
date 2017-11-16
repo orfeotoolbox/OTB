@@ -592,10 +592,15 @@ public:
     {                                                                   \
     Image##Type::Pointer ret;                                           \
     Parameter* param = GetParameterByKey(parameter);                    \
-    if (dynamic_cast<InputImageParameter*>(param))                      \
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
+    ComplexInputImageParameter* paramDownC = dynamic_cast<ComplexInputImageParameter*>(param); \
+    if ( paramDown )                                                    \
       {                                                                 \
-      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
       ret = paramDown->Get##Image();                                    \
+      }                                                                 \
+    else if ( paramDownC )  /* Support of ComplexInputImageParameter */ \
+      {                                                                 \
+      ret = paramDownC->Get##Image();                                   \
       }                                                                 \
     return ret;                                                         \
     }
