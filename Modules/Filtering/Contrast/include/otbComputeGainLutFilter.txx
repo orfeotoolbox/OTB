@@ -64,12 +64,8 @@ void ComputeGainLutFilter <TInputImage , TOutputImage >
   typename InputImageType::ConstPointer input ( this->GetInput() );
   typename OutputImageType::Pointer output ( this->GetOutput() );
 
-  typename InputImageType::RegionType inputRegionForThread;
-  inputRegionForThread = outputRegionForThread;
-  // Is it usefull???
-
   itk::ImageRegionConstIterator < InputImageType > it ( input , 
-                                                        inputRegionForThread );
+                                                        outputRegionForThread );
 
   itk::ImageRegionIterator <OutputImageType > oit ( output ,
                                                     outputRegionForThread );

@@ -148,12 +148,31 @@ private:
 
 	void DoInit() override
 	{
-		SetName("Contrast Enhancement");
-    SetDescription("");
+		SetName("ContrastEnhancement");
+    SetDescription("This application is the implementation of the histogram "
+      "equalization algorithm. It can be used to enhance contrast in an image "
+      "or to reduce the dynamic of th image without loosing too much contrast. "
+      "It offers several options as a no data value, "
+      "a contrast limitation factor, a local version of the algorithm and "
+      "also a mode to equalized the luminance of the image.");
 
     // Documentation
     SetDocName("Contrast Enhancement");
-    SetDocLongDescription("");
+    SetDocLongDescription("This application is the implementation of the "
+      "histogram equalization algorithm. The idea of the algorithm is to use "
+      "the whole available dynamic. In order to do so it computes a histogram "
+      "over the image and then use the whole dynamic : meaning flattening the "
+      "histogram. That gives us gain for each bin that transform the original "
+      "histogram into the flat one. This gain is then apply on the original "
+      "image. Upon this coarse algorithm we added several option to allow "
+      "a finer result. First there is the limitation of the contrast. Many "
+      "ways can be used to do it, we choose to limit the contrast by modifying "
+      "the original histogram. To do so we clip the histogram at a given "
+      "height and redistribute equally among the bins the clipped population. "
+      "Then we add a local version of the algorithm. It is possible to apply "
+      "the algorithm on tiles of the image. That gives us gain depending on "
+      "the value of the pixel and its position in the image. In order to "
+      "smoothen the result we interpolate the gain between tiles.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("");
@@ -166,32 +185,40 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
     
-    AddParameter(ParameterType_Int , "bin" , "Number of bin");
-    SetDefaultParameterInt("bin", 256);
-    SetParameterDescription("bin","Number of bin used to create the histogram");
+    AddParameter(ParameterType_Int , "bins" , "Number of bin");
+    SetDefaultParameterInt("bins", 256);
+    SetParameterDescription("bins",
+      "Number of bin used to create the histogram");
 
     AddParameter(ParameterType_Float , "hfact" , "Contrast Limitation");  
     SetParameterDescription("hfact","This parameter will set the maximum "
       "height accepted in a bin on the input image histogram. "
       "The maximum height will be computed as hfact*eqHeight where eqHeight "
-      "is the height of the theoretical flat histogram. ");
+      "is the height of the theoretical flat histogram. The higher hfact, the "
+      "higher the contrast.");
     MandatoryOff("hfact");
 
     AddParameter(ParameterType_Float , "nodata" , "Nodata Value");
     SetParameterDescription("nodata","If there is a value in the "
-      "image that has no visualization it is ignored by the algorithm.");
+      "image that has no visualization meaning, it can be ignored by the "
+      "algorithm.");
     MandatoryOff("nodata");
 
-    AddParameter(ParameterType_Empty , "global" , "Global equalization" );
-    SetParameterDescription("global","");
-
-    AddParameter(ParameterType_Group, "thumb", "Thumbnail size");
-    SetParameterDescription("thumb","The algorithm can be local : "
-      "in each of those thumbnails a histogram will be computed "
-      "and equalized. The result gain will be interpolated.");
+    AddParameter(ParameterType_Choice , "spatial" , "Spatial parameters "
+      "for the histogram computation");
+    AddChoice( "spatial.global" , "Global" );
+    SetParameterDescription("spatial.global" , "The histogram will be "
+      "computed on the whole image. The equalization will be done on "
+      "this single histogram.");
+    AddChoice( "spatial.local" , "Local" );
+    SetParameterDescription("spatial.local" , "The histograms will be "
+      "computed on the each thumbnail. Each of the histogram will be "
+      "equalized and the corresponding gain will be interpolated.");
  
-    AddParameter(ParameterType_Int,"thumb.h" , "Thumbnail height in pixel");
-    AddParameter(ParameterType_Int,"thumb.w" , "Thumbnail width in pixel");
+    AddParameter(ParameterType_Int,"spatial.local.h" , 
+      "Thumbnail height in pixel");
+    AddParameter(ParameterType_Int,"spatial.local.w" , 
+      "Thumbnail width in pixel");
 
     AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum "
       "definition");
@@ -199,57 +226,56 @@ private:
       "bound the histogram.");
     AddChoice( "minmax.auto" , "Automatic" );
     SetParameterDescription("minmax.auto" , "Minimum and maximum value will "
-      "be the real one computed on the image (nodata value won't be taken "
-      "into account) .");
+      "be computed on the image (nodata value won't be taken "
+      "into account) . Each band will have a minimum and a maximum.");
     AddParameter(ParameterType_Empty, "minmax.auto.global", "Global");
-    SetParameterDescription("minmax.auto.global" , "Automatic "
-      "min/max computation will result in the same minimum and maximum for "
-      "all the bands. Otherwise it is one minimum and one maximum "
-      "for each band.");
-    AddChoice( "minmax.man" , "Manuel" );
+    SetParameterDescription("minmax.auto.global" , "Automatic"
+      "Min/max computation will result in the same minimum and maximum for "
+      "all the bands.");
+    AddChoice( "minmax.manuel" , "Manuel" );
     SetParameterDescription("minmax.auto","Minimum and maximum value will be "
       "set by the user");
-    AddParameter(ParameterType_Float , "minmax.man.min" , "Minimum");
-    AddParameter(ParameterType_Float , "minmax.man.max" , "Maximum");
-    MandatoryOff("minmax.man.min");
-    MandatoryOff("minmax.man.max");
+    AddParameter(ParameterType_Float , "minmax.manuel.min" , "Minimum");
+    AddParameter(ParameterType_Float , "minmax.manuel.max" , "Maximum");
+    MandatoryOff("minmax.manuel.min");
+    MandatoryOff("minmax.manuel.max");
 
     AddParameter(ParameterType_Choice , "mode" , "What to equalized");
     AddChoice( "mode.each" , "Channels" );
     SetParameterDescription( "mode.each" ,
-                "Each channel are equalized independently" );
+      "Each channel is equalized independently" );
     AddChoice( "mode.lum" , "Luminance" );
     SetParameterDescription( "mode.lum" ,
-                "The luminance is equalized and then a gain is applied "
-                "on each channels. This gain for each channels will depend on"
-                "the weight (coef) of the channel in the luminance." );
+      "The luminance is equalized and then a gain is applied "
+      "on each channels. This gain for each channels will depend on"
+      "the weight (coef) of the channel in the luminance." );
     AddParameter(ParameterType_Group , "mode.lum.red" , "Red Channel" );
     AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Channel" );
     SetDefaultParameterInt("mode.lum.red.ch", 0 );
     AddParameter(ParameterType_Float , "mode.lum.red.coef" ,
-                 "Value for luminance computation" );
+      "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.red.coef", 0.21 );
 
     AddParameter(ParameterType_Group , "mode.lum.gre" , "Green Channel" );
     AddParameter(ParameterType_Int , "mode.lum.gre.ch" , "Green Channel" );
     SetDefaultParameterInt("mode.lum.gre.ch", 1 );
     AddParameter(ParameterType_Float , "mode.lum.gre.coef" ,
-                 "Value for luminance computation" );
+      "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.gre.coef", 0.71 );
 
     AddParameter(ParameterType_Group , "mode.lum.blu" , "Blue Channel" );
     AddParameter(ParameterType_Int , "mode.lum.blu.ch" , "Blue Channel" );
     SetDefaultParameterInt("mode.lum.blu.ch", 2 );
     AddParameter(ParameterType_Float , "mode.lum.blu.coef" ,
-                 "Value for luminance computation" );
+      "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.blu.coef", 0.08 );
 
     SetMinimumParameterIntValue("mode.lum.red.ch", 0);
     SetMinimumParameterIntValue("mode.lum.gre.ch", 0);
     SetMinimumParameterIntValue("mode.lum.blu.ch", 0);
-    SetMinimumParameterIntValue("bin", 2);
-    SetMinimumParameterIntValue("thumb.h", 1);
-    SetMinimumParameterIntValue("thumb.w", 1);
+    SetMinimumParameterIntValue("bins", 2);
+    SetMinimumParameterIntValue("spatial.local.h", 1);
+    SetMinimumParameterIntValue("spatial.local.w", 1);
 
     AddRAMParameter(); 
   }
@@ -262,13 +288,15 @@ private:
       FloatVectorImageType::RegionType::SizeType size;
       size = inImage->GetLargestPossibleRegion().GetSize() ;
 
-      if ( !HasUserValue("thumb.w") )
-        SetParameterInt( "thumb.w" , size[0] );
+      if ( !HasUserValue("spatial.local.w") )
+        SetParameterInt( "spatial.local.w" , size[0] );
         
-      if ( !HasUserValue("thumb.h") )
-        SetParameterInt( "thumb.h" , size[1] );
+      if ( !HasUserValue("spatial.local.h") )
+        SetParameterInt( "spatial.local.h" , size[1] );
       
-      if ( HasValue("thumb.h") && HasValue("thumb.w") && HasValue("bin") )
+      if ( GetParameterString("spatial") == "local" &&
+           HasValue("spatial.local.h") && HasValue("spatial.local.w") &&
+           HasValue("bins") )
         CheckValidity();
       
       
@@ -281,46 +309,48 @@ private:
            !HasUserValue("mode.lum.blu.ch") )
         SetDefaultValue( inImage , "RGB" );
 
-      if ( HasUserValue("minmax.man.min") && HasUserValue("minmax.man.max") )
-        {
-        if ( GetParameterFloat( "minmax.man.min" ) > 
-             GetParameterFloat( "minmax.man.max" ) )
-          {
-          float temp = GetParameterFloat( "minmax.man.min" );
-          SetParameterFloat( "minmax.man.min" , 
-                             GetParameterFloat( "minmax.man.max" ));
-          SetParameterFloat( "minmax.man.max" , temp );
-          }
-        else if ( GetParameterFloat( "minmax.man.min" ) == 
-                  GetParameterFloat( "minmax.man.max" ) )
-          {
-          std::ostringstream oss;
-          oss<<"Warning minimum and maximum are equal."<<std::endl;
-          otbAppLogINFO( << oss.str() );
-          }
-        }
+      // if ( HasUserValue("minmax.manuel.min") && HasUserValue("minmax.manuel.max") )
+      //   {
+      //   if ( GetParameterFloat( "minmax.manuel.min" ) > 
+      //        GetParameterFloat( "minmax.manuel.max" ) )
+      //     {
+      //     float temp = GetParameterFloat( "minmax.manuel.min" );
+      //     SetParameterFloat( "minmax.manuel.min" , 
+      //                        GetParameterFloat( "minmax.manuel.max" ));
+      //     SetParameterFloat( "minmax.manuel.max" , temp );
+      //     }
+      //   else if ( GetParameterFloat( "minmax.manuel.min" ) == 
+      //             GetParameterFloat( "minmax.manuel.max" ) )
+      //     {
+      //     std::ostringstream oss;
+      //     oss<<"Warning minimum and maximum are equal."<<std::endl;
+      //     otbAppLogINFO( << oss.str() );
+      //     }
+      //   }
 
       }
 
-    if ( GetParameterString("minmax") == "man" )
+    if ( GetParameterString("minmax") == "manuel" )
       {
-      MandatoryOn("minmax.man.min");
-      MandatoryOn("minmax.man.max");
+      MandatoryOn("minmax.manuel.min");
+      MandatoryOn("minmax.manuel.max");
       }
     else if ( GetParameterString("minmax") == "auto" )
       {
-      MandatoryOff("minmax.man.min");
-      MandatoryOff("minmax.man.max");
+      MandatoryOff("minmax.manuel.min");
+      MandatoryOff("minmax.manuel.max");
       }
   }
 
   void DoExecute() override
   {
-    m_ThumbSize[0] = GetParameterInt("thumb.w");
-    m_ThumbSize[1] = GetParameterInt("thumb.h");
+    m_MinMaxMode = GetParameterString("minmax");
+    m_EqMode = GetParameterString("mode");
+    m_SpatialMode = GetParameterString("spatial");
     FloatVectorImageType * inImage = GetParameterImage("in");
-    ForceGlobalOrNot( inImage );
-    std::string mode = GetParameterString("mode");
+    WarningGlobalOrNot( inImage );
+    WarningMinMax();
+    LogInfo();
     ImageListType::Pointer outputImageList ( ImageListType::New() ); 
     m_VectorToImageListFilter = VectorToImageListFilterType::New() ;
     m_VectorToImageListFilter->SetInput( inImage );
@@ -329,7 +359,7 @@ private:
                   m_VectorToImageListFilter->GetOutput();
     unsigned int nbChannel = inImage->GetVectorLength ();
 
-    if ( mode == "each")
+    if ( m_EqMode == "each")
       {
       // Each channel will be equalized
       m_GainLutFilter.resize(nbChannel);
@@ -339,7 +369,7 @@ private:
       PerBandEqualization( inImage , inputImageList , 
                            nbChannel , outputImageList );
       }
-    else if ( mode == "lum")
+    else if ( m_EqMode == "lum")
       {
       std::vector<int> rgb( 3 , 0 );
       rgb[0] = GetParameterInt("mode.lum.red.ch");
@@ -407,25 +437,97 @@ private:
       }
   }
 
+  // Log info for the user
+  void LogInfo()
+  {
+    std::ostringstream oss;
+    oss << "The application has been launch with the following parameters :"
+    <<std::endl;
+    oss << "- number of bins : " << GetParameterInt("bins")<<std::endl;
+    oss << "- spatial parameters : " << m_SpatialMode ;
+    if ( m_SpatialMode == "local" )
+      {
+      oss<< " with a thumbnail of " <<m_ThumbSize[0]<<"X"<<m_ThumbSize[1];
+      }
+    oss << std::endl << "- equalisation of ";
+    if ( m_EqMode == "each" )
+      {
+      oss << "each channel";
+      }
+    else
+      {
+      oss << "the luminance";
+      }
+    oss << std::endl << "- Min/Max parameters : ";
+    if ( m_MinMaxMode == "auto" )
+      {
+      oss << "automatic";
+      if ( IsParameterEnabled( "minmax.auto.global" ) )
+        { 
+        oss << " and global";
+        }
+      }
+    else 
+      {
+      oss << GetParameterFloat("minmax.manuel.min") << "/" << 
+        GetParameterFloat("minmax.manuel.max");
+      }
+
+    otbAppLogINFO( << oss.str() );
+  }
+
   // Force global computation if the thumbsize is equal to the largest region
-  void ForceGlobalOrNot( FloatVectorImageType * input)
+  void WarningGlobalOrNot( FloatVectorImageType * input)
   {
     auto size = input->GetLargestPossibleRegion().GetSize();
-    if ( size[0] == m_ThumbSize[0] && size[1] == m_ThumbSize[1] )
-      SetParameterEmpty( "global" , true );
+    if ( m_SpatialMode == "global" )
+      {
+      m_ThumbSize[0] = size[0];
+      m_ThumbSize[1] = size[1];
+      }  
+    else 
+      {
+      m_ThumbSize[0] = GetParameterInt("spatial.local.w");
+      m_ThumbSize[1] = GetParameterInt("spatial.local.h");
+      }
+      if ( size[0] == m_ThumbSize[0] && size[1] == m_ThumbSize[1] )
+      {
+      std::ostringstream oss;
+      oss<<"Warning you choose to compute the histogram with a local "
+      "method whereas you have selected the whole image for the thumbnail "
+      "size. In order to use less memory consider using the global option for "
+      "histogram computation.";
+      otbAppLogWARNING( << oss.str() );
+      }
+  }
+
+  // Check for min max validity 
+  void WarningMinMax()
+  {
+    if ( m_MinMaxMode == "manuel" &&  
+         GetParameterFloat( "minmax.manuel.min" ) > 
+         GetParameterFloat( "minmax.manuel.max" ) )
+      {
+      std::ostringstream oss;
+      oss<<"The minimum (" << GetParameterFloat( "minmax.manuel.min" ) <<
+      ") is superior to the maximum (" << GetParameterFloat( "minmax.manuel.max" )
+      << ") please correct this error or allow the application to compute "
+      "those parameters";
+      otbAppLogFATAL( << oss.str() )
+      }
   }
 
   // Check if the image size is a multiple of the thumbnail size
   void CheckValidity()
   {
     std::ostringstream oss;
-    long nbPixel = GetParameterInt("thumb.w") * GetParameterInt("thumb.h");
-    if ( nbPixel < 10 * GetParameterInt("bin"))
+    long nbPixel = GetParameterInt("spatial.local.w") * 
+                   GetParameterInt("spatial.local.h");
+    if ( nbPixel < 10 * GetParameterInt("bins"))
       {   
       oss<<"Warning in parameters selection the thumbnail size is small "
       "in comparison with the number of bin. Histogram may not have much sens. "
-      "For better result enlarge thumbnail size or reduce number of bin."
-      <<std::endl;
+      "For better result enlarge thumbnail size or reduce number of bin.";
       otbAppLogINFO( << oss.str() );
       }
   }
@@ -435,12 +537,12 @@ private:
                             FloatVectorImageType::PixelType & max ,
                             FloatVectorImageType::PixelType & min )
   {
-    if ( GetParameterString("minmax") == "man" )
+    if ( m_MinMaxMode == "manuel" )
       {
-      min.Fill( GetParameterFloat("minmax.man.min") );
-      max.Fill( GetParameterFloat("minmax.man.max") );
+      min.Fill( GetParameterFloat("minmax.manuel.min") );
+      max.Fill( GetParameterFloat("minmax.manuel.max") );
       }
-    else if ( GetParameterString("minmax") == "auto" )
+    else
       {
       VectorStatsFilterType::Pointer 
                 statFilter ( VectorStatsFilterType::New() );
@@ -458,26 +560,40 @@ private:
       if ( IsParameterEnabled("minmax.auto.global") )
         {
         float temp(min[0]);
-        for ( unsigned int i = 0 ; i < min.GetSize() ; i++ )
+        for ( unsigned int i = 1 ; i < min.GetSize() ; i++ )
           {
           temp = std::min(temp , min[i]);
           }
         min.Fill(temp);
         temp = max[0];
-        for ( unsigned int i = 0 ; i < max.GetSize() ; i++ )
+        for ( unsigned int i = 1 ; i < max.GetSize() ; i++ )
           {
           temp = std::max(temp , max[i]);
           }
         max.Fill(temp);
         }
       }
+    std::ostringstream oss;
+    oss<<"Minimum and maximum are for each channel : ";
+    if ( IsParameterEnabled("minmax.auto.global") || 
+          m_MinMaxMode == "manuel" )
+      {
+      oss<<std::endl<<min[0]<<" and "<<max[0];
+      }
+    else 
+      {
+      for ( unsigned int i = 0 ; i < min.GetSize() ; i++ )
+        {
+          oss<<std::endl<<min[i]<<" and "<<max[i];
+        }
+      }
+    otbAppLogINFO( << oss.str() );
   }
 
   // Prepare the first half of the pipe that is common to every methode of 
   // equalization
   void SetUpPipeline( unsigned int channel ,
                       const FloatImageType::Pointer input )
-
   {
     m_GainLutFilter[channel] = GainLutFilterType::New();
     m_ApplyFilter[channel] = ApplyFilterType::New();
@@ -503,7 +619,7 @@ private:
     max.Fill(0);
     ComputeVectorMinMax( inImage , max , min );
 
-    if ( IsParameterEnabled("global") )
+    if ( m_SpatialMode == "global" )
       PersistentComputation( inImage , nbChannel , max , min );
     else
       {
@@ -523,7 +639,7 @@ private:
         SetHistoFilterParameter( m_HistoFilter[channel] ,
                                  min[channel] ,
                                  max[channel] ,
-                                 GetParameterInt("bin") ,
+                                 GetParameterInt("bins") ,
                                  thresh );
         m_Histogram[channel] = m_HistoFilter[channel]->GetHistoOutput();
         }
@@ -535,14 +651,13 @@ private:
 
       if ( min[channel] == max[channel] )
         {
-          //TODO Warn user through log
-          std::cout<<"Channel constant"<<std::endl;
-          std::cout<<"min "<<min[channel]<<std::endl;
-          std::cout<<"max "<<max[channel]<<std::endl;
+          std::ostringstream oss;
+          oss<< "Channel " <<channel << " is constant : " << "min = " <<
+          min[channel] << " and max = " << max[channel] ;
+          otbAppLogINFO( << oss.str() );
           m_BufferFilter[channel]->SetInput( 
                 inputImageList->GetNthElement(channel) );
           outputImageList->PushBack( m_BufferFilter[channel]->GetOutput() );
-          // outputImageList->PushBack( inputImageList->GetNthElement(channel) );
           continue;
         }
 
@@ -595,7 +710,7 @@ private:
     FloatVectorImageType::PixelType min(1) , max(1);
     ComputeVectorMinMax( m_LuminanceFunctor->GetOutput() , max , min );
 
-    if ( IsParameterEnabled("global") )
+    if ( m_SpatialMode == "global" )
       PersistentComputation( m_LuminanceFunctor->GetOutput() , 1 , max , min );
     else
       {
@@ -612,7 +727,7 @@ private:
         SetHistoFilterParameter( m_HistoFilter[0] ,
                                  min[0] ,
                                  max[0] ,
-                                 GetParameterInt("bin") ,
+                                 GetParameterInt("bins") ,
                                  thresh ); 
         m_LuminanceToImageListFilter->UpdateOutputInformation();
         m_HistoFilter[0]->SetInput( 
@@ -648,6 +763,7 @@ private:
     }
   }
 
+  // Function that compute histograms with HistoPersistentFilterType
   void PersistentComputation( const FloatVectorImageType::Pointer inImage ,
                               const unsigned int nbChannel ,
                               const FloatVectorImageType::PixelType & max ,
@@ -656,7 +772,7 @@ private:
 
     HistoPersistentFilterType::Pointer histoPersistent (
         HistoPersistentFilterType::New());
-    unsigned int nbBin ( GetParameterInt( "bin" ) );
+    unsigned int nbBin ( GetParameterInt( "bins" ) );
     histoPersistent->SetInput( inImage );
     FloatVectorImageType::PixelType pixel( nbChannel ) , step( nbChannel );
     pixel.Fill( nbBin );
@@ -677,7 +793,7 @@ private:
     HistoPersistentFilterType::HistogramListType * histoList = 
             histoPersistent->GetHistogramList();
 
-    Transfert( histoList );
+    Transfer( histoList );
 
     if ( HasValue("hfact") )
       {
@@ -685,6 +801,8 @@ private:
       }
   }
 
+  // Threshold function that is normaly done in ComputeHistoFilter  and here is
+  // used on the output of HistoPersistentFilterType.
   void Threshold( HistoPersistentFilterType::HistogramListType * histoList ,
                   unsigned int nbBin )
   {
@@ -718,9 +836,11 @@ private:
       }
   }
 
-  void Transfert( HistoPersistentFilterType::HistogramListType * histoList )
+  // Transfer the output of the HistoPersistentFilterType to the input type
+  // of ComputeGainLutFilter
+  void Transfer( HistoPersistentFilterType::HistogramListType * histoList )
   {
-    unsigned int nbBin( GetParameterInt( "bin" ) );
+    unsigned int nbBin( GetParameterInt( "bins" ) );
 
     HistoPersistentFilterType::HistogramType::Pointer histo;
     FloatImageType::SpacingType inputSpacing ( GetParameterImage("in")->GetSpacing() );
@@ -745,6 +865,7 @@ private:
       }
   }
 
+  // Creating a histogram (VectorImage) from an itkHistogram
   HistogramType::Pointer CreateHistogramFrom( 
       HistoPersistentFilterType::HistogramType::Pointer histo ,
       unsigned int nbBin ,
@@ -776,6 +897,7 @@ private:
     return histoVectorImage;
   }
 
+  // Set correct parameters for the ComputeHistoFilter
   void SetHistoFilterParameter( HistoFilterType::Pointer histoFilter ,
                                 float min ,
                                 float max ,
@@ -794,6 +916,7 @@ private:
       }
   }
 
+  // Set correct parameters for the ComputeGainLutFilter
   void SetGainLutFilterParameter( GainLutFilterType::Pointer gainLutFilter ,
                                   ImagePixelType min ,
                                   ImagePixelType max )
@@ -803,6 +926,7 @@ private:
     gainLutFilter->SetNbPixel( m_ThumbSize[0]*m_ThumbSize[1] );
   }
 
+  // Set correct parameters for the ApplyGainFilter
   void SetApplyFilterParameter( ApplyFilterType::Pointer applyFilter ,
                                 ImagePixelType min ,
                                 ImagePixelType max )
@@ -817,6 +941,7 @@ private:
       }
   }
 
+  std::string m_SpatialMode , m_MinMaxMode , m_EqMode ;
   FloatImageType::SizeType m_ThumbSize;
   ImageListToVectorFilterType::Pointer m_ImageListToVectorFilterOut;
   LuminanceFunctorType::Pointer m_LuminanceFunctor;
