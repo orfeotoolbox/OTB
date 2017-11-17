@@ -109,21 +109,21 @@ private:
 
     AddDocTag(Tags::SAR);
 
-    AddParameter(ParameterType_ComplexInputImage,  "inhh",   "Input Image");
+    AddParameter(ParameterType_InputImage,  "inhh",   "Input Image");
     SetParameterDescription("inhh", "Input image (HH)");
     
-    AddParameter(ParameterType_ComplexInputImage,  "inhv",   "Input Image");
+    AddParameter(ParameterType_InputImage,  "inhv",   "Input Image");
     SetParameterDescription("inhv", "Input image (HV)");
     MandatoryOff("inhv");
     
-    AddParameter(ParameterType_ComplexInputImage,  "invh",   "Input Image");
+    AddParameter(ParameterType_InputImage,  "invh",   "Input Image");
     SetParameterDescription("invh", "Input image (VH)");
     MandatoryOff("invh");
     
-    AddParameter(ParameterType_ComplexInputImage,  "invv",   "Input Image");
+    AddParameter(ParameterType_InputImage,  "invv",   "Input Image");
     SetParameterDescription("invv", "Input image (VV)");
     
-    AddParameter(ParameterType_ComplexOutputImage, "out",  "Output Image");
+    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
     
     AddParameter(ParameterType_Choice, "decomp", "Decompositions");
@@ -201,7 +201,7 @@ private:
 		
 		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
 		m_HAFilter->SetInput(m_MeanFilter->GetOutput());
-		SetParameterComplexOutputImage("out", m_HAFilter->GetOutput() );
+		SetParameterOutputImage("out", m_HAFilter->GetOutput() );
     
 		break;
         
@@ -220,7 +220,7 @@ private:
 		
 		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
 		m_BarnesFilter->SetInput(m_MeanFilter->GetOutput());
-		SetParameterComplexOutputImage("out", m_BarnesFilter->GetOutput() );
+		SetParameterOutputImage("out", m_BarnesFilter->GetOutput() );
     
 		break;
         
@@ -239,7 +239,7 @@ private:
 		
 		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
 		m_HuynenFilter->SetInput(m_MeanFilter->GetOutput());
-		SetParameterComplexOutputImage("out", m_HuynenFilter->GetOutput() );
+		SetParameterOutputImage("out", m_HuynenFilter->GetOutput() );
     
 		break;
         
@@ -257,7 +257,7 @@ private:
         m_Concatener->SetInput( m_ImageList );        
         m_PauliFilter->SetInput(m_Concatener->GetOutput());
         
-		SetParameterComplexOutputImage("out", m_PauliFilter->GetOutput() );
+		SetParameterOutputImage("out", m_PauliFilter->GetOutput() );
     
 		break;
 	  }
