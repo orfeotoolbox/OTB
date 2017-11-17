@@ -20,6 +20,7 @@
 
 #include "otbWrapperOutputImageParameter.h"
 #include "otbClampImageFilter.h"
+#include "itkCastImageFilter.h"
 #include "otbClampVectorImageFilter.h"
 #include "otbImageIOFactory.h"
 #include "itksys/SystemTools.hxx"
@@ -94,6 +95,16 @@ std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
       ret = "double";
       break;
       }
+    case ImagePixelType_cfloat:
+      {
+      ret = "cfloat";
+      break;
+      }
+    case ImagePixelType_cdouble:
+      {
+      ret = "cdouble";
+      break;
+      }
     }
   return ret;
 }
@@ -115,6 +126,10 @@ OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePi
     type = ImagePixelType_float;
   else if (value == "double")
     type = ImagePixelType_double;
+  else if (value == "cfloat")
+    type = ImagePixelType_cfloat;
+  else if (value == "cdouble")
+    type = ImagePixelType_cdouble;
   else
     return false;
   return true;
@@ -140,13 +155,23 @@ void OutputImageParameter::InitializeWriters()
 
   m_RGBUInt8Writer = RGBUInt8WriterType::New();
   m_RGBAUInt8Writer = RGBAUInt8WriterType::New();
+
+  m_ComplexFloatWriter = ComplexFloatWriterType::New();
+  m_ComplexDoubleWriter = ComplexDoubleWriterType::New();
+
+  m_ComplexVectorFloatWriter = ComplexVectorFloatWriterType::New();
+  m_ComplexVectorDoubleWriter = ComplexVectorDoubleWriterType::New();
 }
 
 
-template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput> * writer, const std::string & filename, const unsigned int & ramValue)
+template <typename TInput, typename TOutput> 
+void 
+ClampAndWriteImage( itk::ImageBase<2> * in ,
+                    otb::ImageFileWriter<TOutput> * writer , 
+                    const std::string & filename , 
+                    const unsigned int & ramValue ,
+                    typename itk::ImageToImageFilter< TInput , TOutput > * clampFilter )
 {
-  typedef otb::ClampImageFilter<TInput, TOutput> ClampFilterType; 
-  typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
   clampFilter->SetInput( dynamic_cast<TInput*>(in));
   
   bool useStandardWriter = true;
@@ -264,39 +289,98 @@ OutputImageParameter::SwitchImageWrite()
     {
     case ImagePixelType_uint8:
     {
-    ClampAndWriteImage<TInputImageType,UInt8ImageType>(m_Image,m_UInt8Writer,m_FileName,m_RAMValue);
+    ClampAndWriteImage< TInputImageType , UInt8ImageType >(  m_Image ,
+          m_UInt8Writer ,
+          m_FileName , 
+          m_RAMValue ,
+          otb::ClampImageFilter< TInputImageType , UInt8ImageType >::New() );
     break;
     }
     case ImagePixelType_int16:
     {
-    ClampAndWriteImage<TInputImageType,Int16ImageType>(m_Image,m_Int16Writer,m_FileName,m_RAMValue);
+    ClampAndWriteImage< TInputImageType , Int16ImageType >( m_Image ,
+          m_Int16Writer ,
+          m_FileName , 
+          m_RAMValue ,
+          otb::ClampImageFilter< TInputImageType , Int16ImageType >::New() );
     break;
     }
     case ImagePixelType_uint16:
     {
-    ClampAndWriteImage<TInputImageType,UInt16ImageType>(m_Image,m_UInt16Writer,m_FileName,m_RAMValue);
+    ClampAndWriteImage< TInputImageType , UInt16ImageType >( m_Image ,
+          m_UInt16Writer ,
+          m_FileName , 
+          m_RAMValue ,
+          otb::ClampImageFilter< TInputImageType , UInt16ImageType >::New() );
     break;
     }
     case ImagePixelType_int32:
     {
-    ClampAndWriteImage<TInputImageType,Int32ImageType>(m_Image,m_Int32Writer,m_FileName,m_RAMValue);
+    ClampAndWriteImage< TInputImageType , Int32ImageType >( m_Image ,
+          m_Int32Writer ,
+          m_FileName , 
+          m_RAMValue ,
+          otb::ClampImageFilter< TInputImageType , Int32ImageType >::New() );
     break;
     }
     case ImagePixelType_uint32:
     {
-    ClampAndWriteImage<TInputImageType,UInt32ImageType>(m_Image,m_UInt32Writer,m_FileName,m_RAMValue);
+    ClampAndWriteImage< TInputImageType , UInt32ImageType >( m_Image ,
+          m_UInt32Writer ,
+          m_FileName , 
+          m_RAMValue ,
+          otb::ClampImageFilter< TInputImageType , UInt32ImageType >::New() );
     break;
     }
     case ImagePixelType_float:
     {
-    ClampAndWriteImage<TInputImageType,FloatImageType>(m_Image,m_FloatWriter,m_FileName,m_RAMValue);
+    ClampAndWriteImage< TInputImageType , FloatImageType >( m_Image ,
+          m_FloatWriter ,
+          m_FileName , 
+          m_RAMValue ,
+          otb::ClampImageFilter< TInputImageType , FloatImageType >::New() );
     break;
     }
     case ImagePixelType_double:
     {
-    ClampAndWriteImage<TInputImageType,DoubleImageType>(m_Image,m_DoubleWriter,m_FileName,m_RAMValue);
+    ClampAndWriteImage< TInputImageType , DoubleImageType >( m_Image ,
+          m_DoubleWriter ,
+          m_FileName , 
+          m_RAMValue ,
+          otb::ClampImageFilter< TInputImageType , DoubleImageType >::New() );
     break;
     }
+    default:
+      break;
+    }
+}
+
+template <class TInputImageType>
+void
+OutputImageParameter::SwitchCImageWrite()
+{
+  switch(m_PixelType )
+    {
+    case ImagePixelType_cfloat:
+    {
+    ClampAndWriteImage< TInputImageType , ComplexFloatImageType >( m_Image ,
+        m_ComplexFloatWriter ,
+        m_FileName ,
+        m_RAMValue ,
+        itk::CastImageFilter< TInputImageType , ComplexFloatImageType >::New() );
+    break;
+    }
+    case ImagePixelType_cdouble:
+    {
+    ClampAndWriteImage< TInputImageType , ComplexDoubleImageType >( m_Image ,
+        m_ComplexDoubleWriter ,
+        m_FileName ,
+        m_RAMValue ,
+        itk::CastImageFilter< TInputImageType , ComplexDoubleImageType >::New() );
+    break;
+    }
+    default:
+      break;
     }
 }
 
@@ -342,9 +426,39 @@ OutputImageParameter::SwitchVectorImageWrite()
     ClampAndWriteVectorImage<TInputVectorImageType,DoubleVectorImageType>(m_Image,m_VectorDoubleWriter,m_FileName,m_RAMValue);
     break;
     }
+    default:
+      break;
     }
   }
 
+template <class TInputVectorImageType>
+void
+OutputImageParameter::SwitchVectorCImageWrite()
+{
+  switch(m_PixelType )
+    {
+    case ImagePixelType_cfloat:
+    {
+    ClampAndWriteImage< TInputVectorImageType , ComplexFloatVectorImageType >( m_Image ,
+        m_ComplexVectorFloatWriter ,
+        m_FileName ,
+        m_RAMValue ,
+        itk::CastImageFilter< TInputVectorImageType , ComplexFloatVectorImageType >::New() );
+    break;
+    }
+    case ImagePixelType_cdouble:
+    {
+    ClampAndWriteImage< TInputVectorImageType , ComplexDoubleVectorImageType >( m_Image ,
+        m_ComplexVectorDoubleWriter ,
+        m_FileName ,
+        m_RAMValue ,
+        itk::CastImageFilter< TInputVectorImageType , ComplexDoubleVectorImageType >::New() );
+    break;
+    }
+    default:
+      break;
+    }
+}
 
 template <class TInputRGBAImageType>
 void
@@ -409,6 +523,14 @@ OutputImageParameter::Write()
     {
     SwitchImageWrite<DoubleImageType>();
     }
+  else if (dynamic_cast<ComplexFloatImageType*>(m_Image.GetPointer()) )
+    {
+    SwitchCImageWrite<ComplexFloatImageType>();
+    }
+  else if (dynamic_cast<ComplexDoubleImageType*>(m_Image.GetPointer()) )
+    {
+    SwitchCImageWrite<ComplexDoubleImageType>();
+    }
   else if (dynamic_cast<UInt8VectorImageType*>(m_Image.GetPointer()))
     {
     SwitchVectorImageWrite<UInt8VectorImageType>();
@@ -445,6 +567,14 @@ OutputImageParameter::Write()
     {
     SwitchRGBAImageWrite<UInt8RGBAImageType>();
     }
+  else if (dynamic_cast<ComplexFloatVectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorCImageWrite<ComplexFloatVectorImageType>();
+    }
+  else if (dynamic_cast<ComplexDoubleVectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorCImageWrite<ComplexDoubleVectorImageType>();
+    }
   else
     {
     itkExceptionMacro("Unknown image type");
@@ -467,7 +597,9 @@ OutputImageParameter::GetWriter()
       || dynamic_cast<Int32VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<UInt32VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<FloatVectorImageType*> (m_Image.GetPointer())
-      || dynamic_cast<DoubleVectorImageType*> (m_Image.GetPointer()))
+      || dynamic_cast<DoubleVectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<ComplexFloatVectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<ComplexDoubleVectorImageType*> (m_Image.GetPointer()))
     {
     type = 1;
     }
@@ -553,6 +685,22 @@ OutputImageParameter::GetWriter()
         writer = m_VectorDoubleWriter;
       else
         if (type == 0) writer = m_DoubleWriter;
+      break;
+      }
+    case ImagePixelType_cfloat:
+      {
+      if( type == 1 )
+        writer = m_ComplexVectorFloatWriter;
+      else
+        writer = m_ComplexFloatWriter;
+      break;
+      }
+    case ImagePixelType_cdouble:
+      {
+      if( type == 1 )
+        writer = m_ComplexVectorDoubleWriter;
+      else
+        writer = m_ComplexDoubleWriter;
       break;
       }
     }

@@ -122,8 +122,14 @@ protected:
   template <class TInputImageType>
     void SwitchImageWrite();
 
+  template <class TInputImageType>
+    void SwitchCImageWrite();
+
   template <class TInputVectorImageType>
     void SwitchVectorImageWrite();
+
+  template <class TInputVectorImageType>
+    void SwitchVectorCImageWrite();
 
   template <class TInputVectorImageType>
     void SwitchRGBImageWrite();
@@ -156,6 +162,14 @@ protected:
   typedef otb::ImageFileWriter<UInt8RGBAImageType>  RGBAUInt8WriterType;
   typedef otb::ImageFileWriter<UInt8RGBImageType>   RGBUInt8WriterType;
 
+  // Complex Image
+  typedef otb::ImageFileWriter<ComplexFloatImageType>  ComplexFloatWriterType;
+  typedef otb::ImageFileWriter<ComplexDoubleImageType> ComplexDoubleWriterType;
+
+  typedef otb::ImageFileWriter<ComplexFloatVectorImageType>  ComplexVectorFloatWriterType;
+  typedef otb::ImageFileWriter<ComplexDoubleVectorImageType> ComplexVectorDoubleWriterType;
+
+
   UInt8WriterType::Pointer  m_UInt8Writer;
   Int16WriterType::Pointer  m_Int16Writer;
   UInt16WriterType::Pointer m_UInt16Writer;
@@ -174,6 +188,12 @@ protected:
 
   RGBUInt8WriterType::Pointer   m_RGBUInt8Writer;
   RGBAUInt8WriterType::Pointer  m_RGBAUInt8Writer;
+
+  ComplexFloatWriterType::Pointer  m_ComplexFloatWriter;
+  ComplexDoubleWriterType::Pointer m_ComplexDoubleWriter;
+
+  ComplexVectorFloatWriterType::Pointer  m_ComplexVectorFloatWriter;
+  ComplexVectorDoubleWriterType::Pointer m_ComplexVectorDoubleWriter;
 
 private:
   OutputImageParameter(const Parameter &); //purposely not implemented

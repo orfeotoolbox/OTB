@@ -77,6 +77,8 @@ typedef enum
   ImagePixelType_uint32,
   ImagePixelType_float,
   ImagePixelType_double,
+  ImagePixelType_cfloat,
+  ImagePixelType_cdouble,
 } ImagePixelType;
 
 typedef enum
