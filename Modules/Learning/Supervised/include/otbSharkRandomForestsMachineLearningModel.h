@@ -34,6 +34,7 @@
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #endif
+#include <shark/Models/Classifier.h>
 #include "otb_shark.h"
 #include "shark/Algorithms/Trainers/RFTrainer.h"
 #if defined(__GNUC__) || defined(__clang__)
@@ -154,8 +155,8 @@ private:
   SharkRandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  shark::RFClassifier m_RFModel;
-  shark::RFTrainer m_RFTrainer;
+  shark::RFClassifier<unsigned int> m_RFModel;
+  shark::RFTrainer<unsigned int> m_RFTrainer;
 
   unsigned int m_NumberOfTrees;
   unsigned int m_MTry;
