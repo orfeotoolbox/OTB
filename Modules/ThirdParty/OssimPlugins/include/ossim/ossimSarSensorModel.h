@@ -38,14 +38,14 @@
 #   pragma GCC diagnostic ignored "-Wshadow"
 #   include <ossim/projection/ossimSensorModel.h>
 #   include <ossim/elevation/ossimHgtRef.h>
-#   include "ossimTimeUtilities.h"
+#   include "ossim/ossimTimeUtilities.h"
 
 # pragma GCC diagnostic pop
 
 #else
 #   include <ossim/projection/ossimSensorModel.h>
 #   include <ossim/elevation/ossimHgtRef.h>
-#   include "ossimTimeUtilities.h"
+#   include "ossim/ossimTimeUtilities.h"
 #endif
 
 #if defined(USE_BOOST_TIME)
