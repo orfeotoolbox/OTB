@@ -79,7 +79,7 @@ int GeoInformationConversion::ToEPSG(const std::string &wkt)
   OGRSpatialReference srs(wkt.c_str());
   srs.Fixup();
   srs.AutoIdentifyEPSG();
-  const char * epsg = nullptr;
+  const char * epsg = NULL;
   if (srs.IsGeographic())
     {
     code = 0;
@@ -90,7 +90,7 @@ int GeoInformationConversion::ToEPSG(const std::string &wkt)
     code = 0;
     epsg = srs.GetAuthorityCode("PROJCS");
     }
-  if (epsg!=nullptr && strcmp( epsg, "" )!=0 )
+  if (epsg!=NULL && strcmp( epsg, "" )!=0 )
     {
     try
       {
