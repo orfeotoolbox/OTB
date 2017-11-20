@@ -151,6 +151,9 @@ namespace ossimplugins
       kwl.addList(theManifestKwl, true);
       kwl.addList(theProductKwl,  true);
 
+      const unsigned int k_version = 2;
+      add(kwl, HEADER_PREFIX, "version", k_version);
+      
       return ossimSensorModel::saveState(kwl, prefix);
    }
 
