@@ -268,13 +268,11 @@ ImageFileWriter<TInputImage>
   return static_cast<const InputImageType*>(this->ProcessObject::GetInput(0));
 }
 
-/**
- * Update method : update output information of input and write to file
- */
+/** Prepare everything and call m_ImageIO.WriteInformation() */
 template<class TInputImage>
 void
 ImageFileWriter<TInputImage>
-::Update()
+::GenerateOutputInformation(void)
 {
   // Update output information on input image
   InputImagePointer inputPtr =
@@ -393,14 +391,6 @@ ImageFileWriter<TInputImage>
       }
     }
 
-  this->SetAbortGenerateData(0);
-  this->SetProgress(0.0);
-
-  /**
-   * Tell all Observers that the filter is starting
-   */
-  this->InvokeEvent(itk::StartEvent());
-
   /** Prepare ImageIO  : create ImageFactory */
 
   if (m_FileName == "")
@@ -479,7 +469,6 @@ ImageFileWriter<TInputImage>
   /**
    * Grab the input
    */
-  inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
 
   /** Parse region size modes */
@@ -544,12 +533,6 @@ ImageFileWriter<TInputImage>
   m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
   otbMsgDebugMacro(<< "Number Of Stream Divisions : " << m_NumberOfDivisions);
 
-  /**
-   * Loop over the number of pieces, execute the upstream pipeline on each
-   * piece, and copy the results into the output image.
-   */
-  InputImageRegionType streamRegion;
-
   //
   // Setup the ImageIO with information from inputPtr
   //
@@ -588,12 +571,33 @@ ImageFileWriter<TInputImage>
   m_ImageIO->SetFileName(m_FileName.c_str());
 
   m_ImageIO->WriteImageInformation();
+}
 
+/**
+ * Update method : update output information of input and write to file
+ */
+template<class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::Update()
+{
+  this->UpdateOutputInformation();
+
+  this->SetAbortGenerateData(0);
+  this->SetProgress(0.0);
+
+  /**
+   * Tell all Observers that the filter is starting
+   */
+  this->InvokeEvent(itk::StartEvent());
+  
   this->UpdateProgress(0);
   m_CurrentDivision = 0;
   m_DivisionProgress = 0;
 
   // Get the source process object
+  InputImagePointer inputPtr =
+    const_cast<InputImageType *>(this->GetInput());
   itk::ProcessObject* source = inputPtr->GetSource();
   m_IsObserving = false;
   m_ObserverID = 0;
@@ -614,6 +618,12 @@ ImageFileWriter<TInputImage>
     {
     itkWarningMacro(<< "Could not get the source process object. Progress report might be buggy");
     }
+
+  /**
+   * Loop over the number of pieces, execute the upstream pipeline on each
+   * piece, and copy the results into the output image.
+   */
+  InputImageRegionType streamRegion;
 
   for (m_CurrentDivision = 0;
        m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
