@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbCLHistogramEqualizationFilter.h"
 
-int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char * argv [])
 {
   typedef int InputPixelType;
   const unsigned int Dimension = 2;
@@ -36,20 +36,22 @@ int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char * itkNotUsed(arg
 
   ReaderType::Pointer reader ( ReaderType::New() );
   WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( "/home/antoine/dev/my_data/test/smallinput.tif" );
-  writer->SetFileName( "/home/antoine/dev/my_data/test/small_glob_clahe.tif" );
+  reader->SetFileName( argv[1] );
+  writer->SetFileName( argv[2] );
   reader->UpdateOutputInformation();
+
   FilterType::Pointer histoEqualize ( FilterType::New() );
+  
   histoEqualize->SetInput( reader->GetOutput() );
   histoEqualize->SetMin(0);
   histoEqualize->SetMax(255);
   histoEqualize->SetNbBin(256);
-  InputImageType::SizeType size;
-  size[0] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
-  size[1] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
-  histoEqualize->SetThumbSize(size);
-  // histoEqualize->SetThreshold(100);
-  writer->SetInput(histoEqualize->GetOutput());
+  auto size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
+  size[0] /= 4;
+  size[1] /= 4;
+  histoEqualize->SetThumbSize( size );
+
+  writer->SetInput( histoEqualize->GetOutput() );
   writer->Update();
   return EXIT_SUCCESS;
 }

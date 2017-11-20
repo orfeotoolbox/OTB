@@ -48,6 +48,11 @@ otb_test_application(NAME  apTvUtSmoothingTest_OutXML
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtSmoothingTest.tif
                              ${TEMP}/apTvUtSmoothingTest_OutXML.tif)
+
+#----------- Contrast TESTS ----------------
+
+
+
                              
                              
 

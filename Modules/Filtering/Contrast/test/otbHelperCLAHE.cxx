@@ -25,7 +25,7 @@
 #include "itkImageRegionIterator.h"
 #include "otbCLHistogramEqualizationFilter.h"
 
-int otbHelperCLAHE(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbHelperCLAHE(int itkNotUsed(argc), char * argv [])
 {
   typedef int InputPixelType;
   const unsigned int Dimension = 2;
@@ -35,8 +35,8 @@ int otbHelperCLAHE(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   typedef otb::ImageFileWriter< InputImageType > WriterType;
   ReaderType::Pointer reader ( ReaderType::New() );
   WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( "/home/antoine/dev/my_data/smallinputmono.tif" );
-  writer->SetFileName( "/home/antoine/dev/my_data/smallnewtest.tif" );
+  reader->SetFileName( argv[1] );
+  writer->SetFileName( argv[2] );
   reader->UpdateOutputInformation();
 
   typedef otb::VectorImage< int , 2 > HistogramType;
@@ -62,8 +62,7 @@ int otbHelperCLAHE(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   BufferFilter::Pointer buffer( BufferFilter::New() );
   StreamingImageFilter::Pointer streamFilter( StreamingImageFilter::New() );
   InputImageType::SizeType size;
-  size[0] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
-  size[1] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+  size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
   // histoEqualize->SetThreshold(100);
 
   histoFilter->SetInput( reader->GetOutput() );

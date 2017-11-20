@@ -206,14 +206,15 @@ private:
 
     AddParameter(ParameterType_Choice , "spatial" , "Spatial parameters "
       "for the histogram computation");
-    AddChoice( "spatial.global" , "Global" );
-    SetParameterDescription("spatial.global" , "The histogram will be "
-      "computed on the whole image. The equalization will be done on "
-      "this single histogram.");
     AddChoice( "spatial.local" , "Local" );
     SetParameterDescription("spatial.local" , "The histograms will be "
       "computed on the each thumbnail. Each of the histogram will be "
       "equalized and the corresponding gain will be interpolated.");
+    AddChoice( "spatial.global" , "Global" );
+    SetParameterDescription("spatial.global" , "The histogram will be "
+      "computed on the whole image. The equalization will be done on "
+      "this single histogram.");
+
  
     AddParameter(ParameterType_Int,"spatial.local.h" , 
       "Thumbnail height in pixel");
@@ -309,7 +310,8 @@ private:
            !HasUserValue("mode.lum.blu.ch") )
         SetDefaultValue( inImage , "RGB" );
 
-      // if ( HasUserValue("minmax.manuel.min") && HasUserValue("minmax.manuel.max") )
+      // if ( HasUserValue("minmax.manuel.min") && 
+      //      HasUserValue("minmax.manuel.max") )
       //   {
       //   if ( GetParameterFloat( "minmax.manuel.min" ) > 
       //        GetParameterFloat( "minmax.manuel.max" ) )
@@ -327,7 +329,6 @@ private:
       //     otbAppLogINFO( << oss.str() );
       //     }
       //   }
-
       }
 
     if ( GetParameterString("minmax") == "manuel" )
@@ -381,8 +382,6 @@ private:
 
     m_ImageListToVectorFilterOut = ImageListToVectorFilterType::New() ;
     m_ImageListToVectorFilterOut->SetInput(outputImageList);
-    // m_ImageListToVectorFilterOut->Update();
-    // std::cout<<"not you imagelistetovecor"<<std::endl;
     SetParameterOutputImage( "out" , 
         m_ImageListToVectorFilterOut->GetOutput() );
   }
@@ -510,7 +509,8 @@ private:
       {
       std::ostringstream oss;
       oss<<"The minimum (" << GetParameterFloat( "minmax.manuel.min" ) <<
-      ") is superior to the maximum (" << GetParameterFloat( "minmax.manuel.max" )
+      ") is superior to the maximum (" 
+      << GetParameterFloat( "minmax.manuel.max" )
       << ") please correct this error or allow the application to compute "
       "those parameters";
       otbAppLogFATAL( << oss.str() )
@@ -601,7 +601,8 @@ private:
     m_BufferFilter[channel] = BufferFilterType::New();
     m_BufferFilter[channel]->SetInput( input );
     m_GainLutFilter[channel]->SetInput ( m_Histogram[channel] );
-    m_StreamingFilter[channel]->SetInput( m_GainLutFilter[channel]->GetOutput() );
+    m_StreamingFilter[channel]->SetInput( 
+      m_GainLutFilter[channel]->GetOutput() );
     m_ApplyFilter[channel]->SetInputImage ( 
       m_BufferFilter[channel]->GetOutput() );
     m_ApplyFilter[channel]->SetInputLut( 
@@ -693,7 +694,6 @@ private:
     m_LuminanceFunctor->GetFunctor().SetLumCoef( lumCoef );
     m_LuminanceFunctor->SetInput( inImage );
     m_LuminanceFunctor->UpdateOutputInformation();
-    // std::cout<<m_LuminanceFunctor->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
   }
 
   // Equalize the luminance and apply the corresponding gain on each channel
@@ -815,7 +815,7 @@ private:
       HistogramType::IndexType zero;
       HistogramType::Pointer & histoToThresh = m_Histogram[j];
       zero.Fill(0);
-      for( unsigned int i = 0 ; i < nbBin ; i++ )
+      for ( unsigned int i = 0 ; i < nbBin ; i++ )
         {
         if ( histoToThresh->GetPixel(zero)[i] > height )
           {
@@ -825,7 +825,7 @@ private:
         }
       height = rest / nbBin;
       rest = rest % nbBin;
-      for( unsigned int i = 0 ; i < nbBin ; i++ )
+      for ( unsigned int i = 0 ; i < nbBin ; i++ )
         {
         histoToThresh->GetPixel(zero)[i] += height ;
         if ( i > (nbBin - rest)/2 && i <= (nbBin - rest)/2 + rest )
@@ -843,15 +843,19 @@ private:
     unsigned int nbBin( GetParameterInt( "bins" ) );
 
     HistoPersistentFilterType::HistogramType::Pointer histo;
-    FloatImageType::SpacingType inputSpacing ( GetParameterImage("in")->GetSpacing() );
-    FloatImageType::PointType inputOrigin ( GetParameterImage("in")->GetOrigin() );
+    FloatImageType::SpacingType inputSpacing ( 
+      GetParameterImage("in")->GetSpacing() );
+    FloatImageType::PointType inputOrigin ( 
+      GetParameterImage("in")->GetOrigin() );
 
     HistogramType::SpacingType histoSpacing ;
     histoSpacing[0] = inputSpacing[0] * m_ThumbSize[0] ;
     histoSpacing[1] = inputSpacing[1] * m_ThumbSize[1] ;
     HistogramType::PointType histoOrigin ;
-    histoOrigin[0] = histoSpacing[0] / 2 +  inputOrigin[0] - inputSpacing[0] / 2 ;
-    histoOrigin[1] = histoSpacing[1] / 2 +  inputOrigin[1] - inputSpacing[1] / 2 ;
+    histoOrigin[0] = histoSpacing[0] / 2 + 
+      inputOrigin[0] - inputSpacing[0] / 2 ;
+    histoOrigin[1] = histoSpacing[1] / 2 + 
+      inputOrigin[1] - inputSpacing[1] / 2 ;
 
     for ( unsigned int i = 0 ; i < histoList->Size() ; i++ )
       {

@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbComputeGainLutFilter.h"
 
-int otbComputeGainLutFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbComputeGainLutFilter(int itkNotUsed(argc), char * argv [])
 {
   typedef int InputPixelType;
   typedef double OutputPixelType;
@@ -41,9 +41,9 @@ int otbComputeGainLutFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   ReaderImageType::Pointer readerImage( ReaderImageType::New() );
   ReaderType::Pointer reader( ReaderType::New() );
   WriterType::Pointer writer ( WriterType::New() );
-  readerImage->SetFileName( "/home/antoine/dev/my_data/test/smallinput.tif" );
-  reader->SetFileName( "/home/antoine/dev/my_data/test/small_glob_histo_ref.tif" );
-  writer->SetFileName( "/home/antoine/dev/my_data/test/small_glob_lut.tif" );
+  readerImage->SetFileName( argv[1] );
+  reader->SetFileName( argv[2] );
+  writer->SetFileName( argv[3] );
   reader->UpdateOutputInformation();
   readerImage->UpdateOutputInformation();
 
@@ -53,7 +53,9 @@ int otbComputeGainLutFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   computeGainLut->SetMin(0);
   computeGainLut->SetMax(255);
   auto size = readerImage->GetOutput()->GetLargestPossibleRegion().GetSize();
-  auto nbPix = size[0]*size[1];
+  size[0] /= 4;
+  size[1] /= 4;
+  auto nbPix = size[0]*size[1] ;
   computeGainLut->SetNbPixel( nbPix );
 
   writer->SetInput( computeGainLut->GetOutput() );

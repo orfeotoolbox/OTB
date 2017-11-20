@@ -39,3 +39,50 @@ otb_module_target_label(otbContrastTestDriver)
 
 otb_add_test(NAME bfTuCLHistogramEqualizationFilterNew COMMAND otbContrastTestDriver
   otbCLHistogramEqualizationFilterNew)
+
+otb_add_test(NAME bfTuApplyGainFilterNew COMMAND otbContrastTestDriver
+  otbApplyGainFilterNew)
+
+otb_add_test(NAME bfTuComputeGainLutFilterNew COMMAND otbContrastTestDriver
+  otbComputeGainLutFilterNew)
+
+otb_add_test(NAME bfTuComputeHistoFilterNew COMMAND otbContrastTestDriver
+  otbComputeHistoFilterNew)
+
+otb_add_test(NAME bfTvComputeHistoFilter COMMAND otbContrastTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvComputeHistoFilter.tif
+  ${TEMP}/bfTvComputeHistoFilter.tif
+  otbComputeHistoFilter
+  ${INPUTDATA}/QB_Suburb.png
+  ${TEMP}/inputHisto_QB_Suburb.tif
+  )
+
+otb_add_test(NAME bfTvComputeGainLutFilter COMMAND otbContrastTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvComputeGainLutFilter.tif
+  ${TEMP}/bfTvComputeGainLutFilter.tif
+  otbComputeGainLutFilter
+  ${INPUTDATA}/QB_Suburb.png
+  ${INPUTDATA}/inputHisto_QB_Suburb.tif
+  ${TEMP}/inputLut_QB_Suburb.tif
+  )
+
+otb_add_test(NAME bfTvApplyGainFilter COMMAND otbContrastTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvApplyGainFilter.tif
+  ${TEMP}/bfTvApplyGainFilter.tif
+  otbApplyGainFilter
+  ${INPUTDATA}/QB_Suburb.png
+  ${INPUTDATA}/inputLut_QB_Suburb.tif
+  ${TEMP}/bfTvApplyGainFilter.tif
+  )
+
+otb_add_test(NAME bfTvCLHistoEqFilter COMMAND otbContrastTestDriver
+  --compare-image ${EPSILON_7}
+  ${BASELINE}/bfTvApplyGainFilter.tif
+  ${TEMP}/bfTvCLHistoEqFilter.tif
+  otbCLHistogramEqualizationFilter
+  ${INPUTDATA}/QB_Suburb.png
+  ${TEMP}/bfTvCLHistoEqFilter.tif
+  )

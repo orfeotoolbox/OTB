@@ -24,7 +24,7 @@
 #include "otbVectorImage.h"
 #include "otbComputeHistoFilter.h"
 
-int otbComputeHistoFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbComputeHistoFilter(int itkNotUsed(argc), char * argv [])
 {
   typedef int InputPixelType;
   typedef int OutputPixelType;
@@ -38,8 +38,8 @@ int otbComputeHistoFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   typedef otb::ImageFileWriter< HistoImageType > WriterType;
   ReaderType::Pointer reader ( ReaderType::New() );
   WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( "/home/antoine/dev/my_data/test/smallinput.tif" );
-  writer->SetFileName( "/home/antoine/dev/my_data/test/small_glob_histo.tif" );
+  reader->SetFileName( argv[1] );
+  writer->SetFileName( argv[2] );
   reader->UpdateOutputInformation();
 
   FilterType::Pointer computeHisto ( FilterType::New() );
@@ -48,14 +48,12 @@ int otbComputeHistoFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   computeHisto->SetMin(0);
   computeHisto->SetMax(255);
   computeHisto->SetNbBin(256);
-  // computeHisto->SetThreshol(256);
   auto size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  computeHisto->SetThumbSize(size);
+  size[0] /= 4;
+  size[1] /= 4;
+  computeHisto->SetThumbSize( size );
 
   writer->SetInput( computeHisto->GetHistoOutput() );
   writer->Update();
-  auto index = computeHisto->GetHistoOutput()->GetLargestPossibleRegion().GetIndex();
-  std::cout << computeHisto->GetHistoOutput()->GetPixel(index) << std::endl;
-
   return EXIT_SUCCESS;
 }

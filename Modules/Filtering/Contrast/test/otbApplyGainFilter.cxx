@@ -24,7 +24,7 @@
 #include "otbVectorImage.h"
 #include "otbApplyGainFilter.h"
 
-int otbApplyGainFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbApplyGainFilter(int itkNotUsed(argc), char * argv [])
 {
   typedef int InputPixelType;
   typedef double LutPixelType;
@@ -42,9 +42,9 @@ int otbApplyGainFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   ReaderType::Pointer reader ( ReaderType::New() );
   ReaderLutType::Pointer readerLut ( ReaderLutType::New() );
   WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( "/home/antoine/dev/my_data/test/smallinput.tif" );
-  readerLut->SetFileName( "/home/antoine/dev/my_data/test/small_glob_lut_ref.tif" );
-  writer->SetFileName( "/home/antoine/dev/my_data/test/small_glob_apply.tif" );
+  reader->SetFileName( argv[1] );
+  readerLut->SetFileName( argv[2] );
+  writer->SetFileName( argv[3] );
   reader->UpdateOutputInformation();
   readerLut->UpdateOutputInformation();
 
