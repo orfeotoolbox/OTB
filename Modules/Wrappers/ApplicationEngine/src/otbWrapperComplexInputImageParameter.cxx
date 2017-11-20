@@ -163,6 +163,9 @@ otbGetFalseImageMacro(UInt32VectorImage);
 otbGetFalseImageMacro(UInt8Image);
 otbGetFalseImageMacro(UInt8VectorImage);
 
+otbGetFalseImageMacro(UInt8RGBImage);
+otbGetFalseImageMacro(UInt8RGBAImage);
+
 }
 }
 
