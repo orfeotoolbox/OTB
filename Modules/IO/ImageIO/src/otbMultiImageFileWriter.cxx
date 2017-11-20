@@ -19,7 +19,6 @@
  */
 
 #include "otbMultiImageFileWriter.h"
-#include "otbImage.h"
 #include "otbImageIOFactory.h"
 //~ #include "itkImageFileWriter.h"
 
@@ -31,7 +30,7 @@ namespace otb
 
 MultiImageFileWriter
 ::MultiImageFileWriter() :
- m_NumberOfLinesPerStrip(600),
+ //m_NumberOfLinesPerStrip(600),
  //~ m_GranuleGenerationMode(false),
  m_NumberOfDivisions(0),
  m_CurrentDivision(0),
@@ -47,15 +46,16 @@ MultiImageFileWriter
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
   this->SetAutomaticAdaptativeStreaming();
   // add a fake output to drive memory estimation
-  this->SetNthOutput(0, otb::Image<unsigned char, 2>::New());
+  this->SetNthOutput(0, FakeOutputType::New());
 }
 
 void
 MultiImageFileWriter
 ::SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions)
 {
-  typedef NumberOfDivisionsStrippedStreamingManager<ImageBaseType> NumberOfDivisionsStrippedStreamingManagerType;
-  typename NumberOfDivisionsStrippedStreamingManagerType::Pointer streamingManager = NumberOfDivisionsStrippedStreamingManagerType::New();
+  typedef NumberOfDivisionsStrippedStreamingManager<FakeOutputType> NumberOfDivisionsStrippedStreamingManagerType;
+  NumberOfDivisionsStrippedStreamingManagerType::Pointer streamingManager =
+    NumberOfDivisionsStrippedStreamingManagerType::New();
   streamingManager->SetNumberOfDivisions(nbDivisions);
 
   m_StreamingManager = streamingManager;
@@ -65,8 +65,9 @@ void
 MultiImageFileWriter
 ::SetNumberOfDivisionsTiledStreaming(unsigned int nbDivisions)
 {
-  typedef NumberOfDivisionsTiledStreamingManager<ImageBaseType> NumberOfDivisionsTiledStreamingManagerType;
-  typename NumberOfDivisionsTiledStreamingManagerType::Pointer streamingManager = NumberOfDivisionsTiledStreamingManagerType::New();
+  typedef NumberOfDivisionsTiledStreamingManager<FakeOutputType> NumberOfDivisionsTiledStreamingManagerType;
+  NumberOfDivisionsTiledStreamingManagerType::Pointer streamingManager =
+    NumberOfDivisionsTiledStreamingManagerType::New();
   streamingManager->SetNumberOfDivisions(nbDivisions);
 
   m_StreamingManager = streamingManager;
@@ -76,8 +77,9 @@ void
 MultiImageFileWriter
 ::SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip)
 {
-  typedef NumberOfLinesStrippedStreamingManager<ImageBaseType> NumberOfLinesStrippedStreamingManagerType;
-  typename NumberOfLinesStrippedStreamingManagerType::Pointer streamingManager = NumberOfLinesStrippedStreamingManagerType::New();
+  typedef NumberOfLinesStrippedStreamingManager<FakeOutputType> NumberOfLinesStrippedStreamingManagerType;
+  NumberOfLinesStrippedStreamingManagerType::Pointer streamingManager =
+    NumberOfLinesStrippedStreamingManagerType::New();
   streamingManager->SetNumberOfLinesPerStrip(nbLinesPerStrip);
 
   m_StreamingManager = streamingManager;
@@ -87,8 +89,9 @@ void
 MultiImageFileWriter
 ::SetAutomaticStrippedStreaming(unsigned int availableRAM, double bias)
 {
-  typedef RAMDrivenStrippedStreamingManager<ImageBaseType> RAMDrivenStrippedStreamingManagerType;
-  typename RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
+  typedef RAMDrivenStrippedStreamingManager<FakeOutputType> RAMDrivenStrippedStreamingManagerType;
+  RAMDrivenStrippedStreamingManagerType::Pointer streamingManager =
+    RAMDrivenStrippedStreamingManagerType::New();
   streamingManager->SetAvailableRAMInMB(availableRAM);
   streamingManager->SetBias(bias);
 
@@ -99,8 +102,9 @@ void
 MultiImageFileWriter
 ::SetTileDimensionTiledStreaming(unsigned int tileDimension)
 {
-  typedef TileDimensionTiledStreamingManager<ImageBaseType> TileDimensionTiledStreamingManagerType;
-  typename TileDimensionTiledStreamingManagerType::Pointer streamingManager = TileDimensionTiledStreamingManagerType::New();
+  typedef TileDimensionTiledStreamingManager<FakeOutputType> TileDimensionTiledStreamingManagerType;
+  TileDimensionTiledStreamingManagerType::Pointer streamingManager =
+    TileDimensionTiledStreamingManagerType::New();
   streamingManager->SetTileDimension(tileDimension);
 
   m_StreamingManager = streamingManager;
@@ -110,8 +114,9 @@ void
 MultiImageFileWriter
 ::SetAutomaticTiledStreaming(unsigned int availableRAM, double bias)
 {
-  typedef RAMDrivenTiledStreamingManager<ImageBaseType> RAMDrivenTiledStreamingManagerType;
-  typename RAMDrivenTiledStreamingManagerType::Pointer streamingManager = RAMDrivenTiledStreamingManagerType::New();
+  typedef RAMDrivenTiledStreamingManager<FakeOutputType> RAMDrivenTiledStreamingManagerType;
+  RAMDrivenTiledStreamingManagerType::Pointer streamingManager =
+    RAMDrivenTiledStreamingManagerType::New();
   streamingManager->SetAvailableRAMInMB(availableRAM);
   streamingManager->SetBias(bias);
   m_StreamingManager = streamingManager;
@@ -121,8 +126,9 @@ void
 MultiImageFileWriter
 ::SetAutomaticAdaptativeStreaming(unsigned int availableRAM, double bias)
 {
-  typedef RAMDrivenAdaptativeStreamingManager<ImageBaseType> RAMDrivenAdaptativeStreamingManagerType;
-  typename RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+  typedef RAMDrivenAdaptativeStreamingManager<FakeOutputType> RAMDrivenAdaptativeStreamingManagerType;
+  RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager =
+    RAMDrivenAdaptativeStreamingManagerType::New();
   streamingManager->SetAvailableRAMInMB(availableRAM);
   streamingManager->SetBias(bias);
   m_StreamingManager = streamingManager;
@@ -139,8 +145,6 @@ MultiImageFileWriter
   if(!inputPtr)
     itkExceptionMacro("At least one input must be connected to the writer\n");
 
-  RegionType region = inputPtr->GetLargestPossibleRegion();
-  // TODO : setup streaming for every input
   /**
    * Determine of number of pieces to divide the input.  This will be the
    * minimum of what the user specified via SetNumberOfDivisionsStrippedStreaming()
@@ -148,6 +152,7 @@ MultiImageFileWriter
    */
 
   /** Control if the ImageIO is CanStreamWrite */
+  m_NumberOfDivisions = 1;
   bool canStream = true;
   bool isBuffered = true;
   for (unsigned int inputIndex = 0; inputIndex < m_SinkList.size(); ++inputIndex)
@@ -165,9 +170,8 @@ MultiImageFileWriter
   if (canStream == false)
     {
     otbWarningMacro(
-      << "The ImageFactory selected for the image file <" << m_FileName.c_str() <<
-      "> does not support streaming.");
-    this->SetNumberOfDivisionsStrippedStreaming(1);
+      << "One of the selected ImageIO does not support streaming.");
+    this->SetNumberOfDivisionsStrippedStreaming(m_NumberOfDivisions);
     }
 
   /** Compare the buffered region  with the inputRegion which is the largest
@@ -175,13 +179,44 @@ MultiImageFileWriter
   * Not sure that if this modification is needed  */
   else if (isBuffered)
     {
-    otbMsgDevMacro(<< "Buffered region is the largest possible region, there is no need for streaming.");
-    this->SetNumberOfDivisionsStrippedStreaming(1);
+    otbMsgDevMacro(<< "Buffered region is the largest possible region, there is"
+      " no need for streaming.");
+    this->SetNumberOfDivisionsStrippedStreaming(m_NumberOfDivisions);
     }
-  // TODO : instead of inputPtr, use an output of MultiImageWriter
-  m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
-  m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
-  otbMsgDebugMacro(<< "Number Of Stream Divisions : " << m_NumberOfDivisions);
+  else
+    {
+    FakeOutputType * fakeOut = static_cast<FakeOutputType *>(
+      this->itk::ProcessObject::GetOutput(0));
+    RegionType region = fakeOut->GetLargestPossibleRegion();
+    m_StreamingManager->PrepareStreaming(fakeOut, region);
+    m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
+    // Check this number of division is compatible with all inputs
+    bool nbDivValid = false;
+    while ( (!nbDivValid) && 1 < m_NumberOfDivisions)
+      {
+      unsigned int smallestNbDiv = m_NumberOfDivisions;
+      for (unsigned int i = 0; i < m_SinkList.size(); ++i)
+        {
+        unsigned int div = m_StreamingManager->GetSplitter()->GetNumberOfSplits(
+          m_SinkList[i]->GetInput()->GetLargestPossibleRegion(),
+          m_NumberOfDivisions);
+        smallestNbDiv = std::min(div, smallestNbDiv);
+        }
+      if (smallestNbDiv == m_NumberOfDivisions)
+        {
+        nbDivValid = true;
+        }
+      else
+        {
+        m_NumberOfDivisions = smallestNbDiv;
+        }
+      }
+    if (m_NumberOfDivisions == 1)
+      {
+      otbWarningMacro("Can't find a common split scheme between all inputs, streaming disabled\n");
+      }
+    otbMsgDebugMacro(<< "Number Of Stream Divisions : " << m_NumberOfDivisions);
+    }
 }
 
 void
@@ -232,17 +267,17 @@ MultiImageFileWriter
     return;
     }
 
+  // Initialize streaming
+  this->InitializeStreaming();
+
   /**
    * Prepare all the outputs. This may deallocate previous bulk data.
    */
-  this->PrepareOutputs();
+  //this->PrepareOutputs();
 
   this->SetAbortGenerateData(0);
   this->SetProgress(0.0);
   this->m_Updating = true;
-
-  // Initialize streaming
-  this->InitializeStreaming();
 
   /**
    * Tell all Observers that the filter is starting
@@ -370,22 +405,39 @@ MultiImageFileWriter
 {
   Superclass::GenerateInputRequestedRegion();
 
+  // Approximate conversion of output requested region into each input,
+  // but this is only to have a consistent pipeline memory estimation.
   int numInputs = m_SinkList.size(); //this->GetNumberOfInputs();
 
-  for (int i = 0; i < numInputs; ++i)
+  FakeOutputType* fakeOut = static_cast<FakeOutputType *>(
+    this->itk::ProcessObject::GetOutput(0));
+
+  if (numInputs)
     {
-    ImageBaseType* inputPtr = m_SinkList[i]->GetInput(); //const_cast<ImageBaseType*>(this->GetInput(i));
-
-    if(!inputPtr)
+    RegionType refLargest = fakeOut->GetLargestPossibleRegion();
+    RegionType refRequest = fakeOut->GetRequestedRegion();
+    IndexType idxLargest = refLargest.GetIndex();
+    SizeType sizeLargest = refLargest.GetSize();
+    IndexType idxRequest = refRequest.GetIndex();
+    SizeType sizeRequest = refRequest.GetSize();
+    for (int i = 0; i < numInputs; ++i)
       {
-      return;
+      ImageBaseType* inputPtr = m_SinkList[i]->GetInput(); //const_cast<ImageBaseType*>(this->GetInput(i));
+      if(!inputPtr)
+        {
+        return;
+        }
+      RegionType region = inputPtr->GetLargestPossibleRegion();
+      IndexType idx = region.GetIndex();
+      SizeType size = region.GetSize();
+      idx[0] += size[0] * (idxRequest[0] - idxLargest[0]) / sizeLargest[0];
+      idx[1] += size[1] * (idxRequest[1] - idxLargest[1]) / sizeLargest[1];
+      size[0] *= sizeRequest[0] / sizeLargest[0];
+      size[1] *= sizeRequest[1] / sizeLargest[1];
+      region.SetIndex(idx);
+      region.SetSize(size);
+      inputPtr->SetRequestedRegion(region);
       }
-    RegionType lregion = inputPtr->GetLargestPossibleRegion();
-    SizeType rsize;
-    rsize.Fill(0);
-    lregion.SetSize(rsize);
-
-    inputPtr->SetRequestedRegion(lregion);
     }
 }
 
@@ -414,7 +466,10 @@ MultiImageFileWriter
   //~ region.SetIndex(1, region.GetIndex(1) + sink->GetTopMarginTrimSize());
   //~ region.SetSize(1, region.GetSize(1) - sink->GetTopMarginTrimSize() - sink->GetBottomMarginTrimSize());
 
-  // TODO : call splitter 
+  m_StreamingManager->GetSplitter()->GetSplit(
+    m_CurrentDivision,
+    m_NumberOfDivisions,
+    region);
   return region;
 }
 

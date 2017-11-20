@@ -22,6 +22,7 @@
 #define otbMultiImageFileWriter_h
 
 #include "otbImageFileWriter.h"
+#include "otbImage.h"
 #include "itkImageBase.h"
 #include "itkProcessObject.h"
 #include "itkImageIOBase.h"
@@ -66,29 +67,75 @@ public:
 
   //typedef ImageRegionFixedSplitter<ImageBaseType::ImageDimension> SplitterType;
 
-  typedef StreamingManager<ImageBaseType>        StreamingManagerType;
-
   /**  Return the StreamingManager object responsible for dividing
    *   the region to write */
-  StreamingManagerType* GetStreamingManager(void)
-    {
-    return m_StreamingManager;
-    }
+  //~ StreamingManagerType* GetStreamingManager(void)
+    //~ {
+    //~ return m_StreamingManager;
+    //~ }
 
   /**  Set a user-specified implementation of StreamingManager
    *   used to divide the largest possible region in several divisions */
-  void SetStreamingManager(StreamingManagerType* streamingManager)
-    {
-    m_StreamingManager = streamingManager;
-    }
+  //~ void SetStreamingManager(StreamingManagerType* streamingManager)
+    //~ {
+    //~ m_StreamingManager = streamingManager;
+    //~ }
+
+  /**  Set the streaming mode to 'stripped' and configure the number of strips
+   *   which will be used to stream the image */
+  void SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions);
+
+  /**  Set the streaming mode to 'tiled' and configure the number of tiles
+   *   which will be used to stream the image */
+  void SetNumberOfDivisionsTiledStreaming(unsigned int nbDivisions);
+
+  /**  Set the streaming mode to 'stripped' and configure the number of strips
+   *   which will be used to stream the image with respect to a number of line
+   *   per strip */
+  void SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip);
+
+  /**  Set the streaming mode to 'stripped' and configure the number of MB
+   *   available. The actual number of divisions is computed automatically
+   *   by estimating the memory consumption of the pipeline.
+   *   Setting the availableRAM parameter to 0 means that the available RAM
+   *   is set from the CMake configuration option.
+   *   The bias parameter is a multiplier applied on the estimated memory size
+   *   of the pipeline and can be used to fine tune the potential gap between
+   *   estimated memory and actual memory used, which can happen because of
+   *   composite filters for example */
+  void SetAutomaticStrippedStreaming(unsigned int availableRAM = 0, double bias = 1.0);
+
+  /**  Set the streaming mode to 'tiled' and configure the dimension of the tiles
+   *   in pixels for each dimension (square tiles will be generated) */
+  void SetTileDimensionTiledStreaming(unsigned int tileDimension);
+
+  /**  Set the streaming mode to 'tiled' and configure the number of MB
+   *   available. The actual number of divisions is computed automatically
+   *   by estimating the memory consumption of the pipeline.
+   *   Tiles will be square.
+   *   Setting the availableRAM parameter to 0 means that the available RAM
+   *   is set from the CMake configuration option
+   *   The bias parameter is a multiplier applied on the estimated memory size
+   *   of the pipeline and can be used to fine tune the potential gap between
+   *   estimated memory and actual memory used, which can happen because of
+   *   composite filters for example */
+  void SetAutomaticTiledStreaming(unsigned int availableRAM = 0, double bias = 1.0);
+
+  /**  Set the streaming mode to 'adaptative' and configure the number of MB
+   *   available. The actual number of divisions is computed automatically
+   *   by estimating the memory consumption of the pipeline.
+   *   Tiles will try to match the input file tile scheme.
+   *   Setting the availableRAM parameter to 0 means that the available RAM
+   *   is set from the CMake configuration option */
+  void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
   virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
 
   /** Sets the number of lines used in stripped streaming for an input with
   resolutionFactor == 1.0 . This number is actually multiplied by the resolution
   factor to obtain the size of the strip for each input image. */
-  itkSetMacro(NumberOfLinesPerStrip, int);
-  itkGetMacro(NumberOfLinesPerStrip, int);
+  //~ itkSetMacro(NumberOfLinesPerStrip, int);
+  //~ itkGetMacro(NumberOfLinesPerStrip, int);
 
   /** Set the number of rows per granule for an image with resolution factor 1.0 */
   //~ itkSetMacro(NumberOfRowsPerGranule, int);
@@ -188,7 +235,7 @@ protected:
   /** This is the number of lines used in stripped streaming for an input with
   resolutionFactor == 1.0 . This number is actually multiplied by the resolution
   factor to obtain the size of the strip for each input image. */
-  int m_NumberOfLinesPerStrip;
+  //int m_NumberOfLinesPerStrip;
 
   void operator =(const MultiImageFileWriter&); //purposely not implemented
 
@@ -213,6 +260,11 @@ protected:
     this->UpdateProgress((m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions);
   }
 
+private:
+  typedef otb::Image<unsigned char, 2> FakeOutputType;
+  typedef StreamingManager<FakeOutputType>        StreamingManagerType;
+  /** Streaming manager used for the N inputs */
+  StreamingManagerType::Pointer m_StreamingManager;
   //Granule Generation mode
   //~ bool m_GranuleGenerationMode;
 
@@ -311,8 +363,6 @@ protected:
   SinkListType m_SinkList;
 
   std::vector<RegionType> m_StreamRegionList;
-
-  StreamingManagerType::Pointer m_StreamingManager;
 };
 
 } // end of namespace s2ipf
