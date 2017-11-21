@@ -75,6 +75,8 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   m_ComboBox->addItem( "uint 32");
   m_ComboBox->addItem( "float");
   m_ComboBox->addItem( "double");
+  m_ComboBox->addItem( "cfloat");
+  m_ComboBox->addItem( "cdouble");
   m_ComboBox->setCurrentIndex(m_OutputImageParam->GetPixelType());
   connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetPixelType(int)) );
   connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
