@@ -27,8 +27,6 @@
 #include "itkProcessObject.h"
 #include "itkImageIOBase.h"
 
-//#include "s2ipfImageRegionFixedSplitter.h"
-
 #include <boost/shared_ptr.hpp>
 
 namespace otb
@@ -36,16 +34,15 @@ namespace otb
 
 /** \class MultiImageFileWriter
  *  \brief Streams a pipeline with multiple outputs.
- *  It optionally writes each output to a file, and can also separate each
- *  output into several granules files (use SetGranuleGenerationMode). Inputs
- *  are connected to the writer using the AddInput method.
- *  The streaming occurs by strips. Each output may have a different resolution,
- *  specified at the AddInput call, and the strip size is proportional to the
- *  resolution.
+ *  It writes each output to a file. Inputs
+ *  are connected to the writer using the AddInputImage method.
+ *  The type of streaming can be chosen. Each output may have a different size.
+ *  When the user gives a number of lines per strip or a tile size, the value
+ *  is interpreted on the first input to deduce the number of streams. This
+ *  number of streams is then used to split the other inputs.
  */
 class MultiImageFileWriter: public itk::ProcessObject
 {
-  //~ friend class Sink;
 public:
   /** Standard class typedefs. */
   typedef MultiImageFileWriter Self;
@@ -64,22 +61,6 @@ public:
   typedef ImageBaseType::IndexValueType  IndexValueType;
   typedef ImageBaseType::SizeType   SizeType;
   typedef ImageBaseType::SizeValueType   SizeValueType;
-
-  //typedef ImageRegionFixedSplitter<ImageBaseType::ImageDimension> SplitterType;
-
-  /**  Return the StreamingManager object responsible for dividing
-   *   the region to write */
-  //~ StreamingManagerType* GetStreamingManager(void)
-    //~ {
-    //~ return m_StreamingManager;
-    //~ }
-
-  /**  Set a user-specified implementation of StreamingManager
-   *   used to divide the largest possible region in several divisions */
-  //~ void SetStreamingManager(StreamingManagerType* streamingManager)
-    //~ {
-    //~ m_StreamingManager = streamingManager;
-    //~ }
 
   /**  Set the streaming mode to 'stripped' and configure the number of strips
    *   which will be used to stream the image */
@@ -131,34 +112,6 @@ public:
 
   virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
 
-  /** Sets the number of lines used in stripped streaming for an input with
-  resolutionFactor == 1.0 . This number is actually multiplied by the resolution
-  factor to obtain the size of the strip for each input image. */
-  //~ itkSetMacro(NumberOfLinesPerStrip, int);
-  //~ itkGetMacro(NumberOfLinesPerStrip, int);
-
-  /** Set the number of rows per granule for an image with resolution factor 1.0 */
-  //~ itkSetMacro(NumberOfRowsPerGranule, int);
-  //~ itkGetMacro(NumberOfRowsPerGranule, int);
-
-  /** Specify whether granules are to be generated. If false, a single file is
-  generated for each input */
-  //~ itkSetMacro(GranuleGenerationMode, bool);
-  //~ itkGetConstReferenceMacro(GranuleGenerationMode, bool);
-  //~ itkBooleanMacro(GranuleGenerationMode);
-
-  /** Set the compression On or Off */
-  //~ itkSetMacro(UseCompression, bool);
-  //~ itkGetConstReferenceMacro(UseCompression, bool);
-  //~ itkBooleanMacro(UseCompression);
-
-  /**
-   * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
-   */
-  //~ itkSetMacro(WriteGeomFile, bool);
-  //~ itkGetMacro(WriteGeomFile, bool);
-  //~ itkBooleanMacro(WriteGeomFile);
-
   /** Connect a new input to the multi-writer. Only the input pointer is
    *  required. If the filename list is empty,
    *  streaming will occur without writing. It the filename list contains more
@@ -175,26 +128,8 @@ public:
     Sink<TImage> * sink = new Sink<TImage>(inputPtr, fileName);
     m_SinkList.push_back(SinkBase::Pointer(sink));
     unsigned int size = m_SinkList.size();
-    //~ this->SetNumberOfInputs(size);
     this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(inputPtr)));
   }
-
-  //~ /** Connect a new input to the multi-writer. Takes a single filename instead
-  //~ of a list of filenames */
-  //~ template <class TImage>
-  //~ void AddInput(const TImage* inputPtr, const std::string & fileName = std::string(), double resolutionFactor = 1.0, int topMarginTrimSize = 0, int bottomMarginTrimSize = 0)
-  //~ {
-    //~ std::vector<std::string> fileNameList;
-    //~ fileNameList.push_back(fileName);
-    //~ this->AddInput(inputPtr, fileNameList, resolutionFactor, topMarginTrimSize, bottomMarginTrimSize);
-  //~ }
-//~ 
-  //~ /** This version of AddInput takes no input filename */
-  //~ template <class TImage>
-  //~ void AddInput(const TImage* inputPtr, double resolutionFactor = 1.0, int topMarginTrimSize = 0, int bottomMarginTrimSize = 0)
-  //~ {
-    //~ this->AddInput(inputPtr, std::vector<std::string>(), resolutionFactor, topMarginTrimSize, bottomMarginTrimSize);
-  //~ }
 
   virtual void UpdateOutputInformation();
 
@@ -205,15 +140,17 @@ public:
   }
 
 protected:
-  /** SetInput is changed to protected. Use AddInput to connect the pipeline to
-    * the writer
+  /** SetInput is changed to protected. Use AddInputImage to connect the
+   *  pipeline to the writer
    */
-//  virtual void SetInput(const ImageBaseType* image) { this->Superclass::SetInput(image); }
+  virtual void SetInput(const itk::ProcessObject::DataObjectIdentifierType & key, itk::DataObject* image)
+    { this->Superclass::SetInput(key, image); }
 
-  /** SetInput is changed to protected. Use AddInput to connect the pipeline to
-    * the writer
+  /** SetNthInput is changed to protected. Use AddInputImage to connect the
+   *  pipeline to the writer
    */
-//  virtual void SetInput(unsigned int i, const ImageBaseType* image) { this->Superclass::SetInput(i, image); }
+  virtual void SetNthInput(itk::ProcessObject::DataObjectPointerArraySizeType i, itk::DataObject* image)
+    { this->Superclass::SetNthInput(i, image); }
 
   MultiImageFileWriter();
   virtual ~MultiImageFileWriter() {}
@@ -221,21 +158,22 @@ protected:
   /** GenerateData calls the Write method for each connected input */
   virtual void GenerateData(void);
 
+  /** GenerateInputRequestedRegion can predict approximate input regions
+   *  based on the requested region of the fake output. Only usefull for
+   *  pipeline memory print estimation
+   */
   virtual void GenerateInputRequestedRegion();
 
   /** Computes the number of divisions */
   virtual void InitializeStreaming();
 
-  /** Goes up the pipeline starting at imagePtr, resetting all requested regions to a null region */
+  /** Goes up the pipeline starting at imagePtr, resetting all requested regions
+   *  to a null region. This may be usefull when mixing inputs of different
+   *  resolutions. */
   void ResetAllRequestedRegions(ImageBaseType* imagePtr);
 
   /** Returns the current stream region of the given input */
   virtual RegionType GetStreamRegion(int inputIndex);
-
-  /** This is the number of lines used in stripped streaming for an input with
-  resolutionFactor == 1.0 . This number is actually multiplied by the resolution
-  factor to obtain the size of the strip for each input image. */
-  //int m_NumberOfLinesPerStrip;
 
   void operator =(const MultiImageFileWriter&); //purposely not implemented
 
@@ -265,8 +203,6 @@ private:
   typedef StreamingManager<FakeOutputType>        StreamingManagerType;
   /** Streaming manager used for the N inputs */
   StreamingManagerType::Pointer m_StreamingManager;
-  //Granule Generation mode
-  //~ bool m_GranuleGenerationMode;
 
   //Division parameters
   unsigned int m_NumberOfDivisions;
@@ -276,20 +212,7 @@ private:
   bool m_IsObserving;
   unsigned long m_ObserverID;
 
-  /** compression */
-  //~ bool m_UseCompression;
-  //~ bool m_UseInputMetaDataDictionary; // whether to use the
-                                     // MetaDataDictionary from the
-                                     // input or not.
-  //~ bool m_WriteGeomFile; // Write a geom file to store the kwl
-
-  /** Number of rows per granule for an image with resolution factor 1.0 (i.e. a
-   * 10m band)
-   */
-  //~ int m_NumberOfRowsPerGranule;
-
-  //~ SplitterType::Pointer m_Splitter;
-
+  /** Internal base wrapper class to handle each ImageFileWriter */
   class SinkBase
   {
   public:
@@ -310,12 +233,11 @@ private:
   };
 
   /** \class Sink
-   *  Parameters and methods specific to a single input
+   *  Wrapper class for each ImageFileWriter
    */
   template <class TImage>
   class Sink : public SinkBase
   {
-    //~ friend class MultiImageFileWriter;
   public:
     Sink() {}
     Sink(typename TImage::ConstPointer inputImage,
@@ -327,35 +249,12 @@ private:
     virtual void Write(const RegionType & streamRegion);
     virtual bool CanStreamWrite();
     typedef boost::shared_ptr<Sink> Pointer;
-  protected:
-    //~ void CreateImageFile(int fileIndex);
-
-    /** There may be several output filenames in the case of granule mode
-     *  generation. Or there may be none if no output file is required.
-     */
-    //~ std::string m_FileName;
-
-    /** Specifies whether image is actually written to a file */
-    //~ bool m_UseImageIO;
   private:
     /** Actual writer for this image */
     typename otb::ImageFileWriter<TImage>::Pointer m_Writer;
 
     /** An ImageIO used to actually write data to a file */
     otb::ImageIOBase::Pointer m_ImageIO;
-
-    /** The current file number into which data is written */
-    //~ int m_CurrentFileIndex;
-
-    /** The image region to write to the current file */
-    //~ RegionType m_CurrentFileRegion;
-
-    /** The height of the file, which can be the size of a granule in granule
-    generation mode, or else the size of the input image (minus margins). */
-    //~ int m_FileHeight;
-
-    /** A pointer to the writer to gain access to its fields */
-    //~ typename MultiImageFileWriter::Pointer m_Writer;
   };
 
   /** The list of inputs and their associated parameters, built using AddInput */

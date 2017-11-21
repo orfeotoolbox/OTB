@@ -20,27 +20,17 @@
 
 #include "otbMultiImageFileWriter.h"
 #include "otbImageIOFactory.h"
-//~ #include "itkImageFileWriter.h"
-
-//#include "s2ipfSensor.h"
-//~ #define S2IPF_GRANULE_HEIGHT 2304
 
 namespace otb
 {
 
 MultiImageFileWriter
 ::MultiImageFileWriter() :
- //m_NumberOfLinesPerStrip(600),
- //~ m_GranuleGenerationMode(false),
  m_NumberOfDivisions(0),
  m_CurrentDivision(0),
  m_DivisionProgress(0.0),
  m_IsObserving(true),
  m_ObserverID(0)
- //~ m_UseCompression(false),
- //~ m_UseInputMetaDataDictionary(false),
- //~ m_WriteGeomFile(false),
- //~ m_NumberOfRowsPerGranule(S2IPF_GRANULE_HEIGHT)
 {
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
@@ -145,12 +135,6 @@ MultiImageFileWriter
   if(!inputPtr)
     itkExceptionMacro("At least one input must be connected to the writer\n");
 
-  /**
-   * Determine of number of pieces to divide the input.  This will be the
-   * minimum of what the user specified via SetNumberOfDivisionsStrippedStreaming()
-   * and what the Splitter thinks is a reasonable value.
-   */
-
   /** Control if the ImageIO is CanStreamWrite */
   m_NumberOfDivisions = 1;
   bool canStream = true;
@@ -185,13 +169,17 @@ MultiImageFileWriter
     }
   else
     {
+    /**
+     * Determine of number of pieces to divide the input.  This will be the
+     * first estimated on the fake output, which has the same size as the
+     * first input. Then there is a check that each input can be split into
+     * this number of pieces.
+     */
     FakeOutputType * fakeOut = static_cast<FakeOutputType *>(
       this->itk::ProcessObject::GetOutput(0));
     RegionType region = fakeOut->GetLargestPossibleRegion();
     m_StreamingManager->PrepareStreaming(fakeOut, region);
     m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
-    // DEBUG
-    std::cout << "NbDiv :"<< m_NumberOfDivisions << std::endl;
     // Check this number of division is compatible with all inputs
     bool nbDivValid = false;
     while ( (!nbDivValid) && 1 < m_NumberOfDivisions)
@@ -211,8 +199,6 @@ MultiImageFileWriter
       else
         {
         m_NumberOfDivisions = smallestNbDiv;
-        // DEBUG
-        std::cout << "Div "<< m_NumberOfDivisions << " -> "<< smallestNbDiv << std::endl;
         }
       }
     if (m_NumberOfDivisions == 1)
@@ -275,11 +261,6 @@ MultiImageFileWriter
   // Initialize streaming
   this->InitializeStreaming();
 
-  /**
-   * Prepare all the outputs. This may deallocate previous bulk data.
-   */
-  //this->PrepareOutputs();
-
   this->SetAbortGenerateData(0);
   this->SetProgress(0.0);
   this->m_Updating = true;
@@ -320,14 +301,10 @@ MultiImageFileWriter
   for (m_CurrentDivision = 0; m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
       m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
-
     // Update all stream regions
     for(int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
       {
       m_StreamRegionList[inputIndex] = GetStreamRegion(inputIndex);
-      // DEBUG
-      std::cout << "Region #"<<m_CurrentDivision<<", Image #"<<inputIndex <<
-        ", Height : "<< m_StreamRegionList[inputIndex].GetSize(1) << std::endl;
       }
 
     // NOTE : this reset was probably designed to work with the next section
@@ -342,13 +319,11 @@ MultiImageFileWriter
 
     for(int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
       {
-
-      ImageBaseType::Pointer inputPtr = m_SinkList[inputIndex]->GetInput(); // const_cast<ImageBaseType*>(this->GetInput(inputIndex));
-      //RegionType streamRegion = GetStreamRegion(inputIndex);
+      ImageBaseType::Pointer inputPtr = m_SinkList[inputIndex]->GetInput();
       RegionType inputRequestedRegion = m_StreamRegionList[inputIndex];
-
       const RegionType & currentInputRequestedRegion = inputPtr->GetRequestedRegion();
-      if( currentInputRequestedRegion != inputPtr->GetLargestPossibleRegion() && currentInputRequestedRegion.GetNumberOfPixels() != 0)
+      if( currentInputRequestedRegion != inputPtr->GetLargestPossibleRegion()
+        && currentInputRequestedRegion.GetNumberOfPixels() != 0)
         {
         IndexType startIndex = currentInputRequestedRegion.GetIndex();
         IndexType lastIndex = currentInputRequestedRegion.GetUpperIndex();
@@ -364,16 +339,8 @@ MultiImageFileWriter
       inputPtr->PropagateRequestedRegion();
       }
 
-    //~ for(int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
-      //~ {
-      //~ ImageBaseType* inputPtr = m_SinkList[inputIndex]->GetInput(); // const_cast<ImageBaseType*>(this->GetInput(inputIndex));
-      //~ //RegionType streamRegion = GetStreamRegion(inputIndex);
-      //~ inputPtr->UpdateOutputData();
-      //~ }
-
     /** Call GenerateData to write streams to files if needed */
     this->GenerateData();
-
     }
 
   /**
@@ -403,7 +370,6 @@ MultiImageFileWriter
 
   // Mark that we are no longer updating the data in this filter
   this->m_Updating = false;
-
 }
 
 
@@ -430,7 +396,7 @@ MultiImageFileWriter
     SizeType sizeRequest = refRequest.GetSize();
     for (int i = 0; i < numInputs; ++i)
       {
-      ImageBaseType* inputPtr = m_SinkList[i]->GetInput(); //const_cast<ImageBaseType*>(this->GetInput(i));
+      ImageBaseType* inputPtr = m_SinkList[i]->GetInput();
       if(!inputPtr)
         {
         return;
@@ -453,14 +419,9 @@ void
 MultiImageFileWriter
 ::GenerateData()
 {
-  int numInputs = m_SinkList.size(); //this->GetNumberOfInputs();
-
+  int numInputs = m_SinkList.size();
   for(int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
     {
-
-    //ImageBaseType* inputPtr = const_cast<ImageBaseType*>(this->GetInput(inputIndex));
-    //RegionType streamRegion = GetStreamRegion(inputIndex);
-
     m_SinkList[inputIndex]->Write(m_StreamRegionList[inputIndex]);
     }
 }
@@ -471,8 +432,6 @@ MultiImageFileWriter
 {
   const SinkBase::Pointer sink = m_SinkList[inputIndex];
   RegionType region = sink->GetInput()->GetLargestPossibleRegion();
-  //~ region.SetIndex(1, region.GetIndex(1) + sink->GetTopMarginTrimSize());
-  //~ region.SetSize(1, region.GetSize(1) - sink->GetTopMarginTrimSize() - sink->GetBottomMarginTrimSize());
 
   m_StreamingManager->GetSplitter()->GetSplit(
     m_CurrentDivision,
