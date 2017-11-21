@@ -36,8 +36,8 @@ MultiImageFileWriter::Sink<TImage>
        const std::string & fileName):
   SinkBase(dynamic_cast<const ImageBaseType*>(inputImage.GetPointer())),
   //~ m_FileName(fileName),
-  m_ImageIO(NULL),
-  m_Writer(otb::ImageFileWriter<TImage>::New())
+  m_Writer(otb::ImageFileWriter<TImage>::New()),
+  m_ImageIO(NULL)
 {
   m_Writer->SetFileName(fileName);
   m_Writer->SetInput(inputImage);
@@ -167,7 +167,7 @@ MultiImageFileWriter::Sink<TImage>
     }
   //~ this->SetIORegion(ioRegion);
   m_ImageIO->SetIORegion(ioRegion);
-  m_Writer->GenerateData();
+  m_Writer->UpdateOutputData(nullptr);
 
   //~ if( ! m_UseImageIO ) return;
 //~ 

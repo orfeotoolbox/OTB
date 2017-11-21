@@ -190,6 +190,8 @@ MultiImageFileWriter
     RegionType region = fakeOut->GetLargestPossibleRegion();
     m_StreamingManager->PrepareStreaming(fakeOut, region);
     m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
+    // DEBUG
+    std::cout << "NbDiv :"<< m_NumberOfDivisions << std::endl;
     // Check this number of division is compatible with all inputs
     bool nbDivValid = false;
     while ( (!nbDivValid) && 1 < m_NumberOfDivisions)
@@ -209,6 +211,8 @@ MultiImageFileWriter
       else
         {
         m_NumberOfDivisions = smallestNbDiv;
+        // DEBUG
+        std::cout << "Div "<< m_NumberOfDivisions << " -> "<< smallestNbDiv << std::endl;
         }
       }
     if (m_NumberOfDivisions == 1)
@@ -253,6 +257,7 @@ MultiImageFileWriter
     {
     m_SinkList[inputIndex]->WriteImageInformation();
     }
+  this->GenerateOutputInformation();
 }
 
 void
@@ -320,6 +325,9 @@ MultiImageFileWriter
     for(int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
       {
       m_StreamRegionList[inputIndex] = GetStreamRegion(inputIndex);
+      // DEBUG
+      std::cout << "Region #"<<m_CurrentDivision<<", Image #"<<inputIndex <<
+        ", Height : "<< m_StreamRegionList[inputIndex].GetSize(1) << std::endl;
       }
 
     // NOTE : this reset was probably designed to work with the next section
@@ -356,12 +364,12 @@ MultiImageFileWriter
       inputPtr->PropagateRequestedRegion();
       }
 
-    for(int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
-      {
-      ImageBaseType* inputPtr = m_SinkList[inputIndex]->GetInput(); // const_cast<ImageBaseType*>(this->GetInput(inputIndex));
-      //RegionType streamRegion = GetStreamRegion(inputIndex);
-      inputPtr->UpdateOutputData();
-      }
+    //~ for(int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
+      //~ {
+      //~ ImageBaseType* inputPtr = m_SinkList[inputIndex]->GetInput(); // const_cast<ImageBaseType*>(this->GetInput(inputIndex));
+      //~ //RegionType streamRegion = GetStreamRegion(inputIndex);
+      //~ inputPtr->UpdateOutputData();
+      //~ }
 
     /** Call GenerateData to write streams to files if needed */
     this->GenerateData();

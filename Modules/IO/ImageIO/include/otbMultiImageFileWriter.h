@@ -45,7 +45,7 @@ namespace otb
  */
 class MultiImageFileWriter: public itk::ProcessObject
 {
-  friend class Sink;
+  //~ friend class Sink;
 public:
   /** Standard class typedefs. */
   typedef MultiImageFileWriter Self;
@@ -175,7 +175,7 @@ public:
     Sink<TImage> * sink = new Sink<TImage>(inputPtr, fileName);
     m_SinkList.push_back(SinkBase::Pointer(sink));
     unsigned int size = m_SinkList.size();
-    this->SetNumberOfInputs(size);
+    //~ this->SetNumberOfInputs(size);
     this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(inputPtr)));
   }
 
@@ -342,7 +342,7 @@ private:
     typename otb::ImageFileWriter<TImage>::Pointer m_Writer;
 
     /** An ImageIO used to actually write data to a file */
-    itk::ImageIOBase::Pointer m_ImageIO;
+    otb::ImageIOBase::Pointer m_ImageIO;
 
     /** The current file number into which data is written */
     //~ int m_CurrentFileIndex;
@@ -365,8 +365,10 @@ private:
   std::vector<RegionType> m_StreamRegionList;
 };
 
-} // end of namespace s2ipf
+} // end of namespace otb
 
-//~ #include "otbMultiImageFileWriter.txx"
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbMultiImageFileWriter.txx"
+#endif
 
 #endif // otbMultiImageFileWriter_h
