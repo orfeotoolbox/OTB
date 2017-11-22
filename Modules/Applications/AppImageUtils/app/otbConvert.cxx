@@ -105,8 +105,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
 
-    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Deprecated);
+    AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
 
