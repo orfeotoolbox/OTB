@@ -380,14 +380,14 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
               }
            }
          m_Node->LinkEndChild(n_Parameter);
-         // dig into Choice parameter
-         if (type == ParameterType_Choice)
-          {
-          std::string choiceGroup(key);
-          choiceGroup += '.';
-          choiceGroup += value;
-          this->ParseGroup(choiceGroup);
-          }
+         }
+       // dig into Choice parameter
+       if (type == ParameterType_Choice)
+        {
+        std::string choiceGroup(key);
+        choiceGroup += '.';
+        choiceGroup += m_Appli->GetParameterString(key);
+        this->ParseGroup(choiceGroup);
         }
       }
     }
