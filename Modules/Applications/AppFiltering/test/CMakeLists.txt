@@ -51,6 +51,56 @@ otb_test_application(NAME  apTvUtSmoothingTest_OutXML
 
 #----------- Contrast TESTS ----------------
 
+otb_test_application(NAME  apTvUtContrastTest_base
+                     APP  ContrastEnhancement
+                     OPTIONS -in ${INPUTDATA}/QB_Suburb.png
+                             -out ${TEMP}/apTvUtContrastTest_base.tif int16
+                             -bins 256
+                             -spatial.local.h 51
+                             -spatial.local.w 67
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtContrastTest_base.tif
+                             ${TEMP}/apTvUtContrastTest_base.tif)
+
+otb_test_application(NAME  apTvUtContrastTest_base_glob
+                     APP  ContrastEnhancement
+                     OPTIONS -in ${INPUTDATA}/QB_Suburb.png
+                             -out ${TEMP}/apTvUtContrastTest_base_glob.tif int16
+                             -bins 256
+                             -spatial global
+                             -minmax manuel
+                             -minmax.manuel.min 0 
+                             -minmax.manuel.max 255
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtContrastTest_base_glob.tif
+                             ${TEMP}/apTvUtContrastTest_base_glob.tif)
+
+otb_test_application(NAME  apTvUtContrastTest_lum_glob
+                     APP  ContrastEnhancement
+                     OPTIONS -in ${INPUTDATA}/anaglyphInput1.tif
+                             -out ${TEMP}/apTvUtContrastTest_lum_glob.tif int16
+                             -bins 256
+                             -spatial global
+                             -hfact 2.7
+                             -nodata 0
+                             -mode lum
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtContrastTest_lum_glob.tif
+                             ${TEMP}/apTvUtContrastTest_lum_glob.tif)
+
+otb_test_application(NAME  apTvUtContrastTest_lum
+                     APP  ContrastEnhancement
+                     OPTIONS -in ${INPUTDATA}/anaglyphInput1.tif
+                             -out ${TEMP}/apTvUtContrastTest_lum.tif int16
+                             -bins 256
+                             -spatial.local.h 33
+                             -spatial.local.w 47
+                             -hfact 2.1
+                             -nodata 0
+                             -mode lum
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtContrastTest_lum.tif
+                             ${TEMP}/apTvUtContrastTest_lum.tif)
 
 
                              

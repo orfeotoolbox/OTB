@@ -446,7 +446,7 @@ private:
     oss << "- spatial parameters : " << m_SpatialMode ;
     if ( m_SpatialMode == "local" )
       {
-      oss<< " with a thumbnail of " <<m_ThumbSize[0]<<"X"<<m_ThumbSize[1];
+      oss<< " with a thumbnail of " <<m_ThumbSize[0]<<" X "<<m_ThumbSize[1];
       }
     oss << std::endl << "- equalisation of ";
     if ( m_EqMode == "each" )

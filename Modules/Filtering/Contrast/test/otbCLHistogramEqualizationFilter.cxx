@@ -41,7 +41,7 @@ int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char * argv [])
   reader->UpdateOutputInformation();
 
   FilterType::Pointer histoEqualize ( FilterType::New() );
-  
+
   histoEqualize->SetInput( reader->GetOutput() );
   histoEqualize->SetMin(0);
   histoEqualize->SetMax(255);
