@@ -106,6 +106,7 @@ private:
     SetDocSeeAlso("Rescale");
 
     AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Deprecated);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
 

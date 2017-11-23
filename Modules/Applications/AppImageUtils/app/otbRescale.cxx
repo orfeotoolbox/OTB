@@ -63,7 +63,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Manip);
-
+    AddDocTag(Tags::Deprecated);
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription( "in", "The image to scale." );
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
