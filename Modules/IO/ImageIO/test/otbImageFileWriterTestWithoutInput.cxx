@@ -68,7 +68,7 @@ int otbImageScalarFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* 
   SpacingType spacing;
   spacing.Fill(1.0);
   image->SetOrigin(origin);
-  image->SetSpacing(spacing);
+  image->SetSignedSpacing(spacing);
 
   image->SetRegions(region);
   image->Allocate();
@@ -146,7 +146,7 @@ int otbImageComplexFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char*
   SpacingType spacing;
   spacing.Fill(1.0);
   image->SetOrigin(origin);
-  image->SetSpacing(spacing);
+  image->SetSignedSpacing(spacing);
 
   image->SetRegions(region);
   image->Allocate();

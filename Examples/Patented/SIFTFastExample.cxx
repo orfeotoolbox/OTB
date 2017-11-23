@@ -239,7 +239,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  ImageType::SpacingType    spacing = reader->GetOutput()->GetSpacing();
+  ImageType::SpacingType    spacing = reader->GetOutput()->GetSignedSpacing();
   ImageType::PointType      origin = reader->GetOutput()->GetOrigin();
 // Software Guide : EndCodeSnippet
 

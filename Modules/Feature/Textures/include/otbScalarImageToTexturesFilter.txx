@@ -187,7 +187,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   outputRegion.SetSize(0, 1 + (inputRegion.GetSize(0) - 1 - m_SubsampleOffset[0]) / m_SubsampleFactor[0]);
   outputRegion.SetSize(1, 1 + (inputRegion.GetSize(1) - 1 - m_SubsampleOffset[1]) / m_SubsampleFactor[1]);
 
-  typename OutputImageType::SpacingType outSpacing = this->GetInput()->GetSpacing();
+  typename OutputImageType::SpacingType outSpacing = this->GetInput()->GetSignedSpacing();
   outSpacing[0] *= m_SubsampleFactor[0];
   outSpacing[1] *= m_SubsampleFactor[1];
 
@@ -199,7 +199,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     OutputImagePointerType outputPtr = this->GetOutput(i);
     outputPtr->SetLargestPossibleRegion(outputRegion);
     outputPtr->SetOrigin(outOrigin);
-    outputPtr->SetSpacing(outSpacing);
+    outputPtr->SetSignedSpacing(outSpacing);
     }
 }
 

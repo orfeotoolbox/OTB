@@ -242,7 +242,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   //std::cout<<" GrisStep "<<m_DEMGridStep<<std::endl;
   outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
   outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
-  outputPtr->SetSpacing(outSpacing);
+  outputPtr->SetSignedSpacing(outSpacing);
 
   // Choose origin
   typename TOutputDEMImage::PointType outOrigin;
@@ -278,7 +278,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   // genericRSEstimator->SetInputProjectionRef( static_cast<std::string>(otb::GeoInformationConversion::ToWKT(4326)));
    genericRSEstimator->SetOutputProjectionRef(m_ProjectionRef);
    genericRSEstimator->Compute();
-   outputPtr->SetSpacing(genericRSEstimator->GetOutputSpacing());
+   outputPtr->SetSignedSpacing(genericRSEstimator->GetOutputSpacing());
    outputPtr->SetOrigin(genericRSEstimator->GetOutputOrigin());
 
     // Compute output size
@@ -311,7 +311,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
   if (this->m_OutputParametersFrom3DMap == -2)
     {
     outputPtr->SetOrigin(m_OutputOrigin);
-    outputPtr->SetSpacing(m_OutputSpacing);
+    outputPtr->SetSignedSpacing(m_OutputSpacing);
 
     typename TOutputDEMImage::RegionType outRegion;
     outRegion.SetIndex(m_OutputStartIndex);
@@ -357,7 +357,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
 
   typename TOutputDEMImage::RegionType outRegion = outputDEM->GetRequestedRegion();
   typename TOutputDEMImage::PointType outOrigin = outputDEM->GetOrigin();
-  typename TOutputDEMImage::SpacingType outSpacing = outputDEM->GetSpacing();
+  typename TOutputDEMImage::SpacingType outSpacing = outputDEM->GetSignedSpacing();
 
   // up left at elevation min
   TDPointType corners[8];
@@ -402,12 +402,12 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     RSTransformType::Pointer groundToSensorTransform = RSTransformType::New();
     //groundToSensorTransform->SetInputKeywordList(outputDEM->GetImageKeywordlist());
     //groundToSensorTransform->SetInputOrigin(outputDEM->GetOrigin());
-    //groundToSensorTransform->SetInputSpacing(outputDEM->GetSpacing());
+    //groundToSensorTransform->SetInputSpacing(outputDEM->GetSignedSpacing());
     groundToSensorTransform->SetInputProjectionRef(m_ProjectionRef);
 
     groundToSensorTransform->SetOutputKeywordList(imgPtr->GetImageKeywordlist());
     groundToSensorTransform->SetOutputOrigin(imgPtr->GetOrigin());
-    groundToSensorTransform->SetOutputSpacing(imgPtr->GetSpacing());
+    groundToSensorTransform->SetOutputSpacing(imgPtr->GetSignedSpacing());
     groundToSensorTransform->InstantiateTransform();
 
     typename T3DImage::RegionType mapRegion = imgPtr->GetLargestPossibleRegion();
@@ -568,7 +568,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
   typename OutputImageType::PointType pointRefStep;
   typename OutputImageType::RegionType requestedRegion = outputPtr->GetRequestedRegion();
 
-//  typename TOutputDEMImage::SpacingType step = outputPtr->GetSpacing();
+//  typename TOutputDEMImage::SpacingType step = outputPtr->GetSignedSpacing();
 
   //convert requested region to Long/Lat
 
@@ -606,7 +606,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
       typename InputMapType::PointType origin;
       origin = imgPtr->GetOrigin();
       typename InputMapType::SpacingType spacing;
-      spacing = imgPtr->GetSpacing();
+      spacing = imgPtr->GetSignedSpacing();
 
       if (static_cast<unsigned int> (threadId) < m_NumberOfSplit[k])
         {

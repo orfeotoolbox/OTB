@@ -128,7 +128,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
     itkExceptionMacro("Invalid input image.");
     }
 
-  /*std::cout << "Spacing of the input image: "<< m_InputImage->GetSpacing() << std::endl;
+  /*std::cout << "Spacing of the input image: "<< m_InputImage->GetSignedSpacing() << std::endl;
   std::cout << "Origin of the input image: "<< m_InputImage->GetOrigin() << std::endl;
   std::cout << "Size of the input image: "<< m_InputImage->GetLargestPossibleRegion() << std::endl;
   std::cout << "ProjRef of the input image: "<< m_InputImage->GetProjectionRef() << std::endl;
@@ -203,7 +203,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   if (m_UseOutputSpacingAndOriginFromImage)
     {
     m_VdProjFilter->SetOutputOrigin(m_InputImage->GetOrigin());
-    m_VdProjFilter->SetOutputSpacing(m_InputImage->GetSpacing());
+    m_VdProjFilter->SetOutputSpacing(m_InputImage->GetSignedSpacing());
     }
   else
     {

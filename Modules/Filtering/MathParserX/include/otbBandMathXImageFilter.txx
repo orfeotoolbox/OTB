@@ -665,13 +665,13 @@ void BandMathXImageFilter<TImage>
 
         if (m_AImage[i][j].type == 2) //imiPhyX
         {
-          SpacingType spacing = this->GetNthInput(m_AImage[i][j].info[0])->GetSpacing();
+          SpacingType spacing = this->GetNthInput(m_AImage[i][j].info[0])->GetSignedSpacing();
           m_AImage[i][j].value = ValueType(static_cast<double>(spacing[0]));
         }
 
         if (m_AImage[i][j].type == 3) //imiPhyY
         {
-          SpacingType spacing = this->GetNthInput(m_AImage[i][j].info[0])->GetSpacing();
+          SpacingType spacing = this->GetNthInput(m_AImage[i][j].info[0])->GetSignedSpacing();
           m_AImage[i][j].value = ValueType(static_cast<double>(spacing[1]));
         }
 

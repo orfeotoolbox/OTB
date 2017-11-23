@@ -159,9 +159,9 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   // First, spacing : choose a square spacing,
   SpacingType outputSpacing;
   outputSpacing.Fill(m_Scale * m_GridStep);
-  double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSpacing()[0])+vcl_abs(m_LeftImage->GetSpacing()[1]));
-  //double ratio_x = mean_spacing / vcl_abs(m_LeftImage->GetSpacing()[0]);
-  //double ratio_y = mean_spacing / vcl_abs(m_LeftImage->GetSpacing()[1]);
+  double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSignedSpacing()[0])+vcl_abs(m_LeftImage->GetSignedSpacing()[1]));
+  //double ratio_x = mean_spacing / vcl_abs(m_LeftImage->GetSignedSpacing()[0]);
+  //double ratio_y = mean_spacing / vcl_abs(m_LeftImage->GetSignedSpacing()[1]);
 
   outputSpacing[0]*=mean_spacing;
   outputSpacing[1]*=mean_spacing;
@@ -240,14 +240,14 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 
   // First we compute coordinates of the 4 corners (we omit ulx which
   // coordinates are {0,0})
-  double urx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSpacing()[0];
-  double ury = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSpacing()[0];
-  double llx = uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSpacing()[1];
-  double lly = vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSpacing()[1];
-  double lrx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSpacing()[0]
-             + uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSpacing()[1];
-  double lry = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSpacing()[0]
-             + vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSpacing()[1];
+  double urx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSignedSpacing()[0];
+  double ury = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSignedSpacing()[0];
+  double llx = uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSignedSpacing()[1];
+  double lly = vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSignedSpacing()[1];
+  double lrx = ux * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSignedSpacing()[0]
+             + uy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSignedSpacing()[1];
+  double lry = vx * m_LeftImage->GetLargestPossibleRegion().GetSize()[0] * m_LeftImage->GetSignedSpacing()[0]
+             + vy * m_LeftImage->GetLargestPossibleRegion().GetSize()[1] * m_LeftImage->GetSignedSpacing()[1];
 
   // Bounding box (this time we do not omit ulx)
   double minx = std::min(std::min(std::min(urx,llx),lrx),0.);
@@ -279,8 +279,8 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   leftDFPtr->SetLargestPossibleRegion(outputLargestRegion);
   rightDFPtr->SetLargestPossibleRegion(outputLargestRegion);
 
-  leftDFPtr->SetSpacing(outputSpacing);
-  rightDFPtr->SetSpacing(outputSpacing);
+  leftDFPtr->SetSignedSpacing(outputSpacing);
+  rightDFPtr->SetSignedSpacing(outputSpacing);
 
   leftDFPtr->SetNumberOfComponentsPerPixel(2);
   rightDFPtr->SetNumberOfComponentsPerPixel(2);
@@ -333,7 +333,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
 
   // Use the mean spacing as before
-  double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSpacing()[0])+vcl_abs(m_LeftImage->GetSpacing()[1]));
+  double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSignedSpacing()[0])+vcl_abs(m_LeftImage->GetSignedSpacing()[1]));
 
   // Initialize
   currentPoint1 = m_OutputOriginInLeftImage;

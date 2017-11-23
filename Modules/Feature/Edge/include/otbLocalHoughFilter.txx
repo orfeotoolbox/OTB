@@ -195,7 +195,7 @@ LocalHoughFilter<TInputImage>
       region.SetIndex(index);
       localImage->SetRegions(region);
       localImage->SetOrigin(filterImage->GetOrigin());
-      localImage->SetSpacing(filterImage->GetSpacing());
+      localImage->SetSignedSpacing(filterImage->GetSignedSpacing());
       localImage->Allocate();
 
       typedef itk::ImageRegionIteratorWithIndex<InputImageType>      LocalIteratorType;

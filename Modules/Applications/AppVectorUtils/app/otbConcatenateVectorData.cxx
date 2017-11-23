@@ -50,22 +50,28 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("ConcatenateVectorData");
-    SetDescription("Concatenate VectorDatas");
+    SetDescription("Concatenate vector data files");
 
-    SetDocName("Concatenate");
-    SetDocLongDescription("This application concatenates a list of VectorData to produce a unique VectorData as output."
-                          "Note that the VectorDatas must be of the same type (Storing polygons only, lines only, or points only)");
-    SetDocLimitations("None");
+    SetDocName("Concatenate Vector Data");
+    SetDocLongDescription("This application concatenates a list of vector data "
+      "files to produce a unique vector data output file.\n\n"
+      "This application will gather all the geometries from the input files and"
+      " write them into an output vector data file. Any format supported by OGR"
+      " can be used. Ideally, all inputs should have the same set of fields and"
+      " the same spatial reference system.");
+    SetDocLimitations("The vector data must be contain the same type of "
+      "geometries (point / lines / polygons). The fields present in the output "
+      "file are the ones from the first input.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Vector);
 
-    AddParameter(ParameterType_InputVectorDataList, "vd", "Input VectorDatas to concatenate");
-    SetParameterDescription("vd", "VectorData files to be concatenated in an unique VectorData");
+    AddParameter(ParameterType_InputVectorDataList, "vd", "Input vector files");
+    SetParameterDescription("vd", "Vector data files to be concatenated.");
 
-    AddParameter(ParameterType_OutputVectorData, "out", "Concatenated VectorData");
-    SetParameterDescription("out", "Output conctenated VectorData");
+    AddParameter(ParameterType_OutputVectorData, "out", "Concatenated output");
+    SetParameterDescription("out", "Output conctenated vector data file.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("vd", "ToulousePoints-examples.shp ToulouseRoad-examples.shp");

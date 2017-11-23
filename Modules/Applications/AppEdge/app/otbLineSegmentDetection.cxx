@@ -185,7 +185,7 @@ private:
       vproj->SetInput(vd);
       vproj->SetInputKeywordList(GetParameterImage("in")->GetImageKeywordlist());
       //vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
-      //vproj->SetInputSpacing(GetParameterImage("in")->GetSpacing());
+      //vproj->SetInputSpacing(GetParameterImage("in")->GetSignedSpacing());
 
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");

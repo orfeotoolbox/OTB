@@ -49,21 +49,14 @@ ComplexInputImageParameter::GetImage()
       {
       //////////////////////// Filename case:
       // A new valid filename has been given : a reader is created
-      m_PreviousFileName = m_FileName;
       typedef otb::ImageFileReader<TOutputImage> ReaderType;
       typename ReaderType::Pointer reader = ReaderType::New();
       reader->SetFileName(m_FileName);
-      try
-        {
-        reader->UpdateOutputInformation();
-        }
-      catch(itk::ExceptionObject &)
-        {
-        this->ClearValue();
-        }
+      reader->UpdateOutputInformation();
 
       m_Image = reader->GetOutput();
       m_Reader = reader;
+      m_PreviousFileName = m_FileName;
 
       // Pay attention, don't return m_Image because it is a ImageBase...
       return reader->GetOutput();

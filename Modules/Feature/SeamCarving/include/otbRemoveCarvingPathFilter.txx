@@ -191,7 +191,7 @@ RemoveCarvingPathFilter<TInputImage, TInputPath, TOutputImage>
   // we need to compute the output spacing, the output image size, and the
   // output image start index
   const typename TInputImage::SpacingType&
-                                        inputSpacing = inputPtr->GetSpacing();
+                                        inputSpacing = inputPtr->GetSignedSpacing();
   const typename TInputImage::SizeType& inputSize
     = inputPtr->GetLargestPossibleRegion().GetSize();
   const typename TInputImage::IndexType& inputStartIndex
@@ -210,7 +210,7 @@ RemoveCarvingPathFilter<TInputImage, TInputPath, TOutputImage>
   // we remove one column of the image
   outputSize[dir0] = inputSize[dir0] - 1;
 
-  outputPtr->SetSpacing(outputSpacing);
+  outputPtr->SetSignedSpacing(outputSpacing);
 
   typename TOutputImage::RegionType outputLargestPossibleRegion;
   outputLargestPossibleRegion.SetSize(outputSize);

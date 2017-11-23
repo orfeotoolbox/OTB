@@ -114,7 +114,7 @@ public:
   }
 
   /** Set the spacing (size of a pixel) of the image.
-   * \sa GetSpacing() */
+   * \sa GetSignedSpacing() */
   itkSetVectorMacro(Spacing, const double, OutputImageType::ImageDimension);
   itkSetVectorMacro(Spacing, const float, OutputImageType::ImageDimension);
 

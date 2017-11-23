@@ -76,7 +76,7 @@ PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
   index.Fill(0);
   largest.SetIndex(index);
   outputPtr->SetRegions(largest);
-  outputPtr->SetSpacing(m_OutputSpacing);
+  outputPtr->SetSignedSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
   // Force the displacement field to have vector pixel of size 2.
   outputPtr->SetNumberOfComponentsPerPixel(2);

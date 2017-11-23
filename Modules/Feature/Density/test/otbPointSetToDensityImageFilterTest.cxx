@@ -63,7 +63,7 @@ int otbPointSetToDensityImageFilterTest(int itkNotUsed(argc), char* argv[])
   /** PointSetImageToDensity ImageFilter*/
   filter->SetInput(detector->GetOutput());
   filter->SetRadius(radius);
-  filter->SetSpacing(reader->GetOutput()->GetSpacing());
+  filter->SetSpacing(reader->GetOutput()->GetSignedSpacing());
   filter->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
   filter->SetOrigin(reader->GetOutput()->GetOrigin());
 

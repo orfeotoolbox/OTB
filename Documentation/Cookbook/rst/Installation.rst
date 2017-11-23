@@ -28,7 +28,6 @@ Linux x86_64
 
 .. include:: Installation_Linux.txt
 
-
 MacOS X
 -------
 

@@ -61,7 +61,7 @@ int otbImageTest(int itkNotUsed(argc), char* argv[])
   std::cout << "---------------------" << std::endl;
 
   file << "------ IMAGE --------" << std::endl;
-  file << "Spacing " << image->GetSpacing() << std::endl;
+  file << "Spacing " << image->GetSignedSpacing() << std::endl;
   file << "Origin " << image->GetOrigin() << std::endl;
   file << "Projection REF " << image->GetProjectionRef() << std::endl;
   file << "GCP Projection " << image->GetGCPProjection() << std::endl;

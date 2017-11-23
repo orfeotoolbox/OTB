@@ -429,8 +429,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   outVDispPtr->CopyInformation(inHDispPtr);
 
   // Check the size of the input disparity maps (possible subsampled grid)
-  SpacingType leftSpacing = inLeftPtr->GetSpacing();
-  SpacingType dispSpacing = inHDispPtr->GetSpacing();
+  SpacingType leftSpacing = inLeftPtr->GetSignedSpacing();
+  SpacingType dispSpacing = inHDispPtr->GetSignedSpacing();
   PointType   leftOrigin  = inLeftPtr->GetOrigin();
   PointType   dispOrigin  = inHDispPtr->GetOrigin();
 
