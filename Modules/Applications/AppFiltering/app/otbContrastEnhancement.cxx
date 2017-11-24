@@ -11,7 +11,7 @@
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreened to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -257,23 +257,23 @@ private:
       "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.red.coef", 0.21 );
 
-    AddParameter(ParameterType_Group , "mode.lum.gre" , "Green Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.gre.ch" , "Green Channel" );
-    SetDefaultParameterInt("mode.lum.gre.ch", 1 );
-    AddParameter(ParameterType_Float , "mode.lum.gre.coef" ,
+    AddParameter(ParameterType_Group , "mode.lum.green" , "Green Channel" );
+    AddParameter(ParameterType_Int , "mode.lum.green.ch" , "Greenen Channel" );
+    SetDefaultParameterInt("mode.lum.green.ch", 1 );
+    AddParameter(ParameterType_Float , "mode.lum.green.coef" ,
       "Value for luminance computation" );
-    SetDefaultParameterFloat("mode.lum.gre.coef", 0.71 );
+    SetDefaultParameterFloat("mode.lum.green.coef", 0.71 );
 
-    AddParameter(ParameterType_Group , "mode.lum.blu" , "Blue Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.blu.ch" , "Blue Channel" );
-    SetDefaultParameterInt("mode.lum.blu.ch", 2 );
-    AddParameter(ParameterType_Float , "mode.lum.blu.coef" ,
+    AddParameter(ParameterType_Group , "mode.lum.blue" , "Blue Channel" );
+    AddParameter(ParameterType_Int , "mode.lum.blue.ch" , "Blue Channel" );
+    SetDefaultParameterInt("mode.lum.blue.ch", 2 );
+    AddParameter(ParameterType_Float , "mode.lum.blue.coef" ,
       "Value for luminance computation" );
-    SetDefaultParameterFloat("mode.lum.blu.coef", 0.08 );
+    SetDefaultParameterFloat("mode.lum.blue.coef", 0.08 );
 
     SetMinimumParameterIntValue("mode.lum.red.ch", 0);
-    SetMinimumParameterIntValue("mode.lum.gre.ch", 0);
-    SetMinimumParameterIntValue("mode.lum.blu.ch", 0);
+    SetMinimumParameterIntValue("mode.lum.green.ch", 0);
+    SetMinimumParameterIntValue("mode.lum.blue.ch", 0);
     SetMinimumParameterIntValue("bins", 2);
     SetMinimumParameterIntValue("spatial.local.h", 1);
     SetMinimumParameterIntValue("spatial.local.w", 1);
@@ -306,8 +306,8 @@ private:
 
       if ( GetParameterString( "mode" ) == "lum" && 
            !HasUserValue("mode.lum.red.ch") &&
-           !HasUserValue("mode.lum.gre.ch") &&
-           !HasUserValue("mode.lum.blu.ch") )
+           !HasUserValue("mode.lum.green.ch") &&
+           !HasUserValue("mode.lum.blue.ch") )
         SetDefaultValue( inImage , "RGB" );
 
       // if ( HasUserValue("minmax.manuel.min") && 
@@ -374,8 +374,8 @@ private:
       {
       std::vector<int> rgb( 3 , 0 );
       rgb[0] = GetParameterInt("mode.lum.red.ch");
-      rgb[1] = GetParameterInt("mode.lum.gre.ch");
-      rgb[2] = GetParameterInt("mode.lum.blu.ch");
+      rgb[1] = GetParameterInt("mode.lum.green.ch");
+      rgb[2] = GetParameterInt("mode.lum.blue.ch");
       ComputeLuminance( inImage , rgb );
       LuminanceEqualization( inputImageList , rgb , outputImageList );
       }
@@ -416,8 +416,8 @@ private:
                     metadataInterface->GetDefaultDisplay() ;
       unsigned int m = inImage->GetVectorLength ();
       SetParameterInt( "mode.lum.red.ch" , rgb[0] );
-      SetParameterInt( "mode.lum.gre.ch" , rgb[1] );
-      SetParameterInt( "mode.lum.blu.ch" , rgb[2] );
+      SetParameterInt( "mode.lum.green.ch" , rgb[1] );
+      SetParameterInt( "mode.lum.blue.ch" , rgb[2] );
       if( m < rgb[ 0 ] )
         {
         SetParameterFloat ("mode.lum.red.coef" , 0.0 );
@@ -425,13 +425,13 @@ private:
         }
       if( m < rgb[ 1 ] )
         {
-        SetParameterFloat ("mode.lum.gre.coef" , 0.0 );
+        SetParameterFloat ("mode.lum.green.coef" , 0.0 );
         SetParameterInt( "mode.lum.gre.ch" , 0 );
         }
       if( m < rgb[ 2 ] )
         {
-        SetParameterFloat ("mode.lum.blu.coef" , 0.0 );
-        SetParameterInt( "mode.lum.blu.ch" , 0 );
+        SetParameterFloat ("mode.lum.blue.coef" , 0.0 );
+        SetParameterInt( "mode.lum.blue.ch" , 0 );
         }
       }
   }
@@ -680,8 +680,8 @@ private:
     // Retreive coeffs for each channel
     std::vector < float > lumCoef( 3 , 0.0 );
     lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
-    lumCoef[1] = GetParameterFloat("mode.lum.gre.coef");
-    lumCoef[2] = GetParameterFloat("mode.lum.blu.coef");
+    lumCoef[1] = GetParameterFloat("mode.lum.green.coef");
+    lumCoef[2] = GetParameterFloat("mode.lum.blue.coef");
     // Normalize those coeffs
     float sum = std::accumulate( lumCoef.begin() , lumCoef.end() , 0.0 );
     assert(sum>0);
