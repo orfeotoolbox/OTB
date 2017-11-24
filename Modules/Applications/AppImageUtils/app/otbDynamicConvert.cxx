@@ -70,36 +70,39 @@ public:
   typedef itk::Statistics::ListSample<FloatVectorImageType::PixelType> ListSampleType;
   typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
   typedef ListSampleToHistogramListGenerator<ListSampleType,
-                                             FloatVectorImageType::InternalPixelType,
-                                             DFContainerType>          HistogramsGeneratorType;
+    FloatVectorImageType::InternalPixelType,
+    DFContainerType> HistogramsGeneratorType;
+    
   typedef StreamingShrinkImageFilter<FloatVectorImageType,
-                                     FloatVectorImageType>             ShrinkFilterType;
+    FloatVectorImageType> ShrinkFilterType;
+
   typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
   typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
-                                                 FloatVectorImageType,
-                                                 TransferLogFunctor>   TransferLogType;
+    FloatVectorImageType,
+    TransferLogFunctor> TransferLogType;
 
 private:
 
   void DoInit() ITK_OVERRIDE
   {
     SetName("DynamicConvert");
-    SetDescription("Convert an image to a different format and rescaling the dynamic ...");
+    SetDescription("Change the pixel type and rescale the image's dynamic");
 
     // Documentation
     SetDocName("Dynamic Conversion");
     // TODO
-    SetDocLongDescription("This application performs an image pixel type conversion "
-        "(short, ushort, uchar, int, uint, float and double types are handled). "
-    "The output image is written in the specified format (ie. that corresponds "
-    "to the given extension).\n The conversion can include a rescale of the data range, "
-    "by default it's set from 2% to 98% of the data values. The rescale can be linear or log2. \n "
-    "The choice of the output channels can be done with the extended filename, "
-    "but less easy to handle. To do this, a 'channels' parameter allows you to select "
-    "the desired bands at the output. There are 3 modes, the available choices are: \n"
-      " * grayscale :  to display mono image as standard color image \n"
-      " * rgb : select 3 bands in the input image (multi-bands) \n"
-      " * all : keep all bands.");
+    SetDocLongDescription("This application performs an image pixel type "
+      "conversion (short, ushort, uchar, int, uint, float and double types are "
+      "handled). The output image is written in the specified format (ie. "
+      "that corresponds to the given extension).\n The conversion can include "
+      "a rescale of the data range, by default it's set between the 2nd to "
+      "the 98th percentile. The rescale can be linear or log2. \n The choice "
+      "of the output channels can be done with the extended filename, but "
+      "less easy to handle. To do this, a 'channels' parameter allows you to "
+      "select the desired bands at the output. There are 3 modes, the "
+      "available choices are: \n * grayscale :  to display mono image as "
+      "standard color image \n * rgb : select 3 bands in the input image "
+      "(multi-bands) \n * all : keep all bands.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Convert, Rescale");
@@ -121,29 +124,35 @@ private:
     AddChoice("type.log2", "Log2");
     SetParameterString("type", "linear", false);
 
-    AddParameter(ParameterType_Float,"type.linear.gamma","Gamma correction factor");
-    SetParameterDescription("type.linear.gamma","Gamma correction factor");
+    AddParameter(ParameterType_Float,"type.linear.gamma",
+      "Gamma correction factor");
+    SetParameterDescription("type.linear.gamma",
+      "Gamma correction factor");
     SetDefaultParameterFloat("type.linear.gamma",1.0);
     MandatoryOff("type.linear.gamma");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
-    SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic "
+    SetParameterDescription("mask",
+      "The masked pixels won't be used to adapt the dynamic "
       "(the mask must have the same dimensions as the input image)");
     MandatoryOff("mask");
     DisableParameter("mask");
 
     AddParameter(ParameterType_Group,"quantile","Histogram quantile cutting");
-    SetParameterDescription("quantile","Cut the histogram edges before rescaling");
+    SetParameterDescription("quantile",
+      "Cut the histogram edges before rescaling");
 
     AddParameter(ParameterType_Float, "quantile.high", "High cut quantile");
-    SetParameterDescription("quantile.high", "Quantiles to cut from histogram high values "
+    SetParameterDescription("quantile.high", 
+      "Quantiles to cut from histogram high values "
       "before computing min/max rescaling (in percent, 2 by default)");
     MandatoryOff("quantile.high");
     SetDefaultParameterFloat("quantile.high", 2.0);
     DisableParameter("quantile.high");
 
     AddParameter(ParameterType_Float, "quantile.low", "Low cut quantile");
-    SetParameterDescription("quantile.low", "Quantiles to cut from histogram low values "
+    SetParameterDescription("quantile.low", 
+      "Quantiles to cut from histogram low values "
       "before computing min/max rescaling (in percent, 2 by default)");
     MandatoryOff("quantile.low");
     SetDefaultParameterFloat("quantile.low", 2.0);
@@ -154,11 +163,14 @@ private:
       "of the output image. There are 3 modes, the available choices are:");
 
     AddChoice("channels.all", "Default mode");
-    SetParameterDescription("channels.all", "Select all bands in the input image, (1,...,n).");
+    SetParameterDescription("channels.all", 
+      "Select all bands in the input image, (1,...,n).");
 
     AddChoice("channels.grayscale", "Grayscale mode");
-    SetParameterDescription("channels.grayscale", "Display single channel as standard color image.");
-    AddParameter(ParameterType_Int, "channels.grayscale.channel", "Grayscale channel");
+    SetParameterDescription("channels.grayscale", 
+      "Display single channel as standard color image.");
+    AddParameter(ParameterType_Int, "channels.grayscale.channel", 
+      "Grayscale channel");
     SetDefaultParameterInt("channels.grayscale.channel", 1);
     SetMinimumParameterIntValue("channels.grayscale.channel", 1);
 
@@ -205,7 +217,8 @@ private:
     {
       typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
       ImageMetadataInterfaceType::Pointer metadataInterface =
-        ImageMetadataInterfaceFactory::CreateIMI(GetParameterImage("in")->GetMetaDataDictionary());
+        ImageMetadataInterfaceFactory::CreateIMI(
+          GetParameterImage("in")->GetMetaDataDictionary());
 
       int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
       SetMaximumParameterIntValue("channels.grayscale.channel", nbBand);
@@ -243,14 +256,17 @@ private:
     // Shrink factor is computed so as to load a quicklook of 1000
     // pixels square at most
     auto imageSize = tempImage->GetLargestPossibleRegion().GetSize();
-    unsigned int shrinkFactor = std::max({int(imageSize[0])/1000, int(imageSize[1])/1000, 1});
+    unsigned int shrinkFactor = std::max({int(imageSize[0])/1000, 
+      int(imageSize[1])/1000, 1});
     otbAppLogDEBUG( << "Shrink factor used to compute Min/Max: "<<shrinkFactor );
 
     otbAppLogDEBUG( << "Shrink starts..." );
     typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
     shrinkFilter->SetShrinkFactor(shrinkFactor);
-    shrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
-    AddProcess(shrinkFilter->GetStreamer(), "Computing shrink Image for min/max estimation...");
+    shrinkFilter->GetStreamer()->
+      SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    AddProcess(shrinkFilter->GetStreamer(), 
+      "Computing shrink Image for min/max estimation...");
 
     if ( rescaleType == "log2")
     {
@@ -272,10 +288,12 @@ private:
 
     otbAppLogDEBUG( << "Evaluating input Min/Max..." );
     itk::ImageRegionConstIterator<FloatVectorImageType>
-      it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
+      it(shrinkFilter->GetOutput(), 
+        shrinkFilter->GetOutput()->GetLargestPossibleRegion());
 
     typename ListSampleType::Pointer listSample = ListSampleType::New();
-    listSample->SetMeasurementVectorSize(tempImage->GetNumberOfComponentsPerPixel());
+    listSample->SetMeasurementVectorSize( 
+      tempImage->GetNumberOfComponentsPerPixel());
 
     // Now we generate the list of samples
     if (IsParameterEnabled("mask"))
@@ -284,10 +302,12 @@ private:
       ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
       maskShrinkFilter->SetShrinkFactor(shrinkFactor);
       maskShrinkFilter->SetInput(mask);
-      maskShrinkFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+      maskShrinkFilter->GetStreamer()->
+        SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
       maskShrinkFilter->Update();
 
-      auto itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(maskShrinkFilter->GetOutput(),
+      auto itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
+        maskShrinkFilter->GetOutput(),
         maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
 
       // Remove masked pixels
@@ -296,7 +316,7 @@ private:
       for(; !it.IsAtEnd(); ++it, ++itMask)
       {
         // float values, so the threshold is set to 0.5
-        if (itMask.Get()[0] < 0.5)
+        if (itMask.Get()[0] > 0.5)
         {
           listSample->PushBack(it.Get());
         }
@@ -304,8 +324,8 @@ private:
       // if listSample is empty
       if (listSample->Size() == 0)
       {
-        otbAppLogINFO( << "All pixels were masked, the application assume a wrong mask "
-          "and include all the image");
+        otbAppLogINFO( << "All pixels were masked, the application assume "
+          "a wrong mask and include all the image");
       }
     }
 
@@ -319,7 +339,8 @@ private:
     }
 
     // And then the histogram
-    typename HistogramsGeneratorType::Pointer histogramsGenerator = HistogramsGeneratorType::New();
+    typename HistogramsGeneratorType::Pointer histogramsGenerator = 
+      HistogramsGeneratorType::New();
     histogramsGenerator->SetListSample(listSample);
     histogramsGenerator->SetNumberOfBins(255);
     // Samples with nodata values are ignored
@@ -334,11 +355,15 @@ private:
     {
       auto && elm = histOutput->GetNthElement(i);
       assert(elm);
-      inputMin[i] = elm->Quantile(0, 0.01 * GetParameterFloat("quantile.low"));
-      inputMax[i] = elm->Quantile(0, 1.0 - 0.01 * GetParameterFloat("quantile.high"));
+      inputMin[i] = elm->Quantile(0, 
+        0.01 * GetParameterFloat("quantile.low"));
+      inputMax[i] = elm->Quantile(0, 
+        1.0 - 0.01 * GetParameterFloat("quantile.high"));
     }
 
-    otbAppLogDEBUG( << std::setprecision(5) << "Min/Max computation done : min=" << inputMin
+    otbAppLogDEBUG( << std::setprecision(5) 
+                    << "Min/Max computation done : min=" 
+                    << inputMin
                     << " max=" << inputMax );
 
     rescaler->AutomaticInputMinMaxComputationOff();
@@ -364,6 +389,7 @@ private:
       itkExceptionMacro("The outmax value at " << GetParameterFloat("outmax") << 
                         " is too high, select a value in "<< outmaxvalue <<" max.");
     */
+
     maximum.Fill( GetParameterFloat("outmax") );
     minimum.Fill( GetParameterFloat("outmin") );
 
@@ -407,7 +433,8 @@ private:
       }
       else
       {
-        itkExceptionMacro(<< "At least one needed channel has an invalid index");
+        itkExceptionMacro(<< "At least one needed channel has an invalid "
+          "index");
       }
     }
     else if (channelMode == "all")
@@ -424,13 +451,14 @@ private:
   typename TImageType::Pointer GetSelectedChannels()
   {
     typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
-                                         typename TImageType::InternalPixelType>  ExtractROIFilterType;
-    typedef otb::ImageList<otb::Image<typename TImageType::InternalPixelType> >   ImageListType;
+      typename TImageType::InternalPixelType> ExtractROIFilterType;
+    typedef otb::ImageList<otb::Image<typename TImageType::InternalPixelType> > ImageListType;
     typedef ImageListToVectorImageFilter<ImageListType,
-                                         TImageType >                             ListConcatenerFilterType;
+                                         TImageType > ListConcatenerFilterType;
 
-    typename ImageListType::Pointer             imageList  = ImageListType::New();
-    typename ListConcatenerFilterType::Pointer  concatener = ListConcatenerFilterType::New();
+    typename ImageListType::Pointer imageList  = ImageListType::New();
+    typename ListConcatenerFilterType::Pointer concatener = 
+      ListConcatenerFilterType::New();
 
     //m_Filters.push_back(imageList.GetPointer());
     m_Filters.push_back(concatener.GetPointer());
@@ -442,10 +470,13 @@ private:
 
     for (auto && channel : channels)
     {
-      typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+      typename ExtractROIFilterType::Pointer extractROIFilter = 
+        ExtractROIFilterType::New();
       m_Filters.push_back(extractROIFilter.GetPointer());
       extractROIFilter->SetInput(GetParameterImage("in"));
-      if (!monoChannel) extractROIFilter->SetChannel(channel);
+      if (!monoChannel) 
+        extractROIFilter->SetChannel(channel);
+
       extractROIFilter->UpdateOutputInformation();
       imageList->PushBack(extractROIFilter->GetOutput());
     }
@@ -483,7 +514,8 @@ private:
         GenericDoExecute<DoubleVectorImageType>();
         break;
       default:
-        itkExceptionMacro("Unknown pixel type "<<this->GetParameterOutputImagePixelType("out")<<".");
+        itkExceptionMacro("Unknown pixel type "
+          <<this->GetParameterOutputImagePixelType("out")<<".");
         break;
     }
   }
