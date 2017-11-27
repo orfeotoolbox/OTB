@@ -175,7 +175,7 @@ private:
       "smoothen the result we interpolate the gain between tiles.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("");
+    SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Filter);
 
@@ -271,12 +271,23 @@ private:
       "Value for luminance computation" );
     SetDefaultParameterFloat("mode.lum.blue.coef", 0.08 );
 
+    SetDefaultParameterInt( "spatial.local.w" , 256 );
+    SetDefaultParameterInt( "spatial.local.h" , 256 );
+
     SetMinimumParameterIntValue("mode.lum.red.ch", 0);
     SetMinimumParameterIntValue("mode.lum.green.ch", 0);
     SetMinimumParameterIntValue("mode.lum.blue.ch", 0);
     SetMinimumParameterIntValue("bins", 2);
     SetMinimumParameterIntValue("spatial.local.h", 1);
     SetMinimumParameterIntValue("spatial.local.w", 1);
+
+    unsigned int exId = AddExample( "Local contrast enhancement by luminance" );
+    SetDocExampleParameterValue( "in" , "couleurs.tif" , exId );
+    SetDocExampleParameterValue( "out" , "equalizedcouleurs.tif float" , exId );
+    SetDocExampleParameterValue( "bins" , "256" , exId );
+    SetDocExampleParameterValue( "spatial.local.w" , "500" , exId );
+    SetDocExampleParameterValue( "spatial.local.h" , "500" , exId );
+    SetDocExampleParameterValue( "mode" , "lum" , exId );
 
     AddRAMParameter(); 
   }
@@ -289,11 +300,11 @@ private:
       FloatVectorImageType::RegionType::SizeType size;
       size = inImage->GetLargestPossibleRegion().GetSize() ;
 
-      if ( !HasUserValue("spatial.local.w") )
-        SetParameterInt( "spatial.local.w" , size[0] );
+      // if ( !HasUserValue("spatial.local.w") )
+      //   SetParameterInt( "spatial.local.w" , size[0] );
         
-      if ( !HasUserValue("spatial.local.h") )
-        SetParameterInt( "spatial.local.h" , size[1] );
+      // if ( !HasUserValue("spatial.local.h") )
+      //   SetParameterInt( "spatial.local.h" , size[1] );
       
       if ( GetParameterString("spatial") == "local" &&
            HasValue("spatial.local.h") && HasValue("spatial.local.w") &&
