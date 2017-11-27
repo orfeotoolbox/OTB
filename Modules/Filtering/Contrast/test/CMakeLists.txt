@@ -55,7 +55,7 @@ otb_add_test(NAME bfTvComputeHistoFilter COMMAND otbContrastTestDriver
   ${TEMP}/bfTvComputeHistoFilter.tif
   otbComputeHistoFilter
   ${INPUTDATA}/QB_Suburb.png
-  ${TEMP}/inputHisto_QB_Suburb.tif
+  ${TEMP}/bfTvComputeHistoFilter.tif
   )
 
 otb_add_test(NAME bfTvComputeGainLutFilter COMMAND otbContrastTestDriver
@@ -65,7 +65,7 @@ otb_add_test(NAME bfTvComputeGainLutFilter COMMAND otbContrastTestDriver
   otbComputeGainLutFilter
   ${INPUTDATA}/QB_Suburb.png
   ${INPUTDATA}/inputHisto_QB_Suburb.tif
-  ${TEMP}/inputLut_QB_Suburb.tif
+  ${TEMP}/bfTvComputeGainLutFilter.tif
   )
 
 otb_add_test(NAME bfTvApplyGainFilter COMMAND otbContrastTestDriver
