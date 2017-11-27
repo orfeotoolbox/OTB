@@ -36,7 +36,7 @@ otb_test_application(NAME apTvUtConvertBasic
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                              -out ${TEMP}/apTvUtConvertBasicOutput.tif float
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/apTvUtConvertBasicOutput.tif
+                             ${OTBAPP_BASELINE}/apTvUtConvertBasicOutput.tif
                 	     ${TEMP}/apTvUtConvertBasicOutput.tif
 )
 
@@ -52,8 +52,8 @@ otb_test_application(NAME apTvUtConvertWithScaling
                              -out ${TEMP}/apTvUtConvertWithScalingOutput.tif
                              -type linear
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/apTvUtConvertWithScalingOutput.tif
-                	     ${TEMP}/apTvUtConvertWithScalingOutput.tif
+                             ${OTBAPP_BASELINE}/apTvUtConvertWithScalingOutput.tif
+                             ${TEMP}/apTvUtConvertWithScalingOutput.tif
 )
 
 otb_test_application(NAME apTvUtConvertExtendedFilename_readerGEOM
@@ -74,7 +74,7 @@ otb_test_application(NAME apTvUtConvertSelectChannels
                              -channels.rgb.blue 1
                              -type linear
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/apTvUtConvertSelectChannelsRgbOutput.tif
+                             ${OTBAPP_BASELINE}/apTvUtConvertSelectChannelsRgbOutput.tif
                              ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif)
 
 otb_test_application(NAME apTvUtConvertMonoChannel
@@ -84,8 +84,45 @@ otb_test_application(NAME apTvUtConvertMonoChannel
                              -channels grayscale
                              -type linear
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/apTvUtConvertMonoChannelOutput.tif
+                             ${OTBAPP_BASELINE}/apTvUtConvertMonoChannelOutput.tif
                              ${TEMP}/apTvUtConvertMonoChannelOutput.tif)
+
+#----------- DynamicConvert TESTS ------------
+otb_test_application(NAME apTvUtDynamicConvertBasic
+                     APP DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out ${TEMP}/apTvUtDynamicConvertOutput.tif
+                             -type linear
+                             -channels rgb
+                             -channels.rgb.red 2
+                             -channels.rgb.green 3
+                             -channels.rgb.blue 1
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/apTvUtConvertSelectChannelsRgbOutput.tif
+                             ${TEMP}/apTvUtDynamicConvertOutput.tif)
+
+otb_test_application(NAME apTvUtDynamicConvertLog2
+                     APP DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out ${TEMP}/apTvUtDynamicConvertLog2Output.tif
+                             -type log2
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/apTvUtDynamicConvertLog2Output.tif
+                             ${TEMP}/apTvUtDynamicConvertLog2Output.tif)
+
+otb_test_application(NAME apTvUtDynamicConvertFloat
+                     APP DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -out ${TEMP}/apTvUtDynamicConvertFloatOutput.tif float
+                             -type linear
+                             -type.linear.gamma 2.2
+                             -outmin 0.0
+                             -outmax 1.0
+                             -quantile.low 0
+                             -quantile.high 4
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/apTvUtDynamicConvertFloatOutput.tif
+                             ${TEMP}/apTvUtDynamicConvertFloatOutput.tif)
 
 #----------- PixelInfo TESTS ----------------
 

@@ -53,10 +53,12 @@ otb_create_application(
   SOURCES        otbComputePolylineFeatureFromImage.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           KMeansClassification
-  SOURCES        otbKMeansClassification.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+if(OTB_USE_SHARK)
+  otb_create_application(
+    NAME           KMeansClassification
+    SOURCES        otbKMeansClassification.cxx
+    LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+endif()
 
 otb_create_application(
   NAME           TrainImagesClassifier
