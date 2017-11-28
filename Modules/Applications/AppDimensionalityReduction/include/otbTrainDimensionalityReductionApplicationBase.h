@@ -14,13 +14,6 @@
 //Estimator
 #include "otbDimensionalityReductionModelFactory.h"
 
-#include "otbSOMModel.h"
-
-#ifdef OTB_USE_SHARK
-#include "otbAutoencoderModel.h"
-#include "otbPCAModel.h"
-#endif
-
 namespace otb
 {
 namespace Wrapper
@@ -84,34 +77,6 @@ public:
 	  
   typedef typename ModelType::InputSampleType     SampleType;
   typedef typename ModelType::InputListSampleType ListSampleType;
-	  
-// Dimensionality reduction models
-
-//typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 2> Map2DType;
-  typedef otb::SOMModel<InputValueType, 2> SOM2DModelType;
-	
-//typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> Map3DType;
-  typedef otb::SOMModel<InputValueType, 3> SOM3DModelType;
-	
-//typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 4> Map4DType;
-  typedef otb::SOMModel<InputValueType, 4> SOM4DModelType;
-	
-//typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 5> Map5DType;
-  typedef otb::SOMModel<InputValueType, 5> SOM5DModelType;
-	
-
-#ifdef OTB_USE_SHARK
-
-// typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
-  typedef shark::LogisticNeuron NeuronType;
-  typedef otb::AutoencoderModel<InputValueType, NeuronType> AutoencoderModelType;
-/*
-	// typedef shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron> TiedAutoencoderType;
-	typedef shark::TiedAutoencoder< shark::TanhNeuron, shark::TanhNeuron> TiedAutoencoderType;
-	typedef otb::AutoencoderModel<InputValueType, TiedAutoencoderType> TiedAutoencoderModelType;
-	*/
-  typedef otb::PCAModel<InputValueType> PCAModelType;
-#endif
   
 protected:
 TrainDimensionalityReductionApplicationBase();
@@ -148,8 +113,6 @@ void BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample, std::st
   void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   
   void TrainPCA(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
-  
- 
 #endif  
 //@}
 };

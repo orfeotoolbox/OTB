@@ -3,6 +3,7 @@
 #define cbTrainAutoencoder_txx
 
 #include "otbTrainDimensionalityReductionApplicationBase.h"
+#include "otbAutoencoderModel.h"
 
 namespace otb
 {
@@ -106,7 +107,15 @@ void
 TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::BeforeTrainAutoencoder(typename ListSampleType::Pointer trainingListSample,
                          std::string modelPath)
-{		
+{
+  // typedef shark::Autoencoder< shark::TanhNeuron, shark::LinearNeuron> AutoencoderType;
+  typedef shark::LogisticNeuron NeuronType;
+  typedef otb::AutoencoderModel<InputValueType, NeuronType> AutoencoderModelType;
+  /*
+  // typedef shark::TiedAutoencoder< shark::TanhNeuron, shark::LinearNeuron> TiedAutoencoderType;
+  typedef shark::TiedAutoencoder< shark::TanhNeuron, shark::TanhNeuron> TiedAutoencoderType;
+  typedef otb::AutoencoderModel<InputValueType, TiedAutoencoderType> TiedAutoencoderModelType;
+  */
   std::string TiedWeigth = GetParameterString("algorithm.autoencoder.istied");
   std::cout << TiedWeigth << std::endl;
 		

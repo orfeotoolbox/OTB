@@ -3,6 +3,7 @@
 #define cbTrainPCA_txx
 
 #include "otbTrainDimensionalityReductionApplicationBase.h"
+#include "otbPCAModel.h"
 
 namespace otb
 {
@@ -37,6 +38,7 @@ template <class TInputValue, class TOutputValue>
 void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::TrainPCA(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
+    typedef otb::PCAModel<InputValueType> PCAModelType;
 		typename PCAModelType::Pointer dimredTrainer = PCAModelType::New();
 		dimredTrainer->SetDimension(GetParameterInt("algorithm.pca.dim"));
 		dimredTrainer->SetInputListSample(trainingListSample);
