@@ -25,7 +25,7 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-#include "ossimTimeUtilities.h"
+#include "ossim/ossimTimeUtilities.h"
 
 //useful constants
 #include <otbMath.h>
