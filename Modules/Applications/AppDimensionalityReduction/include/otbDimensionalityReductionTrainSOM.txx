@@ -125,14 +125,14 @@ void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 		dimredTrainer->SetMaxWeight(GetParameterFloat("algorithm.som.iv"));
 		typename TemplateEstimatorType::SizeType size;
 		std::vector<std::basic_string<char>> s= GetParameterStringList("algorithm.som.s");
-		for (int i=0; i<dim; i++){ 
+		for (unsigned int i=0; i<dim; i++){
 			size[i]=std::stoi(s[i]);
 		}
 		
         dimredTrainer->SetMapSize(size);
         typename TemplateEstimatorType::SizeType radius;
         std::vector<std::basic_string<char>> n= GetParameterStringList("algorithm.som.n");
-        for (int i=0; i<dim; i++){ 
+        for (unsigned int i=0; i<dim; i++){
         radius[i]=std::stoi(n[i]);
         }
         dimredTrainer->SetNeighborhoodSizeInit(radius);

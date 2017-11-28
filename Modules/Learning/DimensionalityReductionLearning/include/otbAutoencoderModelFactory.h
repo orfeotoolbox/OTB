@@ -2,8 +2,8 @@
 #define AutoencoderModelFactory_h
 
 
-#include <shark/Models/TiedAutoencoder.h>
-#include <shark/Models/Autoencoder.h>
+//#include <shark/Models/TiedAutoencoder.h>
+//#include <shark/Models/Autoencoder.h>
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 

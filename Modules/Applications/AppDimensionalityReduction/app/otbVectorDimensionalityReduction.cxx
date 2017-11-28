@@ -155,7 +155,7 @@ class VectorDimensionalityReduction : public Application
 					/*
 					key.erase( std::remove_if(key.begin(),key.end(),IsNotAlphaNum), key.end());
 					std::transform(key.begin(), key.end(), key.begin(), tolower);*/
-					OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
+					//OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
 				/*	if(fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
 					{*/
 						//std::string tmpKey="feat."+key;
@@ -320,7 +320,7 @@ class VectorDimensionalityReduction : public Application
 			
 			// Add the field of prediction in the output layer if field not exist
 			
-			for (int i=0; i<GetParameterStringList("featout").size() ;i++)
+			for (unsigned int i=0; i<GetParameterStringList("featout").size() ;i++)
 			{
 				OGRFeatureDefn &layerDefn = outLayer.GetLayerDefn();
 				int idx = layerDefn.GetFieldIndex(GetParameterStringList("featout")[i].c_str());

@@ -1,6 +1,8 @@
 #ifndef SOMModel_txx
 #define SOMModel_txx
 
+#include "otbSOMModel.h"
+
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -68,7 +70,7 @@ bool SOMModel<TInputValue, MapDimension>::CanReadFile(const std::string & filena
 
 
 template <class TInputValue, unsigned int MapDimension>
-bool SOMModel<TInputValue, MapDimension>::CanWriteFile(const std::string & filename)
+bool SOMModel<TInputValue, MapDimension>::CanWriteFile(const std::string & /*filename*/)
 {
 	return true;
 }
@@ -91,7 +93,7 @@ std::istream & binary_read(std::istream& stream, T& value){
 
 
 template <class TInputValue, unsigned int MapDimension>
-void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, const std::string & name)
+void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, const std::string & /*name*/)
 {
 	itk::ImageRegionConstIterator<MapType> inputIterator(m_SOMMap,m_SOMMap->GetLargestPossibleRegion());
 	inputIterator.GoToBegin();
@@ -133,7 +135,7 @@ void SOMModel<TInputValue, MapDimension>::Save(const std::string & filename, con
 }
 
 template <class TInputValue, unsigned int MapDimension>
-void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, const std::string & name)
+void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, const std::string & /*name*/)
 {
 	
 	std::ifstream ifs(filename, std::ios::binary);
@@ -154,7 +156,7 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
     
 	SizeType size;
 	itk::Index< MapDimension > index;
-	for (int i=0 ; i<MapDimension; i++)
+	for (unsigned int i=0 ; i<MapDimension; i++)
 	{
 		binary_read(ifs,size[i]);
 		index[i]=0;
@@ -174,7 +176,7 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
 	std::string value;
 	while(!outputIterator.IsAtEnd()){
 		InputSampleType  vect(numberOfElements);
-		for (int i=0 ; i<numberOfElements; i++)
+		for (unsigned int i=0 ; i<numberOfElements; i++)
 		{
 			float v;    // InputValue type is not the same during training anddimredvector.
 			binary_read(ifs,v);
@@ -191,13 +193,13 @@ void SOMModel<TInputValue, MapDimension>::Load(const std::string & filename, con
 
 template <class TInputValue, unsigned int MapDimension>
 typename SOMModel<TInputValue, MapDimension>::TargetSampleType
-SOMModel<TInputValue, MapDimension>::DoPredict(const InputSampleType & value, ConfidenceValueType * quality) const
+SOMModel<TInputValue, MapDimension>::DoPredict(const InputSampleType & value, ConfidenceValueType * /*quality*/) const
 { 
     TargetSampleType target;
     target.SetSize(this->m_Dimension);
 	
     auto winner =m_SOMMap->GetWinner(value);
-    for (int i=0; i< this->m_Dimension ;i++) {
+    for (unsigned int i=0; i< this->m_Dimension ;i++) {
 		target[i] = winner.GetElement(i); 
 	}
 

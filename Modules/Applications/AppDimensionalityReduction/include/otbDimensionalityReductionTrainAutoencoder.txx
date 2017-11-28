@@ -148,7 +148,7 @@ void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>::Trai
 		regularization.SetSize(s_nbneuron.size());
 		rho.SetSize(s_nbneuron.size());
 		beta.SetSize(s_nbneuron.size());
-		for (int i=0; i<s_nbneuron.size(); i++){ 
+		for (unsigned int i=0; i<s_nbneuron.size(); i++){
 			nb_neuron[i]=std::stoi(s_nbneuron[i]);
 			noise[i]=std::stof(s_noise[i]);
 			regularization[i]=std::stof(s_regularization[i]);

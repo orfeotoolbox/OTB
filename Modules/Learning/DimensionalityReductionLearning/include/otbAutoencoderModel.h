@@ -4,10 +4,21 @@
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"
 #include <fstream>
-#include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+#include "otb_shark.h"
+#include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
 #include <shark/Models/FFNet.h>
 #include <shark/Models/Autoencoder.h>
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+
 namespace otb
 {
 template <class TInputValue, class NeuronType>

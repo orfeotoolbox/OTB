@@ -2,9 +2,16 @@
 #ifndef PCAModel_txx
 #define PCAModel_txx
 
+#include "otbPCAModel.h"
+
 #include <fstream>
-#include <shark/Data/Dataset.h>
 #include "itkMacro.h"
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
 #include "otbSharkUtils.h"
 //include train function
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
@@ -13,6 +20,9 @@
 #include <shark/ObjectiveFunctions/Regularizer.h> //L2 regulariziation
 
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 namespace otb
 {
@@ -65,13 +75,13 @@ bool PCAModel<TInputValue>::CanReadFile(const std::string & filename)
 
 
 template <class TInputValue>
-bool PCAModel<TInputValue>::CanWriteFile(const std::string & filename)
+bool PCAModel<TInputValue>::CanWriteFile(const std::string & /*filename*/)
 {
 	return true;
 }
 
 template <class TInputValue>
-void PCAModel<TInputValue>::Save(const std::string & filename, const std::string & name)
+void PCAModel<TInputValue>::Save(const std::string & filename, const std::string & /*name*/)
 {
 	std::ofstream ofs(filename);
 	//ofs << m_encoder.name() << std::endl; //first line
@@ -98,7 +108,7 @@ otxt.close();
 }
 
 template <class TInputValue>
-void PCAModel<TInputValue>::Load(const std::string & filename, const std::string & name)
+void PCAModel<TInputValue>::Load(const std::string & filename, const std::string & /*name*/)
 {
 	std::ifstream ifs(filename);
 	char encoder[256];
@@ -130,7 +140,7 @@ void PCAModel<TInputValue>::Load(const std::string & filename, const std::string
 
 template <class TInputValue>
 typename PCAModel<TInputValue>::TargetSampleType
-PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType * quality) const
+PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType * /*quality*/) const
 {  
 	shark::RealVector samples(value.Size());
 	for(size_t i = 0; i < value.Size();i++)
@@ -156,7 +166,7 @@ PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueT
 
 template <class TInputValue>
 void PCAModel<TInputValue>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * /*quality*/) const
 {
 	
 	std::vector<shark::RealVector> features;

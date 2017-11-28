@@ -1,11 +1,19 @@
 #ifndef AutoencoderModel_txx
 #define AutoencoderModel_txx
 
-#include <fstream>
-#include <shark/Data/Dataset.h>
-#include "itkMacro.h"
-#include "otbSharkUtils.h"
+#include "otbAutoencoderModel.h"
 
+
+#include <fstream>
+#include "itkMacro.h"
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+#include "otbSharkUtils.h"
 //include train function
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
 #include <shark/ObjectiveFunctions/SparseAutoencoderError.h>//the error function performing the regularisation of the hidden neurons
@@ -20,6 +28,9 @@
 #include <shark/Algorithms/StoppingCriteria/TrainingProgress.h> //Stops when the algorithm seems to converge, Tracks the progress of the training error over a period of time
 
 #include <shark/Algorithms/GradientDescent/SteepestDescent.h>
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 namespace otb
 {
@@ -46,7 +57,7 @@ void AutoencoderModel<TInputValue,NeuronType>::Train()
 	shark::Data<shark::RealVector> inputSamples_copy = inputSamples;
 	
 	std::ofstream ofs;
-	if (this->m_WriteLearningCurve =true) 
+	if (this->m_WriteLearningCurve == true)
 	{
 		ofs.open(m_LearningCurveFileName);
 		ofs << "learning curve" << std::endl; 
@@ -176,7 +187,7 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneLayer(shark::AbstractStop
 	optimizer.init(error);
 	
 	std::cout<<"error before training : " << optimizer.solution().value<<std::endl;
-	if (this->m_WriteLearningCurve =true) 
+	if (this->m_WriteLearningCurve == true)
 	{
 		File << "end layer" << std::endl;
 	}
@@ -185,7 +196,7 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneLayer(shark::AbstractStop
 	do{
 		i++;
 		optimizer.step(error);
-		if (this->m_WriteLearningCurve =true) 
+		if (this->m_WriteLearningCurve == true)
 		{	
 		File << optimizer.solution().value << std::endl;
 		}
@@ -252,12 +263,12 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(shark::Abstra
 		i++;
 		optimizer.step(error);
 		std::cout<<"error after " << i << "iterations : " << optimizer.solution().value <<std::endl;
-		if (this->m_WriteLearningCurve =true) 
+		if (this->m_WriteLearningCurve == true) 
 		{	
 		File << optimizer.solution().value << std::endl;
 		}
 	} while( !criterion.stop( optimizer.solution() ) );
-	if (this->m_WriteLearningCurve =true) 
+	if (this->m_WriteLearningCurve == true)
 	{
 		File << "end layer" << std::endl;
 	}
@@ -272,7 +283,7 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(shark::Abstra
 
 template <class TInputValue, class NeuronType>
 template <class T>
-void AutoencoderModel<TInputValue,NeuronType>::TrainNetwork(shark::AbstractStoppingCriterion<T> & criterion,double rho,double beta, double regularization, shark::Data<shark::RealVector> &samples, std::ostream& File)
+void AutoencoderModel<TInputValue,NeuronType>::TrainNetwork(shark::AbstractStoppingCriterion<T> & criterion,double /*rho*/,double /*beta*/, double regularization, shark::Data<shark::RealVector> &samples, std::ostream& File)
 {
 	
 	shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
@@ -292,7 +303,7 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainNetwork(shark::AbstractStopp
 		i++;
 		optimizer.step(error);
 		std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
-		if (this->m_WriteLearningCurve =true) 
+		if (this->m_WriteLearningCurve == true)
 		{	
 			File << optimizer.solution().value << std::endl;
 		}
@@ -319,13 +330,13 @@ bool AutoencoderModel<TInputValue,NeuronType>::CanReadFile(const std::string & f
 
 
 template <class TInputValue, class NeuronType>
-bool AutoencoderModel<TInputValue,NeuronType>::CanWriteFile(const std::string & filename)
+bool AutoencoderModel<TInputValue,NeuronType>::CanWriteFile(const std::string & /*filename*/)
 {
 	return true;
 }
 
 template <class TInputValue, class NeuronType>
-void AutoencoderModel<TInputValue,NeuronType>::Save(const std::string & filename, const std::string & name)
+void AutoencoderModel<TInputValue,NeuronType>::Save(const std::string & filename, const std::string & /*name*/)
 {
 	std::cout << "saving model ..." << std::endl;
 	std::ofstream ofs(filename);
@@ -382,7 +393,7 @@ void AutoencoderModel<TInputValue,NeuronType>::Save(const std::string & filename
 }
 
 template <class TInputValue, class NeuronType>
-void AutoencoderModel<TInputValue,NeuronType>::Load(const std::string & filename, const std::string & name)
+void AutoencoderModel<TInputValue,NeuronType>::Load(const std::string & filename, const std::string & /*name*/)
 {
 	
 	NetworkType net;
@@ -421,7 +432,7 @@ void AutoencoderModel<TInputValue,NeuronType>::Load(const std::string & filename
 
 template <class TInputValue, class NeuronType>
 typename AutoencoderModel<TInputValue,NeuronType>::TargetSampleType
-AutoencoderModel<TInputValue,NeuronType>::DoPredict(const InputSampleType & value, ConfidenceValueType * quality) const
+AutoencoderModel<TInputValue,NeuronType>::DoPredict(const InputSampleType & value, ConfidenceValueType * /*quality*/) const
 {  
 	
 	shark::RealVector samples(value.Size());
@@ -453,7 +464,7 @@ AutoencoderModel<TInputValue,NeuronType>::DoPredict(const InputSampleType & valu
 
 template <class TInputValue, class NeuronType>
 void AutoencoderModel<TInputValue,NeuronType>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * /*quality*/) const
 {
 	
 	std::vector<shark::RealVector> features;

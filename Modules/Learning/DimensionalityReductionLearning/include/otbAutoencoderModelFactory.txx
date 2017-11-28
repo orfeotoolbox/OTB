@@ -20,9 +20,9 @@
 
 
 #include "otbAutoencoderModelFactory.h"
+#include "otbAutoencoderModel.h"
 
 #include "itkCreateObjectFunction.h"
-#include "otbAutoencoderModel.h"
 #include "itkVersion.h"
 
 namespace otb

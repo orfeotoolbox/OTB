@@ -111,9 +111,9 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
-  typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
+  //typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
-  typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
+  //typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
 
   InputIteratorType inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
@@ -155,9 +155,9 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
-  typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
+  //typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
-  typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
+  //typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
 
   InputIteratorType inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);

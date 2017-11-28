@@ -4,7 +4,17 @@
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+#include "otb_shark.h"
 #include <shark/Algorithms/Trainers/PCA.h>
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 namespace otb
 {
