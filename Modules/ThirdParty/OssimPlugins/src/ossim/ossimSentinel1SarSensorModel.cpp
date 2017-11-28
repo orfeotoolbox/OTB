@@ -25,7 +25,7 @@
 
 #include <ossimSentinel1SarSensorModel.h>
 #include <ossim/base/ossimXmlDocument.h>
-#include <ossimXmlTools.h>
+#include "ossim/ossimXmlTools.h"
 
 namespace {// Anonymous namespace
     const ossimString attAzimuthTime      = "azimuthTime";

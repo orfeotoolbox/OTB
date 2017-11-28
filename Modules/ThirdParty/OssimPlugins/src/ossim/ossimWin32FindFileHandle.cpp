@@ -23,7 +23,7 @@
  */
 
 #include <cassert>
-#include "ossimStringUtilities.h"
+#include "ossim/ossimStringUtilities.h"
 #include "ossimWin32FindFileHandle.h"
 
 namespace ossimplugins {

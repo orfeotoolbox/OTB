@@ -49,6 +49,7 @@ static const std::string SAR="SAR";
 static const std::string Stereo="Stereo";
 static const std::string Segmentation="Segmentation";
 static const std::string Vector="Vector Data Manipulation";
+static const std::string Deprecated="Deprecated";
 
 } // end namespace Wrappers
 } // end namespace Tags

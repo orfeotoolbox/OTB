@@ -23,7 +23,7 @@
  */
 
 
-#include "ossimSarSensorModelPathsAndKeys.h"
+#include "ossim/ossimSarSensorModelPathsAndKeys.h"
 
 namespace ossimplugins {
    const std::string HEADER_PREFIX       = "header.";

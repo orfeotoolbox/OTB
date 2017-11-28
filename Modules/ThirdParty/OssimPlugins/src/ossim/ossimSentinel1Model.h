@@ -38,7 +38,7 @@
 
 //#include <ossim/projection/ossimSensorModel.h>
 //#include <ossim/projection/ossimCoarseGridModel.h>
-#include "ossimSarSensorModel.h"
+#include "ossim/ossimSarSensorModel.h"
 #include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
 #include <ossim/support_data/ossimSupportFilesList.h>
