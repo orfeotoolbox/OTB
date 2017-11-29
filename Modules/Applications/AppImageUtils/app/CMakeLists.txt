@@ -94,3 +94,8 @@ otb_create_application(
   NAME           ManageNoData
   SOURCES        otbManageNoData.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           DynamicConvert
+  SOURCES        otbDynamicConvert.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})

@@ -40,8 +40,10 @@
 #include "ossimTileMapModel.h"
 #include "ossimSpot6Model.h"
 #include "ossimSentinel1Model.h"
-#include "ossimStringUtilities.h"
-#include "ossimTraceHelpers.h"
+
+#include "ossim/ossimStringUtilities.h"
+#include "ossim/ossimTraceHelpers.h"
+
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/projection/ossimProjection.h>
@@ -390,6 +392,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
      return new ossimSentinel1Model;
    }
+   else if(name == STATIC_TYPE_NAME(ossimSarSensorModel))
+   {
+     return new ossimSarSensorModel;
+   }
 
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
@@ -465,6 +471,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          result = new ossimSentinel1Model();
       }
 
+      else if (type == "ossimSarSensorModel")
+      {
+         result = new ossimSarSensorModel();
+         std::cout<<"ossiMSarSensorModel"<<std::endl;
+      }
+
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
    //***
@@ -476,7 +488,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       // Then, try to load the keyword list
       if ( result.get() && !result->loadState(kwl, prefix) )
       {
-         result = 0;
+      result = 0;
       }
    }
 
@@ -509,6 +521,7 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimPleiadesModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSentinel1Model));
+   typeList.push_back(STATIC_TYPE_NAME(ossimSarSensorModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot6Model));
 
    //***

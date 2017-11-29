@@ -25,8 +25,8 @@
 #ifndef ossimTimeUtilities_h
 #define ossimTimeUtilities_h
 
-#include "ossimStringUtilities.h"
-#include "ossimOperatorUtilities.h"
+#include "ossim/ossimStringUtilities.h"
+#include "ossim/ossimOperatorUtilities.h"
 #include "ossimPluginConstants.h"
 #include <cassert>
 #include <ostream>
