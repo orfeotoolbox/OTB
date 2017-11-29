@@ -100,10 +100,10 @@ void ApplyGainFilter < TInputImage , TLut , TOutputImage >
   typename InputImageType::ConstPointer input ( GetInputImage() );
   if ( m_ThumbSizeFromSpacing )
     {
-    m_ThumbSize[0] = std::round( lut->GetSpacing()[0] 
-          / input->GetSpacing()[0] );
-    m_ThumbSize[1] = std::round( lut->GetSpacing()[1] 
-          / input->GetSpacing()[1] );
+    m_ThumbSize[0] = std::round( lut->GetSignedSpacing()[0] 
+          / input->GetSignedSpacing()[0] );
+    m_ThumbSize[1] = std::round( lut->GetSignedSpacing()[1] 
+          / input->GetSignedSpacing()[1] );
     }
   m_Step = static_cast<double>( m_Max - m_Min ) \
                 / static_cast<double>( lut->GetVectorLength() - 1 );

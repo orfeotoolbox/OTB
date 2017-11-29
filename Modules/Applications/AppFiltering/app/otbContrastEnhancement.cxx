@@ -499,15 +499,15 @@ private:
       {
       m_ThumbSize[0] = GetParameterInt("spatial.local.w");
       m_ThumbSize[1] = GetParameterInt("spatial.local.h");
-      }
       if ( size[0] == m_ThumbSize[0] && size[1] == m_ThumbSize[1] )
-      {
-      std::ostringstream oss;
-      oss<<"Warning you choose to compute the histogram with a local "
-      "method whereas you have selected the whole image for the thumbnail "
-      "size. In order to use less memory consider using the global option for "
-      "histogram computation.";
-      otbAppLogWARNING( << oss.str() );
+        {
+        std::ostringstream oss;
+        oss<<"Warning you choose to compute the histogram with a local "
+        "method whereas you have selected the whole image for the thumbnail "
+        "size. In order to use less memory consider using the global option for "
+        "histogram computation.";
+        otbAppLogWARNING( << oss.str() );
+        }
       }
   }
 
@@ -855,7 +855,7 @@ private:
 
     HistoPersistentFilterType::HistogramType::Pointer histo;
     FloatImageType::SpacingType inputSpacing ( 
-      GetParameterImage("in")->GetSpacing() );
+      GetParameterImage("in")->GetSignedSpacing() );
     FloatImageType::PointType inputOrigin ( 
       GetParameterImage("in")->GetOrigin() );
 
@@ -901,7 +901,7 @@ private:
     histoVectorImage->SetBufferedRegion( sizeOne );
     histoVectorImage->SetRequestedRegion( sizeOne );
     histoVectorImage->SetLargestPossibleRegion( sizeOne );
-    histoVectorImage->SetSpacing( histoSpacing ) ;
+    histoVectorImage->SetSignedSpacing( histoSpacing ) ;
     histoVectorImage->SetOrigin( histoOrigin );
     histoVectorImage->Allocate();
     for (unsigned int j = 0 ; j < nbBin ; j++ )
