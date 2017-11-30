@@ -451,13 +451,22 @@ private:
   void LogInfo()
   {
     std::ostringstream oss;
-    oss << "The application has been launch with the following parameters :"
+    oss << "The application has been launched with the following parameters :"
     <<std::endl;
-    oss << "- number of bins : " << GetParameterInt("bins")<<std::endl;
+    oss << "- number of bins : " << GetParameterInt("bins") << std::endl;
+    if ( HasValue("hfact") )
+      {
+      oss << "- contrast limtaition factor : "
+      << GetParameterFloat("hfact") << std::endl;
+      }
+    else
+      {
+      oss << "- no contrast limitation factor" << std::endl;
+      }
     oss << "- spatial parameters : " << m_SpatialMode ;
     if ( m_SpatialMode == "local" )
       {
-      oss<< " with a thumbnail of " <<m_ThumbSize[0]<<" X "<<m_ThumbSize[1];
+      oss<< " with a thumbnail of " << m_ThumbSize[0] <<" X "<< m_ThumbSize[1] ;
       }
     oss << std::endl << "- equalisation of ";
     if ( m_EqMode == "each" )
@@ -817,7 +826,7 @@ private:
   void Threshold( HistoPersistentFilterType::HistogramListType * histoList ,
                   unsigned int nbBin )
   {
-    for ( unsigned int j = 0 ; j < m_Histogram.size() ; j++ )
+    for ( unsigned int j = 0 ; j < histoList->Size() ; j++ )
       {
       unsigned int rest(0) , height ( static_cast<unsigned int>( 
           GetParameterFloat( "hfact" ) * 
