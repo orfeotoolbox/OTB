@@ -142,9 +142,9 @@ if(WITH_REMOTE_MODULES)
     list(APPEND OTB_MODULES_CONFIG -DModule_${remote_module}:BOOL=ON)
   endforeach()
 
-  # Add CESBIO'S remote modules if OTB is compiled with GSL support (for now only TemporalGapFilling)
+  # Add CESBIO'S remote modules if OTB is compiled with GSL support
   if(OTB_USE_GSL)
-    foreach(remote_module OTBTemporalGapFilling)
+    foreach(remote_module OTBTemporalGapFilling OTBBioVars OTBPhenology)
       list(APPEND OTB_MODULES_CONFIG -DModule_${remote_module}:BOOL=ON)
     endforeach()
   endif()
