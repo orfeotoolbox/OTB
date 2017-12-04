@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef cbTrainSOM_txx
-#define cbTrainSOM_txx
+#ifndef otbDimensionalityReductionTrainSOM_txx
+#define otbDimensionalityReductionTrainSOM_txx
 #include "otbTrainDimensionalityReductionApplicationBase.h"
 #include "otbSOMModel.h"
 

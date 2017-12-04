@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef cbTrainPCA_txx
-#define cbTrainPCA_txx
+#ifndef otbDimensionalityReductionTrainPCA_txx
+#define otbDimensionalityReductionTrainPCA_txx
 
 #include "otbTrainDimensionalityReductionApplicationBase.h"
 #include "otbPCAModel.h"

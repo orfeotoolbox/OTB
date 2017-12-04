@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef DimensionalityReductionModelFactory_h
-#define DimensionalityReductionModelFactory_h
+#ifndef otbDimensionalityReductionModelFactory_h
+#define otbDimensionalityReductionModelFactory_h
 
 //#include "DimensionalityReductionModel.h"
 #include "otbMachineLearningModelFactoryBase.h"

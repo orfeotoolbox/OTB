@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef PCAModel_txx
-#define PCAModel_txx
+#ifndef otbPCAModel_txx
+#define otbPCAModel_txx
 
 #include "otbPCAModel.h"
 

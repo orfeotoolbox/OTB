@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef SOMModel_h
-#define SOMModel_h
+#ifndef otbSOMModel_h
+#define otbSOMModel_h
 
 //#include "DimensionalityReductionModel.h"
 #include "otbSOMMap.h"

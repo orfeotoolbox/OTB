@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef PCAModel_h
-#define PCAModel_h
+#ifndef otbPCAModel_h
+#define otbPCAModel_h
 
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"

@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef PCAModelFactory_h
-#define PCAModelFactory_h
+#ifndef otbPCAModelFactory_h
+#define otbPCAModelFactory_h
 
 
 #include "itkObjectFactoryBase.h"

@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef SOMFactory_txx
-#define SOMFactory_txx
+#ifndef otbSOMFactory_txx
+#define otbSOMFactory_txx
 
 
 #include "otbSOMModelFactory.h"

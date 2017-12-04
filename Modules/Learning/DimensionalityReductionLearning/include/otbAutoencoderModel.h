@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef AutoencoderModel_h
-#define AutoencoderModel_h
+#ifndef otbAutoencoderModel_h
+#define otbAutoencoderModel_h
 
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"
