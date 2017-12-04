@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef SOMModelFactory_h
-#define SOMModelFactory_h
+#ifndef otbSOMModelFactory_h
+#define otbSOMModelFactory_h
 
 
 #include "itkObjectFactoryBase.h"
@@ -70,7 +70,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "SOMModelFactory.txx"
+#include "otbSOMModelFactory.txx"
 #endif
 
 #endif
