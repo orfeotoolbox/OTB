@@ -30,11 +30,11 @@ namespace otb
 {
 	
 template <class TInputValue, class TTargetValue, class NeuronType>
-class ITK_EXPORT AutoencoderModelFactoryBase : public itk::ObjectFactoryBase
+class ITK_EXPORT AutoencoderModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef AutoencoderModelFactoryBase   Self;
+  typedef AutoencoderModelFactory   Self;
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -47,21 +47,21 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AutoencoderModelFactoryBase, itk::ObjectFactoryBase);
+  itkTypeMacro(AutoencoderModelFactory, itk::ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    Pointer AEFactory = AutoencoderModelFactoryBase::New();
+    Pointer AEFactory = AutoencoderModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(AEFactory);
   }
 
 protected:
-  AutoencoderModelFactoryBase();
-  ~AutoencoderModelFactoryBase() ITK_OVERRIDE;
+  AutoencoderModelFactory();
+  ~AutoencoderModelFactory() ITK_OVERRIDE;
 
 private:
-  AutoencoderModelFactoryBase(const Self &); //purposely not implemented
+  AutoencoderModelFactory(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
 };

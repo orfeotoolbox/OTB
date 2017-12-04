@@ -30,7 +30,7 @@
 namespace otb
 {
 template <class TInputValue, class TOutputValue, class NeuronType>
-AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::AutoencoderModelFactoryBase()
+AutoencoderModelFactory<TInputValue,TOutputValue, NeuronType>::AutoencoderModelFactory()
 {
 
   std::string classOverride = std::string("DimensionalityReductionModel");
@@ -45,18 +45,18 @@ AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::AutoencoderMo
 }
 
 template <class TInputValue, class TOutputValue, class NeuronType>
-AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::~AutoencoderModelFactoryBase()
+AutoencoderModelFactory<TInputValue,TOutputValue, NeuronType>::~AutoencoderModelFactory()
 {
 }
 
 template <class TInputValue, class TOutputValue, class NeuronType>
-const char* AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::GetITKSourceVersion(void) const
+const char* AutoencoderModelFactory<TInputValue,TOutputValue, NeuronType>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
 template <class TInputValue, class TOutputValue, class NeuronType>
-const char* AutoencoderModelFactoryBase<TInputValue,TOutputValue, NeuronType>::GetDescription() const
+const char* AutoencoderModelFactory<TInputValue,TOutputValue, NeuronType>::GetDescription() const
 {
   return "Autoencoder model factory";
 }

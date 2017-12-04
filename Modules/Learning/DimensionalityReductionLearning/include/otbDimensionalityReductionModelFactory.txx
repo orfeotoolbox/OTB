@@ -38,7 +38,7 @@ namespace otb
 
 
 template <class TInputValue, class TTargetValue>
-using AutoencoderModelFactory = AutoencoderModelFactoryBase<TInputValue, TTargetValue, shark::LogisticNeuron>  ;
+using LogAutoencoderModelFactory = AutoencoderModelFactory<TInputValue, TTargetValue, shark::LogisticNeuron>  ;
 
 
 template <class TInputValue, class TTargetValue>
@@ -121,7 +121,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   
 #ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
-  RegisterFactory(AutoencoderModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(LogAutoencoderModelFactory<TInputValue,TOutputValue>::New());
   // RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
 #endif
   
@@ -188,8 +188,8 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       
 #ifdef OTB_USE_SHARK
 	
-    AutoencoderModelFactory<TInputValue,TOutputValue> *aeFactory =
-      dynamic_cast<AutoencoderModelFactory<TInputValue,TOutputValue> *>(*itFac);
+    LogAutoencoderModelFactory<TInputValue,TOutputValue> *aeFactory =
+      dynamic_cast<LogAutoencoderModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (aeFactory)
       {
       itk::ObjectFactoryBase::UnRegisterFactory(aeFactory);
