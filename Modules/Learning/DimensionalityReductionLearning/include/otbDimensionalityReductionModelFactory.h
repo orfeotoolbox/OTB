@@ -20,9 +20,7 @@
 #ifndef otbDimensionalityReductionModelFactory_h
 #define otbDimensionalityReductionModelFactory_h
 
-//#include "DimensionalityReductionModel.h"
 #include "otbMachineLearningModelFactoryBase.h"
- 
 #include "otbMachineLearningModel.h" 
 
 namespace otb
@@ -54,7 +52,6 @@ public:
   /** Mode in which the files is intended to be used */
   typedef enum { ReadMode, WriteMode } FileModeType;
 
-
   /** Create the appropriate MachineLearningModel depending on the particulars of the file. */
   static DimensionalityReductionModelTypePointer CreateDimensionalityReductionModel(const std::string& path, FileModeType mode);
 
@@ -74,7 +71,6 @@ private:
   /** Register a single factory, ensuring it has not been registered
     * twice */
   static void RegisterFactory(itk::ObjectFactoryBase * factory);
-
 };
 
 } // end namespace otb

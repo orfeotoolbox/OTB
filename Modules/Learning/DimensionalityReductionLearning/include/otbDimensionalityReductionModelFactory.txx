@@ -32,14 +32,11 @@
 
 #include "itkMutexLockHolder.h"
 
-
 namespace otb
 {
 
-
 template <class TInputValue, class TTargetValue>
 using LogAutoencoderModelFactory = AutoencoderModelFactory<TInputValue, TTargetValue, shark::LogisticNeuron>  ;
-
 
 template <class TInputValue, class TTargetValue>
 using SOM2DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 2>  ;
@@ -55,7 +52,7 @@ using SOM5DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 5>  ;
 
 
 template <class TInputValue, class TOutputValue>
-typename MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TOutputValue>>::Pointer
+typename MachineLearningModel<itk::VariableLengthVector< TInputValue>, itk::VariableLengthVector< TOutputValue> >::Pointer
 DimensionalityReductionModelFactory<TInputValue,TOutputValue>
 ::CreateDimensionalityReductionModel(const std::string& path, FileModeType mode)
 {
@@ -64,7 +61,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   std::list<DimensionalityReductionModelTypePointer> possibleDimensionalityReductionModel;
   std::list<LightObject::Pointer> allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("DimensionalityReductionModel");
- 
+
   for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
       i != allobjects.end(); ++i)
     {
@@ -75,19 +72,17 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       }
     else
       {
-	
       std::cerr << "Error DimensionalityReductionModel Factory did not return an DimensionalityReductionModel: "
                 << (*i)->GetNameOfClass()
                 << std::endl;
       }
     }
-  
-for(typename std::list<DimensionalityReductionModelTypePointer>::iterator k = possibleDimensionalityReductionModel.begin();
+
+  for(typename std::list<DimensionalityReductionModelTypePointer>::iterator k = possibleDimensionalityReductionModel.begin();
       k != possibleDimensionalityReductionModel.end(); ++k)
     {
-      if( mode == ReadMode )
+    if( mode == ReadMode )
       {
-		
       if((*k)->CanReadFile(path))
         {
         return *k;
@@ -99,7 +94,6 @@ for(typename std::list<DimensionalityReductionModelTypePointer>::iterator k = po
         {
         return *k;
         }
-
       }
     }
   return ITK_NULLPTR;
@@ -111,20 +105,16 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
 ::RegisterBuiltInFactories()
 {
   itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
-  
-  
 
   RegisterFactory(SOM2DModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(SOM3DModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(SOM4DModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(SOM5DModelFactory<TInputValue,TOutputValue>::New());
-  
+
 #ifdef OTB_USE_SHARK
   RegisterFactory(PCAModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(LogAutoencoderModelFactory<TInputValue,TOutputValue>::New());
-  // RegisterFactory(TiedAutoencoderModelFactory<TInputValue,TOutputValue>::New());
 #endif
-  
 }
 
 template <class TInputValue, class TOutputValue>
@@ -151,17 +141,15 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
 
   for (itFac = factories.begin(); itFac != factories.end() ; ++itFac)
     {
-
-	// SOM
-	
-	SOM5DModelFactory<TInputValue,TOutputValue> *som5dFactory =
+    // SOM 5D
+    SOM5DModelFactory<TInputValue,TOutputValue> *som5dFactory =
       dynamic_cast<SOM5DModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (som5dFactory)
       {
       itk::ObjectFactoryBase::UnRegisterFactory(som5dFactory);
       continue;
       }
-    
+    // SOM 4D
     SOM4DModelFactory<TInputValue,TOutputValue> *som4dFactory =
       dynamic_cast<SOM4DModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (som4dFactory)
@@ -169,7 +157,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(som4dFactory);
       continue;
       }
-      
+    // SOM 3D
     SOM3DModelFactory<TInputValue,TOutputValue> *som3dFactory =
       dynamic_cast<SOM3DModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (som3dFactory)
@@ -177,7 +165,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(som3dFactory);
       continue;
       }
-      
+    // SOM 2D
     SOM2DModelFactory<TInputValue,TOutputValue> *som2dFactory =
       dynamic_cast<SOM2DModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (som2dFactory)
@@ -185,9 +173,8 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(som2dFactory);
       continue;
       }
-      
 #ifdef OTB_USE_SHARK
-	
+    // Autoencoder
     LogAutoencoderModelFactory<TInputValue,TOutputValue> *aeFactory =
       dynamic_cast<LogAutoencoderModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (aeFactory)
@@ -195,17 +182,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(aeFactory);
       continue;
       }
-    
-    /*
-    TiedAutoencoderModelFactory<TInputValue,TOutputValue> *taeFactory =
-      dynamic_cast<TiedAutoencoderModelFactory<TInputValue,TOutputValue> *>(*itFac);
-    if (taeFactory)
-      {
-      itk::ObjectFactoryBase::UnRegisterFactory(taeFactory);
-      continue;
-      }
-    */
-    // PCA  
+    // PCA
     PCAModelFactory<TInputValue,TOutputValue> *pcaFactory =
       dynamic_cast<PCAModelFactory<TInputValue,TOutputValue> *>(*itFac);
     if (pcaFactory)
@@ -214,9 +191,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
       continue;
       }
 #endif
-
     }
-
 }
 
 } // end namespace otb

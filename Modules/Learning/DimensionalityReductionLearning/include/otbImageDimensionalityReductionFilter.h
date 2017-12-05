@@ -21,7 +21,6 @@
 #define otbImageDimensionalityReduction_h
 
 #include "itkImageToImageFilter.h"
-//#include "DimensionalityReductionModel.h"
 #include "otbMachineLearningModel.h"
 #include "otbImage.h"
 

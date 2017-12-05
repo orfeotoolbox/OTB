@@ -36,8 +36,6 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
 
-  //m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();
-
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TOutputImage::New());
   this->SetNthOutput(1,ConfidenceImageType::New());
@@ -113,9 +111,7 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
-  //typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
-  //typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
 
   InputIteratorType inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
@@ -123,43 +119,36 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   // Walk the part of the image
   for (inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd() && !outIt.IsAtEnd(); ++inIt, ++outIt)
     {
-	// Classifify
-
-	outIt.Set(m_Model->Predict(inIt.Get()));
+    // Classifify
+    outIt.Set(m_Model->Predict(inIt.Get()));
     progress.CompletedPixel();
     }
-
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::GenerateOutputInformation()
 {
-	Superclass::GenerateOutputInformation();
+  Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel( m_Model->GetDimension() );
 }
-
-
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 ::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
-
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
   OutputImagePointerType     outputPtr    = this->GetOutput();
   ConfidenceImagePointerType confidencePtr = this->GetOutputConfidence();
-  
+
   // Progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
-  //typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
-  //typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
 
   InputIteratorType inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
@@ -168,45 +157,40 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   typedef typename ModelType::InputListSampleType  InputListSampleType;
   typedef typename ModelType::TargetValueType      TargetValueType;
   typedef typename ModelType::TargetListSampleType TargetListSampleType;
-  
+
   typename InputListSampleType::Pointer samples = InputListSampleType::New();
   unsigned int num_features = inputPtr->GetNumberOfComponentsPerPixel();
   samples->SetMeasurementVectorSize(num_features);
   InputSampleType sample(num_features);
+
   // Fill the samples
-  
   for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
     {
-    
-     typename InputImageType::PixelType pix = inIt.Get();
-     for(size_t feat=0; feat<num_features; ++feat)
-        {
-        sample[feat]=pix[feat];
-        }
-      samples->PushBack(sample);
-      
+    typename InputImageType::PixelType pix = inIt.Get();
+    for(size_t feat=0; feat<num_features; ++feat)
+      {
+      sample[feat]=pix[feat];
+      }
+    samples->PushBack(sample);
     }
   //Make the batch prediction
   typename TargetListSampleType::Pointer labels;
- 
+
   // This call is threadsafe
   labels = m_Model->PredictBatch(samples);
 
   // Set the output values
- 
   typename TargetListSampleType::ConstIterator labIt = labels->Begin();
- 
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
     {
-
-	itk::VariableLengthVector<TargetValueType> labelValue;
-  
+    itk::VariableLengthVector<TargetValueType> labelValue;
     labelValue = labIt.GetMeasurementVector();
     ++labIt;    
     outIt.Set(labelValue);
     progress.CompletedPixel();
     }
 }
+
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
@@ -220,8 +204,8 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
     {
     this->ClassicThreadedGenerateData(outputRegionForThread, threadId);
     }
-
 }
+
 /**
  * PrintSelf Method
  */
@@ -232,5 +216,6 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 {
   Superclass::PrintSelf(os, indent);
 }
+
 } // End namespace otb
 #endif
