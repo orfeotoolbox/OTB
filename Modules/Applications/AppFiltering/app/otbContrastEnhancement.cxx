@@ -34,7 +34,7 @@
 #include "otbApplyGainFilter.h"
 #include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
-
+#include <string>
 #include "otbStreamingHistogramVectorImageFilter.h"
 
 namespace otb
@@ -281,13 +281,13 @@ private:
     SetMinimumParameterIntValue("spatial.local.h", 1);
     SetMinimumParameterIntValue("spatial.local.w", 1);
 
-    unsigned int exId = AddExample( "Local contrast enhancement by luminance" );
-    SetDocExampleParameterValue( "in" , "couleurs.tif" , exId );
-    SetDocExampleParameterValue( "out" , "equalizedcouleurs.tif float" , exId );
-    SetDocExampleParameterValue( "bins" , "256" , exId );
-    SetDocExampleParameterValue( "spatial.local.w" , "500" , exId );
-    SetDocExampleParameterValue( "spatial.local.h" , "500" , exId );
-    SetDocExampleParameterValue( "mode" , "lum" , exId );
+    SetExampleComment( "Local contrast enhancement by luminance" , 0 );
+    SetDocExampleParameterValue( "in" , "couleurs.tif" );
+    SetDocExampleParameterValue( "out" , "equalizedcouleurs.tif float" );
+    SetDocExampleParameterValue( "bins" , "256" );
+    SetDocExampleParameterValue( "spatial.local.w" , "500" );
+    SetDocExampleParameterValue( "spatial.local.h" , "500");
+    SetDocExampleParameterValue( "mode" , "lum" );
 
     AddRAMParameter(); 
   }
