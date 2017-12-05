@@ -24,7 +24,7 @@
 #include "otbClampVectorImageFilter.h"
 #include "otbImageIOFactory.h"
 #include "itksys/SystemTools.hxx"
-#include "otbVectorImageToComplexVectorImageFilter.h"
+#include "otbTwoNRIBandsImageToNComplexBandsImage.h"
 
 #ifdef OTB_USE_MPI
 
@@ -481,7 +481,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_ComplexVectorFloatWriter ,
       m_FileName ,
       m_RAMValue ,
-      otb::VectorImageToComplexVectorImageFilter < TInput , ComplexFloatVectorImageType >::New() ); 
+      otb::TwoNRIBandsImageToNComplexBandsImage < TInput , ComplexFloatVectorImageType >::New() ); 
     break;
     }
     case ImagePixelType_cdouble:
@@ -491,7 +491,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_ComplexVectorDoubleWriter ,
       m_FileName ,
       m_RAMValue ,
-      otb::VectorImageToComplexVectorImageFilter < TInput , ComplexDoubleVectorImageType >::New() );
+      otb::TwoNRIBandsImageToNComplexBandsImage < TInput , ComplexDoubleVectorImageType >::New() );
     break;
     }
     default:

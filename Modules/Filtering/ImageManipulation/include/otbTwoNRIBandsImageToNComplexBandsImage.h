@@ -23,7 +23,6 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
-#include "itkNumericTraits.h"
 
 /*
  * Inputs : one single image made of 2N real bands 
@@ -63,26 +62,31 @@ public:
   /** typemacro */
   itkTypeMacro(TwoNRIBandsImageToNComplexBandsImage, ImageToImageFilter);
 
-  typedef typename InputImageType::PixelType                    InputPixelType;
-  typedef typename OutputImageType::PixelType                   OutputPixelType;
-  typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
-  typedef typename InputImageType::RegionType                   InputImageRegionType;
-  typedef typename OutputImageType::RegionType                  OutputImageRegionType;
+  typedef typename InputImageType::InternalPixelType InputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputPixelType;
+  typedef typename OutputPixelType::value_type OutputRealType;
+  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
 
 
 protected:
   TwoNRIBandsImageToNComplexBandsImage();
-  ~TwoNRIBandsImageToNComplexBandsImage() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~TwoNRIBandsImageToNComplexBandsImage() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
+  void BeforeThreadedGenerateData(void) override;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
-  TwoNRIBandsImageToNComplexBandsImage(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TwoNRIBandsImageToNComplexBandsImage(const Self &) = delete; //purposely not implemented
+  void operator =(const Self&) = delete; //purposely not implemented
+
+  OutputRealType InBoundValue( InputPixelType in ) const ;
+
+  double m_LowestBD , m_HighestBD ;
+  OutputRealType m_LowestB , m_HighestB ;
 
 
 };
