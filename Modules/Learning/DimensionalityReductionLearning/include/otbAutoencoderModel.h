@@ -124,9 +124,6 @@ public:
     shark::AbstractStoppingCriterion<T> & criterion,
     Autoencoder &,
     unsigned int,
-    unsigned int,
-    double,
-    double,
     shark::Data<shark::RealVector> &,
     std::ostream&);
 
@@ -135,19 +132,12 @@ public:
     shark::AbstractStoppingCriterion<T> & criterion,
     Autoencoder &,
     unsigned int,
-    unsigned int,
-    double,
-    double,
-    double,
     shark::Data<shark::RealVector> &,
     std::ostream&);
 
   template <class T>
   void TrainNetwork(
     shark::AbstractStoppingCriterion<T> & criterion,
-    double,
-    double,
-    double,
     shark::Data<shark::RealVector> &,
     std::ostream&);
 
