@@ -18,22 +18,5 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Image filtering application.")
-
-otb_module(OTBAppFiltering
-  DEPENDS
-    OTBImageManipulation
-    OTBITK
-    OTBApplicationEngine
-    OTBImageBase
-    OTBContrast
-    OTBStatistics
-    OTBStreaming
-
-  TEST_DEPENDS
-    OTBTestKernel
-    OTBCommandLine
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+project(OTBContrast)
+otb_module_impl()
