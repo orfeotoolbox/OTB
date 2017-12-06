@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-#include "ossimStringUtilities.h"
+#include "ossim/ossimStringUtilities.h"
 #include "ossimplugins-config.h"
 #if defined(HAVE_STD_SNPRINTF)
 #  include <cstdio>

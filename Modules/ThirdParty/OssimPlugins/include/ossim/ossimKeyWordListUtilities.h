@@ -26,8 +26,8 @@
 #ifndef ossimKeyWordListUtilities_h
 #define ossimKeyWordListUtilities_h
 
-#include "ossimStringUtilities.h"
-#include "ossimXmlTools.h"
+#include "ossim/ossimStringUtilities.h"
+#include "ossim/ossimXmlTools.h"
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimXmlNode.h>

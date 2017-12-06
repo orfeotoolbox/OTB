@@ -61,18 +61,7 @@ template<typename T> bool IsNoData(const T & pixel, const
   assert(flags.size()>0);
   assert(values.size()>0);
 
-  if(nanIsNoData && vnl_math_isnan(values[0]))
-    return true;
-
-
-  if(flags[0])
-    {
-    return (pixel == values[0]);
-    }
-  else
-    {
-    return false;
-    }
+  return ((nanIsNoData && vnl_math_isnan(pixel)) || (flags[0] && (pixel == values[0])));
 }
 
 /**
