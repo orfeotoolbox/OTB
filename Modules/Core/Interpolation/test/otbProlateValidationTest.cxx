@@ -54,7 +54,7 @@ int otbProlateValidationTest(int itkNotUsed(argc), char * argv[])
   reader->UpdateOutputInformation();
 
   ImageType::PointType   origin = reader->GetOutput()->GetOrigin();
-  ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
+  ImageType::SpacingType spacing = reader->GetOutput()->GetSignedSpacing();
   ImageType::SpacingType newSpacing;
   newSpacing[0] = spacing[0] * factor;
   newSpacing[1] = spacing[1] * factor;

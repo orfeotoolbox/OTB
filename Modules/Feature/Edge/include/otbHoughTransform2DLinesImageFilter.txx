@@ -195,7 +195,7 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
   m_SimplifyAccumulator = OutputImageType::New();
   m_SimplifyAccumulator->SetRegions(outputImage->GetLargestPossibleRegion());
   m_SimplifyAccumulator->SetOrigin(inputImage->GetOrigin());
-  m_SimplifyAccumulator->SetSpacing(inputImage->GetSpacing());
+  m_SimplifyAccumulator->SetSignedSpacing(inputImage->GetSignedSpacing());
   m_SimplifyAccumulator->Allocate();
   m_SimplifyAccumulator->FillBuffer(0);
 

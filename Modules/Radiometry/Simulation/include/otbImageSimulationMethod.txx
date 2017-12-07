@@ -185,7 +185,7 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
     FTMFilter->SetInterpolator(interpolator);
     //       FTMFilter->SetOutputSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
     FTMFilter->SetSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
-    FTMFilter->SetOutputSpacing(multiToMonoChannelFilter->GetOutput()->GetSpacing());
+    FTMFilter->SetOutputSpacing(multiToMonoChannelFilter->GetOutput()->GetSignedSpacing());
     FTMFilter->SetOutputOrigin(multiToMonoChannelFilter->GetOutput()->GetOrigin());
     FTMFilter->SetInput(multiToMonoChannelFilter->GetOutput());
     FTMFilter->Update();
@@ -246,7 +246,7 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 //       FTMFilter->SetInterpolator(interpolator);
 // //       FTMFilter->SetOutputSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
 //       FTMFilter->SetSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
-//       FTMFilter->SetOutputSpacing(multiToMonoChannelFilter->GetOutput()->GetSpacing());
+//       FTMFilter->SetOutputSpacing(multiToMonoChannelFilter->GetOutput()->GetSignedSpacing());
 //       FTMFilter->SetOutputOrigin(multiToMonoChannelFilter->GetOutput()->GetOrigin());
 //       FTMFilter->SetInput(multiToMonoChannelFilter->GetOutput());
 //       FTMFilter->Update();

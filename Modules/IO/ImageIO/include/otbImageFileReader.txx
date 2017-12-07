@@ -324,13 +324,18 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   double                               origin[TOutputImage::ImageDimension];
   typename TOutputImage::DirectionType direction;
   std::vector<double>                  axis;
+  int spacing_sign (0);
 
   for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
     {
     if (i < this->m_ImageIO->GetNumberOfDimensions())
       {
       dimSize[i] = this->m_ImageIO->GetDimensions(i);
-      spacing[i] = this->m_ImageIO->GetSpacing(i);
+      if ( this->m_ImageIO->GetSpacing(i) < 0 )
+        spacing_sign = -1;
+      else
+        spacing_sign = 1;
+      spacing[i] = spacing_sign * this->m_ImageIO->GetSpacing(i);
       origin[i]  = this->m_ImageIO->GetOrigin(i);
 // Please note: direction cosines are stored as columns of the
 // direction matrix
@@ -339,7 +344,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         {
         if (j < this->m_ImageIO->GetNumberOfDimensions())
           {
-          direction[j][i] = axis[j];
+          direction[j][i] = spacing_sign * axis[j];
           }
         else
           {
@@ -385,10 +390,10 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       }
     }
 
-  output->SetSpacing(spacing);       // Set the image spacing
   output->SetOrigin(origin);         // Set the image origin
   output->SetDirection(direction);   // Set the image direction cosines
-
+  output->SetSpacing(spacing); // Set the image spacing
+  
   if(!m_KeywordListUpToDate && !m_FilenameHelper->GetSkipGeom())
     {
 

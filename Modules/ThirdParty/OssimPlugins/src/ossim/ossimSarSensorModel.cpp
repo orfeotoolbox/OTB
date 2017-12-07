@@ -23,13 +23,14 @@
  */
 
 
-#include "ossimSarSensorModel.h"
-#include "ossimKeyWordListUtilities.h"
-#include "ossimTraceHelpers.h"
-#include "ossimRangeUtilities.h"
-#include "ossimSarSensorModelPathsAndKeys.h"
+#include "ossim/ossimSarSensorModel.h"
+#include "ossim/ossimKeyWordListUtilities.h"
+#include "ossim/ossimTraceHelpers.h"
+#include "ossim/ossimRangeUtilities.h"
+#include "ossim/ossimSarSensorModelPathsAndKeys.h"
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimLsrSpace.h>
+#include <ossim/base/ossimKeywordNames.h>
 #include <boost/static_assert.hpp>
 #include <iostream>
 #include <vector>
@@ -103,6 +104,8 @@ namespace {// Anonymous namespace
 
 namespace ossimplugins
 {
+   RTTI_DEF1(ossimSarSensorModel, "ossimSarSensorModel", ossimSensorModel);
+
    const double ossimSarSensorModel::C = 299792458;
 
    ossimSarSensorModel::ProductType::ProductType(string_view const& s)
@@ -1037,6 +1040,30 @@ namespace ossimplugins
       }
    }
 
+   void add(
+       ossimKeywordlist & kwl,
+       const std::vector<ossimSarSensorModel::OrbitRecordType> & orbitRecords)
+   {
+     char orbit_prefix_[256];
+
+     add(kwl,ORBIT_NUMBER_KEY,(ossim_uint32)orbitRecords.size());
+
+     for(std::size_t i = 0; i!=orbitRecords.size();++i)
+       {
+       const int pos = s_printf(orbit_prefix_, "%s[%d].", ORBIT_PREFIX.c_str(), int(i));
+       assert(pos > 0 && pos < 256);
+       const std::string orbit_prefix(orbit_prefix_, pos);
+
+       add(kwl, orbit_prefix + keyTime, orbitRecords[i].azimuthTime);
+       add(kwl, orbit_prefix + keyPosX, orbitRecords[i].position[0]);
+       add(kwl, orbit_prefix + keyPosY, orbitRecords[i].position[1]);
+       add(kwl, orbit_prefix + keyPosZ, orbitRecords[i].position[2]);
+       add(kwl, orbit_prefix + keyVelX, orbitRecords[i].velocity[0]);
+       add(kwl, orbit_prefix + keyVelY, orbitRecords[i].velocity[1]);
+       add(kwl, orbit_prefix + keyVelZ, orbitRecords[i].velocity[2]);
+       }
+   }
+
    void get(
          ossimKeywordlist                             const& kwl,
          std::vector<ossimSarSensorModel::BurstRecordType> & burstRecords)
@@ -1056,6 +1083,24 @@ namespace ossimplugins
          get(kwl, burstPrefix + keyAzimuthStopTime,  burstRecord.azimuthStopTime);
          burstRecords.push_back(burstRecord);
       }
+   }
+
+   void add(
+     ossimKeywordlist                                        & kwl,
+     const std::vector<ossimSarSensorModel::BurstRecordType> & burstRecords)
+   {
+     char burstPrefix_[1024];
+     add(kwl, BURST_NUMBER_KEY, (ossim_uint32)burstRecords.size());
+     for (std::size_t burstId=0; burstId!=burstRecords.size() ; ++burstId) {
+     const int pos = s_printf(burstPrefix_, "%s[%d].", BURST_PREFIX.c_str(), burstId);
+     assert(pos > 0 && pos < sizeof(burstPrefix_));
+     const std::string burstPrefix(burstPrefix_, pos);
+
+     add(kwl, burstPrefix + keyStartLine, (ossim_uint32) burstRecords[burstId].startLine);
+     add(kwl, burstPrefix + keyEndLine, (ossim_uint32) burstRecords[burstId].endLine);
+     add(kwl, burstPrefix + keyAzimuthStartTime, burstRecords[burstId].azimuthStartTime);
+     add(kwl, burstPrefix + keyAzimuthStopTime,  burstRecords[burstId].azimuthStopTime);
+     }
    }
 
    void get(
@@ -1081,6 +1126,28 @@ namespace ossimplugins
          gcpRecords.push_back(gcpRecord);
       }
    }
+
+   void add(
+     ossimKeywordlist                                      & kwl,
+     const std::vector<ossimSarSensorModel::GCPRecordType> & gcpRecords)
+   {
+     char prefix_[1024];
+     add(kwl, GCP_NUMBER_KEY, (ossim_uint32)gcpRecords.size());
+     for (std::size_t gcpId=0; gcpId!=gcpRecords.size() ; ++gcpId) {
+     const int pos = s_printf(prefix_, "%s[%d].", GCP_PREFIX.c_str(), gcpId);
+     assert(pos > 0 && pos < sizeof(prefix_));
+     const std::string prefix(prefix_, pos);
+
+     add(kwl, prefix, keyAzimuthTime,    gcpRecords[gcpId].azimuthTime);
+     add(kwl, prefix, keySlantRangeTime, gcpRecords[gcpId].slantRangeTime);
+     add(kwl, prefix, keyImPtX,          gcpRecords[gcpId].imPt.x);
+     add(kwl, prefix, keyImPtY,          gcpRecords[gcpId].imPt.y);
+     add(kwl, prefix, keyWorldPtLat,     gcpRecords[gcpId].worldPt.lat);
+     add(kwl, prefix, keyWorldPtLon,     gcpRecords[gcpId].worldPt.lon);
+     add(kwl, prefix, keyWorldPtHgt,     gcpRecords[gcpId].worldPt.hgt);
+     }
+   }
+
 
    void get(
          ossimKeywordlist                                            const& kwl,
@@ -1116,12 +1183,73 @@ namespace ossimplugins
       }
    }
 
+   void add(
+     ossimKeywordlist                                                       & kwl,
+     std::string                                                       const& sr_gr_prefix,
+     std::string                                                       const& rg0,
+     const std::vector<ossimSarSensorModel::CoordinateConversionRecordType> & conversionRecords)
+   {
+     char prefix_[1024];
+     add(kwl, sr_gr_prefix +"."+ NUMBER_KEY, (ossim_uint32)conversionRecords.size());
+
+     for (std::size_t idx=0 ; idx!=conversionRecords.size() ; ++idx)
+       {
+       const int pos = s_printf(prefix_, "%s[%d].", sr_gr_prefix.c_str(), idx);
+       assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
+       std::string prefix(prefix_, pos);
+
+
+       add(kwl, prefix + keyAzimuthTime,  conversionRecords[idx].azimuthTime);
+       add(kwl, prefix + rg0,             conversionRecords[idx].rg0);
+
+       std::size_t nbCoeffs = conversionRecords[idx].coefs.size();
+       add(kwl, prefix + NUMBER_KEY,      (ossim_uint32)nbCoeffs);
+       for (std::size_t coeff_idx=0; coeff_idx!=nbCoeffs ; ++coeff_idx)
+         {
+         const int pos2 = s_printf(prefix_+pos, sizeof(prefix_)-pos, "coeff[%d]", coeff_idx);
+         assert(pos2 > 0 && pos+pos2 < sizeof(prefix_));
+         prefix.assign(prefix_, pos+pos2);
+         add(kwl, prefix, conversionRecords[idx].coefs[coeff_idx]);
+         }
+       }
+   }
    bool ossimSarSensorModel::saveState(ossimKeywordlist& kwl, const char* prefix) const
    {
-      SCOPED_LOG(traceDebug, "ossimplugins::ossimSarSensorModel::loadState");
+     static const char MODULE[] = "ossimplugins::ossimSarSensorModel::saveState";
+     SCOPED_LOG(traceDebug, MODULE);
 
-      add(kwl, HEADER_PREFIX, "version", k_version);
-      return ossimSensorModel::saveState(kwl, prefix);
+     kwl.add(prefix,
+             ossimKeywordNames::TYPE_KW,
+             "ossimSarSensorModel",
+             true);
+
+     add(kwl, SUPPORT_DATA_PREFIX + "product_type", theProductType.ToString().data());
+
+     add(kwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", theNearRangeTime      );
+     add(kwl, SUPPORT_DATA_PREFIX, "range_sampling_rate"       , theRangeSamplingRate  );
+     add(kwl, SUPPORT_DATA_PREFIX, "range_spacing"             , theRangeResolution    );
+     add(kwl, SUPPORT_DATA_PREFIX, "radar_frequency"           , theRadarFrequency     );
+     add(kwl, SUPPORT_DATA_PREFIX, "line_time_interval"        , theAzimuthTimeInterval.total_seconds());
+
+     kwl.removeKeysThatMatch(ORBIT_PREFIX+"*");
+     add(kwl, theOrbitRecords);
+
+     kwl.removeKeysThatMatch(BURST_PREFIX+"*");
+     add(kwl, theBurstRecords);
+
+     if (isGRD())
+       {
+       kwl.removeKeysThatMatch(SR_PREFIX+"*");
+       add(kwl, SR_PREFIX, keySr0, theSlantRangeToGroundRangeRecords);
+       kwl.removeKeysThatMatch(GR_PREFIX+"*");
+       add(kwl, GR_PREFIX, keyGr0, theGroundRangeToSlantRangeRecords);
+       }
+     kwl.removeKeysThatMatch(GCP_PREFIX+"*");
+     add(kwl, theGCPRecords);
+
+     add(kwl, HEADER_PREFIX, "version", k_version);
+
+     return ossimSensorModel::saveState(kwl, prefix);
    }
 
    bool ossimSarSensorModel::loadState(ossimKeywordlist const& kwl, const char* prefix)

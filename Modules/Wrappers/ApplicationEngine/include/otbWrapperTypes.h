@@ -87,7 +87,7 @@ typedef enum
 
 typedef enum
 {
-  Role_Input,
+  Role_Input = 0,
   Role_Output
 } Role;
 

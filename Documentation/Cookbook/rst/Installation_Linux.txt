@@ -33,24 +33,31 @@ archive is extracted, the directory structure consists of:
 -  ``lib``: A folder containing all shared libraries and OTB
    applications.
 
+-  ``include``: A folder containing all the necessary headers to compile OTB
+   based projects.
+
 -  ``share``: A folder containing common resources and copyright
    mentions.
 
 -  ``tool``: A folder containing usefull scripts to test the installation or
    to uninstall OTB libraries and headers while keeping all the depedencies.
 
+The applications can be launched from the Mapla launcher. If you want to
+use the otbcli and otbgui launchers, you can initialize your environment
+with ``source otbenv.profile``.
+
+The package can be used to compile other projects using OTB (binaries, libraries
+and headers are included). If you want to build OTB from source using this
+package, you should first uninstall the specific OTB files from the package to
+leave only the dependencies (what we call an XDK). You can do it using the
+supplied script ``tools/uninstall_otb.sh``.
+
+System dependencies
+~~~~~~~~~~~~~~~~~~~
+
 In order to run the command line launchers, this package doesn’t require
 any special library that is not present in most modern Linux
-distributions. There is a small caveat for "expat" though as these binaries depend
-on "libexpat.so", which can be supplied by most package managers (apt, yum, ...).
-Note that this problem only affects versions 6.0 and older.
-If not already present, it is necessary to install one of the following packages:
-
-::
-
-    libexpat-dev   libexpat1-dev
-
-The graphical executable (otbgui launchers, Monteverdi
+distributions. The graphical executable (otbgui launchers, Monteverdi
 and Mapla) use the X11 libraries, which are widely used in a lot of
 distributions:
 
@@ -58,13 +65,21 @@ distributions:
 
     libx11-6 libxext6 libxau6 libxxf86vm1 libxdmcp6 libdrm2
 
-Monteverdi also requires the standard graphics libraries libgl1 and
-libglu1. Make sure you have at least one version of them installed
+Monteverdi also requires the standard graphics libraries **libgl1** and
+**libglu1**. Make sure you have at least one version of them installed
 in your system.
 
-The applications can be launched from the Mapla launcher. If you want to
-use the otbcli and otbgui launchers, you can initialize your environment
-with ``source otbenv.profile``.
+Caveat on OTB 6.0
+~~~~~~~~~~~~~~~~~
+
+In OTB 6.0 binaries, there is a small caveat for "expat" as the supplied binaries
+depend on "libexpat.so", which is not contained in the package. It can be
+supplied by most package managers (apt, yum, ...). If not already present, it is
+necessary to install one of the following packages:
+
+::
+
+    libexpat-dev   libexpat1-dev
 
 Python bindings
 ~~~~~~~~~~~~~~~
@@ -118,7 +133,7 @@ A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk
 Q: Monteverdi and Mapla applications look different from my other applications.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-A: In versions 6.0 and older, Monteverdi, Mapla and otbapplication (otbgui\_\*)
+A: In versions 6.0, Monteverdi, Mapla and otbapplication (otbgui\_\*)
 use the system gtk theme. If you can't install GTK on your system you can use the
 one distributed with the OTB package. Note that using system GTK is the preferred
 way with the OTB standalone package as the distributed version of GTK do not
@@ -130,8 +145,8 @@ To use the distributed GTK libraries you need to set the OTB_USE_LOCAL_GTK:
 
    export OTB_USE_LOCAL_GTK=1
 
-And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-|release|-Linux64
+And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-6.0.0-Linux64
 To get back default behaviour, unset OTB_USE_LOCAL_GTK=1 or set OTB_USE_LOCAL_GTK=0
 
-In version 6.2, the Linux binaries are built without GTK support to cut some
+In version 6.2 and older, the Linux binaries are built without GTK support to cut some
 dependencies.

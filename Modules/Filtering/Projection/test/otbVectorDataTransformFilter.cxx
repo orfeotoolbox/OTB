@@ -75,7 +75,7 @@ int otbVectorDataTransformFilter (int itkNotUsed(argc), char * argv[])
   TransformType::Pointer transform = TransformType::New();
   TranslationParamType   translationParam;
   translationParam[0] = 0;
-  translationParam[1] = 8. * reader->GetOutput()->GetSpacing()[1];
+  translationParam[1] = 8. * reader->GetOutput()->GetSignedSpacing()[1];
   transform->SetTranslation(translationParam);
 
   VectorDataTransformType::Pointer transformFilter = VectorDataTransformType::New();

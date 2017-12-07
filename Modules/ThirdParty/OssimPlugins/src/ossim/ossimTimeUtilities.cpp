@@ -22,14 +22,14 @@
  * THE SOFTWARE.
  */
 
-#include "ossimTimeUtilities.h"
+#include "ossim/ossimTimeUtilities.h"
 #include <stdexcept>
 // #include <sstream>
 #include <typeinfo>
 #include <cmath>
 #include <cstdio>
 #include <stdexcept>
-#include "ossimStringUtilities.h"
+#include "ossim/ossimStringUtilities.h"
 #include <ossim/base/ossimDate.h>
 // #include <iostream>
 

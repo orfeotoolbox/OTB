@@ -37,6 +37,8 @@ namespace ossimplugins {
    extern const std::string GR_PREFIX           ;
    extern const std::string BURST_PREFIX        ;
    extern const std::string BURST_NUMBER_KEY    ;
+   extern const std::string ORBIT_PREFIX        ;
+   extern const std::string ORBIT_NUMBER_KEY    ;
    extern const std::string GCP_PREFIX          ;
    extern const std::string GCP_NUMBER_KEY      ;
    extern const std::string NUMBER_KEY          ;

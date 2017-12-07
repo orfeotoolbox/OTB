@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   FixedImageType::Pointer fixedImage = fixedImageReader->GetOutput();
 
-  const SpacingType fixedSpacing = fixedImage->GetSpacing();
+  const SpacingType fixedSpacing = fixedImage->GetSignedSpacing();
   const OriginType  fixedOrigin  = fixedImage->GetOrigin();
   const RegionType  fixedRegion  = fixedImage->GetLargestPossibleRegion();
   const SizeType    fixedSize    = fixedRegion.GetSize();
@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   MovingImageType::Pointer movingImage = movingImageReader->GetOutput();
 
-  const SpacingType movingSpacing = movingImage->GetSpacing();
+  const SpacingType movingSpacing = movingImage->GetSignedSpacing();
   const OriginType  movingOrigin  = movingImage->GetOrigin();
   const RegionType  movingRegion  = movingImage->GetLargestPossibleRegion();
   const SizeType    movingSize    = movingRegion.GetSize();
@@ -528,7 +528,7 @@ int main(int argc, char *argv[])
 
   resample->SetSize(fixedImage->GetLargestPossibleRegion().GetSize());
   resample->SetOutputOrigin(fixedImage->GetOrigin());
-  resample->SetOutputSpacing(fixedImage->GetSpacing());
+  resample->SetOutputSpacing(fixedImage->GetSignedSpacing());
   resample->SetDefaultPixelValue(100);
 
   typedef otb::ImageFileWriter<FixedImageType> WriterFixedType;

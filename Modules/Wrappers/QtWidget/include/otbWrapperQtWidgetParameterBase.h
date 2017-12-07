@@ -42,7 +42,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterBase : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetParameterBase(Parameter *, QtWidgetModel*);
+  QtWidgetParameterBase( Parameter *, QtWidgetModel * );
   ~QtWidgetParameterBase() ITK_OVERRIDE;
 
   void CreateWidget();
@@ -61,6 +61,9 @@ signals:
 protected:
   QtWidgetModel* GetModel();
 
+  const Parameter * GetParam() const;
+
+  Parameter * GetParam();
 
 private:
   QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
@@ -70,9 +73,10 @@ private:
 
   virtual void DoCreateWidget() = 0;
 
-  QtWidgetModel* m_Model;
+private:
+  QtWidgetModel * m_Model;
 
-  Parameter*      m_Param;
+  Parameter * m_Param;
 };
 
 

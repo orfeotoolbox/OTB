@@ -214,7 +214,7 @@ private:
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     // Set up output image information
-    FloatVectorImageType::SpacingType spacing = refImage->GetSpacing();
+    FloatVectorImageType::SpacingType spacing = refImage->GetSignedSpacing();
     FloatVectorImageType::IndexType   start   = refImage->GetLargestPossibleRegion().GetIndex();
     FloatVectorImageType::SizeType    size    = refImage->GetLargestPossibleRegion().GetSize();
     FloatVectorImageType::PointType   origin  = refImage->GetOrigin();
@@ -278,7 +278,7 @@ private:
       
       m_BasicResampler->SetOutputOrigin(origin);
 
-      FloatVectorImageType::SpacingType xsSpacing = GetParameterImage("inm")->GetSpacing();
+      FloatVectorImageType::SpacingType xsSpacing = GetParameterImage("inm")->GetSignedSpacing();
       xsSpacing*=0.25;
       
       m_BasicResampler->SetOutputSpacing(xsSpacing);

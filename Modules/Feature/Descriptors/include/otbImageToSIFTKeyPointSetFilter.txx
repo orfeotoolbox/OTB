@@ -144,7 +144,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     input = m_ShrinkFilter->GetOutput();
 
     typename InputImageType::PointType   origin1;
-    typename InputImageType::SpacingType spacing = input->GetSpacing();
+    typename InputImageType::SpacingType spacing = input->GetSignedSpacing();
 
     origin1[0] = origin0[0] + spacing[0] * 0.25;
     origin1[1] = origin0[1] + spacing[1] * 0.25;
@@ -181,7 +181,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
 
   typename InputImageType::PointType   origin0 = this->GetInput()->GetOrigin();
   typename InputImageType::PointType   origin1;
-  typename InputImageType::SpacingType spacing = m_ExpandFilter->GetOutput()->GetSpacing();
+  typename InputImageType::SpacingType spacing = m_ExpandFilter->GetOutput()->GetSignedSpacing();
 
   origin1[0] = origin0[0] - spacing[0] * 0.5;
   origin1[1] = origin0[1] - spacing[1] * 0.5;
@@ -213,8 +213,8 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
   //
   // with multiply by spacing before filtering, length sigma gaussian
   // is compute in pixel
-  double xsigman = vcl_abs(input->GetSpacing()[0]) * m_Sigma0;
-  double ysigman = vcl_abs(input->GetSpacing()[1]) * m_Sigma0;
+  double xsigman = vcl_abs(input->GetSignedSpacing()[0]) * m_Sigma0;
+  double ysigman = vcl_abs(input->GetSignedSpacing()[1]) * m_Sigma0;
 
   for (lScale = 0; lScale != m_ScalesNumber + 2; lScale++)
     {
@@ -276,7 +276,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     typename ImageListType::Iterator     lIterDoG = m_DoGList->Begin() + 1;
     unsigned int                         lScale = 1;
     OutputPointSetPointerType            outputPointSet = this->GetOutput();
-    typename InputImageType::SpacingType spacing = lIterDoG.Get()->GetSpacing();
+    typename InputImageType::SpacingType spacing = lIterDoG.Get()->GetSignedSpacing();
 
     while ((lIterDoG + 1) != m_DoGList->End())
       {

@@ -1686,8 +1686,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (projectionRef.empty()
       &&  (vcl_abs(m_Origin[0] - 0.5) > Epsilon
            || vcl_abs(m_Origin[1] - 0.5) > Epsilon
-           || vcl_abs(m_Spacing[0] - 1.0) > Epsilon
-           || vcl_abs(m_Spacing[1] - 1.0) > Epsilon) )
+           || vcl_abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon
+           || vcl_abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon) )
     {
     // See issue #303 :
     // If there is no ProjectionRef, and the GeoTransform is not the identity,
@@ -1768,18 +1768,18 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   if ( vcl_abs(m_Origin[0] - 0.5) > Epsilon
     || vcl_abs(m_Origin[1] - 0.5) > Epsilon
-    || vcl_abs(m_Spacing[0] - 1.0) > Epsilon
-    || vcl_abs(m_Spacing[1] - 1.0) > Epsilon )
+    || vcl_abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon
+    || vcl_abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon )
     {
     // Only set the geotransform if it is not identity (it may erase GCP)
     itk::VariableLengthVector<double> geoTransform(6);
     /// Reporting origin and spacing
     // Beware : GDAL origin is at the corner of the top-left pixel
     // whereas OTB/ITK origin is at the centre of the top-left pixel
-    geoTransform[0] = m_Origin[0] - 0.5*m_Spacing[0];
-    geoTransform[3] = m_Origin[1] - 0.5*m_Spacing[1];
-    geoTransform[1] = m_Spacing[0];
-    geoTransform[5] = m_Spacing[1];
+    geoTransform[0] = m_Origin[0] - 0.5 * m_Spacing[0] * m_Direction[0][0];
+    geoTransform[3] = m_Origin[1] - 0.5 * m_Spacing[1] * m_Direction[1][1];
+    geoTransform[1] = m_Spacing[0] * m_Direction[0][0];
+    geoTransform[5] = m_Spacing[1] * m_Direction[1][1];
 
     // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
     geoTransform[2] = 0.;
