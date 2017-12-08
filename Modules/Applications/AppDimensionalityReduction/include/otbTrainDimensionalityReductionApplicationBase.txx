@@ -49,8 +49,8 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 
   // main choice parameter that will contain all dimensionality reduction options
   AddParameter(ParameterType_Choice, "algorithm", "algorithm to use for the training");
-  SetParameterDescription("algorithm", "Choice of the dimensionality reduction algorithm to use for the training.");
-  
+  SetParameterDescription("algorithm", "Choice of the dimensionality reduction "
+    "algorithm to use for the training.");
 
   InitSOMParams();
   
@@ -71,48 +71,39 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
-::Train(typename ListSampleType::Pointer trainingListSample,
-        std::string modelPath)
+::Train(
+  typename ListSampleType::Pointer trainingListSample,
+  std::string modelPath)
 {
- 
- // get the name of the chosen machine learning model
+  // get the name of the chosen machine learning model
   const std::string modelName = GetParameterString("algorithm");
   // call specific train function
- 
+
   if(modelName == "som")
-	{
-		BeforeTrainSOM(trainingListSample,modelPath);
-	}
- 
+    {
+    BeforeTrainSOM(trainingListSample,modelPath);
+    }
+
  if(modelName == "autoencoder")
     {
-		#ifdef OTB_USE_SHARK
+#ifdef OTB_USE_SHARK
     BeforeTrainAutoencoder(trainingListSample,modelPath);
 #else
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
 #endif
     }
-    /*
-  if(modelName == "tiedautoencoder")
-    {
-		#ifdef OTB_USE_SHARK
-		TrainAutoencoder<TiedAutoencoderModelType>(trainingListSample,modelPath);
-		#else
-		otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-		#endif
-    }
-    */
+
   if(modelName == "pca")
     {
-		#ifdef OTB_USE_SHARK
-		TrainPCA(trainingListSample,modelPath);
-		#else
-		otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-		#endif
+#ifdef OTB_USE_SHARK
+    TrainPCA(trainingListSample,modelPath);
+#else
+    otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
+#endif
     }
 }
 
-}
-}
+} // end of namespace Wrapper
+} // end of namespace otb
 
 #endif

@@ -32,20 +32,19 @@ void
 TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::InitSOMParams()
 {
-
   AddChoice("algorithm.som", "OTB SOM");
   SetParameterDescription("algorithm.som",
                           "This group of parameters allows setting SOM parameters. "
                           );
 
-	AddParameter(ParameterType_Int, "algorithm.som.dim","Dimension of the map");
-	SetParameterDescription("algorithm.som.dim","Dimension of the SOM map.");
+  AddParameter(ParameterType_Int, "algorithm.som.dim","Dimension of the map");
+  SetParameterDescription("algorithm.som.dim","Dimension of the SOM map.");
   
-	AddParameter(ParameterType_StringList ,  "algorithm.som.s",   "Size");
+  AddParameter(ParameterType_StringList ,  "algorithm.som.s",   "Size");
     SetParameterDescription("algorithm.som.s", "Size of the SOM map");
     MandatoryOff("algorithm.som.s");
     
-	AddParameter(ParameterType_StringList ,  "algorithm.som.n",   "Size Neighborhood");
+  AddParameter(ParameterType_StringList ,  "algorithm.som.n",   "Size Neighborhood");
     SetParameterDescription("algorithm.som.n", "Size of the initial neighborhood in the SOM map");
     MandatoryOff("algorithm.som.n");
     
@@ -99,74 +98,69 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample,
         std::string modelPath)
 {
-  //typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 2> Map2DType;
-  //typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 3> Map3DType;
-  //typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 4> Map4DType;
-  //typedef SOMMap<TInputValue,itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, 5> Map5DType;
-  typedef otb::SOMModel<InputValueType, 2> SOM2DModelType;
-  typedef otb::SOMModel<InputValueType, 3> SOM3DModelType;
-  typedef otb::SOMModel<InputValueType, 4> SOM4DModelType;
-  typedef otb::SOMModel<InputValueType, 5> SOM5DModelType;
-
   int SomDim = GetParameterInt("algorithm.som.dim");
   std::cout << SomDim << std::endl;
-		
+
   if(SomDim == 2)
-		{
-		TrainSOM<SOM2DModelType >(trainingListSample,modelPath);
-		}
-		
-	if(SomDim == 3)
-		{
-		TrainSOM<SOM3DModelType >(trainingListSample,modelPath);
-		}
-	 
-	if(SomDim == 4)
-		{
-		TrainSOM<SOM4DModelType >(trainingListSample,modelPath);
-		}
-	 
-	if(SomDim == 5)
-		{
-		TrainSOM<SOM5DModelType >(trainingListSample,modelPath);
-		}   
-	if(SomDim > 5 || SomDim < 2)
-		{
-			std::cerr << "k : invalid dimension" << std::endl;
-		}
+    {
+    typedef otb::SOMModel<InputValueType, 2> SOM2DModelType;
+    TrainSOM<SOM2DModelType >(trainingListSample,modelPath);
+    }
+
+  if(SomDim == 3)
+    {
+    typedef otb::SOMModel<InputValueType, 3> SOM3DModelType;
+    TrainSOM<SOM3DModelType >(trainingListSample,modelPath);
+    }
+
+  if(SomDim == 4)
+    {
+    typedef otb::SOMModel<InputValueType, 4> SOM4DModelType;
+    TrainSOM<SOM4DModelType >(trainingListSample,modelPath);
+    }
+
+  if(SomDim == 5)
+    {
+    typedef otb::SOMModel<InputValueType, 5> SOM5DModelType;
+    TrainSOM<SOM5DModelType >(trainingListSample,modelPath);
+    }   
+  if(SomDim > 5 || SomDim < 2)
+    {
+    std::cerr << "k : invalid dimension" << std::endl;
+    }
 }
 
-
 template <class TInputValue, class TOutputValue>
-template <typename somchoice>
+template <typename TSOM>
 void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::TrainSOM(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
 {
-		using TemplateEstimatorType = typename somchoice::EstimatorType;
-		typename somchoice::Pointer dimredTrainer = somchoice::New();
-		unsigned int dim = dimredTrainer->GetDimension();
-		std::cout << dim << std::endl;
-		dimredTrainer->SetNumberOfIterations(GetParameterInt("algorithm.som.ni"));
-		dimredTrainer->SetBetaInit(GetParameterFloat("algorithm.som.bi"));
-		dimredTrainer->SetWriteMap(true);
-		dimredTrainer->SetBetaEnd(GetParameterFloat("algorithm.som.bf"));
-		dimredTrainer->SetMaxWeight(GetParameterFloat("algorithm.som.iv"));
-		typename TemplateEstimatorType::SizeType size;
-		std::vector<std::basic_string<char>> s= GetParameterStringList("algorithm.som.s");
-		for (unsigned int i=0; i<dim; i++){
-			size[i]=std::stoi(s[i]);
-		}
-		
-        dimredTrainer->SetMapSize(size);
-        typename TemplateEstimatorType::SizeType radius;
-        std::vector<std::basic_string<char>> n= GetParameterStringList("algorithm.som.n");
-        for (unsigned int i=0; i<dim; i++){
-        radius[i]=std::stoi(n[i]);
-        }
-        dimredTrainer->SetNeighborhoodSizeInit(radius);
-        dimredTrainer->SetListSample(trainingListSample);
-		dimredTrainer->Train();
-		dimredTrainer->Save(modelPath);
+  typename TSOM::Pointer dimredTrainer = TSOM::New();
+  unsigned int dim = dimredTrainer->GetDimension();
+  std::cout << dim << std::endl;
+  dimredTrainer->SetNumberOfIterations(GetParameterInt("algorithm.som.ni"));
+  dimredTrainer->SetBetaInit(GetParameterFloat("algorithm.som.bi"));
+  dimredTrainer->SetWriteMap(true);
+  dimredTrainer->SetBetaEnd(GetParameterFloat("algorithm.som.bf"));
+  dimredTrainer->SetMaxWeight(GetParameterFloat("algorithm.som.iv"));
+  typename TSOM::SizeType size;
+  std::vector<std::basic_string<char>> s= GetParameterStringList("algorithm.som.s");
+  for (unsigned int i=0; i<dim; i++)
+    {
+    size[i]=std::stoi(s[i]);
+    }
+
+  dimredTrainer->SetMapSize(size);
+  typename TSOM::SizeType radius;
+  std::vector<std::basic_string<char>> n= GetParameterStringList("algorithm.som.n");
+  for (unsigned int i=0; i<dim; i++)
+    {
+    radius[i]=std::stoi(n[i]);
+    }
+  dimredTrainer->SetNeighborhoodSizeInit(radius);
+  dimredTrainer->SetListSample(trainingListSample);
+  dimredTrainer->Train();
+  dimredTrainer->Save(modelPath);
 }
 
 } //end namespace wrapper

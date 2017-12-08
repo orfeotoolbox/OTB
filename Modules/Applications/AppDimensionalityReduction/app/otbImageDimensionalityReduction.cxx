@@ -68,11 +68,15 @@ private:
   InternalType m_B;
 };
   
-}
+} // end of namespace Functor
 
 namespace Wrapper
 {
-
+/**
+ * \class ImageDimensionalityReduction
+ *
+ * Apply a dimensionality reduction model to an image
+ */
 class ImageDimensionalityReduction : public Application
 {
 public:
@@ -88,21 +92,27 @@ public:
   itkTypeMacro(ImageDimensionalityReduction, otb::Application);
 
   /** Filters typedef */
-  typedef UInt8ImageType                                                                       MaskImageType;
-  typedef itk::VariableLengthVector<FloatVectorImageType::InternalPixelType>                   MeasurementType;
-  typedef otb::StatisticsXMLFileReader<MeasurementType>                                        StatisticsReader;
-  typedef otb::ShiftScaleVectorImageFilter<FloatVectorImageType, FloatVectorImageType>         RescalerType;
+  typedef UInt8ImageType                                  MaskImageType;
+  typedef itk::VariableLengthVector<
+    FloatVectorImageType::InternalPixelType>              MeasurementType;
+  typedef otb::StatisticsXMLFileReader<MeasurementType>   StatisticsReader;
+  typedef otb::ShiftScaleVectorImageFilter<
+    FloatVectorImageType, FloatVectorImageType>           RescalerType;
   typedef itk::UnaryFunctorImageFilter<
       FloatImageType,
       FloatImageType,
-      otb::Functor::AffineFunctor<float,float> >                                               OutputRescalerType;
-  typedef otb::ImageDimensionalityReductionFilter<FloatVectorImageType, FloatVectorImageType, MaskImageType>  DimensionalityReductionFilterType;
-  typedef DimensionalityReductionFilterType::Pointer                                                    DimensionalityReductionFilterPointerType;
-  typedef DimensionalityReductionFilterType::ModelType                                                  ModelType;
-  typedef ModelType::Pointer                                                                   ModelPointerType;
-  typedef DimensionalityReductionFilterType::ValueType                                                  ValueType;
-  typedef DimensionalityReductionFilterType::LabelType                                                  LabelType;
-  typedef otb::DimensionalityReductionModelFactory<ValueType, LabelType>                               DimensionalityReductionModelFactoryType;
+      otb::Functor::AffineFunctor<float,float> >          OutputRescalerType;
+  typedef otb::ImageDimensionalityReductionFilter<
+    FloatVectorImageType,
+    FloatVectorImageType,
+    MaskImageType>                                        DimensionalityReductionFilterType;
+  typedef DimensionalityReductionFilterType::Pointer      DimensionalityReductionFilterPointerType;
+  typedef DimensionalityReductionFilterType::ModelType    ModelType;
+  typedef ModelType::Pointer                              ModelPointerType;
+  typedef DimensionalityReductionFilterType::ValueType    ValueType;
+  typedef DimensionalityReductionFilterType::LabelType    LabelType;
+  typedef otb::DimensionalityReductionModelFactory<
+    ValueType, LabelType>                                 DimensionalityReductionModelFactoryType;
 
 protected:
 
@@ -115,7 +125,8 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("DimensionalityReduction");
-    SetDescription("Performs dimensionality reduction of the input image according to a dimensionality reduction model file.");
+    SetDescription("Performs dimensionality reduction of the input image "
+      "according to a dimensionality reduction model file.");
 
     // Documentation
     SetDocName("DimensionalityReduction");
@@ -185,12 +196,14 @@ private:
 
     // Load DR model using a factory
     otbAppLogINFO("Loading model");
-    m_Model = DimensionalityReductionModelFactoryType::CreateDimensionalityReductionModel(GetParameterString("model"),
-                                                                          DimensionalityReductionModelFactoryType::ReadMode);
+    m_Model = DimensionalityReductionModelFactoryType::CreateDimensionalityReductionModel(
+      GetParameterString("model"),
+      DimensionalityReductionModelFactoryType::ReadMode);
 
     if (m_Model.IsNull())
       {
-      otbAppLogFATAL(<< "Error when loading model " << GetParameterString("model") << " : unsupported model type");
+      otbAppLogFATAL(<< "Error when loading model " << GetParameterString("model")
+        << " : unsupported model type");
       }
 
     m_Model->Load(GetParameterString("model"));
@@ -203,7 +216,7 @@ private:
     FloatVectorImageType::Pointer outputImage = m_ClassificationFilter->GetOutput();
 
     // Normalize input image if asked
-    if(IsParameterEnabled("imstat")  )
+    if( IsParameterEnabled("imstat") )
       {
       otbAppLogINFO("Input image normalization activated.");
       // Normalize input image (optional)
@@ -236,7 +249,6 @@ private:
       m_ClassificationFilter->SetInput(inImage);
       }
 
-
     if(IsParameterEnabled("mask"))
       {
       otbAppLogINFO("Using input mask");
@@ -247,7 +259,6 @@ private:
       }
 
     SetParameterOutputImage<FloatVectorImageType>("out", outputImage);
-
   }
 
   DimensionalityReductionFilterType::Pointer m_ClassificationFilter;
@@ -256,8 +267,7 @@ private:
   OutputRescalerType::Pointer m_OutRescaler;
 };
 
-
-}
-}
+} // end of namespace Wrapper
+} // end of namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::ImageDimensionalityReduction)

@@ -20,13 +20,15 @@
 #ifndef otbSOMModelFactory_h
 #define otbSOMModelFactory_h
 
-
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 
 namespace otb
 {
-	
+
+/** \class SOMModelFactory
+ * Factory for SOMModel
+ */
 template <class TInputValue, class TTargetValue, unsigned int MapDimension>
 class ITK_EXPORT SOMModelFactory : public itk::ObjectFactoryBase
 {
@@ -64,15 +66,10 @@ private:
 
 };
 
-
-
 } //namespace otb
-
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSOMModelFactory.txx"
 #endif
 
 #endif
-
-

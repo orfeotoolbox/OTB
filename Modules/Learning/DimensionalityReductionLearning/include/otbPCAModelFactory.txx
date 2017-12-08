@@ -20,7 +20,6 @@
 #ifndef otbPCAFactory_txx
 #define otbPCAFactory_txx
 
-
 #include "otbPCAModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -29,18 +28,19 @@
 
 namespace otb
 {
+
 template <class TInputValue, class TOutputValue>
 PCAModelFactory<TInputValue,TOutputValue>::PCAModelFactory()
 {
-
   std::string classOverride = std::string("DimensionalityReductionModel");
   std::string subclass = std::string("PCAModel");
 
-  this->RegisterOverride(classOverride.c_str(),
-                         subclass.c_str(),
-                         "Shark PCA ML Model",
-                         1,
-                         itk::CreateObjectFunction<PCAModel<TInputValue>>::New());
+  this->RegisterOverride(
+    classOverride.c_str(),
+    subclass.c_str(),
+    "Shark PCA ML Model",
+    1,
+    itk::CreateObjectFunction<PCAModel<TInputValue>>::New());
 }
 
 template <class TInputValue, class TOutputValue>

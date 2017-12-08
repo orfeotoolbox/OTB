@@ -20,7 +20,6 @@
 #ifndef otbSOMFactory_txx
 #define otbSOMFactory_txx
 
-
 #include "otbSOMModelFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -32,16 +31,15 @@ namespace otb
 template <class TInputValue, class TOutputValue, unsigned int MapDimension>
 SOMModelFactory<TInputValue,TOutputValue,MapDimension>::SOMModelFactory()
 {
-
   std::string classOverride = std::string("DimensionalityReductionModel");
   std::string subclass = std::string("SOMModel");
 
-  this->RegisterOverride(classOverride.c_str(),
-                         subclass.c_str(),
-                         "SOM DR Model",
-                         1,
-
-                         itk::CreateObjectFunction<SOMModel<TInputValue,  MapDimension>>::New());
+  this->RegisterOverride(
+    classOverride.c_str(),
+    subclass.c_str(),
+    "SOM DR Model",
+    1,
+    itk::CreateObjectFunction<SOMModel<TInputValue,  MapDimension>>::New());
 }
 
 template <class TInputValue, class TOutputValue, unsigned int MapDimension>

@@ -20,13 +20,15 @@
 #ifndef otbPCAModelFactory_h
 #define otbPCAModelFactory_h
 
-
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 
 namespace otb
 {
-	
+
+/** \class PCAModelFactory
+ * Factory for the PCAModel
+ */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT PCAModelFactory : public itk::ObjectFactoryBase
 {
@@ -61,18 +63,12 @@ protected:
 private:
   PCAModelFactory(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
 };
 
-
-
 } //namespace otb
-
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPCAModelFactory.txx"
 #endif
 
 #endif
-
-

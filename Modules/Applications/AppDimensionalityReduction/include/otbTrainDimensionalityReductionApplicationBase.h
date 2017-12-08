@@ -21,17 +21,14 @@
 #define otbTrainDimensionalityReductionApplicationBase_h
 
 #include "otbConfigure.h"
-
 #include "otbWrapperApplication.h"
-
-#include <iostream>
+#include "otbDimensionalityReductionModelFactory.h"
 
 // ListSample
 #include "itkListSample.h"
 #include "itkVariableLengthVector.h"
 
-//Estimator
-#include "otbDimensionalityReductionModelFactory.h"
+#include <iostream>
 
 namespace otb
 {
@@ -98,30 +95,29 @@ public:
   typedef typename ModelType::InputListSampleType ListSampleType;
   
 protected:
-TrainDimensionalityReductionApplicationBase();
-~TrainDimensionalityReductionApplicationBase();
+  TrainDimensionalityReductionApplicationBase();
+  ~TrainDimensionalityReductionApplicationBase() override;
 
-/** Generic method to train and save the machine learning model. This method
-   * uses specific train methods depending on the chosen model.*/
-void Train(typename ListSampleType::Pointer trainingListSample,
-           std::string modelPath);
+  /** Generic method to train and save the machine learning model. This method
+     * uses specific train methods depending on the chosen model.*/
+  void Train(typename ListSampleType::Pointer trainingListSample,
+             std::string modelPath);
 
-/** Generic method to load a model file and use it to classify a sample list*/
-void Reduce(typename ListSampleType::Pointer validationListSample,
-            std::string modelPath);
+  /** Generic method to load a model file and use it to classify a sample list*/
+  void Reduce(typename ListSampleType::Pointer validationListSample,
+              std::string modelPath);
 
-/** Init method that creates all the parameters for machine learning models */
-void DoInit();
+  /** Init method that creates all the parameters for machine learning models */
+  void DoInit() override;
 
 private:
 
-/** Specific Init and Train methods for each machine learning model */
-//@{
-  
-void InitSOMParams();
-template <class somchoice>
-void TrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
-void BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+  /** Specific Init and Train methods for each machine learning model */
+
+  void InitSOMParams();
+  template <class somchoice>
+  void TrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
+  void BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
 
 #ifdef OTB_USE_SHARK
   void InitAutoencoderParams();
@@ -132,12 +128,11 @@ void BeforeTrainSOM(typename ListSampleType::Pointer trainingListSample, std::st
   void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   
   void TrainPCA(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
-#endif  
-//@}
+#endif
 };
 
-}
-}
+} // end of namespace Wrapper
+} // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbTrainDimensionalityReductionApplicationBase.txx"
