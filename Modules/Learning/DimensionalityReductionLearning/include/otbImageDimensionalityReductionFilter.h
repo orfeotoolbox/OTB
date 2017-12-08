@@ -36,7 +36,7 @@ namespace otb
  * \ingroup Streamed
  * \ingroup Threaded
  *
- * \ingroup OTBSupervised
+ * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
 class ITK_EXPORT ImageDimensionalityReductionFilter

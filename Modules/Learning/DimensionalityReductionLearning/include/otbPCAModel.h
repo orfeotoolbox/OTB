@@ -41,6 +41,8 @@ namespace otb
 /** \class PCAModel
  *
  * This class wraps a PCA model implemented by Shark, in a otb::MachineLearningModel
+ *
+ * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue>
 class ITK_EXPORT PCAModel

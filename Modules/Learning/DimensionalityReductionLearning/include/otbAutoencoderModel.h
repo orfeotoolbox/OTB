@@ -40,6 +40,13 @@
 
 namespace otb
 {
+/**
+ * \class AutoencoderModel
+ *
+ * Autoencoder model wrapper class
+ *
+ * \ingroup OTBDimensionalityReductionLearning
+ */
 template <class TInputValue, class NeuronType>
 class ITK_EXPORT AutoencoderModel
   : public  MachineLearningModel<

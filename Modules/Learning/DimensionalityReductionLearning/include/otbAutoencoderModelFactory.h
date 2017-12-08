@@ -26,6 +26,13 @@
 namespace otb
 {
 
+/**
+ * \class AutoencoderModelFactory
+ *
+ * Factory for AutoencoderModel
+ *
+ * \ingroup OTBDimensionalityReductionLearning
+ */
 template <class TInputValue, class TTargetValue, class NeuronType>
 class ITK_EXPORT AutoencoderModelFactory : public itk::ObjectFactoryBase
 {

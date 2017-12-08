@@ -27,7 +27,10 @@ namespace otb
 {
 
 /** \class PCAModelFactory
+ * 
  * Factory for the PCAModel
+ *
+ * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT PCAModelFactory : public itk::ObjectFactoryBase

@@ -35,6 +35,8 @@ namespace otb
 
 /** \class SOMModel
  * MachineLearningModel for Self-Organizing Map
+ *
+ * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, unsigned int MapDimension>
 class ITK_EXPORT SOMModel

@@ -65,7 +65,7 @@ namespace Wrapper
  * \sa TrainImagesClassifier
  * \sa TrainRegression
  *
- * \ingroup OTBAppClassification
+ * \ingroup OTBAppDimensionalityReduction
  */
 template <class TInputValue, class TOutputValue>
 class TrainDimensionalityReductionApplicationBase: public Application

@@ -28,7 +28,7 @@ namespace otb
 /** \class MachineLearningModelFactory
  * \brief Creation of object instance using object factory.
  *
- * \ingroup OTBSupervised
+ * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, class TOutputValue>
 class DimensionalityReductionModelFactory : public MachineLearningModelFactoryBase
