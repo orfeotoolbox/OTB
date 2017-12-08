@@ -391,6 +391,22 @@ int Application::Execute()
     }
 
   this->DoExecute();
+  
+  // Ensure that all output image parameter have called UpdateOutputInformation()
+  for (auto it = paramList.begin(); it != paramList.end(); ++it)
+    {
+    OutputImageParameter * outImgParamPtr = dynamic_cast<OutputImageParameter *>(GetParameterByKey(*it));
+    // If this is an OutputImageParameter
+    if(outImgParamPtr != ITK_NULLPTR)
+      {
+      // If the parameter is enabled
+      if(IsParameterEnabled(*it))
+        {
+        // Call UpdateOutputInformation()
+        outImgParamPtr->GetValue()->UpdateOutputInformation();
+        }
+      }
+    }
 
   return 0;
 }
