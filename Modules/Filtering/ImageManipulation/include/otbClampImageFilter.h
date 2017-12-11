@@ -21,7 +21,8 @@
 #ifndef otbClampImageFilter_h
 #define otbClampImageFilter_h
 
-#include "itkImageToImageFilter.h"
+#include "otbConvertTypeFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 namespace otb
 {
@@ -45,61 +46,68 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
   template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ClampImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+  class ITK_EXPORT ClampImageFilter 
+  : public itk::UnaryFunctorImageFilter< TInputImage , TOutputImage ,
+      Functor::ConvertTypeFunctor <typename TInputImage::PixelType ,
+                                   typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef ClampImageFilter               Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef ClampImageFilter Self;
+  typedef itk::UnaryFunctorImageFilter< TInputImage , TOutputImage ,
+    Functor::ConvertTypeFunctor <typename TInputImage::PixelType ,
+                                 typename TOutputImage::PixelType> >  Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  itkNewMacro( Self );
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ClampImageFilter, itk::ImageToImageFilter);
+  itkTypeMacro( ClampImageFilter , itk::UnaryFunctorImageFilter );
 
 
   /** Some additional typedefs.  */
   typedef TInputImage                                  InputImageType;
-  typedef typename InputImageType::ConstPointer        InputImagePointer;
   typedef typename InputImageType::RegionType          InputImageRegionType;
   typedef typename InputImageType::PixelType           InputImagePixelType;
 
   /** Some additional typedefs.  */
-  typedef TOutputImage                                 OutputImageType;
-  typedef typename OutputImageType::Pointer            OutputImagePointer;
-  typedef typename OutputImageType::RegionType         OutputImageRegionType;
-  typedef typename OutputImageType::PixelType          OutputImagePixelType;
+  typedef TOutputImage OutputImageType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType OutputImagePixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename itk::NumericTraits< OutputInternalPixelType >::ValueType OutputPixelValueType;
 
 
   /** The values greater than or equal to the value are set to OutsideValue. */
-  void ClampAbove(const OutputImagePixelType &thresh);
+  void ClampAbove(const OutputPixelValueType &thresh);
 
   /** The values less than or equal to the value are set to OutsideValue. */
-  void ClampBelow(const OutputImagePixelType &thresh);
+  void ClampBelow(const OutputPixelValueType &thresh);
 
   /** The values outside the range are set to OutsideValue. */
-  void ClampOutside(const OutputImagePixelType &lower, const OutputImagePixelType &upper);
+  void ClampOutside(const OutputPixelValueType &lower, const OutputPixelValueType &upper);
 
   /** Set/Get methods to set the lower threshold */
-  void SetLower(OutputImagePixelType val)
+  void SetLower(OutputPixelValueType val)
   {
     m_Lower = val;
     m_DLower = static_cast<double>(val);
+    this->GetFunctor().SetLowest( m_Lower );
     this->Modified();
   }
-  itkGetConstMacro(Lower, OutputImagePixelType);
+  itkGetConstMacro(Lower, OutputPixelValueType);
 
   /** Set/Get methods to set the upper threshold */
-  void SetUpper(OutputImagePixelType val)
+  void SetUpper(OutputPixelValueType val)
   {
     m_Upper = val;
     m_DUpper = static_cast<double>(val);
+    this->GetFunctor().SetHighest( m_Upper );
     this->Modified();
   }
-  itkGetConstMacro(Upper, OutputImagePixelType);
+  itkGetConstMacro(Upper, OutputPixelValueType);
 
 
 protected:
@@ -117,14 +125,23 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId ) ITK_OVERRIDE;
+  // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+  //                           itk::ThreadIdType threadId ) ITK_OVERRIDE;
 
   void GenerateOutputInformation(void) ITK_OVERRIDE
   {
     Superclass::GenerateOutputInformation();
 
-    this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetInput()->GetNumberOfComponentsPerPixel() );
+    // typename InputImageType::IndexType index;
+    // index.Fill(0);
+    // InputImagePixelType px = ->GetPixel( index );
+
+    unsigned int sizeIn = this->GetInput()->GetNumberOfComponentsPerPixel();
+    // sizeIn *= itk::NumericTraits < typename itk::NumericTraits< InputImagePixelType >::ValueType > 
+    //   :: GetLength();
+
+    this->GetOutput()->SetNumberOfComponentsPerPixel( 
+      this->GetFunctor().GetOutputSize ( sizeIn ) );
   }
 
 private:
@@ -134,8 +151,8 @@ private:
   double m_DLower;
   double m_DUpper;
 
-  OutputImagePixelType m_Lower;
-  OutputImagePixelType m_Upper;
+  OutputPixelValueType m_Lower;
+  OutputPixelValueType m_Upper;
 };
 
 

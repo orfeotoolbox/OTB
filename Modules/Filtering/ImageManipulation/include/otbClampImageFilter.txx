@@ -25,6 +25,7 @@
 #include "otbClampImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
+#include <limits>
 #include "itkObjectFactory.h"
 #include "itkProgressReporter.h"
 
@@ -38,8 +39,8 @@ template <class TInputImage, class TOutputImage>
 ClampImageFilter<TInputImage, TOutputImage>
 ::ClampImageFilter()
 {
-  m_Lower = itk::NumericTraits<OutputImagePixelType>::NonpositiveMin();
-  m_Upper = itk::NumericTraits<OutputImagePixelType>::max();
+  m_Lower = std::numeric_limits < OutputPixelValueType >::lowest();
+  m_Upper = std::numeric_limits < OutputPixelValueType >::max();
 
   m_DLower = static_cast<double>(m_Lower);
   m_DUpper = static_cast<double>(m_Upper);
@@ -70,14 +71,16 @@ ClampImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ClampImageFilter<TInputImage, TOutputImage>
-::ClampAbove(const OutputImagePixelType &thresh)
+::ClampAbove(const OutputPixelValueType &thresh)
 {
   if (m_Upper != thresh
-      || m_Lower > itk::NumericTraits<OutputImagePixelType>::NonpositiveMin())
+      || m_Lower > std::numeric_limits < OutputPixelValueType >::lowest())
     {
-    m_Lower = itk::NumericTraits<OutputImagePixelType>::NonpositiveMin();
+    m_Lower = std::numeric_limits < OutputPixelValueType >::lowest();
     m_Upper = thresh;
     m_DUpper = static_cast<double>(m_Upper);
+    this->GetFunctor().SetLowest( m_Lower );
+    this->GetFunctor().SetHighest( m_Upper );
     this->Modified();
     }
 }
@@ -88,13 +91,15 @@ ClampImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ClampImageFilter<TInputImage, TOutputImage>
-::ClampBelow(const OutputImagePixelType &thresh)
+::ClampBelow(const OutputPixelValueType &thresh)
 {
-  if (m_Lower != thresh || m_Upper < itk::NumericTraits<OutputImagePixelType>::max())
+  if (m_Lower != thresh || m_Upper < std::numeric_limits < OutputPixelValueType >::max())
     {
+    m_Upper = std::numeric_limits < OutputPixelValueType >::max();
     m_Lower = thresh;
     m_DLower = m_Lower;
-    m_Upper = itk::NumericTraits<InputImagePixelType>::max();
+    this->GetFunctor().SetLowest( m_Lower );
+    this->GetFunctor().SetHighest( m_Upper );
     this->Modified();
     }
 }
@@ -106,7 +111,7 @@ ClampImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ClampImageFilter<TInputImage, TOutputImage>
-::ClampOutside(const OutputImagePixelType &lower, const OutputImagePixelType &upper)
+::ClampOutside(const OutputPixelValueType &lower, const OutputPixelValueType &upper)
 {
   if (lower > upper)
     {
@@ -120,6 +125,8 @@ ClampImageFilter<TInputImage, TOutputImage>
     m_Upper = upper;
     m_DLower = m_Lower;
     m_DUpper = m_Upper;
+    this->GetFunctor().SetLowest( m_Lower );
+    this->GetFunctor().SetHighest( m_Upper );
     this->Modified();
     }
 }
@@ -128,62 +135,62 @@ ClampImageFilter<TInputImage, TOutputImage>
 /**
  *
  */
-template <class TInputImage, class TOutputImage>
-void
-ClampImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
-{
-  itkDebugMacro(<<"Actually executing");
+// template <class TInputImage, class TOutputImage>
+// void
+// ClampImageFilter<TInputImage, TOutputImage>
+// ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+//                        itk::ThreadIdType threadId)
+// {
+//   itkDebugMacro(<<"Actually executing");
 
-  // Get the input and output pointers
-  InputImagePointer  inputPtr  = this->GetInput();
-  OutputImagePointer outputPtr = this->GetOutput(0);
+//   // Get the input and output pointers
+//   typename InputImageType::ConstPointer  inputPtr  = this->GetInput();
+//   typename OutputImageType::Pointer outputPtr = this->GetOutput(0);
 
-  // Define/declare an iterator that will walk the output region for this
-  // thread.
-  typedef itk::ImageRegionConstIterator<TInputImage> InputIterator;
-  typedef itk::ImageRegionIterator<TOutputImage>      OutputIterator;
+//   // Define/declare an iterator that will walk the output region for this
+//   // thread.
+//   typedef itk::ImageRegionConstIterator<TInputImage> InputIterator;
+//   typedef itk::ImageRegionIterator<TOutputImage> OutputIterator;
 
-  InputIterator  inIt(inputPtr, outputRegionForThread);
-  OutputIterator outIt(outputPtr, outputRegionForThread);
+//   InputIterator  inIt(inputPtr, outputRegionForThread);
+//   OutputIterator outIt(outputPtr, outputRegionForThread);
 
-  // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+//   // support progress methods/callbacks
+//   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  // walk the regions, threshold each pixel
-  while( !outIt.IsAtEnd() && !inIt.IsAtEnd()  )
-    {
-    // Cast the value of the pixel to double in order to compare
-    // with the double version of the upper and the lower bounds of
-    // output image
-    const double value = static_cast<double>(inIt.Get());
-    OutputImagePixelType      outPix = m_Lower;
+//   // walk the regions, threshold each pixel
+//   while( !outIt.IsAtEnd() && !inIt.IsAtEnd()  )
+//     {
+//     // Cast the value of the pixel to double in order to compare
+//     // with the double version of the upper and the lower bounds of
+//     // output image
+//     const double value = static_cast<double>(inIt.Get());
+//     OutputImagePixelType      outPix = m_Lower;
 
-    if ( m_DLower <= value && value <= m_DUpper)
-      {
-      // pixel passes to output unchanged
-      outPix = static_cast<OutputImagePixelType>(value);
-      }
-    /* Already outPix is initialized with m_Lower even for preventing Warning.
-     *
-    else if ( value < m_DLower )
-      {
-      outPix = m_Lower;
-      }
-     */
-    else if ( value > m_DUpper)
-      {
-      outPix = m_Upper;
-      }
+//     if ( m_DLower <= value && value <= m_DUpper)
+//       {
+//       // pixel passes to output unchanged
+//       outPix = static_cast<OutputImagePixelType>(value);
+//       }
+//     /* Already outPix is initialized with m_Lower even for preventing Warning.
+//      *
+//     else if ( value < m_DLower )
+//       {
+//       outPix = m_Lower;
+//       }
+//      */
+//     else if ( value > m_DUpper)
+//       {
+//       outPix = m_Upper;
+//       }
 
-    outIt.Set( outPix );
+//     outIt.Set( outPix );
 
-    ++inIt;
-    ++outIt;
-    progress.CompletedPixel();
-    }
-}
+//     ++inIt;
+//     ++outIt;
+//     progress.CompletedPixel();
+//     }
+// }
 
 } // end namespace itk
 
