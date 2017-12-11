@@ -21,6 +21,7 @@
 #define otbAutoencoderModel_txx
 
 #include "otbAutoencoderModel.h"
+#include "otbMacro.h"
 
 #include <fstream>
 #include "itkMacro.h"
@@ -92,7 +93,6 @@ AutoencoderModel<TInputValue,NeuronType>
 
   for (unsigned int i = std::max(0,static_cast<int>(m_NumberOfHiddenNeurons.Size()-1)) ; i > 0; --i)
     {
-    std::cout << i << std::endl;
     layers.push_back(m_NumberOfHiddenNeurons[i-1]);
     }
 
@@ -126,7 +126,7 @@ AutoencoderModel<TInputValue,NeuronType>
     if (m_Noise[0] != 0)
       {
       TrainOneLayer(criterion, net, 0, inputSamples, ofs);
-      std::cout << "mnoise " << m_Noise[0] << std::endl;
+      otbMsgDevMacro(<< "m_Noise " << m_Noise[0]);
       }
     else
       {
@@ -166,7 +166,7 @@ AutoencoderModel<TInputValue,NeuronType>
       if (m_Noise[i] != 0)
         {
         TrainOneLayer(criterion, net, i, inputSamples, ofs);
-        std::cout << "mnoise " << m_Noise[i] << std::endl;
+        otbMsgDevMacro(<< "m_Noise " << m_Noise[0]);
         }
       else
         {
@@ -193,8 +193,7 @@ AutoencoderModel<TInputValue,NeuronType>
   shark::Data<shark::RealVector> &samples,
   std::ostream& File)
 {
-  //AutoencoderType net;
-  std::cout << "noise " <<  m_Noise[layer_index] << std::endl;
+  otbMsgDevMacro(<< "Noise " <<  m_Noise[layer_index]);
   std::size_t inputs = dataDimension(samples);
   net.setStructure(inputs, m_NumberOfHiddenNeurons[layer_index]);
   initRandomUniform(net,-m_InitFactor*std::sqrt(1.0/inputs),m_InitFactor*std::sqrt(1.0/inputs));
@@ -212,7 +211,7 @@ AutoencoderModel<TInputValue,NeuronType>
   error.init();
   optimizer.init(error);
 
-  std::cout<<"error before training : " << optimizer.solution().value<<std::endl;
+  otbMsgDevMacro(<<"Error before training : " << optimizer.solution().value);
   if (this->m_WriteLearningCurve == true)
     {
     File << "end layer" << std::endl;
@@ -227,7 +226,7 @@ AutoencoderModel<TInputValue,NeuronType>
       {
       File << optimizer.solution().value << std::endl;
       }
-    std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<  std::endl ;
+    otbMsgDevMacro(<<"Error after " << i << " iterations : " << optimizer.solution().value);
     } while( !criterion.stop( optimizer.solution() ) );
 
   net.setParameterVector(optimizer.solution().point);
@@ -259,18 +258,17 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(
 
   shark::TwoNormRegularizer regularizer(error.numberOfVariables());
   error.setRegularizer(m_Regularization[layer_index],&regularizer);
-  std::cout << samples.element(0) << std::endl;
   shark::IRpropPlusFull optimizer;
   error.init();
   optimizer.init(error);
 
-  std::cout<<"error before training : " << optimizer.solution().value<<std::endl;
+  otbMsgDevMacro(<<"Error before training : " << optimizer.solution().value);
   unsigned int i=0;
   do
     {
     i++;
     optimizer.step(error);
-    std::cout<<"error after " << i << "iterations : " << optimizer.solution().value <<std::endl;
+    otbMsgDevMacro(<<"Error after " << i << " iterations : " << optimizer.solution().value);
     if (this->m_WriteLearningCurve == true)
       {
       File << optimizer.solution().value << std::endl;
@@ -295,7 +293,8 @@ AutoencoderModel<TInputValue,NeuronType>
   shark::Data<shark::RealVector> &samples,
   std::ostream& File)
 {
-  shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
+  //labels identical to inputs
+  shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);
   shark::SquaredLoss<shark::RealVector> loss;
 
   shark::ErrorFunction error(trainSet, &m_Net, &loss);
@@ -305,19 +304,18 @@ AutoencoderModel<TInputValue,NeuronType>
   shark::IRpropPlusFull optimizer;
   error.init();
   optimizer.init(error);
-  std::cout<<"error before training : " << optimizer.solution().value<<std::endl;
+  otbMsgDevMacro(<<"Error before training : " << optimizer.solution().value);
   unsigned int i=0;
   while( !criterion.stop( optimizer.solution() ) )
     {
     i++;
     optimizer.step(error);
-    std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
+    otbMsgDevMacro(<<"Error after " << i << " iterations : " << optimizer.solution().value);
     if (this->m_WriteLearningCurve == true)
       {
       File << optimizer.solution().value << std::endl;
       }
     }
-  //std::cout<<"error after " << i << "iterations : " << optimizer.solution().value<<std::endl;
 }
 
 template <class TInputValue, class NeuronType>
@@ -350,7 +348,7 @@ void
 AutoencoderModel<TInputValue,NeuronType>
 ::Save(const std::string & filename, const std::string & /*name*/)
 {
-  std::cout << "saving model ..." << std::endl;
+  otbMsgDevMacro(<< "saving model ...");
   std::ofstream ofs(filename);
   ofs << m_Net.name() << std::endl; // the first line of the model file contains a key
   boost::archive::polymorphic_text_oarchive oa(ofs);
@@ -381,7 +379,6 @@ AutoencoderModel<TInputValue,NeuronType>
   ifs.getline(autoencoder,256);
   std::string autoencoderstr(autoencoder);
 
-  std::cout << autoencoderstr << std::endl;
   if (autoencoderstr != net.name()){
     itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
@@ -391,8 +388,8 @@ AutoencoderModel<TInputValue,NeuronType>
 
   // This gives us the dimension if we keep the encoder and decoder
   size_t feature_layer_index = m_Net.layerMatrices().size()/2;
-  this->m_Dimension = m_Net.layerMatrix(feature_layer_index).size1(); // number of neurons in the feature layer (first dimension of the first decoder weight matrix)
-  std::cout << this->m_Dimension << std::endl;
+  // number of neurons in the feature layer (first dimension of the first decoder weight matrix)
+  this->m_Dimension = m_Net.layerMatrix(feature_layer_index).size1(); 
 }
 
 template <class TInputValue, class NeuronType>
