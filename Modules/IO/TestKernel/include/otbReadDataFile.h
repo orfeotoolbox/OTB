@@ -50,6 +50,7 @@ bool ReadDataFile(
     return false;
     }
 
+  labels->SetMeasurementVectorSize(1);
   unsigned int nbfeatures = 0;
 
   while (!ifs.eof())
