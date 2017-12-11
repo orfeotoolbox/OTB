@@ -100,8 +100,6 @@ public:
   itkGetMacro(RandomInit, bool);
   itkSetMacro(Seed, unsigned int);
   itkGetMacro(Seed, unsigned int);
-  itkGetObjectMacro(ListSample, InputListSampleType);
-  itkSetObjectMacro(ListSample, InputListSampleType);
 
   bool CanReadFile(const std::string & filename);
   bool CanWriteFile(const std::string & filename);
@@ -140,8 +138,6 @@ private:
   bool m_RandomInit;
   /** Seed for random initialization */
   unsigned int m_Seed;
-  /** The input list sample */
-  ListSamplePointerType m_ListSample;
   /** Behavior of the Learning weightening (link to the beta coefficient) */
   SOMLearningBehaviorFunctorType m_BetaFunctor;
   /** Behavior of the Neighborhood extent */

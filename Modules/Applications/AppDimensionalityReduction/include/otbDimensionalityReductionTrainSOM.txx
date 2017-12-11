@@ -158,7 +158,7 @@ void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
     radius[i]=std::stoi(n[i]);
     }
   dimredTrainer->SetNeighborhoodSizeInit(radius);
-  dimredTrainer->SetListSample(trainingListSample);
+  dimredTrainer->SetInputListSample(trainingListSample);
   dimredTrainer->Train();
   dimredTrainer->Save(modelPath);
 }

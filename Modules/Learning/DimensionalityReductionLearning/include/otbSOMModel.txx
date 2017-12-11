@@ -72,7 +72,7 @@ SOMModel<TInputValue,  MapDimension>::Train()
 {
   typedef otb::SOM<InputListSampleType, MapType>    EstimatorType;
   typename EstimatorType::Pointer estimator = EstimatorType::New();
-  estimator->SetListSample(m_ListSample);
+  estimator->SetListSample(this->GetInputListSample());
   estimator->SetMapSize(m_MapSize);
   estimator->SetNeighborhoodSizeInit(m_NeighborhoodSizeInit);
   estimator->SetNumberOfIterations(m_NumberOfIterations);
