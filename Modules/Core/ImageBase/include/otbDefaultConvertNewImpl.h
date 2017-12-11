@@ -40,8 +40,13 @@ public:
     }  
 };
 
+//
+//  Default traits for the complex<> pixel type
+//
+
 template < typename T >
-class DefaultConvertPixelTraitsTest < std::complex < T > > : public itk::DefaultConvertPixelTraits < std::complex < T > >
+class DefaultConvertPixelTraitsTest < std::complex < T > > 
+: public itk::DefaultConvertPixelTraits < std::complex < T > >
 {
 public:
   typedef itk::DefaultConvertPixelTraits < std::complex < T > > SuperClass;
@@ -56,18 +61,39 @@ public:
     }
 };
 
-// template <>                                   
-// class DefaultConvertPixelTraitsTest < itk::RGBPixel < short int > >                 
-// : public itk::DefaultConvertPixelTraits < itk::FixedArray < short int > >             
-// {                                                                                            
-// public:                                                                                      
-//   typedef itk::DefaultConvertPixelTraits < itk::RGBPixel < short int > > SuperClass;
-//   typedef itk::RGBPixel < short int > TargetType;                                        
-//   static void SetNthComponent(int , TargetType & pixel, const TargetType & v)                
-//     {                                                                                        
-//       pixel = v;                                                                             
-//     }                                                                                        
-// };
+//
+//  Default traits for the Offset<> pixel type
+//
+
+template<unsigned int VDimension>
+class DefaultConvertPixelTraitsTest < itk::Offset< VDimension > > : 
+public itk::DefaultConvertPixelTraits< itk::Offset< VDimension > >
+{
+public:
+  typedef itk::DefaultConvertPixelTraits < itk::Offset< VDimension > > SuperClass;
+  typedef typename SuperClass::TargetType TargetType;
+  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)
+    {
+      pixel = v;
+    }
+};
+
+//
+//  Default traits for the pixel types deriving from Matrix<>
+//
+
+template<typename VComponent, unsigned VRows, unsigned VCols >
+class DefaultConvertPixelTraitsTest < itk::Matrix< VComponent, VRows, VCols > >
+: public itk::DefaultConvertPixelTraits < itk::Matrix< VComponent, VRows, VCols > >
+{
+public:
+  typedef itk::DefaultConvertPixelTraits < itk::Matrix< VComponent, VRows, VCols > > SuperClass;
+  typedef typename SuperClass::TargetType TargetType;
+  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)
+    {
+      pixel = v;
+    }
+};
 
 #define OTB_DEFAULTCONVERTTRAITS_FIXEDARRAY_TYPE(type)                                       \
 template < typename TComponentType , unsigned VDimension >                                   \
