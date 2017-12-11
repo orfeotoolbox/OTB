@@ -81,11 +81,8 @@ public:
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  itkNewMacro(Self)
-;
-
-  itkTypeMacro(ExampleApplication, otb::Application)
-;
+  itkNewMacro(Self);
+  itkTypeMacro(ExampleApplication, otb::Application);
   //  Software Guide : EndCodeSnippet
 
 
@@ -136,7 +133,7 @@ private:
 
     // Software Guide : BeginLatex
     // \code{AddDocTag()} method categorize the application using relevant tags.
-    // \code{Code/ApplicationEngine/otbWrapperTags.h} contains some predefined tags defined in \code{Tags} namespace.
+    // The header file \code{otbWrapperTags.h} in OTB sources contains some predefined tags defined in \code{Tags} namespace.
     // Software Guide : EndLatex
 
     //  Software Guide : BeginCodeSnippet
@@ -146,52 +143,63 @@ private:
 
     // Software Guide : BeginLatex
     // Application parameters declaration is done using \code{AddParameter()} method.
-    // \code{AddParameter()} requires Parameter type, its name and description.
+    // \code{AddParameter()} requires the input parameter type
+    // (ParameterType_InputImage, ParameterType_Int, ParameterType_Float), its name and description.
     // \subdoxygen{otb}{Wrapper}{Application} class contains methods to set parameters characteristics.
     // Software Guide : EndLatex
 
     //  Software Guide : BeginCodeSnippet
     AddParameter(ParameterType_InputImage, "in", "Input Image");
+
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    AddParameter(ParameterType_Empty, "boolean", "Boolean");
-    MandatoryOff("boolean");
-    AddParameter(ParameterType_Int, "int", "Integer");
-    MandatoryOff("int");
-    SetDefaultParameterInt("int", 1);
-    SetMinimumParameterIntValue("int", 0);
-    SetMaximumParameterIntValue("int", 10);
-    AddParameter(ParameterType_Float, "float", "Float");
-    MandatoryOff("float");
-    SetDefaultParameterFloat("float", 0.2);
-    SetMinimumParameterFloatValue("float", -1.0);
-    SetMaximumParameterFloatValue("float", 15.0);
-    AddParameter(ParameterType_String, "string", "String");
-    MandatoryOff("string");
-    AddParameter(ParameterType_InputFilename, "filename", "File name");
-    MandatoryOff("filename");
-    AddParameter(ParameterType_Directory, "directory", "Directory name");
-    MandatoryOff("directory");
 
-    AddParameter(ParameterType_Choice, "choice", "Choice");
-    AddChoice("choice.choice1", "Choice 1");
-    AddChoice("choice.choice2", "Choice 2");
-    AddChoice("choice.choice3", "Choice 3");
-    AddParameter(ParameterType_Float, "choice.choice1.floatchoice1"
-                 , "Float of choice1");
-    SetDefaultParameterFloat("choice.choice1.floatchoice1", 0.125);
-    AddParameter(ParameterType_Float, "choice.choice3.floatchoice3"
-                 , "Float of choice3");
-    SetDefaultParameterFloat("choice.choice3.floatchoice3", 5.0);
+    AddParameter(ParameterType_Empty, "param1", "Example of boolean parameter");
+    MandatoryOff("param1");
 
-    AddParameter(ParameterType_Group, "ingroup", "Input Group");
+    AddParameter(ParameterType_Int, "param2", "Example of integer parameter");
+    MandatoryOff("param2");
+    SetDefaultParameterInt("param2", 1);
+    SetMinimumParameterIntValue("param2", 0);
+    SetMaximumParameterIntValue("param2", 10);
+
+    AddParameter(ParameterType_Float, "param3", "Example of float parameter");
+    MandatoryOff("param3");
+    SetDefaultParameterFloat("param3", 0.2);
+    SetMinimumParameterFloatValue("param3", -1.0);
+    SetMaximumParameterFloatValue("param3", 15.0);
+
+    AddParameter(ParameterType_String, "param4", "Example of string parameter");
+    MandatoryOff("param4");
+
+    AddParameter(ParameterType_InputFilename, "param5", "Example of filename");
+    MandatoryOff("param5");
+
+    AddParameter(ParameterType_Directory, "param6", "Example of directory name");
+    MandatoryOff("param6");
+
+    AddParameter(ParameterType_Choice, "inchoice", "Example of choice parameter");
+    AddChoice("inchoice.choice1", "Choice 1");
+    AddChoice("inchoice.choice2", "Choice 2");
+    AddChoice("inchoice.choice3", "Choice 3");
+      
+    AddParameter(ParameterType_Float, "inchoice.choice1.floatchoice1"
+                 , "Example of float parameter for choice1");
+    SetDefaultParameterFloat("inchoice.choice1.floatchoice1", 0.125);
+
+    AddParameter(ParameterType_Float, "inchoice.choice3.floatchoice3"
+                 , "Example of float parameter for choice3");
+    SetDefaultParameterFloat("inchoice.choice3.floatchoice3", 5.0);
+
+    AddParameter(ParameterType_Group, "ingroup", "Input group");
     MandatoryOff("ingroup");
-    AddParameter(ParameterType_Int, "ingroup.integer", "Integer of Group");
-    MandatoryOff("ingroup.integer");
-    AddParameter(ParameterType_Group, "ingroup.images", "Input Images Group");
+    AddParameter(ParameterType_Int, "ingroup.valint", "Example of integer parameter for group");
+    MandatoryOff("ingroup.valint");
+    AddParameter(ParameterType_Group, "ingroup.images", "Input Images group");
     AddParameter(ParameterType_InputImage, "ingroup.images.inputimage"
                  , "Input Image");
     MandatoryOff("ingroup.images.inputimage");
-    AddParameter(ParameterType_Group, "outgroup", "Output Group");
+
+    AddParameter(ParameterType_Group, "outgroup", "Output group");
     MandatoryOff("outgroup");
     AddParameter(ParameterType_OutputImage, "outgroup.outputimage"
                  , "Output Image");
@@ -199,7 +207,7 @@ private:
     AddParameter(ParameterType_InputImageList, "il", "Input image list");
     MandatoryOff("il");
 
-    AddParameter(ParameterType_ListView, "cl", "Output Image channels");
+    AddParameter(ParameterType_ListView, "cl", "Output image channels");
     AddChoice("cl.choice1", "cl.choice1");
     AddChoice("cl.choice2", "cl.choice2");
     MandatoryOff("cl");
@@ -208,14 +216,14 @@ private:
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
 
-    AddParameter(ParameterType_ComplexInputImage, "cin", "Input Complex Image");
-    AddParameter(ParameterType_ComplexOutputImage, "cout", "Output Complex Image");
+    AddParameter(ParameterType_ComplexInputImage, "cin", "Input complex image");
+    AddParameter(ParameterType_ComplexOutputImage, "cout", "Output complex image");
     MandatoryOff("cin");
     MandatoryOff("cout");
     //  Software Guide : EndCodeSnippet
 
     // Software Guide : BeginLatex
-    // An example commandline is automatically generated. Method \code{SetDocExampleParameterValue()} is
+    // An example of command-line is automatically generated. Method \code{SetDocExampleParameterValue()} is
     // used to set parameters. Dataset should be located in  \code{OTB-Data/Examples} directory.
     // Software Guide : EndLatex
 
@@ -231,7 +239,7 @@ private:
   // gives a complete description of this method.
   // Software Guide : EndLatex
   //  Software Guide :BeginCodeSnippet
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
   //  Software Guide : EndCodeSnippet
@@ -241,13 +249,13 @@ private:
   // gives a complete description of this method.
   // Software Guide : EndLatex
   //  Software Guide :BeginCodeSnippet
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
-    int paramInt = GetParameterInt("int");
-    otbAppLogDEBUG( << paramInt <<std::endl );
-    int paramFloat = GetParameterFloat("float");
+    int paramInt = GetParameterInt("param2");
+    otbAppLogDEBUG( << paramInt << std::endl );
+    int paramFloat = GetParameterFloat("param3");
     otbAppLogINFO( << paramFloat );
 
     SetParameterOutputImage("out", inImage);
@@ -260,7 +268,7 @@ private:
 }
 
 // Software Guide : BeginLatex
-// Finally \code{OTB\_APPLICATION\_EXPORT} is called.
+// Finally \code{OTB\_APPLICATION\_EXPORT} is called:
 // Software Guide : EndLatex
 //  Software Guide :BeginCodeSnippet
 OTB_APPLICATION_EXPORT(otb::Wrapper::ApplicationExample)
