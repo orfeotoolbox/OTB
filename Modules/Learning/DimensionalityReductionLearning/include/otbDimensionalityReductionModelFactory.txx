@@ -52,7 +52,7 @@ using SOM5DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 5>  ;
 
 
 template <class TInputValue, class TOutputValue>
-typename MachineLearningModel<itk::VariableLengthVector< TInputValue>, itk::VariableLengthVector< TOutputValue> >::Pointer
+typename DimensionalityReductionModelFactory<TInputValue,TOutputValue>::DimensionalityReductionModelTypePointer
 DimensionalityReductionModelFactory<TInputValue,TOutputValue>
 ::CreateDimensionalityReductionModel(const std::string& path, FileModeType mode)
 {
@@ -65,7 +65,8 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
   for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
       i != allobjects.end(); ++i)
     {
-    MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TOutputValue>> * io = dynamic_cast<MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TOutputValue>>*>(i->GetPointer());
+    DimensionalityReductionModelType* io =
+      dynamic_cast<DimensionalityReductionModelType*>(i->GetPointer());
     if(io)
       {
       possibleDimensionalityReductionModel.push_back(io);

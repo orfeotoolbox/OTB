@@ -46,7 +46,9 @@ public:
   itkTypeMacro(DimensionalityReductionModelFactory, itk::Object);
 
   /** Convenient typedefs. */
-  typedef otb::MachineLearningModel<itk::VariableLengthVector< TInputValue> , itk::VariableLengthVector< TOutputValue>> DimensionalityReductionModelType;
+  typedef otb::MachineLearningModel<
+    itk::VariableLengthVector< TInputValue >,
+    itk::VariableLengthVector< TOutputValue> >  DimensionalityReductionModelType;
   typedef typename DimensionalityReductionModelType::Pointer DimensionalityReductionModelTypePointer;
 
   /** Mode in which the files is intended to be used */
