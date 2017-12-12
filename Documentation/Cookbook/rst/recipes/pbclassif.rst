@@ -525,9 +525,7 @@ Example
 
 We consider 4 classes: water, roads, vegetation and buildings with red
 roofs. Data is available in the OTB-Data
-`repository <http://hg.orfeo-toolbox.org/OTB-Data/file/0fed8f4f035c/Input/Classification>`_ 
-and this image is produced with the commands inside this
-`file <http://hg.orfeo-toolbox.org/OTB-Applications/file/3ce975605013/Testing/Classification/CMakeLists.txt>`_ .
+`repository <https://git.orfeo-toolbox.org/otb-data.git/tree/HEAD:/Input/Classification>`_ .
 
 .. |image_21| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
 .. |image_22| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_fusion.jpg
