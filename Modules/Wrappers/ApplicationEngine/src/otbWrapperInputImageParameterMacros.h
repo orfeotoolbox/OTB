@@ -28,7 +28,7 @@
     return this->GetImage< image##Type > ();          \
   }
 
-
+/*
 #define otbCastImageMacro(InputImageType, OutputImageType, theMethod)   \
   template<> OutputImageType *                                          \
   InputImageParameter::CastImage<InputImageType , OutputImageType>()    \
@@ -44,6 +44,6 @@
   otbCastImageMacro(InputImageType, Int32##prefix##ImageType, theMethod) \
   otbCastImageMacro(InputImageType, Float##prefix##ImageType, theMethod) \
   otbCastImageMacro(InputImageType, Double##prefix##ImageType, theMethod)
-
+*/
 
 #endif

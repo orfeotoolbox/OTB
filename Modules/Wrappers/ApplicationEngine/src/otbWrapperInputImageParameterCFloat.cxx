@@ -28,8 +28,9 @@ namespace otb
 {
 namespace Wrapper
 {
-otbGetImageMacro(ComplexFloatImage)
+otbGetImageMacro(ComplexFloatImage);
 otbGetImageMacro(ComplexFloatVectorImage)
+/*
 // otbGenericCastImageMacro(ComplexFloatImage, SimpleCastImage, )
 otbCastImageMacro(ComplexFloatImageType , ComplexDoubleImageType , SimpleCastImage)
 otbCastImageMacro(ComplexFloatImageType , ComplexFloatImageType , SimpleCastImage)
@@ -39,5 +40,6 @@ otbCastImageMacro(ComplexFloatVectorImageType , ComplexFloatVectorImageType , Si
 // otbGenericCastImageMacro(ComplexFloatImage, CastVectorImageFromImage, Vector)
 otbCastImageMacro(ComplexFloatImageType , ComplexDoubleVectorImageType , CastVectorImageFromImage)
 otbCastImageMacro(ComplexFloatImageType , ComplexFloatVectorImageType , CastVectorImageFromImage)
+*/
 }
 }

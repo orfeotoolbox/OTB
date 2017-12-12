@@ -208,7 +208,26 @@ template <class TInputImage, class TOutputImage>
 TOutputImage*
 InputImageParameter::CastImage()
 {
-  itkExceptionMacro("Cast from "<<typeid(TInputImage).name()<<" to "<<typeid(TOutputImage).name()<<" not authorized.");
+  if ( dynamic_cast<TOutputImage*> (m_Image.GetPointer()) )
+    {
+    return dynamic_cast<TOutputImage*> (m_Image.GetPointer());
+    }
+  else
+    {
+    TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
+
+    typedef ClampImageFilter<TInputImage, TOutputImage> CasterType;
+    typename CasterType::Pointer caster = CasterType::New();
+
+    caster->SetInput(realInputImage);
+    caster->UpdateOutputInformation();
+
+    m_Image = caster->GetOutput();
+    m_Caster = caster;
+
+    return caster->GetOutput();
+    } 
+  // itkExceptionMacro("Cast from "<<typeid(TInputImage).name()<<" to "<<typeid(TOutputImage).name()<<" not authorized.");
 }
 
 
