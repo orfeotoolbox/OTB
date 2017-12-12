@@ -170,15 +170,12 @@ void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>::Trai
     if (HasValue("algorithm.autoencoder.learningcurve") &&
         IsParameterEnabled("algorithm.autoencoder.learningcurve"))
       {
-      std::cout << "yo" << std::endl;
       dimredTrainer->SetWriteLearningCurve(true);
       dimredTrainer->SetLearningCurveFileName(GetParameterString("algorithm.autoencoder.learningcurve"));
       }
 
     dimredTrainer->SetInputListSample(trainingListSample);
-    std::cout << "before train" << std::endl;
     dimredTrainer->Train();
-    std::cout << "after train" << std::endl;
     dimredTrainer->Save(modelPath);
 }
 
