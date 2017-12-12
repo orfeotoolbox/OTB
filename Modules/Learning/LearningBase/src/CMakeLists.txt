@@ -18,8 +18,14 @@
 # limitations under the License.
 #
 
-project(OTBLearningBase)
+set(OTBLearningBase_SRC
+  otbMachineLearningModelFactoryBase.cxx
+  )
 
-set(OTBLearningBase_LIBRARIES OTBLearningBase)
+add_library(OTBLearningBase ${OTBLearningBase_SRC})
+target_link_libraries(OTBLearningBase
+  ${OTBCommon_LIBRARIES}
+  ${OTBITK_LIBRARIES}
+  )
 
-otb_module_impl()
+otb_module_target(OTBLearningBase)
