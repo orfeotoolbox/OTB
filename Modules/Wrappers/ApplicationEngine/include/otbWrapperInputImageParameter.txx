@@ -26,6 +26,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkCastImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
+#include "otbClampImageFilter.h"
 
 namespace otb
 {
@@ -223,7 +224,7 @@ InputImageParameter::SimpleCastImage()
     {
     TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
 
-    typedef itk::CastImageFilter<TInputImage, TOutputImage> CasterType;
+    typedef ClampImageFilter<TInputImage, TOutputImage> CasterType;
     typename CasterType::Pointer caster = CasterType::New();
 
     caster->SetInput(realInputImage);
@@ -243,7 +244,7 @@ InputImageParameter::CastVectorImageFromImage()
 {
   TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
 
-  typedef ImageToVectorImageCastFilter<TInputImage, TOutputImage> CasterType;
+  typedef ClampImageFilter<TInputImage, TOutputImage> CasterType;
   typename CasterType::Pointer caster = CasterType::New();
 
   caster->SetInput(realInputImage);
