@@ -64,7 +64,7 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
-::Reduce(typename ListSampleType::Pointer validationListSample,std::string modelPath)
+::Reduce(typename ListSampleType::Pointer /*validationListSample*/,std::string /*modelPath*/)
 {
 }
 
