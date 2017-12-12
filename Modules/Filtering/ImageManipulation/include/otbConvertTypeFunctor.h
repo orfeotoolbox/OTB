@@ -59,7 +59,7 @@ public:
       m_Scal = m_CompIn;
     if ( m_cOutPix || m_cOutInternalPix )
       {
-      m_CompOut = sizeIn / 2 ; // ( sizeIn + 1 )/ 2
+      m_CompOut = ( sizeIn + 1 ) / 2 ; // ( sizeIn + 1 )/ 2
       return m_CompOut ; 
       }
     else
@@ -105,6 +105,8 @@ public:
     std::vector < double > vPixel;
     for ( unsigned int i  = 0 ; i < m_CompIn ; i ++)
       FillIn < InputPixelType > ( i , in , vPixel );
+    if (  ( m_cOutPix || m_cOutInternalPix ) && vPixel.size()%2 )
+      vPixel.push_back(0); // last component has no imaginary part
     Clamp( vPixel );
     OutputPixelType out;
     int hack = 1;
