@@ -25,4 +25,10 @@ void RegisterTests()
   REGISTER_TEST(otbAutoencoderModelNew);
   REGISTER_TEST(otbAutoencoderModelCanRead);
   REGISTER_TEST(otbAutoencoderModeTrain);
+  REGISTER_TEST(otbPCAModelNew);
+  REGISTER_TEST(otbPCAModelCanRead);
+  REGISTER_TEST(otbPCAModeTrain);
+  REGISTER_TEST(otbSOMModelNew);
+  REGISTER_TEST(otbSOMModelCanRead);
+  REGISTER_TEST(otbSOMModeTrain);
 }

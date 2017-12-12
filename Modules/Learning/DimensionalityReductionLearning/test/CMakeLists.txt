@@ -23,6 +23,8 @@ otb_module_test()
 set(OTBDimensionalityReductionLearningTests
 otbDimensionalityReductionLearningTestDriver.cxx
 otbAutoencoderModelTest.cxx
+otbPCAModelTest.cxx
+otbSOMModelTest.cxx
 )
 
 add_executable(otbDimensionalityReductionLearningTestDriver ${OTBDimensionalityReductionLearningTests})
@@ -40,13 +42,61 @@ otb_add_test(NAME leTvAutoencoderModelTrain COMMAND
   otbDimensionalityReductionLearningTestDriver
   otbAutoencoderModeTrain
   ${INPUTDATA}/letter_light.scale
-  ${TEMP}/ae_model.txt
+  ${TEMP}/model.ae
   )
 
 otb_add_test(NAME leTvAutoencoderModelCanRead COMMAND
   otbDimensionalityReductionLearningTestDriver
   otbAutoencoderModelCanRead
-  ${TEMP}/ae_model.txt
+  ${TEMP}/model.ae
   )
 
 set_property(TEST leTvAutoencoderModelCanRead APPEND PROPERTY DEPENDS leTvAutoencoderModelTrain)
+
+# --------------- PCA --------------------------------
+otb_add_test(NAME leTuPCAModelNew COMMAND
+  otbDimensionalityReductionLearningTestDriver
+  otbPCAModelNew
+  )
+
+otb_add_test(NAME leTvPCAModelTrain COMMAND
+  otbDimensionalityReductionLearningTestDriver
+  otbPCAModeTrain
+  ${INPUTDATA}/letter_light.scale
+  ${TEMP}/model.pca
+  )
+
+otb_add_test(NAME leTvPCAModelCanRead COMMAND
+  otbDimensionalityReductionLearningTestDriver
+  otbPCAModelCanRead
+  ${TEMP}/model.pca
+  )
+
+set_property(TEST leTvPCAModelCanRead APPEND PROPERTY DEPENDS leTvPCAModelTrain)
+
+# --------------- SOM --------------------------------
+otb_add_test(NAME leTuSOMModelNew COMMAND
+  otbDimensionalityReductionLearningTestDriver
+  otbSOMModelNew
+  )
+
+otb_add_test(NAME leTvSOMModelTrain COMMAND
+  otbDimensionalityReductionLearningTestDriver
+  otbSOMModeTrain
+  ${INPUTDATA}/letter_light.scale
+  ${TEMP}/model2D.som
+  ${TEMP}/model3D.som
+  ${TEMP}/model4D.som
+  ${TEMP}/model5D.som
+  )
+
+otb_add_test(NAME leTvSOMModelCanRead COMMAND
+  otbDimensionalityReductionLearningTestDriver
+  otbSOMModelCanRead
+  ${TEMP}/model2D.som
+  ${TEMP}/model3D.som
+  ${TEMP}/model4D.som
+  ${TEMP}/model5D.som
+  )
+
+set_property(TEST leTvSOMModelCanRead APPEND PROPERTY DEPENDS leTvSOMModelTrain)

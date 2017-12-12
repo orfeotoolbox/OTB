@@ -88,7 +88,7 @@ int otbAutoencoderModeTrain(int argc, char * argv [])
 
   LogAutoencoderModel::Pointer model = LogAutoencoderModel::New();
   model->SetNumberOfHiddenNeurons(nb_neuron);
-  model->SetNumberOfIterations(100);
+  model->SetNumberOfIterations(50);
   model->SetNumberOfIterationsFineTuning(0);
   model->SetEpsilon(0.0);
   model->SetInitFactor(1.0);
