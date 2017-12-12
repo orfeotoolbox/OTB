@@ -170,9 +170,11 @@ void
 ClampAndWriteImage( itk::ImageBase<2> * in ,
                     otb::ImageFileWriter<TOutput> * writer , 
                     const std::string & filename , 
-                    const unsigned int & ramValue ,
-                    typename itk::ImageToImageFilter< TInput , TOutput > * clampFilter )
+                    const unsigned int & ramValue )
 {
+  typedef ClampImageFilter < TInput , TOutput > ClampFilterType;
+  typename ClampFilterType::Pointer clampFilter ( ClampFilterType::New() );
+
   clampFilter->SetInput( dynamic_cast<TInput*>(in));
   
   bool useStandardWriter = true;
@@ -297,8 +299,7 @@ OutputImageParameter::SwitchImageWrite()
       m_Image ,
       m_UInt8Writer ,
       m_FileName , 
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , UInt8ImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_int16:
@@ -307,8 +308,7 @@ OutputImageParameter::SwitchImageWrite()
       m_Image ,
       m_Int16Writer ,
       m_FileName , 
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , Int16ImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_uint16:
@@ -317,8 +317,7 @@ OutputImageParameter::SwitchImageWrite()
       m_Image ,
       m_UInt16Writer ,
       m_FileName , 
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , UInt16ImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_int32:
@@ -327,8 +326,7 @@ OutputImageParameter::SwitchImageWrite()
       m_Image ,
       m_Int32Writer ,
       m_FileName , 
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , Int32ImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_uint32:
@@ -337,8 +335,7 @@ OutputImageParameter::SwitchImageWrite()
       m_Image ,
       m_UInt32Writer ,
       m_FileName , 
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , UInt32ImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_float:
@@ -347,8 +344,7 @@ OutputImageParameter::SwitchImageWrite()
       m_Image ,
       m_FloatWriter ,
       m_FileName , 
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , FloatImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_double:
@@ -357,8 +353,7 @@ OutputImageParameter::SwitchImageWrite()
       m_Image ,
       m_DoubleWriter ,
       m_FileName , 
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , DoubleImageType >::New() );
+      m_RAMValue );
     break;
     }
     default:
@@ -378,8 +373,7 @@ OutputImageParameter::SwitchCImageWrite()
       m_Image ,
       m_ComplexFloatWriter ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , ComplexFloatImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_cdouble:
@@ -388,8 +382,7 @@ OutputImageParameter::SwitchCImageWrite()
       m_Image ,
       m_ComplexDoubleWriter ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , ComplexDoubleImageType >::New() );
+      m_RAMValue );
     break;
     }
     default:
@@ -410,8 +403,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_VectorUInt8Writer ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , UInt8VectorImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_int16:
@@ -420,8 +412,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_VectorInt16Writer ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , Int16VectorImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_uint16:
@@ -430,8 +421,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_VectorUInt16Writer ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , UInt16VectorImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_int32:
@@ -440,8 +430,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_VectorInt32Writer ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , Int32VectorImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_uint32:
@@ -450,8 +439,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_VectorUInt32Writer ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , UInt32VectorImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_float:
@@ -460,8 +448,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_VectorFloatWriter ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , FloatVectorImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_double:
@@ -470,8 +457,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_VectorDoubleWriter ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter< TInput , DoubleVectorImageType >::New() );
+      m_RAMValue );
     break;
     }
     case ImagePixelType_cfloat:
@@ -480,8 +466,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_ComplexVectorFloatWriter ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter < TInput , ComplexFloatVectorImageType >::New() ); 
+      m_RAMValue ); 
     break;
     }
     case ImagePixelType_cdouble:
@@ -490,8 +475,7 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_Image ,
       m_ComplexVectorDoubleWriter ,
       m_FileName ,
-      m_RAMValue ,
-      otb::ClampImageFilter < TInput , ComplexDoubleVectorImageType >::New() );
+      m_RAMValue );
     break;
     }
     default:
@@ -511,8 +495,7 @@ OutputImageParameter::SwitchVectorCImageWrite()
         m_Image ,
         m_ComplexVectorFloatWriter ,
         m_FileName ,
-        m_RAMValue ,
-        otb::ClampImageFilter< TInput , ComplexFloatVectorImageType >::New() );
+        m_RAMValue );
     break;
     }
     case ImagePixelType_cdouble:
@@ -521,8 +504,7 @@ OutputImageParameter::SwitchVectorCImageWrite()
         m_Image ,
         m_ComplexVectorDoubleWriter ,
         m_FileName ,
-        m_RAMValue ,
-        otb::ClampImageFilter< TInput , ComplexDoubleVectorImageType >::New() );
+        m_RAMValue );
     break;
     }
     default:
