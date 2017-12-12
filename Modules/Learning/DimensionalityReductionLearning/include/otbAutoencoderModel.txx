@@ -24,7 +24,6 @@
 #include "otbMacro.h"
 
 #include <fstream>
-#include "itkMacro.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
