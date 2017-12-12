@@ -41,6 +41,9 @@
 #pragma GCC diagnostic pop
 #endif
 
+#include <boost/archive/polymorphic_text_oarchive.hpp>
+#include <boost/archive/polymorphic_text_iarchive.hpp>
+
 namespace otb
 {
 
