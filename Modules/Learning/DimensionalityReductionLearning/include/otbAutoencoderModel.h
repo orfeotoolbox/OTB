@@ -29,6 +29,7 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wsign-compare"
 #endif
 #include "otb_shark.h"
 #include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
