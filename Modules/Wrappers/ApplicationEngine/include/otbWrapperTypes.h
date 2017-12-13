@@ -77,12 +77,16 @@ typedef enum
   ImagePixelType_uint32,
   ImagePixelType_float,
   ImagePixelType_double,
+  ImagePixelType_cint16,
+  ImagePixelType_cint32,
   ImagePixelType_cfloat,
   ImagePixelType_cdouble,
 } ImagePixelType;
 
 typedef enum
 {
+  ComplexImagePixelType_int16,
+  ComplexImagePixelType_int32,
   ComplexImagePixelType_float,
   ComplexImagePixelType_double,
 } ComplexImagePixelType;
@@ -121,13 +125,19 @@ typedef otb::VectorImage<double>         DoubleVectorImageType;
 typedef otb::Image< itk::RGBPixel<unsigned char> >  UInt8RGBImageType;
 typedef otb::Image< itk::RGBAPixel<unsigned char> > UInt8RGBAImageType;
 
+typedef std::complex<short>  Int16ComplexPixelType;
+typedef std::complex<int>    Int32ComplexPixelType;
 typedef std::complex<float>  FloatComplexPixelType;
 typedef std::complex<double> DoubleComplexPixelType;
 
-// Complex Image Type (first : double and float)
+// Complex Image Type
+typedef otb::Image< Int16ComplexPixelType, 2 >  ComplexInt16ImageType;
+typedef otb::Image< Int32ComplexPixelType, 2 >  ComplexInt32ImageType;
 typedef otb::Image< FloatComplexPixelType, 2 >  ComplexFloatImageType;
 typedef otb::Image< DoubleComplexPixelType, 2 > ComplexDoubleImageType;
 
+typedef otb::VectorImage< Int16ComplexPixelType, 2 >  ComplexInt16VectorImageType;
+typedef otb::VectorImage< Int32ComplexPixelType, 2 >  ComplexInt32VectorImageType;
 typedef otb::VectorImage<FloatComplexPixelType, 2 >   ComplexFloatVectorImageType;
 typedef otb::VectorImage< DoubleComplexPixelType, 2 > ComplexDoubleVectorImageType;
 

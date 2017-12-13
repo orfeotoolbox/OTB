@@ -80,10 +80,14 @@ public:
   UInt8RGBImageType* GetUInt8RGBImage();
   UInt8RGBAImageType* GetUInt8RGBAImage();
 
-  // Complex image 
+  // Complex image
+  ComplexInt16ImageType*  GetComplexInt16Image();
+  ComplexInt32ImageType*  GetComplexInt32Image();
   ComplexFloatImageType*  GetComplexFloatImage();
   ComplexDoubleImageType* GetComplexDoubleImage();
 
+  ComplexInt16VectorImageType*  GetComplexInt16VectorImage();
+  ComplexInt32VectorImageType*  GetComplexInt32VectorImage();
   ComplexFloatVectorImageType*  GetComplexFloatVectorImage();
   ComplexDoubleVectorImageType* GetComplexDoubleVectorImage();
 
@@ -152,9 +156,13 @@ protected:
   typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
 
   // Complex
+  typedef otb::ImageFileReader<ComplexInt16ImageType> ComplexInt16ReaderType;
+  typedef otb::ImageFileReader<ComplexInt32ImageType> ComplexInt32ReaderType;
   typedef otb::ImageFileReader<ComplexFloatImageType> ComplexFloatReaderType;
   typedef otb::ImageFileReader<ComplexDoubleImageType> ComplexDoubleReaderType;
 
+  typedef otb::ImageFileReader<ComplexInt16VectorImageType> ComplexInt16VectorReaderType;
+  typedef otb::ImageFileReader<ComplexInt32VectorImageType> ComplexInt32VectorReaderType;
   typedef otb::ImageFileReader<ComplexFloatVectorImageType> ComplexFloatVectorReaderType;
   typedef otb::ImageFileReader<ComplexDoubleVectorImageType> ComplexDoubleVectorReaderType;
 

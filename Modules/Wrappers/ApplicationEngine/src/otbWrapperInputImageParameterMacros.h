@@ -28,6 +28,11 @@
     return this->GetImage< image##Type > ();          \
   }
 
+#define otbGetImageAndVectorImageMacro(type) \
+  otbGetImageMacro(type##Image);             \
+  otbGetImageMacro(type##VectorImage); 
+
+
 /*
 #define otbCastImageMacro(InputImageType, OutputImageType, theMethod)   \
   template<> OutputImageType *                                          \

@@ -24,8 +24,8 @@
 #include "otbWrapperInputImageParameter.h"
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkCastImageFilter.h"
-#include "otbImageToVectorImageCastFilter.h"
+// #include "itkCastImageFilter.h"
+// #include "otbImageToVectorImageCastFilter.h"
 #include "otbClampImageFilter.h"
 
 namespace otb
@@ -139,6 +139,22 @@ InputImageParameter::GetImage()
         {
         return CastImage<DoubleImageType, TImageType> ();
         }
+      else if (dynamic_cast<ComplexInt16ImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexInt16ImageType, TImageType>();
+        }
+      else if (dynamic_cast<ComplexInt32ImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexInt32ImageType, TImageType>();
+        }
+      else if (dynamic_cast<ComplexFloatImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexFloatImageType, TImageType>();
+        }
+      else if (dynamic_cast<ComplexDoubleImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexDoubleImageType, TImageType>();
+        }
       else if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer()))
         {
         return CastImage<UInt8VectorImageType, TImageType> ();
@@ -175,6 +191,14 @@ InputImageParameter::GetImage()
         {
         return CastImage<UInt8RGBImageType, TImageType> ();
         }
+      else if (dynamic_cast<ComplexInt16VectorImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexInt16VectorImageType, TImageType>();
+        }
+      else if (dynamic_cast<ComplexInt32VectorImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexInt32VectorImageType, TImageType>();
+        }
       else if (dynamic_cast<ComplexFloatVectorImageType*>(m_Image.GetPointer()))
         {
         return CastImage<ComplexFloatVectorImageType, TImageType>();
@@ -182,14 +206,6 @@ InputImageParameter::GetImage()
       else if (dynamic_cast<ComplexDoubleVectorImageType*>(m_Image.GetPointer()))
         {
         return CastImage<ComplexDoubleVectorImageType, TImageType>();
-        }
-      else if (dynamic_cast<ComplexFloatImageType*>(m_Image.GetPointer()))
-        {
-        return CastImage<ComplexFloatImageType, TImageType>();
-        }
-      else if (dynamic_cast<ComplexDoubleImageType*>(m_Image.GetPointer()))
-        {
-        return CastImage<ComplexDoubleImageType, TImageType>();
         }
       else
         {
