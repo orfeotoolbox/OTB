@@ -38,3 +38,15 @@ otb_test_application(NAME   apTvFEDimensionalityReductionPCA
                              ${BASELINE}/bfTvPCAImageFilter3.tif
                              ${TEMP}/apTvChDimensionalityReductionPCA.tif)
 
+#----------- TrainDimensionalityReduction TESTS ----------------
+otb_test_application(NAME apTvDrTrainDimensionalityReductionAE
+  APP TrainDimensionalityReduction
+  OPTIONS -io.vd ${INPUTDATA}/cuprite_samples.sqlite
+          -io.out ${TEMP}/cuprite_DRModel.ae
+          -feat value_0 value_1 value_2 value_3 value_4 value_5 value_6 value_7 value_8 value_9
+          -algorithm autoencoder
+          -algorithm.autoencoder.nbneuron 8
+          -algorithm.autoencoder.regularization 0.01
+          -algorithm.autoencoder.noise 0
+          -algorithm.autoencoder.rho 0
+          -algorithm.autoencoder.beta 0)
