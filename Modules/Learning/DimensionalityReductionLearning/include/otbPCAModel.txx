@@ -41,9 +41,6 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include <boost/archive/polymorphic_text_oarchive.hpp>
-#include <boost/archive/polymorphic_text_iarchive.hpp>
-
 namespace otb
 {
 
@@ -101,7 +98,7 @@ PCAModel<TInputValue>::Save(const std::string & filename, const std::string & /*
 {
   std::ofstream ofs(filename);
   ofs << "pca" << std::endl; //first line
-  boost::archive::polymorphic_text_oarchive oa(ofs);
+  shark::TextOutArchive oa(ofs);
   m_Encoder.write(oa);
   ofs.close();
 
@@ -135,7 +132,7 @@ PCAModel<TInputValue>::Load(const std::string & filename, const std::string & /*
   if (encoderstr != "pca"){
     itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
-  boost::archive::polymorphic_text_iarchive ia(ifs);
+  shark::TextInArchive ia(ifs);
   m_Encoder.read(ia);
   ifs.close();
   if (this->m_Dimension ==0)

@@ -50,9 +50,6 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include <boost/archive/polymorphic_text_oarchive.hpp>
-#include <boost/archive/polymorphic_text_iarchive.hpp>
-
 namespace otb
 {
 
@@ -353,7 +350,7 @@ AutoencoderModel<TInputValue,NeuronType>
   otbMsgDevMacro(<< "saving model ...");
   std::ofstream ofs(filename);
   ofs << m_Net.name() << std::endl; // the first line of the model file contains a key
-  boost::archive::polymorphic_text_oarchive oa(ofs);
+  shark::TextOutArchive oa(ofs);
   oa << m_Net;
   ofs.close();
 
@@ -384,7 +381,7 @@ AutoencoderModel<TInputValue,NeuronType>
   if (autoencoderstr != net.name()){
     itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
-  boost::archive::polymorphic_text_iarchive ia(ifs);
+  shark::TextInArchive ia(ifs);
   ia >> m_Net;
   ifs.close();
 
