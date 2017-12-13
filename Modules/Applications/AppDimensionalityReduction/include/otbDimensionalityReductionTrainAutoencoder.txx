@@ -33,21 +33,10 @@ void
 TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 ::InitAutoencoderParams()
 {
-  AddChoice("algorithm.tiedautoencoder", "Shark Tied Autoencoder");
   AddChoice("algorithm.autoencoder", "Shark Autoencoder");
   SetParameterDescription("algorithm.autoencoder",
                           "This group of parameters allows setting Shark autoencoder parameters. "
                           );
-
-  //Tied Autoencoder
-  AddParameter(ParameterType_Choice, "algorithm.autoencoder.istied",
-               "tied weighth <tied/untied>");
-  SetParameterDescription(
-    "algorithm.autoencoder.istied",
-    "Parameter that determine if the weights are tied or not <tied/untied>");
-
-  AddChoice("algorithm.autoencoder.istied.yes","Tied weigths");
-  AddChoice("algorithm.autoencoder.istied.no","Untied weights");
 
   //Number Of Iterations
   AddParameter(ParameterType_Int, "algorithm.autoencoder.nbiter",
@@ -116,17 +105,7 @@ TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
 {
   typedef shark::LogisticNeuron NeuronType;
   typedef otb::AutoencoderModel<InputValueType, NeuronType> AutoencoderModelType;
-  std::string TiedWeigth = GetParameterString("algorithm.autoencoder.istied");
-  std::cout << TiedWeigth << std::endl;
-
-  if(TiedWeigth == "no")
-    {
-    TrainAutoencoder<AutoencoderModelType>(trainingListSample,modelPath);
-    }
-  if(TiedWeigth != "yes" && TiedWeigth != "no")
-    {
-      std::cerr << "istied : invalid choice <yes/no>" << std::endl;
-    }
+  TrainAutoencoder<AutoencoderModelType>(trainingListSample,modelPath);
 }
 
 template <class TInputValue, class TOutputValue>

@@ -73,7 +73,7 @@ private:
     SetName("TrainDimensionalityReduction");
     SetDescription("Trainer for the dimensionality reduction algorithms used in"
       " the ImageDimensionalityReduction and VectorDimensionalityReduction applications.");
-  
+
     AddParameter(ParameterType_Group, "io", "Input and output data");
     SetParameterDescription("io", "This group of parameters allows setting input and output data.");
 
@@ -83,8 +83,7 @@ private:
 
     AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
     SetParameterDescription("io.out", "Output file containing the estimated model (.txt format).");
-    
-  
+
     AddParameter(ParameterType_InputFilename, "io.stats", "Input XML image statistics file");
     MandatoryOff("io.stats");
     SetParameterDescription("io.stats", "XML file containing mean and variance of each feature.");
