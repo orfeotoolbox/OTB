@@ -22,8 +22,6 @@
 
 #include "otbSOMModel.h"
 #include "otbSOM.h"
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
 
 #include "itkMacro.h"
 #include "itkImageRegionIterator.h"
