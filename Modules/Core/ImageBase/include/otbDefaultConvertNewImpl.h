@@ -49,33 +49,35 @@ public:
 // We might not need this specialization if the compileur allow
 // us to declare to function with same signature in some case :
 // see "SetNthComponent"
+/*
 #define OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(type)                      \
   template< >                                                              \
-  class DefaultConvertPixelTraitsTest < type >                                 \
+  class DefaultConvertPixelTraitsTest < type >                             \
   : public itk::DefaultConvertPixelTraits < type >                         \
   {                                                                        \
 public:                                                                    \
   typedef itk::DefaultConvertPixelTraits < type > SuperClass;              \
     using typename SuperClass::ComponentType;                              \
   };
+*/
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(float)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(double)
+// Warning long double is not in itk < 4.11
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(long double)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(int)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(char)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(short)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned int)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(signed char)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned char)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned short)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(long)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned long)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(long long)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned long long)
+// OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(bool)
 
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(float)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(double)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(long double)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(int)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(char)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(short)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned int)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(signed char)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned char)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned short)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(long)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned long)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(long long)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(unsigned long long)
-OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL(bool)
-
-#undef OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL
+// #undef OTB_DEFAULTCONVERTTRAITS_NATIVE_SPECIAL
 
 //
 //  Default traits for the Offset<> pixel type
