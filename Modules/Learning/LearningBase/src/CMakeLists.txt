@@ -25,6 +25,7 @@ set(OTBLearningBase_SRC
 add_library(OTBLearningBase ${OTBLearningBase_SRC})
 target_link_libraries(OTBLearningBase
   ${OTBCommon_LIBRARIES}
+  ${OTBImageBase_LIBRARIES}
   ${OTBITK_LIBRARIES}
   )
 

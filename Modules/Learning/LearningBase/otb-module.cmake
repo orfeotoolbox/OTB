@@ -25,17 +25,12 @@ otb_module(OTBLearningBase
   ENABLE_SHARED
   DEPENDS
     OTBCommon
-    OTBITK
-    OTBImageIO
     OTBImageBase
-
-  OPTIONAL_DEPENDS
-    OTBShark
+    OTBITK
 
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO
-    OTBImageBase
 
   DESCRIPTION
     "${DOCUMENTATION}"
