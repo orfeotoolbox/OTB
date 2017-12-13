@@ -163,9 +163,13 @@ protected:
   typedef otb::ImageFileWriter<UInt8RGBImageType>   RGBUInt8WriterType;
 
   // Complex Image
+  typedef otb::ImageFileWriter<ComplexInt16ImageType>  ComplexInt16WriterType;
+  typedef otb::ImageFileWriter<ComplexInt32ImageType>  ComplexInt32WriterType;
   typedef otb::ImageFileWriter<ComplexFloatImageType>  ComplexFloatWriterType;
   typedef otb::ImageFileWriter<ComplexDoubleImageType> ComplexDoubleWriterType;
 
+  typedef otb::ImageFileWriter<ComplexInt16VectorImageType>  ComplexVectorInt16WriterType;
+  typedef otb::ImageFileWriter<ComplexInt32VectorImageType>  ComplexVectorInt32WriterType;
   typedef otb::ImageFileWriter<ComplexFloatVectorImageType>  ComplexVectorFloatWriterType;
   typedef otb::ImageFileWriter<ComplexDoubleVectorImageType> ComplexVectorDoubleWriterType;
 
@@ -189,9 +193,13 @@ protected:
   RGBUInt8WriterType::Pointer   m_RGBUInt8Writer;
   RGBAUInt8WriterType::Pointer  m_RGBAUInt8Writer;
 
+  ComplexInt16WriterType::Pointer  m_ComplexInt16Writer;
+  ComplexInt32WriterType::Pointer  m_ComplexInt32Writer;
   ComplexFloatWriterType::Pointer  m_ComplexFloatWriter;
   ComplexDoubleWriterType::Pointer m_ComplexDoubleWriter;
 
+  ComplexVectorInt16WriterType::Pointer  m_ComplexVectorInt16Writer;
+  ComplexVectorInt32WriterType::Pointer  m_ComplexVectorInt32Writer;
   ComplexVectorFloatWriterType::Pointer  m_ComplexVectorFloatWriter;
   ComplexVectorDoubleWriterType::Pointer m_ComplexVectorDoubleWriter;
 

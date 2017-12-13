@@ -96,6 +96,16 @@ std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
       ret = "double";
       break;
       }
+    case ImagePixelType_cint16:
+      {
+      ret = "cint16";
+      break;
+      }
+    case ImagePixelType_cint32:
+      {
+      ret = "cint32";
+      break;
+      }
     case ImagePixelType_cfloat:
       {
       ret = "cfloat";
@@ -127,6 +137,10 @@ OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePi
     type = ImagePixelType_float;
   else if (value == "double")
     type = ImagePixelType_double;
+  else if (value == "cint16")
+    type = ImagePixelType_cint16;
+  else if (value == "cint32")
+    type = ImagePixelType_cint32;
   else if (value == "cfloat")
     type = ImagePixelType_cfloat;
   else if (value == "cdouble")
@@ -157,9 +171,13 @@ void OutputImageParameter::InitializeWriters()
   m_RGBUInt8Writer = RGBUInt8WriterType::New();
   m_RGBAUInt8Writer = RGBAUInt8WriterType::New();
 
+  m_ComplexInt16Writer = ComplexInt16WriterType::New();
+  m_ComplexInt32Writer = ComplexInt32WriterType::New();
   m_ComplexFloatWriter = ComplexFloatWriterType::New();
   m_ComplexDoubleWriter = ComplexDoubleWriterType::New();
 
+  m_ComplexVectorInt16Writer = ComplexVectorInt16WriterType::New();
+  m_ComplexVectorInt32Writer = ComplexVectorInt32WriterType::New();
   m_ComplexVectorFloatWriter = ComplexVectorFloatWriterType::New();
   m_ComplexVectorDoubleWriter = ComplexVectorDoubleWriterType::New();
 }
@@ -356,6 +374,24 @@ OutputImageParameter::SwitchImageWrite()
       m_RAMValue );
     break;
     }
+    case ImagePixelType_cint16:
+    {
+    ClampAndWriteImage< TInput , ComplexInt16ImageType >( 
+      m_Image ,
+      m_ComplexInt16Writer ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_cint32:
+    {
+    ClampAndWriteImage< TInput , ComplexInt32ImageType >( 
+      m_Image ,
+      m_ComplexInt32Writer ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
     case ImagePixelType_cfloat:
     {
     ClampAndWriteImage< TInput , ComplexFloatImageType >( 
@@ -478,6 +514,24 @@ OutputImageParameter::SwitchVectorImageWrite()
       m_RAMValue );
     break;
     }
+    case ImagePixelType_cint16:
+    {
+    ClampAndWriteImage < TInput , ComplexInt16VectorImageType > (
+      m_Image ,
+      m_ComplexVectorInt16Writer ,
+      m_FileName ,
+      m_RAMValue ); 
+    break;
+    }
+    case ImagePixelType_cint32:
+    {
+    ClampAndWriteImage < TInput , ComplexInt32VectorImageType > (
+      m_Image ,
+      m_ComplexVectorInt32Writer ,
+      m_FileName ,
+      m_RAMValue ); 
+    break;
+    }
     case ImagePixelType_cfloat:
     {
     ClampAndWriteImage < TInput , ComplexFloatVectorImageType > (
@@ -593,6 +647,14 @@ OutputImageParameter::Write()
     {
     SwitchImageWrite<DoubleImageType>();
     }
+  else if (dynamic_cast<ComplexInt16ImageType*>(m_Image.GetPointer()) )
+    {
+    SwitchImageWrite<ComplexInt16ImageType>();
+    }
+  else if (dynamic_cast<ComplexInt32ImageType*>(m_Image.GetPointer()) )
+    {
+    SwitchImageWrite<ComplexInt32ImageType>();
+    }
   else if (dynamic_cast<ComplexFloatImageType*>(m_Image.GetPointer()) )
     {
     SwitchImageWrite<ComplexFloatImageType>();
@@ -637,6 +699,14 @@ OutputImageParameter::Write()
     {
     SwitchRGBAImageWrite<UInt8RGBAImageType>();
     }
+  else if (dynamic_cast<ComplexInt16VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<ComplexInt16VectorImageType>();
+    }
+  else if (dynamic_cast<ComplexInt32VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<ComplexInt32VectorImageType>();
+    }
   else if (dynamic_cast<ComplexFloatVectorImageType*>(m_Image.GetPointer()))
     {
     SwitchVectorImageWrite<ComplexFloatVectorImageType>();
@@ -668,6 +738,8 @@ OutputImageParameter::GetWriter()
       || dynamic_cast<UInt32VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<FloatVectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<DoubleVectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<ComplexInt16VectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<ComplexInt32VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<ComplexFloatVectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<ComplexDoubleVectorImageType*> (m_Image.GetPointer()))
     {
@@ -755,6 +827,22 @@ OutputImageParameter::GetWriter()
         writer = m_VectorDoubleWriter;
       else
         if (type == 0) writer = m_DoubleWriter;
+      break;
+      }
+    case ImagePixelType_cint16:
+      {
+      if( type == 1 )
+        writer = m_ComplexVectorInt16Writer;
+      else
+        writer = m_ComplexInt16Writer;
+      break;
+      }
+    case ImagePixelType_cint32:
+      {
+      if( type == 1 )
+        writer = m_ComplexVectorInt32Writer;
+      else
+        writer = m_ComplexInt32Writer;
       break;
       }
     case ImagePixelType_cfloat:
