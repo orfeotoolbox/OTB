@@ -122,14 +122,14 @@ protected:
   template <class TInputImageType>
     void SwitchImageWrite();
 
-  template <class TInputImageType>
-    void SwitchCImageWrite();
+  // template <class TInputImageType>
+  //   void SwitchCImageWrite();
 
   template <class TInputVectorImageType>
     void SwitchVectorImageWrite();
 
-  template <class TInputVectorImageType>
-    void SwitchVectorCImageWrite();
+  // template <class TInputVectorImageType>
+  //   void SwitchVectorCImageWrite();
 
   template <class TInputVectorImageType>
     void SwitchRGBImageWrite();
