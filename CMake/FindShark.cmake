@@ -97,17 +97,25 @@ if(SHARK_CONFIG_FILE)
   "${SHARK_VERSION_MAJOR}.${SHARK_VERSION_MINOR}.${SHARK_VERSION_PATCH}")
 endif()
 
-set(SHARK_USE_OPENMP_matched)
-#define SHARK_USE_OPENMP
+# Check if Shark was built with OpenMP, CBLAS, DYNLIB, ...
 file(STRINGS "${SHARK_INCLUDE_DIR}/shark/Core/Shark.h" SHARK_H_CONTENTS)
-string(REGEX MATCH
-  "#define.SHARK_USE_OPENMP"
-  SHARK_USE_OPENMP_matched "${SHARK_H_CONTENTS}")
 
-if(SHARK_USE_OPENMP_matched)
-  if(NOT OTB_USE_OPENMP)
-    message(WARNING "Shark library is built with OpenMP and you have OTB_USE_OPENMP set to OFF.")
-  endif()
+if(SHARK_H_CONTENTS MATCHES "#define.SHARK_USE_OPENMP")
+  set(SHARK_USE_OPENMP 1)
+else()
+  set(SHARK_USE_OPENMP 0)
+endif()
+
+if(SHARK_H_CONTENTS MATCHES "#define.SHARK_USE_CBLAS")
+  set(SHARK_USE_CBLAS 1)
+else()
+  set(SHARK_USE_CBLAS 0)
+endif()
+
+if(SHARK_H_CONTENTS MATCHES "#define.SHARK_USE_DYNLIB")
+  set(SHARK_USE_DYNLIB 1)
+else()
+  set(SHARK_USE_DYNLIB 0)
 endif()
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
