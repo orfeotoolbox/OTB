@@ -179,8 +179,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   this->m_ImageIO->SetIORegion(ioRegion);
 
-  typedef otb::DefaultConvertPixelTraitsTest<typename TOutputImage::IOPixelType> ConvertIOPixelTraits;
-  typedef otb::DefaultConvertPixelTraitsTest<typename TOutputImage::PixelType>   ConvertOutputPixelTraits;
+  typedef otb::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType> ConvertIOPixelTraits;
+  typedef otb::DefaultConvertPixelTraits<typename TOutputImage::PixelType>   ConvertOutputPixelTraits;
 
   if (this->m_ImageIO->GetComponentTypeInfo()
       == typeid(typename ConvertOutputPixelTraits::ComponentType)

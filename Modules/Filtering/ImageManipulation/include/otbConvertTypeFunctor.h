@@ -28,7 +28,7 @@
 
 #include "itkVariableLengthVector.h"
 #include "itkNumericTraits.h"
-#include "otbDefaultConvertNewImpl.h"
+#include "otbDefaultConvertPixelTraits.h"
 
 namespace otb
 {
@@ -126,7 +126,7 @@ protected:
     std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 2 >
   void FillIn( unsigned int i , InputPixelType const & pix , std::vector < double > & vPix ) const
     {
-      vPix.push_back( DefaultConvertPixelTraitsTest < InputPixelType > ::
+      vPix.push_back( DefaultConvertPixelTraits < InputPixelType > ::
           GetNthComponent( i , pix ) );
     }
 
@@ -134,7 +134,7 @@ protected:
     std::enable_if_t < boost::is_complex < PixelType > :: value , int > = 1 >
   void FillIn( unsigned int i , InputPixelType const & pix , std::vector < double > & vPix ) const
     {
-      PixelType comp = DefaultConvertPixelTraitsTest < InputPixelType > ::
+      PixelType comp = DefaultConvertPixelTraits < InputPixelType > ::
           GetNthComponent( i , pix );
       vPix.push_back( static_cast < double > ( real( comp ) ) );
       vPix.push_back( static_cast < double > ( imag( comp ) ) );
@@ -163,7 +163,7 @@ protected:
     std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 2 >
   void FillOut( unsigned int i , OutputPixelType & pix , std::vector < double > & vPix ) const
     {
-      DefaultConvertPixelTraitsTest < OutputPixelType > ::
+      DefaultConvertPixelTraits < OutputPixelType > ::
           SetNthComponent( i , pix , vPix[i] );
     }
 
@@ -171,7 +171,7 @@ protected:
     std::enable_if_t < boost::is_complex < PixelType > :: value , int > = 1 >
   void FillOut( unsigned int i , OutputPixelType & pix , std::vector < double > & vPix ) const
     {
-      DefaultConvertPixelTraitsTest < OutputPixelType > ::
+      DefaultConvertPixelTraits < OutputPixelType > ::
           SetNthComponent( i , pix , 
             PixelType ( vPix[ 2 * i] , vPix[ 2 * i + 1] ) );
     }
