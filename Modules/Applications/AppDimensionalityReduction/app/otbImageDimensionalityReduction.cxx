@@ -207,7 +207,7 @@ private:
       }
 
     m_Model->Load(GetParameterString("model"));
-    otbAppLogINFO("Model loaded");
+    otbAppLogINFO("Model loaded, dimension = "<< m_Model->GetDimension());
 
     // Classify
     m_ClassificationFilter = DimensionalityReductionFilterType::New();
@@ -216,7 +216,7 @@ private:
     FloatVectorImageType::Pointer outputImage = m_ClassificationFilter->GetOutput();
 
     // Normalize input image if asked
-    if( IsParameterEnabled("imstat") )
+    if( IsParameterEnabled("imstat") && HasValue("imstat") )
       {
       otbAppLogINFO("Input image normalization activated.");
       // Normalize input image (optional)
