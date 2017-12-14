@@ -27,7 +27,7 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 #include "itkVariableLengthVector.h"
-#include <limits>
+
 
 
 
@@ -40,10 +40,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>::TwoNRIBandsImageToNComplexBandsImage()
 {
-  m_LowestB = std::numeric_limits < OutputRealType > ::lowest();
-  m_HighestB = std::numeric_limits < OutputRealType > ::max();
-  m_LowestBD = static_cast < double > ( m_LowestB );
-  m_HighestBD = static_cast < double > ( m_HighestB );
+	//this->SetNumberOfThreads(1);
 }
 
 /**
@@ -55,15 +52,17 @@ TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>
 ::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
-  
+
   unsigned int nbCompo = this->GetInput()->GetNumberOfComponentsPerPixel();
-  
- //  if ( (nbCompo % 2) != 0 )
- //  {
-	// itkExceptionMacro("Number of bands of the input images must be an even number");
- //  }
- //  else
-	this->GetOutput()->SetNumberOfComponentsPerPixel( ( nbCompo + 1 ) / 2 );  
+
+  if ( (nbCompo % 2) != 0 )
+    {
+    itkExceptionMacro("Number of bands of the input images must be an even number");
+    }
+  else
+    {
+    this->GetOutput()->SetNumberOfComponentsPerPixel(nbCompo/2);
+    }
 }
 
 /**
@@ -74,11 +73,11 @@ void
 TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData(void)
 {
-	// unsigned int nbCompo = this->GetInput()->GetNumberOfComponentsPerPixel();
-			
-	// if ( (nbCompo % 2) != 0 )
-	//   itkExceptionMacro("Number of bands of the input images must be an even number");
-		
+	unsigned int nbCompo = this->GetInput()->GetNumberOfComponentsPerPixel();
+
+	if ( (nbCompo % 2) != 0 )
+	  itkExceptionMacro("Number of bands of the input images must be an even number");
+
 }
 
 /**
@@ -93,68 +92,42 @@ void TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>::ThreadedGe
  
   unsigned int nbCompo = this->GetInput()->GetNumberOfComponentsPerPixel();
   
-  itk::VariableLengthVector < std::complex < OutputRealType > > 
-    vlv( ( nbCompo+1 ) / 2 );
+  itk::VariableLengthVector< std::complex< typename InputPixelType::ValueType > > vlv(nbCompo/2);
   
  
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());	
 
-  auto inIt = itk::ImageRegionConstIterator < InputImageType > (
-    this->GetInput() , outputRegionForThread );	
+  itk::ImageRegionConstIterator<TInputImage>  inIt;
+  inIt = itk::ImageRegionConstIterator<TInputImage>(this->GetInput(), outputRegionForThread);	
 	
-  auto outIt = itk::ImageRegionIterator < OutputImageType > (
-    this->GetOutput() , outputRegionForThread );
+  itk::ImageRegionIterator<OutputImageType>      outIt;
+  outIt = itk::ImageRegionIterator<OutputImageType>(this->GetOutput(), outputRegionForThread);
   
 
   inIt.GoToBegin();
   outIt.GoToBegin();
-  OutputRealType reOut , imOut ;
-  InputPixelType reIn , imIn ;
+
   while (!outIt.IsAtEnd())
   {
-	  for (unsigned int i = 0 ; i < nbCompo / 2 ; ++i )
-	  { 
-      reIn = inIt.Get()[ 2 * i ];
-      imIn = inIt.Get()[ 2 * i + 1 ];
-      reOut = InBoundValue( reIn );
-      imOut = InBoundValue( imIn );
-		  vlv[i] = std::complex < OutputRealType > ( reOut , imOut );
+	  
+	  unsigned int k=0;
+	  for (unsigned int i=0; i<nbCompo-1; i=i+2)
+	  {
+		  vlv[k] = std::complex< typename InputPixelType::ValueType >(inIt.Get()[i],inIt.Get()[i+1]);
+		  k++;
 	  }
-    if ( nbCompo % 2 == 1 )
-      {
-      reIn = inIt.Get()[ nbCompo - 1 ];
-      reOut = InBoundValue( reIn );
-      vlv[ ( nbCompo + 1 ) / 2 ] = 
-        std::complex < OutputRealType > ( reOut , 0 );
-      }
 
+	  
 	  outIt.Set(vlv);
+	  
 
 	  ++inIt;
 	  ++outIt;
-
+	  
 	  progress.CompletedPixel();
   }
   
-}
-
-template <class TInputImage, class TOutput>
-typename TwoNRIBandsImageToNComplexBandsImage < TInputImage , TOutput > 
-::OutputRealType
-TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutput>
-::InBoundValue( InputPixelType in ) const
-{
-  OutputRealType out ;
-  if ( static_cast < double > ( in ) >= m_HighestBD )
-    out = m_HighestB;
-  else
-    out = static_cast < OutputRealType > ( in ) ;
-  if ( static_cast < double > ( in ) <= m_LowestBD )
-    out = m_LowestB;
-  else
-    out = static_cast < OutputRealType > ( in ) ;
-  return out ;
 }
 
 /**

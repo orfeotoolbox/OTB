@@ -388,6 +388,22 @@ int Application::Execute()
     }
 
   this->DoExecute();
+  
+  // Ensure that all output image parameter have called UpdateOutputInformation()
+  for (auto it = paramList.begin(); it != paramList.end(); ++it)
+    {
+    OutputImageParameter * outImgParamPtr = dynamic_cast<OutputImageParameter *>(GetParameterByKey(*it));
+    // If this is an OutputImageParameter
+    if(outImgParamPtr != ITK_NULLPTR)
+      {
+      // If the parameter is enabled
+      if(IsParameterEnabled(*it))
+        {
+        // Call UpdateOutputInformation()
+        outImgParamPtr->GetValue()->UpdateOutputInformation();
+        }
+      }
+    }
 
   return 0;
 }
@@ -826,7 +842,7 @@ void Application::SetMinimumParameterIntValue(std::string parameter, int value)
     paramInt->SetMinimumValue(value);
     }
  else
-    itkExceptionMacro(<<parameter << "parameter can't be casted to int");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to int");
 }
 
 void Application::SetMaximumParameterIntValue(std::string parameter, int value)
@@ -839,7 +855,7 @@ void Application::SetMaximumParameterIntValue(std::string parameter, int value)
     paramInt->SetMaximumValue(value);
     }
   else
-    itkExceptionMacro(<<parameter << "parameter can't be casted to int");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to int");
 
 }
 
@@ -853,7 +869,7 @@ void Application::SetMinimumParameterFloatValue(std::string parameter, float val
     paramFloat->SetMinimumValue(value);
     }
  else
-    itkExceptionMacro(<<parameter << "parameter can't be casted to float");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to float");
 }
 
 void Application::SetMaximumParameterFloatValue(std::string parameter, float value)
@@ -866,7 +882,7 @@ void Application::SetMaximumParameterFloatValue(std::string parameter, float val
     paramFloat->SetMaximumValue(value);
     }
   else
-    itkExceptionMacro(<<parameter << "parameter can't be casted to float");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to float");
 
 }
 
@@ -880,7 +896,7 @@ void Application::SetListViewSingleSelectionMode(std::string parameter, bool sta
     paramListView->SetSingleSelection(status);
     }
   else
-    itkExceptionMacro(<<parameter << "parameter can't be casted to ListView");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to ListView");
 
 }
 
@@ -994,7 +1010,7 @@ int Application::GetParameterInt(std::string parameter)
     }
   else
     {
-     itkExceptionMacro(<<parameter << "parameter can't be casted to int");
+     itkExceptionMacro(<<parameter << " parameter can't be casted to int");
     }
 
   return ret;
@@ -1012,7 +1028,7 @@ float Application::GetParameterFloat(std::string parameter)
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to float");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to float");
     }
 
   return ret;
@@ -1159,7 +1175,7 @@ Application
             }
           else
             {
-            itkExceptionMacro(<<parameter << "parameter can't be casted to StringList");
+            itkExceptionMacro(<<parameter << " parameter can't be casted to StringList");
             }
 
   return ret;
@@ -1177,7 +1193,7 @@ void Application::SetParameterInputImage(std::string parameter, InputImageParame
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to InputImageParameter");
     }
 }
 
@@ -1193,7 +1209,7 @@ OutputImageParameter::ImageBaseType * Application::GetParameterOutputImage(std::
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to OutputImageParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to OutputImageParameter");
     }
 }
 
@@ -1210,7 +1226,7 @@ void Application::SetParameterComplexInputImage(std::string parameter, ComplexIn
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to ComplexInputImageParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to ComplexInputImageParameter");
     }
 }
 
@@ -1226,7 +1242,7 @@ ComplexOutputImageParameter::ImageBaseType * Application::GetParameterComplexOut
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to ComplexOutputImageParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to ComplexOutputImageParameter");
     }
 }
 
@@ -1242,7 +1258,7 @@ void Application::AddImageToParameterInputImageList(std::string parameter, Input
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to InputImageListParameter");
     }
 
 }
@@ -1259,7 +1275,7 @@ void Application::SetNthParameterInputImageList(std::string parameter, const uns
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to InputImageListParameter");
     }
 
 }
@@ -1276,7 +1292,7 @@ void Application::AddParameterStringList(std::string parameter, const std::strin
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to InputImageListParameter");
     }
 
 }
@@ -1293,7 +1309,7 @@ void Application::SetNthParameterStringList(std::string parameter, const unsigne
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to InputImageListParameter");
     }
 
 }
@@ -1312,7 +1328,7 @@ void Application::ClearParameterInputImageList(std::string parameter)
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to InputImageListParameter");
     }
 
 }
@@ -1329,7 +1345,7 @@ unsigned int Application::GetNumberOfElementsInParameterInputImageList(std::stri
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to InputImageListParameter");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to InputImageListParameter");
     }
 
 }
@@ -1348,7 +1364,7 @@ FloatVectorImageType* Application::GetParameterImage(std::string parameter)
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to ImageType");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to ImageType");
     }
 
   return ret;
@@ -1366,7 +1382,7 @@ FloatVectorImageListType* Application::GetParameterImageList(std::string paramet
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to ImageListType");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to ImageListType");
     }
 
   return ret;
@@ -1384,7 +1400,7 @@ ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string p
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to ComplexImageType");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to ComplexImageType");
     }
 
   return ret;
@@ -1402,7 +1418,7 @@ VectorDataType* Application::GetParameterVectorData(std::string parameter)
     }
   else
     {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to Vector Data");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to Vector Data");
     }
   return ret;
 }
@@ -1419,7 +1435,7 @@ VectorDataListType* Application::GetParameterVectorDataList(std::string paramete
     }
   else
    {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to Vector Data List");
+    itkExceptionMacro(<<parameter << " parameter can't be casted to Vector Data List");
    }
   return ret;
 }

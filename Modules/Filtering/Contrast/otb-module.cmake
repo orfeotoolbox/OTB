@@ -18,9 +18,20 @@
 # limitations under the License.
 #
 
-otb_test_application(NAME apTeGenerateAnApplicationExample
-  APP ApplicationExample
-  OPTIONS -in ${OTB_DATA_ROOT}/Examples/QB_Suburb.png
-          -out ${TEMP}/apTeGenerateAnApplicationExampleOutput.png uint8)
+set(DOCUMENTATION "work in progress")
 
-set_tests_properties(apTeGenerateAnApplicationExample PROPERTIES DEPENDS otbapp_ApplicationExample)
+otb_module(OTBContrast
+  DEPENDS
+    OTBImageManipulation
+    OTBITK
+  	OTBCommon
+  	OTBImageBase  
+
+  TEST_DEPENDS
+    OTBTestKernel
+    OTBImageBase
+    OTBImageIO
+
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)

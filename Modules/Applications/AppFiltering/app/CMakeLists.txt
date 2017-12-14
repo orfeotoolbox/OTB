@@ -22,3 +22,8 @@ otb_create_application(
   NAME           Smoothing
   SOURCES        otbSmoothing.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ContrastEnhancement
+  SOURCES        otbContrastEnhancement.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
