@@ -58,15 +58,11 @@ public:
     else
       m_Scal = m_CompIn;
     if ( m_cOutPix || m_cOutInternalPix )
-      {
-      m_CompOut = ( sizeIn + 1 ) / 2 ; // ( sizeIn + 1 )/ 2
-      return m_CompOut ; 
-      }
+      m_CompOut = ( sizeIn + 1 ) / 2 ;
     else
-      {
       m_CompOut = sizeIn ;
-      return m_CompOut ; 
-      } 
+  
+    return m_CompOut ;
   }
 
   void SetLowest( OutputPixelValueType & lowest )
@@ -93,10 +89,6 @@ public:
     m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
     m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ; 
     m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
-    m_MultiCompIn = ! ( boost::is_complex < InputPixelType > :: value ) 
-                 || ! ( boost::is_scalar < InputPixelType > :: value) ;
-    m_MultiCompOut = ! ( boost::is_complex < OutputPixelType > :: value ) 
-                  || ! ( boost::is_scalar < OutputPixelType > :: value);
   }
 
 
@@ -110,9 +102,11 @@ public:
     Clamp( vPixel );
     OutputPixelType out;
     int hack = 1;
-    if ( m_cOutPix && !m_MultiCompOut )
-      hack += 1; // needed in case we have OutputPixelType == complex<t> as SetLength() will ask a length of 2!
-    itk::NumericTraits < OutputPixelType > :: SetLength( out , hack * m_CompOut );
+    if ( m_cOutPix && m_CompOut == 1 )
+      hack += 1; // needed in case we have OutputPixelType == complex<t> as 
+    // itk::NumericTraits::SetLength() will ask a length of 2!
+    itk::NumericTraits < OutputPixelType > :: SetLength( out , 
+      hack * m_CompOut );
     for ( unsigned int i  = 0 ; i < m_CompOut ; i ++)
       FillOut < OutputPixelType > ( i , out , vPixel );
     return out;
@@ -123,16 +117,20 @@ public:
 protected:
   
   template <class PixelType ,
-    std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 2 >
-  void FillIn( unsigned int i , InputPixelType const & pix , std::vector < double > & vPix ) const
+    std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 0 >
+  void FillIn( unsigned int i ,
+               InputPixelType const & pix ,
+               std::vector < double > & vPix ) const
     {
       vPix.push_back( DefaultConvertPixelTraits < InputPixelType > ::
           GetNthComponent( i , pix ) );
     }
 
   template <class PixelType ,
-    std::enable_if_t < boost::is_complex < PixelType > :: value , int > = 1 >
-  void FillIn( unsigned int i , InputPixelType const & pix , std::vector < double > & vPix ) const
+    std::enable_if_t < boost::is_complex < PixelType > :: value , int > = 0 >
+  void FillIn( unsigned int i ,
+               InputPixelType const & pix ,
+               std::vector < double > & vPix ) const
     {
       PixelType comp = DefaultConvertPixelTraits < InputPixelType > ::
           GetNthComponent( i , pix );
@@ -141,8 +139,11 @@ protected:
     }
 
   template <class PixelType ,
-   std::enable_if_t <  !( boost::is_complex < PixelType > :: value || std::is_arithmetic < PixelType > ::value ) , int > = 0 > 
-  void FillIn( unsigned int i , InputPixelType const & pix , std::vector < double > & vPix ) const
+   std::enable_if_t <  !( boost::is_complex < PixelType > :: value 
+    || std::is_arithmetic < PixelType > ::value ) , int > = 0 > 
+  void FillIn( unsigned int i ,
+               InputPixelType const & pix ,
+               std::vector < double > & vPix ) const
     {
         FillIn < InputInternalPixelType > ( i , pix , vPix );
     }
@@ -160,16 +161,20 @@ protected:
   }
 
   template <class PixelType ,
-    std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 2 >
-  void FillOut( unsigned int i , OutputPixelType & pix , std::vector < double > & vPix ) const
+    std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 0 >
+  void FillOut( unsigned int i ,
+                OutputPixelType & pix ,
+                std::vector < double > & vPix ) const
     {
       DefaultConvertPixelTraits < OutputPixelType > ::
           SetNthComponent( i , pix , vPix[i] );
     }
 
   template <class PixelType ,
-    std::enable_if_t < boost::is_complex < PixelType > :: value , int > = 1 >
-  void FillOut( unsigned int i , OutputPixelType & pix , std::vector < double > & vPix ) const
+    std::enable_if_t < boost::is_complex < PixelType > :: value , int > = 0 >
+  void FillOut( unsigned int i ,
+                OutputPixelType & pix ,
+                std::vector < double > & vPix ) const
     {
       DefaultConvertPixelTraits < OutputPixelType > ::
           SetNthComponent( i , pix , 
@@ -177,8 +182,11 @@ protected:
     }
 
   template <class PixelType ,
-   std::enable_if_t <  !( boost::is_complex < PixelType > :: value || std::is_arithmetic < PixelType > ::value ) , int > = 0 > 
-  void FillOut( unsigned int i , OutputPixelType & pix , std::vector < double > & vPix ) const
+   std::enable_if_t <  !( boost::is_complex < PixelType > :: value 
+    || std::is_arithmetic < PixelType > ::value ) , int > = 0 > 
+  void FillOut( unsigned int i ,
+                OutputPixelType & pix ,
+                std::vector < double > & vPix ) const
     {
       FillOut < OutputInternalPixelType > ( i , pix , vPix );
     }
@@ -190,8 +198,7 @@ private:
   double m_LowestBD , m_HighestBD ;
   OutputPixelValueType m_LowestB , m_HighestB ;
   unsigned int m_CompIn , m_CompOut , m_Scal ;
-  bool m_cInPix , m_cInInternalPix , m_cOutPix , m_cOutInternalPix ,
-    m_MultiCompIn , m_MultiCompOut ;
+  bool m_cInPix , m_cInInternalPix , m_cOutPix , m_cOutInternalPix ;
 
 
 };
