@@ -36,7 +36,7 @@ class DefaultConvertPixelTraits
 {
 public:
   typedef itk::DefaultConvertPixelTraits < PixelType > SuperClass;
-  using SuperClass::ComponentType;
+  using typename SuperClass::ComponentType;
 
   using SuperClass::SetNthComponent;
 
