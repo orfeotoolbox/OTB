@@ -179,6 +179,7 @@ AutoencoderModel<TInputValue,NeuronType>
     shark::MaxIterations<> criterion(m_NumberOfIterationsFineTuning);
     TrainNetwork(criterion, inputSamples_copy, ofs);
     }
+  this->SetDimension(m_NumberOfHiddenNeurons[m_NumberOfHiddenNeurons.Size()-1]);
 }
 
 template <class TInputValue, class NeuronType>
@@ -387,8 +388,8 @@ AutoencoderModel<TInputValue,NeuronType>
 
   // This gives us the dimension if we keep the encoder and decoder
   size_t feature_layer_index = m_Net.layerMatrices().size()/2;
-  // number of neurons in the feature layer (first dimension of the first decoder weight matrix)
-  this->m_Dimension = m_Net.layerMatrix(feature_layer_index).size1(); 
+  // number of neurons in the feature layer (second dimension of the first decoder weight matrix)
+  this->SetDimension(m_Net.layerMatrix(feature_layer_index).size2());
 }
 
 template <class TInputValue, class NeuronType>
@@ -407,7 +408,8 @@ AutoencoderModel<TInputValue,NeuronType>
 
   shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
 
-  data = m_Net.evalLayer( m_Net.layerMatrices().size()/2-1 ,data); // features layer for a network containing the encoder and decoder part
+  // features layer for a network containing the encoder and decoder part
+  data = m_Net.evalLayer( m_Net.layerMatrices().size()/2-1 ,data);
   TargetSampleType target;
   target.SetSize(this->m_Dimension);
 
@@ -432,7 +434,8 @@ AutoencoderModel<TInputValue,NeuronType>
   Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
   shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
   TargetSampleType target;
-  data = m_Net.evalLayer( m_Net.layerMatrices().size()/2-1 ,data);   // features layer for a network containing the encoder and decoder part
+  // features layer for a network containing the encoder and decoder part
+  data = m_Net.evalLayer( m_Net.layerMatrices().size()/2-1 ,data);
 
   unsigned int id = startIndex;
   target.SetSize(this->m_Dimension);
