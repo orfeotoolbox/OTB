@@ -71,8 +71,18 @@ private:
   void DoInit()
   {
     SetName("TrainDimensionalityReduction");
-    SetDescription("Trainer for the dimensionality reduction algorithms used in"
-      " the ImageDimensionalityReduction and VectorDimensionalityReduction applications.");
+    SetDescription("Train a dimensionality reduction model");
+
+    SetDocName("Train Dimensionality Reduction");
+    SetDocLongDescription("Trainer for dimensionality reduction algorithms "
+      "(autoencoders, PCA, SOM). All input samples are used to compute the "
+      "model, like other machine learning models.\n"
+      "The model can be used in the ImageDimensionalityReduction and "
+      "VectorDimensionalityReduction applications.");
+
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso("ImageDimensionalityReduction, VectorDimensionalityReduction");
 
     AddParameter(ParameterType_Group, "io", "Input and output data");
     SetParameterDescription("io", "This group of parameters allows setting input and output data.");
@@ -95,6 +105,14 @@ private:
     Superclass::DoInit();
 
     AddRAMParameter();
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("io.vd", "cuprite_samples.sqlite");
+    SetDocExampleParameterValue("io.out", "mode.ae");
+    SetDocExampleParameterValue("algorithm", "pca");
+    SetDocExampleParameterValue("algorithm.pca.dim", "8");
+    SetDocExampleParameterValue("feat","value_0 value_1 value_2 value_3 value_4"
+      " value_5 value_6 value_7 value_8 value_9");
   }
 
   void DoUpdateParameters()

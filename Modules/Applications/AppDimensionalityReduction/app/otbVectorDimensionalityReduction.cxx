@@ -92,6 +92,7 @@ private:
       "dimensionality reduction based on a model file produced by the "
       "TrainDimensionalityReduction application.");
     SetDocSeeAlso("TrainDimensionalityReduction");
+    SetDocLimitations("None");
     AddDocTag(Tags::Learning);
 
     AddParameter(ParameterType_InputVectorData, "in", "Name of the input vector data");
