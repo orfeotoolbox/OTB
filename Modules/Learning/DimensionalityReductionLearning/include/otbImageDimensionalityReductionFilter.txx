@@ -82,10 +82,6 @@ void
 ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
 ::BeforeThreadedGenerateData()
 {
-  if (!m_Model)
-    {
-    itkGenericExceptionMacro(<< "No model for classification");
-    }
   if(m_BatchMode)
     {
     #ifdef _OPENMP
@@ -129,7 +125,11 @@ template <class TInputImage, class TOutputImage, class TMaskImage>
 void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-    this->GetOutput()->SetNumberOfComponentsPerPixel( m_Model->GetDimension() );
+  if (!m_Model)
+    {
+    itkGenericExceptionMacro(<< "No model for dimensionality reduction");
+    }
+  this->GetOutput()->SetNumberOfComponentsPerPixel( m_Model->GetDimension() );
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
