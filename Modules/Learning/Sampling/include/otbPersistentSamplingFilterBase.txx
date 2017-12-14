@@ -740,7 +740,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     dstFeature.SetFID(featIt->GetFID());
     tmpLayers[counter].CreateFeature( dstFeature );
     cptFeat++;
-    if (cptFeat > nbFeatThread) counter++; cptFeat=0;
+    if (cptFeat > nbFeatThread && (counter + 1) < numberOfThreads)
+      {
+      counter++;
+      cptFeat=0;
+      }
     }
 
   inLayer.SetSpatialFilter(ITK_NULLPTR);
