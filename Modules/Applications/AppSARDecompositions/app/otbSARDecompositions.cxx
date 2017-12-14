@@ -31,7 +31,7 @@
 #include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 #include "otbPerBandVectorImageFilter.h"
 #include "itkMeanImageFilter.h"
-#include "otbNRIBandImagesToOneNComplexBandsImage.h"
+// #include "otbNRIBandImagesToOneNComplexBandsImage.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbImageList.h"
 
