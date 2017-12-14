@@ -125,7 +125,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   m_ShrunkOutput->CopyInformation(inputPtr);
 
   const typename InputImageType::SpacingType&
-                                           inputSpacing = inputPtr->GetSpacing();
+                                           inputSpacing = inputPtr->GetSignedSpacing();
   const typename InputImageType::SizeType& inputSize
     = inputPtr->GetLargestPossibleRegion().GetSize();
   const typename InputImageType::IndexType& inputIndex
@@ -154,7 +154,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
     shrunkOutputStartIndex[i] = 0;
     }
 
-  m_ShrunkOutput->SetSpacing(shrunkOutputSpacing);
+  m_ShrunkOutput->SetSignedSpacing(shrunkOutputSpacing);
   m_ShrunkOutput->SetOrigin(shrunkOutputOrigin);
 
   shrunkOutputLargestPossibleRegion.SetSize(shrunkOutputSize);

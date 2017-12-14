@@ -405,6 +405,8 @@ private:
       "KMeansClassification is a composite application, "
       "using an existing training and classification application."
       "The SharkKMeans model is used.\n"
+      "KMeansClassification application is only available if OTB is compiled with Shark support"
+      "(CMake option OTB_USE_SHARK=ON)\n"
       "The steps of this composite application :\n"
         "1) ImageEnveloppe : create a shapefile (1 polygon),\n"
         "2) PolygonClassStatistics : compute the statistics,\n"

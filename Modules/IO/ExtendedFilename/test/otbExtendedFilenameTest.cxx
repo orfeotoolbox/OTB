@@ -55,7 +55,7 @@ int otbImageFileReaderWithExtendedFilename(int itkNotUsed(argc), char* argv[])
 
   file2 << "ProjRef: " << reader->GetOutput()->GetProjectionRef() << std::endl;
   file2 << "Origin: "  << reader->GetOutput()->GetOrigin() << std::endl;
-  file2 << "Spacing: " << reader->GetOutput()->GetSpacing() << std::endl;
+  file2 << "Spacing: " << reader->GetOutput()->GetSignedSpacing() << std::endl;
 
   return EXIT_SUCCESS;
 }

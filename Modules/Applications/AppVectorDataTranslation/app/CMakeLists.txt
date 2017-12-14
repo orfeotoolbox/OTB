@@ -18,12 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppVectorDataTranslation_LINK_LIBS
-  ${OTBConversion_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBTransform_LIBRARIES}
-)
-
 otb_create_application(
   NAME           Rasterization
   SOURCES        otbRasterization.cxx

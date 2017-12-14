@@ -99,7 +99,7 @@ int main(int argc, char * argv[])
 
   ImagePointType origin = image->GetOrigin();
 
-  ImageType::SpacingType spacing = image->GetSpacing();
+  ImageType::SpacingType spacing = image->GetSignedSpacing();
   ImageType::SizeType    size    = image->GetBufferedRegion().GetSize();
 
   ImagePointType point;

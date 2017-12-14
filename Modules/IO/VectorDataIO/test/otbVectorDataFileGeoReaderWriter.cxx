@@ -42,7 +42,7 @@ int otbVectorDataFileGeoReaderWriter(int itkNotUsed(argc), char * argv[])
   vectorDataReader->SetFileName(argv[1]);
 
 //      vectorData->SetOrigin(m_Reader->GetOutput()->GetOrigin());
-//       vectorData->SetSpacing(m_Reader->GetOutput()->GetSpacing());
+//       vectorData->SetSignedSpacing(m_Reader->GetOutput()->GetSignedSpacing());
 
   std::string projectionRef;
   itk::ExposeMetaData<std::string>(

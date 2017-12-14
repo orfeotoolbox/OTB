@@ -61,7 +61,9 @@ void QtWidgetChoiceParameter::DoUpdateGUI()
 void QtWidgetChoiceParameter::DoCreateWidget()
 {
   m_ComboBox = new QComboBox;
-  m_ComboBox->setToolTip(m_ChoiceParam->GetDescription());
+  m_ComboBox->setToolTip(
+    QString::fromStdString( m_ChoiceParam->GetDescription() )
+  );
 
   m_StackWidget = new QStackedWidget;
 

@@ -18,37 +18,31 @@
  * limitations under the License.
  */
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbWrapperAbstractParameterList.h"
 
-#include "otbWrapperParameter.h"
 
-int otbWrapperParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+namespace otb
 {
-  typedef otb::Wrapper::Parameter ParameterBaseType;
-  ParameterBaseType::Pointer parameter = ParameterBaseType::New();
 
-  //std::cout << parameter << std::endl;
 
-  return EXIT_SUCCESS;
+namespace Wrapper
+{
+
+
+/*****************************************************************************/
+AbstractParameterList
+::AbstractParameterList()
+{
 }
 
-int otbWrapperParameterTest1(int itkNotUsed(argc), char* argv[])
+/*****************************************************************************/
+AbstractParameterList
+::~AbstractParameterList()
 {
-  typedef otb::Wrapper::Parameter ParameterBaseType;
-  ParameterBaseType::Pointer parameter = ParameterBaseType::New();
-
-  const std::string name = argv[1];
-
-  parameter->SetName(name);
-
-  if (name == parameter->GetName())
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
 }
+
+
+} // End of namespace 'Wrapper'
+
+
+} // End of namespace 'otb'
