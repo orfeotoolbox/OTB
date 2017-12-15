@@ -624,10 +624,14 @@ public:
   otbGetParameterImageMacro(UInt8RGBImage);
   otbGetParameterImageMacro(UInt8RGBAImage);
 
-  // Complex image 
+  // Complex image
+  otbGetParameterImageMacro(ComplexInt16Image);
+  otbGetParameterImageMacro(ComplexInt32Image); 
   otbGetParameterImageMacro(ComplexFloatImage);
   otbGetParameterImageMacro(ComplexDoubleImage);
 
+  otbGetParameterImageMacro(ComplexInt16VectorImage);
+  otbGetParameterImageMacro(ComplexInt32VectorImage);
   otbGetParameterImageMacro(ComplexFloatVectorImage);
   otbGetParameterImageMacro(ComplexDoubleVectorImage);
 
