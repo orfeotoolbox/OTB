@@ -19,3 +19,5 @@
 #
 
 find_package ( Ossim REQUIRED )
+
+set(OTB_OSSIM_VERSION ${OSSIM_VERSION_NUMBER} CACHE INTERNAL "Ossim version detected by OTB" FORCE)
