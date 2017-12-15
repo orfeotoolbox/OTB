@@ -28,18 +28,17 @@ namespace otb
 {
 
 /** \class ClampImageFilter
- * \brief Set image values to a user-specified value if they are below,
- * above, or between simple threshold values.
+ * \brief Clamp image values to be below, over, or between threhold values.
  *
  * ClampImageFilter  clamp image values to be between an upper
  * and lower value. Values lower than m_Lower values are set to lower,
  * and values greater than upper threshold are set to upper threshold
  * value.
+ * This filter can also be used to cast any type of image into any other type
+ * as long as those types are arithmetics or complex.
  *
  * By default lower and upper thresholds are set to the maximum and
- * minimum bounds of the image pixel type.
- *
- * The pixels must support the operators >= and <=.
+ * minimum bounds of the image internal pixel value.
  *
  * \ingroup IntensityImageFilters Multithreaded
  *
@@ -112,41 +111,20 @@ public:
 
 protected:
   ClampImageFilter();
-  ~ClampImageFilter() ITK_OVERRIDE {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ClampImageFilter() override {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  /** ClampImageFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData() routine
-   * which is called for each processing thread. The output image data is
-   * allocated automatically by the superclass prior to calling
-   * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-   * portion of the output image specified by the parameter
-   * "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
-  // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-  //                           itk::ThreadIdType threadId ) ITK_OVERRIDE;
-
-  void GenerateOutputInformation(void) ITK_OVERRIDE
+  void GenerateOutputInformation(void) override
   {
     Superclass::GenerateOutputInformation();
-
-    // typename InputImageType::IndexType index;
-    // index.Fill(0);
-    // InputImagePixelType px = ->GetPixel( index );
-
     unsigned int sizeIn = this->GetInput()->GetNumberOfComponentsPerPixel();
-    // sizeIn *= itk::NumericTraits < typename itk::NumericTraits< InputImagePixelType >::ValueType > 
-    //   :: GetLength();
-
     this->GetOutput()->SetNumberOfComponentsPerPixel( 
       this->GetFunctor().GetOutputSize ( sizeIn ) );
   }
 
 private:
-  ClampImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ClampImageFilter(const Self&) delete ;
+  void operator=(const Self&) delete ;
 
   double m_DLower;
   double m_DUpper;
