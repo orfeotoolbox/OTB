@@ -108,38 +108,51 @@ private:
     SetParameterDescription("model", "A model file (produced by the "
       "TrainDimensionalityReduction application,");
 
-    AddParameter(ParameterType_ListView, "feat", "Input features to use for reduction."); //
-    SetParameterDescription("feat","List of field names in the input vector "
-      "data used as features for reduction."); //
-
-    AddParameter(ParameterType_StringList, "featout", "Names of the new output features."); //
-    SetParameterDescription("featout","List of field names for the output "
-      "features which result from the reduction."); //
-
     AddParameter(ParameterType_OutputFilename, "out", "Output vector data file "
       "containing the reduced vector");
     SetParameterDescription("out","Output vector data file storing sample "
       "values (OGR format). If not given, the input vector data file is used. "
       "In overwrite mode, the original features will be lost.");
     MandatoryOff("out");
-        
-    AddParameter(ParameterType_Int, "indim", "Dimension of the input vector");
-    SetParameterDescription("indim","Dimension of the whole input vector, this "
-      "value is required if only a part of the bands contained in the vector "
-      "are used. If not given, the dimension is deduced from the length of the "
-      "'feat' parameter");
-    MandatoryOff("indim");
-    
-    AddParameter(ParameterType_Int, "pcadim", "Principal component"); //
+
+    AddParameter(ParameterType_ListView, "feat", "Input features to use for reduction."); //
+    SetParameterDescription("feat","List of field names in the input vector "
+      "data used as features for reduction."); //
+
+    AddParameter(ParameterType_Choice, "featout", "Output feature"); //
+    SetParameterDescription("featout", "Naming of output features");
+
+    AddChoice("featout.prefix", "Prefix");
+    SetParameterDescription("featout.prefix", "Use a name prefix");
+
+    AddParameter(ParameterType_String, "featout.prefix.name", "Feature name prefix");
+    SetParameterDescription("featout.prefix.name","Name prefix for output "
+      "features. This prefix is followed by the numeric index of each output feature.");
+    SetParameterString("featout.prefix.name","reduced_", false);
+
+    AddChoice("featout.list","List");
+    SetParameterDescription("featout.list", "Use a list with all names");
+
+    AddParameter(ParameterType_StringList, "featout.list.names", "Feature name list");
+    SetParameterDescription("featout.list.names","List of field names for the output "
+      "features which result from the reduction."); //
+
+    AddParameter(ParameterType_Int, "pcadim", "Principal component dimension"); //
     SetParameterDescription("pcadim","This optional parameter can be set to "
-      "reduce the number of eignevectors used in the PCA model file."); //
+      "reduce the number of eignevectors used in the PCA model file. This "
+      "parameter can't be used for other models"); //
     MandatoryOff("pcadim");
     
-    AddParameter(ParameterType_String, "mode", "Writting mode"); //
-    SetParameterString("mode","overwrite", false);
-    SetParameterDescription("mode","This parameter determines if the output "
+    AddParameter(ParameterType_Choice, "mode", "Writting mode"); //
+    SetParameterDescription("mode", "This parameter determines if the output "
       "file is overwritten or updated [overwrite/update]. If an output file "
-      "name is given, the original file is copied before creating the new features."); //
+      "name is given, the original file is copied before creating the new features.");
+
+    AddChoice("mode.overwrite", "Overwrite");
+    SetParameterDescription("mode.overwrite","Overwrite mode"); //
+
+    AddChoice("mode.update", "Update");
+    SetParameterDescription("mode.update", "Update mode");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "vectorData.shp");
@@ -147,7 +160,6 @@ private:
     SetDocExampleParameterValue("model", "model.txt");
     SetDocExampleParameterValue("out", "vectorDataOut.shp");
     SetDocExampleParameterValue("feat", "perimeter area width");
-    SetDocExampleParameterValue("featout", "perimeter area width");
     //SetOfficialDocLink(); 
     }
 
@@ -185,11 +197,22 @@ private:
       shapefile, otb::ogr::DataSource::Modes::Read);
     otb::ogr::Layer layer = source->GetLayer(0);
     ListSampleType::Pointer input = ListSampleType::New();
-    int nbFeatures = GetSelectedItems("feat").size();
+    std::vector<int> inputIndexes = GetSelectedItems("feat");
+    int nbFeatures = inputIndexes.size();
 
     input->SetMeasurementVectorSize(nbFeatures);
     otb::ogr::Layer::const_iterator it = layer.cbegin();
     otb::ogr::Layer::const_iterator itEnd = layer.cend();
+
+    // Get the list of non-selected field indexes
+    // /!\ The 'feat' is assumed to expose all available fields, hence the
+    // mapping between GetSelectedItems() and OGR field indexes
+    OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
+    std::set<int> otherInputFields;
+    for (int i=0 ; i < inLayerDefn.GetFieldCount() ; i++)
+      otherInputFields.insert(i);
+    for (int k=0 ; k < nbFeatures ; k++)
+      otherInputFields.erase(inputIndexes[k]);
 
     for( ; it!=itEnd ; ++it)
       {
@@ -198,7 +221,7 @@ private:
       
       for(int idx=0; idx < nbFeatures; ++idx)
         {
-        mv[idx] = static_cast<float>( (*it)[GetSelectedItems("feat")[idx]].GetValue<double>() );
+        mv[idx] = static_cast<float>( (*it)[inputIndexes[idx]].GetValue<double>() );
         }
       input->PushBack(mv);
       }
@@ -214,6 +237,8 @@ private:
       statisticsReader->SetFileName(XMLfile);
       meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
       stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
+      otbAppLogINFO("Mean used: " << meanMeasurementVector);
+      otbAppLogINFO("Standard deviation used: " << stddevMeasurementVector);
       }
     else
       {
@@ -228,10 +253,8 @@ private:
     trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
     trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
     trainingShiftScaleFilter->Update();
-    otbAppLogINFO("mean used: " << meanMeasurementVector);
-    otbAppLogINFO("standard deviation used: " << stddevMeasurementVector);
-    otbAppLogINFO("Loading model");
 
+    otbAppLogINFO("Loading model");
     /** Read the model */
     m_Model = DimensionalityReductionModelFactoryType::CreateDimensionalityReductionModel(
       GetParameterString("model"),
@@ -241,14 +264,17 @@ private:
       otbAppLogFATAL(<< "Error when loading model " << GetParameterString("model")
         << " : unsupported model type");
       }
+    m_Model->Load(GetParameterString("model"));
     if (HasValue("pcadim") && IsParameterEnabled("pcadim"))
       {
-      int dimension = GetParameterInt("pcadim");
-      m_Model->SetDimension(dimension );
+      std::string modelName(m_Model->GetNameOfClass());
+      if (modelName != "PCAModel")
+        {
+        otbAppLogFATAL(<< "Can't set 'pcadim' on a model : "<< modelName);
+        }
+      m_Model->SetDimension( GetParameterInt("pcadim") );
       }
-
-    m_Model->Load(GetParameterString("model"));
-    otbAppLogINFO("Model loaded");
+    otbAppLogINFO("Model loaded, dimension : "<< m_Model->GetDimension());
 
     /** Perform Dimensionality Reduction */    
     ListSampleType::Pointer listSample = trainingShiftScaleFilter->GetOutput();
@@ -258,12 +284,6 @@ private:
     ogr::DataSource::Pointer output;
     ogr::DataSource::Pointer buffer = ogr::DataSource::New();
     bool updateMode = false;
-
-    int nbBands = nbFeatures;
-    if (HasValue("indim") && IsParameterEnabled("indim"))
-      {
-      nbBands = GetParameterInt("indim");
-      } 
 
     if (IsParameterEnabled("out") && HasValue("out"))
       {
@@ -275,9 +295,8 @@ private:
           GetParameterString("out"),
           const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
           layer.GetGeomType());
-        // Copy existing fields
-        OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
-        for (int k=0 ; k<inLayerDefn.GetFieldCount()-nbBands ; k++) // we don't copy the original bands 
+        // Copy existing fields except the ones selected for reduction
+        for (const int& k : otherInputFields)
           {
           OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
           newLayer.CreateField(fieldDefn);
@@ -315,24 +334,53 @@ private:
 
     if (errStart != OGRERR_NONE)
       {
-      itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+      otbAppLogFATAL(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+      }
+
+    // Build the list of output fields
+    std::vector<std::string> outFields;
+    if(GetParameterString("featout") == "prefix")
+      {
+      std::string prefix = GetParameterString("featout.prefix.name");
+      std::ostringstream oss;
+      for (unsigned int i=0 ; i < m_Model->GetDimension() ; i++)
+        {
+        oss.str(prefix);
+        oss.seekp(0,std::ios_base::end);
+        oss << i;
+        outFields.push_back(oss.str());
+        }
+      }
+    else if(GetParameterString("featout") == "list")
+      {
+      outFields = GetParameterStringList("featout.list.names");
+      if (outFields.size() != m_Model->GetDimension())
+        {
+        otbAppLogFATAL( << "Wrong number of output field names, expected "
+          << m_Model->GetDimension() << " , got "<< outFields.size());
+        }
+      }
+    else
+      {
+      otbAppLogFATAL( << "Unsupported output feature mode : "
+        << GetParameterString("featout"));
       }
 
     // Add the field of prediction in the output layer if field not exist
-    for (unsigned int i=0; i<GetParameterStringList("featout").size() ;i++)
+    for (unsigned int i=0; i<outFields.size() ;i++)
       {
       OGRFeatureDefn &layerDefn = outLayer.GetLayerDefn();
-      int idx = layerDefn.GetFieldIndex(GetParameterStringList("featout")[i].c_str());
+      int idx = layerDefn.GetFieldIndex(outFields[i].c_str());
       
       if (idx >= 0)
         {
         if (layerDefn.GetFieldDefn(idx)->GetType() != OFTReal)
-        itkExceptionMacro("Field name "<< GetParameterStringList("featout")[i]
+        otbAppLogFATAL("Field name "<< outFields[i]
           << " already exists with a different type!");
         }
       else
         {
-        OGRFieldDefn predictedField(GetParameterStringList("featout")[i].c_str(), OFTReal);
+        OGRFieldDefn predictedField(outFields[i].c_str(), OFTReal);
         ogr::FieldDefn predictedFieldDef(predictedField);
         outLayer.CreateField(predictedFieldDef);
         }
@@ -340,10 +388,8 @@ private:
 
     // Fill output layer
     unsigned int count=0;
-    auto classfieldname = GetParameterStringList("featout");
     it = layer.cbegin();
     itEnd = layer.cend();
-
     for( ; it!=itEnd ; ++it, ++count)
       {
       ogr::Feature dstFeature(outLayer.GetLayerDefn());
@@ -351,9 +397,9 @@ private:
       dstFeature.SetFrom( *it , TRUE);
       dstFeature.SetFID(it->GetFID());
 
-      for (std::size_t i=0; i<classfieldname.size(); ++i)
+      for (std::size_t i=0; i<outFields.size(); ++i)
         {
-        dstFeature[classfieldname[i]].SetValue<double>(target->GetMeasurementVector(count)[i]);
+        dstFeature[outFields[i]].SetValue<double>(target->GetMeasurementVector(count)[i]);
         }
       if (updateMode)
         {
@@ -370,7 +416,7 @@ private:
       const OGRErr errCommitX = outLayer.ogr().CommitTransaction();
       if (errCommitX != OGRERR_NONE)
         {
-        itkExceptionMacro(<< "Unable to commit transaction for OGR layer " <<
+        otbAppLogFATAL(<< "Unable to commit transaction for OGR layer " <<
           outLayer.ogr().GetName() << ".");
         }
       }
