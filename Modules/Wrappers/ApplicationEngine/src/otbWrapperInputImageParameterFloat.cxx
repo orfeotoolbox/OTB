@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <vcl_deprecated_header.h>
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageParameterMacros.h"
 #include "itksys/SystemTools.hxx"
