@@ -73,14 +73,18 @@ ComplexInputImageParameter::GetImage()
     return this->GetImage< image##Type > ();          \
   }
 
+otbGetImageMacro(ComplexInt16Image);
+otbGetImageMacro(ComplexInt32Image);
 otbGetImageMacro(ComplexFloatImage);
 otbGetImageMacro(ComplexDoubleImage);
 
+otbGetImageMacro(ComplexInt16VectorImage);
+otbGetImageMacro(ComplexInt32VectorImage);
 otbGetImageMacro(ComplexFloatVectorImage);
 otbGetImageMacro(ComplexDoubleVectorImage);
 
 
-#define otbCastImageMacro(ComplexInputImageType, OutputImageType, theMethod)   \
+/*#define otbCastImageMacro(ComplexInputImageType, OutputImageType, theMethod)   \
   template<> OutputImageType *                                          \
   ComplexInputImageParameter::CastImage<ComplexInputImageType , OutputImageType>()    \
   {                                                                     \
@@ -89,22 +93,22 @@ otbGetImageMacro(ComplexDoubleVectorImage);
 
 #define otbGenericCastImageMacro(ComplexInputImageType, theMethod, prefix)     \
   otbCastImageMacro(ComplexInputImageType, ComplexFloat##prefix##ImageType, theMethod) \
-  otbCastImageMacro(ComplexInputImageType, ComplexDouble##prefix##ImageType, theMethod)
+  otbCastImageMacro(ComplexInputImageType, ComplexDouble##prefix##ImageType, theMethod)*/
 
 
-/*********************************************************************
+/********************************************************************
 ********************** Image -> Image
-**********************************************************************/
+*********************************************************************/
 
-  otbGenericCastImageMacro(ComplexFloatImageType, SimpleCastImage, )
-  otbGenericCastImageMacro(ComplexDoubleImageType, SimpleCastImage, )
+//   otbGenericCastImageMacro(ComplexFloatImageType, SimpleCastImage, )
+//   otbGenericCastImageMacro(ComplexDoubleImageType, SimpleCastImage, )
 
 
 /*********************************************************************
 ********************** VectorImage -> VectorImage
 **********************************************************************/
-  otbGenericCastImageMacro(ComplexFloatVectorImageType, SimpleCastImage, Vector)
-  otbGenericCastImageMacro(ComplexDoubleVectorImageType, SimpleCastImage, Vector)
+//   otbGenericCastImageMacro(ComplexFloatVectorImageType, SimpleCastImage, Vector)
+//   otbGenericCastImageMacro(ComplexDoubleVectorImageType, SimpleCastImage, Vector)
 
   void
 ComplexInputImageParameter::SetImage(ComplexFloatVectorImageType* image)

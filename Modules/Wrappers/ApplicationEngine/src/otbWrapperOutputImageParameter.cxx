@@ -20,11 +20,8 @@
 
 #include "otbWrapperOutputImageParameter.h"
 #include "otbClampImageFilter.h"
-// #include "itkCastImageFilter.h"
-// #include "otbClampVectorImageFilter.h"
 #include "otbImageIOFactory.h"
 #include "itksys/SystemTools.hxx"
-// #include "otbTwoNRIBandsImageToNComplexBandsImage.h"
 
 #ifdef OTB_USE_MPI
 
@@ -305,144 +302,144 @@ ClampAndWriteVectorImage( itk::ImageBase<2> * in ,
     }
 }*/
 
-// template <class TInput>
-// void
-// OutputImageParameter::SwitchImageWrite()
-// {
-//   switch(m_PixelType )
-//     {
-//     case ImagePixelType_uint8:
-//     {
-//     ClampAndWriteImage< TInput , UInt8ImageType >(  
-//       m_Image ,
-//       m_UInt8Writer ,
-//       m_FileName , 
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_int16:
-//     {
-//     ClampAndWriteImage< TInput , Int16ImageType >( 
-//       m_Image ,
-//       m_Int16Writer ,
-//       m_FileName , 
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_uint16:
-//     {
-//     ClampAndWriteImage< TInput , UInt16ImageType >( 
-//       m_Image ,
-//       m_UInt16Writer ,
-//       m_FileName , 
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_int32:
-//     {
-//     ClampAndWriteImage< TInput , Int32ImageType >( 
-//       m_Image ,
-//       m_Int32Writer ,
-//       m_FileName , 
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_uint32:
-//     {
-//     ClampAndWriteImage< TInput , UInt32ImageType >( 
-//       m_Image ,
-//       m_UInt32Writer ,
-//       m_FileName , 
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_float:
-//     {
-//     ClampAndWriteImage< TInput , FloatImageType >( 
-//       m_Image ,
-//       m_FloatWriter ,
-//       m_FileName , 
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_double:
-//     {
-//     ClampAndWriteImage< TInput , DoubleImageType >( 
-//       m_Image ,
-//       m_DoubleWriter ,
-//       m_FileName , 
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_cint16:
-//     {
-//     ClampAndWriteImage< TInput , ComplexInt16ImageType >( 
-//       m_Image ,
-//       m_ComplexInt16Writer ,
-//       m_FileName ,
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_cint32:
-//     {
-//     ClampAndWriteImage< TInput , ComplexInt32ImageType >( 
-//       m_Image ,
-//       m_ComplexInt32Writer ,
-//       m_FileName ,
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_cfloat:
-//     {
-//     ClampAndWriteImage< TInput , ComplexFloatImageType >( 
-//       m_Image ,
-//       m_ComplexFloatWriter ,
-//       m_FileName ,
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_cdouble:
-//     {
-//     ClampAndWriteImage< TInput , ComplexDoubleImageType >( 
-//       m_Image ,
-//       m_ComplexDoubleWriter ,
-//       m_FileName ,
-//       m_RAMValue );
-//     break;
-//     }
-//     default:
-//       break;
-//     }
-// }
+/*template <class TInput>
+void
+OutputImageParameter::SwitchImageWrite()
+{
+  switch(m_PixelType )
+    {
+    case ImagePixelType_uint8:
+    {
+    ClampAndWriteImage< TInput , UInt8ImageType >(  
+      m_Image ,
+      m_UInt8Writer ,
+      m_FileName , 
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_int16:
+    {
+    ClampAndWriteImage< TInput , Int16ImageType >( 
+      m_Image ,
+      m_Int16Writer ,
+      m_FileName , 
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_uint16:
+    {
+    ClampAndWriteImage< TInput , UInt16ImageType >( 
+      m_Image ,
+      m_UInt16Writer ,
+      m_FileName , 
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_int32:
+    {
+    ClampAndWriteImage< TInput , Int32ImageType >( 
+      m_Image ,
+      m_Int32Writer ,
+      m_FileName , 
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_uint32:
+    {
+    ClampAndWriteImage< TInput , UInt32ImageType >( 
+      m_Image ,
+      m_UInt32Writer ,
+      m_FileName , 
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_float:
+    {
+    ClampAndWriteImage< TInput , FloatImageType >( 
+      m_Image ,
+      m_FloatWriter ,
+      m_FileName , 
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_double:
+    {
+    ClampAndWriteImage< TInput , DoubleImageType >( 
+      m_Image ,
+      m_DoubleWriter ,
+      m_FileName , 
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_cint16:
+    {
+    ClampAndWriteImage< TInput , ComplexInt16ImageType >( 
+      m_Image ,
+      m_ComplexInt16Writer ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_cint32:
+    {
+    ClampAndWriteImage< TInput , ComplexInt32ImageType >( 
+      m_Image ,
+      m_ComplexInt32Writer ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_cfloat:
+    {
+    ClampAndWriteImage< TInput , ComplexFloatImageType >( 
+      m_Image ,
+      m_ComplexFloatWriter ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_cdouble:
+    {
+    ClampAndWriteImage< TInput , ComplexDoubleImageType >( 
+      m_Image ,
+      m_ComplexDoubleWriter ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
+    default:
+      break;
+    }
+}*/
 
-// template <class TInput>
-// void
-// OutputImageParameter::SwitchCImageWrite()
-// {
-//   switch(m_PixelType )
-//     {
-//     case ImagePixelType_cfloat:
-//     {
-//     ClampAndWriteImage< TInput , ComplexFloatImageType >( 
-//       m_Image ,
-//       m_ComplexFloatWriter ,
-//       m_FileName ,
-//       m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_cdouble:
-//     {
-//     ClampAndWriteImage< TInput , ComplexDoubleImageType >( 
-//       m_Image ,
-//       m_ComplexDoubleWriter ,
-//       m_FileName ,
-//       m_RAMValue );
-//     break;
-//     }
-//     default:
-//       break;
-//     }
-// }
+/*template <class TInput>
+void
+OutputImageParameter::SwitchCImageWrite()
+{
+  switch(m_PixelType )
+    {
+    case ImagePixelType_cfloat:
+    {
+    ClampAndWriteImage< TInput , ComplexFloatImageType >( 
+      m_Image ,
+      m_ComplexFloatWriter ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
+    case ImagePixelType_cdouble:
+    {
+    ClampAndWriteImage< TInput , ComplexDoubleImageType >( 
+      m_Image ,
+      m_ComplexDoubleWriter ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
+    default:
+      break;
+    }
+}*/
 
 
 template <class TInput>
@@ -555,34 +552,34 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
   }
 
-// template <class TInput>
-// void
-// OutputImageParameter::SwitchVectorCImageWrite()
-// {
-//   switch(m_PixelType )
-//     {
-//     case ImagePixelType_cfloat:
-//     {
-//     ClampAndWriteImage< TInput , ComplexFloatVectorImageType >( 
-//         m_Image ,
-//         m_ComplexVectorFloatWriter ,
-//         m_FileName ,
-//         m_RAMValue );
-//     break;
-//     }
-//     case ImagePixelType_cdouble:
-//     {
-//     ClampAndWriteImage< TInput , ComplexDoubleVectorImageType >( 
-//         m_Image ,
-//         m_ComplexVectorDoubleWriter ,
-//         m_FileName ,
-//         m_RAMValue );
-//     break;
-//     }
-//     default:
-//       break;
-//     }
-// }
+/*template <class TInput>
+void
+OutputImageParameter::SwitchVectorCImageWrite()
+{
+  switch(m_PixelType )
+    {
+    case ImagePixelType_cfloat:
+    {
+    ClampAndWriteImage< TInput , ComplexFloatVectorImageType >( 
+        m_Image ,
+        m_ComplexVectorFloatWriter ,
+        m_FileName ,
+        m_RAMValue );
+    break;
+    }
+    case ImagePixelType_cdouble:
+    {
+    ClampAndWriteImage< TInput , ComplexDoubleVectorImageType >( 
+        m_Image ,
+        m_ComplexVectorDoubleWriter ,
+        m_FileName ,
+        m_RAMValue );
+    break;
+    }
+    default:
+      break;
+    }
+}*/
 
 template <class TInputRGBAImageType>
 void
