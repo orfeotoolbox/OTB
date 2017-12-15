@@ -162,8 +162,8 @@ PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueT
     shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
      
   data = m_Encoder(data);
-    TargetSampleType target;
-    target.SetSize(this->m_Dimension);
+  TargetSampleType target;
+  target.SetSize(this->m_Dimension);
   
   for(unsigned int a = 0; a < this->m_Dimension; ++a){
     target[a]=data.element(0)[a];
