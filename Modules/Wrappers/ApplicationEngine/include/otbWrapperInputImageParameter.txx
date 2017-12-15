@@ -247,7 +247,8 @@ InputImageParameter::CastImage()
 }
 
 
-template <class TInputImage, class TOutputImage>
+
+/*template <class TInputImage, class TOutputImage>
 TOutputImage*
 InputImageParameter::SimpleCastImage()
 {
@@ -272,7 +273,6 @@ InputImageParameter::SimpleCastImage()
     }
 }
 
-
 template <class TInputImage, class TOutputImage>
 TOutputImage*
 InputImageParameter::CastVectorImageFromImage()
@@ -290,7 +290,7 @@ InputImageParameter::CastVectorImageFromImage()
 
   return caster->GetOutput();
 }
-
+*/
 
 template <class TInputImage>
 void

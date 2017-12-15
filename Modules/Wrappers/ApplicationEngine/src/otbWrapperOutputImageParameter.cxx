@@ -182,7 +182,7 @@ void OutputImageParameter::InitializeWriters()
 
 template <typename TInput, typename TOutput> 
 void 
-ClampAndWriteImage( itk::ImageBase<2> * in ,
+ClampAndWriteVectorImage( itk::ImageBase<2> * in ,
                     otb::ImageFileWriter<TOutput> * writer , 
                     const std::string & filename , 
                     const unsigned int & ramValue )
@@ -245,7 +245,7 @@ ClampAndWriteImage( itk::ImageBase<2> * in ,
 
 /*template <typename TInput, typename TOutput > 
 void
-ClampAndWriteVectorImage( itk::ImageBase<2> * in , 
+ClampAndWriteImage( itk::ImageBase<2> * in , 
                           otb::ImageFileWriter<TOutput > * writer ,
                           const std::string & filename , 
                           const unsigned int & ramValue ,
@@ -450,7 +450,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     {
     case ImagePixelType_uint8:
     {
-    ClampAndWriteImage< TInput , UInt8VectorImageType > (
+    ClampAndWriteVectorImage< TInput , UInt8VectorImageType > (
       m_Image ,
       m_VectorUInt8Writer ,
       m_FileName ,
@@ -459,7 +459,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_int16:
     {
-    ClampAndWriteImage< TInput , Int16VectorImageType > (
+    ClampAndWriteVectorImage< TInput , Int16VectorImageType > (
       m_Image ,
       m_VectorInt16Writer ,
       m_FileName ,
@@ -468,7 +468,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_uint16:
     {
-    ClampAndWriteImage< TInput , UInt16VectorImageType > (
+    ClampAndWriteVectorImage< TInput , UInt16VectorImageType > (
       m_Image ,
       m_VectorUInt16Writer ,
       m_FileName ,
@@ -477,7 +477,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_int32:
     {
-    ClampAndWriteImage< TInput , Int32VectorImageType > (
+    ClampAndWriteVectorImage< TInput , Int32VectorImageType > (
       m_Image ,
       m_VectorInt32Writer ,
       m_FileName ,
@@ -486,7 +486,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_uint32:
     {
-    ClampAndWriteImage< TInput , UInt32VectorImageType > (
+    ClampAndWriteVectorImage< TInput , UInt32VectorImageType > (
       m_Image ,
       m_VectorUInt32Writer ,
       m_FileName ,
@@ -495,7 +495,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_float:
     {
-    ClampAndWriteImage< TInput , FloatVectorImageType > (
+    ClampAndWriteVectorImage< TInput , FloatVectorImageType > (
       m_Image ,
       m_VectorFloatWriter ,
       m_FileName ,
@@ -504,7 +504,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_double:
     {
-    ClampAndWriteImage< TInput , DoubleVectorImageType > (
+    ClampAndWriteVectorImage< TInput , DoubleVectorImageType > (
       m_Image ,
       m_VectorDoubleWriter ,
       m_FileName ,
@@ -513,7 +513,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_cint16:
     {
-    ClampAndWriteImage < TInput , ComplexInt16VectorImageType > (
+    ClampAndWriteVectorImage < TInput , ComplexInt16VectorImageType > (
       m_Image ,
       m_ComplexVectorInt16Writer ,
       m_FileName ,
@@ -522,7 +522,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_cint32:
     {
-    ClampAndWriteImage < TInput , ComplexInt32VectorImageType > (
+    ClampAndWriteVectorImage < TInput , ComplexInt32VectorImageType > (
       m_Image ,
       m_ComplexVectorInt32Writer ,
       m_FileName ,
@@ -531,7 +531,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_cfloat:
     {
-    ClampAndWriteImage < TInput , ComplexFloatVectorImageType > (
+    ClampAndWriteVectorImage < TInput , ComplexFloatVectorImageType > (
       m_Image ,
       m_ComplexVectorFloatWriter ,
       m_FileName ,
@@ -540,7 +540,7 @@ OutputImageParameter::SwitchVectorImageWrite()
     }
     case ImagePixelType_cdouble:
     {
-    ClampAndWriteImage < TInput , ComplexDoubleVectorImageType > (
+    ClampAndWriteVectorImage < TInput , ComplexDoubleVectorImageType > (
       m_Image ,
       m_ComplexVectorDoubleWriter ,
       m_FileName ,

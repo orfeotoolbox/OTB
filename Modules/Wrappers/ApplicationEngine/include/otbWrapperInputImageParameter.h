@@ -109,13 +109,13 @@ public:
 
   /** Cast an image to an image of the same type
   * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
-  template <class TInputImage, class TOutputImage>
-    TOutputImage* SimpleCastImage();
+  // template <class TInputImage, class TOutputImage>
+  //   TOutputImage* SimpleCastImage();
 
 
   /** Cast an image to a vector image. */
-  template <class TInputImage, class TOutputImage>
-    TOutputImage* CastVectorImageFromImage();
+  // template <class TInputImage, class TOutputImage>
+  //   TOutputImage* CastVectorImageFromImage();
 
 
   bool HasValue() const ITK_OVERRIDE;
