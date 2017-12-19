@@ -46,8 +46,6 @@
 #include <otbImageFileReader.h>
 #include "otbImageFileWriter.h"
 
-#include "itkTimeProbe.h"
-
 
 int main(int itkNotUsed(argc), char * argv[])
 {

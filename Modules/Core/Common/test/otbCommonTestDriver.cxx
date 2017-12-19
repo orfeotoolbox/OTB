@@ -31,6 +31,7 @@ void RegisterTests()
   REGISTER_TEST(otbRectangle);
   REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitterNew);
   REGISTER_TEST(otbSystemTest);
+  REGISTER_TEST(otbStopwatchTest);
   REGISTER_TEST(otbParseHdfSubsetName);
   REGISTER_TEST(otbParseHdfFileName);
   REGISTER_TEST(otbImageRegionSquareTileSplitterNew);

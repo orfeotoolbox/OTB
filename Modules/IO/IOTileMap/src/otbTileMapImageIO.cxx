@@ -33,7 +33,6 @@
 
 #include "otbGDALImageIO.h"
 
-#include "itkTimeProbe.h"
 #include "otbCurlHelper.h"
 
 #include "otbImageKeywordlist.h"
@@ -514,7 +513,7 @@ void TileMapImageIO::ReadImageInformation()
   this->SetNumberOfDimensions(2);
   this->SetFileTypeToBinary();
   this->SetComponentType(UCHAR);
-  
+
   ImageKeywordlist otb_kwl;
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
   itk::ExposeMetaData<ImageKeywordlist>(dict,
