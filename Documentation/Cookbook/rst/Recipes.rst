@@ -17,3 +17,4 @@ and demonstrate how the can be applied.
    recipes/featextract.rst
    recipes/stereo.rst
    recipes/bandmathx.rst
+   recipes/contrast_enhancement.rst

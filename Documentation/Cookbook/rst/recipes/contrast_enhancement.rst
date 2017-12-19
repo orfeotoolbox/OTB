@@ -8,21 +8,28 @@ The contrast enhancement application is aiming at reducing this dynamic
 by compressing it in a smarter way than just linear compression.
 In a linear compression, compression changes the dynamic range (for instance
 from 12 to 8 bits) but does not change the repartition of the pixel.
+
 |image1| |image2|
 
-.. |image1| image:: ../Art/contrast1.png
-
-.. |image2| image:: ../Art/contrast2.png
-
 Here the equalization of histogram is creating a look up table in order to
-maximize the use of dynamics.
+maximize the use of dynamics. The target histogram is perfectly flat one.
+The gain applied on each pixel comes from the computation of the transfer
+function :math:`T` such that :
 
-..image::../Art/contrast3.png
+.. math:: \forall i \quad  \int_{min}^{i*T(i)}h_{istogram}(j)dj = 
+          \int_{min}^{i}h_{target}(j)dj
+
+where :math:`h_{target}` is the corresponding flat histogram and we have
+the constraint that white and black are still white and black after
+equalization : 
+
+.. math:: T(min) = T(max) = 1
 
 With this in mind you can then try it on your own images with the simple
 following use :
 
-::
+:: 
+
     otbcli_ContrastEnhancement -in input_image.tif 
                                -out output_image.tif 
                                -spatial global
@@ -46,10 +53,11 @@ computed over those tiles. Gain will be interpolated between the adjacent
 tiles in order to give a smooth result.
 
 ::
-    otbcli_ContrastEnhancement -in input_image.tif 
-                               -out output_image.tif 
-                               -spatial.local.h 500 
-                               -spatial.local.w 500 
+
+    otbcli_ContrastEnhancement -in input_image.tif
+                               -out output_image.tif
+                               -spatial.local.h 500
+                               -spatial.local.w 500
                                -mode lum
 
 The application also offers a way to limit contrast by adjusting original
@@ -58,9 +66,19 @@ any bucket of the histogram : we compute the height of the perfect flat
 histogram and the maximal height is the limitation factor time this "flat
 height".
 
-..image::../Art/contrast4.png
+|image4|
 
 Finally you have the choice to ignore a particular value with the "nodata"
 parameter, and also the choice to put manually your minimum and maximum value.
 Any value out of bound will be ignored.
 
+.. |image1| image:: ../Art/contrast1.png
+            :scale: 30%
+
+.. |image2| image:: ../Art/contrast2.png
+            :scale: 30%
+
+.. |image3| image:: ../Art/contrast3.png
+            :scale: 40%
+
+.. |image4| image:: ../Art/contrast4.png
