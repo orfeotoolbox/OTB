@@ -25,6 +25,7 @@ SETUP_SUPERBUILD(GSL)
 ExternalProject_Add(GSL
   PREFIX GSL
   URL "https://github.com/ampl/gsl/archive/v2.3.0.tar.gz"
+  DOWNLOAD_NAME gsl_v2.3.0.tar.gz
   URL_MD5 7e0478f7c5e62696fef480b9a46f708c
   BINARY_DIR ${GSL_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
