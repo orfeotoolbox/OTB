@@ -26,8 +26,6 @@
 
 #include "otbMultiToMonoChannelExtractROI.h"
 
-#include "itkTimeProbe.h"
-
 namespace otb
 {
 namespace Wrapper

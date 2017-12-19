@@ -181,6 +181,11 @@ if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EX
   set(HAVE_PYTHON TRUE)
 endif()
 
+set(HAVE_PYTHON3 FALSE CACHE INTERNAL "HAVE_PYTHON3")
+if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python3/_otbApplication${PYMODULE_EXT}")
+  set(HAVE_PYTHON3 TRUE)
+endif()
+
   #only for *nix
 if(UNIX)
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks   "#!/bin/sh\n")

@@ -23,23 +23,8 @@
 # So if you run again from a terminal. you need to run the script again
 # see how this is sourced in monteverdi.sh and mapla.sh
 
-# unset any existing LD_LIBRARY_PATH
-unset LD_LIBRARY_PATH
-
 CMAKE_PREFIX_PATH=OUT_DIR
 export CMAKE_PREFIX_PATH
-
-
-# if OTB_USE_LOCAL_GTK is set to one,
-# we must include ./lib/gtk because gtklibs are installed there. 
-# OTB_USE_LOCAL_GTK is not set by default (use GTK system)
-#This code only affect linux system. for osx OUT_DIR/lib/gtk does not exists
-if [ "$OTB_USE_LOCAL_GTK" = "1" ]; then
-    if [ -d "OUT_DIR/lib/gtk" ]; then
-	LD_LIBRARY_PATH=OUT_DIR/lib/gtk
-	export LD_LIBRARY_PATH
-    fi
-fi
 
 # check and set OTB_APPLICATION_PATH
 if [ -z "$OTB_APPLICATION_PATH" ] || [ "$OTB_APPLICATION_PATH" = "" ]; then

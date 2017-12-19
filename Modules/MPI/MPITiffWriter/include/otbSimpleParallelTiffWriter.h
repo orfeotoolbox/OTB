@@ -28,10 +28,6 @@
 #include "otbExtendedFilenameToWriterOptions.h"
 #include "otbMPIConfig.h"
 
-// Time probe
-#include "itkTimeProbe.h"
-
-
 #include "itkImageFileWriter.h"
 
 #include "itkObjectFactoryBase.h"

@@ -27,10 +27,11 @@ set(OTBCommon_SRC
   otbConfigurationManager.cxx
   otbStandardOneLineFilterWatcher.cxx
   otbWriterWatcherBase.cxx
+  otbStopwatch.cxx
   )
 
 add_library(OTBCommon ${OTBCommon_SRC})
-target_link_libraries(OTBCommon 
+target_link_libraries(OTBCommon
   ${OTBITK_LIBRARIES}
 
   )
