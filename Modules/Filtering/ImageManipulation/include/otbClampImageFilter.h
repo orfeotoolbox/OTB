@@ -123,8 +123,8 @@ protected:
   }
 
 private:
-  ClampImageFilter(const Self&) delete ;
-  void operator=(const Self&) delete ;
+  ClampImageFilter(const Self&) = delete ;
+  void operator=(const Self&) = delete ;
 
   double m_DLower;
   double m_DUpper;

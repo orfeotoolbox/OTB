@@ -58,7 +58,6 @@ otbStreamingInnerProductVectorImageFilter.cxx
 otbPhaseFunctorTest.cxx
 otbShiftScaleVectorImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
-otbClampVectorImageFilter.cxx
 otbPrintableImageFilterNew.cxx
 otbShiftScaleImageAdaptorNew.cxx
 otbStreamingInnerProductVectorImageFilterNew.cxx
@@ -440,20 +439,6 @@ otb_add_test(NAME bfTvChangeLabelImageFilter COMMAND otbImageManipulationTestDri
   ${TEMP}/bfChangeLabelImageFilter.tif
   150   # lower threshold
   255   # upper  threshold
-  )
-
-
-otb_add_test(NAME bfTvClampVectorImageFilterTest COMMAND otbImageManipulationTestDriver
-  --compare-image 0.0001
-  ${BASELINE}/bfTvClampVectorImageFilterTest_Output.tif
-  ${TEMP}/bfTvClampVectorImageFilterTest_Output.tif
-  otbClampVectorImageFilterTest
-  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
-  ${TEMP}/bfTvClampVectorImageFilterTest_Output.tif
-  )
-
-otb_add_test(NAME bfTuClampVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbClampVectorImageFilterNew
   )
 
 otb_add_test(NAME bfTuPrintableImageFilterNew COMMAND otbImageManipulationTestDriver
