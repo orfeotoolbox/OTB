@@ -1376,7 +1376,7 @@ MainWindow
       )
     );
 
-    if( !( value.isValid() ? value.toBool() : OVERVIEWS_ENABLED_DEFAULT ) ||
+    if( ( value.isValid() ? value.toBool() : OVERVIEWS_ENABLED_DEFAULT ) &&
 	!BuildGDALOverviews( filenames ) )
       return;
   }
