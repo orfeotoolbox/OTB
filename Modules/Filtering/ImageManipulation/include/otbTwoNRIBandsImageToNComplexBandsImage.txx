@@ -52,18 +52,17 @@ TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>
 ::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
-  
+
   unsigned int nbCompo = this->GetInput()->GetNumberOfComponentsPerPixel();
-  
+
   if ( (nbCompo % 2) != 0 )
-  {
-	itkExceptionMacro("Number of bands of the input images must be an even number");
-  }
+    {
+    itkExceptionMacro("Number of bands of the input images must be an even number");
+    }
   else
-	this->GetOutput()->SetNumberOfComponentsPerPixel(nbCompo/2);
-	
-	std::cout << "GenerateOutputInformation : " << this->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
-  
+    {
+    this->GetOutput()->SetNumberOfComponentsPerPixel(nbCompo/2);
+    }
 }
 
 /**
@@ -75,10 +74,10 @@ TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData(void)
 {
 	unsigned int nbCompo = this->GetInput()->GetNumberOfComponentsPerPixel();
-			
+
 	if ( (nbCompo % 2) != 0 )
 	  itkExceptionMacro("Number of bands of the input images must be an even number");
-		
+
 }
 
 /**
