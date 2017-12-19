@@ -65,12 +65,14 @@ struct Flags
 {
   Flags() :
     loadOTBApplications( false ),
-    forceNoGLSL( false )
+    forceNoGLSL( false ),
+    forceNoOverviews( false )
   {
   }
 
   bool loadOTBApplications: 1;
   bool forceNoGLSL: 1;
+  bool forceNoOverviews: 1;
 };
 
 
@@ -111,9 +113,13 @@ main( int argc, char* argv[] )
 	  QCoreApplication::translate(
 	    PROJECT_NAME,
 	    "Usage: %1 [-h|--help] [-a|--applications] [<filename>...]\n"
-	    "  -n, --no-glsl      force OpenGL 1.x compatible rendering."
-	    "  -a, --applications load OTB-applications from OTB_APPLICATIONS_PATH."
-	    "  -h, --help         display this help message.\n"
+	    "  -a, --applications    load OTB-applications from OTB_APPLICATIONS_PATH."
+	    "  -h, --help            display this help message.\n"
+	    "  -g, --no-glsl         force OpenGL 1.x compatible rendering."
+	    "  -o, --no-overviews    ignore build GDAL overviews step."
+#if 0
+	    "  -O, --force-overviews force build GDAL overviews step."
+#endif
 	  )
 	  .arg( QFileInfo( argv[ 0 ] ).baseName() )
 	)
@@ -130,7 +136,15 @@ main( int argc, char* argv[] )
       it = args.erase( it );
       }
 
-    else if(it->compare( "-n" )==0 ||
+    else if(it->compare( "-o" )==0 ||
+	    it->compare( "--no-overviews" )==0 )
+      {
+      flags.forceNoOverviews = true;
+
+      it = args.erase( it );
+      }
+
+    else if(it->compare( "-g" )==0 ||
 	    it->compare( "--no-glsl" )==0 )
       {
       flags.forceNoGLSL = true;
@@ -212,7 +226,7 @@ main( int argc, char* argv[] )
   // 6. Load command-line filenames.
   args.pop_front();
 
-  mainWindow.ImportImages( args );
+  mainWindow.ImportImages( args, !flags.forceNoOverviews );
 
   //
   // 6. Let's go: run the application and return exit code.
