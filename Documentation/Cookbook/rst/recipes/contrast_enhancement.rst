@@ -2,17 +2,17 @@ Visual product and contrast enhancement
 ========================================================
 Sensor images have often a wide dynamic range. Whereas it is very helpful
 to have high precision to do complex processing, it is pretty hard to display
-wide range of dynamic, even on modern screen. The dynamic range for basic
-screen is of 8 bits. Data can contain 12 or 16 bits (or even more!).
+high dynamic images, even on modern screen. The dynamic range for basic
+screen is of 8 bits. Images can contain 12 or 16 bits (or even more!) of data.
 The contrast enhancement application is aiming at reducing this dynamic
-by compressing it in a smarter way than just linear compression.
+by reorganizing it in a smarter way than just linear compression.
 In a linear compression, compression changes the dynamic range (for instance
 from 12 to 8 bits) but does not change the repartition of the pixel.
 
 |image1| |image2|
 
 Here the equalization of histogram is creating a look up table in order to
-maximize the use of dynamics. The target histogram is perfectly flat one.
+maximize the use of dynamic. The target histogram is a perfectly flat one.
 The gain applied on each pixel comes from the computation of the transfer
 function :math:`T` such that :
 
@@ -34,11 +34,14 @@ following use :
                                -out output_image.tif 
                                -spatial global
 
+You can then compress your dynamic without loosing too much detail and
+contrast.
+
 Advanced parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-You can see that more parameter are available in the application. Let us see
+You can see that more parameters are available in the application. Let us see
 what there are for.
-First what you want to equalize. There is two modes :
+First what you want to equalize. There are two modes :
 * luminance : you provide the application with a 3 bands image and the
 equalization will be done on a single band which will be a composition of
 the original bands. The computed gain will then be applied on the different
@@ -47,8 +50,8 @@ different color, conserve the hue.
 * channel : you provide the application with a n bands image and each of
 them are equalized independently.
 
-The other main mode is the local equalization. You can choose a window
-size that will be use to split the image in tiles and histograms will be
+The other option is the local equalization. You can choose a window size
+that will be use to split the image in tiles and histograms will be
 computed over those tiles. Gain will be interpolated between the adjacent
 tiles in order to give a smooth result.
 
@@ -69,8 +72,8 @@ height".
 |image4|
 
 Finally you have the choice to ignore a particular value with the "nodata"
-parameter, and also the choice to put manually your minimum and maximum value.
-Any value out of bound will be ignored.
+parameter, and also the choice to put manually your minimum and maximum value,
+which can be a gain of time. Any value out of bound will be ignored.
 
 .. |image1| image:: ../Art/contrast1.png
             :scale: 30%
