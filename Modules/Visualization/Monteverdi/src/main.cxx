@@ -31,6 +31,8 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QCoreApplication>
+#include <QFile>
 #include <QPixmap>
 #include <QSplashScreen>
 
@@ -48,6 +50,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdAlgorithm.h"
 #include "mvdApplication.h"
 #include "mvdMainWindow.h"
 
@@ -79,22 +82,25 @@ struct Flags
 /*****************************************************************************/
 /* FUNCTIONS DECLARATION                                                     */
 /*****************************************************************************/
+void
+DisplayUsage( const char * );
 
+void
+AppendFromTextFile( QStringList &, const QString & );
 
 /*****************************************************************************/
 /* MAIN                                                                      */
 /*****************************************************************************/
 int
-main( int argc, char* argv[] )
+main( int argc, char * argv[] )
 {
   QApplication qtApp( argc, argv );
-  Flags flags;
 
   //
   // 0. Splash-screen.
 #if USE_SPLASH_SCREEN
-  QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
-  QSplashScreen splash(pixmap);
+  QPixmap pixmap( QLatin1String( ":/images/application_splash" ) );
+  QSplashScreen splash( pixmap );
   splash.show();
   qtApp.processEvents();//This is used to accept a click on the screen so that user can cancel the screen
 #endif
@@ -102,28 +108,16 @@ main( int argc, char* argv[] )
   //
   // 0bis. Parse pre-initialization command-line arguments.
   QStringList args( qtApp.arguments() );
+  Flags flags;
   {
+  QStringList filenames;
+
   for( QStringList::iterator it( args.begin() );
        it!=args.end(); )
     if( it->compare( "-h" )==0 ||
 	it->compare( "--help" )==0 )
       {
-      std::cout
-	<< mvd::ToLocalStdString(
-	  QCoreApplication::translate(
-	    PROJECT_NAME,
-	    "Usage: %1 [-h|--help] [-a|--applications] [<filename>...]\n"
-	    "  -a, --applications    load OTB-applications from OTB_APPLICATIONS_PATH."
-	    "  -h, --help            display this help message.\n"
-	    "  -g, --no-glsl         force OpenGL 1.x compatible rendering."
-	    "  -o, --no-overviews    ignore build GDAL overviews step."
-#if 0
-	    "  -O, --force-overviews force build GDAL overviews step."
-#endif
-	  )
-	  .arg( QFileInfo( argv[ 0 ] ).baseName() )
-	)
-	<< std::endl;
+      DisplayUsage( argv[ 0 ] );
 
       return ERROR_CODE_USAGE;
       }
@@ -136,6 +130,14 @@ main( int argc, char* argv[] )
       it = args.erase( it );
       }
 
+    else if(it->compare( "-g" )==0 ||
+	    it->compare( "--no-glsl" )==0 )
+      {
+      flags.forceNoGLSL = true;
+
+      it = args.erase( it );
+      }
+
     else if(it->compare( "-o" )==0 ||
 	    it->compare( "--no-overviews" )==0 )
       {
@@ -144,15 +146,28 @@ main( int argc, char* argv[] )
       it = args.erase( it );
       }
 
-    else if(it->compare( "-g" )==0 ||
-	    it->compare( "--no-glsl" )==0 )
+    else if(it->compare( "-t" )==0 ||
+	    it->compare( "--txt-file" )==0 )
       {
-      flags.forceNoGLSL = true;
+      it = args.erase( it );
+
+      if( it==args.end() ||
+	  it->startsWith( '-' ) )
+	{
+	DisplayUsage( argv[ 0 ] );
+
+	return ERROR_CODE_USAGE;
+	}
+
+      AppendFromTextFile( filenames, *it );
 
       it = args.erase( it );
       }
+
     else
       ++ it;
+
+  args << filenames;
   }
 
   //
@@ -219,7 +234,7 @@ main( int argc, char* argv[] )
 #if USE_OTB_APPS
     mainWindow.SetupOTBApplications();
 #else // USE_OTB_APPS
-    qWarning() << "OTB-applications support is not included in this build.";
+  qWarning() << "OTB-applications support is not included in this build.";
 #endif // USE_OTB_APPS
 
   //
@@ -246,3 +261,63 @@ main( int argc, char* argv[] )
 /*****************************************************************************/
 /* FUNCTIONS IMPLEMENTATION                                                  */
 /*****************************************************************************/
+void
+DisplayUsage( const char * argv0 )
+{
+  std::cout
+    << mvd::ToLocalStdString(
+      QCoreApplication::translate(
+	PROJECT_NAME,
+	"Usage: %1 "
+	"[-h|--help] "
+	"[-a|--applications] "
+	"[-g|--no-glsl] "
+	"[-o|--no-overviews] "
+	"[-t|--txt-file <filename>] "
+	"[<filename>...]\n"
+	"  -a, --applications    load OTB-applications from OTB_APPLICATIONS_PATH.\n"
+#if 0
+	"  -f, --file            load Monteverdi project file.\n"
+#endif
+	"  -h, --help            display this help message.\n"
+	"  -g, --no-glsl         force OpenGL 1.x compatible rendering.\n"
+	"  -o, --no-overviews    ignore build GDAL overviews step.\n"
+#if 0
+	"  -O, --force-overviews force build GDAL overviews step.\n"
+#endif
+	"  -t, --txt-file        read layer filenames from text file.\n"
+#if 0
+	"  -c, --csv-file        read layer filenames & settings from CSV file.\n"
+	"  -x, --xml-file        read layer filenames & settings from XML file.\n"
+#endif
+      )
+      .arg( QFileInfo( argv0 ).baseName() )
+    )
+    << std::endl;
+}
+
+/*****************************************************************************/
+void
+AppendFromTextFile( QStringList & strings,
+		    const QString & filename )
+{
+  QFile file( filename );
+
+  if( !file.open( QFile::ReadOnly | QFile::Text  ) )
+    throw mvd::SystemError(
+      mvd::ToStdString(
+	QCoreApplication::translate( "mvd::", "Failed to open '%1'" )
+	.arg( filename )
+      )
+    );
+
+  QTextStream is( &file );
+
+  while( !is.atEnd() )
+    {
+    QString line( is.readLine() );
+
+    if( !line.isNull() )
+      strings << line;
+    }
+}
