@@ -18,14 +18,10 @@
 # limitations under the License.
 #
 
-#Contact: Jordi Inglada  <jordi.inglada@cesbio.eu>
-otb_fetch_module(OTBTemporalGapFilling
-  "Gapfilling for time series replaces invalid pixels (as designated by a mask)
-  by an interpolation using the valid dates of the series.
-A more detailed description can be found on the project website:
-http://tully.ups-tlse.fr/jordi/temporalgapfilling
-"
-  GIT_REPOSITORY http://tully.ups-tlse.fr/jordi/temporalgapfilling.git
-  # Commit on develop branch which includes patches for Windows support
-  GIT_TAG 4fc4a71acf7b9b051cda5a3b950de2cdb9d26287
-)
+project(OTBGSL)
+set(OTBGSL_THIRD_PARTY 1)
+
+set(OTBGSL_SYSTEM_INCLUDE_DIRS ${GSL_INCLUDE_DIR})
+set(OTBGSL_LIBRARIES ${GSL_LIBRARY})
+
+otb_module_impl()
