@@ -4,6 +4,9 @@ Sensor images have often a wide dynamic range. Whereas it is very helpful
 to have high precision to do complex processing, it is pretty hard to display
 high dynamic images, even on modern screen. The dynamic range for basic
 screen is of 8 bits. Images can contain 12 or 16 bits (or even more!) of data.
+
+|image5| |image6|
+
 The contrast enhancement application is aiming at reducing this dynamic
 by reorganizing it in a smarter way than just linear compression.
 In a linear compression, compression changes the dynamic range (for instance
@@ -75,13 +78,20 @@ Finally you have the choice to ignore a particular value with the "nodata"
 parameter, and also the choice to put manually your minimum and maximum value,
 which can be a gain of time. Any value out of bound will be ignored.
 
+
 .. |image1| image:: ../Art/contrast1.png
             :scale: 30%
 
 .. |image2| image:: ../Art/contrast2.png
             :scale: 30%
 
-.. |image3| image:: ../Art/contrast3.png
-            :scale: 40%
-
 .. |image4| image:: ../Art/contrast4.png
+
+.. |image5| image:: ../Art/contrast_orig.jpg
+            :scale: 30%
+            :alt: original
+
+
+.. |image6| image:: ../Art/contrast_result.jpg
+            :scale: 30%
+            :alt: result
