@@ -27,7 +27,7 @@ namespace otb
 
 Stopwatch
 ::Stopwatch()
-    : m_ElapsedMilliseconds(), m_IsRunning()
+  : m_StartTime(), m_ElapsedMilliseconds(), m_IsRunning()
 {
 }
 
