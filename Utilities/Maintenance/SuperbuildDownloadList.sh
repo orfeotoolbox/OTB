@@ -46,30 +46,33 @@ else
     VERSION="develop"
 fi
 CMAKE_FILES=$(find "${SB_CMAKE_DIR}" -maxdepth 1 -type f -name "External_*")
-DOWNLOAD_LIST=$(grep -h -E '^[^#]*\"(ftp|http|https)://.*(\.tar\.gz|\.tar\.bz2|\.tgz|\.tar\.xz|\.zip|export=download).*\"' ${CMAKE_FILES} |
-		    grep -o -E '(ftp|http|https)://[^\"]*' | sort | uniq)
 
 DOWNLOAD_NAMES=
-
-#echo "DOWNLOAD_LIST=$DOWNLOAD_LIST"
 
 mkdir -p "${DOWNLOAD_DIR}"
 cd "${DOWNLOAD_DIR}" || echo "cannot cd to DOWNLOAD_DIR"
 echo "Downloading files to ${DOWNLOAD_DIR}/"
-for url in ${DOWNLOAD_LIST}; do
-  file_name=$(echo "${url}" | grep -o -E '[^\/]+$')
-  $WGET -N "${url}"
-  ret="$?"
-  if [ $ret -gt 0 ] && [ $ret -ne 8 ]; then
-     echo "Download failed for URL: '${url}'. wget finished with exit status '$ret'."
-     exit 1;
-  fi
-
-  if [ "$file_name" != "" ]; then
-     DOWNLOAD_NAMES="${DOWNLOAD_NAMES} ${file_name}"
-  else
-     echo "invalid filename for url=${url}" && exit 1;
-  fi
+for cmake in ${CMAKE_FILES}; do
+  download_links=$(grep -h -E '^[^#]*\"(ftp|http|https)://.*(\.tar\.gz|\.tar\.bz2|\.tgz|\.tar\.xz|\.zip|export=download).*\"' ${cmake} |
+		    grep -o -E '(ftp|http|https)://[^\"]*' | sort | uniq)
+  for url in ${download_links}; do
+    file_name=$(echo "${url}" | grep -o -E '[^\/]+$')
+    if [ -z "$file_name" ]; then
+      echo "invalid filename for url=${url}" && exit 1;
+    fi
+    download_name=$(grep -E -A 3 -B 3 "(ftp|http|https).+$file_name" ${cmake} | grep -E -o 'DOWNLOAD_NAME .+' | cut -d ' ' -f 2-)
+    $WGET -N "${url}"
+    ret="$?"
+    if [ $ret -gt 0 ] && [ $ret -ne 8 ]; then
+       echo "Download failed for URL: '${url}'. wget finished with exit status '$ret'."
+       exit 1;
+    fi
+    if [ -n "$download_name" ]; then
+      mv $file_name $download_name
+      file_name=$download_name
+    fi
+    DOWNLOAD_NAMES="${DOWNLOAD_NAMES} ${file_name}"
+  done
 done
 
 ARCHIVE_NAME="SuperBuild-archives-$VERSION"
