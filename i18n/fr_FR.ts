@@ -279,7 +279,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2005-2017 Centre National d&apos;Etudes Spatiales (CNES)&lt;/p&gt;&lt;p&gt;Monteverdi is part of Orfeo Toolbox&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.orfeo-toolbox.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.orfeo-toolbox.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licensed under the Apache License, Version 2.0 (the &amp;quot;License&amp;quot;); you may not use this file except in compliance with&lt;br/&gt;the License. You may obtain a copy of the License at:&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &lt;br/&gt;&amp;quot;AS IS&amp;quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License&lt;br/&gt;for the specific language governing permissions and limitations under the License.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -456,6 +456,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <message>
         <source>Title</source>
         <translation>Titre</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Nom</translation>
     </message>
 </context>
 <context>
@@ -4597,7 +4601,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>GDAL Overviews</source>
-        <translation>Overviews GDAL</translation>
+        <translation>Aperçus GDAL</translation>
     </message>
     <message>
         <source>Generate</source>
