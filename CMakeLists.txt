@@ -47,6 +47,13 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Check if compiler is GCC < 5.0
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5)
+    message(STATUS "WARNING: your GCC version is less than 5.0, support of C++14 may be incomplete.")
+  endif()
+endif()
+
 include(CMakeDependentOption)
 #
 # use ExternalProject
