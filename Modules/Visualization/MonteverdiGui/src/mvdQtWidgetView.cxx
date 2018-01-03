@@ -206,6 +206,10 @@ QtWidgetView
     SIGNAL( SetApplicationReady( bool ) ),
     this, SLOT( UpdateMessageAfterApplicationReady( bool ) )
   );
+  connect(
+    m_Model,
+    SIGNAL(SetProgressReportDone(int)),
+    this, SLOT(UpdateMessageAfterExecution(int)) );
   mainLayout->addWidget(m_Message);
 
   otb::Wrapper::QtWidgetSimpleProgressReport* progressReport =
@@ -611,9 +615,24 @@ QtWidgetView
     }
   */
 
-  m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
-
   emit ExecuteAndWriteOutput();
+
+  m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
+}
+
+/******************************************************************************/
+void
+QtWidgetView
+::UpdateMessageAfterExecution(int status)
+{
+  if (status >= 0)
+    {
+    m_Message->setText("<center><font color=\"#00A000\">DONE</font></center>");
+    }
+  else
+    {
+    m_Message->setText("<center><font color=\"#FF0000\">FAILED !</font></center>");
+    }
 }
 
 /*******************************************************************************/
