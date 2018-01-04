@@ -303,7 +303,16 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
   // second pass on the thread region to mask pixels outside the displacement grid
   const PixelType paddingValue = this->GetEdgePaddingValue();
   OutputImagePointerType outputPtr = this->GetOutput();
+
+  // ITK 4.13 fix const correctness of GetDisplacementField. Use ITK version
+  // number for backward compatibility
+  // Related commit in ITK: https://github.com/InsightSoftwareConsortium/ITK/commit/0070848b91baf69f04893bc3ce85bcf110c3c63a
+  
+  #if (ITK_VERSION_MAJOR >= 4 && ITK_VERSION_MINOR >= 13)
+  const DisplacementFieldType * fieldPtr = this->GetDisplacementField();
+  #else
   DisplacementFieldPointerType fieldPtr = this->GetDisplacementField();
+  #endif
 
   DisplacementFieldRegionType defRegion = fieldPtr->GetLargestPossibleRegion();
 
