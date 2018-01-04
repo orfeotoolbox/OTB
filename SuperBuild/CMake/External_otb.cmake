@@ -120,6 +120,13 @@ if(OTB_USE_QWT)
   ADD_SUPERBUILD_CMAKE_VAR(OTB QWT_LIBRARY)
 endif()
 
+if(OTB_USE_GSL)
+  ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OTB GSL)
+  ADD_SUPERBUILD_CMAKE_VAR(OTB GSL_INCLUDE_DIR)
+  ADD_SUPERBUILD_CMAKE_VAR(OTB GSL_LIBRARY)
+endif()
+
+
 ADD_SUPERBUILD_CMAKE_VAR(OTB GDAL_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(OTB GDAL_LIBRARY)
 
@@ -140,6 +147,13 @@ if(WITH_REMOTE_MODULES)
   foreach(remote_module SertitObject Mosaic otbGRM OTBFFSforGMM)
     list(APPEND OTB_MODULES_CONFIG -DModule_${remote_module}:BOOL=ON)
   endforeach()
+
+  # Add CESBIO'S remote modules if OTB is compiled with GSL support (for now only TemporalGapFilling)
+  if(OTB_USE_GSL)
+    foreach(remote_module OTBTemporalGapFilling)
+      list(APPEND OTB_MODULES_CONFIG -DModule_${remote_module}:BOOL=ON)
+    endforeach()
+  endif()
 else()
   set(OTB_MODULES_CONFIG)
 endif()
@@ -191,6 +205,7 @@ ExternalProject_Add(OTB
   -DOTB_USE_GLUT:BOOL=${OTB_USE_GLUT}
   -DOTB_USE_QWT:BOOL=${OTB_USE_QWT}
   -DOTB_USE_OPENMP:BOOL=${OTB_USE_OPENMP}
+  -DOTB_USE_GSL:BOOL=${OTB_USE_GSL}
   -DOTB_WRAP_PYTHON:BOOL=${OTB_WRAP_PYTHON}
   -DOTB_WRAP_PYTHON3:BOOL=${OTB_WRAP_PYTHON3}
   -DOTB_WRAP_JAVA:BOOL=${OTB_WRAP_JAVA}

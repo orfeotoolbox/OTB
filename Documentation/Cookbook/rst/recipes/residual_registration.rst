@@ -168,7 +168,7 @@ the estimated model.
                                -outstat stats.txt
                                -outvector refined_slave_image.shp
 
-Orthorecrtify image using the affine geometry
+Orthorectify image using the affine geometry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now we will show how we can use this new sensor model. In our case we’ll

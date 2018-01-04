@@ -18,14 +18,25 @@
 # limitations under the License.
 #
 
-#Contact: Jordi Inglada  <jordi.inglada@cesbio.eu>
-otb_fetch_module(OTBTemporalGapFilling
-  "Gapfilling for time series replaces invalid pixels (as designated by a mask)
-  by an interpolation using the valid dates of the series.
-A more detailed description can be found on the project website:
-http://tully.ups-tlse.fr/jordi/temporalgapfilling
-"
-  GIT_REPOSITORY http://tully.ups-tlse.fr/jordi/temporalgapfilling.git
-  # Commit on develop branch which includes patches for Windows support
-  GIT_TAG 4fc4a71acf7b9b051cda5a3b950de2cdb9d26287
-)
+INCLUDE_ONCE_MACRO(GSL)
+
+SETUP_SUPERBUILD(GSL)
+
+ExternalProject_Add(GSL
+  PREFIX GSL
+  URL "https://github.com/ampl/gsl/archive/v2.3.0.tar.gz"
+  DOWNLOAD_NAME gsl_v2.3.0.tar.gz
+  URL_MD5 7e0478f7c5e62696fef480b9a46f708c
+  BINARY_DIR ${GSL_SB_BUILD_DIR}
+  INSTALL_DIR ${SB_INSTALL_PREFIX}
+  DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
+  CMAKE_CACHE_ARGS ${SB_CMAKE_CACHE_ARGS}
+  CMAKE_COMMAND ${SB_CMAKE_COMMAND}
+  DEPENDS ${GSL_DEPENDENCIES}
+  LOG_DOWNLOAD 1
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
+  )
+
+SUPERBUILD_UPDATE_CMAKE_VARIABLES(GSL FALSE)
