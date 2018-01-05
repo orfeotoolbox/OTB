@@ -5110,5 +5110,37 @@ Le(s) résultat(s) vont être importés en tant que jeu de données.</translatio
         <source>Following files are being viewed in </source>
         <translation>Les fichiers suivants sont en cours de visualisation dans </translation>
     </message>
+    <message>
+        <source>Running</source>
+        <translation>En cours</translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation>Terminé</translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation>Echec</translation>
+    </message>
+    <message>
+        <source>Ready to run</source>
+        <translation>Prêt à démarrer</translation>
+    </message>
+    <message>
+        <source>Select parameters</source>
+        <translation>Choix des paramètres</translation>
+    </message>
+    <message>
+        <source>Parameters</source>
+        <translation>Paramètres</translation>
+    </message>
+    <message>
+        <source>Documentation</source>
+        <translation>Documentation</translation>
+    </message>
+    <message>
+        <source>Logs</source>
+        <translation>Logs</translation>
+    </message>
 </context>
 </TS>
