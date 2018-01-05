@@ -4616,8 +4616,8 @@ Merci d&apos;en sélectionner un autre.</translation>
         <translation>pixel(s)</translation>
     </message>
     <message>
-        <source>When the image width or height is lower than this minimum, overview generation is not proposed</source>
-        <translation>Lorsque la hauteur ou la largeur d&apos;une image est inférieure à ce minimum, la génération des aperçus n&apos;est pas proposée</translation>
+        <source>When the image width or height is lower than twice this minimum, overview generation is not proposed</source>
+        <translation>Lorsque la hauteur ou la largeur d&apos;une image est inférieure à deux fois ce minimum, la génération des aperçus n&apos;est pas proposée</translation>
     </message>
 </context>
 <context>
