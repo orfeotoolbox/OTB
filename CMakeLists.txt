@@ -47,10 +47,13 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Check if compiler is GCC < 5.0
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5)
-    message(STATUS "WARNING: your GCC version is less than 5.0, support of C++14 may be incomplete.")
+# Check compiler versions
+set(OTB_MIN_GNU_VER 5)
+set(OTB_MIN_MSVC_VER 19)
+set(OTB_MIN_Clang_VER 3.4)
+if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
+  if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
+    message(STATUS "WARNING: the version of your ${CMAKE_CXX_COMPILER_ID} compiler is less than ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER}, support of C++14 may be incomplete.")
   endif()
 endif()
 
