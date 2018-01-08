@@ -53,7 +53,10 @@ set(OTB_MIN_MSVC_VER 19)
 set(OTB_MIN_Clang_VER 3.4)
 if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
   if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
-    message(STATUS "WARNING: the version of your ${CMAKE_CXX_COMPILER_ID} compiler is less than ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER}, support of C++14 may be incomplete.")
+    message(STATUS "WARNING: the version of your ${CMAKE_CXX_COMPILER_ID} "
+      "compiler is not supported by Orfeo ToolBox (C++14 support might be "
+      "incomplete). Please consider updating your compiler to version "
+      "${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER} or later.")
   endif()
 endif()
 
