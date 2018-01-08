@@ -121,7 +121,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string>When the image width or height is lower than this minimum, overview generation is not proposed</string>
+           <string>When the image width or height is lower than twice this minimum, overview generation is not proposed</string>
           </property>
           <property name="text">
            <string>Minimum size:</string>
@@ -131,7 +131,7 @@
         <item row="1" column="2">
          <widget class="QSpinBox" name="overviewsSpinBox">
           <property name="toolTip">
-           <string>When the image width or height is lower than this minimum, overview generation is not proposed</string>
+           <string>When the image width or height is lower than twice this minimum, overview generation is not proposed</string>
           </property>
           <property name="maximum">
            <number>999999999</number>

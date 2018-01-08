@@ -97,11 +97,11 @@ void QtWidgetView::UpdateMessageAfterExecution(int status)
 {
   if (status >= 0)
     {
-    m_Message->setText("<center><font color=\"#00A000\">DONE</font></center>");
+    m_Message->setText("<center><font color=\"#00A000\">Done</font></center>");
     }
   else
     {
-    m_Message->setText("<center><font color=\"#FF0000\">FAILED !</font></center>");
+    m_Message->setText("<center><font color=\"#FF0000\">Failed</font></center>");
     }
 }
 
