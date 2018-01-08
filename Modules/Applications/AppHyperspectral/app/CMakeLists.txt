@@ -18,13 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppHyperspectral_LINK_LIBS
-  ${OTBStatistics_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBEndmembersExtraction_LIBRARIES}
-  ${OTBUnmixing_LIBRARIES}
-)
-
 otb_create_application(
   NAME           HyperspectralUnmixing
   SOURCES        otbHyperspectralUnmixing.cxx

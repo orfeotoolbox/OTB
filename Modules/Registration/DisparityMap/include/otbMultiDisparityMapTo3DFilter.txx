@@ -216,10 +216,10 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 
     // copy also origin and spacing
     outputPtr->SetOrigin(horizDisp->GetOrigin());
-    outputPtr->SetSpacing(horizDisp->GetSpacing());
+    outputPtr->SetSignedSpacing(horizDisp->GetSignedSpacing());
 
     residuePtr->SetOrigin(horizDisp->GetOrigin());
-    residuePtr->SetSpacing(horizDisp->GetSpacing());
+    residuePtr->SetSignedSpacing(horizDisp->GetSignedSpacing());
 
     if (this->m_ReferenceKeywordList.GetSize() > 0)
       {

@@ -74,7 +74,7 @@ int otbImageFileReaderMSTAR(int itkNotUsed(argc), char* argv[])
 
   InternalImageType::Pointer magnitude = InternalImageType::New();
   magnitude->SetRegions(inputRegion);
-  const InternalImageType::SpacingType& spacing = reader->GetOutput()->GetSpacing();
+  const InternalImageType::SpacingType& spacing = reader->GetOutput()->GetSignedSpacing();
   const InternalImageType::PointType&   inputOrigin = reader->GetOutput()->GetOrigin();
   double                                outputOrigin[InputDimension];
 
@@ -83,7 +83,7 @@ int otbImageFileReaderMSTAR(int itkNotUsed(argc), char* argv[])
     outputOrigin[i] = inputOrigin[i] + spacing[i] * inputStart[i];
     }
 
-  magnitude->SetSpacing(spacing);
+  magnitude->SetSignedSpacing(spacing);
   magnitude->SetOrigin(outputOrigin);
   magnitude->Allocate();
 

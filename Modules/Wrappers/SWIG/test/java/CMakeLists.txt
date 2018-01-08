@@ -33,7 +33,7 @@ if (WIN32)
     --add-before-env PATH ${OTB_BINARY_DIR}/bin)
 endif()
 
-set( CMAKE_JAVA_INCLUDE_PATH ${OTBSWIGWrapper_BINARY_DIR}/src/org.otb.application.jar )
+set( CMAKE_JAVA_INCLUDE_PATH ${OTBSWIGWrapper_BINARY_DIR}/src/java/org.otb.application.jar )
 set( JAVA_COMMAND "${Java_JAVA_EXECUTABLE}"
                   "-Djava.library.path=${OTB_BINARY_DIR}/Code/Wrappers/SWIG${PATH_SEPARATOR}$<TARGET_FILE_DIR:otbApplicationJava>" )
 

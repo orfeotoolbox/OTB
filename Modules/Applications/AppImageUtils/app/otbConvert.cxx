@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#include <numeric>
+
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -105,6 +107,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
 
+    AddDocTag(Tags::Deprecated);
     AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
@@ -195,7 +198,7 @@ private:
     if ( HasValue("in") )
       {
       typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-      ImageMetadataInterfaceType::Pointer metadataInterface = 
+      ImageMetadataInterfaceType::Pointer metadataInterface =
       ImageMetadataInterfaceFactory::CreateIMI(GetParameterImage("in")->GetMetaDataDictionary());
 
       int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
@@ -215,7 +218,7 @@ private:
         SetDefaultParameterInt("channels.rgb.blue", bandBlue);
         }
       }
-    
+
 
   }
 

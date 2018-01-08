@@ -135,3 +135,11 @@ add_test( NAME pyTvConnectApplications
   PythonConnectApplications
   ${OTB_DATA_ROOT}/Input/poupees.tif
   ${TEMP}/pyTvConnectApplicationsOutput.tif)
+
+add_test( NAME pyTvBug1498
+  COMMAND ${TEST_DRIVER} Execute
+  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  Bug823
+  ${OTB_DATA_ROOT}/Input/poupees.tif
+  ${TEMP}/Bu1498-output.tif)  
+

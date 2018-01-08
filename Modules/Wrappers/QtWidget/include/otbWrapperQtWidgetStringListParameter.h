@@ -21,52 +21,47 @@
 #ifndef otbWrapperQtWidgetStringListParameter_h
 #define otbWrapperQtWidgetStringListParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "otbQtStringSelectionWidget.h"
-#endif //tag=QT4-boost-compatibility
+
+#include "otbWrapperQtWidgetParameterList.h"
+
 
 namespace otb
 {
+
+
 namespace Wrapper
 {
+
+
+class StringListParameter;
+
 
 /** \class QtWidgetStringListParameter
  * \brief
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetStringListParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetStringListParameter :
+    public QtWidgetParameterList
 {
-  Q_OBJECT
+  Q_OBJECT;
+
+
+//
+// Public methods.
 public:
-  QtWidgetStringListParameter(StringListParameter*, QtWidgetModel*);
-  ~QtWidgetStringListParameter() ITK_OVERRIDE;
+  QtWidgetStringListParameter( StringListParameter *, QtWidgetModel * );
+  ~QtWidgetStringListParameter() override;
 
-signals:
-  void Change();
 
-protected slots:
-  void SetString( const QString& value );
-  virtual void AddString();
-  virtual void SuppressString();
-  virtual void UpdateStringList();
-
+//
+// Private methods.
 private:
-  QtWidgetStringListParameter(const QtWidgetStringListParameter&); //purposely not implemented
-  void operator=(const QtWidgetStringListParameter&); //purposely not implemented
+   // Purposely not implemented.
+  QtWidgetStringListParameter( const QtWidgetStringListParameter & );
 
-  void DoCreateWidget() ITK_OVERRIDE;
-
-  void DoUpdateGUI() ITK_OVERRIDE;
-
-  StringListParameter::Pointer m_StringListParam;
-
-  QHBoxLayout * m_HLayout;
-  QVBoxLayout * m_StringLayout;
-  QScrollArea * m_Scroll;
-
-  std::vector<QtStringSelectionWidget *> m_LineEditList;
+  // Purposely not implemented
+  void operator = ( const QtWidgetStringListParameter & );
 };
 
 

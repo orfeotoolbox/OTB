@@ -144,7 +144,7 @@ private:
       {
       FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in.kwl");
       m_GeometriesProjFilter->SetInputOrigin(inImage->GetOrigin()); // nec qd capteur
-      m_GeometriesProjFilter->SetInputSpacing(inImage->GetSpacing()); // nec qd capteur
+      m_GeometriesProjFilter->SetInputSpacing(inImage->GetSignedSpacing()); // nec qd capteur
       m_GeometriesProjFilter->SetInputKeywordList(inImage->GetImageKeywordlist());
       //otbAppLogINFO(<<"kwl."<<std::endl);
       }
@@ -156,7 +156,7 @@ private:
       if (outImage)
         {
         m_GeometriesProjFilter->SetOutputOrigin(outImage->GetOrigin()); // nec qd capteur
-        m_GeometriesProjFilter->SetOutputSpacing(outImage->GetSpacing()); // nec qd capteur
+        m_GeometriesProjFilter->SetOutputSpacing(outImage->GetSignedSpacing()); // nec qd capteur
         m_OutputProjectionRef = outImage->GetProjectionRef(); // ~ wkt
         if (m_OutputProjectionRef.empty())
           {

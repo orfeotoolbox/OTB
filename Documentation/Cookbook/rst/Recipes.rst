@@ -13,7 +13,9 @@ and demonstrate how the can be applied.
    recipes/sarprocessing.rst
    recipes/residual_registration.rst
    recipes/improc.rst
+   recipes/bandmathx.rst
+   recipes/contrast_enhancement.rst
    recipes/pbclassif.rst
    recipes/featextract.rst
    recipes/stereo.rst
-   recipes/bandmathx.rst
+   

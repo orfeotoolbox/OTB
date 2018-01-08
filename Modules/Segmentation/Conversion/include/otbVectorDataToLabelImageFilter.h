@@ -107,7 +107,7 @@ public:
   itkGetConstReferenceMacro(OutputOrigin, OutputOriginType);
 
   /** Set the spacing (size of a pixel) of the output image.
-  * \sa GetSpacing()
+  * \sa GetSignedSpacing()
   */
   virtual void SetOutputSpacing(const OutputSpacingType& spacing);
   virtual void SetOutputSpacing(const double spacing[2]);

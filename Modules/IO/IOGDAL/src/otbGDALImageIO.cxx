@@ -25,6 +25,7 @@
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
+#include "otbStopwatch.h"
 #include "itksys/SystemTools.hxx"
 #include "otbImage.h"
 #include "otb_tinyxml.h"
@@ -35,7 +36,6 @@
 
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
-#include "itkTimeProbe.h"
 
 #include "cpl_conv.h"
 #include "ogr_spatialref.h"
@@ -408,8 +408,7 @@ void GDALImageIO::Read(void* buffer)
                    << " lineOffset = " << lineOffset << "\n"
                    << " bandOffset = " << bandOffset );
 
-    itk::TimeProbe chrono;
-    chrono.Start();
+    otb::Stopwatch chrono = otb::Stopwatch::StartNew();
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
                                                        lFirstColumn,
                                                        lFirstLine,
@@ -426,7 +425,7 @@ void GDALImageIO::Read(void* buffer)
                                                        lineOffset,
                                                        bandOffset);
     chrono.Stop();
-    otbMsgDevMacro(<< "RasterIO Read took " << chrono.GetTotal() << " sec")
+    otbMsgDevMacro(<< "RasterIO Read took " << chrono.GetElapsedMilliseconds() << " ms")
 
     // Check if gdal call succeed
     if (lCrGdal == CE_Failure)
@@ -1211,7 +1210,7 @@ void GDALImageIO::InternalReadImageInformation()
       // automatically read as a color image (using the palette). Perhaps this
       // behaviour should be restricted.  Comment color table interpretation in
       // gdalimageio
-  
+
       // FIXME: Better support of color table in OTB
       // - disable palette conversion in GDALImageIO (the comments in this part
       // of the code are rather careful)
@@ -1219,7 +1218,7 @@ void GDALImageIO::InternalReadImageInformation()
       // a kind of LUT ?).
       // - ImageFileReader should use a kind of adapter filter to convert the mono
       // image into color.
-      
+
       // Do not set indexed image attribute to true
       //m_IsIndexed = true;
 
@@ -1387,8 +1386,7 @@ void GDALImageIO::Write(const void* buffer)
                  "\n, Line offset =" << m_BytePerPixel * m_NbBands * lNbColumns << // is pixelOffset * nbColumns
                  "\n, Band offset =" <<  m_BytePerPixel) //  is BytePerPixel
 
-                 itk::TimeProbe chrono;
-    chrono.Start();
+    otb::Stopwatch chrono = otb::Stopwatch::StartNew();
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Write,
                                                        lFirstColumn,
                                                        lFirstLine,
@@ -1410,7 +1408,7 @@ void GDALImageIO::Write(const void* buffer)
                                                        // Band offset is BytePerPixel
                                                        m_BytePerPixel);
     chrono.Stop();
-    otbMsgDevMacro(<< "RasterIO Write took " << chrono.GetTotal() << " sec")
+    otbMsgDevMacro(<< "RasterIO Write took " << chrono.GetElapsedMilliseconds() << " ms")
 
     // Check if writing succeed
     if (lCrGdal == CE_Failure)
@@ -1686,8 +1684,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (projectionRef.empty()
       &&  (vcl_abs(m_Origin[0] - 0.5) > Epsilon
            || vcl_abs(m_Origin[1] - 0.5) > Epsilon
-           || vcl_abs(m_Spacing[0] - 1.0) > Epsilon
-           || vcl_abs(m_Spacing[1] - 1.0) > Epsilon) )
+           || vcl_abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon
+           || vcl_abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon) )
     {
     // See issue #303 :
     // If there is no ProjectionRef, and the GeoTransform is not the identity,
@@ -1768,18 +1766,18 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   if ( vcl_abs(m_Origin[0] - 0.5) > Epsilon
     || vcl_abs(m_Origin[1] - 0.5) > Epsilon
-    || vcl_abs(m_Spacing[0] - 1.0) > Epsilon
-    || vcl_abs(m_Spacing[1] - 1.0) > Epsilon )
+    || vcl_abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon
+    || vcl_abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon )
     {
     // Only set the geotransform if it is not identity (it may erase GCP)
     itk::VariableLengthVector<double> geoTransform(6);
     /// Reporting origin and spacing
     // Beware : GDAL origin is at the corner of the top-left pixel
     // whereas OTB/ITK origin is at the centre of the top-left pixel
-    geoTransform[0] = m_Origin[0] - 0.5*m_Spacing[0];
-    geoTransform[3] = m_Origin[1] - 0.5*m_Spacing[1];
-    geoTransform[1] = m_Spacing[0];
-    geoTransform[5] = m_Spacing[1];
+    geoTransform[0] = m_Origin[0] - 0.5 * m_Spacing[0] * m_Direction[0][0];
+    geoTransform[3] = m_Origin[1] - 0.5 * m_Spacing[1] * m_Direction[1][1];
+    geoTransform[1] = m_Spacing[0] * m_Direction[0][0];
+    geoTransform[5] = m_Spacing[1] * m_Direction[1][1];
 
     // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
     geoTransform[2] = 0.;

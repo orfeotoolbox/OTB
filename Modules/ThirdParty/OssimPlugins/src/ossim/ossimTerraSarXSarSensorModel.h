@@ -26,7 +26,7 @@
 #ifndef ossimTerraSarXSarSensorModel_HEADER
 #define ossimTerraSarXSarSensorModel_HEADER
 
-#include "ossimSarSensorModel.h"
+#include "ossim/ossimSarSensorModel.h"
 
 namespace ossimplugins
 {

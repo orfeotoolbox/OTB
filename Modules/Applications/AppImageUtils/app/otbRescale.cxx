@@ -62,8 +62,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+    AddDocTag(Tags::Deprecated);
     AddDocTag(Tags::Manip);
-
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription( "in", "The image to scale." );
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");

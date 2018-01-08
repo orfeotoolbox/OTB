@@ -18,6 +18,9 @@ and their launchers (both command line and graphical launchers are provided):
 
 -  ``lib``: A folder containing application DLLs.
 
+-  ``include``: A folder containing all the necessary headers to compile OTB
+   based projects.
+
 -  ``tool``: A folder containing usefull scripts to test the installation or
    to uninstall OTB libraries and headers while keeping all the depedencies.
 
@@ -25,17 +28,36 @@ The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize a command prompt
 with ``otbenv.bat``.
 
+The package can be used to compile other projects using OTB (binaries, libraries
+and headers are included). If you want to build OTB from source using this
+package, you should first uninstall the specific OTB files from the package to
+leave only the dependencies (what we call an XDK). You can do it using the
+supplied script ``tools/uninstall_otb.bat``.
+
+In the package you also have a template project for Visual 2015
+``OTB Project.zip``. This template can be placed in your user Visual 2015 template
+directory : ``%USERPROFILE%\Documents\Visual Studio 2015\Templates\ProjectTemplates``.
+The script ``start_devenv.bat`` allows to copy the template in that folder and
+start Visual Studio.
+
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Starting from OTB 5.8.0, OTB Python bindings are distributed with binary package.
-Currently only Python 2.x is supported and if no compatible Python version is found a
+Starting from OTB 5.8.0, OTB bindings for Python 2.7 are distributed with binary
+package. With OTB 6.4.0, additional bindings for Python 3.5 are also included.
+Please note that using a different Python version may not be compatible with
+OTB wrappings. If no compatible Python 2.x version is found a
 notification is generated during the installation process.  If the installation completes
 without issue, information relating to your Python bindings will be provided. 
 
 You must have Python numpy bindings installed in your system. They can be installed locally
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
 to select their own existing Python installation rather than the one dibstributed by the OTB package.
+
+By default, bindings for Python 2.7 will be enabled with the ``otbenv`` script.
+If you want to use bindings for Python 3.5, you can copy this script and modify:
+
+- ``lib/python`` into ``lib/python3``, for variable PYTHONPATH
 
 Notes
 ~~~~~

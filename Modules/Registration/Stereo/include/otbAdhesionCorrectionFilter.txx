@@ -182,12 +182,12 @@ AdhesionCorrectionFilter<TImage, TMask>
   ImageRegionType largestRegion  = outputPtr->GetLargestPossibleRegion();
   SizeType outputSize       = largestRegion.GetSize();
   m_ImageSize = outputSize;
-  SpacingType outputSpacing = outputPtr->GetSpacing();
+  SpacingType outputSpacing = outputPtr->GetSignedSpacing();
 
   // Set spacing
-  outputPtr->SetSpacing(outputSpacing);
-  outputMaskPtr->SetSpacing(outputSpacing);
-  outputriskedgesPtr->SetSpacing(outputSpacing);
+  outputPtr->SetSignedSpacing(outputSpacing);
+  outputMaskPtr->SetSignedSpacing(outputSpacing);
+  outputriskedgesPtr->SetSignedSpacing(outputSpacing);
 
   // Set largest region size
   largestRegion.SetSize(outputSize);

@@ -27,7 +27,7 @@
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
 
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 #include "otbMacro.h"
 #include <cassert>
 
@@ -76,8 +76,6 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
 {
   otbMsgDebugMacro(<< "tile number : " << m_TileNumber);
   ++m_TileNumber;
-  itk::TimeProbe tileChrono;
-  tileChrono.Start();
 
   // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
   typedef itk::ExtractImageFilter<InputImageType, InputImageType> ExtractImageFilterType;
@@ -94,16 +92,13 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
   typename LabelImageToOGRDataSourceFilterType::Pointer labelImageToOGRDataFilter =
                                               LabelImageToOGRDataSourceFilterType::New();
 
-  itk::TimeProbe chrono1;
-  chrono1.Start();
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   m_SegmentationFilter->SetInput(extract->GetOutput());
   m_SegmentationFilter->UpdateLargestPossibleRegion();
 
-  chrono1.Stop();
-  otbMsgDebugMacro(<<"segmentation took " << chrono1.GetTotal() << " sec");
+  otbMsgDebugMacro(<<"segmentation took " << chrono.GetElapsedMilliseconds() / 1000 << " sec");
 
-  itk::TimeProbe chrono2;
-  chrono2.Start();
+  chrono.Restart();
   typename LabelImageType::ConstPointer inputMask = this->GetInputMask();
   if (!inputMask.IsNull())
   {
@@ -124,16 +119,14 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
   labelImageToOGRDataFilter->SetUse8Connected(m_Use8Connected);
   labelImageToOGRDataFilter->Update();
 
-  chrono2.Stop();
-  otbMsgDebugMacro(<< "vectorization took " << chrono2.GetTotal() << " sec");
+  otbMsgDebugMacro(<< "vectorization took " << chrono.GetElapsedMilliseconds() / 1000 << " sec");
 
   //Relabeling & simplication of geometries & filtering small objects
-  itk::TimeProbe chrono3;
-  chrono3.Start();
+  chrono.Restart();
   OGRDataSourcePointerType tmpDS = const_cast<OGRDataSourceType *>(labelImageToOGRDataFilter->GetOutput());
   OGRLayerType tmpLayer = tmpDS->GetLayer(0);
 
-  const typename InputImageType::SpacingType inSpacing = this->GetInput()->GetSpacing();
+  const typename InputImageType::SpacingType inSpacing = this->GetInput()->GetSignedSpacing();
   const double tol = m_SimplificationTolerance * std::max(vcl_abs(inSpacing[0]),vcl_abs(inSpacing[1]));
 
   typename OGRLayerType::iterator featIt = tmpLayer.begin();
@@ -160,7 +153,7 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
      {
         double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();
         //convert into pixel coordinates
-        typename InputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
+        typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
         double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
         otbMsgDebugMacro(<<"DN = "<<field.GetValue<int>()<<", area = "<<pixelsArea);
         if( pixelsArea < m_MinimumObjectSize )
@@ -169,8 +162,8 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
         }
      }
   }
-  chrono3.Stop();
-  otbMsgDebugMacro(<< "relabeling, filtering small objects and simplifying geometries took " << chrono3.GetTotal() << " sec");
+  chrono.Stop();
+  otbMsgDebugMacro(<< "relabeling, filtering small objects and simplifying geometries took " << chrono.GetElapsedMilliseconds() / 1000 << " sec");
 
   return tmpDS;
 }

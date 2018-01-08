@@ -205,13 +205,13 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   double sizePerPixel = 1;
   for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
-    sizePerPixel *= vcl_abs(m_LabelImage->GetSpacing()[i]);
+    sizePerPixel *= vcl_abs(m_LabelImage->GetSignedSpacing()[i]);
     }
 
   typename std::vector<double> sizePerPixelPerDimension;
   for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
-    sizePerPixelPerDimension.push_back(sizePerPixel / vcl_abs(m_LabelImage->GetSpacing()[i]));
+    sizePerPixelPerDimension.push_back(sizePerPixel / vcl_abs(m_LabelImage->GetSignedSpacing()[i]));
     }
 
   // compute the max the index on the border of the image
@@ -367,7 +367,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     // get the physical position and the spacing - they are used several times later
     typename TLabelImage::PointType physicalPosition;
     m_LabelImage->TransformIndexToPhysicalPoint(idx, physicalPosition);
-    const typename TLabelImage::SpacingType& spacing = m_LabelImage->GetSpacing();
+    const typename TLabelImage::SpacingType& spacing = m_LabelImage->GetSignedSpacing();
     // the sum of x positions, also reused several times
     double sumX = length * (physicalPosition[0] + (spacing[0] * (length - 1)) / 2.0);
     // the real job - the sum of square of x positions
@@ -406,7 +406,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     {
     centroid[i] /= size;
     regionSize[i] = maxs[i] - mins[i] + 1;
-    double s = regionSize[i] * vcl_abs(m_LabelImage->GetSpacing()[i]);
+    double s = regionSize[i] * vcl_abs(m_LabelImage->GetSignedSpacing()[i]);
     minSize = std::min(s, minSize);
     maxSize = std::max(s, maxSize);
     for (DimensionType j = 0; j < LabelObjectType::ImageDimension; ++j)
@@ -550,7 +550,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     SimplifyPolygonFunctorType simplifyFunctor;
     polygonFunctor.SetStartIndex(m_LabelImage->GetLargestPossibleRegion().GetIndex());
     polygonFunctor.SetOrigin(m_LabelImage->GetOrigin());
-    polygonFunctor.SetSpacing(m_LabelImage->GetSpacing());
+    polygonFunctor.SetSpacing(m_LabelImage->GetSignedSpacing());
     typename PolygonType::Pointer polygon = simplifyFunctor(polygonFunctor(lo));
     lo->SetPolygon(polygon);
     }
@@ -622,7 +622,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
         double length = 0;
         for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
           {
-          length += vcl_pow((iIt1->operator[] (i) - iIt2->operator[] (i)) * m_LabelImage->GetSpacing()[i], 2);
+          length += vcl_pow((iIt1->operator[] (i) - iIt2->operator[] (i)) * m_LabelImage->GetSignedSpacing()[i], 2);
           }
         if (feretDiameter < length)
           {
@@ -853,7 +853,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     }
 
   // compute the perimeter based on the intercept counts
-  double perimeter = PerimeterFromInterceptCount( intercepts, m_LabelImage->GetSpacing() );
+  double perimeter = PerimeterFromInterceptCount( intercepts, m_LabelImage->GetSignedSpacing() );
   return perimeter;
 }
 

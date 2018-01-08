@@ -32,8 +32,8 @@ class ossimXmlDocument;
 #if defined(USE_BOOST_TIME)
 #   include <boost/date_time/posix_time/posix_time.hpp>
 #endif
-#include "ossimStringUtilities.h"
-#include "ossimTimeUtilities.h"
+#include "ossim/ossimStringUtilities.h"
+#include "ossim/ossimTimeUtilities.h"
 #include <ossim/base/ossimXmlNode.h>
 
 namespace ossimplugins {

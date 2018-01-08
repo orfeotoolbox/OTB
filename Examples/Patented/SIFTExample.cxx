@@ -234,7 +234,7 @@ int main(int argc, char * argv[])
     }
 
   PointsIteratorType        pIt = filter->GetOutput()->GetPoints()->Begin();
-  ImageType::SpacingType    spacing = reader->GetOutput()->GetSpacing();
+  ImageType::SpacingType    spacing = reader->GetOutput()->GetSignedSpacing();
   ImageType::PointType      origin = reader->GetOutput()->GetOrigin();
   OutputImageType::SizeType size =
     outputImage->GetLargestPossibleRegion().GetSize();

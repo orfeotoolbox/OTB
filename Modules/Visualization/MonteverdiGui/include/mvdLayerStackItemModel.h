@@ -157,15 +157,13 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
    */
-  
-    QVariant
+  QVariant
     data( const QModelIndex & index, int role = Qt::DisplayRole ) const ITK_OVERRIDE;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#dropMimeData
    */
-  
-    bool
+  bool
     dropMimeData( const QMimeData * data,
                   Qt::DropAction action,
                   int row,
@@ -188,11 +186,11 @@ public:
   QVariant headerData( int section,
                                Qt::Orientation orientation,
                                int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
    */
-  
-    QModelIndex
+  QModelIndex
     index( int row,
            int column,
            const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
@@ -200,8 +198,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
    */
-  
-    bool
+  bool
     insertRows( int row,
                 int count,
                 const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
@@ -224,8 +221,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
    */
-  
-    bool
+  bool
     removeRows( int row,
                 int count,
                 const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
@@ -238,8 +234,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
    */
-  
-    bool
+  bool
     setData( const QModelIndex & index,
              const QVariant & value,
              int role = Qt::EditRole ) ITK_OVERRIDE;

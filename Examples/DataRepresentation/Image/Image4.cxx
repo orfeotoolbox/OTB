@@ -114,20 +114,20 @@ int main(int, char *[])
   // Software Guide : BeginLatex
   //
   // The array can be assigned to the image using
-  // the \code{SetSpacing()} method.
+  // the \code{SetSignedSpacing()} method.
   //
-  // \index{otb::Image!SetSpacing()}
+  // \index{otb::Image!SetSignedSpacing()}
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  image->SetSpacing(spacing);
+  image->SetSignedSpacing(spacing);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
   // The spacing information can be retrieved from an image by using the
-  // \code{GetSpacing()} method. This method returns a reference to a
+  // \code{GetSignedSpacing()} method. This method returns a reference to a
   // \code{FixedArray}. The returned object can then be used to read the
   // contents of the array. Note the use of the \code{const} keyword to indicate
   // that the array will not be modified.
@@ -135,7 +135,7 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  const ImageType::SpacingType& sp = image->GetSpacing();
+  const ImageType::SpacingType& sp = image->GetSignedSpacing();
 
   std::cout << "Spacing = ";
   std::cout << sp[0] << ", " << sp[1] << std::endl;

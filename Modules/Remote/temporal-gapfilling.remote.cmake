@@ -26,5 +26,6 @@ A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/jordi/temporalgapfilling
 "
   GIT_REPOSITORY http://tully.ups-tlse.fr/jordi/temporalgapfilling.git
-  GIT_TAG 4180f28091fb10029860ada2dcf9c9526d3a55d2
+  # Commit on develop branch which includes patches for Windows support
+  GIT_TAG 4fc4a71acf7b9b051cda5a3b950de2cdb9d26287
 )

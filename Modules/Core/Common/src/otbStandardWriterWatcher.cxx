@@ -147,7 +147,7 @@ void
 StandardWriterWatcher
 ::StartWriter()
 {
-  m_TimeProbe.Start();
+  m_Stopwatch.Start();
   std::cout << "Writing task: " << " \"" << m_Comment << "\" " << std::endl;
   std::cout << "Writer type: " << (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None") << std::endl;
   std::cout << "Filter type: " << (m_SourceProcess.GetPointer() ? m_SourceProcess->GetNameOfClass() : "None") <<
@@ -158,9 +158,9 @@ void
 StandardWriterWatcher
 ::EndWriter()
 {
-  m_TimeProbe.Stop();
+  m_Stopwatch.Stop();
   std::cout << std::endl << "Writing task took "
-            << m_TimeProbe.GetMean()
+            << m_Stopwatch.GetElapsedMilliseconds() / 1000
             << " seconds." << std::endl;
 }
 

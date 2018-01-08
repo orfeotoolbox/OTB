@@ -142,7 +142,7 @@ public:
   itkGetConstReferenceMacro(InputOrigin, OriginType);
 
   /** Set the spacing (size of a pixel) of the vector data.
-    * \sa GetSpacing() */
+    * \sa GetSignedSpacing() */
   itkSetMacro(InputSpacing, SpacingType);
   itkGetConstReferenceMacro(InputSpacing, SpacingType);
 
@@ -152,7 +152,7 @@ public:
   itkGetConstReferenceMacro(OutputOrigin, OriginType);
 
   /** Set the spacing (size of a pixel) of the vector data.
-  * \sa GetSpacing() */
+  * \sa GetSignedSpacing() */
   itkSetMacro(OutputSpacing, SpacingType);
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 

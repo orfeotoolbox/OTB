@@ -27,7 +27,7 @@
 #define ossimSentinel1SarSensorModel_HEADER
 
 #include <boost/config.hpp>
-#include "ossimSarSensorModel.h"
+#include "ossim/ossimSarSensorModel.h"
 
 class ossimXmlDocument;
 class ossimString;

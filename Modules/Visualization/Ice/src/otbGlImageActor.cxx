@@ -154,7 +154,7 @@ void GlImageActor::Initialize(const std::string & filename)
     }
 
   m_Origin = m_FileReader->GetOutput()->GetOrigin();
-  m_Spacing = m_FileReader->GetOutput()->GetSpacing();
+  m_Spacing = m_FileReader->GetOutput()->GetSignedSpacing();
   m_NumberOfComponents = m_FileReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
   unsigned int ovrCount = m_FileReader->GetOverviewsCount();
@@ -706,7 +706,7 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(clr,ilr);
 
   // Take into account that Origin refers to center of first pixel
-  SpacingType spacing = m_FileReader->GetOutput()->GetSpacing();
+  SpacingType spacing = m_FileReader->GetOutput()->GetSignedSpacing();
   iul[0]-=0.5*spacing[0];
   iul[1]-=0.5*spacing[1];
   iur[0]+=0.5*spacing[0];

@@ -88,6 +88,22 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   origin[1]=17;
   ImageType::SizeType outSize;
   outSize.Fill(103);
+  ImageType::DirectionType direction;
+  direction.SetIdentity();
+  ImageType::SpacingType uspacing;
+  for ( unsigned int i = 0 ; i < ImageType::ImageDimension ; i++ )
+    {
+    if (  spacing[i] < 0 )
+      {
+      uspacing[i] = -spacing[i];
+      for (unsigned int j = 0 ; j < ImageType::ImageDimension ; j++)
+        {
+        direction[j][i] = -direction[j][i];
+        }
+      }
+      else
+        uspacing[i] = spacing[i];
+    }
 
   filter->SetOutputSize(outSize);
   filter->SetOutputOrigin(origin);
@@ -95,7 +111,8 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   refFilter->SetSize(outSize);
   refFilter->SetOutputOrigin(origin);
-  refFilter->SetOutputSpacing(spacing);
+  refFilter->SetOutputSpacing(uspacing);
+  refFilter->SetOutputDirection(direction);
 
   typedef otb::DifferenceImageFilter<ImageType,ImageType> ComparisonFilterType;
   typedef itk::StreamingImageFilter<ImageType,ImageType> StreamingFilterType;

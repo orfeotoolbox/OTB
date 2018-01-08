@@ -339,7 +339,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typename TOutputDEMImage::SpacingType outSpacing;
   outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
   outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
-  outputPtr->SetSpacing(outSpacing);
+  outputPtr->SetSignedSpacing(outSpacing);
 
   // Choose origin
   typename TOutputDEMImage::PointType outOrigin;
@@ -381,7 +381,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 
   typename DEMImageType::RegionType outRegion = outputDEM->GetRequestedRegion();
   typename DEMImageType::PointType outOrigin = outputDEM->GetOrigin();
-  typename DEMImageType::SpacingType outSpacing = outputDEM->GetSpacing();
+  typename DEMImageType::SpacingType outSpacing = outputDEM->GetSignedSpacing();
 
   RSTransformType::Pointer groundToLeftTransform = RSTransformType::New();
   groundToLeftTransform->SetOutputKeywordList(leftSensor->GetImageKeywordlist());

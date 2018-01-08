@@ -1320,8 +1320,8 @@ ImageIOBase
 void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  using namespace std::string_literals;
-  os << indent << "FileName: "s << m_FileName << std::endl;
+
+  os << indent << "FileName: " << m_FileName << std::endl;
   os << indent << "FileType: " << this->GetFileTypeAsString(m_FileType) << std::endl;
   os << indent << "ByteOrder: " << this->GetByteOrderAsString(m_ByteOrder) << std::endl;
   os << indent << "IORegion: " << std::endl;

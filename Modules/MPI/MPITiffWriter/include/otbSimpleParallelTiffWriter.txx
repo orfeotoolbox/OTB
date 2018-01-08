@@ -22,7 +22,7 @@
 #define otbSimpleParallelTiffWriter_txx
 
 #include "otbSimpleParallelTiffWriter.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 
 using std::vector;
 
@@ -546,12 +546,12 @@ SimpleParallelTiffWriter<TInputImage>
     {
     // Set geotransform
     double geotransform[6];
-    geotransform[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSpacing()[0];
-    geotransform[1] = inputPtr->GetSpacing()[0];
+    geotransform[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSignedSpacing()[0];
+    geotransform[1] = inputPtr->GetSignedSpacing()[0];
     geotransform[2] = 0.0;
-    geotransform[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSpacing()[1];
+    geotransform[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSignedSpacing()[1];
     geotransform[4] = 0.0;
-    geotransform[5] = inputPtr->GetSpacing()[1];
+    geotransform[5] = inputPtr->GetSignedSpacing()[1];
 
     // Call SPTW routine that creates the output raster
     SPTW_ERROR sperr = create_generic_raster(m_FileName,
@@ -617,7 +617,7 @@ SimpleParallelTiffWriter<TInputImage>
    ************************************************************************/
 
   // Time probe for overall process time
-  itk::TimeProbe overallTime;
+  otb::Stopwatch overallTime;
   overallTime.Start();
 
   // Check that streaming is relevant
@@ -674,19 +674,16 @@ SimpleParallelTiffWriter<TInputImage>
       /*
        * Processing
        */
-      itk::TimeProbe processingTime;
-      processingTime.Start();
+      otb::Stopwatch processingTime = otb::Stopwatch::StartNew();
       inputPtr->SetRequestedRegion(streamRegion);
       inputPtr->PropagateRequestedRegion();
       inputPtr->UpdateOutputData();
-      processingTime.Stop();
-      processDuration += processingTime.GetTotal();
+      processDuration += processingTime.GetElapsedMilliseconds();
 
       /*
        * Writing using SPTW
        */
-      itk::TimeProbe writingTime;
-      writingTime.Start();
+      otb::Stopwatch writingTime = otb::Stopwatch::StartNew();
       if (!m_VirtualMode)
         {
         sptw::write_area(output_raster,
@@ -696,8 +693,7 @@ SimpleParallelTiffWriter<TInputImage>
             streamRegion.GetIndex()[0] + streamRegion.GetSize()[0] -1,
             streamRegion.GetIndex()[1] + streamRegion.GetSize()[1] -1);
         }
-      writingTime.Stop();
-      writeDuration += writingTime.GetTotal();
+      writeDuration += writingTime.GetElapsedMilliseconds();
       numberOfProcessedRegions += 1;
       }
     }
@@ -731,12 +727,12 @@ SimpleParallelTiffWriter<TInputImage>
       itkDebugMacro( "Process Id\tProcessing\tWriting" );
 	  for (unsigned int i = 0; i < process_runtimes.size(); i+=nValues)
 	    {
-      itkDebugMacro( <<(int (i/nValues)) << 
+      itkDebugMacro( <<(int (i/nValues)) <<
 	        "\t" << process_runtimes[i] <<
 	        "\t" << process_runtimes[i+1] <<
 	        "\t("<< process_runtimes[i+2] << " regions)" );
 	    }
-	  itkDebugMacro( "Overall time:" << overallTime.GetTotal() );
+	  itkDebugMacro( "Overall time: " << overallTime.GetElapsedMilliseconds() / 1000 << " s" );
 	  }
    */
 

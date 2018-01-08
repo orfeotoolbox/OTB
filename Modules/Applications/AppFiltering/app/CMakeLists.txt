@@ -18,13 +18,12 @@
 # limitations under the License.
 #
 
-set(OTBAppFiltering_LINK_LIBS
-  ${OTBImageManipulation_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBImageBase_LIBRARIES}
-)
-
 otb_create_application(
   NAME           Smoothing
   SOURCES        otbSmoothing.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ContrastEnhancement
+  SOURCES        otbContrastEnhancement.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

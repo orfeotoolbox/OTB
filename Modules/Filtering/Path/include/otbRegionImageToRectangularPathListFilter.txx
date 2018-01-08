@@ -82,7 +82,7 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
   typename InputImageType::PointType   origin;
   typename InputImageType::SpacingType spacing;
   origin = InputImage->GetOrigin();
-  spacing = InputImage->GetSpacing();
+  spacing = InputImage->GetSignedSpacing();
   std::cout << "Image origin : " << origin << std::endl;
   std::cout << "Image spacing : " << spacing << std::endl;
 

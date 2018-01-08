@@ -23,7 +23,7 @@
  */
 
 
-#include "ossimSarSensorModelPathsAndKeys.h"
+#include "ossim/ossimSarSensorModelPathsAndKeys.h"
 
 namespace ossimplugins {
    const std::string HEADER_PREFIX       = "header.";
@@ -34,6 +34,8 @@ namespace ossimplugins {
    const std::string GR_PREFIX           = "support_data.geom.srd.coords.gr";
    const std::string BURST_PREFIX        = "support_data.geom.bursts.burst";
    const std::string BURST_NUMBER_KEY    = "support_data.geom.bursts.number";
+   const std::string ORBIT_PREFIX        = "orbitList.orbit";
+   const std::string ORBIT_NUMBER_KEY    = "orbitList.nb_orbits";
    const std::string GCP_PREFIX          = "support_data.geom.gcp";
    const std::string GCP_NUMBER_KEY      = "support_data.geom.gcp.number";
    const std::string NUMBER_KEY          = "number";

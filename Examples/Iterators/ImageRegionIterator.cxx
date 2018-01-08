@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 // Software Guide : BeginCodeSnippet
   ImageType::Pointer outputImage = ImageType::New();
   outputImage->SetRegions(outputRegion);
-  const ImageType::SpacingType& spacing = reader->GetOutput()->GetSpacing();
+  const ImageType::SpacingType& spacing = reader->GetOutput()->GetSignedSpacing();
   const ImageType::PointType&   inputOrigin = reader->GetOutput()->GetOrigin();
   double                        outputOrigin[Dimension];
 
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
     outputOrigin[i] = inputOrigin[i] + spacing[i] * inputStart[i];
     }
 
-  outputImage->SetSpacing(spacing);
+  outputImage->SetSignedSpacing(spacing);
   outputImage->SetOrigin(outputOrigin);
   outputImage->Allocate();
 // Software Guide : EndCodeSnippet
