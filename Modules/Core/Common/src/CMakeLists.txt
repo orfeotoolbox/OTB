@@ -28,6 +28,7 @@ set(OTBCommon_SRC
   otbStandardOneLineFilterWatcher.cxx
   otbWriterWatcherBase.cxx
   otbStopwatch.cxx
+  otbStringToHTML.cxx
   )
 
 add_library(OTBCommon ${OTBCommon_SRC})

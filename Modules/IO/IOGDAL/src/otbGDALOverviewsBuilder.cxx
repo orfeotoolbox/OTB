@@ -30,6 +30,7 @@
 #include "otbGDALImageIO.h"
 #include "otbSystem.h"
 
+#include <cctype>
 
 namespace otb
 {
