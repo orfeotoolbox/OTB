@@ -1,4 +1,3 @@
-#!/bin/sh
 #
 # Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
 #
@@ -18,12 +17,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-set -e
-rm -fr OUT_DIR/include/OTB-*
-rm -f OUT_DIR/lib/{libotb*,libOTB*}
-rm -fr OUT_DIR/lib/{otb,python/*otbApplication*,python3/*otbApplication*,java/org.otb.application.jar}
-rm -fr OUT_DIR/share/OTB*
-rm -fv OUT_DIR/bin/{otb*,monteverdi,mapla}
-rm -fv OUT_DIR/{mapla.sh,monteverdi.sh}
 
-echo "OTB is now uninstalled from OUT_DIR"
+function(install_java_bindings)
+  if(HAVE_JAVA)
+    install(FILE ${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar
+      DESTINATION ${PKG_STAGE_DIR}/lib/java
+      )
+  endif()
+endfunction()

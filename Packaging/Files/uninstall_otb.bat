@@ -26,7 +26,9 @@ set MY_INSTALL_DIR=%cd%
 del /S /Q %MY_INSTALL_DIR%\include\OTB* || exit 1
 del /S /Q %MY_INSTALL_DIR%\lib\cmake\OTB* || exit 1
 del /S /Q %MY_INSTALL_DIR%\lib\otb* || exit 1
-del /S /Q %MY_INSTALL_DIR%\lib\python\_otbApplication.* || exit 1
+del /S /Q %MY_INSTALL_DIR%\lib\python\*otbApplication.* || exit 1
+del /S /Q %MY_INSTALL_DIR%\lib\python3\*otbApplication.* || exit 1
+del /S /Q %MY_INSTALL_DIR%\lib\java\org.otb.application.jar || exit 1
 del /S /Q %MY_INSTALL_DIR%\bin\otb* || exit 1
 del /S /Q %MY_INSTALL_DIR%\bin\monteverdi.exe || exit 1
 del /S /Q %MY_INSTALL_DIR%\bin\mapla.exe || exit 1
