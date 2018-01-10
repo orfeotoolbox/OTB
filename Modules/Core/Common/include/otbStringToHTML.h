@@ -34,6 +34,8 @@ namespace otb
  *
  * Prepare a plain string for HTML encapsulation (protection of special
  * characters)
+ *
+ * \ingroup OTBCommon
  */
 class OTBCommon_EXPORT StringToHTML
 {
