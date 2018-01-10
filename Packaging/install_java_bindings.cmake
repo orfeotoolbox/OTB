@@ -20,7 +20,7 @@
 
 function(install_java_bindings)
   if(HAVE_JAVA)
-    install(FILE ${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar
+    install(FILES ${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar
       DESTINATION ${PKG_STAGE_DIR}/lib/java
       )
   endif()
