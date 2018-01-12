@@ -1,3 +1,4 @@
+@echo off
 :: 
 :: Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
 ::
@@ -20,22 +21,33 @@
 :: script to uninstall OTB
 
 setlocal
-set CUR_DIR=%~dp0
-cd %CUR_DIR%..
-set MY_INSTALL_DIR=%cd%
-del /S /Q %MY_INSTALL_DIR%\include\OTB* || exit 1
-del /S /Q %MY_INSTALL_DIR%\lib\cmake\OTB* || exit 1
-del /S /Q %MY_INSTALL_DIR%\lib\otb* || exit 1
-del /S /Q %MY_INSTALL_DIR%\lib\python\*otbApplication.* || exit 1
-del /S /Q %MY_INSTALL_DIR%\lib\python3\*otbApplication.* || exit 1
-del /S /Q %MY_INSTALL_DIR%\lib\java\org.otb.application.jar || exit 1
-del /S /Q %MY_INSTALL_DIR%\bin\otb* || exit 1
-del /S /Q %MY_INSTALL_DIR%\bin\monteverdi.exe || exit 1
-del /S /Q %MY_INSTALL_DIR%\bin\mapla.exe || exit 1
-del /S /Q %MY_INSTALL_DIR%\mapla.bat || exit 1
-del /S /Q %MY_INSTALL_DIR%\monteverdi.bat || exit 1
-del /S /Q %MY_INSTALL_DIR%\share\OTB* || exit 1
-del /S /Q "%MY_INSTALL_DIR%\OTB Project.zip" || exit 1
+cd %~dp0%..
+
+echo - Clean include\OTB*
+for /f %%i in ('dir /b include\OTB*') do rd /S /Q include\%%i
+
+echo - Clean lib\cmake\OTB*
+for /f %%i in ('dir /b lib\cmake\OTB*') do rd /S /Q lib\cmake\%%i
+
+echo - Clean share\OTB*
+for /f %%i in ('dir /b share\OTB*') do rd /S /Q share\%%i
+
+echo - Clean lib\otb
+rd /S /Q lib\otb
+
+del /S /Q lib\otb*
+del /S /Q lib\python\*otbApplication.* || exit 1
+del /S /Q lib\python3\*otbApplication.* || exit 1
+del /S /Q lib\java\org.otb.application.jar || exit 1
+del /S /Q bin\otb* || exit 1
+del /S /Q bin\monteverdi.exe || exit 1
+del /S /Q bin\mapla.exe || exit 1
+del /S /Q mapla.bat || exit 1
+del /S /Q monteverdi.bat || exit 1
+del /S /Q otbenv.* || exit 1
+del /S /Q start_devenv.bat || exit 1
+del /S /Q "OTB Project.zip" || exit 1
+
+echo OTB is now uninstalled from %cd%
+
 endlocal
-
-
