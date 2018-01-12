@@ -1,5 +1,3 @@
-## Title of the bug
-
 ### Description
 
 Describe what happens and why you think it is a bug
