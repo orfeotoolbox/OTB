@@ -1,5 +1,3 @@
-## Title of the Request for Changes
-
 ### Summary
 
 Gives a short summary of the changes.
