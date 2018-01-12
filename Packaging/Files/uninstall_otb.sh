@@ -22,8 +22,10 @@ set -e
 rm -fr OUT_DIR/include/OTB-*
 rm -f OUT_DIR/lib/{libotb*,libOTB*}
 rm -fr OUT_DIR/lib/{otb,python/*otbApplication*,python3/*otbApplication*,java/org.otb.application.jar}
+rm -fr OUT_DIR/lib/cmake/OTB-*
 rm -fr OUT_DIR/share/OTB*
 rm -fv OUT_DIR/bin/{otb*,monteverdi,mapla}
 rm -fv OUT_DIR/{mapla.sh,monteverdi.sh}
+rm -fv OUT_DIR/otbenv.*
 
 echo "OTB is now uninstalled from OUT_DIR"
