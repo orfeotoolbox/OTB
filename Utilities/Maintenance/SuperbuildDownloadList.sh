@@ -53,14 +53,14 @@ mkdir -p "${DOWNLOAD_DIR}"
 cd "${DOWNLOAD_DIR}" || echo "cannot cd to DOWNLOAD_DIR"
 echo "Downloading files to ${DOWNLOAD_DIR}/"
 for cmake in ${CMAKE_FILES}; do
-  download_links=$(grep -h -E '^[^#]*\"(ftp|http|https)://.*(\.tar\.gz|\.tar\.bz2|\.tgz|\.tar\.xz|\.zip|export=download).*\"' ${cmake} |
+  download_links=$(grep -h -E '^[^#]*\"(ftp|http|https)://.*(\.tar\.gz|\.tar\.bz2|\.tgz|\.tar\.xz|\.zip|export=download).*\"' "${cmake}" |
 		    grep -o -E '(ftp|http|https)://[^\"]*' | sort | uniq)
   for url in ${download_links}; do
     file_name=$(echo "${url}" | grep -o -E '[^\/]+$')
     if [ -z "$file_name" ]; then
       echo "invalid filename for url=${url}" && exit 1;
     fi
-    download_name=$(grep -E -A 3 -B 3 "(ftp|http|https).+$file_name" ${cmake} | grep -E -o 'DOWNLOAD_NAME .+' | cut -d ' ' -f 2-)
+    download_name=$(grep -E -A 3 -B 3 "(ftp|http|https).+$file_name" "${cmake}" | grep -E -o 'DOWNLOAD_NAME .+' | cut -d ' ' -f 2-)
     $WGET -N "${url}"
     ret="$?"
     if [ $ret -gt 0 ] && [ $ret -ne 8 ]; then
@@ -68,7 +68,7 @@ for cmake in ${CMAKE_FILES}; do
        exit 1;
     fi
     if [ -n "$download_name" ]; then
-      mv $file_name $download_name
+      mv "${file_name}" "${download_name}"
       file_name=$download_name
     fi
     DOWNLOAD_NAMES="${DOWNLOAD_NAMES} ${file_name}"
