@@ -554,21 +554,39 @@ SimpleParallelTiffWriter<TInputImage>
     geotransform[5] = inputPtr->GetSignedSpacing()[1];
 
     // Call SPTW routine that creates the output raster
-    SPTW_ERROR sperr = create_generic_raster(m_FileName,
-        inputPtr->GetLargestPossibleRegion().GetSize()[0],
-        inputPtr->GetLargestPossibleRegion().GetSize()[1],
-        nBands,
-        dataType,
-        geotransform,
-        inputPtr->GetProjectionRef(),
-        block_size_x,
-        m_TiffTiledMode);
-
-    if (sperr != sptw::SP_None)
+    if(!m_TiffTiledMode)
       {
-      itkExceptionMacro(<<"Error creating raster");
-      otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
+      SPTW_ERROR sperr = sptw::create_raster(m_FileName,
+                                             inputPtr->GetLargestPossibleRegion().GetSize()[0],
+                                             inputPtr->GetLargestPossibleRegion().GetSize()[1],
+                                             nBands,
+                                             dataType,
+                                             geotransform,
+                                             inputPtr->GetProjectionRef());
+      if (sperr != sptw::SP_None)
+        {
+        itkExceptionMacro(<<"Error creating raster");
+        otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
+        }
+
       }
+    else
+      {
+      SPTW_ERROR sperr = sptw::create_tiled_raster(m_FileName,
+                                                   inputPtr->GetLargestPossibleRegion().GetSize()[0],
+                                                   inputPtr->GetLargestPossibleRegion().GetSize()[1],
+                                                   nBands,
+                                                   dataType,
+                                                   geotransform,
+                                                   inputPtr->GetProjectionRef(),
+                                                   block_size_x);
+      if (sperr != sptw::SP_None)
+        {
+        itkExceptionMacro(<<"Error creating raster");
+        otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
+        }
+      }
+    
     }
 
   // Wait for rank 0 to finish creating the output raster
