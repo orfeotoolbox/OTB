@@ -747,13 +747,13 @@ class ApplicationProxy(object):
         print ("int8, int16, int32, uint8, uint16, uint32, float, double")
         numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
 
-      if len(numpy_vector_image.shape) > 2:
-        raise ValueError("len(numpy_vector_image.shape) > 2\n"
-                         "Output image from application is of 3 dimension (len(nparray.shape) > 2). \n"
-                         "GetImageFromNumpyArray returns an numpy array of dimension 2 that will result is loss of data.\n"
+      if numpy_vector_image.shape[2] > 1:
+        raise ValueError("numpy_vector_image.shape[2] > 1\n"
+                         "Output image from application has more than 1 band\n"
+                         "GetImageFromNumpyArray only returns the first band, which will result in a loss of data.\n"
                          "In this case you must use GetVectorImageFromNumpyArray which is capable of return a 3 dimension image.\n")
 
-      numpy_vector_image = numpy_vector_image[:,:,1]
+      numpy_vector_image = numpy_vector_image[:,:,0]
       return numpy_vector_image
 
 
