@@ -40,7 +40,23 @@ int otbSarDeburstFilterTest(int itkNotUsed(argc), char * argv[])
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(argv[2]);
   writer->Update();
-  
+
+  // check that there is now a single burst in data
+  reader = ReaderType::New();
+  reader->SetFileName(argv[2]);
+  reader->UpdateOutputInformation();
+
+  unsigned int nb_bursts = atoi(reader->GetOutput()->GetImageKeywordlist().GetMetadataByKey("support_data.geom.bursts.number").c_str());
+
+  if(nb_bursts != 1)
+    {
+    std::cerr<<"Error: more than 1 burst ("<<nb_bursts<<" bursts) found in output metadata."<<std::endl;
+    }
+  else
+    {
+    std::cout<<"Metadata have a single burst as expected."<<std::endl;
+    }
+
   return EXIT_SUCCESS;
 }
 

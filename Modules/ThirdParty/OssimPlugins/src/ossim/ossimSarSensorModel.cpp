@@ -1218,13 +1218,18 @@ namespace ossimplugins
      static const char MODULE[] = "ossimplugins::ossimSarSensorModel::saveState";
      SCOPED_LOG(traceDebug, MODULE);
 
-     kwl.add(prefix,
-             ossimKeywordNames::TYPE_KW,
-             "ossimSarSensorModel",
-             true);
+     // Prevent override of subclasses TYPE_KW
+     
+     if(!kwl.hasKey(ossimKeywordNames::TYPE_KW))
+       {
+       kwl.add(prefix,
+               ossimKeywordNames::TYPE_KW,
+               "ossimSarSensorModel",
+               true);
+       }
 
-     add(kwl, SUPPORT_DATA_PREFIX + "product_type", theProductType.ToString().data());
-
+     std::string product_type = theProductType.ToString().data();
+     add(kwl, SUPPORT_DATA_PREFIX + "product_type", product_type);
      add(kwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", theNearRangeTime      );
      add(kwl, SUPPORT_DATA_PREFIX, "range_sampling_rate"       , theRangeSamplingRate  );
      add(kwl, SUPPORT_DATA_PREFIX, "range_spacing"             , theRangeResolution    );
