@@ -107,7 +107,7 @@ private:
                      HistoType & targetHisto ) ;
   //TODO Give the opportunity to choose the histogram target
   
-  /** Check whether the input histogram has enought pixel to be meaningful */
+  /** Check whether the input histogram has enough pixel to be meaningful */
   bool IsValid(const HistoType & inputHisto ) ;
 
   double m_Min;

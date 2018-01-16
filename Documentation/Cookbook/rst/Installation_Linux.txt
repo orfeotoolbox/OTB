@@ -39,8 +39,8 @@ archive is extracted, the directory structure consists of:
 -  ``share``: A folder containing common resources and copyright
    mentions.
 
--  ``tool``: A folder containing usefull scripts to test the installation or
-   to uninstall OTB libraries and headers while keeping all the depedencies.
+-  ``tool``: A folder containing useful scripts to test the installation or
+   to uninstall OTB libraries and headers while keeping all the dependencies.
 
 The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize your environment

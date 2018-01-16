@@ -46,7 +46,7 @@ OTB-v.6.2.0 - Changes since version 6.0.0 (October 26th, 2017)
     * 0001460: Unable to compile OTB  6.2.0 RC1 with superbuild (CURL issue)
 
   * Orfeo Toolbox (OTB)
-    * 0001453: Applications crash with inxml paramter (GUI mode)
+    * 0001453: Applications crash with inxml parameter (GUI mode)
     * 0001405: Crash on optical calibration, TOC mode, GUI only (command line works), only on Mac
     * 0001422: Optical Calibration application crash on MacOSX
     * 0001401: ktrace reports too many file open for any otbapplication
