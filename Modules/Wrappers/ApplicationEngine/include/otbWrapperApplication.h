@@ -93,9 +93,9 @@ public:
   /** RTTI support */
   itkTypeMacro(Application, itk::Object);
 
-  /** Set the parameter name */
-  //itkSetStringMacro(Name);
 
+  //itkSetStringMacro(Name);
+  /** Set the application name */
   virtual void SetName( const std::string & name )
   {
     m_Name = name;
@@ -104,12 +104,13 @@ public:
     m_Logger->SetName(name);
   }
 
+  /** Get the application name */
   itkGetStringMacro(Name);
 
-  /** Set the parameter description */
+  /** Set the application description */
   itkSetStringMacro(Description);
 
-  /** Get the parameter description */
+  /** Get the application description */
   itkGetStringMacro(Description);
 
   /** Initialize the application, instantiating the parameter list */
@@ -169,65 +170,66 @@ public:
    * WARNING: this method may disappear from the API */
   const Parameter* GetParameterByKey(std::string parameter, bool follow=true) const;
 
-  /* Returns the description of a parameter */
+  /** Returns the name of a parameter */
   std::string GetParameterName(std::string paramKey);
 
-  /* Returns the description of a parameter */
+  /** Returns the description of a parameter */
   std::string GetParameterDescription(std::string paramKey);
 
-  /* Set the description of a parameter */
+  /** Set the description of a parameter */
   void SetParameterDescription(std::string paramKey, std::string dec);
 
-  /* Enable the use of an optional parameter. Returns the previous state */
+  /** Enable the use of an optional parameter.*/
   void EnableParameter(std::string paramKey);
 
-  /* Disable the use of an optional parameter. Returns the previous state  */
+  /** Disable the use of an optional parameter.*/
   void DisableParameter(std::string paramKey);
 
-  /* Return the enable state of an optional parameter  */
+  /** Return the enable state of an optional parameter  */
   bool IsParameterEnabled(std::string paramKey, bool recurseParents = false) const;
 
-  /* Return true if the specified parameter is mandatory */
+  /** Return true if the specified parameter is mandatory */
   bool IsMandatory(std::string paramKey) const;
 
-  /* Return true if the specified parameter was set automatically in
+  /** Return true if the specified parameter was set automatically in
    * the application
    */
   bool HasAutomaticValue(std::string paramKey) const;
 
-  /* Returns true if the parameter has an associated value provided externally
-   *  (not automatically computed by the application) */
+  /** Returns true if the parameter has an associated value provided externally
+   *  (not automatically computed by the application) 
+   */
   bool HasUserValue(std::string paramKey) const;
 
-  /* If a user value was provided clear it and update the other parameters */
+  /** If a user value was provided clear it and update the other parameters */
   void ClearValue(std::string paramKey);
 
-  /* Returns true if the parameter has an associated value.
-   * This value can be an automatically computed value or default value,
+  /** Returns true if the parameter has an associated value.
+   * This value can be an automatically computed value, default value,
    * or a value set externally by user */
   bool HasValue(std::string paramKey) const;
 
-  /* Get active flag of parameter with key paramKey
-   */
+  /** Get active flag of parameter with key paramKey */
   bool GetParameterEmpty(std::string paramKey);
 
-  /** Set HasUserValue flag of parameter with key paramKey
-   */
+  /** Set UserValue flag of parameter with key paramKey */
   void SetParameterUserValue(std::string paramKey, bool value);
 
-  /* Return the user level of access to a parameter */
+  /** Return the user level of access to a parameter */
   UserLevel GetParameterUserLevel(std::string paramKey) const;
 
   /** Get the role of the parameter */
   Role GetParameterRole(std::string paramKey) const;
 
-  /* Get the parameter type from its name */
+  /** Get the parameter type */
   ParameterType GetParameterType(std::string paramKey) const;
 
-  /* Returns the description of a parameter */
+  /** Returns the list of choices (key) of the ListView parameter
+   * or the Choice parameter */
   std::vector<std::string> GetChoiceKeys(std::string paramKey);
 
-  /* Returns the description of a parameter */
+  /** Returns the list of choices (name) of the ListView parameter
+   * or the Choice parameter */
   std::vector<std::string> GetChoiceNames(std::string paramKey);
 
   /* Is the application ready to be executed : All the mandatory
@@ -236,52 +238,60 @@ public:
   /* Set the Parameter value and Update the UserFlag. used by xml parameter
    */
 
-  /* Set an integer value
+  /** Set an integer value.
    *
    * Can be called for types :
-   * \li ParameterType_Int
-   * \li ParameterType_Float
-   * \li ParameterType_Radius
-   * \li ParameterType_Choice
+   * \li \c ParameterType_Int
+   * \li \c ParameterType_Float
+   * \li \c ParameterType_Radius
+   * \li \c ParameterType_Choice
    */
   void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag = true);
 
-  /* Set a floating value
+  /** Set a floating value.
    *
-   * Can be called for types :
-   * \li ParameterType_Float
+   * Can be called for type \c ParameterType_Float
    */
   void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag = true);
 
-  /* Set a string value
+  /** Set a string value.
    *
    * Can be called for types :
-   * \li ParameterType_InputImageListParameter
-   * \li ParameterType_InputVectorDataListParameter
-   * \li ParameterType_InputFilenameListParameter
-   * \li ParameterType_StringList
+   * \li \c ParameterType_Choice
+   * \li \c ParameterType_ListView
+   * \li \c ParameterType_String
+   * \li \c ParameterType_InputFilename
+   * \li \c ParameterType_OutputFilename
+   * \li \c ParameterType_Directory
+   * \li \c ParameterType_RAM
+   * \li \c ParameterType_Int (conversion)
+   * \li \c ParameterType_Float (conversion)
+   * \li \c ParameterType_Radius (conversion)
+   * \li \c ParameterType_InputImage (set filename)
+   * \li \c ParameterType_ComplexInputImage (set filename)
+   * \li \c ParameterType_InputVectorData (set filename)
+   * \li \c ParameterType_OutputImage (set filename)
+   * \li \c ParameterType_ComplexOutputImage (set filename)
+   * \li \c ParameterType_OutputVectorData (set filename)
+   * \li \c ParameterType_OutputProcessXML (set filename)
+   * \li \c ParameterType_InputProcessXML (set filename)
    */
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
 
-  /* Set a string value
+  /* Set a string value.
    *
    * Can be called for types :
-   * \li ParameterType_String
-   * \li ParameterType_InputFilename
-   * \li ParameterType_OutputFilename
-   * \li ParameterType_Directory
-   * \li ParameterType_Choice
-   * \li ParameterType_Float
-   * \li ParameterType_Int
-   * \li ParameterType_Radius
-   * \li ParameterType_InputImageParameter
-   * \li ParameterType_ComplexInputImageParameter
-   * \li ParameterType_InputVectorDataParameter
-   * \li ParameterType_OutputImageParameter
-   * \li ParameterType_OutputVectorDataParameter
+   * \li \c ParameterType_StringList
+   * \li \c ParameterType_InputFilenameList
+   * \li \c ParameterType_ListView (set selected names)
+   * \li \c ParameterType_InputVectorDataList (set filenames)
+   * \li \c ParameterType_InputImageList (set filenames)
    */
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
 
+  /** Set Active flag to \param value and UserValue to 
+  * \param hasUserValueFlag 
+  */
   void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
   /** Checks if the application is ready to be executed. It checks that there
@@ -292,168 +302,158 @@ public:
   /** Checks if a parameter 'key' is missing.
    *
    * A parameter is missing when all the following conditions are true :
+   *   - the parameter has no value
    *   - the parameter is mandatory
    *   - the parameter has Role_Input
    *   - the parameter is not a group
-   *   - the parameter has no value
    *   - the parameter ancestors are mandatory or enabled.
    */
   bool IsParameterMissing(const std::string &key) const;
 
-  /* Set an default integer value, must used in the
-   * DoInit when setting a value by default
-   * for the parameter
+  /** Set a default integer value, must be used in the
+   * DoInit when setting a value by default for the parameter.
    *
    * Can be called for types :
-   * \li ParameterType_Int
-   * \li ParameterType_Float
-   * \li ParameterType_Radius
-   * \li ParameterType_Choice
+   * \li \c ParameterType_Int
+   * \li \c ParameterType_Float
+   * \li \c ParameterType_Radius
+   * \li \c ParameterType_RAM
    */
   void SetDefaultParameterInt(std::string parameter, int value);
 
-  /* Set a default floating value, must used in the
+  /** Set a default floating value, must used in the
    * DoInit when setting a value by default
-   * for the parameter
+   * for the parameter.
    *
-   * Can be called for types :
-   * \li ParameterType_Float
+   * Can be called for type \c ParameterType_Float
    */
   void SetDefaultParameterFloat(std::string parameter, float value);
 
   /** Set a default pixel type for an output image parameter
    *
-   * \param[in] parameter Name of the output image parameter
-   * \param[in] type Default pixel type
+   * \param parameter Name of the output image parameter
+   * \param type Default pixel type
    */
   void SetDefaultOutputPixelType(std::string parameter, ImagePixelType type);
 
   /** Set a default complex pixel type for an output complex image parameter
    *
-   * \param[in] parameter Name of the output complex image parameter
-   * \param[in] type Default complex pixel type
+   * \param parameter Name of the output complex image parameter
+   * \param type Default complex pixel type
    */
   void SetDefaultOutputComplexPixelType(std::string parameter, ComplexImagePixelType type);
 
- /* Set a minimum int value, must used in the
-   * DoInit when setting a value by default
-   * for the parameter
+  /** Set a minimum int value, must be used in the
+   * DoInit when setting a \param value by default for the 
+   * \param parameter.
    *
-   * Can be called for types :
-   * \li ParameterType_Int
+   * Can be called for type \c ParameterType_Int
    */
   void SetMinimumParameterIntValue(std::string parameter, int value);
 
- /* Set a maximum int value, must used in the
-   * DoInit when setting a value by default
-   * for the parameter
+  /** Set a maximum int value, must be used in the
+   * DoInit when setting a \param value by default for the 
+   * \param parameter.
    *
-   * Can be called for types :
-   * \li ParameterType_Int
+   * Can be called for type \c ParameterType_Int
    */
   void SetMaximumParameterIntValue(std::string parameter, int value);
 
- /* Set a minimum int value, must used in the
-   * DoInit when setting a value by default
-   * for the parameter
+  /** Set a minimum float value, must be used in the
+   * DoInit when setting a \param value by default
+   * for the \param parameter
    *
-   * Can be called for types :
-   * \li ParameterType_Float
+   * Can be called for type \c ParameterType_Float
    */
   void SetMinimumParameterFloatValue(std::string parameter, float value);
 
- /* Set a maximum int value, must used in the
-   * DoInit when setting a value by default
-   * for the parameter
+  /** Set a maximum float value, must be used in the
+   * DoInit when setting a \param value by default
+   * for the \param parameter
    *
-   * Can be called for types :
-   * \li ParameterType_Float
+   * Can be called for type \c ParameterType_Float
    */
   void SetMaximumParameterFloatValue(std::string parameter, float value);
 
 
-  /**
-   * Enable single selection mode for list view if status in true
-   * (default is false).
+  /** Set single selection mode on \param status.
    *
-   * Can be called for types:
-   * \li ParameterType_ListView
+   * Can be called for type \c ParameterType_ListView
    */
   void SetListViewSingleSelectionMode(std::string parameter, bool status);
 
-  /* Set an output image value
+  /** Set an output image value.
    *
-   * Can be called for types :
-   * \li ParameterType_OutputImage
+   * Can be called for type \c ParameterType_OutputImage
    */
   void SetParameterOutputImage(std::string parameter, FloatVectorImageType* value);
 
-  /* Set a complex output image value
+  /** Set a complex output image value
    *
-   * Can be called for types :
-   * \li ParameterType_ComplexOutputImage
+   * Can be called for type \c ParameterType_ComplexOutputImage
    */
   void SetParameterComplexOutputImage(std::string parameter, ComplexFloatVectorImageType* value);
 
-  /* Set the pixel type in which the image will be saved
+  /** Set the pixel type in which the image will be saved.
    *
-   * Can be called for types :
-   * \li ParameterType_OutputImage
+   * Can be called for type \c ParameterType_OutputImage
    */
   void SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType);
 
-  /* Set the complex pixel type in which the image will be saved
+  /** Set the complex pixel type in which the image will be saved
    *
-   * Can be called for types :
-   * \li ParameterType_ComplexOutputImage
+   * Can be called for type \c ParameterType_ComplexOutputImage
    */
   void SetParameterComplexOutputImagePixelType(std::string parameter, ComplexImagePixelType cpixelType);
 
-  /* Set an output vector data value
+  /** Set an output vector data value.
    *
-   * Can be called for types :
-   * \li ParameterType_OutputVectorData
+   * Can be called for type \c ParameterType_OutputVectorData
    */
   void SetParameterOutputVectorData(std::string parameter, VectorDataType* value);
 
-  /* Get an integer parameter value
+  /** Get an integer from a \param parameter.
    *
    * Can be called for types :
-   * \li ParameterType_Int
-   * \li ParameterType_Float
-   * \li ParameterType_Radius
-   * \li ParameterType_Choice
+   * \li \c ParameterType_Int
+   * \li \c ParameterType_Float
+   * \li \c ParameterType_Radius
+   * \li \c ParameterType_Choice
+   * \li \c ParameterType_RAM
    */
   int GetParameterInt(std::string parameter);
 
-  /* Get a floating parameter value
+  /** Get a floating from a \param parameter.
    *
-   * Can be called for types :
-   * \li ParameterType_Float
+   * Can be called for type \c ParameterType_Float
    */
   float GetParameterFloat(std::string parameter);
 
-  /* Get a string parameter value
+  /** Get a string from a \param parameter.
    *
    * Can be called for types :
-   * \li ParameterType_String
-   * \li ParameterType_InputFilename
-   * \li ParameterType_OutputFilename
-   * \li ParameterType_Directory
-   * \li ParameterType_InputImage
-   * \li ParameterType_ComplexInputImage
-   * \li ParameterType_InputVectorData
-   * \li ParameterType_OutputImage
-   * \li ParameterType_OutputVectorData
+   * \li \c ParameterType_String
+   * \li \c ParameterType_InputFilename
+   * \li \c ParameterType_OutputFilename
+   * \li \c ParameterType_Directory
+   * \li \c ParameterType_InputImage (get the filename)
+   * \li \c ParameterType_ComplexInputImage (get the filename)
+   * \li \c ParameterType_InputVectorData (get the filename)
+   * \li \c ParameterType_OutputImage (get the filename)
+   * \li \c ParameterType_OutputVectorData (get the filename)
+   * \li \c ParameterType_ListView (get the string list)
+   * \li \c ParameterType_Choice (get the string list)
    */
   std::string GetParameterString(std::string parameter);
 
-  /* Get a string list parameter value
+  /** Get a string list parameter value.
    *
    * Can be called for types :
-   * \li ParameterType_StringList
-   * \li ParameterType_InputImageList
-   * \li ParameterType_InputFilenameList
+   * \li \c ParameterType_StringList
+   * \li \c ParameterType_ListView (get the filename list)
+   * \li \c ParameterType_InputImageList (get the filename list)
+   * \li \c ParameterType_InputVectorDataList (get the filename list)
+   * \li \c ParameterType_InputFilenameList (get the filename list)
    */
   // TODO: Should be rewritten:
   //
@@ -470,8 +470,8 @@ public:
    * Set the input image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
    * application instances.
-   * \in parameter The parameter key
-   * \in inputImage ImageBase pointer to use as input
+   * \param parameter The parameter key
+   * \param inputImage ImageBase pointer to use as input
    * \throw itk::Exception if parameter is not found or not an
    * InputImageParameter
    */
@@ -481,7 +481,7 @@ public:
    * Get the output image parameter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
    * application instances.
-   * \in parameter The parameter key
+   * \param parameter The parameter key
    * \return The ImageBase * to the output image
    * \throw itk::Exception if parameter is not found or not an
    * OutputImageParameter
@@ -492,8 +492,8 @@ public:
    * Set the input complex image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
    * application instances.
-   * \in parameter The parameter key
-   * \in inputImage ImageBase pointer to use as input
+   * \param parameter The parameter key
+   * \param inputImage ImageBase pointer to use as input
    * \throw itk::Exception if parameter is not found or not an
    * ComplexInputImageParameter
    */
@@ -503,7 +503,7 @@ public:
    * Get the complex output image parameter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
    * application instances.
-   * \in parameter The parameter key
+   * \param parameter The parameter key
    * \return The ImageBase * pointer to the output image
    * \throw itk::Exception if parameter is not found or not an
    * ComplexOutputImageParameter
@@ -514,8 +514,8 @@ public:
    * Add an image to an InputImageList parameter as an ImageBase
    * pointer instead of reading from file. Useful to connect pipelines
    * between different application instances.
-   * \in parameter The parameter key
-   * \in img The ImageBase * of the image to add
+   * \param parameter The parameter key
+   * \param img The ImageBase * of the image to add
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
    */
@@ -525,22 +525,21 @@ public:
    * Set the nth image of an InputImageList parameter as an ImageBase pointer
    * instead of reading from file. Useful to connect pipelines
    * between different application instances.
-   * \in parameter The parameter key
-   * \in id Position at which to set the ImageBase pointer
-   * \in img The ImageBase * of the image to add
+   * \param parameter The parameter key
+   * \param id Position at which to set the ImageBase pointer
+   * \param img The ImageBase * of the image to add
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter or if id is out of bounds
    */
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
 
-/**
-   * Add a value to a parameter list as a string
+  /**
+   * Add a value to a parameter list as a string.
    *
-   * Can be called for parameter types:
-   * \li ParameterType_InputImageList
+   * Can be called for parameter type \c ParameterType_InputImageList .
    *
-   * \in parameter The parameter key
-   * \in str The string
+   * \param parameter The parameter key
+   * \param str The filename of the image to add
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
    */
@@ -549,12 +548,11 @@ public:
   /**
    * Set the nth value of a parameter list as a string.
    *
-   * Can be called for parameter types:
-   * \li ParameterType_InputImageList
+   * Can be called for parameter type \c ParameterType_InputImageList .
    *
-   * \in parameter The parameter key
-   * \in id Position at which to set the ImageBase pointer
-   * \in str The string
+   * \param parameter The parameter key
+   * \param id Position at which to set the ImageBase pointer
+   * \param str The filename of the image to add
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter or if id is out of bounds
    */
@@ -644,21 +642,21 @@ public:
   otbGetParameterComplexImageMacro(ComplexFloatVectorImage);
   otbGetParameterComplexImageMacro(ComplexDoubleVectorImage);
 
-  /* Get an image list value
+  /** Get an image list value
    *
    * Can be called for types :
    * \li ParameterType_InputImageList
    */
   FloatVectorImageListType* GetParameterImageList(std::string parameter);
 
-  /* Get a complex image value
+  /** Get a complex image value
    *
    * Can be called for types :
    * \li ParameterType_ComplexInputImage
    */
   ComplexFloatVectorImageType* GetParameterComplexImage(std::string parameter);
 
-  /* GetParameterVectorData
+  /** GetParameterVectorData
    *
    * Can be called for types :
 
@@ -666,38 +664,36 @@ public:
    */
   VectorDataType* GetParameterVectorData(std::string parameter);
 
-  /* GetParameteVetorDataList
-     *
-     * Can be called for types :
-
-     * \li ParameterType_InputVectorDatalist
-     */
+  /** GetParameteVetorDataList
+  *
+  * Can be called for types :
+  * \li ParameterType_InputVectorDatalist
+  */
   VectorDataListType* GetParameterVectorDataList(std::string parameter);
 
- /* Get the parameter as a std::string
-   *
-   * Can be called for types :
-   * \li ParameterType_Float
-   * \li ParameterType_Int
-   * \li ParameterType_Choice
-   * \li ParameterType_Radius
-   * \li ParameterType_String
-   * \li ParameterType_InputFilename
-   * \li ParameterType_OutputFilename
-   * \li ParameterType_Directory
-   * \li ParameterType_InputImage
-   * \li ParameterType_ComplexInputImage
-   * \li ParameterType_InputVectorData
-   * \li ParameterType_OutputImage
-   * \li ParameterType_OutputVectorData
-   */
+ /** Get the parameter as a std::string
+  *
+  * Can be called for types :
+  * \li ParameterType_Float
+  * \li ParameterType_Int
+  * \li ParameterType_Choice
+  * \li ParameterType_Radius
+  * \li ParameterType_String
+  * \li ParameterType_InputFilename
+  * \li ParameterType_OutputFilename
+  * \li ParameterType_Directory
+  * \li ParameterType_InputImage
+  * \li ParameterType_ComplexInputImage
+  * \li ParameterType_InputVectorData
+  * \li ParameterType_OutputImage
+  * \li ParameterType_OutputVectorData
+  */
   std::string GetParameterAsString(std::string paramKey);
 
-  /* Get the list of all parameters
-   */
+  /** Get the list of all parameters */
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
-  /* Get the pixel type in which the image will be saved
+  /** Get the pixel type in which the image will be saved
    *
    * Can be called for types :
    * \li ParameterType_OutputImage
@@ -709,7 +705,7 @@ public:
     m_ParameterList = paramGroup;
   }
 
-  /* Get the pixel type in which the complex image will be saved
+  /** Get the pixel type in which the complex image will be saved
    *
    * Can be called for types :
    * \li ParameterType_ComplexOutputImage
