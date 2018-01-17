@@ -784,6 +784,10 @@ namespace ossimplugins
             numBands,
             true);
 #endif
+
+      // Ensure that superclass members are initialized
+      loadState(theProductKwl);
+      
       return true;
    }
 
