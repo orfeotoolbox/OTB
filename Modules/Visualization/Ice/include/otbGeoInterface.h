@@ -33,7 +33,8 @@ class ImageKeywordlist;
 
 
 /**
- * @class This class is the abstract interface for actors which need
+ * \class GeoInterface 
+ * \brief This class is the abstract interface for actors which need
  * geo-referenced methods.
  *
  * Use multiple inheritance to provide geo-referenced interface to
