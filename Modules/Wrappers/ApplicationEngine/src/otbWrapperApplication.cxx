@@ -1446,17 +1446,25 @@ std::string Application::GetParameterAsString(std::string paramKey)
   std::string ret="";
   ParameterType type = this->GetParameterType( paramKey );
 
-  if( type == ParameterType_String || type == ParameterType_InputFilename || type == ParameterType_OutputFilename
-      || type == ParameterType_Directory || type == ParameterType_InputImage
-      || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
-      || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData
-      || type == ParameterType_ListView || type == ParameterType_Choice
-      || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML )
+  if( type == ParameterType_String 
+   || type == ParameterType_InputFilename 
+   || type == ParameterType_OutputFilename
+   || type == ParameterType_Directory 
+   || type == ParameterType_InputImage
+   || type == ParameterType_ComplexInputImage 
+   || type == ParameterType_InputVectorData
+   || type == ParameterType_OutputImage 
+   || type == ParameterType_OutputVectorData
+   || type == ParameterType_ListView 
+   || type == ParameterType_Choice
+   || type == ParameterType_OutputProcessXML 
+   || type == ParameterType_InputProcessXML )
     {
       ret = this->GetParameterString( paramKey );
     }
-  else if ( type == ParameterType_Int || type == ParameterType_Radius
-            || type == ParameterType_RAM)
+  else if ( type == ParameterType_Int 
+         || type == ParameterType_Radius
+         || type == ParameterType_RAM)
     {
       std::ostringstream oss;
       oss << this->GetParameterInt( paramKey );
@@ -1469,10 +1477,10 @@ std::string Application::GetParameterAsString(std::string paramKey)
       oss << this->GetParameterFloat( paramKey );
       ret = oss.str();
     }
-  else if( type == ParameterType_StringList ||
-    type == ParameterType_InputImageList ||
-    type == ParameterType_InputVectorDataList ||
-    type == ParameterType_InputFilenameList)
+  else if( type == ParameterType_StringList 
+        || type == ParameterType_InputImageList
+        || type == ParameterType_InputVectorDataList 
+        || type == ParameterType_InputFilenameList)
     {
       std::ostringstream oss;
       oss << std::setprecision(10);

@@ -75,9 +75,13 @@ namespace Wrapper
 {
 
 /** \class Application
- *  \brief This class represent an application
- *  TODO
- *
+ *  \brief %This class represent an application.
+ *  
+ * %This class is an abstract class that is used to set a framework
+ * for the different applications that will derived from it.
+ * It defines the basic actions that one needs to create or use an application,
+ * mainly through parameter manipulation. See the Parameter class 
+ * documentation for more information.
  *
  * \ingroup OTBApplicationEngine
  */
@@ -278,7 +282,7 @@ public:
    */
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
 
-  /* Set a string value.
+  /** Set a string value.
    *
    * Can be called for types :
    * \li \c ParameterType_StringList
@@ -289,8 +293,8 @@ public:
    */
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
 
-  /** Set Active flag to \param value and UserValue to 
-  * \param hasUserValueFlag 
+  /** Set Active flag to \a value and UserValue to 
+  * \a hasUserValueFlag 
   */
   void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
@@ -344,39 +348,39 @@ public:
   void SetDefaultOutputComplexPixelType(std::string parameter, ComplexImagePixelType type);
 
   /** Set a minimum int value, must be used in the
-   * DoInit when setting a \param value by default for the 
-   * \param parameter.
+   * DoInit when setting a \a value by default for the 
+   * \a parameter.
    *
    * Can be called for type \c ParameterType_Int
    */
   void SetMinimumParameterIntValue(std::string parameter, int value);
 
   /** Set a maximum int value, must be used in the
-   * DoInit when setting a \param value by default for the 
-   * \param parameter.
+   * DoInit when setting a \a value by default for the 
+   * \a parameter.
    *
    * Can be called for type \c ParameterType_Int
    */
   void SetMaximumParameterIntValue(std::string parameter, int value);
 
   /** Set a minimum float value, must be used in the
-   * DoInit when setting a \param value by default
-   * for the \param parameter
+   * DoInit when setting a \a value by default
+   * for the \a parameter
    *
    * Can be called for type \c ParameterType_Float
    */
   void SetMinimumParameterFloatValue(std::string parameter, float value);
 
   /** Set a maximum float value, must be used in the
-   * DoInit when setting a \param value by default
-   * for the \param parameter
+   * DoInit when setting a \a value by default
+   * for the \a parameter
    *
    * Can be called for type \c ParameterType_Float
    */
   void SetMaximumParameterFloatValue(std::string parameter, float value);
 
 
-  /** Set single selection mode on \param status.
+  /** Set single selection mode on \a status.
    *
    * Can be called for type \c ParameterType_ListView
    */
@@ -412,7 +416,7 @@ public:
    */
   void SetParameterOutputVectorData(std::string parameter, VectorDataType* value);
 
-  /** Get an integer from a \param parameter.
+  /** Get an integer from a \a parameter.
    *
    * Can be called for types :
    * \li \c ParameterType_Int
@@ -423,13 +427,13 @@ public:
    */
   int GetParameterInt(std::string parameter);
 
-  /** Get a floating from a \param parameter.
+  /** Get a floating from a \a parameter.
    *
    * Can be called for type \c ParameterType_Float
    */
   float GetParameterFloat(std::string parameter);
 
-  /** Get a string from a \param parameter.
+  /** Get a string from a \a parameter.
    *
    * Can be called for types :
    * \li \c ParameterType_String
@@ -562,7 +566,7 @@ public:
   /**
    * Clear all images from an InputImageList parameter.
    *
-   * \in parameter The parameter key
+   * \param parameter The parameter key
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
    */
@@ -570,7 +574,7 @@ public:
 
   /**
    * Get the number of images in an InputImageList parameter.
-   * \in parameter The parameter key
+   * \param parameter The parameter key
    * \return The number of images
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
@@ -578,13 +582,16 @@ public:
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
 
-  /* Get an image value
+  /** Get an image value as a pointer of \c FloatVectorImageType.
    *
-   * Can be called for types :
-   * \li ParameterType_InputImage
+   * Can be called for type \c ParameterType_InputImage
    */
   FloatVectorImageType* GetParameterImage(std::string parameter);
 
+  /* Get an image value as a pointer of \c Image
+   * 
+   * Can be called for type \c ParameterType_InputImage
+   */      
 #define otbGetParameterImageMacro( Image )                              \
   Image##Type * GetParameter##Image( std::string parameter )            \
     {                                                                   \
@@ -592,9 +599,15 @@ public:
     Parameter* param = GetParameterByKey(parameter);                    \
     if (dynamic_cast<InputImageParameter*>(param))                      \
       {                                                                 \
-      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
+      InputImageParameter* paramDown =                                  \
+       dynamic_cast<InputImageParameter*>(param);                       \
       ret = paramDown->Get##Image();                                    \
       }                                                                 \
+    else                                                                \
+    {                                                                   \
+    itkExceptionMacro(<<parameter <<                                    \
+      " parameter can't be casted to ImageType");                       \
+    }                                                                   \
     return ret;                                                         \
     }
 
@@ -619,8 +632,7 @@ public:
 
   /* Get a complex image value
    *
-   * Can be called for types :
-   * \li ParameterType_ComplexInputImage
+   * Can be called for type \c ParameterType_ComplexInputImage
    */
 
 #define otbGetParameterComplexImageMacro( Image )                       \
@@ -642,79 +654,86 @@ public:
   otbGetParameterComplexImageMacro(ComplexFloatVectorImage);
   otbGetParameterComplexImageMacro(ComplexDoubleVectorImage);
 
-  /** Get an image list value
+  /** Get an image list value as a pointer of \c FloatVectorImageListType.
    *
-   * Can be called for types :
-   * \li ParameterType_InputImageList
+   * Can be called for type \c ParameterType_InputImageList
    */
   FloatVectorImageListType* GetParameterImageList(std::string parameter);
 
-  /** Get a complex image value
+  /** Get a complex image value as a pointer of 
+   * \c ComplexFloatVectorImageType.
    *
-   * Can be called for types :
-   * \li ParameterType_ComplexInputImage
+   * Can be called for type \c ParameterType_ComplexInputImage
    */
   ComplexFloatVectorImageType* GetParameterComplexImage(std::string parameter);
 
-  /** GetParameterVectorData
+  /** Get a vector data as a pointer of \c VectorDataType.
    *
-   * Can be called for types :
-
-   * \li ParameterType_InputVectorData
+   * Can be called for type \c ParameterType_InputVectorData
    */
   VectorDataType* GetParameterVectorData(std::string parameter);
 
-  /** GetParameteVetorDataList
+  /** Get a vector data list as a pointer of \c VectorDataListType.
   *
-  * Can be called for types :
-  * \li ParameterType_InputVectorDatalist
+  * Can be called for type \c ParameterType_InputVectorDatalist
   */
   VectorDataListType* GetParameterVectorDataList(std::string parameter);
 
  /** Get the parameter as a std::string
   *
   * Can be called for types :
-  * \li ParameterType_Float
-  * \li ParameterType_Int
-  * \li ParameterType_Choice
-  * \li ParameterType_Radius
-  * \li ParameterType_String
-  * \li ParameterType_InputFilename
-  * \li ParameterType_OutputFilename
-  * \li ParameterType_Directory
-  * \li ParameterType_InputImage
-  * \li ParameterType_ComplexInputImage
-  * \li ParameterType_InputVectorData
-  * \li ParameterType_OutputImage
-  * \li ParameterType_OutputVectorData
+  * \li \c ParameterType_String 
+  * \li \c ParameterType_InputFilename 
+  * \li \c ParameterType_OutputFilename
+  * \li \c ParameterType_Directory 
+  * \li \c ParameterType_InputImage
+  * \li \c ParameterType_ComplexInputImage 
+  * \li \c ParameterType_InputVectorData
+  * \li \c ParameterType_OutputImage 
+  * \li \c ParameterType_OutputVectorData
+  * \li \c ParameterType_ListView 
+  * \li \c ParameterType_Choice
+  * \li \c ParameterType_OutputProcessXML 
+  * \li \c ParameterType_InputProcessXML
+  * \li \c ParameterType_StringList (get parameter string list) 
+  * \li \c ParameterType_InputImageList (get parameter string list)
+  * \li \c ParameterType_InputVectorDataList (get parameter string list) 
+  * \li \c ParameterType_InputFilenameList (get parameter string list)
+  * \li \c ParameterType_Int 
+  * \li \c ParameterType_Radius
+  * \li \c ParameterType_RAM
   */
   std::string GetParameterAsString(std::string paramKey);
 
-  /** Get the list of all parameters */
+  /** Get the list of all parameters as a vector of their key.
+   * The \a recursive allows you to get all parameters inside
+   * group prameter (default value is \True) 
+   */
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
-  /** Get the pixel type in which the image will be saved
+  /** Get the pixel type in which the image will be saved.
    *
-   * Can be called for types :
-   * \li ParameterType_OutputImage
+   * Can be called for type \c ParameterType_OutputImage
    */
   ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
 
+  /** Set the parameter list of the application as \a paramGroup */
   void SetParameterList(ParameterGroup::Pointer paramGroup)
   {
     m_ParameterList = paramGroup;
   }
 
-  /** Get the pixel type in which the complex image will be saved
+  /** Get the pixel type in which the complex image will be saved.
    *
-   * Can be called for types :
-   * \li ParameterType_ComplexOutputImage
+   * Can be called for type \c ParameterType_ComplexOutputImage
    */
   ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
+  /** Return the logger of the application */
   otb::Logger* GetLogger() const;
 
-  /** Sets the logger instance of the application (use with caution) */
+  /** Set the logger instance of the application as \a logger
+   * (to use with caution) */
   void SetLogger(otb::Logger *logger);
 
   itk::ProcessObject* GetProgressSource() const;
@@ -732,14 +751,19 @@ public:
   itkGetStringMacro(DocLimitations);
   itkSetStringMacro(DocSeeAlso);
   itkGetStringMacro(DocSeeAlso);
+
+  /** Get the application doc tag */
   std::vector<std::string> GetDocTags(){
     return m_DocTags;
   }
+
+  /** Get the application doc tag to \a val */
   void SetDocTags( std::vector<std::string> val ){
     m_DocTags = val;
     this->Modified();
   }
 
+  /** Add a \a tag to the application doc tag */
   void AddDocTag( const std::string & tag )
   {
     for (unsigned int i=0; i<m_DocTags.size(); i++)
@@ -750,6 +774,7 @@ public:
     this->Modified();
   }
 
+  /** Get the application doc example */
   DocExampleStructure::Pointer GetDocExample()
   {
     if (! IsInitialized())
@@ -760,43 +785,62 @@ public:
     return m_DocExample;
   }
 
+  /** Get the number of example in the application doc example */
   unsigned int GetNumberOfExamples()
   {
     return GetDocExample()->GetNbOfExamples();
   }
 
+  /** Get the comment of the \a id th example 
+   * of the application doc example 
+   */
   std::string GetExampleComment(unsigned int id)
   {
     return GetDocExample()->GetExampleComment(id);
   }
 
+  /** Get the number of parameter of the \a id th example 
+   * of the application doc example 
+   */
   unsigned int GetExampleNumberOfParameters(unsigned int id)
   {
     return GetDocExample()->GetNumberOfParameters(id);
   }
 
+  /** Get the parameter key of the \a paramId th parameter
+   * of the \a id th example of the application doc example 
+   */
   std::string GetExampleParameterKey(unsigned int exId, unsigned int paramId)
   {
     return GetDocExample()->GetParameterKey(paramId, exId);
   }
 
+  /** Get the parameter value of the \a paramId th parameter
+   * of the \a id th example of the application doc example 
+   */
   std::string GetExampleParameterValue(unsigned int exId, unsigned int paramId)
   {
     return GetDocExample()->GetParameterValue(paramId, exId);
   }
 
+  /** Set the parameter \a key value
+   * of the \a id th example of the application doc example to \a val
+   */
   void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 )
   {
     GetDocExample()->AddParameter( key, value, exId );
     this->Modified();
   }
 
+  /** Set the \a i th example comment to \a comm  */
   void SetExampleComment( const std::string & comm, unsigned int i )
   {
     GetDocExample()->SetExampleComment( comm, i );
     this->Modified();
   }
 
+  /** Add an example to the application doc example. 
+   * Return the id of the added example */
   unsigned int AddExample( const std::string & comm="" )
   {
     unsigned int id = GetDocExample()->AddExample( comm );
@@ -804,19 +848,22 @@ public:
     return id;
   }
 
+  /** Generate the first command line example */
   std::string GetCLExample()
   {
     return GetDocExample()->GenerateCLExample();
   }
 
+  /** Generate the first command line example (HTML style) */
   std::string GetHtmlExample()
   {
     return GetDocExample()->GenerateHtmlExample();
   }
 
-  /** Return all parameters which role is Role_Output in a vector of pairs that contains the
-  * parameter key and its value.
-  */
+  /** Return all parameters which role is \c Role_Output and that are enable
+   * in a vector of pairs that contains the parameter key (first) 
+   * and its value (second).
+   */
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
 
    /** If need to force readxml more than once in application */
@@ -824,6 +871,7 @@ public:
    {
      m_IsInXMLParsed = false;
    }
+
 
   double GetLastExecutionTiming() const;
 
@@ -836,6 +884,7 @@ public:
     }
   }
 
+  /** Get the doc link */
   const std::string& GetDocLink() const
   {
     return m_Doclink;
@@ -856,62 +905,88 @@ protected:
   /** Destructor */
   ~Application() ITK_OVERRIDE;
 
-  /* Register a ProcessObject as a new progress source */
+  /** Register a ProcessObject as a new progress source */
   void AddProcess(itk::ProcessObject* object, std::string description);
 
-  /** Add a new choice value to an existing choice parameter */
+  /** Add a new choice value to an existing choice parameter
+   * \param paramKey : path.to.choice.NewChoice
+   * \param paramName : name of NewChoice
+   */
   void AddChoice(std::string paramKey, std::string paramName);
 
-  /** Add a new parameter to the parameter group
-   * the parent key of paramKey can be the path to a parameter group
-   * or the path to a choice value */
+  /** Add a new parameter to a parameter group.
+   * The \a paramKey can be the path to a parameter group
+   * or the path to a choice value.
+   * \param paramKey : path.to.parametergroupe.NewParam or NewParam
+   * \param paramName : name of NewParam
+   * \param type : parameter type
+   */
   void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
-  /** Add a parameterRAM method with no parameter*/
+  /** Is calling \link <tt> AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue) </tt>
+   * AddRAMParameter( paramKey , "Available RAM (Mb)" , maxRam ) \endlink 
+   * where the \a maxRam is computed by 
+   * otb::ConfigurationManager::GetMaxRAMHint() . 
+   * Default value of \a paramKey is \c "ram" .
+   */
   void AddRAMParameter(std::string paramKey="ram");
 
-  /** Add a parameterRAM method with parameter*/
+  /** Add a parameterRAM 
+   * \param paramKey : key to the ram parameter
+   * \param paramName : name of the ram parameter
+   * \param defaultValue : default value that will be used during execution if
+   * none is given
+   */
   void AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
 
-   /** Add a parameterRAND method with no parameter*/
-   void AddRANDParameter(std::string paramKey="rand");
+  /** Add a rand parameter with name : "set user defined seed" 
+   * and no default value.
+   * \param paramKey : key of the parameter, default value is "rand"
+   */
+  void AddRANDParameter(std::string paramKey="rand");
 
   /** Add a parameterRAND method with parameter
-   * by default seed initialization is based on time value*/
-   void AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
+   * by default seed initialization is based on time value
+   */
+  void AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
 
-   void AddInXMLParameter()
-   {
-     GetParameterList()->AddInXMLParameter();
-   }
+  /** Add a \c ParameterType_InputProcessXML */
+  void AddInXMLParameter()
+  {
+    GetParameterList()->AddInXMLParameter();
+  }
 
-   void AddOutXMLParameter()
-   {
-     GetParameterList()->AddOutXMLParameter();
-   }
+  /** Add a \c ParameterType_OutputProcessXML */
+  void AddOutXMLParameter()
+  {
+    GetParameterList()->AddOutXMLParameter();
+  }
 
-  /** Remove the items added to the ListWidget */
+  /** Remove the items of a ListView parameter. 
+   * Can be called on type \c ParameterType_ListView 
+   */
   void ClearChoices(std::string key);
 
-  /** Get Items selected in the ListView Parameter*/
+  /** Get Items selected in the ListView parameter.
+   * Can be called on type \c ParameterType_ListView 
+   */
   std::vector<int>  GetSelectedItems(std::string paramKey);
 
-  /** Declare a parameter as mandatory */
+  /** Set Mandatory flag to \c true */
   void MandatoryOn(std::string paramKey);
 
-  /** Declare a parameter as NOT mandatory (default state) */
+  /** Set Mandatory flag to \c false */
   void MandatoryOff(std::string paramKey);
 
-  /* Set the user level of access to a parameter */
+  /** Not implemented */
   void SetParameterUserLevel(std::string paramKey, UserLevel level);
 
-  /*  Set the parameter role (input/output) */
+  /**  Set the parameter role (Role_Input / Role_Output ) */
   void SetParameterRole(std::string paramKey, Role role);
 
-  /* Get an image value
+  /** Get a TImageType pointer.
    *
-   * Can be called for types :
-   * \li ParameterType_InputImage
+   * Can be called for type ParameterType_InputImage
    */
   template <class TImageType>
     TImageType* GetParameterImage(std::string parameter)
@@ -928,21 +1003,22 @@ protected:
     return ret;
   }
 
-  /** Declare a parameter as having an automatic value */
+  /** Set flag AutomaticValue to \c true */
   void AutomaticValueOn(std::string paramKey);
 
-  /** Declare a parameter as NOT having an automatic value */
+  /** Set flag AutomaticValue to \c false */
   void AutomaticValueOff(std::string paramKey);
 
-  /* Set an output image value
+  /** Set a TImageType value.
+   * \param paramKey : key to a ParameterType_OutputImage
+   * \param value : TImageType pointer
    *
-   * Can be called for types :
-   * \li ParameterType_OutputImage
+   * Can be called for type \c ParameterType_OutputImage
    */
   template <class TImageType>
-    void SetParameterOutputImage(std::string parameter, TImageType* value)
+    void SetParameterOutputImage(std::string paramKey, TImageType* value)
   {
-    Parameter* param = GetParameterByKey(parameter);
+    Parameter* param = GetParameterByKey(paramKey);
 
     if (dynamic_cast<OutputImageParameter*>(param))
       {
@@ -969,16 +1045,16 @@ protected:
   }
 
 private:
-  /* Implement this method to add parameters */
+  /** Override this method to add parameters */
   virtual void DoInit() = 0;
 
-  /* Implement this method to update non valued parameters */
+  /** Override this method to update non valued parameters */
   virtual void DoUpdateParameters() = 0;
 
-  /* Implement this method to build the output */
+  /** Override this method to build the output */
   virtual void DoExecute() = 0;
 
-  /* This method will be called after the
+  /** This method will be called after the
    * ExecuteAndWriteOutput() call to allow for cleanup. Default
    * implementation does nothing */
   virtual void AfterExecuteAndWriteOutputs();
@@ -986,9 +1062,16 @@ private:
   Application(const Application &); //purposely not implemented
   void operator =(const Application&); //purposely not implemented
 
+  /** %Application name */
   std::string                       m_Name;
+
+  /** %Application description */
   std::string                       m_Description;
+
+  /** Root parameter group for the application */
   ParameterGroup::Pointer           m_ParameterList;
+
+  /** %Application logger */
   otb::Logger::Pointer              m_Logger;
 
   itk::ProcessObject::Pointer       m_ProgressSource;
@@ -996,18 +1079,25 @@ private:
 
   /** Long name of the application (that can be displayed...) */
   std::string m_DocName;
+
   /** Long and precise application description . */
-  std::string                       m_DocLongDescription;
+  std::string m_DocLongDescription;
+
   /** Doc example structure. Use GetDocExample() to access it */
   DocExampleStructure::Pointer m_DocExample;
+
   /** Author List. Format : "John Doe, Winnie the Pooh".*/
   std::string m_DocAuthors;
+
   /** Known limitations (threading, invalid pixel type ...) or bugs */
   std::string m_DocLimitations;
+
   /** Related applications */
   std::string m_DocSeeAlso;
+
   /** Tags that define the application (ex : segmentation, OBIA).*/
   std::vector<std::string> m_DocTags;
+
   /** Doc link application */
   std::string m_Doclink;
 
@@ -1015,9 +1105,15 @@ private:
   itk::TimeProbe m_Chrono;
 
   //rashad:: controls adding of -xml parameter. set to true by default
+  /** Flag for \c ParameterType_InputProcessXML */
   bool                              m_HaveInXML;
+
+  /** Flag for \c ParameterType_OutputProcessXML */
   bool                              m_HaveOutXML;
+
+  /** Flag for the state of the input XML */
   bool                              m_IsInXMLParsed;
+
   /**
     * Declare the class
     * - Wrapper::MapProjectionParametersHandler
