@@ -31,9 +31,9 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class Application
- *  \brief This class represent an application
- *  TODO
+/** \class ApplicationRegistry
+ *  \brief This class represent is used to create otbcli executable
+ *  
  *
  *
  * \ingroup OTBApplicationEngine

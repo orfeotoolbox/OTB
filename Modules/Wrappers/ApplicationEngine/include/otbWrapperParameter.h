@@ -54,9 +54,11 @@ enum DefaultValueMode
 
 /** \class Parameter
  *  \brief This class represent a parameter for the wrapper framework
- *  This class is a high level class representing a parameter for the
- *  wrapper framework. It should be subclassed to represent different
- *  kinds of parameters
+ *
+ * \par
+ * This class is a high level class representing a parameter for the
+ * wrapper framework. It should be subclassed to represent different
+ * kinds of parameters
  *
  * \ingroup OTBApplicationEngine
  */

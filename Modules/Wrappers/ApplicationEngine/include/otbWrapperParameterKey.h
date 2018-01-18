@@ -33,7 +33,7 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class Application
+/** \class ParameterKey
  *  \brief This class is a the Parameter key representation.
  *
  *  The constructor accepts a string key constructed as follow : parent.me.child.

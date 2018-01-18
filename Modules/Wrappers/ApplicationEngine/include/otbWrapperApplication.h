@@ -77,6 +77,7 @@ namespace Wrapper
 /** \class Application
  *  \brief %This class represent an application.
  *  
+ * \par
  * %This class is an abstract class that is used to set a framework
  * for the different applications that will derived from it.
  * It defines the basic actions that one needs to create or use an application,
@@ -588,7 +589,7 @@ public:
    */
   FloatVectorImageType* GetParameterImage(std::string parameter);
 
-  /* Get an image value as a pointer of \c Image
+  /** Get an image value as a pointer of \c Image
    * 
    * Can be called for type \c ParameterType_InputImage
    */      
