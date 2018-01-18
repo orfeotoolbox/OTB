@@ -211,6 +211,8 @@ namespace ossimplugins
 
       // -----[ Read manifest file
       const ossimFilename safeFile = searchManifestFile(file);
+      ossimString sensorId;
+      ossimString imageId;
 
       if ( !safeFile.empty() )
       {
@@ -232,8 +234,8 @@ namespace ossimplugins
             ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << "Manifest file " << safeFile << " opened\n";
          }
 
-         theImageID = getImageId(manifestDoc);
-         if (theImageID.empty()) {
+         imageId = getImageId(manifestDoc);
+         if (imageId.empty()) {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Image ID not found in manifest file " << safeFile << "\n";
             return false;
          }
@@ -243,8 +245,8 @@ namespace ossimplugins
             return false;
          }
 
-         theSensorID = initSensorID(manifestDoc);
-         if (theSensorID.empty()) {
+         sensorId = initSensorID(manifestDoc);
+         if (sensorId.empty()) {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
             return false;
          }
@@ -312,6 +314,10 @@ namespace ossimplugins
             << " this->initImageSize( theImageSize ) fails \n";
          return false;
       }
+
+      // Fix sensor and image ID as they may be overriden during SensorModel::loadState()
+      theSensorID = sensorId;
+      theImageID = imageId;
 
       theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
       theSubImageOffset.x = 0.0;
