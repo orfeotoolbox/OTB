@@ -32,7 +32,7 @@ namespace Wrapper
 {
 
 /** \class DirectoryParameter
- *  \brief This class represent a string parameter for the wrapper framework
+ *  \brief This class represents a string parameter for the wrapper framework.
  *
  * \ingroup OTBApplicationEngine
  */
@@ -57,8 +57,10 @@ public:
     return m_StringParam->HasValue();
   }
 
-  // Set/Get Value
+  /** Set the path value */
   otbSetObjectMemberMacro(StringParam, Value , std::string);
+
+  /** Get the path value */
   otbGetObjectMemberMacro(StringParam, Value , std::string);
 
   // Clear Value

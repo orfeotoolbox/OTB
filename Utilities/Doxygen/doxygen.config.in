@@ -2018,7 +2018,10 @@ PREDEFINED             = "itkNotUsed(x)=" \
                          "__itkMacro_h" \
                          "ITK_LEGACY_REMOVE" \
                          "ITKCommon_EXPORT_EXPLICIT" \
-                         "otbGetParameterImageMacro(Image)=Image##Type * GetParameter##Image( std::string parameter )"
+                         "otbGetParameterImageMacro(Image)=Image##Type * GetParameter##Image( std::string parameter )" \
+                         "otbSetObjectMemberMacro(object,name,type)=virtual void Set##name(const type val)" \
+                         "otbGetObjectMemberMacro(object,name,type)=virtual type Get##name()"\
+                         "otbGetObjectMemberConstMacro(object,name,type)=virtual type Get##name() const"
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

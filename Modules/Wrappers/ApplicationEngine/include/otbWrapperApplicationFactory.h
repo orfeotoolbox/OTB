@@ -29,6 +29,11 @@ namespace otb
 namespace Wrapper
 {
 
+/** \class ApplicationFactory
+ *  \brief TODO
+ *
+ * \ingroup OTBApplicationEngine
+ */
 template < class TApplication >
 class ITK_ABI_EXPORT ApplicationFactory : public ApplicationFactoryBase
 {

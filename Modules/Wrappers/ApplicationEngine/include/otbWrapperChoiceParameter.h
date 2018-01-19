@@ -29,7 +29,8 @@ namespace Wrapper
 {
 
 /** \class ChoiceParameter
- *  \brief This class represent a multiple choice parameter for the wrapper framework
+ *  \brief This class represent a multiple choice 
+ *  parameter for the wrapper framework
  *
  *  Represents an enumerated parameter.
  *  The different values of the enumeration can be associated with a parameter

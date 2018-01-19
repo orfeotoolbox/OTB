@@ -160,17 +160,19 @@ public:
    */
   int ExecuteAndWriteOutput();
 
-  /* Get the internal application parameters
+  /** Get the internal application parameters
    *
    * WARNING: this method may disappear from the API */
   ParameterGroup* GetParameterList();
 
-  /* Get the internal application parameter specified
-   * if the follow flag is on, the function returns the target of proxy parameters
+  /** Get the internal application parameter specified.
+   * If the follow flag is on, the function returns the target 
+   * of proxy parameters, default is on.
+   * 
    * WARNING: this method may disappear from the API */
   Parameter* GetParameterByKey(std::string parameter, bool follow=true);
 
-  /* Get the internal application parameter specified
+  /** Get the internal application parameter specified.
    *
    * WARNING: this method may disappear from the API */
   const Parameter* GetParameterByKey(std::string parameter, bool follow=true) const;

@@ -31,7 +31,7 @@ namespace Wrapper
 {
 
 /** \class AddProcessToWatchEvent
- *  \brief This class implements an event storing a pointer to
+ *  \brief This class implements an event, storing a pointer to
  *  itk::ProcessObject and a string describing the process.
  *
  *
@@ -48,28 +48,31 @@ public:
   AddProcessToWatchEvent(const Self& s) :itk::EventObject(s){};
   ~AddProcessToWatchEvent() ITK_OVERRIDE {}
 
-  /** Set/Get the process to watch */
+  /** Set the process to watch */
   virtual void SetProcess(itk::ProcessObject * process)
   {
     m_Process = process;
   }
+
+  /** Get the process to watch */
   virtual itk::ProcessObject * GetProcess() const
   {
     return m_Process;
   }
 
-  /** Set/Get the process description */
+  /** Set the process description */
   virtual void SetProcessDescription(const std::string desc)
   {
     m_ProcessDescription = desc;
   }
 
+  /** Get the process description */
   virtual  std::string GetProcessDescription() const
   {
     return m_ProcessDescription;
   }
 
-  /** Virtual pure method to implement */
+  /**  */
   itk::EventObject* MakeObject() const ITK_OVERRIDE
   {
     return new Self;

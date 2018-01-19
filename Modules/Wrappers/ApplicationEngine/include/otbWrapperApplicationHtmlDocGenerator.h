@@ -28,7 +28,7 @@ namespace otb
 namespace Wrapper
 {
 /** \class ApplicationHtmlDocGenerator
- *  \brief This class genertaes the documentation of a class usung the
+ *  \brief This class generates the documentation of a class using the
  *  class doc attributes.
  *
  * \ingroup OTBApplicationEngine
@@ -46,30 +46,39 @@ public:
   /** Destructor */
   virtual ~ApplicationHtmlDocGenerator();
 
-  /** Generate ans dave the documentation. */
-  /** Add the key is the description of the parameter if showKey is
-  * set at true. */
+  /** Generate and save the documentation in the file pointed by \a filename.
+   * \param app : application pointer
+   * \param filename : path to the file 
+   * \param showKey : if \c true will display command line example, 
+   * default is \c false  
+   */
   static void GenerateDoc( const Application::Pointer app, const std::string & filename, const bool showKey = false );
-  /** Generate the documentation as a string. */
-  /** Add the key is the description of the parameter if showKey is
-  * set at true. */
+  /** Generate the documentation.
+   * \param app : application pointer
+   * \param val : string that will receive the documentation
+   * \param showKey : if \c true will display command line example, 
+   * default is \c false  
+   */
   static void GenerateDoc( const Application::Pointer app, std::string & val, const bool showKey = false);
 
 protected:
 
-  /** Get the parameter description of one parameter. */
-  /** Add the key is the description of the parameter if showKey is
-  * set at true. */
+  /** Get the parameter description of one parameter.
+   * \param showKey : if sets to \c true display the full key 
+   * (parent.group.key) , default is \c false
+   */
   static void GetDocParameters( const Application::Pointer app, std::string & val, const bool showKey = false );
 
-  /** generate the documentation associated to a group.*/
-  /** Add the key is the description of the parameter if showKey is
-  * set at true. */
+  /** generate the documentation associated to a group.
+   * \param showKey : if sets to \c true display the full key 
+   * (parent.group.key) , default is \c false
+   */
   static void GetDocParameterGroup( const Application::Pointer app, std::string & val, const std::string & key, const bool showKey = false );
 
-  /** generate the documentation associated to a choice.*/
-  /** Add the key is the description of the parameter if showKey is
-  * set at true. */
+  /** generate the documentation associated to a choice.
+   * \param showKey : if sets to \c true display the full key 
+   * (parent.group.key) , default is \c false
+   */
   static void GetDocParameterChoice( const Application::Pointer app, std::string & val, const std::string & key, const bool showKey = false );
 
 

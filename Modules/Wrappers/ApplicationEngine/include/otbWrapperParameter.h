@@ -58,7 +58,15 @@ enum DefaultValueMode
  * \par
  * This class is a high level class representing a parameter for the
  * wrapper framework. It should be subclassed to represent different
- * kinds of parameters
+ * kinds of parameters.
+ *
+ * \par
+ * The basic structure is :
+ * \li a key that will be its denomination in otbcli,
+ *     and in the code with method such as Application::GetParameterByKey
+ * \li a name that will be its denomination in the otbgui and in the cli help
+ * \li a description that will be display in the help
+ * \li a value which depends on the type of parameter
  *
  * \ingroup OTBApplicationEngine
  */
@@ -150,6 +158,7 @@ public:
   {
   }
 
+  /** Pure virtual method that must be override by each parameter */
   virtual bool HasValue() const = 0;
 
   virtual bool HasUserValue() const

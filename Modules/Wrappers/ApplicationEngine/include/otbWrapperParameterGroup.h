@@ -87,7 +87,7 @@ public:
    * function return the string InputImage */
   std::string GetParameterTypeAsString(ParameterType paramType);
 
-  /* Get the parameter type from its string version of ParameterType enum */
+  /** Get the parameter type from its string version of ParameterType enum */
   ParameterType GetParameterTypeFromString(std::string paramType);
 
   unsigned int GetNumberOfParameters();

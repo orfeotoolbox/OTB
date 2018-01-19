@@ -32,7 +32,7 @@ namespace Wrapper
 {
 
 /** \class ApplicationRegistry
- *  \brief This class represent is used to create otbcli executable
+ *  \brief TODO
  *  
  *
  *
