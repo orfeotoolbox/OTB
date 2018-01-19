@@ -33,31 +33,107 @@ namespace otb
 namespace Wrapper
 {
 
+/** Enumeration that list all of the parameter types that can be used
+ * in an application. See Parameter for more information on the
+ * parameter structure.
+ */
 typedef enum
 {
+  /** %Parameter holding a boolean. 
+   * See EmptyParameter.
+   */
   ParameterType_Empty,
+  /** %Parameter holding an int. 
+   * See NumericalParameter.
+   */
   ParameterType_Int,
+  /** %Parameter holding a float.
+   * See NumericalParameter. 
+   */
   ParameterType_Float,
+  /** %Parameter holding a string.
+   * See StringParameter. 
+   */
   ParameterType_String,
+  /** %Parameter holding a string list.
+   * See StringListParameter. 
+   */
   ParameterType_StringList,
+  /** %Parameter holding a filename used for input. 
+   * See InputFilenameParameter.
+   */
   ParameterType_InputFilename,
+  /** %Parameter holding a filename list used for input. 
+   * See InputFilenameListParameter.
+   */
   ParameterType_InputFilenameList,
+  /** %Parameter holding a filename used for output. 
+   * See OutputFilenameParameter.
+   */
   ParameterType_OutputFilename,
+  /** %Parameter holding a path. 
+   * See DirectoryParameter.
+   */
   ParameterType_Directory,
+  /** %Parameter holding choice available for user. 
+   * See ChoiceParameter.
+   */
   ParameterType_Choice,
+  /** %Parameter holding a image used for input. 
+   * See InputImageParameter.
+   */
   ParameterType_InputImage,
+  /** %Parameter holding a image list used for input. 
+   * See InputImageListParameter.
+   */
   ParameterType_InputImageList,
+  /** %Parameter holding a vector of data used for input. 
+   * See InputVectorDataParameter.
+   */
   ParameterType_InputVectorData,
+  /** %Parameter holding a vector of data list used for input. 
+   * See InputVectorDataListParameter.
+   */
   ParameterType_InputVectorDataList,
+  /** %Parameter holding a image used for output. 
+   * See OutputImageParameter.
+   */
   ParameterType_OutputImage,
+  /** %Parameter holding a vector of data used for output. 
+   * See OutputVectorDataParameter.
+   */
   ParameterType_OutputVectorData,
+  /** %Parameter holding a radius. 
+   * See RadiusParameter.
+   */
   ParameterType_Radius,
+  /** %Parameter holding a group of parameter.
+   * See GroupParameter. 
+   */
   ParameterType_Group,
+  /** %Parameter holding a list view.
+   * See ListViewParameter.
+   */
   ParameterType_ListView,
+  /** %Parameter holding a complex image used for input.
+   * See ComplexInputImageParameter. 
+   */
   ParameterType_ComplexInputImage,
+  /** %Parameter holding a complex image used for output.
+   * See ComplexOutputImageParameter. 
+   */
   ParameterType_ComplexOutputImage,
+  /** %Parameter holding the ram parameter.
+   * See RAMParameter.
+   */
   ParameterType_RAM,
+  /** %Parameter holding the xml used for output.
+   * See OutputProcessXMLParameter.
+   */
   ParameterType_OutputProcessXML,
+  /** %Parameter holding the xml used for input.
+   * See InputProcessXMLParameter.
+   */
   ParameterType_InputProcessXML
 } ParameterType;
 
@@ -67,6 +143,7 @@ typedef enum
   UserLevel_Advanced
 } UserLevel;
 
+/** Enumeration that define the numerical type of the pixel. */
 typedef enum
 {
   // Not int8 because not handle by Gdal
@@ -91,7 +168,9 @@ typedef enum
   Role_Output
 } Role;
 
-// enum used for the map projection choices
+/** Enumeration used for the choice of elevation modes. 
+ * See ElevationParametersHandler.
+ */
 typedef enum
 {
   Elevation_DEM,

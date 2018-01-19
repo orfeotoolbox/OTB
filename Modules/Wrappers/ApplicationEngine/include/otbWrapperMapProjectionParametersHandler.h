@@ -30,7 +30,9 @@ namespace otb
 namespace Wrapper
 {
 
-// enum used for the map projection choices
+/** Enumeration used for the map projection choices. 
+ * See MapProjectionParametersHandler.
+ */
 enum
 {
   Map_Utm,

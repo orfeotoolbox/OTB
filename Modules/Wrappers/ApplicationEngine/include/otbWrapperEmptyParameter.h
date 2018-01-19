@@ -29,7 +29,8 @@ namespace Wrapper
 {
 
 /** \class EmptyParameter
- *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
+ *  \brief This class represent an empty parameter 
+ *  for the wrapper framework (boolean value)
  *
  * \ingroup OTBApplicationEngine
  */
