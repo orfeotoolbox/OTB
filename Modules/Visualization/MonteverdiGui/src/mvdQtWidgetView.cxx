@@ -187,35 +187,42 @@ QtWidgetView
   // Create a VBoxLayout with the header, the input widgets, and the footer
   QVBoxLayout *mainLayout = new QVBoxLayout();
   QTabWidget *tab = new QTabWidget();
-  tab->addTab(CreateInputWidgets(), "Parameters");
+  tab->addTab(CreateInputWidgets(), tr("Parameters"));
 
-   
   //otb::Wrapper::QtWidgetProgressReport* prog =  new otb::Wrapper::QtWidgetProgressReport(m_Model);
   //prog->SetApplication(m_Application);
   //tab->addTab(prog, "Progress");
-  tab->addTab(CreateDoc(), "Documentation");
+  tab->addTab(CreateDoc(), tr("Documentation"));
   mainLayout->addWidget(tab);
 
   QTextEdit *log = new QTextEdit();
   connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
-  tab->addTab(log, "Logs");
+  tab->addTab(log, tr("Logs"));
 
-  m_Message = new QLabel("<center><font color=\"#FF0000\">Select parameters</font></center>");
+  m_Message = new QLabel("<center><font color=\"#FF0000\">"+tr("Select parameters")+"</font></center>");
   connect(
     m_Model,
     SIGNAL( SetApplicationReady( bool ) ),
     this, SLOT( UpdateMessageAfterApplicationReady( bool ) )
   );
+  connect(
+    m_Model,
+    SIGNAL(SetProgressReportDone(int)),
+    this, SLOT(UpdateMessageAfterExecution(int)) );
   mainLayout->addWidget(m_Message);
 
   otb::Wrapper::QtWidgetSimpleProgressReport* progressReport =
     new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model);
   progressReport->SetApplication(m_Application);
+
+  QWidget* footer = CreateFooter();
    
   QHBoxLayout *footLayout = new QHBoxLayout;
   footLayout->addWidget(progressReport);
-  footLayout->addWidget(CreateFooter());
+  footLayout->addWidget(footer);
   mainLayout->addLayout(footLayout);
+
+  footLayout->setAlignment(footer, Qt::AlignBottom);
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(mainLayout);
@@ -611,9 +618,28 @@ QtWidgetView
     }
   */
 
-  m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
-
   emit ExecuteAndWriteOutput();
+
+  m_Message->setText("<center><font color=\"#FF0000\">"+tr("Running")+"</font></center>");
+}
+
+/******************************************************************************/
+void
+QtWidgetView
+::UpdateMessageAfterExecution(int status)
+{
+  if (status >= 0)
+    {
+    m_Message->setText("<center>"
+      "<img src=\":/icons/done\" width=\"16\" height=\"16\" />"
+      "<font color=\"#00A000\">"+tr("Done")+"</font></center>");
+    }
+  else
+    {
+    m_Message->setText("<center>"
+      "<img src=\":/icons/failed\" width=\"16\" height=\"16\" />"
+      "<font color=\"#FF0000\">"+tr("Failed")+"</font></center>");
+    }
 }
 
 /*******************************************************************************/
@@ -622,9 +648,9 @@ QtWidgetView
 ::UpdateMessageAfterApplicationReady( bool val )
 {
   if(val == true)
-    m_Message->setText("<center><font color=\"#00FF00\">Ready to run</font></center>");
+    m_Message->setText("<center><font color=\"#00A000\">"+tr("Ready to run")+"</font></center>");
   else
-    m_Message->setText("<center><font color=\"#FF0000\">Select parameters</font></center>");
+    m_Message->setText("<center><font color=\"#FF0000\">"+tr("Select parameters")+"</font></center>");
 }
 
 /*******************************************************************************/

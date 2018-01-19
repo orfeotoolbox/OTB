@@ -290,6 +290,22 @@ how the file is streamed on the disk and will try to minimize the memory
 consumption along the pipeline. More information can be found into the
 documentation of the class.
 
+Problems using OTB python wrapping along with other software
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you use OTB standalone binaries, there should not be any dependency conflict
+with other libraries installed on your system. OTB will always try to grab
+supplied libraries in the standalone package.
+
+However, when using Python wrappings, there can be conflicts if you import
+*otbApplications* along with other software that share common dependencies with
+OTB. For instance, if you want to use OTB Applications and Fiona in a Python
+script, they both rely on GDAL library. As the libraries loaded by Python must
+be unique, the first library *SomeLib* loaded will be used by any other binary
+depending on it. Thus, the order of the imports has an effect. In some cases,
+symbol problems have been observed in libcrypto, and the solution was to import
+OTB Applications before importing Fiona.
+
 Getting help
 ------------
 

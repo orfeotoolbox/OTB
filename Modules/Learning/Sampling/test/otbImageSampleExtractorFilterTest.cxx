@@ -22,8 +22,8 @@
 #include "otbImageSampleExtractorFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
+#include "otbStopwatch.h"
 #include "itkPhysicalPointImageSource.h"
-#include "itkTimeProbe.h"
 #include <fstream>
 
 int otbImageSampleExtractorFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
@@ -44,6 +44,7 @@ int otbImageSampleExtractorFilter(int argc, char* argv[])
   if (argc < 3)
     {
     std::cout << "Usage : "<<argv[0]<< "  input_vector  output" << std::endl;
+    return EXIT_FAILURE;
     }
 
   std::string vectorPath(argv[1]);
@@ -81,13 +82,11 @@ int otbImageSampleExtractorFilter(int argc, char* argv[])
   filter->SetClassFieldName(classFieldName);
   filter->SetOutputFieldPrefix(outputPrefix);
 
-  itk::TimeProbe chrono;
-  chrono.Start();
-
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   filter->Update();
-
   chrono.Stop();
-  std::cout << "Extraction took "<< chrono.GetTotal() << " sec" << std::endl;
+
+  std::cout << "Extraction took "<< chrono.GetElapsedMilliseconds() << " ms" << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -100,6 +99,7 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   if (argc < 3)
     {
     std::cout << "Usage : "<<argv[0]<< "  input_vector  output" << std::endl;
+    return EXIT_FAILURE;
     }
 
   std::string vectorPath(argv[1]);
@@ -134,57 +134,55 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   dstLayer.CreateField(labelField, true);
   const  OGRErr err = dstLayer.ogr().StartTransaction();
 
-  if (err == OGRERR_NONE) {
-
-  otb::ogr::Layer::const_iterator featIt = inLayer.begin();
-  for(; featIt!=inLayer.end(); ++featIt)
+  if (err == OGRERR_NONE)
     {
-    otb::ogr::Feature dstFeature(dstLayer.GetLayerDefn());
-    dstFeature.SetFrom( *featIt, TRUE );
-    dstLayer.CreateFeature( dstFeature );
-    }
+    otb::ogr::Layer::const_iterator featIt = inLayer.begin();
+    for(; featIt!=inLayer.end(); ++featIt)
+      {
+      otb::ogr::Feature dstFeature(dstLayer.GetLayerDefn());
+      dstFeature.SetFrom( *featIt, TRUE );
+      dstLayer.CreateFeature( dstFeature );
+      }
 
-  const OGRErr err2 = dstLayer.ogr().CommitTransaction();
-  if (err2 == OGRERR_NONE)
+    const OGRErr err2 = dstLayer.ogr().CommitTransaction();
+    if (err2 == OGRERR_NONE)
+      {
+      output->Clear();
+
+      otb::ogr::DataSource::Pointer outputUpdate =
+        otb::ogr::DataSource::New(outputPath,otb::ogr::DataSource::Modes::Update_LayerUpdate);
+
+      typedef itk::PhysicalPointImageSource<InputImageType> ImageSourceType;
+      ImageSourceType::Pointer imgSource = ImageSourceType::New();
+      imgSource->SetSize(region.GetSize());
+      imgSource->SetSpacing(spacing);
+      imgSource->SetOrigin(origin);
+
+      FilterType::Pointer filter = FilterType::New();
+      filter->SetInput(imgSource->GetOutput());
+      filter->SetLayerIndex(0);
+      filter->SetSamplePositions(outputUpdate);
+      filter->SetOutputSamples(outputUpdate);
+      filter->SetClassFieldName(classFieldName);
+      filter->SetOutputFieldPrefix(outputPrefix);
+
+      otb::Stopwatch chrono = otb::Stopwatch::StartNew();
+      filter->Update();
+      chrono.Stop();
+
+      std::cout << "Extraction took "<< chrono.GetElapsedMilliseconds() << " ms" << std::endl;
+      }
+    else
+      {
+      std::cout<< "Unable to commit transaction for OGR layer " << dstLayer.ogr().GetName() << "." << std::endl;
+      return EXIT_FAILURE;
+      }
+    }
+  else
     {
-
-  output->Clear();
-
-  otb::ogr::DataSource::Pointer outputUpdate =
-    otb::ogr::DataSource::New(outputPath,otb::ogr::DataSource::Modes::Update_LayerUpdate);
-
-  typedef itk::PhysicalPointImageSource<InputImageType> ImageSourceType;
-  ImageSourceType::Pointer imgSource = ImageSourceType::New();
-  imgSource->SetSize(region.GetSize());
-  imgSource->SetSpacing(spacing);
-  imgSource->SetOrigin(origin);
-
-  FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(imgSource->GetOutput());
-  filter->SetLayerIndex(0);
-  filter->SetSamplePositions(outputUpdate);
-  filter->SetOutputSamples(outputUpdate);
-  filter->SetClassFieldName(classFieldName);
-  filter->SetOutputFieldPrefix(outputPrefix);
-
-  itk::TimeProbe chrono;
-  chrono.Start();
-
-  filter->Update();
-
-  chrono.Stop();
-  std::cout << "Extraction took "<< chrono.GetTotal() << " sec" << std::endl;
-    }
-  else {
-    std::cout<< "Unable to commit transaction for OGR layer " << dstLayer.ogr().GetName() << "." << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  }
-  else {
     std::cout << "Unable to start transaction for OGR layer " << dstLayer.ogr().GetName() << "." << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

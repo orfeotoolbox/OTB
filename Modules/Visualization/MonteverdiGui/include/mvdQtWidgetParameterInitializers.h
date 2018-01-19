@@ -756,18 +756,21 @@ SetupOutputFilename( W* widget,
                      const QString& prefix,
                      const QString& extension )
 {
-  QString id( QUuid::createUuid().toString() );
+  if(widget->isEnabled())
+    {
+    QString id( QUuid::createUuid().toString() );
 
-  id.replace( QRegExp( "[\\{|\\}]" ), "" );
+    id.replace( QRegExp( "[\\{|\\}]" ), "" );
 
-  if( prefix!=NULL )
-    id.prepend( "_" );
+    if( prefix!=NULL )
+      id.prepend( "_" );
 
-  widget->SetFileName(
-    dir.absoluteFilePath( prefix + id + extension )
-  );
+    widget->SetFileName(
+      dir.absoluteFilePath( prefix + id + extension )
+    );
 
-  widget->UpdateGUI();
+    widget->UpdateGUI();
+    }
 }
 
 /*****************************************************************************/
@@ -776,9 +779,12 @@ void
 SetupOutputFilename( W * widget,
                      const QDir & dir )
 {
-  widget->SetFileName( dir.path() );
+  if(widget->isEnabled())
+    {
+    widget->SetFileName( dir.path() );
 
-  widget->UpdateGUI();
+    widget->UpdateGUI();
+    }
 }
 
 /*******************************************************************************/

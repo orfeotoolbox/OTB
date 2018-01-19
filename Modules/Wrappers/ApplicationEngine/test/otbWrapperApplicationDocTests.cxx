@@ -99,7 +99,7 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
   otb::Wrapper::DocExampleStructure::Pointer doc = app->GetDocExample();
   if( doc->GetApplicationName() == "" )
     {
-    std::cout<<"Error in doc example: no aaplication name found."<<std::endl;
+    std::cout<<"Error in doc example: no application name found."<<std::endl;
     isOK = false;
     }
   if( doc->GetParameterList().size() == 0 )

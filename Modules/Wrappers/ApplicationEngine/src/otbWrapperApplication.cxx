@@ -410,8 +410,7 @@ int Application::Execute()
 
 int Application::ExecuteAndWriteOutput()
 {
-  m_Chrono.Reset();
-  m_Chrono.Start();
+  m_Chrono.Restart();
 
   int status = this->Execute();
 
@@ -1709,7 +1708,7 @@ std::string Application::GetProgressDescription() const
 
 double Application::GetLastExecutionTiming() const
 {
-  return m_Chrono.GetTotal();
+  return m_Chrono.GetElapsedMilliseconds() / 1000.0;
 }
 
 }

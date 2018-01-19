@@ -24,7 +24,7 @@
 #include "otbVectorDataTransformFilter.h"
 #include "itkProgressReporter.h"
 #include <itkContinuousIndex.h>
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 
 namespace otb
 {
@@ -163,10 +163,10 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
   tree->SetRoot(outputRoot);
 
   // Start recursive processing
-  itk::TimeProbe chrono;
-  chrono.Start();
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   this->ProcessNode(inputRoot, outputRoot);
   chrono.Stop();
+  otbMsgDevMacro(<< "VectorDataTransformFilter: features processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }
 
 } // end namespace otb

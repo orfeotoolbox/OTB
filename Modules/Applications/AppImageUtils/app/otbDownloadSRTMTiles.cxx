@@ -33,7 +33,7 @@ enum
   Mode_List
 };
 
-const std::string SRTMServerPath = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
+const std::string SRTMServerPath = "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 
 const std::string HGTZIPExtension = ".hgt.zip";
 const std::string HGTExtension = ".hgt";

@@ -68,7 +68,7 @@ public:
   } // end operator ()
 
 
-  void SetRgb( std::vector<int> rgb)
+  void SetRgb( std::vector<unsigned int> rgb)
     {
     m_Rgb = rgb;
     }
@@ -82,7 +82,7 @@ public:
     return m_LumCoef;
     }
 private:
-  std::vector<int> m_Rgb;
+  std::vector<unsigned int> m_Rgb;
   std::vector<float> m_LumCoef;
 }; // end of functor class  MultiplyOperator
 
@@ -383,10 +383,17 @@ private:
       }
     else if ( m_EqMode == "lum")
       {
-      std::vector<int> rgb( 3 , 0 );
+      std::vector< unsigned int > rgb( 3 , 0 );
       rgb[0] = GetParameterInt("mode.lum.red.ch");
       rgb[1] = GetParameterInt("mode.lum.green.ch");
       rgb[2] = GetParameterInt("mode.lum.blue.ch");
+      if ( !( nbChannel > std::max( rgb[0] , std::max( rgb[1] , rgb[2] ) ) ) )
+        {
+        std::ostringstream oss;
+        oss<<"One of the selected channel needed for luminance computation "
+        "exceed the number of component of the image.";
+        otbAppLogFATAL( << oss.str() )
+        }
       ComputeLuminance( inImage , rgb );
       LuminanceEqualization( inputImageList , rgb , outputImageList );
       }
@@ -695,7 +702,7 @@ private:
 
   // Compute the luminance with user parameters
   void ComputeLuminance( const FloatVectorImageType::Pointer inImage ,
-                         std::vector < int > rgb )
+                         std::vector < unsigned int > rgb )
   {
     // Retreive coeffs for each channel
     std::vector < float > lumCoef( 3 , 0.0 );
@@ -719,7 +726,7 @@ private:
   // Equalize the luminance and apply the corresponding gain on each channel
   // used to compute this luminance
   void LuminanceEqualization( const ImageListType::Pointer inputImageList ,
-                              const std::vector < int > rgb ,
+                              const std::vector < unsigned int > rgb ,
                               ImageListType::Pointer outputImageList )
   {
     m_GainLutFilter.resize( 1 , GainLutFilterType::New() );
