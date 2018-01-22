@@ -215,7 +215,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     //Call GDALPolygonize()
     char ** options;
     options = ITK_NULLPTR;
-    char * option[1];
+    char * option[2]= { nullptr , nullptr } ;
     if (m_Use8Connected == true)
     {
       std::string opt("8CONNECTED:8");
