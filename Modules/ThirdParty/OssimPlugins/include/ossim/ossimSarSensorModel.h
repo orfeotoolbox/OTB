@@ -421,6 +421,9 @@ protected:
    double                                      theRangeTimeOffset; // Offset in seconds, computed
 
    static const double C;
+
+   static const unsigned int thePluginVersion; // version of the SarSensorModel plugin
+
 private:
    /** Disabled assignment operator.  */
    ossimSarSensorModel& operator=(ossimSarSensorModel const& rhs);

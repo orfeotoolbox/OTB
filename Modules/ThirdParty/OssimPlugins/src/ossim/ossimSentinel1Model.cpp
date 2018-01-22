@@ -683,6 +683,8 @@ namespace ossimplugins
       addMandatory(theProductKwl, HEADER_PREFIX, "first_line_time", adsHeader, "startTime");
       addMandatory(theProductKwl, HEADER_PREFIX, "last_line_time",  adsHeader, "stopTime");
 
+      add(theProductKwl, HEADER_PREFIX, "version", thePluginVersion);
+
       //RK maybe use this->getManifestPrefix()
 
       add(theProductKwl, SUPPORT_DATA_PREFIX, "mds1_tx_rx_polar", polarisation);
