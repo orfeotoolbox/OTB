@@ -760,7 +760,7 @@ public:
     return m_DocTags;
   }
 
-  /** Get the application doc tag to \a val */
+  /** Set the application doc tag to \a val */
   void SetDocTags( std::vector<std::string> val ){
     m_DocTags = val;
     this->Modified();
