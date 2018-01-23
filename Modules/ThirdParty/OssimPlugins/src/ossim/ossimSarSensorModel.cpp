@@ -953,6 +953,9 @@ namespace ossimplugins
       DurationType cumulAzimuthTime(seconds(0));
       double cumulRangeTime(0);
       unsigned int count=0;
+      // reset offsets before optimisation
+      theAzimuthTimeOffset = seconds(0);
+      theRangeTimeOffset = 0.0;
 
       // First, fix the azimuth time
       for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
