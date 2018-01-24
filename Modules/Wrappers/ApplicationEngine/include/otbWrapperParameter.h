@@ -55,12 +55,10 @@ enum DefaultValueMode
 /** \class Parameter
  *  \brief This class represent a parameter for the wrapper framework
  *
- * \par
  * This class is a high level class representing a parameter for the
  * wrapper framework. It should be subclassed to represent different
  * kinds of parameters.
  *
- * \par
  * The basic structure is :
  * \li a key that will be its denomination in otbcli,
  *     and in the code with method such as Application::GetParameterByKey

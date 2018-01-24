@@ -29,7 +29,8 @@ namespace Wrapper
 {
 
 /** \class OutputProcessXMLParameter
- *  \brief This class represent a xml filename parameter for the wrapper framework to save otb application.
+ *  \brief This class represent a xml filename parameter for the wrapper 
+ *  framework to save otb application.
  *
  * \ingroup OTBApplicationEngine
  */

@@ -75,10 +75,9 @@ namespace Wrapper
 {
 
 /** \class Application
- *  \brief %This class represent an application.
+ *  \brief This class represent an application.
  *  
- * \par
- * %This class is an abstract class that is used to set a framework
+ * This class is an abstract class that is used to set a framework
  * for the different applications that will derived from it.
  * It defines the basic actions that one needs to create or use an application,
  * mainly through parameter manipulation. See the Parameter class 

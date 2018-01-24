@@ -31,7 +31,7 @@ namespace Wrapper
 {
 
 /**
- * \class Group
+ * \class ParameterGroup
  *
  * \ingroup OTBApplicationEngine
  */
