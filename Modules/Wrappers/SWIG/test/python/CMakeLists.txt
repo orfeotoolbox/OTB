@@ -19,7 +19,6 @@
 #
 
 set(TEST_DRIVER otbTestDriver
-    --add-before-env PYTHONPATH        "${OTBSWIGWrapper_BINARY_DIR}/src"
     --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
     --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
 
@@ -27,7 +26,6 @@ if(WIN32)
   # on windows, loading the module _otbApplication requires the otbossimplugins*.dll
   # which is in the 'bin/<CMAKE_BUILD_TYPE>' folder
   set(TEST_DRIVER ${TEST_DRIVER}
-    --add-before-env PATH ${CMAKE_BINARY_DIR}/bin
     --add-before-env PATH $<TARGET_FILE_DIR:OTBCommon>)
 endif(WIN32)
 
