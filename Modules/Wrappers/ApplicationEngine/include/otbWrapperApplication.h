@@ -507,7 +507,7 @@ public:
    */
   OutputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
 
-  /** Set the input complex image parameter
+  /** Set the input complex image parameter.
    *
    * Set the input complex image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
@@ -519,7 +519,7 @@ public:
    */
   void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
 
-  /** Get the complex output image parameter
+  /** Get the complex output image parameter.
    *
    * Get the complex output image parameter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
@@ -531,19 +531,21 @@ public:
    */
   ComplexOutputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
 
-  /** Add an image to an InputImageList parameter
+  /** Add an image to an InputImageList parameter.
    *
    * Add an image to an InputImageList parameter as an ImageBase
    * pointer instead of reading from file. Useful to connect pipelines
    * between different application instances.
+   * 
    * \param parameter The parameter key
    * \param img The ImageBase * of the image to add
+   *
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
    */
   void AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img);
 
-  /** Set the nth image of an InputImageList parameter
+  /** Set the nth image of an InputImageList parameter.
    *
    * Set the nth image of an InputImageList parameter as an ImageBase pointer
    * instead of reading from file. Useful to connect pipelines

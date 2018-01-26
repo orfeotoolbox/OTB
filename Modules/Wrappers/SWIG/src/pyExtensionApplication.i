@@ -11,6 +11,9 @@
       s  = self.GetDocName()
 
     def GetParameterTypeAsString(self, parameter_type):
+      """
+      Get the `parameter_type` as a string "parameter_type".
+      """
       return {
         ParameterType_InputProcessXML : 'ParameterType_InputProcessXML',
         ParameterType_String : 'ParameterType_String',
@@ -44,6 +47,9 @@
       return s
 
     def SetParameterValue(self, paramKey, value):
+      """
+      TODO
+      """
       paramType = self.GetParameterType(paramKey)
       if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
                        ParameterType_String, ParameterType_InputFilename,
@@ -71,6 +77,9 @@
       return
 
     def GetParameterValue(self, paramKey):
+      """
+      TODO
+      """
       paramType = self.GetParameterType(paramKey)
       if paramType in [ParameterType_InputProcessXML,
                        ParameterType_String, ParameterType_InputFilename,
@@ -153,6 +162,8 @@
     {
     def SetImageFromNumpyArray(self, paramKey, npArray):
       """
+      Set the Image of `paramKey` from a Numpy Array.
+
       This method takes a numpy array and set ImageIOBase of
       InputImageParameter by creating an otbImage with
       same pixel type as numpyarray.dtype
@@ -186,6 +197,8 @@
 
     def SetVectorImageFromNumpyArray(self, paramKey, npArray):
       """
+      Set the VectorImage of `paramKey` from a Numpy Array.
+
       This method takes a numpy array and set ImageIOBase of
       InputImageParameter by creating an otbVectorImage with
       same pixel type as numpyarray.dtype.
@@ -221,9 +234,18 @@
 
     def GetVectorImageAsNumpyArray(self, paramKey, dt='float'):
       """
+      Get an vector image as a Numpy Array of type `dt`.
+
       If datatype is unknown this method assumes to numpy.float32
       Valid datatypes are:
-      int8, int16, int32, uint8, uint16, uint32, float, double.
+      * `int8`
+      * `int16`
+      * `int32` 
+      * `uint8`
+      * `uint16`
+      * `uint32`
+      * `float`
+      * `double`
       NOTE: This method always return an numpy array with dimension 3
       """
       if dt == 'int8':
@@ -249,9 +271,19 @@
 
     def GetImageAsNumpyArray(self, paramKey, dt='float'):
       """
+      Get an image as a Numpy Array of type `dt`.
+
       If datatype is unknown this method assumes to numpy.float32
       Valid datatypes are:
-      int8, int16, int32, uint8, uint16, uint32, float, double.
+      * `int8`
+      * `int16`
+      * `int32` 
+      * `uint8`
+      * `uint16`
+      * `uint32`
+      * `float`
+      * `double`
+
       NOTE: This method always return an numpy array with dimension 3
       """
       if dt == 'int8':
