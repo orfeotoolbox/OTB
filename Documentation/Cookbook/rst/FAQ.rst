@@ -243,22 +243,21 @@ OFF the CMake variable OTB\_USE\_EXTERNAL\_ITK.
 OTB compilation and Windows platform
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To build OTB on Windows, we highly recommend using OSGeo4W which
-provides all the necessary dependencies.
+To build OTB on Windows, you should prepare an environment with the following
+tools:
 
-Currently it is not possible to build OTB in Debug when using the
-dependencies provided by OSGeo4W. If you want to build OTB in Debug for
-Windows, you will need to build and install manually each dependency
-needed by OTB. You should use the same compiler for all the
-dependencies, as much as possible.
+* Visual Studio 2015 or later
+* CMake 3.1 or later
+* OTB XDK : download a Windows binary package of OTB and use the supplied
+  uninstall script to remove OTB binaries and headers. Now, this package only
+  contains the dependencies needed to build OTB.
 
-Therefore, we highly recommend you to use OSGeo4W shell environment to
-build OTB. You can use the 32 or 64 bit installer, since OSGeo4W
-provides all the necessary dependencies in the two cases. Please follow
-carefully the procedure provided in the Software Guide.
+Then, you can download OTB sources (preferably, a version compatible with your
+XDK), and compile them as a standard CMake project. More details are available
+in the SoftwareGuide.
 
-Typically, when using the dependencies provided by OSGeo4W, compile OTB
-in Release or RelWithDebInfo mode.
+There is an other solution, using OSGeo4W distribution. However, the
+dependencies may be outdated.
 
 Using OTB
 ---------

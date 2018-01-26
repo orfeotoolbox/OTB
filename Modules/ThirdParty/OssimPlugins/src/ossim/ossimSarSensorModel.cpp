@@ -46,7 +46,6 @@ using ossimplugins::time::seconds;
 
 namespace {// Anonymous namespace
    const bool         k_verbose = false; // global verbose constant; TODO: use an option
-   const unsigned int k_version = 2;
 
    // Sometimes, we don't need to compare the actual distance, its square value is
    // more than enough.
@@ -107,6 +106,8 @@ namespace ossimplugins
    RTTI_DEF1(ossimSarSensorModel, "ossimSarSensorModel", ossimSensorModel);
 
    const double ossimSarSensorModel::C = 299792458;
+
+   const unsigned int ossimSarSensorModel::thePluginVersion = 2;
 
    ossimSarSensorModel::ProductType::ProductType(string_view const& s)
    {
@@ -952,6 +953,9 @@ namespace ossimplugins
       DurationType cumulAzimuthTime(seconds(0));
       double cumulRangeTime(0);
       unsigned int count=0;
+      // reset offsets before optimisation
+      theAzimuthTimeOffset = seconds(0);
+      theRangeTimeOffset = 0.0;
 
       // First, fix the azimuth time
       for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
@@ -1218,13 +1222,18 @@ namespace ossimplugins
      static const char MODULE[] = "ossimplugins::ossimSarSensorModel::saveState";
      SCOPED_LOG(traceDebug, MODULE);
 
-     kwl.add(prefix,
-             ossimKeywordNames::TYPE_KW,
-             "ossimSarSensorModel",
-             true);
+     // Prevent override of subclasses TYPE_KW
+     
+     if(!kwl.hasKey(ossimKeywordNames::TYPE_KW))
+       {
+       kwl.add(prefix,
+               ossimKeywordNames::TYPE_KW,
+               "ossimSarSensorModel",
+               true);
+       }
 
-     add(kwl, SUPPORT_DATA_PREFIX + "product_type", theProductType.ToString().data());
-
+     std::string product_type = theProductType.ToString().data();
+     add(kwl, SUPPORT_DATA_PREFIX + "product_type", product_type);
      add(kwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", theNearRangeTime      );
      add(kwl, SUPPORT_DATA_PREFIX, "range_sampling_rate"       , theRangeSamplingRate  );
      add(kwl, SUPPORT_DATA_PREFIX, "range_spacing"             , theRangeResolution    );
@@ -1247,7 +1256,7 @@ namespace ossimplugins
      kwl.removeKeysThatMatch(GCP_PREFIX+"*");
      add(kwl, theGCPRecords);
 
-     add(kwl, HEADER_PREFIX, "version", k_version);
+     add(kwl, HEADER_PREFIX, "version", thePluginVersion);
 
      return ossimSensorModel::saveState(kwl, prefix);
    }
@@ -1297,7 +1306,7 @@ namespace ossimplugins
          try {
             unsigned int version;
             get(kwl, HEADER_PREFIX, "version", version);
-            if (version < k_version) {
+            if (version < thePluginVersion) {
                throw std::runtime_error("Geom file generated with previous version of ossim plugins");
             }
          } catch (...) {

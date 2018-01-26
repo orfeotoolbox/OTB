@@ -151,7 +151,7 @@ private:
 		SetName("ContrastEnhancement");
     SetDescription("This application is the implementation of the histogram "
       "equalization algorithm. It can be used to enhance contrast in an image "
-      "or to reduce the dynamic of th image without loosing too much contrast. "
+      "or to reduce the dynamic of the image without losing too much contrast. "
       "It offers several options as a no data value, "
       "a contrast limitation factor, a local version of the algorithm and "
       "also a mode to equalized the luminance of the image.");
@@ -704,7 +704,7 @@ private:
   void ComputeLuminance( const FloatVectorImageType::Pointer inImage ,
                          std::vector < unsigned int > rgb )
   {
-    // Retreive coeffs for each channel
+    // Retrieve coeffs for each channel
     std::vector < float > lumCoef( 3 , 0.0 );
     lumCoef[0] = GetParameterFloat("mode.lum.red.coef");
     lumCoef[1] = GetParameterFloat("mode.lum.green.coef");
@@ -828,7 +828,7 @@ private:
       }
   }
 
-  // Threshold function that is normaly done in ComputeHistoFilter  and here is
+  // Threshold function that is normally done in ComputeHistoFilter  and here is
   // used on the output of HistoPersistentFilterType.
   void Threshold( HistoPersistentFilterType::HistogramListType * histoList ,
                   unsigned int nbBin )

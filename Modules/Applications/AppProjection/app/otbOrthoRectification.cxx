@@ -91,7 +91,7 @@ private:
   {
     SetName("OrthoRectification");
     std::ostringstream oss;
-    oss << "This application allows to ortho-rectify optical and radar images from supported sensors." << std::endl;
+    oss << "This application allows ortho-rectifying optical and radar images from supported sensors." << std::endl;
     SetDescription(oss.str());
     // Documentation
     SetDocName("Ortho-rectification");

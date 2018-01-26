@@ -89,7 +89,7 @@ private:
 
     AddParameter(ParameterType_InputImage, "in", "Support image");
     SetParameterDescription("in","Image defining the reference coordinate "
-      "system in which the tranform is applied. Both projected and sensor "
+      "system in which the transform is applied. Both projected and sensor "
       "images are supported.");
 
     // Transform Group

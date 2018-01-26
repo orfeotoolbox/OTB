@@ -165,6 +165,9 @@ protected:
   /** Gather the content of in-memory output layer into the filter outputs */
   virtual void GatherOutputVectors(void);
 
+  /** Fill output vectors for a particular output */
+  virtual void FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update);
+
   /** Utility method to add new fields on an output layer */
   virtual void InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS);
 

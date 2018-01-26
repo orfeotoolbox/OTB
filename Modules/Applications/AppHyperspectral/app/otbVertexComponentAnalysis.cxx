@@ -51,7 +51,7 @@ private:
   {
     SetName("VertexComponentAnalysis");
     SetDescription("Given a set of mixed spectral vectors, estimate"
-    "reference subtances also known as endmembers using the Vertex"
+    "reference substances also known as endmembers using the Vertex"
     "Component Analysis algorithm.");
 
     // Documentation
@@ -59,7 +59,7 @@ private:
     SetDocLongDescription("Apply the Vertex Component Analysis [1] to"
     "an hyperspectral image to extract endmembers. Given a set of mixed"
     "spectral vectors (multispectral or hyperspectral), the application"
-    "estimates the spectral signature of reference subtances also known"
+    "estimates the spectral signature of reference substances also known"
     "as endmembers.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
