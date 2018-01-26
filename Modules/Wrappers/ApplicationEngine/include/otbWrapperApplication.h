@@ -153,6 +153,7 @@ public:
 
   /** Run the application, then writes all the output to disk
    * if they have an associated filename.
+   *
    * This is a helper function for wrappers without pipeline support.
    *
    * Returns 0 on success, or a non-null integer on error
@@ -165,6 +166,7 @@ public:
   ParameterGroup* GetParameterList();
 
   /** Get the internal application parameter specified.
+   *
    * If the follow flag is on, the function returns the target 
    * of proxy parameters, default is on.
    * 
@@ -176,13 +178,13 @@ public:
    * WARNING: this method may disappear from the API */
   const Parameter* GetParameterByKey(std::string parameter, bool follow=true) const;
 
-  /** Returns the name of a parameter */
+  /** Returns the name of a parameter. */
   std::string GetParameterName(std::string paramKey);
 
-  /** Returns the description of a parameter */
+  /** Returns the description of a parameter. */
   std::string GetParameterDescription(std::string paramKey);
 
-  /** Set the description of a parameter */
+  /** Set the description of a parameter. */
   void SetParameterDescription(std::string paramKey, std::string dec);
 
   /** Enable the use of an optional parameter.*/
@@ -191,19 +193,19 @@ public:
   /** Disable the use of an optional parameter.*/
   void DisableParameter(std::string paramKey);
 
-  /** Return the enable state of an optional parameter  */
+  /** Return the enable state of an optional parameter.  */
   bool IsParameterEnabled(std::string paramKey, bool recurseParents = false) const;
 
-  /** Return true if the specified parameter is mandatory */
+  /** Return true if the specified parameter is mandatory. */
   bool IsMandatory(std::string paramKey) const;
 
   /** Return true if the specified parameter was set automatically in
-   * the application
+   * the application.
    */
   bool HasAutomaticValue(std::string paramKey) const;
 
   /** Returns true if the parameter has an associated value provided externally
-   *  (not automatically computed by the application) 
+   *  (not automatically computed by the application).
    */
   bool HasUserValue(std::string paramKey) const;
 
@@ -211,8 +213,10 @@ public:
   void ClearValue(std::string paramKey);
 
   /** Returns true if the parameter has an associated value.
+   *
    * This value can be an automatically computed value, default value,
-   * or a value set externally by user */
+   * or a value set externally by user 
+   */
   bool HasValue(std::string paramKey) const;
 
   /** Get active flag of parameter with key paramKey */
@@ -231,11 +235,11 @@ public:
   ParameterType GetParameterType(std::string paramKey) const;
 
   /** Returns the list of choices (key) of the ListView parameter
-   * or the Choice parameter */
+   * or the Choice parameter. */
   std::vector<std::string> GetChoiceKeys(std::string paramKey);
 
   /** Returns the list of choices (name) of the ListView parameter
-   * or the Choice parameter */
+   * or the Choice parameter. */
   std::vector<std::string> GetChoiceNames(std::string paramKey);
 
   /* Is the application ready to be executed : All the mandatory
@@ -295,13 +299,13 @@ public:
    */
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
 
-  /** Set Active flag to \a value and UserValue to 
-  * \a hasUserValueFlag 
+  /** Set Active flag to \a value and UserValue to \a hasUserValueFlag .
   */
   void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
-  /** Checks if the application is ready to be executed. It checks that there
-   *  is no parameter missing
+  /** Checks if the application is ready to be executed. 
+   *
+   * It checks that there is no parameter missing.
    */
   bool IsApplicationReady();
 
@@ -316,8 +320,10 @@ public:
    */
   bool IsParameterMissing(const std::string &key) const;
 
-  /** Set a default integer value, must be used in the
-   * DoInit when setting a value by default for the parameter.
+  /** Set a default integer value.
+   *
+   * This method must be used in the DoInit when setting a \c value by default
+   * for the parameter.
    *
    * Can be called for types :
    * \li \c ParameterType_Int
@@ -327,8 +333,9 @@ public:
    */
   void SetDefaultParameterInt(std::string parameter, int value);
 
-  /** Set a default floating value, must used in the
-   * DoInit when setting a value by default
+  /** Set a default floating value.
+   *
+   * This method must used in the DoInit when setting a \c value by default
    * for the parameter.
    *
    * Can be called for type \c ParameterType_Float
@@ -349,33 +356,37 @@ public:
    */
   void SetDefaultOutputComplexPixelType(std::string parameter, ComplexImagePixelType type);
 
-  /** Set a minimum int value, must be used in the
-   * DoInit when setting a \a value by default for the 
-   * \a parameter.
+  /** Set a minimum int value.
+   * 
+   * This method must be used in the DoInit when setting the minimum \a value 
+   * allowed for the \a parameter
    *
    * Can be called for type \c ParameterType_Int
    */
   void SetMinimumParameterIntValue(std::string parameter, int value);
 
-  /** Set a maximum int value, must be used in the
-   * DoInit when setting a \a value by default for the 
-   * \a parameter.
+  /** Set a maximum int value.
+   * 
+   * This method must be used in the DoInit when setting the maximum \a value 
+   * allowed for the \a parameter
    *
    * Can be called for type \c ParameterType_Int
    */
   void SetMaximumParameterIntValue(std::string parameter, int value);
 
-  /** Set a minimum float value, must be used in the
-   * DoInit when setting a \a value by default
-   * for the \a parameter
+  /** Set a minimum float value
+   *
+   * This method must be used in the DoInit when setting the minimum \a value 
+   * allowed for the \a parameter
    *
    * Can be called for type \c ParameterType_Float
    */
   void SetMinimumParameterFloatValue(std::string parameter, float value);
 
-  /** Set a maximum float value, must be used in the
-   * DoInit when setting a \a value by default
-   * for the \a parameter
+  /** Set a maximum float value 
+   *
+   * This method must be used in the DoInit when setting the maximum \a value 
+   * allowed for the \a parameter
    *
    * Can be called for type \c ParameterType_Float
    */
@@ -394,7 +405,7 @@ public:
    */
   void SetParameterOutputImage(std::string parameter, FloatVectorImageType* value);
 
-  /** Set a complex output image value
+  /** Set a complex output image value.
    *
    * Can be called for type \c ParameterType_ComplexOutputImage
    */
@@ -406,7 +417,7 @@ public:
    */
   void SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType);
 
-  /** Set the complex pixel type in which the image will be saved
+  /** Set the complex pixel type in which the image will be saved.
    *
    * Can be called for type \c ParameterType_ComplexOutputImage
    */
@@ -435,7 +446,7 @@ public:
    */
   float GetParameterFloat(std::string parameter);
 
-  /** Get a string from a \a parameter.
+  /** Get a string parameter value.
    *
    * Can be called for types :
    * \li \c ParameterType_String
@@ -471,17 +482,9 @@ public:
   //                         const std::string & parameter ) const;
   //
   // to avoid useless memory allocations.
-    /*
-    Get a string list parameter value.
-   *
-   * Can be called for types :
-    \li \c ParameterType_StringList
-   * \li \c ParameterType_ListView (get the filename list)
-   * \li \c ParameterType_InputImageList (get the filename list)
-   * \li \c ParameterType_InputVectorDataList (get the filename list)
-   * \li \c ParameterType_InputFilenameList (get the filename list)*/
 
-  /**
+  /** Set the input image parameter
+   *
    * Set the input image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
    * application instances.
@@ -492,7 +495,8 @@ public:
    */
   void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
 
-  /**
+  /** Get the output image parameter
+   *
    * Get the output image parameter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
    * application instances.
@@ -503,7 +507,8 @@ public:
    */
   OutputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
 
-  /**
+  /** Set the input complex image parameter
+   *
    * Set the input complex image parameter as an ImageBase * instead
    * of filename. Useful to connect pipelines between different
    * application instances.
@@ -514,7 +519,8 @@ public:
    */
   void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
 
-  /**
+  /** Get the complex output image parameter
+   *
    * Get the complex output image parameter as an ImageBase * instead
    * of writing to disk. Useful to connect pipelines between different
    * application instances.
@@ -525,7 +531,8 @@ public:
    */
   ComplexOutputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
 
-  /**
+  /** Add an image to an InputImageList parameter
+   *
    * Add an image to an InputImageList parameter as an ImageBase
    * pointer instead of reading from file. Useful to connect pipelines
    * between different application instances.
@@ -536,7 +543,8 @@ public:
    */
   void AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img);
 
-  /**
+  /** Set the nth image of an InputImageList parameter
+   *
    * Set the nth image of an InputImageList parameter as an ImageBase pointer
    * instead of reading from file. Useful to connect pipelines
    * between different application instances.
@@ -560,8 +568,7 @@ public:
    */
   void AddParameterStringList(std::string parameter, const std::string & str);
 
-  /**
-   * Set the nth value of a parameter list as a string.
+  /** Set the nth value of a parameter list as a string.
    *
    * Can be called for parameter type \c ParameterType_InputImageList .
    *
@@ -574,8 +581,7 @@ public:
   void SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string& str);
 
 
-  /**
-   * Clear all images from an InputImageList parameter.
+  /** Clear all images from an InputImageList parameter.
    *
    * \param parameter The parameter key
    * \throw itk::Exception if parameter is not found or not an
@@ -583,8 +589,8 @@ public:
    */
   void ClearParameterInputImageList(std::string parameter);
 
-  /**
-   * Get the number of images in an InputImageList parameter.
+  /** Get the number of images in an InputImageList parameter.
+   *
    * \param parameter The parameter key
    * \return The number of images
    * \throw itk::Exception if parameter is not found or not an
@@ -717,6 +723,7 @@ public:
   std::string GetParameterAsString(std::string paramKey);
 
   /** Get the list of all parameters as a vector of their key.
+   *
    * The \a recursive allows you to get all parameters inside
    * group prameter (default value is \True) 
    */
@@ -850,8 +857,10 @@ public:
     this->Modified();
   }
 
-  /** Add an example to the application doc example. 
-   * Return the id of the added example */
+  /** Add an example to the application doc example.
+   *
+   * Return the id of the added example 
+   */
   unsigned int AddExample( const std::string & comm="" )
   {
     unsigned int id = GetDocExample()->AddExample( comm );
@@ -871,7 +880,9 @@ public:
     return GetDocExample()->GenerateHtmlExample();
   }
 
-  /** Return all parameters which role is \c Role_Output and that are enable
+  /** Return all enable parameters which role is \c Role_Output
+   *
+   * Return all parameters which role is \c Role_Output and that are enable
    * in a vector of pairs that contains the parameter key (first) 
    * and its value (second).
    */
@@ -920,12 +931,14 @@ protected:
   void AddProcess(itk::ProcessObject* object, std::string description);
 
   /** Add a new choice value to an existing choice parameter
+   *
    * \param paramKey : path.to.choice.NewChoice
    * \param paramName : name of NewChoice
    */
   void AddChoice(std::string paramKey, std::string paramName);
 
   /** Add a new parameter to a parameter group.
+   *
    * The \a paramKey can be the path to a parameter group
    * or the path to a choice value.
    * \param paramKey : path.to.parametergroupe.NewParam or NewParam
@@ -943,6 +956,7 @@ protected:
   void AddRAMParameter(std::string paramKey="ram");
 
   /** Add a parameterRAM 
+   *
    * \param paramKey : key to the ram parameter
    * \param paramName : name of the ram parameter
    * \param defaultValue : default value that will be used during execution if
@@ -973,12 +987,14 @@ protected:
     GetParameterList()->AddOutXMLParameter();
   }
 
-  /** Remove the items of a ListView parameter. 
+  /** Remove the items of a ListView parameter.
+   *
    * Can be called on type \c ParameterType_ListView 
    */
   void ClearChoices(std::string key);
 
   /** Get Items selected in the ListView parameter.
+   *
    * Can be called on type \c ParameterType_ListView 
    */
   std::vector<int>  GetSelectedItems(std::string paramKey);
@@ -1021,6 +1037,7 @@ protected:
   void AutomaticValueOff(std::string paramKey);
 
   /** Set a TImageType value.
+   *
    * \param paramKey : key to a ParameterType_OutputImage
    * \param value : TImageType pointer
    *
@@ -1038,7 +1055,7 @@ protected:
       }
   }
 
-    /* Set a complex output image value
+  /** Set a complex output image value
    *
    * Can be called for types :
    * \li ParameterType_ComplexOutputImage
@@ -1066,8 +1083,10 @@ private:
   virtual void DoExecute() = 0;
 
   /** This method will be called after the
+   *
    * ExecuteAndWriteOutput() call to allow for cleanup. Default
-   * implementation does nothing */
+   * implementation does nothing 
+   */
   virtual void AfterExecuteAndWriteOutputs();
 
   Application(const Application &); //purposely not implemented
