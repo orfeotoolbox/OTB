@@ -203,165 +203,28 @@ available in the ``otb-bin`` OSGeo4W package, and the environment is
 configured automatically so you don’t need to tweak
 ``OTB_APPLICATION_PATH``.
 
-In the ``otbApplication`` module, two main classes can be manipulated :
-
--  ``Registry``, which provides access to the list of available
-   applications, and can create applications.
-
--  ``Application``, the base class for all applications. This allows to
-   interact with an application instance created by the ``Registry``.
-
-Here is one example of how to use Python to run the ``Smoothing``
-application, changing the algorithm at each iteration.
+Once your environment is set, you can use OTB applications from Python, just
+like this small example:
 
 .. code-block:: python
 
     #  Example on the use of the Smoothing application
-    #
-
-    # We will use sys.argv to retrieve arguments from the command line.
-    # Here, the script will accept an image file as first argument,
-    # and the basename of the output files, without extension.
-    from sys import argv
 
     # The python module providing access to OTB applications is otbApplication
-    import otbApplication
-
-    # otbApplication.Registry can tell you what application are available
-    print "Available applications: "
-    print str( otbApplication.Registry.GetAvailableApplications() )
+    import otbApplication as otb
 
     # Let's create the application with codename "Smoothing"
-    app = otbApplication.Registry.CreateApplication("Smoothing")
+    app = otb.Registry.CreateApplication("Smoothing")
 
-    # We print the keys of all its parameter
-    print app.GetParametersKeys()
+    # We set its parameters
+    app.SetParameterString("in", "my_input_image.tif")
+    app.SetParameterString("type", "mean")
+    app.SetParameterString("out", "my_output_image.tif")
 
-    # First, we set the input image filename
-    app.SetParameterString("in", argv[1])
+    # This will execute the application and save the output file
+    app.ExecuteAndWriteOutput()
 
-    # The smoothing algorithm can be set with the "type" parameter key
-    # and can take 3 values: 'mean', 'gaussian', 'anidif'
-    for type in ['mean', 'gaussian', 'anidif']:
-
-      print 'Running with ' + type + ' smoothing type'
-
-      # Here we configure the smoothing algorithm
-      app.SetParameterString("type", type)
-
-      # Set the output filename, using the algorithm to differentiate the outputs
-      app.SetParameterString("out", argv[2] + type + ".tif")
-
-      # This will execute the application and save the output file
-      app.ExecuteAndWriteOutput()
-
-Numpy array processing
-----------------------
-
-Input and output images to any OTB application in the form of numpy array is now possible in OTB python wrapping.
-The python wrapping only exposes OTB ApplicationEngine module which allow to access existing C++ applications.
-Due to blissful nature of ApplicationEngine's loading mechanism no specific wrapping is required for each application.
-
-Numpy extension to Python wrapping allows data exchange to application as an array rather than a disk file.
-Ofcourse, it is possible to load an image from file and then convert to numpy array or just provide a file as earlier via
-Application.SetParameterString(...).
-
-This bridge that completes numpy and OTB makes it easy to plug OTB into any image processing chain via python code that uses
-GIS/Image processing tools such as GDAL, GRASS GIS, OSSIM that can deal with numpy.
-
-
-Below code reads an input image using python pillow (PIL) and convert it to numpy array. This numpy array is
-used an input to the application via *SetImageFromNumpyArray(...)* method.
-The application used in this example is ExtractROI. After extracting
-a small area the output image is taken as numpy array with *GetImageFromNumpyArray(...)* method thus avoid wiriting
-output to a temporary file.
-
-::
-
-   import sys
-   import os
-   import numpy as np
-   import otbApplication
-   from PIL import Image as PILImage
-
-   pilimage = PILImage.open('poupees.jpg')
-   npimage = np.asarray(pilimage)
-   inshow(pilimage)
-
-   ExtractROI = otbApplication.Registry.CreateApplication('ExtractROI')
-   ExtractROI.SetImageFromNumpyArray('in', npimage)
-   ExtractROI.SetParameterInt('startx', 140)
-   ExtractROI.SetParameterInt('starty', 120)
-   ExtractROI.SetParameterInt('sizex', 150)
-   ExtractROI.SetParameterInt('sizey', 150)
-   ExtractROI.Execute()
-
-   ExtractOutput = ExtractROI.GetImageAsNumpyArray('out')
-   output_pil_image = PILImage.fromarray(np.uint8(ExtractOutput))
-   imshow(output_pil_image)
-
-In-memory connection
---------------------
-
-Applications are often use as parts of larger processing
-chains. Chaining applications currently requires to write/read back
-images between applications, resulting in heavy I/O operations and a
-significant amount of time dedicated to writing temporary files.
-
-Since OTB 5.8, it is possible to connect an output image parameter
-from one application to the input image parameter of the next
-parameter. This results in the wiring of the internal ITK/OTB
-pipelines together, allowing to perform image streaming between the
-applications. There is therefore no more writing of temporary
-images. The last application of the processing chain is responsible
-for writing the final result images.
-
-In-memory connection between applications is available both at the C++
-API level and using the  python bindings to the application presented
-in the `Python interface`_ section.
-
-Here is a Python code sample connecting several applications together:
-
-.. code-block:: python
-
-                import otbApplication as otb
-
-                app1 = otb.Registry.CreateApplication("Smoothing")
-                app2 = otb.Registry.CreateApplication("Smoothing")
-                app3 = otb.Registry.CreateApplication("Smoothing")
-                app4 = otb.Registry.CreateApplication("ConcatenateImages")
-
-                app1.IN = argv[1]
-                app1.Execute()
-
-                # Connection between app1.out and app2.in
-                app2.SetParameterInputImage("in",app1.GetParameterOutputImage("out"))
-
-                # Execute call is mandatory to wire the pipeline and expose the
-                # application output. It does not write image
-                app2.Execute()
-
-                app3.IN = argv[1]
-
-                # Execute call is mandatory to wire the pipeline and expose the
-                # application output. It does not write image
-                app3.Execute()
-
-                # Connection between app2.out, app3.out and app4.il using images list
-                app4.AddImageToParameterInputImageList("il",app2.GetParameterOutputImage("out"));
-                app4.AddImageToParameterInputImageList("il",app3.GetParameterOutputImage("out"));
-
-                app4.OUT = argv[2]
-
-                # Call to ExecuteAndWriteOutput() both wires the pipeline and
-                # actually writes the output, only necessary for last application of
-                # the chain.
-                app4.ExecuteAndWriteOutput()
-
-**Note:** Streaming will only work properly if the application internal
-implementation does not break it, for instance by using an internal
-writer to write intermediate data. In this case, execution should
-still be correct, but some intermediate data will be read or written.
+For more information about this Python interface, check the recipe section.
 
 QGIS interface
 --------------
