@@ -452,7 +452,7 @@ public:
    */
   std::string GetParameterString(std::string parameter);
 
-  /** Get a string list parameter value.
+   /** Get a string list parameter value.
    *
    * Can be called for types :
    * \li \c ParameterType_StringList
@@ -461,6 +461,9 @@ public:
    * \li \c ParameterType_InputVectorDataList (get the filename list)
    * \li \c ParameterType_InputFilenameList (get the filename list)
    */
+
+  std::vector< std::string >
+    GetParameterStringList( const std::string & parameter );
   // TODO: Should be rewritten:
   //
   // std::size_t
@@ -468,9 +471,15 @@ public:
   //                         const std::string & parameter ) const;
   //
   // to avoid useless memory allocations.
-  std::vector< std::string >
-    GetParameterStringList( const std::string & parameter );
-
+    /*
+    Get a string list parameter value.
+   *
+   * Can be called for types :
+    \li \c ParameterType_StringList
+   * \li \c ParameterType_ListView (get the filename list)
+   * \li \c ParameterType_InputImageList (get the filename list)
+   * \li \c ParameterType_InputVectorDataList (get the filename list)
+   * \li \c ParameterType_InputFilenameList (get the filename list)*/
 
   /**
    * Set the input image parameter as an ImageBase * instead
