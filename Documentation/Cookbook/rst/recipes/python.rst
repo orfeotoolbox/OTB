@@ -214,4 +214,52 @@ setting the ``field`` parameter:
 No metadata in Numpy arrays
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-TODO
+With the Numpy module, it is possible to convert images between OTB and Numpy
+arrays. For instance, when converting from OTB to Numpy array:
+
+* An ``Update()`` of the underlying ``otb::VectorImage`` is requested. Be aware
+  that the full image is generated.
+* The pixel buffer is copied into a ``numpy.array``
+
+As you can see, there is no export of the metadata, such as origin, spacing,
+projection WKT. It means that if you want to import back a Numpy array into OTB,
+the image won't have any of these metadata. It can be a problem for applications
+doing geometry, projections, and also calibration.
+
+Future developments will probably offer a more adapted structure to import and
+export images between OTB and Python world.
+
+Setting of boolean parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Most of the parameters are set using functions ``SetParameterXXX()``. The boolean
+parameters are handled differently (also called Empty parameter). Let's take an example with the application
+``ReadImageInfo``:
+
+.. code-block:: python
+
+    import otbApplication as otb
+    app = otb.Registry.CreateApplication("ReadImageInfo")
+
+If you want the get the state of parameter ``keywordlist``, a boolean, use:
+
+.. code-block:: python
+
+    app.IsParameterEnabled("keywordlist")
+
+To set this parameter ON / OFF, use the functions:
+
+.. code-block:: python
+
+    app.EnableParameter("keywordlist")
+    app.DisableParameter("keywordlist")
+
+Don't try to use other functions to set the state of a boolean. For instance,
+try the following commands:
+
+.. code-block:: python
+
+    app.SetParameterInt("keywordlist", 0)
+    app.IsParameterEnabled("keywordlist")
+
+You will get a state ``True`` even if you asked the opposite.
