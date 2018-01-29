@@ -20,7 +20,7 @@
 
 
 %module otbApplication
-
+%include docString.i
  %{
 #include "itkBase.includes"
 #include "otbWrapperSWIGIncludes.h"
