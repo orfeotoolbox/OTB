@@ -25,8 +25,19 @@ if ( OTB_WRAP_PYTHON OR OTB_WRAP_JAVA OR OTB_WRAP_PYTHON3)
        itkBase.includes
        ${CMAKE_CURRENT_SOURCE_DIR}/itkBase.i
        ${CMAKE_CURRENT_SOURCE_DIR}/itkMacro.i
+       ${CMAKE_CURRENT_SOURCE_DIR}/otbAddProcessToWatchEvent.i
+       ${CMAKE_CURRENT_SOURCE_DIR}/otbRegistry.i
+       ${CMAKE_CURRENT_SOURCE_DIR}/otbWrapperType.i
        )
   include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} )
+endif()
+
+if ( OTB_WRAP_PYTHON OR OTB_WRAP_PYTHON3)
+  list(APPEND SWIG_EXTRA_DEPS
+       ${CMAKE_CURRENT_SOURCE_DIR}/docString.i
+       ${CMAKE_CURRENT_SOURCE_DIR}/pyApplicationProxy.i
+       ${CMAKE_CURRENT_SOURCE_DIR}/pyExtensionApplication.i
+       )
 endif()
 
 # Python SWIG configuration

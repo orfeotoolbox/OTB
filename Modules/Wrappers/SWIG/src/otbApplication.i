@@ -20,7 +20,11 @@
 
 
 %module otbApplication
+
+#if SWIGPYTHON
 %include docString.i
+#endif
+
  %{
 #include "itkBase.includes"
 #include "otbWrapperSWIGIncludes.h"

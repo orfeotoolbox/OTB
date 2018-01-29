@@ -446,6 +446,8 @@ add_subdirectory(Utilities/Doxygen)
 
 add_subdirectory(Utilities/Completion)
 
+add_subdirectory(Utilities/PythonDoc)
+
 #----------------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
 if(UNIX)
