@@ -177,7 +177,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 
   // copy also origin and spacing
   outputPtr->SetOrigin(horizDisp->GetOrigin());
-  outputPtr->SetSpacing(horizDisp->GetSpacing());
+  outputPtr->SetSignedSpacing(horizDisp->GetSignedSpacing());
 }
 
 template <class TDisparityImage, class TOutputImage,

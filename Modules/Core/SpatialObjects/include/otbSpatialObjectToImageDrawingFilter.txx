@@ -362,11 +362,11 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject, TOutputImage>
 
   if (specified)
     {
-    OutputImage->SetSpacing(this->m_Spacing);           // set spacing
+    OutputImage->SetSignedSpacing(this->m_Spacing);           // set spacing
     }
   else
     {
-    OutputImage->SetSpacing(InputObject->GetIndexToObjectTransform()->GetScaleComponent());     // set spacing
+    OutputImage->SetSignedSpacing(InputObject->GetIndexToObjectTransform()->GetScaleComponent());     // set spacing
     m_Spacing[0] = InputObject->GetIndexToObjectTransform()->GetScaleComponent()[0];
     m_Spacing[1] = InputObject->GetIndexToObjectTransform()->GetScaleComponent()[1];
     }

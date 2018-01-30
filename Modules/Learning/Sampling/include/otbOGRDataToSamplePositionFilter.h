@@ -139,6 +139,9 @@ protected:
    */
   void DispatchInputVectors(void) ITK_OVERRIDE;
 
+  /** Fill the output vectors with a special ordering (class partition) */
+  void FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update) ITK_OVERRIDE;
+
 private:
   PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

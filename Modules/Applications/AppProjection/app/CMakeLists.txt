@@ -18,21 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppProjection_LINK_LIBS
-  ${OTBGdalAdapters_LIBRARIES}
-  ${OTBImageManipulation_LIBRARIES}
-  ${OTBProjection_LIBRARIES}
-  ${OTBImageBase_LIBRARIES}
-  ${OTBTransform_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
-  ${OTBCarto_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBMathParser_LIBRARIES}
-  ${OTBCommon_LIBRARIES}
-  ${OTBGDAL_LIBRARIES}
-  ${OTBInterpolation_LIBRARIES}
-)
-
 otb_create_application(
   NAME           OrthoRectification
   SOURCES        otbOrthoRectification.cxx

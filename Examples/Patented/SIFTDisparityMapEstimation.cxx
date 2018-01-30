@@ -304,7 +304,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   ImageType::ConstPointer fixedImage = fixedReader->GetOutput();
 
-  deformer->SetOutputSpacing(fixedImage->GetSpacing());
+  deformer->SetOutputSpacing(fixedImage->GetSignedSpacing());
   deformer->SetOutputOrigin(fixedImage->GetOrigin());
   deformer->SetOutputRegion(fixedImage->GetLargestPossibleRegion());
   // Software Guide : EndCodeSnippet

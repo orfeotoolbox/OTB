@@ -22,59 +22,43 @@
 #define otbWrapperQtWidgetInputFilenameListParameter_h
 
 #include <QtGui>
+
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "otbQtFileSelectionWidget.h"
+#  include "otbWrapperQtWidgetParameterList.h"
 #endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
+
 namespace Wrapper
 {
+
+class InputFilenameListParameter;
 
 /** \class QtWidgetInputFilenameListParameter
  * \brief
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetInputFilenameListParameter : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetInputFilenameListParameter :
+    public QtWidgetParameterList
 {
   Q_OBJECT
+
+//
+// Public methods.
 public:
-  QtWidgetInputFilenameListParameter(InputFilenameListParameter*, QtWidgetModel*);
-  ~QtWidgetInputFilenameListParameter() ITK_OVERRIDE;
+  QtWidgetInputFilenameListParameter( InputFilenameListParameter *, QtWidgetModel * );
+  ~QtWidgetInputFilenameListParameter() override;
 
-
-signals:
-  void Change();
-  void FileSelectionWidgetAdded( QWidget * );
-
-protected slots:
-  //void SetFileName( const QString& value );
-  //virtual void SelectFile();
-  virtual void UpFile();
-  virtual void DownFile();
-  virtual void AddFile();
-  virtual void SuppressFile();
-  virtual void EraseFile();
-  virtual void UpdateFilenameList();
-
+//
+// Private methods.
 private:
-  QtWidgetInputFilenameListParameter(const QtWidgetInputFilenameListParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputFilenameListParameter&); //purposely not implemented
+  // purposely not implemented
+  QtWidgetInputFilenameListParameter( const QtWidgetInputFilenameListParameter & );
 
-  void DoCreateWidget() ITK_OVERRIDE;
-
-  void DoUpdateGUI() ITK_OVERRIDE;
-
-  void RecreateFilenameList();
-  void UpdateFileList( std::map<unsigned int, unsigned int> idMap );
-
-  InputFilenameListParameter::Pointer m_InputFilenameListParam;
-
-  QHBoxLayout * m_HLayout;
-  QVBoxLayout * m_FileLayout;
-  QScrollArea * m_Scroll;
-  std::vector<QtFileSelectionWidget *> m_FileSelectionList;
+  //  purposely not implemented
+  void operator = ( const QtWidgetInputFilenameListParameter & );
 };
 
 

@@ -23,7 +23,6 @@ otb_module_test()
 set(OTBApplicationEngineTests
 otbApplicationEngineTestDriver.cxx
 otbWrapperApplicationTest.cxx
-otbWrapperParameterTest.cxx
 otbWrapperInputImageParameterTest.cxx
 otbWrapperNumericalParameterTest.cxx
 otbWrapperStringParameterTest.cxx
@@ -52,15 +51,6 @@ otb_module_target_label(otbApplicationEngineTestDriver)
 
 otb_add_test(NAME owTuApplication COMMAND otbApplicationEngineTestDriver
   otbWrapperApplicationNew
-  )
-
-otb_add_test(NAME owTvParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperParameterTest1
-  "param1"
-  )
-
-otb_add_test(NAME owTuParameterNew COMMAND otbApplicationEngineTestDriver
-  otbWrapperParameterNew
   )
 
 otb_add_test(NAME owTvInputImageParameter COMMAND otbApplicationEngineTestDriver

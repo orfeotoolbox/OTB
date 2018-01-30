@@ -66,22 +66,34 @@ private:
 
     SetDocLongDescription(
       "This application performs a mathematical operation on several multi-band "
-      "images and outputs the result into a monoband image. Evaluation of the "
+      "images and outputs the result into a monoband image. The given expression"
+      " is computed at each pixel position. Evaluation of the "
       "mathematical formula is done by the muParser libraries.\n\n"
 
-      "muParser version superior to 2.0, provides the '&&' and '||' logical "
-      "operators, and a ternary operator 'boolean_expression ? if_true : "
-      "if_false'.\n\n"
+      "The formula can be written using:\n\n"
+      "  * numerical values ( 2.3, -5, 3.1e4, ...)\n"
+      "  * variables containing pixel values (e.g. : 'im2b3' is the pixel value"
+      " in 2nd image, 3rd band)\n"
+      "  * binary operators:\n\n"
+      "    * '+' addition, '-' subtraction, '*' multiplication, '/' division\n"
+      "    * '^' raise x to the power of y\n"
+      "    * '<' less than, '>' greater than, '<=' less or equal, '>=' greater or equal\n"
+      "    * '==' equal, '!=' not equal\n"
+#ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+      "    * '||' logical or, '&&' logical and\n"
+      "  * if-then-else operator: '(condition ? value_true : value_false)'\n"
+#else
+      "    * 'or' logical or, 'and' logical and\n"
+      "  * if-then-else operator: 'if(condition;value_true;value_false)'\n"
+#endif
+      "  * functions : exp(), log(), sin(), cos(), min(), max(), ...\n\n"
 
-      "Older versions of muParser (prior to v-2.0) provides only the 'and' and "
-      "'or' logical operators, and a ternary operator 'if(; ; )'.\n\n"
-
-      "The list of features and operators is available on the muParser website [1]."
+      "The full list of features and operators is available on the muParser website [1]."
       );
 
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
-    SetDocSeeAlso("[1] http://muparser.sourceforge.net/");
+    SetDocSeeAlso("[1] http://beltoforion.de/article.php?a=muparser");
     AddDocTag( "Miscellaneous" );
 
     AddParameter( ParameterType_InputImageList, "il", "Input image-list" );
@@ -101,12 +113,7 @@ private:
     AddParameter( ParameterType_String, "exp", "Expression");
     SetParameterDescription(
       "exp",
-      "The muParser mathematical expression to apply on input images.\n"
-      "Use im1b1 as first band of first image, im1b2 for the second band of "
-      "first image.\n"
-      "Use im2b1 as first band of second image, im2b2 for the second band of "
-      "second image.\n"
-      "etc."
+      "The muParser mathematical expression to apply on input images."
     );
 
     // Doc example parameter settings

@@ -26,7 +26,7 @@
 
 #include "otbImage.h"
 
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 
 
 template <typename  InputPixelType /*= unsigned char */, typename OutputPixelType /*= unsigned char*/>
@@ -130,20 +130,11 @@ int generic_otbMultiChannelExtractROI(int itkNotUsed(argc), char * argv[], const
 
   writer->SetInput(extractROIFilter->GetOutput());
 
-  itk::TimeProbe chrono;
-
-  if (computeExtractTime)
-  {
-         chrono.Start();
-  }
-
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   writer->Update();
 
   if (computeExtractTime)
-  {
-         chrono.Stop();
-         std::cout << " Time to compute the extracted image: " << chrono.GetTotal() << " seconds" << std::endl;
-  }
+    std::cout << " Time to compute the extracted image: " << chrono.GetElapsedMilliseconds() << " ms" << std::endl;
 
   std::cout << " Number of channels in the input image: " << reader->GetOutput()->GetNumberOfComponentsPerPixel() <<
   std::endl;

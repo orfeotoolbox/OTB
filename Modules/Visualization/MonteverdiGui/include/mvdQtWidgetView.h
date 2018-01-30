@@ -220,6 +220,8 @@ private slots:
 
   void UpdateMessageAfterApplicationReady(bool val);
 
+  void UpdateMessageAfterExecution(int status);
+
   /**
    */
   void OnExecButtonClicked();

@@ -316,8 +316,8 @@ private:
     ossOutput << "\tOrigin :  [" << GetParameterFloat("originx") << "," << GetParameterFloat("originy") << "]" << std::endl;
 
     //Get image spacing
-    SetParameterFloat("spacingx",inImage->GetSpacing()[0], false);
-    SetParameterFloat("spacingy",inImage->GetSpacing()[1], false);
+    SetParameterFloat("spacingx",inImage->GetSignedSpacing()[0], false);
+    SetParameterFloat("spacingy",inImage->GetSignedSpacing()[1], false);
     ossOutput << "\tSpacing :  [" << GetParameterFloat("spacingx") << "," << GetParameterFloat("spacingy") << "]" << std::endl;
 
     //Estimate ground spacing

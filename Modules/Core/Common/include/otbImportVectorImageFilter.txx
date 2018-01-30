@@ -170,7 +170,7 @@ ImportVectorImageFilter<TOutputImage>
 
   // we need to compute the output spacing, the output origin, the
   // output image size, and the output image start index
-  outputPtr->SetSpacing(m_Spacing);
+  outputPtr->SetSignedSpacing(m_Spacing);
   outputPtr->SetOrigin(m_Origin);
   outputPtr->SetDirection(m_Direction);
   outputPtr->SetLargestPossibleRegion(m_Region);

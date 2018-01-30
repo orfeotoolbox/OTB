@@ -24,10 +24,10 @@
 
 
 #include "ossimSentinel1Model.h"
-#include "ossimTraceHelpers.h"
-#include "ossimXmlTools.h"
-#include "ossimKeyWordListUtilities.h"
-#include "ossimSarSensorModelPathsAndKeys.h"
+#include "ossim/ossimTraceHelpers.h"
+#include "ossim/ossimXmlTools.h"
+#include "ossim/ossimKeyWordListUtilities.h"
+#include "ossim/ossimSarSensorModelPathsAndKeys.h"
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimXmlNode.h>
@@ -150,25 +150,6 @@ namespace ossimplugins
 
       kwl.addList(theManifestKwl, true);
       kwl.addList(theProductKwl,  true);
-
-      // Rewrite burst records since model could have been debursted
-      kwl.removeKeysThatMatch(BURST_PREFIX+"*");
-      
-      add(kwl,BURST_NUMBER_KEY.c_str(),(unsigned int)theBurstRecords.size());
-
-      unsigned int burstId(0);
-      char burstPrefix[1024];
-      
-      for(std::vector<BurstRecordType>::const_iterator burstIt = theBurstRecords.begin();
-          burstIt!=theBurstRecords.end();++burstIt)
-        {
-        s_printf(burstPrefix, "%s[%d].", BURST_PREFIX.c_str(), burstId);
-        add(kwl,burstPrefix+keyStartLine,(ossim_uint32)burstIt->startLine);
-        add(kwl,burstPrefix+keyEndLine,(ossim_uint32)burstIt->endLine);
-        add(kwl,burstPrefix+keyAzimuthStartTime,burstIt->azimuthStartTime);
-        add(kwl,burstPrefix+keyAzimuthStopTime,burstIt->azimuthStopTime);
-        ++burstId;
-        }
       
       return ossimSarSensorModel::saveState(kwl, prefix);
    }
@@ -230,6 +211,8 @@ namespace ossimplugins
 
       // -----[ Read manifest file
       const ossimFilename safeFile = searchManifestFile(file);
+      ossimString sensorId;
+      ossimString imageId;
 
       if ( !safeFile.empty() )
       {
@@ -251,8 +234,8 @@ namespace ossimplugins
             ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << "Manifest file " << safeFile << " opened\n";
          }
 
-         theImageID = getImageId(manifestDoc);
-         if (theImageID.empty()) {
+         imageId = getImageId(manifestDoc);
+         if (imageId.empty()) {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Image ID not found in manifest file " << safeFile << "\n";
             return false;
          }
@@ -262,8 +245,8 @@ namespace ossimplugins
             return false;
          }
 
-         theSensorID = initSensorID(manifestDoc);
-         if (theSensorID.empty()) {
+         sensorId = initSensorID(manifestDoc);
+         if (sensorId.empty()) {
             ossimNotify(ossimNotifyLevel_FATAL) << MODULE << "Cannot load sensor ID from " << safeFile << "\n";
             return false;
          }
@@ -331,6 +314,10 @@ namespace ossimplugins
             << " this->initImageSize( theImageSize ) fails \n";
          return false;
       }
+
+      // Fix sensor and image ID as they may be overriden during SensorModel::loadState()
+      theSensorID = sensorId;
+      theImageID = imageId;
 
       theImageClipRect = ossimDrect( 0, 0, theImageSize.x-1, theImageSize.y-1 );
       theSubImageOffset.x = 0.0;
@@ -696,6 +683,8 @@ namespace ossimplugins
       addMandatory(theProductKwl, HEADER_PREFIX, "first_line_time", adsHeader, "startTime");
       addMandatory(theProductKwl, HEADER_PREFIX, "last_line_time",  adsHeader, "stopTime");
 
+      add(theProductKwl, HEADER_PREFIX, "version", thePluginVersion);
+
       //RK maybe use this->getManifestPrefix()
 
       add(theProductKwl, SUPPORT_DATA_PREFIX, "mds1_tx_rx_polar", polarisation);
@@ -803,6 +792,10 @@ namespace ossimplugins
             numBands,
             true);
 #endif
+
+      // Ensure that superclass members are initialized
+      loadState(theProductKwl);
+      
       return true;
    }
 

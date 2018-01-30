@@ -102,11 +102,28 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("StereoRectificationGridGenerator");
-    SetDescription("Generates two deformation fields to stereo-rectify (i.e. resample in epipolar geometry) a pair of stereo images up to the sensor model precision");
+    SetDescription("Generates two deformation fields to resample in epipolar "
+      "geometry, a pair of stereo images up to the sensor model precision");
 
     SetDocName("Stereo-rectification deformation grid generator");
-    SetDocLongDescription("This application generates a pair of deformation grid to stereo-rectify a pair of stereo images according to sensor modelling and a mean elevation hypothesis. The deformation grids can be passed to the GridBasedImageResampling application for actual resampling in epipolar geometry.");
-    SetDocLimitations("Generation of the deformation grid is not streamable, pay attention to this fact when setting the grid step.");
+    SetDocLongDescription("This application generates a pair of deformation "
+      "grid to stereo-rectify a pair of stereo images according to sensor "
+      "modelling and a mean elevation hypothesis.\n\n"
+      "This application is the first part of the stereo reconstruction "
+      "framework. The output deformation grids can be passed to the "
+      "GridBasedImageResampling application for actual resampling into epipolar"
+      " geometry.\n\n"
+      "There are several ways to set the elevation source:\n"
+      "  * An arbitrary constant elevation\n"
+      "  * A DEM directory\n"
+      "  * Compute an average elevation from a DEM\n\n"
+      "If needed, the application can compute inverse resampling grids (from "
+      "epipolar to original sensor geometry). Don't forget to check the other "
+      "outputs from the application. For instance, the application gives the "
+      "X and Y size of the rectified images, along with an estimated baseline "
+      "ratio.");
+    SetDocLimitations("Generation of the deformation grid is not streamable, "
+      "pay attention to this fact when setting the grid step.");
     SetDocAuthors("OTB-Team");
 
     AddDocTag(Tags::Stereo);
@@ -116,16 +133,20 @@ private:
     AddParameter(ParameterType_Group,"io","Input and output data");
     SetParameterDescription("io","This group of parameters allows setting the input and output images.");
     AddParameter(ParameterType_InputImage,"io.inleft","Left input image");
-    SetParameterDescription("io.inleft","The left input image to resample");
+    SetParameterDescription("io.inleft","The left image from the stereo pair,"
+      " in sensor geometry.");
 
     AddParameter(ParameterType_InputImage,"io.inright","Right input image");
-    SetParameterDescription("io.inright","The right input image to resample");
+    SetParameterDescription("io.inright","The right image from the stereo pair,"
+      " in sensor geometry.");
 
     AddParameter(ParameterType_OutputImage, "io.outleft", "Left output deformation grid");
-    SetParameterDescription("io.outleft","The output deformation grid to be used to resample the left input image");
+    SetParameterDescription("io.outleft","The deformation grid to resample the"
+      " left image from sensor geometry to epipolar geometry.");
 
     AddParameter(ParameterType_OutputImage, "io.outright", "Right output deformation grid");
-    SetParameterDescription("io.outright","The output deformation grid to be used to resample the right input image");
+    SetParameterDescription("io.outright","The deformation grid to resample the"
+      " right image from sensor geometry to epipolar geometry.");
 
     AddParameter(ParameterType_Group,"epi","Epipolar  geometry and grid parameters");
     SetParameterDescription("epi","Parameters of the epipolar geometry and output grids");
@@ -148,48 +169,73 @@ private:
     DisableParameter("epi.elevation.avgdem.value");
 
     AddParameter(ParameterType_Float,"epi.elevation.avgdem.mindisp","Minimum disparity from DEM");
-    SetParameterDescription("epi.elevation.avgdem.mindisp","Disparity corresponding to estimated minimum elevation over the left image");
+    SetParameterDescription("epi.elevation.avgdem.mindisp","Disparity "
+      "corresponding to estimated minimum elevation over the left image");
     SetParameterRole("epi.elevation.avgdem.mindisp",Role_Output);
     DisableParameter("epi.elevation.avgdem.mindisp");
 
     AddParameter(ParameterType_Float,"epi.elevation.avgdem.maxdisp","Maximum disparity from DEM");
-    SetParameterDescription("epi.elevation.avgdem.maxdisp","Disparity corresponding to estimated maximum elevation over the left image");
+    SetParameterDescription("epi.elevation.avgdem.maxdisp","Disparity "
+      "corresponding to estimated maximum elevation over the left image");
     SetParameterRole("epi.elevation.avgdem.maxdisp",Role_Output);
     DisableParameter("epi.elevation.avgdem.maxdisp");
 
     AddParameter(ParameterType_Float,"epi.scale","Scale of epipolar images");
-    SetParameterDescription("epi.scale","The scale parameter allows generating zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
+    SetParameterDescription("epi.scale","The scale parameter allows generating"
+      " zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
     SetDefaultParameterFloat("epi.scale",1.);
 
     AddParameter(ParameterType_Int,"epi.step","Step of the deformation grid (in nb. of pixels)");
-    SetParameterDescription("epi.step","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images");
+    SetParameterDescription("epi.step","Stereo-rectification deformation grid "
+      "only varies slowly. Therefore, it is recommended to use a coarser grid "
+      "(higher step value) in case of large images");
     SetDefaultParameterInt("epi.step",1);
 
     AddParameter(ParameterType_Int,"epi.rectsizex","Rectified image size X");
-    SetParameterDescription("epi.rectsizex","The application computes the optimal rectified image size so that the whole left input image fits into the rectified area. However, due to the scale and step parameter, this size may not match the size of the deformation field output. In this case, one can use these output values.");
+    SetParameterDescription("epi.rectsizex","The application computes the "
+      "optimal rectified image size so that the whole left input image fits "
+      "into the rectified area. However, due to the scale and step parameter, "
+      "this size may not match the size of the deformation field output. In "
+      "this case, one can use these output values.");
     SetParameterRole("epi.rectsizex", Role_Output);
 
     AddParameter(ParameterType_Int,"epi.rectsizey","Rectified image size Y");
-    SetParameterDescription("epi.rectsizey","The application computes the optimal rectified image size so that the whole left input image fits into the rectified area. However, due to the scale and step parameter, this size may not match the size of the deformation field output. In this case, one can use these output values.");
+    SetParameterDescription("epi.rectsizey","The application computes the "
+      "optimal rectified image size so that the whole left input image fits "
+      "into the rectified area. However, due to the scale and step parameter, "
+      "this size may not match the size of the deformation field output. In "
+      "this case, one can use these output values.");
     SetParameterRole("epi.rectsizey", Role_Output);
 
     AddParameter(ParameterType_Float,"epi.baseline","Mean baseline ratio");
-    SetParameterDescription("epi.baseline","This parameter is the mean value, in pixels.meters^-1, of the baseline to sensor altitude ratio. It can be used to convert disparities to physical elevation, since a disparity of one pixel will correspond to an elevation offset of the invert of this value with respect to the mean elevation.");
+    SetParameterDescription("epi.baseline","This parameter is the mean value, "
+      "in pixels.meters^-1, of the baseline to sensor altitude ratio. It can be"
+      " used to convert disparities to physical elevation, since a disparity of"
+      " one pixel will correspond to an elevation offset of the invert of this"
+      " value with respect to the mean elevation.");
     SetParameterRole("epi.baseline", Role_Output);
 
     AddParameter(ParameterType_Group,"inverse","Write inverse fields");
-    SetParameterDescription("inverse","This group of parameter allows generating the inverse fields as well");
+    SetParameterDescription("inverse","This group of parameter allows "
+      "generating the inverse fields as well");
 
     AddParameter(ParameterType_OutputImage, "inverse.outleft", "Left inverse deformation grid");
-    SetParameterDescription("inverse.outleft","The output deformation grid to be used to resample the epipolar left image");
+    SetParameterDescription("inverse.outleft","The deformation grid to resample"
+      " the left image from the epipolar geometry back into its original sensor"
+      " geometry.");
     MandatoryOff("inverse.outleft");
 
     AddParameter(ParameterType_OutputImage, "inverse.outright", "Right inverse deformation grid");
-    SetParameterDescription("inverse.outright","The output deformation grid to be used to resample the epipolar right image");
+    SetParameterDescription("inverse.outright","The output deformation grid to"
+      " resample the right image from the epipolar geometry back into its "
+      "original sensor geometry.");
     MandatoryOff("inverse.outright");
 
     AddParameter(ParameterType_Int, "inverse.ssrate", "Sub-sampling rate for inversion");
-    SetParameterDescription("inverse.ssrate","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows one to first sub-sample the field to invert.");
+    SetParameterDescription("inverse.ssrate","Grid inversion is an heavy "
+      "process that implies spline regression on control points. To avoid "
+      "eating to much memory, this parameter allows one to first sub-sample "
+      "the field to invert.");
     SetDefaultParameterInt("inverse.ssrate",16);
     SetMinimumParameterIntValue("inverse.ssrate",1);
 
@@ -229,7 +275,7 @@ private:
       {
       FloatImageType::PointType   origin  = GetParameterImage("io.inleft")->GetOrigin();
       FloatImageType::SizeType    size    = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
-      FloatImageType::SpacingType spacing = GetParameterImage("io.inleft")->GetSpacing();
+      FloatImageType::SpacingType spacing = GetParameterImage("io.inleft")->GetSignedSpacing();
 
       size[0]/=GetParameterInt("epi.elevation.avgdem.step");
       size[1]/=GetParameterInt("epi.elevation.avgdem.step");
@@ -289,7 +335,7 @@ private:
       m_LeftInvertDisplacementFieldFilter->SetInput(m_LeftDisplacementFieldCaster->GetOutput());
 
       FloatVectorImageType::PointType lorigin = GetParameterImage("io.inleft")->GetOrigin();
-      FloatVectorImageType::SpacingType lspacing = GetParameterImage("io.inleft")->GetSpacing();
+      FloatVectorImageType::SpacingType lspacing = GetParameterImage("io.inleft")->GetSignedSpacing();
       FloatVectorImageType::SizeType lsize = GetParameterImage("io.inleft")->GetLargestPossibleRegion().GetSize();
 
       if (lsize[0]*lsize[1]>256*256)
@@ -331,7 +377,7 @@ private:
 
       m_RightInvertDisplacementFieldFilter->SetInput(m_RightDisplacementFieldCaster->GetOutput());
       FloatVectorImageType::PointType rorigin = GetParameterImage("io.inright")->GetOrigin();
-      FloatVectorImageType::SpacingType rspacing = GetParameterImage("io.inright")->GetSpacing();
+      FloatVectorImageType::SpacingType rspacing = GetParameterImage("io.inright")->GetSignedSpacing();
       FloatVectorImageType::SizeType rsize = GetParameterImage("io.inright")->GetLargestPossibleRegion().GetSize();
 
       if (rsize[0]*rsize[1]>256*256)

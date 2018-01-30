@@ -55,6 +55,7 @@ public:
 public slots:
   void CloseSlot();
   void UnhandledException(QString message);
+  void OnExceptionRaised(QString message);
 
 private slots:
   void UpdateMessageAfterExecuteClicked();

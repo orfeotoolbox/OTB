@@ -31,6 +31,11 @@ ps_children () {
   ps -e -o pid -o command=COMMAND-WIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIDE-COLUMN -o ppid | grep " $1$" | grep -v -e ' grep ' -e ' ps -e '
 }
 
+# get the pid field from the output line of ps_children
+get_pid() {
+  echo "$1" | grep -E -o '[0-9]+' | head -n 1
+}
+
 # nb_report_lines( ) : get number of lines in report
 nb_report_lines () {
   report_lines="$(wc -l selftest_report.log)"
@@ -122,25 +127,32 @@ for app in $OTB_APPS; do
     echo "" >tmp.log
     "bin/otbgui_$app" >tmp.log 2>&1 &
     GUI_PID=$!
-    sleep 5s
-    # Check process tree
-    CHILD_PROC=$(ps_children $GUI_PID | grep "bin/otbgui $app")
-    if [ -n "$CHILD_PROC" ]; then
-      CHILD_PID=$(echo "$CHILD_PROC" | cut -d ' ' -f 1)
-      NEXT_CHILD_PROC=$(ps_children "$CHILD_PID" | grep 'otbApplicationLauncherQt')
-      if [ -n "$NEXT_CHILD_PROC" ]; then
-        NEXT_CHILD_PID=$(echo "$NEXT_CHILD_PROC" | cut -d ' ' -f 1)
-        kill -9 "$NEXT_CHILD_PID"
-        wait "$NEXT_CHILD_PID" 2>/dev/null
-      else
-        echo "ERROR: otbApplicationLauncherQt $app failed to launch"
-        tee -a selftest_report.log < tmp.log
-	exit_if
+    CHILD_PID=""
+    NEXT_CHILD_PID=""
+    nb_try=0
+    while [ -z "$NEXT_CHILD_PID" -a $nb_try -lt 10 ]; do
+      sleep 1s
+      CHILD_PROC=$(ps_children $GUI_PID | grep " bin/otbgui $app")
+      if [ -n "$CHILD_PROC" ]; then
+        CHILD_PID=$(get_pid "$CHILD_PROC")
+        NEXT_CHILD_PROC=$(ps_children "$CHILD_PID" | grep 'otbApplicationLauncherQt')
+        if [ -n "$NEXT_CHILD_PROC" ]; then
+          NEXT_CHILD_PID=$(get_pid "$NEXT_CHILD_PROC")
+        fi
       fi
+      nb_try=$(( nb_try + 1 ))
+    done
+    if [ -n "$NEXT_CHILD_PID" ]; then
+      kill -9 "$NEXT_CHILD_PID"
+      wait "$NEXT_CHILD_PID" 2>/dev/null
+    elif [ -n "$CHILD_PID" ]; then
+      echo "ERROR: otbApplicationLauncherQt $app failed to launch"
+      tee -a selftest_report.log < tmp.log
+      exit_if
     else
-	echo "ERROR: bin/otbgui_$app failed to launch"
-	tee -a selftest_report.log < tmp.log
-	exit_if
+      echo "ERROR: bin/otbgui_$app failed to launch"
+      tee -a selftest_report.log < tmp.log
+      exit_if
     fi
   fi
   app_index=$(( app_index + 1 ))

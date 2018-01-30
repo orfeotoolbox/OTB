@@ -27,7 +27,7 @@
 #include "otbMacro.h"
 #include "otbDataNode.h"
 #include "otbMetaDataKey.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 #include "otbOGRIOHelper.h"
 
 namespace otb
@@ -204,8 +204,7 @@ bool OGRVectorDataIO::CanWriteFile(const char* filename) const
 
 void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
 {
-  itk::TimeProbe chrono;
-  chrono.Start();
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
 
   VectorDataConstPointerType data = dynamic_cast<const VectorDataType*>(datag);
 
@@ -298,7 +297,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
     }
 
   chrono.Stop();
-  otbMsgDevMacro( << "OGRVectorDataIO: file saved in " << chrono.GetMean() << " seconds. (" << layerKept <<
+  otbMsgDevMacro( << "OGRVectorDataIO: file saved in " << chrono.GetElapsedMilliseconds() << " ms. (" << layerKept <<
   " elements)" );
 
   otbMsgDevMacro(<< " OGRVectorDataIO::Write()  ");

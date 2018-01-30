@@ -22,9 +22,9 @@
 #ifndef otbFilterWatcherBase_h
 #define otbFilterWatcherBase_h
 
+#include "otbStopwatch.h"
 #include "itkCommand.h"
 #include "itkProcessObject.h"
-#include "itkTimeProbe.h"
 
 #include "OTBCommonExport.h"
 
@@ -82,10 +82,10 @@ public:
     return m_Comment;
   }
 
-  /** Get a reference to the TimeProbe */
-  itk::TimeProbe& GetTimeProbe()
+  /** Get a reference to the Stopwatch */
+  otb::Stopwatch& GetStopwatch()
   {
-    return m_TimeProbe;
+    return m_Stopwatch;
   }
 
 protected:
@@ -126,7 +126,7 @@ protected:
   virtual void EndFilter() = 0;
 
   /** Computing time */
-  itk::TimeProbe m_TimeProbe;
+  otb::Stopwatch m_Stopwatch;
 
   /** Associated comment */
   std::string m_Comment;

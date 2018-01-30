@@ -82,6 +82,8 @@ void QtWidgetView::CreateGui()
   QVBoxLayout  *finalLayout = new QVBoxLayout();
   finalLayout->addWidget(mainGroup);
 
+  connect( m_Model, SIGNAL(ExceptionRaised(QString)), this, SLOT(OnExceptionRaised(QString)) );
+
   // Make the final layout to the widget
   this->setLayout(finalLayout);
 }
@@ -95,11 +97,11 @@ void QtWidgetView::UpdateMessageAfterExecution(int status)
 {
   if (status >= 0)
     {
-    m_Message->setText("<center><font color=\"#00A000\">DONE</font></center>");
+    m_Message->setText("<center><font color=\"#00A000\">Done</font></center>");
     }
   else
     {
-    m_Message->setText("<center><font color=\"#FF0000\">FAILED !</font></center>");
+    m_Message->setText("<center><font color=\"#FF0000\">Failed</font></center>");
     }
 }
 
@@ -188,8 +190,13 @@ void QtWidgetView::CloseSlot()
 
 void QtWidgetView::UnhandledException(QString message)
 {
-  m_TabWidget->setCurrentIndex(1);
+  this->OnExceptionRaised(message);
   m_LogText->append(message);
+}
+
+void QtWidgetView::OnExceptionRaised(QString /*message*/)
+{
+  m_TabWidget->setCurrentIndex(1);
 }
 
 }

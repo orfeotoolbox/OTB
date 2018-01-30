@@ -63,7 +63,7 @@ void DEMToImageGenerator<TDEMImage>
   largestPossibleRegion.SetIndex(start);
 
   output->SetLargestPossibleRegion(largestPossibleRegion);
-  output->SetSpacing(m_OutputSpacing);
+  output->SetSignedSpacing(m_OutputSpacing);
   output->SetOrigin(m_OutputOrigin);
 
 

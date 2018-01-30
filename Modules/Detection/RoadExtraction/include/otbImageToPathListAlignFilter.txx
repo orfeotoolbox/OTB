@@ -239,7 +239,7 @@ ImageToPathListAlignFilter<TInputImage, TOutputPath>
   region.SetIndex(IndexOut);
   m_AngleImage->SetRegions(region);
   m_AngleImage->SetOrigin(InputImage->GetOrigin());
-  m_AngleImage->SetSpacing(InputImage->GetSpacing());
+  m_AngleImage->SetSignedSpacing(InputImage->GetSignedSpacing());
   m_AngleImage->Allocate();
 
   n = Taille[0];

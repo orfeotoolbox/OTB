@@ -81,7 +81,7 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
 
   // Compute centre of the transform
   SizeType inputSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
-  SpacingType inputSpacing = this->GetInput()->GetSpacing();
+  SpacingType inputSpacing = this->GetInput()->GetSignedSpacing();
   itk::ContinuousIndex<double,2> centre;
   centre[0] = -0.5 + 0.5 * static_cast<double>(inputSize[0]);
   centre[1] = -0.5 + 0.5 * static_cast<double>(inputSize[1]);

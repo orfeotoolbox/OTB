@@ -384,7 +384,6 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       if(itksys::SystemTools::FileExists(value.c_str()))
 	{
 	InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-	paramDown->SetFromFileName(value);
 	if ( !paramDown->SetFromFileName(value) )
 	  {
 	  ret = -1;
@@ -395,28 +394,16 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       {
       InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
       paramDown->SetListFromFileName(values);
-      if ( !paramDown->SetListFromFileName(values) )
-	{
-	ret = -1;
-	}
       }
     else if (dynamic_cast<InputVectorDataListParameter*>(param))
       {
       InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-      paramDown->SetListFromFileName(values);
-      if ( !paramDown->SetListFromFileName(values) )
-	{
-	ret = -1;
-	}
+      paramDown->SetListFromFileName( values );
       }
     else if (dynamic_cast<InputFilenameListParameter*>(param))
       {
       InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
-      paramDown->SetListFromFileName(values);
-      if ( !paramDown->SetListFromFileName(values) )
-	{
-	ret= -1;
-	}
+      paramDown->SetListFromFileName( values );
       }
     else if (type == ParameterType_Radius || type == ParameterType_Int ||
 	     typeAsString == "rand" )

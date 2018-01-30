@@ -245,7 +245,7 @@ BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>
         }
       derivativeValue[n] += m_Coefficients->GetPixel(coefficientIndex) * tempValue;
       }
-    derivativeValue[n] /= this->GetInputImage()->GetSpacing()[n];   // take spacing into account
+    derivativeValue[n] /= this->GetInputImage()->GetSignedSpacing()[n];   // take spacing into account
     }
 
   return (derivativeValue);

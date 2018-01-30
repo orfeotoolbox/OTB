@@ -225,7 +225,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   const InputImageType * src = dynamic_cast<const InputImageType*>(image);
 
   this->SetOutputOrigin ( src->GetOrigin() );
-  this->SetOutputSpacing ( src->GetSpacing() );
+  this->SetOutputSpacing ( src->GetSignedSpacing() );
   this->SetOutputStartIndex ( src->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( src->GetLargestPossibleRegion().GetSize() );
   this->SetOutputProjectionRef(src->GetProjectionRef());
@@ -243,7 +243,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::SetOutputParametersFromImage(const TImageType * image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );
-  this->SetOutputSpacing ( image->GetSpacing() );
+  this->SetOutputSpacing ( image->GetSignedSpacing() );
   this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
   this->SetOutputProjectionRef(image->GetProjectionRef());

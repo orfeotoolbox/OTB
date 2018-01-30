@@ -61,10 +61,12 @@ private:
 
     // Documentation
     SetDocName("Images Concatenation");
-    SetDocLongDescription("This application performs images channels concatenation. It will walk the input image list (single or multi-channel) and generates a single multi-channel image. The channel order is the one of the list.");
+    SetDocLongDescription("This application performs images channels concatenation. "
+      "It reads the input image list (single or multi-channel) "
+      "and generates a single multi-channel image. The channel order is the same as the list.");
     SetDocLimitations("All input images must have the same size.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Rescale application, Convert");
+    SetDocSeeAlso("Rescale application, Convert, SplitImage");
 
     AddDocTag(Tags::Manip);
     AddDocTag("Concatenation");
@@ -75,10 +77,10 @@ private:
     m_ImageList = ImageListType::New();
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
-    SetParameterDescription("il", "The list of images to concatenate");
+    SetParameterDescription("il", "The list of images to concatenate, must have the same size.");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "The concatenated output image");
+    SetParameterDescription("out", "The concatenated output image.");
 
     AddRAMParameter();
 

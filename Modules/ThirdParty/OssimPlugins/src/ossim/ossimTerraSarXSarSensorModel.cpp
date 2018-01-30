@@ -25,7 +25,7 @@
 
 #include <ossimTerraSarXSarSensorModel.h>
 #include <ossim/base/ossimXmlDocument.h>
-#include <ossimXmlTools.h>
+#include "ossim/ossimXmlTools.h"
 
 
 namespace {// Anonymous namespace

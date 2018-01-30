@@ -23,6 +23,7 @@
 
 #include "otbStreamingResampleImageFilter.h"
 #include "itkProgressAccumulator.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -34,7 +35,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   // internal filters instantiation
   m_DisplacementFilter = DisplacementFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
-
+  m_SignedOutputSpacing = m_DisplacementFilter->GetOutputSpacing();
   // Initialize the displacement field spacing to zero : inconsistent
   // value
   this->SetDisplacementFieldSpacing(itk::NumericTraits<SpacingType>::ZeroValue());
@@ -121,11 +122,36 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );
-  this->SetOutputSpacing ( image->GetSpacing() );
+  this->SetOutputSpacing ( internal::GetSignedSpacing( image ) );
   this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
   this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
 }
 
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
+void
+StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
+::SetDisplacementFieldSpacing( SpacingType outputSpacing )
+{
+  m_SignedOutputSpacing = outputSpacing;
+  typename TInputImage::DirectionType direction = this->m_DisplacementFilter->GetOutputDirection();
+  for(unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
+    {
+    if ( outputSpacing[i] < 0 )
+      {
+      if ( direction[i][i] > 0 )
+        {
+        for(unsigned int j = 0; j < TInputImage::ImageDimension; ++j)
+          {
+          direction[j][i] = - direction[j][i];
+          }
+        }
+      outputSpacing[i] = - outputSpacing[i];
+      }
+    }
+  this->m_DisplacementFilter->SetOutputSpacing( outputSpacing );
+  this->m_DisplacementFilter->SetOutputDirection( direction );
+  this->Modified();
+}
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
 void

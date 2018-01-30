@@ -375,7 +375,31 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
 
   if (itksys::SystemTools::FileExists(path.c_str(),true))
     {
-    itk::LibHandle lib = itk::DynamicLoader::OpenLibrary(path.c_str());
+#if defined(_WIN32) && !defined(__CYGWIN__)
+    int cp = CP_UTF8;
+    int acp = GetACP();
+    if (acp != CP_UTF8)
+      {
+      bool hasNonAscii=false;
+      for (auto c: path)
+        {
+        if (0 > (int) c)
+          {
+          hasNonAscii = true;
+          break;
+          }
+        }
+      if (hasNonAscii) cp = acp;
+      }
+    int length = MultiByteToWideChar(cp, 0, path.c_str(), -1, NULL, 0);
+    wchar_t* wpath = new wchar_t[length+1];
+    wpath[0] = '\0';
+    MultiByteToWideChar(cp, 0, path.c_str(), -1, wpath, length);
+    itk::LibHandle lib = LoadLibraryW(wpath);
+    delete [] wpath;
+#else
+    itk::LibHandle lib = itksys::DynamicLoader::OpenLibrary(path);
+#endif
     if (lib)
       {
       /**
@@ -411,6 +435,10 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
           }
         }
       itk::DynamicLoader::CloseLibrary(lib);
+      }
+    else
+      {
+      otbMsgDevMacro( << "Can't load library : " << path << std::endl );
       }
     }
   return appli;
