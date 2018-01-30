@@ -1,4 +1,4 @@
-OTB-v.6.4.0 - Changes since version 6.2.0 (January 17th, 2018)
+OTB-v.6.4.0 - Changes since version 6.2.0 (January 30th, 2018)
 ----------------------------------------------------------
 
 * Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
@@ -16,6 +16,11 @@ OTB-v.6.4.0 - Changes since version 6.2.0 (January 17th, 2018)
 
 * Bugfixes:
   * Orfeo Toolbox (OTB)
+    * 0001508: ExtractROI does not work with mode.fit.vect
+    * 0001509: Patch to fix spelling errors in 6.4.0-rc1
+    * 0001482: In 6.2, otbcli_Convert with MPI produces invalid tiff files
+    * 0001507: Segmentation segfault
+    * 0001488: OTB apps sometime do not appear in the widget
     * 0001501: Does Java wrapping works on Windows?
     * 0001495: Crash when setting Orthorectification input field
     * 0001489: BandMath and BandMathX are missing important documentation on expression syntax
@@ -25,12 +30,12 @@ OTB-v.6.4.0 - Changes since version 6.2.0 (January 17th, 2018)
     * 0001483: Monteverdi shows a pop up terminal on windows
     * 0001496: Monteverdi 'build overviews' pop-up trigger condition is unclear or incorrect
     * 0001494: Segmentation app shows 'Select parameters' instead of 'Running'
-    * 0001504: OTB does not compile with ITK last stable release 4.13
     * 0001492: Monteverdi 6.2 is missing some French translations
-    * 0001503: Fix new coverity issues in release 6.4
     * 0001499: OSSIMAdapters fails to build with OSSIM 2.2.0 (error: 'class ossimRpcSolver' has no member named 'createRpcProjection')
     * 0001498: ExtractROI Channel list empty when application is chained in memory
-    * 0001476: Python wrapping not working with Python >= 3.4
+    * 0001476: Python wrapping not working with Python >= 3.
+    * 0001504: OTB does not compile with ITK last stable release 4.13
+    * 0001503: Fix new coverity issues in release 6.4
 
   * Documentation
     * 0001500: Application example in OTB software guide is confusing

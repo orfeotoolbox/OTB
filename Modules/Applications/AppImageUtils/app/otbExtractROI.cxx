@@ -729,7 +729,7 @@ private:
         urp_in[ 0 ] = ulx ;
         urp_in[ 1 ] = lry ;
         llp_in[ 0 ] = lrx ; 
-        llp_in[ 1 ] = ulx ;
+        llp_in[ 1 ] = uly ;
         lrp_in[ 0 ] = lrx ;
         lrp_in[ 1 ] = lry ;
         ulp_out = rsTransform->TransformPoint(ulp_in);
