@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "otbDEMHandler.h"
+#include "itkPoint.h"
 
 namespace ossimplugins
 {
@@ -62,6 +63,9 @@ public:
 
   typedef std::auto_ptr<ossimplugins::ossimSarSensorModel> InternalModelPointer;
 
+  using Point2DType = itk::Point<double,2>;
+  using Point3DType = itk::Point<double,3>;
+  
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -80,6 +84,14 @@ public:
   /** Deburst metadata if possible and return lines to keep in image file */
   bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines);
 
+  /** Transform world point (lat,lon,hgt) to input image point
+  (col,row) and YZ frame */
+  bool WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType yz) const;
+
+  /** Transform world point (lat,lon,hgt) to input image point
+  (col,row) */
+  bool WorldToLineSample(const Point3DType & inGEoPOint, Point2DType & cr) const;
+  
   static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
 
   static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);

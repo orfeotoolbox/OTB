@@ -109,6 +109,58 @@ void SarSensorModelAdapter::DeburstLineToImageLine(const std::vector<std::pair<u
   ossimplugins::ossimSarSensorModel::deburstLineToImageLine(lines,deburstLine,imageLine);
 }
 
+bool SarSensorModelAdapter::WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType yz) const
+{
+  if(m_SensorModel.get() == ITK_NULLPTR)
+    {
+    return false;
+    }
+
+  ossimGpt inGpt;
+  inGpt.lat = inGeoPoint[0];
+  inGpt.lon = inGeoPoint[1];
+  inGpt.hgt = inGeoPoint[2];
+
+  ossimDpt outDpt;
+
+  double y(0.),z(0.);
+  m_SensorModel->worldToLineSampleYZ(inGpt,outDpt,y,z);
+
+  if(outDpt.isNan())
+    return false;
+
+  cr[0]=outDpt.x;
+  cr[1]=outDpt.y;
+  yz[0]=y;
+  yz[1]=z;
+
+  return true;
+}
+
+bool SarSensorModelAdapter::WorldToLineSample(const Point3DType & inGeoPoint, Point2DType & cr) const
+{
+  if(m_SensorModel.get() == ITK_NULLPTR)
+    {
+    return false;
+    }
+
+  ossimGpt inGpt;
+  inGpt.lat = inGeoPoint[0];
+  inGpt.lon = inGeoPoint[1];
+  inGpt.hgt = inGeoPoint[2];
+
+  ossimDpt outDpt;
+
+  m_SensorModel->worldToLineSample(inGpt,outDpt);
+
+  if(outDpt.isNan())
+    return false;
+
+  cr[0]=outDpt.x;
+  cr[1]=outDpt.y;
+
+  return true;
+}
 
 
 
