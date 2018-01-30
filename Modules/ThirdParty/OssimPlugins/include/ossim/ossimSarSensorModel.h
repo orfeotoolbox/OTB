@@ -238,13 +238,36 @@ public:
     * \param[in] worldPoint World point to geocode
     * \param[out] azimuthTime Estimated zero-doppler azimuth time
     * \param[out] rangeTime Estimated range time
+    * \param[out] interpSensorPos interpolated ECEF sensor position
+    * \param[out] interpSensorVel interpolated ECEF sensor velocity
     * \return True if success, false otherwise. In this case,
     * azimuthTime and rangeTime will not be modified.
     */
-   /*virtual*/ bool worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime) const;
+   /*virtual*/ bool worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime, ossimEcefPoint & interpSensorPos, ossimEcefVector & interpSensorVel) const;
 
-   // TODO: document me
-   /*virtual*/ void lineSampleToAzimuthRangeTime(const ossimDpt & imPt, TimeType & azimuthTime, double & rangeTime) const;
+   /**
+    * This method implement inverse sar geolocation similar to
+    * worldToLineSample, except that it also returns (y,z)
+    * coordinates, defined as follows:
+    * Let n = |sensorPos|,
+    * ps2 = scalar_product(sensorPos,worldPoint)
+    * d = distance(sensorPos,worldPoint)
+    *
+    * z = n - ps2/n
+    * y = sqrt(d*d - z*z)
+    * 
+    * sign of y is furher adapted to be inverted if sensor is left or
+    * right looking 
+    *
+    * \param[in] worldPoint World point to geocode
+    * \param[out] imPt Corresponding estimated image point
+    * \param[out] y 
+    * \param[out] z 
+    * \return True if success, false otherwise. In this case,
+    */
+   void worldToLineSampleYZ(const ossimGpt& worldPt, ossimDpt& imPt, double & y, double & z) const;
+   
+   void lineSampleToAzimuthRangeTime(const ossimDpt & imPt, TimeType & azimuthTime, double & rangeTime) const;
 
    // TODO: document me
    bool autovalidateInverseModelFromGCPs(const double & xtol = 1, const double & ytol = 1, const double azTimeTol = 500, const double &rangeTimeTo=0.0000000001) const;
@@ -419,7 +442,8 @@ protected:
    ProductType                                 theProductType; // GRD/SLC
    DurationType                                theAzimuthTimeOffset; // Offset computed
    double                                      theRangeTimeOffset; // Offset in seconds, computed
-
+   bool                                        theRightLookingFlag;
+   
    static const double C;
 private:
    /** Disabled assignment operator.  */

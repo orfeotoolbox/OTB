@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -136,7 +136,8 @@ namespace ossimplugins
       theRangeResolution(0.),
       theBistaticCorrectionNeeded(false),
       theAzimuthTimeOffset(seconds(0)),
-      theRangeTimeOffset(0.)
+      theRangeTimeOffset(0.),
+      theRightLookingFlag(true)
       {}
 
    ossimSarSensorModel::GCPRecordType const&
@@ -219,7 +220,10 @@ namespace ossimplugins
       TimeType azimuthTime;
       double rangeTime;
 
-      const bool success = worldToAzimuthRangeTime(worldPt, azimuthTime, rangeTime);
+      ossimEcefPoint sensorPos;
+      ossimEcefVector sensorVel;
+
+      const bool success = worldToAzimuthRangeTime(worldPt, azimuthTime, rangeTime, sensorPos, sensorVel);
 
       if(!success)
       {
@@ -256,7 +260,81 @@ namespace ossimplugins
       }
    }
 
-   bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime) const
+void ossimSarSensorModel::worldToLineSampleYZ(const ossimGpt& worldPt, ossimDpt & imPt, double & y, double & z) const
+   {
+      // std::clog << "ossimSarSensorModel::worldToLineSample()\n";
+      assert(theRangeResolution>0&&"theRangeResolution is null.");
+
+      // First compute azimuth and range time
+      TimeType azimuthTime;
+      double rangeTime;
+      ossimEcefPoint sensorPos;
+      ossimEcefVector sensorVel;
+
+      const bool success = worldToAzimuthRangeTime(worldPt, azimuthTime, rangeTime,sensorPos,sensorVel);
+
+      if(!success)
+      {
+         imPt.makeNan();
+         return;
+      }
+      // std::clog << "AzimuthTime: " << azimuthTime << "\n";
+      // std::clog << "RangeTime: " << rangeTime << "\n";
+      // std::clog << "GRD: " << isGRD() << "\n";
+
+      // Convert azimuth time to line
+      azimuthTimeToLine(azimuthTime,imPt.y);
+
+      if(isGRD())
+      {
+         // GRD case
+         double groundRange(0);
+         slantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
+         // std::clog << "GroundRange: " << groundRange << "\n";
+         // std::clog << "TheRangeResolution: " << theRangeResolution << "\n";
+
+         // Eq 32 p. 31
+         // TODO: possible micro-optimization: precompute 1/theRangeResolution, and
+         // use *
+         imPt.x = groundRange/theRangeResolution;
+      }
+      else
+      {
+         // std::clog << "TheNearRangeTime: " << theNearRangeTime << "\n";
+         // std::clog << "TheRangeSamplingRate: " << theRangeSamplingRate << "\n";
+         // SLC case
+         // Eq 23 and 24 p. 28
+         imPt.x = (rangeTime - theNearRangeTime)*theRangeSamplingRate;
+      }
+
+      // Now computes Y and Z
+      ossimEcefPoint inputPt(worldPt);
+      double NormeS = sqrt(sensorPos[0]*sensorPos[0] + sensorPos[1]*sensorPos[1] + sensorPos[2]*sensorPos[2]);  /* distance du radar */                                                                           
+      double PS2 = inputPt[0]*sensorPos[0] + inputPt[1]*sensorPos[1] + inputPt[2]*sensorPos[2];
+
+      // TODO check for small NormesS to avoid division by zero ?
+      // Should never happen ...
+      assert(NormesS>1e-6);
+      z = NormeS - PS2/NormeS;
+
+      double distance = sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) + 
+                             (sensorPos[1]-inputPt[1])*(sensorPos[1]-inputPt[1]) + 
+                             (sensorPos[2]-inputPt[2])*(sensorPos[2]-inputPt[2]));  
+
+      y = sqrt(distance*distance - z*z);
+
+      // Check view side and change sign of Y accordingly
+      if ( (( sensorVel[0] * (sensorPos[1]* inputPt[2] - sensorPos[2]* inputPt[1]) +
+              sensorVel[1] * (sensorPos[2]* inputPt[0] - sensorPos[0]* inputPt[2]) +
+              sensorVel[2] * (sensorPos[0]* inputPt[1] - sensorPos[1]* inputPt[0])) > 0) ^ theRightLookingFlag )
+        {
+        y = -y;
+        }
+   }
+
+
+
+bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime, ossimEcefPoint & interpSensorPos, ossimEcefVector & interpSensorVel) const
    {
       // std::clog << "ossimSarSensorModel::worldToAzimuthRangeTime()\n";
       // First convert lat/lon to ECEF
@@ -264,8 +342,6 @@ namespace ossimplugins
 
       // Compute zero doppler time
       TimeType interpTime;
-      ossimEcefPoint interpSensorPos;
-      ossimEcefVector interpSensorVel;
 
       const bool success = zeroDopplerLookup(inputPt,azimuthTime,interpSensorPos,interpSensorVel);
 
@@ -856,7 +932,9 @@ namespace ossimplugins
          double   estimatedRangeTime;
 
          // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime);
+         ossimEcefPoint sensorPos;
+         ossimEcefVector sensorVel;
+         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime,sensorPos, sensorVel);
          this->worldToLineSample(gcpIt->worldPt,estimatedImPt);
 
          const bool thisSuccess
@@ -960,8 +1038,10 @@ namespace ossimplugins
          TimeType estimatedAzimuthTime;
          double   estimatedRangeTime;
 
+         ossimEcefPoint sensorPos;
+         ossimEcefVector sensorVel;
          // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime);
+         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
 
          if(s1)
          {
@@ -981,8 +1061,11 @@ namespace ossimplugins
          TimeType estimatedAzimuthTime;
          double   estimatedRangeTime;
 
+         ossimEcefPoint sensorPos;
+         ossimEcefVector sensorVel;
+
          // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime);
+         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
 
          if(s1)
          {
