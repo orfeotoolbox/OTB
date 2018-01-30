@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to API_test's documentation!
+Welcome to Python API documentation!
 ====================================
 
-This is the python api for otb. Here is the list to the available class 
+This is the python API documentation of otb. Here is the list to the available class.
 :ref:`class`
 
 Indices and tables
