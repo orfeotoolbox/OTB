@@ -67,7 +67,7 @@ if( OTBQt4_ENABLED )
     endforeach()
   endif()
 
-  qt4_add_translation(OTB_QM_TRANSLATIONS
+  qt5_add_translation(OTB_QM_TRANSLATIONS
       ${OTB_TS_TRANSLATIONS}
       )
 

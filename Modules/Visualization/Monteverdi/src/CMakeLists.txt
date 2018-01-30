@@ -44,9 +44,9 @@ set( OTBMonteverdi_RESOURCES
   )
 
 #############################################################################
-qt4_wrap_cpp( OTBMonteverdi_SRC_MOC ${OTBMonteverdi_HEADERS_MOC} )
-qt4_wrap_ui( OTBMonteverdi_FORMS_HEADERS ${OTBMonteverdi_FORMS}  )
-qt4_add_resources( OTBMonteverdi_RESOURCES_RCC ${OTBMonteverdi_RESOURCES} OPTIONS "-no-compress")
+qt5_wrap_cpp( OTBMonteverdi_SRC_MOC ${OTBMonteverdi_HEADERS_MOC} )
+qt5_wrap_ui( OTBMonteverdi_FORMS_HEADERS ${OTBMonteverdi_FORMS}  )
+qt5_add_resources( OTBMonteverdi_RESOURCES_RCC ${OTBMonteverdi_RESOURCES} OPTIONS "-no-compress")
 
 #############################################################################
 add_to_qt4_i18n_sources( ${OTBMonteverdi_SRCS} )

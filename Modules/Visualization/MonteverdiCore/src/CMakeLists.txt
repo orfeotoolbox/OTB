@@ -94,7 +94,7 @@ add_to_qt4_i18n_sources( ${OTBMonteverdiCore_SRCS} )
 add_to_qt4_i18n_headers( "../include" ${OTBMonteverdiCore_SRCS} )
 
 #############################################################################
-qt4_wrap_cpp( OTBMonteverdiCore_SRC_MOC ${OTBMonteverdiCore_HEADERS_MOC} )
+qt5_wrap_cpp( OTBMonteverdiCore_SRC_MOC ${OTBMonteverdiCore_HEADERS_MOC} )
 
 add_library( OTBMonteverdiCore ${OTBMonteverdiCore_SRCS} ${OTBMonteverdiCore_SRC_MOC})
 
