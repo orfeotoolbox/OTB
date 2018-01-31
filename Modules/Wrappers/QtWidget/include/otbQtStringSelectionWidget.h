@@ -73,7 +73,7 @@ public:
 
   std::string ToStdString()
   {
-    return m_Input->text().toAscii().constData();
+    return m_Input->text().toLatin1().constData();
   }
 
   void ClearText()
