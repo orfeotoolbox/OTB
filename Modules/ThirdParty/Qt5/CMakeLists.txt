@@ -18,19 +18,10 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "QT wrappers.")
+project( OTBQt5 )
 
-otb_module(OTBQtWidget
-ENABLE_SHARED
-  DEPENDS
-    OTBApplicationEngine
-    OTBITK
-    OTBQt5
-    OTBQtAdapters
+set( OTBQt5_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} )
 
-  TEST_DEPENDS
-    OTBTestKernel
+set( QT_VERSION "${QTVERSION}" CACHE INTERNAL "" FORCE )
 
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+otb_module_impl()

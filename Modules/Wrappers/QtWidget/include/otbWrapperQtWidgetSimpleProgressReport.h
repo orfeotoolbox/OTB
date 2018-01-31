@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetSimpleProgressReport_h
 #define otbWrapperQtWidgetSimpleProgressReport_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperQtWidgetModel.h"
 #include "itkProcessObject.h"

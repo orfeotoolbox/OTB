@@ -18,19 +18,15 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "QT wrappers.")
+set(DOCUMENTATION "This module imports Qt5 to the build system")
 
-otb_module(OTBQtWidget
-ENABLE_SHARED
+otb_module(OTBQt5
   DEPENDS
-    OTBApplicationEngine
-    OTBITK
-    OTBQt5
-    OTBQtAdapters
-
+    
   TEST_DEPENDS
-    OTBTestKernel
-
+    
   DESCRIPTION
     "${DOCUMENTATION}"
-)
+  )
+
+otb_module_activation_option("Enable Qt5 dependent modules" OFF)

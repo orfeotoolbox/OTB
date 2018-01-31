@@ -18,19 +18,8 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "QT wrappers.")
-
-otb_module(OTBQtWidget
-ENABLE_SHARED
-  DEPENDS
-    OTBApplicationEngine
-    OTBITK
-    OTBQt5
-    OTBQtAdapters
-
-  TEST_DEPENDS
-    OTBTestKernel
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+find_package(Qt5Core)
+find_package(Qt5Gui)
+find_package(Qt5Widgets)
+find_package(Qt5LinguistTools)
+mark_as_advanced( QT_QMAKE_EXECUTABLE )

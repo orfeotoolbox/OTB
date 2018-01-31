@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <QtGui>
+#include <QtWidgets>
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"

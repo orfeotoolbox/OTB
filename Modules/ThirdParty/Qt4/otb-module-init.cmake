@@ -18,13 +18,7 @@
 # limitations under the License.
 #
 
-#find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL) # QtXml )
-find_package(Qt5Core)
-find_package(Qt5Widgets)
-
-#FIXME move to i18n directory?
-find_package(Qt5LinguistTools)
-
+find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL) # QtXml )
 mark_as_advanced( QT_QMAKE_EXECUTABLE )
 #set( QT_USE_QTXML 1 )
-#include( ${QT_USE_FILE} )
+include( ${QT_USE_FILE} )

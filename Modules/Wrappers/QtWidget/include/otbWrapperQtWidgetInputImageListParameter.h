@@ -22,7 +22,7 @@
 #define otbWrapperQtWidgetInputImageListParameter_h
 
 
-#include <QtGui>
+#include <QtWidgets>
 
 
 #include "OTBQtWidgetExport.h"

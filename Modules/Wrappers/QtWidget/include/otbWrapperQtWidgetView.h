@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetView_h
 #define otbWrapperQtWidgetView_h
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QObject>
 #include <QShortcut>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
