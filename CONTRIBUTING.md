@@ -23,10 +23,10 @@ You are welcome to ask questions there as a beginner or future OTB contributor!
 
 ## Reporting bugs
 
-If you have found a bug, you can first [search the existing issues](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
+If you have found a bug, you can first [search the existing issues](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug)
 to see if it has already been reported.
 
-If it's a new bug, please [open a new issue on GitLab](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues).
+If it's a new bug, please [open a new issue on GitLab](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/new).
 The 'Bug' issue template will help you provide all important information and
 help fixing the bug quicker. Remember to add as much information as possible!
 

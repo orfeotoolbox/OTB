@@ -26,7 +26,7 @@ not a black box!
 * [Public git repositories](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb)
 * [GitHub mirror](https://github.com/orfeotoolbox/)
 * [Build status](http://dash.orfeo-toolbox.org/index.php?project=OTB)
-* [Bug tracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
+* [Bug tracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug)
 * [Wiki](http://wiki.orfeo-toolbox.org/index.php/Main_Page)
 * [Task tracking](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
 
@@ -46,5 +46,4 @@ Please see the license and the Copyright directory for legal issues on the use o
 Please report any issue you might encouter to [our bugtracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues).
 
 ### Governance
-
 The Orfeo ToolBox project is governed by the [Project Steering Committee](PSC.md) and its members.
