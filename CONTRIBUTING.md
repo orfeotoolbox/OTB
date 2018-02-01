@@ -1,4 +1,4 @@
-# How to contribute to Orfeo ToolBox
+# How to contribute to Orfeo ToolBox ?
 
 Thank you for taking the time to contribute to OTB! This document will guide you
 through the workflow and best practices you need to know to send your
@@ -71,6 +71,16 @@ short and descriptive. If fixing an issue or bug, put the issue number in the
 commit message so that GitLab can [crosslink it](https://docs.gitlab.com/ce/user/project/issues/crosslinking_issues.html).
 You can prefix your commit message with an indicating flag (DOC, BUG, PKG,
 TEST, SuperBuild, etc.) or the name of the module you are changing.
+
+Standard prefixes for OTB commit messages:
+
+    BUG: Fix for runtime crash or incorrect result
+    COMP: Compiler error or warning fix
+    DOC: Documentation change
+    ENH: New functionality
+    PERF: Performance improvement
+    STYLE: No logic impact (indentation, comments)
+    WIP: Work In Progress not ready for merge
 
 For example, here are some good commit messages:
 
