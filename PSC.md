@@ -205,7 +205,7 @@ submits to vote the following release decisions:
 -   The Chair adjudicates in cases of disputes about voting.
 
 A summary of discussions is published in a dedicated section of the wiki
-[Requests for Changes](Requests_for_Changes "wikilink").
+[Requests for Changes](https://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes).
 
 ## Current members and roles
 
@@ -244,11 +244,11 @@ The **release manager** is in charge of :
     rights (github pull request for instance)
 5.  Tracking remote module that can be candidate for official inclusion
     in next release, and ensuring they will be included (see
-    [Contributors guidelines](Contributors_guidelines "wikilink"))
+    [Contributors guidelines](CONTRIBUTING.md))
 6.  Submitting the start of the [release
-    process](How_to_Release "wikilink") to PSC vote
+    process](https://wiki.orfeo-toolbox.org/index.php/How_to_Release) to PSC vote
 7.  Ensuring proper execution of [release
-    process](How_to_Release "wikilink")
+    process](https://wiki.orfeo-toolbox.org/index.php/How_to_Release)
 
 **Feature freeze:** Starting the release process is also called *feature
 freeze* which describes the period between the creation of the release
@@ -266,10 +266,10 @@ branches merge.
 ### Feature branch merge acceptance checklist
 
 1.  The feature branch corresponds to an [approved
-    Merge Request](Project_Steering_Committee#Process "wikilink")
+    Merge Request](#process)
 2.  The feature branch is synched with develop
-3.  The feature branch is tested on the dashboard (see
-    [here](#NightlyFeatureBranches "wikilink")) and has no major failure
+3.  The feature branch is tested on the dashboard
+    and has no major failure
     (compilation errors, tremendous amount of warning or failing tests,
     segfault or not executed tests)
 4.  Feature branch author are available during days following the merge
