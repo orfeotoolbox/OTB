@@ -1,4 +1,4 @@
-# ![OTB](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/blob/master/Utilities/Doxygen/logoVectoriel.png) Orfeo Toolbox
+# ![OTB](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/master/Utilities/Doxygen/logoVectoriel.png) Orfeo Toolbox
 ## Open Source processing of remote sensing images
 
 Orfeo ToolBox (OTB) is an open-source project for state-of-the-art remote
