@@ -23,10 +23,10 @@ not a black box!
 * [OTB's website](https://www.orfeo-toolbox.org/)
 * [Documentation](https://www.orfeo-toolbox.org/documentation/)
 * [Downloads](https://www.orfeo-toolbox.org/download/)
-* [Public git repositories](https://gitlab.orfeo-toolbox.org/orfeotoolbox)
+* [Public git repositories](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb)
 * [GitHub mirror](https://github.com/orfeotoolbox/)
 * [Build status](http://dash.orfeo-toolbox.org/index.php?project=OTB)
-* [Bug tracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=general)
+* [Bug tracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
 * [Wiki](http://wiki.orfeo-toolbox.org/index.php/Main_Page)
 * [Task tracking](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
 
@@ -37,10 +37,14 @@ joining our community and mailing lists.
 [https://www.orfeo-toolbox.org/community/](https://www.orfeo-toolbox.org/community/)
 
 ### Contributing
-Please see the wiki for contributors guidelines.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for contributors guidelines.
 
 ### License
 Please see the license and the Copyright directory for legal issues on the use of the software.
 
 ### Issues
 Please report any issue you might encouter to [our bugtracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues).
+
+### Governance
+
+The Orfeo ToolBox project is governed by the [Project Steering Committee](PSC.md) and its members.
