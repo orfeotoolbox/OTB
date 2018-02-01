@@ -31,7 +31,8 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QtOpenGL>
+#include <QGLWidget>
+// #include <QtOpenGL>
 
 //
 // System includes (sorted by alphabetic order)

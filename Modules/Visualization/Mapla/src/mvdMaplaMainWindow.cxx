@@ -42,7 +42,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT5
 # include "mvdApplicationLauncher.h"
 # include "mvdApplicationsToolBoxController.h"
 # include "mvdOTBApplicationsModel.h"
@@ -86,7 +86,7 @@ MaplaMainWindow
 ::MaplaMainWindow( QWidget * p, Qt::WindowFlags flags ) :
   I18nMainWindow( p, flags ),
   m_UI( new mvd::Ui::MaplaMainWindow() )
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT5
   ,
   m_ApplicationsToolBoxController( NULL )
 #endif
@@ -110,7 +110,7 @@ MaplaMainWindow
   setObjectName( "Mapla" );
   setWindowTitle( PROJECT_NAME " Application Launcher" );
 
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT5
 
   assert( m_ApplicationsToolBoxController==NULL );
 
@@ -124,16 +124,16 @@ MaplaMainWindow
 
   setCentralWidget( m_ApplicationsToolBoxController->GetWidget() );
 
-#else // OTB_USE_QT4
+#else // OTB_USE_QT5
 
   setCentralWidget(
     new QLabel(
-      tr( "Enable OTB_USE_QT4 preprocessor definition at compile time!" ),
+      tr( "Enable OTB_USE_QT5 preprocessor definition at compile time!" ),
       this
     )
   );
 
-#endif // OTB_USE_QT4
+#endif // OTB_USE_QT5
 
   if( !RestoreLayout( Monteverdi_UI_VERSION ) )
     {
@@ -148,7 +148,7 @@ MaplaMainWindow
 {
   //
   // OTB application support.
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT5
 
   QObject::connect(
     m_ApplicationsToolBoxController->GetWidget(),
@@ -217,7 +217,7 @@ MaplaMainWindow
 ::OnApplicationToLaunchSelected( const QString & appName,
 				 const QString & )
 {
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT5
 
   assert( MaplaApplication::ConstInstance()!=NULL );
   assert( MaplaApplication::ConstInstance()->GetModel()!=NULL );
@@ -241,7 +241,7 @@ MaplaMainWindow
 
   appWindow->show();
 
-#endif // OTB_USE_QT4
+#endif // OTB_USE_QT5
 }
 
 /*****************************************************************************/
