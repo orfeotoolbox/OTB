@@ -43,7 +43,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for contributors guidelines.
 Please see the license and the Copyright directory for legal issues on the use of the software.
 
 ### Issues
-Please report any issue you might encouter to [our bugtracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues).
+Please report any issue you might encouter to [our bugtracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug).
 
 ### Governance
 The Orfeo ToolBox project is governed by the [Project Steering Committee](PSC.md) and its members.
