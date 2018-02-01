@@ -22,7 +22,7 @@ set(DOCUMENTATION "This module imports Qwt to the build system")
 
 otb_module(OTBQwt
   DEPENDS
-    OTBQt4
+    OTBQt5
     
   TEST_DEPENDS
     

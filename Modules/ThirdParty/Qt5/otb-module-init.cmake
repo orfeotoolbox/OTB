@@ -21,5 +21,6 @@
 find_package(Qt5Core)
 find_package(Qt5Gui)
 find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
 find_package(Qt5LinguistTools)
 mark_as_advanced( QT_QMAKE_EXECUTABLE )
