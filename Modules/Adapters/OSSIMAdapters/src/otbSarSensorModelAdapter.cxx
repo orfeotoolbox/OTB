@@ -162,6 +162,62 @@ bool SarSensorModelAdapter::WorldToLineSample(const Point3DType & inGeoPoint, Po
   return true;
 }
 
+bool SarSensorModelAdapter::WorldToCartesian(const Point3DType & inGeoPoint, Point3DType & outCartesianPoint) const
+{
+  if(m_SensorModel.get() == ITK_NULLPTR)
+    {
+      return false;
+    }
+
+  ossimGpt inGpt;
+  inGpt.lat = inGeoPoint[0];
+  inGpt.lon = inGeoPoint[1];
+  inGpt.hgt = inGeoPoint[2];
+
+
+  ossimEcefPoint outCartesien(inGpt);
+
+  
+  if(outCartesien.isNan())
+    return false;
+
+  outCartesianPoint[0] = outCartesien.x();
+  outCartesianPoint[1] = outCartesien.y();
+  outCartesianPoint[2] = outCartesien.z();
+
+  return true;
+
+}
+
+bool SarSensorModelAdapter::WorldToSatPosition(const Point3DType & inGeoPoint, Point3DType & satelitePosition) const
+{
+  if(m_SensorModel.get() == ITK_NULLPTR)
+    {
+      return false;
+    }
+
+  ossimGpt inGpt;
+  inGpt.lat = inGeoPoint[0];
+  inGpt.lon = inGeoPoint[1];
+  inGpt.hgt = inGeoPoint[2];
+
+  
+  ossimplugins::ossimSarSensorModel::TimeType azimuthTime;
+  double rangeTime;
+  ossimEcefPoint sensorPos;
+  ossimEcefVector sensorVel;
+
+  const bool success = m_SensorModel->worldToAzimuthRangeTime(inGpt, azimuthTime, rangeTime,sensorPos,sensorVel);
+  
+  if(sensorPos.isNan())
+    return false;
+
+  satelitePosition[0] = sensorPos.x();
+  satelitePosition[1] = sensorPos.y();
+  satelitePosition[2] = sensorPos.z();
+
+  return true;
+}
 
 
 } // namespace otb
