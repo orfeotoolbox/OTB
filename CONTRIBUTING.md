@@ -86,10 +86,8 @@ For example, here are some good commit messages:
 
 Your contribution is ready to be added to the main OTB repository? Send a Merge
 Request against the `develop` branch on GitLab using the merge request
-template.
-
-The merge request will then be discussed by the community and the core OTB
-team. Larger contributions will require code review and a formal PSC vote.
+template. The merge request will then be discussed by the community and the core
+OTB team.
 
 * Merge requests can not be merged until all discussions have been resolved (this is enforced by GitLab).
 * Merge requests **must receive at least 2 positives votes from PSC members** before being merged.
