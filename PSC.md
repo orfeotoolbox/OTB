@@ -175,12 +175,11 @@ submits to vote the following release decisions:
 
 ### Process
 
--   Proposals are written up and submitted on the otb-developers mailing
-    list for discussion and voting, by any interested party, not just
-    committee members. Proposals are available for review for at least
-    three days before a vote can be closed. It is acknowledged that some
-    more complex issues may require more time for discussion and
-    deliberation.
+-   Proposals are written up and submitted as GitLab merge requests or on the
+    otb-developers mailing list for discussion and voting, by any interested
+    party, not just committee members. Proposals are available for review for at
+    least three days before a vote can be closed. It is acknowledged that some
+    more complex issues may require more time for discussion and deliberation.
 -   Respondents may vote “+1” to indicate support for the proposal and a
     willingness to support implementation.
 -   Respondents may vote “-1” to veto a proposal, but must provide
@@ -189,9 +188,9 @@ submits to vote the following release decisions:
 -   A vote of -0 indicates mild disagreement, but has no effect. A 0
     indicates no opinion. A +0 indicates mild support, but has no
     effect.
--   Anyone may comment and vote on proposals on the list, but only
-    members of the PSC's votes (including the Chair) will be counted
-    (“eligible voters”).
+-   Anyone may comment and vote on proposals on the list or on the merge request
+    thread, but only members of the PSC's votes (including the Chair) will be
+    counted (“eligible voters”).
 -   A proposal will be accepted if it receives at least +2 (including
     the proponent) and no vetos (-1)
 -   If a proposal is vetoed, and it cannot be revised to satisfy all
@@ -199,9 +198,6 @@ submits to vote the following release decisions:
     majority of all eligible voters indicating +1 is sufficient to pass
     it. Note that this is a majority of all committee members, not just
     those who actively vote.
--   Upon completion of discussion and voting the proposers should
-    announce whether they are proceeding (proposal accepted) or are
-    withdrawing their proposal (vetoed).
 -   The Chair adjudicates in cases of disputes about voting.
 
 A summary of discussions is published in a dedicated section of the wiki

@@ -33,16 +33,9 @@ help fixing the bug quicker. Remember to add as much information as possible!
 ## Feature requests and discussions
 
 Feature requests are welcome! Generally you are welcome to simply [open an issue](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
-and discuss your idea there.
+and discuss your idea there. For more complex requests there is an issue
+template for in depth description called 'Request for Comments'.
 
-For complex and potentially controvertial ideas, we use Request for Comments.
-RFCs are normal issues but which will need more discussion from the community
-and usually a formal PSC vote. For this, use the 'Request for Comments' issue
-template on gitlab. Older RFCs live on the [wiki](https://wiki.orfeo-toolbox.org/index.php/Requests_for_Comments).
-More long term ideas are collected on the wiki [Wishlist](https://wiki.orfeo-toolbox.org/index.php/Wishlist).
-
-For more peripheral contributions which do not belong in the main OTB
-repository [Remote Modules](#remote-modules) are also a great option.
 
 ## Documentation improvements
 
@@ -62,7 +55,8 @@ Clone the repository, create a feature branch, commit your changes, push the
 feature branch to a fork (or the main repository if you are a core developer),
 then send a merge request.
 
-Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB).
+Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB)
+which we will manually merge.
 
 ### Commit message
 
@@ -70,7 +64,7 @@ On your feature branch, write a good [commit message](https://xkcd.com/1296/):
 short and descriptive. If fixing an issue or bug, put the issue number in the
 commit message so that GitLab can [crosslink it](https://docs.gitlab.com/ce/user/project/issues/crosslinking_issues.html).
 You can prefix your commit message with an indicating flag (DOC, BUG, PKG,
-TEST, SuperBuild, etc.) or the name of the module you are changing.
+TEST, SuperBuild, etc.).
 
 Standard prefixes for OTB commit messages:
 
@@ -87,7 +81,6 @@ For example, here are some good commit messages:
     BUG: #1701 Warn users if parameter string is unset
     DOC: Fix typo in Monteverdi French translation
     COMP: Allow GeoTIFF and TIFF to be disabled when no 3rd party drags them
-    Learning/Unsupervised: Add KMeans Shark implementation
 
 ### Merge request
 
@@ -98,12 +91,18 @@ template.
 The merge request will then be discussed by the community and the core OTB
 team. Larger contributions will require code review and a formal PSC vote.
 
+* Merge requests can not be merged until all discussions have been resolved (this is enforced by GitLab).
+* Merge requests **must receive at least 2 positives votes from PSC members** before being merged.
+* The merger is responsible for checking that the branch is up-to-date with develop and that the dashboard is ok.
+* Merge requests can be merged by anyone (not just PSC or RM) with push access to develop
+
 ## Remote modules
 
-[Remote Modules](https://wiki.orfeo-toolbox.org/index.php/Remote_Modules) are the prefered way if your contribution is about adding new classes or
-application to bring new features to OTB. Remote modules are just like regular
-modules, except they are not distributed inside OTB source code. Under some
-conditions (dependencies, official acceptance process, etc.), we are also able
-to distribute your remote module in the official standalone binaries. See [the wiki](https://wiki.orfeo-toolbox.org/index.php/Remote_Modules)
+[Remote Modules](https://wiki.orfeo-toolbox.org/index.php/Remote_Modules) are
+the prefered way if you wish to make your apps and filters available to the
+community while keeping control and maintenance of their sources. Remote
+modules are just like regular modules, except they are not distributed inside
+OTB source code. Under some conditions (dependencies, official acceptance
+process, etc.), we are also able to distribute your remote module in the
+official standalone binaries. See [the wiki](https://wiki.orfeo-toolbox.org/index.php/Remote_Modules)
 for more information.
-
