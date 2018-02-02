@@ -86,7 +86,7 @@ public:
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) and YZ frame */
-  bool WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType yz) const;
+  bool WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType & yz) const;
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) */

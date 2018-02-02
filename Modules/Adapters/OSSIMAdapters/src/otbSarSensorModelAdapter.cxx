@@ -109,7 +109,7 @@ void SarSensorModelAdapter::DeburstLineToImageLine(const std::vector<std::pair<u
   ossimplugins::ossimSarSensorModel::deburstLineToImageLine(lines,deburstLine,imageLine);
 }
 
-bool SarSensorModelAdapter::WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType yz) const
+bool SarSensorModelAdapter::WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType & yz) const
 {
   if(m_SensorModel.get() == ITK_NULLPTR)
     {
