@@ -85,14 +85,17 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+    std::cout<<"Debug on input "<<std::endl;
     GetParameterImage("in")->DebugOn();
     ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
     extractor->DebugOn();
     m_Filters.push_back(extractor.GetPointer());
+    std::cout<<"Debug on extractor "<<std::endl;
     extractor->DebugOn();
     extractor->SetInput(GetParameterImage("in"));
     extractor->SetChannel(1);
     extractor->UpdateOutputInformation();
+    std::cout<<"Debug on extractor's output "<<std::endl;
     extractor->GetOutput()->DebugOn();
     SetParameterOutputImage("out" , extractor->GetOutput() );
   }

@@ -518,10 +518,11 @@ int Application::ExecuteAndWriteOutput()
     }
 
   this->AfterExecuteAndWriteOutputs();
-
+  m_Filters.clear();
   m_Chrono.Stop();
   return status;
 }
+
 
 /* Enable the use of an optional parameter. Returns the previous state */
 void Application::EnableParameter(std::string paramKey)

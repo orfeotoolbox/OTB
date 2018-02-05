@@ -80,6 +80,7 @@ ImageFileWriter<TInputImage>
   this->SetAutomaticAdaptativeStreaming();
 
   m_FilenameHelper = FNameHelperType::New();
+  std::cout<<"A writer is created"<<std::endl;
 }
 
 /**
@@ -89,6 +90,7 @@ template <class TInputImage>
 ImageFileWriter<TInputImage>
 ::~ImageFileWriter()
 {
+  std::cout<<"A writer is deleted"<<std::endl;
 }
 
 template <class TInputImage>

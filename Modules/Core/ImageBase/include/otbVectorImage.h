@@ -194,7 +194,9 @@ public:
 
 protected:
   VectorImage();
-  ~VectorImage() ITK_OVERRIDE {}
+  ~VectorImage() ITK_OVERRIDE {
+    std::cout<<"A vector image is deleted"<<std::endl;
+  }
 
 private:
   VectorImage(const Self &); //purposely not implemented
