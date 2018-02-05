@@ -853,6 +853,8 @@ public:
     this->SetDocLink(link);
   }
 
+  std::vector<itk::ProcessObject::Pointer> m_Filters;
+
 protected:
   /** Constructor */
   Application();

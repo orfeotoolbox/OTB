@@ -22,3 +22,8 @@ otb_create_application(
   NAME           TestApplication
   SOURCES        otbTestApplication.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           MemoryTest
+  SOURCES        otbMemoryTestApplication.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
