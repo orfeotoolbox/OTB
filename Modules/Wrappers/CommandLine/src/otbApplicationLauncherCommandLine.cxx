@@ -22,6 +22,7 @@
 #include "otbWrapperCommandLineLauncher.h"
 #include "otb_tinyxml.h"
 #include <vector>
+#include <iostream>
 
 #ifdef OTB_USE_MPI
 #include "otbMPIConfig.h"
@@ -304,9 +305,53 @@ int main(int argc, char* argv[])
     ShowUsage(argv);
     return false;
   }
+  goto RUN;
 
+  RUN : 
+  for (auto i : vexp)
+    std::cout<<i<<" ";
+  std::cout<<std::endl;
   bool success = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();
 
+  
+  std::string answer;
+  std::cout<<"Rerun or run with other args? r : rerun ; s : small test ; b : big test ; else quit "<<std::endl;
+  std::cin >> answer;
+  if ( answer[0]=='r')
+  {
+    std::cout<<"again"<<std::endl;
+    goto RUN;
+  }
+  else if ( answer[0]=='s' )
+  {
+    std::cout<<"Small test running"<<std::endl;
+    vexp[2] = "/home/antoine/dev/my_data/anaglyphInput2.tif";
+    vexp[4] = "/home/antoine/dev/my_data/anaglyphOut.tif";
+    goto RUN;
+  }
+  else if ( answer[0]=='b' )
+  {
+    std::cout<<"Big test running"<<std::endl;
+    vexp[2] = "/home/antoine/dev/my_data/bigbigtestclassic.tif";
+    vexp[4] = "/home/antoine/dev/my_data/bigbigtestclasssic.tif";
+    goto RUN;
+  }
+  // else
+  //   {
+  //     vexp.clear();
+  //    for (int i = 1; i < argc; i++)
+  //     {
+  //     std::string strarg(answer[i]);
+  //     std::string cleanArg = CleanWord(strarg);
+  //     if (cleanArg.empty())
+  //       {
+  //       // Empty argument !
+  //       continue;
+  //       }
+  //     vexp.push_back(cleanArg);
+  //     }
+  //     goto RUN;
+  //   }
   // shutdown MPI after application finished
   #ifdef OTB_USE_MPI
   otb::MPIConfig::Instance()->terminate();

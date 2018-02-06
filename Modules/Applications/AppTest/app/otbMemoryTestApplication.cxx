@@ -64,11 +64,12 @@ private:
 
     AddParameter(ParameterType_InputImage, "in", "Input image");
     SetParameterDescription("in", "Input image");
+    SetParameterString("in", "/home/antoine/dev/my_data/anaglyphInput2.tif");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
     SetDefaultOutputPixelType("out",ImagePixelType_uint8);
-
+    SetParameterString("out", "/home/antoine/dev/my_data/anaglyphtestInput2.tif");
 
     AddRAMParameter();
 
@@ -85,18 +86,26 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+    #ifdef MEM_DEBUG
     std::cout<<"Debug on input "<<std::endl;
     GetParameterImage("in")->DebugOn();
+    #endif
     ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
+    #ifdef MEM_DEBUG
     extractor->DebugOn();
+    #endif
     m_Filters.push_back(extractor.GetPointer());
+    #ifdef MEM_DEBUG
     std::cout<<"Debug on extractor "<<std::endl;
     extractor->DebugOn();
+    #endif
     extractor->SetInput(GetParameterImage("in"));
     extractor->SetChannel(1);
     extractor->UpdateOutputInformation();
+    #ifdef MEM_DEBUG
     std::cout<<"Debug on extractor's output "<<std::endl;
     extractor->GetOutput()->DebugOn();
+    #endif
     SetParameterOutputImage("out" , extractor->GetOutput() );
   }
 
