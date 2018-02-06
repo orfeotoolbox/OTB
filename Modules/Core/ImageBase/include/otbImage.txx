@@ -32,6 +32,7 @@ namespace otb
 template <class TPixel, unsigned int VImageDimension>
 Image<TPixel, VImageDimension>::Image()
 {
+  std::cout<<"An image is created"<<std::endl;
 }
 
 template <class TPixel, unsigned int VImageDimension>

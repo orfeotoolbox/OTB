@@ -252,7 +252,9 @@ public:
 
 protected:
   Image();
-  ~Image() ITK_OVERRIDE {}
+  ~Image() ITK_OVERRIDE {
+    std::cout<<"An image is deleted"<<std::endl;
+  }
 
 private:
   Image(const Self &) = delete;
