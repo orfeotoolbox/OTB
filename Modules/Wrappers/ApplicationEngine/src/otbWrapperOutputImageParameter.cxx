@@ -631,7 +631,7 @@ OutputImageParameter::CheckFileName(bool fixMissingExtension)
 void OutputImageParameter::ClearValue() 
 {
   m_Image = nullptr;
-  m_FileName = "";
+  // m_FileName = "";
   
   m_UInt8Writer = nullptr;
   m_Int16Writer = nullptr;
@@ -652,7 +652,7 @@ void OutputImageParameter::ClearValue()
   m_RGBUInt8Writer = nullptr;
   m_RGBAUInt8Writer = nullptr;
 
-  m_RAMValue = 0; 
+  // m_RAMValue = 0;
 
   Superclass::ClearValue();
 }

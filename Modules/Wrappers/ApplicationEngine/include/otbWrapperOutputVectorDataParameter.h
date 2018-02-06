@@ -111,7 +111,7 @@ public:
   {
     m_Writer = nullptr;
     m_VectorData = nullptr;
-    m_FileName = "";
+    // m_FileName = "";
     Superclass::ClearValue();
   }
 protected:
