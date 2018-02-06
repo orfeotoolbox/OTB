@@ -188,7 +188,9 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
     m_Application->GetLogger()->Fatal("Caught unknown exception during application execution.\n");
     return false;
   }
-
+  
+  // Cleaning process
+  DeleteWatcherList();
   return true;
 }
 

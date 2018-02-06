@@ -113,6 +113,8 @@ public:
 
   std::string CheckFileName(bool fixMissingExtension = false);
 
+  void ClearValue() override;
+
 protected:
   /** Constructor */
   OutputImageParameter();

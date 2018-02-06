@@ -469,6 +469,7 @@ int Application::ExecuteAndWriteOutput()
             std::cout<<"Add Process and write"<<std::endl;
             AddProcess(outputParam->GetWriter(), progressId.str());
             outputParam->Write();
+            // ClearWriter in param();
             }
           }
         else if (GetParameterType(key) == ParameterType_OutputVectorData
@@ -520,12 +521,62 @@ int Application::ExecuteAndWriteOutput()
     }
 
   this->AfterExecuteAndWriteOutputs();
-  m_Filters.clear();
   m_Chrono.Stop();
+  ClearMemory();
   return status;
 }
 
+void Application::ClearMemory()
+{
+  // Cleaning the parameter input and output
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
+    {
+    std::string key = *it;
+    if (GetParameterType(key) == ParameterType_InputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputImageParameter * input = dynamic_cast<InputImageParameter*>(param);
+      input->ClearValue();
+      }
+    else if (GetParameterType(key) == ParameterType_InputImageList )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputImageListParameter * input = dynamic_cast<InputImageListParameter*>(param);
+      input->ClearValue();
+      }
+    else if (GetParameterType(key) == ParameterType_InputVectorData )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputVectorDataParameter * input = dynamic_cast<InputVectorDataParameter*>(param);
+      input->ClearValue();
+      }
+    else if (GetParameterType(key) == ParameterType_InputVectorDataList )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputVectorDataListParameter * input = dynamic_cast<InputVectorDataListParameter*>(param);
+      input->ClearValue();
+      }
+    else if (GetParameterType(key) == ParameterType_OutputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter * input = dynamic_cast<OutputImageParameter*>(param);
+      input->ClearValue();
+      }
+    else
+      {
+      continue;
+      }
+    }
 
+  // Cleaning m_ProgressSource
+  m_ProgressSource = nullptr;
+
+  // Cleaning m_Filters
+  m_Filters.clear();
+}
 /* Enable the use of an optional parameter. Returns the previous state */
 void Application::EnableParameter(std::string paramKey)
 {

@@ -107,6 +107,13 @@ public:
     m_Writer = otb::VectorDataFileWriter<VectorDataType>::New();
   }
 
+  void ClearValue() override
+  {
+    m_Writer = nullptr;
+    m_VectorData = nullptr;
+    m_FileName = "";
+    Superclass::ClearValue();
+  }
 protected:
   /** Constructor */
   OutputVectorDataParameter()

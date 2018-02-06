@@ -154,6 +154,10 @@ public:
    */
   int ExecuteAndWriteOutput();
 
+  /** Clear the pipeline and the various parameters that hold data
+   */
+  virtual void ClearMemory();
+
   /* Get the internal application parameters
    *
    * WARNING: this method may disappear from the API */
