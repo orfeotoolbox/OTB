@@ -44,9 +44,13 @@ public:
   typedef AddProcessToWatchEvent Self;
   typedef itk::EventObject       Superclass;
 
-  AddProcessToWatchEvent(){}
+  AddProcessToWatchEvent(){
+    std::cout<<"A new AddProcessToWatchEvent is created"<<std::endl;
+  }
   AddProcessToWatchEvent(const Self& s) :itk::EventObject(s){};
-  ~AddProcessToWatchEvent() ITK_OVERRIDE {}
+  ~AddProcessToWatchEvent() ITK_OVERRIDE {
+    std::cout<<"The AddProcessToWatchEvent is deleted... Description was : "<<m_ProcessDescription<<std::endl;
+  }
 
   /** Set/Get the process to watch */
   virtual void SetProcess(itk::ProcessObject * process)

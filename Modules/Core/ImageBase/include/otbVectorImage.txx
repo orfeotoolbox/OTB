@@ -29,11 +29,15 @@
 
 namespace otb
 {
+template <class TPixel, unsigned int VImageDimension>
+int VectorImage<TPixel, VImageDimension>::m_Instance = 0;
 
 template <class TPixel, unsigned int VImageDimension>
 VectorImage<TPixel, VImageDimension>::VectorImage()
 {
   std::cout<<"A vector image is created"<<std::endl;
+  m_Instance++;
+  std::cout<<m_Instance<<" vector image(s) live(s)"<<std::endl;
 }
 
 template <class TPixel, unsigned int VImageDimension>

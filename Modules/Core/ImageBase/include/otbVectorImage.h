@@ -179,7 +179,7 @@ public:
 //   {
 //     return AccessorType( this->GetNumberOfComponentsPerPixel() );
 //   }
-
+  static int m_Instance;
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
   {
@@ -196,6 +196,8 @@ protected:
   VectorImage();
   ~VectorImage() ITK_OVERRIDE {
     std::cout<<"A vector image is deleted"<<std::endl;
+    m_Instance--;
+    std::cout<<m_Instance<<" vector image(s) still live(s)"<<std::endl;
   }
 
 private:

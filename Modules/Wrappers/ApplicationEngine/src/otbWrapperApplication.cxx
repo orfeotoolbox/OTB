@@ -410,6 +410,7 @@ int Application::Execute()
 
 int Application::ExecuteAndWriteOutput()
 {
+  std::cout<<"Executing..."<<std::endl;
   m_Chrono.Restart();
 
   int status = this->Execute();
@@ -465,6 +466,7 @@ int Application::ExecuteAndWriteOutput()
               }
             std::ostringstream progressId;
             progressId << "Writing " << outputParam->GetFileName() << "...";
+            std::cout<<"Add Process and write"<<std::endl;
             AddProcess(outputParam->GetWriter(), progressId.str());
             outputParam->Write();
             }
