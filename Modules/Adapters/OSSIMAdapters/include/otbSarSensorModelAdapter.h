@@ -92,12 +92,12 @@ public:
   (col,row) */
   bool WorldToLineSample(const Point3DType & inGEoPOint, Point2DType & cr) const;
 
-  /** Transform world point (lat,lon,hgt) to cartesian point (x,y,z) */
-  bool WorldToCartesian(const Point3DType & inGeoPoint, Point3DType & outCartesianPoint) const;
-
 /** Transform world point (lat,lon,hgt) to satellite position (x,y,z) and satellite velocity */
   bool WorldToSatPositionAndVelocity(const Point3DType & inGeoPoint, Point3DType & satelitePosition,  
 				     Point3DType & sateliteVelocity) const;
+
+  /** Transform world point (lat,lon,hgt) to cartesian point (x,y,z) */
+  static bool WorldToCartesian(const Point3DType & inGeoPoint, Point3DType & outCartesianPoint);
 
   static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
 
