@@ -1,7 +1,14 @@
+.. _extended-filenames:
+
 Extended filenames
 ================================
 
-There are multiple ways to define geo-referencing information. For
+Extended filenames is an interesting feature of OTB. With it, you can control
+several aspects of the beahvior of the OTB in the OTB-Applications or in our
+own C++ applications. Historically this feature has been desingn to solve
+an issue with how to handle geo-referencing information. 
+
+Indeed, there are multiple ways to define geo-referencing information. For
 instance, one can use a geographic transform, a cartographic projection,
 or a sensor model with RPC coefficients. A single image may contain
 several of these elements, such as in the “ortho-ready” products: this
@@ -19,9 +26,12 @@ application, the sensor model must be used. In order to specify which
 information should be skipped, a syntax of extended filenames has been
 developed for both reading and writing.
 
-The reader and writer extended file name support is based on the same
-syntax, only the options are different. To benefit from the extended
-file name mechanism, the following syntax is to be used:
+Since the development of this feature we have extend this mechanism for 
+other aspaects: like band or overview selection in reader part or support
+create option of gdal in writer part.The reader and writer extended filename 
+support is based on the same syntax, only the options are different. 
+To benefit from the extended file name mechanism, the following syntax 
+is to be used:
 
 ::
 
@@ -157,14 +167,11 @@ Writer options
 
 ::
 
-       &gdal:co:<GDALKEY>=<VALUE>
+    &gdal:co:<GDALKEY>=<VALUE>
 
 -  To specify a gdal creation option
 
--  For gdal creation option information, see dedicated gdal documentation
-for each driver. For example, you can find `here
-<http://www.gdal.org/frmt_gtiff.html>`_ the information about the GeoTiff 
-create options.
+-  For gdal creation option information, see dedicated gdal documentation for each driver. For example, you can find `here <http://www.gdal.org/frmt_gtiff.html>`_ the information about the GeoTiff create options
 
 -  None by default
 
@@ -291,6 +298,9 @@ The available syntax for boolean options are:
 
 -  OFF, Off, off, false, False, 0 are available for setting a ’false’
    boolean value
+   
+Examples
+^^^^^^^^^^^^^^
 
 You can find below some examples:
 
@@ -300,7 +310,7 @@ You can find below some examples:
 
     $ otbcli_Convert -in OTB-Data/Examples/QB_1_ortho.tif -out "/tmp/example1.tif?&gdal:co:TILED=YES&gdal:co:COMPRESS=DEFLATE"
 
-- Process only one band from a file
+- Process only first band from a file
 
 ::
 
