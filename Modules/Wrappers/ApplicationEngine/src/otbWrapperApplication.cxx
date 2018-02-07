@@ -530,6 +530,7 @@ void Application::ClearMemory()
 {
   // Cleaning the parameter input and output
   std::vector<std::string> paramList = GetParametersKeys(true);
+  std::string filename ("");
   for (std::vector<std::string>::const_iterator it = paramList.begin();
            it != paramList.end();
            ++it)
@@ -539,31 +540,41 @@ void Application::ClearMemory()
       {
       Parameter* param = GetParameterByKey(key);
       InputImageParameter * input = dynamic_cast<InputImageParameter*>(param);
+      filename = input->GetFileName();
       input->ClearValue();
+      input->SetFromFileName(filename);
       }
     else if (GetParameterType(key) == ParameterType_InputImageList )
       {
       Parameter* param = GetParameterByKey(key);
       InputImageListParameter * input = dynamic_cast<InputImageListParameter*>(param);
+      std::vector< std::string > filenamelist = input->GetFileNameList();
       input->ClearValue();
+      input->SetListFromFileName(filenamelist);
       }
     else if (GetParameterType(key) == ParameterType_InputVectorData )
       {
       Parameter* param = GetParameterByKey(key);
       InputVectorDataParameter * input = dynamic_cast<InputVectorDataParameter*>(param);
+      filename = input->GetFileName();
       input->ClearValue();
+      input->SetFromFileName(filename);
       }
     else if (GetParameterType(key) == ParameterType_InputVectorDataList )
       {
       Parameter* param = GetParameterByKey(key);
       InputVectorDataListParameter * input = dynamic_cast<InputVectorDataListParameter*>(param);
+      std::vector< std::string > filenamelist = input->GetFileNameList();
       input->ClearValue();
+      input->SetListFromFileName(filenamelist);
       }
     else if (GetParameterType(key) == ParameterType_OutputImage )
       {
       Parameter* param = GetParameterByKey(key);
-      OutputImageParameter * input = dynamic_cast<OutputImageParameter*>(param);
-      input->ClearValue();
+      OutputImageParameter * output = dynamic_cast<OutputImageParameter*>(param);
+      filename = output->GetFileName();
+      output->ClearValue();
+      output->SetFileName(filename);
       }
     else
       {
