@@ -32,6 +32,8 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbImageList.h"
 
+#include <numeric>
+
 namespace otb
 {
 namespace Wrapper

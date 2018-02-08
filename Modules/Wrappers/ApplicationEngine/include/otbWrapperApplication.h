@@ -27,7 +27,7 @@
 #include "otbWrapperParameterGroup.h"
 
 #include "otbLogger.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 #include "otbWrapperMacros.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageListParameter.h"
@@ -1032,7 +1032,7 @@ private:
   std::string m_Doclink;
 
   /** Chrono to measure execution time */
-  itk::TimeProbe m_Chrono;
+  otb::Stopwatch m_Chrono;
 
   //rashad:: controls adding of -xml parameter. set to true by default
   bool                              m_HaveInXML;

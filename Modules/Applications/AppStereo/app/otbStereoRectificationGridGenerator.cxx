@@ -115,7 +115,7 @@ private:
       " geometry.\n\n"
       "There are several ways to set the elevation source:\n"
       "  * An arbitrary constant elevation\n"
-      "  * A DEM directoy\n"
+      "  * A DEM directory\n"
       "  * Compute an average elevation from a DEM\n\n"
       "If needed, the application can compute inverse resampling grids (from "
       "epipolar to original sensor geometry). Don't forget to check the other "

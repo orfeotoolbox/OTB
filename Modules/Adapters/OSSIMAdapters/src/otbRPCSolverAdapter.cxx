@@ -112,7 +112,11 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
   rmsError = rpcSolver->getRmsError();
 
   // Retrieve the output RPC projection
+#if OTB_OSSIM_VERSION < 20200
   ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(rpcSolver->createRpcProjection()->getProjection());
+#else
+  ossimRefPtr<ossimRpcModel> rpcProjection = rpcSolver->getRpcModel();
+#endif
 
   // Export the sensor model in an ossimKeywordlist
   ossimKeywordlist geom_kwl;

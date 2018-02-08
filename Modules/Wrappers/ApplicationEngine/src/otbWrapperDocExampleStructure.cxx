@@ -19,6 +19,7 @@
  */
 
 #include "otbWrapperDocExampleStructure.h"
+#include "otbStringToHTML.h"
 
 namespace otb
 {
@@ -185,7 +186,7 @@ DocExampleStructure::GenerateHtmlExample( unsigned int exId )
       {
       oss << "<li>";
       oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">";
-      oss << it->first << ": " << it->second;
+      oss << it->first << ": " << otb::StringToHTML(it->second);
       oss << "</p>";
       oss << "</li>";
       }
@@ -211,7 +212,7 @@ DocExampleStructure::GenerateHtmlExample()
     if( m_NbOfExamples>1 )
       oss << "<li>";
     if( !m_ExampleCommentList[exId].empty() )
-      oss << m_ExampleCommentList[exId];
+      oss << otb::StringToHTML(m_ExampleCommentList[exId]);
     oss << this->GenerateHtmlExample( exId );
     if( m_NbOfExamples>1 )
       oss << "</li>";

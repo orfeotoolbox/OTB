@@ -35,7 +35,6 @@
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 
-#include "itkTimeProbe.h"
 #include "otbConvexOrConcaveClassificationFilter.h"
 #include "otbMorphologicalProfilesSegmentationFilter.h"
 #include "otbGeodesicMorphologyIterativeDecompositionImageFilter.h"
