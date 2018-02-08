@@ -61,6 +61,7 @@ public slots:
   void AddNewProcessToReport();
 
 private:
+  void ClearEvent();
   QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&); //purposely not implemented
   void operator=(const QtWidgetSimpleProgressReport&); //purposely not
                                                        //implemented

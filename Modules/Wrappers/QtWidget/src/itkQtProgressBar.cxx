@@ -98,4 +98,24 @@ QtProgressBar::Observe( itk::Object *caller )
   m_Caller->AddObserver(  itk::ProgressEvent(), m_RedrawCommand.GetPointer() );
 }
 
+void
+QtProgressBar::ClearObserver()
+{
+  if ( m_Caller->HasObserver(itk::ProgressEvent()) )
+    {
+      unsigned int i(0);
+      while ( (m_Caller->GetCommand(i)) != (m_RedrawCommand.GetPointer()) )
+      {
+        ++i;
+        if (i>10)
+          std::cout<<"ERROR"<<std::endl;
+      }
+      std::cout<<i<<std::endl;
+      m_Caller->RemoveObserver(i);
+
+    }
+  m_Caller = nullptr;
+  // m_Caller->RemoveAllObservers();
+}
+
 } // end namespace fltk

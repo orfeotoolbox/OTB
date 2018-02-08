@@ -52,9 +52,10 @@ public:
   void ProcessEvent(itk::Object * caller, const itk::EventObject & event );
   void ConstProcessEvent(const itk::Object * caller, const itk::EventObject & event );
 
-
   /** Manage a Progress event */
   void Observe( itk::Object *caller );
+
+  void ClearObserver();
 
 signals:
   void SetValueChanged(int);
