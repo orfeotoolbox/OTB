@@ -31,26 +31,6 @@ namespace otb
 {
 namespace Wrapper
 {
-enum DefaultValueMode
-  {
-    /**
-     * This parameter has no default behaviour and should be set by
-     * the user.
-     */
-    DefaultValueMode_UNKNOWN,
-    /**
-     * The default value of this parameter can be estimated from
-     * other parameters.
-     */
-    DefaultValueMode_RELATIVE,
-
-    /**
-     * The default value of this parameter is not depending on any
-     * other parameter.
-     */
-    DefaultValueMode_ABSOLUTE
-  };
-
 
 /** \class Parameter
  *  \brief This class represent a parameter for the wrapper framework
@@ -122,12 +102,6 @@ public:
 
   /** Toogle the parameter AutomaticValue flag */
   itkBooleanMacro(AutomaticValue);
-
-  /** Set the default value mode */
-  itkSetEnumMacro(DefaultValueMode, DefaultValueMode);
-
-  /** Get the default value mode */
-  itkGetEnumMacro(DefaultValueMode, DefaultValueMode);
 
   /** Set the user access level */
   itkSetEnumMacro(UserLevel, UserLevel);
@@ -223,7 +197,6 @@ protected:
     m_Active( false ),
     m_UserValue( false ),
     m_AutomaticValue( false ),
-    m_DefaultValueMode( DefaultValueMode_UNKNOWN ),
     m_UserLevel( UserLevel_Basic ),
     m_Role( Role_Input ),
     m_Root( this ),
@@ -253,9 +226,6 @@ protected:
 
   /** True if the application change the value of this parameter */
   bool                               m_AutomaticValue;
-
-  /** Default value behaviour */
-  DefaultValueMode                   m_DefaultValueMode;
 
   UserLevel                          m_UserLevel;
 
