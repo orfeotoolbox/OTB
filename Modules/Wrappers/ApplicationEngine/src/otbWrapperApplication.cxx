@@ -65,7 +65,8 @@ Application::Application()
     m_Doclink(""),
     m_HaveInXML(true),
     m_HaveOutXML(true),
-    m_IsInXMLParsed(false)
+    m_IsInXMLParsed(false),
+    m_IsInPrivateDo(false)
 {
   // Don't call Init from the constructor, since it calls a virtual method !
   m_Logger->SetName("Application.logger");
@@ -304,7 +305,14 @@ void Application::SetParameterUserValue(std::string paramKey, bool value)
   using Application::EnableParameter();
   **/
   EnableParameter(paramKey);
-  GetParameterByKey(paramKey)->SetUserValue(value);
+  if (m_IsInPrivateDo)
+    {
+    GetParameterByKey(paramKey)->SetUserValue(false);
+    }
+  else
+    {
+    GetParameterByKey(paramKey)->SetUserValue(value);
+    }
 }
 
 const Parameter* Application::GetParameterByKey(std::string name, bool follow) const
@@ -320,7 +328,9 @@ void Application::Init()
   m_ParameterList = ParameterGroup::New();
   //reset inXML parse checker in case if reinit-ing
   m_IsInXMLParsed = false;
+  m_IsInPrivateDo = true;
   this->DoInit();
+  m_IsInPrivateDo = false;
 
   //rashad: global parameters. now used only for inxml and outxml
   if(this->GetHaveInXML())
@@ -352,7 +362,9 @@ void Application::UpdateParameters()
         }
       }
     }
+  m_IsInPrivateDo = true;
   this->DoUpdateParameters();
+  m_IsInPrivateDo = false;
 }
 
 void Application::AfterExecuteAndWriteOutputs()
@@ -387,7 +399,9 @@ int Application::Execute()
       itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
     }
 
+  m_IsInPrivateDo = true;
   this->DoExecute();
+  m_IsInPrivateDo = false;
   
   // Ensure that all output image parameter have called UpdateOutputInformation()
   for (auto it = paramList.begin(); it != paramList.end(); ++it)
