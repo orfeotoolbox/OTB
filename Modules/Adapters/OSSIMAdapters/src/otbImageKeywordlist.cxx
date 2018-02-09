@@ -287,60 +287,15 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
     }
 
   /**********************************************************/
-  /* Third try : look for external geom file and RPC tags   */
+  /* Third try : look for RPC tags   */
   /**********************************************************/
-  if (!hasMetaData)
+  if (!hasMetaData && checkRpcTag)
     {
-    // If still no metadata, try the ".geom" file
-    ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
-    otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
+    // check any RPC tags
+    otb_kwl = ReadGeometryFromRPCTag(filename);
 
-    // also check any RPC tags
-    ImageKeywordlist rpc_kwl;
-    if (checkRpcTag)
+    if (!otb_kwl.Empty())
       {
-      rpc_kwl = ReadGeometryFromRPCTag(filename);
-      }
-
-    if (otb_kwl.HasKey("type"))
-      {
-      // external geom has a "type" keyword
-      std::string geomType(otb_kwl.GetMetadataByKey("type"));
-      ossimProjection *testProj = ossimProjectionFactoryRegistry::instance()
-        ->createProjection(ossimString(geomType));
-      if (dynamic_cast<ossimSensorModel*>(testProj))
-        {
-        // "type" keyword corresponds to a sensor model : don't erase it
-        if (rpc_kwl.GetSize() > 0)
-          {
-          rpc_kwl.ClearMetadataByKey("type");
-          }
-
-        ossimKeywordlist ossim_test_kwl;
-        otb_kwl.convertToOSSIMKeywordlist(ossim_test_kwl);
-        testProj = ossimProjectionFactoryRegistry::instance()
-          ->createProjection(ossim_test_kwl);
-        if (testProj)
-          {
-          // external geom contains a valid sensor geometry
-          hasMetaData = true;
-          }
-        }
-      }
-
-    // copy keywords found in RPC tags if the external geom is not valid
-    if (!hasMetaData && rpc_kwl.GetSize() > 0)
-      {
-      const ImageKeywordlist::KeywordlistMap &kwlMap = rpc_kwl.GetKeywordlist();
-      for (ImageKeywordlist::KeywordlistMap::const_iterator it = kwlMap.begin();
-          it != kwlMap.end();
-          ++it)
-        {
-        if (it->second != "")
-          {
-          otb_kwl.AddKey(it->first , it->second);
-          }
-        }
       hasMetaData = true;
       }
     }

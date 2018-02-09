@@ -398,18 +398,33 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     {
 
     std::string lFileNameOssimKeywordlist = GetDerivedDatasetSourceFileName(m_FileName);
+    std::string extension = itksys::SystemTools::GetFilenameLastExtension(lFileNameOssimKeywordlist);
+    std::string attachedGeom = lFileNameOssimKeywordlist.substr(
+      0,
+      lFileNameOssimKeywordlist.size() - extension.size()) + std::string(".geom");
 
     // Update otb Keywordlist
     ImageKeywordlist otb_kwl;
-    if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
-      {
-      otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
-      otbMsgDevMacro(<< "Loading internal kwl");
-      }
-    else
+
+    // Case 1: external geom supplied through extended filename
+    if (m_FilenameHelper->ExtGEOMFileNameIsSet())
       {
       otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
       otbMsgDevMacro(<< "Loading external kwl");
+      }
+    // Case 2: attached geom (if present)
+    else if (itksys::SystemTools::FileExists(attachedGeom))
+      {
+      otb_kwl = ReadGeometryFromGEOMFile(attachedGeom);
+      otbMsgDevMacro(<< "Loading attached kwl");
+      }
+    // Case 3: find an ossimPluginProjection
+    // Case 4: find an ossimProjection
+    // Case 5: find RPC tags in TIF
+    else
+      {
+      otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
+      otbMsgDevMacro(<< "Loading internal kwl");
       }
 
     // Don't add an empty ossim keyword list
