@@ -94,14 +94,29 @@ public:
   /** Toogle the parameter mandatory flag */
   itkBooleanMacro(Mandatory);
 
-  /** Set the parameter AutomaticValue flag */
-  itkSetMacro(AutomaticValue, bool);
+  /** Set the parameter AutomaticValue flag (which is the opposite of UserValue)*/
+  virtual void SetAutomaticValue(bool flag)
+    {
+    this->SetUserValue(!flag);
+    }
 
   /** Get the parameter AutomaticValue flag */
-  itkGetConstMacro(AutomaticValue, bool);
+  virtual bool GetAutomaticValue() const
+    {
+    return !m_UserValue;
+    }
 
-  /** Toogle the parameter AutomaticValue flag */
-  itkBooleanMacro(AutomaticValue);
+  /** Toogle ON the parameter AutomaticValue flag */
+  void AutomaticValueOn()
+    {
+    this->SetAutomaticValue(true);
+    }
+
+  /** Toogle OFF the parameter AutomaticValue flag */
+  void AutomaticValueOff()
+    {
+    this->SetAutomaticValue(false);
+    }
 
   /** Set the user access level */
   itkSetEnumMacro(UserLevel, UserLevel);
@@ -196,7 +211,6 @@ protected:
     m_Mandatory( true ),
     m_Active( false ),
     m_UserValue( false ),
-    m_AutomaticValue( false ),
     m_UserLevel( UserLevel_Basic ),
     m_Role( Role_Input ),
     m_Root( this ),
@@ -221,11 +235,8 @@ protected:
   /** True if activated (a mandatory parameter is always active) */
   bool                               m_Active;
 
-  /** True if the value is set in user mode */
+  /** True if the value is set in user mode (otherwise, it is an automatic value)*/
   bool                               m_UserValue;
-
-  /** True if the application change the value of this parameter */
-  bool                               m_AutomaticValue;
 
   UserLevel                          m_UserLevel;
 
