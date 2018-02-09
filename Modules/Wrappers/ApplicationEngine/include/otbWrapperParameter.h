@@ -188,20 +188,6 @@ public:
     return m_ChildrenList;
   }
 
-  /** Store the state of the check box relative to this parameter (TO
-    * BE MOVED to QtWrapper Model )
-    */
-  virtual bool IsChecked() const
-  {
-    return m_IsChecked;
-  }
-
-  /** Modify the state of the checkbox relative to this parameter */
-  virtual void SetChecked(const bool value)
-  {
-    m_IsChecked = value;
-  }
-
 protected:
   /** Constructor */
   Parameter() :
@@ -213,8 +199,7 @@ protected:
     m_UserValue( false ),
     m_UserLevel( UserLevel_Basic ),
     m_Role( Role_Input ),
-    m_Root( this ),
-    m_IsChecked( false )
+    m_Root( this )
   {}
 
   /** Destructor */
@@ -248,9 +233,6 @@ protected:
 
   /** List of children parameters */
   std::vector<Parameter::Pointer >   m_ChildrenList;
-
-  /** Store the status of the checkbox */
-  bool                               m_IsChecked;
 
 private:
   Parameter(const Parameter &); //purposely not implemented
