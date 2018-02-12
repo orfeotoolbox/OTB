@@ -410,7 +410,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     if (m_FilenameHelper->ExtGEOMFileNameIsSet())
       {
       otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
-      otbMsgDevMacro(<< "Loading external kwl");
+      otbMsgDevMacro(<< "Loading external kwl: "<< m_FilenameHelper->GetExtGEOMFileName());
       }
     // Case 2: attached geom (if present)
     else if (itksys::SystemTools::FileExists(attachedGeom))
