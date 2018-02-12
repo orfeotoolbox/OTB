@@ -623,6 +623,11 @@ otb_add_test(NAME bfTvClampImageFilterTest COMMAND otbImageManipulationTestDrive
   ${TEMP}/bfTvClampImageFilterTest_Output.tif
   )
 
+otb_add_test(NAME bfTvClampImageFilterConversionTest COMMAND otbImageManipulationTestDriver
+  otbClampImageFilterConversionTest
+  ${INPUTDATA}/veryverySmallFSATSW.tif
+  )
+
 otb_add_test(NAME coTvConcatenateVectorImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/coConcatenateVectorImageFilterOutput1.hdr

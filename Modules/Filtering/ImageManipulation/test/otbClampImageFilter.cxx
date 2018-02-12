@@ -21,9 +21,13 @@
 
 #include "otbClampImageFilter.h"
 #include "otbImage.h"
+#include "otbVectorImage.h"
+#include <limits>
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+
+#include "itkImageRegionConstIterator.h"
 
 /** Pixel typedefs */
 typedef double                                      InputPixelType;
@@ -64,4 +68,209 @@ int otbClampImageFilterTest(int itkNotUsed(argc), char* argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
+}
+
+template < class InImageType , class OutImageType >
+typename OutImageType::Pointer
+Cross ( std::string const & inputFileName )
+{
+  typedef otb::ImageFileReader< InImageType > ReaderType;
+  typedef otb::ClampImageFilter< InImageType , OutImageType > ClampFilter;
+  typename ReaderType::Pointer reader ( ReaderType::New() );
+  reader->SetFileName( inputFileName );
+  typename ClampFilter::Pointer clamp ( ClampFilter::New() );
+  clamp->SetInput( reader->GetOutput() );
+  clamp->Update();
+  return clamp->GetOutput();
+}
+
+typedef otb::VectorImage<double> ImageRefType;
+
+template <class ImageType >
+bool
+CompareImageReal( const ImageRefType::Pointer imRef , 
+                  const ImageType * im )
+{
+  typedef typename ImageType::PixelType RealPixelType;
+
+  RealPixelType min = std::numeric_limits< RealPixelType >::lowest();
+  RealPixelType max = std::numeric_limits< RealPixelType >::max();
+  auto itRef = itk::ImageRegionConstIterator< ImageRefType >( imRef , 
+    imRef->GetLargestPossibleRegion() );
+  auto it = itk::ImageRegionConstIterator< ImageType >( im , 
+    im->GetLargestPossibleRegion() );
+  itRef.GoToBegin();
+  it.GoToBegin();
+  RealPixelType val;
+  double ref;
+  while ( !it.IsAtEnd() )
+    {
+    val = it.Get();
+    ref = itRef.Get()[0];
+    if ( ref > static_cast<double>( max ) && val != max ) 
+      {
+      return false;
+      }
+    else if ( ref < static_cast<double>( min ) && val != min ) 
+      {
+      return false;
+      }
+    else if ( ref != static_cast<double>( val ) )
+      {
+      return false;
+      }
+    ++it;
+    ++itRef;
+    }
+    return true;
+}
+
+template <class ImageType >
+bool
+CompareVectorReal( const ImageRefType::Pointer imRef , 
+                   const ImageType * im)
+{
+  typedef typename ImageType::InternalPixelType RealPixelType;
+  RealPixelType min = std::numeric_limits< RealPixelType >::lowest();
+  RealPixelType max = std::numeric_limits< RealPixelType >::max();
+  auto itRef = itk::ImageRegionConstIterator< ImageRefType >( imRef , 
+    imRef->GetLargestPossibleRegion() );
+  auto it = itk::ImageRegionConstIterator< ImageType >( im , 
+    im->GetLargestPossibleRegion() );
+  itRef.GoToBegin();
+  it.GoToBegin();
+  unsigned int nbChanel = im->GetNumberOfComponentsPerPixel ();
+  RealPixelType val;
+  double ref;
+  while ( !it.IsAtEnd() )
+    {
+    for ( unsigned int i = 0 ; i < nbChanel ; i++ )
+      {
+      val = it.Get()[i];
+      ref = itRef.Get()[i];
+      if ( ref > static_cast<double>( max ) && val != max ) 
+        {
+        return false;
+        }
+      else if ( ref < static_cast<double>( min ) && val != min ) 
+        {
+        return false;
+        }
+      else if ( ref != static_cast<double>( val ) )
+        {
+        return false;
+        }
+      }
+    ++it;
+    ++itRef;
+    }
+  return true;
+}
+
+template <class ImageType >
+bool
+CompareImageComplex( const ImageRefType::Pointer imageRef , 
+                     const ImageType * im )
+{
+  typedef typename ImageType::PixelType ComplexType;
+  typedef typename ComplexType::value_type RealType;
+
+  RealType min = std::numeric_limits< RealType >::lowest();
+  RealType max = std::numeric_limits< RealType >::max();
+  auto itRef = itk::ImageRegionConstIterator< ImageRefType >( imageRef , 
+    imageRef->GetLargestPossibleRegion() );
+  auto it = itk::ImageRegionConstIterator< ImageType >( im , 
+    im->GetLargestPossibleRegion() );
+  itRef.GoToBegin();
+  it.GoToBegin();
+  ComplexType val;
+  double reRef , imRef;
+  while ( !it.IsAtEnd() )
+    {
+    val = it.Get();
+    reRef = itRef.Get()[0];
+    imRef = itRef.Get()[1];
+    if ( ( reRef > static_cast<double>( max ) && val.real != max )
+      || ( imRef > static_cast<double>( max ) && val.imag != max ) ) 
+      {
+      return false;
+      }
+    else if ( ( reRef < static_cast<double>( min ) && val.real != min )
+           || ( imRef < static_cast<double>( min ) && val.imag != min ) ) 
+      {
+      return false;
+      }
+    else if ( reRef != static_cast<double>( val.real )
+           || imRef != static_cast<double>( val.imag ) )
+      {
+      return false;
+      }
+    ++it;
+    ++itRef;
+    }
+    return true;
+}
+
+template <class ImageType >
+bool
+CompareVectorComplex( const ImageRefType::Pointer imageRef , 
+                     const ImageType * im )
+{
+  typedef typename ImageType::InternalPixelType ComplexType;
+  typedef typename ComplexType::value_type RealType;
+
+  RealType min = std::numeric_limits< RealType >::lowest();
+  RealType max = std::numeric_limits< RealType >::max();
+  auto itRef = itk::ImageRegionConstIterator< ImageRefType >( imageRef , 
+    imageRef->GetLargestPossibleRegion() );
+  auto it = itk::ImageRegionConstIterator< ImageType >( im , 
+    im->GetLargestPossibleRegion() );
+  itRef.GoToBegin();
+  it.GoToBegin();
+  unsigned int nbChanel = im->GetNumberOfComponentsPerPixel ();
+  ComplexType val;
+  double reRef , imRef;
+  while ( !it.IsAtEnd() )
+    {
+    
+    for (unsigned int i = 0 ; i < nbChanel ; i++ )
+      {
+      val = it.Get()[i];
+      reRef = itRef.Get()[ 2 * i ];
+      imRef = itRef.Get()[ 2 * i + 1 ];
+      if ( ( reRef > static_cast<double>( max ) && val.real != max )
+        || ( imRef > static_cast<double>( max ) && val.imag != max ) ) 
+        {
+        return false;
+        }
+      else if ( ( reRef < static_cast<double>( min ) && val.real != min )
+             || ( imRef < static_cast<double>( min ) && val.imag != min ) ) 
+        {
+        return false;
+        }
+      else if ( reRef != static_cast<double>( val.real )
+             || imRef != static_cast<double>( val.imag ) )
+        {
+        return false;
+        }
+      }
+    ++it;
+    ++itRef;
+    }
+    return true;
+}
+
+int otbClampImageFilterConversionTest(int itkNotUsed(argc), char* argv[])
+{
+  typedef otb::ImageFileReader< ImageRefType > ReaderType;
+  ReaderType::Pointer reader ( ReaderType::New() );
+  reader->SetFileName( argv[1] );
+  reader->Update();
+  ImageRefType::Pointer imageRef = reader->GetOutput();
+  otb::VectorImage<int>::Pointer image = 
+    Cross < otb::VectorImage< std::complex<float> >  , otb::VectorImage<int> > ( argv[1] );
+  bool test = CompareVectorReal < otb::VectorImage<int> >( imageRef , image );
+  if (test)
+    return EXIT_SUCCESS;
+  return 42;
 }
