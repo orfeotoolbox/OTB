@@ -124,7 +124,7 @@ private:
       "Only geometries with this field available will be taken into account.\n"
       "The field is added either in the input file (if 'out' off) or in the output file.\n"
       "Caution, the 'cfield' must not exist in the input file if you are updating the file.");
-    SetParameterString("cfield","predicted", false);
+    SetParameterString("cfield","predicted");
 
     AddParameter(ParameterType_ListView, "feat", "Field names to be calculated.");
     SetParameterDescription("feat","List of field names in the input vector data used as features for training. "

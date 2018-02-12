@@ -146,8 +146,8 @@ private:
 
       if (!HasUserValue("rsx")  && !HasUserValue("rsy") )
         {
-        SetParameterInt("rsx",largestRegion.GetSize()[0], false);
-        SetParameterInt("rsy",largestRegion.GetSize()[1], false);
+        SetParameterInt("rsx",largestRegion.GetSize()[0]);
+        SetParameterInt("rsy",largestRegion.GetSize()[1]);
         }
 
       // Put the limit of the index and the size relative the image
@@ -168,8 +168,8 @@ private:
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
-        SetParameterInt("rox",0, false);
-        SetParameterInt("roy",0, false);
+        SetParameterInt("rox",0);
+        SetParameterInt("roy",0);
         this->CropRegionOfInterest();
         }
       }
@@ -188,10 +188,10 @@ bool CropRegionOfInterest()
       {
         if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
           {
-            SetParameterInt( "rsx", region.GetSize(0), HasUserValue("rsx") );
-            SetParameterInt( "rsy", region.GetSize(1), HasUserValue("rsy") );
-            SetParameterInt( "rox", region.GetIndex(0), HasUserValue("rox") );
-            SetParameterInt( "roy", region.GetIndex(1), HasUserValue("roy") );
+            SetParameterInt( "rsx", region.GetSize(0));
+            SetParameterInt( "rsy", region.GetSize(1));
+            SetParameterInt( "rox", region.GetIndex(0));
+            SetParameterInt( "roy", region.GetIndex(1));
             return true;
           }
       }

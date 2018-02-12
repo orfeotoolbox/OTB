@@ -368,7 +368,7 @@ private:
       "first and second image, a second couple with third and fourth image etc."
       " (in this case image list must be even).");
     MandatoryOff("input.co");
-    SetParameterString("input.co","", false);
+    SetParameterString("input.co","");
     DisableParameter("input.co");
 
     AddParameter(ParameterType_Int, "input.channel", "Input Image channel");
@@ -385,7 +385,7 @@ private:
     // // Build the Output Map Projection
     // for custom map projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
-    SetParameterString("map","wgs", false);
+    SetParameterString("map","wgs");
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
     SetParameterDescription("output.res","Spatial sampling distance of the output elevation : the cell size (in m)");

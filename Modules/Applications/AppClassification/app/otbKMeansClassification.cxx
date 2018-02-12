@@ -148,7 +148,7 @@ protected:
 
   void ComputeImageEnvelope(const std::string &vectorFileName)
   {
-    GetInternalApplication("imgenvelop")->SetParameterString("out", vectorFileName, false);
+    GetInternalApplication("imgenvelop")->SetParameterString("out", vectorFileName);
     GetInternalApplication("imgenvelop")->ExecuteAndWriteOutput();
   }
 
@@ -187,8 +187,8 @@ protected:
   {
     std::vector<std::string> fieldList = {fieldName};
 
-    GetInternalApplication("polystats")->SetParameterStringList("field", fieldList, false);
-    GetInternalApplication("polystats")->SetParameterString("out", statisticsFileName, false);
+    GetInternalApplication("polystats")->SetParameterStringList("field", fieldList);
+    GetInternalApplication("polystats")->SetParameterString("out", statisticsFileName);
 
     ExecuteInternal("polystats");
   }
@@ -199,17 +199,17 @@ protected:
                                int NBSamples)
   {
     /* SampleSelection */
-    GetInternalApplication("select")->SetParameterString("out", sampleFileName, false);
+    GetInternalApplication("select")->SetParameterString("out", sampleFileName);
 
     UpdateInternalParameters("select");
-    GetInternalApplication("select")->SetParameterString("instats", statisticsFileName, false);
-    GetInternalApplication("select")->SetParameterString("field", fieldName, false);
+    GetInternalApplication("select")->SetParameterString("instats", statisticsFileName);
+    GetInternalApplication("select")->SetParameterString("field", fieldName);
 
-    GetInternalApplication("select")->SetParameterString("strategy", "constant", false);
-    GetInternalApplication("select")->SetParameterInt("strategy.constant.nb", NBSamples, false);
+    GetInternalApplication("select")->SetParameterString("strategy", "constant");
+    GetInternalApplication("select")->SetParameterInt("strategy.constant.nb", NBSamples);
 
     if( IsParameterEnabled("rand"))
-      GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"), false);
+      GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"));
 
     // select sample positions
     ExecuteInternal("select");
@@ -217,8 +217,8 @@ protected:
     /* SampleExtraction */
     UpdateInternalParameters("extraction");
 
-    GetInternalApplication("extraction")->SetParameterString("outfield", "prefix", false);
-    GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name", "value_", false);
+    GetInternalApplication("extraction")->SetParameterString("outfield", "prefix");
+    GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name", "value_");
 
     // extract sample descriptors
     GetInternalApplication("extraction")->ExecuteAndWriteOutput();
@@ -229,7 +229,7 @@ protected:
                     const std::string &modelFileName)
   {
     std::vector<std::string> extractOutputList = {sampleTrainFileName};
-    GetInternalApplication("training")->SetParameterStringList("io.vd", extractOutputList, false);
+    GetInternalApplication("training")->SetParameterStringList("io.vd", extractOutputList);
     UpdateInternalParameters("training");
 
     // set field names
@@ -242,19 +242,19 @@ protected:
       oss << i;
       selectedNames.push_back( selectPrefix + oss.str() );
       }
-    GetInternalApplication("training")->SetParameterStringList("feat", selectedNames, false);
+    GetInternalApplication("training")->SetParameterStringList("feat", selectedNames);
 
-    GetInternalApplication("training")->SetParameterString("classifier", "sharkkm", false);
+    GetInternalApplication("training")->SetParameterString("classifier", "sharkkm");
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.maxiter",
-                                                        GetParameterInt("maxit"), false);
+                                                        GetParameterInt("maxit"));
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
-                                                        GetParameterInt("nc"), false);
+                                                        GetParameterInt("nc"));
 
     if( IsParameterEnabled("rand"))
-      GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"), false);
+      GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"));
     GetInternalApplication("training")->GetParameterByKey("v")->SetActive(false);
 
-    GetInternalApplication("training")->SetParameterString("io.out", modelFileName, false);
+    GetInternalApplication("training")->SetParameterString("io.out", modelFileName);
 
     ExecuteInternal( "training" );
     otbAppLogINFO("output model : " << GetInternalApplication("training")->GetParameterString("io.out"));
@@ -264,8 +264,8 @@ protected:
                                                const std::string &imagesStatsFileName)
   {
     std::vector<std::string> imageFileNameList = {imageFileName};
-    GetInternalApplication("imgstats")->SetParameterStringList("il", imageFileNameList, false);
-    GetInternalApplication("imgstats")->SetParameterString("out", imagesStatsFileName, false);
+    GetInternalApplication("imgstats")->SetParameterStringList("il", imageFileNameList);
+    GetInternalApplication("imgstats")->SetParameterString("out", imagesStatsFileName);
 
     ExecuteInternal( "imgstats" );
     otbAppLogINFO("image statistics file : " << GetInternalApplication("imgstats")->GetParameterString("out"));
@@ -506,7 +506,7 @@ private:
 
   void UpdateKMPolygonClassStatisticsParameters(const std::string &vectorFileName)
   {
-    GetInternalApplication( "polystats" )->SetParameterString( "vec", vectorFileName, false );
+    GetInternalApplication( "polystats" )->SetParameterString( "vec", vectorFileName);
     UpdateInternalParameters( "polystats" );
   }
 
