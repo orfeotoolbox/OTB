@@ -162,7 +162,7 @@ PipelineMemoryPrintCalculator
 
 PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
-::EvaluateDataObjectPrint(DataObjectType * data) const
+::EvaluateDataObjectPrint(DataObjectType * data)
 {
   otbMsgDevMacro(<< "EvaluateMemoryPrint for " << data->GetNameOfClass() << " (" << data << ")")
 
