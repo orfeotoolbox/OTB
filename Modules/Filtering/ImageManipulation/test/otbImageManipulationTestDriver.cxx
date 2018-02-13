@@ -85,7 +85,7 @@ void RegisterTests()
   REGISTER_TEST(otbMultiplyByScalarImageFilterTest);
   REGISTER_TEST(otbClampImageFilterNew);
   REGISTER_TEST(otbClampImageFilterTest);
-  REGISTER_TEST(otbClampImageFilterConversionFromRealTest);
+  REGISTER_TEST(otbClampImageFilterConversionTest);
   REGISTER_TEST(otbConcatenateVectorImageFilter);
   REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculatorNew);
   REGISTER_TEST(otbVectorRescaleIntensityImageFilterNew);
