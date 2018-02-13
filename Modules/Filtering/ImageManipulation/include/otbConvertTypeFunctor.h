@@ -53,8 +53,15 @@ public:
   unsigned int GetOutputSize( unsigned int sizeIn )
   {
     m_CompIn = sizeIn ;
-    if ( m_cInPix || m_cInInternalPix )
+    if ( m_cInInternalPix )
       m_Scal = 2 * m_CompIn;
+    else if ( m_cInPix )
+      {
+      // needed as ITK thinks that one complex component is actually 
+      // two components...
+      m_CompIn /= 2 ;
+      m_Scal = 2 * m_CompIn;
+      }
     else
       m_Scal = m_CompIn;
     if ( m_cOutInternalPix )
@@ -102,8 +109,11 @@ public:
     std::vector < double > vPixel;
     for ( unsigned int i  = 0 ; i < m_CompIn ; i ++)
       FillIn < InputPixelType > ( i , in , vPixel );
+    assert( m_Scal == vPixel.size() );
     if (  ( m_cOutPix || m_cOutInternalPix ) && vPixel.size()%2 )
+      { 
       vPixel.push_back(0); // last component has no imaginary part
+      }
     Clamp( vPixel );
     OutputPixelType out;
     int hack = 1;
@@ -155,7 +165,6 @@ protected:
 
   void Clamp( std::vector < double > & vPixel ) const
   {
-    assert( m_Scal == vPixel.size() );
     for ( double & comp : vPixel )
       {
         if ( comp >= m_HighestBD )
