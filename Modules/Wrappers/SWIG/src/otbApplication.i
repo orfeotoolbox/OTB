@@ -74,12 +74,6 @@ namespace otb
 {
 namespace Wrapper
 {
-  enum DefaultValueMode
-  {
-    DefaultValueMode_UNKNOWN,
-    DefaultValueMode_RELATIVE,
-    DefaultValueMode_ABSOLUTE
-  };
 
   typedef enum
   {
