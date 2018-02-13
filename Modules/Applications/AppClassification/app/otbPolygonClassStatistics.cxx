@@ -155,6 +155,22 @@ private:
           }
         }
       }
+
+     // Check that the extension of the output parameter is XML (mandatory for
+     // StatisticsXMLFileWriter)
+     // Check it here to trigger the error before polygons analysis
+     
+     if ( HasValue("out") )
+       {
+       // Store filename extension
+       // Check that the right extension is given : expected .xml
+       const std::string extension = itksys::SystemTools::GetFilenameLastExtension(this->GetParameterString("out"));
+
+       if (itksys::SystemTools::LowerCase(extension) != ".xml")
+         {
+         otbAppLogFATAL( << extension << " is a wrong extension for parameter \"out\": Expected .xml" );
+         }
+       }
   }
 
   void DoExecute() ITK_OVERRIDE
