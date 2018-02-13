@@ -57,11 +57,14 @@ public:
       m_Scal = 2 * m_CompIn;
     else
       m_Scal = m_CompIn;
-    if ( m_cOutPix || m_cOutInternalPix )
-      m_CompOut = ( sizeIn + 1 ) / 2 ;
+    if ( m_cOutInternalPix )
+      m_CompOut = ( m_Scal + 1 ) / 2 ;
     else
-      m_CompOut = sizeIn ;
-  
+      m_CompOut = m_Scal ;
+    
+    if ( m_sOutPix || m_cOutPix )
+      m_CompOut = 1;
+
     return m_CompOut ;
   }
 
@@ -87,8 +90,10 @@ public:
 
     m_cInPix = boost::is_complex < InputPixelType > :: value ; 
     m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
+    m_sOutPix = std::is_arithmetic< OutputPixelType > :: value ;
     m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ; 
     m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
+
   }
 
 
@@ -198,7 +203,7 @@ private:
   double m_LowestBD , m_HighestBD ;
   OutputPixelValueType m_LowestB , m_HighestB ;
   unsigned int m_CompIn , m_CompOut , m_Scal ;
-  bool m_cInPix , m_cInInternalPix , m_cOutPix , m_cOutInternalPix ;
+  bool m_cInPix , m_cInInternalPix , m_cOutPix , m_cOutInternalPix , m_sOutPix ;
 
 
 };
