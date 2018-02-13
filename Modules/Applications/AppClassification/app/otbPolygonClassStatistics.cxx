@@ -76,7 +76,7 @@ private:
     SetDocName("Polygon Class Statistics");
     SetDocLongDescription("The application processes a set of geometries "
       "intended for training (they should have a field giving the associated "
-      "class). The geometries are analysed against a support image to compute "
+      "class). The geometries are analyzed against a support image to compute "
       "statistics : \n"
       "  - number of samples per class\n"
       "  - number of samples per geometry\n"
@@ -100,7 +100,7 @@ private:
     MandatoryOff("mask");
     
     AddParameter(ParameterType_InputFilename, "vec", "Input vectors");
-    SetParameterDescription("vec","Input geometries to analyse");
+    SetParameterDescription("vec","Input geometries to analyze");
     
     AddParameter(ParameterType_OutputFilename, "out", "Output Statistics");
     SetParameterDescription("out","Output file to store statistics (XML format)");
@@ -223,7 +223,7 @@ private:
   filter->SetLayerIndex(this->GetParameterInt("layer"));
   filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
-  AddProcess(filter->GetStreamer(),"Analyse polygons...");
+  AddProcess(filter->GetStreamer(),"Analyze polygons...");
   filter->Update();
   
   FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
