@@ -92,10 +92,10 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    AddParameter(ParameterType_InputImage,  "in",   "InputImage");
+    AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Support image that will be classified");
 
-    AddParameter(ParameterType_InputImage,  "mask",   "InputMask");
+    AddParameter(ParameterType_InputImage,  "mask",   "Input validity mask");
     SetParameterDescription("mask", "Validity mask (only pixels corresponding to a mask value greater than 0 will be used for statistics)");
     MandatoryOff("mask");
     
