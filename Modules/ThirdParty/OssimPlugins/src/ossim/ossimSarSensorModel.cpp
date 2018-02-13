@@ -315,7 +315,7 @@ void ossimSarSensorModel::worldToLineSampleYZ(const ossimGpt& worldPt, ossimDpt 
 
       // TODO check for small NormesS to avoid division by zero ?
       // Should never happen ...
-      assert(NormesS>1e-6);
+      assert(NormeS>1e-6);
       z = NormeS - PS2/NormeS;
 
       double distance = sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) + 
