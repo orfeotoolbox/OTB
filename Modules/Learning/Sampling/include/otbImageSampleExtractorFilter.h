@@ -98,7 +98,7 @@ protected:
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   /** process only points */
-  void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid) ITK_OVERRIDE;
+  void ThreadedGenerateVectorData(const std::vector<ogr::Feature> & layerForThread, itk::ThreadIdType threadid) ITK_OVERRIDE;
 
 private:
   PersistentImageSampleExtractorFilter(const Self &); //purposely not implemented

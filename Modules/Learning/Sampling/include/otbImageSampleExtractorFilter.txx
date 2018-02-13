@@ -159,15 +159,15 @@ PersistentImageSampleExtractorFilter<TInputImage>
 template<class TInputImage>
 void
 PersistentImageSampleExtractorFilter<TInputImage>
-::ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid)
+::ThreadedGenerateVectorData(const std::vector<ogr::Feature>& layerForThread, itk::ThreadIdType threadid)
 {
   // Retrieve inputs
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
 
-  ogr::Layer outputLayer = this->GetInMemoryOutput(threadid);
+  auto outputLayer = this->GetInMemoryOutput(threadid);
 
-  itk::ProgressReporter progress( this, threadid, layerForThread.GetFeatureCount(true) );
+  itk::ProgressReporter progress( this, threadid, layerForThread.size() );
 
   // Loop across the features in the layer (filtered by requested region in BeforeTGD already)
   OGRGeometry *geom;
@@ -176,7 +176,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
   PixelType imgPixel;
   double imgComp;
 
-  ogr::Layer::const_iterator featIt = layerForThread.begin();
+  auto featIt = layerForThread.begin();
   for(; featIt!=layerForThread.end(); ++featIt)
     {
     geom = featIt->ogr().GetGeometryRef();
@@ -196,7 +196,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
         inputImage->TransformPhysicalPointToIndex(imgPoint,imgIndex);
         imgPixel = inputImage->GetPixel(imgIndex);
 
-        ogr::Feature dstFeature(outputLayer.GetLayerDefn());
+        ogr::Feature dstFeature(this->GetOutputSamples()->GetLayerChecked(this->GetLayerIndex()).GetLayerDefn());
         dstFeature.SetFrom( *featIt, TRUE );
         dstFeature.SetFID(featIt->GetFID());
         for (unsigned int i=0 ; i<nbBand ; ++i)
@@ -205,7 +205,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
           // Fill the output OGRDataSource
           dstFeature[m_SampleFieldNames[i]].SetValue(imgComp);
           }
-        outputLayer.CreateFeature( dstFeature );
+        outputLayer.push_back( dstFeature );
         break;
         }
       default:

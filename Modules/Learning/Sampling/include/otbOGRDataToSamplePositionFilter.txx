@@ -183,15 +183,14 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
       ogrTmpPoint.setX(imgPoint[0]);
       ogrTmpPoint.setY(imgPoint[1]);
 
-      ogr::Layer outputLayer = this->GetInMemoryOutput(threadid,i);
-      ogr::Feature feat(outputLayer.GetLayerDefn());
+      ogr::Feature feat(feature.GetDefn());
       feat.SetFrom(feature);
       if (m_UseOriginField)
         {
         feat[this->GetOriginFieldName()].SetValue(static_cast<int>(feature.GetFID()));
         }
       feat.SetGeometry(&ogrTmpPoint);
-      outputLayer.CreateFeature(feat);
+      Superclass::GetInMemoryOutput(threadid).push_back(feat);
       break;
       }
     }
@@ -230,13 +229,6 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 
   inLayer.SetSpatialFilter(&tmpPolygon);
 
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
-  std::vector<ogr::Layer> tmpLayers;
-  for (unsigned int i=0 ; i<numberOfThreads ; i++)
-    {
-    tmpLayers.push_back(this->GetInMemoryInput(i));
-    }
-
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   ogr::Layer::const_iterator featIt = inLayer.begin();
   std::string className;
@@ -246,7 +238,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     dstFeature.SetFrom( *featIt, TRUE );
     dstFeature.SetFID(featIt->GetFID());
     className = featIt->ogr().GetFieldAsString(this->GetFieldIndex());
-    tmpLayers[m_ClassPartition[className]].CreateFeature( dstFeature );
+    Superclass::GetInMemoryInput(m_ClassPartition[className]).push_back(dstFeature );
     }
 
   inLayer.SetSpatialFilter(ITK_NULLPTR);
@@ -326,12 +318,8 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   // output vectors sorted by class
   for (auto& label : m_ClassPartition)
     {
-    ogr::Layer inLayer = this->GetInMemoryOutput(label.second,outIdx);
-    if (!inLayer)
-      {
-      continue;
-      }
-
+    std::vector<ogr::Feature> & inLayer = this->GetInMemoryOutput(label.second,outIdx);
+  
     // This test only uses 1 input, not compatible with multiple OGRData inputs
     for(auto tmpIt = inLayer.begin(); tmpIt!=inLayer.end(); ++tmpIt)
       {

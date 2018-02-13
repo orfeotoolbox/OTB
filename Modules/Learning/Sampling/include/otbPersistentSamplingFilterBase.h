@@ -114,7 +114,7 @@ protected:
   void AllocateOutputs(void) ITK_OVERRIDE;
 
   /** Start of main processing loop */
-  virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid);
+  virtual void ThreadedGenerateVectorData(const std::vector<ogr::Feature>& layerForThread, itk::ThreadIdType threadid);
 
   /** Process a geometry, recursive method when the geometry is a collection */
   void ExploreGeometry(const ogr::Feature& feature,
@@ -155,7 +155,7 @@ protected:
                       OGRPolygon& tmpPolygon);
 
   /** Get the region bounding a set of features */
-  RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
+  RegionType FeatureBoundingRegion(const TInputImage* image, const ogr::Feature & featIt) const;
 
   /** Method to split the input OGRDataSource between several containers
    *  for each thread. Default is to put the same number of features for
@@ -200,10 +200,10 @@ protected:
     };
 
   /** Give access to in-memory input layers */
-  ogr::Layer GetInMemoryInput(unsigned int threadId);
+  std::vector<ogr::Feature> & GetInMemoryInput(unsigned int threadId);
 
   /** Give access to in-memory output layers */
-  ogr::Layer GetInMemoryOutput(unsigned int threadId, unsigned int index=0);
+  std::vector<ogr::Feature> &  GetInMemoryOutput(unsigned int threadId, unsigned int index=0);
 
 private:
   PersistentSamplingFilterBase(const Self &); //purposely not implemented
@@ -228,10 +228,10 @@ private:
   std::vector<SimpleFieldDefn> m_AdditionalFields;
 
   /** In-memory containers storing input geometries for each thread*/
-  std::vector<OGRDataPointer> m_InMemoryInputs;
+  std::vector<std::vector<ogr::Feature> > m_InMemoryInputs;
 
   /** In-memory containers storing position during iteration loop*/
-  std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
+  std::vector<std::vector<ogr::Feature> > m_InMemoryOutputs;
 
 };
 } // End namespace otb
