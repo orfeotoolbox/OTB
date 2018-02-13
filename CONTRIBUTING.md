@@ -89,10 +89,35 @@ Request against the `develop` branch on GitLab using the merge request
 template. The merge request will then be discussed by the community and the core
 OTB team.
 
-* Merge requests can not be merged until all discussions have been resolved (this is enforced by GitLab).
-* Merge requests **must receive at least 2 positives votes from PSC members** before being merged.
-* The merger is responsible for checking that the branch is up-to-date with develop and that the dashboard is ok.
+* Merge requests can not be merged until all discussions have been resolved (this is enforced by GitLab)
+* Merge requests **must receive at least 2 positives votes from PSC members** before being merged
+* The merger is responsible for checking that the branch is up-to-date with develop
 * Merge requests can be merged by anyone (not just PSC or RM) with push access to develop
+* Merge requests can be merged once the dashboard is proven green for this branch
+
+Branches can be registered for dashboard testing by adding one line in 'Config/feature_branches.txt' in [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git).
+
+Syntax is the following.
+
+For branches in the main repository, syntax is the following.
+
+```
+branch_name [otb-data_branch_name]
+
+```
+Second branch name is optional. It can be set if you need to modify [otb-data](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git) according to your changes.
+
+For branches in forks, syntax is the following:
+```
+user/branch_name [user/otb-data_branch_name]
+```
+Again, second branch name is optional.
+
+For user without push access to [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git), the modification can be asked through a merge requests to this repository.
+
+Once the feature branch is registered for testing, it should appear in the *FeatureBranches* section of the [OTB dashboard](https://dash.orfeo-toolbox.org/index.php?project=OTB) next day (remember tests are run on a nighlty basis).
+
+Do not forget to remove the feature branch for testing once it has been merged.
 
 ## Remote modules
 
