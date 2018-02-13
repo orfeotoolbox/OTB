@@ -102,7 +102,7 @@ private:
     AddParameter(ParameterType_InputFilename, "vec", "Input vectors");
     SetParameterDescription("vec","Input geometries to analyze");
     
-    AddParameter(ParameterType_OutputFilename, "out", "Output Statistics");
+    AddParameter(ParameterType_OutputFilename, "out", "Output XML statistics file");
     SetParameterDescription("out","Output file to store statistics (XML format)");
 
     AddParameter(ParameterType_ListView, "field", "Field Name");
