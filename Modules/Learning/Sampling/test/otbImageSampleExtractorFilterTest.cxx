@@ -129,6 +129,7 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   output->CreateLayer( inLayer.GetName(),
                        oSRS,
                        inLayer.GetLayerDefn().GetGeomType());
+  oSRS->Release();
   otb::ogr::Layer dstLayer = output->GetLayer(0);
   OGRFieldDefn labelField(classFieldName.c_str(),OFTString);
   dstLayer.CreateField(labelField, true);
