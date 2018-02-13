@@ -624,7 +624,7 @@ otb_add_test(NAME bfTvClampImageFilterTest COMMAND otbImageManipulationTestDrive
   )
 
 otb_add_test(NAME bfTvClampImageFilterConversionTest COMMAND otbImageManipulationTestDriver
-  otbClampImageFilterConversionTest
+  otbClampImageFilterConversionFromRealTest
   ${INPUTDATA}/veryverySmallFSATSW.tif
   )
 

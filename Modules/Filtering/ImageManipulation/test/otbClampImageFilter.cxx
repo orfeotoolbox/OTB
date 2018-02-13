@@ -115,7 +115,7 @@ CompareImageReal( const ImageRefType::Pointer imRef ,
       {
       return false;
       }
-    else if ( ref != static_cast<double>( val ) )
+    else if ( static_cast<RealPixelType>( ref ) !=  val )
       {
       return false;
       }
@@ -156,11 +156,12 @@ CompareVectorReal( const ImageRefType::Pointer imRef ,
         {
         return false;
         }
-      else if ( ref != static_cast<double>( val ) )
+      else if ( static_cast<RealPixelType>(ref) !=  val )
         {
         return false;
         }
       }
+    std::cout<<itRef.Get()<<std::endl;
     ++it;
     ++itRef;
     }
@@ -190,18 +191,18 @@ CompareImageComplex( const ImageRefType::Pointer imageRef ,
     val = it.Get();
     reRef = itRef.Get()[0];
     imRef = itRef.Get()[1];
-    if ( ( reRef > static_cast<double>( max ) && val.real != max )
-      || ( imRef > static_cast<double>( max ) && val.imag != max ) ) 
+    if ( ( reRef > static_cast<double>( max ) && val.real() != max )
+      || ( imRef > static_cast<double>( max ) && val.imag() != max ) ) 
       {
       return false;
       }
-    else if ( ( reRef < static_cast<double>( min ) && val.real != min )
-           || ( imRef < static_cast<double>( min ) && val.imag != min ) ) 
+    else if ( ( reRef < static_cast<double>( min ) && val.real() != min )
+           || ( imRef < static_cast<double>( min ) && val.imag() != min ) ) 
       {
       return false;
       }
-    else if ( reRef != static_cast<double>( val.real )
-           || imRef != static_cast<double>( val.imag ) )
+    else if ( static_cast<RealType>( reRef ) !=  val.real() 
+           || static_cast<RealType>( imRef ) !=  val.imag() )
       {
       return false;
       }
@@ -229,27 +230,29 @@ CompareVectorComplex( const ImageRefType::Pointer imageRef ,
   it.GoToBegin();
   unsigned int nbChanel = im->GetNumberOfComponentsPerPixel ();
   ComplexType val;
-  double reRef , imRef;
+  float reRef , imRef;
   while ( !it.IsAtEnd() )
     {
-    
     for (unsigned int i = 0 ; i < nbChanel ; i++ )
       {
       val = it.Get()[i];
       reRef = itRef.Get()[ 2 * i ];
       imRef = itRef.Get()[ 2 * i + 1 ];
-      if ( ( reRef > static_cast<double>( max ) && val.real != max )
-        || ( imRef > static_cast<double>( max ) && val.imag != max ) ) 
+      std::cout<<it.Get()[0].real()<<" , "<<it.Get()[0].imag()<<" ; "<<
+      it.Get()[1].real()<<" , "<<it.Get()[1].imag()<<std::endl;
+      std::cout<<itRef.Get()<<std::endl;
+      if ( ( reRef > static_cast<double>( max ) && val.real() != max )
+        || ( imRef > static_cast<double>( max ) && val.imag() != max ) ) 
         {
         return false;
         }
-      else if ( ( reRef < static_cast<double>( min ) && val.real != min )
-             || ( imRef < static_cast<double>( min ) && val.imag != min ) ) 
+      else if ( ( reRef < static_cast<double>( min ) && val.real() != min )
+             || ( imRef < static_cast<double>( min ) && val.imag() != min ) ) 
         {
         return false;
         }
-      else if ( reRef != static_cast<double>( val.real )
-             || imRef != static_cast<double>( val.imag ) )
+      else if ( static_cast<RealType>( reRef ) != val.real()
+             || static_cast<RealType>( imRef ) != val.imag() )
         {
         return false;
         }
@@ -260,17 +263,27 @@ CompareVectorComplex( const ImageRefType::Pointer imageRef ,
     return true;
 }
 
-int otbClampImageFilterConversionTest(int itkNotUsed(argc), char* argv[])
+int otbClampImageFilterConversionFromRealTest(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::ImageFileReader< ImageRefType > ReaderType;
   ReaderType::Pointer reader ( ReaderType::New() );
   reader->SetFileName( argv[1] );
   reader->Update();
   ImageRefType::Pointer imageRef = reader->GetOutput();
-  otb::VectorImage<int>::Pointer image = 
-    Cross < otb::VectorImage< std::complex<float> >  , otb::VectorImage<int> > ( argv[1] );
-  bool test = CompareVectorReal < otb::VectorImage<int> >( imageRef , image );
-  if (test)
+  otb::VectorImage< std::complex<float>>::Pointer image1 = 
+    Cross < otb::VectorImage< float >  , otb::VectorImage<std::complex<float>> > ( argv[1] );
+  bool test1 = CompareVectorComplex < otb::VectorImage<std::complex<float>> >( imageRef , image1 );
+
+
+  otb::Image<double>::Pointer image2 = 
+    Cross < otb::VectorImage< float >  , otb::Image<double> > ( argv[1] );
+  bool test2 = CompareImageReal < otb::Image<double> >( imageRef , image2 );
+
+  otb::Image< std::complex<float>>::Pointer image3 = 
+    Cross < otb::VectorImage< float >  , otb::Image<std::complex<float>> > ( argv[1] );
+  bool test3 = CompareImageComplex < otb::Image<std::complex<float>> >( imageRef , image3 );
+
+  if (test1 && test2 && test3)
     return EXIT_SUCCESS;
   return 42;
 }
