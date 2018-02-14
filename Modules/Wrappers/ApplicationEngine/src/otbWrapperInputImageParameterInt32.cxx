@@ -31,10 +31,5 @@ namespace Wrapper
 {
 otbGetImageMacro(Int32Image);
 otbGetImageMacro(Int32VectorImage)
-/*
-otbGenericCastImageMacro(Int32ImageType, SimpleCastImage, )
-otbGenericCastImageMacro(Int32VectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(Int32ImageType, CastVectorImageFromImage, Vector)
-*/
 }
 }
