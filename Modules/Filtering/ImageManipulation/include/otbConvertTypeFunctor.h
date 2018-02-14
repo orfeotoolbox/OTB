@@ -117,13 +117,23 @@ public:
       }
     Clamp( vPixel );
     OutputPixelType out;
-    int hack = 1;
-    if ( m_cOutPix && m_CompOut == 1 )
-      hack += 1; // needed in case we have OutputPixelType == complex<t> as 
+    unsigned int compOut = m_CompOut;
+    unsigned int size = 
+      itk::NumericTraits < OutputPixelType > :: GetLength( out );
+    if ( size == 0 ) // That means it is a variable size container
+      {
+      int hack = 1;
+      if ( m_cOutPix && m_CompOut == 1 )
+        hack += 1; // needed in case we have OutputPixelType == complex<t> as 
     // itk::NumericTraits::SetLength() will ask a length of 2!
-    itk::NumericTraits < OutputPixelType > :: SetLength( out , 
-      hack * m_CompOut );
-    for ( unsigned int i  = 0 ; i < m_CompOut ; i ++)
+      itk::NumericTraits < OutputPixelType > :: SetLength( out , 
+        hack * m_CompOut );
+      }
+    else if ( m_cOutPix )// It is a fixed size container, m_CompOut should be equal to its size
+      compOut = size / 2;
+    else 
+      compOut = size;
+    for ( unsigned int i  = 0 ; i < compOut ; i ++)
       FillOut < OutputPixelType > ( i , out , vPixel );
     return out;
   }
