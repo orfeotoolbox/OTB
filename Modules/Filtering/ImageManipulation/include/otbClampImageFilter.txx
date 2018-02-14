@@ -41,11 +41,30 @@ ClampImageFilter<TInputImage, TOutputImage>
 {
   m_Lower = std::numeric_limits < OutputPixelValueType >::lowest();
   m_Upper = std::numeric_limits < OutputPixelValueType >::max();
-
-  m_DLower = static_cast<double>(m_Lower);
-  m_DUpper = static_cast<double>(m_Upper);
 }
 
+template <class TInputImage, class TOutputImage>
+void
+ClampImageFilter<TInputImage, TOutputImage>
+::SetLower(OutputPixelValueType val)
+{
+  if ( m_Lower != val )
+    {
+    m_Lower = val;
+    this->GetFunctor().SetLowest( m_Lower );
+    this->Modified();  
+    }
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ClampImageFilter<TInputImage, TOutputImage>
+::SetUpper(OutputPixelValueType val)
+{
+  m_Upper = val;
+  this->GetFunctor().SetHighest( m_Upper );
+  this->Modified();
+}
 
 /**
  *
@@ -78,7 +97,6 @@ ClampImageFilter<TInputImage, TOutputImage>
     {
     m_Lower = std::numeric_limits < OutputPixelValueType >::lowest();
     m_Upper = thresh;
-    m_DUpper = static_cast<double>(m_Upper);
     this->GetFunctor().SetLowest( m_Lower );
     this->GetFunctor().SetHighest( m_Upper );
     this->Modified();
@@ -97,7 +115,6 @@ ClampImageFilter<TInputImage, TOutputImage>
     {
     m_Upper = std::numeric_limits < OutputPixelValueType >::max();
     m_Lower = thresh;
-    m_DLower = m_Lower;
     this->GetFunctor().SetLowest( m_Lower );
     this->GetFunctor().SetHighest( m_Upper );
     this->Modified();
@@ -123,8 +140,6 @@ ClampImageFilter<TInputImage, TOutputImage>
     {
     m_Lower = lower;
     m_Upper = upper;
-    m_DLower = m_Lower;
-    m_DUpper = m_Upper;
     this->GetFunctor().SetLowest( m_Lower );
     this->GetFunctor().SetHighest( m_Upper );
     this->Modified();

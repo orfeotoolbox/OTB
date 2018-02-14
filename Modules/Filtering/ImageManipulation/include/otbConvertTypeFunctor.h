@@ -64,13 +64,14 @@ public:
       }
     else
       m_Scal = m_CompIn;
+
     if ( m_cOutInternalPix )
       m_CompOut = ( m_Scal + 1 ) / 2 ;
+    else if ( m_sOutPix || m_cOutPix )
+      m_CompOut = 1;
     else
       m_CompOut = m_Scal ;
     
-    if ( m_sOutPix || m_cOutPix )
-      m_CompOut = 1;
 
     return m_CompOut ;
   }
@@ -164,7 +165,7 @@ protected:
     }
 
   void Clamp( std::vector < double > & vPixel ) const
-  {
+    {
     for ( double & comp : vPixel )
       {
         if ( comp >= m_HighestBD )
@@ -172,7 +173,7 @@ protected:
         else if ( comp <= m_LowestBD )
           comp = m_LowestBD;
       }
-  }
+    }
 
   template <class PixelType ,
     std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 0 >

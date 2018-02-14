@@ -79,33 +79,23 @@ public:
   typedef typename itk::NumericTraits< OutputInternalPixelType >::ValueType OutputPixelValueType;
 
 
-  /** The values greater than or equal to the value are set to OutsideValue. */
+  /** The values greater than or equal to the value are set to \p thresh. */
   void ClampAbove(const OutputPixelValueType &thresh);
 
-  /** The values less than or equal to the value are set to OutsideValue. */
+  /** The values less than or equal to the value are set to \p thresh. */
   void ClampBelow(const OutputPixelValueType &thresh);
 
-  /** The values outside the range are set to OutsideValue. */
+  /** The values outside the range are set to \p lower or \p upper. */
   void ClampOutside(const OutputPixelValueType &lower, const OutputPixelValueType &upper);
 
   /** Set/Get methods to set the lower threshold */
-  void SetLower(OutputPixelValueType val)
-  {
-    m_Lower = val;
-    m_DLower = static_cast<double>(val);
-    this->GetFunctor().SetLowest( m_Lower );
-    this->Modified();
-  }
+  void SetLower(OutputPixelValueType val);
+
   itkGetConstMacro(Lower, OutputPixelValueType);
 
   /** Set/Get methods to set the upper threshold */
-  void SetUpper(OutputPixelValueType val)
-  {
-    m_Upper = val;
-    m_DUpper = static_cast<double>(val);
-    this->GetFunctor().SetHighest( m_Upper );
-    this->Modified();
-  }
+  void SetUpper(OutputPixelValueType val);
+
   itkGetConstMacro(Upper, OutputPixelValueType);
 
 
@@ -125,9 +115,6 @@ protected:
 private:
   ClampImageFilter(const Self&) = delete ;
   void operator=(const Self&) = delete ;
-
-  double m_DLower;
-  double m_DUpper;
 
   OutputPixelValueType m_Lower;
   OutputPixelValueType m_Upper;

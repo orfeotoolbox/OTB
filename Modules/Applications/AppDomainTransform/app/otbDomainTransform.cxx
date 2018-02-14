@@ -264,7 +264,7 @@ private:
       {
       // fft ttransform
       bool shift = IsParameterEnabled( "mode.fft.shift");
-      typedef otb::Image< std::complex<OutputPixelType> >          OutputImageType;
+      typedef otb::Image< std::complex<OutputPixelType> > ComplexOutputImageType;
 
       if (dir == 0 )
         {
