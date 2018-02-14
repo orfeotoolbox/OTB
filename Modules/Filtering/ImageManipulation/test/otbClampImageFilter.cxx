@@ -88,8 +88,19 @@ template < class OutImageType >
 typename OutImageType::Pointer
 Cross ( otb::VectorImage< std::complex<float> >::Pointer input )
 {
- 
   typedef otb::ClampImageFilter< otb::VectorImage< std::complex<float> > ,
+                                 OutImageType > ClampFilter;
+  typename ClampFilter::Pointer clamp ( ClampFilter::New() );
+  clamp->SetInput( input );
+  clamp->Update();
+  return clamp->GetOutput();
+}
+
+template < class OutImageType >
+typename OutImageType::Pointer
+Cross ( otb::Image< itk::FixedArray< std::complex<float> , 2 > >::Pointer input )
+{
+  typedef otb::ClampImageFilter< otb::Image< itk::FixedArray< std::complex<float> , 2 > > ,
                                  OutImageType > ClampFilter;
   typename ClampFilter::Pointer clamp ( ClampFilter::New() );
   clamp->SetInput( input );
@@ -237,8 +248,7 @@ CompareImageComplex( const ImageRefType::Pointer imageRef ,
 template <class ImageType >
 bool
 CompareVectorComplex( const ImageRefType::Pointer imageRef , 
-                     const ImageType * im ,
-                     bool fromImage = false)
+                     const ImageType * im )
 {
   typedef typename ImageType::InternalPixelType ComplexType;
   typedef typename ComplexType::value_type RealType;
@@ -251,9 +261,56 @@ CompareVectorComplex( const ImageRefType::Pointer imageRef ,
     im->GetLargestPossibleRegion() );
   itRef.GoToBegin();
   it.GoToBegin();
-  unsigned int nbChanel = 1;
-  if ( !fromImage )
-    nbChanel = im->GetNumberOfComponentsPerPixel ();
+  unsigned int nbChanel = im->GetNumberOfComponentsPerPixel ();
+  ComplexType val;
+  float reRef , imRef;
+  while ( !it.IsAtEnd() )
+    {
+    for (unsigned int i = 0 ; i < nbChanel ; i++ )
+      {
+      val = it.Get()[i];
+      reRef = itRef.Get()[ 2 * i ];
+      imRef = itRef.Get()[ 2 * i + 1 ];
+      if ( ( reRef > static_cast<double>( max ) && val.real() != max )
+        || ( imRef > static_cast<double>( max ) && val.imag() != max ) ) 
+        {
+        return false;
+        }
+      else if ( ( reRef < static_cast<double>( min ) && val.real() != min )
+             || ( imRef < static_cast<double>( min ) && val.imag() != min ) ) 
+        {
+        return false;
+        }
+      else if ( static_cast<RealType>( reRef ) != val.real()
+             || static_cast<RealType>( imRef ) != val.imag() )
+        {
+        return false;
+        }
+      }
+    ++it;
+    ++itRef;
+    }
+    return true;
+}
+
+template <class ImageType >
+bool
+CompareArrayComplex( const ImageRefType::Pointer imageRef , 
+                     const ImageType * im )
+{
+  typedef typename ImageType::PixelType ArrayType;
+  typedef typename ArrayType::ValueType ComplexType;
+  typedef typename ComplexType::value_type RealType;
+
+  RealType min = std::numeric_limits< RealType >::lowest();
+  RealType max = std::numeric_limits< RealType >::max();
+  auto itRef = itk::ImageRegionConstIterator< ImageRefType >( imageRef , 
+    imageRef->GetLargestPossibleRegion() );
+  auto it = itk::ImageRegionConstIterator< ImageType >( im , 
+    im->GetLargestPossibleRegion() );
+  itRef.GoToBegin();
+  it.GoToBegin();
+  unsigned int nbChanel = im->GetNumberOfComponentsPerPixel ();
   ComplexType val;
   float reRef , imRef;
   while ( !it.IsAtEnd() )
@@ -404,8 +461,31 @@ int otbClampImageFilterConversionTest(int itkNotUsed(argc), char* argv[])
   std::cout<< "Test 15 : "<<test15<<std::endl;
   image15 = nullptr;
 
+  // image<fixedarray<real>> --> image<fixedarray<complex>>
+  otb::Image< itk::FixedArray < std::complex<float> , 2 > >::Pointer image16 = 
+    Cross < otb::Image< itk::FixedArray < double , 4 > > ,
+            otb::Image< itk::FixedArray < std::complex<float> , 2 > > > ( argv[1] );
+  bool test16 = CompareArrayComplex < otb::Image< itk::FixedArray < std::complex<float> , 2 > > >( imageRef , image16 );
+  std::cout<< "Test 16 : "<<test16<<std::endl; 
+
+  // image<fixedarray<complex>> --> vectorimage<real>
+  otb::VectorImage< int >::Pointer image17 = 
+    Cross < otb::VectorImage< int > >( image16 );
+  bool test17 = CompareVectorReal < otb::VectorImage< int > >( imageRef , image17 );
+  std::cout<< "Test 17 : "<<test17<<std::endl; 
+  image17 = nullptr;
+
+  // vector<real> --> image<fixedarray<complex>>
+  otb::Image< itk::FixedArray < std::complex<float> , 2 > >::Pointer image18 = 
+    Cross < otb::VectorImage< int > ,
+            otb::Image< itk::FixedArray < std::complex<float> , 2 > > > ( argv[1] );
+  bool test18 = CompareArrayComplex < otb::Image< itk::FixedArray < std::complex<float> , 2 > > >( imageRef , image18 );
+  image18 = nullptr;
+  std::cout<< "Test 18 : "<<test18<<std::endl; 
+
   if (test1 && test2 && test3 && test4 && test5 &&test6 && test7 && test8 
-   && test9 && test10 && test11 && test12 && test13 && test14 && test15 )
+   && test9 && test10 && test11 && test12 && test13 && test14 && test15 
+   && test16 && test17 && test18 )
     return EXIT_SUCCESS;
   return EXIT_FAILURE;
 }
