@@ -49,28 +49,54 @@ public:
   typedef typename itk::NumericTraits < InputInternalPixelType > :: ValueType InputPixelValueType;
   typedef typename itk::NumericTraits < OutputInternalPixelType > :: ValueType OutputPixelValueType;
 
-  // template < class InternalPixelType  >
-  unsigned int GetOutputSize( unsigned int sizeIn )
+  ConvertTypeFunctor() 
   {
+    m_LowestB = std::numeric_limits < OutputPixelValueType >::lowest();
+    m_HighestB = std::numeric_limits < OutputPixelValueType >::max();
+
+    m_LowestBD = static_cast < double > ( m_LowestB );
+    m_HighestBD = static_cast < double > ( m_HighestB );
+
+    m_cInPix = boost::is_complex < InputPixelType > :: value ; 
+    m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
+    m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ; 
+    m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
+  }
+
+  // template < class InternalPixelType  >
+  void SetInputComponents( unsigned int sizeIn )
+    {
     m_CompIn = sizeIn ;
-    if ( m_cInInternalPix )
-      m_Scal = 2 * m_CompIn;
-    else if ( m_cInPix )
+    if ( m_cInPix )
       {
       // needed as ITK thinks that one complex component is actually 
       // two components...
       m_CompIn /= 2 ;
-      m_Scal = 2 * m_CompIn;
       }
+    }
+
+  unsigned int GetOutputSize()
+  {
+    if ( m_cInInternalPix || m_cInPix )
+      m_Scal = 2 * m_CompIn;
     else
       m_Scal = m_CompIn;
 
-    if ( m_cOutInternalPix )
-      m_CompOut = ( m_Scal + 1 ) / 2 ;
-    else if ( m_sOutPix || m_cOutPix )
-      m_CompOut = 1;
-    else
-      m_CompOut = m_Scal ;
+    OutputPixelType out;
+    unsigned int size = 
+      itk::NumericTraits < OutputPixelType > :: GetLength( out );
+    if ( size == 0 ) // That means it is a variable size container
+      {
+      if ( m_cOutInternalPix )
+        m_CompOut = ( m_Scal + 1 ) / 2 ;
+      else
+        m_CompOut = m_Scal ;
+      }
+    // It is a fixed size container, m_CompOut should be equal to its size
+    else if ( m_cOutPix ) // one complex is one component
+      m_CompOut = 1 ;
+    else // fized size container or scalar
+      m_CompOut = size;
     
 
     return m_CompOut ;
@@ -88,23 +114,6 @@ public:
     m_HighestBD = static_cast < double > ( m_HighestB );
   }
 
-  ConvertTypeFunctor() 
-  {
-    m_LowestB = std::numeric_limits < OutputPixelValueType >::lowest();
-    m_HighestB = std::numeric_limits < OutputPixelValueType >::max();
-
-    m_LowestBD = static_cast < double > ( m_LowestB );
-    m_HighestBD = static_cast < double > ( m_HighestB );
-
-    m_cInPix = boost::is_complex < InputPixelType > :: value ; 
-    m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
-    m_sOutPix = std::is_arithmetic< OutputPixelType > :: value ;
-    m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ; 
-    m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
-
-  }
-
-
   OutputPixelType operator() ( InputPixelType const & in ) const
   {
     std::vector < double > vPixel;
@@ -117,23 +126,15 @@ public:
       }
     Clamp( vPixel );
     OutputPixelType out;
-    unsigned int compOut = m_CompOut;
-    unsigned int size = 
-      itk::NumericTraits < OutputPixelType > :: GetLength( out );
-    if ( size == 0 ) // That means it is a variable size container
-      {
-      int hack = 1;
-      if ( m_cOutPix && m_CompOut == 1 )
-        hack += 1; // needed in case we have OutputPixelType == complex<t> as 
+
+    int hack = 1;
+    if ( m_cOutPix )
+      hack += 1; // needed in case we have OutputPixelType == complex<t> as 
     // itk::NumericTraits::SetLength() will ask a length of 2!
-      itk::NumericTraits < OutputPixelType > :: SetLength( out , 
+    itk::NumericTraits < OutputPixelType > :: SetLength( out , 
         hack * m_CompOut );
-      }
-    else if ( m_cOutPix )// It is a fixed size container, m_CompOut should be equal to its size
-      compOut = size / 2;
-    else 
-      compOut = size;
-    for ( unsigned int i  = 0 ; i < compOut ; i ++)
+
+    for ( unsigned int i  = 0 ; i < m_CompOut ; i ++)
       FillOut < OutputPixelType > ( i , out , vPixel );
     return out;
   }

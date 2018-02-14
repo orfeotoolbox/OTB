@@ -108,8 +108,9 @@ protected:
   {
     Superclass::GenerateOutputInformation();
     unsigned int sizeIn = this->GetInput()->GetNumberOfComponentsPerPixel();
+    this->GetFunctor().SetInputComponents( sizeIn );
     this->GetOutput()->SetNumberOfComponentsPerPixel( 
-      this->GetFunctor().GetOutputSize ( sizeIn ) );
+      this->GetFunctor().GetOutputSize () );
   }
 
 private:
