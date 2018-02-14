@@ -49,7 +49,11 @@ public:
   typedef typename itk::NumericTraits < InputInternalPixelType > :: ValueType InputPixelValueType;
   typedef typename itk::NumericTraits < OutputInternalPixelType > :: ValueType OutputPixelValueType;
 
-  ConvertTypeFunctor() 
+  ConvertTypeFunctor() :
+  m_cInPix ( boost::is_complex < InputPixelType > :: value ) ,
+  m_cOutPix ( boost::is_complex < OutputPixelType > :: value ) ,
+  m_cInInternalPix ( boost::is_complex < InputInternalPixelType > :: value ) ,
+  m_cOutInternalPix ( boost::is_complex < OutputInternalPixelType > :: value )
   {
     m_LowestB = std::numeric_limits < OutputPixelValueType >::lowest();
     m_HighestB = std::numeric_limits < OutputPixelValueType >::max();
@@ -57,10 +61,10 @@ public:
     m_LowestBD = static_cast < double > ( m_LowestB );
     m_HighestBD = static_cast < double > ( m_HighestB );
 
-    m_cInPix = boost::is_complex < InputPixelType > :: value ; 
-    m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
-    m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ; 
-    m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
+    // m_cInPix = boost::is_complex < InputPixelType > :: value ; 
+    // m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
+    // m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ; 
+    // m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
   }
 
   // template < class InternalPixelType  >
@@ -224,7 +228,7 @@ private:
   double m_LowestBD , m_HighestBD ;
   OutputPixelValueType m_LowestB , m_HighestB ;
   unsigned int m_CompIn , m_CompOut , m_Scal ;
-  bool m_cInPix , m_cInInternalPix , m_cOutPix , m_cOutInternalPix , m_sOutPix ;
+  const bool m_cInPix , m_cOutPix , m_cInInternalPix , m_cOutInternalPix ;
 
 
 };
