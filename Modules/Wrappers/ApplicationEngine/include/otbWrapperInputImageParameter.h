@@ -107,17 +107,6 @@ public:
   template <class TInputImage, class TOutputImage>
   TOutputImage*  CastImage();
 
-  /** Cast an image to an image of the same type
-  * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
-  // template <class TInputImage, class TOutputImage>
-  //   TOutputImage* SimpleCastImage();
-
-
-  /** Cast an image to a vector image. */
-  // template <class TInputImage, class TOutputImage>
-  //   TOutputImage* CastVectorImageFromImage();
-
-
   bool HasValue() const ITK_OVERRIDE;
 
   void ClearValue() ITK_OVERRIDE;
@@ -180,90 +169,6 @@ private:
   bool m_UseFilename;
 
 }; // End class InputImage Parameter
-
-
-// template specializations of CastImage<> should be declared in header
-// so that the linker knows they exist when building OTB Applications
-/*
-#define otbDeclareCastImageMacro(InputImageType, OutputImageType)   \
-  template<> OTBApplicationEngine_EXPORT OutputImageType *                                          \
-  InputImageParameter::CastImage<InputImageType , OutputImageType>();    \
-
-#define otbGenericDeclareCastImageMacro(InputImageType, prefix)     \
-  otbDeclareCastImageMacro(InputImageType, UInt8##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, UInt16##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, Int16##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, UInt32##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, Int32##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, Float##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, Double##prefix##ImageType)
-*/
-
-/*********************************************************************
-********************** Image -> Image
-**********************************************************************/
-/*
-otbGenericDeclareCastImageMacro(UInt8ImageType, )
-otbGenericDeclareCastImageMacro(Int16ImageType, )
-otbGenericDeclareCastImageMacro(UInt16ImageType, )
-otbGenericDeclareCastImageMacro(Int32ImageType, )
-otbGenericDeclareCastImageMacro(UInt32ImageType, )
-otbGenericDeclareCastImageMacro(FloatImageType, )
-otbGenericDeclareCastImageMacro(DoubleImageType, )
-
-otbDeclareCastImageMacro( ComplexDoubleImageType , ComplexDoubleImageType )
-otbDeclareCastImageMacro( ComplexDoubleImageType , ComplexFloatImageType )
-
-otbDeclareCastImageMacro( ComplexFloatImageType , ComplexDoubleImageType )
-otbDeclareCastImageMacro( ComplexFloatImageType , ComplexFloatImageType )
-*/
-
-/*********************************************************************
-********************** VectorImage -> VectorImage
-**********************************************************************/
-/*
-otbGenericDeclareCastImageMacro(UInt8VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(Int16VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(UInt16VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(Int32VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(UInt32VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(FloatVectorImageType, Vector)
-otbGenericDeclareCastImageMacro(DoubleVectorImageType, Vector)
-
-otbDeclareCastImageMacro( ComplexDoubleVectorImageType , 
-  ComplexDoubleVectorImageType )
-otbDeclareCastImageMacro( ComplexDoubleVectorImageType ,
-  ComplexFloatVectorImageType )
-
-otbDeclareCastImageMacro( ComplexFloatVectorImageType ,
-  ComplexDoubleVectorImageType )
-otbDeclareCastImageMacro( ComplexFloatVectorImageType ,
-  ComplexFloatVectorImageType )
-*/
-/*********************************************************************
-********************** Image -> VectorImage
-**********************************************************************/
-/*
-otbGenericDeclareCastImageMacro(UInt8ImageType, Vector)
-otbGenericDeclareCastImageMacro(Int16ImageType, Vector)
-otbGenericDeclareCastImageMacro(UInt16ImageType, Vector)
-otbGenericDeclareCastImageMacro(Int32ImageType, Vector)
-otbGenericDeclareCastImageMacro(UInt32ImageType, Vector)
-otbGenericDeclareCastImageMacro(FloatImageType, Vector)
-otbGenericDeclareCastImageMacro(DoubleImageType, Vector)
-
-otbDeclareCastImageMacro( ComplexDoubleImageType , 
-  ComplexDoubleVectorImageType )
-otbDeclareCastImageMacro( ComplexDoubleImageType , 
-  ComplexFloatVectorImageType )
-
-otbDeclareCastImageMacro( ComplexFloatImageType , ComplexDoubleVectorImageType )
-otbDeclareCastImageMacro( ComplexFloatImageType , ComplexFloatVectorImageType )
-
-
-#undef otbDeclareCastImageMacro
-#undef otbGenericDeclareCastImageMacro
-*/
 
 } // End namespace Wrapper
 } // End namespace otb

@@ -106,15 +106,6 @@ the macro otbGetParameterImageMacro of otbWrapperApplication.h */
   template <class TComplexInputImage, class TOutputImage>
     TOutputImage* CastImage();
 
-  /** Cast an image to an image of the same type
-  * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
-  // template <class TComplexInputImage, class TOutputImage>
-  //   TOutputImage* SimpleCastImage();
-
-  /** Cast an image to a vector image. */
-  // template <class TComplexInputImage, class TOutputImage>
-  //   TOutputImage* CastVectorImageFromImage();
-
   bool HasValue() const ITK_OVERRIDE;
 
   void ClearValue() ITK_OVERRIDE;
@@ -132,9 +123,6 @@ protected:
 
 
   /** Readers typedefs */
-  // typedef otb::ImageFileReader<ComplexFloatImageType> ComplexFloatReaderType;
-  // typedef otb::ImageFileReader<ComplexDoubleImageType> ComplexDoubleReaderType;
-
   typedef otb::ImageFileReader<ComplexFloatVectorImageType> ComplexFloatVectorReaderType;
   typedef otb::ImageFileReader<ComplexDoubleVectorImageType> ComplexDoubleVectorReaderType;
 
@@ -152,33 +140,6 @@ private:
   bool m_UseFilename;
 
 }; // End class ComplexInputImage Parameter
-
-
-// template specializations of CastImage<> should be declared in header
-// so that the linker knows they exist when building OTB Applications
-
-/*#define otbDefineCastImageMacro(ComplexInputImageType, OutputImageType)   \
-  template<> OutputImageType *                                          \
-  ComplexInputImageParameter::CastImage<ComplexInputImageType , OutputImageType>();   \
-
-#define otbGenericDefineCastImageMacro(ComplexInputImageType, prefix)     \
-  otbDefineCastImageMacro(ComplexInputImageType, ComplexFloat##prefix##ImageType) \
-  otbDefineCastImageMacro(ComplexInputImageType, ComplexDouble##prefix##ImageType)
-*/
-
-/********************************************************************
-********************** Image -> Image
-*********************************************************************/
-
-//   otbGenericDefineCastImageMacro(ComplexFloatImageType, )
-//   otbGenericDefineCastImageMacro(ComplexDoubleImageType, )
-
-
-/*********************************************************************
-********************** VectorImage -> VectorImage
-**********************************************************************/
-//   otbGenericDefineCastImageMacro(ComplexFloatVectorImageType, Vector)
-//   otbGenericDefineCastImageMacro(ComplexDoubleVectorImageType, Vector)
 
 } // End namespace Wrapper
 } // End namespace otb

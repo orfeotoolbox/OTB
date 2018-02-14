@@ -153,44 +153,6 @@ ComplexInputImageParameter::CastImage()
   //                   <<" to "<<typeid(TOutputImage).name()<<" not authorized.");
 }
 
-
-/*template <class TComplexInputImage, class TOutputImage>
-TOutputImage*
-ComplexInputImageParameter::SimpleCastImage()
-{
-  TComplexInputImage* realComplexInputImage = dynamic_cast<TComplexInputImage*>(m_Image.GetPointer());
-
-  typedef itk::CastImageFilter<TComplexInputImage, TOutputImage> CasterType;
-  typename CasterType::Pointer caster = CasterType::New();
-
-  caster->SetInput(realComplexInputImage);
-  caster->UpdateOutputInformation();
-
-  m_Image = caster->GetOutput();
-  m_Caster = caster;
-
-  return caster->GetOutput();
-}
-
-
-template <class TComplexInputImage, class TOutputImage>
-TOutputImage*
-ComplexInputImageParameter::CastVectorImageFromImage()
-{
-  TComplexInputImage* realComplexInputImage = dynamic_cast<TComplexInputImage*>(m_Image.GetPointer());
-
-  typedef ImageToVectorImageCastFilter<TComplexInputImage, TOutputImage> CasterType;
-  typename CasterType::Pointer caster = CasterType::New();
-
-  caster->SetInput(realComplexInputImage);
-  caster->UpdateOutputInformation();
-
-  m_Image = caster->GetOutput();
-  m_Caster = caster;
-
-  return caster->GetOutput();
-}*/
-
 template <class TComplexInputImage>
 void
 ComplexInputImageParameter::SetImage(TComplexInputImage* image)

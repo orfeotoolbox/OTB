@@ -21,8 +21,6 @@
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbClampImageFilter.h"
-// #include "itkCastImageFilter.h"
-// #include "itkVectorCastImageFilter.h"
 
 #ifdef OTB_USE_MPI
 
@@ -102,9 +100,6 @@ ComplexOutputImageParameter::ConvertStringToPixelType(const std::string &value, 
 
 void ComplexOutputImageParameter::InitializeWriters()
 {
-  // m_ComplexFloatWriter = ComplexFloatWriterType::New();
-  // m_ComplexDoubleWriter = ComplexDoubleWriterType::New();
-
   m_ComplexVectorInt16Writer = ComplexVectorInt16WriterType::New();
   m_ComplexVectorInt32Writer = ComplexVectorInt32WriterType::New();
   m_ComplexVectorFloatWriter = ComplexVectorFloatWriterType::New();
@@ -213,27 +208,6 @@ ComplexOutputImageParameter::SwitchImageWrite()
     }
 }
 
-
-// template <class TInputVectorImageType>
-// void
-// ComplexOutputImageParameter::SwitchVectorImageWrite()
-//   {
-//   switch(m_ComplexPixelType )
-//     {
-//     case ComplexImagePixelType_float:
-//     {
-//     CastAndWriteImage<TInputVectorImageType,ComplexFloatVectorImageType>(m_Image,m_ComplexVectorFloatWriter,m_FileName,m_RAMValue);
-//     break;
-//     }
-//     case ComplexImagePixelType_double:
-//     {
-//     CastAndWriteImage<TInputVectorImageType,ComplexDoubleVectorImageType>(m_Image,m_ComplexVectorDoubleWriter,m_FileName,m_RAMValue);
-//     break;
-//     }
-//     }
-//   }
-
-
 void
 ComplexOutputImageParameter::Write()
 {
@@ -279,16 +253,6 @@ ComplexOutputImageParameter::Write()
 itk::ProcessObject*
 ComplexOutputImageParameter::GetWriter()
 {
-  // int type = 1;
-  // 0 : image
-  // 1 : VectorImage
-
-  // if ( dynamic_cast<ComplexFloatVectorImageType*>( m_Image.GetPointer()) ||
-  //      dynamic_cast<ComplexDoubleVectorImageType*>(m_Image.GetPointer()))
-  //   {
-  //   type = 1;
-  //   }
-
   itk::ProcessObject* writer = ITK_NULLPTR;
   switch ( GetComplexPixelType() )
     {
@@ -302,18 +266,12 @@ ComplexOutputImageParameter::GetWriter()
     }
     case ComplexImagePixelType_float:
     {
-    // if( type == 1 )
       writer = m_ComplexVectorFloatWriter;
-    // else
-      // writer = m_ComplexFloatWriter;
     break;
     }
     case ComplexImagePixelType_double:
     {
-    // if( type == 1 )
       writer = m_ComplexVectorDoubleWriter;
-    // else
-      // writer = m_ComplexDoubleWriter;
     break;
     }
     }

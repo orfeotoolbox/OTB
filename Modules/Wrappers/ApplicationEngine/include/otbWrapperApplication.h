@@ -635,31 +635,6 @@ public:
   otbGetParameterImageMacro(ComplexFloatVectorImage);
   otbGetParameterImageMacro(ComplexDoubleVectorImage);
 
-  /* Get a complex image value
-   *
-   * Can be called for types :
-   * \li ParameterType_ComplexInputImage
-   */
-/*
-#define otbGetParameterComplexImageMacro( Image )                       \
-  Image##Type * GetParameter##Image( std::string parameter )            \
-    {                                                                   \
-    Image##Type::Pointer ret;                                           \
-    Parameter* param = GetParameterByKey(parameter);                    \
-    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param); \
-    if (paramDown)                                                      \
-      {                                                                 \
-      ret = paramDown->Get##Image();                                    \
-      }                                                                 \
-    return ret;                                                         \
-    }
-
-  otbGetParameterComplexImageMacro(ComplexFloatImage);
-  otbGetParameterComplexImageMacro(ComplexDoubleImage);
-
-  otbGetParameterComplexImageMacro(ComplexFloatVectorImage);
-  otbGetParameterComplexImageMacro(ComplexDoubleVectorImage);*/
-
   /* Get an image list value
    *
    * Can be called for types :
