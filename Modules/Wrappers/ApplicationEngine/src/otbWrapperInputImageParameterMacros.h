@@ -33,22 +33,4 @@
   otbGetImageMacro(type##VectorImage); 
 
 
-/*
-#define otbCastImageMacro(InputImageType, OutputImageType, theMethod)   \
-  template<> OutputImageType *                                          \
-  InputImageParameter::CastImage<InputImageType , OutputImageType>()    \
-  {                                                                     \
-    return this->theMethod<InputImageType , OutputImageType>();         \
-  }
-
-#define otbGenericCastImageMacro(InputImageType, theMethod, prefix)     \
-  otbCastImageMacro(InputImageType, UInt8##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, UInt16##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Int16##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, UInt32##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Int32##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Float##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Double##prefix##ImageType, theMethod)
-*/
-
 #endif
