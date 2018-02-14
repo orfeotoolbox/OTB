@@ -26,7 +26,6 @@
 #include <boost/type_traits/is_complex.hpp>
 #include <boost/type_traits/is_scalar.hpp>
 
-#include "itkVariableLengthVector.h"
 #include "itkNumericTraits.h"
 #include "otbDefaultConvertPixelTraits.h"
 
@@ -49,11 +48,16 @@ public:
   typedef typename itk::NumericTraits < InputInternalPixelType > :: ValueType InputPixelValueType;
   typedef typename itk::NumericTraits < OutputInternalPixelType > :: ValueType OutputPixelValueType;
 
-  ConvertTypeFunctor() :
-  m_cInPix ( boost::is_complex < InputPixelType > :: value ) ,
-  m_cOutPix ( boost::is_complex < OutputPixelType > :: value ) ,
-  m_cInInternalPix ( boost::is_complex < InputInternalPixelType > :: value ) ,
-  m_cOutInternalPix ( boost::is_complex < OutputInternalPixelType > :: value )
+  static constexpr bool m_cInPix = boost::is_complex < InputPixelType > :: value ;
+  static constexpr bool m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
+  static constexpr bool m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ;
+  static constexpr bool m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
+
+  ConvertTypeFunctor()  
+  // m_cInPix ( boost::is_complex < InputPixelType > :: value ) ,
+  // m_cOutPix ( boost::is_complex < OutputPixelType > :: value ) ,
+  // m_cInInternalPix ( boost::is_complex < InputInternalPixelType > :: value ) ,
+  // m_cOutInternalPix ( boost::is_complex < OutputInternalPixelType > :: value )
   {
     m_LowestB = std::numeric_limits < OutputPixelValueType >::lowest();
     m_HighestB = std::numeric_limits < OutputPixelValueType >::max();
@@ -228,8 +232,7 @@ private:
   double m_LowestBD , m_HighestBD ;
   OutputPixelValueType m_LowestB , m_HighestB ;
   unsigned int m_CompIn , m_CompOut , m_Scal ;
-  const bool m_cInPix , m_cOutPix , m_cInInternalPix , m_cOutInternalPix ;
-
+  // const bool m_cInPix , m_cOutPix , m_cInInternalPix , m_cOutInternalPix ;
 
 };
 
