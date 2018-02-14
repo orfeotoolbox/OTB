@@ -35,29 +35,7 @@ ImageList<TImage>
   Superclass::UpdateOutputData();
   for (ConstIterator it = this->Begin(); it != this->End(); ++it)
     {
-    if (it.Get()->GetUpdateMTime() < it.Get()->GetPipelineMTime()
-        || it.Get()->GetDataReleased()
-        || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
-      {
-      if (it.Get()->GetSource())
-        {
-        it.Get()->GetSource()->PropagateRequestedRegion(it.Get());
-
-        // Check that the requested region lies within the largest possible region
-        if (!it.Get()->VerifyRequestedRegion())
-          {
-          // invalid requested region, throw an exception
-          itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-          e.SetLocation(ITK_LOCATION);
-          e.SetDataObject(it.Get());
-          e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-
-          throw e;
-          }
-
         it.Get()->GetSource()->UpdateOutputData(it.Get());
-        }
-      }
     }
 }
 
@@ -67,6 +45,31 @@ ImageList<TImage>
 ::PropagateRequestedRegion() throw (itk::InvalidRequestedRegionError)
   {
   Superclass::PropagateRequestedRegion();
+
+  for (ConstIterator it = this->Begin(); it != this->End(); ++it)
+    {
+    if (it.Get()->GetUpdateMTime() < it.Get()->GetPipelineMTime()
+        || it.Get()->GetDataReleased()
+        || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
+      {
+      if (it.Get()->GetSource())
+        {
+        it.Get()->GetSource()->PropagateRequestedRegion(it.Get());
+        
+        // Check that the requested region lies within the largest possible region
+        if (!it.Get()->VerifyRequestedRegion())
+          {
+          // invalid requested region, throw an exception
+          itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+          e.SetLocation(ITK_LOCATION);
+          e.SetDataObject(it.Get());
+          e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+          
+          throw e;
+          }
+        }
+      }
+    }
   }
 
 template <class TImage>

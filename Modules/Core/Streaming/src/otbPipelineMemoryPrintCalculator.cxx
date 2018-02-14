@@ -187,11 +187,8 @@ PipelineMemoryPrintCalculator
        it != imageList->End(); ++it)                                    \
        {                                                             \
        if(it.Get()->GetSource())                                        \
-         {                                                              \
-         it.Get()->PropagateRequestedRegion();                                   \
          print += this->EvaluateProcessObjectPrintRecursive(it.Get()->GetSource());\
-         }                                                              \
-else                                                                    \
+       else                                                             \
          print += this->EvaluateDataObjectPrint(it.Get());              \
        }                                                           \
     return print;                                                  \
