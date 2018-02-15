@@ -105,13 +105,13 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateOutputInformation(void) override
-  {
+    {
     Superclass::GenerateOutputInformation();
     unsigned int sizeIn = this->GetInput()->GetNumberOfComponentsPerPixel();
     this->GetFunctor().SetInputComponents( sizeIn );
     this->GetOutput()->SetNumberOfComponentsPerPixel( 
       this->GetFunctor().GetOutputSize () );
-  }
+    }
 
 private:
   ClampImageFilter(const Self&) = delete ;

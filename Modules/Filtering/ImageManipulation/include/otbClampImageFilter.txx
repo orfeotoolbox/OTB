@@ -61,9 +61,12 @@ void
 ClampImageFilter<TInputImage, TOutputImage>
 ::SetUpper(OutputPixelValueType val)
 {
-  m_Upper = val;
-  this->GetFunctor().SetHighest( m_Upper );
-  this->Modified();
+  if ( m_Upper != val )
+    {
+    m_Upper = val;
+    this->GetFunctor().SetHighest( m_Upper );
+    this->Modified();
+    }
 }
 
 /**
