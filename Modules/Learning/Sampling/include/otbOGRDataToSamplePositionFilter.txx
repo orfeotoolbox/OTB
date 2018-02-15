@@ -174,6 +174,8 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
                 typename TInputImage::PointType& imgPoint,
                 itk::ThreadIdType& threadid)
 {
+  ogr::Layer outLayer = this->GetOutputLayer();
+  
   std::string className(feature.ogr().GetFieldAsString(this->GetFieldIndex()));
   for (unsigned int i=0 ; i<this->GetNumberOfLevels() ; ++i)
     {
@@ -183,7 +185,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
       ogrTmpPoint.setX(imgPoint[0]);
       ogrTmpPoint.setY(imgPoint[1]);
 
-      ogr::Feature feat(feature.GetDefn());
+      ogr::Feature feat(outLayer.GetLayerDefn());
       feat.SetFrom(feature);
       if (m_UseOriginField)
         {
@@ -305,9 +307,7 @@ void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update)
 {
-  ogr::Layer outLayer = outDS->GetLayersCount() == 1
-                        ? outDS->GetLayer(0)
-                        : outDS->GetLayer(this->GetOutLayerName());
+  ogr::Layer outLayer = this->GetOutputLayer(outIdx);
 
   OGRErr err = outLayer.ogr().StartTransaction();
   if (err != OGRERR_NONE)

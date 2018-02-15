@@ -77,6 +77,11 @@ public:
   /** Get the OGR layer creation options */
   const std::vector<std::string>& GetOGRLayerCreationOptions();
 
+  /** Get the ith output layer, depending on update mode and layer
+   * index. Default output index is 1, as first output is image for streaming.
+   */
+  ogr::Layer GetOutputLayer(unsigned int outputId = 1);
+  
   /** Set/Get macro for the field name containing class names
    * in the input vectors.*/
   itkSetMacro(FieldName, std::string);

@@ -196,7 +196,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
         inputImage->TransformPhysicalPointToIndex(imgPoint,imgIndex);
         imgPixel = inputImage->GetPixel(imgIndex);
 
-        ogr::Feature dstFeature(this->GetOutputSamples()->GetLayerChecked(this->GetLayerIndex()).GetLayerDefn());
+        ogr::Feature dstFeature(this->GetOutputLayer().GetLayerDefn());
         dstFeature.SetFrom( *featIt, TRUE );
         dstFeature.SetFID(featIt->GetFID());
         for (unsigned int i=0 ; i<nbBand ; ++i)

@@ -250,7 +250,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // gather temporary outputs and write to output
   const otb::ogr::DataSource* vectors = this->GetOGRData();
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  unsigned int count = 0;
+  unsigned int count = 1;
   for (unsigned int k=0 ; k < this->GetNumberOfOutputs() ; k++)
     {
     ogr::DataSource* realOutput = dynamic_cast<ogr::DataSource *>(
@@ -272,9 +272,7 @@ void
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update)
 {
-  ogr::Layer outLayer = outDS->GetLayersCount() == 1
-                        ? outDS->GetLayer(0)
-                        : outDS->GetLayer(m_OutLayerName);
+  ogr::Layer outLayer = GetOutputLayer(outIdx);
 
   OGRErr err = outLayer.ogr().StartTransaction();
   if (err != OGRERR_NONE)
@@ -312,6 +310,32 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   if (err != OGRERR_NONE)
     {
     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+    }
+}
+
+template <class TInputImage, class TMaskImage>
+ogr::Layer
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::GetOutputLayer(unsigned int outputId)
+{
+  ogr::DataSource* realOutput = dynamic_cast<ogr::DataSource *>(
+    this->itk::ProcessObject::GetOutput(outputId));
+
+  if(!realOutput)
+    itkExceptionMacro(<<"Can not cast "<<outputId<<"th output to ogr::DataSource *");
+
+  bool updateMode = (realOutput == this->GetOGRData());
+
+  if(updateMode)
+    {
+    return realOutput->GetLayerChecked(m_LayerIndex);
+    }
+  else
+    {
+    ogr::Layer outLayer = realOutput->GetLayersCount() == 1
+                        ? realOutput->GetLayer(0)
+                        : realOutput->GetLayer(m_OutLayerName);
+    return outLayer;
     }
 }
 
@@ -794,6 +818,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       }
     else
       {
+      std::cout<<"Create field "<<m_AdditionalFields[k].Name.c_str()<<std::endl;
       outLayer.CreateField(fieldDef);
       }
     }
