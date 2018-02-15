@@ -20,7 +20,8 @@
 
 #include "itkMacro.h"
 
-#include "otbOneRIBandImageToOneComplexBandImage.h"
+// #include "otbOneRIBandImageToOneComplexBandImage.h"
+#include "otbClampImageFilter.h"
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -37,7 +38,7 @@ int otbOneRIBandImageToOneComplexBandImage(int itkNotUsed(argc), char * argv[])
   typedef otb::Image<OutputPixelType, 2> OutputImageType;
  
  
-  typedef otb::OneRIBandImageToOneComplexBandImage<InputImageType, OutputImageType> FilterType;
+  typedef otb::ClampImageFilter<InputImageType, OutputImageType> FilterType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 

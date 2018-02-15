@@ -264,7 +264,7 @@ private:
       {
       // fft ttransform
       bool shift = IsParameterEnabled( "mode.fft.shift");
-      typedef otb::Image< std::complex<OutputPixelType> >          ComplexOutputImageType;
+      typedef otb::Image< std::complex<OutputPixelType> > ComplexOutputImageType;
 
       if (dir == 0 )
         {
@@ -277,7 +277,7 @@ private:
 
         //typedef itk::::ForwardFFTImageFilter over otbImage< InputPixelType >
 
-        typedef itk::ForwardFFTImageFilter < TInputImage, ComplexOutputImageType > FFTFilter;
+        typedef itk::ForwardFFTImageFilter < TInputImage, OutputImageType > FFTFilter;
         FFTFilter::Pointer fwdFilter = FFTFilter::New();
         fwdFilter->SetInput( inImage );
 
@@ -286,7 +286,7 @@ private:
         typedef otb::VectorImage<OutputPixelType>          TOutputImage;
 
 	typedef otb::ComplexToVectorImageCastFilter<
-	  ComplexOutputImageType,
+	  OutputImageType,
 	  TOutputImage > ComplexToVectorImageCastFilter;
 	ComplexToVectorImageCastFilter::Pointer unaryFunctorImageFilter = ComplexToVectorImageCastFilter::New();
 

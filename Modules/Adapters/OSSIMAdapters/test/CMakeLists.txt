@@ -31,6 +31,7 @@ otbGeometricSarSensorModelAdapter.cxx
 otbPlatformPositionAdapter.cxx
 otbDEMHandlerTest.cxx
 otbRPCSolverAdapterTest.cxx
+otbSarSensorModelAdapterTest.cxx
 )
 
 add_executable(otbOSSIMAdaptersTestDriver ${OTBOSSIMAdaptersTests})
@@ -499,3 +500,8 @@ otb_add_test(NAME uaTvRPCSolverAdapterValidationTest COMMAND otbOSSIMAdaptersTes
   ${INPUTDATA}/DEM/egm96.grd
   )
 
+
+otb_add_test(NAME uaTvSarSensorModelAdapter COMMAND otbOSSIMAdaptersTestDriver
+  otbSarSensorModelAdapterTest
+  ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.geom
+  )

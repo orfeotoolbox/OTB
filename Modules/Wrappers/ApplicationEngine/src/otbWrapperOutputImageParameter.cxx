@@ -20,7 +20,6 @@
 
 #include "otbWrapperOutputImageParameter.h"
 #include "otbClampImageFilter.h"
-#include "otbClampVectorImageFilter.h"
 #include "otbImageIOFactory.h"
 #include "itksys/SystemTools.hxx"
 
@@ -94,6 +93,26 @@ std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
       ret = "double";
       break;
       }
+    case ImagePixelType_cint16:
+      {
+      ret = "cint16";
+      break;
+      }
+    case ImagePixelType_cint32:
+      {
+      ret = "cint32";
+      break;
+      }
+    case ImagePixelType_cfloat:
+      {
+      ret = "cfloat";
+      break;
+      }
+    case ImagePixelType_cdouble:
+      {
+      ret = "cdouble";
+      break;
+      }
     }
   return ret;
 }
@@ -115,6 +134,14 @@ OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePi
     type = ImagePixelType_float;
   else if (value == "double")
     type = ImagePixelType_double;
+  else if (value == "cint16")
+    type = ImagePixelType_cint16;
+  else if (value == "cint32")
+    type = ImagePixelType_cint32;
+  else if (value == "cfloat")
+    type = ImagePixelType_cfloat;
+  else if (value == "cdouble")
+    type = ImagePixelType_cdouble;
   else
     return false;
   return true;
@@ -122,14 +149,6 @@ OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePi
 
 void OutputImageParameter::InitializeWriters()
 {
-  m_UInt8Writer = UInt8WriterType::New();
-  m_Int16Writer = Int16WriterType::New();
-  m_UInt16Writer = UInt16WriterType::New();
-  m_Int32Writer = Int32WriterType::New();
-  m_UInt32Writer = UInt32WriterType::New();
-  m_FloatWriter = FloatWriterType::New();
-  m_DoubleWriter = DoubleWriterType::New();
-
   m_VectorUInt8Writer = VectorUInt8WriterType::New();
   m_VectorInt16Writer = VectorInt16WriterType::New();
   m_VectorUInt16Writer = VectorUInt16WriterType::New();
@@ -140,13 +159,24 @@ void OutputImageParameter::InitializeWriters()
 
   m_RGBUInt8Writer = RGBUInt8WriterType::New();
   m_RGBAUInt8Writer = RGBAUInt8WriterType::New();
+
+  m_ComplexVectorInt16Writer = ComplexVectorInt16WriterType::New();
+  m_ComplexVectorInt32Writer = ComplexVectorInt32WriterType::New();
+  m_ComplexVectorFloatWriter = ComplexVectorFloatWriterType::New();
+  m_ComplexVectorDoubleWriter = ComplexVectorDoubleWriterType::New();
 }
 
 
-template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput> * writer, const std::string & filename, const unsigned int & ramValue)
+template <typename TInput, typename TOutput> 
+void 
+ClampAndWriteVectorImage( itk::ImageBase<2> * in ,
+                    otb::ImageFileWriter<TOutput> * writer , 
+                    const std::string & filename , 
+                    const unsigned int & ramValue )
 {
-  typedef otb::ClampImageFilter<TInput, TOutput> ClampFilterType; 
-  typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
+  typedef ClampImageFilter < TInput , TOutput > ClampFilterType;
+  typename ClampFilterType::Pointer clampFilter ( ClampFilterType::New() );
+
   clampFilter->SetInput( dynamic_cast<TInput*>(in));
   
   bool useStandardWriter = true;
@@ -200,108 +230,7 @@ template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageB
     }
 }
 
-template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk::ImageBase<2> * in, otb::ImageFileWriter<TOutput > * writer, const std::string & filename, const unsigned int & ramValue)
-{
-  typedef otb::ClampVectorImageFilter<TInput, TOutput> ClampFilterType; 
-  typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();         
-  clampFilter->SetInput( dynamic_cast<TInput*>(in));
-  
-  bool useStandardWriter = true;
-  
-#ifdef OTB_USE_MPI
-  
-  otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
-  
-  if (mpiConfig->GetNbProcs() > 1)
-    {
-    useStandardWriter = false;
-    
-    // Get file extension
-    std::string extension = itksys::SystemTools::GetFilenameExtension(filename);
-    
-    if(extension == ".vrt")
-      {
-      // Use the WriteMPI function
-      WriteMPI(clampFilter->GetOutput(),filename,ramValue);      
-      }
-    #ifdef OTB_USE_SPTW
-    else if (extension == ".tif")
-      {
-      // Use simple parallel tiff writer
-      typedef otb::SimpleParallelTiffWriter<TOutput> SPTWriterType;
-      
-      typename SPTWriterType::Pointer sptWriter = SPTWriterType::New();
-      sptWriter->SetFileName(filename);
-      sptWriter->SetInput(clampFilter->GetOutput());
-      sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
-      sptWriter->Update();
-      }
-    
-    #endif
-    else
-      {
-      itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
-      }
-    }
-  #endif
-  
-  if(useStandardWriter)
-    {
-    
-    writer->SetFileName( filename );                                     
-    writer->SetInput(clampFilter->GetOutput());                                     
-    writer->SetAutomaticAdaptativeStreaming(ramValue);
-    writer->Update();
-    }
-}
-
-
-template <class TInputImageType>
-void
-OutputImageParameter::SwitchImageWrite()
-{
-  switch(m_PixelType )
-    {
-    case ImagePixelType_uint8:
-    {
-    ClampAndWriteImage<TInputImageType,UInt8ImageType>(m_Image,m_UInt8Writer,m_FileName,m_RAMValue);
-    break;
-    }
-    case ImagePixelType_int16:
-    {
-    ClampAndWriteImage<TInputImageType,Int16ImageType>(m_Image,m_Int16Writer,m_FileName,m_RAMValue);
-    break;
-    }
-    case ImagePixelType_uint16:
-    {
-    ClampAndWriteImage<TInputImageType,UInt16ImageType>(m_Image,m_UInt16Writer,m_FileName,m_RAMValue);
-    break;
-    }
-    case ImagePixelType_int32:
-    {
-    ClampAndWriteImage<TInputImageType,Int32ImageType>(m_Image,m_Int32Writer,m_FileName,m_RAMValue);
-    break;
-    }
-    case ImagePixelType_uint32:
-    {
-    ClampAndWriteImage<TInputImageType,UInt32ImageType>(m_Image,m_UInt32Writer,m_FileName,m_RAMValue);
-    break;
-    }
-    case ImagePixelType_float:
-    {
-    ClampAndWriteImage<TInputImageType,FloatImageType>(m_Image,m_FloatWriter,m_FileName,m_RAMValue);
-    break;
-    }
-    case ImagePixelType_double:
-    {
-    ClampAndWriteImage<TInputImageType,DoubleImageType>(m_Image,m_DoubleWriter,m_FileName,m_RAMValue);
-    break;
-    }
-    }
-}
-
-
-template <class TInputVectorImageType>
+template <class TInput>
 void
 OutputImageParameter::SwitchVectorImageWrite()
   {
@@ -309,42 +238,107 @@ OutputImageParameter::SwitchVectorImageWrite()
     {
     case ImagePixelType_uint8:
     {
-    ClampAndWriteVectorImage<TInputVectorImageType,UInt8VectorImageType>(m_Image,m_VectorUInt8Writer,m_FileName,m_RAMValue);
+    ClampAndWriteVectorImage< TInput , UInt8VectorImageType > (
+      m_Image ,
+      m_VectorUInt8Writer ,
+      m_FileName ,
+      m_RAMValue );
     break;
     }
     case ImagePixelType_int16:
     {
-    ClampAndWriteVectorImage<TInputVectorImageType,Int16VectorImageType>(m_Image,m_VectorInt16Writer,m_FileName,m_RAMValue);
+    ClampAndWriteVectorImage< TInput , Int16VectorImageType > (
+      m_Image ,
+      m_VectorInt16Writer ,
+      m_FileName ,
+      m_RAMValue );
     break;
     }
     case ImagePixelType_uint16:
     {
-    ClampAndWriteVectorImage<TInputVectorImageType,UInt16VectorImageType>(m_Image,m_VectorUInt16Writer,m_FileName,m_RAMValue);
+    ClampAndWriteVectorImage< TInput , UInt16VectorImageType > (
+      m_Image ,
+      m_VectorUInt16Writer ,
+      m_FileName ,
+      m_RAMValue );
     break;
     }
     case ImagePixelType_int32:
     {
-    ClampAndWriteVectorImage<TInputVectorImageType,Int32VectorImageType>(m_Image,m_VectorInt32Writer,m_FileName,m_RAMValue);
+    ClampAndWriteVectorImage< TInput , Int32VectorImageType > (
+      m_Image ,
+      m_VectorInt32Writer ,
+      m_FileName ,
+      m_RAMValue );
     break;
     }
     case ImagePixelType_uint32:
     {
-    ClampAndWriteVectorImage<TInputVectorImageType,UInt32VectorImageType>(m_Image,m_VectorUInt32Writer,m_FileName,m_RAMValue);
+    ClampAndWriteVectorImage< TInput , UInt32VectorImageType > (
+      m_Image ,
+      m_VectorUInt32Writer ,
+      m_FileName ,
+      m_RAMValue );
     break;
     }
     case ImagePixelType_float:
     {
-    ClampAndWriteVectorImage<TInputVectorImageType,FloatVectorImageType>(m_Image,m_VectorFloatWriter,m_FileName,m_RAMValue);
+    ClampAndWriteVectorImage< TInput , FloatVectorImageType > (
+      m_Image ,
+      m_VectorFloatWriter ,
+      m_FileName ,
+      m_RAMValue );
     break;
     }
     case ImagePixelType_double:
     {
-    ClampAndWriteVectorImage<TInputVectorImageType,DoubleVectorImageType>(m_Image,m_VectorDoubleWriter,m_FileName,m_RAMValue);
+    ClampAndWriteVectorImage< TInput , DoubleVectorImageType > (
+      m_Image ,
+      m_VectorDoubleWriter ,
+      m_FileName ,
+      m_RAMValue );
     break;
     }
+    case ImagePixelType_cint16:
+    {
+    ClampAndWriteVectorImage < TInput , ComplexInt16VectorImageType > (
+      m_Image ,
+      m_ComplexVectorInt16Writer ,
+      m_FileName ,
+      m_RAMValue ); 
+    break;
+    }
+    case ImagePixelType_cint32:
+    {
+    ClampAndWriteVectorImage < TInput , ComplexInt32VectorImageType > (
+      m_Image ,
+      m_ComplexVectorInt32Writer ,
+      m_FileName ,
+      m_RAMValue ); 
+    break;
+    }
+    case ImagePixelType_cfloat:
+    {
+    ClampAndWriteVectorImage < TInput , ComplexFloatVectorImageType > (
+      m_Image ,
+      m_ComplexVectorFloatWriter ,
+      m_FileName ,
+      m_RAMValue ); 
+    break;
+    }
+    case ImagePixelType_cdouble:
+    {
+    ClampAndWriteVectorImage < TInput , ComplexDoubleVectorImageType > (
+      m_Image ,
+      m_ComplexVectorDoubleWriter ,
+      m_FileName ,
+      m_RAMValue );
+    break;
+    }
+    default:
+      break;
     }
   }
-
 
 template <class TInputRGBAImageType>
 void
@@ -383,31 +377,47 @@ OutputImageParameter::Write()
 
   if (dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()))
     {
-    SwitchImageWrite<UInt8ImageType>();
+    SwitchVectorImageWrite<UInt8ImageType>();
     }
   else if (dynamic_cast<Int16ImageType*>(m_Image.GetPointer()))
     {
-    SwitchImageWrite<Int16ImageType>();
+    SwitchVectorImageWrite<Int16ImageType>();
     }
   else if (dynamic_cast<UInt16ImageType*>(m_Image.GetPointer()))
     {
-    SwitchImageWrite<UInt16ImageType>();
+    SwitchVectorImageWrite<UInt16ImageType>();
     }
   else if (dynamic_cast<Int32ImageType*>(m_Image.GetPointer()))
     {
-    SwitchImageWrite<Int32ImageType>();
+    SwitchVectorImageWrite<Int32ImageType>();
     }
   else if (dynamic_cast<UInt32ImageType*>(m_Image.GetPointer()))
     {
-    SwitchImageWrite<UInt32ImageType>();
+    SwitchVectorImageWrite<UInt32ImageType>();
     }
   else if (dynamic_cast<FloatImageType*>(m_Image.GetPointer()))
     {
-    SwitchImageWrite<FloatImageType>();
+    SwitchVectorImageWrite<FloatImageType>();
     }
   else if (dynamic_cast<DoubleImageType*>(m_Image.GetPointer()))
     {
-    SwitchImageWrite<DoubleImageType>();
+    SwitchVectorImageWrite<DoubleImageType>();
+    }
+  else if (dynamic_cast<ComplexInt16ImageType*>(m_Image.GetPointer()) )
+    {
+    SwitchVectorImageWrite<ComplexInt16ImageType>();
+    }
+  else if (dynamic_cast<ComplexInt32ImageType*>(m_Image.GetPointer()) )
+    {
+    SwitchVectorImageWrite<ComplexInt32ImageType>();
+    }
+  else if (dynamic_cast<ComplexFloatImageType*>(m_Image.GetPointer()) )
+    {
+    SwitchVectorImageWrite<ComplexFloatImageType>();
+    }
+  else if (dynamic_cast<ComplexDoubleImageType*>(m_Image.GetPointer()) )
+    {
+    SwitchVectorImageWrite<ComplexDoubleImageType>();
     }
   else if (dynamic_cast<UInt8VectorImageType*>(m_Image.GetPointer()))
     {
@@ -437,6 +447,22 @@ OutputImageParameter::Write()
     {
     SwitchVectorImageWrite<DoubleVectorImageType>();
     }
+  else if (dynamic_cast<ComplexInt16VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<ComplexInt16VectorImageType>();
+    }
+  else if (dynamic_cast<ComplexInt32VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<ComplexInt32VectorImageType>();
+    }
+  else if (dynamic_cast<ComplexFloatVectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<ComplexFloatVectorImageType>();
+    }
+  else if (dynamic_cast<ComplexDoubleVectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<ComplexDoubleVectorImageType>();
+    }
   else if (dynamic_cast<UInt8RGBImageType*>(m_Image.GetPointer()))
     {
     SwitchRGBImageWrite<UInt8RGBImageType>();
@@ -458,23 +484,14 @@ OutputImageParameter::Write()
 itk::ProcessObject*
 OutputImageParameter::GetWriter()
 {
-  int type = 0;
+  int type = 1;
   // 0 : image
   // 1 : VectorImage
   // 2 : RGBAImage
   // 3 : RGBImage
   itk::ProcessObject* writer = ITK_NULLPTR;
-  if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer())
-      || dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer())
-      || dynamic_cast<UInt16VectorImageType*> (m_Image.GetPointer())
-      || dynamic_cast<Int32VectorImageType*> (m_Image.GetPointer())
-      || dynamic_cast<UInt32VectorImageType*> (m_Image.GetPointer())
-      || dynamic_cast<FloatVectorImageType*> (m_Image.GetPointer())
-      || dynamic_cast<DoubleVectorImageType*> (m_Image.GetPointer()))
-    {
-    type = 1;
-    }
-  else if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
+
+  if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
     {
     type = 2;
     writer = m_RGBAUInt8Writer;
@@ -495,9 +512,6 @@ OutputImageParameter::GetWriter()
       {
       switch(type)
         {
-        case 0:
-          writer = m_UInt8Writer;
-          break;
         case 1:
           writer = m_VectorUInt8Writer;
           break;
@@ -514,48 +528,60 @@ OutputImageParameter::GetWriter()
       {
       if (type == 1)
         writer = m_VectorInt16Writer;
-      else
-        if (type == 0) writer = m_Int16Writer;
       break;
       }
     case ImagePixelType_uint16:
       {
       if (type == 1)
         writer = m_VectorUInt16Writer;
-      else
-        if (type == 0) writer = m_UInt16Writer;
       break;
       }
     case ImagePixelType_int32:
       {
       if (type == 1)
         writer = m_VectorInt32Writer;
-      else
-        if (type == 0) writer = m_Int32Writer;
       break;
       }
     case ImagePixelType_uint32:
       {
       if (type == 1)
         writer = m_VectorUInt32Writer;
-      else
-        if (type == 0) writer = m_UInt32Writer;
       break;
       }
     case ImagePixelType_float:
       {
       if (type == 1)
         writer = m_VectorFloatWriter;
-      else
-        if (type == 0) writer = m_FloatWriter;
       break;
       }
     case ImagePixelType_double:
       {
       if (type == 1)
         writer = m_VectorDoubleWriter;
-      else
-        if (type == 0) writer = m_DoubleWriter;
+      break;
+      }
+    case ImagePixelType_cint16:
+      {
+      if( type == 1 )
+        writer = m_ComplexVectorInt16Writer;
+      break;
+      }
+    case ImagePixelType_cint32:
+      {
+      if( type == 1 )
+        writer = m_ComplexVectorInt32Writer;
+      break;
+      }
+    case ImagePixelType_cfloat:
+      {
+      if( type == 1 )
+        writer = m_ComplexVectorFloatWriter;
+      break;
+      }
+    case ImagePixelType_cdouble:
+      {
+      if( type == 1 )
+        writer = m_ComplexVectorDoubleWriter;
       break;
       }
     }
