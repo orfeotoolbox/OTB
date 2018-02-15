@@ -89,10 +89,33 @@ Request against the `develop` branch on GitLab using the merge request
 template. The merge request will then be discussed by the community and the core
 OTB team.
 
-* Merge requests can not be merged until all discussions have been resolved (this is enforced by GitLab).
-* Merge requests **must receive at least 2 positives votes from PSC members** before being merged.
-* The merger is responsible for checking that the branch is up-to-date with develop and that the dashboard is ok.
+* Merge requests can not be merged until all discussions have been resolved (this is enforced by GitLab)
+* Merge requests **must receive at least 2 positives votes from PSC members** before being merged
+* The merger is responsible for checking that the branch is up-to-date with develop
 * Merge requests can be merged by anyone (not just PSC or RM) with push access to develop
+* Merge requests can be merged once the dashboard is proven green for this branch
+
+Branches can be registered for dashboard testing by adding one line in `Config/feature_branches.txt` in [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git).
+
+For branches in the main repository, the syntax is the following:
+
+```
+branch_name [otb-data_branch_name]
+
+```
+The second branch name is optional. It can be set if you need to modify [otb-data](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git) according to your changes.
+
+For branches in forks, the syntax is the following:
+```
+user/branch_name [user/otb-data_branch_name]
+```
+Again, the second branch name is optional.
+
+For users without push access to [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git), the modification can be asked through a merge requests to this repository.
+
+Once the feature branch is registered for testing, it should appear in the *FeatureBranches* section of the [OTB dashboard](https://dash.orfeo-toolbox.org/index.php?project=OTB) next day (remember tests are run on a nighlty basis).
+
+Do not forget to remove the feature branch for testing once it has been merged.
 
 ## Remote modules
 
@@ -104,3 +127,21 @@ OTB source code. Under some conditions (dependencies, official acceptance
 process, etc.), we are also able to distribute your remote module in the
 official standalone binaries. See [the wiki](https://wiki.orfeo-toolbox.org/index.php/Remote_Modules)
 for more information.
+
+## Gitlab guidelines
+
+In order to organize the issues in our Gitlab instance, we use both labels and
+milestones.
+
+The [milestones](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/milestones) should be used to track in which release a feature is merged.
+Gitlab can then provide a summary of all features and bugs added to a given release
+version.
+
+Regarding labels, we use the following set:
+* ~story: significant feature to be implemented with a detailed work plan, it can
+  correspond to a Request for Comments that has turned into a development action
+* ~bug: Bug, crash or unexpected behavior, reported by a user or a developer
+* ~feature: Feature request expressed by an OTB user/developer
+* ~"To Do": action is planned
+* ~Doing: work in progress
+* ~api ~app ~documentation ~monteverdi ~packaging ~qgis: optional context information
