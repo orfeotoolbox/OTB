@@ -257,7 +257,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         this->itk::ProcessObject::GetOutput(k));
     if (realOutput)
       {
-      this->FillOneOutput(count, realOutput, bool(vectors == realOutput));
+      this->FillOneOutput(count, bool(vectors == realOutput));
       count++;
       }
     }
@@ -270,7 +270,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 template <class TInputImage, class TMaskImage>
 void
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update)
+::FillOneOutput(unsigned int outIdx, bool update)
 {
   ogr::Layer outLayer = GetOutputLayer(outIdx);
 
@@ -892,7 +892,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 std::vector<ogr::Feature> &
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GetInMemoryOutput(unsigned int threadId, unsigned int index)
+::GetInMemoryOutput(unsigned int threadId)
 {
   if (threadId >= m_InMemoryOutputs.size())
     {

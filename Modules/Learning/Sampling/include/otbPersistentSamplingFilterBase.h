@@ -171,7 +171,7 @@ protected:
   virtual void GatherOutputVectors(void);
 
   /** Fill output vectors for a particular output */
-  virtual void FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update);
+  virtual void FillOneOutput(unsigned int outIdx, bool update);
 
   /** Utility method to add new fields on an output layer */
   virtual void InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS);
@@ -208,7 +208,7 @@ protected:
   std::vector<ogr::Feature> & GetInMemoryInput(unsigned int threadId);
 
   /** Give access to in-memory output layers */
-  std::vector<ogr::Feature> &  GetInMemoryOutput(unsigned int threadId, unsigned int index=0);
+  std::vector<ogr::Feature> &  GetInMemoryOutput(unsigned int threadId);
 
 private:
   PersistentSamplingFilterBase(const Self &); //purposely not implemented

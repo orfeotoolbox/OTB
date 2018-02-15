@@ -305,7 +305,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 template<class TInputImage, class TMaskImage, class TSampler>
 void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
-::FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update)
+::FillOneOutput(unsigned int outIdx, bool update)
 {
   ogr::Layer outLayer = this->GetOutputLayer(outIdx);
 
@@ -318,7 +318,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   // output vectors sorted by class
   for (auto& label : m_ClassPartition)
     {
-    std::vector<ogr::Feature> & inLayer = this->GetInMemoryOutput(label.second,outIdx);
+    std::vector<ogr::Feature> & inLayer = this->GetInMemoryOutput(label.second);
   
     // This test only uses 1 input, not compatible with multiple OGRData inputs
     for(auto tmpIt = inLayer.begin(); tmpIt!=inLayer.end(); ++tmpIt)
