@@ -25,10 +25,20 @@ namespace otb
 namespace Wrapper
 {
 
+BoolParameter::BoolParameter()
+  : m_Value(false)
+{}
+
 bool
 BoolParameter::GetValue() const
 {
   return m_Value;
+}
+
+std::string
+BoolParameter::GetValueAsString() const
+{
+  return std::string(m_Value?"true":"false");
 }
 
 void
@@ -39,29 +49,31 @@ BoolParameter::SetValue(bool state)
     m_Value = state;
     this->Modified();
     }
+  this->SetActive(true);
 }
 
 void
 BoolParameter::SetValue(const std::string & str)
 {
   std::string lowerStr;
-  // only strings less than 10 characters expected
-  lowerStr.reserve(10);
-  for (unsigned int i=0 ; i < std::min(10U,(unsigned int) str.size()) ; i++ )
+  // only strings less than 8 characters expected
+  lowerStr.reserve(8);
+  for (unsigned int i=0 ; i < std::min(8U,(unsigned int) str.size()) ; i++ )
     {
     lowerStr.push_back(tolower(str[i]));
     }
-  if (lowerStr == "1" || lowerStr == "on" || lowerStr == "true")
+  if (lowerStr == "1" || lowerStr == "on" || lowerStr == "true" || lowerStr == "yes")
     {
     this->SetValue(true);
     }
-  else if (lowerStr == "0" || lowerStr == "off" || lowerStr == "false")
+  else if (lowerStr == "0" || lowerStr == "off" || lowerStr == "false" || lowerStr == "no")
     {
     this->SetValue(false);
     }
   else
     {
-    itkGenericExceptionMacro(<< "Wrong value for BoolParameter (" << str << "), accepts: 0, 1, on, off, true, false");
+    itkGenericExceptionMacro(<< "Wrong value for BoolParameter (" << str << "),"
+      " accepts: 0, 1, on, off, true, false, yes, no");
     }
 }
 

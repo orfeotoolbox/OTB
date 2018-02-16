@@ -60,15 +60,15 @@ public:
 
   bool GetValue() const;
 
+  std::string GetValueAsString() const;
+
   void SetValue(bool state);
 
   void SetValue(const std::string & str);
 
 protected:
   /** Constructor */
-  BoolParameter()
-    : m_Value(false)
-  {}
+  BoolParameter();
 
   /** Destructor */
   ~BoolParameter() override
