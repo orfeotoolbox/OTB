@@ -1155,7 +1155,7 @@ std::string Application::GetParameterString(std::string parameter)
   else if (dynamic_cast<BoolParameter*>(param))
     {
     BoolParameter* paramDown = dynamic_cast<BoolParameter*>(param);
-    ret = (paramDown->GetValue()?"true":"false");
+    ret = paramDown->GetValueAsString();
     }
   else
    {
