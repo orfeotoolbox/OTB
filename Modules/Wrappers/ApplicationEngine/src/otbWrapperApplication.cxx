@@ -303,8 +303,8 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
 
 void Application::SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag)
 {
-  GetParameterByKey(parameter)->SetActive(value);
   this->SetParameterUserValue(parameter, hasUserValueFlag);
+  GetParameterByKey(parameter)->SetActive(value);
 }
 
 void Application::SetParameterUserValue(std::string paramKey, bool value)
