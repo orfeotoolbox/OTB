@@ -183,15 +183,20 @@ bool CropRegionOfInterest()
     region.SetSize(1,  GetParameterInt("rsy"));
     region.SetIndex(0, GetParameterInt("rox"));
     region.SetIndex(1, GetParameterInt("roy"));
+    FloatVectorImageType::RegionType region0 = region;
 
     if ( HasValue("in") )
       {
         if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
           {
-            SetParameterInt( "rsx", region.GetSize(0));
-            SetParameterInt( "rsy", region.GetSize(1));
-            SetParameterInt( "rox", region.GetIndex(0));
-            SetParameterInt( "roy", region.GetIndex(1));
+            if (region0.GetSize(0) != region.GetSize(0))
+              SetParameterInt( "rsx", region.GetSize(0));
+            if (region0.GetSize(1) != region.GetSize(1))
+              SetParameterInt( "rsy", region.GetSize(1));
+            if (region0.GetIndex(0) != region.GetIndex(0))
+              SetParameterInt( "rox", region.GetIndex(0));
+            if (region0.GetIndex(1) != region.GetIndex(1))
+              SetParameterInt( "roy", region.GetIndex(1));
             return true;
           }
       }
