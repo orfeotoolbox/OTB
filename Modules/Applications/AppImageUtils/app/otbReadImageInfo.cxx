@@ -67,10 +67,8 @@ private:
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image to analyse");
 
-    AddParameter(ParameterType_Empty, "keywordlist", "Display the OSSIM keywordlist");
+    AddParameter(ParameterType_Bool, "keywordlist", "Display the OSSIM keywordlist");
     SetParameterDescription("keywordlist", "Output the OSSIM keyword list. It contains metadata information (sensor model, geometry ). Information is stored in keyword list (pairs of key/value)");
-    DisableParameter("keywordlist");
-    MandatoryOff("keywordlist");
 
     AddParameter(ParameterType_OutputFilename, "outkwl", "Write the OSSIM keywordlist to a geom file");
     SetParameterDescription("outkwl", "This option allows extracting the OSSIM keywordlist of the image into a geom file.");
@@ -486,7 +484,7 @@ private:
     SetParameterStringList("gcp.geocoord", gcp_geocoord, false);
     SetParameterStringList("gcp.info", gcp_infos, false);
 
-    if ( IsParameterEnabled("keywordlist") )
+    if ( GetParameterInt("keywordlist") )
       {
       std::ostringstream osskeywordlist;
       osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
@@ -499,7 +497,7 @@ private:
     //Display image information in the dedicated logger
     otbAppLogINFO( << ossOutput.str() );
 
-    if(IsParameterEnabled("outkwl"))
+    if(IsParameterEnabled("outkwl") && HasValue("outkwl"))
       {
       WriteGeometry(metadataInterface->GetImageKeywordlist(),GetParameterString("outkwl"));
       }
