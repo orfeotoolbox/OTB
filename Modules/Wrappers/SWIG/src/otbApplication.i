@@ -106,7 +106,8 @@ namespace Wrapper
     ParameterType_ComplexOutputImage,
     ParameterType_RAM,
     ParameterType_OutputProcessXML,
-    ParameterType_InputProcessXML
+    ParameterType_InputProcessXML,
+    ParameterType_Bool
   } ParameterType;
 
   typedef enum
