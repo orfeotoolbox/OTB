@@ -47,7 +47,7 @@ BoolParameter::SetValue(const std::string & str)
   std::string lowerStr;
   // only strings less than 10 characters expected
   lowerStr.reserve(10);
-  for (unsigned int i=0 ; i < std::min(10,str.size()) ; i++ )
+  for (unsigned int i=0 ; i < std::min(10U,(unsigned int) str.size()) ; i++ )
     {
     lowerStr.push_back(tolower(str[i]));
     }
@@ -61,7 +61,7 @@ BoolParameter::SetValue(const std::string & str)
     }
   else
     {
-    // TODO: exception, value not a bool
+    itkGenericExceptionMacro(<< "Wrong value for BoolParameter (" << str << "), accepts: 0, 1, on, off, true, false");
     }
 }
 

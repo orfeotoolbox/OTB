@@ -21,6 +21,9 @@
 #ifndef otbWrapperBoolParameter_h
 #define otbWrapperBoolParameter_h
 
+#include "otbWrapperParameter.h"
+#include "OTBApplicationEngineExport.h"
+
 namespace otb
 {
 namespace Wrapper
