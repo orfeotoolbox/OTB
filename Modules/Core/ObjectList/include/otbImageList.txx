@@ -35,7 +35,15 @@ ImageList<TImage>
   Superclass::UpdateOutputData();
   for (ConstIterator it = this->Begin(); it != this->End(); ++it)
     {
+    if (it.Get()->GetUpdateMTime() < it.Get()->GetPipelineMTime()
+        || it.Get()->GetDataReleased()
+        || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
+      {
+      if(it.Get()->GetSource())
+        {
         it.Get()->GetSource()->UpdateOutputData(it.Get());
+        }
+      }
     }
 }
 
@@ -52,6 +60,8 @@ ImageList<TImage>
         || it.Get()->GetDataReleased()
         || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
       {
+
+      std::cout<<"Requested region: "<<it.Get()<<" "<<it.Get()->GetRequestedRegion()<<std::endl;
       if (it.Get()->GetSource())
         {
         it.Get()->GetSource()->PropagateRequestedRegion(it.Get());
@@ -71,6 +81,17 @@ ImageList<TImage>
       }
     }
   }
+
+template<class TImage>
+void
+ImageList<TImage>
+::SetRequestedRegion(const itk::DataObject * source)
+{
+  for (ConstIterator it = this->Begin(); it != this->End(); ++it)
+    {
+    it.Get()->SetRequestedRegion(source);
+    }
+}
 
 template <class TImage>
 void
