@@ -475,9 +475,6 @@ OutputImageParameter::Write()
     {
     itkExceptionMacro("Unknown image type");
     }
-
-    // Clear writer
-    m_UInt8Writer = nullptr;
   }
 
 
@@ -658,14 +655,6 @@ void OutputImageParameter::ClearValue()
 {
   m_Image = nullptr;
   // m_FileName = "";
-  
-  m_UInt8Writer = nullptr;
-  m_Int16Writer = nullptr;
-  m_UInt16Writer = nullptr;
-  m_Int32Writer = nullptr;
-  m_UInt32Writer = nullptr;
-  m_FloatWriter = nullptr;
-  m_DoubleWriter = nullptr;
 
   m_VectorUInt8Writer = nullptr;
   m_VectorInt16Writer = nullptr;

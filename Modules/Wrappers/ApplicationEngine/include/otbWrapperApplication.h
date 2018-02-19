@@ -848,6 +848,8 @@ public:
     this->SetDocLink(link);
   }
 
+  void RegisterPipeline();
+
   std::vector<itk::ProcessObject::Pointer> m_Filters;
 
 protected:

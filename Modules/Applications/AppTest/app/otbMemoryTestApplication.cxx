@@ -94,7 +94,7 @@ private:
     #ifdef MEM_DEBUG
     extractor->DebugOn();
     #endif
-    m_Filters.push_back(extractor.GetPointer());
+    // m_Filters.push_back(extractor.GetPointer());
     #ifdef MEM_DEBUG
     std::cout<<"Debug on extractor "<<std::endl;
     extractor->DebugOn();
@@ -107,6 +107,9 @@ private:
     extractor->GetOutput()->DebugOn();
     #endif
     SetParameterOutputImage("out" , extractor->GetOutput() );
+    std::cout<<"Registering"<<std::endl;
+    RegisterPipeline();
+    std::cout<<"Registered"<<std::endl;
   }
 
 };

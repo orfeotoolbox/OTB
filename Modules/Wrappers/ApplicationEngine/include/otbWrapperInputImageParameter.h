@@ -111,6 +111,10 @@ public:
 
   void ClearValue() ITK_OVERRIDE;
 
+  ImageBaseType::Pointer GetPointer()
+  {
+    return m_Image;
+  }
 
 protected:
   /** Constructor */

@@ -45,6 +45,8 @@
 #include "otbWrapperTypes.h"
 #include <exception>
 #include "itkMacro.h"
+#include <stack>
+#include <set>
 
 namespace otb
 {
@@ -73,6 +75,83 @@ Application::Application()
 
 Application::~Application()
 {
+}
+
+void
+Application::RegisterPipeline()
+{
+  m_Filters.clear();
+  std::stack< itk::DataObject * > dataStack;
+  std::set< itk::DataObject * > inputData;
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
+    {
+    std::string key = *it;
+    if ( GetParameterType(key) == ParameterType_OutputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter * outP = dynamic_cast<OutputImageParameter*>(param);
+      itk::ImageBase<2> * outData = outP->GetValue();
+      std::cout<<"one image in output"<<std::endl;
+      dataStack.push(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputVectorDataParameter * outP = dynamic_cast<OutputVectorDataParameter*>(param);
+      Wrapper::VectorDataType * outData = outP->GetValue();
+      dataStack.push(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_InputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputImageParameter * inP = dynamic_cast<InputImageParameter*>(param);
+      itk::ImageBase<2> * inData = inP->GetPointer();
+      inputData.insert(inData);
+      }
+    }
+  // DFS
+  std::set< itk::ProcessObject * > processSet;
+  while ( !dataStack.empty() )
+    {
+    std::cout<<"one data  is processed"<<std::endl;
+    itk::DataObject * current = dataStack.top();
+    dataStack.pop();
+    if ( inputData.find( current ) != inputData.end() )
+      continue;
+    std::cout<<"not an input"<<std::endl;
+    if ( dynamic_cast<itk::ImageBase<2> * > ( current ) )
+      {
+      itk::ImageBase<2> * image = dynamic_cast<itk::ImageBase<2> * > ( current );
+      itk::ImageBase<2>::SizeType sizenull;
+      sizenull.Fill(0);
+      if ( image->GetLargestPossibleRegion() == image->GetBufferedRegion() && image->GetBufferedRegion().GetSize() != sizenull )
+        continue;
+      }
+    std::cout<<"not empty"<<std::endl;
+    itk::ProcessObject * process = (current->GetSource()).GetPointer();
+    if ( processSet.find( process ) != processSet.end())
+      continue;
+    std::cout<<"add process to set"<<std::endl;
+    processSet.insert( process );
+    std::vector< itk::DataObject::Pointer > inputs = process->GetInputs();
+    for ( auto it : inputs )
+      {
+      if ( inputData.find(it.GetPointer()) != inputData.end() )
+        continue;
+      dataStack.push( it.GetPointer() );
+      }
+    }
+
+  for ( auto it : processSet )
+  {
+    std::cout<<"one filter is registered"<<std::endl;
+    m_Filters.push_back( it );
+  }
+
+
 }
 
 otb::Logger* Application::GetLogger() const
