@@ -308,6 +308,55 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     }
 }
 
+template<class TInputImage, class TMaskImage, class TSampler>
+void
+PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
+::FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update)
+{
+  ogr::Layer outLayer = outDS->GetLayersCount() == 1
+                        ? outDS->GetLayer(0)
+                        : outDS->GetLayer(this->GetOutLayerName());
+
+  OGRErr err = outLayer.ogr().StartTransaction();
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+    }
+
+  // output vectors sorted by class
+  for (auto& label : m_ClassPartition)
+    {
+    ogr::Layer inLayer = this->GetInMemoryOutput(label.second,outIdx);
+    if (!inLayer)
+      {
+      continue;
+      }
+
+    // This test only uses 1 input, not compatible with multiple OGRData inputs
+    for(auto tmpIt = inLayer.begin(); tmpIt!=inLayer.end(); ++tmpIt)
+      {
+      if( label.first.compare(tmpIt->ogr().GetFieldAsString(this->GetFieldIndex())) != 0 )
+        continue;
+      if(update)
+        {
+        outLayer.SetFeature( *tmpIt );
+        }
+      else
+        {
+        ogr::Feature dstFeature(outLayer.GetLayerDefn());
+        dstFeature.SetFrom( *tmpIt, TRUE );
+        outLayer.CreateFeature( dstFeature );
+        }
+      }
+    }
+
+  err = outLayer.ogr().CommitTransaction();
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+    }
+}
+
 // -------------- otb::OGRDataToSamplePositionFilter --------------------------
 
 template<class TInputImage, class TMaskImage, class TSampler>
