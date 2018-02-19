@@ -105,7 +105,7 @@ void QtWidgetSimpleProgressReport::ReportProcess()
 
 void QtWidgetSimpleProgressReport::Init()
 {
-  ClearEvent();
+  // ClearEvent();
   m_Bar->setValue(0);
   m_Label->setText("No process");
 }
