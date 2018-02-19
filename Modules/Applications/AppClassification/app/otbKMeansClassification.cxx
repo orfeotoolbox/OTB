@@ -59,11 +59,10 @@ protected:
     InitKMClassification();
 
     // init at the end cleanup
-    AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
-    EnableParameter( "cleanup" );
+    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
     SetParameterDescription( "cleanup",
                            "If activated, the application will try to clean all temporary files it created" );
-    MandatoryOff( "cleanup" );
+    SetParameterInt("cleanup", 1);
   }
 
   void InitKMSampling()
@@ -497,7 +496,7 @@ private:
     Superclass::CreateOutMeansFile(GetParameterImage("in"), fileNames.modelFile, GetParameterInt("nc"));
 
     // Remove all tempory files
-    if( IsParameterEnabled( "cleanup" ) )
+    if( GetParameterInt( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
       fileNames.clear();

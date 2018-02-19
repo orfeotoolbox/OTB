@@ -205,7 +205,7 @@ public:
     TrainModel( imageList, fileNames.sampleTrainOutputs, fileNames.sampleValidOutputs );
 
     // cleanup
-    if( IsParameterEnabled( "cleanup" ) )
+    if( GetParameterInt( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
       fileNames.clear();

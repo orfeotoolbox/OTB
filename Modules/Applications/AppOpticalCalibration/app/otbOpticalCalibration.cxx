@@ -199,16 +199,13 @@ private:
     AddChoice("level.toc",     "Image to Top Of Canopy reflectance (atmospheric corrections)");
     SetParameterString("level", "toa", false);
 
-    AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
+    AddParameter(ParameterType_Bool, "milli", "Convert to milli reflectance");
     SetParameterDescription("milli", "Flag to use milli-reflectance instead of reflectance.\n"
                             "This allows saving the image with integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename double for example)");
-    DisableParameter("milli");
-    MandatoryOff("milli");
 
-    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0, 1]");
+    AddParameter(ParameterType_Bool, "clamp", "Clamp of reflectivity values between [0, 1]");
     SetParameterDescription("clamp", "Clamping in the range [0, 1]. It can be useful to preserve area with specular reflectance.");
-    EnableParameter("clamp");
-    MandatoryOff("clamp");
+    SetParameterInt("clamp",1);
 
     //Acquisition parameters
     AddParameter(ParameterType_Group,"acqui","Acquisition parameters");
@@ -751,12 +748,12 @@ private:
         m_ImageToRadianceFilter->SetInput(inImage);
         m_RadianceToReflectanceFilter->SetInput(m_ImageToRadianceFilter->GetOutput());
 
-        if (IsParameterEnabled("clamp"))
+        if (GetParameterInt("clamp"))
           {
           GetLogger()->Info("Clamp values between [0, 100]\n");
           }
 
-        m_RadianceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
+        m_RadianceToReflectanceFilter->SetUseClamp(GetParameterInt("clamp"));
         m_RadianceToReflectanceFilter->UpdateOutputInformation();
         m_ScaleFilter->SetInput(m_RadianceToReflectanceFilter->GetOutput());
       }
@@ -894,7 +891,7 @@ private:
         }
 
         //Rescale the surface reflectance in milli-reflectance
-        if (!IsParameterEnabled("clamp"))
+        if (!GetParameterInt("clamp"))
         {
           if (!adjComputation)
             m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
@@ -920,7 +917,7 @@ private:
     // Output Image
     double scale = 1.;
 
-    if (IsParameterEnabled("milli"))
+    if (GetParameterInt("milli"))
     {
     GetLogger()->Info("Use milli-reflectance\n");
       if ( (GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC) )

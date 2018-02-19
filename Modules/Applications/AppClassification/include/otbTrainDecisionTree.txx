@@ -90,13 +90,13 @@ LearningApplicationBase<TInputValue,TOutputValue>
     "is equal to cv_folds.");
 
   //Use1seRule
-  AddParameter(ParameterType_Empty, "classifier.dt.r", "Set Use1seRule flag to false");
+  AddParameter(ParameterType_Bool, "classifier.dt.r", "Set Use1seRule flag to false");
   SetParameterDescription("classifier.dt.r",
       "If true, then a pruning will be harsher. This will make a tree more compact and more "
       "resistant to the training data noise but a bit less accurate.");
 
   //TruncatePrunedTree
-  AddParameter(ParameterType_Empty, "classifier.dt.t", "Set TruncatePrunedTree flag to false");
+  AddParameter(ParameterType_Bool, "classifier.dt.t", "Set TruncatePrunedTree flag to false");
   SetParameterDescription("classifier.dt.t",
     "If true, then pruned branches are physically removed from the tree.");
 
@@ -121,11 +121,11 @@ LearningApplicationBase<TInputValue,TOutputValue>
   classifier->SetRegressionAccuracy(GetParameterFloat("classifier.dt.ra"));
   classifier->SetMaxCategories(GetParameterInt("classifier.dt.cat"));
   classifier->SetCVFolds(GetParameterInt("classifier.dt.f"));
-  if (IsParameterEnabled("classifier.dt.r"))
+  if (GetParameterInt("classifier.dt.r"))
     {
     classifier->SetUse1seRule(false);
     }
-  if (IsParameterEnabled("classifier.dt.t"))
+  if (GetParameterInt("classifier.dt.t"))
     {
     classifier->SetTruncatePrunedTree(false);
     }

@@ -134,7 +134,7 @@ private:
     AddChoice("mode.fft", "FFT transform");
     SetParameterDescription("mode.fft", "FFT transform");
 
-    AddParameter(ParameterType_Empty, "mode.fft.shift", "Shift fft transform");
+    AddParameter(ParameterType_Bool, "mode.fft.shift", "Shift fft transform");
     SetParameterDescription("mode.fft.shift", "Shift transform of fft filter");
 
     AddChoice("mode.wavelet", "Wavelet");
@@ -263,7 +263,7 @@ private:
     else
       {
       // fft ttransform
-      bool shift = IsParameterEnabled( "mode.fft.shift");
+      bool shift = GetParameterInt( "mode.fft.shift");
       typedef otb::Image< std::complex<OutputPixelType> >          ComplexOutputImageType;
 
       if (dir == 0 )

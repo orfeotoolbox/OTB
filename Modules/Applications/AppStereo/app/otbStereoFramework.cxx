@@ -525,20 +525,16 @@ private:
     AddParameter(ParameterType_Group,"postproc","Postprocessing parameters");
     SetParameterDescription("postproc","This group of parameters allow use optional filters.");
 
-    AddParameter(ParameterType_Empty,"postproc.bij","Use bijection consistency"
+    AddParameter(ParameterType_Bool,"postproc.bij","Use bijection consistency"
       " in block matching strategy");
     SetParameterDescription("postproc.bij","Use bijection consistency. "
       "Right to Left correlation is computed to validate Left to Right "
       "disparities. If bijection is not found, the disparity is rejected.");
-    MandatoryOff("postproc.bij");
-    EnableParameter("postproc.bij");
+    SetParameterInt("postproc.bij", 1);
 
-    AddParameter(ParameterType_Empty,"postproc.med","Use median disparities filtering");
+    AddParameter(ParameterType_Bool,"postproc.med","Use median disparities filtering");
     SetParameterDescription("postproc.med","Disparity map can be filtered using"
       " median post filtering (disabled by default).");
-    MandatoryOff("postproc.med");
-    DisableParameter("postproc.med");
-
 
     AddParameter(ParameterType_Float,"postproc.metrict","Correlation metric threshold");
     SetParameterDescription("postproc.metrict","Use block matching metric "
@@ -624,7 +620,7 @@ private:
       }
     else blockMatcherFilter->MinimizeOff();
 
-    if (IsParameterEnabled("postproc.bij"))
+    if (GetParameterInt("postproc.bij"))
       {
       invBlockMatcherFilter->SetLeftInput(rightImage);
       invBlockMatcherFilter->SetRightInput(leftImage);
@@ -947,7 +943,7 @@ private:
       m_Filters.push_back(lBandMathFilter.GetPointer());
 
       BandMathFilterType::Pointer finalMaskFilter;
-      if (IsParameterEnabled("postproc.bij"))
+      if (GetParameterInt("postproc.bij"))
         {
         finalMaskFilter = BandMathFilterType::New();
         finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
@@ -992,7 +988,7 @@ private:
           blockMatcherFilterPointer = SSDDivMeanBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
 
-          if (IsParameterEnabled("postproc.bij"))
+          if (GetParameterInt("postproc.bij"))
             {
             //Reverse correlation
             invSSDDivMeanBlockMatcherFilter = SSDDivMeanBlockMatchingFilterType::New();
@@ -1025,7 +1021,7 @@ private:
           blockMatcherFilterPointer = SSDBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
 
-          if (IsParameterEnabled("postproc.bij"))
+          if (GetParameterInt("postproc.bij"))
             {
             //Reverse correlation
             invSSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
@@ -1056,7 +1052,7 @@ private:
           blockMatcherFilterPointer = NCCBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
 
-          if (IsParameterEnabled("postproc.bij"))
+          if (GetParameterInt("postproc.bij"))
             {
             //Reverse correlation
             invNCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
@@ -1090,7 +1086,7 @@ private:
           blockMatcherFilterPointer = LPBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
 
-          if (IsParameterEnabled("postproc.bij"))
+          if (GetParameterInt("postproc.bij"))
             {
             //Reverse correlation
             invLPBlockMatcherFilter = LPBlockMatchingFilterType::New();
@@ -1119,7 +1115,7 @@ private:
           break;
         }
 
-       if (IsParameterEnabled("postproc.bij"))
+       if (GetParameterInt("postproc.bij"))
         {
         otbAppLogINFO(<<"Using reverse block-matching to filter incoherent disparity values.");
         bijectFilter = BijectionFilterType::New();
@@ -1149,7 +1145,7 @@ private:
 
      FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
       FloatImageType::Pointer finalMaskImage=finalMaskFilter->GetOutput();
-      if (IsParameterEnabled("postproc.med"))
+      if (GetParameterInt("postproc.med"))
         {
         MedianFilterType::Pointer hMedianFilter = MedianFilterType::New();
         hMedianFilter->SetInput(subPixelFilterPointer->GetOutput(0));
@@ -1183,7 +1179,7 @@ private:
       FloatImageType::Pointer hDispOutput2 = disparityTranslateFilter->GetHorizontalDisparityMapOutput();
       FloatImageType::Pointer vDispOutput2 = disparityTranslateFilter->GetVerticalDisparityMapOutput();
       FloatImageType::Pointer translatedMaskImage =  dispTranslateMaskFilter->GetOutput();
-      if (IsParameterEnabled("postproc.med"))
+      if (GetParameterInt("postproc.med"))
         {
         MedianFilterType::Pointer hMedianFilter2 = MedianFilterType::New();
         MedianFilterType::Pointer vMedianFilter2 = MedianFilterType::New();

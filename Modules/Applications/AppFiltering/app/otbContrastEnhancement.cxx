@@ -229,7 +229,7 @@ private:
     SetParameterDescription("minmax.auto" , "Minimum and maximum value will "
       "be computed on the image (nodata value won't be taken "
       "into account) . Each band will have a minimum and a maximum.");
-    AddParameter(ParameterType_Empty, "minmax.auto.global", "Global");
+    AddParameter(ParameterType_Bool, "minmax.auto.global", "Global");
     SetParameterDescription("minmax.auto.global" , "Automatic"
       "Min/max computation will result in the same minimum and maximum for "
       "all the bands.");
@@ -488,7 +488,7 @@ private:
     if ( m_MinMaxMode == "auto" )
       {
       oss << "automatic";
-      if ( IsParameterEnabled( "minmax.auto.global" ) )
+      if ( GetParameterInt( "minmax.auto.global" ) )
         { 
         oss << " and global";
         }
@@ -584,7 +584,7 @@ private:
       statFilter->Update();
       min = statFilter->GetMinimum();
       max = statFilter->GetMaximum();
-      if ( IsParameterEnabled("minmax.auto.global") )
+      if ( GetParameterInt("minmax.auto.global") )
         {
         float temp(min[0]);
         for ( unsigned int i = 1 ; i < min.GetSize() ; i++ )
@@ -602,7 +602,7 @@ private:
       }
     std::ostringstream oss;
     oss<<"Minimum and maximum are for each channel : ";
-    if ( IsParameterEnabled("minmax.auto.global") || 
+    if ( GetParameterInt("minmax.auto.global") || 
           m_MinMaxMode == "manuel" )
       {
       oss<<std::endl<<min[0]<<" and "<<max[0];
