@@ -171,11 +171,11 @@ otb_add_test(NAME owTvOutputImageParameter COMMAND otbApplicationEngineTestDrive
   "my description"
   )
 
-otb_add_test(NAME owTvOutputImageParameterConversion COMMAND otbApplicationEngineTestDriver
-  otbWrapperOutputImageParameterConversionTest
-  ${INPUTDATA}/poupees.tif
-  ${TEMP}/poupees_out.tif
-  )
+#~ otb_add_test(NAME owTvOutputImageParameterConversion COMMAND otbApplicationEngineTestDriver
+  #~ otbWrapperOutputImageParameterConversionTest
+  #~ ${INPUTDATA}/poupees.tif
+  #~ ${TEMP}/poupees_out.tif
+  #~ )
 
 otb_add_test(NAME owTvDocExampleStructureTest COMMAND otbApplicationEngineTestDriver
   --compare-ascii ${NOTOL}
