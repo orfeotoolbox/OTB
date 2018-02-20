@@ -510,6 +510,10 @@ class ApplicationProxy(object):
 			s += self.GetDocLongDescription()
 			return s
 
+		def SetParameters(self, dict_params):
+			for param_key, param_value in dict_params.iteritems():
+				self.SetParameterValue(param_key, param_value)
+
 		def SetParameterValue(self, paramKey, value):
 			paramType = self.GetParameterType(paramKey)
 			if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
