@@ -523,6 +523,14 @@ int Application::ExecuteAndWriteOutput()
   return status;
 }
 
+void
+Application::Stop()
+{
+  // TODO :  call AbortGenerateData on ProcessObjects (but no mutex)
+  // TODO : set an internal AbortExecute flag with mutex
+  std::cout << "Stop !" << std::endl;
+}
+
 /* Enable the use of an optional parameter. Returns the previous state */
 void Application::EnableParameter(std::string paramKey)
 {

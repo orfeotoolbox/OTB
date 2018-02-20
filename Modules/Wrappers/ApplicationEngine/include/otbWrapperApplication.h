@@ -154,6 +154,9 @@ public:
    */
   int ExecuteAndWriteOutput();
 
+  /** Request the application to stop its processing */
+  void Stop();
+
   /* Get the internal application parameters
    *
    * WARNING: this method may disappear from the API */
