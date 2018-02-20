@@ -200,7 +200,7 @@ QtWidgetModel
     }
 
   // launch the output image writing
-  AppliThread * taskAppli = new AppliThread( m_Application );
+  AppliThread *taskAppli = new AppliThread( m_Application );
 
   QObject::connect(
     taskAppli,
@@ -225,10 +225,19 @@ QtWidgetModel
     SLOT( deleteLater() )
   );
 
+  QObject::connect(
+    this,
+    SIGNAL( Stop() ),
+    taskAppli,
+    SLOT( Stop() )
+  );
+
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
 
   taskAppli->Execute();
+
+  emit SetApplicationReady(true);
 }
 
 void

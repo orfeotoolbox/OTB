@@ -68,6 +68,13 @@ signals:
    */
   void ExceptionRaised( QString what );
 
+public slots:
+  /** Ask the running application to stop */
+  void Stop()
+    {
+    m_Application->Stop();
+    }
+
 protected:
   void run() ITK_OVERRIDE;
 
@@ -138,6 +145,8 @@ signals:
   void ExceptionRaised( QString what );
 
   void UpdateGui();
+
+  void Stop();
 
 protected slots:
   /**
