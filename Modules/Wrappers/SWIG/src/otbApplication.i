@@ -541,6 +541,13 @@ class ApplicationProxy(object):
 			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
 			return
 
+		def GetParameters(self):
+			ret = {}
+			for key in self.GetParametersKeys():
+				if self.HasValue(key) and self.IsParameterEnabled(key) and self.GetParameterRole(key) == 0:
+					ret[key] = self.GetParameterValue(key)
+			return ret
+
 		def GetParameterValue(self, paramKey):
 			paramType = self.GetParameterType(paramKey)
 			if paramType in [ParameterType_InputProcessXML,
