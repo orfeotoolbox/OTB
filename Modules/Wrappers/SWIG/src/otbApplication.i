@@ -522,7 +522,7 @@ class ApplicationProxy(object):
 			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,
 												 ParameterType_ListView]:
-			  return self.setParameterStringList(paramKey, value)
+			  return self.SetParameterStringList(paramKey, value)
 			elif paramType in [ParameterType_Int, ParameterType_Radius]:
 			  return self.SetParameterInt(paramKey, value)
 			elif paramType in [ParameterType_Float]:
