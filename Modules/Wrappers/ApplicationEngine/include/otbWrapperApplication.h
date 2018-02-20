@@ -849,7 +849,7 @@ public:
   }
 
   void RegisterPipeline();
-
+  void ReleaseDataFromPipeline();
   std::vector<itk::ProcessObject::Pointer> m_Filters;
 
 protected:

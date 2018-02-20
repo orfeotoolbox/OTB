@@ -77,83 +77,6 @@ Application::~Application()
 {
 }
 
-void
-Application::RegisterPipeline()
-{
-  m_Filters.clear();
-  std::stack< itk::DataObject * > dataStack;
-  std::set< itk::DataObject * > inputData;
-  std::vector<std::string> paramList = GetParametersKeys(true);
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-           it != paramList.end();
-           ++it)
-    {
-    std::string key = *it;
-    if ( GetParameterType(key) == ParameterType_OutputImage )
-      {
-      Parameter* param = GetParameterByKey(key);
-      OutputImageParameter * outP = dynamic_cast<OutputImageParameter*>(param);
-      itk::ImageBase<2> * outData = outP->GetValue();
-      std::cout<<"one image in output"<<std::endl;
-      dataStack.push(outData);
-      }
-    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
-      {
-      Parameter* param = GetParameterByKey(key);
-      OutputVectorDataParameter * outP = dynamic_cast<OutputVectorDataParameter*>(param);
-      Wrapper::VectorDataType * outData = outP->GetValue();
-      dataStack.push(outData);
-      }
-    else if ( GetParameterType(key) == ParameterType_InputImage )
-      {
-      Parameter* param = GetParameterByKey(key);
-      InputImageParameter * inP = dynamic_cast<InputImageParameter*>(param);
-      itk::ImageBase<2> * inData = inP->GetPointer();
-      inputData.insert(inData);
-      }
-    }
-  // DFS
-  std::set< itk::ProcessObject * > processSet;
-  while ( !dataStack.empty() )
-    {
-    std::cout<<"one data  is processed"<<std::endl;
-    itk::DataObject * current = dataStack.top();
-    dataStack.pop();
-    if ( inputData.find( current ) != inputData.end() )
-      continue;
-    std::cout<<"not an input"<<std::endl;
-    if ( dynamic_cast<itk::ImageBase<2> * > ( current ) )
-      {
-      itk::ImageBase<2> * image = dynamic_cast<itk::ImageBase<2> * > ( current );
-      itk::ImageBase<2>::SizeType sizenull;
-      sizenull.Fill(0);
-      if ( image->GetLargestPossibleRegion() == image->GetBufferedRegion() && image->GetBufferedRegion().GetSize() != sizenull )
-        continue;
-      }
-    std::cout<<"not empty"<<std::endl;
-    itk::ProcessObject * process = (current->GetSource()).GetPointer();
-    if ( processSet.find( process ) != processSet.end())
-      continue;
-    std::cout<<"add process to set"<<std::endl;
-    processSet.insert( process );
-    std::vector< itk::DataObject::Pointer > inputs = process->GetInputs();
-    for ( auto it : inputs )
-      {
-      if ( inputData.find(it.GetPointer()) != inputData.end() )
-        continue;
-      dataStack.push( it.GetPointer() );
-      }
-    }
-
-  for ( auto it : processSet )
-  {
-    std::cout<<"one filter is registered"<<std::endl;
-    m_Filters.push_back( it );
-  }
-
-
-}
-
 otb::Logger* Application::GetLogger() const
 {
   return m_Logger;
@@ -437,6 +360,81 @@ void Application::UpdateParameters()
 void Application::AfterExecuteAndWriteOutputs()
 {}
 
+void
+Application::RegisterPipeline()
+{
+  m_Filters.clear();
+  std::stack< itk::DataObject * > dataStack;
+  std::set< itk::DataObject * > inputData;
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
+    {
+    std::string key = *it;
+    if ( GetParameterType(key) == ParameterType_OutputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter * outP = dynamic_cast<OutputImageParameter*>(param);
+      itk::ImageBase<2> * outData = outP->GetValue();
+      std::cout<<"one image in output"<<std::endl;
+      dataStack.push(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputVectorDataParameter * outP = dynamic_cast<OutputVectorDataParameter*>(param);
+      Wrapper::VectorDataType * outData = outP->GetValue();
+      dataStack.push(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_InputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputImageParameter * inP = dynamic_cast<InputImageParameter*>(param);
+      itk::ImageBase<2> * inData = inP->GetPointer();
+      inputData.insert(inData);
+      }
+    }
+  // DFS
+  std::set< itk::ProcessObject * > processSet;
+  while ( !dataStack.empty() )
+    {
+    std::cout<<"one data  is processed"<<std::endl;
+    itk::DataObject * current = dataStack.top();
+    dataStack.pop();
+    if ( inputData.find( current ) != inputData.end() )
+      continue;
+    std::cout<<"not an input"<<std::endl;
+    if ( dynamic_cast<itk::ImageBase<2> * > ( current ) )
+      {
+      itk::ImageBase<2> * image = dynamic_cast<itk::ImageBase<2> * > ( current );
+      itk::ImageBase<2>::SizeType sizenull;
+      sizenull.Fill(0);
+      if ( image->GetLargestPossibleRegion() == image->GetBufferedRegion() && image->GetBufferedRegion().GetSize() != sizenull )
+        continue;
+      }
+    std::cout<<"not empty"<<std::endl;
+    itk::ProcessObject * process = (current->GetSource()).GetPointer();
+    if ( processSet.find( process ) != processSet.end())
+      continue;
+    std::cout<<"add process to set"<<std::endl;
+    processSet.insert( process );
+    std::vector< itk::DataObject::Pointer > inputs = process->GetInputs();
+    for ( auto it : inputs )
+      {
+      if ( inputData.find(it.GetPointer()) != inputData.end() )
+        continue;
+      dataStack.push( it.GetPointer() );
+      }
+    }
+
+  for ( auto it : processSet )
+  {
+    std::cout<<"one filter is registered"<<std::endl;
+    m_Filters.push_back( it );
+  }
+}
+
 int Application::Execute()
 {
 
@@ -485,6 +483,72 @@ int Application::Execute()
     }
 
   return 0;
+}
+
+void
+Application::ReleaseDataFromPipeline()
+{
+  std::stack< itk::DataObject * > dataStack;
+  std::set< itk::DataObject * > dataSet;
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
+    {
+    std::string key = *it;
+    if ( GetParameterType(key) == ParameterType_OutputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter * outP = dynamic_cast<OutputImageParameter*>(param);
+      itk::ImageBase<2> * outData = outP->GetValue();
+      std::cout<<"one image in output"<<std::endl;
+      dataSet.insert(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputVectorDataParameter * outP = dynamic_cast<OutputVectorDataParameter*>(param);
+      Wrapper::VectorDataType * outData = outP->GetValue();
+      dataSet.insert(outData);
+      }
+    else
+      continue;
+    }
+  // DFS
+  std::stack< itk::ProcessObject * > processStack;
+  for ( auto data : dataSet )
+    {
+    auto process = (data->GetSource()).GetPointer();
+    if ( process != nullptr )
+      processStack.push( process );
+    }
+
+  while ( !processStack.empty() )
+    {
+    std::cout<<"one process  is processed"<<std::endl;
+    itk::ProcessObject * current = processStack.top();
+    std::cout<<"top"<<std::endl;
+    processStack.pop();
+    std::cout<<"pop"<<std::endl;
+    std::cout<<current->GetNameOfClass()<<std::endl;
+    auto inputVector = current->GetInputs();
+    for ( auto data : inputVector )
+      {
+      if ( dataSet.find( data.GetPointer() ) != dataSet.end() && data != nullptr )
+        continue;
+      std::cout<<"one data is stored"<<std::endl;
+      dataSet.insert( data.GetPointer() );
+      itk::ProcessObject * process = data->GetSource().GetPointer();
+      if ( process != nullptr )
+        processStack.push( process );
+      }
+    }
+
+  for ( auto data : dataSet )
+  {
+    std::cout<<"one bulk is freed"<<std::endl;
+    data->ReleaseData();
+  }
 }
 
 int Application::ExecuteAndWriteOutput()
@@ -601,6 +665,7 @@ int Application::ExecuteAndWriteOutput()
 
   this->AfterExecuteAndWriteOutputs();
   m_Chrono.Stop();
+  ReleaseDataFromPipeline();
   ClearMemory();
   return status;
 }
@@ -615,39 +680,39 @@ void Application::ClearMemory()
            ++it)
     {
     std::string key = *it;
-    if (GetParameterType(key) == ParameterType_InputImage )
-      {
-      Parameter* param = GetParameterByKey(key);
-      InputImageParameter * input = dynamic_cast<InputImageParameter*>(param);
-      filename = input->GetFileName();
-      input->ClearValue();
-      input->SetFromFileName(filename);
-      }
-    else if (GetParameterType(key) == ParameterType_InputImageList )
-      {
-      Parameter* param = GetParameterByKey(key);
-      InputImageListParameter * input = dynamic_cast<InputImageListParameter*>(param);
-      std::vector< std::string > filenamelist = input->GetFileNameList();
-      input->ClearValue();
-      input->SetListFromFileName(filenamelist);
-      }
-    else if (GetParameterType(key) == ParameterType_InputVectorData )
-      {
-      Parameter* param = GetParameterByKey(key);
-      InputVectorDataParameter * input = dynamic_cast<InputVectorDataParameter*>(param);
-      filename = input->GetFileName();
-      input->ClearValue();
-      input->SetFromFileName(filename);
-      }
-    else if (GetParameterType(key) == ParameterType_InputVectorDataList )
-      {
-      Parameter* param = GetParameterByKey(key);
-      InputVectorDataListParameter * input = dynamic_cast<InputVectorDataListParameter*>(param);
-      std::vector< std::string > filenamelist = input->GetFileNameList();
-      input->ClearValue();
-      input->SetListFromFileName(filenamelist);
-      }
-    else if (GetParameterType(key) == ParameterType_OutputImage )
+    // if (GetParameterType(key) == ParameterType_InputImage )
+    //   {
+    //   Parameter* param = GetParameterByKey(key);
+    //   InputImageParameter * input = dynamic_cast<InputImageParameter*>(param);
+    //   filename = input->GetFileName();
+    //   input->ClearValue();
+    //   input->SetFromFileName(filename);
+    //   }
+    // else if (GetParameterType(key) == ParameterType_InputImageList )
+    //   {
+    //   Parameter* param = GetParameterByKey(key);
+    //   InputImageListParameter * input = dynamic_cast<InputImageListParameter*>(param);
+    //   std::vector< std::string > filenamelist = input->GetFileNameList();
+    //   input->ClearValue();
+    //   input->SetListFromFileName(filenamelist);
+    //   }
+    // else if (GetParameterType(key) == ParameterType_InputVectorData )
+    //   {
+    //   Parameter* param = GetParameterByKey(key);
+    //   InputVectorDataParameter * input = dynamic_cast<InputVectorDataParameter*>(param);
+    //   filename = input->GetFileName();
+    //   input->ClearValue();
+    //   input->SetFromFileName(filename);
+    //   }
+    // else if (GetParameterType(key) == ParameterType_InputVectorDataList )
+    //   {
+    //   Parameter* param = GetParameterByKey(key);
+    //   InputVectorDataListParameter * input = dynamic_cast<InputVectorDataListParameter*>(param);
+    //   std::vector< std::string > filenamelist = input->GetFileNameList();
+    //   input->ClearValue();
+    //   input->SetListFromFileName(filenamelist);
+    //   }
+    if (GetParameterType(key) == ParameterType_OutputImage )
       {
       Parameter* param = GetParameterByKey(key);
       OutputImageParameter * output = dynamic_cast<OutputImageParameter*>(param);
@@ -662,7 +727,7 @@ void Application::ClearMemory()
     }
 
   // Cleaning m_ProgressSource
-  m_ProgressSource = nullptr;
+  // m_ProgressSource = nullptr;
 
   // Cleaning m_Filters
   m_Filters.clear();
