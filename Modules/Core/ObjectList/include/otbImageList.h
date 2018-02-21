@@ -68,6 +68,8 @@ public:
     throw (itk::InvalidRequestedRegionError) ITK_OVERRIDE;
   void UpdateOutputData(void) ITK_OVERRIDE;
 
+  void SetRequestedRegion(const itk::DataObject * source);
+  
 protected:
   /** Constructor */
   ImageList() {};

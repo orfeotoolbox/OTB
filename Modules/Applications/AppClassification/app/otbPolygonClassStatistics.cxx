@@ -76,7 +76,7 @@ private:
     SetDocName("Polygon Class Statistics");
     SetDocLongDescription("The application processes a set of geometries "
       "intended for training (they should have a field giving the associated "
-      "class). The geometries are analysed against a support image to compute "
+      "class). The geometries are analyzed against a support image to compute "
       "statistics : \n"
       "  - number of samples per class\n"
       "  - number of samples per geometry\n"
@@ -92,17 +92,17 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    AddParameter(ParameterType_InputImage,  "in",   "InputImage");
+    AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Support image that will be classified");
 
-    AddParameter(ParameterType_InputImage,  "mask",   "InputMask");
+    AddParameter(ParameterType_InputImage,  "mask",   "Input validity mask");
     SetParameterDescription("mask", "Validity mask (only pixels corresponding to a mask value greater than 0 will be used for statistics)");
     MandatoryOff("mask");
     
     AddParameter(ParameterType_InputFilename, "vec", "Input vectors");
-    SetParameterDescription("vec","Input geometries to analyse");
+    SetParameterDescription("vec","Input geometries to analyze");
     
-    AddParameter(ParameterType_OutputFilename, "out", "Output Statistics");
+    AddParameter(ParameterType_OutputFilename, "out", "Output XML statistics file");
     SetParameterDescription("out","Output file to store statistics (XML format)");
 
     AddParameter(ParameterType_ListView, "field", "Field Name");
@@ -155,6 +155,22 @@ private:
           }
         }
       }
+
+     // Check that the extension of the output parameter is XML (mandatory for
+     // StatisticsXMLFileWriter)
+     // Check it here to trigger the error before polygons analysis
+     
+     if ( HasValue("out") )
+       {
+       // Store filename extension
+       // Check that the right extension is given : expected .xml
+       const std::string extension = itksys::SystemTools::GetFilenameLastExtension(this->GetParameterString("out"));
+
+       if (itksys::SystemTools::LowerCase(extension) != ".xml")
+         {
+         otbAppLogFATAL( << extension << " is a wrong extension for parameter \"out\": Expected .xml" );
+         }
+       }
   }
 
   void DoExecute() ITK_OVERRIDE
@@ -223,7 +239,7 @@ private:
   filter->SetLayerIndex(this->GetParameterInt("layer"));
   filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
-  AddProcess(filter->GetStreamer(),"Analyse polygons...");
+  AddProcess(filter->GetStreamer(),"Analyze polygons...");
   filter->Update();
   
   FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
