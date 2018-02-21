@@ -24,6 +24,17 @@
 namespace otb
 {
 
+Logger::Pointer Logger::Singleton = ITK_NULLPTR;
+
+Logger::Pointer Logger::Instance()
+{
+  if(!Logger::Singleton)
+    Logger::Singleton = Logger::New();
+
+  return Logger::Singleton;
+}
+
+
 Logger::Logger()
 {
 #if OTB_DEBUG
