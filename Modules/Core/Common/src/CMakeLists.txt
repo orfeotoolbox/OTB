@@ -29,6 +29,7 @@ set(OTBCommon_SRC
   otbWriterWatcherBase.cxx
   otbStopwatch.cxx
   otbStringToHTML.cxx
+  otbLogger.cxx
   )
 
 add_library(OTBCommon ${OTBCommon_SRC})
