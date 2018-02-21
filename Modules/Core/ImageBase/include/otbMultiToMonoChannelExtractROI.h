@@ -90,10 +90,14 @@ public:
                       InputImageType::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       OutputImageType::ImageDimension);
-
+  static int nb;
 protected:
   MultiToMonoChannelExtractROI();
-  ~MultiToMonoChannelExtractROI() ITK_OVERRIDE {}
+  ~MultiToMonoChannelExtractROI() ITK_OVERRIDE {
+    std::cout<<"One multitomono is destructed"<<std::endl;
+    --nb;
+    std::cout<<nb<<" left"<<std::endl;
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** ExtractImageFilter can produce an image which is a different

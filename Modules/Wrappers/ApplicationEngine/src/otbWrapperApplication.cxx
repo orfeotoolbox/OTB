@@ -549,6 +549,44 @@ Application::ReleaseDataFromPipeline()
     std::cout<<"one bulk is freed"<<std::endl;
     data->ReleaseData();
   }
+
+  // std::vector<std::string> paramList = GetParametersKeys(true);
+  // std::string filename ("");
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
+    {
+    std::string key = *it;
+    if (GetParameterType(key) == ParameterType_InputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputImageParameter * input = dynamic_cast<InputImageParameter*>(param);
+      
+      }
+    else if (GetParameterType(key) == ParameterType_InputImageList )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputImageListParameter * input = dynamic_cast<InputImageListParameter*>(param);
+      
+      }
+    else if (GetParameterType(key) == ParameterType_InputVectorData )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputVectorDataParameter * input = dynamic_cast<InputVectorDataParameter*>(param);
+      
+      }
+    else if (GetParameterType(key) == ParameterType_InputVectorDataList )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputVectorDataListParameter * input = dynamic_cast<InputVectorDataListParameter*>(param);
+      
+      }
+    else
+      {
+      continue;
+      }
+    }
+
 }
 
 int Application::ExecuteAndWriteOutput()
@@ -612,7 +650,6 @@ int Application::ExecuteAndWriteOutput()
             std::cout<<"Add Process and write"<<std::endl;
             AddProcess(outputParam->GetWriter(), progressId.str());
             outputParam->Write();
-            // ClearWriter in param();
             }
           }
         else if (GetParameterType(key) == ParameterType_OutputVectorData

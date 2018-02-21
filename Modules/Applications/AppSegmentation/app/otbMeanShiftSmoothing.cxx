@@ -121,13 +121,16 @@ private:
 
     AddParameter(ParameterType_InputImage,   "in",     "Input Image");
     SetParameterDescription( "in", "The input image can be any single or multiband image. Beware of pontential imbalance between bands ranges as it may alter euclidean distance." );
+    SetParameterString("in", "/home/antoine/dev/otb-data/Examples/QB_1_ortho.tif");
 
     AddParameter(ParameterType_OutputImage,  "fout",    "Spectral filtered output");
     SetParameterDescription( "fout", "This output image contains the final average spectral signatures of each pixel. The output type should be at least as wide as the input image type. Floating point encoding is advised. This output can be used as input image (in) of the LSMSSegmentation application [4,5]."  );
+    SetParameterString("fout", "/home/antoine/dev/off_otbL/build2/Testing/Temporary/apTvLSMS1_filtered_range.tif");
 
     AddParameter(ParameterType_OutputImage,  "foutpos",    "Spatial filtered displacement output");
     SetParameterDescription( "foutpos", " This output image contains the 2D displacement between the input pixel spatial position and the final position after convergence. Floating point encoding is mandatory. This output can be used as input image (in) of the LSMSSegmentation application [4,5].");
-    MandatoryOff("foutpos");
+    MandatoryOn("foutpos");
+    SetParameterString("foutpos", "/home/antoine/dev/off_otbL/build2/Testing/Temporary/apTvLSMS1_filtered_spatial.tif");
 
     AddRAMParameter();
 
@@ -149,7 +152,7 @@ private:
 
     AddParameter(ParameterType_Int, "maxiter", "Maximum number of iterations");
     SetParameterDescription("maxiter", "Algorithm will stop if convergence threshold is not met after the maximum number of iterations.");
-    SetDefaultParameterInt("maxiter", 100);
+    SetDefaultParameterInt("maxiter", 10);
     SetMinimumParameterIntValue("maxiter", 1);
     MandatoryOff("maxiter");
 

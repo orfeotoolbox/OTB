@@ -116,6 +116,16 @@ public:
     return m_Image;
   }
 
+  itk::ProcessObject::Pointer GetReader()
+  {
+    return m_Reader;
+  }
+
+  itk::ProcessObject::Pointer GetCaster()
+  {
+    return m_Caster;
+  }
+
 protected:
   /** Constructor */
   InputImageParameter();

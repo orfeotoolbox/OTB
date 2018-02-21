@@ -26,6 +26,9 @@
 namespace otb
 {
 
+template<class TInputPixelType, class TOutputPixelType>
+int MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::nb = 0;
+
 /**
  *
  */
@@ -34,7 +37,9 @@ MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
 ::MultiToMonoChannelExtractROI() :    ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> >(),
   m_Channel(1)
 {
-
+  std::cout<<"One multitomono is created"<<std::endl;
+  ++nb;
+  std::cout<<nb<<" created"<<std::endl;
 }
 
 /**
