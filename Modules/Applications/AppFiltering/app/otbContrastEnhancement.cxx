@@ -154,7 +154,7 @@ private:
       "or to reduce the dynamic of the image without losing too much contrast. "
       "It offers several options as a no data value, "
       "a contrast limitation factor, a local version of the algorithm and "
-      "also a mode to equalized the luminance of the image.");
+      "also a mode to equalize the luminance of the image.");
 
     // Documentation
     SetDocName("Contrast Enhancement");
@@ -164,13 +164,14 @@ private:
       "over the image and then use the whole dynamic : meaning flattening the "
       "histogram. That gives us gain for each bin that transform the original "
       "histogram into the flat one. This gain is then apply on the original "
-      "image. Upon this coarse algorithm we added several option to allow "
-      "a finer result. First there is the limitation of the contrast. Many "
-      "ways can be used to do it, we choose to limit the contrast by modifying "
-      "the original histogram. To do so we clip the histogram at a given "
-      "height and redistribute equally among the bins the clipped population. "
-      "Then we add a local version of the algorithm. It is possible to apply "
-      "the algorithm on tiles of the image. That gives us gain depending on "
+      "image." 
+      "\nThe application proposes several option to allow a finer result : "
+      "\n- There is an option to limit contrast. We choose to limit the contrast "
+      "by modifying the original histogram. To do so we clip the histogram at a "
+      "given height and redistribute equally among the bins the clipped population. "
+      "Then we add a local version of the algorithm. "
+       "\n- It is possible to apply the algorithm on tiles of the image, instead "
+      "of on the whole image. That gives us gain depending on "
       "the value of the pixel and its position in the image. In order to "
       "smoothen the result we interpolate the gain between tiles.");
     SetDocLimitations("None");
@@ -195,7 +196,8 @@ private:
       "height accepted in a bin on the input image histogram. "
       "The maximum height will be computed as hfact*eqHeight where eqHeight "
       "is the height of the theoretical flat histogram. The higher hfact, the "
-      "higher the contrast.");
+      "higher the contrast."
+      "\nWhen using 'luminance mode', it is recommended to limit this factor to a small value (ex : 4)");
     MandatoryOff("hfact");
 
     AddParameter(ParameterType_Float , "nodata" , "Nodata Value");
@@ -208,7 +210,7 @@ private:
       "for the histogram computation");
     AddChoice( "spatial.local" , "Local" );
     SetParameterDescription("spatial.local" , "The histograms will be "
-      "computed on the each thumbnail. Each of the histogram will be "
+      "computed on each thumbnail. Each of the histogram will be "
       "equalized and the corresponding gain will be interpolated.");
     AddChoice( "spatial.global" , "Global" );
     SetParameterDescription("spatial.global" , "The histogram will be "
@@ -247,9 +249,14 @@ private:
       "Each channel is equalized independently" );
     AddChoice( "mode.lum" , "Luminance" );
     SetParameterDescription( "mode.lum" ,
-      "The luminance is equalized and then a gain is applied "
-      "on each channels. This gain for each channels will depend on"
-      "the weight (coef) of the channel in the luminance." );
+      "The relative luminance is calculated thanks to the coefficients."
+      "Then the histogram is equalized and then a gain is applied on each channels."
+      "This gain for each channels will depend on"
+      "the weight (coef) of the channel in the luminance." 
+      "\nNote that default values come from color space theories "
+      "on how human eyes perceive colors)" 
+
+);
     AddParameter(ParameterType_Group , "mode.lum.red" , "Red Channel" );
     AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Channel" );
     SetDefaultParameterInt("mode.lum.red.ch", 0 );
@@ -300,12 +307,6 @@ private:
       FloatVectorImageType::RegionType::SizeType size;
       size = inImage->GetLargestPossibleRegion().GetSize() ;
 
-      // if ( !HasUserValue("spatial.local.w") )
-      //   SetParameterInt( "spatial.local.w" , size[0] );
-        
-      // if ( !HasUserValue("spatial.local.h") )
-      //   SetParameterInt( "spatial.local.h" , size[1] );
-      
       if ( GetParameterString("spatial") == "local" &&
            HasValue("spatial.local.h") && HasValue("spatial.local.w") &&
            HasValue("bins") )
@@ -320,26 +321,6 @@ private:
            !HasUserValue("mode.lum.green.ch") &&
            !HasUserValue("mode.lum.blue.ch") )
         SetDefaultValue( inImage , "RGB" );
-
-      // if ( HasUserValue("minmax.manuel.min") && 
-      //      HasUserValue("minmax.manuel.max") )
-      //   {
-      //   if ( GetParameterFloat( "minmax.manuel.min" ) > 
-      //        GetParameterFloat( "minmax.manuel.max" ) )
-      //     {
-      //     float temp = GetParameterFloat( "minmax.manuel.min" );
-      //     SetParameterFloat( "minmax.manuel.min" , 
-      //                        GetParameterFloat( "minmax.manuel.max" ));
-      //     SetParameterFloat( "minmax.manuel.max" , temp );
-      //     }
-      //   else if ( GetParameterFloat( "minmax.manuel.min" ) == 
-      //             GetParameterFloat( "minmax.manuel.max" ) )
-      //     {
-      //     std::ostringstream oss;
-      //     oss<<"Warning minimum and maximum are equal."<<std::endl;
-      //     otbAppLogINFO( << oss.str() );
-      //     }
-      //   }
       }
 
     if ( GetParameterString("minmax") == "manuel" )
