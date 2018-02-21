@@ -20,6 +20,7 @@
 
 #include "otbLogger.h"
 #include "itksys/SystemTools.hxx"
+#include "otbConfigurationManager.h"
 
 namespace otb
 {
@@ -37,11 +38,7 @@ Logger::Pointer Logger::Instance()
 
 Logger::Logger()
 {
-#if OTB_DEBUG
-  this->SetPriorityLevel(itk::LoggerBase::DEBUG);
-#else
-  this->SetPriorityLevel(itk::LoggerBase::INFO);
-#endif
+  this->SetPriorityLevel(otb::ConfigurationManager::GetLoggerLevel());
 
   this->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
 
