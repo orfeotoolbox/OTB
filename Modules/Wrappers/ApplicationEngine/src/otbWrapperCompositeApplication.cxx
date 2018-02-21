@@ -62,8 +62,6 @@ CompositeApplication
   InternalApplication container;
   container.App = ApplicationRegistry::CreateApplication(appType);
   container.Desc = desc;
-  // Setup logger
-  container.App->SetLogger(this->GetLogger());
   container.App->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
   m_AppContainer[key] = container;
   return true;
