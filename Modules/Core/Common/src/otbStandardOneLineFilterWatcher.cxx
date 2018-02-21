@@ -29,7 +29,6 @@ StandardOneLineFilterWatcher
   : m_StarsCount(50),
     m_CurrentNbStars(-1)
 {
-  std::cout<<"A StandardOneLineFilterWatcher is created (default)"<<std::endl;
 }
 
 StandardOneLineFilterWatcher
@@ -39,7 +38,6 @@ StandardOneLineFilterWatcher
     m_StarsCount(50),
     m_CurrentNbStars(-1)
 {
-  std::cout<<"A StandardOneLineFilterWatcher is created with description "<<comment<<std::endl;
 }
 
 StandardOneLineFilterWatcher
@@ -49,7 +47,6 @@ StandardOneLineFilterWatcher
     m_StarsCount(50),
     m_CurrentNbStars(-1)
 {
-    std::cout<<"A StandardOneLineFilterWatcher is created with description "<<comment<<std::endl;
 }
 
 void

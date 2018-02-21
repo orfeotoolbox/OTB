@@ -23,7 +23,6 @@ set(DOCUMENTATION "Test application.")
 otb_module(OTBAppTest 
   DEPENDS
     OTBApplicationEngine
-    OTBImageBase
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine

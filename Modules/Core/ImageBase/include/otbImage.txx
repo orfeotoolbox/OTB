@@ -30,14 +30,8 @@ namespace otb
 {
 
 template <class TPixel, unsigned int VImageDimension>
-int Image<TPixel, VImageDimension>::m_Instance = 0;
-
-template <class TPixel, unsigned int VImageDimension>
 Image<TPixel, VImageDimension>::Image()
 {
-  std::cout<<"An image is created"<<std::endl;
-  m_Instance++;
-  std::cout<<m_Instance<<" image(s) live(s)"<<std::endl;
 }
 
 template <class TPixel, unsigned int VImageDimension>

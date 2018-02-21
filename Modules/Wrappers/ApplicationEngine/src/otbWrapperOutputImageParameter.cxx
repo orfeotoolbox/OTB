@@ -651,26 +651,5 @@ OutputImageParameter::CheckFileName(bool fixMissingExtension)
   return ret;
 }
 
-void OutputImageParameter::ClearValue() 
-{
-  m_Image = nullptr;
-  // m_FileName = "";
-
-  m_VectorUInt8Writer = nullptr;
-  m_VectorInt16Writer = nullptr;
-  m_VectorUInt16Writer = nullptr;
-  m_VectorInt32Writer = nullptr;
-  m_VectorUInt32Writer = nullptr;
-  m_VectorFloatWriter = nullptr;
-  m_VectorDoubleWriter = nullptr;
-
-  m_RGBUInt8Writer = nullptr;
-  m_RGBAUInt8Writer = nullptr;
-
-  // m_RAMValue = 0;
-
-  Superclass::ClearValue();
-}
-
 }
 }

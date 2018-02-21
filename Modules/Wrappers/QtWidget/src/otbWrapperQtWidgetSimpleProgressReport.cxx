@@ -78,22 +78,10 @@ QtWidgetSimpleProgressReport::ProcessEvent( itk::Object * itkNotUsed(caller),
     if(eventToWatch)
       {
       m_CurrentProcess = eventToWatch->GetProcess();
-      std::cout<<"process in the box : "<<m_CurrentProcess->GetNameOfClass()<<std::endl;
       m_CurrentDescription =  eventToWatch->GetProcessDescription();
-      std::cout<<"Description is : "<<m_CurrentDescription<<std::endl;
       emit AddNewProcessToReport();
       }
     }
-}
-
-void
-QtWidgetSimpleProgressReport::ClearEvent()
-{
-  std::cout<<"Cleaning event"<<std::endl;
-  m_CurrentProcess = nullptr;
-  m_CurrentDescription = "";
-  // emit AddNewProcessToReport();
-  m_Bar->ClearObserver();
 }
 
 void QtWidgetSimpleProgressReport::ReportProcess()
@@ -105,7 +93,6 @@ void QtWidgetSimpleProgressReport::ReportProcess()
 
 void QtWidgetSimpleProgressReport::Init()
 {
-  // ClearEvent();
   m_Bar->setValue(0);
   m_Label->setText("No process");
 }

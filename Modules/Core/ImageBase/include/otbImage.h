@@ -179,7 +179,7 @@ public:
 //   {
 //     return AccessorType();
 //   }
-  static int m_Instance;
+
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
   {
@@ -252,11 +252,7 @@ public:
 
 protected:
   Image();
-  ~Image() ITK_OVERRIDE {
-    std::cout<<"An image is deleted"<<std::endl;
-    m_Instance--;
-    std::cout<<m_Instance<<" image(s) still live(s)"<<std::endl;
-  }
+  ~Image() ITK_OVERRIDE {}
 
 private:
   Image(const Self &) = delete;

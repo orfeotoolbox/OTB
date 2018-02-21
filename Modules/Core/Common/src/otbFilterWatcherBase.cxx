@@ -159,7 +159,6 @@ FilterWatcherBase
 FilterWatcherBase
 ::~FilterWatcherBase()
 {
-  std::cout<<"A FilterWatcherBase is deleted... Description was "<<m_Comment<<std::endl;
   // Remove any observers we have on the old process object
   if (m_Process)
     {
