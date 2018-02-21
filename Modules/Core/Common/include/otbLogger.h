@@ -23,6 +23,7 @@
 
 #include "itkLoggerBase.h"
 #include "itkLogger.h"
+#include "OTBCommonExport.h"
 
 namespace otb {
 
@@ -33,7 +34,7 @@ namespace otb {
  *
  * \ingroup OTBApplicationEngine
  */
-class Logger : public itk::Logger
+class OTBCommon_EXPORT Logger : public itk::Logger
 {
 public:
   typedef Logger                          Self;
