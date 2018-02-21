@@ -24,8 +24,7 @@
 namespace otb
 {
 
-Logger::Logger() :
-    itk::Logger::Logger()
+Logger::Logger()
 {
 #if OTB_DEBUG
   this->SetPriorityLevel(itk::LoggerBase::DEBUG);
