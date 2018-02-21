@@ -31,7 +31,7 @@
 
 #include <string>
 #include <boost/cstdint.hpp>
-
+#include "itkLoggerBase.h"
 #include "OTBCommonExport.h"
 
 namespace otb
@@ -84,6 +84,10 @@ public:
    */
   static RAMValueType GetMaxRAMHint();
 
+
+  static itk::LoggerBase::PriorityLevelType GetLoggerLevel();
+ 
+  
 private:
   ConfigurationManager(); //purposely not implemented
   ~ConfigurationManager(); //purposely not implemented
