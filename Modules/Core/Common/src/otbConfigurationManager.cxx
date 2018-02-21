@@ -23,6 +23,8 @@
 #include "itksys/SystemTools.hxx"
 
 #include <cstdlib>
+#include <algorithm>
+#include <string>
 
 namespace otb
 {
@@ -59,6 +61,35 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
     }
   
   return value;
-
 }
+
+
+#define level_macro(x) \
+  {                                                                     \
+    std::string target = #x;                                            \
+    if(std::equal(svalue.begin(),svalue.end(),target.begin(),target.end())) \
+      level = itk::LoggerBase::x;                                       \
+  }                                                                     \
+
+
+itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
+{
+  std::string svalue;
+
+  #ifndef NDEBUG
+  itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::DEBUG;
+  #else
+  itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::WARNING;
+  #endif
+
+  
+  if(itksys::SystemTools::GetEnv("OTB_LOGGER_LEVEL",svalue))
+    {
+    level_macro(DEBUG);
+    level_macro(WARNING);
+    level_macro(INFO);
+    }
+  return level;
+}
+
 }
