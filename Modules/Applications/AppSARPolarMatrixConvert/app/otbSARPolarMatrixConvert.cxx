@@ -232,7 +232,7 @@ private:
 
     AddDocTag(Tags::SAR);
 
-    AddParameter(ParameterType_ComplexInputImage,  "inc",   "Input : multi-band complex image");
+    AddParameter(ParameterType_InputImage,  "inc",   "Input : multi-band complex image");
     SetParameterDescription("inc", "Input : multi-band complex image");
     MandatoryOff("inc");
     
@@ -241,23 +241,23 @@ private:
     MandatoryOff("inf");
 
 
-    AddParameter(ParameterType_ComplexInputImage,  "inhh",   "Input : one-band complex image (HH)");
+    AddParameter(ParameterType_InputImage,  "inhh",   "Input : one-band complex image (HH)");
     SetParameterDescription("inhh", "Input : one-band complex image (HH)");
     MandatoryOff("inhh");
     
-    AddParameter(ParameterType_ComplexInputImage,  "inhv",   "Input : one-band complex image (HV)");
+    AddParameter(ParameterType_InputImage,  "inhv",   "Input : one-band complex image (HV)");
     SetParameterDescription("inhv", "Input : one-band complex image (HV)");
     MandatoryOff("inhv");
     
-    AddParameter(ParameterType_ComplexInputImage,  "invh",   "Input : one-band complex image (VH)");
+    AddParameter(ParameterType_InputImage,  "invh",   "Input : one-band complex image (VH)");
     SetParameterDescription("invh", "Input : one-band complex image (VH)");
     MandatoryOff("invh");
     
-    AddParameter(ParameterType_ComplexInputImage,  "invv",   "Input : one-band complex image (VV)");
+    AddParameter(ParameterType_InputImage,  "invv",   "Input : one-band complex image (VV)");
     SetParameterDescription("invv", "Input : one-band complex image (VV)");
     MandatoryOff("invv");
     
-    AddParameter(ParameterType_ComplexOutputImage, "outc",  "Output Complex Image");
+    AddParameter(ParameterType_OutputImage, "outc",  "Output Complex Image");
     SetParameterDescription("outc", "Output Complex image.");
     MandatoryOff("outc");
     
@@ -509,7 +509,7 @@ private:
 		m_RCohSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
 		m_RCohSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterComplexOutputImage("outc", m_RCohSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
+		SetParameterOutputImage("outc", m_RCohSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 		
 		break;
 
@@ -526,7 +526,7 @@ private:
 		m_RCovSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
 		m_RCovSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterComplexOutputImage("outc", m_RCovSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
+		SetParameterOutputImage("outc", m_RCovSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 		
 		break;
 		
@@ -544,7 +544,7 @@ private:
 		m_RCCSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
 		m_RCCSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterComplexOutputImage("outc", m_RCCSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
+		SetParameterOutputImage("outc", m_RCCSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 		
 		break;
 		
@@ -565,7 +565,7 @@ private:
 		m_RCCDFilter = RCCDFilterType::New();
 		m_RCCDFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
-		SetParameterComplexOutputImage("outc", m_RCCDFilter->GetOutput() ); // input : 6 complex channels | 3 complex channels
+		SetParameterOutputImage("outc", m_RCCDFilter->GetOutput() ); // input : 6 complex channels | 3 complex channels
 		
 		break;
 
@@ -575,7 +575,7 @@ private:
 		m_RCRCFilter = RCRCFilterType::New();
 		m_RCRCFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
-		SetParameterComplexOutputImage("outc", m_RCRCFilter->GetOutput() ); // input : 6 complex channels | 6 complex channels
+		SetParameterOutputImage("outc", m_RCRCFilter->GetOutput() ); // input : 6 complex channels | 6 complex channels
 		
 		break;
 		
@@ -586,7 +586,7 @@ private:
 		m_RLCRCCFilter = RLCRCCFilterType::New();
 		m_RLCRCCFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
-		SetParameterComplexOutputImage("outc", m_RLCRCCFilter->GetOutput() ); // input : 6 complex channels | output : 6 complex channels
+		SetParameterOutputImage("outc", m_RLCRCCFilter->GetOutput() ); // input : 6 complex channels | output : 6 complex channels
 		
 		break;
 		
@@ -597,7 +597,7 @@ private:
 		
 		m_MRCFilter->SetInput(GetParameterDoubleVectorImage("inf"));
 		
-		SetParameterComplexOutputImage("outc", m_MRCFilter->GetOutput() ); // input : 16 real channels | output : 6 complex channels
+		SetParameterOutputImage("outc", m_MRCFilter->GetOutput() ); // input : 16 real channels | output : 6 complex channels
 		
 		break;
 		
@@ -615,7 +615,7 @@ private:
 		m_CohSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
 		m_CohSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterComplexOutputImage("outc", m_CohSRFilter->GetOutput() ); // input : 4 x 1 complex channel | 10 complex channels
+		SetParameterOutputImage("outc", m_CohSRFilter->GetOutput() ); // input : 4 x 1 complex channel | 10 complex channels
 		
 		break;
 		
@@ -630,7 +630,7 @@ private:
 		m_CovSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
 		m_CovSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterComplexOutputImage("outc", m_CovSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
+		SetParameterOutputImage("outc", m_CovSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
 		
 		break;
 		
@@ -644,7 +644,7 @@ private:
 		m_CCSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
 		m_CCSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterComplexOutputImage("outc", m_CCSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
+		SetParameterOutputImage("outc", m_CCSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
 		
 		break;
 		
