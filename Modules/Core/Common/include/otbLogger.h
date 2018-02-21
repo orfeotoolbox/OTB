@@ -42,15 +42,15 @@ public:
   typedef itk::SmartPointer< Self >       Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  itkTypeMacro(Logger, Object);
+  itkTypeMacro(Logger, itk::Logger);
   itkNewMacro(Self);
 
   // Overwrite this to provide custom formatting of log entries
-  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) ITK_OVERRIDE;
+  virtual std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) ITK_OVERRIDE;
 
 protected:
     Logger();
-    virtual ~Logger();
+    virtual ~Logger() ITK_OVERRIDE;
 }; // class Logger
 
 } // namespace otb
