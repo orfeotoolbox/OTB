@@ -71,15 +71,18 @@ PipelineMemoryPrintCalculator
 
 void
 PipelineMemoryPrintCalculator
-::Compute()
+::Compute(bool propagate)
 {
   // Clear the visited process objects set
   m_VisitedProcessObjects.clear();
 
   // Dry run of pipeline synchronisation
-  m_DataToWrite->UpdateOutputInformation();
-  m_DataToWrite->SetRequestedRegionToLargestPossibleRegion();
-  m_DataToWrite->PropagateRequestedRegion();
+  if (propagate)
+    {
+    m_DataToWrite->UpdateOutputInformation();
+    m_DataToWrite->SetRequestedRegionToLargestPossibleRegion();
+    m_DataToWrite->PropagateRequestedRegion();
+    }
 
   // Get the source process object
   ProcessObjectType * source = m_DataToWrite->GetSource();

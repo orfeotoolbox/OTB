@@ -114,7 +114,7 @@ public:
   itkSetObjectMacro(DataToWrite, DataObjectType);
 
   /** Compute pipeline memory print */
-  void Compute();
+  void Compute(bool propagate=true);
 
   /** Const conversion factor */
   static const double ByteToMegabyte;
