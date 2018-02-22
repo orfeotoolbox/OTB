@@ -1656,11 +1656,6 @@ Application::IsParameterMissing(const std::string &key) const
         }
       level++;
       }
-    if (ret)
-      {
-      // the missing parameter is on an active branch : we need it
-      otbDebugMacro("MISSING : "<< key << " (Level "<< split.size()<<")");
-      }
     }
   return ret;
 }
