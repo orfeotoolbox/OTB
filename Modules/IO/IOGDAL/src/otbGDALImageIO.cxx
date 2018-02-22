@@ -74,57 +74,6 @@ public:
 }; // end of GDALDataTypeWrapper
 
 
-/*
-template<class InputType>
-void printOutputData(InputType *pData, int nbBands, int nbPixelToRead)
-{
-  for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * nbBands); itPxl++)
-    {
-    std::cout << "Buffer["<< itPxl << "] = " << *(pData + itPxl) << std::endl;
-    }
-};
-
-void printDataBuffer(unsigned char *pData, GDALDataType pxlType, int nbBands, int nbPixelToRead)
-{
-  if (pxlType == GDT_Int16)
-    {
-    printOutputData( static_cast<short*>( static_cast<void*>(pData) ), nbBands, nbPixelToRead);
-    }
-  else if (pxlType == GDT_Int32)
-    {
-    printOutputData( static_cast<int*>( static_cast<void*>(pData) ), nbBands, nbPixelToRead);
-    }
-  else if (pxlType == GDT_Float32)
-    {
-    printOutputData( static_cast<float*>( static_cast<void*>(pData) ), nbBands, nbPixelToRead);
-    }
-  else if (pxlType == GDT_Float64)
-    {
-    printOutputData( static_cast<double*>( static_cast<void*>(pData) ), nbBands, nbPixelToRead);
-    }
-  else if (pxlType == GDT_CInt16)
-    {
-    printOutputData( static_cast<std::complex<short>*>( static_cast<void*>(pData) ), nbBands, nbPixelToRead);
-    }
-  else if (pxlType == GDT_CInt32)
-    {
-    printOutputData( static_cast<std::complex<int>*>( static_cast<void*>(pData) ), nbBands, nbPixelToRead);
-    }
-  else if (pxlType == GDT_CFloat32)
-    {
-    printOutputData( static_cast<std::complex<float>*>( static_cast<void*>(pData) ), nbBands, nbPixelToRead);
-    }
-  else if (pxlType == GDT_CFloat64)
-    {
-    printOutputData( static_cast<std::complex<double>*>( static_cast<void*>(pData) ), nbBands, nbPixelToRead);
-    }
-  else
-    {
-    std::cerr << "Pixel type unknown" << std::endl;
-    }
-};
-*/
-
 GDALImageIO::GDALImageIO()
 {
   // By default set number of dimensions to two.
@@ -147,9 +96,6 @@ GDALImageIO::GDALImageIO()
 
   m_IsIndexed   = false;
   m_DatasetNumber = 0;
-  //m_poBands     = NULL;
-  //m_hDriver     = NULL;
-  //m_poDataset   = NULL;
 
   m_NbBands = 0;
   m_FlagWriteImageInformation = true;
@@ -177,7 +123,6 @@ bool GDALImageIO::CanReadFile(const char* file)
   // First check the extension
   if (file == ITK_NULLPTR)
     {
-    itkDebugMacro(<< "No filename specified.");
     return false;
     }
   m_Dataset = GDALDriverManagerWrapper::GetInstance().Open(file);
@@ -207,7 +152,7 @@ void GDALImageIO::Read(void* buffer)
   // Check if conversion succeed
   if (p == ITK_NULLPTR)
     {
-    itkExceptionMacro(<< "GDAL : Bad alloc");
+    itkExceptionMacro(<< "Buffer passed to GDALImageIO for reading is NULL.");
     return;
     }
 
@@ -219,14 +164,9 @@ void GDALImageIO::Read(void* buffer)
   int lNbLinesRegion   = this->GetIORegion().GetSize()[1];
   int lNbColumnsRegion = this->GetIORegion().GetSize()[0];
 
-  //std::cout << "OriginBuffer= " <<  lFirstLineRegion << " x " << lFirstColumnRegion << std::endl;
-  //std::cout << "SizeBuffer= " <<  lNbLinesRegion << " x " << lNbColumnsRegion << std::endl;
-
   // Compute the origin of the image region to read at the initial resolution
   int lFirstLine   = lFirstLineRegion * (1 << m_ResolutionFactor);
   int lFirstColumn = lFirstColumnRegion * (1 << m_ResolutionFactor);
-
-  //std::cout << "OriginImage= " <<  lFirstLine << " x " << lFirstColumn << std::endl;
 
   // Compute the size of the image region to read at the initial resolution
   int lNbLines     = lNbLinesRegion * (1 << m_ResolutionFactor);
@@ -238,103 +178,11 @@ void GDALImageIO::Read(void* buffer)
   if (lFirstColumn + lNbColumns > static_cast<int>(m_OriginalDimensions[0]))
     lNbColumns = static_cast<int>(m_OriginalDimensions[0]-lFirstColumn);
 
-  //std::cout << "SizeImage= " <<  lNbLines << " x " << lNbColumns << std::endl;
-
-
   GDALDataset* dataset = m_Dataset->GetDataSet();
-
-  // This special case is due to the fact the CINT/CLONG types
-  // do not exists in ITK. In this case we only report the first band
-  // TODO This should be fixed
-  /*if (GDALDataTypeIsComplex(m_PxType->pixType)
-      && (m_PxType->pixType != GDT_CFloat32)
-      && (m_PxType->pixType != GDT_CFloat64))
-    {
-    int pixelOffset = m_BytePerPixel * m_NbBands;
-    int lineOffset  = m_BytePerPixel * m_NbBands * lNbColumns;
-    int bandOffset  = m_BytePerPixel;
-    int nbBands     = m_NbBands;
-
-    int nbPixelToRead = lNbColumns *  lNbLines;
-    std::streamoff nbBytes = static_cast<std::streamoff>(m_NbBands) * static_cast<std::streamoff>(nbPixelToRead) * static_cast<std::streamoff>(m_BytePerPixel);
-    unsigned char *pBufferTemp = new unsigned char[static_cast<unsigned int>(nbBytes)];
-
-    // keep it for the moment
-    otbMsgDevMacro(<< "Parameters RasterIO (case CInt and CShort):"
-                   << "\n indX = " << lFirstColumn
-                   << "\n indY = " << lFirstLine
-                   << "\n sizeX = " << lNbColumns
-                   << "\n sizeY = " << lNbLines
-                   << "\n GDAL Data Type = " << GDALGetDataTypeName(m_PxType->pixType)
-                   << "\n pixelOffset = " << pixelOffset
-                   << "\n lineOffset = " << lineOffset
-                   << "\n bandOffset = " << bandOffset);
-
-    CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
-                                                       lFirstColumn,
-                                                       lFirstLine,
-                                                       lNbColumns,
-                                                       lNbLines,
-                                                       pBufferTemp, //p, // pData
-                                                       lNbColumns,
-                                                       lNbLines,
-                                                       m_PxType->pixType,
-                                                       nbBands,
-                                                       // We want to read all bands
-                                                       NULL,
-                                                       pixelOffset,
-                                                       lineOffset,
-                                                       bandOffset);
-    // Check for gdal error
-    if (lCrGdal == CE_Failure)
-      {
-      itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName );
-      delete[] pBufferTemp;
-      return;
-      }
-    //std::cout << "RAW BUFFER:" <<std::endl;
-    //printDataBuffer(pBufferTemp, m_PxType->pixType, m_NbBands, lNbColumns*lNbLines);
-
-    // Convert the buffer to GDT_Float64 type
-    typedef std::complex<float>           RealType;
-    typedef double                         ScalarRealType;
-
-    if (m_PxType->pixType == GDT_CInt32)
-      {
-      //std::cout << "Convert input File from GDT_CInt32 to GDT_CFloat32" << std::endl;
-      typedef std::complex<int>              ComplexIntType;
-
-      for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * m_NbBands); itPxl++)
-        {
-        ComplexIntType pxlValue = *(static_cast<ComplexIntType*>( static_cast<void*>(pBufferTemp)) + itPxl );
-
-        RealType    pxlValueReal( static_cast<ScalarRealType>(pxlValue.real()), static_cast<ScalarRealType>(pxlValue.imag()) );
-
-        memcpy((void*) (&(p[itPxl*sizeof(RealType)])), (const void*) (&(pxlValueReal)), (size_t) (sizeof(RealType)));
-        }
-      }
-    else if (m_PxType->pixType == GDT_CInt16)
-      {
-      //std::cout << "Convert input File from GDT_CInt16 to GDT_CFloat32" << std::endl;
-      typedef std::complex<short>            ComplexShortType;
-
-      for (unsigned int itPxl = 0; itPxl < (unsigned int) (nbPixelToRead * m_NbBands); itPxl++)
-        {
-        ComplexShortType pxlValue = *(static_cast<ComplexShortType*>( static_cast<void*>(pBufferTemp)) + itPxl );
-
-        RealType    pxlValueReal( static_cast<ScalarRealType>(pxlValue.real()), static_cast<ScalarRealType>(pxlValue.imag()) );
-
-        memcpy((void*) (&(p[itPxl*sizeof(RealType)])), (const void*) (&(pxlValueReal)), (size_t) (sizeof(RealType)));
-        }
-      }
-    //std::cout << "CONVERTED BUFFER:" <<std::endl;
-    //printDataBuffer(p, GDT_CFloat64, m_NbBands, lNbColumns*lNbLines);
-    delete[] pBufferTemp;
-    }
 
   // In the indexed case, one has to retrieve the index image and the
   // color table, and translate p to a 4 components color values buffer
-  else*/ if (m_IsIndexed)
+  if (m_IsIndexed)
     {
     // TODO: This is a very special case and seems to be working only
     // for unsigned char pixels. There might be a gdal method to do
@@ -346,8 +194,9 @@ void GDALImageIO::Read(void* buffer)
 
    std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents())
                        * static_cast<std::streamoff>(m_BytePerPixel);
-
-    CPLErr lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
+   otbLogMacro(Debug,<<"GDAL reads ["<<lFirstColumn<<", "<<lFirstColumn+lNbColumns-1<<"]x["<<lFirstLine<<", "<<lFirstLine+lNbLines-1<<"] indexed color image of type "<<GDALGetDataTypeName(m_PxType->pixType)<<" from file "<<m_FileName);
+   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
+   CPLErr lCrGdal = dataset->GetRasterBand(1)->RasterIO(GF_Read,
                                      lFirstColumn,
                                      lFirstLine,
                                      lNbColumns,
@@ -358,11 +207,16 @@ void GDALImageIO::Read(void* buffer)
                                      m_PxType->pixType,
                                      0,
                                      0);
-    if (lCrGdal == CE_Failure)
+    chrono.Stop();
+    
+   if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) '"
         << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       }
+
+    otbLogMacro(Debug,<< "GDAL read took " << chrono.GetElapsedMilliseconds() << " ms")
+      
     // Interpret index as color
     std::streamoff cpt(0);
     GDALColorTable* colorTable = dataset->GetRasterBand(1)->GetColorTable();
@@ -394,19 +248,7 @@ void GDALImageIO::Read(void* buffer)
       }
 
     // keep it for the moment
-    //otbMsgDevMacro(<< "Number of bands inside input file: " << m_NbBands);
-    otbMsgDevMacro(<< "Parameters RasterIO : \n"
-                   << " indX = " << lFirstColumn << "\n"
-                   << " indY = " << lFirstLine << "\n"
-                   << " sizeX = " << lNbColumns << "\n"
-                   << " sizeY = " << lNbLines << "\n"
-                   << " Buffer Size X = " << lNbColumnsRegion << "\n"
-                   << " Buffer Size Y = " << lNbLinesRegion << "\n"
-                   << " GDAL Data Type = " << GDALGetDataTypeName(m_PxType->pixType) << "\n"
-                   << " nbBands = " << nbBands << "\n"
-                   << " pixelOffset = " << pixelOffset << "\n"
-                   << " lineOffset = " << lineOffset << "\n"
-                   << " bandOffset = " << bandOffset );
+    otbLogMacro(Debug,<<"GDAL reads ["<<lFirstColumn<<", "<<lFirstColumnRegion+lNbColumnsRegion-1<<"]x["<<lFirstLineRegion<<", "<<lFirstLineRegion+lNbLinesRegion-1<<"] x "<<nbBands<<" bands of type "<<GDALGetDataTypeName(m_PxType->pixType)<<" from file "<<m_FileName);
 
     otb::Stopwatch chrono = otb::Stopwatch::StartNew();
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Read,
@@ -425,8 +267,6 @@ void GDALImageIO::Read(void* buffer)
                                                        lineOffset,
                                                        bandOffset);
     chrono.Stop();
-    otbMsgDevMacro(<< "RasterIO Read took " << chrono.GetElapsedMilliseconds() << " ms")
-
     // Check if gdal call succeed
     if (lCrGdal == CE_Failure)
       {
@@ -434,8 +274,10 @@ void GDALImageIO::Read(void* buffer)
         << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       return;
       }
-    //printDataBuffer(p, m_PxType->pixType, m_NbBands, lNbColumnsRegion*lNbLinesRegion);
-    }
+
+    otbLogMacro(Debug,<< "GDAL read took " << chrono.GetElapsedMilliseconds() << " ms")
+
+      }
 }
 
 bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector<std::string> &desc)
@@ -456,8 +298,6 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
       std::string key, name;
       if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
         {
-        otbMsgDevMacro(<< "- key:  " << key);
-        otbMsgDevMacro(<< "- name: " << name);
         // check if this is a dataset name
         if (key.find("_NAME") != std::string::npos) names.push_back(name);
         // check if this is a dataset descriptor
@@ -609,8 +449,6 @@ void GDALImageIO::InternalReadImageInformation()
         std::string key, name;
         if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
           {
-          otbMsgDevMacro(<< "- key:  " << key);
-          otbMsgDevMacro(<< "- name: " << name);
           // check if this is a dataset name
           if (key.find("_NAME") != std::string::npos) names.push_back(name);
           }
@@ -618,7 +456,6 @@ void GDALImageIO::InternalReadImageInformation()
       }
     if (m_DatasetNumber < names.size())
       {
-      otbMsgDevMacro(<< "Reading: " << names[m_DatasetNumber]);
       m_Dataset = GDALDriverManagerWrapper::GetInstance().Open(names[m_DatasetNumber]);
       }
     else
@@ -643,8 +480,6 @@ void GDALImageIO::InternalReadImageInformation()
   m_OriginalDimensions.push_back(dataset->GetRasterXSize());
   m_OriginalDimensions.push_back(dataset->GetRasterYSize());
 
-  otbMsgDevMacro(<< "Original Dimensions of the input file: " << m_OriginalDimensions[0] << " x " << m_OriginalDimensions[1]);
-
   // Get Number of Bands
   m_NbBands = dataset->GetRasterCount();
 
@@ -661,20 +496,12 @@ void GDALImageIO::InternalReadImageInformation()
 
       /*std::cout << "Overviews size of input file" << m_FileName << ": "
                 <<  m_OverviewsSize.back().first << " x " << m_OverviewsSize.back().second <<   std::endl; */
-      otbMsgDevMacro( << "Overviews size of input file" << m_FileName << ": "
-                      <<  m_OverviewsSize.back().first << " x " << m_OverviewsSize.back().second);
   }
-
-  otbMsgDevMacro(<< "Number of Overviews inside input file: " << m_NumberOfOverviews);
-  otbMsgDevMacro(<< "Input file dimension: " << m_Dimensions[0] << ", " << m_Dimensions[1]);
-  otbMsgDevMacro(<< "Number of bands inside input file: " << m_NbBands);
 
   this->SetNumberOfComponents(m_NbBands);
 
   // Set the number of dimensions (verify for the dim )
   this->SetNumberOfDimensions(2);
-
-  otbMsgDevMacro(<< "Nb of Dimensions of the input file: " << m_NumberOfDimensions);
 
   // Automatically set the Type to Binary for GDAL data
   this->SetFileTypeToBinary();
@@ -683,7 +510,7 @@ void GDALImageIO::InternalReadImageInformation()
   // Consider only the data type given by the first band
   // Maybe be could changed (to check)
   m_PxType->pixType = dataset->GetRasterBand(1)->GetRasterDataType();
-  otbMsgDevMacro(<< "PixelType inside input file: "<< GDALGetDataTypeName(m_PxType->pixType) );
+  
   if (m_PxType->pixType == GDT_Byte)
     {
     SetComponentType(UCHAR);
@@ -809,7 +636,7 @@ void GDALImageIO::InternalReadImageInformation()
       // we are reading a complex data set into an image where the pixel
       // type is Vector<real>: we have to double the number of component
       // for that to work
-      otbMsgDevMacro( << "GDALtypeIO= Complex and IFReader::InternalPixelType= Scalar and IFReader::PixelType= Vector");
+      otbLogMacro(Warning,<<"Encoding of file ("<<m_FileName<<") is complex but will be read as a VectorImage of scalar type, with twice the number of bands.");
       this->SetNumberOfComponents(m_NbBands*2);
       this->SetPixelType(VECTOR);
       }
@@ -831,12 +658,6 @@ void GDALImageIO::InternalReadImageInformation()
       }
     }
 
-  /*** Parameters set by Internal Read function ***/
-  otbMsgDevMacro( << "Pixel Type IFReader = " << GetPixelTypeAsString(this->GetPixelType()) )
-  otbMsgDevMacro( << "Number of component IFReader = " << this->GetNumberOfComponents() )
-  otbMsgDevMacro( << "Byte per pixel set = " << m_BytePerPixel )
-  otbMsgDevMacro( << "Component Type set = " << GetComponentTypeAsString(this->GetComponentType()) );
-
   /*----------------------------------------------------------------------*/
   /*-------------------------- METADATA ----------------------------------*/
   /*----------------------------------------------------------------------*/
@@ -854,8 +675,6 @@ void GDALImageIO::InternalReadImageInformation()
 
     if(blockSizeX > 0 && blockSizeY > 0)
       {
-      otbMsgDevMacro(<< "Original blockSize: "<< blockSizeX << " x " << blockSizeY );
-
       blockSizeX = uint_ceildivpow2(blockSizeX,m_ResolutionFactor);
       if (m_Dataset->IsJPEG2000())
         {
@@ -867,8 +686,6 @@ void GDALImageIO::InternalReadImageInformation()
         // Try to keep the GDAL block memory constant
         blockSizeY = blockSizeY * (1 << m_ResolutionFactor);
         }
-
-      otbMsgDevMacro(<< "Decimated blockSize: "<< blockSizeX << " x " << blockSizeY );
 
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, blockSizeY);
@@ -948,7 +765,6 @@ void GDALImageIO::InternalReadImageInformation()
     }
   else
     {
-    otbMsgDevMacro( << "No projection => sensor model" );
     // Special case for Jpeg2000 files : try to read the origin in the GML box
     if (m_Dataset->IsJPEG2000())
       {
@@ -1044,7 +860,7 @@ void GDALImageIO::InternalReadImageInformation()
           }
         else
           {
-          otbWarningMacro(<< "Incorrect geotransform  (spacing = 0)!");
+          otbLogMacro(Warning,<< "Geotransform reported by Gdal is invalid (spacing = 0)");
           m_Spacing[0] = 1;
           m_Spacing[1] = 1;
           }
@@ -1064,23 +880,6 @@ void GDALImageIO::InternalReadImageInformation()
   // Now that the spacing is known, apply the half-pixel shift
   m_Origin[0] += 0.5*m_Spacing[0];
   m_Origin[1] += 0.5*m_Spacing[1];
-
-  // Dataset info
-  otbMsgDevMacro(<< "**** ReadImageInformation() DATASET INFO: ****" );
-  otbMsgDevMacro(<< "Projection Ref: "<< dataset->GetProjectionRef() );
-  double GT[6];
-  if (dataset->GetGeoTransform(GT) == CE_None)
-    {
-    otbMsgDevMacro( <<"Geo Transform: "<< GT[0] << ", " << GT[1] << ", "
-                                 << GT[2] << ", " << GT[3] << ", "
-                                 << GT[4] << ", " << GT[5] );
-    }
-  else
-    {
-    otbMsgDevMacro( << "No Geo Transform: ");
-    }
-  otbMsgDevMacro(<< "GCP Projection Ref: "<< dataset->GetGCPProjection() );
-  otbMsgDevMacro(<< "GCP Count: " << dataset->GetGCPCount() );
 
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
@@ -1289,7 +1088,6 @@ bool GDALImageIO::CanWriteFile(const char* name)
   // First check the filename
   if (name == ITK_NULLPTR)
     {
-    itkDebugMacro(<< "No filename specified.");
     return false;
     }
 
@@ -1307,7 +1105,7 @@ bool GDALImageIO::CanWriteFile(const char* name)
   if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, ITK_NULLPTR ) == ITK_NULLPTR
        && GDALGetMetadataItem( driver, GDAL_DCAP_CREATECOPY, ITK_NULLPTR ) == ITK_NULLPTR )
     {
-    itkDebugMacro(<< "The driver " << GDALGetDriverShortName(driver) << " does not support writing");
+    otbLogMacro(Warning,<< "Gdal driver " << GDALGetDriverShortName(driver) << " does not support writing");
     return false;
     }
   return true;
@@ -1321,7 +1119,6 @@ bool GDALImageIO::CanStreamWrite()
 
   if (driver == ITK_NULLPTR)
     {
-    itkDebugMacro(<< "Unable to instantiate driver " << gdalDriverShortName);
     m_CanStreamWrite = false;
     }
   if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, ITK_NULLPTR ) != ITK_NULLPTR )
@@ -1347,7 +1144,7 @@ void GDALImageIO::Write(const void* buffer)
   // Check if conversion succeed
   if (buffer == ITK_NULLPTR)
     {
-    itkExceptionMacro(<< "GDAL : Bad alloc");
+    itkExceptionMacro(<< "Null buffer passed to GDALImageIO for writing.");
     return;
     }
 
@@ -1373,18 +1170,7 @@ void GDALImageIO::Write(const void* buffer)
   // If driver supports streaming
   if (m_CanStreamWrite)
     {
-
-    otbMsgDevMacro(<< "RasterIO Write requested region : " << this->GetIORegion() <<
-                 "\n, lFirstColumn =" << lFirstColumn <<
-                 "\n, lFirstLine =" << lFirstLine <<
-                 "\n, lNbColumns =" << lNbColumns <<
-                 "\n, lNbLines =" << lNbLines <<
-                 "\n, m_PxType =" << GDALGetDataTypeName(m_PxType->pixType) <<
-                 "\n, m_NbBands =" << m_NbBands <<
-                 "\n, m_BytePerPixel ="<< m_BytePerPixel <<
-                 "\n, Pixel offset =" << m_BytePerPixel * m_NbBands <<  // is nbComp * BytePerPixel
-                 "\n, Line offset =" << m_BytePerPixel * m_NbBands * lNbColumns << // is pixelOffset * nbColumns
-                 "\n, Band offset =" <<  m_BytePerPixel) //  is BytePerPixel
+    otbLogMacro(Debug,<<"GDAL writes ["<<lFirstColumn<<", "<<lFirstColumn+lNbColumns-1<<"]x["<<lFirstLine<<", "<<lFirstLine+lNbLines-1<<"] x "<<m_NbBands<<" bands of type "<<GDALGetDataTypeName(m_PxType->pixType)<<" to file "<<m_FileName);
 
     otb::Stopwatch chrono = otb::Stopwatch::StartNew();
     CPLErr lCrGdal = m_Dataset->GetDataSet()->RasterIO(GF_Write,
@@ -1408,7 +1194,6 @@ void GDALImageIO::Write(const void* buffer)
                                                        // Band offset is BytePerPixel
                                                        m_BytePerPixel);
     chrono.Stop();
-    otbMsgDevMacro(<< "RasterIO Write took " << chrono.GetElapsedMilliseconds() << " ms")
 
     // Check if writing succeed
     if (lCrGdal == CE_Failure)
@@ -1416,6 +1201,9 @@ void GDALImageIO::Write(const void* buffer)
       itkExceptionMacro(<< "Error while writing image (GDAL format) '"
         << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       }
+
+    otbLogMacro(Debug,<< "GDAL write took " << chrono.GetElapsedMilliseconds() << " ms")
+      
     // Flush dataset cache
     m_Dataset->GetDataSet()->FlushCache();
     }
@@ -1582,55 +1370,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (m_CanStreamWrite)
     {
     GDALCreationOptionsType creationOptions = m_CreationOptions;
-/*
-    // Force tile mode for TIFF format if no creation option are given
-    if( driverShortName == "GTiff"  )
-      {
-      if ( CreationOptionContains( "TILED=YES" ) )
-        {
-        // User requested tiled TIFF explicitly
-        //
-        // Let GDAL set up the BLOCKXSIZE and BLOCKYSIZE
-        // or suppose the user have set it also along with TILED=YES
-        // This allows the user to have complete
-        // control over the tiling scheme
-        }
-      else if ( CreationOptionContains( "BLOCKYSIZE=" ) )
-        {
-        // User did not set "TILED=YES" but set "BLOCKYSIZE="
-        // -> He requested a stripped TIFF
-        }
-      else
-        {
-        // User did not specify "TILED=YES" nor "BLOCKYSIZE=?"
-        // Switch to TILED mode automatically, and choose BLOCKXSIZE and BLOCKYSIZE for him
-
-        otbMsgDevMacro(<< "Enabling TIFF Tiled mode")
-
-        // Use a fixed tile size
-        // Take as reference is a 256*256 short int 4 bands tile
-        const unsigned int ReferenceTileSizeInBytes = 256 * 256 * 4 * 2;
-        const unsigned int NbPixelPerTile = ReferenceTileSizeInBytes / m_BytePerPixel / m_NbBands;
-        const unsigned int IdealTileDimension = static_cast<unsigned int>( vcl_sqrt(static_cast<float>(NbPixelPerTile)) );
-
-        // Set tileDimension to the nearest power of two and aligned to
-        // 16 pixels (needed by TIFF spec)
-        unsigned int tileDimension = 16;
-        while(2*tileDimension < IdealTileDimension)
-          {
-          tileDimension*=2;
-          }
-        otbMsgDevMacro(<< "Tile dimension : " << tileDimension << " * " << tileDimension)
-
-        std::ostringstream tileDimensionStr;
-        tileDimensionStr << tileDimension;
-
-        creationOptions.push_back( "TILED=YES" );
-        creationOptions.push_back( std::string("BLOCKXSIZE=") + tileDimensionStr.str() );
-        creationOptions.push_back( std::string("BLOCKYSIZE=") + tileDimensionStr.str() );
-        }
-      }
-*/
     m_Dataset = GDALDriverManagerWrapper::GetInstance().Create(
                      driverShortName,
                      GetGdalWriteImageFileName(driverShortName, m_FileName),
@@ -1691,7 +1430,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     // If there is no ProjectionRef, and the GeoTransform is not the identity,
     // then saving also GCPs is undefined behavior for GDAL, and a WGS84 projection crs
     // is assigned arbitrarily
-    otbMsgDevMacro(<< "Skipping GCPs saving to prevent GDAL from assigning a WGS84 projection ref to the file")
+    otbLogMacro(Warning,<< "Skipping GCPs saving to prevent GDAL from assigning a WGS84 projref to file ("<<m_FileName<<")")
     }
   else
     {
@@ -1802,31 +1541,12 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       unsigned int equalityPos = svalue.find_first_of('=');
       std::string  tag = svalue.substr(0, equalityPos);
       std::string  value = svalue.substr(equalityPos + 1);
-      otbMsgDevMacro(<< "Metadata: " << tag << "=" << value);
       dataset->SetMetadataItem(tag.c_str(), value.c_str(), ITK_NULLPTR);
       }
     }
 
 
   // END
-
-  // Dataset info
-  otbMsgDevMacro( << "**** WriteImageInformation() DATASET INFO: ****" );
-  otbMsgDevMacro( << "Projection Ref: "<<dataset->GetProjectionRef() );
-  double GT[6];
-  if (dataset->GetGeoTransform(GT) == CE_None)
-    {
-    otbMsgDevMacro( <<"Geo Transform: "<< GT[0] << ", " << GT[1] << ", "
-                                 << GT[2] << ", " << GT[3] << ", "
-                                 << GT[4] << ", " << GT[5] );
-    }
-  else
-    {
-    otbMsgDevMacro( << "No Geo Transform: ");
-    }
-
-  otbMsgDevMacro( << "GCP Projection Ref: "<< dataset->GetGCPProjection() );
-  otbMsgDevMacro( << "GCP Count: " << dataset->GetGCPCount() );
 
   // Write no-data flags
   std::vector<bool> noDataValueAvailable;
@@ -1926,7 +1646,6 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
 
   std::string gmlString = static_cast<std::string>(jp2Metadata.papszGMLMetadata[0]);
   gmlString.erase(0,18); // We need to remove first part to create a true xml stream
-  otbMsgDevMacro( << "XML extract from GML box: " << gmlString );
 
   TiXmlDocument doc;
   doc.Parse(gmlString.c_str()); // Create xml doc from a string
@@ -1942,13 +1661,8 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
                                      .FirstChild( "gml:limits" )
                                      .FirstChild( "gml:GridEnvelope" )
                                      .FirstChild( "gml:low").ToElement();
-  if(originTag)
+  if(!originTag)
     {
-    otbMsgDevMacro( << "\t Origin (" <<  originTag->Value() <<" tag)= "<<  originTag->GetText());
-    }
-  else
-    {
-    otbMsgDevMacro( << "Didn't find the GML element which indicate the origin!" );
     return false;
     }
 
@@ -1962,8 +1676,6 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
   ss1 >> origin[0];
   origin[0] += -1.0;
   origin[1] += -1.0;
-
-  otbMsgDevMacro( << "\t Origin from GML box: " <<  origin[0] << ", " << origin[1] );
 
   return true;
 }
