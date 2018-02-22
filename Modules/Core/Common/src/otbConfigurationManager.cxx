@@ -88,6 +88,8 @@ itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
     level_macro(DEBUG);
     level_macro(WARNING);
     level_macro(INFO);
+    level_macro(CRITICAL);
+    level_macro(FATAL);
     }
   return level;
 }
