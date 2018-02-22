@@ -71,7 +71,7 @@ Application.SetParameterString(...).
 The bridge between NumPy and OTB makes it easy to plug OTB into any image processing chain via Python code that uses
 GIS/Image processing tools such as GDAL, GRASS GIS, OSSIM that can deal with NumPy.
 
-Below code reads an input image using Python pillow (PIL) and convert it to
+Below code reads an input image using Python Pillow library (fork of PIL) and convert it to
 NumPy array. The NumPy array is used an input to the application via
 *SetImageFromNumpyArray(...)* method.  The application used in this example is
 ExtractROI. After extracting a small area the output image is taken as NumPy
@@ -248,7 +248,7 @@ If you want the get the state of parameter ``keywordlist``, a boolean, use:
 
     app.IsParameterEnabled("keywordlist")
 
-To set this parameter ON / OFF, use the functions:
+To set this parameter ON/OFF, use the functions:
 
 .. code-block:: python
 
