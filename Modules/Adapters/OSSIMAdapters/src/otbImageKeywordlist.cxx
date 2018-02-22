@@ -241,8 +241,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 
   if (projection)
     {
-    otbMsgDevMacro(<< "OSSIM plugin projection instantiated ! ");
-
     hasMetaData = projection->saveState(geom_kwl);
     otb_kwl.SetKeywordlist(geom_kwl);
     }
@@ -479,7 +477,6 @@ WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename)
 
   if (geom_kwl.getSize() > 0)
     {
-    otbMsgDevMacro(<< "Exporting keywordlist ...");
     ossimFilename geomFileName(filename);
     geomFileName.setExtension(".geom");
     geom_kwl.write(geomFileName.chars());

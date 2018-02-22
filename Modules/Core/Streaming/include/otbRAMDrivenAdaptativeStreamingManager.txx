@@ -72,7 +72,7 @@ RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming( itk::DataObject *
   this->m_Splitter = splitter;
 
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDivisions);
-  otbMsgDevMacro(<< "Number of split : " << this->m_ComputedNumberOfSplits)
+
   this->m_Region = region;
 }
 
