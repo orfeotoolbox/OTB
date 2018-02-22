@@ -10,11 +10,11 @@ Explain the rationale for the changes (possible link to a Request For Comments o
 
 #### Classes and files
 
-Give an overview of the implementation: main changes made to classes, files and module. Do not paste complete diff, as it is available in the merge request already.
+Give an overview of the implementation: main changes made to classes, files and modules. Do not paste complete diff, as it is available in the merge request already.
 
 #### Applications
 
-Describe any changes made to existing applications, or new application that have been added.
+Describe any changes made to existing applications, or new applications that have been added.
 
 #### Tests
 
@@ -22,7 +22,7 @@ Describe the testing strategy for new features.
 
 ### Documentation
 
-List or link documentation modification that were made (doxygen, example, software guide, application documentation, cookbook).
+List or link documentation modifications that were made (doxygen, example, software guide, application documentation, cookbook).
 
 ### Additional notes
 

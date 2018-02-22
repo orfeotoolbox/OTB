@@ -24,8 +24,9 @@
 #include "otbWrapperComplexInputImageParameter.h"
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "itkCastImageFilter.h"
-#include "otbImageToVectorImageCastFilter.h"
+// #include "itkCastImageFilter.h"
+// #include "otbImageToVectorImageCastFilter.h"
+#include "otbClampImageFilter.h"
 
 namespace otb
 {
@@ -91,13 +92,29 @@ ComplexInputImageParameter::GetImage()
       }
     else
       {
-      if (dynamic_cast<ComplexFloatVectorImageType*>(m_Image.GetPointer()))
+      if (dynamic_cast<ComplexInt16VectorImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexInt16VectorImageType, TOutputImage>();
+        }
+      else if (dynamic_cast<ComplexInt32VectorImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexInt32VectorImageType, TOutputImage>();
+        }
+      else if (dynamic_cast<ComplexFloatVectorImageType*>(m_Image.GetPointer()))
         {
         return CastImage<ComplexFloatVectorImageType, TOutputImage>();
         }
       else if (dynamic_cast<ComplexDoubleVectorImageType*>(m_Image.GetPointer()))
         {
         return CastImage<ComplexDoubleVectorImageType, TOutputImage>();
+        }
+      else if (dynamic_cast<ComplexInt16ImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexInt16ImageType, TOutputImage>();
+        }
+      else if (dynamic_cast<ComplexInt32ImageType*>(m_Image.GetPointer()))
+        {
+        return CastImage<ComplexInt32ImageType, TOutputImage>();
         }
       else if (dynamic_cast<ComplexFloatImageType*>(m_Image.GetPointer()))
         {
@@ -120,18 +137,9 @@ template <class TComplexInputImage, class TOutputImage>
 TOutputImage*
 ComplexInputImageParameter::CastImage()
 {
-  itkExceptionMacro("Cast from "<<typeid(TComplexInputImage).name()
-                    <<" to "<<typeid(TOutputImage).name()<<" not authorized.");
-}
-
-
-template <class TComplexInputImage, class TOutputImage>
-TOutputImage*
-ComplexInputImageParameter::SimpleCastImage()
-{
   TComplexInputImage* realComplexInputImage = dynamic_cast<TComplexInputImage*>(m_Image.GetPointer());
 
-  typedef itk::CastImageFilter<TComplexInputImage, TOutputImage> CasterType;
+  typedef ClampImageFilter<TComplexInputImage, TOutputImage> CasterType;
   typename CasterType::Pointer caster = CasterType::New();
 
   caster->SetInput(realComplexInputImage);
@@ -141,25 +149,8 @@ ComplexInputImageParameter::SimpleCastImage()
   m_Caster = caster;
 
   return caster->GetOutput();
-}
-
-
-template <class TComplexInputImage, class TOutputImage>
-TOutputImage*
-ComplexInputImageParameter::CastVectorImageFromImage()
-{
-  TComplexInputImage* realComplexInputImage = dynamic_cast<TComplexInputImage*>(m_Image.GetPointer());
-
-  typedef ImageToVectorImageCastFilter<TComplexInputImage, TOutputImage> CasterType;
-  typename CasterType::Pointer caster = CasterType::New();
-
-  caster->SetInput(realComplexInputImage);
-  caster->UpdateOutputInformation();
-
-  m_Image = caster->GetOutput();
-  m_Caster = caster;
-
-  return caster->GetOutput();
+  // itkExceptionMacro("Cast from "<<typeid(TComplexInputImage).name()
+  //                   <<" to "<<typeid(TOutputImage).name()<<" not authorized.");
 }
 
 template <class TComplexInputImage>
