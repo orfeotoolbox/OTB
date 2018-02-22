@@ -45,8 +45,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::ImageBase<2> ImageBaseType;
-
   /** Defining ::New() static method */
   itkNewMacro(Self);
 

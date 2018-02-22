@@ -1180,7 +1180,7 @@ Application
   return ret;
 }
 
-void Application::SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage)
+void Application::SetParameterInputImage(std::string parameter, ImageBaseType * inputImage)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1196,7 +1196,7 @@ void Application::SetParameterInputImage(std::string parameter, InputImageParame
     }
 }
 
-OutputImageParameter::ImageBaseType * Application::GetParameterOutputImage(std::string parameter)
+ImageBaseType * Application::GetParameterOutputImage(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1213,7 +1213,7 @@ OutputImageParameter::ImageBaseType * Application::GetParameterOutputImage(std::
 }
 
 
-void Application::SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage)
+void Application::SetParameterComplexInputImage(std::string parameter, ImageBaseType * inputImage)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1229,7 +1229,7 @@ void Application::SetParameterComplexInputImage(std::string parameter, ComplexIn
     }
 }
 
-ComplexOutputImageParameter::ImageBaseType * Application::GetParameterComplexOutputImage(std::string parameter)
+ImageBaseType * Application::GetParameterComplexOutputImage(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1245,7 +1245,7 @@ ComplexOutputImageParameter::ImageBaseType * Application::GetParameterComplexOut
     }
 }
 
-void Application::AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img)
+void Application::AddImageToParameterInputImageList(std::string parameter, ImageBaseType * img)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1262,7 +1262,7 @@ void Application::AddImageToParameterInputImageList(std::string parameter, Input
 
 }
 
-void Application::SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img)
+void Application::SetNthParameterInputImageList(std::string parameter, const unsigned int &id, ImageBaseType * img)
 {
   Parameter* param = GetParameterByKey(parameter);
 

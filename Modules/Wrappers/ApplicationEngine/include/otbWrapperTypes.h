@@ -141,6 +141,8 @@ typedef otb::ObjectList<VectorDataType> VectorDataListType;
 typedef otb::ObjectList<FloatVectorImageType> FloatVectorImageListType;
 typedef otb::ObjectList<FloatImageType>       FloatImageListType;
 
+typedef itk::ImageBase<2> ImageBaseType;
+
 
 } // end namespace Wrapper
 } // end namespace otb

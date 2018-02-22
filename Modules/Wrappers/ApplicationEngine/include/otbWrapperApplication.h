@@ -475,7 +475,7 @@ public:
    * \throw itk::Exception if parameter is not found or not an
    * InputImageParameter
    */
-  void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
+  void SetParameterInputImage(std::string parameter, ImageBaseType * inputImage);
 
   /**
    * Get the output image parameter as an ImageBase * instead
@@ -486,7 +486,7 @@ public:
    * \throw itk::Exception if parameter is not found or not an
    * OutputImageParameter
    */
-  OutputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
+  ImageBaseType * GetParameterOutputImage(std::string parameter);
 
   /**
    * Set the input complex image parameter as an ImageBase * instead
@@ -497,7 +497,7 @@ public:
    * \throw itk::Exception if parameter is not found or not an
    * ComplexInputImageParameter
    */
-  void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
+  void SetParameterComplexInputImage(std::string parameter, ImageBaseType * inputImage);
 
   /**
    * Get the complex output image parameter as an ImageBase * instead
@@ -508,7 +508,7 @@ public:
    * \throw itk::Exception if parameter is not found or not an
    * ComplexOutputImageParameter
    */
-  ComplexOutputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
+  ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
 
   /**
    * Add an image to an InputImageList parameter as an ImageBase
@@ -519,7 +519,7 @@ public:
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter
    */
-  void AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img);
+  void AddImageToParameterInputImageList(std::string parameter, ImageBaseType * img);
 
   /**
    * Set the nth image of an InputImageList parameter as an ImageBase pointer
@@ -531,7 +531,7 @@ public:
    * \throw itk::Exception if parameter is not found or not an
    * InputImageList parameter or if id is out of bounds
    */
-  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img);
+  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, ImageBaseType * img);
 
 /**
    * Add a value to a parameter list as a string

@@ -254,7 +254,7 @@ ComplexOutputImageParameter::GetWriter()
   return writer;
 }
 
-ComplexOutputImageParameter::ImageBaseType*
+ImageBaseType*
 ComplexOutputImageParameter::GetValue( )
 {
   return m_Image;
