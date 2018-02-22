@@ -211,10 +211,6 @@ ApplicationRegistry::CreateApplication(const std::string& name, bool useFactory)
           appli = app;
           appli->Init();
         }
-      else
-        {
-        otbMsgDevMacro( << "Error ApplicationRegistry factory did not return an Application: " << possibleApp->GetNameOfClass() << std::endl );
-        }
       }
     }
   
@@ -350,10 +346,6 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
         std::string curName(app->GetName());
         appSet.insert(curName);
         }
-      else
-        {
-        otbMsgDevMacro( << "Error ApplicationRegistry factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
-        }
       }
     }
 
@@ -438,7 +430,7 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
       }
     else
       {
-      otbMsgDevMacro( << "Can't load library : " << path << std::endl );
+      otbLogMacro(Warning,<< "Failed to load libraries from " << path << " while trying to create application "<<name );
       }
     }
   return appli;
