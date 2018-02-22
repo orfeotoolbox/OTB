@@ -65,6 +65,15 @@ ComplexInputImageParameter::GetImage()
   return this->GetImage<ComplexFloatVectorImageType>();
 }
 
+template <>
+ImageBaseType*
+ComplexInputImageParameter::GetImage()
+{
+  if (m_Image.IsNull())
+    return this->GetImage<ComplexFloatVectorImageType>();
+
+  return m_Image;
+}
 
 #define otbGetImageMacro(image)                       \
   image##Type *                                       \
