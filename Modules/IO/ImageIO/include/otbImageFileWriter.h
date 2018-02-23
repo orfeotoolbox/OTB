@@ -25,6 +25,7 @@
 #include "itkProcessObject.h"
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
+#include "itkFastMutexLock.h"
 
 namespace otb
 {
@@ -199,6 +200,11 @@ public:
   itkGetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
 
+  // the interface of the superclass getter function is not thread safe
+  bool GetAbortGenerateDataMutex() const;
+
+  void SetAbortGenerateData(bool val) override;
+
 protected:
   ImageFileWriter();
   ~ImageFileWriter() ITK_OVERRIDE;
@@ -270,6 +276,9 @@ private:
    *  This variable can be the number of components in m_ImageIO or the
    *  number of components in the m_BandList (if used) */
   unsigned int m_IOComponents;
+
+  /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 } // end namespace otb

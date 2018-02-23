@@ -616,7 +616,7 @@ ImageFileWriter<TInputImage>
     }
 
   for (m_CurrentDivision = 0;
-       m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
+       m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateDataMutex();
        m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
@@ -645,7 +645,7 @@ ImageFileWriter<TInputImage>
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
    */
-  if (!this->GetAbortGenerateData())
+  if (!this->GetAbortGenerateDataMutex())
     {
     this->UpdateProgress(1.0);
     }
@@ -841,6 +841,27 @@ ImageFileWriter<TInputImage>
 ::GetFileName () const
 {
 return this->m_FilenameHelper->GetSimpleFileName();
+}
+
+template <class TInputImage>
+bool
+ImageFileWriter<TInputImage>
+::GetAbortGenerateDataMutex() const
+{
+  m_Lock.Lock();
+  bool ret = Superclass::GetAbortGenerateData();
+  m_Lock.Unlock();
+  return ret;
+}
+
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetAbortGenerateData(bool val)
+{
+  m_Lock.Lock();
+  Superclass::SetAbortGenerateData(val);
+  m_Lock.Unlock();
 }
 
 } // end namespace otb
