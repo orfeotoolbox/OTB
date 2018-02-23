@@ -22,6 +22,7 @@
 #define otbWrapperApplication_h
 
 #include <string>
+#include <set>
 #include "otbWrapperTypes.h"
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"
@@ -845,7 +846,7 @@ public:
   }
 
   void RegisterPipeline();
-  std::vector<itk::ProcessObject::Pointer> m_Filters;
+  std::set<itk::ProcessObject::Pointer> m_Filters;
 
 protected:
   /** Constructor */
