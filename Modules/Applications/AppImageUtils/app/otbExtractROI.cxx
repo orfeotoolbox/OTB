@@ -828,7 +828,7 @@ private:
 
     this->CropRegionOfInterest();
 
-    m_ExtractROIFilter = ExtractROIFilterType::New();
+    ExtractROIFilterType::Pointer m_ExtractROIFilter = ExtractROIFilterType::New();
     m_ExtractROIFilter->SetInput(inImage);
     m_ExtractROIFilter->SetStartX(GetParameterInt("startx"));
     m_ExtractROIFilter->SetStartY(GetParameterInt("starty"));
@@ -841,10 +841,8 @@ private:
       }
 
     SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  ExtractROIFilterType::Pointer   m_ExtractROIFilter;
-
 };
 
 }

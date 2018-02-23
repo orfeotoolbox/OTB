@@ -100,8 +100,8 @@ private:
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
     otbAppLogDEBUG( << "Starting Min/Max computation" )
-
-    m_MinMaxFilter = MinMaxFilterType::New();
+  
+    MinMaxFilterType::Pointer m_MinMaxFilter = MinMaxFilterType::New();
     m_MinMaxFilter->SetInput( inImage );
     m_MinMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
@@ -113,7 +113,8 @@ private:
 
     FloatVectorImageType::PixelType inMin, inMax;
 
-    m_RescaleFilter = RescaleImageFilterType::New();
+    RescaleImageFilterType::Pointer m_RescaleFilter = 
+      RescaleImageFilterType::New();
     m_RescaleFilter->SetInput( inImage );
     m_RescaleFilter->SetAutomaticInputMinMaxComputation(false);
     m_RescaleFilter->SetInputMinimum( m_MinMaxFilter->GetMinimum() );
@@ -130,10 +131,8 @@ private:
     m_RescaleFilter->UpdateOutputInformation();
 
     SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  RescaleImageFilterType::Pointer m_RescaleFilter;
-  MinMaxFilterType::Pointer       m_MinMaxFilter;
 };
 
 }

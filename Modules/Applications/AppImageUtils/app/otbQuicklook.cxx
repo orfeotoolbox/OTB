@@ -202,8 +202,10 @@ bool CropRegionOfInterest()
   {
     InputImageType::Pointer inImage = GetParameterImage("in");
 
-    m_ExtractROIFilter = ExtractROIFilterType::New();
-    m_ResamplingFilter = ShrinkImageFilterType::New();
+    ExtractROIFilterType::Pointer m_ExtractROIFilter =
+      ExtractROIFilterType::New();
+    ShrinkImageFilterType::Pointer m_ResamplingFilter =
+      ShrinkImageFilterType::New();
 
     // The image on which the quicklook will be generated
     // Will eventually be the m_ExtractROIFilter output
@@ -277,10 +279,8 @@ bool CropRegionOfInterest()
     m_ResamplingFilter->Update();
 
     SetParameterOutputImage("out", m_ResamplingFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  ExtractROIFilterType::Pointer m_ExtractROIFilter;
-  ShrinkImageFilterType::Pointer m_ResamplingFilter;
 
 };
 

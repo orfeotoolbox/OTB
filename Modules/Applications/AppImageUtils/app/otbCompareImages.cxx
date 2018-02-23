@@ -172,9 +172,12 @@ private:
   void DoExecute() ITK_OVERRIDE
   {
     // Init filters
-    m_ExtractRefFilter = ExtractROIMonoFilterType::New();
-    m_ExtractMeasFilter = ExtractROIMonoFilterType::New();
-    m_CompareFilter = StreamingCompareImageFilterType::New();
+    ExtractROIMonoFilterType::Pointer m_ExtractRefFilter = 
+      ExtractROIMonoFilterType::New();
+    ExtractROIMonoFilterType::Pointer m_ExtractMeasFilter = 
+      ExtractROIMonoFilterType::New();
+    StreamingCompareImageFilterType::Pointer m_CompareFilter = 
+      StreamingCompareImageFilterType::New(); 
 
     // Get input image pointers
     FloatVectorImageType::Pointer refIm = this->GetParameterImage("ref.in");
@@ -229,12 +232,8 @@ private:
     SetParameterFloat( "mae",m_CompareFilter->GetMAE() , false);
     SetParameterFloat( "psnr",m_CompareFilter->GetPSNR() , false);
     SetParameterFloat( "count",m_CompareFilter->GetDiffCount() , false);
+    RegisterPipeline();
   }
-
-
-  ExtractROIMonoFilterType::Pointer m_ExtractRefFilter;
-  ExtractROIMonoFilterType::Pointer m_ExtractMeasFilter;
-  StreamingCompareImageFilterType::Pointer m_CompareFilter;
 };
 
 }

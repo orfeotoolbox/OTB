@@ -103,7 +103,7 @@ private:
     ext   = itksys::SystemTools::GetFilenameExtension(ofname);
 
     // Set the extract filter input image
-    m_Filter = FilterType::New();
+    FilterType::Pointer m_Filter = FilterType::New();
     m_Filter->SetInput(inImage);
 
     for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
@@ -140,9 +140,8 @@ private:
     // Disable the output Image parameter to avoid writing
     // the last image (Application::ExecuteAndWriteOutput method)
     DisableParameter("out");
+    RegisterPipeline();
   }
-
-  FilterType::Pointer        m_Filter;
 };
 }
 }

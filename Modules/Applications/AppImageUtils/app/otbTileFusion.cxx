@@ -95,7 +95,7 @@ private:
       itkExceptionMacro("No input Image set...");
       }
 
-    m_FusionFilter = TileFilterType::New();
+    TileFilterType::Pointer m_FusionFilter = TileFilterType::New();
 
     TileFilterType::SizeType layout;
     layout[0] = this->GetParameterInt("cols");
@@ -108,9 +108,8 @@ private:
       }
 
     SetParameterOutputImage("out", m_FusionFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  TileFilterType::Pointer m_FusionFilter;
 
 };
 
