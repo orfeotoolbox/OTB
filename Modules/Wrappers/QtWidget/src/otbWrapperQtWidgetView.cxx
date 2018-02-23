@@ -96,6 +96,12 @@ void QtWidgetView::UpdateMessageAfterExecuteClicked()
   disconnect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutputSlot() ) );
   disconnect( m_ExecButton, SIGNAL(clicked()), this, SLOT(UpdateMessageAfterExecuteClicked() ) );
   connect( m_ExecButton, SIGNAL(clicked()), m_Model, SIGNAL(Stop()));
+  connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(UpdateMessageAfterCancelClicked()));
+}
+
+void QtWidgetView::UpdateMessageAfterCancelClicked()
+{
+  m_Message->setText("<center><font color=\"#FF0000\">Cancelling...</font></center>");
 }
 
 void QtWidgetView::UpdateMessageAfterExecution(int status)
@@ -111,6 +117,7 @@ void QtWidgetView::UpdateMessageAfterExecution(int status)
   m_ExecButton->setText(QObject::tr("Execute"));
 
   disconnect( m_ExecButton, SIGNAL(clicked()), m_Model, SIGNAL(Stop()));
+  disconnect( m_ExecButton, SIGNAL(clicked()), this, SLOT(UpdateMessageAfterCancelClicked()));
   connect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutputSlot() ) );
   connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(UpdateMessageAfterExecuteClicked() ) );
 }

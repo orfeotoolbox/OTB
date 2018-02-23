@@ -59,6 +59,7 @@ public slots:
 
 private slots:
   void UpdateMessageAfterExecuteClicked();
+  void UpdateMessageAfterCancelClicked();
   void UpdateMessageAfterExecution(int status);
   void UpdateMessageAfterApplicationReady(bool val);
 
