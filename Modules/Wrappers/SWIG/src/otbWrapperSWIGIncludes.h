@@ -36,4 +36,10 @@ typedef otb::Wrapper::InputImageParameter                InputImageParameter;
 typedef otb::Wrapper::ComplexOutputImageParameter        ComplexOutputImageParameter;
 typedef otb::Wrapper::ComplexInputImageParameter         ComplexInputImageParameter;
 
+typedef otb::Wrapper::ImageBaseType                      ImageBaseType;
+
+typedef ImageBaseType::SizeType                           itkSize;
+typedef ImageBaseType::RegionType                         itkRegion;
+typedef ImageBaseType::IndexType                          itkIndex;
+
 #endif

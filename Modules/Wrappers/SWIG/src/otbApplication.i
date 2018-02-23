@@ -21,7 +21,7 @@
 
 %module otbApplication
 
- %{
+%{
 #include "itkBase.includes"
 #include "otbWrapperSWIGIncludes.h"
 #include <string>         // std::string
@@ -36,6 +36,8 @@
 %include "Lua.i"
 %include "itkMacro.i"
 %include "itkBase.i"
+
+%include "std_map.i"
 
 #if OTB_SWIGNUMPY
 %include "numpy.i"
@@ -142,6 +144,203 @@ namespace Wrapper
 
 }
 
+namespace std {
+%template(keywordlist) map<string,string>;
+
+#if SWIGPYTHON
+%extend map<string,string>
+{
+  %pythoncode
+  {
+    def __str__(self):
+      ret = "{"
+      for key in self:
+        ret += str(key)+":"+str(self[key])+", "
+      if len(ret) == 1:
+        ret += ", "
+      return ret[:-2]+"}"
+  }
+};
+#endif
+} // end of namespace std
+
+class itkSize
+{
+public:
+  itkSize();
+  virtual ~itkSize();
+  void Fill(unsigned long val);
+  unsigned long GetElement(unsigned long element) const;
+  void SetElement(unsigned long element, unsigned long val);
+  static unsigned int GetSizeDimension();
+};
+
+class itkIndex
+{
+public:
+  itkIndex();
+  virtual ~itkIndex();
+  void Fill(signed long val);
+  signed long GetElement(unsigned long element) const;
+  void SetElement(unsigned long element, signed long val);
+  static unsigned int GetIndexDimension();
+};
+
+class itkRegion
+{
+public:
+  itkRegion();
+  itkRegion(const itkIndex &index, const itkSize &size);
+  virtual ~itkRegion();
+  void SetIndex(const itkIndex &index);
+  void SetSize(const itkSize &size);
+  void SetUpperIndex(const itkIndex &idx);
+  itkIndex GetUpperIndex() const;
+  const itkIndex & GetIndex() const;
+  const itkSize & GetSize() const;
+  bool IsInside(const itkIndex & index) const;
+  void SetSize(unsigned int i, unsigned long val);
+  unsigned long GetSize(unsigned int i) const;
+  void SetIndex(unsigned int i, signed long val);
+  signed long GetIndex(unsigned int i) const;
+private:
+  itkIndex m_Index;
+  itkSize m_Size;
+};
+
+namespace itk
+{
+template <typename TValue, unsigned int VLength = 3>
+class FixedArray
+{
+public:
+  FixedArray();
+  virtual ~FixedArray();
+  unsigned int Size();
+  void SetElement(unsigned short idx, const TValue &val);
+  const TValue & GetElement(unsigned short idx);
+};
+
+%template(itkFixedArrayD2) FixedArray<double,2>;
+%template(itkFixedArrayF2) FixedArray<float,2>;
+
+template <typename TValue, unsigned int NDim = 3>
+class Vector: public FixedArray<TValue,NDim>
+{
+public: 
+  Vector();
+  virtual ~Vector();
+  typedef NumericTraits<TValue>::RealType RealValueType;
+  RealValueType GetNorm() const;
+  RealValueType GetSquaredNorm() const;
+  RealValueType Normalize();
+};
+
+%template(itkVectorD2) Vector<double,2>;
+%template(itkVectorF2) Vector<float,2>;
+
+template <typename TCoord, unsigned int NDim = 3>
+class Point: public FixedArray<TCoord,NDim>
+{
+public:
+  Point();
+  virtual ~Point();
+};
+
+%template(itkPointD2) Point<double,2>;
+%template(itkPointF2) Point<float,2>;
+
+
+} // end of namespace itk
+
+#if SWIGPYTHON
+
+%define WRAP_AS_LIST(N)
+  %pythoncode
+    {
+    def __str__(self):
+      ret = "["
+      for index in range(N):
+        ret += str(self.GetElement(index))+","
+      ret = ret[:-1] + "]"
+      return ret
+    def __len__(self):
+      return N
+    def __getitem__(self,idx):
+      if idx >= N or idx < 0:
+        raise IndexError('Index outside [0,'+str(N-1)+']')
+      return self.GetElement(idx)
+    def __setitem__(self,idx,val):
+      if idx >= N or idx < 0:
+        raise IndexError('Index outside [0,'+str(N-1)+']')
+      return self.SetElement(idx,val)
+    }
+%enddef
+
+%extend itkSize
+{
+  WRAP_AS_LIST(2)
+};
+%extend itkIndex
+{
+  WRAP_AS_LIST(2)
+};
+
+namespace itk
+{
+%extend FixedArray<double,2>
+{
+  WRAP_AS_LIST(2)
+};
+%extend FixedArray<float,2>
+{
+  WRAP_AS_LIST(2)
+};
+%extend Vector<double,2>
+{
+  WRAP_AS_LIST(2)
+};
+%extend Vector<float,2>
+{
+  WRAP_AS_LIST(2)
+};
+%extend Point<double,2>
+{
+  WRAP_AS_LIST(2)
+};
+%extend Point<float,2>
+{
+  WRAP_AS_LIST(2)
+};
+} // end of namespace itk
+
+%extend itkRegion
+{
+  %pythoncode
+    {
+    def __str__(self):
+      return "{index:"+str(self.GetIndex())+", size:"+str(self.GetSize())+"}"
+    def __len__(self):
+      return 2
+    def __getitem__(self,key):
+      if key == 'index':
+        return self.GetIndex()
+      elif key == 'size':
+        return self.GetSize()
+      else:
+        raise IndexError('Key not in ["index","size"]')
+    def __setitem__(self,key,val):
+      if key == 'index':
+        self.SetIndex(val)
+      elif key == 'size':
+        self.SetSize(val)
+      else:
+        raise IndexError('Key not in ["index","size"]')
+
+    }
+}
+#endif
+
 class Application: public itkObject
 {
 public:
@@ -199,18 +398,25 @@ public:
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
 
-  InputImageParameter::ImageBaseType * GetParameterOutputImage(std::string parameter);
-  void SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage);
-  ComplexInputImageParameter::ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
-  void SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage);
-  void AddImageToParameterInputImageList(std::string parameter,InputImageParameter::ImageBaseType * img);
+  ImageBaseType * GetParameterOutputImage(std::string parameter);
+  void SetParameterInputImage(std::string parameter, ImageBaseType * inputImage);
+  ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
+  void SetParameterComplexInputImage(std::string parameter, ImageBaseType * inputImage);
+  void AddImageToParameterInputImageList(std::string parameter,ImageBaseType * img);
   void AddParameterStringList(std::string parameter,const std::string & str);
-  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageParameter::ImageBaseType * img);
+  void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, ImageBaseType * img);
   void SetNthParameterStringList(std::string parameter, const unsigned int &id, const std::string& str);
   void ClearParameterInputImageList(std::string parameter);
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
-
+  itk::Point<double,2> GetImageOrigin(const std::string & key, unsigned int idx = 0);
+  itk::Vector<double,2> GetImageSpacing(const std::string & key, unsigned int idx = 0);
+  itkSize GetImageSize(const std::string & key, unsigned int idx = 0);
+  unsigned int GetImageNbBands(const std::string & key, unsigned int idx = 0);
+  std::string GetImageProjection(const std::string & key, unsigned int idx = 0);
+  std::map<std::string,std::string> GetImageKeywordlist(const std::string & key, unsigned int idx = 0);
+  unsigned long PropagateRequestedRegion(const std::string & key, itkRegion region, unsigned int idx = 0);
+  itkRegion GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
 
   itkProcessObject* GetProgressSource() const;
 
@@ -320,7 +526,6 @@ public:
         {                                                               \
         otb::Wrapper::Parameter *parameter = $self->GetParameterList()->GetParameterByKey(pkey); \
         OutputImageParameter* outputImageParam = dynamic_cast<OutputImageParameter*>(parameter); \
-        typedef itk::ImageBase<2> ImageBaseType;                        \
         typedef ImageBaseType::RegionType RegionType;          \
         ImageBaseType::Pointer imageBase;                               \
         imageBase = outputImageParam->GetValue();                       \
