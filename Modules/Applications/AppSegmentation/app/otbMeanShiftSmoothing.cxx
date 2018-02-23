@@ -183,7 +183,7 @@ private:
   {
     FloatVectorImageType* input = GetParameterImage("in");
 
-    m_Filter = MSFilterType::New();
+    MSFilterType::Pointer m_Filter = MSFilterType::New();
 
     m_Filter->SetInput(input);
 
@@ -215,9 +215,8 @@ private:
       {
       otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
       }
+    RegisterPipeline();
    }
-
-  MSFilterType::Pointer m_Filter;
 
 };
 
