@@ -517,6 +517,7 @@ int Application::ExecuteAndWriteOutput()
         }
     }
 
+  // TODO: only if no Stop() was called
   this->AfterExecuteAndWriteOutputs();
 
   m_Chrono.Stop();
@@ -526,9 +527,24 @@ int Application::ExecuteAndWriteOutput()
 void
 Application::Stop()
 {
-  // TODO :  call AbortGenerateData on ProcessObjects (but no mutex)
-  // TODO : set an internal AbortExecute flag with mutex
-  std::cout << "Stop !" << std::endl;
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
+    {
+    std::string key = *it;
+    if (GetParameterType(key) == ParameterType_OutputImage
+        && IsParameterEnabled(key) && HasValue(key) )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+
+      if(outputParam!=ITK_NULLPTR)
+        {
+        outputParam->GetWriter()->SetAbortGenerateData(true);
+        }
+      }
+    }
 }
 
 /* Enable the use of an optional parameter. Returns the previous state */
