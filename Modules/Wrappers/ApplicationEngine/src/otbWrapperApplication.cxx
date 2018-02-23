@@ -383,7 +383,7 @@ Application::RegisterPipeline()
       Parameter* param = GetParameterByKey(key);
       OutputVectorDataParameter * outP = 
         dynamic_cast< OutputVectorDataParameter * >( param );
-      Wrapper::VectorDataType * outData = outP->GetValue();
+      VectorDataType * outData = outP->GetValue();
       if ( outData )
         dataStack.push(outData);
       }
@@ -392,6 +392,8 @@ Application::RegisterPipeline()
       Parameter* param = GetParameterByKey(key);
       InputImageParameter * inP = 
         dynamic_cast< InputImageParameter * >( param );
+      if ( !inP->HasValue() )
+        continue;
       itk::ImageBase< 2 > * inData = inP->GetPointer();
       if ( inData && !inputData.count(inData) )
         inputData.insert(inData);
@@ -401,6 +403,8 @@ Application::RegisterPipeline()
       Parameter * param = GetParameterByKey(key);
       InputImageListParameter * inP = 
         dynamic_cast< InputImageListParameter * > ( param );
+      if ( !inP->HasValue() )
+        continue;
       const FloatVectorImageListType * list = inP->GetImageList();
       auto it = list->Begin();
       while ( it != list->End() )
@@ -416,6 +420,9 @@ Application::RegisterPipeline()
       Parameter * param = GetParameterByKey(key);
       InputVectorDataParameter * inP =
         dynamic_cast< InputVectorDataParameter * > ( param );
+      std::cout<<"Getting data from outputvectordataparameter"<<std::endl;
+      if ( !inP->HasValue() )
+        continue;
       VectorDataType * inData = inP->GetVectorData();
       if ( inData && !inputData.count(inData) )
         inputData.insert(inData);
@@ -425,6 +432,8 @@ Application::RegisterPipeline()
       Parameter * param = GetParameterByKey(key);
       InputVectorDataListParameter * inP =
         dynamic_cast< InputVectorDataListParameter * > ( param );
+      if ( !inP->HasValue() )
+        continue;
       VectorDataListType * list = inP->GetVectorDataList();
       auto it = list->Begin();
       while ( it != list->End() )
@@ -438,7 +447,7 @@ Application::RegisterPipeline()
     else
       continue;
     }
-
+  std::cout<<"Beginning DFS"<<std::endl;
   // DFS
   std::set< itk::ProcessObject * > processSet;
   while ( !dataStack.empty() )
