@@ -162,6 +162,16 @@ ObjectList<TObject>
     }
   return m_InternalContainer[index];
 }
+
+template <class TObject>
+typename ObjectList<TObject>::Superclass *
+ObjectList<TObject>
+::GetNthDataObject(unsigned int index) const
+{
+  ObjectType * object = GetNthElement(index).GetPointer();
+  return dynamic_cast< Superclass * > ( object );
+}
+
 /**
    * Return the first element of the list.
    * \return The first element of the list.

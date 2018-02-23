@@ -449,6 +449,20 @@ Application::RegisterPipeline()
     if ( inputData.count( current ) || !current )
       continue;
     std::cout<<"it is not an input"<<std::endl;
+    if ( dynamic_cast< ObjectListInterface *> (current) )
+      {
+      ObjectListInterface * list = 
+        dynamic_cast< ObjectListInterface *> (current);
+      int length = list->Size();
+      for ( int i = 0 ; i < length ; i++ )
+        {
+        itk::DataObject * newData = list->GetNthDataObject(i);
+        if ( inputData.count( current ) || !current )
+          continue;
+        dataStack.push( newData );
+        }
+      continue;
+      }
     itk::ProcessObject * process = (current->GetSource()).GetPointer();
     if ( m_Filters.find( process ) != m_Filters.end() || !process )
       continue;

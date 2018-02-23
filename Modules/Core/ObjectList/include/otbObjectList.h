@@ -23,6 +23,7 @@
 
 #include <vector>
 #include "itkDataObject.h"
+#include "otbObjectListInterface.h"
 #include "itkObjectFactory.h"
 
 namespace otb
@@ -36,7 +37,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TObject>
-class ITK_EXPORT ObjectList : public itk::DataObject
+class ITK_EXPORT ObjectList : public itk::DataObject , public ObjectListInterface
 {
 public:
   /** Standard typedefs */
@@ -99,6 +100,11 @@ public:
    * \return The pointer to the nth element of the list.
    */
   ObjectPointerType GetNthElement(unsigned int index) const;
+  /**
+   * Get the nth element of the list as a DataObject *.
+   * \param index The index of the object to get.
+   */
+  Superclass *  GetNthDataObject(unsigned int index) const;
   /**
    * Return the first element of the list.
    * \return The first element of the list.
