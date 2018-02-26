@@ -592,10 +592,15 @@ public:
     {                                                                   \
     Image##Type::Pointer ret;                                           \
     Parameter* param = GetParameterByKey(parameter);                    \
-    if (dynamic_cast<InputImageParameter*>(param))                      \
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
+    ComplexInputImageParameter* paramDownC = dynamic_cast<ComplexInputImageParameter*>(param); \
+    if ( paramDown )                                                    \
       {                                                                 \
-      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
       ret = paramDown->Get##Image();                                    \
+      }                                                                 \
+    else if ( paramDownC )  /* Support of ComplexInputImageParameter */ \
+      {                                                                 \
+      ret = paramDownC->Get##Image();                                   \
       }                                                                 \
     return ret;                                                         \
     }
@@ -619,30 +624,16 @@ public:
   otbGetParameterImageMacro(UInt8RGBImage);
   otbGetParameterImageMacro(UInt8RGBAImage);
 
-  /* Get a complex image value
-   *
-   * Can be called for types :
-   * \li ParameterType_ComplexInputImage
-   */
+  // Complex image
+  otbGetParameterImageMacro(ComplexInt16Image);
+  otbGetParameterImageMacro(ComplexInt32Image); 
+  otbGetParameterImageMacro(ComplexFloatImage);
+  otbGetParameterImageMacro(ComplexDoubleImage);
 
-#define otbGetParameterComplexImageMacro( Image )                       \
-  Image##Type * GetParameter##Image( std::string parameter )            \
-    {                                                                   \
-    Image##Type::Pointer ret;                                           \
-    Parameter* param = GetParameterByKey(parameter);                    \
-    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param); \
-    if (paramDown)                                                      \
-      {                                                                 \
-      ret = paramDown->Get##Image();                                    \
-      }                                                                 \
-    return ret;                                                         \
-    }
-
-  otbGetParameterComplexImageMacro(ComplexFloatImage);
-  otbGetParameterComplexImageMacro(ComplexDoubleImage);
-
-  otbGetParameterComplexImageMacro(ComplexFloatVectorImage);
-  otbGetParameterComplexImageMacro(ComplexDoubleVectorImage);
+  otbGetParameterImageMacro(ComplexInt16VectorImage);
+  otbGetParameterImageMacro(ComplexInt32VectorImage);
+  otbGetParameterImageMacro(ComplexFloatVectorImage);
+  otbGetParameterImageMacro(ComplexDoubleVectorImage);
 
   /* Get an image list value
    *

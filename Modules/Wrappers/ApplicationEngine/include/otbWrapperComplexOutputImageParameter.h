@@ -122,23 +122,18 @@ protected:
   template <class TInputVectorImageType>
     void SwitchVectorImageWrite();
 
-  //FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
   std::string            m_FileName;
   ComplexImagePixelType         m_ComplexPixelType;
   ComplexImagePixelType         m_DefaultComplexPixelType;
 
-  typedef otb::ImageFileWriter<ComplexFloatImageType>  ComplexFloatWriterType;
-  typedef otb::ImageFileWriter<ComplexDoubleImageType> ComplexDoubleWriterType;
-
-
+  typedef otb::ImageFileWriter<ComplexInt16VectorImageType>  ComplexVectorInt16WriterType;
+  typedef otb::ImageFileWriter<ComplexInt32VectorImageType>  ComplexVectorInt32WriterType;
   typedef otb::ImageFileWriter<ComplexFloatVectorImageType>  ComplexVectorFloatWriterType;
   typedef otb::ImageFileWriter<ComplexDoubleVectorImageType> ComplexVectorDoubleWriterType;
 
-
-  ComplexFloatWriterType::Pointer  m_ComplexFloatWriter;
-  ComplexDoubleWriterType::Pointer m_ComplexDoubleWriter;
-
+  ComplexVectorInt16WriterType::Pointer  m_ComplexVectorInt16Writer;
+  ComplexVectorInt32WriterType::Pointer  m_ComplexVectorInt32Writer;
   ComplexVectorFloatWriterType::Pointer  m_ComplexVectorFloatWriter;
   ComplexVectorDoubleWriterType::Pointer m_ComplexVectorDoubleWriter;
 

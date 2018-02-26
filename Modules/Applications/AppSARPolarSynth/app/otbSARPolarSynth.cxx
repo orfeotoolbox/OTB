@@ -86,7 +86,7 @@ private:
 
     AddDocTag(Tags::SAR);
 
-    AddParameter(ParameterType_ComplexInputImage,  "in",   "Input Image");
+    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
