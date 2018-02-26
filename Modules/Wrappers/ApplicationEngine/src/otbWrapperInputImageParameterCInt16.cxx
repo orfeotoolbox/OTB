@@ -20,9 +20,7 @@
 
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageParameterMacros.h"
-#include "itksys/SystemTools.hxx"
 #include "otbWrapperTypes.h"
-#include "otb_boost_string_header.h"
 
 namespace otb
 {
