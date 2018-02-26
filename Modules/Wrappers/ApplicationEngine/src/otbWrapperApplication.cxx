@@ -650,6 +650,12 @@ int Application::ExecuteAndWriteOutput()
 
   this->AfterExecuteAndWriteOutputs();
   m_Chrono.Stop();
+  for ( auto filter : m_Filters )
+    {
+    std::cout<<"For filter : "<<filter->GetNameOfClass()<<
+    " count : "<<filter->GetReferenceCount()<<std::endl;
+    }
+
   m_Filters.clear();
   return status;
 }
