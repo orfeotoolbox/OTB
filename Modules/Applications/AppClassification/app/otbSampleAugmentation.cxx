@@ -27,6 +27,7 @@ namespace otb
 namespace Wrapper
 {
 
+
 class SampleAugmentation : public Application
 {
 public:
@@ -42,6 +43,9 @@ public:
   itkTypeMacro(SampleAugmentation, otb::Application);
 
   /** Filters typedef */
+  using SampleType = std::vector<double>;
+  using SampleVectorType = std::vector<SampleType>;
+
 
 private:
   SampleAugmentation() {}
@@ -63,8 +67,8 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    AddParameter(ParameterType_InputFilename, "vec", "Input samples");
-    SetParameterDescription("vec","Vector data file containing samples (OGR format)");
+    AddParameter(ParameterType_InputFilename, "in", "Input samples");
+    SetParameterDescription("in","Vector data file containing samples (OGR format)");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output samples");
     SetParameterDescription("out","Output vector data file storing new samples"
@@ -90,28 +94,33 @@ private:
                             "be generated.");
     SetDefaultParameterInt("samples",100);
 
-    AddRAMParameter();
+    AddParameter(ParameterType_ListView, "exclude", "Field names for excluded features.");
+    SetParameterDescription("exclude",
+                            "List of field names in the input vector data that will not be generated in the output file.");
+
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("vec", "samples.sqlite");
+    SetDocExampleParameterValue("in", "samples.sqlite");
     SetDocExampleParameterValue("field", "class");
     SetDocExampleParameterValue("label", "3");
     SetDocExampleParameterValue("samples", "100");
     SetDocExampleParameterValue("out","augmented_samples.sqlite");
+    SetDocExampleParameterValue( "exclude", "OGC_FID name class originfid" );
 
     SetOfficialDocLink();
   }
 
   void DoUpdateParameters()
   {
-    if ( HasValue("vec") )
+    if ( HasValue("in") )
       {
-      std::string vectorFile = GetParameterString("vec");
+      std::string vectorFile = GetParameterString("in");
       ogr::DataSource::Pointer ogrDS =
         ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
       ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
       ogr::Feature feature = layer.ogr().GetNextFeature();
 
+      ClearChoices( "exclude" );
       ClearChoices("field");
       
       for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
@@ -129,6 +138,11 @@ private:
           std::string tmpKey="field."+key.substr(0, end - key.begin());
           AddChoice(tmpKey,item);
           }
+        if( fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64( fieldType ) || fieldType == OFTReal )
+          {
+          std::string tmpKey = "exclude." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
+          AddChoice( tmpKey, item );
+          }
         }
       }
   }
@@ -139,15 +153,15 @@ private:
     ogr::DataSource::Pointer output;
     if (IsParameterEnabled("out") && HasValue("out"))
       {
-      vectors = ogr::DataSource::New(this->GetParameterString("vec"));
+      vectors = ogr::DataSource::New(this->GetParameterString("in"));
       output = ogr::DataSource::New(this->GetParameterString("out"),
                                     ogr::DataSource::Modes::Overwrite);
       }
     else
       {
       // Update mode
-      vectors = ogr::DataSource::New(this->GetParameterString("vec"),
-                                    ogr::DataSource::Modes::Update_LayerUpdate);
+      vectors = ogr::DataSource::New(this->GetParameterString("in"),
+                                     ogr::DataSource::Modes::Update_LayerUpdate);
       output = vectors;
       }
 
@@ -162,10 +176,165 @@ private:
   std::vector<std::string> cFieldNames = GetChoiceNames("field");  
   std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
     
-
+  std::vector<std::string> excludedFeatures = GetExcludedFeatures( GetChoiceNames( "exclude" ), GetSelectedItems( "exclude" ));
+  for(const auto& ef : excludedFeatures)
+    std::cout << ef << " excluded\n";
+  auto inSamples = extractSamples(vectors, this->GetParameterInt("layer"),
+                                  fieldName,
+                                  this->GetParameterInt("label"),
+                                  excludedFeatures);
+  auto newSamples = augmentSamples(inSamples, this->GetParameterInt("samples"));
+  writeSamples(vectors, output, newSamples, this->GetParameterInt("layer"),
+               fieldName,
+               this->GetParameterInt("label"),
+               excludedFeatures);
   output->SyncToDisk();
     }
 
+/** Extracts the samples of a single class from the vector data to a
+* vector and excludes some unwanted features.
+*/
+  SampleVectorType extractSamples(const ogr::DataSource::Pointer vectors, size_t layerName,
+                                  std::string classField, int label,
+                                  const std::vector<std::string>& excludedFeatures = {})
+  {
+    ogr::Layer layer = vectors->GetLayer(layerName);
+    ogr::Feature feature = layer.ogr().GetNextFeature();
+    if(feature.addr() == 0)
+      {
+      otbAppLogFATAL("Layer " << layerName << " of input sample file is empty.\n");
+      }
+    int cFieldIndex = feature.ogr().GetFieldIndex( classField.c_str() );
+    if( cFieldIndex < 0 )
+      {
+      otbAppLogFATAL( "The field name for class label (" << classField
+                      << ") has not been found in the vector file " );
+      }
+
+    auto numberOfFields = feature.ogr().GetFieldCount();
+    std::set<size_t> excludedIds;
+    if( excludedFeatures.size() != 0)
+      {
+      for(const auto& fieldName : excludedFeatures)
+          {
+          auto idx = feature.ogr().GetFieldIndex( fieldName.c_str() );
+          excludedIds.insert(idx);
+          }
+      }
+    otbAppLogINFO("The vector file contains " << numberOfFields << " fields.\n");
+    SampleVectorType samples;
+    bool goesOn{feature.addr() != 0};
+    while( goesOn )
+      {
+      // Retrieve all the features for each field in the ogr layer.
+      if(feature.ogr().GetFieldAsInteger(classField.c_str()) == label)
+        {
+        SampleType mv;
+        for(auto idx=0; idx<numberOfFields; ++idx)
+          {
+          OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(idx)->GetType();
+          if(excludedIds.find(idx) == excludedIds.cend() &&
+             (fieldType == OFTInteger 
+              || ogr::version_proxy::IsOFTInteger64( fieldType ) 
+              || fieldType == OFTReal))
+            mv.push_back(feature.ogr().GetFieldAsDouble(idx));
+          }
+        samples.push_back(mv); 
+        }
+      feature = layer.ogr().GetNextFeature();
+      goesOn = feature.addr() != 0;
+      }
+    return samples;
+  }
+
+  SampleVectorType augmentSamples(const SampleVectorType& inSamples, 
+                                  const size_t nbSamples)
+  {
+    SampleVectorType newSamples;
+    for(size_t i=0; i<nbSamples; ++i)
+      {
+      newSamples.push_back(inSamples[i%inSamples.size()]);
+      }
+    return newSamples;
+  }
+
+  void writeSamples(const ogr::DataSource::Pointer vectors,
+                    ogr::DataSource::Pointer output, 
+                    const SampleVectorType& samples,
+                    size_t layerName,
+                    std::string classField, int label,
+                    const std::vector<std::string>& excludedFeatures = {})
+  {
+
+    auto inputLayer = vectors->GetLayer(layerName);
+    std::set<size_t> excludedIds;
+    if( excludedFeatures.size() != 0)
+      {
+      auto feature = *(inputLayer).begin();
+      for(const auto& fieldName : excludedFeatures)
+        {
+        auto idx = feature.ogr().GetFieldIndex( fieldName.c_str() );
+        excludedIds.insert(idx);
+        }
+      }
+
+
+    OGRSpatialReference * oSRS = nullptr;
+    if (inputLayer.GetSpatialRef())
+      {
+      oSRS = inputLayer.GetSpatialRef()->Clone();
+      }
+    OGRFeatureDefn &layerDefn = inputLayer.GetLayerDefn();
+
+    auto outputLayer = output->CreateLayer(inputLayer.GetName(), oSRS, 
+                                           inputLayer.GetGeomType());
+    for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
+      {
+      OGRFieldDefn originDefn(layerDefn.GetFieldDefn(k));
+      ogr::FieldDefn fieldDefn(originDefn);
+      outputLayer.CreateField(fieldDefn);
+      }
+
+    auto featureCount = outputLayer.GetFeatureCount(false);
+    auto templateFeature = *(inputLayer).begin();
+    for(const auto& sample : samples)
+         {
+         ogr::Feature dstFeature(outputLayer.GetLayerDefn());
+         dstFeature.SetFrom( templateFeature, TRUE );
+         dstFeature.SetFID(++featureCount);
+         auto sampleFieldCounter = 0;
+         for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
+           {
+           OGRFieldType fieldType = dstFeature.ogr().GetFieldDefnRef(k)->GetType();
+           if(excludedIds.find(k) == excludedIds.cend() &&
+              (fieldType == OFTInteger 
+               || ogr::version_proxy::IsOFTInteger64( fieldType ) 
+               || fieldType == OFTReal))
+             {
+             dstFeature.ogr().SetField(k, sample[sampleFieldCounter++]);
+             }
+           }
+         // for (unsigned int i=0 ; i<nbBand ; ++i)
+         //   {
+         //   imgComp = static_cast<double>(itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i,imgPixel));
+         //   // Fill the output OGRDataSource
+         //   dstFeature[m_SampleFieldNames[i]].SetValue(imgComp);
+         //   }
+         outputLayer.CreateFeature( dstFeature );
+         }
+  }
+
+  std::vector<std::string> GetExcludedFeatures(std::vector <std::string> fieldNames,
+                                               std::vector<int> selectedIdx)
+  {
+    auto nbFeatures = static_cast<unsigned int>(selectedIdx.size());
+    std::vector<std::string> result( nbFeatures );
+    for( unsigned int i = 0; i < nbFeatures; ++i )
+      {
+      result[i] = fieldNames[selectedIdx[i]];
+      }
+    return result;
+  }
 };
 
 } // end of namespace Wrapper

@@ -972,3 +972,14 @@ otb_test_application(
   ${OTBAPP_BASELINE_FILES}/apTvClMultiImageSamplingRate_out_3.csv
   ${TEMP}/apTvClMultiImageSamplingRate_out_3.csv
 )
+
+#------------ SampleAgmentation TESTS ----------------
+otb_test_application(NAME apTvClSampleAugmentation
+  APP  SampleAugmentation
+  OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+  -field class
+  -label 3
+  -samples 100
+  -out ${TEMP}/apTvClSampleAugmentation.sqlite
+  #  -excluded_features OGC_FID name class originfid
+  )
