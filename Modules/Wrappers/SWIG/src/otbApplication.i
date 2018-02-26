@@ -164,52 +164,57 @@ namespace std {
 #endif
 } // end of namespace std
 
-class itkSize
-{
-public:
-  itkSize();
-  virtual ~itkSize();
-  void Fill(unsigned long val);
-  unsigned long GetElement(unsigned long element) const;
-  void SetElement(unsigned long element, unsigned long val);
-  static unsigned int GetSizeDimension();
-};
-
-class itkIndex
-{
-public:
-  itkIndex();
-  virtual ~itkIndex();
-  void Fill(signed long val);
-  signed long GetElement(unsigned long element) const;
-  void SetElement(unsigned long element, signed long val);
-  static unsigned int GetIndexDimension();
-};
-
-class itkRegion
-{
-public:
-  itkRegion();
-  itkRegion(const itkIndex &index, const itkSize &size);
-  virtual ~itkRegion();
-  void SetIndex(const itkIndex &index);
-  void SetSize(const itkSize &size);
-  void SetUpperIndex(const itkIndex &idx);
-  itkIndex GetUpperIndex() const;
-  const itkIndex & GetIndex() const;
-  const itkSize & GetSize() const;
-  bool IsInside(const itkIndex & index) const;
-  void SetSize(unsigned int i, unsigned long val);
-  unsigned long GetSize(unsigned int i) const;
-  void SetIndex(unsigned int i, signed long val);
-  signed long GetIndex(unsigned int i) const;
-private:
-  itkIndex m_Index;
-  itkSize m_Size;
-};
+// BASIC ITK TYPES WRAPPING
+%include "itkFloatTypes.h"
+%include "itkIntTypes.h"
 
 namespace itk
 {
+
+template <unsigned int VDim = 2>
+class Size
+{
+public:
+  Size();
+  virtual ~Size();
+  void Fill(unsigned long val);
+  SizeValueType GetElement(unsigned long element) const;
+  void SetElement(unsigned long element, SizeValueType val);
+  static unsigned int GetSizeDimension();
+};
+
+template <unsigned int VDim = 2>
+class Index
+{
+public:
+  Index();
+  virtual ~Index();
+  void Fill(signed long val);
+  IndexValueType GetElement(unsigned long element) const;
+  void SetElement(unsigned long element, IndexValueType val);
+  static unsigned int GetIndexDimension();
+};
+
+template <unsigned int VDim>
+class ImageRegion
+{
+public:
+  ImageRegion();
+  ImageRegion(const Index<VDim> &index, const Size<VDim> &size);
+  virtual ~ImageRegion();
+  void SetIndex(const Index<VDim> &index);
+  void SetSize(const Size<VDim> &size);
+  void SetUpperIndex(const Index<VDim> &idx);
+  Index<VDim> GetUpperIndex() const;
+  const Index<VDim> & GetIndex() const;
+  const Size<VDim> & GetSize() const;
+  bool IsInside(const Index<VDim> & index) const;
+  void SetSize(unsigned int i, SizeValueType val);
+  SizeValueType GetSize(unsigned int i) const;
+  void SetIndex(unsigned int i, IndexValueType val);
+  IndexValueType GetIndex(unsigned int i) const;
+};
+
 template <typename TValue, unsigned int VLength = 3>
 class FixedArray
 {
@@ -220,9 +225,6 @@ public:
   void SetElement(unsigned short idx, const TValue &val);
   const TValue & GetElement(unsigned short idx);
 };
-
-%template(itkFixedArrayD2) FixedArray<double,2>;
-%template(itkFixedArrayF2) FixedArray<float,2>;
 
 template <typename TValue, unsigned int NDim = 3>
 class Vector: public FixedArray<TValue,NDim>
@@ -236,9 +238,6 @@ public:
   RealValueType Normalize();
 };
 
-%template(itkVectorD2) Vector<double,2>;
-%template(itkVectorF2) Vector<float,2>;
-
 template <typename TCoord, unsigned int NDim = 3>
 class Point: public FixedArray<TCoord,NDim>
 {
@@ -247,15 +246,22 @@ public:
   virtual ~Point();
 };
 
-%template(itkPointD2) Point<double,2>;
-%template(itkPointF2) Point<float,2>;
 
+// Instanciate the needed templates
+%template(itkSize) Size<2>;
+%template(itkIndex) Index<2>;
+%template(itkRegion) ImageRegion<2>;
+%template(itkFixedArray) FixedArray<SpacePrecisionType,2>;
+%template(itkVector) Vector<SpacePrecisionType,2>;
+%template(itkPoint) Point<SpacePrecisionType,2>;
 
 } // end of namespace itk
 
 #if SWIGPYTHON
 
-%define WRAP_AS_LIST(N)
+%define WRAP_AS_LIST(N, T...)
+%extend T
+  {
   %pythoncode
     {
     def __str__(self):
@@ -275,46 +281,18 @@ public:
         raise IndexError('Index outside [0,'+str(N-1)+']')
       return self.SetElement(idx,val)
     }
+  };
 %enddef
-
-%extend itkSize
-{
-  WRAP_AS_LIST(2)
-};
-%extend itkIndex
-{
-  WRAP_AS_LIST(2)
-};
 
 namespace itk
 {
-%extend FixedArray<double,2>
-{
-  WRAP_AS_LIST(2)
-};
-%extend FixedArray<float,2>
-{
-  WRAP_AS_LIST(2)
-};
-%extend Vector<double,2>
-{
-  WRAP_AS_LIST(2)
-};
-%extend Vector<float,2>
-{
-  WRAP_AS_LIST(2)
-};
-%extend Point<double,2>
-{
-  WRAP_AS_LIST(2)
-};
-%extend Point<float,2>
-{
-  WRAP_AS_LIST(2)
-};
-} // end of namespace itk
+WRAP_AS_LIST(2, Size<2>)
+WRAP_AS_LIST(2, Index<2>)
+WRAP_AS_LIST(2, FixedArray<SpacePrecisionType,2>)
+WRAP_AS_LIST(2, Vector<SpacePrecisionType,2>)
+WRAP_AS_LIST(2, Point<SpacePrecisionType,2>)
 
-%extend itkRegion
+%extend ImageRegion<2>
 {
   %pythoncode
     {
@@ -336,9 +314,9 @@ namespace itk
         self.SetSize(val)
       else:
         raise IndexError('Key not in ["index","size"]')
-
     }
-}
+};
+} // end of namespace itk
 #endif
 
 class Application: public itkObject
@@ -409,14 +387,14 @@ public:
   void ClearParameterInputImageList(std::string parameter);
   unsigned int GetNumberOfElementsInParameterInputImageList(std::string parameter);
 
-  itk::Point<double,2> GetImageOrigin(const std::string & key, unsigned int idx = 0);
-  itk::Vector<double,2> GetImageSpacing(const std::string & key, unsigned int idx = 0);
-  itkSize GetImageSize(const std::string & key, unsigned int idx = 0);
+  itk::Point<SpacePrecisionType,2> GetImageOrigin(const std::string & key, unsigned int idx = 0);
+  itk::Vector<SpacePrecisionType,2> GetImageSpacing(const std::string & key, unsigned int idx = 0);
+  itk::Size<2> GetImageSize(const std::string & key, unsigned int idx = 0);
   unsigned int GetImageNbBands(const std::string & key, unsigned int idx = 0);
   std::string GetImageProjection(const std::string & key, unsigned int idx = 0);
   std::map<std::string,std::string> GetImageKeywordlist(const std::string & key, unsigned int idx = 0);
-  unsigned long PropagateRequestedRegion(const std::string & key, itkRegion region, unsigned int idx = 0);
-  itkRegion GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
+  unsigned long PropagateRequestedRegion(const std::string & key, itk::ImageRegion<2> region, unsigned int idx = 0);
+  itk::ImageRegion<2> GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
 
   itkProcessObject* GetProgressSource() const;
 
