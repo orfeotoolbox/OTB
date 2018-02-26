@@ -235,13 +235,13 @@ private:
     SetParameterDescription("minmax.auto.global" , "Automatic"
       "Min/max computation will result in the same minimum and maximum for "
       "all the bands.");
-    AddChoice( "minmax.manuel" , "Manuel" );
+    AddChoice( "minmax.manual" , "Manual" );
     SetParameterDescription("minmax.auto","Minimum and maximum value will be "
       "set by the user");
-    AddParameter(ParameterType_Float , "minmax.manuel.min" , "Minimum");
-    AddParameter(ParameterType_Float , "minmax.manuel.max" , "Maximum");
-    MandatoryOff("minmax.manuel.min");
-    MandatoryOff("minmax.manuel.max");
+    AddParameter(ParameterType_Float , "minmax.manual.min" , "Minimum");
+    AddParameter(ParameterType_Float , "minmax.manual.max" , "Maximum");
+    MandatoryOff("minmax.manual.min");
+    MandatoryOff("minmax.manual.max");
 
     AddParameter(ParameterType_Choice , "mode" , "What to equalized");
     AddChoice( "mode.each" , "Channels" );
@@ -323,15 +323,15 @@ private:
         SetDefaultValue( inImage , "RGB" );
       }
 
-    if ( GetParameterString("minmax") == "manuel" )
+    if ( GetParameterString("minmax") == "manual" )
       {
-      MandatoryOn("minmax.manuel.min");
-      MandatoryOn("minmax.manuel.max");
+      MandatoryOn("minmax.manual.min");
+      MandatoryOn("minmax.manual.max");
       }
     else if ( GetParameterString("minmax") == "auto" )
       {
-      MandatoryOff("minmax.manuel.min");
-      MandatoryOff("minmax.manuel.max");
+      MandatoryOff("minmax.manual.min");
+      MandatoryOff("minmax.manual.max");
       }
   }
 
@@ -476,8 +476,8 @@ private:
       }
     else 
       {
-      oss << GetParameterFloat("minmax.manuel.min") << "/" << 
-        GetParameterFloat("minmax.manuel.max");
+      oss << GetParameterFloat("minmax.manual.min") << "/" << 
+        GetParameterFloat("minmax.manual.max");
       }
 
     otbAppLogINFO( << oss.str() );
@@ -511,14 +511,14 @@ private:
   // Check for min max validity 
   void WarningMinMax()
   {
-    if ( m_MinMaxMode == "manuel" &&  
-         GetParameterFloat( "minmax.manuel.min" ) > 
-         GetParameterFloat( "minmax.manuel.max" ) )
+    if ( m_MinMaxMode == "manual" &&  
+         GetParameterFloat( "minmax.manual.min" ) > 
+         GetParameterFloat( "minmax.manual.max" ) )
       {
       std::ostringstream oss;
-      oss<<"The minimum (" << GetParameterFloat( "minmax.manuel.min" ) <<
+      oss<<"The minimum (" << GetParameterFloat( "minmax.manual.min" ) <<
       ") is superior to the maximum (" 
-      << GetParameterFloat( "minmax.manuel.max" )
+      << GetParameterFloat( "minmax.manual.max" )
       << ") please correct this error or allow the application to compute "
       "those parameters";
       otbAppLogFATAL( << oss.str() )
@@ -545,10 +545,10 @@ private:
                             FloatVectorImageType::PixelType & max ,
                             FloatVectorImageType::PixelType & min )
   {
-    if ( m_MinMaxMode == "manuel" )
+    if ( m_MinMaxMode == "manual" )
       {
-      min.Fill( GetParameterFloat("minmax.manuel.min") );
-      max.Fill( GetParameterFloat("minmax.manuel.max") );
+      min.Fill( GetParameterFloat("minmax.manual.min") );
+      max.Fill( GetParameterFloat("minmax.manual.max") );
       }
     else
       {
@@ -584,7 +584,7 @@ private:
     std::ostringstream oss;
     oss<<"Minimum and maximum are for each channel : ";
     if ( IsParameterEnabled("minmax.auto.global") || 
-          m_MinMaxMode == "manuel" )
+          m_MinMaxMode == "manual" )
       {
       oss<<std::endl<<min[0]<<" and "<<max[0];
       }
