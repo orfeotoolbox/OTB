@@ -313,45 +313,54 @@ int main(int argc, char* argv[])
   std::cout<<std::endl;
   bool success = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();
 
+  RERUN :
   
   std::string answer;
-  std::cout<<"Rerun or run with other args? r : rerun ; s : small test ; b : big test ; else quit "<<std::endl;
+  std::cout<<"Rerun or run with other args? r : rerun ; o : other args ; else quit "<<std::endl;
   std::cin >> answer;
   if ( answer[0]=='r')
   {
     std::cout<<"again"<<std::endl;
-    goto RUN;
+    success = success && launcher->ExecuteAndWriteOutput();
+    goto RERUN;
   }
-  else if ( answer[0]=='s' )
+  else if ( answer[0]=='o' )
   {
-    std::cout<<"Small test running"<<std::endl;
-    vexp[2] = "/home/antoine/dev/my_data/anaglyphInput2.tif";
-    vexp[4] = "/home/antoine/dev/my_data/anaglyphOut.tif";
-    goto RUN;
+    std::cout<<"Enter the new command line : "<<std::endl;
+    std::string newline;
+    std::cin.get();
+    std::getline( std::cin , newline );
+    std::string::size_type pos , begin ;
+    // std::string module = vexp[0];
+    // std::string path = vexp[1];
+    vexp.clear();
+    // vexp.push_back(module);
+    // vexp.push_back(path);
+    pos = 0 ;
+    begin = 0;
+    while ( pos != -1 )
+      {
+      pos = newline.find_first_of(" " , begin );
+      std::string strarg = newline.substr( begin , pos - begin );
+      begin = pos + 1 ;
+      std::string cleanArg = CleanWord(strarg);
+      if (cleanArg.empty())
+        {
+        // Empty argument !
+        continue;
+        }
+      vexp.push_back(cleanArg);
+      }
+    std::cout<<"new args : ";
+    for (auto i : vexp)
+      std::cout<<i<<" ";
+    std::cout<<std::endl;
+    launcher->SetArgs(vexp);
+    launcher->BeforeExecute();
+    success = success && launcher->ExecuteAndWriteOutput();  
+    goto RERUN;
   }
-  else if ( answer[0]=='b' )
-  {
-    std::cout<<"Big test running"<<std::endl;
-    vexp[2] = "/home/antoine/dev/my_data/bigbigtestclassic.tif";
-    vexp[4] = "/home/antoine/dev/my_data/bigbigtestclasssic.tif";
-    goto RUN;
-  }
-  // else
-  //   {
-  //     vexp.clear();
-  //    for (int i = 1; i < argc; i++)
-  //     {
-  //     std::string strarg(answer[i]);
-  //     std::string cleanArg = CleanWord(strarg);
-  //     if (cleanArg.empty())
-  //       {
-  //       // Empty argument !
-  //       continue;
-  //       }
-  //     vexp.push_back(cleanArg);
-  //     }
-  //     goto RUN;
-  //   }
+  
   // shutdown MPI after application finished
   #ifdef OTB_USE_MPI
   otb::MPIConfig::Instance()->terminate();

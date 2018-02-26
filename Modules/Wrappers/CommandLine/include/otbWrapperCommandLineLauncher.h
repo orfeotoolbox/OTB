@@ -68,6 +68,11 @@ public:
   /** RTTI support */
   itkTypeMacro(CommandLineLauncher, itk::Object);
 
+  void SetArgs( std::vector<std::string> expr)
+  {
+    m_VExpression = expr;
+  }
+
   /** Parse result enum */
   typedef CommandLineParser::ParseResultType ParseResultType;
   typedef enum { OKPARAM, MISSINGMANDATORYPARAMETER,
