@@ -142,14 +142,9 @@ handle with a Merge Request :
 -   Changing inter-subsystem APIs, or objects,
 -   Any change in the code or in the documentation.
 
-Merge Request can be linked to an issue and should describe :
+Merge Request can implement an issue in GitLab. 
 
-1.  What changes will be made and why they will make a better Orfeo
-    ToolBox
-2.  When will those changes be available (target release or date)
-3.  Who will be developing the proposed changes
-
-Those elements must be provided to a git hosted platform (GitLab, GitHub, etc.). 
+Merge Requests must be provided to a git hosted platform (GitLab, GitHub, etc.). 
 Merge request can be discussed on the developer list or directly on GitLab.
 
 Votes are necessary to accept Merge Request : 
