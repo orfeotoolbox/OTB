@@ -121,7 +121,7 @@ public:
   static const double MegabyteToByte;
 
   /** Evaluate the print (in bytes) of a single data object */
-  MemoryPrintType EvaluateDataObjectPrint(DataObjectType * data) const;
+  MemoryPrintType EvaluateDataObjectPrint(DataObjectType * data);
 
 protected:
   /** Constructor */

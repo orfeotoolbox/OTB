@@ -277,7 +277,7 @@ private:
 
         //typedef itk::::ForwardFFTImageFilter over otbImage< InputPixelType >
 
-        typedef itk::ForwardFFTImageFilter < TInputImage, OutputImageType > FFTFilter;
+        typedef itk::ForwardFFTImageFilter < TInputImage, ComplexOutputImageType > FFTFilter;
         FFTFilter::Pointer fwdFilter = FFTFilter::New();
         fwdFilter->SetInput( inImage );
 
@@ -286,7 +286,7 @@ private:
         typedef otb::VectorImage<OutputPixelType>          TOutputImage;
 
 	typedef otb::ComplexToVectorImageCastFilter<
-	  OutputImageType,
+	  ComplexOutputImageType,
 	  TOutputImage > ComplexToVectorImageCastFilter;
 	ComplexToVectorImageCastFilter::Pointer unaryFunctorImageFilter = ComplexToVectorImageCastFilter::New();
 
