@@ -981,5 +981,5 @@ otb_test_application(NAME apTvClSampleAugmentation
   -label 3
   -samples 100
   -out ${TEMP}/apTvClSampleAugmentation.sqlite
-  #  -excluded_features OGC_FID name class originfid
+  -exclude originfid
   )
