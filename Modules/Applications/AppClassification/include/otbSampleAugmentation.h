@@ -58,7 +58,9 @@ SampleType estimateStds(SampleVectorType samples)
       }
     }
   for(auto std : stds)
+    {
     std = std::sqrt(std/nbSamples);
+    }
   return stds;
 }
 
@@ -86,7 +88,7 @@ void replicateSamples(const SampleVectorType& inSamples,
 void jitterSamples(const SampleVectorType& inSamples, 
                    const size_t nbSamples,
                       SampleVectorType& newSamples,
-                   float stdFactor=1.0,
+                   float stdFactor=10000,
                    const int seed = std::time(nullptr))
 {
   newSamples.resize(nbSamples);
@@ -100,7 +102,7 @@ void jitterSamples(const SampleVectorType& inSamples,
   auto stds = estimateStds(inSamples);
   std::vector<std::normal_distribution<double>> gaussDis;
   for(size_t i=0; i<nbComponents; ++i)
-    gaussDis.emplace_back(std::normal_distribution<double>{0.0, stds[i]*stdFactor});
+    gaussDis.emplace_back(std::normal_distribution<double>{0.0, stds[i]/stdFactor});
   for(size_t i=0; i<nbSamples; ++i)
     {
     newSamples[i] = inSamples[std::rand()%nbSamples];

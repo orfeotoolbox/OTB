@@ -99,6 +99,42 @@ private:
     SetParameterDescription("exclude",
                             "List of field names in the input vector data that will not be generated in the output file.");
 
+    AddParameter(ParameterType_Choice, "strategy", "Augmentation strategy");
+
+    AddChoice("strategy.replicate","Replicate input samples");
+    SetParameterDescription("strategy.replicate","The new samples are generated "
+                            "by replicating input samples which are randomly "
+                            "selected with replacement.");
+
+    AddChoice("strategy.jitter","Jitter input samples");
+    SetParameterDescription("strategy.jitter","The new samples are generated "
+                            "by adding gaussian noise to input samples which are "
+                            "randomly selected with replacement.");
+    AddParameter(ParameterType_Float, "strategy.jitter.stdfactor", 
+                 "Factor for dividing the standard deviation of each feature");
+    SetParameterDescription("strategy.jitter.stdfactor", 
+                            "The noise added to the input samples will have the "
+                            "standard deviation of the input features divided "
+                            "by the value of this parameter. ");
+    SetDefaultParameterFloat("strategy.jitter.stdfactor",10000);
+
+    AddChoice("strategy.smote","Smote input samples");
+    SetParameterDescription("strategy.smote","The new samples are generated "
+                            "by using the SMOTE algorithm (http://dx.doi.org/10.1613/jair.953) "
+                            "on input samples which are "
+                            "randomly selected with replacement.");
+    AddParameter(ParameterType_Int, "strategy.smote.neighbors", 
+                 "Number of nearest neighbors.");
+    SetParameterDescription("strategy.smote.neighbors", 
+                            "Number of nearest neighbors to be used in the "
+                            "SMOTE algorithm");
+    SetDefaultParameterFloat("strategy.smote.neighbors", 5);
+
+    AddParameter(ParameterType_Int, "seed", 
+                 "Random seed.");
+    SetParameterDescription("seed", 
+                            "Seed for the random number generator.");
+    MandatoryOff("seed");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "samples.sqlite");
@@ -107,6 +143,8 @@ private:
     SetDocExampleParameterValue("samples", "100");
     SetDocExampleParameterValue("out","augmented_samples.sqlite");
     SetDocExampleParameterValue( "exclude", "OGC_FID name class originfid" );
+    SetDocExampleParameterValue("strategy", "smote");
+    SetDocExampleParameterValue("strategy.smote.neighbors", "5");
 
     SetOfficialDocLink();
   }
@@ -186,12 +224,39 @@ private:
                                   fieldName,
                                   this->GetParameterInt("label"),
                                   excludedFeatures);
+  int seed = std::time(nullptr);
+  if(IsParameterEnabled("seed")) seed = this->GetParameterInt("seed");
   SampleVectorType newSamples;
-  // sampleAugmentation::replicateSamples(inSamples, this->GetParameterInt("samples"), 
-  //                                      newSamples);
-  sampleAugmentation::smote(inSamples, this->GetParameterInt("samples"), 
-                            newSamples,
-                            4);
+  switch (this->GetParameterInt("strategy"))
+    {
+    // replicate
+    case 0:
+    {
+    otbAppLogINFO("Augmentation strategy : replicate");
+    sampleAugmentation::replicateSamples(inSamples, this->GetParameterInt("samples"),
+                                         newSamples);
+    }
+    break;
+    // jitter
+    case 1:
+    {
+    otbAppLogINFO("Augmentation strategy : jitter");
+    sampleAugmentation::jitterSamples(inSamples, this->GetParameterInt("samples"),
+                                      newSamples,
+                                      this->GetParameterFloat("strategy.jitter.stdfactor"),
+                                      seed);
+    }
+    break;
+    case 2:
+    {
+    otbAppLogINFO("Augmentation strategy : smote");
+    sampleAugmentation::smote(inSamples, this->GetParameterInt("samples"),
+                              newSamples,
+                              this->GetParameterInt("strategy.smote.neighbors"),
+                              seed);
+    }
+    break;
+    }
   writeSamples(vectors, output, newSamples, this->GetParameterInt("layer"),
                fieldName,
                this->GetParameterInt("label"),

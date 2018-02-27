@@ -974,12 +974,37 @@ otb_test_application(
 )
 
 #------------ SampleAgmentation TESTS ----------------
-otb_test_application(NAME apTvClSampleAugmentation
+otb_test_application(NAME apTvClSampleAugmentationReplicate
   APP  SampleAugmentation
   OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
   -field class
   -label 3
   -samples 100
-  -out ${TEMP}/apTvClSampleAugmentation.sqlite
+  -out ${TEMP}/apTvClSampleAugmentationReplicate.sqlite
   -exclude originfid
+  -strategy replicate
+  )
+
+otb_test_application(NAME apTvClSampleAugmentationJitter
+  APP  SampleAugmentation
+  OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+  -field class
+  -label 3
+  -samples 100
+  -out ${TEMP}/apTvClSampleAugmentationJitter.sqlite
+  -exclude originfid
+  -strategy jitter
+  -strategy.jitter.stdfactor 10000
+  )
+
+otb_test_application(NAME apTvClSampleAugmentationSmote
+  APP  SampleAugmentation
+  OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+  -field class
+  -label 3
+  -samples 100
+  -out ${TEMP}/apTvClSampleAugmentationSmote.sqlite
+  -exclude originfid
+  -strategy smote
+  -strategy.smote.neighbors 5
   )
