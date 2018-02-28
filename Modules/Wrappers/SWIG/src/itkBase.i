@@ -44,13 +44,191 @@
   }
 }
 
+// BASIC ITK TYPES WRAPPING
+%include "itkFloatTypes.h"
+%include "itkIntTypes.h"
+
 // Some code from STL
 // Do not wrap if not necessary as it really slows down compilation
 
 %include <std_string.i>
 %include <std_vector.i>
+%include <std_map.i>
 
-%template(vectorstring)   std::vector< std::string >;
+%template(vectorstring)     std::vector< std::string >;
+%template(mapstringstring)  std::map< std::string, std::string >;
+%template(vectorbool)       std::vector<bool>;
+%template(vectordouble)     std::vector<double>;
+
+#if SWIGPYTHON
+%extend std::map< std::string, std::string >
+{
+  %pythoncode
+  {
+    def __str__(self):
+      ret = "{"
+      for key in self:
+        ret += str(key)+":"+str(self[key])+", "
+      if len(ret) == 1:
+        ret += ", "
+      return ret[:-2]+"}"
+  }
+};
+#endif
+
+//---------------- ITK classes ------------------------------------
+
+namespace itk
+{
+
+template <unsigned int VDim = 2>
+class Size
+{
+public:
+  Size();
+  virtual ~Size();
+  void Fill(unsigned long val);
+  SizeValueType GetElement(unsigned long element) const;
+  void SetElement(unsigned long element, SizeValueType val);
+  static unsigned int GetSizeDimension();
+};
+
+template <unsigned int VDim = 2>
+class Index
+{
+public:
+  Index();
+  virtual ~Index();
+  void Fill(signed long val);
+  IndexValueType GetElement(unsigned long element) const;
+  void SetElement(unsigned long element, IndexValueType val);
+  static unsigned int GetIndexDimension();
+};
+
+template <unsigned int VDim>
+class ImageRegion
+{
+public:
+  ImageRegion();
+  ImageRegion(const Index<VDim> &index, const Size<VDim> &size);
+  virtual ~ImageRegion();
+  void SetIndex(const Index<VDim> &index);
+  void SetSize(const Size<VDim> &size);
+  void SetUpperIndex(const Index<VDim> &idx);
+  Index<VDim> GetUpperIndex() const;
+  const Index<VDim> & GetIndex() const;
+  const Size<VDim> & GetSize() const;
+  bool IsInside(const Index<VDim> & index) const;
+  void SetSize(unsigned int i, SizeValueType val);
+  SizeValueType GetSize(unsigned int i) const;
+  void SetIndex(unsigned int i, IndexValueType val);
+  IndexValueType GetIndex(unsigned int i) const;
+};
+
+template <typename TValue, unsigned int VLength = 3>
+class FixedArray
+{
+public:
+  FixedArray();
+  virtual ~FixedArray();
+  unsigned int Size();
+  void SetElement(unsigned short idx, const TValue &val);
+  const TValue & GetElement(unsigned short idx);
+};
+
+template <typename TValue, unsigned int NDim = 3>
+class Vector: public FixedArray<TValue,NDim>
+{
+public: 
+  Vector();
+  virtual ~Vector();
+  typedef NumericTraits<TValue>::RealType RealValueType;
+  RealValueType GetNorm() const;
+  RealValueType GetSquaredNorm() const;
+  RealValueType Normalize();
+};
+
+template <typename TCoord, unsigned int NDim = 3>
+class Point: public FixedArray<TCoord,NDim>
+{
+public:
+  Point();
+  virtual ~Point();
+};
+
+// Instanciate the needed templates
+%template(itkSize) Size<2>;
+%template(itkIndex) Index<2>;
+%template(itkRegion) ImageRegion<2>;
+%template(itkFixedArray) FixedArray<SpacePrecisionType,2>;
+%template(itkVector) Vector<SpacePrecisionType,2>;
+%template(itkPoint) Point<SpacePrecisionType,2>;
+
+} // end of namespace itk
+
+#if SWIGPYTHON
+
+%define WRAP_AS_LIST(N, T...)
+%extend T
+  {
+  %pythoncode
+    {
+    def __str__(self):
+      ret = "["
+      for index in range(N):
+        ret += str(self.GetElement(index))+","
+      ret = ret[:-1] + "]"
+      return ret
+    def __len__(self):
+      return N
+    def __getitem__(self,idx):
+      if idx >= N or idx < 0:
+        raise IndexError('Index outside [0,'+str(N-1)+']')
+      return self.GetElement(idx)
+    def __setitem__(self,idx,val):
+      if idx >= N or idx < 0:
+        raise IndexError('Index outside [0,'+str(N-1)+']')
+      return self.SetElement(idx,val)
+    }
+  };
+%enddef
+
+namespace itk
+{
+WRAP_AS_LIST(2, Size<2>)
+WRAP_AS_LIST(2, Index<2>)
+WRAP_AS_LIST(2, FixedArray<SpacePrecisionType,2>)
+WRAP_AS_LIST(2, Vector<SpacePrecisionType,2>)
+WRAP_AS_LIST(2, Point<SpacePrecisionType,2>)
+
+%extend ImageRegion<2>
+{
+  %pythoncode
+    {
+    def __str__(self):
+      return "{index:"+str(self.GetIndex())+", size:"+str(self.GetSize())+"}"
+    def __len__(self):
+      return 2
+    def keys(self):
+      return ['index', 'size']
+    def __getitem__(self,key):
+      if key == 'index':
+        return self.GetIndex()
+      elif key == 'size':
+        return self.GetSize()
+      else:
+        raise IndexError('Key not in ["index","size"]')
+    def __setitem__(self,key,val):
+      if key == 'index':
+        self.SetIndex(val)
+      elif key == 'size':
+        self.SetSize(val)
+      else:
+        raise IndexError('Key not in ["index","size"]')
+    }
+};
+} // end of namespace itk
+#endif
 
 class itkIndent {
    public:
@@ -155,6 +333,21 @@ class itkIndent {
  };
  DECLARE_REF_COUNT_CLASS( itkObjectFactoryBase )
 
+class itkMetaDataObjectBase : public itkLightObject
+{
+public:
+  virtual const std::type_info & GetMetaDataObjectTypeInfo() const;
+  virtual const char * GetMetaDataObjectTypeName() const;
+  virtual const char * GetNameOfClass() const;
+  virtual void Print(std::ostream &os) const;
+protected:
+  itkMetaDataObjectBase();
+#if SWIGJAVA
+  ~itkMetaDataObjectBase();
+#endif
+};
+DECLARE_REF_COUNT_CLASS(itkMetaDataObjectBase)
+
  class itkMetaDataDictionary {
    public:
      virtual void Print(std::ostream & os) const;
@@ -163,7 +356,20 @@ class itkIndent {
      ~itkMetaDataDictionary();
      std::vector< std::string > GetKeys() const;
      bool HasKey(std::string const & arg0) const;
+     const itkMetaDataObjectBase* Get(const std::string &) const;
+     void Set(const std::string &, itkMetaDataObjectBase *);
  };
+
+namespace itk
+{
+
+template <typename T>
+inline bool ExposeMetaData(const itkMetaDataDictionary & Dictionary, const std::string key, T & outval);
+
+template <typename T>
+inline void EncapsulateMetaData(itkMetaDataDictionary & Dictionary, const std::string & key, const T & invalue);
+
+}
  
  class itkCommand : public itkObject {
    public:
