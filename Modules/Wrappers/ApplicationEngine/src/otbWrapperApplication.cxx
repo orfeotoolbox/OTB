@@ -1741,18 +1741,17 @@ Application::GetImageProjection(const std::string & key, unsigned int idx)
   return proj;
 }
 
-std::map<std::string,std::string>
+otb::ImageKeywordlist
 Application::GetImageKeywordlist(const std::string & key, unsigned int idx)
 {
   ImageKeywordlist kwl;
   const itk::MetaDataDictionary& dict =
     this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
 
-  if (!dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    return std::map<std::string,std::string>();
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, kwl);
 
-  itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, kwl);
-  return  kwl.GetKeywordlist();
+  return kwl;
 }
 
 unsigned long

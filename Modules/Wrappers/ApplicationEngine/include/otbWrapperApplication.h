@@ -875,7 +875,7 @@ public:
 
   /** Get the keywordlist of the image parameter 'key'. The optional 'idx'
    * allows to select the image in an InputImageList.*/
-  std::map<std::string,std::string> GetImageKeywordlist(const std::string & key, unsigned int idx = 0);
+  otb::ImageKeywordlist GetImageKeywordlist(const std::string & key, unsigned int idx = 0);
 
   /** Set the requested region on the image parameter 'key' and propagate it.
    *  The returned value is an estimate of the RAM usage (in Bytes) to process
