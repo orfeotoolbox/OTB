@@ -1784,6 +1784,13 @@ Application::GetImageRequestedRegion(const std::string & key, unsigned int idx)
   return requested;
 }
 
+itk::MetaDataDictionary
+Application::GetImageMetaData(const std::string & key, unsigned int idx)
+{
+  ImageBaseType* image = this->GetParameterImageBase(key, idx);
+  return image->GetMetaDataDictionary();
+}
+
 ImageBaseType*
 Application::GetParameterImageBase(const std::string & key, unsigned int idx)
 {

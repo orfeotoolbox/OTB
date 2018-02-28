@@ -889,6 +889,9 @@ public:
    * the index of the largest possible region starts at (0,0).*/
   ImageBaseType::RegionType GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
 
+  /** Returns a copy of the metadata dictionary of the image */
+  itk::MetaDataDictionary GetImageMetaData(const std::string & key, unsigned int idx = 0);
+
 protected:
   /** Constructor */
   Application();
