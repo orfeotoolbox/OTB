@@ -1,0 +1,168 @@
+/*
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef otbSampleAugmentationFilter_h
+#define otbSampleAugmentationFilter_h
+
+#include "itkProcessObject.h"
+#include "otbOGRDataSourceWrapper.h"
+#include "otbSampleAugmentation.h"
+
+namespace otb
+{
+
+/** \class SampleAugmentationFilter
+This class 
+ */
+
+class ITK_EXPORT SampleAugmentationFilter :
+    public itk::ProcessObject
+{
+public:
+
+  /** typedef for the classes standards. */
+  typedef SampleAugmentationFilter                 Self;
+  typedef itk::ProcessObject                              Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
+
+  /** Method for management of the object factory. */
+  itkNewMacro(Self);
+
+  /** Return the name of the class. */
+  itkTypeMacro(SampleAugmentationFilter, ProcessObject);
+
+  typedef ogr::DataSource                            OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
+  typedef ogr::Layer                                 OGRLayerType;
+
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+
+  using SampleType = sampleAugmentation::SampleType;
+  using SampleVectorType = sampleAugmentation::SampleVectorType;
+
+  enum class Strategy { Replicate, Jitter, Smote };
+
+  /** Set/Get the input OGRDataSource of this process object.  */
+  using Superclass::SetInput;
+  virtual void SetInput(const OGRDataSourceType* ds);
+  const OGRDataSourceType*  GetInput(unsigned int idx);
+
+  virtual void SetOutputSamples(ogr::DataSource* data);
+
+  /** Set the Field Name in which labels will be written. (default is "class")
+   * A field "ClassFieldName" of type integer is created in the output memory layer.
+   */
+  itkSetMacro(ClassFieldName, std::string);
+  /**
+   * Return the Field name in which labels have been written.
+   */
+  itkGetMacro(ClassFieldName, std::string);
+
+
+  itkSetMacro(Layer, size_t);
+  itkGetMacro(Layer, size_t);
+  itkSetMacro(Label, int);
+  itkGetMacro(Label, int);
+  void SetStrategy(Strategy s)
+  {
+    m_Strategy = s;
+  }
+  Strategy GetStrategy() const
+  {
+    return m_Strategy;
+  }
+  itkSetMacro(NumberOfSamples, int);
+  itkGetMacro(NumberOfSamples, int);
+  void SetExcludedFeatures(const std::vector<std::string>& ef)
+  {
+    m_ExcludedFeatures = ef;
+  }
+  std::vector<std::string> GetExcludedFeatures() const
+  {
+    return m_ExcludedFeatures;
+  }
+  itkSetMacro(StdFactor, double);
+  itkGetMacro(StdFactor, double);
+  itkSetMacro(SmoteNeighbors, size_t);
+  itkGetMacro(SmoteNeighbors, size_t);
+  itkSetMacro(Seed, int);
+  itkGetMacro(Seed, int);
+/**
+   * Get the output \c ogr::DataSource which is a "memory" datasource.
+   */
+  const OGRDataSourceType * GetOutput();
+
+protected:
+  SampleAugmentationFilter();
+  ~SampleAugmentationFilter() ITK_OVERRIDE {}
+
+  /** Generate Data method*/
+  void GenerateData() ITK_OVERRIDE;
+
+  /** DataObject pointer */
+  typedef itk::DataObject::Pointer DataObjectPointer;
+
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  using Superclass::MakeOutput;
+
+
+  SampleVectorType extractSamples(const ogr::DataSource::Pointer vectors, 
+                                  size_t layerName,
+                                  const std::string& classField, const int label,
+                                  const std::vector<std::string>& excludedFeatures = {});
+
+  void sampleToOGRFeatures(const ogr::DataSource::Pointer& vectors,
+                           ogr::DataSource* output, 
+                           const SampleVectorType& samples,
+                           const size_t layerName,
+                           const std::string& classField, int label,
+                           const std::vector<std::string>& excludedFeatures = {});
+
+std::set<size_t> getExcludedFeaturesIds(const std::vector<std::string>& excludedFeatures,
+                                        const ogr::Layer& inputLayer);
+bool isNumericField(const ogr::Feature& feature, const int idx);
+
+ogr::Feature selectTemplateFeature(const ogr::Layer& inputLayer, 
+                                   const std::string& classField, int label);
+private:
+  SampleAugmentationFilter(const Self &);  //purposely not implemented
+  void operator =(const Self&);      //purposely not implemented
+
+  std::string m_ClassFieldName;
+  size_t m_Layer;
+  int m_Label;
+  std::vector<std::string> m_ExcludedFeatures;
+  Strategy m_Strategy;
+  int m_NumberOfSamples;
+  double m_StdFactor;
+  size_t m_SmoteNeighbors;
+  int m_Seed;
+
+};
+
+
+} // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbSampleAugmentationFilter.txx"
+#endif
+
+#endif

@@ -21,7 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbOGRDataSourceWrapper.h"
-#include "otbSampleAugmentation.h"
+#include "otbSampleAugmentationFilter.h"
 
 namespace otb
 {
@@ -44,9 +44,9 @@ public:
   itkTypeMacro(SampleAugmentation, otb::Application);
 
   /** Filters typedef */
-  using SampleType = sampleAugmentation::SampleType;
-  using SampleVectorType = sampleAugmentation::SampleVectorType;
-
+  using FilterType = otb::SampleAugmentationFilter;
+  using SampleType = FilterType::SampleType;
+  using SampleVectorType = FilterType::SampleVectorType;
 
 private:
   SampleAugmentation() {}
@@ -220,143 +220,49 @@ private:
                          GetSelectedItems( "exclude" ));
   for(const auto& ef : excludedFeatures)
     otbAppLogINFO("Excluding feature " << ef << '\n');
-  auto inSamples = extractSamples(vectors, this->GetParameterInt("layer"),
-                                  fieldName,
-                                  this->GetParameterInt("label"),
-                                  excludedFeatures);
+
   int seed = std::time(nullptr);
   if(IsParameterEnabled("seed")) seed = this->GetParameterInt("seed");
-  SampleVectorType newSamples;
+
+
+  FilterType::Pointer filter = FilterType::New();
+  filter->SetInput(vectors);
+  filter->SetLayer(this->GetParameterInt("layer"));
+  filter->SetNumberOfSamples(this->GetParameterInt("samples"));
+  filter->SetOutputSamples(output);
+  filter->SetClassFieldName(fieldName);
+  filter->SetLabel(this->GetParameterInt("label"));
+  filter->SetExcludedFeatures(excludedFeatures);
+  filter->SetSeed(seed);
   switch (this->GetParameterInt("strategy"))
     {
     // replicate
     case 0:
     {
     otbAppLogINFO("Augmentation strategy : replicate");
-    sampleAugmentation::replicateSamples(inSamples, this->GetParameterInt("samples"),
-                                         newSamples);
+    filter->SetStrategy(FilterType::Strategy::Replicate);
     }
-    break;
+      break;
     // jitter
     case 1:
     {
     otbAppLogINFO("Augmentation strategy : jitter");
-    sampleAugmentation::jitterSamples(inSamples, this->GetParameterInt("samples"),
-                                      newSamples,
-                                      this->GetParameterFloat("strategy.jitter.stdfactor"),
-                                      seed);
+    filter->SetStrategy(FilterType::Strategy::Jitter);
+    filter->SetStdFactor(this->GetParameterFloat("stdfactor"));
     }
     break;
     case 2:
     {
     otbAppLogINFO("Augmentation strategy : smote");
-    sampleAugmentation::smote(inSamples, this->GetParameterInt("samples"),
-                              newSamples,
-                              this->GetParameterInt("strategy.smote.neighbors"),
-                              seed);
+    filter->SetStrategy(FilterType::Strategy::Smote);
+    filter->SetSmoteNeighbors(this->GetParameterInt("neighbors"));
     }
     break;
     }
-  writeSamples(vectors, output, newSamples, this->GetParameterInt("layer"),
-               fieldName,
-               this->GetParameterInt("label"),
-               excludedFeatures);
+  filter->Update();
   output->SyncToDisk();
     }
 
-/** Extracts the samples of a single class from the vector data to a
-* vector and excludes some unwanted features.
-*/
-  SampleVectorType extractSamples(const ogr::DataSource::Pointer vectors, 
-                                  size_t layerName,
-                                  const std::string& classField, const int label,
-                                  const std::vector<std::string>& excludedFeatures = {})
-  {
-    ogr::Layer layer = vectors->GetLayer(layerName);
-    ogr::Feature feature = layer.ogr().GetNextFeature();
-    if(feature.addr() == 0)
-      {
-      otbAppLogFATAL("Layer " << layerName << " of input sample file is empty.\n");
-      }
-    int cFieldIndex = feature.ogr().GetFieldIndex( classField.c_str() );
-    if( cFieldIndex < 0 )
-      {
-      otbAppLogFATAL( "The field name for class label (" << classField
-                      << ") has not been found in the vector file " );
-      }
-
-    auto numberOfFields = feature.ogr().GetFieldCount();
-    auto excludedIds = getExcludedFeaturesIds(excludedFeatures, layer);
-    otbAppLogINFO("The vector file contains " << numberOfFields << " fields.\n");
-    SampleVectorType samples;
-    bool goesOn{feature.addr() != 0};
-    while( goesOn )
-      {
-      // Retrieve all the features for each field in the ogr layer.
-      if(feature.ogr().GetFieldAsInteger(classField.c_str()) == label)
-        {
-
-        SampleType mv;
-        for(auto idx=0; idx<numberOfFields; ++idx)
-          {
-          if(excludedIds.find(idx) == excludedIds.cend() &&
-             isNumericField(feature, idx))
-            mv.push_back(feature.ogr().GetFieldAsDouble(idx));
-          }
-        samples.push_back(mv); 
-        }
-      feature = layer.ogr().GetNextFeature();
-      goesOn = feature.addr() != 0;
-      }
-    return samples;
-  }
-
-  void writeSamples(const ogr::DataSource::Pointer& vectors,
-                    ogr::DataSource::Pointer& output, 
-                    const SampleVectorType& samples,
-                    const size_t layerName,
-                    const std::string& classField, int label,
-                    const std::vector<std::string>& excludedFeatures = {})
-  {
-
-    auto inputLayer = vectors->GetLayer(layerName);
-    auto excludedIds = getExcludedFeaturesIds(excludedFeatures, inputLayer);
-
-    OGRSpatialReference * oSRS = nullptr;
-    if (inputLayer.GetSpatialRef())
-      {
-      oSRS = inputLayer.GetSpatialRef()->Clone();
-      }
-    OGRFeatureDefn &layerDefn = inputLayer.GetLayerDefn();
-
-    auto outputLayer = output->CreateLayer(inputLayer.GetName(), oSRS, 
-                                           inputLayer.GetGeomType());
-    for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
-      {
-      OGRFieldDefn originDefn(layerDefn.GetFieldDefn(k));
-      ogr::FieldDefn fieldDefn(originDefn);
-      outputLayer.CreateField(fieldDefn);
-      }
-
-    auto featureCount = outputLayer.GetFeatureCount(false);
-    auto templateFeature = selectTemplateFeature(inputLayer, classField, label);
-    for(const auto& sample : samples)
-         {
-         ogr::Feature dstFeature(outputLayer.GetLayerDefn());
-         dstFeature.SetFrom( templateFeature, TRUE );
-         dstFeature.SetFID(++featureCount);
-         auto sampleFieldCounter = 0;
-         for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
-           {
-           if(excludedIds.find(k) == excludedIds.cend() &&
-              isNumericField(dstFeature, k))
-             {
-             dstFeature.ogr().SetField(k, sample[sampleFieldCounter++]);
-             }
-           }
-         outputLayer.CreateFeature( dstFeature );
-         }
-  }
 
   std::vector<std::string> GetExcludedFeatures(const std::vector<std::string>& fieldNames,
                                                const std::vector<int>& selectedIdx)
@@ -369,45 +275,8 @@ private:
       }
     return result;
   }
-  ogr::Feature selectTemplateFeature(const ogr::Layer& inputLayer, 
-                                     const std::string& classField, int label)
-  {
-    auto featureIt = inputLayer.begin();
-    bool goesOn{(*featureIt).addr() != 0};
-    while( goesOn )
-      {
-      if((*featureIt).ogr().GetFieldAsInteger(classField.c_str()) == label)
-        {
-        return *featureIt;
-        }
-      ++featureIt;
-      }
-    return *(inputLayer.begin());
-  }
-  std::set<size_t> getExcludedFeaturesIds(const std::vector<std::string>& excludedFeatures,
-                                          const ogr::Layer& inputLayer)
-  {
-    auto feature = *(inputLayer).begin();
-    std::set<size_t> excludedIds;
-    if( excludedFeatures.size() != 0)
-      {
-      for(const auto& fieldName : excludedFeatures)
-        {
-        auto idx = feature.ogr().GetFieldIndex( fieldName.c_str() );
-        excludedIds.insert(idx);
-        }
-      }
-    return excludedIds;
-  }
-  bool isNumericField(const ogr::Feature& feature,
-                      const int idx)
-  {
-    OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(idx)->GetType();
-    return (fieldType == OFTInteger 
-            || ogr::version_proxy::IsOFTInteger64( fieldType ) 
-            || fieldType == OFTReal);
-  }
-  };
+
+};
 
 } // end of namespace Wrapper
 } // end of namespace otb

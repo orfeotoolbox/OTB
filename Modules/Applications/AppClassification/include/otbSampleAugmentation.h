@@ -199,7 +199,7 @@ void smote(const SampleVectorType& inSamples,
       }
 }
 
-}
-}
+}//end namespaces sampleAugmentation
+}//end namespace otb
 
 #endif
