@@ -838,6 +838,7 @@ public:
   static Application_Pointer CreateApplication(const std::string& name);
   static void AddApplicationPath(std::string newpath);
   static void SetApplicationPath(std::string newpath);
+  static void CleanRegistry();
 
 protected:
   Registry();
