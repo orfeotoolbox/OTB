@@ -24,6 +24,7 @@
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
 #include "otbWrapperDocExampleStructure.h"
+#include "otbWrapperMetaDataHelper.h"
 
 typedef otb::Wrapper::Application                        Application;
 typedef otb::Wrapper::Application::Pointer               Application_Pointer;
@@ -37,9 +38,5 @@ typedef otb::Wrapper::ComplexOutputImageParameter        ComplexOutputImageParam
 typedef otb::Wrapper::ComplexInputImageParameter         ComplexInputImageParameter;
 
 typedef otb::Wrapper::ImageBaseType                      ImageBaseType;
-
-typedef ImageBaseType::SizeType                           itkSize;
-typedef ImageBaseType::RegionType                         itkRegion;
-typedef ImageBaseType::IndexType                          itkIndex;
 
 #endif
