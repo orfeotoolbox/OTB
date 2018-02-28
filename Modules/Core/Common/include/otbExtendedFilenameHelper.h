@@ -23,6 +23,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "OTBCommonExport.h"
 
 namespace otb
 {
@@ -35,7 +36,7 @@ namespace otb
  * \ingroup OTBExtendedFilename
  */
 
-class ITK_EXPORT ExtendedFilenameHelper : public itk::Object
+class OTBCommon_EXPORT ExtendedFilenameHelper : public itk::Object
 {
 public:
 /** Standard class typedefs. */

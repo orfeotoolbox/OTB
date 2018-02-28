@@ -29,6 +29,8 @@ set(OTBGdalAdapters_SRC
   otbGeometriesToGeometriesFilter.cxx
   otbOGRDataSourceWrapper.cxx
   otbOGRVersionProxy.cxx
+  otbOGRExtendedFilenameToReaderOptions.cxx
+  otbOGRExtendedFilenameToWriterOptions.cxx
   )
 
 add_library(OTBGdalAdapters ${OTBGdalAdapters_SRC})
