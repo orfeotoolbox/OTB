@@ -37,8 +37,6 @@
 %include "itkMacro.i"
 %include "itkBase.i"
 
-%include "std_map.i"
-
 #if OTB_SWIGNUMPY
 %include "numpy.i"
 
@@ -140,184 +138,70 @@ namespace Wrapper
     ComplexImagePixelType_double,
   } ComplexImagePixelType;
 
-}
+} // end of namespace Wrapper
 
-}
+class ImageKeywordlist
+{
+public:
+  typedef std::map<std::string, std::string> KeywordlistMap;
+  typedef KeywordlistMap::size_type KeywordlistMapSizeType;
+  ImageKeywordlist();
+  virtual ~ImageKeywordlist();
+  const KeywordlistMap& GetKeywordlist() const;
+  void Clear(void);
+  KeywordlistMapSizeType Empty() const;
+  KeywordlistMapSizeType GetSize(void) const;
+  const std::string& GetMetadataByKey(const std::string& key) const;
+  bool HasKey(const std::string& key) const;
+  virtual void ClearMetadataByKey(const std::string& key);
+  virtual void AddKey(const std::string& key, const std::string& value);
+  virtual void Print(std::ostream& os, itkIndent indent = 0) const;
+};
 
-namespace std {
-%template(keywordlist) map<string,string>;
+class VectorDataKeywordlist
+{
+public:
+  VectorDataKeywordlist();
+  ~VectorDataKeywordlist();
+  // VectorDataKeywordlist(const Self& other);
+  // TODO : finish wrapping
+};
+
+class OTB_GCP
+{
+public:
+  std::string m_Id;
+  std::string m_Info;
+  double m_GCPCol;
+  double m_GCPRow;
+  double m_GCPX;
+  double m_GCPY;
+  double m_GCPZ;
+  OTB_GCP();
+  ~OTB_GCP();
+  void Print(std::ostream& os) const;
+};
 
 #if SWIGPYTHON
-%extend map<string,string>
-{
-  %pythoncode
-  {
-    def __str__(self):
-      ret = "{"
-      for key in self:
-        ret += str(key)+":"+str(self[key])+", "
-      if len(ret) == 1:
-        ret += ", "
-      return ret[:-2]+"}"
-  }
-};
-#endif
-} // end of namespace std
-
-// BASIC ITK TYPES WRAPPING
-%include "itkFloatTypes.h"
-%include "itkIntTypes.h"
-
-namespace itk
-{
-
-template <unsigned int VDim = 2>
-class Size
-{
-public:
-  Size();
-  virtual ~Size();
-  void Fill(unsigned long val);
-  SizeValueType GetElement(unsigned long element) const;
-  void SetElement(unsigned long element, SizeValueType val);
-  static unsigned int GetSizeDimension();
-};
-
-template <unsigned int VDim = 2>
-class Index
-{
-public:
-  Index();
-  virtual ~Index();
-  void Fill(signed long val);
-  IndexValueType GetElement(unsigned long element) const;
-  void SetElement(unsigned long element, IndexValueType val);
-  static unsigned int GetIndexDimension();
-};
-
-template <unsigned int VDim>
-class ImageRegion
-{
-public:
-  ImageRegion();
-  ImageRegion(const Index<VDim> &index, const Size<VDim> &size);
-  virtual ~ImageRegion();
-  void SetIndex(const Index<VDim> &index);
-  void SetSize(const Size<VDim> &size);
-  void SetUpperIndex(const Index<VDim> &idx);
-  Index<VDim> GetUpperIndex() const;
-  const Index<VDim> & GetIndex() const;
-  const Size<VDim> & GetSize() const;
-  bool IsInside(const Index<VDim> & index) const;
-  void SetSize(unsigned int i, SizeValueType val);
-  SizeValueType GetSize(unsigned int i) const;
-  void SetIndex(unsigned int i, IndexValueType val);
-  IndexValueType GetIndex(unsigned int i) const;
-};
-
-template <typename TValue, unsigned int VLength = 3>
-class FixedArray
-{
-public:
-  FixedArray();
-  virtual ~FixedArray();
-  unsigned int Size();
-  void SetElement(unsigned short idx, const TValue &val);
-  const TValue & GetElement(unsigned short idx);
-};
-
-template <typename TValue, unsigned int NDim = 3>
-class Vector: public FixedArray<TValue,NDim>
-{
-public: 
-  Vector();
-  virtual ~Vector();
-  typedef NumericTraits<TValue>::RealType RealValueType;
-  RealValueType GetNorm() const;
-  RealValueType GetSquaredNorm() const;
-  RealValueType Normalize();
-};
-
-template <typename TCoord, unsigned int NDim = 3>
-class Point: public FixedArray<TCoord,NDim>
-{
-public:
-  Point();
-  virtual ~Point();
-};
-
-
-// Instanciate the needed templates
-%template(itkSize) Size<2>;
-%template(itkIndex) Index<2>;
-%template(itkRegion) ImageRegion<2>;
-%template(itkFixedArray) FixedArray<SpacePrecisionType,2>;
-%template(itkVector) Vector<SpacePrecisionType,2>;
-%template(itkPoint) Point<SpacePrecisionType,2>;
-
-} // end of namespace itk
-
-#if SWIGPYTHON
-
-%define WRAP_AS_LIST(N, T...)
-%extend T
+%extend ImageKeywordlist
   {
   %pythoncode
     {
     def __str__(self):
-      ret = "["
-      for index in range(N):
-        ret += str(self.GetElement(index))+","
-      ret = ret[:-1] + "]"
-      return ret
+      return str(self.GetKeywordlist())
     def __len__(self):
-      return N
-    def __getitem__(self,idx):
-      if idx >= N or idx < 0:
-        raise IndexError('Index outside [0,'+str(N-1)+']')
-      return self.GetElement(idx)
-    def __setitem__(self,idx,val):
-      if idx >= N or idx < 0:
-        raise IndexError('Index outside [0,'+str(N-1)+']')
-      return self.SetElement(idx,val)
-    }
-  };
-%enddef
-
-namespace itk
-{
-WRAP_AS_LIST(2, Size<2>)
-WRAP_AS_LIST(2, Index<2>)
-WRAP_AS_LIST(2, FixedArray<SpacePrecisionType,2>)
-WRAP_AS_LIST(2, Vector<SpacePrecisionType,2>)
-WRAP_AS_LIST(2, Point<SpacePrecisionType,2>)
-
-%extend ImageRegion<2>
-{
-  %pythoncode
-    {
-    def __str__(self):
-      return "{index:"+str(self.GetIndex())+", size:"+str(self.GetSize())+"}"
-    def __len__(self):
-      return 2
+      return self.GetSize()
     def __getitem__(self,key):
-      if key == 'index':
-        return self.GetIndex()
-      elif key == 'size':
-        return self.GetSize()
-      else:
-        raise IndexError('Key not in ["index","size"]')
+      return self.GetKeywordlist()[key]
     def __setitem__(self,key,val):
-      if key == 'index':
-        self.SetIndex(val)
-      elif key == 'size':
-        self.SetSize(val)
-      else:
-        raise IndexError('Key not in ["index","size"]')
+      self.GetKeywordlist()[key] = val
+    def keys(self):
+      return self.GetKeywordlist().keys()
     }
-};
-} // end of namespace itk
+  }
 #endif
+
+} // end of namespace otb
 
 class Application: public itkObject
 {
@@ -392,9 +276,10 @@ public:
   itk::Size<2> GetImageSize(const std::string & key, unsigned int idx = 0);
   unsigned int GetImageNbBands(const std::string & key, unsigned int idx = 0);
   std::string GetImageProjection(const std::string & key, unsigned int idx = 0);
-  std::map<std::string,std::string> GetImageKeywordlist(const std::string & key, unsigned int idx = 0);
+  otb::ImageKeywordlist GetImageKeywordlist(const std::string & key, unsigned int idx = 0);
   unsigned long PropagateRequestedRegion(const std::string & key, itk::ImageRegion<2> region, unsigned int idx = 0);
   itk::ImageRegion<2> GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
+  itkMetaDataDictionary GetImageMetaData(const std::string & key, unsigned int idx = 0);
 
   itkProcessObject* GetProgressSource() const;
 
@@ -976,3 +861,152 @@ public:
 };
 
 %include "PyCommand.i"
+
+namespace otb
+{
+namespace Wrapper
+{
+class MetaDataHelper
+{
+public:
+  MetaDataHelper();
+  virtual ~MetaDataHelper();
+  typedef enum
+  {
+    MDType_STRING,
+    MDType_INT,
+    MDType_DOUBLE,
+    MDType_GCP,
+    MDType_VECTOR,
+    MDType_IMAGEKWL,
+    MDType_VECTORDATAKWL,
+    MDType_BOOLVECTOR
+  } MDType;
+
+  static MDType GetType(const std::string &val);
+
+  static std::string GetString(
+    const itkMetaDataDictionary &dict,
+    const std::string &key);
+  static void SetString(
+    itkMetaDataDictionary &dict,
+    const std::string &key,
+    const std::string &val);
+
+  static unsigned int GetInt(
+    const itkMetaDataDictionary &dict,
+    const std::string &key);
+  static void SetInt(
+    itkMetaDataDictionary &dict,
+    const std::string &key,
+    unsigned int val);
+
+  static double GetDouble(
+    const itkMetaDataDictionary &dict,
+    const std::string &key);
+  static void SetDouble(
+    itkMetaDataDictionary &dict,
+    const std::string &key,
+    double val);
+
+  static OTB_GCP GetGCP(
+    const itkMetaDataDictionary &dict,
+    const std::string &key);
+  static void SetGCP(
+    itkMetaDataDictionary &dict,
+    const std::string &key,
+    const OTB_GCP &val);
+
+  static std::vector<double> GetVector(
+    const itkMetaDataDictionary &dict,
+    const std::string &key);
+  static void SetVector(
+    itkMetaDataDictionary &dict,
+    const std::string &key,
+    const std::vector<double> &val);
+
+  static ImageKeywordlist GetImageKWL(
+    const itkMetaDataDictionary &dict,
+    const std::string &key);
+  static void SetImageKWL(
+    itkMetaDataDictionary &dict,
+    const std::string &key,
+    const ImageKeywordlist &val);
+
+  static VectorDataKeywordlist GetVectorDataKWL(
+    const itkMetaDataDictionary &dict,
+    const std::string &key);
+  static void SetVectorDataKWL(
+    itkMetaDataDictionary &dict,
+    const std::string &key,
+    const VectorDataKeywordlist &val);
+
+  static std::vector<bool> GetBoolVector(
+    const itkMetaDataDictionary &dict,
+    const std::string &key);
+  static void SetBoolVector(
+    itkMetaDataDictionary &dict,
+    const std::string &key,
+    const std::vector<bool> &val);
+};
+
+} // end of namespace Wrapper
+} // end of namespace otb
+
+
+
+#if SWIGPYTHON
+%pythoncode
+{
+MetaDataHelper.GetterMap = {
+  MetaDataHelper.MDType_STRING : MetaDataHelper.GetString,
+  MetaDataHelper.MDType_INT : MetaDataHelper.GetInt,
+  MetaDataHelper.MDType_DOUBLE : MetaDataHelper.GetDouble,
+  MetaDataHelper.MDType_GCP : MetaDataHelper.GetGCP,
+  MetaDataHelper.MDType_VECTOR : MetaDataHelper.GetVector,
+  MetaDataHelper.MDType_IMAGEKWL : MetaDataHelper.GetImageKWL,
+  MetaDataHelper.MDType_VECTORDATAKWL : MetaDataHelper.GetVectorDataKWL,
+  MetaDataHelper.MDType_BOOLVECTOR : MetaDataHelper.GetBoolVector,
+  }
+
+MetaDataHelper.SetterMap = {
+  MetaDataHelper.MDType_STRING : MetaDataHelper.SetString,
+  MetaDataHelper.MDType_INT : MetaDataHelper.SetInt,
+  MetaDataHelper.MDType_DOUBLE : MetaDataHelper.SetDouble,
+  MetaDataHelper.MDType_GCP : MetaDataHelper.SetGCP,
+  MetaDataHelper.MDType_VECTOR : MetaDataHelper.SetVector,
+  MetaDataHelper.MDType_IMAGEKWL : MetaDataHelper.SetImageKWL,
+  MetaDataHelper.MDType_VECTORDATAKWL : MetaDataHelper.SetVectorDataKWL,
+  MetaDataHelper.MDType_BOOLVECTOR : MetaDataHelper.SetBoolVector,
+  }
+}
+
+// enhance the MetaDataDictionary class for Python
+%extend itkMetaDataDictionary
+{
+  %pythoncode
+  {
+    def __str__(self):
+      ret = ''
+      for k in self.GetKeys():
+        ret += k + ':<...>, '
+      if len(ret) == 0:
+        ret += ', '
+      return "{"+ret[:-2] +"}"
+    def __len__(self):
+      return len(self.GetKeys())
+    def keys(self):
+      return self.GetKeys()
+    def __getitem__(self,key):
+      if key in self.GetKeys():
+        return MetaDataHelper.GetterMap[MetaDataHelper.GetType(key)](self,key)
+      else:
+        raise IndexError('Key not recognized')
+    def __setitem__(self,key,val):
+      if key in self.GetKeys():
+        MetaDataHelper.SetterMap[MetaDataHelper.GetType(key)](self,key,val)
+      else:
+        raise IndexError('Key not recognized')
+  }
+};
+#endif
