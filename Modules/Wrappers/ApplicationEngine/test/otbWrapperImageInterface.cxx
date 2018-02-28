@@ -61,12 +61,14 @@ int otbWrapperImageInterface(int argc, char * argv[])
   ofs << "Origin: "<< app1->GetImageOrigin("out") << std::endl;
   ofs << "Spacing: "<< app1->GetImageSpacing("out") << std::endl;
   ofs << "Keywordlist: "<< std::endl;
-  for (auto item : app1->GetImageKeywordlist("out"))
-    {
-    ofs <<"  ["<<item.first<<"] = "<<item.second << std::endl;
-    }
-  ofs << "ProjectionRef: "<< std::endl;
+  otb::ImageKeywordlist kwl = app1->GetImageKeywordlist("out");
+  kwl.Print(ofs);
+  ofs << "ProjectionRef:"<< std::endl;
   ofs << app1->GetImageProjection("out") << std::endl;
+
+  itk::MetaDataDictionary dict = app1->GetImageMetaData("out");
+  ofs << "Dictionary:"<< std::endl;
+  dict.Print(ofs);
 
   otb::Wrapper::ImageBaseType::RegionType region;
   region.SetIndex(0,10);
