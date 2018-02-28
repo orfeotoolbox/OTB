@@ -148,7 +148,7 @@ Merge Requests must be provided to a git hosted platform (GitLab, GitHub, etc.).
 Merge request can be discussed on the developer list or directly on GitLab.
 
 Votes are necessary to accept Merge Request : 
--   Core developers (PSC members + 'Master' members in Gitlab) can vote
+-   Core developers ('Master' members in Gitlab ; it includes PSC members) can vote
 -   At least two +1 are necessary
 -   PSC members have veto
 
