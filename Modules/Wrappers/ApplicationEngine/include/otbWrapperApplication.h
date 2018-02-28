@@ -1023,6 +1023,16 @@ protected:
    */
   ImageBaseType* GetParameterImageBase(const std::string & key, unsigned int idx = 0);
 
+  /** Set the image in parameter 'key' as a base type. The optional 'idx'
+   *  allows to access InputImageList.
+   *
+   *  Works on parameters:
+   *  \li ParameterType_InputImage
+   *  \li ParameterType_InputImageList
+   *  \li ParameterType_ComplexInputImage
+   */
+  void SetParameterImageBase(const std::string & key, ImageBaseType* img, unsigned int idx = 0);
+
 private:
   /* Implement this method to add parameters */
   virtual void DoInit() = 0;

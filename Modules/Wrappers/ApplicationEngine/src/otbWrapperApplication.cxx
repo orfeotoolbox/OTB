@@ -1823,5 +1823,37 @@ Application::GetParameterImageBase(const std::string & key, unsigned int idx)
   return nullptr;
 }
 
+void
+Application::SetParameterImageBase(const std::string & key, ImageBaseType* img, unsigned int idx)
+{
+  Parameter* param = GetParameterByKey(key);
+  if (dynamic_cast<InputImageParameter*>(param))
+    {
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    paramDown->SetImage<ImageBaseType>(img);
+    }
+  else if (dynamic_cast<InputImageListParameter*>(param))
+    {
+    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+    if (idx >= paramDown->Size())
+      {
+      paramDown->AddImage(img);
+      }
+    else
+      {
+      paramDown->SetNthImage(idx, img);
+      }
+    }
+  else if (dynamic_cast<ComplexInputImageParameter*>(param))
+    {
+    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
+    paramDown->SetImage<ImageBaseType>(img);
+    }
+  else
+    {
+    itkExceptionMacro("Wrong parameter type, expect InputImageParameter, InputImageListParameter or ComplexInputImageParameter");
+    }
+}
+
 }
 }
