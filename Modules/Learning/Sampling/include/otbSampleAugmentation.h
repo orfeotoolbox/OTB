@@ -190,6 +190,7 @@ void smote(const SampleVectorType& inSamples,
   findKNNIndices(inSamples, nbNeighbors, nnVector);
   // The input samples are selected randomly with replacement
   std::srand(seed);
+  #pragma omp parallel for
   for(size_t i=0; i<nbSamples; ++i)
       {
       const auto sampleIdx = std::rand()%nbSamples;
