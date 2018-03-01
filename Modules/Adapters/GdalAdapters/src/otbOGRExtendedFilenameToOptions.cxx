@@ -117,6 +117,8 @@ SetGDALLayerOptions( const OGRExtendedFilenameToOptions::GDALOptionType & option
   for ( const auto & option : options )
     {
     boost::split(tmp, option , boost::is_any_of(":"), boost::token_compress_on);
+    if ( tmp.size()<2 )
+      boost::split(tmp, option , boost::is_any_of("="), boost::token_compress_on);
     m_LayerOptions.gdalOptions[ tmp[0] ] = tmp[1] ;
     }
 }
@@ -129,6 +131,8 @@ AddGDALLayerOptions( const OGRExtendedFilenameToOptions::GDALOptionType & option
   for ( const auto & option : options )
     {
     boost::split(tmp, option , boost::is_any_of(":"), boost::token_compress_on);
+    if ( tmp.size()<2 )
+      boost::split(tmp, option , boost::is_any_of("="), boost::token_compress_on);
     m_LayerOptions.gdalOptions[ tmp[0] ] = tmp[1] ;
     }
 }

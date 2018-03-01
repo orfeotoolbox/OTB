@@ -567,7 +567,33 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
   return otb::ogr::Layer(layer_ptr, *m_DataSource, modifiable);
 }
 
+void
+otb::ogr::DataSource::
+SetLayerCreationOptions( std::vector< std::string > options )
+{
+  FileNameHelperType::Pointer helper = FileNameHelperType::New();
+  helper->SetGDALLayerOptions( options );
+  m_LayerOptions = helper->GetGDALLayerOptions();
+  // perf : do we move code from  helper->SetGDALLayerOptions in here?
+}
 
+void
+otb::ogr::DataSource::
+AddLayerCreationOptions( std::vector< std::string > options )
+{
+  FileNameHelperType::Pointer helper = FileNameHelperType::New();
+  helper->SetGDALLayerOptions( m_LayerOptions );
+  helper->AddGDALLayerOptions( options );
+  m_LayerOptions = helper->GetGDALLayerOptions();
+  // perf : do we move code from helper->AddGDALLayerOptions in here?
+}
+
+std::vector< std::string >
+otb::ogr::DataSource::
+GetLayerCreationOptions()
+{
+  return m_LayerOptions;
+}
 /*===========================================================================*/
 /*===============================[ features ]================================*/
 /*===========================================================================*/

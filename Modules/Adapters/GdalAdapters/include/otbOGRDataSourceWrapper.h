@@ -499,6 +499,10 @@ public:
    */
     ogr::version_proxy::GDALDatasetType & ogr();
 
+    void SetLayerCreationOptions( std::vector< std::string > options );
+    void AddLayerCreationOptions( std::vector< std::string > options );
+    std::vector< std::string > GetLayerCreationOptions();
+
 protected:
   /** Default constructor.
    * The actual \c GDALDataset is using the <em>in-memory</em> \c
