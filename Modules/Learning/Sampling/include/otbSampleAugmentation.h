@@ -192,13 +192,13 @@ void smote(const SampleVectorType& inSamples,
   std::srand(seed);
   #pragma omp parallel for
   for(size_t i=0; i<nbSamples; ++i)
-      {
-      const auto sampleIdx = std::rand()%nbSamples;
-      const auto sample = inSamples[sampleIdx];
-      const auto neighborIdx = nnVector[sampleIdx][std::rand()%nbNeighbors].index;
-      const auto neighbor = inSamples[neighborIdx];
-      newSamples[i] = smoteCombine(sample, neighbor, std::rand()/double{RAND_MAX}); 
-      }
+    {
+    const auto sampleIdx = std::rand()%(inSamples.size());
+    const auto sample = inSamples[sampleIdx];
+    const auto neighborIdx = nnVector[sampleIdx][std::rand()%nbNeighbors].index;
+    const auto neighbor = inSamples[neighborIdx];
+    newSamples[i] = smoteCombine(sample, neighbor, std::rand()/double{RAND_MAX}); 
+    }
 }
 
 }//end namespaces sampleAugmentation
