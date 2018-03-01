@@ -131,41 +131,39 @@ SampleAugmentationFilter
                  const std::vector<std::string>& excludedFields)
 {
   ogr::Layer layer = vectors->GetLayer(layerName);
-  ogr::Feature feature = layer.ogr().GetNextFeature();
-  if(feature.addr() == 0)
+  auto featureIt = layer.begin();
+  if(featureIt==layer.end())
     {
     itkExceptionMacro("Layer " << layerName << " of input sample file is empty.\n");
     }
-  int cFieldIndex = feature.ogr().GetFieldIndex( classField.c_str() );
+  int cFieldIndex = (*featureIt).ogr().GetFieldIndex( classField.c_str() );
   if( cFieldIndex < 0 )
     {
     itkExceptionMacro( "The field name for class label (" << classField
                        << ") has not been found in the vector file " );
     }
 
-  auto numberOfFields = feature.ogr().GetFieldCount();
+  auto numberOfFields = (*featureIt).ogr().GetFieldCount();
   auto excludedIds = this->getExcludedFieldsIds(excludedFields, layer);
   SampleVectorType samples;
-  bool goesOn{feature.addr() != 0};
   int sampleCount{0};
-  while( goesOn )
+  while( featureIt!=layer.end() )
     {
     // Retrieve all the features for each field in the ogr layer.
-    if(feature.ogr().GetFieldAsInteger(classField.c_str()) == label)
+    if((*featureIt).ogr().GetFieldAsInteger(classField.c_str()) == label)
       {
 
       SampleType mv;
       for(auto idx=0; idx<numberOfFields; ++idx)
         {
         if(excludedIds.find(idx) == excludedIds.cend() &&
-           this->isNumericField(feature, idx))
-          mv.push_back(feature.ogr().GetFieldAsDouble(idx));
+           this->isNumericField((*featureIt), idx))
+          mv.push_back((*featureIt).ogr().GetFieldAsDouble(idx));
         }
       samples.push_back(mv); 
       ++sampleCount;
       }
-    feature = layer.ogr().GetNextFeature();
-    goesOn = feature.addr() != 0;
+    ++featureIt;
     }
   std::cout << "Read " << sampleCount << "samples\n";
   return samples;
@@ -175,9 +173,9 @@ void
 SampleAugmentationFilter
 ::sampleToOGRFeatures(const ogr::DataSource::Pointer& vectors,
                       ogr::DataSource* output, 
-               const SampleAugmentationFilter::SampleVectorType& samples,
-               const size_t layerName,
-                  const std::string& classField, int label,
+                      const SampleAugmentationFilter::SampleVectorType& samples,
+                      const size_t layerName,
+                      const std::string& classField, int label,
                       const std::vector<std::string>& excludedFields)
 {
 
@@ -255,8 +253,7 @@ SampleAugmentationFilter
                         const std::string& classField, int label)
 {
   auto featureIt = inputLayer.begin();
-  bool goesOn{(*featureIt).addr() != 0};
-  while( goesOn )
+  while( featureIt!=inputLayer.end() )
     {
     if((*featureIt).ogr().GetFieldAsInteger(classField.c_str()) == label)
       {
