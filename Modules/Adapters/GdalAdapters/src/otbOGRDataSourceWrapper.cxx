@@ -117,6 +117,7 @@ char const* DeduceDriverName(std::string filename)
 
 otb::ogr::DataSource::DataSource()
 : m_DataSource(ITK_NULLPTR),
+  m_FileNameHelper(),
   m_OpenMode(Modes::Update_LayerUpdate),
   m_FirstModifiableLayerID(0)
 {
@@ -128,6 +129,7 @@ otb::ogr::DataSource::DataSource()
   if (!m_DataSource) {
     itkExceptionMacro(<< "Failed to create OGRMemDataSource: " << CPLGetLastErrorMsg());
   }
+  m_FileNameHelper = FileNameHelperType::New();
 }
 
 otb::ogr::DataSource::DataSource(otb::ogr::version_proxy::GDALDatasetType * source, Modes::type mode)

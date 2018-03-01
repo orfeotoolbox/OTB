@@ -46,6 +46,7 @@
 
 #include "otbOGRLayerWrapper.h"
 #include "otbOGRVersionProxy.h"
+#include "otbOGRExtendedFilenameToOptions.h"
 
 class OGRLayer;
 class OGRSpatialReference;
@@ -88,6 +89,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
   //@}
 
+  typedef OGRExtendedFilenameToOptions FileNameHelperType;
   /**\name Standard macros */
   //@{
   /** Default builder.
@@ -549,6 +551,7 @@ private:
 
 private:
   ogr::version_proxy::GDALDatasetType *m_DataSource;
+  FileNameHelperType::Pointer m_FileNameHelper;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;
   }; // end class DataSource

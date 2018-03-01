@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOGRExtendedFilenameToReaderOptions_h
-#define otbOGRExtendedFilenameToReaderOptions_h
+#ifndef otbOGRExtendedFilenameToOptions_h
+#define otbOGRExtendedFilenameToOptions_h
 
 #include <set>
 #include "otbExtendedFilenameHelper.h"
@@ -27,14 +27,14 @@
 namespace otb
 {
 
-/** \class OGRExtendedFilenameToReaderOptions
+/** \class OGRExtendedFilenameToOptions
  */
 
-class ITK_EXPORT OGRExtendedFilenameToReaderOptions : public ExtendedFilenameHelper
+class ITK_EXPORT OGRExtendedFilenameToOptions : public ExtendedFilenameHelper
 {
 public:
   /** Standard class typedefs. */
-  typedef OGRExtendedFilenameToReaderOptions Self;
+  typedef OGRExtendedFilenameToOptions Self;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   typedef ExtendedFilenameHelper Superclass;
@@ -42,31 +42,48 @@ public:
   typedef Superclass::OptionMapType OptionMapType;
   typedef OptionMapType::iterator MapIteratorType;
 
-  itkTypeMacro(OGRExtendedFilenameToReaderOptions, otb::ExtendedFilenameHelper);
+  itkTypeMacro(OGRExtendedFilenameToOptions, otb::ExtendedFilenameHelper);
   itkNewMacro(Self);
 
+  typedef std::vector<std::string> GDALOptionType;
+
   /** The creation option structure. */
-  struct OptionType
+  struct OpenOptionType
   {
-    std::pair< bool , std::string > simpleFileName;
-    std::pair< bool , std::string > encoding;
-    std::set< std::string > availableOptions;
+    std::pair< bool, std::string  > simpleFileName;
+    std::pair< bool, GDALOptionType > gdalOptions;
+    std::map< std::string , bool > availableOptions;
+  };
+
+  struct CreationOptionType
+  {
+    std::pair< bool, std::string  > simpleFileName;
+    std::pair< bool, GDALOptionType > gdalOptions;
+    std::map< std::string , bool > availableOptions;
+  };
+
+  struct LayerOptionType
+  {
+    std::pair< bool, GDALOptionType > gdalOptions;
+    std::map< std::string , bool > availableOptions;
   };
 
   /* Set Methods */
   void SetExtendedFileName(const char * extFname) override;
 
 protected:
-  OGRExtendedFilenameToReaderOptions();
-  ~OGRExtendedFilenameToReaderOptions() override {};
+  OGRExtendedFilenameToOptions();
+  ~OGRExtendedFilenameToOptions() override {};
 
 private:
-  OGRExtendedFilenameToReaderOptions(const Self &) = delete ;
+  OGRExtendedFilenameToOptions(const Self &) = delete ;
   void operator =(const Self&) = delete ;
 
-  OptionType m_Options;
+  OpenOptionType m_OpenOptions;
+  CreationOptionType m_CreationOptions;
+  LayerOptionType m_LayerOptions;
 };
 
 } //end namespace otb
 
-#endif // otbOGRExtendedFilenameToReaderOptions_h
+#endif // otbOGRExtendedFilenameToOptions_h
