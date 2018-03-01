@@ -147,6 +147,7 @@ void findKNNIndices(const SampleVectorType& inSamples,
 {
   const auto nbSamples = inSamples.size();
   nnVector.resize(nbSamples);
+  #pragma omp parallel for
   for(size_t sampleIdx=0; sampleIdx<nbSamples; ++sampleIdx)
     {
     NNIndicesType nns;
