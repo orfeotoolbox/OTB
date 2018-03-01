@@ -164,7 +164,7 @@ void findKNNIndices(const SampleVectorType& inSamples,
 
 /** Generate the new sample in the line linking s1 and s2
 */
-SampleType smoteCombine(SampleType s1, SampleType s2, double position)
+SampleType smoteCombine(const SampleType& s1, const SampleType& s2, double position)
 {
   auto result = s1;
   for(size_t i=0; i<s1.size(); ++i)
