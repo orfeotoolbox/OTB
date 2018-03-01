@@ -513,7 +513,7 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode);
+  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode , std::vector< std::string > layerOption = std::vector< std::string >() );
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
@@ -550,9 +550,8 @@ private:
   std::string GetDatasetDescription() const;
 
 private:
-  static FileNameHelperType::Pointer staticFileNameHelper;
   ogr::version_proxy::GDALDatasetType *m_DataSource;
-  FileNameHelperType::GDALOptionType m_LayerOptions;
+  std::vector< std::string > m_LayerOptions;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;
   }; // end class DataSource

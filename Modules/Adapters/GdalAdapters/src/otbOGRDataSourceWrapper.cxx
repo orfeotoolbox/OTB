@@ -42,10 +42,6 @@
 /*=======================[ construction/destruction ]========================*/
 /*===========================================================================*/
 
-otb::ogr::DataSource::FileNameHelperType::Pointer
-  otb::ogr::DataSource::staticFileNameHelper = 
-  otb::ogr::DataSource::FileNameHelperType::New();
-
 bool otb::ogr::DataSource::Clear()
 {
   Reset(ITK_NULLPTR);
@@ -122,6 +118,7 @@ char const* DeduceDriverName(std::string filename)
 
 otb::ogr::DataSource::DataSource()
 : m_DataSource(ITK_NULLPTR),
+  m_LayerOptions() , 
   m_OpenMode(Modes::Update_LayerUpdate),
   m_FirstModifiableLayerID(0)
 {
@@ -135,9 +132,13 @@ otb::ogr::DataSource::DataSource()
   }
 }
 
-otb::ogr::DataSource::DataSource(otb::ogr::version_proxy::GDALDatasetType * source, Modes::type mode)
-: m_DataSource(source),
-  m_OpenMode(mode),
+otb::ogr::DataSource::DataSource( 
+    otb::ogr::version_proxy::GDALDatasetType * source ,
+    Modes::type mode ,
+    std::vector< std::string > options /*NULL*/ )
+: m_DataSource(source) ,
+  m_LayerOptions(options) ,
+  m_OpenMode(mode) ,
   m_FirstModifiableLayerID(0)
 {
   m_FirstModifiableLayerID = GetLayersCount();
@@ -145,14 +146,15 @@ otb::ogr::DataSource::DataSource(otb::ogr::version_proxy::GDALDatasetType * sour
 
 otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string const& datasourceName, Modes::type mode)
 {
+  FileNameHelperType::Pointer fileNameHelper = FileNameHelperType::New();
   bool update = (mode != Modes::Read);
-  staticFileNameHelper->SetExtendedFileName( datasourceName.c_str() );
+  fileNameHelper->SetExtendedFileName( datasourceName.c_str() );
 
-  std::string simpleFileName = staticFileNameHelper->GetSimpleFileName();
+  std::string simpleFileName = fileNameHelper->GetSimpleFileName();
   ogr::version_proxy::GDALDatasetType * source = 
     ogr::version_proxy::Open( simpleFileName.c_str() ,
                               !update ,
-                              staticFileNameHelper->GetGDALOpenOptions() );
+                              fileNameHelper->GetGDALOpenOptions() );
   if (!source)
     {
     // In read mode, this is a failure
@@ -181,7 +183,7 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
     source = ogr::version_proxy::Create( 
                   d ,
                   simpleFileName.c_str() ,
-                  staticFileNameHelper->GetGDALCreationOptions() );
+                  fileNameHelper->GetGDALCreationOptions() );
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create GDALDataset <"<<datasourceName
         <<"> (driver name: <" << driverName<<">: " << CPLGetLastErrorMsg());
