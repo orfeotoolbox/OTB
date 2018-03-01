@@ -23,8 +23,10 @@
 #endif
 
 #include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperInputImageParameter.h"
 #include "otbImageFileReader.h"
 #include "otbWrapperTypes.h"
+#include <vector>
 
 int otbWrapperOutputImageParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
@@ -33,7 +35,6 @@ int otbWrapperOutputImageParameterNew(int itkNotUsed(argc), char * itkNotUsed(ar
 
   return EXIT_SUCCESS;
 }
-
 
 int otbWrapperOutputImageParameterTest1(int itkNotUsed(argc), char* argv[])
 {
@@ -59,3 +60,59 @@ int otbWrapperOutputImageParameterTest1(int itkNotUsed(argc), char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+
+// template < typename ImageType >
+// void Cross( int p , std::string inputfilename, std::string outputfilename)
+// {
+//   otb::Wrapper::InputImageParameter::Pointer paramIn (
+//     otb::Wrapper::InputImageParameter::New() );
+//   paramIn->SetFromFileName( inputfilename ); 
+//   otb::Wrapper::OutputImageParameter::Pointer paramOut( 
+//     otb::Wrapper::OutputImageParameter::New() ); 
+//   paramOut->SetFileName( outputfilename );
+//   paramOut->SetImage(paramIn->GetImage<ImageType>());
+//   paramOut->InitializeWriters();
+//   paramOut->SetPixelType(static_cast<otb::Wrapper::ImagePixelType>(p));
+//   paramOut->Write();
+// }
+
+
+// int otbWrapperOutputImageParameterConversionTest(int , char* argv[])
+// {
+//   std::string filenamein = argv[1];
+//   std::string filenameout = argv[2] ;
+//   std::string extension = filenameout.substr( filenameout.find_last_of('.') );
+
+//   filenameout = filenameout.substr( 0 , filenameout.find_last_of('.') );
+
+//   for ( int i = otb::Wrapper::ImagePixelType_uint8 ; i < 11 ; i++ )
+//     {
+//       std::string type = 
+//       otb::Wrapper::OutputImageParameter::ConvertPixelTypeToString(
+//         static_cast<otb::Wrapper::ImagePixelType>(i) );
+//       Cross< otb::Wrapper::UInt8ImageType > (i , filenamein , filenameout+"_UInt8_"+ type + extension ) ;
+//       Cross< otb::Wrapper::Int16ImageType > ( i , filenamein , filenameout+"_Int16_"+ type + extension ) ;
+//       Cross< otb::Wrapper::UInt16ImageType > ( i , filenamein , filenameout+"_UInt16_"+ type + extension ) ;
+//       Cross< otb::Wrapper::Int32ImageType > ( i , filenamein , filenameout+"_Int21_"+ type + extension ) ;
+//       Cross< otb::Wrapper::UInt32ImageType > ( i , filenamein , filenameout+"_UInt32_"+ type + extension ) ;
+//       Cross< otb::Wrapper::FloatImageType > ( i , filenamein , filenameout+"_float_"+ type + extension ) ;
+//       Cross< otb::Wrapper::DoubleImageType > ( i , filenamein , filenameout+"_double_"+ type + extension ) ;
+//       Cross< otb::Wrapper::UInt8VectorImageType > ( i , filenamein , filenameout+"_UInt8Vect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::Int16VectorImageType > ( i , filenamein , filenameout+"_Int16Vect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::UInt16VectorImageType > ( i , filenamein , filenameout+"_UInt16Vect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::Int32VectorImageType > ( i , filenamein , filenameout+"_Int21Vect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::UInt32VectorImageType > ( i , filenamein , filenameout+"_UInt32Vect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::FloatVectorImageType > ( i , filenamein , filenameout+"_floatVect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::DoubleVectorImageType > ( i , filenamein , filenameout+"_doubleVect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::ComplexInt16ImageType > ( i , filenamein , filenameout+"_CInt16_"+ type + extension ) ;
+//       Cross< otb::Wrapper::ComplexInt32ImageType > ( i , filenamein , filenameout+"_CInt32_"+ type + extension ) ;
+//       Cross< otb::Wrapper::ComplexFloatImageType > ( i , filenamein , filenameout+"_Cfloat_"+ type + extension ) ;
+//       Cross< otb::Wrapper::ComplexDoubleImageType > ( i , filenamein , filenameout+"_Cdouble_"+ type + extension ) ;
+//       Cross< otb::Wrapper::ComplexInt16VectorImageType > ( i , filenamein , filenameout+"_CInt16Vect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::ComplexInt32VectorImageType > ( i , filenamein , filenameout+"_CInt32Vect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::ComplexFloatVectorImageType > ( i , filenamein , filenameout+"_CfloatVect_"+ type + extension ) ;
+//       Cross< otb::Wrapper::ComplexDoubleVectorImageType > ( i , filenamein , filenameout+"_CdoubleVect_"+ type + extension ) ;
+//     }
+//   return 0;
+// }

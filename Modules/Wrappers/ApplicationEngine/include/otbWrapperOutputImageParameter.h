@@ -117,9 +117,6 @@ protected:
   /** Destructor */
   ~OutputImageParameter() ITK_OVERRIDE;
 
-  template <class TInputImageType>
-    void SwitchImageWrite();
-
   template <class TInputVectorImageType>
     void SwitchVectorImageWrite();
 
@@ -135,14 +132,6 @@ protected:
   ImagePixelType         m_PixelType;
   ImagePixelType         m_DefaultPixelType;
 
-  typedef otb::ImageFileWriter<UInt8ImageType>  UInt8WriterType;
-  typedef otb::ImageFileWriter<Int16ImageType>  Int16WriterType;
-  typedef otb::ImageFileWriter<UInt16ImageType> UInt16WriterType;
-  typedef otb::ImageFileWriter<Int32ImageType>  Int32WriterType;
-  typedef otb::ImageFileWriter<UInt32ImageType> UInt32WriterType;
-  typedef otb::ImageFileWriter<FloatImageType>  FloatWriterType;
-  typedef otb::ImageFileWriter<DoubleImageType> DoubleWriterType;
-
   typedef otb::ImageFileWriter<UInt8VectorImageType>  VectorUInt8WriterType;
   typedef otb::ImageFileWriter<Int16VectorImageType>  VectorInt16WriterType;
   typedef otb::ImageFileWriter<UInt16VectorImageType> VectorUInt16WriterType;
@@ -154,13 +143,10 @@ protected:
   typedef otb::ImageFileWriter<UInt8RGBAImageType>  RGBAUInt8WriterType;
   typedef otb::ImageFileWriter<UInt8RGBImageType>   RGBUInt8WriterType;
 
-  UInt8WriterType::Pointer  m_UInt8Writer;
-  Int16WriterType::Pointer  m_Int16Writer;
-  UInt16WriterType::Pointer m_UInt16Writer;
-  Int32WriterType::Pointer  m_Int32Writer;
-  UInt32WriterType::Pointer m_UInt32Writer;
-  FloatWriterType::Pointer  m_FloatWriter;
-  DoubleWriterType::Pointer m_DoubleWriter;
+  typedef otb::ImageFileWriter<ComplexInt16VectorImageType>  ComplexVectorInt16WriterType;
+  typedef otb::ImageFileWriter<ComplexInt32VectorImageType>  ComplexVectorInt32WriterType;
+  typedef otb::ImageFileWriter<ComplexFloatVectorImageType>  ComplexVectorFloatWriterType;
+  typedef otb::ImageFileWriter<ComplexDoubleVectorImageType> ComplexVectorDoubleWriterType;
 
   VectorUInt8WriterType::Pointer  m_VectorUInt8Writer;
   VectorInt16WriterType::Pointer  m_VectorInt16Writer;
@@ -172,6 +158,11 @@ protected:
 
   RGBUInt8WriterType::Pointer   m_RGBUInt8Writer;
   RGBAUInt8WriterType::Pointer  m_RGBAUInt8Writer;
+
+  ComplexVectorInt16WriterType::Pointer  m_ComplexVectorInt16Writer;
+  ComplexVectorInt32WriterType::Pointer  m_ComplexVectorInt32Writer;
+  ComplexVectorFloatWriterType::Pointer  m_ComplexVectorFloatWriter;
+  ComplexVectorDoubleWriterType::Pointer m_ComplexVectorDoubleWriter;
 
 private:
   OutputImageParameter(const Parameter &); //purposely not implemented
