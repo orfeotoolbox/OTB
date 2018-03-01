@@ -552,6 +552,7 @@ private:
 private:
   ogr::version_proxy::GDALDatasetType *m_DataSource;
   FileNameHelperType::Pointer m_FileNameHelper;
+  static FileNameHelperType::Pointer staticFileNameHelper;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;
   }; // end class DataSource

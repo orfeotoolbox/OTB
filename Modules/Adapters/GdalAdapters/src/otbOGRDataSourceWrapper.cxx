@@ -41,6 +41,11 @@
 /*===========================================================================*/
 /*=======================[ construction/destruction ]========================*/
 /*===========================================================================*/
+
+otb::ogr::DataSource::FileNameHelperType::Pointer
+  otb::ogr::DataSource::staticFileNameHelper = 
+  otb::ogr::DataSource::FileNameHelperType::New();
+
 bool otb::ogr::DataSource::Clear()
 {
   Reset(ITK_NULLPTR);
@@ -143,8 +148,13 @@ otb::ogr::DataSource::DataSource(otb::ogr::version_proxy::GDALDatasetType * sour
 otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string const& datasourceName, Modes::type mode)
 {
   bool update = (mode != Modes::Read);
+  staticFileNameHelper->SetExtendedFileName( datasourceName.c_str() );
 
-  ogr::version_proxy::GDALDatasetType * source = ogr::version_proxy::Open(datasourceName.c_str(),!update);
+  std::string simpleFileName = staticFileNameHelper->GetSimpleFileName();
+  ogr::version_proxy::GDALDatasetType * source = 
+    ogr::version_proxy::Open( simpleFileName.c_str() ,
+                              !update ,
+                              staticFileNameHelper->GetGDALOpenOptions() );
   if (!source)
     {
     // In read mode, this is a failure
@@ -170,7 +180,10 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
       itkGenericExceptionMacro(<<"Could not create OGR driver "<<driverName<<", check your OGR configuration for available drivers.");
       }
 
-    source = ogr::version_proxy::Create(d,datasourceName.c_str());
+    source = ogr::version_proxy::Create( 
+                  d ,
+                  simpleFileName.c_str() ,
+                  staticFileNameHelper->GetGDALCreationOptions() );
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create GDALDataset <"<<datasourceName
         <<"> (driver name: <" << driverName<<">: " << CPLGetLastErrorMsg());

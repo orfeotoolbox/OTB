@@ -79,9 +79,42 @@ SetExtendedFileName(const char *extFname)
       }
 
     }
-
-
 }
+
+OGRExtendedFilenameToOptions::
+GDALOptionType
+OGRExtendedFilenameToOptions::
+GetGDALOptions( const std::string & type ) const
+{
+  if ( type == "layer" )
+    return m_LayerOptions.gdalOptions.second;
+  else if ( type == "creation" )
+    return m_CreationOptions.gdalOptions.second;
+  else if ( type == "open" )
+    return m_OpenOptions.gdalOptions.second;
+  else 
+    {
+    // warn user : wrong option
+    return GDALOptionType();
+    }
+}
+
+
+
+
+#define GetGDALOptionMacro( Type )                 \
+OGRExtendedFilenameToOptions::                     \
+GDALOptionType                                     \
+OGRExtendedFilenameToOptions::                     \
+GetGDAL##Type##Options() const   \
+{                                                  \
+  return m_##Type##Options.gdalOptions.second;        \
+}                                                  \
+
+GetGDALOptionMacro( Open )
+GetGDALOptionMacro( Creation )
+GetGDALOptionMacro( Layer )
+
 
 
 } //end namespace otb

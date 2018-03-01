@@ -71,6 +71,14 @@ public:
   /* Set Methods */
   void SetExtendedFileName(const char * extFname) override;
 
+  GDALOptionType GetGDALOptions( const std::string & type ) const ;
+
+  GDALOptionType GetGDALOpenOptions() const ;
+  GDALOptionType GetGDALCreationOptions() const ;
+  GDALOptionType GetGDALLayerOptions() const ;
+
+
+
 protected:
   OGRExtendedFilenameToOptions();
   ~OGRExtendedFilenameToOptions() override {};
