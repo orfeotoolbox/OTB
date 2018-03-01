@@ -248,14 +248,14 @@ private:
     {
     otbAppLogINFO("Augmentation strategy : jitter");
     filter->SetStrategy(FilterType::Strategy::Jitter);
-    filter->SetStdFactor(this->GetParameterFloat("stdfactor"));
+    filter->SetStdFactor(this->GetParameterFloat("strategy.jitter.stdfactor"));
     }
     break;
     case 2:
     {
     otbAppLogINFO("Augmentation strategy : smote");
     filter->SetStrategy(FilterType::Strategy::Smote);
-    filter->SetSmoteNeighbors(this->GetParameterInt("neighbors"));
+    filter->SetSmoteNeighbors(this->GetParameterInt("strategy.smote.neighbors"));
     }
     break;
     }

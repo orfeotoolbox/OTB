@@ -80,7 +80,7 @@ SampleAugmentationFilter
 {
 
   OGRDataSourcePointerType inputDS = dynamic_cast<OGRDataSourceType*>(this->itk::ProcessObject::GetInput(0));
-  auto outputDS = static_cast<ogr::DataSource *>(this->itk::ProcessObject::GetOutput(1));
+  auto outputDS = static_cast<ogr::DataSource *>(this->itk::ProcessObject::GetOutput(0));
   auto inSamples = this->extractSamples(inputDS, m_Layer,
                                         m_ClassFieldName,
                                         m_Label,
