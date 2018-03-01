@@ -91,13 +91,13 @@ public:
   }
   itkSetMacro(NumberOfSamples, int);
   itkGetMacro(NumberOfSamples, int);
-  void SetExcludedFeatures(const std::vector<std::string>& ef)
+  void SetExcludedFields(const std::vector<std::string>& ef)
   {
-    m_ExcludedFeatures = ef;
+    m_ExcludedFields = ef;
   }
-  std::vector<std::string> GetExcludedFeatures() const
+  std::vector<std::string> GetExcludedFields() const
   {
-    return m_ExcludedFeatures;
+    return m_ExcludedFields;
   }
   itkSetMacro(StdFactor, double);
   itkGetMacro(StdFactor, double);
@@ -127,16 +127,16 @@ protected:
   SampleVectorType extractSamples(const ogr::DataSource::Pointer vectors, 
                                   size_t layerName,
                                   const std::string& classField, const int label,
-                                  const std::vector<std::string>& excludedFeatures = {});
+                                  const std::vector<std::string>& excludedFields = {});
 
   void sampleToOGRFeatures(const ogr::DataSource::Pointer& vectors,
                            ogr::DataSource* output, 
                            const SampleVectorType& samples,
                            const size_t layerName,
                            const std::string& classField, int label,
-                           const std::vector<std::string>& excludedFeatures = {});
+                           const std::vector<std::string>& excludedFields = {});
 
-std::set<size_t> getExcludedFeaturesIds(const std::vector<std::string>& excludedFeatures,
+  std::set<size_t> getExcludedFieldsIds(const std::vector<std::string>& excludedFields,
                                         const ogr::Layer& inputLayer);
 bool isNumericField(const ogr::Feature& feature, const int idx);
 
@@ -149,7 +149,7 @@ private:
   std::string m_ClassFieldName;
   size_t m_Layer;
   int m_Label;
-  std::vector<std::string> m_ExcludedFeatures;
+  std::vector<std::string> m_ExcludedFields;
   Strategy m_Strategy;
   int m_NumberOfSamples;
   double m_StdFactor;

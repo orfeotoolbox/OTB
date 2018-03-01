@@ -84,7 +84,7 @@ SampleAugmentationFilter
   auto inSamples = this->extractSamples(inputDS, m_Layer,
                                         m_ClassFieldName,
                                         m_Label,
-                                        m_ExcludedFeatures);
+                                        m_ExcludedFields);
   SampleVectorType newSamples;
   switch (m_Strategy)
     {
@@ -114,7 +114,7 @@ SampleAugmentationFilter
   this->sampleToOGRFeatures(inputDS, outputDS, newSamples, m_Layer,
                             m_ClassFieldName,
                             m_Label,
-                            m_ExcludedFeatures);
+                            m_ExcludedFields);
 
 
   //  this->SetNthOutput(0,outputDS);
@@ -128,7 +128,7 @@ SampleAugmentationFilter
 ::extractSamples(const ogr::DataSource::Pointer vectors, 
                  size_t layerName,
                  const std::string& classField, const int label,
-                 const std::vector<std::string>& excludedFeatures)
+                 const std::vector<std::string>& excludedFields)
 {
   ogr::Layer layer = vectors->GetLayer(layerName);
   ogr::Feature feature = layer.ogr().GetNextFeature();
@@ -144,9 +144,10 @@ SampleAugmentationFilter
     }
 
   auto numberOfFields = feature.ogr().GetFieldCount();
-  auto excludedIds = this->getExcludedFeaturesIds(excludedFeatures, layer);
+  auto excludedIds = this->getExcludedFieldsIds(excludedFields, layer);
   SampleVectorType samples;
   bool goesOn{feature.addr() != 0};
+  int sampleCount{0};
   while( goesOn )
     {
     // Retrieve all the features for each field in the ogr layer.
@@ -161,10 +162,12 @@ SampleAugmentationFilter
           mv.push_back(feature.ogr().GetFieldAsDouble(idx));
         }
       samples.push_back(mv); 
+      ++sampleCount;
       }
     feature = layer.ogr().GetNextFeature();
     goesOn = feature.addr() != 0;
     }
+  std::cout << "Read " << sampleCount << "samples\n";
   return samples;
 }
 
@@ -175,11 +178,11 @@ SampleAugmentationFilter
                const SampleAugmentationFilter::SampleVectorType& samples,
                const size_t layerName,
                   const std::string& classField, int label,
-                  const std::vector<std::string>& excludedFeatures)
+                      const std::vector<std::string>& excludedFields)
 {
 
   auto inputLayer = vectors->GetLayer(layerName);
-  auto excludedIds = this->getExcludedFeaturesIds(excludedFeatures, inputLayer);
+  auto excludedIds = this->getExcludedFieldsIds(excludedFields, inputLayer);
 
   OGRSpatialReference * oSRS = nullptr;
   if (inputLayer.GetSpatialRef())
@@ -217,25 +220,25 @@ SampleAugmentationFilter
     }
 }
 
-               std::set<size_t> 
-               SampleAugmentationFilter
-               ::getExcludedFeaturesIds(const std::vector<std::string>& excludedFeatures,
-                                        const ogr::Layer& inputLayer)
-                  {
-                    auto feature = *(inputLayer).begin();
-                    std::set<size_t> excludedIds;
-                    if( excludedFeatures.size() != 0)
-                      {
-                      for(const auto& fieldName : excludedFeatures)
-                        {
-                        auto idx = feature.ogr().GetFieldIndex( fieldName.c_str() );
-                        excludedIds.insert(idx);
-                        }
-                      }
-                    return excludedIds;
-                  }
+std::set<size_t> 
+SampleAugmentationFilter
+::getExcludedFieldsIds(const std::vector<std::string>& excludedFields,
+                       const ogr::Layer& inputLayer)
+{
+  auto feature = *(inputLayer).begin();
+  std::set<size_t> excludedIds;
+  if( excludedFields.size() != 0)
+    {
+    for(const auto& fieldName : excludedFields)
+      {
+      auto idx = feature.ogr().GetFieldIndex( fieldName.c_str() );
+      excludedIds.insert(idx);
+      }
+    }
+  return excludedIds;
+}
 
-               bool 
+bool 
 SampleAugmentationFilter
 ::isNumericField(const ogr::Feature& feature,
                  const int idx)

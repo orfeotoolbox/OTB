@@ -215,10 +215,10 @@ private:
   std::vector<std::string> cFieldNames = GetChoiceNames("field");  
   std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
     
-  std::vector<std::string> excludedFeatures = 
-    GetExcludedFeatures( GetChoiceNames( "exclude" ), 
-                         GetSelectedItems( "exclude" ));
-  for(const auto& ef : excludedFeatures)
+  std::vector<std::string> excludedFields = 
+    GetExcludedFields( GetChoiceNames( "exclude" ), 
+                       GetSelectedItems( "exclude" ));
+  for(const auto& ef : excludedFields)
     otbAppLogINFO("Excluding feature " << ef << '\n');
 
   int seed = std::time(nullptr);
@@ -232,7 +232,7 @@ private:
   filter->SetOutputSamples(output);
   filter->SetClassFieldName(fieldName);
   filter->SetLabel(this->GetParameterInt("label"));
-  filter->SetExcludedFeatures(excludedFeatures);
+  filter->SetExcludedFields(excludedFields);
   filter->SetSeed(seed);
   switch (this->GetParameterInt("strategy"))
     {
@@ -264,8 +264,8 @@ private:
     }
 
 
-  std::vector<std::string> GetExcludedFeatures(const std::vector<std::string>& fieldNames,
-                                               const std::vector<int>& selectedIdx)
+  std::vector<std::string> GetExcludedFields(const std::vector<std::string>& fieldNames,
+                                             const std::vector<int>& selectedIdx)
   {
     auto nbFeatures = static_cast<unsigned int>(selectedIdx.size());
     std::vector<std::string> result( nbFeatures );
