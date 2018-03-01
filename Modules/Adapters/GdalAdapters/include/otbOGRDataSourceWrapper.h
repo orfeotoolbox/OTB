@@ -370,7 +370,7 @@ public:
   Layer CopyLayer(
     Layer            & srcLayer,
     std::string const& newName,
-    char            ** papszOptions = ITK_NULLPTR);
+    std::vector<std::string> const& papszOptions = std::vector<std::string>() );
   //@}
 
   /**\name Layers access
@@ -550,9 +550,9 @@ private:
   std::string GetDatasetDescription() const;
 
 private:
-  ogr::version_proxy::GDALDatasetType *m_DataSource;
-  FileNameHelperType::Pointer m_FileNameHelper;
   static FileNameHelperType::Pointer staticFileNameHelper;
+  ogr::version_proxy::GDALDatasetType *m_DataSource;
+  FileNameHelperType::GDALOptionType m_LayerOptions;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;
   }; // end class DataSource

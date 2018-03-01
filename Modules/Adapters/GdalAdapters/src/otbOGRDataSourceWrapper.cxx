@@ -122,7 +122,6 @@ char const* DeduceDriverName(std::string filename)
 
 otb::ogr::DataSource::DataSource()
 : m_DataSource(ITK_NULLPTR),
-  m_FileNameHelper(),
   m_OpenMode(Modes::Update_LayerUpdate),
   m_FirstModifiableLayerID(0)
 {
@@ -134,7 +133,6 @@ otb::ogr::DataSource::DataSource()
   if (!m_DataSource) {
     itkExceptionMacro(<< "Failed to create OGRMemDataSource: " << CPLGetLastErrorMsg());
   }
-  m_FileNameHelper = FileNameHelperType::New();
 }
 
 otb::ogr::DataSource::DataSource(otb::ogr::version_proxy::GDALDatasetType * source, Modes::type mode)
@@ -368,7 +366,7 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
 otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
   Layer & srcLayer,
   std::string const& newName,
-  char ** papszOptions/* = NULL */)
+  std::vector<std::string> const& papszOptions/* = NULL */)
 {
   assert(m_DataSource && "Datasource not initialized");
 
@@ -386,7 +384,7 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
   }
 
   OGRLayer * l0 = &srcLayer.ogr();
-  OGRLayer * ol = m_DataSource->CopyLayer(l0, newName.c_str(), papszOptions);
+  OGRLayer * ol = m_DataSource->CopyLayer(l0, newName.c_str(), otb::ogr::StringListConverter(papszOptions).to_ogr());
   if (!ol)
     {
     itkGenericExceptionMacro(<< "Failed to copy the layer <"
