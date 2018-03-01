@@ -21,7 +21,7 @@
 #ifndef otbOGRExtendedFilenameToOptions_h
 #define otbOGRExtendedFilenameToOptions_h
 
-#include <set>
+#include <unordered_map>
 #include "otbExtendedFilenameHelper.h"
 
 namespace otb
@@ -51,21 +51,20 @@ public:
   struct OpenOptionType
   {
     std::pair< bool, std::string  > simpleFileName;
-    std::pair< bool, GDALOptionType > gdalOptions;
-    std::map< std::string , bool > availableOptions;
+    GDALOptionType gdalOptions;
+    // std::unordered_map< std::string , bool > availableOptions;
   };
 
   struct CreationOptionType
   {
     std::pair< bool, std::string  > simpleFileName;
-    std::pair< bool, GDALOptionType > gdalOptions;
-    std::map< std::string , bool > availableOptions;
+    GDALOptionType gdalOptions;
+    // std::unordered_map< std::string , bool > availableOptions;
   };
 
   struct LayerOptionType
   {
-    std::pair< bool, GDALOptionType > gdalOptions;
-    std::map< std::string , bool > availableOptions;
+    std::unordered_map< std::string , std::string > gdalOptions;
   };
 
   /* Set Methods */
@@ -76,6 +75,9 @@ public:
   GDALOptionType GetGDALOpenOptions() const ;
   GDALOptionType GetGDALCreationOptions() const ;
   GDALOptionType GetGDALLayerOptions() const ;
+
+  void SetGDALLayerOptions( const GDALOptionType & options );
+  void AddGDALLayerOptions( const GDALOptionType & options );
 
 
 
