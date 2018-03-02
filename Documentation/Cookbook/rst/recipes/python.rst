@@ -56,6 +56,15 @@ application, changing the algorithm at each iteration.
       # This will execute the application and save the output file
       app.ExecuteAndWriteOutput()
 
+If you want to handle the parameters from a Python dictionary, you can use the
+functions *SetParameters()* and *GetParameters()*.
+
+.. code-block:: python
+
+    params = {"in":"myInput.tif", "type.mean.radius":4}
+    app.SetParameters(params)
+    params2 = app.GetParameters()
+
 Numpy array processing
 ----------------------
 
