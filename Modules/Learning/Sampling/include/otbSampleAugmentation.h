@@ -46,6 +46,7 @@ SampleType estimateStds(SampleVectorType samples)
   const auto nbComponents = samples[0].size();
   SampleType stds(nbComponents, 0.0);
   SampleType means(nbComponents, 0.0);
+#pragma omp parallel for
   for(size_t i=0; i<nbSamples; ++i)
     {
     for(size_t j=0; j<nbComponents; ++j)
@@ -57,9 +58,10 @@ SampleType estimateStds(SampleVectorType samples)
       means[j] = muNew;
       }
     }
-  for(auto std : stds)
+#pragma omp parallel for
+  for(size_t j=0; j<nbComponents; ++j)
     {
-    std = std::sqrt(std/nbSamples);
+    stds[j] = std::sqrt(stds[j]/nbSamples);
     }
   return stds;
 }
@@ -73,6 +75,7 @@ void replicateSamples(const SampleVectorType& inSamples,
                     SampleVectorType& newSamples)
 {
   newSamples.resize(nbSamples);
+#pragma omp parallel for
   for(size_t i=0; i<nbSamples; ++i)
     {
     newSamples[i] = inSamples[i%inSamples.size()];
