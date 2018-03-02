@@ -108,6 +108,107 @@ public:
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
   void GenerateData() ITK_OVERRIDE;
 
+/** ------------------------------- */
+	class IntersectionGraph
+	{
+	public:
+		struct NodeType
+		{
+			bool isVisited;
+			std::vector<int> adjacencyList;
+		};
+
+		//typedef	std::pair<bool,std::vector<int> > NodeType;
+		typedef std::map<int, NodeType > GraphType;  
+		
+		IntersectionGraph() {graph.clear();} // Constructor
+		~IntersectionGraph() {}; // Destructor
+		
+		void registerEdge(int idx1, int idx2)
+		{
+			if (idx1 != idx2)
+			{
+				if (graph.find(idx1) == graph.end()) // The node (key in the map) doesn't exist
+				{
+					NodeType node;
+					node.adjacencyList.push_back(idx2);
+					node.isVisited = false;
+
+					graph[idx1] = node; 
+				}
+				else
+				{
+					graph[idx1].adjacencyList.push_back(idx2);
+				}
+					
+				if (graph.find(idx2) == graph.end())
+				{
+					NodeType node;
+					node.adjacencyList.push_back(idx1);
+					node.isVisited = false;
+
+					graph[idx2] = node; 
+				}
+				else
+				{
+					graph[idx2].adjacencyList.push_back(idx1);
+				}
+			}
+			else
+			{
+				std::cout << "warning : trying to merge polygon " <<idx1 << " with itself" << std::endl;
+			}	
+		}
+		
+		void printGraph()
+		{
+			for (typename GraphType::iterator it = graph.begin(); it != graph.end(); it++)
+			{
+				std::cout << "Node " << (*it).first << " Adj : " ;
+				for (std::vector<int>::iterator itAdj = (*it).second.adjacencyList.begin(); itAdj != (*it).second.adjacencyList.end(); itAdj++)
+				{
+					std::cout << (*itAdj) << " ";
+				}
+				std::cout << " Visited : " << (*it).second.isVisited;
+				std::cout << std::endl;
+			}
+		}
+		std::vector< std::vector<int> > findConnectedComponents( )
+		//void findConnectedComponents()
+		{
+			std::vector< std::vector<int> > fusionList;
+			for (typename GraphType::iterator it = graph.begin(); it != graph.end(); it++)
+			{
+				std::vector<int> fusionIndexes;
+				VisitNode( (*it).first, fusionIndexes);
+				if (fusionIndexes.empty() != true)
+				{
+					fusionList.push_back(fusionIndexes);
+				}
+			}
+			return fusionList;
+		}
+		
+		
+		void VisitNode(int idx, std::vector<int>& fusionIndexes)
+		{
+			if (graph[idx].isVisited == false) 
+			{
+				fusionIndexes.push_back(idx);
+				graph.find(idx)->second.isVisited = true;
+				std::cout << idx << " ? " << graph[idx].isVisited << std::endl;
+				for (std::vector<int>::iterator it = graph[idx].adjacencyList.begin(); it != graph[idx].adjacencyList.end(); it++)
+				{
+					VisitNode( *it,fusionIndexes);
+				}
+			}
+		}	
+	private:
+		GraphType graph;
+		
+	};
+/** ------------------------------- */
+
 protected:
   MaskStreamStitchingFilter();
   ~MaskStreamStitchingFilter() ITK_OVERRIDE {}

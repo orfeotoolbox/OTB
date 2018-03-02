@@ -254,11 +254,14 @@ MaskStreamStitchingFilter<TInputImage>
          
          std::vector<FusionStruct> fusionList;
          fusionList.clear();
-         
+         IntersectionGraph graph;
          for(unsigned int u=0; u<nbUpperPolygons; u++)
          {
             for(unsigned int l=0; l<nbLowerPolygons; l++)
             {
+			  	
+			  
+				
                FeatureStruct upper = upperStreamFeatureList[u];
                FeatureStruct lower = lowerStreamFeatureList[l];
               if (!(upper.feat == lower.feat))
@@ -279,7 +282,8 @@ MaskStreamStitchingFilter<TInputImage>
                        fusion.indStream1 = u;
                        fusion.indStream2 = l;
                        fusion.overlap = 0.;
-
+                       
+					   graph.registerEdge(u,nbUpperPolygons + l);
                        if(intersection->getGeometryType() == wkbPolygon)
                        {
                            fusion.overlap = dynamic_cast<OGRPolygon *>(intersection.get())->get_Area();
@@ -316,7 +320,8 @@ MaskStreamStitchingFilter<TInputImage>
               }
             }
          }
-         
+         graph.printGraph();
+         std::cout << "end Tile" << std::endl;
          unsigned int fusionListSize = fusionList.size();
          std::sort(fusionList.begin(),fusionList.end(),SortFeature);
          std::vector<int> fusionFIDList; // keep track of the FID of the original features used during the fusion, to remove them afterward  
@@ -401,8 +406,6 @@ MaskStreamStitchingFilter<TInputImage>
             //fusionFeature["size"].SetValue( field_low.GetValue<double>() + field_up.GetValue<double>() - fusionList[i].overlap);
             addedPolygonList.push_back(fusionStructFeature);
 
-            
-            
           }
           
           // Now we can remove the features in fusionListSize

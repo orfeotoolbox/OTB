@@ -72,14 +72,6 @@ private:
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
 
-    AddParameter(ParameterType_Int,"background","Background value");
-    SetParameterDescription("background","Background value of the binary mask");
-    MandatoryOff("background");
-    
-    AddParameter(ParameterType_Int,"foreground","Foreground value");
-    SetParameterDescription("foreground","Foreground value of the binary mask");
-    MandatoryOff("foreground");
-    
     AddParameter(ParameterType_Int,"connectivity","Full connectivity");
     SetParameterDescription("connectivity","Set full connectivity");
     SetMinimumParameterIntValue("connectivity",0);
@@ -88,6 +80,16 @@ private:
 
     AddParameter(ParameterType_OutputFilename, "out", "Output vector data file ");
     SetParameterDescription("out","Output vector");
+
+    AddParameter(ParameterType_Choice,"outmode","Writing mode for the output vector file");
+    SetParameterDescription("outmode","This allows one to set the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.");
+    
+    AddChoice("outmode.overwrite","Overwrite output vector file if existing.");
+    SetParameterDescription("outmode.overwrite","If the output vector file already exists, it is completely destroyed (including all its layers) and recreated from scratch.");
+
+    AddChoice("outmode.update","Update output vector file");
+    SetParameterDescription("outmode.update","The output vector file is opened in update mode if existing");
+
 
     AddParameter(ParameterType_Int,"tile","Tile Size");
     SetParameterDescription("tile","Size of the tiles used for streaming");
@@ -100,8 +102,6 @@ private:
     AddRAMParameter();
 
     // Default values
-    SetDefaultParameterInt("background", 0);
-    SetDefaultParameterInt("foreground", 1);
     SetDefaultParameterInt("connectivity", 0);
     SetDefaultParameterInt("tile", 0);
     // Doc example parameter settings
@@ -118,12 +118,35 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+	clock_t tic = clock();
+  
+	
 	// Create the OGR DataSource with the appropriate fields
     std::string projRef = this->GetParameterFloatImage("in")->GetProjectionRef();
     OGRSpatialReference oSRS(projRef.c_str());
     std::string layer_name = "layer";
     std::string field_name = "field";
-    OGRDataSourceType::Pointer ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
+    
+    std::string outmode = GetParameterString("outmode");
+	std::string dataSourceName = GetParameterString("out");
+    OGRDataSourceType::Pointer ogrDS;
+    
+     if (outmode == "overwrite")
+        {
+        // Create the datasource
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
+
+        }
+      else if (outmode == "update")
+        {
+        // Create the datasource
+        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
+        }
+      else
+        {
+        otbAppLogFATAL(<<"invalid outmode"<< outmode);
+        }
+    ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
     OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbMultiPolygon);
     OGRFieldDefn field(field_name.c_str(), OFTInteger);
     layer.CreateField(field, true);
@@ -165,11 +188,14 @@ private:
     maskFilter->Update();
     ogrDS->SyncToDisk();
     // Fusion Filter : Regroup polygons splitted across tiles.
-    /*MaskStreamStitchingFilterType::Pointer fusionFilter = MaskStreamStitchingFilterType::New();
+    MaskStreamStitchingFilterType::Pointer fusionFilter = MaskStreamStitchingFilterType::New();
     fusionFilter->SetInput(this->GetParameterFloatImage("in"));
     fusionFilter->SetOGRLayer(layer);
     fusionFilter->SetStreamSize(maskFilter->GetStreamSize());
-    fusionFilter->GenerateData();*/
+    fusionFilter->GenerateData();
+    
+    clock_t toc = clock();
+    otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
   }
 
 }; 
