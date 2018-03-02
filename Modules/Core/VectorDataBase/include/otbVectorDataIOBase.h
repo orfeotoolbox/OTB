@@ -29,7 +29,6 @@
 #include "itkDataObject.h"
 
 #include "OTBVectorDataBaseExport.h"
-#include "otbOGRExtendedFilenameToOptions.h"
 
 namespace otb
 {
@@ -72,8 +71,6 @@ public:
   itkStaticConstMacro(VDimension, unsigned int, 3);
   typedef itk::Vector<double, VDimension> SpacingType;
   typedef itk::Point<double, VDimension>  PointType;
-
-  typedef otb::OGRExtendedFilenameToOptions FileNameHelperType;
 
   /** Set/Get the name of the file to be read. */
   itkSetStringMacro(FileName);
@@ -175,8 +172,6 @@ protected:
 private:
   VectorDataIOBase(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
-  FileNameHelperType m_FileNameHelper;
 
 };
 
