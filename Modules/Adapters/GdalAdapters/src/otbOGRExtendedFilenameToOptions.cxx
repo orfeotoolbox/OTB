@@ -36,6 +36,23 @@ OGRExtendedFilenameToOptions()
 
 }
 
+OGRExtendedFilenameToOptions::
+OGRExtendedFilenameToOptions( const GDALOptionType & options ):
+m_LayerOptions()
+{
+  this->SetGDALLayerOptions( options );
+}
+
+OGRExtendedFilenameToOptions::Pointer
+OGRExtendedFilenameToOptions::
+GetGDALLayerOptionsHelper( const GDALOptionType & options )
+{
+  Pointer res = new OGRExtendedFilenameToOptions( options );
+  res->UnRegister();
+  return res;
+}
+
+
 void
 OGRExtendedFilenameToOptions::
 SetExtendedFileName(const char *extFname)

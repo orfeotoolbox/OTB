@@ -79,10 +79,11 @@ public:
   void SetGDALLayerOptions( const GDALOptionType & options );
   void AddGDALLayerOptions( const GDALOptionType & options );
 
-
+  static Pointer GetGDALLayerOptionsHelper( const GDALOptionType & options );
 
 protected:
   OGRExtendedFilenameToOptions();
+  OGRExtendedFilenameToOptions( const GDALOptionType & options );
   ~OGRExtendedFilenameToOptions() override {};
 
 private:

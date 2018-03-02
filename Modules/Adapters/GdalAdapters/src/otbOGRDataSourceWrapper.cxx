@@ -284,6 +284,12 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
   // Other mode : Check if the layer already exists.
   otb::ogr::Layer layer = GetLayer(name); // won't throw on failure
 
+  FileNameHelperType::Pointer layerOptionHelper = 
+    FileNameHelperType::GetGDALLayerOptionsHelper( m_LayerOptions );
+  layerOptionHelper->AddGDALLayerOptions( papszOptions );
+  std::vector<std::string> layerOptions = 
+    layerOptionHelper->GetGDALLayerOptions();
+
   switch (m_OpenMode)
   {
   case Modes::Update_LayerOverwrite:
@@ -296,7 +302,11 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
 
     // Then create it
     OGRLayer * ol = m_DataSource->CreateLayer(
-      name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
+      name.c_str() ,
+      poSpatialRef ,
+      eGType ,
+      otb::ogr::StringListConverter( layerOptions ).to_ogr() );
+
     if (!ol)
       {
       itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
@@ -319,7 +329,11 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
       {
       // Then create it
       OGRLayer * ol = m_DataSource->CreateLayer(
-        name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
+        name.c_str() ,
+        poSpatialRef ,
+        eGType ,
+        otb::ogr::StringListConverter( layerOptions ).to_ogr() );
+
       if (!ol)
         {
         itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
@@ -343,7 +357,11 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
 
     // Case where the layer does not exists
     OGRLayer * ol = m_DataSource->CreateLayer(
-      name.c_str(), poSpatialRef, eGType, otb::ogr::StringListConverter(papszOptions).to_ogr());
+          name.c_str() ,
+          poSpatialRef ,
+          eGType ,
+          otb::ogr::StringListConverter( layerOptions ).to_ogr() );
+
     if (!ol)
       {
       itkGenericExceptionMacro(<< "Failed to create the layer <"<<name
@@ -384,9 +402,18 @@ otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
     default:
       break;
   }
+  
+  FileNameHelperType::Pointer layerOptionHelper = 
+    FileNameHelperType::GetGDALLayerOptionsHelper( m_LayerOptions );
+  layerOptionHelper->AddGDALLayerOptions( papszOptions );
+  std::vector<std::string> layerOptions = 
+    layerOptionHelper->GetGDALLayerOptions();
 
   OGRLayer * l0 = &srcLayer.ogr();
-  OGRLayer * ol = m_DataSource->CopyLayer(l0, newName.c_str(), otb::ogr::StringListConverter(papszOptions).to_ogr());
+  OGRLayer * ol = m_DataSource->CopyLayer( 
+                  l0 ,
+                  newName.c_str() ,
+                  otb::ogr::StringListConverter( layerOptions ).to_ogr() );
   if (!ol)
     {
     itkGenericExceptionMacro(<< "Failed to copy the layer <"
