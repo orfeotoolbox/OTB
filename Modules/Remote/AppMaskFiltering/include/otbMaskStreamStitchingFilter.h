@@ -196,7 +196,6 @@ public:
 			{
 				fusionIndexes.push_back(idx);
 				graph.find(idx)->second.isVisited = true;
-				std::cout << idx << " ? " << graph[idx].isVisited << std::endl;
 				for (std::vector<int>::iterator it = graph[idx].adjacencyList.begin(); it != graph[idx].adjacencyList.end(); it++)
 				{
 					VisitNode( *it,fusionIndexes);

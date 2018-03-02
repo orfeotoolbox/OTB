@@ -135,7 +135,7 @@ private:
         {
         // Create the datasource
         ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
-
+		std::cout << "1" << std::endl;
         }
       else if (outmode == "update")
         {

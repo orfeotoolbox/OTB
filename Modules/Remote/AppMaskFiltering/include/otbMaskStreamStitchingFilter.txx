@@ -139,7 +139,7 @@ MaskStreamStitchingFilter<TInputImage>
 
       for(unsigned int y=1; y<=nbRowStream; y++)
       {
-
+		std::cout << "new tile" << std::endl;
         //Compute Stream line
         OGRLineString streamLine;
         itk::ContinuousIndex<double,2> startIndex;
@@ -252,8 +252,8 @@ MaskStreamStitchingFilter<TInputImage>
          unsigned int nbUpperPolygons = upperStreamFeatureList.size();
          unsigned int nbLowerPolygons = lowerStreamFeatureList.size();
          
-         std::vector<FusionStruct> fusionList;
-         fusionList.clear();
+         //std::vector<FusionStruct> fusionList;
+         //fusionList.clear();
          IntersectionGraph graph;
          for(unsigned int u=0; u<nbUpperPolygons; u++)
          {
@@ -278,49 +278,52 @@ MaskStreamStitchingFilter<TInputImage>
                       //ogr::UniqueGeometryPtr intersection = ogr::Intersection(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
                       if (intersection)
                       {
-                       FusionStruct fusion;
-                       fusion.indStream1 = u;
-                       fusion.indStream2 = l;
-                       fusion.overlap = 0.;
-                       
 					   graph.registerEdge(u,nbUpperPolygons + l);
-                       if(intersection->getGeometryType() == wkbPolygon)
-                       {
-                           fusion.overlap = dynamic_cast<OGRPolygon *>(intersection.get())->get_Area();
-                       }
-                       else if(intersection->getGeometryType() == wkbMultiPolygon)
-                       {
-                           fusion.overlap = dynamic_cast<OGRMultiPolygon *>(intersection.get())->get_Area();
-                       }
-                       else if(intersection->getGeometryType() == wkbGeometryCollection)
-                       {
-                           fusion.overlap = dynamic_cast<OGRGeometryCollection *>(intersection.get())->get_Area();
-                       }
-                       else if(intersection->getGeometryType() == wkbLineString)
-                       {
-                           fusion.overlap = dynamic_cast<OGRLineString *>(intersection.get())->get_Length();
-                       }
-                       else if (intersection->getGeometryType() == wkbMultiLineString)
-                       {
-                           #if(GDAL_VERSION_NUM < 1800)
-                       fusion.overlap = GetLengthOGRGeometryCollection(dynamic_cast<OGRGeometryCollection *> (intersection.get()));
-                           #else
-                       fusion.overlap = dynamic_cast<OGRMultiLineString *>(intersection.get())->get_Length();
-                           #endif
-                      }
-
-                       /** -Wunused-variable
-                       long upperFID = upper.feat.GetFID();
-                       long lowerFID = lower.feat.GetFID();
-                       **/
-                       fusionList.push_back(fusion);
                       }
                   }
                 }
               }
             }
          }
-         graph.printGraph();
+         //graph.printGraph();
+         std::vector< std::vector <int> > fusionList = graph.findConnectedComponents();
+    
+		 std::vector<FeatureStruct> streamFeatureList = upperStreamFeatureList;
+		 
+
+		streamFeatureList.insert( streamFeatureList.end(), lowerStreamFeatureList.begin(), lowerStreamFeatureList.end() );
+		
+		
+		std::vector<OGRFeatureType> addedPolygonList;
+        for (std::vector< std::vector<int> >::iterator itList = fusionList.begin(); itList != fusionList.end(); itList++)
+		{
+		  OGRMultiPolygon geomToMerge;
+		  
+		  for (std::vector<int>::iterator it = (*itList).begin(); it != (*itList).end(); it++)
+		  {
+			
+			FeatureStruct feature = streamFeatureList.at(*it);
+			geomToMerge.addGeometry(feature.feat.GetGeometry());
+			std::cout << feature.feat.GetFID() << " ";
+			m_OGRLayer.DeleteFeature(feature.feat.GetFID());
+		  }
+		  otb::ogr::UniqueGeometryPtr fusionPolygon = otb::ogr::UnionCascaded(geomToMerge);
+		  OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
+		  std::cout << std::endl;
+		  fusionFeature["size"].SetValue(2.);
+		  fusionFeature["perimeter"].SetValue(3.);
+          fusionFeature["field"].SetValue(1);
+          
+            
+          fusionFeature.SetGeometry( fusionPolygon.get() );
+		  addedPolygonList.push_back(fusionFeature);
+		  m_OGRLayer.CreateFeature(fusionFeature); 
+		}
+		
+
+         
+      //geomToMerge.addGeometry
+         /*
          std::cout << "end Tile" << std::endl;
          unsigned int fusionListSize = fusionList.size();
          std::sort(fusionList.begin(),fusionList.end(),SortFeature);
@@ -391,9 +394,6 @@ MaskStreamStitchingFilter<TInputImage>
             fusionStructFeature.fusioned = false;
             fusionStructFeature.fusionIndex = 0;
             
-            /*ogr::Field field_up = upper.feat["size"];
-            ogr::Field field_low = lower.feat["size"];*/
-            
             typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
             double area = static_cast<const OGRPolygon *>(fusionFeature.GetGeometry())->get_Area();
             double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
@@ -425,10 +425,10 @@ MaskStreamStitchingFilter<TInputImage>
             }
           }
          
-          
+          */
          // Update progress
          progress.CompletedPixel();
-
+		
       } //end for x
 
       if(m_OGRLayer.ogr().TestCapability("Transactions"))
@@ -440,6 +440,7 @@ MaskStreamStitchingFilter<TInputImage>
           itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
           }
         }
+       
    } 
 }
 template<class TImage>
