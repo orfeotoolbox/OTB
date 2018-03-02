@@ -994,7 +994,7 @@ otb_test_application(NAME apTvClSampleAugmentationJitter
   -out ${TEMP}/apTvClSampleAugmentationJitter.sqlite
   -exclude originfid
   -strategy jitter
-  -strategy.jitter.stdfactor 10000
+  -strategy.jitter.stdfactor 10
   )
 
 otb_test_application(NAME apTvClSampleAugmentationSmote
