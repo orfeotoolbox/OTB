@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include "otbWrapperChoiceParameter.h"
+#include "otbStringToHTML.h"
 
 namespace otb
 {
@@ -55,12 +56,12 @@ namespace Wrapper
 
 #define otbDocHtmlParamMacro( type, param, fullKey, showKey )           \
   oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New, courier'; font-weight:600;\"; >"; \
-  oss << param->GetName();                                              \
+  oss << otb::StringToHTML(param->GetName());                           \
   if( showKey == true &&  param->GetKey()[0] != '\0' )       \
     {                                                                   \
 if (!fullKey.empty())                                           \
   {                                                                   \
-  oss << " ("<< fullKey<< "." << param->GetKey() << ")";                                        \
+  oss << " ("<< fullKey<< "." << param->GetKey() << ")";              \
   }                                                                   \
 else                                                                  \
   {                                                                   \
@@ -70,7 +71,7 @@ else                                                                  \
   oss << ": </span>";                                                   \
 if( param->GetDescription()[0] != '\0' )                  \
   {                                                                   \
-  oss << param->GetDescription();                                     \
+  oss << otb::StringToHTML(param->GetDescription());                  \
   }                                                                   \
 oss << "</p>";
 
@@ -93,10 +94,10 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   oss << "p, li { white-space: pre-wrap; }";
   oss << "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">";
 
-  otbDocHtmlTitleMacro( app->GetDocName() );
+  otbDocHtmlTitleMacro( otb::StringToHTML(app->GetDocName()) );
 
   otbDocHtmlTitle1Macro( "Brief Description" );
-  otbDocHtmlBodyMacro( app->GetDescription() );
+  otbDocHtmlBodyMacro( otb::StringToHTML(app->GetDescription()) );
 
   otbDocHtmlTitle1Macro( "Tags" );
   std::string tagList;
@@ -107,7 +108,7 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
       tagList.append( app->GetDocTags()[i] ).append(", ");
       }
     tagList.append( app->GetDocTags()[app->GetDocTags().size() - 1]);
-    otbDocHtmlBodyMacro( tagList );
+    otbDocHtmlBodyMacro( otb::StringToHTML(tagList) );
     }
   else
     {
@@ -115,7 +116,7 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
     }
 
   otbDocHtmlTitle1Macro("Long Description");
-  otbDocHtmlBodyMacro( app->GetDocLongDescription() );
+  otbDocHtmlBodyMacro( otb::StringToHTML(app->GetDocLongDescription()) );
 
   otbDocHtmlTitle1Macro("Parameters");
   oss << "<ul>";
@@ -125,13 +126,13 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   oss<<"</ul>";
 
   otbDocHtmlTitle1Macro( "Limitations");
-  otbDocHtmlBodyMacro( app->GetDocLimitations() );
+  otbDocHtmlBodyMacro( otb::StringToHTML(app->GetDocLimitations()) );
 
   otbDocHtmlTitle1Macro( "Authors" );
-  otbDocHtmlBodyMacro( app->GetDocAuthors() );
+  otbDocHtmlBodyMacro( otb::StringToHTML(app->GetDocAuthors()) );
 
   otbDocHtmlTitle1Macro( "See also" );
-  otbDocHtmlBodyMacro( app->GetDocSeeAlso() );
+  otbDocHtmlBodyMacro( otb::StringToHTML(app->GetDocSeeAlso()) );
 
   otbDocHtmlTitle1Macro( "Example of use" );
   if( showKey == true )
@@ -143,7 +144,7 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   if( showKey == true )
     {
     otbDocHtmlBodyMacro( "<li>Command line to execute:</li>" );
-    otbDocHtmlBodyCodeMacro( app->GetCLExample() );
+    otbDocHtmlBodyCodeMacro( otb::StringToHTML(app->GetCLExample()) );
 
     oss << "</ul>";
     }
@@ -151,8 +152,8 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
 
   val = oss.str();
 
-// Replace "\n" string with <br/>
-  itksys::SystemTools::ReplaceString( val, "\n", "<br/>");
+  // Replace ":\n\n" string with ":\n" (the extra LF is needed because of rst syntax
+  itksys::SystemTools::ReplaceString( val, ":<br/><br/>", ":<br/>");
 }
 
 void

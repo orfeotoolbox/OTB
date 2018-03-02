@@ -510,6 +510,10 @@ class ApplicationProxy(object):
 			s += self.GetDocLongDescription()
 			return s
 
+		def SetParameters(self, dict_params):
+			for param_key, param_value in dict_params.iteritems():
+				self.SetParameterValue(param_key, param_value)
+
 		def SetParameterValue(self, paramKey, value):
 			paramType = self.GetParameterType(paramKey)
 			if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
@@ -522,7 +526,7 @@ class ApplicationProxy(object):
 			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,
 												 ParameterType_ListView]:
-			  return self.setParameterStringList(paramKey, value)
+			  return self.SetParameterStringList(paramKey, value)
 			elif paramType in [ParameterType_Int, ParameterType_Radius]:
 			  return self.SetParameterInt(paramKey, value)
 			elif paramType in [ParameterType_Float]:
@@ -536,6 +540,13 @@ class ApplicationProxy(object):
 			else:
 			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
 			return
+
+		def GetParameters(self):
+			ret = {}
+			for key in self.GetParametersKeys():
+				if self.HasValue(key) and self.IsParameterEnabled(key) and self.GetParameterRole(key) == 0:
+					ret[key] = self.GetParameterValue(key)
+			return ret
 
 		def GetParameterValue(self, paramKey):
 			paramType = self.GetParameterType(paramKey)
@@ -747,13 +758,13 @@ class ApplicationProxy(object):
         print ("int8, int16, int32, uint8, uint16, uint32, float, double")
         numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
 
-      if len(numpy_vector_image.shape) > 2:
-        raise ValueError("len(numpy_vector_image.shape) > 2\n"
-                         "Output image from application is of 3 dimension (len(nparray.shape) > 2). \n"
-                         "GetImageFromNumpyArray returns an numpy array of dimension 2 that will result is loss of data.\n"
+      if numpy_vector_image.shape[2] > 1:
+        raise ValueError("numpy_vector_image.shape[2] > 1\n"
+                         "Output image from application has more than 1 band\n"
+                         "GetImageFromNumpyArray only returns the first band, which will result in a loss of data.\n"
                          "In this case you must use GetVectorImageFromNumpyArray which is capable of return a 3 dimension image.\n")
 
-      numpy_vector_image = numpy_vector_image[:,:,1]
+      numpy_vector_image = numpy_vector_image[:,:,0]
       return numpy_vector_image
 
 

@@ -252,6 +252,7 @@ private:
     if ( HasValue("in") )
       {
       ImageType* inImage = GetParameterImage("in");
+      inImage->UpdateOutputInformation();
       ImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
 
       bool userExtent = !HasUserValue( "mode.extent.ulx" ) \
@@ -385,7 +386,9 @@ private:
     region.SetIndex(1, GetParameterInt("starty"));
     if ( HasValue("in") )
       {
-      if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
+      ImageType* inImage = GetParameterImage("in");
+      inImage->UpdateOutputInformation();
+      if (region.Crop(inImage->GetLargestPossibleRegion()))
         {
         SetParameterInt("sizex",region.GetSize(0), HasUserValue("sizex"));
         SetParameterInt("sizey",region.GetSize(1), HasUserValue("sizey"));
@@ -426,19 +429,15 @@ private:
 
       ImageType * inImage = GetParameterImage("in");
       FloatVectorImageType::IndexType uli , lri;
-      bool startin = inImage->TransformPhysicalPointToIndex(ulp,uli);
-      bool sizein = inImage->TransformPhysicalPointToIndex(lrp,lri);
-      if ( startin )
-        {
-        SetParameterInt( "startx", uli[0] , true );
-        SetParameterInt( "starty", uli[1] , true );
-        }
-        
-      if( startin && sizein )
-        {
-        SetParameterInt( "sizex", lri[0] - uli[0] + 1, true );
-        SetParameterInt( "sizey", lri[1] - uli[1] + 1, true );
-        }
+      inImage->TransformPhysicalPointToIndex(ulp,uli);
+      inImage->TransformPhysicalPointToIndex(lrp,lri);
+
+      SetParameterInt( "startx", uli[0] , true );
+      SetParameterInt( "starty", uli[1] , true );
+
+      SetParameterInt( "sizex", lri[0] - uli[0] + 1, true );
+      SetParameterInt( "sizey", lri[1] - uli[1] + 1, true );
+      
       }
     else if( GetParameterString( "mode.extent.unit" ) == "lonlat" )
       {
@@ -456,21 +455,16 @@ private:
       lrp_out = rsTransform->TransformPoint(lrp_in);
 
       FloatVectorImageType::IndexType uli_out , lri_out;
-      bool startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
-      bool sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
+      inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+      inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
 
-      if ( startin )
-        {
-        SetParameterInt( "startx", uli_out[0] , true );
-        SetParameterInt( "starty", uli_out[1] , true );
-        }
-            
-      if( startin && sizein )
-        {
-        SetParameterInt( "sizex", lri_out[0] - uli_out[0] + 1, true );
-        SetParameterInt( "sizey", lri_out[1] - uli_out[1] + 1, true );
-        }
-      }  
+      SetParameterInt( "startx", uli_out[0] , true );
+      SetParameterInt( "starty", uli_out[1] , true );
+
+      SetParameterInt( "sizex", lri_out[0] - uli_out[0] + 1, true );
+      SetParameterInt( "sizey", lri_out[1] - uli_out[1] + 1, true );
+      }
+      this->CropRegionOfInterest();
   }
 
   void
@@ -685,10 +679,10 @@ private:
     ImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
 
-    if ( HasValue( "mode.fit.vect" ) && GetParameterString("mode") == "fit" )
+    if ( HasValue( "mode.fit.vect" ) && GetParameterString("mode") == "fit")
       {
       otb::ogr::DataSource::Pointer ogrDS;
-      ogrDS = otb::ogr::DataSource::New(GetParameterString("in") ,
+      ogrDS = otb::ogr::DataSource::New(GetParameterString("mode.fit.vect") ,
                                         otb::ogr::DataSource::Modes::Read);
       double ulx, uly, lrx, lry;
       bool extentAvailable = true;
@@ -724,40 +718,50 @@ private:
       if (extentAvailable)
         {
         RSTransformType::Pointer rsTransform = RSTransformType::New();
-        rsTransform->SetInputProjectionRef(inputProjectionRef);
+        rsTransform->SetInputProjectionRef( inputProjectionRef );
         rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
         rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
         rsTransform->InstantiateTransform();
-
-        itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
+        itk::Point<float, 2> ulp_in , urp_in , llp_in , lrp_in ,
+          ulp_out , urp_out , llp_out , lrp_out;
         ulp_in[ 0 ] = ulx ;
         ulp_in[ 1 ] = uly ;
+        urp_in[ 0 ] = ulx ;
+        urp_in[ 1 ] = lry ;
+        llp_in[ 0 ] = lrx ; 
+        llp_in[ 1 ] = uly ;
         lrp_in[ 0 ] = lrx ;
         lrp_in[ 1 ] = lry ;
         ulp_out = rsTransform->TransformPoint(ulp_in);
+        urp_out = rsTransform->TransformPoint(urp_in);
+        llp_out = rsTransform->TransformPoint(llp_in);
         lrp_out = rsTransform->TransformPoint(lrp_in);
+        FloatVectorImageType::IndexType uli_out , uri_out , lli_out , lri_out;
 
-        FloatVectorImageType::IndexType uli_out , lri_out;
-        bool startin , sizein ;
-        startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
-        sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
-
-        if ( startin )
-            {
-            SetParameterInt( "startx", uli_out[0] , false );
-            SetParameterInt( "starty", uli_out[1] , false );
-            }
-                
-        if( startin && sizein )
-            {
-            SetParameterInt( "sizey", lri_out[1] - uli_out[1] + 1 , false );
-            SetParameterInt( "sizex", lri_out[0] - uli_out[0] + 1 , false );
-            }
-        }
+        inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+        inImage->TransformPhysicalPointToIndex(urp_out,uri_out);
+        inImage->TransformPhysicalPointToIndex(llp_out,lli_out);
+        inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
         
-      }
+        FloatVectorImageType::IndexType uli, lri;
 
-    if( HasValue( "mode.fit.im" ) && GetParameterString( "mode" ) == "fit" )
+        uli[0] = std::min( std::min( uli_out[0] , uri_out[0] ) , 
+                           std::min( lli_out[0] , lri_out[0] ) );
+        uli[1] = std::min( std::min( uli_out[1] , uri_out[1] ) ,
+                           std::min( lli_out[1] , lri_out[1] ) );
+
+        lri[0] = std::max( std::max( uli_out[0] , uri_out[0] ) ,
+                           std::max( lli_out[0] , lri_out[0] ) );
+        lri[1] = std::max( std::max( uli_out[1] , uri_out[1] ) ,
+                           std::max( lli_out[1] , lri_out[1] ) );
+
+        SetParameterInt( "startx", uli[0] , false );
+        SetParameterInt( "starty", uli[1] , false );   
+        SetParameterInt( "sizex", lri[0] - uli[0] , false );
+        SetParameterInt( "sizey", lri[1] - uli[1] , false );
+        }
+      }
+    else if( HasValue( "mode.fit.im" ) && GetParameterString( "mode" ) == "fit" )
       {
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
@@ -820,9 +824,9 @@ private:
       SetParameterInt("sizex",lri[0]-uli[0]);
       SetParameterInt("sizey",lri[1]-uli[1]);
 
-      this->CropRegionOfInterest();
       }
 
+    this->CropRegionOfInterest();
 
     m_ExtractROIFilter = ExtractROIFilterType::New();
     m_ExtractROIFilter->SetInput(inImage);

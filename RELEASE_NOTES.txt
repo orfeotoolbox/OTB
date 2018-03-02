@@ -1,3 +1,49 @@
+OTB-v.6.4.0 - Changes since version 6.2.0 (January 30th, 2018)
+----------------------------------------------------------
+
+* Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
+  * Request for changes-104: Refactor OTB-applications input/output string/filename lists (adopted, merged)
+  * Request for changes-110: Histogram Equalization (adopted, merged)
+  * Request for changes-117: Merge Convert and Rescale applications (adopted, merged)
+  * Request for changes-118: Enable use of ossimSarSensorModel through geom file (adopted, merged)
+  * Request for changes-119: Install ossimPlugins headers related to ossimSarSensorModel (adopted, merged)
+  * Request for changes-120: Replacing itk::TimeProbe (adopted, merged)
+  * Request for changes-121: Add Laurențiu Nicola as a new committer (adopted, merged)
+  * Request for changes-122: Positive spacing enforcement (adopted, merged)
+  * Request for changes-123: Improve OTB Applications documentation (part 2) (adopted, merged)
+  * Request for changes-124: Add GSL to Superbuild (adopted,merged)
+  * Request for changes-126: Support python 2.7 and 3 wrappings (adopted, merged)
+
+* Bugfixes:
+  * Orfeo Toolbox (OTB)
+    * 0001508: ExtractROI does not work with mode.fit.vect
+    * 0001509: Patch to fix spelling errors in 6.4.0-rc1
+    * 0001482: In 6.2, otbcli_Convert with MPI produces invalid tiff files
+    * 0001507: Segmentation segfault
+    * 0001488: OTB apps sometime do not appear in the widget
+    * 0001501: Does Java wrapping works on Windows?
+    * 0001495: Crash when setting Orthorectification input field
+    * 0001489: BandMath and BandMathX are missing important documentation on expression syntax
+    * 0001479: Monteverdi try to create overviews with /vsicurl file
+    * 0001502: OTB configuration step does not properly check for c++14 availability
+    * 0001497: Some optional parameters are ON by default in otbgui
+    * 0001483: Monteverdi shows a pop up terminal on windows
+    * 0001496: Monteverdi 'build overviews' pop-up trigger condition is unclear or incorrect
+    * 0001494: Segmentation app shows 'Select parameters' instead of 'Running'
+    * 0001492: Monteverdi 6.2 is missing some French translations
+    * 0001499: OSSIMAdapters fails to build with OSSIM 2.2.0 (error: 'class ossimRpcSolver' has no member named 'createRpcProjection')
+    * 0001498: ExtractROI Channel list empty when application is chained in memory
+    * 0001476: Python wrapping not working with Python >= 3.
+    * 0001504: OTB does not compile with ITK last stable release 4.13
+    * 0001503: Fix new coverity issues in release 6.4
+
+  * Documentation
+    * 0001500: Application example in OTB software guide is confusing
+
+  * OTB-applications
+    * 0001481: KMeansClassification application should be compiled only if OTB_USE_SHARK=ON
+
+
 OTB-v.6.2.0 - Changes since version 6.0.0 (October 26th, 2017)
 ----------------------------------------------------------
 
@@ -46,7 +92,7 @@ OTB-v.6.2.0 - Changes since version 6.0.0 (October 26th, 2017)
     * 0001460: Unable to compile OTB  6.2.0 RC1 with superbuild (CURL issue)
 
   * Orfeo Toolbox (OTB)
-    * 0001453: Applications crash with inxml paramter (GUI mode)
+    * 0001453: Applications crash with inxml parameter (GUI mode)
     * 0001405: Crash on optical calibration, TOC mode, GUI only (command line works), only on Mac
     * 0001422: Optical Calibration application crash on MacOSX
     * 0001401: ktrace reports too many file open for any otbapplication

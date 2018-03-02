@@ -71,7 +71,6 @@ InputImageParameter::GetImage()
 otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
 
-
 void
 InputImageParameter::SetImage(FloatVectorImageType* image)
 {

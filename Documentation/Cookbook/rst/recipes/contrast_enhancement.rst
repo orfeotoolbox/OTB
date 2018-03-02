@@ -41,7 +41,7 @@ You can apply this transformation with the *ContrastEnhancement* application:
                                -out output_image.tif
                                -spatial global
 
-It allows to compress the dynamic without loosing details and contrast.
+It allows to compress the dynamic without losing details and contrast.
 
 Advanced parameters
 ~~~~~~~~~~~~~~~~~~~

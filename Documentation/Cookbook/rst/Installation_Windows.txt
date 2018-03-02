@@ -21,8 +21,8 @@ and their launchers (both command line and graphical launchers are provided):
 -  ``include``: A folder containing all the necessary headers to compile OTB
    based projects.
 
--  ``tool``: A folder containing usefull scripts to test the installation or
-   to uninstall OTB libraries and headers while keeping all the depedencies.
+-  ``tool``: A folder containing useful scripts to test the installation or
+   to uninstall OTB libraries and headers while keeping all the dependencies.
 
 The applications can be launched from the Mapla launcher. If you want to
 use the otbcli and otbgui launchers, you can initialize a command prompt
