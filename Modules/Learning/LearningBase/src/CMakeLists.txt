@@ -18,10 +18,15 @@
 # limitations under the License.
 #
 
-find_package ( Shark REQUIRED )
+set(OTBLearningBase_SRC
+  otbMachineLearningModelFactoryBase.cxx
+  )
 
-if(SHARK_USE_OPENMP AND NOT OTB_USE_OPENMP)
-  message(WARNING "Shark library is built with OpenMP and you have OTB_USE_OPENMP set to OFF.")
-endif()
+add_library(OTBLearningBase ${OTBLearningBase_SRC})
+target_link_libraries(OTBLearningBase
+  ${OTBCommon_LIBRARIES}
+  ${OTBImageBase_LIBRARIES}
+  ${OTBITK_LIBRARIES}
+  )
 
-mark_as_advanced( Shark_DIR )
+otb_module_target(OTBLearningBase)

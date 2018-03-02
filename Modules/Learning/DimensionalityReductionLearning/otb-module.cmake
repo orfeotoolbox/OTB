@@ -18,10 +18,19 @@
 # limitations under the License.
 #
 
-find_package ( Shark REQUIRED )
+set(DOCUMENTATION "Dimensionality reduction application")
+otb_module(OTBDimensionalityReductionLearning
+  DEPENDS
+    OTBCommon
+    OTBITK
+    OTBShark
+    OTBBoost
+    OTBSOM
+    OTBLearningBase
 
-if(SHARK_USE_OPENMP AND NOT OTB_USE_OPENMP)
-  message(WARNING "Shark library is built with OpenMP and you have OTB_USE_OPENMP set to OFF.")
-endif()
+  TEST_DEPENDS
+    OTBTestKernel
 
-mark_as_advanced( Shark_DIR )
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)
