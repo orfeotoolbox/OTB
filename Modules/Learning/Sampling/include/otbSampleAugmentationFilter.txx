@@ -28,7 +28,10 @@ namespace otb
 {
 
 SampleAugmentationFilter
-::SampleAugmentationFilter() : m_ClassFieldName("class")
+::SampleAugmentationFilter() : m_ClassFieldName{"class"}, m_Layer{0}, m_Label{1},
+                               m_Strategy{SampleAugmentationFilter::Strategy::Replicate},
+                               m_NumberOfSamples{100}, m_StdFactor{10.0}, 
+                               m_SmoteNeighbors{5}, m_Seed{0}
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
@@ -170,7 +173,7 @@ SampleAugmentationFilter
     itkExceptionMacro("Could not find any samples in layer " << layerName <<
                       " with label " << label << '\n');
     }
-      return samples;
+  return samples;
 }
 
 void 
@@ -246,9 +249,9 @@ SampleAugmentationFilter
                  const int idx)
 {
   OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(idx)->GetType();
-    return (fieldType == OFTInteger 
-            || ogr::version_proxy::IsOFTInteger64( fieldType ) 
-            || fieldType == OFTReal);
+  return (fieldType == OFTInteger 
+          || ogr::version_proxy::IsOFTInteger64( fieldType ) 
+          || fieldType == OFTReal);
 }
 
 ogr::Feature
