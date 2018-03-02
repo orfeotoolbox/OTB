@@ -186,10 +186,10 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
     
-    AddParameter(ParameterType_Int , "bins" , "Number of bin");
+    AddParameter(ParameterType_Int , "bins" , "Number of bins");
     SetDefaultParameterInt("bins", 256);
     SetParameterDescription("bins",
-      "Number of bin used to create the histogram");
+      "Number of bins in the histogram");
 
     AddParameter(ParameterType_Float , "hfact" , "Contrast Limitation");  
     SetParameterDescription("hfact","This parameter will set the maximum "
@@ -214,8 +214,8 @@ private:
       "equalized and the corresponding gain will be interpolated.");
     AddChoice( "spatial.global" , "Global" );
     SetParameterDescription("spatial.global" , "The histogram will be "
-      "computed on the whole image. The equalization will be done on "
-      "this single histogram.");
+      "computed on the whole image. The equalization will be computed on "
+      "this histogram.");
 
  
     AddParameter(ParameterType_Int,"spatial.local.h" , 
@@ -224,7 +224,7 @@ private:
       "Thumbnail width in pixel");
 
     AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum "
-      "definition");
+      "settings");
     SetParameterDescription("minmax","Minimum and maximum value that will "
       "bound the histogram.");
     AddChoice( "minmax.auto" , "Automatic" );
@@ -235,11 +235,11 @@ private:
     SetParameterDescription("minmax.auto.global" , "Automatic"
       "Min/max computation will result in the same minimum and maximum for "
       "all the bands.");
-    AddChoice( "minmax.manual" , "Manual" );
+    AddChoice( "minmax.manual" , "Manual settings of min/max values" );
     SetParameterDescription("minmax.auto","Minimum and maximum value will be "
       "set by the user");
-    AddParameter(ParameterType_Float , "minmax.manual.min" , "Minimum");
-    AddParameter(ParameterType_Float , "minmax.manual.max" , "Maximum");
+    AddParameter(ParameterType_Float , "minmax.manual.min" , "Minimum value");
+    AddParameter(ParameterType_Float , "minmax.manual.max" , "Maximum value");
     MandatoryOff("minmax.manual.min");
     MandatoryOff("minmax.manual.max");
 
@@ -257,25 +257,25 @@ private:
       "on how human eyes perceive colors)" 
 
 );
-    AddParameter(ParameterType_Group , "mode.lum.red" , "Red Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Channel" );
+    AddParameter(ParameterType_Group , "mode.lum.red" , "Red channel" );
+    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red channel" );
     SetDefaultParameterInt("mode.lum.red.ch", 0 );
     AddParameter(ParameterType_Float , "mode.lum.red.coef" ,
-      "Value for luminance computation" );
+      "Value for luminance computation for the red channel" );
     SetDefaultParameterFloat("mode.lum.red.coef", 0.21 );
 
-    AddParameter(ParameterType_Group , "mode.lum.green" , "Green Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.green.ch" , "Green Channel" );
+    AddParameter(ParameterType_Group , "mode.lum.green" , "Green channel" );
+    AddParameter(ParameterType_Int , "mode.lum.green.ch" , "Green channel" );
     SetDefaultParameterInt("mode.lum.green.ch", 1 );
     AddParameter(ParameterType_Float , "mode.lum.green.coef" ,
-      "Value for luminance computation" );
+      "Value for luminance computation of the green channel" );
     SetDefaultParameterFloat("mode.lum.green.coef", 0.71 );
 
-    AddParameter(ParameterType_Group , "mode.lum.blue" , "Blue Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.blue.ch" , "Blue Channel" );
+    AddParameter(ParameterType_Group , "mode.lum.blue" , "Blue channel" );
+    AddParameter(ParameterType_Int , "mode.lum.blue.ch" , "Blue channel" );
     SetDefaultParameterInt("mode.lum.blue.ch", 2 );
     AddParameter(ParameterType_Float , "mode.lum.blue.coef" ,
-      "Value for luminance computation" );
+      "Value for luminance computation of the blue channel" );
     SetDefaultParameterFloat("mode.lum.blue.coef", 0.08 );
 
     SetDefaultParameterInt( "spatial.local.w" , 256 );
@@ -289,8 +289,8 @@ private:
     SetMinimumParameterIntValue("spatial.local.w", 1);
 
     SetExampleComment( "Local contrast enhancement by luminance" , 0 );
-    SetDocExampleParameterValue( "in" , "couleurs.tif" );
-    SetDocExampleParameterValue( "out" , "equalizedcouleurs.tif float" );
+    SetDocExampleParameterValue( "in" , "colours.tif" );
+    SetDocExampleParameterValue( "out" , "equalizedcolors.tif float" );
     SetDocExampleParameterValue( "bins" , "256" );
     SetDocExampleParameterValue( "spatial.local.w" , "500" );
     SetDocExampleParameterValue( "spatial.local.h" , "500");
