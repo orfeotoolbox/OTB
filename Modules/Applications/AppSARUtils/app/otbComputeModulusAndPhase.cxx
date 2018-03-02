@@ -75,7 +75,7 @@ private:
     AddDocTag(Tags::SAR);
     AddDocTag(Tags::Manip);
     // Input images
-    AddParameter(ParameterType_ComplexInputImage,  "in",   "Input Image");
+    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image (complex single band)");
 
     // Outputs
@@ -110,7 +110,7 @@ private:
     m_Modulus = ModulusFilterType::New();
     m_Phase = PhaseFilterType::New();
 
-    ComplexFloatVectorImageType::Pointer inImage = GetParameterComplexImage("in");
+    ComplexFloatVectorImageType::Pointer inImage = GetParameterComplexFloatVectorImage("in");
 
     if (inImage->GetNumberOfComponentsPerPixel() != 1)
     {

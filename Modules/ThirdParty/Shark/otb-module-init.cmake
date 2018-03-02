@@ -20,4 +20,8 @@
 
 find_package ( Shark REQUIRED )
 
+if(SHARK_USE_OPENMP AND NOT OTB_USE_OPENMP)
+  message(WARNING "Shark library is built with OpenMP and you have OTB_USE_OPENMP set to OFF.")
+endif()
+
 mark_as_advanced( Shark_DIR )

@@ -29,7 +29,7 @@
 #include "otbReflectanceToRadianceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "itkMultiplyImageFilter.h"
-#include "otbClampVectorImageFilter.h"
+#include "otbClampImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 #include "otbGroundSpacingImageFunction.h"
 #include "vnl/vnl_random.h"
@@ -92,7 +92,7 @@ public:
 
   typedef itk::MultiplyImageFilter<DoubleVectorImageType,DoubleImageType,DoubleVectorImageType>         ScaleFilterOutDoubleType;
 
-  typedef otb::ClampVectorImageFilter<DoubleVectorImageType,
+  typedef otb::ClampImageFilter<DoubleVectorImageType,
                                       DoubleVectorImageType>              ClampFilterType;
 
   typedef ReflectanceToSurfaceReflectanceImageFilter<DoubleVectorImageType,

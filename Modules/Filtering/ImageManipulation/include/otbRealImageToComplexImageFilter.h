@@ -21,6 +21,7 @@
 #ifndef otbRealImageToComplexImageFilter_h
 #define otbRealImageToComplexImageFilter_h
 
+#include <vcl_deprecated_header.h>
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"
 

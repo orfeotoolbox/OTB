@@ -12,7 +12,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -46,7 +46,6 @@ using ossimplugins::time::seconds;
 
 namespace {// Anonymous namespace
    const bool         k_verbose = false; // global verbose constant; TODO: use an option
-   const unsigned int k_version = 2;
 
    // Sometimes, we don't need to compare the actual distance, its square value is
    // more than enough.
@@ -108,6 +107,8 @@ namespace ossimplugins
 
    const double ossimSarSensorModel::C = 299792458;
 
+   const unsigned int ossimSarSensorModel::thePluginVersion = 2;
+
    ossimSarSensorModel::ProductType::ProductType(string_view const& s)
    {
       using ossimplugins::begin;
@@ -136,7 +137,8 @@ namespace ossimplugins
       theRangeResolution(0.),
       theBistaticCorrectionNeeded(false),
       theAzimuthTimeOffset(seconds(0)),
-      theRangeTimeOffset(0.)
+      theRangeTimeOffset(0.),
+      theRightLookingFlag(true)
       {}
 
    ossimSarSensorModel::GCPRecordType const&
@@ -219,7 +221,10 @@ namespace ossimplugins
       TimeType azimuthTime;
       double rangeTime;
 
-      const bool success = worldToAzimuthRangeTime(worldPt, azimuthTime, rangeTime);
+      ossimEcefPoint sensorPos;
+      ossimEcefVector sensorVel;
+
+      const bool success = worldToAzimuthRangeTime(worldPt, azimuthTime, rangeTime, sensorPos, sensorVel);
 
       if(!success)
       {
@@ -256,7 +261,81 @@ namespace ossimplugins
       }
    }
 
-   bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime) const
+void ossimSarSensorModel::worldToLineSampleYZ(const ossimGpt& worldPt, ossimDpt & imPt, double & y, double & z) const
+   {
+      // std::clog << "ossimSarSensorModel::worldToLineSample()\n";
+      assert(theRangeResolution>0&&"theRangeResolution is null.");
+
+      // First compute azimuth and range time
+      TimeType azimuthTime;
+      double rangeTime;
+      ossimEcefPoint sensorPos;
+      ossimEcefVector sensorVel;
+
+      const bool success = worldToAzimuthRangeTime(worldPt, azimuthTime, rangeTime,sensorPos,sensorVel);
+
+      if(!success)
+      {
+         imPt.makeNan();
+         return;
+      }
+      // std::clog << "AzimuthTime: " << azimuthTime << "\n";
+      // std::clog << "RangeTime: " << rangeTime << "\n";
+      // std::clog << "GRD: " << isGRD() << "\n";
+
+      // Convert azimuth time to line
+      azimuthTimeToLine(azimuthTime,imPt.y);
+
+      if(isGRD())
+      {
+         // GRD case
+         double groundRange(0);
+         slantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
+         // std::clog << "GroundRange: " << groundRange << "\n";
+         // std::clog << "TheRangeResolution: " << theRangeResolution << "\n";
+
+         // Eq 32 p. 31
+         // TODO: possible micro-optimization: precompute 1/theRangeResolution, and
+         // use *
+         imPt.x = groundRange/theRangeResolution;
+      }
+      else
+      {
+         // std::clog << "TheNearRangeTime: " << theNearRangeTime << "\n";
+         // std::clog << "TheRangeSamplingRate: " << theRangeSamplingRate << "\n";
+         // SLC case
+         // Eq 23 and 24 p. 28
+         imPt.x = (rangeTime - theNearRangeTime)*theRangeSamplingRate;
+      }
+
+      // Now computes Y and Z
+      ossimEcefPoint inputPt(worldPt);
+      double NormeS = sqrt(sensorPos[0]*sensorPos[0] + sensorPos[1]*sensorPos[1] + sensorPos[2]*sensorPos[2]);  /* distance du radar */                                                                           
+      double PS2 = inputPt[0]*sensorPos[0] + inputPt[1]*sensorPos[1] + inputPt[2]*sensorPos[2];
+
+      // TODO check for small NormesS to avoid division by zero ?
+      // Should never happen ...
+      assert(NormeS>1e-6);
+      z = NormeS - PS2/NormeS;
+
+      double distance = sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) + 
+                             (sensorPos[1]-inputPt[1])*(sensorPos[1]-inputPt[1]) + 
+                             (sensorPos[2]-inputPt[2])*(sensorPos[2]-inputPt[2]));  
+
+      y = sqrt(distance*distance - z*z);
+
+      // Check view side and change sign of Y accordingly
+      if ( (( sensorVel[0] * (sensorPos[1]* inputPt[2] - sensorPos[2]* inputPt[1]) +
+              sensorVel[1] * (sensorPos[2]* inputPt[0] - sensorPos[0]* inputPt[2]) +
+              sensorVel[2] * (sensorPos[0]* inputPt[1] - sensorPos[1]* inputPt[0])) > 0) ^ theRightLookingFlag )
+        {
+        y = -y;
+        }
+   }
+
+
+
+bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeType & azimuthTime, double & rangeTime, ossimEcefPoint & interpSensorPos, ossimEcefVector & interpSensorVel) const
    {
       // std::clog << "ossimSarSensorModel::worldToAzimuthRangeTime()\n";
       // First convert lat/lon to ECEF
@@ -264,8 +343,6 @@ namespace ossimplugins
 
       // Compute zero doppler time
       TimeType interpTime;
-      ossimEcefPoint interpSensorPos;
-      ossimEcefVector interpSensorVel;
 
       const bool success = zeroDopplerLookup(inputPt,azimuthTime,interpSensorPos,interpSensorVel);
 
@@ -856,7 +933,9 @@ namespace ossimplugins
          double   estimatedRangeTime;
 
          // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime);
+         ossimEcefPoint sensorPos;
+         ossimEcefVector sensorVel;
+         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime,sensorPos, sensorVel);
          this->worldToLineSample(gcpIt->worldPt,estimatedImPt);
 
          const bool thisSuccess
@@ -952,6 +1031,9 @@ namespace ossimplugins
       DurationType cumulAzimuthTime(seconds(0));
       double cumulRangeTime(0);
       unsigned int count=0;
+      // reset offsets before optimisation
+      theAzimuthTimeOffset = seconds(0);
+      theRangeTimeOffset = 0.0;
 
       // First, fix the azimuth time
       for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
@@ -960,8 +1042,10 @@ namespace ossimplugins
          TimeType estimatedAzimuthTime;
          double   estimatedRangeTime;
 
+         ossimEcefPoint sensorPos;
+         ossimEcefVector sensorVel;
          // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime);
+         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
 
          if(s1)
          {
@@ -981,8 +1065,11 @@ namespace ossimplugins
          TimeType estimatedAzimuthTime;
          double   estimatedRangeTime;
 
+         ossimEcefPoint sensorPos;
+         ossimEcefVector sensorVel;
+
          // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime);
+         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
 
          if(s1)
          {
@@ -1218,13 +1305,18 @@ namespace ossimplugins
      static const char MODULE[] = "ossimplugins::ossimSarSensorModel::saveState";
      SCOPED_LOG(traceDebug, MODULE);
 
-     kwl.add(prefix,
-             ossimKeywordNames::TYPE_KW,
-             "ossimSarSensorModel",
-             true);
+     // Prevent override of subclasses TYPE_KW
+     
+     if(!kwl.hasKey(ossimKeywordNames::TYPE_KW))
+       {
+       kwl.add(prefix,
+               ossimKeywordNames::TYPE_KW,
+               "ossimSarSensorModel",
+               true);
+       }
 
-     add(kwl, SUPPORT_DATA_PREFIX + "product_type", theProductType.ToString().data());
-
+     std::string product_type = theProductType.ToString().data();
+     add(kwl, SUPPORT_DATA_PREFIX + "product_type", product_type);
      add(kwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", theNearRangeTime      );
      add(kwl, SUPPORT_DATA_PREFIX, "range_sampling_rate"       , theRangeSamplingRate  );
      add(kwl, SUPPORT_DATA_PREFIX, "range_spacing"             , theRangeResolution    );
@@ -1247,7 +1339,7 @@ namespace ossimplugins
      kwl.removeKeysThatMatch(GCP_PREFIX+"*");
      add(kwl, theGCPRecords);
 
-     add(kwl, HEADER_PREFIX, "version", k_version);
+     add(kwl, HEADER_PREFIX, "version", thePluginVersion);
 
      return ossimSensorModel::saveState(kwl, prefix);
    }
@@ -1297,7 +1389,7 @@ namespace ossimplugins
          try {
             unsigned int version;
             get(kwl, HEADER_PREFIX, "version", version);
-            if (version < k_version) {
+            if (version < thePluginVersion) {
                throw std::runtime_error("Geom file generated with previous version of ossim plugins");
             }
          } catch (...) {

@@ -140,6 +140,7 @@ include(cleanup_package)
 include(install_include_dirs)
 include(install_importlibs)
 include(install_python_bindings)
+include(install_java_bindings)
 include(install_share_dirs)
 include(install_cmake_files)
 include(install_qtdev_files)
@@ -176,14 +177,19 @@ if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
   set(HAVE_MVD TRUE)
 endif()
 
-set(HAVE_PYTHON FALSE CACHE INTERNAL "HAVE_PYTHON")
+set(HAVE_PYTHON FALSE CACHE INTERNAL "Python wrappings")
 if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
   set(HAVE_PYTHON TRUE)
 endif()
 
-set(HAVE_PYTHON3 FALSE CACHE INTERNAL "HAVE_PYTHON3")
+set(HAVE_PYTHON3 FALSE CACHE INTERNAL "Python3 wrappings")
 if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python3/_otbApplication${PYMODULE_EXT}")
   set(HAVE_PYTHON3 TRUE)
+endif()
+
+set(HAVE_JAVA FALSE CACHE INTERNAL "Java wrappings")
+if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar")
+  set(HAVE_JAVA TRUE)
 endif()
 
   #only for *nix
@@ -208,6 +214,8 @@ install_include_dirs()
 install_importlibs()
 
 install_python_bindings()
+
+install_java_bindings()
 
 install_share_dirs()
 

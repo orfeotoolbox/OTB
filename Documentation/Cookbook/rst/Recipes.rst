@@ -18,4 +18,5 @@ and demonstrate how the can be applied.
    recipes/pbclassif.rst
    recipes/featextract.rst
    recipes/stereo.rst
+   recipes/python.rst
    

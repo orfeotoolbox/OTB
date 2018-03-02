@@ -173,6 +173,14 @@ otb_test_application(NAME apTvUtExtractROIRightInputFile
                              ${INPUTDATA}/couleurs_extrait.png
                              ${TEMP}/apTvUtExtractROIRightInputFile.tif)
 
+otb_test_application(NAME apTvUtExtractROIComplexInputFile
+                     APP  ExtractROI
+                     OPTIONS -in ${INPUTDATA}/complexInputCfloat.tif
+                             -out ${TEMP}/apTvUtExtractROIComplexInputFile.tif cfloat
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/complexInputCfloat.tif
+                             ${TEMP}/apTvUtExtractROIComplexInputFile.tif)
+
 
 #----------- Rescale TESTS ----------------
 otb_test_application(NAME  apTvUtRescaleTest
@@ -205,6 +213,11 @@ otb_test_application(NAME apTvUtTileFusion
 otb_test_application(NAME apTuUtReadImageInfoExtendedFilename_reader
                      APP  ReadImageInfo
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true&skipcarto=true
+                     )
+
+otb_test_application(NAME apTuUtReadComplexImageInfoFilename_reader
+                     APP  ReadImageInfo
+                     OPTIONS -in ${INPUTDATA}/complexInputCfloat.tif
                      )
 
 
