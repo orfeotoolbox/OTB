@@ -27,7 +27,7 @@ using namespace otb;
 
 typedef OGRExtendedFilenameToOptions FilenameHelperType;
 
-int main(int argc, char* argv[])
+int main(int , char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputExtendedFilename  = argv[1];
