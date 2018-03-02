@@ -21,7 +21,8 @@
 #ifndef otbSharkUtils_h
 #define otbSharkUtils_h
 
-#include "itkMacro.h"
+#include <stdexcept>
+#include <string>
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -41,11 +42,13 @@ namespace Shark
 {
 template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<shark::RealVector> & output, unsigned int start, unsigned int size)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
 
   if(start+size>listSample->Size())
     {
-    itkGenericExceptionMacro(<<"Requested range ["<<start<<", "<<start+size<<"[ is out of bound for input list sample (range [0, "<<listSample->Size()<<"[");
+    std::out_of_range e_(std::string("otb::Shark::ListSampleRangeToSharkVector "
+      ": Requested range is out of list sample bounds"));
+    throw e_;
     }
   
   output.clear();
@@ -83,11 +86,13 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
 
 template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<unsigned int> & output, unsigned int start, unsigned int size)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
 
   if(start+size>listSample->Size())
     {
-    itkGenericExceptionMacro(<<"Requested range ["<<start<<", "<<start+size<<"[ is out of bound for input list sample (range [0, "<<listSample->Size()<<"[");
+    std::out_of_range e_(std::string("otb::Shark::ListSampleRangeToSharkVector "
+      ": Requested range is out of list sample bounds"));
+    throw e_;
     }
 
   output.clear();
@@ -113,13 +118,13 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
 
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<shark::RealVector> & output)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
   ListSampleRangeToSharkVector(listSample,output,0U,static_cast<unsigned int>(listSample->Size()));
 }
 
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<unsigned int> & output)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
   ListSampleRangeToSharkVector(listSample,output,0, static_cast<unsigned int>(listSample->Size()));
 }
   

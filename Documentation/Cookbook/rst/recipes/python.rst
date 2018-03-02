@@ -56,7 +56,16 @@ application, changing the algorithm at each iteration.
       # This will execute the application and save the output to argv[2]
       app.ExecuteAndWriteOutput()
 
-NumPy array processing
+If you want to handle the parameters from a Python dictionary, you can use the
+functions *SetParameters()* and *GetParameters()*.
+
+.. code-block:: python
+
+    params = {"in":"myInput.tif", "type.mean.radius":4}
+    app.SetParameters(params)
+    params2 = app.GetParameters()
+
+Numpy array processing
 ----------------------
 
 Input and output images to any OTB application in the form of NumPy array is now possible in OTB Python wrapping.
