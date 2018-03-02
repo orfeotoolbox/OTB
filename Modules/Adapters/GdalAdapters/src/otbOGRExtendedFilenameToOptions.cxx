@@ -26,19 +26,15 @@ namespace otb
 {
 
 OGRExtendedFilenameToOptions::
-OGRExtendedFilenameToOptions()
+OGRExtendedFilenameToOptions():
+m_HasFileName(false)
 {
-  m_OpenOptions.simpleFileName.first = false;
-  m_OpenOptions.simpleFileName.second = "";
-
-  m_CreationOptions.simpleFileName.first = false;
-  m_CreationOptions.simpleFileName.second = ""; 
-
 }
 
 OGRExtendedFilenameToOptions::
 OGRExtendedFilenameToOptions( const GDALOptionType & options ):
-m_LayerOptions()
+m_LayerOptions(),
+m_HasFileName(false)
 {
   this->SetGDALLayerOptions( options );
 }
@@ -58,13 +54,9 @@ OGRExtendedFilenameToOptions::
 SetExtendedFileName(const char *extFname)
 {
   Superclass::SetExtendedFileName(extFname);
+  m_HasFileName = true;
+
   OptionMapType map = GetOptionMap();
-
-  m_OpenOptions.simpleFileName.first  = true;
-  m_OpenOptions.simpleFileName.second = this->GetSimpleFileName();
-
-  m_CreationOptions.simpleFileName.first  = true;
-  m_CreationOptions.simpleFileName.second = this->GetSimpleFileName();
 
   MapIteratorType it;
   for ( it=map.begin(); it != map.end(); it++ )
@@ -113,19 +105,6 @@ GetGDALOptions( const std::string & type ) const
     }
 }
 
-OGRExtendedFilenameToOptions::
-GDALOptionType
-OGRExtendedFilenameToOptions::
-GetGDALLayerOptions() const
-{
-  GDALOptionType options;
-  for (const auto & option : m_LayerOptions.gdalOptions )
-    {
-    options.push_back( option.first + "=" + option.second );
-    }
-  return options;
-}
-
 void
 OGRExtendedFilenameToOptions::
 SetGDALLayerOptions( const OGRExtendedFilenameToOptions::GDALOptionType & options )
@@ -144,14 +123,43 @@ void
 OGRExtendedFilenameToOptions::
 AddGDALLayerOptions( const OGRExtendedFilenameToOptions::GDALOptionType & options )
 {
-  std::vector<std::string> tmp;
   for ( const auto & option : options )
     {
+  std::vector<std::string> tmp;
     boost::split(tmp, option , boost::is_any_of(":"), boost::token_compress_on);
     if ( tmp.size()<2 )
       boost::split(tmp, option , boost::is_any_of("="), boost::token_compress_on);
     m_LayerOptions.gdalOptions[ tmp[0] ] = tmp[1] ;
     }
+}
+
+bool
+OGRExtendedFilenameToOptions::
+SimpleFileNameIsSet() const
+{
+  return m_HasFileName;
+}
+
+bool
+OGRExtendedFilenameToOptions::
+HasGDALLayerOption() const
+{
+  if ( m_LayerOptions.gdalOptions.empty() )
+    return false;
+  return true;
+}
+
+OGRExtendedFilenameToOptions::
+GDALOptionType
+OGRExtendedFilenameToOptions::
+GetGDALLayerOptions() const
+{
+  GDALOptionType options;
+  for (const auto & option : m_LayerOptions.gdalOptions )
+    {
+    options.push_back( option.first + "=" + option.second );
+    }
+  return options;
 }
 
 #define GetGDALOptionMacro( Type )                 \

@@ -29,8 +29,9 @@ namespace otb
 
 /** \class OGRExtendedFilenameToOptions
  */
+#include "OTBGdalAdaptersExport.h"
 
-class ITK_EXPORT OGRExtendedFilenameToOptions : public ExtendedFilenameHelper
+class OTBGdalAdapters_EXPORT OGRExtendedFilenameToOptions : public ExtendedFilenameHelper
 {
 public:
   /** Standard class typedefs. */
@@ -41,23 +42,21 @@ public:
 
   typedef Superclass::OptionMapType OptionMapType;
   typedef OptionMapType::iterator MapIteratorType;
+  typedef std::vector<std::string> GDALOptionType;
 
   itkTypeMacro(OGRExtendedFilenameToOptions, otb::ExtendedFilenameHelper);
   itkNewMacro(Self);
 
-  typedef std::vector<std::string> GDALOptionType;
 
   /** The creation option structure. */
   struct OpenOptionType
   {
-    std::pair< bool, std::string  > simpleFileName;
     GDALOptionType gdalOptions;
     // std::unordered_map< std::string , bool > availableOptions;
   };
 
   struct CreationOptionType
   {
-    std::pair< bool, std::string  > simpleFileName;
     GDALOptionType gdalOptions;
     // std::unordered_map< std::string , bool > availableOptions;
   };
@@ -76,6 +75,9 @@ public:
   GDALOptionType GetGDALCreationOptions() const ;
   GDALOptionType GetGDALLayerOptions() const ;
 
+  bool SimpleFileNameIsSet() const;
+  bool HasGDALLayerOption() const;
+
   void SetGDALLayerOptions( const GDALOptionType & options );
   void AddGDALLayerOptions( const GDALOptionType & options );
 
@@ -93,6 +95,7 @@ private:
   OpenOptionType m_OpenOptions;
   CreationOptionType m_CreationOptions;
   LayerOptionType m_LayerOptions;
+  bool m_HasFileName;
 };
 
 } //end namespace otb
