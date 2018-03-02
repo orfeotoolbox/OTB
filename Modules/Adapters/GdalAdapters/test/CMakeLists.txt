@@ -35,5 +35,16 @@ endif()
 add_executable(otbOGRTestsIO otbOGRDataSourceWrapperIO.cxx)
 target_link_libraries(otbOGRTestsIO ${OTBGdalAdapters-Test_LIBRARIES})
 
-add_test(NAME coTuOGRDataSourceWrapperIO
+otb_add_test(NAME coTuOGRDataSourceWrapperIO
          COMMAND otbOGRTestsIO ${INPUTDATA}/ToulousePoints-examples.shp )
+
+add_executable(otbOGRExtendedFilenameTest otbOGRExtendedFilenameToOptionsTest.cxx)
+target_link_libraries(otbOGRExtendedFilenameTest ${OTBGdalAdapters-Test_LIBRARIES})
+
+otb_add_test(NAME TvOGRExtendedFilename
+         COMMAND otbOGRExtendedFilenameTest 
+         test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
+         ${TEMP}/OGRtest.txt     )
+otb_module_target_label(otbOGRExtendedFilenameTest)
+
+message(STATUS "Test link : ${OTBGdalAdapters-Test_LIBRARIES}")
