@@ -165,8 +165,12 @@ SampleAugmentationFilter
       }
     ++featureIt;
     }
-  std::cout << "Read " << sampleCount << "samples\n";
-  return samples;
+  if(sampleCount==0)
+    {
+    itkExceptionMacro("Could not find any samples in layer " << layerName <<
+                      " with label " << label << '\n');
+    }
+      return samples;
 }
 
 void 
