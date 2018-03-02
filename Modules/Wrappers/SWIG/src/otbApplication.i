@@ -510,6 +510,10 @@ class ApplicationProxy(object):
 			s += self.GetDocLongDescription()
 			return s
 
+		def SetParameters(self, dict_params):
+			for param_key, param_value in dict_params.iteritems():
+				self.SetParameterValue(param_key, param_value)
+
 		def SetParameterValue(self, paramKey, value):
 			paramType = self.GetParameterType(paramKey)
 			if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
@@ -522,7 +526,7 @@ class ApplicationProxy(object):
 			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,
 												 ParameterType_ListView]:
-			  return self.setParameterStringList(paramKey, value)
+			  return self.SetParameterStringList(paramKey, value)
 			elif paramType in [ParameterType_Int, ParameterType_Radius]:
 			  return self.SetParameterInt(paramKey, value)
 			elif paramType in [ParameterType_Float]:
@@ -536,6 +540,13 @@ class ApplicationProxy(object):
 			else:
 			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
 			return
+
+		def GetParameters(self):
+			ret = {}
+			for key in self.GetParametersKeys():
+				if self.HasValue(key) and self.IsParameterEnabled(key) and self.GetParameterRole(key) == 0:
+					ret[key] = self.GetParameterValue(key)
+			return ret
 
 		def GetParameterValue(self, paramKey):
 			paramType = self.GetParameterType(paramKey)
