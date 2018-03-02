@@ -116,7 +116,7 @@ private:
                             "The noise added to the input samples will have the "
                             "standard deviation of the input features divided "
                             "by the value of this parameter. ");
-    SetDefaultParameterFloat("strategy.jitter.stdfactor",10000);
+    SetDefaultParameterFloat("strategy.jitter.stdfactor",10);
 
     AddChoice("strategy.smote","Smote input samples");
     SetParameterDescription("strategy.smote","The new samples are generated "

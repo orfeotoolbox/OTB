@@ -85,13 +85,13 @@ void replicateSamples(const SampleVectorType& inSamples,
 /** Create new samples by adding noise to existing samples. Gaussian
 * noise is added to randomly selected samples. The standard deviation
 * of the noise added to each component is the same as the one of the
-* input variables multiplied by stdFactor (defaults to 1). The
+* input variables divided by stdFactor (defaults to 10). The
 * elements of newSamples are removed before proceeding.
 */
 void jitterSamples(const SampleVectorType& inSamples, 
                    const size_t nbSamples,
                       SampleVectorType& newSamples,
-                   float stdFactor=10000,
+                   float stdFactor=10,
                    const int seed = std::time(nullptr))
 {
   newSamples.resize(nbSamples);
