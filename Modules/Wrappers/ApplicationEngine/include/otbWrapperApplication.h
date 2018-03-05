@@ -846,7 +846,6 @@ public:
   }
 
   void RegisterPipeline();
-  std::set<itk::ProcessObject::Pointer> m_Filters;
 
 protected:
   /** Constructor */
@@ -992,6 +991,8 @@ private:
 
   itk::ProcessObject::Pointer       m_ProgressSource;
   std::string                       m_ProgressSourceDescription;
+
+  std::set<itk::ProcessObject::Pointer> m_Filters;
 
   /** Long name of the application (that can be displayed...) */
   std::string m_DocName;

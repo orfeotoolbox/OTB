@@ -363,7 +363,6 @@ void Application::AfterExecuteAndWriteOutputs()
 void
 Application::RegisterPipeline()
 {
-  std::cout<<"Registering Pipeline"<<std::endl;
   std::stack< itk::DataObject * > dataStack;
   std::set< itk::DataObject * > inputData;
   std::vector<std::string> paramList = GetParametersKeys(true);
@@ -447,17 +446,16 @@ Application::RegisterPipeline()
     else
       continue;
     }
-  std::cout<<"Beginning DFS"<<std::endl;
+
   // DFS
-  std::set< itk::ProcessObject * > processSet;
   while ( !dataStack.empty() )
     {
-    std::cout<<"one node (data) is processed"<<std::endl;
     itk::DataObject * current = dataStack.top();
     dataStack.pop();
-    if ( inputData.count( current ) || !current )
+    // whether current = null or is an input data it has no source
+    if ( !current || inputData.count( current ) )
       continue;
-    std::cout<<"it is not an input"<<std::endl;
+    // if current is a list push every of its members in datastack
     if ( dynamic_cast< ObjectListInterface *> (current) )
       {
       ObjectListInterface * list = 
@@ -466,18 +464,19 @@ Application::RegisterPipeline()
       for ( int i = 0 ; i < length ; i++ )
         {
         itk::DataObject * newData = list->GetNthDataObject(i);
-        if ( inputData.count( current ) || !current )
+        if ( !current || inputData.count( current ) )
           continue;
         dataStack.push( newData );
+      continue;
         }
-      continue;
       }
+    // Finally get the current's process object source
     itk::ProcessObject * process = (current->GetSource()).GetPointer();
-    if ( m_Filters.find( process ) != m_Filters.end() || !process )
+    if ( !process || m_Filters.find( process ) != m_Filters.end() )
       continue;
-    std::cout<<"add process to set : "<<process->GetNameOfClass()<<std::endl;
     m_Filters.insert( process );
     std::vector< itk::DataObject::Pointer > inputs = process->GetInputs();
+    // Push back all source's inputs in datastack
     for ( auto it : inputs )
       {
       if ( inputData.count( it.GetPointer() ) )
@@ -539,7 +538,6 @@ int Application::Execute()
 
 int Application::ExecuteAndWriteOutput()
 {
-  std::cout<<"Executing..."<<std::endl;
   m_Chrono.Restart();
 
   int status = this->Execute();
@@ -598,7 +596,6 @@ int Application::ExecuteAndWriteOutput()
             std::cout<<"Add Process and write"<<std::endl;
             AddProcess(outputParam->GetWriter(), progressId.str());
             outputParam->Write();
-            // ClearWriter in param();
             }
           }
         else if (GetParameterType(key) == ParameterType_OutputVectorData
@@ -650,11 +647,12 @@ int Application::ExecuteAndWriteOutput()
 
   this->AfterExecuteAndWriteOutputs();
   m_Chrono.Stop();
-  for ( auto filter : m_Filters )
-    {
-    std::cout<<"For filter : "<<filter->GetNameOfClass()<<
-    " count : "<<filter->GetReferenceCount()<<std::endl;
-    }
+  
+  // for ( auto filter : m_Filters )
+  //   {
+  //   std::cout<<"For filter : "<<filter->GetNameOfClass()<<
+  //   " count : "<<filter->GetReferenceCount()<<std::endl;
+  //   }
 
   m_Filters.clear();
   return status;
