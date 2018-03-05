@@ -54,6 +54,7 @@
 %include <std_string.i>
 %include <std_vector.i>
 %include <std_map.i>
+%include <std_complex.i>
 
 %template(vectorstring)     std::vector< std::string >;
 %template(mapstringstring)  std::map< std::string, std::string >;
