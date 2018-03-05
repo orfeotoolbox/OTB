@@ -42,9 +42,12 @@ add_executable(otbOGRExtendedFilenameTest otbOGRExtendedFilenameToOptionsTest.cx
 target_link_libraries(otbOGRExtendedFilenameTest ${OTBGdalAdapters-Test_LIBRARIES})
 
 otb_add_test(NAME TvOGRExtendedFilename
-         COMMAND otbOGRExtendedFilenameTest 
+         COMMAND otbOGRExtendedFilenameTest
+         --compare-ascii ${NOTOL}
+  ${BASELINE}/TvOGRExtendedFilename.txt
+  ${TEMP}/TvOGRExtendedFilename.txt
          test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
-         ${TEMP}/OGRtest.txt     )
+         ${TEMP}/TvOGRExtendedFilename.txt     )
 otb_module_target_label(otbOGRExtendedFilenameTest)
 
 message(STATUS "Test link : ${OTBGdalAdapters-Test_LIBRARIES}")
