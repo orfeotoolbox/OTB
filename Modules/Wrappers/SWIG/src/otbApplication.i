@@ -67,6 +67,8 @@ import_array();
 %apply (unsigned int** ARGOUTVIEW_ARRAY3, int *DIM1, int *DIM2, int *DIM3) {(unsigned int** buffer, int *dim1, int *dim2, int *dim3)};
 %apply (unsigned long** ARGOUTVIEW_ARRAY3, int *DIM1, int *DIM2, int *DIM3) {(unsigned long** buffer, int *dim1, int *dim2, int *dim3)};
 %apply (double** ARGOUTVIEW_ARRAY3, int *DIM1, int *DIM2, int *DIM3) {(double** buffer, int *dim1, int *dim2, int *dim3)};
+%apply (std::complex<float>** ARGOUTVIEW_ARRAY3, int *DIM1, int *DIM2, int *DIM3) {(std::complex<float>** buffer, int *dim1, int *dim2, int *dim3)};
+%apply (std::complex<double>** ARGOUTVIEW_ARRAY3, int *DIM1, int *DIM2, int *DIM3) {(std::complex<double>** buffer, int *dim1, int *dim2, int *dim3)};
 
 #endif /* OTB_SWIGNUMPY */
 
@@ -124,6 +126,10 @@ namespace Wrapper
     ImagePixelType_uint32,
     ImagePixelType_float,
     ImagePixelType_double,
+    ImagePixelType_cint16,
+    ImagePixelType_cint32,
+    ImagePixelType_cfloat,
+    ImagePixelType_cdouble,
   } ImagePixelType;
 
   typedef enum
@@ -280,6 +286,7 @@ public:
   unsigned long PropagateRequestedRegion(const std::string & key, itk::ImageRegion<2> region, unsigned int idx = 0);
   itk::ImageRegion<2> GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
   itkMetaDataDictionary GetImageMetaData(const std::string & key, unsigned int idx = 0);
+  otb::Wrapper::ImagePixelType GetImageBasePixelType(const std::string & key, unsigned int idx = 0);
 
   itkProcessObject* GetProgressSource() const;
 
@@ -319,153 +326,161 @@ public:
   %extend {
 
 #define SetFromNumpyArrayMacro(prefix, PixelDataType, ImageClass)       \
-      void Set##ImageClass##From##prefix##NumpyArray_(std::string pkey, ##PixelDataType##* buffer, int dim1, int dim2, int dim3) \
-      {                                                                 \
-        otb::Wrapper::Parameter *parameter = $self->GetParameterList()->GetParameterByKey(pkey); \
-        InputImageParameter* inputImageParam = dynamic_cast<InputImageParameter*>(parameter); \
-        typedef otb::##ImageClass##<##PixelDataType##>   ImageType;     \
-        ImageType::Pointer output = ImageType::New();          \
-        typedef ImageType::SizeType        SizeType;           \
-        typedef ImageType::IndexType       IndexType;          \
-        typedef ImageType::RegionType      RegionType;         \
-        typedef ImageType::PointType       PointType;          \
-        typedef ImageType::SpacingType     SpacingType;        \
-        typedef ImageType::DirectionType   DirectionType;      \
-        IndexType start;                                                \
-        DirectionType direction;                                        \
-        start.Fill( 0 );                                                \
-        SizeType size;                                                  \
-        size[0] = dim2; size[1] = dim1;                                 \
-        SetVectorLengthMacro                                            \
-        output->Allocate();                                             \
-        unsigned int numberOfPixels = dim1 * dim2 * dim3;               \
-        RegionType region;                                              \
-        region.SetIndex( start );                                       \
-        region.SetSize( size );                                         \
-        PointType origin;                                               \
-        origin.Fill( 0.0 );                                             \
-        SpacingType spacing;                                            \
-        spacing.Fill( 1.0 );                                            \
-        direction.SetIdentity();                                        \
-        output->SetOrigin( origin );                                    \
-        output->SetSignedSpacing( spacing );                                  \
-        output->SetDirection(direction);                                \
-        output->SetLargestPossibleRegion(region);                       \
-        output->SetRequestedRegion(output->GetLargestPossibleRegion()); \
-        output->SetBufferedRegion(output->GetLargestPossibleRegion());  \
-        output->GetPixelContainer()->SetImportPointer(buffer, numberOfPixels, false); \
-        inputImageParam->SetImage<ImageType>(output);                   \
+  ImageBaseType* Set##ImageClass##From##prefix##NumpyArray_(std::string pkey, int idx, ##PixelDataType##* buffer, int dim1, int dim2, int dim3) \
+  {                                                                 \
+    typedef otb::##ImageClass##<##PixelDataType##>   ImageType;     \
+    ImageType::Pointer output = ImageType::New();                   \
+    unsigned int numberOfPixels = dim1 * dim2 * dim3;               \
+    ImageType::RegionType region;                                   \
+    region.SetIndex(0, 0);                                          \
+    region.SetIndex(1, 0);                                          \
+    region.SetSize( 0, dim2);                                       \
+    region.SetSize( 1, dim1);                                       \
+    output->SetNumberOfComponentsPerPixel(dim3);                    \
+    output->SetRegions(region);                                     \
+    output->GetPixelContainer()->SetImportPointer(buffer, numberOfPixels, false); \
+    $self->SetParameterImageBase(pkey,output.GetPointer(),idx);     \
+    return output.GetPointer();                                     \
   }
 
-#define SetVectorLengthMacro output->SetVectorLength(dim3);
-       SetFromNumpyArrayMacro(Float, float, VectorImage)
-       SetFromNumpyArrayMacro(Int8, signed char, VectorImage)
-       SetFromNumpyArrayMacro(Int16, signed short, VectorImage)
-       SetFromNumpyArrayMacro(Int32, signed int, VectorImage)
-       SetFromNumpyArrayMacro(Int64, signed long, VectorImage)
-       SetFromNumpyArrayMacro(UInt8, unsigned char, VectorImage)
-       SetFromNumpyArrayMacro(UInt16, unsigned short, VectorImage)
-       SetFromNumpyArrayMacro(UInt32, unsigned int, VectorImage)
-       SetFromNumpyArrayMacro(UInt64, unsigned long, VectorImage)
-       SetFromNumpyArrayMacro(Double, double, VectorImage)
-#undef SetVectorLengthMacro
+  SetFromNumpyArrayMacro(UInt8, unsigned char, VectorImage)
+  SetFromNumpyArrayMacro(Int16, signed short, VectorImage)
+  SetFromNumpyArrayMacro(UInt16, unsigned short, VectorImage)
+  SetFromNumpyArrayMacro(Int32, signed int, VectorImage)
+  SetFromNumpyArrayMacro(UInt32, unsigned int, VectorImage)
+  // SetFromNumpyArrayMacro(Int64, signed long, VectorImage)
+  // SetFromNumpyArrayMacro(UInt64, unsigned long, VectorImage)
+  SetFromNumpyArrayMacro(Float, float, VectorImage)
+  SetFromNumpyArrayMacro(Double, double, VectorImage)
+  SetFromNumpyArrayMacro(CFloat, std::complex<float>, VectorImage)
+  SetFromNumpyArrayMacro(CDouble, std::complex<double>, VectorImage)
 
-#define SetVectorLengthMacro dim3=1;
-       SetFromNumpyArrayMacro(Float, float, Image)
-       SetFromNumpyArrayMacro(Int8, signed char, Image)
-       SetFromNumpyArrayMacro(Int16, signed short, Image)
-       SetFromNumpyArrayMacro(Int32, signed int, Image)
-       SetFromNumpyArrayMacro(Int64, signed long, Image)
-       SetFromNumpyArrayMacro(UInt8, unsigned char, Image)
-       SetFromNumpyArrayMacro(UInt16, unsigned short, Image)
-       SetFromNumpyArrayMacro(UInt32, unsigned int, Image)
-       SetFromNumpyArrayMacro(UInt64, unsigned long, Image)
-       SetFromNumpyArrayMacro(Double, double, Image)
-#undef SetVectorLengthMacro
+  SetFromNumpyArrayMacro(UInt8, unsigned char, Image)
+  SetFromNumpyArrayMacro(Int16, signed short, Image)
+  SetFromNumpyArrayMacro(UInt16, unsigned short, Image)
+  SetFromNumpyArrayMacro(Int32, signed int, Image)
+  SetFromNumpyArrayMacro(UInt32, unsigned int, Image)
+  // SetFromNumpyArrayMacro(Int64, signed long, Image)
+  // SetFromNumpyArrayMacro(UInt64, unsigned long, Image)
+  SetFromNumpyArrayMacro(Float, float, Image)
+  SetFromNumpyArrayMacro(Double, double, Image)
+  SetFromNumpyArrayMacro(CFloat, std::complex<float>, Image)
+  SetFromNumpyArrayMacro(CDouble, std::complex<double>, Image)
 #undef SetFromNumpyArrayMacro
 
-#define GetVectorImageAsNumpyArrayMacro(prefix, PixelType)                    \
-      void GetVectorImageAs##prefix##NumpyArray_(std::string pkey, ##PixelType##** buffer, int *dim1, int *dim2, int *dim3) \
-        {                                                               \
-        otb::Wrapper::Parameter *parameter = $self->GetParameterList()->GetParameterByKey(pkey); \
-        OutputImageParameter* outputImageParam = dynamic_cast<OutputImageParameter*>(parameter); \
-        typedef ImageBaseType::RegionType RegionType;          \
-        ImageBaseType::Pointer imageBase;                               \
-        imageBase = outputImageParam->GetValue();                       \
-        imageBase->Update();                                            \
-        typedef ImageBaseType::SizeType        SizeType;       \
-        typedef ImageBaseType::IndexType       IndexType;      \
-        typedef ImageBaseType::PointType       PointType;      \
-        typedef ImageBaseType::SpacingType     SpacingType;    \
-        RegionType region = imageBase->GetBufferedRegion();             \
-        SizeType size =  region.GetSize();                              \
-        *dim1 = size[1];                                                \
-        *dim2 = size[0];                                                \
-        typedef otb::VectorImage<signed char> Int8ImageType;            \
-        typedef otb::VectorImage<signed short> Int16ImageType;          \
-        typedef otb::VectorImage<signed int> Int32ImageType;            \
-        typedef otb::VectorImage<unsigned char> UInt8ImageType;         \
-        typedef otb::VectorImage<unsigned short> UInt16ImageType;       \
-        typedef otb::VectorImage<unsigned int> UInt32ImageType;         \
-        typedef otb::VectorImage<float> FloatImageType;                 \
-        typedef otb::VectorImage<double> DoubleImageType;               \
-        if (dynamic_cast<UInt8ImageType*>(imageBase.GetPointer()))      \
-          {                                                             \
-            UInt8ImageType* output = dynamic_cast<UInt8ImageType*>(imageBase.GetPointer()); \
-            *buffer  =  reinterpret_cast<##PixelType##*>(output->GetBufferPointer()); \
-              *dim3 = output->GetNumberOfComponentsPerPixel();          \
-          }                                                             \
-        else if (dynamic_cast<Int16ImageType*>(imageBase.GetPointer())) \
-          {                                                             \
-            Int16ImageType* output = dynamic_cast<Int16ImageType*>(imageBase.GetPointer()); \
-            *buffer  =  reinterpret_cast<##PixelType##*>(output->GetBufferPointer()); \
-              *dim3 = output->GetNumberOfComponentsPerPixel();          \
-          }                                                             \
-        else if (dynamic_cast<UInt16ImageType*>(imageBase.GetPointer())) \
-          {                                                             \
-            UInt16ImageType* output = dynamic_cast<UInt16ImageType*>(imageBase.GetPointer()); \
-            *buffer  =  reinterpret_cast<##PixelType##*>(output->GetBufferPointer()); \
-              *dim3 = output->GetNumberOfComponentsPerPixel();          \
-          }                                                             \
-        else if (dynamic_cast<Int32ImageType*>(imageBase.GetPointer())) \
-          {                                                             \
-            Int32ImageType* output = dynamic_cast<Int32ImageType*>(imageBase.GetPointer()); \
-            *buffer  =  reinterpret_cast<##PixelType##*>(output->GetBufferPointer()); \
-              *dim3 = output->GetNumberOfComponentsPerPixel();          \
-          }                                                             \
-        else if (dynamic_cast<UInt32ImageType*>(imageBase.GetPointer())) \
-          {                                                             \
-            UInt32ImageType* output = dynamic_cast<UInt32ImageType*>(imageBase.GetPointer()); \
-            *buffer = reinterpret_cast<##PixelType##*>(output->GetBufferPointer()); \
-              *dim3 = output->GetNumberOfComponentsPerPixel();          \
-          }                                                             \
-        else if (dynamic_cast<FloatImageType*>(imageBase.GetPointer())) \
-          {                                                             \
-            FloatImageType* output = dynamic_cast<FloatImageType*>(imageBase.GetPointer()); \
-            *buffer  =  reinterpret_cast<##PixelType##*>(output->GetBufferPointer()); \
-              *dim3 = output->GetNumberOfComponentsPerPixel();          \
-          }                                                             \
-        else if (dynamic_cast<DoubleImageType*>(imageBase.GetPointer())) \
-          {                                                             \
-            DoubleImageType* output = dynamic_cast<DoubleImageType*>(imageBase.GetPointer()); \
-            *buffer  =  reinterpret_cast<##PixelType##*>(output->GetBufferPointer()); \
-              *dim3 = output->GetNumberOfComponentsPerPixel();          \
-          }                                                             \
-        else                                                            \
-          {                                                             \
-            std::cerr << "unknown image type. cannot make a numpy array" << std::endl; \
-          }                                                             \
-      }
+#define GetVectorImageAsNumpyArrayMacro(suffix, TPixel)                     \
+  void GetVectorImageAs##suffix##NumpyArray_                                  \
+    (std::string pkey, ##TPixel##** buffer, int *dim1, int *dim2, int *dim3)  \
+    {                                                                         \
+    ImageBaseType *img = $self->GetParameterOutputImage(pkey);                \
+    img->Update();                                                            \
+    unsigned int nbComp = img->GetNumberOfComponentsPerPixel();               \
+    ImageBaseType::RegionType region = img->GetBufferedRegion();              \
+    ImageBaseType::SizeType size = region.GetSize();                          \
+    *dim1 = region.GetSize(1);                                                \
+    *dim2 = region.GetSize(0);                                                \
+    *dim3 = nbComp;                                                           \
+    std::string className(img->GetNameOfClass());                             \
+    if (className == "VectorImage")                                           \
+      {                                                                       \
+      typedef otb::VectorImage<##TPixel##,2> LocalVectorImageType;            \
+      LocalVectorImageType* imgDown = dynamic_cast<LocalVectorImageType*>(img); \
+      if (imgDown)                                                            \
+        *buffer  =  reinterpret_cast<##TPixel##*>(imgDown->GetBufferPointer());  \
+      else                                                                    \
+        std::cerr << "VectorImage type doesn't match" << std::endl;           \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+      if (nbComp == 1)                                                        \
+        {                                                                     \
+        otb::Image<##TPixel##,2>* imgDown = dynamic_cast< otb::Image<##TPixel##,2>* >(img); \
+        if (imgDown)                                                          \
+          *buffer  =  reinterpret_cast<##TPixel##*>(imgDown->GetBufferPointer()); \
+        else                                                                  \
+          std::cerr << "Image type doesn't match" << std::endl;               \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+        std::cerr << "Unhandled number of components in otb::Image (RGB<T> "  \
+            "and RGBA<T> not supported yet)" << std::endl;                    \
+        }                                                                     \
+      }                                                                       \
+    }
 
-       GetVectorImageAsNumpyArrayMacro(Float, float)
-       GetVectorImageAsNumpyArrayMacro(Int16, signed short)
-       GetVectorImageAsNumpyArrayMacro(Int32, signed int)
-       GetVectorImageAsNumpyArrayMacro(UInt8, unsigned char)
-       GetVectorImageAsNumpyArrayMacro(UInt16, unsigned short)
-       GetVectorImageAsNumpyArrayMacro(UInt32, unsigned int)
-       GetVectorImageAsNumpyArrayMacro(Double, double)
+  GetVectorImageAsNumpyArrayMacro(UInt8, unsigned char)
+  GetVectorImageAsNumpyArrayMacro(Int16,signed short);
+  GetVectorImageAsNumpyArrayMacro(UInt16,unsigned short);
+  GetVectorImageAsNumpyArrayMacro(Int32,signed int);
+  GetVectorImageAsNumpyArrayMacro(UInt32,unsigned int);
+  GetVectorImageAsNumpyArrayMacro(Float,float);
+  GetVectorImageAsNumpyArrayMacro(Double,double);
+  GetVectorImageAsNumpyArrayMacro(CFloat,std::complex<float> );
+  GetVectorImageAsNumpyArrayMacro(CDouble,std::complex<double> );
+  // CInt16 and CInt32 are not supported in Numpy
 #undef GetVectorImageAsNumpyArrayMacro
 
+  std::string ConvertPixelTypeToNumpy(otb::Wrapper::ImagePixelType pixType)
+    {
+    std::ostringstream oss;
+    switch (pixType)
+      {
+      case otb::Wrapper::ImagePixelType_uint8 :
+        oss << "uint" << (sizeof(unsigned char) * 8);
+        break;
+      case otb::Wrapper::ImagePixelType_int16 :
+        oss << "int" << (sizeof(signed short) * 8);
+        break;
+      case otb::Wrapper::ImagePixelType_uint16 :
+        oss << "uint" << (sizeof(unsigned short) * 8);
+        break;
+      case otb::Wrapper::ImagePixelType_int32 :
+        oss << "int" << (sizeof(signed int) * 8);
+        break;
+      case otb::Wrapper::ImagePixelType_uint32 :
+        oss << "uint" << (sizeof(unsigned int) * 8);
+        break;
+      case otb::Wrapper::ImagePixelType_float :
+        oss << "float" << (sizeof(float) * 8);
+        break;
+      case otb::Wrapper::ImagePixelType_double :
+        oss << "float" << (sizeof(double) * 8);
+        break;
+      case otb::Wrapper::ImagePixelType_cfloat :
+        oss << "complex" << (sizeof(std::complex<float>) * 8);
+        break;
+      case otb::Wrapper::ImagePixelType_cdouble :
+        oss << "complex" << (sizeof(std::complex<double>) * 8);
+        break;
+      default:
+        std::cerr << "Pixel type not handled" << std::endl;
+        break;
+      }
+    return oss.str();
+    }
+
+  void SetupImageInformation(
+    ImageBaseType* img,
+    itk::Point<SpacePrecisionType,2> origin,
+    itk::Vector<SpacePrecisionType,2> spacing,
+    itk::Size<2> size,
+    itk::ImageRegion<2> bufferRegion,
+    itkMetaDataDictionary metadata)
+    {
+    img->SetOrigin(origin);
+    otb::internal::SetSignedSpacing(img, spacing);
+    itk::ImageRegion<2> largest;
+    largest.SetSize(size);
+    img->SetLargestPossibleRegion(largest);
+    if (bufferRegion.GetSize() != img->GetBufferedRegion().GetSize())
+      {
+      std::cerr << "Given buffered size doesn't match actual buffer size" << std::endl;
+      return;
+      }
+    img->SetRequestedRegion(bufferRegion);
+    img->SetBufferedRegion(bufferRegion);
+    img->SetMetaDataDictionary(metadata);
+    }
 } /* end of %extend */
 #endif /* OTB_SWIGNUMPY */
 
@@ -690,140 +705,159 @@ class ApplicationProxy(object):
 {
   %pythoncode
     {
-    def SetImageFromNumpyArray(self, paramKey, npArray):
+    NumpyExporterMap = {
+      ImagePixelType_uint8 : GetVectorImageAsUInt8NumpyArray_,
+      ImagePixelType_int16 : GetVectorImageAsInt16NumpyArray_,
+      ImagePixelType_uint16 : GetVectorImageAsUInt16NumpyArray_,
+      ImagePixelType_int32 : GetVectorImageAsInt32NumpyArray_,
+      ImagePixelType_uint32 : GetVectorImageAsUInt32NumpyArray_,
+      ImagePixelType_float : GetVectorImageAsFloatNumpyArray_,
+      ImagePixelType_double : GetVectorImageAsDoubleNumpyArray_,
+      ImagePixelType_cfloat : GetVectorImageAsCFloatNumpyArray_,
+      ImagePixelType_cdouble : GetVectorImageAsCDoubleNumpyArray_,
+      }
+    ImageImporterMap = {
+      ImagePixelType_uint8 : SetImageFromUInt8NumpyArray_,
+      ImagePixelType_int16 : SetImageFromInt16NumpyArray_,
+      ImagePixelType_uint16 : SetImageFromUInt16NumpyArray_,
+      ImagePixelType_int32 : SetImageFromInt32NumpyArray_,
+      ImagePixelType_uint32 : SetImageFromUInt32NumpyArray_,
+      ImagePixelType_float : SetImageFromFloatNumpyArray_,
+      ImagePixelType_double : SetImageFromDoubleNumpyArray_,
+      ImagePixelType_cfloat : SetImageFromCFloatNumpyArray_,
+      ImagePixelType_cdouble : SetImageFromCDoubleNumpyArray_,
+      }
+    VectorImageImporterMap = {
+      ImagePixelType_uint8 : SetVectorImageFromUInt8NumpyArray_,
+      ImagePixelType_int16 : SetVectorImageFromInt16NumpyArray_,
+      ImagePixelType_uint16 : SetVectorImageFromUInt16NumpyArray_,
+      ImagePixelType_int32 : SetVectorImageFromInt32NumpyArray_,
+      ImagePixelType_uint32 : SetVectorImageFromUInt32NumpyArray_,
+      ImagePixelType_float : SetVectorImageFromFloatNumpyArray_,
+      ImagePixelType_double : SetVectorImageFromDoubleNumpyArray_,
+      ImagePixelType_cfloat : SetVectorImageFromCFloatNumpyArray_,
+      ImagePixelType_cdouble : SetVectorImageFromCDoubleNumpyArray_,
+      }
+    
+    def SetImageFromNumpyArray(self, paramKey, npArray, index=0):
       """
       This method takes a numpy array and set ImageIOBase of
       InputImageParameter by creating an otbImage with
       same pixel type as numpyarray.dtype
       """
-      if len(npArray.shape) == 3:
-         raise ValueError( "(len(npArray.shape) == 3)\n"
-                           "Input array given is of 3 dimension.\n"
-                           "SetImageFromNumpyArray create ImageIO from otbImage and thus demands a 2d array.\n"
-                           "you can either provide an 2d numpy array or use SetVectorImageFromNumpyArray depending on your application.\n")
-
-      dt = npArray.dtype.name
-      if dt == 'int8':
-        self.SetImageFromInt8NumpyArray_(paramKey, npArray)
-      elif dt == 'int16':
-        self.SetImageFromInt16NumpyArray_(paramKey, npArray)
-      elif dt == 'int32':
-        self.SetImageFromInt32NumpyArray_(paramKey, npArray)
-      elif dt == 'uint8':
-        self.SetImageFromUInt8NumpyArray_(paramKey, npArray)
-      elif dt == 'uint16':
-        self.SetImageFromUInt16NumpyArray_(paramKey, npArray)
-      elif dt == 'uint32':
-        self.SetImageFromUInt32NumpyArray_(paramKey, npArray)
-      elif dt == 'float':
-        self.SetImageFromFloatNumpyArray_(paramKey, npArray)
-      elif dt == 'double':
-        self.SetImageFromDoubleNumpyArray_(paramKey, npArray)
+      shp = npArray.shape
+      if len(shp) == 2:
+        npArray = npArray.reshape((shp[0],shp[1],1))
+      elif len(shp) == 3:
+        if shp[2] > 1:
+          raise ValueError( "More than 1 band in numpy array\n"
+                           "Cannot convert to Image, use SetVectorImageFromNumpyArray instead\n")
       else:
-        self.SetImageFromFloatNumpyArray_(paramKey, npArray)
-      return
+        raise ValueError( "Expected 2 or 3 dimensions for numpyarray\n")
+      dt = npArray.dtype.name
+      isFound = False
+      for pixT in self.ImageImporterMap:
+        if dt == self.ConvertPixelTypeToNumpy(pixT):
+          isFound = True
+          img = self.ImageImporterMap[pixT](self,paramKey, index, npArray)
+          break
+      if len(shp) == 2:
+        npArray = npArray.reshape(shp)
+      if not isFound:
+        raise ValueError("Can't convert Numpy array of dtype "+dt)
+      return img
 
-    def SetVectorImageFromNumpyArray(self, paramKey, npArray):
+    def SetVectorImageFromNumpyArray(self, paramKey, npArray, index=0):
       """
-      This method takes a numpy array and set ImageIOBase of
+      This method takes a numpy array and set
       InputImageParameter by creating an otbVectorImage with
       same pixel type as numpyarray.dtype.
-      NOTE: Input (npArray) must be an ndarray with 3 dimension,
-      len(npArray.shape) must be > 2
+      NOTE: Input (npArray) must be an ndarray with 2 or 3 dimensions,
       """
-      if len(npArray.shape) < 3:
-        raise ValueError( "(len(npArray.shape) < 3)\n"
-                        "Input array given is not of 3 dimension.\n"
-                        "SetVectorImageFromNumpyArray create ImageIO from otbVectorImage and thus demands an array of shape 3.\n"
-                        "you can either provide an 3d numpy array or use SetImageFromNumpyArray depending on your application.\n")
-
+      shp = npArray.shape
+      if len(shp) == 2:
+        npArray = npArray.reshape((shp[0],shp[1],1))
+      elif len(npArray.shape) != 3:
+        raise ValueError( "Expected 2 or 3 dimensions for numpyarray")
       dt = npArray.dtype.name
-      if dt == 'int8':
-        self.SetVectorImageFromInt8NumpyArray_(paramKey, npArray)
-      elif dt == 'int16':
-        self.SetVectorImageFromInt16NumpyArray_(paramKey, npArray)
-      elif dt == 'int32':
-        self.SetVectorImageFromInt32NumpyArray_(paramKey, npArray)
-      elif dt == 'uint8':
-        self.SetVectorImageFromUInt8NumpyArray_(paramKey, npArray)
-      elif dt == 'uint16':
-        self.SetVectorImageFromUInt16NumpyArray_(paramKey, npArray)
-      elif dt == 'uint32':
-        self.SetVectorImageFromUInt32NumpyArray_(paramKey, npArray)
-      elif dt == 'float':
-        self.SetVectorImageFromFloatNumpyArray_(paramKey, npArray)
-      elif dt == 'double':
-        self.SetVectorImageFromDoubleNumpyArray_(paramKey, npArray)
-      else:
-        self.SetVectorImageFromFloatNumpyArray_(paramKey, npArray)
-      return
+      isFound = False
+      for pixT in self.VectorImageImporterMap:
+        if dt == self.ConvertPixelTypeToNumpy(pixT):
+          isFound = True
+          img = self.VectorImageImporterMap[pixT](self,paramKey, index, npArray)
+          break
+      if len(shp) == 2:
+        npArray = npArray.reshape(shp)
+      if not isFound:
+        raise ValueError("Can't convert Numpy array of dtype "+dt)
+      return img
 
     def GetVectorImageAsNumpyArray(self, paramKey, dt='float'):
       """
-      If datatype is unknown this method assumes to numpy.float32
-      Valid datatypes are:
-      int8, int16, int32, uint8, uint16, uint32, float, double.
-      NOTE: This method always return an numpy array with dimension 3
+      This function retrieves an output image parameter as a Numpy array.
+      The array datatype is guessed automatically from the underlying
+      otb::VectorImage<T,2> type (should also work with otb::Image<T,2>). The
+      optional parameter dt is deprecated and should not be used anymore. The
+      possible output datatypes are:
+      int8, int16, int32, uint8, uint16, uint32, float, double, cint16, cint32,
+      cfloat, cdouble.
+      NOTE: This method always return an numpy array with 3 dimensions
+      NOTE: cint16 and cint32 are not supported yet
       """
-      if dt == 'int8':
-        return self.GetVectorImageAsInt8NumpyArray_(paramKey)
-      elif dt == 'int16':
-        return self.GetVectorImageAsInt16NumpyArray_(paramKey)
-      elif dt == 'int32':
-        return self.GetVectorImageAsInt32NumpyArray_(paramKey)
-      elif dt == 'uint8':
-        return self.GetVectorImageAsUInt8NumpyArray_(paramKey)
-      elif dt == 'uint16':
-        return self.GetVectorImageAsUInt16NumpyArray_(paramKey)
-      elif dt == 'uint32':
-        return self.GetVectorImageAsUInt32NumpyArray_(paramKey)
-      elif dt == 'float':
-        return self.GetVectorImageAsFloatNumpyArray_(paramKey)
-      elif dt == 'double':
-        return self.GetVectorImageAsDoubleNumpyArray_(paramKey)
-      else:
-        print ("Unknown datatype '" + dt + "'. Using float instead. Available types are:")
-        print ("int8, int16, int32, uint8, uint16, uint32, float, double")
-        return self.GetVectorImageAsFloatNumpyArray_(paramKey)
+      pixT = self.GetImageBasePixelType(paramKey)
+      return self.NumpyExporterMap[pixT](self,paramKey)
 
     def GetImageAsNumpyArray(self, paramKey, dt='float'):
       """
-      If datatype is unknown this method assumes to numpy.float32
-      Valid datatypes are:
-      int8, int16, int32, uint8, uint16, uint32, float, double.
-      NOTE: This method always return an numpy array with dimension 3
+      This function retrieves an output image parameter as a Numpy array.
+      The array datatype is guessed automatically from the underlying
+      otb::VectorImage<T,2> type (should also work with otb::Image<T,2>). The
+      optional parameter dt is deprecated and should not be used anymore. The
+      possible output datatypes are:
+      int8, int16, int32, uint8, uint16, uint32, float, double, cint16, cint32,
+      cfloat, cdouble.
+      NOTE: This method always return an numpy array with 2 dimensions
+      NOTE: cint16 and cint32 are not supported yet
       """
-      if dt == 'int8':
-        numpy_vector_image = self.GetVectorImageAsInt8NumpyArray_(paramKey)
-      elif dt == 'int16':
-        numpy_vector_image = self.GetVectorImageAsInt16NumpyArray_(paramKey)
-      elif dt == 'int32':
-        numpy_vector_image = self.GetVectorImageAsInt32NumpyArray_(paramKey)
-      elif dt == 'uint8':
-        numpy_vector_image = self.GetVectorImageAsUInt8NumpyArray_(paramKey)
-      elif dt == 'uint16':
-        numpy_vector_image = self.GetVectorImageAsUInt16NumpyArray_(paramKey)
-      elif dt == 'uint32':
-        numpy_vector_image = self.GetVectorImageAsUInt32NumpyArray_(paramKey)
-      elif dt == 'float':
-        numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
-      elif dt == 'double':
-        numpy_vector_image = self.GetVectorImageAsDoubleNumpyArray_(paramKey)
-
-      else:
-        print ("Unknown datatype '" + dt + "'. Using float instead. Available types are:")
-        print ("int8, int16, int32, uint8, uint16, uint32, float, double")
-        numpy_vector_image = self.GetVectorImageAsFloatNumpyArray_(paramKey)
-
-      if numpy_vector_image.shape[2] > 1:
-        raise ValueError("numpy_vector_image.shape[2] > 1\n"
+      pixT = self.GetImageBasePixelType(paramKey)
+      array = self.NumpyExporterMap[pixT](self,paramKey)
+      if array.shape[2] > 1:
+        raise ValueError("array.shape[2] > 1\n"
                          "Output image from application has more than 1 band\n"
                          "GetImageFromNumpyArray only returns the first band, which will result in a loss of data.\n"
                          "In this case you must use GetVectorImageFromNumpyArray which is capable of return a 3 dimension image.\n")
+      array = array[:,:,0]
+      return array
 
-      numpy_vector_image = numpy_vector_image[:,:,0]
-      return numpy_vector_image
+    def ImportImage(self, paramKey, pyImg, index = 0):
+      """
+      Import an image into a parameter, from a Python dict. with the following
+      keys: array, origin, spacing, size, region, metadata
+      """
+      img = self.SetImageFromNumpyArray(paramKey, pyImg["array"], index)
+      self.SetupImageInformation(img, pyImg["origin"], pyImg["spacing"], pyImg["size"], pyImg["region"], pyImg["metadata"])
 
+    def ImportVectorImage(self, paramKey, pyImg, index = 0):
+      """
+      Import a vector image into a parameter, from a Python dict. with the following
+      keys: array, origin, spacing, size, region, metadata
+      """
+      img = self.SetVectorImageFromNumpyArray(paramKey, pyImg["array"], index)
+      self.SetupImageInformation(img, pyImg["origin"], pyImg["spacing"], pyImg["size"], pyImg["region"], pyImg["metadata"])
+
+    def ExportImage(self, paramKey):
+      """
+      Export an output image from an otbApplication into a python dictionary with the
+      following fields: array, origin, spacing, size, region, metadata
+      """
+      output = {}
+      output["array"] = self.GetVectorImageAsNumpyArray(paramKey)
+      output["origin"] = self.GetImageOrigin(paramKey)
+      output["spacing"] = self.GetImageSpacing(paramKey)
+      output["size"] = self.GetImageSize(paramKey)
+      output["region"] = self.GetImageRequestedRegion(paramKey)
+      output["metadata"] = self.GetImageMetaData(paramKey)
+      return output
 
     }
 }
