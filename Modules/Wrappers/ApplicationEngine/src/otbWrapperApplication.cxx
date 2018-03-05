@@ -1794,10 +1794,6 @@ Application::GetImageMetaData(const std::string & key, unsigned int idx)
 ImageBaseType*
 Application::GetParameterImageBase(const std::string & key, unsigned int idx)
 {
-  if (! this->HasValue(key))
-    {
-    itkExceptionMacro("Can't get the image, parameter has no value");
-    }
   Parameter* param = GetParameterByKey(key);
   if (dynamic_cast<InputImageParameter*>(param))
     {
