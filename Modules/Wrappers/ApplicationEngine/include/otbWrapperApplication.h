@@ -883,6 +883,34 @@ public:
   /** Returns a copy of the metadata dictionary of the image */
   itk::MetaDataDictionary GetImageMetaData(const std::string & key, unsigned int idx = 0);
 
+  /** Find out what is the pixel type from an image parameter
+   *  This function assumes that the underlying object is either an otb::Image
+   *  or an otb::VectorImage. The optional 'idx' allows to access InputImageList.
+   */
+  ImagePixelType GetImageBasePixelType(const std::string & key, unsigned int idx = 0);
+
+  /** Return the image from parameter 'key' as a base type. The optional 'idx'
+   *  allows to access InputImageList.
+   *
+   *  Works on parameters:
+   *  \li ParameterType_InputImage
+   *  \li ParameterType_InputImageList
+   *  \li ParameterType_OutputImage
+   *  \li ParameterType_ComplexInputImage
+   *  \li ParameterType_ComplexOutputImage
+   */
+  ImageBaseType* GetParameterImageBase(const std::string & key, unsigned int idx = 0);
+
+  /** Set the image in parameter 'key' as a base type. The optional 'idx'
+   *  allows to access InputImageList.
+   *
+   *  Works on parameters:
+   *  \li ParameterType_InputImage
+   *  \li ParameterType_InputImageList
+   *  \li ParameterType_ComplexInputImage
+   */
+  void SetParameterImageBase(const std::string & key, ImageBaseType* img, unsigned int idx = 0);
+
 protected:
   /** Constructor */
   Application();
@@ -1001,28 +1029,6 @@ protected:
       paramDown->SetValue(value);
       }
   }
-
-  /** Return the image from parameter 'key' as a base type. The optional 'idx'
-   *  allows to access InputImageList.
-   *
-   *  Works on parameters:
-   *  \li ParameterType_InputImage
-   *  \li ParameterType_InputImageList
-   *  \li ParameterType_OutputImage
-   *  \li ParameterType_ComplexInputImage
-   *  \li ParameterType_ComplexOutputImage
-   */
-  ImageBaseType* GetParameterImageBase(const std::string & key, unsigned int idx = 0);
-
-  /** Set the image in parameter 'key' as a base type. The optional 'idx'
-   *  allows to access InputImageList.
-   *
-   *  Works on parameters:
-   *  \li ParameterType_InputImage
-   *  \li ParameterType_InputImageList
-   *  \li ParameterType_ComplexInputImage
-   */
-  void SetParameterImageBase(const std::string & key, ImageBaseType* img, unsigned int idx = 0);
 
 private:
   /* Implement this method to add parameters */
