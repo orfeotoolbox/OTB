@@ -29,4 +29,5 @@ void RegisterTests()
   REGISTER_TEST(otbSEMClassifierNew);
   REGISTER_TEST(otbDecisionTreeNew);
   REGISTER_TEST(otbKMeansImageClassificationFilterNew);
+  REGISTER_TEST(otbSharkNormalizeLabels);
 }
