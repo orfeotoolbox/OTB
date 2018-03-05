@@ -1861,5 +1861,59 @@ Application::SetParameterImageBase(const std::string & key, ImageBaseType* img, 
     }
 }
 
+ImagePixelType
+Application::GetImageBasePixelType(const std::string & key, unsigned int idx)
+{
+  ImageBaseType* img = this->GetParameterImageBase(key, idx);
+  if (! img)
+    {
+    itkExceptionMacro("No input image");
+    }
+  std::string className(img->GetNameOfClass());
+  if (className == "VectorImage")
+    {
+#define FindVectorImagePixelTypeMacro(TImage, TPixel) \
+    TImage##VectorImageType* img##TImage = dynamic_cast< TImage##VectorImageType* >(img); \
+    if ( img##TImage ) return ImagePixelType_##TPixel ;
+
+    FindVectorImagePixelTypeMacro(UInt8,  uint8)
+    FindVectorImagePixelTypeMacro(Int16,  int16)
+    FindVectorImagePixelTypeMacro(UInt16, uint16)
+    FindVectorImagePixelTypeMacro(Int32,  int32)
+    FindVectorImagePixelTypeMacro(UInt32, uint32)
+    FindVectorImagePixelTypeMacro(Float,  float)
+    FindVectorImagePixelTypeMacro(Double, double)
+    FindVectorImagePixelTypeMacro(ComplexInt16,  cint16)
+    FindVectorImagePixelTypeMacro(ComplexInt32,  cint32)
+    FindVectorImagePixelTypeMacro(ComplexFloat,  cfloat)
+    FindVectorImagePixelTypeMacro(ComplexDouble, cdouble)
+#undef FindVectorImagePixelTypeMacro
+    }
+  else
+    {
+#define FindImagePixelTypeMacro(TImage, TPixel) \
+    TImage##ImageType* img##TImage = dynamic_cast< TImage##ImageType* >(img); \
+    if ( img##TImage ) return ImagePixelType_##TPixel ;
+
+    FindImagePixelTypeMacro(UInt8,  uint8)
+    FindImagePixelTypeMacro(Int16,  int16)
+    FindImagePixelTypeMacro(UInt16, uint16)
+    FindImagePixelTypeMacro(Int32,  int32)
+    FindImagePixelTypeMacro(UInt32, uint32)
+    FindImagePixelTypeMacro(Float,  float)
+    FindImagePixelTypeMacro(Double, double)
+    FindImagePixelTypeMacro(ComplexInt16,  cint16)
+    FindImagePixelTypeMacro(ComplexInt32,  cint32)
+    FindImagePixelTypeMacro(ComplexFloat,  cfloat)
+    FindImagePixelTypeMacro(ComplexDouble, cdouble)
+    FindImagePixelTypeMacro(UInt8RGB,  uint8)
+    FindImagePixelTypeMacro(UInt8RGBA, uint8)
+#undef FindImagePixelTypeMacro
+    }
+  itkWarningMacro("Unknown pixel type");
+  // by default uint8
+  return ImagePixelType_uint8;
+}
+
 }
 }
