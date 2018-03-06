@@ -157,7 +157,7 @@ public:
   }
 
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     TrainFileNamesHandler fileNames;
     std::vector<std::string> vectorFileList;
