@@ -101,6 +101,7 @@ public:
     m_Name = name;
     GetDocExample()->SetApplicationName(name);
     this->Modified();
+    m_Logger->SetName(name);
   }
 
   itkGetStringMacro(Name);
@@ -708,6 +709,9 @@ public:
 
   otb::Logger* GetLogger() const;
 
+  /** Sets the logger instance of the application (use with caution) */
+  void SetLogger(otb::Logger *logger);
+
   itk::ProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;
@@ -980,6 +984,7 @@ private:
   std::string                       m_Name;
   std::string                       m_Description;
   ParameterGroup::Pointer           m_ParameterList;
+  otb::Logger::Pointer              m_Logger;
 
   itk::ProcessObject::Pointer       m_ProgressSource;
   std::string                       m_ProgressSourceDescription;
