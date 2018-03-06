@@ -403,13 +403,13 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     if (m_FilenameHelper->ExtGEOMFileNameIsSet())
       {
       otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
-      otbLogMacro(Info,<< "Loading metadata from external geom file "<< m_FilenameHelper->GetExtGEOMFileName());
+      otbLogMacro(Info,<< "Loading kwl metadata from external geom file "<< m_FilenameHelper->GetExtGEOMFileName());
       }
     // Case 2: attached geom (if present)
     else if (itksys::SystemTools::FileExists(attachedGeom))
       {
       otb_kwl = ReadGeometryFromGEOMFile(attachedGeom);
-      otbLogMacro(Info,<< "Loading metadata from attached geom file "<<attachedGeom);
+      otbLogMacro(Info,<< "Loading kwl metadata from attached geom file "<<attachedGeom);
       }
     // Case 3: find an ossimPluginProjection
     // Case 4: find an ossimProjection
@@ -417,7 +417,14 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     else
       {
       otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
-      otbLogMacro(Info,<< "Loading metadata from product files");
+      if(!otb_kwl.Empty())
+        {
+        otbLogMacro(Info,<< "Loading kwl metadata from official product in file "<<lFileNameOssimKeywordlist);
+        }
+      else
+        {
+        otbLogMacro(Info,<< "No kwl metadata found in file "<<lFileNameOssimKeywordlist);
+        }
       }
 
     // Don't add an empty ossim keyword list
