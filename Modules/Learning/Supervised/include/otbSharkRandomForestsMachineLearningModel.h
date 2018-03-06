@@ -157,6 +157,7 @@ private:
 
   shark::RFClassifier<unsigned int> m_RFModel;
   shark::RFTrainer<unsigned int> m_RFTrainer;
+  std::vector<unsigned int> m_ClassDictionary;
 
   unsigned int m_NumberOfTrees;
   unsigned int m_MTry;
