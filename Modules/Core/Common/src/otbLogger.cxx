@@ -21,6 +21,8 @@
 #include "otbLogger.h"
 #include "itksys/SystemTools.hxx"
 #include "otbConfigurationManager.h"
+#include "itkStdStreamLogOutput.h"
+#include <iostream>
 
 namespace otb
 {
@@ -30,8 +32,16 @@ Logger::Pointer Logger::Singleton = ITK_NULLPTR;
 Logger::Pointer Logger::Instance()
 {
   if(!Logger::Singleton)
+    {
     Logger::Singleton = Logger::New();
 
+    // By default, redirect logs to std::cout
+    itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
+    defaultOutput->SetStream(std::cout);
+
+    Logger::Singleton->AddLogOutput(defaultOutput);
+    }
+  
   return Logger::Singleton;
 }
 
