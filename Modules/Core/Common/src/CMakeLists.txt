@@ -34,8 +34,7 @@ set(OTBCommon_SRC
 
 add_library(OTBCommon ${OTBCommon_SRC})
 target_link_libraries(OTBCommon
-  ${OTBITK_LIBRARIES}
-
+  ${OTBITK_LIBRARIES} ${OTBGDAL_LIBRARIES}
   )
 
 otb_module_target(OTBCommon)

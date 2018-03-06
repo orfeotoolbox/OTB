@@ -23,6 +23,8 @@
 #include "otbConfigurationManager.h"
 #include "itkStdStreamLogOutput.h"
 #include <iostream>
+#include "gdal.h"
+#include "itkMultiThreader.h"
 
 namespace otb
 {
@@ -40,11 +42,13 @@ Logger::Pointer Logger::Instance()
     defaultOutput->SetStream(std::cout);
 
     Logger::Singleton->AddLogOutput(defaultOutput);
+
+    // Log setup information
+    Logger::Singleton->LogSetupInformation();
     }
   
   return Logger::Singleton;
 }
-
 
 Logger::Logger()
 {
@@ -58,6 +62,23 @@ Logger::Logger()
 
 Logger::~Logger()
 {
+}
+
+void Logger::LogSetupInformation()
+{
+  std::ostringstream oss;
+  
+  oss<<"Default RAM limit for OTB is "<<otb::ConfigurationManager::GetMaxRAMHint()<<" Mb"<<std::endl;
+  this->Info(oss.str());
+  oss.str("");
+
+  oss<<"Gdal maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" Mb"<<std::endl;
+  this->Info(oss.str());
+  oss.str("");
+
+  oss<<"OTB will use at most "<<itk::MultiThreader::GetGlobalDefaultNumberOfThreads()<<" threads"<<std::endl;
+  this->Info(oss.str());
+  oss.str("");
 }
 
 std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const & content)

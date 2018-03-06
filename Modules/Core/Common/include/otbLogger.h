@@ -50,6 +50,8 @@ public:
   // Overwrite this to provide custom formatting of log entries
   virtual std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) ITK_OVERRIDE;
 
+  void LogSetupInformation();
+  
 protected:
   itkNewMacro(Self);
   Logger();
