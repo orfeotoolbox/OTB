@@ -45,12 +45,13 @@ public:
   itkTypeMacro(Logger, itk::Logger);
 
   static Pointer Instance();
-  itkNewMacro(Self);
+
   
   // Overwrite this to provide custom formatting of log entries
   virtual std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) ITK_OVERRIDE;
 
 protected:
+  itkNewMacro(Self);
   Logger();
   virtual ~Logger() ITK_OVERRIDE;
 

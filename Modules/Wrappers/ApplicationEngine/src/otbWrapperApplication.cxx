@@ -46,6 +46,7 @@
 #include <exception>
 #include "itkMacro.h"
 
+
 namespace otb
 {
 namespace Wrapper
@@ -54,7 +55,6 @@ namespace Wrapper
 Application::Application()
   : m_Name(""),
     m_Description(""),
-    m_Logger(otb::Logger::New()),
     m_ProgressSourceDescription(""),
     m_DocName(""),
     m_DocLongDescription(""),
@@ -66,10 +66,7 @@ Application::Application()
     m_HaveInXML(true),
     m_HaveOutXML(true),
     m_IsInXMLParsed(false)
-{
-  // Don't call Init from the constructor, since it calls a virtual method !
-  m_Logger->SetName("Application.logger");
-}
+{}
 
 Application::~Application()
 {
@@ -77,15 +74,7 @@ Application::~Application()
 
 otb::Logger* Application::GetLogger() const
 {
-  return m_Logger;
-}
-
-void Application::SetLogger(otb::Logger *logger)
-{
-  if (m_Logger != logger)
-    {
-    m_Logger = logger;
-    }
+  return otb::Logger::Instance();
 }
 
 std::vector<std::string>
@@ -1666,11 +1655,6 @@ Application::IsParameterMissing(const std::string &key) const
         break;
         }
       level++;
-      }
-    if (ret)
-      {
-      // the missing parameter is on an active branch : we need it
-      otbDebugMacro("MISSING : "<< key << " (Level "<< split.size()<<")");
       }
     }
   return ret;
