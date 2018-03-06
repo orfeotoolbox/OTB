@@ -73,7 +73,7 @@ The Python wrapping only exposes OTB Application engine module (called *Applicat
 Due to blissful nature of ApplicationEngine's loading mechanism no specific wrapping is required for each application.
 
 NumPy extension to Python wrapping allows data exchange to application as an array rather than a disk file.
-Of course, it is possible to load an image from file and then convert to NumPy
+Of course, it is possible to load an image from file and then convert it to NumPy
 array or just provide a file as explained in the previous section via
 Application.SetParameterString(...).
 
@@ -81,7 +81,7 @@ The bridge between NumPy and OTB makes it easy to plug OTB into any image proces
 GIS/Image processing tools such as GDAL, GRASS GIS, OSSIM that can deal with NumPy.
 
 Below code reads an input image using Python Pillow library (fork of PIL) and convert it to
-NumPy array. The NumPy array is used an input to the application via
+NumPy array. The NumPy array is used as an input to the application via
 *SetImageFromNumpyArray(...)* method.  The application used in this example is
 ExtractROI. After extracting a small area the output image is taken as NumPy
 array with *GetImageFromNumpyArray(...)* method thus avoid writing output to a
