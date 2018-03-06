@@ -61,7 +61,7 @@ namespace otb
 #define otbDebugMacro(x) otbLogMacro(Debug,otbFileContext(otbClassContext(x)))
 #define otbMsgDebugMacro(x) otbLogMacro(Debug,otbFileContext(x))
 #define otbGenericMsgDebugMacro(x) otbLogMacro(Debug,x)
-#define otbMsgDevMacro(x) otbLogMacro(Info,otbFileContext(x))
+#define otbMsgDevMacro(x) otbLogMacro(Debug,otbFileContext(x))
 #define otbWarningMacro(x) otbLogMacro(Warning,otbFileContext(otbClassContext(x)))
 #define otbGenericWarningMacro(x) otbLogMacro(Warning,otbFileContext(x))
 
