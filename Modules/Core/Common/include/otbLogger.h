@@ -32,7 +32,7 @@ namespace otb {
  *
  *  Sets OTB wide settings in its constructor
  *
- * \ingroup OTBApplicationEngine
+ * \ingroup OTBCommon
  */
 class OTBCommon_EXPORT Logger : public itk::Logger
 {
