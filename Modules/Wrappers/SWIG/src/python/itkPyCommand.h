@@ -70,8 +70,8 @@ public:
 
   PyObject * GetCommandCallable();
 
-  void Execute(Object *, const EventObject&);
-  void Execute(const Object *, const EventObject&);
+  void Execute(Object *, const EventObject&) ITK_OVERRIDE;
+  void Execute(const Object *, const EventObject&) ITK_OVERRIDE;
 
 protected:
   PyCommand();

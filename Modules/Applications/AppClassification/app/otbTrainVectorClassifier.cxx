@@ -54,7 +54,7 @@ public:
   typedef ContingencyTableType::Pointer    ContingencyTablePointerType;
 
 protected:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName( "TrainVectorClassifier" );
     SetDescription( "Train a classifier based on labeled geometries and a "
@@ -73,12 +73,12 @@ protected:
     Superclass::DoInit();
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     Superclass::DoUpdateParameters();
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     m_FeaturesInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
 

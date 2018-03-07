@@ -80,8 +80,8 @@ public:
   itkSetMacro(WriteEigenvectors, bool);
   itkGetMacro(WriteEigenvectors, bool);
 
-  bool CanReadFile(const std::string & filename);
-  bool CanWriteFile(const std::string & filename);
+  bool CanReadFile(const std::string & filename) ITK_OVERRIDE;
+  bool CanWriteFile(const std::string & filename) ITK_OVERRIDE;
 
   void Save(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
   void Load(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
@@ -94,7 +94,7 @@ protected:
  
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const;
+    ConfidenceValueType * quality = ITK_NULLPTR) const ITK_OVERRIDE;
 
   virtual void DoPredictBatch(
     const InputListSampleType *,

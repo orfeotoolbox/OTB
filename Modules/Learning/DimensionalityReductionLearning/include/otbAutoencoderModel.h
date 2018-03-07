@@ -119,8 +119,8 @@ public:
   itkGetMacro(LearningCurveFileName,std::string);
   itkSetMacro(LearningCurveFileName,std::string);
 
-  bool CanReadFile(const std::string & filename);
-  bool CanWriteFile(const std::string & filename);
+  bool CanReadFile(const std::string & filename) ITK_OVERRIDE;
+  bool CanWriteFile(const std::string & filename) ITK_OVERRIDE;
 
   void Save(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
   void Load(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
@@ -155,14 +155,14 @@ protected:
 
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const;
+    ConfidenceValueType * quality = ITK_NULLPTR) const ITK_OVERRIDE;
 
   virtual void DoPredictBatch(
     const InputListSampleType *,
     const unsigned int & startIndex,
     const unsigned int & size,
     TargetListSampleType *,
-    ConfidenceListSampleType * quality = ITK_NULLPTR) const;
+    ConfidenceListSampleType * quality = ITK_NULLPTR) const ITK_OVERRIDE;
 
 private:
   /** Internal Network */

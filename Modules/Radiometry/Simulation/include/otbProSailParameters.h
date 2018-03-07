@@ -115,7 +115,7 @@ class ITK_EXPORT ProSailParameters : public itk::DataObject
       /** Destructor */
       virtual ~ProSailParameters() {};
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
 
    private:

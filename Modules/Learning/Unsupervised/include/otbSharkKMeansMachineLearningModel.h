@@ -140,7 +140,7 @@ protected:
   DataType NormalizeData(const DataType &data) const;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream &os, itk::Indent indent) const;
+  void PrintSelf(std::ostream &os, itk::Indent indent) const ITK_OVERRIDE;
 
 private:
   SharkKMeansMachineLearningModel(const Self &); //purposely not implemented

@@ -101,11 +101,11 @@ public:
   itkSetMacro(Seed, unsigned int);
   itkGetMacro(Seed, unsigned int);
 
-  bool CanReadFile(const std::string & filename);
-  bool CanWriteFile(const std::string & filename);
+  bool CanReadFile(const std::string & filename) ITK_OVERRIDE;
+  bool CanWriteFile(const std::string & filename) ITK_OVERRIDE;
 
-  void Save(const std::string & filename, const std::string & name="") ;
-  void Load(const std::string & filename, const std::string & name="") ;
+  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
 
   void Train() ITK_OVERRIDE;
 
@@ -118,7 +118,7 @@ private:
 
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const;
+    ConfidenceValueType * quality = ITK_NULLPTR) const ITK_OVERRIDE;
 
   /** Map size (width, height) */
   SizeType m_MapSize;

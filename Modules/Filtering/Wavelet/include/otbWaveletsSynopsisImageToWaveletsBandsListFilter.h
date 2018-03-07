@@ -80,7 +80,7 @@ public:
   itkGetMacro(DecimationRatio,unsigned int);
 
   /** If the filter is modified, the extract list need to be regenerated */
-  virtual void Modified() const;
+  virtual void Modified() const ITK_OVERRIDE;
 
 protected:
   /** Constructor */
@@ -90,16 +90,16 @@ protected:
   virtual ~WaveletsSynopsisImageToWaveletsBandsListFilter();
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
 
   /** Generate the input requested region from the first element in the list. */
-  virtual void GenerateInputRequestedRegion(void);
+  virtual void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
 
   /** Generate the output information by building the output list. */
-  virtual void GenerateOutputInformation(void);
+  virtual void GenerateOutputInformation(void) ITK_OVERRIDE;
 
   /** Main computation method */
-  virtual void GenerateData(void);
+  virtual void GenerateData(void) ITK_OVERRIDE;
 
 private:
   WaveletsSynopsisImageToWaveletsBandsListFilter(const Self&); //purposely not implemented

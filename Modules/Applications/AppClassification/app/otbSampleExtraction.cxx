@@ -53,7 +53,7 @@ public:
 private:
   SampleExtraction() {}
 
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("SampleExtraction");
     SetDescription("Extracts samples values from an image.");
@@ -119,7 +119,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
     if ( HasValue("vec") )
       {
@@ -149,7 +149,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
     {
     ogr::DataSource::Pointer vectors;
     ogr::DataSource::Pointer output;

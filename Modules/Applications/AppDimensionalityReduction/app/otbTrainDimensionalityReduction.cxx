@@ -68,7 +68,7 @@ public:
   typedef otb::DimensionalityReductionModelFactory<ValueType, ValueType>  ModelFactoryType;
 
 private:
-  void DoInit()
+  void DoInit() ITK_OVERRIDE
   {
     SetName("TrainDimensionalityReduction");
     SetDescription("Train a dimensionality reduction model");
@@ -115,11 +115,11 @@ private:
       " value_5 value_6 value_7 value_8 value_9");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() ITK_OVERRIDE
   {
   }
 
-  void DoExecute()
+  void DoExecute() ITK_OVERRIDE
   {
     std::string shapefile = GetParameterString("io.vd");
 
