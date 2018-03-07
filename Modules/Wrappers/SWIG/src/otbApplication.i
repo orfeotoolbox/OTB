@@ -76,12 +76,6 @@ namespace otb
 {
 namespace Wrapper
 {
-  enum DefaultValueMode
-  {
-    DefaultValueMode_UNKNOWN,
-    DefaultValueMode_RELATIVE,
-    DefaultValueMode_ABSOLUTE
-  };
 
   typedef enum
   {
@@ -108,7 +102,8 @@ namespace Wrapper
     ParameterType_ComplexOutputImage,
     ParameterType_RAM,
     ParameterType_OutputProcessXML,
-    ParameterType_InputProcessXML
+    ParameterType_InputProcessXML,
+    ParameterType_Bool
   } ParameterType;
 
   typedef enum
@@ -585,6 +580,7 @@ class ApplicationProxy(object):
 				ParameterType_Empty : 'ParameterType_Empty',
 				ParameterType_Choice : 'ParameterType_Choice',
 				ParameterType_Group : 'ParameterType_Group',
+				ParameterType_Bool : 'ParameterType_Bool'
 			}.get(parameter_type, 'ParameterType_UNKNOWN')
 
 		def __str__(self):
@@ -592,6 +588,10 @@ class ApplicationProxy(object):
 			s += '\n'
 			s += self.GetDocLongDescription()
 			return s
+
+		def SetParameters(self, dict_params):
+			for param_key, param_value in dict_params.iteritems():
+				self.SetParameterValue(param_key, param_value)
 
 		def SetParameterValue(self, paramKey, value):
 			paramType = self.GetParameterType(paramKey)
@@ -605,13 +605,15 @@ class ApplicationProxy(object):
 			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,
 												 ParameterType_ListView]:
-			  return self.setParameterStringList(paramKey, value)
+			  return self.SetParameterStringList(paramKey, value)
 			elif paramType in [ParameterType_Int, ParameterType_Radius]:
 			  return self.SetParameterInt(paramKey, value)
 			elif paramType in [ParameterType_Float]:
 			  return self.SetParameterFloat(paramKey, value)
 			elif paramType in [ParameterType_Empty]:
 			  return self.EnableParameter(paramKey)
+			elif paramType in [ParameterType_Bool]:
+			  return self.SetParameterString(paramKey, str(value) )
 			elif paramType in [ParameterType_Group]:
 			  return ApplicationProxy(self, paramKey)
 			elif paramType in [ParameterType_Choice]:
@@ -619,6 +621,13 @@ class ApplicationProxy(object):
 			else:
 			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
 			return
+
+		def GetParameters(self):
+			ret = {}
+			for key in self.GetParametersKeys():
+				if self.HasValue(key) and self.IsParameterEnabled(key) and self.GetParameterRole(key) == 0:
+					ret[key] = self.GetParameterValue(key)
+			return ret
 
 		def GetParameterValue(self, paramKey):
 			paramType = self.GetParameterType(paramKey)
@@ -639,6 +648,8 @@ class ApplicationProxy(object):
 			  return self.GetParameterFloat(paramKey)
 			elif paramType in [ParameterType_Empty]:
 			  return self.IsParameterEnabled(paramKey)
+			elif paramType in [ParameterType_Bool]:
+			  return bool(self.GetParameterInt(paramKey))
 			elif paramType in [ParameterType_Group, ParameterType_Choice]:
 			  return ApplicationProxy(self, paramKey)
 			else:

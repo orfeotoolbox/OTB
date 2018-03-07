@@ -141,6 +141,12 @@ add_test( NAME pyTvBug1498
   ${OTB_DATA_ROOT}/Input/poupees.tif
   ${TEMP}/Bu1498-output.tif)  
 
+add_test( NAME pyTvParametersDict
+  COMMAND ${TEST_DRIVER} Execute
+  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  PythonParametersDict
+  ${OTB_DATA_ROOT}/Input/poupees.tif)
+
 add_test( NAME pyTvImageInterface
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py

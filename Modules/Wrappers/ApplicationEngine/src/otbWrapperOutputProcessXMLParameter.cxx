@@ -235,7 +235,9 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
         }
       else
        {
-       bool paramExists = m_Appli->HasUserValue(key) && m_Appli->IsParameterEnabled(key);
+       bool paramExists = m_Appli->HasUserValue(key) &&
+                          m_Appli->IsParameterEnabled(key) &&
+                          m_Appli->GetParameterRole(key) == Role_Input;
        if ( type == ParameterType_OutputProcessXML )
          {
            paramExists = false;
@@ -305,7 +307,7 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
                    type == ParameterType_Directory || type == ParameterType_InputImage ||
                    type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
                    type == ParameterType_Choice || type == ParameterType_OutputVectorData ||
-                   type == ParameterType_OutputFilename)
+                   type == ParameterType_OutputFilename || type == ParameterType_Bool)
            {
            value = m_Appli->GetParameterString(key);
            }
