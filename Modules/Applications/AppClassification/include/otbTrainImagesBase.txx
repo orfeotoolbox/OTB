@@ -39,11 +39,10 @@ void TrainImagesBase::InitIO()
   SetParameterDescription( "io.vd", "A list of vector data to select the training samples." );
   MandatoryOn( "io.vd" );
 
-  AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
-  EnableParameter( "cleanup" );
+  AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
   SetParameterDescription( "cleanup",
                            "If activated, the application will try to clean all temporary files it created" );
-  MandatoryOff( "cleanup" );
+  SetParameterInt( "cleanup", 1);
 }
 
 void TrainImagesBase::InitSampling()

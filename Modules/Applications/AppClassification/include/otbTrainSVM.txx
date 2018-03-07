@@ -112,9 +112,8 @@ namespace Wrapper
     SetParameterFloat("classifier.svm.degree",1.0);
     SetParameterDescription("classifier.svm.degree", 
       "Parameter degree of a kernel function (POLY).");
-    AddParameter(ParameterType_Empty, "classifier.svm.opt", 
+    AddParameter(ParameterType_Bool, "classifier.svm.opt", 
       "Parameters optimization");
-    MandatoryOff("classifier.svm.opt");
     SetParameterDescription("classifier.svm.opt", "SVM parameters optimization flag.\n"
       "-If set to True, then the optimal SVM parameters will be estimated. "
       "Parameters are considered optimal by OpenCV when the cross-validation estimate of "
@@ -229,10 +228,7 @@ namespace Wrapper
     SVMClassifier->SetCoef0(GetParameterFloat("classifier.svm.coef0"));
     SVMClassifier->SetGamma(GetParameterFloat("classifier.svm.gamma"));
     SVMClassifier->SetDegree(GetParameterFloat("classifier.svm.degree"));
-    if (IsParameterEnabled("classifier.svm.opt"))
-    {
-      SVMClassifier->SetParameterOptimization(true);
-    }
+    SVMClassifier->SetParameterOptimization(GetParameterInt("classifier.svm.opt"));
     SVMClassifier->Train();
     SVMClassifier->Save(modelPath);
 

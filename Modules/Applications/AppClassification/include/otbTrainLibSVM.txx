@@ -105,11 +105,10 @@ namespace Wrapper
         "the smoother the decision.");
 
     // It seems that it miss a nu parameter for the nu-SVM use. 
-    AddParameter(ParameterType_Empty, "classifier.libsvm.opt", "Parameters optimization");
-    MandatoryOff("classifier.libsvm.opt");
+    AddParameter(ParameterType_Bool, "classifier.libsvm.opt", "Parameters optimization");
     SetParameterDescription("classifier.libsvm.opt", "SVM parameters optimization flag.");
-    AddParameter(ParameterType_Empty, "classifier.libsvm.prob", "Probability estimation");
-    MandatoryOff("classifier.libsvm.prob");
+
+    AddParameter(ParameterType_Bool, "classifier.libsvm.prob", "Probability estimation");
     SetParameterDescription("classifier.libsvm.prob", "Probability estimation flag.");
 
     if (this->m_RegressionFlag)
@@ -137,14 +136,8 @@ namespace Wrapper
     libSVMClassifier->SetTargetListSample(trainingLabeledListSample);
     //SVM Option
     //TODO : Add other options ?
-    if (IsParameterEnabled("classifier.libsvm.opt"))
-      {
-      libSVMClassifier->SetParameterOptimization(true);
-      }
-    if (IsParameterEnabled("classifier.libsvm.prob"))
-      {
-      libSVMClassifier->SetDoProbabilityEstimates(true);
-      }
+    libSVMClassifier->SetParameterOptimization(GetParameterInt("classifier.libsvm.opt"));
+    libSVMClassifier->SetDoProbabilityEstimates(GetParameterInt("classifier.libsvm.prob"));
     libSVMClassifier->SetNu(GetParameterFloat("classifier.libsvm.nu"));
     libSVMClassifier->SetC(GetParameterFloat("classifier.libsvm.c"));
 

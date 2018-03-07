@@ -100,7 +100,8 @@ namespace Wrapper
     ParameterType_ComplexOutputImage,
     ParameterType_RAM,
     ParameterType_OutputProcessXML,
-    ParameterType_InputProcessXML
+    ParameterType_InputProcessXML,
+    ParameterType_Bool
   } ParameterType;
 
   typedef enum
@@ -496,6 +497,7 @@ class ApplicationProxy(object):
 				ParameterType_Empty : 'ParameterType_Empty',
 				ParameterType_Choice : 'ParameterType_Choice',
 				ParameterType_Group : 'ParameterType_Group',
+				ParameterType_Bool : 'ParameterType_Bool'
 			}.get(parameter_type, 'ParameterType_UNKNOWN')
 
 		def __str__(self):
@@ -527,6 +529,8 @@ class ApplicationProxy(object):
 			  return self.SetParameterFloat(paramKey, value)
 			elif paramType in [ParameterType_Empty]:
 			  return self.EnableParameter(paramKey)
+			elif paramType in [ParameterType_Bool]:
+			  return self.SetParameterString(paramKey, str(value) )
 			elif paramType in [ParameterType_Group]:
 			  return ApplicationProxy(self, paramKey)
 			elif paramType in [ParameterType_Choice]:
@@ -561,6 +565,8 @@ class ApplicationProxy(object):
 			  return self.GetParameterFloat(paramKey)
 			elif paramType in [ParameterType_Empty]:
 			  return self.IsParameterEnabled(paramKey)
+			elif paramType in [ParameterType_Bool]:
+			  return bool(self.GetParameterInt(paramKey))
 			elif paramType in [ParameterType_Group, ParameterType_Choice]:
 			  return ApplicationProxy(self, paramKey)
 			else:

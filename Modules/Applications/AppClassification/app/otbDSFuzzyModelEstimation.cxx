@@ -164,9 +164,8 @@ private:
     SetParameterDescription("maxnbit","Maximum number of optimizer iteration (default 200)");
     SetParameterInt("maxnbit",200);
 
-    AddParameter(ParameterType_Empty,"optobs","Optimizer Observer");
+    AddParameter(ParameterType_Bool,"optobs","Optimizer Observer");
     SetParameterDescription("optobs","Activate the optimizer observer");
-    MandatoryOff("optobs");
 
     AddParameter(ParameterType_OutputFilename,"out","Output filename");
     SetParameterDescription("out","Output model file name (xml file) contains the optimal model to perform information fusion.");
@@ -405,7 +404,7 @@ private:
 
     // Create the Command observer and register it with the optimizer.
     CommandIterationUpdate::Pointer observer = CommandIterationUpdate::New();
-    if (IsParameterEnabled("optobs"))
+    if (GetParameterInt("optobs"))
       {
       m_Optimizer->AddObserver(itk::IterationEvent(), observer);
       }

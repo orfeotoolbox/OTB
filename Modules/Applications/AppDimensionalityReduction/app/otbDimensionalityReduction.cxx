@@ -164,9 +164,8 @@ private:
     MandatoryOff("nbcomp");
     SetMinimumParameterIntValue("nbcomp", 0);
 
-    AddParameter(ParameterType_Empty, "normalize", "Normalize.");
+    AddParameter(ParameterType_Bool, "normalize", "Normalize.");
     SetParameterDescription("normalize", "center AND reduce data before Dimensionality reduction.");
-    MandatoryOff("normalize");
 
     AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output (text format)");
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
@@ -237,7 +236,7 @@ private:
 
     // Get Parameters
     int nbComp = GetParameterInt("nbcomp");
-    bool normalize = IsParameterEnabled("normalize");
+    bool normalize = GetParameterInt("normalize");
     bool rescale = IsParameterEnabled("rescale");
 
     bool invTransform = HasValue("outinv") && IsParameterEnabled("outinv");

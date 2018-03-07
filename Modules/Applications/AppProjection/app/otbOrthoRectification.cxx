@@ -177,13 +177,13 @@ private:
     MandatoryOff("outputs.lry");
     MandatoryOff("outputs.ortho");
 
-    AddParameter(ParameterType_Empty,"outputs.isotropic","Force isotropic spacing by default");
+    AddParameter(ParameterType_Bool,"outputs.isotropic","Force isotropic spacing by default");
     std::ostringstream isotropOss;
     isotropOss << "Default spacing (pixel size) values are estimated from the sensor modeling of the image. It can therefore result in a non-isotropic spacing. ";
     isotropOss << "This option allows you to force default values to be isotropic (in this case, the minimum of spacing in both direction is applied. ";
     isotropOss << "Values overridden by user are not affected by this option.";
     SetParameterDescription("outputs.isotropic", isotropOss.str());
-    EnableParameter("outputs.isotropic");
+    SetParameterInt("outputs.isotropic", 1);
 
     AddParameter(ParameterType_Float, "outputs.default", "Default pixel value");
     SetParameterDescription("outputs.default","Default value to write when outside of input image.");
@@ -259,7 +259,7 @@ private:
       typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
       OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
 
-      if(IsParameterEnabled("outputs.isotropic"))
+      if(GetParameterInt("outputs.isotropic"))
         {
         genericRSEstimator->EstimateIsotropicSpacingOn();
         }
