@@ -58,8 +58,6 @@ set( OTBApplicationEngine_SRC
   otbWrapperParameterList.cxx
   )
 
-message("Common libraries: ${OTBCommon_LIBRARIES}")
-
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})
 target_link_libraries(OTBApplicationEngine
   ${OTBVectorDataBase_LIBRARIES}
