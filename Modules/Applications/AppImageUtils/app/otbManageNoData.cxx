@@ -112,7 +112,7 @@ private:
     SetParameterDescription("mode.apply.ndval","No Data value used according to the mask image");
     SetDefaultParameterFloat("mode.apply.ndval", 0.0);
 
-    SetParameterString("mode","buildmask", false);
+    SetParameterString("mode","buildmask");
 
     AddRAMParameter();
 

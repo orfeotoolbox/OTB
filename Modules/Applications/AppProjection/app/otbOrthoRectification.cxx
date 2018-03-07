@@ -274,28 +274,28 @@ private:
 
       // Fill the Gui with the computed parameters
       if (!HasUserValue("outputs.sizex"))
-        SetParameterInt("outputs.sizex",genericRSEstimator->GetOutputSize()[0], false);
+        SetParameterInt("outputs.sizex",genericRSEstimator->GetOutputSize()[0]);
 
       if (!HasUserValue("outputs.sizey"))
-        SetParameterInt("outputs.sizey",genericRSEstimator->GetOutputSize()[1], false);
+        SetParameterInt("outputs.sizey",genericRSEstimator->GetOutputSize()[1]);
 
       if (!HasUserValue("outputs.spacingx"))
-        SetParameterFloat("outputs.spacingx",genericRSEstimator->GetOutputSpacing()[0], false);
+        SetParameterFloat("outputs.spacingx",genericRSEstimator->GetOutputSpacing()[0]);
 
       if (!HasUserValue("outputs.spacingy"))
-        SetParameterFloat("outputs.spacingy",genericRSEstimator->GetOutputSpacing()[1], false);
+        SetParameterFloat("outputs.spacingy",genericRSEstimator->GetOutputSpacing()[1]);
 
       if (!HasUserValue("outputs.ulx"))
-        SetParameterFloat("outputs.ulx",genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0], false);
+        SetParameterFloat("outputs.ulx",genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
 
       if (!HasUserValue("outputs.uly"))
-        SetParameterFloat("outputs.uly",genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1], false);
+        SetParameterFloat("outputs.uly",genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
 
       if (!HasUserValue("outputs.lrx"))
-       SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")), false);
+       SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
 
       if (!HasUserValue("outputs.lry"))
-       SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")), false);
+       SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
 
       // Handle the spacing and size field following the mode
       // chose by the user
@@ -336,8 +336,8 @@ private:
         MandatoryOff("outputs.ortho");
 
         // Update lower right
-        SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")), false);
-        SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")), false);
+        SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+        SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
         }
         break;
         case Mode_AutomaticSize:
@@ -382,16 +382,16 @@ private:
         genericRSEstimator->Compute();
 
         // Set the  processed size relative to this forced spacing
-        SetParameterInt("outputs.sizex",genericRSEstimator->GetOutputSize()[0], false);
-        SetParameterInt("outputs.sizey",genericRSEstimator->GetOutputSize()[1], false);
+        SetParameterInt("outputs.sizex",genericRSEstimator->GetOutputSize()[0]);
+        SetParameterInt("outputs.sizey",genericRSEstimator->GetOutputSize()[1]);
 
         // Reset Origin to default
-        SetParameterFloat("outputs.ulx",genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0], false);
-        SetParameterFloat("outputs.uly",genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1], false);
+        SetParameterFloat("outputs.ulx",genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
+        SetParameterFloat("outputs.uly",genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
 
         // Update lower right
-        SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")), false);
-        SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")), false);
+        SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+        SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
         }
         break;
         case Mode_AutomaticSpacing:
@@ -436,16 +436,16 @@ private:
         genericRSEstimator->Compute();
 
         // Set the  processed spacing relative to this forced size
-        SetParameterFloat("outputs.spacingx",genericRSEstimator->GetOutputSpacing()[0], false);
-        SetParameterFloat("outputs.spacingy",genericRSEstimator->GetOutputSpacing()[1], false);
+        SetParameterFloat("outputs.spacingx",genericRSEstimator->GetOutputSpacing()[0]);
+        SetParameterFloat("outputs.spacingy",genericRSEstimator->GetOutputSpacing()[1]);
 
         // Reset Origin to default
-        SetParameterFloat("outputs.ulx",genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0], false);
-        SetParameterFloat("outputs.uly",genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1], false);
+        SetParameterFloat("outputs.ulx",genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
+        SetParameterFloat("outputs.uly",genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
 
         // Update lower right
-        SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")), false);
-        SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")), false);
+        SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+        SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
 
         }
         break;
@@ -489,9 +489,9 @@ private:
 
           // Set the  processed size relative to this forced spacing
           if (vcl_abs(spacing[0]) > 0.0)
-            SetParameterInt("outputs.sizex",static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lrx")-GetParameterFloat("outputs.ulx"))/spacing[0])), false);
+            SetParameterInt("outputs.sizex",static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lrx")-GetParameterFloat("outputs.ulx"))/spacing[0])));
           if (vcl_abs(spacing[1]) > 0.0)
-            SetParameterInt("outputs.sizey",static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lry")-GetParameterFloat("outputs.uly"))/spacing[1])), false);
+            SetParameterInt("outputs.sizey",static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lry")-GetParameterFloat("outputs.uly"))/spacing[1])));
         }
         break;
         case Mode_OrthoFit:
@@ -541,11 +541,11 @@ private:
             SetParameterInt("outputs.sizey",size[1]);
             SetParameterFloat("outputs.spacingx",spacing[0]);
             SetParameterFloat("outputs.spacingy",spacing[1]);
-            SetParameterFloat("outputs.ulx",orig[0] - 0.5 * spacing[0], false);
-            SetParameterFloat("outputs.uly",orig[1] - 0.5 * spacing[1], false);
+            SetParameterFloat("outputs.ulx",orig[0] - 0.5 * spacing[0]);
+            SetParameterFloat("outputs.uly",orig[1] - 0.5 * spacing[1]);
             // Update lower right
-            SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")), false);
-            SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")), false);
+            SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+            SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
           }
         }
         break;
@@ -591,11 +591,11 @@ private:
           // Use the smallest spacing (more precise grid)
           double optimalSpacing = std::min( vcl_abs(xgridspacing), vcl_abs(ygridspacing) );
           otbAppLogINFO( "Setting grid spacing to " << optimalSpacing );
-          SetParameterFloat("opt.gridspacing",optimalSpacing, false);
+          SetParameterFloat("opt.gridspacing",optimalSpacing);
           }
         else // if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
           {
-          SetParameterFloat("opt.gridspacing",DefaultGridSpacingMeter, false);
+          SetParameterFloat("opt.gridspacing",DefaultGridSpacingMeter);
           } // if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
         } // if (!HasUserValue("opt.gridspacing"))
       } // if (HasValue("io.in"))

@@ -267,7 +267,7 @@ private:
     ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
 
     //Get number of bands
-    SetParameterInt("numberbands",inImage->GetNumberOfComponentsPerPixel(), false);
+    SetParameterInt("numberbands",inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
     std::vector<bool> noDataValueAvailable;
     bool ret = itk::ExposeMetaData<std::vector<bool> >(inImage->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
@@ -298,26 +298,26 @@ private:
       ossOutput<<std::endl;
 
     //Get image size
-    SetParameterInt("indexx",inImage->GetLargestPossibleRegion().GetIndex()[0], false);
-    SetParameterInt("indexy",inImage->GetLargestPossibleRegion().GetIndex()[1], false);
+    SetParameterInt("indexx",inImage->GetLargestPossibleRegion().GetIndex()[0]);
+    SetParameterInt("indexy",inImage->GetLargestPossibleRegion().GetIndex()[1]);
 
         ossOutput << "\tStart index :  [" << GetParameterInt("indexx") << "," << GetParameterInt("indexy") << "]" << std::endl;
 
     //Get image size
-    SetParameterInt("sizex",inImage->GetLargestPossibleRegion().GetSize()[0], false);
-    SetParameterInt("sizey",inImage->GetLargestPossibleRegion().GetSize()[1], false);
+    SetParameterInt("sizex",inImage->GetLargestPossibleRegion().GetSize()[0]);
+    SetParameterInt("sizey",inImage->GetLargestPossibleRegion().GetSize()[1]);
 
     ossOutput << "\tSize :  [" << GetParameterInt("sizex") << "," << GetParameterInt("sizey") << "]" << std::endl;
 
     //Get image origin
-    SetParameterFloat("originx",inImage->GetOrigin()[0], false);
-    SetParameterFloat("originy",inImage->GetOrigin()[1], false);
+    SetParameterFloat("originx",inImage->GetOrigin()[0]);
+    SetParameterFloat("originy",inImage->GetOrigin()[1]);
 
     ossOutput << "\tOrigin :  [" << GetParameterFloat("originx") << "," << GetParameterFloat("originy") << "]" << std::endl;
 
     //Get image spacing
-    SetParameterFloat("spacingx",inImage->GetSignedSpacing()[0], false);
-    SetParameterFloat("spacingy",inImage->GetSignedSpacing()[1], false);
+    SetParameterFloat("spacingx",inImage->GetSignedSpacing()[0]);
+    SetParameterFloat("spacingy",inImage->GetSignedSpacing()[1]);
     ossOutput << "\tSpacing :  [" << GetParameterFloat("spacingx") << "," << GetParameterFloat("spacingy") << "]" << std::endl;
 
     //Estimate ground spacing
@@ -336,14 +336,14 @@ private:
     approxGroundSpacing = groundSpacing->EvaluateAtIndex(index);
 
     //Get image estimated ground spacing (in m)
-    SetParameterFloat("estimatedgroundspacingx",approxGroundSpacing[0], false);
-    SetParameterFloat("estimatedgroundspacingy",approxGroundSpacing[1], false);
+    SetParameterFloat("estimatedgroundspacingx",approxGroundSpacing[0]);
+    SetParameterFloat("estimatedgroundspacingy",approxGroundSpacing[1]);
 
     ossOutput << "\tEstimated ground spacing (in meters): [" << GetParameterFloat("estimatedgroundspacingx") << "," << GetParameterFloat("estimatedgroundspacingy") << "]" << std::endl;
 
     ossOutput << std::endl << "Image acquisition information:" << std::endl;
 
-    SetParameterString("sensor", metadataInterface->GetSensorID(), false);
+    SetParameterString("sensor", metadataInterface->GetSensorID());
     ossOutput << "\tSensor : ";
     if (!GetParameterString("sensor").empty())
       ossOutput <<  GetParameterString("sensor");
@@ -353,11 +353,11 @@ private:
     ossOutput << "\tImage identification number: ";
     if (metadataInterface->GetImageKeywordlist().HasKey("image_id"))
       {
-      SetParameterString("id", metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"), false);
+      SetParameterString("id", metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"));
       ossOutput << GetParameterString("id");
       }
     ossOutput << std::endl;
-    SetParameterString("projectionref", metadataInterface->GetProjectionRef(), false);
+    SetParameterString("projectionref", metadataInterface->GetProjectionRef());
     if (!GetParameterString("projectionref").empty())
       ossOutput << "\tImage projection : " << GetParameterString("projectionref") << std::endl;
 
@@ -381,7 +381,7 @@ private:
         osstime<<"0";
       osstime<<metadataInterface->GetMinute();
       osstime<<":00";
-      SetParameterString("time", osstime.str(), false);
+      SetParameterString("time", osstime.str());
 
       ossOutput << "\tAcquisition time : " << GetParameterString("time") << std::endl;
       }
@@ -410,29 +410,29 @@ private:
 
       if( !coord2name->GetCountryName().empty() )
         {
-        SetParameterString("country", coord2name->GetCountryName(), false);
+        SetParameterString("country", coord2name->GetCountryName());
         ossOutput << "\tCountry : " << GetParameterString("country") << std::endl;
         }
       else
-        SetParameterString("country", "Not available", false);
+        SetParameterString("country", "Not available");
 
       if( !coord2name->GetPlaceName().empty() )
         {
-        SetParameterString("town", coord2name->GetPlaceName(), false);
+        SetParameterString("town", coord2name->GetPlaceName());
         ossOutput << "\tTown : " << GetParameterString("town") << std::endl;
         }
       else
-        SetParameterString("town", "Not available", false);
+        SetParameterString("town", "Not available");
 
       // Retrieve footprint
-      SetParameterFloat("ullat",ullat, false);
-      SetParameterFloat("ullon",ullon, false);
-      SetParameterFloat("urlat",urlat, false);
-      SetParameterFloat("urlon",urlon, false);
-      SetParameterFloat("lrlat",lrlat, false);
-      SetParameterFloat("lrlon",lrlon, false);
-      SetParameterFloat("lllat",lllat, false);
-      SetParameterFloat("lllon",lllon, false);
+      SetParameterFloat("ullat",ullat);
+      SetParameterFloat("ullon",ullon);
+      SetParameterFloat("urlat",urlat);
+      SetParameterFloat("urlon",urlon);
+      SetParameterFloat("lrlat",lrlat);
+      SetParameterFloat("lrlon",lrlon);
+      SetParameterFloat("lllat",lllat);
+      SetParameterFloat("lllon",lllon);
 
       ossOutput << std::endl << "Image footprint coordinates:" << std::endl;
       ossOutput << "\tUpper left corner (latitude, longitude) = [" << GetParameterFloat("ullat") << "," << GetParameterFloat("ullon") << "]" << std::endl;
@@ -444,15 +444,15 @@ private:
       {
       }
 
-    SetParameterInt("rgb.r",metadataInterface->GetDefaultDisplay()[0], false);
-    SetParameterInt("rgb.g",metadataInterface->GetDefaultDisplay()[1], false);
-    SetParameterInt("rgb.b",metadataInterface->GetDefaultDisplay()[2], false);
+    SetParameterInt("rgb.r",metadataInterface->GetDefaultDisplay()[0]);
+    SetParameterInt("rgb.g",metadataInterface->GetDefaultDisplay()[1]);
+    SetParameterInt("rgb.b",metadataInterface->GetDefaultDisplay()[2]);
 
     ossOutput << std::endl << "Image default RGB composition:" << std::endl;
     ossOutput << "\t[R, G, B] = [" << GetParameterInt("rgb.r") << "," << GetParameterInt("rgb.g") << "," << GetParameterInt("rgb.b") << "]" << std::endl;
 
-    SetParameterInt("gcp.count",metadataInterface->GetGCPCount(), false);
-    SetParameterString("gcp.proj", metadataInterface->GetGCPProjection(), false);
+    SetParameterInt("gcp.count",metadataInterface->GetGCPCount());
+    SetParameterString("gcp.proj", metadataInterface->GetGCPProjection());
 
     ossOutput << std::endl << "Ground control points information:" << std::endl;
     ossOutput << "\tNumber of GCPs = " << GetParameterInt("gcp.count") << std::endl;
@@ -481,16 +481,16 @@ private:
       ossOutput << "\t\tGround  coordinates =" << gcp_geocoord.back() << std::endl;
       }
 
-    SetParameterStringList("gcp.ids", gcp_ids, false);
-    SetParameterStringList("gcp.imcoord", gcp_imcoord, false);
-    SetParameterStringList("gcp.geocoord", gcp_geocoord, false);
-    SetParameterStringList("gcp.info", gcp_infos, false);
+    SetParameterStringList("gcp.ids", gcp_ids);
+    SetParameterStringList("gcp.imcoord", gcp_imcoord);
+    SetParameterStringList("gcp.geocoord", gcp_geocoord);
+    SetParameterStringList("gcp.info", gcp_infos);
 
     if ( IsParameterEnabled("keywordlist") )
       {
       std::ostringstream osskeywordlist;
       osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
-      SetParameterString("keyword", osskeywordlist.str(), false);
+      SetParameterString("keyword", osskeywordlist.str());
 
       ossOutput << std::endl << "Image OSSIM keywordlist (optional):" << std::endl;
       ossOutput << "\t" << GetParameterString("keyword") << std::endl;

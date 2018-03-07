@@ -79,7 +79,7 @@ void TrainImagesBase::InitSampling()
   AddParameter( ParameterType_Float, "sample.vtr", "Training and validation sample ratio" );
   SetParameterDescription( "sample.vtr", "Ratio between training and validation samples (0.0 = all training, 1.0 = "
           "all validation) (default = 0.5)." );
-  SetParameterFloat( "sample.vtr", 0.5, false );
+  SetParameterFloat( "sample.vtr", 0.5);
   SetMaximumParameterFloatValue( "sample.vtr", 1.0 );
   SetMinimumParameterFloatValue( "sample.vtr", 0.0 );
 
@@ -160,8 +160,8 @@ void TrainImagesBase::ComputePolygonStatistics(FloatVectorImageListType *imageLi
   for( unsigned int i = 0; i < nbImages; i++ )
     {
     GetInternalApplication( "polystat" )->SetParameterInputImage( "in", imageList->GetNthElement( i ) );
-    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileNames[i], false );
-    GetInternalApplication( "polystat" )->SetParameterString( "out", statisticsFileNames[i], false );
+    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileNames[i]);
+    GetInternalApplication( "polystat" )->SetParameterString( "out", statisticsFileNames[i]);
     ExecuteInternal( "polystat" );
     }
 }
@@ -170,7 +170,7 @@ void TrainImagesBase::ComputePolygonStatistics(FloatVectorImageListType *imageLi
 TrainImagesBase::SamplingRates TrainImagesBase::ComputeFinalMaximumSamplingRates(bool dedicatedValidation)
 {
   SamplingRates rates;
-  GetInternalApplication( "rates" )->SetParameterString( "mim", "proportional", false );
+  GetInternalApplication( "rates" )->SetParameterString( "mim", "proportional");
   double vtr = GetParameterFloat( "sample.vtr" );
   long mt = GetParameterInt( "sample.mt" );
   long mv = GetParameterInt( "sample.mv" );
@@ -224,11 +224,11 @@ void TrainImagesBase::ComputeSamplingRate(const std::vector<std::string> &statis
                                           const std::string &ratesFileName, long maximum)
 {
   // Sampling rates
-  GetInternalApplication( "rates" )->SetParameterStringList( "il", statisticsFileNames, false );
-  GetInternalApplication( "rates" )->SetParameterString( "out", ratesFileName, false );
+  GetInternalApplication( "rates" )->SetParameterStringList( "il", statisticsFileNames);
+  GetInternalApplication( "rates" )->SetParameterString( "out", ratesFileName);
   if( GetParameterInt( "sample.bm" ) != 0 )
     {
-    GetInternalApplication( "rates" )->SetParameterString( "strategy", "smallest", false );
+    GetInternalApplication( "rates" )->SetParameterString( "strategy", "smallest");
     }
   else
     {
@@ -236,12 +236,12 @@ void TrainImagesBase::ComputeSamplingRate(const std::vector<std::string> &statis
       {
       std::ostringstream oss;
       oss << maximum;
-      GetInternalApplication( "rates" )->SetParameterString( "strategy", "constant", false );
-      GetInternalApplication( "rates" )->SetParameterString( "strategy.constant.nb", oss.str(), false );
+      GetInternalApplication( "rates" )->SetParameterString( "strategy", "constant");
+      GetInternalApplication( "rates" )->SetParameterString( "strategy.constant.nb", oss.str());
       }
     else
       {
-      GetInternalApplication( "rates" )->SetParameterString( "strategy", "all", false );
+      GetInternalApplication( "rates" )->SetParameterString( "strategy", "all");
       }
     }
   ExecuteInternal( "rates" );
@@ -251,9 +251,9 @@ void
 TrainImagesBase::TrainModel(FloatVectorImageListType *imageList, const std::vector<std::string> &sampleTrainFileNames,
                             const std::vector<std::string> &sampleValidationFileNames)
 {
-  GetInternalApplication( "training" )->SetParameterStringList( "io.vd", sampleTrainFileNames, false );
+  GetInternalApplication( "training" )->SetParameterStringList( "io.vd", sampleTrainFileNames);
   if( !sampleValidationFileNames.empty() )
-    GetInternalApplication( "training" )->SetParameterStringList( "valid.vd", sampleValidationFileNames, false );
+    GetInternalApplication( "training" )->SetParameterStringList( "valid.vd", sampleValidationFileNames);
 
   UpdateInternalParameters( "training" );
   // set field names
@@ -266,7 +266,7 @@ TrainImagesBase::TrainModel(FloatVectorImageListType *imageList, const std::vect
     oss << i;
     selectedNames.push_back( "value_" + oss.str() );
     }
-  GetInternalApplication( "training" )->SetParameterStringList( "feat", selectedNames, false );
+  GetInternalApplication( "training" )->SetParameterStringList( "feat", selectedNames);
   ExecuteInternal( "training" );
 }
 
@@ -276,38 +276,38 @@ void TrainImagesBase::SelectAndExtractSamples(FloatVectorImageType *image, std::
                                               std::string selectedField)
 {
   GetInternalApplication( "select" )->SetParameterInputImage( "in", image );
-  GetInternalApplication( "select" )->SetParameterString( "out", sampleFileName, false );
+  GetInternalApplication( "select" )->SetParameterString( "out", sampleFileName);
 
   // Change the selection strategy based on selected sampling strategy
   switch( strategy )
     {
 //    case GEOMETRIC:
-//      GetInternalApplication( "select" )->SetParameterString( "sampler", "random", false );
-//      GetInternalApplication( "select" )->SetParameterString( "strategy", "percent", false );
+//      GetInternalApplication( "select" )->SetParameterString( "sampler", "random");
+//      GetInternalApplication( "select" )->SetParameterString( "strategy", "percent");
 //      GetInternalApplication( "select" )->SetParameterFloat( "strategy.percent.p",
-//                                                             GetParameterFloat( "sample.percent" ), false );
+//                                                             GetParameterFloat( "sample.percent" ));
 //      break;
     case CLASS:
     default:
-      GetInternalApplication( "select" )->SetParameterString( "vec", vectorFileName, false );
-      GetInternalApplication( "select" )->SetParameterString( "instats", statisticsFileName, false );
-      GetInternalApplication( "select" )->SetParameterString( "sampler", "periodic", false );
+      GetInternalApplication( "select" )->SetParameterString( "vec", vectorFileName);
+      GetInternalApplication( "select" )->SetParameterString( "instats", statisticsFileName);
+      GetInternalApplication( "select" )->SetParameterString( "sampler", "periodic");
       GetInternalApplication( "select" )->SetParameterInt( "sampler.periodic.jitter", 50 );
-      GetInternalApplication( "select" )->SetParameterString( "strategy", "byclass", false );
-      GetInternalApplication( "select" )->SetParameterString( "strategy.byclass.in", ratesFileName, false );
+      GetInternalApplication( "select" )->SetParameterString( "strategy", "byclass");
+      GetInternalApplication( "select" )->SetParameterString( "strategy.byclass.in", ratesFileName);
       break;
     }
 
   // select sample positions
   ExecuteInternal( "select" );
 
-  GetInternalApplication( "extraction" )->SetParameterString( "vec", sampleFileName, false );
+  GetInternalApplication( "extraction" )->SetParameterString( "vec", sampleFileName);
   UpdateInternalParameters( "extraction" );
   if( !selectedField.empty() )
-    GetInternalApplication( "extraction" )->SetParameterString( "field", selectedField, false );
+    GetInternalApplication( "extraction" )->SetParameterString( "field", selectedField);
 
-  GetInternalApplication( "extraction" )->SetParameterString( "outfield", "prefix", false );
-  GetInternalApplication( "extraction" )->SetParameterString( "outfield.prefix.name", "value_", false );
+  GetInternalApplication( "extraction" )->SetParameterString( "outfield", "prefix");
+  GetInternalApplication( "extraction" )->SetParameterString( "outfield.prefix.name", "value_");
 
   // extract sample descriptors
   ExecuteInternal( "extraction" );

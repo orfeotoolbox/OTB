@@ -54,7 +54,7 @@ namespace Wrapper
     SetParameterDescription("classifier.libsvm.k.sigmoid", 
       "The kernel is a hyperbolic tangente function of the vectors.");
 
-    SetParameterString("classifier.libsvm.k", "linear", false);
+    SetParameterString("classifier.libsvm.k", "linear");
     SetParameterDescription("classifier.libsvm.k", "SVM Kernel Type.");
     AddParameter(ParameterType_Choice, "classifier.libsvm.m", "SVM Model Type");
     SetParameterDescription("classifier.libsvm.m", "Type of SVM formulation.");
@@ -67,7 +67,7 @@ namespace Wrapper
        "multiplier C is used ");
 
       AddChoice("classifier.libsvm.m.nusvr", "Nu Support Vector Regression");
-      SetParameterString("classifier.libsvm.m", "epssvr", false);
+      SetParameterString("classifier.libsvm.m", "epssvr");
       SetParameterDescription("classifier.libsvm.m.nusvr",
        "Same as the epsilon regression except that this time the bounded "
        "parameter nu is used instead of epsilon");
@@ -89,17 +89,17 @@ namespace Wrapper
       SetParameterDescription("classifier.libsvm.m.oneclass", 
         "All the training data are from the same class, SVM builds a boundary "
         "that separates the class from the rest of the feature space.");
-      SetParameterString("classifier.libsvm.m", "csvc", false);
+      SetParameterString("classifier.libsvm.m", "csvc");
       }
 
     AddParameter(ParameterType_Float, "classifier.libsvm.c", "Cost parameter C");
-    SetParameterFloat("classifier.libsvm.c",1.0, false);
+    SetParameterFloat("classifier.libsvm.c",1.0);
     SetParameterDescription("classifier.libsvm.c",
         "SVM models have a cost parameter C (1 by default) to control the "
         "trade-off between training errors and forcing rigid margins.");
 
     AddParameter(ParameterType_Float, "classifier.libsvm.nu", "Cost parameter Nu");
-    SetParameterFloat("classifier.libsvm.nu",0.5, false);
+    SetParameterFloat("classifier.libsvm.nu",0.5);
     SetParameterDescription("classifier.libsvm.nu",
         "Cost parameter Nu, in the range 0..1, the larger the value, "
         "the smoother the decision.");
@@ -115,7 +115,7 @@ namespace Wrapper
     if (this->m_RegressionFlag)
       {
       AddParameter(ParameterType_Float, "classifier.libsvm.eps", "Epsilon");
-      SetParameterFloat("classifier.libsvm.eps",1e-3, false);
+      SetParameterFloat("classifier.libsvm.eps",1e-3);
       SetParameterDescription("classifier.libsvm.eps", 
         "The distance between feature vectors from the training set and "
         "the fitting hyper-plane must be less than Epsilon. For outliers"

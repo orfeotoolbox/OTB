@@ -40,9 +40,9 @@ LearningApplicationBase<TInputValue,TOutputValue>
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
 #ifdef OTB_OPENCV_3
-  SetParameterInt("classifier.dt.max",10, false);
+  SetParameterInt("classifier.dt.max",10);
 #else
-  SetParameterInt("classifier.dt.max",65535, false);
+  SetParameterInt("classifier.dt.max",65535);
 #endif
   SetParameterDescription("classifier.dt.max",
    "The training algorithm attempts to split each node while its depth is smaller "
@@ -51,14 +51,14 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //MinSampleCount
   AddParameter(ParameterType_Int, "classifier.dt.min", "Minimum number of samples in each node");
-  SetParameterInt("classifier.dt.min",10, false);
+  SetParameterInt("classifier.dt.min",10);
   SetParameterDescription("classifier.dt.min",
     "If the number of samples in a node is smaller "
     "than this parameter, then this node will not be split.");
 
   //RegressionAccuracy
   AddParameter(ParameterType_Float, "classifier.dt.ra", "Termination criteria for regression tree");
-  SetParameterFloat("classifier.dt.ra",0.01, false);
+  SetParameterFloat("classifier.dt.ra",0.01);
   SetParameterDescription("classifier.dt.ra",
     "If all absolute differences between an estimated value in a node "
     "and the values of the train samples in this node are smaller than this "
@@ -72,7 +72,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddParameter(ParameterType_Int, "classifier.dt.cat",
     "Cluster possible values of a categorical variable into K <= cat clusters to find a "
     "suboptimal split");
-  SetParameterInt("classifier.dt.cat",10, false);
+  SetParameterInt("classifier.dt.cat",10);
   SetParameterDescription("classifier.dt.cat",
       "Cluster possible values of a categorical variable into K <= cat clusters to find a "
       "suboptimal split.");
@@ -81,9 +81,9 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddParameter(ParameterType_Int, "classifier.dt.f", "K-fold cross-validations");
 #ifdef OTB_OPENCV_3
   // disable cross validation by default (crash in opencv 3.2)
-  SetParameterInt("classifier.dt.f",0, false);
+  SetParameterInt("classifier.dt.f",0);
 #else
-  SetParameterInt("classifier.dt.f",10, false);
+  SetParameterInt("classifier.dt.f",10);
 #endif
   SetParameterDescription("classifier.dt.f",
     "If cv_folds > 1, then it prunes a tree with K-fold cross-validation where K "

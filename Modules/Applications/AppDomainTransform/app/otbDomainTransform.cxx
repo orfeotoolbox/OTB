@@ -152,8 +152,8 @@ private:
     AddChoice("mode.wavelet.form.sym8", "SYMLET8");
 
     // Default values for mode
-    SetParameterString("mode", "wavelet", false);
-    SetParameterString("mode.wavelet.form", "haar", false);
+    SetParameterString("mode", "wavelet");
+    SetParameterString("mode.wavelet.form", "haar");
 
     AddParameter(ParameterType_Choice,"direction", "Direction");
     AddChoice("direction.forward", "Forward");

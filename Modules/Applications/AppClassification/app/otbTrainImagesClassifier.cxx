@@ -217,7 +217,7 @@ private :
   void UpdatePolygonClassStatisticsParameters()
   {
     std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
-    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0], false );
+    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0]);
     UpdateInternalParameters( "polystat" );
   }
 

@@ -197,7 +197,7 @@ private:
     AddChoice("level.toa",     "Image to Top Of Atmosphere reflectance");
     AddChoice("level.toatoim",     "TOA reflectance to Image");
     AddChoice("level.toc",     "Image to Top Of Canopy reflectance (atmospheric corrections)");
-    SetParameterString("level", "toa", false);
+    SetParameterString("level", "toa");
 
     AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
     SetParameterDescription("milli", "Flag to use milli-reflectance instead of reflectance.\n"
@@ -429,21 +429,21 @@ private:
              ossOutput << "Acquisition Minute already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.minute",lImageMetadataInterface->GetMinute(), false);
+             SetParameterInt("acqui.minute",lImageMetadataInterface->GetMinute());
            }
 
            if (HasUserValue("acqui.hour"))
              ossOutput << "Acquisition Hour already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.hour",lImageMetadataInterface->GetHour(), false);
+             SetParameterInt("acqui.hour",lImageMetadataInterface->GetHour());
            }
 
            if (HasUserValue("acqui.day"))
              ossOutput << "Acquisition Day already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.day",lImageMetadataInterface->GetDay(), false);
+             SetParameterInt("acqui.day",lImageMetadataInterface->GetDay());
              if (IsParameterEnabled("acqui.fluxnormcoeff"))
                DisableParameter("acqui.day");
            }
@@ -452,7 +452,7 @@ private:
              ossOutput << "Acquisition Month already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.month",lImageMetadataInterface->GetMonth(), false);
+             SetParameterInt("acqui.month",lImageMetadataInterface->GetMonth());
              if (IsParameterEnabled("acqui.fluxnormcoeff"))
                DisableParameter("acqui.month");
            }
@@ -461,28 +461,28 @@ private:
              ossOutput << "Acquisition Year already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.year",lImageMetadataInterface->GetYear(), false);
+             SetParameterInt("acqui.year",lImageMetadataInterface->GetYear());
            }
 
            if (HasUserValue("acqui.sun.elev"))
              ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.sun.elev",lImageMetadataInterface->GetSunElevation(), false);
+             SetParameterFloat("acqui.sun.elev",lImageMetadataInterface->GetSunElevation());
 
            if (HasUserValue("acqui.sun.azim"))
              ossOutput << "Acquisition Sun Azimuth Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.sun.azim",lImageMetadataInterface->GetSunAzimuth(), false);
+             SetParameterFloat("acqui.sun.azim",lImageMetadataInterface->GetSunAzimuth());
 
            if (HasUserValue("acqui.view.elev"))
              ossOutput << "Acquisition Viewing Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.view.elev",lImageMetadataInterface->GetSatElevation(), false);
+             SetParameterFloat("acqui.view.elev",lImageMetadataInterface->GetSatElevation());
 
            if (HasUserValue("acqui.view.azim"))
              ossOutput << "Acquisition Viewing Azimuth Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.view.azim",lImageMetadataInterface->GetSatAzimuth(), false);
+             SetParameterFloat("acqui.view.azim",lImageMetadataInterface->GetSatAzimuth());
 
            // Set default value so that they are stored somewhere even if
            // they are overloaded by user values
