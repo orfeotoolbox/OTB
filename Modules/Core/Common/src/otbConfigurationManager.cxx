@@ -79,7 +79,7 @@ itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
   #ifndef NDEBUG
   itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::DEBUG;
   #else
-  itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::WARNING;
+  itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::INFO;
   #endif
 
   
