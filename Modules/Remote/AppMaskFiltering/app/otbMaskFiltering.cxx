@@ -50,7 +50,7 @@ public:
   typedef MaskStreamStitchingFilter< ImageType >             MaskStreamStitchingFilterType;
   typedef MaskFilter<ImageType>                         MaskFilterType;
   
-  
+
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -147,14 +147,15 @@ private:
         otbAppLogFATAL(<<"invalid outmode"<< outmode);
         }
     ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
-    OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbMultiPolygon);
+    //OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbMultiPolygon);
+    OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
     OGRFieldDefn field(field_name.c_str(), OFTInteger);
     layer.CreateField(field, true);
     OGRFieldDefn fieldSize("size", OFTReal);
     
     layer.CreateField(fieldSize, true);
-	
-	OGRFieldDefn fieldPerimeter("perimeter", OFTReal);
+
+    OGRFieldDefn fieldPerimeter("perimeter", OFTReal);
 	layer.CreateField(fieldPerimeter, true);
 	
     // Mask FIlter : Vectorization of the input raster
@@ -168,7 +169,7 @@ private:
     // Input labels : Labels in the input image that will be vectorized
     
     std::vector<int> inputLabels;
-    if(IsParameterEnabled("feat")  )
+    if(IsParameterEnabled("feat") )
     {
 		std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
 		for (std::vector<std::string>::iterator it = inputLabelsStr.begin(); it != inputLabelsStr.end(); it++)
@@ -179,7 +180,7 @@ private:
 	else
 	{
 		inputLabels.push_back(1);
-	}
+    }
     maskFilter->SetLabels(inputLabels);
     
     maskFilter->SetUse8Connected(this->GetParameterInt("connectivity"));

@@ -67,11 +67,11 @@ PersistentMaskFilter<TInputImage>
   extract->SetInput( this->GetInput() );
   
   SizeType paddedRegionSize = this->GetInput()->GetRequestedRegion().GetSize();
-  //paddedRegionSize[0] += 1;
-  //paddedRegionSize[1] += 1;
+  paddedRegionSize[0] += 1;
+  paddedRegionSize[1] += 1;
   
   RegionType paddedRegion(  this->GetInput()->GetRequestedRegion().GetIndex() , paddedRegionSize );
-  //paddedRegion.Crop(this->GetInput()->GetLargestPossibleRegion());
+  paddedRegion.Crop(this->GetInput()->GetLargestPossibleRegion());
   
   extract->SetExtractionRegion( paddedRegion );
   extract->Update();
@@ -114,16 +114,31 @@ PersistentMaskFilter<TInputImage>
     {
 
       //simplify
-      double tol = 1;
+      /*double tol = 1.5;
       const OGRGeometry * geom = (*featIt).GetGeometry();
       assert(geom && "geometry is NULL ! Can't simplify it.");
       (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify(*geom,tol));
-      
+     */
+     
+     
+      /*
+     const OGRPolygon * geom = static_cast<const OGRPolygon *>((*featIt).GetGeometry());
+     geom->closeRings();
+     (*featIt).ogr::Feature::SetGeometry(&*geom);
+     */
+     
+     /*
+     OGRGeometry* geom = const_cast<OGRGeometry*>((*featIt).GetGeometry());
+     geom->closeRings();
+     (*featIt).ogr::Feature::SetGeometryDirectly(geom);
+     */
+    // (*featIt).GetGeometry()->closeRings();
+     
       // Compute Attributes
       double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();
       typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
       double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
-    
+      
       double perimeter = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->getExteriorRing()->get_Length();
       //otbMsgDebugMacro(<<"DN = "<<field.GetValue<int>()<<", area = "<<pixelsArea);
       
