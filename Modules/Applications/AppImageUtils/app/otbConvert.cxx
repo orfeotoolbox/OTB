@@ -120,7 +120,7 @@ private:
     AddChoice("type.none", "None");
     AddChoice("type.linear", "Linear");
     AddChoice("type.log2", "Log2");
-    SetParameterString("type", "none", false);
+    SetParameterString("type", "none");
 
     AddParameter(ParameterType_Float,"type.linear.gamma","Gamma correction factor");
     SetParameterDescription("type.linear.gamma","Gamma correction factor");

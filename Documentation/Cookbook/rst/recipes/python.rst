@@ -239,12 +239,16 @@ doing geometry, projections, and also calibration.
 Future developments will probably offer a more adapted structure to import and
 export images between OTB and the Python world.
 
-Setting of boolean parameters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Setting of EmptyParameter
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Most of the parameters are set using functions ``SetParameterXXX()``. The boolean
-parameters are handled differently (also called Empty parameter). Let's take an example with the application
-``ReadImageInfo``:
+Most of the parameters are set using functions ``SetParameterXXX()``, except for
+one type of parameter: the ``EmptyParameter``. This class was the first
+implementation of a boolean. It is now **deprecated**, you should use ``BoolParameter``
+instead.
+
+Let's take an example with the application ``ReadImageInfo`` when it was still
+using an ``EmptyParameter`` for parameter ``keywordlist``:
 
 .. code-block:: python
 
