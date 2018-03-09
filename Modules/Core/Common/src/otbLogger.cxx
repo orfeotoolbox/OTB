@@ -68,11 +68,11 @@ void Logger::LogSetupInformation()
 {
   std::ostringstream oss;
   
-  oss<<"Default RAM limit for OTB is "<<otb::ConfigurationManager::GetMaxRAMHint()<<" Mb"<<std::endl;
+  oss<<"Default RAM limit for OTB is "<<otb::ConfigurationManager::GetMaxRAMHint()<<" MB"<<std::endl;
   this->Info(oss.str());
   oss.str("");
 
-  oss<<"Gdal maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" Mb"<<std::endl;
+  oss<<"Gdal maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" MB"<<std::endl;
   this->Info(oss.str());
   oss.str("");
 
