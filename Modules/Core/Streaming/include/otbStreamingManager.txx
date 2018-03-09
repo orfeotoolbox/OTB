@@ -141,7 +141,7 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
   unsigned int optimalNumberOfDivisions =
       otb::PipelineMemoryPrintCalculator::EstimateOptimalNumberOfStreamDivisions(pipelineMemoryPrint, availableRAMInBytes);
 
-  otbLogMacro(Info,<<"Estimated memory for full processing: "<<pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<"MB (avail.: "<<availableRAMInBytes * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<" NB), optimal image partitioning: "<<optimalNumberOfDivisions<<" blocs");
+  otbLogMacro(Info,<<"Estimated memory for full processing: "<<pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<"MB (avail.: "<<availableRAMInBytes * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<" NB), optimal image partitioning: "<<optimalNumberOfDivisions<<" blocks");
   
   return optimalNumberOfDivisions;
 }
