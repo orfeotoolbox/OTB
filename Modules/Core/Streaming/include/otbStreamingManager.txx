@@ -31,6 +31,7 @@ namespace otb
 template <class TImage>
 StreamingManager<TImage>::StreamingManager()
   : m_ComputedNumberOfSplits(0)
+  , m_DefaultRAM(0)
 {
 }
 
@@ -47,9 +48,16 @@ StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType available
 
   if (availableRAMInBytes == 0)
     {
-    otbMsgDevMacro(<< "Retrieving available RAM size from configuration");
-    // Retrieve it from the configuration
-    availableRAMInBytes = 1024*1024*ConfigurationManager::GetMaxRAMHint();
+    if (m_DefaultRAM != 0)
+      {
+      availableRAMInBytes = 1024*1024*m_DefaultRAM;
+      }
+    else
+      {
+      otbMsgDevMacro(<< "Retrieving available RAM size from configuration");
+      // Retrieve it from the configuration
+      availableRAMInBytes = 1024*1024*ConfigurationManager::GetMaxRAMHint();
+      }
     }
 
   otbMsgDevMacro("RAM used to estimate memory footprint : " << availableRAMInBytes / 1024 / 1024  << " MB")
