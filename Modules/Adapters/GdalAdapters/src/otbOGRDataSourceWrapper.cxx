@@ -149,10 +149,10 @@ otb::ogr::DataSource::DataSource(
 otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string const& datasourceName, Modes::type mode)
 {
   FileNameHelperType::Pointer fileNameHelper = FileNameHelperType::New();
-  bool update = (mode != Modes::Read);
   fileNameHelper->SetExtendedFileName( datasourceName.c_str() );
-
   std::string simpleFileName = fileNameHelper->GetSimpleFileName();
+
+  bool update = (mode != Modes::Read);
   ogr::version_proxy::GDALDatasetType * source = 
     ogr::version_proxy::Open( simpleFileName.c_str() ,
                               !update ,
@@ -164,16 +164,16 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
     if (mode == Modes::Read)
       {
       itkGenericExceptionMacro(<< "Failed to open GDALDataset file "
-        << datasourceName<<" : " << CPLGetLastErrorMsg());
+        << simpleFileName<<" : " << CPLGetLastErrorMsg());
       }
 
     // Hand made factory based on file extension.
-    char const* driverName = DeduceDriverName(datasourceName);
+    char const* driverName = DeduceDriverName(simpleFileName);
     if (!driverName)
       {
       itkGenericExceptionMacro(<< "No OGR driver known to OTB to create and "
         "handle a DataSource named <"
-        <<datasourceName<<">.");
+        <<simpleFileName<<">.");
       }
 
     ogr::version_proxy::GDALDriverType * d = 
@@ -191,19 +191,24 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
                   fileNameHelper->GetGDALCreationOptions() );
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create GDALDataset <"
-        << datasourceName << "> (driver name: <" << driverName 
+        << simpleFileName << "> (driver name: <" << driverName 
         <<">: " << CPLGetLastErrorMsg());
     }
     }
-  return otb::ogr::DataSource::New( source, mode );
+  return otb::ogr::DataSource::New( source , mode , fileNameHelper->GetGDALLayerOptions() );
 }
 
 void DeleteDataSource(std::string const& datasourceName)
 {
-  bool ret = otb::ogr::version_proxy::Delete(datasourceName.c_str());
+  otb::OGRExtendedFilenameToOptions::Pointer fileNameHelper = 
+    otb::OGRExtendedFilenameToOptions::New();
+  fileNameHelper->SetExtendedFileName( datasourceName.c_str() );
+  std::string simpleFileName = fileNameHelper->GetSimpleFileName();
+
+  bool ret = otb::ogr::version_proxy::Delete(simpleFileName.c_str());
   if (!ret)
     {
-    itkGenericExceptionMacro(<< "Deletion of data source " << datasourceName
+    itkGenericExceptionMacro(<< "Deletion of data source " << simpleFileName
                              << " failed: " << CPLGetLastErrorMsg());
     }
 }
@@ -211,15 +216,18 @@ void DeleteDataSource(std::string const& datasourceName)
 otb::ogr::DataSource::Pointer
 otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 {
+  FileNameHelperType::Pointer fileNameHelper = FileNameHelperType::New();
+  fileNameHelper->SetExtendedFileName( datasourceName.c_str() );
+  std::string simpleFileName = fileNameHelper->GetSimpleFileName();
+
   if (mode < Modes::Read || mode >= Modes::MAX__)
     {
-    itkGenericExceptionMacro(<< "Wrong mode when opening " << datasourceName );
+    itkGenericExceptionMacro(<< "Wrong mode when opening " << simpleFileName );
     }
 
   Drivers::Init();
-
   ogr::version_proxy::GDALDatasetType * ds = 
-    ogr::version_proxy::Open( datasourceName.c_str() , true );
+    ogr::version_proxy::Open( simpleFileName.c_str() , true );
 
   bool ds_exists = (ds!=ITK_NULLPTR);
 
@@ -236,9 +244,9 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 
 /*static*/
 otb::ogr::DataSource::Pointer
-otb::ogr::DataSource::New(otb::ogr::version_proxy::GDALDatasetType * source, Modes::type mode)
+otb::ogr::DataSource::New(otb::ogr::version_proxy::GDALDatasetType * source , Modes::type mode , std::vector< std::string > layerOptions )
 {
-  Pointer res = new DataSource(source, mode);
+  Pointer res = new DataSource( source , mode , layerOptions );
   res->UnRegister();
   return res;
 }
