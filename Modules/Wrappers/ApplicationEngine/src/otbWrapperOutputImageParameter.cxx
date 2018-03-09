@@ -177,6 +177,7 @@ template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageB
       sptWriter->SetFileName(filename);
       sptWriter->SetInput(clampFilter->GetOutput());
       sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
+      sptWriter->GetStreamingManager()->SetDefaultRAM(ramValue);
       sptWriter->Update();
       }
     
@@ -192,10 +193,9 @@ template <typename TInput, typename TOutput> void ClampAndWriteImage(itk::ImageB
   
   if(useStandardWriter)
     {
-    
-    writer->SetFileName( filename );                                     
-    writer->SetInput(clampFilter->GetOutput());                                     
-    writer->SetAutomaticAdaptativeStreaming(ramValue);
+    writer->SetFileName( filename );
+    writer->SetInput(clampFilter->GetOutput());
+    writer->GetStreamingManager()->SetDefaultRAM(ramValue);
     writer->Update();
     }
 }
@@ -234,6 +234,7 @@ template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk:
       sptWriter->SetFileName(filename);
       sptWriter->SetInput(clampFilter->GetOutput());
       sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
+      sptWriter->GetStreamingManager()->SetDefaultRAM(ramValue);
       sptWriter->Update();
       }
     
@@ -247,10 +248,9 @@ template <typename TInput, typename TOutput > void ClampAndWriteVectorImage(itk:
   
   if(useStandardWriter)
     {
-    
-    writer->SetFileName( filename );                                     
-    writer->SetInput(clampFilter->GetOutput());                                     
-    writer->SetAutomaticAdaptativeStreaming(ramValue);
+    writer->SetFileName( filename );
+    writer->SetInput(clampFilter->GetOutput());
+    writer->GetStreamingManager()->SetDefaultRAM(ramValue);
     writer->Update();
     }
 }
@@ -354,7 +354,7 @@ OutputImageParameter::SwitchRGBAImageWrite()
     {
     m_RGBAUInt8Writer->SetFileName( this->GetFileName() );
     m_RGBAUInt8Writer->SetInput(dynamic_cast<UInt8RGBAImageType*>(m_Image.GetPointer()) );
-    m_RGBAUInt8Writer->SetAutomaticAdaptativeStreaming(m_RAMValue);
+    m_RGBAUInt8Writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
     m_RGBAUInt8Writer->Update();
     }
    else
@@ -369,7 +369,7 @@ OutputImageParameter::SwitchRGBImageWrite()
     {
     m_RGBUInt8Writer->SetFileName( this->GetFileName() );
     m_RGBUInt8Writer->SetInput(dynamic_cast<UInt8RGBImageType*>(m_Image.GetPointer()) );
-    m_RGBUInt8Writer->SetAutomaticAdaptativeStreaming(m_RAMValue);
+    m_RGBUInt8Writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
     m_RGBUInt8Writer->Update();
     }
    else
