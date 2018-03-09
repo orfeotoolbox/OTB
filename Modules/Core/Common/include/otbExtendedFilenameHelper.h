@@ -56,7 +56,7 @@ public:
   itkGetStringMacro(ExtendedFileName);
   itkGetStringMacro(SimpleFileName);
 
-  struct GenericBandRange : std::pair<int,int>
+  struct OTBCommon_EXPORT GenericBandRange : std::pair<int,int>
   {
     GenericBandRange() {}
 
