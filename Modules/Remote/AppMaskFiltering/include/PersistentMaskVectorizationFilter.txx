@@ -1,37 +1,38 @@
 
-#ifndef PersistentMaskFilter_txx
-#define PersistentMaskFilter_txx
+#ifndef PersistentMaskVectorizationFilter_txx
+#define PersistentMaskVectorizationFilter_txx
 
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkProgressReporter.h"
 
 #include "otbOGRFieldWrapper.h"
 
-#include "PersistentMaskFilter.h"
+#include "PersistentMaskVectorizationFilter.h"
 
-// --------- otb::PersistentMaskFilter ---------------------
+// --------- otb::PersistentMaskVectorizationFilter ---------------------
 
 namespace otb
 {
 template<class TInputImage>
-PersistentMaskFilter<TInputImage>
-::PersistentMaskFilter()
+PersistentMaskVectorizationFilter<TInputImage>
+::PersistentMaskVectorizationFilter()
 {
   this->SetNumberOfRequiredOutputs(2);
   //this->SetNthOutput(0,TInputImage::New());
   m_TileNumber = 1;
+  m_Tol = 0;
 }
 
 template<class TInputImage>
 void
-PersistentMaskFilter<TInputImage>
+PersistentMaskVectorizationFilter<TInputImage>
 ::Reset(void)
 {
 }
 
 template<class TInputImage>
 void
-PersistentMaskFilter<TInputImage>
+PersistentMaskVectorizationFilter<TInputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -39,7 +40,7 @@ PersistentMaskFilter<TInputImage>
 
 template<class TInputImage>
 void
-PersistentMaskFilter<TInputImage>
+PersistentMaskVectorizationFilter<TInputImage>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
@@ -47,7 +48,7 @@ PersistentMaskFilter<TInputImage>
 /*
 template<class TImage>
 void
-PersistentMaskFilter<TImage>
+PersistentMaskVectorizationFilter<TImage>
 ::GenerateData()
 {
   std::cout << this->GetInput()->GetRequestedRegion().GetSize() << this->GetInput()->GetRequestedRegion().GetIndex() << std::endl;
@@ -56,8 +57,8 @@ PersistentMaskFilter<TImage>
 }*/
   
 template<class TInputImage>
-typename PersistentMaskFilter<TInputImage>::OGRDataSourcePointerType
-PersistentMaskFilter<TInputImage>
+typename PersistentMaskVectorizationFilter<TInputImage>::OGRDataSourcePointerType
+PersistentMaskVectorizationFilter<TInputImage>
 ::ProcessTile()
 {  
   ++m_TileNumber;
@@ -114,25 +115,10 @@ PersistentMaskFilter<TInputImage>
     {
 
       //simplify
-      /*double tol = 1.5;
+      
       const OGRGeometry * geom = (*featIt).GetGeometry();
       assert(geom && "geometry is NULL ! Can't simplify it.");
-      (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify(*geom,tol));
-     */
-     
-     
-      /*
-     const OGRPolygon * geom = static_cast<const OGRPolygon *>((*featIt).GetGeometry());
-     geom->closeRings();
-     (*featIt).ogr::Feature::SetGeometry(&*geom);
-     */
-     
-     /*
-     OGRGeometry* geom = const_cast<OGRGeometry*>((*featIt).GetGeometry());
-     geom->closeRings();
-     (*featIt).ogr::Feature::SetGeometryDirectly(geom);
-     */
-    // (*featIt).GetGeometry()->closeRings();
+      (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify(*geom,m_Tol));
      
       // Compute Attributes
       double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();

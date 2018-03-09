@@ -24,9 +24,6 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"
 
-//#if(GDAL_VERSION_NUM < 1800)
-//#error MaskStreamStitchingFilter requires GDAL version >= 1.8.0
-//#endif
 
 #include "itkProgressReporter.h"
 
@@ -108,47 +105,54 @@ public:
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
   void GenerateData() ITK_OVERRIDE;
 
-  /** ------------------------------- */
+  /** A class to find connected components on a graph, it is used to find all intersecting polygons from a set of intersecting pairs. */
   class IntersectionGraph
   {
   public:
+  
+    /** struct to store a node of the graph, it contains the list of the node's neighbors, 
+     * and a flag to know if the node has been visited during the connected component algorithm
+     */
     struct NodeType
     {
       bool isVisited;
       std::vector<int> adjacencyList;
     };
 
+    /** this container contains all the information of the graph */
     typedef std::map<int, NodeType > GraphType;  
         
-    IntersectionGraph() {graph.clear();} // Constructor
+    IntersectionGraph() {m_graph.clear();} // Constructor
     ~IntersectionGraph() {}; // Destructor
-        
+    
+    /** Method to add two adjacent nodes idx1 and idx2 to the graph, if they don't exist already, 
+     * and add the adjacency property for existing nodes */
     void registerEdge(int idx1, int idx2)
     {
       if (idx1 != idx2)
       {
-        if (graph.find(idx1) == graph.end()) // The node (key in the map) doesn't exist
+        if (m_graph.find(idx1) == m_graph.end()) // The node (key in the map) doesn't exist
         {
           NodeType node;
           node.adjacencyList.push_back(idx2);
           node.isVisited = false;
-          graph[idx1] = node; 
+          m_graph[idx1] = node; 
         }
         else
         {
-          graph[idx1].adjacencyList.push_back(idx2);
+          m_graph[idx1].adjacencyList.push_back(idx2);
         }
                   
-        if (graph.find(idx2) == graph.end())
+        if (m_graph.find(idx2) == m_graph.end())
         {
           NodeType node;
           node.adjacencyList.push_back(idx1);
           node.isVisited = false;
-          graph[idx2] = node; 
+          m_graph[idx2] = node; 
         }
         else
         {
-          graph[idx2].adjacencyList.push_back(idx1);
+          m_graph[idx2].adjacencyList.push_back(idx1);
         }
       }
       else
@@ -156,9 +160,12 @@ public:
         std::cout << "warning : trying to merge polygon " <<idx1 << " with itself" << std::endl;
       }	
     }	
+    
+    /** Utility method that can be used to print all nodes in a graph, if they have been visited already 
+     * and the list of their neighbors */ 
     void printGraph()
     {
-      for (typename GraphType::iterator it = graph.begin(); it != graph.end(); it++)
+      for (typename GraphType::iterator it = m_graph.begin(); it != m_graph.end(); it++)
       {
         std::cout << "Node " << (*it).first << " Adj : " ;
         for (std::vector<int>::iterator itAdj = (*it).second.adjacencyList.begin(); itAdj != (*it).second.adjacencyList.end(); itAdj++)
@@ -170,10 +177,11 @@ public:
       }
     }
     
+    /** Graph search to find the connected component in the graph (depth-first search using recursivity) */ 
     std::vector< std::vector<int> > findConnectedComponents()
     {
       std::vector< std::vector<int> > fusionList;
-      for (typename GraphType::iterator it = graph.begin(); it != graph.end(); it++)
+      for (typename GraphType::iterator it = m_graph.begin(); it != m_graph.end(); it++)
       {
         std::vector<int> fusionIndexes;
         VisitNode( (*it).first, fusionIndexes);
@@ -185,21 +193,21 @@ public:
       return fusionList;
     }
         
-        
+    /** Visit a node, and recursively call the method on its neighbors */    
     void VisitNode(int idx, std::vector<int>& fusionIndexes)
     {
-      if (graph[idx].isVisited == false) 
+      if (m_graph[idx].isVisited == false) 
       {
         fusionIndexes.push_back(idx);
-        graph.find(idx)->second.isVisited = true;
-        for (std::vector<int>::iterator it = graph[idx].adjacencyList.begin(); it != graph[idx].adjacencyList.end(); it++)
+        m_graph.find(idx)->second.isVisited = true;
+        for (std::vector<int>::iterator it = m_graph[idx].adjacencyList.begin(); it != m_graph[idx].adjacencyList.end(); it++)
         {
           VisitNode( *it,fusionIndexes);
         }
       }
     }	
   private:
-    GraphType graph;
+    GraphType m_graph;
   };
 
 protected:
@@ -244,7 +252,6 @@ private:
   SizeType m_StreamSize;
   unsigned int m_Radius;
   OGRLayerType m_OGRLayer;
-	int m_count;
 
 };
 

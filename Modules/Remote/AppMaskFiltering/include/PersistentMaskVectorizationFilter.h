@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef PersistentMaskFilter_h
-#define PersistentMaskFilter_h
+#ifndef PersistentMaskVectorizationFilter_h
+#define PersistentMaskVectorizationFilter_h
 
 #include "otbPersistentImageToOGRLayerFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -27,30 +27,22 @@
 #include "otbImage.h"
 
 
-
-
-
-// ----------------------------
-#include <itkImageRegionConstIteratorWithIndex.h>
-//-----------
-
-
 namespace otb
 {
 /**
- * \class PersistentMaskFilter
+ * \class PersistentMaskVectorizationFilter
  * 
  * \brief Persistent filter to extract sample values from an image
  * 
  * \ingroup OTBSampling
  */
 template<class TInputImage>
-class ITK_EXPORT PersistentMaskFilter :
+class ITK_EXPORT PersistentMaskVectorizationFilter :
   public PersistentImageToOGRLayerFilter<TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentMaskFilter            Self;
+  typedef PersistentMaskVectorizationFilter            Self;
   typedef PersistentImageToOGRLayerFilter<TInputImage>     Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
@@ -76,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentMaskFilter, PersistentSamplingFilterBase);
+  itkTypeMacro(PersistentMaskVectorizationFilter, PersistentSamplingFilterBase);
 
   void Synthetize(void) ITK_OVERRIDE{}
 
@@ -113,18 +105,16 @@ public:
   }
 protected:
   /** Constructor */
-  PersistentMaskFilter();
+  PersistentMaskVectorizationFilter();
   /** Destructor */
-  ~PersistentMaskFilter() ITK_OVERRIDE {}
+  ~PersistentMaskVectorizationFilter() ITK_OVERRIDE {}
   
-  //void GenerateData() ITK_OVERRIDE;
-
   void GenerateOutputInformation() ITK_OVERRIDE;
 
   void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
 private:
-  PersistentMaskFilter(const Self &); //purposely not implemented
+  PersistentMaskVectorizationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
   
   OGRDataSourcePointerType ProcessTile() ITK_OVERRIDE;
@@ -132,20 +122,21 @@ private:
   std::string m_FieldName;
   std::vector<int> m_Labels;
   bool m_Use8Connected;
+  double m_Tol;
 };
 
 
-//--------------------------------------------------------------------------------------------------------------
+/** Streamed Version of PersistentMaskVectorizationFilter */
 
 template <class TImageType>
 class ITK_EXPORT MaskFilter :
-public PersistentFilterStreamingDecorator<PersistentMaskFilter<TImageType>>
+public PersistentFilterStreamingDecorator<PersistentMaskVectorizationFilter<TImageType>>
 {
 
 public:
   /** Standard Self typedef */
   typedef MaskFilter                                                                    Self;
-  typedef PersistentFilterStreamingDecorator<PersistentMaskFilter<TImageType>>           Superclass;
+  typedef PersistentFilterStreamingDecorator<PersistentMaskVectorizationFilter<TImageType>>           Superclass;
   typedef itk::SmartPointer<Self>                                                       Pointer;
   typedef itk::SmartPointer<const Self>                                                 ConstPointer;
 
@@ -156,14 +147,11 @@ public:
   itkTypeMacro(MaskFilter, PersistentFilterStreamingDecorator);
 
   typedef TImageType                               InputImageType;
-  //typedef typename PersistentMaskFilter<TImageType>::LabelPixelType                           LabelPixelType;
-  //typedef typename PersistentMaskFilter<TImageType>::LabelImageType                           LabelImageType;
-  typedef typename PersistentMaskFilter<TImageType>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
-  typedef typename PersistentMaskFilter<TImageType>::OGRLayerType                             OGRLayerType;
+  typedef typename PersistentMaskVectorizationFilter<TImageType>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
+  typedef typename PersistentMaskVectorizationFilter<TImageType>::OGRLayerType                             OGRLayerType;
 
   typedef typename InputImageType::SizeType                                   SizeType;
  /** Set the input image. */
- // using Superclass::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);
@@ -236,7 +224,7 @@ private:
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "PersistentMaskFilter.txx"
+#include "PersistentMaskVectorizationFilter.txx"
 #endif
 
 #endif

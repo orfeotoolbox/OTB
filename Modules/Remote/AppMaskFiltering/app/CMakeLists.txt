@@ -19,7 +19,7 @@
 #
 
 otb_create_application(
-  NAME           MaskFiltering
-  SOURCES        otbMaskFiltering.cxx
+  NAME           MaskVectorization
+  SOURCES        otbMaskVectorization.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
 

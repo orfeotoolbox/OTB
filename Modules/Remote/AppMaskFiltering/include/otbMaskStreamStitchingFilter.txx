@@ -249,7 +249,6 @@ MaskStreamStitchingFilter<TInputImage>
             {
               if (ogr::Intersects(*upper.feat.GetGeometry(), *lower.feat.GetGeometry()))
               {
-                std::cout << upper.feat.GetGeometry()->IsValid() << std::endl;
                 ogr::UniqueGeometryPtr intersection2 = ogr::Intersection(*upper.feat.GetGeometry(),*lower.feat.GetGeometry());
                 ogr::UniqueGeometryPtr intersection = ogr::Intersection(*intersection2, streamLine);
                 if (intersection)
@@ -279,36 +278,48 @@ MaskStreamStitchingFilter<TInputImage>
       }
       
       otb::ogr::UniqueGeometryPtr fusionPolygon =otb::ogr::UnionCascaded(geomToMerge);
-
+      
+      
+      typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
+      
+      
       if (fusionPolygon->getGeometryType() == wkbPolygon)
       {
         OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
-              
-        fusionFeature["size"].SetValue(static_cast<double>(m_count));
-        fusionFeature["perimeter"].SetValue(3.);
+        
+        double area = static_cast<const OGRPolygon *>(fusionPolygon.get())->get_Area();
+        double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
+        double perimeter = static_cast<const OGRPolygon *>(fusionPolygon.get())->getExteriorRing()->get_Length();
+
+        fusionFeature["size"].SetValue(pixelsArea);
+        fusionFeature["perimeter"].SetValue(perimeter);
         fusionFeature["field"].SetValue(field);
         fusionFeature.SetGeometry( fusionPolygon.get() );
         m_OGRLayer.CreateFeature(fusionFeature);
       }
       else if (fusionPolygon->getGeometryType() == wkbMultiPolygon)
       {
-        OGRMultiPolygon* aaaaaa= dynamic_cast<OGRMultiPolygon*>(fusionPolygon.get());
-        for (int i=0; i < aaaaaa->getNumGeometries() ;i++)
+        OGRMultiPolygon* polygonTmp= dynamic_cast<OGRMultiPolygon*>(fusionPolygon.get());
+        for (int i=0; i < polygonTmp->getNumGeometries() ;i++)
         {
+          
+        double area = static_cast<const OGRPolygon *>(polygonTmp->getGeometryRef(i))->get_Area();
+        double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
+        double perimeter = static_cast<const OGRPolygon *>(polygonTmp->getGeometryRef(i))->getExteriorRing()->get_Length();
+ 
         OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
-        fusionFeature["size"].SetValue(static_cast<double>(m_count));
-        fusionFeature["perimeter"].SetValue(3.);
+        fusionFeature["size"].SetValue(pixelsArea);
+        fusionFeature["perimeter"].SetValue(perimeter);
         fusionFeature["field"].SetValue(field);
-        OGRGeometry* geogeo = aaaaaa->getGeometryRef(i);
-        fusionFeature.SetGeometry(  aaaaaa->getGeometryRef(i) );
+        
+        fusionFeature.SetGeometry(polygonTmp->getGeometryRef(i) );
         m_OGRLayer.CreateFeature(fusionFeature);
         }
       }
       else
       {
       }
-      m_count++;
-      //std::cout << fusionFeature.GetFID() << " " << m_count <<std::endl;
+
       }
       std::set<int> FIDToDelete(FIDVec.begin(), FIDVec.end()); // Converting from std::vector to std::set sorts and removes duplicates
 
@@ -338,7 +349,7 @@ MaskStreamStitchingFilter<TImage>
   {
     itkExceptionMacro(<<"Input OGR layer is null!");
   }
-  m_count =0;
+
   this->InvokeEvent(itk::StartEvent());
   typename InputImageType::ConstPointer inputImage = this->GetInput();
 

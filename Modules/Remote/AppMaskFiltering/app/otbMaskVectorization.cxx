@@ -21,8 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-//#include <itkBinaryShapeOpeningImageFilter.h>
-#include "PersistentMaskFilter.h"
+#include "PersistentMaskVectorizationFilter.h"
 #include "otbMaskStreamStitchingFilter.h"
 
 
@@ -31,11 +30,11 @@ namespace otb
 namespace Wrapper
 {
 
-class MaskFiltering : public Application
+class MaskVectorization : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef MaskFiltering                       Self;
+  typedef MaskVectorization                       Self;
   typedef Application                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
@@ -54,12 +53,12 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(MaskFiltering, otb::Application);
+  itkTypeMacro(MaskVectorization, otb::Application);
 
 private:
   void DoInit() ITK_OVERRIDE
   {
-    SetName("MaskFiltering");
+    SetName("MaskVectorization");
     SetDescription("This application performs the vectorization of an input binary mask");
 
     // Documentation
@@ -135,7 +134,6 @@ private:
         {
         // Create the datasource
         ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
-		std::cout << "1" << std::endl;
         }
       else if (outmode == "update")
         {
@@ -204,4 +202,4 @@ private:
 } //end namespace Wrapper
 } //end namespace otb
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::MaskFiltering)
+OTB_APPLICATION_EXPORT(otb::Wrapper::MaskVectorization)
