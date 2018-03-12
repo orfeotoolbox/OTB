@@ -73,8 +73,7 @@ private:
 
     AddParameter(ParameterType_OutputFilename, "out", "Output samples");
     SetParameterDescription("out","Output vector data file storing new samples"
-                            "(OGR format). If not given, the input vector data file is updated");
-    MandatoryOff("out");
+                            "(OGR format).");
 
     AddParameter(ParameterType_ListView, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
@@ -190,19 +189,9 @@ private:
     {
     ogr::DataSource::Pointer vectors;
     ogr::DataSource::Pointer output;
-    if (IsParameterEnabled("out") && HasValue("out"))
-      {
-      vectors = ogr::DataSource::New(this->GetParameterString("in"));
-      output = ogr::DataSource::New(this->GetParameterString("out"),
-                                    ogr::DataSource::Modes::Overwrite);
-      }
-    else
-      {
-      // Update mode
-      vectors = ogr::DataSource::New(this->GetParameterString("in"),
-                                     ogr::DataSource::Modes::Update_LayerUpdate);
-      output = vectors;
-      }
+    vectors = ogr::DataSource::New(this->GetParameterString("in"));
+    output = ogr::DataSource::New(this->GetParameterString("out"),
+                                  ogr::DataSource::Modes::Overwrite);
 
     // Retrieve the field name
     std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
