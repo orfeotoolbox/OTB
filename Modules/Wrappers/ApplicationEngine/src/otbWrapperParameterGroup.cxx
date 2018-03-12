@@ -40,6 +40,7 @@
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperProxyParameter.h"
+#include "otbWrapperBoolParameter.h"
 
 #include "otb_boost_string_header.h"
 
@@ -332,6 +333,10 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
      {
      return ParameterType_InputProcessXML;
      }
+   else if (type == "Bool")
+     {
+     return ParameterType_Bool;
+     }
    else
      {
      std::cerr << "Cannot find parameter type code for type: " << type <<  std::endl;
@@ -464,6 +469,11 @@ std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
     case ParameterType_InputProcessXML:
     {
     paramType = "InputProcessXML";
+    }
+    break;
+    case ParameterType_Bool:
+    {
+    paramType = "Bool";
     }
     break;
     default:
@@ -623,6 +633,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
       case ParameterType_InputProcessXML:
         {
        newParam = InputProcessXMLParameter::New();
+        }
+        break;
+      case ParameterType_Bool:
+        {
+       newParam = BoolParameter::New();
         }
         break;
       }

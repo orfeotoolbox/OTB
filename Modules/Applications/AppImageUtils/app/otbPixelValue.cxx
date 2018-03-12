@@ -292,7 +292,7 @@ private:
     id.Fill(0);
     std::ostringstream oss;
     oss << extractor->GetOutput()->GetPixel(id);
-    SetParameterString("value", oss.str(), false);
+    SetParameterString("value", oss.str());
     //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );
   }

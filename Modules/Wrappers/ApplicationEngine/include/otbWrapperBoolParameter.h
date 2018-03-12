@@ -18,69 +18,70 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperEmptyParameter_h
-#define otbWrapperEmptyParameter_h
+#ifndef otbWrapperBoolParameter_h
+#define otbWrapperBoolParameter_h
 
 #include "otbWrapperParameter.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-/** \class EmptyParameter
- *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
+/** \class BoolParameter
+ *  \brief This class represent a boolean parameter for the wrapper framework
  *
- * \deprecated in OTB 6.6, use BoolParameter instead
- *
+ *  It is intended to replace the deprecated EmptyParameter
+ * 
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT EmptyParameter
+class OTBApplicationEngine_EXPORT BoolParameter
   : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef EmptyParameter                Self;
+  typedef BoolParameter                 Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Defining ::New() static method */
+    /** Defining ::New() static method */
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(EmptyParameter, Parameter);
+  itkTypeMacro(BoolParameter, Parameter);
 
-  /** HasValue */
-  bool HasValue() const ITK_OVERRIDE
+  /** This parameter is ON/OFF switch, it always has a value */
+  bool HasValue() const override
   {
-    return false;
+    return true;
   }
 
-  bool HasUserValue() const ITK_OVERRIDE
-  {
-    return this->m_UserValue;
-  }
+  bool GetValue() const;
+
+  std::string GetValueAsString() const;
+
+  void SetValue(bool state);
+
+  void SetValue(const std::string & str);
 
 protected:
   /** Constructor */
-  EmptyParameter()
-  {
-  // It does not make sense for an empty parameter to be mandatory
-  this->MandatoryOff();
-  }
+  BoolParameter();
 
   /** Destructor */
-  ~EmptyParameter() ITK_OVERRIDE
+  ~BoolParameter() override
   {}
 
 private:
-  EmptyParameter(const EmptyParameter &); //purposely not implemented
-  void operator =(const EmptyParameter&); //purposely not implemented
+  BoolParameter(const BoolParameter &) = delete;
+  void operator =(const BoolParameter&) = delete;
 
-}; // End class Parameter
+  bool m_Value;
+};
 
-} // End namespace Wrapper
-} // End namespace otb
+} // end of namespace Wrapper
+} // end of namespace otb
 
 #endif

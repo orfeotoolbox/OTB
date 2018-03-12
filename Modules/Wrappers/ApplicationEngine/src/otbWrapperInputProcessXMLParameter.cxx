@@ -306,8 +306,9 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
 	}
       }
 
-    if ( type == ParameterType_OutputFilename || type == ParameterType_OutputVectorData ||
-	 type == ParameterType_String || type == ParameterType_Choice || type == ParameterType_RAM)
+    if (type == ParameterType_OutputFilename || type == ParameterType_OutputVectorData ||
+        type == ParameterType_String || type == ParameterType_Choice ||
+        type == ParameterType_RAM || type == ParameterType_Bool)
       {
       this_->SetParameterString(key, value);
       }
