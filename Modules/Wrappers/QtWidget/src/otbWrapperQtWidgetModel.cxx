@@ -331,6 +331,10 @@ AppliThread
     m_Application->GetLogger()->Fatal(string("Cannot open image ") + err.m_Filename + string(". ") + err.GetDescription() + string("\n"));
     emit ExceptionRaised( err.what() );
   }
+  catch(itk::ProcessAborted& err)
+  {
+    m_Application->GetLogger()->Info("Processing aborted\n");
+  }
   catch(itk::ExceptionObject& err)
   {
     m_Application->GetLogger()->Debug("Caught itk::ExceptionObject during application execution:\n");

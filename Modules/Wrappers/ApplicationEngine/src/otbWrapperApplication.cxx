@@ -517,7 +517,6 @@ int Application::ExecuteAndWriteOutput()
         }
     }
 
-  // TODO: only if no Stop() was called
   this->AfterExecuteAndWriteOutputs();
 
   m_Chrono.Stop();
