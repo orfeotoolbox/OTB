@@ -287,12 +287,7 @@ MaskStreamStitchingFilter<TInputImage>
       {
         OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
         
-        double area = static_cast<const OGRPolygon *>(fusionPolygon.get())->get_Area();
-        double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
-        double perimeter = static_cast<const OGRPolygon *>(fusionPolygon.get())->getExteriorRing()->get_Length();
 
-        fusionFeature["size"].SetValue(pixelsArea);
-        fusionFeature["perimeter"].SetValue(perimeter);
         fusionFeature["field"].SetValue(field);
         fusionFeature.SetGeometry( fusionPolygon.get() );
         m_OGRLayer.CreateFeature(fusionFeature);
@@ -302,14 +297,8 @@ MaskStreamStitchingFilter<TInputImage>
         OGRMultiPolygon* polygonTmp= dynamic_cast<OGRMultiPolygon*>(fusionPolygon.get());
         for (int i=0; i < polygonTmp->getNumGeometries() ;i++)
         {
-          
-        double area = static_cast<const OGRPolygon *>(polygonTmp->getGeometryRef(i))->get_Area();
-        double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
-        double perimeter = static_cast<const OGRPolygon *>(polygonTmp->getGeometryRef(i))->getExteriorRing()->get_Length();
- 
         OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
-        fusionFeature["size"].SetValue(pixelsArea);
-        fusionFeature["perimeter"].SetValue(perimeter);
+
         fusionFeature["field"].SetValue(field);
         
         fusionFeature.SetGeometry(polygonTmp->getGeometryRef(i) );

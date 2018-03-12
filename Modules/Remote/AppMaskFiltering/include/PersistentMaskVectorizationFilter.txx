@@ -121,18 +121,18 @@ PersistentMaskVectorizationFilter<TInputImage>
       (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify(*geom,m_Tol));
      
       // Compute Attributes
-      double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();
-      typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
-      double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
+      //double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();
+      //typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
+      //double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
       
-      double perimeter = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->getExteriorRing()->get_Length();
+      //double perimeter = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->getExteriorRing()->get_Length();
       //otbMsgDebugMacro(<<"DN = "<<field.GetValue<int>()<<", area = "<<pixelsArea);
       
       
       outFeature.SetFrom( *featIt, TRUE );
-      outFeature["size"].ogr::Field::SetValue<double>(pixelsArea);
+      /*outFeature["size"].ogr::Field::SetValue<double>(pixelsArea);
       //outFeature[m_FieldName].ogr::Field::SetValue<int>(1);
-      outFeature["perimeter"].ogr::Field::SetValue<double>(perimeter);
+      outFeature["perimeter"].ogr::Field::SetValue<double>(perimeter);*/
       outLayer.CreateFeature( outFeature );
 
     }

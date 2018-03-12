@@ -149,13 +149,7 @@ private:
     OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
     OGRFieldDefn field(field_name.c_str(), OFTInteger);
     layer.CreateField(field, true);
-    OGRFieldDefn fieldSize("size", OFTReal);
-    
-    layer.CreateField(fieldSize, true);
 
-    OGRFieldDefn fieldPerimeter("perimeter", OFTReal);
-	layer.CreateField(fieldPerimeter, true);
-	
     // Mask FIlter : Vectorization of the input raster
     MaskFilterType::Pointer maskFilter = MaskFilterType::New();
     // Labeled image to be vectorized
