@@ -168,7 +168,8 @@ typename ObjectList<TObject>::Superclass *
 ObjectList<TObject>
 ::GetNthDataObject(unsigned int index) const
 {
-  return GetNthElement(index).GetPointer();
+  
+  return dynamic_cast<itk::DataObject *> ( GetNthElement(index).GetPointer() );
 }
 
 /**
