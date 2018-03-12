@@ -173,12 +173,11 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
                 typename TInputImage::IndexType&,
                 typename TInputImage::PointType& imgPoint,
                 itk::ThreadIdType& threadid)
-{
-  ogr::Layer outLayer = this->GetOutputLayer();
-  
+{  
   std::string className(feature.ogr().GetFieldAsString(this->GetFieldIndex()));
   for (unsigned int i=0 ; i<this->GetNumberOfLevels() ; ++i)
     {
+    ogr::Layer outLayer = this->GetOutputLayer(1+i);
     if (m_Samplers[i][className]->TakeSample())
       {
       OGRPoint ogrTmpPoint;
@@ -192,7 +191,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
         feat[this->GetOriginFieldName()].SetValue(static_cast<int>(feature.GetFID()));
         }
       feat.SetGeometry(&ogrTmpPoint);
-      Superclass::GetInMemoryOutput(threadid).push_back(feat);
+      Superclass::GetInMemoryOutput(i,threadid).push_back(feat);
       break;
       }
     }
@@ -307,6 +306,9 @@ void
 PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
 ::FillOneOutput(unsigned int outIdx, bool update)
 {
+  // output 0 is reserved for image output
+  assert(outIdx>0);
+  
   ogr::Layer outLayer = this->GetOutputLayer(outIdx);
 
   OGRErr err = outLayer.ogr().StartTransaction();
@@ -318,7 +320,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
   // output vectors sorted by class
   for (auto& label : m_ClassPartition)
     {
-    std::vector<ogr::Feature> & inLayer = this->GetInMemoryOutput(label.second);
+    std::vector<ogr::Feature> & inLayer = this->GetInMemoryOutput(outIdx-1,label.second);
   
     // This test only uses 1 input, not compatible with multiple OGRData inputs
     for(auto tmpIt = inLayer.begin(); tmpIt!=inLayer.end(); ++tmpIt)

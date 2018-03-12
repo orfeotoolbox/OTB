@@ -165,7 +165,8 @@ PersistentImageSampleExtractorFilter<TInputImage>
   TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   unsigned int nbBand = inputImage->GetNumberOfComponentsPerPixel();
 
-  std::vector<ogr::Feature> & outputLayer = this->GetInMemoryOutput(threadid);
+  // 0 since SampleExtractor only supports one output
+  std::vector<ogr::Feature> & outputLayer = this->GetInMemoryOutput(0,threadid);
 
   itk::ProgressReporter progress( this, threadid, layerForThread.size() );
 

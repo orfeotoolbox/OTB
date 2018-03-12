@@ -229,14 +229,25 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfOutputs = this->GetNumberOfOutputs();
 
+  if(numberOfOutputs <= 1)
+    {
+    itkExceptionMacro(<<"No vector output found in filter.");
+    }
+  
   // Prepare temporary input
   this->m_InMemoryInputs.clear();
   this->m_InMemoryInputs.resize(numberOfThreads);
 
   // Prepare in-memory outputs
   this->m_InMemoryOutputs.clear();
- this->m_InMemoryOutputs.resize(numberOfThreads);
+  this->m_InMemoryOutputs.resize(numberOfOutputs-1);
+  
+  for(auto it = m_InMemoryOutputs.begin(); it!=m_InMemoryOutputs.end();++it)
+    {
+    it->resize(numberOfThreads);
+    } 
 }
 
 template <class TInputImage, class TMaskImage>
@@ -284,12 +295,12 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   for (unsigned int thread=0 ; thread < numberOfThreads ; thread++)
     {
 
-    auto tmpIt = m_InMemoryOutputs[thread].begin();
+    auto tmpIt = m_InMemoryOutputs[outIdx-1][thread].begin();
     // This test only uses 1 input, not compatible with multiple OGRData inputs
     if (update)
       {
-      // Update mode
-      for(; tmpIt!=m_InMemoryOutputs[thread].end(); ++tmpIt)
+      // Update mode. First outIdx is reserved for output image
+      for(; tmpIt!=m_InMemoryOutputs[outIdx-1][thread].end(); ++tmpIt)
         {
         outLayer.SetFeature( *tmpIt );
         }
@@ -297,7 +308,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     else
       {
       // Copy mode
-      for(; tmpIt!=m_InMemoryOutputs[thread].end(); ++tmpIt)
+      for(; tmpIt!=m_InMemoryOutputs[outIdx-1][thread].end(); ++tmpIt)
         {
         ogr::Feature dstFeature(outLayer.GetLayerDefn());
         dstFeature.SetFrom( *tmpIt, TRUE );
@@ -818,7 +829,6 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       }
     else
       {
-      std::cout<<"Create field "<<m_AdditionalFields[k].Name.c_str()<<std::endl;
       outLayer.CreateField(fieldDef);
       }
     }
@@ -892,13 +902,13 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 std::vector<ogr::Feature> &
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GetInMemoryOutput(unsigned int threadId)
-{
-  if (threadId >= m_InMemoryOutputs.size())
+::GetInMemoryOutput(unsigned int outIndex, unsigned int threadId)
+{  
+  if (outIndex >= m_InMemoryOutputs.size() || threadId >= m_InMemoryOutputs[outIndex].size())
     {
-    itkExceptionMacro(<< "Requested in-memory output layer not available " << threadId << " (total size : "<< m_InMemoryOutputs.size() <<").");
+    itkExceptionMacro(<< "Requested in-memory output layer not available index=" << outIndex<<", threadId="<< threadId);
     }
-  return m_InMemoryOutputs[threadId];
+  return m_InMemoryOutputs[outIndex][threadId];
 }
 
 } // end namespace otb

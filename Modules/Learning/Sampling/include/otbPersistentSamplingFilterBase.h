@@ -208,7 +208,7 @@ protected:
   std::vector<ogr::Feature> & GetInMemoryInput(unsigned int threadId);
 
   /** Give access to in-memory output layers */
-  std::vector<ogr::Feature> &  GetInMemoryOutput(unsigned int threadId);
+  std::vector<ogr::Feature> &  GetInMemoryOutput(unsigned int outIndex, unsigned int threadId);
 
 private:
   PersistentSamplingFilterBase(const Self &); //purposely not implemented
@@ -236,7 +236,7 @@ private:
   std::vector<std::vector<ogr::Feature> > m_InMemoryInputs;
 
   /** In-memory containers storing position during iteration loop*/
-  std::vector<std::vector<ogr::Feature> > m_InMemoryOutputs;
+  std::vector<std::vector<std::vector<ogr::Feature> > >  m_InMemoryOutputs;
 
 };
 } // End namespace otb
