@@ -59,7 +59,7 @@ private:
 
   void DoUpdateGUI() ITK_OVERRIDE;
 
-  virtual void ProcessChild(Parameter * currentNode, bool status);
+  virtual void ProcessChild(QObject* currentNode, bool status);
 
   ParameterGroup::Pointer m_ParamList;
 

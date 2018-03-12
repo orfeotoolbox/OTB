@@ -50,6 +50,7 @@
 #include "otbWrapperQtWidgetRAMParameter.h"
 #include "otbWrapperQtWidgetStringParameter.h"
 #include "otbWrapperQtWidgetStringListParameter.h"
+#include "otbWrapperQtWidgetBoolParameter.h"
 
 
 namespace otb
@@ -123,7 +124,7 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(InputVectorDataParameter, QtWidgetInputVectorDataParameter)
   CREATEWIDGET(OutputImageParameter,    QtWidgetOutputImageParameter)
   CREATEWIDGET(OutputVectorDataParameter, QtWidgetOutputVectorDataParameter)
-  CREATEWIDGET(EmptyParameter,          QtWidgetEmptyParameter)
+  CREATEWIDGET(BoolParameter,          QtWidgetBoolParameter)
   CREATEWIDGET(ParameterGroup,          QtWidgetParameterGroup)
   CREATEWIDGET(RAMParameter,            QtWidgetRAMParameter)
   CREATEWIDGET(OutputProcessXMLParameter,        QtWidgetOutputProcessXMLParameter)

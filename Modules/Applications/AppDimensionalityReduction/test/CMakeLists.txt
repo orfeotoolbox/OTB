@@ -38,3 +38,58 @@ otb_test_application(NAME   apTvFEDimensionalityReductionPCA
                              ${BASELINE}/bfTvPCAImageFilter3.tif
                              ${TEMP}/apTvChDimensionalityReductionPCA.tif)
 
+#-------------------------------------------------------------------------------
+set(algos ae pca som)
+
+set(ae_params
+-algorithm autoencoder
+-algorithm.autoencoder.nbneuron 8
+-algorithm.autoencoder.regularization 0.01
+-algorithm.autoencoder.noise 0
+-algorithm.autoencoder.rho 0
+-algorithm.autoencoder.beta 0)
+
+set(pca_params
+-algorithm pca
+-algorithm.pca.dim 8)
+
+set(som_params
+-algorithm som
+-algorithm.som.s 10 10
+-algorithm.som.n 3 3
+-algorithm.som.ni 10)
+
+foreach(algo ${algos})
+  string(TOUPPER ${algo} ualgo)
+  #------------------ TrainDimensionalityReduction TESTS------------------------
+  otb_test_application(NAME apTvDrTrainDimensionalityReduction${ualgo}
+    APP TrainDimensionalityReduction
+    OPTIONS -io.vd ${INPUTDATA}/cuprite_samples.sqlite
+            -io.out ${TEMP}/cuprite_DRModel.${algo}
+            -io.stats ${INPUTDATA}/cupriteStats.xml
+            -feat value_0 value_1 value_2 value_3 value_4 value_5 value_6 value_7 value_8 value_9
+            ${${algo}_params})
+
+  #------------------ ImageDimensionalityReduction TESTS------------------------
+  otb_test_application(NAME apTvDrImageDimensionalityReduction${ualgo}
+    APP ImageDimensionalityReduction
+    OPTIONS -in ${INPUTDATA}/cupriteSubHsi.tif
+            -model ${TEMP}/cuprite_DRModel.${algo}
+            -imstat ${INPUTDATA}/cupriteStats.xml
+            -out ${TEMP}/cupriteReduced_${algo}.tif)
+
+  set_tests_properties( apTvDrImageDimensionalityReduction${ualgo}
+    PROPERTIES DEPENDS apTvDrTrainDimensionalityReduction${ualgo})
+
+  #------------------ VectorDimensionalityReduction TESTS-----------------------
+  otb_test_application(NAME apTvDrVectorDimensionalityReduction${ualgo}
+    APP VectorDimensionalityReduction
+    OPTIONS -in ${INPUTDATA}/cuprite_samples.sqlite
+            -model ${TEMP}/cuprite_DRModel.${algo}
+            -instat ${INPUTDATA}/cupriteStats.xml
+            -out ${TEMP}/cupriteReduced_${algo}.sqlite
+            -feat value_0 value_1 value_2 value_3 value_4 value_5 value_6 value_7 value_8 value_9)
+
+  set_tests_properties( apTvDrVectorDimensionalityReduction${ualgo}
+    PROPERTIES DEPENDS apTvDrTrainDimensionalityReduction${ualgo})
+endforeach()

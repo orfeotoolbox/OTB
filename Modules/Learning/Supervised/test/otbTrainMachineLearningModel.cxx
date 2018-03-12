@@ -26,6 +26,8 @@
 #include <otbMachineLearningModel.h>
 #include "otbConfusionMatrixCalculator.h"
 
+#include "otbReadDataFile.h"
+
 #include "otb_boost_string_header.h"
 
 typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
@@ -45,142 +47,6 @@ typedef MachineLearningModelRegressionType::TargetSampleType     TargetSampleReg
 typedef MachineLearningModelRegressionType::TargetListSampleType TargetListSampleRegressionType;
 
 typedef otb::ConfusionMatrixCalculator<TargetListSampleType, TargetListSampleType> ConfusionMatrixCalculatorType;
-
-bool ReadDataFile(const std::string & infname, InputListSampleType * samples, TargetListSampleType * labels)
-{
-  std::ifstream ifs;
-  ifs.open(infname.c_str());
-
-  if(!ifs)
-    {
-    std::cout<<"Could not read file "<<infname<<std::endl;
-    return false;
-    }
-
-  unsigned int nbfeatures = 0;
-
-  while (!ifs.eof())
-    {
-    std::string line;
-    std::getline(ifs, line);
-    boost::algorithm::trim(line);
-
-    if(nbfeatures == 0)
-      {
-      nbfeatures = std::count(line.begin(),line.end(),' ');
-      }
-
-    if(line.size()>1)
-      {
-      InputSampleType sample(nbfeatures);
-      sample.Fill(0);
-
-      std::string::size_type pos = line.find_first_of(" ", 0);
-
-      // Parse label
-      TargetSampleType label;
-      label[0] = atoi(line.substr(0, pos).c_str());
-
-      bool endOfLine = false;
-      unsigned int id = 0;
-
-      while(!endOfLine)
-        {
-        std::string::size_type nextpos = line.find_first_of(" ", pos+1);
-
-        if(pos == std::string::npos)
-          {
-          endOfLine = true;
-          nextpos = line.size()-1;
-          }
-        else
-          {
-          std::string feature = line.substr(pos,nextpos-pos);
-          std::string::size_type semicolonpos = feature.find_first_of(":");
-          id = atoi(feature.substr(0,semicolonpos).c_str());
-          sample[id - 1] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
-          pos = nextpos;
-          }
-
-        }
-      samples->SetMeasurementVectorSize(itk::NumericTraits<InputSampleType>::GetLength(sample));
-      samples->PushBack(sample);
-      labels->PushBack(label);
-      }
-    }
-
-  //std::cout<<"Retrieved "<<samples->Size()<<" samples"<<std::endl;
-  ifs.close();
-  return true;
-}
-
-bool ReadDataRegressionFile(const std::string & infname, InputListSampleRegressionType * samples, TargetListSampleRegressionType * labels)
-{
-  std::ifstream ifs;
-  ifs.open(infname.c_str());
-
-  if(!ifs)
-    {
-    std::cout<<"Could not read file "<<infname<<std::endl;
-    return false;
-    }
-
-  unsigned int nbfeatures = 0;
-
-  while (!ifs.eof())
-    {
-    std::string line;
-    std::getline(ifs, line);
-
-    if(nbfeatures == 0)
-      {
-      nbfeatures = std::count(line.begin(),line.end(),' ')-1;
-      //std::cout<<"Found "<<nbfeatures<<" features per samples"<<std::endl;
-      }
-
-    if(line.size()>1)
-      {
-      InputSampleRegressionType sample(nbfeatures);
-      sample.Fill(0);
-
-      std::string::size_type pos = line.find_first_of(" ", 0);
-
-      // Parse label
-      TargetSampleRegressionType label;
-      label[0] = atof(line.substr(0, pos).c_str());
-
-      bool endOfLine = false;
-      unsigned int id = 0;
-
-      while(!endOfLine)
-        {
-        std::string::size_type nextpos = line.find_first_of(" ", pos+1);
-
-        if(nextpos == std::string::npos)
-          {
-          endOfLine = true;
-          nextpos = line.size()-1;
-          }
-        else
-          {
-          std::string feature = line.substr(pos,nextpos-pos);
-          std::string::size_type semicolonpos = feature.find_first_of(":");
-          id = atoi(feature.substr(0,semicolonpos).c_str());
-          sample[id - 1] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
-          pos = nextpos;
-          }
-
-        }
-      samples->SetMeasurementVectorSize(itk::NumericTraits<InputSampleRegressionType>::GetLength(sample));
-      samples->PushBack(sample);
-      labels->PushBack(label);
-      }
-    }
-
-  //std::cout<<"Retrieved "<<samples->Size()<<" samples"<<std::endl;
-  ifs.close();
-  return true;
-}
 
 #ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModel.h"
@@ -205,7 +71,7 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if (!ReadDataFile(argv[1], samples, labels))
+  if (!otb::ReadDataFile(argv[1], samples, labels))
     {
     std::cout << "Failed to read samples file " << argv[1] << std::endl;
     return EXIT_FAILURE;
@@ -294,7 +160,7 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if(!ReadDataFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;
@@ -364,7 +230,7 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
   InputListSampleRegressionType::Pointer samples = InputListSampleRegressionType::New();
   TargetListSampleRegressionType::Pointer labels = TargetListSampleRegressionType::New();
 
-  if(!ReadDataRegressionFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;
@@ -439,7 +305,7 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if(!ReadDataFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;
@@ -516,7 +382,7 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if(!ReadDataFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;
@@ -603,7 +469,7 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if(!ReadDataFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;
@@ -689,7 +555,7 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if (!ReadDataFile(argv[1], samples, labels))
+  if (!otb::ReadDataFile(argv[1], samples, labels))
     {
     std::cout << "Failed to read samples file " << argv[1] << std::endl;
     return EXIT_FAILURE;
@@ -779,7 +645,7 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if(!ReadDataFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;
@@ -856,7 +722,7 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if(!ReadDataFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;
@@ -934,7 +800,7 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if(!ReadDataFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;
@@ -995,139 +861,6 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
 #ifdef OTB_USE_SHARK
 #include <chrono> // If shark is on, then we are using c++11
 
-bool SharkReadDataFile(const std::string & infname, InputListSampleType * samples, TargetListSampleType * labels)
-{
-  std::ifstream ifs(infname.c_str());
-
-  if(!ifs)
-    {
-    std::cout<<"Could not read file "<<infname<<std::endl;
-    return false;
-    }
-
-  unsigned int nbfeatures = 0;
-
-  std::string line;
-  while (std::getline(ifs, line))
-    {
-    boost::algorithm::trim(line);
-
-    if(nbfeatures == 0)
-      {
-      nbfeatures = std::count(line.begin(),line.end(),' ');
-      }
-
-    if(line.size()>1)
-      {
-      InputSampleType sample(nbfeatures);
-      sample.Fill(0);
-
-      std::string::size_type pos = line.find_first_of(" ", 0);
-
-      // Parse label
-      TargetSampleType label;
-      label[0] = std::stoi(line.substr(0, pos).c_str());
-
-      bool endOfLine = false;
-      unsigned int id = 0;
-
-      while(!endOfLine)
-        {
-        std::string::size_type nextpos = line.find_first_of(" ", pos+1);
-
-        if(pos == std::string::npos)
-          {
-          endOfLine = true;
-          nextpos = line.size()-1;
-          }
-        else
-          {
-          std::string feature = line.substr(pos,nextpos-pos);
-          std::string::size_type semicolonpos = feature.find_first_of(":");
-          id = std::stoi(feature.substr(0,semicolonpos).c_str());
-          sample[id - 1] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
-          pos = nextpos;
-          }
-
-        }
-      samples->SetMeasurementVectorSize(itk::NumericTraits<InputSampleType>::GetLength(sample));
-      samples->PushBack(sample);
-      labels->PushBack(label);
-      }
-    }
-
-  //std::cout<<"Retrieved "<<samples->Size()<<" samples"<<std::endl;
-  ifs.close();
-  return true;
-}
-
-bool SharkReadDataRegressionFile(const std::string & infname, InputListSampleRegressionType * samples, TargetListSampleRegressionType * labels)
-{
-  std::ifstream ifs(infname.c_str());
-  if(!ifs)
-    {
-    std::cout<<"Could not read file "<<infname<<std::endl;
-    return false;
-    }
-
-  unsigned int nbfeatures = 0;
-
-  while (!ifs.eof())
-    {
-    std::string line;
-    std::getline(ifs, line);
-
-    if(nbfeatures == 0)
-      {
-      nbfeatures = std::count(line.begin(),line.end(),' ')-1;
-      //std::cout<<"Found "<<nbfeatures<<" features per samples"<<std::endl;
-      }
-
-    if(line.size()>1)
-      {
-      InputSampleRegressionType sample(nbfeatures);
-      sample.Fill(0);
-
-      std::string::size_type pos = line.find_first_of(" ", 0);
-
-      // Parse label
-      TargetSampleRegressionType label;
-      label[0] = atof(line.substr(0, pos).c_str());
-
-      bool endOfLine = false;
-      unsigned int id = 0;
-
-      while(!endOfLine)
-        {
-        std::string::size_type nextpos = line.find_first_of(" ", pos+1);
-
-        if(nextpos == std::string::npos)
-          {
-          endOfLine = true;
-          nextpos = line.size()-1;
-          }
-        else
-          {
-          std::string feature = line.substr(pos,nextpos-pos);
-          std::string::size_type semicolonpos = feature.find_first_of(":");
-          id = std::stoi(feature.substr(0,semicolonpos).c_str());
-          sample[id - 1] = atof(feature.substr(semicolonpos+1,feature.size()-semicolonpos).c_str());
-          pos = nextpos;
-          }
-
-        }
-      samples->SetMeasurementVectorSize(itk::NumericTraits<InputSampleRegressionType>::GetLength(sample));
-      samples->PushBack(sample);
-      labels->PushBack(label);
-      }
-    }
-
-  //std::cout<<"Retrieved "<<samples->Size()<<" samples"<<std::endl;
-  ifs.close();
-  return true;
-}
-
-
 #include "otbSharkRandomForestsMachineLearningModel.h"
 int otbSharkRFMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
@@ -1149,7 +882,7 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
   InputListSampleType::Pointer samples = InputListSampleType::New();
   TargetListSampleType::Pointer labels = TargetListSampleType::New();
 
-  if(!SharkReadDataFile(argv[1],samples,labels))
+  if(!otb::ReadDataFile(argv[1],samples,labels))
     {
     std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
     return EXIT_FAILURE;

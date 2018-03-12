@@ -95,7 +95,8 @@ def GenerateChoice(app,param,paramlist, count = 0):
     return output
 
 def GenerateParameterType(app,param):
-    if app.GetParameterType(param) == otbApplication.ParameterType_Empty:
+    if app.GetParameterType(param) == otbApplication.ParameterType_Empty \
+       or app.GetParameterType(param) == otbApplication.ParameterType_Bool:
         return "Boolean"
     if app.GetParameterType(param) == otbApplication.ParameterType_Int \
        or app.GetParameterType(param) == otbApplication.ParameterType_Radius \
@@ -346,6 +347,8 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
         if paramtype == otbApplication.ParameterType_Empty:
             app.EnableParameter(param)
             output+= "\t" + appname + ".EnableParameter("+EncloseString(param)+")" + linesep
+        if paramtype == otbApplication.ParameterType_Bool:
+            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+","+EncloseString(value)+")" + linesep
         if paramtype == otbApplication.ParameterType_Int \
                 or paramtype == otbApplication.ParameterType_Radius \
                 or paramtype == otbApplication.ParameterType_RAM:

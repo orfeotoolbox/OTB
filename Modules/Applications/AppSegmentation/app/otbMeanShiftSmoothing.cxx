@@ -159,10 +159,8 @@ private:
     SetMinimumParameterFloatValue("rangeramp", 0);
     MandatoryOff("rangeramp");
 
-    AddParameter(ParameterType_Empty, "modesearch", "Mode search.");
+    AddParameter(ParameterType_Bool, "modesearch", "Mode search.");
     SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number and the results will not be stable (see [4] for more details).");
-    DisableParameter("modesearch");
-
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "maur_rgb.png");
@@ -192,7 +190,7 @@ private:
     m_Filter->SetThreshold(GetParameterFloat("thres"));
     m_Filter->SetMaxIterationNumber(GetParameterInt("maxiter"));
     m_Filter->SetRangeBandwidthRamp(GetParameterFloat("rangeramp"));
-    m_Filter->SetModeSearch(IsParameterEnabled("modesearch"));
+    m_Filter->SetModeSearch(GetParameterInt("modesearch"));
 
     //Compute the margin used to ensure exact results (tile wise smoothing)
     //This margin is valid for the default uniform kernel used by the
@@ -211,7 +209,7 @@ private:
       {
       SetParameterOutputImage("foutpos", m_Filter->GetSpatialOutput());
       }
-    if(!IsParameterEnabled("modesearch"))
+    if(!GetParameterInt("modesearch"))
       {
       otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
       }
