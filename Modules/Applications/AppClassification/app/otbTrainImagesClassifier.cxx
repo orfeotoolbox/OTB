@@ -205,7 +205,7 @@ public:
     TrainModel( imageList, fileNames.sampleTrainOutputs, fileNames.sampleValidOutputs );
 
     // cleanup
-    if( IsParameterEnabled( "cleanup" ) )
+    if( GetParameterInt( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
       fileNames.clear();
@@ -217,7 +217,7 @@ private :
   void UpdatePolygonClassStatisticsParameters()
   {
     std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
-    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0], false );
+    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0]);
     UpdateInternalParameters( "polystat" );
   }
 

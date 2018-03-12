@@ -93,7 +93,7 @@ private:
   {
     int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
                                                   GetParameterFloat("lat"));
-    SetParameterInt("utm",utmZone, false);
+    SetParameterInt("utm",utmZone);
   }
 
 };
