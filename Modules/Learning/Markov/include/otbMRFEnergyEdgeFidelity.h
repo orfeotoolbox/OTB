@@ -63,7 +63,7 @@ public:
 
   itkTypeMacro(MRFEnergyEdgeFidelity, MRFEnergy);
 
-  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) ITK_OVERRIDE
+  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) override
   {
     double val1 = static_cast<double>(value1);
     double val2 = static_cast<double>(value2);
@@ -74,7 +74,7 @@ public:
 protected:
   // The constructor and destructor.
   MRFEnergyEdgeFidelity() {};
-  ~MRFEnergyEdgeFidelity() ITK_OVERRIDE {}
+  ~MRFEnergyEdgeFidelity() override {}
 };
 }
 

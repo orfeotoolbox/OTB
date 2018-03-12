@@ -84,11 +84,11 @@ public:
 
 protected:
   ThresholdImageToPointSetFilter();
-  ~ThresholdImageToPointSetFilter() ITK_OVERRIDE {}
+  ~ThresholdImageToPointSetFilter() override {}
 
-  void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ThresholdImageToPointSetFilter(const Self &); //purposely not implemented

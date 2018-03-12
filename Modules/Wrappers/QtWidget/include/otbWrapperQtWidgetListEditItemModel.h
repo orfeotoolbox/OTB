@@ -122,7 +122,7 @@ public:
 		     QObject * p = nullptr );
 
   /** \brief Destructor. */
-  ~ListEditItemModel() ITK_OVERRIDE;
+  ~ListEditItemModel() override;
 
   //
   // QAbstractItemModel overloads.
@@ -130,31 +130,31 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
    */
-  int columnCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  int columnCount( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
    */
   QVariant
     data( const QModelIndex & index,
-	  int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+	  int role = Qt::DisplayRole ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
    */
-  Qt::ItemFlags flags( const QModelIndex & index ) const ITK_OVERRIDE;
+  Qt::ItemFlags flags( const QModelIndex & index ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
    */
-  bool hasChildren( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  bool hasChildren( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
    */
   QVariant headerData( int section,
                                Qt::Orientation orientation,
-                               int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+                               int role = Qt::DisplayRole ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
@@ -162,7 +162,7 @@ public:
   QModelIndex
     index( int row,
            int column,
-           const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+           const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#insertRow
@@ -176,12 +176,12 @@ public:
   bool
     insertRows( int row,
                 int count,
-                const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
+                const QModelIndex & p = QModelIndex() ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
-  QModelIndex parent( const QModelIndex & index ) const ITK_OVERRIDE;
+  QModelIndex parent( const QModelIndex & index ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
@@ -189,12 +189,12 @@ public:
   bool
     removeRows( int row,
                 int count,
-                const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
+                const QModelIndex & p = QModelIndex() ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
    */
-  int rowCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  int rowCount( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
@@ -202,7 +202,7 @@ public:
   bool
     setData( const QModelIndex & index,
              const QVariant & value,
-             int role = Qt::EditRole ) ITK_OVERRIDE;
+             int role = Qt::EditRole ) override;
 
   /** */
   virtual bool Swap( int, int );

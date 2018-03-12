@@ -163,7 +163,7 @@ public:
 
 protected:
   ImageToGenericRSOutputParameters();
-  ~ImageToGenericRSOutputParameters() ITK_OVERRIDE {}
+  ~ImageToGenericRSOutputParameters() override {}
 
 private:
   ImageToGenericRSOutputParameters(const Self&); //purposely not implemented

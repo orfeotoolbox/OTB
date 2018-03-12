@@ -311,7 +311,7 @@ private:
   }
 
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     // TODO : implement this application as a CompositeApplication...
     SetName("StereoFramework");
@@ -584,7 +584,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if( HasValue("input.il") )
       {
@@ -650,7 +650,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Setup the DSM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");

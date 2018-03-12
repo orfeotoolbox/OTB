@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetInputProcessXMLParameter : public QtWidgetParam
   Q_OBJECT
 public:
   QtWidgetInputProcessXMLParameter(InputProcessXMLParameter*, QtWidgetModel*);
-  ~QtWidgetInputProcessXMLParameter() ITK_OVERRIDE;
+  ~QtWidgetInputProcessXMLParameter() override;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -56,9 +56,9 @@ private:
   QtWidgetInputProcessXMLParameter(const QtWidgetInputProcessXMLParameter&); //purposely not implemented
   void operator=(const QtWidgetInputProcessXMLParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
 
   InputProcessXMLParameter::Pointer m_XMLParam;

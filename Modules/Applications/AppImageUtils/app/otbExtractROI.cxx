@@ -63,7 +63,7 @@ public:
 
 private:
   void 
-  DoInit() ITK_OVERRIDE
+  DoInit() override
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
@@ -247,7 +247,7 @@ private:
   }
 
   void 
-  DoUpdateParameters() ITK_OVERRIDE
+  DoUpdateParameters() override
   {
     if ( HasValue("in") )
       {
@@ -674,7 +674,7 @@ private:
   }
 
   void 
-  DoExecute() ITK_OVERRIDE
+  DoExecute() override
   {
     ImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();

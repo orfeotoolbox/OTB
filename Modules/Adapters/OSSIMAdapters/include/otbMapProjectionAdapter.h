@@ -89,7 +89,7 @@ public:
 
 protected:
   MapProjectionAdapter();
-  ~MapProjectionAdapter() ITK_OVERRIDE;
+  ~MapProjectionAdapter() override;
 
 private:
   MapProjectionAdapter(const Self &); //purposely not implemented

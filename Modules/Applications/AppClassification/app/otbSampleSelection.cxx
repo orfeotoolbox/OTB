@@ -80,7 +80,7 @@ private:
     m_RateCalculator = RateCalculatorType::New();
     }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("SampleSelection");
     SetDescription("Selects samples from a training vector data set.");
@@ -227,7 +227,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
  if ( HasValue("vec") )
       {
@@ -257,7 +257,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     {
     // Clear state
     m_RateCalculator->ClearRates();

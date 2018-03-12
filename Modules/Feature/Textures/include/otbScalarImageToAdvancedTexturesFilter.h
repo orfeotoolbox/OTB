@@ -213,15 +213,15 @@ protected:
   /** Constructor */
   ScalarImageToAdvancedTexturesFilter();
   /** Destructor */
-  ~ScalarImageToAdvancedTexturesFilter() ITK_OVERRIDE;
+  ~ScalarImageToAdvancedTexturesFilter() override;
   /** Generate the output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
   /** Generate the input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
   /** Before Parallel textures extraction */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
   /** Parallel textures extraction */
-  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) override;
 
 private:
   ScalarImageToAdvancedTexturesFilter(const Self&); //purposely not implemented

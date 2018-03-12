@@ -188,7 +188,7 @@ void
 ModelComponentBase<TSample>
 ::GenerateData()
 {
-  /** subclasses should ITK_OVERRIDE this function to perform
+  /** subclasses should override this function to perform
    *  parameter estimation. But it allows switching m_SampleModified
    *  when necessary.
    */

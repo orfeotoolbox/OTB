@@ -85,7 +85,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DynamicConvert");
     SetDescription("Change the pixel type and rescale the image's dynamic");
@@ -212,7 +212,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Read information
     if ( HasValue("in") )

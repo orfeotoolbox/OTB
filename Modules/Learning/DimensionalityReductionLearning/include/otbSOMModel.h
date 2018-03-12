@@ -101,24 +101,24 @@ public:
   itkSetMacro(Seed, unsigned int);
   itkGetMacro(Seed, unsigned int);
 
-  bool CanReadFile(const std::string & filename) ITK_OVERRIDE;
-  bool CanWriteFile(const std::string & filename) ITK_OVERRIDE;
+  bool CanReadFile(const std::string & filename) override;
+  bool CanWriteFile(const std::string & filename) override;
 
-  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
-  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  void Save(const std::string & filename, const std::string & name="") override;
+  void Load(const std::string & filename, const std::string & name="") override;
 
-  void Train() ITK_OVERRIDE;
+  void Train() override;
 
 protected:
   SOMModel(); 
-  ~SOMModel() ITK_OVERRIDE;
+  ~SOMModel() override;
 
 private:
   typename MapType::Pointer m_SOMMap;
 
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const ITK_OVERRIDE;
+    ConfidenceValueType * quality = ITK_NULLPTR) const override;
 
   /** Map size (width, height) */
   SizeType m_MapSize;

@@ -99,7 +99,7 @@ private:
     m_StatisticsFilter            = StatisticsFilterType::New();
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("StereoRectificationGridGenerator");
     SetDescription("Generates two deformation fields to resample in epipolar "
@@ -249,12 +249,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     m_DisplacementFieldSource->SetLeftImage(GetParameterImage("io.inleft"));
     m_DisplacementFieldSource->SetRightImage(GetParameterImage("io.inright"));

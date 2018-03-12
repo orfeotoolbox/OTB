@@ -118,7 +118,7 @@ public:
   itkGetConstReferenceMacro(SecondTransform, SecondTransformPointerType);
 
   /**  Method to transform a point. */
-  SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType&) const ITK_OVERRIDE;
+  SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType&) const override;
 
   /**  Method to transform a vector. */
   //  virtual OutputVectorType TransformVector(const InputVectorType &) const;
@@ -131,7 +131,7 @@ public:
 
 protected:
   CompositeTransform();
-  ~CompositeTransform() ITK_OVERRIDE;
+  ~CompositeTransform() override;
 
   FirstTransformPointerType  m_FirstTransform;
   SecondTransformPointerType m_SecondTransform;

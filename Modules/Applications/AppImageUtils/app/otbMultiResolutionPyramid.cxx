@@ -58,7 +58,7 @@ public:
                                  FloatVectorImageType>              ShrinkFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("MultiResolutionPyramid");
     SetDescription("Build a multi-resolution pyramid of the image.");
@@ -114,14 +114,14 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
 
     // Reinitialize the internal process used
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Initializing the process
     m_SmoothingFilter =  SmoothingVectorImageFilterType::New();

@@ -104,14 +104,14 @@ protected:
   /** Constructor */
   SOMImageClassificationFilter();
   /** Destructor */
-  ~SOMImageClassificationFilter() ITK_OVERRIDE {}
+  ~SOMImageClassificationFilter() override {}
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   /** Before threaded generate data */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   SOMImageClassificationFilter(const Self &); //purposely not implemented

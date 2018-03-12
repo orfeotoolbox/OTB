@@ -85,7 +85,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Convert");
     SetDescription("Convert an image to a different format, optionally rescaling the data"
@@ -192,7 +192,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Read information
     if ( HasValue("in") )
@@ -482,7 +482,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {

@@ -81,7 +81,7 @@ public:
 private:
   DomainTransform() {}
 
-  ~DomainTransform() ITK_OVERRIDE
+  ~DomainTransform() override
     {
     }
 
@@ -99,7 +99,7 @@ private:
     #endif
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DomainTransform");
     SetDescription("Domain Transform application for wavelet and fourier");
@@ -173,12 +173,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
     {
 
     }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     {
     int dir = GetParameterInt("direction");
     int mode = GetParameterInt("mode");
