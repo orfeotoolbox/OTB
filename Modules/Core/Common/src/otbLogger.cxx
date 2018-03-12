@@ -29,25 +29,28 @@
 namespace otb
 {
 
-Logger::Pointer Logger::Singleton = ITK_NULLPTR;
+Logger::Pointer Logger::CreateInstance()
+{
+  Logger::Pointer instance = Logger::New();
+
+  // By default, redirect logs to std::cout
+  itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
+  defaultOutput->SetStream(std::cout);
+  
+  instance->AddLogOutput(defaultOutput);
+  
+  // Log setup information
+  instance->LogSetupInformation();
+
+  return instance;
+}
 
 Logger::Pointer Logger::Instance()
 {
-  if(!Logger::Singleton)
-    {
-    Logger::Singleton = Logger::New();
+  // Static locales are initialized once in a thread-safe way
+  static Logger::Pointer instance = CreateInstance();
 
-    // By default, redirect logs to std::cout
-    itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
-    defaultOutput->SetStream(std::cout);
-
-    Logger::Singleton->AddLogOutput(defaultOutput);
-
-    // Log setup information
-    Logger::Singleton->LogSetupInformation();
-    }
-  
-  return Logger::Singleton;
+  return instance;
 }
 
 Logger::Logger()

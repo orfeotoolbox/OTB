@@ -61,7 +61,7 @@ private:
   Logger(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  static Pointer Singleton;
+  static Pointer CreateInstance();
 
 }; // class Logger
 
