@@ -142,6 +142,11 @@ public:
    *  This filter does not produce an output */
   void Update() ITK_OVERRIDE;
 
+  // the interface of the superclass getter function is not thread safe
+  bool GetAbortGenerateDataMutex() const;
+
+  void SetAbortGenerateData(bool val) override;
+
 protected:
   StreamingImageVirtualWriter();
 
@@ -186,6 +191,9 @@ private:
 
   bool          m_IsObserving;
   unsigned long m_ObserverID;
+
+  /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 } // end namespace otb
