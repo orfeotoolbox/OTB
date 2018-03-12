@@ -441,7 +441,6 @@ Application::RegisterPipeline()
       Parameter * param = GetParameterByKey(key);
       InputVectorDataParameter * inP =
         dynamic_cast< InputVectorDataParameter * > ( param );
-      std::cout<<"Getting data from outputvectordataparameter"<<std::endl;
       if ( !inP->HasValue() )
         continue;
       VectorDataType * inData = inP->GetVectorData();
@@ -506,6 +505,90 @@ Application::RegisterPipeline()
       dataStack.push( it.GetPointer() );
       }
     }
+}
+
+void Application::FreeRessources()
+{
+  std::set< itk::DataObject * > dataSet;
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
+    {
+    std::string key = *it;
+    if ( GetParameterType(key) == ParameterType_OutputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter * outP = dynamic_cast<OutputImageParameter*>(param);
+      itk::ImageBase<2> * outData = outP->GetValue();
+      if ( outData )
+        dataSet.insert(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputVectorDataParameter * outP = dynamic_cast<OutputVectorDataParameter*>(param);
+      Wrapper::VectorDataType * outData = outP->GetValue();
+      if ( outData )
+        dataSet.insert(outData);
+      }
+    else
+      continue;
+    }
+  // DFS
+  std::stack< itk::ProcessObject * > processStack;
+  for ( auto data : dataSet )
+    {
+    auto process = (data->GetSource()).GetPointer();
+    if ( process )
+      processStack.push( process );
+    }
+
+  while ( !processStack.empty() )
+    {
+    itk::ProcessObject * current = processStack.top();
+    processStack.pop();
+    std::cout<<current->GetNameOfClass()<<std::endl;
+    if ( !current )
+      continue;
+    auto inputVector = current->GetInputs();
+    for ( auto data : inputVector )
+      {
+      if ( !data.GetPointer() || dataSet.count( data.GetPointer() ) )
+        continue;
+      if ( dynamic_cast< ObjectListInterface *> (data.GetPointer()) )
+        {
+        ObjectListInterface * list = 
+          dynamic_cast< ObjectListInterface *> (data.GetPointer());
+        int length = list->Size();
+        for ( int i = 0 ; i < length ; i++ )
+          {
+          itk::DataObject * newData = list->GetNthDataObject(i);
+          if ( !newData || dataSet.count( newData ) )
+            continue;
+          dataSet.insert( newData );
+          itk::ProcessObject * process = newData->GetSource().GetPointer();
+          if ( process )
+            processStack.push( process );
+          }
+        }
+      else
+        {
+        dataSet.insert( data.GetPointer() );
+        itk::ProcessObject * process = data->GetSource().GetPointer();
+        if ( process )
+          processStack.push( process );
+        }
+      }
+    }
+
+  for ( auto data : dataSet )
+  {
+    std::cout<<"one bulk is freed"<<std::endl;
+    data->ReleaseData();
+  }
+
+  DoFreeRessources();
 }
 
 int Application::Execute()
@@ -672,12 +755,7 @@ int Application::ExecuteAndWriteOutput()
   this->AfterExecuteAndWriteOutputs();
   m_Chrono.Stop();
   
-  // for ( auto filter : m_Filters )
-  //   {
-  //   std::cout<<"For filter : "<<filter->GetNameOfClass()<<
-  //   " count : "<<filter->GetReferenceCount()<<std::endl;
-  //   }
-
+  FreeRessources();
   m_Filters.clear();
   return status;
 }

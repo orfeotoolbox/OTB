@@ -850,6 +850,8 @@ public:
 
   void RegisterPipeline();
 
+  void FreeRessources();
+
 protected:
   /** Constructor */
   Application();
@@ -983,6 +985,8 @@ private:
    * ExecuteAndWriteOutput() call to allow for cleanup. Default
    * implementation does nothing */
   virtual void AfterExecuteAndWriteOutputs();
+
+  virtual void DoFreeRessources(){};
 
   Application(const Application &); //purposely not implemented
   void operator =(const Application&); //purposely not implemented
