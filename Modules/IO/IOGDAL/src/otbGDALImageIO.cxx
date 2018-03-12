@@ -1105,7 +1105,7 @@ bool GDALImageIO::CanWriteFile(const char* name)
   if ( GDALGetMetadataItem( driver, GDAL_DCAP_CREATE, ITK_NULLPTR ) == ITK_NULLPTR
        && GDALGetMetadataItem( driver, GDAL_DCAP_CREATECOPY, ITK_NULLPTR ) == ITK_NULLPTR )
     {
-    otbLogMacro(Warning,<< "Gdal driver " << GDALGetDriverShortName(driver) << " does not support writing");
+    otbLogMacro(Warning,<< "GDAL driver " << GDALGetDriverShortName(driver) << " does not support writing");
     return false;
     }
   return true;
