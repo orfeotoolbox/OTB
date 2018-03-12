@@ -65,15 +65,6 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
   return value;
 }
 
-
-#define level_macro(x) \
-  {                                                                     \
-    std::string target = #x;                                            \
-    if(std::equal(svalue.begin(),svalue.end(),target.begin(),target.end())) \
-      level = itk::LoggerBase::x;                                       \
-  }                                                                     \
-
-
 itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
 {
   std::string svalue;
