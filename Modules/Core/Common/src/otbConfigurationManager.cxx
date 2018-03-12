@@ -20,6 +20,8 @@
 
 #include "otbConfigurationManager.h"
 
+#include "otbMacro.h"
+
 #include "itksys/SystemTools.hxx"
 
 #include <cstdlib>
@@ -85,11 +87,26 @@ itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
   
   if(itksys::SystemTools::GetEnv("OTB_LOGGER_LEVEL",svalue))
     {
-    level_macro(DEBUG);
-    level_macro(WARNING);
-    level_macro(INFO);
-    level_macro(CRITICAL);
-    level_macro(FATAL);
+    if(svalue.compare("DEBUG") == 0)
+      {
+      level = itk::LoggerBase::DEBUG;
+      }
+    else if(svalue.compare("INFO") == 0)
+      {
+      level = itk::LoggerBase::INFO;
+      }
+    else if(svalue.compare("WARNING") == 0)
+      {
+      level = itk::LoggerBase::WARNING;
+      }
+    else if(svalue.compare("CRITICAL") == 0)
+      {
+      level = itk::LoggerBase::CRITICAL;
+      }
+    else
+      {
+      otbLogMacro(Error,<<"Unknown value for OTB_LOGGER_LEVEL_MACRO. Possible values are DEBUG, INFO, WARNING, CRITICAL.");
+      }
     }
   return level;
 }

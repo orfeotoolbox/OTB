@@ -71,14 +71,17 @@ void Logger::LogSetupInformation()
   oss<<"Default RAM limit for OTB is "<<otb::ConfigurationManager::GetMaxRAMHint()<<" MB"<<std::endl;
   this->Info(oss.str());
   oss.str("");
+  oss.clear();
 
-  oss<<"Gdal maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" MB"<<std::endl;
+  oss<<"GDAL maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" MB"<<std::endl;
   this->Info(oss.str());
   oss.str("");
+  oss.clear();
 
   oss<<"OTB will use at most "<<itk::MultiThreader::GetGlobalDefaultNumberOfThreads()<<" threads"<<std::endl;
   this->Info(oss.str());
   oss.str("");
+  oss.clear();
 }
 
 std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const & content)

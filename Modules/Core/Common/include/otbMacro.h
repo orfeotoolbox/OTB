@@ -50,6 +50,7 @@ namespace otb
 #define otbClassContext(x) \
   << this->GetNameOfClass() << " (" << this << "): " x
 
+// Beware that to log to CRITICAL level, level should be passed as "Error"
 #define otbLogMacro(level,msg)                                    \
   {                                                               \
     std::ostringstream itkmsg;                                    \
@@ -58,21 +59,14 @@ namespace otb
   }
 
 
+// Re-definition of old log macros to use the otbLogMacro
 #define otbDebugMacro(x) otbLogMacro(Debug,otbFileContext(otbClassContext(x)))
 #define otbMsgDebugMacro(x) otbLogMacro(Debug,otbFileContext(x))
 #define otbGenericMsgDebugMacro(x) otbLogMacro(Debug,x)
 #define otbMsgDevMacro(x) otbLogMacro(Debug,otbFileContext(x))
 #define otbWarningMacro(x) otbLogMacro(Warning,otbFileContext(otbClassContext(x)))
 #define otbGenericWarningMacro(x) otbLogMacro(Warning,otbFileContext(x))
-
-
-  
-// TODO: Address this macro as well
-#define otbGenericMsgTestingMacro(x)            \
-  {                                             \
-    std::cout x << std::endl;                   \
-  }
-
+#define otbGenericMsgTestingMAcro(x) otbLogMacro(Info,"[testing] "<<x)
   
 /** This macro is used to control condition. It use ONLY by the OTB developers
   *

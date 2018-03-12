@@ -860,7 +860,7 @@ void GDALImageIO::InternalReadImageInformation()
           }
         else
           {
-          otbLogMacro(Warning,<< "Geotransform reported by Gdal is invalid (spacing = 0)");
+          otbLogMacro(Warning,<< "Geotransform reported by GDAL is invalid (spacing = 0)");
           m_Spacing[0] = 1;
           m_Spacing[1] = 1;
           }

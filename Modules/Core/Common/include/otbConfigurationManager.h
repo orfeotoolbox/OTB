@@ -93,7 +93,7 @@ public:
    * INFO, WARNING, CRITICAL or FATAL, the logger level will be
    * set accordingly.
    *
-   * Priority is DEBUG < INFO < WARNING <  CRITICAL < FATAL.
+   * Priority is DEBUG < INFO < WARNING < CRITICAL < FATAL.
    * 
    * Only messages with a higher priority than the logger level will
    * be displayed.

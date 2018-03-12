@@ -513,7 +513,7 @@ ImageFileWriter<TInputImage>
   /** Control if the ImageIO is CanStreamWrite */
   if (m_ImageIO->CanStreamWrite() == false)
     {
-    otbLogMacro(Warning,<<"The file format of " << m_FileName.c_str() <<
+    otbLogMacro(Warning,<<"The file format of " << m_FileName <<
       " does not support streaming. All data will be loaded to memory");
     this->SetNumberOfDivisionsStrippedStreaming(1);
     }
