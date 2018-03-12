@@ -649,6 +649,13 @@ ImageFileWriter<TInputImage>
     {
     this->UpdateProgress(1.0);
     }
+  else
+    {
+    itk::ProcessAborted e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Image writing has been aborted");
+    throw e;
+    }
 
   // Notify end event observers
   this->InvokeEvent(itk::EndEvent());
