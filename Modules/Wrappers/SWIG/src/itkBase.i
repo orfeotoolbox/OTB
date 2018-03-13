@@ -54,7 +54,9 @@
 %include <std_string.i>
 %include <std_vector.i>
 %include <std_map.i>
+#if SWIGPYTHON
 %include <std_complex.i>
+#endif
 
 %template(vectorstring)     std::vector< std::string >;
 %template(mapstringstring)  std::map< std::string, std::string >;
