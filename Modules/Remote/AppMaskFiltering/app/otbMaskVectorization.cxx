@@ -94,6 +94,11 @@ private:
     SetParameterDescription("tile","Size of the tiles used for streaming");
     MandatoryOff("tile");
      
+
+    AddParameter(ParameterType_Int,"fusion","fusion");
+    SetParameterDescription("fusion","Perform polygon fusion");
+    MandatoryOff("fusion");
+     
     AddParameter(ParameterType_StringList,  "feat", "Output Image channels");
     SetParameterDescription("feat","Channels to write in the output image.");
 	MandatoryOff("feat");
@@ -103,6 +108,7 @@ private:
     // Default values
     SetDefaultParameterInt("connectivity", 0);
     SetDefaultParameterInt("tile", 0);
+    SetDefaultParameterInt("fusion", 0);
     // Doc example parameter settings
     
     SetDocExampleParameterValue("in", "sar.tif");
@@ -181,12 +187,14 @@ private:
     maskFilter->Update();
     ogrDS->SyncToDisk();
     // Fusion Filter : Regroup polygons splitted across tiles.
-    MaskStreamStitchingFilterType::Pointer fusionFilter = MaskStreamStitchingFilterType::New();
-    fusionFilter->SetInput(this->GetParameterFloatImage("in"));
-    fusionFilter->SetOGRLayer(layer);
-    fusionFilter->SetStreamSize(maskFilter->GetStreamSize());
-    fusionFilter->GenerateData();
-    
+    if (this->GetParameterInt("fusion") == 1)
+    {
+      MaskStreamStitchingFilterType::Pointer fusionFilter = MaskStreamStitchingFilterType::New();
+      fusionFilter->SetInput(this->GetParameterFloatImage("in"));
+      fusionFilter->SetOGRLayer(layer);
+      fusionFilter->SetStreamSize(maskFilter->GetStreamSize());
+      fusionFilter->GenerateData();
+    }
     clock_t toc = clock();
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
   }
