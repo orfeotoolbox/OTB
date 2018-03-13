@@ -32,4 +32,19 @@ function(install_python_bindings)
       PATTERN "__pycache__" EXCLUDE
       )
   endif()
+  # Handle GDAL python bindings
+  file(GLOB gdal_python_scripts "${SUPERBUILD_INSTALL_DIR}/bin/gdal*.py")
+  foreach(_script ${gdal_python_scripts})
+    install(PROGRAMS ${_script}
+      DESTINATION ${PKG_STAGE_DIR}/bin)
+  endforeach()
+  file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python[2|3]*")
+  foreach(_wrap ${gdal_python_wrappings})
+    if (IS_DIRECTORY _wrap)
+      install(DIRECTORY ${_wrap}
+        DESTINATION ${PKG_STAGE_DIR}/lib
+        PATTERN "*.pyc" EXCLUDE
+        PATTERN "__pycache__" EXCLUDE)
+    endif()
+  endforeach()
 endfunction()
