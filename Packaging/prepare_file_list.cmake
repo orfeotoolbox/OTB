@@ -80,8 +80,12 @@ function(prepare_file_list file_list_result)
     "${OTB_BINARY_DIR}/bin/otbgui_TestApplication")
   
   foreach(otb_test_exe   ${otb_test_exe_list})
-    get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
-    list(APPEND file_list ${otb_test_exe_name})
+    # filter .py files
+    get_filename_component(otb_test_exe_ext ${otb_test_exe} EXT)
+    if (NOT otb_test_exe_ext STREQUAL ".py")
+      get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
+      list(APPEND file_list ${otb_test_exe_name})
+    endif()
   endforeach()
   
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
