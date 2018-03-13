@@ -23,3 +23,7 @@ otb_create_application(
   SOURCES        otbMaskVectorization.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
 
+otb_create_application(
+  NAME           ComputePolygonsGeometricFeatures
+  SOURCES        otbComputePolygonsGeometricFeatures.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
