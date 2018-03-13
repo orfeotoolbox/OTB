@@ -19,7 +19,6 @@
 #
 
 set(OTBSupervised_SRC
-  otbMachineLearningModelFactoryBase.cxx
   otbExhaustiveExponentialOptimizer.cxx
   )
 
@@ -33,6 +32,7 @@ target_link_libraries(OTBSupervised
   ${OTBLibSVM_LIBRARIES}
   ${OTBOpenCV_LIBRARIES}
   ${OTBShark_LIBRARIES}
+  ${OTBLearningBase_LIBRARIES}
   )
 
 otb_module_target(OTBSupervised)

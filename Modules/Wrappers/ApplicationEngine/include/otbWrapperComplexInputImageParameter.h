@@ -60,11 +60,36 @@ public:
   ComplexFloatVectorImageType* GetImage();
 
   /** Get the input image as XXXImageType */
+  ComplexInt16ImageType* GetComplexInt16Image();
+  ComplexInt32ImageType* GetComplexInt32Image();
   ComplexFloatImageType*  GetComplexFloatImage();
   ComplexDoubleImageType* GetComplexDoubleImage();
 
+  ComplexInt16VectorImageType* GetComplexInt16VectorImage();
+  ComplexInt32VectorImageType* GetComplexInt32VectorImage();
   ComplexFloatVectorImageType*  GetComplexFloatVectorImage();
   ComplexDoubleVectorImageType* GetComplexDoubleVectorImage();
+
+/* Support for ComplexInputImageParameter. This has been done to support 
+the macro otbGetParameterImageMacro of otbWrapperApplication.h */
+  UInt8ImageType* GetUInt8Image();
+  UInt16ImageType* GetUInt16Image();
+  Int16ImageType* GetInt16Image();
+  UInt32ImageType* GetUInt32Image();
+  Int32ImageType* GetInt32Image();
+  FloatImageType* GetFloatImage();
+  DoubleImageType* GetDoubleImage();
+
+  UInt8VectorImageType* GetUInt8VectorImage();
+  UInt16VectorImageType* GetUInt16VectorImage();
+  Int16VectorImageType* GetInt16VectorImage();
+  UInt32VectorImageType* GetUInt32VectorImage();
+  Int32VectorImageType* GetInt32VectorImage();
+  FloatVectorImageType* GetFloatVectorImage();
+  DoubleVectorImageType* GetDoubleVectorImage();
+
+  UInt8RGBImageType* GetUInt8RGBImage();
+  UInt8RGBAImageType* GetUInt8RGBAImage();
 
   /** Get the input image as templated image type. */
   template <class TImageType>
@@ -80,15 +105,6 @@ public:
   /** Generic cast method that will be specified for each image type. */
   template <class TComplexInputImage, class TOutputImage>
     TOutputImage* CastImage();
-
-  /** Cast an image to an image of the same type
-  * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
-  template <class TComplexInputImage, class TOutputImage>
-    TOutputImage* SimpleCastImage();
-
-  /** Cast an image to a vector image. */
-  template <class TComplexInputImage, class TOutputImage>
-    TOutputImage* CastVectorImageFromImage();
 
   bool HasValue() const ITK_OVERRIDE;
 
@@ -107,9 +123,6 @@ protected:
 
 
   /** Readers typedefs */
-  typedef otb::ImageFileReader<ComplexFloatImageType> ComplexFloatReaderType;
-  typedef otb::ImageFileReader<ComplexDoubleImageType> ComplexDoubleReaderType;
-
   typedef otb::ImageFileReader<ComplexFloatVectorImageType> ComplexFloatVectorReaderType;
   typedef otb::ImageFileReader<ComplexDoubleVectorImageType> ComplexDoubleVectorReaderType;
 
@@ -127,33 +140,6 @@ private:
   bool m_UseFilename;
 
 }; // End class ComplexInputImage Parameter
-
-
-// template specializations of CastImage<> should be declared in header
-// so that the linker knows they exist when building OTB Applications
-
-#define otbDefineCastImageMacro(ComplexInputImageType, OutputImageType)   \
-  template<> OutputImageType *                                          \
-  ComplexInputImageParameter::CastImage<ComplexInputImageType , OutputImageType>();   \
-
-#define otbGenericDefineCastImageMacro(ComplexInputImageType, prefix)     \
-  otbDefineCastImageMacro(ComplexInputImageType, ComplexFloat##prefix##ImageType) \
-  otbDefineCastImageMacro(ComplexInputImageType, ComplexDouble##prefix##ImageType)
-
-
-/*********************************************************************
-********************** Image -> Image
-**********************************************************************/
-
-  otbGenericDefineCastImageMacro(ComplexFloatImageType, )
-  otbGenericDefineCastImageMacro(ComplexDoubleImageType, )
-
-
-/*********************************************************************
-********************** VectorImage -> VectorImage
-**********************************************************************/
-  otbGenericDefineCastImageMacro(ComplexFloatVectorImageType, Vector)
-  otbGenericDefineCastImageMacro(ComplexDoubleVectorImageType, Vector)
 
 } // End namespace Wrapper
 } // End namespace otb

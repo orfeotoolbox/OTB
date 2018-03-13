@@ -212,6 +212,9 @@ public:
   bool GetParameterEmpty(std::string paramKey);
 
   /** Set HasUserValue flag of parameter with key paramKey
+   *  Note that when this function is called from DoInit, DoUpdateParameters
+   *  or DoExecute, it will always set this flag to false, because this is
+   *  the core behavior of the application.
    */
   void SetParameterUserValue(std::string paramKey, bool value);
 
@@ -592,10 +595,15 @@ public:
     {                                                                   \
     Image##Type::Pointer ret;                                           \
     Parameter* param = GetParameterByKey(parameter);                    \
-    if (dynamic_cast<InputImageParameter*>(param))                      \
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
+    ComplexInputImageParameter* paramDownC = dynamic_cast<ComplexInputImageParameter*>(param); \
+    if ( paramDown )                                                    \
       {                                                                 \
-      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
       ret = paramDown->Get##Image();                                    \
+      }                                                                 \
+    else if ( paramDownC )  /* Support of ComplexInputImageParameter */ \
+      {                                                                 \
+      ret = paramDownC->Get##Image();                                   \
       }                                                                 \
     return ret;                                                         \
     }
@@ -619,30 +627,16 @@ public:
   otbGetParameterImageMacro(UInt8RGBImage);
   otbGetParameterImageMacro(UInt8RGBAImage);
 
-  /* Get a complex image value
-   *
-   * Can be called for types :
-   * \li ParameterType_ComplexInputImage
-   */
+  // Complex image
+  otbGetParameterImageMacro(ComplexInt16Image);
+  otbGetParameterImageMacro(ComplexInt32Image); 
+  otbGetParameterImageMacro(ComplexFloatImage);
+  otbGetParameterImageMacro(ComplexDoubleImage);
 
-#define otbGetParameterComplexImageMacro( Image )                       \
-  Image##Type * GetParameter##Image( std::string parameter )            \
-    {                                                                   \
-    Image##Type::Pointer ret;                                           \
-    Parameter* param = GetParameterByKey(parameter);                    \
-    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param); \
-    if (paramDown)                                                      \
-      {                                                                 \
-      ret = paramDown->Get##Image();                                    \
-      }                                                                 \
-    return ret;                                                         \
-    }
-
-  otbGetParameterComplexImageMacro(ComplexFloatImage);
-  otbGetParameterComplexImageMacro(ComplexDoubleImage);
-
-  otbGetParameterComplexImageMacro(ComplexFloatVectorImage);
-  otbGetParameterComplexImageMacro(ComplexDoubleVectorImage);
+  otbGetParameterImageMacro(ComplexInt16VectorImage);
+  otbGetParameterImageMacro(ComplexInt32VectorImage);
+  otbGetParameterImageMacro(ComplexFloatVectorImage);
+  otbGetParameterImageMacro(ComplexDoubleVectorImage);
 
   /* Get an image list value
    *
@@ -1022,6 +1016,10 @@ private:
   bool                              m_HaveInXML;
   bool                              m_HaveOutXML;
   bool                              m_IsInXMLParsed;
+
+  /** Flag is true when executing DoInit, DoUpdateParameters or DoExecute */
+  bool m_IsInPrivateDo;
+
   /**
     * Declare the class
     * - Wrapper::MapProjectionParametersHandler

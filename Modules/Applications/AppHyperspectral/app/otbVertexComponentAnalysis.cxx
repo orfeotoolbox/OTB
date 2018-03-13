@@ -80,7 +80,7 @@ private:
 
     AddParameter(ParameterType_Int, "ne", "Number of endmembers");
     SetParameterDescription("ne","The number of endmembers to extract from the hyperspectral image.");
-    SetParameterInt("ne",1, false);
+    SetParameterInt("ne",1);
     MandatoryOn("ne");
 
     AddParameter(ParameterType_OutputImage, "outendm", "Output Endmembers");

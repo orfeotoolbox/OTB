@@ -31,6 +31,8 @@ namespace Wrapper
 /** \class EmptyParameter
  *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
  *
+ * \deprecated in OTB 6.6, use BoolParameter instead
+ *
  * \ingroup OTBApplicationEngine
  */
 class OTBApplicationEngine_EXPORT EmptyParameter

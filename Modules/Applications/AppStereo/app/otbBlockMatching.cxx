@@ -202,7 +202,7 @@ private:
     DisableParameter("io.outmask");
     MandatoryOff("io.outmask");
 
-    AddParameter(ParameterType_Empty,"io.outmetric","Flag to output optimal "
+    AddParameter(ParameterType_Bool,"io.outmetric","Flag to output optimal "
       "metric values as well");
     SetParameterDescription("io.outmetric","If enabled, the output image will "
       "have a third component with metric optimal values");
@@ -847,7 +847,7 @@ private:
     m_OutputImageList->PushBack(hdispImage);
     m_OutputImageList->PushBack(vdispImage);
 
-    if(IsParameterEnabled("io.outmetric"))
+    if(GetParameterInt("io.outmetric"))
       {
       m_OutputImageList->PushBack(metricImage);
       }

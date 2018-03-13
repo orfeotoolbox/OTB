@@ -127,3 +127,21 @@ OTB source code. Under some conditions (dependencies, official acceptance
 process, etc.), we are also able to distribute your remote module in the
 official standalone binaries. See [the wiki](https://wiki.orfeo-toolbox.org/index.php/Remote_Modules)
 for more information.
+
+## Gitlab guidelines
+
+In order to organize the issues in our Gitlab instance, we use both labels and
+milestones.
+
+The [milestones](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/milestones) should be used to track in which release a feature is merged.
+Gitlab can then provide a summary of all features and bugs added to a given release
+version.
+
+Regarding labels, we use the following set:
+* ~story: significant feature to be implemented with a detailed work plan, it can
+  correspond to a Request for Comments that has turned into a development action
+* ~bug: Bug, crash or unexpected behavior, reported by a user or a developer
+* ~feature: Feature request expressed by an OTB user/developer
+* ~"To Do": action is planned
+* ~Doing: work in progress
+* ~api ~app ~documentation ~monteverdi ~packaging ~qgis: optional context information
