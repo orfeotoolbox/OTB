@@ -40,7 +40,7 @@ function(install_python_bindings)
   endforeach()
   file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python[2|3]*")
   foreach(_wrap ${gdal_python_wrappings})
-    if (IS_DIRECTORY _wrap)
+    if (IS_DIRECTORY "${_wrap}")
       install(DIRECTORY ${_wrap}
         DESTINATION ${PKG_STAGE_DIR}/lib
         PATTERN "*.pyc" EXCLUDE
