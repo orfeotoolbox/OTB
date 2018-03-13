@@ -69,12 +69,8 @@ itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
 {
   std::string svalue;
 
-  #ifndef NDEBUG
-  itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::DEBUG;
-  #else
+  // Default value is INFO
   itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::INFO;
-  #endif
-
   
   if(itksys::SystemTools::GetEnv("OTB_LOGGER_LEVEL",svalue))
     {

@@ -99,8 +99,7 @@ public:
    * be displayed.
    *
    * By default (if OTB_LOGGER_LEVEL is not set or can not be
-   * decoded), level is DEBUG in Debug or RelWithDebInfo builds, and
-   * INFO otherwise.
+   * decoded), level is INFO.
    * 
    */
   static itk::LoggerBase::PriorityLevelType GetLoggerLevel();

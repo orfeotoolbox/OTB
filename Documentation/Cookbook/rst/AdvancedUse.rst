@@ -14,7 +14,7 @@ those values.
 * ``OTB_DEM_DIRECTORY``: Default directory were DEM tiles are stored. It should only contain ```.hgt`` or or georeferenced ``.tif`` files. Empty if not set (no directory set)
 * ``OTB_GEOID_FILE``: Default path to the geoid file that will be used to retrieve height of DEM above ellipsoid. Empty if not set (no geoid set)
 * ``OTB_MAX_RAM_HINT``: Default maximum memory that OTB should use for processing, in MB. If not set, default value is 128 MB.
-* ``OTB_LOGGER_LEVEL``: Default level of logging for OTB. Should be one of  ``DEBUG``, ``INFO``, ``WARNING``, ``CRITICAL`` or ``FATAL``, by increasing order of priority. Only messages with a higher priority than the level of logging will be displayed. By default level is ``DEBUG`` for Debug build and ``INFO`` otherwise.
+* ``OTB_LOGGER_LEVEL``: Default level of logging for OTB. Should be one of  ``DEBUG``, ``INFO``, ``WARNING``, ``CRITICAL`` or ``FATAL``, by increasing order of priority. Only messages with a higher priority than the level of logging will be displayed. If not set, default level is ``INFO``.
 
 Extended filenames
 ------------------
