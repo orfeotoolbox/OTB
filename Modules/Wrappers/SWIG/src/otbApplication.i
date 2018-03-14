@@ -211,6 +211,8 @@ public:
 
   std::string GetProgressDescription() const;
 
+  void FreeRessources();
+
   itkSetStringMacro(DocName);
   itkGetStringMacro(DocName);
   itkSetStringMacro(DocLongDescription);
