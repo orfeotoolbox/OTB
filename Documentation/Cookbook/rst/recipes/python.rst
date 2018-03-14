@@ -173,6 +173,31 @@ implementation does not break it, for instance by using an internal
 writer to write intermediate data. In this case, execution should
 still be correct, but some intermediate data will be read or written.
 
+Interactions with OTB pipeline
+------------------------------
+
+[since OTB 6.6]
+
+The application framework has been extended in order to provide ways to
+interact with the pipelines inside each application. It applies only to
+applications that use input or output images. Let's check what are the 
+functions added to the ``Application`` class:
+
+* ``GetImageOrigin(key, idx=0)``: returns the origin of the image (physical position of the first pixel center)
+* ``GetImageSpacing(key, idx=0)``: returns the signed spacing of the image
+* ``GetImageSize(key, idx=0)``: returns the size of the LargestPossibleRegion
+* ``GetImageNbBands(key, idx=0)``: returns the number of components per pixel
+* ``GetImageProjection(key, idx=0)``: returns the ProjRef
+* ``GetImageKeywordlist(key, idx=0)``: returns the Ossim keywordlist
+* ``GetImageMetaData(key, idx=0)``: returns the itk::MetaDataDictionary
+* ``GetImageRequestedRegion(key, idx=0)``
+* ``PropagateRequestedRegion(key, region, idx=0)``: set a given RequestedRegion on the image and propagate it, returns the memory print estimation
+* ``GetImageBasePixelType(key, idx=0)``: helper function to guess the pixel type of the underlying Image/VectorImage.
+* ``GetParameterImageBase(key, idx=0)``: helper, returns the image as a ImageBaseType (works on all image parameters)
+* ``SetParameterImageBase(key, idx=0)``: helper, sets the parameter InputImage/InputImageList/ComplexInputImage with an ImageBaseType
+
+Note: some of these function use an optional index to refer to an image parameter. By default this index is 0. It allows to access InputImageLists transparently.
+
 Corner cases
 ------------
 
