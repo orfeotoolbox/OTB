@@ -175,10 +175,10 @@ public:
 
 protected:
   WaveletTransform();
-  ~WaveletTransform() ITK_OVERRIDE {}
+  ~WaveletTransform() override {}
 
   /** Generate data redefinition */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   WaveletTransform (const Self &);
@@ -306,16 +306,16 @@ public:
 
 protected:
   WaveletTransform();
-  ~WaveletTransform() ITK_OVERRIDE {}
+  ~WaveletTransform() override {}
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy information from the input image if existing.
     **/
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate data redefinition */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   WaveletTransform (const Self &);

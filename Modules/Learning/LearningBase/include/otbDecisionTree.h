@@ -100,11 +100,11 @@ protected:
   /** Constructor */
   DecisionTree();
   /** Destructor */
-  ~DecisionTree() ITK_OVERRIDE;
+  ~DecisionTree() override;
   /** Output information redefinition */
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   DecisionTree(const Self &); // purposely not implemented

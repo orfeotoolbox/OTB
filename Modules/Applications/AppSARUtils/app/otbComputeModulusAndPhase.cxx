@@ -57,7 +57,7 @@ public:
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
 
 private:
-  void DoInit()
+  void DoInit() override
   {
     SetName("ComputeModulusAndPhase");
     SetDescription("This application computes the modulus and the phase of a complex SAR image.");
@@ -100,12 +100,12 @@ private:
   }
 
   // DoUpdateParameters() is called as soon as a parameter value change.
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
   }
 
   // DoExecute() contains the application core.
-  void DoExecute()
+  void DoExecute() override
   {
     m_Modulus = ModulusFilterType::New();
     m_Phase = PhaseFilterType::New();

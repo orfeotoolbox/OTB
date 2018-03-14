@@ -73,17 +73,17 @@ public:
   itkGetConstObjectMacro(Filter, FilterType);
   itkGetObjectMacro(Streamer, StreamerType);
 
-  void Update(void) ITK_OVERRIDE;
+  void Update(void) override;
 
 protected:
   /** Constructor */
   PersistentFilterStreamingDecorator();
   /** Destructor */
-  ~PersistentFilterStreamingDecorator() ITK_OVERRIDE {}
+  ~PersistentFilterStreamingDecorator() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   /// Object responsible for streaming
   StreamerPointerType m_Streamer;

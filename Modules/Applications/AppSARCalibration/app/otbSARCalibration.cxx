@@ -45,7 +45,7 @@ public:
                                                       FloatImageType>     CalibrationFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("SARCalibration");
     SetDescription("Perform radiometric calibration of SAR images. Following sensors are supported: TerraSAR-X, Sentinel1 and Radarsat-2.Both Single Look Complex(SLC) and detected products are supported as input.\n");
@@ -68,9 +68,8 @@ private:
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_Empty, "noise", "Disable Noise");
+    AddParameter(ParameterType_Bool, "noise", "Disable Noise");
     SetParameterDescription("noise", "Flag to disable noise. For 5.2.0 release, the noise values are only read by TerraSARX product.");
-    MandatoryOff("noise");
 
     AddParameter(ParameterType_Choice, "lut", "Lookup table sigma /gamma/ beta/ DN.");
     SetParameterDescription("lut", "Lookup table values are not available with all SAR products. Products that provide lookup table with metadata are: Sentinel1, Radarsat2.");
@@ -91,12 +90,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
 
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input complex image
     ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("in");
@@ -104,17 +103,8 @@ private:
     // Set the filer input
     m_CalibrationFilter = CalibrationFilterType::New();
     m_CalibrationFilter->SetInput(floatComplexImage);
-
-    if (IsParameterEnabled("noise"))
-      {
-      m_CalibrationFilter->SetEnableNoise(false);
-      }
-
-    short lut = 0;
-
-    lut = GetParameterInt("lut");
-
-    m_CalibrationFilter->SetLookupSelected(lut);
+    m_CalibrationFilter->SetEnableNoise( !bool(GetParameterInt("noise")) );
+    m_CalibrationFilter->SetLookupSelected(GetParameterInt("lut"));
 
     // Set the output image
     SetParameterOutputImage("out", m_CalibrationFilter->GetOutput());

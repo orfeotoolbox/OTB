@@ -78,9 +78,9 @@ class OTBSimulation_EXPORT LeafParameters : public itk::DataObject
       /** Constructor */
       LeafParameters();
       /** Destructor */
-      ~LeafParameters() ITK_OVERRIDE;
+      ~LeafParameters() override;
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
    private:
       LeafParameters(const Self&); //purposely not implemented

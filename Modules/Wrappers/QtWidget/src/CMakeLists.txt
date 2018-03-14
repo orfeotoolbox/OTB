@@ -57,6 +57,7 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetListEditWidget.cxx
   otbWrapperQtWidgetListEditItemModel.cxx
   otbWrapperQtWidgetParameterList.cxx
+  otbWrapperQtWidgetBoolParameter.cxx
   )
 
 set(OTBQtWidget_MOC_HDR
@@ -97,6 +98,7 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetListEditWidget.h
   ../include/otbWrapperQtWidgetListEditItemModel.h
   ../include/otbWrapperQtWidgetParameterList.h
+  ../include/otbWrapperQtWidgetBoolParameter.h
   )
 
 set( OTBQtWidget_FORMS

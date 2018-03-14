@@ -86,7 +86,7 @@ public:
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& index) const ITK_OVERRIDE;
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& index) const override;
 
   /** Set/Get the window radius*/
   virtual void SetRadius(unsigned int rad);
@@ -115,12 +115,12 @@ public:
 
 protected:
   GenericInterpolateImageFunction();
-  ~GenericInterpolateImageFunction() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~GenericInterpolateImageFunction() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Call the superclass implementation and set the TablesHaveBeenGenerated
    * flag to false */
-  void Modified(void) const ITK_OVERRIDE;
+  void Modified(void) const override;
 
   /** Delete tables.*/
   virtual void ResetOffsetTable();

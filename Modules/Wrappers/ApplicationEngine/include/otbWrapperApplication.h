@@ -212,6 +212,9 @@ public:
   bool GetParameterEmpty(std::string paramKey);
 
   /** Set HasUserValue flag of parameter with key paramKey
+   *  Note that when this function is called from DoInit, DoUpdateParameters
+   *  or DoExecute, it will always set this flag to false, because this is
+   *  the core behavior of the application.
    */
   void SetParameterUserValue(std::string paramKey, bool value);
 
@@ -849,7 +852,7 @@ protected:
   Application();
 
   /** Destructor */
-  ~Application() ITK_OVERRIDE;
+  ~Application() override;
 
   /* Register a ProcessObject as a new progress source */
   void AddProcess(itk::ProcessObject* object, std::string description);
@@ -1013,6 +1016,10 @@ private:
   bool                              m_HaveInXML;
   bool                              m_HaveOutXML;
   bool                              m_IsInXMLParsed;
+
+  /** Flag is true when executing DoInit, DoUpdateParameters or DoExecute */
+  bool m_IsInPrivateDo;
+
   /**
     * Declare the class
     * - Wrapper::MapProjectionParametersHandler

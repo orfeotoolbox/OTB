@@ -20,18 +20,42 @@
 
 #include "otbLogger.h"
 #include "itksys/SystemTools.hxx"
+#include "otbConfigurationManager.h"
+#include "itkStdStreamLogOutput.h"
+#include <iostream>
+#include "gdal.h"
+#include "itkMultiThreader.h"
 
 namespace otb
 {
 
-Logger::Logger() :
-    itk::Logger::Logger()
+Logger::Pointer Logger::CreateInstance()
 {
-#if OTB_DEBUG
-  this->SetPriorityLevel(itk::LoggerBase::DEBUG);
-#else
-  this->SetPriorityLevel(itk::LoggerBase::INFO);
-#endif
+  Logger::Pointer instance = Logger::New();
+
+  // By default, redirect logs to std::cout
+  itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
+  defaultOutput->SetStream(std::cout);
+  
+  instance->AddLogOutput(defaultOutput);
+  
+  // Log setup information
+  instance->LogSetupInformation();
+
+  return instance;
+}
+
+Logger::Pointer Logger::Instance()
+{
+  // Static locales are initialized once in a thread-safe way
+  static Logger::Pointer instance = CreateInstance();
+
+  return instance;
+}
+
+Logger::Logger()
+{
+  this->SetPriorityLevel(otb::ConfigurationManager::GetLoggerLevel());
 
   this->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
 
@@ -41,6 +65,26 @@ Logger::Logger() :
 
 Logger::~Logger()
 {
+}
+
+void Logger::LogSetupInformation()
+{
+  std::ostringstream oss;
+  
+  oss<<"Default RAM limit for OTB is "<<otb::ConfigurationManager::GetMaxRAMHint()<<" MB"<<std::endl;
+  this->Info(oss.str());
+  oss.str("");
+  oss.clear();
+
+  oss<<"GDAL maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" MB"<<std::endl;
+  this->Info(oss.str());
+  oss.str("");
+  oss.clear();
+
+  oss<<"OTB will use at most "<<itk::MultiThreader::GetGlobalDefaultNumberOfThreads()<<" threads"<<std::endl;
+  this->Info(oss.str());
+  oss.str("");
+  oss.clear();
 }
 
 std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const & content)

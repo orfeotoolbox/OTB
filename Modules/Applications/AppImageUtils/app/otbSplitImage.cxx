@@ -49,7 +49,7 @@ public:
                                             FloatVectorImageType::InternalPixelType> FilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("SplitImage");
     SetDescription("Split a N multiband image into N images.");
@@ -83,12 +83,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

@@ -181,10 +181,10 @@ protected:
   MachineLearningModel();
 
   /** Destructor */
-  ~MachineLearningModel() ITK_OVERRIDE;
+  ~MachineLearningModel() override;
  
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Input list sample */
   typename InputListSampleType::Pointer m_InputListSample;

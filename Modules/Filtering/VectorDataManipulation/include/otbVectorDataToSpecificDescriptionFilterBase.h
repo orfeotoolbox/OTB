@@ -76,9 +76,9 @@ protected:
   /** Constructor */
   VectorDataToSpecificDescriptionFilterBase();
   /** Destructor */
-  ~VectorDataToSpecificDescriptionFilterBase() ITK_OVERRIDE {}
+  ~VectorDataToSpecificDescriptionFilterBase() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   VectorDataToSpecificDescriptionFilterBase(const Self &); //purposely not implemented

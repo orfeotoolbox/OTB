@@ -42,7 +42,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("BundleToPerfectSensor");
     SetDescription("Perform P+XS pansharpening");
@@ -85,12 +85,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     UpdateInternalParameters("superimpose");
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     ExecuteInternal("superimpose");
 

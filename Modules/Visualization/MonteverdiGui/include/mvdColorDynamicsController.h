@@ -98,7 +98,7 @@ public:
   ColorDynamicsController( ColorDynamicsWidget* widget, QObject* p =NULL );
 
   /** \brief Destructor. */
-  ~ColorDynamicsController() ITK_OVERRIDE;
+  ~ColorDynamicsController() override;
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
@@ -168,13 +168,13 @@ private:
   //
   // AbstractModelController methods.
 
-  void Connect( AbstractModel* ) ITK_OVERRIDE;
+  void Connect( AbstractModel* ) override;
 
-  void ClearWidget() ITK_OVERRIDE;
+  void ClearWidget() override;
 
-  void virtual_ResetWidget( bool ) ITK_OVERRIDE;
+  void virtual_ResetWidget( bool ) override;
 
-  void Disconnect( AbstractModel* ) ITK_OVERRIDE;
+  void Disconnect( AbstractModel* ) override;
 
   /**
    * \brief Reset intensity ranges to default values for given RGB

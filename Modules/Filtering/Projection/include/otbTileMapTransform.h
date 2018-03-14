@@ -73,7 +73,7 @@ public:
   void SetLevel(unsigned int level);
   unsigned int GetLevel() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
+  OutputPointType TransformPoint(const InputPointType& point) const override;
 
   virtual void PrintMap() const;
 
@@ -85,7 +85,7 @@ public:
 
 protected:
   TileMapTransform();
-  ~TileMapTransform() ITK_OVERRIDE;
+  ~TileMapTransform() override;
 
 private:
   TileMapTransform(const Self &); //purposely not implemented

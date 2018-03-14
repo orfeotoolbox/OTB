@@ -124,7 +124,7 @@ private:
   std::string m_inImageName;
   bool m_currentEnabledStateOfFluxParam;
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("OpticalCalibration");
     SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6, Spot7. For other sensors the application also allows providing calibration parameters manually.");
@@ -197,18 +197,15 @@ private:
     AddChoice("level.toa",     "Image to Top Of Atmosphere reflectance");
     AddChoice("level.toatoim",     "TOA reflectance to Image");
     AddChoice("level.toc",     "Image to Top Of Canopy reflectance (atmospheric corrections)");
-    SetParameterString("level", "toa", false);
+    SetParameterString("level", "toa");
 
-    AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
+    AddParameter(ParameterType_Bool, "milli", "Convert to milli reflectance");
     SetParameterDescription("milli", "Flag to use milli-reflectance instead of reflectance.\n"
                             "This allows saving the image with integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename double for example)");
-    DisableParameter("milli");
-    MandatoryOff("milli");
 
-    AddParameter(ParameterType_Empty, "clamp", "Clamp of reflectivity values between [0, 1]");
+    AddParameter(ParameterType_Bool, "clamp", "Clamp of reflectivity values between [0, 1]");
     SetParameterDescription("clamp", "Clamping in the range [0, 1]. It can be useful to preserve area with specular reflectance.");
-    EnableParameter("clamp");
-    MandatoryOff("clamp");
+    SetParameterInt("clamp",1);
 
     //Acquisition parameters
     AddParameter(ParameterType_Group,"acqui","Acquisition parameters");
@@ -359,7 +356,7 @@ private:
     m_currentEnabledStateOfFluxParam=false;
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     std::ostringstream ossOutput;
     //ossOutput << std::endl << "--DoUpdateParameters--" << std::endl;
@@ -429,21 +426,21 @@ private:
              ossOutput << "Acquisition Minute already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.minute",lImageMetadataInterface->GetMinute(), false);
+             SetParameterInt("acqui.minute",lImageMetadataInterface->GetMinute());
            }
 
            if (HasUserValue("acqui.hour"))
              ossOutput << "Acquisition Hour already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.hour",lImageMetadataInterface->GetHour(), false);
+             SetParameterInt("acqui.hour",lImageMetadataInterface->GetHour());
            }
 
            if (HasUserValue("acqui.day"))
              ossOutput << "Acquisition Day already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.day",lImageMetadataInterface->GetDay(), false);
+             SetParameterInt("acqui.day",lImageMetadataInterface->GetDay());
              if (IsParameterEnabled("acqui.fluxnormcoeff"))
                DisableParameter("acqui.day");
            }
@@ -452,7 +449,7 @@ private:
              ossOutput << "Acquisition Month already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.month",lImageMetadataInterface->GetMonth(), false);
+             SetParameterInt("acqui.month",lImageMetadataInterface->GetMonth());
              if (IsParameterEnabled("acqui.fluxnormcoeff"))
                DisableParameter("acqui.month");
            }
@@ -461,28 +458,28 @@ private:
              ossOutput << "Acquisition Year already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acqui.year",lImageMetadataInterface->GetYear(), false);
+             SetParameterInt("acqui.year",lImageMetadataInterface->GetYear());
            }
 
            if (HasUserValue("acqui.sun.elev"))
              ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.sun.elev",lImageMetadataInterface->GetSunElevation(), false);
+             SetParameterFloat("acqui.sun.elev",lImageMetadataInterface->GetSunElevation());
 
            if (HasUserValue("acqui.sun.azim"))
              ossOutput << "Acquisition Sun Azimuth Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.sun.azim",lImageMetadataInterface->GetSunAzimuth(), false);
+             SetParameterFloat("acqui.sun.azim",lImageMetadataInterface->GetSunAzimuth());
 
            if (HasUserValue("acqui.view.elev"))
              ossOutput << "Acquisition Viewing Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.view.elev",lImageMetadataInterface->GetSatElevation(), false);
+             SetParameterFloat("acqui.view.elev",lImageMetadataInterface->GetSatElevation());
 
            if (HasUserValue("acqui.view.azim"))
              ossOutput << "Acquisition Viewing Azimuth Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acqui.view.azim",lImageMetadataInterface->GetSatAzimuth(), false);
+             SetParameterFloat("acqui.view.azim",lImageMetadataInterface->GetSatAzimuth());
 
            // Set default value so that they are stored somewhere even if
            // they are overloaded by user values
@@ -563,7 +560,7 @@ private:
 
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     //Main filters instantiations
     m_ImageToRadianceFilter                = ImageToRadianceImageFilterType::New();
@@ -751,12 +748,12 @@ private:
         m_ImageToRadianceFilter->SetInput(inImage);
         m_RadianceToReflectanceFilter->SetInput(m_ImageToRadianceFilter->GetOutput());
 
-        if (IsParameterEnabled("clamp"))
+        if (GetParameterInt("clamp"))
           {
           GetLogger()->Info("Clamp values between [0, 100]\n");
           }
 
-        m_RadianceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
+        m_RadianceToReflectanceFilter->SetUseClamp(GetParameterInt("clamp"));
         m_RadianceToReflectanceFilter->UpdateOutputInformation();
         m_ScaleFilter->SetInput(m_RadianceToReflectanceFilter->GetOutput());
       }
@@ -894,7 +891,7 @@ private:
         }
 
         //Rescale the surface reflectance in milli-reflectance
-        if (!IsParameterEnabled("clamp"))
+        if (!GetParameterInt("clamp"))
         {
           if (!adjComputation)
             m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
@@ -920,7 +917,7 @@ private:
     // Output Image
     double scale = 1.;
 
-    if (IsParameterEnabled("milli"))
+    if (GetParameterInt("milli"))
     {
     GetLogger()->Info("Use milli-reflectance\n");
       if ( (GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC) )

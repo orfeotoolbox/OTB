@@ -83,11 +83,11 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) ITK_OVERRIDE;
+  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
 
 protected:
   RAMDrivenAdaptativeStreamingManager();
-  ~RAMDrivenAdaptativeStreamingManager() ITK_OVERRIDE;
+  ~RAMDrivenAdaptativeStreamingManager() override;
 
   /** The number of MegaBytes of RAM available */
   unsigned int m_AvailableRAMInMB;

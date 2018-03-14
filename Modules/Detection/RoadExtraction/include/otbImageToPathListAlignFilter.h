@@ -121,10 +121,10 @@ public:
 
 protected:
   ImageToPathListAlignFilter();
-  ~ImageToPathListAlignFilter() ITK_OVERRIDE;
+  ~ImageToPathListAlignFilter() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE {}  // do nothing
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateOutputInformation() override {}  // do nothing
+  void GenerateData() override;
   virtual std::vector<double> tab(int n, double p, double m);
   virtual void AngleCalculate(const InputImageType*  InputImageIn);
 
@@ -134,7 +134,7 @@ protected:
   ValueType m_PathValue;
   ValueType m_BackgroundValue;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ImageToPathListAlignFilter(const Self &); //purposely not implemented

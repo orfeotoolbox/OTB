@@ -50,7 +50,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
 
   oss.str("");
   oss <<key<<".utm" <<".northhem";
-  app->AddParameter(ParameterType_Empty, oss.str(),  "Northern Hemisphere");
+  app->AddParameter(ParameterType_Bool, oss.str(),  "Northern Hemisphere");
   app->SetParameterDescription(oss.str(),"The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere.");
 
 

@@ -66,11 +66,11 @@ public:
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
 
-  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
+  OutputPointType TransformPoint(const InputPointType& point) const override;
 
 protected:
   GeocentricTransform();
-  ~GeocentricTransform() ITK_OVERRIDE;
+  ~GeocentricTransform() override;
   EllipsoidAdapter::Pointer m_Ellipsoid;
 
 private:

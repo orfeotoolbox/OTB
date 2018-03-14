@@ -90,7 +90,7 @@ template. The merge request will then be discussed by the community and the core
 OTB team.
 
 * Merge requests can not be merged until all discussions have been resolved (this is enforced by GitLab)
-* Merge requests **must receive at least 2 positives votes from PSC members** before being merged
+* Merge requests **must receive at least 2 positives votes from core developers** (members of Main Repositories group in Gitlab with at least "Developer" level; this includes PSC members) before being merged
 * The merger is responsible for checking that the branch is up-to-date with develop
 * Merge requests can be merged by anyone (not just PSC or RM) with push access to develop
 * Merge requests can be merged once the dashboard is proven green for this branch

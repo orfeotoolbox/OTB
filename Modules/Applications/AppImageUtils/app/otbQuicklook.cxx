@@ -53,7 +53,7 @@ public:
         <ExtractROIFilterType::OutputImageType, ExtractROIFilterType::OutputImageType> ShrinkImageFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Quicklook");
     SetDescription("Generates a subsampled version of an image extract");
@@ -121,7 +121,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Update the sizes only if the user does not defined a size
     if ( HasValue("in") )
@@ -146,8 +146,8 @@ private:
 
       if (!HasUserValue("rsx")  && !HasUserValue("rsy") )
         {
-        SetParameterInt("rsx",largestRegion.GetSize()[0], false);
-        SetParameterInt("rsy",largestRegion.GetSize()[1], false);
+        SetParameterInt("rsx",largestRegion.GetSize()[0]);
+        SetParameterInt("rsy",largestRegion.GetSize()[1]);
         }
 
       // Put the limit of the index and the size relative the image
@@ -168,8 +168,8 @@ private:
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
-        SetParameterInt("rox",0, false);
-        SetParameterInt("roy",0, false);
+        SetParameterInt("rox",0);
+        SetParameterInt("roy",0);
         this->CropRegionOfInterest();
         }
       }
@@ -183,22 +183,27 @@ bool CropRegionOfInterest()
     region.SetSize(1,  GetParameterInt("rsy"));
     region.SetIndex(0, GetParameterInt("rox"));
     region.SetIndex(1, GetParameterInt("roy"));
+    FloatVectorImageType::RegionType region0 = region;
 
     if ( HasValue("in") )
       {
         if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
           {
-            SetParameterInt( "rsx", region.GetSize(0), HasUserValue("rsx") );
-            SetParameterInt( "rsy", region.GetSize(1), HasUserValue("rsy") );
-            SetParameterInt( "rox", region.GetIndex(0), HasUserValue("rox") );
-            SetParameterInt( "roy", region.GetIndex(1), HasUserValue("roy") );
+            if (region0.GetSize(0) != region.GetSize(0))
+              SetParameterInt( "rsx", region.GetSize(0));
+            if (region0.GetSize(1) != region.GetSize(1))
+              SetParameterInt( "rsy", region.GetSize(1));
+            if (region0.GetIndex(0) != region.GetIndex(0))
+              SetParameterInt( "rox", region.GetIndex(0));
+            if (region0.GetIndex(1) != region.GetIndex(1))
+              SetParameterInt( "roy", region.GetIndex(1));
             return true;
           }
       }
     return false;
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     InputImageType::Pointer inImage = GetParameterImage("in");
 

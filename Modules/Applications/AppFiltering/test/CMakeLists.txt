@@ -68,9 +68,9 @@ otb_test_application(NAME  apTvUtContrastTest_base_glob
                              -out ${TEMP}/apTvUtContrastTest_base_glob.tif int16
                              -bins 256
                              -spatial global
-                             -minmax manuel
-                             -minmax.manuel.min 0 
-                             -minmax.manuel.max 255
+                             -minmax manual
+                             -minmax.manual.min 0 
+                             -minmax.manual.max 255
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtContrastTest_base_glob.tif
                              ${TEMP}/apTvUtContrastTest_base_glob.tif)

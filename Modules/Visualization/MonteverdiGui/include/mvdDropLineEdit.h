@@ -100,7 +100,7 @@ public:
   DropLineEdit( const QString& contents, QWidget* p =0 );
 
   /** \brief Destructor. */
-  ~DropLineEdit() ITK_OVERRIDE;
+  ~DropLineEdit() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -120,9 +120,9 @@ signals:
 // Protected methods.
 protected:
 
-  void dragEnterEvent( QDragEnterEvent* event ) ITK_OVERRIDE;
-  void dragMoveEvent( QDragMoveEvent* event ) ITK_OVERRIDE;
-  void dropEvent( QDropEvent* event ) ITK_OVERRIDE;
+  void dragEnterEvent( QDragEnterEvent* event ) override;
+  void dragMoveEvent( QDragMoveEvent* event ) override;
+  void dropEvent( QDropEvent* event ) override;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

@@ -130,13 +130,13 @@ public:
 
 protected:
   LocalHoughFilter();
-  ~LocalHoughFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LocalHoughFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Definition of the Hough Filter. */
   typedef itk::HoughTransform2DLinesImageFilter<InputPixelType, AccumulatorPixelType> HoughFilterType;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   LocalHoughFilter(const Self &); //purposely not implemented

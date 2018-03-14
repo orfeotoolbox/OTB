@@ -81,7 +81,7 @@ public:
 private:
   DomainTransform() {}
 
-  ~DomainTransform() ITK_OVERRIDE
+  ~DomainTransform() override
     {
     }
 
@@ -99,7 +99,7 @@ private:
     #endif
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DomainTransform");
     SetDescription("Domain Transform application for wavelet and fourier");
@@ -134,7 +134,7 @@ private:
     AddChoice("mode.fft", "FFT transform");
     SetParameterDescription("mode.fft", "FFT transform");
 
-    AddParameter(ParameterType_Empty, "mode.fft.shift", "Shift fft transform");
+    AddParameter(ParameterType_Bool, "mode.fft.shift", "Shift fft transform");
     SetParameterDescription("mode.fft.shift", "Shift transform of fft filter");
 
     AddChoice("mode.wavelet", "Wavelet");
@@ -152,8 +152,8 @@ private:
     AddChoice("mode.wavelet.form.sym8", "SYMLET8");
 
     // Default values for mode
-    SetParameterString("mode", "wavelet", false);
-    SetParameterString("mode.wavelet.form", "haar", false);
+    SetParameterString("mode", "wavelet");
+    SetParameterString("mode.wavelet.form", "haar");
 
     AddParameter(ParameterType_Choice,"direction", "Direction");
     AddChoice("direction.forward", "Forward");
@@ -173,12 +173,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
     {
 
     }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     {
     int dir = GetParameterInt("direction");
     int mode = GetParameterInt("mode");
@@ -263,7 +263,7 @@ private:
     else
       {
       // fft ttransform
-      bool shift = IsParameterEnabled( "mode.fft.shift");
+      bool shift = GetParameterInt( "mode.fft.shift");
       typedef otb::Image< std::complex<OutputPixelType> > ComplexOutputImageType;
 
       if (dir == 0 )

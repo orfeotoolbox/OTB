@@ -67,10 +67,10 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentOGRDataToClassStatisticsFilter, PersistentSamplingFilterBase);
 
-  void Synthetize(void) ITK_OVERRIDE;
+  void Synthetize(void) override;
 
   /** Reset method called before starting the streaming*/
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
 
   /** the class count map is stored as output #2 */
   const ClassCountObjectType* GetClassCountOutput() const;
@@ -82,24 +82,24 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 protected:
   /** Constructor */
   PersistentOGRDataToClassStatisticsFilter();
   /** Destructor */
-  ~PersistentOGRDataToClassStatisticsFilter() ITK_OVERRIDE {}
+  ~PersistentOGRDataToClassStatisticsFilter() override {}
 
   /** Implement generic method called at each candidate position */
   void ProcessSample(const ogr::Feature& feature,
                      typename TInputImage::IndexType& imgIndex,
                      typename TInputImage::PointType& imgPoint,
-                     itk::ThreadIdType& threadid) ITK_OVERRIDE;
+                     itk::ThreadIdType& threadid) override;
 
   /** Prepare temporary variables for the current feature */
   void PrepareFeature(const ogr::Feature& feature,
-                      itk::ThreadIdType& threadid) ITK_OVERRIDE;
+                      itk::ThreadIdType& threadid) override;
 
 private:
   PersistentOGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
@@ -183,7 +183,7 @@ protected:
   /** Constructor */
   OGRDataToClassStatisticsFilter() {}
   /** Destructor */
-  ~OGRDataToClassStatisticsFilter() ITK_OVERRIDE {}
+  ~OGRDataToClassStatisticsFilter() override {}
 
 private:
   OGRDataToClassStatisticsFilter(const Self &); //purposely not implemented

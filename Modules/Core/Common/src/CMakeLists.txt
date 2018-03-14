@@ -30,11 +30,12 @@ set(OTBCommon_SRC
   otbStopwatch.cxx
   otbStringToHTML.cxx
   otbExtendedFilenameHelper.cxx
+  otbLogger.cxx
   )
 
 add_library(OTBCommon ${OTBCommon_SRC})
 target_link_libraries(OTBCommon
-  ${OTBITK_LIBRARIES}
+  ${OTBITK_LIBRARIES} ${OTBGDAL_LIBRARIES}
   )
 
 otb_module_target(OTBCommon)

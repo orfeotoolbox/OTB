@@ -54,66 +54,66 @@ public:
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias() const ITK_OVERRIDE;
+  VariableLengthVectorType GetPhysicalBias() const override;
 
   /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain() const ITK_OVERRIDE;
+  VariableLengthVectorType GetPhysicalGain() const override;
 
   /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance() const ITK_OVERRIDE;
+  VariableLengthVectorType GetSolarIrradiance() const override;
 
   /** Get the imaging acquisition day from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetDay() const ITK_OVERRIDE;
+  int GetDay() const override;
 
   /** Get the imaging acquisition month from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetMonth() const ITK_OVERRIDE;
+  int GetMonth() const override;
 
   /** Get the imaging acquisition year from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetYear() const ITK_OVERRIDE;
+  int GetYear() const override;
 
   /** Get the imaging acquisition hour from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetHour() const ITK_OVERRIDE;
+  int GetHour() const override;
 
   /** Get the imaging acquisition year from the ossim metadata : "Acquisition Date/Time" metadata variable */
-  int GetMinute() const ITK_OVERRIDE;
+  int GetMinute() const override;
 
   /** Get the imaging production day from the ossim metadata : "Creation Date" metadata variable */
-  int GetProductionDay() const ITK_OVERRIDE;
+  int GetProductionDay() const override;
 
   /** Get the imaging production month from the ossim metadata : "Creation Date" metadata variable */
-  int GetProductionMonth() const ITK_OVERRIDE;
+  int GetProductionMonth() const override;
 
   /** Get the imaging production year from the ossim metadata : "Creation Date" metadata variable */
-  int GetProductionYear() const ITK_OVERRIDE;
+  int GetProductionYear() const override;
 
   /** Get the sat elevation from the ossim metadata */
-  double GetSatElevation() const ITK_OVERRIDE;
+  double GetSatElevation() const override;
 
   /** Get the sat azimuth from the ossim metadata */
-  double GetSatAzimuth() const ITK_OVERRIDE;
+  double GetSatAzimuth() const override;
 
   /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths() const ITK_OVERRIDE;
+  VariableLengthVectorType GetFirstWavelengths() const override;
 
   /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths() const ITK_OVERRIDE;
+  VariableLengthVectorType GetLastWavelengths() const override;
 
-  bool CanRead() const ITK_OVERRIDE;
+  bool CanRead() const override;
 
   /** Get the enhanced band names of Ikonos data*/
-  std::vector<std::string> GetEnhancedBandNames() const ITK_OVERRIDE;
+  std::vector<std::string> GetEnhancedBandNames() const override;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const ITK_OVERRIDE;
+  std::vector<unsigned int> GetDefaultDisplay() const override;
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const ITK_OVERRIDE;
+  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override;
 
 protected:
   IkonosImageMetadataInterface();
-  ~IkonosImageMetadataInterface() ITK_OVERRIDE {}
+  ~IkonosImageMetadataInterface() override {}
 
 private:
 

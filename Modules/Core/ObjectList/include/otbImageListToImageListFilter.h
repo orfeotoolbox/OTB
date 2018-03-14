@@ -73,9 +73,9 @@ protected:
   /** Constructor */
   ImageListToImageListFilter();
   /** Destructor */
-  ~ImageListToImageListFilter() ITK_OVERRIDE {}
+  ~ImageListToImageListFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ImageListToImageListFilter(const Self &); //purposely not implemented

@@ -45,7 +45,7 @@ class OTBQtWidget_EXPORT QtWidgetProgressReport : public QWidget
   Q_OBJECT
 public:
   QtWidgetProgressReport(QtWidgetModel * model);
-  ~QtWidgetProgressReport() ITK_OVERRIDE;
+  ~QtWidgetProgressReport() override;
 
   void SetApplication(Application::Pointer app);
 

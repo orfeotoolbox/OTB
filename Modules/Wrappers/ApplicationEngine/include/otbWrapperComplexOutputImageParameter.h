@@ -77,7 +77,7 @@ public:
   itkGetMacro(RAMValue, unsigned int);
 
   /** Implement the reset method (replace pixel type by default type) */
-  void Reset() ITK_OVERRIDE
+  void Reset() override
   {
     m_ComplexPixelType = m_DefaultComplexPixelType;
   }
@@ -90,7 +90,7 @@ public:
   static bool ConvertStringToPixelType(const std::string &value, ComplexImagePixelType &type);
 
   /** Return true if a filename is set */
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
   void SetFileName (const char* filename)
   {
@@ -114,7 +114,7 @@ protected:
   /** Constructor */
   ComplexOutputImageParameter();
   /** Destructor */
-  ~ComplexOutputImageParameter() ITK_OVERRIDE;
+  ~ComplexOutputImageParameter() override;
 
   template <class TInputImageType>
     void SwitchImageWrite();
