@@ -28,12 +28,22 @@ namespace otb
 
 class ObjectListInterface
 {
-
+/** \class ObjectListInterface
+ *  \brief This non template class is an interface that wrapp ObjectList
+ *  
+ *  New method that do not need the template parameter of ObjectList 
+ *  should be declare here.
+ *
+ * \ingroup ObjectListInterface
+ */
 public:
 
   ObjectListInterface() {};
   virtual ~ObjectListInterface(){};
 
+  /**
+  Get the nth element of the list as a DataObject *.
+  */
   virtual itk::DataObject * GetNthDataObject(unsigned int index) const = 0;
 
   virtual std::size_t Size(void) const = 0;
