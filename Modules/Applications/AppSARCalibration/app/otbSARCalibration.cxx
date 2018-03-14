@@ -68,9 +68,8 @@ private:
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_Empty, "noise", "Disable Noise");
+    AddParameter(ParameterType_Bool, "noise", "Disable Noise");
     SetParameterDescription("noise", "Flag to disable noise. For 5.2.0 release, the noise values are only read by TerraSARX product.");
-    MandatoryOff("noise");
 
     AddParameter(ParameterType_Choice, "lut", "Lookup table sigma /gamma/ beta/ DN.");
     SetParameterDescription("lut", "Lookup table values are not available with all SAR products. Products that provide lookup table with metadata are: Sentinel1, Radarsat2.");
@@ -104,17 +103,8 @@ private:
     // Set the filer input
     m_CalibrationFilter = CalibrationFilterType::New();
     m_CalibrationFilter->SetInput(floatComplexImage);
-
-    if (IsParameterEnabled("noise"))
-      {
-      m_CalibrationFilter->SetEnableNoise(false);
-      }
-
-    short lut = 0;
-
-    lut = GetParameterInt("lut");
-
-    m_CalibrationFilter->SetLookupSelected(lut);
+    m_CalibrationFilter->SetEnableNoise( !bool(GetParameterInt("noise")) );
+    m_CalibrationFilter->SetLookupSelected(GetParameterInt("lut"));
 
     // Set the output image
     SetParameterOutputImage("out", m_CalibrationFilter->GetOutput());

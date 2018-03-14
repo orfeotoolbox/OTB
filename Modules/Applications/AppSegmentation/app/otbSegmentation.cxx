@@ -282,17 +282,13 @@ private:
     SetParameterDescription("mode.vector.inmask", "Only pixels whose mask value is strictly positive will be segmented.");
     MandatoryOff("mode.vector.inmask");
 
-    AddParameter(ParameterType_Empty, "mode.vector.neighbor", "8-neighbor connectivity");
+    AddParameter(ParameterType_Bool, "mode.vector.neighbor", "8-neighbor connectivity");
     SetParameterDescription("mode.vector.neighbor",
                             "Activate 8-Neighborhood connectivity (default is 4).");
-    MandatoryOff("mode.vector.neighbor");
-    DisableParameter("mode.vector.neighbor");
 
-
-    AddParameter(ParameterType_Empty,"mode.vector.stitch","Stitch polygons");
+    AddParameter(ParameterType_Bool,"mode.vector.stitch","Stitch polygons");
     SetParameterDescription("mode.vector.stitch", "Scan polygons on each side of tiles and stitch polygons which connect by more than one pixel.");
-    MandatoryOff("mode.vector.stitch");
-    EnableParameter("mode.vector.stitch");
+    SetParameterInt("mode.vector.stitch",1);
 
     AddParameter(ParameterType_Int, "mode.vector.minsize", "Minimum object size");
     SetParameterDescription("mode.vector.minsize",
@@ -311,11 +307,11 @@ private:
 
     AddParameter(ParameterType_String, "mode.vector.layername", "Layer name");
     SetParameterDescription("mode.vector.layername", "Name of the layer in the vector file or database (default is Layer).");
-    SetParameterString("mode.vector.layername", "layer", false);
+    SetParameterString("mode.vector.layername", "layer");
 
     AddParameter(ParameterType_String, "mode.vector.fieldname", "Geometry index field name");
     SetParameterDescription("mode.vector.fieldname", "Name of the field holding the geometry index in the output vector file or database.");
-    SetParameterString("mode.vector.fieldname", "DN", false);
+    SetParameterString("mode.vector.fieldname", "DN");
 
     AddParameter(ParameterType_Int, "mode.vector.tilesize", "Tiles size");
     SetParameterDescription("mode.vector.tilesize",
@@ -365,7 +361,7 @@ private:
     // Retrieve tile size parameter
     const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("mode.vector.tilesize"));
     // Retrieve the 8-connected option
-    bool use8connected = IsParameterEnabled("mode.vector.neighbor");
+    bool use8connected = GetParameterInt("mode.vector.neighbor");
     // Retrieve min object size parameter
     const unsigned int minSize = static_cast<unsigned int> (this->GetParameterInt("mode.vector.minsize"));
 
@@ -673,7 +669,7 @@ private:
       ogrDS->SyncToDisk();
 
       // Stitching mode
-      if (IsParameterEnabled("mode.vector.stitch"))
+      if (GetParameterInt("mode.vector.stitch"))
         {
         otbAppLogINFO(<<"Segmentation done, stiching polygons ...");
 

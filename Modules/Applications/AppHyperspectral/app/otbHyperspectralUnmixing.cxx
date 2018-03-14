@@ -144,7 +144,7 @@ private:
 
     AddChoice("ua.mdmdnmf", "MDMDNMF");
     SetParameterDescription("ua.mdmdnmf", "Minimum Dispersion Constrained Non Negative Matrix Factorization");
-    SetParameterString("ua", "ucls", false);
+    SetParameterString("ua", "ucls");
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("ie", "cupriteEndmembers.tif");

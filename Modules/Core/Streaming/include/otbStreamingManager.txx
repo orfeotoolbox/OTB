@@ -47,12 +47,9 @@ StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType available
 
   if (availableRAMInBytes == 0)
     {
-    otbMsgDevMacro(<< "Retrieving available RAM size from configuration");
     // Retrieve it from the configuration
     availableRAMInBytes = 1024*1024*ConfigurationManager::GetMaxRAMHint();
     }
-
-  otbMsgDevMacro("RAM used to estimate memory footprint : " << availableRAMInBytes / 1024 / 1024  << " MB")
   return availableRAMInBytes;
 }
 
@@ -62,8 +59,6 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
                                                            MemoryPrintType availableRAM,
                                                            double bias)
 {
-  otbMsgDevMacro(<< "availableRAM " << availableRAM)
-
   MemoryPrintType availableRAMInBytes = GetActualAvailableRAMInBytes(availableRAM);
 
   otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator;
@@ -103,7 +98,6 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
 
     if (smallRegionSuccess)
       {
-      otbMsgDevMacro("Using an extract to estimate memory : " << smallRegion)
       // the region is well behaved, inside the largest possible region
       memoryPrintCalculator->SetDataToWrite(extractFilter->GetOutput() );
 
@@ -114,7 +108,6 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
       }
     else
       {
-      otbMsgDevMacro("Using the input region to estimate memory : " << region)
       // the region is not well behaved
       // use the full region
       memoryPrintCalculator->SetDataToWrite(input);
@@ -148,11 +141,8 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
   unsigned int optimalNumberOfDivisions =
       otb::PipelineMemoryPrintCalculator::EstimateOptimalNumberOfStreamDivisions(pipelineMemoryPrint, availableRAMInBytes);
 
-  otbMsgDevMacro( "Estimated Memory print for the full image : "
-                  << static_cast<unsigned int>(pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte ) << std::endl)
-  otbMsgDevMacro( "Optimal number of stream divisions: "
-                  << optimalNumberOfDivisions << std::endl)
-
+  otbLogMacro(Info,<<"Estimated memory for full processing: "<<pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<"MB (avail.: "<<availableRAMInBytes * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<" NB), optimal image partitioning: "<<optimalNumberOfDivisions<<" blocks");
+  
   return optimalNumberOfDivisions;
 }
 

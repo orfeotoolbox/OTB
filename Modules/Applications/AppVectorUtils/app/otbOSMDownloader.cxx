@@ -98,11 +98,10 @@ private:
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    AddParameter(ParameterType_Empty, "printclasses", "Displays available key/value classes");
+    AddParameter(ParameterType_Bool, "printclasses", "Displays available key/value classes");
     SetParameterDescription("printclasses","Print the key/value classes "
       "available for the selected support image. If enabled, the OSM tag Key "
       "(-key) and the output (-out) become optional" );
-    MandatoryOff("printclasses");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("support", "qb_RoadExtract.tif");
@@ -118,15 +117,15 @@ private:
     // CASE:  when the -print option is not required and the User
     // does not set the option OSMKey or the option Output or does not
     // set both of them
-    if ( !this->HasValue("printclasses") )
-      {
-      MandatoryOn("out");
-      MandatoryOn("key");
-      }
-    else
+    if ( GetParameterInt("printclasses") )
       {
       MandatoryOff("out");
       MandatoryOff("key");
+      }
+    else
+      {
+      MandatoryOn("out");
+      MandatoryOn("key");
       }
   }
 
@@ -178,7 +177,7 @@ private:
 
   // If the user wants to print the Key/Values present in the XML file
   // downloaded  :
-  if ( this->HasValue("printclasses"))
+  if ( GetParameterInt("printclasses"))
     {
     // Print the classes
     VectorDataProviderType::KeyMapType  keymap = m_VdOSMGenerator->GetKeysMap();

@@ -164,7 +164,7 @@ private:
     SetParameterDescription("strategy.all","Take all samples");
 
     // Default strategy : smallest
-    SetParameterString("strategy","smallest", false);
+    SetParameterString("strategy","smallest");
 
     AddParameter(ParameterType_Choice, "mim", "Multi-Image Mode");
 

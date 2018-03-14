@@ -139,7 +139,7 @@ private:
   void RemoveFile(std::string tile)
   {
     // Cleanup
-    if(IsParameterEnabled("cleanup"))
+    if(GetParameterInt("cleanup"))
       {
         // Try to remove the geom file if existing
       std::string geomfile = tile.substr(0,tile.size() - itksys::SystemTools::GetFilenameExtension(tile.c_str()).size()).append(".geom");
@@ -302,10 +302,9 @@ private:
     MandatoryOff("tmpdir");
     DisableParameter("tmpdir");
 
-    AddParameter(ParameterType_Empty,"cleanup","Temporary files cleaning");
-    EnableParameter("cleanup");
+    AddParameter(ParameterType_Bool,"cleanup","Temporary files cleaning");
     SetParameterDescription("cleanup","If activated, the application will try to remove all temporary files it created.");
-    MandatoryOff("cleanup");
+    SetParameterInt("cleanup",1);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in","smooth.tif");
@@ -724,7 +723,7 @@ private:
     // Release input files
     m_FinalReader = ITK_NULLPTR;
 
-    if(IsParameterEnabled("cleanup"))
+    if(GetParameterInt("cleanup"))
       {
       otbAppLogINFO(<<"Final clean-up ...");
 

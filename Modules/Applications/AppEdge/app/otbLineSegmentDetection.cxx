@@ -85,11 +85,10 @@ private:
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0, 255]");
+    AddParameter(ParameterType_Bool, "norescale", "No rescaling in [0, 255]");
     SetParameterDescription("norescale",
       "By default, the input image amplitude is rescaled between [0,255]."
       " Turn on this parameter to skip rescaling");
-    MandatoryOff("norescale");
 
     AddRAMParameter();
 
@@ -132,7 +131,7 @@ private:
       = ShiftScaleImageFilterType::New();
 
     // Default behavior is to do the rescaling
-    if ( !IsParameterEnabled("norescale") )
+    if ( !GetParameterInt("norescale") )
       {
       stats->SetInput(amplitudeConverter->GetOutput());
       stats->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));

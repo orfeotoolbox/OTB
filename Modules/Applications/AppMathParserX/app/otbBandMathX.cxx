@@ -289,7 +289,7 @@ private:
         if (useContext)
           {
           // only set the first expression, 'ManyExpression' is disabled.
-          this->SetParameterString("exp",dummyFilter->GetExpression(0), false);
+          this->SetParameterString("exp",dummyFilter->GetExpression(0));
           }
         }
       }

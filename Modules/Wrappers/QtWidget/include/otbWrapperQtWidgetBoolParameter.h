@@ -18,17 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperQtWidgetParameterGroup_h
-#define otbWrapperQtWidgetParameterGroup_h
+#ifndef otbWrapperQtWidgetBoolParameter_h
+#define otbWrapperQtWidgetBoolParameter_h
 
 #include <QtGui>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "otbWrapperParameterGroup.h"
-#include "otbWrapperRadiusParameter.h"
-#include "otbWrapperRAMParameter.h"
+#include "otbWrapperBoolParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#include "otbWrapperInputProcessXMLParameter.h"
-#include "otbWrapperOutputProcessXMLParameter.h"
 #endif //tag=QT4-boost-compatibility
 
 namespace otb
@@ -36,37 +32,31 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class QtWidgetParameterGroup
+/** \class QtWidgetBoolParameter
  * \brief
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetParameterGroup : public QtWidgetParameterBase
+class OTBQtWidget_EXPORT QtWidgetBoolParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
+
 public:
-  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
-  ~QtWidgetParameterGroup() override;
+  QtWidgetBoolParameter(BoolParameter*, QtWidgetModel*);
+  ~QtWidgetBoolParameter() ITK_OVERRIDE;
 
 public slots:
-  void SetActivationState( bool value ) override;
+  void SetValue( bool value );
 
 private:
-  QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
-  void operator=(const QtWidgetParameterGroup&); //purposely not implemented
+  QtWidgetBoolParameter(const QtWidgetBoolParameter&) = delete;
+  void operator=(const QtWidgetBoolParameter&) = delete;
 
-  void DoCreateWidget() override;
+  void DoCreateWidget() ITK_OVERRIDE;
 
-  void DoUpdateGUI() override;
+  void DoUpdateGUI() ITK_OVERRIDE;
 
-  virtual void ProcessChild(QObject* currentNode, bool status);
-
-  ParameterGroup::Pointer m_ParamList;
-
-  typedef std::vector<QtWidgetParameterBase*> WidgetListType;
-  typedef WidgetListType::iterator WidgetListIteratorType;
-  WidgetListType m_WidgetList;
-
+  QToolButton *m_Button;
 };
 
 

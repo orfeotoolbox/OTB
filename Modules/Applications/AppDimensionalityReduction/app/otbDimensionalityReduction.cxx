@@ -164,9 +164,8 @@ private:
     MandatoryOff("nbcomp");
     SetMinimumParameterIntValue("nbcomp", 0);
 
-    AddParameter(ParameterType_Empty, "normalize", "Normalize.");
+    AddParameter(ParameterType_Bool, "normalize", "Normalize.");
     SetParameterDescription("normalize", "center AND reduce data before Dimensionality reduction.");
-    MandatoryOff("normalize");
 
     AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output (text format)");
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
@@ -196,7 +195,7 @@ private:
                      unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
                      if (nbComp > nbComponents)
                      {
-                            SetParameterInt("nbcomp",nbComponents, false);
+                            SetParameterInt("nbcomp",nbComponents);
                             otbAppLogINFO( << "number of selected components can't exceed image dimension : "<<nbComponents );
                      }
 
@@ -206,14 +205,14 @@ private:
                      if (this->GetParameterString("outinv").size()!= 0)
                      {
                             otbAppLogWARNING(<<"This application only provides the forward transform for the MAF method.");
-                            this->SetParameterString("outinv", "", false);
+                            this->SetParameterString("outinv", "");
                      }
                      this->DisableParameter("outinv");
 
                      if (this->GetParameterString("outmatrix").size()!= 0)
                      {
                             otbAppLogWARNING(<<"No transformation matrix available for MAF method.");
-                            this->SetParameterString("outmatrix", "", false);
+                            this->SetParameterString("outmatrix", "");
                      }
                      this->DisableParameter("outmatrix");
 
@@ -225,7 +224,7 @@ private:
                      unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
                      if ((nbComp != 0) && (nbComp != nbComponents))
                      {
-                            SetParameterInt("nbcomp",nbComponents, false);
+                            SetParameterInt("nbcomp",nbComponents);
                             otbAppLogINFO( << "all components are kept when using MAF filter method.");
                      }
 
@@ -237,7 +236,7 @@ private:
 
     // Get Parameters
     int nbComp = GetParameterInt("nbcomp");
-    bool normalize = IsParameterEnabled("normalize");
+    bool normalize = GetParameterInt("normalize");
     bool rescale = IsParameterEnabled("rescale");
 
     bool invTransform = HasValue("outinv") && IsParameterEnabled("outinv");

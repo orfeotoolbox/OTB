@@ -112,7 +112,7 @@ protected:
     contingencyTableCalculator->Compute(performanceLabeledListSample->Begin(),
                                         performanceLabeledListSample->End(),predictedListSample->Begin(), predictedListSample->End());
 
-    if(IsParameterEnabled("v"))
+    if(GetParameterInt("v"))
     {
       otbAppLogINFO( "Training performances:" );
       otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"
