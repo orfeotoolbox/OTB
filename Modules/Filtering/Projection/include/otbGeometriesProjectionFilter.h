@@ -195,7 +195,7 @@ private:
    * of the filter. It's up to the caller to take responsibility of the returned
    * object.
    */
-  OGRSpatialReference* DoDefineNewLayerSpatialReference(ogr::Layer const& source) const ITK_OVERRIDE;
+  OGRSpatialReference* DoDefineNewLayerSpatialReference(ogr::Layer const& source) const override;
   /**
    * Hook that actually filters an OGR \c Layer.
    * \param[in]     source      Input layer
@@ -207,13 +207,13 @@ private:
    * inner-filter working on \c ogr::DataSource cannot be globally configured
    * once and for all.
    */
-  void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const ITK_OVERRIDE;
+  void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const override;
   /** Hook used to conclude the initialization phase.
    * Global \c ogr::DataSource settings for the \c m_Transform functor are
    * forwarded to the functor. \c ogr::Layer specific settings will be set at
    * the last moment from \c DoProcessLayer().
    */
-  void DoFinalizeInitialization() ITK_OVERRIDE;
+  void DoFinalizeInitialization() override;
   
   /**
    * Hook used to define the fields of the new layer.
@@ -223,18 +223,18 @@ private:
    * Just forwards the fields definition to the \c FieldTransformationPolicy
    * encapsuled in the \c TransformationFunctorDispatcherType.
    */
-  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const ITK_OVERRIDE;
+  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const override;
 
 protected:
   /** Default constructor. */
   GeometriesProjectionFilter();
   /** Destructor. */
-  ~GeometriesProjectionFilter() ITK_OVERRIDE;
+  ~GeometriesProjectionFilter() override;
 
   /** Computes output information.
    * \post \c m_OutputProjectionRef contains all its related meta-data
    */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
 public:
   /**\name Image Reference (origin, spacing) */

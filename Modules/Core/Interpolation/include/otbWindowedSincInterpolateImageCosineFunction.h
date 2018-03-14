@@ -127,8 +127,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageCosineFunction() {};
-  ~WindowedSincInterpolateImageCosineFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~WindowedSincInterpolateImageCosineFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }

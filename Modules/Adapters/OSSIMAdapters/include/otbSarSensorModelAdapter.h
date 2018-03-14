@@ -106,7 +106,7 @@ public:
   
 protected:
   SarSensorModelAdapter();
-  virtual ~SarSensorModelAdapter() ITK_OVERRIDE;
+  virtual ~SarSensorModelAdapter() override;
 
 private:
   SarSensorModelAdapter(const Self &); //purposely not implemented

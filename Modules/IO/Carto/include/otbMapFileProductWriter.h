@@ -154,7 +154,7 @@ public:
   itkGetStringMacro(ShapeIndexPath);
 
   /** Update Method : Call a porotected Write method */
-  void Update() ITK_OVERRIDE
+  void Update() override
   {
     this->Write();
   }
@@ -164,8 +164,8 @@ public:
 
 protected:
   MapFileProductWriter();
-  ~MapFileProductWriter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~MapFileProductWriter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**Method for Tiling the input image*/
   virtual void Tiling();

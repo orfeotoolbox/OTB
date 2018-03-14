@@ -166,7 +166,7 @@ public:
 
 protected:
   ShiftScaleImageAdaptor() {}
-  ~ShiftScaleImageAdaptor() ITK_OVERRIDE {}
+  ~ShiftScaleImageAdaptor() override {}
 
 private:
   ShiftScaleImageAdaptor(const Self &); //purposely not implemented

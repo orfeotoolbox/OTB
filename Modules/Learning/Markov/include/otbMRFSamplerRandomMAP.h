@@ -72,7 +72,7 @@ public:
 
   itkTypeMacro(MRFSamplerRandomMAP, MRFSampler);
 
-  void SetNumberOfClasses(const unsigned int nClasses) ITK_OVERRIDE
+  void SetNumberOfClasses(const unsigned int nClasses) override
   {
     if ((nClasses != this->m_NumberOfClasses) || (m_EnergiesInvalid == true))
       {
@@ -85,7 +85,7 @@ public:
       }
   }
 
-  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) ITK_OVERRIDE
+  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) override
   {
     if (this->m_NumberOfClasses == 0)
       {
@@ -166,7 +166,7 @@ protected:
     m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
-  ~MRFSamplerRandomMAP() ITK_OVERRIDE
+  ~MRFSamplerRandomMAP() override
     {
     if (m_Energy != ITK_NULLPTR) free(m_Energy);
     if (m_RepartitionFunction != ITK_NULLPTR) free(m_RepartitionFunction);

@@ -89,14 +89,14 @@ public:
   AttributesMapObjectType* GetMaximumOutput();
   const AttributesMapObjectType* GetMaximumOutput() const;
 
-  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 protected:
   MinMaxAttributesLabelMapFilter();
-  ~MinMaxAttributesLabelMapFilter() ITK_OVERRIDE {};
+  ~MinMaxAttributesLabelMapFilter() override {};
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   MinMaxAttributesLabelMapFilter(const Self&); //purposely not implemented

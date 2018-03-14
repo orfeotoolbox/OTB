@@ -230,7 +230,7 @@ public:
 
 protected:
    MuellerToPolarisationDegreeAndPowerImageFilter() {}
-  ~MuellerToPolarisationDegreeAndPowerImageFilter() ITK_OVERRIDE {}
+  ~MuellerToPolarisationDegreeAndPowerImageFilter() override {}
 
 private:
   MuellerToPolarisationDegreeAndPowerImageFilter(const Self&); //purposely not implemented

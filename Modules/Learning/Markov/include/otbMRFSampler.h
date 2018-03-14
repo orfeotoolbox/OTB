@@ -111,7 +111,7 @@ protected:
     m_EnergyRegularization = EnergyRegularizationType::New();
     m_EnergyFidelity =  EnergyFidelityType::New();
     };
-  ~MRFSampler() ITK_OVERRIDE {}
+  ~MRFSampler() override {}
 
 };
 

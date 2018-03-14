@@ -94,18 +94,18 @@ public:
   itkSetMacro(OutputIndex, unsigned int);
   itkGetMacro(OutputIndex, unsigned int);
 
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
+  void GenerateOutputInformation(void) override;
 
 protected:
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** Constructor */
   PerBandVectorImageFilter();
   /** Destructor */
-  ~PerBandVectorImageFilter() ITK_OVERRIDE {}
+  ~PerBandVectorImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   PerBandVectorImageFilter(const Self &); //purposely not implemented

@@ -58,7 +58,7 @@ public:
   typedef otb::ChangeInformationImageFilter<FloatVectorImageType> ChangeInfoFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ManageNoData");
     SetDescription("Manage No-Data");
@@ -123,13 +123,13 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
   }
 
 
- void DoExecute() ITK_OVERRIDE
+ void DoExecute() override
   {
     FloatVectorImageType::Pointer inputPtr = this->GetParameterImage("in");
     

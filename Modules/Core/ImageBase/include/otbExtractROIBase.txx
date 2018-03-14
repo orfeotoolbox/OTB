@@ -152,11 +152,6 @@ ExtractROIBase<TInputImage, TOutputImage>
     }
   requestedRegion.SetIndex(index);
   inputPtr->SetRequestedRegion(requestedRegion);
-
-  otbMsgDevMacro(<< "InputRequestedRegion (otbExtractROIBase): ");
-  otbMsgDevMacro(<< "  - index: " << requestedRegion.GetIndex());
-  otbMsgDevMacro(<< "  - size:  " << requestedRegion.GetSize());
-
 }
 
 /**

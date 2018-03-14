@@ -203,7 +203,7 @@ protected:
   {}
 
   /** Destructor */
-  ~Parameter() ITK_OVERRIDE {}
+  ~Parameter() override {}
 
   /** Name of the parameter */
   std::string                        m_Name;

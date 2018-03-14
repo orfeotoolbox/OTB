@@ -189,16 +189,16 @@ protected:
   /** Constructor */
   FineRegistrationImageFilter();
   /** Destructor */
-  ~FineRegistrationImageFilter() ITK_OVERRIDE {};
+  ~FineRegistrationImageFilter() override {};
 
   /** Threaded generate data */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Generate the input requested regions  */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
 private:
   FineRegistrationImageFilter(const Self&); //purposely not implemented

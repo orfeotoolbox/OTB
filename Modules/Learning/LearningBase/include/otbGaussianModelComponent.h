@@ -80,21 +80,21 @@ public:
   typedef typename CovarianceEstimatorType::MatrixType CovarianceType;
 
   /** Sets the input sample */
-  void SetSample(const TSample* sample) ITK_OVERRIDE;
+  void SetSample(const TSample* sample) override;
 
   /** Sets the component's distribution parameters.
    *  e.g. Then user can call directly Pdf( MeasurementVectorType & )  */
   void SetParameters(const ParametersType& parameters);
 
   /** Show the parameters in a minimal form in comparison to PrintSelf */
-  void ShowParameters(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void ShowParameters(std::ostream& os, itk::Indent indent) const override;
 
 protected:
   GaussianModelComponent();
-  ~GaussianModelComponent() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~GaussianModelComponent() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   GaussianModelComponent(const Self &); //purposely not implemented

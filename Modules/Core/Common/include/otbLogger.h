@@ -23,6 +23,7 @@
 
 #include "itkLoggerBase.h"
 #include "itkLogger.h"
+#include "OTBCommonExport.h"
 
 namespace otb {
 
@@ -31,9 +32,9 @@ namespace otb {
  *
  *  Sets OTB wide settings in its constructor
  *
- * \ingroup OTBApplicationEngine
+ * \ingroup OTBCommon
  */
-class Logger : public itk::Logger
+class OTBCommon_EXPORT Logger : public itk::Logger
 {
 public:
   typedef Logger                          Self;
@@ -41,15 +42,27 @@ public:
   typedef itk::SmartPointer< Self >       Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  itkTypeMacro(Logger, Object);
+  itkTypeMacro(Logger, itk::Logger);
+
+  static Pointer Instance();
+
   itkNewMacro(Self);
-
+  
   // Overwrite this to provide custom formatting of log entries
-  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) ITK_OVERRIDE;
+  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) override;
 
+  void LogSetupInformation();
+  
 protected:
-    Logger();
-    virtual ~Logger();
+  Logger();
+  virtual ~Logger() ITK_OVERRIDE;
+
+private:
+  Logger(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
+  static Pointer CreateInstance();
+
 }; // class Logger
 
 } // namespace otb

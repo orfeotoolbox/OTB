@@ -61,7 +61,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(ExhaustiveExponentialOptimizer,itk::SingleValuedNonLinearOptimizer);
 
-  void    StartOptimization(void) ITK_OVERRIDE;
+  void    StartOptimization(void) override;
 
   void StartWalking(void);
   void ResumeWalking(void);
@@ -83,8 +83,8 @@ public:
 
 protected:
   ExhaustiveExponentialOptimizer();
-  ~ExhaustiveExponentialOptimizer() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ExhaustiveExponentialOptimizer() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Advance to the next grid position. */
   void AdvanceOneStep(void);

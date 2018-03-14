@@ -210,30 +210,30 @@ public:
 
 protected:
   HooverInstanceFilter();
-  ~HooverInstanceFilter() ITK_OVERRIDE {};
+  ~HooverInstanceFilter() override {};
 
   /** Re implement the allocate output method to handle the second output correctly */
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
   /** Re implement the release input method to handle the second input correctly */
-  void ReleaseInputs() ITK_OVERRIDE;
+  void ReleaseInputs() override;
 
   /** Actions :
    *    - Fill cardinalities of GT regions
    */
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
 
   /** Actions:
    *    - Check matrix size
    *    - Init cardinalities lists
    *    - Fill cardinalities list for MS (GT is done by ThreadedProcessLabelObject)
    */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Actions :
    *    - Compute Hoover instances
    */
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
 private:
 

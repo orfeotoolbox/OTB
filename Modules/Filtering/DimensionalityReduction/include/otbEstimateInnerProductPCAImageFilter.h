@@ -78,21 +78,21 @@ public:
 
 protected:
   EstimateInnerProductPCAImageFilter();
-  ~EstimateInnerProductPCAImageFilter() ITK_OVERRIDE {}
+  ~EstimateInnerProductPCAImageFilter() override {}
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
    * Copy information from the first image of the list if existing.
    **/
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /**
    * BeforeThreadedGenerateData
    **/
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   EstimateInnerProductPCAImageFilter(const Self &); //purposely not implemented
