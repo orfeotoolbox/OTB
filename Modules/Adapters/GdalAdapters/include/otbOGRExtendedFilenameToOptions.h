@@ -28,6 +28,10 @@ namespace otb
 {
 
 /** \class OGRExtendedFilenameToOptions
+ *  \brief This class aim at processing GDAL option that can be pass through
+ * extended filename.
+ *
+ * \ingroup OTBExtendedFilename
  */
 #include "OTBGdalAdaptersExport.h"
 
@@ -66,11 +70,13 @@ public:
     std::unordered_map< std::string , std::string > gdalOptions;
   };
 
-  /* Set Methods */
+  /** Set extended filename */
   void SetExtendedFileName(const char * extFname) override;
 
+  /** Get the GDAL option for type operation */
   GDALOptionType GetGDALOptions( const std::string & type ) const ;
 
+  /** Get the deffierent GDAL options*/
   GDALOptionType GetGDALOpenOptions() const ;
   GDALOptionType GetGDALCreationOptions() const ;
   GDALOptionType GetGDALLayerOptions() const ;
@@ -78,9 +84,15 @@ public:
   bool SimpleFileNameIsSet() const;
   bool HasGDALLayerOption() const;
 
+  /** Set GDAL layer option through a vector of string */
   void SetGDALLayerOptions( const GDALOptionType & options );
+
+  /** Add GDAL layer option to existing one */
   void AddGDALLayerOptions( const GDALOptionType & options );
 
+  /** Constructor that return a pointer to an OGRExtendedFilename with 
+   * GDAL layer option as options
+   */
   static Pointer GetGDALLayerOptionsHelper( const GDALOptionType & options );
 
 protected:
