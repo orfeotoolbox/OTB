@@ -38,16 +38,31 @@ target_link_libraries(otbOGRTestsIO ${OTBGdalAdapters-Test_LIBRARIES})
 otb_add_test(NAME coTuOGRDataSourceWrapperIO
          COMMAND otbOGRTestsIO ${INPUTDATA}/ToulousePoints-examples.shp )
 
-add_executable(otbOGRExtendedFilenameTest otbOGRExtendedFilenameToOptionsTest.cxx)
-target_link_libraries(otbOGRExtendedFilenameTest ${OTBGdalAdapters-Test_LIBRARIES})
+set(OTBOGRTests
+otbOGRTestDriver.cxx
+otbOGRExtendedFilenameToOptionsTest.cxx
+otbOGRExtendedFilenameToOptionsGDALTest.cxx
+)
+
+add_executable(otbOGRTestDriver ${OTBOGRTests})
+target_link_libraries(otbOGRTestDriver ${OTBGdalAdapters-Test_LIBRARIES})
+otb_module_target_label(otbOGRTestDriver)
 
 otb_add_test(NAME TvOGRExtendedFilename
-         COMMAND otbOGRExtendedFilenameTest
+         COMMAND otbOGRTestDriver
          --compare-ascii ${NOTOL}
-  ${BASELINE}/TvOGRExtendedFilename.txt
-  ${TEMP}/TvOGRExtendedFilename.txt
+         ${BASELINE}/TvOGRExtendedFilename.txt
+         ${TEMP}/TvOGRExtendedFilenameTest.txt
+         otbOGRExtendedFileName
          test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
-         ${TEMP}/TvOGRExtendedFilename.txt     )
-otb_module_target_label(otbOGRExtendedFilenameTest)
+         ${TEMP}/TvOGRExtendedFilenameTest.txt     )
+
+otb_add_test(NAME TvOGRExtendedFilenameGDAL
+         COMMAND otbOGRTestDriver
+         otbOGRExtendedFileNameGDAL
+         ${INPUTDATA}/ToulousePoints-examples.shp?&gdal:oo:openOption=OPTION
+         ${TEMP}/test.shp?&gdal:co:creationOption=OPTION&gdal:lco:layerOption=OPTION
+          )
+
 
 message(STATUS "Test link : ${OTBGdalAdapters-Test_LIBRARIES}")

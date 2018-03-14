@@ -27,12 +27,13 @@ using namespace otb;
 
 typedef OGRExtendedFilenameToOptions FilenameHelperType;
 
-int main(int , char* argv[])
+int otbOGRExtendedFileName(int , char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputExtendedFilename  = argv[1];
   const char * outputFilename = argv[2];
 
+  std::cout<< argv[1] <<"  "<<argv[2]<<std::endl;
   FilenameHelperType::Pointer helper = FilenameHelperType::New();
 
   helper->SetExtendedFileName(inputExtendedFilename);
@@ -69,6 +70,7 @@ int main(int , char* argv[])
   layer.push_back("TOTO=first");
   FilenameHelperType::Pointer layerHelper = 
     FilenameHelperType::GetGDALLayerOptionsHelper ( layer );
+  std::cout<< layerHelper->GetGDALLayerOptions()[0] <<std::endl;
   FilenameHelperType::GDALOptionType newOptions;
     // std::vector< std::string> newOptions;
   newOptions.push_back("TOTO=second");
