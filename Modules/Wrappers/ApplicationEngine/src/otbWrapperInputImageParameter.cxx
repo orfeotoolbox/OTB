@@ -70,18 +70,6 @@ InputImageParameter::GetImage()
 
 otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
-otbGetImageAndVectorImageMacro(UInt8);
-otbGetImageAndVectorImageMacro(UInt16);
-otbGetImageAndVectorImageMacro(UInt32);
-otbGetImageAndVectorImageMacro(Int16);
-otbGetImageAndVectorImageMacro(Int32);
-otbGetImageAndVectorImageMacro(Float);
-otbGetImageAndVectorImageMacro(Double);
-otbGetImageAndVectorImageMacro(ComplexInt16);
-otbGetImageAndVectorImageMacro(ComplexInt32);
-otbGetImageAndVectorImageMacro(ComplexFloat);
-otbGetImageAndVectorImageMacro(ComplexDouble);
-
 
 void
 InputImageParameter::SetImage(FloatVectorImageType* image)

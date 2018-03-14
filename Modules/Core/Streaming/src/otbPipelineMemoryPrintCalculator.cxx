@@ -105,7 +105,7 @@ PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
 ::EvaluateProcessObjectPrintRecursive(ProcessObjectType * process)
 {
-  otbMsgDevMacro(<< "EvaluateMemoryPrint for " << process->GetNameOfClass() << " (" << process << ")")
+  otbLogMacro(Debug,<<"Recursive evaluation of memory print for ProcessObject" << process->GetNameOfClass() << " (" << process << ")");
   // This variable will store the final print
   MemoryPrintType print = 0;
 
@@ -164,8 +164,9 @@ PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
 ::EvaluateDataObjectPrint(DataObjectType * data)
 {
-  otbMsgDevMacro(<< "EvaluateMemoryPrint for " << data->GetNameOfClass() << " (" << data << ")")
-
+    
+  otbLogMacro(Debug,<<"Evaluation of memory print for DataObject " << data->GetNameOfClass() << " (" << data << ")");
+    
 #define OTB_IMAGE_SIZE_BLOCK(type)                                      \
   if(dynamic_cast<itk::Image<type, 2> *>(data) != NULL)                  \
     {                                                                   \

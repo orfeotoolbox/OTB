@@ -20,7 +20,7 @@
 
 otb_add_test(NAME leTvLibSVMMachineLearningModel COMMAND otbSupervisedTestDriver
   otbLibSVMMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/libsvm_model.txt
   )
 otb_add_test(NAME leTuLibSVMMachineLearningModelNew COMMAND otbSupervisedTestDriver

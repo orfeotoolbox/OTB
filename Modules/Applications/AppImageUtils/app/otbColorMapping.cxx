@@ -346,11 +346,11 @@ private:
 
     AddParameter(ParameterType_Float,"method.continuous.min","Mapping range lower value");
     SetParameterDescription("method.continuous.min","Set the lower input value of the mapping range.");
-    SetParameterFloat("method.continuous.min",0., false);
+    SetParameterFloat("method.continuous.min",0.);
 
     AddParameter(ParameterType_Float,"method.continuous.max","Mapping range higher value");
     SetParameterDescription("method.continuous.max","Set the higher input value of the mapping range.");
-    SetParameterFloat("method.continuous.max",255., false);
+    SetParameterFloat("method.continuous.max",255.);
 
     // Optimal LUT
     AddChoice("method.optimal","Compute an optimized look-up table");
@@ -359,7 +359,7 @@ private:
                             "[color to label] Searching all the colors present in the image to compute a continuous label list");
     AddParameter(ParameterType_Int,"method.optimal.background", "Background label");
     SetParameterDescription("method.optimal.background","Value of the background label");
-    SetParameterInt("method.optimal.background",0, false);
+    SetParameterInt("method.optimal.background",0);
     SetMinimumParameterIntValue("method.optimal.background", 0);
     SetMaximumParameterIntValue("method.optimal.background", 255);
 
@@ -371,18 +371,18 @@ private:
     AddParameter(ParameterType_Float, "method.image.nodatavalue", "NoData value");
     SetParameterDescription("method.image.nodatavalue","NoData value for each channel of the support image, which will not be handled in the LUT estimation. If NOT checked, ALL the pixel values of the support image will be handled in the LUT estimation.");
     MandatoryOff("method.image.nodatavalue");
-    SetParameterFloat("method.image.nodatavalue",0, false);
+    SetParameterFloat("method.image.nodatavalue",0);
     DisableParameter("method.image.nodatavalue");
     AddParameter(ParameterType_Int, "method.image.low", "lower quantile");
     SetParameterDescription("method.image.low","lower quantile for image normalization");
     MandatoryOff("method.image.low");
-    SetParameterInt("method.image.low",2, false);
+    SetParameterInt("method.image.low",2);
     SetMinimumParameterIntValue("method.image.low", 0);
     SetMaximumParameterIntValue("method.image.low", 100);
     AddParameter(ParameterType_Int, "method.image.up", "upper quantile");
     SetParameterDescription("method.image.up","upper quantile for image normalization");
     MandatoryOff("method.image.up");
-    SetParameterInt("method.image.up",2, false);
+    SetParameterInt("method.image.up",2);
     SetMinimumParameterIntValue("method.image.up", 0);
     SetMaximumParameterIntValue("method.image.up", 100);
 
@@ -406,7 +406,7 @@ private:
       if (GetParameterInt("method")==1 || GetParameterInt("method")==3)
         {
         otbAppLogWARNING("Override method : use optimal");
-        SetParameterInt("method",2, false);
+        SetParameterInt("method",2);
         }
       }
   }
