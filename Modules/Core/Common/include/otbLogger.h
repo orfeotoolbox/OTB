@@ -44,6 +44,14 @@ public:
 
   itkTypeMacro(Logger, itk::Logger);
 
+  /**
+   * If Logger crashes when called from the destructor of a static
+   * or global object, the singleton might have already been destroyed.
+   * You can prolong its lifetime by calling Logger::Instance()
+   * from that object's constructor.
+   *
+   * See https://stackoverflow.com/questions/335369/finding-c-static-initialization-order-problems#335746
+   */
   static Pointer Instance();
 
   itkNewMacro(Self);
