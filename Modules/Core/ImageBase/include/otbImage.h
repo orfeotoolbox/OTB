@@ -245,14 +245,14 @@ public:
 
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 /// Copy metadata from a DataObject
-  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
+  void CopyInformation(const itk::DataObject *) override;
 
 protected:
   Image();
-  ~Image() ITK_OVERRIDE {}
+  ~Image() override {}
 
 private:
   Image(const Self &) = delete;

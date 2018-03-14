@@ -138,7 +138,7 @@ public:
 
 protected:
   ReciprocalCovarianceToReciprocalCoherencyImageFilter() {}
-  ~ReciprocalCovarianceToReciprocalCoherencyImageFilter() ITK_OVERRIDE {}
+  ~ReciprocalCovarianceToReciprocalCoherencyImageFilter() override {}
 
 private:
   ReciprocalCovarianceToReciprocalCoherencyImageFilter(const Self&); //purposely not implemented

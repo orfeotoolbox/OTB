@@ -132,14 +132,14 @@ public:
   itkGetConstReferenceMacro(NumberOfDirections, unsigned int);
 
   void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw(itk::InvalidRequestedRegionError) override;
 
 protected:
   LineDetectorImageFilterBase();
-  ~LineDetectorImageFilterBase() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LineDetectorImageFilterBase() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** LineDetectorImageFilterBase can be implemented for a treatment of filter multithreaded.
    * Thus, the ThreadedGenerateData() method is called for each thread process.
@@ -151,7 +151,7 @@ protected:
    * \sa    ImageToImageFilter::GenerateData()
   */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
   virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
 

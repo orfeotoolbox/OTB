@@ -76,7 +76,7 @@ public:
   itkGetMacro(RAMValue, unsigned int);
 
   /** Implement the reset method (replace pixel type by default type) */
-  void Reset() ITK_OVERRIDE
+  void Reset() override
   {
     m_PixelType = m_DefaultPixelType;
   }
@@ -89,7 +89,7 @@ public:
   static bool ConvertStringToPixelType(const std::string &value, ImagePixelType &type);
 
   /** Return true if a filename is set */
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
   void SetFileName (const char* filename)
   {
@@ -115,7 +115,7 @@ protected:
   /** Constructor */
   OutputImageParameter();
   /** Destructor */
-  ~OutputImageParameter() ITK_OVERRIDE;
+  ~OutputImageParameter() override;
 
   template <class TInputVectorImageType>
     void SwitchVectorImageWrite();

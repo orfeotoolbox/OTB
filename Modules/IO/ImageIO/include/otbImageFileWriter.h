@@ -168,7 +168,7 @@ public:
 
   /** Override Update() from ProcessObject because this filter
    *  has no output. */
-  void Update() ITK_OVERRIDE;
+  void Update() override;
 
   /** ImageFileWriter Methods */
   virtual void SetFileName(const char* extendedFileName);
@@ -201,11 +201,11 @@ public:
 
 protected:
   ImageFileWriter();
-  ~ImageFileWriter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageFileWriter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Does the real work. */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
 private:
   ImageFileWriter(const ImageFileWriter &); //purposely not implemented

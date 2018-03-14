@@ -48,7 +48,7 @@ public:
 
 protected:
   MachineLearningModelFactoryBase();
-  ~MachineLearningModelFactoryBase() ITK_OVERRIDE;
+  ~MachineLearningModelFactoryBase() override;
 
   static itk::SimpleMutexLock mutex;
 

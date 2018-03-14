@@ -95,14 +95,14 @@ public:
 
   /** This method returns the value of the cost function corresponding
     * to the specified parameters.    */
-  MeasureType GetValue( const ParametersType & parameters ) const ITK_OVERRIDE;
+  MeasureType GetValue( const ParametersType & parameters ) const override;
 
   /** This method returns the derivative of the cost function corresponding
     * to the specified parameters.   */
   void GetDerivative( const ParametersType & parameters,
-                               DerivativeType & derivative ) const ITK_OVERRIDE;
+                               DerivativeType & derivative ) const override;
 
-  unsigned int GetNumberOfParameters(void) const ITK_OVERRIDE;
+  unsigned int GetNumberOfParameters(void) const override;
 
   itkSetMacro(Weight, double);
   itkGetConstMacro(Weight, double);
@@ -151,9 +151,9 @@ protected:
   /** Constructor */
   StandardDSCostFunction();
   /** Destructor */
-  ~StandardDSCostFunction() ITK_OVERRIDE {}
+  ~StandardDSCostFunction() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   StandardDSCostFunction(const Self &); //purposely not implemented

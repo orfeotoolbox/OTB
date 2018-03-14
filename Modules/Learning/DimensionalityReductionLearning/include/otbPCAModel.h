@@ -80,28 +80,28 @@ public:
   itkSetMacro(WriteEigenvectors, bool);
   itkGetMacro(WriteEigenvectors, bool);
 
-  bool CanReadFile(const std::string & filename);
-  bool CanWriteFile(const std::string & filename);
+  bool CanReadFile(const std::string & filename) override;
+  bool CanWriteFile(const std::string & filename) override;
 
-  void Save(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
-  void Load(const std::string & filename, const std::string & name="")  ITK_OVERRIDE;
+  void Save(const std::string & filename, const std::string & name="")  override;
+  void Load(const std::string & filename, const std::string & name="")  override;
 
-  void Train() ITK_OVERRIDE;
+  void Train() override;
 
 protected:
   PCAModel(); 
-  ~PCAModel() ITK_OVERRIDE;
+  ~PCAModel() override;
  
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const;
+    ConfidenceValueType * quality = ITK_NULLPTR) const override;
 
   virtual void DoPredictBatch(
     const InputListSampleType *,
     const unsigned int & startIndex,
     const unsigned int & size,
     TargetListSampleType *,
-    ConfidenceListSampleType * quality = ITK_NULLPTR) const ITK_OVERRIDE;
+    ConfidenceListSampleType * quality = ITK_NULLPTR) const override;
 
 private:
   shark::LinearModel<> m_Encoder;

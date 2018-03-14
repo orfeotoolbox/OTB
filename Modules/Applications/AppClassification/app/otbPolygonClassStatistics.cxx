@@ -67,7 +67,7 @@ private:
    
     }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("PolygonClassStatistics");
     SetDescription("Computes statistics on a training polygon set.");
@@ -127,7 +127,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
      if ( HasValue("vec") )
       {
@@ -173,7 +173,7 @@ private:
        }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
   otb::ogr::DataSource::Pointer vectors = 
     otb::ogr::DataSource::New(this->GetParameterString("vec"));

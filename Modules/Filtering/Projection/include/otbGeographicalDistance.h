@@ -68,10 +68,10 @@ public:
 
   /** Gets the distance between the origin point and x. This function
    *  work with SetOrigin() function */
-  double Evaluate(const VectorType & x) const ITK_OVERRIDE;
+  double Evaluate(const VectorType & x) const override;
 
   /* Gets the distance between x and y points */
-  double Evaluate(const VectorType & x, const VectorType & y) const ITK_OVERRIDE;
+  double Evaluate(const VectorType & x, const VectorType & y) const override;
 
   /** Set the earth radius */
   itkSetMacro(EarthRadius, double);
@@ -84,10 +84,10 @@ protected:
   GeographicalDistance();
 
   /** Destructor */
-  ~GeographicalDistance() ITK_OVERRIDE{}
+  ~GeographicalDistance() override{}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   GeographicalDistance(const Self &);  //purposely not implemented

@@ -57,7 +57,6 @@ set( OTBApplicationEngine_SRC
   otbWrapperAbstractParameterList.cxx
   otbWrapperParameterList.cxx
   otbWrapperBoolParameter.cxx
-  otbLogger.cxx
   otbWrapperMetaDataHelper.cxx
   )
 

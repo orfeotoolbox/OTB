@@ -102,12 +102,12 @@ protected:
   /// Constructor
   KeyPointSetsMatchingFilter();
   /// Destructor
-  ~KeyPointSetsMatchingFilter() ITK_OVERRIDE {}
+  ~KeyPointSetsMatchingFilter() override {}
   /// PrintSelf method
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /// Generate Data
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /**
    * Find the nearest neighbor of data1 in pointset.

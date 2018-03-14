@@ -151,7 +151,7 @@ class NDBI : public TM4AndTM5IndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NDBI";
   }
@@ -159,10 +159,10 @@ public:
   /// Constructor
   NDBI() {}
   /// Desctructor
-  ~NDBI() ITK_OVERRIDE {}
+  ~NDBI() override {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pTM4, const TInput2& pTM5) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& pTM4, const TInput2& pTM5) const override
   {
     double dTM4 = static_cast<double>(pTM4);
     double dTM5 = static_cast<double>(pTM5);
@@ -190,7 +190,7 @@ class ISU : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "ISU";
   }
@@ -198,7 +198,7 @@ public:
   /// Constructor
   ISU() : m_A(100.), m_B(25.) {}
   /// Desctructor
-  ~ISU() ITK_OVERRIDE {}
+  ~ISU() override {}
 
   /** Set/Get A correction */
   void SetA(const double pA)
@@ -220,7 +220,7 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1& pRed, const TInput2& pNIR) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& pRed, const TInput2& pNIR) const override
   {
     double dRed = static_cast<double>(pRed);
     double dNIR = static_cast<double>(pNIR);

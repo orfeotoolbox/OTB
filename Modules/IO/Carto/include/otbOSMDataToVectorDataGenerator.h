@@ -166,7 +166,7 @@ public:
 
 protected:
   /** Generate Data method : launch the process */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /**
     * Parse the xml file get from OSM to compose the requested vector
@@ -186,7 +186,7 @@ protected:
 
 
   OSMDataToVectorDataGenerator();
-  ~OSMDataToVectorDataGenerator() ITK_OVERRIDE;
+  ~OSMDataToVectorDataGenerator() override;
 
 private:
   OSMDataToVectorDataGenerator(const Self&); //purposely not implemented

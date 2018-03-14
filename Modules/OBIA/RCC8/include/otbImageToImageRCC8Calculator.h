@@ -118,7 +118,7 @@ protected:
   /** Constructor */
   ImageToImageRCC8Calculator();
   /** Destructor */
-  ~ImageToImageRCC8Calculator() ITK_OVERRIDE {}
+  ~ImageToImageRCC8Calculator() override {}
   /**
    * Compute the minimal image region required.
    * \return The minimal region required.
@@ -173,9 +173,9 @@ protected:
    */
   BoolImagePointerType ConvertToBoolImage(ImagePointerType image, PixelType insideValue);
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** The RCC8 relation value */

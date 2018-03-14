@@ -72,7 +72,7 @@ public:
 protected:
   GlActor();
 
-  ~GlActor() ITK_OVERRIDE;
+  ~GlActor() override;
 
 private:
   // prevent implementation

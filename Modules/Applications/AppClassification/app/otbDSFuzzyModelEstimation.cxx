@@ -51,12 +51,12 @@ typedef itk::AmoebaOptimizer         OptimizerType;
 typedef   const OptimizerType   *    OptimizerPointer;
 
 
-void Execute(itk::Object *caller, const itk::EventObject & event) ITK_OVERRIDE
+void Execute(itk::Object *caller, const itk::EventObject & event) override
 {
   Execute( (const itk::Object *)caller, event);
 }
 
-void Execute(const itk::Object * object, const itk::EventObject & event) ITK_OVERRIDE
+void Execute(const itk::Object * object, const itk::EventObject & event) override
 {
   OptimizerPointer optimizer =
       dynamic_cast< OptimizerPointer >( object );
@@ -115,7 +115,7 @@ public:
   itkTypeMacro(DSFuzzyModelEstimation, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DSFuzzyModelEstimation");
     SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
@@ -183,7 +183,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
 
@@ -193,7 +193,7 @@ private:
 
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
 
     //Instantiate

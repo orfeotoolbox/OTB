@@ -248,7 +248,7 @@ public:
     <FloatImageType, LabelImageType>                   CasterToLabelImageType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ColorMapping");
     SetDescription("Maps an input label image to 8-bits RGB using look-up tables.");
@@ -397,7 +397,7 @@ private:
     SetOfficialDocLink();
  }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Make sure the operation color->label is not called with methods continuous or image.
     // These methods are not implemented for this operation yet.
@@ -411,7 +411,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     if(GetParameterInt("op")==0)
     {

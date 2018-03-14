@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetView : public QWidget
   Q_OBJECT
 public:
   QtWidgetView(Application* app);
-  ~QtWidgetView() ITK_OVERRIDE;
+  ~QtWidgetView() override;
 
   void CreateGui();
 

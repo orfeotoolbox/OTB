@@ -90,11 +90,11 @@ protected:
   /** Constructor */
   ParallelLinePathListFilter();
   /** Destructor */
-  ~ParallelLinePathListFilter() ITK_OVERRIDE {}
+  ~ParallelLinePathListFilter() override {}
   /** GenerateData method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
   * Verify the angular condition to find parallel lines.

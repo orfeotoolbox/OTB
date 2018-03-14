@@ -57,7 +57,7 @@ private:
     m_CalculatorList = RateCalculatorListType::New();
     }
 
-  void DoInit()
+  void DoInit() override
   {
     SetName("MultiImageSamplingRate");
     SetDescription("Compute sampling rate for an input set of images.");
@@ -186,11 +186,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute()
+  void DoExecute() override
     {
     // Clear state
     m_CalculatorList->Clear();

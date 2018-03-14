@@ -116,13 +116,13 @@ public:
 
 protected:
 
-  ~ImageDimensionalityReduction() ITK_OVERRIDE
+  ~ImageDimensionalityReduction() override
   {
     DimensionalityReductionModelFactoryType::CleanFactories();
   }
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DimensionalityReduction");
     SetDescription("Performs dimensionality reduction of the input image "
@@ -182,12 +182,12 @@ private:
     SetDocExampleParameterValue("out", "ReducedImageQB1.tif");
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Load input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

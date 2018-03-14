@@ -73,11 +73,11 @@ public:
 protected:
   CloudEstimatorFilter();
 
-  ~CloudEstimatorFilter() ITK_OVERRIDE {}
+  ~CloudEstimatorFilter() override {}
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   CloudEstimatorFilter(const Self &); //purposely not implemented

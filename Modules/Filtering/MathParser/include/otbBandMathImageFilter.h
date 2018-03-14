@@ -128,12 +128,12 @@ public:
 
 protected :
   BandMathImageFilter();
-  ~BandMathImageFilter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~BandMathImageFilter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
-  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) ITK_OVERRIDE;
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
+  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) override;
+  void AfterThreadedGenerateData() override;
 
 private :
   BandMathImageFilter(const Self&); //purposely not implemented

@@ -112,13 +112,13 @@ protected:
   SarRadiometricCalibrationToImageFilter();
 
   /** Empty, default virtual dtor */
-  ~SarRadiometricCalibrationToImageFilter() ITK_OVERRIDE {}
+  ~SarRadiometricCalibrationToImageFilter() override {}
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Update the function list and input parameters*/
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
 private:
 

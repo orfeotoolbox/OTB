@@ -75,13 +75,13 @@ public:
     ListSampleType, ListSampleType>                       ShiftScaleFilterType;
 
 protected:
-  ~VectorDimensionalityReduction() ITK_OVERRIDE
+  ~VectorDimensionalityReduction() override
     {
     DimensionalityReductionModelFactoryType::CleanFactories();
     }
 
 private:  
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
     {
     SetName("VectorDimensionalityReduction");
     SetDescription("Performs dimensionality reduction of the input vector data "
@@ -163,7 +163,7 @@ private:
     //SetOfficialDocLink(); 
     }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
     {
     if ( HasValue("in") )
       {
@@ -188,7 +188,7 @@ private:
       }
     }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     {
     clock_t tic = clock();
 

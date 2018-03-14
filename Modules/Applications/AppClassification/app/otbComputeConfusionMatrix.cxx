@@ -103,7 +103,7 @@ private:
   };
 
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
   SetName("ComputeConfusionMatrix");
   SetDescription("Computes the confusion matrix of a classification");
@@ -183,7 +183,7 @@ private:
   SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("ref.vector.in") )
       {
@@ -363,7 +363,7 @@ private:
     return sid;
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     StreamingInitializationData sid = InitStreamingData();
 

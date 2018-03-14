@@ -93,7 +93,7 @@ public:
    * Get The Analyse image at each level of the pyramid.
    * \return The analysed image at each level of the pyramid.
    */
-  OutputImageListType* GetOutput(void) ITK_OVERRIDE;
+  OutputImageListType* GetOutput(void) override;
   /**
    * Get The SupFilter details
    * \return The brighter details extracted from the filtering operation.
@@ -119,12 +119,12 @@ protected:
   /** Constructor */
   MorphologicalPyramidAnalysisFilter();
   /** Destructor */
-  ~MorphologicalPyramidAnalysisFilter() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE {}  // does nothing
+  ~MorphologicalPyramidAnalysisFilter() override;
+  void GenerateOutputInformation() override {}  // does nothing
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** Printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** Number of levels of the algorithm */

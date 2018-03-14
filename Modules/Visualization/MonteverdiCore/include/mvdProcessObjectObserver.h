@@ -101,7 +101,7 @@ public:
 public:
 
   /** \brief Destructor. */
-  ~ProcessObjectObserver() ITK_OVERRIDE;
+  ~ProcessObjectObserver() override;
 
   const ProgressInterface * GetProgressInterface() const;
   ProgressInterface * GetProgressInterface();
@@ -112,10 +112,10 @@ public:
   // itk::Command overloads.
 
   void Execute( itk::Object * caller,
-			const itk::EventObject & event ) ITK_OVERRIDE;
+			const itk::EventObject & event ) override;
 
   void Execute( const itk::Object * caller,
-			const itk::EventObject & event ) ITK_OVERRIDE;
+			const itk::EventObject & event ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

@@ -104,9 +104,9 @@ the macro otbGetParameterImageMacro of otbWrapperApplication.h */
   template <class TComplexInputImage, class TOutputImage>
     TOutputImage* CastImage();
 
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
 
 protected:
@@ -114,7 +114,7 @@ protected:
   ComplexInputImageParameter();
 
   /** Destructor */
-  ~ComplexInputImageParameter() ITK_OVERRIDE;
+  ~ComplexInputImageParameter() override;
 
   ImageBaseType::Pointer m_Image;
   std::string m_FileName;

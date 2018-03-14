@@ -46,7 +46,7 @@ public:
   itkTypeMacro(MeanShiftSmoothing, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("MeanShiftSmoothing");
     SetDescription("This application smooths an image using the MeanShift algorithm.");
@@ -174,10 +174,10 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType* input = GetParameterImage("in");
 

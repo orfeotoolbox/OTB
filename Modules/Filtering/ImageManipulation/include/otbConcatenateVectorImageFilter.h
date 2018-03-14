@@ -95,13 +95,13 @@ protected:
   /** Constructor. */
   ConcatenateVectorImageFilter();
   /** Destructor. */
-  ~ConcatenateVectorImageFilter() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  ~ConcatenateVectorImageFilter() override;
+  void GenerateOutputInformation() override;
+  void BeforeThreadedGenerateData() override;
   /** Main computation method. */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ConcatenateVectorImageFilter(const Self &); //purposely not implemented

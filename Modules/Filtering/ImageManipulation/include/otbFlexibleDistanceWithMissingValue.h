@@ -73,10 +73,10 @@ public:
   typedef typename TVector::ValueType ValueType;
 
   /** Gets the distance between the origin and x */
-  double Evaluate(const TVector& x) const ITK_OVERRIDE;
+  double Evaluate(const TVector& x) const override;
 
   /** Gets the distance between x1 and x2 */
-  double Evaluate(const TVector& x1, const TVector& x2) const ITK_OVERRIDE;
+  double Evaluate(const TVector& x1, const TVector& x2) const override;
 
   /** Gets the cooridnate distance between a and b. NOTE: a and b
   * should be type of component */
@@ -101,7 +101,7 @@ public:
 
 protected:
   FlexibleDistanceWithMissingValue() {}
-  ~FlexibleDistanceWithMissingValue() ITK_OVERRIDE {}
+  ~FlexibleDistanceWithMissingValue() override {}
 };  // end of class
 
 /** Static variable instantiation */

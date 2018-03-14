@@ -93,7 +93,7 @@ public:
 
 protected:
    LabelToSimulationParametersBase(){};
-   ~LabelToSimulationParametersBase() ITK_OVERRIDE {}
+   ~LabelToSimulationParametersBase() override {}
 
 
 private:
