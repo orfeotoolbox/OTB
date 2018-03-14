@@ -145,7 +145,7 @@ void
 ObjectListSource<TOutputList>
 ::GenerateData(void)
 {
-  itkExceptionMacro("subclass should ITK_OVERRIDE this method!!!");
+  itkExceptionMacro("subclass should override this method!!!");
 }
 
 /**

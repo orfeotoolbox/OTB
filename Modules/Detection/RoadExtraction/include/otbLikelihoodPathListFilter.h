@@ -85,11 +85,11 @@ protected:
   /** Constructor */
   LikelihoodPathListFilter();
   /** Destructor */
-  ~LikelihoodPathListFilter() ITK_OVERRIDE {}
+  ~LikelihoodPathListFilter() override {}
   /** GenerateData method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   LikelihoodPathListFilter(const Self &); //purposely not implemented

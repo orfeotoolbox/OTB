@@ -98,7 +98,7 @@ public:
 protected:
   MaskMuParserFunctor();
 
-  ~MaskMuParserFunctor() ITK_OVERRIDE;
+  ~MaskMuParserFunctor() override;
 
 private:
 

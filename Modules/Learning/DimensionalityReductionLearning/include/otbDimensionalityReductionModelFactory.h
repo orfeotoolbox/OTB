@@ -61,7 +61,7 @@ public:
 
 protected:
   DimensionalityReductionModelFactory();
-  ~DimensionalityReductionModelFactory() ITK_OVERRIDE;
+  ~DimensionalityReductionModelFactory() override;
 
 private:
   DimensionalityReductionModelFactory(const Self &); //purposely not implemented

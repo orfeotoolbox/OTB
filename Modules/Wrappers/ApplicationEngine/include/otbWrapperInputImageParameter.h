@@ -107,9 +107,9 @@ public:
   template <class TInputImage, class TOutputImage>
   TOutputImage*  CastImage();
 
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
 
 protected:
@@ -117,7 +117,7 @@ protected:
   InputImageParameter();
 
   /** Destructor */
-  ~InputImageParameter() ITK_OVERRIDE;
+  ~InputImageParameter() override;
 
   ImageBaseType::Pointer m_Image;
   std::string m_FileName;

@@ -49,7 +49,7 @@ public:
       <FloatVectorImageType, VectorDataType>          EnvelopeFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ImageEnvelope");
     SetDescription("Extracts an image envelope.");
@@ -93,12 +93,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to be done
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType::Pointer input = GetParameterImage("in");
 

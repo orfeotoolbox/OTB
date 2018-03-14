@@ -155,7 +155,7 @@ protected:
   /** Constructor */
   MultiChannelsPolarimetricSynthesisFilter();
   /** Destructor */
-  ~MultiChannelsPolarimetricSynthesisFilter() ITK_OVERRIDE {}
+  ~MultiChannelsPolarimetricSynthesisFilter() override {}
 
   /** MultiChannelsPolarimetricSynthesisFilter can produce an image
    * which is a synthesis of channels HH, HV, VH and VV.
@@ -167,9 +167,9 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** MultiChannelsPolarimetricSynthesisFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -182,7 +182,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
   /** Computation of the electromagnetic fields Ei Er */
   void ComputeElectromagneticFields();
@@ -190,7 +190,7 @@ protected:
   /** Verify and force the inputs, if only  2 or 3 channels are present */
   void VerifyAndForceInputs();
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   MultiChannelsPolarimetricSynthesisFilter(const Self &); //purposely not implemented

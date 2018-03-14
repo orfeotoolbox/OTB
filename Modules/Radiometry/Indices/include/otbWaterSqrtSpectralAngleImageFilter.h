@@ -73,7 +73,7 @@ public:
 
 protected:
   WaterSqrtSpectralAngleImageFilter() {}
-  ~WaterSqrtSpectralAngleImageFilter() ITK_OVERRIDE {}
+  ~WaterSqrtSpectralAngleImageFilter() override {}
 
 private:
   WaterSqrtSpectralAngleImageFilter(Self &); // purposely not implemented

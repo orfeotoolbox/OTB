@@ -71,7 +71,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName( "MorphologicalProfilesAnalysis" );
     SetDescription( "Performs morphological profiles analysis on an input image channel." );
@@ -173,12 +173,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
 
     FloatVectorImageType::Pointer inImage = GetParameterImage( "in" );

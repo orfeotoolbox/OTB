@@ -77,7 +77,7 @@ public:
 
 protected:
   ProxyParameter() {}
-  ~ProxyParameter() ITK_OVERRIDE {}
+  ~ProxyParameter() override {}
 
 private:
   ProxyParameter(const Self &); //purposely not implemented

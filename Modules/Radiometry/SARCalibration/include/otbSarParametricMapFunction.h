@@ -79,10 +79,10 @@ public:
   typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType                       RealType;
 
   /** Evaluate the function at specific positions */
-  RealType Evaluate(const PointType& point) const ITK_OVERRIDE;
+  RealType Evaluate(const PointType& point) const override;
 
   /** Evalulate the function at specified index */
-  RealType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE
+  RealType EvaluateAtIndex(const IndexType& index) const override
   {
     PointType point;
     point[0] = static_cast<typename PointType::ValueType>(index[0]);
@@ -91,7 +91,7 @@ public:
   }
 
   RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const ITK_OVERRIDE
+    const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -127,8 +127,8 @@ public:
 
 protected:
   SarParametricMapFunction();
-  ~SarParametricMapFunction() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~SarParametricMapFunction() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   SarParametricMapFunction(const Self &);  //purposely not implemented

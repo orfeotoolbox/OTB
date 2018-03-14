@@ -80,13 +80,13 @@ public:
   typedef itk::Statistics::ListSample<InputSampleType>            ListSampleType;
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
-  ~VectorClassifier() ITK_OVERRIDE
+  ~VectorClassifier() override
     {
     MachineLearningModelFactoryType::CleanFactories();
     }
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("VectorClassifier");
     SetDescription("Performs a classification of the input vector data according to a model file.");
@@ -162,7 +162,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("in") )
     {
@@ -196,7 +196,7 @@ private:
     }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     clock_t tic = clock();
 

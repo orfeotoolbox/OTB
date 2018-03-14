@@ -62,7 +62,7 @@ private:
     m_DispToElev = DisparityToElevationFilterType::New();
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DisparityMapToElevationMap");
     SetDescription("Projects a disparity map into a regular elevation map.");
@@ -163,12 +163,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType::Pointer inputDisp     = this->GetParameterImage("io.in");
     FloatVectorImageType::Pointer sensorLeft    = this->GetParameterImage("io.left");

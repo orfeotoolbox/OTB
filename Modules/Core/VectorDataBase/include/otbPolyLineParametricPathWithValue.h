@@ -117,13 +117,13 @@ protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
   /** Destructor */
-  ~PolyLineParametricPathWithValue() ITK_OVERRIDE {}
+  ~PolyLineParametricPathWithValue() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void ComputeLength() const;
   virtual void ComputeBoundingRegion() const;
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 private:
   PolyLineParametricPathWithValue(const Self &); //purposely not implemented

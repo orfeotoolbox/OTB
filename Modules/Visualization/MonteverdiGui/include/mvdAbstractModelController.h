@@ -90,7 +90,7 @@ public:
 public:
 
   /** Destructor */
-  ~AbstractModelController() ITK_OVERRIDE;
+  ~AbstractModelController() override;
 
   /** */
   void SetModel( AbstractModel* );

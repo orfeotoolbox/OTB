@@ -165,11 +165,11 @@ public:
 
 protected:
   ChangeLabelImageFilter();
-  ~ChangeLabelImageFilter() ITK_OVERRIDE {}
+  ~ChangeLabelImageFilter() override {}
   /** Generate the output information missing */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ChangeLabelImageFilter(const Self &); //purposely not implemented

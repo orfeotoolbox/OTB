@@ -66,7 +66,7 @@ public:
 
   itkTypeMacro(MRFSamplerRandom, MRFSampler);
 
-  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) ITK_OVERRIDE
+  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) override
   {
     this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
     this->m_EnergyBefore += this->m_Lambda
@@ -97,7 +97,7 @@ protected:
     m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
-  ~MRFSamplerRandom() ITK_OVERRIDE {}
+  ~MRFSamplerRandom() override {}
 
 private:
   RandomGeneratorType::Pointer m_Generator;

@@ -78,7 +78,7 @@ public:
 
 protected:
   GeometricSarSensorModelAdapter();
-  ~GeometricSarSensorModelAdapter() ITK_OVERRIDE;
+  ~GeometricSarSensorModelAdapter() override;
 
 private:
   GeometricSarSensorModelAdapter(const Self &); //purposely not implemented

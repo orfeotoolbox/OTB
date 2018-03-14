@@ -45,7 +45,7 @@ public:
   itkTypeMacro(DEMConvert, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DEMConvert");
     SetDescription("Converts a geo-referenced DEM image into a general raster file compatible with OTB DEM handling.");
@@ -75,7 +75,7 @@ private:
     SetOfficialDocLink();
 }
 
-void DoUpdateParameters() ITK_OVERRIDE
+void DoUpdateParameters() override
 {
   // nothing to update
 }
@@ -85,7 +85,7 @@ void DoUpdateParameters() ITK_OVERRIDE
 *  (.ras, .geom and . omd)
 */
 
-void DoExecute() ITK_OVERRIDE
+void DoExecute() override
 {
   // Load input image
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");

@@ -97,18 +97,18 @@ public:
    * method returns a number less than or equal to the requested number
    * of pieces.  */
   unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber) ITK_OVERRIDE;
+                                         unsigned int requestedNumber) override;
 
   /** Get a region definition that represents the ith piece a specified region.
    * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
   RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region) ITK_OVERRIDE;
+                              const RegionType& region) override;
 
 protected:
   ImageRegionNonUniformMultidimensionalSplitter() {}
-  ~ImageRegionNonUniformMultidimensionalSplitter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageRegionNonUniformMultidimensionalSplitter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ImageRegionNonUniformMultidimensionalSplitter(const Self &); //purposely not implemented
