@@ -42,8 +42,8 @@ public:
   typedef itk::SmartPointer<const Self>               ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
-  const char* GetDescription(void) const ITK_OVERRIDE;
+  const char* GetITKSourceVersion(void) const override;
+  const char* GetDescription(void) const override;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -60,7 +60,7 @@ public:
 
 protected:
   OpticalDefaultImageMetadataInterfaceFactory();
-  ~OpticalDefaultImageMetadataInterfaceFactory() ITK_OVERRIDE;
+  ~OpticalDefaultImageMetadataInterfaceFactory() override;
 
 private:
   OpticalDefaultImageMetadataInterfaceFactory(const Self &); //purposely not implemented

@@ -99,7 +99,7 @@ public:
   Application( QApplication* qtApp );
 
   /** \brief Destructor. */
-  ~Application() ITK_OVERRIDE;
+  ~Application() override;
 
   /**
    * \return The number of outdated dataset-models present in the
@@ -160,7 +160,7 @@ protected:
 // Protected attributes.
 protected:
 
-  void virtual_InitializeCore() ITK_OVERRIDE;
+  void virtual_InitializeCore() override;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 

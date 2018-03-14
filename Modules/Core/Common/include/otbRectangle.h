@@ -100,10 +100,10 @@ protected:
     };
 
   /** Destructor */
-  ~Rectangle() ITK_OVERRIDE {}
+  ~Rectangle() override {}
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** */
   virtual double ComputeEuclideanDistanceMetricToSegment(VertexType q1, VertexType q2, VertexType p) const;

@@ -76,7 +76,7 @@ protected:
 
   IceViewer();
 
-  ~IceViewer() ITK_OVERRIDE;
+  ~IceViewer() override;
 
  // Non-static callbacks
   virtual void scroll_callback(GLFWwindow * window, double xoffset, double yoffset);

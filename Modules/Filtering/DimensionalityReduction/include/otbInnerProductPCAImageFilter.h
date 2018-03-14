@@ -121,13 +121,13 @@ public:
 
 protected:
   /** GenerateData */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** Constructor */
   InnerProductPCAImageFilter();
   /** Destructor */
-  ~InnerProductPCAImageFilter() ITK_OVERRIDE {}
+  ~InnerProductPCAImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** NormalizeInnerProductPCAImageFilter can produce an image which is a different
    * resolution than its input image.  As such, NormalizeInnerProductPCAImageFilter
@@ -137,7 +137,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
   InnerProductPCAImageFilter(const Self &); //purposely not implemented

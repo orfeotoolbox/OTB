@@ -99,12 +99,12 @@ public:
     * an input processing area larger than the output one.
     * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw(itk::InvalidRequestedRegionError) override;
 
 protected:
   FrostImageFilter();
-  ~FrostImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~FrostImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** FrostImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
@@ -115,7 +115,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
   FrostImageFilter(const Self &); //purposely not implemented

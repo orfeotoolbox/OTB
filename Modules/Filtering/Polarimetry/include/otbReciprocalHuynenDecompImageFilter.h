@@ -122,7 +122,7 @@ public:
 
 protected:
    ReciprocalHuynenDecompImageFilter() {}
-  ~ReciprocalHuynenDecompImageFilter() ITK_OVERRIDE {}
+  ~ReciprocalHuynenDecompImageFilter() override {}
 
 private:
   ReciprocalHuynenDecompImageFilter(const Self&); //purposely not implemented

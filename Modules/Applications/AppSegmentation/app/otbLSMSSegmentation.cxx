@@ -91,7 +91,7 @@ public:
   LSMSSegmentation(): //m_FinalReader(),m_ImportGeoInformationFilter(),
     m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
 
-  ~LSMSSegmentation() ITK_OVERRIDE{}
+  ~LSMSSegmentation() override{}
 
 private:
   // LabelImageReaderType::Pointer m_FinalReader;
@@ -215,7 +215,7 @@ private:
     return vrtfname;
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("LSMSSegmentation");
     SetDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS) [1].");
@@ -320,11 +320,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     m_FilesToRemoveAfterExecute.clear();
 
@@ -722,7 +722,7 @@ private:
       RegisterPipeline();
   }
 
-  void AfterExecuteAndWriteOutputs() ITK_OVERRIDE
+  void AfterExecuteAndWriteOutputs() override
   {
     // Release input files
     // m_FinalReader = ITK_NULLPTR;

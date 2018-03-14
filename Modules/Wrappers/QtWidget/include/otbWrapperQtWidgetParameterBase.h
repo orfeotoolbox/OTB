@@ -46,7 +46,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterBase : public QWidget
   friend class QtWidgetParameterGroup;
 public:
   QtWidgetParameterBase( Parameter *, QtWidgetModel * );
-  ~QtWidgetParameterBase() ITK_OVERRIDE;
+  ~QtWidgetParameterBase() override;
 
   void CreateWidget();
 

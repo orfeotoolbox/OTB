@@ -94,7 +94,7 @@ public:
 
 protected:
   AssociativeSymmetricalSumImageFilter() {}
-  ~AssociativeSymmetricalSumImageFilter() ITK_OVERRIDE {}
+  ~AssociativeSymmetricalSumImageFilter() override {}
 
 private:
   AssociativeSymmetricalSumImageFilter(const Self &); //purposely not implemented

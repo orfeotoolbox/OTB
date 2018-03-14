@@ -124,7 +124,7 @@ private:
     m_VMedianFilter   = MedianFilterType::New();
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("BlockMatching");
     SetDescription("Performs block-matching to estimate pixel-wise disparities"
@@ -425,7 +425,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if(IsParameterEnabled("mask.variancet") || IsParameterEnabled("mask.nodata"))
       {
@@ -458,7 +458,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatImageType::Pointer leftImage = GetParameterFloatImage("io.inleft");
     FloatImageType::Pointer rightImage = GetParameterFloatImage("io.inright");

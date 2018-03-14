@@ -111,18 +111,18 @@ public:
   /** return list of Mu Parser functions**/
   Parser::FunctionMapType GetFunList() const;
 
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE {}
+  void EnlargeOutputRequestedRegion(itk::DataObject *) override {}
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 protected:
   LabelObjectOpeningMuParserFilter();
-  ~LabelObjectOpeningMuParserFilter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LabelObjectOpeningMuParserFilter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   LabelObjectOpeningMuParserFilter(const Self&); //purposely not implemented

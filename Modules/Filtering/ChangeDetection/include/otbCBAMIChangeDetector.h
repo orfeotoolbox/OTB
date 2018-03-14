@@ -84,7 +84,7 @@ public:
 
 protected:
   CBAMIChangeDetector() {}
-  ~CBAMIChangeDetector() ITK_OVERRIDE {}
+  ~CBAMIChangeDetector() override {}
 
 private:
   CBAMIChangeDetector(const Self &); //purposely not implemented

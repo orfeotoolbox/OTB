@@ -122,7 +122,7 @@ decision-making, or in case of disputes over voting.
 
 A vote of the PSC is required in the following cases:
 
-1.  Merge Request
+1.  Some Merge Request (see below)
 2.  Addition or removal of PSC members (including the selection of a new
     Chair)
 3.  Release process
@@ -134,22 +134,23 @@ In addition, a vote can be summoned for:
 
 #### Merge Request
 
-A Merge Request describes a change in Orfeo ToolBox code, API,
-infrastructure or processes that need to be submitted to the PSC vote:
+All changes in Orfeo ToolBox (code, API, infrastructure or processes) must be 
+handle with a Merge Request :
 
 -   Anything that could cause backward compatibility issues,
 -   Adding substantial amounts of new code,
 -   Changing inter-subsystem APIs, or objects,
+-   Any change in the code or in the documentation.
 
-It should describe :
+Merge Request can implement an issue in GitLab. 
 
-1.  What changes will be made and why they will make a better Orfeo
-    ToolBox
-2.  When will those changes be available (target release or date)
-3.  Who will be developing the proposed changes
+Merge Requests must be provided to a git hosted platform (GitLab, GitHub, etc.). 
+Merge request can be discussed on the developer list or directly on GitLab.
 
-Those elements can be provided in an email to the developer list or on a
-git hosted platform (GitLab, GitHub, etc.).
+Votes are necessary to accept Merge Request : 
+-   Core developers ('Master' members in Gitlab ; it includes PSC members) can vote
+-   At least two +1 are necessary
+-   PSC members have veto
 
 #### Add or remove PSC members
 

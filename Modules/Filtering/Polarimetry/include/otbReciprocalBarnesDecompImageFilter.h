@@ -151,7 +151,7 @@ public:
 
 protected:
    ReciprocalBarnesDecompImageFilter() {}
-  ~ReciprocalBarnesDecompImageFilter() ITK_OVERRIDE {}
+  ~ReciprocalBarnesDecompImageFilter() override {}
 
 private:
   ReciprocalBarnesDecompImageFilter(const Self&); //purposely not implemented

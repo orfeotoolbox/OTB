@@ -101,7 +101,7 @@ public:
   itkGetConstMacro(DenominatorDegree, unsigned int);
 
   /** The transform point method */
-  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE
+  OutputPointType TransformPoint(const InputPointType& point) const override
   {
     // Check for consistency
     if(this->GetNumberOfParameters() != this->m_Parameters.size())
@@ -148,13 +148,13 @@ public:
   }
 
   /** Get the number of parameters */
-  NumberOfParametersType GetNumberOfParameters() const ITK_OVERRIDE
+  NumberOfParametersType GetNumberOfParameters() const override
   {
     return (static_cast <NumberOfParametersType> ( (m_NumeratorDegree +1 + m_DenominatorDegree+1)*SpaceDimension ));
   }
 
   // Set parameter method
-  void SetParameters(const typename Superclass::ParametersType & params) ITK_OVERRIDE
+  void SetParameters(const typename Superclass::ParametersType & params) override
   {
     // Check for the appropriate size
     if(params.Size() != this->GetNumberOfParameters())
@@ -187,9 +187,9 @@ protected:
     }
 
 
-  ~RationalTransform() ITK_OVERRIDE {}
+  ~RationalTransform() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Numerator Degree : " << m_NumeratorDegree << std::endl;

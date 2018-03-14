@@ -75,21 +75,21 @@ public:
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType>   BandStatisticsLabelMapFilterType;
 
   using Superclass::SetInput;
-  void SetInput( const InputImageType *image) ITK_OVERRIDE;
+  void SetInput( const InputImageType *image) override;
   virtual void SetLabeledImage( const LabeledImageType * image);
   const InputImageType * GetInput(void);
   const LabeledImageType * GetLabeledImage();
   virtual LabelMapType* GetOutput();
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 protected:
   /** Constructor */
   ImageToLabelMapWithAttributesFilter();
   /** Destructor */
-  ~ImageToLabelMapWithAttributesFilter() ITK_OVERRIDE{};
+  ~ImageToLabelMapWithAttributesFilter() override{};
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
 
 private:

@@ -81,7 +81,7 @@ public:
   /** ImageRegion typedef needed by the GetImageRegion() method */
   typedef itk::ImageRegion<2> ImageRegionType;
 
-  typename Superclass::RegionType GetRegionType() const ITK_OVERRIDE
+  typename Superclass::RegionType GetRegionType() const override
   {return Superclass::ITK_STRUCTURED_REGION; }
 
   /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
@@ -106,7 +106,7 @@ public:
 
   /** Destructor. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so the destructor is public. */
-  ~RemoteSensingRegion() ITK_OVERRIDE{}
+  ~RemoteSensingRegion() override{}
 
   /** operator=. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so operator= is public. */
@@ -334,7 +334,7 @@ public:
 
 protected:
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     os << std::setprecision(15);
     os << indent << "RemoteSensingRegion" << std::endl;

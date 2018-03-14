@@ -84,7 +84,7 @@ public:
 
 protected:
   JoinHistogramMIImageFilter() {}
-  ~JoinHistogramMIImageFilter() ITK_OVERRIDE {}
+  ~JoinHistogramMIImageFilter() override {}
 
 private:
   JoinHistogramMIImageFilter(const Self &); //purposely not implemented

@@ -85,7 +85,7 @@ public:
 
   enum MassOfBeliefDefinitionMethod {PRECISION, RECALL, ACCURACY, KAPPA};
 
-  void Update() ITK_OVERRIDE;
+  void Update() override;
 
   /** Accessors */
   itkSetMacro(ConfusionMatrix, ConfusionMatrixType);
@@ -141,10 +141,10 @@ protected:
   ConfusionMatrixToMassOfBelief();
 
   /** Destructor */
-  ~ConfusionMatrixToMassOfBelief() ITK_OVERRIDE {};
+  ~ConfusionMatrixToMassOfBelief() override {};
 
   /** Triggers the computation of the confusion matrix */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
 private:
   ConfusionMatrixToMassOfBelief(const Self&); //purposely not implemented

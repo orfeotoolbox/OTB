@@ -87,11 +87,11 @@ protected:
   /** Constructor.*/
   VectorDataToRightAngleVectorDataFilter();
   /**Destructor.*/
-  ~VectorDataToRightAngleVectorDataFilter() ITK_OVERRIDE{}
+  ~VectorDataToRightAngleVectorDataFilter() override{}
   /** Standard PrintSelf method.*/
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**Main computation method.*/
-  void  GenerateData() ITK_OVERRIDE;
+  void  GenerateData() override;
   /**Angle computation.*/
   virtual double ComputeAngleFormedBySegments(LineType * lineDst, LineType * lineSrc);
   /** When we find a right angle, one compute the coordinate of the segments intersection.*/

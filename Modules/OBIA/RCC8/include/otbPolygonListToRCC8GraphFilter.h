@@ -123,9 +123,9 @@ protected:
   /** Constructor */
   PolygonListToRCC8GraphFilter();
   /** Destructor */
-  ~PolygonListToRCC8GraphFilter() ITK_OVERRIDE;
+  ~PolygonListToRCC8GraphFilter() override;
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Multi-threading implementation */
 
@@ -151,7 +151,7 @@ protected:
   /** End Multi-threading implementation */
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Get the composition knowledge.
    * \param r1 First RCC8 relation value,

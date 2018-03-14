@@ -115,9 +115,9 @@ public:
 
 protected:
   LabelMapToVectorDataFilter();
-  ~LabelMapToVectorDataFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  ~LabelMapToVectorDataFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void GenerateData() override;
 
 private:
   LabelMapToVectorDataFilter(const Self &); //purposely not implemented

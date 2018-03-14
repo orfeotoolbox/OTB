@@ -92,10 +92,10 @@ public:
 
 protected:
   DrawLineSpatialObjectListFilter();
-  ~DrawLineSpatialObjectListFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~DrawLineSpatialObjectListFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
    * compute the intersection of the segment to draw with the region
