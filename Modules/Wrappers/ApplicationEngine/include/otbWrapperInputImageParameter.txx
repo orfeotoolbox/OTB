@@ -38,8 +38,6 @@ template <class TImageType>
 TImageType*
 InputImageParameter::GetImage()
 {
-  otbMsgDevMacro(<< "GetImage()");
-
   // Used m_PreviousFileName because if not, when the user call twice GetImage,
   // it without changing the filename, it returns 2 different
   // image pointers
