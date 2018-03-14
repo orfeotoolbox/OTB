@@ -388,6 +388,7 @@ Application::RegisterPipeline()
   std::stack< itk::DataObject * > dataStack;
   std::set< itk::DataObject * > inputData;
   std::vector<std::string> paramList = GetParametersKeys(true);
+  // Get both end of the pipeline
   for ( key : paramList )
     {
     if ( GetParameterType(key) == ParameterType_OutputImage )
@@ -511,6 +512,7 @@ void Application::FreeRessources()
 {
   std::set< itk::DataObject * > dataSet;
   std::vector<std::string> paramList = GetParametersKeys(true);
+  // Get the end of the pipeline
   for (std::vector<std::string>::const_iterator it = paramList.begin();
            it != paramList.end();
            ++it)
@@ -535,7 +537,7 @@ void Application::FreeRessources()
     else
       continue;
     }
-  // DFS
+  // initialize DFS
   std::stack< itk::ProcessObject * > processStack;
   for ( auto data : dataSet )
     {
@@ -543,19 +545,23 @@ void Application::FreeRessources()
     if ( process )
       processStack.push( process );
     }
-
+  // DFS
   while ( !processStack.empty() )
     {
     itk::ProcessObject * current = processStack.top();
     processStack.pop();
     std::cout<<current->GetNameOfClass()<<std::endl;
+    // if null continue
     if ( !current )
       continue;
+    // Get all inputs
     auto inputVector = current->GetInputs();
     for ( auto data : inputVector )
       {
+      // If input is null or already in the set continue
       if ( !data.GetPointer() || dataSet.count( data.GetPointer() ) )
         continue;
+      // If input is a list
       if ( dynamic_cast< ObjectListInterface *> (data.GetPointer()) )
         {
         ObjectListInterface * list = 
@@ -581,13 +587,13 @@ void Application::FreeRessources()
         }
       }
     }
-
+  // Release data
   for ( auto data : dataSet )
   {
     std::cout<<"one bulk is freed"<<std::endl;
     data->ReleaseData();
   }
-
+  // Call overrode method
   DoFreeRessources();
 }
 
