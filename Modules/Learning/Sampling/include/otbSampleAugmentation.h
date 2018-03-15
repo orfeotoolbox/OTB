@@ -49,11 +49,12 @@ SampleType estimateStds(const SampleVectorType& samples)
 #pragma omp parallel for
   for(size_t i=0; i<nbSamples; ++i)
     {
+    auto norm_factor = 1.0/(i+1);
     for(size_t j=0; j<nbComponents; ++j)
       {
       const auto mu = means[j];
       const auto x = samples[i][j];
-      auto muNew = mu+(x-mu)/(i+1);
+      auto muNew = mu+(x-mu)*norm_factor;
       stds[j] += (x-mu)*(x-muNew);
       means[j] = muNew;
       }
