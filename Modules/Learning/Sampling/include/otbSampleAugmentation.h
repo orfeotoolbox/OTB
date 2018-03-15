@@ -40,7 +40,7 @@ using SampleVectorType = std::vector<SampleType>;
 Estimate standard deviations of the components in one pass using
 Welford's algorithm
 */
-SampleType estimateStds(SampleVectorType samples)
+SampleType estimateStds(const SampleVectorType& samples)
 {
   const auto nbSamples = samples.size();
   const auto nbComponents = samples[0].size();
