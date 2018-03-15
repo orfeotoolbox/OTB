@@ -143,7 +143,7 @@ public:
 
 protected:
   ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter() {}
-  ~ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter() ITK_OVERRIDE {}
+  ~ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter() override {}
 
 private:
   ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(const Self&); //purposely not implemented

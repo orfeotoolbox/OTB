@@ -108,7 +108,7 @@ public:
       m_RoiOrigin.Fill( 0 );
     }
 
-    ~RenderingContext() ITK_OVERRIDE {}
+    ~RenderingContext() override {}
 
     PointType m_RoiOrigin;
     PointType m_RoiExtent;
@@ -121,13 +121,13 @@ public:
   QuicklookViewRenderer( QObject* p = NULL );
 
   /** Destructor */
-  ~QuicklookViewRenderer() ITK_OVERRIDE;
+  ~QuicklookViewRenderer() override;
 
   //
   // ImageViewRenderer overloads.
 
   
-  AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const ITK_OVERRIDE;
+  AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -150,7 +150,7 @@ protected:
   // ImageViewRenderer overloads.
 
   
-  void UpdateActors( const AbstractImageViewRenderer::RenderingContext* c ) ITK_OVERRIDE;
+  void UpdateActors( const AbstractImageViewRenderer::RenderingContext* c ) override;
 
 //
 // Protected attributes.
@@ -170,13 +170,13 @@ private:
 
   //
   // ImageViewRenderer methods.
-  void virtual_SetProjection() ITK_OVERRIDE;
-  void virtual_UpdateProjection() ITK_OVERRIDE;
+  void virtual_SetProjection() override;
+  void virtual_UpdateProjection() override;
 
   //
   // AbstractImageViewRenderer overloads.
   // TODO: Move virtual_*Scene() methods to protected section.
-  void virtual_FinishScene() ITK_OVERRIDE;
+  void virtual_FinishScene() override;
 
 //
 // Private attributes.

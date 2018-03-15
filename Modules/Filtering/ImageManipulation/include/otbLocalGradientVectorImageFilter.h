@@ -96,7 +96,7 @@ protected:
     typename Superclass::RadiusType radius = {{1, 1}};
     this->SetRadius( radius );
   }
-  ~LocalGradientVectorImageFilter() ITK_OVERRIDE { }
+  ~LocalGradientVectorImageFilter() override { }
 
 private:
   LocalGradientVectorImageFilter( const Self & ); // Not implemented

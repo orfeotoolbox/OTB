@@ -73,9 +73,9 @@ protected:
   /** Constructor */
   PersistentImageFilter() {}
   /** Destructor */
-  ~PersistentImageFilter() ITK_OVERRIDE {}
+  ~PersistentImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }

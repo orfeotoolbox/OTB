@@ -109,7 +109,7 @@ public:
 
 protected:
   LocalActivityVectorImageFilter() { }
-  ~LocalActivityVectorImageFilter() ITK_OVERRIDE { }
+  ~LocalActivityVectorImageFilter() override { }
 
 private:
   LocalActivityVectorImageFilter( const Self & ); // Not implemented

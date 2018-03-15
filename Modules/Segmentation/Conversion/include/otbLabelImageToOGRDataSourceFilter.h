@@ -114,17 +114,17 @@ public:
 
 protected:
   LabelImageToOGRDataSourceFilter();
-  ~LabelImageToOGRDataSourceFilter() ITK_OVERRIDE {}
+  ~LabelImageToOGRDataSourceFilter() override {}
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate Data method*/
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** DataObject pointer */
   typedef itk::DataObject::Pointer DataObjectPointer;
 
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 private:

@@ -58,7 +58,7 @@ public:
   itkTypeMacro(VectorDataDSValidation, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("VectorDataDSValidation");
     SetDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
@@ -106,7 +106,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
 
@@ -116,7 +116,7 @@ private:
 
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
 
     //Read the vector data

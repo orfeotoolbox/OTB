@@ -104,7 +104,7 @@ public:
   void Load(const std::string & filename, ValuePrecisionType coefNormalization = 1.0);
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** get vector of spectral responses */
   VectorPairType & GetResponse()
@@ -163,7 +163,7 @@ protected:
   /** Constructor from a ASCII file */
   //SpectralResponse( const std::string & filename );
   /** Destructor */
-  ~SpectralResponse() ITK_OVERRIDE
+  ~SpectralResponse() override
   {
   }
 ;

@@ -84,9 +84,9 @@ protected:
   /** Constructor */
   NeighborhoodScalarProductFilter();
   /** Destructor */
-  ~NeighborhoodScalarProductFilter() ITK_OVERRIDE {}
+  ~NeighborhoodScalarProductFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** NeighborhoodScalarProductImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -98,7 +98,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 private:
   NeighborhoodScalarProductFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

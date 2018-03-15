@@ -79,16 +79,16 @@ public:
 
 protected:
   SpectralSensitivityReader();
-  ~SpectralSensitivityReader() ITK_OVERRIDE;
+  ~SpectralSensitivityReader() override;
 
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Find the filename using image metadata */
   void FindFileName();
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Struct use to remove multiple spaces in file */
   struct BothAre

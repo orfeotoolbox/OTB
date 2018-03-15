@@ -98,7 +98,7 @@ protected:
 
 private:
 
-void DoInit() ITK_OVERRIDE
+void DoInit() override
 {
   SetName("TrainRegression");
   SetDescription(
@@ -198,7 +198,7 @@ void DoInit() ITK_OVERRIDE
   SetOfficialDocLink();
 }
 
-void DoUpdateParameters() ITK_OVERRIDE
+void DoUpdateParameters() override
 {
   if (HasValue("io.csv") && IsParameterEnabled("io.csv"))
     {
@@ -279,7 +279,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
   ifs.close();
 }
 
-void DoExecute() ITK_OVERRIDE
+void DoExecute() override
 {
   GetLogger()->Debug("Entering DoExecute\n");
   //Create training and validation for list samples and label list samples

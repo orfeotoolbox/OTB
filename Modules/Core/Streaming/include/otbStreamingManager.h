@@ -90,7 +90,7 @@ public:
 
 protected:
   StreamingManager();
-  ~StreamingManager() ITK_OVERRIDE;
+  ~StreamingManager() override;
 
   virtual unsigned int EstimateOptimalNumberOfDivisions(itk::DataObject * input, const RegionType &region,
                                                         MemoryPrintType availableRAMInMB,

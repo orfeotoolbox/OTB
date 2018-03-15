@@ -104,7 +104,7 @@ public:
   }
 protected:
   Log10ThresholdedImageFilter() {}
-  ~Log10ThresholdedImageFilter() ITK_OVERRIDE {}
+  ~Log10ThresholdedImageFilter() override {}
 
 private:
   Log10ThresholdedImageFilter(const Self&); //purposely not implemented

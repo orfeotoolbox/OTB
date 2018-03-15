@@ -60,7 +60,7 @@ public:
 
 protected:
   MachineLearningModelFactory();
-  ~MachineLearningModelFactory() ITK_OVERRIDE;
+  ~MachineLearningModelFactory() override;
 
 private:
   MachineLearningModelFactory(const Self &); //purposely not implemented

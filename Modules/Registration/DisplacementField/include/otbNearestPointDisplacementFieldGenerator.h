@@ -64,11 +64,11 @@ protected:
   /** Constructor */
   NearestPointDisplacementFieldGenerator() {};
   /** Destructor */
-  ~NearestPointDisplacementFieldGenerator() ITK_OVERRIDE {}
+  ~NearestPointDisplacementFieldGenerator() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   NearestPointDisplacementFieldGenerator(const Self &); //purposely not implemented

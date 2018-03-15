@@ -63,7 +63,7 @@ public:
 
 protected:
   UtmMapProjection();
-  ~UtmMapProjection() ITK_OVERRIDE {};
+  ~UtmMapProjection() override {};
 
 private:
   UtmMapProjection(const Self &); //purposely not implemented

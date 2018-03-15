@@ -50,7 +50,7 @@ public:
   itkTypeMacro(LargeScaleMeanShift, otb::CompositeApplication);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
     {
     SetName("LargeScaleMeanShift");
     SetDescription("Large-scale segmentation using MeanShift");
@@ -152,10 +152,10 @@ private:
     SetOfficialDocLink();
     }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     {
     bool isVector(GetParameterString("mode") == "vector");
     std::string outPath(isVector ?

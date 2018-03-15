@@ -81,7 +81,7 @@ public:
      FloatVectorImageType>                                        BasicResamplerType;
   
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Superimpose");
     SetDescription("Using available image metadata, project one image onto another one");
@@ -159,7 +159,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if(!HasUserValue("mode") && HasValue("inr") && HasValue("inm") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr"),GetParameterImage("inm")))
       {
@@ -169,7 +169,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the inputs
     FloatVectorImageType* refImage = GetParameterImage("inr");

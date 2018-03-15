@@ -42,7 +42,7 @@ public:
   itkTypeMacro(TestApplication, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("TestApplication");
     SetDescription("This application helps developers to test parameters types");
@@ -113,10 +113,10 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     if( HasValue("il") && IsParameterEnabled("il") )
       {

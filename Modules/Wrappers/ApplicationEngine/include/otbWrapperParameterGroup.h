@@ -95,7 +95,7 @@ public:
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
   // Always has value
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return true;
   }
@@ -106,7 +106,7 @@ public:
 
 protected:
   ParameterGroup();
-  ~ParameterGroup() ITK_OVERRIDE;
+  ~ParameterGroup() override;
 
   typedef std::vector<Parameter::Pointer> ParameterListType;
   ParameterListType m_ParameterList;

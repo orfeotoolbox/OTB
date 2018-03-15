@@ -120,7 +120,7 @@ protected:
   /** Constructor */
   DocExampleStructure();
   /** Destructor */
-  ~DocExampleStructure() ITK_OVERRIDE;
+  ~DocExampleStructure() override;
 
 private:
   DocExampleStructure(const DocExampleStructure &); //purposely not implemented

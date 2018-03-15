@@ -138,31 +138,31 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
-  void Reset(void) ITK_OVERRIDE;
+  void AllocateOutputs() override;
+  void GenerateOutputInformation() override;
+  void Synthetize(void) override;
+  void Reset(void) override;
 
 protected:
   PersistentCompareImageFilter();
-  ~PersistentCompareImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PersistentCompareImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType&
                              outputRegionForThread,
-                             itk::ThreadIdType threadId) ITK_OVERRIDE;
+                             itk::ThreadIdType threadId) override;
 
   /** Allows skipping the verification of physical space between
    *  the two input images (see flag m_PhysicalSpaceCheck)
    */
-  void VerifyInputInformation() ITK_OVERRIDE;
+  void VerifyInputInformation() override;
 
 private:
   PersistentCompareImageFilter(const Self &); //purposely not implemented
@@ -319,7 +319,7 @@ protected:
   /** Constructor */
   StreamingCompareImageFilter() {};
   /** Destructor */
-  ~StreamingCompareImageFilter() ITK_OVERRIDE {}
+  ~StreamingCompareImageFilter() override {}
 
 private:
   StreamingCompareImageFilter(const Self &); //purposely not implemented

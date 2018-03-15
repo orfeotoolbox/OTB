@@ -58,11 +58,11 @@ public:
   typedef typename Superclass::ScalarType   ScalarType;
   typedef typename Superclass::RealType     RealType;
 
-  RGBPixelType operator ()(const TScalar&) const ITK_OVERRIDE;
+  RGBPixelType operator ()(const TScalar&) const override;
 
 protected:
   ReliefColormapFunctor(){};
-  ~ReliefColormapFunctor() ITK_OVERRIDE {}
+  ~ReliefColormapFunctor() override {}
 
 private:
   ReliefColormapFunctor(const Self &); //purposely not implemented
