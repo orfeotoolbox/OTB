@@ -176,7 +176,7 @@ still be correct, but some intermediate data will be read or written.
 Interactions with OTB pipeline
 ------------------------------
 
-[since OTB 6.6]
+[Since OTB 6.6]
 
 The application framework has been extended in order to provide ways to
 interact with the pipelines inside each application. It applies only to
@@ -216,7 +216,7 @@ All these getters functions use the following arguments:
 
 There is also a function to send orders to the pipeline:
 
-  ``PropagateRequestedRegion(key, region, idx=0)``: set a given RequestedRegion
+  ``PropagateRequestedRegion(key, region, idx=0)``: sets a given RequestedRegion
   on the image and propagate it, returns the memory print estimation. This function
   can be used to measure the requested portion of input images necessary to produce
   an extract of the full output.
@@ -230,11 +230,11 @@ and Numpy arrays. There are now import and export functions available in
 Python that preserve the metadata of the image during conversions to Numpy
 arrays:
 
-* ``ExportImage(self, key)``: export an output image parameter into a Python
+* ``ExportImage(self, key)``: exports an output image parameter into a Python
   dictionary.
-* ``ImportImage(self, key, dict, index=0)``: import the image from a Python
+* ``ImportImage(self, key, dict, index=0)``: imports the image from a Python
   dictionary into an image parameter (as a monoband image).
-* ``ImportVectorImage(self, key, dict, index=0)``: import the image from a
+* ``ImportVectorImage(self, key, dict, index=0)``: imports the image from a
   Python dictionary into an image parameter (as a multiband image).
 
 The Python dictionary used has the following entries:
@@ -265,7 +265,8 @@ Now some basic Q&A about this interface:
     dictionaries.
     
 This interface allows you to export OTB images (or extracts) to Numpy array,
-process them  by other means, and re-import them with preserved metadatas.
+process them  by other means, and re-import them with preserved metadatas. Please
+note that this is different from an in-memory connection.
 
 Here is a small example of what can be done:
 
