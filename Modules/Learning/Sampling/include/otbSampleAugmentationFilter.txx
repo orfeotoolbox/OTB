@@ -259,16 +259,14 @@ SampleAugmentationFilter
 ::selectTemplateFeature(const ogr::Layer& inputLayer, 
                         const std::string& classField, int label)
 {
-  auto featureIt = inputLayer.begin();
-  while( featureIt!=inputLayer.end() )
-    {
-    if((*featureIt).ogr().GetFieldAsInteger(classField.c_str()) == label)
-      {
-      return *featureIt;
-      }
-    ++featureIt;
-    }
-  return *(inputLayer.begin());
+  auto wh = std::find_if(inputLayer.begin(), inputLayer.end(),
+                         [&](auto& featureIt) 
+                         { 
+                           return featureIt.ogr().GetFieldAsInteger(classField.c_str()) == 
+                           label; 
+                         });
+  return (wh == inputLayer.end()) ? *(inputLayer.begin()) : *wh;
+
 }
 } // end namespace otb
 
