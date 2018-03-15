@@ -138,9 +138,9 @@ double computeSquareDistance(const SampleType& x, const SampleType& y)
   double dist{0};
   for(size_t i=0; i<x.size(); ++i)
     {
-    dist += (x[i]-y[i])*(x[i]-y[i])/(x.size()*x.size());
+    dist += (x[i]-y[i])*(x[i]-y[i]);
     }
-  return dist;
+  return dist/(x.size()*x.size());
 }
 
 using NNIndicesType = std::vector<NeighborType>;
