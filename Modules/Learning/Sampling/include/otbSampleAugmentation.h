@@ -132,7 +132,7 @@ struct NeighborSorter
   }
 };
 
-double computeDistance(const SampleType& x, const SampleType& y)
+double computeSquareDistance(const SampleType& x, const SampleType& y)
 {
   assert(x.size()==y.size());
   double dist{0};
@@ -140,7 +140,7 @@ double computeDistance(const SampleType& x, const SampleType& y)
     {
     dist += (x[i]-y[i])*(x[i]-y[i])/(x.size()*x.size());
     }
-  return std::sqrt(dist);
+  return dist;
 }
 
 using NNIndicesType = std::vector<NeighborType>;
@@ -160,8 +160,8 @@ void findKNNIndices(const SampleVectorType& inSamples,
     for(size_t neighborIdx=0; neighborIdx<nbSamples; ++neighborIdx) 
       {
       if(sampleIdx!=neighborIdx)
-        nns.push_back({neighborIdx, computeDistance(inSamples[sampleIdx],
-                                                    inSamples[neighborIdx])});
+        nns.push_back({neighborIdx, computeSquareDistance(inSamples[sampleIdx],
+                                                          inSamples[neighborIdx])});
       }  
     std::partial_sort(nns.begin(), nns.begin()+nbNeighbors, nns.end(), NeighborSorter{});
     nns.resize(nbNeighbors);
