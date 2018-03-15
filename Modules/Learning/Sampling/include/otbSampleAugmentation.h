@@ -165,7 +165,7 @@ void findKNNIndices(const SampleVectorType& inSamples,
       }  
     std::partial_sort(nns.begin(), nns.begin()+nbNeighbors, nns.end(), NeighborSorter{});
     nns.resize(nbNeighbors);
-    nnVector[sampleIdx] = nns;
+    nnVector[sampleIdx] = std::move(nns);
     }
 }
 
