@@ -709,23 +709,23 @@ private:
       otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
 
       // Final writing
-      LabelImageReaderType::Pointer m_FinalReader = LabelImageReaderType::New();
-      m_FinalReader->SetFileName(vrtfile);
+      LabelImageReaderType::Pointer finalReader = LabelImageReaderType::New();
+      finalReader->SetFileName(vrtfile);
 
       ImportGeoInformationImageFilterType::Pointer 
-        m_ImportGeoInformationFilter = 
+        importGeoInformationFilter = 
         ImportGeoInformationImageFilterType::New();
-      m_ImportGeoInformationFilter->SetInput(m_FinalReader->GetOutput());
-      m_ImportGeoInformationFilter->SetSource(imageIn);
+      importGeoInformationFilter->SetInput(finalReader->GetOutput());
+      importGeoInformationFilter->SetSource(imageIn);
 
-      SetParameterOutputImage("out",m_ImportGeoInformationFilter->GetOutput());
+      SetParameterOutputImage("out",importGeoInformationFilter->GetOutput());
       RegisterPipeline();
   }
 
   void AfterExecuteAndWriteOutputs() override
   {
     // Release input files
-    // m_FinalReader = ITK_NULLPTR;
+    // finalReader = ITK_NULLPTR;
 
     if(GetParameterInt("cleanup"))
       {

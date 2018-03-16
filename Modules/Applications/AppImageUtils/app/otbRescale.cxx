@@ -101,24 +101,24 @@ private:
 
     otbAppLogDEBUG( << "Starting Min/Max computation" )
   
-    MinMaxFilterType::Pointer m_MinMaxFilter = MinMaxFilterType::New();
-    m_MinMaxFilter->SetInput( inImage );
-    m_MinMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    MinMaxFilterType::Pointer minMaxFilter = MinMaxFilterType::New();
+    minMaxFilter->SetInput( inImage );
+    minMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
-    AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
-    m_MinMaxFilter->Update();
+    AddProcess(minMaxFilter->GetStreamer(), "Min/Max computing");
+    minMaxFilter->Update();
 
-    otbAppLogDEBUG( << "Min/Max computation done : min=" << m_MinMaxFilter->GetMinimum()
-                    << " max=" << m_MinMaxFilter->GetMaximum() )
+    otbAppLogDEBUG( << "Min/Max computation done : min=" << minMaxFilter->GetMinimum()
+                    << " max=" << minMaxFilter->GetMaximum() )
 
     FloatVectorImageType::PixelType inMin, inMax;
 
-    RescaleImageFilterType::Pointer m_RescaleFilter = 
+    RescaleImageFilterType::Pointer rescaleFilter = 
       RescaleImageFilterType::New();
-    m_RescaleFilter->SetInput( inImage );
-    m_RescaleFilter->SetAutomaticInputMinMaxComputation(false);
-    m_RescaleFilter->SetInputMinimum( m_MinMaxFilter->GetMinimum() );
-    m_RescaleFilter->SetInputMaximum( m_MinMaxFilter->GetMaximum() );
+    rescaleFilter->SetInput( inImage );
+    rescaleFilter->SetAutomaticInputMinMaxComputation(false);
+    rescaleFilter->SetInputMinimum( minMaxFilter->GetMinimum() );
+    rescaleFilter->SetInputMaximum( minMaxFilter->GetMaximum() );
 
     FloatVectorImageType::PixelType outMin, outMax;
     outMin.SetSize( inImage->GetNumberOfComponentsPerPixel() );
@@ -126,11 +126,11 @@ private:
     outMin.Fill( GetParameterFloat("outmin") );
     outMax.Fill( GetParameterFloat("outmax") );
 
-    m_RescaleFilter->SetOutputMinimum( outMin );
-    m_RescaleFilter->SetOutputMaximum( outMax );
-    m_RescaleFilter->UpdateOutputInformation();
+    rescaleFilter->SetOutputMinimum( outMin );
+    rescaleFilter->SetOutputMaximum( outMax );
+    rescaleFilter->UpdateOutputInformation();
 
-    SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
+    SetParameterOutputImage("out", rescaleFilter->GetOutput());
     RegisterPipeline();
   }
 };
