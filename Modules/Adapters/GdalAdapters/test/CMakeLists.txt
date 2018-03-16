@@ -57,11 +57,28 @@ otb_add_test(NAME TvOGRExtendedFilename
          test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
          ${TEMP}/TvOGRExtendedFilenameTest.txt     )
 
-otb_add_test(NAME TvOGRExtendedFilenameGDAL
+otb_add_test(NAME TvOGRExtendedFilenameGDALOpen
          COMMAND otbOGRTestDriver
-         otbOGRExtendedFileNameGDAL
+         otbOGRExtendedFileNameGDALOpen
          ${INPUTDATA}/ToulousePoints-examples.shp?&gdal:oo:openOption=OPTION
-         ${TEMP}/test.shp?&gdal:co:creationOption=OPTION&gdal:lco:layerOption=OPTION
+          )
+
+otb_add_test(NAME TvOGRExtendedFilenameGDALCreate
+         COMMAND otbOGRTestDriver
+         otbOGRExtendedFileNameGDALCreate
+         test.shp?gdal:co:creationOption=OPTION
+          )
+
+otb_add_test(NAME TvOGRExtendedFilenameGDALLayer
+         COMMAND otbOGRTestDriver
+         otbOGRExtendedFileNameGDALLayer
+         test.shp?&gdal:lco:layeroption=OPTION
+          )
+
+otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
+         COMMAND otbOGRTestDriver
+         otbOGRExtendedFileNameGDALLayerOption
+         test.shp
           )
 
 

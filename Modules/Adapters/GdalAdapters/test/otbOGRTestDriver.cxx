@@ -23,5 +23,8 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbOGRExtendedFileName);
-  REGISTER_TEST(otbOGRExtendedFileNameGDAL);
+  REGISTER_TEST(otbOGRExtendedFileNameGDALOpen);
+  REGISTER_TEST(otbOGRExtendedFileNameGDALCreate);
+  REGISTER_TEST(otbOGRExtendedFileNameGDALLayer);
+  REGISTER_TEST(otbOGRExtendedFileNameGDALLayerOption);
 }

@@ -25,51 +25,44 @@
 #include <fstream>
 
 
-int otbOGRExtendedFileNameGDAL(int , char* argv[])
+int otbOGRExtendedFileNameGDALOpen(int , char* argv[])
 {
-  bool success = true ;
-  const char * inputOpen = argv[1];
-  const char * inputCreation  = argv[2];
-  auto test = otb::ogr::DataSource::New( inputOpen );
-  // std::cout<<"here"<<std::endl;
+  auto test = otb::ogr::DataSource::New( argv[1] );
   std::string  error = CPLGetLastErrorMsg();
   if ( !error.empty() )
     std::cout<<error<<std::endl;
-  // if ( error.find( "does not support open option openOption" ) != std::string::npos )
-  //   success = true && success ;
-  // else
-  //   success = false ;
-  // std::cout<<success<<std::endl;
-
-
-  test = otb::ogr::DataSource::New( inputCreation , otb::ogr::DataSource::Modes::Update_LayerOverwrite);
-error = CPLGetLastErrorMsg();
-  if ( !error.empty() )
-    std::cout<<error<<std::endl;
-  // error = CPLGetLastErrorMsg();
-  // std::cout<<error<<std::endl;
-  // if ( std::string(error).find( "does not support creation option creationOption" ) != std::string::npos )
-  //   success = true && success ;
-  // else
-  //   success = false ;
-  // std::cout<<success<<std::endl;
-
-  test->CreateLayer( "2layertest" , 
-      ITK_NULLPTR , 
-      wkbUnknown , 
-      std::vector< std::string > { "newOption=OPTION" } );
-error = CPLGetLastErrorMsg();
-  if ( !error.empty() )
-    std::cout<<error<<std::endl;
-  // error = CPLGetLastErrorMsg();
-  // std::cout<<error<<std::endl;
-  // if ( std::string(error).find( "toto" ) != std::string::npos )
-  //   success = true && success;
-  // else
-  //   success = false ;
-  // std::cout<<success<<std::endl;
-
-  return EXIT_SUCCESS;
+  return 0;
 }
 
+int otbOGRExtendedFileNameGDALCreate(int , char* argv[])
+{
+  auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Overwrite);
+  std::string error = CPLGetLastErrorMsg();
+  std::cout<<error<<std::endl;
+  return error.empty();
+}
+
+int otbOGRExtendedFileNameGDALLayer(int , char* argv[])
+{
+  auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Update_LayerOverwrite);
+  test->CreateLayer( "2layertest" , 
+      ITK_NULLPTR , 
+      wkbUnknown );
+  std::string error = CPLGetLastErrorMsg();
+  std::cout<<error<<std::endl;
+  return error.empty();
+}
+
+int otbOGRExtendedFileNameGDALLayerOption(int , char* argv[])
+{
+  auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Update_LayerOverwrite);
+  std::vector<std::string> option { "vectorlayeroption=OPTION" }; 
+  test->CreateLayer( "2layertest" , 
+      ITK_NULLPTR , 
+      wkbUnknown ,
+      option );
+  std::string error = CPLGetLastErrorMsg();
+  std::cout<<error<<std::endl;
+  return error.empty();
+}
 
