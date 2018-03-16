@@ -315,6 +315,36 @@ The available syntax for boolean options are:
 -  OFF, Off, off, false, False, 0 are available for setting a ’false’
    boolean value
    
+OGR DataSource options
+^^^^^^^^^^^^^^^^^^^^^^^
+
+We extended this process to OGR DataSource. There are three different type of
+option : open, creation and layer creation. Those options come from the GDAL 
+API. In order to use them one just need to specify to which of this family 
+the option one want to use is from.
+
+For open option :
+
+::
+
+    &gdal:oo:<GDALKEY>=<VALUE>
+
+
+For creation option :
+
+::
+
+    &gdal:co:<GDALKEY>=<VALUE>
+
+
+For layer creation option :
+
+::
+
+    &gdal:lco:<GDALKEY>=<VALUE>
+
+
+
 Examples
 ^^^^^^^^^^^^^^
 
