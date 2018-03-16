@@ -56,9 +56,9 @@ SetExtendedFileName(const char *extFname)
   Superclass::SetExtendedFileName(extFname);
   m_HasFileName = true;
 
-  OptionMapType map = GetOptionMap();
+  const OptionMapType & map = GetOptionMap();
 
-  MapIteratorType it;
+  ConstMapIteratorType it;
   for ( it=map.begin(); it != map.end(); it++ )
     {
     std::vector<std::string> tmp;
@@ -144,9 +144,7 @@ bool
 OGRExtendedFilenameToOptions::
 HasGDALLayerOption() const
 {
-  if ( m_LayerOptions.gdalOptions.empty() )
-    return false;
-  return true;
+  return ! m_LayerOptions.gdalOptions.empty() ;
 }
 
 OGRExtendedFilenameToOptions::

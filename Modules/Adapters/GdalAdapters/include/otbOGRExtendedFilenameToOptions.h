@@ -45,7 +45,7 @@ public:
   typedef ExtendedFilenameHelper Superclass;
 
   typedef Superclass::OptionMapType OptionMapType;
-  typedef OptionMapType::iterator MapIteratorType;
+  typedef OptionMapType::const_iterator ConstMapIteratorType;
   typedef std::vector<std::string> GDALOptionType;
 
   itkTypeMacro(OGRExtendedFilenameToOptions, otb::ExtendedFilenameHelper);
