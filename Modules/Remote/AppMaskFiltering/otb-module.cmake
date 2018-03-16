@@ -28,6 +28,8 @@ otb_module(OTBAppMaskFiltering
     OTBOGRProcessing
     OTBVectorDataBase
     OTBLearningBase
+    OTBCCOBIA
+    OTBSampling
   DESCRIPTION
     "${DOCUMENTATION}"
 )

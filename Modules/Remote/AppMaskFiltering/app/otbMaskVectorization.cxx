@@ -24,6 +24,15 @@
 #include "PersistentMaskVectorizationFilter.h"
 #include "otbMaskStreamStitchingFilter.h"
 
+#include "itkConnectedComponentFunctorImageFilter.h"
+#include "otbConnectedComponentMuParserFunctor.h"
+
+
+
+// For test purposes !
+#include "otbOGRDataToSpectralStatisticsFilter.h"
+
+
 
 namespace otb
 {
@@ -43,12 +52,29 @@ public:
   typedef otb::ogr::Layer                                 OGRLayerType;
   typedef otb::ogr::Feature                               OGRFeatureType;
 
-  //typedef itk::BinaryShapeM_BinaryOpeningFilterImageFilter<UInt8ImageType>    BinaryM_BinaryOpeningFilterFilterType;
-  typedef FloatImageType                                ImageType;
-  //typedef PersistentMaskFilter< ImageType >             PersistentMaskFilterType;
-  typedef MaskStreamStitchingFilter< ImageType >             MaskStreamStitchingFilterType;
-  typedef MaskFilter<ImageType>                         MaskFilterType;
+  //typedef itk::BinaryShapeM_BinaryOpeningFilterImageFilter<UInt8LabelImageType>    BinaryM_BinaryOpeningFilterFilterType;
+  typedef otb::Image<unsigned int, 2>                                 LabelImageType;
+  typedef otb::Image<unsigned int, 2>         MaskImageType;
+
+  typedef float InputPixelType;
+  typedef otb::VectorImage<InputPixelType, 2> VectorImageType;
+  typedef VectorImageType::PixelType VectorImagePixelType;
   
+  //typedef PersistentMaskFilter< LabelImageType >             PersistentMaskFilterType;
+  typedef MaskStreamStitchingFilter< LabelImageType >             MaskStreamStitchingFilterType;
+  typedef MaskFilter<LabelImageType>                         MaskFilterType;
+  
+  
+  // SpectralFeatures : testing purposes
+  typedef OGRDataToSpectralStatisticsFilter<VectorImageType, MaskImageType>                         OGRDataToSpectralStatisticsFilterType;
+  
+  
+  typedef Functor::ConnectedComponentMuParserFunctor<VectorImagePixelType> FunctorType;
+  typedef itk::ConnectedComponentFunctorImageFilter<
+      VectorImageType,
+      LabelImageType,
+      FunctorType,
+      MaskImageType > ConnectedComponentFilterType;
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -70,7 +96,7 @@ private:
     
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
-
+    
     AddParameter(ParameterType_Int,"connectivity","Full connectivity");
     SetParameterDescription("connectivity","Set full connectivity");
     SetMinimumParameterIntValue("connectivity",0);
@@ -86,6 +112,8 @@ private:
     AddChoice("outmode.overwrite","Overwrite output vector file if existing.");
     SetParameterDescription("outmode.overwrite","If the output vector file already exists, it is completely destroyed (including all its layers) and recreated from scratch.");
 
+
+
     AddChoice("outmode.update","Update output vector file");
     SetParameterDescription("outmode.update","The output vector file is opened in update mode if existing");
 
@@ -95,6 +123,10 @@ private:
     MandatoryOff("tile");
      
 
+    AddParameter(ParameterType_String, "expr", "Connected Component Expression");
+    SetParameterDescription("expr", "Formula used for connected component segmentation");
+    
+     
     AddParameter(ParameterType_Int,"fusion","fusion");
     SetParameterDescription("fusion","Perform polygon fusion");
     MandatoryOff("fusion");
@@ -110,7 +142,7 @@ private:
     SetDefaultParameterInt("tile", 0);
     SetDefaultParameterInt("fusion", 0);
     // Doc example parameter settings
-    
+    SetDocExampleParameterValue("expr", "\"distance<10\"");
     SetDocExampleParameterValue("in", "sar.tif");
     SetDocExampleParameterValue("out","test.sqlite");
     SetOfficialDocLink();
@@ -127,7 +159,7 @@ private:
   
 	
 	// Create the OGR DataSource with the appropriate fields
-    std::string projRef = this->GetParameterFloatImage("in")->GetProjectionRef();
+    std::string projRef = this->GetParameterImage("in")->GetProjectionRef();
     OGRSpatialReference oSRS(projRef.c_str());
     std::string layer_name = "layer";
     std::string field_name = "field";
@@ -156,11 +188,15 @@ private:
     OGRFieldDefn field(field_name.c_str(), OFTInteger);
     layer.CreateField(field, true);
 
+    ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
+    connected->SetInput(this->GetParameterImage("in"));
+    connected->GetFunctor().SetExpression(GetParameterString("expr"));
+    connected->Update();
+
     // Mask FIlter : Vectorization of the input raster
     MaskFilterType::Pointer maskFilter = MaskFilterType::New();
     // Labeled image to be vectorized
-    maskFilter->SetInput(this->GetParameterFloatImage("in"));
-    
+    maskFilter->SetInput(connected->GetOutput());
     maskFilter->SetOGRLayer(layer) ;
     maskFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
     
@@ -186,18 +222,32 @@ private:
     maskFilter->Initialize();
     maskFilter->Update();
     ogrDS->SyncToDisk();
+    
+    
+    std::cout << "Vectorization done" << std::endl;
+    
     // Fusion Filter : Regroup polygons splitted across tiles.
     if (this->GetParameterInt("fusion") == 1)
     {
       MaskStreamStitchingFilterType::Pointer fusionFilter = MaskStreamStitchingFilterType::New();
-      fusionFilter->SetInput(this->GetParameterFloatImage("in"));
+      fusionFilter->SetInput(connected->GetOutput());
       fusionFilter->SetOGRLayer(layer);
       fusionFilter->SetStreamSize(maskFilter->GetStreamSize());
       fusionFilter->GenerateData();
+      
     }
     clock_t toc = clock();
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
+    std::cout << "fusion done" << std::endl;
+    OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
+    SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
+    SpectralStatisticsFilter->SetOGRData(ogrDS);
+    SpectralStatisticsFilter->SetFieldName(field_name);
+    SpectralStatisticsFilter->Update();
+    std::cout << this->GetParameterAsString("in") << std::endl;
   }
+  
+  
 
 }; 
 

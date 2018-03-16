@@ -110,8 +110,8 @@ PersistentMaskVectorizationFilter<TInputImage>
   for(; featIt!=tmpLayer.end(); ++featIt)
   {
     OGRFeatureType outFeature(outLayer.GetLayerDefn());
-   
-    if (   std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::GetValue<int>()) != m_Labels.end())
+     if(1)
+    //if (   std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::GetValue<int>()) != m_Labels.end())
     {
 
       //simplify

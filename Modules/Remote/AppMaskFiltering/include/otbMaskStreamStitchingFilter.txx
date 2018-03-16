@@ -242,7 +242,7 @@ MaskStreamStitchingFilter<TInputImage>
           FeatureStruct upper = upperStreamFeatureList[u];
           FeatureStruct lower = lowerStreamFeatureList[l];
           if (!(upper.feat == lower.feat))
-          {	
+          {
             ogr::Field field_up = upper.feat["field"];
             ogr::Field field_low = lower.feat["field"];
             if (field_up.GetValue<int>() == field_low.GetValue<int>())
