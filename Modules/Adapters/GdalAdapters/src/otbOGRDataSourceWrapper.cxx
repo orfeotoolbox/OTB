@@ -137,7 +137,7 @@ otb::ogr::DataSource::DataSource()
 otb::ogr::DataSource::DataSource( 
     otb::ogr::version_proxy::GDALDatasetType * source ,
     Modes::type mode ,
-    std::vector< std::string > options /*NULL*/ )
+    const std::vector< std::string > & options /*NULL*/ )
 : m_DataSource(source) ,
   m_LayerOptions(options) ,
   m_OpenMode(mode) ,
@@ -244,7 +244,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 
 /*static*/
 otb::ogr::DataSource::Pointer
-otb::ogr::DataSource::New(otb::ogr::version_proxy::GDALDatasetType * source , Modes::type mode , std::vector< std::string > layerOptions )
+otb::ogr::DataSource::New(otb::ogr::version_proxy::GDALDatasetType * source , Modes::type mode , const std::vector< std::string > & layerOptions )
 {
   Pointer res = new DataSource( source , mode , layerOptions );
   res->UnRegister();
@@ -620,7 +620,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
 
 void
 otb::ogr::DataSource::
-SetLayerCreationOptions( std::vector< std::string > options )
+SetLayerCreationOptions( const std::vector< std::string > & options )
 {
   FileNameHelperType::Pointer helper = FileNameHelperType::New();
   helper->SetGDALLayerOptions( options );
@@ -639,9 +639,9 @@ AddLayerCreationOptions( std::vector< std::string > options )
   // perf : do we move code from helper->AddGDALLayerOptions in here?
 }
 
-std::vector< std::string >
+const std::vector< std::string > &
 otb::ogr::DataSource::
-GetLayerCreationOptions()
+GetLayerCreationOptions() const
 {
   return m_LayerOptions;
 }

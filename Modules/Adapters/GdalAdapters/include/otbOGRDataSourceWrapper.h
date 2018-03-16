@@ -164,7 +164,7 @@ public:
    * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(GDALDataset *)
    */
-  static Pointer New(ogr::version_proxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read , std::vector< std::string > layerOptions = std::vector< std::string >() );
+  static Pointer New(ogr::version_proxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read , const std::vector< std::string > & layerOptions = std::vector< std::string >() );
   //@}
 
   /**\name Projection Reference property */
@@ -499,9 +499,9 @@ public:
    */
     ogr::version_proxy::GDALDatasetType & ogr();
 
-    void SetLayerCreationOptions( std::vector< std::string > options );
+    void SetLayerCreationOptions( const std::vector< std::string > & options );
     void AddLayerCreationOptions( std::vector< std::string > options );
-    std::vector< std::string > GetLayerCreationOptions();
+    const std::vector< std::string > & GetLayerCreationOptions() const ;
 
 protected:
   /** Default constructor.
@@ -517,7 +517,7 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode , std::vector< std::string > layerOption = std::vector< std::string >() );
+  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode , const std::vector< std::string > & layerOption = std::vector< std::string >() );
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
