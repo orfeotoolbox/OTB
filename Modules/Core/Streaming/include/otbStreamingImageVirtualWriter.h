@@ -24,6 +24,7 @@
 #include "itkMacro.h"
 #include "itkImageToImageFilter.h"
 #include "otbStreamingManager.h"
+#include "itkFastMutexLock.h"
 
 namespace otb
 {
