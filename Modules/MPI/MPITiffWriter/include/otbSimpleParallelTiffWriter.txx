@@ -682,7 +682,7 @@ SimpleParallelTiffWriter<TInputImage>
   double processDuration(0), writeDuration(0), numberOfProcessedRegions(0);
   InputImageRegionType streamRegion;
   for (m_CurrentDivision = 0;
-      m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
+      m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateDataMutex();
       m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
@@ -714,6 +714,16 @@ SimpleParallelTiffWriter<TInputImage>
       writeDuration += writingTime.GetElapsedMilliseconds();
       numberOfProcessedRegions += 1;
       }
+    }
+
+  // abort case
+  if (this->GetAbortGenerateDataMutex())
+    {
+    itk::ProcessAborted e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Image writing has been aborted");
+    throw e;
+    otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
     }
 
   // Clean up
@@ -758,7 +768,7 @@ SimpleParallelTiffWriter<TInputImage>
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
    */
-  if (!this->GetAbortGenerateData())
+  if (!this->GetAbortGenerateDataMutex())
     {
     this->UpdateProgress(1.0);
     }
@@ -823,6 +833,27 @@ SimpleParallelTiffWriter<TInputImage>
  {
   return this->m_FilenameHelper->GetSimpleFileName();
  }
+
+template <class TInputImage>
+bool
+SimpleParallelTiffWriter<TInputImage>
+::GetAbortGenerateDataMutex() const
+{
+  m_Lock.Lock();
+  bool ret = Superclass::GetAbortGenerateData();
+  m_Lock.Unlock();
+  return ret;
+}
+
+template <class TInputImage>
+void
+SimpleParallelTiffWriter<TInputImage>
+::SetAbortGenerateData(bool val)
+{
+  m_Lock.Lock();
+  Superclass::SetAbortGenerateData(val);
+  m_Lock.Unlock();
+}
 
 }
 #endif

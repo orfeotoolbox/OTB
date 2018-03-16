@@ -31,6 +31,7 @@
 #include "itkImageFileWriter.h"
 
 #include "itkObjectFactoryBase.h"
+#include "itkFastMutexLock.h"
 
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
@@ -252,6 +253,11 @@ public:
   itkSetMacro(TiffTiledMode, bool);
   itkGetMacro(TiffTiledMode, bool);
 
+  // the interface of the superclass getter function is not thread safe
+  bool GetAbortGenerateDataMutex() const;
+
+  void SetAbortGenerateData(bool val) override;
+
 protected:
   SimpleParallelTiffWriter();
   virtual ~SimpleParallelTiffWriter();
@@ -325,6 +331,9 @@ private:
   bool m_Verbose;
   bool m_VirtualMode;
   bool m_TiffTiledMode;
+
+  /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 
