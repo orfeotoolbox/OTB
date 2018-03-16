@@ -389,7 +389,7 @@ Application::RegisterPipeline()
   std::set< itk::DataObject * > inputData;
   std::vector<std::string> paramList = GetParametersKeys(true);
   // Get both end of the pipeline
-  for ( key : paramList )
+  for ( auto const & key : paramList )
     {
     if ( GetParameterType(key) == ParameterType_OutputImage )
       {
@@ -465,8 +465,6 @@ Application::RegisterPipeline()
         ++it;
         }
       }
-    else
-      continue;
     }
 
   // DFS
@@ -499,7 +497,7 @@ Application::RegisterPipeline()
     m_Filters.insert( process );
     std::vector< itk::DataObject::Pointer > inputs = process->GetInputs();
     // Push back all source's inputs in datastack
-    for ( auto it : inputs )
+    for ( auto const & it : inputs )
       {
       if ( inputData.count( it.GetPointer() ) )
         continue;
