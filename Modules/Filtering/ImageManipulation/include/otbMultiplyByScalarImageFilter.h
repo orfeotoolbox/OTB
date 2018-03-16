@@ -101,7 +101,7 @@ public:
   }
 protected:
   MultiplyByScalarImageFilter() {}
-  ~MultiplyByScalarImageFilter() ITK_OVERRIDE {}
+  ~MultiplyByScalarImageFilter() override {}
 
 private:
   MultiplyByScalarImageFilter(const Self &); //purposely not implemented

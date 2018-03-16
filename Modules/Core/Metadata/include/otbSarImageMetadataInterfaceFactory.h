@@ -61,7 +61,7 @@ public:
 
 protected:
   SarImageMetadataInterfaceFactory();
-  ~SarImageMetadataInterfaceFactory() ITK_OVERRIDE;
+  ~SarImageMetadataInterfaceFactory() override;
 
 private:
   SarImageMetadataInterfaceFactory(const Self &); //purposely not implemented

@@ -78,11 +78,11 @@ public:
 
 protected:
   HarrisImageToPointSetFilter();
-  ~HarrisImageToPointSetFilter() ITK_OVERRIDE {}
+  ~HarrisImageToPointSetFilter() override {}
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   HarrisImageToPointSetFilter(const Self &); //purposely not implemented

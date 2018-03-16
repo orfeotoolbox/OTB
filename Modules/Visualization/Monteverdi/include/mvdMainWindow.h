@@ -125,7 +125,7 @@ public:
   MainWindow( QWidget* p =0, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~MainWindow() ITK_OVERRIDE;
+  ~MainWindow() override;
 
   /**
    */
@@ -183,7 +183,7 @@ protected:
   //
   // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event ) ITK_OVERRIDE;
+  void closeEvent( QCloseEvent* event ) override;
 
 //
 // Protected attributes.
@@ -197,11 +197,11 @@ protected slots:
 
   /**
    */
-  void OnAboutToChangeModel( const AbstractModel * ) ITK_OVERRIDE;
+  void OnAboutToChangeModel( const AbstractModel * ) override;
 
   /**
    */
-  void OnModelChanged( AbstractModel * ) ITK_OVERRIDE;
+  void OnModelChanged( AbstractModel * ) override;
 
   /**
    */
@@ -344,11 +344,11 @@ private:
   //
   // I18nMainWindow methods.
 
-  void virtual_SetupUI() ITK_OVERRIDE;
+  void virtual_SetupUI() override;
 
-  void virtual_ConnectUI() ITK_OVERRIDE;
+  void virtual_ConnectUI() override;
 
-  void virtual_InitializeUI() ITK_OVERRIDE;
+  void virtual_InitializeUI() override;
 
 //
 // Private attributes.

@@ -78,7 +78,7 @@ public:
 
 protected:
   PlatformPositionAdapter();
-  ~PlatformPositionAdapter() ITK_OVERRIDE;
+  ~PlatformPositionAdapter() override;
 
 private:
   PlatformPositionAdapter(const Self &); //purposely not implemented

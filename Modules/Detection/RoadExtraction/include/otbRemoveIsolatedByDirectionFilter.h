@@ -109,14 +109,14 @@ protected:
   /** Constructor */
   RemoveIsolatedByDirectionFilter() {};
   /** Destructor */
-  ~RemoveIsolatedByDirectionFilter() ITK_OVERRIDE {}
+  ~RemoveIsolatedByDirectionFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE
+  void GenerateData(void) override
   {
     typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
     filter->SetInput1(this->GetInput());

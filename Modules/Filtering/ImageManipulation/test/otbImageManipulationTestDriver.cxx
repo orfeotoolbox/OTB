@@ -61,8 +61,6 @@ void RegisterTests()
   REGISTER_TEST(otbPhaseFunctorTest);
   REGISTER_TEST(otbShiftScaleVectorImageFilterNew);
   REGISTER_TEST(otbChangeLabelImageFilter);
-  REGISTER_TEST(otbClampVectorImageFilterNew);
-  REGISTER_TEST(otbClampVectorImageFilterTest);
   REGISTER_TEST(otbPrintableImageFilterNew);
   REGISTER_TEST(otbShiftScaleImageAdaptorNew);
   REGISTER_TEST(otbStreamingInnerProductVectorImageFilterNew);
@@ -87,6 +85,7 @@ void RegisterTests()
   REGISTER_TEST(otbMultiplyByScalarImageFilterTest);
   REGISTER_TEST(otbClampImageFilterNew);
   REGISTER_TEST(otbClampImageFilterTest);
+  REGISTER_TEST(otbClampImageFilterConversionTest);
   REGISTER_TEST(otbConcatenateVectorImageFilter);
   REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculatorNew);
   REGISTER_TEST(otbVectorRescaleIntensityImageFilterNew);

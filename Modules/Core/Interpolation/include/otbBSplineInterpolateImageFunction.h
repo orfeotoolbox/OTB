@@ -108,7 +108,7 @@ public:
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
   OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& index) const ITK_OVERRIDE;
+    const ContinuousIndexType& index) const override;
 
   /** Derivative typedef support */
   typedef itk::CovariantVector<OutputType,
@@ -131,7 +131,7 @@ public:
   itkGetMacro(SplineOrder, int);
 
   /** Set the input image.  This must be set by the user. */
-  void SetInputImage(const TImageType * inputData) ITK_OVERRIDE;
+  void SetInputImage(const TImageType * inputData) override;
 
   /** Update coefficients filter. Coefficient filter are computed over the buffered
    region of the input image. */
@@ -139,9 +139,9 @@ public:
 
 protected:
   BSplineInterpolateImageFunction();
-  ~BSplineInterpolateImageFunction() ITK_OVERRIDE {}
+  ~BSplineInterpolateImageFunction() override {}
   void operator =(const Self&);  //purposely not implemented
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   // These are needed by the smoothing spline routine.
   std::vector<CoefficientDataType> m_Scratch;           // temp storage for processing of Coefficients

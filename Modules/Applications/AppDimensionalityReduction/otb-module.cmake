@@ -25,9 +25,11 @@ otb_module(OTBAppDimensionalityReduction
   DEPENDS
     OTBImageManipulation
     OTBStatistics
+    OTBIOXML
     OTBApplicationEngine
     OTBDimensionalityReduction
-  TEST_DEPENDS
+    OTBDimensionalityReductionLearning
+    TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
   

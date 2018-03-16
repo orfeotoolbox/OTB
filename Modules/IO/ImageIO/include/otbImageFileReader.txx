@@ -107,7 +107,6 @@ void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::SetImageIO( otb::ImageIOBase * imageIO)
 {
-  itkDebugMacro("setting ImageIO to " << imageIO );
   if (this->m_ImageIO != imageIO )
     {
     this->m_ImageIO = imageIO;
@@ -206,12 +205,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
-
-    otbMsgDevMacro(<< "buffer size for ImageIO::read = " << nbBytes << " = \n"
-        << "ComponentSize ("<< this->m_ImageIO->GetComponentSize() << ") x " \
-        << "Nb of Component ( max(" << this->m_ImageIO->GetNumberOfComponents() \
-        << " , "<<m_BandList.size() << ") ) x " \
-        << "Nb of Pixel to read (" << region.GetNumberOfPixels() << ")");
 
     this->m_ImageIO->Read(loadBuffer);
 
@@ -398,18 +391,40 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     {
 
     std::string lFileNameOssimKeywordlist = GetDerivedDatasetSourceFileName(m_FileName);
+    std::string extension = itksys::SystemTools::GetFilenameLastExtension(lFileNameOssimKeywordlist);
+    std::string attachedGeom = lFileNameOssimKeywordlist.substr(
+      0,
+      lFileNameOssimKeywordlist.size() - extension.size()) + std::string(".geom");
 
     // Update otb Keywordlist
     ImageKeywordlist otb_kwl;
-    if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
-      {
-      otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
-      otbMsgDevMacro(<< "Loading internal kwl");
-      }
-    else
+
+    // Case 1: external geom supplied through extended filename
+    if (m_FilenameHelper->ExtGEOMFileNameIsSet())
       {
       otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
-      otbMsgDevMacro(<< "Loading external kwl");
+      otbLogMacro(Info,<< "Loading kwl metadata from external geom file "<< m_FilenameHelper->GetExtGEOMFileName());
+      }
+    // Case 2: attached geom (if present)
+    else if (itksys::SystemTools::FileExists(attachedGeom))
+      {
+      otb_kwl = ReadGeometryFromGEOMFile(attachedGeom);
+      otbLogMacro(Info,<< "Loading kwl metadata from attached geom file "<<attachedGeom);
+      }
+    // Case 3: find an ossimPluginProjection
+    // Case 4: find an ossimProjection
+    // Case 5: find RPC tags in TIF
+    else
+      {
+      otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
+      if(!otb_kwl.Empty())
+        {
+        otbLogMacro(Info,<< "Loading kwl metadata from official product in file "<<lFileNameOssimKeywordlist);
+        }
+      else
+        {
+        otbLogMacro(Info,<< "No kwl metadata found in file "<<lFileNameOssimKeywordlist);
+        }
       }
 
     // Don't add an empty ossim keyword list
@@ -629,8 +644,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     fic_trouve = true;
     }
 
-  otbMsgDevMacro(<< "lFileNameGdal : " << GdalFileName.c_str());
-  otbMsgDevMacro(<< "fic_trouve : " << fic_trouve);
   return (fic_trouve);
 }
 

@@ -54,7 +54,7 @@ Download, Configure and build OTB
 ::
 
     mkdir -p /opt/OTB/build && cd /opt/OTB
-    git clone --depth=1 --branch=develop https://git@git.orfeo-toolbox.org/git/otb.git source
+    git clone --depth=1 --branch=develop https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git source
     cd build && cmake ../source 
     make -j2
 

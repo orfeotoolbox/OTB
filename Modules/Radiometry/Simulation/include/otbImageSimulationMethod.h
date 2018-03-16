@@ -166,13 +166,13 @@ public:
 
 protected:
   ImageSimulationMethod();
-  ~ImageSimulationMethod() ITK_OVERRIDE
+  ~ImageSimulationMethod() override
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   //    virtual void GenerateData();
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
   ImageSimulationMethod(const Self &); //purposely not implemented

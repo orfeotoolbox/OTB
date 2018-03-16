@@ -49,7 +49,7 @@ signals:
 
 public:
   QtStringSelectionWidget();
-  ~QtStringSelectionWidget() ITK_OVERRIDE;
+  ~QtStringSelectionWidget() override;
 
   bool IsChecked()
   {

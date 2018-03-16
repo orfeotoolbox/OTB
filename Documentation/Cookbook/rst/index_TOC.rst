@@ -8,6 +8,7 @@ Table of Contents
    Installation
    OTB-Applications
    Monteverdi
+   AdvancedUse
    Recipes
    Applications
    FAQ

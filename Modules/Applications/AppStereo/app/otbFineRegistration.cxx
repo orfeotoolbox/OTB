@@ -114,7 +114,7 @@ public:
   typedef otb::ImageFileReader<VectorImageType>         InternalReaderType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("FineRegistration");
     SetDescription("Estimate disparity map between two images.");
@@ -266,12 +266,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType::Pointer refImage = GetParameterImage("ref"); // fixed
     FloatVectorImageType::Pointer secImage = GetParameterImage("sec"); // moved

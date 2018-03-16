@@ -72,13 +72,13 @@ public:
    *  a certain dimensions, then some splits will not be possible.
    */
   unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber) ITK_OVERRIDE;
+                                         unsigned int requestedNumber) override;
 
   /** Get a region definition that represents the ith piece a specified region.
    * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
   RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region) ITK_OVERRIDE;
+                              const RegionType& region) override;
 
   itkGetMacro(TileSizeAlignment, unsigned int);
 
@@ -89,8 +89,8 @@ public:
 
 protected:
   StreamingShrinkImageRegionSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(0), m_ShrinkFactor(10) {}
-  ~StreamingShrinkImageRegionSplitter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~StreamingShrinkImageRegionSplitter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   StreamingShrinkImageRegionSplitter(const StreamingShrinkImageRegionSplitter &); //purposely not implemented
@@ -130,7 +130,7 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) ITK_OVERRIDE;
+  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
 
   void SetShrinkFactor(unsigned int val)
   {
@@ -144,7 +144,7 @@ public:
 
 protected:
   StreamingShrinkStreamingManager();
-  ~StreamingShrinkStreamingManager() ITK_OVERRIDE;
+  ~StreamingShrinkStreamingManager() override;
 
 private:
   StreamingShrinkStreamingManager(const StreamingShrinkStreamingManager &); //purposely not implemented
@@ -203,9 +203,9 @@ public:
     return m_ShrunkOutput;
   }
   
-  void Synthetize(void) ITK_OVERRIDE;
+  void Synthetize(void) override;
 
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
 
   itkSetMacro(ShrinkFactor, unsigned int);
   itkGetMacro(ShrinkFactor, unsigned int);
@@ -213,23 +213,23 @@ public:
 protected:
   PersistentShrinkImageFilter();
 
-  ~PersistentShrinkImageFilter() ITK_OVERRIDE;
+  ~PersistentShrinkImageFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void  BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void  BeforeThreadedGenerateData() override;
 
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void  AfterThreadedGenerateData() ITK_OVERRIDE;
+  void  AfterThreadedGenerateData() override;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 
 private:
@@ -305,7 +305,7 @@ public:
   otbSetObjectMemberMacro(Filter, ShrinkFactor, unsigned int);
   otbGetObjectMemberMacro(Filter, ShrinkFactor, unsigned int);
 
-  void Update(void) ITK_OVERRIDE
+  void Update(void) override
   {
     m_StreamingManager->SetShrinkFactor( this->GetFilter()->GetShrinkFactor() );
     Superclass::Update();
@@ -321,7 +321,7 @@ protected:
   }
 
   /** Destructor */
-  ~StreamingShrinkImageFilter() ITK_OVERRIDE {}
+  ~StreamingShrinkImageFilter() override {}
 
 private:
   StreamingShrinkImageFilter(const Self &); //purposely not implemented

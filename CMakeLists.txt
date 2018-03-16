@@ -123,7 +123,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "4")
+set(OTB_VERSION_MINOR "5")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -231,10 +231,6 @@ mark_as_advanced(OTB_USE_DEPRECATED)
 
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
-#-----------------------------------------------------------------------------
-# SHOW_ALL_MSG_DEBUG option
-option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
-#mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------

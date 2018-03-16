@@ -32,10 +32,14 @@ set( OTBApplicationEngine_SRC
   otbWrapperOutputImageParameter.cxx
   otbWrapperInputImageParameter.cxx
   otbWrapperInputImageParameterUInt8.cxx
-  otbWrapperInputImageParameterInt16.cxx
   otbWrapperInputImageParameterUInt16.cxx
-  otbWrapperInputImageParameterInt32.cxx
   otbWrapperInputImageParameterUInt32.cxx
+  otbWrapperInputImageParameterInt16.cxx
+  otbWrapperInputImageParameterInt32.cxx
+  otbWrapperInputImageParameterCInt16.cxx
+  otbWrapperInputImageParameterCInt32.cxx
+  otbWrapperInputImageParameterCFloat.cxx
+  otbWrapperInputImageParameterCDouble.cxx
   otbWrapperInputImageParameterFloat.cxx
   otbWrapperInputImageParameterDouble.cxx
   otbWrapperParameterKey.cxx
@@ -52,7 +56,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperStringListParameter.cxx
   otbWrapperAbstractParameterList.cxx
   otbWrapperParameterList.cxx
-  otbLogger.cxx
+  otbWrapperBoolParameter.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})

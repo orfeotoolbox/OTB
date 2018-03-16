@@ -114,15 +114,15 @@ public:
   itkSetMacro(Direction, unsigned int);
   itkGetConstMacro(Direction, unsigned int);
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   AddCarvingPathFilter();
-  ~AddCarvingPathFilter() ITK_OVERRIDE {}
+  ~AddCarvingPathFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void GenerateData() override;
 
 private:
   AddCarvingPathFilter(const Self &); //purposely not implemented

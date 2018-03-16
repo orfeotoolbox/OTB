@@ -79,7 +79,7 @@ public:
 
 protected:
   ApplicationRegistry();
-  ~ApplicationRegistry() ITK_OVERRIDE;
+  ~ApplicationRegistry() override;
 
 private:
   ApplicationRegistry(const Self&); //purposely not implemented

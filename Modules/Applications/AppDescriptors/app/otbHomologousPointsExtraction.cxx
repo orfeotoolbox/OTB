@@ -80,7 +80,7 @@ public:
   itkTypeMacro(HomologousPointsExtraction, otb::Wrapper::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("HomologousPointsExtraction");
     SetDocName("Homologous points extraction");
@@ -135,10 +135,8 @@ private:
     SetMinimumParameterFloatValue("threshold",0.0);
     SetDefaultParameterFloat("threshold",0.6);
 
-    AddParameter(ParameterType_Empty,"backmatching","Use back-matching to filter matches.");
+    AddParameter(ParameterType_Bool,"backmatching","Use back-matching to filter matches.");
     SetParameterDescription("backmatching","If set to true, matches should be consistent in both ways.");
-    MandatoryOff("backmatching");
-    DisableParameter("backmatching");
 
     AddParameter(ParameterType_Choice,"mode","Keypoints search mode");
 
@@ -177,10 +175,10 @@ private:
     SetParameterDescription("precision","Estimated precision of the colocalisation function in pixels");
     SetDefaultParameterFloat("precision",0.);
 
-    AddParameter(ParameterType_Empty,"mfilter","Filter points according to geographical or sensor based colocalisation");
+    AddParameter(ParameterType_Bool,"mfilter","Filter points according to geographical or sensor based colocalisation");
     SetParameterDescription("mfilter","If enabled, this option allows one to filter matches according to colocalisation from sensor or geographical information, using the given tolerancy expressed in pixels");
 
-    AddParameter(ParameterType_Empty,"2wgs84","If enabled, points from second image will be exported in WGS84");
+    AddParameter(ParameterType_Bool,"2wgs84","If enabled, points from second image will be exported in WGS84");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -202,7 +200,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
 
   }
@@ -251,7 +249,7 @@ private:
       matchingFilter->SetInput1(surf1->GetOutput());
       matchingFilter->SetInput2(surf2->GetOutput());
       matchingFilter->SetDistanceThreshold(GetParameterFloat("threshold"));
-      matchingFilter->SetUseBackMatching(IsParameterEnabled("backmatching"));
+      matchingFilter->SetUseBackMatching(GetParameterInt("backmatching"));
       }
 
     try
@@ -276,7 +274,7 @@ private:
 
         bool filtered = false;
 
-        if(IsParameterEnabled("mfilter"))
+        if(GetParameterInt("mfilter"))
           {
           pprime1 = rsTransform->TransformPoint(point1);
           error = vcl_sqrt((point2[0]-pprime1[0])*(point2[0]-pprime1[0])+(point2[1]-pprime1[1])*(point2[1]-pprime1[1]));
@@ -289,7 +287,7 @@ private:
 
         if(!filtered)
           {
-          if(IsParameterEnabled("2wgs84"))
+          if(GetParameterInt("2wgs84"))
             {
             pprime2 = rsTransform2ToWGS84->TransformPoint(point2);
 
@@ -326,7 +324,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     OGRMultiLineString mls;
 
