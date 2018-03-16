@@ -113,11 +113,11 @@ else(MSVC)
     ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
 
   foreach(opt_line ${GDAL_SB_EXTRA_OPTIONS})
-    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "${opt_line}")
+    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "${opt_line}\r\n")
   endforeach()
   
   if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
-    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES")
+    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES\r\n")
   endif()
   
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)
