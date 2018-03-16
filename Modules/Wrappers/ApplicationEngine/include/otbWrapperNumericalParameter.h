@@ -54,7 +54,7 @@ public:
   typedef T ScalarType;
 
   /** Implement the reset method (replace value by default value) */
-  void Reset() ITK_OVERRIDE
+  void Reset() override
   {
     m_Value = m_DefaultValue;
   }
@@ -88,12 +88,12 @@ public:
     return boost::any_cast<ScalarType>(m_Value);
   }
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return !m_Value.empty();
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     m_Value = boost::any();
   }
@@ -125,7 +125,7 @@ protected:
   {}
 
   /** Destructor */
-  ~NumericalParameter() ITK_OVERRIDE
+  ~NumericalParameter() override
   {}
 
   /** Value */

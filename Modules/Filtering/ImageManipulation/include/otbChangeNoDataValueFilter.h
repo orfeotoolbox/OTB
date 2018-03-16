@@ -137,10 +137,10 @@ protected:
   ChangeNoDataValueFilter()
   {}
 
-  ~ChangeNoDataValueFilter() ITK_OVERRIDE
+  ~ChangeNoDataValueFilter() override
   {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation();
 

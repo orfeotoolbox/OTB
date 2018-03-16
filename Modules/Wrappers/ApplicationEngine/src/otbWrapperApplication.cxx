@@ -37,7 +37,7 @@
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperParameterKey.h"
-
+#include "otbWrapperBoolParameter.h"
 
 #include "otbWrapperAddProcessToWatchEvent.h"
 
@@ -65,7 +65,8 @@ Application::Application()
     m_Doclink(""),
     m_HaveInXML(true),
     m_HaveOutXML(true),
-    m_IsInXMLParsed(false)
+    m_IsInXMLParsed(false),
+    m_IsInPrivateDo(false)
 {
   // Don't call Init from the constructor, since it calls a virtual method !
   m_Logger->SetName("Application.logger");
@@ -137,6 +138,11 @@ void Application::SetParameterInt(std::string parameter, int value, bool hasUser
     {
     ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
     paramChoice->SetValue(value);
+    }
+  else if (dynamic_cast<BoolParameter*>(param))
+    {
+    BoolParameter* paramBool = dynamic_cast<BoolParameter*>(param);
+    paramBool->SetValue(static_cast<bool>(value));
     }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
@@ -250,6 +256,11 @@ void Application::SetParameterString(std::string parameter, std::string value, b
     if ( !paramDown->SetFileName(value) )
     otbAppLogCRITICAL( <<"Invalid XML parameter filename " << value <<".");
     }
+  else if (dynamic_cast<BoolParameter*>(param))
+    {
+    BoolParameter* paramDown = dynamic_cast<BoolParameter*>(param);
+    paramDown->SetValue(value);
+    }
   else
     {
     otbAppLogWARNING( <<"This parameter can't be set using SetParameterString().");
@@ -293,8 +304,8 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
 
 void Application::SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag)
 {
-  GetParameterByKey(parameter)->SetActive(value);
   this->SetParameterUserValue(parameter, hasUserValueFlag);
+  GetParameterByKey(parameter)->SetActive(value);
 }
 
 void Application::SetParameterUserValue(std::string paramKey, bool value)
@@ -304,7 +315,14 @@ void Application::SetParameterUserValue(std::string paramKey, bool value)
   using Application::EnableParameter();
   **/
   EnableParameter(paramKey);
-  GetParameterByKey(paramKey)->SetUserValue(value);
+  if (m_IsInPrivateDo)
+    {
+    GetParameterByKey(paramKey)->SetUserValue(false);
+    }
+  else
+    {
+    GetParameterByKey(paramKey)->SetUserValue(value);
+    }
 }
 
 const Parameter* Application::GetParameterByKey(std::string name, bool follow) const
@@ -320,7 +338,9 @@ void Application::Init()
   m_ParameterList = ParameterGroup::New();
   //reset inXML parse checker in case if reinit-ing
   m_IsInXMLParsed = false;
+  m_IsInPrivateDo = true;
   this->DoInit();
+  m_IsInPrivateDo = false;
 
   //rashad: global parameters. now used only for inxml and outxml
   if(this->GetHaveInXML())
@@ -352,7 +372,9 @@ void Application::UpdateParameters()
         }
       }
     }
+  m_IsInPrivateDo = true;
   this->DoUpdateParameters();
+  m_IsInPrivateDo = false;
 }
 
 void Application::AfterExecuteAndWriteOutputs()
@@ -387,7 +409,9 @@ int Application::Execute()
       itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
     }
 
+  m_IsInPrivateDo = true;
   this->DoExecute();
+  m_IsInPrivateDo = false;
   
   // Ensure that all output image parameter have called UpdateOutputInformation()
   for (auto it = paramList.begin(); it != paramList.end(); ++it)
@@ -730,6 +754,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_InputProcessXML;
     }
+  else if (dynamic_cast<const BoolParameter*>(param))
+    {
+    type = ParameterType_Bool;
+    }
   else
     {
     itkExceptionMacro(<< "Unknown parameter : " << paramKey);
@@ -1013,6 +1041,16 @@ int Application::GetParameterInt(std::string parameter)
     ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
     ret = paramChoice->GetValue();
     }
+  else if (dynamic_cast<BoolParameter*>(param))
+    {
+    BoolParameter* paramBool = dynamic_cast<BoolParameter*>(param);
+    ret = static_cast<int>(paramBool->GetValue());
+    }
+  else if (dynamic_cast<EmptyParameter*>(param))
+    {
+    // This case is here for compatibility purpose with deprecated EmptyParameter
+    ret = static_cast<int>(this->IsParameterEnabled(parameter));
+    }
   else
     {
      itkExceptionMacro(<<parameter << " parameter can't be casted to int");
@@ -1133,6 +1171,11 @@ std::string Application::GetParameterString(std::string parameter)
     {
     InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
     ret = paramDown->GetFileName();
+    }
+  else if (dynamic_cast<BoolParameter*>(param))
+    {
+    BoolParameter* paramDown = dynamic_cast<BoolParameter*>(param);
+    ret = paramDown->GetValueAsString();
     }
   else
    {
@@ -1456,7 +1499,8 @@ std::string Application::GetParameterAsString(std::string paramKey)
       || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData
       || type == ParameterType_ListView || type == ParameterType_Choice
-      || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML )
+      || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML
+      || type == ParameterType_Bool)
     {
       ret = this->GetParameterString( paramKey );
     }

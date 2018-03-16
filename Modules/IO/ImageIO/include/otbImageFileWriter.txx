@@ -99,7 +99,6 @@ ImageFileWriter<TInputImage>
   typedef NumberOfDivisionsStrippedStreamingManager<TInputImage> NumberOfDivisionsStrippedStreamingManagerType;
   typename NumberOfDivisionsStrippedStreamingManagerType::Pointer streamingManager = NumberOfDivisionsStrippedStreamingManagerType::New();
   streamingManager->SetNumberOfDivisions(nbDivisions);
-
   m_StreamingManager = streamingManager;
 }
 
@@ -111,7 +110,6 @@ ImageFileWriter<TInputImage>
   typedef NumberOfDivisionsTiledStreamingManager<TInputImage> NumberOfDivisionsTiledStreamingManagerType;
   typename NumberOfDivisionsTiledStreamingManagerType::Pointer streamingManager = NumberOfDivisionsTiledStreamingManagerType::New();
   streamingManager->SetNumberOfDivisions(nbDivisions);
-
   m_StreamingManager = streamingManager;
 }
 
@@ -123,7 +121,6 @@ ImageFileWriter<TInputImage>
   typedef NumberOfLinesStrippedStreamingManager<TInputImage> NumberOfLinesStrippedStreamingManagerType;
   typename NumberOfLinesStrippedStreamingManagerType::Pointer streamingManager = NumberOfLinesStrippedStreamingManagerType::New();
   streamingManager->SetNumberOfLinesPerStrip(nbLinesPerStrip);
-
   m_StreamingManager = streamingManager;
 }
 
@@ -136,7 +133,6 @@ ImageFileWriter<TInputImage>
   typename RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
   streamingManager->SetAvailableRAMInMB(availableRAM);
   streamingManager->SetBias(bias);
-
   m_StreamingManager = streamingManager;
 }
 
@@ -147,8 +143,7 @@ ImageFileWriter<TInputImage>
 {
   typedef TileDimensionTiledStreamingManager<TInputImage> TileDimensionTiledStreamingManagerType;
   typename TileDimensionTiledStreamingManagerType::Pointer streamingManager = TileDimensionTiledStreamingManagerType::New();
-  streamingManager->SetTileDimension(tileDimension);
-
+  streamingManager->SetTileDimension(tileDimension);  
   m_StreamingManager = streamingManager;
 }
 
@@ -238,7 +233,6 @@ void
 ImageFileWriter<TInputImage>
 ::SetIORegion(const itk::ImageIORegion& region)
 {
-  itkDebugMacro("setting IORegion to " << region);
   if (m_IORegion != region)
     {
     m_IORegion = region;
@@ -289,7 +283,7 @@ ImageFileWriter<TInputImage>
   /** Parse streaming modes */
   if(m_FilenameHelper->StreamingTypeIsSet())
     {
-    itkWarningMacro(<<"Streaming configuration through extended filename is used. Any previous streaming configuration (ram value, streaming mode ...) will be ignored.");
+    otbLogMacro(Warning,<<"Streaming configuration through extended filename is used. Any previous streaming configuration (ram value, streaming mode ...) will be ignored.");
 
     std::string type = m_FilenameHelper->GetStreamingType();
 
@@ -311,11 +305,11 @@ ImageFileWriter<TInputImage>
       {
       if(sizemode != "auto")
         {
-        itkWarningMacro(<<"In auto streaming type, the sizemode option will be ignored.");
+        otbLogMacro(Warning,<<"In auto streaming type, the sizemode option will be ignored.");
         }
       if(sizevalue == 0.)
         {
-        itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
+        otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
         }
       this->SetAutomaticAdaptativeStreaming(sizevalue);
       }
@@ -325,7 +319,7 @@ ImageFileWriter<TInputImage>
         {
         if(sizevalue == 0.)
           {
-          itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
+          otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
           }
         this->SetAutomaticTiledStreaming(sizevalue);
         }
@@ -333,7 +327,7 @@ ImageFileWriter<TInputImage>
         {
         if(sizevalue == 0.)
           {
-          itkWarningMacro("Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
+          otbLogMacro(Warning,<<"Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
         this->SetNumberOfDivisionsTiledStreaming(static_cast<unsigned int>(sizevalue));
         }
@@ -341,7 +335,7 @@ ImageFileWriter<TInputImage>
         {
         if(sizevalue == 0.)
           {
-          itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
+          otbLogMacro(Warning,<<"Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
 
         this->SetTileDimensionTiledStreaming(static_cast<unsigned int>(sizevalue));
@@ -353,7 +347,7 @@ ImageFileWriter<TInputImage>
         {
         if(sizevalue == 0.)
           {
-          itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
+          otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
           }
 
         this->SetAutomaticStrippedStreaming(sizevalue);
@@ -362,7 +356,7 @@ ImageFileWriter<TInputImage>
         {
         if(sizevalue == 0.)
           {
-          itkWarningMacro("Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
+          otbLogMacro(Warning,<<"Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
         this->SetNumberOfDivisionsStrippedStreaming(static_cast<unsigned int>(sizevalue));
         }
@@ -370,7 +364,7 @@ ImageFileWriter<TInputImage>
         {
         if(sizevalue == 0.)
           {
-          itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
+          otbLogMacro(Warning,<<"Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
         this->SetNumberOfLinesStrippedStreaming(static_cast<unsigned int>(sizevalue));
         }
@@ -380,7 +374,7 @@ ImageFileWriter<TInputImage>
       {
       if(sizemode!="" || sizevalue!=0.)
         {
-        itkWarningMacro("Streaming is explicitly disabled, sizemode and sizevalue will be ignored.");
+        otbLogMacro(Warning,<<"Streaming is explicitly disabled, sizemode and sizevalue will be ignored.");
         }
       this->SetNumberOfDivisionsTiledStreaming(0);
       }
@@ -389,7 +383,7 @@ ImageFileWriter<TInputImage>
     {
     if(m_FilenameHelper->StreamingSizeValueIsSet() || m_FilenameHelper->StreamingSizeModeIsSet())
       {
-      itkWarningMacro(<<"No streaming type is set, streaming sizemode and sizevalue will be ignored.");
+      otbLogMacro(Warning,<<"No streaming type is set, streaming sizemode and sizevalue will be ignored.");
       }
     }
 
@@ -418,8 +412,6 @@ ImageFileWriter<TInputImage>
 
   if (m_ImageIO.IsNull())   //try creating via factory
     {
-    itkDebugMacro(<< "Attempting factory creation of ImageIO for file: "
-                  << m_FileName);
     this->SetImageIO(ImageIOFactory::CreateImageIO(m_FileName.c_str(),
                                                    otb::ImageIOFactory::WriteMode));
 
@@ -429,13 +421,8 @@ ImageFileWriter<TInputImage>
     {
     if (!m_ImageIO->CanWriteFile(m_FileName.c_str()))
       {
-      itkDebugMacro(<< "ImageIO exists but doesn't know how to write file:"
-                    << m_FileName);
-
       if (m_FactorySpecifiedImageIO)
         {
-        itkDebugMacro(<< "Attempting creation of ImageIO with a factory for file:"
-                      << m_FileName);
         m_ImageIO = ImageIOFactory::CreateImageIO(m_FileName.c_str(),
                                                   otb::ImageIOFactory::WriteMode);
         m_FactorySpecifiedImageIO = true;
@@ -514,7 +501,7 @@ ImageFileWriter<TInputImage>
       e.SetDataObject(inputPtr);
       throw e;
       }
-    otbMsgDevMacro(<< "inputRegion " << inputRegion);
+    otbLogMacro(Info,<<"Writing user defined region ["<<start[0]<<", "<<start[0]+size[0]-1<<"]x["<<start[1]<<", "<<start[1]+size[1]<<"]");
     }
 
   /**
@@ -526,9 +513,8 @@ ImageFileWriter<TInputImage>
   /** Control if the ImageIO is CanStreamWrite */
   if (m_ImageIO->CanStreamWrite() == false)
     {
-    otbWarningMacro(
-      << "The ImageFactory selected for the image file <" << m_FileName.c_str() <<
-      "> does not support streaming.");
+    otbLogMacro(Warning,<<"The file format of " << m_FileName <<
+      " does not support streaming. All data will be loaded to memory");
     this->SetNumberOfDivisionsStrippedStreaming(1);
     }
 
@@ -537,12 +523,14 @@ ImageFileWriter<TInputImage>
   * Not sure that if this modification is needed  */
   else if (inputPtr->GetBufferedRegion() == inputRegion)
     {
-    otbMsgDevMacro(<< "Buffered region is the largest possible region, there is no need for streaming.");
+    otbLogMacro(Debug,<< "Buffered region is the largest possible region, there is no need for streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(1);
     }
   m_StreamingManager->PrepareStreaming(inputPtr, inputRegion);
   m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
-  otbMsgDebugMacro(<< "Number Of Stream Divisions : " << m_NumberOfDivisions);
+
+  const auto firstSplitSize = m_StreamingManager->GetSplit(0).GetSize();
+  otbLogMacro(Info,<<"File "<<m_FileName<<" will be written in "<<m_NumberOfDivisions<<" blocks of "<<firstSplitSize[0]<<"x"<<firstSplitSize[1]<<" pixels");
 
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
@@ -612,7 +600,7 @@ ImageFileWriter<TInputImage>
     }
   else
     {
-    itkWarningMacro(<< "Could not get the source process object. Progress report might be buggy");
+    otbLogMacro(Warning,<< "Could not get the source process object. Progress report might be buggy");
     }
 
   for (m_CurrentDivision = 0;
@@ -753,9 +741,6 @@ ImageFileWriter<TInputImage>
     {
     if ( m_NumberOfDivisions > 1 || m_UserSpecifiedIORegion)
       {
-      itkDebugMacro("Requested stream region does not match generated output");
-      itkDebugMacro("input filter may not support streaming well");
-
       cacheImage = InputImageType::New();
       cacheImage->CopyInformation(input);
 

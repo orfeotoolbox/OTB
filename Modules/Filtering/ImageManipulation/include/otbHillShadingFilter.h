@@ -82,7 +82,7 @@ public:
 
 protected:
   HillShadingFilter() {}
-  ~HillShadingFilter() ITK_OVERRIDE {}
+  ~HillShadingFilter() override {}
 
 private:
   HillShadingFilter(const Self &); //purposely not implemented

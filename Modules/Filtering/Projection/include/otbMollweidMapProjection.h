@@ -59,7 +59,7 @@ public:
 
 protected:
   MollweidMapProjection();
-  ~MollweidMapProjection() ITK_OVERRIDE;
+  ~MollweidMapProjection() override;
 
 private:
   MollweidMapProjection(const Self &); //purposely not implemented

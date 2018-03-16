@@ -227,11 +227,11 @@ StreamingImageVirtualWriter<TInputImage>
     m_ObserverID = source->AddObserver(itk::ProgressEvent(), command);
     m_IsObserving = true;
     }
-  else
-    {
-    itkWarningMacro(<< "Could not get the source process object. Progress report might be buggy");
-    }
 
+  const auto firstSplitSize = m_StreamingManager->GetSplit(0).GetSize();
+  otbLogMacro(Info,<<"Estimation will be performed in "<<m_NumberOfDivisions<<" blocks of "<<firstSplitSize[0]<<"x"<<firstSplitSize[1]<<" pixels");
+
+  
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
@@ -242,7 +242,6 @@ StreamingImageVirtualWriter<TInputImage>
        m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
-    otbMsgDevMacro(<< "Processing region : " << streamRegion )
     //inputPtr->ReleaseData();
     //inputPtr->SetRequestedRegion(streamRegion);
     //inputPtr->Update();

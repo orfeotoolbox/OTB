@@ -241,8 +241,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 
   if (projection)
     {
-    otbMsgDevMacro(<< "OSSIM plugin projection instantiated ! ");
-
     hasMetaData = projection->saveState(geom_kwl);
     otb_kwl.SetKeywordlist(geom_kwl);
     }
@@ -257,7 +255,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
                                  ->open(ossimFilename(filename.c_str())));
     if (handler)
       {
-      otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
 
       // Add ossimPlugins model
       ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
@@ -273,7 +270,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
           // if the handler has found a sensor model, copy the tags found
           if (hasMetaData && dynamic_cast<ossimSensorModel const*>(projection))
             {
-            otbMsgDevMacro(<<"OSSIM sensor projection instantiated ! ");
             otb_kwl.SetKeywordlist(geom_kwl);
             // geom_kwl.print(std::cout);
             }
@@ -316,16 +312,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   // We then verify it is a valid sensor model by using otb::SensorModelAdapter
   // which uses ossimSensorModelFactory and ossimPluginProjectionFactory internally,
   // thus by-passing the need for a valid ossimImageHandler.
-
-  if (!hasMetaData)
-    {
-    otbMsgDevMacro(<< "OSSIM MetaData not present ! ");
-    }
-  else
-    {
-    otbMsgDevMacro(<< "OSSIM MetaData present ! ");
-    //otbMsgDevMacro(<< geom_kwl);
-    }
 
   return otb_kwl;
 }
@@ -479,7 +465,6 @@ WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename)
 
   if (geom_kwl.getSize() > 0)
     {
-    otbMsgDevMacro(<< "Exporting keywordlist ...");
     ossimFilename geomFileName(filename);
     geomFileName.setExtension(".geom");
     geom_kwl.write(geomFileName.chars());

@@ -96,11 +96,11 @@ public:
 
 protected:
   LabelizeImageFilterBase();
-  ~LabelizeImageFilterBase() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LabelizeImageFilterBase() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Region growing */
   virtual void RegionGrowing(const IndexType itkNotUsed(indexSeed)) {}

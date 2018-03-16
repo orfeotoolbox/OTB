@@ -26,7 +26,7 @@ otb_add_test(NAME leTuRandomForestsMachineLearningModelNew COMMAND otbSupervised
 
 otb_add_test(NAME leTvANNMachineLearningModel COMMAND otbSupervisedTestDriver
   otbANNMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/ann_model.txt
   )
 
@@ -74,7 +74,7 @@ otb_add_test(NAME leTvSVMMachineLearningRegressionModel COMMAND otbSupervisedTes
 
 otb_add_test(NAME leTvSVMMachineLearningModel COMMAND otbSupervisedTestDriver
   otbSVMMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/svm_model.txt
   )
 
@@ -83,14 +83,14 @@ otb_add_test(NAME leTuBoostMachineLearningModelNew COMMAND otbSupervisedTestDriv
 
 otb_add_test(NAME leTvNormalBayesMachineLearningModel COMMAND otbSupervisedTestDriver
   otbNormalBayesMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/normalbayes_model.txt
   )
 
 if(NOT OTB_OPENCV_3)
 otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModel COMMAND otbSupervisedTestDriver
   otbGradientBoostedTreeMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/gbt_model.txt
   )
 otb_add_test(NAME leTuGradientBoostedTreeMachineLearningModelNew COMMAND otbSupervisedTestDriver
@@ -99,7 +99,7 @@ endif()
 
 otb_add_test(NAME leTvRandomForestsMachineLearningModel COMMAND otbSupervisedTestDriver
   otbRandomForestsMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/rf_model.txt
   )
 
@@ -108,19 +108,19 @@ otb_add_test(NAME leTuANNMachineLearningModelNew COMMAND otbSupervisedTestDriver
 
 otb_add_test(NAME leTvKNearestNeighborsMachineLearningModel COMMAND otbSupervisedTestDriver
   otbKNearestNeighborsMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/knn_model.txt
   )
 
 otb_add_test(NAME leTvDecisionTreeMachineLearningModel COMMAND otbSupervisedTestDriver
   otbDecisionTreeMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/decisiontree_model.txt
   )
 
 otb_add_test(NAME leTvBoostMachineLearningModel COMMAND otbSupervisedTestDriver
   otbBoostMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/boost_model.txt
   )
 

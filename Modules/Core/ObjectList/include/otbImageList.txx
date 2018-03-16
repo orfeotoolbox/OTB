@@ -61,7 +61,6 @@ ImageList<TImage>
         || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
       {
 
-      std::cout<<"Requested region: "<<it.Get()<<" "<<it.Get()->GetRequestedRegion()<<std::endl;
       if (it.Get()->GetSource())
         {
         it.Get()->GetSource()->PropagateRequestedRegion(it.Get());

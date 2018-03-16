@@ -126,12 +126,12 @@ protected:
   /** Constructor */
   AeronetFileReader();
   /** Destructor */
-  ~AeronetFileReader() ITK_OVERRIDE;
+  ~AeronetFileReader() override;
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 

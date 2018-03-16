@@ -85,7 +85,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DynamicConvert");
     SetDescription("Change the pixel type and rescale the image's dynamic");
@@ -124,7 +124,7 @@ private:
     SetParameterDescription("type", "Transfer function for the rescaling");
     AddChoice("type.linear", "Linear");
     AddChoice("type.log2", "Log2");
-    SetParameterString("type", "linear", false);
+    SetParameterString("type", "linear");
 
     AddParameter(ParameterType_Float,"type.linear.gamma",
       "Gamma correction factor");
@@ -212,7 +212,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Read information
     if ( HasValue("in") )

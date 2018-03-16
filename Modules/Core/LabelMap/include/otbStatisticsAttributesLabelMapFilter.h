@@ -195,13 +195,13 @@ protected:
   StatisticsAttributesLabelMapFilter();
 
   /** Destructor */
-  ~StatisticsAttributesLabelMapFilter() ITK_OVERRIDE;
+  ~StatisticsAttributesLabelMapFilter() override;
 
   /** Before threaded data generation */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   StatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented

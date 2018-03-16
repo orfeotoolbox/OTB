@@ -86,11 +86,11 @@ public:
 
   OutputVectorDataType* GetOutputVectorData() const;
 
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
 
-  void Synthetize(void) ITK_OVERRIDE;
+  void Synthetize(void) override;
 
   /** Specify the name of the output shapefile to write. */
   itkSetStringMacro(FileName);
@@ -98,11 +98,11 @@ public:
 
 protected:
   PersistentImageToVectorDataFilter();
-  ~PersistentImageToVectorDataFilter() ITK_OVERRIDE {}
+  ~PersistentImageToVectorDataFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   ExtractImageFilterPointerType          m_ExtractFilter;
 

@@ -141,7 +141,7 @@ public:
 
   /** Override Update() from ProcessObject
    *  This filter does not produce an output */
-  void Update() ITK_OVERRIDE;
+  void Update() override;
 
   // the interface of the superclass getter function is not thread safe
   bool GetAbortGenerateDataMutex() const;
@@ -151,13 +151,13 @@ public:
 protected:
   StreamingImageVirtualWriter();
 
-  ~StreamingImageVirtualWriter() ITK_OVERRIDE;
+  ~StreamingImageVirtualWriter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
 private:
   StreamingImageVirtualWriter(const StreamingImageVirtualWriter &); //purposely not implemented

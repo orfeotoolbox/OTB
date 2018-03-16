@@ -84,12 +84,12 @@ def test(otb, argv):
 	cm_assert(app.MAP.UTM.ZONE, 31)
 
 	# 10 - bool type sub parameters of choice parameter get
-	app.DisableParameter('map.utm.northhem')
+	app.SetParameterInt('map.utm.northhem',0)
 	cm_assert(app.MAP.UTM.NORTHHEM, False)
 
 	# 11 - bool type sub parameters of choice parameter set
 	app.MAP.UTM.NORTHHEM = True
-	cm_assert(True, app.IsParameterEnabled('map.utm.northhem') )
+	cm_assert(True, app.GetParameterInt('map.utm.northhem') )
 
 	#12 - simple choice parameter set
 	app.OUTPUTS.MODE = 'auto'
@@ -128,7 +128,7 @@ def test(otb, argv):
 	cm_assert(app.IsParameterEnabled('outputs.isotropic'), True)
 
 	#21 - parameter bool get
-	app.DisableParameter('outputs.isotropic')
+	app.SetParameterInt('outputs.isotropic',0)
 	cm_assert(False, app.OUTPUTS.ISOTROPIC)
 
 	#Do not execute. we need LARGEINPUT. so we tried a small application

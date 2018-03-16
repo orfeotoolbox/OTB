@@ -81,7 +81,7 @@ public:
 
 protected:
   AsymmetricFusionOfLineDetectorImageFilter();
-  ~AsymmetricFusionOfLineDetectorImageFilter() ITK_OVERRIDE {}
+  ~AsymmetricFusionOfLineDetectorImageFilter() override {}
 
   typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
       InterpolatorType>        LineRatioType;
@@ -90,9 +90,9 @@ protected:
   typedef otb::AssociativeSymmetricalSumImageFilter<InputImageType1, InputImageType2,
       OutputImageType> AssSymSumType;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   AsymmetricFusionOfLineDetectorImageFilter(const Self &); //purposely not implemented

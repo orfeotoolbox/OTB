@@ -94,7 +94,7 @@ protected:
       }
   }
 
-  ~CurlResource() ITK_OVERRIDE
+  ~CurlResource() override
   {
     curl_easy_cleanup(m_Curl);
   }
@@ -140,7 +140,7 @@ protected:
       }
   }
 
-  ~CurlMultiResource() ITK_OVERRIDE
+  ~CurlMultiResource() override
   {
     curl_multi_cleanup(m_Curl);
   }
@@ -187,7 +187,7 @@ public:
 protected:
   CurlFileDescriptorResource(){}
 
-  ~CurlFileDescriptorResource() ITK_OVERRIDE
+  ~CurlFileDescriptorResource() override
   {
     fclose(m_File);
   }

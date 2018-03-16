@@ -58,7 +58,7 @@ public:
   typedef otb::ChangeInformationImageFilter<FloatVectorImageType> ChangeInfoFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ManageNoData");
     SetDescription("Manage No-Data");
@@ -79,10 +79,8 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image");
 
-    AddParameter(ParameterType_Empty,"usenan", "Consider NaN as no-data");
+    AddParameter(ParameterType_Bool,"usenan", "Consider NaN as no-data");
     SetParameterDescription("usenan","If active, the application will consider NaN as no-data values as well");
-    MandatoryOff("usenan");
-    DisableParameter("usenan");
    
     AddParameter(ParameterType_Choice,"mode","No-data handling mode");
     SetParameterDescription("mode","Allows choosing between different no-data handling options");
@@ -112,7 +110,7 @@ private:
     SetParameterDescription("mode.apply.ndval","No Data value used according to the mask image");
     SetDefaultParameterFloat("mode.apply.ndval", 0.0);
 
-    SetParameterString("mode","buildmask", false);
+    SetParameterString("mode","buildmask");
 
     AddRAMParameter();
 
@@ -125,25 +123,25 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
   }
 
 
- void DoExecute() ITK_OVERRIDE
+ void DoExecute() override
   {
     FloatVectorImageType::Pointer inputPtr = this->GetParameterImage("in");
     
     m_Filter = FilterType::New();
     m_Filter->SetInsideValue(this->GetParameterFloat("mode.buildmask.inv"));
     m_Filter->SetOutsideValue(this->GetParameterFloat("mode.buildmask.outv"));
-    m_Filter->SetNaNIsNoData(IsParameterEnabled("usenan"));
+    m_Filter->SetNaNIsNoData(GetParameterInt("usenan"));
     m_Filter->SetInput(inputPtr);
 
     m_ChangeNoDataFilter = ChangeNoDataFilterType::New();
     m_ChangeNoDataFilter->SetInput(inputPtr);
-    m_ChangeNoDataFilter->SetNaNIsNoData(IsParameterEnabled("usenan"));
+    m_ChangeNoDataFilter->SetNaNIsNoData(GetParameterInt("usenan"));
 
     std::vector<double> newNoData(inputPtr->GetNumberOfComponentsPerPixel(),GetParameterFloat("mode.changevalue.newv"));
 

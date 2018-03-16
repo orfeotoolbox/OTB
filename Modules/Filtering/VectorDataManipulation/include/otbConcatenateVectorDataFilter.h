@@ -82,11 +82,11 @@ public:
 
 protected:
   ConcatenateVectorDataFilter();
-  ~ConcatenateVectorDataFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ConcatenateVectorDataFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Triggers the Computation of the sample list */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   /** Recursive method to visit efficiently the vectordata*/
   void ProcessNode(TreeNodeType * source, DataNodeType * outputDocument);

@@ -84,13 +84,13 @@ public:
   /** Return any value */
   virtual unsigned int GetValue();
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     // a choice parameter always has a value
     return true;
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     // nothing to do : a choice parameter always has a value
   }
@@ -155,7 +155,7 @@ protected:
   ListViewParameter();
 
   /** Destructor */
-  ~ListViewParameter() ITK_OVERRIDE;
+  ~ListViewParameter() override;
 
   struct ListViewChoice
   {

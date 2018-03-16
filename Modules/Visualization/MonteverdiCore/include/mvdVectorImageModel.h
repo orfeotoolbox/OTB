@@ -118,7 +118,7 @@ public:
   VectorImageModel( QObject* p =NULL );
 
   /** Destructor */
-  ~VectorImageModel() ITK_OVERRIDE;
+  ~VectorImageModel() override;
 
   /** */
   static void EnsureValidImage( const QString& filename );
@@ -166,17 +166,17 @@ public:
   /**
    * Get the number of available LOD.
    */
-  CountType GetNbLod() const ITK_OVERRIDE;
+  CountType GetNbLod() const override;
 
   /**
    * Get a smart-pointer to the current LOD image-base.
    */
-  ImageBaseType::ConstPointer ToImageBase() const ITK_OVERRIDE;
+  ImageBaseType::ConstPointer ToImageBase() const override;
 
   /**
    * Get a smart-pointer to the current LOD image-base.
    */
-  ImageBaseType::Pointer ToImageBase() ITK_OVERRIDE;
+  ImageBaseType::Pointer ToImageBase() override;
 
   /**
    * Get the placename from the center pixel
@@ -186,9 +186,9 @@ public:
   //
   // AbstractModel methods.
 
-  bool IsModified() const ITK_OVERRIDE;
+  bool IsModified() const override;
 
-  void ClearModified() ITK_OVERRIDE;
+  void ClearModified() override;
 
   // get image size in byte
   std::streamoff GetImageSizeInBytes()
@@ -242,7 +242,7 @@ protected:
   //
   // AbstractModel methods.
 
-  void virtual_BuildModel( void* context =NULL ) ITK_OVERRIDE;
+  void virtual_BuildModel( void* context =NULL ) override;
 
   //
   // AbstractImageModel methods.
@@ -292,18 +292,18 @@ private:
   //
   // AbstractLayerModel methods.
 
-  std::string virtual_GetWkt() const ITK_OVERRIDE;
-  bool virtual_HasKwl() const ITK_OVERRIDE;
+  std::string virtual_GetWkt() const override;
+  bool virtual_HasKwl() const override;
   void virtual_ToWgs84( const PointType &,
 				PointType &,
-				double & alt ) const ITK_OVERRIDE;
+				double & alt ) const override;
 
   //
   // AbstractImageModel methods.
 
-  void virtual_SetCurrentLod( CountType lod ) ITK_OVERRIDE;
+  void virtual_SetCurrentLod( CountType lod ) override;
 
-  void virtual_RefreshHistogram() ITK_OVERRIDE;
+  void virtual_RefreshHistogram() override;
 
 //
 // Private attributes.

@@ -44,7 +44,7 @@ class OTBQtWidget_EXPORT AppliThread : public QThread
       m_Application = app;
     }
 
-  ~AppliThread() ITK_OVERRIDE;
+  ~AppliThread() override;
 
   inline void Execute()
   {
@@ -76,7 +76,7 @@ public slots:
     }
 
 protected:
-  void run() ITK_OVERRIDE;
+  void run() override;
 
 private:
   AppliThread(const AppliThread&); //purposely not implemented
@@ -97,7 +97,7 @@ class OTBQtWidget_EXPORT QtWidgetModel : public QObject
 public:
   QtWidgetModel(Application* app);
 
-  ~QtWidgetModel() ITK_OVERRIDE;
+  ~QtWidgetModel() override;
 
   Application* GetApplication()
   {

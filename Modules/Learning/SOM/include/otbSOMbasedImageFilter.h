@@ -144,10 +144,10 @@ public:
 
 protected:
   // throw the Map to the functor
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+  void BeforeThreadedGenerateData(void) override;
 
   SOMbasedImageFilter ();
-  ~SOMbasedImageFilter () ITK_OVERRIDE {}
+  ~SOMbasedImageFilter () override {}
 
 private:
   SOMbasedImageFilter (const Self &);

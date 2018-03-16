@@ -127,7 +127,7 @@ public:
   inline ValuePrecisionType operator()(const PrecisionType & lambda, const unsigned int numBand);
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** get vector of RSR */
   RSRVectorType & GetRSR()
@@ -147,7 +147,7 @@ protected:
   /** Constructor from a ASCII file */
   //SatelliteRSR( const std::string & filename );
   /** Destructor */
-  ~SatelliteRSR() ITK_OVERRIDE
+  ~SatelliteRSR() override
   {
   }
 ;
