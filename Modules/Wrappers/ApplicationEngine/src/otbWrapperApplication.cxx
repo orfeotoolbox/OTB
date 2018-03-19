@@ -511,11 +511,8 @@ void Application::FreeRessources()
   std::set< itk::DataObject * > dataSet;
   std::vector<std::string> paramList = GetParametersKeys(true);
   // Get the end of the pipeline
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-           it != paramList.end();
-           ++it)
+  for ( const auto & key : paramList )
     {
-    std::string key = *it;
     if ( GetParameterType(key) == ParameterType_OutputImage )
       {
       Parameter* param = GetParameterByKey(key);

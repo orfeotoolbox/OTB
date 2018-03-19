@@ -22,11 +22,12 @@
 #define otbObjectListInterface_h
 
 #include "itkDataObject.h"
+#include "boost/core/noncopyable.hpp"
 
 namespace otb
 {
 
-class ObjectListInterface
+class ObjectListInterface : public boost::noncopyable
 {
 /** \class ObjectListInterface
  *  \brief This non template class is an interface that wrapp ObjectList
@@ -37,10 +38,6 @@ class ObjectListInterface
  * \ingroup ObjectListInterface
  */
 public:
-
-  ObjectListInterface() {};
-  virtual ~ObjectListInterface(){};
-
   /**
   Get the nth element of the list as a DataObject *.
   */
@@ -48,6 +45,9 @@ public:
 
   virtual std::size_t Size(void) const = 0;
 
+protected:
+  ObjectListInterface() = default ;
+  virtual ~ObjectListInterface() = default ;
 };
 
 } // end of otb namespace
