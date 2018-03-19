@@ -22,20 +22,39 @@
 #define otbWrapperExpParameterGroup_h
 
 #include "otbWrapperExpTypes.h"
-#include "OTBApplicationEngineExport.h"
 #include "otbWrapperExpParameter.h"
+#include "OTBApplicationEngineExport.h"
+#include "boost/core/noncopyable.hpp"
 
 namespace otb
 {
 namespace WrapperExp
 {
 
-class OTBApplicationEngine_EXPORT ParameterGroup : public ParameterGroup
+class OTBApplicationEngine_EXPORT ParameterGroup : 
+public Parameter , private boost::noncopyable
 {
 public:
+  typedef ParameterGroup                       Self;
+  typedef Parameter                            Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
+
+  itkNewMacro( Self );
+
+  itkTypeMacro( ParameterGroup , Parameter );
+
+  bool HasValue() const
+  {return false;}
+
 protected:
+  ParameterGroup() = default ;
+  ~ParameterGroup() override = default ;
+
 private:
-}
+};
 
 } // end namespace WrapperExp
 } // end namespace otb
+
+#endif

@@ -131,6 +131,19 @@ public:
 
   virtual bool HasValue() const = 0;
 
+  // template < class T >
+  // virtual T GetValueAs()
+  // {
+  //   //log cannot convert
+  // }
+  /*
+  We would need a type eraser type in order to do  :
+  GetValue() that will use something like boost::any and when called 
+  would be used like :
+  string s = param->GetValue().as<string>();
+  int i = param->GetValue().as<int>();
+  */
+
   virtual bool HasUserValue() const
   {
     return this->HasValue() && m_UserValue;

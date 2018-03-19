@@ -18,35 +18,41 @@
  * limitations under the License.
  */
 
+#ifndef otbWrapperExpSingleParameter_h
+#define otbWrapperExpSingleParameter_h
+
+#include "otbWrapperExpTypes.h"
 #include "otbWrapperExpParameter.h"
+#include "OTBApplicationEngineExport.h"
 
 namespace otb
 {
 namespace WrapperExp
 {
 
-Parameter::Parameter() :
-    m_Name( "" ),
-    m_Description( "" ),
-    m_Key( "" ),
-    m_Mandatory( true ),
-    m_Active( false ),
-    m_UserValue( false ),
-    m_UserLevel( UserLevel_Basic ),
-    m_Role( Role_Input ),
-    m_Root( this )
-{}
-
-bool
-Parameter::GetActive( bool recurseParents /*= false*/) const
+class OTBApplicationEngine_EXPORT SingleParameter : 
+public Parameter , private boost::noncopyable
 {
-  bool result = m_Active;
-  if ( recurseParents && !IsRoot() )
-    {
-    result = result && GetRoot()->GetActive( recurseParents );
-    }
-  return result;
-}
+public:
+  typedef SingleParameter                      Self;
+  typedef Parameter                            Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
+
+  itkTypeMacro( SingleParameter , Parameter );
+
+  virtual const std::string & GetLitteralValue() const = 0;
+  virtual float GetFloattingValue() const = 0;
+  virtual int GetIntegerValue() const = 0;
+
+protected:
+  SingleParameter() = default ;
+  ~SingleParameter() override = default ;
+
+private:
+};
 
 } // end namespace WrapperExp
-} //end namespace otb
+} // end namespace otb
+
+#endif

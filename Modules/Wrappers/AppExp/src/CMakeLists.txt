@@ -29,6 +29,7 @@ set( OTBAppExp_SRC
   otbWrapperExpApplicationFactoryBase.cxx
   otbWrapperExpParameter.cxx
   otbWrapperExpParameterGroup.cxx
+  otbWrapperExpSingleParameter.cxx
   )
 
 add_library(OTBAppExp ${OTBAppExp_SRC})
