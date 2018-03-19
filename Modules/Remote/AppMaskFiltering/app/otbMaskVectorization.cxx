@@ -239,15 +239,14 @@ private:
     clock_t toc = clock();
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
     std::cout << "fusion done" << std::endl;
-    OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
+    /*OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
     SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
     SpectralStatisticsFilter->SetOGRData(ogrDS);
     SpectralStatisticsFilter->SetOutputSamples(ogrDS);
     //SpectralStatisticsFilter->SetOGRLayer(layer);
     SpectralStatisticsFilter->SetFieldName(field_name);
     SpectralStatisticsFilter->Update();
-    
-    std::cout << this->GetParameterAsString("in") << std::endl;
+    */
   }
   
   
