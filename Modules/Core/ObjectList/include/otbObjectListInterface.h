@@ -27,7 +27,7 @@
 namespace otb
 {
 
-class ObjectListInterface : public boost::noncopyable
+class ObjectListInterface : private boost::noncopyable
 {
 /** \class ObjectListInterface
  *  \brief This non template class is an interface that wrapp ObjectList
