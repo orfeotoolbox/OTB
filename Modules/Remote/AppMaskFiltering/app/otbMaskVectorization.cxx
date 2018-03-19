@@ -242,8 +242,11 @@ private:
     OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
     SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
     SpectralStatisticsFilter->SetOGRData(ogrDS);
+    SpectralStatisticsFilter->SetOutputSamples(ogrDS);
+    //SpectralStatisticsFilter->SetOGRLayer(layer);
     SpectralStatisticsFilter->SetFieldName(field_name);
     SpectralStatisticsFilter->Update();
+    
     std::cout << this->GetParameterAsString("in") << std::endl;
   }
   

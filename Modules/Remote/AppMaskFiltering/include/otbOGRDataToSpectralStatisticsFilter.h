@@ -60,9 +60,13 @@ public:
   typedef itk::VariableLengthVector<double>      RealPixelType;
 
   typedef std::map<unsigned long, unsigned long>                   PolygonSizeMapType;
+  typedef std::map<unsigned long, double>                   PolygonScalarMapType;
   typedef std::map< unsigned long, RealPixelType>                  PolygonVectorMapType;
   typedef std::map< unsigned long, MatrixType>                     PolygonMatrixMapType;
   
+  typedef ogr::DataSource                                 OGRDataType;
+  typedef ogr::DataSource::Pointer                        OGRDataPointer;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -73,12 +77,26 @@ public:
 
   /** Reset method called before starting the streaming*/
   void Reset(void) ITK_OVERRIDE;
+  
+  
+  /** Set the output samples OGR container
+   * (shall be equal to the input container for an 'update' mode) */
+  void SetOutputSamples(ogr::DataSource* data);
+
+  /** Get the output samples OGR container */
+  ogr::DataSource* GetOutputSamples();
+
+
 
 protected:
   /** Constructor */
   PersistentOGRDataToSpectralStatisticsFilter();
   /** Destructor */
   ~PersistentOGRDataToSpectralStatisticsFilter() ITK_OVERRIDE {};
+  
+  /** Initialize output fields */
+  void InitializeFields();
+
   
   /** Process a polygon : use pixels inside the polygon */
   virtual void ProcessPolygon(const ogr::Feature& feature,
@@ -101,6 +119,13 @@ private:
   void operator =(const Self&); //purposely not implemented
   /** Number of pixels in each polygons (per thread) */
   std::vector<PolygonSizeMapType> m_PolygonSizeThread;
+  
+  /** Maximum of the pixel values in each polygons (per thread) */
+  std::vector<PolygonVectorMapType> m_PolygonMaxThread;
+  
+  /** Minimum of the pixel values in each polygons (per thread) */
+  std::vector<PolygonVectorMapType> m_PolygonMinThread;
+  
   /** Sum of pixels  in each polygons (per thread) */
   std::vector<PolygonVectorMapType> m_PolygonFirstOrderThread;
   
@@ -139,6 +164,7 @@ public:
   typedef TInputImage                     InputImageType;
   typedef TMaskImage                      MaskImageType;
   typedef otb::ogr::DataSource            OGRDataType;
+  typedef otb::ogr::Layer                 OGRLayerType;
   
   /** Type macro */
   itkNewMacro(Self);
@@ -152,7 +178,15 @@ public:
 
   void SetOGRData(const otb::ogr::DataSource* data);
   const otb::ogr::DataSource* GetOGRData();
-
+  
+  void SetOutputSamples(OGRDataType::Pointer data);
+  const otb::ogr::DataSource* GetOutputSamples();
+  
+  
+  /*
+  void SetOGRLayer(const otb::ogr::Layer & layer);
+  const otb::ogr::Layer & GetOGRLayer();
+  */
   void SetMask(const TMaskImage* mask);
   const TMaskImage* GetMask();
   
