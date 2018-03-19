@@ -29,8 +29,6 @@ int otbOGRExtendedFileNameGDALOpen(int , char* argv[])
 {
   auto test = otb::ogr::DataSource::New( argv[1] );
   std::string  error = CPLGetLastErrorMsg();
-  if ( !error.empty() )
-    std::cout<<error<<std::endl;
   return 0;
 }
 
@@ -38,8 +36,9 @@ int otbOGRExtendedFileNameGDALCreate(int , char* argv[])
 {
   auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Overwrite);
   std::string error = CPLGetLastErrorMsg();
-  std::cout<<error<<std::endl;
-  return error.empty();
+  if ( error.find( "does not support creation option creationOption" ) )
+    return EXIT_SUCCESS;
+  return EXIT_FAILURE;
 }
 
 int otbOGRExtendedFileNameGDALLayer(int , char* argv[])
@@ -49,8 +48,9 @@ int otbOGRExtendedFileNameGDALLayer(int , char* argv[])
       ITK_NULLPTR , 
       wkbUnknown );
   std::string error = CPLGetLastErrorMsg();
-  std::cout<<error<<std::endl;
-  return error.empty();
+  if ( error.find( "does not support layer creation option layeroption" ) )
+    return EXIT_SUCCESS;
+  return EXIT_FAILURE;
 }
 
 int otbOGRExtendedFileNameGDALLayerOption(int , char* argv[])
@@ -62,7 +62,8 @@ int otbOGRExtendedFileNameGDALLayerOption(int , char* argv[])
       wkbUnknown ,
       option );
   std::string error = CPLGetLastErrorMsg();
-  std::cout<<error<<std::endl;
-  return error.empty();
+  if ( error.find( "does not support layer creation option vectorlayeroption" ) )
+    return EXIT_SUCCESS;
+  return EXIT_FAILURE;
 }
 
