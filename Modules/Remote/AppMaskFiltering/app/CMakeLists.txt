@@ -27,3 +27,8 @@ otb_create_application(
   NAME           ComputePolygonsGeometricFeatures
   SOURCES        otbComputePolygonsGeometricFeatures.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+  
+otb_create_application(
+  NAME           ComputePolygonsSpectralFeatures
+  SOURCES        otbComputePolygonsSpectralFeatures.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
