@@ -30,8 +30,9 @@ namespace otb
 /** \class OGRExtendedFilenameToOptions
  *  \brief This class aim at processing GDAL option that can be pass through
  * extended filename.
- *
  * \ingroup OTBExtendedFilename
+ * \ingroup OTBGdalAdapters
+ *
  */
 #include "OTBGdalAdaptersExport.h"
 

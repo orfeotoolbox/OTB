@@ -34,6 +34,7 @@ namespace otb
  *  \sa ImageFileReader
  *
  * \ingroup OTBExtendedFilename
+ * \ingroup OTBCommon
  */
 
 class OTBCommon_EXPORT ExtendedFilenameHelper : public itk::Object
