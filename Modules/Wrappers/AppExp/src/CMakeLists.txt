@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-set( OTBExpApplicationEngine_SRC
+set( OTBAppExp_SRC
   otbWrapperExpApplicationHtmlDocGenerator.cxx
   otbWrapperExpElevationParametersHandler.cxx
   otbWrapperExpParameterKey.cxx
@@ -27,11 +27,12 @@ set( OTBExpApplicationEngine_SRC
   otbWrapperExpApplication.cxx
   otbWrapperExpApplicationRegistry.cxx
   otbWrapperExpApplicationFactoryBase.cxx
-  # otbWrapperExpCompositeApplication.cxx
+  otbWrapperExpParameter.cxx
+  otbWrapperExpParameterGroup.cxx
   )
 
-add_library(OTBExpApplicationEngine ${OTBExpApplicationEngine_SRC})
-target_link_libraries(OTBExpApplicationEngine
+add_library(OTBAppExp ${OTBAppExp_SRC})
+target_link_libraries(OTBAppExp
   ${OTBVectorDataBase_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   ${OTBImageIO_LIBRARIES}
@@ -49,4 +50,4 @@ target_link_libraries(OTBExpApplicationEngine
   ${OTBMPIVrtWriter_LIBRARIES}
   )
 
-otb_module_target(OTBExpApplicationEngine)
+otb_module_target(OTBAppExp)

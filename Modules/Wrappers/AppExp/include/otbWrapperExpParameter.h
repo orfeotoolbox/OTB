@@ -26,6 +26,7 @@
 
 #include "otbWrapperExpTypes.h"
 #include "OTBApplicationEngineExport.h"
+#include "boost/core/noncopyable.hpp"
 
 namespace otb
 {
@@ -41,7 +42,7 @@ namespace WrapperExp
  * \ingroup OTBApplicationEngine
  */
 class OTBApplicationEngine_EXPORT Parameter
-  : public itk::Object
+  : public itk::Object , private boost::noncopyable
 {
 public:
   /** Standard class typedef */
@@ -51,91 +52,82 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** RTTI support */
-  itkTypeMacro(Parameter, itk::Object);
+  itkTypeMacro( Parameter , itk::Object );
 
   /** Set the parameter name */
-  itkSetStringMacro(Name);
+  itkSetStringMacro( Name );
 
   /** Get the parameter name */
-  itkGetStringMacro(Name);
+  itkGetConstReferenceMacro( Name , std::string );
 
   /** Set the parameter description */
-  itkSetStringMacro(Description);
+  itkSetStringMacro( Description );
 
   /** Get the parameter description */
-  itkGetConstReferenceMacro( Description, std::string );
+  itkGetConstReferenceMacro( Description , std::string );
 
   /** Set the parameter key */
-  itkSetStringMacro(Key);
+  itkSetStringMacro( Key );
 
   /** Get the parameter key */
-  itkGetStringMacro(Key);
+  itkGetConstReferenceMacro( Key , std::string );
 
   /** Set the parameter Active flag */
-  itkSetMacro(Active, bool);
+  itkSetMacro( Active , bool );
 
   /** Get the parameter Active flag */
-  bool GetActive(bool recurseParents = false) const
-  {
-    bool result = m_Active;
-    if (recurseParents && !IsRoot())
-      {
-      result = result && GetRoot()->GetActive(recurseParents);
-      }
-    return result;
-  }
+  bool GetActive( bool recurseParents = false ) const ;
 
   /** Set the parameter mandatory flag */
-  itkSetMacro(Mandatory, bool);
+  itkSetMacro( Mandatory , bool );
 
   /** Get the parameter mandatory flag */
-  itkGetConstMacro(Mandatory, bool);
+  itkGetConstMacro( Mandatory , bool );
 
   /** Toogle the parameter mandatory flag */
-  itkBooleanMacro(Mandatory);
+  itkBooleanMacro( Mandatory );
 
-  /** Set the parameter AutomaticValue flag (which is the opposite of UserValue)*/
-  virtual void SetAutomaticValue(bool flag)
-    {
-    this->SetUserValue(!flag);
-    }
+  //Check if we still need those!!!
+  // /** Set the parameter AutomaticValue flag (which is the opposite of UserValue)*/
+  // virtual void SetAutomaticValue(bool flag)
+  //   {
+  //   this->SetUserValue(!flag);
+  //   }
 
-  /** Get the parameter AutomaticValue flag */
-  virtual bool GetAutomaticValue() const
-    {
-    return !m_UserValue;
-    }
+  // /** Get the parameter AutomaticValue flag */
+  // virtual bool GetAutomaticValue() const
+  //   {
+  //   return !m_UserValue;
+  //   }
 
-  /** Toogle ON the parameter AutomaticValue flag */
-  void AutomaticValueOn()
-    {
-    this->SetAutomaticValue(true);
-    }
+  // /** Toogle ON the parameter AutomaticValue flag */
+  // void AutomaticValueOn()
+  //   {
+  //   this->SetAutomaticValue(true);
+  //   }
 
-  /** Toogle OFF the parameter AutomaticValue flag */
-  void AutomaticValueOff()
-    {
-    this->SetAutomaticValue(false);
-    }
+  // /** Toogle OFF the parameter AutomaticValue flag */
+  // void AutomaticValueOff()
+  //   {
+  //   this->SetAutomaticValue(false);
+  //   }
 
   /** Set the user access level */
-  itkSetEnumMacro(UserLevel, UserLevel);
+  itkSetEnumMacro( UserLevel , UserLevel );
 
   /** Get the user access level */
-  itkGetEnumMacro(UserLevel, UserLevel);
+  itkGetEnumMacro( UserLevel , UserLevel) ;
 
   /** Set the parameter io type*/
-  itkSetEnumMacro(Role, Role);
+  itkSetEnumMacro( Role , Role );
 
   /** Get the user access level */
-  itkGetEnumMacro(Role, Role);
+  itkGetEnumMacro( Role , Role );
 
   /** Reset to the the default value. Default implementation does
    * nothing
    */
-  virtual void Reset()
-  {
-  }
+  virtual void Reset() {};
 
   virtual bool HasValue() const = 0;
 
@@ -144,7 +136,7 @@ public:
     return this->HasValue() && m_UserValue;
   }
 
-  virtual void SetUserValue(bool isUserValue)
+  virtual void SetUserValue( bool isUserValue )
   {
     m_UserValue = isUserValue;
   }
@@ -169,41 +161,32 @@ public:
   /** Is the parameter a root or a child of another param */
   virtual bool IsRoot() const
   {
-    return (this == m_Root.GetPointer());
+    return ( this == m_Root.GetPointer() );
   }
 
-  /** Add a child of this parameter when the param is a Group or a
-    * choice
-    */
-  virtual void AddChild(Parameter::Pointer child)
-  {
-    m_ChildrenList.push_back(child);
-  }
+  //This should be onlky for parameter group
+  // /** Add a child of this parameter when the param is a Group or a
+  //   * choice
+  //   */
+  // virtual void AddChild(Parameter::Pointer child)
+  // {
+  //   m_ChildrenList.push_back(child);
+  // }
 
-  /** Get the children pointer list : not const cause we need to
-    * alterate the m_Active status and the m_IsCheckbox
-    */
-  virtual std::vector<Parameter::Pointer > GetChildrenList()
-  {
-    return m_ChildrenList;
-  }
+  // * Get the children pointer list : not const cause we need to
+  //   * alterate the m_Active status and the m_IsCheckbox
+    
+  // virtual std::vector<Parameter::Pointer > GetChildrenList()
+  // {
+  //   return m_ChildrenList;
+  // }
 
 protected:
   /** Constructor */
-  Parameter() :
-    m_Name( "" ),
-    m_Description( "" ),
-    m_Key( "" ),
-    m_Mandatory( true ),
-    m_Active( false ),
-    m_UserValue( false ),
-    m_UserLevel( UserLevel_Basic ),
-    m_Role( Role_Input ),
-    m_Root( this )
-  {}
+  Parameter() ;
 
   /** Destructor */
-  ~Parameter() override {}
+  ~Parameter() override = default ;
 
   /** Name of the parameter */
   std::string                        m_Name;
@@ -232,11 +215,7 @@ protected:
   itk::WeakPointer<Parameter>        m_Root;
 
   /** List of children parameters */
-  std::vector<Parameter::Pointer >   m_ChildrenList;
-
-private:
-  Parameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  // std::vector<Parameter::Pointer >   m_ChildrenList;
 
 }; // End class Parameter
 

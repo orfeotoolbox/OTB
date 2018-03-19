@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-project(OTBExpApplicationEngine)
+project(OTBAppExp)
 
-set(OTBExpApplicationEngine_LIBRARIES OTBExpApplicationEngine)
+set(OTBAppExp_LIBRARIES OTBAppExp)
 otb_module_impl()

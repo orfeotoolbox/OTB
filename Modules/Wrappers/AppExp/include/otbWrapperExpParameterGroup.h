@@ -18,7 +18,11 @@
  * limitations under the License.
  */
 
-#include "otbWrapperExpParameterKey.h"
+#ifndef otbWrapperExpParameterGroup_h
+#define otbWrapperExpParameterGroup_h
+
+#include "otbWrapperExpTypes.h"
+#include "OTBApplicationEngineExport.h"
 #include "otbWrapperExpParameter.h"
 
 namespace otb
@@ -26,28 +30,12 @@ namespace otb
 namespace WrapperExp
 {
 
-Parameter::Parameter() :
-    m_Name( "" ),
-    m_Description( "" ),
-    m_Key( "" ),
-    m_Mandatory( true ),
-    m_Active( false ),
-    m_UserValue( false ),
-    m_UserLevel( UserLevel_Basic ),
-    m_Role( Role_Input ),
-    m_Root( this )
-{}
-
-bool
-Parameter::GetActive( bool recurseParents /*= false*/) const
+class OTBApplicationEngine_EXPORT ParameterGroup : public ParameterGroup
 {
-  bool result = m_Active;
-  if ( recurseParents && !IsRoot() )
-    {
-    result = result && GetRoot()->GetActive( recurseParents );
-    }
-  return result;
+public:
+protected:
+private:
 }
 
 } // end namespace WrapperExp
-} //end namespace otb
+} // end namespace otb
