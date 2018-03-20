@@ -472,11 +472,11 @@ ImageFileWriter<TInputImage>
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
     {
- 	std::vector<int> boxVector;
- 	Utils::ConvertStringToVector( 
- 	m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
- 	
- 	typename InputImageRegionType::IndexType start;
+    std::vector<int> boxVector;
+    Utils::ConvertStringToVector(
+        m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
+
+    typename InputImageRegionType::IndexType start;
     typename InputImageRegionType::SizeType  size;
 
     start[0] = boxVector[0];  // first index on X
