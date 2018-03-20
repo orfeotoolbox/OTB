@@ -17,6 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#ifndef otbWrapperExpNumericalParameter_txx
+#define otbWrapperExpNumericalParameter_txx
+
 #include "otbWrapperExpNumericalParameter.h"
 
 namespace otb
@@ -24,7 +28,7 @@ namespace otb
 namespace WrapperExp
 {
 
-template< class T >
+template< typename T >
 NumericalParameter< T >::NumericalParameter() :
     m_HasValue( false ) ,
     m_HasDefaultValue( false ) ,
@@ -32,10 +36,11 @@ NumericalParameter< T >::NumericalParameter() :
     m_MinimumValue( std::numeric_limits< T >::max() ) ,
     m_MaximumValue( std::numeric_limits< T >::lowest() ) ,
     m_Value( 0 )
-{}
+{
+}
 
+template< typename T >
 void
-template< class T >
 NumericalParameter< T >::SetDefaultValue( const ValueType & val )
 {
   m_HasDefaultValue = true;
@@ -43,47 +48,62 @@ NumericalParameter< T >::SetDefaultValue( const ValueType & val )
   Modified();
 }
 
-typename T
-template< class T >
+template< typename T >
+T
 NumericalParameter< T >::GetDefaultValue() const
 {
   if ( !m_HasDefaultValue )
-    //log
+    return T(0);
+    // log and NaN if there is one
+
   return m_DefaultValue;
 }
 
+template< typename T >
 bool
-template< class T >
 NumericalParameter< T >::HasValue() const
 {
   return m_HasValue;
 }
 
-const std::string &
-template< class T >
+template <typename T >
+T
+NumericalParameter< T >::GetValue() const
+{
+  if ( !m_HasValue )
+    return T(0);
+    // log and NaN if there is one
+
+  return m_Value;
+}
+
+
+template< typename T >
+std::string
 NumericalParameter< T >::GetLitteralValue() const
 {
   std::ostringstream oss;
-  oss << this->GetParameterInt( paramKey );
+  // T val ( GetValue() );
+  oss << GetValue();
   return oss.str();
 }
 
+template< typename T >
 float
-template< class T >
 NumericalParameter< T >::GetFloattingValue() const
 {
-  return m_Value;
+  return GetValue();
 }
 
+template< typename T >
 int
-template< class T >
 NumericalParameter< T >::GetIntegerValue() const
 {
-  return m_Value;
+  return GetValue();
 }
 
+template< typename T >
 void
-template< class T >
 NumericalParameter< T >::Reset()
 {
   if( !m_HasDefaultValue )
@@ -97,3 +117,5 @@ NumericalParameter< T >::Reset()
 
 } // end namespace WrapperExp
 } // end namespace otb
+
+#endif

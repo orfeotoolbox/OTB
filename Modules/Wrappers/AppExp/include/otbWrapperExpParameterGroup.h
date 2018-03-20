@@ -32,7 +32,7 @@ namespace WrapperExp
 {
 
 class OTBApplicationEngine_EXPORT ParameterGroup : 
-public Parameter , private boost::noncopyable
+public Parameter
 {
 public:
   typedef ParameterGroup                       Self;

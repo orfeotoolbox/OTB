@@ -22,7 +22,6 @@ set(DOCUMENTATION "This module contains classes that ease the implementation of
 applications (see chapter 'How to write an application' of the SoftwareGuide).")
 
 otb_module(OTBAppExp
-ENABLE_SHARED
   DEPENDS
     OTBVectorDataBase
     OTBImageIO
@@ -37,17 +36,9 @@ ENABLE_SHARED
     OTBBoostAdapters
     OTBOSSIMAdapters
     OTBITK
-
-    OPTIONAL_DEPENDS
-    OTBMPIVrtWriter
-    OTBMPITiffWriter
     
   TEST_DEPENDS
     OTBTestKernel
-    OTBCommandLine
-    OTBEdge
-    OTBAppImageUtils
-    OTBAppFiltering
     
   DESCRIPTION
     "${DOCUMENTATION}"

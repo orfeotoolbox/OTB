@@ -22,4 +22,18 @@ otb_module_test()
 
 set(OTBExpApplicationEngineTests
 otbExpApplicationEngineTestDriver.cxx
+otbWrapperExpNumericalParameterTest.cxx
 )
+
+add_executable(otbExpApplicationEngineTestDriver ${OTBExpApplicationEngineTests})
+target_link_libraries(otbExpApplicationEngineTestDriver ${OTBAppExp-Test_LIBRARIES})
+otb_module_target_label(otbExpApplicationEngineTestDriver)
+
+# Tests Declaration
+
+otb_add_test(NAME TuExpNumericalParam COMMAND otbExpApplicationEngineTestDriver
+  NumericalInstantiationTest
+  )
+otb_add_test(NAME TvExpNumericalParam COMMAND otbExpApplicationEngineTestDriver
+  NumericalManipulationTest
+  )

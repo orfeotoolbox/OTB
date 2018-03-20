@@ -31,7 +31,7 @@ namespace WrapperExp
 {
 
 class OTBApplicationEngine_EXPORT SingleParameter : 
-public Parameter , private boost::noncopyable
+public Parameter
 {
 public:
   typedef SingleParameter                      Self;
@@ -41,7 +41,7 @@ public:
 
   itkTypeMacro( SingleParameter , Parameter );
 
-  virtual const std::string & GetLitteralValue() const = 0;
+  virtual std::string GetLitteralValue() const = 0;
   virtual float GetFloattingValue() const = 0;
   virtual int GetIntegerValue() const = 0;
 

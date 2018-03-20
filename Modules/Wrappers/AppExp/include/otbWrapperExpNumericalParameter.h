@@ -23,7 +23,7 @@
 
 #include <limits>
 #include <type_traits>
-#include "otbWrapperExpTypes.h"
+// #include "otbWrapperExpTypes.h"
 #include "otbWrapperExpSingleParameter.h"
 #include "OTBApplicationEngineExport.h"
 
@@ -32,13 +32,13 @@ namespace otb
 namespace WrapperExp
 {
 
-template < class T >
+template < typename T >
 class OTBApplicationEngine_EXPORT NumericalParameter : 
-public SingleParameter , private boost::noncopyable
+public SingleParameter
 {
 public:
-  typedef SingleParameter                Self;
-  typedef Parameter                      Superclass;
+  typedef NumericalParameter             Self;
+  typedef SingleParameter                Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef T                              ValueType;
@@ -69,7 +69,11 @@ public:
 
   virtual bool HasValue() const override ;
 
-  virtual const std::string & GetLitteralValue() const override ;
+  /*
+  Warning! The following funciton need work in order to allow 
+  complex instantiation of numerical parameter
+  */
+  virtual std::string GetLitteralValue() const override ;
 
   virtual float GetFloattingValue() const override ;
 
@@ -79,10 +83,9 @@ public:
 
 protected:
   NumericalParameter();
-
-  template < std::enable_if< std::numeric_limits< T >::has_quiet_NaN() , T > 
-      = std::numeric_limits< T >::quiet_NaN() > NumericalParameter();
   ~NumericalParameter() override = default ;
+
+  T GetValue() const ;
 
   bool m_HasValue, m_HasDefaultValue ;
 
@@ -103,5 +106,9 @@ private:
 
 } // end namespace WrapperExp
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbWrapperExpNumericalParameter.txx"
+#endif
 
 #endif

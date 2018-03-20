@@ -22,35 +22,6 @@
 
 void RegisterTests()
 {
-  // REGISTER_TEST(otbWrapperExpApplicationNew);
-  // REGISTER_TEST(otbWrapperExpInputImageParameterNew);
-  // REGISTER_TEST(otbWrapperExpInputImageParameterTest1);
-  // REGISTER_TEST(otbWrapperExpNumericalParameterNew);
-  // REGISTER_TEST(otbWrapperExpNumericalParameterTest1);
-  // REGISTER_TEST(otbWrapperExpStringParameterNew);
-  // REGISTER_TEST(otbWrapperExpStringParameterTest1);
-  // REGISTER_TEST(otbWrapperExpChoiceParameterNew);
-  // REGISTER_TEST(otbWrapperExpChoiceParameterTest1);
-  // REGISTER_TEST(otbWrapperExpApplicationRegistry);
-  // REGISTER_TEST(otbWrapperExpStringListParameterNew);
-  // REGISTER_TEST(otbWrapperExpStringListParameterTest1);
-  // REGISTER_TEST(otbWrapperExpRAMParameterNew);
-  // REGISTER_TEST(otbWrapperExpDocExampleStructureNew);
-  // REGISTER_TEST(otbWrapperExpDocExampleStructureTest);
-  // REGISTER_TEST(otbWrapperExpParameterKey);
-  // REGISTER_TEST(otbWrapperExpParameterListNew);
-  // REGISTER_TEST(otbWrapperExpParameterList);
-  // REGISTER_TEST(otbWrapperExpEmptyParameterNew);
-  // REGISTER_TEST(otbWrapperExpInputImageListParameterNew);
-  // REGISTER_TEST(otbWrapperExpInputImageListParameterTest1);
-  // REGISTER_TEST(otbWrapperExpInputVectorDataListParameterNew);
-  // REGISTER_TEST(otbWrapperExpInputVectorDataListParameterTest1);
-  // REGISTER_TEST(otbWrapperExpApplicationDocTest);
-  // REGISTER_TEST(otbWrapperExpApplicationHtmlDocGeneratorNew);
-  // REGISTER_TEST(otbWrapperExpApplicationHtmlDocGeneratorTest1);
-  // REGISTER_TEST(otbWrapperExpInputVectorDataParameterNew);
-  // REGISTER_TEST(otbWrapperExpOutputImageParameterNew);
-  // REGISTER_TEST(otbWrapperExpOutputImageParameterTest1);
-  // //~ REGISTER_TEST(otbWrapperExpOutputImageParameterConversionTest);
-  // REGISTER_TEST(otbApplicationMemoryConnectTest);
+  REGISTER_TEST(NumericalInstantiationTest);
+  REGISTER_TEST(NumericalManipulationTest);
 }
