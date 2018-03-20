@@ -469,8 +469,6 @@ ImageFileWriter<TInputImage>
   inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
   typename TInputImage::PointType origin = inputPtr->GetOrigin();
-  const typename TInputImage::SpacingType&   spacing = inputPtr->GetSpacing();
-  const typename TInputImage::DirectionType& direction = inputPtr->GetDirection();
 
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
@@ -546,6 +544,8 @@ ImageFileWriter<TInputImage>
   //
   // Setup the ImageIO with information from inputPtr
   //
+  const typename TInputImage::SpacingType&   spacing = inputPtr->GetSpacing();
+  const typename TInputImage::DirectionType& direction = inputPtr->GetDirection();
   m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
   int direction_sign(0);
   for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
@@ -620,7 +620,6 @@ ImageFileWriter<TInputImage>
     for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
       {
       ioRegion.SetSize(i, streamRegion.GetSize(i));
-      ioRegion.SetIndex(i, streamRegion.GetIndex(i));
       //Set the ioRegion index using the shifted index ( (0,0 without box parameter))
       ioRegion.SetIndex(i, streamRegion.GetIndex(i) - m_ShiftOutputIndex[i]);
       }
