@@ -56,13 +56,15 @@ public:
   virtual ValueType GetDefaultValue() const ;
 
   /** Set the minimum value */
-  itkSetMacro( MinimumValue , ValueType );
+  // itkSetMacro( MinimumValue , ValueType );
+  virtual void SetMinimumValue( const ValueType & val );
 
   /** Get the minimum value */
   itkGetMacro( MinimumValue , ValueType );
 
   /** Set the maximum value */
-  itkSetMacro( MaximumValue , ValueType );
+  // itkSetMacro( MaximumValue , ValueType );
+  virtual void SetMaximumValue( const ValueType & val );
 
   /** Get the maximum value */
   itkGetMacro( MaximumValue , ValueType );
@@ -70,7 +72,7 @@ public:
   virtual bool HasValue() const override ;
 
   /*
-  Warning! The following funciton need work in order to allow 
+  Warning! The following functon need work in order to allow 
   complex instantiation of numerical parameter
   */
   virtual std::string GetLitteralValue() const override ;
@@ -85,7 +87,7 @@ protected:
   NumericalParameter();
   ~NumericalParameter() override = default ;
 
-  T GetValue() const ;
+  T GetInternalValue() const ;
 
   bool m_HasValue, m_HasDefaultValue ;
 

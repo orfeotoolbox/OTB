@@ -33,8 +33,8 @@ NumericalParameter< T >::NumericalParameter() :
     m_HasValue( false ) ,
     m_HasDefaultValue( false ) ,
     m_DefaultValue( 0 ) ,
-    m_MinimumValue( std::numeric_limits< T >::max() ) ,
-    m_MaximumValue( std::numeric_limits< T >::lowest() ) ,
+    m_MinimumValue( std::numeric_limits< T >::lowest() ) ,
+    m_MaximumValue( std::numeric_limits< T >::max() ) ,
     m_Value( 0 )
 {
 }
@@ -44,8 +44,47 @@ void
 NumericalParameter< T >::SetDefaultValue( const ValueType & val )
 {
   m_HasDefaultValue = true;
-  m_DefaultValue = val;
-  Modified();
+  if ( m_DefaultValue != val )
+    {
+    bool max = val <= m_MaximumValue ;
+    bool min = val >= m_MinimumValue ;
+    m_DefaultValue = (min && max) ? val : 
+      ( max ? m_MinimumValue : m_MaximumValue );
+    Modified();
+    }
+  
+}
+
+template< typename T >
+void
+NumericalParameter< T >::SetMinimumValue( const ValueType & val )
+{
+  if ( m_MinimumValue != val )
+    {
+    m_MinimumValue = val;
+    bool max = m_MinimumValue <= m_MaximumValue ;
+    bool def =  m_MinimumValue <= m_DefaultValue ;
+    m_MaximumValue = max ? m_MaximumValue : m_MinimumValue ;
+    m_DefaultValue = def ? m_DefaultValue : m_MinimumValue ;
+    // log
+    Modified();
+    }
+}
+
+template< typename T >
+void
+NumericalParameter< T >::SetMaximumValue( const ValueType & val )
+{
+  if ( m_MaximumValue != val )
+    {
+    m_MaximumValue = val;
+    bool min = m_MaximumValue >= m_MinimumValue ;
+    bool def =  m_MaximumValue >= m_DefaultValue ;
+    m_MinimumValue = min ? m_MinimumValue : m_MaximumValue ;
+    m_DefaultValue = def ? m_DefaultValue : m_MaximumValue ;
+    // log
+    Modified();
+    }
 }
 
 template< typename T >
@@ -68,7 +107,7 @@ NumericalParameter< T >::HasValue() const
 
 template <typename T >
 T
-NumericalParameter< T >::GetValue() const
+NumericalParameter< T >::GetInternalValue() const
 {
   if ( !m_HasValue )
     return T(0);
@@ -83,7 +122,6 @@ std::string
 NumericalParameter< T >::GetLitteralValue() const
 {
   std::ostringstream oss;
-  // T val ( GetValue() );
   oss << GetValue();
   return oss.str();
 }

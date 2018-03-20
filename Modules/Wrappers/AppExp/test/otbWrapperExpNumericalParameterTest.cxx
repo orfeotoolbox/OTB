@@ -31,18 +31,98 @@ int NumericalInstantiationTest( int  , char **  )
   return EXIT_SUCCESS;
 }
 
+#define NumericalManipulation( type ) \
+{\
+  NumericalParameter< type >::Pointer param = NumericalParameter<type>::New(); \
+  std::ostringstream oss; \
+  oss<<"First round :"<<std::endl;\
+  type min = param->GetMinimumValue(); \
+  oss<<"min : "<<min<<std::endl;\
+  type max = param->GetMaximumValue(); \
+  oss<<"max : "<<max<<std::endl; \
+  type def = param->GetDefaultValue(); \
+  oss<<"def : "<<def<<std::endl; \
+  type val = param->GetIntegerValue(); \
+  oss<<"val : "<<val<<std::endl; \
+  float fval = param->GetFloattingValue(); \
+  oss<<"fval : "<<fval<<std::endl; \
+  std::string sval = param->GetLitteralValue(); \
+  oss<<"sval : "<<sval<<std::endl; \
+  oss<<"has value : "<<param->HasValue()<<std::endl; \
+  oss<<"Manipulation"<<std::endl; \
+  param->SetMinimumValue( -1.5 ); \
+  min = param->GetMinimumValue(); \
+  oss<<"min : "<<min<<std::endl;\
+  max = param->GetMaximumValue(); \
+  oss<<"max : "<<max<<std::endl; \
+  def = param->GetDefaultValue(); \
+  oss<<"def : "<<def<<std::endl; \
+  param->SetMaximumValue( -6 ); \
+  min = param->GetMinimumValue(); \
+  oss<<"min : "<<min<<std::endl;\
+  max = param->GetMaximumValue(); \
+  oss<<"max : "<<max<<std::endl; \
+  def = param->GetDefaultValue(); \
+  oss<<"def : "<<def<<std::endl; \
+  param->SetDefaultValue( -150 ); \
+  min = param->GetMinimumValue(); \
+  oss<<"min : "<<min<<std::endl;\
+  max = param->GetMaximumValue(); \
+  oss<<"max : "<<max<<std::endl; \
+  def = param->GetDefaultValue(); \
+  oss<<"def : "<<def<<std::endl; \
+  param->SetMinimumValue( 5 ); \
+  min = param->GetMinimumValue(); \
+  oss<<"min : "<<min<<std::endl;\
+  max = param->GetMaximumValue(); \
+  oss<<"max : "<<max<<std::endl; \
+  def = param->GetDefaultValue(); \
+  oss<<"def : "<<def<<std::endl; \
+  param->SetMinimumValue( -100); \
+  min = param->GetMinimumValue(); \
+  oss<<"min : "<<min<<std::endl;\
+  max = param->GetMaximumValue(); \
+  oss<<"max : "<<max<<std::endl; \
+  def = param->GetDefaultValue(); \
+  oss<<"def : "<<def<<std::endl; \
+  param->SetMaximumValue( 100 ); \
+  min = param->GetMinimumValue(); \
+  oss<<"min : "<<min<<std::endl;\
+  max = param->GetMaximumValue(); \
+  oss<<"max : "<<max<<std::endl; \
+  def = param->GetDefaultValue(); \
+  oss<<"def : "<<def<<std::endl; \
+  param->SetDefaultValue( 0 ); \
+  min = param->GetMinimumValue(); \
+  oss<<"min : "<<min<<std::endl;\
+  max = param->GetMaximumValue(); \
+  oss<<"max : "<<max<<std::endl; \
+  def = param->GetDefaultValue(); \
+  oss<<"def : "<<def<<std::endl; \
+  oss<<"has value : "<<param->HasValue()<<std::endl; \
+  std::cout<<oss.str();\
+}\
+
 int NumericalManipulationTest( int , char ** )
 {
-  NumericalParameter< int >::Pointer param = NumericalParameter<int>::New();
-  int min = param->GetMinimumValue();
-  int max = param->GetMaximumValue();
-  int def = param->GetDefaultValue();
-  int val = param->GetIntegerValue();
-  float fval = param->GetFloattingValue();
-  std::string sval = param->GetLitteralValue();
-  bool has_val = param->HasValue();
+  // NumericalParameter< int >::Pointer param = NumericalParameter<int>::New();
+  // int min = param->GetMinimumValue();
+  // int max = param->GetMaximumValue();
+  // int def = param->GetDefaultValue();
+  // int val = param->GetIntegerValue();
+  // float fval = param->GetFloattingValue();
+  // std::string sval = param->GetLitteralValue();
+  // bool has_val = param->HasValue();
+  // param->SetMinimumValue( -1.5 );
+  // min = param->GetMinimumValue();
+  // param->SetMaximumValue( -6 );
+  // max = param->GetMaximumValue();
+  // param->SetMinimumValue( -100);
+  // param->SetMaximumValue( 100 );
+  // param->SetDefaultValue( -150 );
+  // def = param->GetDefaultValue();
+  NumericalManipulation( int )
+  NumericalManipulation( double )
 
   return EXIT_SUCCESS;
 }
-
-#define NumericalManipulation( type ) \
