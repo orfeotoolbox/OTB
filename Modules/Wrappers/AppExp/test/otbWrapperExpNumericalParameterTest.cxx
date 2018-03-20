@@ -31,17 +31,24 @@ int NumericalInstantiationTest( int  , char **  )
   return EXIT_SUCCESS;
 }
 
+template < typename T >
+void PrintMinMaxDef( const typename NumericalParameter<T>::Pointer param, 
+                     std::ostringstream & oss)
+{
+  T min = param->GetMinimumValue();
+  oss<<"min : "<<min<<std::endl;
+  T max = param->GetMaximumValue();
+  oss<<"max : "<<max<<std::endl;
+  T def = param->GetDefaultValue();
+  oss<<"def : "<<def<<std::endl;
+}
+
 #define NumericalManipulation( type ) \
 {\
   NumericalParameter< type >::Pointer param = NumericalParameter<type>::New(); \
   std::ostringstream oss; \
   oss<<"First round :"<<std::endl;\
-  type min = param->GetMinimumValue(); \
-  oss<<"min : "<<min<<std::endl;\
-  type max = param->GetMaximumValue(); \
-  oss<<"max : "<<max<<std::endl; \
-  type def = param->GetDefaultValue(); \
-  oss<<"def : "<<def<<std::endl; \
+  PrintMinMaxDef<type>( param , oss );\
   type val = param->GetIntegerValue(); \
   oss<<"val : "<<val<<std::endl; \
   float fval = param->GetFloattingValue(); \
@@ -51,54 +58,19 @@ int NumericalInstantiationTest( int  , char **  )
   oss<<"has value : "<<param->HasValue()<<std::endl; \
   oss<<"Manipulation"<<std::endl; \
   param->SetMinimumValue( -1.5 ); \
-  min = param->GetMinimumValue(); \
-  oss<<"min : "<<min<<std::endl;\
-  max = param->GetMaximumValue(); \
-  oss<<"max : "<<max<<std::endl; \
-  def = param->GetDefaultValue(); \
-  oss<<"def : "<<def<<std::endl; \
+  PrintMinMaxDef<type>( param , oss );\
   param->SetMaximumValue( -6 ); \
-  min = param->GetMinimumValue(); \
-  oss<<"min : "<<min<<std::endl;\
-  max = param->GetMaximumValue(); \
-  oss<<"max : "<<max<<std::endl; \
-  def = param->GetDefaultValue(); \
-  oss<<"def : "<<def<<std::endl; \
+  PrintMinMaxDef<type>( param , oss );\
   param->SetDefaultValue( -150 ); \
-  min = param->GetMinimumValue(); \
-  oss<<"min : "<<min<<std::endl;\
-  max = param->GetMaximumValue(); \
-  oss<<"max : "<<max<<std::endl; \
-  def = param->GetDefaultValue(); \
-  oss<<"def : "<<def<<std::endl; \
+  PrintMinMaxDef<type>( param , oss );\
   param->SetMinimumValue( 5 ); \
-  min = param->GetMinimumValue(); \
-  oss<<"min : "<<min<<std::endl;\
-  max = param->GetMaximumValue(); \
-  oss<<"max : "<<max<<std::endl; \
-  def = param->GetDefaultValue(); \
-  oss<<"def : "<<def<<std::endl; \
+  PrintMinMaxDef<type>( param , oss );\
   param->SetMinimumValue( -100); \
-  min = param->GetMinimumValue(); \
-  oss<<"min : "<<min<<std::endl;\
-  max = param->GetMaximumValue(); \
-  oss<<"max : "<<max<<std::endl; \
-  def = param->GetDefaultValue(); \
-  oss<<"def : "<<def<<std::endl; \
+  PrintMinMaxDef<type>( param , oss );\
   param->SetMaximumValue( 100 ); \
-  min = param->GetMinimumValue(); \
-  oss<<"min : "<<min<<std::endl;\
-  max = param->GetMaximumValue(); \
-  oss<<"max : "<<max<<std::endl; \
-  def = param->GetDefaultValue(); \
-  oss<<"def : "<<def<<std::endl; \
+  PrintMinMaxDef<type>( param , oss );\
   param->SetDefaultValue( 0 ); \
-  min = param->GetMinimumValue(); \
-  oss<<"min : "<<min<<std::endl;\
-  max = param->GetMaximumValue(); \
-  oss<<"max : "<<max<<std::endl; \
-  def = param->GetDefaultValue(); \
-  oss<<"def : "<<def<<std::endl; \
+  PrintMinMaxDef<type>( param , oss );\
   oss<<"has value : "<<param->HasValue()<<std::endl; \
   std::cout<<oss.str();\
 }\

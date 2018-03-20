@@ -122,7 +122,7 @@ std::string
 NumericalParameter< T >::GetLitteralValue() const
 {
   std::ostringstream oss;
-  oss << GetValue();
+  oss << GetInternalValue();
   return oss.str();
 }
 
@@ -130,14 +130,14 @@ template< typename T >
 float
 NumericalParameter< T >::GetFloattingValue() const
 {
-  return GetValue();
+  return GetInternalValue();
 }
 
 template< typename T >
 int
 NumericalParameter< T >::GetIntegerValue() const
 {
-  return GetValue();
+  return GetInternalValue();
 }
 
 template< typename T >
