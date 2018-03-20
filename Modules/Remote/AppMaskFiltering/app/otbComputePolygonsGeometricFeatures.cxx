@@ -112,20 +112,24 @@ private:
     
     otb::ogr::Layer::iterator featIt;
     
-    OGRFieldDefn field("size", OFTReal);
-    newLayer.CreateField(field, true);
+    OGRFieldDefn fieldSize("size", OFTReal);
+    newLayer.CreateField(fieldSize, true);
+    
+    OGRFieldDefn fieldPerimeter("perimeter", OFTReal);
+    newLayer.CreateField(fieldPerimeter, true);
     
     for(featIt = layer.begin(); featIt!=layer.end(); ++featIt)
     {
       
       double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();
-      std::cout << area << std::endl;
+      double perimeter = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->getExteriorRing()->get_Length();
      /*(*featItOut)["size"].SetValue<double>(area);
       featItOut++;*/
       ogr::Feature dstFeature(newLayer.GetLayerDefn());
       dstFeature.SetFrom( *featIt , TRUE);
       dstFeature.SetFID(featIt->GetFID());
       dstFeature["size"].SetValue<double>(area);
+      dstFeature["perimeter"].SetValue<double>(perimeter);
       newLayer.CreateFeature( dstFeature);
     }
     newLayer.ogr().CommitTransaction();
