@@ -105,8 +105,7 @@ public:
 //
 // Public SLOTS.
 public slots:
-  void UnhandledException(QString message);
-  void OnExceptionRaised( QString what );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -123,6 +122,10 @@ signals:
 // Protected methods.
 protected:
 
+  bool IsRunning();
+
+  virtual QWidget* CreateInputWidgets();
+
   //
   // QWidget overloads.
 
@@ -137,6 +140,15 @@ protected:
 
   /** Html section for 'Failed' icon */
   std::string m_IconPathFailed;
+
+protected slots:
+
+  /**
+   */
+  void OnExecButtonClicked();
+
+  void UnhandledException(QString message);
+  void OnExceptionRaised( QString what );
   
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -148,8 +160,6 @@ private:
   void operator=(const QtWidgetView&); //purposely not implemented
 
   QWidget* CreateFooter();
-
-  QWidget* CreateInputWidgets();
 
   QWidget* CreateDoc();
 
@@ -179,10 +189,6 @@ private:
 private slots:
   void UpdateMessageAfterExecution(int status);
   void UpdateMessageAfterApplicationReady(bool val);
-
-  /**
-   */
-  void OnExecButtonClicked();
 
   /**
    */

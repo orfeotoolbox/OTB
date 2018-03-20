@@ -284,6 +284,11 @@ void QtWidgetView::OnExceptionRaised( QString /*message*/)
   m_TabWidget->setCurrentIndex(1);
 }
 
+bool QtWidgetView::IsRunning()
+{
+  return m_IsRunning;
 }
-}
+
+} // end of namespace Wrapper
+} // end of namespace otb
 
