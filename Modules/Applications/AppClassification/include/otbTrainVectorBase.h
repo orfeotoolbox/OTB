@@ -180,9 +180,9 @@ protected:
   TargetListSampleType::Pointer m_PredictedList;
   FeaturesInfo m_FeaturesInfo;
 
-  void DoInit() ITK_OVERRIDE;
-  void DoUpdateParameters() ITK_OVERRIDE;
-  void DoExecute() ITK_OVERRIDE;
+  void DoInit() override;
+  void DoUpdateParameters() override;
+  void DoExecute() override;
 
 };
 

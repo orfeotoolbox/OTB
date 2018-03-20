@@ -79,9 +79,9 @@ protected:
   /** Constructor */
   PolarimetricData();
   /** Destructor */
-  ~PolarimetricData() ITK_OVERRIDE {}
+  ~PolarimetricData() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   PolarimetricData(const Self &); //purposely not implemented

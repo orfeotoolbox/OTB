@@ -107,7 +107,7 @@ public:
 
   /** Evaluate the function at specified DataNode position.
    * Subclasses must provide this method. */
-  TOutput Evaluate( const DataNodeType& node ) const ITK_OVERRIDE = 0;
+  TOutput Evaluate( const DataNodeType& node ) const override = 0;
 
   /** Check if an index is inside the image buffer.
    * we take into account the fact that each voxel has its
@@ -186,8 +186,8 @@ public:
 
 protected:
   DataNodeImageFunction();
-  ~DataNodeImageFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~DataNodeImageFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Const pointer to the input image. */
   InputImageConstPointer  m_Image;

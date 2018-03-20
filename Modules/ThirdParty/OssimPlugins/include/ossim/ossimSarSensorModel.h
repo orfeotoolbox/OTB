@@ -276,7 +276,7 @@ public:
    bool autovalidateForwardModelFromGCPs(double resTol = 25);
 
    //Pure virtual in base class
-   bool useForward() const;
+   bool useForward() const override;
 
    void optimizeTimeOffsetsFromGcps();
 
@@ -336,7 +336,7 @@ public:
 
    virtual std::ostream& print(std::ostream& out) const override;
 protected:
-   TYPE_DATA;
+   TYPE_DATA
 
    /**
     * Compute range and doppler frequency from an input point, sensor

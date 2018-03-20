@@ -91,9 +91,9 @@ protected:
   /** Constructor */
   LabelImageToLabelMapWithAdjacencyFilter();
   /** Destructor */
-  ~LabelImageToLabelMapWithAdjacencyFilter() ITK_OVERRIDE {};
+  ~LabelImageToLabelMapWithAdjacencyFilter() override {};
   /** Printself */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   // class to store a RLE
   class RLE
@@ -121,16 +121,16 @@ protected:
   /** LabelImageToLabelMapWithAdjacencyFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** LabelImageToLabelMapWithAdjacencyFilter will produce the entire output. */
-  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)) ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)) override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
   /** Add a new adjacency */
   void AddAdjacency(LabelType label1, LabelType label2, itk::ThreadIdType threadId);

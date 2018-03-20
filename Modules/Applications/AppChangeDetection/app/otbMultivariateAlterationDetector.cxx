@@ -43,7 +43,7 @@ public:
   itkTypeMacro(MultivariateAlterationDetector, otb::Wrapper::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("MultivariateAlterationDetector");
     SetDescription("Change detection by Multivariate Alteration Detector (MAD) algorithm");
@@ -110,11 +110,11 @@ private:
   SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     typedef otb::MultivariateAlterationDetectorImageFilter<
         FloatVectorImageType,

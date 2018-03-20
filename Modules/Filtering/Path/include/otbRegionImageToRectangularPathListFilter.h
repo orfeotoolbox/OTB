@@ -102,16 +102,16 @@ public:
 
 protected:
   RegionImageToRectangularPathListFilter();
-  ~RegionImageToRectangularPathListFilter() ITK_OVERRIDE;
+  ~RegionImageToRectangularPathListFilter() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE{}  // do nothing
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateOutputInformation() override{}  // do nothing
+  void GenerateData() override;
 
   double m_MinimumFit;
   double m_MinimumSize;
   int    m_CrossTermFormula;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   //jgc
   typedef Image<unsigned char, itkGetStaticConstMacro(NDimensions)> MarkerImageType;

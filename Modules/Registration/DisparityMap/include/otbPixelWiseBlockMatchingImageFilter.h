@@ -418,10 +418,10 @@ public:
     return m_Functor;
   }
 
-  /** Set initial horizontal disparity field (optional, ITK_OVERRIDE m_InitHorizontalDisparity) */
+  /** Set initial horizontal disparity field (optional, override m_InitHorizontalDisparity) */
   void SetHorizontalDisparityInput( const TOutputDisparityImage * hfield);
 
-  /** Set initial vertical disparity field (optional, ITK_OVERRIDE m_InitVerticalDisparity) */
+  /** Set initial vertical disparity field (optional, override m_InitVerticalDisparity) */
   void SetVerticalDisparityInput( const TOutputDisparityImage * vfield);
 
   /** Get the initial disparity fields */
@@ -447,19 +447,19 @@ protected:
   PixelWiseBlockMatchingImageFilter();
 
   /** Destructor */
-  ~PixelWiseBlockMatchingImageFilter() ITK_OVERRIDE;
+  ~PixelWiseBlockMatchingImageFilter() override;
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Before threaded generate data */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented

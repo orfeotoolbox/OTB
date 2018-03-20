@@ -94,7 +94,7 @@ public:
   MyClass( QObject* p =NULL );
 
   /** \brief Destructor. */
-  ~MyClass() ITK_OVERRIDE;
+  ~MyClass() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

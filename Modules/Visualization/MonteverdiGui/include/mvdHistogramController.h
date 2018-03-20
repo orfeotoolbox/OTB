@@ -101,7 +101,7 @@ public:
   /**
    * \brief Destructor.
    */
-  ~HistogramController() ITK_OVERRIDE;
+  ~HistogramController() override;
 
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -134,13 +134,13 @@ private:
   //
   // AbstractModelController methods.
 
-  void Connect( AbstractModel* ) ITK_OVERRIDE;
+  void Connect( AbstractModel* ) override;
 
-  void ClearWidget() ITK_OVERRIDE;
+  void ClearWidget() override;
 
-  void virtual_ResetWidget( bool = false ) ITK_OVERRIDE;
+  void virtual_ResetWidget( bool = false ) override;
 
-  void Disconnect( AbstractModel* ) ITK_OVERRIDE;
+  void Disconnect( AbstractModel* ) override;
 
 //
 // Private attributes.

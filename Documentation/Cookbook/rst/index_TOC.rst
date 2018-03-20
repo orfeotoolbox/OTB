@@ -8,7 +8,7 @@ Table of Contents
    Installation
    OTB-Applications
    Monteverdi
-   ExtendedFilenames
+   AdvancedUse
    Recipes
    Applications
    FAQ

@@ -397,7 +397,7 @@ public:
   itkTypeMacro(Self, Superclass);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
@@ -451,11 +451,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     if (IsParameterEnabled("vm") && HasValue("vm")) Superclass::ConnectKMClassificationMask();
 

@@ -109,7 +109,7 @@ namespace otb
 
 
           /** PrintSelf method */
-          void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+          void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
           /**
@@ -125,7 +125,7 @@ namespace otb
           /** Constructor from a ASCII file */
           //ReduceSpectralResponseClassifierRAndNIR( const std::string & filename );
           /** Destructor */
-          ~ReduceSpectralResponseClassifierRAndNIR() ITK_OVERRIDE {};
+          ~ReduceSpectralResponseClassifierRAndNIR() override {};
           /** PrintSelf method */
           //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

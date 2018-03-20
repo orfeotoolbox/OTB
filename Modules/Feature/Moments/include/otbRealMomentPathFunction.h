@@ -67,8 +67,8 @@ public:
 
 protected:
   RealMomentPathFunction() {}
-  ~RealMomentPathFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~RealMomentPathFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }

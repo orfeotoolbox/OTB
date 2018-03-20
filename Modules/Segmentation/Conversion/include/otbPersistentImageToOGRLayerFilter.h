@@ -74,9 +74,9 @@ public:
   typedef ogr::Layer                                 OGRLayerType;
   typedef ogr::Feature                               OGRFeatureType;
 
-  void AllocateOutputs() ITK_OVERRIDE;
-  void Reset(void) ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
+  void AllocateOutputs() override;
+  void Reset(void) override;
+  void Synthetize(void) override;
 
   /** This method creates the output layer in the OGRLayer set by the user.
    * \note This methode must be called before the call of Update .
@@ -96,11 +96,11 @@ public:
 
 protected:
   PersistentImageToOGRLayerFilter();
-  ~PersistentImageToOGRLayerFilter() ITK_OVERRIDE;
+  ~PersistentImageToOGRLayerFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 
 private:

@@ -109,11 +109,11 @@ public:
 
 protected:
   LabelizeConfidenceConnectedImageFilter();
-  ~LabelizeConfidenceConnectedImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LabelizeConfidenceConnectedImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Region growing */
-  void RegionGrowing(const IndexType indexSeed) ITK_OVERRIDE;
+  void RegionGrowing(const IndexType indexSeed) override;
 
 private:
   LabelizeConfidenceConnectedImageFilter(const Self &); //purposely not implemented

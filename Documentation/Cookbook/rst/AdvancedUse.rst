@@ -1,7 +1,24 @@
-.. _extended-filenames:
+Advanced Use
+============
+
+This section describes advanced configuration options and tricks.
+
+Environment variables that affects Orfeo ToolBox
+------------------------------------------------
+
+The following environment variables are parsed by Orfeo ToolBox. Note
+that they only affect default values, and that settings in extended
+filenames, applications, monteverdi or custom C++ code might override
+those values.
+
+* ``OTB_DEM_DIRECTORY``: Default directory were DEM tiles are stored. It should only contain ```.hgt`` or or georeferenced ``.tif`` files. Empty if not set (no directory set)
+* ``OTB_GEOID_FILE``: Default path to the geoid file that will be used to retrieve height of DEM above ellipsoid. Empty if not set (no geoid set)
+* ``OTB_MAX_RAM_HINT``: Default maximum memory that OTB should use for processing, in MB. If not set, default value is 128 MB.
+* ``OTB_LOGGER_LEVEL``: Default level of logging for OTB. Should be one of  ``DEBUG``, ``INFO``, ``WARNING``, ``CRITICAL`` or ``FATAL``, by increasing order of priority. Only messages with a higher priority than the level of logging will be displayed. If not set, default level is ``INFO``.
 
 Extended filenames
-================================
+------------------
+.. _extended-filenames:
 
 Extended filenames is an interesting feature of OTB. With it, you can control
 several aspects of the beahvior of the OTB in the OTB-Applications or in our
@@ -42,7 +59,6 @@ applications from the bash command line.**
 
 Reader options
 ^^^^^^^^^^^^^^
-
 ::
 
     &geom=<path/filename.geom>
