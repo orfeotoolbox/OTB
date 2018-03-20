@@ -30,12 +30,13 @@ namespace WrapperExp
 
 template< typename T >
 NumericalParameter< T >::NumericalParameter() :
+    m_NaN( InternalNaN< std::numeric_limits< ValueType >::has_quiet_NaN , ValueType >::value ), 
     m_HasValue( false ) ,
     m_HasDefaultValue( false ) ,
-    m_DefaultValue( 0 ) ,
+    m_DefaultValue( m_NaN ) ,
     m_MinimumValue( std::numeric_limits< T >::lowest() ) ,
     m_MaximumValue( std::numeric_limits< T >::max() ) ,
-    m_Value( 0 )
+    m_Value( m_NaN )
 {
 }
 
@@ -92,8 +93,10 @@ T
 NumericalParameter< T >::GetDefaultValue() const
 {
   if ( !m_HasDefaultValue )
-    return T(0);
-    // log and NaN if there is one
+  {
+    // log
+    return m_NaN;
+  }
 
   return m_DefaultValue;
 }
@@ -110,8 +113,8 @@ T
 NumericalParameter< T >::GetInternalValue() const
 {
   if ( !m_HasValue )
-    return T(0);
-    // log and NaN if there is one
+    return m_NaN;
+    // log
 
   return m_Value;
 }

@@ -83,11 +83,27 @@ public:
 
   virtual void Reset() override ;
 
+  // NaN
+  template < bool B , typename Val>
+  struct InternalNaN
+  {
+    static constexpr Val value = 0 ;
+  };
+
+  template < typename Val>
+  struct InternalNaN< true , Val>
+  {
+    static constexpr Val value = std::numeric_limits< Val>::quiet_NaN() ;
+  };
+
+
 protected:
   NumericalParameter();
   ~NumericalParameter() override = default ;
 
-  T GetInternalValue() const ;
+  ValueType GetInternalValue() const ;
+
+  ValueType m_NaN;
 
   bool m_HasValue, m_HasDefaultValue ;
 
