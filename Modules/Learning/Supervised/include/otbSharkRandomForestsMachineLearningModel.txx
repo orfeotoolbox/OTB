@@ -51,6 +51,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   this->m_ConfidenceIndex = true;
   this->m_IsRegressionSupported = false;
   this->m_IsDoPredictBatchMultiThreaded = true;
+  this->m_NormalizeClassLabels = true;
 }
 
 
@@ -75,6 +76,10 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
   Shark::ListSampleToSharkVector(this->GetTargetListSample(), class_labels);
+  if(m_NormalizeClassLabels)
+    {
+    Shark::NormalizeLabelsAndGetDictionary(class_labels, m_ClassDictionary);
+    }
   shark::ClassificationDataset TrainSamples = shark::createLabeledDataFromRange(features,class_labels);
 
   //Set parameters
@@ -130,7 +135,14 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   unsigned int res{0};
   m_RFModel.eval(samples, res);
   TargetSampleType target;
-  target[0] = static_cast<TOutputValue>(res);
+  if(m_NormalizeClassLabels)
+    {
+    target[0] = m_ClassDictionary[static_cast<TOutputValue>(res)];
+    }
+  else
+    {
+    target[0] = static_cast<TOutputValue>(res);
+    }
   return target;
 }
 
@@ -154,9 +166,9 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
   shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
 
-  #ifdef _OPENMP
+#ifdef _OPENMP
   omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
-  #endif
+#endif
   
   if(quality != ITK_NULLPTR)
     {
@@ -177,7 +189,14 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   for(const auto& p : prediction.elements())
     {
     TargetSampleType target;
-    target[0] = static_cast<TOutputValue>(p);
+    if(m_NormalizeClassLabels)
+      {
+      target[0] = m_ClassDictionary[static_cast<TOutputValue>(p)];
+      }
+    else
+      {
+      target[0] = static_cast<TOutputValue>(p);
+      }
     targets->SetMeasurementVector(id,target);
     ++id;
     }
@@ -194,7 +213,18 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
   // Add comment with model file name
-  ofs << "#" << m_RFModel.name() << std::endl;
+  ofs << "#" << m_RFModel.name();
+  if(m_NormalizeClassLabels) ofs  << " with_dictionary";
+  ofs << std::endl;
+  if(m_NormalizeClassLabels)
+    {
+    ofs << m_ClassDictionary.size() << " ";
+    for(const auto& l : m_ClassDictionary)
+      {
+      ofs << l << " ";
+      }
+    ofs << std::endl;
+    }
   shark::TextOutArchive oa(ofs);
   m_RFModel.save(oa,0);
 }
@@ -214,12 +244,28 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
       {
       if( line.find( m_RFModel.name() ) == std::string::npos )
         itkExceptionMacro( "The model file : " + filename + " cannot be read." );
+      if( line.find( "with_dictionary" ) == std::string::npos )
+        {
+        m_NormalizeClassLabels=false;
+        }
       }
     else
       {
       // rewind if first line is not a comment
       ifs.clear();
       ifs.seekg( 0, std::ios::beg );
+      }
+    if(m_NormalizeClassLabels)
+      {
+      size_t nbLabels{0};
+      ifs >> nbLabels;
+      m_ClassDictionary.resize(nbLabels);
+      for(size_t i=0; i<nbLabels; ++i)
+        {
+        unsigned int label;
+        ifs >> label;
+        m_ClassDictionary[i]=label;
+        }
       }
     shark::TextInArchive ia( ifs );
     m_RFModel.load( ia, 0 );
