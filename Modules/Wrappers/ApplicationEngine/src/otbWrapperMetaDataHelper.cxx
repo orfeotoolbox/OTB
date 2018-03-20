@@ -25,45 +25,38 @@ namespace otb
 {
 namespace Wrapper
 {
-
-MetaDataHelper::MetaDataHelper()
+namespace MetaDataHelper
 {
-}
 
-MetaDataHelper::~MetaDataHelper()
-{
-}
-
-MetaDataHelper::MDType
-MetaDataHelper::GetType(const std::string &val)
+MDType GetType(const std::string &val)
 {
   MDType ret;
   otb::MetaDataKey::KeyType kt = otb::MetaDataKey::GetKeyType(val);
   switch (kt)
     {
     case otb::MetaDataKey::TSTRING:
-      ret = MDType_STRING;
+      ret = MDType::String;
       break;
     case otb::MetaDataKey::TENTIER:
-      ret = MDType_INT;
+      ret = MDType::Int;
       break;
     case otb::MetaDataKey::TDOUBLE:
-      ret = MDType_DOUBLE;
+      ret = MDType::Double;
       break;
     case otb::MetaDataKey::TOTB_GCP:
-      ret = MDType_GCP;
+      ret = MDType::GCP;
       break;
     case otb::MetaDataKey::TVECTOR:
-      ret = MDType_VECTOR;
+      ret = MDType::Vector;
       break;
     case otb::MetaDataKey::TOSSIMKEYWORDLIST:
-      ret = MDType_IMAGEKWL;
+      ret = MDType::ImageKWL;
       break;
     case otb::MetaDataKey::TVECTORDATAKEYWORDLIST:
-      ret = MDType_VECTORDATAKWL;
+      ret = MDType::VectorDataKWL;
       break;
     case otb::MetaDataKey::TBOOLVECTOR:
-      ret = MDType_BOOLVECTOR;
+      ret = MDType::BoolVector;
       break;
     default:
       break;
@@ -72,7 +65,7 @@ MetaDataHelper::GetType(const std::string &val)
 }
 
 std::string
-MetaDataHelper::GetString(
+GetString(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
@@ -82,7 +75,7 @@ MetaDataHelper::GetString(
 }
 
 void
-MetaDataHelper::SetString(
+SetString(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const std::string &val)
@@ -91,7 +84,7 @@ MetaDataHelper::SetString(
 }
 
 unsigned int
-MetaDataHelper::GetInt(
+GetInt(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
@@ -101,7 +94,7 @@ MetaDataHelper::GetInt(
 }
 
 void
-MetaDataHelper::SetInt(
+SetInt(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     unsigned int val)
@@ -110,7 +103,7 @@ MetaDataHelper::SetInt(
 }
 
 double
-MetaDataHelper::GetDouble(
+GetDouble(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
@@ -120,7 +113,7 @@ MetaDataHelper::GetDouble(
 }
 
 void
-MetaDataHelper::SetDouble(
+SetDouble(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     double val)
@@ -129,7 +122,7 @@ MetaDataHelper::SetDouble(
 }
 
 otb::OTB_GCP
-MetaDataHelper::GetGCP(
+GetGCP(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
@@ -139,7 +132,7 @@ MetaDataHelper::GetGCP(
 }
 
 void
-MetaDataHelper::SetGCP(
+SetGCP(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::OTB_GCP &val)
@@ -148,7 +141,7 @@ MetaDataHelper::SetGCP(
 }
 
 otb::MetaDataKey::VectorType
-MetaDataHelper::GetVector(
+GetVector(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
@@ -158,7 +151,7 @@ MetaDataHelper::GetVector(
 }
 
 void
-MetaDataHelper::SetVector(
+SetVector(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::MetaDataKey::VectorType &val)
@@ -167,7 +160,7 @@ MetaDataHelper::SetVector(
 }
 
 otb::ImageKeywordlist
-MetaDataHelper::GetImageKWL(
+GetImageKWL(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
@@ -177,7 +170,7 @@ MetaDataHelper::GetImageKWL(
 }
 
 void
-MetaDataHelper::SetImageKWL(
+SetImageKWL(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::ImageKeywordlist &val)
@@ -186,7 +179,7 @@ MetaDataHelper::SetImageKWL(
 }
 
 otb::VectorDataKeywordlist
-MetaDataHelper::GetVectorDataKWL(
+GetVectorDataKWL(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
@@ -196,7 +189,7 @@ MetaDataHelper::GetVectorDataKWL(
 }
 
 void
-MetaDataHelper::SetVectorDataKWL(
+SetVectorDataKWL(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::VectorDataKeywordlist &val)
@@ -205,7 +198,7 @@ MetaDataHelper::SetVectorDataKWL(
 }
 
 otb::MetaDataKey::BoolVectorType
-MetaDataHelper::GetBoolVector(
+GetBoolVector(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
@@ -215,7 +208,7 @@ MetaDataHelper::GetBoolVector(
 }
 
 void
-MetaDataHelper::SetBoolVector(
+SetBoolVector(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::MetaDataKey::BoolVectorType &val)
@@ -223,5 +216,6 @@ MetaDataHelper::SetBoolVector(
   itk::EncapsulateMetaData<otb::MetaDataKey::BoolVectorType>(dict, key, val);
 }
 
+} // end of namespace MetaDataHelper
 } // end of namespace Wrapper
 } // end of namespace otb

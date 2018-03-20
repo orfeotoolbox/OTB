@@ -33,99 +33,96 @@ namespace Wrapper
 {
 
 /**
- * \class MetaDataHelper
+ * \namespace MetaDataHelper
  *
- * \brief Small helper to manipulate itk::MetaDataDictionary
+ * \brief Contains small helper functions to manipulate itk::MetaDataDictionary
  *
- * This class is only here to instanciate the different template function that
- * allow to get/set values in MetaDataDictionary. All functions are static.
- * 
- * \ingroup OTBApplicationEngine
+ * These functions are only here to instanciate the different template function that
+ * allow to get/set values in MetaDataDictionary.
+ *
  */
-class OTBApplicationEngine_EXPORT MetaDataHelper
+namespace MetaDataHelper
 {
-public:
-  MetaDataHelper();
-  virtual ~MetaDataHelper();
 
-  typedef enum
+  enum class MDType
   {
-    MDType_STRING,
-    MDType_INT,
-    MDType_DOUBLE,
-    MDType_GCP,
-    MDType_VECTOR,
-    MDType_IMAGEKWL,
-    MDType_VECTORDATAKWL,
-    MDType_BOOLVECTOR
-  } MDType;
+    String,
+    Int,
+    Double,
+    GCP,
+    Vector,
+    ImageKWL,
+    VectorDataKWL,
+    BoolVector
+  };
 
-  static MDType GetType(const std::string &val);
+  OTBApplicationEngine_EXPORT MDType GetType(const std::string &val);
 
-  static std::string GetString(
+  OTBApplicationEngine_EXPORT std::string GetString(
     const itk::MetaDataDictionary &dict,
     const std::string &key);
-  static void SetString(
+  OTBApplicationEngine_EXPORT void SetString(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const std::string &val);
 
-  static unsigned int GetInt(
+  OTBApplicationEngine_EXPORT unsigned int GetInt(
     const itk::MetaDataDictionary &dict,
     const std::string &key);
-  static void SetInt(
+  OTBApplicationEngine_EXPORT void SetInt(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     unsigned int val);
 
-  static double GetDouble(
+  OTBApplicationEngine_EXPORT double GetDouble(
     const itk::MetaDataDictionary &dict,
     const std::string &key);
-  static void SetDouble(
+  OTBApplicationEngine_EXPORT void SetDouble(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     double val);
 
-  static otb::OTB_GCP GetGCP(
+  OTBApplicationEngine_EXPORT otb::OTB_GCP GetGCP(
     const itk::MetaDataDictionary &dict,
     const std::string &key);
-  static void SetGCP(
+  OTBApplicationEngine_EXPORT void SetGCP(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::OTB_GCP &val);
 
-  static otb::MetaDataKey::VectorType GetVector(
+  OTBApplicationEngine_EXPORT otb::MetaDataKey::VectorType GetVector(
     const itk::MetaDataDictionary &dict,
     const std::string &key);
-  static void SetVector(
+  OTBApplicationEngine_EXPORT void SetVector(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::MetaDataKey::VectorType &val);
 
-  static otb::ImageKeywordlist GetImageKWL(
+  OTBApplicationEngine_EXPORT otb::ImageKeywordlist GetImageKWL(
     const itk::MetaDataDictionary &dict,
     const std::string &key);
-  static void SetImageKWL(
+  OTBApplicationEngine_EXPORT void SetImageKWL(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::ImageKeywordlist &val);
 
-  static otb::VectorDataKeywordlist GetVectorDataKWL(
+  OTBApplicationEngine_EXPORT otb::VectorDataKeywordlist GetVectorDataKWL(
     const itk::MetaDataDictionary &dict,
     const std::string &key);
-  static void SetVectorDataKWL(
+  OTBApplicationEngine_EXPORT void SetVectorDataKWL(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::VectorDataKeywordlist &val);
 
-  static otb::MetaDataKey::BoolVectorType GetBoolVector(
+  OTBApplicationEngine_EXPORT otb::MetaDataKey::BoolVectorType GetBoolVector(
     const itk::MetaDataDictionary &dict,
     const std::string &key);
-  static void SetBoolVector(
+  OTBApplicationEngine_EXPORT void SetBoolVector(
     itk::MetaDataDictionary &dict,
     const std::string &key,
     const otb::MetaDataKey::BoolVectorType &val);
-};
+
+} // end of namespace MetaDataHelper
 
 } // end of namespace Wrapper
 } // end of namespace otb

@@ -908,130 +908,111 @@ public:
 
 %include "PyCommand.i"
 
-namespace otb
-{
-namespace Wrapper
-{
-class MetaDataHelper
-{
-public:
-  MetaDataHelper();
-  virtual ~MetaDataHelper();
-  typedef enum
-  {
-    MDType_STRING,
-    MDType_INT,
-    MDType_DOUBLE,
-    MDType_GCP,
-    MDType_VECTOR,
-    MDType_IMAGEKWL,
-    MDType_VECTORDATAKWL,
-    MDType_BOOLVECTOR
-  } MDType;
-
-  static MDType GetType(const std::string &val);
-
-  static std::string GetString(
-    const itkMetaDataDictionary &dict,
-    const std::string &key);
-  static void SetString(
-    itkMetaDataDictionary &dict,
-    const std::string &key,
-    const std::string &val);
-
-  static unsigned int GetInt(
-    const itkMetaDataDictionary &dict,
-    const std::string &key);
-  static void SetInt(
-    itkMetaDataDictionary &dict,
-    const std::string &key,
-    unsigned int val);
-
-  static double GetDouble(
-    const itkMetaDataDictionary &dict,
-    const std::string &key);
-  static void SetDouble(
-    itkMetaDataDictionary &dict,
-    const std::string &key,
-    double val);
-
-  static OTB_GCP GetGCP(
-    const itkMetaDataDictionary &dict,
-    const std::string &key);
-  static void SetGCP(
-    itkMetaDataDictionary &dict,
-    const std::string &key,
-    const OTB_GCP &val);
-
-  static std::vector<double> GetVector(
-    const itkMetaDataDictionary &dict,
-    const std::string &key);
-  static void SetVector(
-    itkMetaDataDictionary &dict,
-    const std::string &key,
-    const std::vector<double> &val);
-
-  static ImageKeywordlist GetImageKWL(
-    const itkMetaDataDictionary &dict,
-    const std::string &key);
-  static void SetImageKWL(
-    itkMetaDataDictionary &dict,
-    const std::string &key,
-    const ImageKeywordlist &val);
-
-  static VectorDataKeywordlist GetVectorDataKWL(
-    const itkMetaDataDictionary &dict,
-    const std::string &key);
-  static void SetVectorDataKWL(
-    itkMetaDataDictionary &dict,
-    const std::string &key,
-    const VectorDataKeywordlist &val);
-
-  static std::vector<bool> GetBoolVector(
-    const itkMetaDataDictionary &dict,
-    const std::string &key);
-  static void SetBoolVector(
-    itkMetaDataDictionary &dict,
-    const std::string &key,
-    const std::vector<bool> &val);
-};
-
-} // end of namespace Wrapper
-} // end of namespace otb
-
-
-
-#if SWIGPYTHON
-%pythoncode
-{
-MetaDataHelper.GetterMap = {
-  MetaDataHelper.MDType_STRING : MetaDataHelper.GetString,
-  MetaDataHelper.MDType_INT : MetaDataHelper.GetInt,
-  MetaDataHelper.MDType_DOUBLE : MetaDataHelper.GetDouble,
-  MetaDataHelper.MDType_GCP : MetaDataHelper.GetGCP,
-  MetaDataHelper.MDType_VECTOR : MetaDataHelper.GetVector,
-  MetaDataHelper.MDType_IMAGEKWL : MetaDataHelper.GetImageKWL,
-  MetaDataHelper.MDType_VECTORDATAKWL : MetaDataHelper.GetVectorDataKWL,
-  MetaDataHelper.MDType_BOOLVECTOR : MetaDataHelper.GetBoolVector,
-  }
-
-MetaDataHelper.SetterMap = {
-  MetaDataHelper.MDType_STRING : MetaDataHelper.SetString,
-  MetaDataHelper.MDType_INT : MetaDataHelper.SetInt,
-  MetaDataHelper.MDType_DOUBLE : MetaDataHelper.SetDouble,
-  MetaDataHelper.MDType_GCP : MetaDataHelper.SetGCP,
-  MetaDataHelper.MDType_VECTOR : MetaDataHelper.SetVector,
-  MetaDataHelper.MDType_IMAGEKWL : MetaDataHelper.SetImageKWL,
-  MetaDataHelper.MDType_VECTORDATAKWL : MetaDataHelper.SetVectorDataKWL,
-  MetaDataHelper.MDType_BOOLVECTOR : MetaDataHelper.SetBoolVector,
-  }
-}
-
-// enhance the MetaDataDictionary class for Python
 %extend itkMetaDataDictionary
 {
+  int GetType(const std::string &key)
+    {
+    return (int) otb::Wrapper::MetaDataHelper::GetType(key);
+    }
+
+  std::string GetString(const std::string &key)
+    {
+    return otb::Wrapper::MetaDataHelper::GetString(* $self,key);
+    }
+  void SetString(const std::string &key, const std::string &val)
+    {
+    otb::Wrapper::MetaDataHelper::SetString(* $self,key,val);
+    }
+
+  unsigned int GetInt(const std::string &key)
+    {
+    return otb::Wrapper::MetaDataHelper::GetInt(* $self,key);
+    }
+  void SetInt(const std::string &key, unsigned int val)
+    {
+    otb::Wrapper::MetaDataHelper::SetInt(* $self,key,val);
+    }
+
+  double GetDouble(const std::string &key)
+    {
+    return otb::Wrapper::MetaDataHelper::GetDouble(* $self,key);
+    }
+  void SetDouble(const std::string &key, double val)
+    {
+    otb::Wrapper::MetaDataHelper::SetDouble(* $self,key,val);
+    }
+
+  otb::OTB_GCP GetGCP(const std::string &key)
+    {
+    return otb::Wrapper::MetaDataHelper::GetGCP(* $self,key);
+    }
+  void SetGCP(const std::string &key, const otb::OTB_GCP &val)
+    {
+    otb::Wrapper::MetaDataHelper::SetGCP(* $self,key,val);
+    }
+
+  std::vector<double> GetVector(const std::string &key)
+    {
+    return otb::Wrapper::MetaDataHelper::GetVector(* $self,key);
+    }
+  void SetVector(const std::string &key, const std::vector<double> &val)
+    {
+    otb::Wrapper::MetaDataHelper::SetVector(* $self,key,val);
+    }
+
+  otb::ImageKeywordlist GetImageKWL(const std::string &key)
+    {
+    return otb::Wrapper::MetaDataHelper::GetImageKWL(* $self,key);
+    }
+  void SetImageKWL(const std::string &key, const otb::ImageKeywordlist &val)
+    {
+    otb::Wrapper::MetaDataHelper::SetImageKWL(* $self,key,val);
+    }
+
+  otb::VectorDataKeywordlist GetVectorDataKWL(const std::string &key)
+    {
+    return otb::Wrapper::MetaDataHelper::GetVectorDataKWL(* $self,key);
+    }
+  void SetVectorDataKWL(const std::string &key, const otb::VectorDataKeywordlist &val)
+    {
+    otb::Wrapper::MetaDataHelper::SetVectorDataKWL(* $self,key,val);
+    }
+
+  std::vector<bool> GetBoolVector(const std::string &key)
+    {
+    return otb::Wrapper::MetaDataHelper::GetBoolVector(* $self,key);
+    }
+  void SetBoolVector(const std::string &key, const std::vector<bool> &val)
+    {
+    otb::Wrapper::MetaDataHelper::SetBoolVector(* $self,key,val);
+    }
+
+#if SWIGPYTHON
+// enhance the MetaDataDictionary class for Python
   %pythoncode
   {
+    GetterMap = {
+      0 : GetString,
+      1 : GetInt,
+      2 : GetDouble,
+      3 : GetGCP,
+      4 : GetVector,
+      5 : GetImageKWL,
+      6 : GetVectorDataKWL,
+      7 : GetBoolVector,
+      }
+
+    SetterMap = {
+      0 : SetString,
+      1 : SetInt,
+      2 : SetDouble,
+      3 : SetGCP,
+      4 : SetVector,
+      5 : SetImageKWL,
+      6 : SetVectorDataKWL,
+      7 : SetBoolVector,
+      }
+
     def __str__(self):
       ret = ''
       for k in self.GetKeys():
@@ -1045,14 +1026,14 @@ MetaDataHelper.SetterMap = {
       return self.GetKeys()
     def __getitem__(self,key):
       if key in self.GetKeys():
-        return MetaDataHelper.GetterMap[MetaDataHelper.GetType(key)](self,key)
+        return self.GetterMap[self.GetType(key)](self,key)
       else:
         raise IndexError('Key not recognized')
     def __setitem__(self,key,val):
       if key in self.GetKeys():
-        MetaDataHelper.SetterMap[MetaDataHelper.GetType(key)](self,key,val)
+        self.SetterMap[self.GetType(key)](self,key,val)
       else:
         raise IndexError('Key not recognized')
   }
-};
 #endif
+};
