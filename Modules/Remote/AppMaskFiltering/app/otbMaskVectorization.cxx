@@ -112,8 +112,6 @@ private:
     AddChoice("outmode.overwrite","Overwrite output vector file if existing.");
     SetParameterDescription("outmode.overwrite","If the output vector file already exists, it is completely destroyed (including all its layers) and recreated from scratch.");
 
-
-
     AddChoice("outmode.update","Update output vector file");
     SetParameterDescription("outmode.update","The output vector file is opened in update mode if existing");
 
@@ -133,7 +131,7 @@ private:
      
     AddParameter(ParameterType_StringList,  "feat", "Output Image channels");
     SetParameterDescription("feat","Channels to write in the output image.");
-	MandatoryOff("feat");
+    MandatoryOff("feat");
 	
     AddRAMParameter();
 
@@ -155,33 +153,33 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-	clock_t tic = clock();
-  
-	
-	// Create the OGR DataSource with the appropriate fields
+    clock_t tic = clock();
+    
+    
+    // Create the OGR DataSource with the appropriate fields
     std::string projRef = this->GetParameterImage("in")->GetProjectionRef();
     OGRSpatialReference oSRS(projRef.c_str());
     std::string layer_name = "layer";
     std::string field_name = "field";
     
     std::string outmode = GetParameterString("outmode");
-	std::string dataSourceName = GetParameterString("out");
+    std::string dataSourceName = GetParameterString("out");
     OGRDataSourceType::Pointer ogrDS;
     
-     if (outmode == "overwrite")
-        {
-        // Create the datasource
-        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
-        }
-      else if (outmode == "update")
-        {
-        // Create the datasource
-        ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
-        }
-      else
-        {
-        otbAppLogFATAL(<<"invalid outmode"<< outmode);
-        }
+    if (outmode == "overwrite")
+    {
+      // Create the datasource
+      ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
+    }
+    else if (outmode == "update")
+    {
+      // Create the datasource
+    ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
+    }
+    else
+    {
+      otbAppLogFATAL(<<"invalid outmode"<< outmode);
+    }
     ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
     //OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbMultiPolygon);
     OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
@@ -205,15 +203,15 @@ private:
     std::vector<int> inputLabels;
     if(IsParameterEnabled("feat") )
     {
-		std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
-		for (std::vector<std::string>::iterator it = inputLabelsStr.begin(); it != inputLabelsStr.end(); it++)
-		{
-		  inputLabels.push_back(std::stoi(*it));
-		}
-	}
-	else
-	{
-		inputLabels.push_back(1);
+      std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
+      for (std::vector<std::string>::iterator it = inputLabelsStr.begin(); it != inputLabelsStr.end(); it++)
+      {
+        inputLabels.push_back(std::stoi(*it));
+      }
+    }
+    else
+    {
+    inputLabels.push_back(1);
     }
     maskFilter->SetLabels(inputLabels);
     
@@ -224,7 +222,7 @@ private:
     ogrDS->SyncToDisk();
     
     
-    std::cout << "Vectorization done" << std::endl;
+    otbAppLogINFO("Vectorization done")
     
     // Fusion Filter : Regroup polygons splitted across tiles.
     if (this->GetParameterInt("fusion") == 1)
