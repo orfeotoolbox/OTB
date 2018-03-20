@@ -89,7 +89,7 @@ class Size
 {
 public:
   Size();
-  virtual ~Size();
+  ~Size();
   void Fill(unsigned long val);
   SizeValueType GetElement(unsigned long element) const;
   void SetElement(unsigned long element, SizeValueType val);
@@ -101,7 +101,7 @@ class Index
 {
 public:
   Index();
-  virtual ~Index();
+  ~Index();
   void Fill(signed long val);
   IndexValueType GetElement(unsigned long element) const;
   void SetElement(unsigned long element, IndexValueType val);
@@ -114,7 +114,7 @@ class ImageRegion
 public:
   ImageRegion();
   ImageRegion(const Index<VDim> &index, const Size<VDim> &size);
-  virtual ~ImageRegion();
+  ~ImageRegion();
   void SetIndex(const Index<VDim> &index);
   void SetSize(const Size<VDim> &size);
   void SetUpperIndex(const Index<VDim> &idx);
@@ -133,7 +133,7 @@ class FixedArray
 {
 public:
   FixedArray();
-  virtual ~FixedArray();
+  ~FixedArray();
   unsigned int Size();
   void SetElement(unsigned short idx, const TValue &val);
   const TValue & GetElement(unsigned short idx);
@@ -144,7 +144,7 @@ class Vector: public FixedArray<TValue,NDim>
 {
 public: 
   Vector();
-  virtual ~Vector();
+  ~Vector();
   typedef NumericTraits<TValue>::RealType RealValueType;
   RealValueType GetNorm() const;
   RealValueType GetSquaredNorm() const;
@@ -156,7 +156,7 @@ class Point: public FixedArray<TCoord,NDim>
 {
 public:
   Point();
-  virtual ~Point();
+  ~Point();
 };
 
 // Instanciate the needed templates
