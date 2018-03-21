@@ -73,28 +73,62 @@ public:
   void AddParameter( const std::string key, const std::string name, unsigned int exId = 0);
 
   /** Get the parameter list. */
-  ParametersVectorOfVectorType GetParameterList();
+  const ParametersVectorOfVectorType & GetParameterList() const 
+    {
+    return m_ParameterList;
+    }
 
   /** Get number of parameters */
-  unsigned int GetNumberOfParameters(unsigned int exId = 0);
+  unsigned int GetNumberOfParameters(unsigned int exId = 0) const
+    {
+    if ( exId >= m_ParameterList.size() )
+      //log
+    return m_ParameterList[exId].size();
+    }
 
   /** Get a specific parameter couple key.*/
-  std::string GetParameterKey( unsigned int i, unsigned int exId = 0 );
+  const std::string & GetParameterKey( unsigned int i, unsigned int exId = 0 ) const
+    {
+    if ( exId >= m_ParameterList.size() )
+      //log
+    if ( i >= m_ParameterList[exId].size() )
+      //log
+    return m_ParameterList[exId][i].first;
+    }
 
   /** Get a specific parameter couple value as string.*/
-  std::string GetParameterValue( unsigned int i, unsigned int exId=0 );
+  const std::string & GetParameterValue( unsigned int i, unsigned int exId=0 ) const
+    {
+    if ( exId >= m_ParameterList.size() )
+      //log
+    if ( i >= m_ParameterList[exId].size() )
+      //log
+    return m_ParameterList[exId][i].second;
+    }
 
   /** Set Application name. */
-  void SetApplicationName( const std::string name );
+  void SetApplicationName( const std::string & name )
+    {
+    m_ApplicationName = name;
+    }
 
   /** Get Application name. */
-  std::string GetApplicationName();
+  const std::string & GetApplicationName() const
+    {
+    return m_ApplicationName;
+    }
 
   /** Get the example comment list */
-  std::vector<std::string> GetExampleCommentList();
+  const std::vector<std::string> & GetExampleCommentList() const
+    {
+    return m_ExampleCommentList;
+    }
 
   /** Get one example comment */
-  std::string GetExampleComment( unsigned int i);
+  const std::string & GetExampleComment( unsigned int i) const
+    {
+    return m_ExampleCommentList.at(i);
+    }
 
   /** Set one example comment */
   void SetExampleComment( const std::string & comm, unsigned int i);
@@ -120,7 +154,7 @@ protected:
   /** Constructor */
   DocExampleStructure();
   /** Destructor */
-  ~DocExampleStructure() override;
+  ~DocExampleStructure() override = default ;
 
 private:
   DocExampleStructure(const DocExampleStructure &); //purposely not implemented

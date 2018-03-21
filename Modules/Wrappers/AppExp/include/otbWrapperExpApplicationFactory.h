@@ -56,28 +56,21 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(ApplicationFactory, ApplicationFactoryBase);
   
-  void SetClassName(const char* name)
+  void SetClassName( std::string name)
   {
     // remove namespace, only keep class name
-    std::string tmpName(name);
-    std::string::size_type pos = tmpName.rfind("::");
+    auto pos = name.rfind("::");
     if (pos != std::string::npos)
       {
-      tmpName = tmpName.substr(pos+2);
+      name.erase(0 , pos+2 );
       }
-    m_ClassName.assign(tmpName);
+    m_ClassName = move(name);
   }
 
 protected:
-  ApplicationFactory()
-  {
+  ApplicationFactory() = default ;
 
-  }
-
-  ~ApplicationFactory() override
-  {
-
-  }
+  ~ApplicationFactory() override = default ;
 
   /** This method is provided by sub-classes of ObjectFactoryBase.
    * It should create the named itk object or return 0 if that object

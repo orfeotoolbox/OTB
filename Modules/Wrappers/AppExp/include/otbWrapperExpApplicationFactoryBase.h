@@ -33,11 +33,13 @@ namespace WrapperExp
 class OTBApplicationEngine_EXPORT ApplicationFactoryBase : public itk::ObjectFactoryBase
 {
 public:
-  /** Standard class typedefs. */
+  /** @name Standard class typedefs. */
+  /** @{ */
   typedef ApplicationFactoryBase        Self;
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
+  /** @} */
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(ApplicationFactoryBase, itk::ObjectFactoryBase);

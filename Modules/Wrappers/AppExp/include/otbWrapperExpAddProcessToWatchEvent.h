@@ -44,27 +44,28 @@ public:
   typedef AddProcessToWatchEvent Self;
   typedef itk::EventObject       Superclass;
 
-  AddProcessToWatchEvent(){}
+  AddProcessToWatchEvent() = default ;
   AddProcessToWatchEvent(const Self& s) :itk::EventObject(s){};
-  ~AddProcessToWatchEvent() override {}
+  ~AddProcessToWatchEvent() override = default ;
 
   /** Set/Get the process to watch */
-  virtual void SetProcess(itk::ProcessObject * process)
+  void SetProcess(itk::ProcessObject * process)
   {
     m_Process = process;
   }
-  virtual itk::ProcessObject * GetProcess() const
+  
+  itk::ProcessObject * GetProcess() const
   {
     return m_Process;
   }
 
   /** Set/Get the process description */
-  virtual void SetProcessDescription(const std::string desc)
+  void SetProcessDescription(const std::string & desc)
   {
     m_ProcessDescription = desc;
   }
 
-  virtual  std::string GetProcessDescription() const
+  std::string GetProcessDescription() const
   {
     return m_ProcessDescription;
   }

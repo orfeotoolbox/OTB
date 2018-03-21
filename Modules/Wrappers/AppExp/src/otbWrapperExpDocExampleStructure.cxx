@@ -31,71 +31,15 @@ DocExampleStructure::DocExampleStructure() : m_ParameterList(), m_ApplicationNam
   m_ExampleCommentList.push_back("");
 }
 
-DocExampleStructure::~DocExampleStructure()
-{
-}
-
 void
 DocExampleStructure::AddParameter( const std::string key, const std::string value, unsigned int exId)
 {
   if( m_ParameterList.size() < exId+1 )
     {
-    while( m_ParameterList.size()<exId+1)
-      {
-      m_ParameterList.push_back(ParametersVectorType());
-      }
+    m_ParameterList.resize(exId+1);
     }
 
-  m_ParameterList.at(exId).push_back(std::make_pair(key, value));
-}
-
-DocExampleStructure::ParametersVectorOfVectorType
-DocExampleStructure::GetParameterList()
-{
-  return m_ParameterList;
-}
-
-unsigned int DocExampleStructure::GetNumberOfParameters(unsigned int exId)
-{
-  return m_ParameterList.at(exId).size();
-}
-
-/** Get a specific parameter couple.*/
-std::string
-DocExampleStructure::GetParameterKey( unsigned int i, unsigned int exId)
-{
-  return m_ParameterList.at(exId).at(i).first;
-}
-
-
-std::string
-DocExampleStructure::GetParameterValue( unsigned int i, unsigned int exId )
-{
-  return m_ParameterList.at(exId).at(i).second;
-}
-
-void
-DocExampleStructure::SetApplicationName( const std::string name )
-{
-  m_ApplicationName = name;
-}
-
-std::string
-DocExampleStructure::GetApplicationName()
-{
-  return m_ApplicationName;
-}
-
-std::vector<std::string>
-DocExampleStructure::GetExampleCommentList()
-{
-  return m_ExampleCommentList;
-}
-
-std::string
-DocExampleStructure::GetExampleComment( unsigned int i)
-{
-  return m_ExampleCommentList.at(i);
+  m_ParameterList[exId].emplace_back(std::make_pair(key, value));
 }
 
 void
@@ -134,12 +78,11 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
   std::ostringstream oss;
   oss << "otbcli_" << m_ApplicationName << " ";
 
-  for (ParametersVectorType::const_iterator it = m_ParameterList.at(exId).begin();
-       it != m_ParameterList.at(exId).end(); ++it)
+  for ( const auto & param : m_ParameterList[exId] )
     {
-    if( it->second != "" )
+    if( param.second != "" )
       {
-      oss<< "-" << it->first << " " << it->second <<" ";
+      oss<< "-" << param.first << " " << param.second <<" ";
       }
     }
 
@@ -148,7 +91,7 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
   // Suppress last added space
   res.erase( res.size()-1, 1);
 
-  return res.c_str();
+  return res;
 }
 
 std::string
