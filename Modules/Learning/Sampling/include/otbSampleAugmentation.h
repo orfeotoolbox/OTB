@@ -111,10 +111,11 @@ void jitterSamples(const SampleVectorType& inSamples,
 #pragma omp parallel for
   for(size_t i=0; i<nbComponents; ++i)
     gaussDis[i] = std::normal_distribution<double>{0.0, stds[i]/stdFactor};
-#pragma omp parallel for
+
   for(size_t i=0; i<nbSamples; ++i)
     {
     newSamples[i] = inSamples[std::rand()%inSamples.size()];
+#pragma omp parallel for
     for(size_t j=0; j<nbComponents; ++j)
       newSamples[i][j] += gaussDis[j](gen);
     }
