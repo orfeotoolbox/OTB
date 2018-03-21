@@ -129,10 +129,7 @@ private:
                             "SMOTE algorithm");
     SetDefaultParameterFloat("strategy.smote.neighbors", 5);
 
-    AddParameter(ParameterType_Int, "seed", 
-                 "Random seed.");
-    SetParameterDescription("seed", 
-                            "Seed for the random number generator.");
+    AddRANDParameter("seed");
     MandatoryOff("seed");
 
     // Doc example parameter settings
