@@ -44,6 +44,26 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 }
 
 template<class TInputImage, class TMaskImage>
+void
+PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::GenerateInputRequestedRegion()
+{
+  InputImageType *input = const_cast<InputImageType*>(this->GetInput());
+  RegionType requested = this->GetOutput()->GetRequestedRegion();
+  input->SetRequestedRegion(requested);
+}
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+}
+
+
+
+template<class TInputImage, class TMaskImage>
 ogr::DataSource*
 PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 ::GetOutputSamples()
@@ -60,6 +80,9 @@ void
 PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 ::Reset(void)
 {
+  TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
+  inputImage->UpdateOutputInformation();
+  
   m_PolygonSizeThread.clear();
   m_PolygonMaxThread.clear();
   m_PolygonMinThread.clear();
@@ -104,7 +127,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     PolygonVectorMapType::iterator itMin = m_PolygonMinThread[threadId].begin();
     PolygonMatrixMapType::iterator itSecondOrder = m_PolygonSecondOrderThread[threadId].begin();
     
-    for (itSize ; itSize != m_PolygonSizeThread[threadId].end(); itSize++, itFirstOrder++, itSecondOrder++, itMax++, itMin++)
+    for (; itSize != m_PolygonSizeThread[threadId].end(); itSize++, itFirstOrder++, itSecondOrder++, itMax++, itMin++)
     {
       unsigned int fid = itSize->first;
       if (!PolygonSize.count(fid))
@@ -114,11 +137,9 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
         PolygonSecondOrderComponent[fid] = itSecondOrder->second;
         PolygonMin[fid] = itMin->second;
         PolygonMax[fid] = itMax->second;
-        std::cout << "1! " << fid << threadId << std::endl; 
       }
       else
       {
-        std::cout << "2! " << fid << threadId << std::endl; 
         PolygonSize[fid] += itSize->second;
         for (unsigned int i =0; i < numberOfComponents ; i++)
         {
@@ -154,7 +175,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   //ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
   
   
-  for (itMean; itMean !=  PolygonFirstOrderComponent.end(); itMean++,itSizeFull++, itCov++)
+  for (; itMean !=  PolygonFirstOrderComponent.end(); itMean++,itSizeFull++, itCov++)
   {
     // Retrieve the feature corresponding to the fid in the output layer
     int fid = itMean->first;
@@ -188,42 +209,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     }
     
   }
-  /*
-
-  ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
-  ogr::DataSource* output  = this->GetOutputSamples();
-  
-  otb::ogr::Layer inLayer =  inputDS->GetLayer(0);
-  otb::ogr::Layer outLayer = output->GetLayer(0);
-  */
-  /*
-  otb::ogr::Layer::iterator it = outLayer.begin();
-  otb::ogr::Layer::iterator itEnd = outLayer.end();
-  //for (int i = 0; i <4; i++)
-  for(; it!=itEnd; ++it)
-  {
-    std::cout << it->GetFID() << std::endl;
-    //ogr::Feature feat = it->GetNextFeature();
-    (*it)["mean"].SetValue<double>(0.);
-    /*ogr::Feature dstFeature(outLayer.GetLayerDefn());
-    dstFeature.SetFrom( *it, TRUE );
-    dstFeature.SetFID(it->GetFID());
-    dstFeature["mean"].SetValue<double>(0.);
-    //outLayer.SetFeature( dstFeature );*/
-  //}
-  
-  
-  
-  /*
-  /// Retrieve layer
-  otb::ogr::Layer outLayer = this->GetInMemoryOutput(threadid);
-  
-  
-  ogr::Feature dstFeature(outputLayer.GetLayerDefn());
-  dstFeature.SetFrom( *featIt, TRUE );
-  dstFeature.SetFID(featIt->GetFID());*/
-  
-  
   
   // initialize additional fields for output
   this->InitializeFields();
@@ -244,10 +229,10 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   PolygonMatrixMapType::iterator itCovout = PolygonCovComponent.begin();
   
   
-  for (itSizeout ; itSizeout != PolygonSize.end(); itSizeout++, itFirstOrderout++, itMeanout++, itCovout++, itMaxout++, itMinout++)
+  for (; itSizeout != PolygonSize.end(); itSizeout++, itFirstOrderout++, itMeanout++, itCovout++, itMaxout++, itMinout++)
   {
     // Show results ! (temporary cout)
-    std::cout << "FID : " << itSizeout->first << ",Size : " << itSizeout->second << ",sum : ";
+    /*std::cout << "FID : " << itSizeout->first << ",Size : " << itSizeout->second << ",sum : ";
     for (unsigned int i =0; i < numberOfComponents ; i++)
     {
       std::cout << itFirstOrderout->second[i] << " ";
@@ -266,7 +251,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
         std::cout << itCovout->second[r][c] << " ";
       }
     }
-    std::cout << std::endl;
+    std::cout << std::endl;*/
   
     // Write features in the ouput shapefile
     int fid = itMeanout->first;
@@ -435,9 +420,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
           }
         }
         
-        
-        //std::cout <<  it.Get()[0] << " " << it.Get()[1] << " " << m_PolygonSizeThread[threadid][m_CurrentFID[threadid]] << std::endl;
-        //this->ProcessSample(feature,imgIndex, imgPoint, threadid);
         }
       ++it;
       }
@@ -526,23 +508,6 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 }
 
 
-/*
-template<class TInputImage, class TMaskImage>
-void
-OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::SetOGRLayer(const otb::ogr::Layer & layer)
-{
-  this->GetFilter()->SetOGRLayer(layer);
-}
-
-template<class TInputImage, class TMaskImage>
-const otb::ogr::Layer &
-OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetOGRLayer()
-{
-  return this->GetFilter()->GetOGRLayer();
-}
-*/
 template<class TInputImage, class TMaskImage>
 void
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>

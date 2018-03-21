@@ -26,8 +26,6 @@
 
 
 
-
-
 namespace otb
 {
 namespace Wrapper
@@ -68,25 +66,23 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("ImageConnectedComponentSegmentation");
-    SetDescription("This application performs the vectorization of an input binary mask");
+    SetDescription("This application performs connected component segmentation using an user criterion for connected components");
 
     // Documentation
-    SetDocName("Mask Filtering");
-    SetDocLongDescription("Given an input binary raster image, this application will output a vector data file containing a polygon for each connected component of the input raster. Additionnaly, the size of each polygon will be computed and added to the raster");
+    SetDocName("ImageConnectedComponentSegmentation");
+    SetDocLongDescription("This application performs connected component segmentation using an user criterion for connected components");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
     
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image.");
+    SetParameterDescription("in", "Input multi-band image.");
     
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Output vector");
+    SetParameterDescription("out","Output label image");
 
     AddParameter(ParameterType_String, "expr", "Connected Component Expression");
     SetParameterDescription("expr", "Formula used for connected component segmentation");
-    
-    
     
     AddRAMParameter();
 

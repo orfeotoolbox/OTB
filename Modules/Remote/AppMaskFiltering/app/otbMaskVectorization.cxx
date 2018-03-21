@@ -24,14 +24,6 @@
 #include "PersistentMaskVectorizationFilter.h"
 #include "otbMaskStreamStitchingFilter.h"
 
-#include "itkConnectedComponentFunctorImageFilter.h"
-#include "otbConnectedComponentMuParserFunctor.h"
-
-
-
-// For test purposes !
-#include "otbOGRDataToSpectralStatisticsFilter.h"
-
 
 
 namespace otb
@@ -48,34 +40,20 @@ public:
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
   
+  /** Vector data typedefs. */
   typedef otb::ogr::DataSource                            OGRDataSourceType;
   typedef otb::ogr::Layer                                 OGRLayerType;
   typedef otb::ogr::Feature                               OGRFeatureType;
 
-  //typedef itk::BinaryShapeM_BinaryOpeningFilterImageFilter<UInt8LabelImageType>    BinaryM_BinaryOpeningFilterFilterType;
-  typedef otb::Image<unsigned int, 2>                                 LabelImageType;
-  typedef otb::Image<unsigned int, 2>         MaskImageType;
+  /** Raster data typedef */ 
+  typedef unsigned int                                                PixelType;
+  typedef otb::Image<PixelType, 2>                                 LabelImageType;
 
-  typedef float InputPixelType;
-  typedef otb::VectorImage<InputPixelType, 2> VectorImageType;
-  typedef VectorImageType::PixelType VectorImagePixelType;
-  
-  //typedef PersistentMaskFilter< LabelImageType >             PersistentMaskFilterType;
+  /** Filters typedefs */
   typedef MaskStreamStitchingFilter< LabelImageType >             MaskStreamStitchingFilterType;
   typedef MaskFilter<LabelImageType>                         MaskFilterType;
   
   
-  // SpectralFeatures : testing purposes
-  typedef OGRDataToSpectralStatisticsFilter<VectorImageType, MaskImageType>                         OGRDataToSpectralStatisticsFilterType;
-  
-  
-  typedef Functor::ConnectedComponentMuParserFunctor<VectorImagePixelType> FunctorType;
-  typedef itk::ConnectedComponentFunctorImageFilter<
-      VectorImageType,
-      LabelImageType,
-      FunctorType,
-      MaskImageType > ConnectedComponentFilterType;
-
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -85,11 +63,11 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("MaskVectorization");
-    SetDescription("This application performs the vectorization of an input binary mask");
+    SetDescription("This application performs the vectorization of an input label image");
 
     // Documentation
     SetDocName("Mask Filtering");
-    SetDocLongDescription("Given an input binary raster image, this application will output a vector data file containing a polygon for each connected component of the input raster. Additionnaly, the size of each polygon will be computed and added to the raster");
+    SetDocLongDescription("Given an input label raster image, this application will output a vector data file containing a polygon for each connected component of the input raster, where two components are connected if they share the same label");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
@@ -121,10 +99,6 @@ private:
     MandatoryOff("tile");
      
 
-    AddParameter(ParameterType_String, "expr", "Connected Component Expression");
-    SetParameterDescription("expr", "Formula used for connected component segmentation");
-    
-     
     AddParameter(ParameterType_Int,"fusion","fusion");
     SetParameterDescription("fusion","Perform polygon fusion");
     MandatoryOff("fusion");
@@ -140,7 +114,6 @@ private:
     SetDefaultParameterInt("tile", 0);
     SetDefaultParameterInt("fusion", 0);
     // Doc example parameter settings
-    SetDocExampleParameterValue("expr", "\"distance<10\"");
     SetDocExampleParameterValue("in", "sar.tif");
     SetDocExampleParameterValue("out","test.sqlite");
     SetOfficialDocLink();
@@ -157,11 +130,10 @@ private:
     
     
     // Create the OGR DataSource with the appropriate fields
-    std::string projRef = this->GetParameterImage("in")->GetProjectionRef();
+    std::string projRef = this->GetParameterUInt32Image("in")->GetProjectionRef();
     OGRSpatialReference oSRS(projRef.c_str());
     std::string layer_name = "layer";
     std::string field_name = "field";
-    
     std::string outmode = GetParameterString("outmode");
     std::string dataSourceName = GetParameterString("out");
     OGRDataSourceType::Pointer ogrDS;
@@ -174,47 +146,45 @@ private:
     else if (outmode == "update")
     {
       // Create the datasource
-    ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
+      ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
     }
     else
     {
       otbAppLogFATAL(<<"invalid outmode"<< outmode);
     }
-    ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
-    //OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbMultiPolygon);
+    //ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
     OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
     OGRFieldDefn field(field_name.c_str(), OFTInteger);
     layer.CreateField(field, true);
 
-    ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
-    connected->SetInput(this->GetParameterImage("in"));
-    connected->GetFunctor().SetExpression(GetParameterString("expr"));
-    connected->Update();
-
     // Mask FIlter : Vectorization of the input raster
     MaskFilterType::Pointer maskFilter = MaskFilterType::New();
+    
     // Labeled image to be vectorized
-    maskFilter->SetInput(connected->GetOutput());
+    maskFilter->SetInput(this->GetParameterUInt32Image("in"));
     maskFilter->SetOGRLayer(layer) ;
     maskFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
     
-    // Input labels : Labels in the input image that will be vectorized
     
+    // Input labels : Labels in the input image that will be vectorized
     std::vector<int> inputLabels;
     if(IsParameterEnabled("feat") )
     {
+      
       std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
       for (std::vector<std::string>::iterator it = inputLabelsStr.begin(); it != inputLabelsStr.end(); it++)
       {
         inputLabels.push_back(std::stoi(*it));
       }
+
     }
     else
     {
-    inputLabels.push_back(1);
+      // if no labels are given to the filter, they are all used
+      inputLabels.clear();
     }
-    maskFilter->SetLabels(inputLabels);
     
+    maskFilter->SetLabels(inputLabels);
     maskFilter->SetUse8Connected(this->GetParameterInt("connectivity"));
     maskFilter->SetFieldName( field_name);
     maskFilter->Initialize();
@@ -228,27 +198,16 @@ private:
     if (this->GetParameterInt("fusion") == 1)
     {
       MaskStreamStitchingFilterType::Pointer fusionFilter = MaskStreamStitchingFilterType::New();
-      fusionFilter->SetInput(connected->GetOutput());
+      fusionFilter->SetInput(this->GetParameterUInt32Image("in"));
       fusionFilter->SetOGRLayer(layer);
       fusionFilter->SetStreamSize(maskFilter->GetStreamSize());
       fusionFilter->GenerateData();
-      
     }
+    
     clock_t toc = clock();
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
-    std::cout << "fusion done" << std::endl;
-    /*OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
-    SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
-    SpectralStatisticsFilter->SetOGRData(ogrDS);
-    SpectralStatisticsFilter->SetOutputSamples(ogrDS);
-    //SpectralStatisticsFilter->SetOGRLayer(layer);
-    SpectralStatisticsFilter->SetFieldName(field_name);
-    SpectralStatisticsFilter->Update();
-    */
-  }
-  
-  
 
+  }
 }; 
 
 } //end namespace Wrapper

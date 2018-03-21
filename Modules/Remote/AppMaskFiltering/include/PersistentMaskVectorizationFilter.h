@@ -89,10 +89,6 @@ public:
    * Get the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
    */
   itkGetMacro(Use8Connected, bool);
-/*
-  itkSetMacro(Labels, std::vector<int>);
-  itkGetMacro(Labels, std::vector<int>);
-*/
 
   void SetLabels( const std::vector<int> & labels)
   {

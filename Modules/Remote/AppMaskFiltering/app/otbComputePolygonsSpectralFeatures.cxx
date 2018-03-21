@@ -21,10 +21,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-
-#include "itkConnectedComponentFunctorImageFilter.h"
-#include "otbConnectedComponentMuParserFunctor.h"
-
 #include "otbOGRDataToSpectralStatisticsFilter.h"
 
 
@@ -47,26 +43,14 @@ public:
   typedef otb::ogr::Layer                                 OGRLayerType;
   typedef otb::ogr::Feature                               OGRFeatureType;
 
-  //typedef itk::BinaryShapeM_BinaryOpeningFilterImageFilter<UInt8LabelImageType>    BinaryM_BinaryOpeningFilterFilterType;
-  typedef otb::Image<unsigned int, 2>                                 LabelImageType;
   typedef otb::Image<unsigned int, 2>         MaskImageType;
 
   typedef float InputPixelType;
   typedef otb::VectorImage<InputPixelType, 2> VectorImageType;
   typedef VectorImageType::PixelType VectorImagePixelType;
   
-  
-  
   typedef OGRDataToSpectralStatisticsFilter<VectorImageType, MaskImageType>                         OGRDataToSpectralStatisticsFilterType;
   
-  
-  typedef Functor::ConnectedComponentMuParserFunctor<VectorImagePixelType> FunctorType;
-  typedef itk::ConnectedComponentFunctorImageFilter<
-      VectorImageType,
-      LabelImageType,
-      FunctorType,
-      MaskImageType > ConnectedComponentFilterType;
-
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -76,11 +60,11 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("ComputePolygonsSpectralFeatures");
-    SetDescription("This application performs the vectorization of an input binary mask");
+    SetDescription("This application computes radiometric features on a set of polygons using a multi-band image");
 
     // Documentation
-    SetDocName("Mask Filtering");
-    SetDocLongDescription("Given an input binary raster image, this application will output a vector data file containing a polygon for each connected component of the input raster. Additionnaly, the size of each polygon will be computed and added to the raster");
+    SetDocName("ComputePolygonsSpectralFeatures");
+    SetDocLongDescription("This application computes radiometric features on a set of polygons using a multi-band image");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
@@ -92,12 +76,10 @@ private:
     SetParameterDescription("vec","Vector data file containing sampling"
                                   "positions. (OGR format)");
 
-
     AddParameter(ParameterType_OutputFilename, "out", "Output vector data file ");
     SetParameterDescription("out","Output vector");
     MandatoryOff("out");
     
-
     AddParameter(ParameterType_Int,"tile","Tile Size");
     SetParameterDescription("tile","Size of the tiles used for streaming");
     MandatoryOff("tile");
@@ -144,30 +126,13 @@ private:
                                     ogr::DataSource::Modes::Update_LayerUpdate);
       output = vectors;
       }
-    //ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
-    //ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Update_LayerUpdate);
-    //OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbMultiPolygon);
-    /*OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
-    OGRFieldDefn field(field_name.c_str(), OFTInteger);
-    layer.CreateField(field, true);
-*/
-
-
-    ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
-    connected->SetInput(this->GetParameterImage("in"));
-    connected->GetFunctor().SetExpression("distance<11");
-    connected->Update();
-
-
-
+      
     OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
     SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
-      SpectralStatisticsFilter->UpdateLargestPossibleRegion() ;
+    SpectralStatisticsFilter->UpdateLargestPossibleRegion() ;
     SpectralStatisticsFilter->SetOGRData(vectors);
     SpectralStatisticsFilter->SetOutputSamples(output);
-    //SpectralStatisticsFilter->SetOGRLayer(layer);
     SpectralStatisticsFilter->SetFieldName(field_name);
-    std::cout << this->GetParameterImage("in")->GetLargestPossibleRegion() << std::endl;
     SpectralStatisticsFilter->Update();
     
     clock_t toc = clock();

@@ -23,7 +23,7 @@
 
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-// #include "itkSimpleDataObjectDecorator.h" // maybe useful
+// #include "itkSimpleDataObjectDecorator.h" 
 
 #include "itkArray.h"
 namespace otb
@@ -96,6 +96,10 @@ protected:
   
   /** Initialize output fields */
   void InitializeFields();
+
+  void GenerateOutputInformation() ITK_OVERRIDE;
+
+  void GenerateInputRequestedRegion() ITK_OVERRIDE;
 
   
   /** Process a polygon : use pixels inside the polygon */
@@ -182,37 +186,18 @@ public:
   void SetOutputSamples(OGRDataType::Pointer data);
   const otb::ogr::DataSource* GetOutputSamples();
   
-  
-  /*
-  void SetOGRLayer(const otb::ogr::Layer & layer);
-  const otb::ogr::Layer & GetOGRLayer();
-  */
   void SetMask(const TMaskImage* mask);
   const TMaskImage* GetMask();
   
   void SetFieldName(std::string &key);
   std::string GetFieldName();
-  
-  
-/*
-  void SetFieldName(std::string &key);
-  std::string GetFieldName();
-  
-  void SetLayerIndex(int index);
-  int GetLayerIndex();
-
-  const ClassCountObjectType* GetClassCountOutput() const;
-  ClassCountObjectType* GetClassCountOutput();
-
-  const PolygonSizeObjectType* GetPolygonSizeOutput() const;
-  PolygonSizeObjectType* GetPolygonSizeOutput();
-*/
+ 
 protected:
   /** Constructor */
   OGRDataToSpectralStatisticsFilter() {}
   /** Destructor */
   ~OGRDataToSpectralStatisticsFilter() ITK_OVERRIDE {}
-
+  
 private:
   OGRDataToSpectralStatisticsFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

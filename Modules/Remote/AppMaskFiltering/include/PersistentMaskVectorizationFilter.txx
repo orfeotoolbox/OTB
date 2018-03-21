@@ -45,16 +45,7 @@ PersistentMaskVectorizationFilter<TInputImage>
 {
   Superclass::GenerateInputRequestedRegion();
 }
-/*
-template<class TImage>
-void
-PersistentMaskVectorizationFilter<TImage>
-::GenerateData()
-{
-  std::cout << this->GetInput()->GetRequestedRegion().GetSize() << this->GetInput()->GetRequestedRegion().GetIndex() << std::endl;
-  InputImagePointer inputPtr = const_cast<TImage *>(this->GetInput());
-      
-}*/
+
   
 template<class TInputImage>
 typename PersistentMaskVectorizationFilter<TInputImage>::OGRDataSourcePointerType
@@ -110,8 +101,8 @@ PersistentMaskVectorizationFilter<TInputImage>
   for(; featIt!=tmpLayer.end(); ++featIt)
   {
     OGRFeatureType outFeature(outLayer.GetLayerDefn());
-     if(1)
-    //if (   std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::GetValue<int>()) != m_Labels.end())
+
+    if ( (std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::GetValue<int>()) != m_Labels.end() ) || (m_Labels.empty() ==true))
     {
 
       //simplify
@@ -120,19 +111,7 @@ PersistentMaskVectorizationFilter<TInputImage>
       assert(geom && "geometry is NULL ! Can't simplify it.");
       (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify(*geom,m_Tol));
      
-      // Compute Attributes
-      //double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();
-      //typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
-      //double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
-      
-      //double perimeter = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->getExteriorRing()->get_Length();
-      //otbMsgDebugMacro(<<"DN = "<<field.GetValue<int>()<<", area = "<<pixelsArea);
-      
-      
       outFeature.SetFrom( *featIt, TRUE );
-      /*outFeature["size"].ogr::Field::SetValue<double>(pixelsArea);
-      //outFeature[m_FieldName].ogr::Field::SetValue<int>(1);
-      outFeature["perimeter"].ogr::Field::SetValue<double>(perimeter);*/
       outLayer.CreateFeature( outFeature );
 
     }
