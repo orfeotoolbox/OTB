@@ -124,24 +124,24 @@ protected:
   using Superclass::MakeOutput;
 
 
-  SampleVectorType extractSamples(const ogr::DataSource::Pointer vectors, 
+  SampleVectorType ExtractSamples(const ogr::DataSource::Pointer vectors, 
                                   size_t layerName,
                                   const std::string& classField, const int label,
                                   const std::vector<std::string>& excludedFields = {});
 
-  void sampleToOGRFeatures(const ogr::DataSource::Pointer& vectors,
+  void SampleToOGRFeatures(const ogr::DataSource::Pointer& vectors,
                            ogr::DataSource* output, 
                            const SampleVectorType& samples,
                            const size_t layerName,
                            const std::string& classField, int label,
                            const std::vector<std::string>& excludedFields = {});
 
-  std::set<size_t> getExcludedFieldsIds(const std::vector<std::string>& excludedFields,
+  std::set<size_t> GetExcludedFieldsIds(const std::vector<std::string>& excludedFields,
                                         const ogr::Layer& inputLayer);
-bool isNumericField(const ogr::Feature& feature, const int idx);
+  bool IsNumericField(const ogr::Feature& feature, const int idx);
 
-ogr::Feature selectTemplateFeature(const ogr::Layer& inputLayer, 
-                                   const std::string& classField, int label);
+  ogr::Feature SelectTemplateFeature(const ogr::Layer& inputLayer, 
+                                     const std::string& classField, int label);
 private:
   SampleAugmentationFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented

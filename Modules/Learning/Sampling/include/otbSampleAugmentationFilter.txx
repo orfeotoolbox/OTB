@@ -84,7 +84,7 @@ SampleAugmentationFilter
 
   OGRDataSourcePointerType inputDS = dynamic_cast<OGRDataSourceType*>(this->itk::ProcessObject::GetInput(0));
   auto outputDS = static_cast<ogr::DataSource *>(this->itk::ProcessObject::GetOutput(0));
-  auto inSamples = this->extractSamples(inputDS, m_Layer,
+  auto inSamples = this->ExtractSamples(inputDS, m_Layer,
                                         m_ClassFieldName,
                                         m_Label,
                                         m_ExcludedFields);
@@ -93,13 +93,13 @@ SampleAugmentationFilter
     {
     case Strategy::Replicate:
     {
-    sampleAugmentation::replicateSamples(inSamples, m_NumberOfSamples,
+    sampleAugmentation::ReplicateSamples(inSamples, m_NumberOfSamples,
                                          newSamples);
     }
     break;
     case Strategy::Jitter:
     {
-    sampleAugmentation::jitterSamples(inSamples, m_NumberOfSamples,
+    sampleAugmentation::JitterSamples(inSamples, m_NumberOfSamples,
                                       newSamples,
                                       m_StdFactor,
                                       m_Seed);
@@ -107,14 +107,14 @@ SampleAugmentationFilter
     break;
     case Strategy::Smote:
     {
-    sampleAugmentation::smote(inSamples, m_NumberOfSamples,
+    sampleAugmentation::Smote(inSamples, m_NumberOfSamples,
                               newSamples,
                               m_SmoteNeighbors,
                               m_Seed);
     }
     break;
     }
-  this->sampleToOGRFeatures(inputDS, outputDS, newSamples, m_Layer,
+  this->SampleToOGRFeatures(inputDS, outputDS, newSamples, m_Layer,
                             m_ClassFieldName,
                             m_Label,
                             m_ExcludedFields);
@@ -128,7 +128,7 @@ SampleAugmentationFilter
 */
 SampleAugmentationFilter::SampleVectorType 
 SampleAugmentationFilter
-::extractSamples(const ogr::DataSource::Pointer vectors, 
+::ExtractSamples(const ogr::DataSource::Pointer vectors, 
                  size_t layerName,
                  const std::string& classField, const int label,
                  const std::vector<std::string>& excludedFields)
@@ -147,7 +147,7 @@ SampleAugmentationFilter
     }
 
   auto numberOfFields = (*featureIt).ogr().GetFieldCount();
-  auto excludedIds = this->getExcludedFieldsIds(excludedFields, layer);
+  auto excludedIds = this->GetExcludedFieldsIds(excludedFields, layer);
   SampleVectorType samples;
   int sampleCount{0};
   while( featureIt!=layer.end() )
@@ -160,7 +160,7 @@ SampleAugmentationFilter
       for(auto idx=0; idx<numberOfFields; ++idx)
         {
         if(excludedIds.find(idx) == excludedIds.cend() &&
-           this->isNumericField((*featureIt), idx))
+           this->IsNumericField((*featureIt), idx))
           mv.push_back((*featureIt).ogr().GetFieldAsDouble(idx));
         }
       samples.push_back(mv); 
@@ -178,7 +178,7 @@ SampleAugmentationFilter
 
 void 
 SampleAugmentationFilter
-::sampleToOGRFeatures(const ogr::DataSource::Pointer& vectors,
+::SampleToOGRFeatures(const ogr::DataSource::Pointer& vectors,
                       ogr::DataSource* output, 
                       const SampleAugmentationFilter::SampleVectorType& samples,
                       const size_t layerName,
@@ -187,7 +187,7 @@ SampleAugmentationFilter
 {
 
   auto inputLayer = vectors->GetLayer(layerName);
-  auto excludedIds = this->getExcludedFieldsIds(excludedFields, inputLayer);
+  auto excludedIds = this->GetExcludedFieldsIds(excludedFields, inputLayer);
 
   OGRSpatialReference * oSRS = nullptr;
   if (inputLayer.GetSpatialRef())
@@ -206,7 +206,7 @@ SampleAugmentationFilter
     }
 
   auto featureCount = outputLayer.GetFeatureCount(false);
-  auto templateFeature = this->selectTemplateFeature(inputLayer, classField, label);
+  auto templateFeature = this->SelectTemplateFeature(inputLayer, classField, label);
   for(const auto& sample : samples)
     {
     ogr::Feature dstFeature(outputLayer.GetLayerDefn());
@@ -216,7 +216,7 @@ SampleAugmentationFilter
     for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
       {
       if(excludedIds.find(k) == excludedIds.cend() &&
-         this->isNumericField(dstFeature, k))
+         this->IsNumericField(dstFeature, k))
         {
         dstFeature.ogr().SetField(k, sample[sampleFieldCounter++]);
         }
@@ -227,7 +227,7 @@ SampleAugmentationFilter
 
 std::set<size_t> 
 SampleAugmentationFilter
-::getExcludedFieldsIds(const std::vector<std::string>& excludedFields,
+::GetExcludedFieldsIds(const std::vector<std::string>& excludedFields,
                        const ogr::Layer& inputLayer)
 {
   auto feature = *(inputLayer).begin();
@@ -245,7 +245,7 @@ SampleAugmentationFilter
 
 bool 
 SampleAugmentationFilter
-::isNumericField(const ogr::Feature& feature,
+::IsNumericField(const ogr::Feature& feature,
                  const int idx)
 {
   OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(idx)->GetType();
@@ -256,7 +256,7 @@ SampleAugmentationFilter
 
 ogr::Feature
 SampleAugmentationFilter
-::selectTemplateFeature(const ogr::Layer& inputLayer, 
+::SelectTemplateFeature(const ogr::Layer& inputLayer, 
                         const std::string& classField, int label)
 {
   auto wh = std::find_if(inputLayer.begin(), inputLayer.end(),

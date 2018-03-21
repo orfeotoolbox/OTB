@@ -40,7 +40,7 @@ using SampleVectorType = std::vector<SampleType>;
 Estimate standard deviations of the components in one pass using
 Welford's algorithm
 */
-SampleType estimateStds(const SampleVectorType& samples)
+SampleType EstimateStds(const SampleVectorType& samples)
 {
   const auto nbSamples = samples.size();
   const auto nbComponents = samples[0].size();
@@ -71,7 +71,7 @@ SampleType estimateStds(const SampleVectorType& samples)
 * the input samples and add them to the new data set until nbSamples
 * are added. The elements of newSamples are removed before proceeding.
 */
-void replicateSamples(const SampleVectorType& inSamples, 
+void ReplicateSamples(const SampleVectorType& inSamples, 
                       const size_t nbSamples,
                     SampleVectorType& newSamples)
 {
@@ -92,7 +92,7 @@ void replicateSamples(const SampleVectorType& inSamples,
 * input variables divided by stdFactor (defaults to 10). The
 * elements of newSamples are removed before proceeding.
 */
-void jitterSamples(const SampleVectorType& inSamples, 
+void JitterSamples(const SampleVectorType& inSamples, 
                    const size_t nbSamples,
                       SampleVectorType& newSamples,
                    float stdFactor=10,
@@ -106,7 +106,7 @@ void jitterSamples(const SampleVectorType& inSamples,
   std::srand(seed);
   // We use one gaussian distribution per component since they may
   // have different stds
-  auto stds = estimateStds(inSamples);
+  auto stds = EstimateStds(inSamples);
   std::vector<std::normal_distribution<double>> gaussDis(nbComponents);
 #pragma omp parallel for
   for(size_t i=0; i<nbComponents; ++i)
@@ -136,7 +136,7 @@ struct NeighborSorter
   }
 };
 
-double computeSquareDistance(const SampleType& x, const SampleType& y)
+double ComputeSquareDistance(const SampleType& x, const SampleType& y)
 {
   assert(x.size()==y.size());
   double dist{0};
@@ -151,7 +151,7 @@ using NNIndicesType = std::vector<NeighborType>;
 using NNVectorType = std::vector<NNIndicesType>;
 /** Returns the indices of the nearest neighbors for each input sample
 */
-void findKNNIndices(const SampleVectorType& inSamples, 
+void FindKNNIndices(const SampleVectorType& inSamples, 
                     const size_t nbNeighbors,
                     NNVectorType& nnVector)
 {
@@ -164,7 +164,7 @@ void findKNNIndices(const SampleVectorType& inSamples,
     for(size_t neighborIdx=0; neighborIdx<nbSamples; ++neighborIdx) 
       {
       if(sampleIdx!=neighborIdx)
-        nns.push_back({neighborIdx, computeSquareDistance(inSamples[sampleIdx],
+        nns.push_back({neighborIdx, ComputeSquareDistance(inSamples[sampleIdx],
                                                           inSamples[neighborIdx])});
       }  
     std::partial_sort(nns.begin(), nns.begin()+nbNeighbors, nns.end(), NeighborSorter{});
@@ -175,7 +175,7 @@ void findKNNIndices(const SampleVectorType& inSamples,
 
 /** Generate the new sample in the line linking s1 and s2
 */
-SampleType smoteCombine(const SampleType& s1, const SampleType& s2, double position)
+SampleType SmoteCombine(const SampleType& s1, const SampleType& s2, double position)
 {
   auto result = s1;
   for(size_t i=0; i<s1.size(); ++i)
@@ -189,7 +189,7 @@ synthetic minority over-sampling technique, Journal of artificial
 intelligence research, 16(), 321–357 (2002).
 http://dx.doi.org/10.1613/jair.953
 */
-void smote(const SampleVectorType& inSamples, 
+void Smote(const SampleVectorType& inSamples, 
            const size_t nbSamples,
            SampleVectorType& newSamples,
            const int nbNeighbors,
@@ -197,7 +197,7 @@ void smote(const SampleVectorType& inSamples,
 {
   newSamples.resize(nbSamples);
   NNVectorType nnVector;
-  findKNNIndices(inSamples, nbNeighbors, nnVector);
+  FindKNNIndices(inSamples, nbNeighbors, nnVector);
   // The input samples are selected randomly with replacement
   std::srand(seed);
   #pragma omp parallel for
@@ -207,7 +207,7 @@ void smote(const SampleVectorType& inSamples,
     const auto sample = inSamples[sampleIdx];
     const auto neighborIdx = nnVector[sampleIdx][std::rand()%nbNeighbors].index;
     const auto neighbor = inSamples[neighborIdx];
-    newSamples[i] = smoteCombine(sample, neighbor, std::rand()/double{RAND_MAX}); 
+    newSamples[i] = SmoteCombine(sample, neighbor, std::rand()/double{RAND_MAX}); 
     }
 }
 
