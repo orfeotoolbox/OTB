@@ -458,6 +458,7 @@ SimpleParallelTiffWriter<TInputImage>
    */
   inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
+  typename InputImageType::PointType origin = inputPtr->GetOrigin();
 
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
@@ -497,6 +498,9 @@ SimpleParallelTiffWriter<TInputImage>
       throw e;
       }
     otbMsgDevMacro(<< "inputRegion " << inputRegion);
+
+    // Update the origin
+    inputPtr->TransformIndexToPhysicalPoint(inputRegion.GetIndex(), origin);
     }
 
   // Get number of bands & pixel data type
@@ -538,7 +542,7 @@ SimpleParallelTiffWriter<TInputImage>
   else
     {
     // When mode is not tiled (i.e. striped)
-    block_size_x = inputPtr->GetLargestPossibleRegion().GetSize()[0];
+    block_size_x = inputRegion.GetSize()[0];
     }
 
   // Master process (Rank 0) is responsible for the creation of the output raster.
@@ -546,10 +550,10 @@ SimpleParallelTiffWriter<TInputImage>
     {
     // Set geotransform
     double geotransform[6];
-    geotransform[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSignedSpacing()[0];
+    geotransform[0] = origin[0] - 0.5*inputPtr->GetSignedSpacing()[0];
     geotransform[1] = inputPtr->GetSignedSpacing()[0];
     geotransform[2] = 0.0;
-    geotransform[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSignedSpacing()[1];
+    geotransform[3] = origin[1] - 0.5*inputPtr->GetSignedSpacing()[1];
     geotransform[4] = 0.0;
     geotransform[5] = inputPtr->GetSignedSpacing()[1];
 
@@ -557,8 +561,8 @@ SimpleParallelTiffWriter<TInputImage>
     if(!m_TiffTiledMode)
       {
       SPTW_ERROR sperr = sptw::create_raster(m_FileName,
-                                             inputPtr->GetLargestPossibleRegion().GetSize()[0],
-                                             inputPtr->GetLargestPossibleRegion().GetSize()[1],
+                                             inputRegion.GetSize()[0],
+                                             inputRegion.GetSize()[1],
                                              nBands,
                                              dataType,
                                              geotransform,
@@ -573,8 +577,8 @@ SimpleParallelTiffWriter<TInputImage>
     else
       {
       SPTW_ERROR sperr = sptw::create_tiled_raster(m_FileName,
-                                                   inputPtr->GetLargestPossibleRegion().GetSize()[0],
-                                                   inputPtr->GetLargestPossibleRegion().GetSize()[1],
+                                                   inputRegion.GetSize()[0],
+                                                   inputRegion.GetSize()[1],
                                                    nBands,
                                                    dataType,
                                                    geotransform,
