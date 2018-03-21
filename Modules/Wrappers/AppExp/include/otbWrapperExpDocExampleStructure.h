@@ -66,7 +66,11 @@ public:
   typedef std::vector<ParametersVectorType> ParametersVectorOfVectorType;
 
   /** Get the number of examples */
-  itkGetMacro(NbOfExamples, unsigned int);
+  // itkGetMacro(NbOfExamples, unsigned int);
+  unsigned int GetNbOfExamples() const
+    {
+    return m_ExampleCommentList.size();
+    }
 
   /** Parameter list accessors. */
   /** Parameter list accessors : adding key and name */
@@ -168,9 +172,6 @@ private:
 
   /** Example comments */
   std::vector<std::string> m_ExampleCommentList;
-
-  /** Stores the number of example. */
-  unsigned int m_NbOfExamples;
 
 }; // End class Parameter
 

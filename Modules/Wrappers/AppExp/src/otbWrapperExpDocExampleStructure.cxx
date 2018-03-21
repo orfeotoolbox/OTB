@@ -26,7 +26,7 @@ namespace otb
 namespace WrapperExp
 {
 
-DocExampleStructure::DocExampleStructure() : m_ParameterList(), m_ApplicationName(""), m_ExampleCommentList(), m_NbOfExamples(1)
+DocExampleStructure::DocExampleStructure() : m_ParameterList(), m_ApplicationName(""), m_ExampleCommentList()
 {
   m_ExampleCommentList.push_back("");
 }
@@ -56,7 +56,6 @@ unsigned int
 DocExampleStructure::AddExample( const std::string & comm )
 {
   m_ExampleCommentList.push_back( comm );
-  m_NbOfExamples++;
 
   m_ParameterList.push_back(ParametersVectorType());
 
@@ -98,7 +97,7 @@ std::string
 DocExampleStructure::GenerateCLExample()
 {
   std::ostringstream oss;
-  for( unsigned int exId=0; exId<m_NbOfExamples; exId++)
+  for( unsigned int exId=0; exId<m_ExampleCommentList.size(); exId++)
     {
     if( !m_ExampleCommentList[exId].empty() )
       oss << m_ExampleCommentList[exId]<< std::endl;
@@ -147,20 +146,21 @@ std::string
 DocExampleStructure::GenerateHtmlExample()
 {
   std::ostringstream oss;
-  if( m_NbOfExamples>1 )
+  unsigned int nbOfExamples = m_ExampleCommentList.size();
+  if( nbOfExamples>1 )
     oss << "<ul>";
 
-  for( unsigned int exId=0; exId<m_NbOfExamples; exId++)
+  for( unsigned int exId=0; exId<nbOfExamples; exId++)
     {
-    if( m_NbOfExamples>1 )
+    if( nbOfExamples>1 )
       oss << "<li>";
     if( !m_ExampleCommentList[exId].empty() )
       oss << otb::StringToHTML(m_ExampleCommentList[exId]);
     oss << this->GenerateHtmlExample( exId );
-    if( m_NbOfExamples>1 )
+    if( nbOfExamples>1 )
       oss << "</li>";
     }
-  if( m_NbOfExamples>1 )
+  if( nbOfExamples>1 )
     oss << "</ul>";
 
   std::string res = oss.str();
