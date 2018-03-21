@@ -30,6 +30,6 @@ void RegisterTests()
   REGISTER_TEST(otbDecisionTreeNew);
   REGISTER_TEST(otbKMeansImageClassificationFilterNew);
 #ifdef OTB_USE_SHARK
-  //~ REGISTER_TEST(otbSharkNormalizeLabels);
+  REGISTER_TEST(otbSharkNormalizeLabels);
 #endif
 }

@@ -33,7 +33,7 @@ otbMachineLearningModelTemplates.cxx
 )
 
 if(OTB_USE_SHARK)
-  #~ set(OTBLearningBaseTests ${OTBLearningBaseTests} otbSharkUtilsTests.cxx)
+  set(OTBLearningBaseTests ${OTBLearningBaseTests} otbSharkUtilsTests.cxx)
 endif()
 
 add_executable(otbLearningBaseTestDriver ${OTBLearningBaseTests})
@@ -73,6 +73,6 @@ otb_add_test(NAME leTuKMeansImageClassificationFilterNew COMMAND otbLearningBase
   otbKMeansImageClassificationFilterNew)
 
 if(OTB_USE_SHARK)
-  #~ otb_add_test(NAME leTuSharkNormalizeLabels COMMAND otbLearningBaseTestDriver
-    #~ otbSharkNormalizeLabels)
+  otb_add_test(NAME leTuSharkNormalizeLabels COMMAND otbLearningBaseTestDriver
+    otbSharkNormalizeLabels)
 endif()
