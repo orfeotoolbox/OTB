@@ -146,3 +146,10 @@ add_test( NAME pyTvParametersDict
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
   PythonParametersDict
   ${OTB_DATA_ROOT}/Input/poupees.tif)
+
+add_test( NAME pyTvImageInterface
+  COMMAND ${TEST_DRIVER} Execute
+  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  PythonImageInterface
+  ${OTB_DATA_ROOT}/Examples/QB_Toulouse_Ortho_XS.tif
+  )
