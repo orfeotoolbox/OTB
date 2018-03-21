@@ -76,11 +76,14 @@ void replicateSamples(const SampleVectorType& inSamples,
                     SampleVectorType& newSamples)
 {
   newSamples.resize(nbSamples);
+  size_t imod{0};
 #pragma omp parallel for
   for(size_t i=0; i<nbSamples; ++i)
     {
-    newSamples[i] = inSamples[i%inSamples.size()];
+    if (imod == inSamples.size()) imod = 0;
+    newSamples[i] = inSamples[imod++];
     }
+
 }
 
 /** Create new samples by adding noise to existing samples. Gaussian
