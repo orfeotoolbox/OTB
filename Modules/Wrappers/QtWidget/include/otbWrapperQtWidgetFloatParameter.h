@@ -42,7 +42,7 @@ class OTBQtWidget_EXPORT QtWidgetFloatParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*);
-  ~QtWidgetFloatParameter() ITK_OVERRIDE;
+  ~QtWidgetFloatParameter() override;
 
 protected slots:
   void SetValue( double value );
@@ -51,9 +51,9 @@ private:
   QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
   void operator=(const QtWidgetFloatParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   QHBoxLayout *           m_QHBoxLayout;
   QDoubleSpinBox *        m_QDoubleSpinBox;

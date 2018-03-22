@@ -114,24 +114,24 @@ public:
   itkSetObjectMacro(DataToWrite, DataObjectType);
 
   /** Compute pipeline memory print */
-  void Compute();
+  void Compute(bool propagate=true);
 
   /** Const conversion factor */
   static const double ByteToMegabyte;
   static const double MegabyteToByte;
 
   /** Evaluate the print (in bytes) of a single data object */
-  MemoryPrintType EvaluateDataObjectPrint(DataObjectType * data) const;
+  MemoryPrintType EvaluateDataObjectPrint(DataObjectType * data);
 
 protected:
   /** Constructor */
   PipelineMemoryPrintCalculator();
 
   /** Destructor */
-  ~PipelineMemoryPrintCalculator() ITK_OVERRIDE;
+  ~PipelineMemoryPrintCalculator() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Recursive method to evaluate memory print in bytes */
   MemoryPrintType EvaluateProcessObjectPrintRecursive(ProcessObjectType * process);

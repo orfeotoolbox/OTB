@@ -104,11 +104,11 @@ public:
 
 protected:
   HarrisImageFilter();
-  ~HarrisImageFilter() ITK_OVERRIDE {}
+  ~HarrisImageFilter() override {}
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   HarrisImageFilter(const Self&); //purposely not implemented

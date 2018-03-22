@@ -54,7 +54,7 @@ public:
   typedef itk::CenteredSimilarity2DTransform<double>       TransformType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("VectorDataTransform");
     SetDescription("Apply a transform to each vertex of the input VectorData");
@@ -89,7 +89,7 @@ private:
 
     AddParameter(ParameterType_InputImage, "in", "Support image");
     SetParameterDescription("in","Image defining the reference coordinate "
-      "system in which the tranform is applied. Both projected and sensor "
+      "system in which the transform is applied. Both projected and sensor "
       "images are supported.");
 
     // Transform Group
@@ -129,12 +129,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // nothing to update
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the support image
     FloatVectorImageType*  inImage = GetParameterImage("in");

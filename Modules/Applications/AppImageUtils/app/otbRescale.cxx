@@ -49,7 +49,7 @@ public:
   typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType> RescaleImageFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Rescale");
     SetDescription("Rescale the image between two given values.");
@@ -62,8 +62,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
+    AddDocTag(Tags::Deprecated);
     AddDocTag(Tags::Manip);
-
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription( "in", "The image to scale." );
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
@@ -90,12 +90,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 

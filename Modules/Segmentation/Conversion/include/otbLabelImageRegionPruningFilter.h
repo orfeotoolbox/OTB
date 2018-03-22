@@ -114,20 +114,20 @@ public:
   InputSpectralImageType * GetInputSpectralImage();
 
 protected:
-  void EnlargeOutputRequestedRegion( itk::DataObject *output ) ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion( itk::DataObject *output ) override;
 
-   void GenerateOutputInformation(void) ITK_OVERRIDE;
+   void GenerateOutputInformation(void) override;
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
   /** Constructor */
   LabelImageRegionPruningFilter();
 
   /** Destructor */
-  ~LabelImageRegionPruningFilter() ITK_OVERRIDE;
+  ~LabelImageRegionPruningFilter() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Method to build a map of adjacent regions */
   RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename OutputLabelImageType::Pointer inputLabelImage);

@@ -22,6 +22,8 @@
     <file alias="action_ZoomOut_Icon">../../../../Utilities/Data/Icons/action-zoomout_24x24.png</file>
     <file alias="action_ZoomLayer_Icon">../../../../Utilities/Data/Icons/action-zoomtolayer_24x24.png</file>
     <file alias="action_Open_Icon">../../../../Utilities/Data/Icons/document-open_32x32.png</file>
+    <file alias="done">../../../../Utilities/Data/Icons/check_24x24.png</file>
+    <file alias="failed">../../../../Utilities/Data/Icons/forbidden-24x24.png</file>
   </qresource>
   <qresource prefix="/images">
     <file alias="application_icon">../../../../Utilities/Data/Icons/monteverdi-128x128.png</file>

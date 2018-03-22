@@ -75,11 +75,11 @@ public:
 
 protected:
   LabelMapWithClassLabelToClassLabelImageFilter();
-  ~LabelMapWithClassLabelToClassLabelImageFilter() ITK_OVERRIDE {};
+  ~LabelMapWithClassLabelToClassLabelImageFilter() override {};
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
 
 private:
   LabelMapWithClassLabelToClassLabelImageFilter(const Self&); //purposely not implemented

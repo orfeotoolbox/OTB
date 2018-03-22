@@ -52,7 +52,7 @@ public:
   typedef NumericalParameter<unsigned int>     UnsignedIntParameter;
   typedef UnsignedIntParameter::ScalarType     ScalarType;
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return m_UnsignedIntParam->HasValue();
   }
@@ -71,19 +71,19 @@ public:
   otbGetObjectMemberMacro(UnsignedIntParam,  MaximumValue, ScalarType);
 
   // Clear Value
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     m_UnsignedIntParam->ClearValue();
   }
 
   // Reset
-  void Reset() ITK_OVERRIDE
+  void Reset() override
   {
     m_UnsignedIntParam->Reset();
   }
 
   // Reimplement the SetActive method
-  void SetActive(  const bool value ) ITK_OVERRIDE
+  void SetActive(  const bool value ) override
   {
     Superclass::SetActive( value );
     m_UnsignedIntParam->SetActive( value );
@@ -107,7 +107,7 @@ protected:
   }
 
   /** Destructor */
-  ~RAMParameter() ITK_OVERRIDE
+  ~RAMParameter() override
   {}
 
 private:

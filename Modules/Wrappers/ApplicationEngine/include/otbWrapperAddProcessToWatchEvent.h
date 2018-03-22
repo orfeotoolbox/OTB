@@ -46,7 +46,7 @@ public:
 
   AddProcessToWatchEvent(){}
   AddProcessToWatchEvent(const Self& s) :itk::EventObject(s){};
-  ~AddProcessToWatchEvent() ITK_OVERRIDE {}
+  ~AddProcessToWatchEvent() override {}
 
   /** Set/Get the process to watch */
   virtual void SetProcess(itk::ProcessObject * process)
@@ -70,16 +70,16 @@ public:
   }
 
   /** Virtual pure method to implement */
-  itk::EventObject* MakeObject() const ITK_OVERRIDE
+  itk::EventObject* MakeObject() const override
   {
     return new Self;
   }
 
-  const char* GetEventName() const ITK_OVERRIDE
+  const char* GetEventName() const override
   {
     return "AddProcess";
   }
-  bool CheckEvent(const itk::EventObject* e) const ITK_OVERRIDE
+  bool CheckEvent(const itk::EventObject* e) const override
   {
     return dynamic_cast<const Self*>(e);
   }

@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbFineRegistrationImageFilter.h"
 #include "otbStandardFilterWatcher.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 #include "otbExtractROI.h"
 
 
@@ -154,11 +154,10 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   }
 
   //otb::StandardFilterWatcher watcher(registration,"Registration");
-  itk::TimeProbe chrono;
-  chrono.Start();
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   registration->Update();
-  chrono.Stop();
-  std::cout<<chrono.GetMean()<<"\t";
+
+  std::cout << "Processing time was " << chrono.GetElapsedMilliseconds() << " ms\n";
 
   CorrelWriterType::Pointer correlWriter = CorrelWriterType::New();
   correlWriter->SetFileName(correlFileName);

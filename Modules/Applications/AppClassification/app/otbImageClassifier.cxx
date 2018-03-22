@@ -67,13 +67,13 @@ public:
 
 protected:
 
-  ~ImageClassifier() ITK_OVERRIDE
+  ~ImageClassifier() override
     {
     MachineLearningModelFactoryType::CleanFactories();
     }
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ImageClassifier");
     SetDescription("Performs a classification of the input image according to a model file.");
@@ -141,12 +141,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Load input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

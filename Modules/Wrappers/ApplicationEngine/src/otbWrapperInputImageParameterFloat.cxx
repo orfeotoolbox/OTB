@@ -20,18 +20,12 @@
 
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageParameterMacros.h"
-#include "itksys/SystemTools.hxx"
 #include "otbWrapperTypes.h"
-#include "otb_boost_string_header.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-otbGetImageMacro(FloatImage);
-otbGetImageMacro(FloatVectorImage)
-otbGenericCastImageMacro(FloatImageType, SimpleCastImage, )
-otbGenericCastImageMacro(FloatVectorImageType, SimpleCastImage, Vector)
-otbGenericCastImageMacro(FloatImageType, CastVectorImageFromImage, Vector)
+otbGetImageAndVectorImageMacro(Float);
 }
 }

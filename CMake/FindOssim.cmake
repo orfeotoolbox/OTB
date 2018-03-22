@@ -35,14 +35,10 @@ find_path( OSSIM_INCLUDE_DIR
            NAMES ossim/init/ossimInit.h )
 
 # Version checking
+set(OSSIM_VERSION)
 if(EXISTS "${OSSIM_INCLUDE_DIR}/ossim/ossimVersion.h")
   file(READ "${OSSIM_INCLUDE_DIR}/ossim/ossimVersion.h" _ossim_version_h_CONTENTS)
   string(REGEX REPLACE ".*# *define OSSIM_VERSION *\"([0-9.]+)\".*" "\\1" OSSIM_VERSION "${_ossim_version_h_CONTENTS}")
-  string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" OSSIM_MAJOR_VERSION_NUMBER "${OSSIM_VERSION}")
-  string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" OSSIM_MINOR_VERSION_NUMBER "${OSSIM_VERSION}")
-  string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" OSSIM_PATCH_VERSION_NUMBER "${OSSIM_VERSION}")
-  math(EXPR OSSIM_VERSION_NUMBER
-    "((${OSSIM_MAJOR_VERSION_NUMBER})*100+${OSSIM_MINOR_VERSION_NUMBER})*100+${OSSIM_PATCH_VERSION_NUMBER}")
   if("${OSSIM_VERSION}" VERSION_LESS "1.8.20")
     message(WARNING "The OSSIM include directory detected by OTB is: '${OSSIM_INCLUDE_DIR}'."
       "This version (${OSSIM_VERSION}) is not fully compatible with OTB."
@@ -67,6 +63,28 @@ else()
   endif()
 endif()
 
+# Hack to detect version 2.2.0, without ossimVersion.h
+if(EXISTS "${OSSIM_INCLUDE_DIR}/ossim/projection/ossimRpcSolver.h")
+  file(STRINGS "${OSSIM_INCLUDE_DIR}/ossim/projection/ossimRpcSolver.h" _ossim_rpc_solv_content)
+  if(_ossim_rpc_solv_content MATCHES "const +ossimRefPtr<ossimRpcModel> +getRpcModel\\(\\)")
+    if((NOT OSSIM_VERSION) OR (OSSIM_VERSION VERSION_LESS "2.2.0"))
+      set(OSSIM_VERSION "2.2.0")
+    endif()
+  endif()
+endif()
+
+if(OSSIM_VERSION)
+  string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" OSSIM_MAJOR_VERSION_NUMBER "${OSSIM_VERSION}")
+  string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" OSSIM_MINOR_VERSION_NUMBER "${OSSIM_VERSION}")
+  string(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" OSSIM_PATCH_VERSION_NUMBER "${OSSIM_VERSION}")
+  math(EXPR OSSIM_VERSION_NUMBER
+    "((${OSSIM_MAJOR_VERSION_NUMBER})*100+${OSSIM_MINOR_VERSION_NUMBER})*100+${OSSIM_PATCH_VERSION_NUMBER}")
+else()
+  # Unknown version : default to 0
+  set(OSSIM_VERSION_NUMBER 0)
+endif()
+
+# Look for the library
 find_library(OSSIM_LIBRARY
              NAMES ossim)
 

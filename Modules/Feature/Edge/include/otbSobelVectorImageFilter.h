@@ -100,7 +100,7 @@ protected:
     typename Superclass::RadiusType radius = {{1, 1}};
     this->SetRadius( radius );
   }
-  ~SobelVectorImageFilter() ITK_OVERRIDE { }
+  ~SobelVectorImageFilter() override { }
 
 private:
   SobelVectorImageFilter( const Self & ); // Not implemented

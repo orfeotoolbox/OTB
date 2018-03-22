@@ -23,7 +23,7 @@
 #define otbPersistentImageToOGRLayerFilter_txx
 
 #include "otbPersistentImageToOGRLayerFilter.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 #include <boost/foreach.hpp>
 #include <stdio.h>
 #include "otbMacro.h"
@@ -143,11 +143,9 @@ PersistentImageToOGRLayerFilter<TImage>
      }
 
   //Copy features contained in the memory layer (srcLayer) in the output layer
-  itk::TimeProbe chrono;
-  chrono.Start();
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
 
   OGRErr err = m_OGRLayer.ogr().StartTransaction();
-
   if (err != OGRERR_NONE)
     {
     itkExceptionMacro(<< "Unable to start transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
@@ -162,14 +160,14 @@ PersistentImageToOGRLayerFilter<TImage>
     }
 
   err = m_OGRLayer.ogr().CommitTransaction();
-  
+
   if (err != OGRERR_NONE)
     {
     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
     }
 
   chrono.Stop();
-  otbMsgDebugMacro(<< "write ogr tile took " << chrono.GetTotal() << " sec");
+  otbMsgDebugMacro(<< "Writing OGR tile took " << chrono.GetElapsedMilliseconds() << " ms");
 
 }
 

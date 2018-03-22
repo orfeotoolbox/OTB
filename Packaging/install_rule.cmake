@@ -80,6 +80,8 @@ function(install_rule src_file)
       continue()
     elseif("${sfile_ABS_LOWER}" MATCHES "\\.settings$")
       continue()
+    elseif("${sfile_ABS_LOWER}" MATCHES "-config$")
+      continue()
     else()
       if(UNIX)
         #the last else() loop where we run a 'file' command to find file type and directory

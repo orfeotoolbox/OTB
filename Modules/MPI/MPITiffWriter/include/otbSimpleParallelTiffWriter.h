@@ -28,10 +28,6 @@
 #include "otbExtendedFilenameToWriterOptions.h"
 #include "otbMPIConfig.h"
 
-// Time probe
-#include "itkTimeProbe.h"
-
-
 #include "itkImageFileWriter.h"
 
 #include "itkObjectFactoryBase.h"
@@ -218,7 +214,7 @@ public:
   const InputImageType* GetInput();
 
   /** Does the real work. */
-  virtual void Update();
+  virtual void Update() override;
 
   /** SimpleParallelTiffWriter Methods */
   virtual void SetFileName(const char* extendedFileName);
@@ -259,7 +255,7 @@ public:
 protected:
   SimpleParallelTiffWriter();
   virtual ~SimpleParallelTiffWriter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   SimpleParallelTiffWriter(const SimpleParallelTiffWriter &); //purposely not implemented

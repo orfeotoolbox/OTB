@@ -99,7 +99,7 @@ private:
     m_StatisticsFilter            = StatisticsFilterType::New();
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("StereoRectificationGridGenerator");
     SetDescription("Generates two deformation fields to resample in epipolar "
@@ -115,7 +115,7 @@ private:
       " geometry.\n\n"
       "There are several ways to set the elevation source:\n"
       "  * An arbitrary constant elevation\n"
-      "  * A DEM directoy\n"
+      "  * A DEM directory\n"
       "  * Compute an average elevation from a DEM\n\n"
       "If needed, the application can compute inverse resampling grids (from "
       "epipolar to original sensor geometry). Don't forget to check the other "
@@ -249,12 +249,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     m_DisplacementFieldSource->SetLeftImage(GetParameterImage("io.inleft"));
     m_DisplacementFieldSource->SetRightImage(GetParameterImage("io.inright"));

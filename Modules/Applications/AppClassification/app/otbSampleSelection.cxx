@@ -80,7 +80,7 @@ private:
     m_RateCalculator = RateCalculatorType::New();
     }
 
-  void DoInit()
+  void DoInit() override
   {
     SetName("SampleSelection");
     SetDescription("Selects samples from a training vector data set.");
@@ -200,7 +200,7 @@ private:
     SetParameterDescription("strategy.all","Take all samples");
 
     // Default strategy : smallest
-    SetParameterString("strategy","smallest", false);
+    SetParameterString("strategy","smallest");
 
     AddParameter(ParameterType_ListView, "field", "Field Name");
     SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
@@ -227,7 +227,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
  if ( HasValue("vec") )
       {
@@ -257,7 +257,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() override
     {
     // Clear state
     m_RateCalculator->ClearRates();

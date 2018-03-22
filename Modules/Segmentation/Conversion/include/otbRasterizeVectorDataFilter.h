@@ -136,10 +136,10 @@ public:
   }
 
 protected:
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   RasterizeVectorDataFilter();
-  ~RasterizeVectorDataFilter() ITK_OVERRIDE
+  ~RasterizeVectorDataFilter() override
   {
     if (m_OGRDataSourcePointer != ITK_NULLPTR)
       {
@@ -147,9 +147,9 @@ protected:
       }
   }
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   RasterizeVectorDataFilter(const Self&); //purposely not implemented

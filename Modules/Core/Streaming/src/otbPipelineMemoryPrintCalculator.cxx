@@ -71,15 +71,18 @@ PipelineMemoryPrintCalculator
 
 void
 PipelineMemoryPrintCalculator
-::Compute()
+::Compute(bool propagate)
 {
   // Clear the visited process objects set
   m_VisitedProcessObjects.clear();
 
   // Dry run of pipeline synchronisation
-  m_DataToWrite->UpdateOutputInformation();
-  m_DataToWrite->SetRequestedRegionToLargestPossibleRegion();
-  m_DataToWrite->PropagateRequestedRegion();
+  if (propagate)
+    {
+    m_DataToWrite->UpdateOutputInformation();
+    m_DataToWrite->SetRequestedRegionToLargestPossibleRegion();
+    m_DataToWrite->PropagateRequestedRegion();
+    }
 
   // Get the source process object
   ProcessObjectType * source = m_DataToWrite->GetSource();
@@ -105,7 +108,7 @@ PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
 ::EvaluateProcessObjectPrintRecursive(ProcessObjectType * process)
 {
-  otbMsgDevMacro(<< "EvaluateMemoryPrint for " << process->GetNameOfClass() << " (" << process << ")")
+  otbLogMacro(Debug,<<"Recursive evaluation of memory print for ProcessObject" << process->GetNameOfClass() << " (" << process << ")");
   // This variable will store the final print
   MemoryPrintType print = 0;
 
@@ -162,10 +165,11 @@ PipelineMemoryPrintCalculator
 
 PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
-::EvaluateDataObjectPrint(DataObjectType * data) const
+::EvaluateDataObjectPrint(DataObjectType * data)
 {
-  otbMsgDevMacro(<< "EvaluateMemoryPrint for " << data->GetNameOfClass() << " (" << data << ")")
-
+    
+  otbLogMacro(Debug,<<"Evaluation of memory print for DataObject " << data->GetNameOfClass() << " (" << data << ")");
+    
 #define OTB_IMAGE_SIZE_BLOCK(type)                                      \
   if(dynamic_cast<itk::Image<type, 2> *>(data) != NULL)                  \
     {                                                                   \
@@ -183,11 +187,13 @@ PipelineMemoryPrintCalculator
     {                                                                   \
     ImageList<Image<type, 2> > * imageList = dynamic_cast<otb::ImageList<otb::Image<type, 2> > *>(data); \
     MemoryPrintType print(0);                                         \
-    for(ImageList<Image<type, 2> >::ConstIterator it = imageList->Begin(); \
+    for(ImageList<Image<type, 2> >::Iterator it = imageList->Begin(); \
        it != imageList->End(); ++it)                                    \
        {                                                             \
-       print += it.Get()->GetRequestedRegion().GetNumberOfPixels()   \
-       * it.Get()->GetNumberOfComponentsPerPixel() * sizeof(type); \
+       if(it.Get()->GetSource())                                        \
+         print += this->EvaluateProcessObjectPrintRecursive(it.Get()->GetSource());\
+       else                                                             \
+         print += this->EvaluateDataObjectPrint(it.Get());              \
        }                                                           \
     return print;                                                  \
     }                                                              \
@@ -198,8 +204,10 @@ PipelineMemoryPrintCalculator
     for(ImageList<VectorImage<type, 2> >::ConstIterator it = imageList->Begin(); \
        it != imageList->End(); ++it)                                    \
        {                                                             \
-       print += it.Get()->GetRequestedRegion().GetNumberOfPixels()   \
-       * it.Get()->GetNumberOfComponentsPerPixel() * sizeof(type); \
+       if(it.Get()->GetSource())                                        \
+         print += this->EvaluateProcessObjectPrintRecursive(it.Get()->GetSource());\
+       else                                                             \
+         print += this->EvaluateDataObjectPrint(it.Get());              \
        }                                                           \
     return print;                                                  \
     }                                                              \

@@ -23,7 +23,7 @@
 #include "otbMacro.h"
 #include "ogrsf_frmts.h"
 #include "otbOGR.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 
 namespace otb
 {
@@ -188,11 +188,10 @@ void OGRIOHelper
   layer->ResetReading();
 
   unsigned int   counter = 0;
-  itk::TimeProbe chrono;
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
 
   while ((feature = layer->GetNextFeature()) != ITK_NULLPTR)
     {
-    chrono.Start();
 
     // A pointer to the current multi-geometry
     InternalTreeNodeType::Pointer multiPtr;
@@ -203,7 +202,6 @@ void OGRIOHelper
     if (geometry == ITK_NULLPTR)
       {
       OGRFeature::DestroyFeature(feature);
-      chrono.Stop();
       ++counter;
       continue;
       }
@@ -642,11 +640,12 @@ void OGRIOHelper
 
 
     OGRFeature::DestroyFeature(feature);
-    chrono.Stop();
     ++counter;
     } //end While feature
+
+  chrono.Stop();
   otbMsgDevMacro(
-    << layer->GetFeatureCount() << " features read, average insertion time " << chrono.GetMean() << " s");
+    << layer->GetFeatureCount() << " features read, total processing time " << chrono.GetElapsedMilliseconds() << " ms");
 }
 
 

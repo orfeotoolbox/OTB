@@ -110,19 +110,19 @@ public:
   }
 
   /** Reimplement the method Modified() */
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 protected:
   /** Constructor */
   PhysicalToRPCSensorModelImageFilter();
   /** Destructor */
-  ~PhysicalToRPCSensorModelImageFilter() ITK_OVERRIDE;
+  ~PhysicalToRPCSensorModelImageFilter() override;
 
   /** The PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Generate the Output image information*/
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
   PhysicalToRPCSensorModelImageFilter(const Self &);   // purposely not implemented

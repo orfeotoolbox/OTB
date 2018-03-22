@@ -92,8 +92,8 @@ protected:
   virtual void GenerateData();
 
   StatisticsXMLFileWriter();
-  ~StatisticsXMLFileWriter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~StatisticsXMLFileWriter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   StatisticsXMLFileWriter(const Self&); //purposely not implemented

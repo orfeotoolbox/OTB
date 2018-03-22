@@ -49,7 +49,7 @@ public:
   typedef otb::StreamingCompareImageFilter<FloatImageType> StreamingCompareImageFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("CompareImages");
     SetDescription("Estimator between 2 images.");
@@ -134,7 +134,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Set channel interval
     if( HasValue("ref.in") )
@@ -169,7 +169,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Init filters
     m_ExtractRefFilter = ExtractROIMonoFilterType::New();
@@ -225,10 +225,10 @@ private:
     otbAppLogINFO( << "PSNR: " << m_CompareFilter->GetPSNR() );
     otbAppLogINFO( << "Number of Pixel different: " << m_CompareFilter->GetDiffCount() );
 
-    SetParameterFloat( "mse",m_CompareFilter->GetMSE() , false);
-    SetParameterFloat( "mae",m_CompareFilter->GetMAE() , false);
-    SetParameterFloat( "psnr",m_CompareFilter->GetPSNR() , false);
-    SetParameterFloat( "count",m_CompareFilter->GetDiffCount() , false);
+    SetParameterFloat( "mse",m_CompareFilter->GetMSE());
+    SetParameterFloat( "mae",m_CompareFilter->GetMAE());
+    SetParameterFloat( "psnr",m_CompareFilter->GetPSNR());
+    SetParameterFloat( "count",m_CompareFilter->GetDiffCount());
   }
 
 

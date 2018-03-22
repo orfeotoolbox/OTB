@@ -121,7 +121,7 @@ public:
 protected:
   LearningApplicationBase();
 
-  ~LearningApplicationBase() ITK_OVERRIDE;
+  ~LearningApplicationBase() override;
 
   /** Generic method to train and save the machine learning model. This method
    * uses specific train methods depending on the chosen model.*/
@@ -135,7 +135,7 @@ protected:
     std::string modelPath);
 
   /** Init method that creates all the parameters for machine learning models */
-  void DoInit() ITK_OVERRIDE;
+  void DoInit() override;
 
   /** Flag to switch between classification and regression mode.
    * False by default, child classes may change it in their constructor */

@@ -23,7 +23,7 @@
  */
 
 
-#include "ossimSarSensorModel.h"
+#include "ossim/ossimSarSensorModel.h"
 
 
 int main(int, char *[])

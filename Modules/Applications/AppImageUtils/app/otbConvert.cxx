@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#include <numeric>
+
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -83,7 +85,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Convert");
     SetDescription("Convert an image to a different format, optionally rescaling the data"
@@ -105,6 +107,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
 
+    AddDocTag(Tags::Deprecated);
     AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
@@ -117,7 +120,7 @@ private:
     AddChoice("type.none", "None");
     AddChoice("type.linear", "Linear");
     AddChoice("type.log2", "Log2");
-    SetParameterString("type", "none", false);
+    SetParameterString("type", "none");
 
     AddParameter(ParameterType_Float,"type.linear.gamma","Gamma correction factor");
     SetParameterDescription("type.linear.gamma","Gamma correction factor");
@@ -189,13 +192,13 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Read information
     if ( HasValue("in") )
       {
       typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-      ImageMetadataInterfaceType::Pointer metadataInterface = 
+      ImageMetadataInterfaceType::Pointer metadataInterface =
       ImageMetadataInterfaceFactory::CreateIMI(GetParameterImage("in")->GetMetaDataDictionary());
 
       int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
@@ -215,7 +218,7 @@ private:
         SetDefaultParameterInt("channels.rgb.blue", bandBlue);
         }
       }
-    
+
 
   }
 
@@ -479,7 +482,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {

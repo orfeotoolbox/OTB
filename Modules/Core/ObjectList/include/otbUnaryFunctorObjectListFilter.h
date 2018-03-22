@@ -94,15 +94,15 @@ public:
 
 protected:
   UnaryFunctorObjectListFilter();
-  ~UnaryFunctorObjectListFilter() ITK_OVERRIDE {}
+  ~UnaryFunctorObjectListFilter() override {}
 
   /** Multi-threading implementation */
 
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
   /** startIndex and stopIndex represent the indices of the Objects to
   examine in thread threadId */
-  void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId) override;
 
   /** End Multi-threading implementation */
 

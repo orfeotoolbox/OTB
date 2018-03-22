@@ -69,10 +69,10 @@ public:
 
 protected:
   ChangeInformationImageFilter() {}
-  ~ChangeInformationImageFilter() ITK_OVERRIDE {}
+  ~ChangeInformationImageFilter() override {}
 
   /** Apply changes to the output image metadata. */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
   ChangeInformationImageFilter(const Self &); //purposely not implemented

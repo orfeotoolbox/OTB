@@ -80,26 +80,26 @@ protected:
   TileImageFilter();
 
   /** Destructor */
-  ~TileImageFilter() ITK_OVERRIDE;
+  ~TileImageFilter() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Generate input requested region method */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate input requested region method */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Override VerifyInputInformation() since this filter's inputs do
      * not need to occupy the same physical space.
      *
      * \sa ProcessObject::VerifyInputInformation
      */
-  void VerifyInputInformation() ITK_OVERRIDE {}
+  void VerifyInputInformation() override {}
 
 
 private:
