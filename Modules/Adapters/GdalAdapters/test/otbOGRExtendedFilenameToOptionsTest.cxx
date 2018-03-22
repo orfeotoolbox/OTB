@@ -19,8 +19,10 @@
  */
 
 #include "otbOGRExtendedFilenameToOptions.h"
+#include <algorithm>
 #include <iostream>
 #include <fstream>
+
 
 using namespace otb;
 
@@ -81,11 +83,12 @@ int otbOGRExtendedFileName(int , char* argv[])
   file << layerHelper->HasGDALLayerOption() << std::endl;
   file << "Layer option from layer helper:"<<std::endl;
   FilenameHelperType::GDALOptionType latestOptions = layerHelper->GetGDALOptions("layer");
-  for ( auto option : latestOptions )
+  // need to sort for dummy windows
+  std::sort( latestOptions.begin() , latestOptions.end() );
+  for ( auto option : latestOptions ) 
     {
     file<< option << std::endl;
     }
-  // test
 
   file.close();
   return EXIT_SUCCESS;
