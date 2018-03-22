@@ -1437,7 +1437,7 @@ Application
   return ret;
 }
 
-void Application::SetParameterInputImage(std::string parameter, InputImageParameter::ImageBaseType * inputImage)
+void Application::SetParameterInputImage(std::string parameter, ImageBaseType * inputImage)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1453,7 +1453,7 @@ void Application::SetParameterInputImage(std::string parameter, InputImageParame
     }
 }
 
-OutputImageParameter::ImageBaseType * Application::GetParameterOutputImage(std::string parameter)
+ImageBaseType * Application::GetParameterOutputImage(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1470,7 +1470,7 @@ OutputImageParameter::ImageBaseType * Application::GetParameterOutputImage(std::
 }
 
 
-void Application::SetParameterComplexInputImage(std::string parameter, ComplexInputImageParameter::ImageBaseType * inputImage)
+void Application::SetParameterComplexInputImage(std::string parameter, ImageBaseType * inputImage)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1486,7 +1486,7 @@ void Application::SetParameterComplexInputImage(std::string parameter, ComplexIn
     }
 }
 
-ComplexOutputImageParameter::ImageBaseType * Application::GetParameterComplexOutputImage(std::string parameter)
+ImageBaseType * Application::GetParameterComplexOutputImage(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1502,7 +1502,7 @@ ComplexOutputImageParameter::ImageBaseType * Application::GetParameterComplexOut
     }
 }
 
-void Application::AddImageToParameterInputImageList(std::string parameter, InputImageListParameter::ImageBaseType * img)
+void Application::AddImageToParameterInputImageList(std::string parameter, ImageBaseType * img)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1519,7 +1519,7 @@ void Application::AddImageToParameterInputImageList(std::string parameter, Input
 
 }
 
-void Application::SetNthParameterInputImageList(std::string parameter, const unsigned int &id, InputImageListParameter::ImageBaseType * img)
+void Application::SetNthParameterInputImageList(std::string parameter, const unsigned int &id, ImageBaseType * img)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1959,6 +1959,218 @@ std::string Application::GetProgressDescription() const
 double Application::GetLastExecutionTiming() const
 {
   return m_Chrono.GetElapsedMilliseconds() / 1000.0;
+}
+
+ImageBaseType::PointType
+Application::GetImageOrigin(const std::string & key, unsigned int idx)
+{
+  return this->GetParameterImageBase(key, idx)->GetOrigin();
+}
+
+ImageBaseType::SpacingType
+Application::GetImageSpacing(const std::string & key, unsigned int idx)
+{
+  return otb::internal::GetSignedSpacing(this->GetParameterImageBase(key, idx));
+}
+
+ImageBaseType::SizeType
+Application::GetImageSize(const std::string & key, unsigned int idx)
+{
+  return this->GetParameterImageBase(key, idx)->GetLargestPossibleRegion().GetSize();
+}
+
+unsigned int
+Application::GetImageNbBands(const std::string & key, unsigned int idx)
+{
+  return this->GetParameterImageBase(key, idx)->GetNumberOfComponentsPerPixel();
+}
+
+std::string
+Application::GetImageProjection(const std::string & key, unsigned int idx)
+{
+  std::string proj;
+  const itk::MetaDataDictionary& dict =
+    this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
+
+  if (!dict.HasKey(MetaDataKey::ProjectionRefKey))
+    return std::string("");
+
+  itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, proj);
+  return proj;
+}
+
+otb::ImageKeywordlist
+Application::GetImageKeywordlist(const std::string & key, unsigned int idx)
+{
+  ImageKeywordlist kwl;
+  const itk::MetaDataDictionary& dict =
+    this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, kwl);
+
+  return kwl;
+}
+
+unsigned long
+Application::PropagateRequestedRegion(const std::string & key, ImageBaseType::RegionType region, unsigned int idx)
+{
+  ImageBaseType* image = this->GetParameterImageBase(key, idx);
+  ImageBaseType::RegionType largest = image->GetLargestPossibleRegion();
+  ImageBaseType::RegionType requested = region;
+  requested.SetIndex(0, requested.GetIndex(0) + largest.GetIndex(0));
+  requested.SetIndex(1, requested.GetIndex(1) + largest.GetIndex(1));
+  image->SetRequestedRegion(requested);
+  image->PropagateRequestedRegion();
+  // estimate RAM usage
+  otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator =
+    otb::PipelineMemoryPrintCalculator::New();
+  memoryPrintCalculator->SetDataToWrite(image);
+  memoryPrintCalculator->SetBiasCorrectionFactor(1);
+  memoryPrintCalculator->Compute(false);
+  return memoryPrintCalculator->GetMemoryPrint();
+}
+
+ImageBaseType::RegionType
+Application::GetImageRequestedRegion(const std::string & key, unsigned int idx)
+{
+  ImageBaseType* image = this->GetParameterImageBase(key, idx);
+  ImageBaseType::RegionType largest = image->GetLargestPossibleRegion();
+  ImageBaseType::RegionType requested = image->GetRequestedRegion();
+  requested.SetIndex(0, requested.GetIndex(0) - largest.GetIndex(0));
+  requested.SetIndex(1, requested.GetIndex(1) - largest.GetIndex(1));
+  return requested;
+}
+
+itk::MetaDataDictionary
+Application::GetImageMetaData(const std::string & key, unsigned int idx)
+{
+  ImageBaseType* image = this->GetParameterImageBase(key, idx);
+  return image->GetMetaDataDictionary();
+}
+
+ImageBaseType*
+Application::GetParameterImageBase(const std::string & key, unsigned int idx)
+{
+  Parameter* param = GetParameterByKey(key);
+  if (dynamic_cast<InputImageParameter*>(param))
+    {
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    return paramDown->GetImage<ImageBaseType>();
+    }
+  else if (dynamic_cast<InputImageListParameter*>(param))
+    {
+    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+    return paramDown->GetNthImage(idx);
+    }
+  else if (dynamic_cast<ComplexInputImageParameter*>(param))
+    {
+    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
+    return paramDown->GetImage<ImageBaseType>();
+    }
+  else if (dynamic_cast<OutputImageParameter*>(param))
+    {
+    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+    return paramDown->GetValue();
+    }
+  else if (dynamic_cast<ComplexOutputImageParameter*>(param))
+    {
+    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+    return paramDown->GetValue();
+    }
+  else
+    {
+    itkExceptionMacro("Wrong parameter type, expect InputImageParameter, "
+      "InputImageListParameter, ComplexInputImageParameter, "
+      "OutputImageParameter, ComplexOutputImageParameter");
+    }
+  return nullptr;
+}
+
+void
+Application::SetParameterImageBase(const std::string & key, ImageBaseType* img, unsigned int idx)
+{
+  Parameter* param = GetParameterByKey(key);
+  if (dynamic_cast<InputImageParameter*>(param))
+    {
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    paramDown->SetImage<ImageBaseType>(img);
+    }
+  else if (dynamic_cast<InputImageListParameter*>(param))
+    {
+    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+    if (idx >= paramDown->Size())
+      {
+      paramDown->AddImage(img);
+      }
+    else
+      {
+      paramDown->SetNthImage(idx, img);
+      }
+    }
+  else if (dynamic_cast<ComplexInputImageParameter*>(param))
+    {
+    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
+    paramDown->SetImage<ImageBaseType>(img);
+    }
+  else
+    {
+    itkExceptionMacro("Wrong parameter type, expect InputImageParameter, InputImageListParameter or ComplexInputImageParameter");
+    }
+}
+
+ImagePixelType
+Application::GetImageBasePixelType(const std::string & key, unsigned int idx)
+{
+  ImageBaseType* img = this->GetParameterImageBase(key, idx);
+  if (! img)
+    {
+    itkExceptionMacro("No input image");
+    }
+  std::string className(img->GetNameOfClass());
+  if (className == "VectorImage")
+    {
+#define FindVectorImagePixelTypeMacro(TImage, TPixel) \
+    TImage##VectorImageType* img##TImage = dynamic_cast< TImage##VectorImageType* >(img); \
+    if ( img##TImage ) return ImagePixelType_##TPixel ;
+
+    FindVectorImagePixelTypeMacro(UInt8,  uint8)
+    FindVectorImagePixelTypeMacro(Int16,  int16)
+    FindVectorImagePixelTypeMacro(UInt16, uint16)
+    FindVectorImagePixelTypeMacro(Int32,  int32)
+    FindVectorImagePixelTypeMacro(UInt32, uint32)
+    FindVectorImagePixelTypeMacro(Float,  float)
+    FindVectorImagePixelTypeMacro(Double, double)
+    FindVectorImagePixelTypeMacro(ComplexInt16,  cint16)
+    FindVectorImagePixelTypeMacro(ComplexInt32,  cint32)
+    FindVectorImagePixelTypeMacro(ComplexFloat,  cfloat)
+    FindVectorImagePixelTypeMacro(ComplexDouble, cdouble)
+#undef FindVectorImagePixelTypeMacro
+    }
+  else
+    {
+#define FindImagePixelTypeMacro(TImage, TPixel) \
+    TImage##ImageType* img##TImage = dynamic_cast< TImage##ImageType* >(img); \
+    if ( img##TImage ) return ImagePixelType_##TPixel ;
+
+    FindImagePixelTypeMacro(UInt8,  uint8)
+    FindImagePixelTypeMacro(Int16,  int16)
+    FindImagePixelTypeMacro(UInt16, uint16)
+    FindImagePixelTypeMacro(Int32,  int32)
+    FindImagePixelTypeMacro(UInt32, uint32)
+    FindImagePixelTypeMacro(Float,  float)
+    FindImagePixelTypeMacro(Double, double)
+    FindImagePixelTypeMacro(ComplexInt16,  cint16)
+    FindImagePixelTypeMacro(ComplexInt32,  cint32)
+    FindImagePixelTypeMacro(ComplexFloat,  cfloat)
+    FindImagePixelTypeMacro(ComplexDouble, cdouble)
+    FindImagePixelTypeMacro(UInt8RGB,  uint8)
+    FindImagePixelTypeMacro(UInt8RGBA, uint8)
+#undef FindImagePixelTypeMacro
+    }
+  itkWarningMacro("Unknown pixel type");
+  // by default uint8
+  return ImagePixelType_uint8;
 }
 
 }

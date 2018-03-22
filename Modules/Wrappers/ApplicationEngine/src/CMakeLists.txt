@@ -57,6 +57,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperAbstractParameterList.cxx
   otbWrapperParameterList.cxx
   otbWrapperBoolParameter.cxx
+  otbWrapperMetaDataHelper.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})

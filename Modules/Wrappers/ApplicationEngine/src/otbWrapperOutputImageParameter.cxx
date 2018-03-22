@@ -590,7 +590,7 @@ OutputImageParameter::GetWriter()
   return writer;
 }
 
-OutputImageParameter::ImageBaseType*
+ImageBaseType*
 OutputImageParameter::GetValue( )
 {
   return m_Image;

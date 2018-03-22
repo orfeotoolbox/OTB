@@ -468,22 +468,22 @@ ImageFileWriter<TInputImage>
    */
   inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
+  typename TInputImage::PointType origin = inputPtr->GetOrigin();
 
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
     {
- 	std::vector<int> boxVector;
- 	Utils::ConvertStringToVector( 
- 	m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
- 	
- 	typename InputImageRegionType::IndexType start;
+    std::vector<int> boxVector;
+    Utils::ConvertStringToVector(
+        m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
+
+    typename InputImageRegionType::IndexType start;
     typename InputImageRegionType::SizeType  size;
 
     start[0] = boxVector[0];  // first index on X
     start[1] = boxVector[1];  // first index on Y
     size[0]  = boxVector[2];  // size along X
     size[1]  = boxVector[3];  // size along Y
-
     inputRegion.SetSize(size);
 
     m_ShiftOutputIndex = start;
@@ -501,6 +501,9 @@ ImageFileWriter<TInputImage>
       e.SetDataObject(inputPtr);
       throw e;
       }
+
+    inputPtr->TransformIndexToPhysicalPoint(inputRegion.GetIndex(), origin);
+
     otbLogMacro(Info,<<"Writing user defined region ["<<start[0]<<", "<<start[0]+size[0]-1<<"]x["<<start[1]<<", "<<start[1]+size[1]<<"]");
     }
 
@@ -541,10 +544,9 @@ ImageFileWriter<TInputImage>
   //
   // Setup the ImageIO with information from inputPtr
   //
-  m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
   const typename TInputImage::SpacingType&   spacing = inputPtr->GetSpacing();
-  const typename TInputImage::PointType&     origin = inputPtr->GetOrigin();
   const typename TInputImage::DirectionType& direction = inputPtr->GetDirection();
+  m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
   int direction_sign(0);
   for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
     {
@@ -555,7 +557,7 @@ ImageFileWriter<TInputImage>
     // Final image size
     m_ImageIO->SetDimensions(i, inputRegion.GetSize(i));
     m_ImageIO->SetSpacing(i, direction_sign * spacing[i]);
-    m_ImageIO->SetOrigin(i, origin[i] + static_cast<double>(inputRegion.GetIndex()[i]) * spacing[i]);
+    m_ImageIO->SetOrigin(i, origin[i]);
 
     vnl_vector<double> axisDirection(TInputImage::ImageDimension);
     // Please note: direction cosines are stored as columns of the
@@ -618,7 +620,6 @@ ImageFileWriter<TInputImage>
     for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
       {
       ioRegion.SetSize(i, streamRegion.GetSize(i));
-      ioRegion.SetIndex(i, streamRegion.GetIndex(i));
       //Set the ioRegion index using the shifted index ( (0,0 without box parameter))
       ioRegion.SetIndex(i, streamRegion.GetIndex(i) - m_ShiftOutputIndex[i]);
       }
