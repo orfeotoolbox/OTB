@@ -51,7 +51,6 @@ NumericalParameter< T >::SetDefaultValue( const ValueType & val )
     bool min = val >= m_MinimumValue ;
     m_DefaultValue = (min && max) ? val : 
       ( max ? m_MinimumValue : m_MaximumValue );
-    Modified();
     }
   
 }
@@ -68,7 +67,7 @@ NumericalParameter< T >::SetMinimumValue( const ValueType & val )
     m_MaximumValue = max ? m_MaximumValue : m_MinimumValue ;
     m_DefaultValue = def ? m_DefaultValue : m_MinimumValue ;
     // log
-    Modified();
+
     }
 }
 
@@ -84,7 +83,7 @@ NumericalParameter< T >::SetMaximumValue( const ValueType & val )
     m_MinimumValue = min ? m_MinimumValue : m_MaximumValue ;
     m_DefaultValue = def ? m_DefaultValue : m_MaximumValue ;
     // log
-    Modified();
+
     }
 }
 
@@ -153,7 +152,7 @@ NumericalParameter< T >::Reset()
     return;
     }
   m_Value = m_DefaultValue;
-  Modified();
+
 }
 
 } // end namespace WrapperExp

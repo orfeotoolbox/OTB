@@ -18,34 +18,40 @@
  * limitations under the License.
  */
 
-#include "otbWrapperExpParameter.h"
+#include "otbWrapperExpStringParameter.h"
 
 namespace otb
 {
 namespace WrapperExp
 {
-
-Parameter::Parameter() :
-    m_Name( "" ),
-    m_Description( "" ),
-    m_Key( "" ),
-    m_Mandatory( true ),
-    m_Active( false ),
-    m_UserValueFlag( false ),
-    m_UserLevel( UserLevel_Basic ),
-    m_Role( Role_Input ),
-    m_Root( nullptr )
+StringParameter::StringParameter():
+  m_Value("")
 {}
 
 bool
-Parameter::GetActive( bool recurseParents /*= false*/) const
+StringParameter::HasValue() const
+{}
+
+inline
+std::string
+StringParameter::GetLitteralValue() const
 {
-  bool result = m_Active;
-  if ( recurseParents && !IsRoot() )
-    {
-    result = result && GetRoot()->GetActive( recurseParents );
-    }
-  return result;
+  return m_Value;
+}
+
+float
+StringParameter::GetFloattingValue() const
+{
+}
+
+int
+StringParameter::GetIntegerValue() const
+{
+}
+
+void
+StringParameter::Reset()
+{
 }
 
 } // end namespace WrapperExp

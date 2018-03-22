@@ -30,14 +30,13 @@ namespace otb
 namespace WrapperExp
 {
 
-class OTBApplicationEngine_EXPORT SingleParameter : 
-public Parameter
+class OTBApplicationEngine_EXPORT SingleParameter : public Parameter
 {
 public:
-  typedef SingleParameter                      Self;
-  typedef Parameter                            Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef SingleParameter              Self;
+  typedef Parameter                    Superclass;
+  typedef std::shared_ptr<Self>        Pointer;
+  typedef std::shared_ptr<const Self>  ConstPointer;
 
   itkTypeMacro( SingleParameter , Parameter );
 
@@ -45,9 +44,9 @@ public:
   virtual float GetFloattingValue() const = 0;
   virtual int GetIntegerValue() const = 0;
 
+  ~SingleParameter() override = default ;
 protected:
   SingleParameter() = default ;
-  ~SingleParameter() override = default ;
 
 private:
 };

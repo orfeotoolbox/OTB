@@ -18,42 +18,48 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperExpParameterGroup_h
-#define otbWrapperExpParameterGroup_h
+#ifndef otbWrapperExpStringParameter_h
+#define otbWrapperExpStringParameter_h
 
-#include "otbWrapperExpTypes.h"
-#include "otbWrapperExpParameter.h"
+// #include "otbWrapperExpTypes.h"
+#include "otbWrapperExpSingleParameter.h"
 #include "OTBApplicationEngineExport.h"
-#include "boost/core/noncopyable.hpp"
 
 namespace otb
 {
 namespace WrapperExp
 {
 
-class OTBApplicationEngine_EXPORT ParameterGroup : 
-public Parameter
+class OTBApplicationEngine_EXPORT StringParameter : public SingleParameter
 {
 public:
-  typedef ParameterGroup               Self;
-  typedef Parameter                    Superclass;
+  typedef StringParameter              Self;
+  typedef SingleParameter              Superclass;
   typedef std::shared_ptr<Self>        Pointer;
   typedef std::shared_ptr<const Self>  ConstPointer;
 
-  // itkNewMacro( Self );
+  itkTypeMacro( StringParameter , SingleParameter );
+
   static Pointer New() 
     {
     return std::shared_ptr<Self>( new Self() );
     }
 
-  itkTypeMacro( ParameterGroup , Parameter );
+  virtual bool HasValue() const override ;
 
-  bool HasValue() const
-  {return false;}
+  virtual std::string GetLitteralValue() const override ;
 
-  ~ParameterGroup() override = default;
+  virtual float GetFloattingValue() const override ;
+
+  virtual int GetIntegerValue() const override ;
+
+  virtual void Reset() override ;
+
+  ~StringParameter() override = default ;
 protected:
-  ParameterGroup() = default ;
+  StringParameter();
+
+  std::string m_Value;
 
 private:
 };

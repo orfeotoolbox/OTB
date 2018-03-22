@@ -33,19 +33,21 @@ namespace WrapperExp
 {
 
 template < typename T >
-class OTBApplicationEngine_EXPORT NumericalParameter : 
-public SingleParameter
+class OTBApplicationEngine_EXPORT NumericalParameter : public SingleParameter
 {
 public:
-  typedef NumericalParameter             Self;
-  typedef SingleParameter                Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
-  typedef T                              ValueType;
+  typedef NumericalParameter           Self;
+  typedef SingleParameter              Superclass;
+  typedef std::shared_ptr<Self>        Pointer;
+  typedef std::shared_ptr<const Self>  ConstPointer;
+  typedef T                            ValueType;
 
   itkTypeMacro( NumericalParameter , SingleParameter );
 
-  itkNewMacro( Self );
+  static Pointer New()
+    {
+    return std::shared_ptr<Self>( new Self() );
+    }
 
   /** Set the default value */
   // itkSetMacro( DefaultValue , ValueType );
@@ -72,7 +74,7 @@ public:
   virtual bool HasValue() const override ;
 
   /*
-  Warning! The following functon need work in order to allow 
+  Warning! The following functons need work in order to allow 
   complex instantiation of numerical parameter
   */
   virtual std::string GetLitteralValue() const override ;
@@ -97,9 +99,9 @@ public:
   };
 
 
+  ~NumericalParameter() override = default ;
 protected:
   NumericalParameter();
-  ~NumericalParameter() override = default ;
 
   ValueType GetInternalValue() const ;
 
