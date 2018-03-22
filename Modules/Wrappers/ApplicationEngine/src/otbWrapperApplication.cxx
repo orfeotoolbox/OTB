@@ -545,7 +545,6 @@ void Application::FreeRessources()
     {
     itk::ProcessObject * current = processStack.top();
     processStack.pop();
-    std::cout<<current->GetNameOfClass()<<std::endl;
     // if null continue
     if ( !current )
       continue;
@@ -585,7 +584,6 @@ void Application::FreeRessources()
   // Release data
   for ( auto data : dataSet )
   {
-    std::cout<<"one bulk is freed"<<std::endl;
     data->ReleaseData();
   }
   // Call overrode method
@@ -701,7 +699,6 @@ int Application::ExecuteAndWriteOutput()
               }
             std::ostringstream progressId;
             progressId << "Writing " << outputParam->GetFileName() << "...";
-            std::cout<<"Add Process and write"<<std::endl;
             AddProcess(outputParam->GetWriter(), progressId.str());
             outputParam->Write();
             }
