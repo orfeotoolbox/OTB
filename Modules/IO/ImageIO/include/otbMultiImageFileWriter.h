@@ -131,6 +131,19 @@ public:
     this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(inputPtr)));
   }
 
+  /** Add a new ImageFileWriter to the multi-writer. This is an alternative method
+   *  when you already have an instanciated writer.
+   */
+  template <class TWriter>
+  void AddInputWriter(const TWriter* writer)
+  {
+    Sink<typename TWriter::InputImageType > * sink =
+      new Sink<typename TWriter::InputImageType >(writer);
+    m_SinkList.push_back(SinkBase::Pointer(sink));
+    unsigned int size = m_SinkList.size();
+    this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(writer->GetInput())));
+  }
+
   virtual void UpdateOutputInformation();
 
   virtual void Update()
@@ -242,6 +255,7 @@ private:
     Sink() {}
     Sink(typename TImage::ConstPointer inputImage,
          const std::string & filename);
+    Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer);
 
     virtual ~Sink() {}
 
