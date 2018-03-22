@@ -416,7 +416,7 @@ Application::RegisterPipeline()
         dynamic_cast< InputImageParameter * >( param );
       if ( !inP->HasValue() )
         continue;
-      itk::ImageBase< 2 > * inData = inP->GetPointer();
+      ImageBaseType * inData = inP->GetImage< ImageBaseType >();
       if ( inData && !inputData.count(inData) )
         inputData.insert(inData);
       }
@@ -428,13 +428,11 @@ Application::RegisterPipeline()
       if ( !inP->HasValue() )
         continue;
       const FloatVectorImageListType * list = inP->GetImageList();
-      auto it = list->Begin();
-      while ( it != list->End() )
+      for ( auto it = list->Begin() ; it != list->End() ; ++it ) 
         {
         FloatVectorImageType * inData = it.Get().GetPointer();
         if ( inData && !inputData.count(inData) )
           inputData.insert(inData);
-        ++it;
         }
       }
     else if ( GetParameterType(key) == ParameterType_InputVectorData )
@@ -456,13 +454,11 @@ Application::RegisterPipeline()
       if ( !inP->HasValue() )
         continue;
       VectorDataListType * list = inP->GetVectorDataList();
-      auto it = list->Begin();
-      while ( it != list->End() )
+      for ( auto it = list->Begin() ; it != list->End() ; ++it )
         {
         VectorDataType * inData = it.Get().GetPointer();
         if ( inData && !inputData.count(inData) )
           inputData.insert(inData);
-        ++it;
         }
       }
     }

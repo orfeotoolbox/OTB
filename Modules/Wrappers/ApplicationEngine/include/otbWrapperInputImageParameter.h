@@ -109,11 +109,6 @@ public:
 
   void ClearValue() override;
 
-  ImageBaseType::Pointer GetPointer()
-  {
-    return m_Image;
-  }
-
 protected:
   /** Constructor */
   InputImageParameter();
