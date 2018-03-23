@@ -477,7 +477,6 @@ int Application::ExecuteAndWriteOutput()
 
           if(outputParam!=ITK_NULLPTR)
             {
-            outputParam->InitializeWriters();
             std::string checkReturn = outputParam->CheckFileName(true);
             if (!checkReturn.empty())
               {
@@ -487,6 +486,7 @@ int Application::ExecuteAndWriteOutput()
               {
               outputParam->SetRAMValue(ram);
               }
+            outputParam->InitializeWriters();
             std::ostringstream progressId;
             progressId << "Writing " << outputParam->GetFileName() << "...";
             AddProcess(outputParam->GetWriter(), progressId.str());
