@@ -472,10 +472,10 @@ Application::RegisterPipeline()
     if ( !current || inputData.count( current ) )
       continue;
     // if current is a list push every of its members in datastack
-    if ( dynamic_cast< ObjectListInterface *> (current) )
+    if ( dynamic_cast< DataObjectListInterface *> (current) )
       {
-      ObjectListInterface * list = 
-        dynamic_cast< ObjectListInterface *> (current);
+      DataObjectListInterface * list = 
+        dynamic_cast< DataObjectListInterface *> (current);
       int length = list->Size();
       for ( int i = 0 ; i < length ; i++ )
         {
@@ -552,10 +552,10 @@ void Application::FreeRessources()
       if ( !data.GetPointer() || dataSet.count( data.GetPointer() ) )
         continue;
       // If input is a list
-      if ( dynamic_cast< ObjectListInterface *> (data.GetPointer()) )
+      if ( dynamic_cast< DataObjectListInterface *> (data.GetPointer()) )
         {
-        ObjectListInterface * list = 
-          dynamic_cast< ObjectListInterface *> (data.GetPointer());
+        DataObjectListInterface * list = 
+          dynamic_cast< DataObjectListInterface *> (data.GetPointer());
         int length = list->Size();
         for ( int i = 0 ; i < length ; i++ )
           {

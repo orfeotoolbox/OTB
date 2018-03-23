@@ -23,7 +23,7 @@
 
 #include <vector>
 #include "itkDataObject.h"
-#include "otbObjectListInterface.h"
+#include "otbDataObjectListInterface.h"
 #include "itkObjectFactory.h"
 
 namespace otb
@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TObject>
-class ITK_EXPORT ObjectList : public itk::DataObject , public ObjectListInterface
+class ITK_EXPORT ObjectList : public itk::DataObject , public DataObjectListInterface
 {
 public:
   /** Standard typedefs */

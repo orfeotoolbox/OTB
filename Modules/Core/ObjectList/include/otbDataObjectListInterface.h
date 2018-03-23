@@ -18,24 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef otbObjectListInterface_h
-#define otbObjectListInterface_h
+#ifndef otbDataObjectListInterface_h
+#define otbDataObjectListInterface_h
 
 #include "itkDataObject.h"
-#include "boost/core/noncopyable.hpp"
+#include <boost/noncopyable.hpp>
 
 namespace otb
 {
 
-class ObjectListInterface : private boost::noncopyable
+class DataObjectListInterface : private boost::noncopyable
 {
-/** \class ObjectListInterface
+/** \class DataObjectListInterface
  *  \brief This non template class is an interface that wrapp ObjectList
  *  
  *  New method that do not need the template parameter of ObjectList 
  *  should be declare here.
  *
- * \ingroup ObjectListInterface
+ * \ingroup DataObjectListInterface
  */
 public:
   /**
@@ -46,8 +46,8 @@ public:
   virtual std::size_t Size(void) const = 0;
 
 protected:
-  ObjectListInterface() = default ;
-  virtual ~ObjectListInterface() = default ;
+  DataObjectListInterface() = default ;
+  virtual ~DataObjectListInterface() = default ;
 };
 
 } // end of otb namespace
