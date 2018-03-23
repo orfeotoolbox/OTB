@@ -229,7 +229,7 @@ LocalHoughFilter<TInputImage>
       // Get the list of LineSpatialObject lines
       // ---------------------------------------
 
-      lines = houghFilter->GetLines(m_NumberOfLines);
+      lines = houghFilter->GetLines();
 
       LineIterator itLines = lines.begin();
 
