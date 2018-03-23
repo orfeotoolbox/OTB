@@ -57,7 +57,7 @@ private:
 
     // Documentation
     SetDocName("ObjectBasedFiltering");
-    SetDocLongDescription("This application filters a layer of polygons using a mathematical expression on its features");
+    SetDocLongDescription("This application filters a layer of polygons using a mathematical expression on its features. It applies an sql query on the first layer contained in the vector data");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
@@ -88,42 +88,23 @@ private:
   void DoExecute() ITK_OVERRIDE
   {
     
-    otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
-    otb::ogr::Layer layerIn = source->GetLayer(0);
+    auto source = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
+    auto layerIn = source->GetLayer(0);
     std::string layerName = layerIn.GetName();
-    std::cout << "layername : " << layerName << std::endl;
     
     //otb::ogr::Feature firstFeature = layerTmp.ogr().GetNextFeature();
-    
-    
     
     std::ostringstream sqloss;
     sqloss.str("");
     sqloss<<"SELECT * FROM \""<<layerName<<"\" WHERE "<< this->GetParameterString("expr");
     
-    otb::ogr::Layer layerTmp=source->ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
+    auto layerTmp=source->ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
     
-    otb::ogr::DataSource::Pointer OutDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
+    auto OutDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
     std::string projRef = layerIn.GetProjectionRef();
     OGRSpatialReference oSRS(projRef.c_str());
-    otb::ogr::Layer layerOut = OutDS->CreateLayer(layerName, &oSRS, wkbPolygon);
     
-    // Copy existing fields
-    OGRFeatureDefn &inLayerDefn = layerIn.GetLayerDefn();
-    for (int k=0 ; k<inLayerDefn.GetFieldCount() ; k++)
-    {
-      OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
-      layerOut.CreateField(fieldDefn);
-    }
-    
-    otb::ogr::Layer::const_iterator featIt = layerTmp.cbegin();
-    otb::ogr::Layer::const_iterator featEnd = layerTmp.cend();
-    
-    for (; featIt!=featEnd; featIt++)
-    {
-      layerOut.CreateFeature(*featIt);
-    }
-    
+    auto layerOut = OutDS->CopyLayer( layerTmp, layerName);
   }
 }; 
 

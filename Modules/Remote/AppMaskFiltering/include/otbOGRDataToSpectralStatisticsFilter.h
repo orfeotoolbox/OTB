@@ -59,13 +59,13 @@ public:
   typedef itk::VariableSizeMatrix<double>        MatrixType;
   typedef itk::VariableLengthVector<double>      RealPixelType;
 
-  typedef std::map<unsigned long, unsigned long>                   PolygonSizeMapType;
-  typedef std::map<unsigned long, double>                   PolygonScalarMapType;
-  typedef std::map< unsigned long, RealPixelType>                  PolygonVectorMapType;
-  typedef std::map< unsigned long, MatrixType>                     PolygonMatrixMapType;
+  typedef std::map<unsigned long, unsigned long>                    PolygonSizeMapType;
+  typedef std::map<unsigned long, double>                           PolygonScalarMapType;
+  typedef std::map< unsigned long, RealPixelType>                   PolygonVectorMapType;
+  typedef std::map< unsigned long, MatrixType>                      PolygonMatrixMapType;
   
-  typedef ogr::DataSource                                 OGRDataType;
-  typedef ogr::DataSource::Pointer                        OGRDataPointer;
+  typedef ogr::DataSource                                           OGRDataType;
+  typedef ogr::DataSource::Pointer                                  OGRDataPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -73,10 +73,10 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentOGRDataToSpectralStatisticsFilter, PersistentSamplingFilterBase);
 
-  void Synthetize(void) ITK_OVERRIDE;
+  void Synthetize(void) override;
 
   /** Reset method called before starting the streaming*/
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
   
   
   /** Set the output samples OGR container
@@ -92,14 +92,14 @@ protected:
   /** Constructor */
   PersistentOGRDataToSpectralStatisticsFilter();
   /** Destructor */
-  ~PersistentOGRDataToSpectralStatisticsFilter() ITK_OVERRIDE {};
+  ~PersistentOGRDataToSpectralStatisticsFilter() override {};
   
   /** Initialize output fields */
   void InitializeFields();
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   
   /** Process a polygon : use pixels inside the polygon */
@@ -112,11 +112,11 @@ protected:
   void ProcessSample(const ogr::Feature& feature,
                      typename TInputImage::IndexType& imgIndex,
                      typename TInputImage::PointType& imgPoint,
-                     itk::ThreadIdType& threadid) ITK_OVERRIDE;
+                     itk::ThreadIdType& threadid) override;
   
   /** Prepare temporary variables for the current feature */
   void PrepareFeature(const ogr::Feature& feature,
-                      itk::ThreadIdType& threadid) ITK_OVERRIDE;
+                      itk::ThreadIdType& threadid) override;
 
 private:
   PersistentOGRDataToSpectralStatisticsFilter(const Self &); //purposely not implemented
@@ -196,11 +196,11 @@ protected:
   /** Constructor */
   OGRDataToSpectralStatisticsFilter() {}
   /** Destructor */
-  ~OGRDataToSpectralStatisticsFilter() ITK_OVERRIDE {}
+  ~OGRDataToSpectralStatisticsFilter() override {}
   
 private:
-  OGRDataToSpectralStatisticsFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OGRDataToSpectralStatisticsFilter(const Self &) = delete; //purposely not implemented
+  void operator =(const Self&) = delete; //purposely not implemented
 };
 
 

@@ -59,6 +59,7 @@ PersistentMaskVectorizationFilter<TInputImage>
   extract->SetInput( this->GetInput() );
   
   SizeType paddedRegionSize = this->GetInput()->GetRequestedRegion().GetSize();
+  // Expend input region to avoid touching but not overlapping polygons during fusion
   paddedRegionSize[0] += 1;
   paddedRegionSize[1] += 1;
   
@@ -104,16 +105,13 @@ PersistentMaskVectorizationFilter<TInputImage>
 
     if ( (std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::GetValue<int>()) != m_Labels.end() ) || (m_Labels.empty() ==true))
     {
-
       //simplify
-      
       const OGRGeometry * geom = (*featIt).GetGeometry();
       assert(geom && "geometry is NULL ! Can't simplify it.");
       (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify(*geom,m_Tol));
      
       outFeature.SetFrom( *featIt, TRUE );
       outLayer.CreateFeature( outFeature );
-
     }
     else
     {

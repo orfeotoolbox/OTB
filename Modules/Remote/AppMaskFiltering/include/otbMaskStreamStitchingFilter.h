@@ -35,23 +35,22 @@ namespace otb
 /** \class MaskStreamStitchingFilter
  *  \brief This filter fusion the geometries in a layer (\c OGRLayer) along streaming lines.
  *  It is a in-line filter which means that the result of the fusion overwrites the input layer.
- *  The strategy for merging polygons is quite simple. A polygon P1 is merge with a polygon P2 if:
+ *  A polygon P1 is merge with a polygon P2 if:
  *  - P1 and P2 are on different side of the streaming line
  *  - P1 and P2 intersect each other.
- *  - P2 has the largest intersection with P1 among all other polygons Pi intersecting P1.
+ *  - P1 and P2 have the same labels.
  *  The \c SetStreamSize() method allows retrieving the number of streams in row and column,
  *  and their pixel coordinates.
  *  The input image is used to transform pixel coordinates of the streaming lines into
  *  coordinate system of the image, which must be the same as the one in the OGR input file.
- *  This filter is intended to be used after \c StreamingVectorizedSegmentationOGR.
- *  @see Example/StreamingMeanShiftSegmentation.cxx
+ *  This filter is intended to be used after \c PersistentLabelImageVectorizationFilter.
  *
  *  \ingroup OBIA
  *
  *
- *
  * \ingroup OTBOGRProcessing
  */
+ 
 template <class TInputImage>
 class ITK_EXPORT MaskStreamStitchingFilter :
     public itk::ProcessObject
@@ -74,6 +73,7 @@ public:
   typedef typename InputImageType::PointType   OriginType;
   typedef typename InputImageType::IndexType   IndexType;
 
+  /** Definition of the vector data */
   typedef ogr::Layer                           OGRLayerType;
   typedef ogr::Feature                         OGRFeatureType;
 
@@ -103,7 +103,7 @@ public:
   itkGetMacro(StreamSize, SizeType);
 
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** A class to find connected components on a graph, it is used to find all intersecting polygons from a set of intersecting pairs. */
   class IntersectionGraph
@@ -122,8 +122,8 @@ public:
     /** this container contains all the information of the graph */
     typedef std::map<int, NodeType > GraphType;  
         
-    IntersectionGraph() {m_graph.clear();} // Constructor
-    ~IntersectionGraph() {}; // Destructor
+    IntersectionGraph() = default; // Constructor
+    ~IntersectionGraph() = default; // Destructor
     
     /** Method to add two adjacent nodes idx1 and idx2 to the graph, if they don't exist already, 
      * and add the adjacency property for existing nodes */
@@ -155,27 +155,7 @@ public:
           m_graph[idx2].adjacencyList.push_back(idx1);
         }
       }
-      else
-      {
-        std::cout << "warning : trying to merge polygon " <<idx1 << " with itself" << std::endl;
-      }	
     }	
-    
-    /** Utility method that can be used to print all nodes in a graph, if they have been visited already 
-     * and the list of their neighbors */ 
-    void printGraph()
-    {
-      for (typename GraphType::iterator it = m_graph.begin(); it != m_graph.end(); it++)
-      {
-        std::cout << "Node " << (*it).first << " Adj : " ;
-        for (std::vector<int>::iterator itAdj = (*it).second.adjacencyList.begin(); itAdj != (*it).second.adjacencyList.end(); itAdj++)
-        {
-        std::cout << (*itAdj) << " ";
-        }
-        std::cout << " Visited : " << (*it).second.isVisited;
-        std::cout << std::endl;
-      }
-    }
     
     /** Graph search to find the connected component in the graph (depth-first search using recursivity) */ 
     std::vector< std::vector<int> > findConnectedComponents()
@@ -212,7 +192,7 @@ public:
 
 protected:
   MaskStreamStitchingFilter();
-  ~MaskStreamStitchingFilter() ITK_OVERRIDE {}
+  ~MaskStreamStitchingFilter() override {}
 
   struct FusionStruct
   {
@@ -246,8 +226,8 @@ protected:
   double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);
 
 private:
-  MaskStreamStitchingFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  MaskStreamStitchingFilter(const Self &) = delete;  //purposely not implemented
+  void operator =(const Self&) = delete;      //purposely not implemented
 
   SizeType m_StreamSize;
   unsigned int m_Radius;

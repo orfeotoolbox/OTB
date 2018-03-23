@@ -104,29 +104,28 @@ private:
   {
     clock_t tic = clock();
     
-    
     // Create the OGR DataSource with the appropriate fields
     std::string projRef = this->GetParameterImage("in")->GetProjectionRef();
     OGRSpatialReference oSRS(projRef.c_str());
     std::string layer_name = "layer";
     std::string field_name = "field";
-    
+    std::cout << "1" << std::endl;
     OGRDataSourceType::Pointer vectors;
     OGRDataSourceType::Pointer output;
     if (IsParameterEnabled("out") && HasValue("out"))
-      {
+    {
       vectors = ogr::DataSource::New(this->GetParameterString("vec"));
       output = ogr::DataSource::New(this->GetParameterString("out"),
                                     ogr::DataSource::Modes::Overwrite);
-      }
+    }
     else
-      {
+    {
       // Update mode
       vectors = ogr::DataSource::New(this->GetParameterString("vec"),
                                     ogr::DataSource::Modes::Update_LayerUpdate);
       output = vectors;
-      }
-      
+    }
+      std::cout << "2" << std::endl;
     OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
     SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
     SpectralStatisticsFilter->UpdateLargestPossibleRegion() ;
@@ -134,7 +133,7 @@ private:
     SpectralStatisticsFilter->SetOutputSamples(output);
     SpectralStatisticsFilter->SetFieldName(field_name);
     SpectralStatisticsFilter->Update();
-    
+    std::cout << "3" << std::endl;
     clock_t toc = clock();
     
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");

@@ -159,7 +159,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
           for (unsigned int c =0; c < numberOfComponents ; c++)
           {
             PolygonSecondOrderComponent[fid][r][c] += itSecondOrder->second[r][c];
-            
           }
         }
       }
@@ -230,29 +229,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   
   
   for (; itSizeout != PolygonSize.end(); itSizeout++, itFirstOrderout++, itMeanout++, itCovout++, itMaxout++, itMinout++)
-  {
-    // Show results ! (temporary cout)
-    /*std::cout << "FID : " << itSizeout->first << ",Size : " << itSizeout->second << ",sum : ";
-    for (unsigned int i =0; i < numberOfComponents ; i++)
-    {
-      std::cout << itFirstOrderout->second[i] << " ";
-    }
-    std::cout << "mean : ";
-    for (unsigned int i =0; i < numberOfComponents ; i++)
-    {
-      std::cout << itMeanout->second[i] << " ";
-    }
-    std::cout << "cov : ";
-    for (unsigned int r =0; r < numberOfComponents ; r++)
-    {
-      std::cout << "r" << r <<" " ;
-      for (unsigned int c =0; c < numberOfComponents ; c++)
-      {
-        std::cout << itCovout->second[r][c] << " ";
-      }
-    }
-    std::cout << std::endl;*/
-  
+  {  
     // Write features in the ouput shapefile
     int fid = itMeanout->first;
     ogr::Feature outFeat = outLayer.GetFeature(fid);
@@ -271,9 +248,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
         outFeat["cov_"+std::to_string(r)+"_"+std::to_string(c)].SetValue<double>(itCovout->second[r][c]);
       }
     }    
-  
     outLayer.SetFeature(outFeat);
-    
   }
   
   
@@ -311,6 +286,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     this->CreateAdditionalField("mean_"+std::to_string(i) ,OFTReal,24,15);
   }
   
+  // Create covariance fields
   for (unsigned int r=0; r < numberOfComponents; r++)
   {
     for (unsigned int c=0; c < numberOfComponents; c++)
@@ -333,7 +309,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
   typename TInputImage::IndexType imgIndex;
   typename TInputImage::PointType imgPoint;
-  
   
   OGRPoint tmpPoint;
 
@@ -376,14 +351,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     m_PolygonMaxThread[threadid][fid].SetSize(numberOfComponents);
     m_PolygonSecondOrderThread[threadid][fid].SetSize(numberOfComponents, numberOfComponents);
 
-    /*
-    // Initialize Min and Max accumulators with extreme values
-    for (unsigned int i =0; i < numberOfComponents ; i++)
-    {
-      m_PolygonMaxThread[threadid][fid][i] = ;
-      m_PolygonMinThread[threadid][fid][i] = itk::NumericTraits<double>::max();
-    }*/
-    
     while (!it.IsAtEnd())
       {
       imgIndex = it.GetIndex();
@@ -397,8 +364,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
         PixelType VectorValue = it.Get();
         m_PolygonSizeThread[threadid][fid] ++;
         
-        
-        //std::cout << threadid << std::endl;
         for (unsigned int i =0; i < numberOfComponents ; i++)
         {
           m_PolygonFirstOrderThread[threadid][fid][i] += VectorValue[i];
@@ -423,8 +388,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
         }
       ++it;
       }
-      //m_PolygonFirstOrderThread[threadid][m_CurrentFID[threadid]] /= m_PolygonSizeThread[threadid][m_CurrentFID[threadid]];
-      
     }
 }
 

@@ -70,10 +70,10 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentMaskVectorizationFilter, PersistentSamplingFilterBase);
 
-  void Synthetize(void) ITK_OVERRIDE{}
+  void Synthetize(void) override{}
 
   /** Reset method called before starting the streaming*/
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
   
   /** Get the sample names */
   const std::vector<std::string> & GetSampleFieldNames();
@@ -103,17 +103,17 @@ protected:
   /** Constructor */
   PersistentMaskVectorizationFilter();
   /** Destructor */
-  ~PersistentMaskVectorizationFilter() ITK_OVERRIDE {}
+  ~PersistentMaskVectorizationFilter() override {}
   
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
 private:
   PersistentMaskVectorizationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
   
-  OGRDataSourcePointerType ProcessTile() ITK_OVERRIDE;
+  OGRDataSourcePointerType ProcessTile() override;
   int m_TileNumber;
   std::string m_FieldName;
   std::vector<int> m_Labels;
@@ -208,11 +208,11 @@ protected:
   /** Constructor */
   MaskFilter() {}
   /** Destructor */
-  ~MaskFilter() ITK_OVERRIDE {}
+  ~MaskFilter() override {}
 
 private:
-  MaskFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MaskFilter(const Self &) = delete; //purposely not implemented
+  void operator =(const Self&) = delete; //purposely not implemented
 };
 
 

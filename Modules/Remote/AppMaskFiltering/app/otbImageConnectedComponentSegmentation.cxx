@@ -24,7 +24,7 @@
 #include "itkConnectedComponentFunctorImageFilter.h"
 #include "otbConnectedComponentMuParserFunctor.h"
 
-
+#include "otbMaskMuParserFilter.h"
 
 namespace otb
 {
@@ -42,14 +42,16 @@ public:
   
   //typedef itk::BinaryShapeM_BinaryOpeningFilterImageFilter<UInt8LabelImageType>    BinaryM_BinaryOpeningFilterFilterType;
   typedef otb::Image<unsigned int, 2>                                 LabelImageType;
-  typedef otb::Image<unsigned int, 2>         MaskImageType;
+  typedef otb::Image<unsigned int, 2>                                 MaskImageType;
 
   typedef float InputPixelType;
   typedef otb::VectorImage<InputPixelType, 2> VectorImageType;
   typedef VectorImageType::PixelType VectorImagePixelType;
   
-  
-  
+  // mask filter typedef
+  typedef otb::MaskMuParserFilter<VectorImageType, MaskImageType> MaskMuParserFilterType;
+
+  // connected components filter typedef
   typedef Functor::ConnectedComponentMuParserFunctor<VectorImagePixelType> FunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<
       VectorImageType,
@@ -84,6 +86,10 @@ private:
     AddParameter(ParameterType_String, "expr", "Connected Component Expression");
     SetParameterDescription("expr", "Formula used for connected component segmentation");
     
+    AddParameter(ParameterType_String, "mask", "Mask expression");
+    SetParameterDescription("mask", "Mask mathematical expression (only if support image is given)");
+    MandatoryOff("mask");
+    
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -102,18 +108,32 @@ private:
   {
     clock_t tic = clock();
     
+    typename MaskImageType::Pointer mask;
+    if (IsParameterEnabled("expr") && HasValue("expr"))
+    {
+      // Compute the mask
+      typename MaskMuParserFilterType::Pointer maskFilter;
+      maskFilter = MaskMuParserFilterType::New();
+      maskFilter->SetInput(this->GetParameterImage("in"));
+      maskFilter->SetExpression(this->GetParameterString("expr"));
+      maskFilter->Update();
+      mask = maskFilter->GetOutput();
+    }
+    
     ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
     connected->SetInput(this->GetParameterImage("in"));
     connected->GetFunctor().SetExpression(GetParameterString("expr"));
-    
+    if (mask.IsNotNull())
+    {
+      connected->SetMaskImage(mask);
+    }
     SetParameterOutputImage<LabelImageType>("out", connected->GetOutput());
     connected->Update();
+    
     clock_t toc = clock();
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
   }
   
-  
-
 }; 
 
 } //end namespace Wrapper
