@@ -294,11 +294,17 @@ ImageFileWriter<TInputImage>
       sizemode = m_FilenameHelper->GetStreamingSizeMode();
       }
 
-    double sizevalue = 0.;
+    unsigned int sizevalue = 0;
+    // Save the DefaultRAM value for later
+    unsigned int oldDefaultRAM = m_StreamingManager->GetDefaultRAM();
+    if (sizemode == "auto")
+      {
+      sizevalue = oldDefaultRAM;
+      }
 
     if(m_FilenameHelper->StreamingSizeValueIsSet())
       {
-      sizevalue = m_FilenameHelper->GetStreamingSizeValue();
+      sizevalue = static_cast<unsigned int>(m_FilenameHelper->GetStreamingSizeValue());
       }
 
     if(type == "auto")
@@ -307,7 +313,7 @@ ImageFileWriter<TInputImage>
         {
         otbLogMacro(Warning,<<"In auto streaming type, the sizemode option will be ignored.");
         }
-      if(sizevalue == 0.)
+      if(sizevalue == 0)
         {
         otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
         }
@@ -317,7 +323,7 @@ ImageFileWriter<TInputImage>
       {
       if(sizemode == "auto")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
           }
@@ -325,27 +331,27 @@ ImageFileWriter<TInputImage>
         }
       else if(sizemode == "nbsplits")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfDivisionsTiledStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfDivisionsTiledStreaming(sizevalue);
         }
       else if(sizemode == "height")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
 
-        this->SetTileDimensionTiledStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetTileDimensionTiledStreaming(sizevalue);
         }
       }
     else if(type == "stripped")
       {
       if(sizemode == "auto")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
           }
@@ -354,30 +360,34 @@ ImageFileWriter<TInputImage>
         }
       else if(sizemode == "nbsplits")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfDivisionsStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfDivisionsStrippedStreaming(sizevalue);
         }
       else if(sizemode == "height")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfLinesStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfLinesStrippedStreaming(sizevalue);
         }
 
       }
     else if (type == "none")
       {
-      if(sizemode!="" || sizevalue!=0.)
+      if(sizemode!="" || sizevalue!=0)
         {
         otbLogMacro(Warning,<<"Streaming is explicitly disabled, sizemode and sizevalue will be ignored.");
         }
       this->SetNumberOfDivisionsTiledStreaming(0);
       }
+
+    // since we change the m_StreamingManager under the hood, we copy the DefaultRAM
+    // value to the new streamingManager.
+    m_StreamingManager->SetDefaultRAM(oldDefaultRAM);
     }
   else
     {
