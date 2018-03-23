@@ -31,11 +31,11 @@ namespace otb
 namespace Wrapper
 {
 
-class MaskVectorization : public Application
+class LabelImageVectorization: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef MaskVectorization                       Self;
+  typedef LabelImageVectorization                      Self;
   typedef Application                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
@@ -57,12 +57,12 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(MaskVectorization, otb::Application);
+  itkTypeMacro(LabelImageVectorization, otb::Application);
 
 private:
   void DoInit() ITK_OVERRIDE
   {
-    SetName("MaskVectorization");
+    SetName("LabelImageVectorization");
     SetDescription("This application performs the vectorization of an input label image");
 
     // Documentation
@@ -213,4 +213,4 @@ private:
 } //end namespace Wrapper
 } //end namespace otb
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::MaskVectorization)
+OTB_APPLICATION_EXPORT(otb::Wrapper::LabelImageVectorization)

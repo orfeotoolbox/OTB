@@ -24,8 +24,8 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
 
 otb_create_application(
-  NAME           MaskVectorization
-  SOURCES        otbMaskVectorization.cxx
+  NAME           LabelImageVectorization
+  SOURCES        otbLabelImageVectorization.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
 
 otb_create_application(
