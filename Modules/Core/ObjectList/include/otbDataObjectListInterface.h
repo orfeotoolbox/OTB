@@ -35,7 +35,7 @@ class DataObjectListInterface : private boost::noncopyable
  *  New method that do not need the template parameter of ObjectList 
  *  should be declare here.
  *
- * \ingroup DataObjectListInterface
+ * \ingroup OTBObjectList
  */
 public:
   /**
