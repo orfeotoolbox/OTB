@@ -32,6 +32,7 @@
 #include <cassert>
 
 #include "itkRGBAPixel.h"
+#include "itkRGBPixel.h"
 
 #include "otbGeoInterface.h"
 #include "otbImage.h"
