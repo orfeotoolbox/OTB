@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMaskStreamStitchingFilter_h
-#define otbMaskStreamStitchingFilter_h
+#ifndef otbConnectedComponentStreamStitchingFilter_h
+#define otbConnectedComponentStreamStitchingFilter_h
 
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"
@@ -32,7 +32,7 @@
 namespace otb
 {
 
-/** \class MaskStreamStitchingFilter
+/** \class ConnectedComponentStreamStitchingFilter
  *  \brief This filter fusion the geometries in a layer (\c OGRLayer) along streaming lines.
  *  It is a in-line filter which means that the result of the fusion overwrites the input layer.
  *  A polygon P1 is merge with a polygon P2 if:
@@ -52,13 +52,13 @@ namespace otb
  */
  
 template <class TInputImage>
-class ITK_EXPORT MaskStreamStitchingFilter :
+class ITK_EXPORT ConnectedComponentStreamStitchingFilter :
     public itk::ProcessObject
 {
 public:
 
    /** typedef for the classes standards. */
-  typedef MaskStreamStitchingFilter        Self;
+  typedef ConnectedComponentStreamStitchingFilter        Self;
   typedef itk::ProcessObject                   Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
@@ -87,7 +87,7 @@ public:
   itkNewMacro(Self);
 
   /** Return the name of the class. */
-  itkTypeMacro(MaskStreamStitchingFilter, ProcessObject);
+  itkTypeMacro(ConnectedComponentStreamStitchingFilter, ProcessObject);
 
   /** Set the input OGRLayer */
   void SetOGRLayer( const OGRLayerType & ogrLayer );
@@ -191,8 +191,8 @@ public:
   };
 
 protected:
-  MaskStreamStitchingFilter();
-  ~MaskStreamStitchingFilter() override {}
+  ConnectedComponentStreamStitchingFilter();
+  ~ConnectedComponentStreamStitchingFilter() override {}
 
   struct FusionStruct
   {
@@ -226,8 +226,8 @@ protected:
   double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);
 
 private:
-  MaskStreamStitchingFilter(const Self &) = delete;  //purposely not implemented
-  void operator =(const Self&) = delete;      //purposely not implemented
+  ConnectedComponentStreamStitchingFilter(const Self &) = delete; 
+  void operator =(const Self&) = delete;      
 
   SizeType m_StreamSize;
   unsigned int m_Radius;
@@ -239,7 +239,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaskStreamStitchingFilter.txx"
+#include "otbConnectedComponentStreamStitchingFilter.txx"
 #endif
 
 #endif

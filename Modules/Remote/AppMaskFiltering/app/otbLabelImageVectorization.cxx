@@ -21,8 +21,8 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "PersistentMaskVectorizationFilter.h"
-#include "otbMaskStreamStitchingFilter.h"
+#include "PersistentLabelImageVectorizationFilter.h"
+#include "otbConnectedComponentStreamStitchingFilter.h"
 
 
 
@@ -50,8 +50,8 @@ public:
   typedef otb::Image<PixelType, 2>                                 LabelImageType;
 
   /** Filters typedefs */
-  typedef MaskStreamStitchingFilter< LabelImageType >             MaskStreamStitchingFilterType;
-  typedef MaskFilter<LabelImageType>                         MaskFilterType;
+  typedef ConnectedComponentStreamStitchingFilter< LabelImageType >             ConnectedComponentStreamStitchingFilterType;
+  typedef LabelImageVectorizationFilter<LabelImageType>                         LabelImageVectorizationFilterType;
   
   
   /** Standard macro */
@@ -106,7 +106,7 @@ private:
     AddParameter(ParameterType_StringList,  "feat", "Output Image channels");
     SetParameterDescription("feat","Channels to write in the output image.");
     MandatoryOff("feat");
-	
+    
     AddRAMParameter();
 
     // Default values
@@ -127,7 +127,6 @@ private:
   void DoExecute() ITK_OVERRIDE
   {
     clock_t tic = clock();
-    
     
     // Create the OGR DataSource with the appropriate fields
     std::string projRef = this->GetParameterUInt32Image("in")->GetProjectionRef();
@@ -158,7 +157,7 @@ private:
     layer.CreateField(field, true);
 
     // Mask FIlter : Vectorization of the input raster
-    MaskFilterType::Pointer maskFilter = MaskFilterType::New();
+    LabelImageVectorizationFilterType::Pointer maskFilter = LabelImageVectorizationFilterType::New();
     
     // Labeled image to be vectorized
     maskFilter->SetInput(this->GetParameterUInt32Image("in"));
@@ -197,7 +196,7 @@ private:
     // Fusion Filter : Regroup polygons splitted across tiles.
     if (this->GetParameterInt("fusion") == 1)
     {
-      MaskStreamStitchingFilterType::Pointer fusionFilter = MaskStreamStitchingFilterType::New();
+      ConnectedComponentStreamStitchingFilterType::Pointer fusionFilter = ConnectedComponentStreamStitchingFilterType::New();
       fusionFilter->SetInput(this->GetParameterUInt32Image("in"));
       fusionFilter->SetOGRLayer(layer);
       fusionFilter->SetStreamSize(maskFilter->GetStreamSize());

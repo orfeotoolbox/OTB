@@ -1,21 +1,21 @@
 
-#ifndef PersistentMaskVectorizationFilter_txx
-#define PersistentMaskVectorizationFilter_txx
+#ifndef PersistentLabelImageVectorizationFilter_txx
+#define PersistentLabelImageVectorizationFilter_txx
 
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkProgressReporter.h"
 
 #include "otbOGRFieldWrapper.h"
 
-#include "PersistentMaskVectorizationFilter.h"
+#include "PersistentLabelImageVectorizationFilter.h"
 
-// --------- otb::PersistentMaskVectorizationFilter ---------------------
+// --------- otb::PersistentLabelImageVectorizationFilter ---------------------
 
 namespace otb
 {
 template<class TInputImage>
-PersistentMaskVectorizationFilter<TInputImage>
-::PersistentMaskVectorizationFilter()
+PersistentLabelImageVectorizationFilter<TInputImage>
+::PersistentLabelImageVectorizationFilter()
 {
   this->SetNumberOfRequiredOutputs(2);
   //this->SetNthOutput(0,TInputImage::New());
@@ -25,14 +25,14 @@ PersistentMaskVectorizationFilter<TInputImage>
 
 template<class TInputImage>
 void
-PersistentMaskVectorizationFilter<TInputImage>
+PersistentLabelImageVectorizationFilter<TInputImage>
 ::Reset(void)
 {
 }
 
 template<class TInputImage>
 void
-PersistentMaskVectorizationFilter<TInputImage>
+PersistentLabelImageVectorizationFilter<TInputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -40,7 +40,7 @@ PersistentMaskVectorizationFilter<TInputImage>
 
 template<class TInputImage>
 void
-PersistentMaskVectorizationFilter<TInputImage>
+PersistentLabelImageVectorizationFilter<TInputImage>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
@@ -48,8 +48,8 @@ PersistentMaskVectorizationFilter<TInputImage>
 
   
 template<class TInputImage>
-typename PersistentMaskVectorizationFilter<TInputImage>::OGRDataSourcePointerType
-PersistentMaskVectorizationFilter<TInputImage>
+typename PersistentLabelImageVectorizationFilter<TInputImage>::OGRDataSourcePointerType
+PersistentLabelImageVectorizationFilter<TInputImage>
 ::ProcessTile()
 {  
   ++m_TileNumber;

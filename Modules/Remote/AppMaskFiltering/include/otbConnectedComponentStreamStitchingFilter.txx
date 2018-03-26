@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef otbMaskStreamStitchingFilter_txx
-#define otbMaskStreamStitchingFilter_txx
+#ifndef otbConnectedComponentStreamStitchingFilter_txx
+#define otbConnectedComponentStreamStitchingFilter_txx
 
-#include "otbMaskStreamStitchingFilter.h"
+#include "otbConnectedComponentStreamStitchingFilter.h"
 #include "itkContinuousIndex.h"
 
 #include <iomanip>
@@ -32,24 +32,24 @@ namespace otb
 {
 
 template<class TImage>
-MaskStreamStitchingFilter<TImage>
-::MaskStreamStitchingFilter() : m_Radius(2), m_OGRLayer(ITK_NULLPTR, false)
+ConnectedComponentStreamStitchingFilter<TImage>
+::ConnectedComponentStreamStitchingFilter() : m_Radius(2), m_OGRLayer(ITK_NULLPTR, false)
 {
   m_StreamSize.Fill(0);
 }
 
 template <class TInputImage>
 void
-MaskStreamStitchingFilter<TInputImage>
+ConnectedComponentStreamStitchingFilter<TInputImage>
 ::SetInput(const InputImageType *input)
 {
   this->Superclass::SetNthInput(0, const_cast<InputImageType *>(input));
 }
 
 template <class TInputImage>
-const typename MaskStreamStitchingFilter<TInputImage>
+const typename ConnectedComponentStreamStitchingFilter<TInputImage>
 ::InputImageType *
-MaskStreamStitchingFilter<TInputImage>
+ConnectedComponentStreamStitchingFilter<TInputImage>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
@@ -61,7 +61,7 @@ MaskStreamStitchingFilter<TInputImage>
 
 template<class TInputImage>
 void
-MaskStreamStitchingFilter<TInputImage>
+ConnectedComponentStreamStitchingFilter<TInputImage>
 ::SetOGRLayer( const OGRLayerType& ogrLayer )
 {
   m_OGRLayer = ogrLayer;
@@ -69,8 +69,8 @@ MaskStreamStitchingFilter<TInputImage>
 }
 
 template<class TInputImage>
-const typename MaskStreamStitchingFilter<TInputImage>::OGRLayerType &
-MaskStreamStitchingFilter<TInputImage>
+const typename ConnectedComponentStreamStitchingFilter<TInputImage>::OGRLayerType &
+ConnectedComponentStreamStitchingFilter<TInputImage>
 ::GetOGRLayer( void ) const
 {
   return m_OGRLayer;
@@ -78,7 +78,7 @@ MaskStreamStitchingFilter<TInputImage>
 
 template<class TInputImage>
 double
-MaskStreamStitchingFilter<TInputImage>
+ConnectedComponentStreamStitchingFilter<TInputImage>
 ::GetLengthOGRGeometryCollection( OGRGeometryCollection * intersection )
 {
   double dfLength = 0.0;
@@ -104,7 +104,7 @@ MaskStreamStitchingFilter<TInputImage>
 
 template<class TInputImage>
 void
-MaskStreamStitchingFilter<TInputImage>
+ConnectedComponentStreamStitchingFilter<TInputImage>
 ::ProcessStreamingLine( bool line, itk::ProgressReporter & progress)
 {
   typename InputImageType::ConstPointer inputImage = this->GetInput();
@@ -331,7 +331,7 @@ MaskStreamStitchingFilter<TInputImage>
 
 template<class TImage>
 void
-MaskStreamStitchingFilter<TImage>
+ConnectedComponentStreamStitchingFilter<TImage>
 ::GenerateData(void)
 {
   if(!m_OGRLayer)

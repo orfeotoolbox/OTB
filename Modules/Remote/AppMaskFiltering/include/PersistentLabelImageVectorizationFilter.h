@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef PersistentMaskVectorizationFilter_h
-#define PersistentMaskVectorizationFilter_h
+#ifndef PersistentLabelImageVectorizationFilter_h
+#define PersistentLabelImageVectorizationFilter_h
 
 #include "otbPersistentImageToOGRLayerFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
@@ -30,31 +30,31 @@
 namespace otb
 {
 /**
- * \class PersistentMaskVectorizationFilter
+ * \class PersistentLabelImageVectorizationFilter
  * 
  * \brief Persistent filter to extract sample values from an image
  * 
  * \ingroup OTBSampling
  */
 template<class TInputImage>
-class ITK_EXPORT PersistentMaskVectorizationFilter :
+class ITK_EXPORT PersistentLabelImageVectorizationFilter :
   public PersistentImageToOGRLayerFilter<TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentMaskVectorizationFilter            Self;
-  typedef PersistentImageToOGRLayerFilter<TInputImage>     Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef PersistentLabelImageVectorizationFilter             Self;
+  typedef PersistentImageToOGRLayerFilter<TInputImage>        Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
-  typedef TInputImage                                     InputImageType;
-  typedef typename InputImageType::Pointer                InputImagePointer;
-  typedef typename InputImageType::RegionType             RegionType;
-  typedef typename InputImageType::PointType              PointType;
-  typedef typename InputImageType::IndexType              IndexType;
-  typedef typename InputImageType::SizeType               SizeType;
-  typedef typename InputImageType::PixelType              PixelType;
-  typedef typename InputImageType::InternalPixelType      InternalPixelType;
+  typedef TInputImage                                         InputImageType;
+  typedef typename InputImageType::Pointer                    InputImagePointer;
+  typedef typename InputImageType::RegionType                 RegionType;
+  typedef typename InputImageType::PointType                  PointType;
+  typedef typename InputImageType::IndexType                  IndexType;
+  typedef typename InputImageType::SizeType                   SizeType;
+  typedef typename InputImageType::PixelType                  PixelType;
+  typedef typename InputImageType::InternalPixelType          InternalPixelType;
   
   typedef otb::LabelImageToOGRDataSourceFilter<InputImageType>          LabelImageToOGRDataSourceFilterType;
   typedef typename Superclass::OGRDataSourceType                        OGRDataSourceType;
@@ -68,7 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentMaskVectorizationFilter, PersistentSamplingFilterBase);
+  itkTypeMacro(PersistentLabelImageVectorizationFilter, PersistentSamplingFilterBase);
 
   void Synthetize(void) override{}
 
@@ -101,16 +101,16 @@ public:
   }
 protected:
   /** Constructor */
-  PersistentMaskVectorizationFilter();
+  PersistentLabelImageVectorizationFilter();
   /** Destructor */
-  ~PersistentMaskVectorizationFilter() override {}
+  ~PersistentLabelImageVectorizationFilter() override {}
   
   void GenerateOutputInformation() override;
 
   void GenerateInputRequestedRegion() override;
 
 private:
-  PersistentMaskVectorizationFilter(const Self &); //purposely not implemented
+  PersistentLabelImageVectorizationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
   
   OGRDataSourcePointerType ProcessTile() override;
@@ -122,17 +122,17 @@ private:
 };
 
 
-/** Streamed Version of PersistentMaskVectorizationFilter */
+/** Streamed Version of PersistentLabelImageVectorizationFilter */
 
 template <class TImageType>
-class ITK_EXPORT MaskFilter :
-public PersistentFilterStreamingDecorator<PersistentMaskVectorizationFilter<TImageType>>
+class ITK_EXPORT LabelImageVectorizationFilter :
+public PersistentFilterStreamingDecorator<PersistentLabelImageVectorizationFilter<TImageType>>
 {
 
 public:
   /** Standard Self typedef */
-  typedef MaskFilter                                                                    Self;
-  typedef PersistentFilterStreamingDecorator<PersistentMaskVectorizationFilter<TImageType>>           Superclass;
+  typedef LabelImageVectorizationFilter                                                                     Self;
+  typedef PersistentFilterStreamingDecorator<PersistentLabelImageVectorizationFilter<TImageType>>           Superclass;
   typedef itk::SmartPointer<Self>                                                       Pointer;
   typedef itk::SmartPointer<const Self>                                                 ConstPointer;
 
@@ -140,11 +140,11 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(MaskFilter, PersistentFilterStreamingDecorator);
+  itkTypeMacro(LabelImageVectorizationFilter, PersistentFilterStreamingDecorator);
 
   typedef TImageType                               InputImageType;
-  typedef typename PersistentMaskVectorizationFilter<TImageType>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
-  typedef typename PersistentMaskVectorizationFilter<TImageType>::OGRLayerType                             OGRLayerType;
+  typedef typename PersistentLabelImageVectorizationFilter<TImageType>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
+  typedef typename PersistentLabelImageVectorizationFilter<TImageType>::OGRLayerType                             OGRLayerType;
 
   typedef typename InputImageType::SizeType                                   SizeType;
  /** Set the input image. */
@@ -206,13 +206,13 @@ public:
   }
 protected:
   /** Constructor */
-  MaskFilter() {}
+  LabelImageVectorizationFilter() {}
   /** Destructor */
-  ~MaskFilter() override {}
+  ~LabelImageVectorizationFilter() override {}
 
 private:
-  MaskFilter(const Self &) = delete; //purposely not implemented
-  void operator =(const Self&) = delete; //purposely not implemented
+  LabelImageVectorizationFilter(const Self &) = delete; 
+  void operator =(const Self&) = delete; 
 };
 
 
@@ -220,7 +220,7 @@ private:
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "PersistentMaskVectorizationFilter.txx"
+#include "PersistentLabelImageVectorizationFilter.txx"
 #endif
 
 #endif
