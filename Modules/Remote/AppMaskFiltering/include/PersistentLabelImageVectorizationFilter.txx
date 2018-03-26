@@ -15,12 +15,9 @@ namespace otb
 {
 template<class TInputImage>
 PersistentLabelImageVectorizationFilter<TInputImage>
-::PersistentLabelImageVectorizationFilter()
+::PersistentLabelImageVectorizationFilter() : m_TileNumber(1), m_Enlarge(0), m_Tolerance(0)
 {
   this->SetNumberOfRequiredOutputs(2);
-  //this->SetNthOutput(0,TInputImage::New());
-  m_TileNumber = 1;
-  m_Tol = 0;
 }
 
 template<class TInputImage>
@@ -59,17 +56,22 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   extract->SetInput( this->GetInput() );
   
   SizeType paddedRegionSize = this->GetInput()->GetRequestedRegion().GetSize();
+  
   // Expend input region to avoid touching but not overlapping polygons during fusion
-  paddedRegionSize[0] += 1;
-  paddedRegionSize[1] += 1;
-  
+  if (m_Enlarge)
+  {
+    paddedRegionSize[0] += 1;
+    paddedRegionSize[1] += 1;
+  }
   RegionType paddedRegion(  this->GetInput()->GetRequestedRegion().GetIndex() , paddedRegionSize );
-  paddedRegion.Crop(this->GetInput()->GetLargestPossibleRegion());
   
+  // Crop Enlarged Region to avoid asking for pixels outside the input image
+  if (m_Enlarge)
+  {
+    paddedRegion.Crop(this->GetInput()->GetLargestPossibleRegion());
+  }
   extract->SetExtractionRegion( paddedRegion );
   extract->Update();
-
-
 
   // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary
   extract->GetOutput()->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
@@ -97,18 +99,18 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   OGRFieldDefn fieldPerimeter("perimeter",OFTReal);
   outLayer.CreateField(fieldPerimeter, true);
   
-  //typename OGRLayerType::const_iterator featIt = tmpLayer.begin();
-  typename OGRLayerType::iterator featIt = tmpLayer.begin();
-  for(; featIt!=tmpLayer.end(); ++featIt)
+  // Write output features
+  for(auto featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
   {
     OGRFeatureType outFeature(outLayer.GetLayerDefn());
-
+    
+    // Only geometries whose attributes belong to the selected label list parameter are created. If the list is empty, all geometries are created
     if ( (std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::GetValue<int>()) != m_Labels.end() ) || (m_Labels.empty() ==true))
     {
       //simplify
       const OGRGeometry * geom = (*featIt).GetGeometry();
       assert(geom && "geometry is NULL ! Can't simplify it.");
-      (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify(*geom,m_Tol));
+      (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify( *geom->Buffer(0) ,m_Tolerance));
      
       outFeature.SetFrom( *featIt, TRUE );
       outLayer.CreateFeature( outFeature );
@@ -119,8 +121,6 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   }
   return outDS;
 }
-
-
 
 } // End namespace otb
 
