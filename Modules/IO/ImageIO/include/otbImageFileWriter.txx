@@ -22,14 +22,15 @@
 #define otbImageFileWriter_txx
 
 #include "otbImageFileWriter.h"
-#include "itkImageFileWriter.h"
 
 #include "itkObjectFactoryBase.h"
 
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
+#include "otbWriterIOException.h"
 
 #include "itkImageRegionIterator.h"
+#include "itkCommand.h"
 
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
@@ -433,7 +434,7 @@ ImageFileWriter<TInputImage>
 
   if (m_ImageIO.IsNull())
     {
-    itk::ImageFileWriterException e(__FILE__, __LINE__);
+    WriterIOException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << "Cannot write image " << m_FileName.c_str() << ". Probably unsupported format or incorrect filename extension.";
     e.SetDescription(msg.str().c_str());
@@ -449,7 +450,7 @@ ImageFileWriter<TInputImage>
 
     if(imageIO.IsNull())
       {
-      itk::ImageFileWriterException e(__FILE__, __LINE__);
+      WriterIOException e(__FILE__, __LINE__);
       std::ostringstream msg;
       msg << " ImageIO is of kind GDALImageIO, but fails to dynamic_cast (this should never happen)."<< std::endl;
       e.SetDescription(msg.str().c_str());
@@ -764,7 +765,7 @@ ImageFileWriter<TInputImage>
       }
     else
       {
-      itk::ImageFileWriterException e(__FILE__, __LINE__);
+      WriterIOException e(__FILE__, __LINE__);
       std::ostringstream msg;
       msg << "Did not get requested region!" << std::endl;
       msg << "Requested:" << std::endl;
