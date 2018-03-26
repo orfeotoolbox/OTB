@@ -24,37 +24,10 @@
 #include "itkProcessObject.h"
 #include "itkMacro.h"
 #include "otbVectorDataIOBase.h"
+#include "otbWriterIOException.h"
 
 namespace otb
 {
-/** \brief Base exception class for IO problems during writing.
- *
- * \class ImageFileWriterException
- *
- * \ingroup OTBVectorDataIO
- */
-class VectorDataFileWriterException : public itk::ExceptionObject
-{
-public:
-  /** Run-time information. */
-  itkTypeMacro(VectorDataFileWriterException, ExceptionObject);
-
-  /** Constructor. */
-  VectorDataFileWriterException(const char *file, unsigned int line,
-                                const char* message = "Error in IO",
-                                const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-  {
-  }
-
-  /** Constructor. */
-  VectorDataFileWriterException(const std::string& file, unsigned int line,
-                                const char* message = "Error in IO",
-                                const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-  {
-  }
-};
 
 /** \class VectorDataFileWriter
  *  \brief This class writes vector data file format (shapefile and KML)
@@ -63,7 +36,6 @@ public:
  *
  * \ingroup OTBVectorDataIO
  */
-
 template <class TInputVectorData>
 class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
 {

@@ -135,7 +135,7 @@ VectorDataFileWriter<TInputVectorData>
 
   if (m_VectorDataIO.IsNull())
     {
-    VectorDataFileWriterException e(__FILE__, __LINE__);
+    WriterIOException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << " Could not create IO object for file "
         << m_FileName.c_str() << std::endl;
