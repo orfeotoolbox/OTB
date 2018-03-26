@@ -315,11 +315,16 @@ SimpleParallelTiffWriter<TInputImage>
       sizemode = m_FilenameHelper->GetStreamingSizeMode();
       }
 
-    double sizevalue = 0.;
-
+    unsigned int sizevalue = 0;
+    // Save the DefaultRAM value for later
+    unsigned int oldDefaultRAM = m_StreamingManager->GetDefaultRAM();
+    if (sizemode == "auto")
+      {
+      sizevalue = oldDefaultRAM;
+      }
     if(m_FilenameHelper->StreamingSizeValueIsSet())
       {
-      sizevalue = m_FilenameHelper->GetStreamingSizeValue();
+      sizevalue = static_cast<unsigned int>(m_FilenameHelper->GetStreamingSizeValue());
       }
 
     if(type == "auto")
@@ -328,7 +333,7 @@ SimpleParallelTiffWriter<TInputImage>
         {
         itkWarningMacro(<<"In auto streaming type, the sizemode option will be ignored.");
         }
-      if(sizevalue == 0.)
+      if(sizevalue == 0)
         {
         itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
         }
@@ -338,7 +343,7 @@ SimpleParallelTiffWriter<TInputImage>
       {
       if(sizemode == "auto")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
           }
@@ -346,27 +351,27 @@ SimpleParallelTiffWriter<TInputImage>
         }
       else if(sizemode == "nbsplits")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfDivisionsTiledStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfDivisionsTiledStreaming(sizevalue);
         }
       else if(sizemode == "height")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
 
-        this->SetTileDimensionTiledStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetTileDimensionTiledStreaming(sizevalue);
         }
       }
     else if(type == "stripped")
       {
       if(sizemode == "auto")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
           }
@@ -375,30 +380,34 @@ SimpleParallelTiffWriter<TInputImage>
         }
       else if(sizemode == "nbsplits")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfDivisionsStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfDivisionsStrippedStreaming(sizevalue);
         }
       else if(sizemode == "height")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfLinesStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfLinesStrippedStreaming(sizevalue);
         }
 
       }
     else if (type == "none")
       {
-      if(sizemode!="" || sizevalue!=0.)
+      if(sizemode!="" || sizevalue!=0)
         {
         itkWarningMacro("Streaming is explicitly disabled, sizemode and sizevalue will be ignored.");
         }
       this->SetNumberOfDivisionsTiledStreaming(0);
       }
+
+    // since we change the m_StreamingManager under the hood, we copy the DefaultRAM
+    // value to the new streamingManager.
+    m_StreamingManager->SetDefaultRAM(oldDefaultRAM);
     }
   else
     {
@@ -458,6 +467,7 @@ SimpleParallelTiffWriter<TInputImage>
    */
   inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
+  typename InputImageType::PointType origin = inputPtr->GetOrigin();
 
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
@@ -497,6 +507,9 @@ SimpleParallelTiffWriter<TInputImage>
       throw e;
       }
     otbMsgDevMacro(<< "inputRegion " << inputRegion);
+
+    // Update the origin
+    inputPtr->TransformIndexToPhysicalPoint(inputRegion.GetIndex(), origin);
     }
 
   // Get number of bands & pixel data type
@@ -538,7 +551,7 @@ SimpleParallelTiffWriter<TInputImage>
   else
     {
     // When mode is not tiled (i.e. striped)
-    block_size_x = inputPtr->GetLargestPossibleRegion().GetSize()[0];
+    block_size_x = inputRegion.GetSize()[0];
     }
 
   // Master process (Rank 0) is responsible for the creation of the output raster.
@@ -546,10 +559,10 @@ SimpleParallelTiffWriter<TInputImage>
     {
     // Set geotransform
     double geotransform[6];
-    geotransform[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSignedSpacing()[0];
+    geotransform[0] = origin[0] - 0.5*inputPtr->GetSignedSpacing()[0];
     geotransform[1] = inputPtr->GetSignedSpacing()[0];
     geotransform[2] = 0.0;
-    geotransform[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSignedSpacing()[1];
+    geotransform[3] = origin[1] - 0.5*inputPtr->GetSignedSpacing()[1];
     geotransform[4] = 0.0;
     geotransform[5] = inputPtr->GetSignedSpacing()[1];
 
@@ -557,8 +570,8 @@ SimpleParallelTiffWriter<TInputImage>
     if(!m_TiffTiledMode)
       {
       SPTW_ERROR sperr = sptw::create_raster(m_FileName,
-                                             inputPtr->GetLargestPossibleRegion().GetSize()[0],
-                                             inputPtr->GetLargestPossibleRegion().GetSize()[1],
+                                             inputRegion.GetSize()[0],
+                                             inputRegion.GetSize()[1],
                                              nBands,
                                              dataType,
                                              geotransform,
@@ -573,8 +586,8 @@ SimpleParallelTiffWriter<TInputImage>
     else
       {
       SPTW_ERROR sperr = sptw::create_tiled_raster(m_FileName,
-                                                   inputPtr->GetLargestPossibleRegion().GetSize()[0],
-                                                   inputPtr->GetLargestPossibleRegion().GetSize()[1],
+                                                   inputRegion.GetSize()[0],
+                                                   inputRegion.GetSize()[1],
                                                    nBands,
                                                    dataType,
                                                    geotransform,

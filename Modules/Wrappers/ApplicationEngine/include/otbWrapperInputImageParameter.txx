@@ -215,6 +215,10 @@ InputImageParameter::GetImage()
     }
 }
 
+/** declare a specialization for ImageBaseType */
+template <>
+ImageBaseType*
+InputImageParameter::GetImage();
 
 template <class TInputImage, class TOutputImage>
 TOutputImage*

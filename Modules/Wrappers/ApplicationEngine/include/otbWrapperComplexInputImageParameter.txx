@@ -132,6 +132,10 @@ ComplexInputImageParameter::GetImage()
     }
 }
 
+/** declare a specialization for ImageBaseType */
+template <>
+ImageBaseType*
+ComplexInputImageParameter::GetImage();
 
 template <class TComplexInputImage, class TOutputImage>
 TOutputImage*

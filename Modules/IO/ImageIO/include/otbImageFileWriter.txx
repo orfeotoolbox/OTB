@@ -294,11 +294,17 @@ ImageFileWriter<TInputImage>
       sizemode = m_FilenameHelper->GetStreamingSizeMode();
       }
 
-    double sizevalue = 0.;
+    unsigned int sizevalue = 0;
+    // Save the DefaultRAM value for later
+    unsigned int oldDefaultRAM = m_StreamingManager->GetDefaultRAM();
+    if (sizemode == "auto")
+      {
+      sizevalue = oldDefaultRAM;
+      }
 
     if(m_FilenameHelper->StreamingSizeValueIsSet())
       {
-      sizevalue = m_FilenameHelper->GetStreamingSizeValue();
+      sizevalue = static_cast<unsigned int>(m_FilenameHelper->GetStreamingSizeValue());
       }
 
     if(type == "auto")
@@ -307,7 +313,7 @@ ImageFileWriter<TInputImage>
         {
         otbLogMacro(Warning,<<"In auto streaming type, the sizemode option will be ignored.");
         }
-      if(sizevalue == 0.)
+      if(sizevalue == 0)
         {
         otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
         }
@@ -317,7 +323,7 @@ ImageFileWriter<TInputImage>
       {
       if(sizemode == "auto")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use the default value");
           }
@@ -325,27 +331,27 @@ ImageFileWriter<TInputImage>
         }
       else if(sizemode == "nbsplits")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfDivisionsTiledStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfDivisionsTiledStreaming(sizevalue);
         }
       else if(sizemode == "height")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
 
-        this->SetTileDimensionTiledStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetTileDimensionTiledStreaming(sizevalue);
         }
       }
     else if(type == "stripped")
       {
       if(sizemode == "auto")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
           }
@@ -354,30 +360,34 @@ ImageFileWriter<TInputImage>
         }
       else if(sizemode == "nbsplits")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfDivisionsStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfDivisionsStrippedStreaming(sizevalue);
         }
       else if(sizemode == "height")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           otbLogMacro(Warning,<<"Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfLinesStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfLinesStrippedStreaming(sizevalue);
         }
 
       }
     else if (type == "none")
       {
-      if(sizemode!="" || sizevalue!=0.)
+      if(sizemode!="" || sizevalue!=0)
         {
         otbLogMacro(Warning,<<"Streaming is explicitly disabled, sizemode and sizevalue will be ignored.");
         }
       this->SetNumberOfDivisionsTiledStreaming(0);
       }
+
+    // since we change the m_StreamingManager under the hood, we copy the DefaultRAM
+    // value to the new streamingManager.
+    m_StreamingManager->SetDefaultRAM(oldDefaultRAM);
     }
   else
     {
@@ -472,22 +482,19 @@ ImageFileWriter<TInputImage>
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
     {
- 	std::vector<int> boxVector;
- 	Utils::ConvertStringToVector( 
- 	m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
- 	
- 	typename InputImageRegionType::IndexType start;
+    std::vector<int> boxVector;
+    Utils::ConvertStringToVector(
+        m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
+
+    typename InputImageRegionType::IndexType start;
     typename InputImageRegionType::SizeType  size;
 
     start[0] = boxVector[0];  // first index on X
     start[1] = boxVector[1];  // first index on Y
     size[0]  = boxVector[2];  // size along X
     size[1]  = boxVector[3];  // size along Y
-
     inputRegion.SetSize(size);
-
-    m_ShiftOutputIndex = start;
-    inputRegion.SetIndex(m_ShiftOutputIndex);
+    inputRegion.SetIndex(start);
 
     if (!inputRegion.Crop(inputPtr->GetLargestPossibleRegion()))
       {
@@ -503,6 +510,7 @@ ImageFileWriter<TInputImage>
       }
     otbLogMacro(Info,<<"Writing user defined region ["<<start[0]<<", "<<start[0]+size[0]-1<<"]x["<<start[1]<<", "<<start[1]+size[1]<<"]");
     }
+  m_ShiftOutputIndex = inputRegion.GetIndex();
 
   /**
    * Determine of number of pieces to divide the input.  This will be the
@@ -541,10 +549,11 @@ ImageFileWriter<TInputImage>
   //
   // Setup the ImageIO with information from inputPtr
   //
-  m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
+  typename TInputImage::PointType origin;
+  inputPtr->TransformIndexToPhysicalPoint(inputRegion.GetIndex(), origin);
   const typename TInputImage::SpacingType&   spacing = inputPtr->GetSpacing();
-  const typename TInputImage::PointType&     origin = inputPtr->GetOrigin();
   const typename TInputImage::DirectionType& direction = inputPtr->GetDirection();
+  m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
   int direction_sign(0);
   for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
     {
@@ -555,7 +564,7 @@ ImageFileWriter<TInputImage>
     // Final image size
     m_ImageIO->SetDimensions(i, inputRegion.GetSize(i));
     m_ImageIO->SetSpacing(i, direction_sign * spacing[i]);
-    m_ImageIO->SetOrigin(i, origin[i] + static_cast<double>(inputRegion.GetIndex()[i]) * spacing[i]);
+    m_ImageIO->SetOrigin(i, origin[i]);
 
     vnl_vector<double> axisDirection(TInputImage::ImageDimension);
     // Please note: direction cosines are stored as columns of the
@@ -618,7 +627,6 @@ ImageFileWriter<TInputImage>
     for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
       {
       ioRegion.SetSize(i, streamRegion.GetSize(i));
-      ioRegion.SetIndex(i, streamRegion.GetIndex(i));
       //Set the ioRegion index using the shifted index ( (0,0 without box parameter))
       ioRegion.SetIndex(i, streamRegion.GetIndex(i) - m_ShiftOutputIndex[i]);
       }
@@ -664,7 +672,7 @@ ImageFileWriter<TInputImage>
 
   //Reset global shift on input region (box parameter)
   //It allows calling multiple update over the writer
-  m_ShiftOutputIndex.Fill(0);
+  m_ShiftOutputIndex = inputPtr->GetLargestPossibleRegion().GetIndex();
 }
 
 
@@ -720,10 +728,7 @@ ImageFileWriter<TInputImage>
   InputImageRegionType ioRegion;
 
   // No shift of the ioRegion from the buffered region is expected
-  typename InputImageRegionType::IndexType tmpIndex;
-  tmpIndex.Fill(0);
   itk::ImageIORegionAdaptor<TInputImage::ImageDimension>::
-    //Convert(m_ImageIO->GetIORegion(), ioRegion, tmpIndex);
     Convert(m_ImageIO->GetIORegion(), ioRegion, m_ShiftOutputIndex);
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
 
