@@ -194,9 +194,9 @@ public:
  
 protected:
   /** Constructor */
-  OGRDataToSpectralStatisticsFilter() {}
+  OGRDataToSpectralStatisticsFilter() = default;
   /** Destructor */
-  ~OGRDataToSpectralStatisticsFilter() override {}
+  ~OGRDataToSpectralStatisticsFilter() override = default;
   
 private:
   OGRDataToSpectralStatisticsFilter(const Self &) = delete; //purposely not implemented

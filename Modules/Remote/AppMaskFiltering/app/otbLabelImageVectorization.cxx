@@ -35,10 +35,10 @@ class LabelImageVectorization: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelImageVectorization                      Self;
-  typedef Application                         Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef LabelImageVectorization                         Self;
+  typedef Application                                     Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
   
   /** Vector data typedefs. */
   typedef otb::ogr::DataSource                            OGRDataSourceType;
@@ -47,7 +47,7 @@ public:
 
   /** Raster data typedef */ 
   typedef unsigned int                                                PixelType;
-  typedef otb::Image<PixelType, 2>                                 LabelImageType;
+  typedef otb::Image<PixelType, 2>                                    LabelImageType;
 
   /** Filters typedefs */
   typedef ConnectedComponentStreamStitchingFilter< LabelImageType >             ConnectedComponentStreamStitchingFilterType;
@@ -98,7 +98,10 @@ private:
     SetParameterDescription("tile","Size of the tiles used for streaming");
     MandatoryOff("tile");
      
-
+    AddParameter(ParameterType_Float,"tolerance","Tolerance");
+    SetParameterDescription("tolerance","Tolerance used for polygon simplification");
+    MandatoryOff("tolerance");
+    
     AddParameter(ParameterType_Int,"fusion","fusion");
     SetParameterDescription("fusion","Perform polygon fusion");
     MandatoryOff("fusion");
@@ -111,6 +114,7 @@ private:
 
     // Default values
     SetDefaultParameterInt("connectivity", 0);
+    SetDefaultParameterFloat("tolerance", 0.);
     SetDefaultParameterInt("tile", 0);
     SetDefaultParameterInt("fusion", 0);
     // Doc example parameter settings
@@ -157,25 +161,28 @@ private:
     layer.CreateField(field, true);
 
     // Mask FIlter : Vectorization of the input raster
-    LabelImageVectorizationFilterType::Pointer maskFilter = LabelImageVectorizationFilterType::New();
+    LabelImageVectorizationFilterType::Pointer labelImageFilter = LabelImageVectorizationFilterType::New();
     
     // Labeled image to be vectorized
-    maskFilter->SetInput(this->GetParameterUInt32Image("in"));
-    maskFilter->SetOGRLayer(layer) ;
-    maskFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
+    labelImageFilter->SetInput(this->GetParameterUInt32Image("in"));
+    labelImageFilter->SetOGRLayer(layer) ;
+    labelImageFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
     
+    // Enlarge is not a parameter of the application, if the fusion option is 'on' we enlarge, if it is 'off' we don't
+    if (this->GetParameterInt("fusion") == 1)
+    {
+      labelImageFilter->SetEnlarge(1);
+    }
     
     // Input labels : Labels in the input image that will be vectorized
     std::vector<int> inputLabels;
     if(IsParameterEnabled("feat") )
     {
-      
       std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
       for (std::vector<std::string>::iterator it = inputLabelsStr.begin(); it != inputLabelsStr.end(); it++)
       {
         inputLabels.push_back(std::stoi(*it));
       }
-
     }
     else
     {
@@ -183,13 +190,13 @@ private:
       inputLabels.clear();
     }
     
-    maskFilter->SetLabels(inputLabels);
-    maskFilter->SetUse8Connected(this->GetParameterInt("connectivity"));
-    maskFilter->SetFieldName( field_name);
-    maskFilter->Initialize();
-    maskFilter->Update();
+    labelImageFilter->SetLabels(inputLabels);
+    labelImageFilter->SetUse8Connected(this->GetParameterInt("connectivity"));
+    labelImageFilter->SetTolerance(this->GetParameterFloat("tolerance"));
+    labelImageFilter->SetFieldName( field_name);
+    labelImageFilter->Initialize();
+    labelImageFilter->Update();
     ogrDS->SyncToDisk();
-    
     
     otbAppLogINFO("Vectorization done")
     
@@ -199,7 +206,7 @@ private:
       ConnectedComponentStreamStitchingFilterType::Pointer fusionFilter = ConnectedComponentStreamStitchingFilterType::New();
       fusionFilter->SetInput(this->GetParameterUInt32Image("in"));
       fusionFilter->SetOGRLayer(layer);
-      fusionFilter->SetStreamSize(maskFilter->GetStreamSize());
+      fusionFilter->SetStreamSize(labelImageFilter->GetStreamSize());
       fusionFilter->GenerateData();
     }
     

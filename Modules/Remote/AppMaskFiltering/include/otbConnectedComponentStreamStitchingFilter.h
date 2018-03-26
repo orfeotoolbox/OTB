@@ -192,7 +192,7 @@ public:
 
 protected:
   ConnectedComponentStreamStitchingFilter();
-  ~ConnectedComponentStreamStitchingFilter() override {}
+  ~ConnectedComponentStreamStitchingFilter() override = default;
 
   struct FusionStruct
   {

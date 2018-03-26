@@ -77,9 +77,31 @@ public:
   
   /** Get the sample names */
   const std::vector<std::string> & GetSampleFieldNames();
-  
+   
+  /** Set the name of the field that will contain the labels in the output image */
   itkSetStringMacro(FieldName);
+  
+  /** Get the name of the field that will contain the labels in the output image */
   itkGetStringMacro(FieldName);
+  
+  /** Set the tolerance parameter used for polygon simplification */
+  itkSetMacro(Tolerance , double);
+  
+  /** Get the tolerance parameter used for polygon simplification */
+  itkGetMacro(Tolerance , double);
+  
+  /**
+   * Set the value of the enlarge flag, if this option is on, connected components 
+   * on tiles with one more pixel than the stream size, and the resulting polygons 
+   * will overlap, this can be used to merge more efficiently touching connected 
+   * component splitted by streaming. 
+   */
+  itkSetMacro(Enlarge , bool);
+  
+  /**
+   * Get the value of the enlarge flag
+   */
+  itkGetMacro(Enlarge , bool);
 
   /**
    * Set the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
@@ -90,35 +112,38 @@ public:
    */
   itkGetMacro(Use8Connected, bool);
 
+  /** Set selected input labels to vectorize */
   void SetLabels( const std::vector<int> & labels)
   {
     m_Labels = labels;
   }
 
+  /** Get selected input labels to vectorize */
   const std::vector<int> & GetLabels() const
   {
     return m_Labels;
   }
+  
 protected:
   /** Constructor */
   PersistentLabelImageVectorizationFilter();
   /** Destructor */
-  ~PersistentLabelImageVectorizationFilter() override {}
+  ~PersistentLabelImageVectorizationFilter() override = default;
   
   void GenerateOutputInformation() override;
-
   void GenerateInputRequestedRegion() override;
 
 private:
-  PersistentLabelImageVectorizationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentLabelImageVectorizationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   
   OGRDataSourcePointerType ProcessTile() override;
   int m_TileNumber;
   std::string m_FieldName;
   std::vector<int> m_Labels;
   bool m_Use8Connected;
-  double m_Tol;
+  bool m_Enlarge;
+  double m_Tolerance;
 };
 
 
@@ -147,11 +172,14 @@ public:
   typedef typename PersistentLabelImageVectorizationFilter<TImageType>::OGRLayerType                             OGRLayerType;
 
   typedef typename InputImageType::SizeType                                   SizeType;
- /** Set the input image. */
+  
+  /** Set the input image. */
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);
   }
+  
+  /** Get the input image */
   const InputImageType * GetInput()
   {
     return this->GetFilter()->GetInput();
@@ -163,25 +191,42 @@ public:
     this->GetFilter()->SetOGRLayer(ogrLayer);
   }
 
+  /** Set the name of the field that will contain the labels in the output image */
   void SetFieldName( const std::string & fieldName )
   {
     this->GetFilter()->SetFieldName(fieldName);
   }
 
+  /** Get the name of the field that will contain the labels in the output image */
   const std::string & GetFieldName() const
   {
     return this->GetFilter()->GetFieldName();
   }
  
+  /** Set selected input labels to vectorize */
   void SetLabels( const std::vector<int> & labels)
   {
     this->GetFilter()->SetLabels(labels);
   }
 
+  /** Get selected input labels to vectorize */
   const std::vector<int> & GetLabels() const
   {
     return this->GetFilter()->GetLabels();
   }
+  
+  /** Get the tolerance parameter used for polygon simplification */
+  void SetTolerance( double tolerance)
+  {
+    this->GetFilter()->SetTolerance(tolerance);
+  }
+
+  /** Get the tolerance parameter used for polygon simplification */
+  const std::vector<int> & GetTolerance() const
+  {
+    return this->GetFilter()->GetTolerance();
+  }
+  
   /** Retrieve the actual streamsize used */
   SizeType GetStreamSize()
   {
@@ -192,6 +237,26 @@ public:
   {
      this->GetFilter()->Initialize();
   }
+  
+  /**
+   * Set the value of the enlarge flag, if this option is on, connected components 
+   * on tiles with one more pixel than the stream size, and the resulting polygons 
+   * will overlap, this can be used to merge more efficiently touching connected 
+   * component splitted by streaming. 
+   */
+  void SetEnlarge(bool flag)
+  {
+     this->GetFilter()->SetEnlarge(flag);
+  }
+  
+  /**
+   * Get the value of the enlarge flag
+   */
+  bool GetEnlarge()
+  {
+     return this->GetFilter()->GetEnlarge();
+  }
+  
   /**
    * Set the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
    */
@@ -199,24 +264,24 @@ public:
   {
      this->GetFilter()->SetUse8Connected(flag);
   }
-
+  
+  /**
+   * Get the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
+   */
   bool GetUse8Connected()
   {
      return this->GetFilter()->GetUse8Connected();
   }
 protected:
   /** Constructor */
-  LabelImageVectorizationFilter() {}
+  LabelImageVectorizationFilter() = default;
   /** Destructor */
-  ~LabelImageVectorizationFilter() override {}
+  ~LabelImageVectorizationFilter() override = default;
 
 private:
   LabelImageVectorizationFilter(const Self &) = delete; 
   void operator =(const Self&) = delete; 
 };
-
-
-
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

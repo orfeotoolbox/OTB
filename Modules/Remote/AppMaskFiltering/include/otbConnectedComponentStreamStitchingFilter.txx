@@ -122,7 +122,7 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
     {
       itkExceptionMacro(<< "Unable to start transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
     }
-
+    
     for(unsigned int y=1; y<=nbRowStream; y++)
     {
       //Compute Stream line
@@ -260,11 +260,9 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
           }
         }
       }
-              
-      // graph.printGraph();
+      
       std::vector< std::vector <int> > fusionList = graph.findConnectedComponents();
-
-        
+      
       std::vector<OGRFeatureType> addedPolygonList;
       std::vector<int> FIDVec;
       for (std::vector< std::vector<int> >::iterator itList = fusionList.begin(); itList != fusionList.end(); itList++)
@@ -273,21 +271,16 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
       int field = m_OGRLayer.GetFeature(  *(*itList).begin())["field"].GetValue<int>();
       for (std::vector<int>::iterator it = (*itList).begin(); it != (*itList).end(); it++)
       {
-        geomToMerge.addGeometry(m_OGRLayer.GetFeature(*it).GetGeometry());
+        geomToMerge.addGeometry( m_OGRLayer.GetFeature(*it).GetGeometry());
         m_OGRLayer.DeleteFeature(*it);
       }
       
       otb::ogr::UniqueGeometryPtr fusionPolygon =otb::ogr::UnionCascaded(geomToMerge);
       
       
-      typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
-      
-      
       if (fusionPolygon->getGeometryType() == wkbPolygon)
       {
         OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
-        
-
         fusionFeature["field"].SetValue(field);
         fusionFeature.SetGeometry( fusionPolygon.get() );
         m_OGRLayer.CreateFeature(fusionFeature);
@@ -297,12 +290,12 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
         OGRMultiPolygon* polygonTmp= dynamic_cast<OGRMultiPolygon*>(fusionPolygon.get());
         for (int i=0; i < polygonTmp->getNumGeometries() ;i++)
         {
-        OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
+          OGRFeatureType fusionFeature(m_OGRLayer.GetLayerDefn());
 
-        fusionFeature["field"].SetValue(field);
-        
-        fusionFeature.SetGeometry(polygonTmp->getGeometryRef(i) );
-        m_OGRLayer.CreateFeature(fusionFeature);
+          fusionFeature["field"].SetValue(field);
+          
+          fusionFeature.SetGeometry(polygonTmp->getGeometryRef(i) );
+          m_OGRLayer.CreateFeature(fusionFeature);
         }
       }
       else
@@ -311,8 +304,6 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
 
       }
       std::set<int> FIDToDelete(FIDVec.begin(), FIDVec.end()); // Converting from std::vector to std::set sorts and removes duplicates
-
-        
 
       // Update progress
       progress.CompletedPixel();
