@@ -91,9 +91,9 @@ OTB wrappings. If no compatible Python 2.x version is found a
 notification is generated during the installation process.  If the installation completes
 without issue, information relating to your Python bindings will be provided. 
 
-You must have Python numpy bindings installed in your system. They can be installed locally
+You must have Python NumPy bindings installed in your system. They can be installed locally
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
-to select their own existing Python installation rather than the one dibstributed by the OTB package.
+to select their own existing Python installation rather than the one distributed by the OTB package.
 
 By default, bindings for Python 2.7 will be enabled with the ``otbenv`` script.
 If you want to use bindings for Python 3.5, you can copy this script and modify:
@@ -165,7 +165,7 @@ To use the distributed GTK libraries you need to set the OTB_USE_LOCAL_GTK:
    export OTB_USE_LOCAL_GTK=1
 
 And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-6.0.0-Linux64
-To get back default behaviour, unset OTB_USE_LOCAL_GTK=1 or set OTB_USE_LOCAL_GTK=0
+To get back default behavior, unset OTB_USE_LOCAL_GTK=1 or set OTB_USE_LOCAL_GTK=0
 
 In version 6.2 and older, the Linux binaries are built without GTK support to cut some
 dependencies.
