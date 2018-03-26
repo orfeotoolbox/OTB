@@ -115,7 +115,7 @@ Notes:
 FAQ
 ~~~
 
-Q: I am getting an error message...
+Q: I am getting an error message related to Qt library...
 +++++++++++++++++++++++++++++++++++
 
 ::
@@ -130,6 +130,25 @@ A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk
    cd /path/to/OTB-|release|-Linux64
    rm -f lib/libQt* && rm -fr lib/gtk
 
+Q: Unable to import otbApplication library with Python3
++++++++++++++++++++++++++++++++++++
+
+::
+
+   ImportError: libpython3.5m.so.rh-python35-1.0: cannot open shared object file: No such file or directory
+
+A: You need to add a symlink to libpython3.5m.so.rh-python35-1.0 to make it works. 
+
+Here is the solution:
+
+- find the libpython3.5XX on your system : find /usr/lib -iname *libpython3.5*
+(on Ubuntu 14.04, it is /usr/lib/x86_64-linux-gnu/libpython3.5m.so)
+- create a symlink : ln -s path/to/lib/python3.5XX
+path/to/lib/libpython3.5m.so.rh-python35-1.0
+- Try to import otbApplication again
+
+See this discussion on `OTB issue tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1540#note_67864>`_
+   
 Q: Monteverdi and Mapla applications look different from my other applications.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
