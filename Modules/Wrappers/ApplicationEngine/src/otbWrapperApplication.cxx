@@ -504,6 +504,7 @@ Application::RegisterPipeline()
 
 void Application::FreeRessources()
 {
+  std::set< itk::DataObject * > dataSetToRelease; // do not release output
   std::set< itk::DataObject * > dataSet;
   std::vector<std::string> paramList = GetParametersKeys(true);
   // Get the end of the pipeline
@@ -563,6 +564,7 @@ void Application::FreeRessources()
           if ( !newData || dataSet.count( newData ) )
             continue;
           dataSet.insert( newData );
+          dataSetToRelease.insert( newData );
           itk::ProcessObject * process = newData->GetSource().GetPointer();
           if ( process )
             processStack.push( process );
@@ -571,6 +573,7 @@ void Application::FreeRessources()
       else
         {
         dataSet.insert( data.GetPointer() );
+        dataSetToRelease.insert( data.GetPointer() );
         itk::ProcessObject * process = data->GetSource().GetPointer();
         if ( process )
           processStack.push( process );
@@ -578,11 +581,11 @@ void Application::FreeRessources()
       }
     }
   // Release data
-  for ( auto data : dataSet )
+  for ( auto data : dataSetToRelease )
   {
     data->ReleaseData();
   }
-  // Call overrode method
+  // Call override method
   DoFreeRessources();
 }
 
