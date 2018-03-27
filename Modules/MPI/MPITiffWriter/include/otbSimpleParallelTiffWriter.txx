@@ -23,6 +23,7 @@
 
 #include "otbSimpleParallelTiffWriter.h"
 #include "otbStopwatch.h"
+#include "otbUtils.h"
 
 using std::vector;
 
@@ -682,7 +683,7 @@ SimpleParallelTiffWriter<TInputImage>
   double processDuration(0), writeDuration(0), numberOfProcessedRegions(0);
   InputImageRegionType streamRegion;
   for (m_CurrentDivision = 0;
-      m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateDataMutex();
+      m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
       m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
@@ -717,7 +718,7 @@ SimpleParallelTiffWriter<TInputImage>
     }
 
   // abort case
-  if (this->GetAbortGenerateDataMutex())
+  if (this->GetAbortGenerateData())
     {
     itk::ProcessAborted e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
@@ -768,7 +769,7 @@ SimpleParallelTiffWriter<TInputImage>
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
    */
-  if (!this->GetAbortGenerateDataMutex())
+  if (!this->GetAbortGenerateData())
     {
     this->UpdateProgress(1.0);
     }
@@ -835,14 +836,15 @@ SimpleParallelTiffWriter<TInputImage>
  }
 
 template <class TInputImage>
-bool
+const bool &
 SimpleParallelTiffWriter<TInputImage>
-::GetAbortGenerateDataMutex() const
+::GetAbortGenerateData() const
 {
   m_Lock.Lock();
   bool ret = Superclass::GetAbortGenerateData();
   m_Lock.Unlock();
-  return ret;
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
 }
 
 template <class TInputImage>

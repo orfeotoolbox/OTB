@@ -253,8 +253,8 @@ public:
   itkSetMacro(TiffTiledMode, bool);
   itkGetMacro(TiffTiledMode, bool);
 
-  // the interface of the superclass getter function is not thread safe
-  bool GetAbortGenerateDataMutex() const;
+  /** This override doesn't return a const ref on the actual boolean */
+  const bool & GetAbortGenerateData() const override;
 
   void SetAbortGenerateData(bool val) override;
 

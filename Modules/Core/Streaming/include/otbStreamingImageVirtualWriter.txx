@@ -32,6 +32,7 @@
 #include "otbTileDimensionTiledStreamingManager.h"
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
+#include "otbUtils.h"
 
 namespace otb
 {
@@ -238,7 +239,7 @@ StreamingImageVirtualWriter<TInputImage>
    */
   InputImageRegionType streamRegion;
   for (m_CurrentDivision = 0;
-       m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateDataMutex();
+       m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
        m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
@@ -254,7 +255,7 @@ StreamingImageVirtualWriter<TInputImage>
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
    */
-  if (!this->GetAbortGenerateDataMutex())
+  if (!this->GetAbortGenerateData())
     {
     this->UpdateProgress(1.0);
     }
@@ -293,14 +294,15 @@ StreamingImageVirtualWriter<TInputImage>
 }
 
 template <class TInputImage>
-bool
+const bool &
 StreamingImageVirtualWriter<TInputImage>
-::GetAbortGenerateDataMutex() const
+::GetAbortGenerateData() const
 {
   m_Lock.Lock();
   bool ret = Superclass::GetAbortGenerateData();
   m_Lock.Unlock();
-  return ret;
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
 }
 
 template <class TInputImage>

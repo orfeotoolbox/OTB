@@ -48,6 +48,7 @@
 #include "otb_boost_tokenizer_header.h"
 
 #include "otbStringUtils.h"
+#include "otbUtils.h"
 
 namespace otb
 {
@@ -604,7 +605,7 @@ ImageFileWriter<TInputImage>
     }
 
   for (m_CurrentDivision = 0;
-       m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateDataMutex();
+       m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
        m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
@@ -633,7 +634,7 @@ ImageFileWriter<TInputImage>
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
    */
-  if (!this->GetAbortGenerateDataMutex())
+  if (!this->GetAbortGenerateData())
     {
     this->UpdateProgress(1.0);
     }
@@ -836,14 +837,16 @@ return this->m_FilenameHelper->GetSimpleFileName();
 }
 
 template <class TInputImage>
-bool
+const bool &
 ImageFileWriter<TInputImage>
-::GetAbortGenerateDataMutex() const
+::GetAbortGenerateData() const
 {
   m_Lock.Lock();
+  // protected read here
   bool ret = Superclass::GetAbortGenerateData();
   m_Lock.Unlock();
-  return ret;
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
 }
 
 template <class TInputImage>
