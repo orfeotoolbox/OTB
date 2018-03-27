@@ -23,6 +23,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "OTBCommonExport.h"
 
 namespace otb
 {
@@ -33,9 +34,10 @@ namespace otb
  *  \sa ImageFileReader
  *
  * \ingroup OTBExtendedFilename
+ * \ingroup OTBCommon
  */
 
-class ITK_EXPORT ExtendedFilenameHelper : public itk::Object
+class OTBCommon_EXPORT ExtendedFilenameHelper : public itk::Object
 {
 public:
 /** Standard class typedefs. */
@@ -55,7 +57,7 @@ public:
   itkGetStringMacro(ExtendedFileName);
   itkGetStringMacro(SimpleFileName);
 
-  struct GenericBandRange : std::pair<int,int>
+  struct OTBCommon_EXPORT GenericBandRange : std::pair<int,int>
   {
     GenericBandRange() {}
 

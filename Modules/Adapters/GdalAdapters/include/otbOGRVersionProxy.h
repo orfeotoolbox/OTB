@@ -97,7 +97,7 @@ OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type);
    * \return NULL if file could not be open.
    */
   OTBGdalAdapters_EXPORT   
-  GDALDatasetType * Open(const char * filename, bool readOnly = true);
+  GDALDatasetType * Open(const char * filename, bool readOnly = true , std::vector< std::string > const & options = std::vector< std::string >() );
 
   /**
    * This function closes a dataset.
@@ -126,7 +126,7 @@ OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type);
    * \return NULL if dataset could not be created.
    */
   OTBGdalAdapters_EXPORT
-  GDALDatasetType * Create(GDALDriverType * driver, const char * name);
+  GDALDatasetType * Create(GDALDriverType * driver, const char * name , std::vector< std::string > const & options = std::vector< std::string >() );
 
 
   /**
