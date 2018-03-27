@@ -115,7 +115,6 @@ private:
     // Default values
     SetDefaultParameterInt("connectivity", 0);
     SetDefaultParameterFloat("tolerance", 0.);
-    SetDefaultParameterInt("tile", 0);
     SetDefaultParameterInt("fusion", 0);
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "sar.tif");
@@ -166,8 +165,14 @@ private:
     // Labeled image to be vectorized
     labelImageFilter->SetInput(this->GetParameterUInt32Image("in"));
     labelImageFilter->SetOGRLayer(layer) ;
-    labelImageFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
-    
+    if (IsParameterEnabled("tile") && HasValue("tile"))
+    {
+      labelImageFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
+    }
+    else
+    {
+      labelImageFilter->GetStreamer()->SetAutomaticTiledStreaming();
+    }
     // Enlarge is not a parameter of the application, if the fusion option is 'on' we enlarge, if it is 'off' we don't
     if (this->GetParameterInt("fusion") == 1)
     {
