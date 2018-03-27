@@ -115,21 +115,6 @@ Notes:
 FAQ
 ~~~
 
-Q: I am getting an error message related to Qt library...
-+++++++++++++++++++++++++++++++++++
-
-::
-
-   Cannot mix incompatible Qt library (version 0x40806) with this library (version 0x40807)
-   Aborted
-
-A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk libs in OTB package. The fix you need is to remove those libs from package.
-
-.. parsed-literal::
-
-   cd /path/to/OTB-|release|-Linux64
-   rm -f lib/libQt* && rm -fr lib/gtk
-
 Q: Unable to import otbApplication library with Python3
 +++++++++++++++++++++++++++++++++++
 
@@ -148,24 +133,3 @@ path/to/lib/libpython3.5m.so.rh-python35-1.0
 - Try to import otbApplication again
 
 See this discussion on `OTB issue tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1540#note_67864>`_
-   
-Q: Monteverdi and Mapla applications look different from my other applications.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-A: In versions 6.0, Monteverdi, Mapla and otbapplication (otbgui\_\*)
-use the system gtk theme. If you can't install GTK on your system you can use the
-one distributed with the OTB package. Note that using system GTK is the preferred
-way with the OTB standalone package as the distributed version of GTK do not
-work on recent Linux distributions. 
-
-To use the distributed GTK libraries you need to set the OTB_USE_LOCAL_GTK:
-
-::
-
-   export OTB_USE_LOCAL_GTK=1
-
-And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-6.0.0-Linux64
-To get back default behavior, unset OTB_USE_LOCAL_GTK=1 or set OTB_USE_LOCAL_GTK=0
-
-In version 6.2 and older, the Linux binaries are built without GTK support to cut some
-dependencies.
