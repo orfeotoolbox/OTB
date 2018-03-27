@@ -81,6 +81,3 @@ otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
          otbOGRExtendedFileNameGDALLayerOption
          test.shp
           )
-
-
-message(STATUS "Test link : ${OTBGdalAdapters-Test_LIBRARIES}")
