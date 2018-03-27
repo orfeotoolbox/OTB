@@ -119,7 +119,8 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   
   // Accumulate Results from all thread
   const itk::ThreadIdType numberOfThreads = this->GetNumberOfThreads();
-  for (itk::ThreadIdType threadId = 0; threadId < numberOfThreads; ++threadId) 
+  
+  for (itk::ThreadIdType threadId = 0; threadId < numberOfThreads; threadId++) 
   {
     PolygonSizeMapType::iterator itSize = m_PolygonSizeThread[threadId].begin();
     PolygonVectorMapType::iterator itFirstOrder = m_PolygonFirstOrderThread[threadId].begin();
@@ -199,10 +200,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
         for (unsigned int c =0; c < numberOfComponents ; c++)
         {
           PolygonCovComponent[itMean->first][r][c] = itCov->second[r][c] / sizePolygon - PolygonMeanComponent[itMean->first][r]*PolygonMeanComponent[itMean->first][c];
-          
-          
-          //std::cout << sizePolygon << " " << PolygonMeanComponent[itMean->first][r] << " " << PolygonMeanComponent[itMean->first][c] << " " << itCov->second[r][c] << std::endl;
-          //PolygonCovComponent[itMean->first][r][c] /= sizePolygon;
         }
       }
     }
@@ -347,8 +344,16 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     
     // Initialize accumulator sizes
     m_PolygonFirstOrderThread[threadid][fid].SetSize(numberOfComponents);
-    m_PolygonMinThread[threadid][fid].SetSize(numberOfComponents);
-    m_PolygonMaxThread[threadid][fid].SetSize(numberOfComponents);
+
+    if (!m_PolygonMinThread[threadid].count(fid))
+    {
+      m_PolygonMinThread[threadid][fid].SetSize(numberOfComponents);
+      m_PolygonMaxThread[threadid][fid].SetSize(numberOfComponents);
+
+      m_PolygonMinThread[threadid][fid].Fill(itk::NumericTraits<double>::max());
+      m_PolygonMaxThread[threadid][fid].Fill(itk::NumericTraits<double>::NonpositiveMin());
+      
+    }
     m_PolygonSecondOrderThread[threadid][fid].SetSize(numberOfComponents, numberOfComponents);
 
     while (!it.IsAtEnd())
@@ -367,21 +372,22 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
         for (unsigned int i =0; i < numberOfComponents ; i++)
         {
           m_PolygonFirstOrderThread[threadid][fid][i] += VectorValue[i];
-          if (VectorValue[i] > std::max(itk::NumericTraits<double>::NonpositiveMin(), m_PolygonMaxThread[threadid][fid][i]))
+          if (VectorValue[i] > m_PolygonMaxThread[threadid][fid][i])
           {
             m_PolygonMaxThread[threadid][fid][i] = VectorValue[i];
           }
-          if (VectorValue[i] < std::min(itk::NumericTraits<double>::max(), m_PolygonMinThread[threadid][fid][i]))
+          
+          if (VectorValue[i] < m_PolygonMinThread[threadid][fid][i])
           {
             m_PolygonMinThread[threadid][fid][i] = VectorValue[i];
           }
         }
+        
         for (unsigned int r =0; r < numberOfComponents ; r++)
         {
           for (unsigned int c =0; c < numberOfComponents ; c++)
           {
             m_PolygonSecondOrderThread[threadid][fid][r][c] += VectorValue[r]*VectorValue[c];
-            if  (std::isnan( VectorValue[r] ) || std::isnan( VectorValue[c] )) std::cout <<  fid << " " << std::endl;;
           }
         }
         
