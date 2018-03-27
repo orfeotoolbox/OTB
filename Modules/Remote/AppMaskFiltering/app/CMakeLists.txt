@@ -42,3 +42,8 @@ otb_create_application(
   NAME           ObjectBasedFiltering
   SOURCES        otbObjectBasedFiltering.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+
+otb_create_application(
+  NAME           LargeScaleConnectedComponent
+  SOURCES        otbLargeScaleConnectedComponent.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
