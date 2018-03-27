@@ -91,9 +91,9 @@ OTB wrappings. If no compatible Python 2.x version is found a
 notification is generated during the installation process.  If the installation completes
 without issue, information relating to your Python bindings will be provided. 
 
-You must have Python numpy bindings installed in your system. They can be installed locally
+You must have Python NumPy bindings installed in your system. They can be installed locally
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
-to select their own existing Python installation rather than the one dibstributed by the OTB package.
+to select their own existing Python installation rather than the one distributed by the OTB package.
 
 By default, bindings for Python 2.7 will be enabled with the ``otbenv`` script.
 If you want to use bindings for Python 3.5, you can copy this script and modify:
@@ -115,38 +115,21 @@ Notes:
 FAQ
 ~~~
 
-Q: I am getting an error message...
+Q: Unable to import otbApplication library with Python3
 +++++++++++++++++++++++++++++++++++
 
 ::
 
-   Cannot mix incompatible Qt library (version 0x40806) with this library (version 0x40807)
-   Aborted
+   ImportError: libpython3.5m.so.rh-python35-1.0: cannot open shared object file: No such file or directory
 
-A: This is due to a conflict with system Qt4 (usually seen on KDE) and Qt4 + gtk libs in OTB package. The fix you need is to remove those libs from package.
+A: You need to add a symlink to libpython3.5m.so.rh-python35-1.0 to make it works. 
 
-.. parsed-literal::
+Here is the solution:
 
-   cd /path/to/OTB-|release|-Linux64
-   rm -f lib/libQt* && rm -fr lib/gtk
+- find the libpython3.5XX on your system : find /usr/lib -iname *libpython3.5*
+(on Ubuntu 14.04, it is /usr/lib/x86_64-linux-gnu/libpython3.5m.so)
+- create a symlink : ln -s path/to/lib/python3.5XX
+path/to/lib/libpython3.5m.so.rh-python35-1.0
+- Try to import otbApplication again
 
-Q: Monteverdi and Mapla applications look different from my other applications.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-A: In versions 6.0, Monteverdi, Mapla and otbapplication (otbgui\_\*)
-use the system gtk theme. If you can't install GTK on your system you can use the
-one distributed with the OTB package. Note that using system GTK is the preferred
-way with the OTB standalone package as the distributed version of GTK do not
-work on recent Linux distributions. 
-
-To use the distributed GTK libraries you need to set the OTB_USE_LOCAL_GTK:
-
-::
-
-   export OTB_USE_LOCAL_GTK=1
-
-And now start ``monteverdi.sh`` or ``mapla.sh`` from OTB-6.0.0-Linux64
-To get back default behaviour, unset OTB_USE_LOCAL_GTK=1 or set OTB_USE_LOCAL_GTK=0
-
-In version 6.2 and older, the Linux binaries are built without GTK support to cut some
-dependencies.
+See this discussion on `OTB issue tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1540#note_67864>`_
