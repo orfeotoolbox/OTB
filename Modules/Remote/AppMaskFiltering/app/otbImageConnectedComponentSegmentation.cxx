@@ -109,13 +109,13 @@ private:
     clock_t tic = clock();
     
     typename MaskImageType::Pointer mask;
-    if (IsParameterEnabled("expr") && HasValue("expr"))
+    if (IsParameterEnabled("mask") && HasValue("mask"))
     {
       // Compute the mask
       typename MaskMuParserFilterType::Pointer maskFilter;
       maskFilter = MaskMuParserFilterType::New();
       maskFilter->SetInput(this->GetParameterImage("in"));
-      maskFilter->SetExpression(this->GetParameterString("expr"));
+      maskFilter->SetExpression(this->GetParameterString("mask"));
       maskFilter->Update();
       mask = maskFilter->GetOutput();
     }
