@@ -18,44 +18,68 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperExpParameterGroup_h
-#define otbWrapperExpParameterGroup_h
+#ifndef otbWrapperExpNumericalParameterInterface_h
+#define otbWrapperExpNumericalParameterInterface_h
 
-#include "otbWrapperExpTypes.h"
-#include "otbWrapperExpParameter.h"
+#include <memory>
+#include <typeinfo>
+#include <algorithm>
+#include "otbWrapperExpAnyNumeric.h"
 #include "OTBApplicationEngineExport.h"
-#include "boost/core/noncopyable.hpp"
 
 namespace otb
 {
 namespace WrapperExp
 {
 
-class OTBApplicationEngine_EXPORT ParameterGroup : 
-public Parameter
+class NumericalParameterInterface
 {
 public:
-  typedef ParameterGroup               Self;
-  typedef Parameter                    Superclass;
+  typedef NumericalParameterInterface  Self;
   typedef std::shared_ptr<Self>        Pointer;
   typedef std::shared_ptr<const Self>  ConstPointer;
 
-  // itkNewMacro( Self );
-  // static Pointer New() 
+  // itkTypeMacroNoParent( NumericalParameterInterface );
+
+  // static Pointer New()
   //   {
   //   return std::shared_ptr<Self>( new Self() );
   //   }
 
-  itkTypeMacro( ParameterGroup , Parameter );
+  virtual void SetDefaultValue( any_numeric val )
+  {
+    CheckInvariant( val , 1 );
+  }
 
-  bool HasValue() const
-  {return false;}
+  virtual void SetMinimumValue( any_numeric val )
+  {
+    CheckInvariant( val , 0 );
+  }
 
-  ~ParameterGroup() override = default;
+  virtual void SetMaximumValue( any_numeric val )
+  {
+    CheckInvariant( val , 2 );
+  }
+
+  virtual double GetFloattingPointValue() const = 0 ;
+
+  virtual int GetIntegerValue() const = 0 ;
+
+  virtual any_numeric GetNumericValue() const = 0 ;
+
+  virtual ~NumericalParameterInterface() = default ;
+
 protected:
-  ParameterGroup() = default ;
+  NumericalParameterInterface() = default ;
+
+  void CheckInvariant( any_numeric val , int n );
+
+  std::array< any_numeric , 3 > m_Boundaries;
 
 private:
+
+
+
 };
 
 } // end namespace WrapperExp

@@ -40,9 +40,9 @@ public:
 
   itkTypeMacro( SingleParameter , Parameter );
 
-  virtual std::string GetLitteralValue() const = 0;
-  virtual float GetFloattingValue() const = 0;
-  virtual int GetIntegerValue() const = 0;
+  virtual std::string GetValue( int i = -1 ) const override ;
+
+  virtual void SetValue( const std::string & val , int i = 0 ) override ;
 
   ~SingleParameter() override = default ;
 protected:

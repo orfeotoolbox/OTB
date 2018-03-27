@@ -34,7 +34,8 @@ Parameter::Parameter() :
     m_UserValueFlag( false ),
     m_UserLevel( UserLevel_Basic ),
     m_Role( Role_Input ),
-    m_Root( nullptr )
+    m_Root( nullptr ),
+    m_Value("")
 {}
 
 bool

@@ -18,41 +18,19 @@
  * limitations under the License.
  */
 
-#include "otbWrapperExpStringParameter.h"
+#include "otbWrapperExpNumericalParameterInterface.h"
 
 namespace otb
 {
 namespace WrapperExp
 {
-StringParameter::StringParameter():
-  m_Value("")
-{}
-
-bool
-StringParameter::HasValue() const
-{}
-
-inline
-std::string
-StringParameter::GetLitteralValue() const
-{
-  return m_Value;
-}
-
-float
-StringParameter::GetFloattingValue() const
-{
-}
-
-int
-StringParameter::GetIntegerValue() const
-{
-}
 
 void
-StringParameter::Reset()
+NumericalParameterInterface::CheckInvariant( any_numeric val , int n )
 {
+  
 }
+
 
 } // end namespace WrapperExp
 } //end namespace otb

@@ -144,11 +144,14 @@ public:
    */
   virtual void Reset() {};
 
-  virtual bool HasValue() const = 0;
+  virtual bool HasValue() const 
+  {
+    return !m_Value.empty();
+  }
 
   virtual bool HasUserValue() const
   {
-    return this->HasValue() && m_UserValueFlag;
+    return ( HasValue() && m_UserValueFlag ) ;
   }
 
   virtual void ClearValue()
@@ -170,8 +173,12 @@ public:
   /** Is the parameter a root or a child of another param */
   virtual bool IsRoot() const
   {
-    return ( this == m_Root.get() );
+    return !m_Root;
   }
+
+  virtual std::string GetValue( int i = -1 ) const = 0;
+
+  virtual void SetValue( const std::string & val , int i = 0 ) = 0;
 
   virtual ~Parameter() = default ;
 protected:

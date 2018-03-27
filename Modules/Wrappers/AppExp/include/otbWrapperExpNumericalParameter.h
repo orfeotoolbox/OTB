@@ -23,7 +23,7 @@
 
 #include <limits>
 #include <type_traits>
-// #include "otbWrapperExpTypes.h"
+#include "otbWrapperExpNumericalParameterInterface.h"
 #include "otbWrapperExpSingleParameter.h"
 #include "OTBApplicationEngineExport.h"
 
@@ -33,92 +33,35 @@ namespace WrapperExp
 {
 
 template < typename T >
-class OTBApplicationEngine_EXPORT NumericalParameter : public SingleParameter
+class OTBApplicationEngine_EXPORT NumericalParameter : 
+public SingleParameter , public NumericalParameterInterface
 {
 public:
   typedef NumericalParameter           Self;
-  typedef SingleParameter              Superclass;
+  // typedef SingleParameter              Superclass;
   typedef std::shared_ptr<Self>        Pointer;
   typedef std::shared_ptr<const Self>  ConstPointer;
   typedef T                            ValueType;
 
-  itkTypeMacro( NumericalParameter , SingleParameter );
+  // itkTypeMacro( NumericalParameter , SingleParameter );
 
   static Pointer New()
     {
     return std::shared_ptr<Self>( new Self() );
     }
 
-  /** Set the default value */
-  // itkSetMacro( DefaultValue , ValueType );
-  virtual void SetDefaultValue( const ValueType & val );
 
-  /** Get the default value */
-  // itkGetMacro( DefaultValue , ValueType );
-  virtual ValueType GetDefaultValue() const ;
-
-  /** Set the minimum value */
-  // itkSetMacro( MinimumValue , ValueType );
-  virtual void SetMinimumValue( const ValueType & val );
-
-  /** Get the minimum value */
-  itkGetMacro( MinimumValue , ValueType );
-
-  /** Set the maximum value */
-  // itkSetMacro( MaximumValue , ValueType );
-  virtual void SetMaximumValue( const ValueType & val );
-
-  /** Get the maximum value */
-  itkGetMacro( MaximumValue , ValueType );
-
-  virtual bool HasValue() const override ;
-
-  /*
-  Warning! The following functons need work in order to allow 
-  complex instantiation of numerical parameter
-  */
-  virtual std::string GetLitteralValue() const override ;
-
-  virtual float GetFloattingValue() const override ;
+  // override for NumericalParameterInterface inheritance
+  virtual double GetFloattingPointValue() const override ;
 
   virtual int GetIntegerValue() const override ;
 
-  virtual void Reset() override ;
+  virtual double GetNumericValue() const override ;
 
-  // NaN
-  template < bool B , typename Val>
-  struct InternalNaN
-  {
-    static constexpr Val value = 0 ;
-  };
-
-  template < typename Val>
-  struct InternalNaN< true , Val>
-  {
-    static constexpr Val value = std::numeric_limits< Val>::quiet_NaN() ;
-  };
-
-
-  ~NumericalParameter() override = default ;
+  virtual ~NumericalParameter() override = default ;
 protected:
   NumericalParameter();
 
-  ValueType GetInternalValue() const ;
-
-  ValueType m_NaN;
-
-  bool m_HasValue, m_HasDefaultValue ;
-
-  /** Default value (when appliable) */
-  ValueType m_DefaultValue;
-
-  /** Minimum value */
-  ValueType m_MinimumValue;
-
-  /** Maximum value */
-  ValueType m_MaximumValue;
-
-  /** Value */
   ValueType m_Value;
 
 private:

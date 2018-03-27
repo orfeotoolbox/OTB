@@ -25,8 +25,12 @@ using namespace otb::WrapperExp;
 
 int NumericalInstantiationTest( int  , char **  )
 {
-  NumericalParameter< int >::Pointer intParam = NumericalParameter< int >::New();
-  NumericalParameter< double >::Pointer doubleParam = NumericalParameter< double >::New();
+  any_numeric test ( any_numeric(3) );
+  test = 4.5;
+  std::cout<<test.as<float>();
+  std::cout<<test.as<double>();
+  // NumericalParameter< int >::Pointer intParam = NumericalParameter< int >::New();
+  // NumericalParameter< double >::Pointer doubleParam = NumericalParameter< double >::New();
   // NumericalParameter< std::complex<int> >::Pointer complexParam = NumericalParameter< std::complex<int> >::New();
   return EXIT_SUCCESS;
 }
@@ -35,14 +39,14 @@ template < typename T >
 void PrintMinMaxDef( const typename NumericalParameter<T>::Pointer param, 
                      std::ostringstream & oss)
 {
-  T min = param->GetMinimumValue();
-  oss<<"min : "<<min<<std::endl;
-  T max = param->GetMaximumValue();
-  oss<<"max : "<<max<<std::endl;
-  T def = param->GetDefaultValue();
-  oss<<"def : "<<def<<std::endl;
+  // T min = param->GetMinimumValue();
+  // oss<<"min : "<<min<<std::endl;
+  // T max = param->GetMaximumValue();
+  // oss<<"max : "<<max<<std::endl;
+  // T def = param->GetDefaultValue();
+  // oss<<"def : "<<def<<std::endl;
 }
-
+/*
 #define NumericalManipulation( type ) \
 {\
   NumericalParameter< type >::Pointer param = NumericalParameter<type>::New(); \
@@ -74,7 +78,7 @@ void PrintMinMaxDef( const typename NumericalParameter<T>::Pointer param,
   oss<<"has value : "<<param->HasValue()<<std::endl; \
   std::cout<<oss.str();\
 }\
-
+*/
 int NumericalManipulationTest( int , char ** )
 {
   // NumericalParameter< int >::Pointer param = NumericalParameter<int>::New();
@@ -93,8 +97,8 @@ int NumericalManipulationTest( int , char ** )
   // param->SetMaximumValue( 100 );
   // param->SetDefaultValue( -150 );
   // def = param->GetDefaultValue();
-  NumericalManipulation( int )
-  NumericalManipulation( double )
+  // NumericalManipulation( int )
+  // NumericalManipulation( double )
 
   return EXIT_SUCCESS;
 }
