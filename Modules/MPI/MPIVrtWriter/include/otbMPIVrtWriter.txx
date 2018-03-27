@@ -22,6 +22,7 @@
 #define otbMPIVrtWriter_txx
 
 #include "otbMPIVrtWriter.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -163,10 +164,9 @@ MPIVrtWriter<TImage>::Update()
 	}
   }
   std::vector<std::string> joins;
-  joins.push_back(itksys::SystemTools::GetFilenamePath(output).append("/"));
-  joins.push_back(itksys::SystemTools::GetFilenameWithoutExtension(output));
+  itksys::SystemTools::SplitPath(output, joins);
+  joins.back() = itksys::SystemTools::GetFilenameWithoutExtension(output);
   std::string prefix = itksys::SystemTools::JoinPath(joins);
-
 
   // Data type
   std::string dataTypeStr = "Float32";
@@ -287,7 +287,7 @@ MPIVrtWriter<TImage>::Update()
           int tileIndexY = currentRegion.GetIndex()[1];
           std::stringstream tileFileName;
           tileFileName <<prefix<<"_"<<tileIndexX<<"_"<<tileIndexY<<"_"<<tileSizeX<<"_"<<tileSizeY<<".tif";
-          std::cout<<tileFileName.str()<<std::endl;
+          otbDebugMacro(<<tileFileName.str());
 
           GDALDataset *dataset = (GDALDataset*) GDALOpen(tileFileName.str().c_str(), GA_ReadOnly);
 
