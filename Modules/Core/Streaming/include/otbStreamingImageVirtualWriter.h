@@ -146,7 +146,7 @@ public:
   // the interface of the superclass getter function is not thread safe
   bool GetAbortGenerateDataMutex() const;
 
-  void SetAbortGenerateData(bool val) override;
+  void SetAbortGenerateData(const bool val) override;
 
 protected:
   StreamingImageVirtualWriter();
