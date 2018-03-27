@@ -263,9 +263,14 @@ ClampAndWriteVectorImage( TInput * in ,
 
     if(extension == ".vrt")
       {
-      // Use the WriteMPI function
-      // TODO : create a dedicated filter
-      //~ WriteMPI(clampFilter->GetOutput(),filename,ramValue);      
+      // Use the MPIVrtWriter
+      typedef otb::MPIVrtWriter<TOutput> VRTWriterType;
+
+      typename VRTWriterType::Pointer vrtWriter = VRTWriterType::New();
+      vrtWriter->SetInput(clampFilter->GetOutput());
+      vrtWriter->SetFileName(filename);
+      vrtWriter->SetAvailableRAM(ramValue);
+      ret.second = vrtWriter.GetPointer();
       }
     #ifdef OTB_USE_SPTW
     else if (extension == ".tif")
