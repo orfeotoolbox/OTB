@@ -109,7 +109,6 @@ private:
     OGRSpatialReference oSRS(projRef.c_str());
     std::string layer_name = "layer";
     std::string field_name = "field";
-    std::cout << "1" << std::endl;
     OGRDataSourceType::Pointer vectors;
     OGRDataSourceType::Pointer output;
     if (IsParameterEnabled("out") && HasValue("out"))
@@ -125,22 +124,24 @@ private:
                                     ogr::DataSource::Modes::Update_LayerUpdate);
       output = vectors;
     }
-      std::cout << "2" << std::endl;
+    
     OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
     SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
     SpectralStatisticsFilter->UpdateLargestPossibleRegion() ;
+    if (IsParameterEnabled("tile") && HasValue("tile"))
+      SpectralStatisticsFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
+    else
+      SpectralStatisticsFilter->GetStreamer()->SetAutomaticTiledStreaming();
     SpectralStatisticsFilter->SetOGRData(vectors);
     SpectralStatisticsFilter->SetOutputSamples(output);
     SpectralStatisticsFilter->SetFieldName(field_name);
     SpectralStatisticsFilter->Update();
-    std::cout << "3" << std::endl;
+    
     clock_t toc = clock();
     
     otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
   }
   
-  
-
 }; 
 
 } //end namespace Wrapper
