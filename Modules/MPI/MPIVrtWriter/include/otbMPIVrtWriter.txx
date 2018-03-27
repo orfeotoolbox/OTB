@@ -48,7 +48,7 @@ MPIVrtWriter<TImage>::SetInput(const InputImageType *input)
 }
 
 template <typename TImage>
-const InputImageType*
+const TImage*
 MPIVrtWriter<TImage>::GetInput()
 {
   if (this->GetNumberOfInputs() < 1)
