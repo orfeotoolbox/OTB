@@ -84,16 +84,6 @@ private:
     AddParameter(ParameterType_OutputFilename, "out", "Output vector data file ");
     SetParameterDescription("out","Output vector");
 
-    AddParameter(ParameterType_Choice,"outmode","Writing mode for the output vector file");
-    SetParameterDescription("outmode","This allows one to set the writing behaviour for the output vector file. Please note that the actual behaviour depends on the file format.");
-    
-    AddChoice("outmode.overwrite","Overwrite output vector file if existing.");
-    SetParameterDescription("outmode.overwrite","If the output vector file already exists, it is completely destroyed (including all its layers) and recreated from scratch.");
-
-    AddChoice("outmode.update","Update output vector file");
-    SetParameterDescription("outmode.update","The output vector file is opened in update mode if existing");
-
-
     AddParameter(ParameterType_Int,"tile","Tile Size");
     SetParameterDescription("tile","Size of the tiles used for streaming");
     MandatoryOff("tile");
@@ -138,27 +128,15 @@ private:
     std::string field_name = "field";
     std::string outmode = GetParameterString("outmode");
     std::string dataSourceName = GetParameterString("out");
-    OGRDataSourceType::Pointer ogrDS;
-    
-    if (outmode == "overwrite")
-    {
-      // Create the datasource
-      ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
-    }
-    else if (outmode == "update")
-    {
-      // Create the datasource
-      ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
-    }
-    else
-    {
-      otbAppLogFATAL(<<"invalid outmode"<< outmode);
-    }
-    //ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
-    OGRLayerType layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
+
+    // Create the datasource
+    auto ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
+    auto layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
     OGRFieldDefn field(field_name.c_str(), OFTInteger);
     layer.CreateField(field, true);
-
+   
+    //ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
+     
     // Mask FIlter : Vectorization of the input raster
     LabelImageVectorizationFilterType::Pointer labelImageFilter = LabelImageVectorizationFilterType::New();
     
