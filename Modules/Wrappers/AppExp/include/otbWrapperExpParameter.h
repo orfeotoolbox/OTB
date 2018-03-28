@@ -144,11 +144,17 @@ public:
    */
   virtual void Reset() {};
 
+  /** Check wether the parameter has a value. Default implementation set  
+   *  m_Valule to an empty string.
+   */
   virtual bool HasValue() const 
   {
     return !m_Value.empty();
   }
 
+  /** Check wether the parameter has a value and if the value has been set
+   * by user.
+   */
   virtual bool HasUserValue() const
   {
     return ( HasValue() && m_UserValueFlag ) ;
@@ -181,6 +187,7 @@ public:
   virtual void SetValue( const std::string & val , int i = 0 ) = 0;
 
   virtual ~Parameter() = default ;
+  
 protected:
   /** Constructor */
   Parameter() ;

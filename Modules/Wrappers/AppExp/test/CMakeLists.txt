@@ -23,6 +23,7 @@ otb_module_test()
 set(OTBExpApplicationEngineTests
 otbExpApplicationEngineTestDriver.cxx
 otbWrapperExpNumericalParameterTest.cxx
+otbWrapperExpAnyNumericTest.cxx
 )
 
 add_executable(otbExpApplicationEngineTestDriver ${OTBExpApplicationEngineTests})

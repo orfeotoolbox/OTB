@@ -40,6 +40,11 @@ public:
 
   itkTypeMacro( SingleParameter , Parameter );
 
+  static Pointer New()
+    {
+    return std::shared_ptr<Self>( new Self() );
+    }
+
   virtual std::string GetValue( int i = -1 ) const override
     {
     if ( i != -1 )

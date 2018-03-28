@@ -21,7 +21,6 @@
 #ifndef otbWrapperExpAnyNumeric_h
 #define otbWrapperExpAnyNumeric_h
 
-#include <memory>
 #include <typeinfo>
 #include <algorithm>
 #include "OTBApplicationEngineExport.h"

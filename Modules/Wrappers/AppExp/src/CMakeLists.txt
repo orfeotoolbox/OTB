@@ -30,6 +30,8 @@ set( OTBAppExp_SRC
   otbWrapperExpParameter.cxx
   otbWrapperExpParameterGroup.cxx
   otbWrapperExpSingleParameter.cxx
+  otbWrapperExpAnyNumeric.cxx
+  otbWrapperExpNumericalParameterInterface.cxx
   )
 
 add_library(OTBAppExp ${OTBAppExp_SRC})
