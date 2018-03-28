@@ -28,8 +28,18 @@
 namespace otb
 {
 
-/** \class SampleAugmentationFilter
-This class 
+
+/** 
+ * \class SampleAugmentationFilter
+ *
+ * \brief Filter to generate synthetic samples from existing ones 
+ *
+ * This class generates synthetic samples from existing ones either by
+ * replication, jitter (adding gaussian noise to the features of
+ * existing samples) or SMOTE (linear combination of pairs
+ * neighbouring samples of the same class.
+ *
+ * \ingroup OTBSampling
  */
 
 class ITK_EXPORT SampleAugmentationFilter :
