@@ -42,9 +42,8 @@ public:
   typedef itk::SmartPointer<Self>                 Pointer;
   typedef itk::SmartPointer<const Self>           ConstPointer;
 
-/** Standard macro */
+  /** Standard macro */
   itkNewMacro(Self);
-
   itkTypeMacro(LargeScaleConnectedComponent, otb::CompositeApplication);
 
 private:
@@ -60,7 +59,8 @@ private:
       "LabelImageVectorization [2], the ComputePolygonsGeometricFeatures [3], the ComputePolygonsSpectralFeatures [4] and the "
       "ObjectBasedFiltering [5].\n\n"
       "It generates a vector data file containing the regions extracted with "
-      "the Connected component algorithm using a user defined criterion, features (size, perimeter, min, max and mean for each band, and the covariance matrix). "
+      "the Connected components algorithm using a user defined criterion, features (size, perimeter, min, max and mean for each band, and the covariance matrix) "
+      " are then extracted for each segment. Optionally, the segment are filtered using a criterion on the computed features."
       );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -77,7 +77,7 @@ private:
     AddApplication("LabelImageVectorization", "vectorization", "Vectorization step");
     AddApplication("ComputePolygonsGeometricFeatures", "geometric", "Geometric features computation step");
     AddApplication("ComputePolygonsSpectralFeatures", "spectral", "Spectral features computation step");
-    AddApplication("ObjectBasedFiltering", "filtering", "Vectorization step");
+    AddApplication("ObjectBasedFiltering", "filtering", "Filtering step");
 
     ShareParameter("in","segmentation.in");
     ShareParameter("expr","segmentation.expr");
@@ -86,44 +86,17 @@ private:
     ShareParameter("out","vectorization.out");
     ShareParameter("tile","vectorization.tile");
     MandatoryOff("tile");
+    ShareParameter("fusion","vectorization.fusion");
+    MandatoryOff("fusion");
+    ShareParameter("filter","filtering.expr");
+    MandatoryOff("filter");
     
     Connect("spectral.tile","vectorization.tile");
     Connect("geometric.in","vectorization.out");
     Connect("spectral.in","segmentation.in");
     Connect("spectral.vec","vectorization.out");
-/*
-    ShareParameter("tilesizex","segmentation.tilesizex");
-    ShareParameter("tilesizey","segmentation.tilesizey");
-*/
-/*    AddParameter(ParameterType_Choice, "mode","Output mode");
-    SetParameterDescription("mode", "Type of segmented output");
+    Connect("filtering.in","vectorization.out");
 
-    AddChoice("mode.vector", "Segmentation as vector output");
-    SetParameterDescription("mode.vector","In this mode, the application will "
-      "produce a vector file or database and compute field values for each "
-      "region");
-
-    AddParameter(ParameterType_InputImage, "mode.vector.imfield", "Support image for field computation");
-    SetParameterDescription( "mode.vector.imfield", "This is an optional support image "
-      "that can be used to compute field values in each region. Otherwise, the "
-      "input image is used as support." );
-    MandatoryOff("mode.vector.imfield");
-
-    ShareParameter("mode.vector.out","vectorization.out");
-
-    AddChoice("mode.raster", "Standard segmentation with labeled raster output");
-    SetParameterDescription("mode.raster","In this mode, the application will produce a standard labeled raster.");
-
-    ShareParameter("mode.raster.out","merging.out",
-      "The output raster image",
-      "It corresponds to the output of the small region merging step.");
-
-    AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
-    EnableParameter( "cleanup" );
-    SetParameterDescription( "cleanup",
-      "If activated, the application will try to clean all temporary files it created" );
-    MandatoryOff( "cleanup" );
-*/
     // Setup RAM
     ShareParameter("ram","segmentation.ram");
     Connect("vectorization.ram","segmentation.ram");
@@ -131,26 +104,7 @@ private:
     Connect("spectral.ram","segmentation.ram");
     Connect("filtering.ram","segmentation.ram");
     
-/*
-    Connect("merging.tilesizex","segmentation.tilesizex");
-    Connect("merging.tilesizey","segmentation.tilesizey");
-    Connect("vectorization.tilesizex","segmentation.tilesizex");
-    Connect("vectorization.tilesizey","segmentation.tilesizey");
 
-    // TODO : this is not exactly true, we used to choose the smoothed image instead
-    Connect("merging.in","smoothing.in");
-
-    // Setup constant parameters
-    GetInternalApplication("smoothing")->SetParameterString("foutpos","foo");
-    GetInternalApplication("smoothing")->EnableParameter("foutpos");
-
-    // Doc example parameter settings
-    SetDocExampleParameterValue("in", "QB_1_ortho.tif");
-    SetDocExampleParameterValue("spatialr", "4");
-    SetDocExampleParameterValue("ranger", "80");
-    SetDocExampleParameterValue("minsize", "16");
-    SetDocExampleParameterValue("mode.vector.out", "regions.shp");
-*/
     SetOfficialDocLink();
     }
 
@@ -158,87 +112,30 @@ private:
   {}
 
   void DoExecute() ITK_OVERRIDE
-    {
-      //GetInternalApplication("segmentation")->SetParameterString("expr", );
-      ExecuteInternal("segmentation");
-      
-      GetInternalApplication("vectorization")->SetParameterInputImage("in", GetInternalApplication("segmentation")->GetParameterOutputImage("out"));
-      
-      ExecuteInternal("vectorization");
-      GetInternalApplication("geometric")->SetParameterString("sizefield", "size");
-      GetInternalApplication("geometric")->SetParameterString("perimeterfield", "perimeter");
-      ExecuteInternal("geometric");
-      
-      ExecuteInternal("spectral");
-      
-      
-    /*bool isVector(GetParameterString("mode") == "vector");
-    std::string outPath(isVector ?
-      GetParameterString("mode.vector.out"):
-      GetParameterString("mode.raster.out"));
-    std::vector<std::string> tmpFilenames;
-    tmpFilenames.push_back(outPath+std::string("_labelmap.tif"));
-    tmpFilenames.push_back(outPath+std::string("_labelmap.geom"));
-    ExecuteInternal("smoothing");
-    // in-memory connexion here (saves 1 additional update for foutpos)
-    GetInternalApplication("segmentation")->SetParameterInputImage("in",
-      GetInternalApplication("smoothing")->GetParameterOutputImage("fout"));
-    GetInternalApplication("segmentation")->SetParameterInputImage("inpos",
-      GetInternalApplication("smoothing")->GetParameterOutputImage("foutpos"));
-    // temporary file output here
-    GetInternalApplication("segmentation")->SetParameterString("out",
-      tmpFilenames[0]);
-    // take half of previous radii
-    GetInternalApplication("segmentation")->SetParameterFloat("spatialr",
-      0.5 * (double)GetInternalApplication("smoothing")->GetParameterInt("spatialr"));
-    GetInternalApplication("segmentation")->SetParameterFloat("ranger",
-      0.5 * GetInternalApplication("smoothing")->GetParameterFloat("ranger"));
-    GetInternalApplication("segmentation")->ExecuteAndWriteOutput();
-
-    GetInternalApplication("merging")->SetParameterString("inseg",
-      tmpFilenames[0]);
-    EnableParameter("mode.raster.out");
-    if (isVector)
-      {
-      tmpFilenames.push_back(outPath+std::string("_labelmap_merged.tif"));
-      tmpFilenames.push_back(outPath+std::string("_labelmap_merged.geom"));
-      GetInternalApplication("merging")->SetParameterString("out",
-        tmpFilenames[2]);
-      GetInternalApplication("merging")->ExecuteAndWriteOutput();
-      if (IsParameterEnabled("mode.vector.imfield") &&
-          HasValue("mode.vector.imfield"))
-        {
-        GetInternalApplication("vectorization")->SetParameterString("in",
-          GetParameterString("mode.vector.imfield"));
-        }
-      else
-        {
-        GetInternalApplication("vectorization")->SetParameterString("in",
-          GetParameterString("in"));
-        }
-      GetInternalApplication("vectorization")->SetParameterString("inseg",
-        tmpFilenames[2]);
-      ExecuteInternal("vectorization");
-      }
-    else
-      {
-      GetInternalApplication("merging")->ExecuteAndWriteOutput();
-      }
-    DisableParameter("mode.raster.out");
-
-    if( IsParameterEnabled( "cleanup" ) )
-      {
-      otbAppLogINFO( <<"Final clean-up ..." );
-      for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)
-        {
-        if(itksys::SystemTools::FileExists(tmpFilenames[i].c_str()))
-          {
-          itksys::SystemTools::RemoveFile(tmpFilenames[i].c_str());
-          }
-        }
-      }*/
+  {
+    // Image to image connected components segmentation step
+    ExecuteInternal("segmentation");
+    
+    // Label Image vectorization step
+    GetInternalApplication("vectorization")->SetParameterInputImage("in", GetInternalApplication("segmentation")->GetParameterOutputImage("out"));
+    ExecuteInternal("vectorization");
+    
+    // Geometric features computation step
+    GetInternalApplication("geometric")->SetParameterString("sizefield", "size");
+    GetInternalApplication("geometric")->SetParameterString("perimeterfield", "perimeter");
+    ExecuteInternal("geometric");
+    
+    // Spectral features computation step
+    ExecuteInternal("spectral");
+    
+    // Object based filtering step
+    if (IsParameterEnabled("filter") && HasValue("filter"))
+    {  
+      ExecuteInternal("filtering");
     }
-
+      
+    
+  }
 };
 
 } // end of namespace Wrapper
