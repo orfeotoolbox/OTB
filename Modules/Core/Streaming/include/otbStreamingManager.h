@@ -91,6 +91,9 @@ public:
    * GetNumberOfSplits() returns. */
   virtual RegionType GetSplit(unsigned int i);
 
+  itkSetMacro(DefaultRAM, MemoryPrintType);
+  itkGetMacro(DefaultRAM, MemoryPrintType);
+
 protected:
   StreamingManager();
   ~StreamingManager() override;
@@ -113,11 +116,13 @@ private:
   StreamingManager(const StreamingManager &); //purposely not implemented
   void operator =(const StreamingManager&);   //purposely not implemented
 
-  /* Compute the available RAM from configuration settings if the input parameter is 0,
-   * otherwise, simply returns the input parameter */
+  /** Compute the available RAM in Bytes from an input value in MByte.
+   *  If the input value is 0, it uses the m_DefaultRAM value.
+   *  If m_DefaultRAM is also 0, it uses the configuration settings */
   MemoryPrintType GetActualAvailableRAMInBytes(MemoryPrintType availableRAMInMB);
 
-
+  /** Default available RAM in MB */
+  MemoryPrintType m_DefaultRAM;
 };
 
 } // End namespace otb

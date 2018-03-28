@@ -45,6 +45,8 @@
 #include "otbWrapperTypes.h"
 #include <exception>
 #include "itkMacro.h"
+#include <stack>
+#include <set>
 
 namespace otb
 {
@@ -380,6 +382,213 @@ void Application::UpdateParameters()
 void Application::AfterExecuteAndWriteOutputs()
 {}
 
+void
+Application::RegisterPipeline()
+{
+  std::stack< itk::DataObject * > dataStack;
+  std::set< itk::DataObject * > inputData;
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  // Get both end of the pipeline
+  for ( auto const & key : paramList )
+    {
+    if ( GetParameterType(key) == ParameterType_OutputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter * outP = 
+        dynamic_cast< OutputImageParameter * >( param );
+      itk::ImageBase< 2 > * outData = outP->GetValue();
+      if ( outData )
+        dataStack.push(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputVectorDataParameter * outP = 
+        dynamic_cast< OutputVectorDataParameter * >( param );
+      VectorDataType * outData = outP->GetValue();
+      if ( outData )
+        dataStack.push(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_InputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      InputImageParameter * inP = 
+        dynamic_cast< InputImageParameter * >( param );
+      if ( !inP->HasValue() )
+        continue;
+      ImageBaseType * inData = inP->GetImage< ImageBaseType >();
+      if ( inData && !inputData.count(inData) )
+        inputData.insert(inData);
+      }
+    else if ( GetParameterType(key) == ParameterType_InputImageList )
+      {
+      Parameter * param = GetParameterByKey(key);
+      InputImageListParameter * inP = 
+        dynamic_cast< InputImageListParameter * > ( param );
+      if ( !inP->HasValue() )
+        continue;
+      const FloatVectorImageListType * list = inP->GetImageList();
+      for ( auto it = list->Begin() ; it != list->End() ; ++it ) 
+        {
+        FloatVectorImageType * inData = it.Get().GetPointer();
+        if ( inData && !inputData.count(inData) )
+          inputData.insert(inData);
+        }
+      }
+    else if ( GetParameterType(key) == ParameterType_InputVectorData )
+      {
+      Parameter * param = GetParameterByKey(key);
+      InputVectorDataParameter * inP =
+        dynamic_cast< InputVectorDataParameter * > ( param );
+      if ( !inP->HasValue() )
+        continue;
+      VectorDataType * inData = inP->GetVectorData();
+      if ( inData && !inputData.count(inData) )
+        inputData.insert(inData);
+      }
+    else if ( GetParameterType(key) == ParameterType_InputVectorDataList )
+      {
+      Parameter * param = GetParameterByKey(key);
+      InputVectorDataListParameter * inP =
+        dynamic_cast< InputVectorDataListParameter * > ( param );
+      if ( !inP->HasValue() )
+        continue;
+      VectorDataListType * list = inP->GetVectorDataList();
+      for ( auto it = list->Begin() ; it != list->End() ; ++it )
+        {
+        VectorDataType * inData = it.Get().GetPointer();
+        if ( inData && !inputData.count(inData) )
+          inputData.insert(inData);
+        }
+      }
+    }
+
+  // DFS
+  while ( !dataStack.empty() )
+    {
+    itk::DataObject * current = dataStack.top();
+    dataStack.pop();
+    // whether current = null or is an input data it has no source
+    if ( !current || inputData.count( current ) )
+      continue;
+    // if current is a list push every of its members in datastack
+    if ( dynamic_cast< DataObjectListInterface *> (current) )
+      {
+      DataObjectListInterface * list = 
+        dynamic_cast< DataObjectListInterface *> (current);
+      int length = list->Size();
+      for ( int i = 0 ; i < length ; i++ )
+        {
+        itk::DataObject * newData = list->GetNthDataObject(i);
+        if ( !current || inputData.count( current ) )
+          continue;
+        dataStack.push( newData );
+      continue;
+        }
+      }
+    // Finally get the current's process object source
+    itk::ProcessObject * process = (current->GetSource()).GetPointer();
+    if ( !process || m_Filters.find( process ) != m_Filters.end() )
+      continue;
+    m_Filters.insert( process );
+    std::vector< itk::DataObject::Pointer > inputs = process->GetInputs();
+    // Push back all source's inputs in datastack
+    for ( auto const & it : inputs )
+      {
+      if ( inputData.count( it.GetPointer() ) )
+        continue;
+      dataStack.push( it.GetPointer() );
+      }
+    }
+}
+
+void Application::FreeRessources()
+{
+  std::set< itk::DataObject * > dataSetToRelease; // do not release output
+  std::set< itk::DataObject * > dataSet;
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  // Get the end of the pipeline
+  for ( const auto & key : paramList )
+    {
+    if ( GetParameterType(key) == ParameterType_OutputImage )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter * outP = dynamic_cast<OutputImageParameter*>(param);
+      itk::ImageBase<2> * outData = outP->GetValue();
+      if ( outData )
+        dataSet.insert(outData);
+      }
+    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputVectorDataParameter * outP = dynamic_cast<OutputVectorDataParameter*>(param);
+      Wrapper::VectorDataType * outData = outP->GetValue();
+      if ( outData )
+        dataSet.insert(outData);
+      }
+    else
+      continue;
+    }
+  // initialize DFS
+  std::stack< itk::ProcessObject * > processStack;
+  for ( auto data : dataSet )
+    {
+    auto process = (data->GetSource()).GetPointer();
+    if ( process )
+      processStack.push( process );
+    }
+  // DFS
+  while ( !processStack.empty() )
+    {
+    itk::ProcessObject * current = processStack.top();
+    processStack.pop();
+    // if null continue
+    if ( !current )
+      continue;
+    // Get all inputs
+    auto inputVector = current->GetInputs();
+    for ( auto data : inputVector )
+      {
+      // If input is null or already in the set continue
+      if ( !data.GetPointer() || dataSet.count( data.GetPointer() ) )
+        continue;
+      // If input is a list
+      if ( dynamic_cast< DataObjectListInterface *> (data.GetPointer()) )
+        {
+        DataObjectListInterface * list = 
+          dynamic_cast< DataObjectListInterface *> (data.GetPointer());
+        int length = list->Size();
+        for ( int i = 0 ; i < length ; i++ )
+          {
+          itk::DataObject * newData = list->GetNthDataObject(i);
+          if ( !newData || dataSet.count( newData ) )
+            continue;
+          dataSet.insert( newData );
+          dataSetToRelease.insert( newData );
+          itk::ProcessObject * process = newData->GetSource().GetPointer();
+          if ( process )
+            processStack.push( process );
+          }
+        }
+      else
+        {
+        dataSet.insert( data.GetPointer() );
+        dataSetToRelease.insert( data.GetPointer() );
+        itk::ProcessObject * process = data->GetSource().GetPointer();
+        if ( process )
+          processStack.push( process );
+        }
+      }
+    }
+  // Release data
+  for ( auto data : dataSetToRelease )
+  {
+    data->ReleaseData();
+  }
+  // Call override method
+  DoFreeRessources();
+}
+
 int Application::Execute()
 {
 
@@ -526,7 +735,6 @@ int Application::ExecuteAndWriteOutput()
             outputParam->Write();
             }
           }
-
         //xml writer parameter
         else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
                  && IsParameterEnabled(key) && HasValue(key) )
@@ -542,9 +750,17 @@ int Application::ExecuteAndWriteOutput()
     }
 
   this->AfterExecuteAndWriteOutputs();
-
   m_Chrono.Stop();
+  
+  FreeRessources();
+  m_Filters.clear();
   return status;
+}
+
+void
+Application::Stop()
+{
+  m_ProgressSource->SetAbortGenerateData(true);
 }
 
 /* Enable the use of an optional parameter. Returns the previous state */

@@ -18,33 +18,13 @@
  * limitations under the License.
  */
 
+#include "otbTestMain.h"
 
-#include "otbUtils.h"
-#include <sstream>
-
-namespace otb
+void RegisterTests()
 {
-
-namespace Utils
-{
-
-bool IsLonLatValid(double lon, double lat)
-{
-  if (lon < -180.0) return false;
-  if (lon > 180.0) return false;
-  if (lat < -90.0) return false;
-  if (lat > 90.0) return false;
-  return true;
-}
-
-void PrintNothing(const char * /* s */)
-{
-}
-
-bool const TrueConstant = true;
-
-bool const FalseConstant = false;
-
-}
-
+  REGISTER_TEST(otbOGRExtendedFileName);
+  REGISTER_TEST(otbOGRExtendedFileNameGDALOpen);
+  REGISTER_TEST(otbOGRExtendedFileNameGDALCreate);
+  REGISTER_TEST(otbOGRExtendedFileNameGDALLayer);
+  REGISTER_TEST(otbOGRExtendedFileNameGDALLayerOption);
 }

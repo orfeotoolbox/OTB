@@ -190,6 +190,7 @@ otb_add_test(NAME owTuDocExampleStructureNew COMMAND otbApplicationEngineTestDri
   otbWrapperDocExampleStructureNew
   )
 
+# Warning this test require otbapp_Smoothing and otbapp_ConcatenateImages to be built
 otb_add_test(NAME owTvApplicationMemoryConnectTest COMMAND otbApplicationEngineTestDriver otbApplicationMemoryConnectTest
   $<TARGET_FILE_DIR:otbapp_Smoothing>
   ${INPUTDATA}/poupees.tif

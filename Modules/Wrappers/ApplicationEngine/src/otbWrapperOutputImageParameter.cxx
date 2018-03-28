@@ -281,7 +281,7 @@ ClampAndWriteVectorImage( TInput * in ,
       typename SPTWriterType::Pointer sptWriter = SPTWriterType::New();
       sptWriter->SetFileName(filename);
       sptWriter->SetInput(clampFilter->GetOutput());
-      sptWriter->SetAutomaticAdaptativeStreaming(ramValue);
+      sptWriter->GetStreamingManager()->SetDefaultRAM(ramValue);
       ret.second = sptWriter.GetPointer();
       }
     
@@ -299,9 +299,9 @@ ClampAndWriteVectorImage( TInput * in ,
     {
     typename otb::ImageFileWriter<TOutput>::Pointer writer =
       otb::ImageFileWriter<TOutput>::New();
-    writer->SetFileName( filename );                                     
-    writer->SetInput(clampFilter->GetOutput());                                     
-    writer->SetAutomaticAdaptativeStreaming(ramValue);
+    writer->SetFileName( filename );
+    writer->SetInput(clampFilter->GetOutput());
+    writer->GetStreamingManager()->SetDefaultRAM(ramValue);
     ret.second = writer.GetPointer();
     }
 
@@ -414,7 +414,6 @@ OutputImageParameter::SwitchInput(TInput *img)
   return 1;
 }
 
-
 void
 OutputImageParameter::Write()
 {
@@ -505,7 +504,7 @@ OutputImageParameter::SwitchInput(UInt8RGBAImageType *img)
       otb::ImageFileWriter<UInt8RGBAImageType>::New();
     writer->SetFileName( this->GetFileName() );
     writer->SetInput(img);
-    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);
+    writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
     m_Writer = writer.GetPointer();
     }
    else
@@ -525,7 +524,7 @@ OutputImageParameter::SwitchInput(UInt8RGBImageType *img)
       otb::ImageFileWriter<UInt8RGBImageType>::New();
     writer->SetFileName( this->GetFileName() );
     writer->SetInput(img);
-    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);
+    writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
     m_Writer = writer.GetPointer();
     }
    else
