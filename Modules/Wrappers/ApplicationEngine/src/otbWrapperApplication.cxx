@@ -757,6 +757,12 @@ int Application::ExecuteAndWriteOutput()
   return status;
 }
 
+void
+Application::Stop()
+{
+  m_ProgressSource->SetAbortGenerateData(true);
+}
+
 /* Enable the use of an optional parameter. Returns the previous state */
 void Application::EnableParameter(std::string paramKey)
 {

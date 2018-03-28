@@ -23,6 +23,7 @@
 
 #include "otbSimpleParallelTiffWriter.h"
 #include "otbStopwatch.h"
+#include "otbUtils.h"
 
 using std::vector;
 
@@ -729,6 +730,16 @@ SimpleParallelTiffWriter<TInputImage>
       }
     }
 
+  // abort case
+  if (this->GetAbortGenerateData())
+    {
+    itk::ProcessAborted e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Image writing has been aborted");
+    throw e;
+    otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
+    }
+
   // Clean up
   close_raster(output_raster);
   output_raster = NULL;
@@ -836,6 +847,28 @@ SimpleParallelTiffWriter<TInputImage>
  {
   return this->m_FilenameHelper->GetSimpleFileName();
  }
+
+template <class TInputImage>
+const bool &
+SimpleParallelTiffWriter<TInputImage>
+::GetAbortGenerateData() const
+{
+  m_Lock.Lock();
+  bool ret = Superclass::GetAbortGenerateData();
+  m_Lock.Unlock();
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
+}
+
+template <class TInputImage>
+void
+SimpleParallelTiffWriter<TInputImage>
+::SetAbortGenerateData(bool val)
+{
+  m_Lock.Lock();
+  Superclass::SetAbortGenerateData(val);
+  m_Lock.Unlock();
+}
 
 }
 #endif

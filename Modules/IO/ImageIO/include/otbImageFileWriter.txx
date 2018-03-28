@@ -48,6 +48,7 @@
 #include "otb_boost_tokenizer_header.h"
 
 #include "otbStringUtils.h"
+#include "otbUtils.h"
 
 namespace otb
 {
@@ -645,6 +646,13 @@ ImageFileWriter<TInputImage>
     {
     this->UpdateProgress(1.0);
     }
+  else
+    {
+    itk::ProcessAborted e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Image writing has been aborted");
+    throw e;
+    }
 
   // Notify end event observers
   this->InvokeEvent(itk::EndEvent());
@@ -831,6 +839,29 @@ ImageFileWriter<TInputImage>
 ::GetFileName () const
 {
 return this->m_FilenameHelper->GetSimpleFileName();
+}
+
+template <class TInputImage>
+const bool &
+ImageFileWriter<TInputImage>
+::GetAbortGenerateData() const
+{
+  m_Lock.Lock();
+  // protected read here
+  bool ret = Superclass::GetAbortGenerateData();
+  m_Lock.Unlock();
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
+}
+
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetAbortGenerateData(bool val)
+{
+  m_Lock.Lock();
+  Superclass::SetAbortGenerateData(val);
+  m_Lock.Unlock();
 }
 
 } // end namespace otb

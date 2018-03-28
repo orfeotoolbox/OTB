@@ -32,6 +32,7 @@
 #include "otbTileDimensionTiledStreamingManager.h"
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
+#include "otbUtils.h"
 
 namespace otb
 {
@@ -258,6 +259,13 @@ StreamingImageVirtualWriter<TInputImage>
     {
     this->UpdateProgress(1.0);
     }
+  else
+    {
+    itk::ProcessAborted e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Image streaming has been aborted");
+    throw e;
+    }
 
   // Notify end event observers
   this->InvokeEvent(itk::EndEvent());
@@ -285,6 +293,27 @@ StreamingImageVirtualWriter<TInputImage>
   this->ReleaseInputs();
 }
 
+template <class TInputImage>
+const bool &
+StreamingImageVirtualWriter<TInputImage>
+::GetAbortGenerateData() const
+{
+  m_Lock.Lock();
+  bool ret = Superclass::GetAbortGenerateData();
+  m_Lock.Unlock();
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::SetAbortGenerateData(bool val)
+{
+  m_Lock.Lock();
+  Superclass::SetAbortGenerateData(val);
+  m_Lock.Unlock();
+}
 
 } // end namespace otb
 
