@@ -65,18 +65,18 @@ private:
     SetParameterDescription("in","Name of the input vector data.");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output vector data");
-    SetParameterDescription("out","Output filtered vector data ");
+    SetParameterDescription("out","Output filtered vector data, if no output vector is given the input layer is overwritten");
     MandatoryOff("out");
 
     AddParameter(ParameterType_String, "expr", "filter expression");
     SetParameterDescription("expr","Mathemetical expression used for filtering.");
 
     AddRAMParameter();
-
-    // Default values
-
+    
     // Doc example parameter settings
-
+    SetDocExampleParameterValue("expr", "size<10");
+    SetDocExampleParameterValue("in", "vectorData.shp");
+    SetDocExampleParameterValue("out","filtered_data.sqlite");
     SetOfficialDocLink();
   }
 
@@ -87,24 +87,42 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    
+    // Open Input Datasource
     auto source = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
     auto layerIn = source->GetLayer(0);
     std::string layerName = layerIn.GetName();
     
-    //otb::ogr::Feature firstFeature = layerTmp.ogr().GetNextFeature();
+    auto expr = this->GetParameterString("expr");
     
+    // Copy input layer and close input Datasource, so we can re-open it in overwrite mode later (if not output vector is specified)
+    auto buffer = ogr::DataSource::New();
+    auto layerInCpy = buffer->CopyLayer( layerIn, layerName);
+    source->Clear();
+    
+    // Apply SQL query, we use 'WHERE NOT' to delete element verifying the filtering expression
     std::ostringstream sqloss;
     sqloss.str("");
-    sqloss<<"SELECT * FROM \""<<layerName<<"\" WHERE "<< this->GetParameterString("expr");
+    sqloss<<"SELECT * FROM \""<<layerName<<"\" WHERE NOT"<< expr;
+    auto layerTmp=buffer->ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
     
-    auto layerTmp=source->ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
+    // Get Ouput path (new File or Update)
+    std::string outPath = "";
     
-    auto OutDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
-    std::string projRef = layerIn.GetProjectionRef();
-    OGRSpatialReference oSRS(projRef.c_str());
+    if (IsParameterEnabled("out") && HasValue("out"))
+    {  
+      outPath = this->GetParameterString("out");
+    }
+    else
+    {
+      outPath = this->GetParameterString("in");
+    }
     
-    auto layerOut = OutDS->CopyLayer( layerTmp, layerName);
+    // Create output DataSource
+    auto sourceOut = otb::ogr::DataSource::New(outPath, otb::ogr::DataSource::Modes::Overwrite);
+    auto layerOut = sourceOut->CopyLayer( layerTmp, layerName);
+    otbAppLogINFO("filtering done")
+    
+    sourceOut->SyncToDisk();
   }
 }; 
 
