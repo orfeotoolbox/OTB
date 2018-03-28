@@ -21,9 +21,8 @@
 #ifndef otbWrapperExpNumericalParameterInterface_h
 #define otbWrapperExpNumericalParameterInterface_h
 
+#include <cassert>
 #include <memory>
-#include <typeinfo>
-#include <algorithm>
 #include "otbWrapperExpAnyNumeric.h"
 #include "OTBApplicationEngineExport.h"
 
@@ -48,17 +47,23 @@ public:
 
   virtual void SetDefaultValue( any_numeric val )
   {
-    CheckInvariant( val , 1 );
+    assert ( val <= m_Boundaries[2] );
+    assert ( val >= m_Boundaries[0] );
+    m_Boundaries[1] = val ;
   }
 
   virtual void SetMinimumValue( any_numeric val )
   {
-    CheckInvariant( val , 0 );
+    assert ( val <= m_Boundaries[2] );
+    m_Boundaries[1] = ( val <= m_Boundaries[1] ) ? m_Boundaries[1] : val ; 
+    m_Boundaries[0] = val ;
   }
 
   virtual void SetMaximumValue( any_numeric val )
   {
-    CheckInvariant( val , 2 );
+    assert ( val >= m_Boundaries[0] );
+    m_Boundaries[1] = ( val >= m_Boundaries[1] ) ? m_Boundaries[1] : val ; 
+    m_Boundaries[2] = val ;
   }
 
   virtual double GetFloattingPointValue() const = 0 ;
@@ -70,7 +75,7 @@ public:
   virtual ~NumericalParameterInterface() = default ;
 
 protected:
-  NumericalParameterInterface() = default ;
+  NumericalParameterInterface() ;
 
   void CheckInvariant( any_numeric val , int n );
 
@@ -84,5 +89,9 @@ private:
 
 } // end namespace WrapperExp
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbWrapperExpNumericalParameterInterface.txx"
+#endif
 
 #endif

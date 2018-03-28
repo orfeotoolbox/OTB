@@ -18,6 +18,10 @@
  * limitations under the License.
  */
 
+#ifndef otbWrapperExpNumericalParameterInterface_txx
+#define otbWrapperExpNumericalParameterInterface_txx
+
+#include <limits>
 #include "otbWrapperExpNumericalParameterInterface.h"
 
 namespace otb
@@ -25,5 +29,14 @@ namespace otb
 namespace WrapperExp
 {
 
+NumericalParameterInterface::NumericalParameterInterface() :
+m_Boundaries({ any_numeric( std::numeric_limits< double >::lowest() ),
+               any_numeric::DefaultInit(),
+               any_numeric( std::numeric_limits< double >::max() ) })
+{
+}
+
 } // end namespace WrapperExp
-} //end namespace otb
+} // end namespace otb
+
+#endif

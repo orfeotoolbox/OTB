@@ -21,7 +21,6 @@
 #ifndef otbWrapperExpNumericalParameter_h
 #define otbWrapperExpNumericalParameter_h
 
-#include <limits>
 #include <type_traits>
 #include "otbWrapperExpNumericalParameterInterface.h"
 #include "otbWrapperExpSingleParameter.h"
@@ -52,19 +51,50 @@ public:
 
 
   // override for NumericalParameterInterface inheritance
-  virtual double GetFloattingPointValue() const override ;
+  virtual T GetNumericValue() const override 
+    {
+    return m_Value;
+    }
 
-  virtual int GetIntegerValue() const override ;
+  virtual double GetFloattingPointValue() const override 
+    {
+    return GetNumericValue();
+    }
 
-  virtual double GetNumericValue() const override ;
+  virtual int GetIntegerValue() const override
+    {
+    return GetNumericValue(); // might need to take care of this conversion
+    }
+
+  virtual T GetDefaultValue() const override
+    {
+    return GetBoundary(1);
+    }
+
+  virtual T GetMaxValue() const override
+    {
+    return GetBoundary(2);
+    }
+
+  virtual T GetMinValue() const override
+    {
+    return GetBoundary(0);
+    }
 
   virtual ~NumericalParameter() override = default ;
+
 protected:
   NumericalParameter();
 
   ValueType m_Value;
 
 private:
+  T GetBoundary( unsigned int n )
+    {
+    assert (n<3);
+    return m_Boundaries[n].as<T>(); 
+    }
+
 };
 
 } // end namespace WrapperExp

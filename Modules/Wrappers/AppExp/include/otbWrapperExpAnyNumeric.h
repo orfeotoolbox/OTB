@@ -43,10 +43,20 @@ public:
   {
   }
 
+  any_numeric( any_numeric&& other)
+  : m_Numeric( other.m_Numeric ? std::move(other.m_Numeric) : nullptr )
+  {
+  }
+
   template< typename T >
   any_numeric( const T & val)
   : m_Numeric( new numeric< T >( val ) )
   {
+  }
+
+  static any_numeric DefaultInit()
+  {
+     return any_numeric( std::numeric_limits<double>::quiet_NaN() );
   }
 
   any_numeric & swap( any_numeric & rhs )
@@ -72,6 +82,36 @@ public:
     return m_Numeric ? m_Numeric->type_info() : typeid(void) ;
     }
 
+  bool operator<( const any_numeric & rhs )
+    {
+    return as<double>() < rhs.as<double>() ;
+    }
+
+  bool operator>( const any_numeric & rhs )
+    {
+    return rhs < this ;
+    }
+
+  bool operator<=( const any_numeric & rhs )
+    {
+    return !(rhs > this) ;
+    }
+
+  bool operator>=( const any_numeric & rhs )
+    {
+    return !(rhs < this) ;
+    }
+
+  bool operator==( const any_numeric & rhs )
+    {
+    return as<double>() == rhs.as<double>() ;
+    }
+
+  bool operator!=( const any_numeric & rhs )
+    {
+    return !((*this) == rhs ) ;
+    }
+
   template < typename T >
   T as() const
     {
@@ -85,7 +125,9 @@ public:
     {
     return m_Numeric;
     }
+
 private:
+
   class numeric_holder
   {
   public:

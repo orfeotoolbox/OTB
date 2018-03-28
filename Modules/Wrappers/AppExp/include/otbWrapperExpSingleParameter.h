@@ -40,9 +40,23 @@ public:
 
   itkTypeMacro( SingleParameter , Parameter );
 
-  virtual std::string GetValue( int i = -1 ) const override ;
+  virtual std::string GetValue( int i = -1 ) const override
+    {
+    if ( i != -1 )
+      {
+      //log
+      }
+    return m_Value;
+    }
 
-  virtual void SetValue( const std::string & val , int i = 0 ) override ;
+  virtual void SetValue( const std::string & val , int i = 0 ) override 
+    {
+    if ( i != 0 )
+      {
+      //log
+      }
+    m_Value = val;
+    }
 
   ~SingleParameter() override = default ;
 protected:

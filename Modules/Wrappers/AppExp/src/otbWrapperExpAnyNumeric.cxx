@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#include "otbWrapperExpNumericalParameterInterface.h"
+#include <limits>
+#include "otbWrapperExpAnyNumeric.h"
 
 namespace otb
 {
