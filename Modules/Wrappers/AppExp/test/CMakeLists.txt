@@ -35,6 +35,15 @@ otb_module_target_label(otbExpApplicationEngineTestDriver)
 otb_add_test(NAME TuExpNumericalParam COMMAND otbExpApplicationEngineTestDriver
   NumericalInstantiationTest
   )
+
 otb_add_test(NAME TvExpNumericalParam COMMAND otbExpApplicationEngineTestDriver
   NumericalManipulationTest
+  )
+
+otb_add_test(NAME TuExpAnyNumeric COMMAND otbExpApplicationEngineTestDriver
+  AnyNumericTest
+  )
+
+otb_add_test(NAME TvExpAnyNumeric COMMAND otbExpApplicationEngineTestDriver
+  AnyNumericComp
   )

@@ -19,13 +19,34 @@
  */
 
 #include "otbWrapperExpAnyNumeric.h"
-
+using namespace otb::WrapperExp;
 int AnyNumericTest( int  , char **  )
 {
+  any_numeric a = 3;
+  any_numeric b (a);
+  b = 5.5;
   return EXIT_SUCCESS;
 }
 
-bool AnyNumericEqual()
+int AnyNumericComp( int  , char **  )
 {
-  return true;
+  bool ret = true ;
+  any_numeric a = 3;
+  ret = ret && ( a == 3 );
+  a = 3.0;
+  ret = ret && ( a == 3 );
+  a = 2.5 ;
+  ret = ret && ( a != 3.0 );
+  ret = ret && ( a > 2 );
+  ret = ret && ( a >= 2.5 );
+  ret = ret && ( a <= 2.5 );
+  ret = ret && ( a < 6 );
+  any_numeric b = -6;
+  ret = ret && ( b < a );
+  ret = ret && ( b != a );
+  a = 3;
+  b = 3.0;
+  ret = ret && ( b == a );
+
+  return ret;
 }

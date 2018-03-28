@@ -25,12 +25,8 @@ using namespace otb::WrapperExp;
 
 int NumericalInstantiationTest( int  , char **  )
 {
-  any_numeric test ( any_numeric(3) );
-  test = 4.5;
-  std::cout<<test.as<float>();
-  std::cout<<test.as<double>();
-  // NumericalParameter< int >::Pointer intParam = NumericalParameter< int >::New();
-  // NumericalParameter< double >::Pointer doubleParam = NumericalParameter< double >::New();
+  NumericalParameter< int >::Pointer intParam = NumericalParameter< int >::New();
+  NumericalParameter< double >::Pointer doubleParam = NumericalParameter< double >::New();
   // NumericalParameter< std::complex<int> >::Pointer complexParam = NumericalParameter< std::complex<int> >::New();
   return EXIT_SUCCESS;
 }

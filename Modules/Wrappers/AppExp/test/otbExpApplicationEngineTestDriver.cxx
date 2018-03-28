@@ -24,4 +24,6 @@ void RegisterTests()
 {
   REGISTER_TEST(NumericalInstantiationTest);
   REGISTER_TEST(NumericalManipulationTest);
+  REGISTER_TEST(AnyNumericTest);
+  REGISTER_TEST(AnyNumericComp);
 }
