@@ -22,6 +22,7 @@
 #define otbWrapperApplication_h
 
 #include <string>
+#include <set>
 #include "otbWrapperTypes.h"
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"
@@ -914,6 +915,27 @@ public:
    */
   void SetParameterImageBase(const std::string & key, ImageBaseType* img, unsigned int idx = 0);
 
+  /**
+  Register all ProcessObject that are linked to parameters : 
+    \li ParameterType_OutputImage
+    \li ParameterType_OutputVectorData
+
+    Those ProcessObjects are stored in the m_Filters set and are deleted at the 
+  end of ExecuteAndWriteOutput (if there are only held by the set)
+  This method can be called just before the end of a DoExecute in a derived 
+  class of Application.
+  */
+  void RegisterPipeline();
+
+  /**
+  Register all DataObject that are reachable from :
+    \li ParameterType_OutputImage
+    \li ParameterType_OutputVectorData
+
+  Once registered, the methode ReleaseData is called on each one of them.
+  */
+  void FreeRessources();
+
 protected:
   /** Constructor */
   Application();
@@ -1048,6 +1070,8 @@ private:
    * implementation does nothing */
   virtual void AfterExecuteAndWriteOutputs();
 
+  virtual void DoFreeRessources(){};
+
   Application(const Application &); //purposely not implemented
   void operator =(const Application&); //purposely not implemented
 
@@ -1058,6 +1082,8 @@ private:
 
   itk::ProcessObject::Pointer       m_ProgressSource;
   std::string                       m_ProgressSourceDescription;
+
+  std::set<itk::ProcessObject::Pointer> m_Filters;
 
   /** Long name of the application (that can be displayed...) */
   std::string m_DocName;

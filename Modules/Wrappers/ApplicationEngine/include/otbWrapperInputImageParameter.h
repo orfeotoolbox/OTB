@@ -109,7 +109,6 @@ public:
 
   void ClearValue() override;
 
-
 protected:
   /** Constructor */
   InputImageParameter();
