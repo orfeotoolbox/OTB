@@ -21,10 +21,11 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-
 #include "otbOGRDataSourceWrapper.h"
 #include "otbOGRFeatureWrapper.h"
 #include "otbMacro.h"
+
+#include "otbStopwatch.h"
 
 namespace otb
 {
@@ -87,6 +88,9 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+    // Start Timer for the application
+    auto Timer = Stopwatch::StartNew();
+    
     // Open Input Datasource
     auto source = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
     auto layerIn = source->GetLayer(0);
@@ -123,6 +127,9 @@ private:
     otbAppLogINFO("filtering done")
     
     sourceOut->SyncToDisk();
+    
+    Timer.Stop();
+    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
 }; 
 

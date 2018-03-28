@@ -26,6 +26,8 @@
 
 #include "otbMaskMuParserFilter.h"
 
+#include "otbStopwatch.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -106,7 +108,8 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    clock_t tic = clock();
+    // Start Timer for the application
+    auto Timer = Stopwatch::StartNew();
     
     typename MaskImageType::Pointer mask;
     if (IsParameterEnabled("mask") && HasValue("mask"))
@@ -130,8 +133,8 @@ private:
     SetParameterOutputImage<LabelImageType>("out", connected->GetOutput());
     connected->Update();
     
-    clock_t toc = clock();
-    otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
+    Timer.Stop();
+    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
   
 }; 

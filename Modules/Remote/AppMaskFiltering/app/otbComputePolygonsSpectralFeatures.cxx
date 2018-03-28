@@ -23,7 +23,7 @@
 
 #include "otbOGRDataToSpectralStatisticsFilter.h"
 
-
+#include "otbStopwatch.h"
 
 namespace otb
 {
@@ -102,7 +102,8 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    clock_t tic = clock();
+    // Start Timer for the application
+    auto Timer = Stopwatch::StartNew();
     
     // Create the OGR DataSource with the appropriate fields
     std::string projRef = this->GetParameterImage("in")->GetProjectionRef();
@@ -137,9 +138,8 @@ private:
     SpectralStatisticsFilter->SetFieldName(field_name);
     SpectralStatisticsFilter->Update();
     
-    clock_t toc = clock();
-    
-    otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
+    Timer.Stop();
+    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
   
 }; 

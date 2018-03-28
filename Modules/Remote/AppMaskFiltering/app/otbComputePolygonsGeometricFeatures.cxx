@@ -25,6 +25,9 @@
 #include "otbOGRFeatureWrapper.h"
 #include "otbMacro.h"
 
+#include "otbStopwatch.h"
+
+
 namespace otb
 {
 namespace Wrapper
@@ -91,7 +94,10 @@ private:
   }
 
   void DoExecute() ITK_OVERRIDE
-  {
+  { 
+    // Start Timer for the application
+    auto Timer = Stopwatch::StartNew();
+    
     auto source = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
     auto layer = source->GetLayer(0);
     
@@ -167,6 +173,8 @@ private:
       }
     }
     newLayer.ogr().CommitTransaction();
+    Timer.Stop();
+    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
 }; 
 
