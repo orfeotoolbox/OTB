@@ -52,11 +52,21 @@ public:
     m_Boundaries[1] = val ;
   }
 
+  virtual const any_numeric GetDefaultValue() const
+  {
+    return m_Boundaries[1];
+  }
+
   virtual void SetMinimumValue( any_numeric val )
   {
     assert ( val <= m_Boundaries[2] );
     m_Boundaries[1] = ( val <= m_Boundaries[1] ) ? m_Boundaries[1] : val ; 
     m_Boundaries[0] = val ;
+  }
+
+  virtual const any_numeric GetMinimumValue() const
+  {
+    return m_Boundaries[0];
   }
 
   virtual void SetMaximumValue( any_numeric val )
@@ -66,11 +76,16 @@ public:
     m_Boundaries[2] = val ;
   }
 
+  virtual const any_numeric GetMaximumValue() const
+  {
+    return m_Boundaries[2];
+  }
+
   virtual double GetFloattingPointValue() const = 0 ;
 
   virtual int GetIntegerValue() const = 0 ;
 
-  virtual any_numeric GetNumericValue() const = 0 ;
+  virtual any_numeric GetAnyNumericValue() const = 0 ;
 
   virtual ~NumericalParameterInterface() = default ;
 

@@ -51,10 +51,16 @@ public:
 
 
   // override for NumericalParameterInterface inheritance
-  virtual T GetNumericValue() const override 
+  virtual any_numeric GetAnyNumericValue() const override 
     {
-    return m_Value;
+    return any_numeric(m_NumValue);
     }
+
+  virtual T GetNumericValue() const 
+    {
+    return m_NumValue;
+    }
+
 
   virtual double GetFloattingPointValue() const override 
     {
@@ -65,20 +71,20 @@ public:
     {
     return GetNumericValue(); // might need to take care of this conversion
     }
-
-  virtual T GetDefaultValue() const override
+// do we keep this
+  virtual T GetDefaultTypeValue() const
     {
-    return GetBoundary(1);
+    return m_Boundaries[1].as<T>();
     }
-
-  virtual T GetMaxValue() const override
+// do we keep this
+  virtual T GetMaximumTypeValue() const
     {
-    return GetBoundary(2);
+    return m_Boundaries[0].as<T>();
     }
-
-  virtual T GetMinValue() const override
+// do we keep this
+  virtual T GetMinimumTypeValue() const
     {
-    return GetBoundary(0);
+    return m_Boundaries[2].as<T>();
     }
 
   virtual ~NumericalParameter() override = default ;
@@ -86,15 +92,9 @@ public:
 protected:
   NumericalParameter();
 
-  ValueType m_Value;
+  ValueType m_NumValue;
 
 private:
-  T GetBoundary( unsigned int n )
-    {
-    assert (n<3);
-    return m_Boundaries[n].as<T>(); 
-    }
-
 };
 
 } // end namespace WrapperExp
