@@ -18,9 +18,6 @@
  * limitations under the License.
  */
 
-#ifndef otbSampleAugmentationFilter_txx
-#define otbSampleAugmentationFilter_txx
-
 #include "otbSampleAugmentationFilter.h"
 #include "stdint.h" //needed for uintptr_t
 
@@ -270,4 +267,3 @@ SampleAugmentationFilter
 }
 } // end namespace otb
 
-#endif
