@@ -38,9 +38,6 @@ Logger::Pointer Logger::CreateInstance()
   defaultOutput->SetStream(std::cout);
   
   instance->AddLogOutput(defaultOutput);
-  
-  // Log setup information
-  instance->LogSetupInformation();
 
   return instance;
 }
