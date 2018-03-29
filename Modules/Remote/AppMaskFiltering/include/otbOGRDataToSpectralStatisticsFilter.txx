@@ -352,7 +352,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 
       m_PolygonMinThread[threadid][fid].Fill(itk::NumericTraits<double>::max());
       m_PolygonMaxThread[threadid][fid].Fill(itk::NumericTraits<double>::NonpositiveMin());
-      
     }
     m_PolygonSecondOrderThread[threadid][fid].SetSize(numberOfComponents, numberOfComponents);
 
@@ -366,31 +365,30 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
       bool isInside = this->IsSampleInsidePolygon(polygon,&tmpPoint);
       if (isInside)
         {
-        PixelType VectorValue = it.Get();
-        m_PolygonSizeThread[threadid][fid] ++;
-        
-        for (unsigned int i =0; i < numberOfComponents ; i++)
-        {
-          m_PolygonFirstOrderThread[threadid][fid][i] += VectorValue[i];
-          if (VectorValue[i] > m_PolygonMaxThread[threadid][fid][i])
+          PixelType VectorValue = it.Get();
+          m_PolygonSizeThread[threadid][fid] ++;
+          
+          for (unsigned int i =0; i < numberOfComponents ; i++)
           {
-            m_PolygonMaxThread[threadid][fid][i] = VectorValue[i];
+            m_PolygonFirstOrderThread[threadid][fid][i] += VectorValue[i];
+            if (VectorValue[i] > m_PolygonMaxThread[threadid][fid][i])
+            {
+              m_PolygonMaxThread[threadid][fid][i] = VectorValue[i];
+            }
+            
+            if (VectorValue[i] < m_PolygonMinThread[threadid][fid][i])
+            {
+              m_PolygonMinThread[threadid][fid][i] = VectorValue[i];
+            }
           }
           
-          if (VectorValue[i] < m_PolygonMinThread[threadid][fid][i])
+          for (unsigned int r =0; r < numberOfComponents ; r++)
           {
-            m_PolygonMinThread[threadid][fid][i] = VectorValue[i];
+            for (unsigned int c =0; c < numberOfComponents ; c++)
+            {
+              m_PolygonSecondOrderThread[threadid][fid][r][c] += VectorValue[r]*VectorValue[c];
+            }
           }
-        }
-        
-        for (unsigned int r =0; r < numberOfComponents ; r++)
-        {
-          for (unsigned int c =0; c < numberOfComponents ; c++)
-          {
-            m_PolygonSecondOrderThread[threadid][fid][r][c] += VectorValue[r]*VectorValue[c];
-          }
-        }
-        
         }
       ++it;
       }

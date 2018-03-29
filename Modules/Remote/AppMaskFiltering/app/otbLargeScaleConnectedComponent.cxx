@@ -42,8 +42,9 @@ public:
   typedef itk::SmartPointer<Self>                 Pointer;
   typedef itk::SmartPointer<const Self>           ConstPointer;
 
-  /** Standard macro */
+/** Standard macro */
   itkNewMacro(Self);
+
   itkTypeMacro(LargeScaleConnectedComponent, otb::CompositeApplication);
 
 private:
@@ -133,9 +134,8 @@ private:
     {  
       ExecuteInternal("filtering");
     }
-      
-    
   }
+
 };
 
 } // end of namespace Wrapper
