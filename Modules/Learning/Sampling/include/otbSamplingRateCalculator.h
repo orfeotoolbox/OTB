@@ -50,7 +50,7 @@ public:
   /** typdefs **/
   typedef std::map<std::string, unsigned long>  ClassCountMapType;
   typedef ClassCountMapType::const_iterator constItMapType;
-  typedef struct Triplet
+  typedef struct OTBSampling_EXPORT Triplet
    {
      unsigned long Required;
      unsigned long Tot;
