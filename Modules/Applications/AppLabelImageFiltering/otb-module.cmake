@@ -18,9 +18,9 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Binary mask filtering application.")
+set(DOCUMENTATION "Label Image filtering applications.")
 
-otb_module(OTBAppMaskFiltering
+otb_module(OTBAppLabelImageFiltering
   DEPENDS
     OTBITK
     OTBApplicationEngine
@@ -30,6 +30,7 @@ otb_module(OTBAppMaskFiltering
     OTBLearningBase
     OTBCCOBIA
     OTBSampling
+    OTBStatistics
   DESCRIPTION
     "${DOCUMENTATION}"
 )

@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-project(OTBAppMaskFiltering)
-#set(OTBAppMaskFiltering_LIBRARIES ${otb-module})
+project(OTBAppLabelImageFiltering)
+#set(OTBAppLabelImageFiltering_LIBRARIES ${otb-module})
 
 otb_module_impl()
