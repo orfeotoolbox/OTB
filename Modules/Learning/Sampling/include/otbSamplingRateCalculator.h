@@ -24,6 +24,7 @@
 #include "itkImageRegion.h"
 #include "itkVectorContainer.h"
 #include <set>
+#include "OTBSamplingExport.h"
 
 namespace otb
 {
@@ -36,7 +37,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 
-class ITK_EXPORT SamplingRateCalculator
+class OTBSampling_EXPORT SamplingRateCalculator
   : public itk::Object
 {
 public:

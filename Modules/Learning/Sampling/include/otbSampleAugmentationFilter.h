@@ -24,6 +24,7 @@
 #include "itkProcessObject.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbSampleAugmentation.h"
+#include "OTBSamplingExport.h"
 
 namespace otb
 {
@@ -42,7 +43,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 
-class ITK_EXPORT SampleAugmentationFilter :
+class OTBSampling_EXPORT SampleAugmentationFilter :
     public itk::ProcessObject
 {
 public:
