@@ -468,7 +468,7 @@ public:
     friend class ConstIterator;
     friend class ReverseIterator;
     /** typedef of the internal iterator */
-    typedef typename InternalContainerType::reverse_iterator InternalReverseConstIteratorType;
+    typedef typename InternalContainerType::const_reverse_iterator InternalReverseConstIteratorType;
     /** Constructor */
     ReverseConstIterator() {};
     /** Constructor with iternal iterator parameter */
