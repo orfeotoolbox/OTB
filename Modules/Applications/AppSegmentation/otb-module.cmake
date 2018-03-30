@@ -42,6 +42,7 @@ otb_module(OTBAppSegmentation
     OTBMorphologicalProfiles
     OTBLabelMap
     OTBProjection
+    OTBSampling
 
   TEST_DEPENDS
     OTBTestKernel
