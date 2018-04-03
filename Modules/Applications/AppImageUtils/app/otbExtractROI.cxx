@@ -249,62 +249,52 @@ private:
   void 
   DoUpdateParameters() override
   {
-    if( GetParameterString("mode") != "standard" )
-      {
-      this->DisableParameter("startx");
-      this->DisableParameter("starty");
-      this->DisableParameter("sizex");
-      this->DisableParameter("sizey");
-      }
-    else
-      {
-      this->EnableParameter("startx");
-      this->EnableParameter("starty");
-      this->EnableParameter("sizex");
-      this->EnableParameter("sizey");
-      }
-      
     if ( HasValue("in") )
       {
       ImageType* inImage = GetParameterImage("in");
       inImage->UpdateOutputInformation();
       ImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
 
-      bool userExtent = !HasUserValue( "mode.extent.ulx" ) \
-                     && !HasUserValue( "mode.extent.uly" ) \
-                     && !HasUserValue( "mode.extent.lrx" ) \
-                     && !HasUserValue( "mode.extent.lry" );
+      // bool userExtent = !HasUserValue( "mode.extent.ulx" ) \
+      //                && !HasUserValue( "mode.extent.uly" ) \
+      //                && !HasUserValue( "mode.extent.lrx" ) \
+      //                && !HasUserValue( "mode.extent.lry" );
 
-      bool userRadius = !HasUserValue( "mode.radius.r" ) \
-                     && !HasUserValue( "mode.radius.cx" ) \
-                     && !HasUserValue( "mode.radius.cy" );
+      // bool userRadius = !HasUserValue( "mode.radius.r" ) \
+      //                && !HasUserValue( "mode.radius.cx" ) \
+      //                && !HasUserValue( "mode.radius.cy" );
 
-      // Update the sizes only if the user has not defined a size
       ImageType::RegionType currentLargest;
-      currentLargest.SetSize( 0 , GetParameterInt("sizex") ); // need a methode to get default value
-      currentLargest.SetSize( 1 , GetParameterInt("sizey") ); // need a methode to get default value
-      currentLargest.SetIndex( 0, 0 );
-      currentLargest.SetIndex( 1, 0 );
-      if ( currentLargest != largestRegion )
+      currentLargest.SetSize( 0 , GetDefaultParameterInt("sizex") ); // need a methode to get default value
+      currentLargest.SetSize( 1 , GetDefaultParameterInt("sizey") ); // need a methode to get default value
+      currentLargest.SetIndex( 1 , GetDefaultParameterInt("starty") );
+      currentLargest.SetIndex( 0 , GetDefaultParameterInt("startx") );
+      // Update default only if largest has changed
+      if ( !(currentLargest == largestRegion) )
         {
+        std::cout<<"Reseting default value"<<std::endl;
         // Put the limit of the index and the size relative the image      
-        SetMaximumParameterIntValue("sizex", largestRegion.GetSize(0));      
-        SetMaximumParameterIntValue("sizey", largestRegion.GetSize(1));      
-        SetMaximumParameterIntValue("startx", largestRegion.GetSize(0));
-        SetMaximumParameterIntValue("starty", largestRegion.GetSize(1));
-        
+        SetMaximumParameterIntValue( "sizex" , largestRegion.GetSize(0) );
+        SetMaximumParameterIntValue( "sizey" , largestRegion.GetSize(1) );
+        SetMaximumParameterIntValue( "startx" , 
+          largestRegion.GetIndex(0) + largestRegion.GetSize(0) );
+        SetMaximumParameterIntValue( "starty" , 
+          largestRegion.GetIndex(1) + largestRegion.GetSize(1) );
+
         SetDefaultParameterInt( "sizex" , largestRegion.GetSize(0) );
         SetDefaultParameterInt( "sizey" , largestRegion.GetSize(1) );
+        SetDefaultParameterInt( "startx" , largestRegion.GetIndex(0) );
+        SetDefaultParameterInt( "starty" , largestRegion.GetIndex(1) );
         // if ( !HasUserValue("sizex") )
           // SetParameterInt( "sizex" , largestRegion.GetSize(0) );
         // if ( !HasUserValue("sizey") )
           // SetParameterInt( "sizey" , largestRegion.GetSize(1) );
 
         // Compute radius parameter with default sizex and sizey
-        if ( GetParameterString( "mode" ) == "radius" && userRadius )
+        // if ( GetParameterString( "mode" ) == "radius" && userRadius )
           ComputeRadiusFromIndex( inImage , largestRegion );
         // Compute extent parameter with default sizex and sizey
-        if ( GetParameterString( "mode" ) == "extent" && userExtent )
+        // if ( GetParameterString( "mode" ) == "extent" && userExtent )
           ComputeExtentFromIndex( inImage, largestRegion );
         }
 
@@ -327,34 +317,34 @@ private:
         }
 
       // Update the start and size parameter depending on the mode
-      if ( GetParameterString("mode") == "extent" && !userExtent)
+      if ( GetParameterString("mode") == "extent" )//&& !userExtent)
           ComputeIndexFromExtent();
-      if (GetParameterString("mode") == "radius" && !userRadius)
+      if (GetParameterString("mode") == "radius" )//&& !userRadius)
           ComputeIndexFromRadius();
       
       // Crop the roi region to be included in the largest possible
       // region
-      if(!this->CropRegionOfInterest())
+   /*   if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
         SetParameterInt("startx",0);
         SetParameterInt("starty",0);
         this->CropRegionOfInterest();
-        }
+        }*/
 
       if(GetParameterString("mode")=="fit")
         {
-        this->SetParameterRole("startx",Role_Output);
-        this->SetParameterRole("starty",Role_Output);
-        this->SetParameterRole("sizex",Role_Output);
-        this->SetParameterRole("sizey",Role_Output);
+        SetParameterRole("startx",Role_Output);
+        SetParameterRole("starty",Role_Output);
+        SetParameterRole("sizex",Role_Output);
+        SetParameterRole("sizey",Role_Output);
         }
       else
         {
-        this->SetParameterRole("startx",Role_Input);
-        this->SetParameterRole("starty",Role_Input);
-        this->SetParameterRole("sizex",Role_Input);
-        this->SetParameterRole("sizey",Role_Input);
+        SetParameterRole("startx",Role_Input);
+        SetParameterRole("starty",Role_Input);
+        SetParameterRole("sizex",Role_Input);
+        SetParameterRole("sizey",Role_Input);
         }
       }
 
@@ -365,6 +355,10 @@ private:
       MandatoryOff("starty");
       MandatoryOff("sizex");
       MandatoryOff("sizey");
+      DisableParameter("startx");
+      DisableParameter("starty");
+      DisableParameter("sizex");
+      DisableParameter("sizey");
       }
     else
       {
@@ -372,6 +366,10 @@ private:
       MandatoryOn("starty");
       MandatoryOn("sizex");
       MandatoryOn("sizey");
+      EnableParameter("startx");
+      EnableParameter("starty");
+      EnableParameter("sizex");
+      EnableParameter("sizey");
       }
 
     if ( GetParameterString( "mode" ) == "fit" && HasValue( "mode.fit.im" ) )
@@ -474,7 +472,6 @@ private:
       SetParameterInt( "sizex", lri_out[0] - uli_out[0] + 1);
       SetParameterInt( "sizey", lri_out[1] - uli_out[1] + 1);
       }
-      this->CropRegionOfInterest();
   }
 
   void
@@ -783,7 +780,7 @@ private:
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
-      FloatVectorImageType::Pointer referencePtr = this->GetParameterImage("mode.fit.im");
+      FloatVectorImageType::Pointer referencePtr = GetParameterImage("mode.fit.im");
       referencePtr->UpdateOutputInformation();
 
       RSTransformType::Pointer rsTransform = RSTransformType::New();
@@ -843,7 +840,7 @@ private:
 
       }
 
-    this->CropRegionOfInterest();
+    CropRegionOfInterest();
 
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
     extractROIFilter->SetInput(inImage);
