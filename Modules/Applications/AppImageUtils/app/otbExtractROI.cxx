@@ -255,50 +255,38 @@ private:
       inImage->UpdateOutputInformation();
       ImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
 
-      // bool userExtent = !HasUserValue( "mode.extent.ulx" ) \
-      //                && !HasUserValue( "mode.extent.uly" ) \
-      //                && !HasUserValue( "mode.extent.lrx" ) \
-      //                && !HasUserValue( "mode.extent.lry" );
-
-      // bool userRadius = !HasUserValue( "mode.radius.r" ) \
-      //                && !HasUserValue( "mode.radius.cx" ) \
-      //                && !HasUserValue( "mode.radius.cy" );
-
       ImageType::RegionType currentLargest;
-      currentLargest.SetSize( 0 , GetDefaultParameterInt("sizex") ); // need a methode to get default value
-      currentLargest.SetSize( 1 , GetDefaultParameterInt("sizey") ); // need a methode to get default value
+      currentLargest.SetSize( 0 , GetDefaultParameterInt("sizex") );
+      currentLargest.SetSize( 1 , GetDefaultParameterInt("sizey") );
       currentLargest.SetIndex( 1 , GetDefaultParameterInt("starty") );
       currentLargest.SetIndex( 0 , GetDefaultParameterInt("startx") );
       // Update default only if largest has changed
-      if ( !(currentLargest == largestRegion) )
+      if ( currentLargest != largestRegion )
         {
-        std::cout<<"Reseting default value"<<std::endl;
-        // Put the limit of the index and the size relative the image      
+        // Setting maximum value
         SetMaximumParameterIntValue( "sizex" , largestRegion.GetSize(0) );
         SetMaximumParameterIntValue( "sizey" , largestRegion.GetSize(1) );
         SetMaximumParameterIntValue( "startx" , 
           largestRegion.GetIndex(0) + largestRegion.GetSize(0) );
         SetMaximumParameterIntValue( "starty" , 
           largestRegion.GetIndex(1) + largestRegion.GetSize(1) );
-
+        // Setting default value
         SetDefaultParameterInt( "sizex" , largestRegion.GetSize(0) );
         SetDefaultParameterInt( "sizey" , largestRegion.GetSize(1) );
         SetDefaultParameterInt( "startx" , largestRegion.GetIndex(0) );
         SetDefaultParameterInt( "starty" , largestRegion.GetIndex(1) );
-        // if ( !HasUserValue("sizex") )
-          // SetParameterInt( "sizex" , largestRegion.GetSize(0) );
-        // if ( !HasUserValue("sizey") )
-          // SetParameterInt( "sizey" , largestRegion.GetSize(1) );
-
-        // Compute radius parameter with default sizex and sizey
-        // if ( GetParameterString( "mode" ) == "radius" && userRadius )
-          ComputeRadiusFromIndex( inImage , largestRegion );
-        // Compute extent parameter with default sizex and sizey
-        // if ( GetParameterString( "mode" ) == "extent" && userExtent )
-          ComputeExtentFromIndex( inImage, largestRegion );
+        // Setting actual value
+        if ( !HasUserValue("sizex") )
+          SetParameterFloat( "sizex" , 
+            GetDefaultParameterFloat( "sizex" ) );
+        if ( !HasUserValue("sizey") )
+          SetParameterFloat( "sizey" , 
+            GetDefaultParameterFloat( "sizey" ) );
+        // Compute radius parameters default value
+        ComputeRadiusFromIndex( inImage , largestRegion );
+        // Compute extent parameters default value
+        ComputeExtentFromIndex( inImage, largestRegion );
         }
-
-
 
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
       ListViewParameter *clParam = 
@@ -317,20 +305,10 @@ private:
         }
 
       // Update the start and size parameter depending on the mode
-      if ( GetParameterString("mode") == "extent" )//&& !userExtent)
+      if ( GetParameterString("mode") == "extent" )
           ComputeIndexFromExtent();
-      if (GetParameterString("mode") == "radius" )//&& !userRadius)
+      if (GetParameterString("mode") == "radius" )
           ComputeIndexFromRadius();
-      
-      // Crop the roi region to be included in the largest possible
-      // region
-   /*   if(!this->CropRegionOfInterest())
-        {
-        // Put the index of the ROI to origin and try to crop again
-        SetParameterInt("startx",0);
-        SetParameterInt("starty",0);
-        this->CropRegionOfInterest();
-        }*/
 
       if(GetParameterString("mode")=="fit")
         {
