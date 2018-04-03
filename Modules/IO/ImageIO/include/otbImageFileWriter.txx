@@ -281,6 +281,8 @@ ImageFileWriter<TInputImage>
     itkExceptionMacro(<< "No input to writer");
     }
 
+  otb::Logger::Instance()->LogSetupInformation();
+
   /** Parse streaming modes */
   if(m_FilenameHelper->StreamingTypeIsSet())
     {
