@@ -249,6 +249,21 @@ private:
   void 
   DoUpdateParameters() override
   {
+    if( GetParameterString("mode") != "standard" )
+      {
+      this->DisableParameter("startx");
+      this->DisableParameter("starty");
+      this->DisableParameter("sizex");
+      this->DisableParameter("sizey");
+      }
+    else
+      {
+      this->EnableParameter("startx");
+      this->EnableParameter("starty");
+      this->EnableParameter("sizex");
+      this->EnableParameter("sizey");
+      }
+      
     if ( HasValue("in") )
       {
       ImageType* inImage = GetParameterImage("in");
@@ -265,19 +280,34 @@ private:
                      && !HasUserValue( "mode.radius.cy" );
 
       // Update the sizes only if the user has not defined a size
-      if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
+      ImageType::RegionType currentLargest;
+      currentLargest.SetSize( 0 , GetParameterInt("sizex") ); // need a methode to get default value
+      currentLargest.SetSize( 1 , GetParameterInt("sizey") ); // need a methode to get default value
+      currentLargest.SetIndex( 0, 0 );
+      currentLargest.SetIndex( 1, 0 );
+      if ( currentLargest != largestRegion )
         {
-        SetParameterInt("sizex",largestRegion.GetSize()[0]);
-        SetParameterInt("sizey",largestRegion.GetSize()[1]);
-
-        // Compute extent parameter with default sizex and sizey
-        if ( GetParameterString( "mode" ) == "extent" && userExtent )
-          ComputeExtentFromIndex( inImage, largestRegion );
+        // Put the limit of the index and the size relative the image      
+        SetMaximumParameterIntValue("sizex", largestRegion.GetSize(0));      
+        SetMaximumParameterIntValue("sizey", largestRegion.GetSize(1));      
+        SetMaximumParameterIntValue("startx", largestRegion.GetSize(0));
+        SetMaximumParameterIntValue("starty", largestRegion.GetSize(1));
+        
+        SetDefaultParameterInt( "sizex" , largestRegion.GetSize(0) );
+        SetDefaultParameterInt( "sizey" , largestRegion.GetSize(1) );
+        // if ( !HasUserValue("sizex") )
+          // SetParameterInt( "sizex" , largestRegion.GetSize(0) );
+        // if ( !HasUserValue("sizey") )
+          // SetParameterInt( "sizey" , largestRegion.GetSize(1) );
 
         // Compute radius parameter with default sizex and sizey
         if ( GetParameterString( "mode" ) == "radius" && userRadius )
           ComputeRadiusFromIndex( inImage , largestRegion );
+        // Compute extent parameter with default sizex and sizey
+        if ( GetParameterString( "mode" ) == "extent" && userExtent )
+          ComputeExtentFromIndex( inImage, largestRegion );
         }
+
 
 
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
@@ -296,20 +326,11 @@ private:
           }
         }
 
-      // Put the limit of the index and the size relative the image
-      
-      SetMaximumParameterIntValue("sizex", largestRegion.GetSize(0));      
-      SetMaximumParameterIntValue("sizey", largestRegion.GetSize(1));      
-      SetMaximumParameterIntValue("startx", largestRegion.GetSize(0));
-      SetMaximumParameterIntValue("starty", largestRegion.GetSize(1));
-
-      
       // Update the start and size parameter depending on the mode
       if ( GetParameterString("mode") == "extent" && !userExtent)
           ComputeIndexFromExtent();
       if (GetParameterString("mode") == "radius" && !userRadius)
           ComputeIndexFromRadius();
-
       
       // Crop the roi region to be included in the largest possible
       // region
@@ -327,24 +348,13 @@ private:
         this->SetParameterRole("starty",Role_Output);
         this->SetParameterRole("sizex",Role_Output);
         this->SetParameterRole("sizey",Role_Output);
-        this->DisableParameter("startx");
-        this->DisableParameter("starty");
-        this->DisableParameter("sizex");
-        this->DisableParameter("sizey");
         }
-
-      else if(GetParameterString("mode")=="standard" || 
-              GetParameterString("mode")=="extent" ||
-              GetParameterString("mode")== "radius" )
+      else
         {
         this->SetParameterRole("startx",Role_Input);
         this->SetParameterRole("starty",Role_Input);
         this->SetParameterRole("sizex",Role_Input);
         this->SetParameterRole("sizey",Role_Input);
-        this->EnableParameter("startx");
-        this->EnableParameter("starty");
-        this->EnableParameter("sizex");
-        this->EnableParameter("sizey");
         }
       }
 
@@ -636,7 +646,7 @@ private:
     if ( GetParameterString("mode.radius.unitr") == "pxl" )
       {
       int rad = std::min( centeri[ 0 ], centeri[ 1 ] );
-      SetParameterFloat( "mode.radius.r" , rad);
+      SetDefaultParameterFloat( "mode.radius.r" , rad);
       }
     if ( GetParameterString("mode.radius.unitr") == "phy" )
       {
@@ -645,19 +655,22 @@ private:
       input->TransformIndexToPhysicalPoint(helpRxi,helpRxp);
       input->TransformIndexToPhysicalPoint(helpRyi,helpRyp);
       float rad = std::min( helpRxp[0] - helpRyp[0] , helpRyp[1] - helpRxp[1] );
-      SetParameterFloat( "mode.radius.r" , rad);
+      SetDefaultParameterFloat( "mode.radius.r" , rad);
       }
+    // if ( !HasUserValue( "mode.radius.r" )
+      // setvalueasdefault
+
     if ( GetParameterString("mode.radius.unitc") == "pxl" )
       {
-      SetParameterFloat( "mode.radius.cx" , centeri[0]);
-      SetParameterFloat( "mode.radius.cy" , centeri[1]) ;
+      SetDefaultParameterFloat( "mode.radius.cx" , centeri[0] );
+      SetDefaultParameterFloat( "mode.radius.cy" , centeri[1] );
       }
     if ( GetParameterString("mode.radius.unitc") == "phy" )
       {
-      itk::Point<float, 2> centerp , helpRp;
+      itk::Point<float, 2> centerp ;
       input->TransformIndexToPhysicalPoint(centeri,centerp);
-      SetParameterFloat( "mode.radius.cx" , centerp[0]);
-      SetParameterFloat( "mode.radius.cy" , centerp[1]) ;
+      SetDefaultParameterFloat( "mode.radius.cx" , centerp[0] );
+      SetDefaultParameterFloat( "mode.radius.cy" , centerp[1] );
       }
     if ( GetParameterString("mode.radius.unitc") == "lonlat" )
       {
@@ -668,9 +681,13 @@ private:
       itk::Point<float, 2> centerp_in,  centerp_out;
       input->TransformIndexToPhysicalPoint(centeri,centerp_in);
       centerp_out = rsTransform->TransformPoint( centerp_in );
-      SetParameterFloat( "mode.radius.cx" , centerp_out[ 0 ]);
-      SetParameterFloat( "mode.radius.cy" , centerp_out[ 1 ]);
+      SetDefaultParameterFloat( "mode.radius.cx" , centerp_out[ 0 ]);
+      SetDefaultParameterFloat( "mode.radius.cy" , centerp_out[ 1 ]);
       }
+    // if ( !HasUserValue( "mode.radius.cx"))
+      //setasdefault
+    // if ( !HasUserValue( "mode.radius.cy"))
+      //setasdefault
   }
 
   void 
