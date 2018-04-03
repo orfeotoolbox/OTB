@@ -380,6 +380,17 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         spacing[i] = 1.0;
         }
       origin[i] = 0.5*spacing[i];
+      for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
+        {
+        if (i == j)
+          {
+          direction[j][i] = 1.0;
+          }
+        else
+          {
+          direction[j][i] = 0.0;
+          }
+        }
       }
     }
 
