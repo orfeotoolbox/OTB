@@ -412,18 +412,17 @@ private:
   ComputeIndexFromExtent()
   {
     assert( GetParameterString( "mode" ) == "extent" );
-    int pixelValue = -1 ;
     // Compute standard parameter depending on the unit chosen by the user
     if (GetParameterString( "mode.extent.unit" ) == "pxl" )
       {
-      pixelValue = std::round( GetParameterFloat( "mode.extent.ulx" ) );
+      int pixelValue = std::round( GetParameterFloat( "mode.extent.ulx" ) );
       SetParameterInt( "startx", pixelValue);
-      pixelValue = std::round( GetParameterFloat( "mode.extent.lrx" ) \
+      pixelValue = std::round( GetParameterFloat( "mode.extent.lrx" )
                    - pixelValue ) + 1 ;
       SetParameterInt( "sizex", pixelValue);
       pixelValue = std::round( GetParameterFloat( "mode.extent.uly" ) );
       SetParameterInt( "starty", pixelValue);
-      pixelValue = std::round( GetParameterFloat( "mode.extent.lry" ) \
+      pixelValue = std::round( GetParameterFloat( "mode.extent.lry" )
                    - pixelValue ) + 1 ;
       SetParameterInt( "sizey", pixelValue);
       }
@@ -447,7 +446,7 @@ private:
       SetParameterInt( "sizey", lri[1] - uli[1] + 1);
       
       }
-    else if( GetParameterString( "mode.extent.unit" ) == "lonlat" )
+    else // if( GetParameterString( "mode.extent.unit" ) == "lonlat" )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       ImageType* inImage = GetParameterImage("in");
@@ -484,24 +483,24 @@ private:
     lri[ 1 ] = largestRegion.GetSize()[1];
     if ( GetParameterString( "mode.extent.unit" ) == "pxl" )
       {
-      SetParameterFloat("mode.extent.ulx", uli[0]);
-      SetParameterFloat("mode.extent.uly", uli[1]);
-      SetParameterFloat("mode.extent.lrx", lri[0]);
-      SetParameterFloat("mode.extent.lry", lri[1]);
+      SetDefaultParameterFloat("mode.extent.ulx", uli[0]);
+      SetDefaultParameterFloat("mode.extent.uly", uli[1]);
+      SetDefaultParameterFloat("mode.extent.lrx", lri[0]);
+      SetDefaultParameterFloat("mode.extent.lry", lri[1]);
       }
     else if ( GetParameterString( "mode.extent.unit" ) == "phy" )
       {
       itk::Point<float, 2> ulp,  lrp;
 
       input->TransformIndexToPhysicalPoint(uli,ulp);
-      SetParameterFloat("mode.extent.ulx",ulp[0]);
-      SetParameterFloat("mode.extent.uly",ulp[1]);
+      SetDefaultParameterFloat("mode.extent.ulx",ulp[0]);
+      SetDefaultParameterFloat("mode.extent.uly",ulp[1]);
 
       input->TransformIndexToPhysicalPoint(lri,lrp);
-      SetParameterFloat("mode.extent.lrx",lrp[0]);
-      SetParameterFloat("mode.extent.lry",lrp[1]);  
+      SetDefaultParameterFloat("mode.extent.lrx",lrp[0]);
+      SetDefaultParameterFloat("mode.extent.lry",lrp[1]);  
       }
-    else if ( GetParameterString( "mode.extent.unit" ) == "lonlat" )
+    else // if ( GetParameterString( "mode.extent.unit" ) == "lonlat" )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       rsTransform->SetInputKeywordList( input->GetImageKeywordlist() );
@@ -510,14 +509,26 @@ private:
       itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
       input->TransformIndexToPhysicalPoint(uli,ulp_in);
       ulp_out = rsTransform->TransformPoint( ulp_in );
-      SetParameterFloat( "mode.extent.ulx" , ulp_out[ 0 ]);
-      SetParameterFloat( "mode.extent.uly" , ulp_out[ 1 ]);
+      SetDefaultParameterFloat( "mode.extent.ulx" , ulp_out[ 0 ]);
+      SetDefaultParameterFloat( "mode.extent.uly" , ulp_out[ 1 ]);
 
       input->TransformIndexToPhysicalPoint( lri , lrp_in );
       lrp_out = rsTransform->TransformPoint( lrp_in );
-      SetParameterFloat( "mode.extent.lrx" , lrp_out[ 0 ]);
-      SetParameterFloat( "mode.extent.lry" , lrp_out[ 1 ]);
+      SetDefaultParameterFloat( "mode.extent.lrx" , lrp_out[ 0 ]);
+      SetDefaultParameterFloat( "mode.extent.lry" , lrp_out[ 1 ]);
       }
+    if ( !HasUserValue( "mode.extent.ulx" ) )
+      SetParameterFloat( "mode.extent.ulx" , 
+        GetDefaultParameterFloat( "mode.extent.ulx" ) );
+    if ( !HasUserValue( "mode.extent.uly" ) )
+      SetParameterFloat( "mode.extent.uly" , 
+        GetDefaultParameterFloat( "mode.extent.uly" ) );
+    if ( !HasUserValue( "mode.extent.lrx" ) )
+      SetParameterFloat( "mode.extent.lrx" , 
+        GetDefaultParameterFloat( "mode.extent.lrx" ) );
+    if ( !HasUserValue( "mode.extent.lry" ) )
+      SetParameterFloat( "mode.extent.lry" , 
+        GetDefaultParameterFloat( "mode.extent.lry" ) );
   }
 
   void
@@ -526,7 +537,7 @@ private:
     int pixelValue = -1;
     assert( GetParameterString( "mode" ) == "radius" );
     // First compute sizex sizey thanks to the radius
-    if ( HasUserValue( "mode.radius.r" ) )
+    if ( HasValue( "mode.radius.r" ) )
       {
       if ( GetParameterString( "mode.radius.unitr" ) == "pxl" )
         {
@@ -577,20 +588,19 @@ private:
       }
 
     // Then compute startx and starty
-    bool size = ( HasValue("sizex")  && HasValue("sizey") );
-    if ( size ) 
+    if ( HasValue("sizex") && HasValue("sizey") ) 
       {
       int radiusxi = GetParameterInt("sizex") / 2 ;
       int radiusyi = GetParameterInt("sizey") / 2 ;
 
-      if ( GetParameterString( "mode.radius.unitc" ) == "pxl" && size )
+      if ( GetParameterString( "mode.radius.unitc" ) == "pxl" )
         {
         pixelValue = std::round(GetParameterFloat( "mode.radius.cx" ));
         SetParameterInt( "startx", pixelValue - radiusxi);
         pixelValue = std::round(GetParameterFloat( "mode.radius.cy" ));
         SetParameterInt( "starty", pixelValue - radiusyi);
         }
-      if ( GetParameterString( "mode.radius.unitc" ) == "phy" && size ) 
+      else if ( GetParameterString( "mode.radius.unitc" ) == "phy" ) 
         {
         ImageType * inImage = GetParameterImage("in");
         itk::Point<float, 2> centerp;
@@ -604,7 +614,7 @@ private:
           SetParameterInt( "starty", centeri[1] - radiusyi);
           }
         }
-      if ( GetParameterString( "mode.radius.unitc" ) == "lonlat" && size )
+      else // if ( GetParameterString( "mode.radius.unitc" ) == "lonlat" )
         {
         ImageType* inImage = GetParameterImage("in");
         RSTransformType::Pointer rsTransform = RSTransformType::New();
@@ -645,7 +655,7 @@ private:
       int rad = std::min( centeri[ 0 ], centeri[ 1 ] );
       SetDefaultParameterFloat( "mode.radius.r" , rad);
       }
-    if ( GetParameterString("mode.radius.unitr") == "phy" )
+    else // if  ( GetParameterString("mode.radius.unitr") == "phy" )
       {
       itk::Point<float, 2> centerp , helpRxp, helpRyp;
       input->TransformIndexToPhysicalPoint(centeri,centerp);
@@ -654,22 +664,25 @@ private:
       float rad = std::min( helpRxp[0] - helpRyp[0] , helpRyp[1] - helpRxp[1] );
       SetDefaultParameterFloat( "mode.radius.r" , rad);
       }
-    // if ( !HasUserValue( "mode.radius.r" )
-      // setvalueasdefault
 
+    if ( !HasUserValue( "mode.radius.r" ) )
+      SetParameterFloat( "mode.radius.r" , 
+        GetDefaultParameterFloat( "mode.radius.r" ) );
+
+    // Center
     if ( GetParameterString("mode.radius.unitc") == "pxl" )
       {
       SetDefaultParameterFloat( "mode.radius.cx" , centeri[0] );
       SetDefaultParameterFloat( "mode.radius.cy" , centeri[1] );
       }
-    if ( GetParameterString("mode.radius.unitc") == "phy" )
+    else if ( GetParameterString("mode.radius.unitc") == "phy" )
       {
       itk::Point<float, 2> centerp ;
       input->TransformIndexToPhysicalPoint(centeri,centerp);
       SetDefaultParameterFloat( "mode.radius.cx" , centerp[0] );
       SetDefaultParameterFloat( "mode.radius.cy" , centerp[1] );
       }
-    if ( GetParameterString("mode.radius.unitc") == "lonlat" )
+    else // if ( GetParameterString("mode.radius.unitc") == "lonlat" )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       rsTransform->SetInputKeywordList( input->GetImageKeywordlist() );
@@ -681,10 +694,12 @@ private:
       SetDefaultParameterFloat( "mode.radius.cx" , centerp_out[ 0 ]);
       SetDefaultParameterFloat( "mode.radius.cy" , centerp_out[ 1 ]);
       }
-    // if ( !HasUserValue( "mode.radius.cx"))
-      //setasdefault
-    // if ( !HasUserValue( "mode.radius.cy"))
-      //setasdefault
+    if ( !HasUserValue( "mode.radius.cx") )
+      SetParameterFloat( "mode.radius.cx" , 
+        GetDefaultParameterFloat( "mode.radius.cx" ) );
+    if ( !HasUserValue( "mode.radius.cy") )
+      SetParameterFloat( "mode.radius.cy" , 
+        GetDefaultParameterFloat( "mode.radius.cy" ) );
   }
 
   void 
