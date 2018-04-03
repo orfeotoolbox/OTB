@@ -76,7 +76,6 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_OutputVectorData] = "QgsProcessingParameterVectorDestination";
   parameterTypeToString[ParameterType_OutputFilename] = "QgsProcessingParameterFileDestination";
   parameterTypeToString[ParameterType_Directory] = "QgsProcessingParameterFile";
-  parameterTypeToString[ParameterType_ListView] = "LISTVIEW";
   //TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
   
@@ -86,7 +85,6 @@ int main(int argc, char* argv[])
 
   std::ofstream dFile;
   dFile.open (module + ".txt", std::ios::out);
-
 
   std::string output_parameter_name;
   bool hasRasterOutput = false;
