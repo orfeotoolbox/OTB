@@ -308,3 +308,55 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                               ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
                               ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
                      )
+                     
+#----------- LargeScaleConnectedComponent TESTS ----
+otb_test_application(NAME     apTvLargeScaleConnectedComponent
+                     APP      LargeScaleConnectedComponent.cxx
+                     OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
+                              -out ${TEMP}/LargeScaleConnectedComponent.shp
+                              -expr "distance<10"
+                              -filter "nbpixels<10"
+                              -mask "b1>15"
+                     )
+                     
+#----------- ImageConnectedComponentSegmentation TESTS ----
+otb_test_application(NAME     apTvImageConnectedComponentSegmentation
+                     APP      ImageConnectedComponentSegmentation
+                     OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
+                              -out ${TEMP}/apTvImageConnectedComponentSegmentation.tif
+                              -expr "distance<10"
+                              -mask "b1>15"
+                     )
+
+#----------- LabelImageVectorization TESTS -----------
+otb_test_application(NAME     apTvLabelImageVectorization
+                     APP      LabelImageVectorization
+                     OPTIONS  -in ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
+                              -out ${TEMP}/apTvLabelImageVectorization.shp
+                              -expr "distance<10"
+                              -mask "b1>15"
+                     )
+
+#----------- ComputePolygonsGeometricFeatures TESTS -----------
+otb_test_application(NAME     apTvComputePolygonsGeometricFeatures
+                     APP      ComputePolygonsGeometricFeatures
+                     OPTIONS  -in ${INPUTDATA}/Classification/VectorData_QB1.shp
+                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
+                     )
+
+
+#----------- ComputePolygonsSpectralFeatures TESTS -----------
+otb_test_application(NAME     apTvComputePolygonsSpectralFeatures
+                     APP      ComputePolygonsSpectralFeatures
+                     OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                              -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
+                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
+                     )
+
+#----------- ObjectBasedFiltering TESTS -----------
+otb_test_application(NAME     apTvObjectBasedFiltering
+                     APP      ObjectBasedFiltering
+                     OPTIONS  -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
+                              -expr "class < 3"
+                              -out ${TEMP}/apTvObjectBasedFiltering.shp
+                     )
