@@ -828,23 +828,21 @@ private:
 
     this->CropRegionOfInterest();
 
-    m_ExtractROIFilter = ExtractROIFilterType::New();
-    m_ExtractROIFilter->SetInput(inImage);
-    m_ExtractROIFilter->SetStartX(GetParameterInt("startx"));
-    m_ExtractROIFilter->SetStartY(GetParameterInt("starty"));
-    m_ExtractROIFilter->SetSizeX(GetParameterInt("sizex"));
-    m_ExtractROIFilter->SetSizeY(GetParameterInt("sizey"));
+    ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+    extractROIFilter->SetInput(inImage);
+    extractROIFilter->SetStartX(GetParameterInt("startx"));
+    extractROIFilter->SetStartY(GetParameterInt("starty"));
+    extractROIFilter->SetSizeX(GetParameterInt("sizex"));
+    extractROIFilter->SetSizeY(GetParameterInt("sizey"));
 
     for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx)
       {
-      m_ExtractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
+      extractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
       }
 
-    SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());
+    SetParameterOutputImage("out", extractROIFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  ExtractROIFilterType::Pointer   m_ExtractROIFilter;
-
 };
 
 }

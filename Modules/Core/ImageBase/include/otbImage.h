@@ -49,18 +49,18 @@ namespace internal
   }
 
   template < class InputImage , typename SpacingType >
-  void SetSignedSpacing( InputImage input , SpacingType spacing )
+  void SetSignedSpacing( InputImage *input , SpacingType spacing )
   {
     // TODO check for spacing size ==> error
     typename InputImage::DirectionType direction = input->GetDirection();
-    for ( unsigned int i = 0 ; i < InputImage::VImageDimension ; i++ )
+    for ( unsigned int i = 0 ; i < InputImage::ImageDimension ; i++ )
       {
       // TODO check if spacing[i] = 0 ==> error
       if ( spacing[ i ] < 0 )
         {
         if ( direction[i][i] > 0 )
           {
-          for ( unsigned int j = 0 ; j < InputImage::VImageDimension ; j++ )
+          for ( unsigned int j = 0 ; j < InputImage::ImageDimension ; j++ )
             {
             direction[j][i] = - direction[j][i];
             }

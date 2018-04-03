@@ -217,13 +217,13 @@ ApplicationLauncher
     ApplicationLauncher::NewOtbApplicationWidget( appName, isStandalone );
 
   assert( appWidget!=NULL );
-  assert( appWidget->GetApplication() );
+  assert( appWidget->GetModel()->GetApplication() );
 
   QMainWindow * mainWindow = new QMainWindow( p, flags );
 
   mainWindow->setWindowTitle(
     QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
-    .arg( appWidget->GetApplication()->GetDocName() )
+    .arg( appWidget->GetModel()->GetApplication()->GetDocName() )
   );
 
   mainWindow->setWindowIcon( QIcon( ":/otb_small.png" ) );
@@ -251,11 +251,11 @@ ApplicationLauncher
     );
 
   assert( appWidget!=NULL );
-  assert( appWidget->GetApplication() );
+  assert( appWidget->GetModel()->GetApplication() );
 
   appWidget->setWindowTitle(
     QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
-    .arg( appWidget->GetApplication()->GetDocName() )
+    .arg( appWidget->GetModel()->GetApplication()->GetDocName() )
   );
 
   appWidget->setWindowIcon( QIcon( ":/icons/process" ) );

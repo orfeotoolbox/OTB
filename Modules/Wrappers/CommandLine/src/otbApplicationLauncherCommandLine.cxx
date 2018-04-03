@@ -270,7 +270,7 @@ int main(int argc, char* argv[])
   if (argc < 2)
   {
       ShowUsage(argv);
-      return false;
+      return EXIT_FAILURE;
   }
 
   std::vector<std::string> vexp;
@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
   if (vexp.empty())
   {
     ShowUsage(argv);
-    return false;
+    return EXIT_FAILURE;
   }
 
   bool success = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();

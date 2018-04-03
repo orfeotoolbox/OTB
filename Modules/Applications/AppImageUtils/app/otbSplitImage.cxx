@@ -103,13 +103,13 @@ private:
     ext   = itksys::SystemTools::GetFilenameExtension(ofname);
 
     // Set the extract filter input image
-    m_Filter = FilterType::New();
-    m_Filter->SetInput(inImage);
+    FilterType::Pointer filter = FilterType::New();
+    filter->SetInput(inImage);
 
     for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
       {
       // Set the channel to extract
-      m_Filter->SetChannel(i+1);
+      filter->SetChannel(i+1);
 
       // build the current output filename
       std::ostringstream oss;
@@ -129,7 +129,7 @@ private:
       // Set the filename of the current output image
       paramOut->SetFileName(oss.str());
       otbAppLogINFO(<< "File: "<<paramOut->GetFileName() << " will be written.");
-      paramOut->SetValue(m_Filter->GetOutput());
+      paramOut->SetValue(filter->GetOutput());
       paramOut->SetPixelType(this->GetParameterOutputImagePixelType("out"));
       // Add the current level to be written
       paramOut->InitializeWriters();
@@ -140,9 +140,8 @@ private:
     // Disable the output Image parameter to avoid writing
     // the last image (Application::ExecuteAndWriteOutput method)
     DisableParameter("out");
+    RegisterPipeline();
   }
-
-  FilterType::Pointer        m_Filter;
 };
 }
 }

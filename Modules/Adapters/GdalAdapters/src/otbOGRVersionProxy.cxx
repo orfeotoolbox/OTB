@@ -19,6 +19,7 @@
  */
 
 #include "otbOGRVersionProxy.h"
+#include "otbOGRHelpers.h"
 
 #include "itkMacro.h"
 
@@ -60,12 +61,18 @@ OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
 }
 
 
-GDALDatasetType * Open(const char * filename, bool readOnly)
+GDALDatasetType * Open(const char * filename, bool readOnly , std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000
+  (void)options;
   return OGRSFDriverRegistrar::Open(filename,!readOnly);
 #else
-  return (GDALDatasetType *)GDALOpenEx(filename, (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,NULL,NULL,NULL);
+  return (GDALDatasetType *)GDALOpenEx(
+      filename, 
+      (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
+      NULL,
+      otb::ogr::StringListConverter( options ).to_ogr(),
+      NULL);
 #endif
 }
 
@@ -78,9 +85,10 @@ void Close(GDALDatasetType * dataset)
 #endif
 }
 
-GDALDatasetType * Create(GDALDriverType * driver, const char * name)
+GDALDatasetType * Create(GDALDriverType * driver, const char * name ,  std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000
+  (void)options;
   GDALDatasetType * ds = driver->CreateDataSource(name);
 
   if(ds)
@@ -88,7 +96,12 @@ GDALDatasetType * Create(GDALDriverType * driver, const char * name)
 
   return ds;
 #else
-  return driver->Create(name,0,0,0,GDT_Unknown,NULL);
+  return driver->Create( name ,
+                         0 ,
+                         0 ,
+                         0 ,
+                         GDT_Unknown ,
+                         otb::ogr::StringListConverter( options ).to_ogr() );
 #endif
 }
 

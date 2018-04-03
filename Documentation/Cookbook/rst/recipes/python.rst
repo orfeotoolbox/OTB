@@ -173,6 +173,142 @@ implementation does not break it, for instance by using an internal
 writer to write intermediate data. In this case, execution should
 still be correct, but some intermediate data will be read or written.
 
+Interactions with OTB pipeline
+------------------------------
+
+[Since OTB 6.6]
+
+The application framework has been extended in order to provide ways to
+interact with the pipelines inside each application. It applies only to
+applications that use input or output images. Let's check what are the 
+functions added to the ``Application`` class. There are a lot of getter 
+functions:
+
++---------------------------------+---------------------------------------+
+| Function name                   | return value                          |
++=================================+=======================================+
+| ``GetImageOrigin(...)``         | origin of the image (physical position|
+|                                 | of the first pixel center)            |
++---------------------------------+---------------------------------------+
+| ``GetImageSpacing(...)``        | signed spacing of the image           |
++---------------------------------+---------------------------------------+
+| ``GetImageSize(...)``           | size of the LargestPossibleRegion     |
++---------------------------------+---------------------------------------+
+| ``GetImageNbBands(...)``        | number of components per pixel        |
++---------------------------------+---------------------------------------+
+| ``GetImageProjection(...)``     | Projection WKT string                 |
++---------------------------------+---------------------------------------+
+| ``GetImageKeywordlist(...)``    | Ossim keywordlist (sensor model)      |
++---------------------------------+---------------------------------------+
+| ``GetImageMetaData(...)``       | the entire MetaDataDictionary         |
++---------------------------------+---------------------------------------+
+| ``GetImageRequestedRegion(...)``| requested region                      |
++---------------------------------+---------------------------------------+
+| ``GetImageBasePixelType(...)``  | pixel type of the underlying          |
+|                                 | Image/VectorImage.                    |
++---------------------------------+---------------------------------------+
+
+All these getters functions use the following arguments:
+
+* ``key``: a string containing the key of the image parameter
+* ``idx``: an optional index (default is 0) that can be used to access ImageList
+  parameters transparently
+
+There is also a function to send orders to the pipeline:
+
+  ``PropagateRequestedRegion(key, region, idx=0)``: sets a given RequestedRegion
+  on the image and propagate it, returns the memory print estimation. This function
+  can be used to measure the requested portion of input images necessary to produce
+  an extract of the full output.
+
+Note: a requested region (like other regions in the C++ API of otb::Image) is 
+just a pair of an image index and a size, that define a rectangular extract of
+the full image.
+
+This set of function has been used to enhance the bridge between OTB images
+and Numpy arrays. There are now import and export functions available in
+Python that preserve the metadata of the image during conversions to Numpy
+arrays:
+
+* ``ExportImage(self, key)``: exports an output image parameter into a Python
+  dictionary.
+* ``ImportImage(self, key, dict, index=0)``: imports the image from a Python
+  dictionary into an image parameter (as a monoband image).
+* ``ImportVectorImage(self, key, dict, index=0)``: imports the image from a
+  Python dictionary into an image parameter (as a multiband image).
+
+The Python dictionary used has the following entries:
+
+  * ``'array'``: the Numpy array containing the pixel buffer
+  * ``'origin'``: origin of the image
+  * ``'spacing'``: signed spacing of the image
+  * ``'size'``: full size of the image
+  * ``'region'``: region of the image present in the buffer
+  * ``'metadata'``: metadata dictionary (contains projection, sensor model,...)
+
+Now some basic Q&A about this interface:
+
+    Q: What portion of the image is exported to Numpy array?
+    A: By default, the whole image is exported. If you had a non-empty requested
+    region (the result of calling PropagateRequestedRegion()), then this region
+    is exported.
+    
+    Q: What is the difference between ImportImage and ImportVectorImage?
+    A: The first one is here for Applications that expect a monoband otb::Image.
+    In most cases, you will use the second one: ImportVectorImage.
+    
+    Q: What kind of object are there in this dictionary export?
+    A: The array is a numpy.ndarray. The other fields are wrapped
+    objects from the OTB library but you can interact with them in a
+    Python way: they support ``len()`` and ``str()`` operator, as well as 
+    bracket operator ``[]``. Some of them also have a ``keys()`` function just like
+    dictionaries.
+    
+This interface allows you to export OTB images (or extracts) to Numpy array,
+process them  by other means, and re-import them with preserved metadatas. Please
+note that this is different from an in-memory connection.
+
+Here is a small example of what can be done:
+
+.. code-block:: python
+
+  import otbApplication as otb
+  
+  # Create a smoothing application
+  app = otb.Registry.CreateApplication("Smoothing")
+  app.SetParameterString("in",argv[1])
+  
+  # only call Execute() to setup the pipeline, not ExecuteAndWriteOutput() which would
+  # run it and write the output image
+  app.Execute()
+
+  # Setup a special requested region
+  myRegion = otb.itkRegion()
+  myRegion['size'][0] = 20
+  myRegion['size'][1] = 25
+  myRegion['index'].Fill(10)
+  ram = app.PropagateRequestedRegion("out",myRegion)
+  
+  # Check the requested region on the input image
+  print(app.GetImageRequestedRegion("in"))
+  
+  # Create a ReadImageInfo application
+  app2 = otb.Registry.CreateApplication("ReadImageInfo")
+  
+  # export "out" from Smoothing and import it as "in" in ReadImageInfo
+  ex = app.ExportImage("out")
+  app2.ImportVectorImage("in", ex)
+  app2.Execute()
+  
+  # Check the result of ReadImageInfo
+  someKeys = ['sizex', 'sizey', 'spacingx', 'spacingy', 'sensor', 'projectionref']
+  for key in someKeys:
+    print(key + ' : ' + str(app2.GetParameterValue(key)) )
+  
+  # Only a portion of "out" was exported but ReadImageInfo is still able to detect the 
+  # correct full size of the image
+
+
 Corner cases
 ------------
 
