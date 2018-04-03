@@ -30,7 +30,7 @@ namespace MetaDataHelper
 
 MDType GetType(const std::string &val)
 {
-  MDType ret;
+  MDType ret(MDType::String);
   otb::MetaDataKey::KeyType kt = otb::MetaDataKey::GetKeyType(val);
   switch (kt)
     {
@@ -88,7 +88,7 @@ GetInt(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
-  unsigned int ret;
+  unsigned int ret=0;
   itk::ExposeMetaData<unsigned int>(dict, key, ret);
   return ret;
 }
@@ -107,7 +107,7 @@ GetDouble(
     const itk::MetaDataDictionary &dict,
     const std::string &key)
 {
-  double ret;
+  double ret = 0.0;
   itk::ExposeMetaData<double>(dict, key, ret);
   return ret;
 }
