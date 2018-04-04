@@ -277,7 +277,7 @@ I18nCoreApplication
       std::cerr << msg << std::endl;
 #endif
 #if LOG_QDEBUG
-      assert( false && "Not yet implemented!" );
+      static_assert( false, "Not yet implemented!" );
 #endif
       break;
     //
@@ -292,7 +292,7 @@ I18nCoreApplication
       std::cerr << "WARNG> " << msg << std::endl;
 #endif
 #if LOG_QWARNING
-      assert( false && "Not yet implemented!" );
+      static_assert( false, "Not yet implemented!" );
 #endif
       break;
     //
@@ -307,7 +307,7 @@ I18nCoreApplication
       std::cerr << "ERROR> " << msg << std::endl;
 #endif
 #if LOG_QCRITICAL
-      assert( false && "Not yet implemented!" );
+      static_assert( false, "Not yet implemented!" );
 #endif
 #if THROW_QCRITICAL
       throw std::runtime_error(
@@ -330,7 +330,7 @@ I18nCoreApplication
       std::cerr << "FATAL> " << msg << std::endl;
 #endif
 #if LOG_QFATAL
-      assert( false && "Not yet implemented!" );
+      static_assert( false, "Not yet implemented!" );
 #endif
 #if THROW_QFATAL
       throw std::runtime_error(
