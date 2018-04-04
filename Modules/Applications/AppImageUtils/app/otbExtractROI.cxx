@@ -787,7 +787,7 @@ private:
       }
 
     if ( !CropRegionOfInterest() )
-      otbAppLogFATAL(<<"Could not extract the ROI as it is out of the "
+      otbAppLogWARNING(<<"Could not extract the ROI as it is out of the "
         "input image.");
 
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
