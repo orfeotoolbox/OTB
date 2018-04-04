@@ -256,13 +256,14 @@ I18nCoreApplication
 }
 
 /*****************************************************************************/
-/*///////////////Warning signature modification for qt5//////////////////////*/
 void
 I18nCoreApplication
-::HandleQtMessage( QtMsgType type , 
-                   const QMessageLogContext & , 
+::HandleQtMessage( QtMsgType type ,
+                   const QMessageLogContext & ,
                    const QString & message )
 {
+  std::string msg = ToStdString( message );
+
   switch( type )
     {
     //
@@ -270,10 +271,10 @@ I18nCoreApplication
     case QtDebugMsg:
 #if ECHO_QDEBUG || FORCE_QDEBUG
 #if _WIN32
-      OutputDebugString( message );
+      OutputDebugString( msg.c_str() );
       OutputDebugString( "\n" );
 #endif
-      fprintf( stderr, "%s\n", message );
+      std::cerr << msg << std::endl;
 #endif
 #if LOG_QDEBUG
       assert( false && "Not yet implemented!" );
@@ -285,10 +286,10 @@ I18nCoreApplication
 #if ECHO_QWARNING || FORCE_QWARNING
 #if _WIN32
       OutputDebugString( "WARNG> " );
-      OutputDebugString( message );
+      OutputDebugString( msg.c_str() );
       OutputDebugString( "\n" );
 #endif
-      fprintf( stderr, tr( "WARNG> %s\n" ).toLatin1().constData(), message );
+      std::cerr << "WARNG> " << msg << std::endl;
 #endif
 #if LOG_QWARNING
       assert( false && "Not yet implemented!" );
@@ -303,7 +304,7 @@ I18nCoreApplication
       OutputDebugString( message );
       OutputDebugString( "\n" );
 #endif
-      fprintf( stderr, tr( "ERROR> %s\n" ).toLatin1().constData(), message );
+      std::cerr << "ERROR> " << msg << std::endl;
 #endif
 #if LOG_QCRITICAL
       assert( false && "Not yet implemented!" );
@@ -326,11 +327,7 @@ I18nCoreApplication
       OutputDebugString( message );
       OutputDebugString( "\n" );
 #endif
-      fprintf(
-	stderr,
-	tr( "FATAL> %s\n" ).toLatin1().constData(),
-	message
-      );
+      std::cerr << "FATAL> " << msg << std::endl;
 #endif
 #if LOG_QFATAL
       assert( false && "Not yet implemented!" );
