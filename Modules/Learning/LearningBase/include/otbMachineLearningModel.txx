@@ -38,7 +38,8 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
   m_RegressionMode(false),
   m_IsRegressionSupported(false),
   m_ConfidenceIndex(false),
-  m_IsDoPredictBatchMultiThreaded(false)
+  m_IsDoPredictBatchMultiThreaded(false),
+  m_Dimension(0)
 {}
 
 
@@ -98,18 +99,18 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
   else
     {
     
-    #ifdef _OPENMP
+#ifdef _OPENMP
     // OpenMP threading here
     unsigned int nb_threads(0), threadId(0), nb_batches(0);
     
-    #pragma omp parallel shared(nb_threads,nb_batches) private(threadId)
+#pragma omp parallel shared(nb_threads,nb_batches) private(threadId)
     {
     // Get number of threads configured with ITK
     omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
     nb_threads = omp_get_num_threads();
     threadId = omp_get_thread_num();
     nb_batches = std::min(nb_threads,(unsigned int)input->Size());
-    // Ensure that we do not spawn unncessary threads
+    // Ensure that we do not spawn unnecessary threads
     if(threadId<nb_batches)
       {
       unsigned int batch_size = ((unsigned int)input->Size()/nb_batches);
@@ -122,9 +123,9 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
       this->DoPredictBatch(input,batch_start,batch_size,targets,quality);
       }
     }
-    #else
+#else
     this->DoPredictBatch(input,0,input->Size(),targets,quality);
-    #endif
+#endif
     return targets;
     }
 }
@@ -169,12 +170,12 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void
-MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
-}
-}
+    MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
+    ::PrintSelf(std::ostream& os, itk::Indent indent) const
+    {
+    // Call superclass implementation
+    Superclass::PrintSelf(os,indent);
+    }
+    }
 
 #endif

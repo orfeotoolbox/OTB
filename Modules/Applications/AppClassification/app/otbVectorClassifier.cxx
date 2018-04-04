@@ -80,13 +80,13 @@ public:
   typedef itk::Statistics::ListSample<InputSampleType>            ListSampleType;
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
-  ~VectorClassifier() ITK_OVERRIDE
+  ~VectorClassifier() override
     {
     MachineLearningModelFactoryType::CleanFactories();
     }
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("VectorClassifier");
     SetDescription("Performs a classification of the input vector data according to a model file.");
@@ -124,13 +124,13 @@ private:
       "Only geometries with this field available will be taken into account.\n"
       "The field is added either in the input file (if 'out' off) or in the output file.\n"
       "Caution, the 'cfield' must not exist in the input file if you are updating the file.");
-    SetParameterString("cfield","predicted", false);
+    SetParameterString("cfield","predicted");
 
     AddParameter(ParameterType_ListView, "feat", "Field names to be calculated.");
     SetParameterDescription("feat","List of field names in the input vector data used as features for training. "
       "Put the same field names as the TrainVectorClassifier application.");
 
-    AddParameter(ParameterType_Empty, "confmap",  "Confidence map");
+    AddParameter(ParameterType_Bool, "confmap",  "Confidence map");
     SetParameterDescription( "confmap", "Confidence map of the produced classification. "
       "The confidence index depends on the model : \n"
       "  - LibSVM : difference between the two highest probabilities "
@@ -145,7 +145,6 @@ private:
       "    * RandomForest : Confidence (proportion of votes for the majority class). "
              "Margin (normalized difference of the votes of the 2 majority classes) is not available for now.\n"
       "    * SVM : distance to margin (only works for 2-class models).\n");
-    MandatoryOff("confmap");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output vector data file containing class labels");
     SetParameterDescription("out","Output vector data file storing sample values (OGR format)."
@@ -163,7 +162,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("in") )
     {
@@ -197,7 +196,7 @@ private:
     }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     clock_t tic = clock();
 
@@ -271,10 +270,10 @@ private:
 
     ConfidenceListSampleType::Pointer quality;
 
-    bool computeConfidenceMap(IsParameterEnabled("confmap") && m_Model->HasConfidenceIndex() 
+    bool computeConfidenceMap(GetParameterInt("confmap") && m_Model->HasConfidenceIndex() 
                               && !m_Model->GetRegressionMode());
 
-    if (!m_Model->HasConfidenceIndex() && IsParameterEnabled("confmap"))
+    if (!m_Model->HasConfidenceIndex() && GetParameterInt("confmap"))
       {
       otbAppLogWARNING("Confidence map requested but the classifier doesn't support it!");
       }

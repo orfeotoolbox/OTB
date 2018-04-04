@@ -54,31 +54,29 @@ public:
   typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ConcatenateImages");
     SetDescription("Concatenate a list of images of the same size into a single multi-channel one.");
 
     // Documentation
     SetDocName("Images Concatenation");
-    SetDocLongDescription("This application performs images channels concatenation. It will walk the input image list (single or multi-channel) and generates a single multi-channel image. The channel order is the one of the list.");
+    SetDocLongDescription("This application performs images channels concatenation. "
+      "It reads the input image list (single or multi-channel) "
+      "and generates a single multi-channel image. The channel order is the same as the list.");
     SetDocLimitations("All input images must have the same size.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Rescale application, Convert");
+    SetDocSeeAlso("Rescale application, Convert, SplitImage");
 
     AddDocTag(Tags::Manip);
     AddDocTag("Concatenation");
     AddDocTag("Multi-channel");
 
-    m_Concatener = ListConcatenerFilterType::New();
-    m_ExtractorList = ExtractROIFilterListType::New();
-    m_ImageList = ImageListType::New();
-
     AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
-    SetParameterDescription("il", "The list of images to concatenate");
+    SetParameterDescription("il", "The list of images to concatenate, must have the same size.");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "The concatenated output image");
+    SetParameterDescription("out", "The concatenated output image.");
 
     AddRAMParameter();
 
@@ -89,18 +87,19 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
-
-    // Reinitialize the object
-    m_Concatener = ListConcatenerFilterType::New();
-    m_ImageList = ImageListType::New();
-    m_ExtractorList = ExtractROIFilterListType::New();
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
+    ListConcatenerFilterType::Pointer m_Concatener =
+      ListConcatenerFilterType::New();
+    ExtractROIFilterListType::Pointer m_ExtractorList = 
+      ExtractROIFilterListType::New();
+    ImageListType::Pointer m_ImageList =
+      ImageListType::New();
     // Get the input image list
     FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
 
@@ -138,12 +137,8 @@ private:
     m_Concatener->SetInput( m_ImageList );
 
     SetParameterOutputImage("out", m_Concatener->GetOutput());
+    RegisterPipeline();
   }
-
-
-  ListConcatenerFilterType::Pointer  m_Concatener;
-  ExtractROIFilterListType::Pointer  m_ExtractorList;
-  ImageListType::Pointer        m_ImageList;
 };
 
 }

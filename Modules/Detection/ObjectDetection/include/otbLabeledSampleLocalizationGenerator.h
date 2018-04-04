@@ -116,11 +116,11 @@ public:
 
 protected:
   LabeledSampleLocalizationGenerator();
-  ~LabeledSampleLocalizationGenerator() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LabeledSampleLocalizationGenerator() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Triggers the Computation of the sample list */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   PointVectorType RandomPointsGenerator(DataNodeType * node);
 

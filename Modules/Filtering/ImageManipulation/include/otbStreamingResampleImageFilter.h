@@ -117,15 +117,12 @@ public:
   otbGetObjectMemberConstMacro(DisplacementFilter, Transform, const TransformType*);
 
   /** The Displacement field spacing & size */
-  void SetDisplacementFieldSpacing(const SpacingType & spacing)
-  {
-    m_DisplacementFilter->SetOutputSpacing(spacing);
-    this->Modified();
-  }
+  void SetDisplacementFieldSpacing( SpacingType spacing);
+
   const SpacingType & GetDisplacementFieldSpacing() const
   {
-   return m_DisplacementFilter->GetOutputSpacing();
-  }
+    return m_SignedOutputSpacing;
+  };
 
   /** The resampled image parameters */
   // Output Origin
@@ -175,23 +172,27 @@ public:
   }
 
   /** Override itk::ProcessObject method to let the internal filter do the propagation */
-  void PropagateRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
+  void PropagateRequestedRegion(itk::DataObject *output) override;
 
 protected:
   StreamingResampleImageFilter();
 
   /** Destructor */
-  ~StreamingResampleImageFilter() ITK_OVERRIDE {};
+  ~StreamingResampleImageFilter() override {};
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   StreamingResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  //We need this to respect ConstRef macro and to be compliant with itk positive 
+  //spacing
+  SpacingType m_SignedOutputSpacing;
 
   typename DisplacementFieldGeneratorType::Pointer   m_DisplacementFilter;
   typename WarpImageFilterType::Pointer             m_WarpFilter;

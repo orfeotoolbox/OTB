@@ -166,7 +166,7 @@ public:
   /** Set the index.
    * It is moved to the next available (usable) index.
    * \sa GetIndex */
-  void SetIndex(const IndexType& ind) ITK_OVERRIDE;
+  void SetIndex(const IndexType& ind) override;
 
   /** Get the Index. */
   IndexType GetIndex() const

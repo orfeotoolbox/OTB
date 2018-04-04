@@ -53,7 +53,7 @@ public:
   itkTypeMacro(LineSegmentDetection, otb::Wrapper::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("LineSegmentDetection");
     SetDescription("Detect line segments in raster");
@@ -85,11 +85,10 @@ private:
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0, 255]");
+    AddParameter(ParameterType_Bool, "norescale", "No rescaling in [0, 255]");
     SetParameterDescription("norescale",
       "By default, the input image amplitude is rescaled between [0,255]."
       " Turn on this parameter to skip rescaling");
-    MandatoryOff("norescale");
 
     AddRAMParameter();
 
@@ -100,11 +99,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     typedef otb::VectorImageToAmplitudeImageFilter<FloatVectorImageType, FloatImageType>
       VectorImageToAmplitudeImageFilterType;
@@ -132,7 +131,7 @@ private:
       = ShiftScaleImageFilterType::New();
 
     // Default behavior is to do the rescaling
-    if ( !IsParameterEnabled("norescale") )
+    if ( !GetParameterInt("norescale") )
       {
       stats->SetInput(amplitudeConverter->GetOutput());
       stats->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
@@ -185,7 +184,7 @@ private:
       vproj->SetInput(vd);
       vproj->SetInputKeywordList(GetParameterImage("in")->GetImageKeywordlist());
       //vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
-      //vproj->SetInputSpacing(GetParameterImage("in")->GetSpacing());
+      //vproj->SetInputSpacing(GetParameterImage("in")->GetSignedSpacing());
 
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");

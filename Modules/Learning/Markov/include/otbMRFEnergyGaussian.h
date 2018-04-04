@@ -68,7 +68,7 @@ public:
 
   itkNewMacro(Self);
 
-  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) ITK_OVERRIDE
+  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) override
   {
     return vnl_math_sqr((static_cast<double>(value1))
                         - (static_cast<double>(value2)));
@@ -81,7 +81,7 @@ protected:
     this->m_NumberOfParameters = 0;
     this->m_Parameters.SetSize(this->m_NumberOfParameters);
     };
-  ~MRFEnergyGaussian() ITK_OVERRIDE {}
+  ~MRFEnergyGaussian() override {}
 
 };
 }

@@ -142,7 +142,7 @@ public:
   itkGetConstReferenceMacro(InputOrigin, OriginType);
 
   /** Set the spacing (size of a pixel) of the vector data.
-    * \sa GetSpacing() */
+    * \sa GetSignedSpacing() */
   itkSetMacro(InputSpacing, SpacingType);
   itkGetConstReferenceMacro(InputSpacing, SpacingType);
 
@@ -152,7 +152,7 @@ public:
   itkGetConstReferenceMacro(OutputOrigin, OriginType);
 
   /** Set the spacing (size of a pixel) of the vector data.
-  * \sa GetSpacing() */
+  * \sa GetSignedSpacing() */
   itkSetMacro(OutputSpacing, SpacingType);
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
@@ -168,31 +168,31 @@ public:
   /** Methods prototypes */
   virtual const TransformType * GetTransform() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
+  OutputPointType TransformPoint(const InputPointType& point) const override;
 
   virtual void  InstantiateTransform();
   
   // Get inverse methods
   bool GetInverse(Self * inverseTransform) const;
-  InverseTransformBasePointer GetInverseTransform() const ITK_OVERRIDE;
+  InverseTransformBasePointer GetInverseTransform() const override;
 
   // Dummy set parameter method
-  void SetParameters(const typename Superclass::ParametersType &) ITK_OVERRIDE  {}
+  void SetParameters(const typename Superclass::ParametersType &) override  {}
 
   // Dummy ComputeJacobianWithRespectToParameters method
-  void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const ITK_OVERRIDE {}
+  void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const override {}
 
 protected:
   GenericRSTransform();
-  ~GenericRSTransform() ITK_OVERRIDE {}
+  ~GenericRSTransform() override {}
 
-  void Modified() const ITK_OVERRIDE
+  void Modified() const override
   {
     this->Superclass::Modified();
     m_TransformUpToDate = false;
   }
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   GenericRSTransform(const Self &);    //purposely not implemented

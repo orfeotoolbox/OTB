@@ -34,6 +34,49 @@
 
 namespace otb
 {
+namespace internal
+{
+  template < class ImageType >
+  typename ImageType::SpacingType GetSignedSpacing( const ImageType * input)
+  {
+    typename ImageType::SpacingType spacing = input->GetSpacing();
+    typename ImageType::DirectionType direction = input->GetDirection();
+    for ( unsigned int i = 0 ; i < ImageType::ImageDimension ; i++ )
+      {
+      spacing[i] *= direction[i][i] ;
+      }
+    return spacing;
+  }
+
+  template < class InputImage , typename SpacingType >
+  void SetSignedSpacing( InputImage *input , SpacingType spacing )
+  {
+    // TODO check for spacing size ==> error
+    typename InputImage::DirectionType direction = input->GetDirection();
+    for ( unsigned int i = 0 ; i < InputImage::ImageDimension ; i++ )
+      {
+      // TODO check if spacing[i] = 0 ==> error
+      if ( spacing[ i ] < 0 )
+        {
+        if ( direction[i][i] > 0 )
+          {
+          for ( unsigned int j = 0 ; j < InputImage::ImageDimension ; j++ )
+            {
+            direction[j][i] = - direction[j][i];
+            }
+          }
+        spacing[i] = -spacing[i];
+        }
+      }
+    input->SetDirection( direction );
+    input->SetSpacing( spacing );
+  }
+}
+}
+
+
+namespace otb
+{
 /** \class Image
  * \brief Creation of an "otb" image which contains metadata.
  *
@@ -174,6 +217,21 @@ public:
   /** Get the six coefficients of affine geoTtransform. */
   virtual VectorType GetGeoTransform(void) const;
 
+  /** Get signed spacing */
+  SpacingType GetSignedSpacing() const;
+
+  // SpacingType GetSpacing() const
+  //   {
+  //     PixelType a;
+  //     a.toto();
+  //     SpacingType t = this->GetSignedSpacing();
+  //     return t ;
+  //   };
+
+  /** Set signed spacing */
+  virtual void SetSignedSpacing( SpacingType spacing );
+  virtual void SetSignedSpacing( double spacing[ VImageDimension ] );
+
   /** Get image corners. */
   virtual VectorType GetUpperLeftCorner(void) const;
   virtual VectorType GetUpperRightCorner(void) const;
@@ -187,14 +245,14 @@ public:
 
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 /// Copy metadata from a DataObject
-  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
+  void CopyInformation(const itk::DataObject *) override;
 
 protected:
   Image();
-  ~Image() ITK_OVERRIDE {}
+  ~Image() override {}
 
 private:
   Image(const Self &) = delete;

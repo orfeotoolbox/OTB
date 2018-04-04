@@ -89,7 +89,7 @@ public:
   ColorSetupWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~ColorSetupWidget() ITK_OVERRIDE;
+  ~ColorSetupWidget() override;
 
   /**
    * \brief Set the component-name list.

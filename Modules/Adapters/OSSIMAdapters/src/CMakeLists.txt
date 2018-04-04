@@ -41,7 +41,16 @@ target_link_libraries(OTBOSSIMAdapters
   ${OTBOssim_LIBRARIES}
   ${OTBOssimPlugins_LIBRARIES}
   ${OTBOpenThreads_LIBRARIES}
-
   )
 
 otb_module_target(OTBOSSIMAdapters)
+
+# add the OTB_OSSIM_VERSION definition
+get_target_property(_OTBOSSIMAdapters_COMP_DEF OTBOSSIMAdapters COMPILE_DEFINITIONS)
+if(_OTBOSSIMAdapters_COMP_DEF)
+  set_target_properties(OTBOSSIMAdapters
+    PROPERTIES COMPILE_DEFINITIONS "${_OTBOSSIMAdapters_COMP_DEF};OTB_OSSIM_VERSION=${OTB_OSSIM_VERSION}")
+else()
+  set_target_properties(OTBOSSIMAdapters
+    PROPERTIES COMPILE_DEFINITIONS "OTB_OSSIM_VERSION=${OTB_OSSIM_VERSION}")
+endif()

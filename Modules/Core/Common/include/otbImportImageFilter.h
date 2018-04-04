@@ -113,7 +113,7 @@ public:
   }
 
   /** Set the spacing (size of a pixel) of the image.
-   * \sa GetSpacing() */
+   * \sa GetSignedSpacing() */
   itkSetVectorMacro(Spacing, const double, OutputImageType::ImageDimension);
   itkSetVectorMacro(Spacing, const float, OutputImageType::ImageDimension);
 
@@ -143,26 +143,26 @@ public:
 
 protected:
   ImportImageFilter();
-  ~ImportImageFilter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImportImageFilter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** This filter does not actually "produce" any data, rather it "wraps"
    * the user supplied data into an itk::Image.  */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** This is a source, so it must set the spacing, size, and largest possible
    * region for the output image that it will produce.
    * \sa ProcessObject::GenerateOutputInformation() */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** This filter can only produce the amount of data that it is given,
-   * so we must ITK_OVERRIDE ProcessObject::EnlargeOutputRequestedRegion()
+   * so we must override ProcessObject::EnlargeOutputRequestedRegion()
    * (The default implementation of a source produces the amount of
    * data requested.  This source, however, can only produce what it is
    * given.)
    *
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
-  void EnlargeOutputRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion(itk::DataObject *output) override;
 
 private:
   ImportImageFilter(const ImportImageFilter &); //purposely not implemented

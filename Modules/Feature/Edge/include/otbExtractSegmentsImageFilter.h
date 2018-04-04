@@ -129,16 +129,16 @@ public:
 
 protected:
   ExtractSegmentsImageFilter();
-  ~ExtractSegmentsImageFilter() ITK_OVERRIDE {}
+  ~ExtractSegmentsImageFilter() override {}
 
   typedef PixelSuppressionByDirectionImageFilter<InputImageType, PSOutputImageType> PixelSuppressionType;
   typedef LocalHoughFilter<InputImageType>                                          LocalHoughType;
   typedef FillGapsFilter                                                            FillGapsType;
   typedef DrawLineSpatialObjectListFilter<InputImageType, OutputImageType>          DrawLineListType;
   typedef  itk::RescaleIntensityImageFilter<TInputImage, TInputImage>               RescaleType;
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ExtractSegmentsImageFilter(const Self &); //purposely not implemented

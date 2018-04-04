@@ -31,6 +31,7 @@
 #include "itkMacro.h"
 #include "itkObject.h"
 #include "otbConfigure.h"
+#include "otbLogger.h"
 
 /**
  * \namespace otb
@@ -42,86 +43,31 @@ namespace otb
 {
 } // end namespace otb - this is here for documentation purposes
 
-/** This macro is used to print debug (or other information). They are
- * also used to catch errors, etc. Example usage looks like:
- * itkDebugMacro(<< "this is debug info" << this->SomeVariable); */
-#define otbDebugMacro(x) itkDebugMacro(x)
-/*  { if ( this->GetDebug() && *::itk::Object::GetGlobalWarningDisplay())   \
-    { std::ostringstream itkmsg; \
-      itkmsg << "Debug: In " __FILE__ ", line " << __LINE__ << "\n" \
-             << this->GetNameOfClass() << " (" << this << "): " x  \
-             << "\n\n"; \
-      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); } \
-}*/
 
-#define otbMsgDebugMacro(x) \
-    { \
-    if (this->GetDebug() && ::itk::Object::GetGlobalWarningDisplay())   \
-      { \
-      std::ostringstream itkmsg; \
-      itkmsg << " Msg Debug: " x << "\n"; \
-      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
-      } \
-    }
+#define otbFileContext(x) \
+  << "file " __FILE__ ", line " << __LINE__<<", " x
+
+#define otbClassContext(x) \
+  << this->GetNameOfClass() << " (" << this << "): " x
+
+// Beware that to log to CRITICAL level, level should be passed as "Error"
+#define otbLogMacro(level,msg)                                    \
+  {                                                               \
+    std::ostringstream itkmsg;                                    \
+    itkmsg msg << "\n";                                           \
+    otb::Logger::Instance()->level(itkmsg.str().c_str());         \
+  }
 
 
-#ifndef NDEBUG
-#define otbGenericMsgDebugMacro(x) \
-    {  \
-    if (::itk::Object::GetGlobalWarningDisplay())   \
-      { \
-      std::ostringstream itkmsg; \
-      itkmsg << " Generic Msg Debug: " x << "\n"; \
-      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
-      } \
-    }
-#else
-#define otbGenericMsgDebugMacro(x)
-#endif
-
-#define otbGenericMsgTestingMacro(x) \
-    {  \
-    std::cout x << std::endl; \
-    }
-
-#ifdef OTB_SHOW_ALL_MSG_DEBUG
-#define otbMsgDevMacro(x) \
-    { \
-      { \
-      std::ostringstream itkmsg; \
-      itkmsg << " Msg Dev: (" << __FILE__ << ":" << __LINE__ << ") " x << "\n"; \
-      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
-      } \
-    }
-#else
-#define otbMsgDevMacro(x)
-#endif
-
-/** This macro is used to print warning information (i.e., unusual circumstance
- * but not necessarily fatal.) Example usage looks like:
- * itkWarningMacro(<< "this is warning info" << this->SomeVariable); */
-#define otbWarningMacro(x) \
-    { \
-    if (itk::Object::GetGlobalWarningDisplay()) \
-      { \
-      std::ostringstream itkmsg; \
-      itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << "\n" \
-             << this->GetNameOfClass() << " (" << this << "): " x  \
-             << "\n\n"; \
-      itk::OutputWindowDisplayWarningText(itkmsg.str().c_str()); \
-      } \
-    }
-
-#define otbGenericWarningMacro(x) \
-    { \
-    if (itk::Object::GetGlobalWarningDisplay()) \
-      { \
-      std::ostringstream itkmsg; \
-      itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << ": " x <<"\n";\
-      itk::OutputWindowDisplayWarningText(itkmsg.str().c_str()); \
-      } \
-    }
-
+// Re-definition of old log macros to use the otbLogMacro
+#define otbDebugMacro(x) otbLogMacro(Debug,otbFileContext(otbClassContext(x)))
+#define otbMsgDebugMacro(x) otbLogMacro(Debug,otbFileContext(x))
+#define otbGenericMsgDebugMacro(x) otbLogMacro(Debug,x)
+#define otbMsgDevMacro(x) otbLogMacro(Debug,otbFileContext(x))
+#define otbWarningMacro(x) otbLogMacro(Warning,otbFileContext(otbClassContext(x)))
+#define otbGenericWarningMacro(x) otbLogMacro(Warning,otbFileContext(x))
+#define otbGenericMsgTestingMAcro(x) otbLogMacro(Info,"[testing] "<<x)
+  
 /** This macro is used to control condition. It use ONLY by the OTB developers
   *
   */

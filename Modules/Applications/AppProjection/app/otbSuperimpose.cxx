@@ -81,7 +81,7 @@ public:
      FloatVectorImageType>                                        BasicResamplerType;
   
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Superimpose");
     SetDescription("Using available image metadata, project one image onto another one");
@@ -159,17 +159,17 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if(!HasUserValue("mode") && HasValue("inr") && HasValue("inm") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr"),GetParameterImage("inm")))
       {
       otbAppLogWARNING("Forcing PHR mode with PHR data. You need to add \"-mode default\" to force the default mode with PHR images.");
-      SetParameterString("mode","phr", false);
+      SetParameterString("mode","phr");
       }
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the inputs
     FloatVectorImageType* refImage = GetParameterImage("inr");
@@ -214,7 +214,7 @@ private:
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     // Set up output image information
-    FloatVectorImageType::SpacingType spacing = refImage->GetSpacing();
+    FloatVectorImageType::SpacingType spacing = refImage->GetSignedSpacing();
     FloatVectorImageType::IndexType   start   = refImage->GetLargestPossibleRegion().GetIndex();
     FloatVectorImageType::SizeType    size    = refImage->GetLargestPossibleRegion().GetSize();
     FloatVectorImageType::PointType   origin  = refImage->GetOrigin();
@@ -278,7 +278,7 @@ private:
       
       m_BasicResampler->SetOutputOrigin(origin);
 
-      FloatVectorImageType::SpacingType xsSpacing = GetParameterImage("inm")->GetSpacing();
+      FloatVectorImageType::SpacingType xsSpacing = GetParameterImage("inm")->GetSignedSpacing();
       xsSpacing*=0.25;
       
       m_BasicResampler->SetOutputSpacing(xsSpacing);

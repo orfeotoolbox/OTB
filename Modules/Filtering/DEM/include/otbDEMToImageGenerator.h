@@ -165,7 +165,7 @@ public:
   template <class TImageType> void SetOutputParametersFromImage(const TImageType * image)
     {
     this->SetOutputOrigin ( image->GetOrigin() );
-    this->SetOutputSpacing ( image->GetSpacing() );
+    this->SetOutputSpacing ( image->GetSignedSpacing() );
     //this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
     this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
     this->SetOutputProjectionRef(image->GetProjectionRef());
@@ -176,13 +176,13 @@ public:
 
 protected:
   DEMToImageGenerator();
-  ~DEMToImageGenerator() ITK_OVERRIDE{}
+  ~DEMToImageGenerator() override{}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void BeforeThreadedGenerateData() override;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
+  void GenerateOutputInformation() override;
 
   DEMHandlerType::Pointer m_DEMHandler;
   PointType               m_OutputOrigin;

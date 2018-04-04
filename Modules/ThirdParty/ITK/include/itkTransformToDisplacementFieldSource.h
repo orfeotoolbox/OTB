@@ -37,9 +37,9 @@ namespace itk
  * spacing, origin and direction of the reference image will be used.
  *
  * Since this filter produces an image which is a different size than
- * its input, it needs to ITK_OVERRIDE several of the methods defined
+ * its input, it needs to override several of the methods defined
  * in ProcessObject in order to properly manage the pipeline execution model.
- * In particular, this filter ITK_OVERRIDEs
+ * In particular, this filter overrides
  * ProcessObject::GenerateInputRequestedRegion() and
  * ProcessObject::GenerateOutputInformation().
  *
@@ -154,13 +154,13 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType *image);
 
   /** DisplacementFieldImageFilter produces a vector image. */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Just checking if transform is set. */
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+  void BeforeThreadedGenerateData(void) override;
 
   /** Compute the Modified Time based on changes to the components. */
-  ModifiedTimeType GetMTime(void) const ITK_OVERRIDE;
+  ModifiedTimeType GetMTime(void) const override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -173,16 +173,16 @@ public:
 
 protected:
   TransformToDisplacementFieldSource(void);
-  ~TransformToDisplacementFieldSource(void) ITK_OVERRIDE {}
+  ~TransformToDisplacementFieldSource(void) override {}
 
-  void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** TransformToDisplacementFieldSource can be implemented as a multithreaded
    * filter.
    */
   void ThreadedGenerateData(
     const OutputImageRegionType & outputRegionForThread,
-    ThreadIdType threadId) ITK_OVERRIDE;
+    ThreadIdType threadId) override;
 
   /** Default implementation for resampling that works for any
    * transformation type.

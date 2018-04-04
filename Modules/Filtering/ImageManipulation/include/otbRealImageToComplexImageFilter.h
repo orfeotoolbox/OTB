@@ -21,6 +21,7 @@
 #ifndef otbRealImageToComplexImageFilter_h
 #define otbRealImageToComplexImageFilter_h
 
+#include <vcl_deprecated_header.h>
 #include "itkUnaryFunctorImageFilter.h"
 #include "vnl/vnl_math.h"
 
@@ -92,7 +93,7 @@ public:
 
 protected:
   RealImageToComplexImageFilter() {}
-  ~RealImageToComplexImageFilter() ITK_OVERRIDE {}
+  ~RealImageToComplexImageFilter() override {}
 
 private:
   RealImageToComplexImageFilter(const Self&); //purposely not implemented

@@ -96,13 +96,13 @@ public:
 
 protected:
   ImageToEnvelopeVectorDataFilter();
-  ~ImageToEnvelopeVectorDataFilter() ITK_OVERRIDE {}
+  ~ImageToEnvelopeVectorDataFilter() override {}
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   void InstantiateTransform();
 

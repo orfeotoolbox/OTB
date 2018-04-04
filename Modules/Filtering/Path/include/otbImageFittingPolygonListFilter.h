@@ -94,11 +94,11 @@ protected:
   /** Constructor */
   ImageFittingPolygonListFilter();
   /** Destructor */
-  ~ImageFittingPolygonListFilter() ITK_OVERRIDE {}
+  ~ImageFittingPolygonListFilter() override {}
   /** GenerateData method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual double computeValue(ImageConstPointerType image,
                               VertexType middlePoint,

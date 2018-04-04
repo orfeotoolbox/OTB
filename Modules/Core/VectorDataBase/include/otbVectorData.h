@@ -103,7 +103,7 @@ public:
 
   /** Set the spacing of the vector data to put it in the corresponding
    * image coordinates
-   * \sa GetSpacing() */
+   * \sa GetSignedSpacing() */
   virtual void SetSpacing(const SpacingType& spacing);
   virtual void SetSpacing(const double spacing[2]);
   virtual void SetSpacing(const float spacing[2]);
@@ -129,15 +129,15 @@ public:
    * SmartPointers to the same VectorData since separate DataObjects are
    * still maintained. This method is similar to
    * VectorDataSource::GraftOutput(). */
-  void Graft(const itk::DataObject *data) ITK_OVERRIDE;
+  void Graft(const itk::DataObject *data) override;
 
 protected:
   /** Constructor */
   VectorData();
   /** Destructor */
-  ~VectorData() ITK_OVERRIDE {}
+  ~VectorData() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   VectorData(const Self&); //purposely not implemented

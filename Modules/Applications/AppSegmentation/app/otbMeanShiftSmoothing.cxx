@@ -46,7 +46,7 @@ public:
   itkTypeMacro(MeanShiftSmoothing, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("MeanShiftSmoothing");
     SetDescription("This application smooths an image using the MeanShift algorithm.");
@@ -159,10 +159,8 @@ private:
     SetMinimumParameterFloatValue("rangeramp", 0);
     MandatoryOff("rangeramp");
 
-    AddParameter(ParameterType_Empty, "modesearch", "Mode search.");
+    AddParameter(ParameterType_Bool, "modesearch", "Mode search.");
     SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number and the results will not be stable (see [4] for more details).");
-    DisableParameter("modesearch");
-
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "maur_rgb.png");
@@ -176,28 +174,28 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType* input = GetParameterImage("in");
 
-    m_Filter = MSFilterType::New();
+    MSFilterType::Pointer filter = MSFilterType::New();
 
-    m_Filter->SetInput(input);
+    filter->SetInput(input);
 
-    m_Filter->SetSpatialBandwidth(GetParameterInt("spatialr"));
-    m_Filter->SetRangeBandwidth(GetParameterFloat("ranger"));
-    m_Filter->SetThreshold(GetParameterFloat("thres"));
-    m_Filter->SetMaxIterationNumber(GetParameterInt("maxiter"));
-    m_Filter->SetRangeBandwidthRamp(GetParameterFloat("rangeramp"));
-    m_Filter->SetModeSearch(IsParameterEnabled("modesearch"));
+    filter->SetSpatialBandwidth(GetParameterInt("spatialr"));
+    filter->SetRangeBandwidth(GetParameterFloat("ranger"));
+    filter->SetThreshold(GetParameterFloat("thres"));
+    filter->SetMaxIterationNumber(GetParameterInt("maxiter"));
+    filter->SetRangeBandwidthRamp(GetParameterFloat("rangeramp"));
+    filter->SetModeSearch(GetParameterInt("modesearch"));
 
     //Compute the margin used to ensure exact results (tile wise smoothing)
     //This margin is valid for the default uniform kernel used by the
     //MeanShiftSmoothing filter (bandwidth equal to radius in this case)
-    const unsigned int margin = (m_Filter->GetMaxIterationNumber() * m_Filter->GetSpatialBandwidth()) + 1;
+    const unsigned int margin = (filter->GetMaxIterationNumber() * filter->GetSpatialBandwidth()) + 1;
     
     otbAppLogINFO(<<"Margin of " << margin << " pixels applied to each tile to stabilized mean shift filtering." << std::endl);
 
@@ -206,18 +204,17 @@ private:
       otbAppLogWARNING(<<"Margin value exceed the input image size." << std::endl);
       }
 
-    SetParameterOutputImage("fout", m_Filter->GetOutput());
+    SetParameterOutputImage("fout", filter->GetOutput());
     if (IsParameterEnabled("foutpos") && HasValue("foutpos"))
       {
-      SetParameterOutputImage("foutpos", m_Filter->GetSpatialOutput());
+      SetParameterOutputImage("foutpos", filter->GetSpatialOutput());
       }
-    if(!IsParameterEnabled("modesearch"))
+    if(!GetParameterInt("modesearch"))
       {
       otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
       }
+    RegisterPipeline();
    }
-
-  MSFilterType::Pointer m_Filter;
 
 };
 

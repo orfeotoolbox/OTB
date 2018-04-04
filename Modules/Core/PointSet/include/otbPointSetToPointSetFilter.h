@@ -73,8 +73,8 @@ public:
 
 protected:
   PointSetToPointSetFilter();
-  ~PointSetToPointSetFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PointSetToPointSetFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   PointSetToPointSetFilter(const PointSetToPointSetFilter &); //purposely not implemented

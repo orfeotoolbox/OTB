@@ -49,16 +49,19 @@ public:
                                             FloatVectorImageType::InternalPixelType> FilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("SplitImage");
-    SetDescription("Split a N multiband image into N images");
+    SetDescription("Split a N multiband image into N images.");
 
     SetDocName("Split Image");
-    SetDocLongDescription("This application splits a N-bands image into N mono-band images. The output images filename will be generated from the output parameter. Thus if the input image has 2 channels, and the user has set an output outimage.tif, the generated images will be outimage_0.tif and outimage_1.tif");
+    SetDocLongDescription("This application splits a N-bands image into N mono-band images. "
+      "The output images filename will be generated from the output parameter. "
+      "Thus, if the input image has 2 channels, and the user has set as output parameter, outimage.tif, "
+      "the generated images will be outimage_0.tif and outimage_1.tif.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("ConcatenateImages");
 
     AddDocTag(Tags::Manip);
 
@@ -66,8 +69,10 @@ private:
     SetParameterDescription("in","Input multiband image filename.");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out",
-                            "Output filename that will be used to get the prefix and the extension of the output images to write");
+    SetParameterDescription("out", "The output filename will be used to get the prefix "
+    "an the extension of the output written's image. For example with outimage.tif as output filename, "
+    "the generated images will had an indice (corresponding at each bands) "
+    "between the prefix and the extension, such as: outimage_0.tif  and outimage_1.tif (if 2 bands).");
 
     AddRAMParameter();
 
@@ -78,12 +83,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
@@ -98,13 +103,13 @@ private:
     ext   = itksys::SystemTools::GetFilenameExtension(ofname);
 
     // Set the extract filter input image
-    m_Filter = FilterType::New();
-    m_Filter->SetInput(inImage);
+    FilterType::Pointer filter = FilterType::New();
+    filter->SetInput(inImage);
 
     for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
       {
       // Set the channel to extract
-      m_Filter->SetChannel(i+1);
+      filter->SetChannel(i+1);
 
       // build the current output filename
       std::ostringstream oss;
@@ -124,7 +129,7 @@ private:
       // Set the filename of the current output image
       paramOut->SetFileName(oss.str());
       otbAppLogINFO(<< "File: "<<paramOut->GetFileName() << " will be written.");
-      paramOut->SetValue(m_Filter->GetOutput());
+      paramOut->SetValue(filter->GetOutput());
       paramOut->SetPixelType(this->GetParameterOutputImagePixelType("out"));
       // Add the current level to be written
       paramOut->InitializeWriters();
@@ -135,9 +140,8 @@ private:
     // Disable the output Image parameter to avoid writing
     // the last image (Application::ExecuteAndWriteOutput method)
     DisableParameter("out");
+    RegisterPipeline();
   }
-
-  FilterType::Pointer        m_Filter;
 };
 }
 }

@@ -120,15 +120,15 @@ protected:
   /** Constructor */
   Segmenter();
   /** Destructor */
-  ~Segmenter() ITK_OVERRIDE {}
+  ~Segmenter() override {}
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Configure the input datas.
    */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
   /**
    * Configure the output data.
    */

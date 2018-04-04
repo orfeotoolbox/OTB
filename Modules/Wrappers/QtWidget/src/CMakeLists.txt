@@ -54,6 +54,10 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetOutputVectorDataParameter.cxx
   otbWrapperQtWidgetInputFilenameParameter.cxx
   otbWrapperQtWidgetInputImageListParameter.cxx
+  otbWrapperQtWidgetListEditWidget.cxx
+  otbWrapperQtWidgetListEditItemModel.cxx
+  otbWrapperQtWidgetParameterList.cxx
+  otbWrapperQtWidgetBoolParameter.cxx
   )
 
 set(OTBQtWidget_MOC_HDR
@@ -91,11 +95,24 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetDirectoryParameter.h
   ../include/otbWrapperQtWidgetSimpleProgressReport.h
   ../include/otbWrapperQtWidgetRAMParameter.h
+  ../include/otbWrapperQtWidgetListEditWidget.h
+  ../include/otbWrapperQtWidgetListEditItemModel.h
+  ../include/otbWrapperQtWidgetParameterList.h
+  ../include/otbWrapperQtWidgetBoolParameter.h
   )
 
-QT4_WRAP_CPP(OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR})
+set( OTBQtWidget_FORMS
+  otbWrapperQtWidgetListEditWidget.ui
+  )
 
-add_library(OTBQtWidget ${OTBQtWidget_SRC} ${OTBQtWidget_MOC_SRC})
+qt4_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} )
+qt4_wrap_ui( OTBQtWidget_FORMS_HEADERS ${OTBQtWidget_FORMS} )
+
+add_library( OTBQtWidget
+  ${OTBQtWidget_SRC}
+  ${OTBQtWidget_FORMS_HEADERS}
+  ${OTBQtWidget_MOC_SRC}
+  )
 
 target_link_libraries( OTBQtWidget
   ${OTBApplicationEngine_LIBRARIES}

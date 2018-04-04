@@ -152,11 +152,6 @@ ExtractROIBase<TInputImage, TOutputImage>
     }
   requestedRegion.SetIndex(index);
   inputPtr->SetRequestedRegion(requestedRegion);
-
-  otbMsgDevMacro(<< "InputRequestedRegion (otbExtractROIBase): ");
-  otbMsgDevMacro(<< "  - index: " << requestedRegion.GetIndex());
-  otbMsgDevMacro(<< "  - size:  " << requestedRegion.GetSize());
-
 }
 
 /**
@@ -247,7 +242,7 @@ ExtractROIBase<TInputImage, TOutputImage>
   // This logic needs to be augmented with logic that select which
   // dimensions to copy
   const typename InputImageType::SpacingType&
-    inputSpacing = inputPtr->GetSpacing();
+    inputSpacing = inputPtr->GetSignedSpacing();
   const typename InputImageType::DirectionType&
     inputDirection = inputPtr->GetDirection();
   const typename InputImageType::PointType&
@@ -304,7 +299,7 @@ ExtractROIBase<TInputImage, TOutputImage>
     }
 
   // set the spacing and origin
-  outputPtr->SetSpacing(outputSpacing);
+  outputPtr->SetSignedSpacing(outputSpacing);
   outputPtr->SetDirection(outputDirection);
   outputPtr->SetOrigin(outputOrigin);
 

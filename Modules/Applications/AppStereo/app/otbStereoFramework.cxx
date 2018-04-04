@@ -311,49 +311,68 @@ private:
   }
 
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
+    // TODO : implement this application as a CompositeApplication...
     SetName("StereoFramework");
     SetDescription("Compute the ground elevation based on one or multiple stereo pair(s)");
 
     SetDocName("Stereo Framework");
-    SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
-                          "between one or multiple stereo pair in sensor geometry. The output is projected in "
-                          "desired geographic or cartographic map projection (UTM by default). The pipeline is made of the following steps:\n"
-                          "for each sensor pair :\n\n"
-                          "\t- compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
-                          "\t- resample the stereo pair into epipolar geometry using BCO interpolation\n"
-                          "\t- create masks for each epipolar image : remove black borders and resample"
-                          " input masks\n"
-                          "\t- compute horizontal disparities with a block matching algorithm\n"
-                          "\t- refine disparities to sub-pixel precision with a dichotomy algorithm\n"
-                          "\t- apply an optional median filter\n"
-                          "\t- filter disparities based on the correlation score  and exploration bounds\n"
-                          "\t- translate disparities in sensor geometry\n"
-                          "\t  convert disparity to 3D Map.\n\n"
-                          "Then fuse all 3D maps to produce DSM.");
+    SetDocLongDescription(
+      "Compute the ground elevation with a stereo block matching algorithm "
+      "between one or multiple stereo pair in sensor geometry. The output is "
+      "projected in desired geographic or cartographic map projection (WGS84 by"
+      " default).\n\n"
+      "This application is chaining different processing steps. Some of them "
+      "are also performed by other applications in the stereo-reconstruction "
+      "framework:\n"
+      "  * StereoRectificationGridGenerator [1] : for the generation of deformation grids\n"
+      "  * GridBasedImageResampling [2] : resampling into epipolar geometry\n"
+      "  * BlockMatching [3] : estimation of dense disparity maps\n\n"
+      "The pipeline executes the following steps on each stereo pair:\n"
+      "  - compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
+      "  - resample the stereo pair into epipolar geometry using BCO interpolation\n"
+      "  - create masks for each epipolar image : remove black borders and resample"
+      " input masks\n"
+      "  - compute horizontal disparities with a block matching algorithm\n"
+      "  - refine disparities to sub-pixel precision with a dichotomy algorithm\n"
+      "  - apply an optional median filter\n"
+      "  - filter disparities based on the correlation score and exploration bounds\n"
+      "  - translate disparities in sensor geometry\n"
+      "  - convert disparity to 3D Map.\n\n"
+      "Then all 3D maps are fused to produce DSM. The fusion method in each "
+      "DEM cell can be chosen between maximum, minimum and average.");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("[1] StereoRectificationGridGenerator\n"
+      "[2] GridBasedImageResampling\n"
+      "[3] BlockMatching");
 
     AddDocTag(Tags::Stereo);
 
     // Add the output parameters in a group
     AddParameter(ParameterType_Group, "input", "Input parameters");
-    SetParameterDescription("input","This group of parameters allows one to parametrize input data.");
+    SetParameterDescription("input","This group of parameters allows one to set input data.");
 
-    AddParameter(ParameterType_InputImageList,  "input.il",   "Input images list");
-    SetParameterDescription("input.il", "The list of images.");
+    AddParameter(ParameterType_InputImageList, "input.il", "Input images list");
+    SetParameterDescription("input.il", "List of images corresponding to "
+      "multiple views on a single scene, in sensor geometry.");
 
     AddParameter(ParameterType_String, "input.co", "Couples list");
-    SetParameterDescription("input.co","List of index of couples im image list. Couples must be separated by a comma. (index start at 0). for example : 0 1,1 2 will process a first couple composed of the first and the second image in image list, then the first and the third image\n. note that images are handled by pairs."
-        " if left empty couples are created from input index i.e. a first couple will be composed of the first and second image, a second couple with third and fourth image etc. (in this case image list must be even).");
+    SetParameterDescription("input.co","List of index of couples im image list."
+      " Couples must be separated by a comma (index start at 0). For example :"
+      " 0 1,1 2 will process a first couple composed of the first and the"
+      " second image in image list, then the second and the third image\n. "
+      "Note that images are handled by pairs. If left empty, couples are "
+      "created from input index i.e. a first couple will be composed of the "
+      "first and second image, a second couple with third and fourth image etc."
+      " (in this case image list must be even).");
     MandatoryOff("input.co");
-    SetParameterString("input.co","", false);
+    SetParameterString("input.co","");
     DisableParameter("input.co");
 
-    AddParameter(ParameterType_Int,  "input.channel",   "Image channel used for the block matching");
-    SetParameterDescription("input.channel", "Used channel for block matching (used for all images)");
+    AddParameter(ParameterType_Int, "input.channel", "Input Image channel");
+    SetParameterDescription("input.channel", "Channel used for block matching (the same for all images)");
     SetDefaultParameterInt("input.channel", 1);
     SetMinimumParameterIntValue("input.channel", 1);
 
@@ -366,7 +385,7 @@ private:
     // // Build the Output Map Projection
     // for custom map projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
-    SetParameterString("map","wgs", false);
+    SetParameterString("map","wgs");
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
     SetParameterDescription("output.res","Spatial sampling distance of the output elevation : the cell size (in m)");
@@ -380,10 +399,18 @@ private:
     // UserDefined values
     AddParameter(ParameterType_Choice, "output.fusionmethod", "Method to fuse measures in each DSM cell");
     SetParameterDescription("output.fusionmethod","This parameter allows one to choose the method used to fuse elevation measurements in each output DSM cell");
-    AddChoice("output.fusionmethod.max", "The cell is filled with the maximum measured elevation values");
-    AddChoice("output.fusionmethod.min", "The cell is filled with the minimum measured elevation values");
-    AddChoice("output.fusionmethod.mean","The cell is filled with the mean of measured elevation values");
-    AddChoice("output.fusionmethod.acc", "accumulator mode. The cell is filled with the the number of values (for debugging purposes).");
+    AddChoice("output.fusionmethod.max", "Maximum");
+    SetParameterDescription("output.fusionmethod.max","The cell is filled with"
+      " the maximum measured elevation values");
+    AddChoice("output.fusionmethod.min", "Minimum");
+    SetParameterDescription("output.fusionmethod.min", "The cell is filled with"
+      " the minimum measured elevation values");
+    AddChoice("output.fusionmethod.mean","Mean");
+    SetParameterDescription("output.fusionmethod.mean","The cell is filled with"
+      " the mean of measured elevation values");
+    AddChoice("output.fusionmethod.acc", "Accumulator");
+    SetParameterDescription("output.fusionmethod.acc", "Accumulator mode. The"
+      " cell is filled with the the number of values (for debugging purposes).");
 
     AddParameter(ParameterType_OutputImage,"output.out","Output DSM");
     SetParameterDescription("output.out","Output elevation image");
@@ -396,55 +423,76 @@ private:
     SetParameterDescription("output.mode.user","This mode allows you to fully modify default values.");
     // Upper left point coordinates
     AddParameter(ParameterType_Float, "output.mode.user.ulx", "Upper Left X ");
-    SetParameterDescription("output.mode.user.ulx","Cartographic X coordinate of upper-left corner (meters for cartographic projections, degrees for geographic ones)");
+    SetParameterDescription("output.mode.user.ulx","Cartographic X coordinate "
+      "of upper-left corner (meters for cartographic projections, degrees for"
+      " geographic ones)");
 
     AddParameter(ParameterType_Float, "output.mode.user.uly", "Upper Left Y ");
-    SetParameterDescription("output.mode.user.uly","Cartographic Y coordinate of the upper-left corner (meters for cartographic projections, degrees for geographic ones)");
+    SetParameterDescription("output.mode.user.uly","Cartographic Y coordinate "
+      "of the upper-left corner (meters for cartographic projections, degrees "
+      "for geographic ones)");
 
     // Size of the output image
     AddParameter(ParameterType_Int, "output.mode.user.sizex", "Size X ");
-    SetParameterDescription("output.mode.user.sizex","Size of projected image along X (in pixels)");
+    SetParameterDescription("output.mode.user.sizex","Size of projected image"
+      " along X (in pixels)");
 
     AddParameter(ParameterType_Int, "output.mode.user.sizey", "Size Y ");
-    SetParameterDescription("output.mode.user.sizey","Size of projected image along Y (in pixels)");
+    SetParameterDescription("output.mode.user.sizey","Size of projected image"
+      " along Y (in pixels)");
 
     // Spacing of the output image
     AddParameter(ParameterType_Float, "output.mode.user.spacingx", "Pixel Size X ");
-    SetParameterDescription("output.mode.user.spacingx","Size of each pixel along X axis (meters for cartographic projections, degrees for geographic ones)");
+    SetParameterDescription("output.mode.user.spacingx","Size of each pixel "
+      "along X axis (meters for cartographic projections, degrees for geographic ones)");
 
 
     AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y ");
-    SetParameterDescription("output.mode.user.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
+    SetParameterDescription("output.mode.user.spacingy","Size of each pixel "
+      "along Y axis (meters for cartographic projections, degrees for geographic ones)");
 
     // Add the output parameters in a group
     AddParameter(ParameterType_Group, "stereorect", "Stereorectification Grid parameters");
-    SetParameterDescription("stereorect","This group of parameters allows one to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption.");
+    SetParameterDescription("stereorect","This group of parameters allows one "
+      "to choose direct and inverse grid subsampling. These parameters are very"
+      " useful to tune time and memory consumption.");
 
     AddParameter(ParameterType_Int,"stereorect.fwdgridstep","Step of the displacement grid (in pixels)");
-    SetParameterDescription("stereorect.fwdgridstep","Stereo-rectification displacement grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images");
+    SetParameterDescription("stereorect.fwdgridstep","Stereo-rectification "
+      "displacement grid only varies slowly. Therefore, it is recommended to "
+      "use a coarser grid (higher step value) in case of large images");
     SetDefaultParameterInt("stereorect.fwdgridstep",16);
     MandatoryOff("stereorect.fwdgridstep");
 
     AddParameter(ParameterType_Int, "stereorect.invgridssrate", "Sub-sampling rate for epipolar grid inversion");
-    SetParameterDescription("stereorect.invgridssrate","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows one to first sub-sample the field to invert.");
+    SetParameterDescription("stereorect.invgridssrate","Grid inversion is an "
+      "heavy process that implies spline regression on control points. To avoid"
+      " eating to much memory, this parameter allows one to first sub-sample "
+      "the field to invert.");
     SetDefaultParameterInt("stereorect.invgridssrate",10);
     SetMinimumParameterIntValue("stereorect.invgridssrate",1);
     MandatoryOff("stereorect.invgridssrate");
 
     AddParameter(ParameterType_Group,"bm","Block matching parameters");
-    SetParameterDescription("bm","This group of parameters allow tuning the block-matching behavior");
+    SetParameterDescription("bm","This group of parameters allow tuning the "
+      "block-matching behavior");
 
     AddParameter(ParameterType_Choice,   "bm.metric", "Block-matching metric");
+    SetParameterDescription("bm.metric", "Metric used to compute matching score");
     //SetDefaultParameterInt("bm.metric",3);
 
     AddChoice("bm.metric.ssdmean","Sum of Squared Distances divided by mean of block");
-    SetParameterDescription("bm.metric.ssdmean","derived version of Sum of Squared Distances between pixels value in the metric window (SSD divided by mean over window)");
+    SetParameterDescription("bm.metric.ssdmean","derived version of Sum of "
+      "Squared Distances between pixels value in the metric window (SSD divided"
+      " by mean over window)");
 
     AddChoice("bm.metric.ssd","Sum of Squared Distances");
-    SetParameterDescription("bm.metric.ssd","Sum of squared distances between pixels value in the metric window");
+    SetParameterDescription("bm.metric.ssd","Sum of squared distances between "
+      "pixels value in the metric window");
 
     AddChoice("bm.metric.ncc","Normalized Cross-Correlation");
-    SetParameterDescription("bm.metric.ncc","Normalized Cross-Correlation between the left and right windows");
+    SetParameterDescription("bm.metric.ncc","Normalized Cross-Correlation "
+      "between the left and right windows");
 
     AddChoice("bm.metric.lp","Lp pseudo-norm");
     SetParameterDescription("bm.metric.lp","Lp pseudo-norm between the left and right windows");
@@ -454,20 +502,22 @@ private:
     SetDefaultParameterFloat("bm.metric.lp.p", 1.0);
     SetMinimumParameterFloatValue("bm.metric.lp.p", 0.0);
 
-    AddParameter(ParameterType_Int,"bm.radius","Radius of blocks for matching filter (in pixels)");
+    AddParameter(ParameterType_Int,"bm.radius","Correlation window radius (in pixels)");
     SetParameterDescription("bm.radius","The radius of blocks in Block-Matching (in pixels)");
     SetDefaultParameterInt("bm.radius",2);
     SetMinimumParameterIntValue("bm.radius",1);
     MandatoryOff("bm.radius");
 
     AddParameter(ParameterType_Float,"bm.minhoffset","Minimum altitude offset (in meters)");
-    SetParameterDescription("bm.minhoffset","Minimum altitude below the selected elevation source (in meters)");
+    SetParameterDescription("bm.minhoffset","Minimum altitude below the "
+      "selected elevation source (in meters)");
     //MandatoryOff("bm.minhoffset");
     SetDefaultParameterFloat("bm.minhoffset",-20.0);
     DisableParameter("bm.minhoffset");
 
     AddParameter(ParameterType_Float,"bm.maxhoffset","Maximum altitude offset (in meters)");
-    SetParameterDescription("bm.maxhoffset","Maximum altitude above the selected elevation source (in meters)");
+    SetParameterDescription("bm.maxhoffset","Maximum altitude above the "
+      "selected elevation source (in meters)");
     //MandatoryOff("bm.maxhoffset");
     SetDefaultParameterFloat("bm.maxhoffset",20.0);
     DisableParameter("bm.maxhoffset");
@@ -475,19 +525,21 @@ private:
     AddParameter(ParameterType_Group,"postproc","Postprocessing parameters");
     SetParameterDescription("postproc","This group of parameters allow use optional filters.");
 
-    AddParameter(ParameterType_Empty,"postproc.bij","Use bijection consistency in block matching strategy");
-    SetParameterDescription("postproc.bij","use bijection consistency. Right to Left correlation is computed to validate Left to Right disparities. If bijection is not found pixel is rejected.");
-    MandatoryOff("postproc.bij");
-    EnableParameter("postproc.bij");
+    AddParameter(ParameterType_Bool,"postproc.bij","Use bijection consistency"
+      " in block matching strategy");
+    SetParameterDescription("postproc.bij","Use bijection consistency. "
+      "Right to Left correlation is computed to validate Left to Right "
+      "disparities. If bijection is not found, the disparity is rejected.");
+    SetParameterInt("postproc.bij", 1);
 
-    AddParameter(ParameterType_Empty,"postproc.med","Use median disparities filtering");
-    SetParameterDescription("postproc.med","disparities output can be filtered using median post filtering (disabled by default).");
-    MandatoryOff("postproc.med");
-    DisableParameter("postproc.med");
-
+    AddParameter(ParameterType_Bool,"postproc.med","Use median disparities filtering");
+    SetParameterDescription("postproc.med","Disparity map can be filtered using"
+      " median post filtering (disabled by default).");
 
     AddParameter(ParameterType_Float,"postproc.metrict","Correlation metric threshold");
-    SetParameterDescription("postproc.metrict","Use block matching metric output to discard pixels with low correlation value (disabled by default, float value)");
+    SetParameterDescription("postproc.metrict","Use block matching metric "
+      "output to discard pixels with low correlation value (disabled by "
+      "default, float value)");
     MandatoryOff("postproc.metrict");
     SetDefaultParameterFloat("postproc.metrict",0.6);
     DisableParameter("postproc.metrict");
@@ -495,23 +547,27 @@ private:
     AddParameter(ParameterType_Group,"mask","Masks");
 
     AddParameter(ParameterType_InputImage, "mask.left","Input left mask");
-    SetParameterDescription("mask.left","Mask for left input image");
+    SetParameterDescription("mask.left","Mask for left input image. Pixel with"
+      " a null mask value are discarded.");
     MandatoryOff("mask.left");
     DisableParameter("mask.left");
 
     AddParameter(ParameterType_InputImage, "mask.right","Input right mask");
-    SetParameterDescription("mask.right","Mask for right input image");
+    SetParameterDescription("mask.right","Mask for right input image. Pixel "
+      "with a null mask value are discarded.");
     MandatoryOff("mask.right");
     DisableParameter("mask.right");
 
-    AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low local variance");
-    SetParameterDescription("mask.variancet","This parameter allows one to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
+    AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low"
+      " local variance");
+    SetParameterDescription("mask.variancet","This parameter allows one to "
+      "discard pixels whose local variance is too small (the size of the "
+      "neighborhood is given by the correlation window radius)");
     MandatoryOff("mask.variancet");
     SetDefaultParameterFloat("mask.variancet",50.);
     //DisableParameter("mask.variancet");
 
     AddRAMParameter();
-
 
     SetDocExampleParameterValue("input.il","sensor_stereo_left.tif sensor_stereo_right.tif");
     SetDocExampleParameterValue("elev.default","200");
@@ -524,7 +580,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if( HasValue("input.il") )
       {
@@ -564,7 +620,7 @@ private:
       }
     else blockMatcherFilter->MinimizeOff();
 
-    if (IsParameterEnabled("postproc.bij"))
+    if (GetParameterInt("postproc.bij"))
       {
       invBlockMatcherFilter->SetLeftInput(rightImage);
       invBlockMatcherFilter->SetRightInput(leftImage);
@@ -590,7 +646,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Setup the DSM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
@@ -688,8 +744,8 @@ private:
       epipolarGridSource->Update();
 
       FloatImageType::SpacingType epiSpacing;
-      epiSpacing[0] = 0.5 * (vcl_abs(inleft->GetSpacing()[0]) + vcl_abs(inleft->GetSpacing()[1]));
-      epiSpacing[1] = 0.5 * (vcl_abs(inleft->GetSpacing()[0]) + vcl_abs(inleft->GetSpacing()[1]));
+      epiSpacing[0] = 0.5 * (vcl_abs(inleft->GetSignedSpacing()[0]) + vcl_abs(inleft->GetSignedSpacing()[1]));
+      epiSpacing[1] = 0.5 * (vcl_abs(inleft->GetSignedSpacing()[0]) + vcl_abs(inleft->GetSignedSpacing()[1]));
 
       FloatImageType::SizeType epiSize;
       epiSize = epipolarGridSource->GetRectifiedImageSize();
@@ -721,7 +777,7 @@ private:
       leftInverseDisplacementFieldFilter->SetInput(leftDisplacement);
 
       FloatVectorImageType::PointType lorigin = inleft->GetOrigin();
-      FloatVectorImageType::SpacingType lspacing = inleft->GetSpacing();
+      FloatVectorImageType::SpacingType lspacing = inleft->GetSignedSpacing();
       FloatVectorImageType::SizeType lsize = inleft->GetLargestPossibleRegion().GetSize();
       double gridStep = epipolarGridSource->GetGridStep();
       lspacing[0] *= gridStep;
@@ -887,7 +943,7 @@ private:
       m_Filters.push_back(lBandMathFilter.GetPointer());
 
       BandMathFilterType::Pointer finalMaskFilter;
-      if (IsParameterEnabled("postproc.bij"))
+      if (GetParameterInt("postproc.bij"))
         {
         finalMaskFilter = BandMathFilterType::New();
         finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
@@ -932,7 +988,7 @@ private:
           blockMatcherFilterPointer = SSDDivMeanBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
 
-          if (IsParameterEnabled("postproc.bij"))
+          if (GetParameterInt("postproc.bij"))
             {
             //Reverse correlation
             invSSDDivMeanBlockMatcherFilter = SSDDivMeanBlockMatchingFilterType::New();
@@ -965,7 +1021,7 @@ private:
           blockMatcherFilterPointer = SSDBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
 
-          if (IsParameterEnabled("postproc.bij"))
+          if (GetParameterInt("postproc.bij"))
             {
             //Reverse correlation
             invSSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
@@ -996,7 +1052,7 @@ private:
           blockMatcherFilterPointer = NCCBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
 
-          if (IsParameterEnabled("postproc.bij"))
+          if (GetParameterInt("postproc.bij"))
             {
             //Reverse correlation
             invNCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
@@ -1030,7 +1086,7 @@ private:
           blockMatcherFilterPointer = LPBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
 
-          if (IsParameterEnabled("postproc.bij"))
+          if (GetParameterInt("postproc.bij"))
             {
             //Reverse correlation
             invLPBlockMatcherFilter = LPBlockMatchingFilterType::New();
@@ -1059,7 +1115,7 @@ private:
           break;
         }
 
-       if (IsParameterEnabled("postproc.bij"))
+       if (GetParameterInt("postproc.bij"))
         {
         otbAppLogINFO(<<"Using reverse block-matching to filter incoherent disparity values.");
         bijectFilter = BijectionFilterType::New();
@@ -1089,7 +1145,7 @@ private:
 
      FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
       FloatImageType::Pointer finalMaskImage=finalMaskFilter->GetOutput();
-      if (IsParameterEnabled("postproc.med"))
+      if (GetParameterInt("postproc.med"))
         {
         MedianFilterType::Pointer hMedianFilter = MedianFilterType::New();
         hMedianFilter->SetInput(subPixelFilterPointer->GetOutput(0));
@@ -1123,7 +1179,7 @@ private:
       FloatImageType::Pointer hDispOutput2 = disparityTranslateFilter->GetHorizontalDisparityMapOutput();
       FloatImageType::Pointer vDispOutput2 = disparityTranslateFilter->GetVerticalDisparityMapOutput();
       FloatImageType::Pointer translatedMaskImage =  dispTranslateMaskFilter->GetOutput();
-      if (IsParameterEnabled("postproc.med"))
+      if (GetParameterInt("postproc.med"))
         {
         MedianFilterType::Pointer hMedianFilter2 = MedianFilterType::New();
         MedianFilterType::Pointer vMedianFilter2 = MedianFilterType::New();

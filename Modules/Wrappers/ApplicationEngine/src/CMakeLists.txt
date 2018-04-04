@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-set(OTBApplicationEngine_SRC
+set( OTBApplicationEngine_SRC
   otbWrapperApplicationHtmlDocGenerator.cxx
   otbWrapperComplexOutputImageParameter.cxx
   otbWrapperInputVectorDataListParameter.cxx
@@ -32,10 +32,14 @@ set(OTBApplicationEngine_SRC
   otbWrapperOutputImageParameter.cxx
   otbWrapperInputImageParameter.cxx
   otbWrapperInputImageParameterUInt8.cxx
-  otbWrapperInputImageParameterInt16.cxx
   otbWrapperInputImageParameterUInt16.cxx
-  otbWrapperInputImageParameterInt32.cxx
   otbWrapperInputImageParameterUInt32.cxx
+  otbWrapperInputImageParameterInt16.cxx
+  otbWrapperInputImageParameterInt32.cxx
+  otbWrapperInputImageParameterCInt16.cxx
+  otbWrapperInputImageParameterCInt32.cxx
+  otbWrapperInputImageParameterCFloat.cxx
+  otbWrapperInputImageParameterCDouble.cxx
   otbWrapperInputImageParameterFloat.cxx
   otbWrapperInputImageParameterDouble.cxx
   otbWrapperParameterKey.cxx
@@ -48,11 +52,16 @@ set(OTBApplicationEngine_SRC
   otbWrapperApplicationRegistry.cxx
   otbWrapperApplicationFactoryBase.cxx
   otbWrapperCompositeApplication.cxx
-  otbLogger.cxx
+  otbWrapperStringListInterface.cxx
+  otbWrapperStringListParameter.cxx
+  otbWrapperAbstractParameterList.cxx
+  otbWrapperParameterList.cxx
+  otbWrapperBoolParameter.cxx
+  otbWrapperMetaDataHelper.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})
-target_link_libraries(OTBApplicationEngine 
+target_link_libraries(OTBApplicationEngine
   ${OTBVectorDataBase_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   ${OTBImageIO_LIBRARIES}

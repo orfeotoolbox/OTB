@@ -57,7 +57,9 @@ void QtWidgetComplexOutputImageParameter::DoCreateWidget()
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
   m_Input = new QLineEdit;
-  m_Input->setToolTip( m_OutputImageParam->GetDescription() );
+  m_Input->setToolTip(
+    QString::fromStdString( m_OutputImageParam->GetDescription() )
+  );
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
   connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
   m_HLayout->addWidget(m_Input);
@@ -65,6 +67,8 @@ void QtWidgetComplexOutputImageParameter::DoCreateWidget()
   // Set the Output PixelType choice Combobox
   m_ComboBox = new QComboBox;
   m_ComboBox->setToolTip("Complex Output Pixel Type");
+  m_ComboBox->addItem( "cint16");
+  m_ComboBox->addItem( "cint32");
   m_ComboBox->addItem( "cfloat");
   m_ComboBox->addItem( "cdouble");
   m_ComboBox->setCurrentIndex(m_OutputImageParam->GetComplexPixelType());

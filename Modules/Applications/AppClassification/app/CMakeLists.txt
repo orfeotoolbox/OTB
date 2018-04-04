@@ -18,33 +18,6 @@
 # limitations under the License.
 #
 
-set(OTBAppClassification_LINK_LIBS
-  ${OTBVectorDataBase_LIBRARIES}
-  ${OTBConversion_LIBRARIES}
-  ${OTBStatistics_LIBRARIES}
-  ${OTBColorMap_LIBRARIES}
-  ${OTBBoost_LIBRARIES}
-  ${OTBInterpolation_LIBRARIES}
-  ${OTBMajorityVoting_LIBRARIES}
-  ${OTBVectorDataIO_LIBRARIES}
-  ${OTBSOM_LIBRARIES}
-  ${OTBSVMLearning_LIBRARIES}
-  ${OTBLearningBase_LIBRARIES}
-  ${OTBApplicationEngine_LIBRARIES}
-  ${OTBIndices_LIBRARIES}
-  ${OTBMathParser_LIBRARIES}
-  ${OTBDempsterShafer_LIBRARIES}
-  ${OTBGdalAdapters_LIBRARIES}
-  ${OTBProjection_LIBRARIES}
-  ${OTBImageBase_LIBRARIES}
-  ${OTBIOXML_LIBRARIES}
-  ${OTBVectorDataManipulation_LIBRARIES}
-  ${OTBStreaming_LIBRARIES}
-  ${OTBImageManipulation_LIBRARIES}
-  ${OTBObjectList_LIBRARIES}
-  ${OTBCommon_LIBRARIES}
-)
-
 otb_create_application(
   NAME           ComputeOGRLayersFeaturesStatistics
   SOURCES        otbComputeOGRLayersFeaturesStatistics.cxx
@@ -80,10 +53,12 @@ otb_create_application(
   SOURCES        otbComputePolylineFeatureFromImage.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           KMeansClassification
-  SOURCES        otbKMeansClassification.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+if(OTB_USE_SHARK)
+  otb_create_application(
+    NAME           KMeansClassification
+    SOURCES        otbKMeansClassification.cxx
+    LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+endif()
 
 otb_create_application(
   NAME           TrainImagesClassifier
@@ -148,6 +123,11 @@ otb_create_application(
 otb_create_application(
   NAME           VectorClassifier
   SOURCES        otbVectorClassifier.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           SampleAugmentation
+  SOURCES        otbSampleAugmentation.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 # Mantis-1427 : temporary fix

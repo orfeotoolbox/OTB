@@ -34,8 +34,6 @@
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 
-#include "itkTimeProbe.h"
-
 namespace otb
 {
 namespace Wrapper
@@ -76,79 +74,103 @@ itkTypeMacro(BinaryMorphologicalOperation, otb::Application);
 
 private:
 
-void DoInit() ITK_OVERRIDE
+void DoInit() override
 {
-SetName("BinaryMorphologicalOperation");
-SetDescription("Performs morphological operations on an input image channel");
+SetName( "BinaryMorphologicalOperation" );
+SetDescription( "Performs morphological operations on an input image channel" );
 
 // Documentation
-SetDocName("Binary Morphological Operation");
-SetDocLongDescription("This application performs binary morphological operations on a mono band image");
-SetDocLimitations("None");
-SetDocAuthors("OTB-Team");
-SetDocSeeAlso("itkBinaryDilateImageFilter, itkBinaryErodeImageFilter, itkBinaryMorphologicalOpeningImageFilter and itkBinaryMorphologicalClosingImageFilter classes");
+SetDocName( "Binary Morphological Operation" );
+SetDocLongDescription( "This application performs binary morphological "
+  "operations on a mono band image or a channel of the input." );
+SetDocLimitations( "None" );
+SetDocAuthors( "OTB-Team" );
+SetDocSeeAlso( "itkBinaryDilateImageFilter, itkBinaryErodeImageFilter, "
+  "itkBinaryMorphologicalOpeningImageFilter and "
+  "itkBinaryMorphologicalClosingImageFilter classes." );
 
 AddDocTag(Tags::FeatureExtraction);
 AddDocTag("Morphology");
 
-AddParameter(ParameterType_InputImage, "in",  "Input Image");
-SetParameterDescription("in", "The input image to be filtered.");
+AddParameter( ParameterType_InputImage , "in" ,  "Input Image" );
+SetParameterDescription( "in" , "The input image to be filtered." );
 
-AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
-SetParameterDescription("out", "Output image containing the filtered output image.");
+AddParameter( ParameterType_OutputImage , "out" , "Output Image" );
+SetParameterDescription( "out" , "Output image" );
 
-AddParameter(ParameterType_Int,  "channel",  "Selected Channel");
-SetParameterDescription("channel", "The selected channel index");
-SetDefaultParameterInt("channel", 1);
-SetMinimumParameterIntValue("channel", 1);
+AddParameter( ParameterType_Int ,  "channel" ,  "Selected Channel" );
+SetParameterDescription( "channel" , "The selected channel index" );
+SetDefaultParameterInt( "channel" , 1 );
+SetMinimumParameterIntValue( "channel" , 1 );
 
 AddRAMParameter();
 
-AddParameter(ParameterType_Choice, "structype", "Structuring Element Type");
-SetParameterDescription("structype", "Choice of the structuring element type");
+AddParameter( ParameterType_Choice , "structype" ,
+ "Type of structuring element" );
+SetParameterDescription( "structype" , 
+  "Choice of the structuring element type");
 //Ball
-AddChoice("structype.ball", "Ball");
-AddParameter(ParameterType_Int, "structype.ball.xradius", "The Structuring Element X Radius");
-SetParameterDescription("structype.ball.xradius", "The Structuring Element X Radius");
-SetDefaultParameterInt("structype.ball.xradius", 5);
-AddParameter(ParameterType_Int, "structype.ball.yradius", "The Structuring Element Y Radius");
-SetParameterDescription("structype.ball.yradius", "The Structuring Element Y Radius");
-SetDefaultParameterInt("structype.ball.yradius", 5);
+AddChoice( "structype.ball" , "Ball" );
+AddParameter( ParameterType_Int , "structype.ball.xradius" ,
+ "Structuring element X radius" );
+SetParameterDescription( "structype.ball.xradius" , 
+  "The structuring element radius along the X axis." );
+SetDefaultParameterInt( "structype.ball.xradius" , 5 );
+AddParameter( ParameterType_Int , "structype.ball.yradius" ,
+ "Structuring element Y radiuss" );
+SetParameterDescription( "structype.ball.yradius" , 
+  "The structuring element radius along the y axis." );
+SetDefaultParameterInt( "structype.ball.yradius" , 5 );
 //Cross
-AddChoice("structype.cross", "Cross");
+AddChoice( "structype.cross" , "Cross" );
 
 AddParameter(ParameterType_Choice, "filter", "Morphological Operation");
 SetParameterDescription("filter", "Choice of the morphological operation");
 //Dilate
-AddChoice("filter.dilate", "Dilate");
-AddParameter(ParameterType_Float, "filter.dilate.foreval", "Foreground Value");
-SetParameterDescription("filter.dilate.foreval", "The Foreground Value");
-SetDefaultParameterFloat("filter.dilate.foreval", 1.0);
-AddParameter(ParameterType_Float, "filter.dilate.backval", "Background Value");
-SetParameterDescription("filter.dilate.backval", "The Background Value");
-SetDefaultParameterFloat("filter.dilate.backval", 0.0);
+AddChoice( "filter.dilate" , "Dilate" );
+AddParameter( ParameterType_Float , "filter.dilate.foreval" ,
+ "Foreground value" );
+SetParameterDescription( "filter.dilate.foreval" , 
+  "Set the foreground value, default is 1.0." );
+SetDefaultParameterFloat( "filter.dilate.foreval" , 1.0 );
+AddParameter( ParameterType_Float , "filter.dilate.backval" ,
+ "Background value" );
+SetParameterDescription( "filter.dilate.backval" , 
+  "Set the background value, default is 0.0." );
+SetDefaultParameterFloat( "filter.dilate.backval" , 0.0 );
 
 //Erode
-AddChoice("filter.erode", "Erode");
-AddParameter(ParameterType_Float, "filter.erode.foreval", "Foreground Value");
-SetParameterDescription("filter.erode.foreval", "The Foreground Value");
-SetDefaultParameterFloat("filter.erode.foreval", 1.0);
-AddParameter(ParameterType_Float, "filter.erode.backval", "Background Value");
-SetParameterDescription("filter.erode.backval", "The Background Value");
+AddChoice( "filter.erode" , "Erode" );
+AddParameter( ParameterType_Float , "filter.erode.foreval" , 
+  "Foreground value" );
+SetParameterDescription( "filter.erode.foreval" , 
+  "Set the foreground value, default is 1.0." );
+SetDefaultParameterFloat( "filter.erode.foreval" , 1.0 );
+AddParameter( ParameterType_Float , "filter.erode.backval" , 
+   "Background value" );
+SetParameterDescription("filter.erode.backval", 
+  "Set the background value, default is 0.0." );
 SetDefaultParameterFloat("filter.erode.backval", 0.0);
+
 //Opening
-AddChoice("filter.opening", "Opening");
-AddParameter(ParameterType_Float, "filter.opening.foreval", "Foreground Value");
-SetParameterDescription("filter.opening.foreval", "The Foreground Value");
+AddChoice( "filter.opening" , "Opening" );
+AddParameter( ParameterType_Float , "filter.opening.foreval" ,
+  "Foreground value" );
+SetParameterDescription( "filter.opening.foreval" , 
+  "Set the foreground value, default is 1.0." );
 SetDefaultParameterFloat("filter.opening.foreval", 1.0);
-AddParameter(ParameterType_Float, "filter.opening.backval", "Background Value");
-SetParameterDescription("filter.opening.backval", "The Background Value");
-SetDefaultParameterFloat("filter.opening.backval", 0.0);
+AddParameter( ParameterType_Float , "filter.opening.backval" ,
+  "Background value" );
+SetParameterDescription( "filter.opening.backval" , 
+  "Set the background value, default is 0.0." );
+SetDefaultParameterFloat( "filter.opening.backval" , 0.0 );
 //Closing
-AddChoice("filter.closing", "Closing");
-AddParameter(ParameterType_Float, "filter.closing.foreval", "Foreground Value");
-SetParameterDescription("filter.closing.foreval", "The Foreground Value");
-SetDefaultParameterFloat("filter.closing.foreval", 1.0);
+AddChoice( "filter.closing" , "Closing" );
+AddParameter( ParameterType_Float , "filter.closing.foreval" ,
+  "Foreground value" );
+SetParameterDescription( "filter.closing.foreval" , 
+  "Set the foreground value, default is 1.0." );
+SetDefaultParameterFloat( "filter.closing.foreval" , 1.0 );
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
@@ -161,12 +183,12 @@ SetDocExampleParameterValue("filter", "erode");
 SetOfficialDocLink();
 }
 
-void DoUpdateParameters() ITK_OVERRIDE
+void DoUpdateParameters() override
 {
   // Nothing to do here : all parameters are independent
 }
 
-void DoExecute() ITK_OVERRIDE
+void DoExecute() override
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   inImage->UpdateOutputInformation();

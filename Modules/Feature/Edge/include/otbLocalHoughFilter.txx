@@ -195,7 +195,7 @@ LocalHoughFilter<TInputImage>
       region.SetIndex(index);
       localImage->SetRegions(region);
       localImage->SetOrigin(filterImage->GetOrigin());
-      localImage->SetSpacing(filterImage->GetSpacing());
+      localImage->SetSignedSpacing(filterImage->GetSignedSpacing());
       localImage->Allocate();
 
       typedef itk::ImageRegionIteratorWithIndex<InputImageType>      LocalIteratorType;
@@ -229,7 +229,11 @@ LocalHoughFilter<TInputImage>
       // Get the list of LineSpatialObject lines
       // ---------------------------------------
 
+      #if !defined(ITK_LEGACY_REMOVE)
       lines = houghFilter->GetLines(m_NumberOfLines);
+      #else
+      lines = houghFilter->GetLines();
+      #endif
 
       LineIterator itLines = lines.begin();
 

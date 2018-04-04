@@ -1433,11 +1433,11 @@ MainWindow
 
       if( !( *it )->IsClosable() )
 	{
-	assert( !( *it )->GetApplication().IsNull() );
+	assert( ( *it )->GetModel()->GetApplication() );
 
 	// qDebug() << "OTB-application:" << ( *it )->GetApplication()->GetDocName();
 
-	names.push_back( ( *it )->GetApplication()->GetDocName() );
+	names.push_back( ( *it )->GetModel()->GetApplication()->GetDocName() );
 	}
       }
 

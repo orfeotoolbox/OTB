@@ -22,6 +22,14 @@ function(install_python_bindings)
     install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib/otb/python
       DESTINATION ${PKG_STAGE_DIR}/lib
       PATTERN "*.pyc" EXCLUDE
+      PATTERN "__pycache__" EXCLUDE
+      )
+  endif()
+  if(HAVE_PYTHON3)
+    install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib/otb/python3
+      DESTINATION ${PKG_STAGE_DIR}/lib
+      PATTERN "*.pyc" EXCLUDE
+      PATTERN "__pycache__" EXCLUDE
       )
   endif()
 endfunction()

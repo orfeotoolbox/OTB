@@ -29,7 +29,6 @@
 // Statistic XML Reader
 #include "otbStatisticsXMLFileReader.h"
 
-#include "itkTimeProbe.h"
 #include "otbStandardFilterWatcher.h"
 
 // Normalize the samples
@@ -99,7 +98,7 @@ protected:
 
 private:
 
-void DoInit() ITK_OVERRIDE
+void DoInit() override
 {
   SetName("TrainRegression");
   SetDescription(
@@ -117,53 +116,74 @@ void DoInit() ITK_OVERRIDE
     "lists are built such that their size is inferior to maximum bounds given "
     "by the user, and the proportion corresponds to the balance parameter. "
     "Several classifier parameters can be set depending on the chosen "
-    "classifier. In the validation process, the mean square error is computed\n"
+    "classifier. In the validation process, the mean square error is computed "
+    "between the ground truth and the estimated model.\n"
     " This application is based on LibSVM and on OpenCV Machine Learning "
     "classifiers, and is compatible with OpenCV 2.3.1 and later.");
   SetDocLimitations("None");
   SetDocAuthors("OTB-Team");
-  SetDocSeeAlso("OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html ");
+  SetDocSeeAlso("OpenCV documentation for machine learning "
+    "http://docs.opencv.org/modules/ml/doc/ml.html ");
 
   //Group IO
-  AddParameter(ParameterType_Group, "io", "Input and output data");
-  SetParameterDescription("io", "This group of parameters allows setting input and output data.");
-  AddParameter(ParameterType_InputImageList, "io.il", "Input Image List");
-  SetParameterDescription("io.il", "A list of input images. First (n-1) bands should contain the predictor. The last band should contain the output value to predict.");
-  AddParameter(ParameterType_InputFilename, "io.csv", "Input CSV file");
-  SetParameterDescription("io.csv","Input CSV file containing the predictors, and the output values in last column. Only used when no input image is given");
-  MandatoryOff("io.csv");
+  AddParameter( ParameterType_Group , "io" , "Input and output data" );
+  SetParameterDescription("io" , 
+    "This group of parameters allows setting input and output data." );
+  AddParameter( ParameterType_InputImageList , "io.il", "Input Image List" );
+  SetParameterDescription( "io.il" , 
+    "A list of input images. First (n-1) bands should contain the predictor. "
+    "The last band should contain the output value to predict." );
+  AddParameter( ParameterType_InputFilename , "io.csv" , "Input CSV file" );
+  SetParameterDescription( "io.csv" ,
+    "Input CSV file containing the predictors, and the output values in last "
+    "column. Only used when no input image is given" );
+  MandatoryOff( "io.csv" );
 
-  AddParameter(ParameterType_InputFilename, "io.imstat", "Input XML image statistics file");
-  MandatoryOff("io.imstat");
-  SetParameterDescription("io.imstat",
-                          "Input XML file containing the mean and the standard deviation of the input images.");
-  AddParameter(ParameterType_OutputFilename, "io.out", "Output regression model");
-  SetParameterDescription("io.out", "Output file containing the model estimated (.txt format).");
+  AddParameter( ParameterType_InputFilename , "io.imstat" , 
+    "Input XML image statistics file" );
+  MandatoryOff( "io.imstat" );
+  SetParameterDescription( "io.imstat",
+    "Input XML file containing the mean and the standard deviation of the "
+    "input images." );
+  AddParameter( ParameterType_OutputFilename , "io.out" ,
+    "Output regression model" );
+  SetParameterDescription( "io.out" , 
+    "Output file containing the model estimated (.txt format)." );
 
-  AddParameter(ParameterType_Float,"io.mse","Mean Square Error");
-  SetParameterDescription("io.mse","Mean square error computed with the validation predictors");
-  SetParameterRole("io.mse",Role_Output);
-  DisableParameter("io.mse");
+  AddParameter( ParameterType_Float , "io.mse" , "Mean Square Error" );
+  SetParameterDescription( "io.mse" ,
+    "Mean square error computed with the validation predictors" );
+  SetParameterRole( "io.mse" , Role_Output );
+  DisableParameter( "io.mse" );
 
   //Group Sample list
-  AddParameter(ParameterType_Group, "sample", "Training and validation samples parameters");
-  SetParameterDescription("sample",
-                          "This group of parameters allows you to set training and validation sample lists parameters.");
+  AddParameter( ParameterType_Group , "sample" , 
+    "Training and validation samples parameters" );
+  SetParameterDescription( "sample" ,
+    "This group of parameters allows you to set training and validation sample "
+    "lists parameters." );
 
-  AddParameter(ParameterType_Int, "sample.mt", "Maximum training predictors");
+  AddParameter( ParameterType_Int , "sample.mt" , 
+    "Maximum training predictors");
   //MandatoryOff("mt");
-  SetDefaultParameterInt("sample.mt", 1000);
-  SetParameterDescription("sample.mt", "Maximum number of training predictors (default = 1000) (no limit = -1).");
+  SetDefaultParameterInt( "sample.mt" , 1000 );
+  SetParameterDescription( "sample.mt" , 
+    "Maximum number of training predictors (default = 1000) (no limit = -1).");
 
-  AddParameter(ParameterType_Int, "sample.mv", "Maximum validation predictors");
+  AddParameter( ParameterType_Int , "sample.mv" , 
+    "Maximum validation predictors");
   // MandatoryOff("mv");
-  SetDefaultParameterInt("sample.mv", 1000);
-  SetParameterDescription("sample.mv", "Maximum number of validation predictors (default = 1000) (no limit = -1).");
+  SetDefaultParameterInt( "sample.mv" , 1000 );
+  SetParameterDescription( "sample.mv" , 
+    "Maximum number of validation predictors (default = 1000) "
+    "(no limit = -1).");
 
-  AddParameter(ParameterType_Float, "sample.vtr", "Training and validation sample ratio");
-  SetParameterDescription("sample.vtr",
-                          "Ratio between training and validation samples (0.0 = all training, 1.0 = all validation) (default = 0.5).");
-  SetParameterFloat("sample.vtr",0.5, false);
+  AddParameter( ParameterType_Float , "sample.vtr" , 
+    "Training and validation sample ratio");
+  SetParameterDescription( "sample.vtr" ,
+    "Ratio between training and validation samples (0.0 = all training, "
+    "1.0 = all validation) (default = 0.5).");
+  SetParameterFloat( "sample.vtr" , 0.5);
 
   Superclass::DoInit();
 
@@ -178,7 +198,7 @@ void DoInit() ITK_OVERRIDE
   SetOfficialDocLink();
 }
 
-void DoUpdateParameters() ITK_OVERRIDE
+void DoUpdateParameters() override
 {
   if (HasValue("io.csv") && IsParameterEnabled("io.csv"))
     {
@@ -259,7 +279,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
   ifs.close();
 }
 
-void DoExecute() ITK_OVERRIDE
+void DoExecute() override
 {
   GetLogger()->Debug("Entering DoExecute\n");
   //Create training and validation for list samples and label list samples

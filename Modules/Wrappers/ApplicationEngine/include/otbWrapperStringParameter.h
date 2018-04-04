@@ -51,24 +51,24 @@ public:
   itkTypeMacro(StringParameter, Parameter);
 
   /** Set the value */
-  void SetValue( std::string value)
+  void SetValue( const std::string & value )
   {
     m_Value = value;
-    SetActive(true);
+    SetActive( true );
   }
 
   /** Get the value */
-  std::string GetValue() const
+  const std::string & GetValue() const
   {
     return m_Value;
   }
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return !m_Value.empty();
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     m_Value = "";
   }
@@ -79,7 +79,7 @@ protected:
   {}
 
   /** Destructor */
-  ~StringParameter() ITK_OVERRIDE
+  ~StringParameter() override
   {}
 
   std::string  m_Value;

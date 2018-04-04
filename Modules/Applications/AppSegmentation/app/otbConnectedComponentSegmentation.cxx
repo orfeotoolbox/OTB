@@ -69,7 +69,7 @@ public:
         <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ConnectedComponentSegmentation");
     SetDescription("Connected component segmentation and object based image filtering of the input image according to user-defined criterions.");
@@ -124,12 +124,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     InputVectorImageType::Pointer inputImage = GetParameterImage("in");
 
@@ -173,7 +173,7 @@ private:
       m_Vproj->SetInput(m_Connected->GetFilter()->GetOutputVectorData());
       m_Vproj->SetInputKeywordList(inputImage->GetImageKeywordlist());
       //m_Vproj->SetInputOrigin(inputImage->GetOrigin());
-      //m_Vproj->SetInputSpacing(inputImage->GetSpacing());
+      //m_Vproj->SetInputSpacing(inputImage->GetSignedSpacing());
 
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");

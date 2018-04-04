@@ -67,9 +67,9 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
 
     // Compute tile center
     PointType center = reader->GetOutput()->GetOrigin();
-    center[0] += reader->GetOutput()->GetSpacing()[0]
+    center[0] += reader->GetOutput()->GetSignedSpacing()[0]
                 * reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]/2;
-    center[1] += reader->GetOutput()->GetSpacing()[1]
+    center[1] += reader->GetOutput()->GetSignedSpacing()[1]
                 * reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]/2;
     points.push_back(center);
 

@@ -47,6 +47,19 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Check compiler versions
+set(OTB_MIN_GNU_VER 5)
+set(OTB_MIN_MSVC_VER 19)
+set(OTB_MIN_Clang_VER 3.4)
+if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
+  if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
+    message(STATUS "WARNING: the version of your ${CMAKE_CXX_COMPILER_ID} "
+      "compiler is not supported by Orfeo ToolBox (C++14 support might be "
+      "incomplete). Please consider updating your compiler to version "
+      "${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER} or later.")
+  endif()
+endif()
+
 include(CMakeDependentOption)
 #
 # use ExternalProject
@@ -110,7 +123,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "2")
+set(OTB_VERSION_MINOR "5")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -144,6 +157,9 @@ if(NOT OTB_INSTALL_APP_DIR)
 endif()
 if(NOT OTB_INSTALL_PYTHON_DIR)
   set(OTB_INSTALL_PYTHON_DIR "lib/otb/python")
+endif()
+if(NOT OTB_INSTALL_PYTHON3_DIR)
+  set(OTB_INSTALL_PYTHON3_DIR "lib/otb/python3")
 endif()
 if(NOT OTB_INSTALL_JAVA_DIR)
   set(OTB_INSTALL_JAVA_DIR "lib/otb/java")
@@ -215,10 +231,6 @@ mark_as_advanced(OTB_USE_DEPRECATED)
 
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
-#-----------------------------------------------------------------------------
-# SHOW_ALL_MSG_DEBUG option
-option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
-#mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------

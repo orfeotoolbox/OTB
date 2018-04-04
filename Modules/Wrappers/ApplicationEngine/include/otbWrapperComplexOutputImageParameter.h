@@ -44,8 +44,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::ImageBase<2> ImageBaseType;
-
   /** Defining ::New() static method */
   itkNewMacro(Self);
 
@@ -77,7 +75,7 @@ public:
   itkGetMacro(RAMValue, unsigned int);
 
   /** Implement the reset method (replace pixel type by default type) */
-  void Reset() ITK_OVERRIDE
+  void Reset() override
   {
     m_ComplexPixelType = m_DefaultComplexPixelType;
   }
@@ -85,8 +83,12 @@ public:
   /** Static method to convert pixel type into string */
   static std::string ConvertPixelTypeToString(ComplexImagePixelType type);
 
+  /** Convert a string into a ComplexImagePixelType (returns false if the
+   *  conversion fails) */
+  static bool ConvertStringToPixelType(const std::string &value, ComplexImagePixelType &type);
+
   /** Return true if a filename is set */
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
   void SetFileName (const char* filename)
   {
@@ -110,7 +112,7 @@ protected:
   /** Constructor */
   ComplexOutputImageParameter();
   /** Destructor */
-  ~ComplexOutputImageParameter() ITK_OVERRIDE;
+  ~ComplexOutputImageParameter() override;
 
   template <class TInputImageType>
     void SwitchImageWrite();
@@ -118,23 +120,18 @@ protected:
   template <class TInputVectorImageType>
     void SwitchVectorImageWrite();
 
-  //FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
   std::string            m_FileName;
   ComplexImagePixelType         m_ComplexPixelType;
   ComplexImagePixelType         m_DefaultComplexPixelType;
 
-  typedef otb::ImageFileWriter<ComplexFloatImageType>  ComplexFloatWriterType;
-  typedef otb::ImageFileWriter<ComplexDoubleImageType> ComplexDoubleWriterType;
-
-
+  typedef otb::ImageFileWriter<ComplexInt16VectorImageType>  ComplexVectorInt16WriterType;
+  typedef otb::ImageFileWriter<ComplexInt32VectorImageType>  ComplexVectorInt32WriterType;
   typedef otb::ImageFileWriter<ComplexFloatVectorImageType>  ComplexVectorFloatWriterType;
   typedef otb::ImageFileWriter<ComplexDoubleVectorImageType> ComplexVectorDoubleWriterType;
 
-
-  ComplexFloatWriterType::Pointer  m_ComplexFloatWriter;
-  ComplexDoubleWriterType::Pointer m_ComplexDoubleWriter;
-
+  ComplexVectorInt16WriterType::Pointer  m_ComplexVectorInt16Writer;
+  ComplexVectorInt32WriterType::Pointer  m_ComplexVectorInt32Writer;
   ComplexVectorFloatWriterType::Pointer  m_ComplexVectorFloatWriter;
   ComplexVectorDoubleWriterType::Pointer m_ComplexVectorDoubleWriter;
 

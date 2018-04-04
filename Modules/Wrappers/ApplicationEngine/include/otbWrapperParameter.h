@@ -31,26 +31,6 @@ namespace otb
 {
 namespace Wrapper
 {
-enum DefaultValueMode
-  {
-    /**
-     * This parameter has no default behaviour and should be set by
-     * the user.
-     */
-    DefaultValueMode_UNKNOWN,
-    /**
-     * The default value of this parameter can be estimated from
-     * other parameters.
-     */
-    DefaultValueMode_RELATIVE,
-
-    /**
-     * The default value of this parameter is not depending on any
-     * other parameter.
-     */
-    DefaultValueMode_ABSOLUTE
-  };
-
 
 /** \class Parameter
  *  \brief This class represent a parameter for the wrapper framework
@@ -70,9 +50,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Defining ::New() static method */
-  itkNewMacro(Self);
-
   /** RTTI support */
   itkTypeMacro(Parameter, itk::Object);
 
@@ -86,7 +63,7 @@ public:
   itkSetStringMacro(Description);
 
   /** Get the parameter description */
-  itkGetStringMacro(Description);
+  itkGetConstReferenceMacro( Description, std::string );
 
   /** Set the parameter key */
   itkSetStringMacro(Key);
@@ -117,20 +94,29 @@ public:
   /** Toogle the parameter mandatory flag */
   itkBooleanMacro(Mandatory);
 
-  /** Set the parameter AutomaticValue flag */
-  itkSetMacro(AutomaticValue, bool);
+  /** Set the parameter AutomaticValue flag (which is the opposite of UserValue)*/
+  virtual void SetAutomaticValue(bool flag)
+    {
+    this->SetUserValue(!flag);
+    }
 
   /** Get the parameter AutomaticValue flag */
-  itkGetConstMacro(AutomaticValue, bool);
+  virtual bool GetAutomaticValue() const
+    {
+    return !m_UserValue;
+    }
 
-  /** Toogle the parameter AutomaticValue flag */
-  itkBooleanMacro(AutomaticValue);
+  /** Toogle ON the parameter AutomaticValue flag */
+  void AutomaticValueOn()
+    {
+    this->SetAutomaticValue(true);
+    }
 
-  /** Set the default value mode */
-  itkSetEnumMacro(DefaultValueMode, DefaultValueMode);
-
-  /** Get the default value mode */
-  itkGetEnumMacro(DefaultValueMode, DefaultValueMode);
+  /** Toogle OFF the parameter AutomaticValue flag */
+  void AutomaticValueOff()
+    {
+    this->SetAutomaticValue(false);
+    }
 
   /** Set the user access level */
   itkSetEnumMacro(UserLevel, UserLevel);
@@ -151,14 +137,11 @@ public:
   {
   }
 
-  virtual bool HasValue() const
-  {
-    itkExceptionMacro(<<"HasValue() method must be re-implemented by sub-classes.");
-  }
+  virtual bool HasValue() const = 0;
 
   virtual bool HasUserValue() const
   {
-    return HasValue() && m_UserValue;
+    return this->HasValue() && m_UserValue;
   }
 
   virtual void SetUserValue(bool isUserValue)
@@ -168,7 +151,8 @@ public:
 
   virtual void ClearValue()
   {
-    itkExceptionMacro(<<"ClearValue() method must be re-implemented by sub-classes.");
+    SetActive( false );
+    Modified();
   }
 
   /** Set/Get the root of the current parameter (direct parent) */
@@ -204,39 +188,22 @@ public:
     return m_ChildrenList;
   }
 
-  /** Store the state of the check box relative to this parameter (TO
-    * BE MOVED to QtWrapper Model )
-    */
-  virtual bool IsChecked()
-  {
-    return m_IsChecked;
-  }
-
-  /** Modify the state of the checkbox relative to this parameter */
-  virtual void SetChecked(const bool value)
-  {
-    m_IsChecked = value;
-  }
-
 protected:
   /** Constructor */
-  Parameter() : m_Name(""),
-                m_Description(""),
-                m_Key(""),
-                m_Mandatory(true),
-                m_Active(false),
-                m_UserValue(false),
-                m_AutomaticValue(false),
-                m_DefaultValueMode(DefaultValueMode_UNKNOWN),
-                m_UserLevel(UserLevel_Basic),
-                m_Role(Role_Input),
-                m_Root(this),
-                m_IsChecked(false)
+  Parameter() :
+    m_Name( "" ),
+    m_Description( "" ),
+    m_Key( "" ),
+    m_Mandatory( true ),
+    m_Active( false ),
+    m_UserValue( false ),
+    m_UserLevel( UserLevel_Basic ),
+    m_Role( Role_Input ),
+    m_Root( this )
   {}
 
   /** Destructor */
-  ~Parameter() ITK_OVERRIDE
-  {}
+  ~Parameter() override {}
 
   /** Name of the parameter */
   std::string                        m_Name;
@@ -253,14 +220,8 @@ protected:
   /** True if activated (a mandatory parameter is always active) */
   bool                               m_Active;
 
-  /** True if the value is set in user mode */
+  /** True if the value is set in user mode (otherwise, it is an automatic value)*/
   bool                               m_UserValue;
-
-  /** True if the application change the value of this parameter */
-  bool                               m_AutomaticValue;
-
-  /** Default value behaviour */
-  DefaultValueMode                   m_DefaultValueMode;
 
   UserLevel                          m_UserLevel;
 
@@ -272,9 +233,6 @@ protected:
 
   /** List of children parameters */
   std::vector<Parameter::Pointer >   m_ChildrenList;
-
-  /** Store the status of the checkbox */
-  bool                               m_IsChecked;
 
 private:
   Parameter(const Parameter &); //purposely not implemented

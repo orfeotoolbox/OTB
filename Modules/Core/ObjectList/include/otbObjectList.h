@@ -23,6 +23,7 @@
 
 #include <vector>
 #include "itkDataObject.h"
+#include "otbDataObjectListInterface.h"
 #include "itkObjectFactory.h"
 
 namespace otb
@@ -36,7 +37,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TObject>
-class ITK_EXPORT ObjectList : public itk::DataObject
+class ITK_EXPORT ObjectList : public itk::DataObject , public DataObjectListInterface
 {
 public:
   /** Standard typedefs */
@@ -71,7 +72,7 @@ public:
    * Get the number of elements in the vector.
    * \return The number of elements in the vector.
    */
-  InternalContainerSizeType Size(void) const;
+  InternalContainerSizeType Size(void) const override;
   /**
    * Resize the maximal list capacity.
    * \param size The new maximal size of the list.
@@ -99,6 +100,11 @@ public:
    * \return The pointer to the nth element of the list.
    */
   ObjectPointerType GetNthElement(unsigned int index) const;
+  /**
+   * Get the nth element of the list as a DataObject *.
+   * \param index The index of the object to get.
+   */
+  Superclass *  GetNthDataObject(unsigned int index) const override;
   /**
    * Return the first element of the list.
    * \return The first element of the list.
@@ -200,7 +206,6 @@ public:
       Iterator lIter(m_Iter + i);
       return lIter;
     }
-
     /**
        * Remove
        */
@@ -208,6 +213,20 @@ public:
     {
       Iterator lIter(m_Iter - i);
       return lIter;
+    }
+    /**
+     */
+    Iterator
+      operator += ( int i )
+    {
+      return m_Iter + i;
+    }
+    /**
+     */
+    Iterator
+      operator -= ( int i )
+    {
+      return m_Iter - i;
     }
     /**
        * Difference comparison operator.
@@ -449,7 +468,7 @@ public:
     friend class ConstIterator;
     friend class ReverseIterator;
     /** typedef of the internal iterator */
-    typedef typename InternalContainerType::reverse_iterator InternalReverseConstIteratorType;
+    typedef typename InternalContainerType::const_reverse_iterator InternalReverseConstIteratorType;
     /** Constructor */
     ReverseConstIterator() {};
     /** Constructor with iternal iterator parameter */
@@ -587,9 +606,9 @@ protected:
   /** Constructor */
   ObjectList();
   /** Destructor */
-  ~ObjectList() ITK_OVERRIDE {}
+  ~ObjectList() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ObjectList(const Self &); //purposely not implemented

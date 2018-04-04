@@ -114,7 +114,7 @@ public:
   }
 
   /** Set the spacing (size of a pixel) of the image.
-   * \sa GetSpacing() */
+   * \sa GetSignedSpacing() */
   itkSetVectorMacro(Spacing, const double, OutputImageType::ImageDimension);
   itkSetVectorMacro(Spacing, const float, OutputImageType::ImageDimension);
 
@@ -160,7 +160,7 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** This filter can only produce the amount of data that it is given,
-   * so we must ITK_OVERRIDE ProcessObject::EnlargeOutputRequestedRegion()
+   * so we must override ProcessObject::EnlargeOutputRequestedRegion()
    * (The default implementation of a source produces the amount of
    * data requested.  This source, however, can only produce what it is
    * given.)

@@ -26,7 +26,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataFileWriter.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 #include "itkMinimumMaximumImageCalculator.h"
 
 #include "otbCorrectPolygonFunctor.h"
@@ -87,15 +87,13 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
   data->GetDataTree()->Add(folder1, document);
   data->SetProjectionRef(lreader->GetOutput()->GetProjectionRef());
 
-  itk::TimeProbe chrono;
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
 
   // If a label is given, extract only this label
   if (argc == 4)
     {
     std::cout << "Label is given; Vectorizing object " << atoi(argv[3]) << std::endl;
-    chrono.Start();
     PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(atoi(argv[3])));
-    chrono.Stop();
 
     //correct polygon
     PolygonType::Pointer correct_polygon = correctPolygon(polygon);
@@ -117,9 +115,7 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
       if (labelMapFilter->GetOutput()->HasLabel(label) && label != labelMapFilter->GetOutput()->GetBackgroundValue())
         {
         std::cout << "Vectorizing object " << label << std::endl;
-        chrono.Start();
         PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(label));
-        chrono.Stop();
 
         //correct polygon
         PolygonType::Pointer correct_polygon = correctPolygon(polygon);
@@ -131,11 +127,12 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
         }
       }
     }
-  std::cout << "Average vectorization time: " << chrono.GetMean() << " s." << std::endl;
+
+  std::cout << "Total vectorization time: " << chrono.GetElapsedMilliseconds() << " ms." << std::endl;
 
   VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
   vectorDataProjection->SetInputOrigin(lreader->GetOutput()->GetOrigin());
-  vectorDataProjection->SetInputSpacing(lreader->GetOutput()->GetSpacing());
+  vectorDataProjection->SetInputSpacing(lreader->GetOutput()->GetSignedSpacing());
   vectorDataProjection->SetInput(data);
 
   writer->SetFileName(outfname);

@@ -162,7 +162,7 @@ public:
 ; itkSetMacro(StartIndex, IndexType)
 ;
   /** Set the spacing (size of a pixel) of the vector data.
-   * \sa GetSpacing() */
+   * \sa GetSignedSpacing() */
   virtual void SetSpacing(const SpacingType& spacing);
   virtual void SetSpacing(const double spacing[2]);
   virtual void SetSpacing(const float spacing[2]);
@@ -187,20 +187,20 @@ public:
 ; itkGetMacro(InitialLabel, LabelType)
 ;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 protected:
   VectorDataToLabelMapWithAttributesFilter();
-  ~VectorDataToLabelMapWithAttributesFilter() ITK_OVERRIDE
+  ~VectorDataToLabelMapWithAttributesFilter() override
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
    * Standard pipeline method.
    */
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** VectorDataToLabelMapWithAttributesFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().

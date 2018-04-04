@@ -77,7 +77,7 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
   SpacingType spacing;
   spacing.Fill(1.0);
   image->SetOrigin(origin);
-  image->SetSpacing(spacing);
+  image->SetSignedSpacing(spacing);
 
   image->SetRegions(region);
   image->SetNumberOfComponentsPerPixel(atoi(argv[3]));
@@ -180,7 +180,7 @@ int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, ch
   SpacingType spacing;
   spacing.Fill(1.0);
   image->SetOrigin(origin);
-  image->SetSpacing(spacing);
+  image->SetSignedSpacing(spacing);
 
   image->SetRegions(region);
   image->SetNumberOfComponentsPerPixel(atoi(argv[3]));

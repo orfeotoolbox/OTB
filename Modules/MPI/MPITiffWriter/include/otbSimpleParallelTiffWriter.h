@@ -28,13 +28,10 @@
 #include "otbExtendedFilenameToWriterOptions.h"
 #include "otbMPIConfig.h"
 
-// Time probe
-#include "itkTimeProbe.h"
-
-
 #include "itkImageFileWriter.h"
 
 #include "itkObjectFactoryBase.h"
+#include "itkFastMutexLock.h"
 
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
@@ -218,7 +215,7 @@ public:
   const InputImageType* GetInput();
 
   /** Does the real work. */
-  virtual void Update();
+  virtual void Update() override;
 
   /** SimpleParallelTiffWriter Methods */
   virtual void SetFileName(const char* extendedFileName);
@@ -256,10 +253,15 @@ public:
   itkSetMacro(TiffTiledMode, bool);
   itkGetMacro(TiffTiledMode, bool);
 
+  /** This override doesn't return a const ref on the actual boolean */
+  const bool & GetAbortGenerateData() const override;
+
+  void SetAbortGenerateData(bool val) override;
+
 protected:
   SimpleParallelTiffWriter();
   virtual ~SimpleParallelTiffWriter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   SimpleParallelTiffWriter(const SimpleParallelTiffWriter &); //purposely not implemented
@@ -329,6 +331,9 @@ private:
   bool m_Verbose;
   bool m_VirtualMode;
   bool m_TiffTiledMode;
+
+  /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 

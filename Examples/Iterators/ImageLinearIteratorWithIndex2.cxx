@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
   Index4DType   index4D   = region4D.GetIndex();
   Size4DType    size4D    = region4D.GetSize();
-  Spacing4DType spacing4D = image4D->GetSpacing();
+  Spacing4DType spacing4D = image4D->GetSignedSpacing();
   Origin4DType  origin4D  = image4D->GetOrigin();
 
   for (unsigned int i = 0; i < 3; ++i)
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     origin3D[i]  = origin4D[i];
     }
 
-  image3D->SetSpacing(spacing3D);
+  image3D->SetSignedSpacing(spacing3D);
   image3D->SetOrigin(origin3D);
 
   Region3DType region3D;

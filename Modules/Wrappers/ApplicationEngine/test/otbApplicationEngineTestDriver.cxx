@@ -23,8 +23,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbWrapperApplicationNew);
-  REGISTER_TEST(otbWrapperParameterNew);
-  REGISTER_TEST(otbWrapperParameterTest1);
   REGISTER_TEST(otbWrapperInputImageParameterNew);
   REGISTER_TEST(otbWrapperInputImageParameterTest1);
   REGISTER_TEST(otbWrapperNumericalParameterNew);
@@ -53,5 +51,7 @@ void RegisterTests()
   REGISTER_TEST(otbWrapperInputVectorDataParameterNew);
   REGISTER_TEST(otbWrapperOutputImageParameterNew);
   REGISTER_TEST(otbWrapperOutputImageParameterTest1);
+  //~ REGISTER_TEST(otbWrapperOutputImageParameterConversionTest);
   REGISTER_TEST(otbApplicationMemoryConnectTest);
+  REGISTER_TEST(otbWrapperImageInterface);
 }

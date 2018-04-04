@@ -145,7 +145,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
   // Update size and spacing according to grid step
   InputImageRegionType largestRegion  = outputPtr->GetLargestPossibleRegion();
   SizeType outputSize       = largestRegion.GetSize();
-  SpacingType outputSpacing = outputPtr->GetSpacing();
+  SpacingType outputSpacing = outputPtr->GetSignedSpacing();
 
   for(unsigned int dim = 0; dim < TOutputCorrelation::ImageDimension; ++dim)
     {
@@ -154,8 +154,8 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
     }
 
   // Set spacing
-  outputPtr->SetSpacing(outputSpacing);
-  outputFieldPtr->SetSpacing(outputSpacing);
+  outputPtr->SetSignedSpacing(outputSpacing);
+  outputFieldPtr->SetSignedSpacing(outputSpacing);
 
   // Set largest region size
   largestRegion.SetSize(outputSize);
@@ -406,7 +406,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacement
   SpacingType localOffset = m_InitialOffset;
 
   // Get fixed image spacing
-  SpacingType fixedSpacing = fixedPtr->GetSpacing();
+  SpacingType fixedSpacing = fixedPtr->GetSignedSpacing();
 
 
   // Walk the images

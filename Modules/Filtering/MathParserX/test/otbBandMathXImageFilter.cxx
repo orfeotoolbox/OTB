@@ -520,11 +520,11 @@ int otbBandMathXImageFilterWithIdx( int itkNotUsed(argc), char* argv[])
   IteratorType it3(image3, region);
 
   image1->SetOrigin(origin);
-  image1->SetSpacing(spacing);
+  image1->SetSignedSpacing(spacing);
   image2->SetOrigin(origin);
-  image2->SetSpacing(spacing);
+  image2->SetSignedSpacing(spacing);
   image3->SetOrigin(origin);
-  image3->SetSpacing(spacing);
+  image3->SetSignedSpacing(spacing);
 
   for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
   {

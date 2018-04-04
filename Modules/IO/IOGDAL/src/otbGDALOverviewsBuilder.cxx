@@ -30,6 +30,7 @@
 #include "otbGDALImageIO.h"
 #include "otbSystem.h"
 
+#include <cctype>
 
 namespace otb
 {
@@ -100,7 +101,32 @@ GDALOverviewsBuilder
 
   io->SetFileName( filename );
 
-  return !io->GetSubDatasetInfo( names, descs );
+  // no overview for containers
+  if(io->GetSubDatasetInfo( names, descs ))
+    return false;
+
+  // no overview for VSI datasets
+  if (filename.size()>8 && filename.compare(0, 4, "/vsi") == 0)
+    {
+    size_t pos = filename.find('/',4);
+    if (pos != std::string::npos)
+      {
+      bool isVSI = true;
+      for (unsigned int i=4; i<pos ; i++)
+        {
+        int c = filename[i];
+        if ( !(std::islower(c) || std::isdigit(c) || c == '_' ) )
+          {
+          isVSI = false;
+          break;
+          }
+        }
+      if (isVSI)
+        return false;
+      }
+    }
+
+  return true;
 }
 
 /***************************************************************************/

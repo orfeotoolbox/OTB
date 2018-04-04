@@ -26,7 +26,9 @@ namespace Wrapper
 {
 
 QtWidgetParameterBase::QtWidgetParameterBase(Parameter * param, QtWidgetModel* m)
-  : m_Model(m), m_Param(param)
+  : m_Model(m)
+  , m_Param(param)
+  , m_IsChecked( false )
 {
 
 }
@@ -89,7 +91,7 @@ void QtWidgetParameterBase::SetActivationState( bool value )
     }
 
   this->setEnabled(value);
-  m_Param->SetChecked(value);
+  this->SetChecked(value);
   m_Param->SetActive(value);
 
 }
@@ -102,6 +104,21 @@ void QtWidgetParameterBase::Reset(  )
   m_Param->SetAutomaticValue(false);
   this->UpdateGUI();
 }
+
+const Parameter *
+QtWidgetParameterBase
+::GetParam() const
+{
+  return m_Param;
+}
+
+Parameter *
+QtWidgetParameterBase
+::GetParam()
+{
+  return m_Param;
+}
+
 
 }
 

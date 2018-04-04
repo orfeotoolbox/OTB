@@ -52,7 +52,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //WeakCount
   AddParameter(ParameterType_Int, "classifier.gbt.w", "Number of boosting algorithm iterations");
-  SetParameterInt("classifier.gbt.w",200, false);
+  SetParameterInt("classifier.gbt.w",200);
   SetParameterDescription(
       "classifier.gbt.w",
       "Number \"w\" of boosting algorithm iterations, with w*K being the total number of trees in "
@@ -60,20 +60,20 @@ LearningApplicationBase<TInputValue,TOutputValue>
 
   //Shrinkage
   AddParameter(ParameterType_Float, "classifier.gbt.s", "Regularization parameter");
-  SetParameterFloat("classifier.gbt.s",0.01, false);
+  SetParameterFloat("classifier.gbt.s",0.01);
   SetParameterDescription("classifier.gbt.s", "Regularization parameter.");
 
   //SubSamplePortion
   AddParameter(ParameterType_Float, "classifier.gbt.p",
                "Portion of the whole training set used for each algorithm iteration");
-  SetParameterFloat("classifier.gbt.p",0.8, false);
+  SetParameterFloat("classifier.gbt.p",0.8);
   SetParameterDescription(
       "classifier.gbt.p",
       "Portion of the whole training set used for each algorithm iteration. The subset is generated randomly.");
 
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.gbt.max", "Maximum depth of the tree");
-  SetParameterInt("classifier.gbt.max",3, false);
+  SetParameterInt("classifier.gbt.max",3);
   SetParameterDescription(
         "classifier.gbt.max", "The training algorithm attempts to split each node while its depth is smaller than the maximum "
         "possible depth of the tree. The actual depth may be smaller if the other termination criteria are met, and/or "

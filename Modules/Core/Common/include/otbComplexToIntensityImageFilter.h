@@ -99,7 +99,7 @@ public:
 
 protected:
   ComplexToIntensityImageFilter() {}
-  ~ComplexToIntensityImageFilter() ITK_OVERRIDE {}
+  ~ComplexToIntensityImageFilter() override {}
 
 private:
   ComplexToIntensityImageFilter(const Self&); //purposely not implemented

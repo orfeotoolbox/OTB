@@ -142,11 +142,11 @@ public:
 
 protected:
   QuaternaryFunctorImageFilter();
-  ~QuaternaryFunctorImageFilter() ITK_OVERRIDE {}
+  ~QuaternaryFunctorImageFilter() override {}
 
   /** Validate the presence of all three inputs. If one or more inputs
    * are missing, throw an exception. */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** QuaternaryFunctorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -159,7 +159,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
   QuaternaryFunctorImageFilter(const Self &); //purposely not implemented

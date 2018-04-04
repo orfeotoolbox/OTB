@@ -24,27 +24,15 @@
 /* INCLUDE SECTION                                                           */
 
 //
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-
-//
 // System includes (sorted by alphabetic order)
 #include <functional>
 
 //
-// ITK includes (sorted by alphabetic order)
-
-//
 // OTB includes (sorted by alphabetic order)
 #include "otbWrapperApplicationHtmlDocGenerator.h"
-// #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
-// #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
-// #include "otbWrapperQtWidgetOutputImageParameter.h"
-// #include "otbWrapperQtWidgetProgressReport.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
-// #include "otbWrapperTypes.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -140,91 +128,28 @@ QtWidgetView
 ::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
 		QWidget* p,
 		Qt::WindowFlags flags ) :
-  QWidget( p, flags ),
-  m_Application( otbApp ),
-  m_Model( NULL ),
-  m_ExecButton( NULL ),
-  m_QuitButton( NULL ),
-  m_Message( NULL ),
-  m_IsClosable( true )
+  otb::Wrapper::QtWidgetView( otbApp, p, flags )
 {
   setObjectName( QtWidgetView::OBJECT_NAME );
 
-  m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
-  m_QuitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
+  m_IconPathDone = std::string("<img src=\":/icons/done\" width=\"16\" height=\"16\" />");
+  m_IconPathFailed = std::string("<img src=\":/icons/failed\" width=\"16\" height=\"16\" />");
 
+  //
+  // need to be connected to the end of a process
   QObject::connect(
-    m_Model, SIGNAL( SetProgressReportBegin() ),
-    this, SLOT( OnProgressReportBegin() )
-  );
-
-  QObject::connect(
-    m_Model, SIGNAL( SetProgressReportDone( int ) ),
-    this, SLOT( OnProgressReportEnd( int ) )
-  );
-
-  QObject::connect(
-    m_Model, SIGNAL( ExceptionRaised( QString ) ),
-    this, SLOT( OnExceptionRaised( QString ) )
-  );
+    GetModel(),
+    SIGNAL( SetProgressReportDone( int ) ),
+    // to:
+    this,
+    SLOT ( OnApplicationExecutionDone( int ) )
+    );
 }
 
 /*******************************************************************************/
 QtWidgetView
 ::~QtWidgetView()
 {
-  // m_Application is smart-pointed and will be automatically deleted.
-
-  delete m_Model;
-  m_Model = NULL;
-}
-
-/*******************************************************************************/
-void
-QtWidgetView
-::CreateGui()
-{
-  // Create a VBoxLayout with the header, the input widgets, and the footer
-  QVBoxLayout *mainLayout = new QVBoxLayout();
-  QTabWidget *tab = new QTabWidget();
-  tab->addTab(CreateInputWidgets(), "Parameters");
-
-   
-  //otb::Wrapper::QtWidgetProgressReport* prog =  new otb::Wrapper::QtWidgetProgressReport(m_Model);
-  //prog->SetApplication(m_Application);
-  //tab->addTab(prog, "Progress");
-  tab->addTab(CreateDoc(), "Documentation");
-  mainLayout->addWidget(tab);
-
-  QTextEdit *log = new QTextEdit();
-  connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
-  tab->addTab(log, "Logs");
-
-  m_Message = new QLabel("<center><font color=\"#FF0000\">Select parameters</font></center>");
-  connect(
-    m_Model,
-    SIGNAL( SetApplicationReady( bool ) ),
-    this, SLOT( UpdateMessageAfterApplicationReady( bool ) )
-  );
-  mainLayout->addWidget(m_Message);
-
-  otb::Wrapper::QtWidgetSimpleProgressReport* progressReport =
-    new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model);
-  progressReport->SetApplication(m_Application);
-   
-  QHBoxLayout *footLayout = new QHBoxLayout;
-  footLayout->addWidget(progressReport);
-  footLayout->addWidget(CreateFooter());
-  mainLayout->addLayout(footLayout);
-
-  QGroupBox *mainGroup = new QGroupBox();
-  mainGroup->setLayout(mainLayout);
-
-  QVBoxLayout  *finalLayout = new QVBoxLayout();
-  finalLayout->addWidget(mainGroup);
-
-  // Make the final layout to the widget
-  this->setLayout(finalLayout);
 }
 
 /*******************************************************************************/
@@ -232,109 +157,14 @@ QWidget*
 QtWidgetView
 ::CreateInputWidgets()
 {
-  QScrollArea *scrollArea = new QScrollArea;
+  QWidget * widget = otb::Wrapper::QtWidgetView::CreateInputWidgets();
 
-  QWidget * widget = 
-    otb::Wrapper::QtWidgetParameterFactory::CreateQtWidget(
-      m_Model->GetApplication()->GetParameterList(),
-      m_Model
-    );
+  otb::Wrapper::QtWidgetParameterBase *paramWidget =
+    widget->findChild<otb::Wrapper::QtWidgetParameterBase*>();
 
-  scrollArea->setWidget( widget );
-  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  scrollArea->setWidgetResizable(true);
+  SetupParameterWidgets(paramWidget);
 
-  //
-  // need to be connected to the end of a process
-  QObject::connect(
-    m_Model,
-    SIGNAL( SetProgressReportDone( int ) ),
-    // to:
-    this,
-    SLOT ( OnApplicationExecutionDone( int ) )
-    );
-
-  SetupParameterWidgets( widget );
-
-  return scrollArea;
-}
-
-/*******************************************************************************/
-QWidget*
-QtWidgetView
-::CreateFooter()
-{
-  // an HLayout with two buttons : Execute and Quit
-  QGroupBox *footerGroup = new QGroupBox;
-  QHBoxLayout *footerLayout = new QHBoxLayout;
- 
-  footerGroup->setFixedHeight(40);
-  footerGroup->setContentsMargins(0, 0, 0, 0);
-  footerLayout->setContentsMargins(5, 5, 5, 5);
-
-  m_ExecButton = new QPushButton(footerGroup);
-  m_ExecButton->setDefault(true);
-  m_ExecButton->setEnabled(false);
-  m_ExecButton->setText(QObject::tr("Execute"));
-  connect(
-    m_Model, SIGNAL( SetApplicationReady( bool ) ),
-    m_ExecButton, SLOT( setEnabled( bool ) )
-  );
-
-  QObject::connect(
-    m_ExecButton, SIGNAL( clicked() ),
-    // to:
-    this, SLOT( OnExecButtonClicked() )
-  );
-  QObject::connect(
-    this, SIGNAL( ExecuteAndWriteOutput() ),
-    // to:
-    m_Model, SLOT( ExecuteAndWriteOutputSlot() )
-  );
-
-  m_QuitButton = new QPushButton(footerGroup);
-  m_QuitButton->setText(QObject::tr("Quit"));
-  connect(
-    m_QuitButton,
-    SIGNAL( clicked() ),
-    // to:
-    this,
-    SLOT( close() )
-  );
-
-  // Add Ctrl-Q shortcut to quit
-  connect( m_QuitShortcut, SIGNAL(activated()), this, SLOT(close()) );
-
-
-  // Put the buttons on the right
-  footerLayout->addStretch();
-  footerLayout->addWidget(m_ExecButton);
-  footerLayout->addWidget(m_QuitButton);
-
-  footerGroup->setLayout(footerLayout);
-
-  return footerGroup;
-}
-
-/*******************************************************************************/
-QWidget*
-QtWidgetView
-::CreateDoc()
-{
-  QTextEdit *text = new QTextEdit;
-  text->setReadOnly(true);
-
-  QTextDocument * doc = new QTextDocument();
-
-  std::string docContain;
-  otb::Wrapper::ApplicationHtmlDocGenerator::GenerateDoc( m_Application, docContain);
-
-  doc->setHtml(docContain.c_str());
-
-  text->setDocument(doc);
-
-  return text;
+  return widget;
 }
 
 /*******************************************************************************/
@@ -345,13 +175,14 @@ QtWidgetView
   assert( widget!=NULL );
 
   SetupWidget( widget, InputFilenameInitializer() );
-  SetupWidget( widget, InputFilenameListInitializer( this ) );
+  //SetupWidget( widget, InputFilenameListInitializer() );
   SetupWidget( widget, InputImageInitializer() );
-  SetupWidget( widget, InputImageListInitializer( this ) );
+  //SetupWidget( widget, InputImageListInitializer() );
   SetupWidget( widget, ComplexInputImageInitializer() );
   SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
-  SetupWidget( widget, InputVectorDataListInitializer( this ) );
+  //SetupWidget( widget, InputVectorDataListInitializer() );
+  SetupWidget( widget, ParameterListInitializer() );
 #if defined( OTB_DEBUG )
   SetupWidget( widget, ToolTipInitializer() );
 #endif
@@ -361,11 +192,11 @@ QtWidgetView
 
   SetupWidget(
     widget,
-    OutputImageInitializer( m_Application->GetName() )
+    OutputImageInitializer( GetModel()->GetApplication()->GetName() )
   );
   SetupWidget(
     widget,
-    ComplexOutputImageInitializer( m_Application->GetName() )
+    ComplexOutputImageInitializer( GetModel()->GetApplication()->GetName() )
   );
 
   SetupWidget( widget, OutputVectorDataInitializer() );
@@ -387,243 +218,186 @@ QtWidgetView
 }
 
 /*******************************************************************************/
-void
-QtWidgetView
-::closeEvent( QCloseEvent * e )
-{
-  assert( e!=NULL );
-
-  if( !IsClosable() )
-    {
-    assert( !m_Application.IsNull() );
-
-    QMessageBox::warning(
-      this,
-      tr( "Warning!" ),
-      tr( "OTB-Application '%1' cannot be closed while running!")
-      .arg( m_Application->GetDocName() )
-    );
-
-    e->ignore();
-
-    return;
-    }
-
-  QWidget::closeEvent( e );
-
-  emit QuitSignal();
-
-  deleteLater();
-}
-
-/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
 QtWidgetView
 ::OnExecButtonClicked()
 {
-  assert( m_Model!=NULL );
-  assert( m_Model->GetApplication()!=NULL );
-
-
-  assert( I18nCoreApplication::Instance()!=NULL );
-
-  //
-  // Get layer-stack, if any.
-  StackedLayerModel * layerStack =
-    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
-
-  otb::Wrapper::Application::Pointer otbApp( m_Model->GetApplication() );
-
-  //
-  // Check output parameters of OTB-application.
-  StringVector paramKeys( otbApp->GetParametersKeys() );
-  QStringList filenames1;
-
-  KeyLayerAccumulator::KeyLayerPairList layers;
-  QStringList filenames2;
-
-  for( StringVector::const_iterator it( paramKeys.begin() );
-       it!=paramKeys.end();
-       ++it )
+  if ( !IsRunning() )
     {
-    if( otbApp->IsParameterEnabled( *it, true ) &&
-        otbApp->HasValue( *it ) )
+    assert( GetModel()!=NULL );
+    assert( GetModel()->GetApplication()!=NULL );
+  
+  
+    assert( I18nCoreApplication::Instance()!=NULL );
+  
+    //
+    // Get layer-stack, if any.
+    StackedLayerModel * layerStack =
+      I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
+  
+    otb::Wrapper::Application::Pointer otbApp( GetModel()->GetApplication() );
+  
+    //
+    // Check output parameters of OTB-application.
+    StringVector paramKeys( otbApp->GetParametersKeys() );
+    QStringList filenames1;
+  
+    KeyLayerAccumulator::KeyLayerPairList layers;
+    QStringList filenames2;
+  
+    for( StringVector::const_iterator it( paramKeys.begin() );
+         it!=paramKeys.end();
+         ++it )
       {
-      otb::Wrapper::Parameter::Pointer param( otbApp->GetParameterByKey( *it ) );
-      assert( !param.IsNull() );
-
+      if( otbApp->IsParameterEnabled( *it, true ) &&
+          otbApp->HasValue( *it ) )
+        {
+        otb::Wrapper::Parameter::Pointer param( otbApp->GetParameterByKey( *it ) );
+        assert( !param.IsNull() );
+  
+        // qDebug()
+        // 	<< it->c_str() << ": type" << otbApp->GetParameterType( *it );
+  
+        // const char* filename = NULL;
+        std::string filename;
+  
+        switch( otbApp->GetParameterType( *it ) )
+    {
+    case otb::Wrapper::ParameterType_OutputFilename:
+      filename =
+        otb::DynamicCast< otb::Wrapper::OutputFilenameParameter >( param )
+        ->GetValue();
+      break;
+    //
+    // FILENAME.
+    //
+    // IMAGE.
+    case otb::Wrapper::ParameterType_OutputImage:
+      filename =
+        otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
+        ->GetFileName();
+      break;
+    //
+    // VECTOR-DATA.
+    case otb::Wrapper::ParameterType_OutputVectorData:
+      filename =
+        otb::DynamicCast< otb::Wrapper::OutputVectorDataParameter >( param )
+        ->GetFileName();
+      break;
+    //
+    // COMPLEX IMAGE.
+    case otb::Wrapper::ParameterType_ComplexOutputImage:
+      filename =
+        otb::DynamicCast< otb::Wrapper::ComplexOutputImageParameter >( param )
+        ->GetFileName();
+      break;
+    //
+    // NONE.
+    default:
+      break;
+    }
+  
+        if( QFileInfo( filename.c_str() ).exists() )
+    filenames1.push_back( filename.c_str() );
+  
+        if( layerStack!=NULL )
+    {
+    KeyLayerAccumulator accumulator(
+      std::for_each(
+        layerStack->Begin(),
+        layerStack->End(), KeyLayerAccumulator( filename, layers )
+      )
+    );
+  
+    if( accumulator.GetCount()>0 )
+      filenames2.push_back( filename.c_str() );
+    }
+        }
+      }
+  
+    {
+    QString message;
+  
+    if( filenames1.size()==1 )
+      {
       // qDebug()
-      // 	<< it->c_str() << ": type" << otbApp->GetParameterType( *it );
-
-      // const char* filename = NULL;
-      std::string filename;
-
-      switch( otbApp->GetParameterType( *it ) )
-	{
-	case otb::Wrapper::ParameterType_OutputFilename:
-	  filename =
-	    otb::DynamicCast< otb::Wrapper::OutputFilenameParameter >( param )
-	    ->GetValue();
-	  break;
-	//
-	// FILENAME.
-	//
-	// IMAGE.
-	case otb::Wrapper::ParameterType_OutputImage:
-	  filename =
-	    otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
-	    ->GetFileName();
-	  break;
-	//
-	// VECTOR-DATA.
-	case otb::Wrapper::ParameterType_OutputVectorData:
-	  filename =
-	    otb::DynamicCast< otb::Wrapper::OutputVectorDataParameter >( param )
-	    ->GetFileName();
-	  break;
-	//
-	// COMPLEX IMAGE.
-	case otb::Wrapper::ParameterType_ComplexOutputImage:
-	  filename =
-	    otb::DynamicCast< otb::Wrapper::ComplexOutputImageParameter >( param )
-	    ->GetFileName();
-	  break;
-	//
-	// NONE.
-	default:
-	  break;
-	}
-
-      if( QFileInfo( filename.c_str() ).exists() )
-	filenames1.push_back( filename.c_str() );
-
-      if( layerStack!=NULL )
-	{
-	KeyLayerAccumulator accumulator(
-	  std::for_each(
-	    layerStack->Begin(),
-	    layerStack->End(), KeyLayerAccumulator( filename, layers )
-	  )
-	);
-
-	if( accumulator.GetCount()>0 )
-	  filenames2.push_back( filename.c_str() );
-	}
+      //   << it->c_str() << ":" << QString( filename.c_str() );
+  
+      message =
+        tr( "Are you sure you want to overwrite file '%1'?" )
+        .arg( filenames1.front() );
       }
-    }
-
-  {
-  QString message;
-
-  if( filenames1.size()==1 )
-    {
-    // qDebug()
-    //   << it->c_str() << ":" << QString( filename.c_str() );
-
-    message =
-      tr( "Are you sure you want to overwrite file '%1'?" )
-      .arg( filenames1.front() );
-    }
-  else if( filenames1.size()>1 )
-    {
-    message =
-      tr( "Following files will be overwritten. Are you sure you want to continue?\n- %1" )
-      .arg( filenames1.join( "\n- " ) );
-    }
-
-  if( !message.isEmpty() )
-    {
-    QMessageBox::StandardButton button =
-      QMessageBox::question(
-	this,
-	PROJECT_NAME,
-	message,
-	QMessageBox::Yes | QMessageBox::No,
-	QMessageBox::No
-      );
-
-    if( button==QMessageBox::No )
-      return;
-    }
-  }
-
-  {
-  QString message;
-
-  if( filenames2.size()==1 )
-    {
-    // qDebug()
-    //   << it->c_str() << ":" << QString( filename.c_str() );
-
-    message =
-      tr( "File '%1' is being viewed in " PROJECT_NAME " and will be concurrently overwritten by running this %2. File will be removed from layer-stack before running %2 and reloaded after.\n\nDo you want to continue?" )
-      .arg( filenames2.front() )
-      .arg( otbApp->GetDocName() );
-    }
-  else if( filenames2.size()>1 )
-    {
-    message =
-      tr( "Following files are being viewed in " PROJECT_NAME " and will be concurrently overwritter by running %2. Files will be removed from layer-stack before running %2. Do you want to continue?\n- %1" )
-      .arg( filenames2.join( "\n- " ) )
-      .arg( otbApp->GetDocName() );
-    }
-
-  if( !message.isEmpty() )
-    {
-    QMessageBox::StandardButton button =
-      QMessageBox::question(
-	this,
-	PROJECT_NAME,
-	message,
-	QMessageBox::Yes | QMessageBox::No,
-	QMessageBox::No
-      );
-
-    if( button==QMessageBox::No )
-      return;
-
-    while( !layers.empty() )
+    else if( filenames1.size()>1 )
       {
-      layerStack->Delete( layers.front().first );
-
-      layers.pop_front();
+      message =
+        tr( "Following files will be overwritten. Are you sure you want to continue?\n- %1" )
+        .arg( filenames1.join( "\n- " ) );
+      }
+  
+    if( !message.isEmpty() )
+      {
+      QMessageBox::StandardButton button =
+        QMessageBox::question(
+    this,
+    PROJECT_NAME,
+    message,
+    QMessageBox::Yes | QMessageBox::No,
+    QMessageBox::No
+        );
+  
+      if( button==QMessageBox::No )
+        return;
+      }
+    }
+  
+    {
+    QString message;
+  
+    if( filenames2.size()==1 )
+      {
+      // qDebug()
+      //   << it->c_str() << ":" << QString( filename.c_str() );
+  
+      message =
+        tr( "File '%1' is being viewed in " PROJECT_NAME " and will be concurrently overwritten by running this %2. File will be removed from layer-stack before running %2 and reloaded after.\n\nDo you want to continue?" )
+        .arg( filenames2.front() )
+        .arg( otbApp->GetDocName() );
+      }
+    else if( filenames2.size()>1 )
+      {
+      message =
+        tr( "Following files are being viewed in " PROJECT_NAME " and will be concurrently overwritter by running %2. Files will be removed from layer-stack before running %2. Do you want to continue?\n- %1" )
+        .arg( filenames2.join( "\n- " ) )
+        .arg( otbApp->GetDocName() );
+      }
+  
+    if( !message.isEmpty() )
+      {
+      QMessageBox::StandardButton button =
+        QMessageBox::question(
+    this,
+    PROJECT_NAME,
+    message,
+    QMessageBox::Yes | QMessageBox::No,
+    QMessageBox::No
+        );
+  
+      if( button==QMessageBox::No )
+        return;
+  
+      while( !layers.empty() )
+        {
+        layerStack->Delete( layers.front().first );
+  
+        layers.pop_front();
+        }
       }
     }
   }
 
-
-  /* U N S A F E
-  // BUGFIX: Mantis-750
-  //
-  // Remove files which will be overwritten in order to use
-  // file-existence to check whether to emit the OutputImageChanged
-  // signal (see ::OnApplicationExecutionDone()).
-  for( FileInfoVector::const_iterator it( fileInfos.begin() );
-       it!=fileInfos.end();
-       ++it )
-    {
-    qDebug() << "Removing:" << it->filePath();
-
-    it->dir().remove( it->fileName() );
-    }
-  */
-
-  m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
-
-  emit ExecuteAndWriteOutput();
-}
-
-/*******************************************************************************/
-void
-QtWidgetView
-::UpdateMessageAfterApplicationReady( bool val )
-{
-  if(val == true)
-    m_Message->setText("<center><font color=\"#00FF00\">Ready to run</font></center>");
-  else
-    m_Message->setText("<center><font color=\"#FF0000\">Select parameters</font></center>");
+  otb::Wrapper::QtWidgetView::OnExecButtonClicked();
 }
 
 /*******************************************************************************/
@@ -648,7 +422,7 @@ void
 QtWidgetView
 ::OnApplicationExecutionDone( int status )
 {
-  otb::Wrapper::Application::Pointer otbApp( m_Model->GetApplication() );
+  otb::Wrapper::Application::Pointer otbApp( GetModel()->GetApplication() );
 
   if( status!=0 )
     {
@@ -738,6 +512,5 @@ QtWidgetView
   emit ExecutionDone( status );
 }
 
-}
-
-}
+} // end of namespace Wrapper
+} // end of namespace mvd

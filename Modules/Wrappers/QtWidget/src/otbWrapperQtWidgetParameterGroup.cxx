@@ -141,10 +141,10 @@ void QtWidgetParameterGroup::DoCreateWidget()
           group->setChecked(false);
 
           // Update iteratively the children status
-          for (unsigned int idx = 0; idx < param->GetChildrenList().size(); ++idx)
+          for (auto child : specificWidget->children())
             {
             // deactivate the children tree
-            this->ProcessChild(param->GetChildrenList()[idx], false);
+            this->ProcessChild(child, false);
             }
           }
         else
@@ -176,33 +176,35 @@ void QtWidgetParameterGroup::SetActivationState( bool value )
   this->setEnabled(value);
 
   // Update iteratively the children status
-  for (unsigned int idx = 0; idx < m_ParamList->GetChildrenList().size(); ++idx)
+  for (auto child : this->children() )
     {
-    this->ProcessChild(m_ParamList->GetChildrenList()[idx], value);
+    this->ProcessChild(child, value);
     }
 }
 
 // Activate iteratively  the children
-void QtWidgetParameterGroup::ProcessChild(Parameter* currentNode, bool status)
+void QtWidgetParameterGroup::ProcessChild(QObject* currentNode, bool status)
 {
   // Activate the current node if it was checked
-  if ( currentNode->IsChecked() && status)
+  QtWidgetParameterBase* widgetBase = dynamic_cast<QtWidgetParameterBase*>(currentNode);
+  if(widgetBase)
     {
-    currentNode->SetActive(status);
+    if ( widgetBase->IsChecked() && status)
+      {
+      widgetBase->GetParam()->SetActive(status);
+      }
+
+    // If the status is false (deactivating) deactivate all the children
+    // tree
+    if (!status)
+      {
+      widgetBase->GetParam()->SetActive(status);
+      }
     }
 
-  // If the status is false (deactivating) deactivate all the children
-  // tree
-  if (!status)
+  for (auto child : currentNode->children() )
     {
-    currentNode->SetActive(status);
-    }
-
-  unsigned int counter = 0;
-  while(counter < currentNode->GetChildrenList().size())
-    {
-    this->ProcessChild(currentNode->GetChildrenList()[counter], status);
-    ++counter;
+    this->ProcessChild(child, status);
     }
 }
 

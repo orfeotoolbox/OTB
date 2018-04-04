@@ -63,7 +63,7 @@ public:
 
 private:
   void 
-  DoInit() ITK_OVERRIDE
+  DoInit() override
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
@@ -247,11 +247,12 @@ private:
   }
 
   void 
-  DoUpdateParameters() ITK_OVERRIDE
+  DoUpdateParameters() override
   {
     if ( HasValue("in") )
       {
       ImageType* inImage = GetParameterImage("in");
+      inImage->UpdateOutputInformation();
       ImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
 
       bool userExtent = !HasUserValue( "mode.extent.ulx" ) \
@@ -266,8 +267,8 @@ private:
       // Update the sizes only if the user has not defined a size
       if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
         {
-        SetParameterInt("sizex",largestRegion.GetSize()[0], false);
-        SetParameterInt("sizey",largestRegion.GetSize()[1], false);
+        SetParameterInt("sizex",largestRegion.GetSize()[0]);
+        SetParameterInt("sizey",largestRegion.GetSize()[1]);
 
         // Compute extent parameter with default sizex and sizey
         if ( GetParameterString( "mode" ) == "extent" && userExtent )
@@ -315,8 +316,8 @@ private:
       if(!this->CropRegionOfInterest())
         {
         // Put the index of the ROI to origin and try to crop again
-        SetParameterInt("startx",0, false);
-        SetParameterInt("starty",0, false);
+        SetParameterInt("startx",0);
+        SetParameterInt("starty",0);
         this->CropRegionOfInterest();
         }
 
@@ -385,12 +386,14 @@ private:
     region.SetIndex(1, GetParameterInt("starty"));
     if ( HasValue("in") )
       {
-      if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
+      ImageType* inImage = GetParameterImage("in");
+      inImage->UpdateOutputInformation();
+      if (region.Crop(inImage->GetLargestPossibleRegion()))
         {
-        SetParameterInt("sizex",region.GetSize(0), HasUserValue("sizex"));
-        SetParameterInt("sizey",region.GetSize(1), HasUserValue("sizey"));
-        SetParameterInt("startx",region.GetIndex(0), HasUserValue("startx"));
-        SetParameterInt("starty",region.GetIndex(1), HasUserValue("starty"));
+        SetParameterInt("sizex",region.GetSize(0));
+        SetParameterInt("sizey",region.GetSize(1));
+        SetParameterInt("startx",region.GetIndex(0));
+        SetParameterInt("starty",region.GetIndex(1));
         return true;
         }
       }
@@ -406,15 +409,15 @@ private:
     if (GetParameterString( "mode.extent.unit" ) == "pxl" )
       {
       pixelValue = std::round( GetParameterFloat( "mode.extent.ulx" ) );
-      SetParameterInt( "startx", pixelValue , true );
+      SetParameterInt( "startx", pixelValue);
       pixelValue = std::round( GetParameterFloat( "mode.extent.lrx" ) \
                    - pixelValue ) + 1 ;
-      SetParameterInt( "sizex", pixelValue , true );
+      SetParameterInt( "sizex", pixelValue);
       pixelValue = std::round( GetParameterFloat( "mode.extent.uly" ) );
-      SetParameterInt( "starty", pixelValue , true );
+      SetParameterInt( "starty", pixelValue);
       pixelValue = std::round( GetParameterFloat( "mode.extent.lry" ) \
                    - pixelValue ) + 1 ;
-      SetParameterInt( "sizey", pixelValue , true );
+      SetParameterInt( "sizey", pixelValue);
       }
     else if( GetParameterString( "mode.extent.unit" ) == "phy" )
       {
@@ -426,19 +429,15 @@ private:
 
       ImageType * inImage = GetParameterImage("in");
       FloatVectorImageType::IndexType uli , lri;
-      bool startin = inImage->TransformPhysicalPointToIndex(ulp,uli);
-      bool sizein = inImage->TransformPhysicalPointToIndex(lrp,lri);
-      if ( startin )
-        {
-        SetParameterInt( "startx", uli[0] , true );
-        SetParameterInt( "starty", uli[1] , true );
-        }
-        
-      if( startin && sizein )
-        {
-        SetParameterInt( "sizex", lri[0] - uli[0] + 1, true );
-        SetParameterInt( "sizey", lri[1] - uli[1] + 1, true );
-        }
+      inImage->TransformPhysicalPointToIndex(ulp,uli);
+      inImage->TransformPhysicalPointToIndex(lrp,lri);
+
+      SetParameterInt( "startx", uli[0]);
+      SetParameterInt( "starty", uli[1]);
+
+      SetParameterInt( "sizex", lri[0] - uli[0] + 1);
+      SetParameterInt( "sizey", lri[1] - uli[1] + 1);
+      
       }
     else if( GetParameterString( "mode.extent.unit" ) == "lonlat" )
       {
@@ -456,21 +455,16 @@ private:
       lrp_out = rsTransform->TransformPoint(lrp_in);
 
       FloatVectorImageType::IndexType uli_out , lri_out;
-      bool startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
-      bool sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
+      inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+      inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
 
-      if ( startin )
-        {
-        SetParameterInt( "startx", uli_out[0] , true );
-        SetParameterInt( "starty", uli_out[1] , true );
-        }
-            
-      if( startin && sizein )
-        {
-        SetParameterInt( "sizex", lri_out[0] - uli_out[0] + 1, true );
-        SetParameterInt( "sizey", lri_out[1] - uli_out[1] + 1, true );
-        }
-      }  
+      SetParameterInt( "startx", uli_out[0]);
+      SetParameterInt( "starty", uli_out[1]);
+
+      SetParameterInt( "sizex", lri_out[0] - uli_out[0] + 1);
+      SetParameterInt( "sizey", lri_out[1] - uli_out[1] + 1);
+      }
+      this->CropRegionOfInterest();
   }
 
   void
@@ -483,22 +477,22 @@ private:
     lri[ 1 ] = largestRegion.GetSize()[1];
     if ( GetParameterString( "mode.extent.unit" ) == "pxl" )
       {
-      SetParameterFloat("mode.extent.ulx", uli[0] , false);
-      SetParameterFloat("mode.extent.uly", uli[1] , false);
-      SetParameterFloat("mode.extent.lrx", lri[0] , false);
-      SetParameterFloat("mode.extent.lry", lri[1] , false);
+      SetParameterFloat("mode.extent.ulx", uli[0]);
+      SetParameterFloat("mode.extent.uly", uli[1]);
+      SetParameterFloat("mode.extent.lrx", lri[0]);
+      SetParameterFloat("mode.extent.lry", lri[1]);
       }
     else if ( GetParameterString( "mode.extent.unit" ) == "phy" )
       {
       itk::Point<float, 2> ulp,  lrp;
 
       input->TransformIndexToPhysicalPoint(uli,ulp);
-      SetParameterFloat("mode.extent.ulx",ulp[0], false);
-      SetParameterFloat("mode.extent.uly",ulp[1], false);
+      SetParameterFloat("mode.extent.ulx",ulp[0]);
+      SetParameterFloat("mode.extent.uly",ulp[1]);
 
       input->TransformIndexToPhysicalPoint(lri,lrp);
-      SetParameterFloat("mode.extent.lrx",lrp[0], false);
-      SetParameterFloat("mode.extent.lry",lrp[1], false);  
+      SetParameterFloat("mode.extent.lrx",lrp[0]);
+      SetParameterFloat("mode.extent.lry",lrp[1]);  
       }
     else if ( GetParameterString( "mode.extent.unit" ) == "lonlat" )
       {
@@ -509,13 +503,13 @@ private:
       itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
       input->TransformIndexToPhysicalPoint(uli,ulp_in);
       ulp_out = rsTransform->TransformPoint( ulp_in );
-      SetParameterFloat( "mode.extent.ulx" , ulp_out[ 0 ] , false );
-      SetParameterFloat( "mode.extent.uly" , ulp_out[ 1 ] , false );
+      SetParameterFloat( "mode.extent.ulx" , ulp_out[ 0 ]);
+      SetParameterFloat( "mode.extent.uly" , ulp_out[ 1 ]);
 
       input->TransformIndexToPhysicalPoint( lri , lrp_in );
       lrp_out = rsTransform->TransformPoint( lrp_in );
-      SetParameterFloat( "mode.extent.lrx" , lrp_out[ 0 ] , false );
-      SetParameterFloat( "mode.extent.lry" , lrp_out[ 1 ] , false );
+      SetParameterFloat( "mode.extent.lrx" , lrp_out[ 0 ]);
+      SetParameterFloat( "mode.extent.lry" , lrp_out[ 1 ]);
       }
   }
 
@@ -530,8 +524,8 @@ private:
       if ( GetParameterString( "mode.radius.unitr" ) == "pxl" )
         {
         pixelValue = std::floor( 2 * GetParameterFloat( "mode.radius.r" ) ) + 1;
-        SetParameterInt( "sizey", pixelValue , true );
-        SetParameterInt( "sizex", pixelValue , true );
+        SetParameterInt( "sizey", pixelValue);
+        SetParameterInt( "sizex", pixelValue);
         }
       if ( GetParameterString( "mode.radius.unitr" ) == "phy" )
         {
@@ -570,8 +564,8 @@ private:
           {
           pixelValue = maxR;
           }
-        SetParameterInt( "sizey", 2 * pixelValue + 1 , true );
-        SetParameterInt( "sizex", 2 * pixelValue + 1 , true );
+        SetParameterInt( "sizey", 2 * pixelValue + 1);
+        SetParameterInt( "sizex", 2 * pixelValue + 1);
         }
       }
 
@@ -585,9 +579,9 @@ private:
       if ( GetParameterString( "mode.radius.unitc" ) == "pxl" && size )
         {
         pixelValue = std::round(GetParameterFloat( "mode.radius.cx" ));
-        SetParameterInt( "startx", pixelValue - radiusxi , true );
+        SetParameterInt( "startx", pixelValue - radiusxi);
         pixelValue = std::round(GetParameterFloat( "mode.radius.cy" ));
-        SetParameterInt( "starty", pixelValue - radiusyi , true );
+        SetParameterInt( "starty", pixelValue - radiusyi);
         }
       if ( GetParameterString( "mode.radius.unitc" ) == "phy" && size ) 
         {
@@ -599,8 +593,8 @@ private:
         bool isIn = inImage->TransformPhysicalPointToIndex( centerp , centeri );
           if ( isIn )
           {
-          SetParameterInt( "startx", centeri[0] - radiusxi , true );
-          SetParameterInt( "starty", centeri[1] - radiusyi , true );
+          SetParameterInt( "startx", centeri[0] - radiusxi);
+          SetParameterInt( "starty", centeri[1] - radiusyi);
           }
         }
       if ( GetParameterString( "mode.radius.unitc" ) == "lonlat" && size )
@@ -619,8 +613,8 @@ private:
                                                             centeri_out );
         if ( isIn )
           {
-          SetParameterInt( "startx", centeri_out[0] - radiusxi , true );
-          SetParameterInt( "starty", centeri_out[1] - radiusyi , true );
+          SetParameterInt( "startx", centeri_out[0] - radiusxi);
+          SetParameterInt( "starty", centeri_out[1] - radiusyi);
           }
         }
       }
@@ -642,7 +636,7 @@ private:
     if ( GetParameterString("mode.radius.unitr") == "pxl" )
       {
       int rad = std::min( centeri[ 0 ], centeri[ 1 ] );
-      SetParameterFloat( "mode.radius.r" , rad , false );
+      SetParameterFloat( "mode.radius.r" , rad);
       }
     if ( GetParameterString("mode.radius.unitr") == "phy" )
       {
@@ -651,19 +645,19 @@ private:
       input->TransformIndexToPhysicalPoint(helpRxi,helpRxp);
       input->TransformIndexToPhysicalPoint(helpRyi,helpRyp);
       float rad = std::min( helpRxp[0] - helpRyp[0] , helpRyp[1] - helpRxp[1] );
-      SetParameterFloat( "mode.radius.r" , rad , false );
+      SetParameterFloat( "mode.radius.r" , rad);
       }
     if ( GetParameterString("mode.radius.unitc") == "pxl" )
       {
-      SetParameterFloat( "mode.radius.cx" , centeri[0] , false );
-      SetParameterFloat( "mode.radius.cy" , centeri[1] , false) ;
+      SetParameterFloat( "mode.radius.cx" , centeri[0]);
+      SetParameterFloat( "mode.radius.cy" , centeri[1]) ;
       }
     if ( GetParameterString("mode.radius.unitc") == "phy" )
       {
       itk::Point<float, 2> centerp , helpRp;
       input->TransformIndexToPhysicalPoint(centeri,centerp);
-      SetParameterFloat( "mode.radius.cx" , centerp[0] , false );
-      SetParameterFloat( "mode.radius.cy" , centerp[1] , false) ;
+      SetParameterFloat( "mode.radius.cx" , centerp[0]);
+      SetParameterFloat( "mode.radius.cy" , centerp[1]) ;
       }
     if ( GetParameterString("mode.radius.unitc") == "lonlat" )
       {
@@ -674,21 +668,21 @@ private:
       itk::Point<float, 2> centerp_in,  centerp_out;
       input->TransformIndexToPhysicalPoint(centeri,centerp_in);
       centerp_out = rsTransform->TransformPoint( centerp_in );
-      SetParameterFloat( "mode.radius.cx" , centerp_out[ 0 ] , false );
-      SetParameterFloat( "mode.radius.cy" , centerp_out[ 1 ] , false );
+      SetParameterFloat( "mode.radius.cx" , centerp_out[ 0 ]);
+      SetParameterFloat( "mode.radius.cy" , centerp_out[ 1 ]);
       }
   }
 
   void 
-  DoExecute() ITK_OVERRIDE
+  DoExecute() override
   {
     ImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
 
-    if ( HasValue( "mode.fit.vect" ) && GetParameterString("mode") == "fit" )
+    if ( HasValue( "mode.fit.vect" ) && GetParameterString("mode") == "fit")
       {
       otb::ogr::DataSource::Pointer ogrDS;
-      ogrDS = otb::ogr::DataSource::New(GetParameterString("in") ,
+      ogrDS = otb::ogr::DataSource::New(GetParameterString("mode.fit.vect") ,
                                         otb::ogr::DataSource::Modes::Read);
       double ulx, uly, lrx, lry;
       bool extentAvailable = true;
@@ -724,40 +718,50 @@ private:
       if (extentAvailable)
         {
         RSTransformType::Pointer rsTransform = RSTransformType::New();
-        rsTransform->SetInputProjectionRef(inputProjectionRef);
+        rsTransform->SetInputProjectionRef( inputProjectionRef );
         rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
         rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
         rsTransform->InstantiateTransform();
-
-        itk::Point<float, 2> ulp_in,  lrp_in , ulp_out , lrp_out;
+        itk::Point<float, 2> ulp_in , urp_in , llp_in , lrp_in ,
+          ulp_out , urp_out , llp_out , lrp_out;
         ulp_in[ 0 ] = ulx ;
         ulp_in[ 1 ] = uly ;
+        urp_in[ 0 ] = ulx ;
+        urp_in[ 1 ] = lry ;
+        llp_in[ 0 ] = lrx ; 
+        llp_in[ 1 ] = uly ;
         lrp_in[ 0 ] = lrx ;
         lrp_in[ 1 ] = lry ;
         ulp_out = rsTransform->TransformPoint(ulp_in);
+        urp_out = rsTransform->TransformPoint(urp_in);
+        llp_out = rsTransform->TransformPoint(llp_in);
         lrp_out = rsTransform->TransformPoint(lrp_in);
+        FloatVectorImageType::IndexType uli_out , uri_out , lli_out , lri_out;
 
-        FloatVectorImageType::IndexType uli_out , lri_out;
-        bool startin , sizein ;
-        startin = inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
-        sizein = inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
-
-        if ( startin )
-            {
-            SetParameterInt( "startx", uli_out[0] , false );
-            SetParameterInt( "starty", uli_out[1] , false );
-            }
-                
-        if( startin && sizein )
-            {
-            SetParameterInt( "sizey", lri_out[1] - uli_out[1] + 1 , false );
-            SetParameterInt( "sizex", lri_out[0] - uli_out[0] + 1 , false );
-            }
-        }
+        inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
+        inImage->TransformPhysicalPointToIndex(urp_out,uri_out);
+        inImage->TransformPhysicalPointToIndex(llp_out,lli_out);
+        inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
         
-      }
+        FloatVectorImageType::IndexType uli, lri;
 
-    if( HasValue( "mode.fit.im" ) && GetParameterString( "mode" ) == "fit" )
+        uli[0] = std::min( std::min( uli_out[0] , uri_out[0] ) , 
+                           std::min( lli_out[0] , lri_out[0] ) );
+        uli[1] = std::min( std::min( uli_out[1] , uri_out[1] ) ,
+                           std::min( lli_out[1] , lri_out[1] ) );
+
+        lri[0] = std::max( std::max( uli_out[0] , uri_out[0] ) ,
+                           std::max( lli_out[0] , lri_out[0] ) );
+        lri[1] = std::max( std::max( uli_out[1] , uri_out[1] ) ,
+                           std::max( lli_out[1] , lri_out[1] ) );
+
+        SetParameterInt( "startx", uli[0]);
+        SetParameterInt( "starty", uli[1]);   
+        SetParameterInt( "sizex", lri[0] - uli[0]);
+        SetParameterInt( "sizey", lri[1] - uli[1]);
+        }
+      }
+    else if( HasValue( "mode.fit.im" ) && GetParameterString( "mode" ) == "fit" )
       {
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
@@ -820,27 +824,25 @@ private:
       SetParameterInt("sizex",lri[0]-uli[0]);
       SetParameterInt("sizey",lri[1]-uli[1]);
 
-      this->CropRegionOfInterest();
       }
 
+    this->CropRegionOfInterest();
 
-    m_ExtractROIFilter = ExtractROIFilterType::New();
-    m_ExtractROIFilter->SetInput(inImage);
-    m_ExtractROIFilter->SetStartX(GetParameterInt("startx"));
-    m_ExtractROIFilter->SetStartY(GetParameterInt("starty"));
-    m_ExtractROIFilter->SetSizeX(GetParameterInt("sizex"));
-    m_ExtractROIFilter->SetSizeY(GetParameterInt("sizey"));
+    ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+    extractROIFilter->SetInput(inImage);
+    extractROIFilter->SetStartX(GetParameterInt("startx"));
+    extractROIFilter->SetStartY(GetParameterInt("starty"));
+    extractROIFilter->SetSizeX(GetParameterInt("sizex"));
+    extractROIFilter->SetSizeY(GetParameterInt("sizey"));
 
     for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx)
       {
-      m_ExtractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
+      extractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
       }
 
-    SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());
+    SetParameterOutputImage("out", extractROIFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  ExtractROIFilterType::Pointer   m_ExtractROIFilter;
-
 };
 
 }

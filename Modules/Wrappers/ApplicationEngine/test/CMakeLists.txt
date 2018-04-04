@@ -23,7 +23,6 @@ otb_module_test()
 set(OTBApplicationEngineTests
 otbApplicationEngineTestDriver.cxx
 otbWrapperApplicationTest.cxx
-otbWrapperParameterTest.cxx
 otbWrapperInputImageParameterTest.cxx
 otbWrapperNumericalParameterTest.cxx
 otbWrapperStringParameterTest.cxx
@@ -42,6 +41,7 @@ otbWrapperApplicationHtmlDocGeneratorTest.cxx
 otbWrapperInputVectorDataParameterTest.cxx
 otbWrapperOutputImageParameterTest.cxx
 otbApplicationMemoryConnectTest.cxx
+otbWrapperImageInterface.cxx
 )
 
 add_executable(otbApplicationEngineTestDriver ${OTBApplicationEngineTests})
@@ -52,15 +52,6 @@ otb_module_target_label(otbApplicationEngineTestDriver)
 
 otb_add_test(NAME owTuApplication COMMAND otbApplicationEngineTestDriver
   otbWrapperApplicationNew
-  )
-
-otb_add_test(NAME owTvParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperParameterTest1
-  "param1"
-  )
-
-otb_add_test(NAME owTuParameterNew COMMAND otbApplicationEngineTestDriver
-  otbWrapperParameterNew
   )
 
 otb_add_test(NAME owTvInputImageParameter COMMAND otbApplicationEngineTestDriver
@@ -181,6 +172,12 @@ otb_add_test(NAME owTvOutputImageParameter COMMAND otbApplicationEngineTestDrive
   "my description"
   )
 
+#~ otb_add_test(NAME owTvOutputImageParameterConversion COMMAND otbApplicationEngineTestDriver
+  #~ otbWrapperOutputImageParameterConversionTest
+  #~ ${INPUTDATA}/poupees.tif
+  #~ ${TEMP}/poupees_out.tif
+  #~ )
+
 otb_add_test(NAME owTvDocExampleStructureTest COMMAND otbApplicationEngineTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE}/owTuDocExampleStructureTest.txt
@@ -193,6 +190,7 @@ otb_add_test(NAME owTuDocExampleStructureNew COMMAND otbApplicationEngineTestDri
   otbWrapperDocExampleStructureNew
   )
 
+# Warning this test require otbapp_Smoothing and otbapp_ConcatenateImages to be built
 otb_add_test(NAME owTvApplicationMemoryConnectTest COMMAND otbApplicationEngineTestDriver otbApplicationMemoryConnectTest
   $<TARGET_FILE_DIR:otbapp_Smoothing>
   ${INPUTDATA}/poupees.tif
@@ -200,4 +198,14 @@ otb_add_test(NAME owTvApplicationMemoryConnectTest COMMAND otbApplicationEngineT
 
 otb_add_test(NAME owTvParameterGroup COMMAND otbApplicationEngineTestDriver
   otbWrapperParameterList
+  )
+
+otb_add_test(NAME owTvImageInterface COMMAND otbApplicationEngineTestDriver
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/owTvImageInterfaceOut.txt
+  ${TEMP}/owTvImageInterfaceOut.txt
+  otbWrapperImageInterface
+  $<TARGET_FILE_DIR:otbapp_Smoothing>
+  ${INPUTDATA}/Capitole_Rasterization.tif
+  ${TEMP}/owTvImageInterfaceOut.txt
   )

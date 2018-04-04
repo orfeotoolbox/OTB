@@ -26,7 +26,7 @@
 #include "itkImageRegionConstIteratorWithOnlyIndex.h"
 #include "itkImageRegionConstIterator.h"
 #include "otbMacro.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
 #include "itkProgressReporter.h"
 
 namespace otb
@@ -36,7 +36,7 @@ template<class TInputImage, class TMaskImage>
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::PersistentSamplingFilterBase()
   : m_FieldName(std::string("class"))
-  , m_FieldIndex(0)  
+  , m_FieldIndex(0)
   , m_LayerIndex(0)
   , m_OutLayerName(std::string("output"))
   , m_OGRLayerCreationOptions()
@@ -135,7 +135,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       itkGenericExceptionMacro("Mask and input image have a different origin!");
       }
-    if (mask->GetSpacing() != input->GetSpacing())
+    if (mask->GetSignedSpacing() != input->GetSignedSpacing())
       {
       itkGenericExceptionMacro("Mask and input image have a different spacing!");
       }
@@ -265,6 +265,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       }
     this->m_InMemoryOutputs.push_back(tmpContainer);
     }
+
+  if (oSRS)
+    {
+    oSRS->Release();
+    }
 }
 
 template <class TInputImage, class TMaskImage>
@@ -275,12 +280,9 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   // clean temporary inputs
   this->m_InMemoryInputs.clear();
 
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
-  
   // gather temporary outputs and write to output
   const otb::ogr::DataSource* vectors = this->GetOGRData();
-  itk::TimeProbe chrono;
-  chrono.Start();
+  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   unsigned int count = 0;
   for (unsigned int k=0 ; k < this->GetNumberOfOutputs() ; k++)
     {
@@ -288,57 +290,67 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         this->itk::ProcessObject::GetOutput(k));
     if (realOutput)
       {
-      ogr::Layer outLayer = realOutput->GetLayersCount() == 1
-                            ? realOutput->GetLayer(0)
-                            : realOutput->GetLayer(m_OutLayerName);
-
-      OGRErr err = outLayer.ogr().StartTransaction();
-      if (err != OGRERR_NONE)
-        {
-        itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
-        }
-  
-      for (unsigned int thread=0 ; thread < numberOfThreads ; thread++)
-        {
-        ogr::Layer inLayer = this->m_InMemoryOutputs[thread][count]->GetLayerChecked(0);
-        if (!inLayer)
-          {
-          continue;
-          }
-  
-        ogr::Layer::const_iterator tmpIt = inLayer.begin();
-        // This test only uses 1 input, not compatible with multiple OGRData inputs
-        if (vectors == realOutput)
-          {
-          // Update mode
-          for(; tmpIt!=inLayer.end(); ++tmpIt)
-            {
-            outLayer.SetFeature( *tmpIt );
-            }
-          }
-        else
-          {
-          // Copy mode
-          for(; tmpIt!=inLayer.end(); ++tmpIt)
-            {
-            ogr::Feature dstFeature(outLayer.GetLayerDefn());
-            dstFeature.SetFrom( *tmpIt, TRUE );
-            outLayer.CreateFeature( dstFeature );
-            }
-          }
-        }
-  
-      err = outLayer.ogr().CommitTransaction();
-      if (err != OGRERR_NONE)
-        {
-        itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outLayer.ogr().GetName() << ".");
-        }
+      this->FillOneOutput(count, realOutput, bool(vectors == realOutput));
       count++;
       }
     }
+
   chrono.Stop();
-  otbMsgDebugMacro(<< "write ogr points took " << chrono.GetTotal() << " sec");
+  otbMsgDebugMacro(<< "Writing OGR points took " << chrono.GetElapsedMilliseconds() << " ms");
   this->m_InMemoryOutputs.clear();
+}
+
+template <class TInputImage, class TMaskImage>
+void
+PersistentSamplingFilterBase<TInputImage,TMaskImage>
+::FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update)
+{
+  ogr::Layer outLayer = outDS->GetLayersCount() == 1
+                        ? outDS->GetLayer(0)
+                        : outDS->GetLayer(m_OutLayerName);
+
+  OGRErr err = outLayer.ogr().StartTransaction();
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+    }
+
+  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  for (unsigned int thread=0 ; thread < numberOfThreads ; thread++)
+    {
+    ogr::Layer inLayer = this->m_InMemoryOutputs[thread][outIdx]->GetLayerChecked(0);
+    if (!inLayer)
+      {
+      continue;
+      }
+
+    ogr::Layer::const_iterator tmpIt = inLayer.begin();
+    // This test only uses 1 input, not compatible with multiple OGRData inputs
+    if (update)
+      {
+      // Update mode
+      for(; tmpIt!=inLayer.end(); ++tmpIt)
+        {
+        outLayer.SetFeature( *tmpIt );
+        }
+      }
+    else
+      {
+      // Copy mode
+      for(; tmpIt!=inLayer.end(); ++tmpIt)
+        {
+        ogr::Feature dstFeature(outLayer.GetLayerDefn());
+        dstFeature.SetFrom( *tmpIt, TRUE );
+        outLayer.CreateFeature( dstFeature );
+        }
+      }
+    }
+
+  err = outLayer.ogr().CommitTransaction();
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outLayer.ogr().GetName() << ".");
+    }
 }
 
 template <class TInputImage, class TMaskImage>
@@ -380,7 +392,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   typename TInputImage::PointType imgPoint;
   typename TInputImage::IndexType imgIndex;
-  
+
   switch (geom->getGeometryType())
     {
     case wkbPoint:
@@ -388,11 +400,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
       if (castPoint == ITK_NULLPTR) break;
-      
+
       imgPoint[0] = castPoint->getX();
       imgPoint[1] = castPoint->getY();
       const TInputImage* img = this->GetInput();
-      const TMaskImage* mask = this->GetMask(); 
+      const TMaskImage* mask = this->GetMask();
       img->TransformPhysicalPointToIndex(imgPoint,imgIndex);
       if ((mask == ITK_NULLPTR) || mask->GetPixel(imgIndex))
         {
@@ -472,7 +484,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
   typename TInputImage::IndexType imgIndex;
   typename TInputImage::PointType imgPoint;
-  typename TInputImage::SpacingType imgAbsSpacing = img->GetSpacing();
+  typename TInputImage::SpacingType imgAbsSpacing = img->GetSignedSpacing();
   if (imgAbsSpacing[0] < 0) imgAbsSpacing[0] = -imgAbsSpacing[0];
   if (imgAbsSpacing[1] < 0) imgAbsSpacing[1] = -imgAbsSpacing[1];
 
@@ -569,7 +581,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
         }
       ++it;
       }
-    }  
+    }
 }
 
 template <class TInputImage, class TMaskImage>
@@ -727,7 +739,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     }
 
   const unsigned int nbFeatThread = std::ceil(inLayer.GetFeatureCount(true) / (float) numberOfThreads);
-  assert(nbFeatThread > 0);
+  //assert(nbFeatThread > 0);
 
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   ogr::Layer::const_iterator featIt = inLayer.begin();
@@ -740,7 +752,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     dstFeature.SetFID(featIt->GetFID());
     tmpLayers[counter].CreateFeature( dstFeature );
     cptFeat++;
-    if (cptFeat > nbFeatThread) counter++; cptFeat=0;
+    if (cptFeat > nbFeatThread && (counter + 1) < numberOfThreads)
+      {
+      counter++;
+      cptFeat=0;
+      }
     }
 
   inLayer.SetSpatialFilter(ITK_NULLPTR);
@@ -753,14 +769,14 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 {
   TInputImage *inputImage = const_cast<TInputImage*>(this->GetInput());
   inputImage->UpdateOutputInformation();
-  
+
   ogr::Layer inLayer = inputDS->GetLayer(this->GetLayerIndex());
 
   bool updateMode = false;
   if (inputDS == outputDS)
     {
     updateMode = true;
-    // Check m_OutLayerName is same as input layer name 
+    // Check m_OutLayerName is same as input layer name
     m_OutLayerName = inLayer.GetName();
     }
 
@@ -795,6 +811,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
       outLayer.CreateField(fieldDefn);
+      }
+
+    if (oSRS)
+      {
+      oSRS->Release();
       }
     }
 

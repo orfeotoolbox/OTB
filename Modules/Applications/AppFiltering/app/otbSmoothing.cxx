@@ -55,82 +55,93 @@ public:
   itkTypeMacro(Smoothing, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
-    SetName("Smoothing");
-    SetDescription("Apply a smoothing filter to an image");
+    SetName( "Smoothing" );
+    SetDescription( "Apply a smoothing filter to an image" );
 
-    SetDocName("Smoothing");
-    SetDocLongDescription("This application applies smoothing filter to an image."
-      " Either gaussian, mean, or anisotropic diffusion are available.");
-    SetDocLimitations("None");
-    SetDocAuthors("OTB-Team");
+    SetDocName( "Smoothing" );
+    SetDocLongDescription( "This application applies a smoothing filter to an "
+      "image. Three methodes can be used : a gaussian filter , a mean filter "
+      ", or an anisotropic diffusion using the Perona-Malik algorithm." );
+    SetDocLimitations( "None") ;
+    SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Filter);
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image to smooth.");
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "Output smoothed image.");
+    AddParameter( ParameterType_InputImage ,  "in" , "Input Image" );
+    SetParameterDescription( "in", "Input image to smooth." );
+    AddParameter( ParameterType_OutputImage , "out" , "Output Image" );
+    SetParameterDescription( "out" , "Output smoothed image." );
 
     AddRAMParameter();
 
-    AddParameter(ParameterType_Choice,      "type", "Smoothing Type");
-    SetParameterDescription("type", "Smoothing kernel to apply");
+    AddParameter( ParameterType_Choice, "type" , "Smoothing Type" );
+    SetParameterDescription( "type", "Smoothing kernel to apply" );
 
-    AddChoice("type.mean",     "Mean");
+    AddChoice( "type.mean" , "Mean" );
 
-    AddParameter(ParameterType_Radius, "type.mean.radius", "Radius");
-    SetParameterDescription("type.mean.radius", "Mean radius (in pixels)");
-    SetDefaultParameterInt("type.mean.radius", 2);
+    AddParameter( ParameterType_Radius , "type.mean.radius" , "Radius" );
+    SetParameterDescription( "type.mean.radius" , 
+      "Kernel's radius (in pixels)" );
+    SetDefaultParameterInt( "type.mean.radius" , 2 );
 
-    AddChoice("type.gaussian", "Gaussian");
+    AddChoice( "type.gaussian" , "Gaussian" );
 
-    AddParameter(ParameterType_Float, "type.gaussian.radius", "Radius");
-    SetParameterDescription("type.gaussian.radius", "Gaussian radius (in pixels)");
-    SetDefaultParameterFloat("type.gaussian.radius", 2.0);
+    AddParameter( ParameterType_Float, "type.gaussian.radius" , "Radius" );
+    SetParameterDescription( "type.gaussian.radius", 
+      "Standard deviation of the gaussian kernel used to filter the image");
+    SetDefaultParameterFloat( "type.gaussian.radius" , 2.0 );
+    // TODO rename this parameter
 
-    AddChoice("type.anidif",   "Anisotropic Diffusion");
+    AddChoice( "type.anidif" , "Anisotropic Diffusion" );
 
-    AddParameter(ParameterType_Float,  "type.anidif.timestep", "Time Step");
-    SetParameterDescription("type.anidif.timestep", "Diffusion equation time step");
 
-    AddParameter(ParameterType_Int,  "type.anidif.nbiter", "Nb Iterations");
-    SetParameterDescription("type.anidif.nbiter", "Number of iterations");
+    AddParameter( ParameterType_Float , "type.anidif.timestep",  "Time Step" );
+    SetParameterDescription( "type.anidif.timestep" , 
+      "Time step that will be used to discretize the diffusion equation" );
 
-    AddParameter(ParameterType_Float,  "type.anidif.conductance", "Conductance");
-    SetParameterDescription("type.anidif.nbiter", "Controls the sensitivity of the conductance term");
+    AddParameter( ParameterType_Int , "type.anidif.nbiter" , "Nb Iterations" );
+    SetParameterDescription( "type.anidif.nbiter" , 
+      "Number of iterations needed to get the result" );
 
-    SetDefaultParameterFloat("type.anidif.timestep",   0.125);
-    SetDefaultParameterInt("type.anidif.nbiter",     10);
-    SetDefaultParameterInt("type.anidif.conductance",     1.);
+    AddParameter( ParameterType_Float , "type.anidif.conductance" , 
+      "Conductance" );
+    SetParameterDescription( "type.anidif.conductance" , 
+      "Controls the sensitivity of the conductance term in the diffusion "
+      "equation. The lower it is the stronger the features will be preserved" );
 
-    SetParameterString("type", "anidif", false);
+    SetDefaultParameterFloat( "type.anidif.timestep" , 0.125 );
+    SetDefaultParameterInt( "type.anidif.nbiter" , 10 );
+    SetDefaultParameterInt( "type.anidif.conductance" , 1. );
+
+    SetParameterString( "type" , "anidif");
 
     // Doc example parameter settings
-    SetExampleComment("Image smoothing using a mean filter.", 0);
-    SetDocExampleParameterValue("in", "Romania_Extract.tif");
-    SetDocExampleParameterValue("out", "smoothedImage_mean.png uchar");
-    SetDocExampleParameterValue("type", "mean");
+    SetExampleComment( "Image smoothing using a mean filter." , 0 );
+    SetDocExampleParameterValue( "in" , "Romania_Extract.tif" );
+    SetDocExampleParameterValue( "out" , "smoothedImage_mean.png uchar" );
+    SetDocExampleParameterValue( "type" , "mean");
 
-    unsigned int exId = AddExample( "Image smoothing using an anisotropic diffusion filter." );
-    SetDocExampleParameterValue("in", "Romania_Extract.tif", exId);
-    SetDocExampleParameterValue("out", "smoothedImage_ani.png float", exId);
-    SetDocExampleParameterValue("type", "anidif", exId);
-    SetDocExampleParameterValue("type.anidif.timestep", "0.1", exId);
-    SetDocExampleParameterValue("type.anidif.nbiter", "5", exId);
-    SetDocExampleParameterValue("type.anidif.conductance", "1.5", exId);
+    unsigned int exId = AddExample( "Image smoothing using an anisotropic "
+      "diffusion filter." );
+    SetDocExampleParameterValue( "in" , "Romania_Extract.tif" , exId );
+    SetDocExampleParameterValue( "out" , "smoothedImage_ani.png float" , exId );
+    SetDocExampleParameterValue( "type" , "anidif" , exId );
+    SetDocExampleParameterValue( "type.anidif.timestep" , "0.1" , exId );
+    SetDocExampleParameterValue( "type.anidif.nbiter" , "5" , exId );
+    SetDocExampleParameterValue( "type.anidif.conductance" , "1.5" , exId );
 
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

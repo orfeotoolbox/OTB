@@ -50,44 +50,58 @@ public:
   typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("OSMDownloader");
-    SetDescription("Generate a vector data from OSM on the input image extend");
+    SetDescription("Download vector data from OSM and store it to file");
     // Documentation
-    SetDocName("Open Street Map layers importations applications");
-    SetDocLongDescription("Generate a vector data from Open Street Map data. A DEM could be use. By default, the entire layer is downloaded, an image can be use as support for the OSM data. The application can provide also available classes in layers . This application required an Internet access. Information about the OSM project : http://www.openstreetmap.fr/");
-    SetDocLimitations("None");
+    SetDocName("Open Street Map layers import");
+    SetDocLongDescription("The application connects to Open Street Map server"
+      ", downloads the data corresponding to the spatial extent of the support"
+      " image, and filters the geometries based on OSM tags to produce a vector"
+      " data file.\n\n"
+      "This application can be used to download reference data to perform the "
+      "training of a machine learning model (see for instance [1]).\n\n"
+      "By default, the entire layer is downloaded. The application has a "
+      "special mode to provide the list of available classes in the layers. "
+      "The downloaded features are filtered by giving an OSM tag 'key'. In "
+      "addition, the user can also choose what 'value' this key should have. "
+      "More information about the OSM project at [2].");
+    SetDocLimitations("This application requires an Internet access.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Conversion");
+    SetDocSeeAlso("[1] TrainImagesClassifier \n"
+      "[2] http://www.openstreetmap.fr/");
 
 	AddDocTag("Miscellaneous");
     AddDocTag(Tags::Meta);
 	AddDocTag(Tags::Vector);
 
-    AddParameter(ParameterType_OutputVectorData,  "out",   "Output vector data");
-    SetParameterDescription("out", "Generated output vector data path");
+    AddParameter(ParameterType_OutputVectorData, "out", "Output vector data");
+    SetParameterDescription("out", "Vector data file to store downloaded features");
 
-    AddParameter(ParameterType_InputImage,  "support",   "Support image");
-    SetParameterDescription("support", "Image used as support to estimate the models");
+    AddParameter(ParameterType_InputImage, "support", "Support image");
+    SetParameterDescription("support", "Image used to derive the spatial extent"
+      " to be requested from OSM server (the bounding box of the extent is "
+      "used). Be aware that a request with a large extent may be rejected by "
+      "the server.");
 
     AddParameter(ParameterType_String, "key",  "OSM tag key");
-    SetParameterDescription("key", "OSM tag key to extract (highway, building...)");
+    SetParameterDescription("key", "OSM tag key to extract (highway, building"
+     "...). It defines a category to select features.");
     MandatoryOff("key");
 
     AddParameter(ParameterType_String, "value",  "OSM tag value");
-    SetParameterDescription("value", "OSM tag value to extract (motorway, footway...)");
+    SetParameterDescription("value", "OSM tag value to extract (motorway, "
+      "footway...). It defines the type of feature to select inside a category.");
     MandatoryOff("value");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    AddParameter(ParameterType_Empty, "printclasses", "option to display available key/value classes");
-    std::ostringstream oss;
-    oss << "Print the key/value classes available for the bounding box of the input image "<<std::endl;
-    oss << "\t\t\t\t  ** If not used : Note that the options OSMKey (-key) and Output (-out) become mandatory";
-    SetParameterDescription("printclasses", oss.str().c_str());
-    MandatoryOff("printclasses");
+    AddParameter(ParameterType_Bool, "printclasses", "Displays available key/value classes");
+    SetParameterDescription("printclasses","Print the key/value classes "
+      "available for the selected support image. If enabled, the OSM tag Key "
+      "(-key) and the output (-out) become optional" );
 
     // Doc example parameter settings
     SetDocExampleParameterValue("support", "qb_RoadExtract.tif");
@@ -98,24 +112,24 @@ private:
   }
 
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // CASE:  when the -print option is not required and the User
     // does not set the option OSMKey or the option Output or does not
     // set both of them
-    if ( !this->HasValue("printclasses") )
-      {
-      MandatoryOn("out");
-      MandatoryOn("key");
-      }
-    else
+    if ( GetParameterInt("printclasses") )
       {
       MandatoryOff("out");
       MandatoryOff("key");
       }
+    else
+      {
+      MandatoryOn("out");
+      MandatoryOn("key");
+      }
   }
 
- void DoExecute() ITK_OVERRIDE
+ void DoExecute() override
   {
     typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType>
       EnvelopeFilterType;
@@ -163,7 +177,7 @@ private:
 
   // If the user wants to print the Key/Values present in the XML file
   // downloaded  :
-  if ( this->HasValue("printclasses"))
+  if ( GetParameterInt("printclasses"))
     {
     // Print the classes
     VectorDataProviderType::KeyMapType  keymap = m_VdOSMGenerator->GetKeysMap();

@@ -185,13 +185,13 @@ public:
 
 protected:
   WaveletPacketTransform();
-  ~WaveletPacketTransform() ITK_OVERRIDE {}
+  ~WaveletPacketTransform() override {}
 
   /** Generate data redefinition.
    * This class does not performs multi-threading directly. But it uses step by step the
    * GenerateData() of TFilter. If This one can thread, the transformation is threaded
    * (e.g. WaveletFilterBank) */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Performs (if any) the local decomposition (called recursively) */
   virtual void GenerateData(unsigned int depth, OutputImageType * outputPtr,
@@ -323,19 +323,19 @@ public:
 
 protected:
   WaveletPacketTransform();
-  ~WaveletPacketTransform() ITK_OVERRIDE {}
+  ~WaveletPacketTransform() override {}
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy information from the input image if existing.
     **/
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate data redefinition.
    * This class does not performs multi-threading directly. But it uses step by step the
    * GenerateData() of TFilter. If This one can thread, the transformation is threaded
    * (e.g. WaveletFilterBank) */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Performs (if any) the local decomposition (called recursively) */
   virtual unsigned int SetInputFilters(unsigned int& ruleID, InputImageIterator& inputIter,

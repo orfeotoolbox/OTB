@@ -162,6 +162,16 @@ ObjectList<TObject>
     }
   return m_InternalContainer[index];
 }
+
+template <class TObject>
+typename ObjectList<TObject>::Superclass *
+ObjectList<TObject>
+::GetNthDataObject(unsigned int index) const
+{
+  
+  return dynamic_cast<itk::DataObject *> ( GetNthElement(index).GetPointer() );
+}
+
 /**
    * Return the first element of the list.
    * \return The first element of the list.
@@ -236,7 +246,11 @@ typename ObjectList<TObject>::ReverseIterator
 ObjectList<TObject>
 ::Insert(ReverseIterator position, ObjectPointerType element)
 {
-  ReverseIterator iter(m_InternalContainer.insert(position.GetIter(), element));
+  ReverseIterator iter(
+    InternalContainerType::reverse_iterator(
+      m_InternalContainer.insert(position.GetIter().base(), element)
+      )
+    );
   this->Modified();
   return iter;
 }

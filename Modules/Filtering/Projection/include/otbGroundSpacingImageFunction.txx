@@ -131,7 +131,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   const itk::MetaDataDictionary& inputDict = this->GetInputImage()->GetMetaDataDictionary();
   transform->SetInputDictionary(inputDict);
   transform->SetInputOrigin(this->GetInputImage()->GetOrigin());
-  transform->SetInputSpacing(this->GetInputImage()->GetSpacing());
+  transform->SetInputSpacing(this->GetInputImage()->GetSignedSpacing());
 
   transform->InstantiateTransform();
   return transform->TransformPoint(inputPoint);

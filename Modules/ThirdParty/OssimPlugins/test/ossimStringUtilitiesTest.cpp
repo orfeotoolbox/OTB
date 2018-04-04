@@ -31,7 +31,7 @@
 
 #define BOOST_TEST_MODULE "ossim String Utilities unit testing"
 #define BOOST_TEST_DYN_LINK
-#include "ossimStringUtilities.h"
+#include "ossim/ossimStringUtilities.h"
 #include <boost/test/unit_test.hpp>
 #include <cstdio>
 #include <iostream>

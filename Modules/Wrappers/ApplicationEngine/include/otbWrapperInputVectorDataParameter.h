@@ -55,28 +55,31 @@ public:
 
   /** Set value from filename */
   bool SetFromFileName(const std::string& filename);
-  itkGetConstMacro(FileName, std::string);
+  itkGetConstReferenceMacro( FileName, std::string );
 
-  VectorDataType* GetVectorData();
+  const VectorDataType * GetVectorData() const;
+  VectorDataType * GetVectorData();
 
   void SetVectorData(VectorDataType* vectorData);
 
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
 protected:
   /** Constructor */
   InputVectorDataParameter();
 
   /** Destructor */
-  ~InputVectorDataParameter() ITK_OVERRIDE;
+  ~InputVectorDataParameter() override;
 
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataType::Pointer m_VectorData;
   VectorDataFileReaderType::Pointer m_Reader;
 
   std::string m_FileName;
+
+  std::string m_PreviousFileName;
 
 private:
   InputVectorDataParameter(const Parameter &); //purposely not implemented

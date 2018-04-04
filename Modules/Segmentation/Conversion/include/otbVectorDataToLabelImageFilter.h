@@ -107,7 +107,7 @@ public:
   itkGetConstReferenceMacro(OutputOrigin, OutputOriginType);
 
   /** Set the spacing (size of a pixel) of the output image.
-  * \sa GetSpacing()
+  * \sa GetSignedSpacing()
   */
   virtual void SetOutputSpacing(const OutputSpacingType& spacing);
   virtual void SetOutputSpacing(const double spacing[2]);
@@ -124,10 +124,10 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
 protected:
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   VectorDataToLabelImageFilter();
-  ~VectorDataToLabelImageFilter() ITK_OVERRIDE
+  ~VectorDataToLabelImageFilter() override
   {
     // Destroy the geometries stored
     for (unsigned int idx = 0; idx < m_SrcDataSetGeometries.size(); ++idx)
@@ -141,9 +141,9 @@ protected:
       }
   }
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   VectorDataToLabelImageFilter(const Self&); //purposely not implemented

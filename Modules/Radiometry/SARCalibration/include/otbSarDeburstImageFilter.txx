@@ -48,7 +48,7 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   ImageType * outputPtr = this->GetOutput();
 
   // Check that azimuth spacing has not been modified
-  if(vcl_abs(inputPtr->GetSpacing()[1]-1.)>=std::numeric_limits<double>::epsilon())
+  if(vcl_abs(inputPtr->GetSignedSpacing()[1]-1.)>=std::numeric_limits<double>::epsilon())
     itkExceptionMacro("Can not perform deburst if input image azimuth spacing is not 1.");
   
   // Check that the azimuth sampling grid has not been modified

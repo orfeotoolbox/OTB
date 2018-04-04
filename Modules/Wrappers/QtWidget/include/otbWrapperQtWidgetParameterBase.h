@@ -33,6 +33,8 @@ namespace otb
 namespace Wrapper
 {
 
+class QtWidgetParameterGroup;
+
 /** \class QtWidgetParameterBase
  * \brief
  *
@@ -41,11 +43,25 @@ namespace Wrapper
 class OTBQtWidget_EXPORT QtWidgetParameterBase : public QWidget
 {
   Q_OBJECT
+  friend class QtWidgetParameterGroup;
 public:
-  QtWidgetParameterBase(Parameter *, QtWidgetModel*);
-  ~QtWidgetParameterBase() ITK_OVERRIDE;
+  QtWidgetParameterBase( Parameter *, QtWidgetModel * );
+  ~QtWidgetParameterBase() override;
 
   void CreateWidget();
+
+  /** Store the state of the check box relative to this parameter
+    */
+  virtual bool IsChecked() const
+  {
+    return m_IsChecked;
+  }
+
+  /** Modify the state of the checkbox relative to this parameter */
+  virtual void SetChecked(const bool value)
+  {
+    m_IsChecked = value;
+  }
 
 public slots:
   void UpdateGUI();
@@ -61,6 +77,9 @@ signals:
 protected:
   QtWidgetModel* GetModel();
 
+  const Parameter * GetParam() const;
+
+  Parameter * GetParam();
 
 private:
   QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
@@ -70,9 +89,13 @@ private:
 
   virtual void DoCreateWidget() = 0;
 
-  QtWidgetModel* m_Model;
+private:
+  QtWidgetModel * m_Model;
 
-  Parameter*      m_Param;
+  Parameter * m_Param;
+
+  /** Store the status of the checkbox */
+  bool m_IsChecked;
 };
 
 

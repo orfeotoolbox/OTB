@@ -24,7 +24,6 @@
 #include "otbConcatenateVectorDataFilter.h"
 
 #include "otbMath.h"
-#include "itkTimeProbe.h"
 
 namespace otb
 {

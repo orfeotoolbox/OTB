@@ -130,7 +130,7 @@ public:
         <FloatPixelType, Int16PixelType> >          HooverColorFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("HooverCompareSegmentation");
     SetDescription("Compare two segmentations with Hoover metrics");
@@ -202,12 +202,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     UInt32ImageType::Pointer inputGT = GetParameterUInt32Image("ingt");
     UInt32ImageType::Pointer inputMS = GetParameterUInt32Image("inms");
@@ -297,10 +297,10 @@ private:
 
     m_InstanceFilter->Update();
 
-    SetParameterFloat("rc",m_InstanceFilter->GetMeanRC(), false);
-    SetParameterFloat("rf",m_InstanceFilter->GetMeanRF(), false);
-    SetParameterFloat("ra",m_InstanceFilter->GetMeanRA(), false);
-    SetParameterFloat("rm",m_InstanceFilter->GetMeanRM(), false);
+    SetParameterFloat("rc",m_InstanceFilter->GetMeanRC());
+    SetParameterFloat("rf",m_InstanceFilter->GetMeanRF());
+    SetParameterFloat("ra",m_InstanceFilter->GetMeanRA());
+    SetParameterFloat("rm",m_InstanceFilter->GetMeanRM());
   }
 
   ImageToLabelMapFilterType::Pointer m_GTFilter;

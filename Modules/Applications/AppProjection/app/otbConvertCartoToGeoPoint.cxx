@@ -50,14 +50,14 @@ public:
   typedef otb::GenericRSTransform<>        TransformType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ConvertCartoToGeoPoint");
-    SetDescription("Convert cartographic coordinates to geographic one.");
+    SetDescription("Convert cartographic coordinates to geographic ones.");
 
     // Documentation
     SetDocName("Cartographic to geographic coordinates conversion");
-    SetDocLongDescription("This application computes the geographic coordinates from a cartographic one. User has to give the X and Y coordinate and the cartographic projection (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID/SVY21).");
+    SetDocLongDescription("This application computes the geographic coordinates from cartographic ones. User has to give the X and Y coordinate and the cartographic projection (see mapproj parameter for details).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -67,20 +67,20 @@ private:
 
     AddParameter(ParameterType_Group, "carto", "Input cartographic coordinates");
     AddParameter(ParameterType_Float, "carto.x", "X cartographic coordinates");
-    SetParameterDescription("carto.x", "X cartographic coordinates in the specified projection.");
+    SetParameterDescription("carto.x", "X cartographic coordinates in the projection defined by mapproj parameter");
 
     AddParameter(ParameterType_Float, "carto.y", "Y cartographic coordinates");
-    SetParameterDescription("carto.y", "Y cartographic coordinates in the specified projection.");
+    SetParameterDescription("carto.y", "Y cartographic coordinates in the projection defined by mapproj parameter");
 
     // Add the MapProjectionParameters
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "mapproj");
 
     AddParameter(ParameterType_Float, "long", "Output long");
-    SetParameterDescription("long", "Point longitude coordinates.");
+    SetParameterDescription("long", "Point longitude coordinates in decimal degrees.");
     SetParameterRole("long", Role_Output);
 
     AddParameter(ParameterType_Float, "lat", "Output lat");
-    SetParameterDescription("lat", "Point latitude coordinates.");
+    SetParameterDescription("lat", "Point latitude coordinates in decimal degrees.");
     SetParameterRole("lat", Role_Output);
 
     // Doc example parameter settings
@@ -93,11 +93,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the projectionRef
     std::string inputProjRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "mapproj");
@@ -122,8 +122,8 @@ private:
     otbAppLogINFO( << std::setprecision(10) << "Geographic   Point (Long, Lat) : (" << geoPoint[0] << ", " <<  geoPoint[1] << ")" );
 
 
-    SetParameterFloat( "long",geoPoint[0] , false);
-    SetParameterFloat( "lat",geoPoint[1] , false);
+    SetParameterFloat( "long",geoPoint[0]);
+    SetParameterFloat( "lat",geoPoint[1]);
   }
 };
 

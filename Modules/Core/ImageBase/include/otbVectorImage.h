@@ -144,6 +144,13 @@ public:
   /** Get the six coefficients of affine geoTtransform. */
   virtual VectorType GetGeoTransform(void) const;
 
+    /** Get signed spacing */
+  SpacingType GetSignedSpacing() const;
+
+  /** Set signed spacing */
+  virtual void SetSignedSpacing( SpacingType spacing );
+  virtual void SetSignedSpacing( double spacing[ VImageDimension ] );
+
   /** Get image corners. */
   virtual VectorType GetUpperLeftCorner(void) const;
   virtual VectorType GetUpperRightCorner(void) const;
@@ -157,9 +164,9 @@ public:
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
   /// Copy metadata from a DataObject
-  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
+  void CopyInformation(const itk::DataObject *) override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Return the Pixel Accessor object */
 //   AccessorType GetPixelAccessor( void )
@@ -187,7 +194,7 @@ public:
 
 protected:
   VectorImage();
-  ~VectorImage() ITK_OVERRIDE {}
+  ~VectorImage() override {}
 
 private:
   VectorImage(const Self &); //purposely not implemented

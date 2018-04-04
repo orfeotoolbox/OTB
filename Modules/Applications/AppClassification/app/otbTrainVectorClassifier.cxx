@@ -54,14 +54,16 @@ public:
   typedef ContingencyTableType::Pointer    ContingencyTablePointerType;
 
 protected:
-  void DoInit()
+  void DoInit() override
   {
     SetName( "TrainVectorClassifier" );
-    SetDescription( "Train a classifier based on labeled geometries and a list of features to consider." );
+    SetDescription( "Train a classifier based on labeled geometries and a "
+      "list of features to consider." );
 
     SetDocName( "Train Vector Classifier" );
     SetDocLongDescription( "This application trains a classifier based on "
-                                   "labeled geometries and a list of features to consider for classification." );
+      "labeled geometries and a list of features to consider for "
+      "classification." );
     SetDocLimitations( " " );
     SetDocAuthors( "OTB Team" );
     SetDocSeeAlso( " " );
@@ -71,12 +73,12 @@ protected:
     Superclass::DoInit();
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
     Superclass::DoUpdateParameters();
   }
 
-  void DoExecute()
+  void DoExecute() override
   {
     m_FeaturesInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
 
@@ -110,7 +112,7 @@ protected:
     contingencyTableCalculator->Compute(performanceLabeledListSample->Begin(),
                                         performanceLabeledListSample->End(),predictedListSample->Begin(), predictedListSample->End());
 
-    if(IsParameterEnabled("v"))
+    if(GetParameterInt("v"))
     {
       otbAppLogINFO( "Training performances:" );
       otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"

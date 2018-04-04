@@ -45,14 +45,14 @@ public:
   typedef otb::TileImageFilter<FloatVectorImageType> TileFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("TileFusion");
     SetDescription("Fusion of an image made of several tile files.");
 
     // Documentation
     SetDocName("Image Tile Fusion");
-    SetDocLongDescription("Concatenate several tile files into a single image file.");
+    SetDocLongDescription("Automatically mosaic a set of non overlapping tile files into a single image. Images must have a matching number of bands and they must be listed in lexicographic order.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -60,7 +60,7 @@ private:
     AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input Tile Images");
-    SetParameterDescription("il", "Input tiles to concatenate (in lexicographic order : (0,0) (1,0) (0,1) (1,1)).");
+    SetParameterDescription("il", "Input images to concatenate (in lexicographic order, for instance : (0,0) (1,0) (0,1) (1,1)).");
 
     AddParameter(ParameterType_Int, "cols", "Number of tile columns");
     SetParameterDescription("cols", "Number of columns in the tile array");
@@ -80,12 +80,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to be done
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input image list
     FloatVectorImageListType::Pointer tileList = this->GetParameterImageList("il");
@@ -95,22 +95,21 @@ private:
       itkExceptionMacro("No input Image set...");
       }
 
-    m_FusionFilter = TileFilterType::New();
+    TileFilterType::Pointer fusionFilter = TileFilterType::New();
 
     TileFilterType::SizeType layout;
     layout[0] = this->GetParameterInt("cols");
     layout[1] = this->GetParameterInt("rows");
-    m_FusionFilter->SetLayout(layout);
+    fusionFilter->SetLayout(layout);
 
     for (unsigned int i=0; i<(layout[0]*layout[1]); i++)
       {
-      m_FusionFilter->SetInput(i,tileList->GetNthElement(i));
+      fusionFilter->SetInput(i,tileList->GetNthElement(i));
       }
 
-    SetParameterOutputImage("out", m_FusionFilter->GetOutput());
+    SetParameterOutputImage("out", fusionFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  TileFilterType::Pointer m_FusionFilter;
 
 };
 

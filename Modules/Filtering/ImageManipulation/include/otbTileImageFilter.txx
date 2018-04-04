@@ -62,7 +62,7 @@ TileImageFilter<TImage>
     itkExceptionMacro(<<"Layout has "<<numberOfImages<<" tiles, but only "<<this->GetNumberOfInputs()<<" inputs are found.");
     }
 
-  typename ImageType::SpacingType spacing = this->GetInput()->GetSpacing();
+  typename ImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
   unsigned int nbComp = this->GetInput()->GetNumberOfComponentsPerPixel();
 
   m_ColumnsSizes.clear();
@@ -94,7 +94,7 @@ TileImageFilter<TImage>
         itkExceptionMacro(<<"Inconsistent sizes in layout detected!");
         }
 
-      if(spacing != currentTile->GetSpacing())
+      if(spacing != currentTile->GetSignedSpacing())
         {
         itkExceptionMacro(<<"Inconsistent spacings in layout detected!");
         }

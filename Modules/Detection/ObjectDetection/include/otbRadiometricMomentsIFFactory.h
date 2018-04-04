@@ -82,8 +82,8 @@ public:
 
 protected:
   RadiometricMomentsIFFactory(){}
-  ~RadiometricMomentsIFFactory() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~RadiometricMomentsIFFactory() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   RadiometricMomentsIFFactory(const Self& ); //purposely not implemented

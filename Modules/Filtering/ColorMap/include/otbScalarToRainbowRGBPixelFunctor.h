@@ -139,7 +139,7 @@ class ITK_EXPORT ScalarToRainbowRGBPixelFunctor
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
-  ~ScalarToRainbowRGBPixelFunctor() ITK_OVERRIDE {}
+  ~ScalarToRainbowRGBPixelFunctor() override {}
 
   typedef ScalarToRainbowRGBPixelFunctor                      Self;
   typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
@@ -154,7 +154,7 @@ public:
   typedef TScalar                              ScalarType;
   typedef HSVToRGBFunctor<RGBPixelType>        HSVToRGBFunctorType;
 
-  RGBPixelType operator ()(const TScalar&) const ITK_OVERRIDE;
+  RGBPixelType operator ()(const TScalar&) const override;
 
 protected:
   RGBPixelType HSVToRGB(double h, double s, double v) const;

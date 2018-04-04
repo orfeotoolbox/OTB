@@ -22,7 +22,8 @@
 #define otbSimpleParallelTiffWriter_txx
 
 #include "otbSimpleParallelTiffWriter.h"
-#include "itkTimeProbe.h"
+#include "otbStopwatch.h"
+#include "otbUtils.h"
 
 using std::vector;
 
@@ -315,11 +316,16 @@ SimpleParallelTiffWriter<TInputImage>
       sizemode = m_FilenameHelper->GetStreamingSizeMode();
       }
 
-    double sizevalue = 0.;
-
+    unsigned int sizevalue = 0;
+    // Save the DefaultRAM value for later
+    unsigned int oldDefaultRAM = m_StreamingManager->GetDefaultRAM();
+    if (sizemode == "auto")
+      {
+      sizevalue = oldDefaultRAM;
+      }
     if(m_FilenameHelper->StreamingSizeValueIsSet())
       {
-      sizevalue = m_FilenameHelper->GetStreamingSizeValue();
+      sizevalue = static_cast<unsigned int>(m_FilenameHelper->GetStreamingSizeValue());
       }
 
     if(type == "auto")
@@ -328,7 +334,7 @@ SimpleParallelTiffWriter<TInputImage>
         {
         itkWarningMacro(<<"In auto streaming type, the sizemode option will be ignored.");
         }
-      if(sizevalue == 0.)
+      if(sizevalue == 0)
         {
         itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
         }
@@ -338,7 +344,7 @@ SimpleParallelTiffWriter<TInputImage>
       {
       if(sizemode == "auto")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
           }
@@ -346,27 +352,27 @@ SimpleParallelTiffWriter<TInputImage>
         }
       else if(sizemode == "nbsplits")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfDivisionsTiledStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfDivisionsTiledStreaming(sizevalue);
         }
       else if(sizemode == "height")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
 
-        this->SetTileDimensionTiledStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetTileDimensionTiledStreaming(sizevalue);
         }
       }
     else if(type == "stripped")
       {
       if(sizemode == "auto")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
           }
@@ -375,30 +381,34 @@ SimpleParallelTiffWriter<TInputImage>
         }
       else if(sizemode == "nbsplits")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfDivisionsStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfDivisionsStrippedStreaming(sizevalue);
         }
       else if(sizemode == "height")
         {
-        if(sizevalue == 0.)
+        if(sizevalue == 0)
           {
           itkWarningMacro("Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting the sizevalue by using &streaming:sizevalue=x.");
           }
-        this->SetNumberOfLinesStrippedStreaming(static_cast<unsigned int>(sizevalue));
+        this->SetNumberOfLinesStrippedStreaming(sizevalue);
         }
 
       }
     else if (type == "none")
       {
-      if(sizemode!="" || sizevalue!=0.)
+      if(sizemode!="" || sizevalue!=0)
         {
         itkWarningMacro("Streaming is explicitly disabled, sizemode and sizevalue will be ignored.");
         }
       this->SetNumberOfDivisionsTiledStreaming(0);
       }
+
+    // since we change the m_StreamingManager under the hood, we copy the DefaultRAM
+    // value to the new streamingManager.
+    m_StreamingManager->SetDefaultRAM(oldDefaultRAM);
     }
   else
     {
@@ -458,6 +468,7 @@ SimpleParallelTiffWriter<TInputImage>
    */
   inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
+  typename InputImageType::PointType origin = inputPtr->GetOrigin();
 
   /** Parse region size modes */
   if(m_FilenameHelper->BoxIsSet())
@@ -497,6 +508,9 @@ SimpleParallelTiffWriter<TInputImage>
       throw e;
       }
     otbMsgDevMacro(<< "inputRegion " << inputRegion);
+
+    // Update the origin
+    inputPtr->TransformIndexToPhysicalPoint(inputRegion.GetIndex(), origin);
     }
 
   // Get number of bands & pixel data type
@@ -538,7 +552,7 @@ SimpleParallelTiffWriter<TInputImage>
   else
     {
     // When mode is not tiled (i.e. striped)
-    block_size_x = inputPtr->GetLargestPossibleRegion().GetSize()[0];
+    block_size_x = inputRegion.GetSize()[0];
     }
 
   // Master process (Rank 0) is responsible for the creation of the output raster.
@@ -546,29 +560,47 @@ SimpleParallelTiffWriter<TInputImage>
     {
     // Set geotransform
     double geotransform[6];
-    geotransform[0] = inputPtr->GetOrigin()[0] - 0.5*inputPtr->GetSpacing()[0];
-    geotransform[1] = inputPtr->GetSpacing()[0];
+    geotransform[0] = origin[0] - 0.5*inputPtr->GetSignedSpacing()[0];
+    geotransform[1] = inputPtr->GetSignedSpacing()[0];
     geotransform[2] = 0.0;
-    geotransform[3] = inputPtr->GetOrigin()[1] - 0.5*inputPtr->GetSpacing()[1];
+    geotransform[3] = origin[1] - 0.5*inputPtr->GetSignedSpacing()[1];
     geotransform[4] = 0.0;
-    geotransform[5] = inputPtr->GetSpacing()[1];
+    geotransform[5] = inputPtr->GetSignedSpacing()[1];
 
     // Call SPTW routine that creates the output raster
-    SPTW_ERROR sperr = create_generic_raster(m_FileName,
-        inputPtr->GetLargestPossibleRegion().GetSize()[0],
-        inputPtr->GetLargestPossibleRegion().GetSize()[1],
-        nBands,
-        dataType,
-        geotransform,
-        inputPtr->GetProjectionRef(),
-        block_size_x,
-        m_TiffTiledMode);
-
-    if (sperr != sptw::SP_None)
+    if(!m_TiffTiledMode)
       {
-      itkExceptionMacro(<<"Error creating raster");
-      otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
+      SPTW_ERROR sperr = sptw::create_raster(m_FileName,
+                                             inputRegion.GetSize()[0],
+                                             inputRegion.GetSize()[1],
+                                             nBands,
+                                             dataType,
+                                             geotransform,
+                                             inputPtr->GetProjectionRef());
+      if (sperr != sptw::SP_None)
+        {
+        itkExceptionMacro(<<"Error creating raster");
+        otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
+        }
+
       }
+    else
+      {
+      SPTW_ERROR sperr = sptw::create_tiled_raster(m_FileName,
+                                                   inputRegion.GetSize()[0],
+                                                   inputRegion.GetSize()[1],
+                                                   nBands,
+                                                   dataType,
+                                                   geotransform,
+                                                   inputPtr->GetProjectionRef(),
+                                                   block_size_x);
+      if (sperr != sptw::SP_None)
+        {
+        itkExceptionMacro(<<"Error creating raster");
+        otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
+        }
+      }
+    
     }
 
   // Wait for rank 0 to finish creating the output raster
@@ -617,7 +649,7 @@ SimpleParallelTiffWriter<TInputImage>
    ************************************************************************/
 
   // Time probe for overall process time
-  itk::TimeProbe overallTime;
+  otb::Stopwatch overallTime;
   overallTime.Start();
 
   // Check that streaming is relevant
@@ -674,19 +706,16 @@ SimpleParallelTiffWriter<TInputImage>
       /*
        * Processing
        */
-      itk::TimeProbe processingTime;
-      processingTime.Start();
+      otb::Stopwatch processingTime = otb::Stopwatch::StartNew();
       inputPtr->SetRequestedRegion(streamRegion);
       inputPtr->PropagateRequestedRegion();
       inputPtr->UpdateOutputData();
-      processingTime.Stop();
-      processDuration += processingTime.GetTotal();
+      processDuration += processingTime.GetElapsedMilliseconds();
 
       /*
        * Writing using SPTW
        */
-      itk::TimeProbe writingTime;
-      writingTime.Start();
+      otb::Stopwatch writingTime = otb::Stopwatch::StartNew();
       if (!m_VirtualMode)
         {
         sptw::write_area(output_raster,
@@ -696,10 +725,19 @@ SimpleParallelTiffWriter<TInputImage>
             streamRegion.GetIndex()[0] + streamRegion.GetSize()[0] -1,
             streamRegion.GetIndex()[1] + streamRegion.GetSize()[1] -1);
         }
-      writingTime.Stop();
-      writeDuration += writingTime.GetTotal();
+      writeDuration += writingTime.GetElapsedMilliseconds();
       numberOfProcessedRegions += 1;
       }
+    }
+
+  // abort case
+  if (this->GetAbortGenerateData())
+    {
+    itk::ProcessAborted e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Image writing has been aborted");
+    throw e;
+    otb::MPIConfig::Instance()->abort(EXIT_FAILURE);
     }
 
   // Clean up
@@ -731,12 +769,12 @@ SimpleParallelTiffWriter<TInputImage>
       itkDebugMacro( "Process Id\tProcessing\tWriting" );
 	  for (unsigned int i = 0; i < process_runtimes.size(); i+=nValues)
 	    {
-      itkDebugMacro( <<(int (i/nValues)) << 
+      itkDebugMacro( <<(int (i/nValues)) <<
 	        "\t" << process_runtimes[i] <<
 	        "\t" << process_runtimes[i+1] <<
 	        "\t("<< process_runtimes[i+2] << " regions)" );
 	    }
-	  itkDebugMacro( "Overall time:" << overallTime.GetTotal() );
+	  itkDebugMacro( "Overall time: " << overallTime.GetElapsedMilliseconds() / 1000 << " s" );
 	  }
    */
 
@@ -809,6 +847,28 @@ SimpleParallelTiffWriter<TInputImage>
  {
   return this->m_FilenameHelper->GetSimpleFileName();
  }
+
+template <class TInputImage>
+const bool &
+SimpleParallelTiffWriter<TInputImage>
+::GetAbortGenerateData() const
+{
+  m_Lock.Lock();
+  bool ret = Superclass::GetAbortGenerateData();
+  m_Lock.Unlock();
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
+}
+
+template <class TInputImage>
+void
+SimpleParallelTiffWriter<TInputImage>
+::SetAbortGenerateData(bool val)
+{
+  m_Lock.Lock();
+  Superclass::SetAbortGenerateData(val);
+  m_Lock.Unlock();
+}
 
 }
 #endif

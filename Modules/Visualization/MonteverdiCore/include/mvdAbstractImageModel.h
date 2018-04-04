@@ -49,7 +49,7 @@
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbImageMetadataInterfaceBase.h"
 #endif //tag=QT4-boost-compatibility
-
+#include "otbImage.h" // Needed to get otb::internal::Get/SetSignedSpacing()
 //
 // Monteverdi includes (sorted by alphabetic order)
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
@@ -171,7 +171,7 @@ public:
 public:
 
   /** Destructor */
-  ~AbstractImageModel() ITK_OVERRIDE;
+  ~AbstractImageModel() override;
 
   /** */
   inline int GetId() const;
@@ -263,7 +263,7 @@ public:
 
   /**
    */
-  inline const SpacingType& GetSpacing() const;
+  inline const SpacingType GetSpacing() const;
 
   /**
    */
@@ -322,7 +322,7 @@ protected:
   //
   // AbstractModel methods.
 
-  void virtual_BuildModel( void* context ) ITK_OVERRIDE;
+  void virtual_BuildModel( void* context ) override;
 
 //
 // Protected attributes.
@@ -479,7 +479,8 @@ AbstractImageModel
   m_CurrentLod = lod;
 
   // if everything ok emit the new spacing of the current lod
-  emit SpacingChanged(ToImageBase()->GetSpacing());
+  emit SpacingChanged( otb::internal::GetSignedSpacing( 
+    static_cast< ImageBaseType * > ( ToImageBase() ) ) );
 }
 
 /*****************************************************************************/
@@ -554,13 +555,14 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-const SpacingType&
+const SpacingType
 AbstractImageModel
 ::GetSpacing() const
 {
   assert( !ToImageBase().IsNull() );
 
-  return ToImageBase()->GetSpacing();
+  return otb::internal::GetSignedSpacing( 
+    static_cast< ImageBaseType const * >( ToImageBase() ) );
 }
 
 /*****************************************************************************/

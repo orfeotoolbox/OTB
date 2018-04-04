@@ -65,7 +65,7 @@ public:
   itkTypeMacro(MRFSamplerMAP, MRFSampler);
 
   inline int Compute(const InputImageNeighborhoodIterator& itData,
-                     const LabelledImageNeighborhoodIterator& itRegul) ITK_OVERRIDE
+                     const LabelledImageNeighborhoodIterator& itRegul) override
   {
     if (this->m_NumberOfClasses == 0)
       {
@@ -103,7 +103,7 @@ public:
 protected:
   // The constructor and destructor.
   MRFSamplerMAP() {};
-  ~MRFSamplerMAP() ITK_OVERRIDE {}
+  ~MRFSamplerMAP() override {}
 
 };
 
