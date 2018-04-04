@@ -67,12 +67,15 @@ public:
   typedef typename ImageType::InternalPixelType PixelType;
 
   typedef otb::PipelineMemoryPrintCalculator::MemoryPrintType MemoryPrintType;
+  typedef itk::ImageRegionSplitterBase          AbstractSplitterType;
 
   /** Type macro */
   itkTypeMacro(StreamingManager, itk::LightObject);
 
   /** Dimension of input image. */
   itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
+
+  const AbstractSplitterType * GetSplitter() const;
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
@@ -106,7 +109,6 @@ protected:
   RegionType m_Region;
 
   /** The splitter used to compute the different strips */
-  typedef itk::ImageRegionSplitterBase           AbstractSplitterType;
   typedef typename AbstractSplitterType::Pointer AbstractSplitterPointerType;
   AbstractSplitterPointerType m_Splitter;
 
