@@ -41,6 +41,13 @@ StreamingManager<TImage>::~StreamingManager()
 }
 
 template <class TImage>
+const typename StreamingManager<TImage>::AbstractSplitterType *
+StreamingManager<TImage>::GetSplitter() const
+{
+  return m_Splitter;
+}
+
+template <class TImage>
 typename StreamingManager<TImage>::MemoryPrintType
 StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType availableRAMInMB)
 {
