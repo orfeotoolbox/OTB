@@ -41,6 +41,10 @@ void PrintNothing(const char * /* s */)
 {
 }
 
+bool const TrueConstant = true;
+
+bool const FalseConstant = false;
+
 }
 
 }

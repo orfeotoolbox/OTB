@@ -21,6 +21,7 @@
 set(DOCUMENTATION "This module contains OTB sampling framework.")
 
 otb_module(OTBSampling
+  ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBConversion

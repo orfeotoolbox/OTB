@@ -22,6 +22,7 @@ set(DOCUMENTATION "This module contains classes related to the reading and the
 writing of remote sensing images.")
 
 otb_module(OTBImageIO
+  ENABLE_SHARED
   DEPENDS
     OTBBoostAdapters
     OTBCommon
