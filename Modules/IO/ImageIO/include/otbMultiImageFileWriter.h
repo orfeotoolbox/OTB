@@ -26,6 +26,7 @@
 #include "itkImageBase.h"
 #include "itkProcessObject.h"
 #include "itkImageIOBase.h"
+#include "OTBImageIOExport.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -41,7 +42,7 @@ namespace otb
  *  is interpreted on the first input to deduce the number of streams. This
  *  number of streams is then used to split the other inputs.
  */
-class MultiImageFileWriter: public itk::ProcessObject
+class OTBImageIO_EXPORT MultiImageFileWriter: public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
