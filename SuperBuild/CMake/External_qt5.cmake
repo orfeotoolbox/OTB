@@ -36,19 +36,72 @@ SETUP_SUPERBUILD(QT5)
 #NOTE: make sure your superbuild install directory does not contain any
 #Qt files from previous install of superbuild QT.
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT5 FREETYPE)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT5 ZLIB PNG JPEG FREETYPE)
 
 #use system libs always for Qt4 as we build them from source or have already in system
 
-# if(SB_INSTALL_PREFIX)
-  # file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT4_INSTALL_PREFIX_NATIVE)
-  # file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include QT4_INCLUDE_PREFIX_NATIVE)
-  # file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/lib QT4_LIB_PREFIX_NATIVE)
-  # file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include/freetype2 QT4_INCLUDE_FREETYPE_NATIVE)
-# endif()
+if(SB_INSTALL_PREFIX)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT5_INSTALL_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include QT5_INCLUDE_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/lib QT5_LIB_PREFIX_NATIVE)
+  file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include/freetype2 QT5_INCLUDE_FREETYPE_NATIVE)
+endif()
 
 #Common options for all cases
-# set(QT4_SB_CONFIG
+# -skip qtbase 
+set(QT5_SB_CONFIG
+  "-prefix ${QT5_INSTALL_PREFIX_NATIVE} -L ${QT4_LIB_PREFIX_NATIVE} \
+  -I ${QT4_INCLUDE_PREFIX_NATIVE} -I ${QT4_INCLUDE_FREETYPE_NATIVE} \
+  -opensource -confirm-license -release -shared -nomake demos \
+  -nomake examples -nomake tools -no-openssl \
+  -skip qtgamepad  \
+  -skip qt3d  \
+  -skip qtactiveqt  \
+  -skip qtandroidextras \ 
+  -skip qtcanvas3d  \
+  -skip qtcharts  \
+  -skip qtconnectivity  \
+  -skip qtdatavis3d  \
+  -skip qtdeclarative  \
+  -skip qtdoc  \
+  -skip qtgamepad  \
+  -skip qtgraphicaleffects  \
+  -skip qtimageformats  \
+  -skip qtlocation  \
+  -skip qtmacextras  \
+  -skip qtmultimedia  \
+  -skip qtnetworkauth \
+  -skip qtpurchasing  \
+  -skip qtquickcontrols  \
+  -skip qtquickcontrols2  \
+  -skip qtremoteobjects  \
+  -skip qtscript  \
+  -skip qtsensors  \
+  -skip qtserialbus  \
+  -skip qtserialport  \
+  -skip qtspeech hasing  \
+  -skip qtquickcontrols  \
+  -skip qtquickcontrols2  \
+  -skip qtremoteobjects  \
+  -skip qtscript  \
+  -skip qtsensors  \
+  -skip qtserialbus  \
+  -skip qtserialport  \
+  -skip qtspeech  \
+  -skip qtsvg  \
+  -skip qttools  \
+  -skip qttranslations  \
+  -skip qtvirtualkeyboard  \
+  -skip qtwayland  \
+  -skip qtwebchannel  \
+  -skip qtwebengine  \
+  -skip qtwebglplugin  \
+  -skip qtwebsockets  \
+  -skip qtwebview  \
+  -skip qtwinextras  \
+  -skip qtx11extras  \
+  -skip qtxmlpatterns \
+  -system-libpng -system-libjpeg -system-zlib")
 # "-prefix ${QT4_INSTALL_PREFIX_NATIVE} -L ${QT4_LIB_PREFIX_NATIVE} \
 # -I ${QT4_INCLUDE_PREFIX_NATIVE} -I ${QT4_INCLUDE_FREETYPE_NATIVE} \
 # -opensource -confirm-license -release -shared -nomake demos \
@@ -80,22 +133,22 @@ ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT5 FREETYPE)
 # endif()
 
 # if(WIN32)
-#   set(QT4_BIN_EXT ".exe")
-#   file(TO_NATIVE_PATH ${QT4_SB_SRC}/configure.exe QT4_CONFIGURE_SCRIPT)
-#   set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.bat)
-#   set(QT4_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.bat.in)
+#   set(QT5_BIN_EXT ".exe")
+#   file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure.exe QT5_CONFIGURE_SCRIPT)
+#   set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt5.bat)
+#   set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.bat.in)
 # else()
-#   set(QT4_BIN_EXT "")
-#   file(TO_NATIVE_PATH ${QT4_SB_SRC}/configure QT4_CONFIGURE_SCRIPT)
-#   set(QT4_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt4.sh)
-#   set(QT4_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT4/configure_qt4.sh.in)
+set(QT5_BIN_EXT "")
+file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure QT5_CONFIGURE_SCRIPT)
+set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt5.sh)
+set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.sh.in)
 # endif()
 
-# if(EXISTS "${QT4_CONFIGURE_COMMAND}")
-#   execute_process(COMMAND ${CMAKE_COMMAND} -E remove -f "${QT4_CONFIGURE_COMMAND}")
+# if(EXISTS "${QT5_CONFIGURE_COMMAND}")
+#   execute_process(COMMAND ${CMAKE_COMMAND} -E remove -f "${QT5_CONFIGURE_COMMAND}")
 # endif()
 
-# configure_file(${QT4_CONFIGURE_COMMAND_IN} ${QT4_CONFIGURE_COMMAND} @ONLY )
+configure_file( ${QT5_CONFIGURE_COMMAND_IN} ${QT5_CONFIGURE_COMMAND} @ONLY )
 
 #Remove left over or previous installation from install prefix.
 #Existing files in install prefix was disturbing a second installation.
