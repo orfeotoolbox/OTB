@@ -601,13 +601,26 @@ class ApplicationProxy(object):
 											 ParameterType_String, ParameterType_InputFilename,
 											 ParameterType_OutputImage, ParameterType_OutputVectorData,
 											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-											 ParameterType_Directory, ParameterType_InputImage,
+											 ParameterType_Directory,
 											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-			  return self.SetParameterString(paramKey, value)
-			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+				return self.SetParameterString(paramKey, value)
+			elif paramType in [ParameterType_InputImage]:
+				if isinstance(value, str):
+					return self.SetParameterString(paramKey, value)
+				elif type(value).__name__ == 'SwigPyObject':
+					return self.SetParameterInputImage(paramKey, value)
+			elif paramType in [ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,
 												 ParameterType_ListView]:
-			  return self.SetParameterStringList(paramKey, value)
+				return self.SetParameterStringList(paramKey, value)
+			elif paramType in [ParameterType_InputImageList]:
+				for item in value:
+					if type(item).__name__ == "SwigPyObject":
+						self.AddImageToParameterInputImageList("il", item)
+					elif isinstance(item, str):
+						self.AddParameterStringList("il", item)
+					else:
+						self.AddParameterStringList("il", item)
 			elif paramType in [ParameterType_Int, ParameterType_Radius]:
 			  return self.SetParameterInt(paramKey, value)
 			elif paramType in [ParameterType_Float]:
