@@ -58,6 +58,11 @@ then send a merge request.
 Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB)
 which we will manually merge.
 
+Caveat: if the Dashboard build on develop branch is broken, it is possible for
+core developers to push their fixes directly on develop (to gain time) but this
+is strictly limited to compilation error fixes. It is assumed that core
+developers are aware of the multi-platform environment on the Dashboard.
+
 ### Commit message
 
 On your feature branch, write a good [commit message](https://xkcd.com/1296/):
