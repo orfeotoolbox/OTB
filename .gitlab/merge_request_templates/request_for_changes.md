@@ -22,8 +22,12 @@ Describe the testing strategy for new features.
 
 ### Documentation
 
-List or link documentation modifications that were made (doxygen, example, software guide, application documentation, cookbook).
+List or link documentation modifications that were made (doxygen, example, Software Guide, application documentation, CookBook).
 
 ### Additional notes
 
-List remaining open issues if any, and additional notes. 
+List remaining open issues if any, and additional notes.
+
+### Copyright
+
+[ ] I've signed the ORFEO ToolBox Contributor License Agreement

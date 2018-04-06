@@ -117,6 +117,22 @@ Once the feature branch is registered for testing, it should appear in the *Feat
 
 Do not forget to remove the feature branch for testing once it has been merged.
 
+### Contribution license agreement
+
+OTB requires that contributors sign out a [Contributor License
+Agreement](https://en.wikipedia.org/wiki/Contributor_License_Agreement). The
+purpose of this CLA is to ensure that the project has the necessary ownership or
+grants of rights over all contributions to allow them to distribute under the
+chosen license (Apache License Version 2.0)
+
+To accept your contribution, you need to complete, sign and email to *cla [at]
+orfeo-toolbox [dot] org* an [Individual Contributor Licensing
+Agreement](https://www.orfeo-toolbox.org/cla/icla-en.doc) (ICLA) form and a
+[Corporate Contributor Licensing
+Agreement](https://www.orfeo-toolbox.org/cla/ccla-en.doc) (CCLA) form if you are
+contributing on behalf of your company or another entity which retains copyright
+for your contribution.
+
 ## Remote modules
 
 [Remote Modules](https://wiki.orfeo-toolbox.org/index.php/Remote_Modules) are
