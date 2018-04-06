@@ -72,7 +72,7 @@ public:
    * Get the number of elements in the vector.
    * \return The number of elements in the vector.
    */
-  InternalContainerSizeType Size(void) const;
+  InternalContainerSizeType Size(void) const override;
   /**
    * Resize the maximal list capacity.
    * \param size The new maximal size of the list.
@@ -104,7 +104,7 @@ public:
    * Get the nth element of the list as a DataObject *.
    * \param index The index of the object to get.
    */
-  Superclass *  GetNthDataObject(unsigned int index) const;
+  Superclass *  GetNthDataObject(unsigned int index) const override;
   /**
    * Return the first element of the list.
    * \return The first element of the list.
