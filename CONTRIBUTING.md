@@ -58,10 +58,14 @@ then send a merge request.
 Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB)
 which we will manually merge.
 
-Caveat: if the Dashboard build on develop branch is broken, it is possible for
-core developers to push their fixes directly on develop (to gain time) but this
-is strictly limited to compilation error fixes. It is assumed that core
-developers are aware of the multi-platform environment on the Dashboard.
+Caveat: even if the Dashboard build on develop branch is broken, it is not
+allowed to push fixes directly on develop. The developer trying to fix the
+build should create a merge request and submit it for review. However in that
+case, it is not mandatory to wait for a green dashboard if:
+
+* the developer has confirmed that proposed changes fix the compilation
+* the reviewers agree for a fast merge.
+
 
 ### Commit message
 
