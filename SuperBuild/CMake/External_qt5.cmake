@@ -38,7 +38,7 @@ SETUP_SUPERBUILD(QT5)
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QT5 ZLIB PNG JPEG FREETYPE)
 
-#use system libs always for Qt4 as we build them from source or have already in system
+#use system libs always for Qt5 as we build them from source or have already in system
 
 if(SB_INSTALL_PREFIX)
   file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX} QT5_INSTALL_PREFIX_NATIVE)
@@ -47,11 +47,13 @@ if(SB_INSTALL_PREFIX)
   file(TO_NATIVE_PATH ${SB_INSTALL_PREFIX}/include/freetype2 QT5_INCLUDE_FREETYPE_NATIVE)
 endif()
 
+file(TO_NATIVE_PATH ${QT5_SB_SRC} QT5_SB_SRC_NATIVE)
+
 #Common options for all cases
 # -skip qtbase 
 set(QT5_SB_CONFIG
-  "-prefix ${QT5_INSTALL_PREFIX_NATIVE} -L ${QT4_LIB_PREFIX_NATIVE} \
-  -I ${QT4_INCLUDE_PREFIX_NATIVE} -I ${QT4_INCLUDE_FREETYPE_NATIVE} \
+  "-prefix ${QT5_INSTALL_PREFIX_NATIVE} -L ${QT5_LIB_PREFIX_NATIVE} \
+  -I ${QT5_INCLUDE_PREFIX_NATIVE} -I ${QT5_INCLUDE_FREETYPE_NATIVE} \
   -opensource -confirm-license -release -shared -nomake demos \
   -nomake examples -nomake tools -no-openssl \
   -skip qtgamepad  \
@@ -132,21 +134,21 @@ set(QT5_SB_CONFIG
 #   set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -mp")
 # endif()
 
-# if(WIN32)
-#   set(QT5_BIN_EXT ".exe")
-#   file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure.exe QT5_CONFIGURE_SCRIPT)
-#   set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt5.bat)
-#   set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.bat.in)
-# else()
-set(QT5_BIN_EXT "")
-file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure QT5_CONFIGURE_SCRIPT)
-set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt5.sh)
-set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.sh.in)
-# endif()
+if(WIN32)
+  set(QT5_BIN_EXT ".exe")
+  file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure.bat QT5_CONFIGURE_SCRIPT)
+  set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt5.bat)
+  set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.bat.in)
+else()
+  set(QT5_BIN_EXT "")
+  file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure QT5_CONFIGURE_SCRIPT)
+  set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt5.sh)
+  set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.sh.in)
+endif()
 
-# if(EXISTS "${QT5_CONFIGURE_COMMAND}")
-#   execute_process(COMMAND ${CMAKE_COMMAND} -E remove -f "${QT5_CONFIGURE_COMMAND}")
-# endif()
+if(EXISTS "${QT5_CONFIGURE_COMMAND}")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E remove -f "${QT5_CONFIGURE_COMMAND}")
+endif()
 
 configure_file( ${QT5_CONFIGURE_COMMAND_IN} ${QT5_CONFIGURE_COMMAND} @ONLY )
 
