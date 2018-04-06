@@ -54,7 +54,7 @@ file(TO_NATIVE_PATH ${QT5_SB_SRC} QT5_SB_SRC_NATIVE)
 set(QT5_SB_CONFIG
   "-prefix ${QT5_INSTALL_PREFIX_NATIVE} -L ${QT5_LIB_PREFIX_NATIVE} \
   -I ${QT5_INCLUDE_PREFIX_NATIVE} -I ${QT5_INCLUDE_FREETYPE_NATIVE} \
-  -opensource -confirm-license -release -shared -nomake demos \
+  -opensource -confirm-license -release -shared \
   -nomake examples -nomake tools -no-openssl \
   -skip qtgamepad  \
   -skip qt3d  \
