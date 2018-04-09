@@ -59,7 +59,7 @@ set(QT5_SB_CONFIG
   -skip qtgamepad  \
   -skip qt3d  \
   -skip qtactiveqt  \
-  -skip qtandroidextras \ 
+  -skip qtandroidextras \
   -skip qtcanvas3d  \
   -skip qtcharts  \
   -skip qtconnectivity  \
@@ -117,22 +117,22 @@ set(QT5_SB_CONFIG
   # set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -I ${PNG_PNG_INCLUDE_DIR}")
 # endif()
 
-# if(UNIX)
-#   if(APPLE)
-#     set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-framework")
-#   else() #Linux
-#     if(QT4_SB_ENABLE_GTK)
-#       message(WARNING "QT4_SB_ENABLE_GTK support is experimental")
-#       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
-#     else()
-#       set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-gtkstyle -no-glib -no-fontconfig")
-#     endif()
-#   endif()
-#   #common for all unix
-#   set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -no-dbus -no-nis -no-javascript-jit -no-icu -v")
-# elseif(MSVC)
-#   set(QT4_SB_CONFIG "${QT4_SB_CONFIG} -mp")
-# endif()
+if(UNIX)
+  if(APPLE)
+    set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-framework")
+  else() #Linux
+#    if(QT5_SB_ENABLE_GTK)
+#      message(WARNING "QT5_SB_ENABLE_GTK support is experimental")
+#      set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -sm -xrender -xrandr -gtkstyle")
+#    else()
+      set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-gtkstyle -no-glib -no-fontconfig")
+#    endif()
+  endif()
+  #common for all unix
+  set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-dbus -no-nis -no-javascript-jit -no-icu -v")
+elseif(MSVC)
+  set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -mp")
+endif()
 
 if(WIN32)
   set(QT5_BIN_EXT ".exe")
