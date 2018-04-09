@@ -64,6 +64,7 @@ OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
 GDALDatasetType * Open(const char * filename, bool readOnly , std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000
+  (void)options;
   return OGRSFDriverRegistrar::Open(filename,!readOnly);
 #else
   return (GDALDatasetType *)GDALOpenEx(
@@ -87,6 +88,7 @@ void Close(GDALDatasetType * dataset)
 GDALDatasetType * Create(GDALDriverType * driver, const char * name ,  std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000
+  (void)options;
   GDALDatasetType * ds = driver->CreateDataSource(name);
 
   if(ds)
