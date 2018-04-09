@@ -11,4 +11,4 @@ otb_module(OTBQgis
   DESCRIPTION
     "${DOCUMENTATION}"
 )
-otb_module_activation_option("Generating descriptors for QGIS processing" OFF)
+
