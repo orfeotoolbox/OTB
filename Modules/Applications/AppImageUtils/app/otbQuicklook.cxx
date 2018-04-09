@@ -207,27 +207,29 @@ bool CropRegionOfInterest()
   {
     InputImageType::Pointer inImage = GetParameterImage("in");
 
-    m_ExtractROIFilter = ExtractROIFilterType::New();
-    m_ResamplingFilter = ShrinkImageFilterType::New();
+    ExtractROIFilterType::Pointer extractROIFilter =
+      ExtractROIFilterType::New();
+    ShrinkImageFilterType::Pointer resamplingFilter =
+      ShrinkImageFilterType::New();
 
     // The image on which the quicklook will be generated
-    // Will eventually be the m_ExtractROIFilter output
+    // Will eventually be the extractROIFilter output
 
     if (HasUserValue("rox") || HasUserValue("roy")
         || HasUserValue("rsx") || HasUserValue("rsy")
         || (GetSelectedItems("cl").size() > 0))
       {
-      m_ExtractROIFilter->SetInput(inImage);
-      m_ExtractROIFilter->SetStartX(GetParameterInt("rox"));
-      m_ExtractROIFilter->SetStartY(GetParameterInt("roy"));
-      m_ExtractROIFilter->SetSizeX(GetParameterInt("rsx"));
-      m_ExtractROIFilter->SetSizeY(GetParameterInt("rsy"));
+      extractROIFilter->SetInput(inImage);
+      extractROIFilter->SetStartX(GetParameterInt("rox"));
+      extractROIFilter->SetStartY(GetParameterInt("roy"));
+      extractROIFilter->SetSizeX(GetParameterInt("rsx"));
+      extractROIFilter->SetSizeY(GetParameterInt("rsy"));
 
       if ((GetSelectedItems("cl").size() > 0))
         {
         for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx)
           {
-          m_ExtractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
+          extractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
           }
         }
       else
@@ -235,14 +237,14 @@ bool CropRegionOfInterest()
         unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
         for (unsigned int idx = 0; idx < nbComponents; ++idx)
           {
-          m_ExtractROIFilter->SetChannel(idx + 1);
+          extractROIFilter->SetChannel(idx + 1);
           }
         }
-      m_ResamplingFilter->SetInput( m_ExtractROIFilter->GetOutput() );
+      resamplingFilter->SetInput( extractROIFilter->GetOutput() );
       }
     else
       {
-      m_ResamplingFilter->SetInput(inImage);
+      resamplingFilter->SetInput(inImage);
       }
 
     unsigned int Ratio = static_cast<unsigned int>(GetParameterInt("sr"));
@@ -278,14 +280,12 @@ bool CropRegionOfInterest()
       }
     otbAppLogINFO( << "Ratio used: "<<Ratio << ".");
 
-    m_ResamplingFilter->SetShrinkFactor( Ratio );
-    m_ResamplingFilter->Update();
+    resamplingFilter->SetShrinkFactor( Ratio );
+    resamplingFilter->Update();
 
-    SetParameterOutputImage("out", m_ResamplingFilter->GetOutput());
+    SetParameterOutputImage("out", resamplingFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  ExtractROIFilterType::Pointer m_ExtractROIFilter;
-  ShrinkImageFilterType::Pointer m_ResamplingFilter;
 
 };
 

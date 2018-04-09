@@ -48,6 +48,7 @@
 #include "otb_boost_tokenizer_header.h"
 
 #include "otbStringUtils.h"
+#include "otbUtils.h"
 
 namespace otb
 {
@@ -262,13 +263,11 @@ ImageFileWriter<TInputImage>
   return static_cast<const InputImageType*>(this->ProcessObject::GetInput(0));
 }
 
-/**
- * Update method : update output information of input and write to file
- */
+/** Prepare everything and call m_ImageIO.WriteInformation() */
 template<class TInputImage>
 void
 ImageFileWriter<TInputImage>
-::Update()
+::GenerateOutputInformation(void)
 {
   // Update output information on input image
   InputImagePointer inputPtr =
@@ -397,14 +396,6 @@ ImageFileWriter<TInputImage>
       }
     }
 
-  this->SetAbortGenerateData(0);
-  this->SetProgress(0.0);
-
-  /**
-   * Tell all Observers that the filter is starting
-   */
-  this->InvokeEvent(itk::StartEvent());
-
   /** Prepare ImageIO  : create ImageFactory */
 
   if (m_FileName == "")
@@ -476,7 +467,6 @@ ImageFileWriter<TInputImage>
   /**
    * Grab the input
    */
-  inputPtr->UpdateOutputInformation();
   InputImageRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
 
   /** Parse region size modes */
@@ -540,12 +530,6 @@ ImageFileWriter<TInputImage>
   const auto firstSplitSize = m_StreamingManager->GetSplit(0).GetSize();
   otbLogMacro(Info,<<"File "<<m_FileName<<" will be written in "<<m_NumberOfDivisions<<" blocks of "<<firstSplitSize[0]<<"x"<<firstSplitSize[1]<<" pixels");
 
-  /**
-   * Loop over the number of pieces, execute the upstream pipeline on each
-   * piece, and copy the results into the output image.
-   */
-  InputImageRegionType streamRegion;
-
   //
   // Setup the ImageIO with information from inputPtr
   //
@@ -585,12 +569,33 @@ ImageFileWriter<TInputImage>
   m_ImageIO->SetFileName(m_FileName.c_str());
 
   m_ImageIO->WriteImageInformation();
+}
 
+/**
+ * Update method : update output information of input and write to file
+ */
+template<class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::Update()
+{
+  this->UpdateOutputInformation();
+
+  this->SetAbortGenerateData(0);
+  this->SetProgress(0.0);
+
+  /**
+   * Tell all Observers that the filter is starting
+   */
+  this->InvokeEvent(itk::StartEvent());
+  
   this->UpdateProgress(0);
   m_CurrentDivision = 0;
   m_DivisionProgress = 0;
 
   // Get the source process object
+  InputImagePointer inputPtr =
+    const_cast<InputImageType *>(this->GetInput());
   itk::ProcessObject* source = inputPtr->GetSource();
   m_IsObserving = false;
   m_ObserverID = 0;
@@ -611,6 +616,12 @@ ImageFileWriter<TInputImage>
     {
     otbLogMacro(Warning,<< "Could not get the source process object. Progress report might be buggy");
     }
+
+  /**
+   * Loop over the number of pieces, execute the upstream pipeline on each
+   * piece, and copy the results into the output image.
+   */
+  InputImageRegionType streamRegion;
 
   for (m_CurrentDivision = 0;
        m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
@@ -644,6 +655,13 @@ ImageFileWriter<TInputImage>
   if (!this->GetAbortGenerateData())
     {
     this->UpdateProgress(1.0);
+    }
+  else
+    {
+    itk::ProcessAborted e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Image writing has been aborted");
+    throw e;
     }
 
   // Notify end event observers
@@ -831,6 +849,29 @@ ImageFileWriter<TInputImage>
 ::GetFileName () const
 {
 return this->m_FilenameHelper->GetSimpleFileName();
+}
+
+template <class TInputImage>
+const bool &
+ImageFileWriter<TInputImage>
+::GetAbortGenerateData() const
+{
+  m_Lock.Lock();
+  // protected read here
+  bool ret = Superclass::GetAbortGenerateData();
+  m_Lock.Unlock();
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
+}
+
+template <class TInputImage>
+void
+ImageFileWriter<TInputImage>
+::SetAbortGenerateData(bool val)
+{
+  m_Lock.Lock();
+  Superclass::SetAbortGenerateData(val);
+  m_Lock.Unlock();
 }
 
 } // end namespace otb

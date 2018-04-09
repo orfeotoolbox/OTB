@@ -95,22 +95,21 @@ private:
       itkExceptionMacro("No input Image set...");
       }
 
-    m_FusionFilter = TileFilterType::New();
+    TileFilterType::Pointer fusionFilter = TileFilterType::New();
 
     TileFilterType::SizeType layout;
     layout[0] = this->GetParameterInt("cols");
     layout[1] = this->GetParameterInt("rows");
-    m_FusionFilter->SetLayout(layout);
+    fusionFilter->SetLayout(layout);
 
     for (unsigned int i=0; i<(layout[0]*layout[1]); i++)
       {
-      m_FusionFilter->SetInput(i,tileList->GetNthElement(i));
+      fusionFilter->SetInput(i,tileList->GetNthElement(i));
       }
 
-    SetParameterOutputImage("out", m_FusionFilter->GetOutput());
+    SetParameterOutputImage("out", fusionFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  TileFilterType::Pointer m_FusionFilter;
 
 };
 

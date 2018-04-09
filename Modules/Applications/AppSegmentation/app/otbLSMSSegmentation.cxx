@@ -88,13 +88,14 @@ public:
     LabelImageType,
     AffineFunctorType>                        LabelShiftFilterType;
 
-  LSMSSegmentation(): m_FinalReader(),m_ImportGeoInformationFilter(),m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
+  LSMSSegmentation(): //m_FinalReader(),m_ImportGeoInformationFilter(),
+    m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
 
   ~LSMSSegmentation() override{}
 
 private:
-  LabelImageReaderType::Pointer m_FinalReader;
-  ImportGeoInformationImageFilterType::Pointer m_ImportGeoInformationFilter;
+  // LabelImageReaderType::Pointer m_FinalReader;
+  // ImportGeoInformationImageFilterType::Pointer m_ImportGeoInformationFilter;
   std::vector<std::string> m_FilesToRemoveAfterExecute;
   bool m_TmpDirCleanup;
 
@@ -708,20 +709,23 @@ private:
       otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
 
       // Final writing
-      m_FinalReader = LabelImageReaderType::New();
-      m_FinalReader->SetFileName(vrtfile);
+      LabelImageReaderType::Pointer finalReader = LabelImageReaderType::New();
+      finalReader->SetFileName(vrtfile);
 
-      m_ImportGeoInformationFilter = ImportGeoInformationImageFilterType::New();
-      m_ImportGeoInformationFilter->SetInput(m_FinalReader->GetOutput());
-      m_ImportGeoInformationFilter->SetSource(imageIn);
+      ImportGeoInformationImageFilterType::Pointer 
+        importGeoInformationFilter = 
+        ImportGeoInformationImageFilterType::New();
+      importGeoInformationFilter->SetInput(finalReader->GetOutput());
+      importGeoInformationFilter->SetSource(imageIn);
 
-      SetParameterOutputImage("out",m_ImportGeoInformationFilter->GetOutput());
+      SetParameterOutputImage("out",importGeoInformationFilter->GetOutput());
+      RegisterPipeline();
   }
 
   void AfterExecuteAndWriteOutputs() override
   {
     // Release input files
-    m_FinalReader = ITK_NULLPTR;
+    // finalReader = ITK_NULLPTR;
 
     if(GetParameterInt("cleanup"))
       {
