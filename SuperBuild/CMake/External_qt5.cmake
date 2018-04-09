@@ -81,15 +81,7 @@ set(QT5_SB_CONFIG
   -skip qtsensors  \
   -skip qtserialbus  \
   -skip qtserialport  \
-  -skip qtspeech hasing  \
-  -skip qtquickcontrols  \
-  -skip qtquickcontrols2  \
-  -skip qtremoteobjects  \
-  -skip qtscript  \
-  -skip qtsensors  \
-  -skip qtserialbus  \
-  -skip qtserialport  \
-  -skip qtspeech  \
+  -skip qtspeech \
   -skip qtsvg  \
   -skip qttools  \
   -skip qttranslations  \
