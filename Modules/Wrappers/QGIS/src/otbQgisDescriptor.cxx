@@ -53,8 +53,6 @@ int main(int argc, char* argv[])
   Application::Pointer appli =  ApplicationRegistry::CreateApplicationFaster(module.c_str());
   
   assert(!appli.IsNull());
-  
-  appli->Init();
 
   std::map<ParameterType, std::string> parameterTypeToString;
 
@@ -230,7 +228,7 @@ int main(int argc, char* argv[])
       else if(type ==ParameterType_ListView)
 	{
 	  //default is None and nothing to add to dFile
-	}
+	}       
       else if(type == ParameterType_Bool)
 	{
 	  //BoolParameter *bparam = dynamic_cast<BoolParameter*>(param.GetPointer());
