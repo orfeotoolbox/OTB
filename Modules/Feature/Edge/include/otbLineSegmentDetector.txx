@@ -792,8 +792,14 @@ LineSegmentDetector<TInputImage, TPrecision>
     l =  (static_cast<double>((*it)[0]) - x) * dx + (static_cast<double>((*it)[1]) - y) * dy;
     w = -(static_cast<double>((*it)[0]) - x) * dy + (static_cast<double>((*it)[1]) - y) * dx;
 
-    if (l < l_min) l_min = l; if (l > l_max) l_max = l;
-    if (w < w_min) w_min = w; if (w > w_max) w_max = w;
+    if (l < l_min)
+      l_min = l;
+    if (l > l_max)
+      l_max = l;
+    if (w < w_min)
+      w_min = w;
+    if (w > w_max)
+      w_max = w;
 
     sum_l[static_cast < int > (vcl_floor(l) + 0.5) + Diagonal] +=  static_cast<MagnitudePixelType>(weight);
     sum_w[static_cast < int > (vcl_floor(w) + 0.5) + Diagonal] +=  static_cast<MagnitudePixelType>(weight);

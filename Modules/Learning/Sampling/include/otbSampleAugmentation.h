@@ -21,6 +21,10 @@
 #ifndef otbSampleAugmentation_h
 #define otbSampleAugmentation_h
 
+#ifdef _OPENMP
+ # include <omp.h>
+#endif
+
 #include <vector>
 #include <algorithm>
 #include <random>
@@ -49,7 +53,9 @@ SampleType EstimateStds(const SampleVectorType& samples)
   for(size_t i=0; i<nbSamples; ++i)
     {
     auto norm_factor = 1.0/(i+1);
-#pragma omp parallel for 
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif 
     for(size_t j=0; j<nbComponents; ++j)
       {
       const auto mu = means[j];
@@ -59,7 +65,9 @@ SampleType EstimateStds(const SampleVectorType& samples)
       means[j] = muNew;
       }
     }
+#ifdef _OPENMP
 #pragma omp parallel for
+#endif
   for(size_t j=0; j<nbComponents; ++j)
     {
     stds[j] = std::sqrt(stds[j]/nbSamples);
@@ -77,7 +85,9 @@ void ReplicateSamples(const SampleVectorType& inSamples,
 {
   newSamples.resize(nbSamples);
   size_t imod{0};
+#ifdef _OPENMP
 #pragma omp parallel for
+#endif
   for(size_t i=0; i<nbSamples; ++i)
     {
     if (imod == inSamples.size()) imod = 0;
@@ -108,14 +118,18 @@ void JitterSamples(const SampleVectorType& inSamples,
   // have different stds
   auto stds = EstimateStds(inSamples);
   std::vector<std::normal_distribution<double>> gaussDis(nbComponents);
+#ifdef _OPENMP
 #pragma omp parallel for
+#endif
   for(size_t i=0; i<nbComponents; ++i)
     gaussDis[i] = std::normal_distribution<double>{0.0, stds[i]/stdFactor};
 
   for(size_t i=0; i<nbSamples; ++i)
     {
     newSamples[i] = inSamples[std::rand()%inSamples.size()];
+#ifdef _OPENMP
 #pragma omp parallel for
+#endif
     for(size_t j=0; j<nbComponents; ++j)
       newSamples[i][j] += gaussDis[j](gen);
     }
@@ -157,7 +171,9 @@ void FindKNNIndices(const SampleVectorType& inSamples,
 {
   const auto nbSamples = inSamples.size();
   nnVector.resize(nbSamples);
+  #ifdef _OPENMP
   #pragma omp parallel for
+  #endif
   for(size_t sampleIdx=0; sampleIdx<nbSamples; ++sampleIdx)
     {
     NNIndicesType nns;
@@ -200,7 +216,9 @@ void Smote(const SampleVectorType& inSamples,
   FindKNNIndices(inSamples, nbNeighbors, nnVector);
   // The input samples are selected randomly with replacement
   std::srand(seed);
+  #ifdef _OPENMP
   #pragma omp parallel for
+  #endif
   for(size_t i=0; i<nbSamples; ++i)
     {
     const auto sampleIdx = std::rand()%(inSamples.size());

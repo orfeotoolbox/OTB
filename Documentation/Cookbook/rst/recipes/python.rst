@@ -29,14 +29,14 @@ application, changing the algorithm at each iteration.
     import otbApplication
 
     # otbApplication.Registry can tell you what application are available
-    print "Available applications: "
-    print str( otbApplication.Registry.GetAvailableApplications() )
+    print('Available applications: ')
+    print (str( otbApplication.Registry.GetAvailableApplications()))
 
     # Let's create the application  "Smoothing"
     app = otbApplication.Registry.CreateApplication("Smoothing")
 
     # We print the keys of all its parameters
-    print app.GetParametersKeys()
+    print (app.GetParametersKeys())
 
     # First, we set the input image filename
     app.SetParameterString("in", argv[1])
@@ -45,7 +45,7 @@ application, changing the algorithm at each iteration.
     # and can take 3 values: 'mean', 'gaussian', 'anidif'
     for type in ['mean', 'gaussian', 'anidif']:
 
-      print 'Running with ' + type + ' smoothing type'
+      print('Running with ' + type + ' smoothing type')
 
       # Now we configure the smoothing algorithm
       app.SetParameterString("type", type)
@@ -303,7 +303,7 @@ Here is a small example of what can be done:
   # Check the result of ReadImageInfo
   someKeys = ['sizex', 'sizey', 'spacingx', 'spacingy', 'sensor', 'projectionref']
   for key in someKeys:
-    print(key + ' : ' + str(app2.GetParameterValue(key)) )
+    print(key + ' : ' + str(app2.GetParameterValue(key)))
   
   # Only a portion of "out" was exported but ReadImageInfo is still able to detect the 
   # correct full size of the image

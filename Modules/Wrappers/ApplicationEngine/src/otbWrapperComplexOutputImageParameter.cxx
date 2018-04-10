@@ -259,20 +259,22 @@ ComplexOutputImageParameter::GetWriter()
     case ComplexImagePixelType_int16:
     {
       writer = m_ComplexVectorInt16Writer;
+      break;
     }
     case ComplexImagePixelType_int32:
     {
       writer = m_ComplexVectorInt32Writer;
+      break;
     }
     case ComplexImagePixelType_float:
     {
       writer = m_ComplexVectorFloatWriter;
-    break;
+      break;
     }
     case ComplexImagePixelType_double:
     {
       writer = m_ComplexVectorDoubleWriter;
-    break;
+      break;
     }
     }
   return writer;
