@@ -38,8 +38,10 @@ list(APPEND dfiles "${dfile}")
 endforeach()
 add_custom_target(generate_qgis_descriptor
   COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Generating descriptor files for QGIS"
+  COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Installing: ${CMAKE_INSTALL_PREFIX}/descriptors/"
+  COMMAND "${CMAKE_COMMAND}" "-E" "copy_directory" "${OTB_BINARY_DIR}/descriptors" "${CMAKE_INSTALL_PREFIX}/descriptors"
   DEPENDS ${dfiles}
   )
 
-otb_module_target_label(generate_qgis_descriptor)
+#otb_module_target_label(generate_qgis_descriptor)
 
