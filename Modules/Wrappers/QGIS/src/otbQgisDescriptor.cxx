@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 {
   if (argc < 3)
     {
-      std::cerr << "Usage : " << argv[0] << " name OTB_APPLICATION_PATH" << std::endl;
+      std::cerr << "Usage : " << argv[0] << " name OTB_APPLICATION_PATH [out_dir]" << std::endl;
       return EXIT_FAILURE;
     }
     
@@ -83,8 +83,25 @@ int main(int argc, char* argv[])
   const std::vector<std::string> appKeyList = appli->GetParametersKeys(true);
   const unsigned int nbOfParam = appKeyList.size();
 
+  std::string output_file = module + ".txt";
+  std::string  algs_txt = "algs.txt";
+  if (argc > 3) {
+   #if defined(WIN32)
+   std::string output_dir = std::string(argv[3]) + "\\";
+   #else
+   std::string output_dir = std::string(argv[3]) + "/";
+   #endif
+    output_file = output_dir + module + ".txt";
+    algs_txt = output_dir +  "algs.txt";
+    }
+
+  #if 0
+  std::cout << "output_file: " << output_file << std::endl;
+  std::cout << "algs_txt: " << algs_txt << std::endl;
+  #endif
   std::ofstream dFile;
-  dFile.open (module + ".txt", std::ios::out);
+  dFile.open (output_file, std::ios::out);
+  std::cerr << "Writing " << output_file << std::endl;
 
   std::string output_parameter_name;
   bool hasRasterOutput = false;
@@ -270,9 +287,11 @@ int main(int argc, char* argv[])
    }
   
   dFile.close();
+
+
   
   std::ofstream indexFile;
-  indexFile.open ("algs.txt", std::ios::out | std::ios::app );
+  indexFile.open (algs_txt, std::ios::out | std::ios::app );
   indexFile << group << "|" << module << std::endl;
   indexFile.close();
   return EXIT_SUCCESS;
