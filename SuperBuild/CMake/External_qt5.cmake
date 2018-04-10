@@ -95,7 +95,7 @@ set(QT5_SB_CONFIG
   -skip qtwinextras  \
   -skip qtx11extras  \
   -skip qtxmlpatterns \
-  -system-libpng -system-libjpeg -system-zlib")
+  -system-libpng -system-libjpeg -system-zlib -system-freetype")
 # "-prefix ${QT4_INSTALL_PREFIX_NATIVE} -L ${QT4_LIB_PREFIX_NATIVE} \
 # -I ${QT4_INCLUDE_PREFIX_NATIVE} -I ${QT4_INCLUDE_FREETYPE_NATIVE} \
 # -opensource -confirm-license -release -shared -nomake demos \
