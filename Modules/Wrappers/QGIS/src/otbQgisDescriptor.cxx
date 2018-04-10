@@ -78,7 +78,19 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_Directory] = "QgsProcessingParameterFile";
   //TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
-  
+
+  //ListView parameters are treated as plain string (QLineEdit) in qgis processing ui.
+  //This seems rather unpleasant when comparing Qgis processing with Monteverdi/Mapla in OTB
+  //We tried to push something simple with checkboxes but its too risky for this version
+  //and clock is ticking...
+  //
+  parameterTypeToString[ParameterType_ListView] = "QgsProcessingParameterString";
+
+  //For next update of plugin code ListView should use a custom widget wrapper and behave
+  //exactly like OTB Mapla. And this #if 0 block is our TODO remainder.
+  #if 0
+  parameterTypeToString[ParameterType_ListView] = "OTBParameterListView";
+  #endif
 
   const std::vector<std::string> appKeyList = appli->GetParametersKeys(true);
   const unsigned int nbOfParam = appKeyList.size();
@@ -137,26 +149,9 @@ int main(int argc, char* argv[])
       const std::string description = param->GetName();
       const std::string qgis_type = parameterTypeToString[type];
 
-
-      //ListView parameters types are added as N number of QgsParameterBoolean where N being
-      //number of items in a listview.
-      //Example case: RadiometricIndices application
-      //For next update of plugin code ListView can use custom widget wrapper and behave
-      //exactly like OTB.
-      if(type == ParameterType_ListView)
-	{
-	  ListViewParameter *lparam = dynamic_cast<ListViewParameter*>(param.GetPointer());
-	  for( unsigned int c = 0; c < lparam->GetNbChoices(); ++c )	    
-	    dFile << "QgsProcessingParameterBoolean|"
-		  << lparam->GetChoiceKey(c)  << "|"
-		  << lparam->GetChoiceName(c)
-		  << "|False|True" << std::endl;
-	}
-
       if (  type == ParameterType_Group  ||
 	    type == ParameterType_OutputProcessXML  ||
 	    type == ParameterType_InputProcessXML  ||
-	    type == ParameterType_ListView ||
 	    type == ParameterType_RAM
 	    )
 	{
@@ -231,7 +226,11 @@ int main(int argc, char* argv[])
       else if(type ==ParameterType_StringList)
 	{
 	  //default is None and nothing to add to dFile
-	}      
+	}
+      else if(type ==ParameterType_ListView)
+	{
+	  //default is None and nothing to add to dFile
+	}
       else if(type == ParameterType_Bool)
 	{
 	  //BoolParameter *bparam = dynamic_cast<BoolParameter*>(param.GetPointer());
