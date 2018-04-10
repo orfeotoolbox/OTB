@@ -58,6 +58,8 @@ then send a merge request.
 Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB)
 which we will manually merge.
 
+The feature branch are then tested on multiple platforms on the OTB test infrastructure (a.k.a the [Dashboard](https://dash.orfeo-toolbox.org/)) in the FeatureBranches section. 
+
 Caveat: even if the Dashboard build on develop branch is broken, it is not
 allowed to push fixes directly on develop. The developer trying to fix the
 build should create a merge request and submit it for review. Direct push to
