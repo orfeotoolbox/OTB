@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     }
     
   using namespace otb::Wrapper;
-  
+
   const std::string module(argv[1]);
 
   /* TestApplication is removed in CMakeLists.txt */
@@ -158,33 +158,55 @@ int main(int argc, char* argv[])
       if (  type == ParameterType_Group  ||
 	    type == ParameterType_OutputProcessXML  ||
 	    type == ParameterType_InputProcessXML  ||
-	    type == ParameterType_RAM
+	    type == ParameterType_RAM ||
+	    param->GetRole() == Role_Output
 	    )
 	{
 	  // group parameter cannot have any value.
 	  //outxml and inxml parameters are not relevant for QGIS and is considered a bit noisy
 	  //ram is added by qgis-otb processing provider plugin as an advanced parameter for all apps
+	  //parameter role cannot be of type Role_Output
 	  continue;
 	}
-
 
       assert(!qgis_type.empty());
       if(qgis_type.empty())
 	{
 	  std::cerr << "No mapping found for parameter '" <<name <<"' type=" << type << std::endl;
 	  return EXIT_FAILURE;
-	}      
-
+	}
 
       bool isDestination = false;
+      bool isEpsgCode = false;
+
+      //use QgsProcessingParameterCrs if required.
+      //TODO: do a regex on name to match ==epsg || *\.epsg.\*
+      if ( name == "epsg"
+	   || name == "map.epsg.code"
+	   || name == "mapproj.epsg.code"
+	   || name == "mode.epsg.code")
+	{
+	  qgis_type = "QgsProcessingParameterCrs";
+	  isEpsgCode = true;
+	}
 
       dFile << qgis_type << "|" << name << "|" << description;
 
       std::string default_value = "None";
       if (type == ParameterType_Int)
-	{ 
-	  dFile << "|QgsProcessingParameterNumber.Integer";
-	  default_value = param->HasValue() ? appli->GetParameterAsString(name): "0";
+	{
+	  if (isEpsgCode)
+	    {
+	      if (param->HasValue() && appli->GetParameterInt(name) < 1)
+		default_value =  "EPSG: " + appli->GetParameterAsString(name);
+	      else
+		default_value =  "ProjectCrs";
+	    }
+	  else
+	    {
+	    dFile << "|QgsProcessingParameterNumber.Integer";
+	    default_value = param->HasValue() ? appli->GetParameterAsString(name): "0";
+	  }
 	}
       else if (type == ParameterType_Float)
 	{	
