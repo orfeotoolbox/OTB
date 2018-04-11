@@ -24,3 +24,5 @@ find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 find_package(Qt5LinguistTools)
 mark_as_advanced( QT_QMAKE_EXECUTABLE )
+
+#include( ${QT_USE_FILE} )
