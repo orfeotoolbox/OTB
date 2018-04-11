@@ -294,11 +294,17 @@ int main(int argc, char* argv[])
 	  std::string optional;
 	  if (param->GetMandatory())
 	    {
+	      // type == ParameterType_StringList check is needed because:
+	      //
+	      // If parameter is mandatory it can have no value
+	      // It is accepted in OTB that, string list could be generated dynamically
+	      // qgis has no such option to handle dynamic values yet..
+	      // So mandatory parameters whose type is StringList is considered optional
 	      optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
 	    }
 	  else
 	    {
-	      optional = "False";
+	      optional = "True";
 	    }
 	  dFile << "|" << default_value << "|" << optional;
 	}
