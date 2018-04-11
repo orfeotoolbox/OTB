@@ -95,26 +95,18 @@ int main(int argc, char* argv[])
 
   std::string output_file = module + ".txt";
   std::string  algs_txt = "algs.txt";
-  if (argc > 3) {
-   #if defined(WIN32)
-   std::string output_dir = std::string(argv[3]) + "\\";
-   #else
-   std::string output_dir = std::string(argv[3]) + "/";
-   #endif
-    output_file = output_dir + module + ".txt";
-    algs_txt = output_dir +  "algs.txt";
+  if (argc > 3)
+    {
+      output_file = std::string(argv[3]) + module + ".txt";
+      algs_txt = std::string(argv[3])  +  "algs.txt";
     }
-
-  #if 0
-  std::cout << "output_file: " << output_file << std::endl;
-  std::cout << "algs_txt: " << algs_txt << std::endl;
-  #endif
   std::ofstream dFile;
   dFile.open (output_file, std::ios::out);
   std::cerr << "Writing " << output_file << std::endl;
 
   std::string output_parameter_name;
   bool hasRasterOutput = false;
+  {
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
       Parameter::Pointer param = appli->GetParameterByKey(appKeyList[i]);

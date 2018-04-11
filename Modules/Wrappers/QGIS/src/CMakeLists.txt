@@ -29,15 +29,16 @@ foreach(otb_app ${app_list})
   set(dfile "${OTB_BINARY_DIR}/descriptors/${otb_app}.txt")
   add_custom_command(OUTPUT "${dfile}"
   COMMAND "$<TARGET_FILE:otbQgisDescriptor>"
-     "${otb_app}" "${OTB_BINARY_DIR}/lib/otb/applications"
+     "${otb_app}" "${OTB_BINARY_DIR}/lib/otb/applications" "${OTB_BINARY_DIR}/descriptors/"
   DEPENDS otbQgisDescriptor
-  WORKING_DIRECTORY ${OTB_BINARY_DIR}/descriptors/
-  COMMENT "./bin/otbQgisDescriptor ${otb_app} ${OTB_BINARY_DIR}/lib/otb/applications"
+  WORKING_DIRECTORY ${OTB_BINARY_DIR}
+  COMMENT "./bin/otbQgisDescriptor ${otb_app} ./lib/otb/applications ./descriptors/"
   VERBATIM)
 list(APPEND dfiles "${dfile}")
 endforeach()
 add_custom_target(generate_qgis_descriptor
   COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Generating descriptor files for QGIS"
+  COMMAND "${CMAKE_COMMAND}" "-E" "remove" "${OTB_BINARY_DIR}/descriptors/algs.txt"
   COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Installing: ${CMAKE_INSTALL_PREFIX}/descriptors/"
   COMMAND "${CMAKE_COMMAND}" "-E" "copy_directory" "${OTB_BINARY_DIR}/descriptors" "${CMAKE_INSTALL_PREFIX}/descriptors"
   DEPENDS ${dfiles}
