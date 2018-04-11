@@ -76,6 +76,7 @@ private:
     ClearApplications();
     AddApplication("ImageConnectedComponentSegmentation", "segmentation", "connected component segmentation step");
     AddApplication("LabelImageVectorization", "vectorization", "Vectorization step");
+    AddApplication("LSMSSmallRegionsMerging", "merging", "Small region merging step");
     AddApplication("ComputePolygonsGeometricFeatures", "geometric", "Geometric features computation step");
     AddApplication("ComputePolygonsSpectralFeatures", "spectral", "Spectral features computation step");
     AddApplication("ObjectBasedFiltering", "filtering", "Filtering step");
@@ -89,23 +90,41 @@ private:
     MandatoryOff("tile");
     ShareParameter("fusion","vectorization.fusion");
     MandatoryOff("fusion");
+    
+    AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
+    SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, "
+      "a segment is of size lower than this criterion, the segment is merged with the segment "
+      "that has the closest sepctral signature.");
+    SetMinimumParameterIntValue("minsize", 0);
+    MandatoryOff("minsize");
+    
     ShareParameter("filter","filtering.expr");
     MandatoryOff("filter");
     
+    AddParameter( ParameterType_Int, "cleanup", "Temporary files cleaning" );
+    EnableParameter( "cleanup" );
+    SetParameterDescription( "cleanup",
+      "If activated, the application will try to clean all temporary files it created" );
+    SetMinimumParameterIntValue("cleanup", 0);
+    SetMaximumParameterIntValue("cleanup", 1);
+    SetDefaultParameterInt("cleanup", 1);
+    MandatoryOff( "cleanup" );
+
     Connect("spectral.tile","vectorization.tile");
     Connect("geometric.in","vectorization.out");
     Connect("spectral.in","segmentation.in");
+    Connect("merging.in","segmentation.in");
     Connect("spectral.vec","vectorization.out");
     Connect("filtering.in","vectorization.out");
 
     // Setup RAM
     ShareParameter("ram","segmentation.ram");
     Connect("vectorization.ram","segmentation.ram");
+    Connect("merging.ram","segmentation.ram");
     Connect("geometric.ram","segmentation.ram");
     Connect("spectral.ram","segmentation.ram");
     Connect("filtering.ram","segmentation.ram");
     
-
     SetOfficialDocLink();
     }
 
@@ -114,11 +133,37 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    // Image to image connected components segmentation step
-    ExecuteInternal("segmentation");
+    // Temporary files (deleted depending on "cleanup" parameter)
+    std::string outPath(this->GetParameterString("out"));
+    std::vector<std::string> tmpFilenames;
+    tmpFilenames.push_back(outPath+std::string("_labelmap.tif"));
+    tmpFilenames.push_back(outPath+std::string("_labelmap_merged.tif"));
+      
+    // If the LSMSSmallRegionsMerging application is used, we can't use in-memory connection, so we have to write all outputs image files.
+    if (IsParameterEnabled("minsize") && HasValue("minsize"))
+    {
+      // Image to image connected components segmentation step
+      GetInternalApplication("segmentation")->SetParameterString("out",
+        tmpFilenames[0]);
+      //ExecuteInternal("segmentation");
+      GetInternalApplication("segmentation")->ExecuteAndWriteOutput();
+
+      // Optional small segments merging step
+      GetInternalApplication("merging")->SetParameterInt("minsize",this->GetParameterInt("minsize"));
+      GetInternalApplication("merging")->SetParameterString("inseg",tmpFilenames[0] );
+      GetInternalApplication("merging")->SetParameterString("out",tmpFilenames[1] );
+      GetInternalApplication("merging")->ExecuteAndWriteOutput();
+      //ExecuteInternal("merging");
+      GetInternalApplication("vectorization")->SetParameterString("in", tmpFilenames[1]);
+    }
+    // In this case in-memory connection is used
+    else
+    {
+      ExecuteInternal("segmentation");
+      GetInternalApplication("vectorization")->SetParameterInputImage("in", GetInternalApplication("segmentation")->GetParameterOutputImage("out"));
+    }
     
     // Label Image vectorization step
-    GetInternalApplication("vectorization")->SetParameterInputImage("in", GetInternalApplication("segmentation")->GetParameterOutputImage("out"));
     ExecuteInternal("vectorization");
     
     // Geometric features computation step
@@ -133,6 +178,19 @@ private:
     if (IsParameterEnabled("filter") && HasValue("filter"))
     {  
       ExecuteInternal("filtering");
+    }
+    
+    // Delete temporary files
+    if(this->GetParameterInt("cleanup") == 1)
+    {
+      otbAppLogINFO( <<"Final clean-up ..." );
+      for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)
+      {
+        if(itksys::SystemTools::FileExists(tmpFilenames[i].c_str()))
+        {
+          itksys::SystemTools::RemoveFile(tmpFilenames[i].c_str());
+        }
+      }
     }
   }
 
