@@ -1,0 +1,11 @@
+--- qt-everywhere-src-5.10.1/qtbase/src/corelib/kernel/qcore_mac_p.h	2018-02-08 19:24:48.000000000 +0100
++++ QT5/qtbase/src/corelib/kernel/qcore_mac_p.h	2018-04-11 15:26:28.118640978 +0200
+@@ -86,7 +86,7 @@
+     QAppleRefCounted(const QAppleRefCounted &other) : value(other.value) { if (value) RetainFunction(value); }
+     ~QAppleRefCounted() { if (value) ReleaseFunction(value); }
+     operator T() { return value; }
+-    void swap(QAppleRefCounted &other) Q_DECL_NOEXCEPT_EXPR(noexcept(qSwap(value, other.value)))
++    void swap(QAppleRefCounted &other) Q_DECL_NOEXCEPT_EXPR(noexcept(qSwap(this->value, other.value)))
+     { qSwap(value, other.value); }
+     QAppleRefCounted &operator=(const QAppleRefCounted &other)
+     { QAppleRefCounted copy(other); swap(copy); return *this; }
