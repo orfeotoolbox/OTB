@@ -269,33 +269,32 @@ int main(int argc, char* argv[])
 
       if (!isDestination)
 	{
-	  //const char*  optional = param->GetMandatory() ? "False" : "True";
 	  std::string optional;
 	  if (param->GetMandatory())
-	    if (param->HasValue())
-	      {
-		optional = "True";
-	      }
-	    else{
+	    {
+	      optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
+	    }
+	  else
+	    {
 	      optional = "False";
 	    }
-	  else {
-	    optional = "True";
-	  }
-
 	  dFile << "|" << default_value << "|" << optional;
 	}
       dFile << std::endl;
    }
-  
+
+  if(hasRasterOutput)
+    {
+      dFile << "*QgsProcessingParameterEnum|outputpixeltype|Output pixel type|unit8;int;float;double|False|2|True" << std::endl;
+    }
+
   dFile.close();
-
-
   
   std::ofstream indexFile;
   indexFile.open (algs_txt, std::ios::out | std::ios::app );
   indexFile << group << "|" << module << std::endl;
   indexFile.close();
+  std::cerr << "Updated " << algs_txt << std::endl;
   return EXIT_SUCCESS;
 }
 
