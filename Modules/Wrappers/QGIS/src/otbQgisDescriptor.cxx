@@ -73,17 +73,17 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_OutputVectorData] = "QgsProcessingParameterVectorDestination";
   parameterTypeToString[ParameterType_OutputFilename] = "QgsProcessingParameterFileDestination";
   parameterTypeToString[ParameterType_Directory] = "QgsProcessingParameterFile";
-  //TODO
+  // TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
-  //ListView parameters are treated as plain string (QLineEdit) in qgis processing ui.
-  //This seems rather unpleasant when comparing Qgis processing with Monteverdi/Mapla in OTB
-  //We tried to push something simple with checkboxes but its too risky for this version
-  //and clock is ticking...
-  //
+  // ListView parameters are treated as plain string (QLineEdit) in qgis processing ui.
+  // This seems rather unpleasant when comparing Qgis processing with Monteverdi/Mapla in OTB
+  // We tried to push something simple with checkboxes but its too risky for this version
+  // and clock is ticking...
+
   parameterTypeToString[ParameterType_ListView] = "QgsProcessingParameterString";
 
-  //For next update of plugin code ListView should use a custom widget wrapper and behave
-  //exactly like OTB Mapla. And this #if 0 block is our TODO remainder.
+  // For next update of plugin code ListView should use a custom widget wrapper and behave
+  // exactly like OTB Mapla. And this #if 0 block is our TODO remainder.
   #if 0
   parameterTypeToString[ParameterType_ListView] = "OTBParameterListView";
   #endif
@@ -163,9 +163,9 @@ int main(int argc, char* argv[])
 	    )
 	{
 	  // group parameter cannot have any value.
-	  //outxml and inxml parameters are not relevant for QGIS and is considered a bit noisy
-	  //ram is added by qgis-otb processing provider plugin as an advanced parameter for all apps
-	  //parameter role cannot be of type Role_Output
+	  // outxml and inxml parameters are not relevant for QGIS and is considered a bit noisy
+	  // ram is added by qgis-otb processing provider plugin as an advanced parameter for all apps
+	  // parameter role cannot be of type Role_Output
 	  continue;
 	}
 
@@ -179,8 +179,8 @@ int main(int argc, char* argv[])
       bool isDestination = false;
       bool isEpsgCode = false;
 
-      //use QgsProcessingParameterCrs if required.
-      //TODO: do a regex on name to match ==epsg || *\.epsg.\*
+      // use QgsProcessingParameterCrs if required.
+      // TODO: do a regex on name to match ==epsg || *\.epsg.\*
       if ( name == "epsg"
 	   || name == "map.epsg.code"
 	   || name == "mapproj.epsg.code"
@@ -244,19 +244,19 @@ int main(int argc, char* argv[])
 	}
       else if (type == ParameterType_InputImage)
 	{
-	  //default is None and nothing to add to dFile
+	  // default is None and nothing to add to dFile
 	}      
       else if(type ==ParameterType_String)
 	{
-	  //default is None and nothing to add to dFile
+	  // default is None and nothing to add to dFile
 	}
       else if(type ==ParameterType_StringList)
 	{
-	  //default is None and nothing to add to dFile
+	  // default is None and nothing to add to dFile
 	}
       else if(type ==ParameterType_ListView)
 	{
-	  //default is None and nothing to add to dFile
+	  // default is None and nothing to add to dFile
 	}       
       else if(type == ParameterType_Bool)
 	{
@@ -278,9 +278,9 @@ int main(int argc, char* argv[])
 	      type == ParameterType_OutputImage ||
 	      type == ParameterType_OutputFilename)
 	{
-	  //no need for default_value, optional and extra fields in dFile
-	  //if parameter is a destination type. qgis_type|name|description is enough.
-	  //so we simply set isDestination to true and skip to end to append a new line.
+	  // No need for default_value, optional and extra fields in dFile.
+	  // If parameter is a destination type. qgis_type|name|description is enough.
+	  // So we simply set isDestination to true and skip to end to append a new line.
 	  isDestination =  true;
 	}
       else
