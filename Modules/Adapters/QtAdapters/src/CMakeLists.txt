@@ -26,8 +26,8 @@ set( OTBQtAdapters_HEADERS_MOC
   # otbQtAdapters.h
   )
 
-add_to_qt4_i18n_sources( ${OTBQtAdapters_SRCS} )
-add_to_qt4_i18n_headers( "../include" ${OTBQtAdapters_SRCS} )
+add_to_qt_i18n_sources( ${OTBQtAdapters_SRCS} )
+add_to_qt_i18n_headers( "../include" ${OTBQtAdapters_SRCS} )
 
 qt5_wrap_cpp( OTBQtAdapters_SRC_MOC ${OTBQtAdapters_HEADERS_MOC} )
 

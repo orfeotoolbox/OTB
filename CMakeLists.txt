@@ -100,9 +100,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
-include( i18n_qt4 )
+include( i18n_qt )
 
-reset_qt4_i18n_sources()
+reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 

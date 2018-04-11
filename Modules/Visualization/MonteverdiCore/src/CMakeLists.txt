@@ -90,8 +90,8 @@ if( OTBApplicationEngine_ENABLED )
 endif()
 
 #############################################################################
-add_to_qt4_i18n_sources( ${OTBMonteverdiCore_SRCS} )
-add_to_qt4_i18n_headers( "../include" ${OTBMonteverdiCore_SRCS} )
+add_to_qt_i18n_sources( ${OTBMonteverdiCore_SRCS} )
+add_to_qt_i18n_headers( "../include" ${OTBMonteverdiCore_SRCS} )
 
 #############################################################################
 qt5_wrap_cpp( OTBMonteverdiCore_SRC_MOC ${OTBMonteverdiCore_HEADERS_MOC} )

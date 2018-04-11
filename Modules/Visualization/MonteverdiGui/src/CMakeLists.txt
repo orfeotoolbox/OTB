@@ -179,9 +179,9 @@ qt5_wrap_ui( OTBMonteverdiGUI_FORMS_HEADERS ${OTBMonteverdiGUI_FORMS} )
 qt5_add_resources( OTBMonteverdiGUI_RESOURCES_RCC ${OTBMonteverdiGUI_RESOURCES} )
 
 #############################################################################
-add_to_qt4_i18n_sources( ${OTBMonteverdiGUI_SRCS} )
-add_to_qt4_i18n_headers( "../include" ${OTBMonteverdiGUI_SRCS} )
-add_to_qt4_i18n_forms( ${OTBMonteverdiGUI_FORMS} )
+add_to_qt_i18n_sources( ${OTBMonteverdiGUI_SRCS} )
+add_to_qt_i18n_headers( "../include" ${OTBMonteverdiGUI_SRCS} )
+add_to_qt_i18n_forms( ${OTBMonteverdiGUI_FORMS} )
 
 #############################################################################
 add_library( OTBMonteverdiGUI
