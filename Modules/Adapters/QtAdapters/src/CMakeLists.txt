@@ -34,7 +34,7 @@ qt5_wrap_cpp( OTBQtAdapters_SRC_MOC ${OTBQtAdapters_HEADERS_MOC} )
 add_library( OTBQtAdapters ${OTBQtAdapters_SRC} ${OTBQtAdapters_SRC_MOC})
 
 target_link_libraries( OTBQtAdapters 
-  ${OTBQt5_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   )
 
 otb_module_target( OTBQtAdapters )

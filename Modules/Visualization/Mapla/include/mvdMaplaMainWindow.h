@@ -190,7 +190,7 @@ private:
    */
   Ui::MaplaMainWindow* m_UI;
 
-#ifdef OTB_USE_QT5
+#ifdef OTB_USE_QT
   /**
    *  \brief OTB-applications tool-box controller.
    */

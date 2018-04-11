@@ -114,7 +114,7 @@ add_library( OTBQtWidget
 
 target_link_libraries( OTBQtWidget
   ${OTBApplicationEngine_LIBRARIES}
-  ${OTBQt5_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   ${OTBQtAdapters_LIBRARIES}
   )
 
@@ -124,7 +124,7 @@ add_executable(otbApplicationLauncherQt otbApplicationLauncherQt.cxx)
 target_link_libraries(otbApplicationLauncherQt
   ${OTBQtWidget_LIBRARIES}
   ${OTBApplicationEngine_LIBRARIES}
-  ${OTBQt5_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   )
 otb_module_target(otbApplicationLauncherQt)
 set_linker_stack_size_flag(otbApplicationLauncherQt 10000000)

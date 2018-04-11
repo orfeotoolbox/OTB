@@ -62,7 +62,7 @@ add_library( OTBMonteverdi
 target_link_libraries( OTBMonteverdi
   ${OTBMonteverdiCore_LIBRARIES}
   ${OTBMonteverdiGUI_LIBRARIES}
-  ${OTBQt5_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   ${OTBQtAdapters_LIBRARIES}
   )
 otb_module_target( OTBMonteverdi )

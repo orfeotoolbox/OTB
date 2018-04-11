@@ -39,7 +39,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 
 //
-#ifdef OTB_USE_QT5
+#ifdef OTB_USE_QT
 #include "mvdOTBApplicationsModel.h"
 #endif
 

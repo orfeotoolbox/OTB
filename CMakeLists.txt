@@ -535,7 +535,7 @@ endforeach()
 # message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
 # unset(modules_list_for_summary)
 
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT4")
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT")
 foreach(item ${option_list})
   if(NOT ${item})
     list(REMOVE_ITEM option_list "${item}" )
@@ -554,7 +554,7 @@ list(APPEND option_list TINYXML)
 #Q: Why these two guys here? we already have option_list
 #A: Because cmake case sensitivity with variables.
 
-if(OTB_USE_QT4)
+if(OTB_USE_QT)
   list(APPEND option_list QT)
 endif()
 #sort again!

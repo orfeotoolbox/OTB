@@ -20,7 +20,7 @@
 
 set(DOCUMENTATION "This module imports Qt5 to the build system")
 
-otb_module(OTBQt5
+otb_module(OTBQt
   DEPENDS
     
   TEST_DEPENDS

@@ -79,7 +79,7 @@ add_library( OTBMapla
 target_link_libraries( OTBMapla
   ${OTBMonteverdiCore_LIBRARIES}
   ${OTBMonteverdiGUI_LIBRARIES}
-  ${OTBQt5_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   )
 otb_module_target( OTBMapla )
 

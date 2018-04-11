@@ -29,7 +29,7 @@ otb_module( OTBMonteverdiGUI
     OTBIce
     OTBIOGDAL
     OTBMonteverdiCore
-    OTBQt5
+    OTBQt
     OTBQwt
 
   OPTIONAL_DEPENDS

@@ -27,7 +27,7 @@ otb_module( OTBMonteverdi
   DEPENDS
     OTBMonteverdiCore
     OTBMonteverdiGUI
-    OTBQt5
+    OTBQt
     OTBQtAdapters
 
   OPTIONAL_DEPENDS

@@ -111,7 +111,7 @@ target_link_libraries( OTBMonteverdiCore
   ${OTBObjectList_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBProjection_LIBRARIES}
-  ${OTBQt5_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   ${OTBStatistics_LIBRARIES}
   ${OTBTransform_LIBRARIES}
   )

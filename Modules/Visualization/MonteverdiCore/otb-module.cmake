@@ -36,7 +36,7 @@ otb_module( OTBMonteverdiCore
     OTBObjectList
     OTBOSSIMAdapters
     OTBProjection
-    OTBQt5
+    OTBQt
     OTBStatistics
     OTBTransform
 

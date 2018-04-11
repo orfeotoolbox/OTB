@@ -43,7 +43,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#if defined( OTB_USE_QT5 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
 # include "mvdApplicationLauncher.h"
 # include "mvdApplicationsToolBoxController.h"
 # include "mvdOTBApplicationsModel.h"
@@ -131,7 +131,7 @@ MainWindow
   m_PixelDescriptionDock(NULL),
 #endif // USE_PIXEL_DESCRIPTION
   m_HistogramDock( NULL ),
-#if defined( OTB_USE_QT5 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
   m_OtbApplicationsBrowserDock(NULL),
 #endif
   m_ImageView( NULL ),
@@ -2209,7 +2209,7 @@ MainWindow
 }
 
 /*****************************************************************************/
-#if defined( OTB_USE_QT5 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
 
 void
 MainWindow
@@ -2294,7 +2294,7 @@ MainWindow
   );
 }
 
-#endif // defined( OTB_USE_QT5 ) && USE_OTB_APPS
+#endif // defined( OTB_USE_QT ) && USE_OTB_APPS
 
 /*****************************************************************************/
 #if USE_TABBED_VIEW
@@ -2324,7 +2324,7 @@ MainWindow
   QWidget* appWidget = m_CentralTabWidget->widget( index );
   assert( appWidget!=NULL );
 
-#if defined( OTB_USE_QT5 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
 
   assert( appWidget==qobject_cast< Wrapper::QtWidgetView* >( appWidget ) );
   Wrapper::QtWidgetView* appWidgetView =

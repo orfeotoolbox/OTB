@@ -18,9 +18,9 @@
 # limitations under the License.
 #
 
-project( OTBQt5 )
+project( OTBQt )
 
-set( OTBQt5_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5OpenGL_LIBRARIES})
+set( OTBQt_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5OpenGL_LIBRARIES})
 
 set( QT_VERSION "${QTVERSION}" CACHE INTERNAL "" FORCE )
 
