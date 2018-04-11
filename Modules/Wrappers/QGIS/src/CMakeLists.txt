@@ -36,12 +36,19 @@ foreach(otb_app ${app_list})
   VERBATIM)
 list(APPEND dfiles "${dfile}")
 endforeach()
-add_custom_target(generate_qgis_descriptor
+
+add_custom_target(clean_algs_txt
+  COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${OTB_BINARY_DIR}/descriptors/"
+  COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${CMAKE_INSTALL_PREFIX}/descriptors/"
+  COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/descriptors/"
   COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Generating descriptor files for QGIS"
-  COMMAND "${CMAKE_COMMAND}" "-E" "remove" "${OTB_BINARY_DIR}/descriptors/algs.txt"
+  DEPENDS otbQgisDescriptor
+  )
+
+add_custom_target(generate_qgis_descriptor
   COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Installing: ${CMAKE_INSTALL_PREFIX}/descriptors/"
   COMMAND "${CMAKE_COMMAND}" "-E" "copy_directory" "${OTB_BINARY_DIR}/descriptors" "${CMAKE_INSTALL_PREFIX}/descriptors"
-  DEPENDS ${dfiles}
+  DEPENDS clean_algs_txt ${dfiles}
   )
 
 #otb_module_target_label(generate_qgis_descriptor)
