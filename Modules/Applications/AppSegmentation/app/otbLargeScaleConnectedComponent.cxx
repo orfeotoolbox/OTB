@@ -21,6 +21,8 @@
 #include "otbWrapperCompositeApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+#include "otbStopwatch.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -133,6 +135,9 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
+    // Start Timer for the application
+    auto Timer = Stopwatch::StartNew();
+    
     // Temporary files (deleted depending on "cleanup" parameter)
     std::string outPath(this->GetParameterString("out"));
     std::vector<std::string> tmpFilenames;
@@ -192,6 +197,9 @@ private:
         }
       }
     }
+    
+    Timer.Stop();
+    otbAppLogINFO( "Total elapsed time: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
 
 };
