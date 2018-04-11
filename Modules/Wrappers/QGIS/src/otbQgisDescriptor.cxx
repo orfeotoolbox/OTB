@@ -55,7 +55,6 @@ int main(int argc, char* argv[])
   assert(!appli.IsNull());
 
   std::map<ParameterType, std::string> parameterTypeToString;
-
   parameterTypeToString[ParameterType_Empty] = "QgsProcessingParameterBoolean";
   parameterTypeToString[ParameterType_Bool] = "QgsProcessingParameterBoolean";
   parameterTypeToString[ParameterType_Int] = "QgsProcessingParameterNumber";
@@ -76,7 +75,6 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_Directory] = "QgsProcessingParameterFile";
   //TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
-
   //ListView parameters are treated as plain string (QLineEdit) in qgis processing ui.
   //This seems rather unpleasant when comparing Qgis processing with Monteverdi/Mapla in OTB
   //We tried to push something simple with checkboxes but its too risky for this version
@@ -120,6 +118,7 @@ int main(int argc, char* argv[])
 	    }
 	}
     }
+  }
 
   if(output_parameter_name.empty())
     dFile << module << std::endl;
@@ -137,8 +136,25 @@ int main(int argc, char* argv[])
       Parameter::Pointer param = appli->GetParameterByKey(name);
       ParameterType type = appli->GetParameterType(name);
       const std::string description = param->GetName();
-      const std::string qgis_type = parameterTypeToString[type];
+      std::string qgis_type = parameterTypeToString[type];
+#if 0
+      if (type == ParameterType_ListView)
+	{
+	  ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
+	  std::cerr << "lv_param->GetSingleSelection()" << lv_param->GetSingleSelection() << std::endl;
+	  if (lv_param->GetSingleSelection())
+	    {
 
+	      qgis_type = "QgsProcessingParameterEnum";
+	      std::vector<std::string>  key_list  = appli->GetChoiceKeys(name);
+	      std::string values = "";
+	      for( auto k : key_list)
+		values += k + ";";
+	      values.pop_back();
+	      dFile << "|" << values ;
+	    }
+	}
+#endif
       if (  type == ParameterType_Group  ||
 	    type == ParameterType_OutputProcessXML  ||
 	    type == ParameterType_InputProcessXML  ||
@@ -148,7 +164,6 @@ int main(int argc, char* argv[])
 	  // group parameter cannot have any value.
 	  //outxml and inxml parameters are not relevant for QGIS and is considered a bit noisy
 	  //ram is added by qgis-otb processing provider plugin as an advanced parameter for all apps
-	  //listview is a special case. We indeed add them to descriptor file but with different logic.
 	  continue;
 	}
 
@@ -223,8 +238,6 @@ int main(int argc, char* argv[])
 	}       
       else if(type == ParameterType_Bool)
 	{
-	  //BoolParameter *bparam = dynamic_cast<BoolParameter*>(param.GetPointer());
-	  //default_value = bparam->GetValueAsString();
 	  default_value =  appli->GetParameterAsString(name);
 	}      
       else if(type == ParameterType_Choice)
