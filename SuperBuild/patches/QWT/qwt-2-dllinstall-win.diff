@@ -1,14 +1,14 @@
 --- QWT-orig/src/src.pro	2018-04-10 18:10:50.950501905 +0200
-+++ QWT/src/src.pro	2018-04-10 18:12:56.391144326 +0200
-@@ -25,6 +25,11 @@
++++ QWT/src/src.pro	2018-04-11 11:01:54.888535304 +0200
+@@ -42,6 +42,11 @@
+ target.path    = $${QWT_INSTALL_LIBS}
+ INSTALLS       = target 
  
-     CONFIG += dll
-     win32|symbian: DEFINES += QT_DLL QWT_DLL QWT_MAKEDLL
++win32 {
++  dlltarget.path = $${QWT_INSTALL_BIN}
++  INSTALLS += dlltarget
++}
 +
-+    win32 {
-+      dlltarget.path = $${QWT_INSTALL_BIN}
-+      INSTALLS += dlltarget
-+    }
- }
- else {
-     CONFIG += staticlib
+ CONFIG(lib_bundle) {
+ 
+     FRAMEWORK_HEADERS.version = Versions
