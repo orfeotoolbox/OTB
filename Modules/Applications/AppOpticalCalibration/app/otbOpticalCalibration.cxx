@@ -270,8 +270,8 @@ private:
     //Viewing azimuth angle
     AddParameter(ParameterType_Float, "acqui.view.azim",   "Viewing azimuth angle (deg)");
     SetParameterDescription("acqui.view.azim", "Viewing azimuth angle (in degrees)");
-    // SetMinimumParameterFloatValue("acqui.view.azim", 0.);
-    // SetMaximumParameterFloatValue("acqui.view.azim", 360.);
+    SetMinimumParameterFloatValue("acqui.view.azim", 0.);
+    SetMaximumParameterFloatValue("acqui.view.azim", 360.);
     SetDefaultParameterFloat("acqui.view.azim",0.0);
 
     //Gain & bias
