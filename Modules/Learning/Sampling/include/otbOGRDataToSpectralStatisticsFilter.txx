@@ -190,7 +190,6 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
       for (unsigned int i =0; i < numberOfComponents ; i++)
       {
         PolygonMeanComponent[fid][i] = itMean->second[i] / sizePolygon;
-        
       }
       
       // Covariance computation
@@ -343,18 +342,22 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     int fid = m_CurrentFID[threadid];
     
     // Initialize accumulator sizes
-    m_PolygonFirstOrderThread[threadid][fid].SetSize(numberOfComponents);
-
+    
     if (!m_PolygonMinThread[threadid].count(fid))
     {
+      m_PolygonFirstOrderThread[threadid][fid].SetSize(numberOfComponents);
+      m_PolygonFirstOrderThread[threadid][fid].Fill(0);
+      
       m_PolygonMinThread[threadid][fid].SetSize(numberOfComponents);
       m_PolygonMaxThread[threadid][fid].SetSize(numberOfComponents);
 
       m_PolygonMinThread[threadid][fid].Fill(itk::NumericTraits<double>::max());
       m_PolygonMaxThread[threadid][fid].Fill(itk::NumericTraits<double>::NonpositiveMin());
+      
+      m_PolygonSecondOrderThread[threadid][fid].SetSize(numberOfComponents, numberOfComponents);
+      m_PolygonSecondOrderThread[threadid][fid].Fill(0);
     }
-    m_PolygonSecondOrderThread[threadid][fid].SetSize(numberOfComponents, numberOfComponents);
-
+    
     while (!it.IsAtEnd())
       {
       imgIndex = it.GetIndex();
