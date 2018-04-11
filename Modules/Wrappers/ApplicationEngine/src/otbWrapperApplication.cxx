@@ -645,6 +645,8 @@ int Application::ExecuteAndWriteOutput()
 {
   m_Chrono.Restart();
 
+  m_Logger->LogSetupInformation();
+
   int status = this->Execute();
 
   if (status == 0)

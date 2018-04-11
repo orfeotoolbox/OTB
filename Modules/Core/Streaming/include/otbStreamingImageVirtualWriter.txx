@@ -183,6 +183,8 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::GenerateData(void)
 {
+  otb::Logger::Instance()->LogSetupInformation();
+
   /**
    * Prepare all the outputs. This may deallocate previous bulk data.
    */
