@@ -4067,8 +4067,8 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
         <translation>Afficher les raccourcis clavier et souris</translation>
     </message>
     <message>
-        <source>Enable OTB_USE_QT4 preprocessor definition at compile time!</source>
-        <translation type="obsolete">Activer la définition de pré-processeur OTB_USE_QT4 lors de la compilation !</translation>
+        <source>Enable OTB_USE_QT preprocessor definition at compile time!</source>
+        <translation type="obsolete">Activer la définition de pré-processeur OTB_USE_QT lors de la compilation !</translation>
     </message>
     <message>
         <source>Layer stack</source>
@@ -4240,8 +4240,8 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
         <translation></translation>
     </message>
     <message>
-        <source>Enable OTB_USE_QT4 preprocessor definition at compile time!</source>
-        <translation>Activer la définition de pré-processeur OTB_USE_QT4 lors de la compilation !</translation>
+        <source>Enable OTB_USE_QT preprocessor definition at compile time!</source>
+        <translation>Activer la définition de pré-processeur OTB_USE_QT lors de la compilation !</translation>
     </message>
 </context>
 <context>

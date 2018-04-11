@@ -54,7 +54,7 @@ function(prepare_file_list file_list_result)
   endforeach()
 
   #Qt stuff
-  if(HAVE_QT4)
+  if(HAVE_QT)
     list(APPEND file_list "lrelease${EXE_EXT}")
     list(APPEND file_list "moc${EXE_EXT}")
     list(APPEND file_list "qmake${EXE_EXT}")
