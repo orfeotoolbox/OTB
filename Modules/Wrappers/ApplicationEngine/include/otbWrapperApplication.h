@@ -307,7 +307,7 @@ public:
    */
   bool IsParameterMissing(const std::string &key) const;
 
-  /* Set an default integer value, must used in the
+  /* Set a default integer value, must be used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -319,7 +319,17 @@ public:
    */
   void SetDefaultParameterInt(std::string parameter, int value);
 
-  /* Set a default floating value, must used in the
+  /* Get the default integer value of a parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Int
+   * \li ParameterType_Float
+   * \li ParameterType_Radius
+   * \li ParameterType_Choice
+   */
+  int GetDefaultParameterInt(std::string parameter);
+
+  /* Set a default floating value, must be used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -327,6 +337,13 @@ public:
    * \li ParameterType_Float
    */
   void SetDefaultParameterFloat(std::string parameter, float value);
+
+  /* Get the default floating value of a parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   */
+  float GetDefaultParameterFloat(std::string parameter);
 
   /** Set a default pixel type for an output image parameter
    *

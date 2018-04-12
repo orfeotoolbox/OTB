@@ -87,7 +87,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_UnknownSensor
            -acqui.sun.elev 62.7
            -acqui.sun.azim 152.7
            -acqui.view.elev 87.5
-           -acqui.view.azim -77.0
+           -acqui.view.azim 283
            -acqui.solarilluminations ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorSolarIllumations2.txt
            -atmo.rsr ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorRSR.txt
            -atmo.pressure 1013.0
