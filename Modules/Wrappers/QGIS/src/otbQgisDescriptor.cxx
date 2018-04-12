@@ -220,6 +220,8 @@ int main(int argc, char* argv[])
 	}
       else if(type == ParameterType_InputFilename)
 	{
+	  // TODO: if parameter InputFilename can give supported extensions
+	  // we can use it gitlab #1559
 	  dFile << "|QgsProcessingParameterFile.File|txt";
 	}
       else if(type == ParameterType_Directory)
@@ -228,19 +230,19 @@ int main(int argc, char* argv[])
 	}      
       else if (type == ParameterType_InputImageList)
 	{
-	   dFile << "|3";
+	   dFile << "|QgsProcessing.TypeRaster";
 	}
       else if (type == ParameterType_InputVectorDataList)
 	{
-	  dFile << "|-1";
+	  dFile << "|QgsProcessing.TypeVectorAnyGeometry";
 	}
       else if (type == ParameterType_InputVectorData)
 	{
-	  dFile << "|-1";
+	  dFile << "|QgsProcessing.TypeVectorAnyGeometry";
 	}
       else if(type == ParameterType_InputFilenameList)
 	{
-	  dFile << "|4";
+	  dFile << "|QgsProcessing.TypeFile";
 	}
       else if (type == ParameterType_InputImage)
 	{
