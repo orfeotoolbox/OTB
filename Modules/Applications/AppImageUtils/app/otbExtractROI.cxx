@@ -492,6 +492,7 @@ private:
   ComputeIndexFromRadius()
   {
     FloatVectorImageType::SizeType radiusi ;
+    radiusi.Fill(0);
     assert( GetParameterString( "mode" ) == "radius" );
     if ( HasValue( "mode.radius.r" ) )
       {
