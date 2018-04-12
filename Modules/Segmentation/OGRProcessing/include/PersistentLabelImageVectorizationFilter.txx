@@ -104,8 +104,8 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   {
     OGRFeatureType outFeature(outLayer.GetLayerDefn());
     
-    // Only geometries whose attributes belong to the selected label list parameter are created. If the list is empty, all geometries are created
-    if ( (std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::GetValue<int>()) != m_Labels.end() ) || (m_Labels.empty() ==true))
+    // Only geometries whose attributes belong to the selected label list parameter are created. If the list is empty, all geometries are created except if the label is 0 (background)
+    if ( (std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::GetValue<int>()) != m_Labels.end() ) || ( (m_Labels.empty() ==true) &&  (*featIt)[m_FieldName].ogr::Field::GetValue<int>() > 0 ))
     {
       //simplify
       const OGRGeometry * geom = (*featIt).GetGeometry();
