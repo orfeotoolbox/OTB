@@ -244,22 +244,33 @@ int main(int argc, char* argv[])
 	{
 	  dFile << "|QgsProcessing.TypeFile";
 	}
-      else if (type == ParameterType_InputImage)
-	{
-	  // default is None and nothing to add to dFile
-	}      
       else if(type ==ParameterType_String)
 	{
-	  // default is None and nothing to add to dFile
+	  // Below line is interpreted in qgis processing as
+	  // 1. default_value = None
+	  // 2. multiLine = False
+	  // For more details,
+	  // please refer to documetation of QgsProcessingParameterString.
+	  default_value = "None|False";
 	}
       else if(type ==ParameterType_StringList)
+	{
+	  // Below line is interpreted in qgis processing as
+	  // 1. default_value = None
+	  // 2. multiLine = True
+	  // For more details,
+	  // please refer to documetation of QgsProcessingParameterString.
+	  // setting default_value this way is an exception for ParameterType_StringList and ParameterType_String
+	  default_value = "None|True";
+	}
+      else if (type == ParameterType_InputImage)
 	{
 	  // default is None and nothing to add to dFile
 	}
       else if(type ==ParameterType_ListView)
 	{
 	  // default is None and nothing to add to dFile
-	}       
+	}
       else if(type == ParameterType_Bool)
 	{
 	  default_value =  appli->GetParameterAsString(name);
@@ -296,8 +307,8 @@ int main(int argc, char* argv[])
 	  std::string optional;
 	  if (param->GetMandatory())
 	    {
+	      // TODO: avoid workaround for stringlist types (fix appengine)
 	      // type == ParameterType_StringList check is needed because:
-	      //
 	      // If parameter is mandatory it can have no value
 	      // It is accepted in OTB that, string list could be generated dynamically
 	      // qgis has no such option to handle dynamic values yet..
@@ -313,7 +324,7 @@ int main(int argc, char* argv[])
 	  std::cerr << " mandatory=" << param->GetMandatory();
 	  std::cerr << " HasValue=" << param->HasValue();
 	  std::cerr << " qgis_type=" << qgis_type;
-	  std::cerr << "optional" << optional << std::endl;
+	  std::cerr << "optional=" << optional << std::endl;
           #endif
 	  dFile << "|" << default_value << "|" << optional;
 	}
