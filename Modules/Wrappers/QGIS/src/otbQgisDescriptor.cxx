@@ -306,6 +306,13 @@ int main(int argc, char* argv[])
 	    {
 	      optional = "True";
 	    }
+          #if 0
+	  std::cerr << name;
+	  std::cerr << " mandatory=" << param->GetMandatory();
+	  std::cerr << " HasValue=" << param->HasValue();
+	  std::cerr << " qgis_type=" << qgis_type;
+	  std::cerr << "optional" << optional << std::endl;
+          #endif
 	  dFile << "|" << default_value << "|" << optional;
 	}
       dFile << std::endl;
