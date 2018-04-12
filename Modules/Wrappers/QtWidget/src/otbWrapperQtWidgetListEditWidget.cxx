@@ -257,7 +257,7 @@ ListEditWidget
     {
     if (multi)
       {
-      output = GetOpenFileNames(
+      output = otb::GetOpenFilenames(
         this,
         tr( "Select input filename..." ),
         filePath,
@@ -268,7 +268,7 @@ ListEditWidget
     else
       {
       output.push_back(
-        GetOpenFileName(
+        otb::GetOpenFilename(
           this,
           tr( "Select input filename..." ),
           filePath,
@@ -281,7 +281,7 @@ ListEditWidget
   else
     {
     output.push_back(
-      GetSaveFileName(
+      otb::GetSaveFilename(
         this,
         tr( "Select output filename..." ),
         filePath,
