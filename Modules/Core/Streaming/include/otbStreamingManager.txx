@@ -41,6 +41,13 @@ StreamingManager<TImage>::~StreamingManager()
 }
 
 template <class TImage>
+const typename StreamingManager<TImage>::AbstractSplitterType *
+StreamingManager<TImage>::GetSplitter() const
+{
+  return m_Splitter;
+}
+
+template <class TImage>
 typename StreamingManager<TImage>::MemoryPrintType
 StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType availableRAMInMB)
 {
@@ -149,7 +156,7 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
   unsigned int optimalNumberOfDivisions =
       otb::PipelineMemoryPrintCalculator::EstimateOptimalNumberOfStreamDivisions(pipelineMemoryPrint, availableRAMInBytes);
 
-  otbLogMacro(Info,<<"Estimated memory for full processing: "<<pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<"MB (avail.: "<<availableRAMInBytes * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<" NB), optimal image partitioning: "<<optimalNumberOfDivisions<<" blocks");
+  otbLogMacro(Info,<<"Estimated memory for full processing: "<<pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<"MB (avail.: "<<availableRAMInBytes * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<" MB), optimal image partitioning: "<<optimalNumberOfDivisions<<" blocks");
   
   return optimalNumberOfDivisions;
 }

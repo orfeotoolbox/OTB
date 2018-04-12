@@ -213,6 +213,9 @@ protected:
   /** Does the real work. */
   void GenerateData(void) override;
 
+  /** Prepare the streaming and write the output information on disk */
+  void GenerateOutputInformation(void) override;
+
 private:
   ImageFileWriter(const ImageFileWriter &); //purposely not implemented
   void operator =(const ImageFileWriter&); //purposely not implemented
