@@ -67,7 +67,10 @@ private:
 
     // Documentation
     SetDocName("Mask Filtering");
-    SetDocLongDescription("Given an input label raster image, this application will output a vector data file containing a polygon for each connected component of the input raster, where two components are connected if they share the same label");
+    SetDocLongDescription("Given an input label raster image, this application will output a vector data file containing "
+    "a polygon for each connected component of the input raster, where two components are connected if they share the same label."
+    "If the fusion parameter is activated, segments in the output image that might have been splitted due to streaming are merged"
+    "(two segment are merged if they are touching and if they share the same label)");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     

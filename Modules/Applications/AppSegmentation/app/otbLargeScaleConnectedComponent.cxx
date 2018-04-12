@@ -57,20 +57,23 @@ private:
 
     // Documentation
     SetDocName("Large-Scale MeanShift");
-    SetDocLongDescription("This application chains together the 5 steps of the "
+    SetDocLongDescription("This application chains together the 6 steps of the "
       "Connected components framework, that is the ImageConnectedComponentSegmentation [1], the "
-      "LabelImageVectorization [2], the ComputePolygonsGeometricFeatures [3], the ComputePolygonsSpectralFeatures [4] and the "
-      "ObjectBasedFiltering [5].\n\n"
+      "LabelImageVectorization [2], the ComputePolygonsGeometricFeatures [3], the small regions merging step [4], the ComputePolygonsSpectralFeatures [5] and the "
+      "ObjectBasedFiltering [6].\n\n"
       "It generates a vector data file containing the regions extracted with "
-      "the Connected components algorithm using a user defined criterion, features (size, perimeter, min, max and mean for each band, and the covariance matrix) "
+      "the Connected components algorithm using a user defined criterion,  There is an optional step to remove small regions whose size "
+      "(in pixels) is less than the given 'minsize' parameter. Features (size, perimeter, min, max and mean for each band, and the covariance matrix) "
       " are then extracted for each segment. Optionally, the segment are filtered using a criterion on the computed features."
       );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("[1] ImageConnectedComponentSegmentation\n"
-      "[2] ComputePolygonsGeometricFeatures\n"
-      "[3] ComputePolygonsSpectralFeatures\n"
-      "[4] ObjectBasedFiltering");
+      "[2] LabelImageVectorization\n"
+      "[3] LSMSSmallRegionsMerging\n"
+      "[4] ComputePolygonsGeometricFeatures\n"
+      "[5] ComputePolygonsSpectralFeatures\n"
+      "[6] ObjectBasedFiltering");
 
     AddDocTag(Tags::Segmentation);
     AddDocTag("LSCC");
