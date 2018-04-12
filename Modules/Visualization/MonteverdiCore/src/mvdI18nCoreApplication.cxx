@@ -301,7 +301,7 @@ I18nCoreApplication
 #if ECHO_QCRITICAL || FORCE_QCRITICAL
 #if _WIN32
       OutputDebugString( "ERROR> " );
-      OutputDebugString( message );
+      OutputDebugString( qPrintable(message) );
       OutputDebugString( "\n" );
 #endif
       std::cerr << "ERROR> " << msg << std::endl;
@@ -324,7 +324,7 @@ I18nCoreApplication
 #if ECHO_QFATAL || FORCE_QFATAL
 #if _WIN32
       OutputDebugString( "FATAL> " );
-      OutputDebugString( message );
+      OutputDebugString( qPrintable(message) );
       OutputDebugString( "\n" );
 #endif
       std::cerr << "FATAL> " << msg << std::endl;
