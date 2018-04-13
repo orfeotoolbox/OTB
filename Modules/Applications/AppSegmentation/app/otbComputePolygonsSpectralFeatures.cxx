@@ -86,8 +86,6 @@ private:
     
     AddRAMParameter();
 
-    // Default values
-    SetDefaultParameterInt("tile", 0);
     // Doc example parameter settings
     SetDocExampleParameterValue("expr", "\"distance<10\"");
     SetDocExampleParameterValue("in", "sar.tif");
@@ -125,7 +123,6 @@ private:
                                     ogr::DataSource::Modes::Update_LayerUpdate);
       output = vectors;
     }
-    
     OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
     SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
     SpectralStatisticsFilter->UpdateLargestPossibleRegion() ;
@@ -137,7 +134,6 @@ private:
     SpectralStatisticsFilter->SetOutputSamples(output);
     SpectralStatisticsFilter->SetFieldName(field_name);
     SpectralStatisticsFilter->Update();
-    
     Timer.Stop();
     otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
