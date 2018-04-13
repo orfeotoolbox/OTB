@@ -311,12 +311,17 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                      
 #----------- LargeScaleConnectedComponent TESTS ----
 otb_test_application(NAME     apTvLargeScaleConnectedComponent
-                     APP      LargeScaleConnectedComponent.cxx
+                     APP      LargeScaleConnectedComponent
                      OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
                               -out ${TEMP}/LargeScaleConnectedComponent.shp
                               -expr "distance<10"
                               -filter "nbpixels<10"
                               -mask "b1>15"
+                              -minsize 40
+                              -fusion 1
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
+                              ${TEMP}/LargeScaleConnectedComponent.shp                       
                      )
                      
 #----------- ImageConnectedComponentSegmentation TESTS ----
@@ -333,8 +338,7 @@ otb_test_application(NAME     apTvLabelImageVectorization
                      APP      LabelImageVectorization
                      OPTIONS  -in ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
                               -out ${TEMP}/apTvLabelImageVectorization.shp
-                              -expr "distance<10"
-                              -mask "b1>15"
+                              -fusion 1
                      )
 
 #----------- ComputePolygonsGeometricFeatures TESTS -----------
@@ -350,7 +354,7 @@ otb_test_application(NAME     apTvComputePolygonsSpectralFeatures
                      APP      ComputePolygonsSpectralFeatures
                      OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho.tif
                               -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
+                              -out ${TEMP}/apTvComputePolygonsSpectralFeatures.shp
                      )
 
 #----------- ObjectBasedFiltering TESTS -----------
