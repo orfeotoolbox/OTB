@@ -81,6 +81,10 @@ public:
 
   typedef std::vector<std::string> GDALCreationOptionsType;
 
+  typedef  std::vector<
+    std::pair<int, double>
+    > NoDataListType;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -110,6 +114,8 @@ public:
   {
     m_CreationOptions = opts;
   }
+
+  void SetNoDataList(NoDataListType v) { m_NoDataList = v; }
 
   GDALCreationOptionsType GetOptions(void)
   {
@@ -187,6 +193,8 @@ public:
 
   /** Returns gdal pixel type as string */
   std::string GetGdalPixelTypeAsString() const;
+
+  int NbBands() { return m_NbBands;}
 
 protected:
   /**
@@ -281,6 +289,9 @@ private:
    * True if RPC tags should be exported
    */
   bool m_WriteRPCTags;
+
+
+  NoDataListType m_NoDataList;
   
 };
 

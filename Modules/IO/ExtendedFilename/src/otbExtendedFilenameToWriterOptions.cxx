@@ -22,6 +22,7 @@
 #include "otb_boost_string_header.h"
 #include <itksys/RegularExpression.hxx>
 #include "otb_boost_tokenizer_header.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -37,6 +38,8 @@ ExtendedFilenameToWriterOptions
 
   m_Options.writeRPCTags.first = false;
   m_Options.writeRPCTags.second = false;
+
+  has_noDataValue = false;
   
   m_Options.gdalCreationOptions.first = false;
   m_Options.streamingType.first       = false;
@@ -51,6 +54,7 @@ ExtendedFilenameToWriterOptions
   m_Options.optionList.push_back("streaming:type");
   m_Options.optionList.push_back("streaming:sizemode");
   m_Options.optionList.push_back("streaming:sizevalue");
+  m_Options.optionList.push_back("nodata");
   m_Options.optionList.push_back("box");
   m_Options.optionList.push_back("bands");
 }
@@ -92,6 +96,38 @@ ExtendedFilenameToWriterOptions
        {
        m_Options.writeGEOMFile.second = false;
        }
+     }
+  
+  if (!map["nodata"].empty())
+     {
+       std::string nodata_values = map["nodata"];
+       std::vector<std::string> nodata_list;
+       boost::split(nodata_list, nodata_values, boost::is_any_of(","),
+		    boost::token_compress_on);
+       std::vector<std::string>::const_iterator listIt = nodata_list.begin();
+       for(; listIt != nodata_list.end(); ++listIt) {
+       std::string nodata_pair = (*listIt);
+       std::vector<std::string> per_band_no_data;
+       boost::split(per_band_no_data,
+		    nodata_pair,
+		    boost::is_any_of(":"),
+		    boost::token_compress_on);
+       if (per_band_no_data.size() == 1)
+	 {
+	   double val = Utils::LexicalCast<double>(per_band_no_data[0],
+						   "nodata value");
+	   m_NoDataList.push_back(NoDataPairType(1, val));
+	 }
+       else
+	 {
+	   int band = Utils::LexicalCast<int>(per_band_no_data[0],
+						   "nodata value");
+	   double val = Utils::LexicalCast<double>(per_band_no_data[1],
+						   "nodata value");
+	   m_NoDataList.push_back(NoDataPairType(band, val));
+	 }
+       }
+       has_noDataValue = true;
      }
 
   if (!map["writerpctags"].empty())
@@ -202,6 +238,13 @@ ExtendedFilenameToWriterOptions
         itkWarningMacro("Unknown option detected: " << it->first << ".");
       }
     }
+}
+
+bool
+ExtendedFilenameToWriterOptions
+::NoDataValueIsSet () const
+{
+  return has_noDataValue;
 }
 
 bool

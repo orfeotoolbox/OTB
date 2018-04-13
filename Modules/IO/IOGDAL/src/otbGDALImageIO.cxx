@@ -1847,6 +1847,11 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
         }
       }
     }
+
+  NoDataListType::const_iterator noDataIt = m_NoDataList.begin();
+    for(; noDataIt != m_NoDataList.end(); ++noDataIt)
+    dataset->GetRasterBand(noDataIt->first)->SetNoDataValue(noDataIt->second);
+
 }
 
 std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const
