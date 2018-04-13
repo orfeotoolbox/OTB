@@ -23,6 +23,7 @@
 
 #include "itkLoggerBase.h"
 #include "itkLogger.h"
+#include "OTBCommonExport.h"
 
 namespace otb {
 
@@ -31,9 +32,9 @@ namespace otb {
  *
  *  Sets OTB wide settings in its constructor
  *
- * \ingroup OTBApplicationEngine
+ * \ingroup OTBCommon
  */
-class Logger : public itk::Logger
+class OTBCommon_EXPORT Logger : public itk::Logger
 {
 public:
   typedef Logger                          Self;
@@ -41,15 +42,44 @@ public:
   typedef itk::SmartPointer< Self >       Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  itkTypeMacro(Logger, Object);
-  itkNewMacro(Self);
+  itkTypeMacro(Logger, itk::Logger);
 
+  /**
+   * If Logger crashes when called from the destructor of a static
+   * or global object, the singleton might have already been destroyed.
+   * You can prolong its lifetime by calling Logger::Instance()
+   * from that object's constructor.
+   *
+   * See https://stackoverflow.com/questions/335369/finding-c-static-initialization-order-problems#335746
+   */
+  static Pointer Instance();
+
+  itkNewMacro(Self);
+  
   // Overwrite this to provide custom formatting of log entries
-  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) ITK_OVERRIDE;
+  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) override;
+
+  /** Output logs about the RAM, caching and multi-threading settings */
+  void LogSetupInformation();
+
+  /** Return true if the LogSetupInformation has already been called*/
+  bool IsLogSetupInformationDone();
+
+  /** Set the flag m_LogSetupInfoDone to true */
+  void LogSetupInformationDone();
 
 protected:
-    Logger();
-    virtual ~Logger();
+  Logger();
+  virtual ~Logger() ITK_OVERRIDE;
+
+private:
+  Logger(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
+  static Pointer CreateInstance();
+
+  bool m_LogSetupInfoDone;
+
 }; // class Logger
 
 } // namespace otb

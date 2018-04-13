@@ -20,6 +20,7 @@
 
 set(OTBImageIO_SRC
   otbImageIOFactory.cxx
+  otbMultiImageFileWriter.cxx
   )
 
 add_library(OTBImageIO ${OTBImageIO_SRC})

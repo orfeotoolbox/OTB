@@ -90,7 +90,7 @@ protected:
   CommandLineParser();
 
   /** Destructor */
-  ~CommandLineParser() ITK_OVERRIDE;
+  ~CommandLineParser() override;
 
 private:
   CommandLineParser(const CommandLineParser &); //purposely not implemented

@@ -104,11 +104,11 @@ public:
 
 protected:
   LabelizeNeighborhoodConnectedImageFilter();
-  ~LabelizeNeighborhoodConnectedImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LabelizeNeighborhoodConnectedImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Region growing */
-  void RegionGrowing(const IndexType indexSeed) ITK_OVERRIDE;
+  void RegionGrowing(const IndexType indexSeed) override;
 
 private:
   LabelizeNeighborhoodConnectedImageFilter(const Self &); //purposely not implemented

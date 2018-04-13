@@ -200,7 +200,7 @@ QtWidgetModel
     }
 
   // launch the output image writing
-  AppliThread * taskAppli = new AppliThread( m_Application );
+  AppliThread *taskAppli = new AppliThread( m_Application );
 
   QObject::connect(
     taskAppli,
@@ -225,10 +225,19 @@ QtWidgetModel
     SLOT( deleteLater() )
   );
 
+  QObject::connect(
+    this,
+    SIGNAL( Stop() ),
+    taskAppli,
+    SLOT( Stop() )
+  );
+
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
 
   taskAppli->Execute();
+
+  emit SetApplicationReady(true);
 }
 
 void
@@ -321,6 +330,10 @@ AppliThread
     m_Application->GetLogger()->Debug(string(err.what()) + "\n");
     m_Application->GetLogger()->Fatal(string("Cannot open image ") + err.m_Filename + string(". ") + err.GetDescription() + string("\n"));
     emit ExceptionRaised( err.what() );
+  }
+  catch(itk::ProcessAborted& /*err*/)
+  {
+    m_Application->GetLogger()->Info("Processing aborted\n");
   }
   catch(itk::ExceptionObject& err)
   {

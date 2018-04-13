@@ -91,7 +91,7 @@ public:
   void SetNthFileName( std::size_t, const std::string & ) override;
 
   /** */
-  std::size_t SetStrings( const StringVector & );
+  std::size_t SetStrings( const StringVector & ) override;
 
   /** */
   std::size_t GetStrings( StringVector & ) const override;

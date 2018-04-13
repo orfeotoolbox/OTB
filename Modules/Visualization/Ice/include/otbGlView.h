@@ -280,7 +280,7 @@ public:
 protected:
   GlView();
 
-  ~GlView() ITK_OVERRIDE;
+  ~GlView() override;
 
 private:
   // prevent implementation

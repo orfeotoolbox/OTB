@@ -123,7 +123,7 @@ public:
 
 protected:
   KMeansAttributesLabelMapFilter();
-  ~KMeansAttributesLabelMapFilter() ITK_OVERRIDE {};
+  ~KMeansAttributesLabelMapFilter() override {};
 
 
 private:

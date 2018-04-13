@@ -90,10 +90,10 @@ public:
 
 protected:
   DrawPathFilter();
-  ~DrawPathFilter() ITK_OVERRIDE {}
+  ~DrawPathFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void GenerateData() override;
 
 private:
   DrawPathFilter(const Self &); //purposely not implemented

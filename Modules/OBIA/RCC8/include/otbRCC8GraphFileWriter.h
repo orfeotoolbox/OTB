@@ -107,17 +107,17 @@ public:
   /**
    * Update method.
    */
-  void Update(void) ITK_OVERRIDE;
+  void Update(void) override;
 
 protected:
   /** Constructor */
   RCC8GraphFileWriter();
   /** Destructor */
-  ~RCC8GraphFileWriter() ITK_OVERRIDE;
+  ~RCC8GraphFileWriter() override;
   /**
    * Main computation method.
    */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /**
    * Write Method.
    * Performs checkings and invoke GenerateData().
@@ -143,7 +143,7 @@ protected:
   /**
    * PrintSelf method
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** Filename of the graph file to write */

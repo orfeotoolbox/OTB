@@ -29,6 +29,9 @@ ENABLE_SHARED
     OTBGDAL
     OTBITK
 
+  TEST_DEPENDS
+    OTBTestKernel
+    
   DESCRIPTION
     "${DOCUMENTATION}"
 )

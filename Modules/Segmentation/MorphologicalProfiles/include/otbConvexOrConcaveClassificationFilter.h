@@ -215,7 +215,7 @@ public:
    *
    */
   using Superclass::SetInput;
-  void SetInput(const TInputImage * image) ITK_OVERRIDE
+  void SetInput(const TInputImage * image) override
   {
     this->SetInput1(image);
   }
@@ -242,7 +242,7 @@ public:
   itkGetMacro(Sigma, double);
 
   /** Set the functor parameters before calling the ThreadedGenerateData() */
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
+  void BeforeThreadedGenerateData(void) override
   {
     this->GetFunctor().SetConvexLabel(m_ConvexLabel);
     this->GetFunctor().SetConcaveLabel(m_ConcaveLabel);
@@ -260,9 +260,9 @@ protected:
     m_Sigma        = 0.0;
     };
   /** Destructor */
-  ~ConvexOrConcaveClassificationFilter() ITK_OVERRIDE {}
+  ~ConvexOrConcaveClassificationFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "ConvexLabel: " << m_ConvexLabel << std::endl;

@@ -149,13 +149,13 @@ public:
 
 protected:
   /** GenerateData */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** Constructor */
   GeodesicMorphologyDecompositionImageFilter();
   /** Destructor */
-  ~GeodesicMorphologyDecompositionImageFilter() ITK_OVERRIDE {}
+  ~GeodesicMorphologyDecompositionImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   GeodesicMorphologyDecompositionImageFilter(const Self &); //purposely not implemented

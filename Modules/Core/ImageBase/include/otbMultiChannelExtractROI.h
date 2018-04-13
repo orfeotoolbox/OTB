@@ -115,8 +115,8 @@ public:
 
 protected:
   MultiChannelExtractROI();
-  ~MultiChannelExtractROI() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~MultiChannelExtractROI() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** MultiChannelExtractROI can produce an image which is a different
    * resolution than its input image.  As such, MultiChannelExtractROI
@@ -126,7 +126,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Reinitialize channels vector for multiple Update.*/
   void ChannelsReInitialization();
@@ -137,7 +137,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
   MultiChannelExtractROI(const Self &); //purposely not implemented

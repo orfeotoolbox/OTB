@@ -23,7 +23,7 @@ otb_add_test(NAME leTuSharkRFMachineLearningModelNew COMMAND otbSupervisedTestDr
 
 otb_add_test(NAME leTvSharkRFMachineLearningModel COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModel
-  ${INPUTDATA}/letter.scale
+  ${INPUTDATA}/letter_light.scale
   ${TEMP}/shark_rf_model.txt
   )
 

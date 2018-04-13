@@ -99,12 +99,12 @@ public:
 		   QObject *p = 0 );
 
   /** \brief Destructor. */
-  ~DoubleValidator() ITK_OVERRIDE;
+  ~DoubleValidator() override;
 
   //
   // QDoubleValidator overloads.
 
-  void fixup( QString& input ) const ITK_OVERRIDE;
+  void fixup( QString& input ) const override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

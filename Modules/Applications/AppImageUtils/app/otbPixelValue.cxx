@@ -48,7 +48,7 @@ public:
   itkTypeMacro(PixelValue, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("PixelValue");
     SetDescription("Get the value of a pixel.");
@@ -120,7 +120,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("in") )
       {
@@ -206,7 +206,7 @@ private:
     return box;
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     std::string mode = GetParameterString( "mode" );
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
@@ -292,7 +292,7 @@ private:
     id.Fill(0);
     std::ostringstream oss;
     oss << extractor->GetOutput()->GetPixel(id);
-    SetParameterString("value", oss.str(), false);
+    SetParameterString("value", oss.str());
     //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );
   }

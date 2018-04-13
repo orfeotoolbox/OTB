@@ -91,17 +91,17 @@ protected:
   /** Get the pointer to the filter */
   itkGetObjectMacro(Filter, FilterType);
   /** GenerateData method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** GenerateOutputInformation method */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
   /** Generate input requested region */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
   /** Constructor */
   ImageToProfileFilter();
   /** Destructor */
-  ~ImageToProfileFilter() ITK_OVERRIDE {}
+  ~ImageToProfileFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ImageToProfileFilter(const Self &); //purposely not implemented

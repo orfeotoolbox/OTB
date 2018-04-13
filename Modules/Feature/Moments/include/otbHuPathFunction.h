@@ -90,7 +90,7 @@ public:
   typedef typename Superclass::PrecisionType PrecisionType;
 
   /** Evaluate the function at non-integer positions */
-  RealType Evaluate(const PathType& path) const ITK_OVERRIDE;
+  RealType Evaluate(const PathType& path) const override;
   virtual RealType Evaluate() const;
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
@@ -99,8 +99,8 @@ public:
 
 protected:
   HuPathFunction();
-  ~HuPathFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~HuPathFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   HuPathFunction(const Self &);  //purposely not implemented

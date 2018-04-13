@@ -48,7 +48,7 @@ public:
 protected:
   ApplicationFactoryBase(){}
 
-  ~ApplicationFactoryBase() ITK_OVERRIDE{}
+  ~ApplicationFactoryBase() override{}
 
 private:
   ApplicationFactoryBase(const Self &); //purposely not implemented

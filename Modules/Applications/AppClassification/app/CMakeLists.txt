@@ -125,5 +125,10 @@ otb_create_application(
   SOURCES        otbVectorClassifier.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
+otb_create_application(
+  NAME           SampleAugmentation
+  SOURCES        otbSampleAugmentation.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
 # Mantis-1427 : temporary fix
 add_dependencies(${otb-module}-all otbapp_ImageEnvelope)

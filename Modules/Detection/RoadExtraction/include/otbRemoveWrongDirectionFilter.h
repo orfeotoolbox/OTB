@@ -104,14 +104,14 @@ protected:
   /** Constructor */
   RemoveWrongDirectionFilter() {};
   /** Destructor */
-  ~RemoveWrongDirectionFilter() ITK_OVERRIDE {}
+  ~RemoveWrongDirectionFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE
+  void GenerateData(void) override
   {
     typename ComputingFilterType::Pointer filter = ComputingFilterType::New();
     filter->SetInput1(this->GetInput());

@@ -265,6 +265,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       }
     this->m_InMemoryOutputs.push_back(tmpContainer);
     }
+
+  if (oSRS)
+    {
+    oSRS->Release();
+    }
 }
 
 template <class TInputImage, class TMaskImage>
@@ -734,7 +739,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     }
 
   const unsigned int nbFeatThread = std::ceil(inLayer.GetFeatureCount(true) / (float) numberOfThreads);
-  assert(nbFeatThread > 0);
+  //assert(nbFeatThread > 0);
 
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   ogr::Layer::const_iterator featIt = inLayer.begin();
@@ -806,6 +811,11 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
       {
       OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
       outLayer.CreateField(fieldDefn);
+      }
+
+    if (oSRS)
+      {
+      oSRS->Release();
       }
     }
 

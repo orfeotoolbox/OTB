@@ -88,12 +88,12 @@ public:
   /** Return any value */
   virtual unsigned int GetValue();
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return !m_ChoiceList.empty();
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     // Same as constructor init value
     // Note that this may be invalid if HasValue() == false
@@ -105,7 +105,7 @@ protected:
   ChoiceParameter();
 
   /** Destructor */
-  ~ChoiceParameter() ITK_OVERRIDE;
+  ~ChoiceParameter() override;
 
   struct Choice
   {
