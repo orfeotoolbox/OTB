@@ -19,7 +19,7 @@
 #
 
 #############################################################################
-# Qt4 translations.
+# Qt translations.
 #----------------------------------------------------------------------------
 # Locale human-readable translation files.
 set( OTB_TS_TRANSLATIONS
@@ -37,7 +37,7 @@ option( OTB_I18N_MERGE_TS
   )
 
 #----------------------------------------------------------------------------
-if( OTBQt4_ENABLED )
+if( OTBQt_ENABLED )
   # Generate commands to build Qt translations according to option.
   if( OTB_I18N_MERGE_TS )
     message(
@@ -49,7 +49,7 @@ if( OTBQt4_ENABLED )
 
     set( OTB_QT_I18N_PRO "${CMAKE_CURRENT_BINARY_DIR}/i18n.pro" )
 
-    generate_qt4_project( ${OTB_QT_I18N_PRO} )
+    generate_qt_project( ${OTB_QT_I18N_PRO} )
 
     foreach(_ts_name ${OTB_TS_TRANSLATIONS})
       get_filename_component(_abs_ts ${_ts_name} ABSOLUTE)
