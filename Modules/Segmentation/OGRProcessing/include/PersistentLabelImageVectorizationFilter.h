@@ -174,6 +174,7 @@ public:
   typedef typename InputImageType::SizeType                                   SizeType;
   
   /** Set the input image. */
+  using itk::ProcessObject::SetInput;
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);

@@ -268,7 +268,7 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
       for (std::vector< std::vector<int> >::iterator itList = fusionList.begin(); itList != fusionList.end(); itList++)
       {
       OGRMultiPolygon geomToMerge;
-      int field = m_OGRLayer.GetFeature(  *(*itList).begin())["field"].GetValue<int>();
+      int field = m_OGRLayer.GetFeature(  *(*itList).begin())["field"].template GetValue<int>();
       for (std::vector<int>::iterator it = (*itList).begin(); it != (*itList).end(); it++)
       {
         geomToMerge.addGeometry( m_OGRLayer.GetFeature(*it).GetGeometry());
