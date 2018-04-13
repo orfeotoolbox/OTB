@@ -96,7 +96,12 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   m_PolygonFirstOrderThread.resize(this->GetNumberOfThreads());
   m_PolygonSecondOrderThread.resize(this->GetNumberOfThreads());
   m_CurrentFID.resize(this->GetNumberOfThreads());
-
+  
+  this->InitializeFields();
+  ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
+  ogr::DataSource* output  = this->GetOutputSamples();
+  
+  this->InitializeOutputDataSource(inputDS,output);
 }
 
 
@@ -204,17 +209,17 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     }
     
   }
-  
   // initialize additional fields for output
-  this->InitializeFields();
+  //this->InitializeFields();
 
   // initialize output DataSource
   ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
   ogr::DataSource* output  = this->GetOutputSamples();
   
-  this->InitializeOutputDataSource(inputDS,output);
+  //this->InitializeOutputDataSource(inputDS,output);
   
-  otb::ogr::Layer outLayer = output->GetLayer(0);
+  auto outLayer = output->GetLayer(0);
+  auto inLayer = inputDS->GetLayer(0);
   
   PolygonSizeMapType::iterator itSizeout = PolygonSize.begin();
   PolygonVectorMapType::iterator itFirstOrderout = PolygonFirstOrderComponent.begin();
@@ -228,9 +233,10 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   {  
     // Write features in the ouput shapefile
     int fid = itMeanout->first;
-    ogr::Feature outFeat = outLayer.GetFeature(fid);
-    
-    outFeat["NbPixels"].SetValue<int>(itSizeout->second);
+    //auto outFeat = inLayer.GetFeature(fid);
+    ogr::Feature outFeat(outLayer.GetLayerDefn());
+    outFeat.SetFrom( inLayer.GetFeature(fid), TRUE );
+    outFeat["nbpixels"].SetValue<int>(itSizeout->second);
     for (unsigned int i =0; i < numberOfComponents ; i++)
     {
       outFeat["mean_"+std::to_string(i)].SetValue<double>(itMeanout->second[i]);
@@ -243,8 +249,8 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
       {
         outFeat["cov_"+std::to_string(r)+"_"+std::to_string(c)].SetValue<double>(itCovout->second[r][c]);
       }
-    }    
-    outLayer.SetFeature(outFeat);
+    } 
+    outLayer.CreateFeature(outFeat);
   }
   
   
@@ -262,7 +268,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     
   this->ClearAdditionalFields();
   
-  this->CreateAdditionalField("NbPixels",OFTInteger,24,15);
+  this->CreateAdditionalField("nbpixels",OFTInteger,24,15);
   
   // Create min fields
   for (unsigned int i=0; i < numberOfComponents; i++)
@@ -308,109 +314,70 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   
   OGRPoint tmpPoint;
 
-  if (mask)
-    {
-    // For pixels in consideredRegion and not masked
-    typedef MaskedIteratorDecorator<
-      itk::ImageRegionConstIterator<TMaskImage>,
-      itk::ImageRegionConstIterator<TMaskImage> > MaskedIteratorType;
-    MaskedIteratorType it(mask, mask, region);
-    it.GoToBegin();
-    while (!it.IsAtEnd())
-      {
-      imgIndex = it.GetIndex();
-      img->TransformIndexToPhysicalPoint(imgIndex,imgPoint);
-      tmpPoint.setX(imgPoint[0]);
-      tmpPoint.setY(imgPoint[1]);
-      bool isInside = this->IsSampleInsidePolygon(polygon,&tmpPoint);
-      if (isInside)
-        {
-        this->ProcessSample(feature,imgIndex, imgPoint, threadid);
-        }
-      ++it;
-      }
-    }
-  else
-    {
-    typedef itk::ImageRegionConstIterator<TInputImage> ValueIteratorType;
-    ValueIteratorType it(img,region);
+  typedef itk::ImageRegionConstIterator<TInputImage> ValueIteratorType;
+  ValueIteratorType it(img,region);
     
-    unsigned int numberOfComponents = img->GetNumberOfComponentsPerPixel();
+  unsigned int numberOfComponents = img->GetNumberOfComponentsPerPixel();
     
     
-    it.GoToBegin();
-    int fid = m_CurrentFID[threadid];
+  it.GoToBegin();
+  int fid = m_CurrentFID[threadid];
     
-    // Initialize accumulator sizes
+  // Initialize accumulator sizes
     
-    if (!m_PolygonMinThread[threadid].count(fid))
-    {
-      m_PolygonFirstOrderThread[threadid][fid].SetSize(numberOfComponents);
-      m_PolygonFirstOrderThread[threadid][fid].Fill(0);
+  if (!m_PolygonMinThread[threadid].count(fid))
+  {
+    m_PolygonFirstOrderThread[threadid][fid].SetSize(numberOfComponents);
+    m_PolygonFirstOrderThread[threadid][fid].Fill(0);
       
-      m_PolygonMinThread[threadid][fid].SetSize(numberOfComponents);
-      m_PolygonMaxThread[threadid][fid].SetSize(numberOfComponents);
+    m_PolygonMinThread[threadid][fid].SetSize(numberOfComponents);
+    m_PolygonMaxThread[threadid][fid].SetSize(numberOfComponents);
 
-      m_PolygonMinThread[threadid][fid].Fill(itk::NumericTraits<double>::max());
-      m_PolygonMaxThread[threadid][fid].Fill(itk::NumericTraits<double>::NonpositiveMin());
+    m_PolygonMinThread[threadid][fid].Fill(itk::NumericTraits<double>::max());
+    m_PolygonMaxThread[threadid][fid].Fill(itk::NumericTraits<double>::NonpositiveMin());
       
-      m_PolygonSecondOrderThread[threadid][fid].SetSize(numberOfComponents, numberOfComponents);
-      m_PolygonSecondOrderThread[threadid][fid].Fill(0);
-    }
+    m_PolygonSecondOrderThread[threadid][fid].SetSize(numberOfComponents, numberOfComponents);
+    m_PolygonSecondOrderThread[threadid][fid].Fill(0);
+  }
     
-    while (!it.IsAtEnd())
-      {
-      imgIndex = it.GetIndex();
-      img->TransformIndexToPhysicalPoint(imgIndex,imgPoint);
-      tmpPoint.setX(imgPoint[0]);
-      tmpPoint.setY(imgPoint[1]);
+  while (!it.IsAtEnd())
+  {
+    imgIndex = it.GetIndex();
+    img->TransformIndexToPhysicalPoint(imgIndex,imgPoint);
+    tmpPoint.setX(imgPoint[0]);
+    tmpPoint.setY(imgPoint[1]);
       
-      bool isInside = this->IsSampleInsidePolygon(polygon,&tmpPoint);
-      if (isInside)
-        {
-          PixelType VectorValue = it.Get();
-          m_PolygonSizeThread[threadid][fid] ++;
+    bool isInside = this->IsSampleInsidePolygon(polygon,&tmpPoint);
+    if (isInside)
+    {
+      PixelType VectorValue = it.Get();
+      m_PolygonSizeThread[threadid][fid] ++;
           
-          for (unsigned int i =0; i < numberOfComponents ; i++)
-          {
-            m_PolygonFirstOrderThread[threadid][fid][i] += VectorValue[i];
-            if (VectorValue[i] > m_PolygonMaxThread[threadid][fid][i])
-            {
-              m_PolygonMaxThread[threadid][fid][i] = VectorValue[i];
-            }
+      for (unsigned int i =0; i < numberOfComponents ; i++)
+      {
+        m_PolygonFirstOrderThread[threadid][fid][i] += VectorValue[i];
+        if (VectorValue[i] > m_PolygonMaxThread[threadid][fid][i])
+        {
+          m_PolygonMaxThread[threadid][fid][i] = VectorValue[i];
+        }
             
-            if (VectorValue[i] < m_PolygonMinThread[threadid][fid][i])
-            {
-              m_PolygonMinThread[threadid][fid][i] = VectorValue[i];
-            }
-          }
-          
-          for (unsigned int r =0; r < numberOfComponents ; r++)
-          {
-            for (unsigned int c =0; c < numberOfComponents ; c++)
-            {
-              m_PolygonSecondOrderThread[threadid][fid][r][c] += VectorValue[r]*VectorValue[c];
-            }
-          }
+        if (VectorValue[i] < m_PolygonMinThread[threadid][fid][i])
+        {
+          m_PolygonMinThread[threadid][fid][i] = VectorValue[i];
         }
-      ++it;
+      }
+          
+      for (unsigned int r =0; r < numberOfComponents ; r++)
+      {
+        for (unsigned int c =0; c < numberOfComponents ; c++)
+          {
+            m_PolygonSecondOrderThread[threadid][fid][r][c] += VectorValue[r]*VectorValue[c];
+          }
       }
     }
-}
-
-template<class TInputImage, class TMaskImage>
-void
-PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::ProcessSample(
-  const ogr::Feature&,
-  typename TInputImage::IndexType& imgIndex,
-  typename TInputImage::PointType& imgPoint,
-  itk::ThreadIdType& threadid)
-{
-  std::cout << "P: " << imgPoint[0] << " " << imgPoint[1] << std::endl;
-  std::cout << "I: " << imgIndex[0] << " " << imgIndex[1] << std::endl;
-   
-  //unsigned long& fId = m_CurrentFID[threadid];
+    ++it;
+  }
+    
 }
 
 template<class TInputImage, class TMaskImage>

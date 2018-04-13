@@ -109,11 +109,11 @@ protected:
                               itk::ThreadIdType& threadid);
 
   /** Implement generic method called at each candidate position */
-  void ProcessSample(const ogr::Feature& feature,
+  /*void ProcessSample(const ogr::Feature& feature,
                      typename TInputImage::IndexType& imgIndex,
                      typename TInputImage::PointType& imgPoint,
                      itk::ThreadIdType& threadid) override;
-  
+  */
   /** Prepare temporary variables for the current feature */
   void PrepareFeature(const ogr::Feature& feature,
                       itk::ThreadIdType& threadid) override;
