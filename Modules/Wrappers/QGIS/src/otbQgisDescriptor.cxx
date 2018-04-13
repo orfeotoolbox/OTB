@@ -230,19 +230,19 @@ int main(int argc, char* argv[])
 	}      
       else if (type == ParameterType_InputImageList)
 	{
-	   dFile << "|QgsProcessing.TypeRaster";
+	  dFile << "|3"; //QgsProcessing.TypeRaster
 	}
       else if (type == ParameterType_InputVectorDataList)
 	{
-	  dFile << "|QgsProcessing.TypeVectorAnyGeometry";
+	  dFile << "|-1"; //QgsProcessing.TypeVectorAnyGeometry
 	}
       else if (type == ParameterType_InputVectorData)
 	{
-	  dFile << "|QgsProcessing.TypeVectorAnyGeometry";
+	  dFile << "|-1"; //QgsProcessing.TypeVectorAnyGeometry
 	}
       else if(type == ParameterType_InputFilenameList)
 	{
-	  dFile << "|QgsProcessing.TypeFile";
+	  dFile << "|4"; //QgsProcessing.TypeFile"
 	}
       else if(type ==ParameterType_String)
 	{
@@ -324,7 +324,7 @@ int main(int argc, char* argv[])
 	  std::cerr << " mandatory=" << param->GetMandatory();
 	  std::cerr << " HasValue=" << param->HasValue();
 	  std::cerr << " qgis_type=" << qgis_type;
-	  std::cerr << "optional=" << optional << std::endl;
+	  std::cerr << " optional=" << optional << std::endl;
           #endif
 	  dFile << "|" << default_value << "|" << optional;
 	}
