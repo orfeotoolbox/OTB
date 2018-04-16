@@ -52,6 +52,7 @@ file(TO_NATIVE_PATH ${QT5_SB_SRC} QT5_SB_SRC_NATIVE)
 #Common options for all cases
 # -skip qtbase
 # -skip qttools  (need linguist)
+# -skip qttranslations
 set(QT5_SB_CONFIG
   "-prefix ${QT5_INSTALL_PREFIX_NATIVE} -L ${QT5_LIB_PREFIX_NATIVE} \
   -I ${QT5_INCLUDE_PREFIX_NATIVE} -I ${QT5_INCLUDE_FREETYPE_NATIVE} \
@@ -84,7 +85,6 @@ set(QT5_SB_CONFIG
   -skip qtserialport  \
   -skip qtspeech \
   -skip qtsvg  \
-  -skip qttranslations  \
   -skip qtvirtualkeyboard  \
   -skip qtwayland  \
   -skip qtwebchannel  \
