@@ -310,7 +310,7 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                      )
                      
 #----------- LargeScaleConnectedComponent with minsize TESTS ----
-otb_test_application(NAME     apTvLargeScaleConnectedComponent
+otb_test_application(NAME     apTvLargeScaleConnectedComponentMinSize
                      APP      LargeScaleConnectedComponent
                      OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
                               -out ${TEMP}/LargeScaleConnectedComponent.shp
@@ -347,7 +347,7 @@ otb_test_application(NAME     apTvImageConnectedComponentSegmentation
                               -out ${TEMP}/apTvImageConnectedComponentSegmentation.tif
                               -expr "distance<100"
                               -mask "b1>250"
-                     VALID    --compare-ogr ${NOTOL}
+                     VALID    --compare-image ${NOTOL}
                               ${BASELINE_FILES}/apTvImageConnectedComponentSegmentation.tif
                               ${TEMP}/apTvImageConnectedComponentSegmentation.tif    
                      )
