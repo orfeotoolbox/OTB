@@ -189,7 +189,7 @@ The first time, you can get the source code using:
 
 ::
 
-          git clone https://git@git.orfeo-toolbox.org/git/otb.git
+          git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git
 
 Then you can build OTB as usual using this directory as the source
 (refer to build instructions). Later if you want to update your source,
@@ -428,7 +428,7 @@ You can get the base doing:
 
 ::
 
-          git clone https://git@git.orfeo-toolbox.org/git/otb-data.git
+          git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git
 
 This is about 1 GB of data, so it will take a while, but you have to do
 it only once, as after, a simple

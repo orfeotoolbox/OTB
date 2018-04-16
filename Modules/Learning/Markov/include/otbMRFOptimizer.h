@@ -76,7 +76,7 @@ protected:
   MRFOptimizer() :
     m_NumberOfParameters(1),
     m_Parameters(1) {}
-  ~MRFOptimizer() ITK_OVERRIDE {}
+  ~MRFOptimizer() override {}
   unsigned int   m_NumberOfParameters;
   ParametersType m_Parameters;
 

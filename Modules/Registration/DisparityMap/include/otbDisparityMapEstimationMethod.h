@@ -184,15 +184,15 @@ protected:
   /**
    * Destructor.
    */
-  ~DisparityMapEstimationMethod() ITK_OVERRIDE;
+  ~DisparityMapEstimationMethod() override;
   /**
    * Standard PrintSelf method.
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Main computation method.
    */
-  void  GenerateData() ITK_OVERRIDE;
+  void  GenerateData() override;
 
 private:
   DisparityMapEstimationMethod(const Self &); //purposely not implemented

@@ -79,15 +79,15 @@ protected:
   /** Constructor */
   ClosingOpeningMorphologicalFilter();
   /** Destructor */
-  ~ClosingOpeningMorphologicalFilter() ITK_OVERRIDE {}
+  ~ClosingOpeningMorphologicalFilter() override {}
 
   /* void GenerateInputRequestedRegion(); */
   /*   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)); */
 
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ClosingOpeningMorphologicalFilter(const Self &); //purposely not implemented

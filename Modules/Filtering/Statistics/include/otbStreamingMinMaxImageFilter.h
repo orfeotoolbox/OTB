@@ -124,26 +124,26 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
-  void Reset(void) ITK_OVERRIDE;
+  void AllocateOutputs() override;
+  void GenerateOutputInformation() override;
+  void Synthetize(void) override;
+  void Reset(void) override;
 
 protected:
   PersistentMinMaxImageFilter();
-  ~PersistentMinMaxImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PersistentMinMaxImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType&
                              outputRegionForThread,
-                             itk::ThreadIdType threadId) ITK_OVERRIDE;
+                             itk::ThreadIdType threadId) override;
 
 private:
   PersistentMinMaxImageFilter(const Self &); //purposely not implemented
@@ -280,7 +280,7 @@ protected:
   /** Constructor */
   StreamingMinMaxImageFilter() {}
   /** Destructor */
-  ~StreamingMinMaxImageFilter() ITK_OVERRIDE {}
+  ~StreamingMinMaxImageFilter() override {}
 
 private:
   StreamingMinMaxImageFilter(const Self &); //purposely not implemented

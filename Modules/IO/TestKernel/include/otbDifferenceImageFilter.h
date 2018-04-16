@@ -91,9 +91,9 @@ public:
 
 protected:
   DifferenceImageFilter();
-  ~DifferenceImageFilter() ITK_OVERRIDE {}
+  ~DifferenceImageFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** DifferenceImageFilter can be implemented as a multithreaded
    * filter.  Therefore, this implementation provides a
@@ -107,11 +107,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& threadRegion,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
+  void AfterThreadedGenerateData() override;
+  void GenerateOutputInformation() override;
 
   ScalarRealType m_DifferenceThreshold;
   RealType       m_MeanDifference;

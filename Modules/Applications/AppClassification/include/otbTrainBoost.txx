@@ -61,16 +61,16 @@ namespace Wrapper
     SetParameterDescription("classifier.boost.t.gentle",
       "A modified version of the Real Adaboost algorithm, using Newton stepping "
       "rather than exact optimization at each step.");
-    SetParameterString("classifier.boost.t", "real", false);
+    SetParameterString("classifier.boost.t", "real");
     SetParameterDescription("classifier.boost.t", "Type of Boosting algorithm.");
     //Do not expose SplitCriteria
     //WeakCount
     AddParameter(ParameterType_Int, "classifier.boost.w", "Weak count");
-    SetParameterInt("classifier.boost.w",100, false);
+    SetParameterInt("classifier.boost.w",100);
     SetParameterDescription("classifier.boost.w","The number of weak classifiers.");
     //WeightTrimRate
     AddParameter(ParameterType_Float, "classifier.boost.r", "Weight Trim Rate");
-    SetParameterFloat("classifier.boost.r",0.95, false);
+    SetParameterFloat("classifier.boost.r",0.95);
     SetParameterDescription("classifier.boost.r",
       "A threshold between 0 and 1 used to save computational time. "
       "Samples with summary weight <= (1 - weight_trim_rate) do not participate in"
@@ -78,7 +78,7 @@ namespace Wrapper
       "functionality.");
     //MaxDepth : Not sure that this parameter has to be exposed.
     AddParameter(ParameterType_Int, "classifier.boost.m", "Maximum depth of the tree");
-    SetParameterInt("classifier.boost.m",1, false);
+    SetParameterInt("classifier.boost.m",1);
     SetParameterDescription("classifier.boost.m","Maximum depth of the tree.");
   }
 

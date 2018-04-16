@@ -88,7 +88,7 @@ public:
 
   typedef std::vector<PrecisionType>                  OutputType;
 
-  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
+  OutputType Evaluate( const DataNodeType& node ) const override;
 
   /** Set/Get methods */
   itkGetConstMacro(NDVIThreshold, PrecisionType);
@@ -117,8 +117,8 @@ public:
 
 protected:
   NDVIDataNodeFeatureFunction();
-  ~NDVIDataNodeFeatureFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~NDVIDataNodeFeatureFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   NDVIDataNodeFeatureFunction(const Self&); //purposely not implemented

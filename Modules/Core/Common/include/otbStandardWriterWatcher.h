@@ -87,22 +87,22 @@ public:
 protected:
 
   /** Callback method to show the ProgressEvent */
-  void ShowWriterProgress() ITK_OVERRIDE;
+  void ShowWriterProgress() override;
 
   /** Callback method to show the StartEvent */
-  void StartWriter() ITK_OVERRIDE;
+  void StartWriter() override;
 
   /** Callback method to show the EndEvent */
-  void EndWriter() ITK_OVERRIDE;
+  void EndWriter() override;
 
   /** Callback method to show the ProgressEvent */
-  void ShowFilterProgress() ITK_OVERRIDE;
+  void ShowFilterProgress() override;
 
   /** Callback method to show the StartEvent */
-  void StartFilter() ITK_OVERRIDE {}
+  void StartFilter() override {}
 
   /** Callback method to show the EndEvent */
-  void EndFilter() ITK_OVERRIDE {}
+  void EndFilter() override {}
 
   /** This is the method invoked by ShowFilterProgress() and ShowWriterProgress() */
   virtual void ShowProgress();

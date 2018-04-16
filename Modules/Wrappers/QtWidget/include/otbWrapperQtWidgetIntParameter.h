@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetIntParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
-  ~QtWidgetIntParameter() ITK_OVERRIDE;
+  ~QtWidgetIntParameter() override;
 
 protected slots:
   void SetValue( int value );
@@ -52,9 +52,9 @@ private:
   QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
   void operator=(const QtWidgetIntParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   QHBoxLayout *         m_QHBoxLayout;
   QSpinBox *            m_QSpinBox;

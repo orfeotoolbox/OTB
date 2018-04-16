@@ -69,7 +69,7 @@ public:
 
 protected:
    SimulationStep1Base(){};
-   ~SimulationStep1Base() ITK_OVERRIDE {}
+   ~SimulationStep1Base() override {}
 
 
 private:

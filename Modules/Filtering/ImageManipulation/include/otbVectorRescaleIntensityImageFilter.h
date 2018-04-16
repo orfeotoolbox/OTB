@@ -260,20 +260,20 @@ public:
   itkGetConstReferenceMacro(Gamma,double);
 
   /** Process to execute before entering the multithreaded section */
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+  void BeforeThreadedGenerateData(void) override;
 
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   /** Print internal ivars */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 protected:
   VectorRescaleIntensityImageFilter();
-  ~VectorRescaleIntensityImageFilter() ITK_OVERRIDE {}
+  ~VectorRescaleIntensityImageFilter() override {}
 
 private:
   VectorRescaleIntensityImageFilter(const Self &); //purposely not implemented

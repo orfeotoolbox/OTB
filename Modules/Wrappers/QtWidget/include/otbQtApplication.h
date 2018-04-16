@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtApplication : public QApplication
 public:
   QtApplication(int& argc, char** argv);
 
-  bool notify(QObject *object, QEvent* event) ITK_OVERRIDE;
+  bool notify(QObject *object, QEvent* event) override;
 
 signals:
 

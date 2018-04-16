@@ -166,19 +166,19 @@ protected:
   StereorectificationDisplacementFieldSource( void );
 
   /** Destructor */
-  ~StereorectificationDisplacementFieldSource( void ) ITK_OVERRIDE {};
+  ~StereorectificationDisplacementFieldSource( void ) override {};
 
   /** Generate output images information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Enlarge output requested region (no streaming) */
-  void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output)) ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output)) override;
 
   /** Compute the deformation field */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf( std::ostream& os, itk::Indent indent ) const ITK_OVERRIDE;
+  void PrintSelf( std::ostream& os, itk::Indent indent ) const override;
 
 private:
   StereorectificationDisplacementFieldSource( const Self& ); // purposely

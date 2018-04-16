@@ -22,8 +22,8 @@
 otb_fetch_module(OTBBioVars
   "Biophysical variable estimation from remote sensing imagery.
 A more detailed description can be found on the project website:
-http://tully.ups-tlse.fr/jordi/otb-bv
+https://gitlab.orfeo-toolbox.org/jinglada/otb-bv
 "
-  GIT_REPOSITORY http://tully.ups-tlse.fr/jordi/otb-bv.git
+  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/otb-bv.git
   GIT_TAG 0e56e487aebc4a493e25223960560e9ef0ca27ec
 )

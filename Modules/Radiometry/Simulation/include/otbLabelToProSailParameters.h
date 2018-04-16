@@ -86,11 +86,11 @@ public:
   // virtual const ParametersType & GetStep1Parameters();
   //virtual const ParametersType & GetStep2Parameters();
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
 protected:
    LabelToProSailParameters();
-   ~LabelToProSailParameters() ITK_OVERRIDE {}
+   ~LabelToProSailParameters() override {}
 
 
 private:

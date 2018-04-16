@@ -21,7 +21,9 @@
 #ifndef otbSharkUtils_h
 #define otbSharkUtils_h
 
-#include "itkMacro.h"
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -41,11 +43,13 @@ namespace Shark
 {
 template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<shark::RealVector> & output, unsigned int start, unsigned int size)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
 
   if(start+size>listSample->Size())
     {
-    itkGenericExceptionMacro(<<"Requested range ["<<start<<", "<<start+size<<"[ is out of bound for input list sample (range [0, "<<listSample->Size()<<"[");
+    std::out_of_range e_(std::string("otb::Shark::ListSampleRangeToSharkVector "
+      ": Requested range is out of list sample bounds"));
+    throw e_;
     }
   
   output.clear();
@@ -83,11 +87,13 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
 
 template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<unsigned int> & output, unsigned int start, unsigned int size)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
 
   if(start+size>listSample->Size())
     {
-    itkGenericExceptionMacro(<<"Requested range ["<<start<<", "<<start+size<<"[ is out of bound for input list sample (range [0, "<<listSample->Size()<<"[");
+    std::out_of_range e_(std::string("otb::Shark::ListSampleRangeToSharkVector "
+      ": Requested range is out of list sample bounds"));
+    throw e_;
     }
 
   output.clear();
@@ -113,14 +119,35 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
 
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<shark::RealVector> & output)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
   ListSampleRangeToSharkVector(listSample,output,0U,static_cast<unsigned int>(listSample->Size()));
 }
 
 template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<unsigned int> & output)
 {
-  assert(listSample != ITK_NULLPTR);
+  assert(listSample != nullptr);
   ListSampleRangeToSharkVector(listSample,output,0, static_cast<unsigned int>(listSample->Size()));
+}
+
+/** Shark assumes that labels are 0 ... (nbClasses-1). This function modifies the labels contained in the input vector and returns a vector with size = nbClasses which allows the translation from the normalised labels to the new ones oldLabel = dictionary[newLabel].
+*/
+template <typename T> void NormalizeLabelsAndGetDictionary(std::vector<T>& labels, 
+                                                           std::vector<T>& dictionary)
+{
+  std::unordered_map<T, T> dictMap;
+  T labelCount{0};
+  for(const auto& l : labels)
+    {
+    if(dictMap.find(l)==dictMap.end())
+      dictMap.insert({l, labelCount++});
+    }
+  dictionary.resize(labelCount);
+  for(auto& l : labels)
+    {
+    auto newLabel = dictMap[l];
+    dictionary[newLabel] = l;
+    l = newLabel;
+    }
 }
   
 }

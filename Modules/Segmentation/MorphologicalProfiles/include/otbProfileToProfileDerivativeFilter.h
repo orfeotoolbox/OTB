@@ -78,20 +78,20 @@ public:
 
   /** Generate output information for the ImageList and for each image
       in the list. */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Generate input requested region for each image in the list. */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
 protected:
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** Constructor */
   ProfileToProfileDerivativeFilter();
   /** Destructor */
-  ~ProfileToProfileDerivativeFilter() ITK_OVERRIDE {}
+  ~ProfileToProfileDerivativeFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ProfileToProfileDerivativeFilter(const Self &); //purposely not implemented

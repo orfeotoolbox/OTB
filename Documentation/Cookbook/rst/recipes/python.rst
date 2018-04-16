@@ -29,14 +29,14 @@ application, changing the algorithm at each iteration.
     import otbApplication
 
     # otbApplication.Registry can tell you what application are available
-    print "Available applications: "
-    print str( otbApplication.Registry.GetAvailableApplications() )
+    print('Available applications: ')
+    print (str( otbApplication.Registry.GetAvailableApplications()))
 
-    # Let's create the application with codename "Smoothing"
+    # Let's create the application  "Smoothing"
     app = otbApplication.Registry.CreateApplication("Smoothing")
 
-    # We print the keys of all its parameter
-    print app.GetParametersKeys()
+    # We print the keys of all its parameters
+    print (app.GetParametersKeys())
 
     # First, we set the input image filename
     app.SetParameterString("in", argv[1])
@@ -45,37 +45,47 @@ application, changing the algorithm at each iteration.
     # and can take 3 values: 'mean', 'gaussian', 'anidif'
     for type in ['mean', 'gaussian', 'anidif']:
 
-      print 'Running with ' + type + ' smoothing type'
+      print('Running with ' + type + ' smoothing type')
 
-      # Here we configure the smoothing algorithm
+      # Now we configure the smoothing algorithm
       app.SetParameterString("type", type)
 
-      # Set the output filename, using the algorithm to differentiate the outputs
+      # Set the output filename, using the algorithm type to differentiate the outputs
       app.SetParameterString("out", argv[2] + type + ".tif")
 
-      # This will execute the application and save the output file
+      # This will execute the application and save the output to argv[2]
       app.ExecuteAndWriteOutput()
+
+If you want to handle the parameters from a Python dictionary, you can use the
+functions *SetParameters()* and *GetParameters()*.
+
+.. code-block:: python
+
+    params = {"in":"myInput.tif", "type.mean.radius":4}
+    app.SetParameters(params)
+    params2 = app.GetParameters()
 
 Numpy array processing
 ----------------------
 
-Input and output images to any OTB application in the form of numpy array is now possible in OTB python wrapping.
-The python wrapping only exposes OTB ApplicationEngine module which allow to access existing C++ applications.
+Input and output images to any OTB application in the form of NumPy array is now possible in OTB Python wrapping.
+The Python wrapping only exposes OTB Application engine module (called *ApplicationEngine*) which allows to access existing C++ applications.
 Due to blissful nature of ApplicationEngine's loading mechanism no specific wrapping is required for each application.
 
-Numpy extension to Python wrapping allows data exchange to application as an array rather than a disk file.
-Ofcourse, it is possible to load an image from file and then convert to numpy array or just provide a file as earlier via
+NumPy extension to Python wrapping allows data exchange to application as an array rather than a disk file.
+Of course, it is possible to load an image from file and then convert it to NumPy
+array or just provide a file as explained in the previous section via
 Application.SetParameterString(...).
 
-This bridge that completes numpy and OTB makes it easy to plug OTB into any image processing chain via python code that uses
-GIS/Image processing tools such as GDAL, GRASS GIS, OSSIM that can deal with numpy.
+The bridge between NumPy and OTB makes it easy to plug OTB into any image processing chain via Python code that uses
+GIS/Image processing tools such as GDAL, GRASS GIS, OSSIM that can deal with NumPy.
 
-
-Below code reads an input image using python pillow (PIL) and convert it to numpy array. This numpy array is
-used an input to the application via *SetImageFromNumpyArray(...)* method.
-The application used in this example is ExtractROI. After extracting
-a small area the output image is taken as numpy array with *GetImageFromNumpyArray(...)* method thus avoid wiriting
-output to a temporary file.
+Below code reads an input image using Python Pillow library (fork of PIL) and convert it to
+NumPy array. The NumPy array is used as an input to the application via
+*SetImageFromNumpyArray(...)* method.  The application used in this example is
+ExtractROI. After extracting a small area the output image is taken as NumPy
+array with *GetImageFromNumpyArray(...)* method thus avoid writing output to a
+temporary file.
 
 ::
 
@@ -105,7 +115,7 @@ In-memory connection
 --------------------
 
 Applications are often use as parts of larger processing
-chains. Chaining applications currently requires to write/read back
+workflow. Chaining applications currently requires to write/read back
 images between applications, resulting in heavy I/O operations and a
 significant amount of time dedicated to writing temporary files.
 
@@ -118,9 +128,9 @@ images. The last application of the processing chain is responsible
 for writing the final result images.
 
 In-memory connection between applications is available both at the C++
-API level and using the  python bindings.
+API level and using the Python bindings.
 
-Here is a Python code sample connecting several applications together:
+Here is a Python code sample which connects several applications together:
 
 .. code-block:: python
 
@@ -163,11 +173,147 @@ implementation does not break it, for instance by using an internal
 writer to write intermediate data. In this case, execution should
 still be correct, but some intermediate data will be read or written.
 
+Interactions with OTB pipeline
+------------------------------
+
+[Since OTB 6.6]
+
+The application framework has been extended in order to provide ways to
+interact with the pipelines inside each application. It applies only to
+applications that use input or output images. Let's check what are the 
+functions added to the ``Application`` class. There are a lot of getter 
+functions:
+
++---------------------------------+---------------------------------------+
+| Function name                   | return value                          |
++=================================+=======================================+
+| ``GetImageOrigin(...)``         | origin of the image (physical position|
+|                                 | of the first pixel center)            |
++---------------------------------+---------------------------------------+
+| ``GetImageSpacing(...)``        | signed spacing of the image           |
++---------------------------------+---------------------------------------+
+| ``GetImageSize(...)``           | size of the LargestPossibleRegion     |
++---------------------------------+---------------------------------------+
+| ``GetImageNbBands(...)``        | number of components per pixel        |
++---------------------------------+---------------------------------------+
+| ``GetImageProjection(...)``     | Projection WKT string                 |
++---------------------------------+---------------------------------------+
+| ``GetImageKeywordlist(...)``    | Ossim keywordlist (sensor model)      |
++---------------------------------+---------------------------------------+
+| ``GetImageMetaData(...)``       | the entire MetaDataDictionary         |
++---------------------------------+---------------------------------------+
+| ``GetImageRequestedRegion(...)``| requested region                      |
++---------------------------------+---------------------------------------+
+| ``GetImageBasePixelType(...)``  | pixel type of the underlying          |
+|                                 | Image/VectorImage.                    |
++---------------------------------+---------------------------------------+
+
+All these getters functions use the following arguments:
+
+* ``key``: a string containing the key of the image parameter
+* ``idx``: an optional index (default is 0) that can be used to access ImageList
+  parameters transparently
+
+There is also a function to send orders to the pipeline:
+
+  ``PropagateRequestedRegion(key, region, idx=0)``: sets a given RequestedRegion
+  on the image and propagate it, returns the memory print estimation. This function
+  can be used to measure the requested portion of input images necessary to produce
+  an extract of the full output.
+
+Note: a requested region (like other regions in the C++ API of otb::Image) is 
+just a pair of an image index and a size, that define a rectangular extract of
+the full image.
+
+This set of function has been used to enhance the bridge between OTB images
+and Numpy arrays. There are now import and export functions available in
+Python that preserve the metadata of the image during conversions to Numpy
+arrays:
+
+* ``ExportImage(self, key)``: exports an output image parameter into a Python
+  dictionary.
+* ``ImportImage(self, key, dict, index=0)``: imports the image from a Python
+  dictionary into an image parameter (as a monoband image).
+* ``ImportVectorImage(self, key, dict, index=0)``: imports the image from a
+  Python dictionary into an image parameter (as a multiband image).
+
+The Python dictionary used has the following entries:
+
+  * ``'array'``: the Numpy array containing the pixel buffer
+  * ``'origin'``: origin of the image
+  * ``'spacing'``: signed spacing of the image
+  * ``'size'``: full size of the image
+  * ``'region'``: region of the image present in the buffer
+  * ``'metadata'``: metadata dictionary (contains projection, sensor model,...)
+
+Now some basic Q&A about this interface:
+
+    Q: What portion of the image is exported to Numpy array?
+    A: By default, the whole image is exported. If you had a non-empty requested
+    region (the result of calling PropagateRequestedRegion()), then this region
+    is exported.
+    
+    Q: What is the difference between ImportImage and ImportVectorImage?
+    A: The first one is here for Applications that expect a monoband otb::Image.
+    In most cases, you will use the second one: ImportVectorImage.
+    
+    Q: What kind of object are there in this dictionary export?
+    A: The array is a numpy.ndarray. The other fields are wrapped
+    objects from the OTB library but you can interact with them in a
+    Python way: they support ``len()`` and ``str()`` operator, as well as 
+    bracket operator ``[]``. Some of them also have a ``keys()`` function just like
+    dictionaries.
+    
+This interface allows you to export OTB images (or extracts) to Numpy array,
+process them  by other means, and re-import them with preserved metadatas. Please
+note that this is different from an in-memory connection.
+
+Here is a small example of what can be done:
+
+.. code-block:: python
+
+  import otbApplication as otb
+  
+  # Create a smoothing application
+  app = otb.Registry.CreateApplication("Smoothing")
+  app.SetParameterString("in",argv[1])
+  
+  # only call Execute() to setup the pipeline, not ExecuteAndWriteOutput() which would
+  # run it and write the output image
+  app.Execute()
+
+  # Setup a special requested region
+  myRegion = otb.itkRegion()
+  myRegion['size'][0] = 20
+  myRegion['size'][1] = 25
+  myRegion['index'].Fill(10)
+  ram = app.PropagateRequestedRegion("out",myRegion)
+  
+  # Check the requested region on the input image
+  print(app.GetImageRequestedRegion("in"))
+  
+  # Create a ReadImageInfo application
+  app2 = otb.Registry.CreateApplication("ReadImageInfo")
+  
+  # export "out" from Smoothing and import it as "in" in ReadImageInfo
+  ex = app.ExportImage("out")
+  app2.ImportVectorImage("in", ex)
+  app2.Execute()
+  
+  # Check the result of ReadImageInfo
+  someKeys = ['sizex', 'sizey', 'spacingx', 'spacingy', 'sensor', 'projectionref']
+  for key in someKeys:
+    print(key + ' : ' + str(app2.GetParameterValue(key)))
+  
+  # Only a portion of "out" was exported but ReadImageInfo is still able to detect the 
+  # correct full size of the image
+
+
 Corner cases
 ------------
 
 There are a few corner cases to be aware of when using Python wrappers. They are
-often limitations, that one day may be solved by future developments. If it
+often limitations, that one day may be solved in future versions. If it
 happens, this documentation will report the OTB version that fixes the issue.
 
 Calling UpdateParameters()
@@ -211,30 +357,34 @@ setting the ``field`` parameter:
     app.UpdateParameters()
     app.SetParameterString("field", "label")
 
-No metadata in Numpy arrays
+No metadata in NumPy arrays
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With the Numpy module, it is possible to convert images between OTB and Numpy
-arrays. For instance, when converting from OTB to Numpy array:
+With the NumPy module, it is possible to convert images between OTB and NumPy
+arrays. For instance, when converting from OTB to NumPy array:
 
 * An ``Update()`` of the underlying ``otb::VectorImage`` is requested. Be aware
   that the full image is generated.
 * The pixel buffer is copied into a ``numpy.array``
 
 As you can see, there is no export of the metadata, such as origin, spacing,
-projection WKT. It means that if you want to import back a Numpy array into OTB,
+geographic projection. It means that if you want to import back a NumPy array into OTB,
 the image won't have any of these metadata. It can be a problem for applications
 doing geometry, projections, and also calibration.
 
 Future developments will probably offer a more adapted structure to import and
-export images between OTB and Python world.
+export images between OTB and the Python world.
 
-Setting of boolean parameters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Setting of EmptyParameter
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Most of the parameters are set using functions ``SetParameterXXX()``. The boolean
-parameters are handled differently (also called Empty parameter). Let's take an example with the application
-``ReadImageInfo``:
+Most of the parameters are set using functions ``SetParameterXXX()``, except for
+one type of parameter: the ``EmptyParameter``. This class was the first
+implementation of a boolean. It is now **deprecated**, you should use ``BoolParameter``
+instead.
+
+Let's take an example with the application ``ReadImageInfo`` when it was still
+using an ``EmptyParameter`` for parameter ``keywordlist``:
 
 .. code-block:: python
 
@@ -247,7 +397,7 @@ If you want the get the state of parameter ``keywordlist``, a boolean, use:
 
     app.IsParameterEnabled("keywordlist")
 
-To set this parameter ON / OFF, use the functions:
+To set this parameter ON/OFF, use the functions:
 
 .. code-block:: python
 

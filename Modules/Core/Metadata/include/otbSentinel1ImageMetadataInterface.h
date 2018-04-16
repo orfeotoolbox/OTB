@@ -59,40 +59,40 @@ public:
   typedef Superclass::LookupDataPointerType LookupDataPointerType;
 
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay() const ITK_OVERRIDE;
+  int GetProductionDay() const override;
 
   /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth() const ITK_OVERRIDE;
+  int GetProductionMonth() const override;
 
   /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear() const ITK_OVERRIDE;
+  int GetProductionYear() const override;
 
   /** check sensor ID */
-  bool CanRead() const ITK_OVERRIDE;
+  bool CanRead() const override;
 
-  int GetDay() const ITK_OVERRIDE;
+  int GetDay() const override;
 
-  int GetMonth() const ITK_OVERRIDE;
+  int GetMonth() const override;
 
-  int GetYear() const ITK_OVERRIDE;
+  int GetYear() const override;
 
-  int GetHour() const ITK_OVERRIDE;
+  int GetHour() const override;
 
-  int GetMinute() const ITK_OVERRIDE;
+  int GetMinute() const override;
 
-  UIntVectorType GetDefaultDisplay() const ITK_OVERRIDE;
+  UIntVectorType GetDefaultDisplay() const override;
 
   /*SarImageMetadataInterface pure virutals rituals */
-  double GetPRF() const ITK_OVERRIDE;
+  double GetPRF() const override;
 
-  double GetRSF() const ITK_OVERRIDE;
+  double GetRSF() const override;
 
-  double GetRadarFrequency() const ITK_OVERRIDE;
+  double GetRadarFrequency() const override;
 
-  double GetCenterIncidenceAngle() const ITK_OVERRIDE;
+  double GetCenterIncidenceAngle() const override;
 
   /*get lookup data for calculating backscatter */
-  void CreateCalibrationLookupData(const short type) ITK_OVERRIDE;
+  void CreateCalibrationLookupData(const short type) override;
 
 protected:
 
@@ -100,7 +100,7 @@ protected:
   Sentinel1ImageMetadataInterface();
 
   /* class dtor */
-  ~Sentinel1ImageMetadataInterface() ITK_OVERRIDE {}
+  ~Sentinel1ImageMetadataInterface() override {}
 
 private:
 
@@ -159,7 +159,7 @@ public:
   {
   }
 
-  ~Sentinel1CalibrationLookupData() ITK_OVERRIDE
+  ~Sentinel1CalibrationLookupData() override
   {
   }
 
@@ -176,7 +176,7 @@ public:
     lineTimeInterval = (lt - ft) / ((lines - 1) * 1.0);
   }
 
-  double GetValue(const IndexValueType x, const IndexValueType y) const ITK_OVERRIDE
+  double GetValue(const IndexValueType x, const IndexValueType y) const override
   {
     const int calVecIdx = GetVectorIndex(y);
     assert(calVecIdx>=0 && calVecIdx < count-1);

@@ -210,29 +210,29 @@ protected:
   SubPixelDisparityImageFilter();
 
   /** Destructor */
-  ~SubPixelDisparityImageFilter() ITK_OVERRIDE;
+  ~SubPixelDisparityImageFilter() override;
 
   /** \brief Verify that the input images are compatible
    *
    * This method needs to be re-implemented from ImageToImageFilter since
    * the initial images and disparity maps may not have the same size
    */
-  void VerifyInputInformation() ITK_OVERRIDE;
+  void VerifyInputInformation() override;
   
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Before threaded generate data */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** After threaded generate data */
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
 private:
   SubPixelDisparityImageFilter(const Self&); //purposely not implemented

@@ -31,6 +31,8 @@ namespace Wrapper
 /** \class EmptyParameter
  *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
  *
+ * \deprecated in OTB 6.6, use BoolParameter instead
+ *
  * \ingroup OTBApplicationEngine
  */
 class OTBApplicationEngine_EXPORT EmptyParameter
@@ -50,12 +52,12 @@ public:
   itkTypeMacro(EmptyParameter, Parameter);
 
   /** HasValue */
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return false;
   }
 
-  bool HasUserValue() const ITK_OVERRIDE
+  bool HasUserValue() const override
   {
     return this->m_UserValue;
   }
@@ -69,7 +71,7 @@ protected:
   }
 
   /** Destructor */
-  ~EmptyParameter() ITK_OVERRIDE
+  ~EmptyParameter() override
   {}
 
 private:

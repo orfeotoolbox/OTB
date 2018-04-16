@@ -428,12 +428,12 @@ public:
 
 protected:
   ImageSeriesFileReader();
-  ~ImageSeriesFileReader () ITK_OVERRIDE {}
+  ~ImageSeriesFileReader () override {}
 
   /**
    * Tests the coherency of the Meta File (especifically band selection) with the image types
    */
-  void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) ITK_OVERRIDE{}
+  void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) override{}
 
   /** GenerateData
    * This method will be specialised if template definitions follow:
@@ -441,7 +441,7 @@ protected:
    * - TImage is an Image and TInteranalImage is a VectorImage
    * - TImage and TInternalImage are of Image type.
    */
-  void GenerateData(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  void GenerateData(DataObjectPointerArraySizeType idx) override;
   using Superclass::GenerateData;
 
   /**
@@ -449,10 +449,10 @@ protected:
    * This allows specific (or global) initialization in the GenerateData methods,
    * that the user may invoke through GenerateOutput() or GenerateOutput( idx ).
    */
-  void AllocateListOfComponents(void) ITK_OVERRIDE;
+  void AllocateListOfComponents(void) override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     return Superclass::PrintSelf(os, indent);
   }

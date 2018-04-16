@@ -88,7 +88,7 @@ public:
   itkTypeMacro(HyperspectralUnmixing, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("HyperspectralUnmixing");
     SetDescription("Estimate abundance maps from an hyperspectral image and a set of endmembers.");
@@ -144,7 +144,7 @@ private:
 
     AddChoice("ua.mdmdnmf", "MDMDNMF");
     SetParameterDescription("ua.mdmdnmf", "Minimum Dispersion Constrained Non Negative Matrix Factorization");
-    SetParameterString("ua", "ucls", false);
+    SetParameterString("ua", "ucls");
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("ie", "cupriteEndmembers.tif");
@@ -154,12 +154,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     m_ProcessObjects.clear();
 

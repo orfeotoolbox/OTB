@@ -67,7 +67,7 @@ public:
 
 protected:
   EllipsoidAdapter();
-  ~EllipsoidAdapter() ITK_OVERRIDE;
+  ~EllipsoidAdapter() override;
 
 private:
   EllipsoidAdapter(const Self &); //purposely not implemented

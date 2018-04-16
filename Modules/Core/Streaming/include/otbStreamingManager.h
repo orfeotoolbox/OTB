@@ -67,12 +67,15 @@ public:
   typedef typename ImageType::InternalPixelType PixelType;
 
   typedef otb::PipelineMemoryPrintCalculator::MemoryPrintType MemoryPrintType;
+  typedef itk::ImageRegionSplitterBase          AbstractSplitterType;
 
   /** Type macro */
   itkTypeMacro(StreamingManager, itk::LightObject);
 
   /** Dimension of input image. */
   itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
+
+  const AbstractSplitterType * GetSplitter() const;
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
@@ -88,9 +91,12 @@ public:
    * GetNumberOfSplits() returns. */
   virtual RegionType GetSplit(unsigned int i);
 
+  itkSetMacro(DefaultRAM, MemoryPrintType);
+  itkGetMacro(DefaultRAM, MemoryPrintType);
+
 protected:
   StreamingManager();
-  ~StreamingManager() ITK_OVERRIDE;
+  ~StreamingManager() override;
 
   virtual unsigned int EstimateOptimalNumberOfDivisions(itk::DataObject * input, const RegionType &region,
                                                         MemoryPrintType availableRAMInMB,
@@ -103,7 +109,6 @@ protected:
   RegionType m_Region;
 
   /** The splitter used to compute the different strips */
-  typedef itk::ImageRegionSplitterBase           AbstractSplitterType;
   typedef typename AbstractSplitterType::Pointer AbstractSplitterPointerType;
   AbstractSplitterPointerType m_Splitter;
 
@@ -111,11 +116,13 @@ private:
   StreamingManager(const StreamingManager &); //purposely not implemented
   void operator =(const StreamingManager&);   //purposely not implemented
 
-  /* Compute the available RAM from configuration settings if the input parameter is 0,
-   * otherwise, simply returns the input parameter */
+  /** Compute the available RAM in Bytes from an input value in MByte.
+   *  If the input value is 0, it uses the m_DefaultRAM value.
+   *  If m_DefaultRAM is also 0, it uses the configuration settings */
   MemoryPrintType GetActualAvailableRAMInBytes(MemoryPrintType availableRAMInMB);
 
-
+  /** Default available RAM in MB */
+  MemoryPrintType m_DefaultRAM;
 };
 
 } // End namespace otb

@@ -87,7 +87,7 @@ protected:
   LineOfSightOptimizer();
 
   /** Destructor */
-  ~LineOfSightOptimizer() ITK_OVERRIDE{};
+  ~LineOfSightOptimizer() override{};
 
 
 private:

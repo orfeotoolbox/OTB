@@ -78,17 +78,17 @@ public:
   RealType;
 
   /** Evalulate the function at specified index */
-  RealType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
+  RealType EvaluateAtIndex(const IndexType& index) const override;
 
   /** Evaluate the function at non-integer positions */
-  RealType Evaluate(const PointType& point) const ITK_OVERRIDE
+  RealType Evaluate(const PointType& point) const override
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
   RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const ITK_OVERRIDE
+    const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -107,8 +107,8 @@ public:
 
 protected:
   BinaryImageDensityFunction();
-  ~BinaryImageDensityFunction() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~BinaryImageDensityFunction() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   BinaryImageDensityFunction(const Self &);  //purposely not implemented

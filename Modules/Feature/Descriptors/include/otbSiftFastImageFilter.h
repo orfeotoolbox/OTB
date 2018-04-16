@@ -91,16 +91,16 @@ public:
 
 protected:
   /** Actually process the input */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Constructor */
   SiftFastImageFilter();
 
   /** Destructor */
-  ~SiftFastImageFilter() ITK_OVERRIDE {}
+  ~SiftFastImageFilter() override {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** The number of scales */

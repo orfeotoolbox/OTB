@@ -137,12 +137,12 @@ public:
   /** Constructor */
   AtmosphericCorrectionParameters();
   /** Destructor */
-  ~AtmosphericCorrectionParameters() ITK_OVERRIDE {}
+  ~AtmosphericCorrectionParameters() override {}
 
 protected:
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   AtmosphericCorrectionParameters(const Self &); //purposely not implemented
