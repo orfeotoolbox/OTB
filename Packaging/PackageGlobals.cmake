@@ -43,30 +43,30 @@ elseif(APPLE)
 endif()
 
 set(WINDOWS_SYSTEM_DLLS
-  user32.dll
-  gdi32.dll
-  shell32.dll
-  kernel32.dll
-  ws2_32.dll
-  wldap32.dll
-  ole32.dll
-  comdlg32.dll
-  shfolder.dll
-  secur32.dll
-  wsock32.dll
   advapi32.dll
+  comdlg32.dll
   crypt32.dll
-  imm32.dll
-  oleaut32.dll
-  winmm.dll
-  opengl32.dll
+  gdi32.dll
   glu32.dll
-  rpcrt4.dll
-  winspool.drv
+  imm32.dll
+  kernel32.dll
   normaliz.dll
   odbc32.dll
+  ole32.dll
+  oleaut32.dll
+  opengl32.dll
   psapi.dll
   python...dll
+  rpcrt4.dll
+  secur32.dll
+  shell32.dll
+  shfolder.dll
+  user32.dll
+  winmm.dll
+  winspool.drv
+  wldap32.dll
+  ws2_32.dll
+  wsock32.dll
   )
 
 set(LINUX_SYSTEM_DLLS
