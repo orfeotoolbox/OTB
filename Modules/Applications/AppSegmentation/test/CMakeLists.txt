@@ -313,30 +313,29 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
 otb_test_application(NAME     apTvLargeScaleConnectedComponentMinSize
                      APP      LargeScaleConnectedComponent
                      OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
-                              -out ${TEMP}/LargeScaleConnectedComponent.shp
+                              -out ${TEMP}/LargeScaleConnectedComponentMinSize.sqlite
                               -expr "distance<10"
                               -filter "nbpixels<10"
                               -mask "b1>15"
                               -minsize 40
                               -fusion 1
                      VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
-                              ${TEMP}/LargeScaleConnectedComponent.shp                       
+                              ${BASELINE_FILES}/LargeScaleConnectedComponentMinSize.sqlite
+                              ${TEMP}/LargeScaleConnectedComponentMinSize.sqlite                       
                      )
 
-#----------- LargeScaleConnectedComponent with minsize TESTS ----
+#----------- LargeScaleConnectedComponent 
 otb_test_application(NAME     apTvLargeScaleConnectedComponent
                      APP      LargeScaleConnectedComponent
                      OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
-                              -out ${TEMP}/LargeScaleConnectedComponent.shp
-                              -expr "distance<10"
-                              -filter "nbpixels<10"
-                              -mask "b1>15"
-                              -minsize 40
+                              -out ${TEMP}/LargeScaleConnectedComponent.sqlite
+                              -expr "distance<100"
+                              -filter "nbpixels<15"
+                              -mask "b1>200"
                               -fusion 1
                      VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
-                              ${TEMP}/LargeScaleConnectedComponent.shp                       
+                              ${BASELINE_FILES}/LargeScaleConnectedComponent.sqlite
+                              ${TEMP}/LargeScaleConnectedComponent.sqlite                      
                      )
                      
                      
@@ -366,26 +365,33 @@ otb_test_application(NAME     apTvLabelImageVectorization
 #----------- ComputePolygonsGeometricFeatures TESTS -----------
 otb_test_application(NAME     apTvComputePolygonsGeometricFeatures
                      APP      ComputePolygonsGeometricFeatures
-                     OPTIONS  -in ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
-                              -sizefield size 
-                              -perimeterfield perimeter
-                              
+                     OPTIONS  -in ${BASELINE_FILES}/apTvLabelImageVectorization.sqlite
+                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.sqlite
+                              -sizefield "size"
+                              -perimeterfield "perimeter"
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvComputePolygonsGeometricFeatures.sqlite
+                              ${TEMP}/apTvComputePolygonsGeometricFeatures.sqlite
                      )
 
 
 #----------- ComputePolygonsSpectralFeatures TESTS -----------
 otb_test_application(NAME     apTvComputePolygonsSpectralFeatures
                      APP      ComputePolygonsSpectralFeatures
-                     OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho.tif
-                              -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -out ${TEMP}/apTvComputePolygonsSpectralFeatures.shp
+                     OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
+                              -vec ${BASELINE_FILES}/apTvComputePolygonsGeometricFeatures.sqlite
+                              -out ${TEMP}//apTvComputePolygonsSpectralFeatures.sqlite
+                              VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}//apTvComputePolygonsSpectralFeatures.sqlite
+                              ${TEMP}//apTvComputePolygonsSpectralFeatures.sqlite
                      )
 
 #----------- ObjectBasedFiltering TESTS -----------
 otb_test_application(NAME     apTvObjectBasedFiltering
                      APP      ObjectBasedFiltering
-                     OPTIONS  -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -expr "class < 3"
-                              -out ${TEMP}/apTvObjectBasedFiltering.shp
+                     OPTIONS  -vec ${BASELINE_FILES}/apTvComputePolygonsSpectralFeatures.sqlite
+                              -expr "nbpixels <15"
+                              -out ${TEMP}//apTvObjectBasedFiltering.sqlite
+                              ${BASELINE_FILES}/apTvObjectBasedFiltering.sqlite
+                              ${TEMP}/apTvObjectBasedFiltering.sqlite
                      )
