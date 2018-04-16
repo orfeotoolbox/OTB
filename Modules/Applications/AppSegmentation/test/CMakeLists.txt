@@ -309,32 +309,58 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                               ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
                      )
                      
-#----------- LargeScaleConnectedComponent TESTS ----
+#----------- LargeScaleConnectedComponent with minsize TESTS ----
 otb_test_application(NAME     apTvLargeScaleConnectedComponent
-                     APP      LargeScaleConnectedComponent.cxx
+                     APP      LargeScaleConnectedComponent
                      OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
                               -out ${TEMP}/LargeScaleConnectedComponent.shp
                               -expr "distance<10"
                               -filter "nbpixels<10"
                               -mask "b1>15"
+                              -minsize 40
+                              -fusion 1
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
+                              ${TEMP}/LargeScaleConnectedComponent.shp                       
                      )
+
+#----------- LargeScaleConnectedComponent with minsize TESTS ----
+otb_test_application(NAME     apTvLargeScaleConnectedComponent
+                     APP      LargeScaleConnectedComponent
+                     OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
+                              -out ${TEMP}/LargeScaleConnectedComponent.shp
+                              -expr "distance<10"
+                              -filter "nbpixels<10"
+                              -mask "b1>15"
+                              -minsize 40
+                              -fusion 1
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
+                              ${TEMP}/LargeScaleConnectedComponent.shp                       
+                     )
+                     
                      
 #----------- ImageConnectedComponentSegmentation TESTS ----
 otb_test_application(NAME     apTvImageConnectedComponentSegmentation
                      APP      ImageConnectedComponentSegmentation
                      OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
                               -out ${TEMP}/apTvImageConnectedComponentSegmentation.tif
-                              -expr "distance<10"
-                              -mask "b1>15"
+                              -expr "distance<100"
+                              -mask "b1>250"
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvImageConnectedComponentSegmentation.tif
+                              ${TEMP}/apTvImageConnectedComponentSegmentation.tif    
                      )
 
 #----------- LabelImageVectorization TESTS -----------
 otb_test_application(NAME     apTvLabelImageVectorization
                      APP      LabelImageVectorization
-                     OPTIONS  -in ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
-                              -out ${TEMP}/apTvLabelImageVectorization.shp
-                              -expr "distance<10"
-                              -mask "b1>15"
+                     OPTIONS  -in ${BASELINE_FILES}/apTvImageConnectedComponentSegmentation.tif
+                              -out ${TEMP}/apTvLabelImageVectorization.sqlite
+                              -fusion 1
+                    VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLabelImageVectorization.sqlite
+                              ${TEMP}/apTvLabelImageVectorization.sqlite
                      )
 
 #----------- ComputePolygonsGeometricFeatures TESTS -----------
@@ -342,6 +368,9 @@ otb_test_application(NAME     apTvComputePolygonsGeometricFeatures
                      APP      ComputePolygonsGeometricFeatures
                      OPTIONS  -in ${INPUTDATA}/Classification/VectorData_QB1.shp
                               -out ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
+                              -sizefield size 
+                              -perimeterfield perimeter
+                              
                      )
 
 
@@ -350,7 +379,7 @@ otb_test_application(NAME     apTvComputePolygonsSpectralFeatures
                      APP      ComputePolygonsSpectralFeatures
                      OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho.tif
                               -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
-                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
+                              -out ${TEMP}/apTvComputePolygonsSpectralFeatures.shp
                      )
 
 #----------- ObjectBasedFiltering TESTS -----------

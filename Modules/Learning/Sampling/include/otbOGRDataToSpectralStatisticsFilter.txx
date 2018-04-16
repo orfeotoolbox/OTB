@@ -209,14 +209,10 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     }
     
   }
-  // initialize additional fields for output
-  //this->InitializeFields();
 
   // initialize output DataSource
   ogr::DataSource* inputDS = const_cast<ogr::DataSource*>(this->GetOGRData());
   ogr::DataSource* output  = this->GetOutputSamples();
-  
-  //this->InitializeOutputDataSource(inputDS,output);
   
   auto outLayer = output->GetLayer(0);
   auto inLayer = inputDS->GetLayer(0);
@@ -235,7 +231,9 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     int fid = itMeanout->first;
     //auto outFeat = inLayer.GetFeature(fid);
     ogr::Feature outFeat(outLayer.GetLayerDefn());
+    outFeat.SetGeometry( inLayer.GetFeature(fid).GetGeometry());
     outFeat.SetFrom( inLayer.GetFeature(fid), TRUE );
+    outFeat.SetFID(fid);
     outFeat["nbpixels"].SetValue<int>(itSizeout->second);
     for (unsigned int i =0; i < numberOfComponents ; i++)
     {
@@ -250,7 +248,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
         outFeat["cov_"+std::to_string(r)+"_"+std::to_string(c)].SetValue<double>(itCovout->second[r][c]);
       }
     } 
-    outLayer.CreateFeature(outFeat);
+    outLayer.SetFeature(outFeat);
   }
   
   
