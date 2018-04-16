@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetRAMParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*);
-  ~QtWidgetRAMParameter() ITK_OVERRIDE;
+  ~QtWidgetRAMParameter() override;
 
 protected slots:
   void SetValue( int value );
@@ -52,9 +52,9 @@ private:
   QtWidgetRAMParameter(const QtWidgetRAMParameter&); //purposely not implemented
   void operator=(const QtWidgetRAMParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   QHBoxLayout *         m_QHBoxLayout;
   QSpinBox *            m_QSpinBox;

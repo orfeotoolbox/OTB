@@ -263,9 +263,10 @@ otb_add_test(NAME feTvFourierMellinDescriptors COMMAND otbDescriptorsTestDriver
   )
 
 otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterDistanceMap COMMAND otbDescriptorsTestDriver
-  --compare-ascii ${EPSILON_3}
+  --compare-ascii ${EPSILON_3} 
   ${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
   ${TEMP}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
+  --ignore-lines-with 2 INFO DEBUG
   otbImageToSIFTKeyPointSetFilterDistanceMap
   ${INPUTDATA}/scene.png
   6 3 0.08 10.0

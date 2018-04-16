@@ -58,7 +58,7 @@ public:
                                  FloatVectorImageType>              ShrinkFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("MultiResolutionPyramid");
     SetDescription("Build a multi-resolution pyramid of the image.");
@@ -96,12 +96,11 @@ private:
     SetParameterDescription( "vfactor", "Variance factor use in smoothing. It is multiplied by the subsampling factor of each level in the  pyramid (default is 0.6).");
 
     // Boolean Fast scheme
-    AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");
+    AddParameter(ParameterType_Bool, "fast", "Use Fast Scheme");
     std::ostringstream desc;
     desc<<"If used, this option allows one to speed-up computation by iteratively"
         <<" subsampling previous level of pyramid instead of processing the full input.";
     SetParameterDescription("fast", desc.str());
-    MandatoryOff("fast");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
@@ -114,14 +113,14 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
 
     // Reinitialize the internal process used
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Initializing the process
     m_SmoothingFilter =  SmoothingVectorImageFilterType::New();
@@ -132,7 +131,7 @@ private:
     unsigned int shrinkFactor = GetParameterInt("sfactor");
     double varianceFactor     = GetParameterFloat("vfactor");
 
-    bool fastScheme = IsParameterEnabled("fast");
+    bool fastScheme = GetParameterInt("fast");
 
     // Get the input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

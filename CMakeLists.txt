@@ -231,10 +231,6 @@ mark_as_advanced(OTB_USE_DEPRECATED)
 
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
-#-----------------------------------------------------------------------------
-# SHOW_ALL_MSG_DEBUG option
-option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
-#mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------

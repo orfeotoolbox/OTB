@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetComplexInputImageParameter : public QtWidgetPar
   Q_OBJECT
 public:
   QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*);
-  ~QtWidgetComplexInputImageParameter() ITK_OVERRIDE;
+  ~QtWidgetComplexInputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -56,9 +56,9 @@ private:
   QtWidgetComplexInputImageParameter(const QtWidgetComplexInputImageParameter&); //purposely not implemented
   void operator=(const QtWidgetComplexInputImageParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
 
   ComplexInputImageParameter::Pointer m_ComplexInputImageParam;

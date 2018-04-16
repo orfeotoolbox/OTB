@@ -83,9 +83,9 @@ public:
 
 protected:
   VectorDataSource();
-  ~VectorDataSource() ITK_OVERRIDE;
+  ~VectorDataSource() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Ensure that the output vector data are cleared before processing */
   virtual void  AllocateOutputs();

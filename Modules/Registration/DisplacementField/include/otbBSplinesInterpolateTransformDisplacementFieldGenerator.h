@@ -106,13 +106,13 @@ protected:
   /** Constructor */
   BSplinesInterpolateTransformDisplacementFieldGenerator();
   /** Destructor */
-  ~BSplinesInterpolateTransformDisplacementFieldGenerator() ITK_OVERRIDE {}
+  ~BSplinesInterpolateTransformDisplacementFieldGenerator() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /**
    * Test whether a parameter is angular or not.

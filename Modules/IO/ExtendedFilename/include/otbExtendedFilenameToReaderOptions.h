@@ -79,7 +79,7 @@ public:
   };
 
   /* Set Methods */
-  void SetExtendedFileName(const char * extFname) ITK_OVERRIDE;
+  void SetExtendedFileName(const char * extFname) override;
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
   bool ExtGEOMFileNameIsSet () const;
@@ -101,7 +101,7 @@ public:
 
 protected:
   ExtendedFilenameToReaderOptions();
-  ~ExtendedFilenameToReaderOptions() ITK_OVERRIDE {}
+  ~ExtendedFilenameToReaderOptions() override {}
 
 private:
   ExtendedFilenameToReaderOptions(const Self &);  //purposely not implemented

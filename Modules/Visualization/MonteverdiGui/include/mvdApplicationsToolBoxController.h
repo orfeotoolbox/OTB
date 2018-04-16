@@ -105,7 +105,7 @@ public:
   /**
    * \brief Destructor.
    */
-  ~ApplicationsToolBoxController() ITK_OVERRIDE;
+  ~ApplicationsToolBoxController() override;
 
   /** Get the seleceted application Gui */
   // QWidget * GetSelectedApplicationWidget(const QString& appName);
@@ -126,13 +126,13 @@ protected:
   //
   // AbstractModelController methods.
 
-  void Connect( AbstractModel* ) ITK_OVERRIDE;
+  void Connect( AbstractModel* ) override;
 
-  void ClearWidget() ITK_OVERRIDE;
+  void ClearWidget() override;
 
-  void virtual_ResetWidget( bool ) ITK_OVERRIDE;
+  void virtual_ResetWidget( bool ) override;
 
-  void Disconnect( AbstractModel* ) ITK_OVERRIDE;
+  void Disconnect( AbstractModel* ) override;
 
 //
 // Protected attributes.

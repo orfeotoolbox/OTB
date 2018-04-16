@@ -77,7 +77,7 @@ public:
   AboutDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
-  ~AboutDialog() ITK_OVERRIDE;
+  ~AboutDialog() override;
 
 //
 // SIGNALS.

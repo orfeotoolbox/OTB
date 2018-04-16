@@ -42,7 +42,7 @@ class OTBQtWidget_EXPORT QtWidgetStringParameter : public QtWidgetParameterBase
   Q_OBJECT
 public:
   QtWidgetStringParameter(StringParameter*, QtWidgetModel*);
-  ~QtWidgetStringParameter() ITK_OVERRIDE;
+  ~QtWidgetStringParameter() override;
 
 protected slots:
   void SetValue( const QString& value );
@@ -51,9 +51,9 @@ private:
   QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented
   void operator=(const QtWidgetStringParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   StringParameter::Pointer m_StringParam;
   QHBoxLayout *            m_HLayout;

@@ -96,7 +96,7 @@ class AtmosphericEffects
            /** Constructor from a ASCII file */
            //AtmosphericEffects( const std::string & filename );
            /** Destructor */
-           ~AtmosphericEffects() ITK_OVERRIDE {};
+           ~AtmosphericEffects() override {};
            /** PrintSelf method */
            //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

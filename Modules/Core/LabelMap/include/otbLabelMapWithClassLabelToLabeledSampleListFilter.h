@@ -100,14 +100,14 @@ public:
 
 protected:
   LabelMapWithClassLabelToLabeledSampleListFilter();
-  ~LabelMapWithClassLabelToLabeledSampleListFilter() ITK_OVERRIDE;
+  ~LabelMapWithClassLabelToLabeledSampleListFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Make Output */
-  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 private:

@@ -107,13 +107,13 @@ public:
 
 protected:
 
-  ~PredictRegression() ITK_OVERRIDE
+  ~PredictRegression() override
     {
     MachineLearningModelFactoryType::CleanFactories();
     }
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("PredictRegression");
     SetDescription("Performs a prediction of the input image according to a regression model file.");
@@ -182,12 +182,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Load input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");

@@ -101,10 +101,10 @@ public:
 
 protected:
   DrawLineSpatialObjectFilter();
-  ~DrawLineSpatialObjectFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~DrawLineSpatialObjectFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   DrawLineSpatialObjectFilter(const Self &); //purposely not implemented

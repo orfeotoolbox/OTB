@@ -70,7 +70,7 @@ protected:
   {
   }
 ;
-  ~SimulationStep2Base() ITK_OVERRIDE
+  ~SimulationStep2Base() override
   {
   }
 

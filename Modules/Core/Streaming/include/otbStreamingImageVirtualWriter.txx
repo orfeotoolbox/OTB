@@ -32,6 +32,7 @@
 #include "otbTileDimensionTiledStreamingManager.h"
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
+#include "otbUtils.h"
 
 namespace otb
 {
@@ -182,6 +183,8 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::GenerateData(void)
 {
+  otb::Logger::Instance()->LogSetupInformation();
+
   /**
    * Prepare all the outputs. This may deallocate previous bulk data.
    */
@@ -227,11 +230,11 @@ StreamingImageVirtualWriter<TInputImage>
     m_ObserverID = source->AddObserver(itk::ProgressEvent(), command);
     m_IsObserving = true;
     }
-  else
-    {
-    itkWarningMacro(<< "Could not get the source process object. Progress report might be buggy");
-    }
 
+  const auto firstSplitSize = m_StreamingManager->GetSplit(0).GetSize();
+  otbLogMacro(Info,<<"Estimation will be performed in "<<m_NumberOfDivisions<<" blocks of "<<firstSplitSize[0]<<"x"<<firstSplitSize[1]<<" pixels");
+
+  
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
@@ -242,7 +245,6 @@ StreamingImageVirtualWriter<TInputImage>
        m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
-    otbMsgDevMacro(<< "Processing region : " << streamRegion )
     //inputPtr->ReleaseData();
     //inputPtr->SetRequestedRegion(streamRegion);
     //inputPtr->Update();
@@ -258,6 +260,13 @@ StreamingImageVirtualWriter<TInputImage>
   if (!this->GetAbortGenerateData())
     {
     this->UpdateProgress(1.0);
+    }
+  else
+    {
+    itk::ProcessAborted e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Image streaming has been aborted");
+    throw e;
     }
 
   // Notify end event observers
@@ -286,6 +295,27 @@ StreamingImageVirtualWriter<TInputImage>
   this->ReleaseInputs();
 }
 
+template <class TInputImage>
+const bool &
+StreamingImageVirtualWriter<TInputImage>
+::GetAbortGenerateData() const
+{
+  m_Lock.Lock();
+  bool ret = Superclass::GetAbortGenerateData();
+  m_Lock.Unlock();
+  if (ret) return otb::Utils::TrueConstant;
+  return otb::Utils::FalseConstant;
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::SetAbortGenerateData(bool val)
+{
+  m_Lock.Lock();
+  Superclass::SetAbortGenerateData(val);
+  m_Lock.Unlock();
+}
 
 } // end namespace otb
 

@@ -104,7 +104,7 @@ private:
     m_DisplacementFieldCaster = DisplacementFieldCastFilterType::New();
   }
 
- void DoInit() ITK_OVERRIDE
+ void DoInit() override
   {
     SetName("GridBasedImageResampling");
     SetDescription("Resamples an image according to a resampling grid");
@@ -173,7 +173,7 @@ private:
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
     SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artifacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
-    SetParameterString("interpolator","bco", false);
+    SetParameterString("interpolator","bco");
 
     AddRAMParameter();
 
@@ -188,12 +188,12 @@ private:
     SetOfficialDocLink();
   }
 
- void DoUpdateParameters() ITK_OVERRIDE
+ void DoUpdateParameters() override
   {
     // Nothing to do here
   }
 
-void DoExecute() ITK_OVERRIDE
+void DoExecute() override
     {
       // Get the input image
       FloatVectorImageType* inImage = GetParameterImage("io.in");

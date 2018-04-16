@@ -23,6 +23,7 @@
 
 #include "otbSamplingRateCalculator.h"
 #include "otbObjectList.h"
+#include "OTBSamplingExport.h"
 
 namespace otb
 {
@@ -37,7 +38,7 @@ namespace otb
  *
  * \ingroup OTBSampling
  */
-class ITK_EXPORT SamplingRateCalculatorList
+class OTBSampling_EXPORT SamplingRateCalculatorList
   : public ObjectList<SamplingRateCalculator>
 {
 public:
@@ -98,7 +99,7 @@ protected:
   SamplingRateCalculatorList(){}
 
   /** Destructor */
-  ~SamplingRateCalculatorList() ITK_OVERRIDE {}
+  ~SamplingRateCalculatorList() override {}
 
 private:
   SamplingRateCalculatorList(const Self &);    //purposely not implemented

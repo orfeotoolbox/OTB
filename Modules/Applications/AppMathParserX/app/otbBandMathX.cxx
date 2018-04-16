@@ -55,7 +55,7 @@ public:
 
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName( "BandMathX" );
 
@@ -251,7 +251,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // check if input context should be used
     bool useContext = this->ContextCheck();
@@ -289,7 +289,7 @@ private:
         if (useContext)
           {
           // only set the first expression, 'ManyExpression' is disabled.
-          this->SetParameterString("exp",dummyFilter->GetExpression(0), false);
+          this->SetParameterString("exp",dummyFilter->GetExpression(0));
           }
         }
       }
@@ -345,7 +345,7 @@ private:
       }
     }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");

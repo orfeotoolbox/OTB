@@ -55,47 +55,47 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  bool CanReadFile(const char*) ITK_OVERRIDE;
+  bool CanReadFile(const char*) override;
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
-  bool CanStreamRead() ITK_OVERRIDE
+  bool CanStreamRead() override
   {
     return true;
   }
 
   /** Set the spacing and dimension information for the set filename. */
-  void ReadImageInformation() ITK_OVERRIDE;
+  void ReadImageInformation() override;
 
   /** Reads the data from disk into the memory buffer provided. */
-  void Read(void* buffer) ITK_OVERRIDE;
+  void Read(void* buffer) override;
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
-  bool CanWriteFile(const char*) ITK_OVERRIDE;
+  bool CanWriteFile(const char*) override;
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  bool CanStreamWrite() ITK_OVERRIDE
+  bool CanStreamWrite() override
   {
     return true;
   }
 
   /** Set the spacing and dimension information for the set filename. */
-  void WriteImageInformation() ITK_OVERRIDE;
+  void WriteImageInformation() override;
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */
-  void Write(const void* buffer) ITK_OVERRIDE;
+  void Write(const void* buffer) override;
 
   MSTARImageIO();
-  ~MSTARImageIO() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~MSTARImageIO() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
   /** Get the number of overviews available into the file specified
    *  This imageIO didn't support overviews */
-  unsigned int GetOverviewsCount() ITK_OVERRIDE
+  unsigned int GetOverviewsCount() override
   {
     // MANTIS-1154: Source image is always considered as the best
     // resolution overview.
@@ -104,7 +104,7 @@ public:
   
   /** Get information about overviews available into the file specified
    * This imageIO didn't support overviews */ 
-  std::vector<std::string> GetOverviewsInfo() ITK_OVERRIDE
+  std::vector<std::string> GetOverviewsInfo() override
   {
     std::vector<std::string> desc;
     return desc;
@@ -113,7 +113,7 @@ public:
   /** Provide hist about the output container to deal with complex pixel
    *  type (Not used here) */ 
   void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
-                                        bool itkNotUsed(isVectorImage)) ITK_OVERRIDE{}
+                                        bool itkNotUsed(isVectorImage)) override{}
   
 private:
   MSTARImageIO(const Self &); //purposely not implemented

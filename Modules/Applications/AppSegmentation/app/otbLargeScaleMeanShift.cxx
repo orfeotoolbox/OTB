@@ -50,7 +50,7 @@ public:
   itkTypeMacro(LargeScaleMeanShift, otb::CompositeApplication);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
     {
     SetName("LargeScaleMeanShift");
     SetDescription("Large-scale segmentation using MeanShift");
@@ -120,11 +120,10 @@ private:
       "The output raster image",
       "It corresponds to the output of the small region merging step.");
 
-    AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
-    EnableParameter( "cleanup" );
+    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
     SetParameterDescription( "cleanup",
       "If activated, the application will try to clean all temporary files it created" );
-    MandatoryOff( "cleanup" );
+    SetParameterInt("cleanup",1);
 
     // Setup RAM
     ShareParameter("ram","smoothing.ram");
@@ -153,10 +152,10 @@ private:
     SetOfficialDocLink();
     }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     {
     bool isVector(GetParameterString("mode") == "vector");
     std::string outPath(isVector ?

@@ -98,36 +98,36 @@ public:
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */
-  ~QuicklookViewManipulator() ITK_OVERRIDE;
+  ~QuicklookViewManipulator() override;
 
   //
   // ImageViewManipulator overloads.
 
-  ZoomType GetFixedZoomType() const ITK_OVERRIDE;
+  ZoomType GetFixedZoomType() const override;
 
   
     void
     SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const ITK_OVERRIDE;
+      AbstractImageViewRenderer::RenderingContext * const ) const override;
 
 
-  void MousePressEvent( QMouseEvent* event ) ITK_OVERRIDE;
+  void MousePressEvent( QMouseEvent* event ) override;
 
-  void MouseMoveEvent( QMouseEvent* event ) ITK_OVERRIDE;
+  void MouseMoveEvent( QMouseEvent* event ) override;
 
   // virtual void MousePressEvent( QMouseEvent* event );
 
   // virtual void MouseReleaseEvent( QMouseEvent* event );
 
-  void MouseDoubleClickEvent( QMouseEvent * ) ITK_OVERRIDE {};
+  void MouseDoubleClickEvent( QMouseEvent * ) override {};
 
-  void WheelEvent( QWheelEvent* event) ITK_OVERRIDE;
+  void WheelEvent( QWheelEvent* event) override;
 
-  void ResizeEvent( QResizeEvent * event ) ITK_OVERRIDE;
+  void ResizeEvent( QResizeEvent * event ) override;
 
-  void KeyPressEvent( QKeyEvent* event ) ITK_OVERRIDE;
+  void KeyPressEvent( QKeyEvent* event ) override;
 
-  void KeyReleaseEvent( QKeyEvent* event ) ITK_OVERRIDE;
+  void KeyReleaseEvent( QKeyEvent* event ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 

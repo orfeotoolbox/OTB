@@ -123,7 +123,7 @@ public:
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */
-  ~ImageViewManipulator() ITK_OVERRIDE;
+  ~ImageViewManipulator() override;
 
   //
   // AbstractImageViewManipulator overloads.
@@ -132,29 +132,29 @@ public:
   //
   // Accessors.
 
-  void SetViewportSize( int width, int height ) ITK_OVERRIDE;
+  void SetViewportSize( int width, int height ) override;
 
-  SizeType GetViewportSize() const ITK_OVERRIDE;
+  SizeType GetViewportSize() const override;
 
-  void SetOrigin( const PointType& origin ) ITK_OVERRIDE;
+  void SetOrigin( const PointType& origin ) override;
 
-  PointType GetOrigin() const ITK_OVERRIDE;
+  PointType GetOrigin() const override;
 
-  void SetSpacing( const SpacingType& spacing ) ITK_OVERRIDE;
+  void SetSpacing( const SpacingType& spacing ) override;
 
-  SpacingType GetSpacing() const ITK_OVERRIDE;
+  SpacingType GetSpacing() const override;
 
-  void SetNativeSpacing( const SpacingType& ) ITK_OVERRIDE;
+  void SetNativeSpacing( const SpacingType& ) override;
 
-  void SetWkt( const std::string& wkt ) ITK_OVERRIDE;
+  void SetWkt( const std::string& wkt ) override;
 
   void SetKeywordList(
     const DefaultImageType::ImageKeywordlistType& kwl
-  ) ITK_OVERRIDE;
+  ) override;
 
-  PointType GetCenter() const ITK_OVERRIDE;
+  PointType GetCenter() const override;
 
-  ZoomType GetFixedZoomType() const ITK_OVERRIDE;
+  ZoomType GetFixedZoomType() const override;
 
   //
   // Controls.
@@ -162,34 +162,34 @@ public:
   
     void
     SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const ITK_OVERRIDE;
+      AbstractImageViewRenderer::RenderingContext * const ) const override;
 
-  void ZoomIn() ITK_OVERRIDE;
+  void ZoomIn() override;
 
-  void ZoomOut() ITK_OVERRIDE;
+  void ZoomOut() override;
 
-  const PointType& Transform( PointType&, const QPoint& ) const ITK_OVERRIDE;
+  const PointType& Transform( PointType&, const QPoint& ) const override;
 
-  void ResetViewport() ITK_OVERRIDE;
+  void ResetViewport() override;
 
   //
   // Events.
 
-  void MouseMoveEvent( QMouseEvent* event ) ITK_OVERRIDE;
+  void MouseMoveEvent( QMouseEvent* event ) override;
 
-  void MousePressEvent( QMouseEvent* event ) ITK_OVERRIDE;
+  void MousePressEvent( QMouseEvent* event ) override;
 
-  void MouseReleaseEvent( QMouseEvent* event ) ITK_OVERRIDE;
+  void MouseReleaseEvent( QMouseEvent* event ) override;
 
-  void MouseDoubleClickEvent( QMouseEvent * ) ITK_OVERRIDE;
+  void MouseDoubleClickEvent( QMouseEvent * ) override;
 
-  void WheelEvent( QWheelEvent* event) ITK_OVERRIDE;
+  void WheelEvent( QWheelEvent* event) override;
 
-  void ResizeEvent( QResizeEvent* event ) ITK_OVERRIDE;
+  void ResizeEvent( QResizeEvent* event ) override;
 
-  void KeyPressEvent( QKeyEvent* event ) ITK_OVERRIDE;
+  void KeyPressEvent( QKeyEvent* event ) override;
 
-  void KeyReleaseEvent( QKeyEvent* event ) ITK_OVERRIDE;
+  void KeyReleaseEvent( QKeyEvent* event ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
@@ -200,9 +200,9 @@ public slots:
   //
   // AbstractImageViewManipulator overloads.
 
-  void CenterOn( const PointType& point ) ITK_OVERRIDE;
+  void CenterOn( const PointType& point ) override;
 
-  void ZoomTo( double scale ) ITK_OVERRIDE;
+  void ZoomTo( double scale ) override;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

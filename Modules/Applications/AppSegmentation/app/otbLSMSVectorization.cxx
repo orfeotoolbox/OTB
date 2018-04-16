@@ -66,7 +66,7 @@ public:
   itkTypeMacro(Vectorization, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("LSMSVectorization");
     SetDescription("This application performs the fourth step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
@@ -124,11 +124,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     clock_t tic = clock();
 

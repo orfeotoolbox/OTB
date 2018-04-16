@@ -64,7 +64,7 @@ public:
 
 protected:
   LambertConformalConicMapProjection();
-  ~LambertConformalConicMapProjection() ITK_OVERRIDE {};
+  ~LambertConformalConicMapProjection() override {};
 
 private:
   LambertConformalConicMapProjection(const Self &); //purposely not implemented

@@ -101,7 +101,7 @@ public:
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~ShaderWidget() ITK_OVERRIDE;
+  ~ShaderWidget() override;
 
   /**
    */
@@ -144,7 +144,7 @@ private:
   void SetEffectVisible(const Effect & effect, bool visible);
   
   /** */
-  void virtual_SetSettings( ImageSettings * ) ITK_OVERRIDE;
+  void virtual_SetSettings( ImageSettings * ) override;
 
   /**
    * Set the ComboBox effects item for the corresponding image settings.

@@ -60,7 +60,7 @@ public:
   typedef otb::OGRDataSourceToLabelImageFilter<FloatImageType> OGRDataSourceToMapFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
     {
     SetName("Rasterization");
     SetDescription("Rasterize a vector dataset.");
@@ -132,7 +132,7 @@ private:
 
     AddParameter(ParameterType_String,"mode.attribute.field","The attribute field to burn");
     SetParameterDescription("mode.attribute.field","Name of the attribute field to burn");
-    SetParameterString("mode.attribute.field","DN", false);
+    SetParameterString("mode.attribute.field","DN");
 
     AddRAMParameter();
 
@@ -144,13 +144,13 @@ private:
     SetOfficialDocLink();
     }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
     {
     // Nothing to do
     }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     {
     otb::ogr::DataSource::Pointer ogrDS;
     UInt8ImageType::Pointer referenceImage;

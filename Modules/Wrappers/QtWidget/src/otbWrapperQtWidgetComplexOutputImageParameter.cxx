@@ -67,6 +67,8 @@ void QtWidgetComplexOutputImageParameter::DoCreateWidget()
   // Set the Output PixelType choice Combobox
   m_ComboBox = new QComboBox;
   m_ComboBox->setToolTip("Complex Output Pixel Type");
+  m_ComboBox->addItem( "cint16");
+  m_ComboBox->addItem( "cint32");
   m_ComboBox->addItem( "cfloat");
   m_ComboBox->addItem( "cdouble");
   m_ComboBox->setCurrentIndex(m_OutputImageParam->GetComplexPixelType());

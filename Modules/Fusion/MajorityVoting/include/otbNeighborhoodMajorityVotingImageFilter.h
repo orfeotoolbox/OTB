@@ -159,7 +159,7 @@ public:
 
 protected:
   NeighborhoodMajorityVotingImageFilter();
-  ~NeighborhoodMajorityVotingImageFilter() ITK_OVERRIDE {};
+  ~NeighborhoodMajorityVotingImageFilter() override {};
 
   /** Evaluate image neighborhood with kernel to find the new value
    * for the center pixel value
@@ -169,9 +169,9 @@ protected:
    * Evaluate is used for non-boundary pixels. */
   PixelType Evaluate(const NeighborhoodIteratorType &nit,
                      const KernelIteratorType kernelBegin,
-                     const KernelIteratorType kernelEnd) ITK_OVERRIDE;
+                     const KernelIteratorType kernelEnd) override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 
   //Type to store the useful information from the label histogram  

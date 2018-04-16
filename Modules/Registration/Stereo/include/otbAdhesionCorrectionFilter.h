@@ -151,16 +151,16 @@ protected:
   /** Constructor */
   AdhesionCorrectionFilter();
   /** Destructor */
-  ~AdhesionCorrectionFilter() ITK_OVERRIDE {};
+  ~AdhesionCorrectionFilter() override {};
 
   /** Threaded generate data */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Generate the input requested regions  */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
 private:
   AdhesionCorrectionFilter(const Self&); //purposely not implemented

@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetOutputFilenameParameter : public QtWidgetParame
   Q_OBJECT
 public:
   QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*);
-  ~QtWidgetOutputFilenameParameter() ITK_OVERRIDE;
+  ~QtWidgetOutputFilenameParameter() override;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -58,9 +58,9 @@ private:
   QtWidgetOutputFilenameParameter(const QtWidgetOutputFilenameParameter&); //purposely not implemented
   void operator=(const QtWidgetOutputFilenameParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
 
   OutputFilenameParameter::Pointer m_FilenameParam;

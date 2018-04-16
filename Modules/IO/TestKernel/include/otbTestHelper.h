@@ -71,7 +71,7 @@ public:
       std::string("Integer"),std::string("Integer64")));
   }
 
-  ~TestHelper() ITK_OVERRIDE{}
+  ~TestHelper() override{}
 
   int RegressionTestAllImages(const StringList& baselineFilenamesImage,
                               const StringList& testFilenamesImage);

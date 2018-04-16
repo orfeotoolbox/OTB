@@ -81,13 +81,13 @@ public:
   const ImageType* GetInput() const;
 
 protected:
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   // Method to compute the extent of the image
   void EstimateImageExtent();
 
   ImageToOSMVectorDataGenerator();
-  ~ImageToOSMVectorDataGenerator() ITK_OVERRIDE {}
+  ~ImageToOSMVectorDataGenerator() override {}
 
 private:
   ImageToOSMVectorDataGenerator(const Self&); //purposely not implemented

@@ -93,7 +93,7 @@ public:
   FilenameDragAndDropEventFilter( QObject* p =NULL );
 
   /** \brief Destructor. */
-  ~FilenameDragAndDropEventFilter() ITK_OVERRIDE;
+  ~FilenameDragAndDropEventFilter() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -125,22 +125,22 @@ protected:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragEnterEvent
    */
-  bool DragEnterEvent( QObject* object, QDragEnterEvent* event ) ITK_OVERRIDE;
+  bool DragEnterEvent( QObject* object, QDragEnterEvent* event ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragLeaveEvent
    */
-  bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event ) ITK_OVERRIDE;
+  bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragMoveEvent
    */
-  bool DragMoveEvent( QObject* object, QDragMoveEvent* event ) ITK_OVERRIDE;
+  bool DragMoveEvent( QObject* object, QDragMoveEvent* event ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dropEvent
    */
-  bool DropEvent( QObject* object, QDropEvent* event ) ITK_OVERRIDE;
+  bool DropEvent( QObject* object, QDropEvent* event ) override;
 
 //
 // Protected attributes.

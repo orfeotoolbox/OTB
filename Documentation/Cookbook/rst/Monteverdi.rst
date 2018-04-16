@@ -321,7 +321,7 @@ Conclusion
 ~~~~~~~~~~
 
 The images used in this documentation can be found in the OTB-Data
-repository (https://git.orfeo-toolbox.org/otb-data.git):
+repository (https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git):
 
 -  in OTB-Data/Input:
 

@@ -97,7 +97,7 @@ public:
   StatusBarWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~StatusBarWidget() ITK_OVERRIDE;
+  ~StatusBarWidget() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

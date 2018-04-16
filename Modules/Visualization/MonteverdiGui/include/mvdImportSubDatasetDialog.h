@@ -104,7 +104,7 @@ public:
 		     Qt::WindowFlags flags = 0 );
 
   /** \brief Destructor. */
-  ~ImportSubDatasetDialog() ITK_OVERRIDE;
+  ~ImportSubDatasetDialog() override;
 
   /**
    */

@@ -155,11 +155,11 @@ public:
 
 protected:
   MultivariateAlterationDetectorImageFilter();
-  ~MultivariateAlterationDetectorImageFilter() ITK_OVERRIDE {}
+  ~MultivariateAlterationDetectorImageFilter() override {}
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
   MultivariateAlterationDetectorImageFilter(const Self &); //purposely not implemented

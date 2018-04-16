@@ -59,6 +59,9 @@ public:
 
     if(input->GetVertexList()->Size()>0)
       {
+      //Initialization of lastVertex to GetVertexList
+      lastVertex = input->GetVertexList()->Begin().Value();
+      
       for (VertexListConstIteratorType vertexIt = input->GetVertexList()->Begin();
           vertexIt != input->GetVertexList()->End();
           ++vertexIt)

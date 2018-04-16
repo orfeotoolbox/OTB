@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterLabel : public QWidget
   Q_OBJECT
 public:
   QtWidgetParameterLabel(Parameter*);
-  ~QtWidgetParameterLabel() ITK_OVERRIDE;
+  ~QtWidgetParameterLabel() override;
 
 private:
   QtWidgetParameterLabel(const QtWidgetParameterLabel&); //purposely not implemented

@@ -99,7 +99,7 @@ public:
   LayerStackWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~LayerStackWidget() ITK_OVERRIDE;
+  ~LayerStackWidget() override;
 
   /**
    */
@@ -146,7 +146,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
    */
-  bool eventFilter( QObject * watched, QEvent * event ) ITK_OVERRIDE;
+  bool eventFilter( QObject * watched, QEvent * event ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
