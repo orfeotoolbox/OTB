@@ -56,7 +56,7 @@ if( OTBQt_ENABLED )
 
       message( STATUS "Merge TS : ${_abs_ts}")
       add_custom_command(OUTPUT ${_abs_ts}
-        COMMAND ${QT_LUPDATE_EXECUTABLE}
+        COMMAND ${Qt5_LUPDATE_EXECUTABLE}
         ARGS -locations none -pro ${OTB_QT_I18N_PRO} -ts ${_abs_ts}
         DEPENDS
           ${OTB_QT_I18N_HEADER_FILES}
