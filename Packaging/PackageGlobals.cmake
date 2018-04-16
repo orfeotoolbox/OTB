@@ -46,11 +46,15 @@ set(WINDOWS_SYSTEM_DLLS
   advapi32.dll
   comdlg32.dll
   crypt32.dll
+  dwmapi.dll
+  d3d9.dll
   gdi32.dll
   glu32.dll
   imm32.dll
   kernel32.dll
+  netapi32.dll
   normaliz.dll
+  mpr.dll
   odbc32.dll
   ole32.dll
   oleaut32.dll
@@ -62,6 +66,9 @@ set(WINDOWS_SYSTEM_DLLS
   shell32.dll
   shfolder.dll
   user32.dll
+  userenv.dll
+  uxtheme.dll
+  version.dll
   winmm.dll
   winspool.drv
   wldap32.dll
