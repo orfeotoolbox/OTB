@@ -103,7 +103,8 @@ OTB team.
 * Merge requests can be merged once the dashboard is proven green for this branch.
   This condition is mandatory unless reviewers and authors explicitely agree that
   it can be skipped (for instance in case of documentation merges or compilation
-  fixes on develop)
+  fixes on develop). Branches of that sort can be identified with the ~patch label, 
+  which tells the reviewer that the author would like to merge without dashboard testing.
 
 Branches can be registered for dashboard testing by adding one line in `Config/feature_branches.txt` in [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git).
 
@@ -152,6 +153,7 @@ Regarding labels, we use the following set:
   correspond to a Request for Comments that has turned into a development action
 * ~bug: Bug, crash or unexpected behavior, reported by a user or a developer
 * ~feature: Feature request expressed by an OTB user/developer
+* ~patch: A small patch fixing build warnings, compilation errors, typos in logs or documentation
 * ~"To Do": action is planned
 * ~Doing: work in progress
 * ~api ~app ~documentation ~monteverdi ~packaging ~qgis: optional context information
