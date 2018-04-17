@@ -22,11 +22,7 @@
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperBoolParameter.h"
 #include "otbWrapperApplicationRegistry.h"
-#include "otbWrapperTypes.h"
-#include "otbWrapperApplication.h"
 
-#include <vector>
-#include <string>
 #include <iostream>
 #include <cassert>
 #include <fstream>
