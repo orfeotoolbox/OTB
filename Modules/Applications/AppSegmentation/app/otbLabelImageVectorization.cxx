@@ -21,7 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "PersistentLabelImageVectorizationFilter.h"
+#include "otbPersistentLabelImageVectorizationFilter.h"
 #include "otbConnectedComponentStreamStitchingFilter.h"
 
 #include "otbStopwatch.h"

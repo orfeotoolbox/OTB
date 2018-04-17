@@ -7,7 +7,7 @@
 
 #include "otbOGRFieldWrapper.h"
 
-#include "PersistentLabelImageVectorizationFilter.h"
+#include "otbPersistentLabelImageVectorizationFilter.h"
 
 // --------- otb::PersistentLabelImageVectorizationFilter ---------------------
 
