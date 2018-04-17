@@ -56,6 +56,8 @@ function(prepare_file_list file_list_result)
   #Qt stuff
   if(HAVE_QT)
     list(APPEND file_list "lrelease${EXE_EXT}")
+    list(APPEND file_list "lupdate${EXE_EXT}")
+    list(APPEND file_list "lconvert${EXE_EXT}")
     list(APPEND file_list "moc${EXE_EXT}")
     list(APPEND file_list "qmake${EXE_EXT}")
     list(APPEND file_list "rcc${EXE_EXT}")
