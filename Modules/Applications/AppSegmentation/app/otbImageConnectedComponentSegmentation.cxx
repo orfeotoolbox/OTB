@@ -35,24 +35,25 @@ class ImageConnectedComponentSegmentation : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageConnectedComponentSegmentation                       Self;
+  typedef ImageConnectedComponentSegmentation Self;
   typedef Application                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
   
-  //typedef itk::BinaryShapeM_BinaryOpeningFilterImageFilter<UInt8LabelImageType>    BinaryM_BinaryOpeningFilterFilterType;
-  typedef otb::Image<unsigned int, 2>                                 LabelImageType;
-  typedef otb::Image<unsigned int, 2>                                 MaskImageType;
+  typedef otb::Image<unsigned int, 2>         LabelImageType;
+  typedef otb::Image<unsigned int, 2>         MaskImageType;
 
   typedef float InputPixelType;
   typedef otb::VectorImage<InputPixelType, 2> VectorImageType;
   typedef VectorImageType::PixelType VectorImagePixelType;
   
   // mask filter typedef
-  typedef otb::MaskMuParserFilter<VectorImageType, MaskImageType> MaskMuParserFilterType;
+  typedef otb::MaskMuParserFilter<VectorImageType, MaskImageType> 
+                                                  MaskMuParserFilterType;
 
   // connected components filter typedef
-  typedef Functor::ConnectedComponentMuParserFunctor<VectorImagePixelType> FunctorType;
+  typedef Functor::ConnectedComponentMuParserFunctor<VectorImagePixelType> 
+                                                  FunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<
       VectorImageType,
       LabelImageType,
@@ -65,14 +66,16 @@ public:
   itkTypeMacro(ImageConnectedComponentSegmentation, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ImageConnectedComponentSegmentation");
-    SetDescription("This application performs connected component segmentation using an user criterion for connected components");
+    SetDescription("This application performs connected component "
+      "segmentation using an user criterion for connected components");
 
     // Documentation
     SetDocName("ImageConnectedComponentSegmentation");
-    SetDocLongDescription("This application performs connected component segmentation using an user criterion for connected components");
+    SetDocLongDescription("This application performs connected component "
+      "segmentation using an user criterion for connected components");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
@@ -83,11 +86,14 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Output label image");
 
-    AddParameter(ParameterType_String, "expr", "Connected Component Expression");
-    SetParameterDescription("expr", "Formula used for connected component segmentation");
+    AddParameter(ParameterType_String, "expr", 
+      "Connected Component Expression");
+    SetParameterDescription("expr", 
+      "Formula used for connected component segmentation");
     
     AddParameter(ParameterType_String, "mask", "Mask expression");
-    SetParameterDescription("mask", "Mask mathematical expression (only if support image is given)");
+    SetParameterDescription("mask", 
+      "Mask mathematical expression (only if support image is given)");
     MandatoryOff("mask");
     
     AddRAMParameter();
@@ -99,17 +105,18 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     typename MaskImageType::Pointer mask;
     typename MaskMuParserFilterType::Pointer maskFilter;
     maskFilter = MaskMuParserFilterType::New();
-    ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
+    ConnectedComponentFilterType::Pointer connected = 
+      ConnectedComponentFilterType::New();
     if (IsParameterEnabled("mask") && HasValue("mask"))
     {
       // Compute the mask
