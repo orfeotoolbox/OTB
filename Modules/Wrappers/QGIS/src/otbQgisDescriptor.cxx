@@ -136,7 +136,27 @@ int main(int argc, char* argv[])
       Parameter::Pointer param = appli->GetParameterByKey(name);
       ParameterType type = appli->GetParameterType(name);
       const std::string description = param->GetName();
-      std::string qgis_type = parameterTypeToString[type];
+      if (  type == ParameterType_Group  ||
+            type == ParameterType_OutputProcessXML  ||
+            type == ParameterType_InputProcessXML  ||
+            type == ParameterType_RAM ||
+            param->GetRole() == Role_Output
+      )
+        {
+        // group parameter cannot have any value.
+        // outxml and inxml parameters are not relevant for QGIS and is considered a bit noisy
+        // ram is added by qgis-otb processing provider plugin as an advanced parameter for all apps
+        // parameter role cannot be of type Role_Output
+        continue;
+        }
+      auto it = parameterTypeToString.find(type);
+      assert(  it != parameterTypeToString.end() );
+      if( it == parameterTypeToString.end() )
+        {
+        std::cerr << "No mapping found for parameter '" <<name <<"' type=" << type << std::endl;
+        return EXIT_FAILURE;
+        }
+      std::string qgis_type = it->second;
 #if 0
       if (type == ParameterType_ListView)
 	{
@@ -155,26 +175,6 @@ int main(int argc, char* argv[])
 	    }
 	}
 #endif
-      if (  type == ParameterType_Group  ||
-	    type == ParameterType_OutputProcessXML  ||
-	    type == ParameterType_InputProcessXML  ||
-	    type == ParameterType_RAM ||
-	    param->GetRole() == Role_Output
-	    )
-	{
-	  // group parameter cannot have any value.
-	  // outxml and inxml parameters are not relevant for QGIS and is considered a bit noisy
-	  // ram is added by qgis-otb processing provider plugin as an advanced parameter for all apps
-	  // parameter role cannot be of type Role_Output
-	  continue;
-	}
-
-      assert(!qgis_type.empty());
-      if(qgis_type.empty())
-	{
-	  std::cerr << "No mapping found for parameter '" <<name <<"' type=" << type << std::endl;
-	  return EXIT_FAILURE;
-	}
 
       bool isDestination = false;
       bool isEpsgCode = false;
