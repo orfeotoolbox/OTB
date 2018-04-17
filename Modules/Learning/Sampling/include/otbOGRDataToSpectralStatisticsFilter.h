@@ -133,6 +133,9 @@ private:
   /** FID of the current feature (per thread) */
   std::vector<unsigned long> m_CurrentFID;
   
+  /** Update mode, set during Reset(), 1 if the output DS is the same as the input DS, 0 if it isn't*/
+  bool m_updateMode = 0;
+
 };
 
 

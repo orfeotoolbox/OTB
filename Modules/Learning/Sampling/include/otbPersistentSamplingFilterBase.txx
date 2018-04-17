@@ -804,7 +804,7 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     outLayer = outputDS->CreateLayer(
       this->GetOutLayerName(),
       oSRS,
-      wkbPoint,
+      inLayer.GetGeomType(),
       this->GetOGRLayerCreationOptions());
     // Copy existing fields
     for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
