@@ -26,8 +26,6 @@
 
 #include "otbMaskMuParserFilter.h"
 
-#include "otbStopwatch.h"
-
 namespace otb
 {
 namespace Wrapper
@@ -108,33 +106,24 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    // Start Timer for the application
-    auto Timer = Stopwatch::StartNew();
-    
     typename MaskImageType::Pointer mask;
+    typename MaskMuParserFilterType::Pointer maskFilter;
+    maskFilter = MaskMuParserFilterType::New();
+    ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
     if (IsParameterEnabled("mask") && HasValue("mask"))
     {
       // Compute the mask
-      typename MaskMuParserFilterType::Pointer maskFilter;
-      maskFilter = MaskMuParserFilterType::New();
       maskFilter->SetInput(this->GetParameterImage("in"));
       maskFilter->SetExpression(this->GetParameterString("mask"));
-      maskFilter->Update();
-      mask = maskFilter->GetOutput();
+      maskFilter->UpdateOutputInformation();
+      connected->SetMaskImage(maskFilter->GetOutput());
     }
     
-    ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
     connected->SetInput(this->GetParameterImage("in"));
     connected->GetFunctor().SetExpression(GetParameterString("expr"));
-    if (mask.IsNotNull())
-    {
-      connected->SetMaskImage(mask);
-    }
+
     SetParameterOutputImage<LabelImageType>("out", connected->GetOutput());
-    connected->Update();
-    
-    Timer.Stop();
-    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
+    RegisterPipeline();
   }
   
 }; 
