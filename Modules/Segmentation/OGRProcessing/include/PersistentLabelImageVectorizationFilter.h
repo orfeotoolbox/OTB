@@ -29,17 +29,19 @@
 
 namespace otb
 {
-/**
- * \class PersistentLabelImageVectorizationFilter
- * 
- * \brief Persistent filter to extract sample values from an image
- * 
- * \ingroup OTBSampling
- */
+
+ 
 template<class TInputImage>
 class ITK_EXPORT PersistentLabelImageVectorizationFilter :
   public PersistentImageToOGRLayerFilter<TInputImage>
 {
+/** \class PersistentLabelImageVectorizationFilter
+ * \brief This filter is a framework for large scale image vectorization.
+ * For a detailed description @see LabelImageVectorizationFilter
+ *
+ * \ingroup OTBOGRProcessing
+ */
+ 
 public:
   /** Standard Self typedef */
   typedef PersistentLabelImageVectorizationFilter             Self;
@@ -153,7 +155,21 @@ template <class TImageType>
 class ITK_EXPORT LabelImageVectorizationFilter :
 public PersistentFilterStreamingDecorator<PersistentLabelImageVectorizationFilter<TImageType>>
 {
-
+/** \class StreamingImageToOGRLayerSegmentationFilter
+ * \brief This filter is a framework for large scale label image vectorization.
+ * It is a persistent filter that process the input image tile by tile.
+ * Each segment (group of connected pixels sharing the same label) of each tile is vectorized, using \c PersistentImageToOGRLayerFilter
+ * (based on \c GDALPolygonize()). The label list parameter can be set to choose which labels must be vectorized, by default, all labels 
+ * but 0 are vectorized.
+ * The output \c OGRDataSource of the \c LabelImageToOGRDataSourceFilter is a "memory" DataSource
+ * (ie all features of a tile are kept in memory) and all features contained in the "memory" DataSource are then copied into the input Layer
+ *
+ * \note The Use8Connected parameter can be turn on and it will be used in \c GDALPolygonize().
+ * \note The enlarge parameter can be turn activated to vectorize connected components on tiles with one more pixel than the stream size 
+ * on the right and the bottom of the tile, this can be used to merge more efficiently touching connected component splitted by streaming
+ * (for instance with the otbConnectedComponentStreamStitchingFilter)
+ * \ingroup OTBOGRProcessing
+ */
 public:
   /** Standard Self typedef */
   typedef LabelImageVectorizationFilter                                                                     Self;
