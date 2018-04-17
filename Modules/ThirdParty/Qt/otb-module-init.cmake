@@ -18,9 +18,9 @@
 # limitations under the License.
 #
 
-find_package(Qt5Core)
-find_package(Qt5Gui)
-find_package(Qt5Widgets)
-find_package(Qt5OpenGL)
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5OpenGL REQUIRED)
 find_package(Qt5LinguistTools)
 mark_as_advanced( QT_QMAKE_EXECUTABLE )
