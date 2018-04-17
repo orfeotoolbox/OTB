@@ -95,5 +95,14 @@ function(prepare_file_list file_list_result)
     list(APPEND file_list "libEGL.dll")
   endif()
 
+  # Qt plugins
+  if(HAVE_QT)
+    file(GLOB _qt_plugins "${SUPERBUILD_INSTALL_DIR}/plugins/*/${LIB_PREFIX}*${LIB_EXT}")
+    foreach(_qt_plugin ${_qt_plugins})
+      get_filename_component(_qt_plugin_name ${_qt_plugin} NAME)
+      list(APPEND file_list ${_qt_plugin_name})
+    endforeach()
+  endif()
+
   set(${file_list_result} ${file_list} PARENT_SCOPE)
 endfunction()
