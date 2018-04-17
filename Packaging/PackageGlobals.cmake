@@ -103,6 +103,12 @@ set(LINUX_SYSTEM_DLLS
   libICE.so*
   libXrandr.so*
   libpython*
+  libxcb.so*
+  libxcb-glx.so*
+  libX11-xcb.so*
+  libmysqlclient.so*
+  libodbc.so*
+  libpq.so*
   )
   # libexpat.so.*
   # libfontconfig.so*
@@ -128,6 +134,7 @@ set(APPLE_SYSTEM_DLLS
   AGL.framework
   OpenGL.framework
   libgcc_s.*dylib
+  libcups.*dylib
   )
 
 if(WIN32)
