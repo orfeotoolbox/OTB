@@ -80,7 +80,8 @@ set(mode "Vector")
 
 string(TOLOWER ${filter} lfilter)
 
-# Add a test for ULOVW
+# Add a test for ULOVW./apTvComputePolygonsSpectralFeatures.sqlite
+
 set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulovw")
 
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
@@ -315,9 +316,9 @@ otb_test_application(NAME     apTvLargeScaleConnectedComponentMinSize
                      OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
                               -out ${TEMP}/LargeScaleConnectedComponentMinSize.sqlite
                               -expr "distance<10"
-                              -filter "nbpixels<10"
-                              -mask "b1>15"
-                              -minsize 40
+                              -filter "nbpixels<150"
+                              -mask "b1>30"
+                              -minsize 50
                               -fusion 1
                      VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/LargeScaleConnectedComponentMinSize.sqlite
@@ -331,7 +332,7 @@ otb_test_application(NAME     apTvLargeScaleConnectedComponent
                               -out ${TEMP}/LargeScaleConnectedComponent.sqlite
                               -expr "distance<100"
                               -filter "nbpixels<15"
-                              -mask "b1>200"
+                              -mask "b1>250"
                               -fusion 1
                      VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/LargeScaleConnectedComponent.sqlite
@@ -347,14 +348,14 @@ otb_test_application(NAME     apTvImageConnectedComponentSegmentation
                               -expr "distance<100"
                               -mask "b1>250"
                      VALID    --compare-image ${NOTOL}
-                              ${BASELINE_FILES}/apTvImageConnectedComponentSegmentation.tif
+                              ${BASELINE}/apTvImageConnectedComponentSegmentation.tif
                               ${TEMP}/apTvImageConnectedComponentSegmentation.tif    
                      )
 
 #----------- LabelImageVectorization TESTS -----------
 otb_test_application(NAME     apTvLabelImageVectorization
                      APP      LabelImageVectorization
-                     OPTIONS  -in ${BASELINE_FILES}/apTvImageConnectedComponentSegmentation.tif
+                     OPTIONS  -in ${BASELINE}/apTvImageConnectedComponentSegmentation.tif
                               -out ${TEMP}/apTvLabelImageVectorization.sqlite
                               -fusion 1
                     VALID    --compare-ogr ${NOTOL}
@@ -389,9 +390,10 @@ otb_test_application(NAME     apTvComputePolygonsSpectralFeatures
 #----------- ObjectBasedFiltering TESTS -----------
 otb_test_application(NAME     apTvObjectBasedFiltering
                      APP      ObjectBasedFiltering
-                     OPTIONS  -vec ${BASELINE_FILES}/apTvComputePolygonsSpectralFeatures.sqlite
-                              -expr "nbpixels <15"
+                     OPTIONS  -in ${BASELINE_FILES}/apTvComputePolygonsSpectralFeatures.sqlite
+                              -expr "nbpixels<15"
                               -out ${TEMP}//apTvObjectBasedFiltering.sqlite
+                              VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/apTvObjectBasedFiltering.sqlite
                               ${TEMP}/apTvObjectBasedFiltering.sqlite
                      )
