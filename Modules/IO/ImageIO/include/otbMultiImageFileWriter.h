@@ -26,6 +26,7 @@
 #include "itkImageBase.h"
 #include "itkProcessObject.h"
 #include "itkImageIOBase.h"
+#include "OTBImageIOExport.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -40,8 +41,10 @@ namespace otb
  *  When the user gives a number of lines per strip or a tile size, the value
  *  is interpreted on the first input to deduce the number of streams. This
  *  number of streams is then used to split the other inputs.
+ *
+ * \ingroup OTBImageIO
  */
-class MultiImageFileWriter: public itk::ProcessObject
+class OTBImageIO_EXPORT MultiImageFileWriter: public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
@@ -225,7 +228,11 @@ private:
   bool m_IsObserving;
   unsigned long m_ObserverID;
 
-  /** Internal base wrapper class to handle each ImageFileWriter */
+  /** \class SinkBase
+   * Internal base wrapper class to handle each ImageFileWriter
+   *
+   * \ingroup OTBImageIO
+   */
   class SinkBase
   {
   public:
@@ -247,6 +254,8 @@ private:
 
   /** \class Sink
    *  Wrapper class for each ImageFileWriter
+   *
+   * \ingroup OTBImageIO
    */
   template <class TImage>
   class Sink : public SinkBase

@@ -23,6 +23,7 @@
 
 #include "itkObject.h"
 #include "otbImageIOBase.h"
+#include "OTBImageIOExport.h"
 
 namespace otb
 {
@@ -31,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBImageIO
  */
-class ITK_EXPORT ImageIOFactory : public itk::Object
+class OTBImageIO_EXPORT ImageIOFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
