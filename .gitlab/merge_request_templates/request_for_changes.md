@@ -30,4 +30,4 @@ List remaining open issues if any, and additional notes.
 
 ### Copyright
 
-[ ] I've signed the ORFEO ToolBox Contributor License Agreement
+The copyright owner is *COPYRIGHT OWNER (OR OWNER'S AGENT)* and has signed the ORFEO ToolBox Contributor License Agreement
