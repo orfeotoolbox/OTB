@@ -24,7 +24,6 @@
 #include "otbPersistentLabelImageVectorizationFilter.h"
 #include "otbConnectedComponentStreamStitchingFilter.h"
 
-#include "otbStopwatch.h"
 
 namespace otb
 {
@@ -35,23 +34,25 @@ class LabelImageVectorization: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelImageVectorization                         Self;
-  typedef Application                                     Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef LabelImageVectorization        Self;
+  typedef Application                    Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
   
   /** Vector data typedefs. */
-  typedef otb::ogr::DataSource                            OGRDataSourceType;
-  typedef otb::ogr::Layer                                 OGRLayerType;
-  typedef otb::ogr::Feature                               OGRFeatureType;
+  typedef otb::ogr::DataSource           OGRDataSourceType;
+  typedef otb::ogr::Layer                OGRLayerType;
+  typedef otb::ogr::Feature              OGRFeatureType;
 
   /** Raster data typedef */ 
-  typedef unsigned int                                                PixelType;
-  typedef otb::Image<PixelType, 2>                                    LabelImageType;
+  typedef unsigned int                   PixelType;
+  typedef otb::Image<PixelType, 2>       LabelImageType;
 
   /** Filters typedefs */
-  typedef ConnectedComponentStreamStitchingFilter< LabelImageType >             ConnectedComponentStreamStitchingFilterType;
-  typedef LabelImageVectorizationFilter<LabelImageType>                         LabelImageVectorizationFilterType;
+  typedef ConnectedComponentStreamStitchingFilter< LabelImageType >             
+                              ConnectedComponentStreamStitchingFilterType;
+  typedef LabelImageVectorizationFilter<LabelImageType>                         
+                              LabelImageVectorizationFilterType;
   
   
   /** Standard macro */
@@ -63,14 +64,18 @@ private:
   void DoInit() ITK_OVERRIDE
   {
     SetName("LabelImageVectorization");
-    SetDescription("This application performs the vectorization of an input label image");
+    SetDescription("This application performs the vectorization of an "
+      "input label image");
 
     // Documentation
     SetDocName("Mask Filtering");
-    SetDocLongDescription("Given an input label raster image, this application will output a vector data file containing "
-    "a polygon for each connected component of the input raster, where two components are connected if they share the same label."
-    "If the fusion parameter is activated, segments in the output image that might have been splitted due to streaming are merged"
-    "(two segment are merged if they are touching and if they share the same label)");
+    SetDocLongDescription("Given an input label raster image, this "
+      "application will output a vector data file containing a polygon "
+      "for each connected component of the input raster, where two "
+      "components are connected if they share the same label. If the "
+      "fusion parameter is activated, segments in the output image that "
+      "might have been splitted due to streaming are merged (two segment "
+      "are merged if they are touching and if they share the same label)");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
@@ -78,37 +83,36 @@ private:
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
     
-    AddParameter(ParameterType_Int,"connectivity","Full connectivity");
+    AddParameter(ParameterType_Bool,"connectivity","Full connectivity");
     SetParameterDescription("connectivity","Set full connectivity");
-    SetMinimumParameterIntValue("connectivity",0);
-    SetMaximumParameterIntValue("connectivity",1);
-    MandatoryOff("connectivity");
 
-    AddParameter(ParameterType_OutputFilename, "out", "Output vector data file ");
+    AddParameter(ParameterType_OutputFilename, "out", 
+      "Output vector data file ");
     SetParameterDescription("out","Output vector");
-
-    AddParameter(ParameterType_Int,"tile","Tile Size");
-    SetParameterDescription("tile","Size of the tiles used for streaming");
-    MandatoryOff("tile");
      
     AddParameter(ParameterType_Float,"tolerance","Tolerance");
-    SetParameterDescription("tolerance","Tolerance used for polygon simplification");
+    SetParameterDescription("tolerance",
+      "Tolerance used for polygon simplification");
     MandatoryOff("tolerance");
     
-    AddParameter(ParameterType_Int,"fusion","fusion");
+    AddParameter(ParameterType_Bool,"fusion","fusion");
     SetParameterDescription("fusion","Perform polygon fusion");
-    MandatoryOff("fusion");
      
     AddParameter(ParameterType_StringList,  "feat", "Output Image channels");
     SetParameterDescription("feat","Channels to write in the output image.");
     MandatoryOff("feat");
+
+    AddParameter(ParameterType_Int,"tile","Tile Size");
+    SetParameterDescription("tile","Size of the tiles used for streaming");
+    MandatoryOff("tile");
     
     AddRAMParameter();
 
     // Default values
-    SetDefaultParameterInt("connectivity", 0);
+    SetParameterInt("connectivity", 0);
     SetDefaultParameterFloat("tolerance", 0.);
-    SetDefaultParameterInt("fusion", 0);
+    SetParameterInt("fusion", 0);
+    
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "sar.tif");
     SetDocExampleParameterValue("out","test.sqlite");
@@ -122,11 +126,9 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   {
-    // Start Timer for the application
-    auto Timer = Stopwatch::StartNew();
-    
     // Create the OGR DataSource with the appropriate fields
-    std::string projRef = this->GetParameterUInt32Image("in")->GetProjectionRef();
+    std::string projRef = 
+            this->GetParameterUInt32Image("in")->GetProjectionRef();
     OGRSpatialReference oSRS(projRef.c_str());
     std::string layer_name = "layer";
     std::string field_name = "field";
@@ -134,7 +136,9 @@ private:
     std::string dataSourceName = GetParameterString("out");
 
     // Create the datasource
-    auto ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
+    auto ogrDS = 
+      otb::ogr::DataSource::New(dataSourceName, 
+                                otb::ogr::DataSource::Modes::Overwrite);
     auto layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
     OGRFieldDefn field(field_name.c_str(), OFTInteger);
     layer.CreateField(field, true);
@@ -142,40 +146,42 @@ private:
     //ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
      
     // Mask FIlter : Vectorization of the input raster
-    LabelImageVectorizationFilterType::Pointer labelImageFilter = LabelImageVectorizationFilterType::New();
+    LabelImageVectorizationFilterType::Pointer labelImageFilter = 
+      LabelImageVectorizationFilterType::New();
     
     // Labeled image to be vectorized
     labelImageFilter->SetInput(this->GetParameterUInt32Image("in"));
     labelImageFilter->SetOGRLayer(layer) ;
     if (IsParameterEnabled("tile") && HasValue("tile"))
-    {
-      labelImageFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
-    }
+      {
+      labelImageFilter->GetStreamer()->SetTileDimensionTiledStreaming(
+        this->GetParameterInt("tile"));
+      }
     else
-    {
+      {
       labelImageFilter->GetStreamer()->SetAutomaticTiledStreaming();
-    }
+      }
     // Enlarge is not a parameter of the application, if the fusion option is 'on' we enlarge, if it is 'off' we don't
     if (this->GetParameterInt("fusion") == 1)
-    {
+      {
       labelImageFilter->SetEnlarge(1);
-    }
+      }
     
     // Input labels : Labels in the input image that will be vectorized
     std::vector<int> inputLabels;
     if(IsParameterEnabled("feat") )
-    {
-      std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
-      for (std::vector<std::string>::iterator it = inputLabelsStr.begin(); it != inputLabelsStr.end(); it++)
       {
-        inputLabels.push_back(std::stoi(*it));
+      std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
+      for ( const auto & label : inputLabelsStr )
+        {
+        inputLabels.push_back(std::stoi(label));
+        }
       }
-    }
     else
-    {
+      {
       // if no labels are given to the filter, they are all used
       inputLabels.clear();
-    }
+      }
     
     labelImageFilter->SetLabels(inputLabels);
     labelImageFilter->SetUse8Connected(this->GetParameterInt("connectivity"));
@@ -190,15 +196,13 @@ private:
     // Fusion Filter : Regroup polygons splitted across tiles.
     if (this->GetParameterInt("fusion") == 1)
     {
-      ConnectedComponentStreamStitchingFilterType::Pointer fusionFilter = ConnectedComponentStreamStitchingFilterType::New();
+      ConnectedComponentStreamStitchingFilterType::Pointer fusionFilter = 
+                          ConnectedComponentStreamStitchingFilterType::New();
       fusionFilter->SetInput(this->GetParameterUInt32Image("in"));
       fusionFilter->SetOGRLayer(layer);
       fusionFilter->SetStreamSize(labelImageFilter->GetStreamSize());
       fusionFilter->GenerateData();
     }
-    
-    Timer.Stop();
-    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
 
   }
 }; 
