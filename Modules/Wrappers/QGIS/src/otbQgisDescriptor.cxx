@@ -338,6 +338,10 @@ int main(int argc, char* argv[])
   indexFile << group << "|" << module << std::endl;
   indexFile.close();
   std::cerr << "Updated " << algs_txt << std::endl;
+
+  appli = nullptr;
+  ApplicationRegistry::CleanRegistry();
+
   return EXIT_SUCCESS;
   }
 
