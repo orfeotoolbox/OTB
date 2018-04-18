@@ -645,6 +645,8 @@ int Application::ExecuteAndWriteOutput()
 {
   m_Chrono.Restart();
 
+  m_Logger->LogSetupInformation();
+
   int status = this->Execute();
 
   if (status == 0)
@@ -1040,6 +1042,37 @@ void Application::SetDefaultParameterInt(std::string parameter, int value)
     }
 }
 
+int Application::GetDefaultParameterInt(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  int ret = 0 ;
+  if (dynamic_cast<RadiusParameter*>(param))
+    {
+    RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
+    ret = paramRadius->GetDefaultValue();
+    }
+   else if (dynamic_cast<IntParameter*>(param))
+    {
+    IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
+    ret = paramInt->GetDefaultValue();
+    }
+  else if (dynamic_cast<FloatParameter*>(param))
+    {
+    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
+    ret = paramFloat->GetDefaultValue();
+    }
+  else if (dynamic_cast<RAMParameter*>(param))
+    {
+    RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
+    ret = paramRAM->GetDefaultValue();
+    }
+  else
+    {
+    // log
+    }
+  return ret;
+}
+
 void Application::SetDefaultParameterFloat(std::string parameter, float value)
 {
   Parameter* param = GetParameterByKey(parameter);
@@ -1050,6 +1083,18 @@ void Application::SetDefaultParameterFloat(std::string parameter, float value)
     paramFloat->SetDefaultValue(value);
     if (!param->HasUserValue()) paramFloat->SetValue(value);
     }
+}
+
+float Application::GetDefaultParameterFloat(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<FloatParameter*>(param))
+    {
+    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
+    return paramFloat->GetDefaultValue();
+    }
+  return 0;
 }
 
 void Application::SetDefaultOutputPixelType(std::string parameter, ImagePixelType type)
