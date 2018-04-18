@@ -75,7 +75,9 @@ private:
     // Documentation
     SetDocName("ImageConnectedComponentSegmentation");
     SetDocLongDescription("This application performs connected component "
-      "segmentation using an user criterion for connected components");
+      "segmentation using an user criterion for connected components. "
+      "Optionally, an expression can be given to the application to "
+      "mask some pixels during segmentation.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
@@ -89,17 +91,33 @@ private:
     AddParameter(ParameterType_String, "expr", 
       "Connected Component Expression");
     SetParameterDescription("expr", 
-      "Formula used for connected component segmentation");
-    
+      "MuParser Formula used for connected component segmentation, two pixels "
+      "are connected if the expression evaluates to one. "
+      "The following parameters, functions and constants can be used in the "
+      "expression :"
+      "p1bX, p2bX, where X denote band index for pixel values."
+      "distance : euclidian distance between the pixels."
+      "ndvi(r, niri) of a pixel."
+      "e - log2e - log10e - ln2 - ln10 - pi - euler.");
+
+
     AddParameter(ParameterType_String, "mask", "Mask expression");
     SetParameterDescription("mask", 
-      "Mask mathematical expression (only if support image is given)");
+      "MuParser mask mathematical expression. A pixel is masked if the "
+      "expression evaluates to one."
+      "The following parameters, functions and constants can be used in the "
+      "expression :"
+      "bX, where X denote band index for pixel values."
+      "distance : euclidian distance between the pixels."
+      "ndvi(r, niri) of a pixel."
+      "e - log2e - log10e - ln2 - ln10 - pi - euler.");
     MandatoryOff("mask");
     
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("expr", "\"distance<10\"");
+    SetDocExampleParameterValue("expr", "distance<10");
+    SetDocExampleParameterValue("mask", "b1<30");
     SetDocExampleParameterValue("in", "sar.tif");
     SetDocExampleParameterValue("out","test.sqlite");
     SetOfficialDocLink();
