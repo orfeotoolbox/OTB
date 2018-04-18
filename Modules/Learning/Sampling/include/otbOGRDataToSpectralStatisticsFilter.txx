@@ -402,6 +402,90 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     }
   m_CurrentFID[threadid] = fId;
 }
+
+template<class TInputImage, class TMaskImage>
+void
+PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS)
+{
+  TInputImage *inputImage = const_cast<TInputImage*>(this->GetInput());
+  inputImage->UpdateOutputInformation();
+
+  ogr::Layer inLayer = inputDS->GetLayer(this->GetLayerIndex());
+
+  bool updateMode = false;
+  if (inputDS == outputDS)
+    {
+    updateMode = true;
+    // Check m_OutLayerName is same as input layer name
+    this->SetOutLayerName(inLayer.GetName());
+    }
+
+  // First get list of current fields
+  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
+  std::map<std::string, OGRFieldType> currentFields;
+  for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
+    {
+    OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
+    std::string currentName(fieldDefn.GetNameRef());
+    currentFields[currentName] = fieldDefn.GetType();
+    }
+
+  ogr::Layer outLayer = inLayer;
+  if (!updateMode)
+    {
+    std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
+    bool projectionInformationAvailable = !projectionRefWkt.empty();
+    OGRSpatialReference * oSRS = ITK_NULLPTR;
+    if(projectionInformationAvailable)
+      {
+      oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
+      }
+    // Create layer
+    outLayer = outputDS->CreateLayer(
+      this->GetOutLayerName(),
+      oSRS,
+       wkbPolygon,
+      this->GetOGRLayerCreationOptions());
+    // Copy existing fields
+    for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
+      {
+      OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
+      outLayer.CreateField(fieldDefn);
+      }
+
+    if (oSRS)
+      {
+      oSRS->Release();
+      }
+    }
+
+  // Add new fields
+  
+  auto AdditionalFields = this->GetAdditionalFields();
+  for (unsigned int k=0 ; k<AdditionalFields.size() ; k++)
+    {
+    OGRFieldDefn ogrFieldDefinition(AdditionalFields[k].Name.c_str(),AdditionalFields[k].Type);
+    ogrFieldDefinition.SetWidth( AdditionalFields[k].Width );
+    ogrFieldDefinition.SetPrecision( AdditionalFields[k].Precision );
+    ogr::FieldDefn fieldDef(ogrFieldDefinition);
+    // test if field is already present
+    if (currentFields.count(fieldDef.GetName()))
+      {
+      // test the field type
+      if (currentFields[fieldDef.GetName()] != fieldDef.GetType())
+        {
+        itkExceptionMacro("Field name "<< fieldDef.GetName() << " already exists with a different type!");
+        }
+      }
+    else
+      {
+      outLayer.CreateField(fieldDef);
+      }
+    }
+}
+
+
 // -------------- otb::OGRDataToSpectralStatisticsFilter --------------------------
 
 template<class TInputImage, class TMaskImage>
@@ -484,6 +568,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 {
   return this->GetFilter()->GetFieldName();
 }
+
 
 } // end of namespace otb
 

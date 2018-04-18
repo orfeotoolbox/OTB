@@ -87,7 +87,6 @@ public:
   ogr::DataSource* GetOutputSamples();
 
 
-
 protected:
   /** Constructor */
   PersistentOGRDataToSpectralStatisticsFilter();
@@ -111,6 +110,11 @@ protected:
   /** Prepare temporary variables for the current feature */
   void PrepareFeature(const ogr::Feature& feature,
                       itk::ThreadIdType& threadid) override;
+
+  /** Initialize output datasource, this method is overrided because we need to set the output geometry type as wkbPolygon 
+   * instead of wkbPoint (as it is in the base class) */
+  void InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS) override;
+
 
 private:
   PersistentOGRDataToSpectralStatisticsFilter(const Self &); //purposely not implemented
@@ -137,8 +141,6 @@ private:
   bool m_updateMode = 0;
 
 };
-
-
 
 /**
  * \class OGRDataToSpectralStatisticsFilter
