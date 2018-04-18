@@ -75,35 +75,50 @@ private:
       "components are connected if they share the same label. If the "
       "fusion parameter is activated, segments in the output image that "
       "might have been splitted due to streaming are merged (two segment "
-      "are merged if they are touching and if they share the same label)");
+      "are merged if they are touching and if they share the same label)." 
+      "By default, all segments with a label different than 0 are vectorized, "
+      "but the feat parameter can be set to choose which label should be"
+      "vectorized.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
     
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image.");
+    SetParameterDescription("in", "Input label image to be vectorized.");
     
     AddParameter(ParameterType_Bool,"connectivity","Full connectivity");
-    SetParameterDescription("connectivity","Set full connectivity");
+    SetParameterDescription("connectivity","if this parameter is set to true,"
+    "an eight pixels neighbourhood will be used instead of the default"
+    "four pixels neighbourdhood.");
 
     AddParameter(ParameterType_OutputFilename, "out", 
       "Output vector data file ");
     SetParameterDescription("out","Output vector");
      
-    AddParameter(ParameterType_Float,"tolerance","Tolerance");
-    SetParameterDescription("tolerance",
+    AddParameter(ParameterType_Float,"tolerance",
       "Tolerance used for polygon simplification");
+    SetParameterDescription("tolerance",
+      "Simplify polygons according to a given tolerance (in pixel). "
+      "This option allows reducing the size of the output file or database.");
     MandatoryOff("tolerance");
     
-    AddParameter(ParameterType_Bool,"fusion","fusion");
-    SetParameterDescription("fusion","Perform polygon fusion");
+    AddParameter(ParameterType_Bool,"fusion","flag to perform polygon fusion");
+    SetParameterDescription("fusion","If this parameter is set to true , "
+    "segments in the output image that might have been splitted due to "
+    "streaming are merged (two segment are merged if they are touching and if "
+    "they share the same label).");
      
-    AddParameter(ParameterType_StringList,  "feat", "Output Image channels");
-    SetParameterDescription("feat","Channels to write in the output image.");
+    AddParameter(ParameterType_StringList,  "feat", "Input image labels");
+    SetParameterDescription("feat","label in the input image to be vectorized."
+      "By default all labels but 0 are used. This parameter can be set for "
+      "example to vectorize a classification map, and output a polygon by "
+      "connex component of a same class");
     MandatoryOff("feat");
 
     AddParameter(ParameterType_Int,"tile","Tile Size");
-    SetParameterDescription("tile","Size of the tiles used for streaming");
+    SetParameterDescription("tile","Size of the tiles used for streaming,"
+      "by default, size tile is automatically computed using the available"
+      "RAM.");
     MandatoryOff("tile");
     
     AddRAMParameter();
@@ -132,19 +147,15 @@ private:
     OGRSpatialReference oSRS(projRef.c_str());
     std::string layer_name = "layer";
     std::string field_name = "field";
-    //std::string outmode = GetParameterString("outmode");
     std::string dataSourceName = GetParameterString("out");
 
     // Create the datasource
-    auto ogrDS = 
-      otb::ogr::DataSource::New(dataSourceName, 
+    auto ogrDS = otb::ogr::DataSource::New(dataSourceName, 
                                 otb::ogr::DataSource::Modes::Overwrite);
     auto layer = ogrDS->CreateLayer(layer_name, &oSRS, wkbPolygon);
     OGRFieldDefn field(field_name.c_str(), OFTInteger);
     layer.CreateField(field, true);
-   
-    //ogrDS = otb::ogr::DataSource::New(GetParameterString("out"), otb::ogr::DataSource::Modes::Overwrite);
-     
+    
     // Mask FIlter : Vectorization of the input raster
     LabelImageVectorizationFilterType::Pointer labelImageFilter = 
       LabelImageVectorizationFilterType::New();
@@ -153,35 +164,36 @@ private:
     labelImageFilter->SetInput(this->GetParameterUInt32Image("in"));
     labelImageFilter->SetOGRLayer(layer) ;
     if (IsParameterEnabled("tile") && HasValue("tile"))
-      {
+    {
       labelImageFilter->GetStreamer()->SetTileDimensionTiledStreaming(
         this->GetParameterInt("tile"));
-      }
+    }
     else
-      {
+    {
       labelImageFilter->GetStreamer()->SetAutomaticTiledStreaming();
-      }
+    }
+    
     // Enlarge is not a parameter of the application, if the fusion option is 'on' we enlarge, if it is 'off' we don't
     if (this->GetParameterInt("fusion") == 1)
-      {
+    {
       labelImageFilter->SetEnlarge(1);
-      }
+    }
     
     // Input labels : Labels in the input image that will be vectorized
     std::vector<int> inputLabels;
     if(IsParameterEnabled("feat") )
-      {
+    {
       std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
       for ( const auto & label : inputLabelsStr )
-        {
-        inputLabels.push_back(std::stoi(label));
-        }
-      }
-    else
       {
+        inputLabels.push_back(std::stoi(label));
+      }
+    }
+    else
+    {
       // if no labels are given to the filter, they are all used
       inputLabels.clear();
-      }
+    }
     
     labelImageFilter->SetLabels(inputLabels);
     labelImageFilter->SetUse8Connected(this->GetParameterInt("connectivity"));
