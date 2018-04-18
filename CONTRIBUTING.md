@@ -136,7 +136,7 @@ purpose of this CLA is to ensure that the project has the necessary ownership or
 grants of rights over all contributions to allow them to distribute under the
 chosen license (Apache License Version 2.0)
 
-To accept your contribution, you need to complete, sign and email to *cla [at]
+To accept your contribution, we need you to complete, sign and email to *cla [at]
 orfeo-toolbox [dot] org* an [Individual Contributor Licensing
 Agreement](https://www.orfeo-toolbox.org/cla/icla-en.doc) (ICLA) form and a
 [Corporate Contributor Licensing
