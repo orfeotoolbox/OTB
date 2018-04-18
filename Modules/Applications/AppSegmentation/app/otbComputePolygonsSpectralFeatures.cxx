@@ -125,7 +125,6 @@ private:
     }
     OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
     SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
-    SpectralStatisticsFilter->UpdateLargestPossibleRegion() ;
     if (IsParameterEnabled("tile") && HasValue("tile"))
       SpectralStatisticsFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
     else
