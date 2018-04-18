@@ -58,6 +58,13 @@ then send a merge request.
 Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB)
 which we will manually merge.
 
+Feature branches are tested on multiple platforms on the OTB test infrastructure (a.k.a the [Dashboard](https://dash.orfeo-toolbox.org/)). They appear in the FeatureBranches section. 
+
+Caveat: even if the Dashboard build on develop branch is broken, it is not
+allowed to push fixes directly on develop. The developer trying to fix the
+build should create a merge request and submit it for review. Direct push to
+develop without review must be avoided.
+
 ### Commit message
 
 On your feature branch, write a good [commit message](https://xkcd.com/1296/):
@@ -93,7 +100,11 @@ OTB team.
 * Merge requests **must receive at least 2 positives votes from core developers** (members of Main Repositories group in Gitlab with at least "Developer" level; this includes PSC members) before being merged
 * The merger is responsible for checking that the branch is up-to-date with develop
 * Merge requests can be merged by anyone (not just PSC or RM) with push access to develop
-* Merge requests can be merged once the dashboard is proven green for this branch
+* Merge requests can be merged once the dashboard is proven green for this branch.
+  This condition is mandatory unless reviewers and authors explicitely agree that
+  it can be skipped (for instance in case of documentation merges or compilation
+  fixes on develop). Branches of that sort can be identified with the ~patch label, 
+  which tells the reviewer that the author would like to merge without dashboard testing.
 
 Branches can be registered for dashboard testing by adding one line in `Config/feature_branches.txt` in [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git).
 
@@ -142,6 +153,7 @@ Regarding labels, we use the following set:
   correspond to a Request for Comments that has turned into a development action
 * ~bug: Bug, crash or unexpected behavior, reported by a user or a developer
 * ~feature: Feature request expressed by an OTB user/developer
+* ~patch: A small patch fixing build warnings, compilation errors, typos in logs or documentation
 * ~"To Do": action is planned
 * ~Doing: work in progress
 * ~api ~app ~documentation ~monteverdi ~packaging ~qgis: optional context information
