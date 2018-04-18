@@ -99,21 +99,33 @@ private:
     AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
     SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, "
       "a segment is of size lower than this criterion, the segment is merged with the segment "
-      "that has the closest sepctral signature.");
+      "that has the closest sepctral signature. If this option is used, the application will create"
+      "temporary files, and will remove them (if the parameter cleanup is set to true) at"
+      "the end of the app");
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
     
     ShareParameter("filter","filtering.expr");
     MandatoryOff("filter");
     
-    AddParameter( ParameterType_Int, "cleanup", "Temporary files cleaning" );
+    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
     EnableParameter( "cleanup" );
     SetParameterDescription( "cleanup",
-      "If activated, the application will try to clean all temporary files it created" );
-    SetMinimumParameterIntValue("cleanup", 0);
-    SetMaximumParameterIntValue("cleanup", 1);
+      "If activated, the application will try to clean all temporary files it created."
+      "Note that temporary files are only created if the minsize option"
+      "is activated");
     SetDefaultParameterInt("cleanup", 1);
     MandatoryOff( "cleanup" );
+
+    AddParameter(ParameterType_Directory,"tmpdir","Directory where to "
+      "write temporary files");
+    SetParameterDescription("tmpdir","This applications need to write "
+      "temporary files for each tile (only if the minsize option"
+      "is activated).This parameter allows choosing the path where to" 
+      "write those files."
+      "If disabled, the directory of the out parameter will be used.");
+    MandatoryOff("tmpdir");
+    DisableParameter("tmpdir");
 
     Connect("spectral.tile","vectorization.tile");
     Connect("geometric.in","vectorization.out");
@@ -144,8 +156,26 @@ private:
     // Temporary files (deleted depending on "cleanup" parameter)
     std::string outPath(this->GetParameterString("out"));
     std::vector<std::string> tmpFilenames;
-    tmpFilenames.push_back(outPath+std::string("_labelmap.tif"));
-    tmpFilenames.push_back(outPath+std::string("_labelmap_merged.tif"));
+    
+    // The temporay folder will be removed if this flag is set to true
+    bool TmpDirCleanup = false;
+    
+    if (IsParameterEnabled("tmpdir") && HasValue("tmpdir"))
+    {
+      // Test if the temporary directory already exists
+      if(!itksys::SystemTools::FileExists(GetParameterString("tmpdir").c_str()))
+      {
+        TmpDirCleanup = true;
+        itksys::SystemTools::MakeDirectory(GetParameterString("tmpdir").c_str());
+      }
+      tmpFilenames.push_back(GetParameterString("tmpdir") + std::string("/labelmap.tif"));
+      tmpFilenames.push_back(GetParameterString("tmpdir") + std::string("/labelmap_merged.tif"));
+    }
+    else
+    {
+      tmpFilenames.push_back(outPath+std::string("_labelmap.tif"));
+      tmpFilenames.push_back(outPath+std::string("_labelmap_merged.tif"));
+    }    
       
     // If the LSMSSmallRegionsMerging application is used, we can't use in-memory connection, so we have to write all outputs image files.
     if (IsParameterEnabled("minsize") && HasValue("minsize"))
@@ -187,20 +217,23 @@ private:
     {  
       ExecuteInternal("filtering");
     }
-    
-    // Delete temporary files
-    if(this->GetParameterInt("cleanup") == 1)
+
+    // Clean temporary files
+    if(GetParameterInt("cleanup"))
     {
-      otbAppLogINFO( <<"Final clean-up ..." );
+      otbAppLogINFO(<<"Final clean-up ...");
       for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)
       {
-        if(itksys::SystemTools::FileExists(tmpFilenames[i].c_str()))
-        {
-          itksys::SystemTools::RemoveFile(tmpFilenames[i].c_str());
-        }
+        itksys::SystemTools::RemoveFile(tmpFilenames[i].c_str());
+      }
+
+      if(IsParameterEnabled("tmpdir") && TmpDirCleanup)
+      {
+        otbAppLogINFO(<<"Removing tmp directory "<<GetParameterString("tmpdir")<<", since it has been created by the application");
+        itksys::SystemTools::RemoveADirectory(GetParameterString("tmpdir").c_str());
       }
     }
-    
+
     Timer.Stop();
     otbAppLogINFO( "Total elapsed time: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
