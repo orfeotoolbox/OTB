@@ -32,6 +32,101 @@
 namespace otb
 {
 
+/** \class StatisticsMapAccumulator
+ * \brief Holds statistics for each label of a label image
+ *
+ * TODO: enrich, create base class for this, and move class in other source code?
+ */
+template<class TRealVectorPixelType>
+class StatisticsAccumulator
+{
+public:
+
+  typedef typename TRealVectorPixelType::ValueType RealValueType;
+
+  // Constructor (default)
+  StatisticsAccumulator(){}
+
+  // Constructor (initialize the accumulator with the given pixel)
+  StatisticsAccumulator(const TRealVectorPixelType & pixel)
+  {
+    m_Count = 1;
+    m_Sum = pixel;
+    m_Min = pixel;
+    m_Max = pixel;
+    m_SqSum = pixel;
+    for (unsigned int band = 0 ; band < m_SqSum.GetSize() ; band++)
+      m_SqSum[band] *= m_SqSum[band];
+  }
+
+  // Constructor (other)
+  StatisticsAccumulator(const StatisticsAccumulator & other)
+  {
+    m_Count = other.m_Count;
+    m_Sum = other.m_Sum;
+    m_Min = other.m_Min;
+    m_Max = other.m_Max;
+    m_SqSum = other.m_SqSum;
+  }
+
+  // Destructor
+  ~StatisticsAccumulator(){}
+
+  // Function update (pixel)
+  void Update(const TRealVectorPixelType & pixel)
+  {
+    m_Count++;
+    const unsigned int nBands = pixel.GetSize();
+    for (unsigned int band = 0 ; band < nBands ; band ++ )
+      {
+      const RealValueType value = pixel[band];
+      const RealValueType sqValue = value * value;
+      UpdateValues(value, sqValue, value, value,
+          m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
+      }
+  }
+
+  // Function update (self)
+  void Update(const StatisticsAccumulator & other)
+  {
+    m_Count += other.m_Count;
+    const unsigned int nBands = other.m_Sum.GetSize();
+    for (unsigned int band = 0 ; band < nBands ; band ++ )
+      {
+      UpdateValues(other.m_Sum[band], other.m_SqSum[band], other.m_Min[band], other.m_Max[band],
+          m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
+      }
+  }
+
+  // Accessors
+  const TRealVectorPixelType GetSum() { return m_Sum; }
+  const TRealVectorPixelType GetSqSum() { return m_SqSum; }
+  const TRealVectorPixelType GetMin() { return m_Min; }
+  const TRealVectorPixelType GetMax() { return m_Max; }
+  double GetCount() { return m_Count; }
+
+private:
+  void UpdateValues(const RealValueType & otherSum, const RealValueType & otherSqSum,
+      const RealValueType & otherMin, const RealValueType & otherMax,
+      RealValueType & sum, RealValueType & sqSum,
+      RealValueType & min, RealValueType & max)
+  {
+  sum += otherSum;
+  sqSum += otherSqSum;
+  if (otherMin < min)
+    min = otherMin;
+  if (otherMax > max)
+    max = otherMax;
+  }
+
+protected:
+  TRealVectorPixelType m_Sum;
+  TRealVectorPixelType m_SqSum;
+  TRealVectorPixelType m_Min;
+  TRealVectorPixelType m_Max;
+  double m_Count;
+};
+
 /** \class PersistentStreamingStatisticsMapFromLabelImageFilter
  * \brief Computes mean radiometric value for each label of a label image, based on a support VectorImage
  *
@@ -75,9 +170,13 @@ public:
   typedef typename TLabelImage::Pointer       LabelImagePointer;
 
   typedef typename VectorImageType::PixelType                           VectorPixelType;
+  typedef typename VectorImageType::PixelType::ValueType                VectorPixelValueType;
   typedef typename LabelImageType::PixelType                            LabelPixelType;
-  typedef std::map<LabelPixelType, itk::VariableLengthVector<double> >  MeanValueMapType;
-  typedef std::map<LabelPixelType, double>                              LabelPopulationMapType;
+  typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
+  typedef StatisticsAccumulator<RealVectorPixelType>                    AccumulatorType;
+  typedef std::map<LabelPixelType, AccumulatorType >                    AccumulatorMapType;
+  typedef std::map<LabelPixelType, RealVectorPixelType >  PixelValueMapType;
+  typedef std::map<LabelPixelType, double>                LabelPopulationMapType;
 
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputVectorImage::ImageDimension);
@@ -94,7 +193,7 @@ public:
   typedef typename ImageBaseType::RegionType InputImageRegionType;
 
   /** Type of DataObjects used for scalar outputs */
-  typedef itk::SimpleDataObjectDecorator<MeanValueMapType>  MeanValueMapObjectType;
+  typedef itk::SimpleDataObjectDecorator<PixelValueMapType>  PixelValueMapObjectType;
 
   /** Set input label image */
   virtual void SetInputLabelImage( const LabelImageType *image);
@@ -103,7 +202,16 @@ public:
   virtual const LabelImageType * GetInputLabelImage();
 
   /** Return the computed Mean for each label in the input label image */
-  MeanValueMapType GetMeanValueMap() const;
+  PixelValueMapType GetMeanValueMap() const;
+
+  /** Return the computed Standard Deviation for each label in the input label image */
+  PixelValueMapType GetStandardDeviationValueMap() const;
+
+  /** Return the computed Min for each label in the input label image */
+  PixelValueMapType GetMinValueMap() const;
+
+  /** Return the computed Max for each label in the input label image */
+  PixelValueMapType GetMaxValueMap() const;
 
   /** Return the computed number of labeled pixels for each label in the input label image */
   LabelPopulationMapType GetLabelPopulationMap() const;
@@ -134,13 +242,21 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** GenerateData. */
-  void  GenerateData() override;
+  void GenerateData() override;
 
 private:
   PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  MeanValueMapType                       m_RadiometricValueAccumulator;
+  // Internal
+  AccumulatorMapType                     accumulator;
+
+  // User
+  PixelValueMapType                      m_MeanRadiometricValue;
+  PixelValueMapType                      m_StDevRadiometricValue;
+  PixelValueMapType                      m_MinRadiometricValue;
+  PixelValueMapType                      m_MaxRadiometricValue;
+
   LabelPopulationMapType                 m_LabelPopulation;
 }; // end of class PersistentStreamingStatisticsMapFromLabelImageFilter
 
@@ -212,8 +328,8 @@ public:
   typedef TInputVectorImage                   VectorImageType;
   typedef TLabelImage                         LabelImageType;
 
-  typedef typename Superclass::FilterType::MeanValueMapType          MeanValueMapType;
-  typedef typename Superclass::FilterType::MeanValueMapObjectType    MeanValueMapObjectType;
+  typedef typename Superclass::FilterType::PixelValueMapType         PixelValueMapType;
+  typedef typename Superclass::FilterType::PixelValueMapObjectType   PixelValueMapObjectType;
 
   typedef typename Superclass::FilterType::LabelPopulationMapType    LabelPopulationMapType;
 
@@ -243,9 +359,27 @@ public:
   }
 
   /** Return the computed Mean for each label */
-  MeanValueMapType GetMeanValueMap() const
+  PixelValueMapType GetMeanValueMap() const
   {
     return this->GetFilter()->GetMeanValueMap();
+  }
+
+  /** Return the computed Standard Deviation for each label */
+  PixelValueMapType GetStandardDeviationValueMap() const
+  {
+    return this->GetFilter()->GetStandardDeviationValueMap();
+  }
+
+  /** Return the computed Min for each label */
+  PixelValueMapType GetMinValueMap() const
+  {
+    return this->GetFilter()->GetMinValueMap();
+  }
+
+  /** Return the computed Max for each label */
+  PixelValueMapType GetMaxValueMap() const
+  {
+    return this->GetFilter()->GetMaxValueMap();
   }
 
   /** Return the computed number of labeled pixels for each label */
