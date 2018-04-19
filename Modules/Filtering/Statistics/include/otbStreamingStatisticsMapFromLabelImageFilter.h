@@ -36,6 +36,8 @@ namespace otb
  * \brief Holds statistics for each label of a label image
  *
  * TODO: enrich, create base class for this, and move class in other source code?
+ *
+ * \ingroup OTBStatistics
  */
 template<class TRealVectorPixelType>
 class StatisticsAccumulator
@@ -249,7 +251,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   // Internal
-  AccumulatorMapType                     accumulator;
+  AccumulatorMapType                     accumulatorMap;
 
   // User
   PixelValueMapType                      m_MeanRadiometricValue;

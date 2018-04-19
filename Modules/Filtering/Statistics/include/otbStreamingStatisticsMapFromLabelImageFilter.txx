@@ -177,7 +177,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   // Update temporary accumulator
   AccumulatorMapType outputAcc;
   typename AccumulatorMapType::iterator it;
-  for(it = accumulator.begin(); it != accumulator.end(); it++)
+  for(it = accumulatorMap.begin(); it != accumulatorMap.end(); it++)
     {
     const LabelPixelType label = it->first;
     if (outputAcc.count(label) <= 0)
@@ -229,7 +229,7 @@ void
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::Reset()
 {
-  accumulator.clear();
+  accumulatorMap.clear();
 
   m_MeanRadiometricValue.clear();
   m_StDevRadiometricValue.clear();
@@ -295,14 +295,14 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
       value = inIt.Get();
       label = labelIt.Get();
 
-      if (accumulator.count(label) <= 0) //add new element to the map
+      if (accumulatorMap.count(label) <= 0) //add new element to the map
         {
         AccumulatorType newAcc(value);
-        accumulator[label] = newAcc;
+        accumulatorMap[label] = newAcc;
         }
       else
         {
-        accumulator[label].Update(value);
+        accumulatorMap[label].Update(value);
         }
     }
 }
