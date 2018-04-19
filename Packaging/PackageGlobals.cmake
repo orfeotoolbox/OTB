@@ -48,6 +48,7 @@ set(WINDOWS_SYSTEM_DLLS
   crypt32.dll
   dnsapi.dll
   dwmapi.dll
+  dwrite.dll
   d2d1.dll
   d3d9.dll
   d3d11.dll
