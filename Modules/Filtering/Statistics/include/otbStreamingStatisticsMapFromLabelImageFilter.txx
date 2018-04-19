@@ -176,28 +176,31 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
  {
   // Update temporary accumulator
   AccumulatorMapType outputAcc;
-  typename AccumulatorMapType::iterator it;
-  for(it = accumulatorMap.begin(); it != accumulatorMap.end(); it++)
+
+  for (auto& threadAccMap: accumulatorMaps)
     {
-    const LabelPixelType label = it->first;
-    if (outputAcc.count(label) <= 0)
+    for(auto& it: threadAccMap)
       {
-      AccumulatorType newAcc(it->second);
-      outputAcc[label] = newAcc;
-      }
-    else
-      {
-      outputAcc[label].Update(it->second);
+      const LabelPixelType label = it.first;
+      if (outputAcc.count(label) <= 0)
+        {
+        AccumulatorType newAcc(it.second);
+        outputAcc[label] = newAcc;
+        }
+      else
+        {
+        outputAcc[label].Update(it.second);
+        }
       }
     }
 
   // Publish output maps
-  for(it = outputAcc.begin(); it != outputAcc.end(); it++)
+  for(auto& it: outputAcc)
     {
-    const LabelPixelType label = it->first;
-    const double count = it->second.GetCount();
-    const RealVectorPixelType sum   = it->second.GetSum();
-    const RealVectorPixelType sqSum = it->second.GetSqSum();
+    const LabelPixelType label = it.first;
+    const double count = it.second.GetCount();
+    const RealVectorPixelType sum   = it.second.GetSum();
+    const RealVectorPixelType sqSum = it.second.GetSqSum();
 
     // Count
     m_LabelPopulation[label] = count;
@@ -218,8 +221,8 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
     m_StDevRadiometricValue[label] = std;
 
     // Min & max
-    m_MinRadiometricValue[label] = it->second.GetMin();
-    m_MaxRadiometricValue[label] = it->second.GetMax();
+    m_MinRadiometricValue[label] = it.second.GetMin();
+    m_MaxRadiometricValue[label] = it.second.GetMax();
     }
 
  }
@@ -229,13 +232,19 @@ void
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::Reset()
 {
-  accumulatorMap.clear();
+  accumulatorMaps.clear();
 
   m_MeanRadiometricValue.clear();
   m_StDevRadiometricValue.clear();
   m_MinRadiometricValue.clear();
   m_MaxRadiometricValue.clear();
   m_LabelPopulation.clear();
+
+  for (itk::ThreadIdType thread = 0 ; thread < this->GetNumberOfThreads() ; thread++)
+    {
+    AccumulatorMapType newMap;
+    accumulatorMaps.push_back(newMap);
+    }
 }
 
 template<class TInputVectorImage, class TLabelImage>
@@ -271,7 +280,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 template<class TInputVectorImage, class TLabelImage>
 void
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
-::GenerateData()
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId )
 {
   /**
    * Grab the input
@@ -279,14 +288,12 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   InputVectorImagePointer inputPtr =  const_cast<TInputVectorImage *>(this->GetInput());
   LabelImagePointer labelInputPtr =  const_cast<TLabelImage *>(this->GetInputLabelImage());
 
-  itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, inputPtr->GetRequestedRegion());
-  itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, labelInputPtr->GetRequestedRegion());
-
-  RealVectorPixelType zeroValue(inputPtr->GetNumberOfComponentsPerPixel());
-  zeroValue.Fill(0.0);
+  itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, outputRegionForThread);
+  itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, outputRegionForThread);
 
   typename VectorImageType::PixelType value;
   typename LabelImageType::PixelType label;
+
   // do the work
   for (inIt.GoToBegin(), labelIt.GoToBegin();
        !inIt.IsAtEnd() && !labelIt.IsAtEnd();
@@ -295,14 +302,15 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
       value = inIt.Get();
       label = labelIt.Get();
 
-      if (accumulatorMap.count(label) <= 0) //add new element to the map
+      // Update the accumulator
+      if (accumulatorMaps[threadId].count(label) <= 0) //add new element to the map
         {
         AccumulatorType newAcc(value);
-        accumulatorMap[label] = newAcc;
+        accumulatorMaps[threadId][label] = newAcc;
         }
       else
         {
-        accumulatorMap[label].Update(value);
+        accumulatorMaps[threadId][label].Update(value);
         }
     }
 }

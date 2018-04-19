@@ -35,7 +35,17 @@ namespace otb
 /** \class StatisticsMapAccumulator
  * \brief Holds statistics for each label of a label image
  *
- * TODO: enrich, create base class for this, and move class in other source code?
+ * Intended to store and update the following statistics:
+ * -count
+ * -sum of values
+ * -sum of squared values
+ * -min
+ * -max
+ *
+ * TODO:
+ * -Better architecture?
+ * -Enrich with other statistics?
+ * -Move this class in a dedicated source to enable its use by other otbStatistics stuff?
  *
  * \ingroup OTBStatistics
  */
@@ -139,7 +149,6 @@ protected:
  *
  * To get the statistics once the regions have been processed via the pipeline, use the Synthetize() method.
  *
- * \todo Implement other statistics (min, max, stddev...)
  *
  * \sa StreamingStatisticsMapFromLabelImageFilter
  * \ingroup Streamed
@@ -171,12 +180,14 @@ public:
   typedef TLabelImage                         LabelImageType;
   typedef typename TLabelImage::Pointer       LabelImagePointer;
 
+  typedef typename VectorImageType::RegionType                          RegionType;
   typedef typename VectorImageType::PixelType                           VectorPixelType;
   typedef typename VectorImageType::PixelType::ValueType                VectorPixelValueType;
   typedef typename LabelImageType::PixelType                            LabelPixelType;
   typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
   typedef StatisticsAccumulator<RealVectorPixelType>                    AccumulatorType;
   typedef std::map<LabelPixelType, AccumulatorType >                    AccumulatorMapType;
+  typedef std::vector<AccumulatorMapType>                               AccumulatorMapCollectionType;
   typedef std::map<LabelPixelType, RealVectorPixelType >  PixelValueMapType;
   typedef std::map<LabelPixelType, double>                LabelPopulationMapType;
 
@@ -243,15 +254,14 @@ protected:
   ~PersistentStreamingStatisticsMapFromLabelImageFilter() override {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  /** GenerateData. */
-  void GenerateData() override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId ) override;
 
 private:
   PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   // Internal
-  AccumulatorMapType                     accumulatorMap;
+  AccumulatorMapCollectionType           accumulatorMaps;
 
   // User
   PixelValueMapType                      m_MeanRadiometricValue;
