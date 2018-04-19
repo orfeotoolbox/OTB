@@ -57,7 +57,7 @@ set(QT5_SB_CONFIG
   "-prefix ${QT5_INSTALL_PREFIX_NATIVE} -L ${QT5_LIB_PREFIX_NATIVE} \
   -I ${QT5_INCLUDE_PREFIX_NATIVE} -I ${QT5_INCLUDE_FREETYPE_NATIVE} \
   -opensource -confirm-license -release -shared \
-  -nomake examples -nomake tools -no-openssl \
+  -nomake examples -make tools -no-openssl \
   -skip qtgamepad  \
   -skip qt3d  \
   -skip qtactiveqt  \
@@ -194,3 +194,11 @@ configure_file( ${QT5_CONFIGURE_COMMAND_IN} ${QT5_CONFIGURE_COMMAND} @ONLY )
 SUPERBUILD_PATCH_SOURCE(QT5)
 
 set(_SB_QT_QMAKE_EXECUTABLE ${SB_INSTALL_PREFIX}/bin/qmake)
+
+if(UNIX AND NOT APPLE)
+  ExternalProject_Add_Step(QT5 adding_font
+  COMMAND ${CMAKE_COMMAND} 
+  -D BUILD_DIR=${QT5_SB_BUILD_DIR} -D INSTALL_DIR=${SB_INSTALL_PREFIX} -D DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION} -P /home/antoine/dev/off_otbL/otb/SuperBuild/CMake/font_qt.cmake 
+  DEPENDEES install
+  WORKING_DIRECTORY ${SB_INSTALL_PREFIX} )
+endif()
