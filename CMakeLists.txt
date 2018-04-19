@@ -1,9 +1,9 @@
 #
 # Copyright (C) 2017 CS SI
 #
-# This file is part of remote module OTBStereoFilters
+#  This file is part of Orfeo Toolbox
 #
-#     TODO
+#    https://www.orfeo-toolbox.org/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+
+
 cmake_minimum_required(VERSION 2.8.9)
 project(OTBStereoFilters)
 
@@ -28,3 +30,5 @@ if(NOT OTB_SOURCE_DIR)
 else()
   otb_module_impl()
 endif()
+
+

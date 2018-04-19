@@ -14,7 +14,27 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
+
+ * Copyright (C) CS SI
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ 
 =========================================================================*/
+
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -55,7 +75,7 @@
 #include "otbConvolutionImageFilter.h"
 
 #include "otbMultiplyByScalarImageFilter.h"
-#include "itkAddConstantToImageFilter.h"
+#include <itkAddImageFilter.h>
 #include "otbThresholdVectorImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h" //muti channel 
 #include "otbVectorRescaleIntensityImageFilter.h" //muti channel
@@ -76,11 +96,11 @@ namespace otb
 namespace Wrapper
 {
 
-class CVF : public Application
+class CostVolumeFilter : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef CVF                 Self;
+  typedef CostVolumeFilter                 Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -127,12 +147,12 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(CVF, otb::Application);
+  itkTypeMacro(CostVolumeFilter, otb::Application);
 
   /** Filters typedef */
 
 private:
-  CVF()
+  CostVolumeFilter()
   {    
     m_MultiplyLeft = MultiplyFilterType::New();
 	m_MultiplyRight = MultiplyFilterType::New();
@@ -239,15 +259,15 @@ private:
 
   void DoInit() ITK_OVERRIDE
   {
-    SetName("CVF");
+    SetName("CostVolumeFilter");
     SetDescription("Performs Fast Cost Volume Filter to estimate a disparty map between two images");
 
-    SetDocName("CVF");
+    SetDocName("CostVolumeFilter");
     SetDocLongDescription("This application allows Fast Cost Volume Filter to estimate a disparty map between two images "
      "to present parameters types," 
       " and Application class framework. " 
       "It is used to generate Software guide documentation" 
-      " for Application chapter CVF.");
+      " for Application chapter CostVolumeFilter.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("");
@@ -854,5 +874,5 @@ SetParameterOutputImage("io.out",m_FillMedian->GetOutput());
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::CVF)
+OTB_APPLICATION_EXPORT(otb::Wrapper::CostVolumeFilter)
 

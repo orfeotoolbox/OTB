@@ -1,9 +1,9 @@
 #
 # Copyright (C) 2017 CS SI
 #
-# This file is part of remote module StereoFilters
+#  This file is part of Orfeo Toolbox
 #
-#     TODO
+#    https://www.orfeo-toolbox.org/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 
 set(DOCUMENTATION "This module contains advanced filters for block matching")
 

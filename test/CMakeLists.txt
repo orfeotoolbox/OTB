@@ -1,9 +1,11 @@
 #
 # Copyright (C) 2017 CS SI
 #
-# This file is part of remote module MatchingFilters
+# This file is part of remote module StereoFilters
 #
-#     TODO
+#  This file is part of Orfeo Toolbox
+#
+#    https://www.orfeo-toolbox.org/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,33 +20,38 @@
 # limitations under the License.
 #
 
+
 otb_module_test()
 
 set(OTBStereoFiltersTests
-otbStereoFiltersTestDriver.cxx
-cvf.cpp
-PatchMatch.cpp
+  otbStereoFiltersTestDriver.cxx
+  CostVolumeFilter.cpp
+  PatchMatch.cpp
 )
-
 
 add_executable(otbStereoFiltersTestDriver ${OTBStereoFiltersTests})
 target_link_libraries(otbStereoFiltersTestDriver ${OTBStereoFilters-Test_LIBRARIES})
 otb_module_target_label(otbStereoFiltersTestDriver)
 
 
+otb_add_test(NAME PatchMatch COMMAND otbStereoFiltersTestDriver 9 -15 0 ${INPUTDATA}/left_image.png 
+${INPUTDATA}/right_image.png ${TEMP}/)
+
+
 #----------- StereoFilters TESTS ----------------
-otb_test_application(NAME apTvCVFTest
-                     APP  CVF
+otb_test_application(NAME CostVolumeFilterTest
+                     APP  CostVolumeFilter
                      OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif
                              -io.inright ${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif
-                             -io.out ${TEMP}/apTvDmCVFTest.tif
+                             -io.out ${TEMP}/apTvCostVolumeFilterTest.tif
                              -hdispmin -15
-                             -hdispmax 0
-                                          
+                             -hdispmax 0                                          
                              -radius 9
                              -rmf 19
                              
                      VALID   --compare-image ${EPSILON_10}
-                         ${BASELINE}/apTvCVFTest.tif
-                         ${TEMP}/apTvCVFTest.tif
+                         ${BASELINE}/apTvCostVolumeFilterTest.tif
+                         ${TEMP}/apTvCostVolumeFilterTest.tif
                      )
+
+

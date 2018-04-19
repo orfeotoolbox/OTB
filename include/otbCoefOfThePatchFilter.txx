@@ -58,9 +58,9 @@ template <class TInputImage,  class TOutputImage >
 void
 CoefOfThePatchFilter<TInputImage, TOutputImage >
 ::SetInputImage(const TInputImage * image)
-{
- 
+{ 
   this->SetNthInput(0, const_cast<TInputImage *>( image ));
+}
 //================================== Geters ====================================================
 template <class TInputImage, class TOutputImage >
 const TInputImage *

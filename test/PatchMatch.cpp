@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) CS SI
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
 /** Execution ./bin/otbPatchMatchFiltersTestDriver main_PatchMatch radius dispMin dispMax
  * Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images/ 
  
@@ -8,7 +29,7 @@
   /home/dbelazou/src/otb/Modules/Remote/MatchingFilters/data/ImageRGB/middlebury/tsukuba1.png 
   /home/dbelazou/src/otb/Modules/Remote/MatchingFilters/data/SortiePatchMatch/
 
- * **/ 
+ * * */ 
 
 //standard
 #include <cstdio>
@@ -20,7 +41,6 @@
 //PatchMatch
 
 #include "otbCoefOfThePatchFilter.h"
-
 #include "otbAggregatedCostVectorPixelFilter.h"
 #include "otbSpatialPropagationImageFilter.h"
 #include "otbViewPropagationImageFilter.h"
@@ -54,7 +74,8 @@
 
 //ITK
 #include <itkImage.h>
-#include "itkAddConstantToImageFilter.h"
+//#include "itkAddConstantToImageFilter.h"
+#include <itkAddImageFilter.h>
 #include <itkVectorImageToImageAdaptor.h>
 #include "itkCastImageFilter.h"
 #include "itkMedianImageFilter.h"
@@ -64,15 +85,17 @@
 	
 int main_PatchMatch(int argc, char *argv[])
 {
+
 	
 if(argc < 7) {
+
 		std::cerr << "Usage: " << argv[0] << " radius min_disp max_disp Left_Image Right_Image Out_Path" << std::endl;
 		return EXIT_FAILURE;
 	}
 	
-     long unsigned int PatchSize = atoi(argv[1]);
-	 int HdispMin = atoi(argv[2]);
-	 int HdispMax  = atoi(argv[3]);
+  long unsigned int PatchSize = atoi(argv[1]);
+	int HdispMin = atoi(argv[2]);
+	int HdispMax  = atoi(argv[3]);
 	 
 	
   
@@ -89,7 +112,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   LeftReader->SetFileName(argv[4]); //LeftImage 
   LeftReader->UpdateOutputInformation();
  
-  // Reading ReghtInput images
+  // Reading RightInput images
   typedef otb::ImageFileReader<ImageType> RightReaderType;
   RightReaderType::Pointer RightReader = RightReaderType::New();
   RightReader->SetFileName(argv[5]);//RightImage
@@ -128,9 +151,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   //~ RightReader->SetRadius(radius); 
   
   
-  
-  
-  
+   
   
   
  //argv[6] le chemin des images de sortie  
@@ -311,7 +332,6 @@ double MaxDz0 = HdispMin/2;
 double MaxDn = 1;
 //char Sense;
 for(unsigned int iteration = 1 ; iteration < 4; iteration++){
-//unsigned int iteration = 2 ;
  std::cout<< "  iteration   " << iteration<< std::endl;
  ///Left  
   LeftSpatial->SetLeftInputImage(LeftReader->GetOutput());
@@ -357,8 +377,8 @@ else{
   SpatialPlaneWriter->SetFileName(FILENAME("SpatialPropPlaneOutputImage.tif"));
   SpatialPlaneWriter->SetInput( LeftSpatial->GetOutputPatchImage() ); 
 otb::StandardFilterWatcher watcherPlane(SpatialPlaneWriter, "SpatialPropFilter");  
-  SpatialPlaneWriter->Update();  
-  
+  SpatialPlaneWriter->Update();   
+
   
    ImageWriterType::Pointer SpatialCostWriter = ImageWriterType::New();
   SpatialCostWriter->SetFileName(FILENAME("SpatialPropCostOutputImage.tif"));  
