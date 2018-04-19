@@ -94,7 +94,7 @@ public:
       const RealValueType value = pixel[band];
       const RealValueType sqValue = value * value;
       UpdateValues(value, sqValue, value, value,
-          m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
+                   m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
       }
   }
 
@@ -106,7 +106,7 @@ public:
     for (unsigned int band = 0 ; band < nBands ; band ++ )
       {
       UpdateValues(other.m_Sum[band], other.m_SqSum[band], other.m_Min[band], other.m_Max[band],
-          m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
+                   m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
       }
   }
 
@@ -119,9 +119,9 @@ public:
 
 private:
   void UpdateValues(const RealValueType & otherSum, const RealValueType & otherSqSum,
-      const RealValueType & otherMin, const RealValueType & otherMax,
-      RealValueType & sum, RealValueType & sqSum,
-      RealValueType & min, RealValueType & max)
+                    const RealValueType & otherMin, const RealValueType & otherMax,
+                    RealValueType & sum, RealValueType & sqSum,
+                    RealValueType & min, RealValueType & max)
   {
   sum += otherSum;
   sqSum += otherSqSum;
@@ -159,7 +159,7 @@ protected:
  */
 template<class TInputVectorImage, class TLabelImage>
 class ITK_EXPORT PersistentStreamingStatisticsMapFromLabelImageFilter :
-  public PersistentImageFilter<TInputVectorImage, TInputVectorImage>
+public PersistentImageFilter<TInputVectorImage, TInputVectorImage>
 {
 public:
   /** Standard Self typedef */
@@ -295,17 +295,15 @@ private:
  * StatisticsType::Pointer statistics = StatisticsType::New();
  * statistics->SetInput(reader->GetOutput());
  * statistics->Update();
- * StatisticsType::MeanValueMapType meanValueMap = statistics->GetMeanValueMap();
- * StatisticsType::MeanValueMapType::const_iterator end = meanValueMap();
- * for (StatisticsType::MeanValueMapType::const_iterator it = meanValueMap.begin(); it != end; ++it)
+ * StatisticsType::PixelValueMapType meanValueMap = statistics->GetMeanValueMap();
+ * StatisticsType::PixelValueMapType::const_iterator end = meanValueMap();
+ * for (StatisticsType::PixelValueMapType::const_iterator it = meanValueMap.begin(); it != end; ++it)
  * {
  *       std::cout << "label : " << it->first << " , ";
  *                 << "mean value : " << it->second << std::endl;
  * }
  * \endcode
  *
- * \todo Implement other statistics (min, max, stddev...)
- * \todo Reimplement as a multi-threaded filter
  *
  * \sa PersistentStatisticsImageFilter
  * \sa PersistentImageFilter
@@ -321,13 +319,13 @@ private:
 
 template<class TInputVectorImage, class TLabelImage>
 class ITK_EXPORT StreamingStatisticsMapFromLabelImageFilter :
-  public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage> >
+public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage> >
 {
 public:
   /** Standard Self typedef */
   typedef StreamingStatisticsMapFromLabelImageFilter Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage> > Superclass;
+      <PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

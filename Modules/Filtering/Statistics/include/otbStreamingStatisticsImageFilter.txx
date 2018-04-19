@@ -40,7 +40,7 @@ PersistentStatisticsImageFilter<TInputImage>
    m_ThreadMax(1),
    m_IgnoreInfiniteValues(true),
    m_IgnoreUserDefinedValue(false)
-{
+   {
   // first output is a copy of the image, DataObject created by
   // superclass
   //
@@ -49,7 +49,7 @@ PersistentStatisticsImageFilter<TInputImage>
   for (int i = 1; i < 3; ++i)
     {
     typename PixelObjectType::Pointer output
-      = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
+    = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
     this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
     }
   // allocate the data objects for the outputs which are
@@ -57,7 +57,7 @@ PersistentStatisticsImageFilter<TInputImage>
   for (int i = 3; i < 7; ++i)
     {
     typename RealObjectType::Pointer output
-      = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
+    = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
     this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
     }
 
@@ -73,15 +73,15 @@ PersistentStatisticsImageFilter<TInputImage>
   m_IgnoredUserPixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
 
   this->Reset();
-}
+   }
 
 template<class TInputImage>
 typename itk::DataObject::Pointer
 PersistentStatisticsImageFilter<TInputImage>
 ::MakeOutput(DataObjectPointerArraySizeType output)
-{
+ {
   switch (output)
-    {
+  {
     case 0:
       return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
       break;
@@ -101,109 +101,109 @@ PersistentStatisticsImageFilter<TInputImage>
       // might as well make an image
       return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
       break;
-    }
-}
+  }
+ }
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::PixelObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetMinimumOutput()
-{
+ {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
-}
+ }
 
 template<class TInputImage>
 const typename PersistentStatisticsImageFilter<TInputImage>::PixelObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetMinimumOutput() const
-{
+ {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
-}
+ }
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::PixelObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetMaximumOutput()
-{
+ {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
-}
+ }
 
 template<class TInputImage>
 const typename PersistentStatisticsImageFilter<TInputImage>::PixelObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetMaximumOutput() const
-{
+ {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
-}
+ }
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetMeanOutput()
-{
+ {
   return static_cast<RealObjectType*>(this->itk::ProcessObject::GetOutput(3));
-}
+ }
 
 template<class TInputImage>
 const typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetMeanOutput() const
-{
+ {
   return static_cast<const RealObjectType*>(this->itk::ProcessObject::GetOutput(3));
-}
+ }
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetSigmaOutput()
-{
+ {
   return static_cast<RealObjectType*>(this->itk::ProcessObject::GetOutput(4));
-}
+ }
 
 template<class TInputImage>
 const typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetSigmaOutput() const
-{
+ {
   return static_cast<const RealObjectType*>(this->itk::ProcessObject::GetOutput(4));
-}
+ }
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetVarianceOutput()
-{
+ {
   return static_cast<RealObjectType*>(this->itk::ProcessObject::GetOutput(5));
-}
+ }
 
 template<class TInputImage>
 const typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetVarianceOutput() const
-{
+ {
   return static_cast<const RealObjectType*>(this->itk::ProcessObject::GetOutput(5));
-}
+ }
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetSumOutput()
-{
+ {
   return static_cast<RealObjectType*>(this->itk::ProcessObject::GetOutput(6));
-}
+ }
 
 template<class TInputImage>
 const typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
 ::GetSumOutput() const
-{
+ {
   return static_cast<const RealObjectType*>(this->itk::ProcessObject::GetOutput(6));
-}
+ }
 template<class TInputImage>
 void
 PersistentStatisticsImageFilter<TInputImage>
 ::GenerateOutputInformation()
-{
+ {
   Superclass::GenerateOutputInformation();
   if (this->GetInput())
     {
@@ -215,24 +215,24 @@ PersistentStatisticsImageFilter<TInputImage>
       this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
       }
     }
-}
+ }
 template<class TInputImage>
 void
 PersistentStatisticsImageFilter<TInputImage>
 ::AllocateOutputs()
-{
+ {
   // This is commented to prevent the streaming of the whole image for the first stream strip
   // It shall not cause any problem because the output image of this filter is not intended to be used.
   //InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
   //this->GraftOutput( image );
   // Nothing that needs to be allocated for the remaining outputs
-}
+ }
 
 template<class TInputImage>
 void
 PersistentStatisticsImageFilter<TInputImage>
 ::Synthetize()
-{
+ {
   int      i;
   long     count;
   RealType sumOfSquares;
@@ -277,7 +277,7 @@ PersistentStatisticsImageFilter<TInputImage>
       {
       // unbiased estimate
       variance = (sumOfSquares - (sum * sum / static_cast<RealType>(count)))
-             / static_cast<RealType>(count - 1);
+                 / static_cast<RealType>(count - 1);
       sigma = vcl_sqrt(variance);
       }
     }
@@ -293,13 +293,13 @@ PersistentStatisticsImageFilter<TInputImage>
   this->GetSigmaOutput()->Set(sigma);
   this->GetVarianceOutput()->Set(variance);
   this->GetSumOutput()->Set(sum);
-}
+ }
 
 template<class TInputImage>
 void
 PersistentStatisticsImageFilter<TInputImage>
 ::Reset()
-{
+ {
   int numberOfThreads = this->GetNumberOfThreads();
 
   // Resize the thread temporaries
@@ -323,14 +323,14 @@ PersistentStatisticsImageFilter<TInputImage>
     {
     m_IgnoredUserPixelCount= std::vector<unsigned int>(this->GetNumberOfThreads(), 0);
     }
-}
+ }
 
 template<class TInputImage>
 void
 PersistentStatisticsImageFilter<TInputImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
                        itk::ThreadIdType threadId)
-{
+                       {
   /**
    * Grab the input
    */
@@ -378,22 +378,22 @@ PersistentStatisticsImageFilter<TInputImage>
     ++it;
     progress.CompletedPixel();
     }
-}
+                       }
 template <class TImage>
 void
 PersistentStatisticsImageFilter<TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
+ {
   Superclass::PrintSelf(os, indent);
 
   os << indent << "Minimum: "
-     << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMinimum()) << std::endl;
+      << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMinimum()) << std::endl;
   os << indent << "Maximum: "
-     << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMaximum()) << std::endl;
+      << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMaximum()) << std::endl;
   os << indent << "Sum: "      << this->GetSum() << std::endl;
   os << indent << "Mean: "     << this->GetMean() << std::endl;
   os << indent << "Sigma: "    << this->GetSigma() << std::endl;
   os << indent << "Variance: " << this->GetVariance() << std::endl;
-}
+ }
 } // end namespace otb
 #endif
