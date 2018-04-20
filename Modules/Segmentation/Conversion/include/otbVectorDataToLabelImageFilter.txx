@@ -49,8 +49,11 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
   // This filter is intended to work with otb::Image
   m_BandsToBurn.push_back(1);
 
-  // Default burn value if no burnAttribute availabke
+  // Default burn value if no burnAttribute available
   m_DefaultBurnValue = 1.;
+
+  // Default background value
+  m_BackgroundValue = 0;
 }
 
 template<class TVectorData, class TOutputImage>
@@ -263,14 +266,8 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   // Get the buffered region
   OutputImageRegionType bufferedRegion = this->GetOutput()->GetBufferedRegion();
 
-  //Start from a clean buffer
-  //Patch provided by R. Cresson on otb-developers
-  typename itk::ImageRegionIterator<OutputImageType> outputIt(this->GetOutput(), bufferedRegion);
-  
-  for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
-    {
-    outputIt.Set(itk::NumericTraits<typename OutputImageType::InternalPixelType>::Zero);
-    }
+  // Fill the buffer with the background value
+  this->GetOutput()->FillBuffer(m_BackgroundValue);
   
   // nb bands
   unsigned int nbBands =  this->GetOutput()->GetNumberOfComponentsPerPixel();

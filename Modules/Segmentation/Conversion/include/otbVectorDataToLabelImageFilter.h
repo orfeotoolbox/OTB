@@ -120,6 +120,14 @@ public:
   itkSetStringMacro(BurnAttribute);
   itkGetStringMacro(BurnAttribute);
 
+  /** Set the background value */
+  itkSetMacro(BackgroundValue, OutputImageInternalPixelType);
+  itkGetMacro(BackgroundValue, OutputImageInternalPixelType);
+
+  /** Set the default burn value */
+  itkSetMacro(DefaultBurnValue, OutputImageInternalPixelType);
+  itkGetMacro(DefaultBurnValue, OutputImageInternalPixelType);
+
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
@@ -163,6 +171,9 @@ private:
 
   // Default burn value
   double                        m_DefaultBurnValue;
+
+  // Background value
+  OutputImageInternalPixelType  m_BackgroundValue;
 
   // Output params
   std::string                   m_OutputProjectionRef;
