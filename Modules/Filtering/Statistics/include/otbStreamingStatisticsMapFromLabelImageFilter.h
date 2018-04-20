@@ -111,11 +111,11 @@ public:
   }
 
   // Accessors
-  const TRealVectorPixelType GetSum() { return m_Sum; }
-  const TRealVectorPixelType GetSqSum() { return m_SqSum; }
-  const TRealVectorPixelType GetMin() { return m_Min; }
-  const TRealVectorPixelType GetMax() { return m_Max; }
-  double GetCount() { return m_Count; }
+  itkGetMacro(Sum, TRealVectorPixelType);
+  itkGetMacro(SqSum, TRealVectorPixelType);
+  itkGetMacro(Min, TRealVectorPixelType);
+  itkGetMacro(Max, TRealVectorPixelType);
+  itkGetMacro(Count, double);
 
 private:
   void UpdateValues(const RealValueType & otherSum, const RealValueType & otherSqSum,
