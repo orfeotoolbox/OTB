@@ -260,16 +260,15 @@ private:
   PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  // Internal
-  AccumulatorMapCollectionType           accumulatorMaps;
+  AccumulatorMapCollectionType           m_AccumulatorMaps;
 
-  // User
   PixelValueMapType                      m_MeanRadiometricValue;
   PixelValueMapType                      m_StDevRadiometricValue;
   PixelValueMapType                      m_MinRadiometricValue;
   PixelValueMapType                      m_MaxRadiometricValue;
 
   LabelPopulationMapType                 m_LabelPopulation;
+
 }; // end of class PersistentStreamingStatisticsMapFromLabelImageFilter
 
 

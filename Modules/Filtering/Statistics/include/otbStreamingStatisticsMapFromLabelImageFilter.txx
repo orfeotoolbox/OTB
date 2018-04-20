@@ -177,7 +177,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   // Update temporary accumulator
   AccumulatorMapType outputAcc;
 
-  for (auto& threadAccMap: accumulatorMaps)
+  for (auto& threadAccMap: m_AccumulatorMaps)
     {
     for(auto& it: threadAccMap)
       {
@@ -232,7 +232,7 @@ void
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::Reset()
 {
-  accumulatorMaps.clear();
+  m_AccumulatorMaps.clear();
 
   m_MeanRadiometricValue.clear();
   m_StDevRadiometricValue.clear();
@@ -243,7 +243,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   for (itk::ThreadIdType thread = 0 ; thread < this->GetNumberOfThreads() ; thread++)
     {
     AccumulatorMapType newMap;
-    accumulatorMaps.push_back(newMap);
+    m_AccumulatorMaps.push_back(newMap);
     }
 }
 
@@ -303,14 +303,14 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
       label = labelIt.Get();
 
       // Update the accumulator
-      if (accumulatorMaps[threadId].count(label) <= 0) //add new element to the map
+      if (m_AccumulatorMaps[threadId].count(label) <= 0) //add new element to the map
         {
         AccumulatorType newAcc(value);
-        accumulatorMaps[threadId][label] = newAcc;
+        m_AccumulatorMaps[threadId][label] = newAcc;
         }
       else
         {
-        accumulatorMaps[threadId][label].Update(value);
+        m_AccumulatorMaps[threadId][label].Update(value);
         }
     }
 }
