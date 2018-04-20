@@ -27,6 +27,7 @@
 
 #include "otbStopwatch.h"
 
+#include "otbOGRDataToPolygonGeometricFeaturesFilter.h"
 
 namespace otb
 {
@@ -45,7 +46,9 @@ public:
   typedef otb::ogr::DataSource                                    OGRDataSourceType;
   typedef otb::ogr::Layer                                         OGRLayerType;
   typedef otb::ogr::Feature                                       OGRFeatureType;
-
+  
+  typedef OGRDataToPolygonGeometricFeaturesFilter                         OGRDataToPolygonGeometricFeaturesFilterType;
+  
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -95,86 +98,28 @@ private:
 
   void DoExecute() ITK_OVERRIDE
   { 
-    // Start Timer for the application
-    auto Timer = Stopwatch::StartNew();
-    
-    auto source = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
-    auto layer = source->GetLayer(0);
-    
-    
-    // Create new OGRDataSource
-    auto output = ogr::DataSource::New();
-    auto buffer = ogr::DataSource::New();
-    
-    bool updateMode = false;
+    OGRDataSourceType::Pointer vectors;
+    OGRDataSourceType::Pointer output;
     if (IsParameterEnabled("out") && HasValue("out"))
     {
-      // Create new OGRDataSource
-      output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
-      otb::ogr::Layer newLayer = output->CreateLayer(
-        layer.GetName(),
-        const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
-        layer.GetGeomType());
-      
-      // Copy existing fields
-      OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
-      for (int k=0 ; k<inLayerDefn.GetFieldCount() ; k++)
-      {
-        OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
-        newLayer.CreateField(fieldDefn);
-      }
+      vectors = ogr::DataSource::New(this->GetParameterString("in"));
+      output = ogr::DataSource::New(this->GetParameterString("out"),
+                                    ogr::DataSource::Modes::Overwrite);
     }
     else
     {
       // Update mode
-      updateMode = true;
-      otbAppLogINFO("Update input vector data.");
-      // fill temporary buffer for the transfer
-      otb::ogr::Layer inputLayer = layer;
-      layer = buffer->CopyLayer(inputLayer, std::string("Buffer"));
-      // close input data source
-      source->Clear();
-      // Re-open input data source in update mode
-      output = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Update_LayerUpdate);
+      vectors = ogr::DataSource::New(this->GetParameterString("in"),
+                                    ogr::DataSource::Modes::Update_LayerUpdate);
+      output = vectors;
     }
-    
-    auto newLayer = output->GetLayer(0);
-    
-    // Create the new fields
-    std::string sizeField = this->GetParameterString("sizefield");
-    OGRFieldDefn fieldSize(sizeField.c_str(), OFTReal);
-    newLayer.CreateField(fieldSize, true);
-    
-    std::string perimeterField = this->GetParameterString("perimeterfield");
-    OGRFieldDefn fieldPerimeter(perimeterField.c_str(), OFTReal);
-    newLayer.CreateField(fieldPerimeter, true);
-    
-    // Fill the output layer
-    for (auto && feature : layer) 
-    {
-      auto && geometry = feature.GetGeometry();
-      assert(geometry->getGeometryType() == wkbPolygon); // otherwise get_area will crash with no explanation
-      const double area = static_cast<OGRPolygon  const*>(geometry)->get_Area();
-      const double perimeter = static_cast<OGRPolygon const*>(geometry)->getExteriorRing()->get_Length();
-      ogr::Feature dstFeature(newLayer.GetLayerDefn());
-      dstFeature.SetFrom( feature , TRUE);
-      dstFeature.SetFID(feature.GetFID());
-      dstFeature[sizeField].SetValue<double>(area);
-      dstFeature[perimeterField].SetValue<double>(perimeter);
-      if (updateMode == true)
-      {
-        // Update the existing feature
-        newLayer.SetFeature( dstFeature);
-      }
-      else
-      {
-        // Append the new feature
-        newLayer.CreateFeature( dstFeature);
-      }
-    }
-    newLayer.ogr().CommitTransaction();
-    Timer.Stop();
-    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
+    // With a threaded filter
+    auto GeometricFeaturesFilter = OGRDataToPolygonGeometricFeaturesFilterType::New();
+    GeometricFeaturesFilter->SetSizeField( this->GetParameterString("sizefield"));
+    GeometricFeaturesFilter->SetPerimeterField( this->GetParameterString("perimeterfield"));
+    GeometricFeaturesFilter->SetInput(vectors);
+    GeometricFeaturesFilter->SetOutput(output);
+    GeometricFeaturesFilter->Update();
   }
 }; 
 
