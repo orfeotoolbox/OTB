@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2017 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -1362,7 +1363,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImages( const QStringList & filenames )
+::ImportImages( const QStringList & filenames, bool enableOverviews )
 {
   if( filenames.isEmpty() )
     return;
@@ -1376,7 +1377,8 @@ MainWindow
       )
     );
 
-    if( !( value.isValid() ? value.toBool() : OVERVIEWS_ENABLED_DEFAULT ) ||
+    if( enableOverviews &&
+	( value.isValid() ? value.toBool() : OVERVIEWS_ENABLED_DEFAULT ) &&
 	!BuildGDALOverviews( filenames ) )
       return;
   }
@@ -1809,7 +1811,8 @@ MainWindow
   // Select filename.
   QString caption(tr("Open file..."));
   ImportImages(
-    otb::GetOpenFileNames( this, caption )
+    otb::GetOpenFileNames( this, caption ),
+    true
   );
 }
 
