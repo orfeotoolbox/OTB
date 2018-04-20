@@ -87,6 +87,7 @@ const ExtensionDriverAssociation k_ExtensionDriverMap[] =
     {".SQLITE", "SQLite"},
     {".KML", "KML"},
     {".CSV", "CSV"},
+    {".GPKG", "GPKG"}
   };
 /**\ingroup GeometryInternals
  * \brief Returns the OGR driver name associated to a filename.
