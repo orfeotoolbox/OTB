@@ -34,8 +34,10 @@ target_link_libraries(otbStereoFiltersTestDriver ${OTBStereoFilters-Test_LIBRARI
 otb_module_target_label(otbStereoFiltersTestDriver)
 
 
-otb_add_test(NAME PatchMatch COMMAND otbStereoFiltersTestDriver 9 -15 0 ${INPUTDATA}/left_image.png 
-${INPUTDATA}/right_image.png ${TEMP}/)
+otb_add_test(NAME PatchMatch COMMAND otbStereoFiltersTestDriver main_PatchMatch 9 -15 0 
+${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif 
+${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif 
+${TEMP}/)
 
 
 #----------- StereoFilters TESTS ----------------
