@@ -36,21 +36,13 @@ namespace otb
 template<class TVectorData, class TOutputImage>
 VectorDataToLabelImageFilter<TVectorData, TOutputImage>
 ::VectorDataToLabelImageFilter()
- : m_OGRDataSourcePointer(ITK_NULLPTR)
+ : m_OGRDataSourcePointer(ITK_NULLPTR),
+   m_BandsToBurn(1, 1),
+   m_BurnAttribute("FID"),
+   m_DefaultBurnValue(1.),
+   m_BackgroundValue(0.)
 {
   this->SetNumberOfRequiredInputs(1);
-
-  // This filter is intended to work with otb::Image
-  m_BandsToBurn.push_back(1);
-
-  // Default burn attribute
-  m_BurnAttribute = "FID";
-
-  // Default burn value if no burnAttribute available
-  m_DefaultBurnValue = 1.;
-
-  // Default background value
-  m_BackgroundValue = 0;
 
   // Output parameters initialization
   m_OutputSpacing.Fill(1.0);
