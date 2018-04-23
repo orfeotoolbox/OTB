@@ -453,8 +453,8 @@ OGRDataToPolygonGeometricFeaturesFilter
     ogr::Feature dstFeature(outLayer.GetLayerDefn());
     dstFeature.SetFrom( feature, TRUE );
     dstFeature.SetFID( feature.GetFID() );
-    dstFeature["size"].SetValue<double>(area);
-    dstFeature["perimeter"].SetValue<double>(perimeter);
+    dstFeature[m_SizeField].SetValue<double>(area);
+    dstFeature[m_PerimeterField].SetValue<double>(perimeter);
     
     outLayer.CreateFeature( dstFeature );
   }
