@@ -132,9 +132,6 @@ protected:
   /** Destructor */
   ~PersistentLabelImageVectorizationFilter() override = default;
   
-  void GenerateOutputInformation() override;
-  void GenerateInputRequestedRegion() override;
-
 private:
   PersistentLabelImageVectorizationFilter(const Self &) = delete;
   void operator =(const Self&) = delete;

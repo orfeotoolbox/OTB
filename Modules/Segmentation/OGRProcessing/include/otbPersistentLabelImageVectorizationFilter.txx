@@ -46,7 +46,7 @@ PersistentLabelImageVectorizationFilter<TInputImage>
 ::Reset(void)
 {
 }
-
+/*
 template<class TInputImage>
 void
 PersistentLabelImageVectorizationFilter<TInputImage>
@@ -61,7 +61,7 @@ PersistentLabelImageVectorizationFilter<TInputImage>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
-}
+}*/
 
   
 template<class TInputImage>
@@ -114,11 +114,11 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   OGRLayerType outLayer = outDS->CreateLayer("Layer");
   OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
   outLayer.CreateField(field, true);
-  OGRFieldDefn fieldSize("size",OFTReal);
+  /*OGRFieldDefn fieldSize("size",OFTReal);
   outLayer.CreateField(fieldSize, true);
   OGRFieldDefn fieldPerimeter("perimeter",OFTReal);
   outLayer.CreateField(fieldPerimeter, true);
-  
+  */
   // Write output features
   for(auto featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
   {
