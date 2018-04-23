@@ -86,6 +86,25 @@ public:
   /** Get the output samples OGR container */
   ogr::DataSource* GetOutputSamples();
 
+  /** Set/Get macro for the min field name prefix*/
+  itkSetMacro(MinField, std::string);
+  itkGetMacro(MinField, std::string);
+
+  /** Set/Get macro for the max field name prefix*/
+  itkSetMacro(MaxField, std::string);
+  itkGetMacro(MaxField, std::string);
+  
+  /** Set/Get macro for the mean field name prefix*/
+  itkSetMacro(MeanField, std::string);
+  itkGetMacro(MeanField, std::string);
+
+  /** Set/Get macro for the covariance field name prefix*/
+  itkSetMacro(CovField, std::string);
+  itkGetMacro(CovField, std::string);
+
+  /** Set/Get macro for the number of pixels field name prefix*/
+  itkSetMacro(NbPixelsField, std::string);
+  itkGetMacro(NbPixelsField, std::string);
 
 protected:
   /** Constructor */
@@ -140,6 +159,21 @@ private:
   /** Update mode, set during Reset(), 1 if the output DS is the same as the input DS, 0 if it isn't*/
   bool m_updateMode = 0;
 
+  /** Min field name prefix*/
+  std::string m_MinField;
+  
+  /** Max field name prefix*/ 
+  std::string m_MaxField;
+  
+  /** Mean field name prefix*/
+  std::string m_MeanField;
+  
+  /** Covariance field name prefix */
+  std::string m_CovField;  
+
+  /** Number of pixels field name prefix */
+  std::string m_NbPixelsField;  
+
 };
 
 /**
@@ -188,8 +222,23 @@ public:
   void SetMask(const TMaskImage* mask);
   const TMaskImage* GetMask();
   
-  void SetFieldName(std::string &key);
+  void SetFieldName(std::string key);
   std::string GetFieldName();
+  
+  void SetMinField(std::string key);
+  std::string GetMinField();
+  
+  void SetMaxField(std::string key);
+  std::string GetMaxField();
+  
+  void SetMeanField(std::string key);
+  std::string GetMeanField();
+  
+  void SetCovField(std::string key);
+  std::string GetCovField();
+ 
+  void SetNbPixelsField(std::string key);
+  std::string GetNbPixelsField();
  
 protected:
   /** Constructor */

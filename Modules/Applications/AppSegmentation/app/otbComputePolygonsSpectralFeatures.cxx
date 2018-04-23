@@ -80,6 +80,26 @@ private:
     SetParameterDescription("out","Output vector");
     MandatoryOff("out");
     
+    AddParameter(ParameterType_String, "minfield", "Min field prefix");
+    SetParameterDescription("minfield", "Prefix of the field containing minimum value for each band in the geometry");
+    MandatoryOff("minfield");
+      
+    AddParameter(ParameterType_String, "maxfield", "Max field prefix");
+    SetParameterDescription("maxfield", "Prefix of the field containing maximum value for each band in the geometry");
+    MandatoryOff("maxfield");
+    
+    AddParameter(ParameterType_String, "meanfield", "Mean field prefix");
+    SetParameterDescription("meanfield", "Prefix of the field containing mean of the values in the geometry for each band");
+    MandatoryOff("meanfield");
+    
+    AddParameter(ParameterType_String, "covfield", "Covariance field prefix");
+    SetParameterDescription("covfield", "Prefix of the field containing the covariance matrix between different bands, for samples inside the geometry");
+    MandatoryOff("covfield");
+    
+    AddParameter(ParameterType_String, "nbpixelfield", "Number of pixel field prefix");
+    SetParameterDescription("nbpixelfield", "Name of the field containing the number of pixel in each geometries");
+    MandatoryOff("nbpixelfield");
+    
     AddParameter(ParameterType_Int,"tile","Tile Size");
     SetParameterDescription("tile","Size of the tiles used for streaming");
     MandatoryOff("tile");
@@ -129,6 +149,20 @@ private:
       SpectralStatisticsFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
     else
       SpectralStatisticsFilter->GetStreamer()->SetAutomaticTiledStreaming();
+    
+    // Name of fields  
+    if (IsParameterEnabled("minfield") && HasValue("minfield"))
+      SpectralStatisticsFilter->SetMinField(GetParameterString("minfield"));
+    if (IsParameterEnabled("maxfield") && HasValue("maxfield"))
+      SpectralStatisticsFilter->SetMaxField(GetParameterString("maxfield"));
+    if (IsParameterEnabled("meanfield") && HasValue("meanfield"))
+      SpectralStatisticsFilter->SetMeanField(GetParameterString("meanfield"));
+    if (IsParameterEnabled("covfield") && HasValue("covfield"))
+      SpectralStatisticsFilter->SetCovField(GetParameterString("covfield"));
+    if (IsParameterEnabled("nbpixelfield") && HasValue("nbpixelfield"))
+      SpectralStatisticsFilter->SetNbPixelsField(GetParameterString("nbpixelfield"));
+
+    
     SpectralStatisticsFilter->SetOGRData(vectors);
     SpectralStatisticsFilter->SetOutputSamples(output);
     SpectralStatisticsFilter->SetFieldName(field_name);

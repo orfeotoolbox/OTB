@@ -30,6 +30,11 @@ namespace otb
 template<class TInputImage, class TMaskImage>
 PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 ::PersistentOGRDataToSpectralStatisticsFilter()
+  : m_MinField("Min")
+  , m_MaxField("Max")
+  , m_MeanField("Mean")
+  , m_CovField("Cov")
+  , m_NbPixelsField("Nbpixels")
 {  
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TInputImage::New());
@@ -237,18 +242,18 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     outFeat.SetGeometry( inLayer.GetFeature(fid).GetGeometry());
     
     outFeat.SetFID(fid);
-    outFeat["nbpixels"].SetValue<int>(itSizeout->second);
+    outFeat[m_NbPixelsField].SetValue<int>(itSizeout->second);
     for (unsigned int i =0; i < numberOfComponents ; i++)
     {
-      outFeat["mean_"+std::to_string(i)].SetValue<double>(itMeanout->second[i]);
-      outFeat["min_"+std::to_string(i)].SetValue<double>(itMinout->second[i]);
-      outFeat["max_"+std::to_string(i)].SetValue<double>(itMaxout->second[i]);
+      outFeat[m_MeanField+"b"+std::to_string(i)].SetValue<double>(itMeanout->second[i]);
+      outFeat[m_MinField+"b"+std::to_string(i)].SetValue<double>(itMinout->second[i]);
+      outFeat[m_MaxField+"b"+std::to_string(i)].SetValue<double>(itMaxout->second[i]);
     }
     for (unsigned int r =0; r < numberOfComponents ; r++)
     {
       for (unsigned int c =0; c < numberOfComponents ; c++)
       {
-        outFeat["cov_"+std::to_string(r)+"_"+std::to_string(c)].SetValue<double>(itCovout->second[r][c]);
+        outFeat[m_CovField+"b"+std::to_string(r)+"b"+std::to_string(c)].SetValue<double>(itCovout->second[r][c]);
       }
     } 
     if (m_updateMode==0)
@@ -276,24 +281,24 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     
   this->ClearAdditionalFields();
   
-  this->CreateAdditionalField("nbpixels",OFTInteger,24,15);
+  this->CreateAdditionalField(m_NbPixelsField,OFTInteger,24,15);
   
   // Create min fields
   for (unsigned int i=0; i < numberOfComponents; i++)
   {
-    this->CreateAdditionalField("min_"+std::to_string(i) ,OFTReal,24,15);
+    this->CreateAdditionalField(m_MinField + "b" +std::to_string(i) ,OFTReal,24,15);
   }
   
   // Create max fields
   for (unsigned int i=0; i < numberOfComponents; i++)
   {
-    this->CreateAdditionalField("max_"+std::to_string(i) ,OFTReal,24,15);
+    this->CreateAdditionalField(m_MaxField + "b" +std::to_string(i) ,OFTReal,24,15);
   }
   for (unsigned int i=0; i < numberOfComponents; i++)
   
   // Create mean fields
   {
-    this->CreateAdditionalField("mean_"+std::to_string(i) ,OFTReal,24,15);
+    this->CreateAdditionalField(m_MeanField + "b" +std::to_string(i) ,OFTReal,24,15);
   }
   
   // Create covariance fields
@@ -301,7 +306,7 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   {
     for (unsigned int c=0; c < numberOfComponents; c++)
     {
-      this->CreateAdditionalField("cov_"+std::to_string(r)+"_"+std::to_string(c),OFTReal,24,15);
+      this->CreateAdditionalField(m_CovField + "b" +std::to_string(r)+"b"+std::to_string(c),OFTReal,24,15);
     }
   }
 }
@@ -556,7 +561,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 void
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::SetFieldName(std::string &key)
+::SetFieldName(std::string key)
 {
   this->GetFilter()->SetFieldName(key);
 }
@@ -569,7 +574,85 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   return this->GetFilter()->GetFieldName();
 }
 
+template<class TInputImage, class TMaskImage>
+void
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::SetMinField(std::string key)
+{
+  this->GetFilter()->SetMinField(key);
+}
 
+template<class TInputImage, class TMaskImage>
+std::string
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::GetMinField()
+{
+  return this->GetFilter()->GetMinField();
+}
+
+template<class TInputImage, class TMaskImage>
+void
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::SetMaxField(std::string key)
+{
+  this->GetFilter()->SetMaxField(key);
+}
+
+template<class TInputImage, class TMaskImage>
+std::string
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::GetMaxField()
+{
+  return this->GetFilter()->GetMaxField();
+}
+
+template<class TInputImage, class TMaskImage>
+void
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::SetMeanField(std::string key)
+{
+  this->GetFilter()->SetMeanField(key);
+}
+
+template<class TInputImage, class TMaskImage>
+std::string
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::GetMeanField()
+{
+  return this->GetFilter()->GetMeanField();
+}
+
+template<class TInputImage, class TMaskImage>
+void
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::SetCovField(std::string key)
+{
+  this->GetFilter()->SetCovField(key);
+}
+
+template<class TInputImage, class TMaskImage>
+std::string
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::GetCovField()
+{
+  return this->GetFilter()->GetCovField();
+}
+
+template<class TInputImage, class TMaskImage>
+void
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::SetNbPixelsField(std::string key)
+{
+  this->GetFilter()->SetNbPixelsField(key);
+}
+
+template<class TInputImage, class TMaskImage>
+std::string
+OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
+::GetNbPixelsField()
+{
+  return this->GetFilter()->GetNbPixelsField();
+}
 } // end of namespace otb
 
 #endif
