@@ -304,32 +304,7 @@ OGRDataToPolygonGeometricFeaturesFilter
   //TInputImage* outputImage = this->GetOutput();
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetInput(0));
   ogr::Layer inLayer = vectors->GetLayer(0);
-/*  ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
 
-  const RegionType& requestedRegion = outputImage->GetRequestedRegion();
-  itk::ContinuousIndex<double> startIndex(requestedRegion.GetIndex());
-  itk::ContinuousIndex<double> endIndex(requestedRegion.GetUpperIndex());
-  startIndex[0] += -0.5;
-  startIndex[1] += -0.5;
-  endIndex[0] += 0.5;
-  endIndex[1] += 0.5;
-  itk::Point<double, 2> startPoint;
-  itk::Point<double, 2> endPoint;
-  outputImage->TransformContinuousIndexToPhysicalPoint(startIndex, startPoint);
-  outputImage->TransformContinuousIndexToPhysicalPoint(endIndex, endPoint);
-
-  // create geometric extent
-  OGRPolygon tmpPolygon;
-  OGRLinearRing ring;
-  ring.addPoint(startPoint[0],startPoint[1],0.0);
-  ring.addPoint(startPoint[0],endPoint[1]  ,0.0);
-  ring.addPoint(endPoint[0]  ,endPoint[1]  ,0.0);
-  ring.addPoint(endPoint[0]  ,startPoint[1],0.0);
-  ring.addPoint(startPoint[0],startPoint[1],0.0);
-  tmpPolygon.addRing(&ring);
-
-  inLayer.SetSpatialFilter(&tmpPolygon);
-*/
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   std::vector<ogr::Layer> tmpLayers;
   tmpLayers.reserve(numberOfThreads);
@@ -339,7 +314,6 @@ OGRDataToPolygonGeometricFeaturesFilter
     }
 
   const unsigned int nbFeatThread = std::ceil(inLayer.GetFeatureCount(true) / (float) numberOfThreads);
-  //assert(nbFeatThread > 0);
 
   OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
   ogr::Layer::const_iterator featIt = inLayer.begin();
