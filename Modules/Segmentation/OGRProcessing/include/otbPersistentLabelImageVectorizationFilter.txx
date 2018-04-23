@@ -46,22 +46,6 @@ PersistentLabelImageVectorizationFilter<TInputImage>
 ::Reset(void)
 {
 }
-/*
-template<class TInputImage>
-void
-PersistentLabelImageVectorizationFilter<TInputImage>
-::GenerateOutputInformation()
-{
-  Superclass::GenerateOutputInformation();
-}
-
-template<class TInputImage>
-void
-PersistentLabelImageVectorizationFilter<TInputImage>
-::GenerateInputRequestedRegion()
-{
-  Superclass::GenerateInputRequestedRegion();
-}*/
 
   
 template<class TInputImage>
