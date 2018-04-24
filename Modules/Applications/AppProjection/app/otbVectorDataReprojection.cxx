@@ -63,13 +63,9 @@ private:
   void DoInit() override
   {
     SetName("VectorDataReprojection");
-    std::ostringstream oss;
-    oss << "Reproject a vector data using support image projection reference"
-        ", or a user specified map projection" << std::endl;
-    SetDescription(oss.str());
-    // Documentation
+    SetDescription("Reproject a vector data using support image projection reference, or a user specified map projection");
     SetDocName("Vector Data reprojection");
-    oss.str("");
+    std::ostringstream oss;
     oss <<" This application allows reprojecting a vector data using support image projection reference"
         ", or a user given map projection." << std::endl;
     oss <<" If given, image keywordlist can be added to reprojected vectordata.";

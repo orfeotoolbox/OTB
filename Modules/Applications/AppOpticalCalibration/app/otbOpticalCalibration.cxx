@@ -275,8 +275,8 @@ private:
     SetDefaultParameterFloat("acqui.view.azim",0.0);
 
     //Gain & bias
-    AddParameter(ParameterType_InputFilename, "acqui.gainbias",   "Gains | biases");
-    SetParameterDescription("acqui.gainbias", "Gains | biases");
+    AddParameter(ParameterType_InputFilename, "acqui.gainbias",   "Gains or biases");
+    SetParameterDescription("acqui.gainbias", "Gains or biases");
     MandatoryOff("acqui.gainbias");
     //Solar illuminations
     AddParameter(ParameterType_InputFilename, "acqui.solarilluminations",   "Solar illuminations");
