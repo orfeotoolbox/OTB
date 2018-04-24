@@ -18,7 +18,9 @@
 # limitations under the License.
 #
 
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL) # QtXml )
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5OpenGL REQUIRED)
+find_package(Qt5LinguistTools)
 mark_as_advanced( QT_QMAKE_EXECUTABLE )
-#set( QT_USE_QTXML 1 )
-include( ${QT_USE_FILE} )

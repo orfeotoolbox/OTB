@@ -18,9 +18,9 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module imports Qt4 to the build system")
+set(DOCUMENTATION "This module imports Qt5 to the build system")
 
-otb_module(OTBQt4
+otb_module(OTBQt
   DEPENDS
     
   TEST_DEPENDS
@@ -29,4 +29,4 @@ otb_module(OTBQt4
     "${DOCUMENTATION}"
   )
 
-otb_module_activation_option("Enable Qt4 dependent modules" OFF)
+otb_module_activation_option("Enable Qt5 dependent modules" OFF)

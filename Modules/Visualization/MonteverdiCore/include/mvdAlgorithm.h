@@ -260,7 +260,7 @@ ToLocalString( const QString & );
 /**
  * \brief Convert and copy a QString to a STL std::string.
  *
- * The Unicode data is converted to 8-bit using the QString::toAscii()
+ * The Unicode data is converted to 8-bit using the QString::toLatin1()
  * method.
  *
  * \param str The Unicode string to convert.
@@ -517,7 +517,7 @@ inline
 std::string
 ToStdString( const QString& str )
 {
-  return std::string( str.toAscii().constData() );
+  return std::string( str.toLatin1().constData() );
 }
 
 /*******************************************************************************/
@@ -525,7 +525,7 @@ inline
 const char*
 ToString( const QString& str )
 {
-  return str.toAscii().constData();
+  return str.toLatin1().constData();
 }
 
 /*******************************************************************************/
