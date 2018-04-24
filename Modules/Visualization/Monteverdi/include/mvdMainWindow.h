@@ -150,7 +150,7 @@ public slots:
 
   /**
    */
-  void ImportImages( const QStringList & filenames );
+  void ImportImages( const QStringList & filenames, bool enableOverviews );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

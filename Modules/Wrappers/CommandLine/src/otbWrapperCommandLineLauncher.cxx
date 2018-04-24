@@ -729,7 +729,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
       {
       defPixType = OutputImageParameter::ConvertPixelTypeToString(paramDown->GetDefaultPixelType());
       }
-    oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double]";
+    oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double/cint16/cint32/cfloat/cdouble]";
     oss << " (default value is " << defPixType <<")";
     }
 
