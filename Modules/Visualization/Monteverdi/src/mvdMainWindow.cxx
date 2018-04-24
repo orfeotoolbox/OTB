@@ -1811,7 +1811,7 @@ MainWindow
   // Select filename.
   QString caption(tr("Open file..."));
   ImportImages(
-    otb::GetOpenFilenames( this, caption )
+    otb::GetOpenFilenames( this, caption ) ,
     true
   );
 }
