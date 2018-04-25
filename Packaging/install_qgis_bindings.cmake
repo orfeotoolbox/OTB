@@ -21,6 +21,6 @@
 function(install_qgis_bindings)
   if(HAVE_QGIS)
     install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/descriptors
-      DESTINATION ${PKG_STAGE_DIR}
+      DESTINATION ${PKG_STAGE_DIR})
   endif()
 endfunction()
