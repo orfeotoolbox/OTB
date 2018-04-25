@@ -82,7 +82,7 @@ rm -fr "template.app"
 LONG_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@
 SHORT_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@
 #sed qt.conf
-sed -i "" "s,../lib,$OUT_DIR/lib,g" "$OUT_DIR/bin/qt.conf"
+sed -i "" "s,Prefix=..,Prefix=$OUT_DIR,g" "$OUT_DIR/bin/qt.conf"
 
 cp "$OUT_DIR/bin/qt.conf" "$OUT_DIR/Mapla.app/Contents/Resources/qt.conf"
 cp "$OUT_DIR/Monteverdi.icns" "Mapla.app/Contents/Resources/"
