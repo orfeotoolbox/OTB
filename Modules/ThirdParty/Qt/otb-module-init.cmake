@@ -24,3 +24,5 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(Qt5LinguistTools)
 mark_as_advanced( QT_QMAKE_EXECUTABLE )
+
+set(QT_VERSION_STRING ${Qt5Core_VERSION})
