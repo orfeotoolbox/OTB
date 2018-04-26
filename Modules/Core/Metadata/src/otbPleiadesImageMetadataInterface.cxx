@@ -944,12 +944,23 @@ PleiadesImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-
   std::vector<unsigned int> rgb(3);
 
   rgb[0] = 0;
   rgb[1] = 1;
   rgb[2] = 2;
+
+  if ( imageKeywordlist.HasKey( "support_data.band_name_list" ) )
+  {
+    const std::string & rgbOrder = 
+      imageKeywordlist.GetMetadataByKey( "support_data.band_name_list" );
+    auto place = rgbOrder.find("B");
+    for (int i = 0 ; i < 3 ; i++ )
+      {
+      rgb[i] = rgbOrder[place+1] -'0';
+      place = rgbOrder.find("B", place+1 );
+      }
+  }
 
   return rgb;
 }
