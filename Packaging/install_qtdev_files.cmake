@@ -42,5 +42,8 @@ set(QT_REQ_DIRS)
     ${CMAKE_CURRENT_SOURCE_DIR}/Files/qt.conf
     DESTINATION ${PKG_STAGE_DIR}/bin
     )
- 
+
+  if(IS_DIRECTORY "${SUPERBUILD_INSTALL_DIR}/lib/fonts")
+    install_without_message("${SUPERBUILD_INSTALL_DIR}/lib/fonts" "lib")
+  endif()
 endfunction()
