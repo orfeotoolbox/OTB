@@ -127,7 +127,8 @@ macro(otb_create_application)
        "${APPLICATION_NAME}"
        "${APPLICATION_BINARY_PATH}"
        "${descriptor_output_dir}/"
-       #COMMENT "./bin/otbQgisDescriptor ${APPLICATION_NAME} ${APPLICATION_BINARY_PATH} ${descriptor_output_dir}"
+       DEPENDS otbQgisDescriptor
+       #COMMENT "./bin/otbQgisDescriptor ${APPLICATION_NAME} ${APPLICATION_BINARY_PATH} ${descriptor_output_dir}/"
        WORKING_DIRECTORY ${OTB_BINARY_DIR} VERBATIM)
      install(FILES ${dfile} DESTINATION ${OTB_INSTALL_DESCR_DIR})
    endif()
