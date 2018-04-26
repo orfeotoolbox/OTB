@@ -454,7 +454,7 @@ PreferencesDialog
 ::on_geoidButton_clicked()
 {
   QString geoidFile(
-    otb::GetOpenFileName(
+    otb::GetOpenFilename(
       this,
       tr( "Select a geoid file." )
     )

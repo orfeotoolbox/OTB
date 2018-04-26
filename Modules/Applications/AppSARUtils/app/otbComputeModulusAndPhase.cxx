@@ -57,7 +57,7 @@ public:
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
 
 private:
-  void DoInit()
+  void DoInit() override
   {
     SetName("ComputeModulusAndPhase");
     SetDescription("This application computes the modulus and the phase of a complex SAR image.");
@@ -75,7 +75,7 @@ private:
     AddDocTag(Tags::SAR);
     AddDocTag(Tags::Manip);
     // Input images
-    AddParameter(ParameterType_ComplexInputImage,  "in",   "Input Image");
+    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image (complex single band)");
 
     // Outputs
@@ -100,17 +100,17 @@ private:
   }
 
   // DoUpdateParameters() is called as soon as a parameter value change.
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
   }
 
   // DoExecute() contains the application core.
-  void DoExecute()
+  void DoExecute() override
   {
     m_Modulus = ModulusFilterType::New();
     m_Phase = PhaseFilterType::New();
 
-    ComplexFloatVectorImageType::Pointer inImage = GetParameterComplexImage("in");
+    ComplexFloatVectorImageType::Pointer inImage = GetParameterComplexFloatVectorImage("in");
 
     if (inImage->GetNumberOfComponentsPerPixel() != 1)
     {

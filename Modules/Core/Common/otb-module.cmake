@@ -27,6 +27,8 @@ ENABLE_SHARED
     OTBITK
     #Add dependency to OTBGDAL as GDAL module need to set OTB_USE_GDAL_20 before configuring otbConfigure.h
     OTBGDAL
+    #Add dependency for extended filename helper class
+    OTBBoostAdapters
 
   TEST_DEPENDS
     OTBImageBase

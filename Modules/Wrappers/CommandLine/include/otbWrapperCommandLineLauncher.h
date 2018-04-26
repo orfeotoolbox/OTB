@@ -122,7 +122,7 @@ protected:
   CommandLineLauncher();
 
   /** Destructor */
-  ~CommandLineLauncher() ITK_OVERRIDE;
+  ~CommandLineLauncher() override;
 
   /** Load the executable path. It looks for the key --modulePath,
     * extract and interpret as path the following strings.

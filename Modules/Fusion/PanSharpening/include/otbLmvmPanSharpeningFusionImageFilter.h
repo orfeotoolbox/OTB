@@ -110,13 +110,13 @@ protected:
   LmvmPanSharpeningFusionImageFilter();
 
   /** Destructor */
-  ~LmvmPanSharpeningFusionImageFilter() ITK_OVERRIDE {};
+  ~LmvmPanSharpeningFusionImageFilter() override {};
 
   /** Call to generate data, wiring composite internal minipipeline */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   LmvmPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented

@@ -68,9 +68,18 @@ InputImageParameter::GetImage()
   return this->GetImage<FloatVectorImageType>();
 }
 
+template <>
+ImageBaseType*
+InputImageParameter::GetImage()
+{
+  if (m_Image.IsNull())
+    return this->GetImage<FloatVectorImageType>();
+
+  return m_Image;
+}
+
 otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
-
 
 void
 InputImageParameter::SetImage(FloatVectorImageType* image)

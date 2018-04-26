@@ -64,14 +64,14 @@ public:
 
   itkTypeMacro(MRFEnergyGaussianClassification, MRFEnergy);
 
-  void SetNumberOfParameters(const unsigned int nParameters) ITK_OVERRIDE
+  void SetNumberOfParameters(const unsigned int nParameters) override
   {
     Superclass::SetNumberOfParameters(nParameters);
     this->m_Parameters.SetSize(nParameters);
     this->Modified();
   }
 
-  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) ITK_OVERRIDE
+  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) override
   {
     if ((unsigned int) value2 >= this->GetNumberOfParameters() / 2)
       {
@@ -89,7 +89,7 @@ public:
 protected:
   // The constructor and destructor.
   MRFEnergyGaussianClassification() {};
-  ~MRFEnergyGaussianClassification() ITK_OVERRIDE {}
+  ~MRFEnergyGaussianClassification() override {}
 
 };
 }

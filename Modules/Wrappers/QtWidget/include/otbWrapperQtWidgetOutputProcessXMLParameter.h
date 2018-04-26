@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetOutputProcessXMLParameter_h
 #define otbWrapperQtWidgetOutputProcessXMLParameter_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetOutputProcessXMLParameter : public QtWidgetPara
   Q_OBJECT
 public:
   QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter*, QtWidgetModel*);
-  ~QtWidgetOutputProcessXMLParameter() ITK_OVERRIDE;
+  ~QtWidgetOutputProcessXMLParameter() override;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -58,9 +58,9 @@ private:
   QtWidgetOutputProcessXMLParameter(const QtWidgetOutputProcessXMLParameter&); //purposely not implemented
   void operator=(const QtWidgetOutputProcessXMLParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
 
   OutputProcessXMLParameter::Pointer m_XMLParam;

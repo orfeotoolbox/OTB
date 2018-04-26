@@ -164,9 +164,9 @@ public:
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
   /// Copy metadata from a DataObject
-  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
+  void CopyInformation(const itk::DataObject *) override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Return the Pixel Accessor object */
 //   AccessorType GetPixelAccessor( void )
@@ -194,7 +194,7 @@ public:
 
 protected:
   VectorImage();
-  ~VectorImage() ITK_OVERRIDE {}
+  ~VectorImage() override {}
 
 private:
   VectorImage(const Self &); //purposely not implemented

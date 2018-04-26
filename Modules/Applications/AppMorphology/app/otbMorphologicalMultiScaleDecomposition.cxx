@@ -35,7 +35,6 @@
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 
-#include "itkTimeProbe.h"
 #include "otbConvexOrConcaveClassificationFilter.h"
 #include "otbMorphologicalProfilesSegmentationFilter.h"
 #include "otbGeodesicMorphologyIterativeDecompositionImageFilter.h"
@@ -66,7 +65,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName( "MorphologicalMultiScaleDecomposition" );
     SetDescription( "Perform a geodesic morphology based image analysis on an input image channel" );
@@ -156,12 +155,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage( "in" );
     int nBComp = inImage->GetNumberOfComponentsPerPixel();

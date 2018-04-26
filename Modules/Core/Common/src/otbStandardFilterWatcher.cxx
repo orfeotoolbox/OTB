@@ -100,7 +100,7 @@ void
 StandardFilterWatcher
 ::StartFilter()
 {
-  m_TimeProbe.Start();
+  m_Stopwatch.Start();
   std::cout << (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None")
             << " \"" << m_Comment << "\" " << std::endl;
 }
@@ -109,9 +109,9 @@ void
 StandardFilterWatcher
 ::EndFilter()
 {
-  m_TimeProbe.Stop();
+  m_Stopwatch.Stop();
   std::cout << std::endl << "Filter took "
-            << m_TimeProbe.GetMean()
+            << m_Stopwatch.GetElapsedMilliseconds() / 1000
             << " seconds." << std::endl;
 }
 } // end namespace otb

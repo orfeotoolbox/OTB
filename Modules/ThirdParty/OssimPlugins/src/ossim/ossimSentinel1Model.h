@@ -38,7 +38,7 @@
 
 //#include <ossim/projection/ossimSensorModel.h>
 //#include <ossim/projection/ossimCoarseGridModel.h>
-#include "ossimSarSensorModel.h"
+#include "ossim/ossimSarSensorModel.h"
 #include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
 #include <ossim/support_data/ossimSupportFilesList.h>
@@ -81,22 +81,22 @@ namespace ossimplugins
       /*!
        * Returns pointer to a new instance, copy of this.
        */
-      virtual ossimObject* dup() const;
+      virtual ossimObject* dup() const override;
 
       /*!
        * Extends base-class implementation. Dumps contents of object to ostream.
        */
-      virtual std::ostream& print(std::ostream& out) const;
+      virtual std::ostream& print(std::ostream& out) const override;
 
       /*!
        * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
        * KWL files. Returns true if successful.
        */
       virtual bool saveState(ossimKeywordlist& kwl,
-            const char* prefix=NULL) const;
+            const char* prefix=NULL) const override;
 
       virtual bool loadState(ossimKeywordlist const& kwl,
-            const char* prefix=NULL);
+            const char* prefix=NULL) override;
 
       bool checkDirectory(const ossimFilename& file, const char* d, const char *ext) const;
 

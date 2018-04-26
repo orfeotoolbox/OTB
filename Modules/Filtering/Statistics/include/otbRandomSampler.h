@@ -80,7 +80,7 @@ public:
   /**
    * Reset internal counter (to be called before starting iteration)
    */
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
 
   /**
    * Method to call during iteration, returns true if the sample is selected,
@@ -93,7 +93,7 @@ protected:
   RandomSampler();
    
   /** Destructor */
-  ~RandomSampler() ITK_OVERRIDE {}
+  ~RandomSampler() override {}
 
 private:
   // Not implemented

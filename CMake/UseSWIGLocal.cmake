@@ -122,10 +122,6 @@ macro(SWIG_ADD_SOURCE_TO_MODULE name outfiles infile)
 
   set(swig_generated_file_fullname
     "${CMAKE_CURRENT_BINARY_DIR}")
-  if(swig_source_file_relative_path)
-    set(swig_generated_file_fullname
-      "${swig_generated_file_fullname}/${swig_source_file_relative_path}")
-  endif()
   # If CMAKE_SWIG_OUTDIR was specified then pass it to -outdir
   if(CMAKE_SWIG_OUTDIR)
     set(swig_outdir ${CMAKE_SWIG_OUTDIR})

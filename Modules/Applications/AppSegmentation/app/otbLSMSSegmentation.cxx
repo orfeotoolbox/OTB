@@ -88,13 +88,14 @@ public:
     LabelImageType,
     AffineFunctorType>                        LabelShiftFilterType;
 
-  LSMSSegmentation(): m_FinalReader(),m_ImportGeoInformationFilter(),m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
+  LSMSSegmentation(): //m_FinalReader(),m_ImportGeoInformationFilter(),
+    m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
 
-  ~LSMSSegmentation() ITK_OVERRIDE{}
+  ~LSMSSegmentation() override{}
 
 private:
-  LabelImageReaderType::Pointer m_FinalReader;
-  ImportGeoInformationImageFilterType::Pointer m_ImportGeoInformationFilter;
+  // LabelImageReaderType::Pointer m_FinalReader;
+  // ImportGeoInformationImageFilterType::Pointer m_ImportGeoInformationFilter;
   std::vector<std::string> m_FilesToRemoveAfterExecute;
   bool m_TmpDirCleanup;
 
@@ -139,7 +140,7 @@ private:
   void RemoveFile(std::string tile)
   {
     // Cleanup
-    if(IsParameterEnabled("cleanup"))
+    if(GetParameterInt("cleanup"))
       {
         // Try to remove the geom file if existing
       std::string geomfile = tile.substr(0,tile.size() - itksys::SystemTools::GetFilenameExtension(tile.c_str()).size()).append(".geom");
@@ -214,7 +215,7 @@ private:
     return vrtfname;
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("LSMSSegmentation");
     SetDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS) [1].");
@@ -302,10 +303,9 @@ private:
     MandatoryOff("tmpdir");
     DisableParameter("tmpdir");
 
-    AddParameter(ParameterType_Empty,"cleanup","Temporary files cleaning");
-    EnableParameter("cleanup");
+    AddParameter(ParameterType_Bool,"cleanup","Temporary files cleaning");
     SetParameterDescription("cleanup","If activated, the application will try to remove all temporary files it created.");
-    MandatoryOff("cleanup");
+    SetParameterInt("cleanup",1);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in","smooth.tif");
@@ -320,11 +320,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     m_FilesToRemoveAfterExecute.clear();
 
@@ -709,22 +709,25 @@ private:
       otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
 
       // Final writing
-      m_FinalReader = LabelImageReaderType::New();
-      m_FinalReader->SetFileName(vrtfile);
+      LabelImageReaderType::Pointer finalReader = LabelImageReaderType::New();
+      finalReader->SetFileName(vrtfile);
 
-      m_ImportGeoInformationFilter = ImportGeoInformationImageFilterType::New();
-      m_ImportGeoInformationFilter->SetInput(m_FinalReader->GetOutput());
-      m_ImportGeoInformationFilter->SetSource(imageIn);
+      ImportGeoInformationImageFilterType::Pointer 
+        importGeoInformationFilter = 
+        ImportGeoInformationImageFilterType::New();
+      importGeoInformationFilter->SetInput(finalReader->GetOutput());
+      importGeoInformationFilter->SetSource(imageIn);
 
-      SetParameterOutputImage("out",m_ImportGeoInformationFilter->GetOutput());
+      SetParameterOutputImage("out",importGeoInformationFilter->GetOutput());
+      RegisterPipeline();
   }
 
-  void AfterExecuteAndWriteOutputs() ITK_OVERRIDE
+  void AfterExecuteAndWriteOutputs() override
   {
     // Release input files
-    m_FinalReader = ITK_NULLPTR;
+    // finalReader = ITK_NULLPTR;
 
-    if(IsParameterEnabled("cleanup"))
+    if(GetParameterInt("cleanup"))
       {
       otbAppLogINFO(<<"Final clean-up ...");
 

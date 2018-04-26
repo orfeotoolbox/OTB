@@ -55,7 +55,7 @@ public:
 
 protected:
   BinaryFunctorImageFilter() {};
-  ~BinaryFunctorImageFilter() ITK_OVERRIDE {}
+  ~BinaryFunctorImageFilter() override {}
 
   /** BinaryFunctorImageFilter can produce an image which has a different number of bands
    * than its input image.  As such, BinaryFunctorImageFilter
@@ -65,7 +65,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();

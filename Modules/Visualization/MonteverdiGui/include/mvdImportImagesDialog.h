@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -105,7 +105,7 @@ public:
 		      Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~ImportImagesDialog() ITK_OVERRIDE;
+  ~ImportImagesDialog() override;
 
   /**
    */

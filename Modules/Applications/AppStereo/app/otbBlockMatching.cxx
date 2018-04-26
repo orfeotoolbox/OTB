@@ -124,7 +124,7 @@ private:
     m_VMedianFilter   = MedianFilterType::New();
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("BlockMatching");
     SetDescription("Performs block-matching to estimate pixel-wise disparities"
@@ -202,7 +202,7 @@ private:
     DisableParameter("io.outmask");
     MandatoryOff("io.outmask");
 
-    AddParameter(ParameterType_Empty,"io.outmetric","Flag to output optimal "
+    AddParameter(ParameterType_Bool,"io.outmetric","Flag to output optimal "
       "metric values as well");
     SetParameterDescription("io.outmetric","If enabled, the output image will "
       "have a third component with metric optimal values");
@@ -425,7 +425,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if(IsParameterEnabled("mask.variancet") || IsParameterEnabled("mask.nodata"))
       {
@@ -458,7 +458,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatImageType::Pointer leftImage = GetParameterFloatImage("io.inleft");
     FloatImageType::Pointer rightImage = GetParameterFloatImage("io.inright");
@@ -847,7 +847,7 @@ private:
     m_OutputImageList->PushBack(hdispImage);
     m_OutputImageList->PushBack(vdispImage);
 
-    if(IsParameterEnabled("io.outmetric"))
+    if(GetParameterInt("io.outmetric"))
       {
       m_OutputImageList->PushBack(metricImage);
       }

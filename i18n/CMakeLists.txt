@@ -19,7 +19,7 @@
 #
 
 #############################################################################
-# Qt4 translations.
+# Qt translations.
 #----------------------------------------------------------------------------
 # Locale human-readable translation files.
 set( OTB_TS_TRANSLATIONS
@@ -37,7 +37,7 @@ option( OTB_I18N_MERGE_TS
   )
 
 #----------------------------------------------------------------------------
-if( OTBQt4_ENABLED )
+if( OTBQt_ENABLED )
   # Generate commands to build Qt translations according to option.
   if( OTB_I18N_MERGE_TS )
     message(
@@ -49,14 +49,14 @@ if( OTBQt4_ENABLED )
 
     set( OTB_QT_I18N_PRO "${CMAKE_CURRENT_BINARY_DIR}/i18n.pro" )
 
-    generate_qt4_project( ${OTB_QT_I18N_PRO} )
+    generate_qt_project( ${OTB_QT_I18N_PRO} )
 
     foreach(_ts_name ${OTB_TS_TRANSLATIONS})
       get_filename_component(_abs_ts ${_ts_name} ABSOLUTE)
 
       message( STATUS "Merge TS : ${_abs_ts}")
       add_custom_command(OUTPUT ${_abs_ts}
-        COMMAND ${QT_LUPDATE_EXECUTABLE}
+        COMMAND ${Qt5_LUPDATE_EXECUTABLE}
         ARGS -locations none -pro ${OTB_QT_I18N_PRO} -ts ${_abs_ts}
         DEPENDS
           ${OTB_QT_I18N_HEADER_FILES}
@@ -67,7 +67,7 @@ if( OTBQt4_ENABLED )
     endforeach()
   endif()
 
-  qt4_add_translation(OTB_QM_TRANSLATIONS
+  qt5_add_translation(OTB_QM_TRANSLATIONS
       ${OTB_TS_TRANSLATIONS}
       )
 

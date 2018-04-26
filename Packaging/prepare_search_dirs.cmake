@@ -55,5 +55,13 @@ list(APPEND search_dirs "${SUPERBUILD_INSTALL_DIR}/lib/otb/python")
 #for otbtest executables. 
 list(APPEND search_dirs ${OTB_BINARY_DIR}/bin)
 
+# for Qt plugins
+if(EXISTS "${SUPERBUILD_INSTALL_DIR}/plugins")
+  file(GLOB _qt_plugins_subdirs "${SUPERBUILD_INSTALL_DIR}/plugins/*")
+  foreach(_subdir ${_qt_plugins_subdirs})
+    list(APPEND search_dirs "${_subdir}")
+  endforeach()
+endif()
+
 set(${search_dirs_result} ${search_dirs} PARENT_SCOPE)
 endfunction()

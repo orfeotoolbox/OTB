@@ -23,8 +23,8 @@
  */
 
 
-#include "ossimXmlTools.h"
-#include "ossimTimeUtilities.h"
+#include "ossim/ossimXmlTools.h"
+#include "ossim/ossimTimeUtilities.h"
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimNotify.h>

@@ -78,11 +78,11 @@ public:
 
 protected:
   PointSetExtractROI();
-  ~PointSetExtractROI() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PointSetExtractROI() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Generate Requested Data */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
 private:
   PointSetExtractROI(const PointSetExtractROI &); //purposely not implemented

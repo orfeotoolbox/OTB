@@ -91,17 +91,17 @@ public:
        m_Buffer = pBuff;
   }
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
-   void Update() ITK_OVERRIDE
+   void Update() override
    {
      this->GenerateData();
    }
 
 protected:
   ScalarBufferToImageFileWriter();
-  ~ScalarBufferToImageFileWriter() ITK_OVERRIDE { /* don't call ClearBuffer, user's care */}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ScalarBufferToImageFileWriter() override { /* don't call ClearBuffer, user's care */}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 

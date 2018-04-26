@@ -59,7 +59,7 @@ public:
   itkGetObjectMacro(VectorData, VectorDataType);
 
   /** Return true if a filename is set */
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     std::string filename(this->GetFileName());
     return !filename.empty();
@@ -116,7 +116,7 @@ protected:
   }
 
   /** Destructor */
-  ~OutputVectorDataParameter() ITK_OVERRIDE
+  ~OutputVectorDataParameter() override
   {}
 
 

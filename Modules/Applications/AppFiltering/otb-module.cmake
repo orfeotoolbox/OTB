@@ -26,6 +26,9 @@ otb_module(OTBAppFiltering
     OTBITK
     OTBApplicationEngine
     OTBImageBase
+    OTBContrast
+    OTBStatistics
+    OTBStreaming
 
   TEST_DEPENDS
     OTBTestKernel

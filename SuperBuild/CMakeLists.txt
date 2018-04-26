@@ -34,6 +34,10 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     )
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  message(WARNING "The support of debug build in SuperBuild is incomplete, some dependencies such as NetCDF don't support it.")
+endif()
+
 include(ExternalProject)
 
 # Not needed as OTB Superbuild requires c++14 since version 6.2
@@ -281,7 +285,7 @@ option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
 option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
 option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
 option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_QT4 "Use a system build of QT4"  OFF)
+option(USE_SYSTEM_QT "Use a system build of QT5"  OFF)
 option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
 option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
@@ -291,6 +295,7 @@ option(USE_SYSTEM_SHARK "Use a system build of Shark" OFF)
 option(USE_SYSTEM_HDF4 "Use a system build of HDF4" OFF)
 option(USE_SYSTEM_HDF5 "Use a system build of HDF5" OFF)
 option(USE_SYSTEM_NETCDF "Use a system build of NetCDF" OFF)
+option(USE_SYSTEM_GSL "Use a system build of GSL" OFF)
 
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
@@ -306,12 +311,12 @@ option(OTB_USE_MAPNIK "Enable module Mapnik in OTB" OFF)
 option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
 option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
 option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
-option(OTB_USE_QT4 "Enable module QT4 in OTB" ON)
+option(OTB_USE_QT "Enable module QT5 in OTB" ON)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
 
-#Cannot activate GLUT on OSX. See manits issue #1194")
+#Cannot activate GLUT on OSX. See Mantis issue #1194")
 # do not activate GLFW by default on osx. see failing test 
 # https://dash.orfeo-toolbox.org/testDetails.php?test=59844554&build=287120
 if(APPLE)
@@ -324,6 +329,7 @@ endif()
 
 option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
 option(OTB_USE_QWT "Enable module QWT in OTB" ON)
+option(OTB_USE_GSL "Enable module GSL in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data
@@ -333,6 +339,7 @@ find_path(OTB_DATA_ROOT README-OTB-Data
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
+option(OTB_WRAP_PYTHON3 "Enable python 3 wrappers for OTB applications (requires SWIG)" OFF)
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in

@@ -26,7 +26,6 @@
 
 #include <iomanip>
 #include "ogrsf_frmts.h"
-#include "itkTimeProbe.h"
 #include <set>
 
 namespace otb
@@ -363,7 +362,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
 
       if(m_OGRLayer.ogr().TestCapability("Transactions"))
         {
-      
+
         OGRErr errCommitX = m_OGRLayer.ogr().CommitTransaction();
         if (errCommitX != OGRERR_NONE)
           {
@@ -371,11 +370,11 @@ OGRLayerStreamStitchingFilter<TInputImage>
           }
         }
    } //end for y
-      
+
    if(m_OGRLayer.ogr().TestCapability("Transactions"))
      {
      const OGRErr errCommitY = m_OGRLayer.ogr().CommitTransaction();
-     
+
      if (errCommitY != OGRERR_NONE)
        {
        itkWarningMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ". Gdal error code " << errCommitY << "." << std::endl);

@@ -57,7 +57,7 @@ public:
   itkTypeMacro(GenerateRPCSensorModel, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("GenerateRPCSensorModel");
     SetDescription("Generate a RPC sensor model from a list of Ground Control Points.");
@@ -108,12 +108,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     OGRMultiLineString mls;
 

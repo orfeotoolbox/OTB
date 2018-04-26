@@ -188,7 +188,7 @@ WriterWatcherBase
     }
 
   // Initialize state
-  m_TimeProbe = watch.m_TimeProbe;
+  m_Stopwatch = watch.m_Stopwatch;
   m_Process = watch.m_Process;
   m_SourceProcess = watch.m_SourceProcess;
   m_Comment = watch.m_Comment;
@@ -281,7 +281,7 @@ WriterWatcherBase
     }
 
   // Initialize state
-  m_TimeProbe = watch.m_TimeProbe;
+  m_Stopwatch = watch.m_Stopwatch;
   m_Process = watch.m_Process;
   m_SourceProcess = watch.m_SourceProcess;
   m_Comment = watch.m_Comment;

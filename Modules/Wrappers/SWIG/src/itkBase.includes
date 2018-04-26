@@ -38,6 +38,8 @@ typedef itk::ProcessObject::Pointer     itkProcessObject_Pointer;
 typedef itk::ObjectFactoryBase          itkObjectFactoryBase;
 typedef itk::ObjectFactoryBase::Pointer itkObjectFactoryBase_Pointer;
 typedef itk::MetaDataDictionary         itkMetaDataDictionary;
+typedef itk::MetaDataObjectBase         itkMetaDataObjectBase;
+typedef itk::MetaDataObjectBase::Pointer itkMetaDataObjectBase_Pointer;
 typedef itk::Indent                     itkIndent;
 
 typedef itk::Command              itkCommand;

@@ -109,7 +109,112 @@ void SarSensorModelAdapter::DeburstLineToImageLine(const std::vector<std::pair<u
   ossimplugins::ossimSarSensorModel::deburstLineToImageLine(lines,deburstLine,imageLine);
 }
 
+bool SarSensorModelAdapter::WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType & yz) const
+{
+  if(m_SensorModel.get() == ITK_NULLPTR)
+    {
+    return false;
+    }
 
+  ossimGpt inGpt;
+  inGpt.lon = inGeoPoint[0];
+  inGpt.lat = inGeoPoint[1];
+  inGpt.hgt = inGeoPoint[2];
+
+  ossimDpt outDpt;
+
+  double y(0.),z(0.);
+  m_SensorModel->worldToLineSampleYZ(inGpt,outDpt,y,z);
+
+  if(outDpt.isNan())
+    return false;
+
+  cr[0]=outDpt.x;
+  cr[1]=outDpt.y;
+  yz[0]=y;
+  yz[1]=z;
+
+  return true;
+}
+
+bool SarSensorModelAdapter::WorldToLineSample(const Point3DType & inGeoPoint, Point2DType & cr) const
+{
+  if(m_SensorModel.get() == ITK_NULLPTR)
+    {
+    return false;
+    }
+
+  ossimGpt inGpt;
+  inGpt.lon = inGeoPoint[0];
+  inGpt.lat = inGeoPoint[1];
+  inGpt.hgt = inGeoPoint[2];
+
+  ossimDpt outDpt;
+
+  m_SensorModel->worldToLineSample(inGpt,outDpt);
+
+  if(outDpt.isNan())
+    return false;
+
+  cr[0]=outDpt.x;
+  cr[1]=outDpt.y;
+
+  return true;
+}
+
+bool SarSensorModelAdapter::WorldToCartesian(const Point3DType & inGeoPoint, Point3DType & outCartesianPoint)
+{
+  ossimGpt inGpt;
+  inGpt.lon = inGeoPoint[0];
+  inGpt.lat = inGeoPoint[1];
+  inGpt.hgt = inGeoPoint[2];
+
+  ossimEcefPoint outCartesien(inGpt);
+  
+  if(outCartesien.isNan())
+    return false;
+
+  outCartesianPoint[0] = outCartesien.x();
+  outCartesianPoint[1] = outCartesien.y();
+  outCartesianPoint[2] = outCartesien.z();
+
+  return true;
+}
+  
+bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & inGeoPoint, 
+							  Point3DType & satelitePosition, 
+							  Point3DType & sateliteVelocity) const
+{
+  if(m_SensorModel.get() == ITK_NULLPTR)
+    {
+      return false;
+    }
+
+  ossimGpt inGpt;
+  inGpt.lon = inGeoPoint[0];
+  inGpt.lat = inGeoPoint[1];
+  inGpt.hgt = inGeoPoint[2];
+  
+  ossimplugins::ossimSarSensorModel::TimeType azimuthTime;
+  double rangeTime;
+  ossimEcefPoint sensorPos;
+  ossimEcefVector sensorVel;
+
+  const bool success = m_SensorModel->worldToAzimuthRangeTime(inGpt, azimuthTime, rangeTime,sensorPos,sensorVel);
+  
+  if(sensorPos.isNan() || !success)
+    return false;
+
+  satelitePosition[0] = sensorPos.x();
+  satelitePosition[1] = sensorPos.y();
+  satelitePosition[2] = sensorPos.z();
+
+  sateliteVelocity[0] = sensorVel.x();
+  sateliteVelocity[1] = sensorVel.y();
+  sateliteVelocity[2] = sensorVel.z();    
+
+  return true;
+}
 
 
 } // namespace otb

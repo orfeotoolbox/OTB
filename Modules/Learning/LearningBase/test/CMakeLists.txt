@@ -32,6 +32,10 @@ otbKMeansImageClassificationFilterNew.cxx
 otbMachineLearningModelTemplates.cxx
 )
 
+if(OTB_USE_SHARK)
+  set(OTBLearningBaseTests ${OTBLearningBaseTests} otbSharkUtilsTests.cxx)
+endif()
+
 add_executable(otbLearningBaseTestDriver ${OTBLearningBaseTests})
 target_link_libraries(otbLearningBaseTestDriver ${OTBLearningBase-Test_LIBRARIES})
 otb_module_target_label(otbLearningBaseTestDriver)
@@ -68,3 +72,7 @@ otb_add_test(NAME leTuDecisionTreeNew COMMAND otbLearningBaseTestDriver
 otb_add_test(NAME leTuKMeansImageClassificationFilterNew COMMAND otbLearningBaseTestDriver
   otbKMeansImageClassificationFilterNew)
 
+if(OTB_USE_SHARK)
+  otb_add_test(NAME leTuSharkNormalizeLabels COMMAND otbLearningBaseTestDriver
+    otbSharkNormalizeLabels)
+endif()

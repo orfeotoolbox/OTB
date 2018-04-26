@@ -161,7 +161,7 @@ OverviewBuilder
 
 	emit ProgressTextChanged(
 	  QString(
-	    tr( "Generting overviews for file %1/%2 '%3'." )
+	    tr( "Generating overviews for file %1/%2 '%3'." )
 	  )
 	  .arg( m_Index + 1 )
 	  .arg( m_Count )

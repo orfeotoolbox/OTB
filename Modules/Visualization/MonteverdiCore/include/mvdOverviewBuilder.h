@@ -110,12 +110,12 @@ public:
   /**
    * \brief Destructor.
    */
-  ~OverviewBuilder() ITK_OVERRIDE;
+  ~OverviewBuilder() override;
 
   //
   // ProgressInterface overloads.
 
-  void SetProgress( double ) ITK_OVERRIDE;
+  void SetProgress( double ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -166,9 +166,9 @@ private:
   //
   // AbstractWorker oveloads.
 
-  QObject * virtual_Do() ITK_OVERRIDE;
+  QObject * virtual_Do() override;
 
-  QString virtual_GetFirstProgressText() const ITK_OVERRIDE;
+  QString virtual_GetFirstProgressText() const override;
 
 
 //

@@ -84,9 +84,9 @@ protected:
   /** Constructor */
   VectorImageToAmplitudeImageFilter() {};
   /** Destructor */
-  ~VectorImageToAmplitudeImageFilter() ITK_OVERRIDE {}
+  ~VectorImageToAmplitudeImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }

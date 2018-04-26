@@ -45,7 +45,7 @@ public:
   itkTypeMacro(ComputeImagesStatistics, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ComputeImagesStatistics");
     SetDocName("Compute Images second order statistics");
@@ -85,12 +85,12 @@ private:
    SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     //Statistics estimator
     typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StreamingStatisticsVImageFilterType;

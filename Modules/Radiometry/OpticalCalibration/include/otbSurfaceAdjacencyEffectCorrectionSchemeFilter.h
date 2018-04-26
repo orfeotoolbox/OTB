@@ -267,11 +267,11 @@ public:
 
 protected:
   SurfaceAdjacencyEffectCorrectionSchemeFilter();
-  ~SurfaceAdjacencyEffectCorrectionSchemeFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~SurfaceAdjacencyEffectCorrectionSchemeFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Initialize the parameters of the functor before the threads run. */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Fill AtmosphericRadiativeTerms using image metadata*/
   void UpdateAtmosphericRadiativeTerms();
@@ -280,7 +280,7 @@ protected:
   void UpdateFunctors();
 
   /** If modified, we need to compute the functor parameters again */
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 private:
 

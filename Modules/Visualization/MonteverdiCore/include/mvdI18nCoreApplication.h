@@ -142,7 +142,7 @@ public:
   I18nCoreApplication( QCoreApplication* qtApp );
 
   /** \brief Destructor. */
-  ~I18nCoreApplication() ITK_OVERRIDE;
+  ~I18nCoreApplication() override;
 
   /**
    */
@@ -448,7 +448,11 @@ private:
    * \param type Type of caught message.
    * \param message Content of caught message.
    */
-  static void HandleQtMessage( QtMsgType type, const char* message );
+  static void HandleQtMessage( QtMsgType type, const QMessageLogContext & , const QString & message );
+  /* Old function was 
+  static void HandleQtMessage( QtMsgType type, const char * message );
+  Qstring has a constructor QString(const char *str) but I have no idea
+  of the perf impact */
 
   /**
    */

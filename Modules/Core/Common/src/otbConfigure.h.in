@@ -27,9 +27,6 @@
 
 #cmakedefine OTB_BUILD_SHARED_LIBS
 
-/* Show developer debug messages */
-#cmakedefine OTB_SHOW_ALL_MSG_DEBUG
-
 #cmakedefine OTB_USE_GDAL_20
 
 #cmakedefine OTB_USE_OPENMP

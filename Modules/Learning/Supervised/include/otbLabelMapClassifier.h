@@ -89,11 +89,11 @@ public:
 
 protected:
   LabelMapClassifier();
-  ~LabelMapClassifier() ITK_OVERRIDE {};
+  ~LabelMapClassifier() override {};
 
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
 
-  void ReleaseInputs() ITK_OVERRIDE;
+  void ReleaseInputs() override;
 
 
 private:

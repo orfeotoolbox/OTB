@@ -25,6 +25,8 @@ attributes are for each band of the input image : mean, standard-deviation,
 median, variance, kurtosis, skewness. The result could be use to perform further
 object-oriented image analysis.
 "
-  GIT_REPOSITORY https://github.com/sertit/SertitObject.git
-  GIT_TAG master
+  GIT_REPOSITORY https://github.com/gpo-geo/SertitObject
+  GIT_TAG 4e6c46b239760b206d4cee379c0e90ee33abf613
 )
+
+# use a temporary fork because pull request #8 not merged yet

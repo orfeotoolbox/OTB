@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetFactory_h
 #define otbWrapperQtWidgetFactory_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -64,7 +64,7 @@ public:
 
 protected:
   QtWidgetParameterFactory();
-  ~QtWidgetParameterFactory() ITK_OVERRIDE;
+  ~QtWidgetParameterFactory() override;
 
 private:
   QtWidgetParameterFactory(const Self&); //purposely not implemented

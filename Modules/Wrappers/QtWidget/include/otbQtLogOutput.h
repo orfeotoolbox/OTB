@@ -21,7 +21,7 @@
 #ifndef otbQtLogOutput_h
 #define otbQtLogOutput_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkStdStreamLogOutput.h"
 #endif //tag=QT4-boost-compatibility
@@ -55,16 +55,16 @@ public:
   itkNewMacro(QtLogOutput);
 
   /** flush a buffer */
-  void Flush() ITK_OVERRIDE;
+  void Flush() override;
 
   /** Write to multiple outputs */
-  void Write(double timestamp) ITK_OVERRIDE;
+  void Write(double timestamp) override;
 
   /** Write to a buffer */
-  void Write(std::string const &content) ITK_OVERRIDE;
+  void Write(std::string const &content) override;
 
   /** Write to a buffer */
-  void Write(std::string const &content, double timestamp) ITK_OVERRIDE;
+  void Write(std::string const &content, double timestamp) override;
 
 signals:
   void NewContentLog(QString);
@@ -74,9 +74,9 @@ protected:
   QtLogOutput();
 
   /** Destructor */
-  ~QtLogOutput() ITK_OVERRIDE;
+  ~QtLogOutput() override;
 
-  void PrintSelf(std::ostream &os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream &os, itk::Indent indent) const override;
 };
 
 }

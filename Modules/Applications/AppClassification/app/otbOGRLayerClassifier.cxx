@@ -55,7 +55,7 @@ public:
 ;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("OGRLayerClassifier");
     SetDescription("Classify an OGR layer based on a machine learning model and a list of features to consider.");
@@ -82,7 +82,7 @@ private:
 
     AddParameter(ParameterType_String,"cfield","Field containing the predicted class.");
     SetParameterDescription("cfield","Field containing the predicted class");
-    SetParameterString("cfield","predicted", false);
+    SetParameterString("cfield","predicted");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("inshp", "vectorData.shp");
@@ -94,7 +94,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("inshp") )
       {
@@ -135,7 +135,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
       
     #ifdef OTB_USE_LIBSVM 

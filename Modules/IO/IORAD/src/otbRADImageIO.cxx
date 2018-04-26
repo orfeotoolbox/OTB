@@ -325,31 +325,31 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   file >> lStrCodePix;
 
   lStrCodePix = itksys::SystemTools::UpperCase(lStrCodePix);
-  if (lStrCodePix == "OCT")
+  if (lStrCodePix == "OCT" || lStrCodePix == "BYT")
     {
     m_PixelType = SCALAR;
     SetComponentType(UCHAR);
     m_BytePerPixel = 1;
     }
-  if (lStrCodePix == "PHA")
+  else if (lStrCodePix == "PHA")
     {
     m_PixelType = SCALAR;
     SetComponentType(CHAR);
     m_BytePerPixel = 1;
     }
-  if (lStrCodePix == "I2")
+  else if (lStrCodePix == "I2")
     {
     m_PixelType = SCALAR;
     SetComponentType(SHORT);
     m_BytePerPixel = 2;
     }
-  if (lStrCodePix == "I4")
+  else if (lStrCodePix == "I4")
     {
     m_PixelType = SCALAR;
     SetComponentType(INT);
     m_BytePerPixel = 4;
     }
-  if (lStrCodePix == "R4")
+  else if (lStrCodePix == "R4")
     {
     m_PixelType = SCALAR;
     SetComponentType(FLOAT);
