@@ -99,7 +99,6 @@ int main(int argc, char* argv[])
     }
   std::ofstream dFile;
   dFile.open (output_file, std::ios::out);
-  std::cerr << "Writing " << output_file << std::endl;
 
   std::string output_parameter_name;
   bool hasRasterOutput = false;
@@ -331,13 +330,14 @@ int main(int argc, char* argv[])
     dFile << "*QgsProcessingParameterEnum|outputpixeltype|Output pixel type|uint8;int;float;double|False|2|True" << std::endl;
     }
 
+  std::cerr << "[100%] Writing " << output_file << std::endl;
   dFile.close();
   
   std::ofstream indexFile;
   indexFile.open (algs_txt, std::ios::out | std::ios::app );
   indexFile << group << "|" << module << std::endl;
   indexFile.close();
-  std::cerr << "Updated " << algs_txt << std::endl;
+  //std::cerr << "Updated " << algs_txt << std::endl;
 
   appli = nullptr;
   ApplicationRegistry::CleanRegistry();
