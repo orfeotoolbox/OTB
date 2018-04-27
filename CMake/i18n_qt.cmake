@@ -20,7 +20,7 @@
 
 #
 # Reset Qt I18N source files cache variable.
-macro( reset_qt4_i18n_sources )
+macro( reset_qt_i18n_sources )
   set( OTB_QT_I18N_INCLUDE_PATH "" CACHE INTERNAL "" FORCE )
   set( OTB_QT_I18N_HEADER_FILES "" CACHE INTERNAL "" FORCE )
   set( OTB_QT_I18N_SOURCE_FILES "" CACHE INTERNAL "" FORCE )
@@ -33,7 +33,7 @@ endmacro()
 
 #
 # Func
-function( add_to_qt4_i18n_files RESULT )
+function( add_to_qt_i18n_files RESULT )
   foreach( F ${ARGN} )
     #message( "${F}" )
 
@@ -45,13 +45,13 @@ endfunction()
 
 #
 #
-macro( add_to_qt4_i18n_include_path DIRECTORY )
+macro( add_to_qt_i18n_include_path DIRECTORY )
   set(OTB_I18N_INCLUDE_PATH ${OTB_I18N_INCLUDE_PATH} ${DIRECTORY} CACHE INTERNAL "")
 endmacro()
 
 #
 #
-macro( add_to_qt4_i18n_headers INCLUDE_DIR )
+macro( add_to_qt_i18n_headers INCLUDE_DIR )
 
   get_filename_component( ABS_INCLUDE_DIR ${INCLUDE_DIR} ABSOLUTE )
 
@@ -68,20 +68,20 @@ endmacro()
 
 #
 # Add source files to Qt I18n translation build.
-macro( add_to_qt4_i18n_sources )
-  add_to_qt4_i18n_files( OTB_QT_I18N_SOURCE_FILES ${ARGN} )
+macro( add_to_qt_i18n_sources )
+  add_to_qt_i18n_files( OTB_QT_I18N_SOURCE_FILES ${ARGN} )
 endmacro()
 
 #
 # Add source files to Qt I18n translation build.
-macro( add_to_qt4_i18n_forms )
-  add_to_qt4_i18n_files( OTB_QT_I18N_FORM_FILES ${ARGN} )
+macro( add_to_qt_i18n_forms )
+  add_to_qt_i18n_files( OTB_QT_I18N_FORM_FILES ${ARGN} )
 endmacro()
 
 #
 #
-macro( generate_qt4_project FILENAME )
-  message( STATUS "Generating Qt4 '${FILENAME}' project file for I18N." )
+macro( generate_qt_project FILENAME )
+  message( STATUS "Generating Qt5 '${FILENAME}' project file for I18N." )
 
   unset(_OTB_QT_I18N_INCLUDE_PATH_PRO)
   unset(_OTB_QT_I18N_HEADER_PRO)

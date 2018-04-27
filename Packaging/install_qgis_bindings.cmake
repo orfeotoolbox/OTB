@@ -18,7 +18,9 @@
 # limitations under the License.
 #
 
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL) # QtXml )
-mark_as_advanced( QT_QMAKE_EXECUTABLE )
-#set( QT_USE_QTXML 1 )
-include( ${QT_USE_FILE} )
+function(install_qgis_bindings)
+  if(HAVE_QGIS)
+    install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/descriptors
+      DESTINATION ${PKG_STAGE_DIR}
+  endif()
+endfunction()

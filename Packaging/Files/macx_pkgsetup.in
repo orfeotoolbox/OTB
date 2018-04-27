@@ -51,7 +51,7 @@ unset DYLD_FALLBACK_LIBRARY_PATH
 
 echo "Configuring..."
 
-LIB_FILES=$(find "$OUT_DIR/lib" -type f -exec file {} \; | grep -i "Mach-O"|cut -d ':' -f1)
+LIB_FILES=$(find "$OUT_DIR/lib" "$OUT_DIR/plugins" -type f -exec file {} \; | grep -i "Mach-O"|cut -d ':' -f1)
 BIN_FILES=$(find "$OUT_DIR/bin" -type f -exec file {} \; | grep -i "Mach-O*.*executable"|cut -d ':' -f1)
 # run install_name_tool
 for input_file in $LIB_FILES $BIN_FILES; do

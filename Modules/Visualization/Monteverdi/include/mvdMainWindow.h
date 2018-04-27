@@ -221,9 +221,9 @@ protected slots:
 
   /**
    */
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
   void OnApplicationToLaunchSelected( const QString & appName, const QString & docName );
-#endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#endif // defined( OTB_USE_QT ) && USE_OTB_APPS
 
   /**
    */
@@ -396,7 +396,7 @@ private:
   QDockWidget* m_HistogramDock;
 
 
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT
   /**
    *  \brief OTB-applications browser dock-widget.
    */

@@ -21,8 +21,7 @@
 #ifndef otbWrapperQtWidgetView_h
 #define otbWrapperQtWidgetView_h
 
-#include <QtGui>
-#include <QShortcut>
+#include <QtWidgets>
 
 //
 // OTB includes (sorted by alphabetic order)
