@@ -194,7 +194,7 @@ if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar")
 endif()
 
 set(HAVE_QGIS FALSE CACHE INTERNAL "QGIS wrappings")
-if(IS_DIRECTORY "${SUPERBUILD_INSTALL_DIR}/descriptors")
+if(IS_DIRECTORY "${SUPERBUILD_INSTALL_DIR}/share/otb/description")
   set(HAVE_QGIS TRUE)
 endif()
 

@@ -50,6 +50,9 @@ int main(int argc, char* argv[])
   
   assert(!appli.IsNull());
 
+  const std::string group = appli->GetDocTags().size() > 0 ? appli->GetDocTags()[0] : "";
+  assert(!group.empty());
+
   std::map<ParameterType, std::string> parameterTypeToString;
   parameterTypeToString[ParameterType_Empty] = "QgsProcessingParameterBoolean";
   parameterTypeToString[ParameterType_Bool] = "QgsProcessingParameterBoolean";
@@ -96,7 +99,6 @@ int main(int argc, char* argv[])
     }
   std::ofstream dFile;
   dFile.open (output_file, std::ios::out);
-  std::cerr << "Writing " << output_file << std::endl;
 
   std::string output_parameter_name;
   bool hasRasterOutput = false;
@@ -106,12 +108,11 @@ int main(int argc, char* argv[])
     Parameter::Pointer param = appli->GetParameterByKey(appKeyList[i]);
     if (param->GetMandatory())
       {
-      ParameterType type = appli->GetParameterType(appKeyList[i]);
-      if (type == ParameterType_OutputImage )
-        {
-        output_parameter_name = appKeyList[i];
-        hasRasterOutput = true;
-        }
+	if (appli->GetParameterType(appKeyList[i]) == ParameterType_OutputImage)
+	  {
+	    output_parameter_name = appKeyList[i];
+	    hasRasterOutput = true;
+	  }
       }
     }
   }
@@ -122,15 +123,13 @@ int main(int argc, char* argv[])
     dFile << module << "|" <<  output_parameter_name << std::endl;
   
   dFile << appli->GetDescription() << std::endl;
-  const std::string group = appli->GetDocTags().size() > 0 ? appli->GetDocTags()[0] : "UNCLASSIFIED";
   dFile << group << std::endl;
   
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
     const std::string name = appKeyList[i];
-      
-    Parameter::Pointer param = appli->GetParameterByKey(name);
-    ParameterType type = appli->GetParameterType(name);
+    const Parameter::Pointer param = appli->GetParameterByKey(name);
+    const ParameterType type = appli->GetParameterType(name);
     const std::string description = param->GetName();
     if (  type == ParameterType_Group  ||
           type == ParameterType_OutputProcessXML  ||
@@ -239,7 +238,7 @@ int main(int argc, char* argv[])
       {
       dFile << "|4"; //QgsProcessing.TypeFile"
       }
-    else if(type ==ParameterType_String)
+    else if(type == ParameterType_String)
       {
       // Below line is interpreted in qgis processing as
       // 1. default_value = None
@@ -248,7 +247,7 @@ int main(int argc, char* argv[])
       // please refer to documetation of QgsProcessingParameterString.
       default_value = "None|False";
       }
-    else if(type ==ParameterType_StringList)
+    else if(type == ParameterType_StringList)
       {
       // Below line is interpreted in qgis processing as
       // 1. default_value = None
@@ -262,13 +261,13 @@ int main(int argc, char* argv[])
       {
       // default is None and nothing to add to dFile
       }
-    else if(type ==ParameterType_ListView)
+    else if(type == ParameterType_ListView)
       {
       // default is None and nothing to add to dFile
       }
     else if(type == ParameterType_Bool)
       {
-      default_value =  appli->GetParameterAsString(name);
+      default_value = appli->GetParameterAsString(name);
       }      
     else if(type == ParameterType_Choice)
       {
@@ -328,9 +327,10 @@ int main(int argc, char* argv[])
 
   if(hasRasterOutput)
     {
-    dFile << "*QgsProcessingParameterEnum|outputpixeltype|Output pixel type|unit8;int;float;double|False|2|True" << std::endl;
+    dFile << "*QgsProcessingParameterEnum|outputpixeltype|Output pixel type|uint8;int;float;double|False|2|True" << std::endl;
     }
 
+  std::cerr << "Writing " << output_file << std::endl;
   dFile.close();
   
   std::ofstream indexFile;

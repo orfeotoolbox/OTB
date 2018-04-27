@@ -174,6 +174,10 @@ if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 endif()
 
+if(NOT OTB_INSTALL_DESCR_DIR)
+  set (OTB_INSTALL_DESCR_DIR "share/otb/description")
+endif()
+
 #convert path to native for reconfiguring otbcli.bat.in
 file(TO_NATIVE_PATH "${OTB_INSTALL_APP_DIR}" OTB_INSTALL_APP_DIR_NATIVE)
 
