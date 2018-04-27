@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // Qwt includes.
@@ -113,7 +113,7 @@ public:
   HistogramWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~HistogramWidget() ITK_OVERRIDE;
+  ~HistogramWidget() override;
 
   /**
    * \brief

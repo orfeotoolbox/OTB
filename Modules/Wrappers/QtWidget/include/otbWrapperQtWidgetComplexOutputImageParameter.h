@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetComplexOutputImageParameter_h
 #define otbWrapperQtWidgetComplexOutputImageParameter_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetComplexOutputImageParameter : public QtWidgetPa
   Q_OBJECT
 public:
   QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*);
-  ~QtWidgetComplexOutputImageParameter() ITK_OVERRIDE;
+  ~QtWidgetComplexOutputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -62,9 +62,9 @@ private:
   QtWidgetComplexOutputImageParameter(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
   void operator=(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   std::string m_FileName;
   ComplexOutputImageParameter::Pointer m_OutputImageParam;

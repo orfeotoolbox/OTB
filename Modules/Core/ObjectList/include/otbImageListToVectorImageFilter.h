@@ -67,26 +67,26 @@ public:
 protected:
 
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
    * Copy information from the first image of the list if existing.
    **/
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /**
    * GenerateInputRequestedRegion
    * Set the requested region of each image in the list.
    */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   /** Constructor */
   ImageListToVectorImageFilter() {};
   /** Destructor */
-  ~ImageListToVectorImageFilter() ITK_OVERRIDE {}
+  ~ImageListToVectorImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ImageListToVectorImageFilter(const Self &); //purposely not implemented

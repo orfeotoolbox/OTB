@@ -66,7 +66,7 @@ public:
 
   itkNewMacro(Self);
 
-  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) ITK_OVERRIDE
+  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) override
   {
     if (value1 != value2)
       {
@@ -86,7 +86,7 @@ protected:
     this->m_Parameters.SetSize(this->m_NumberOfParameters);
     this->m_Parameters[0] = 1.0;
     };
-  ~MRFEnergyPotts() ITK_OVERRIDE {}
+  ~MRFEnergyPotts() override {}
 
 };
 }

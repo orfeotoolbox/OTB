@@ -50,7 +50,7 @@ public:
   typedef otb::GenericRSTransform<>        TransformType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ConvertCartoToGeoPoint");
     SetDescription("Convert cartographic coordinates to geographic ones.");
@@ -93,11 +93,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the projectionRef
     std::string inputProjRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "mapproj");
@@ -122,8 +122,8 @@ private:
     otbAppLogINFO( << std::setprecision(10) << "Geographic   Point (Long, Lat) : (" << geoPoint[0] << ", " <<  geoPoint[1] << ")" );
 
 
-    SetParameterFloat( "long",geoPoint[0] , false);
-    SetParameterFloat( "lat",geoPoint[1] , false);
+    SetParameterFloat( "long",geoPoint[0]);
+    SetParameterFloat( "lat",geoPoint[1]);
   }
 };
 

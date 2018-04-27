@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -90,7 +90,7 @@ class OTBMonteverdiGUI_EXPORT AbstractDragAndDropEventFilter :
 public:
 
   /** \brief Destructor. */
-  ~AbstractDragAndDropEventFilter() ITK_OVERRIDE;
+  ~AbstractDragAndDropEventFilter() override;
 
   //
   // QObject overloads.
@@ -98,7 +98,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
    */
-  bool eventFilter( QObject* watched, QEvent* event ) ITK_OVERRIDE;
+  bool eventFilter( QObject* watched, QEvent* event ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

@@ -70,16 +70,16 @@ protected:
   SarDeburstImageFilter();
 
   // Destructor
-  virtual ~SarDeburstImageFilter() ITK_OVERRIDE {};
+  virtual ~SarDeburstImageFilter() override {};
 
   // Needs to be re-implemented since size of output is modified
-  virtual void GenerateOutputInformation() ITK_OVERRIDE;
+  virtual void GenerateOutputInformation() override;
 
   // Needs to be re-implemented since size of output is modified
-  virtual void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  virtual void GenerateInputRequestedRegion() override;
 
   // Actual processing
-  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   RegionType OutputRegionToInputRegion(const RegionType& outputRegion) const;
   

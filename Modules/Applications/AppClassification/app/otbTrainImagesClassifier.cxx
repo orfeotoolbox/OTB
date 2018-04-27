@@ -35,7 +35,7 @@ public:
   itkNewMacro( Self )
   itkTypeMacro( Self, Superclass )
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName( "TrainImagesClassifier" );
     SetDescription( "Train a classifier from multiple pairs of images and training vector data." );
@@ -86,7 +86,7 @@ public:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if( HasValue( "io.vd" ) && IsParameterEnabled( "io.vd" ))
       {
@@ -157,7 +157,7 @@ public:
   }
 
 
-  void DoExecute()
+  void DoExecute() override
   {
     TrainFileNamesHandler fileNames;
     std::vector<std::string> vectorFileList;
@@ -205,7 +205,7 @@ public:
     TrainModel( imageList, fileNames.sampleTrainOutputs, fileNames.sampleValidOutputs );
 
     // cleanup
-    if( IsParameterEnabled( "cleanup" ) )
+    if( GetParameterInt( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
       fileNames.clear();
@@ -217,7 +217,7 @@ private :
   void UpdatePolygonClassStatisticsParameters()
   {
     std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
-    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0], false );
+    GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0]);
     UpdateInternalParameters( "polystat" );
   }
 

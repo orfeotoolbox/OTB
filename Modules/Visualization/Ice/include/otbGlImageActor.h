@@ -80,16 +80,16 @@ public:
   void Initialize(const std::string & filename);
 
   // Retrieve the full extent of the actor
-  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const ITK_OVERRIDE;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const override;
 
   // Update internal actor state with respect to ViewSettings
-  void ProcessViewSettings() ITK_OVERRIDE;
+  void ProcessViewSettings() override;
 
   // Heavy load/unload operations of data
-  void UpdateData() ITK_OVERRIDE;
+  void UpdateData() override;
 
   // Gl rendering of current state
-  void Render() ITK_OVERRIDE;
+  void Render() override;
 
   // Automatic color adjustment
   void AutoColorAdjustment( double & minRed, double & maxRed,
@@ -101,15 +101,15 @@ public:
 
   const PointType & GetOrigin() const;
 
-  const GeoInterface::Spacing2 & GetSpacing() const ITK_OVERRIDE;
+  const GeoInterface::Spacing2 & GetSpacing() const override;
 
-  std::string GetWkt() const ITK_OVERRIDE;
+  std::string GetWkt() const override;
 
   ImageKeywordlistType GetKwl() const;
 
-  bool HasKwl() const ITK_OVERRIDE;
+  bool HasKwl() const override;
 
-  bool GetKwl( ImageKeywordlist & ) const ITK_OVERRIDE;
+  bool GetKwl( ImageKeywordlist & ) const override;
 
   MetaDataDictionaryType & GetMetaDataDictionary() const;
 
@@ -191,11 +191,11 @@ public:
 
   bool TransformFromViewport( Point2d & out,
                                       const Point2d & in,
-                                      bool isPhysical = true ) const ITK_OVERRIDE;
+                                      bool isPhysical = true ) const override;
 
   bool TransformToViewport( Point2d & out,
                                     const Point2d & in,
-                                    bool isPhysical = true ) const ITK_OVERRIDE;
+                                    bool isPhysical = true ) const override;
 
 
   void UpdateTransforms();
@@ -203,7 +203,7 @@ public:
 protected:
   GlImageActor();
   
-  ~GlImageActor() ITK_OVERRIDE;
+  ~GlImageActor() override;
 
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
   typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;

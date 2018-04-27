@@ -180,10 +180,10 @@ protected:
   MassOfBelief() {}
 
   /** Desctructor */
-  ~MassOfBelief() ITK_OVERRIDE {}
+  ~MassOfBelief() override {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   MassOfBelief(const Self&); //purposely not implemented

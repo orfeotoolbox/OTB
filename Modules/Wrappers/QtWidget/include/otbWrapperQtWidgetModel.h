@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetModel_h
 #define otbWrapperQtWidgetModel_h
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QTimer>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperApplication.h"
@@ -44,7 +44,7 @@ class OTBQtWidget_EXPORT AppliThread : public QThread
       m_Application = app;
     }
 
-  ~AppliThread() ITK_OVERRIDE;
+  ~AppliThread() override;
 
   inline void Execute()
   {
@@ -68,8 +68,15 @@ signals:
    */
   void ExceptionRaised( QString what );
 
+public slots:
+  /** Ask the running application to stop */
+  void Stop()
+    {
+    m_Application->Stop();
+    }
+
 protected:
-  void run() ITK_OVERRIDE;
+  void run() override;
 
 private:
   AppliThread(const AppliThread&); //purposely not implemented
@@ -90,7 +97,7 @@ class OTBQtWidget_EXPORT QtWidgetModel : public QObject
 public:
   QtWidgetModel(Application* app);
 
-  ~QtWidgetModel() ITK_OVERRIDE;
+  ~QtWidgetModel() override;
 
   Application* GetApplication()
   {
@@ -138,6 +145,8 @@ signals:
   void ExceptionRaised( QString what );
 
   void UpdateGui();
+
+  void Stop();
 
 protected slots:
   /**

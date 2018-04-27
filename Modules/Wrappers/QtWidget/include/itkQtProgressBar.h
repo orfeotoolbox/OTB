@@ -22,7 +22,7 @@
 #ifndef __itkQtProgressBar_h
 #define __itkQtProgressBar_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkCommand.h"
 #endif //tag=QT4-boost-compatibility
@@ -42,7 +42,7 @@ public:
   QtProgressBar( QWidget *parent );
 
   /** Destructor */
-  ~QtProgressBar() ITK_OVERRIDE;
+  ~QtProgressBar() override;
 
   /** Get Command */
   RedrawCommandType * GetRedrawCommand( void ) const;

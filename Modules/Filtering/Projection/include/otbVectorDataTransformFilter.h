@@ -102,14 +102,14 @@ public:
 
 protected:
   VectorDataTransformFilter();
-  ~VectorDataTransformFilter() ITK_OVERRIDE {};
+  ~VectorDataTransformFilter() override {};
 
-  PointType ProcessPoint(PointType point) const ITK_OVERRIDE;
-  LinePointerType ProcessLine(LinePointerType line) const ITK_OVERRIDE;
-  PolygonPointerType ProcessPolygon(PolygonPointerType polygon) const ITK_OVERRIDE;
-  PolygonListPointerType ProcessPolygonList(PolygonListPointerType polygonList) const ITK_OVERRIDE;
+  PointType ProcessPoint(PointType point) const override;
+  LinePointerType ProcessLine(LinePointerType line) const override;
+  PolygonPointerType ProcessPolygon(PolygonPointerType polygon) const override;
+  PolygonListPointerType ProcessPolygonList(PolygonListPointerType polygonList) const override;
 
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
 private:
   VectorDataTransformFilter(const Self&); //purposely not implemented

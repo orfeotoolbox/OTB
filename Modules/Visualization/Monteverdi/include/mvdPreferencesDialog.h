@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -92,7 +92,7 @@ public:
   PreferencesDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor */
-  ~PreferencesDialog() ITK_OVERRIDE;
+  ~PreferencesDialog() override;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -99,7 +99,7 @@ public:
   LayerStackWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~LayerStackWidget() ITK_OVERRIDE;
+  ~LayerStackWidget() override;
 
   /**
    */
@@ -146,7 +146,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
    */
-  bool eventFilter( QObject * watched, QEvent * event ) ITK_OVERRIDE;
+  bool eventFilter( QObject * watched, QEvent * event ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

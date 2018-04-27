@@ -104,12 +104,12 @@ public:
 
 protected:
   LabelImageToVectorDataFilter();
-  ~LabelImageToVectorDataFilter() ITK_OVERRIDE {}
+  ~LabelImageToVectorDataFilter() override {}
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate Data method*/
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   LabelImageToVectorDataFilter(const Self &);  //purposely not implemented

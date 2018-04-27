@@ -67,9 +67,9 @@ protected:
   /** Constructor */
   SpatialObjectSource();
   /** Destructor */
-  ~SpatialObjectSource() ITK_OVERRIDE {}
+  ~SpatialObjectSource() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   SpatialObjectSource(const Self &); //purposely not implemented

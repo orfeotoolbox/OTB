@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetInputFilenameParameter_h
 #define otbWrapperQtWidgetInputFilenameParameter_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetInputFilenameParameter : public QtWidgetParamet
   Q_OBJECT
 public:
   QtWidgetInputFilenameParameter(InputFilenameParameter*, QtWidgetModel*);
-  ~QtWidgetInputFilenameParameter() ITK_OVERRIDE;
+  ~QtWidgetInputFilenameParameter() override;
 
   inline const QLineEdit* GetInput() const;
   inline QLineEdit* GetInput();
@@ -56,9 +56,9 @@ private:
   QtWidgetInputFilenameParameter(const QtWidgetInputFilenameParameter&); //purposely not implemented
   void operator=(const QtWidgetInputFilenameParameter&); //purposely not implemented
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
 
   InputFilenameParameter::Pointer m_FilenameParam;

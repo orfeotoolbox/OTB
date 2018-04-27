@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -99,7 +99,7 @@ public:
   /**
    * \brief Destructor.
    */
-  ~TaskProgressDialog() ITK_OVERRIDE;
+  ~TaskProgressDialog() override;
 
   /**
    */

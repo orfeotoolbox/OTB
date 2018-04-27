@@ -122,7 +122,7 @@ public:
   /**
    * Destructor.
    */
-  ~AbstractImageViewRenderer() ITK_OVERRIDE{};
+  ~AbstractImageViewRenderer() override{};
 
   /**
    */

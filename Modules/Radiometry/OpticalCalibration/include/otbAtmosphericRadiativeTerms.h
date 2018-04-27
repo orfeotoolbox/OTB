@@ -119,9 +119,9 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTermsSingleChannel();
   /** Destructor */
-  ~AtmosphericRadiativeTermsSingleChannel() ITK_OVERRIDE {}
+  ~AtmosphericRadiativeTermsSingleChannel() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   AtmosphericRadiativeTermsSingleChannel(const Self &); //purposely not implemented
@@ -266,9 +266,9 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTerms();
   /** Destructor */
-  ~AtmosphericRadiativeTerms() ITK_OVERRIDE {}
+  ~AtmosphericRadiativeTerms() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   AtmosphericRadiativeTerms(const Self &); //purposely not implemented

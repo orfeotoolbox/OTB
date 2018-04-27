@@ -435,7 +435,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             type == ParameterType_InputVectorData ||
             type == ParameterType_OutputVectorData ||
             type == ParameterType_RAM ||
-            type == ParameterType_OutputProcessXML) // || type == ParameterType_InputProcessXML)
+            type == ParameterType_OutputProcessXML ||
+            type == ParameterType_Bool) // || type == ParameterType_InputProcessXML)
           {
           // Single value parameter
           m_Application->SetParameterString(paramKey, values[0]);
@@ -686,7 +687,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<int32>         ";
     }
-  else if (type == ParameterType_Empty )
+  else if (type == ParameterType_Empty || type == ParameterType_Bool)
     {
     oss << "<boolean>       ";
     }
@@ -728,7 +729,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
       {
       defPixType = OutputImageParameter::ConvertPixelTypeToString(paramDown->GetDefaultPixelType());
       }
-    oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double]";
+    oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double/cint16/cint32/cfloat/cdouble]";
     oss << " (default value is " << defPixType <<")";
     }
 

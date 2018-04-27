@@ -35,7 +35,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 #include <qnamespace.h>
 
 //
@@ -82,7 +82,7 @@ public:
   explicit ProjectionBarWidget(QWidget *p = NULL, Qt::WindowFlags flags = Qt::Widget );
 
   /** \brief Destructor. */
-  ~ProjectionBarWidget() ITK_OVERRIDE;
+  ~ProjectionBarWidget() override;
 
 public slots:
   void SetProjectionScale(double scale_x, double scale_y);

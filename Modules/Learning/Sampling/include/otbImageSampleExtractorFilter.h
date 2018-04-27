@@ -73,10 +73,10 @@ public:
   /** Get the output samples OGR container */
   ogr::DataSource* GetOutputSamples();
 
-  void Synthetize(void) ITK_OVERRIDE{}
+  void Synthetize(void) override{}
 
   /** Reset method called before starting the streaming*/
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
   
   itkSetMacro(SampleFieldPrefix, std::string);
   itkGetMacro(SampleFieldPrefix, std::string);
@@ -91,14 +91,14 @@ protected:
   /** Constructor */
   PersistentImageSampleExtractorFilter();
   /** Destructor */
-  ~PersistentImageSampleExtractorFilter() ITK_OVERRIDE {}
+  ~PersistentImageSampleExtractorFilter() override {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** process only points */
-  void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid) ITK_OVERRIDE;
+  void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid) override;
 
 private:
   PersistentImageSampleExtractorFilter(const Self &); //purposely not implemented
@@ -178,7 +178,7 @@ protected:
   /** Constructor */
   ImageSampleExtractorFilter() {}
   /** Destructor */
-  ~ImageSampleExtractorFilter() ITK_OVERRIDE {}
+  ~ImageSampleExtractorFilter() override {}
 
 private:
   ImageSampleExtractorFilter(const Self &); //purposely not implemented

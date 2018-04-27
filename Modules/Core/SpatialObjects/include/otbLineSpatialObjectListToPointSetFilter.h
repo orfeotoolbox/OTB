@@ -74,8 +74,8 @@ public:
 
 protected:
   LineSpatialObjectListToPointSetFilter();
-  ~LineSpatialObjectListToPointSetFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LineSpatialObjectListToPointSetFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   LineSpatialObjectListToPointSetFilter(const Self &); //purposely not implemented

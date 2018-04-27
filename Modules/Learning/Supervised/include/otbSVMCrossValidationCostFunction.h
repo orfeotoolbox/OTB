@@ -82,19 +82,19 @@ public:
   itkGetMacro(DerivativeStep, ParametersValueType);
 
   /** \return The accuracy value corresponding the parameters */
-  MeasureType GetValue(const ParametersType& parameters) const ITK_OVERRIDE;
+  MeasureType GetValue(const ParametersType& parameters) const override;
 
   /** \return The accuracy derivative corresponding to the parameters */
-  void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const ITK_OVERRIDE;
+  void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const override;
 
   /** \return the number of parameters to optimize */
-  unsigned int GetNumberOfParameters(void) const ITK_OVERRIDE;
+  unsigned int GetNumberOfParameters(void) const override;
 
 protected:
   /// Constructor
   SVMCrossValidationCostFunction();
   /// Destructor
-  ~SVMCrossValidationCostFunction() ITK_OVERRIDE;
+  ~SVMCrossValidationCostFunction() override;
 
   /** Update svm parameters struct according to the input parameters
     */

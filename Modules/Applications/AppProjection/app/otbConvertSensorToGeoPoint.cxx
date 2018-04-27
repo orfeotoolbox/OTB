@@ -49,7 +49,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ConvertSensorToGeoPoint");
     SetDescription("Sensor to geographic coordinates conversion.");
@@ -101,11 +101,11 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get input Image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
@@ -130,8 +130,8 @@ private:
     outputPoint = model->TransformPoint(point);
 
     // Set the value computed
-    SetParameterFloat("output.idx",outputPoint[0], false);
-    SetParameterFloat("output.idy",outputPoint[1], false);
+    SetParameterFloat("output.idx",outputPoint[0]);
+    SetParameterFloat("output.idy",outputPoint[1]);
 
     // Set the town and the neaerest city
     CoordinateToName::Pointer coord2name = CoordinateToName::New();
@@ -139,8 +139,8 @@ private:
     coord2name->SetLat(outputPoint[1]);
     coord2name->Evaluate();
 
-    SetParameterString("output.town", coord2name->GetPlaceName(), false);
-    SetParameterString("output.country", coord2name->GetCountryName(), false);
+    SetParameterString("output.town", coord2name->GetPlaceName());
+    SetParameterString("output.country", coord2name->GetCountryName());
   }
 
 };

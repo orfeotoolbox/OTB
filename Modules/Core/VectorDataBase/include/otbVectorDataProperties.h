@@ -86,9 +86,9 @@ protected:
   /** Constructor */
   VectorDataProperties() : m_VectorDataObject(ITK_NULLPTR) {};
   /** Destructor */
-  ~VectorDataProperties() ITK_OVERRIDE {}
+  ~VectorDataProperties() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void ProcessNode(InternalTreeNodeType * source);
   bool IsBoundingRegionNull();

@@ -100,9 +100,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
-include( i18n_qt4 )
+include( i18n_qt )
 
-reset_qt4_i18n_sources()
+reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -123,7 +123,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "4")
+set(OTB_VERSION_MINOR "6")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -231,10 +231,6 @@ mark_as_advanced(OTB_USE_DEPRECATED)
 
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
-#-----------------------------------------------------------------------------
-# SHOW_ALL_MSG_DEBUG option
-option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
-#mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------
@@ -535,7 +531,7 @@ endforeach()
 # message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
 # unset(modules_list_for_summary)
 
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT4")
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT")
 foreach(item ${option_list})
   if(NOT ${item})
     list(REMOVE_ITEM option_list "${item}" )
@@ -554,7 +550,7 @@ list(APPEND option_list TINYXML)
 #Q: Why these two guys here? we already have option_list
 #A: Because cmake case sensitivity with variables.
 
-if(OTB_USE_QT4)
+if(OTB_USE_QT)
   list(APPEND option_list QT)
 endif()
 #sort again!

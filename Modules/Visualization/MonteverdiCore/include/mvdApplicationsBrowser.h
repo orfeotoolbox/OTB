@@ -112,7 +112,7 @@ public:
   ApplicationsBrowser( QObject* p =NULL );
 
   /** \brief Destructor. */
-  ~ApplicationsBrowser() ITK_OVERRIDE;
+  ~ApplicationsBrowser() override;
 
   /** set the path where to look for applications */
   void SetAutoLoadPath(const std::string & itk_auto_load_path);

@@ -143,10 +143,10 @@ protected:
   /** Constructor */
   TerraSarBrightnessImageFilter(){};
   /** Destructor */
-  ~TerraSarBrightnessImageFilter() ITK_OVERRIDE {}
+  ~TerraSarBrightnessImageFilter() override {}
 
   /** Initialize the functor vector */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
 private:
   TerraSarBrightnessImageFilter(const Self &); //purposely not implemented

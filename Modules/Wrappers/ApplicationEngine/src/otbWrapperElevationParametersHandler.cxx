@@ -57,7 +57,11 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss.str("");
   oss << key<<".geoid";
   app->AddParameter(ParameterType_InputFilename, oss.str(), "Geoid File");
-  app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website (https://git.orfeo-toolbox.org/otb-data.git/blob/HEAD:/Input/DEM/egm96.grd).");
+  app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height "
+    "above the ellipsoid in case there is no DEM available, no coverage for "
+    "some points or pixels with no_data in the DEM tiles. A version of the "
+    "geoid can be found on the OTB website"
+    "(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd).");
   app->MandatoryOff(oss.str());
 
   std::string geoidFromConfig = otb::ConfigurationManager::GetGeoidFile();

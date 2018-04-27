@@ -98,7 +98,7 @@ public:
 
   virtual void PrintMap() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
+  OutputPointType TransformPoint(const InputPointType& point) const override;
 
   virtual bool InstantiateProjection();
 
@@ -111,9 +111,9 @@ public:
 
 protected:
   GenericMapProjection();
-  ~GenericMapProjection() ITK_OVERRIDE;
+  ~GenericMapProjection() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   MapProjectionAdapter::Pointer m_MapProjection;
 

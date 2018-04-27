@@ -54,19 +54,19 @@ protected:
   {
   }
 
-  ~StubApplication() ITK_OVERRIDE
+  ~StubApplication() override
   {
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
   }
 };

@@ -80,7 +80,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
@@ -159,7 +159,7 @@ private:
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
     SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artifacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
-    SetParameterString("interpolator","bco", false);
+    SetParameterString("interpolator","bco");
 
     // RAM available
     AddRAMParameter("ram");
@@ -176,12 +176,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     FloatVectorImageType* inputImage = GetParameterImage("in");
 

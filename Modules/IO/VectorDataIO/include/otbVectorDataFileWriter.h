@@ -93,9 +93,9 @@ public:
   /** Does the real work. */
   virtual void Write();
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void Update() ITK_OVERRIDE
+  void Update() override
   {
     this->Write();
   }
@@ -106,9 +106,9 @@ public:
 
 protected:
   VectorDataFileWriter();
-  ~VectorDataFileWriter() ITK_OVERRIDE;
+  ~VectorDataFileWriter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   std::string m_FileName; // The file to be read
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;

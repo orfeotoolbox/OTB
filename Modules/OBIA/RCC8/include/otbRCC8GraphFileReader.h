@@ -92,9 +92,9 @@ protected:
   /** Constructor */
   RCC8GraphFileReader();
   /** Destructor */
-  ~RCC8GraphFileReader() ITK_OVERRIDE;
+  ~RCC8GraphFileReader() override;
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /**
    * Parse edge information from a given line.
    * \param line The line to parse.
@@ -107,7 +107,7 @@ protected:
   void  ParseVertex(const std::string& line);
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** File name */

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include <QtGui>
+#include <QtWidgets>
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
@@ -36,9 +36,11 @@ int main(int argc, char* argv[])
 {
   // Handle UTF-8 filenames
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-
+  /*/////////////////////////////// Warning //////////////////////
+  we need to replace those lines with a function of Qt5
+  // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+  // QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+  //////////////////////////////////////////////////////////////////*/
   QtApplication qtApp(argc, argv);
 
   if (argc < 2)

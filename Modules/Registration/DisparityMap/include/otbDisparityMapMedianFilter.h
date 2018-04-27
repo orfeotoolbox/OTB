@@ -151,8 +151,8 @@ public:
 
 protected:
   DisparityMapMedianFilter();
-  ~DisparityMapMedianFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~DisparityMapMedianFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** MedianImageFilter needs a larger input requested region than
    * the output requested region.  As such, MedianImageFilter needs
@@ -160,13 +160,13 @@ protected:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
 
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** apply median filter */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   DisparityMapMedianFilter(const Self&); //purposely not implemented

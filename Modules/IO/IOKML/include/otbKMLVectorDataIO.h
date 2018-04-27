@@ -90,27 +90,27 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  bool CanReadFile(const char*) const ITK_OVERRIDE;
+  bool CanReadFile(const char*) const override;
 
   /** Reads the data from disk into the data structure provided. */
-  void Read(itk::DataObject* data) ITK_OVERRIDE;
+  void Read(itk::DataObject* data) override;
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  bool CanWriteFile(const char*) const ITK_OVERRIDE;
+  bool CanWriteFile(const char*) const override;
 
   /** Writes the data to disk from the data structure provided */
-  void Write(const itk::DataObject* data, char ** papszOptions = ITK_NULLPTR) ITK_OVERRIDE;
+  void Write(const itk::DataObject* data, char ** papszOptions = ITK_NULLPTR) override;
 
 protected:
   /** Constructor.*/
   KMLVectorDataIO();
   /** Destructor.*/
-  ~KMLVectorDataIO() ITK_OVERRIDE;
+  ~KMLVectorDataIO() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   static const kmldom::FeaturePtr GetRootFeature(const kmldom::ElementPtr& root);
 
