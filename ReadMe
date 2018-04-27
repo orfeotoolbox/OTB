@@ -34,7 +34,7 @@ Cost-volume filtering parameters:
      sigmas: value of sigma_space (9)
 
 Execution:
- ./bin/otbStereoFiltersTestDriver main_CostVolumeFilter Radius Min_Disp Max_Disp
+ ./bin/otbStereoFiltersTestDriver testCostVolumeFilter Radius Min_Disp Max_Disp
  Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images/ 
 
 
@@ -47,7 +47,7 @@ Patch Match Stéréo parameters:
   tau2: max for gradient difference (2)
 
 Execution:
-./bin/otbStereoFiltersTestDriver main_PatchMatch radius dispMin dispMax
+./bin/otbStereoFiltersTestDriver testPatchMatch radius dispMin dispMax
   Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images/
 
 

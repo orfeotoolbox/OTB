@@ -387,7 +387,7 @@ AggCostPixel = m_AggregatedCost->GetOutput()->GetPixel(CostIndex);
 
 
 	 for(unsigned int b = 0; b<3 ; ++b){		 
-					m = std::min(m,AggCostPixel[b]);
+					m = std::min(m,static_cast<double>(AggCostPixel[b]));
 					 if ( m == AggCostPixel[b]){
 						val = b ;
 					 }				 
@@ -500,7 +500,7 @@ AggCostPixel = m_AggregatedCost->GetOutput()->GetPixel(CostIndex);
 //}
 
 	 for(unsigned int b = 0; b<3 ; ++b){		 
-					m = std::min(m,AggCostPixel[b]);
+					m = std::min(m,static_cast<double>(AggCostPixel[b]));
 					 if ( m == AggCostPixel[b]){
 						val = b ;
 					 }				 

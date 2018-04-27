@@ -1,4 +1,42 @@
-/** Execution ./bin/otbCVFFiltersTestDriver main_CVF Radius Min_Disp Max_Disp
+/*=========================================================================
+
+ *  Program:   ORFEO Toolbox
+ *  Language:  C++
+ *  Date:      $Date$
+ * Version:   $Revision$
+ *
+ * Copyright (C) Damia Belazouz - 2017
+ *
+ *  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ * See OTBCopyright.txt for details.
+ *
+ *
+ *     This software is distributed WITHOUT ANY WARRANTY; without even
+ *     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ *    PURPOSE.  See the above copyright notices for more information.
+ *
+ *
+ * Copyright (C) CS SI
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ 
+=========================================================================*/
+
+/** Execution ./bin/otbCVFFiltersTestDriver test_CVF Radius Min_Disp Max_Disp
  * Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images 
  
  * **/ 
@@ -59,41 +97,42 @@
 
 
 	
-int main_CostVolumeFilter(int argc, char *argv[])
+int testCostVolumeFilter(int argc, char *argv[])
 {
 	
 
-	if(argc < 7) {
-		std::cerr << "Usage: " << argv[0] << " radius min_disp max_disp Left_Image Right_Image Out_Path" << std::endl;
+	if(argc < 8) {
+		std::cerr << "Usage: " << argv[0] << " radius min_disp max_disp radius_to_mean_filter Left_Image Right_Image Out_Path" << std::endl;
 		return EXIT_FAILURE;
 	}
 	
      long unsigned int r = atoi(argv[1]);
 	 int HdispMin = atoi(argv[2]);
 	 int HdispMax  = atoi(argv[3]);
+   int rmf = atoi(argv[4]) ;
   
-// Main type definition
-const unsigned int Dimension = 2;
-typedef otb::Image< double, Dimension > OTBImageType;
-typedef otb::VectorImage< double , Dimension > ImageType;
-typedef otb::ImageList<OTBImageType>              ImageListType;
+  // Main type definition
+  const unsigned int Dimension = 2;
+  typedef otb::Image< double, Dimension > OTBImageType;
+  typedef otb::VectorImage< double , Dimension > ImageType;
+  typedef otb::ImageList<OTBImageType>              ImageListType;
 
- 
-typedef otb::ImageFileWriter< OTBImageType > OtbImageWriterType; 
-typedef otb::ImageFileWriter< ImageType > ImageWriterType;
-  // Reading Leftinput images
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer LeftReader = ReaderType::New();
-  LeftReader->SetFileName(argv[4]); //LeftImage 
-  LeftReader->UpdateOutputInformation();//*
-  // Reading ReghtInput images
-  typedef otb::ImageFileReader<ImageType> RightReaderType;
-  RightReaderType::Pointer RightReader = RightReaderType::New();
-  RightReader->SetFileName(argv[5]);//RightImage
-  RightReader->UpdateOutputInformation();//*
- //argv[6] le chemin des images de sortie  
-  std::string argv6 = std::string(argv[6]);
-  #define FILENAME(n) std::string( argv6 + std::string(n)).c_str()
+   
+  typedef otb::ImageFileWriter< OTBImageType > OtbImageWriterType; 
+  typedef otb::ImageFileWriter< ImageType > ImageWriterType;
+    // Reading Leftinput images
+    typedef otb::ImageFileReader<ImageType> ReaderType;
+    ReaderType::Pointer LeftReader = ReaderType::New();
+    LeftReader->SetFileName(argv[5]); //LeftImage 
+    LeftReader->UpdateOutputInformation();//*
+    // Reading ReghtInput images
+    typedef otb::ImageFileReader<ImageType> RightReaderType;
+    RightReaderType::Pointer RightReader = RightReaderType::New();
+    RightReader->SetFileName(argv[6]);//RightImage
+    RightReader->UpdateOutputInformation();//*
+   //argv[6] le chemin des images de sortie  
+    std::string argv7 = std::string(argv[7]);
+    #define FILENAME(n) std::string( argv7 + std::string(n)).c_str()
   
 
  //#if 0
@@ -473,7 +512,7 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   LeftCVFFiltredWriter->SetFileName(FILENAME("GuidedFilter.tif"));
   LeftCVFFiltredWriter->SetInput( LeftCVFFiltred->GetOutput() ); 
   otb::StandardFilterWatcher LeftCVFFiltredWatcher(LeftCVFFiltredWriter, "GuidedFilter");  
-  //LeftCVFFiltredWriter->Update(); //* A NE PAS METTRE 
+
 
  /* =========================================== Min Filter ======================================*/
 ImageWriterType::Pointer LeftMinWriter = ImageWriterType::New();
@@ -703,8 +742,8 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
     
    
   ImageType::SizeType radiusM;
-  radiusM[0] = 19;
-  radiusM[1] = 19;   
+  radiusM[0] = rmf;
+  radiusM[1] = rmf;   
   LeftMedian->SetRadius(radiusM) ;
    
    

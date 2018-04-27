@@ -40,3 +40,9 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 
+otb_create_application(
+  NAME           PatchMatch
+  SOURCES        otbPatchMatch.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+

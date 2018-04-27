@@ -1,4 +1,21 @@
-/*
+/*=========================================================================
+
+ *  Program:   ORFEO Toolbox
+ *  Language:  C++
+ *  Date:      $Date$
+ * Version:   $Revision$
+ *
+ * Copyright (C) Damia Belazouz - 2017
+ *
+ *  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ * See OTBCopyright.txt for details.
+ *
+ *
+ *     This software is distributed WITHOUT ANY WARRANTY; without even
+ *     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ *    PURPOSE.  See the above copyright notices for more information.
+ *
+ *
  * Copyright (C) CS SI
  *
  * This file is part of Orfeo Toolbox
@@ -16,20 +33,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-
-
-/** Execution ./bin/otbPatchMatchFiltersTestDriver main_PatchMatch radius dispMin dispMax
- * Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images/ 
  
+=========================================================================*/
+
+
+/* Execution ./bin/otbPatchMatchFiltersTestDriver testPatchMatch radius dispMin dispMax
+  Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images/  
  
  Exemple:
- * make -j3 OTBPatchMatchFilters-all && ./bin/otbPatchMatchFiltersTestDriver main_PatchMatch 9 -15 0
-   /home/dbelazou/src/otb/Modules/Remote/MatchingFilters/data/ImageRGB/middlebury/tsukuba0.png 
-  /home/dbelazou/src/otb/Modules/Remote/MatchingFilters/data/ImageRGB/middlebury/tsukuba1.png 
-  /home/dbelazou/src/otb/Modules/Remote/MatchingFilters/data/SortiePatchMatch/
+  make -j3 OTBPatchMatchFilters-all && ./bin/otbPatchMatchFiltersTestDriver testPatchMatch 7 -15 0 19
+   tsukuba0.png tsukuba1.png SortiePatchMatch/
 
- * * */ 
+ */ 
 
 //standard
 #include <cstdio>
@@ -83,19 +98,20 @@
 #include "itkConstantBoundaryCondition.h"
 
 	
-int main_PatchMatch(int argc, char *argv[])
+int testPatchMatch(int argc, char *argv[])
 {
 
 	
-if(argc < 7) {
+if(argc < 8) {
 
-		std::cerr << "Usage: " << argv[0] << " radius min_disp max_disp Left_Image Right_Image Out_Path" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " radius min_disp max_disp radius_to_mean_filter Left_Image Right_Image Out_Path" << std::endl;
 		return EXIT_FAILURE;
 	}
 	
   long unsigned int PatchSize = atoi(argv[1]);
 	int HdispMin = atoi(argv[2]);
 	int HdispMax  = atoi(argv[3]);
+  int rmf  = atoi(argv[4]);
 	 
 	
   
@@ -109,13 +125,13 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   // Reading Leftinput images
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer LeftReader = ReaderType::New();
-  LeftReader->SetFileName(argv[4]); //LeftImage 
+  LeftReader->SetFileName(argv[5]); //LeftImage 
   LeftReader->UpdateOutputInformation();
  
   // Reading RightInput images
   typedef otb::ImageFileReader<ImageType> RightReaderType;
   RightReaderType::Pointer RightReader = RightReaderType::New();
-  RightReader->SetFileName(argv[5]);//RightImage
+  RightReader->SetFileName(argv[6]);//RightImage
   RightReader->UpdateOutputInformation();
   
   
@@ -151,12 +167,11 @@ typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   //~ RightReader->SetRadius(radius); 
   
   
-   
   
   
- //argv[6] le chemin des images de sortie  
-  std::string argv6 = std::string(argv[6]);
-  #define FILENAME(n) std::string( argv6 + std::string(n)).c_str()
+ //argv[7] le chemin des images de sortie  
+  std::string argv7 = std::string(argv[7]);
+  #define FILENAME(n) std::string( argv7 + std::string(n)).c_str()
   
  
   
@@ -462,7 +477,7 @@ typedef otb::PatchMatchRefinementImageFilter< ImageType, ImageType > RefinementT
  RightRefinement->SetDispMinMax(HdispMin, HdispMax); 
   
   ImageWriterType::Pointer RefineViewWriter = ImageWriterType::New();
-  RefineViewWriter->SetFileName(FILENAME("LeftRefinement.tif"));  
+  RefineViewWriter->SetFileName(FILENAME("LeftRefinement.tif")); 
   RefineViewWriter->SetInput( LeftRefinement->GetOutputPatchImage() );   
  otb::StandardFilterWatcher watcherRV(RefineViewWriter, "LeftRefinement");  
   RefineViewWriter->Update();  
@@ -532,7 +547,7 @@ typedef otb::PatchMatchRefinementImageFilter< ImageType, ImageType > RefinementT
 	RightCoefPlane = RightMinPlaneView->GetOutputPatchImage();
 	RightCoefPlane->DisconnectPipeline();
 	RightNormalPlane = RightMinPlaneView->GetOutputNormalAndZValueImage(); 
-    RightNormalPlane->DisconnectPipeline();
+  RightNormalPlane->DisconnectPipeline();
     
     
    /// refinement Disparity
@@ -587,10 +602,6 @@ std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << st
   //~ LeftPMedianWriter->Update(); 
   
 
-
- 
-  
-  
   
   
   
@@ -634,8 +645,8 @@ RightDispFilter->SetRadius(radiusD);
 
 typedef otb::DisparityWeightedMedianImageFilter< ImageType, ImageType > DispMedianType;
 DispMedianType::RadiusType radiusPMedian;
-  radiusPMedian[0] = 19;
-  radiusPMedian[1] = 19;
+  radiusPMedian[0] = rmf;
+  radiusPMedian[1] = rmf;
 /// Left
 DispMedianType::Pointer LeftDispMedian = DispMedianType::New();
 LeftDispMedian->SetInput(ConcatenateDispEndInLeftImage->GetOutput());

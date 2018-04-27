@@ -1,20 +1,21 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-
+ *  Program:   ORFEO Toolbox
+ *  Language:  C++
+ *  Date:      $Date$
+ * Version:   $Revision$
+ *
+ * Copyright (C) Damia Belazouz - 2017
+ *
+ *  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ * See OTBCopyright.txt for details.
+ *
+ *
+ *     This software is distributed WITHOUT ANY WARRANTY; without even
+ *     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ *    PURPOSE.  See the above copyright notices for more information.
+ *
+ *
  * Copyright (C) CS SI
  *
  * This file is part of Orfeo Toolbox
@@ -287,7 +288,7 @@ private:
 
     AddParameter(ParameterType_Int,"radius","Radius of Mean, gradient and the guided Filter");
     SetParameterDescription("radius","The radius of Mean, gradient and the guided Filter.");
-    SetDefaultParameterInt("radius",9.);
+    SetDefaultParameterInt("radius",9);
   
 
     AddParameter(ParameterType_Int,"hdispmin","Minimum horizontal disparity");
@@ -300,7 +301,7 @@ private:
     
     AddParameter(ParameterType_Int,"rmf", "Radiusf or median filter");
     SetParameterDescription("rmf", "Radius for median filter");
-     SetDefaultParameterInt("rmf",19.);
+     SetDefaultParameterInt("rmf",19);
   
 
     AddRAMParameter();
@@ -329,6 +330,7 @@ private:
     unsigned int R  = GetParameterInt("radius");
     int          HdispMin = GetParameterInt("hdispmin");
     int          HdispMax = GetParameterInt("hdispmax");
+    int rmf = GetParameterInt("rmf") ;
 
 
 /*============================== calcul de la multiplication pour la covariance =======*/
@@ -707,8 +709,8 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
     
    
   FloatVectorImageType::SizeType radiusM;
-  radiusM[0] = 19;
-  radiusM[1] = 19;   
+  radiusM[0] = rmf;
+  radiusM[1] = rmf;   
   m_LeftMedian->SetRadius(radiusM) ;
    
 
@@ -762,8 +764,9 @@ m_OtbImageRightMedian->Update();
 
   m_FillMedian-> SetInput(m_ConcatenateFillEndInLeftMedImage->GetOutput()); 
   m_FillMedian->SetRadius(radiusM) ;
+  //m_FillMedian->Update();
  
-SetParameterOutputImage("io.out",m_FillMedian->GetOutput());
+  SetParameterOutputImage("io.out",m_FillMedian->GetOutput());
   
   }
   
