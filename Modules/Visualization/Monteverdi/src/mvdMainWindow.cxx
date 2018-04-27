@@ -1363,7 +1363,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImages( const QStringList & filenames, bool enableOverviews )
+::ImportImages( const QStringList & filenames, bool enableOverviews /*= true*/)
 {
   if( filenames.isEmpty() )
     return;
