@@ -119,20 +119,6 @@ macro(otb_create_application)
        CACHE STRING "List of all applications" FORCE)
    mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 
-   if(NOT ${APPLICATION_NAME} MATCHES "(TestApplication|ApplicationExample)")
-     set(descriptor_output_dir "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}")
-     set(dfile "${descriptor_output_dir}/${APPLICATION_NAME}.txt")
-     add_custom_command(TARGET "${APPLICATION_TARGET_NAME}" POST_BUILD
-       COMMAND "$<TARGET_FILE:otbQgisDescriptor>"
-       "${APPLICATION_NAME}"
-       "${APPLICATION_BINARY_PATH}"
-       "${descriptor_output_dir}/"
-       DEPENDS otbQgisDescriptor
-       #COMMENT "./bin/otbQgisDescriptor ${APPLICATION_NAME} ${APPLICATION_BINARY_PATH} ${descriptor_output_dir}/"
-       WORKING_DIRECTORY ${OTB_BINARY_DIR} VERBATIM)
-     install(FILES ${dfile} DESTINATION ${OTB_INSTALL_DESCR_DIR})
-   endif()
-
 endmacro()
 
 macro(otb_test_application)
