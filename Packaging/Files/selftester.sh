@@ -217,7 +217,7 @@ else
 fi
 
 grep_cmd=$(which grep)
-grep_out=$($grep_cmd -Rs "/usr/" "$CUR_DIR/lib/cmake/")
+grep_out=$($grep_cmd -Rs "/usr/" "$CUR_DIR/lib/cmake/" | $grep_cmd -v "/usr/include/libdrm")
 grep_ret=$?
 if [ $grep_ret -ne 1 ]; then
     echo "Check 4/4 : FAIL"
