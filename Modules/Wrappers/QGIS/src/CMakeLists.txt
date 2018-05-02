@@ -20,15 +20,13 @@
 add_executable(otbQgisDescriptor otbQgisDescriptor.cxx)
 target_link_libraries(otbQgisDescriptor ${OTBQgis_LIBRARIES})
 otb_module_target(otbQgisDescriptor)
-foreach(app_name ${OTB_APPLICATIONS_NAME_LIST})
-  add_dependencies(otbQgisDescriptor otbapp_${app_name})
-endforeach()
 set(app_names ${OTB_APPLICATIONS_NAME_LIST})
 list(REMOVE_ITEM app_names "TestApplication")
 list(REMOVE_ITEM app_names "ApplicationExample")
 list(REMOVE_DUPLICATES app_names)
+
 foreach(app_name ${app_names})
-  set(dfile "${OTB_BINARY_DIR}/descriptors/${app_name}.txt")
+  add_dependencies(otbQgisDescriptor otbapp_${app_name})
   add_custom_command(TARGET otbQgisDescriptor POST_BUILD
     COMMAND "$<TARGET_FILE:otbQgisDescriptor>"
     "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
