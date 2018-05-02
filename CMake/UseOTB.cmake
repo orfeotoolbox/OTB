@@ -23,6 +23,13 @@
 # included directly, but rather through the OTB_USE_FILE setting
 # obtained from OTBConfig.cmake.
 
+# ABI compatibility
+if ( CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 5.0 )
+    add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+  endif()
+endif()
+
 # Add compiler flags needed to use OTB.
 set(CMAKE_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
