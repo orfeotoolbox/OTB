@@ -20,42 +20,26 @@
 add_executable(otbQgisDescriptor otbQgisDescriptor.cxx)
 target_link_libraries(otbQgisDescriptor ${OTBQgis_LIBRARIES})
 otb_module_target(otbQgisDescriptor)
-
-set(dfiles)
 set(app_names ${OTB_APPLICATIONS_NAME_LIST})
 list(REMOVE_ITEM app_names "TestApplication")
 list(REMOVE_ITEM app_names "ApplicationExample")
 list(REMOVE_DUPLICATES app_names)
+
 foreach(app_name ${app_names})
-  set(dfile "${OTB_BINARY_DIR}/descriptors/${app_name}.txt")
-  add_custom_command(OUTPUT "${dfile}"
+  add_dependencies(otbQgisDescriptor otbapp_${app_name})
+  add_custom_command(TARGET otbQgisDescriptor POST_BUILD
     COMMAND "$<TARGET_FILE:otbQgisDescriptor>"
     "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
-    DEPENDS otbQgisDescriptor
     WORKING_DIRECTORY ${OTB_BINARY_DIR}
     COMMENT "./bin/otbQgisDescriptor ${app_name} ./${OTB_INSTALL_APP_DIR} ./${OTB_INSTALL_DESCR_DIR}/"
     VERBATIM)
-  list(APPEND dfiles "${dfile}")
 endforeach()
 
-add_custom_target(clean_descr.dirs
+add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
+  COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Cleaning ${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
   COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
   COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
-  DEPENDS otbQgisDescriptor
   )
-
-add_custom_target(generate_descriptors
-  COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Generated descriptor files for QGIS"
-  DEPENDS clean_descr.dirs ${dfiles}
-  )
-
-install(CODE "
-    message(STATUS \"Generating descriptor files for QGIS in ${OTB_INSTALL_DESCR_DIR}\") 
-      execute_process(
-        COMMAND ${CMAKE_COMMAND} --build \"${OTB_BINARY_DIR}\" --target generate_descriptors
-        COMMAND ${CMAKE_COMMAND} -E echo \"Installing: ${CMAKE_INSTALL_PREFIX}/${OTB_INSTALL_DESCR_DIR}/\"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory \"${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}\" \"${CMAKE_INSTALL_PREFIX}/${OTB_INSTALL_DESCR_DIR}\"
-        WORKING_DIRECTORY \"${OTB_BINARY_DIR}\"
-     )
-  ")
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}
+  DESTINATION share/otb)
 
