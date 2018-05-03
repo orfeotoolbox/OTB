@@ -789,7 +789,13 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     
     if(m_Application->HasValue(paramKey))
       {
-      oss<<", default value is "<<m_Application->GetParameterAsString(paramKey);
+      if ( m_Application->GetParameterAsString(paramKey).empty() )
+        oss<<", no default value";
+      else
+        {
+        oss<<", default value is "
+           <<m_Application->GetParameterAsString(paramKey);
+        }
       }
     oss<<")";
     }
