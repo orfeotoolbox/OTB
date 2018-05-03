@@ -89,6 +89,17 @@ function(prepare_file_list file_list_result)
       list(APPEND file_list ${otb_test_exe_name})
     endif()
   endforeach()
+
+  # find ITK targets
+  set(_itk_targets_path
+    "${SUPERBUILD_INSTALL_DIR}/lib/cmake/ITK-${PKG_ITK_SB_VERSION}")
+  file(GLOB _itk_targets_config_files "${_itk_targets_path}/ITKTargets-*.cmake")
+  foreach(f ${_itk_targets_config_files})
+    file(STRINGS ${f} _f_content REGEX " IMPORTED_LOCATION_[A-Z]+ ")
+    string(REGEX REPLACE " +IMPORTED_LOCATION_[A-Z]+ \"([^\"]+)\"" "\\1;" _filtered ${_f_content})
+    string(CONFIGURE "${_filtered}" _configured)
+    list(APPEND file_list "${_configured}")
+  endforeach()
   
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
   # for proj.dll, see Mantis-1424
