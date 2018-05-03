@@ -49,6 +49,12 @@ endif()
 
 file(TO_NATIVE_PATH ${QT5_SB_SRC} QT5_SB_SRC_NATIVE)
 
+if(WIN32)
+  set(QT5_SB_OPENGL_CONFIG "-opengl desktop")
+else()
+  set(QT5_SB_OPENGL_CONFIG "")
+endif()
+
 #Common options for all cases
 # -skip qtbase
 # -skip qttools  (need linguist)
@@ -58,6 +64,7 @@ set(QT5_SB_CONFIG
   -I ${QT5_INCLUDE_PREFIX_NATIVE} -I ${QT5_INCLUDE_FREETYPE_NATIVE} \
   -opensource -confirm-license -release -shared \
   -nomake examples -make tools -no-openssl \
+  ${QT5_SB_OPENGL_CONFIG} \
   -skip qtgamepad  \
   -skip qt3d  \
   -skip qtactiveqt  \
