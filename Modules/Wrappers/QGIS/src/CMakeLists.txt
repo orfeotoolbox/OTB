@@ -20,26 +20,33 @@
 add_executable(otbQgisDescriptor otbQgisDescriptor.cxx)
 target_link_libraries(otbQgisDescriptor ${OTBQgis_LIBRARIES})
 otb_module_target(otbQgisDescriptor)
-set(app_names ${OTB_APPLICATIONS_NAME_LIST})
-list(REMOVE_ITEM app_names "TestApplication")
-list(REMOVE_ITEM app_names "ApplicationExample")
-list(REMOVE_DUPLICATES app_names)
-
-foreach(app_name ${app_names})
-  add_dependencies(otbQgisDescriptor otbapp_${app_name})
-  add_custom_command(TARGET otbQgisDescriptor POST_BUILD
-    COMMAND "$<TARGET_FILE:otbQgisDescriptor>"
-    "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
-    WORKING_DIRECTORY ${OTB_BINARY_DIR}
-    COMMENT "./bin/otbQgisDescriptor ${app_name} ./${OTB_INSTALL_APP_DIR} ./${OTB_INSTALL_DESCR_DIR}/"
-    VERBATIM)
-endforeach()
 
 add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
   COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Cleaning ${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
   COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
   COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
   )
+
+set(app_names ${OTB_APPLICATIONS_NAME_LIST})
+list(REMOVE_ITEM app_names "TestApplication")
+list(REMOVE_ITEM app_names "ApplicationExample")
+list(REMOVE_DUPLICATES app_names)
+set(dfiles)
+foreach(app_name ${app_names})
+  add_dependencies(otbQgisDescriptor otbapp_${app_name})
+  set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/${app_name}.txt")
+  add_custom_command(OUTPUT "${dfile}"
+    COMMAND "$<TARGET_FILE:otbQgisDescriptor>"
+     "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
+    WORKING_DIRECTORY ${OTB_BINARY_DIR}
+    COMMENT "./bin/otbQgisDescriptor ${app_name} ./${OTB_INSTALL_APP_DIR} ./${OTB_INSTALL_DESCR_DIR}/"
+    VERBATIM)
+  list(APPEND dfiles "${dfile}")
+endforeach()
+
+add_custom_target(generate_descriptors DEPENDS ${dfiles} )
+add_dependencies(${otb-module}-all generate_descriptors)
+
 install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}
   DESTINATION share/otb)
 
