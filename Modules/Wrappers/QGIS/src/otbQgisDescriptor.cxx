@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
       {
       // TODO: if parameter InputFilename can give supported extensions
       // we can use it gitlab #1559
-      dFile << "|QgsProcessingParameterFile.File|txt";
+      dFile << "|QgsProcessingParameterFile.File|None";
       }
     else if(type == ParameterType_Directory)
       {
