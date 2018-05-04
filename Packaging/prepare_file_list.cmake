@@ -107,7 +107,6 @@ function(prepare_file_list file_list_result)
   if(MSVC)
     list(APPEND file_list "ucrtbase.dll")
     list(APPEND file_list "proj.dll")
-    list(APPEND file_list "libEGL.dll")
   endif()
 
   # Qt plugins
