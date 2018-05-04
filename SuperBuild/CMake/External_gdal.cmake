@@ -43,12 +43,12 @@ set(GDAL_CONFIGURE_COMMAND)
 set(GDAL_BUILD_COMMAND)
 set(GDAL_INSTALL_COMMAND)
 
+set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
+mark_as_advanced(GDAL_SB_EXTRA_OPTIONS)
+#Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
+separate_arguments(GDAL_SB_EXTRA_OPTIONS)
 
 if(UNIX)
-  set(GDAL_SB_EXTRA_OPTIONS "" CACHE STRING "Extra options to be passed to GDAL configure script")
-  mark_as_advanced(GDAL_SB_EXTRA_OPTIONS)
-  #Convert GDAL_SB_EXTRA_OPTIONS to a list to allow to add multiple instructions to the CONFIGURE_COMMAND
-  separate_arguments(GDAL_SB_EXTRA_OPTIONS)
   #we don't do any framework build on osx. So let's be sure on case of gdal
   if(APPLE)
     list(APPEND GDAL_SB_CONFIG "--with-macosx-framework=no")
@@ -111,9 +111,13 @@ else(MSVC)
   configure_file(
     ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
     ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+
+  foreach(opt_line ${GDAL_SB_EXTRA_OPTIONS})
+    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "${opt_line}\r\n")
+  endforeach()
   
   if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
-    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES")
+    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES\r\n")
   endif()
   
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)

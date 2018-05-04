@@ -114,7 +114,11 @@ typedef mpl::map
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , T ( OGRFeature::*ptr_to_function )(int) const
+#else
   , T ( OGRFeature::*ptr_to_function )(int)
+#endif
   , typename FinalReturnType = T
   > class MemberGetterPtr
     {
@@ -190,7 +194,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , T const* ( OGRFeature::*ptr_to_function )(int, int*) const
+#else
   , T const* ( OGRFeature::*ptr_to_function )(int, int*)
+#endif
   , typename FinalReturnType = std::vector<T>
   > class MemberContainerGetterPtr
     {
@@ -292,7 +300,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , void ( OGRFeature::*ptr_to_function )(int, int, const T*)
+#else
   , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+#endif
   , typename ActualParamType = std::vector<T>
   > class MemberContainerSetterPtr
     {
