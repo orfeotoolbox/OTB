@@ -88,6 +88,9 @@
 #include "itkTimeProbe.h" //crono
 #include "itkConstantBoundaryCondition.h"
 
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
+
 
 namespace otb
 {
@@ -133,7 +136,7 @@ namespace otb
       void DoInit() ITK_OVERRIDE
       {     
         SetName("PatchMatch");
-        SetDescription("Performs Fast Cost Volume Filter to estimate a disparty map between two images");
+        SetDescription("Performs PatchMatch Filter to estimate a disparty map between two images");
 
         SetDocName("PatchMatch");
         SetDocLongDescription("This application allows PatchMatch Filter to estimate a disparty map between two images" );
@@ -165,7 +168,7 @@ namespace otb
         SetParameterDescription("hdispmax","Maximum horizontal disparity to explore (can be negative)");
         SetDefaultParameterInt("hdispmax",0);
         
-        AddParameter(ParameterType_Int,"rmf", "Radiusf or median filter");
+        AddParameter(ParameterType_Int,"rmf", "Radius for median filter");
         SetParameterDescription("rmf", "Radius for median filter");
         SetDefaultParameterInt("rmf",19.);      
 
@@ -193,6 +196,7 @@ namespace otb
         m_RightCoefPatch = CoefPatchFilterType::New();
        
         m_LeftIn = FloatVectorImageType::New();
+
 
         m_LeftNormalPlane = FloatVectorImageType::New();
         m_RightNormalPlane = FloatVectorImageType::New();
@@ -231,13 +235,16 @@ namespace otb
         m_leftImage = GetParameterFloatVectorImage("io.inleft");
         m_rightImage = GetParameterFloatVectorImage("io.inright");
 
-        unsigned int R  = GetParameterInt("radius");
+        long unsigned int R  = GetParameterInt("radius");
         int          HdispMin = GetParameterInt("hdispmin");
         int          HdispMax = GetParameterInt("hdispmax");
         int rmf = GetParameterInt("rmf") ;
 
+
+
         /* ================================== Gradient =======================================================*/
-     
+  
+    
         // Gradient X  
         ConvFilterTypeLeft::InputSizeType radiusGX;
         radiusGX[0] = 1;
@@ -262,19 +269,23 @@ namespace otb
         m_GradientXR->SetFilter(m_convFilterXR);
         m_GradientXR->SetInput(m_rightImage);
 
+
         /*=====================Compute Coeffs of the patch =========================================================*/
+    
         //Left           
         m_LeftCoefPatch->SetInputImage(m_leftImage);
         m_LeftCoefPatch->SetMindisp(HdispMin);
         m_LeftCoefPatch->SetMaxdisp(HdispMax);
 
         // Right        
-        m_RightCoefPatch->SetInputImage(m_leftImage);
+        m_RightCoefPatch->SetInputImage(m_rightImage);
         m_RightCoefPatch->SetMindisp(-HdispMax);
         m_RightCoefPatch->SetMaxdisp(-HdispMin);
 
         
         /*========================================== Spatial Propagation ===========================================*/
+       
+
         itk::TimeProbe chrono1;
         chrono1.Start();
        
@@ -302,22 +313,20 @@ namespace otb
         In.Fill(0.);
         m_LeftCoefPatch->UpdateOutputInformation();
         m_RightCoefPatch->UpdateOutputInformation();
-         
-        m_LeftIn->CopyInformation(m_LeftCoefPatch->GetOutputCoefImage());
-        m_LeftIn->SetNumberOfComponentsPerPixel(3);
-        m_LeftIn->SetRegions(m_LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
-        m_LeftIn->Allocate();   
-        m_LeftIn->FillBuffer(In);
+
+    
 
          /// créer une image pour permuter l'entrer et la sortie pour mettre a jour les coefs        
-        m_LeftCoefPlane->CopyInformation(m_LeftCoefPatch->GetOutputCoefImage());
+        m_LeftCoefPlane->CopyInformation(m_LeftCoefPatch->GetOutputCoefImage());    
         m_LeftCoefPlane->SetNumberOfComponentsPerPixel(3);
-        m_LeftCoefPlane->SetRegions(m_LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
+        m_LeftCoefPlane->SetRegions(m_LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());       
         m_LeftCoefPlane->Allocate();   
         m_LeftCoefPlane->FillBuffer(In);  
-        m_LeftCoefPlane = m_LeftCoefPatch->GetOutputCoefImage();       
+        m_LeftCoefPlane = m_LeftCoefPatch->GetOutputCoefImage();    
 
-        
+
+
+     
         m_LeftNormalPlane->CopyInformation(m_LeftCoefPatch->GetOutputCoefImage());
         m_LeftNormalPlane->SetNumberOfComponentsPerPixel(3);
         m_LeftNormalPlane->SetRegions(m_LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
@@ -326,47 +335,55 @@ namespace otb
         m_LeftNormalPlane = m_LeftCoefPatch->GetOutputNormalAndZValueImage(); 
 
        
-        m_RightCoefPlane->CopyInformation(m_LeftCoefPatch->GetOutputCoefImage());
+
+        m_RightCoefPlane->CopyInformation(m_RightCoefPatch->GetOutputCoefImage());
         m_RightCoefPlane->SetNumberOfComponentsPerPixel(3);
-        m_RightCoefPlane->SetRegions(m_LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
+        m_RightCoefPlane->SetRegions(m_RightCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
         m_RightCoefPlane->Allocate();   
         m_RightCoefPlane->FillBuffer(In); 
-        m_RightCoefPlane = m_RightCoefPatch->GetOutputCoefImage();
-
+        m_RightCoefPlane = m_RightCoefPatch->GetOutputCoefImage();        
         
-        m_RightNormalPlane->CopyInformation(m_LeftCoefPatch->GetOutputCoefImage());
+        m_RightNormalPlane->CopyInformation(m_RightCoefPatch->GetOutputCoefImage());
         m_RightNormalPlane->SetNumberOfComponentsPerPixel(3);
-        m_RightNormalPlane->SetRegions(m_LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
+        m_RightNormalPlane->SetRegions(m_RightCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
         m_RightNormalPlane->Allocate();   
         m_RightNormalPlane->FillBuffer(In);
         m_RightNormalPlane = m_RightCoefPatch->GetOutputNormalAndZValueImage();
+
                      
         double MaxDz0 = HdispMin/2;
         double MaxDn = 1;      
 
+
+
         for(unsigned int iteration = 1 ; iteration < 4; iteration++)
         {
           std::cout<< "  iteration   " << iteration<< std::endl;
+          
           m_LeftSpatial->SetLeftInputImage(m_leftImage);
           m_LeftSpatial->SetRightInputImage(m_rightImage);
 
           m_LeftSpatial->SetLeftGradientXInput(m_GradientXL->GetOutput());
           m_LeftSpatial->SetRightGradientXInput(m_GradientXR->GetOutput());  
+
           m_LeftSpatial->SetPatchInputImage(m_LeftCoefPlane);
           m_LeftSpatial->SetNormalAndZValueImage(m_LeftNormalPlane); //
           m_LeftSpatial->SetIteration(iteration);
           m_LeftSpatial->SetPatchSize(R,R);
           m_LeftSpatial->SetSense(1); 
 
-          if(iteration % (2) == 1){
+          if(iteration % (2) == 1)
+          {
             m_LeftSpatial->SetOffsetPatch(Offset0,Offset1,Offset2);
           }
-          else{
+          else
+          {
             m_LeftSpatial->SetOffsetPatch(Offset0,Offset1R,Offset2R);
-          }
+          }          
 
           m_RightSpatial->SetLeftInputImage(m_leftImage);
           m_RightSpatial->SetRightInputImage(m_rightImage);  
+
           m_RightSpatial->SetLeftGradientXInput(m_GradientXL->GetOutput());
           m_RightSpatial->SetRightGradientXInput(m_GradientXR->GetOutput());  
           m_RightSpatial->SetPatchInputImage(m_RightCoefPlane); 
@@ -375,128 +392,141 @@ namespace otb
           m_RightSpatial->SetPatchSize(R,R); 
           m_RightSpatial->SetSense(0); 
          
-          if(iteration % (2) == 1){
+          if(iteration % (2) == 1)
+          {
             m_RightSpatial->SetOffsetPatch(Offset0,Offset1,Offset2);
           }
 
-          else{
+          else
+          {
             m_RightSpatial->SetOffsetPatch(Offset0,Offset1R,Offset2R);
-          }      
-
-
-        //Left view
-        m_LeftView->SetSpatialCostImage(m_RightSpatial->GetOutputCostImage());
-        m_LeftView->SetLeftInputImage(m_leftImage);
-        m_LeftView->SetRightInputImage(m_rightImage);   
-        m_LeftView->SetLeftPatchInputImage(m_LeftSpatial->GetOutputPatchImage()); 
-        m_LeftView->SetLeftNormalAndZValueImage(m_LeftSpatial->GetOutputNormalAndZValueImage());
-        m_LeftView->SetRightPatchInputImage(m_RightSpatial->GetOutputPatchImage());
-        m_LeftView->SetRightNormalAndZValueImage(m_RightSpatial->GetOutputNormalAndZValueImage()); 
-        m_LeftView->SetLeftGradientXInput(m_GradientXL->GetOutput());
-        m_LeftView->SetRightGradientXInput(m_GradientXR->GetOutput());
-        m_LeftView->SetIteration(iteration);
-        m_LeftView->SetPatchSize(R,R);
-        m_LeftView->SetDispMinMax(HdispMin,HdispMax); // pour deteminer la taille de la fenetre de recherche
-        m_LeftView->SetRadius((unsigned int)((HdispMax-HdispMin)/2), 0);
+          } 
        
+
+          //Left view
+          m_LeftView->SetSpatialCostImage(m_LeftSpatial->GetOutputCostImage());
+          m_LeftView->SetLeftInputImage(m_leftImage);
+          m_LeftView->SetRightInputImage(m_rightImage);   
+          m_LeftView->SetLeftPatchInputImage(m_LeftSpatial->GetOutputPatchImage()); 
+          m_LeftView->SetLeftNormalAndZValueImage(m_LeftSpatial->GetOutputNormalAndZValueImage());
+          m_LeftView->SetRightPatchInputImage(m_RightSpatial->GetOutputPatchImage());
+          m_LeftView->SetRightNormalAndZValueImage(m_RightSpatial->GetOutputNormalAndZValueImage()); 
+          m_LeftView->SetLeftGradientXInput(m_GradientXL->GetOutput());
+          m_LeftView->SetRightGradientXInput(m_GradientXR->GetOutput());
+          m_LeftView->SetIteration(iteration);
+          m_LeftView->SetPatchSize(R,R);
+          m_LeftView->SetDispMinMax(HdispMin,HdispMax); // pour deteminer la taille de la fenetre de recherche
+          m_LeftView->SetRadius((unsigned int)((HdispMax-HdispMin)/2), 0);
          
-      //Right view
-        m_RightView->SetSpatialCostImage(m_LeftSpatial->GetOutputCostImage());
-        m_RightView->SetLeftInputImage(m_rightImage);
-        m_RightView->SetRightInputImage(m_leftImage);   
-        m_RightView->SetLeftPatchInputImage(m_RightSpatial->GetOutputPatchImage()); 
-        m_RightView->SetLeftNormalAndZValueImage(m_RightSpatial->GetOutputNormalAndZValueImage());
-        m_RightView->SetRightPatchInputImage(m_LeftSpatial->GetOutputPatchImage());
-        m_RightView->SetRightNormalAndZValueImage(m_LeftSpatial->GetOutputNormalAndZValueImage()); 
-        m_RightView->SetLeftGradientXInput(m_GradientXR->GetOutput());
-        m_RightView->SetRightGradientXInput(m_GradientXL->GetOutput());
-        m_RightView->SetIteration(iteration);
-        m_RightView->SetPatchSize(R,R);
-        m_RightView->SetDispMinMax(HdispMin, HdispMax);
-        m_RightView->SetRadius((unsigned int)((HdispMax-HdispMin)/2), 0);
-
-     
-        /* ************************************************************************* */  
-        /*=================== Refinement ====================================================*/
-        ///Left
-        m_LeftRefinement->SetNormalAndZValueImage(m_LeftView->GetOutputNormalAndZValueImage());
-        m_LeftRefinement->SetMaxDz0(MaxDz0); 
-        m_LeftRefinement->SetMaxDn(MaxDn); 
-        m_LeftRefinement->SetDispMinMax(HdispMin, HdispMax);   
-
-        /// Right       
-        m_RightRefinement->SetNormalAndZValueImage(m_RightView->GetOutputNormalAndZValueImage());
-        m_RightRefinement->SetMaxDz0(MaxDz0);
-        m_RightRefinement->SetMaxDn(MaxDn); 
-        m_RightRefinement->SetDispMinMax(HdispMin, HdispMax); 
+           
+        //Right view
+          m_RightView->SetSpatialCostImage(m_RightSpatial->GetOutputCostImage());
+          m_RightView->SetLeftInputImage(m_leftImage);
+          m_RightView->SetRightInputImage(m_rightImage);   
+          m_RightView->SetLeftPatchInputImage(m_LeftSpatial->GetOutputPatchImage()); 
+          m_RightView->SetLeftNormalAndZValueImage(m_LeftSpatial->GetOutputNormalAndZValueImage());
+          m_RightView->SetRightPatchInputImage(m_RightSpatial->GetOutputPatchImage());
+          m_RightView->SetRightNormalAndZValueImage(m_RightSpatial->GetOutputNormalAndZValueImage()); 
+          m_RightView->SetLeftGradientXInput(m_GradientXR->GetOutput());
+          m_RightView->SetRightGradientXInput(m_GradientXL->GetOutput());
+          m_RightView->SetIteration(iteration);
+          m_RightView->SetPatchSize(R,R);
+          m_RightView->SetDispMinMax(HdispMin, HdispMax);
+          m_RightView->SetRadius((unsigned int)((HdispMax-HdispMin)/2), 0);
 
 
-        /* ************************************************************************/
-        /* =========================== MinPlaneRefinement =========================*/
-        ///Left        
-        m_LeftMinPlaneView->SetLeftInputImage(m_leftImage);
-        m_LeftMinPlaneView->SetRightInputImage(m_rightImage);  
-        m_LeftMinPlaneView->SetLeftGradientXInput(m_GradientXL->GetOutput());
-        m_LeftMinPlaneView->SetRightGradientXInput(m_GradientXR->GetOutput()); 
-         
-        m_LeftMinPlaneView->SetPatchInputImage(m_LeftView->GetOutputPatchImage()); 
-        m_LeftMinPlaneView->SetCostInputImage(m_LeftView->GetOutputCostImage()); //
-        m_LeftMinPlaneView->SetNormalAndZValueImage(m_LeftView->GetOutputNormalAndZValueImage());
+          /*=================== Refinement ====================================================*/
+
+          ///Left
+          m_LeftRefinement->SetNormalAndZValueImage(m_LeftView->GetOutputNormalAndZValueImage());
+          m_LeftRefinement->SetMaxDz0(MaxDz0); 
+          m_LeftRefinement->SetMaxDn(MaxDn); 
+          m_LeftRefinement->SetDispMinMax(HdispMin, HdispMax);   
+
+          /// Right       
+          m_RightRefinement->SetNormalAndZValueImage(m_RightView->GetOutputNormalAndZValueImage());
+          m_RightRefinement->SetMaxDz0(MaxDz0);
+          m_RightRefinement->SetMaxDn(MaxDn); 
+          m_RightRefinement->SetDispMinMax(HdispMin, HdispMax); 
+
+
+          /* ************************************************************************/
+          /* =========================== MinPlaneRefinement =========================*/
+
+
+          ///Left        
+          m_LeftMinPlaneView->SetLeftInputImage(m_leftImage);
+          m_LeftMinPlaneView->SetRightInputImage(m_rightImage);  
+          m_LeftMinPlaneView->SetLeftGradientXInput(m_GradientXL->GetOutput());
+          m_LeftMinPlaneView->SetRightGradientXInput(m_GradientXR->GetOutput()); 
+           
+          m_LeftMinPlaneView->SetPatchInputImage(m_LeftView->GetOutputPatchImage()); 
+          m_LeftMinPlaneView->SetCostInputImage(m_LeftView->GetOutputCostImage()); //
+          m_LeftMinPlaneView->SetNormalAndZValueImage(m_LeftView->GetOutputNormalAndZValueImage());
+            
+          m_LeftMinPlaneView->SetCoefRefinedInputImage(m_LeftRefinement->GetOutputPatchImage());
+          m_LeftMinPlaneView->SetRefinedNormalAndZValueImage(m_LeftRefinement->GetOutputNormalAndZValueImage());
           
-        m_LeftMinPlaneView->SetCoefRefinedInputImage(m_LeftRefinement->GetOutputPatchImage());
-        m_LeftMinPlaneView->SetRefinedNormalAndZValueImage(m_LeftRefinement->GetOutputNormalAndZValueImage());
-        
-        m_LeftMinPlaneView->SetPatchSize(R,R); 
-        m_LeftMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0);                 
-        m_LeftMinPlaneView->Update();
+          m_LeftMinPlaneView->SetPatchSize(R,R); 
+          m_LeftMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0);      
+          std::cout << " ITERATION " << iteration << std::endl ;           
+          m_LeftMinPlaneView->Update();
 
-         ///Right    
-        m_RightMinPlaneView->SetLeftInputImage(m_leftImage);
-        m_RightMinPlaneView->SetRightInputImage(m_rightImage);  
-        m_RightMinPlaneView->SetLeftGradientXInput(m_GradientXL->GetOutput());
-        m_RightMinPlaneView->SetRightGradientXInput(m_GradientXR->GetOutput()); 
-         
-        m_RightMinPlaneView->SetPatchInputImage(m_RightView->GetOutputPatchImage()); 
-        m_RightMinPlaneView->SetCostInputImage(m_RightView->GetOutputCostImage()); 
-        m_RightMinPlaneView->SetNormalAndZValueImage(m_RightView->GetOutputNormalAndZValueImage());
+
+
+           ///Right    
+          m_RightMinPlaneView->SetLeftInputImage(m_leftImage);
+          m_RightMinPlaneView->SetRightInputImage(m_rightImage);  
+          m_RightMinPlaneView->SetLeftGradientXInput(m_GradientXL->GetOutput());
+          m_RightMinPlaneView->SetRightGradientXInput(m_GradientXR->GetOutput()); 
+           
+          m_RightMinPlaneView->SetPatchInputImage(m_RightView->GetOutputPatchImage()); 
+          m_RightMinPlaneView->SetCostInputImage(m_RightView->GetOutputCostImage()); 
+          m_RightMinPlaneView->SetNormalAndZValueImage(m_RightView->GetOutputNormalAndZValueImage());
+            
+          m_RightMinPlaneView->SetCoefRefinedInputImage(m_RightRefinement->GetOutputPatchImage());
+          m_RightMinPlaneView->SetRefinedNormalAndZValueImage(m_RightRefinement->GetOutputNormalAndZValueImage());
           
-        m_RightMinPlaneView->SetCoefRefinedInputImage(m_RightRefinement->GetOutputPatchImage());
-        m_RightMinPlaneView->SetRefinedNormalAndZValueImage(m_RightRefinement->GetOutputNormalAndZValueImage());
+          m_RightMinPlaneView->SetPatchSize(R,R); 
+          m_RightMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0);         
+          m_RightMinPlaneView->Update();
+  
+
+         /// mettre à jour les plan et les normales    
         
-        m_RightMinPlaneView->SetPatchSize(R,R); 
-        m_RightMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0);         
-        m_RightMinPlaneView->Update();
- 
-       /// mèttre à jour les plan et les normales  
         m_LeftCoefPlane = m_LeftMinPlaneView->GetOutputPatchImage();
-        m_LeftCoefPlane->DisconnectPipeline();
-        m_LeftNormalPlane = m_LeftMinPlaneView->GetOutputNormalAndZValueImage(); 
-        m_LeftNormalPlane->DisconnectPipeline();        
-
-        m_RightCoefPlane = m_RightMinPlaneView->GetOutputPatchImage();
-        m_RightCoefPlane->DisconnectPipeline();
+        m_LeftCoefPlane->DisconnectPipeline();    
+        m_LeftNormalPlane = m_LeftMinPlaneView->GetOutputNormalAndZValueImage();       
+        m_LeftNormalPlane->DisconnectPipeline(); 
+       
+        m_RightCoefPlane = m_RightMinPlaneView->GetOutputPatchImage();       
+        m_RightCoefPlane->DisconnectPipeline();        
         m_RightNormalPlane = m_RightMinPlaneView->GetOutputNormalAndZValueImage(); 
-        m_RightNormalPlane->DisconnectPipeline();      
-       
-          
-        /// refinement Disparity           
-        if(MaxDz0>0.1){   
-        MaxDz0 = MaxDz0/2;
-        MaxDn = MaxDn/2; 
-        }
-        else{
-        MaxDz0 = MaxDz0;
-        MaxDn = MaxDn;
-        } 
-       
-        chrono1.Stop();
-        std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << std::endl;
+        m_RightNormalPlane->DisconnectPipeline();  
+  
 
-      }
+          
+          /// refinement Disparity           
+          if(MaxDz0>0.1){   
+            MaxDz0 = MaxDz0/2;
+            MaxDn = MaxDn/2; 
+          }
+          else{
+            MaxDz0 = MaxDz0;
+            MaxDn = MaxDn;
+          }          
+
+          chrono1.Stop();
+          std::cout << "Operation after update took "<< chrono1.GetTotal() << " sec" << std::endl;
+
+        } 
     
+ 
 
       /* ************************************************************************* */ 
       /*=============================Disparity ======================================*/
+
+  
       DisparityType::RadiusType radiusD;
       radiusD[0] = 0;
       radiusD[1] = 0;
@@ -531,9 +561,13 @@ namespace otb
       m_RightDispMedian->SetRadius(radiusPMedian);
      //m_RightDispMedian->Update();
 
-      SetParameterOutputImage("io.out",m_LeftDispMedian->GetOutput());  
+    // SetParameterOutputImage("io.out",m_LeftDispMedian->GetOutput());       
  
+  SetParameterOutputImage("io.out", m_LeftCoefPlane);       
+
+
     }
+
 
       FloatVectorImageType::Pointer m_leftImage ;
       FloatVectorImageType::Pointer m_rightImage ;
@@ -547,10 +581,13 @@ namespace otb
       CoefPatchFilterType::Pointer m_LeftCoefPatch ;
       CoefPatchFilterType::Pointer m_RightCoefPatch ;
 
-      FloatVectorImageType::Pointer m_LeftCoefPlane ; 
+      FloatVectorImageType::Pointer m_LeftCoefPlane ;
+      FloatVectorImageType::Pointer m_RightCoefPlane ; 
+
       FloatVectorImageType::Pointer m_LeftIn ;
+
       FloatVectorImageType::Pointer m_LeftNormalPlane ; 
-      FloatVectorImageType::Pointer m_RightCoefPlane ;
+
       FloatVectorImageType::Pointer m_RightNormalPlane ;
 
       MinPlaneType::Pointer m_LeftMinPlaneView ; 
@@ -563,8 +600,8 @@ namespace otb
       ViewPropType::Pointer m_RightView;
 
       RefinementType::Pointer m_LeftRefinement ; 
-
       RefinementType::Pointer m_RightRefinement;
+
       DisparityType::Pointer m_LeftDispFilter ; 
       DisparityType::Pointer m_RightDispFilter ; 
 

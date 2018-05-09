@@ -325,6 +325,8 @@ private:
   {
     FloatVectorImageType::Pointer leftImage = GetParameterFloatVectorImage("io.inleft");
     FloatVectorImageType::Pointer rightImage = GetParameterFloatVectorImage("io.inright");
+
+
  
 
     unsigned int R  = GetParameterInt("radius");

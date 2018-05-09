@@ -145,24 +145,24 @@ OutPixel.Fill(0);
 
 double somme(0.),temp(0.), m(0.);
 
-while( !EstimatedInIt.IsAtEnd() ){
-		  
+while( !EstimatedInIt.IsAtEnd() ){		  
 				
-temp = (EstimatedInIt.Get()[0] - EstimatedInIt.Get()[0])*(EstimatedInIt.Get()[0] - EstimatedInIt.Get()[0] ) ; 
+//temp = (EstimatedInIt.Get()[0] - EstimatedInIt.Get()[0])*(EstimatedInIt.Get()[0] - EstimatedInIt.Get()[0] ) ; 
+temp = (EstimatedInIt.Get()[0] - InIt.Get()[0])*(EstimatedInIt.Get()[0] - InIt.Get()[0] ) ; 
+
 somme +=temp ;  							           						
-		
-    std::cout << "somme  = " << EstimatedInIt.Get()[0] << std::endl;
-         
-    
-         
-         
-        ++InIt;
+		   
+    std::cout << "somme  = " << temp << std::endl;        
+    ++InIt;
 		++EstimatedInIt;
-		  progress.CompletedPixel();
+		progress.CompletedPixel();
        
 }  // end of while 
       
-         m = std::sqrt (somme/ (ImageSize[0]*ImageSize[1]) );
+      m = std::sqrt (somme/ (ImageSize[0]*ImageSize[1]));
+      std::cout << "m   = " << m  << std::endl;   
+
+
     OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>(m) ;
       
       this->GetOutput()->SetPixel(Index, OutPixel);
