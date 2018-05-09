@@ -314,7 +314,8 @@ namespace otb
         m_LeftCoefPatch->UpdateOutputInformation();
         m_RightCoefPatch->UpdateOutputInformation();
 
-    
+/*
+      
 
          /// créer une image pour permuter l'entrer et la sortie pour mettre a jour les coefs        
         m_LeftCoefPlane->CopyInformation(m_LeftCoefPatch->GetOutputCoefImage());    
@@ -322,11 +323,10 @@ namespace otb
         m_LeftCoefPlane->SetRegions(m_LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());       
         m_LeftCoefPlane->Allocate();   
         m_LeftCoefPlane->FillBuffer(In);  
-        m_LeftCoefPlane = m_LeftCoefPatch->GetOutputCoefImage();    
+        m_LeftCoefPlane = m_LeftCoefPatch->GetOutputCoefImage();  
+*/
+/*
 
-
-
-     
         m_LeftNormalPlane->CopyInformation(m_LeftCoefPatch->GetOutputCoefImage());
         m_LeftNormalPlane->SetNumberOfComponentsPerPixel(3);
         m_LeftNormalPlane->SetRegions(m_LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
@@ -334,8 +334,8 @@ namespace otb
         m_LeftNormalPlane->FillBuffer(In);
         m_LeftNormalPlane = m_LeftCoefPatch->GetOutputNormalAndZValueImage(); 
 
-       
-
+    */
+/*
         m_RightCoefPlane->CopyInformation(m_RightCoefPatch->GetOutputCoefImage());
         m_RightCoefPlane->SetNumberOfComponentsPerPixel(3);
         m_RightCoefPlane->SetRegions(m_RightCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
@@ -349,17 +349,127 @@ namespace otb
         m_RightNormalPlane->Allocate();   
         m_RightNormalPlane->FillBuffer(In);
         m_RightNormalPlane = m_RightCoefPatch->GetOutputNormalAndZValueImage();
+*/
 
-                     
+        /*
+
+      for(int i=0; i!=4; ++i) {
+       //create name
+       std::string name="/home/julie/Documents/tmp/file_" + std::to_string(i) + ".txt"; // C++11 for std::to_string 
+       //create file
+       std::ofstream file(name);
+       //if not C++11 then std::ostream file(name.c_str());
+       //then do with file
+   }
+
+*/
+
+
         double MaxDz0 = HdispMin/2;
         double MaxDn = 1;      
 
 
 
+        typedef otb::ImageFileWriter< FloatVectorImageType > ImageWriterType;
+
+        //LEFT
+        ImageWriterType::Pointer img_LeftCoefPlane = ImageWriterType::New();
+        ImageWriterType::Pointer img_LeftNormalPlane = ImageWriterType::New();
+
+        img_LeftNormalPlane->SetFileName("/home/julie/Documents/tmp/img_LeftCoefPlane" + std::to_string(1) + ".tif");  
+        img_LeftNormalPlane->SetInput( m_LeftCoefPatch->GetOutputCoefImage() );
+        img_LeftNormalPlane->Update();  
+
+        img_LeftNormalPlane->SetFileName("/home/julie/Documents/tmp/img_LeftNormalPlane" + std::to_string(1) + ".tif");  
+        img_LeftNormalPlane->SetInput( m_LeftCoefPatch->GetOutputNormalAndZValueImage() );
+        img_LeftNormalPlane->Update();  
+
+        //RIGHT
+        ImageWriterType::Pointer img_RightCoefPlane = ImageWriterType::New();
+        ImageWriterType::Pointer img_RightNormalPlane = ImageWriterType::New();
+
+        img_RightCoefPlane->SetFileName("/home/julie/Documents/tmp/img_RightCoefPlane" + std::to_string(1) + ".tif");  
+        img_RightCoefPlane->SetInput( m_RightCoefPatch->GetOutputCoefImage() );
+        img_RightCoefPlane->Update();  
+
+        img_RightNormalPlane->SetFileName("/home/julie/Documents/tmp/img_RightNormalPlane" + std::to_string(1) + ".tif");  
+        img_RightNormalPlane->SetInput( m_RightCoefPatch->GetOutputNormalAndZValueImage() );
+        img_RightNormalPlane->Update(); 
+
+
+
+        typedef otb::ImageFileReader<FloatVectorImageType> ReaderType;
+        ReaderType::Pointer LCP = ReaderType::New();
+        ReaderType::Pointer LNP = ReaderType::New();
+        ReaderType::Pointer RCP = ReaderType::New();
+        ReaderType::Pointer RNP = ReaderType::New();
+
+
+
         for(unsigned int iteration = 1 ; iteration < 4; iteration++)
         {
-          std::cout<< "  iteration   " << iteration<< std::endl;
-          
+          std::cout<< "  iteration   " << iteration<< std::endl;       
+
+          LCP->SetFileName("/home/julie/Documents/tmp/img_LeftCoefPlane" + std::to_string(iteration) + ".tif"); //LeftImage 
+          LCP->UpdateOutputInformation();
+          LNP->SetFileName("/home/julie/Documents/tmp/img_LeftNormalPlane" + std::to_string(iteration) + ".tif"); //LeftImage 
+          LNP->UpdateOutputInformation();
+
+          RCP->SetFileName("/home/julie/Documents/tmp/img_RightCoefPlane" + std::to_string(iteration) + ".tif"); //LeftImage 
+          RCP->UpdateOutputInformation();
+          RNP->SetFileName("/home/julie/Documents/tmp/img_RightNormalPlane" + std::to_string(iteration) + ".tif"); //LeftImage 
+          RNP->UpdateOutputInformation();
+
+          std::cout << "LCP : " << "/home/julie/Documents/tmp/img_LeftCoefPlane" + std::to_string(iteration) + ".tif" << std::endl;
+
+
+          m_LeftSpatial->SetLeftInputImage(m_leftImage);
+          m_LeftSpatial->SetRightInputImage(m_rightImage);
+
+          m_LeftSpatial->SetLeftGradientXInput(m_GradientXL->GetOutput());
+          m_LeftSpatial->SetRightGradientXInput(m_GradientXR->GetOutput());  
+
+          m_LeftSpatial->SetPatchInputImage(LCP->GetOutput());
+          m_LeftSpatial->SetNormalAndZValueImage(LNP->GetOutput()); //
+          m_LeftSpatial->SetIteration(iteration);
+          m_LeftSpatial->SetPatchSize(R,R);
+          m_LeftSpatial->SetSense(1); 
+
+
+
+          if(iteration % (2) == 1)
+          {
+            m_LeftSpatial->SetOffsetPatch(Offset0,Offset1,Offset2);
+          }
+          else
+          {
+            m_LeftSpatial->SetOffsetPatch(Offset0,Offset1R,Offset2R);
+          }
+
+          m_RightSpatial->SetLeftInputImage(m_leftImage);
+          m_RightSpatial->SetRightInputImage(m_rightImage);  
+
+          m_RightSpatial->SetLeftGradientXInput(m_GradientXL->GetOutput());
+          m_RightSpatial->SetRightGradientXInput(m_GradientXR->GetOutput());  
+          m_RightSpatial->SetPatchInputImage(RCP->GetOutput()); 
+          m_RightSpatial->SetNormalAndZValueImage(RNP->GetOutput()); //
+          m_RightSpatial->SetIteration(iteration);
+          m_RightSpatial->SetPatchSize(R,R); 
+          m_RightSpatial->SetSense(0); 
+         
+          if(iteration % (2) == 1)
+          {
+            m_RightSpatial->SetOffsetPatch(Offset0,Offset1,Offset2);
+          }
+
+          else
+          {
+            m_RightSpatial->SetOffsetPatch(Offset0,Offset1R,Offset2R);
+          } 
+       
+
+
+          /*
           m_LeftSpatial->SetLeftInputImage(m_leftImage);
           m_LeftSpatial->SetRightInputImage(m_rightImage);
 
@@ -372,6 +482,8 @@ namespace otb
           m_LeftSpatial->SetPatchSize(R,R);
           m_LeftSpatial->SetSense(1); 
 
+
+
           if(iteration % (2) == 1)
           {
             m_LeftSpatial->SetOffsetPatch(Offset0,Offset1,Offset2);
@@ -379,7 +491,9 @@ namespace otb
           else
           {
             m_LeftSpatial->SetOffsetPatch(Offset0,Offset1R,Offset2R);
-          }          
+          }  
+                 
+
 
           m_RightSpatial->SetLeftInputImage(m_leftImage);
           m_RightSpatial->SetRightInputImage(m_rightImage);  
@@ -402,6 +516,7 @@ namespace otb
             m_RightSpatial->SetOffsetPatch(Offset0,Offset1R,Offset2R);
           } 
        
+       */
 
           //Left view
           m_LeftView->SetSpatialCostImage(m_LeftSpatial->GetOutputCostImage());
@@ -468,8 +583,8 @@ namespace otb
           m_LeftMinPlaneView->SetRefinedNormalAndZValueImage(m_LeftRefinement->GetOutputNormalAndZValueImage());
           
           m_LeftMinPlaneView->SetPatchSize(R,R); 
-          m_LeftMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0);      
-          std::cout << " ITERATION " << iteration << std::endl ;           
+          m_LeftMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0);    
+         
           m_LeftMinPlaneView->Update();
 
 
@@ -490,10 +605,31 @@ namespace otb
           m_RightMinPlaneView->SetPatchSize(R,R); 
           m_RightMinPlaneView->SetOffsetPatch(Offset0,Offset0,Offset0);         
           m_RightMinPlaneView->Update();
+
+
+        img_RightCoefPlane->SetFileName("/home/julie/Documents/tmp/img_LeftCoefPlane" + std::to_string(iteration+1) + ".tif");  
+        img_RightCoefPlane->SetInput( m_LeftMinPlaneView->GetOutputPatchImage() );
+        img_RightCoefPlane->Update();  
+
+        img_RightNormalPlane->SetFileName("/home/julie/Documents/tmp/img_LeftNormalPlane" + std::to_string(iteration+1) + ".tif");  
+        img_RightNormalPlane->SetInput( m_LeftMinPlaneView->GetOutputNormalAndZValueImage() );
+        img_RightNormalPlane->Update(); 
+
+         img_RightCoefPlane->SetFileName("/home/julie/Documents/tmp/img_RightCoefPlane" + std::to_string(iteration+1) + ".tif");  
+        img_RightCoefPlane->SetInput( m_RightMinPlaneView->GetOutputPatchImage() );
+        img_RightCoefPlane->Update();  
+
+        img_RightNormalPlane->SetFileName("/home/julie/Documents/tmp/img_RightNormalPlane" + std::to_string(iteration+1) + ".tif");  
+        img_RightNormalPlane->SetInput( m_RightMinPlaneView->GetOutputNormalAndZValueImage() );
+        img_RightNormalPlane->Update(); 
+
+
   
 
          /// mettre à jour les plan et les normales    
-        
+      
+
+      /*  
         m_LeftCoefPlane = m_LeftMinPlaneView->GetOutputPatchImage();
         m_LeftCoefPlane->DisconnectPipeline();    
         m_LeftNormalPlane = m_LeftMinPlaneView->GetOutputNormalAndZValueImage();       
@@ -503,7 +639,7 @@ namespace otb
         m_RightCoefPlane->DisconnectPipeline();        
         m_RightNormalPlane = m_RightMinPlaneView->GetOutputNormalAndZValueImage(); 
         m_RightNormalPlane->DisconnectPipeline();  
-  
+  */
 
           
           /// refinement Disparity           
@@ -538,10 +674,11 @@ namespace otb
       m_RightDispFilter->SetInput(m_RightMinPlaneView->GetOutputPatchImage());
       m_RightDispFilter->SetRadius(radiusD);
 
-     
+    
       /// ======== Weighted Median Disparity ==============================    
       /** Concatenation de la disparité avec l'image de de droite  ou gauche*/
 
+   
       m_ConcatenateDispEndInLeftImage->SetInput1(m_LeftDispFilter->GetOutput());
       m_ConcatenateDispEndInLeftImage->SetInput2( m_leftImage);
 
@@ -561,9 +698,8 @@ namespace otb
       m_RightDispMedian->SetRadius(radiusPMedian);
      //m_RightDispMedian->Update();
 
-    // SetParameterOutputImage("io.out",m_LeftDispMedian->GetOutput());       
- 
-  SetParameterOutputImage("io.out", m_LeftCoefPlane);       
+    
+      SetParameterOutputImage("io.out",m_LeftDispMedian->GetOutput());     
 
 
     }
