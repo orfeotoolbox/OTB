@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 function(install_qtdev_files)
-  if(NOT HAVE_QT4)
+  if(NOT HAVE_QT)
     return()
   endif()
 set(QT_REQ_DIRS)

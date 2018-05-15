@@ -71,7 +71,7 @@ QtWidgetStringListParameter::UpdateStringList()
 
 void QtWidgetStringListParameter::SetString(const QString& value)
 {
-  m_StringListParam->AddString(value.toAscii().constData());
+  m_StringListParam->AddString(value.toLatin1().constData());
   m_StringListParam->SetUserValue(true);
   QString key( m_StringListParam->GetKey() );
   emit ParameterChanged(key);

@@ -47,7 +47,7 @@ private:
   void DoInit() override
   {
     SetName("SARDeburst");
-    SetDescription("This application performs deburst of Sentinel1 IW SLC images by removing redundant lines.\n");
+    SetDescription("This application performs deburst of Sentinel1 IW SLC images by removing redundant lines.");
 
     // Documentation
     SetDocName("SAR Deburst");

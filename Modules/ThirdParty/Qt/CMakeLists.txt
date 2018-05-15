@@ -18,15 +18,17 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module imports Qt4 to the build system")
+project( OTBQt )
 
-otb_module(OTBQt4
-  DEPENDS
-    
-  TEST_DEPENDS
-    
-  DESCRIPTION
-    "${DOCUMENTATION}"
-  )
+set( OTBQt_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5OpenGL_LIBRARIES})
+set( OTBQt_SYSTEM_INCLUDE_DIRS ${Qt5Widgets_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} )
+set( OTBQt_EXPORT_CODE_BUILD
+"find_package(Qt5Core REQUIRED HINTS ${Qt5Core_DIR})
+find_package(Qt5Gui REQUIRED HINTS ${Qt5Gui_DIR})
+find_package(Qt5Widgets REQUIRED HINTS ${Qt5Widgets_DIR})
+find_package(Qt5OpenGL REQUIRED HINTS ${Qt5OpenGL_DIR})
+find_package(Qt5LinguistTools HINTS ${Qt5LinguistTools_DIR})
+")
+set( OTBQt_EXPORT_CODE_INSTALL ${OTBQt_EXPORT_CODE_BUILD})
 
-otb_module_activation_option("Enable Qt4 dependent modules" OFF)
+otb_module_impl()

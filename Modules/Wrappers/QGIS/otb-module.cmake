@@ -18,10 +18,17 @@
 # limitations under the License.
 #
 
-project( OTBQt4 )
+set(DOCUMENTATION "Required to generate descriptor files for QGIS processing plugin.")
 
-set( OTBQt4_SYSTEM_INCLUDE_DIRS ${QT_INCLUDE_DIRS} )
-set( OTBQt4_LIBRARIES "${QT_LIBRARIES}" )
-set( QT_VERSION "${QTVERSION}" CACHE INTERNAL "" FORCE )
+otb_module(OTBQgis
+  DEPENDS
+    OTBITK
+    OTBApplicationEngine
+    
+  TEST_DEPENDS
+    OTBTestKernel
 
-otb_module_impl()
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)
+

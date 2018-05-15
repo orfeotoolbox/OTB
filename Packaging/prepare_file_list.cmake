@@ -54,8 +54,10 @@ function(prepare_file_list file_list_result)
   endforeach()
 
   #Qt stuff
-  if(HAVE_QT4)
+  if(HAVE_QT)
     list(APPEND file_list "lrelease${EXE_EXT}")
+    list(APPEND file_list "lupdate${EXE_EXT}")
+    list(APPEND file_list "lconvert${EXE_EXT}")
     list(APPEND file_list "moc${EXE_EXT}")
     list(APPEND file_list "qmake${EXE_EXT}")
     list(APPEND file_list "rcc${EXE_EXT}")
@@ -86,9 +88,20 @@ function(prepare_file_list file_list_result)
   
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
   # for proj.dll, see Mantis-1424
+  # libEGL needed by Qt 5 at runtime
   if(MSVC)
     list(APPEND file_list "ucrtbase.dll")
     list(APPEND file_list "proj.dll")
+    list(APPEND file_list "libEGL.dll")
+  endif()
+
+  # Qt plugins
+  if(HAVE_QT)
+    file(GLOB _qt_plugins "${SUPERBUILD_INSTALL_DIR}/plugins/*/${LIB_PREFIX}*${LIB_EXT}")
+    foreach(_qt_plugin ${_qt_plugins})
+      get_filename_component(_qt_plugin_name ${_qt_plugin} NAME)
+      list(APPEND file_list ${_qt_plugin_name})
+    endforeach()
   endif()
 
   set(${file_list_result} ${file_list} PARENT_SCOPE)

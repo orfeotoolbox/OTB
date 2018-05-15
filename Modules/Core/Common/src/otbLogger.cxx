@@ -87,8 +87,9 @@ void Logger::LogSetupInformation()
     oss.str("");
     oss.clear();
 
-    // only switch the flag for the singleton, so that other instances can call
-    // LogSetupInformation() several times
+    // ensure LogSetupInformation is done once per logger, and also that it is
+    // skipped by the singleton when it has already been printed by an other instance
+    LogSetupInformationDone();
     Instance()->LogSetupInformationDone();
     }
 }

@@ -141,6 +141,7 @@ include(install_include_dirs)
 include(install_importlibs)
 include(install_python_bindings)
 include(install_java_bindings)
+include(install_qgis_bindings)
 include(install_share_dirs)
 include(install_cmake_files)
 include(install_qtdev_files)
@@ -167,9 +168,9 @@ check_cmake_variables()
 
 cleanup_package()
 
-set(HAVE_QT4 FALSE CACHE INTERNAL "HAVE_QT4")
+set(HAVE_QT FALSE CACHE INTERNAL "HAVE_QT")
 if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherQt${EXE_EXT}")
-  set(HAVE_QT4 TRUE)
+  set(HAVE_QT TRUE)
 endif()
 
 set(HAVE_MVD FALSE  CACHE INTERNAL "HAVE_MVD")
@@ -190,6 +191,11 @@ endif()
 set(HAVE_JAVA FALSE CACHE INTERNAL "Java wrappings")
 if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar")
   set(HAVE_JAVA TRUE)
+endif()
+
+set(HAVE_QGIS FALSE CACHE INTERNAL "QGIS wrappings")
+if(IS_DIRECTORY "${SUPERBUILD_INSTALL_DIR}/descriptors")
+  set(HAVE_QGIS TRUE)
 endif()
 
   #only for *nix
@@ -216,6 +222,8 @@ install_importlibs()
 install_python_bindings()
 
 install_java_bindings()
+
+install_qgis_bindings()
 
 install_share_dirs()
 

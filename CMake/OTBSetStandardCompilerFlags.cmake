@@ -136,7 +136,6 @@ function(check_compiler_warning_flags c_warning_flags_var cxx_warning_flags_var)
     -Winvalid-pch
     -Wno-format-nonliteral
     -Wpointer-arith
-    -Wshadow
     -Wunused
     -Wwrite-strings
     -funit-at-a-time

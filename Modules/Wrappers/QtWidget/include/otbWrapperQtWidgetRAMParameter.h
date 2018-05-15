@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetRAMParameter_h
 #define otbWrapperQtWidgetRAMParameter_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"

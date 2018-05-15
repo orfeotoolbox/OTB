@@ -105,8 +105,8 @@ set( OTBQtWidget_FORMS
   otbWrapperQtWidgetListEditWidget.ui
   )
 
-qt4_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} )
-qt4_wrap_ui( OTBQtWidget_FORMS_HEADERS ${OTBQtWidget_FORMS} )
+qt5_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} )
+qt5_wrap_ui( OTBQtWidget_FORMS_HEADERS ${OTBQtWidget_FORMS} )
 
 add_library( OTBQtWidget
   ${OTBQtWidget_SRC}
@@ -116,7 +116,7 @@ add_library( OTBQtWidget
 
 target_link_libraries( OTBQtWidget
   ${OTBApplicationEngine_LIBRARIES}
-  ${OTBQt4_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   ${OTBQtAdapters_LIBRARIES}
   )
 
@@ -126,7 +126,7 @@ add_executable(otbApplicationLauncherQt otbApplicationLauncherQt.cxx)
 target_link_libraries(otbApplicationLauncherQt
   ${OTBQtWidget_LIBRARIES}
   ${OTBApplicationEngine_LIBRARIES}
-  ${OTBQt4_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   )
 otb_module_target(otbApplicationLauncherQt)
 set_linker_stack_size_flag(otbApplicationLauncherQt 10000000)

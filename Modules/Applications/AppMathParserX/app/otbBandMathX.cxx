@@ -59,9 +59,7 @@ private:
   {
     SetName( "BandMathX" );
 
-    SetDescription(
-      "This application performs mathematical operations on several multiband images.\n"
-    );
+    SetDescription("This application performs mathematical operations on several multiband images.");
 
     SetDocName( "Band Math X" );
 
