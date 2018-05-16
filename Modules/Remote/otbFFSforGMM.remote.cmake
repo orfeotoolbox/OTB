@@ -25,5 +25,5 @@ A more detailed description can be found on the project website:
 https://github.com/Laadr/otbFFSforGMM
 "
   GIT_REPOSITORY https://github.com/Laadr/otbFFSforGMM.git
-  GIT_TAG 3ad529b9c5c81b7dd17fe83d4802ad5a3c4eb62b
+  GIT_TAG d9c31cf51b59a4a10e4daa2858a85cd12561c696
   )
