@@ -61,7 +61,9 @@ public:
   TOutputImage * GetOutputImage();
 
 	int GetHDisparity() const ;
-     
+
+
+
       
 //=============== Seters ====================================================================================
   /** Set left input */
@@ -82,6 +84,7 @@ public:
   {
     m_HorizontalDisparity  = disp;
   }
+
   
 
 
@@ -105,7 +108,7 @@ protected:
 private:
   CostVolumeImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted  
- void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion); 
+ void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp); 
 
    /** The min disparity to explore */
   int                           m_HorizontalDisparity;
@@ -113,6 +116,10 @@ private:
 
    /** The min disparity to explore */
   int                           m_VerticalDisparity;
+
+
+     
+
   
 
 

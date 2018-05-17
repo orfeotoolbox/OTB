@@ -43,6 +43,7 @@
 #include "otbImageFileWriter.h"
 
 #include "otbLocalGradientVectorImageFilter.h"
+#include "otbCostVolumeImageFilter.h"
 
 
 
@@ -76,6 +77,7 @@ int testCVF(int argc, char *argv[])
     std::string argv7 = std::string(argv[7]);
     #define FILENAME(n) std::string( argv7 + std::string(n)).c_str()
 
+    // CALCUL GRADIENT
     typedef otb::LocalGradientVectorImageFilter<FloatVectorImageType, FloatVectorImageType> GradientType;
     GradientType::Pointer gradX = GradientType::New();
     GradientType::Pointer gradY = GradientType::New();
@@ -86,11 +88,33 @@ int testCVF(int argc, char *argv[])
     writer_gradX->SetFileName( FILENAME("GradientLeft.tif"));
     writer_gradX->SetInput(gradX->GetOutput());
   	writer_gradX->Update();
-
     ImageWriterType::Pointer writer_gradY = ImageWriterType::New();
     writer_gradY->SetFileName( FILENAME("GradientRight.tif"));
     writer_gradY->SetInput(gradY->GetOutput());
   	writer_gradY->Update();
+
+
+    // COST VOLUME
+
+    typedef otb::CostVolumeImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > CostVolumeType;
+    CostVolumeType::Pointer m_LeftCost = CostVolumeType::New();
+    m_LeftCost->SetLeftInputImage(inLeft->GetOutput() );
+    m_LeftCost->SetRightInputImage(inRight->GetOutput() );  
+    m_LeftCost->SetLeftGradientXInput(gradX->GetOutput() ); 
+    m_LeftCost->SetRightGradientXInput(gradY->GetOutput() );      
+    m_LeftCost->SetDisp(dispMax);
+    m_LeftCost->Update();
+
+    ImageWriterType::Pointer writer_LeftCost = ImageWriterType::New();
+    writer_LeftCost->SetFileName( FILENAME("LeftCost.tif"));
+    writer_LeftCost->SetInput(m_LeftCost->GetOutput());
+    writer_LeftCost->Update();
+
+
+
+
+
+
 
 
 
