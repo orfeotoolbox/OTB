@@ -45,6 +45,8 @@
 #include "otbLocalGradientVectorImageFilter.h"
 #include "otbCostVolumeImageFilter.h"
 
+#include "otbMinimumNBandsImageFilter.h"
+
 
 
 
@@ -111,12 +113,19 @@ int testCVF(int argc, char *argv[])
     writer_LeftCost->Update();
 
 
+    //std::cout << "band number : " << m_LeftCost->GetBandNumber()<< std::endl;
 
 
 
+    typedef otb::MinimumNBandsImageFilter< FloatVectorImageType, FloatVectorImageType > MinCostVolume;  
+    MinCostVolume::Pointer m_minCost = MinCostVolume::New();
+    m_minCost->SetInput(m_LeftCost->GetOutput());
 
 
-
+    ImageWriterType::Pointer writer_m_minCost = ImageWriterType::New();
+    writer_m_minCost->SetFileName( FILENAME("minLeftCost.tif"));
+    writer_m_minCost->SetInput(m_minCost->GetOutput());
+    writer_m_minCost->Update();
 
 
 
