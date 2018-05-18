@@ -35,7 +35,7 @@ CoeffGuidedBoxImageFilter<TInputImage,TOutputImage>
   // this->SetNumberOfThreads(1);
 
   // Default parameters
-  m_Epsilon = 0.00001*255*255;
+  m_Epsilon = 0.0001*255*255;
 
 }
 
@@ -252,10 +252,11 @@ Matrice_covInv.resize(9,0);
 
 while ( !outputIt.IsAtEnd() && !InputImageIt.IsAtEnd() && !MeanInputIt.IsAtEnd() && !CovarianceInputIt.IsAtEnd()){
 		
-				
-						    Matrice_cov[0] = CovarianceInputIt.GetCenterPixel()[0] + m_Epsilon;
+		/*		
+						  Matrice_cov[0] = CovarianceInputIt.GetCenterPixel()[0] + m_Epsilon;
 							Matrice_cov[4] = CovarianceInputIt.GetCenterPixel()[4] + m_Epsilon;
 							Matrice_cov[8] = CovarianceInputIt.GetCenterPixel()[8] + m_Epsilon;
+
 							Matrice_cov[1] = CovarianceInputIt.GetCenterPixel()[1];
 							Matrice_cov[2] = CovarianceInputIt.GetCenterPixel()[2];
 							Matrice_cov[3] = CovarianceInputIt.GetCenterPixel()[3];
@@ -263,7 +264,20 @@ while ( !outputIt.IsAtEnd() && !InputImageIt.IsAtEnd() && !MeanInputIt.IsAtEnd()
 							Matrice_cov[6] = CovarianceInputIt.GetCenterPixel()[6];
 							Matrice_cov[7] = CovarianceInputIt.GetCenterPixel()[7];		
 					
-							
+						*/
+
+              Matrice_cov[0] = CovarianceInputIt.GetCenterPixel()[0] + m_Epsilon;
+              Matrice_cov[4] = CovarianceInputIt.GetCenterPixel()[4] + m_Epsilon;
+              Matrice_cov[8] = CovarianceInputIt.GetCenterPixel()[8] + m_Epsilon;
+              
+              Matrice_cov[1] = CovarianceInputIt.GetCenterPixel()[1] + m_Epsilon;
+              Matrice_cov[2] = CovarianceInputIt.GetCenterPixel()[2] + m_Epsilon;
+              Matrice_cov[3] = CovarianceInputIt.GetCenterPixel()[3] + m_Epsilon;
+              Matrice_cov[5] = CovarianceInputIt.GetCenterPixel()[5] + m_Epsilon;
+              Matrice_cov[6] = CovarianceInputIt.GetCenterPixel()[6] + m_Epsilon;
+              Matrice_cov[7] = CovarianceInputIt.GetCenterPixel()[7] + m_Epsilon; 
+
+
 //=================================  ineversion of the matrix
 
 							Matrice_covInv[0] = Matrice_cov[0]* Matrice_cov[8]- Matrice_cov[5]*Matrice_cov[7];

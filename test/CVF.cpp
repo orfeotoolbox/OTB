@@ -46,6 +46,7 @@
 #include "otbCostVolumeImageFilter.h"
 
 #include "otbMinimumNBandsImageFilter.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 
 
 
@@ -127,8 +128,49 @@ int testCVF(int argc, char *argv[])
     writer_m_minCost->SetInput(m_minCost->GetOutput());
     writer_m_minCost->Update();
 
+    typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StatFilter;
+    StatFilter::Pointer m_CovLeft = StatFilter::New();
+    m_CovLeft->SetInput(m_LeftCost->GetOutput());
+    m_CovLeft->Update();
+    std::cout << "Cov : " << m_CovLeft->GetCovariance() << std::endl;
 
 
+//TEST
+
+    /*
+
+    const unsigned int Dimension = 2;
+  typedef double PixelType;
+
+
+  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StatFilter;
+
+  // Instantiating object
+  StatFilter::Pointer m_CovLeft = StatFilter::New();
+
+
+//  ReaderType::Pointer reader = ReaderType::New();
+ // reader->SetFileName(argv[1]);
+
+
+//  filter->SetInput(reader->GetOutput());
+    m_CovLeft->SetInput(m_LeftCost->GetOutput());
+  m_CovLeft->Update();
+
+  std::cout << "Cov : " << m_CovLeft->GetCovariance() << std::endl;
+*/
+  /*
+  std::ofstream file;
+  file.open("/home/julie/Documents/PROJETS/CVF/output.tif");
+  file << "Minimum: " << filter->GetMinimum() << std::endl;
+  file << "Maximum: " << filter->GetMaximum() << std::endl;
+  file << std::fixed;
+  file.precision(5);
+  file << "Sum: " << filter->GetSum() << std::endl;
+  file << "Mean: " << filter->GetMean() << std::endl;
+  file << "Covariance: " << filter->GetCovariance() << std::endl;
+file.close();
+*/
 
 
 
