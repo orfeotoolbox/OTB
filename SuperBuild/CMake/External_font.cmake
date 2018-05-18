@@ -34,7 +34,7 @@ SET(CMAKE_TLS_VERIFY "OFF")
 if ( NOT ( "${MD5_FONT}" STREQUAL "d0efec10b9f110a32e9b8f796e21782c" ) )
 MESSAGE("DOWNLOADING FONTS")
 file(DOWNLOAD 
-  https://netix.dl.sourceforge.net/project/dejavu/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2
+  "https://netix.dl.sourceforge.net/project/dejavu/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2"
   ${DOWNLOAD_LOCATION}/dejavu-fonts-ttf-2.37.tar.bz2
   EXPECTED_MD5 d0efec10b9f110a32e9b8f796e21782c)
 endif()
