@@ -144,7 +144,7 @@ private:
     // Software Guide : BeginLatex
     // Application parameters declaration is done using \code{AddParameter()} method.
     // \code{AddParameter()} requires the input parameter type
-    // (ParameterType_InputImage, ParameterType_Int, ParameterType_Float), its name and description.
+    // (ParameterType\_InputImage, ParameterType\_Int, ParameterType\_Float), its name and description.
     // \subdoxygen{otb}{Wrapper}{Application} class contains methods to set parameters characteristics.
     // Software Guide : EndLatex
 

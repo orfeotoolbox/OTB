@@ -137,7 +137,6 @@ SET( Tex_SRCS
   FeatureExtraction.tex
   ObjectBasedImageAnalysis.tex
   Hyperspectral.tex
-  ReleaseNotes.tex
   Wrapping.tex
 )
 
