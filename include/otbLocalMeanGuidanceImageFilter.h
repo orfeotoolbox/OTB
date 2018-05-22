@@ -48,20 +48,47 @@ public:
     unsigned int r_Mean = r_Box[0]-1;
     unsigned int size_Mean = 2*r_Mean+1;
 
-    TOutput output(Nband); 
+    TOutput output(Nband*2); 
     output.Fill(0); 
 
-    for(unsigned int b = 0; b < Nband; ++b)
+    //Median
+    for(unsigned int b = 0; b < Nband/2; ++b)
       {
-        double mean(0.);
+        double mean(0.);       
+
 
         for(unsigned int i = 0; i < input_it.Size() ; ++i)
           {
-            mean += input_it.GetPixel(i)[b]     ;       
+            mean += input_it.GetPixel(i)[b]     ;   
+
           }
-          mean /= size_Mean*size_Mean;     
+          mean /= size_Mean*size_Mean;    
           output[b] = static_cast<typename TOutput::ValueType>(mean) ;
       }
+
+      //variance
+    for(unsigned int b =  Nband/2; b < Nband; ++b)
+      {
+        double sum2(0.);
+        double sum1(0.);
+        double var(0.); 
+
+        for(unsigned int i = 0; i < input_it.Size() ; ++i)
+          {
+         
+            sum2 += input_it.GetPixel(i)[b]* input_it.GetPixel(i)[b]    ; 
+            sum1 +=  input_it.GetPixel(i)[b] ;
+            var =  (sum2 - ( sum1 * output[b-Nband/2])) ;
+          }
+          var = var / (size_Mean-1);
+          output[b-Nband/2] = static_cast<typename TOutput::ValueType>(var) ;
+          
+
+      }
+
+
+
+
 
     return output ;
 
