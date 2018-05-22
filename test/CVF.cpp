@@ -47,6 +47,7 @@
 
 #include "otbMinimumNBandsImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbLocalMeanGuidanceImageFilter.h"
 
 
 
@@ -114,67 +115,34 @@ int testCVF(int argc, char *argv[])
     writer_LeftCost->Update();
 
 
-    //std::cout << "band number : " << m_LeftCost->GetBandNumber()<< std::endl;
-
 
 
     typedef otb::MinimumNBandsImageFilter< FloatVectorImageType, FloatVectorImageType > MinCostVolume;  
     MinCostVolume::Pointer m_minCost = MinCostVolume::New();
     m_minCost->SetInput(m_LeftCost->GetOutput());
 
-
     ImageWriterType::Pointer writer_m_minCost = ImageWriterType::New();
-    writer_m_minCost->SetFileName( FILENAME("minLeftCost.tif"));
+    writer_m_minCost->SetFileName( FILENAME("MinLeftCost.tif"));
     writer_m_minCost->SetInput(m_minCost->GetOutput());
     writer_m_minCost->Update();
 
-    typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StatFilter;
-    StatFilter::Pointer m_CovLeft = StatFilter::New();
-    m_CovLeft->SetInput(m_LeftCost->GetOutput());
-    m_CovLeft->Update();
-    std::cout << "Cov : " << m_CovLeft->GetCovariance() << std::endl;
 
 
-//TEST
+  typedef otb::LocalMeanGuidanceImageFilter< FloatVectorImageType, FloatVectorImageType > LocalMeanImageFilter;
+  LocalMeanImageFilter::Pointer m_meanLeftCost = LocalMeanImageFilter::New();
+  
+  m_meanLeftCost->SetInput( inLeft->GetOutput() );  
+  LocalMeanImageFilter::RadiusType radius = {{r,r}};
+  m_meanLeftCost->SetRadius(radius);
 
-    /*
-
-    const unsigned int Dimension = 2;
-  typedef double PixelType;
-
-
-  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StatFilter;
-
-  // Instantiating object
-  StatFilter::Pointer m_CovLeft = StatFilter::New();
-
-
-//  ReaderType::Pointer reader = ReaderType::New();
- // reader->SetFileName(argv[1]);
-
-
-//  filter->SetInput(reader->GetOutput());
-    m_CovLeft->SetInput(m_LeftCost->GetOutput());
-  m_CovLeft->Update();
-
-  std::cout << "Cov : " << m_CovLeft->GetCovariance() << std::endl;
-*/
-  /*
-  std::ofstream file;
-  file.open("/home/julie/Documents/PROJETS/CVF/output.tif");
-  file << "Minimum: " << filter->GetMinimum() << std::endl;
-  file << "Maximum: " << filter->GetMaximum() << std::endl;
-  file << std::fixed;
-  file.precision(5);
-  file << "Sum: " << filter->GetSum() << std::endl;
-  file << "Mean: " << filter->GetMean() << std::endl;
-  file << "Covariance: " << filter->GetCovariance() << std::endl;
-file.close();
-*/
+  ImageWriterType::Pointer writer_meanLeftCost = ImageWriterType::New();
+  writer_meanLeftCost->SetFileName( FILENAME("LocalMeanLeftInput.tif"));
+  writer_meanLeftCost->SetInput(m_meanLeftCost->GetOutput());
+  writer_meanLeftCost->Update();
 
 
 
- 
-	return EXIT_SUCCESS;
+
+  return EXIT_SUCCESS;
 
 }
