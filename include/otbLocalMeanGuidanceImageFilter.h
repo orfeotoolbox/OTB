@@ -48,11 +48,11 @@ public:
     unsigned int r_Mean = r_Box[0]-1;
     unsigned int size_Mean = 2*r_Mean+1;
 
-    TOutput output(Nband*2); 
+    TOutput output(Nband*3); 
     output.Fill(0); 
 
-    //Median
-    for(unsigned int b = 0; b < Nband/2; ++b)
+    //Mean
+    for(unsigned int b = 0; b < Nband; ++b)
       {
         double mean(0.);       
 
@@ -66,6 +66,8 @@ public:
           output[b] = static_cast<typename TOutput::ValueType>(mean) ;
       }
 
+      /*
+
       //variance
     for(unsigned int b =  Nband/2; b < Nband; ++b)
       {
@@ -74,21 +76,59 @@ public:
         double var(0.); 
 
         for(unsigned int i = 0; i < input_it.Size() ; ++i)
-          {
-         
-            sum2 += input_it.GetPixel(i)[b]* input_it.GetPixel(i)[b]    ; 
-            sum1 +=  input_it.GetPixel(i)[b] ;
-            var =  (sum2 - ( sum1 * output[b-Nband/2])) ;
+          { 
+          sum1 +=  input_it.GetPixel(i)[b] ;        
+          sum2 += input_it.GetPixel(i)[b]* input_it.GetPixel(i)[b]    ; 
+            
+          var =  sum2 - ( sum1 * output[b-Nband/2]) ;
+
           }
           var = var / (size_Mean-1);
           output[b-Nband/2] = static_cast<typename TOutput::ValueType>(var) ;
-          
-
       }
 
+  */
+
+      //variance rr, gg, bb
+   //   std::cout << "variance rr, gg, bb" << std::endl;
+      for(unsigned int b = Nband; b < Nband*2; ++b)
+        {
+        double var(0.);
+        double sum(0.);
+        for(unsigned int i = 0; i < input_it.Size() ; ++i)
+          {
+          sum += input_it.GetPixel(i)[b-Nband] * input_it.GetPixel(i)[b-Nband] ;        
+          }
+        var = sum/(size_Mean*size_Mean) - output[b-Nband] * output[b-Nband] ;
+        output[b] = static_cast<typename TOutput::ValueType>(var) ;
+        }
+
+     // std::cout << "variance rg, gb" << std::endl;
+      for(unsigned int b = Nband*2; b < Nband*3-1; ++b)
+        {
+        double var(0.);
+        double sum(0.);
+        for(unsigned int i = 0; i < input_it.Size() ; ++i)
+          {
+            sum += input_it.GetPixel(i)[b-2*Nband] * input_it.GetPixel(i)[b-2*Nband+1] ;       
+          }
+        var = sum/(size_Mean*size_Mean) - output[b-2*Nband] * output[b-2*Nband+1] ;
+        output[b] = static_cast<typename TOutput::ValueType>(var) ;
+        }
 
 
-
+      //std::cout << "variance rg" << std::endl;
+        for(unsigned int b = Nband*3-1; b < Nband*3; ++b)
+          {
+          double var(0.);
+          double sum(0.);
+          for(unsigned int i = 0; i < input_it.Size() ; ++i)
+            {
+              sum += input_it.GetPixel(i)[b-2*Nband] * input_it.GetPixel(i)[b-2*Nband-2] ;       
+            }
+          var = sum/(size_Mean*size_Mean) - output[b-2*Nband] * output[b-2*Nband-2] ;
+          output[b] = static_cast<typename TOutput::ValueType>(var) ;
+          }
 
     return output ;
 
