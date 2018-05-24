@@ -47,7 +47,7 @@
 
 #include "otbMinimumNBandsImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbLocalMeanGuidanceImageFilter.h"
+#include "otbLocalStatImageFilter.h"
 
 
 
@@ -128,19 +128,18 @@ int testCVF(int argc, char *argv[])
 
 
 
-  typedef otb::LocalMeanGuidanceImageFilter< FloatVectorImageType, FloatVectorImageType > LocalMeanImageFilter;
-  LocalMeanImageFilter::Pointer m_meanLeftCost = LocalMeanImageFilter::New();
-  
-  m_meanLeftCost->SetInput( inLeft->GetOutput() );  
-  LocalMeanImageFilter::RadiusType radius = {{r,r}};
-  m_meanLeftCost->SetRadius(radius);
+  typedef otb::LocalStatImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > StatGuidanceImageFilter;
+  StatGuidanceImageFilter::Pointer m_meanLeftCost = StatGuidanceImageFilter::New();
+ 
+  m_meanLeftCost->SetInput1(inLeft->GetOutput());
+  m_meanLeftCost->SetInput2(m_LeftCost->GetOutput()); 
+  m_meanLeftCost->SetRadius(0,9);
+
 
   ImageWriterType::Pointer writer_meanLeftCost = ImageWriterType::New();
   writer_meanLeftCost->SetFileName( FILENAME("LocalMeanLeftInput.tif"));
   writer_meanLeftCost->SetInput(m_meanLeftCost->GetOutput());
   writer_meanLeftCost->Update();
-
-
 
 
   return EXIT_SUCCESS;
