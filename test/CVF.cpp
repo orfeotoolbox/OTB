@@ -48,7 +48,6 @@
 #include "otbMinimumNBandsImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbLocalStatImageFilter.h"
-#include "otbWeightsGuidedFilter.h"
 
 
 
@@ -136,22 +135,11 @@ int testCVF(int argc, char *argv[])
   m_meanLeftCost->SetInput2(m_LeftCost->GetOutput()); 
   m_meanLeftCost->SetRadius(0,9);
 
+
   ImageWriterType::Pointer writer_meanLeftCost = ImageWriterType::New();
   writer_meanLeftCost->SetFileName( FILENAME("LocalMeanLeftInput.tif"));
   writer_meanLeftCost->SetInput(m_meanLeftCost->GetOutput());
   writer_meanLeftCost->Update();
-
-  typedef otb::WeightsGuidedFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > Weights;
-  Weights::Pointer m_weights_ak_bk = Weights::New();
- 
-  m_weights_ak_bk->SetInput1(m_meanLeftCost->GetOutput());
-  m_weights_ak_bk->SetInput2(inLeft->GetOutput()); 
-  m_weights_ak_bk->SetRadius(0,9);
-
-   ImageWriterType::Pointer writer_weights_ak_bk = ImageWriterType::New();
-  writer_weights_ak_bk->SetFileName( FILENAME("LocalMeanLeftInput.tif"));
-  writer_weights_ak_bk->SetInput(m_weights_ak_bk->GetOutput());
-  writer_weights_ak_bk->Update();
 
 
   return EXIT_SUCCESS;
