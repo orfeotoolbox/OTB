@@ -32,12 +32,19 @@ list(REMOVE_ITEM app_names "TestApplication")
 list(REMOVE_ITEM app_names "ApplicationExample")
 list(REMOVE_DUPLICATES app_names)
 set(dfiles)
+set(generate_descriptor_cmd "$<TARGET_FILE:otbQgisDescriptor>")
+#debian does not use RPATH and build is failing
+#see gitlab #1593
+#if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+if(CMAKE_SKIP_RPATH AND "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+  set(generate_descriptor_cmd "env;LD_LIBRARY_PATH=${OTB_BINARY_DIR}/lib;$<TARGET_FILE:otbQgisDescriptor>")
+endif()
 foreach(app_name ${app_names})
   add_dependencies(otbQgisDescriptor otbapp_${app_name})
   set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/${app_name}.txt")
   add_custom_command(OUTPUT "${dfile}"
-    COMMAND "$<TARGET_FILE:otbQgisDescriptor>"
-     "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
+    COMMAND ${generate_descriptor_cmd}
+    "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
     WORKING_DIRECTORY ${OTB_BINARY_DIR}
     COMMENT "./bin/otbQgisDescriptor ${app_name} ./${OTB_INSTALL_APP_DIR} ./${OTB_INSTALL_DESCR_DIR}/"
     VERBATIM)
