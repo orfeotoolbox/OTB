@@ -28,7 +28,7 @@ namespace Wrapper
 QtApplication::QtApplication(int& argcc, char** argvv)
   : QApplication(argcc, argvv)
 {
-  std::cout<<QApplication::font().defaultFamily().toStdString()<<std::endl;
+  //std::cout<<QApplication::font().defaultFamily().toStdString()<<std::endl;
 }
 
 bool
