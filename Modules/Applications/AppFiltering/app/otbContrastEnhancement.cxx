@@ -219,9 +219,13 @@ private:
 
  
     AddParameter(ParameterType_Int,"spatial.local.h" , 
-      "Thumbnail height in pixel");
+      "Thumbnail height");
+    SetParameterDescription("spatial.local.h","Height of the thumbnail "
+      "over which the histogram will be computed. The value is in pixel.");
     AddParameter(ParameterType_Int,"spatial.local.w" , 
-      "Thumbnail width in pixel");
+      "Thumbnail width");
+    SetParameterDescription("spatial.local.w","Width of the thumbnail "
+      "over which the histogram will be computed. The value is in pixel.");
 
     AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum "
       "settings");
@@ -233,12 +237,11 @@ private:
       "be computed on the image (nodata value won't be taken "
       "into account) . Each band will have a minimum and a maximum.");
     AddParameter(ParameterType_Bool, "minmax.auto.global", "Global");
-    SetParameterDescription("minmax.auto.global" , "Automatic"
+    SetParameterDescription("minmax.auto.global" , 
       "Min/max computation will result in the same minimum and maximum for "
-      "all the bands. Otherwise the computation will be done for each "
-      "thumbnail if a local equalization is done");
-    AddChoice( "minmax.manual" , "Manual settings of min/max values" );
-    SetParameterDescription("minmax.auto","Minimum and maximum value will be "
+      "all the bands.");
+    AddChoice( "minmax.manual" , "Manual settings for min/max values" );
+    SetParameterDescription("minmax.manual","Minimum and maximum value will be "
       "set by the user");
     AddParameter(ParameterType_Float , "minmax.manual.min" , "Minimum value");
     AddParameter(ParameterType_Float , "minmax.manual.max" , "Maximum value");
