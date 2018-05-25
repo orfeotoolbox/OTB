@@ -165,7 +165,7 @@ private:
       "histogram. That gives us gain for each bin that transform the original "
       "histogram into the flat one. This gain is then apply on the original "
       "image." 
-      "\nThe application proposes several option to allow a finer result : "
+      "\nThe application proposes several options to allow a finer result : "
       "\n- There is an option to limit contrast. We choose to limit the contrast "
       "by modifying the original histogram. To do so we clip the histogram at a "
       "given height and redistribute equally among the bins the clipped population. "
@@ -226,7 +226,8 @@ private:
     AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum "
       "settings");
     SetParameterDescription("minmax","Minimum and maximum value that will "
-      "bound the histogram.");
+      "bound the histogram and thus the dynamic of the resulting image. Values "
+      "over those boundaries will be clipped.");
     AddChoice( "minmax.auto" , "Automatic" );
     SetParameterDescription("minmax.auto" , "Minimum and maximum value will "
       "be computed on the image (nodata value won't be taken "
@@ -234,12 +235,15 @@ private:
     AddParameter(ParameterType_Bool, "minmax.auto.global", "Global");
     SetParameterDescription("minmax.auto.global" , "Automatic"
       "Min/max computation will result in the same minimum and maximum for "
-      "all the bands.");
+      "all the bands. Otherwise the computation will be done for each "
+      "thumbnail if a local equalization is done");
     AddChoice( "minmax.manual" , "Manual settings of min/max values" );
     SetParameterDescription("minmax.auto","Minimum and maximum value will be "
       "set by the user");
     AddParameter(ParameterType_Float , "minmax.manual.min" , "Minimum value");
     AddParameter(ParameterType_Float , "minmax.manual.max" , "Maximum value");
+    SetDefaultParameterFloat("minmax.manual.min", 0 );
+    SetDefaultParameterFloat("minmax.manual.max", 255 );
     MandatoryOff("minmax.manual.min");
     MandatoryOff("minmax.manual.max");
 
@@ -249,9 +253,9 @@ private:
       "Each channel is equalized independently" );
     AddChoice( "mode.lum" , "Luminance" );
     SetParameterDescription( "mode.lum" ,
-      "The relative luminance is calculated thanks to the coefficients."
-      "Then the histogram is equalized and then a gain is applied on each channels."
-      "This gain for each channels will depend on"
+      "The relative luminance is computed thanks to the coefficients."
+      "Then the histogram is equalized and the gain is applied on each channels."
+      "This gain for each channels will depend on "
       "the weight (coef) of the channel in the luminance." 
       "\nNote that default values come from color space theories "
       "on how human eyes perceive colors)" 
