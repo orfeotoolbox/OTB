@@ -245,8 +245,8 @@ private:
       "set by the user");
     AddParameter(ParameterType_Float , "minmax.manual.min" , "Minimum value");
     AddParameter(ParameterType_Float , "minmax.manual.max" , "Maximum value");
-    SetDefaultParameterFloat("minmax.manual.min", 0 );
-    SetDefaultParameterFloat("minmax.manual.max", 255 );
+    // SetDefaultParameterFloat("minmax.manual.min", 0 );
+    // SetDefaultParameterFloat("minmax.manual.max", 255 );
     MandatoryOff("minmax.manual.min");
     MandatoryOff("minmax.manual.max");
 
