@@ -1018,3 +1018,111 @@ The model to use is read from file (the one produced during training).
                               -imstat stats.xml
                               -out    prediction.tif
 
+
+Dimensionality Reduction
+------------------------
+
+In Remote Sensing, the amount of data to process is often huge, and it can
+be interesting to perform dimensionality reduction as a pre-processing step
+for further processing. This is possible with the OTB machine learning 
+framework. In the same way as classification or regression, a dimensionality 
+reduction model is first computed using training data, and the model can then be
+applied to image and vector data. 
+
+Training
+~~~~~~~~
+
+Machine learning models for dimensionality reduction work just like machine 
+learning models for classification and regression. the training application
+takes as input a vector data set, a list of features to consider in this set,
+an output dimension and the chosen algorithm with its parameters
+
+Also, like in classification and regression, a statistics estimation step can 
+be performed before training. It allows to normalize the dynamic of the input
+predictors to a standard one: zero mean, unit standard deviation. This is done
+by calling the "ComputeImageStatistics" application :
+
+::
+
+    otbcli_ComputeImagesStatistics        -il   input_image.tif
+                                          -out  stats.xml
+
+. The following 
+algorithms can be used
+
+-  Principal Component Analysis (pca)
+
+-  Autoencoders (ae)
+
+-  Self Organizing Maps (som)
+
+::
+
+    otbcli_TrainDimensionalityReduction   -io.vd training_set.sqlite 
+                                          -io.out model_pca.txt 
+                                          -io.stats stats.xml
+                                          -algorithm pca 
+                                          -algorithm.pca.dim 3
+                                          -feat value_0 value_1 value_2 value_3 value_4 value_5 value_6
+
+                                      
+Reduction
+~~~~~~~~~
+
+Once the model is trained, it can be used to reduce data. It is possible to
+process an image with the application "ImageDimensionalityReduction" :
+
+::
+
+    otbcli_ImageDimensionalityReduction     -in input_image.tif 
+                                            -imstat stats.xml 
+                                            -model model.txt 
+                                            -out output_image.tif
+
+It is also possible to apply the model on vector data, using the "VectorDimensionalityReductionApplication" :
+
+::
+
+    otbcli_VectorDimensionalityReduction        -in vectorData.shp 
+                                                -instat stats.xml 
+                                                -model model.txt 
+                                                -out vectorDataOut.shp 
+                                                -feat value_0 value_1 value_2 value_3 value_4 value_5 value_6
+
+After this dimensionality reduction step, the data can be used for further 
+processing, like classification.
+
+
+Sample Augmentation
+-------------------
+
+Collecting training data for machine learning algorithm in remote sensing can be hard,
+for example in land cover classification there often are minority classes
+for which only a few training samples are available, thus leading to inbalance
+between the number of samples of each class. Some classifiers have poor 
+performances when this class inbalance is important, therefore it can be
+interesting generate synthetic samples for minority classes.
+
+In the following example, we will generate new samples using "Jittering" : it consits in 
+adding noise to the existing data to create new artificially corrupted samples.
+the strength of the noise is proportionnal to the variance of the input
+samples by a factor given as parameter.
+
+The ``-field`` parameter is the name of the field containing class labels 
+in the input geometries, the ``-label`` parameter is the label of the class 
+to be augmented and the ``-sample`` parameter is the number of samples to be
+created. The ``-exclude`` parameter can be used to specify which fields in
+the input geometry should not be modified by the noise, but just copied in 
+the generated samples, for example the field containing the class should
+be the same in the input and generated samples.
+
+::
+
+    otbcli_SampleAugmentation     -in samples.sqlite 
+                                  -field class 
+                                  -label 3 
+                                  -samples 100 
+                                  -out augmented_samples.sqlite 
+                                  -exclude OGC_FID name class originfid 
+                                  -strategy jitter 
+                                  -strategy.jitter.stdfactor 10
