@@ -50,8 +50,8 @@ prefix.
     // All variables related to anotherImage (input 2) will have the prefix im3
     filter->SetNthInput(2, anotherImage);
 
-In this document, we will keep the default convention. Following list
-summaries the available variables for input #0 (and so on for every
+In this document, we will keep the default convention. The following list
+summarises the available variables for input #0 (and so on for every
 input).
 
 Variables and their descriptions:
@@ -80,7 +80,7 @@ Variables and their descriptions:
 
 [variables]
 
-Moreover, we also have the generic variables idxX and idxY that
+In addition, we also have the generic variables idxX and idxY that
 represent the indices of the current pixel (scalars).
 
 Note that the use of a global statistics will automatically make the
@@ -149,7 +149,7 @@ two vectors (see next section “New operators and functions”
 
 Now, let’s go back to the first formula: this one specifies the addition
 of two images band to band. With muParserX lib, we can now define such
-operation with only one formula, instead of many formulas (as many as
+operation with only one formula, instead of many formulae (as many as
 the number of bands). We call this new functionality the **batch mode**,
 which directly arises from the introduction of vectors within muParserX
 framework.
@@ -178,7 +178,7 @@ For instance, im1b3N3x5 represents the following neighbourhood:
 
 Fundamentally, a neighbourhood is represented as a matrix inside the
 muParserX framework; so the remark about mathematically well-defined
-formulas still stands.
+formulae still stands.
 
 New operators and functions
 ---------------------------
@@ -256,22 +256,22 @@ needed; one mean value is computed per input). For instance:
 
 .. math:: mean(im1b1N3x3,im1b2N3x3,im1b3N3x3,im1b4N3x3)
 
-Note: a limitation coming from muparserX itself makes impossible to pass
+Note: a limitation coming from muparserX itself makes it impossible to pass
 all those neighborhoods with a unique variable.
 
-**Function var** This function allows to compute the variance of a given
+**Function var** This function computes the variance of a given
 vector or neighborhood (the function can take as many inputs as needed;
 one var value is computed per input). For instance:
 
 .. math:: var(im1b1N3x3)
 
-**Function median** This function allows to compute the median value of
+**Function median** This function computes the median value of
 a given vector or neighborhood (the function can take as many inputs as
 needed; one median value is computed per input). For instance:
 
 .. math:: median(im1b1N3x3)
 
-**Function corr** This function allows to compute the correlation
+**Function corr** This function computes the correlation
 between two vectors or matrices of the same dimensions (the function
 takes two inputs). For instance:
 

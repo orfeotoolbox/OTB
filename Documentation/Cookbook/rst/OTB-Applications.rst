@@ -40,9 +40,9 @@ command-line interface of the Convert application, while
 Command-line launcher
 ---------------------
 
-The command-line application launcher allows to load an application
+The command-line application launcher loads an application
 plugin, to set its parameters, and execute it using the command line.
-Launching the ``otbApplicationLauncherCommandLine`` without argument
+Launching the ``otbApplicationLauncherCommandLine`` without any arguments provided,
 results in the following help to be displayed:
 
 ::
@@ -200,7 +200,7 @@ modules needs to be properly set with the ``OTB_APPLICATION_PATH``
 environment variable. The standard location on Unix systems is
 ``/usr/lib/otb/applications``. On Windows, the applications are
 available in the ``otb-bin`` OSGeo4W package, and the environment is
-configured automatically so you don’t need to tweak
+configured automatically so it doesn't need to be modified
 ``OTB_APPLICATION_PATH``.
 
 Once your environment is set, you can use OTB applications from Python, just
@@ -233,7 +233,7 @@ The processing toolbox
 ^^^^^^^^^^^^^^^^^^^^^^
 
 OTB applications are available from QGIS. Use them from the processing
-toolbox, which is accessible with Processing :math:`\rightarrow`
+toolbox, which is accessible under Processing :math:`\rightarrow`
 ToolBox. Switch to “advanced interface” in the bottom of the application
 widget and OTB applications will be there.
 
@@ -243,7 +243,7 @@ Using a custom OTB
 ^^^^^^^^^^^^^^^^^^
 
 If QGIS cannot find OTB, the “applications folder” and “binaries folder”
-can be set from the settings in the Processing :math:`\rightarrow`
+can be set from the settings found under Processing :math:`\rightarrow`
 Settings :math:`\rightarrow` “service provider”.
 
 .. figure:: Art/QtImages/qgis-otb-settings.png
@@ -278,7 +278,7 @@ parameter:
 
     otbcli_BandMath -inxml saved_applications_parameters.xml
 
-Note that you can also overload parameters from command line at the same
+Note that you can also add additional parameters on the command line at the same
 time
 
 ::
@@ -355,7 +355,7 @@ Here is an example of MPI call on a cluster::
 
 One can see that the registration and pan-sharpening of the
 panchromatic and multi-spectral bands of a Pleiades image has been split
-among 560 cpus and took only 56 seconds.
+among 560 cpus and only took 56 seconds.
 
 Note that this MPI parallel invocation of applications is only
 available for command-line calls to OTB applications, and only for
