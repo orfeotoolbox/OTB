@@ -31,8 +31,3 @@ if (BUILD_TESTING)
     message(STATUS "Found Boost components: unit_test_framework")
   endif()
 endif() #BUILD_TESTING
-
-if(WIN32)
-  # disable autolinking in boost
-	add_definitions( -DBOOST_ALL_NO_LIB )
-endif()

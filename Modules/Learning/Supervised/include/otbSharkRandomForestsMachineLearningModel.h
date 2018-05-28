@@ -36,7 +36,6 @@
 #pragma GCC diagnostic ignored "-Wheader-guard"
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
-#include <shark/Models/Classifier.h>
 #include "otb_shark.h"
 #include "shark/Algorithms/Trainers/RFTrainer.h"
 #if defined(__GNUC__) || defined(__clang__)
@@ -137,10 +136,6 @@ public:
   /** If true, margin confidence value will be computed */
   itkSetMacro(ComputeMargin, bool);
 
-  /** If true, class labels will be normalised in [0 ... nbClasses] */
-  itkGetMacro(NormalizeClassLabels, bool);
-  itkSetMacro(NormalizeClassLabels, bool);
-
 protected:
   /** Constructor */
   SharkRandomForestsMachineLearningModel();
@@ -161,10 +156,8 @@ private:
   SharkRandomForestsMachineLearningModel(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  shark::RFClassifier<unsigned int> m_RFModel;
-  shark::RFTrainer<unsigned int> m_RFTrainer;
-  std::vector<unsigned int> m_ClassDictionary;
-  bool m_NormalizeClassLabels;
+  shark::RFClassifier m_RFModel;
+  shark::RFTrainer m_RFTrainer;
 
   unsigned int m_NumberOfTrees;
   unsigned int m_MTry;

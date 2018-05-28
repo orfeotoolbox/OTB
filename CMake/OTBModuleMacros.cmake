@@ -277,12 +277,6 @@ macro(otb_module_test)
   foreach(dep IN LISTS OTB_MODULE_${otb-module-test}_DEPENDS)
     list(APPEND ${otb-module-test}_LIBRARIES "${${dep}_LIBRARIES}")
   endforeach()
-  # make sure the test can link with optional libs
-  foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
-    if (${dep}_ENABLED)
-      list(APPEND ${otb-module-test}_LIBRARIES "${${dep}_LIBRARIES}")
-    endif()
-  endforeach()
 endmacro()
 
 macro(otb_module_warnings_disable)

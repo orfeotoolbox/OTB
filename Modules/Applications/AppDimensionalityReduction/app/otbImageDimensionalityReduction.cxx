@@ -124,12 +124,12 @@ protected:
 private:
   void DoInit() override
   {
-    SetName("ImageDimensionalityReduction");
+    SetName("DimensionalityReduction");
     SetDescription("Performs dimensionality reduction of the input image "
       "according to a dimensionality reduction model file.");
 
     // Documentation
-    SetDocName("Image Dimensionality Reduction");
+    SetDocName("DimensionalityReduction");
     SetDocLongDescription("This application reduces the dimension of an input"
                           " image, based on a machine learning model file produced by"
                           " the TrainDimensionalityReduction application. Pixels of the "
