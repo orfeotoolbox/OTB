@@ -156,7 +156,7 @@ protected:
 
     if(!ret)
       {
-      noDataValueAvailable.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),true);
+      noDataValueAvailable.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),false);
       noDataValues.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),0);
       }
 
@@ -165,7 +165,7 @@ protected:
     
     std::vector<bool> flags = noDataValueAvailable;
     
-    if(this->GetFunctor().m_NaNIsNoData)
+    if((this->GetFunctor().m_NaNIsNoData) || (!ret))
       {
       flags = std::vector<bool>(flags.size(),true);
       }
