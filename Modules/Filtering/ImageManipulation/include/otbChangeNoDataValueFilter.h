@@ -21,7 +21,6 @@
 #ifndef otbChangeNoDataValueFilter_h
 #define otbChangeNoDataValueFilter_h
 
-#include "otbLogger.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
