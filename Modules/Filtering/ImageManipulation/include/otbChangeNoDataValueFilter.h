@@ -21,6 +21,7 @@
 #ifndef otbChangeNoDataValueFilter_h
 #define otbChangeNoDataValueFilter_h
 
+#include "otbLogger.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
@@ -80,11 +81,16 @@ public:
  *  - NaN values will be considered as no data and replaced as well
  *  - Output image will have no-data flags and values for all bands
  *
- *  If NaNIsNoData is false:
+ *  If NaNIsNoData is false and the input has at least one band with no-data 
+ *  flag and no-data value :
  *  - Band for which input no-data flags is false will remain
  *    untouched
  *  - Output image will have no-data flags and values only for bands
  *    for which input no-data flag is true.
+ * 
+ *  If NaNIsNoData is false and the input has no band with no-data 
+ *  flag and no-data value :
+ *  - Output image will have no-data flags and values for all bands
  * 
  * \ingroup Streamed
  * \ingroup MultiThreaded
@@ -151,7 +157,7 @@ protected:
 
     if(!ret)
       {
-      noDataValueAvailable.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),false);
+      noDataValueAvailable.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),true);
       noDataValues.resize(this->GetInput()->GetNumberOfComponentsPerPixel(),0);
       }
 
