@@ -185,7 +185,6 @@ PleiadesPToXSAffineTransformCalculator
   OffsetType offset = ComputeOffset(panchromaticImage,xsImage);
      
   // Apply the scaling
-  typedef itk::ScalableAffineTransform<double, 2>  TransformType;
   TransformType::Pointer transform = TransformType::New();
   transform->SetIdentity();
   

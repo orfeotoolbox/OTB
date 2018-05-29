@@ -964,13 +964,13 @@ LineSegmentDetector<TInputImage, TPrecision>
    */
 
   /**  Compute the number of points aligned */
-  typedef otb::Rectangle<double> RectangleType;
-  RectangleType::Pointer rectangle =  RectangleType::New();
+  typedef otb::Rectangle<double> OTBRectangleType;
+  OTBRectangleType::Pointer rectangle =  OTBRectangleType::New();
 
   /** Fill the rectangle with the points*/
   for (int i = 0; i < 2; ++i)
     {
-    typename RectangleType::VertexType vertex;
+    typename OTBRectangleType::VertexType vertex;
     vertex[0] = rec[2 * i];
     vertex[1] = rec[2 * i + 1];
     rectangle->AddVertex(vertex);
