@@ -58,8 +58,22 @@ private:
     //std::cout << "TestApplication::DoInit" << std::endl;
     AddParameter(ParameterType_Empty, "empty", "Boolean (old impl.)");
     AddParameter(ParameterType_Bool, "boolean", "Boolean");
-    AddParameter(ParameterType_Int, "int", "Integer");
-    MandatoryOff("int");
+
+    AddParameter(ParameterType_Int, "int1", "Integer (not mandatory, no default)");
+    MandatoryOff("int1");
+
+    AddParameter(ParameterType_Int, "int2", "Integer (mandatory, no default)");
+    MandatoryOn("int2");
+
+    AddParameter(ParameterType_Int, "int3", "Integer (not mandatory, default)");
+    MandatoryOff("int3");
+    SetDefaultParameterInt("int3", 42);
+
+    AddParameter(ParameterType_Int, "int4", "Integer (mandatory, default)");
+    MandatoryOn("int4");
+    SetDefaultParameterInt("int4", 42);
+
+
     AddParameter(ParameterType_Float, "float", "Float");
     MandatoryOff("float");
     AddParameter(ParameterType_String, "string", "String");

@@ -23,14 +23,14 @@
 
 #include "otbWrapperParameter.h"
 #include "itkNumericTraits.h"
-#include <boost/any.hpp>
+#include <boost/optional.hpp>
 
 namespace otb
 {
 namespace Wrapper
 {
 /** \class NumericalParameter
- *  \brief This class represents a numerical parameter
+ *  \brief This class represents a numerical parameter with an optional default value
  *
  * \ingroup OTBApplicationEngine
  */
@@ -85,41 +85,54 @@ public:
       {
       itkGenericExceptionMacro(<< "Parameter " << this->GetKey() << " has no value yet.");
       }
-    return boost::any_cast<ScalarType>(m_Value);
+    return m_Value.value();
+  }
+
+  ScalarType GetDefaultValue() const
+  {
+    if (!HasDefaultValue())
+      {
+      itkGenericExceptionMacro(<< "Parameter " << this->GetKey() << " has no default value.");
+      }
+    return m_DefaultValue.value();
   }
 
   bool HasValue() const override
   {
-    return !m_Value.empty();
+    return m_Value != boost::none;
+  }
+
+  bool HasDefaultValue() const
+  {
+    return m_DefaultValue != boost::none;
   }
 
   void ClearValue() override
   {
-    m_Value = boost::any();
+    m_Value = boost::none;
+  }
+
+  void ClearDefaultValue()
+  {
+    m_DefaultValue = boost::none;
   }
 
   /** Set the default value */
   itkSetMacro(DefaultValue, ScalarType);
 
-  /** Get the default value */
-  itkGetMacro(DefaultValue, ScalarType);
-
-  /** Set the minimum value */
+  /** Get/Set the minimum value */
+  itkGetMacro(MinimumValue, ScalarType);
   itkSetMacro(MinimumValue, ScalarType);
 
-  /** Get the minimum value */
-  itkGetMacro(MinimumValue, ScalarType);
-
-  /** Set the maximum value */
-  itkSetMacro(MaximumValue, ScalarType);
-
-  /** Get the maximum value */
+  /** Get/Set the maximum value */
   itkGetMacro(MaximumValue, ScalarType);
+  itkSetMacro(MaximumValue, ScalarType);
 
 protected:
   /** Constructor */
   NumericalParameter()
-    : m_DefaultValue(itk::NumericTraits<T>::Zero),
+    : m_Value(boost::none),
+      m_DefaultValue(boost::none),
       m_MinimumValue(itk::NumericTraits<T>::NonpositiveMin()),
       m_MaximumValue(itk::NumericTraits<T>::max())
   {}
@@ -128,16 +141,13 @@ protected:
   ~NumericalParameter() override
   {}
 
-  /** Value */
-  boost::any m_Value;
+  /** Value or boost::none */
+  boost::optional<T> m_Value;
 
-  /** Default value (when appliable) */
-  ScalarType m_DefaultValue;
+  /** Default value or boost::none **/
+  boost::optional<T> m_DefaultValue;
 
-  /** Minimum value */
   ScalarType m_MinimumValue;
-
-  /** Maximum value */
   ScalarType m_MaximumValue;
 
 private:
