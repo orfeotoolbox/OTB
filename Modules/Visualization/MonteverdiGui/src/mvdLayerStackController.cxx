@@ -150,6 +150,14 @@ LayerStackController
     SLOT( OnProjectionButtonClicked() )
   );  
 
+//bugfix
+  QObject::connect(
+    widget,
+    SIGNAL( LayerDeletingWidget( unsigned int index ) ),
+    // to:
+    model,
+    SLOT( Deleting( int ) )
+  );
 
   QObject::connect(
     widget,

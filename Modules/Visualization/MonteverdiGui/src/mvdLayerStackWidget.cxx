@@ -120,6 +120,16 @@ LayerStackWidget
     this,
     SLOT( OnSelectionChanged( const QItemSelection &, const QItemSelection & ) )
     );
+  
+  /////// Bugfix  
+  QObject::connect(
+    m_UI->treeView->selectionModel(),
+    SIGNAL( LayerDeleting(unsigned int index) ),
+    // to:
+    this,
+    SIGNAL( LayerDeletingWidget(unsigned int index) )
+    );
+  ///////////////
 
   QObject::connect(
     m_UI->topButton,

@@ -788,14 +788,33 @@ LayerStackItemModel
 
   if( p.isValid() || count!=1 )
     return false;
+  
+  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
+  assert( widget!=NULL );
+  QObject::disconnect(
+    widget,
+    SIGNAL( SelectionChanged( int ) ),
+    // from:
+    this,
+    SLOT( OnSelectionChanged( int ) )
+  );
 
   beginRemoveRows( p, row, row + count - 1 );
   {
   // StackedLayerModel has already been shortened.
-
+  emit LayerDeleting(row);
   // TODO: Release additional row data here.
   }
+
   endRemoveRows();
+
+  QObject::connect(
+    widget,
+    SIGNAL( SelectionChanged( int ) ),
+    // from:
+    this,
+    SLOT( OnSelectionChanged( int ) )
+  );
 
   return true;
 }

@@ -159,6 +159,8 @@ public slots:
 //
 // Signals.
 signals:
+  //bugFix
+  void LayerDeletingWidget( unsigned int index );
   /**
    */
   void CurrentChanged( int );
