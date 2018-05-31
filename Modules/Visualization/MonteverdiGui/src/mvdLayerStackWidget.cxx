@@ -113,6 +113,7 @@ LayerStackWidget
     SLOT( OnCurrentRowChanged( const QModelIndex &, const QModelIndex & ) )
     );
 
+bool test =
   QObject::connect(
     m_UI->treeView->selectionModel(),
     SIGNAL( selectionChanged( const QItemSelection &,  const QItemSelection & ) ),
@@ -120,16 +121,7 @@ LayerStackWidget
     this,
     SLOT( OnSelectionChanged( const QItemSelection &, const QItemSelection & ) )
     );
-  
-  /////// Bugfix  
-  QObject::connect(
-    m_UI->treeView->selectionModel(),
-    SIGNAL( LayerDeleting(unsigned int index) ),
-    // to:
-    this,
-    SIGNAL( LayerDeletingWidget(unsigned int index) )
-    );
-  ///////////////
+  std::cout<<"An other conncetion worked : "<<test<<std::endl;
 
   QObject::connect(
     m_UI->topButton,
@@ -202,8 +194,28 @@ LayerStackWidget
     this,
     SIGNAL( ResetEffectsButtonClicked() )
   );
+
+  /////// Bugfix  
+  bool connectionBugFix = QObject::connect(
+    this->GetItemModel(),
+    SIGNAL( LayerDeletingModel(int) ),
+    // to:
+    this,
+    SLOT( OnLayerDeletingWidget(int) )
+    );
+  std::cout<<"LayerDeletingModel connected with OnLayerDeletingWidget : "
+  <<connectionBugFix<<std::endl;
+  std::cout<<"Model adress : "<<m_UI->treeView->selectionModel()<<std::endl;
+  ///////////////
 }
 
+void 
+LayerStackWidget
+::OnLayerDeletingWidget(int index)
+{
+  std::cout<<"In widget, sending LayerDeletingSignal"<<std::endl;
+  emit LayerDeletingWidget(index);
+}
 /*******************************************************************************/
 LayerStackWidget
 ::~LayerStackWidget()

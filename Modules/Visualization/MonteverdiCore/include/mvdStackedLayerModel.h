@@ -212,7 +212,7 @@ public:
 // Public SLOTS.
 public slots:
   void Clear();
-  void Deleting( SizeType index )
+  void Deleting( int index );
   inline void Delete( const KeyType & );
   inline void DeleteCurrent();
   inline void LowerCurrent();

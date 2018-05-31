@@ -151,13 +151,16 @@ LayerStackController
   );  
 
 //bugfix
+  bool conSuc =
   QObject::connect(
     widget,
-    SIGNAL( LayerDeletingWidget( unsigned int index ) ),
+    SIGNAL( LayerDeletingWidget( int ) ),
     // to:
     model,
     SLOT( Deleting( int ) )
   );
+  std::cout<<"LayerDeletingWidget connect with Deleting : "
+  <<conSuc<<std::endl;
 
   QObject::connect(
     widget,
@@ -251,7 +254,7 @@ LayerStackController
   QObject::disconnect(
     model,
     SIGNAL( CurrentChanged( size_t ) ),
-    // from:
+    // from:deletin
     this,
     SLOT( OnStackedLayerCurrentChanged( size_t ) )
   );

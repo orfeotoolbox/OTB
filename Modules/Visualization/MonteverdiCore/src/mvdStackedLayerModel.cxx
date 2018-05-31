@@ -220,7 +220,7 @@ StackedLayerModel
 /*****************************************************************************/
 void
 StackedLayerModel
-::Deleting( SizeType index )
+::Deleting( int index )
 {
     // qDebug() << this << "::Delete(" << index << ")";
 

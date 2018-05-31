@@ -154,13 +154,16 @@ public:
 // Public SLOTS.
 public slots:
 
+//bugfix
+  void OnLayerDeletingWidget( int index );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
   //bugFix
-  void LayerDeletingWidget( unsigned int index );
+  void LayerDeletingWidget( int index );
   /**
    */
   void CurrentChanged( int );
