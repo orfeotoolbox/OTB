@@ -107,7 +107,6 @@ public:
           v_mean_ai[b] = mean_ak ;
        // output[b] = static_cast<typename TOutput::ValueType>(mean_ak) ;
       }
-
     
 
 

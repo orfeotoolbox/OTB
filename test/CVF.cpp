@@ -74,7 +74,7 @@ int testCVF(int argc, char *argv[])
     inRight->UpdateOutputInformation();
 
     int dispMin = atoi(argv[3]);
-	int dispMax  = atoi(argv[4]);
+	  int dispMax  = atoi(argv[4]);
     long unsigned int r = atoi(argv[5]);	
     int rmf = atoi(argv[6]) ;
 
@@ -113,22 +113,25 @@ int testCVF(int argc, char *argv[])
     m_LeftCost->Update();
        
 
-/*
+
     ImageWriterType::Pointer writer_LeftCost = ImageWriterType::New();
     writer_LeftCost->SetFileName( FILENAME("LeftCost.tif"));
     writer_LeftCost->SetInput(m_LeftCost->GetOutput());
     writer_LeftCost->Update();
-*/
+
+
+
 
     typedef otb::MinimumNBandsImageFilter< FloatVectorImageType, FloatVectorImageType > MinCostVolume;  
     MinCostVolume::Pointer m_minCost = MinCostVolume::New();
     m_minCost->SetInput(m_LeftCost->GetOutput());
-/*
+
+
     ImageWriterType::Pointer writer_m_minCost = ImageWriterType::New();
     writer_m_minCost->SetFileName( FILENAME("MinLeftCost.tif"));
     writer_m_minCost->SetInput(m_minCost->GetOutput());
     writer_m_minCost->Update();
-*/
+
 
 
   typedef otb::WeightsGuidedFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > Weights_ak_bk;
@@ -136,7 +139,7 @@ int testCVF(int argc, char *argv[])
  
   m_meanLeftCost->SetInput1(inLeft->GetOutput());
   m_meanLeftCost->SetInput2(m_LeftCost->GetOutput());  
-  m_meanLeftCost->SetRadius(0,9);
+  m_meanLeftCost->SetRadius(0,r);
 
 
   ImageWriterType::Pointer writer_meanLeftCost = ImageWriterType::New();
@@ -147,12 +150,11 @@ int testCVF(int argc, char *argv[])
 
 
 
-
   typedef otb::MeanVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > MeanVectorImage;
   MeanVectorImage::Pointer m_meanWeights = MeanVectorImage::New();
   m_meanWeights->SetInput1(m_meanLeftCost->GetOutput());
   m_meanWeights->SetInput2(inLeft->GetOutput());
-  m_meanWeights->SetRadius(0,9);
+  m_meanWeights->SetRadius(0,r);
 
 
   ImageWriterType::Pointer writer_meanWeights = ImageWriterType::New();
@@ -168,30 +170,6 @@ int testCVF(int argc, char *argv[])
   writerminCostWeights->SetFileName( FILENAME("MinCostWeights.tif"));
   writerminCostWeights->SetInput(m_minCostWeights->GetOutput());
   writerminCostWeights->Update(); 
-
-
-
-/*
-  typedef otb::Image< float >                FloatImageType;
-  typedef otb::ImageFileReader<FloatImageType> ReaderType2;
-  typedef otb::ImageFileWriter<FloatImageType> ImageWriterType2;
-
-  typedef itk::MeanImageFilter< FloatImageType, FloatImageType > MeanImage ;
-
-    ReaderType2::Pointer im1b1 = ReaderType2::New();
-    im1b1->SetFileName("/home/julie/Documents/c++/data/im1b1.tif");  
-    im1b1->UpdateOutputInformation();
-
-    MeanImage::Pointer m_meanImage = MeanImage::New();
-    m_meanImage->SetInput(im1b1->GetOutput());
-    m_meanImage->SetRadius(9);
-
-    ImageWriterType2::Pointer writer_meanImage = ImageWriterType2::New();
-    writer_meanImage->SetFileName( FILENAME("m_meanImage.tif"));
-    writer_meanImage->SetInput(m_meanImage->GetOutput());
-    writer_meanImage->Update();
-
-*/
 
 
 

@@ -72,7 +72,8 @@ public:
 
     unsigned int Nband =  input_I.GetPixel(0).Size(); //bands number
     unsigned int Nband_C =  input_C.GetPixel(0).Size(); //bands number
-    
+
+   
   
   //fenetre wk 
     typename TInput_I::RadiusType r_Box = input_I.GetRadius(); 
@@ -81,30 +82,29 @@ public:
 
     unsigned int disparity_max = Nband_C ;
 
-    unsigned int size_output = disparity_max ;
-
     TOutput output(m_numberOfComponents); 
     output.Fill(0); 
 
 
+
     //moyenne rr, gg, bb
     std::vector<double> v_mean;
-    v_mean.resize(2,0);
+    v_mean.resize(3,0);
     //variance rr, gg, bb
     std::vector<double> v_var;
-    v_var.resize(5,0);
+    v_var.resize(6,0);
 
     std::vector<double> v_pmean;
-    v_pmean.resize(disparity_max-1,0) ;
+    v_pmean.resize(disparity_max,0) ;
 
     std::vector<double> v_multr;
-    v_multr.resize(disparity_max-1,0) ;
+    v_multr.resize(disparity_max,0) ;
 
     std::vector<double> v_multg;
-    v_multg.resize(disparity_max-1,0) ;
+    v_multg.resize(disparity_max,0) ;
 
     std::vector<double> v_multb;
-    v_multb.resize(disparity_max-1,0) ;
+    v_multb.resize(disparity_max,0) ;
 
 
 
@@ -125,6 +125,9 @@ public:
         v_mean[bandI] = mean ; 
         v_var[bandI] = var ;
       }
+
+
+
 
     //variance rg, rb
     for(unsigned int bandI = 1 ; bandI < Nband ; ++bandI)
@@ -170,10 +173,13 @@ public:
         multb /= size_Mean*size_Mean;
 
         v_pmean[bandC] = mean_p;
+
         v_multr[bandC] = multr ;
         v_multg[bandC] = multg ;
         v_multb[bandC] = multb ;
+
       }
+      
 
     //covariance matrix
     typedef itk::Matrix<double, 3, 3> MatrixType;
@@ -183,16 +189,16 @@ public:
     //Calcul ai
     //r
     std::vector<double> elem1;
-    elem1.resize(disparity_max-1,0);
+    elem1.resize(disparity_max,0);
     //g
     std::vector<double> elem2;
-    elem2.resize(disparity_max-1,0);
+    elem2.resize(disparity_max,0);
     //b
     std::vector<double> elem3;
-    elem3.resize(disparity_max-1,0);
+    elem3.resize(disparity_max,0);
 
     std::vector<double> ak;
-    ak.resize(2,0); 
+    ak.resize(3,0); 
 
     for(unsigned int bandC = 0 ; bandC < disparity_max ; ++bandC)
       {
@@ -231,7 +237,7 @@ public:
       output[4*bandC+3] = static_cast<typename TOutput::ValueType>(bk);
       
     }
- 
+
     return output ; 
     }
 
