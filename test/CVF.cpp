@@ -39,16 +39,15 @@
 
 
 #include "otbVectorImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
 #include "otbLocalGradientVectorImageFilter.h"
 #include "otbCostVolumeImageFilter.h"
-
 #include "otbMinimumNBandsImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter.h"
-
 #include "otbWeightsGuidedFilter.h"
+#include "otbMeanVectorImageFilter.h"
 
 
 
@@ -136,8 +135,9 @@ int testCVF(int argc, char *argv[])
   Weights_ak_bk::Pointer m_meanLeftCost = Weights_ak_bk::New();
  
   m_meanLeftCost->SetInput1(inLeft->GetOutput());
-  m_meanLeftCost->SetInput2(m_LeftCost->GetOutput()); 
+  m_meanLeftCost->SetInput2(m_LeftCost->GetOutput());  
   m_meanLeftCost->SetRadius(0,9);
+
 
   ImageWriterType::Pointer writer_meanLeftCost = ImageWriterType::New();
   writer_meanLeftCost->SetFileName( FILENAME("Weights.tif"));
@@ -145,20 +145,57 @@ int testCVF(int argc, char *argv[])
   writer_meanLeftCost->Update();
 
 
+
+
+
+  typedef otb::MeanVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > MeanVectorImage;
+  MeanVectorImage::Pointer m_meanWeights = MeanVectorImage::New();
+  m_meanWeights->SetInput1(m_meanLeftCost->GetOutput());
+  m_meanWeights->SetInput2(inLeft->GetOutput());
+  m_meanWeights->SetRadius(0,9);
+
+
+  ImageWriterType::Pointer writer_meanWeights = ImageWriterType::New();
+  writer_meanWeights->SetFileName( FILENAME("MeanWeights.tif"));
+  writer_meanWeights->SetInput(m_meanWeights->GetOutput());
+  writer_meanWeights->Update();  
+
+
+  MinCostVolume::Pointer m_minCostWeights = MinCostVolume::New();
+  m_minCostWeights->SetInput(m_meanWeights->GetOutput());
+
+  ImageWriterType::Pointer writerminCostWeights = ImageWriterType::New();
+  writerminCostWeights->SetFileName( FILENAME("MinCostWeights.tif"));
+  writerminCostWeights->SetInput(m_minCostWeights->GetOutput());
+  writerminCostWeights->Update(); 
+
+
+
 /*
+  typedef otb::Image< float >                FloatImageType;
+  typedef otb::ImageFileReader<FloatImageType> ReaderType2;
+  typedef otb::ImageFileWriter<FloatImageType> ImageWriterType2;
 
-  typedef otb::WeightsGuidedFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > Weights;
-  Weights::Pointer m_weights_ak_bk = Weights::New(); 
-  m_weights_ak_bk->SetInput1(inLeft->GetOutput());
-  m_weights_ak_bk->SetInput2(m_meanLeftCost->GetOutput()); 
-  m_weights_ak_bk->SetRadius(0,9);
+  typedef itk::MeanImageFilter< FloatImageType, FloatImageType > MeanImage ;
 
-  ImageWriterType::Pointer writer_weights_ak_bk = ImageWriterType::New();
-  writer_weights_ak_bk->SetFileName( FILENAME("Weights.tif"));
-  writer_weights_ak_bk->SetInput(m_weights_ak_bk->GetOutput());
-  writer_weights_ak_bk->Update();
+    ReaderType2::Pointer im1b1 = ReaderType2::New();
+    im1b1->SetFileName("/home/julie/Documents/c++/data/im1b1.tif");  
+    im1b1->UpdateOutputInformation();
+
+    MeanImage::Pointer m_meanImage = MeanImage::New();
+    m_meanImage->SetInput(im1b1->GetOutput());
+    m_meanImage->SetRadius(9);
+
+    ImageWriterType2::Pointer writer_meanImage = ImageWriterType2::New();
+    writer_meanImage->SetFileName( FILENAME("m_meanImage.tif"));
+    writer_meanImage->SetInput(m_meanImage->GetOutput());
+    writer_meanImage->Update();
 
 */
+
+
+
+
 
 
   return EXIT_SUCCESS;

@@ -67,7 +67,6 @@ public:
   }
 
 
-
   TOutput operator() ( TInput_I input_I , TInput_CostVolume input_C )
     {
 
@@ -80,7 +79,7 @@ public:
     unsigned int r_Mean = r_Box[0];
     unsigned int size_Mean = 2*r_Mean+1;
 
-    unsigned int disparity_max = 2 ;
+    unsigned int disparity_max = Nband_C ;
 
     unsigned int size_output = disparity_max ;
 
@@ -212,42 +211,32 @@ public:
 
       elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;
       elem2[bandC] = v_multg[bandC] - v_mean[1] * v_pmean[bandC] ;
-      elem3[bandC] = v_multb[bandC] - v_mean[2] * v_pmean[bandC] ;        
+      elem3[bandC] = v_multb[bandC] - v_mean[2] * v_pmean[bandC] ;  
+
+
 
       //calcul ak
-      ak[0] = Matrice_cov_inv(0,0)*elem1[bandC] + Matrice_cov_inv(0,1)*elem2[bandC] * Matrice_cov_inv(0,2)*elem3[bandC];
-      ak[1] = Matrice_cov_inv(1,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] * Matrice_cov_inv(1,2)*elem3[bandC];
-      ak[2] = Matrice_cov_inv(2,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] * Matrice_cov_inv(2,2)*elem3[bandC]; 
+      ak[0] = Matrice_cov_inv(0,0)*elem1[bandC] + Matrice_cov_inv(0,1)*elem2[bandC] + Matrice_cov_inv(0,2)*elem3[bandC];
+      ak[1] = Matrice_cov_inv(1,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] + Matrice_cov_inv(1,2)*elem3[bandC];
+      ak[2] = Matrice_cov_inv(2,0)*elem1[bandC] + Matrice_cov_inv(2,1)*elem2[bandC] + Matrice_cov_inv(2,2)*elem3[bandC]; 
+
 
       //calcul bk
       double bk(0.);
       bk = v_pmean[bandC] - (ak[0]*v_mean[0]  + ak[1]*v_mean[1] + ak[2]*v_mean[2]) ;
    
-
       output[4*bandC] = static_cast<typename TOutput::ValueType>(ak[0]);
       output[4*bandC+1] = static_cast<typename TOutput::ValueType>(ak[1]);
       output[4*bandC+2] = static_cast<typename TOutput::ValueType>(ak[2]);
       output[4*bandC+3] = static_cast<typename TOutput::ValueType>(bk);
       
     }
-
-
-
-
-
  
     return output ; 
-
     }
-/*
-    void SetInputImagePtr( TInputImage1::Pointer ptr )
-      {
-        m_input_ptr = ptr;
-      }
-*/
+
 
   protected:
-  //    TInputImage1::Pointer           m_input_ptr;
       unsigned char                   m_RadiusMin;
       unsigned char                   m_RadiusMax;
       unsigned int                    m_numberOfComponents ;
@@ -296,9 +285,8 @@ public:
     {
     Superclass::GenerateOutputInformation();
     unsigned int nb_comp (this->GetInput(1)->GetNumberOfComponentsPerPixel());
-    this->GetOutput()->SetNumberOfComponentsPerPixel(3*nb_comp);
-    this->GetFunctor().SetNumberOfComponent(3*nb_comp);
- //   this->GetFunctor()->SetInputImagePtr(const_cast<TInputImage1 *>(this->GetInput()));
+    this->GetOutput()->SetNumberOfComponentsPerPixel(4*nb_comp);
+    this->GetFunctor().SetNumberOfComponent(4*nb_comp);
     } 
 
   private:
