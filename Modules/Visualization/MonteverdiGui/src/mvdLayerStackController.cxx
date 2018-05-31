@@ -150,17 +150,14 @@ LayerStackController
     SLOT( OnProjectionButtonClicked() )
   );  
 
-//bugfix
-  bool conSuc =
+//bugfix for layer deletion
   QObject::connect(
     widget,
-    SIGNAL( LayerDeletingWidget( int ) ),
+    SIGNAL( LayerDeletingWidget( unsigned int ) ),
     // to:
     model,
-    SLOT( Deleting( int ) )
+    SLOT( Deleting( unsigned int ) )
   );
-  std::cout<<"LayerDeletingWidget connect with Deleting : "
-  <<conSuc<<std::endl;
 
   QObject::connect(
     widget,
@@ -300,6 +297,14 @@ LayerStackController
     SLOT( OnProjectionButtonClicked() )
   );  
 
+  //Bugfix for layer deletion
+  QObject::disconnect(
+    widget,
+    SIGNAL( LayerDeletingWidget( unsigned int ) ),
+    // to:
+    model,
+    SLOT( Deleting( unsigned int ) )
+  );
 
   QObject::disconnect(
     widget,

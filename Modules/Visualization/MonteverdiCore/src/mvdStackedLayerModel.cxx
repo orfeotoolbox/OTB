@@ -220,7 +220,7 @@ StackedLayerModel
 /*****************************************************************************/
 void
 StackedLayerModel
-::Deleting( int index )
+::Deleting( unsigned int index )
 {
     // qDebug() << this << "::Delete(" << index << ")";
 
@@ -315,95 +315,8 @@ void
 StackedLayerModel
 ::Delete( SizeType index )
 {
-  /*// qDebug() << this << "::Delete(" << index << ")";
-
-
-  //
-  // Check content.
-  if( IsEmpty() )
-    return;
-
-  if( index>=GetCount() )
-    return;
-
-  assert( !m_Keys[ index ].empty() );
-
-  //
-  // Find item.
-  LayerModelMap::iterator it(
-    m_LayerModels.find( m_Keys[ index ] )
-  );
-
-  assert( it!=m_LayerModels.end() );
-
-  //
-  // Check if signals have to be emitted.
-  bool emitCurrentChanged = m_Current<GetCount() && index<=m_Current;
-  bool emitReferenceChanged = m_Reference<GetCount() && index<=m_Reference;
-
-  //
-  // Remember new current index.
-  SizeType current =
-    index>m_Current
-    ? m_Current
-    : ( m_Current>0
-        ? m_Current - 1
-        : GetCount()>1 ? 0 : StackedLayerModel::NIL_INDEX );
-
-  //
-  // Emit signals.
-  emit ContentAboutToBeChanged();
-  emit LayerAboutToBeDeleted( index );
-
-  //
-  // Clear satellite date.
-  ClearPixelInfos();
-
-  //
-  // Remove layer-model.
-  AbstractLayerModel * layer = it->second;
-
-  // Disconnect the renaming signals
-  QObject::disconnect(
-    layer,
-    SIGNAL( NameChanged() ),
-    // from:
-    this,
-    SIGNAL( LayerRenamed() )
-  );
-
-  m_LayerModels.erase( it );
-
-  m_Keys.erase( m_Keys.begin() + index );
-
-  it = m_LayerModels.end();
-
-  //
-  // Update pointer to current.
-  if( emitCurrentChanged )
-    SetCurrent( current, true );
-
-  //
-  // Update reference pointer.
-  if( emitReferenceChanged )
-    SetReference(
-      index>m_Reference
-      ? m_Reference
-      : ( m_Reference > 0
-	  ? m_Reference - 1
-          : GetCount() > 0 ? 0 : StackedLayerModel::NIL_INDEX ),
-      true
-    );
-
-  //
-  // Eventually delete layer.
-  if( layer->parent()==this )
-    {
-    delete layer;
-    layer = NULL;
-    }
-
-  //*/
+  // the work of deleting model is now done in the above function
+  // Deleting(unsigned int index)
   // Emit signals.
   emit LayerDeleted( index );
   emit ContentChanged();
