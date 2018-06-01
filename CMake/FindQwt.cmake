@@ -99,10 +99,6 @@ endif ()
 
 find_library ( QWT_LIBRARY
   NAMES qwt-qt5 qwt6-qt5 qwt qwt6
-  PATHS
-    /usr/lib
-    /usr/local/lib
-    /usr/local/lib/qt5
 )
 
 set ( QWT_LIBRARIES ${QWT_LIBRARY} )
