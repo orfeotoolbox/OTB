@@ -85,6 +85,11 @@ public:
     m_HorizontalDisparity  = disp;
   }
 
+  int GetBandNumber()
+  {
+        return abs(m_HorizontalDisparity);
+  }
+
   
 
 
