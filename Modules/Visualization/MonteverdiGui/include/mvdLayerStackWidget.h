@@ -160,6 +160,10 @@ public slots:
 // Signals.
 signals:
   /**
+  */
+  //bugFix for layer deletion
+  void LayerDeletingWidget( unsigned int index );
+  /**
    */
   void CurrentChanged( int );
   /**
