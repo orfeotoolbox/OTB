@@ -2370,6 +2370,7 @@ MainWindow
 
   // import the result image into the database
   ImportImage( outfname, false );
+  m_ImageView->updateGL();
 }
 
 /*****************************************************************************/
