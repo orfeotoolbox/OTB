@@ -20,6 +20,8 @@
 
 #include "otbWrapperQtWidgetFloatParameter.h"
 
+#include <limits>
+
 namespace otb
 {
 namespace Wrapper
@@ -38,17 +40,15 @@ QtWidgetFloatParameter::~QtWidgetFloatParameter()
 void QtWidgetFloatParameter::DoUpdateGUI()
 {
   // Update the valid range if updated
-  m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(),
-                             m_FloatParam->GetMaximumValue());
+  m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(), m_FloatParam->GetMaximumValue());
 
-  bool signalsBlocked2 = m_QDoubleSpinBox->blockSignals( true );
-
+  // Update the SpinBox value if parameter has been updated
   if (m_FloatParam->HasValue())
-    {
-    m_QDoubleSpinBox->setValue(m_FloatParam->GetValue());
-    }
-  m_QDoubleSpinBox->blockSignals( signalsBlocked2 );
+  {
+    m_QDoubleSpinBox->SetValueNoSignal(m_FloatParam->GetValue());
+  }
 
+  // Set style depending on UserValue parameter flag
   QFont f = m_QDoubleSpinBox->font();
   if (m_FloatParam->HasUserValue())
     {
@@ -68,18 +68,34 @@ void QtWidgetFloatParameter::DoCreateWidget()
   m_QHBoxLayout->setSpacing(0);
   m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_QDoubleSpinBox = new QDoubleSpinBox;
-  m_QDoubleSpinBox->setDecimals(5);
+  m_QDoubleSpinBox = new QtWidgetDoubleSpinBox;
   m_QDoubleSpinBox->setSingleStep(0.1);
+  m_QDoubleSpinBox->setDecimals(std::numeric_limits<float>::digits10); // max precision, this is 6 for IEEE float
   m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(), m_FloatParam->GetMaximumValue());
-  m_QDoubleSpinBox->setToolTip(
-    QString::fromStdString(
-      m_FloatParam->GetDescription()
-    )
-  );
+  m_QDoubleSpinBox->setToolTip( QString::fromStdString( m_FloatParam->GetDescription()));
 
-  connect( m_QDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(SetValue(double)) );
-  connect( m_QDoubleSpinBox, SIGNAL(valueChanged(double)), GetModel(), SLOT(NotifyUpdate()) );
+  // Block mouse wheel events to the QSpinBox
+  // this is to avoid grabbing focus when scrolling the parent QScrollArea
+  m_QDoubleSpinBox->setFocusPolicy(Qt::StrongFocus);
+  m_QDoubleSpinBox->installEventFilter(this);
+
+  // Set the SpinBox initial value to the parameter value
+  if (m_FloatParam->HasValue())
+    m_QDoubleSpinBox->SetValueNoSignal(m_FloatParam->GetValue());
+
+  // What happens when the Reset button is clicked
+  connect(m_QDoubleSpinBox, &QtWidgetDoubleSpinBox::Cleared,
+          this, &QtWidgetFloatParameter::OnCleared);
+
+  // What happens when the value changed because of user interaction (keyboard or arrows pressed)
+  // Note: to avoid calling this when the value changes automatically (reset button, DoParameterUpdate, XML load),
+  // calls to QSpinBox::setValue() are wrapped with signal blockers
+  connect(m_QDoubleSpinBox, QOverload<double>::of(&QtWidgetDoubleSpinBox::valueChanged),
+          this, &QtWidgetFloatParameter::OnValueChanged);
+
+  // What happens when the SpinBox looses focus, or enter is pressed
+  connect(m_QDoubleSpinBox, &QtWidgetDoubleSpinBox::editingFinished,
+          this, &QtWidgetFloatParameter::OnEditingFinished);
 
   m_QHBoxLayout->addWidget(m_QDoubleSpinBox);
   m_QHBoxLayout->addStretch();
@@ -92,16 +108,45 @@ void QtWidgetFloatParameter::DoCreateWidget()
     }
 }
 
-void QtWidgetFloatParameter::SetValue(double value)
+void QtWidgetFloatParameter::OnCleared()
 {
+  // Set the parameter to its default value
+  m_FloatParam->Reset();
+
+  // Reset the SpinBox value, but avoid triggering its valueChanged signal
+  m_QDoubleSpinBox->SetValueNoSignal(m_FloatParam->GetDefaultValue());
+
+  // Unset user value flag and hide the Reset button
+  m_FloatParam->SetUserValue(false);
+  m_QDoubleSpinBox->DisableClearButton();
+
+  // Call the application DoUpdateParameters, then all widgets' DoUpdateGUI (including this one)
+  this->GetModel()->NotifyUpdate();
+}
+
+void QtWidgetFloatParameter::OnValueChanged(double value)
+{
+  // Set the parameter value, user value flag and show the Reset button
   m_FloatParam->SetValue( static_cast<float>(value) );
-  /** moved to ParameterChanged slot in QtWidgetParameterBase:: **/
-  /** m_FloatParam->SetUserValue(true); **/
+  m_FloatParam->SetUserValue(true);
+  m_QDoubleSpinBox->EnableClearButton();
+}
 
-  QString key( m_FloatParam->GetKey() );
-  emit ParameterChanged(key);
+void QtWidgetFloatParameter::OnEditingFinished()
+{
+  // Call the application DoUpdateParameters, then all widgets' DoUpdateGUI (including this one)
+  this->GetModel()->NotifyUpdate();
+}
 
-  m_FloatParam->SetAutomaticValue(false);
+// Filter mouse wheel events to avoid scrolling issues in parent QScrollArea
+bool QtWidgetFloatParameter::eventFilter(QObject * o, QEvent * e)
+{
+  if ( e->type() == QEvent::Wheel && qobject_cast<QAbstractSpinBox*>( o ) )
+  {
+    e->ignore();
+    return true;
+  }
+  return QWidget::eventFilter( o, e );
 }
 
 }

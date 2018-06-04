@@ -91,7 +91,6 @@ set(QT5_SB_CONFIG
   -skip qtserialbus  \
   -skip qtserialport  \
   -skip qtspeech \
-  -skip qtsvg  \
   -skip qtvirtualkeyboard  \
   -skip qtwayland  \
   -skip qtwebchannel  \

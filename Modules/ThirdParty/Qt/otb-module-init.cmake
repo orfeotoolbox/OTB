@@ -23,6 +23,7 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL REQUIRED)
 find_package(Qt5LinguistTools)
+find_package(Qt5Svg REQUIRED)
 mark_as_advanced( QT_QMAKE_EXECUTABLE )
 
 set(QT_VERSION_STRING ${Qt5Core_VERSION})
