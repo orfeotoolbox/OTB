@@ -44,4 +44,7 @@ void RegisterTests()
 REGISTER_TEST( testCostVolumeFilter );
 REGISTER_TEST( testPatchMatch );
 REGISTER_TEST( testCVF );
+REGISTER_TEST( testOcclusionsFilter ) ;
+
 }
+
