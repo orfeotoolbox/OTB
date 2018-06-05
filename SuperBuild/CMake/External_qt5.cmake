@@ -49,6 +49,12 @@ endif()
 
 file(TO_NATIVE_PATH ${QT5_SB_SRC} QT5_SB_SRC_NATIVE)
 
+if(WIN32)
+  set(QT5_SB_OPENGL_CONFIG "-opengl desktop")
+else()
+  set(QT5_SB_OPENGL_CONFIG "")
+endif()
+
 #Common options for all cases
 # -skip qtbase
 # -skip qttools  (need linguist)
@@ -58,6 +64,7 @@ set(QT5_SB_CONFIG
   -I ${QT5_INCLUDE_PREFIX_NATIVE} -I ${QT5_INCLUDE_FREETYPE_NATIVE} \
   -opensource -confirm-license -release -shared \
   -nomake examples -make tools -no-openssl \
+  ${QT5_SB_OPENGL_CONFIG} \
   -skip qtgamepad  \
   -skip qt3d  \
   -skip qtactiveqt  \
@@ -201,7 +208,7 @@ if(UNIX AND NOT APPLE)
   -D BUILD_DIR=${QT5_SB_BUILD_DIR} 
   -D INSTALL_DIR=${SB_INSTALL_PREFIX} 
   -D DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION} 
-  -P ${CMAKE_SOURCE_DIR}/CMake/font_qt.cmake 
+  -P ${CMAKE_SOURCE_DIR}/CMake/External_font.cmake 
   DEPENDEES install
   WORKING_DIRECTORY ${SB_INSTALL_PREFIX} )
 endif()

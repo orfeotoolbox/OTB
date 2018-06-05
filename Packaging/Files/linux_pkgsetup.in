@@ -75,7 +75,7 @@ chmod +x "$OUT_DIR/mapla.sh"
 sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/otbenv.profile"
 chmod +x "$OUT_DIR/otbenv.profile"
 
-sed -i  -E "s,../lib,$OUT_DIR/lib,g" "$OUT_DIR/bin/qt.conf"
+sed -i  -E "s,Prefix=..,Prefix=$OUT_DIR,g" "$OUT_DIR/bin/qt.conf"
 
 #echo "Creating symbolic links..."
 . ./make_symlinks

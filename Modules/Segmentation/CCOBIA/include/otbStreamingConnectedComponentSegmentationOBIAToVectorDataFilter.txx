@@ -55,7 +55,6 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
 ::ProcessTile()
 {
   // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
-  typedef itk::ExtractImageFilter<VectorImageType, VectorImageType> ExtractImageFilterType;
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
   extract->SetInput( this->GetInput() );
   extract->SetExtractionRegion( this->GetOutput()->GetRequestedRegion() );

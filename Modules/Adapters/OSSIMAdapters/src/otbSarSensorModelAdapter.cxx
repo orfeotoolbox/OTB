@@ -182,8 +182,8 @@ bool SarSensorModelAdapter::WorldToCartesian(const Point3DType & inGeoPoint, Poi
 }
   
 bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & inGeoPoint, 
-							  Point3DType & satelitePosition, 
-							  Point3DType & sateliteVelocity) const
+							  Point3DType & satellitePosition, 
+							  Point3DType & satelliteVelocity) const
 {
   if(m_SensorModel.get() == ITK_NULLPTR)
     {
@@ -205,13 +205,13 @@ bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & in
   if(sensorPos.isNan() || !success)
     return false;
 
-  satelitePosition[0] = sensorPos.x();
-  satelitePosition[1] = sensorPos.y();
-  satelitePosition[2] = sensorPos.z();
+  satellitePosition[0] = sensorPos.x();
+  satellitePosition[1] = sensorPos.y();
+  satellitePosition[2] = sensorPos.z();
 
-  sateliteVelocity[0] = sensorVel.x();
-  sateliteVelocity[1] = sensorVel.y();
-  sateliteVelocity[2] = sensorVel.z();    
+  satelliteVelocity[0] = sensorVel.x();
+  satelliteVelocity[1] = sensorVel.y();
+  satelliteVelocity[2] = sensorVel.z();    
 
   return true;
 }
