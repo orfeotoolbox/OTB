@@ -255,6 +255,9 @@ public slots:
 //
 // Signals.
 signals:
+  
+  //Bugfix for layer deletion
+  void LayerDeletingModel( unsigned int index);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

@@ -192,6 +192,16 @@ LayerStackWidget
     this,
     SIGNAL( ResetEffectsButtonClicked() )
   );
+
+  /////// Bugfix for layer deletion
+  QObject::connect(
+    this->GetItemModel(),
+    SIGNAL( LayerDeletingModel( unsigned int ) ),
+    // to:
+    this,
+    SIGNAL( LayerDeletingWidget( unsigned int) )
+    );
+  ///////////////
 }
 
 /*******************************************************************************/
