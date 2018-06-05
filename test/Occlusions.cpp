@@ -53,6 +53,7 @@
 #include "otbWeightedMedianImageFilter.h"
 #include "otbBijectionCoherencyFilter.h"
 #include "otbFillOcclusionDisparityImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 
 
@@ -78,6 +79,12 @@ int testOcclusionsFilter(int argc, char *argv[])
 
   typedef otb::ImageFileReader<FloatVectorImageType> ReaderType;
   typedef otb::ImageFileWriter<FloatVectorImageType> ImageWriterType;
+
+
+  typedef otb::ImageFileReader<IntVectorImageType> IntVectorImageReaderType;
+  typedef otb::ImageFileWriter<IntVectorImageType> IntVectorImageWriterType;
+
+
   typedef otb::ImageFileReader<IntImageType> IntReaderType;
   typedef otb::ImageFileWriter<IntImageType> IntWriterType;
 
@@ -91,9 +98,14 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_RightDisparityInv->SetFileName(argv[2]); //RightDisparity
   m_RightDisparityInv->UpdateOutputInformation();
 
+  IntVectorImageReaderType::Pointer m_inLeft = IntVectorImageReaderType::New();
+  m_inLeft->SetFileName(argv[3]); 
+  m_inLeft->UpdateOutputInformation();
 
-  std::string argv3 = std::string(argv[3]);
-  #define FILENAME(n) std::string( argv3 + std::string(n)).c_str()
+
+
+  std::string argv4 = std::string(argv[4]);
+  #define FILENAME(n) std::string( argv4 + std::string(n)).c_str()
 
   unsigned int dispMax = 15;
   unsigned int dispMin = 0; 
@@ -130,6 +142,33 @@ int testOcclusionsFilter(int argc, char *argv[])
  writer_FillOcclusions->SetInput( m_FillOccDisparityMap->GetOutput() );  
  writer_FillOcclusions->Update(); 
 
+
+  typedef otb::ImageToVectorImageCastFilter<IntImageType,IntVectorImageType> CastImageFilter;
+  CastImageFilter::Pointer m_CastOccMap = CastImageFilter::New();
+  m_CastOccMap-> SetInput( const_cast <IntImageType *>( m_FillOccDisparityMap->GetOutput() ));
+
+
+
+  typedef otb::ConcatenateVectorImageFilter< IntVectorImageType, IntVectorImageType, IntVectorImageType> ConcatenateVectorImageFilterType;  
+  ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage = ConcatenateVectorImageFilterType::New();
+  m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastOccMap->GetOutput());
+  m_ConcatenateCastOccMapAndLeftImage->SetInput2(m_inLeft->GetOutput());
+
+
+  typedef  otb::WeightMedianImageFilter< IntVectorImageType, FloatVectorImageType > WeightMedianFilter;
+  WeightMedianFilter::Pointer m_WeightOccMapAndLeftImageFilter = WeightMedianFilter::New();
+  m_WeightOccMapAndLeftImageFilter->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
+
+  FloatVectorImageType::SizeType radiusM;
+  radiusM[0] = 19;
+  radiusM[1] = 19;   
+  m_WeightOccMapAndLeftImageFilter->SetRadius(radiusM);
+
+
+  ImageWriterType::Pointer writer_smoothFillDisparity = ImageWriterType::New();
+  writer_smoothFillDisparity->SetFileName( FILENAME("SmoothFillDisparity.tif"));
+ writer_smoothFillDisparity->SetInput( m_WeightOccMapAndLeftImageFilter->GetOutput() );  
+ writer_smoothFillDisparity->Update(); 
 
  
 
