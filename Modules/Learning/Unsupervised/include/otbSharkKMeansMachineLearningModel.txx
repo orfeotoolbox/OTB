@@ -55,7 +55,6 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
         m_Normalized( false ), m_K(2), m_MaximumNumberOfIterations( 10 )
 {
   // Default set HardClusteringModel
-  this->m_ConfidenceIndex = true;
   m_ClusteringModel = boost::make_shared<ClusteringModelType>( &m_Centroids );
 }
 
@@ -175,7 +174,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   // Change quality measurement only if SoftClustering or other clustering method is used.
   if( quality != ITK_NULLPTR )
     {
-    for( unsigned int qid = startIndex; qid < startIndex+size; ++qid )
+    for( unsigned int qid = startIndex; qid < size; ++qid )
       {
       quality->SetMeasurementVector( qid, static_cast<ConfidenceValueType>(1.) );
       }

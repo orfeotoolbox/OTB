@@ -28,11 +28,7 @@ otb_module(OTBLearningBase
     OTBImageBase
     OTBITK
 
-    OPTIONAL_DEPENDS
-    OTBShark
-
-    TEST_DEPENDS
-    OTBBoost
+  TEST_DEPENDS
     OTBTestKernel
     OTBImageIO
 

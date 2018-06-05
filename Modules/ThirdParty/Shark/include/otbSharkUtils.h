@@ -23,7 +23,6 @@
 
 #include <stdexcept>
 #include <string>
-#include <unordered_map>
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -127,27 +126,6 @@ template <class T> void ListSampleToSharkVector(const T * listSample, std::vecto
 {
   assert(listSample != nullptr);
   ListSampleRangeToSharkVector(listSample,output,0, static_cast<unsigned int>(listSample->Size()));
-}
-
-/** Shark assumes that labels are 0 ... (nbClasses-1). This function modifies the labels contained in the input vector and returns a vector with size = nbClasses which allows the translation from the normalised labels to the new ones oldLabel = dictionary[newLabel].
-*/
-template <typename T> void NormalizeLabelsAndGetDictionary(std::vector<T>& labels, 
-                                                           std::vector<T>& dictionary)
-{
-  std::unordered_map<T, T> dictMap;
-  T labelCount{0};
-  for(const auto& l : labels)
-    {
-    if(dictMap.find(l)==dictMap.end())
-      dictMap.insert({l, labelCount++});
-    }
-  dictionary.resize(labelCount);
-  for(auto& l : labels)
-    {
-    auto newLabel = dictMap[l];
-    dictionary[newLabel] = l;
-    l = newLabel;
-    }
 }
   
 }
