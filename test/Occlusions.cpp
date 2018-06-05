@@ -51,9 +51,10 @@
 #include "otbMeanVectorImageFilter.h"
 #include "otbConcatenateVectorImageFilter.h"
 #include "otbWeightedMedianImageFilter.h"
-#include "otbVectorImageToImageListFilter.h"
 #include "otbBijectionCoherencyFilter.h"
-#include "otbStandardFilterWatcher.h"
+#include "otbFillOcclusionDisparityImageFilter.h"
+
+
 
 
 
@@ -62,7 +63,7 @@
 int testOcclusionsFilter(int argc, char *argv[])
   {
   if(argc < 3) {
-  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap RigthDisparityMap outputPathFolder" << std::endl;
+  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap InvRigthDisparityMap outputPathFolder" << std::endl;
   	return EXIT_FAILURE;
   	}
 
@@ -71,6 +72,7 @@ int testOcclusionsFilter(int argc, char *argv[])
 
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<float> FloatVectorImageType;
+  typedef otb::VectorImage<int> IntVectorImageType;
   typedef otb::Image< double, Dimension > FloatImageType;
   typedef otb::Image< int, Dimension > IntImageType;
 
@@ -85,21 +87,51 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_LeftDisparity->SetFileName(argv[1]); //LeftDisparity 
   m_LeftDisparity->UpdateOutputInformation();
 
-  IntReaderType::Pointer m_RightDisparity = IntReaderType::New();
-  m_RightDisparity->SetFileName(argv[2]); //RightDisparity
-  m_RightDisparity->UpdateOutputInformation();
+  IntReaderType::Pointer m_RightDisparityInv = IntReaderType::New();
+  m_RightDisparityInv->SetFileName(argv[2]); //RightDisparity
+  m_RightDisparityInv->UpdateOutputInformation();
 
 
   std::string argv3 = std::string(argv[3]);
   #define FILENAME(n) std::string( argv3 + std::string(n)).c_str()
 
+  unsigned int dispMax = 15;
+  unsigned int dispMin = 0; 
 
 
 
+  // OCCLUSION DETECTION
+  typedef otb::BijectionCoherencyFilter< IntImageType, IntImageType > OcclusionType;
+  OcclusionType::Pointer m_OcclusionFilter = OcclusionType::New();  
+  m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
+  m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparityInv->GetOutput()); 
+   
+  m_OcclusionFilter->SetMaxHDisp(dispMax);
+  m_OcclusionFilter->SetMinHDisp(dispMin);
+  m_OcclusionFilter->SetMinVDisp(0);
+  m_OcclusionFilter->SetMaxVDisp(0);
+  m_OcclusionFilter->SetTolerance(1);
+  
+
+ IntWriterType::Pointer OcclusionWriter = IntWriterType::New(); 
+ OcclusionWriter->SetFileName( FILENAME("Occlusions.tif"));
+ OcclusionWriter->SetInput( m_OcclusionFilter->GetOutput() );  
+ OcclusionWriter->Update(); 
+
+ typedef otb::FillOcclusionDisparityImageFilter<IntImageType, IntImageType, IntImageType> FillOcclusionFilter ;
+ FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
+ m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
+ m_FillOccDisparityMap->SetInput2(m_LeftDisparity->GetOutput() );
+ m_FillOccDisparityMap->SetRadius(0,1);
 
 
+ IntWriterType::Pointer writer_FillOcclusions = IntWriterType::New(); 
+ writer_FillOcclusions->SetFileName( FILENAME("FillOcclusions.tif"));
+ writer_FillOcclusions->SetInput( m_FillOccDisparityMap->GetOutput() );  
+ writer_FillOcclusions->Update(); 
 
 
+ 
 
 
 
