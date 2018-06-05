@@ -150,6 +150,14 @@ LayerStackController
     SLOT( OnProjectionButtonClicked() )
   );  
 
+//bugfix for layer deletion
+  QObject::connect(
+    widget,
+    SIGNAL( LayerDeletingWidget( unsigned int ) ),
+    // to:
+    model,
+    SLOT( Deleting( unsigned int ) )
+  );
 
   QObject::connect(
     widget,
@@ -243,7 +251,7 @@ LayerStackController
   QObject::disconnect(
     model,
     SIGNAL( CurrentChanged( size_t ) ),
-    // from:
+    // from:deletin
     this,
     SLOT( OnStackedLayerCurrentChanged( size_t ) )
   );
@@ -289,6 +297,14 @@ LayerStackController
     SLOT( OnProjectionButtonClicked() )
   );  
 
+  //Bugfix for layer deletion
+  QObject::disconnect(
+    widget,
+    SIGNAL( LayerDeletingWidget( unsigned int ) ),
+    // to:
+    model,
+    SLOT( Deleting( unsigned int ) )
+  );
 
   QObject::disconnect(
     widget,

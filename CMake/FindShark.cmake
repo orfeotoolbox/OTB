@@ -120,7 +120,7 @@ endif()
 
 if(SHARK_USE_CBLAS AND SHARK_USE_DYNLIB)
   set(REQUIRED_CBLAS_LIB CBLAS_LIBRARY)
-  find_library(CBLAS_LIBRARY NAMES cblas)
+  find_library(CBLAS_LIBRARY NAMES cblas blas PATH_SUFFIXES blas)
 else()
   set(REQUIRED_CBLAS_LIB)
 endif()

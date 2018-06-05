@@ -99,7 +99,7 @@ OGRIOHelper
 }
 
 
-inline void
+void
 OGRIOHelper
 ::ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
 {

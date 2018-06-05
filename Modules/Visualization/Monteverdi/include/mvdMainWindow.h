@@ -39,7 +39,7 @@
 
 
 #ifndef USE_OTB_APPS
-#  define USE_OTB_APPS ( ( defined( OTB_DEBUG ) && 0 ) || 1 )
+#  define USE_OTB_APPS 1
 #endif
 
 //
@@ -150,7 +150,7 @@ public slots:
 
   /**
    */
-  void ImportImages( const QStringList & filenames, bool enableOverviews );
+  void ImportImages( const QStringList & filenames, bool enableOverviews = true );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

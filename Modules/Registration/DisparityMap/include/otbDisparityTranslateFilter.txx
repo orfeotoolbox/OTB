@@ -258,7 +258,6 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 
   IndexType minIndex,maxIndex;
   // -Wmaybe-uninitialized
-  typedef typename IndexType::IndexValueType IndexValueType;
   minIndex.Fill(itk::NumericTraits<IndexValueType>::Zero);
   maxIndex.Fill(itk::NumericTraits<IndexValueType>::Zero);
 
@@ -382,7 +381,6 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
       leftGrid->TransformPhysicalPointToContinuousIndex(pointSensor, indexGrid);
 
       // Interpolate in left grid
-      typedef typename IndexType::IndexValueType IndexValueType;
       IndexType ul;
       ul[0] = static_cast<long> (vcl_floor(indexGrid[0]));
       ul[1] = static_cast<long> (vcl_floor(indexGrid[1]));
