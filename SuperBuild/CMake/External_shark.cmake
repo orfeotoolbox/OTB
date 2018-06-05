@@ -30,8 +30,8 @@ ADD_SUPERBUILD_CMAKE_VAR(SHARK BOOST_LIBRARYDIR)
 
 ExternalProject_Add(SHARK
   PREFIX SHARK
-  URL "https://github.com/Shark-ML/Shark/archive/349f29bd71c370e0f88f7fc9aa66fa5c4768fcb0.zip"
-  URL_MD5 d6e4310f943e8dda4a0151612b5c62ce
+  URL "https://github.com/Shark-ML/Shark/archive/v3.1.4.zip"
+  URL_MD5 149e7d2e458cbe65c6373c2e89876b3e
   SOURCE_DIR ${SHARK_SB_SRC}
   BINARY_DIR ${SHARK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
