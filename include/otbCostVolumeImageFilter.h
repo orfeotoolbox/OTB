@@ -60,7 +60,8 @@ public:
   const TOutputImage * GetOutputImage() const;
   TOutputImage * GetOutputImage();
 
-	int GetHDisparity() const ;
+	int GetHorizontalMinDisparity() const ;
+  int GetHorizontalMaxDisparity() const ;
 
 
 
@@ -80,14 +81,27 @@ public:
   void SetRightGradientXInput(const TGradientImage * image);
   void SetRightGradientYInput(const TGradientImage * image);
  
+  void SetMinDisp(int disp)
+  {
+    m_HorizontalMinDisparity  = disp;
+  }
+
+
+  void SetMaxDisp(int disp)
+  {
+    m_HorizontalMaxDisparity  = disp;
+  }
+
   void SetDisp(int disp)
   {
-    m_HorizontalDisparity  = disp;
+    m_HorizontalMaxDisparity  = disp;
   }
+
 
   int GetBandNumber()
   {
-        return abs(m_HorizontalDisparity);
+    unsigned int b = abs(m_HorizontalMinDisparity) + abs(m_HorizontalMaxDisparity);
+    return b ;
   }
 
   
@@ -116,7 +130,8 @@ private:
  void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp); 
 
    /** The min disparity to explore */
-  int                           m_HorizontalDisparity;
+  int                           m_HorizontalMinDisparity;
+  int                           m_HorizontalMaxDisparity;
 
 
    /** The min disparity to explore */

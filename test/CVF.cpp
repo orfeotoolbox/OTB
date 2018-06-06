@@ -129,13 +129,14 @@ int testCVF(int argc, char *argv[])
   m_LeftCost->SetRightInputImage(inRight->GetOutput() );  
   m_LeftCost->SetLeftGradientXInput(gradX->GetOutput() ); 
   m_LeftCost->SetRightGradientXInput(gradY->GetOutput() );      
-  m_LeftCost->SetDisp(dispMax);
+  m_LeftCost->SetMinDisp(dispMin);
+  m_LeftCost->SetMaxDisp(dispMax);
   m_LeftCost->Update();
       
-  // ImageWriterType::Pointer writer_LeftCost = ImageWriterType::New();
-  // writer_LeftCost->SetFileName( FILENAME("LeftCost.tif"));
-  // writer_LeftCost->SetInput(m_LeftCost->GetOutput());
-  // writer_LeftCost->Update();  
+  ImageWriterType::Pointer writer_LeftCost = ImageWriterType::New();
+  writer_LeftCost->SetFileName( FILENAME("LeftCost.tif"));
+  writer_LeftCost->SetInput(m_LeftCost->GetOutput());
+  writer_LeftCost->Update();  
 
 
     // --- RIGHT
@@ -144,7 +145,8 @@ int testCVF(int argc, char *argv[])
   m_RightCost->SetRightInputImage(inLeft->GetOutput() );  
   m_RightCost->SetLeftGradientXInput(gradY->GetOutput() ); 
   m_RightCost->SetRightGradientXInput(gradX->GetOutput() );      
-  m_RightCost->SetDisp(-dispMax);
+  m_RightCost->SetMinDisp(-dispMax);
+  m_RightCost->SetMaxDisp(-dispMin);
   m_RightCost->Update();
       
   // ImageWriterType::Pointer writer_RightCost = ImageWriterType::New();
@@ -166,6 +168,8 @@ int testCVF(int argc, char *argv[])
   writer_m_minCost->Update();
 */
 
+  
+
 
 
   //WEIGHTS  
@@ -180,7 +184,7 @@ int testCVF(int argc, char *argv[])
   // writer_meanLeftCost->SetFileName( FILENAME("LeftWeights.tif"));
   // writer_meanLeftCost->SetInput(m_meanLeftCost->GetOutput());
   // writer_meanLeftCost->Update();
-  
+ 
     // --- RIGHT
   Weights_ak_bk::Pointer m_meanRightCost = Weights_ak_bk::New(); 
   m_meanRightCost->SetInput1(inRight->GetOutput());
@@ -206,7 +210,9 @@ int testCVF(int argc, char *argv[])
   // writer_meanLeftWeights->SetFileName( FILENAME("LeftMeanWeights.tif"));
   // writer_meanLeftWeights->SetInput(m_meanLeftWeights->GetOutput());
   // writer_meanLeftWeights->Update();  
-  
+
+
+
     // --- RIGHT
   MeanVectorImage::Pointer m_meanRightWeights = MeanVectorImage::New();
   m_meanRightWeights->SetInput1(m_meanRightCost->GetOutput());
@@ -217,7 +223,7 @@ int testCVF(int argc, char *argv[])
   // writer_meanRightWeights->SetFileName( FILENAME("RightMeanWeights.tif"));
   // writer_meanRightWeights->SetInput(m_meanRightWeights->GetOutput());
   // writer_meanRightWeights->Update(); 
-  
+
 
 
   //DISPARITY MAP
@@ -233,6 +239,8 @@ int testCVF(int argc, char *argv[])
   writer_LeftDisparity->SetInput(m_LeftDisparity->GetOutput());
   writer_LeftDisparity->Update(); 
   
+
+  
       // --- RIGHT
   MinCostVolume::Pointer m_RightDisparity = MinCostVolume::New();
   m_RightDisparity->SetInput(m_meanRightWeights->GetOutput());
@@ -241,6 +249,8 @@ int testCVF(int argc, char *argv[])
   writer_RightDisparity->SetFileName( FILENAME("RightDisparity.tif"));
   writer_RightDisparity->SetInput(m_RightDisparity->GetOutput());
   writer_RightDisparity->Update(); 
+
+
 
 /*
 
