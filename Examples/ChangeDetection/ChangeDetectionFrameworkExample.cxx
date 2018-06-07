@@ -141,7 +141,7 @@ public:
 
 protected:
   MyChangeDetectorImageFilter() {}
-  ~MyChangeDetectorImageFilter() ITK_OVERRIDE {}
+  ~MyChangeDetectorImageFilter() override {}
 
 private:
   MyChangeDetectorImageFilter(const Self &); //purposely not implemented

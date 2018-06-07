@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetBoolParameter : public QtWidgetParameterBase
 
 public:
   QtWidgetBoolParameter(BoolParameter*, QtWidgetModel*);
-  ~QtWidgetBoolParameter() ITK_OVERRIDE;
+  ~QtWidgetBoolParameter() override;
 
 public slots:
   void SetValue( bool value );
@@ -52,9 +52,9 @@ private:
   QtWidgetBoolParameter(const QtWidgetBoolParameter&) = delete;
   void operator=(const QtWidgetBoolParameter&) = delete;
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   QToolButton *m_Button;
 };

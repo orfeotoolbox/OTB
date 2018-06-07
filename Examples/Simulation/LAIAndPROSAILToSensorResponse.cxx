@@ -135,10 +135,10 @@ protected:
     {
     m_Image = ITK_NULLPTR;
     }
-  ~ImageUniqueValuesCalculator() ITK_OVERRIDE
+  ~ImageUniqueValuesCalculator() override
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Image: " << m_Image.GetPointer() << std::endl;
@@ -452,9 +452,9 @@ public:
 
 protected:
   TernaryFunctorImageFilterWithNBands() {}
-  ~TernaryFunctorImageFilterWithNBands() ITK_OVERRIDE {}
+  ~TernaryFunctorImageFilterWithNBands() override {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel( m_NumberOfOutputBands );
