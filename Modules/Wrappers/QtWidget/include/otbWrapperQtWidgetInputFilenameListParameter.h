@@ -54,11 +54,8 @@ public:
 //
 // Private methods.
 private:
-  // purposely not implemented
-  QtWidgetInputFilenameListParameter( const QtWidgetInputFilenameListParameter & );
-
-  //  purposely not implemented
-  void operator = ( const QtWidgetInputFilenameListParameter & );
+  QtWidgetInputFilenameListParameter( const QtWidgetInputFilenameListParameter & ) = delete;
+  void operator = ( const QtWidgetInputFilenameListParameter & ) = delete;
 };
 
 

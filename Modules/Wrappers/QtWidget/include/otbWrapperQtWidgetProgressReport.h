@@ -82,8 +82,8 @@ public slots:
   void AddNewProcessToReport();
 
 private:
-  QtWidgetProgressReport(const QtWidgetProgressReport&); //purposely not implemented
-  void operator=(const QtWidgetProgressReport&); //purposely not implemented
+  QtWidgetProgressReport(const QtWidgetProgressReport&) = delete;
+  void operator=(const QtWidgetProgressReport&) = delete;
 
   Application::Pointer              m_Application;
   QtWidgetModel *                   m_Model;

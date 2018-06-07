@@ -134,8 +134,8 @@ protected:
   }
 
 private:
-  MultiChannelRAndBAndNIRIndexImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiChannelRAndBAndNIRIndexImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Red channel index */
   unsigned int m_RedIndex;

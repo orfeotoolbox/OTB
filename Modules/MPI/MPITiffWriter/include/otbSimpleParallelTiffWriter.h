@@ -264,8 +264,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SimpleParallelTiffWriter(const SimpleParallelTiffWriter &); //purposely not implemented
-  void operator =(const SimpleParallelTiffWriter&); //purposely not implemented
+  SimpleParallelTiffWriter(const SimpleParallelTiffWriter &) = delete;
+  void operator =(const SimpleParallelTiffWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {

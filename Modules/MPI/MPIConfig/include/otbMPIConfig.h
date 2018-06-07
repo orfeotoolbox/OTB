@@ -81,8 +81,8 @@ protected:
 
 private:
 
-  MPIConfig(const MPIConfig &); //purposely not implemented
-  void operator =(const MPIConfig&); //purposely not implemented
+  MPIConfig(const MPIConfig &) = delete;
+  void operator =(const MPIConfig&) = delete;
 
   // MPI rank
   unsigned int m_MyRank;

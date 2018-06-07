@@ -94,8 +94,8 @@ protected:
 
 
 private:
-  Parser(const Self &);             //purposely not implemented
-  void operator =(const Self &);    //purposely not implemented
+  Parser(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
   typedef itk::SmartPointer<ParserImpl> ParserImplPtr;
   ParserImplPtr m_InternalParser;

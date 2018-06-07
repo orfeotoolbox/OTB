@@ -92,8 +92,8 @@ protected:
   void GenerateData() override;
 
 private:
-  ImageToEdgePathFilter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  ImageToEdgePathFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   PixelType m_ForegroundValue;
 };

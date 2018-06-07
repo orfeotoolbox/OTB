@@ -67,8 +67,8 @@ protected:
   ~QtWidgetParameterFactory() override;
 
 private:
-  QtWidgetParameterFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  QtWidgetParameterFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

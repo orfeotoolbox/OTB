@@ -166,8 +166,8 @@ protected:
   ~ImageToGenericRSOutputParameters() override {}
 
 private:
-  ImageToGenericRSOutputParameters(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToGenericRSOutputParameters(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void UpdateTransform();
   void EstimateOutputImageExtent();

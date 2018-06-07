@@ -104,8 +104,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageToProfileFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToProfileFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The filter used to compute the profile */
   FilterPointerType m_Filter;

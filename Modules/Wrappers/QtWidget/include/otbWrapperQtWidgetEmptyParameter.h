@@ -46,8 +46,8 @@ public:
   ~QtWidgetEmptyParameter() override;
 
 private:
-  QtWidgetEmptyParameter(const QtWidgetEmptyParameter&); //purposely not implemented
-  void operator=(const QtWidgetEmptyParameter&); //purposely not implemented
+  QtWidgetEmptyParameter(const QtWidgetEmptyParameter&) = delete;
+  void operator=(const QtWidgetEmptyParameter&) = delete;
 
   void DoCreateWidget() override;
 

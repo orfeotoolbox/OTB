@@ -104,8 +104,8 @@ protected:
   ~MultiplyByScalarImageFilter() override {}
 
 private:
-  MultiplyByScalarImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiplyByScalarImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

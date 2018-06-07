@@ -130,8 +130,8 @@ protected:
 
 private:
 
-  PleiadesImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PleiadesImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

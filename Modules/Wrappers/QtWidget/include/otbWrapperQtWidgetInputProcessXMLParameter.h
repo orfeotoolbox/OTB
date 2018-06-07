@@ -53,8 +53,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetInputProcessXMLParameter(const QtWidgetInputProcessXMLParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputProcessXMLParameter&); //purposely not implemented
+  QtWidgetInputProcessXMLParameter(const QtWidgetInputProcessXMLParameter&) = delete;
+  void operator=(const QtWidgetInputProcessXMLParameter&) = delete;
 
   void DoCreateWidget() override;
 

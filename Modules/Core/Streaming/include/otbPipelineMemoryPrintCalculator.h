@@ -137,8 +137,8 @@ protected:
   MemoryPrintType EvaluateProcessObjectPrintRecursive(ProcessObjectType * process);
 
 private:
-  PipelineMemoryPrintCalculator(const Self &); //purposely not implemented
-  void operator =(const Self&);                //purposely not implemented
+  PipelineMemoryPrintCalculator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The total memory print of the pipeline */
   MemoryPrintType       m_MemoryPrint;

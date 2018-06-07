@@ -53,8 +53,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetComplexInputImageParameter(const QtWidgetComplexInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetComplexInputImageParameter&); //purposely not implemented
+  QtWidgetComplexInputImageParameter(const QtWidgetComplexInputImageParameter&) = delete;
+  void operator=(const QtWidgetComplexInputImageParameter&) = delete;
 
   void DoCreateWidget() override;
 

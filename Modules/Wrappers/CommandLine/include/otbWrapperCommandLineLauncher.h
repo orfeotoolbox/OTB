@@ -169,8 +169,8 @@ protected:
 
 private:
 
-  CommandLineLauncher(const CommandLineLauncher &); //purposely not implemented
-  void operator =(const CommandLineLauncher&); //purposely not implemented
+  CommandLineLauncher(const CommandLineLauncher &) = delete;
+  void operator =(const CommandLineLauncher&) = delete;
 
   std::string                       m_Path;
 

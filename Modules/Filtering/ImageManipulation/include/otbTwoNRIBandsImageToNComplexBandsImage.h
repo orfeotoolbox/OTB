@@ -82,8 +82,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  TwoNRIBandsImageToNComplexBandsImage(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TwoNRIBandsImageToNComplexBandsImage(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
 };

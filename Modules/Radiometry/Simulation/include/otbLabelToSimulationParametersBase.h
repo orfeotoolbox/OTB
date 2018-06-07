@@ -97,8 +97,8 @@ protected:
 
 
 private:
-   LabelToSimulationParametersBase(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
+   LabelToSimulationParametersBase(const Self &) = delete;
+   void operator =(const Self&) = delete;
 
    ParametersType m_Step1Parameters;
    ParametersType m_Step2Parameters;

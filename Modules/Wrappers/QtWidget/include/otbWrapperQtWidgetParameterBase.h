@@ -82,8 +82,8 @@ protected:
   Parameter * GetParam();
 
 private:
-  QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
-  void operator=(const QtWidgetParameterBase&); //purposely not implemented
+  QtWidgetParameterBase(const QtWidgetParameterBase&) = delete;
+  void operator=(const QtWidgetParameterBase&) = delete;
 
   virtual void DoUpdateGUI() = 0;
 

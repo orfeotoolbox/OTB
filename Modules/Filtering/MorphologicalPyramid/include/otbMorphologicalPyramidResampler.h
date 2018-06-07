@@ -89,8 +89,8 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 private:
-  Resampler(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  Resampler(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /// Output image size
   SizeType m_Size;
 };

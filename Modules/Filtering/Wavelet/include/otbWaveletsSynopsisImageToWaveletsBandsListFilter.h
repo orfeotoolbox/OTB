@@ -102,8 +102,8 @@ protected:
   virtual void GenerateData(void) override;
 
 private:
-  WaveletsSynopsisImageToWaveletsBandsListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WaveletsSynopsisImageToWaveletsBandsListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The number of levels in the decomposition */
   unsigned int m_NumberOfLevels;

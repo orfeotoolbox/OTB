@@ -192,8 +192,8 @@ protected:
   TransformFilterPointerType m_TransformFilter;
 
 private:
-  FastICAImageFilter( const Self & ); //purposely not implemented
-  void operator =( const Self & ); //purposely not implemented
+  FastICAImageFilter( const Self & ) = delete;
+  void operator =( const Self & ) = delete;
 }; // end of class
 
 } // end of namespace otb

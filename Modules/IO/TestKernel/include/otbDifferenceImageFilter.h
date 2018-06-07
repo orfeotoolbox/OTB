@@ -123,8 +123,8 @@ protected:
   itk::Array<unsigned long>   m_ThreadNumberOfPixels;
 
 private:
-  DifferenceImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DifferenceImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

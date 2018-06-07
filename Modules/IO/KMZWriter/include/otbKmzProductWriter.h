@@ -177,8 +177,8 @@ protected:
   virtual void Write();
 
 private:
-  KmzProductWriter(const Self &); //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  KmzProductWriter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
    /** Mehtod to initialize the variables*/
    virtual void Initialize();

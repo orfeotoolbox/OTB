@@ -49,8 +49,8 @@ protected slots:
   void SetValue( int value );
 
 private:
-  QtWidgetRAMParameter(const QtWidgetRAMParameter&); //purposely not implemented
-  void operator=(const QtWidgetRAMParameter&); //purposely not implemented
+  QtWidgetRAMParameter(const QtWidgetRAMParameter&) = delete;
+  void operator=(const QtWidgetRAMParameter&) = delete;
 
   void DoCreateWidget() override;
 

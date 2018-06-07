@@ -118,8 +118,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RadiometricMomentsImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  RadiometricMomentsImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NeighborhoodRadius;
   FunctorType m_Functor;

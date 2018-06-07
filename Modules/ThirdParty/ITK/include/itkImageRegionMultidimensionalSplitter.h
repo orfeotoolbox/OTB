@@ -111,8 +111,8 @@ protected:
   void PrintSelf(std::ostream & os, Indent indent) const;
 
 private:
-  ImageRegionMultidimensionalSplitter(const Self &); //purposely not implemented
-  void operator=(const Self &);                      //purposely not implemented
+  ImageRegionMultidimensionalSplitter(const Self &) = delete;
+  void operator=(const Self &) = delete;
 
   static unsigned int ComputeSplits(unsigned int numberOfPieces,
                                     const RegionType &region,

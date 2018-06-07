@@ -82,8 +82,8 @@ protected:
   void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
 
 private:
-  LabelMapWithClassLabelToClassLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapWithClassLabelToClassLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 

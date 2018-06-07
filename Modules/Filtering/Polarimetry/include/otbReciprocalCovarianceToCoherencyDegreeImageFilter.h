@@ -150,8 +150,8 @@ protected:
   ~ReciprocalCovarianceToCoherencyDegreeImageFilter() override {}
 
 private:
-  ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);                  //purposely not implemented
+  ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 
 };

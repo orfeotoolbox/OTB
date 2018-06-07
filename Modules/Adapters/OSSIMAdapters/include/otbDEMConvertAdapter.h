@@ -52,8 +52,8 @@ protected:
   ~DEMConvertAdapter() override;
 
 private:
-  DEMConvertAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DEMConvertAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

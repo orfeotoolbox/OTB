@@ -210,8 +210,8 @@ protected:
 
 private:
 
-  OBIAMuParserFunctor(const Self &); //purposely not implemented
-  void operator =(const Self &); //purposely not implemented
+  OBIAMuParserFunctor(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
   std::string m_Expression;
   ParserType::Pointer m_Parser;

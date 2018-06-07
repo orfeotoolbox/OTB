@@ -87,8 +87,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HaralickTexturesIFFactory(const Self& ); //purposely not implemented
-  void operator=(const Self& ); //purposely not implemented
+  HaralickTexturesIFFactory(const Self& ) = delete;
+  void operator=(const Self& ) = delete;
 
 };
 

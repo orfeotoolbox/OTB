@@ -124,8 +124,8 @@ protected:
   StreamingManagerPointer m_StreamingManager;
 
 private:
-  ImageToPointSetFilter(const ImageToPointSetFilter &); //purposely not implemented
-  void operator =(const ImageToPointSetFilter&); //purposely not implemented
+  ImageToPointSetFilter(const ImageToPointSetFilter &) = delete;
+  void operator =(const ImageToPointSetFilter&) = delete;
 
 };
 

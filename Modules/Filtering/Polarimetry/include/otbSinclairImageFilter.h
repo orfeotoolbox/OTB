@@ -117,8 +117,8 @@ protected:
 
 private:
 
-  SinclairImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SinclairImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

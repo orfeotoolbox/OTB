@@ -93,8 +93,8 @@ protected:
   ~CommandLineParser() override;
 
 private:
-  CommandLineParser(const CommandLineParser &); //purposely not implemented
-  void operator =(const CommandLineParser&); //purposely not implemented
+  CommandLineParser(const CommandLineParser &) = delete;
+  void operator =(const CommandLineParser&) = delete;
 
 
   /** Return true if the found key is valid : not a number */

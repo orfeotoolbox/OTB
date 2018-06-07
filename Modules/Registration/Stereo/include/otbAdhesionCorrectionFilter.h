@@ -163,8 +163,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  AdhesionCorrectionFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AdhesionCorrectionFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   SizeType                      m_ImageSize;
   /** The radius for correlation */

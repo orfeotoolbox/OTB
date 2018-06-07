@@ -65,8 +65,8 @@ protected:
   ~NormalBayesMachineLearningModelFactory() override;
 
 private:
-  NormalBayesMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NormalBayesMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

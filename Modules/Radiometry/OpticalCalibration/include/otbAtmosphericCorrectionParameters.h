@@ -145,8 +145,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  AtmosphericCorrectionParameters(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AtmosphericCorrectionParameters(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Path to an Aeronet data file, allows computing aerosol optical and water vapor amounts. */
   std::string m_AeronetFileName;
   /** Day */

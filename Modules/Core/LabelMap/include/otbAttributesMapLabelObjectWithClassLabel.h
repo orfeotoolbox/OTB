@@ -142,8 +142,8 @@ protected:
     }
 
 private:
-  AttributesMapLabelObjectWithClassLabel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AttributesMapLabelObjectWithClassLabel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The class label */
   ClassLabelType m_ClassLabel;

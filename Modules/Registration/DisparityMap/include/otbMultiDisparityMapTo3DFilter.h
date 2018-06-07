@@ -172,8 +172,8 @@ protected:
   void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  MultiDisparityMapTo3DFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiDisparityMapTo3DFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Keywordlist of reference sensor image */
   ImageKeywordListType m_ReferenceKeywordList;

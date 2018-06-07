@@ -115,8 +115,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  UnaryFunctorVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 }; // end of class

@@ -143,8 +143,8 @@ protected:
 
 
 private:
-  LabelImageToLabelMapWithAdjacencyFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelImageToLabelMapWithAdjacencyFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   OutputImagePixelType m_BackgroundValue;
 

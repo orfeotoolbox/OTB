@@ -109,8 +109,8 @@ protected:
   virtual ~SarSensorModelAdapter() override;
 
 private:
-  SarSensorModelAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarSensorModelAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InternalModelPointer m_SensorModel;
 };

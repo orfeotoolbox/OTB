@@ -91,8 +91,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  NormalBayesMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NormalBayesMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 #ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::NormalBayesClassifier> m_NormalBayesModel;
 #else

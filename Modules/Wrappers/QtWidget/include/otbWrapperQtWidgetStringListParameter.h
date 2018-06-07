@@ -57,11 +57,9 @@ public:
 //
 // Private methods.
 private:
-   // Purposely not implemented.
-  QtWidgetStringListParameter( const QtWidgetStringListParameter & );
+  QtWidgetStringListParameter( const QtWidgetStringListParameter & ) = delete;
 
-  // Purposely not implemented
-  void operator = ( const QtWidgetStringListParameter & );
+  void operator = ( const QtWidgetStringListParameter & ) = delete;
 };
 
 

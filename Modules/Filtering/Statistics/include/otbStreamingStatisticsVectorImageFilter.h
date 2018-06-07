@@ -231,8 +231,8 @@ protected:
   void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentStreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentStreamingStatisticsVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   bool m_EnableMinMax;
   bool m_EnableFirstOrderStats;
@@ -496,8 +496,8 @@ protected:
   ~StreamingStatisticsVectorImageFilter() override {}
 
 private:
-  StreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingStatisticsVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

@@ -86,8 +86,8 @@ protected:
   ~ExtendedFilenameHelper() override {}
 
 private:
-  ExtendedFilenameHelper(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ExtendedFilenameHelper(const Self &) = delete;
+  void operator =(const Self&) = delete;
   itkSetStringMacro(SimpleFileName);
 
   std::string                          m_ExtendedFileName;

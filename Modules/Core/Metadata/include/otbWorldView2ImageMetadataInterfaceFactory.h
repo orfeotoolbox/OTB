@@ -63,8 +63,8 @@ protected:
   ~WorldView2ImageMetadataInterfaceFactory() override;
 
 private:
-  WorldView2ImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WorldView2ImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

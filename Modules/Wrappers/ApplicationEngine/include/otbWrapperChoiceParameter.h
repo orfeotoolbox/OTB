@@ -122,8 +122,8 @@ protected:
   unsigned int m_CurrentChoice;
 
 private:
-  ChoiceParameter(const ChoiceParameter &); //purposely not implemented
-  void operator =(const ChoiceParameter&); //purposely not implemented
+  ChoiceParameter(const ChoiceParameter &) = delete;
+  void operator =(const ChoiceParameter&) = delete;
 
 }; // End class Parameter
 

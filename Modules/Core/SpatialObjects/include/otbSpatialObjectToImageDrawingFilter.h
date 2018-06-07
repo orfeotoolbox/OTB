@@ -156,8 +156,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SpatialObjectToImageDrawingFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SpatialObjectToImageDrawingFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

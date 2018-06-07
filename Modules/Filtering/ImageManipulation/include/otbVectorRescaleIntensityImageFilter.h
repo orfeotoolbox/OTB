@@ -278,8 +278,8 @@ protected:
   ~VectorRescaleIntensityImageFilter() override {}
 
 private:
-  VectorRescaleIntensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorRescaleIntensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputPixelType m_OutputMinimum;
   OutputPixelType m_OutputMaximum;

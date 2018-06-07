@@ -74,8 +74,8 @@ protected:
   void GenerateData() override;
 
 private:
-  NNearestPointsLinearInterpolateDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NNearestPointsLinearInterpolateDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfPoints;
 };

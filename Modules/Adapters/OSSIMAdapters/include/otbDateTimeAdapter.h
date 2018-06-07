@@ -88,8 +88,8 @@ protected:
   ~DateTimeAdapter() override;
 
 private:
-  DateTimeAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DateTimeAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ossimLocalTm *m_LocalTm;
 

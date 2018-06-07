@@ -107,8 +107,8 @@ protected:
 //
 // Private methods.
 private:
-  InputImageListParameter( const Parameter & ); //purposely not implemented
-  void operator = ( const Parameter & ); //purposely not implemented
+  InputImageListParameter( const Parameter & ) = delete;
+  void operator = ( const Parameter & ) = delete;
 
   InputImageParameter::Pointer
     FromImage( ImageBaseType * );

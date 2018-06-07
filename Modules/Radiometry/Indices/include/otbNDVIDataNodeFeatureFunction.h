@@ -121,8 +121,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  NDVIDataNodeFeatureFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  NDVIDataNodeFeatureFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** NDVI Threshold & Functor */
   PrecisionType               m_NDVIThreshold;

@@ -221,8 +221,8 @@ protected:
   MetaDataDictionaryType m_MetaDataDictionary;
 
 private:
-  ImageMetadataInterfaceBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageMetadataInterfaceBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OTB_GCP            m_GCP;
 };

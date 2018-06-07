@@ -218,8 +218,8 @@ protected:
   unsigned int m_DatasetNumber;
 
 private:
-  GDALImageIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GDALImageIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Determine real file name to write the image */
   std::string GetGdalWriteImageFileName(const std::string& gdalDriverShortName, const std::string& filename) const;

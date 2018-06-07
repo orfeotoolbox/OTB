@@ -155,8 +155,8 @@ protected:
   bool m_SortBands;
 
 private:
-  SatelliteRSR(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SatelliteRSR(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Vector of SpectralResponse */
   RSRVectorType m_RSR;

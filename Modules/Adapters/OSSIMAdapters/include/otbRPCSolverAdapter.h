@@ -79,11 +79,11 @@ public:
 
 
 private:
-  RPCSolverAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-  RPCSolverAdapter(); // purposely not implemented, this class defines
+  RPCSolverAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
+  RPCSolverAdapter() = delete;, this class defines
                       // typedefs and exposes static methods
-  virtual ~RPCSolverAdapter(); // purposely not implemented, this class defines
+  virtual ~RPCSolverAdapter() = delete;, this class defines
                               // typedefs and exposes static methods
 };
 

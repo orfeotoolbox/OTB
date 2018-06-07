@@ -72,8 +72,8 @@ protected:
   virtual void  AllocateOutputs();
 
 private:
-  LabelMapSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelMapSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

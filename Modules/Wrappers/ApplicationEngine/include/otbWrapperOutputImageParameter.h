@@ -127,8 +127,8 @@ protected:
   ImagePixelType         m_DefaultPixelType;
 
 private:
-  OutputImageParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  OutputImageParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
   unsigned int                  m_RAMValue;
 

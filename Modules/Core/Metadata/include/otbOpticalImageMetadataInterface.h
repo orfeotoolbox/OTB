@@ -105,8 +105,8 @@ protected:
 
 
 private:
-  OpticalImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OpticalImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

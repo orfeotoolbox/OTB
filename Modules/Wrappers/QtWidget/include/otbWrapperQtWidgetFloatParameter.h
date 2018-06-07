@@ -48,8 +48,8 @@ protected slots:
   void SetValue( double value );
 
 private:
-  QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
-  void operator=(const QtWidgetFloatParameter&); //purposely not implemented
+  QtWidgetFloatParameter(const QtWidgetFloatParameter&) = delete;
+  void operator=(const QtWidgetFloatParameter&) = delete;
 
   void DoCreateWidget() override;
 

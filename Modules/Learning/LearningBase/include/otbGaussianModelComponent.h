@@ -97,8 +97,8 @@ protected:
   void GenerateData() override;
 
 private:
-  GaussianModelComponent(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GaussianModelComponent(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typename NativeMembershipFunctionType::Pointer m_GaussianMembershipFunction;
   // TODO add a m_GaussianCumulativeFunction

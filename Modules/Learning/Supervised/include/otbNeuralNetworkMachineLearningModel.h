@@ -186,8 +186,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NeuralNetworkMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void CreateNetwork();
   void SetupNetworkAndTrain(cv::Mat& labels);

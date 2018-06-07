@@ -207,8 +207,8 @@ protected:
 
 private:
 
-  ImageToSURFKeyPointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToSURFKeyPointSetFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Number of octaves */
   int m_OctavesNumber;

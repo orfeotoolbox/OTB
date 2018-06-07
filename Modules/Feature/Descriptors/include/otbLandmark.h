@@ -81,8 +81,8 @@ protected:
   }
 
 private:
-  Landmark(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Landmark(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /// First landmark point
   PointType m_Point1;

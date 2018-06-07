@@ -206,8 +206,8 @@ protected:
   ogr::Layer GetInMemoryOutput(unsigned int threadId, unsigned int index=0);
 
 private:
-  PersistentSamplingFilterBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentSamplingFilterBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Field name containing the class name*/
   std::string m_FieldName;

@@ -62,8 +62,8 @@ protected:
   ~QuickBirdImageMetadataInterfaceFactory() override;
 
 private:
-  QuickBirdImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  QuickBirdImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

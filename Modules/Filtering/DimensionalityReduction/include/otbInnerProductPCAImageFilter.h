@@ -140,8 +140,8 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  InnerProductPCAImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  InnerProductPCAImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The number of largest principal components  */
   unsigned int m_NumberOfPrincipalComponentsRequired;

@@ -52,8 +52,8 @@ public slots:
   void SetActivationState( bool value ) override;
 
 private:
-  QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
-  void operator=(const QtWidgetParameterGroup&); //purposely not implemented
+  QtWidgetParameterGroup(const QtWidgetParameterGroup&) = delete;
+  void operator=(const QtWidgetParameterGroup&) = delete;
 
   void DoCreateWidget() override;
 

@@ -320,8 +320,8 @@ protected:
       }
   }
 private:
-  AttributesMapLabelObject(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AttributesMapLabelObject(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The attributes map */
   AttributesMapType m_Attributes;

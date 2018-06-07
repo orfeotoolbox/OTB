@@ -617,8 +617,8 @@ protected:
 #endif
 
 private:
-  MeanShiftSmoothingImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MeanShiftSmoothingImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Range bandwidth */
   RealType m_RangeBandwidth;

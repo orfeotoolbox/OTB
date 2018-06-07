@@ -59,11 +59,8 @@ public:
 //
 // Private methods.
 private:
-  // Purposely not implemented
-  QtWidgetInputImageListParameter( const QtWidgetInputImageListParameter & );
-
-  // Purposely not implemented
-  void operator = ( const QtWidgetInputImageListParameter & );
+  QtWidgetInputImageListParameter( const QtWidgetInputImageListParameter & ) = delete;
+  void operator = ( const QtWidgetInputImageListParameter & ) = delete;
 };
 
 

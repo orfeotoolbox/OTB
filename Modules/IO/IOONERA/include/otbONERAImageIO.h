@@ -150,8 +150,8 @@ protected:
   std::fstream m_Headerfile;
 
 private:
-  ONERAImageIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ONERAImageIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Analyze the input file name : if it's a directory, check
     * that a header file exists (ENT...) and set OneraFileName to it

@@ -121,8 +121,8 @@ protected:
                                           const OutputImageRegionType *outputRegionForThread) const;
 
 private:
-  DrawLineSpatialObjectListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DrawLineSpatialObjectListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputPixelType m_Value;
   int             m_Length;

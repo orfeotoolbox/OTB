@@ -63,8 +63,8 @@ protected:
   virtual ~SharkRandomForestsMachineLearningModelFactory();
 
 private:
-  SharkRandomForestsMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SharkRandomForestsMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

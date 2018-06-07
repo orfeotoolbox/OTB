@@ -240,8 +240,8 @@ private:
    */ 
   virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality= ITK_NULLPTR) const = 0;  
  
-  MachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // end namespace otb
 

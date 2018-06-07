@@ -83,8 +83,8 @@ class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
 private:
 
-  SarCalibrationLookupData(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarCalibrationLookupData(const Self&) = delete;
+  void operator =(const Self&) = delete;
   short m_Type;
 
 };

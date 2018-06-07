@@ -86,8 +86,8 @@ protected:
   InputPathConstPointer m_Path;
 
 private:
-  PathFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

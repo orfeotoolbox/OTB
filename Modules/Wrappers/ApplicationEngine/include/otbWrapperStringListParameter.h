@@ -101,11 +101,9 @@ protected:
 //
 // Private methods.
 private:
-  // Purposely not implemented
-  StringListParameter ( const StringListParameter & );
+  StringListParameter ( const StringListParameter & ) = delete;
 
-  // Purposely not implemented
-  void operator = ( const StringListParameter & );
+  void operator = ( const StringListParameter & ) = delete;
 
 }; // End class Parameter
 

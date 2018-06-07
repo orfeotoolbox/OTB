@@ -137,8 +137,8 @@ protected:
    */
   OffsetVectorType GetThreeNeighborOffsetFromDirection(double direction, unsigned int flagReverse);
 private:
-  VectorizationPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorizationPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Amplitude threshold to start following a path */
   InputPixelType m_AmplitudeThreshold;
 };

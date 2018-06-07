@@ -90,8 +90,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OpeningClosingMorphologicalFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OpeningClosingMorphologicalFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Morphological operation kernel  */
   KernelType m_Kernel;
 };

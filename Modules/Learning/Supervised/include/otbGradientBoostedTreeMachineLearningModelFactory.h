@@ -67,8 +67,8 @@ protected:
   ~GradientBoostedTreeMachineLearningModelFactory() override;
 
 private:
-  GradientBoostedTreeMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GradientBoostedTreeMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

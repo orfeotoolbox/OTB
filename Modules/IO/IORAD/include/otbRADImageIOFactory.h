@@ -62,8 +62,8 @@ protected:
   ~RADImageIOFactory() override;
 
 private:
-  RADImageIOFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RADImageIOFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

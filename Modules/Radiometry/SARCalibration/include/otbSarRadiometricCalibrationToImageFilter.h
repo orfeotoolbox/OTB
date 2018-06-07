@@ -122,8 +122,8 @@ protected:
 
 private:
 
-  SarRadiometricCalibrationToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarRadiometricCalibrationToImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
   short m_LookupSelected;

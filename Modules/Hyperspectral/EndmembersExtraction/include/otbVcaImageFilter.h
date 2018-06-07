@@ -127,8 +127,8 @@ protected:
   void GenerateData() override;
 
 private:
-  VCAImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VCAImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfEndmembers;
 };

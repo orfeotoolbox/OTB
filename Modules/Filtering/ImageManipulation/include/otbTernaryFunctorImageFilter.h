@@ -74,8 +74,8 @@ protected:
   }
 
 private:
-  TernaryFunctorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TernaryFunctorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

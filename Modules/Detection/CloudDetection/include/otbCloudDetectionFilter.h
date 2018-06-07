@@ -78,8 +78,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  CloudDetectionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  CloudDetectionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

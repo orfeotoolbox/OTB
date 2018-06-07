@@ -94,8 +94,8 @@ protected:
 
 
 private:
-   LabelToProSailParameters(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
+   LabelToProSailParameters(const Self &) = delete;
+   void operator =(const Self&) = delete;
 
 
 };

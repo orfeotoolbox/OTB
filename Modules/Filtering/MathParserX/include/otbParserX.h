@@ -112,8 +112,8 @@ protected:
 
 
 private:
-  ParserX(const Self &);             //purposely not implemented
-  void operator =(const Self &);    //purposely not implemented
+  ParserX(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
   typedef itk::SmartPointer<ParserXImpl> ParserXImplPtr;
   ParserXImplPtr m_InternalParserX;

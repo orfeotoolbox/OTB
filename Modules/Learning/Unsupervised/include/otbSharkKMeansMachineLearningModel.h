@@ -143,8 +143,8 @@ protected:
   void PrintSelf(std::ostream &os, itk::Indent indent) const override;
 
 private:
-  SharkKMeansMachineLearningModel(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  SharkKMeansMachineLearningModel(const Self &) = delete;
+  void operator=(const Self &) = delete;
 
   // Parameters set by the user
   bool m_Normalized;

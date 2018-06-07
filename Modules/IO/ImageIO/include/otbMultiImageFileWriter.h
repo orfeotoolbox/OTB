@@ -191,7 +191,7 @@ protected:
   /** Returns the current stream region of the given input */
   virtual RegionType GetStreamRegion(int inputIndex);
 
-  void operator =(const MultiImageFileWriter&); //purposely not implemented
+  void operator =(const MultiImageFileWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event)
   {

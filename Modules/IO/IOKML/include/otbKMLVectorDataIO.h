@@ -136,8 +136,8 @@ protected:
                         kmldom::MultiGeometryPtr currentMultiGeometry);
 
 private:
-  KMLVectorDataIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KMLVectorDataIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DataTreePointerType m_Tree;
 

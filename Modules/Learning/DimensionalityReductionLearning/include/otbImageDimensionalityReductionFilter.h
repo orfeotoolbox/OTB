@@ -127,8 +127,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageDimensionalityReductionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageDimensionalityReductionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The model used for classification */
   ModelPointerType m_Model;

@@ -131,8 +131,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  MatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MatrixImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Matrix declaration */
   MatrixType m_Matrix;

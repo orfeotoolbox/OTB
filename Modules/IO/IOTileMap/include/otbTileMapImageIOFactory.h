@@ -64,8 +64,8 @@ protected:
   ~TileMapImageIOFactory() override;
 
 private:
-  TileMapImageIOFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TileMapImageIOFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

@@ -69,8 +69,8 @@ protected:
   ~VectorImageToASImageAdaptor() override {}
 
 private:
-  VectorImageToASImageAdaptor(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorImageToASImageAdaptor(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

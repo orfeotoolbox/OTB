@@ -116,8 +116,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OGRVectorDataIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OGRVectorDataIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string GetOGRDriverName(std::string name) const;
 

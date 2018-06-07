@@ -46,8 +46,8 @@ public:
   ~QtWidgetParameterLabel() override;
 
 private:
-  QtWidgetParameterLabel(const QtWidgetParameterLabel&); //purposely not implemented
-  void operator=(const QtWidgetParameterLabel&); //purposely not implemented
+  QtWidgetParameterLabel(const QtWidgetParameterLabel&) = delete;
+  void operator=(const QtWidgetParameterLabel&) = delete;
 };
 
 

@@ -154,8 +154,8 @@ protected:
   ogr::Feature SelectTemplateFeature(const ogr::Layer& inputLayer, 
                                      const std::string& classField, int label);
 private:
-  SampleAugmentationFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  SampleAugmentationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string m_ClassFieldName;
   size_t m_Layer;

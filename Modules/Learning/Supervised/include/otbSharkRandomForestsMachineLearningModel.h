@@ -158,8 +158,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SharkRandomForestsMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SharkRandomForestsMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   shark::RFClassifier<unsigned int> m_RFModel;
   shark::RFTrainer<unsigned int> m_RFTrainer;

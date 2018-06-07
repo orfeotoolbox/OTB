@@ -58,8 +58,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetOutputVectorDataParameter(const QtWidgetOutputVectorDataParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputVectorDataParameter&); //purposely not implemented
+  QtWidgetOutputVectorDataParameter(const QtWidgetOutputVectorDataParameter&) = delete;
+  void operator=(const QtWidgetOutputVectorDataParameter&) = delete;
 
   void DoCreateWidget() override;
 

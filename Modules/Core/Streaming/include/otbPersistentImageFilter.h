@@ -81,8 +81,8 @@ protected:
   }
 
 private:
-  PersistentImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 

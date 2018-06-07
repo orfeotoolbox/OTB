@@ -171,8 +171,8 @@ protected:
   void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentMatrixTransposeMatrixImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ArrayMatrixType m_ThreadSum;
   bool            m_UsePadFirstInput;
@@ -277,8 +277,8 @@ protected:
   ~StreamingMatrixTransposeMatrixImageFilter() override {}
 
 private:
-  StreamingMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingMatrixTransposeMatrixImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

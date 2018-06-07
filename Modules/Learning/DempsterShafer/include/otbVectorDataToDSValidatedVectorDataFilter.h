@@ -177,8 +177,8 @@ protected:
     }
 
 private:
-  VectorDataToDSValidatedVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToDSValidatedVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Descriptor bench
   DescriptorModelsType                            m_DescriptorModels;

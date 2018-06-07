@@ -139,8 +139,8 @@ protected:
   void GenerateInputRequestedRegion() override;
 
 private:
-  PointSetSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PointSetSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Used by streaming: The requested region of the output being processed
    * by the execute method. Set in the GenerateInputRequestedRegion method. */
