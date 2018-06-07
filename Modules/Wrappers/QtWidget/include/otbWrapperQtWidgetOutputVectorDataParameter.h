@@ -42,7 +42,7 @@ class OTBQtWidget_EXPORT QtWidgetOutputVectorDataParameter : public QtWidgetPara
 {
   Q_OBJECT
 public:
-  QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*);
+  QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputVectorDataParameter() override;
 
   inline const QLineEdit* GetInput() const;

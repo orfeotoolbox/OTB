@@ -41,7 +41,7 @@ class OTBQtWidget_EXPORT QtWidgetListViewParameter : public QtWidgetParameterBas
 {
   Q_OBJECT
 public:
-  QtWidgetListViewParameter(ListViewParameter*, QtWidgetModel*);
+  QtWidgetListViewParameter(ListViewParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetListViewParameter() override;
 
   std::vector<int>  GetSelectedItems()

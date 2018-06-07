@@ -25,8 +25,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_StringParam(param)
 {
 }
@@ -52,11 +52,11 @@ void QtWidgetStringParameter::DoUpdateGUI()
 void QtWidgetStringParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_StringParam->GetDescription() )
   );

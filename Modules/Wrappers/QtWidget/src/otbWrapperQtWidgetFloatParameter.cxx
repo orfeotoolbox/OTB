@@ -27,8 +27,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetFloatParameter::QtWidgetFloatParameter(FloatParameter* floatParam, QtWidgetModel* m)
-: QtWidgetParameterBase(floatParam, m),
+QtWidgetFloatParameter::QtWidgetFloatParameter(FloatParameter* floatParam, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(floatParam, m, parent),
   m_FloatParam(floatParam)
 {
 }
@@ -64,11 +64,11 @@ void QtWidgetFloatParameter::DoUpdateGUI()
 
 void QtWidgetFloatParameter::DoCreateWidget()
 {
-  m_QHBoxLayout = new QHBoxLayout;
+  m_QHBoxLayout = new QHBoxLayout(this);
   m_QHBoxLayout->setSpacing(0);
   m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_QDoubleSpinBox = new QtWidgetDoubleSpinBox;
+  m_QDoubleSpinBox = new QtWidgetDoubleSpinBox(this);
   m_QDoubleSpinBox->setSingleStep(0.1);
   m_QDoubleSpinBox->setDecimals(std::numeric_limits<float>::digits10); // max precision, this is 6 for IEEE float
   m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(), m_FloatParam->GetMaximumValue());

@@ -45,7 +45,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterGroup : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
+  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*, QWidget*);
   ~QtWidgetParameterGroup() override;
 
 public slots:

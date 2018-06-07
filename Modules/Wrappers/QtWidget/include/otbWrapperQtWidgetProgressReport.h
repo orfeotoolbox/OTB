@@ -44,7 +44,7 @@ class OTBQtWidget_EXPORT QtWidgetProgressReport : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetProgressReport(QtWidgetModel * model);
+  QtWidgetProgressReport(QtWidgetModel * model, QWidget * parent);
   ~QtWidgetProgressReport() override;
 
   void SetApplication(Application::Pointer app);

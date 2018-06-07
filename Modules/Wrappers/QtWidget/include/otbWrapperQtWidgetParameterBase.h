@@ -45,7 +45,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterBase : public QWidget
   Q_OBJECT
   friend class QtWidgetParameterGroup;
 public:
-  QtWidgetParameterBase( Parameter *, QtWidgetModel * );
+  QtWidgetParameterBase( Parameter *, QtWidgetModel * , QWidget * parent);
   ~QtWidgetParameterBase() override;
 
   void CreateWidget();

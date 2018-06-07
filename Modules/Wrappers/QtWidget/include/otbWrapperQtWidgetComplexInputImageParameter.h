@@ -42,7 +42,7 @@ class OTBQtWidget_EXPORT QtWidgetComplexInputImageParameter : public QtWidgetPar
 {
   Q_OBJECT
 public:
-  QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*);
+  QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetComplexInputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;

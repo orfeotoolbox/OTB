@@ -41,7 +41,7 @@ class OTBQtWidget_EXPORT QtWidgetStringParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetStringParameter(StringParameter*, QtWidgetModel*);
+  QtWidgetStringParameter(StringParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetStringParameter() override;
 
 protected slots:

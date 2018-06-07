@@ -32,8 +32,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_InputImageParam(param),
   m_HLayout( ITK_NULLPTR ),
   m_Input( ITK_NULLPTR ),
@@ -64,10 +64,10 @@ void QtWidgetInputImageParameter::DoUpdateGUI()
 void QtWidgetInputImageParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
 
   m_Input->setToolTip(
     QString::fromStdString( m_InputImageParam->GetDescription() )
@@ -79,7 +79,7 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());

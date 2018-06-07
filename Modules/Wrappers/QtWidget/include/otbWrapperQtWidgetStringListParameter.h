@@ -50,7 +50,7 @@ class OTBQtWidget_EXPORT QtWidgetStringListParameter :
 //
 // Public methods.
 public:
-  QtWidgetStringListParameter( StringListParameter *, QtWidgetModel * );
+  QtWidgetStringListParameter( StringListParameter *, QtWidgetModel * , QWidget *);
   ~QtWidgetStringListParameter() override;
 
 

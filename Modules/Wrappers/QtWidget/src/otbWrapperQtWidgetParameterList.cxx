@@ -33,8 +33,8 @@ namespace Wrapper
 
 /*****************************************************************************/
 QtWidgetParameterList
-::QtWidgetParameterList( AbstractParameterList * param, QtWidgetModel * m ) :
-  QtWidgetParameterBase( param, m )
+::QtWidgetParameterList( AbstractParameterList * param, QtWidgetModel * m , QWidget * parent) :
+  QtWidgetParameterBase( param, m , parent)
 {
   assert( m!=nullptr );
 
@@ -67,12 +67,13 @@ QtWidgetParameterList
   assert( dynamic_cast< StringListInterface * >( GetParam() )!=nullptr );
 
   ListEditWidget * widget = new ListEditWidget(
-    dynamic_cast< StringListInterface * >( GetParam() )
+    dynamic_cast< StringListInterface * >( GetParam() ),
+    this
   );
 
   //
   // Global Layout
-  QGridLayout * gLayout = new QGridLayout();
+  QGridLayout * gLayout = new QGridLayout(this);
 
   gLayout->setSpacing( 1 );
   gLayout->setContentsMargins( 2, 2, 2, 2 );

@@ -42,7 +42,7 @@ class OTBQtWidget_EXPORT QtWidgetInputProcessXMLParameter : public QtWidgetParam
 {
   Q_OBJECT
 public:
-  QtWidgetInputProcessXMLParameter(InputProcessXMLParameter*, QtWidgetModel*);
+  QtWidgetInputProcessXMLParameter(InputProcessXMLParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputProcessXMLParameter() override;
 
   inline const QLineEdit* GetInput() const;

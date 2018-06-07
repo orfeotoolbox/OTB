@@ -44,7 +44,7 @@ class OTBQtWidget_EXPORT QtWidgetIntParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
+  QtWidgetIntParameter(IntParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetIntParameter() override;
 
 private slots:

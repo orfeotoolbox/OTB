@@ -29,8 +29,8 @@ namespace Wrapper
 {
 
 QtWidgetChoiceParameter::QtWidgetChoiceParameter( ChoiceParameter* param,
-                                            QtWidgetModel* m ) :
-  QtWidgetParameterBase(param, m),
+                                            QtWidgetModel* m , QWidget * parent) :
+  QtWidgetParameterBase(param, m, parent),
   m_ChoiceParam(param),
   m_ComboBox( ITK_NULLPTR ),
   m_StackWidget( ITK_NULLPTR ),
@@ -60,12 +60,12 @@ void QtWidgetChoiceParameter::DoUpdateGUI()
 
 void QtWidgetChoiceParameter::DoCreateWidget()
 {
-  m_ComboBox = new QComboBox;
+  m_ComboBox = new QComboBox(this);
   m_ComboBox->setToolTip(
     QString::fromStdString( m_ChoiceParam->GetDescription() )
   );
 
-  m_StackWidget = new QStackedWidget;
+  m_StackWidget = new QStackedWidget(this);
 
   for (unsigned int i = 0; i < m_ChoiceParam->GetNbChoices(); ++i)
     {
@@ -76,7 +76,7 @@ void QtWidgetChoiceParameter::DoCreateWidget()
     if (param.IsNotNull())
       {
       QtWidgetParameterBase* widget =
-       QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+       QtWidgetParameterFactory::CreateQtWidget( param, GetModel(), this);
 
       m_StackWidget->addWidget(widget);
 
@@ -88,7 +88,7 @@ void QtWidgetChoiceParameter::DoCreateWidget()
   connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), m_StackWidget, SLOT(setCurrentIndex(int)) );
   connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
 
-  m_VLayout = new QVBoxLayout;
+  m_VLayout = new QVBoxLayout(this);
   m_VLayout->addWidget(m_ComboBox);
   if (!m_WidgetList.empty())
     {

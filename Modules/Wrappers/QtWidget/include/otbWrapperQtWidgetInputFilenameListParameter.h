@@ -48,7 +48,7 @@ class OTBQtWidget_EXPORT QtWidgetInputFilenameListParameter :
 //
 // Public methods.
 public:
-  QtWidgetInputFilenameListParameter( InputFilenameListParameter *, QtWidgetModel * );
+  QtWidgetInputFilenameListParameter( InputFilenameListParameter *, QtWidgetModel * , QWidget *);
   ~QtWidgetInputFilenameListParameter() override;
 
 //

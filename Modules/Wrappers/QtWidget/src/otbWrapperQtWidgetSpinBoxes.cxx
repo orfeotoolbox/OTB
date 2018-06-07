@@ -64,7 +64,7 @@ QtWidgetSpinBox::QtWidgetSpinBox( QWidget* parent )
   : QSpinBox( parent )
 {
   // Use a custom LineEdit a forward its Cleared signal
-  m_LineEdit = new QtWidgetLineEdit();
+  m_LineEdit = new QtWidgetLineEdit(this);
   this->setLineEdit(m_LineEdit);
   connect(m_LineEdit, &QtWidgetLineEdit::Cleared, this, &QtWidgetSpinBox::Cleared);
 
@@ -123,7 +123,7 @@ QtWidgetDoubleSpinBox::QtWidgetDoubleSpinBox( QWidget* parent )
   : QDoubleSpinBox( parent )
 {
   // Use a custom LineEdit and forward its Cleared signal
-  m_LineEdit = new QtWidgetLineEdit();
+  m_LineEdit = new QtWidgetLineEdit(this);
   this->setLineEdit(m_LineEdit);
   connect(m_LineEdit, &QtWidgetLineEdit::Cleared, this, &QtWidgetDoubleSpinBox::Cleared);
 
