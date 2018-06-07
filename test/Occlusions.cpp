@@ -64,7 +64,7 @@
 int testOcclusionsFilter(int argc, char *argv[])
   {
   if(argc < 3) {
-  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap InvRigthDisparityMap outputPathFolder" << std::endl;
+  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap InvRigthDisparityMap inLeftImage outputPathFolder" << std::endl;
   	return EXIT_FAILURE;
   	}
 
@@ -134,7 +134,7 @@ int testOcclusionsFilter(int argc, char *argv[])
  FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
  m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
  m_FillOccDisparityMap->SetInput2(m_LeftDisparity->GetOutput() );
- m_FillOccDisparityMap->SetRadius(0,1);
+ m_FillOccDisparityMap->SetRadius(0,2);
 
 
  IntWriterType::Pointer writer_FillOcclusions = IntWriterType::New(); 
