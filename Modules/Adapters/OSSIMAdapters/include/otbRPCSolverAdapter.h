@@ -81,10 +81,10 @@ public:
 private:
   RPCSolverAdapter(const Self &) = delete;
   void operator =(const Self&) = delete;
-  RPCSolverAdapter() = delete;, this class defines
-                      // typedefs and exposes static methods
-  virtual ~RPCSolverAdapter() = delete;, this class defines
-                              // typedefs and exposes static methods
+
+  // This class defines typedefs and exposes static methods
+  RPCSolverAdapter() = delete;
+  virtual ~RPCSolverAdapter() = delete;
 };
 
 } // namespace otb
