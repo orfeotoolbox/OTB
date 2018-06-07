@@ -48,8 +48,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See:
-		   // https://bugreports.qt-project.org/browse/QTBUG-22829
 #include <otbCast.h>
 #include <otbImage.h>
 #include <otbImageFileReader.h>
