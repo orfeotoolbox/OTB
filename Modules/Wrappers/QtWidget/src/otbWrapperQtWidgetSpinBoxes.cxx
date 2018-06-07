@@ -22,6 +22,7 @@
 
 #include <sstream>
 #include <limits>
+#include <locale>
 #include <QAction>
 
 namespace otb
@@ -179,13 +180,24 @@ QString QtWidgetDoubleSpinBox::textFromValue(double value) const
   // which leads to ugly trailing zeros for small values (e.g 1.50000)
   // We use std::ostringstream because QString::arg formatting support is too limited
   std::ostringstream oss;
+  oss.imbue(std::locale("")); // use system's locale for formatting
 
   // Set precision to the number of decimal digits that can be represented without change.
   // Use float precision because OTB parameter is float
   // For IEEE float it's 6.
   oss.precision(std::numeric_limits<float>::digits10);
-
   oss << value;
+
+  // Add a trailing dot if the number is integer,
+  // so that int and float parameters are more visually different.
+  // For now this is done for all locales, even though not all locales use this
+  // convention for formatting decimals...
+  const char dot = std::use_facet<std::numpunct<char>>(std::locale("")).decimal_point();
+  if (oss.str().find(dot) == std::string::npos)
+  {
+      oss << dot;
+  }
+
   return QString::fromStdString(oss.str());
 }
 
