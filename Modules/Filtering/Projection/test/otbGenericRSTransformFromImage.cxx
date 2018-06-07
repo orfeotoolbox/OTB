@@ -59,7 +59,7 @@ int otbGenericRSTransformFromImage(int itkNotUsed(argc), char* argv[])
   // Build wgs ref
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
-  char * wgsRef = ITK_NULLPTR;
+  char * wgsRef = nullptr;
   oSRS.exportToWkt(&wgsRef);
 
   // Instantiate WGS->Image transform
@@ -109,7 +109,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int itkNotUsed(arg
   // Build wgs ref
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
-  char * wgsRef = ITK_NULLPTR;
+  char * wgsRef = nullptr;
   oSRS.exportToWkt(&wgsRef);
 
   DistanceType::Pointer distance = DistanceType::New();

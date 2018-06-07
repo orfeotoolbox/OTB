@@ -130,7 +130,7 @@ protected:
   ~GradientBoostedTreeMachineLearningModel() override;
 
     /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
 
   
   /** PrintSelf method */

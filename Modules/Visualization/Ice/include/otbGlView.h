@@ -327,7 +327,7 @@ GlView
   const otb::GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==ITK_NULLPTR )
+  if( geo==nullptr )
     return false;
 
   const otb::GeoInterface::Spacing2 nativeReferenceSpacing = geo->GetSpacing();
@@ -631,7 +631,7 @@ GlView
   const GeoInterface * geo =
     dynamic_cast< const GeoInterface * >( actor.GetPointer() );
 
-  if( geo==ITK_NULLPTR )
+  if( geo==nullptr )
     return false;
 
   // Get viewport current center and spacing.

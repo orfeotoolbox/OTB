@@ -29,7 +29,7 @@ void
 ExtendedFilenameHelper
 ::SetExtendedFileName(const char *extFname)
 {
-  if (extFname == ITK_NULLPTR)
+  if (extFname == nullptr)
   {
     itkGenericExceptionMacro( << "Filename is NULL" );
   }

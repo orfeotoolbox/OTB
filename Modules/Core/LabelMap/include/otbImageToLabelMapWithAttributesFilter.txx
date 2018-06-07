@@ -79,7 +79,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 {
     if (this->GetNumberOfInputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const  InputImageType* >
@@ -93,7 +93,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 {
     if (this->GetNumberOfInputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const  LabeledImageType* >

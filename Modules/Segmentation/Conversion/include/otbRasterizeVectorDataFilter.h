@@ -141,7 +141,7 @@ protected:
   RasterizeVectorDataFilter();
   ~RasterizeVectorDataFilter() override
   {
-    if (m_OGRDataSourcePointer != ITK_NULLPTR)
+    if (m_OGRDataSourcePointer != nullptr)
       {
       ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }

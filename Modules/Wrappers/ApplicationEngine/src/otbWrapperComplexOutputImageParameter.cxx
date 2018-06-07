@@ -253,7 +253,7 @@ ComplexOutputImageParameter::Write()
 itk::ProcessObject*
 ComplexOutputImageParameter::GetWriter()
 {
-  itk::ProcessObject* writer = ITK_NULLPTR;
+  itk::ProcessObject* writer = nullptr;
   switch ( GetComplexPixelType() )
     {
     case ComplexImagePixelType_int16:

@@ -366,7 +366,7 @@ void Application::UpdateParameters()
       {
       Parameter* param = GetParameterByKey(inXMLKey);
       InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
-      if(inXMLParam!=ITK_NULLPTR)
+      if(inXMLParam!=nullptr)
         {
         // switch on 'm_IsInXMLParsed' before Read() to avoid cyclic calls
         m_IsInXMLParsed = true;
@@ -606,7 +606,7 @@ int Application::Execute()
          UseSpecificSeed = true;
       Parameter* param = GetParameterByKey(key);
       IntParameter* randParam = dynamic_cast<IntParameter*> (param);
-      if(randParam!=ITK_NULLPTR)
+      if(randParam!=nullptr)
         {
         int seed = randParam->GetValue();
         itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(seed);
@@ -627,7 +627,7 @@ int Application::Execute()
     {
     OutputImageParameter * outImgParamPtr = dynamic_cast<OutputImageParameter *>(GetParameterByKey(*it));
     // If this is an OutputImageParameter
-    if(outImgParamPtr != ITK_NULLPTR)
+    if(outImgParamPtr != nullptr)
       {
       // If the parameter is enabled
       if(IsParameterEnabled(*it))
@@ -667,7 +667,7 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
-          if(ramParam!=ITK_NULLPTR)
+          if(ramParam!=nullptr)
             {
             ram = ramParam->GetValue();
             useRAM = true;
@@ -686,7 +686,7 @@ int Application::ExecuteAndWriteOutput()
           Parameter* param = GetParameterByKey(key);
           OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
 
-          if(outputParam!=ITK_NULLPTR)
+          if(outputParam!=nullptr)
             {
             std::string checkReturn = outputParam->CheckFileName(true);
             if (!checkReturn.empty())
@@ -709,7 +709,7 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-          if(outputParam!=ITK_NULLPTR)
+          if(outputParam!=nullptr)
             {
             outputParam->InitializeWriters();
             std::ostringstream progressId;
@@ -724,7 +724,7 @@ int Application::ExecuteAndWriteOutput()
           Parameter* param = GetParameterByKey(key);
           ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
 
-          if(outputParam!=ITK_NULLPTR)
+          if(outputParam!=nullptr)
             {
             outputParam->InitializeWriters();
             if (useRAM)
@@ -743,7 +743,7 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-          if(outXMLParam!=ITK_NULLPTR)
+          if(outXMLParam!=nullptr)
             {
             outXMLParam->Write(this);
             }
@@ -1657,7 +1657,7 @@ unsigned int Application::GetNumberOfElementsInParameterInputImageList(std::stri
 
 FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {
-  FloatVectorImageType::Pointer ret = ITK_NULLPTR;
+  FloatVectorImageType::Pointer ret = nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputImageParameter*> (param))
@@ -1675,7 +1675,7 @@ FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 
 FloatVectorImageListType* Application::GetParameterImageList(std::string parameter)
 {
-  FloatVectorImageListType::Pointer ret=ITK_NULLPTR;
+  FloatVectorImageListType::Pointer ret=nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputImageListParameter*>(param))
@@ -1693,7 +1693,7 @@ FloatVectorImageListType* Application::GetParameterImageList(std::string paramet
 
 ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string parameter)
 {
-  ComplexFloatVectorImageType::Pointer ret=ITK_NULLPTR;
+  ComplexFloatVectorImageType::Pointer ret=nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<ComplexInputImageParameter*>(param))
@@ -1711,7 +1711,7 @@ ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string p
 
 VectorDataType* Application::GetParameterVectorData(std::string parameter)
 {
-  VectorDataType::Pointer ret=ITK_NULLPTR;
+  VectorDataType::Pointer ret=nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputVectorDataParameter*>(param))
@@ -1728,7 +1728,7 @@ VectorDataType* Application::GetParameterVectorData(std::string parameter)
 
 VectorDataListType* Application::GetParameterVectorDataList(std::string parameter)
 {
-  VectorDataListType::Pointer ret=ITK_NULLPTR;
+  VectorDataListType::Pointer ret=nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputVectorDataListParameter*>(param))

@@ -110,8 +110,8 @@ int otbRegionProjectionResampler(int argc, char* argv[])
   spacing[0] = atof(argv[8]);
   spacing[1] = atof(argv[9]);
 
-  origin[0] = strtod(argv[3], ITK_NULLPTR);         // origin longitude.
-  origin[1] = strtod(argv[4], ITK_NULLPTR);         // origin latitude.
+  origin[0] = strtod(argv[3], nullptr);         // origin longitude.
+  origin[1] = strtod(argv[4], nullptr);         // origin latitude.
 
   otbGenericMsgDebugMacro(<< "Origin " << origin);
 

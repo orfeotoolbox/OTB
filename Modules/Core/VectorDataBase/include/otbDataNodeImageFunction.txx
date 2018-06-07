@@ -33,7 +33,7 @@ template <class TImage, class TOutput, class TCoordRep, class TPrecision>
 DataNodeImageFunction<TImage, TOutput, TCoordRep, TPrecision>
 ::DataNodeImageFunction()
 {
-  m_Image = ITK_NULLPTR;
+  m_Image = nullptr;
   m_StartIndex.Fill(0);
   m_EndIndex.Fill(0);
   m_StartContinuousIndex.Fill(0.0f);

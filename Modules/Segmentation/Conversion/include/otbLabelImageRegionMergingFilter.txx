@@ -93,7 +93,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-      return ITK_NULLPTR;
+      return nullptr;
     }
   return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -117,7 +117,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-      return ITK_NULLPTR;
+      return nullptr;
     }
   return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
 }

@@ -143,7 +143,7 @@ protected:
       OGR_G_DestroyGeometry(m_SrcDataSetGeometries[idx]);
       }
 
-    if (m_OGRDataSourcePointer != ITK_NULLPTR)
+    if (m_OGRDataSourcePointer != nullptr)
       {
       ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }

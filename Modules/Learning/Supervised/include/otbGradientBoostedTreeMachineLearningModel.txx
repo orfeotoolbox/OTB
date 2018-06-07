@@ -96,7 +96,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     if (!this->m_ConfidenceIndex)
       {
@@ -113,7 +113,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_GBTreeModel->save(filename.c_str(), ITK_NULLPTR);
+    m_GBTreeModel->save(filename.c_str(), nullptr);
   else
     m_GBTreeModel->save(filename.c_str(), name.c_str());
 }
@@ -124,7 +124,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & name)
 {
   if (name == "")
-    m_GBTreeModel->load(filename.c_str(), ITK_NULLPTR);
+    m_GBTreeModel->load(filename.c_str(), nullptr);
   else
     m_GBTreeModel->load(filename.c_str(), name.c_str());
 }

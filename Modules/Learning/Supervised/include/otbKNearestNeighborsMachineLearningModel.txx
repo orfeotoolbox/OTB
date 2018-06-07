@@ -119,10 +119,10 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 #ifdef OTB_OPENCV_3
   result = m_KNearestModel->findNearest(sample, m_K, cv::noArray(), nearest, cv::noArray());
 #else
-  result = m_KNearestModel->find_nearest(sample, m_K,ITK_NULLPTR,ITK_NULLPTR,&nearest,ITK_NULLPTR);
+  result = m_KNearestModel->find_nearest(sample, m_K,nullptr,nullptr,&nearest,nullptr);
 #endif
   // compute quality if asked (only happens in classification mode)
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     assert(!this->m_RegressionMode);
     unsigned int accuracy = 0;

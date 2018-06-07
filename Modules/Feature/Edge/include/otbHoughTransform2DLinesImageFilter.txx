@@ -53,7 +53,7 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
   m_Variance = 5;
   m_OldModifiedTime = 0;
   m_OldNumberOfLines = 0;
-  m_SimplifyAccumulator = ITK_NULLPTR;
+  m_SimplifyAccumulator = nullptr;
 }
 
 template<typename TInputPixelType, typename TOutputPixelType>

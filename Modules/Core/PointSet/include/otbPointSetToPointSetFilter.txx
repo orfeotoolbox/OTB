@@ -88,7 +88,7 @@ typename PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>::InputPointSe
 PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
 ::GetInput(void)
 {
-  if (this->GetNumberOfInputs() < 1) return ITK_NULLPTR;
+  if (this->GetNumberOfInputs() < 1) return nullptr;
 
   return static_cast<InputPointSetType*>
            (this->ProcessObjectType::GetInput(0));

@@ -37,7 +37,7 @@ template <class TInputVectorData>
 VectorDataFileWriter<TInputVectorData>
 ::VectorDataFileWriter() :
   m_FileName(""),
-  m_VectorDataIO(ITK_NULLPTR),
+  m_VectorDataIO(nullptr),
   m_UserSpecifiedVectorDataIO(false),
   m_FactorySpecifiedVectorDataIO(false)
 {
@@ -70,7 +70,7 @@ VectorDataFileWriter<TInputVectorData>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<TInputVectorData*>
@@ -97,7 +97,7 @@ VectorDataFileWriter<TInputVectorData>
   itkDebugMacro(<< "Writing a vector data file");
 
   // Make sure input is available
-  if (input == ITK_NULLPTR)
+  if (input == nullptr)
     {
     itkExceptionMacro(<< "No input to writer!");
     }

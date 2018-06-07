@@ -115,7 +115,7 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuri
 {
   if (this->GetNumberOfOutputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>
            (this->itk::ProcessObject::GetOutput(1));
@@ -131,7 +131,7 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuri
 {
   if (this->GetNumberOfOutputs() < 3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputImageType *>
            (this->itk::ProcessObject::GetOutput(2));
