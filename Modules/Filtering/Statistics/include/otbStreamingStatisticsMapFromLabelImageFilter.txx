@@ -55,27 +55,13 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 ::MakeOutput(DataObjectPointerArraySizeType output)
 {
   switch (output)
-    {
-    case 0:
-      return static_cast<itk::DataObject*>(TInputVectorImage::New().GetPointer());
-      break;
-    case 1:
-      return static_cast<itk::DataObject*>(PixelValueMapObjectType::New().GetPointer());
-      break;
-    case 2:
-      return static_cast<itk::DataObject*>(PixelValueMapObjectType::New().GetPointer());
-      break;
-    case 3:
-      return static_cast<itk::DataObject*>(PixelValueMapObjectType::New().GetPointer());
-      break;
+  {
+    case 1: [[fallthrough]] // [[fallthrough]] is a C++17 attribute that'll simply be ignored in C++11-14
+    case 2: [[fallthrough]]
+    case 3: [[fallthrough]]
     case 4:
       return static_cast<itk::DataObject*>(PixelValueMapObjectType::New().GetPointer());
-      break;
-    default:
-      // might as well make an image
-      return static_cast<itk::DataObject*>(TInputVectorImage::New().GetPointer());
-      break;
-    }
+  }
 }
 
 template<class TInputVectorImage, class TLabelImage>
@@ -177,9 +163,9 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   // Update temporary accumulator
   AccumulatorMapType outputAcc;
 
-  for (auto& threadAccMap: m_AccumulatorMaps)
+  for (auto const& threadAccMap: m_AccumulatorMaps)
     {
-    for(auto& it: threadAccMap)
+    for(auto const& it: threadAccMap)
       {
       const LabelPixelType label = it.first;
       if (outputAcc.count(label) <= 0)
@@ -239,12 +225,8 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   m_MinRadiometricValue.clear();
   m_MaxRadiometricValue.clear();
   m_LabelPopulation.clear();
+  m_AccumulatorMaps.resize(this->GetNumberOfThreads());
 
-  for (itk::ThreadIdType thread = 0 ; thread < this->GetNumberOfThreads() ; thread++)
-    {
-    AccumulatorMapType newMap;
-    m_AccumulatorMaps.push_back(newMap);
-    }
 }
 
 template<class TInputVectorImage, class TLabelImage>
