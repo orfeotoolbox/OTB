@@ -114,6 +114,7 @@ set(LINUX_SYSTEM_DLLS
   libmysqlclient.so*
   libodbc.so*
   libpq.so*
+  libEGL.so*
   )
   # libexpat.so.*
   # libfontconfig.so*

@@ -1,0 +1,62 @@
+--- gdal-2.2.1-orig/makefile.vc	2017-06-23 14:18:38.000000000 +0200
++++ gdal-2.2.1/makefile.vc	2018-03-14 19:05:43.372712378 +0100
+@@ -49,6 +49,12 @@
+ 
+ DISTDIR	=	gdal_$(VERSION)
+ 
++WRAP_TARGETS =
++
++!IFDEF WRAP_PYTHON
++WRAP_TARGETS = $(WRAP_TARGETS) swig_py
++!ENDIF
++
+ !IFDEF DLLBUILD
+ TARGET_LIB = dll
+ PLUGIN_TARGET = plugin_dir
+@@ -58,7 +64,7 @@
+ 
+ DEFAULT_TARGETS = 
+ 
+-default:	$(TARGET_LIB) $(PLUGIN_TARGET) apps_dir
++default:	$(TARGET_LIB) $(PLUGIN_TARGET) apps_dir $(WRAP_TARGETS)
+ 
+ staticlib:      $(LIB_DEPENDS)
+ 	if exist gdal.lib del gdal.lib
+@@ -166,6 +172,11 @@
+ 
+ dll:	$(GDAL_DLL)
+ 
++swig_py:   $(TARGET_LIB)
++  cd swig
++  $(MAKE) /f makefile.vc python
++  cd ..
++
+ install: default
+ 	-mkdir $(BINDIR)
+ 	-mkdir $(DATADIR)
+@@ -191,6 +202,11 @@
+ !ENDIF
+ 	cd ..\..
+ !ENDIF
++!IFDEF WRAP_PYTHON
++	cd swig
++	$(MAKE) /f makefile.vc python-install
++	cd ..
++!ENDIF
+ 
+ libinstall: $(GDALLIB)
+ 	-mkdir $(LIBDIR)
+--- gdal-2.2.1-orig/swig/makefile.vc	2017-06-23 14:18:45.000000000 +0200
++++ gdal-2.2.1/swig/makefile.vc	2018-03-14 19:04:05.851776139 +0100
+@@ -22,6 +22,11 @@
+         $(SWIG) -c++ -python -modern -new_repr -I../include/python -I../include/python/docs -o extensions/gdal_array_wrap.cpp -outdir osgeo ..\include\gdal_array.i
+         $(PYDIR)\python.exe setup.py build
+ 
++python-install: python
++        cd python
++        $(PYDIR)\python.exe setup.py install --prefix=$(GDAL_HOME)
++        # TODO: install python scripts
++
+ #d:\Python\debug\Python-2.4\PCbuild\python_d.exe setup.py build   --debug
+ 
+ csharp: gdalvars

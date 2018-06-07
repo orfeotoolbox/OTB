@@ -791,10 +791,11 @@ LayerStackItemModel
 
   beginRemoveRows( p, row, row + count - 1 );
   {
-  // StackedLayerModel has already been shortened.
-
+  // StackedLayerModel need to be shortened now
+  emit LayerDeletingModel(row);
   // TODO: Release additional row data here.
   }
+
   endRemoveRows();
 
   return true;

@@ -161,11 +161,11 @@ private:
     SetDocLongDescription("This application is the implementation of the "
       "histogram equalization algorithm. The idea of the algorithm is to use "
       "the whole available dynamic. In order to do so it computes a histogram "
-      "over the image and then use the whole dynamic : meaning flattening the "
+      "over the image and then use the whole dynamic: meaning flattening the "
       "histogram. That gives us gain for each bin that transform the original "
       "histogram into the flat one. This gain is then apply on the original "
       "image." 
-      "\nThe application proposes several option to allow a finer result : "
+      "\nThe application proposes several options to allow a finer result: "
       "\n- There is an option to limit contrast. We choose to limit the contrast "
       "by modifying the original histogram. To do so we clip the histogram at a "
       "given height and redistribute equally among the bins the clipped population. "
@@ -197,7 +197,7 @@ private:
       "The maximum height will be computed as hfact*eqHeight where eqHeight "
       "is the height of the theoretical flat histogram. The higher hfact, the "
       "higher the contrast."
-      "\nWhen using 'luminance mode', it is recommended to limit this factor to a small value (ex : 4)");
+      "\nWhen using 'luminance mode', it is recommended to limit this factor to a small value (ex: 4)");
     MandatoryOff("hfact");
 
     AddParameter(ParameterType_Float , "nodata" , "Nodata Value");
@@ -219,27 +219,34 @@ private:
 
  
     AddParameter(ParameterType_Int,"spatial.local.h" , 
-      "Thumbnail height in pixel");
+      "Thumbnail height");
+    SetParameterDescription("spatial.local.h","Height of the thumbnail "
+      "over which the histogram will be computed. The value is in pixels.");
     AddParameter(ParameterType_Int,"spatial.local.w" , 
-      "Thumbnail width in pixel");
+      "Thumbnail width");
+    SetParameterDescription("spatial.local.w","Width of the thumbnail "
+      "over which the histogram will be computed. The value is in pixels.");
 
     AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum "
       "settings");
     SetParameterDescription("minmax","Minimum and maximum value that will "
-      "bound the histogram.");
+      "bound the histogram and thus the dynamic of the resulting image. Values "
+      "over those boundaries will be clipped.");
     AddChoice( "minmax.auto" , "Automatic" );
     SetParameterDescription("minmax.auto" , "Minimum and maximum value will "
       "be computed on the image (nodata value won't be taken "
       "into account) . Each band will have a minimum and a maximum.");
     AddParameter(ParameterType_Bool, "minmax.auto.global", "Global");
-    SetParameterDescription("minmax.auto.global" , "Automatic"
+    SetParameterDescription("minmax.auto.global" , 
       "Min/max computation will result in the same minimum and maximum for "
       "all the bands.");
-    AddChoice( "minmax.manual" , "Manual settings of min/max values" );
-    SetParameterDescription("minmax.auto","Minimum and maximum value will be "
+    AddChoice( "minmax.manual" , "Manual settings for min/max values" );
+    SetParameterDescription("minmax.manual","Minimum and maximum value will be "
       "set by the user");
     AddParameter(ParameterType_Float , "minmax.manual.min" , "Minimum value");
     AddParameter(ParameterType_Float , "minmax.manual.max" , "Maximum value");
+    // SetDefaultParameterFloat("minmax.manual.min", 0 );
+    // SetDefaultParameterFloat("minmax.manual.max", 255 );
     MandatoryOff("minmax.manual.min");
     MandatoryOff("minmax.manual.max");
 
@@ -249,9 +256,9 @@ private:
       "Each channel is equalized independently" );
     AddChoice( "mode.lum" , "Luminance" );
     SetParameterDescription( "mode.lum" ,
-      "The relative luminance is calculated thanks to the coefficients."
-      "Then the histogram is equalized and then a gain is applied on each channels."
-      "This gain for each channels will depend on"
+      "The relative luminance is computed according to the coefficients."
+      "Then the histogram is equalized and the gain is applied to each of the "
+      "channels. The channel gain will depend on "
       "the weight (coef) of the channel in the luminance." 
       "\nNote that default values come from color space theories "
       "on how human eyes perceive colors)" 

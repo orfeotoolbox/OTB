@@ -21,36 +21,39 @@ add_executable(otbQgisDescriptor otbQgisDescriptor.cxx)
 target_link_libraries(otbQgisDescriptor ${OTBQgis_LIBRARIES})
 otb_module_target(otbQgisDescriptor)
 
+add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
+  COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Cleaning ${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
+  COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
+  COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
+  )
+
+set(app_names ${OTB_APPLICATIONS_NAME_LIST})
+list(REMOVE_ITEM app_names "TestApplication")
+list(REMOVE_ITEM app_names "ApplicationExample")
+list(REMOVE_DUPLICATES app_names)
 set(dfiles)
-set(app_list ${OTB_APPLICATIONS_NAME_LIST})
-list(REMOVE_ITEM app_list "TestApplication")
-list(REMOVE_ITEM app_list "ApplicationExample")
-list(REMOVE_DUPLICATES app_list)
-foreach(otb_app ${app_list})
-  set(dfile "${OTB_BINARY_DIR}/descriptors/${otb_app}.txt")
+set(generate_descriptor_cmd "$<TARGET_FILE:otbQgisDescriptor>")
+#debian does not use RPATH and build is failing
+#see gitlab #1593
+#if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+if(CMAKE_SKIP_RPATH AND "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
+  set(generate_descriptor_cmd "env;LD_LIBRARY_PATH=${OTB_BINARY_DIR}/lib;$<TARGET_FILE:otbQgisDescriptor>")
+endif()
+foreach(app_name ${app_names})
+  add_dependencies(otbQgisDescriptor otbapp_${app_name})
+  set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/${app_name}.txt")
   add_custom_command(OUTPUT "${dfile}"
-  COMMAND "$<TARGET_FILE:otbQgisDescriptor>"
-     "${otb_app}" "${OTB_BINARY_DIR}/lib/otb/applications" "${OTB_BINARY_DIR}/descriptors/"
-  DEPENDS otbQgisDescriptor
-  WORKING_DIRECTORY ${OTB_BINARY_DIR}
-  COMMENT "./bin/otbQgisDescriptor ${otb_app} ./lib/otb/applications ./descriptors/"
-  VERBATIM)
-list(APPEND dfiles "${dfile}")
+    COMMAND ${generate_descriptor_cmd}
+    "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
+    WORKING_DIRECTORY ${OTB_BINARY_DIR}
+    COMMENT "./bin/otbQgisDescriptor ${app_name} ./${OTB_INSTALL_APP_DIR} ./${OTB_INSTALL_DESCR_DIR}/"
+    VERBATIM)
+  list(APPEND dfiles "${dfile}")
 endforeach()
 
-add_custom_target(clean_algs_txt
-  COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${OTB_BINARY_DIR}/descriptors/"
-  COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${CMAKE_INSTALL_PREFIX}/descriptors/"
-  COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/descriptors/"
-  COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Generating descriptor files for QGIS"
-  DEPENDS otbQgisDescriptor
-  )
+add_custom_target(generate_descriptors DEPENDS ${dfiles} )
+add_dependencies(${otb-module}-all generate_descriptors)
 
-add_custom_target(generate_qgis_descriptor
-  COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Installing: ${CMAKE_INSTALL_PREFIX}/descriptors/"
-  COMMAND "${CMAKE_COMMAND}" "-E" "copy_directory" "${OTB_BINARY_DIR}/descriptors" "${CMAKE_INSTALL_PREFIX}/descriptors"
-  DEPENDS clean_algs_txt ${dfiles}
-  )
-
-#otb_module_target_label(generate_qgis_descriptor)
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}
+  DESTINATION share/otb)
 

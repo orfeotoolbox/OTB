@@ -16,9 +16,10 @@ those values.
 * ``OTB_MAX_RAM_HINT``: Default maximum memory that OTB should use for processing, in MB. If not set, default value is 128 MB.
 * ``OTB_LOGGER_LEVEL``: Default level of logging for OTB. Should be one of  ``DEBUG``, ``INFO``, ``WARNING``, ``CRITICAL`` or ``FATAL``, by increasing order of priority. Only messages with a higher priority than the level of logging will be displayed. If not set, default level is ``INFO``.
 
+.. _extended-filenames:
+
 Extended filenames
 ------------------
-.. _extended-filenames:
 
 Extended filenames is an interesting feature of OTB. With it, you can control
 several aspects of the beahvior of the OTB in the OTB-Applications or in our
