@@ -33,8 +33,8 @@ QtWidgetLineEdit::QtWidgetLineEdit( QWidget *parent )
   : QLineEdit( parent )
 {
   // Setup the clear button icon
-  m_ClearIcon.addPixmap( QIcon(":/Utilities/Data/Icons/mIconClearText.svg").pixmap( QSize( CLEAR_ICON_SIZE, CLEAR_ICON_SIZE)), QIcon::Normal, QIcon::On );
-  m_ClearIcon.addPixmap( QIcon(":/Utilities/Data/Icons/mIconClearTextHover.svg").pixmap( QSize( CLEAR_ICON_SIZE, CLEAR_ICON_SIZE)) , QIcon::Selected, QIcon::On );
+  m_ClearIcon.addPixmap( QIcon(":/Utilities/Data/Icons/mIconClearText.png").pixmap( QSize( CLEAR_ICON_SIZE, CLEAR_ICON_SIZE)), QIcon::Normal, QIcon::On );
+  m_ClearIcon.addPixmap( QIcon(":/Utilities/Data/Icons/mIconClearTextHover.png").pixmap( QSize( CLEAR_ICON_SIZE, CLEAR_ICON_SIZE)) , QIcon::Selected, QIcon::On );
 }
 
 void QtWidgetLineEdit::EnableClearButton()
