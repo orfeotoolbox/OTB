@@ -35,12 +35,14 @@ public:
   MinVectorImage(){}
   virtual ~MinVectorImage() {}
 
+  
+
   TOutput operator() ( TInput input )
     {
     unsigned int size ( input.GetSize() ) ;
 
     TOutput output(1); 
-    output.Fill(0); 
+    output = 0;
     typename TInput::ValueType min ( input[0] );
 
     for(int i=1; i<size; i++)
@@ -48,12 +50,13 @@ public:
       if (input[i]<min)
         {
         min = input[i] ;
-        output[0] = i;
+        output = i;
         }
       }
 
     return output;
     }
+
 }; //end class
 
 } // end Functor
