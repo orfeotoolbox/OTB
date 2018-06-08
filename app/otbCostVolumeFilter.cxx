@@ -46,7 +46,7 @@
 #include <iostream>
 #include <vector>
 
-#include "otbCostVolumeImageFilter.h"
+#include "otbCostVolumeImageFilter0.h"
 #include "otbCoeffGuidedBoxImageFilter.h"
 #include "otbMinFilter.h"
 #include "otbWeightedMedianImageFilter.h"
@@ -129,7 +129,7 @@ public:
   typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, ConvFilterTypeLeft> VectorFilterTypeLeft;
   typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, ConvFilterTypeRight> VectorFilterTypeRight;
   typedef otb::LocalGradientVectorImageFilter< FloatVectorImageType, FloatVectorImageType > GradientType;
-  typedef otb::CostVolumeImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > CostVolumeType;
+  typedef otb::CostVolumeImageFilter0< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > CostVolumeType;
   typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType,FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;
   typedef otb::CoeffGuidedBoxImageFilter< FloatVectorImageType, FloatVectorImageType> CoeffGuidedFilterType;
   typedef otb::MinFilter< FloatVectorImageType,FloatVectorImageType,FloatVectorImageType> MinFilterType;
@@ -156,7 +156,7 @@ private:
   CostVolumeFilter()
   {    
     m_MultiplyLeft = MultiplyFilterType::New();
-	m_MultiplyRight = MultiplyFilterType::New();
+	 m_MultiplyRight = MultiplyFilterType::New();
   
     m_LeftBox = BoxFilterType::New();
     m_RightBox = BoxFilterType::New();
@@ -337,7 +337,10 @@ private:
 
 /*============================== calcul de la multiplication pour la covariance =======*/
 // covariance = Mean( im1*im2) - Mean(im1)*mean(im2)  
-  m_MultiplyLeft->SetInput( leftImage );
+
+   m_MultiplyLeft->SetInput( leftImage );
+
+
   m_MultiplyRight->SetInput( rightImage );
  
 
@@ -430,6 +433,8 @@ private:
   m_GradientYR->SetFilter(m_convFilterYR);
   m_GradientYR->SetInput(rightImage);
 
+
+
 /*========================================== Cost Volume ===========================================*/
    /** sortie a une seule bande et elle contient le volume de cout */
   m_LeftCost->SetLeftInputImage(leftImage );
@@ -444,6 +449,9 @@ private:
    	
   m_LeftCost->SetDisp(HdispMin);
   m_RightCost->SetDisp(-HdispMin); 
+
+
+
 
 /*========================================== Guided filter ==========================================================*/
  /** la moyenne du CostVolume en utilsant les images intégrales*/
@@ -560,7 +568,7 @@ m_RightCVFFiltred->UpdateOutputInformation();
     FloatVectorImageType::Pointer LeftOutGuided = FloatVectorImageType::New();
 //Right    
     FloatVectorImageType::Pointer RightDispIn = FloatVectorImageType::New(); 
-	FloatVectorImageType::Pointer RightMinCost = FloatVectorImageType::New(); 
+	FloatVectorImageType::Pointer RightMinCost = FloatVectorImageType::New();  
 	FloatVectorImageType::Pointer RightDispOut;
     FloatVectorImageType::Pointer RightMinIn;
     FloatVectorImageType::Pointer RightOutGuided = FloatVectorImageType::New();
@@ -623,11 +631,19 @@ m_RightCVFFiltred->UpdateOutputInformation();
   m_LeftMin->SetInput1(LeftMinIn); 
   m_LeftMin->SetInput2(m_LeftCVFFiltred->GetOutput()); 
 
+typedef otb::ImageFileWriter< FloatVectorImageType > ImageWriterType;
+ImageWriterType::Pointer w_LeftCost = ImageWriterType::New();
+
+
+
 // left disp
-for (int Hdisp = HdispMin ; Hdisp <=HdispMax ;Hdisp++){ 	 
+for (int Hdisp = HdispMin ; Hdisp <=HdispMax ;Hdisp++){ 	
+
+ // w_LeftCost->SetFileName("/home/julie/Documents/tmp/tzukuba/w_LeftCost" + std::to_string(Hdisp) + ".tif"); 
+
+
  m_LeftCost->SetDisp(Hdisp); 
  m_LeftCost->Modified();
-
 
  m_LeftMin->GetFunctor().SetDisp(Hdisp); 
  m_LeftMin->Update();
@@ -641,6 +657,9 @@ for (int Hdisp = HdispMin ; Hdisp <=HdispMax ;Hdisp++){
  m_LeftMin->GraftOutput(LeftMinIn) ;
 
  m_LeftMin->SetInput1( LeftDispOut); // ne pas mettre le SetInput2 car il vas se mettre a j automatiquement avec le pipeline
+
+ //w_LeftCost->SetInput( m_LeftCost->GetOutput() );
+// w_LeftCost->Update();
   
 }  
 
@@ -694,18 +713,28 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
   m_LeftDisparity-> SetInput( const_cast <FloatImageType *>( m_Leftchannel1->GetOutput() ));  
   m_RightDisparity-> SetInput( const_cast <FloatImageType *>( m_Rightchannel1->GetOutput() ));
 
+
+
+
+
  
   /** Concatenation de la 1ère bande qui est la disparité avec l'image de de droite */
+
+  
   m_ConcatenateDispEndInLeftImage->SetInput1(m_LeftDisparity->GetOutput());
   m_ConcatenateDispEndInLeftImage->SetInput2( m_LeftMedianFilter->GetOutput() );
 
   m_ConcatenateDispEndInRightImage->SetInput1(m_RightDisparity->GetOutput());
   m_ConcatenateDispEndInRightImage->SetInput2( m_RightMedianFilter->GetOutput() );
+
+ 
   
+
+
   
   /** Instanciation du filtre weighted median en metant en entrée une image a 4 bandes (sortie de la concatenation) 
    * le 1ere bande etant la disparité et 3 autre l'image de droite */
-  
+ 
    //Left
    m_LeftMedian-> SetInput(m_ConcatenateDispEndInLeftImage->GetOutput());
     
@@ -720,8 +749,13 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
 // right 
   m_RightMedian-> SetInput(m_ConcatenateDispEndInRightImage->GetOutput());   
   m_RightMedian->SetRadius(radiusM) ;
+
+
+
 /*========================== Detection d'occulusion =============================*/  
 /** Conversion des vectorImage vers OtbImage*/
+
+
 
 m_OtbImageLeftMedian->SetInput( m_LeftMedian->GetOutput() );
 m_OtbImageLeftMedian->Update();
@@ -731,6 +765,9 @@ m_OtbImageRightMedian->Update();
 
 
 /** Detection d'occlusion*/
+
+ //  SetParameterOutputImage("io.out", m_LeftMedian->GetOutput());
+
 
   m_Occlusionfilter->SetDirectHorizontalDisparityMapInput(m_OtbImageLeftMedian->GetOutput()->GetNthElement(0)); //LeftMedian
   m_Occlusionfilter->SetReverseHorizontalDisparityMapInput(m_OtbImageRightMedian->GetOutput()->GetNthElement(0)); //Rightmedian
@@ -743,11 +780,13 @@ m_OtbImageRightMedian->Update();
  
 
 /*========================== Fill occlusion =====================================*/  
+ 
   m_OccCastFiler-> SetInput( const_cast <FloatImageType *>( m_Occlusionfilter->GetOutput() ));  
   
+  // m_ConcatenateOccEndInLeftMedImage->SetInput1(m_OccCastFiler->GetOutput());
+  // m_ConcatenateOccEndInLeftMedImage->SetInput2( m_LeftMedian->GetOutput() );
   m_ConcatenateOccEndInLeftMedImage->SetInput1(m_OccCastFiler->GetOutput());
-  m_ConcatenateOccEndInLeftMedImage->SetInput2( m_LeftMedian->GetOutput() );
-  
+  m_ConcatenateOccEndInLeftMedImage->SetInput2( m_RightMedian->GetOutput() );
 
   m_FillOcclusionfilter->SetInput(m_ConcatenateOccEndInLeftMedImage->GetOutput()); 
   FloatVectorImageType::SizeType OccRadius;
@@ -755,17 +794,20 @@ m_OtbImageRightMedian->Update();
   OccRadius[1] = 0;
   
   m_FillOcclusionfilter->SetRadius(OccRadius);
- 
- 
+
    /** Instanciation du filtre weighted median en metant en entrée une image a 4 bandes (sortie de la concatenation) 
    * le 1ere bande etant la carte de fill occlusion et 3 autre l'image de droite filtré avec un median simple */
    
+  // m_ConcatenateFillEndInLeftMedImage->SetInput1(m_FillOcclusionfilter->GetOutput());
+  // m_ConcatenateFillEndInLeftMedImage->SetInput2( m_LeftMedianFilter->GetOutput() );
+     
   m_ConcatenateFillEndInLeftMedImage->SetInput1(m_FillOcclusionfilter->GetOutput());
-  m_ConcatenateFillEndInLeftMedImage->SetInput2( m_LeftMedianFilter->GetOutput() );
-  
+  m_ConcatenateFillEndInLeftMedImage->SetInput2( m_RightMedianFilter->GetOutput() );
 
   m_FillMedian-> SetInput(m_ConcatenateFillEndInLeftMedImage->GetOutput()); 
   m_FillMedian->SetRadius(radiusM) ;
+
+  
   //m_FillMedian->Update();
  
   SetParameterOutputImage("io.out",m_FillMedian->GetOutput());
