@@ -266,15 +266,14 @@ while ( !outputIt.IsAtEnd() && !InputImageIt.IsAtEnd() && !MeanInputIt.IsAtEnd()
 					
 						*/
 
-              Matrice_cov[0] = CovarianceInputIt.GetCenterPixel()[0] + m_Epsilon;
-              Matrice_cov[4] = CovarianceInputIt.GetCenterPixel()[4] + m_Epsilon;
-              Matrice_cov[8] = CovarianceInputIt.GetCenterPixel()[8] + m_Epsilon;
-              
+              Matrice_cov[0] = CovarianceInputIt.GetCenterPixel()[0] + m_Epsilon;           
               Matrice_cov[1] = CovarianceInputIt.GetCenterPixel()[1] + m_Epsilon;
               Matrice_cov[2] = CovarianceInputIt.GetCenterPixel()[2] + m_Epsilon;
               Matrice_cov[3] = CovarianceInputIt.GetCenterPixel()[3] + m_Epsilon;
+              Matrice_cov[4] = CovarianceInputIt.GetCenterPixel()[4] + m_Epsilon;
               Matrice_cov[5] = CovarianceInputIt.GetCenterPixel()[5] + m_Epsilon;
               Matrice_cov[6] = CovarianceInputIt.GetCenterPixel()[6] + m_Epsilon;
+              Matrice_cov[8] = CovarianceInputIt.GetCenterPixel()[8] + m_Epsilon;
               Matrice_cov[7] = CovarianceInputIt.GetCenterPixel()[7] + m_Epsilon; 
 
 

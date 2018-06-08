@@ -319,6 +319,8 @@ void
 SpatialPropagationImageFilter<TInputImage,  TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId){
 
+	std::cout << "ThreadedGenerateData : SpatialPropagationImageFilter.txx " << std::endl;
+
 
 //input iterator 
 ConstNeighborhoodIteratorType InputImageIt ( this->GetRadius(), this->GetLeftInputImage(), outputRegionForThread );

@@ -134,6 +134,7 @@ PatchMatchRefinementImageFilter<TInputImage,  TOutputImage >
 {	
  
 //std::cout<< "Radius"<< this->GetRadius()<< std::endl;
+	std::cout << "ThreadedGenerateData : PatchMatchRefinementImageFilter.txx " << std::endl;
 
 //input iterator 
 
@@ -214,13 +215,12 @@ IndexType Index = NormalAndZValueInputIt.GetIndex();
 		NormalAndZValue[1] = ny1;
 		NormalAndZValue[2] = nz1;
 		
-		NormalAndZValue[3] = z1;
-		
+		NormalAndZValue[3] = z1;	
 	
 	
 	this->GetOutputPatchImage()->SetPixel(Index, coeffs);
-	this->GetOutputNormalAndZValueImage()->SetPixel(Index, NormalAndZValue);
-							
+	this->GetOutputNormalAndZValueImage()->SetPixel(Index, NormalAndZValue);							
+	
 	
 	++NormalAndZValueInputIt;
 	progress.CompletedPixel();

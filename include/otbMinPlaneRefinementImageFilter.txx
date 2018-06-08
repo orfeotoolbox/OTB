@@ -332,8 +332,8 @@ if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr
   typename TInputImage::RegionType inputRequestedRegion;
   inputRequestedRegion = inCoefRefinedPtr->GetRequestedRegion();
     SizeType Re;
-Re[0] = m_PatchSize[0] +5;
-Re[1] = m_PatchSize[1] +5;
+  Re[0] = m_PatchSize[0]+5;
+  Re[1] = m_PatchSize[1]+5;
   // pad the input requested region by the plane Size
   inputRequestedRegion.PadByRadius(Re);
   otbMsgDevMacro(<< "Padding by " << Re);
@@ -371,6 +371,7 @@ MinPlaneRefinementImageFilter<TInputImage,  TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId){
 
 //std::cout<<"outputRegionForThread =  " << outputRegionForThread <<std::endl;
+  std::cout << "ThreadedGenerateData : MinPlaneRefinementImageFilter.txx " << std::endl;
 //input iterator 
 ConstNeighborhoodIteratorType InputImageIt ( this->GetRadius(), this->GetLeftInputImage(), outputRegionForThread );
 InputImageIt.GoToBegin();

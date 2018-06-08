@@ -40,7 +40,7 @@ public:
     TOutput Out(9); 
     Out.Fill(0);   
         	
-        		Out[0] = static_cast<typename TOutput::ValueType>(input[0]*input[0]) ;
+        Out[0] = static_cast<typename TOutput::ValueType>(input[0]*input[0]) ;
 				Out[1] = static_cast<typename TOutput::ValueType>(input[0]*input[1]) ;
 				Out[2] = static_cast<typename TOutput::ValueType>(input[0]*input[2]) ;
 				Out[3] = Out[1];
@@ -49,6 +49,9 @@ public:
 				Out[6] = static_cast<typename TOutput::ValueType>(input[2]*input[0]) ;
 				Out[7] = Out[5];
 				Out[8] = static_cast<typename TOutput::ValueType>(input[2]*input[2]) ;
+
+       // std::cout << " input[0] = " << input[0] << std::endl;
+        // std::cout << " out[0] = " << Out[0] << std::endl;
 
    	return Out;
   } // end operator ()

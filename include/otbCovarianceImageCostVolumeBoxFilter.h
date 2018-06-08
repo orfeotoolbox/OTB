@@ -35,7 +35,7 @@ public:
   {	TOutput OutCov(3); 
 	  OutCov.Fill(0);   
         	
-        		OutCov[0] = static_cast<typename TOutput::ValueType>(inputMul[0]- inputMean[0]*inputMean[3]) ; //Meam(R*Cost)-mean(R) *mean(Cost)
+        OutCov[0] = static_cast<typename TOutput::ValueType>(inputMul[0]- inputMean[0]*inputMean[3]) ; //Meam(R*Cost)-mean(R) *mean(Cost)
 				OutCov[1] = static_cast<typename TOutput::ValueType>(inputMul[1]- inputMean[1]*inputMean[3]) ;
 				OutCov[2] = static_cast<typename TOutput::ValueType>(inputMul[2]- inputMean[2]*inputMean[3]) ;
 			
@@ -46,8 +46,6 @@ public:
 }; // end of functor class  CovarianceBoxOperator
 
 }  // end of fonctor 
-
-
 
 
 

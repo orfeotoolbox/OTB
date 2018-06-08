@@ -77,7 +77,6 @@
 #include "otbConvolutionImageFilter.h"
 
 #include "otbMultiplyByScalarImageFilter.h"
-//#include "itkAddConstantToImageFilter.h"
 #include <itkAddImageFilter.h>
 #include "otbThresholdVectorImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h" //muti channel 
@@ -145,9 +144,9 @@ int testCostVolumeFilter(int argc, char *argv[])
   MultiplyFilterType::Pointer MultiplyLeft = MultiplyFilterType::New();
   MultiplyLeft->SetInput( LeftReader->GetOutput() );
   
+  
   MultiplyFilterType::Pointer MultiplyRight = MultiplyFilterType::New();
-  MultiplyRight->SetInput( RightReader->GetOutput() );
- 
+  MultiplyRight->SetInput( RightReader->GetOutput() ); 
   
   ImageWriterType::Pointer Multiplywriter = ImageWriterType::New();
   Multiplywriter->SetFileName(FILENAME("MultiplyImage.tif" ));
@@ -381,6 +380,8 @@ int testCostVolumeFilter(int argc, char *argv[])
   MeanBoxFilterType::Pointer LeftMeanCostBoxFilter = MeanBoxFilterType::New();
   LeftMeanCostBoxFilter->SetInput( LeftCostBox->GetOutput() );  
   LeftMeanCostBoxFilter->SetRadius(radius);
+
+  
   // Right
   BoxFilterType::Pointer RightCostBox = BoxFilterType::New();
   RightCostBox->SetInput( RightCost->GetOutput() ); 
@@ -841,13 +842,40 @@ OtbImageRightMedian->Update();
   FillMedianwriter->SetFileName( FILENAME("SmoothFillDisparity.tif"));
   FillMedianwriter->SetInput( FillMedian->GetOutput() );  
   FillMedianwriter->Update(); 
+ 
  //#endif 
 
   if(false){
     // ================ Test du RMSE =================
+
+    ReaderType::Pointer GroundTruth = ReaderType::New();
+    ReaderType::Pointer FillMedianI = ReaderType::New();
+
+    GroundTruth->SetFileName("/home/julie/Documents/c++/data/truedisp.row3.col3.pgm"); 
+    GroundTruth->UpdateOutputInformation();
+
+    FillMedianI->SetFileName("/home/julie/Documents/c++/results/CVFDisparity.tif"); 
+    FillMedianI->UpdateOutputInformation();
+
+    typedef otb::RMSEVectorImageFilter< ImageType, ImageType > RMSEType;
+
+    RMSEType::Pointer RMSEfilter = RMSEType::New();
+    RMSEfilter->SetEstimatedInputImage(GroundTruth->GetOutput()); //groundTruth
+    RMSEfilter->SetInputImage(FillMedianI->GetOutput()); //Fillmedian
+    RMSEfilter->UpdateOutputInformation();
+
+
+    ImageWriterType::Pointer RMSEWriter = ImageWriterType::New(); 
+   RMSEWriter->SetFileName( FILENAME("RMSEfilter.tif"));
+   RMSEWriter->SetInput( RMSEfilter->GetOutput());  
+   otb::StandardFilterWatcher RMSEWatcher(RMSEWriter, "RMSEfilter"); 
+   RMSEWriter->Update();
+
+/*
+    
    ReaderType::Pointer GroundTruth = ReaderType::New();
    
-    GroundTruth->SetFileName("/home/dbelazou/src/otb/Modules/Remote/MatchingFilters/data/ImageRGB/middlebury/tsukuba_o_d.jpg"); //LeftImage 
+    GroundTruth->SetFileName("/home/julie/Documents/c++/data/scene1_row3_col3.ppm"); //LeftImage 
     GroundTruth->UpdateOutputInformation();//*
 
 
@@ -855,20 +883,22 @@ OtbImageRightMedian->Update();
     RMSEType::Pointer RMSEfilter = RMSEType::New();
     RMSEfilter->SetEstimatedInputImage(LeftReader->GetOutput()); //groundTruth
     RMSEfilter->SetInputImage(LeftReader->GetOutput()); //Fillmedian
-     
+    */
    
   /** écriture du resultat de la disparité avec le cost volumebrute**/ 
+/*
+    
    ImageWriterType::Pointer RMSEWriter = ImageWriterType::New(); 
    RMSEWriter->SetFileName( FILENAME("RMSEfilter.tif"));
    RMSEWriter->SetInput( RMSEfilter->GetOutput());  
    otb::StandardFilterWatcher RMSEWatcher(RMSEWriter, "RMSEfilter"); 
    RMSEWriter->Update();
+   */
+
   }
-
-
-  
-
+ 
 return EXIT_SUCCESS;
+
 }
 
  

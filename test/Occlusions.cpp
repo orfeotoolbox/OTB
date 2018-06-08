@@ -64,7 +64,7 @@
 int testOcclusionsFilter(int argc, char *argv[])
   {
   if(argc < 3) {
-  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap InvRigthDisparityMap inLeftImage outputPathFolder" << std::endl;
+  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap InvRigthDisparityMap inLeftImage radiusOcc rmf outputPathFolder" << std::endl;
   	return EXIT_FAILURE;
   	}
 
@@ -102,10 +102,13 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_inLeft->SetFileName(argv[3]); 
   m_inLeft->UpdateOutputInformation();
 
+  int radiusOcc = atoi(argv[4]);
+  int rmf = atoi(argv[5]) ;
 
 
-  std::string argv4 = std::string(argv[4]);
-  #define FILENAME(n) std::string( argv4 + std::string(n)).c_str()
+
+  std::string argv6 = std::string(argv[6]);
+  #define FILENAME(n) std::string( argv6 + std::string(n)).c_str()
 
   unsigned int dispMax = 15;
   unsigned int dispMin = 0; 
@@ -134,7 +137,7 @@ int testOcclusionsFilter(int argc, char *argv[])
  FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
  m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
  m_FillOccDisparityMap->SetInput2(m_LeftDisparity->GetOutput() );
- m_FillOccDisparityMap->SetRadius(0,2);
+ m_FillOccDisparityMap->SetRadius(0,radiusOcc);
 
 
  IntWriterType::Pointer writer_FillOcclusions = IntWriterType::New(); 
@@ -160,8 +163,8 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_WeightOccMapAndLeftImageFilter->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
 
   FloatVectorImageType::SizeType radiusM;
-  radiusM[0] = 19;
-  radiusM[1] = 19;   
+  radiusM[0] = rmf;
+  radiusM[1] = rmf;   
   m_WeightOccMapAndLeftImageFilter->SetRadius(radiusM);
 
 

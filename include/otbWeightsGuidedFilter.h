@@ -89,10 +89,10 @@ public:
 
     //moyenne rr, gg, bb
     std::vector<double> v_mean;
-    v_mean.resize(3,0);
+    v_mean.resize(Nband,0);
     //variance rr, gg, bb
     std::vector<double> v_var;
-    v_var.resize(6,0);
+    v_var.resize(2*Nband,0);
 
     std::vector<double> v_pmean;
     v_pmean.resize(disparity_max,0) ;
@@ -198,48 +198,67 @@ public:
     elem3.resize(disparity_max,0);
 
     std::vector<double> ak;
-    ak.resize(3,0); 
+    ak.resize(Nband,0); 
 
     for(unsigned int bandC = 0 ; bandC < disparity_max ; ++bandC)
       {
-       //matrice de covariance fenêtre k :
-      M(0,0) = v_var[0] + epsilon;
-      M(0,1) = v_var[3] ;
-      M(0,2) = v_var[4] ;
-      M(1,0) = M(0,1) ;
-      M(1,1) = v_var[1] + epsilon ;
-      M(1,2) = v_var[5] ;
-      M(2,0) = M(0,2) ;
-      M(2,1) = M(1,2); ;
-      M(2,2) = v_var[2] + epsilon ;
-      // Inverse of (covariance Matrix + epsilon+I3)
-      MatrixType Matrice_cov_inv( M.GetInverse() ); 
 
-      elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;
-      elem2[bandC] = v_multg[bandC] - v_mean[1] * v_pmean[bandC] ;
-      elem3[bandC] = v_multb[bandC] - v_mean[2] * v_pmean[bandC] ;  
+        if(Nband>1)
+        {
+        //matrice de covariance fenêtre k :
+        M(0,0) = v_var[0] + epsilon;
+        M(0,1) = v_var[3] ;
+        M(0,2) = v_var[4] ;
+        M(1,0) = M(0,1) ;
+        M(1,1) = v_var[1] + epsilon ;
+        M(1,2) = v_var[5] ;
+        M(2,0) = M(0,2) ;
+        M(2,1) = M(1,2); ;
+        M(2,2) = v_var[2] + epsilon ;
+        // Inverse of (covariance Matrix + epsilon+I3)
+        MatrixType Matrice_cov_inv( M.GetInverse() ); 
 
-
-
-      //calcul ak
-      ak[0] = Matrice_cov_inv(0,0)*elem1[bandC] + Matrice_cov_inv(0,1)*elem2[bandC] + Matrice_cov_inv(0,2)*elem3[bandC];
-      ak[1] = Matrice_cov_inv(1,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] + Matrice_cov_inv(1,2)*elem3[bandC];
-      ak[2] = Matrice_cov_inv(2,0)*elem1[bandC] + Matrice_cov_inv(2,1)*elem2[bandC] + Matrice_cov_inv(2,2)*elem3[bandC]; 
+        elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;
+        elem2[bandC] = v_multg[bandC] - v_mean[1] * v_pmean[bandC] ;
+        elem3[bandC] = v_multb[bandC] - v_mean[2] * v_pmean[bandC] ;  
 
 
-      //calcul bk
-      double bk(0.);
-      bk = v_pmean[bandC] - (ak[0]*v_mean[0]  + ak[1]*v_mean[1] + ak[2]*v_mean[2]) ;
-   
-      output[4*bandC] = static_cast<typename TOutput::ValueType>(ak[0]);
-      output[4*bandC+1] = static_cast<typename TOutput::ValueType>(ak[1]);
-      output[4*bandC+2] = static_cast<typename TOutput::ValueType>(ak[2]);
-      output[4*bandC+3] = static_cast<typename TOutput::ValueType>(bk);
+
+        //calcul ak
+        ak[0] = Matrice_cov_inv(0,0)*elem1[bandC] + Matrice_cov_inv(0,1)*elem2[bandC] + Matrice_cov_inv(0,2)*elem3[bandC];
+        ak[1] = Matrice_cov_inv(1,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] + Matrice_cov_inv(1,2)*elem3[bandC];
+        ak[2] = Matrice_cov_inv(2,0)*elem1[bandC] + Matrice_cov_inv(2,1)*elem2[bandC] + Matrice_cov_inv(2,2)*elem3[bandC]; 
+
+
+        //calcul bk
+        double bk(0.);
+        bk = v_pmean[bandC] - (ak[0]*v_mean[0]  + ak[1]*v_mean[1] + ak[2]*v_mean[2]) ;
+     
+        output[4*bandC] = static_cast<typename TOutput::ValueType>(ak[0]);
+        output[4*bandC+1] = static_cast<typename TOutput::ValueType>(ak[1]);
+        output[4*bandC+2] = static_cast<typename TOutput::ValueType>(ak[2]);
+        output[4*bandC+3] = static_cast<typename TOutput::ValueType>(bk);
+        }
+        else
+        {
+
+
+          elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;          
+          ak[0] = elem1[bandC] / (v_var[Nband-1]+epsilon) ;
+          double bk(0.);
+          bk = v_pmean[bandC] - ak[0]*v_mean[0] ;
+
+        output[(Nband+1)*bandC] = static_cast<typename TOutput::ValueType>(ak[0]);
+        output[(Nband+1)*bandC+1] = static_cast<typename TOutput::ValueType>(bk);
+
+
+        }
+     
       
     }
 
-    return output ; 
-    }
+  return output ; 
+  }
 
 
   protected:
@@ -291,8 +310,10 @@ public:
     {
     Superclass::GenerateOutputInformation();
     unsigned int nb_comp (this->GetInput(1)->GetNumberOfComponentsPerPixel());
-    this->GetOutput()->SetNumberOfComponentsPerPixel(4*nb_comp);
-    this->GetFunctor().SetNumberOfComponent(4*nb_comp);
+    unsigned int bandI (this->GetInput(0)->GetNumberOfComponentsPerPixel());
+    this->GetOutput()->SetNumberOfComponentsPerPixel((bandI+1)*nb_comp);
+    this->GetFunctor().SetNumberOfComponent((bandI+1)*nb_comp);      
+
     } 
 
   private:

@@ -384,6 +384,8 @@ void
 ViewPropagationImageFilter<TInputImage,  TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId){
 
+std::cout << "ThreadedGenerateData : ViewPropagationImageFilter.txx " << std::endl;
+
 RegionType bufferedRegion = this->GetOutputNormalAndZValueImage()->GetBufferedRegion();
 //std::cout<< "bufferedRegion"<< bufferedRegion << std::endl;
 

@@ -28,17 +28,18 @@
 
 
 
+
 namespace otb
 {
 
 namespace Functor
 {
 template<class TInput_I, class TInput_CostVolume, class TOutput> 
-class LocalStatVectorImage
+class LocalStatVectorImage1
 {
 public:
-  LocalStatVectorImage(){}
-  ~LocalStatVectorImage() {}
+  LocalStatVectorImage1(){}
+  ~LocalStatVectorImage1() {}
 
 
   int  GetNumberOfComponentsPerPixel() const
@@ -64,6 +65,7 @@ public:
 
 
 
+
   TOutput operator() ( TInput_I input_it , TInput_CostVolume input_C )
     {
 
@@ -71,13 +73,15 @@ public:
     unsigned int Nband_C =  input_C.GetPixel(0).Size(); //bands number
     
   
-    typename TInput_I::RadiusType r_Box = input_it.GetRadius();  
+    typename TInput_I::RadiusType r_Box = input_it.GetRadius(); 
     unsigned int r_Mean = r_Box[0]-1;
     unsigned int size_Mean = 2*r_Mean+1;
+
 
     TOutput output(Nband*3+4*Nband_C); 
 
     output.Fill(0); 
+
 
     //Mean
     for(unsigned int b = 0; b < Nband; ++b)
@@ -87,8 +91,7 @@ public:
 
         for(unsigned int i = 0; i < input_it.Size() ; ++i)
           {
-            mean += input_it.GetPixel(i)[b]     ;   
-
+            mean += input_it.GetPixel(i)[b] ;  
           }
           mean /= size_Mean*size_Mean;    
           output[b] = static_cast<typename TOutput::ValueType>(mean) ;
@@ -121,7 +124,7 @@ public:
         output[b] = static_cast<typename TOutput::ValueType>(var) ;
         }
 
-      //std::cout << "variance rg" << std::endl;
+      //std::cout << "variance gb" << std::endl;
         for(unsigned int b = Nband*3-1; b < Nband*3; ++b)
           {
           double var(0.);
@@ -184,6 +187,64 @@ public:
             output[b] = static_cast<typename TOutput::ValueType>(mult_b) ;
           }
      
+
+    //Functor2
+
+
+    // Covariance matrix
+    typedef itk::Matrix<double, 3, 3> MatrixType;
+    MatrixType M;
+    unsigned int epsilon = 0.0001 ; 
+
+
+    //Calcul ak
+    //r
+    std::vector<double> elem1;
+    elem1.resize(Nband_C-1,0);
+    //g
+    std::vector<double> elem2;
+    elem2.resize(Nband_C-1,0);
+    //b
+    std::vector<double> elem3;
+    elem3.resize(Nband_C-1,0);
+
+    std::vector<double> ak;
+    ak.resize(2,0);
+
+    std::vector<double> sum_ak;
+    sum_ak.resize(2,0);
+
+
+    for(unsigned int disp=0; disp < 1 ; ++disp)
+      {  
+
+      //matrice de covariance fenêtre k :
+      M(0,0) = output[3] + epsilon;
+      M(0,1) = output[6] ;
+      M(0,2) = output[7] ;
+
+      M(1,0) = M(0,0) ;
+      M(1,1) = output[4] + epsilon ;
+      M(1,2) = output[8] ;
+
+      M(2,0) = M(0,2) ;
+      M(2,1) = M(1,2); ;
+      M(2,2) = output[5] + epsilon ;
+
+      // Inverse of (covariance Matrix + epsilon+I3)
+      MatrixType Matrice_cov_inv( M.GetInverse() );  
+
+      elem1[disp] = output[24+disp] - output[0]*output[9+disp];
+      elem2[disp] = output[39+disp] - output[1]*output[9+disp];
+      elem3[disp] = output[54+disp] - output[2]*output[9+disp];   
+
+      ak[0] = Matrice_cov_inv(0,0)*elem1[disp] + Matrice_cov_inv(0,1)*elem2[disp] * Matrice_cov_inv(0,2)*elem3[disp];
+      ak[1] = Matrice_cov_inv(1,0)*elem1[disp] + Matrice_cov_inv(1,1)*elem2[disp] * Matrice_cov_inv(1,2)*elem3[disp];
+      ak[2] = Matrice_cov_inv(2,0)*elem1[disp] + Matrice_cov_inv(1,1)*elem2[disp] * Matrice_cov_inv(2,2)*elem3[disp];
+
+      }
+
+
   
     return output ; 
 

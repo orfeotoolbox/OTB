@@ -247,6 +247,8 @@ typedef otb::CoefOfThePatchFilter< ImageType, ImageType> CoefPatchFilterType;
   RightCoefPatch->SetMaxdisp(-HdispMin);
  // RightCoefPatch->UpdateOutputInformation(); 
 
+
+
  ImageWriterType::Pointer CoefPatchWriter = ImageWriterType::New();
   CoefPatchWriter->SetFileName(FILENAME("CoefPatch.tif"));
   CoefPatchWriter->SetInput( RightCoefPatch->GetOutputCoefImage() );   
@@ -303,7 +305,7 @@ RightCoefPatch->UpdateOutputInformation();
 
  
  /// créer une image pour permuter l'entrer et la sortie pour mettre a jour les coefs
-	ImageType::Pointer LeftCoefPlane  = ImageType::New();; 
+	ImageType::Pointer LeftCoefPlane  = ImageType::New(); 
 	LeftCoefPlane->CopyInformation(LeftCoefPatch->GetOutputCoefImage());
     LeftCoefPlane->SetNumberOfComponentsPerPixel(3);
     LeftCoefPlane->SetRegions(LeftCoefPatch->GetOutputCoefImage()->GetLargestPossibleRegion());
