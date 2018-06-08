@@ -125,13 +125,6 @@ else()
   set(REQUIRED_CBLAS_LIB)
 endif()
 
-
-if ( SHARK_USE_OPENMP AND NOT OTB_USE_OPENMP )
-  message(WARNING "Shark library is built with OpenMP and you have OTB_USE_OPENMP set to OFF.\
-   It will be turned to ON to allow compilation")
-  set( OTB_USE_OPENMP "ON" CACHE BOOL "Add openmp compiler and linker flags" FORCE )
-endif()
-
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Shark
   REQUIRED_VARS SHARK_LIBRARY SHARK_INCLUDE_DIR ${REQUIRED_CBLAS_LIB}
