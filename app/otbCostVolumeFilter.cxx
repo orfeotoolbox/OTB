@@ -783,10 +783,10 @@ m_OtbImageRightMedian->Update();
  
   m_OccCastFiler-> SetInput( const_cast <FloatImageType *>( m_Occlusionfilter->GetOutput() ));  
   
-  // m_ConcatenateOccEndInLeftMedImage->SetInput1(m_OccCastFiler->GetOutput());
-  // m_ConcatenateOccEndInLeftMedImage->SetInput2( m_LeftMedian->GetOutput() );
   m_ConcatenateOccEndInLeftMedImage->SetInput1(m_OccCastFiler->GetOutput());
-  m_ConcatenateOccEndInLeftMedImage->SetInput2( m_RightMedian->GetOutput() );
+  m_ConcatenateOccEndInLeftMedImage->SetInput2( m_LeftMedian->GetOutput() );
+  // m_ConcatenateOccEndInLeftMedImage->SetInput1(m_OccCastFiler->GetOutput());
+  // m_ConcatenateOccEndInLeftMedImage->SetInput2( m_RightMedian->GetOutput() );
 
   m_FillOcclusionfilter->SetInput(m_ConcatenateOccEndInLeftMedImage->GetOutput()); 
   FloatVectorImageType::SizeType OccRadius;
@@ -798,11 +798,11 @@ m_OtbImageRightMedian->Update();
    /** Instanciation du filtre weighted median en metant en entrée une image a 4 bandes (sortie de la concatenation) 
    * le 1ere bande etant la carte de fill occlusion et 3 autre l'image de droite filtré avec un median simple */
    
-  // m_ConcatenateFillEndInLeftMedImage->SetInput1(m_FillOcclusionfilter->GetOutput());
-  // m_ConcatenateFillEndInLeftMedImage->SetInput2( m_LeftMedianFilter->GetOutput() );
-     
   m_ConcatenateFillEndInLeftMedImage->SetInput1(m_FillOcclusionfilter->GetOutput());
-  m_ConcatenateFillEndInLeftMedImage->SetInput2( m_RightMedianFilter->GetOutput() );
+  m_ConcatenateFillEndInLeftMedImage->SetInput2( m_LeftMedianFilter->GetOutput() );
+     
+  // m_ConcatenateFillEndInLeftMedImage->SetInput1(m_FillOcclusionfilter->GetOutput());
+  // m_ConcatenateFillEndInLeftMedImage->SetInput2( m_RightMedianFilter->GetOutput() );
 
   m_FillMedian-> SetInput(m_ConcatenateFillEndInLeftMedImage->GetOutput()); 
   m_FillMedian->SetRadius(radiusM) ;
