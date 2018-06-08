@@ -69,7 +69,7 @@ QtWidgetSpinBox::QtWidgetSpinBox( QWidget* parent )
   connect(m_LineEdit, &QtWidgetLineEdit::Cleared, this, &QtWidgetSpinBox::Cleared);
 
   // Small Qt hack to prevent highlighting the text after it has changed (to improve UX a bit)
-  connect(this, QOverload<int>::of(&QtWidgetSpinBox::valueChanged), this, [&](int) {
+  connect(this, static_cast<void (QtWidgetSpinBox::*)(int)>(&QtWidgetSpinBox::valueChanged), this, [&](int) {
     m_LineEdit->deselect();
   }, Qt::QueuedConnection);
 
@@ -128,7 +128,7 @@ QtWidgetDoubleSpinBox::QtWidgetDoubleSpinBox( QWidget* parent )
   connect(m_LineEdit, &QtWidgetLineEdit::Cleared, this, &QtWidgetDoubleSpinBox::Cleared);
 
   // Small Qt hack to prevent highlighting the text after it has changed (to improve UX a bit)
-  connect(this, QOverload<double>::of(&QtWidgetDoubleSpinBox::valueChanged), this, [&](double) {
+  connect(this, static_cast<void (QtWidgetDoubleSpinBox::*)(double)>(&QtWidgetDoubleSpinBox::valueChanged), this, [&](double) {
     m_LineEdit->deselect();
   }, Qt::QueuedConnection);
 

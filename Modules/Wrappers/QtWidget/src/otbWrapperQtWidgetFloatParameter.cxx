@@ -90,7 +90,7 @@ void QtWidgetFloatParameter::DoCreateWidget()
   // What happens when the value changed because of user interaction (keyboard or arrows pressed)
   // Note: to avoid calling this when the value changes automatically (reset button, DoParameterUpdate, XML load),
   // calls to QSpinBox::setValue() are wrapped with signal blockers
-  connect(m_QDoubleSpinBox, QOverload<double>::of(&QtWidgetDoubleSpinBox::valueChanged),
+  connect(m_QDoubleSpinBox, static_cast<void (QtWidgetDoubleSpinBox::*)(double)>(&QtWidgetDoubleSpinBox::valueChanged),
           this, &QtWidgetFloatParameter::OnValueChanged);
 
   // What happens when the SpinBox looses focus, or enter is pressed
