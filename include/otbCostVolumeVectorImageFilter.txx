@@ -3,7 +3,7 @@
 #define otbCostVolumeVectorImageFilter_txx
 
 
-#include "otbCostVolumeImageFilter.h"
+#include "otbCostVolumeVectorImageFilter.h"
 #include "itkProgressReporter.h"
 #include "itkConstantBoundaryCondition.h"
 #include "itkConstNeighborhoodIterator.h"
@@ -18,7 +18,6 @@
 #include "otbVectorImage.h"
 
 
-//m_HorizontalDisparity
 
 namespace otb
 {	

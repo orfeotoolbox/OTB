@@ -3,7 +3,7 @@
 #define otbCostVolumeImageFilter0_txx
 
 
-#include "otbCostVolumeImageFilter.h"
+#include "otbCostVolumeImageFilter0.h"
 #include "itkProgressReporter.h"
 #include "itkConstantBoundaryCondition.h"
 #include "itkConstNeighborhoodIterator.h"

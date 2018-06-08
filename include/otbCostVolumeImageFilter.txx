@@ -18,7 +18,6 @@
 #include "otbVectorImage.h"
 
 
-//m_HorizontalDisparity
 
 namespace otb
 {	
