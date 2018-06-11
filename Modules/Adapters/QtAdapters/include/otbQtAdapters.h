@@ -31,9 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include <QFileDialog>
-#endif //tag=QT4-boost-compatibility
 
 //
 // System includes (sorted by alphabetic order)
