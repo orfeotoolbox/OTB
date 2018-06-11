@@ -36,10 +36,10 @@ List or link documentation modifications that were made (doxygen, example, Softw
 
 The copyright owner is *COPYRIGHT OWNER (OR OWNER'S AGENT)* and has signed the ORFEO ToolBox Contributor License Agreement.
 
-
+<hr>
 ***Check before merging:***
-- [ ] All discussions are resolved
-- [ ] At least 2 :thumbsup: votes from core developers, no :thumbsdown: vote.
-- [ ] The feature branch is (reasonably) up-to-date with the base branch
-- [ ] Dashboard is green
-- [ ] Copyright owner has signed the ORFEO ToolBox Contributor License Agreement
+- All discussions are resolved
+- At least 2 :thumbsup: votes from core developers, no :thumbsdown: vote.
+- The feature branch is (reasonably) up-to-date with the base branch
+- Dashboard is green
+- Copyright owner has signed the ORFEO ToolBox Contributor License Agreement
