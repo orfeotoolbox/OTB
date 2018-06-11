@@ -64,7 +64,7 @@
 int testOcclusionsFilter(int argc, char *argv[])
   {
   if(argc < 3) {
-  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap InvRigthDisparityMap inLeftImage radiusOcc rmf outputPathFolder" << std::endl;
+  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap RigthDisparityMap inLeftImage minDisp maxDisp rwmf outputPathFolder" << std::endl;
   	return EXIT_FAILURE;
   	}
 
@@ -94,32 +94,30 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_LeftDisparity->SetFileName(argv[1]); //LeftDisparity 
   m_LeftDisparity->UpdateOutputInformation();
 
-  IntReaderType::Pointer m_RightDisparityInv = IntReaderType::New();
-  m_RightDisparityInv->SetFileName(argv[2]); //RightDisparity
-  m_RightDisparityInv->UpdateOutputInformation();
+  IntReaderType::Pointer m_RightDisparity = IntReaderType::New();
+  m_RightDisparity->SetFileName(argv[2]); //RightDisparity
+  m_RightDisparity->UpdateOutputInformation();
 
   IntVectorImageReaderType::Pointer m_inLeft = IntVectorImageReaderType::New();
   m_inLeft->SetFileName(argv[3]); 
   m_inLeft->UpdateOutputInformation();
-
-  int radiusOcc = atoi(argv[4]);
-  int rmf = atoi(argv[5]) ;
-
+  unsigned int dispMin = atoi(argv[4]);
+  unsigned int dispMax = atoi(argv[5]);
 
 
-  std::string argv6 = std::string(argv[6]);
-  #define FILENAME(n) std::string( argv6 + std::string(n)).c_str()
+  int rwmf = atoi(argv[6]) ;
 
-  unsigned int dispMax = 15;
-  unsigned int dispMin = 0; 
 
+
+  std::string argv7 = std::string(argv[7]);
+  #define FILENAME(n) std::string( argv7 + std::string(n)).c_str()
 
 
   // OCCLUSION DETECTION
   typedef otb::BijectionCoherencyFilter< IntImageType, IntImageType > OcclusionType;
   OcclusionType::Pointer m_OcclusionFilter = OcclusionType::New();  
   m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
-  m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparityInv->GetOutput()); 
+  m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
    
   m_OcclusionFilter->SetMaxHDisp(dispMax);
   m_OcclusionFilter->SetMinHDisp(dispMin);
@@ -137,7 +135,7 @@ int testOcclusionsFilter(int argc, char *argv[])
  FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
  m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
  m_FillOccDisparityMap->SetInput2(m_LeftDisparity->GetOutput() );
- m_FillOccDisparityMap->SetRadius(0,radiusOcc);
+ m_FillOccDisparityMap->SetRadius(0,rwmf);
 
 
  IntWriterType::Pointer writer_FillOcclusions = IntWriterType::New(); 
@@ -163,8 +161,8 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_WeightOccMapAndLeftImageFilter->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
 
   FloatVectorImageType::SizeType radiusM;
-  radiusM[0] = rmf;
-  radiusM[1] = rmf;   
+  radiusM[0] = rwmf;
+  radiusM[1] = rwmf;   
   m_WeightOccMapAndLeftImageFilter->SetRadius(radiusM);
 
 
