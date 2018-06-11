@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -45,7 +43,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbMacro.h"
 #include "otbQtFileSelectionWidget.h"
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
@@ -63,7 +60,6 @@
 #include "otbWrapperQtWidgetComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperQtWidgetListEditWidget.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiGUIExport.h"
 //
@@ -401,10 +397,8 @@ public:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdI18nCoreApplication.h"
 #include "mvdFilenameDragAndDropEventFilter.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace mvd
 {
