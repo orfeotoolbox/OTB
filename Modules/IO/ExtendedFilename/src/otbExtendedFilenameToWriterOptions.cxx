@@ -101,9 +101,9 @@ ExtendedFilenameToWriterOptions
    check nodata value(s) for each band and make a list of
    band-nodata pairs
   */
-  auto wh = map.find("nodata");
-  if (wh != map.end()) {
-    auto const& nodata_values = *wh;
+  auto iter = map.find("nodata");
+  if (iter != map.end()) {
+    auto const& nodata_values = iter->second;
     std::vector<std::string> nodata_list;
     boost::split(nodata_list, nodata_values,
 		 boost::is_any_of(","),
