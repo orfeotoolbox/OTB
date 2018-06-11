@@ -1567,9 +1567,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       }
     }
 
-  NoDataListType::const_iterator noDataIt = m_NoDataList.begin();
-    for(; noDataIt != m_NoDataList.end(); ++noDataIt)
-    dataset->GetRasterBand(noDataIt->first)->SetNoDataValue(noDataIt->second);
+  for (auto const& noData : m_NoDataList)
+    dataset->GetRasterBand(noData.first)->SetNoDataValue(noData.second);
 
 }
 

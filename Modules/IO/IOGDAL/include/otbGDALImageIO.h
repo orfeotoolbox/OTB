@@ -116,7 +116,7 @@ public:
     m_CreationOptions = opts;
   }
 
-  void SetNoDataList(NoDataListType v) { m_NoDataList = v; }
+  itkSetMacro(NoDataList, NoDataListType);
 
   GDALCreationOptionsType GetOptions(void)
   {
@@ -195,7 +195,7 @@ public:
   /** Returns gdal pixel type as string */
   std::string GetGdalPixelTypeAsString() const;
 
-  int NbBands() { return m_NbBands;}
+  itkGetMacro(NbBands, int);
 
 protected:
   /**

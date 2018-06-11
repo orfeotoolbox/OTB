@@ -50,14 +50,13 @@ ExtendedFilenameToWriterOptions
   m_Options.bandRange.first = false;
   m_Options.bandRange.second = "";
 
-  m_Options.optionList.push_back("writegeom");
-  m_Options.optionList.push_back("writerpctags");
-  m_Options.optionList.push_back("streaming:type");
-  m_Options.optionList.push_back("streaming:sizemode");
-  m_Options.optionList.push_back("streaming:sizevalue");
-  m_Options.optionList.push_back("nodata");
-  m_Options.optionList.push_back("box");
-  m_Options.optionList.push_back("bands");
+  m_Options.optionList = {
+    "writegeom", "writerpctags",
+    "streaming:type", "streaming:sizemode", "streaming:sizevalue",
+    "nodata",
+    "box", "bands"
+  };
+
 }
 
 void
@@ -98,38 +97,39 @@ ExtendedFilenameToWriterOptions
        m_Options.writeGEOMFile.second = false;
        }
      }
-  
-  if (!map["nodata"].empty())
-     {
-       std::string nodata_values = map["nodata"];
-       std::vector<std::string> nodata_list;
-       boost::split(nodata_list, nodata_values, boost::is_any_of(","),
-		    boost::token_compress_on);
-       std::vector<std::string>::const_iterator listIt = nodata_list.begin();
-       for(; listIt != nodata_list.end(); ++listIt) {
-       std::string nodata_pair = (*listIt);
-       std::vector<std::string> per_band_no_data;
-       boost::split(per_band_no_data,
-		    nodata_pair,
-		    boost::is_any_of(":"),
-		    boost::token_compress_on);
-       if (per_band_no_data.size() == 1)
-	 {
-	   double val = Utils::LexicalCast<double>(per_band_no_data[0],
-						   "nodata value");
-	   m_NoDataList.push_back(NoDataPairType(1, val));
-	 }
-       else
-	 {
-	   int band = Utils::LexicalCast<int>(per_band_no_data[0],
-						   "nodata value");
-	   double val = Utils::LexicalCast<double>(per_band_no_data[1],
-						   "nodata value");
-	   m_NoDataList.push_back(NoDataPairType(band, val));
-	 }
-       }
-       has_noDataValue = true;
-     }
+  /*
+   check nodata value(s) for each band and make a list of
+   band-nodata pairs
+  */
+  auto wh = map.find("nodata");
+  if (wh != map.end()) {
+    auto const& nodata_values = *wh;
+    std::vector<std::string> nodata_list;
+    boost::split(nodata_list, nodata_values,
+		 boost::is_any_of(","),
+		 boost::token_compress_on);
+    for (auto const& nodata_pair :nodata_list)
+      {
+	std::vector<std::string> per_band_no_data;
+	boost::split(per_band_no_data,
+		     nodata_pair,
+		     boost::is_any_of(":"),
+		     boost::token_compress_on);
+
+	if (per_band_no_data.size() == 1)
+	  {
+	    double val = Utils::LexicalCast<double>(per_band_no_data[0], "nodata value");
+	    m_NoDataList.push_back({1, val});
+	  }
+	else
+	  {
+	    int band = Utils::LexicalCast<int>(per_band_no_data[0], "nodata value");
+	    double val = Utils::LexicalCast<double>(per_band_no_data[1], "nodata value");
+	    m_NoDataList.push_back({band, val});
+	  }
+      }
+    has_noDataValue = true;
+  }
 
   if (!map["writerpctags"].empty())
      {
