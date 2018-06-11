@@ -40,11 +40,10 @@ QtWidgetParameterGroup::~QtWidgetParameterGroup()
 
 void QtWidgetParameterGroup::DoUpdateGUI()
 {
-  WidgetListIteratorType it = m_WidgetList.begin();
-  for (it = m_WidgetList.begin(); it != m_WidgetList.end(); ++it)
-    {
-    (*it)->UpdateGUI();
-    }
+  // Note that we do not need to call each child widget's UpdateGUI here,
+  // because they already each have a signal/slot connection that triggers it
+  // when the model updates.
+  // It is created in QtWidgetParameterBase::CreateWidget()
 }
 
 void QtWidgetParameterGroup::DoCreateWidget()
@@ -102,26 +101,6 @@ void QtWidgetParameterGroup::DoCreateWidget()
           specificWidget->setEnabled(false);
           }
         gridLayout->addWidget(checkBox, i, 0);
-
-        // Reset Button
-        // Make sense only for NumericalParameter
-        if (dynamic_cast<IntParameter*>(param)
-            || dynamic_cast<FloatParameter*>(param)
-            || dynamic_cast<RadiusParameter*>(param)
-            /*|| dynamic_cast<RAMParameter*>(param)*/)
-          {
-          if( param->GetRole() != Role_Output )
-            {
-            QPushButton* resetButton = new QPushButton;
-            resetButton->setText("Reset");
-            resetButton->setToolTip("Reset the value of this parameter");
-            gridLayout->addWidget(resetButton, i, 3);
-
-            // Slots to connect to the reset button
-            connect( resetButton, SIGNAL(clicked()), specificWidget, SLOT(Reset()) );
-            connect( resetButton, SIGNAL(clicked()), GetModel(), SLOT(NotifyUpdate()) );
-            }
-          }
 
         m_WidgetList.push_back(specificWidget);
         }

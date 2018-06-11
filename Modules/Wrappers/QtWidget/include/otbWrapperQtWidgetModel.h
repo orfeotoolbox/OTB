@@ -158,12 +158,11 @@ protected slots:
    */
   void ExecuteAndWriteOutputSlot();
 
+public slots:
   /**
    * \brief Slots called every time one of the widget needs to be
    * updated (e.g. by specialized parameter widgets).
    *
-   * This slot is protected so it can only be called via Qt
-   * signal/slot mechanism and not directly by extern caller.
    */
   void NotifyUpdate();
 

@@ -40,10 +40,10 @@ QtWidgetParameterBase::~QtWidgetParameterBase()
 
 void QtWidgetParameterBase::CreateWidget()
 {
-  this->DoCreateWidget();
+  // Connect the model update gui signal to this widget update gui slot
+  connect( GetModel(), &QtWidgetModel::UpdateGui, this, &QtWidgetParameterBase::UpdateGUI );
 
-  // connect the update signal to this widget
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
+  this->DoCreateWidget();
 }
 
 void QtWidgetParameterBase::UpdateGUI()
@@ -94,15 +94,6 @@ void QtWidgetParameterBase::SetActivationState( bool value )
   this->SetChecked(value);
   m_Param->SetActive(value);
 
-}
-
-// Slot connected to the signal emitted by the Reset Button
-void QtWidgetParameterBase::Reset(  )
-{
-  m_Param->Reset();
-  m_Param->SetUserValue(false);
-  m_Param->SetAutomaticValue(false);
-  this->UpdateGUI();
 }
 
 const Parameter *
