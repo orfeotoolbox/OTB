@@ -220,7 +220,7 @@ CostVolumeVectorImageFilter<TInputImage, TGradientImage, TOutputImage >
   // Call superclass implementation
   Superclass::GenerateOutputInformation();
   
-  this->GetOutput()->SetNumberOfComponentsPerPixel(abs(m_HorizontalMinDisparity)+abs(m_HorizontalMaxDisparity)); 
+  this->GetOutput()->SetNumberOfComponentsPerPixel(m_HorizontalMaxDisparity - m_HorizontalMinDisparity +1); 
  
 }
 //============================================  GenerateInputRequestedRegion  ========================================================

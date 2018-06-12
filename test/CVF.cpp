@@ -59,7 +59,10 @@
 #include "otbImageToVectorImageCastFilter.h"
 
 #include "itkMedianImageFilter.h"
+#include "itkMeanImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
+#include "otbCovarianceMatrix.h"
+
 
 
 
@@ -69,24 +72,30 @@
 	
 int testCVF(int argc, char *argv[])
   {
-  if(argc < 8) {
-  	std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp radius radiusToMeanFilter radiusToWeightFilter outputPathFolder" << std::endl;
+
+
+  if(argc < 9) {
+  	std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp radius radiusToMedianImageFilter radiusToWeightFilter outputPathFolder" << std::endl;
   	return EXIT_FAILURE;
   	}
 
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<float> FloatVectorImageType;
-  typedef otb::Image< double, Dimension > DoubleImageType;
+    typedef otb::VectorImage<int> IntVectorImageType;
+
   typedef otb::Image< float, Dimension > FloatImageType;
   typedef otb::Image< int, Dimension > IntImageType;
- // typedef otb::ImageList<FloatImageType>    ImageListType;
+
 
 
   typedef otb::ImageFileReader<FloatVectorImageType> ReaderType;
   typedef otb::ImageFileWriter<FloatVectorImageType> ImageWriterType;
-  typedef otb::ImageFileWriter< FloatImageType > OtbImageWriterType; 
-  typedef otb::ImageFileReader< FloatImageType > OtbImageReaderType; 
 
+  typedef otb::ImageFileReader<IntVectorImageType> IntVectorImageReaderType;
+  typedef otb::ImageFileWriter<IntVectorImageType> IntVectorImageWriterType;
+  
+  typedef otb::ImageFileReader< IntImageType > IntImageReaderType;
+  typedef otb::ImageFileWriter< IntImageType > IntImageWriterType;  
 
 
 
@@ -109,7 +118,7 @@ int testCVF(int argc, char *argv[])
   #define FILENAME(n) std::string( argv8 + std::string(n)).c_str()
 
 
-
+/*
   // CALCUL GRADIENT
   typedef otb::LocalGradientVectorImageFilter<FloatVectorImageType, FloatVectorImageType> GradientType;
   GradientType::Pointer gradX = GradientType::New();
@@ -129,6 +138,37 @@ int testCVF(int argc, char *argv[])
   writer_gradY->SetInput(gradY->GetOutput());
   writer_gradY->Update();
 
+*/
+
+  ReaderType::Pointer reader_XL = ReaderType::New();
+  reader_XL->SetFileName("/home/julie/Documents/PROJETS/CVF/results/scene/testCostVolumeFilter/GradientXLeft.tif"); //LeftImage  
+  reader_XL->UpdateOutputInformation();
+
+  ReaderType::Pointer reader_XR = ReaderType::New();
+  reader_XR->SetFileName("/home/julie/Documents/PROJETS/CVF/results/scene/testCostVolumeFilter/GradientXRight.tif"); //LeftImage  
+  reader_XR->UpdateOutputInformation();
+
+
+  //MEAN IMAGES
+
+
+  // typedef itk::MedianImageFilter< FloatImageType, FloatImageType > MedianFilterType;
+  // MedianFilterType::Pointer LMedian = MedianFilterType::New();
+  // MedianFilterType::RadiusType MedianRadius = {{1,1}};
+  // LMedian->SetRadius(MedianRadius); 
+
+  // typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, MedianFilterType> PerBand;  
+  //     // ---LEFT
+  // PerBand::Pointer m_LeftMedianFilter = PerBand::New();
+  // m_LeftMedianFilter->SetFilter(LMedian);
+  // m_LeftMedianFilter->SetInput(inLeft->GetOutput()); 
+
+  // ImageWriterType::Pointer LeftMedianwriter = ImageWriterType::New();
+  // LeftMedianwriter->SetFileName( FILENAME("LeftMedian.tif"));
+  // LeftMedianwriter->SetInput( m_LeftMedianFilter->GetOutput() );
+  // LeftMedianwriter->Update();
+
+ 
 
 
   // COST VOLUME  
@@ -137,19 +177,19 @@ int testCVF(int argc, char *argv[])
   CostVolumeType::Pointer m_LeftCost = CostVolumeType::New();
   m_LeftCost->SetLeftInputImage(inLeft->GetOutput() );
   m_LeftCost->SetRightInputImage(inRight->GetOutput() );  
-  m_LeftCost->SetLeftGradientXInput(gradX->GetOutput() ); 
-  m_LeftCost->SetRightGradientXInput(gradY->GetOutput() );      
+  m_LeftCost->SetLeftGradientXInput(reader_XL->GetOutput() ); 
+  m_LeftCost->SetRightGradientXInput(reader_XR->GetOutput() );      
   m_LeftCost->SetMinDisp(dispMin);
   m_LeftCost->SetMaxDisp(dispMax);
   m_LeftCost->Update();
 
 
-  /*
+  
   ImageWriterType::Pointer writer_LeftCost = ImageWriterType::New();
   writer_LeftCost->SetFileName( FILENAME("LeftCost.tif"));
   writer_LeftCost->SetInput(m_LeftCost->GetOutput());
   writer_LeftCost->Update();  
-*/
+
 
 
 
@@ -158,30 +198,47 @@ int testCVF(int argc, char *argv[])
   CostVolumeVectorType::Pointer m_RightCost = CostVolumeVectorType::New();
   m_RightCost->SetLeftInputImage(inRight->GetOutput() );
   m_RightCost->SetRightInputImage(inLeft->GetOutput() );  
-  m_RightCost->SetLeftGradientXInput(gradY->GetOutput() ); 
-  m_RightCost->SetRightGradientXInput(gradX->GetOutput() );      
+  m_RightCost->SetLeftGradientXInput(reader_XR->GetOutput() ); 
+  m_RightCost->SetRightGradientXInput(reader_XL->GetOutput() );      
   m_RightCost->SetMinDisp(-dispMax);
   m_RightCost->SetMaxDisp(-dispMin);
   m_RightCost->Update();
       
-  // ImageWriterType::Pointer writer_RightCost = ImageWriterType::New();
-  // writer_RightCost->SetFileName( FILENAME("RightCost.tif"));
-  // writer_RightCost->SetInput(m_RightCost->GetOutput());
-  // writer_RightCost->Update();
+  ImageWriterType::Pointer writer_RightCost = ImageWriterType::New();
+  writer_RightCost->SetFileName( FILENAME("RightCost.tif"));
+  writer_RightCost->SetInput(m_RightCost->GetOutput());
+  writer_RightCost->Update();
 
 
-/*
 
-  typedef otb::MinimumNBandsImageFilter< FloatVectorImageType, FloatVectorImageType > MinCostVolume;  
+
+
+
+  typedef otb::MinimumNBandsImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;  
   MinCostVolume::Pointer m_minCost = MinCostVolume::New();
   m_minCost->SetInput(m_LeftCost->GetOutput());
 
 
-  ImageWriterType::Pointer writer_m_minCost = ImageWriterType::New();
+  IntImageWriterType::Pointer writer_m_minCost = IntImageWriterType::New();
   writer_m_minCost->SetFileName( FILENAME("MinLeftCost.tif"));
   writer_m_minCost->SetInput(m_minCost->GetOutput());
   writer_m_minCost->Update();
-*/
+
+
+  //COVARIANCE VISUALIZATION
+  typedef otb::CovarianceMatrixFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > CovarianceMatrixType;
+    // --- LEFT
+  CovarianceMatrixType::Pointer m_LeftCovarianceMatrix = CovarianceMatrixType::New(); 
+  m_LeftCovarianceMatrix->SetInput1(inLeft->GetOutput());
+  m_LeftCovarianceMatrix->SetInput2(m_LeftCost->GetOutput());  
+  m_LeftCovarianceMatrix->SetRadius(0,r);
+
+  ImageWriterType::Pointer writer_LeftCovarianceMatrix = ImageWriterType::New();
+  writer_LeftCovarianceMatrix->SetFileName( FILENAME("LeftCovarianceMatrix.tif"));
+  writer_LeftCovarianceMatrix->SetInput(m_LeftCovarianceMatrix->GetOutput());
+  writer_LeftCovarianceMatrix->Update();
+ 
+
 
 
 
@@ -194,12 +251,12 @@ int testCVF(int argc, char *argv[])
   m_meanLeftCost->SetRadius(0,r);
 
 
-  /*
-   ImageWriterType::Pointer writer_meanLeftCost = ImageWriterType::New();
-   writer_meanLeftCost->SetFileName( FILENAME("LeftWeights.tif"));
-   writer_meanLeftCost->SetInput(m_meanLeftCost->GetOutput());
-   writer_meanLeftCost->Update();
- */
+  
+  ImageWriterType::Pointer writer_meanLeftCost = ImageWriterType::New();
+  writer_meanLeftCost->SetFileName( FILENAME("LeftWeights.tif"));
+  writer_meanLeftCost->SetInput(m_meanLeftCost->GetOutput());
+  writer_meanLeftCost->Update();
+ 
 
    // --- RIGHT
   Weights_ak_bk::Pointer m_meanRightCost = Weights_ak_bk::New(); 
@@ -208,12 +265,11 @@ int testCVF(int argc, char *argv[])
   m_meanRightCost->SetRadius(0,r);
   
 
-  // ImageWriterType::Pointer writer_meanRightCost = ImageWriterType::New();
-  // writer_meanRightCost->SetFileName( FILENAME("RightWeights.tif"));
-  // writer_meanRightCost->SetInput(m_meanRightCost->GetOutput());
-  // writer_meanRightCost->Update();
+  ImageWriterType::Pointer writer_meanRightCost = ImageWriterType::New();
+  writer_meanRightCost->SetFileName( FILENAME("RightWeights.tif"));
+  writer_meanRightCost->SetInput(m_meanRightCost->GetOutput());
+  writer_meanRightCost->Update();
   
-
 
 
   //MEAN WEIGHTS   
@@ -224,10 +280,10 @@ int testCVF(int argc, char *argv[])
   m_meanLeftWeights->SetInput2(inLeft->GetOutput());
   m_meanLeftWeights->SetRadius(0,r);
   
-  // ImageWriterType::Pointer writer_meanLeftWeights = ImageWriterType::New();
-  // writer_meanLeftWeights->SetFileName( FILENAME("LeftMeanWeights.tif"));
-  // writer_meanLeftWeights->SetInput(m_meanLeftWeights->GetOutput());
-  // writer_meanLeftWeights->Update();  
+  ImageWriterType::Pointer writer_meanLeftWeights = ImageWriterType::New();
+  writer_meanLeftWeights->SetFileName( FILENAME("LeftMeanWeights.tif"));
+  writer_meanLeftWeights->SetInput(m_meanLeftWeights->GetOutput());
+  writer_meanLeftWeights->Update();  
 
 
     // --- RIGHT
@@ -236,21 +292,20 @@ int testCVF(int argc, char *argv[])
   m_meanRightWeights->SetInput2(inRight->GetOutput());
   m_meanRightWeights->SetRadius(0,r);
   
-  // ImageWriterType::Pointer writer_meanRightWeights = ImageWriterType::New();
-  // writer_meanRightWeights->SetFileName( FILENAME("RightMeanWeights.tif"));
-  // writer_meanRightWeights->SetInput(m_meanRightWeights->GetOutput());
-  // writer_meanRightWeights->Update(); 
+  ImageWriterType::Pointer writer_meanRightWeights = ImageWriterType::New();
+  writer_meanRightWeights->SetFileName( FILENAME("RightMeanWeights.tif"));
+  writer_meanRightWeights->SetInput(m_meanRightWeights->GetOutput());
+  writer_meanRightWeights->Update(); 
 
 
   //DISPARITY MAP
-  typedef otb::MinimumNBandsImageFilter< FloatVectorImageType, IntImageType > MinCostVolume;  
     // --- LEFT
   MinCostVolume::Pointer m_LeftDisparity = MinCostVolume::New();
   m_LeftDisparity->SetInput(m_meanLeftWeights->GetOutput());
   
-  typedef otb::ImageFileWriter< IntImageType > OtbIntImageWriterType; 
+  //typedef otb::ImageFileWriter< IntImageType > IntImageWriterType; 
 
-  OtbIntImageWriterType::Pointer writer_LeftDisparity = OtbIntImageWriterType::New();
+  IntImageWriterType::Pointer writer_LeftDisparity = IntImageWriterType::New();
   writer_LeftDisparity->SetFileName( FILENAME("LeftDisparity.tif"));
   writer_LeftDisparity->SetInput(m_LeftDisparity->GetOutput());
   writer_LeftDisparity->Update(); 
@@ -263,78 +318,111 @@ int testCVF(int argc, char *argv[])
 
 
   
-  OtbIntImageWriterType::Pointer writer_RightDisparity = OtbIntImageWriterType::New();
+  IntImageWriterType::Pointer writer_RightDisparity = IntImageWriterType::New();
   writer_RightDisparity->SetFileName( FILENAME("RightDisparity.tif"));
   writer_RightDisparity->SetInput(m_RightDisparity->GetOutput());
   writer_RightDisparity->Update(); 
 
 
+ 
+
+  // //MEDIAN INPUT IMAGES
+  // typedef itk::MedianImageFilter< FloatImageType, FloatImageType > MedianFilterType;
+  // MedianFilterType::Pointer LMedian = MedianFilterType::New();
+  // MedianFilterType::RadiusType MedianRadius = {{1,1}};
+  // LMedian->SetRadius(MedianRadius); 
+
+  // typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, MedianFilterType> PerBand;  
+  //     // ---LEFT
+  // PerBand::Pointer m_LeftMedianFilter = PerBand::New();
+  // m_LeftMedianFilter->SetFilter(LMedian);
+  // m_LeftMedianFilter->SetInput(inLeft->GetOutput()); 
+
+  // ImageWriterType::Pointer LeftMedianwriter = ImageWriterType::New();
+  // LeftMedianwriter->SetFileName( FILENAME("LeftMedian.tif"));
+  // LeftMedianwriter->SetInput( m_LeftMedianFilter->GetOutput() );
+  // LeftMedianwriter->Update();
+
+
+
+  // typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastIntImageFilter;
+  // CastIntImageFilter::Pointer m_CastLeftDisparity = CastIntImageFilter::New();
+  // m_CastLeftDisparity-> SetInput( const_cast <IntImageType *>( m_LeftDisparity->GetOutput() ));
+
+  // typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastFloatImageFilter;
+  // CastFloatImageFilter::Pointer m_CastLeftMedianFilter = CastFloatImageFilter::New();
+  // m_CastLeftMedianFilter-> SetInput( const_cast <FloatImageType *>( m_LeftDisparity->GetOutput() ));
+
+
+
+
+
+  // typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
+  // ConcatenateVectorImageFilterType::Pointer m_ConcatenateDispEndInLeftImage = ConcatenateVectorImageFilterType::New();
+  // m_ConcatenateDispEndInLeftImage->SetInput1(m_CastLeftDisparity->GetOutput());
+  // m_ConcatenateDispEndInLeftImage->SetInput2(m_CastLeftMedianFilter->GetOutput());
+
+
+
+
+
+  // typedef otb::ConcatenateVectorImageFilter< IntVectorImageType, IntVectorImageType, IntVectorImageType> ConcatenateVectorImageFilterType;  
+  // ConcatenateVectorImageFilterType::Pointer m_ConcatenateDispEndInLeftImage = ConcatenateVectorImageFilterType::New();
+  // m_ConcatenateDispEndInLeftImage->SetInput1(m_CastLeftDisparity->GetOutput());
+  // m_ConcatenateDispEndInLeftImage->SetInput2(m_CastLeftDisparity->GetOutput());
+
+
+
+
+
+//         // ---RIGHT
+//   PerBand::Pointer m_RightMedianFilter = PerBand::New();
+//   m_RightMedianFilter->SetFilter(LMedian);
+//   m_RightMedianFilter->SetInput(inRight->GetOutput()); 
+//   ImageWriterType::Pointer RightMedianwriter = ImageWriterType::New();
+//   RightMedianwriter->SetFileName( FILENAME("RightMedian.tif"));
+//   RightMedianwriter->SetInput( m_RightMedianFilter->GetOutput() );
+//   RightMedianwriter->Update();
+
+
+
+//   /////////////
+//      // --- LEFT
+//   MeanVectorImage::Pointer m_meanMedianLeftWeights = MeanVectorImage::New();
+//   m_meanMedianLeftWeights->SetInput1(m_meanLeftCost->GetOutput());
+//   m_meanMedianLeftWeights->SetInput2(m_LeftMedianFilter->GetOutput());
+//   m_meanMedianLeftWeights->SetRadius(0,r);
   
-
-  //MEDIAN INPUT IMAGES
-  typedef itk::MedianImageFilter< FloatImageType, FloatImageType > MedianFilterType;
-  MedianFilterType::Pointer LMedian = MedianFilterType::New();
-  MedianFilterType::RadiusType MedianRadius = {{rmf,rmf}};
-  LMedian->SetRadius(MedianRadius); 
-
-  typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, MedianFilterType> PerBand;  
-      // ---LEFT
-  PerBand::Pointer m_LeftMedianFilter = PerBand::New();
-  m_LeftMedianFilter->SetFilter(LMedian);
-  m_LeftMedianFilter->SetInput(inLeft->GetOutput()); 
-  ImageWriterType::Pointer LeftMedianwriter = ImageWriterType::New();
-  LeftMedianwriter->SetFileName( FILENAME("LeftMedian.tif"));
-  LeftMedianwriter->SetInput( m_LeftMedianFilter->GetOutput() );
-  LeftMedianwriter->Update();
-
-        // ---RIGHT
-  PerBand::Pointer m_RightMedianFilter = PerBand::New();
-  m_RightMedianFilter->SetFilter(LMedian);
-  m_RightMedianFilter->SetInput(inRight->GetOutput()); 
-  ImageWriterType::Pointer RightMedianwriter = ImageWriterType::New();
-  RightMedianwriter->SetFileName( FILENAME("RightMedian.tif"));
-  RightMedianwriter->SetInput( m_RightMedianFilter->GetOutput() );
-  RightMedianwriter->Update();
+//     // --- RIGHT
+//   MeanVectorImage::Pointer m_meanMedianRightWeights = MeanVectorImage::New();
+//   m_meanMedianRightWeights->SetInput1(m_meanRightCost->GetOutput());
+//   m_meanMedianRightWeights->SetInput2(m_RightMedianFilter->GetOutput());
+//   m_meanMedianRightWeights->SetRadius(0,r);
 
 
+//   //DISPARITY MAP
+//   typedef otb::MinimumNBandsImageFilter< FloatVectorImageType, IntImageType > MinCostVolume;  
+//     // --- LEFT
+//   MinCostVolume::Pointer m_MedianLeftDisparity = MinCostVolume::New();
+//   m_MedianLeftDisparity->SetInput(m_meanMedianLeftWeights->GetOutput());
 
-  /////////////
-     // --- LEFT
-  MeanVectorImage::Pointer m_meanMedianLeftWeights = MeanVectorImage::New();
-  m_meanMedianLeftWeights->SetInput1(m_meanLeftCost->GetOutput());
-  m_meanMedianLeftWeights->SetInput2(m_LeftMedianFilter->GetOutput());
-  m_meanMedianLeftWeights->SetRadius(0,r);
+//   IntImageWriterType::Pointer writer_MedianLeftDisparity = IntImageWriterType::New();
+//   writer_MedianLeftDisparity->SetFileName( FILENAME("LeftMedianDisparity.tif"));
+//   writer_MedianLeftDisparity->SetInput(m_MedianLeftDisparity->GetOutput());
+//   writer_MedianLeftDisparity->Update(); 
   
-    // --- RIGHT
-  MeanVectorImage::Pointer m_meanMedianRightWeights = MeanVectorImage::New();
-  m_meanMedianRightWeights->SetInput1(m_meanRightCost->GetOutput());
-  m_meanMedianRightWeights->SetInput2(m_RightMedianFilter->GetOutput());
-  m_meanMedianRightWeights->SetRadius(0,r);
+//       // --- RIGHT
 
-
-  //DISPARITY MAP
-  typedef otb::MinimumNBandsImageFilter< FloatVectorImageType, IntImageType > MinCostVolume;  
-    // --- LEFT
-  MinCostVolume::Pointer m_MedianLeftDisparity = MinCostVolume::New();
-  m_MedianLeftDisparity->SetInput(m_meanMedianLeftWeights->GetOutput());
-
-  OtbIntImageWriterType::Pointer writer_MedianLeftDisparity = OtbIntImageWriterType::New();
-  writer_MedianLeftDisparity->SetFileName( FILENAME("LeftMedianDisparity.tif"));
-  writer_MedianLeftDisparity->SetInput(m_MedianLeftDisparity->GetOutput());
-  writer_MedianLeftDisparity->Update(); 
-  
-      // --- RIGHT
-
-  typedef otb::MaximumNBandsImageFilter< FloatVectorImageType, IntImageType > MaxCostVolume;  
-  MaxCostVolume::Pointer m_MedianRightDisparity = MaxCostVolume::New();
-  m_MedianRightDisparity->SetInput(m_meanMedianRightWeights->GetOutput());
+//   typedef otb::MaximumNBandsImageFilter< FloatVectorImageType, IntImageType > MaxCostVolume;  
+//   MaxCostVolume::Pointer m_MedianRightDisparity = MaxCostVolume::New();
+//   m_MedianRightDisparity->SetInput(m_meanMedianRightWeights->GetOutput());
 
 
   
-  OtbIntImageWriterType::Pointer writer_MedianRightDisparity = OtbIntImageWriterType::New();
-  writer_MedianRightDisparity->SetFileName( FILENAME("RightMedianDisparity.tif"));
-  writer_MedianRightDisparity->SetInput(m_MedianRightDisparity->GetOutput());
-  writer_MedianRightDisparity->Update(); 
+//   IntImageWriterType::Pointer writer_MedianRightDisparity = IntImageWriterType::New();
+//   writer_MedianRightDisparity->SetFileName( FILENAME("RightMedianDisparity.tif"));
+//   writer_MedianRightDisparity->SetInput(m_MedianRightDisparity->GetOutput());
+//   writer_MedianRightDisparity->Update(); 
 
 
 

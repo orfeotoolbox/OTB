@@ -82,7 +82,7 @@ public:
     unsigned int Nband_I = input_I.GetPixel(0).Size();
 
 
-    TOutput output(Nband_weights/4); 
+    TOutput output(Nband_weights/(Nband_I+1)); 
     output.Fill(0); 
 
     
@@ -110,11 +110,18 @@ public:
     
 
 
-      for(unsigned int b = 0 ; b < Nband_weights/4 ; ++b)
+      for(unsigned int b = 0 ; b < Nband_weights/(Nband_I+1) ; ++b)
         {
           double qi(0.);
-          qi = v_mean_ai[4*b] * input_I.GetCenterPixel()[0] + v_mean_ai[4*b+1] * input_I.GetCenterPixel()[1] + v_mean_ai[4*b+2] * input_I.GetCenterPixel()[2] + v_mean_ai[4*b+3] ;
-          
+          if(Nband_I>1)
+            {
+            qi = v_mean_ai[(Nband_I+1)*b] * input_I.GetCenterPixel()[0] + v_mean_ai[(Nband_I+1)*b+1] * input_I.GetCenterPixel()[1] + v_mean_ai[(Nband_I+1)*b+2] * input_I.GetCenterPixel()[2] + v_mean_ai[(Nband_I+1)*b+3] ;
+            }
+          else
+            {
+            qi = v_mean_ai[(Nband_I+1)*b] * input_I.GetCenterPixel()[0] + v_mean_ai[(Nband_I+1)*b+1] ;
+            }
+         
         output[b] = static_cast<typename TOutput::ValueType>(qi);
         }
   
@@ -175,8 +182,9 @@ public:
     {
     Superclass::GenerateOutputInformation();
     unsigned int nb_comp (this->GetInput(0)->GetNumberOfComponentsPerPixel());
-    this->GetOutput()->SetNumberOfComponentsPerPixel(nb_comp/4);
-    this->GetFunctor().SetNumberOfComponent(nb_comp/4);
+    unsigned int nb_inI (this->GetInput(1)->GetNumberOfComponentsPerPixel());
+    this->GetOutput()->SetNumberOfComponentsPerPixel(nb_comp/(nb_inI+1));
+    this->GetFunctor().SetNumberOfComponent(nb_comp/(nb_inI+1));
     } 
 
 

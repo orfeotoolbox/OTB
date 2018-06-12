@@ -220,7 +220,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
   // Call superclass implementation
   Superclass::GenerateOutputInformation();
   
-  this->GetOutput()->SetNumberOfComponentsPerPixel(abs(m_HorizontalMinDisparity)+abs(m_HorizontalMaxDisparity)); 
+  this->GetOutput()->SetNumberOfComponentsPerPixel(m_HorizontalMaxDisparity - m_HorizontalMinDisparity +1 ); 
  
 }
 //============================================  GenerateInputRequestedRegion  ========================================================
@@ -296,10 +296,6 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 	double taux1 = 7;  
 	double taux2 = 2;  	
 
-
-typedef otb::VectorImage<float> FloatVectorImageType;
-typedef otb::ImageFileWriter<FloatVectorImageType> ImageWriterType;
-ImageWriterType::Pointer img = ImageWriterType::New();
 
 
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)

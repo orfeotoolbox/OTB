@@ -47,7 +47,7 @@
 #include <iostream>
 #include <vector>
 
-#include "otbCostVolumeImageFilter.h"
+#include "otbCostVolumeImageFilter0.h"
 #include "otbCoeffGuidedBoxImageFilter.h"
 #include "otbMinFilter.h"
 #include "otbWeightedMedianImageFilter.h"
@@ -59,7 +59,6 @@
 #include "otbMultiplyImagebandsFilter.h"
 #include "otbMultiplyImageAndCostImageFilter.h"
 #include "otbGuidedImageFilter.h"
-#include "otbRMSEVectorImageFilter.h"
 
 
 
@@ -71,6 +70,7 @@
 #include "otbLocalGradientVectorImageFilter.h"
 #include "otbConcatenateVectorImageFilter.h"
 #include "otbLocalGradientVectorImageFilter.h" 
+#include "itkConstNeighborhoodIterator.h" 
 
 #include "otbPerBandVectorImageFilter.h"
 
@@ -93,6 +93,7 @@
 #include "itkMedianImageFilter.h"
 #include "itkTimeProbe.h" //crono
 #include "otbVectorImageToImageListFilter.h" //Conversion de vectorImageToOTBImage
+#include "otbRMSEVectorImageFilter.h"
 
 
 	
@@ -100,10 +101,10 @@ int testCostVolumeFilter(int argc, char *argv[])
 {
 	
 
-	if(argc < 8) {
-		std::cerr << "Usage: " << argv[0] << " radius min_disp max_disp radius_to_mean_filter Left_Image Right_Image Out_Path" << std::endl;
-		return EXIT_FAILURE;
-	}
+ 	if(argc < 8) {
+ 		std::cerr << "Usage: " << argv[0] << " radius min_disp max_disp radius_to_mean_filter Left_Image Right_Image Out_Path" << std::endl;
+ 		return EXIT_FAILURE;
+ 	}
 	
      long unsigned int r = atoi(argv[1]);
 	 int HdispMin = atoi(argv[2]);
@@ -340,7 +341,7 @@ int testCostVolumeFilter(int argc, char *argv[])
 
 /*========================================== Cost Volume ===========================================*/
    /** sortie a une seule bande et elle contient le volume de cout */
-  typedef otb::CostVolumeImageFilter< ImageType, ImageType, ImageType > CostVolumeType;
+  typedef otb::CostVolumeImageFilter0< ImageType, ImageType, ImageType > CostVolumeType;
  
   CostVolumeType::Pointer LeftCost = CostVolumeType::New();
   LeftCost->SetLeftInputImage(LeftReader->GetOutput() );
@@ -476,7 +477,7 @@ int testCostVolumeFilter(int argc, char *argv[])
   ImageWriterType::Pointer RightGuidedWriter = ImageWriterType::New();
   RightGuidedWriter->SetFileName( FILENAME("CoeffRightGuidedFilter.tif"));
   RightGuidedWriter->SetInput( RightGuided->GetOutput() );  
-  otb::StandardFilterWatcher RightGuidedWatcher(RightGuidedWriter, "RightGuidedFilter");  
+  otb::StandardFilterWatcher RightGuidedWatcher(RightGuidedWriter, "CoeffRightGuidedFilter");  
   RightGuidedWriter->Update(); 
 
 /*============= La moyenne des coeffs du guided box filter avec les images integrales==========*/
@@ -513,6 +514,7 @@ int testCostVolumeFilter(int argc, char *argv[])
   LeftCVFFiltredWriter->SetFileName(FILENAME("GuidedFilter.tif"));
   LeftCVFFiltredWriter->SetInput( LeftCVFFiltred->GetOutput() ); 
   otb::StandardFilterWatcher LeftCVFFiltredWatcher(LeftCVFFiltredWriter, "GuidedFilter");  
+  LeftCVFFiltredWriter->Update();
 
 
  /* =========================================== Min Filter ======================================*/
@@ -636,7 +638,7 @@ for (int Hdisp = HdispMin ; Hdisp <=HdispMax ;Hdisp++){
   
 }  
 /** écriture du resultat de la disparité avec le cost volumebrute**/  
- LeftMinWriter->SetFileName(FILENAME("LeftDisparité.tif"));
+ LeftMinWriter->SetFileName(FILENAME("LeftDisparite.tif"));
  LeftMinWriter->SetInput(  LeftMin->GetOutput());  
  otb::StandardFilterWatcher LeftMinwatcher(LeftMin, "LeftMinFilter"); 
  LeftMinWriter->Update();
@@ -666,7 +668,7 @@ for (int Hdisp = -HdispMax ; Hdisp <= -HdispMin ;Hdisp++){
 }   
 
 /** écriture du resultat de la disparité avec le cost volumebrute**/  
- RightMinWriter->SetFileName(FILENAME("RightDisparité.tif"));
+ RightMinWriter->SetFileName(FILENAME("RightDisparite.tif"));
  RightMinWriter->SetInput( RightMin->GetOutput());  
  otb::StandardFilterWatcher RightMinwatcher(RightMinWriter, "RightMinFilter"); 
  RightMinWriter->Update(); 
@@ -896,6 +898,8 @@ OtbImageRightMedian->Update();
    */
 
   }
+
+  std::cout << "costvolumefilter"<<std::endl;
  
 return EXIT_SUCCESS;
 

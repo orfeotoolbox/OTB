@@ -64,7 +64,7 @@
 int testOcclusionsFilter(int argc, char *argv[])
   {
   if(argc < 3) {
-  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap RigthDisparityMap inLeftImage minDisp maxDisp rwmf outputPathFolder" << std::endl;
+  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap RigthDisparityMap inLeftImage minDisp maxDisp rFillOcc rwmf outputPathFolder" << std::endl;
   	return EXIT_FAILURE;
   	}
 
@@ -104,13 +104,15 @@ int testOcclusionsFilter(int argc, char *argv[])
   unsigned int dispMin = atoi(argv[4]);
   unsigned int dispMax = atoi(argv[5]);
 
-
-  int rwmf = atoi(argv[6]) ;
-
+  unsigned int rFillOcc = atoi(argv[6]);
 
 
-  std::string argv7 = std::string(argv[7]);
-  #define FILENAME(n) std::string( argv7 + std::string(n)).c_str()
+  int rwmf = atoi(argv[7]) ;
+
+
+
+  std::string argv8 = std::string(argv[8]);
+  #define FILENAME(n) std::string( argv8 + std::string(n)).c_str()
 
 
   // OCCLUSION DETECTION
@@ -135,7 +137,7 @@ int testOcclusionsFilter(int argc, char *argv[])
  FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
  m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
  m_FillOccDisparityMap->SetInput2(m_LeftDisparity->GetOutput() );
- m_FillOccDisparityMap->SetRadius(0,rwmf);
+ m_FillOccDisparityMap->SetRadius(0, rFillOcc);
 
 
  IntWriterType::Pointer writer_FillOcclusions = IntWriterType::New(); 
@@ -164,6 +166,7 @@ int testOcclusionsFilter(int argc, char *argv[])
   radiusM[0] = rwmf;
   radiusM[1] = rwmf;   
   m_WeightOccMapAndLeftImageFilter->SetRadius(radiusM);
+
 
 
   ImageWriterType::Pointer writer_smoothFillDisparity = ImageWriterType::New();

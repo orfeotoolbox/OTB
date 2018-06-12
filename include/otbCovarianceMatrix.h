@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbWeightsGuidedFilter_h
-#define otbWeightsGuidedFilter_h
+#ifndef otbCovarianceMatrix_h
+#define otbCovarianceMatrix_h
 
 #include "otbBinaryFunctorNeighborhoodVectorImageFilter.h"
 #include <itkConstNeighborhoodIterator.h>
@@ -32,11 +32,11 @@ namespace otb
 namespace Functor
 {
 template<class TInput_I, class TInput_CostVolume, class TOutput> 
-class Weights
+class CovarianceMatrix
 {
 public:
-  Weights(){}
-  ~Weights() {}
+  CovarianceMatrix(){}
+  ~CovarianceMatrix() {}
 
 
   int  GetNumberOfComponentsPerPixel() const
@@ -150,7 +150,7 @@ public:
       var_tmp += input_I.GetPixel(i)[1] * input_I.GetPixel(i)[2];
       }
       var = var_tmp/(size_Mean*size_Mean) - v_mean[1]*v_mean[2] ;
-      v_var[2*Nband-1] = var ;
+      v_var[2*Nband-1] = var;
 
 
     //mean of each slice of the cost volume + sum(Ir(i)*p(i)) + sum(Ig(i)*p(i)) + sum(Ib(i)*p(i))
@@ -197,70 +197,103 @@ public:
     std::vector<double> elem3;
     elem3.resize(disparity_max,0);
 
-
-    for(unsigned int bandC = 0 ; bandC < disparity_max ; ++bandC)
-      {
-
-        if(Nband>1)
-        {
-
-
-        std::vector<double> ak;
-        ak.resize(Nband,0); 
-        //matrice de covariance fenêtre k :
-        M(0,0) = v_var[0] + epsilon;
-        M(0,1) = v_var[3] ;
-        M(0,2) = v_var[4] ;
-        M(1,0) = v_var[3]  ;
-        M(1,1) = v_var[1] + epsilon ;
-        M(1,2) = v_var[5] ;
-        M(2,0) = v_var[4] ;
-        M(2,1) = v_var[5];
-        M(2,2) = v_var[2] + epsilon ;
-        // Inverse of (covariance Matrix + epsilon+I3)
-        MatrixType Matrice_cov_inv( M.GetInverse() ); 
-
-        elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;
-        elem2[bandC] = v_multg[bandC] - v_mean[1] * v_pmean[bandC] ;
-        elem3[bandC] = v_multb[bandC] - v_mean[2] * v_pmean[bandC] ;  
+    M(0,0) = v_var[0] + epsilon;
+    M(0,1) = v_var[3] ;
+    M(0,2) = v_var[4] ;
+    M(1,0) = v_var[3]  ;
+    M(1,1) = v_var[1] + epsilon ;
+    M(1,2) = v_var[5] ;
+    M(2,0) = v_var[4] ;
+    M(2,1) = v_var[5];
+    M(2,2) = v_var[2] + epsilon ;
 
 
+    output[0] = static_cast<typename TOutput::ValueType>(v_var[0]);
+    output[1] = static_cast<typename TOutput::ValueType>(v_var[1]);
+    output[2] = static_cast<typename TOutput::ValueType>(v_var[2]);
+    output[3] = static_cast<typename TOutput::ValueType>(v_var[3]);
+    output[4] = static_cast<typename TOutput::ValueType>(v_var[4]);
+    output[5] = static_cast<typename TOutput::ValueType>(v_var[5]);
 
-        //calcul ak
-        ak[0] = Matrice_cov_inv(0,0)*elem1[bandC] + Matrice_cov_inv(0,1)*elem2[bandC] + Matrice_cov_inv(0,2)*elem3[bandC];
-        ak[1] = Matrice_cov_inv(1,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] + Matrice_cov_inv(1,2)*elem3[bandC];
-        ak[2] = Matrice_cov_inv(2,0)*elem1[bandC] + Matrice_cov_inv(2,1)*elem2[bandC] + Matrice_cov_inv(2,2)*elem3[bandC]; 
+
+    // output[0] = static_cast<typename TOutput::ValueType>(M(0,0));
+    // output[1] = static_cast<typename TOutput::ValueType>(M(0,1));
+    // output[2] = static_cast<typename TOutput::ValueType>(M(0,2));
+    // output[3] = static_cast<typename TOutput::ValueType>(M(1,0));
+    // output[4] = static_cast<typename TOutput::ValueType>(M(1,1));
+    // output[5] = static_cast<typename TOutput::ValueType>(M(1,2));
+    // output[6] = static_cast<typename TOutput::ValueType>(M(2,0));
+    // output[7] = static_cast<typename TOutput::ValueType>(M(2,1));
+    // output[8] = static_cast<typename TOutput::ValueType>(M(2,2));
+
+    // output[0] = static_cast<typename TOutput::ValueType>(v_mean[0]);
+    // output[1] = static_cast<typename TOutput::ValueType>(v_mean[1]);
+    // output[2] = static_cast<typename TOutput::ValueType>(v_mean[2]);
 
 
-        //calcul bk
-        double bk(0.);
-        bk = v_pmean[bandC] - (ak[0]*v_mean[0]  + ak[1]*v_mean[1] + ak[2]*v_mean[2]) ;
+
+
+
+
+
+    // for(unsigned int bandC = 0 ; bandC < disparity_max ; ++bandC)
+    //   {
+
+    //   if(Nband>1)
+    //     {
+
+    //     std::vector<double> ak;
+    //     ak.resize(Nband,0); 
+    //     //matrice de covariance fenêtre k :
+    //     M(0,0) = v_var[0] + epsilon;
+    //     M(0,1) = v_var[3] ;
+    //     M(0,2) = v_var[4] ;
+    //     M(1,0) = M(0,1) ;
+    //     M(1,1) = v_var[1] + epsilon ;
+    //     M(1,2) = v_var[5] ;
+    //     M(2,0) = M(0,2) ;
+    //     M(2,1) = M(1,2); ;
+    //     M(2,2) = v_var[2] + epsilon ;
+    //     // Inverse of (covariance Matrix + epsilon+I3)
+    //     MatrixType Matrice_cov_inv( M.GetInverse() ); 
+
+    //     elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;
+    //     elem2[bandC] = v_multg[bandC] - v_mean[1] * v_pmean[bandC] ;
+    //     elem3[bandC] = v_multb[bandC] - v_mean[2] * v_pmean[bandC] ;  
+
+
+
+    //     //calcul ak
+    //     ak[0] = Matrice_cov_inv(0,0)*elem1[bandC] + Matrice_cov_inv(0,1)*elem2[bandC] + Matrice_cov_inv(0,2)*elem3[bandC];
+    //     ak[1] = Matrice_cov_inv(1,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] + Matrice_cov_inv(1,2)*elem3[bandC];
+    //     ak[2] = Matrice_cov_inv(2,0)*elem1[bandC] + Matrice_cov_inv(2,1)*elem2[bandC] + Matrice_cov_inv(2,2)*elem3[bandC]; 
+
+
+    //     //calcul bk
+    //     double bk(0.);
+    //     bk = v_pmean[bandC] - (ak[0]*v_mean[0]  + ak[1]*v_mean[1] + ak[2]*v_mean[2]) ;
      
-        output[4*bandC] = static_cast<typename TOutput::ValueType>(ak[0]);
-        output[4*bandC+1] = static_cast<typename TOutput::ValueType>(ak[1]);
-        output[4*bandC+2] = static_cast<typename TOutput::ValueType>(ak[2]);
-        output[4*bandC+3] = static_cast<typename TOutput::ValueType>(bk);
-        }
-        else
-        {
-          double ak(0.) ;
-          double bk(0.) ;
+    //     output[4*bandC] = static_cast<typename TOutput::ValueType>(ak[0]);
+    //     output[4*bandC+1] = static_cast<typename TOutput::ValueType>(ak[1]);
+    //     output[4*bandC+2] = static_cast<typename TOutput::ValueType>(ak[2]);
+    //     output[4*bandC+3] = static_cast<typename TOutput::ValueType>(bk);
+    //     }
+    //   else
+    //     {
+    //     double ak(0.) ;
+    //     double bk(0.) ;
+    //     elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;          
+    //     ak = elem1[bandC] / (v_var[Nband-1]+epsilon) ;
+    //     bk = v_pmean[bandC] - ak*v_mean[0] ;
+    //     output[(Nband+1)*bandC] = static_cast<typename TOutput::ValueType>(ak);
+    //     output[(Nband+1)*bandC+1] = static_cast<typename TOutput::ValueType>(bk);
 
-          elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;          
-          ak = elem1[bandC] / (v_var[Nband-1]+epsilon) ;
-
-          bk = v_pmean[bandC] - ak*v_mean[0] ;
-
-        output[(Nband+1)*bandC] = static_cast<typename TOutput::ValueType>(ak);
-        output[(Nband+1)*bandC+1] = static_cast<typename TOutput::ValueType>(bk);
-
-
-        }
-     
+    //     }   
       
-    }
+    //   }
 
-  return output ; 
+    return output ; 
+
   }
 
 
@@ -275,22 +308,22 @@ public:
 
   // class LocalMeanGuidanceImageFilter
   template <class TInputImage1, class TInputImage2, class TOutputImage>
-  class ITK_EXPORT WeightsGuidedFilter :
+  class ITK_EXPORT CovarianceMatrixFilter :
     public otb::BinaryFunctorNeighborhoodVectorImageFilter<
         TInputImage1, TInputImage2, TOutputImage,
-        Functor::Weights<
+        Functor::CovarianceMatrix<
             typename itk::ConstNeighborhoodIterator<TInputImage1>,
             typename itk::ConstNeighborhoodIterator<TInputImage2>,
             typename TOutputImage::PixelType> >
   {
   public:
   /** Standard class typedefs. */
-  typedef WeightsGuidedFilter Self;
+  typedef CovarianceMatrixFilter Self;
   typedef typename otb::BinaryFunctorNeighborhoodVectorImageFilter<
       TInputImage1,
       TInputImage2,
       TOutputImage,
-      Functor::Weights<
+      Functor::CovarianceMatrix<
           typename itk::ConstNeighborhoodIterator<TInputImage1>,
           typename itk::ConstNeighborhoodIterator<TInputImage2>,
           typename TOutputImage::PixelType> > Superclass;
@@ -306,25 +339,24 @@ public:
 
 
   protected:
-  WeightsGuidedFilter() {}
-  ~WeightsGuidedFilter() override {}
+  CovarianceMatrixFilter() {}
+  ~CovarianceMatrixFilter() override {}
 
   void GenerateOutputInformation(void) override
     {
     Superclass::GenerateOutputInformation();
-    unsigned int nb_comp (this->GetInput(1)->GetNumberOfComponentsPerPixel());
-    unsigned int bandI (this->GetInput(0)->GetNumberOfComponentsPerPixel());
-    this->GetOutput()->SetNumberOfComponentsPerPixel((bandI+1)*nb_comp);
-    this->GetFunctor().SetNumberOfComponent((bandI+1)*nb_comp);      
+    unsigned int nb_comp=6;
+    this->GetOutput()->SetNumberOfComponentsPerPixel(nb_comp);
+    this->GetFunctor().SetNumberOfComponent(nb_comp);      
 
     } 
 
   private:
-  WeightsGuidedFilter(const Self &) = delete; //purposely not implemented
+  CovarianceMatrixFilter(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 
 
-  }; // end of WeightsGuidedFilter class
+  }; // end of CovarianceMatrixFilter class
 
 } // end namespace otb
 

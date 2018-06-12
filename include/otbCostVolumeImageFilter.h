@@ -100,7 +100,8 @@ public:
 
   int GetBandNumber()
   {
-    unsigned int b = abs(m_HorizontalMinDisparity) + abs(m_HorizontalMaxDisparity);
+    unsigned int b = m_HorizontalMaxDisparity - m_HorizontalMinDisparity +1 ;
+    //unsigned int b = abs(m_HorizontalMinDisparity) + abs(m_HorizontalMaxDisparity)+1;
     return b ;
   }
 
