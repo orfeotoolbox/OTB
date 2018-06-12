@@ -441,10 +441,10 @@ private:
     catch ( itk::ExceptionObject & /*err*/ )
       {
       }
-
-    SetParameterInt("rgb.r",metadataInterface->GetDefaultDisplay()[0]);
-    SetParameterInt("rgb.g",metadataInterface->GetDefaultDisplay()[1]);
-    SetParameterInt("rgb.b",metadataInterface->GetDefaultDisplay()[2]);
+    auto rgbVect = metadataInterface->GetDefaultDisplay();
+    SetParameterInt("rgb.r",rgbVect[0]);
+    SetParameterInt("rgb.g",rgbVect[1]);
+    SetParameterInt("rgb.b",rgbVect[2]);
 
     ossOutput << std::endl << "Image default RGB composition:" << std::endl;
     ossOutput << "\t[R, G, B] = [" << GetParameterInt("rgb.r") << "," << GetParameterInt("rgb.g") << "," << GetParameterInt("rgb.b") << "]" << std::endl;

@@ -116,7 +116,7 @@ FAQ
 ~~~
 
 Q: Unable to import otbApplication library with Python3
-+++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ::
 
@@ -126,10 +126,9 @@ A: You need to add a symlink to libpython3.5m.so.rh-python35-1.0 to make it work
 
 Here is the solution:
 
-- find the libpython3.5XX on your system : find /usr/lib -iname *libpython3.5*
-(on Ubuntu 14.04, it is /usr/lib/x86_64-linux-gnu/libpython3.5m.so)
-- create a symlink : ln -s path/to/lib/python3.5XX
-path/to/lib/libpython3.5m.so.rh-python35-1.0
+- Find the libpython3.5XX on your system : ``find /usr/lib -iname *libpython3.5*``
+  (on Ubuntu 14.04, it is ``/usr/lib/x86_64-linux-gnu/libpython3.5m.so``)
+- Create a symlink : ``ln -s path/to/lib/python3.5XX path/to/lib/libpython3.5m.so.rh-python35-1.0``
 - Try to import otbApplication again
 
 See this discussion on `OTB issue tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1540#note_67864>`_

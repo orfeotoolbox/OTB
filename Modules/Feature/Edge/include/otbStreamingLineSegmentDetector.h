@@ -68,6 +68,7 @@ public:
   typedef typename Superclass::OutputVectorDataType        OutputVectorDataType;
   typedef typename Superclass::OutputVectorDataPointerType OutputVectorDataPointerType;
 
+  typedef typename Superclass::ExtractImageFilterType      ExtractImageFilterType;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 

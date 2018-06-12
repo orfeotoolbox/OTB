@@ -25,10 +25,8 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
-#endif //tag=QT4-boost-compatibility
 #include "OTBQtWidgetExport.h"
 
 namespace otb

@@ -22,10 +22,10 @@
 #define otbWrapperQtWidgetIntParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+
+#include "otbWrapperQtWidgetSpinBoxes.h"
 
 
 namespace otb
@@ -45,19 +45,22 @@ public:
   QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
   ~QtWidgetIntParameter() override;
 
-protected slots:
-  void SetValue( int value );
+private slots:
+  void OnCleared();
+  void OnValueChanged(int);
+  void OnEditingFinished();
 
 private:
   QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
   void operator=(const QtWidgetIntParameter&); //purposely not implemented
 
   void DoCreateWidget() override;
-
   void DoUpdateGUI() override;
 
+  bool eventFilter( QObject * o, QEvent * e );
+
   QHBoxLayout *         m_QHBoxLayout;
-  QSpinBox *            m_QSpinBox;
+  QtWidgetSpinBox* m_QSpinBox;
 
   IntParameter::Pointer m_IntParam;
 };
