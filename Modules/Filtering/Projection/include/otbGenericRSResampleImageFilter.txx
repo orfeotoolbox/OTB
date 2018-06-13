@@ -298,12 +298,12 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     bool hem = (geoPoint[1]>1e-10)?true:false;
 
     // Build the output UTM projection ref
-    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(ITK_NULLPTR);
+    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(nullptr);
     OSRSetProjCS(oSRS, "UTM");
     OSRSetWellKnownGeogCS(oSRS, "WGS84");
     OSRSetUTM(oSRS, zone, hem);
 
-    char * utmRefC = ITK_NULLPTR;
+    char * utmRefC = nullptr;
     OSRExportToWkt(oSRS, &utmRefC);
     projectionRef = utmRefC;
 

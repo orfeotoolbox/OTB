@@ -233,7 +233,7 @@ void ONERAImageIO::Read(void* buffer)
     }
 
   delete[] value;
-  value = ITK_NULLPTR;
+  value = nullptr;
 
 }
 
@@ -517,7 +517,7 @@ void ONERAImageIO::Write(const void* buffer)
     }
 
   delete[] tempmemory;
-  tempmemory = ITK_NULLPTR;
+  tempmemory = nullptr;
 }
 
 // To be consistent with the behavior of GDALImageIO

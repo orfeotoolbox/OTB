@@ -102,7 +102,7 @@ int main(int argc, char * argv[])
 //  Software Guide : EndCodeSnippet
 
     char * fileNameIn = argv[1];
-    char * fileNameImgInit = ITK_NULLPTR;
+    char * fileNameImgInit = nullptr;
     char * fileNameOut = argv[2];
     int    numberOfClasses = atoi(argv[3]);
     int    numberOfIteration = atoi(argv[4]);
@@ -148,7 +148,7 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-    if (fileNameImgInit != ITK_NULLPTR)
+    if (fileNameImgInit != nullptr)
       {
       typedef otb::ImageFileReader<OutputImageType> ImgInitReaderType;
       ImgInitReaderType::Pointer segReader = ImgInitReaderType::New();

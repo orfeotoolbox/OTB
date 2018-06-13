@@ -67,7 +67,7 @@ ProspectModel
    if(this->GetNumberOfInputs() != 1)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<LeafParametersType *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -88,7 +88,7 @@ ProspectModel
    if(this->GetNumberOfOutputs() < 2)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -101,7 +101,7 @@ ProspectModel
    if(this->GetNumberOfOutputs() < 2)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
 }

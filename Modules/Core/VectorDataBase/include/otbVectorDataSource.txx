@@ -110,7 +110,7 @@ VectorDataSource<TOutputVectorData>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputVectorDataType *> (this->ProcessObject::GetOutput(0));
 }

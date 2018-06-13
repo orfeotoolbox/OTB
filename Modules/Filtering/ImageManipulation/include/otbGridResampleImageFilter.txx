@@ -388,7 +388,7 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 ::AfterThreadedGenerateData()
 {
   // Disconnect input image from the interpolator
-  m_Interpolator->SetInputImage(ITK_NULLPTR);
+  m_Interpolator->SetInputImage(nullptr);
 }
 
 

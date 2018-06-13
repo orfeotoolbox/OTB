@@ -72,7 +72,7 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const TInputImage *>
@@ -87,7 +87,7 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const TInputImage *>

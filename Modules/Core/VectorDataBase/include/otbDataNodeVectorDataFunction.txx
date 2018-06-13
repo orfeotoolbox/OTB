@@ -33,7 +33,7 @@ template <class TOutput, class TCoordRep, class TPrecision>
 DataNodeVectorDataFunction<TOutput, TCoordRep, TPrecision>
 ::DataNodeVectorDataFunction()
 {
-  m_VectorData = ITK_NULLPTR;
+  m_VectorData = nullptr;
 }
 
 

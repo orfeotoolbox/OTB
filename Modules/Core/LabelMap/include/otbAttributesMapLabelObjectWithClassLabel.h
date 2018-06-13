@@ -111,7 +111,7 @@ public:
 
     // copy the data of the current type if possible
     const Self * src = dynamic_cast<const Self *>( lo );
-    if( src == ITK_NULLPTR )
+    if( src == nullptr )
       {
       return;
       }

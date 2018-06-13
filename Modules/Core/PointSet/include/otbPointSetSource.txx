@@ -66,7 +66,7 @@ PointSetSource<TOutputPointSet>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<TOutputPointSet*>

@@ -210,8 +210,8 @@ void GlVectorActor::SetCurrentLayer(const std::string & layername)
   m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername).GetName();
   
   // Clear transforms
-  m_VectorToViewportTransform = ITK_NULLPTR;
-  m_ViewportToVectorTransform = ITK_NULLPTR;
+  m_VectorToViewportTransform = nullptr;
+  m_ViewportToVectorTransform = nullptr;
 
   // Clear features
   m_InternalFeatures.clear();
@@ -371,7 +371,7 @@ void GlVectorActor::UpdateData()
       {
       std::ostringstream oss;
       oss<<"SELECT * FROM "<<m_CurrentLayer<<" WHERE OGR_GEOM_AREA>"<<100*areaOfScreenPixel;
-      filtered = m_OGRDataSource->ExecuteSQL(oss.str(), &spatialFilter,ITK_NULLPTR);
+      filtered = m_OGRDataSource->ExecuteSQL(oss.str(), &spatialFilter,nullptr);
       }
    
     m_InternalFeatures.clear();
@@ -427,7 +427,7 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
 
       gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, !fill);
       // Begin a new polygon
-      gluTessBeginPolygon(tesselator, ITK_NULLPTR);
+      gluTessBeginPolygon(tesselator, nullptr);
       
       // Render the outer boundary
       gluTessBeginContour(tesselator);
@@ -473,7 +473,7 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
 
         gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, true);
         // Begin a new polygon
-        gluTessBeginPolygon(tesselator, ITK_NULLPTR);
+        gluTessBeginPolygon(tesselator, nullptr);
         
         // Render the outer boundary
         gluTessBeginContour(tesselator);

@@ -249,7 +249,7 @@ PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler>
     tmpLayers[m_ClassPartition[className]].CreateFeature( dstFeature );
     }
 
-  inLayer.SetSpatialFilter(ITK_NULLPTR);
+  inLayer.SetSpatialFilter(nullptr);
 }
 
 template<class TInputImage, class TMaskImage, class TSampler>

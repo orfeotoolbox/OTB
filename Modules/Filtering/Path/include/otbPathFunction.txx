@@ -33,7 +33,7 @@ template <class TInputPath, class TOutput>
 PathFunction<TInputPath, TOutput>
 ::PathFunction()
 {
-  m_Path = ITK_NULLPTR;
+  m_Path = nullptr;
 }
 
 /**

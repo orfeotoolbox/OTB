@@ -109,7 +109,7 @@ int main(int argc, char * argv[])
     otb::ogr::DataSource::Pointer destination = otb::ogr::DataSource::New(
       argv[2], otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
     otb::ogr::Layer destLayer = destination->CreateLayer(
-      argv[2], ITK_NULLPTR, wkbMultiPolygon);
+      argv[2], nullptr, wkbMultiPolygon);
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

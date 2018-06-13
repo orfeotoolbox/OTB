@@ -127,9 +127,9 @@ std::vector<std::string> System::Readdir(const std::string& pszPath)
 
   if (pszPath.empty() == true) path = ".";
 
-  if ((hDir = opendir(path.c_str())) != ITK_NULLPTR)
+  if ((hDir = opendir(path.c_str())) != nullptr)
     {
-    while ((psDirEntry = readdir(hDir)) != ITK_NULLPTR)
+    while ((psDirEntry = readdir(hDir)) != nullptr)
       {
       listFileFind.push_back(psDirEntry->d_name);
       }
