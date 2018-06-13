@@ -46,9 +46,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_OutputSpacing.Fill(1);
   m_OutputOrigin.Fill(0);
 
-  m_Transform = ITK_NULLPTR;
-  m_InputTransform = ITK_NULLPTR;
-  m_OutputTransform = ITK_NULLPTR;
+  m_Transform = nullptr;
+  m_InputTransform = nullptr;
+  m_OutputTransform = nullptr;
   m_TransformUpToDate = false;
   m_TransformAccuracy = Projection::UNKNOWN;
 }
@@ -99,8 +99,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
 
   //Make sure that the state is clean:
-  m_InputTransform = ITK_NULLPTR;
-  m_OutputTransform = ITK_NULLPTR;
+  m_InputTransform = nullptr;
+  m_OutputTransform = nullptr;
 
   bool firstTransformGiveGeo = true;
   bool inputTransformIsSensor = false;
@@ -161,8 +161,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     m_InputTransform = itk::IdentityTransform<double, NInputDimensions>::New();
 //     firstTransformGiveGeo = false;
 
-    OGRSpatialReferenceH hSRS = ITK_NULLPTR;
-    hSRS = OSRNewSpatialReference(ITK_NULLPTR);
+    OGRSpatialReferenceH hSRS = nullptr;
+    hSRS = OSRNewSpatialReference(nullptr);
     const char * wktString = m_InputProjectionRef.c_str();
     if (OSRImportFromWkt(hSRS, (char **) &wktString) != OGRERR_NONE)
       {
@@ -286,7 +286,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::GetInverse(Self * inverseTransform) const
 {
   // Test the inverseTransform pointer
-  if (inverseTransform == ITK_NULLPTR)
+  if (inverseTransform == nullptr)
     {
     return false;
     }

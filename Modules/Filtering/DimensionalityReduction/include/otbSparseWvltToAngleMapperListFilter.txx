@@ -58,7 +58,7 @@ SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputI
 {
   if ( i >= this->GetNumberOfInputs() )
   {
-    return ITK_NULLPTR;
+    return nullptr;
   }
 
   return static_cast<const InputImageListType * >

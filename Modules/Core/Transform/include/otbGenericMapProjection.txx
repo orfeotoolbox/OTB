@@ -133,7 +133,7 @@ bool
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::IsProjectionDefined() const
 {
-  return (m_MapProjection->GetMapProjection() != ITK_NULLPTR);
+  return (m_MapProjection->GetMapProjection() != nullptr);
 }
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,

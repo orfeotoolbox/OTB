@@ -54,7 +54,7 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
   if(itksys::SystemTools::GetEnv("OTB_MAX_RAM_HINT",svalue))
     {
 
-    unsigned long int tmp = strtoul(svalue.c_str(),ITK_NULLPTR,10);
+    unsigned long int tmp = strtoul(svalue.c_str(),nullptr,10);
     
     if(tmp)
       {

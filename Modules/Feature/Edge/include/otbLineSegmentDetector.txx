@@ -80,7 +80,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const InputImageType *>(this->Superclass::GetInput(0));

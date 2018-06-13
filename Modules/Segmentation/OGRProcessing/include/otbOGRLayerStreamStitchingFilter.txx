@@ -33,7 +33,7 @@ namespace otb
 
 template<class TImage>
 OGRLayerStreamStitchingFilter<TImage>
-::OGRLayerStreamStitchingFilter() : m_Radius(2), m_OGRLayer(ITK_NULLPTR, false)
+::OGRLayerStreamStitchingFilter() : m_Radius(2), m_OGRLayer(nullptr, false)
 {
    m_StreamSize.Fill(0);
 }
@@ -54,7 +54,7 @@ OGRLayerStreamStitchingFilter<TInputImage>
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
 
   return static_cast<const InputImageType *>(this->Superclass::GetInput(0));

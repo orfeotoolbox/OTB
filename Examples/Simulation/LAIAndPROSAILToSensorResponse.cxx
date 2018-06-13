@@ -133,12 +133,12 @@ public:
 protected:
   ImageUniqueValuesCalculator()
     {
-    m_Image = ITK_NULLPTR;
+    m_Image = nullptr;
     }
-  ~ImageUniqueValuesCalculator() ITK_OVERRIDE
+  ~ImageUniqueValuesCalculator() override
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Image: " << m_Image.GetPointer() << std::endl;
@@ -452,9 +452,9 @@ public:
 
 protected:
   TernaryFunctorImageFilterWithNBands() {}
-  ~TernaryFunctorImageFilterWithNBands() ITK_OVERRIDE {}
+  ~TernaryFunctorImageFilterWithNBands() override {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel( m_NumberOfOutputBands );
@@ -472,7 +472,7 @@ private:
 
 int main(int argc, char *argv[])
 {
-  char *cmifname = ITK_NULLPTR;
+  char *cmifname = nullptr;
   if (argc != 10)
     {
     if (argc == 11) // cloud mask filename optional parameter
@@ -807,7 +807,7 @@ int main(int argc, char *argv[])
   miReader->UpdateOutputInformation();
   MaskImageType::Pointer maskImage = miReader->GetOutput();
 
-  if (cmifname != ITK_NULLPTR)
+  if (cmifname != nullptr)
     {
 
     MaskReaderType::Pointer cmiReader = MaskReaderType::New();

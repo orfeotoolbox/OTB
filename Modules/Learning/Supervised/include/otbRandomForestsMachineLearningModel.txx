@@ -147,7 +147,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     cv::noArray(),
     var_type));
 #else
-  float * priors = m_Priors.empty() ? ITK_NULLPTR : &m_Priors.front();
+  float * priors = m_Priors.empty() ? nullptr : &m_Priors.front();
 
   CvRTParams params = CvRTParams(m_MaxDepth,                    // max depth
                                  m_MinSampleCount,              // min sample count
@@ -183,7 +183,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     if(m_ComputeMargin)
       (*quality) = m_RFModel->predict_margin(sample);
@@ -206,7 +206,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   fs.release();
 #else
   if (name == "")
-    m_RFModel->save(filename.c_str(), ITK_NULLPTR);
+    m_RFModel->save(filename.c_str(), nullptr);
   else
     m_RFModel->save(filename.c_str(), name.c_str());
 #endif
@@ -222,7 +222,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   m_RFModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
-    m_RFModel->load(filename.c_str(), ITK_NULLPTR);
+    m_RFModel->load(filename.c_str(), nullptr);
   else
     m_RFModel->load(filename.c_str(), name.c_str());
 #endif

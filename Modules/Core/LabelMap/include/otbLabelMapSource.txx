@@ -65,7 +65,7 @@ LabelMapSource<TOutputLabelMap>
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<OutputLabelMapType *> (this->ProcessObject::GetOutput(0));
 }

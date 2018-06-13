@@ -32,10 +32,10 @@ QtWidgetChoiceParameter::QtWidgetChoiceParameter( ChoiceParameter* param,
                                             QtWidgetModel* m , QWidget * parent) :
   QtWidgetParameterBase(param, m, parent),
   m_ChoiceParam(param),
-  m_ComboBox( ITK_NULLPTR ),
-  m_StackWidget( ITK_NULLPTR ),
-  m_VLayout( ITK_NULLPTR ),
-  m_VLayoutGroup( ITK_NULLPTR ),
+  m_ComboBox( nullptr ),
+  m_StackWidget( nullptr ),
+  m_VLayout( nullptr ),
+  m_VLayoutGroup( nullptr ),
   m_WidgetList()
 {
 }

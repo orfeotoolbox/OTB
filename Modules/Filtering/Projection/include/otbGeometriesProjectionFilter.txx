@@ -37,7 +37,7 @@ otb::ogr::UniqueGeometryPtr
 otb::internal::ReprojectTransformationFunctor::ByCopy::operator()(TGeometry const* in) const
 {
   boost::interprocess::unique_ptr<TGeometry, ogr::internal::GeometryDeleter>
-    out(in ? static_cast <TGeometry*>(in->clone()) : ITK_NULLPTR); // OGR clone doesn't use covariant return ...
+    out(in ? static_cast <TGeometry*>(in->clone()) : nullptr); // OGR clone doesn't use covariant return ...
   if (out)
     m_Reprojector.do_transform(*out);
   ogr::UniqueGeometryPtr res(out.release());

@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   ogr::DataSource::Pointer ds
     = ogr::DataSource::New(filename, ogr::DataSource::Modes::Overwrite);
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> CreateLayer(layer1, ITK_NULLPTR, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(layer1, nullptr, wkbPoint);
   OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
   l.CreateField(k_f1);
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   ogr::DataSource::Pointer ds
     = ogr::DataSource::New(filename, ogr::DataSource::Modes::Overwrite);
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> CreateLayer(layer1, ITK_NULLPTR, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(layer1, nullptr, wkbPoint);
   OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
   l.CreateField(k_f1);
@@ -476,7 +476,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_sqlite_overwrite)
   ogr::DataSource::Pointer ds
     = ogr::DataSource::New(filename, ogr::DataSource::Modes::Overwrite);
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> CreateLayer(layer1, ITK_NULLPTR, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(layer1, nullptr, wkbPoint);
   OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
   l.CreateField(k_f1);
@@ -510,7 +510,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_sqlite_overwrite)
   ogr::DataSource::Pointer ds
     = ogr::DataSource::New(filename, ogr::DataSource::Modes::Overwrite);
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> CreateLayer(layer1, ITK_NULLPTR, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(layer1, nullptr, wkbPoint);
   OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
   l.CreateField(k_f1);
@@ -603,7 +603,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_sqlite_overwrite)
 
   // Check that we can read the file
   BOOST_ASSERT(ds);
-  ogr::Layer l = ds -> CreateLayer(layer1, ITK_NULLPTR, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(layer1, nullptr, wkbPoint);
   BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 0);
 
 //  OGRFeatureDefn & defn = l.GetLayerDefn();
@@ -678,7 +678,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Del_Fields)
     ogr::FieldDefn f5(*defn.GetFieldDefn(5));
     BOOST_CHECK_EQUAL(f5, k_f5);
 
-    BOOST_CHECK_EQUAL(defn.GetFieldDefn(6), (void*)ITK_NULLPTR);
+    BOOST_CHECK_EQUAL(defn.GetFieldDefn(6), (void*)nullptr);
     }
 
 #if GDAL_VERSION_NUM >= 1900
@@ -802,7 +802,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_new_shp_with_features)
   const std::string k_shp = "SomeShapeFileWithFeatures";
   ogr::DataSource::Pointer ds = ogr::DataSource::New(k_shp+".shp", ogr::DataSource::Modes::Overwrite);
 
-  ogr::Layer l = ds -> CreateLayer(k_one, ITK_NULLPTR, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(k_one, nullptr, wkbPoint);
 
   OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
@@ -840,7 +840,7 @@ BOOST_AUTO_TEST_CASE(Local_Geometries)
 BOOST_AUTO_TEST_CASE(Add_n_Read_Geometries)
 {
   ogr::DataSource::Pointer ds = ogr::DataSource::New();
-  ogr::Layer l = ds -> CreateLayer(k_one, ITK_NULLPTR, wkbPoint);
+  ogr::Layer l = ds -> CreateLayer(k_one, nullptr, wkbPoint);
 
   OGRFeatureDefn & defn = l.GetLayerDefn();
   for (int u=-10; u!=10; ++u) {

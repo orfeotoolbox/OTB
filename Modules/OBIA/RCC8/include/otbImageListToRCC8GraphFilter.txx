@@ -59,7 +59,7 @@ ImageListToRCC8GraphFilter<TInputImage, TOutputGraph>
   if (this->GetNumberOfInputs() < 1)
     {
     // exit
-    return ITK_NULLPTR;
+    return nullptr;
     }
   // else return the first input
   return static_cast<InputImageListType *>

@@ -292,7 +292,7 @@ private:
       ListViewParameter *clParam = 
                   dynamic_cast<ListViewParameter*>(GetParameterByKey("cl"));
       // Update the values of the channels to be selected if nbComponents is changed
-      if (clParam != ITK_NULLPTR && clParam->GetNbChoices() != nbComponents)
+      if (clParam != nullptr && clParam->GetNbChoices() != nbComponents)
         {
         ClearChoices("cl");
         for (unsigned int idx = 0; idx < nbComponents; ++idx)

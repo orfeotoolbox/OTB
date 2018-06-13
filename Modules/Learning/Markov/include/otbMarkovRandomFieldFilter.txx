@@ -82,7 +82,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TrainingImageType *>
            (this->itk::ProcessObject::GetInput(1));
@@ -321,7 +321,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
        - 2 * m_InputImageNeighborhoodRadius[i]);
     }
 
-  srand((unsigned) time(ITK_NULLPTR));
+  srand((unsigned) time(nullptr));
 
   if (!m_EnergyRegularization)
     {

@@ -44,7 +44,7 @@
 
 bool otb::ogr::DataSource::Clear()
 {
-  Reset(ITK_NULLPTR);
+  Reset(nullptr);
   return true;
 }
 
@@ -111,7 +111,7 @@ char const* DeduceDriverName(std::string filename)
       boost::bind(&ExtensionDriverAssociation::Matches, _1, extension));
   if (whichIt ==  boost::end(k_ExtensionDriverMap))
     {
-    return ITK_NULLPTR; // nothing found
+    return nullptr; // nothing found
     }
   return whichIt->driverName;
   }
@@ -119,7 +119,7 @@ char const* DeduceDriverName(std::string filename)
 
 
 otb::ogr::DataSource::DataSource()
-: m_DataSource(ITK_NULLPTR),
+: m_DataSource(nullptr),
   m_LayerOptions() , 
   m_OpenMode(Modes::Update_LayerUpdate),
   m_FirstModifiableLayerID(0)
@@ -231,7 +231,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
   ogr::version_proxy::GDALDatasetType * ds = 
     ogr::version_proxy::Open( simpleFileName.c_str() , true );
 
-  bool ds_exists = (ds!=ITK_NULLPTR);
+  bool ds_exists = (ds!=nullptr);
 
   ogr::version_proxy::Close(ds);
 
@@ -398,7 +398,7 @@ otb::ogr::Layer otb::ogr::DataSource::CreateLayer(
   }
 
   itkGenericExceptionMacro(<< "GDALDataset opening mode not supported");
-  return Layer(ITK_NULLPTR, false); // keep compiler happy
+  return Layer(nullptr, false); // keep compiler happy
 }
 
 otb::ogr::Layer otb::ogr::DataSource::CopyLayer(
@@ -614,7 +614,7 @@ otb::ogr::Layer otb::ogr::DataSource::ExecuteSQL(
     // Cannot use the deleter made for result sets obtained from
     // GDALDataset::ExecuteSQL because it checks for non-nullity....
     // *sigh*
-    return otb::ogr::Layer(ITK_NULLPTR, modifiable);
+    return otb::ogr::Layer(nullptr, modifiable);
 #endif
     }
   return otb::ogr::Layer(layer_ptr, *m_DataSource, modifiable);

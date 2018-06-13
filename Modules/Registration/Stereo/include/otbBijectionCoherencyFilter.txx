@@ -90,7 +90,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -102,7 +102,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -114,7 +114,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -126,7 +126,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 {
   if (this->GetNumberOfInputs()<4)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(3));
 }

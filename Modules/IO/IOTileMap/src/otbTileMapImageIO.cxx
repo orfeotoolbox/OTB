@@ -107,7 +107,7 @@ TileMapImageIO::~TileMapImageIO()
 bool TileMapImageIO::CanReadFile(const char* file)
 {
   // First check the extension
-  if (file == ITK_NULLPTR)
+  if (file == nullptr)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
@@ -148,7 +148,7 @@ void TileMapImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 void TileMapImageIO::Read(void* buffer)
 {
   unsigned char * p = static_cast<unsigned char *>(buffer);
-  if (p == ITK_NULLPTR)
+  if (p == nullptr)
     {
     itkExceptionMacro(<< "Memory allocation error");
     return;
@@ -355,7 +355,7 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
 void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
 {
   otbMsgDevMacro(<< "Retrieving " << filename);
-  unsigned char *           bufferCacheFault = ITK_NULLPTR;
+  unsigned char *           bufferCacheFault = nullptr;
 
   otb::ImageIOBase::Pointer imageIO;
   imageIO = otb::GDALImageIO::New();
@@ -531,7 +531,7 @@ void TileMapImageIO::ReadImageInformation()
 bool TileMapImageIO::CanWriteFile(const char* name)
 {
   // First if filename is provided
-  if (name == ITK_NULLPTR)
+  if (name == nullptr)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
@@ -556,7 +556,7 @@ void TileMapImageIO::Write(const void* buffer)
 {
 
   const unsigned char * p = static_cast<const unsigned char *>(buffer);
-  if (p == ITK_NULLPTR)
+  if (p == nullptr)
     {
     itkExceptionMacro(<< "Memory allocation error");
     return;

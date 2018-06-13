@@ -111,7 +111,7 @@ int otbAlignImageToPath(int itkNotUsed(argc), char * argv[])
   otbGenericMsgDebugMacro(<< "Writing :");
 
   FILE *file = fopen(outputFilename, "w");
-  if (file == ITK_NULLPTR)
+  if (file == nullptr)
     {
     fprintf(stderr, "Error, can't open file");
     exit(-1);

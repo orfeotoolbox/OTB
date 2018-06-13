@@ -293,11 +293,11 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       // Contains for the 4 directions the the pixels belonging to each zone
       //std::vector<double> PixelValues[NB_DIR][NB_ZONE];
       // ROMAIN
-      std::vector<double>** PixelValues = ITK_NULLPTR;
+      std::vector<double>** PixelValues = nullptr;
       PixelValues = new std::vector<double>*[NB_DIR];
       for (unsigned int i = 0; i < NB_DIR; ++i)
         {
-        PixelValues[i] = ITK_NULLPTR;
+        PixelValues[i] = nullptr;
         PixelValues[i] = new std::vector<double>[NB_ZONE];
         }
       //otbMsgDevMacro( << "\tCentre Xc/Yc="<<Xc<<" "<<Yc<<" Yc12/Yc13="<<Yc12<<" "<<Yc13);
@@ -380,10 +380,10 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       for (unsigned int i = 0; i < NB_DIR; ++i)
         {
         delete[] PixelValues[i];
-        PixelValues[i] = ITK_NULLPTR;
+        PixelValues[i] = nullptr;
         }
       delete[] PixelValues;
-      PixelValues = ITK_NULLPTR;
+      PixelValues = nullptr;
       }
 
     }
