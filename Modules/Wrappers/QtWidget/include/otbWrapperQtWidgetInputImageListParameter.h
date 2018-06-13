@@ -53,7 +53,7 @@ class OTBQtWidget_EXPORT QtWidgetInputImageListParameter :
 //
 // Public methods.
 public:
-  QtWidgetInputImageListParameter( InputImageListParameter *, QtWidgetModel * );
+  QtWidgetInputImageListParameter( InputImageListParameter *, QtWidgetModel *, QWidget * );
   ~QtWidgetInputImageListParameter() override;
 
 //

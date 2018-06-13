@@ -52,7 +52,7 @@ class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter
 // Public methods.
 public:
   QtWidgetInputVectorDataListParameter( InputVectorDataListParameter *,
-					QtWidgetModel * );
+					QtWidgetModel *, QWidget * );
 
   ~QtWidgetInputVectorDataListParameter() override;
 

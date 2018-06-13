@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetDirectoryParameter : public QtWidgetParameterBa
 {
   Q_OBJECT
 public:
-  QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*);
+  QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetDirectoryParameter() override;
 
 protected slots:

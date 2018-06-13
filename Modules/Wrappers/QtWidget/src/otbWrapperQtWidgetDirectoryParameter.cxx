@@ -27,8 +27,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetDirectoryParameter::QtWidgetDirectoryParameter(DirectoryParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetDirectoryParameter::QtWidgetDirectoryParameter(DirectoryParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_DirectoryParam(param)
 {
 }
@@ -52,10 +52,10 @@ void QtWidgetDirectoryParameter::DoUpdateGUI()
 void QtWidgetDirectoryParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_DirectoryParam->GetDescription() )
   );
@@ -65,7 +65,7 @@ void QtWidgetDirectoryParameter::DoCreateWidget()
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select d Directory...");
   m_Button->setMaximumWidth(m_Button->width());

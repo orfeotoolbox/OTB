@@ -39,7 +39,7 @@ class OTBQtWidget_EXPORT QtWidgetChoiceParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*);
+  QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetChoiceParameter() override;
 
 protected slots:

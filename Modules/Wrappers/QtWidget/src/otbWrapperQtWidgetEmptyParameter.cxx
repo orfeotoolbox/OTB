@@ -25,8 +25,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam, QtWidgetModel* m)
-  : QtWidgetParameterBase(emptyParam, m)
+QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam, QtWidgetModel* m, QWidget * parent)
+  : QtWidgetParameterBase(emptyParam, m, parent)
 {
 }
 
@@ -42,11 +42,11 @@ void QtWidgetEmptyParameter::DoUpdateGUI()
 void QtWidgetEmptyParameter::DoCreateWidget()
 {
   // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout;
+  QHBoxLayout *hLayout = new QHBoxLayout(this);
   hLayout->setSpacing(0);
   hLayout->setContentsMargins(0, 0, 0, 0);
 
-  //QCheckBox* checkbox = new QCheckBox;
+  //QCheckBox* checkbox = new QCheckBox(this);
   //checkbox->setToolTip(emptyParam->GetDescription());
 
   //QString optionID(emptyParam->GetName());

@@ -41,7 +41,7 @@ class OTBQtWidget_EXPORT QtWidgetFloatParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*);
+  QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetFloatParameter() override;
 
 private slots:

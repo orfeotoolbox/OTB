@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetOutputImageParameter : public QtWidgetParameter
 {
   Q_OBJECT
 public:
-  QtWidgetOutputImageParameter(OutputImageParameter*, QtWidgetModel*);
+  QtWidgetOutputImageParameter(OutputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;

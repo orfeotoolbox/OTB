@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetBoolParameter : public QtWidgetParameterBase
   Q_OBJECT
 
 public:
-  QtWidgetBoolParameter(BoolParameter*, QtWidgetModel*);
+  QtWidgetBoolParameter(BoolParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetBoolParameter() override;
 
 public slots:

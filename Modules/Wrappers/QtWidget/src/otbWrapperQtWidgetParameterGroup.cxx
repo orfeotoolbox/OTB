@@ -28,8 +28,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterGroup::Pointer paramList, QtWidgetModel* m)
-: QtWidgetParameterBase(paramList, m),
+QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterGroup::Pointer paramList, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(paramList, m, parent),
   m_ParamList(paramList)
 {
 }
@@ -49,7 +49,7 @@ void QtWidgetParameterGroup::DoUpdateGUI()
 void QtWidgetParameterGroup::DoCreateWidget()
 {
   // a GridLayout with two columns : parameter label / parameter widget
-  QGridLayout *gridLayout = new QGridLayout;
+  QGridLayout *gridLayout = new QGridLayout(this);
   gridLayout->setSpacing(1);
   gridLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -73,15 +73,15 @@ void QtWidgetParameterGroup::DoCreateWidget()
       if (paramAsGroup == nullptr && paramAsChoice == nullptr && !paramIsXML)
         {
         // Label (col 1)
-        QWidget* label = new QtWidgetParameterLabel( rawParam );
+        QWidget* label = new QtWidgetParameterLabel( rawParam , this);
         gridLayout->addWidget(label, i, 1);
 
         // Parameter Widget (col 2)
-        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel(), this );
         gridLayout->addWidget(specificWidget, i, 2 );
 
         // CheckBox (col 0)
-        QCheckBox * checkBox = new QCheckBox;
+        QCheckBox * checkBox = new QCheckBox(this);
         connect( checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
         connect( checkBox, SIGNAL(clicked(bool)), GetModel(), SLOT(NotifyUpdate()) );
         connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), checkBox, SLOT(setChecked(bool)));
@@ -106,11 +106,11 @@ void QtWidgetParameterGroup::DoCreateWidget()
         }
       else
         {
-        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel(), this);
 
-        QVBoxLayout* vboxLayout = new QVBoxLayout;
+        QVBoxLayout* vboxLayout = new QVBoxLayout(this);
         vboxLayout->addWidget(specificWidget);
-        QGroupBox* group = new QGroupBox;
+        QGroupBox* group = new QGroupBox(this);
         group->setLayout(vboxLayout);
 
         // Make the parameter Group checkable when it is not mandatory

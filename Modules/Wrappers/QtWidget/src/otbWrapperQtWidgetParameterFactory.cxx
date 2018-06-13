@@ -71,7 +71,7 @@ public:
     return dynamic_cast<TParameterType *>(param) != nullptr;
   }
 
-  static QtWidgetParameterBase* Create( Parameter* param, QtWidgetModel* model )
+  static QtWidgetParameterBase* Create( Parameter* param, QtWidgetModel* model, QWidget * parent )
   {
     QtWidgetParameterBase * widget = nullptr;
     TParameterType * specificParam = dynamic_cast< TParameterType * >( param );
@@ -79,7 +79,7 @@ public:
     // Code should break if param is not a TParameterType and not be silent!
     assert( specificParam!=nullptr );
 
-    widget = new TQtWidget( specificParam, model );
+    widget = new TQtWidget( specificParam, model, parent);
 
     return widget;
   }
@@ -94,14 +94,14 @@ QtWidgetParameterFactory::~QtWidgetParameterFactory()
 }
 
 QtWidgetParameterBase*
-QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model )
+QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model, QWidget * parent )
 {
   QtWidgetParameterBase* widget = nullptr;
 
 #define CREATEWIDGET( ParameterType, WidgetType ) \
   else if ( QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::CanCreate(param) ) \
     { \
-    widget = QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::Create(param, model); \
+    widget = QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::Create(param, model, parent); \
     }
 
   if (0) {}

@@ -46,7 +46,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterList : public QtWidgetParameterBase
 //
 // Public methods.
 public:
-  QtWidgetParameterList( AbstractParameterList *, QtWidgetModel * );
+  QtWidgetParameterList( AbstractParameterList *, QtWidgetModel * , QWidget*);
   ~QtWidgetParameterList() override;
 
 //

@@ -25,8 +25,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetRAMParameter::QtWidgetRAMParameter(RAMParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetRAMParameter::QtWidgetRAMParameter(RAMParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_RAMParam(param)
 {
 }
@@ -38,11 +38,11 @@ QtWidgetRAMParameter::~QtWidgetRAMParameter()
 void QtWidgetRAMParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_QHBoxLayout = new QHBoxLayout;
+  m_QHBoxLayout = new QHBoxLayout(this);
   m_QHBoxLayout->setSpacing(0);
   m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_QSpinBox = new QSpinBox;
+  m_QSpinBox = new QSpinBox(this);
   m_QSpinBox->setToolTip(
     QString::fromStdString( m_RAMParam->GetDescription() )
   );

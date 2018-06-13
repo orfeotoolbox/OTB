@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetEmptyParameter : public QtWidgetParameterBase
   Q_OBJECT
 
 public:
-  QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*);
+  QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetEmptyParameter() override;
 
 private:

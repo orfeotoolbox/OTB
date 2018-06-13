@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetOutputFilenameParameter : public QtWidgetParame
 {
   Q_OBJECT
 public:
-  QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*);
+  QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputFilenameParameter() override;
 
   inline const QLineEdit* GetInput() const;

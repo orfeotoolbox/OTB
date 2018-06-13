@@ -25,8 +25,9 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterBase::QtWidgetParameterBase(Parameter * param, QtWidgetModel* m)
-  : m_Model(m)
+QtWidgetParameterBase::QtWidgetParameterBase(Parameter * param, QtWidgetModel* m, QWidget * parent)
+  : QWidget(parent)
+  , m_Model(m)
   , m_Param(param)
   , m_IsChecked( false )
 {

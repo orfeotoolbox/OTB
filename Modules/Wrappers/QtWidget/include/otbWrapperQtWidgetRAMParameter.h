@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetRAMParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*);
+  QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetRAMParameter() override;
 
 protected slots:
