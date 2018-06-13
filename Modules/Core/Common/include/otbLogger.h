@@ -70,7 +70,7 @@ public:
 
 protected:
   Logger();
-  virtual ~Logger() ITK_OVERRIDE;
+  virtual ~Logger() override;
 
 private:
   Logger(const Self &); //purposely not implemented

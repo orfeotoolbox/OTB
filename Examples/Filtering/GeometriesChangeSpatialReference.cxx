@@ -102,11 +102,11 @@ protected:
   /** Default constructor. */
   MyReprojectionFilter(){ }
   /** Destructor. */
-  ~MyReprojectionFilter() ITK_OVERRIDE{ }
+  ~MyReprojectionFilter() override{ }
 
 private:
 
-  OGRSpatialReference*     DoDefineNewLayerSpatialReference(otb::ogr::Layer const& itkNotUsed(source)) const ITK_OVERRIDE
+  OGRSpatialReference*     DoDefineNewLayerSpatialReference(otb::ogr::Layer const& itkNotUsed(source)) const override
     {
     return m_osr.get();
     }
