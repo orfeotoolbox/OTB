@@ -19,6 +19,10 @@
  * limitations under the License.
  */
 
+#include <complex>
+#include <sstream>
+#include <string>
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -29,7 +33,6 @@
 #include "itkPoint.h"
 #include "itkCovariantVector.h"
 #include "itkDiffusionTensor3D.h"
-#include "itkImageRegionSplitter.h"
 
 namespace otb
 {
