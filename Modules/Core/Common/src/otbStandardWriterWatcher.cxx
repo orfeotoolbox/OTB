@@ -19,7 +19,10 @@
  * limitations under the License.
  */
 
+#include <iostream>
+
 #include "otbStandardWriterWatcher.h"
+#include "otbStopwatch.h"
 
 namespace otb
 {

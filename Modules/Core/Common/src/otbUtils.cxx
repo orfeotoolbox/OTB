@@ -20,7 +20,6 @@
 
 
 #include "otbUtils.h"
-#include <sstream>
 
 namespace otb
 {
