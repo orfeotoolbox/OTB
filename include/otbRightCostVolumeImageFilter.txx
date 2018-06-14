@@ -1,9 +1,9 @@
 
-#ifndef otbCostVolumeImageFilter_txx
-#define otbCostVolumeImageFilter_txx
+#ifndef otbRightCostVolumeImageFilter_txx
+#define otbRightCostVolumeImageFilter_txx
 
 
-#include "otbCostVolumeImageFilter.h"
+#include "otbRightCostVolumeImageFilter.h"
 #include "itkProgressReporter.h"
 #include "itkConstantBoundaryCondition.h"
 #include "itkConstNeighborhoodIterator.h"
@@ -23,8 +23,8 @@ namespace otb
 {	
 	
 template <class TInputImage, class TGradientImage, class TOutputImage >
-CostVolumeImageFilter<TInputImage,TGradientImage,TOutputImage>
-::CostVolumeImageFilter()
+RightCostVolumeImageFilter<TInputImage,TGradientImage,TOutputImage>
+::RightCostVolumeImageFilter()
 {
   // Set the number of inputs
   this->SetNumberOfRequiredInputs(4);  
@@ -39,14 +39,14 @@ CostVolumeImageFilter<TInputImage,TGradientImage,TOutputImage>
 }
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
-CostVolumeImageFilter<TInputImage,TGradientImage,TOutputImage>
-::~CostVolumeImageFilter()
+RightCostVolumeImageFilter<TInputImage,TGradientImage,TOutputImage>
+::~RightCostVolumeImageFilter()
 {}
 // =================================== Seters ========================================================
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::SetLeftInputImage(const TInputImage * image)
 {
  
@@ -55,7 +55,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::SetRightInputImage(const TInputImage * image)
 {
 
@@ -64,7 +64,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::SetLeftGradientXInput(const TGradientImage * image)
 {
 
@@ -73,7 +73,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::SetRightGradientXInput(const TGradientImage * image)
 {
 
@@ -85,7 +85,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::SetLeftGradientYInput(const TGradientImage * image)
 {
 
@@ -95,7 +95,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::SetRightGradientYInput(const TGradientImage * image)
 {
 
@@ -108,7 +108,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 //================================== Geters ====================================================
 template <class TInputImage, class TGradientImage, class TOutputImage >
 const TInputImage *
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetLeftInputImage() const
 {
   if (this->GetNumberOfInputs()<1)
@@ -120,7 +120,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 const TInputImage *
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetRightInputImage() const
 {
   if(this->GetNumberOfInputs()<2)
@@ -133,7 +133,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 const TGradientImage *
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetLeftGradientXInput() const
 {
   if(this->GetNumberOfInputs()<3)
@@ -145,7 +145,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 const TGradientImage *
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetRightGradientXInput() const
 {
   if(this->GetNumberOfInputs()<4)
@@ -158,7 +158,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 const TGradientImage *
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetLeftGradientYInput() const
 {
   if(this->GetNumberOfInputs()<5)
@@ -170,7 +170,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 const TGradientImage *
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetRightGradientYInput() const
 {
   if(this->GetNumberOfInputs()<6)
@@ -183,7 +183,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 TOutputImage *
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetOutputImage()
 {
   if (this->GetNumberOfOutputs()<1)
@@ -195,7 +195,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 int
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetHorizontalMinDisparity() const
      {
        return m_HorizontalMinDisparity;
@@ -203,7 +203,7 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
     
 template <class TInputImage, class TGradientImage, class TOutputImage >
 int
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetHorizontalMaxDisparity() const
      {
        return m_HorizontalMaxDisparity;
@@ -214,19 +214,19 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 //============================================  GenerateOutputInformation  ========================================================
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GenerateOutputInformation()
 {
   // Call superclass implementation
   Superclass::GenerateOutputInformation();
   
-  this->GetOutput()->SetNumberOfComponentsPerPixel(m_HorizontalMaxDisparity - m_HorizontalMinDisparity +1 ); 
+  this->GetOutput()->SetNumberOfComponentsPerPixel(m_HorizontalMaxDisparity - m_HorizontalMinDisparity +1); 
  
 }
 //============================================  GenerateInputRequestedRegion  ========================================================
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::GenerateInputRequestedRegion()
 {
  Superclass::GenerateInputRequestedRegion();	
@@ -280,7 +280,7 @@ for(int iteration_disp=m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMax
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {	
 
@@ -294,8 +294,12 @@ CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
  //  Setting parameters
 	double alpha = 0.9; 
 	double taux1 = 7;  
-	double taux2 = 2;  	
+	double taux2 = 2; 
 
+
+typedef otb::VectorImage<float> FloatVectorImageType;
+typedef otb::ImageFileWriter<FloatVectorImageType> ImageWriterType;
+ImageWriterType::Pointer img = ImageWriterType::New();
 
 
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
@@ -324,6 +328,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
    //~ } 
           
    //  Cost computation    
+
        
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
   while ( !outputIt.IsAtEnd() && !LeftInputImageIt.IsAtEnd() )
@@ -349,12 +354,14 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
                  
                  if(costGradientNorm > taux2) 
                    costGradientNorm = taux2;
-                   // if To take the minimum                             
+                   // if To take the minimum     
+    //std::cout << "costColor : " << costColor << std::endl ;
+    //std::cout << "costGradient : " << costGradient << std::endl;                        
                                                            
            
-    OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-alpha)*costColorNorm + alpha*costGradientNorm );  
-   outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;
-   // outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;
+    OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>(((1-alpha)*costColorNorm + alpha*costGradientNorm) );  
+    outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;
+
     //outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)]=OutPixel[0] ;
      //  outputIt.Set(OutPixel);
      //  std::cout << " cost volume = "<< OutPixel[0] ;              
@@ -363,8 +370,10 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     ++LeftGradientXInputIt;
     ++RightGradientXInputIt;   
     ++outputIt;       
-      progress.CompletedPixel();
+    progress.CompletedPixel();
     }  // end of while 
+
+
   }
 
   
@@ -376,7 +385,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
 // ================================== ComputeInputRegions ======================================================= 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
-CostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp)
 {
 //   
@@ -425,8 +434,6 @@ typename RegionType::IndexType  shift;
 // shift -1
 typename RegionType::IndexType IndexInv = RightRegion.GetIndex();	
 typename RegionType::IndexType  ShiftInv;
-
-
 
 
   ShiftInv[0] = -iteration_disp;

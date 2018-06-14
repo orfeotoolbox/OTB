@@ -33,9 +33,7 @@ class MinVectorImage
 {
 public:
   MinVectorImage(){}
-  virtual ~MinVectorImage() {}
-
-  
+  virtual ~MinVectorImage() {}  
 
   TOutput operator() ( TInput input )
     {
@@ -45,12 +43,12 @@ public:
     output = 0;
     typename TInput::ValueType min ( input[0] );
 
-    for(int i=1; i<size; i++)
+    for(unsigned int i=0; i<size; i++)
       {
       if (input[i]<min)
         {
         min = input[i] ;
-        output = i;
+        output = -i;
         }
       }
 

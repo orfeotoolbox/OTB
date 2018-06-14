@@ -44,6 +44,7 @@ set(OTBStereoFiltersTests
   PatchMatch.cpp
   CVF.cpp
   Occlusions.cpp
+  testDisparityMap.cpp
 )
 
 add_executable(otbStereoFiltersTestDriver ${OTBStereoFiltersTests})

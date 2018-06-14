@@ -801,6 +801,18 @@ OtbImageRightMedian->Update();
  OcclusionWriter->SetInput( Occlusionfilter->GetOutput());  
  otb::StandardFilterWatcher OcclusionWatcher(OcclusionWriter, "Occlusion"); 
  OcclusionWriter->Update(); 
+
+
+
+
+
+
+
+
+
+
+
+
  
 /*========================== Fill occlusion =====================================*/
   CastFilterType::Pointer OccCastFiler = CastFilterType::New();
