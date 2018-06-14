@@ -123,15 +123,15 @@ public:
 
 protected:
   SampleAugmentationFilter();
-  ~SampleAugmentationFilter() ITK_OVERRIDE {}
+  ~SampleAugmentationFilter() override {}
 
   /** Generate Data method*/
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** DataObject pointer */
   typedef itk::DataObject::Pointer DataObjectPointer;
 
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 
@@ -154,8 +154,8 @@ protected:
   ogr::Feature SelectTemplateFeature(const ogr::Layer& inputLayer, 
                                      const std::string& classField, int label);
 private:
-  SampleAugmentationFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  SampleAugmentationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string m_ClassFieldName;
   size_t m_Layer;

@@ -131,8 +131,8 @@ protected:
   }
 
 private:
-  ClampVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ClampVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double m_DLower;
   double m_DUpper;

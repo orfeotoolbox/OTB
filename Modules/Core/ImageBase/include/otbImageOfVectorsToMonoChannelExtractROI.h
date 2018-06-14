@@ -106,8 +106,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  ImageOfVectorsToMonoChannelExtractROI(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageOfVectorsToMonoChannelExtractROI(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Channel to process [1...] */
   unsigned int m_Channel;

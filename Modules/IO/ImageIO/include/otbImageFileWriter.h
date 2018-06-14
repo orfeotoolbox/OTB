@@ -217,8 +217,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  ImageFileWriter(const ImageFileWriter &); //purposely not implemented
-  void operator =(const ImageFileWriter&); //purposely not implemented
+  ImageFileWriter(const ImageFileWriter &) = delete;
+  void operator =(const ImageFileWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {

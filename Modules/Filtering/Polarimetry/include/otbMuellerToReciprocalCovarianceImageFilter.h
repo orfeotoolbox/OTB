@@ -161,8 +161,8 @@ protected:
   ~MuellerToReciprocalCovarianceImageFilter() override {}
 
 private:
-  MuellerToReciprocalCovarianceImageFilter(const Self&); // purposely not implemented
-  void operator=(const Self&);          // purposely not implemented
+  MuellerToReciprocalCovarianceImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

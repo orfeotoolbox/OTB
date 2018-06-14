@@ -159,8 +159,8 @@ protected:
 
 private:
 
-  GreyLevelCooccurrenceIndexedList(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GreyLevelCooccurrenceIndexedList(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** LookupArray instance */
   LookupArrayType m_LookupArray;

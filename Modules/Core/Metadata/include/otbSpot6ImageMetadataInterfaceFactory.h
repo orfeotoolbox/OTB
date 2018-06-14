@@ -62,8 +62,8 @@ protected:
   ~Spot6ImageMetadataInterfaceFactory() override;
 
 private:
-  Spot6ImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Spot6ImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

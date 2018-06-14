@@ -187,8 +187,8 @@ int main(int argc, char* argv[])
   spacing[1] = -0.00001;
 
   ImageType::PointType origin;
-  origin[0] = strtod(argv[3], ITK_NULLPTR);         //longitude
-  origin[1] = strtod(argv[4], ITK_NULLPTR);         //latitude
+  origin[0] = strtod(argv[3], nullptr);         //longitude
+  origin[1] = strtod(argv[4], nullptr);         //latitude
 
   ImageType::RegionType region;
 

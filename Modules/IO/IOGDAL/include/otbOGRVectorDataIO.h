@@ -103,7 +103,7 @@ public:
   bool CanWriteFile(const char*) const override;
 
   /** Writes the data to disk from the memory buffer provided */
-  void Write(const itk::DataObject* data,  char ** papszOptions = ITK_NULLPTR) override;
+  void Write(const itk::DataObject* data,  char ** papszOptions = nullptr) override;
 
 protected:
   /** Constructor.*/
@@ -116,8 +116,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OGRVectorDataIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OGRVectorDataIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string GetOGRDriverName(std::string name) const;
 

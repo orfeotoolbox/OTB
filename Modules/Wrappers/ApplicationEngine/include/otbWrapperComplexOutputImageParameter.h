@@ -137,8 +137,8 @@ protected:
 
 
 private:
-  ComplexOutputImageParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  ComplexOutputImageParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
   unsigned int                  m_RAMValue;
 

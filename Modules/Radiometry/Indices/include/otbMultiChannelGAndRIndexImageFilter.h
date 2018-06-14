@@ -119,8 +119,8 @@ protected:
     os << indent << "Red index: " << m_RedIndex << std::endl;
   }
 private:
-  MultiChannelGAndRIndexImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiChannelGAndRIndexImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Green channel index */
   unsigned int m_GreenIndex;
   /** Red channel index */

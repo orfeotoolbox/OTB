@@ -77,8 +77,8 @@ protected:
   void run() override;
 
 private:
-  AppliThread(const AppliThread&); //purposely not implemented
-  void operator=(const AppliThread&); //purposely not implemented
+  AppliThread(const AppliThread&) = delete;
+  void operator=(const AppliThread&) = delete;
 
   Application::Pointer m_Application;
 };
@@ -175,8 +175,8 @@ private slots:
   void TimerDone();
 
 private:
-  QtWidgetModel(const QtWidgetModel&); //purposely not implemented
-  void operator=(const QtWidgetModel&); //purposely not implemented
+  QtWidgetModel(const QtWidgetModel&) = delete;
+  void operator=(const QtWidgetModel&) = delete;
 
   Application::Pointer m_Application;
 

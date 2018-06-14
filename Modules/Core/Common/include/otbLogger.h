@@ -70,11 +70,11 @@ public:
 
 protected:
   Logger();
-  virtual ~Logger() ITK_OVERRIDE;
+  virtual ~Logger() override;
 
 private:
-  Logger(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Logger(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   static Pointer CreateInstance();
 

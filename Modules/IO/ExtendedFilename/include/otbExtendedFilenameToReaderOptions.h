@@ -104,8 +104,8 @@ protected:
   ~ExtendedFilenameToReaderOptions() override {}
 
 private:
-  ExtendedFilenameToReaderOptions(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ExtendedFilenameToReaderOptions(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OptionType               m_Options;
 

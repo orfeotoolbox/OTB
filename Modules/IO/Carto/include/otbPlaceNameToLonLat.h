@@ -69,8 +69,8 @@ protected:
   void ParseXMLGeonames();
 
 private:
-  PlaceNameToLonLat(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  PlaceNameToLonLat(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double           m_Lon;
   double           m_Lat;

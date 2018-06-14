@@ -59,7 +59,7 @@ namespace Wrapper
 CommandLineLauncher::CommandLineLauncher() :
   /*m_Expression(""),*/m_VExpression(), m_WatcherList(), m_ReportProgress(true)
 {
-  m_Application = ITK_NULLPTR;
+  m_Application = nullptr;
   m_Parser = CommandLineParser::New();
   m_LogOutput = itk::StdStreamLogOutput::New();
   m_LogOutput->SetStream(std::cout);
@@ -72,7 +72,7 @@ CommandLineLauncher::CommandLineLauncher() :
 CommandLineLauncher::~CommandLineLauncher()
 {
   this->DeleteWatcherList();
-  m_Application = ITK_NULLPTR;
+  m_Application = nullptr;
   ApplicationRegistry::CleanRegistry();
 }
 
@@ -81,7 +81,7 @@ void CommandLineLauncher::DeleteWatcherList()
   for (unsigned int i = 0; i < m_WatcherList.size(); i++)
     {
     delete m_WatcherList[i];
-    m_WatcherList[i] = ITK_NULLPTR;
+    m_WatcherList[i] = nullptr;
     }
   m_WatcherList.clear();
 }

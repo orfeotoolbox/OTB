@@ -94,7 +94,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
     cv::noArray(),
     var_type));
 #else
-  CvBoostParams params = CvBoostParams(m_BoostType, m_WeakCount, m_WeightTrimRate, m_MaxDepth, false, ITK_NULLPTR);
+  CvBoostParams params = CvBoostParams(m_BoostType, m_WeakCount, m_WeightTrimRate, m_MaxDepth, false, nullptr);
   params.split_criteria = m_SplitCrit;
   m_BoostModel->train(samples,CV_ROW_SAMPLE,labels,cv::Mat(),cv::Mat(),var_type,cv::Mat(),params);
 #endif
@@ -122,7 +122,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   result = m_BoostModel->predict(sample,missing);
 #endif
 
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     (*quality) = static_cast<ConfidenceValueType>(
 #ifdef OTB_OPENCV_3
@@ -150,7 +150,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   fs.release();
 #else
   if (name == "")
-    m_BoostModel->save(filename.c_str(), ITK_NULLPTR);
+    m_BoostModel->save(filename.c_str(), nullptr);
   else
     m_BoostModel->save(filename.c_str(), name.c_str());
 #endif
@@ -166,7 +166,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
   m_BoostModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
-      m_BoostModel->load(filename.c_str(), ITK_NULLPTR);
+      m_BoostModel->load(filename.c_str(), nullptr);
   else
       m_BoostModel->load(filename.c_str(), name.c_str());
 #endif

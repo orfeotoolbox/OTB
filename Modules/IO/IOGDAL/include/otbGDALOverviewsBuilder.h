@@ -172,9 +172,9 @@ protected:
 
 
 private:
-  GDALOverviewsBuilder( const Self & ); //purposely not implemented
+  GDALOverviewsBuilder( const Self & ) = delete;
 
-  void operator = ( const Self & ); //purposely not implemented
+  void operator = ( const Self & ) = delete;
 
   // void GetGDALResamplingMethod( std::string & resamplingMethod );
 

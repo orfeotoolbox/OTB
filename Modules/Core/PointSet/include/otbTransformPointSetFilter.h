@@ -85,8 +85,8 @@ protected:
   typename TransformType::Pointer m_Transform;
 
 private:
-  TransformPointSetFilter(const TransformPointSetFilter &); //purposely not implemented
-  void operator =(const TransformPointSetFilter&); //purposely not implemented
+  TransformPointSetFilter(const TransformPointSetFilter &) = delete;
+  void operator =(const TransformPointSetFilter&) = delete;
 
 };
 

@@ -96,8 +96,8 @@ protected:
   ~OGRIOHelper() override;
 
 private:
-  OGRIOHelper(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OGRIOHelper(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typedef DataNodeType::PointType                PointType;
 

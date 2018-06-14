@@ -119,8 +119,8 @@ protected:
   void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentVectorImageToMatrixFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentVectorImageToMatrixFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 }; // end of class PersistentVectorImageToMatrixFilter
 
 /**===========================================================================*/
@@ -200,8 +200,8 @@ protected:
   ~VectorImageToMatrixImageFilter() override {}
 
 private:
-  VectorImageToMatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorImageToMatrixImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

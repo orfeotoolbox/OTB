@@ -116,8 +116,8 @@ protected:
   void RegionGrowing(const IndexType indexSeed) override;
 
 private:
-  LabelizeConfidenceConnectedImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelizeConfidenceConnectedImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Initial replace value*/
   OutputPixelType m_ReplaceValue;

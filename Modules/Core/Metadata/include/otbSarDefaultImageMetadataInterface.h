@@ -211,8 +211,8 @@ protected:
 
 private:
 
-  SarDefaultImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarDefaultImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

@@ -62,8 +62,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RCC8GraphSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RCC8GraphSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 

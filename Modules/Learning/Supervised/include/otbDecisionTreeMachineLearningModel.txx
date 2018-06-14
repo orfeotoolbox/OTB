@@ -103,7 +103,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
     cv::noArray(),
     var_type));
 #else
-  float * priors = m_Priors.empty() ? ITK_NULLPTR : &m_Priors.front();
+  float * priors = m_Priors.empty() ? nullptr : &m_Priors.front();
 
   CvDTreeParams params = CvDTreeParams(m_MaxDepth, m_MinSampleCount, m_RegressionAccuracy,
                                        m_UseSurrogates, m_MaxCategories, m_CVFolds, m_Use1seRule, m_TruncatePrunedTree, priors);
@@ -133,7 +133,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     if (!this->m_ConfidenceIndex)
       {
@@ -157,7 +157,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
   fs.release();
 #else
   if (name == "")
-    m_DTreeModel->save(filename.c_str(), ITK_NULLPTR);
+    m_DTreeModel->save(filename.c_str(), nullptr);
   else
     m_DTreeModel->save(filename.c_str(), name.c_str());
 #endif
@@ -173,7 +173,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
   m_DTreeModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
-    m_DTreeModel->load(filename.c_str(), ITK_NULLPTR);
+    m_DTreeModel->load(filename.c_str(), nullptr);
   else
     m_DTreeModel->load(filename.c_str(), name.c_str());
 #endif

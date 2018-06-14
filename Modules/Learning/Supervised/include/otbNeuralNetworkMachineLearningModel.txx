@@ -47,7 +47,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
   m_TermCriteriaType(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS),
   m_MaxIter(1000),
   m_Epsilon(0.01),
-  m_CvMatOfLabels(ITK_NULLPTR)
+  m_CvMatOfLabels(nullptr)
 {
   this->m_ConfidenceIndex = true;
   this->m_IsRegressionSupported = true;
@@ -83,7 +83,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
                                                                                cv::Mat & output)
 {
   unsigned int nbSamples = 0;
-  if (labels != ITK_NULLPTR)
+  if (labels != nullptr)
     {
     nbSamples = labels->Size();
     }
@@ -278,7 +278,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
       }
     }
 
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
@@ -293,7 +293,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
   fs << (name.empty() ? m_ANNModel->getDefaultName() : cv::String(name)) << "{";
   m_ANNModel->write(fs);
-  if (m_CvMatOfLabels != ITK_NULLPTR)
+  if (m_CvMatOfLabels != nullptr)
     {
     std::string labelsName("class_labels");
     fs.writeObj(labelsName,m_CvMatOfLabels);
@@ -305,15 +305,15 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
   if ( !name.empty() )
     lname = name.c_str();
 
-  CvFileStorage* fs = ITK_NULLPTR;
-  fs = cvOpenFileStorage(filename.c_str(), ITK_NULLPTR, CV_STORAGE_WRITE);
+  CvFileStorage* fs = nullptr;
+  fs = cvOpenFileStorage(filename.c_str(), nullptr, CV_STORAGE_WRITE);
   if ( !fs )
     {
     itkExceptionMacro("Could not open the file " << filename << " for writing");
     }
 
   m_ANNModel->write(fs, lname);
-  if (m_CvMatOfLabels != ITK_NULLPTR)
+  if (m_CvMatOfLabels != nullptr)
     cvWrite(fs, "class_labels", m_CvMatOfLabels);
 
   cvReleaseFileStorage(&fs);
@@ -331,7 +331,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
   m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
   fs.release();
 #else
-  const char* lname = ITK_NULLPTR;
+  const char* lname = nullptr;
   if ( !name.empty() )
     lname = name.c_str();
 

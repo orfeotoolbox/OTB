@@ -118,8 +118,8 @@ protected:
   MapProjectionAdapter::Pointer m_MapProjection;
 
 private:
-  GenericMapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GenericMapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

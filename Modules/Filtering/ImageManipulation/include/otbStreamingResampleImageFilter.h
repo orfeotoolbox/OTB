@@ -187,8 +187,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StreamingResampleImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingResampleImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   //We need this to respect ConstRef macro and to be compliant with itk positive 
   //spacing

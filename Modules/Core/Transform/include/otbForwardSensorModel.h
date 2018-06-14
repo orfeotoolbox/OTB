@@ -85,8 +85,8 @@ protected:
 
 private:
 
-  ForwardSensorModel(const Self &); //purposely not implemented
-  void operator =(const Self&);     //purposely not implemented
+  ForwardSensorModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

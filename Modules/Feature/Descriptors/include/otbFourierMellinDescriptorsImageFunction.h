@@ -135,8 +135,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  FourierMellinDescriptorsImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  FourierMellinDescriptorsImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Pmax;
   unsigned int m_Qmax;

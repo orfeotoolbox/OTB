@@ -153,8 +153,8 @@ protected:
   RadiusSizeType m_Radius;
 
 private:
-  BinaryFunctorNeighborhoodImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryFunctorNeighborhoodImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 };

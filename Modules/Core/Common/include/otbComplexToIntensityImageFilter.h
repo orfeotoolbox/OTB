@@ -102,8 +102,8 @@ protected:
   ~ComplexToIntensityImageFilter() override {}
 
 private:
-  ComplexToIntensityImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ComplexToIntensityImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

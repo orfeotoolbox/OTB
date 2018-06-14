@@ -109,8 +109,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  FilterFunctionValues(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  FilterFunctionValues(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Vector that contains the filter function value. */
   ValuesVectorType m_FilterFunctionValues;

@@ -73,7 +73,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
   // Default offset
   m_InitialOffset.Fill(0);
 
-  m_Transform = ITK_NULLPTR;
+  m_Transform = nullptr;
  }
 
 template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
@@ -101,7 +101,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
  {
   if (this->GetNumberOfInputs()<1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
  }
@@ -113,7 +113,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
  {
   if (this->GetNumberOfInputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
  }
@@ -125,7 +125,7 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacement
  {
   if (this->GetNumberOfOutputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<TOutputDisplacementField *>(this->itk::ProcessObject::GetOutput(1));
  }

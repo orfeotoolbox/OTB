@@ -91,8 +91,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  DBOverlapDataNodeFeatureFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DBOverlapDataNodeFeatureFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Road / Building distance Threshold */
   PrecisionType               m_DistanceThreshold;

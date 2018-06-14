@@ -97,7 +97,7 @@ DimensionalityReductionModelFactory<TInputValue,TOutputValue>
         }
       }
     }
-  return ITK_NULLPTR;
+  return nullptr;
 }
 
 template <class TInputValue, class TOutputValue>

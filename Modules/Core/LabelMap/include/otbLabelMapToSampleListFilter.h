@@ -107,8 +107,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LabelMapToSampleListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapToSampleListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The functor used to build the measurement vector */
   MeasurementFunctorType        m_MeasurementFunctor;

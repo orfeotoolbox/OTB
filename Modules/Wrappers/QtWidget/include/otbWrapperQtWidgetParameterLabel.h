@@ -40,12 +40,12 @@ class OTBQtWidget_EXPORT QtWidgetParameterLabel : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetParameterLabel(Parameter*);
+  QtWidgetParameterLabel(Parameter*, QWidget*);
   ~QtWidgetParameterLabel() override;
 
 private:
-  QtWidgetParameterLabel(const QtWidgetParameterLabel&); //purposely not implemented
-  void operator=(const QtWidgetParameterLabel&); //purposely not implemented
+  QtWidgetParameterLabel(const QtWidgetParameterLabel&) = delete;
+  void operator=(const QtWidgetParameterLabel&) = delete;
 };
 
 

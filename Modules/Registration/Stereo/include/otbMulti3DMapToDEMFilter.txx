@@ -107,7 +107,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Get3DMapInput(unsi
 {
   if ((2 * (index + 1)) > this->GetNumberOfInputs())
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const T3DImage *> (this->itk::ProcessObject::GetInput(2 * index));
 }
@@ -118,7 +118,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GetMaskInput(unsig
 {
   if ((2 * (index + 1)) > this->GetNumberOfInputs())
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TMaskImage *> (this->itk::ProcessObject::GetInput(2 * index + 1));
 }
@@ -140,7 +140,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GetDEMOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<TOutputDEMImage *> (this->itk::ProcessObject::GetOutput(0));
 }
@@ -587,8 +587,8 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
   InputInternalPixelType maxLat = std::max(regionLat1, regionLat2);
   */
 
-  TOutputDEMImage * tmpDEM = ITK_NULLPTR;
-  AccumulatorImageType *tmpAcc = ITK_NULLPTR;
+  TOutputDEMImage * tmpDEM = nullptr;
+  AccumulatorImageType *tmpAcc = nullptr;
   typename TOutputDEMImage::RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
 
   typename T3DImage::RegionType splitRegion;

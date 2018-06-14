@@ -101,8 +101,8 @@ protected:
   void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid) override;
 
 private:
-  PersistentImageSampleExtractorFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageSampleExtractorFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Initialize fields to store extracted values (Real type) */
   void InitializeFields();
@@ -181,8 +181,8 @@ protected:
   ~ImageSampleExtractorFilter() override {}
 
 private:
-  ImageSampleExtractorFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageSampleExtractorFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end of namespace otb

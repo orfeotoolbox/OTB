@@ -126,8 +126,8 @@ protected:
   void Modified() const override;
 
 private:
-  PolyLineParametricPathWithValue(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PolyLineParametricPathWithValue(const Self &) = delete;
+  void operator =(const Self&) = delete;
   std::string        m_Key;
   mutable double     m_Length;
   mutable bool       m_LengthIsValid;

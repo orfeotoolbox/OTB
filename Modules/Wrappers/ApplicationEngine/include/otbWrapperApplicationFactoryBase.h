@@ -51,8 +51,8 @@ protected:
   ~ApplicationFactoryBase() override{}
 
 private:
-  ApplicationFactoryBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ApplicationFactoryBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

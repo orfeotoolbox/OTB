@@ -114,8 +114,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOMImageClassificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SOMImageClassificationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The SOM model used for classification */
   SOMMapPointerType m_Map;

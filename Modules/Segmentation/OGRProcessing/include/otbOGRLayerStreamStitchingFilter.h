@@ -143,8 +143,8 @@ protected:
   double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);
 
 private:
-  OGRLayerStreamStitchingFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  OGRLayerStreamStitchingFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   SizeType m_StreamSize;
   unsigned int m_Radius;

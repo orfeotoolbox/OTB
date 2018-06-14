@@ -125,8 +125,8 @@ protected:
   void Modified() const override;
 
 private:
-  GaborFilterGenerator(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GaborFilterGenerator(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   RadiusType m_Radius;

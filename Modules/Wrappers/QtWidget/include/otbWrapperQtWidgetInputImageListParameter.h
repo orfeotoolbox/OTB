@@ -53,17 +53,14 @@ class OTBQtWidget_EXPORT QtWidgetInputImageListParameter :
 //
 // Public methods.
 public:
-  QtWidgetInputImageListParameter( InputImageListParameter *, QtWidgetModel * );
+  QtWidgetInputImageListParameter( InputImageListParameter *, QtWidgetModel *, QWidget * );
   ~QtWidgetInputImageListParameter() override;
 
 //
 // Private methods.
 private:
-  // Purposely not implemented
-  QtWidgetInputImageListParameter( const QtWidgetInputImageListParameter & );
-
-  // Purposely not implemented
-  void operator = ( const QtWidgetInputImageListParameter & );
+  QtWidgetInputImageListParameter( const QtWidgetInputImageListParameter & ) = delete;
+  void operator = ( const QtWidgetInputImageListParameter & ) = delete;
 };
 
 

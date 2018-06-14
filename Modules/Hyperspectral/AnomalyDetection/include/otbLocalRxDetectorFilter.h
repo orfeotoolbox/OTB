@@ -106,8 +106,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LocalRxDetectorFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LocalRxDetectorFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   int m_InternalRadius;
   int m_ExternalRadius;

@@ -111,7 +111,7 @@ public:
 
     // copy the data of the current type if possible
     const Self * src = dynamic_cast<const Self *>( lo );
-    if( src == ITK_NULLPTR )
+    if( src == nullptr )
       {
       return;
       }
@@ -142,8 +142,8 @@ protected:
     }
 
 private:
-  AttributesMapLabelObjectWithClassLabel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AttributesMapLabelObjectWithClassLabel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The class label */
   ClassLabelType m_ClassLabel;

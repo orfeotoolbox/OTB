@@ -74,8 +74,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ConcatenateSampleListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ConcatenateSampleListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 }; // end of class ImageToListGenerator
 
 } // end of namespace Statistics

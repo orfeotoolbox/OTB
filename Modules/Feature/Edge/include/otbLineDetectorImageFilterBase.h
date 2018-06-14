@@ -171,8 +171,8 @@ protected:
 
   unsigned int m_NumberOfDirections;
 private:
-  LineDetectorImageFilterBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LineDetectorImageFilterBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // end namespace otb

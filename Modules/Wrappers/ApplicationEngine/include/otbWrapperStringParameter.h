@@ -85,8 +85,8 @@ protected:
   std::string  m_Value;
 
 private:
-  StringParameter(const StringParameter &); //purposely not implemented
-  void operator =(const StringParameter&); //purposely not implemented
+  StringParameter(const StringParameter &) = delete;
+  void operator =(const StringParameter&) = delete;
 
 }; // End class Parameter
 

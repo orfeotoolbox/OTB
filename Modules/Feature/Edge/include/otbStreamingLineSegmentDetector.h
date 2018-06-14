@@ -83,8 +83,8 @@ protected:
   void GenerateInputRequestedRegion() override;
 
 private:
-  PersistentStreamingLineSegmentDetector(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentStreamingLineSegmentDetector(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputVectorDataPointerType ProcessTile() override;
 };

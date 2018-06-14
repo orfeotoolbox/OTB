@@ -156,7 +156,7 @@ InputProcessXMLParameter::GetChildNodeTextOf(TiXmlElement *parentElement, std::s
 
   if(parentElement)
     {
-    TiXmlElement* childElement = ITK_NULLPTR;
+    TiXmlElement* childElement = nullptr;
     childElement = parentElement->FirstChildElement(key.c_str());
 
     //same as childElement->GetText() does but that call is failing if there is
@@ -270,7 +270,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
   ParameterGroup::Pointer paramGroup = this_->GetParameterList();
 
   // Iterate through the parameter list
-  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != ITK_NULLPTR;
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != nullptr;
        n_Parameter = n_Parameter->NextSiblingElement() )
     {
     std::string key,typeAsString, value, paramName;
@@ -295,11 +295,11 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     param->SetUserValue(true);
     param->SetActive(true);
 
-    TiXmlElement* n_Values = ITK_NULLPTR;
+    TiXmlElement* n_Values = nullptr;
     n_Values = n_Parameter->FirstChildElement("values");
     if(n_Values)
       {
-      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != ITK_NULLPTR;
+      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != nullptr;
 	  n_Value = n_Value->NextSiblingElement())
 	{
 	values.push_back(n_Value->GetText());
@@ -319,7 +319,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       OutputImageParameter * outImageParam =
 	dynamic_cast< OutputImageParameter * >( param );
 
-      assert( outImageParam!=ITK_NULLPTR );
+      assert( outImageParam!=nullptr );
 
       outImageParam->SetFileName( value );
 
@@ -337,19 +337,19 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     else if (type == ParameterType_ComplexOutputImage)
       {
       ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
-      if(paramDown!=ITK_NULLPTR)
+      if(paramDown!=nullptr)
 	paramDown->SetFileName(value);
       }
     else if (type == ParameterType_Directory)
       {
       DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
-      if(paramDown!=ITK_NULLPTR)
+      if(paramDown!=nullptr)
 	paramDown->SetValue(value);
       }
     else if (type == ParameterType_InputFilename)
       {
       InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
-      if(paramDown!=ITK_NULLPTR)
+      if(paramDown!=nullptr)
 	paramDown->SetValue(value);
       }
     else if (type == ParameterType_InputImage)
@@ -357,7 +357,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       if(itksys::SystemTools::FileExists(value.c_str()))
 	{
 	InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-	if(paramDown!=ITK_NULLPTR)
+	if(paramDown!=nullptr)
 	  {
 	  paramDown->SetFromFileName(value);
 	  if (!paramDown->SetFromFileName(value))
@@ -376,7 +376,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       if(itksys::SystemTools::FileExists(value.c_str()))
 	{
 	ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
-	if(paramDown!=ITK_NULLPTR)
+	if(paramDown!=nullptr)
 	  paramDown->SetFromFileName(value);
 	}
       }

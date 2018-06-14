@@ -128,8 +128,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageRegionTileMapSplitter(const ImageRegionTileMapSplitter &); //purposely not implemented
-  void operator =(const ImageRegionTileMapSplitter&); //purposely not implemented
+  ImageRegionTileMapSplitter(const ImageRegionTileMapSplitter &) = delete;
+  void operator =(const ImageRegionTileMapSplitter&) = delete;
 
   unsigned int m_SplitsPerDimension[VImageDimension];
   unsigned int m_AlignStep;

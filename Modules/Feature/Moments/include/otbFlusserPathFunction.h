@@ -106,8 +106,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  FlusserPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  FlusserPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   short m_MomentNumber;
 };

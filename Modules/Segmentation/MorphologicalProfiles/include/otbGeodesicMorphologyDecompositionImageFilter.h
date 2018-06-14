@@ -158,8 +158,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GeodesicMorphologyDecompositionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GeodesicMorphologyDecompositionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the structuring element */
   RadiusType m_Radius;

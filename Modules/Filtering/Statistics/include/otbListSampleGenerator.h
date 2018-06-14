@@ -164,8 +164,8 @@ protected:
   void GenerateClassStatistics();
 
 private:
-  ListSampleGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ListSampleGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typedef typename VectorDataType::DataNodeType         DataNodeType;
   typedef typename DataNodeType::PolygonType            PolygonType;

@@ -178,8 +178,8 @@ protected:
                              itk::ThreadIdType threadId) override;
 
 private:
-  PersistentDescriptorsListSampleGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentDescriptorsListSampleGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   bool IsInsideWithNeighborhoodRadius(const RegionType& region, const ContinuousIndexType &index) const
     {
@@ -366,8 +366,8 @@ public:
     ~DescriptorsListSampleGenerator() override;
 
   private:
-    DescriptorsListSampleGenerator(const Self &); //purposely not implemented
-    void operator =(const Self&); //purposely not implemented
+    DescriptorsListSampleGenerator(const Self &) = delete;
+    void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

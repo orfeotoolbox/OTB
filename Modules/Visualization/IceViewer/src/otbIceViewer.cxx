@@ -41,7 +41,7 @@ GlVectorActor::ColorType BuildColor(double r, double g, double b)
 }
 
 IceViewer::IceViewer()
-  : m_Window(ITK_NULLPTR),
+  : m_Window(nullptr),
     m_View(),
     m_FastRendering(false),
     m_SelectedActor(""),
@@ -74,7 +74,7 @@ IceViewer::IceViewer()
 
 IceViewer::~IceViewer()
 {
-  if(m_Window != ITK_NULLPTR)
+  if(m_Window != nullptr)
     {
     glfwDestroyWindow(m_Window);
     }
@@ -91,8 +91,8 @@ void IceViewer::AddImage(const std::string & fname, const std::string & key, con
   
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
 
-  const char * glVersion = ITK_NULLPTR;
-  const char * glslVersion = ITK_NULLPTR;
+  const char * glVersion = nullptr;
+  const char * glslVersion = nullptr;
 
   if( GlVersionChecker::CheckGLCapabilities( glVersion,
 					     glslVersion ) )
@@ -229,19 +229,19 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
   // Initialize glut (ugly workaround)
   int fake_argc = 1;
   char fake_name[] = "fake";
-  char * fake_argv[] = {fake_name,ITK_NULLPTR};
+  char * fake_argv[] = {fake_name,nullptr};
   glutInit(&fake_argc,fake_argv);
 
   // Set glfw errors callback
   glfwSetErrorCallback(error_callback);
   
   // Create the window
-  if(m_Window != ITK_NULLPTR)
+  if(m_Window != nullptr)
     {
     glfwDestroyWindow(m_Window);
     }
   
-  m_Window = glfwCreateWindow(w, h,name.c_str(), ITK_NULLPTR, ITK_NULLPTR);
+  m_Window = glfwCreateWindow(w, h,name.c_str(), nullptr, nullptr);
   if (!m_Window)
     {
     itkExceptionMacro(<<"Could not create glfw window.");

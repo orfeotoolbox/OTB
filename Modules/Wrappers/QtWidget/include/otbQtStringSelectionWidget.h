@@ -84,8 +84,8 @@ protected slots:
    void OnEditionFinished();
 
 private:
-  QtStringSelectionWidget(const QtStringSelectionWidget&); //purposely not implemented
-  void operator=(const QtStringSelectionWidget&); //purposely not implemented
+  QtStringSelectionWidget(const QtStringSelectionWidget&) = delete;
+  void operator=(const QtStringSelectionWidget&) = delete;
 
   virtual void DoCreateWidget();
 

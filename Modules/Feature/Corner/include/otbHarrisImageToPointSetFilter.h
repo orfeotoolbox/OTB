@@ -85,8 +85,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HarrisImageToPointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  HarrisImageToPointSetFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputPixelType m_LowerThreshold;
   InputPixelType m_UpperThreshold;

@@ -90,8 +90,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BinaryImageToDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryImageToDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   CountFunctionPointerType m_CountFunction;
 

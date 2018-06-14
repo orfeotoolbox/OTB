@@ -72,7 +72,7 @@ const typename ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage
 ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
 ::GetVectorInput()
 {
-  if (this->GetNumberOfInputs() < 2) return ITK_NULLPTR;
+  if (this->GetNumberOfInputs() < 2) return nullptr;
 
   return dynamic_cast<const VectorInputImageType*>(this->itk::ProcessObject::GetInput(1));
 }

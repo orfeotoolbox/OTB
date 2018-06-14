@@ -62,8 +62,8 @@ protected:
   ~TerraSarImageMetadataInterfaceFactory() override;
 
 private:
-  TerraSarImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TerraSarImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

@@ -105,8 +105,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  GammaMAPImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GammaMAPImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   SizeType m_Radius;

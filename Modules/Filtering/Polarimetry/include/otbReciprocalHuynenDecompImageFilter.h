@@ -125,8 +125,8 @@ protected:
   ~ReciprocalHuynenDecompImageFilter() override {}
 
 private:
-  ReciprocalHuynenDecompImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);            //purposely not implemented
+  ReciprocalHuynenDecompImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

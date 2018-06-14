@@ -201,8 +201,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  FineRegistrationImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  FineRegistrationImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
   
   inline double callMetric(double val1,double val2,double &oldRes,bool &flag);
   inline void updateOptParams(double potBestVal,double parx,double pary,                             //inputs

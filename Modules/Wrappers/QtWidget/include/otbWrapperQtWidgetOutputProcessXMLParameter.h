@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetOutputProcessXMLParameter : public QtWidgetPara
 {
   Q_OBJECT
 public:
-  QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter*, QtWidgetModel*);
+  QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputProcessXMLParameter() override;
 
   inline const QLineEdit* GetInput() const;
@@ -53,8 +53,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetOutputProcessXMLParameter(const QtWidgetOutputProcessXMLParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputProcessXMLParameter&); //purposely not implemented
+  QtWidgetOutputProcessXMLParameter(const QtWidgetOutputProcessXMLParameter&) = delete;
+  void operator=(const QtWidgetOutputProcessXMLParameter&) = delete;
 
   void DoCreateWidget() override;
 

@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
   mainWindow->setWindowTitle(QString(app->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
 
   // Create GUI based on module
-  QtWidgetView* gui = new QtWidgetView(app);
+  QtWidgetView* gui = new QtWidgetView(app, mainWindow);
   gui->CreateGui();
 
   // Connect the View "Quit" signal, to the mainWindow close slot
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 
   // Clean resources
   delete mainWindow;
-  app = ITK_NULLPTR;
+  app = nullptr;
   ApplicationRegistry::CleanRegistry();
 
   return ret;

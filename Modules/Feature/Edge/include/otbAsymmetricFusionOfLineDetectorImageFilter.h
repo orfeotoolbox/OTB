@@ -95,8 +95,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  AsymmetricFusionOfLineDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AsymmetricFusionOfLineDetectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typename LineRatioType::Pointer m_LineRatio;
   typename LineCorrelationType::Pointer m_LineCorrelation;

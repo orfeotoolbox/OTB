@@ -105,8 +105,8 @@ protected:
   ~ExtendedFilenameToWriterOptions() override {}
 
 private:
-  ExtendedFilenameToWriterOptions(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ExtendedFilenameToWriterOptions(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OptionType               m_Options;
 

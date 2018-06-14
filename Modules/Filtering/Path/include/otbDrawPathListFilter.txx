@@ -59,7 +59,7 @@ DrawPathListFilter<TInputImage, TInputPath, TOutputImage>
 {
   if (this->GetNumberOfInputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const InputPathListType *>(this->ProcessObjectType::GetInput(1));
 }

@@ -182,8 +182,8 @@ protected:
   void ComputeInterval();
 
 private:
-  SpectralResponse(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpectralResponse(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

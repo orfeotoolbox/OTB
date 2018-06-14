@@ -109,8 +109,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  EigenvalueLikelihoodMaximisation(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EigenvalueLikelihoodMaximisation(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   MatrixType m_Covariance;
   MatrixType m_Correlation;

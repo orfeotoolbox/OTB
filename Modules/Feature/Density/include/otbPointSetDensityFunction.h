@@ -73,8 +73,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetDensityFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  PointSetDensityFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Radius;
 };

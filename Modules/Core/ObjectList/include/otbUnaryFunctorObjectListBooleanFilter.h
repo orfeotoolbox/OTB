@@ -112,8 +112,8 @@ protected:
   /** End Multi-threading implementation */
 
 private:
-  UnaryFunctorObjectListBooleanFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorObjectListBooleanFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 };

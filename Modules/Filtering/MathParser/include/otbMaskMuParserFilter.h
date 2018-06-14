@@ -128,8 +128,8 @@ protected:
   void AfterThreadedGenerateData() override;
 
 private:
-  MaskMuParserFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MaskMuParserFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::vector<FunctorPointer> m_VFunctor;
   std::string m_Expression;

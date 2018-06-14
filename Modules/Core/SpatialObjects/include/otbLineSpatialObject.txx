@@ -226,7 +226,7 @@ LineSpatialObject<VDimension>
 {
   // otbMsgDevMacro( "Checking the point [" << point << "] is on the Line" );
 
-  if (name == ITK_NULLPTR)
+  if (name == nullptr)
     {
     if (IsInside(point))
       {

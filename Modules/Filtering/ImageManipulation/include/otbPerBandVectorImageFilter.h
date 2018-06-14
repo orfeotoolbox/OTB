@@ -108,8 +108,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PerBandVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PerBandVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /// The processing filter
   FilterPointerType m_Filter;

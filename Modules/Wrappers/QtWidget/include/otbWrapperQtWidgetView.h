@@ -68,7 +68,7 @@ public:
 
   /** \brief Constructor. */
   QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* p =0,
+		QWidget* parent,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
@@ -153,8 +153,8 @@ protected slots:
 // Private methods.
 private:
 
-  QtWidgetView(const QtWidgetView&); //purposely not implemented
-  void operator=(const QtWidgetView&); //purposely not implemented
+  QtWidgetView(const QtWidgetView&) = delete;
+  void operator=(const QtWidgetView&) = delete;
 
   QWidget* CreateFooter();
 

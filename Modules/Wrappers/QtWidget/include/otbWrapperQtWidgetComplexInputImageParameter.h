@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetComplexInputImageParameter : public QtWidgetPar
 {
   Q_OBJECT
 public:
-  QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*);
+  QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetComplexInputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;
@@ -51,8 +51,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetComplexInputImageParameter(const QtWidgetComplexInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetComplexInputImageParameter&); //purposely not implemented
+  QtWidgetComplexInputImageParameter(const QtWidgetComplexInputImageParameter&) = delete;
+  void operator=(const QtWidgetComplexInputImageParameter&) = delete;
 
   void DoCreateWidget() override;
 

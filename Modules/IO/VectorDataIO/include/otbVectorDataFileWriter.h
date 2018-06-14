@@ -116,8 +116,8 @@ protected:
   bool m_FactorySpecifiedVectorDataIO;
 
 private:
-  VectorDataFileWriter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataFileWriter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

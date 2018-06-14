@@ -99,8 +99,8 @@ protected:
   VectorDataConstPointerType  m_VectorData;
 
 private:
-  DataNodeVectorDataFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DataNodeVectorDataFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

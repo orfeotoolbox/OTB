@@ -116,8 +116,8 @@ protected:
   }
 
 private:
-  ImageToVectorImageCastFilter(const Self &); //purposely not implemented
-  void operator =(const Self&);  // purposely not implemented
+  ImageToVectorImageCastFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // end namespace otb
 #endif

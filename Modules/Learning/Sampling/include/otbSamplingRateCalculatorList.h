@@ -102,8 +102,8 @@ protected:
   ~SamplingRateCalculatorList() override {}
 
 private:
-  SamplingRateCalculatorList(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  SamplingRateCalculatorList(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void UpdateGlobalCounts();
 

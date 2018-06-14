@@ -29,8 +29,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetComplexOutputImageParameter::QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetComplexOutputImageParameter::QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_OutputImageParam(param)
 {
 }
@@ -53,10 +53,10 @@ void QtWidgetComplexOutputImageParameter::DoUpdateGUI()
 void QtWidgetComplexOutputImageParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_OutputImageParam->GetDescription() )
   );
@@ -65,7 +65,7 @@ void QtWidgetComplexOutputImageParameter::DoCreateWidget()
   m_HLayout->addWidget(m_Input);
 
   // Set the Output PixelType choice Combobox
-  m_ComboBox = new QComboBox;
+  m_ComboBox = new QComboBox(this);
   m_ComboBox->setToolTip("Complex Output Pixel Type");
   m_ComboBox->addItem( "cint16");
   m_ComboBox->addItem( "cint32");
@@ -77,7 +77,7 @@ void QtWidgetComplexOutputImageParameter::DoCreateWidget()
   m_HLayout->addWidget(m_ComboBox);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select output filename...");
   m_Button->setMaximumWidth(m_Button->width());

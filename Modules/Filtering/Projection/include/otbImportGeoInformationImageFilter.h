@@ -97,8 +97,8 @@ protected:
   void VerifyInputInformation() override {}
 
 private:
-  ImportGeoInformationImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImportGeoInformationImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

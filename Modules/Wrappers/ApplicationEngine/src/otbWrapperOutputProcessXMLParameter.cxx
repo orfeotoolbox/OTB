@@ -45,7 +45,7 @@ namespace otb
 namespace Wrapper
 {
 OutputProcessXMLParameter::OutputProcessXMLParameter()
-  : m_Node(ITK_NULLPTR)
+  : m_Node(nullptr)
   , m_Appli()
 {
   this->SetKey("outxml");
@@ -192,8 +192,8 @@ OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
   this->ParseGroup(std::string(""));
 
   // reset temporary members
-  m_Appli = ITK_NULLPTR;
-  m_Node = ITK_NULLPTR;
+  m_Appli = nullptr;
+  m_Node = nullptr;
   return n_App;
 }
 
@@ -248,7 +248,7 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
          {
            EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
 
-           if(eParam!=ITK_NULLPTR)
+           if(eParam!=nullptr)
              {
              //Don't use m_Appli->HasUserValue which returns false always because of
              //EmptyParameter::HasValue() is false for EmptyParameter
@@ -278,7 +278,7 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
           {
            OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
            
-           if(imgParam!=ITK_NULLPTR)
+           if(imgParam!=nullptr)
              {
              value = imgParam->GetFileName();
              ImagePixelType pixType = imgParam->GetPixelType();

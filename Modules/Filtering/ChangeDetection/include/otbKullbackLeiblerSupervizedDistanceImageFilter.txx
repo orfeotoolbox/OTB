@@ -35,8 +35,8 @@ template <class TInput1, class TInput2, class TInputROIImage, class TOutput>
 KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
 ::KullbackLeiblerSupervizedDistance ()
 {
-  m_CumROI1 = ITK_NULLPTR;
-  m_CumROI2 = ITK_NULLPTR;
+  m_CumROI1 = nullptr;
+  m_CumROI2 = nullptr;
 }
 
 template <class TInput1, class TInput2, class TInputROIImage, class TOutput>
@@ -44,10 +44,10 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
 ::~KullbackLeiblerSupervizedDistance ()
 {
   delete m_CumROI1;
-  m_CumROI1 = ITK_NULLPTR;
+  m_CumROI1 = nullptr;
 
   delete m_CumROI2;
-  m_CumROI2 = ITK_NULLPTR;
+  m_CumROI2 = nullptr;
 }
 
 template <class TInput1, class TInput2, class TInputROIImage, class TOutput>
@@ -68,7 +68,7 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
   conversion1->SetROIImage(imgROI);
   conversion1->Update();
 
-  if (m_CumROI1 != ITK_NULLPTR) delete m_CumROI1;
+  if (m_CumROI1 != nullptr) delete m_CumROI1;
 
   m_CumROI1 = new CumulantsForEdgeworth<ROIInputType1> (conversion1->GetOutput());
 
@@ -91,7 +91,7 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
   conversion2->SetROIImage(imgROI);
   conversion2->Update();
 
-  if (m_CumROI2 != ITK_NULLPTR) delete m_CumROI2;
+  if (m_CumROI2 != nullptr) delete m_CumROI2;
 
   m_CumROI2 = new CumulantsForEdgeworth<ROIInputType2> (conversion2->GetOutput());
 

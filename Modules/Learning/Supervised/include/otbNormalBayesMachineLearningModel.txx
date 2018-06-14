@@ -100,7 +100,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
     if (!this->HasConfidenceIndex())
       {
@@ -123,7 +123,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
   fs.release();
 #else
   if (name == "")
-    m_NormalBayesModel->save(filename.c_str(), ITK_NULLPTR);
+    m_NormalBayesModel->save(filename.c_str(), nullptr);
   else
     m_NormalBayesModel->save(filename.c_str(), name.c_str());
 #endif
@@ -139,7 +139,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
   m_NormalBayesModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
-    m_NormalBayesModel->load(filename.c_str(), ITK_NULLPTR);
+    m_NormalBayesModel->load(filename.c_str(), nullptr);
   else
     m_NormalBayesModel->load(filename.c_str(), name.c_str());
 #endif

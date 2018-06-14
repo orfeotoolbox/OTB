@@ -209,8 +209,8 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  ShiftScaleVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ShiftScaleVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputPixelType  m_Scale;
   InputPixelType  m_Shift;

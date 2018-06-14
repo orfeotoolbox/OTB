@@ -62,8 +62,8 @@ protected:
   ~IkonosImageMetadataInterfaceFactory() override;
 
 private:
-  IkonosImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  IkonosImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

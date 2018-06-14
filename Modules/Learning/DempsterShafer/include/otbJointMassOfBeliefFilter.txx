@@ -86,7 +86,7 @@ JointMassOfBeliefFilter<TMassFunction>
 {
   if(this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<MassFunctionType *>(this->itk::ProcessObject::GetOutput(0));
 }

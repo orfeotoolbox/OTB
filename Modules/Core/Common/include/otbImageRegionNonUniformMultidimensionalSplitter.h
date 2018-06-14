@@ -111,8 +111,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageRegionNonUniformMultidimensionalSplitter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageRegionNonUniformMultidimensionalSplitter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

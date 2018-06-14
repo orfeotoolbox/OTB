@@ -29,7 +29,7 @@ namespace otb
 {
 
 GDALDatasetWrapper
-::GDALDatasetWrapper(): m_Dataset(ITK_NULLPTR)
+::GDALDatasetWrapper(): m_Dataset(nullptr)
 {
 }
 
@@ -44,7 +44,7 @@ GDALDatasetWrapper
     // GDALDriverManagerWrapper::Open(). So, it should be destroyed by
     // GDALClose() (see
     // http://gdal.org/classGDALDataset.html#a4d110533d799bac7dcfad3c41d30c0e7).
-    m_Dataset = ITK_NULLPTR;
+    m_Dataset = nullptr;
     }
 }
 
@@ -69,7 +69,7 @@ GDALDatasetWrapper
 bool
 GDALDatasetWrapper::IsJPEG2000() const
 {
-  if (m_Dataset == ITK_NULLPTR)
+  if (m_Dataset == nullptr)
     {
     return false;
     }
