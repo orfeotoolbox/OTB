@@ -144,8 +144,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SarBrightnessFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  SarBrightnessFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorRealType             m_Scale;
   ParametricFunctionPointer   m_Noise;

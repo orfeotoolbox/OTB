@@ -50,8 +50,8 @@ private slots:
   void OnEditingFinished();
 
 private:
-  QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
-  void operator=(const QtWidgetFloatParameter&); //purposely not implemented
+  QtWidgetFloatParameter(const QtWidgetFloatParameter&) = delete;
+  void operator=(const QtWidgetFloatParameter&) = delete;
 
   void DoCreateWidget() override;
   void DoUpdateGUI() override;

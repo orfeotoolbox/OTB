@@ -145,8 +145,8 @@ protected:
   PathPointerType WriteParallelPath(PathPointerType p1);
 
 private:
-  ParallelLinePathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ParallelLinePathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   RealType m_AngularThreshold;
   RealType m_DistanceThreshold;

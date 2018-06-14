@@ -57,8 +57,8 @@ signals:
 //
 // Private methods.
 private:
-  QtWidgetParameterList( const QtWidgetParameterList & ); // purposely not implemented
-  void operator = (const QtWidgetParameterList & ); // purposely not implemented
+  QtWidgetParameterList( const QtWidgetParameterList & ) = delete;
+  void operator = (const QtWidgetParameterList & ) = delete;
 
   void DoCreateWidget() override;
 

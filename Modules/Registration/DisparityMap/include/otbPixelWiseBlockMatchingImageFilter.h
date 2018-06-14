@@ -462,7 +462,7 @@ protected:
   void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
+  PixelWiseBlockMatchingImageFilter(const Self&) = delete;
   void operator=(const Self&); //purposely not implemeFnted
 
   /** The radius of the blocks */

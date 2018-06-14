@@ -66,8 +66,8 @@ protected:
   ~UtmMapProjection() override {};
 
 private:
-  UtmMapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);   //purposely not implemented
+  UtmMapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

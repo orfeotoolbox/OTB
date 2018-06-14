@@ -62,8 +62,8 @@ protected:
   ~MollweidMapProjection() override;
 
 private:
-  MollweidMapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);          //purposely not implemented
+  MollweidMapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

@@ -132,8 +132,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LocalHistogramImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  LocalHistogramImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int     m_NeighborhoodRadius;
   unsigned long    m_NumberOfHistogramBins;

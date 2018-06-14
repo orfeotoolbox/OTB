@@ -199,8 +199,8 @@ protected:
   ContinuousIndexType     m_EndContinuousIndex;
 
 private:
-  DataNodeImageFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DataNodeImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

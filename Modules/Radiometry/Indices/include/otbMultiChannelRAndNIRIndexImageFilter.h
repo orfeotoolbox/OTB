@@ -119,8 +119,8 @@ protected:
     os << indent << "NIR index: " << m_NIRIndex << std::endl;
   }
 private:
-  MultiChannelRAndNIRIndexImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiChannelRAndNIRIndexImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Red channel index */
   unsigned int m_RedIndex;
   /** NIR channel index */

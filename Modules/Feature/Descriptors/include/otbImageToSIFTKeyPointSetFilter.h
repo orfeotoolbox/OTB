@@ -305,8 +305,8 @@ protected:
                                                    const PixelType& orientation);
 
 private:
-  ImageToSIFTKeyPointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToSIFTKeyPointSetFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Number of octaves */
   unsigned int m_OctavesNumber;

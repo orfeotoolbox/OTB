@@ -106,10 +106,10 @@ public:
  
   
 private:
-  ConfigurationManager(); //purposely not implemented
-  ~ConfigurationManager(); //purposely not implemented
-  ConfigurationManager(const ConfigurationManager&); //purposely not implemented
-  void operator =(const ConfigurationManager&); //purposely not implemented
+  ConfigurationManager() = delete;
+  ~ConfigurationManager() = delete;
+  ConfigurationManager(const ConfigurationManager&) = delete;
+  void operator =(const ConfigurationManager&) = delete;
 
 
 };

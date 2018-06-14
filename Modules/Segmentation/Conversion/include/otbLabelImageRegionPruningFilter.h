@@ -133,8 +133,8 @@ protected:
   RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename OutputLabelImageType::Pointer inputLabelImage);
 
 private:
-  LabelImageRegionPruningFilter(const Self &);     //purposely not implemented
-  void operator =(const Self&);             //purposely not implemented
+  LabelImageRegionPruningFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Number of components per pixel in the input image */
   unsigned int                   m_NumberOfComponentsPerPixel;

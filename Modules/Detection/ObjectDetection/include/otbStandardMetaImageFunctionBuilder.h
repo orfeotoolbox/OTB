@@ -174,8 +174,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StandardMetaImageFunctionBuilder(const Self& ); //purposely not implemented
-  void operator=(const Self& ); //purposely not implemented
+  StandardMetaImageFunctionBuilder(const Self& ) = delete;
+  void operator=(const Self& ) = delete;
 
   MetaImageFunctionPointerType    m_MetaImageFunction;
   DataObjectContainerType         m_DataObjectContainer;

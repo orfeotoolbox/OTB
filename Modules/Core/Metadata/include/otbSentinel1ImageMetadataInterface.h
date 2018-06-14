@@ -104,8 +104,8 @@ protected:
 
 private:
 
-  Sentinel1ImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Sentinel1ImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 /* Helper function to parse date and time into a std::vector<std::string>
  * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
@@ -213,9 +213,9 @@ public:
 
 private:
 
-  Sentinel1CalibrationLookupData(const Self&); //purposely not implemented
+  Sentinel1CalibrationLookupData(const Self&) = delete;
 
-  void operator =(const Self&); //purposely not implemented
+  void operator =(const Self&) = delete;
 
   double firstLineTime;
   double lastLineTime;

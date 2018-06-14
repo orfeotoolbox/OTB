@@ -51,8 +51,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetInputFilenameParameter(const QtWidgetInputFilenameParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputFilenameParameter&); //purposely not implemented
+  QtWidgetInputFilenameParameter(const QtWidgetInputFilenameParameter&) = delete;
+  void operator=(const QtWidgetInputFilenameParameter&) = delete;
 
   void DoCreateWidget() override;
 

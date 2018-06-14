@@ -114,8 +114,8 @@ protected:
   /** End Multi-threading implementation */
 
 private:
-  ObjectListToObjectListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ObjectListToObjectListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

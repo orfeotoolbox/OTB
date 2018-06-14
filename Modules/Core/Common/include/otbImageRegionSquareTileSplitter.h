@@ -132,8 +132,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageRegionSquareTileSplitter(const ImageRegionSquareTileSplitter &); //purposely not implemented
-  void operator =(const ImageRegionSquareTileSplitter&); //purposely not implemented
+  ImageRegionSquareTileSplitter(const ImageRegionSquareTileSplitter &) = delete;
+  void operator =(const ImageRegionSquareTileSplitter&) = delete;
 
   itk::FixedArray<unsigned int, VImageDimension> m_SplitsPerDimension;
   unsigned int m_TileDimension;

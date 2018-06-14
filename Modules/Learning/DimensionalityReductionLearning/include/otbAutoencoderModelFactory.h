@@ -65,8 +65,8 @@ protected:
   ~AutoencoderModelFactory() override;
 
 private:
-  AutoencoderModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AutoencoderModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } //namespace otb

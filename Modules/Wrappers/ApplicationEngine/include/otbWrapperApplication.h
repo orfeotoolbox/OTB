@@ -1092,8 +1092,8 @@ private:
 
   virtual void DoFreeRessources(){};
 
-  Application(const Application &); //purposely not implemented
-  void operator =(const Application&); //purposely not implemented
+  Application(const Application &) = delete;
+  void operator =(const Application&) = delete;
 
   std::string                       m_Name;
   std::string                       m_Description;

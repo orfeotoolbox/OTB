@@ -103,8 +103,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HuPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  HuPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   short m_MomentNumber;
 };

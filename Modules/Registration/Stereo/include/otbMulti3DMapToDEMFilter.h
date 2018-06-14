@@ -261,8 +261,8 @@ private:
 
   void SetOutputParametersFromImage();
 
-  Multi3DMapToDEMFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  Multi3DMapToDEMFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Keywordlist of each map */
  // std::vector<ImageKeywordListType> m_MapKeywordLists;

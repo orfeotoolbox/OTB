@@ -63,8 +63,8 @@ protected:
   ~LibSVMMachineLearningModelFactory() override;
 
 private:
-  LibSVMMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LibSVMMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

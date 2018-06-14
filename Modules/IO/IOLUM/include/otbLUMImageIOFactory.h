@@ -62,8 +62,8 @@ protected:
   ~LUMImageIOFactory() override;
 
 private:
-  LUMImageIOFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LUMImageIOFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

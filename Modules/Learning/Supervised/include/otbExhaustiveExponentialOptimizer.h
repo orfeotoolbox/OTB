@@ -106,8 +106,8 @@ protected:
   ParametersType m_MaximumMetricValuePosition;
 
 private:
-  ExhaustiveExponentialOptimizer(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ExhaustiveExponentialOptimizer(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

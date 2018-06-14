@@ -170,8 +170,8 @@ protected:
   virtual void Reset(const bool freeDynamic = true);
 
 private:
-  VectorDataIOBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataIOBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

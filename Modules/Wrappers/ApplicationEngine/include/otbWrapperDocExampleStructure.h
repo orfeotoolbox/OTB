@@ -123,8 +123,8 @@ protected:
   ~DocExampleStructure() override;
 
 private:
-  DocExampleStructure(const DocExampleStructure &); //purposely not implemented
-  void operator =(const DocExampleStructure&); //purposely not implemented
+  DocExampleStructure(const DocExampleStructure &) = delete;
+  void operator =(const DocExampleStructure&) = delete;
 
   /** List of the application parameters. List of key/name/value couples. */
   ParametersVectorOfVectorType m_ParameterList;

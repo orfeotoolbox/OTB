@@ -93,8 +93,8 @@ protected:
 //
 // Private methods.
 private:
-  InputFilenameListParameter( const Parameter & ); //purposely not implemented
-  void operator = ( const Parameter & ); //purposely not implemented
+  InputFilenameListParameter( const Parameter & ) = delete;
+  void operator = ( const Parameter & ) = delete;
 
 }; // End class InputFilenameList Parameter
 

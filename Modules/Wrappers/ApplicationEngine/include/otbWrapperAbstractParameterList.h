@@ -68,8 +68,8 @@ protected:
 //
 // Private methods.
 private:
-  AbstractParameterList( const Parameter & ) = delete; // purposely not implemented
-  void operator = ( const Parameter & ) = delete; // purposely not implemented
+  AbstractParameterList( const Parameter & ) = delete;
+  void operator = ( const Parameter & ) = delete;
 
 //
 // Protected methods.

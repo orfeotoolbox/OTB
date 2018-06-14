@@ -92,8 +92,8 @@ protected:
   void ProcessNode(TreeNodeType * source, DataNodeType * outputDocument);
 
 private:
-  ConcatenateVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConcatenateVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DataNodePointerType       m_Folder;
   DataNodePointerType       m_Document;

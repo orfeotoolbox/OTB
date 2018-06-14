@@ -67,8 +67,8 @@ protected:
   ~LambertConformalConicMapProjection() override {};
 
 private:
-  LambertConformalConicMapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);                       //purposely not implemented
+  LambertConformalConicMapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

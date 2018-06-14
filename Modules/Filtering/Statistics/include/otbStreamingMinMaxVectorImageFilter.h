@@ -163,8 +163,8 @@ protected:
   void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentMinMaxVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentMinMaxVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ArrayPixelType     m_ThreadMin;
   ArrayPixelType     m_ThreadMax;
@@ -274,8 +274,8 @@ protected:
   ~StreamingMinMaxVectorImageFilter() override {}
 
 private:
-  StreamingMinMaxVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingMinMaxVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

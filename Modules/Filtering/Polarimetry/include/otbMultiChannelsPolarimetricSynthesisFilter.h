@@ -193,7 +193,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  MultiChannelsPolarimetricSynthesisFilter(const Self &); //purposely not implemented
+  MultiChannelsPolarimetricSynthesisFilter(const Self &) = delete;
 
   /** Psi Incident */
   double m_PsiI;

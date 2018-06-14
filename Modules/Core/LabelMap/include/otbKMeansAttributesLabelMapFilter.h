@@ -127,8 +127,8 @@ protected:
 
 
 private:
-  KMeansAttributesLabelMapFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  KMeansAttributesLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputImagePointer m_InputLabelMap;
   CentroidsVectorType m_Centroids;

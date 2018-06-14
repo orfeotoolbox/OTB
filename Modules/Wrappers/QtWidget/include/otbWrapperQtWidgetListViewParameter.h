@@ -51,8 +51,8 @@ protected slots:
   void SelectedItems();
 
 private:
-  QtWidgetListViewParameter(const QtWidgetListViewParameter&); //purposely not implemented
-  void operator=(const QtWidgetListViewParameter&); //purposely not implemented
+  QtWidgetListViewParameter(const QtWidgetListViewParameter&) = delete;
+  void operator=(const QtWidgetListViewParameter&) = delete;
 
   void DoCreateWidget() override;
 

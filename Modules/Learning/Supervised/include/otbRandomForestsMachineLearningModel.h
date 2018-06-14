@@ -151,8 +151,8 @@ protected:
   /* typename TargetListSampleType::Pointer m_TargetListSample; */
 
 private:
-  RandomForestsMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RandomForestsMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 #ifdef OTB_OPENCV_3
   cv::Ptr<CvRTreesWrapper> m_RFModel;

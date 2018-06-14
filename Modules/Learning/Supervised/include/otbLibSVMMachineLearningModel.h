@@ -278,8 +278,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LibSVMMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LibSVMMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void BuildProblem(void);
 

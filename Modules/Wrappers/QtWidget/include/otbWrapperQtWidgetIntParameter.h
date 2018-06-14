@@ -51,8 +51,8 @@ private slots:
   void OnEditingFinished();
 
 private:
-  QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
-  void operator=(const QtWidgetIntParameter&); //purposely not implemented
+  QtWidgetIntParameter(const QtWidgetIntParameter&) = delete;
+  void operator=(const QtWidgetIntParameter&) = delete;
 
   void DoCreateWidget() override;
   void DoUpdateGUI() override;

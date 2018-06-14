@@ -111,8 +111,8 @@ protected:
   PathPointerType LinkPath(PathPointerType p1, bool revert1, PathPointerType p2, bool revert2);
 
 private:
-  LinkPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LinkPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   RealType m_AngularThreshold;
   RealType m_DistanceThreshold;

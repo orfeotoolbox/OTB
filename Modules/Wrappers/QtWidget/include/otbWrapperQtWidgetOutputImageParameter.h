@@ -57,8 +57,8 @@ protected slots:
   void SetPixelType(int pixelType);
 
 private:
-  QtWidgetOutputImageParameter(const QtWidgetOutputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputImageParameter&); //purposely not implemented
+  QtWidgetOutputImageParameter(const QtWidgetOutputImageParameter&) = delete;
+  void operator=(const QtWidgetOutputImageParameter&) = delete;
 
   void DoCreateWidget() override;
 

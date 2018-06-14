@@ -59,7 +59,7 @@ public slots:
   void AddNewProcessToReport();
 
 private:
-  QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&); //purposely not implemented
+  QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&) = delete;
   void operator=(const QtWidgetSimpleProgressReport&); //purposely not
                                                        //implemented
 

@@ -81,8 +81,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ModulusAndDirectionImageToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ModulusAndDirectionImageToImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // end namespace otb

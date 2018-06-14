@@ -105,8 +105,8 @@ protected:
 
 private:
 
-  ScalarBufferToImageFileWriter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ScalarBufferToImageFileWriter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
   /** Writer */

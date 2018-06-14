@@ -111,8 +111,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BinaryImageDensityFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  BinaryImageDensityFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   RadiusType m_NeighborhoodRadius;
 

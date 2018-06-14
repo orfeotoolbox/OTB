@@ -106,8 +106,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ComplexMomentPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ComplexMomentPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
   ComplexPrecisionType EvaluateComplexMomentAtIndex(VertexType index) const;
 
   unsigned int m_P;

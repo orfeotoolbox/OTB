@@ -62,8 +62,8 @@ protected:
   ~ONERAImageIOFactory() override;
 
 private:
-  ONERAImageIOFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ONERAImageIOFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

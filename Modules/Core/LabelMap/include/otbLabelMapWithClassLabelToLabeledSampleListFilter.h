@@ -111,8 +111,8 @@ protected:
   using Superclass::MakeOutput;
 
 private:
-  LabelMapWithClassLabelToLabeledSampleListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapWithClassLabelToLabeledSampleListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The functor used to build the measurement vector */
   MeasurementFunctorType              m_MeasurementFunctor;

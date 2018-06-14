@@ -106,8 +106,8 @@ protected:
   PointVectorType RandomPointsGenerator(DataNodeType * node);
 
 private:
-  VectorDataToRandomLineGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToRandomLineGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string GetNextID()
     {

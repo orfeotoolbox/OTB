@@ -116,8 +116,8 @@ public:
                                         bool itkNotUsed(isVectorImage)) override{}
   
 private:
-  MSTARImageIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MSTARImageIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Methode permettant de recuperer le format et le nom de l'image a partir du
   nom d'un fichier image. */

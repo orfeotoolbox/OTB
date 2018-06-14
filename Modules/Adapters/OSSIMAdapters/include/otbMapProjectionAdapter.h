@@ -92,8 +92,8 @@ protected:
   ~MapProjectionAdapter() override;
 
 private:
-  MapProjectionAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MapProjectionAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void ApplyParametersToProjection();
 

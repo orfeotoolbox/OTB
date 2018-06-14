@@ -93,8 +93,8 @@ protected:
   void ProcessNode(InternalTreeNodeType * source);
   bool IsBoundingRegionNull();
 private:
-  VectorDataProperties(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  VectorDataProperties(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   //Pointer to the VectorData
   VectorDataType * m_VectorDataObject;

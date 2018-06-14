@@ -101,8 +101,8 @@ protected:
   void UpdateParameters(const ParametersType& parameters) const;
 
 private:
-  SVMCrossValidationCostFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SVMCrossValidationCostFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /**Pointer to the SVM model to optimize */
   SVMModelPointer m_Model;

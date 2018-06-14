@@ -145,8 +145,8 @@ protected:
   }
 
 private:
-  ImageUniqueValuesCalculator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageUniqueValuesCalculator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ImageConstPointer         m_Image;
 
@@ -460,8 +460,8 @@ protected:
     this->GetOutput()->SetNumberOfComponentsPerPixel( m_NumberOfOutputBands );
   }
 private:
-  TernaryFunctorImageFilterWithNBands(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TernaryFunctorImageFilterWithNBands(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfOutputBands;
 

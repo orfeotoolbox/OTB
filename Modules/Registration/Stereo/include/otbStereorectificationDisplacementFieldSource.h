@@ -184,7 +184,7 @@ private:
   StereorectificationDisplacementFieldSource( const Self& ); // purposely
                                                             // not
                                                             // implemented
-  void operator=( const Self& ); //purposely not implemented
+  void operator=( const Self& ) = delete;
 
   /** This elevation offset is used to compute the epipolar direction */
   double m_ElevationOffset;

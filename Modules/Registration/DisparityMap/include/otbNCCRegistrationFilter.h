@@ -151,8 +151,8 @@ protected:
   void GenerateInputRequestedRegion() override;
 
 private:
-  NCCRegistrationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NCCRegistrationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

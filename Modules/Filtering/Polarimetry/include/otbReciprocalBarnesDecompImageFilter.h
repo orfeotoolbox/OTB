@@ -154,8 +154,8 @@ protected:
   ~ReciprocalBarnesDecompImageFilter() override {}
 
 private:
-  ReciprocalBarnesDecompImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);            //purposely not implemented
+  ReciprocalBarnesDecompImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

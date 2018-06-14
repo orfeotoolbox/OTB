@@ -65,8 +65,8 @@ protected:
   ~DecisionTreeMachineLearningModelFactory() override;
 
 private:
-  DecisionTreeMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DecisionTreeMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

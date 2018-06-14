@@ -98,8 +98,8 @@ public:
   ~Quadratic2DCostFunction() override{};
 
 private:
-  Quadratic2DCostFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Quadratic2DCostFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ModelType m_FunctionInternalParameters;
 

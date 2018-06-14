@@ -142,8 +142,8 @@ protected:
 
 
 private:
-  ConfusionMatrixCalculator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConfusionMatrixCalculator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double m_KappaIndex;
   double m_OverallAccuracy;

@@ -123,8 +123,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  VectorDataToRoadDescriptionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToRoadDescriptionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typename ParserConditionFeatureFunctionType::Pointer  m_NDVIFeatureFunction;
   typename ParserConditionFeatureFunctionType::Pointer  m_SpectralAngleFeatureFunction;

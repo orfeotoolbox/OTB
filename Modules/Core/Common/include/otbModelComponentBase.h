@@ -147,8 +147,8 @@ protected:
   ParametersType m_Parameters;
 
 private:
-  ModelComponentBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ModelComponentBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** target sample data pointer */
   const TSample* m_Sample;
 

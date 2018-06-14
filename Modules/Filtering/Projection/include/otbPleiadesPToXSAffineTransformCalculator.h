@@ -98,9 +98,9 @@ public:
   static TransformType::Pointer Compute(const itk::ImageBase<2> * panchromaticImage, const itk::ImageBase<2> * xsImage);
                   
 private:
-  PleiadesPToXSAffineTransformCalculator(); // purposely not implemented
-  PleiadesPToXSAffineTransformCalculator(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  PleiadesPToXSAffineTransformCalculator() = delete;
+  PleiadesPToXSAffineTransformCalculator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 

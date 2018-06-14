@@ -203,8 +203,8 @@ protected:
 
 private:
 
-  GenericRoadExtractionFilter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  GenericRoadExtractionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typename SquareRootImageFilterType::Pointer m_SquareRootImageFilter;
   typename GradientFilterType::Pointer m_GradientFilter;

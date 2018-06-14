@@ -168,9 +168,9 @@ protected:
   }
 
 private:
-  ProjectiveProjectionImageFilter(const Self &); //purposely not implemented
+  ProjectiveProjectionImageFilter(const Self &) = delete;
 
-  void operator =(const Self&); //purposely not implemented
+  void operator =(const Self&) = delete;
 
 };
 

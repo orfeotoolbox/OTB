@@ -223,8 +223,8 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  ImageAndVectorImageOperationFilter(const ImageAndVectorImageOperationFilter &); //purposely not implemented
-  void operator =(const ImageAndVectorImageOperationFilter&); //purposely not implemented
+  ImageAndVectorImageOperationFilter(const ImageAndVectorImageOperationFilter &) = delete;
+  void operator =(const ImageAndVectorImageOperationFilter&) = delete;
 
   bool m_UseAddition;
   bool m_UseMultiplication;

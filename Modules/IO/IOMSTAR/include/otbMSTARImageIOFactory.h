@@ -62,8 +62,8 @@ protected:
   ~MSTARImageIOFactory() override;
 
 private:
-  MSTARImageIOFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MSTARImageIOFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

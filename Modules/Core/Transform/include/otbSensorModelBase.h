@@ -103,8 +103,8 @@ protected:
   SensorModelAdapter::Pointer m_Model;
 
 private:
-  SensorModelBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SensorModelBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

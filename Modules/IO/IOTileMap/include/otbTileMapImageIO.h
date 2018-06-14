@@ -183,8 +183,8 @@ private:
     std::string filename;
   } TileNameAndCoordType;
 
-  TileMapImageIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TileMapImageIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void InternalWrite(double x, double y, const void* buffer);
   void BuildFileName(const std::ostringstream& quad, std::ostringstream& filename, bool inCache = true) const;

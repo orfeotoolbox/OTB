@@ -46,8 +46,8 @@ protected slots:
   void SetValue( const QString& value );
 
 private:
-  QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented
-  void operator=(const QtWidgetStringParameter&); //purposely not implemented
+  QtWidgetStringParameter(const QtWidgetStringParameter&) = delete;
+  void operator=(const QtWidgetStringParameter&) = delete;
 
   void DoCreateWidget() override;
 

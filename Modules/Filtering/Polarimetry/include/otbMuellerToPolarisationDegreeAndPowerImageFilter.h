@@ -233,8 +233,8 @@ protected:
   ~MuellerToPolarisationDegreeAndPowerImageFilter() override {}
 
 private:
-  MuellerToPolarisationDegreeAndPowerImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);                                 //purposely not implemented
+  MuellerToPolarisationDegreeAndPowerImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -137,8 +137,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GradientBoostedTreeMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GradientBoostedTreeMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   CvGBTrees * m_GBTreeModel;
 

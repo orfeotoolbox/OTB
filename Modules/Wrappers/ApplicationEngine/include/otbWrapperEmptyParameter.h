@@ -75,8 +75,8 @@ protected:
   {}
 
 private:
-  EmptyParameter(const EmptyParameter &); //purposely not implemented
-  void operator =(const EmptyParameter&); //purposely not implemented
+  EmptyParameter(const EmptyParameter &) = delete;
+  void operator =(const EmptyParameter&) = delete;
 
 }; // End class Parameter
 

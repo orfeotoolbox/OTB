@@ -112,8 +112,8 @@ protected:
 
 private:
 
-  KeyPointDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KeyPointDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DetectorPointerType               m_Detector;
   PointSetToDensityImagePointerType m_PointSetToDensityImageFilter;
