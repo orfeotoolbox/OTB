@@ -62,7 +62,7 @@ int testDisparityMap(int argc, char *argv[])
 
 
   if(argc < 7) {
-  	std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp radius outputPathFolder" << std::endl;
+  	std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp radius rwmf outputPathFolder" << std::endl;
   	return EXIT_FAILURE;
   	}
 
@@ -101,10 +101,11 @@ int testDisparityMap(int argc, char *argv[])
   unsigned int dispMin = atoi(argv[3]);
 	unsigned int dispMax  = atoi(argv[4]);
   long unsigned int r = atoi(argv[5]);	
+  unsigned int rwmf = atoi(argv[6]);
 
 
-  std::string argv6 = std::string(argv[6]);
-  #define FILENAME(n) std::string( argv6 + std::string(n)).c_str()
+  std::string argv7 = std::string(argv[7]);
+  #define FILENAME(n) std::string( argv7 + std::string(n)).c_str()
 
 
 
@@ -330,10 +331,10 @@ int testDisparityMap(int argc, char *argv[])
    m_LeftDispMedian-> SetInput(m_ConcatenateDispEndInLeftImage->GetOutput());
     
    
-  FloatVectorImageType::SizeType radiusM;
-  radiusM[0] = 19;
-  radiusM[1] = 19;   
-  m_LeftDispMedian->SetRadius(radiusM) ;
+  FloatVectorImageType::SizeType radiusWM;
+  radiusWM[0] = rwmf;
+  radiusWM[1] = rwmf;   
+  m_LeftDispMedian->SetRadius(radiusWM) ;
 
   ImageWriterType::Pointer writer_LeftDispMedian = ImageWriterType::New();
   writer_LeftDispMedian->SetFileName( FILENAME("LeftMedianDisparity.tif"));
@@ -364,7 +365,7 @@ int testDisparityMap(int argc, char *argv[])
 
   WeightMedianType::Pointer m_RightDispMedian = WeightMedianType::New();
   m_RightDispMedian-> SetInput(m_ConcatenateDispEndInRightImage->GetOutput());    
-  m_RightDispMedian->SetRadius(radiusM) ;
+  m_RightDispMedian->SetRadius(radiusWM) ;
 
   ImageWriterType::Pointer writer_RightDispMedian = ImageWriterType::New();
   writer_RightDispMedian->SetFileName( FILENAME("RightMedianDisparity.tif"));

@@ -43,7 +43,7 @@ set(OTBStereoFiltersTests
   CostVolumeFilter.cpp
   PatchMatch.cpp
   CVF.cpp
-  Occlusions.cpp
+  testOcclusions.cpp
   testDisparityMap.cpp
 )
 

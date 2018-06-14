@@ -125,7 +125,7 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_OcclusionFilter->SetMinHDisp(dispMin);
   m_OcclusionFilter->SetMinVDisp(0);
   m_OcclusionFilter->SetMaxVDisp(0);
-  m_OcclusionFilter->SetTolerance(1);
+  m_OcclusionFilter->SetTolerance(2);
   
 
  IntWriterType::Pointer OcclusionWriter = IntWriterType::New(); 
@@ -175,8 +175,6 @@ int testOcclusionsFilter(int argc, char *argv[])
  writer_smoothFillDisparity->Update(); 
 
  
-
-
 
 
   return EXIT_SUCCESS;
