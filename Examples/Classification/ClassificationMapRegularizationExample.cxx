@@ -23,11 +23,11 @@
 //
 // After having generated a classification map, it is possible to
 // regularize such a labeled image in order to obtain more homogeneous
-// areas, which makes the interpretation of its classes easier. For this
+// areas, which facilitates its interpretation. For this
 // purpose, the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} was
 // implemented. Like a morphological filter, this filter uses majority
 // voting in a ball shaped neighborhood in order to set each pixel of the
-// classification map to the more representative label value in its
+// classification map to the most representative label value in its
 // neighborhood.
 //
 // In this example we will illustrate its use. We start by including the
@@ -78,7 +78,7 @@ int main(int itkNotUsed(argc), char * argv[])
 // Software Guide : BeginLatex
 //
 // We can now define the type for the neighborhood majority voting filter,
-// which is templated over its input and output images types and over its
+// which is templated over its input and output images types as well as its
 // structuring element type. Choosing only the input image type in the template
 // of this filter induces that, both input and output images types are the same
 // and that the structuring element is a ball
@@ -196,9 +196,9 @@ int main(int itkNotUsed(argc), char * argv[])
 
 // Software Guide : BeginLatex
 //
-// Moreover, since the majority voting regularization may lead to not unique
-// majority labels in the neighborhood, it is important to define which behaviour
-// the filter must have in this case. For this purpose, a Boolean parameter is used
+// Furthermore, since the majority voting regularization may lead to different 
+// majority labels in the neighborhood, in this case, it would be important to define
+// the filter's behaviour. For this purpose, a Boolean parameter is used
 // in the filter to choose whether pixels with more than one majority class are set
 // to undecidedValue (true), or to their Original labels (false = default value)
 // in the output image.
