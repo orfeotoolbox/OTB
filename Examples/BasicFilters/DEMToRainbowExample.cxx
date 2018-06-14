@@ -37,12 +37,12 @@
 
 // Software Guide : BeginLatex
 //
-// In some situation, it is desirable to represent a gray level image in color for easier
+// In some situation, it is desirable to represent a gray scale image in color for easier
 // interpretation. This is particularly the case if pixel values in the image are used
 // to represent some data such as elevation, deformation map,
 // interferogram. In this case, it is important to ensure that similar
 // values will get similar colors. You can notice how this requirement
-// differ from the previous case.
+// differs from the previous case.
 //
 // The following example illustrates the use of the \doxygen{otb}{DEMToImageGenerator} class
 // combined with the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}. You can refer to the
@@ -112,7 +112,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginLatex
   //
-  // As in the previous example the \doxygen{itk}{ScalarToRGBColormapImageFilter} is
+  // As in the previous example, the \doxygen{itk}{ScalarToRGBColormapImageFilter} is
   // the filter in charge of calling the functor we specify to do the work for
   // each pixel. Here it is the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}.
   //
@@ -189,8 +189,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:RAINBOW_FILTER} shows effect of applying the filter to
-  // a gray level image.
+  // Figure~\ref{fig:RAINBOW_FILTER} shows the effect of applying the filter to
+  // a gray scale image.
   //
 // \begin{figure}
 // \center
@@ -199,7 +199,7 @@ int main(int argc, char * argv[])
 // \includegraphics[width=0.44\textwidth]{DEMToHotImageGenerator.eps}
 // \includegraphics[width=0.44\textwidth]{DEMToReliefImageGenerator.eps}
 // \itkcaption[Grayscale to color]{The gray level DEM extracted from SRTM
-// data (top-left) and the same area in color representation.}
+// data (top-left) and the same area represented in color.}
 // \label{fig:RAINBOW_FILTER}
 // \end{figure}
 //  Software Guide : EndLatex

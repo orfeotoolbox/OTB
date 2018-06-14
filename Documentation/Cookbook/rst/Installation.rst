@@ -38,7 +38,7 @@ Other packages
 
 Warning! These packages may not be up-to-date with latest OTB
 releases. In addition, some features of the library may not be available
-on every platform. Some of these are not maintained by OTB-team. If you
+on every platform. Some of these are not maintained by the OTB-team. If you
 want to get involved in the packaging of OTB for your favourite
 platform, please contact us through the developer’s mailing list:
 otb-developers@googlegroups.com.
@@ -93,7 +93,7 @@ You will then need to run:
     sudo aptitude install otb-bin otb-bin-qt python-otb
 
 If you are using *Synaptic*, you can add the repositories, update and
-install the packages through the graphical interface.
+install the packages through the graphical user interface.
 
 For further information about Ubuntu packages go to
 `ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`__
