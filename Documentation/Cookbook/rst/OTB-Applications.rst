@@ -200,7 +200,7 @@ modules needs to be properly set with the ``OTB_APPLICATION_PATH``
 environment variable. The standard location on Unix systems is
 ``/usr/lib/otb/applications``. On Windows, the applications are
 available in the ``otb-bin`` OSGeo4W package, and the environment is
-configured automatically so it doesn't need to be modified
+configured automatically so ``OTB_APPLICATION_PATH`` doesn't need to be modified
 ``OTB_APPLICATION_PATH``.
 
 Once your environment is set, you can use OTB applications from Python, just
@@ -278,7 +278,7 @@ parameter:
 
     otbcli_BandMath -inxml saved_applications_parameters.xml
 
-Note that you can also add additional parameters on the command line at the same
+Note that you can also add additional parameters to the command line at the same
 time
 
 ::

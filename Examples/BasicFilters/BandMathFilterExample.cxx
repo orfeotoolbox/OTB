@@ -82,8 +82,8 @@ int main( int argc, char* argv[])
 //
 //  We start by the classical \code{typedef}s needed for reading and
 //  writing the images. The \doxygen{otb}{BandMathImageFilter} class
-// works with \doxygen{otb}{Image} as input, so we need to define additional
-// filters to extract each layer of the multispectral image.
+//  works with \doxygen{otb}{Image} as input, so we need to define additional
+//  filters to extract each layer of the multispectral image.
 //
 //  Software Guide : EndLatex
 
@@ -183,9 +183,9 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-// The muParser library also provides the possibility to extend existing built-in functions. For example,
-// you can use the OTB expression "ndvi(b3, b4)" with the filter. In this instance, the mathematical expression would be 
-// \textit{if($ndvi(b3, b4)>0.4$, 255, 0)}, which would return the same result.
+//  The muParser library also provides the possibility to extend existing built-in functions. For example,
+//  you can use the OTB expression "ndvi(b3, b4)" with the filter. In this instance, the mathematical expression would be 
+//  \textit{if($ndvi(b3, b4)>0.4$, 255, 0)}, which would return the same result.
 //
 //  Software Guide : EndLatex
 

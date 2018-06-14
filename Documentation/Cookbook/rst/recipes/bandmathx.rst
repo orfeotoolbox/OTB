@@ -149,7 +149,7 @@ two vectors (see next section “New operators and functions”
 
 Now, let’s go back to the first formula: this one specifies the addition
 of two images band to band. With muParserX lib, we can now define such
-operation with only one formula, instead of many formulae (as many as
+operation with only one formula, instead of many formulas (as many as
 the number of bands). We call this new functionality the **batch mode**,
 which directly arises from the introduction of vectors within muParserX
 framework.
@@ -178,7 +178,7 @@ For instance, im1b3N3x5 represents the following neighbourhood:
 
 Fundamentally, a neighbourhood is represented as a matrix inside the
 muParserX framework; so the remark about mathematically well-defined
-formulae still stands.
+formulas still stands.
 
 New operators and functions
 ---------------------------
