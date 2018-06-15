@@ -362,7 +362,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>(((1-alpha)*costColorNorm + alpha*costGradientNorm) );  
     outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;
 
-    //outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)]=OutPixel[0] ;
+    //outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;
      //  outputIt.Set(OutPixel);
      //  std::cout << " cost volume = "<< OutPixel[0] ;              
     ++LeftInputImageIt;

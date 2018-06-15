@@ -100,8 +100,6 @@ public:
 
 
 
-
-
 	
   
   } // end operator ()

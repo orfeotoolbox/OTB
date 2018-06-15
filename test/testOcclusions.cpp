@@ -54,6 +54,7 @@
 #include "otbBijectionCoherencyFilter.h"
 #include "otbFillOcclusionDisparityImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
+#include "otbFillOcclusionImageFilter.h"
 
 
 
@@ -77,8 +78,8 @@ int testOcclusionsFilter(int argc, char *argv[])
   typedef otb::Image< double, Dimension > FloatImageType;
   typedef otb::Image< int, Dimension > IntImageType;
 
-  typedef otb::ImageFileReader<FloatVectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<FloatVectorImageType> ImageWriterType;
+  typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorImageReaderType;
+  typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType;
 
 
   typedef otb::ImageFileReader<IntVectorImageType> IntVectorImageReaderType;
@@ -87,6 +88,9 @@ int testOcclusionsFilter(int argc, char *argv[])
 
   typedef otb::ImageFileReader<IntImageType> IntReaderType;
   typedef otb::ImageFileWriter<IntImageType> IntWriterType;
+
+    typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
+  typedef otb::ImageFileWriter<FloatImageType> FloatWriterType;
 
 
 
@@ -98,7 +102,7 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_RightDisparity->SetFileName(argv[2]); //RightDisparity
   m_RightDisparity->UpdateOutputInformation();
 
-  IntVectorImageReaderType::Pointer m_inLeft = IntVectorImageReaderType::New();
+  FloatVectorImageReaderType::Pointer m_inLeft = FloatVectorImageReaderType::New();
   m_inLeft->SetFileName(argv[3]); 
   m_inLeft->UpdateOutputInformation();
   unsigned int dispMin = atoi(argv[4]);
@@ -133,6 +137,7 @@ int testOcclusionsFilter(int argc, char *argv[])
  OcclusionWriter->SetInput( m_OcclusionFilter->GetOutput() );  
  OcclusionWriter->Update(); 
 
+
  typedef otb::FillOcclusionDisparityImageFilter<IntImageType, IntImageType, IntImageType> FillOcclusionFilter ;
  FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
  m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
@@ -146,19 +151,19 @@ int testOcclusionsFilter(int argc, char *argv[])
  writer_FillOcclusions->Update(); 
 
 
-  typedef otb::ImageToVectorImageCastFilter<IntImageType,IntVectorImageType> CastImageFilter;
+  typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastImageFilter;
   CastImageFilter::Pointer m_CastOccMap = CastImageFilter::New();
   m_CastOccMap-> SetInput( const_cast <IntImageType *>( m_FillOccDisparityMap->GetOutput() ));
 
 
 
-  typedef otb::ConcatenateVectorImageFilter< IntVectorImageType, IntVectorImageType, IntVectorImageType> ConcatenateVectorImageFilterType;  
+  typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
   ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage = ConcatenateVectorImageFilterType::New();
   m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastOccMap->GetOutput());
   m_ConcatenateCastOccMapAndLeftImage->SetInput2(m_inLeft->GetOutput());
 
 
-  typedef  otb::WeightMedianImageFilter< IntVectorImageType, FloatVectorImageType > WeightMedianFilter;
+  typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatVectorImageType > WeightMedianFilter;
   WeightMedianFilter::Pointer m_WeightOccMapAndLeftImageFilter = WeightMedianFilter::New();
   m_WeightOccMapAndLeftImageFilter->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
 
@@ -169,12 +174,46 @@ int testOcclusionsFilter(int argc, char *argv[])
 
 
 
-  ImageWriterType::Pointer writer_smoothFillDisparity = ImageWriterType::New();
+  FloatVectorImageWriterType::Pointer writer_smoothFillDisparity = FloatVectorImageWriterType::New();
   writer_smoothFillDisparity->SetFileName( FILENAME("SmoothFillDisparity.tif"));
  writer_smoothFillDisparity->SetInput( m_WeightOccMapAndLeftImageFilter->GetOutput() );  
  writer_smoothFillDisparity->Update(); 
 
  
+
+// typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastFloatImageFilter;
+// CastFloatImageFilter::Pointer m_CastFloatOcc = CastFloatImageFilter::New();
+// m_CastFloatOcc-> SetInput( const_cast <IntImageType *>( m_OcclusionFilter->GetOutput() ));
+
+// CastFloatImageFilter::Pointer m_CastLeftDisparity = CastFloatImageFilter::New();
+// m_CastLeftDisparity-> SetInput( const_cast <IntImageType *>( m_LeftDisparity->GetOutput() ));
+
+
+
+
+// typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateFloatVecImagesFilter;  
+// ConcatenateFloatVecImagesFilter::Pointer m_ConcatenateOccAndLeftDisparity = ConcatenateFloatVecImagesFilter::New();
+// m_ConcatenateOccAndLeftDisparity->SetInput1(m_CastFloatOcc->GetOutput());
+// m_ConcatenateOccAndLeftDisparity->SetInput2(m_CastLeftDisparity->GetOutput());
+
+
+
+//  typedef otb::FillOcclusionImageFilter<FloatVectorImageType, FloatVectorImageType> FillOcclusionsImageFilter ; 
+//  FillOcclusionsImageFilter::Pointer m_FillOcclusionfilter = FillOcclusionsImageFilter::New();
+//  m_FillOcclusionfilter->SetInput(m_ConcatenateOccAndLeftDisparity->GetOutput());
+//  FloatVectorImageType::SizeType OccRadius;
+//  OccRadius[0] = 9;
+//  OccRadius[1] = 0;
+//  m_FillOcclusionfilter->SetRadius(OccRadius);
+
+//  ImageWriterType::Pointer writer_FilloccImage = ImageWriterType::New();
+//  writer_FilloccImage->SetFileName(FILENAME("FillImageOcc.tif"));
+//  writer_FilloccImage->SetInput(m_FillOcclusionfilter->GetOutput());
+//  writer_FilloccImage->Update();
+
+
+
+
 
 
   return EXIT_SUCCESS;
