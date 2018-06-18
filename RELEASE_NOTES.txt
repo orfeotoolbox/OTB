@@ -18,7 +18,6 @@ Features added:
    * !53: Resolve "add Wrapper/QGIS to generate qgis descriptors for processing plugin" by Rashad Kanavath (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/53)
    * !63: Background value for VectorDataToLabelImageFilter by Rémi Cresson (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/63)
    * !71: New Itk modules by Yannick TANGUY (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/71)
-   * !89: Resolve "remove -Wshadow warning" by Rashad Kanavath (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/89)
 
 Bugs fixed:
    * !6: Resolve "SampleExtraction application memory usage grows constantly" by Guillaume Pasero (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/6)
@@ -78,8 +77,6 @@ Small patches made:
    * !124: Document third party environment variables by Julien Michel (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/124)
    * !129: Update screenshots in Monteverdi Cookbook section with wrong RGB color composition by Manuel Grizonnet (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/129)
    * !135: COMP: handle Shark dependency to openmp using REQUIRED_FLAGS by Guillaume Pasero (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/135)
-   * !136: DOC: add checklist to MR template by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/136)
-   * !137: DOC: Set of proposed edits to the documentation by Daniel McInerney (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/137)
 
 Other changes:
    * !1: DOC: Add CONTRIBUTING and PSC docs by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/1)
@@ -102,14 +99,6 @@ Other changes:
    * !117: On Revert shark by Antoine Regimbeau (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/117)
    * !119: Monteverdi black screen after app execution by Cédric Traizet (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/119)
    * !121: Resolve "Cannot launch monteverdi if .ini config file is invalid" by Julien Michel (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/121)
-   * !123: New custom widgets for Float and Int parameters by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/123)
-   * !125: BUG: Fix missing QWidget parents by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/125)
-   * !126: BUG: Remove workaround for QT bug 22829 by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/126)
-   * !127: COMP: fix gcc 7 'defined' warnings by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/127)
-   * !130: C++14: Replace ITK_NULLPTR by nullptr by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/130)
-   * !131: C++14: Replace ITK_OVERRIDE by override by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/131)
-   * !132: ENH: Add comments to MR template by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/132)
-   * !133: C++14: Replace comments by '= delete' by Victor Poughon (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/133)
 
 
 OTB-v.6.4.0 - Changes since version 6.2.0 (January 30th, 2018)
