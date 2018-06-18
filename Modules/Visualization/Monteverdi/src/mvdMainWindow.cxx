@@ -109,7 +109,7 @@ namespace mvd
 
 #define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
 
-#define FORCE_NO_GLSL ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
+#define FORCE_NO_GLSL 0
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */

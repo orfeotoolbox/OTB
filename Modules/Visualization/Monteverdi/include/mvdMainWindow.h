@@ -28,7 +28,7 @@
 #include "ConfigureMonteverdi.h"
 
 #define USE_TABBED_VIEW 0
-#define USE_PIXEL_DESCRIPTION ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
+#define USE_PIXEL_DESCRIPTION 0
 
 #define RENDER_IMAGE_VIEW_DISABLED 0
 #define RENDER_QUICKLOOK_VIEW_DISABLED 0
