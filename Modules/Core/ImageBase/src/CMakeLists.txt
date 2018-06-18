@@ -20,6 +20,8 @@
 
 set(OTBImageBase_SRC
   otbImageIOBase.cxx
+  otbImage.cxx
+  otbVectorImage.cxx
   )
 
 add_library(OTBImageBase ${OTBImageBase_SRC})

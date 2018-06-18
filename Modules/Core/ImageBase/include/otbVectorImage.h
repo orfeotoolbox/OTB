@@ -211,8 +211,15 @@ private:
 
 } // end namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorImage.txx"
-#endif
+
+namespace otb {
+  extern template class VectorImage<unsigned int, 2>;
+  extern template class VectorImage<int, 2>;
+  extern template class VectorImage<unsigned char, 2>;
+  extern template class VectorImage<char, 2>;
+  extern template class VectorImage<float, 2>;
+  extern template class VectorImage<double, 2>;
+}
 
 #endif
