@@ -46,3 +46,7 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 
+otb_create_application(
+  NAME           CVF
+  SOURCES        otbCVF.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
