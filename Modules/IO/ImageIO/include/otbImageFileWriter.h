@@ -290,4 +290,17 @@ private:
 #include "otbImageFileWriter.hxx"
 #endif
 
+#include "otbImage.h"
+#include "otbVectorImage.h"
+
+namespace otb {
+  extern template class ImageFileWriter<otb::Image<unsigned int, 2>>;
+  extern template class ImageFileWriter<otb::Image<int, 2>>;
+  extern template class ImageFileWriter<otb::Image<unsigned char, 2>>;
+  extern template class ImageFileWriter<otb::Image<char, 2>>;
+  extern template class ImageFileWriter<otb::Image<float, 2>>;
+  extern template class ImageFileWriter<otb::Image<double, 2>>;
+ // TODO add vector image
+}
+
 #endif

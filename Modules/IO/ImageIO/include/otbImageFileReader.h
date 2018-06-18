@@ -212,4 +212,17 @@ private:
 #include "otbImageFileReader.hxx"
 #endif
 
+#include "otbImage.h"
+#include "otbVectorImage.h"
+
+namespace otb {
+  extern template class ImageFileReader<Image<unsigned int, 2>>;
+  extern template class ImageFileReader<Image<int, 2>>;
+  extern template class ImageFileReader<Image<unsigned char, 2>>;
+  extern template class ImageFileReader<Image<char, 2>>;
+  extern template class ImageFileReader<Image<float, 2>>;
+  extern template class ImageFileReader<Image<double, 2>>;
+  // TODO add vector image
+}
+
 #endif // otbImageFileReader_h

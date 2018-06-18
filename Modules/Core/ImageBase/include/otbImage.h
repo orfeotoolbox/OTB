@@ -274,4 +274,13 @@ private:
 #include "otbImage.hxx"
 #endif
 
+namespace otb {
+  extern template class Image<unsigned int, 2>;
+  extern template class Image<int, 2>;
+  extern template class Image<unsigned char, 2>;
+  extern template class Image<char, 2>;
+  extern template class Image<float, 2>;
+  extern template class Image<double, 2>;
+}
+
 #endif
