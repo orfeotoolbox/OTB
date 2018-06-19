@@ -135,8 +135,9 @@ private:
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
     SetParameterDescription("mask",
-      "The masked pixels won't be used to adapt the dynamic "
-      "(the mask must have the same dimensions as the input image)");
+      "Optional binary mask to only process part of the input image."
+      "Only pixels where the mask is 0 will be processed."
+      "The mask must have the same dimensions as the input image.");
     MandatoryOff("mask");
     DisableParameter("mask");
 
