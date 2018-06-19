@@ -79,8 +79,8 @@ class CVF : public Application
   /** Standard class typedefs. */
   typedef CVF                 Self;
   typedef Application                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;    
+  // typedef itk::SmartPointer<Self>       Pointer;
+  // typedef itk::SmartPointer<const Self> ConstPointer;    
   itkNewMacro(Self);
   itkTypeMacro(CVF, otb::Application);
 
@@ -176,7 +176,19 @@ class CVF : public Application
     unsigned int r  = GetParameterInt("radius");
     int rwmf = GetParameterInt("rwmf") ;
 
-    // GRADIENT CALCULATIONS  
+
+    //   // CALCUL GRADIENT
+    // typedef otb::LocalGradientVectorImageFilter<FloatVectorImageType, FloatVectorImageType> GradientType;
+    // GradientType::Pointer m_GradientXLeft = GradientType::New();
+    // GradientType::Pointer m_GradientXRight = GradientType::New();
+    // m_GradientXLeft->SetInput(inLeft);
+    // m_GradientXRight->SetInput(inRight);
+    // m_GradientXRight->Update();
+    // m_GradientXLeft->Update();
+
+
+
+   // GRADIENT CALCULATIONS  
     typedef itk::ConstantBoundaryCondition<FloatImageType> BoundaryConditionType;
     typedef otb::ConvolutionImageFilter<FloatImageType, FloatImageType, BoundaryConditionType> ConvFilterType;
     ConvFilterType::Pointer m_convFilterXLeft = ConvFilterType::New();
@@ -200,22 +212,12 @@ class CVF : public Application
     VectorFilterType::Pointer m_GradientXLeft = VectorFilterType::New();
     m_GradientXLeft->SetFilter(m_convFilterXLeft);
     m_GradientXLeft->SetInput(inLeft);
+    m_GradientXLeft->Update();
 
     VectorFilterType::Pointer m_GradientXRight = VectorFilterType::New();
     m_GradientXRight->SetFilter(m_convFilterXRight);
     m_GradientXRight->SetInput(inRight);
-
- 
-  // FloatVectorImageWriterType::Pointer writerGradientXLeft = FloatVectorImageWriterType::New();
-  // writerGradientXLeft->SetFileName( FILENAME("GradientXLeft.tif"));
-  // writerGradientXLeft->SetInput(m_GradientXLeft->GetOutput());
-  // writerGradientXLeft->Update();
-   
-  // FloatVectorImageWriterType::Pointer writerGradientXRight = FloatVectorImageWriterType::New();
-  // writerGradientXRight->SetFileName( FILENAME("GradientXRight.tif"));
-  // writerGradientXRight->SetInput(m_GradientXRight->GetOutput());
-  // writerGradientXRight->Update();
-
+    m_GradientXRight->Update();
 
 
     // COST VOLUME  
@@ -228,6 +230,8 @@ class CVF : public Application
     m_LeftCost->SetRightGradientXInput(m_GradientXRight->GetOutput() );      
     m_LeftCost->SetMinDisp(dispMin);
     m_LeftCost->SetMaxDisp(dispMax);
+
+
    
       // --- RIGHT
     typedef otb::RightCostVolumeImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > RightCostVolumeType; 
@@ -238,6 +242,8 @@ class CVF : public Application
     m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() );      
     m_RightCost->SetMinDisp(-dispMax);
     m_RightCost->SetMaxDisp(-dispMin);
+
+
 
 
       
