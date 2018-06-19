@@ -22,6 +22,18 @@
 
 namespace otb {
 
+ImageFileReaderException::ImageFileReaderException(const char *file, unsigned int line,
+                                                   const std::string& desc,
+                                                   const std::string& filename) :
+    ExceptionObject(file, line, desc),
+    m_Filename(filename)
+{
+}
+
+ImageFileReaderException::~ImageFileReaderException()
+{
+}
+
 // Explicit instanciation of common types
 template class ImageFileReader<otb::Image<unsigned int, 2>>;
 template class ImageFileReader<otb::Image<int, 2>>;
@@ -31,4 +43,5 @@ template class ImageFileReader<otb::Image<unsigned short, 2>>;
 template class ImageFileReader<otb::Image<short, 2>>;
 template class ImageFileReader<otb::Image<float, 2>>;
 template class ImageFileReader<otb::Image<double, 2>>;
+
 }

@@ -55,11 +55,10 @@ public:
   /** Constructor. */
   ImageFileReaderException(const char *file, unsigned int line,
                            const std::string& desc = "",
-                           const std::string& filename = "") :
-    ExceptionObject(file, line, desc),
-    m_Filename(filename)
-  {
-  }
+                           const std::string& filename = "");
+
+  /** Destructor. */
+  ~ImageFileReaderException();
 
   std::string m_Filename;
 };
