@@ -38,6 +38,8 @@ public:
   TOutput operator() ( TInput input )
     {
     unsigned int size ( input.GetSize() ) ;
+    int grayMin=255;
+    int grayMax=0;
 
     TOutput output(1); 
     output = 0;
@@ -48,12 +50,37 @@ public:
       if (input[i]<min)
         {
         min = input[i] ;
-        output = i;
+        output = -255+-i*((grayMax-grayMin)/(m_dispMax-m_dispMin));
+        //output = i;
         }
       }
 
     return output;
     }
+
+  void SetDispMax( int disp)
+    {
+       m_dispMax = disp ;
+    }
+
+  int GetDispMax()
+    {
+      return m_dispMax ;
+    }
+
+  void SetDispMin( int disp)
+    {
+       m_dispMin = disp ;
+    }
+
+   int GetDispMin()
+    {
+      return m_dispMin ;
+    }
+
+  protected:    
+     int                   m_dispMin;
+     int                   m_dispMax;
 
 }; //end class
 
@@ -84,11 +111,25 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  int GetDispMax()
+    {
+     return this->GetFunctor().GetDispMax();     
+    }
 
+  int GetDispMin()
+    {
+     return this->GetFunctor().GetDispMin();     
+    }
 
-  protected:
-  MaximumNBandsImageFilter() {}
-  ~MaximumNBandsImageFilter() override {}
+  void SetDispMax(int disp)
+    {
+      this->GetFunctor().SetDispMax(disp);
+    }
+
+  void SetDispMin(int disp)
+    {
+      this->GetFunctor().SetDispMin(disp);
+    }
 
   void GenerateOutputInformation(void) override
     {
@@ -96,6 +137,12 @@ public:
 
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
+
+  protected:
+  MaximumNBandsImageFilter() {}
+  ~MaximumNBandsImageFilter() override {}
+
+
 
   private:
   MaximumNBandsImageFilter(const Self &) = delete; //purposely not implemented
