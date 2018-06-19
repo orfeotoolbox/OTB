@@ -216,13 +216,19 @@ private:
 #include "otbVectorImage.h"
 
 namespace otb {
-  extern template class ImageFileReader<Image<unsigned int, 2>>;
-  extern template class ImageFileReader<Image<int, 2>>;
-  extern template class ImageFileReader<Image<unsigned char, 2>>;
-  extern template class ImageFileReader<Image<char, 2>>;
-  extern template class ImageFileReader<Image<float, 2>>;
-  extern template class ImageFileReader<Image<double, 2>>;
-  // TODO add vector image
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class ImageFileReader<Image<unsigned int, 2>>;
+extern template class ImageFileReader<Image<int, 2>>;
+extern template class ImageFileReader<Image<unsigned char, 2>>;
+extern template class ImageFileReader<Image<char, 2>>;
+extern template class ImageFileReader<Image<unsigned short, 2>>;
+extern template class ImageFileReader<Image<short, 2>>;
+extern template class ImageFileReader<Image<float, 2>>;
+extern template class ImageFileReader<Image<double, 2>>;
+// TODO add vector image
+
 }
 
 #endif // otbImageFileReader_h

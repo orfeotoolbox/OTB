@@ -294,13 +294,19 @@ private:
 #include "otbVectorImage.h"
 
 namespace otb {
-  extern template class ImageFileWriter<otb::Image<unsigned int, 2>>;
-  extern template class ImageFileWriter<otb::Image<int, 2>>;
-  extern template class ImageFileWriter<otb::Image<unsigned char, 2>>;
-  extern template class ImageFileWriter<otb::Image<char, 2>>;
-  extern template class ImageFileWriter<otb::Image<float, 2>>;
-  extern template class ImageFileWriter<otb::Image<double, 2>>;
- // TODO add vector image
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class ImageFileWriter<otb::Image<unsigned int, 2>>;
+extern template class ImageFileWriter<otb::Image<int, 2>>;
+extern template class ImageFileWriter<otb::Image<unsigned char, 2>>;
+extern template class ImageFileWriter<otb::Image<char, 2>>;
+extern template class ImageFileWriter<otb::Image<unsigned short, 2>>;
+extern template class ImageFileWriter<otb::Image<short, 2>>;
+extern template class ImageFileWriter<otb::Image<float, 2>>;
+extern template class ImageFileWriter<otb::Image<double, 2>>;
+// TODO add vector image
+
 }
 
 #endif

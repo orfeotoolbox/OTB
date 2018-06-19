@@ -275,12 +275,18 @@ private:
 #endif
 
 namespace otb {
-  extern template class Image<unsigned int, 2>;
-  extern template class Image<int, 2>;
-  extern template class Image<unsigned char, 2>;
-  extern template class Image<char, 2>;
-  extern template class Image<float, 2>;
-  extern template class Image<double, 2>;
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class Image<unsigned int, 2>;
+extern template class Image<int, 2>;
+extern template class Image<unsigned char, 2>;
+extern template class Image<char, 2>;
+extern template class Image<unsigned short, 2>;
+extern template class Image<short, 2>;
+extern template class Image<float, 2>;
+extern template class Image<double, 2>;
+
 }
 
 #endif
