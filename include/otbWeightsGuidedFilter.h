@@ -319,7 +319,7 @@ public:
 
     } 
 
-  private:
+ // private:
   WeightsGuidedFilter(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 

@@ -50,8 +50,8 @@ public:
       if (input[i]<min)
         {
         min = input[i] ;
-        output = -255+-i*((grayMax-grayMin)/(m_dispMax-m_dispMin));
-        //output = i;
+       // output = -255-i*((grayMax-grayMin)/(m_dispMax-m_dispMin));
+        output = i;
         }
       }
 

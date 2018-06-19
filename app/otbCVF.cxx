@@ -59,6 +59,8 @@
 #include "otbConcatenateVectorImageFilter.h"
 #include "otbWeightedMedianImageFilter.h"
 #include "otbCovarianceMatrix.h"
+#include "otbBijectionCoherencyFilter.h"
+#include "otbFillOcclusionDisparityImageFilter.h"
 
 #include <otbImageToVectorImageCastFilter.h>
 #include <itkMedianImageFilter.h>
@@ -286,12 +288,17 @@ class CVF : public Application
     typedef otb::MinimumNBandsImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;  
     MinCostVolume::Pointer m_LeftDisparity = MinCostVolume::New();
     m_LeftDisparity->SetInput(m_meanLeftWeights->GetOutput());
+    m_LeftDisparity->SetDispMin(dispMin);
+    m_LeftDisparity->SetDispMax(dispMax);
+
 
 
       // --- RIGHT
     typedef otb::MaximumNBandsImageFilter< FloatVectorImageType, IntImageType > MaxCostVolume;  
     MaxCostVolume::Pointer m_RightDisparity = MaxCostVolume::New();
     m_RightDisparity->SetInput(m_meanRightWeights->GetOutput());
+    m_RightDisparity->SetDispMin(-dispMax);
+    m_RightDisparity->SetDispMax(-dispMin);
 
 
 
@@ -315,7 +322,8 @@ class CVF : public Application
     ConcatenateVectorImageFilterType::Pointer m_ConcatenateDispEndInLeftImage = ConcatenateVectorImageFilterType::New();
     m_ConcatenateDispEndInLeftImage->SetInput1(m_CastLeftDisparity->GetOutput());
     m_ConcatenateDispEndInLeftImage->SetInput2(m_LeftMedianFilter->GetOutput());
-    typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatVectorImageType > WeightMedianType;
+
+    typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatImageType > WeightMedianType;
     WeightMedianType::Pointer m_LeftDispMedian = WeightMedianType::New();
     m_LeftDispMedian-> SetInput(m_ConcatenateDispEndInLeftImage->GetOutput());
     
@@ -323,7 +331,7 @@ class CVF : public Application
     radiusWM[0] = rwmf;
     radiusWM[1] = rwmf;   
     m_LeftDispMedian->SetRadius(radiusWM) ;
-    m_LeftDispMedian->Update();
+
 
 
     //FILTRAGE LEFT DISPARITY PAR FILTRE MEDIAN
@@ -339,7 +347,50 @@ class CVF : public Application
     m_RightDispMedian-> SetInput(m_ConcatenateDispEndInRightImage->GetOutput());    
     m_RightDispMedian->SetRadius(radiusWM) ;
 
-    SetParameterOutputImage("io.out", m_LeftDispMedian->GetOutput());
+
+    typedef otb::BijectionCoherencyFilter< FloatImageType, FloatImageType > OcclusionType;
+    OcclusionType::Pointer m_OcclusionFilter = OcclusionType::New();  
+    m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_RightDispMedian->GetOutput()); 
+    m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_LeftDispMedian->GetOutput()); 
+     
+    m_OcclusionFilter->SetMaxHDisp(dispMax);
+    m_OcclusionFilter->SetMinHDisp(dispMin);
+    m_OcclusionFilter->SetMinVDisp(0);
+    m_OcclusionFilter->SetMaxVDisp(0);
+    m_OcclusionFilter->SetTolerance(2);
+
+
+
+    typedef otb::FillOcclusionDisparityImageFilter<FloatImageType, FloatImageType, FloatImageType> FillOcclusionFilter ;
+    FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
+    m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
+    m_FillOccDisparityMap->SetInput2(m_LeftDispMedian->GetOutput() );
+    m_FillOccDisparityMap->SetRadius(0,1);
+
+
+    typedef otb::ImageToVectorImageCastFilter<FloatImageType,FloatVectorImageType> CastImageFilter;
+    CastImageFilter::Pointer m_CastOccMap = CastImageFilter::New();
+    m_CastOccMap-> SetInput( const_cast <FloatImageType *>( m_FillOccDisparityMap->GetOutput() ));
+
+    typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
+    ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage = ConcatenateVectorImageFilterType::New();
+    m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastOccMap->GetOutput());
+    m_ConcatenateCastOccMapAndLeftImage->SetInput2(inLeft);
+
+    typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatImageType > WeightMedianFilter;
+    WeightMedianFilter::Pointer m_WeightOccMapAndLeftImageFilter = WeightMedianFilter::New();
+    m_WeightOccMapAndLeftImageFilter->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
+
+    FloatVectorImageType::SizeType radiusM;
+    radiusM[0] = rwmf;
+    radiusM[1] = rwmf;   
+    m_WeightOccMapAndLeftImageFilter->SetRadius(radiusM);
+    m_WeightOccMapAndLeftImageFilter->Update();
+
+
+
+    SetParameterOutputImage("io.out", m_WeightOccMapAndLeftImageFilter->GetOutput());
+
 
 
 

@@ -805,14 +805,6 @@ OtbImageRightMedian->Update();
 
 
 
-
-
-
-
-
-
-
-
  
 /*========================== Fill occlusion =====================================*/
   CastFilterType::Pointer OccCastFiler = CastFilterType::New();
