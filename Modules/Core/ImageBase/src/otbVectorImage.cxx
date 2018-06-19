@@ -21,11 +21,16 @@
 #include "otbVectorImage.h"
 
 namespace otb {
-  template class VectorImage<unsigned int, 2>;
-  template class VectorImage<int, 2>;
-  template class VectorImage<unsigned char, 2>;
-  template class VectorImage<char, 2>;
-  template class VectorImage<float, 2>;
-  template class VectorImage<double, 2>;
+
+// Explicit instanciation of common types
+template class VectorImage<unsigned int, 2>;
+template class VectorImage<int, 2>;
+template class VectorImage<unsigned char, 2>;
+template class VectorImage<char, 2>;
+template class VectorImage<unsigned short, 2>;
+template class VectorImage<short, 2>;
+template class VectorImage<float, 2>;
+template class VectorImage<double, 2>;
+
 }
 
