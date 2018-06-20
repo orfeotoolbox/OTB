@@ -511,18 +511,54 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
       }
     }
 
-  // SECOND PASS : check mandatory parameters
-  for (unsigned int i = 0; i < appKeyList.size(); i++)
+  // SECOND PASS : checks
+  for (const auto & paramKey : appKeyList)
     {
-    const std::string paramKey(appKeyList[i]);
-    ParameterType type = m_Application->GetParameterType(paramKey);
+    // Check for missing mandatory parameters
+    if(!CheckMissingMandatoryParameter(paramKey))
+      return MISSINGMANDATORYPARAMETER;
+
+    // Check and warn unused parameters
+    CheckUnusedParameter(paramKey);
+
+    // Check output paths are valid
+    if(!CheckOutputPathsValidity(paramKey))
+      return WRONGPARAMETERVALUE;
+    }
+
+  return OKPARAM;
+}
+
+bool CommandLineLauncher::CheckOutputPathsValidity(const std::string & paramKey) const
+{
+  ParameterType type = m_Application->GetParameterType(paramKey);
+  if (m_Application->HasValue(paramKey) &&
+      type == ParameterType_OutputFilename)
+    {
+    std::string filename = m_Application->GetParameterString(paramKey);
+    itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
+    if (path!="" && !itksys::SystemTools::FileIsDirectory(path.c_str()))
+      {
+      std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
+      return false;
+        }
+      }
+  return true;
+}
+
+bool CommandLineLauncher::CheckMissingMandatoryParameter(const std::string & paramKey) const
+{
     if (m_Application->IsParameterMissing(paramKey))
       {
       std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
-      return MISSINGMANDATORYPARAMETER;
+      return true;
       }
+    return false;
+}
 
-    // Check for ignored parameters
+void CommandLineLauncher::CheckUnusedParameter(const std::string & paramKey) const
+{
+  // Check for ignored parameters
     if(m_Application->HasUserValue(paramKey))
       {
 
@@ -551,30 +587,13 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           // Check that this choice is active
           if(paramKey.find(value) == std::string::npos)
             {
-            const std::string & missingMode = paramKey.substr(start,end-start);
-            std::cerr<<"WARNING: Parameter -"<<paramKey<<" will be ignored because -"<<key<<" is "<<value<<". Consider adding -"<<key<<" "<<missingMode<<" to application parameters."<<std::endl;
+            std::cerr<<"WARNING: Parameter -"<<paramKey<<" will be ignored because -"<<key<<" is "<<value<<"."<<std::endl;
             
             break;
             }
           }
         }
       }
-
-    // Check output paths validity
-    if (m_Application->HasValue(paramKey) &&
-        type == ParameterType_OutputFilename)
-      {
-      std::string filename = m_Application->GetParameterString(paramKey);
-      itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
-      if (path!="" && !itksys::SystemTools::FileIsDirectory(path.c_str()))
-        {
-        std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
-        return WRONGPARAMETERVALUE;
-        }
-      }
-    }
-
-  return OKPARAM;
 }
 
 void CommandLineLauncher::LinkWatchers(itk::Object * itkNotUsed(caller), const itk::EventObject & event)
