@@ -1025,14 +1025,16 @@ protected:
   {
     typename TImageType::Pointer ret;
     Parameter* param = GetParameterByKey(parameter);
-    if (dynamic_cast<InputImageParameter*>(param))
-      {
-      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-      ret = paramDown->GetImage<TImageType>();
-      }
-
-    //TODO: exception if not found ?
-    return ret;
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    if (paramDown)
+    {
+      return paramDown->GetImage<TImageType>();
+    }
+    else
+    {
+      itkExceptionMacro(<<parameter << " parameter can't be casted to ImageType");
+      return nullptr;
+    }
   }
 
   /** Declare a parameter as having an automatic value */

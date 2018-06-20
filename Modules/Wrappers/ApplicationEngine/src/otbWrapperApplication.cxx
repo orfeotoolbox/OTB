@@ -1653,24 +1653,9 @@ unsigned int Application::GetNumberOfElementsInParameterInputImageList(std::stri
 
 }
 
-
-
 FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {
-  FloatVectorImageType::Pointer ret = nullptr;
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<InputImageParameter*> (param))
-    {
-    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*> (param);
-    ret = paramDown->GetImage();
-    }
-  else
-    {
-    itkExceptionMacro(<<parameter << " parameter can't be casted to ImageType");
-    }
-
-  return ret;
+  return this->GetParameterImage<FloatVectorImageType>(parameter);
 }
 
 FloatVectorImageListType* Application::GetParameterImageList(std::string parameter)
