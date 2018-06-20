@@ -129,7 +129,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpectralAngleDataNodeFeatureFunction.txx"
+#include "otbSpectralAngleDataNodeFeatureFunction.hxx"
 #endif
 
 #endif

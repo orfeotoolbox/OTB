@@ -165,7 +165,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRoadExtractionFilter.txx"
+#include "otbRoadExtractionFilter.hxx"
 #endif
 
 #endif

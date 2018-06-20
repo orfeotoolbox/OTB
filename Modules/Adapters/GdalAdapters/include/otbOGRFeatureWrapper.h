@@ -367,7 +367,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRFeatureWrapper.txx"
+#include "otbOGRFeatureWrapper.hxx"
 #endif
 
 #endif // otbOGRFeatureWrapper_h

@@ -129,7 +129,7 @@ private:
 } // end of namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleToVariableDimensionHistogramGenerator.txx"
+#include "otbListSampleToVariableDimensionHistogramGenerator.hxx"
 #endif
 
 #endif

@@ -82,7 +82,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConcatenateSampleListFilter.txx"
+#include "otbConcatenateSampleListFilter.hxx"
 #endif
 
 #endif

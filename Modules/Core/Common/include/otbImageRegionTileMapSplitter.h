@@ -138,7 +138,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionTileMapSplitter.txx"
+# include "otbImageRegionTileMapSplitter.hxx"
 #endif
 
 #endif

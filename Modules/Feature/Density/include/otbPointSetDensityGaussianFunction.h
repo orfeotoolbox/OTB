@@ -83,7 +83,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetDensityGaussianFunction.txx"
+#include "otbPointSetDensityGaussianFunction.hxx"
 #endif
 
 #endif

@@ -142,7 +142,7 @@ template <typename TImage> void WriteMPI(TImage *img, const std::string &output,
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMPIVrtWriter.txx"
+#include "otbMPIVrtWriter.hxx"
 #endif
 
 #endif //__otbMPIVrtWriter_h

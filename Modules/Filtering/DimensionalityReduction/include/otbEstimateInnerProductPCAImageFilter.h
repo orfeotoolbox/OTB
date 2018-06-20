@@ -115,7 +115,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEstimateInnerProductPCAImageFilter.txx"
+#include "otbEstimateInnerProductPCAImageFilter.hxx"
 #endif
 
 #endif

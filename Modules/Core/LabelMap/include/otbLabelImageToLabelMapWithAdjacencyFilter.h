@@ -156,7 +156,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageToLabelMapWithAdjacencyFilter.txx"
+#include "otbLabelImageToLabelMapWithAdjacencyFilter.hxx"
 #endif
 
 #endif

@@ -237,7 +237,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentSamplingFilterBase.txx"
+#include "otbPersistentSamplingFilterBase.hxx"
 #endif
 
 #endif

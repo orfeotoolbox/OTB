@@ -79,7 +79,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpatialObjectSource.txx"
+#include "otbSpatialObjectSource.hxx"
 #endif
 
 #endif

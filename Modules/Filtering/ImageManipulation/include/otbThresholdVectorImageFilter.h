@@ -134,7 +134,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbThresholdVectorImageFilter.txx"
+#include "otbThresholdVectorImageFilter.hxx"
 #endif
 
 #endif

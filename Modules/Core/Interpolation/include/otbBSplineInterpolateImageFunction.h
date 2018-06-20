@@ -191,7 +191,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBSplineInterpolateImageFunction.txx"
+#include "otbBSplineInterpolateImageFunction.hxx"
 #endif
 
 #endif

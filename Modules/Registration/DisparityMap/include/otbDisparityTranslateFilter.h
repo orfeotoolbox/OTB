@@ -148,7 +148,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityTranslateFilter.txx"
+#include "otbDisparityTranslateFilter.hxx"
 #endif
 
 #endif

@@ -394,7 +394,7 @@ protected:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeometriesToGeometriesFilter.txx"
+#include "otbGeometriesToGeometriesFilter.hxx"
 #endif
 
 #endif // otbGeometriesToGeometriesFilter_h

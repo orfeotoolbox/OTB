@@ -105,7 +105,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAngularProjectionBinaryImageFilter.txx"
+#include "otbAngularProjectionBinaryImageFilter.hxx"
 #endif
 
 

@@ -214,7 +214,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandsStatisticsAttributesLabelMapFilter.txx"
+#include "otbBandsStatisticsAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

@@ -254,7 +254,7 @@ public:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.txx"
+#include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.hxx"
 #endif
 
 #endif

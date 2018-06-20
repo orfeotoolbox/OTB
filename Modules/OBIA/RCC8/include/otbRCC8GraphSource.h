@@ -68,6 +68,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8GraphSource.txx"
+#include "otbRCC8GraphSource.hxx"
 #endif
 #endif

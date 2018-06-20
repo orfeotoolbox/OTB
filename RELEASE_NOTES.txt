@@ -124,7 +124,7 @@ OTB-v.6.2.0 - Changes since version 6.0.0 (October 26th, 2017)
     * 0001459: Patch to fix spelling errors
 
   * OTB-applications
-    * 0001441: Error in param in template otbTrainLibSVM.txx
+    * 0001441: Error in param in template otbTrainLibSVM.hxx
     * 0001411: Training applications  needs field name of type integer
     * 0001410: BundleToPerfectSensor composite application does not expose parameters of internal applications
     * 0001467: Convert application memory allocation issue
@@ -2217,7 +2217,7 @@ OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
     * 0000195: unable to perform TSX calibration with the sar calibration
       module in monteverdi 1.4
     * 0000207: Vectorization module shift coordinates
-    * 0000202: Error message "otbSVMModel.txx:310 eps <= O" in the SVM
+    * 0000202: Error message "otbSVMModel.hxx:310 eps <= O" in the SVM
       classification module
     * 0000194: error message opening dataset in monteverdi (development
       version)

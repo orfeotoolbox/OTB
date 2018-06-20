@@ -94,7 +94,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPathFunction.txx"
+#include "otbPathFunction.hxx"
 #endif
 
 #endif

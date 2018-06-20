@@ -128,7 +128,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingManager.txx"
+#include "otbStreamingManager.hxx"
 #endif
 
 #endif

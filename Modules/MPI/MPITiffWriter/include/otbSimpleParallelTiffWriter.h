@@ -342,7 +342,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSimpleParallelTiffWriter.txx"
+#include "otbSimpleParallelTiffWriter.hxx"
 #endif
 
 #endif

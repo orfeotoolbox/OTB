@@ -521,12 +521,12 @@ defaults (usually zero) for all parameters.  The copy constructor and
 assignment operator should be declared \code{private} and not implemented,
 to prevent instantiating the filter without the factory methods (above). 
 
-Finally, the template implementation code (in the \code{.txx} file) should
+Finally, the template implementation code (in the \code{.hxx} file) should
 be included, bracketed by a test for manual instantiation, thus:
 
 \begin{verbatim}
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkExampleFilter.txx"
+#include "itkExampleFilter.hxx"
 #endif
 \end{verbatim}
 

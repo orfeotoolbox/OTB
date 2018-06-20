@@ -470,7 +470,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageSeriesFileReader.txx"
+#include "otbImageSeriesFileReader.hxx"
 #endif
 
 #endif

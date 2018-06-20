@@ -94,7 +94,7 @@ private:
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHaralickTexturesIFFactory.txx"
+#include "otbHaralickTexturesIFFactory.hxx"
 #endif
 
 #endif

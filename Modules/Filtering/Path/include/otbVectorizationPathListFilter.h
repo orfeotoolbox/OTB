@@ -144,7 +144,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorizationPathListFilter.txx"
+#include "otbVectorizationPathListFilter.hxx"
 #endif
 
 #endif
