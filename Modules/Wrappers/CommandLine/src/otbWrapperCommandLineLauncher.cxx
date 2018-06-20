@@ -522,6 +522,37 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
       return MISSINGMANDATORYPARAMETER;
       }
 
+    // Check for ignored parameters
+    if(m_Application->HasUserValue(paramKey))
+      {
+      unsigned int start = 0;
+      auto end = paramKey.find_first_of('.',start);
+    
+      while(end != std::string::npos)
+        {
+        std::string key = paramKey.substr(0,end);
+        ParameterType type = m_Application->GetParameterType(key);
+        
+        if(type == ParameterType_Choice)
+          {
+          std::string value = m_Application->GetParameterString(key);
+
+          if(paramKey.find(value) == std::string::npos)
+            {
+            start = end+1;
+            end = paramKey.find_first_of('.',start);
+            std::string missingMode = paramKey.substr(start,end-start);
+            std::cerr<<"WARNING: Parameter -"<<paramKey<<" will be ignored because -"<<key<<" is "<<value<<". Consider adding -"<<key<<" "<<missingMode<<" to application parameters."<<std::endl;
+            
+            break;
+            }
+          }
+        
+        start = end+1;
+        end = paramKey.find_first_of('.',start);
+        }
+      }
+
     // Check output paths validity
     if (m_Application->HasValue(paramKey) &&
         type == ParameterType_OutputFilename)
