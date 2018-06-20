@@ -551,9 +551,9 @@ bool CommandLineLauncher::CheckMissingMandatoryParameter(const std::string & par
     if (m_Application->IsParameterMissing(paramKey))
       {
       std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
-      return true;
+      return false;
       }
-    return false;
+    return true;
 }
 
 void CommandLineLauncher::CheckUnusedParameter(const std::string & paramKey) const
