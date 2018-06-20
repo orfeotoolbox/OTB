@@ -159,13 +159,13 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
   // If testenv is used, do not catch exceptions
   if (m_Parser->IsAttributExists("-testenv", m_VExpression) == true)
     {
-    ExecuteAndWriteOutputNoCatch();
+    return ExecuteAndWriteOutputNoCatch();
     }
   else
     {
     try
       {
-      ExecuteAndWriteOutputNoCatch();
+      return ExecuteAndWriteOutputNoCatch();
       }
     catch(otb::ApplicationException& err)
       {
