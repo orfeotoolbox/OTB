@@ -58,18 +58,12 @@ public:
   /** Constructor. */
   ApplicationException(const char *file, unsigned int line,
                        const char* message = "Application error.",
-                       const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-  {
-  }
+                       const char* loc = "Unknown");
 
   /** Constructor. */
   ApplicationException(const std::string &file, unsigned int line,
                        const char* message = "Application error.",
-                       const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
-  {
-  }
+                       const char* loc = "Unknown");
 };
 
 namespace Wrapper
@@ -94,24 +88,11 @@ public:
   /** RTTI support */
   itkTypeMacro(Application, itk::Object);
 
-  /** Set the parameter name */
-  //itkSetStringMacro(Name);
+  virtual void SetName(const std::string&);
+  virtual const char* GetName() const;
 
-  virtual void SetName( const std::string & name )
-  {
-    m_Name = name;
-    GetDocExample()->SetApplicationName(name);
-    this->Modified();
-    m_Logger->SetName(name);
-  }
-
-  itkGetStringMacro(Name);
-
-  /** Set the parameter description */
-  itkSetStringMacro(Description);
-
-  /** Get the parameter description */
-  itkGetStringMacro(Description);
+  void SetDescription(const std::string&);
+  virtual const char* GetDescription() const;
 
   /** Initialize the application, instantiating the parameter list */
   void Init();
@@ -119,17 +100,11 @@ public:
   /** Check if the application has been initialized */
   bool IsInitialized() const;
 
-  /** Set the parameter xml flag */
-  itkSetMacro(HaveInXML, bool);
+  virtual void SetHaveInXML(bool);
+  virtual bool GetHaveInXML() const;
 
-  /** Get the parameter xml flag */
-  itkGetConstMacro(HaveInXML, bool);
-
-  /** Set the parameter xml flag */
-  itkSetMacro(HaveOutXML, bool);
-
-  /** Get the parameter xml flag */
-  itkGetConstMacro(HaveOutXML, bool);
+  virtual void SetHaveOutXML(bool);
+  virtual bool GetHaveOutXML() const;
 
   /** Update the value of parameters for which no user value has been provided */
   void UpdateParameters();
@@ -611,53 +586,34 @@ public:
    */
   FloatVectorImageType* GetParameterImage(std::string parameter);
 
-#define otbGetParameterImageMacro( Image )                              \
-  Image##Type * GetParameter##Image( std::string parameter )            \
-    {                                                                   \
-    Image##Type::Pointer ret;                                           \
-    Parameter* param = GetParameterByKey(parameter);                    \
-    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
-    ComplexInputImageParameter* paramDownC = dynamic_cast<ComplexInputImageParameter*>(param); \
-    if ( paramDown )                                                    \
-      {                                                                 \
-      ret = paramDown->Get##Image();                                    \
-      }                                                                 \
-    else if ( paramDownC )  /* Support of ComplexInputImageParameter */ \
-      {                                                                 \
-      ret = paramDownC->Get##Image();                                   \
-      }                                                                 \
-    return ret;                                                         \
-    }
-
-  otbGetParameterImageMacro(UInt8Image);
-  otbGetParameterImageMacro(UInt16Image);
-  otbGetParameterImageMacro(Int16Image);
-  otbGetParameterImageMacro(UInt32Image);
-  otbGetParameterImageMacro(Int32Image);
-  otbGetParameterImageMacro(FloatImage);
-  otbGetParameterImageMacro(DoubleImage);
-
-  otbGetParameterImageMacro(UInt8VectorImage);
-  otbGetParameterImageMacro(UInt16VectorImage);
-  otbGetParameterImageMacro(Int16VectorImage);
-  otbGetParameterImageMacro(UInt32VectorImage);
-  otbGetParameterImageMacro(Int32VectorImage);
-  otbGetParameterImageMacro(FloatVectorImage);
-  otbGetParameterImageMacro(DoubleVectorImage);
-
-  otbGetParameterImageMacro(UInt8RGBImage);
-  otbGetParameterImageMacro(UInt8RGBAImage);
+  UInt8ImageType * GetParameterUInt8Image(std::string);
+  UInt16ImageType * GetParameterUInt16Image(std::string);
+  Int16ImageType * GetParameterInt16Image(std::string);
+  UInt32ImageType * GetParameterUInt32Image(std::string);
+  Int32ImageType * GetParameterInt32Image(std::string);
+  FloatImageType * GetParameterFloatImage(std::string);
+  DoubleImageType * GetParameterDoubleImage(std::string);
+  UInt8VectorImageType * GetParameterUInt8VectorImage(std::string);
+  UInt16VectorImageType * GetParameterUInt16VectorImage(std::string);
+  Int16VectorImageType * GetParameterInt16VectorImage(std::string);
+  UInt32VectorImageType * GetParameterUInt32VectorImage(std::string);
+  Int32VectorImageType * GetParameterInt32VectorImage(std::string);
+  FloatVectorImageType * GetParameterFloatVectorImage(std::string);
+  DoubleVectorImageType * GetParameterDoubleVectorImage(std::string);
+  UInt8RGBImageType * GetParameterUInt8RGBImage(std::string);
+  UInt8RGBAImageType * GetParameterUInt8RGBAImage(std::string);
 
   // Complex image
-  otbGetParameterImageMacro(ComplexInt16Image);
-  otbGetParameterImageMacro(ComplexInt32Image); 
-  otbGetParameterImageMacro(ComplexFloatImage);
-  otbGetParameterImageMacro(ComplexDoubleImage);
+  ComplexInt16ImageType * GetParameterComplexInt16Image(std::string);
+  ComplexInt32ImageType * GetParameterComplexInt32Image(std::string);
+  ComplexFloatImageType * GetParameterComplexFloatImage(std::string);
+  ComplexDoubleImageType * GetParameterComplexDoubleImage(std::string);
 
-  otbGetParameterImageMacro(ComplexInt16VectorImage);
-  otbGetParameterImageMacro(ComplexInt32VectorImage);
-  otbGetParameterImageMacro(ComplexFloatVectorImage);
-  otbGetParameterImageMacro(ComplexDoubleVectorImage);
+  ComplexInt16VectorImageType * GetParameterComplexInt16VectorImage(std::string);
+  ComplexInt32VectorImageType * GetParameterComplexInt32VectorImage(std::string);
+  ComplexFloatVectorImageType * GetParameterComplexFloatVectorImage(std::string);
+  ComplexDoubleVectorImageType * GetParameterComplexDoubleVectorImage(std::string);
+
 
   /* Get an image list value
    *
@@ -741,97 +697,37 @@ public:
   std::string GetProgressDescription() const;
 
   /** Doc element accessors. */
-  itkSetStringMacro(DocName);
-  itkGetStringMacro(DocName);
-  itkSetStringMacro(DocLongDescription);
-  itkGetStringMacro(DocLongDescription);
-  itkSetStringMacro(DocAuthors);
-  itkGetStringMacro(DocAuthors);
-  itkSetStringMacro(DocLimitations);
-  itkGetStringMacro(DocLimitations);
-  itkSetStringMacro(DocSeeAlso);
-  itkGetStringMacro(DocSeeAlso);
-  std::vector<std::string> GetDocTags(){
-    return m_DocTags;
-  }
-  void SetDocTags( std::vector<std::string> val ){
-    m_DocTags = val;
-    this->Modified();
-  }
+  virtual void SetDocName(const std::string&);
+  virtual const char* GetDocName() const;
 
-  void AddDocTag( const std::string & tag )
-  {
-    for (unsigned int i=0; i<m_DocTags.size(); i++)
-      {
-      if (m_DocTags[i].compare(tag) == 0) return;
-      }
-    m_DocTags.push_back( tag );
-    this->Modified();
-  }
+  virtual void SetDocLongDescription(const std::string&);
+  virtual const char* GetDocLongDescription() const;
 
-  DocExampleStructure::Pointer GetDocExample()
-  {
-    if (! IsInitialized())
-      {
-      Init();
-      }
+  virtual void SetDocAuthors(const std::string&);
+  virtual const char* GetDocAuthors() const;
 
-    return m_DocExample;
-  }
+  virtual void SetDocLimitations(const std::string&);
+  virtual const char* GetDocLimitations() const;
 
-  unsigned int GetNumberOfExamples()
-  {
-    return GetDocExample()->GetNbOfExamples();
-  }
+  virtual void SetDocSeeAlso(const std::string&);
+  virtual const char* GetDocSeeAlso() const;
 
-  std::string GetExampleComment(unsigned int id)
-  {
-    return GetDocExample()->GetExampleComment(id);
-  }
+  virtual void SetDocTags(std::vector<std::string>);
+  virtual std::vector<std::string> GetDocTags() const;
 
-  unsigned int GetExampleNumberOfParameters(unsigned int id)
-  {
-    return GetDocExample()->GetNumberOfParameters(id);
-  }
+  void AddDocTag(const std::string&);
 
-  std::string GetExampleParameterKey(unsigned int exId, unsigned int paramId)
-  {
-    return GetDocExample()->GetParameterKey(paramId, exId);
-  }
-
-  std::string GetExampleParameterValue(unsigned int exId, unsigned int paramId)
-  {
-    return GetDocExample()->GetParameterValue(paramId, exId);
-  }
-
-  void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 )
-  {
-    GetDocExample()->AddParameter( key, value, exId );
-    this->Modified();
-  }
-
-  void SetExampleComment( const std::string & comm, unsigned int i )
-  {
-    GetDocExample()->SetExampleComment( comm, i );
-    this->Modified();
-  }
-
-  unsigned int AddExample( const std::string & comm="" )
-  {
-    unsigned int id = GetDocExample()->AddExample( comm );
-    this->Modified();
-    return id;
-  }
-
-  std::string GetCLExample()
-  {
-    return GetDocExample()->GenerateCLExample();
-  }
-
-  std::string GetHtmlExample()
-  {
-    return GetDocExample()->GenerateHtmlExample();
-  }
+  DocExampleStructure::Pointer GetDocExample();
+  unsigned int GetNumberOfExamples();
+  std::string GetExampleComment(unsigned int id);
+  unsigned int GetExampleNumberOfParameters(unsigned int id);
+  std::string GetExampleParameterKey(unsigned int exId, unsigned int paramId);
+  std::string GetExampleParameterValue(unsigned int exId, unsigned int paramId);
+  void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 );
+  void SetExampleComment( const std::string & comm, unsigned int i );
+  unsigned int AddExample( const std::string & comm="" );
+  std::string GetCLExample();
+  std::string GetHtmlExample();
 
   /** Return all parameters which role is Role_Output in a vector of pairs that contains the
   * parameter key and its value.
@@ -839,34 +735,14 @@ public:
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
 
    /** If need to force readxml more than once in application */
-   void ForceInXMLParseFlag()
-   {
-     m_IsInXMLParsed = false;
-   }
+  void ForceInXMLParseFlag();
 
   double GetLastExecutionTiming() const;
 
-  /** documentation link */
-  void SetDocLink(const std::string & link)
-  {
-    if (m_Doclink.compare(link) != 0) {
-      m_Doclink = link;
-      this->Modified();
-    }
-  }
+  virtual void SetDocLink(const std::string & link);
+  virtual const std::string& GetDocLink() const;
 
-  const std::string& GetDocLink() const
-  {
-    return m_Doclink;
-  }
-
-  inline void SetOfficialDocLink()
-  {
-    std::string link = "http://www.orfeo-toolbox.org/Applications/";
-    link.append(this->GetName());
-    link.append(".html");
-    this->SetDocLink(link);
-  }
+  void SetOfficialDocLink();
 
   /** Get the origin of the image parameter 'key'. The optional 'idx' allows
    * to select the image in an InputImageList. */
@@ -1025,14 +901,16 @@ protected:
   {
     typename TImageType::Pointer ret;
     Parameter* param = GetParameterByKey(parameter);
-    if (dynamic_cast<InputImageParameter*>(param))
-      {
-      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-      ret = paramDown->GetImage<TImageType>();
-      }
-
-    //TODO: exception if not found ?
-    return ret;
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    if (paramDown)
+    {
+      return paramDown->GetImage<TImageType>();
+    }
+    else
+    {
+      itkExceptionMacro(<<parameter << " parameter can't be casted to ImageType");
+      return nullptr;
+    }
   }
 
   /** Declare a parameter as having an automatic value */
