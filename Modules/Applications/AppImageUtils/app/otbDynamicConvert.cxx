@@ -318,7 +318,7 @@ private:
       for(; !it.IsAtEnd(); ++it, ++itMask)
       {
         // float values, so the threshold is set to 0.5
-        if (itMask.Get()[0] > 0.5)
+        if (itMask.Get()[0] < 0.5)
         {
           listSample->PushBack(it.Get());
         }
