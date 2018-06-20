@@ -157,19 +157,19 @@ class CVF : public Application
     { 
     const unsigned int Dimension = 2;
    // typedef otb::VectorImage<float> FloatVectorImageType;
-    typedef otb::VectorImage<int> IntVectorImageType;
+    // typedef otb::VectorImage<int> IntVectorImageType;
    // typedef otb::Image< float, Dimension > FloatImageType;
     typedef otb::Image< int, Dimension > IntImageType;
 
-    typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorImageReaderType;
-    typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType;
+    // typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorImageReaderType;
+    // typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType;
 
-    typedef otb::ImageFileReader<IntVectorImageType> IntVectorImageReaderType;
-    typedef otb::ImageFileWriter<IntVectorImageType> IntVectorImageWriterType;    
-    typedef otb::ImageFileReader< IntImageType > IntImageReaderType;
-    typedef otb::ImageFileWriter< IntImageType > IntImageWriterType;  
-    typedef otb::ImageFileReader< FloatImageType > FloatImageReaderType;
-    typedef otb::ImageFileWriter< FloatImageType > FloatImageWriterType; 
+    // typedef otb::ImageFileReader<IntVectorImageType> IntVectorImageReaderType;
+    // typedef otb::ImageFileWriter<IntVectorImageType> IntVectorImageWriterType;    
+    // typedef otb::ImageFileReader< IntImageType > IntImageReaderType;
+    // typedef otb::ImageFileWriter< IntImageType > IntImageWriterType;  
+    // typedef otb::ImageFileReader< FloatImageType > FloatImageReaderType;
+    // typedef otb::ImageFileWriter< FloatImageType > FloatImageWriterType; 
 
     FloatVectorImageType::Pointer inLeft = GetParameterFloatVectorImage("io.inleft");
     FloatVectorImageType::Pointer inRight = GetParameterFloatVectorImage("io.inright");
@@ -288,8 +288,6 @@ class CVF : public Application
     typedef otb::MinimumNBandsImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;  
     MinCostVolume::Pointer m_LeftDisparity = MinCostVolume::New();
     m_LeftDisparity->SetInput(m_meanLeftWeights->GetOutput());
-    m_LeftDisparity->SetDispMin(dispMin);
-    m_LeftDisparity->SetDispMax(dispMax);
 
 
 
@@ -297,8 +295,7 @@ class CVF : public Application
     typedef otb::MaximumNBandsImageFilter< FloatVectorImageType, IntImageType > MaxCostVolume;  
     MaxCostVolume::Pointer m_RightDisparity = MaxCostVolume::New();
     m_RightDisparity->SetInput(m_meanRightWeights->GetOutput());
-    m_RightDisparity->SetDispMin(-dispMax);
-    m_RightDisparity->SetDispMax(-dispMin);
+
 
 
 
@@ -328,10 +325,9 @@ class CVF : public Application
     m_LeftDispMedian-> SetInput(m_ConcatenateDispEndInLeftImage->GetOutput());
     
     FloatVectorImageType::SizeType radiusWM;
-    radiusWM[0] = rwmf;
-    radiusWM[1] = rwmf;   
+    radiusWM[0] = r;
+    radiusWM[1] = r;   
     m_LeftDispMedian->SetRadius(radiusWM) ;
-
 
 
     //FILTRAGE LEFT DISPARITY PAR FILTRE MEDIAN
@@ -366,15 +362,17 @@ class CVF : public Application
     m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
     m_FillOccDisparityMap->SetInput2(m_LeftDispMedian->GetOutput() );
     m_FillOccDisparityMap->SetRadius(0,1);
+    m_FillOccDisparityMap->SetDispMin(dispMin);
+    m_FillOccDisparityMap->SetDispMax(dispMax);
 
 
     typedef otb::ImageToVectorImageCastFilter<FloatImageType,FloatVectorImageType> CastImageFilter;
-    CastImageFilter::Pointer m_CastOccMap = CastImageFilter::New();
-    m_CastOccMap-> SetInput( const_cast <FloatImageType *>( m_FillOccDisparityMap->GetOutput() ));
+    CastImageFilter::Pointer m_CastFillOccDisparityMap = CastImageFilter::New();
+    m_CastFillOccDisparityMap-> SetInput( const_cast <FloatImageType *>( m_FillOccDisparityMap->GetOutput() ));
 
     typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
     ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage = ConcatenateVectorImageFilterType::New();
-    m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastOccMap->GetOutput());
+    m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastFillOccDisparityMap->GetOutput());
     m_ConcatenateCastOccMapAndLeftImage->SetInput2(inLeft);
 
     typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatImageType > WeightMedianFilter;

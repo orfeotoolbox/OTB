@@ -31,7 +31,7 @@ class WeightMedianImageOperator
 {
 public:
 typedef typename TInput::OffsetType      OffsetType;
-typedef std::pair<int,double> pairCord;
+typedef std::pair<int,float> pairCord;
 typedef typename TInput::PixelType               PixelType;
 public:
   WeightMedianImageOperator() { }
@@ -41,7 +41,7 @@ public:
     if( j.first < i.first ) return false;
     return (i.first < j.first ); }
     
-//    bool mypred(std::pair<int, double> p1, double s2) { return p1.first == s2; } ;
+//    bool mypred(std::pair<int, float> p1, float s2) { return p1.first == s2; } ;
 
     
   
@@ -51,23 +51,22 @@ public:
    // unsigned int Nband = input.GetPixel(0).Size(); // nbr de bande 4
     TOutput output ( 1);
     output = 0;
-   // output.Fill(0); 
-     
+   
      
     unsigned int Wsize = input.Size();  //taille de la fenetre ipol 19*19 ;
    
    
    	// std::cout << " Nband = "<< Nband; 
-	double sSpace = 9;
-	double sColor = 25.5;
+	float sSpace = 9;
+	float sColor = 25.5;
 	
 	 sSpace = 1.0f/(sSpace*sSpace);
 	 sColor = 1.0f/(sColor*sColor);
      OffsetType Offset_j;
 	
 	
-double d,Wtemp = 0., W = 0.,Wt = 0.;
-std::vector< std::pair<int,double> > duo(Wsize); 	 
+float d,Wtemp = 0., W = 0.,Wt = 0.;
+std::vector< std::pair<int,float> > duo(Wsize); 	 
 
 	
 PixelType I(3);
@@ -77,33 +76,33 @@ PixelType I(3);
 				I[0] = input.GetCenterPixel()[1]- input.GetPixel(j)[1];
 				I[1] = input.GetCenterPixel()[2]- input.GetPixel(j)[2];
 				I[2] = input.GetCenterPixel()[3]- input.GetPixel(j)[3];
+
 				
 								
 				W =  std::exp( - (std::pow(Offset_j[0],2.0)+std::pow(Offset_j[1],2.0)) *sSpace 
 				-(I.GetSquaredNorm())*sColor);
-				
-			//	- std::pow((double)(input.GetCenterPixel()[1]- input.GetPixel(j)[1]),2.0) *sColor);
-				
-				
+
 							
-		duo[j].first = input.GetPixel(j)[0];               
+		duo[j].first = input.GetPixel(j)[0];      
+
 		duo[j].second =  W; 
 		Wt += W	;	
 	}
 	 Wt = Wt/2;
-    // std::cout << "W totale =  " << Wt ;
+
 		
  std::sort (duo.begin(), duo.end(), comparePair);
+
+
 	
 	
     
      for (std::vector<pairCord>::iterator it=duo.begin(); it !=duo.end(); ++it){
+
        		 Wtemp += it->second ;
        		 if (Wtemp >= Wt){
-;				 d = it->first; 
-				 //std::cout << "Element found in myvector: " << d << '\n';
-				 //output[0] = static_cast<typename TOutput::ValueType>(d) ;
-				output = d ;
+				    d = it->first; 
+				    output = d;
          break;
 		}		
 	

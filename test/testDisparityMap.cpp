@@ -307,8 +307,6 @@ int testDisparityMap(int argc, char *argv[])
   typedef otb::MinimumNBandsImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;  
   MinCostVolume::Pointer m_LeftDisparity = MinCostVolume::New();
   m_LeftDisparity->SetInput(m_meanLeftWeights->GetOutput());
-  m_LeftDisparity->SetDispMin(dispMin);
-  m_LeftDisparity->SetDispMax(dispMax);
 
   //typedef otb::ImageFileWriter< IntImageType > IntImageWriterType; 
 
@@ -322,8 +320,6 @@ int testDisparityMap(int argc, char *argv[])
   typedef otb::MaximumNBandsImageFilter< FloatVectorImageType, IntImageType > MaxCostVolume;  
   MaxCostVolume::Pointer m_RightDisparity = MaxCostVolume::New();
   m_RightDisparity->SetInput(m_meanRightWeights->GetOutput());
-  m_RightDisparity->SetDispMin(-dispMax);
-  m_RightDisparity->SetDispMax(-dispMin);
 
 
 
