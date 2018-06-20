@@ -28,6 +28,7 @@
 #include "itk_kwiml.h"
 #endif
 #include <set>
+#include <iosfwd>
 
 #include "OTBStreamingExport.h"
 

@@ -22,6 +22,8 @@
 #ifndef otbStandardOneLineFilterWatcher_h
 #define otbStandardOneLineFilterWatcher_h
 
+#include <iosfwd>
+
 #include "otbFilterWatcherBase.h"
 
 namespace otb

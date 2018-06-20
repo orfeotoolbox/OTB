@@ -21,6 +21,9 @@
 #ifndef otbExtendedFilenameHelper_h
 #define otbExtendedFilenameHelper_h
 
+#include <map>
+#include <vector>
+
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "OTBCommonExport.h"
