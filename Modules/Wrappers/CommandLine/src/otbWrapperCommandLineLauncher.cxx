@@ -525,31 +525,38 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     // Check for ignored parameters
     if(m_Application->HasUserValue(paramKey))
       {
+
+      // Find the position of the next dot
       unsigned int start = 0;
       auto end = paramKey.find_first_of('.',start);
-    
+
+      // Until we reach en of key
       while(end != std::string::npos)
         {
-        std::string key = paramKey.substr(0,end);
+        // Extract key until the current dot
+        const std::string & key = paramKey.substr(0,end);
+
+        // Find the corresponding parameter type
         ParameterType type = m_Application->GetParameterType(key);
-        
+
+        // In any case update the position of current and next dot
+        start = end+1;
+        end = paramKey.find_first_of('.',start);
+
+        // If the current parameter (paramKey) has a choice in it
         if(type == ParameterType_Choice)
           {
-          std::string value = m_Application->GetParameterString(key);
+          const std::string & value = m_Application->GetParameterString(key);
 
+          // Check that this choice is active
           if(paramKey.find(value) == std::string::npos)
             {
-            start = end+1;
-            end = paramKey.find_first_of('.',start);
-            std::string missingMode = paramKey.substr(start,end-start);
+            const std::string & missingMode = paramKey.substr(start,end-start);
             std::cerr<<"WARNING: Parameter -"<<paramKey<<" will be ignored because -"<<key<<" is "<<value<<". Consider adding -"<<key<<" "<<missingMode<<" to application parameters."<<std::endl;
             
             break;
             }
           }
-        
-        start = end+1;
-        end = paramKey.find_first_of('.',start);
         }
       }
 
