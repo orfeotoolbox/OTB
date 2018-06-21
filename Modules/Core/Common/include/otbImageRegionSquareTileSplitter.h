@@ -142,8 +142,14 @@ private:
 
 } // end namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionSquareTileSplitter.txx"
-#endif
+#include "otbImageRegionSquareTileSplitter.txx"
+
+namespace otb {
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class ImageRegionSquareTileSplitter<2u>;
+
+}
 
 #endif
