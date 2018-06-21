@@ -114,7 +114,11 @@ typedef mpl::map
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , T ( OGRFeature::*ptr_to_function )(int) const
+#else
   , T ( OGRFeature::*ptr_to_function )(int)
+#endif
   , typename FinalReturnType = T
   > class MemberGetterPtr
     {
@@ -132,7 +136,7 @@ template
  * <tt> = T</tt>)
  *
  * \internal
- * This ITK_OVERRIDE is required because of the particular nature of the
+ * This override is required because of the particular nature of the
  * <tt>char**</tt> type chosen by OGR API, plus the fact this is the only
  * const-correct getter...
  * \since OTB v 3.14.0
@@ -190,7 +194,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , T const* ( OGRFeature::*ptr_to_function )(int, int*) const
+#else
   , T const* ( OGRFeature::*ptr_to_function )(int, int*)
+#endif
   , typename FinalReturnType = std::vector<T>
   > class MemberContainerGetterPtr
     {
@@ -262,7 +270,7 @@ template
  * <tt> = T</tt>)
  *
  * \internal
- * This ITK_OVERRIDE is required because of the particular nature of the
+ * This override is required because of the particular nature of the
  * <tt>char**</tt> type chosen by OGR API.
  * \since OTB v 3.14.0
  */
@@ -292,7 +300,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , void ( OGRFeature::*ptr_to_function )(int, int, const T*)
+#else
   , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+#endif
   , typename ActualParamType = std::vector<T>
   > class MemberContainerSetterPtr
     {

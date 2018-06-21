@@ -117,12 +117,12 @@ public:
 
 protected:
   PathListToHistogramGenerator();
-  ~PathListToHistogramGenerator() ITK_OVERRIDE {}
-  void GenerateData() ITK_OVERRIDE;
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) ITK_OVERRIDE;
+  ~PathListToHistogramGenerator() override {}
+  void GenerateData() override;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
   using Superclass::MakeOutput;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 

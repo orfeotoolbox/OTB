@@ -63,10 +63,10 @@ protected:
   /** Constructor */
   WavelengthSpectralBands();
   /** Destructor */
-  ~WavelengthSpectralBands() ITK_OVERRIDE {}
+  ~WavelengthSpectralBands() override {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   WavelengthSpectralBands(const Self &); //purposely not implemented

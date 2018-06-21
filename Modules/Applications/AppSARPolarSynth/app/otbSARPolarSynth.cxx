@@ -44,7 +44,7 @@ public:
   itkTypeMacro(SARPolarSynth, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("SARPolarSynth");
     SetDescription("Gives, for each pixel, the power that would have been received by a SAR system with a basis different from the classical (H,V) one (polarimetric synthetis).");
@@ -86,7 +86,7 @@ private:
 
     AddDocTag(Tags::SAR);
 
-    AddParameter(ParameterType_ComplexInputImage,  "in",   "Input Image");
+    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
@@ -154,12 +154,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
 	
 	m_MCPSFilter = MCPSFilterType::New();

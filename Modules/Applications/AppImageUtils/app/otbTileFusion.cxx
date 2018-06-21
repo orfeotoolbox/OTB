@@ -45,7 +45,7 @@ public:
   typedef otb::TileImageFilter<FloatVectorImageType> TileFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("TileFusion");
     SetDescription("Fusion of an image made of several tile files.");
@@ -80,12 +80,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to be done
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input image list
     FloatVectorImageListType::Pointer tileList = this->GetParameterImageList("il");
@@ -95,22 +95,21 @@ private:
       itkExceptionMacro("No input Image set...");
       }
 
-    m_FusionFilter = TileFilterType::New();
+    TileFilterType::Pointer fusionFilter = TileFilterType::New();
 
     TileFilterType::SizeType layout;
     layout[0] = this->GetParameterInt("cols");
     layout[1] = this->GetParameterInt("rows");
-    m_FusionFilter->SetLayout(layout);
+    fusionFilter->SetLayout(layout);
 
     for (unsigned int i=0; i<(layout[0]*layout[1]); i++)
       {
-      m_FusionFilter->SetInput(i,tileList->GetNthElement(i));
+      fusionFilter->SetInput(i,tileList->GetNthElement(i));
       }
 
-    SetParameterOutputImage("out", m_FusionFilter->GetOutput());
+    SetParameterOutputImage("out", fusionFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  TileFilterType::Pointer m_FusionFilter;
 
 };
 

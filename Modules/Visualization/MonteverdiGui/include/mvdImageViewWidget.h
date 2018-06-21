@@ -31,7 +31,8 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QtOpenGL>
+#include <QGLWidget>
+// #include <QtOpenGL>
 
 //
 // System includes (sorted by alphabetic order)
@@ -117,7 +118,7 @@ public:
                    Qt::WindowFlags f =0 );
 
   /** \brief Destructor. */
-  ~ImageViewWidget() ITK_OVERRIDE;
+  ~ImageViewWidget() override;
 
   /**
    */
@@ -255,21 +256,21 @@ protected:
   //
   // Qt overloads.
 
-  void initializeGL() ITK_OVERRIDE;
-  void resizeGL( int widgth, int height ) ITK_OVERRIDE;
-  void paintGL() ITK_OVERRIDE;
+  void initializeGL() override;
+  void resizeGL( int widgth, int height ) override;
+  void paintGL() override;
 
-  void mouseMoveEvent( QMouseEvent* event ) ITK_OVERRIDE;
-  void mouseReleaseEvent( QMouseEvent* event ) ITK_OVERRIDE;
-  void mousePressEvent( QMouseEvent* event ) ITK_OVERRIDE;
-  void mouseDoubleClickEvent( QMouseEvent * event ) ITK_OVERRIDE;
+  void mouseMoveEvent( QMouseEvent* event ) override;
+  void mouseReleaseEvent( QMouseEvent* event ) override;
+  void mousePressEvent( QMouseEvent* event ) override;
+  void mouseDoubleClickEvent( QMouseEvent * event ) override;
 
-  void wheelEvent( QWheelEvent* event) ITK_OVERRIDE;
+  void wheelEvent( QWheelEvent* event) override;
 
-  void keyPressEvent( QKeyEvent* event ) ITK_OVERRIDE;
-  void keyReleaseEvent( QKeyEvent* event ) ITK_OVERRIDE;
+  void keyPressEvent( QKeyEvent* event ) override;
+  void keyReleaseEvent( QKeyEvent* event ) override;
 
-  void resizeEvent( QResizeEvent* event ) ITK_OVERRIDE;
+  void resizeEvent( QResizeEvent* event ) override;
 
 
 //

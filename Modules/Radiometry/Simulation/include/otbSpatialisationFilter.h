@@ -112,12 +112,12 @@ public:
 
 protected:
    SpatialisationFilter();
-   ~SpatialisationFilter() ITK_OVERRIDE {}
-   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+   ~SpatialisationFilter() override {}
+   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
    virtual void ProcessObject(unsigned int obj);
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
    SpatialisationFilter(const Self &); //purposely not implemented

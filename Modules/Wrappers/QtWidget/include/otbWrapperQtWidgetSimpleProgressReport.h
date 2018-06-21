@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetSimpleProgressReport_h
 #define otbWrapperQtWidgetSimpleProgressReport_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperQtWidgetModel.h"
 #include "itkProcessObject.h"
@@ -45,7 +45,7 @@ class OTBQtWidget_EXPORT QtWidgetSimpleProgressReport : public QWidget
   Q_OBJECT
 public:
   QtWidgetSimpleProgressReport(QtWidgetModel * model);
-  ~QtWidgetSimpleProgressReport() ITK_OVERRIDE;
+  ~QtWidgetSimpleProgressReport() override;
 
   void SetApplication(Application::Pointer app);
 

@@ -120,12 +120,12 @@ public:
 
 protected:
    LabelMapToSimulatedImageFilter();
-   ~LabelMapToSimulatedImageFilter() ITK_OVERRIDE {}
-   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+   ~LabelMapToSimulatedImageFilter() override {}
+   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-   void BeforeThreadedGenerateData() ITK_OVERRIDE;
-   void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
-   void GenerateOutputInformation() ITK_OVERRIDE;
+   void BeforeThreadedGenerateData() override;
+   void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
+   void GenerateOutputInformation() override;
 
 
 private:

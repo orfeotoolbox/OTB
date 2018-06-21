@@ -3,9 +3,9 @@ Installation
 
 We provide different standalone binary packages for OTB-Applications:
 
--  for Windows platform (7 or higher)
+-  for Windows platform (Seven or higher)
 
--  for 64bit Linux distribution
+-  for 64 bits Linux distribution
 
 -  for MacOS X
 
@@ -21,17 +21,17 @@ You can get latest binary packages from our `Download page <https://www.orfeo-to
 Windows
 -------
 
-.. include:: Installation_Windows.txt
+.. include:: Installation_Windows.rst
 
-Linux x86_64
+Linux
 ------------
 
-.. include:: Installation_Linux.txt
+.. include:: Installation_Linux.rst
 
 MacOS X
 -------
 
-.. include:: Installation_Macx.txt
+.. include:: Installation_Macos.rst
 
 Other packages
 --------------

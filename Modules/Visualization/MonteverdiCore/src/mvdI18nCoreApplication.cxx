@@ -160,7 +160,7 @@ I18nCoreApplication
 
   // get the md5 of the filename
   QByteArray result =
-    QCryptographicHash::hash( fileInfo.absoluteFilePath().toAscii(),
+    QCryptographicHash::hash( fileInfo.absoluteFilePath().toLatin1(),
 			      QCryptographicHash::Md5 );
 
   // MD5 hash-code.
@@ -258,8 +258,12 @@ I18nCoreApplication
 /*****************************************************************************/
 void
 I18nCoreApplication
-::HandleQtMessage( QtMsgType type, const char* message )
+::HandleQtMessage( QtMsgType type ,
+                   const QMessageLogContext & ,
+                   const QString & message )
 {
+  std::string msg = ToStdString( message );
+
   switch( type )
     {
     //
@@ -267,13 +271,13 @@ I18nCoreApplication
     case QtDebugMsg:
 #if ECHO_QDEBUG || FORCE_QDEBUG
 #if _WIN32
-      OutputDebugString( message );
+      OutputDebugString( msg.c_str() );
       OutputDebugString( "\n" );
 #endif
-      fprintf( stderr, "%s\n", message );
+      std::cerr << msg << std::endl;
 #endif
 #if LOG_QDEBUG
-      assert( false && "Not yet implemented!" );
+      static_assert( false, "Not yet implemented!" );
 #endif
       break;
     //
@@ -282,13 +286,13 @@ I18nCoreApplication
 #if ECHO_QWARNING || FORCE_QWARNING
 #if _WIN32
       OutputDebugString( "WARNG> " );
-      OutputDebugString( message );
+      OutputDebugString( msg.c_str() );
       OutputDebugString( "\n" );
 #endif
-      fprintf( stderr, tr( "WARNG> %s\n" ).toLatin1().constData(), message );
+      std::cerr << "WARNG> " << msg << std::endl;
 #endif
 #if LOG_QWARNING
-      assert( false && "Not yet implemented!" );
+      static_assert( false, "Not yet implemented!" );
 #endif
       break;
     //
@@ -297,13 +301,13 @@ I18nCoreApplication
 #if ECHO_QCRITICAL || FORCE_QCRITICAL
 #if _WIN32
       OutputDebugString( "ERROR> " );
-      OutputDebugString( message );
+      OutputDebugString( qPrintable(message) );
       OutputDebugString( "\n" );
 #endif
-      fprintf( stderr, tr( "ERROR> %s\n" ).toLatin1().constData(), message );
+      std::cerr << "ERROR> " << msg << std::endl;
 #endif
 #if LOG_QCRITICAL
-      assert( false && "Not yet implemented!" );
+      static_assert( false, "Not yet implemented!" );
 #endif
 #if THROW_QCRITICAL
       throw std::runtime_error(
@@ -320,17 +324,13 @@ I18nCoreApplication
 #if ECHO_QFATAL || FORCE_QFATAL
 #if _WIN32
       OutputDebugString( "FATAL> " );
-      OutputDebugString( message );
+      OutputDebugString( qPrintable(message) );
       OutputDebugString( "\n" );
 #endif
-      fprintf(
-	stderr,
-	tr( "FATAL> %s\n" ).toLatin1().constData(),
-	message
-      );
+      std::cerr << "FATAL> " << msg << std::endl;
 #endif
 #if LOG_QFATAL
-      assert( false && "Not yet implemented!" );
+      static_assert( false, "Not yet implemented!" );
 #endif
 #if THROW_QFATAL
       throw std::runtime_error(
@@ -378,7 +378,7 @@ I18nCoreApplication
     );
     }
 
-  qInstallMsgHandler( I18nCoreApplication::HandleQtMessage );
+  qInstallMessageHandler( I18nCoreApplication::HandleQtMessage );
 
   m_Instance = this;
 }
@@ -558,17 +558,22 @@ I18nCoreApplication
 
   // Literal strings to be translated are UTF-8 encoded because source
   // files are UTF-8 encoded.
+   /*/////////////////////////////// Warning //////////////////////
+  we need to replace those lines with a function of Qt5
   QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
+  //////////////////////////////////////////////////////////////////*/
 
   // QTextCodec::setCodecForLocale( QTextCodec::codecForName("UTF-8") );
 
   // QTextCodec::setCodecForCStrings( QTextCodec::codecForName("System") );
-
+ /*/////////////////////////////// Warning //////////////////////
+  we need to replace those lines with a function of Qt5
   qDebug()
     << "Codec for C-strings:"
     << ( QTextCodec::codecForCStrings()!=NULL
-	 ? QTextCodec::codecForCStrings()->name()
-	 : "none" );
+   ? QTextCodec::codecForCStrings()->name()
+   : "none" );
+  //////////////////////////////////////////////////////////////////*/
 
   qDebug()
     << "Codec for Locale:"
@@ -576,11 +581,14 @@ I18nCoreApplication
 	 ? QTextCodec::codecForLocale()->name()
 	 : "none" );
 
+   /*/////////////////////////////// Warning //////////////////////
+  we need to replace those lines with a function of Qt5
   qDebug()
     << "Codec for Tr:"
     << ( QTextCodec::codecForTr()!=NULL
-	 ? QTextCodec::codecForTr()->name()
-	 : "none" );
+   ? QTextCodec::codecForTr()->name()
+   : "none" );
+  //////////////////////////////////////////////////////////////////*/
 
   //
   // 1. default UI language is english (no translation).

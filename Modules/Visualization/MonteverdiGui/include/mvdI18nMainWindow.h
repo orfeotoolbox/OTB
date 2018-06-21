@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -103,7 +103,7 @@ public:
 // Public methods.
 public:
   /** \brief Destructor. */
-  ~I18nMainWindow() ITK_OVERRIDE;
+  ~I18nMainWindow() override;
 
   /**
    */
@@ -194,7 +194,7 @@ protected:
   //
   // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event ) ITK_OVERRIDE;
+  void closeEvent( QCloseEvent* event ) override;
 
 //
 // Protected attributes.

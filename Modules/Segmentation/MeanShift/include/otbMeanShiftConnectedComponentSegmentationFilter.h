@@ -130,10 +130,10 @@ public:
 protected:
   MeanShiftConnectedComponentSegmentationFilter();
 
-  ~MeanShiftConnectedComponentSegmentationFilter() ITK_OVERRIDE;
+  ~MeanShiftConnectedComponentSegmentationFilter() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
+  void GenerateData() override;
 
 private:
 

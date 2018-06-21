@@ -109,11 +109,11 @@ protected:
   /**  Constructor */
   SinclairImageFilter() {}
   /**  Destructor */
-  ~SinclairImageFilter() ITK_OVERRIDE {}
+  ~SinclairImageFilter() override {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 

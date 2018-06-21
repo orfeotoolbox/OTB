@@ -88,7 +88,7 @@ QtWidgetInputVectorDataParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetOpenFileName(
+    otb::GetOpenFilename(
       this,
       QString(),
       m_Input->text(),

@@ -58,7 +58,7 @@ public:
 
 protected:
   TileMapImageIOHelper() {}
-  ~TileMapImageIOHelper() ITK_OVERRIDE {}
+  ~TileMapImageIOHelper() override {}
 
 private:
   TileMapImageIOHelper(const Self &);  //purposely not implemented

@@ -21,6 +21,7 @@
 #ifndef otbTwoNRIBandsImageToNComplexBandsImage_h
 #define otbTwoNRIBandsImageToNComplexBandsImage_h
 
+#include <vcl_deprecated_header.h>
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 #include "itkNumericTraits.h"
@@ -72,13 +73,13 @@ public:
 
 protected:
   TwoNRIBandsImageToNComplexBandsImage();
-  ~TwoNRIBandsImageToNComplexBandsImage() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~TwoNRIBandsImageToNComplexBandsImage() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
+  void BeforeThreadedGenerateData(void) override;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
   TwoNRIBandsImageToNComplexBandsImage(const Self &); //purposely not implemented

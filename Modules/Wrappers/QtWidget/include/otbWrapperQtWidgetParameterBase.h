@@ -21,7 +21,7 @@
 #ifndef otbWrapperQtWidgetParameterBase_h
 #define otbWrapperQtWidgetParameterBase_h
 
-#include <QtGui>
+#include <QtWidgets>
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperParameter.h"
 #include "otbWrapperQtWidgetModel.h"
@@ -33,6 +33,8 @@ namespace otb
 namespace Wrapper
 {
 
+class QtWidgetParameterGroup;
+
 /** \class QtWidgetParameterBase
  * \brief
  *
@@ -41,11 +43,25 @@ namespace Wrapper
 class OTBQtWidget_EXPORT QtWidgetParameterBase : public QWidget
 {
   Q_OBJECT
+  friend class QtWidgetParameterGroup;
 public:
   QtWidgetParameterBase( Parameter *, QtWidgetModel * );
-  ~QtWidgetParameterBase() ITK_OVERRIDE;
+  ~QtWidgetParameterBase() override;
 
   void CreateWidget();
+
+  /** Store the state of the check box relative to this parameter
+    */
+  virtual bool IsChecked() const
+  {
+    return m_IsChecked;
+  }
+
+  /** Modify the state of the checkbox relative to this parameter */
+  virtual void SetChecked(const bool value)
+  {
+    m_IsChecked = value;
+  }
 
 public slots:
   void UpdateGUI();
@@ -77,6 +93,9 @@ private:
   QtWidgetModel * m_Model;
 
   Parameter * m_Param;
+
+  /** Store the status of the checkbox */
+  bool m_IsChecked;
 };
 
 

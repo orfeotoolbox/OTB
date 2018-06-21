@@ -142,7 +142,7 @@ public:
   I18nCoreApplication( QCoreApplication* qtApp );
 
   /** \brief Destructor. */
-  ~I18nCoreApplication() ITK_OVERRIDE;
+  ~I18nCoreApplication() override;
 
   /**
    */
@@ -418,9 +418,6 @@ protected:
 		       const QString& orgName,
 		       const QString& orgDomain );
 
-  /**
-   */
-  inline void SynchronizeSettings() const;
 
 //
 // Protected attributes.
@@ -448,7 +445,11 @@ private:
    * \param type Type of caught message.
    * \param message Content of caught message.
    */
-  static void HandleQtMessage( QtMsgType type, const char* message );
+  static void HandleQtMessage( QtMsgType type, const QMessageLogContext & , const QString & message );
+  /* Old function was 
+  static void HandleQtMessage( QtMsgType type, const char * message );
+  Qstring has a constructor QString(const char *str) but I have no idea
+  of the perf impact */
 
   /**
    */
@@ -643,8 +644,6 @@ I18nCoreApplication
 {
   assert( m_Settings!=NULL );
 
-  SynchronizeSettings();
-
   return m_Settings->contains( key );
 }
 
@@ -659,8 +658,6 @@ I18nCoreApplication
   // qDebug() << this << "::StoreSettingsKey(" << key << ", " << value << ")";
 
   m_Settings->setValue( key, value );
-
-  SynchronizeSettings();
 }
 
 /*****************************************************************************/
@@ -671,40 +668,7 @@ I18nCoreApplication
 {
   assert( m_Settings!=NULL );
 
-  SynchronizeSettings();
-
   return m_Settings->value( key );
-}
-
-/*****************************************************************************/
-inline
-void
-I18nCoreApplication
-::SynchronizeSettings() const
-{
-  assert( m_Settings!=NULL );
-
-  m_Settings->sync();
-
-  switch( m_Settings->status() )
-    {
-    case QSettings::NoError:
-      // Ok.
-      break;
-
-    case QSettings::AccessError:
-      throw SystemError( ToStdString( tr( "Cannot access settings file." ) ) );
-      break;
-
-    case QSettings::FormatError:
-      throw SystemError( ToStdString( tr( "Bad settings file format." ) ) );
-      break;
-
-    default:
-      // In case when a new enum value if added in the API.
-      assert( false );
-      break;
-    }
 }
 
 } // end namespace 'mvd'

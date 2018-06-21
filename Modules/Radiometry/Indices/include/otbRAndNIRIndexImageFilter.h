@@ -71,9 +71,9 @@ public:
 
 protected:
   RAndNIRIndexImageFilter();
-  ~RAndNIRIndexImageFilter() ITK_OVERRIDE {}
+  ~RAndNIRIndexImageFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /*  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                               itk::ThreadIdType threadId );

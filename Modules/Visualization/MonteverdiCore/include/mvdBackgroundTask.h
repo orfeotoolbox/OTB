@@ -100,7 +100,7 @@ public:
   /**
    * \brief Destructor.
    */
-  ~BackgroundTask() ITK_OVERRIDE;
+  ~BackgroundTask() override;
 
   /**
    */

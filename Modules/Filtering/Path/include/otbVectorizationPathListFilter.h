@@ -117,11 +117,11 @@ protected:
   /** Constructor */
   VectorizationPathListFilter();
   /** Destructor */
-  ~VectorizationPathListFilter() ITK_OVERRIDE {}
+  ~VectorizationPathListFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /**
    * Compute a vector of the 8  neighbors to explore from the direction and the type of search (forward or backward).
    * \param direction The direction

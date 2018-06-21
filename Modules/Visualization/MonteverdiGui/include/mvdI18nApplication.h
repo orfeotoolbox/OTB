@@ -34,7 +34,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -105,7 +105,7 @@ public:
   I18nApplication( QApplication* qtApp );
 
   /** \brief Destructor. */
-  ~I18nApplication() ITK_OVERRIDE;
+  ~I18nApplication() override;
 
   //
   // APPLICATION SINGLETON.
@@ -147,7 +147,7 @@ signals:
 // Protected methods.
 protected:
 
-  void virtual_InitializeCore() ITK_OVERRIDE;
+  void virtual_InitializeCore() override;
 
 //
 // Protected attributes.

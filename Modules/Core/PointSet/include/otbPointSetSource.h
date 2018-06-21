@@ -125,18 +125,18 @@ public:
    * SmartPointer to a DataObject. If a subclass of MeshSource has
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 protected:
   PointSetSource();
-  ~PointSetSource() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PointSetSource() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Requested region of Point Set is specified as i of N unstructured regions.
    * Since all DataObjects should be able to set the requested region in
    * unstructured form, just copy output->RequestedRegion all inputs. */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
 private:
   PointSetSource(const Self &); //purposely not implemented

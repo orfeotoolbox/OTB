@@ -110,9 +110,9 @@ protected:
   /// Constructor
   MultiChannelRAndGAndNIRIndexImageFilter() : m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4) {};
   /// Destructor
-  ~MultiChannelRAndGAndNIRIndexImageFilter() ITK_OVERRIDE {}
+  ~MultiChannelRAndGAndNIRIndexImageFilter() override {}
   /// Before generating data, set functor parameters
-  void BeforeThreadedGenerateData() ITK_OVERRIDE
+  void BeforeThreadedGenerateData() override
   {
 
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
@@ -126,7 +126,7 @@ protected:
     this->GetFunctor().SetNIRIndex(m_NIRIndex);
   }
   /// PrintSelf
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     this->Superclass::PrintSelf(os, indent);
     os << indent << "Red  index: " << m_RedIndex << std::endl;

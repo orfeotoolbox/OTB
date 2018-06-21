@@ -95,7 +95,7 @@ GetExistingDirectory( QWidget * p,
 
 /*****************************************************************************/
 QString
-GetOpenFileName( QWidget * p,
+GetOpenFilename( QWidget * p,
 		 const QString& caption,
 		 const QString& dir,
 		 const QString& filter,
@@ -129,7 +129,7 @@ GetOpenFileName( QWidget * p,
 
 /*****************************************************************************/
 QStringList
-GetOpenFileNames( QWidget * p,
+GetOpenFilenames( QWidget * p,
 		  const QString & caption,
 		  const QString & dir,
 		  const QString & filter,
@@ -163,7 +163,7 @@ GetOpenFileNames( QWidget * p,
 
 /*****************************************************************************/
 QString
-GetSaveFileName( QWidget * p,
+GetSaveFilename( QWidget * p,
 		 const QString & caption,
 		 const QString & dir,
 		 const QString & filter,

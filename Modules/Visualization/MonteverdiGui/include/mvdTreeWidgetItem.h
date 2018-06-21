@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -120,7 +120,7 @@ public:
   /**
    * \brief Destructor.
    */
-  ~TreeWidgetItem() ITK_OVERRIDE;
+  ~TreeWidgetItem() override;
 
   /**
    */
@@ -145,7 +145,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qtreewidgetitem.html#clone
    */
-  QTreeWidgetItem* clone() const ITK_OVERRIDE;
+  QTreeWidgetItem* clone() const override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

@@ -160,7 +160,7 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** This filter can only produce the amount of data that it is given,
-   * so we must ITK_OVERRIDE ProcessObject::EnlargeOutputRequestedRegion()
+   * so we must override ProcessObject::EnlargeOutputRequestedRegion()
    * (The default implementation of a source produces the amount of
    * data requested.  This source, however, can only produce what it is
    * given.)

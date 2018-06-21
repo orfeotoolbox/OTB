@@ -116,7 +116,7 @@ public:
   StackedLayerModel( QObject* p =NULL );
 
   /** \brief Destructor. */
-  ~StackedLayerModel() ITK_OVERRIDE;
+  ~StackedLayerModel() override;
 
   inline const AbstractLayerModel * operator[]( SizeType ) const;
   inline AbstractLayerModel * operator[]( SizeType );
@@ -212,6 +212,7 @@ public:
 // Public SLOTS.
 public slots:
   void Clear();
+  void Deleting( unsigned int index );
   inline void Delete( const KeyType & );
   inline void DeleteCurrent();
   inline void LowerCurrent();

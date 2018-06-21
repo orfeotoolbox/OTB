@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -122,7 +122,7 @@ public:
   ColorDynamicsWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** Destructor. */
-  ~ColorDynamicsWidget() ITK_OVERRIDE;
+  ~ColorDynamicsWidget() override;
 
   /**
    */

@@ -100,9 +100,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
-include( i18n_qt4 )
+include( i18n_qt )
 
-reset_qt4_i18n_sources()
+reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -123,7 +123,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "4")
+set(OTB_VERSION_MINOR "6")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -172,6 +172,10 @@ if(NOT OTB_INSTALL_DOC_DIR)
 endif()
 if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+endif()
+
+if(NOT OTB_INSTALL_DESCR_DIR)
+  set (OTB_INSTALL_DESCR_DIR "share/otb/description")
 endif()
 
 #convert path to native for reconfiguring otbcli.bat.in
@@ -229,12 +233,15 @@ endif()
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 mark_as_advanced(OTB_USE_DEPRECATED)
 
+# Although the OpenMP option looks like a 3rd party module, it is NOT. This option
+# is handled with other compilation flags in file OTBSetStandardCompilerFlags.cmake
+# before any module is parsed or enabled (see OTBModuleEnablement.cmake later on
+# during configure). Trying to modify this option from any module is
+# useless. Any 3rd party module dragging OpenMP should append
+# the corresponding flags to CMAKE_CXX_FLAGS, CMAKE_EXE_LINKER_FLAGS, and so on.
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
+
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
-#-----------------------------------------------------------------------------
-# SHOW_ALL_MSG_DEBUG option
-option(OTB_SHOW_ALL_MSG_DEBUG "Show all debug messages (very verbose)" OFF)
-#mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------
@@ -535,7 +542,7 @@ endforeach()
 # message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
 # unset(modules_list_for_summary)
 
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT4")
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT")
 foreach(item ${option_list})
   if(NOT ${item})
     list(REMOVE_ITEM option_list "${item}" )
@@ -554,7 +561,7 @@ list(APPEND option_list TINYXML)
 #Q: Why these two guys here? we already have option_list
 #A: Because cmake case sensitivity with variables.
 
-if(OTB_USE_QT4)
+if(OTB_USE_QT)
   list(APPEND option_list QT)
 endif()
 #sort again!

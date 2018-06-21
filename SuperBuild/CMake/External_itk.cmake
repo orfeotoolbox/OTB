@@ -39,6 +39,10 @@ set(ITK_ENABLED_MODULES
   SpatialObjects
   #TestKernel
   Transform
+  TransformFactory
+  IOTransformBase
+  IOTransformInsightLegacy
+  IOTransformMatlab
 
   AnisotropicSmoothing
   AntiAlias

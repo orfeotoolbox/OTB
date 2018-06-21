@@ -59,7 +59,7 @@ class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
   {
   }
 
-  ~SarCalibrationLookupData() ITK_OVERRIDE
+  ~SarCalibrationLookupData() override
   {
   }
 
@@ -75,7 +75,7 @@ class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   itkGetMacro(Type, short);
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream & os, itk::Indent indent) const override
   {
     os << indent << " lookup table type:'" << m_Type << "'" << std::endl;
     Superclass::PrintSelf(os, indent);

@@ -9,3 +9,5 @@ Describe as precisely as possible how to reproduce the bug. Try to isolate a min
 ### Configuration information
 
 OS, OTB version or tag, information related to build (binaries, superbuild, system libs ...)
+
+/label ~bug

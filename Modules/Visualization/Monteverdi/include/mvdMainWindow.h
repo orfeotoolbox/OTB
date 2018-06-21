@@ -39,7 +39,7 @@
 
 
 #ifndef USE_OTB_APPS
-#  define USE_OTB_APPS ( ( defined( OTB_DEBUG ) && 0 ) || 1 )
+#  define USE_OTB_APPS 1
 #endif
 
 //
@@ -125,7 +125,7 @@ public:
   MainWindow( QWidget* p =0, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~MainWindow() ITK_OVERRIDE;
+  ~MainWindow() override;
 
   /**
    */
@@ -150,7 +150,7 @@ public slots:
 
   /**
    */
-  void ImportImages( const QStringList & filenames );
+  void ImportImages( const QStringList & filenames, bool enableOverviews = true );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -183,7 +183,7 @@ protected:
   //
   // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event ) ITK_OVERRIDE;
+  void closeEvent( QCloseEvent* event ) override;
 
 //
 // Protected attributes.
@@ -197,11 +197,11 @@ protected slots:
 
   /**
    */
-  void OnAboutToChangeModel( const AbstractModel * ) ITK_OVERRIDE;
+  void OnAboutToChangeModel( const AbstractModel * ) override;
 
   /**
    */
-  void OnModelChanged( AbstractModel * ) ITK_OVERRIDE;
+  void OnModelChanged( AbstractModel * ) override;
 
   /**
    */
@@ -221,9 +221,9 @@ protected slots:
 
   /**
    */
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
   void OnApplicationToLaunchSelected( const QString & appName, const QString & docName );
-#endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#endif // defined( OTB_USE_QT ) && USE_OTB_APPS
 
   /**
    */
@@ -344,11 +344,11 @@ private:
   //
   // I18nMainWindow methods.
 
-  void virtual_SetupUI() ITK_OVERRIDE;
+  void virtual_SetupUI() override;
 
-  void virtual_ConnectUI() ITK_OVERRIDE;
+  void virtual_ConnectUI() override;
 
-  void virtual_InitializeUI() ITK_OVERRIDE;
+  void virtual_InitializeUI() override;
 
 //
 // Private attributes.
@@ -396,7 +396,7 @@ private:
   QDockWidget* m_HistogramDock;
 
 
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT
   /**
    *  \brief OTB-applications browser dock-widget.
    */

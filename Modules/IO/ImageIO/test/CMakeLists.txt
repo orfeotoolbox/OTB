@@ -76,6 +76,7 @@ otbImageIOFactoryNew.cxx
 otbCompareWritingComplexImage.cxx
 otbImageFileReaderOptBandTest.cxx
 otbImageFileWriterOptBandTest.cxx
+otbMultiImageFileWriterTest.cxx
 )
 
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
@@ -1339,3 +1340,31 @@ otb_add_test(NAME ioTvImageIOToWriterOptions_OptBandReorgTest COMMAND otbImageIO
   ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBandReorg.tif?bands=2,:,-3,2:-1
   4
   )
+
+otb_add_test(NAME ioTvMultiImageFileWriter_SameSize
+  COMMAND otbImageIOTestDriver
+  --compare-n-images ${EPSILON_9} 2
+  ${INPUTDATA}/GomaAvant.png
+  ${TEMP}/ioTvMultiImageFileWriter_SameSize1.tif
+  ${INPUTDATA}/GomaApres.png
+  ${TEMP}/ioTvMultiImageFileWriter_SameSize2.tif
+  otbMultiImageFileWriterTest
+  ${INPUTDATA}/GomaAvant.png
+  ${INPUTDATA}/GomaApres.png
+  ${TEMP}/ioTvMultiImageFileWriter_SameSize1.tif
+  ${TEMP}/ioTvMultiImageFileWriter_SameSize2.tif
+  50)
+
+otb_add_test(NAME ioTvMultiImageFileWriter_DiffSize
+  COMMAND otbImageIOTestDriver
+  --compare-n-images ${EPSILON_9} 2
+  ${INPUTDATA}/GomaAvant.png
+  ${TEMP}/ioTvMultiImageFileWriter_DiffSize1.tif
+  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  ${TEMP}/ioTvMultiImageFileWriter_DiffSize2.tif
+  otbMultiImageFileWriterTest
+  ${INPUTDATA}/GomaAvant.png
+  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  ${TEMP}/ioTvMultiImageFileWriter_DiffSize1.tif
+  ${TEMP}/ioTvMultiImageFileWriter_DiffSize2.tif
+  25)

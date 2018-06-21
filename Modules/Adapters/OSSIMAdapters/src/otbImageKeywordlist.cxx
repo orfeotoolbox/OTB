@@ -241,8 +241,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 
   if (projection)
     {
-    otbMsgDevMacro(<< "OSSIM plugin projection instantiated ! ");
-
     hasMetaData = projection->saveState(geom_kwl);
     otb_kwl.SetKeywordlist(geom_kwl);
     }
@@ -257,7 +255,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
                                  ->open(ossimFilename(filename.c_str())));
     if (handler)
       {
-      otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
 
       // Add ossimPlugins model
       ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
@@ -273,7 +270,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
           // if the handler has found a sensor model, copy the tags found
           if (hasMetaData && dynamic_cast<ossimSensorModel const*>(projection))
             {
-            otbMsgDevMacro(<<"OSSIM sensor projection instantiated ! ");
             otb_kwl.SetKeywordlist(geom_kwl);
             // geom_kwl.print(std::cout);
             }
@@ -287,60 +283,15 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
     }
 
   /**********************************************************/
-  /* Third try : look for external geom file and RPC tags   */
+  /* Third try : look for RPC tags   */
   /**********************************************************/
-  if (!hasMetaData)
+  if (!hasMetaData && checkRpcTag)
     {
-    // If still no metadata, try the ".geom" file
-    ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
-    otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
+    // check any RPC tags
+    otb_kwl = ReadGeometryFromRPCTag(filename);
 
-    // also check any RPC tags
-    ImageKeywordlist rpc_kwl;
-    if (checkRpcTag)
+    if (!otb_kwl.Empty())
       {
-      rpc_kwl = ReadGeometryFromRPCTag(filename);
-      }
-
-    if (otb_kwl.HasKey("type"))
-      {
-      // external geom has a "type" keyword
-      std::string geomType(otb_kwl.GetMetadataByKey("type"));
-      ossimProjection *testProj = ossimProjectionFactoryRegistry::instance()
-        ->createProjection(ossimString(geomType));
-      if (dynamic_cast<ossimSensorModel*>(testProj))
-        {
-        // "type" keyword corresponds to a sensor model : don't erase it
-        if (rpc_kwl.GetSize() > 0)
-          {
-          rpc_kwl.ClearMetadataByKey("type");
-          }
-
-        ossimKeywordlist ossim_test_kwl;
-        otb_kwl.convertToOSSIMKeywordlist(ossim_test_kwl);
-        testProj = ossimProjectionFactoryRegistry::instance()
-          ->createProjection(ossim_test_kwl);
-        if (testProj)
-          {
-          // external geom contains a valid sensor geometry
-          hasMetaData = true;
-          }
-        }
-      }
-
-    // copy keywords found in RPC tags if the external geom is not valid
-    if (!hasMetaData && rpc_kwl.GetSize() > 0)
-      {
-      const ImageKeywordlist::KeywordlistMap &kwlMap = rpc_kwl.GetKeywordlist();
-      for (ImageKeywordlist::KeywordlistMap::const_iterator it = kwlMap.begin();
-          it != kwlMap.end();
-          ++it)
-        {
-        if (it->second != "")
-          {
-          otb_kwl.AddKey(it->first , it->second);
-          }
-        }
       hasMetaData = true;
       }
     }
@@ -361,16 +312,6 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   // We then verify it is a valid sensor model by using otb::SensorModelAdapter
   // which uses ossimSensorModelFactory and ossimPluginProjectionFactory internally,
   // thus by-passing the need for a valid ossimImageHandler.
-
-  if (!hasMetaData)
-    {
-    otbMsgDevMacro(<< "OSSIM MetaData not present ! ");
-    }
-  else
-    {
-    otbMsgDevMacro(<< "OSSIM MetaData present ! ");
-    //otbMsgDevMacro(<< geom_kwl);
-    }
 
   return otb_kwl;
 }
@@ -524,7 +465,6 @@ WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename)
 
   if (geom_kwl.getSize() > 0)
     {
-    otbMsgDevMacro(<< "Exporting keywordlist ...");
     ossimFilename geomFileName(filename);
     geomFileName.setExtension(".geom");
     geom_kwl.write(geomFileName.chars());

@@ -105,8 +105,8 @@ public:
 
 protected:
   EigenvalueLikelihoodMaximisation();
-  ~EigenvalueLikelihoodMaximisation() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~EigenvalueLikelihoodMaximisation() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   EigenvalueLikelihoodMaximisation(const Self &); //purposely not implemented

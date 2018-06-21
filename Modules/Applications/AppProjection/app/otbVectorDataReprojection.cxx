@@ -60,16 +60,12 @@ public:
 ;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("VectorDataReprojection");
-    std::ostringstream oss;
-    oss << "Reproject a vector data using support image projection reference"
-        ", or a user specified map projection" << std::endl;
-    SetDescription(oss.str());
-    // Documentation
+    SetDescription("Reproject a vector data using support image projection reference, or a user specified map projection");
     SetDocName("Vector Data reprojection");
-    oss.str("");
+    std::ostringstream oss;
     oss <<" This application allows reprojecting a vector data using support image projection reference"
         ", or a user given map projection." << std::endl;
     oss <<" If given, image keywordlist can be added to reprojected vectordata.";
@@ -117,12 +113,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
 
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     GetLogger()->Debug("Entering DoExecute\n");
 

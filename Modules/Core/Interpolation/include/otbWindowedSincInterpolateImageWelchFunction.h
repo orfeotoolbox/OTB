@@ -127,8 +127,8 @@ public:
 
 protected:
   WindowedSincInterpolateImageWelchFunction() {};
-  ~WindowedSincInterpolateImageWelchFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~WindowedSincInterpolateImageWelchFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }

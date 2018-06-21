@@ -11,7 +11,7 @@
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreened to in writing, software
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -154,23 +154,24 @@ private:
       "or to reduce the dynamic of the image without losing too much contrast. "
       "It offers several options as a no data value, "
       "a contrast limitation factor, a local version of the algorithm and "
-      "also a mode to equalized the luminance of the image.");
+      "also a mode to equalize the luminance of the image.");
 
     // Documentation
     SetDocName("Contrast Enhancement");
     SetDocLongDescription("This application is the implementation of the "
       "histogram equalization algorithm. The idea of the algorithm is to use "
       "the whole available dynamic. In order to do so it computes a histogram "
-      "over the image and then use the whole dynamic : meaning flattening the "
+      "over the image and then use the whole dynamic: meaning flattening the "
       "histogram. That gives us gain for each bin that transform the original "
       "histogram into the flat one. This gain is then apply on the original "
-      "image. Upon this coarse algorithm we added several option to allow "
-      "a finer result. First there is the limitation of the contrast. Many "
-      "ways can be used to do it, we choose to limit the contrast by modifying "
-      "the original histogram. To do so we clip the histogram at a given "
-      "height and redistribute equally among the bins the clipped population. "
-      "Then we add a local version of the algorithm. It is possible to apply "
-      "the algorithm on tiles of the image. That gives us gain depending on "
+      "image." 
+      "\nThe application proposes several options to allow a finer result: "
+      "\n- There is an option to limit contrast. We choose to limit the contrast "
+      "by modifying the original histogram. To do so we clip the histogram at a "
+      "given height and redistribute equally among the bins the clipped population. "
+      "Then we add a local version of the algorithm. "
+       "\n- It is possible to apply the algorithm on tiles of the image, instead "
+      "of on the whole image. That gives us gain depending on "
       "the value of the pixel and its position in the image. In order to "
       "smoothen the result we interpolate the gain between tiles.");
     SetDocLimitations("None");
@@ -185,17 +186,18 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
     
-    AddParameter(ParameterType_Int , "bins" , "Number of bin");
+    AddParameter(ParameterType_Int , "bins" , "Number of bins");
     SetDefaultParameterInt("bins", 256);
     SetParameterDescription("bins",
-      "Number of bin used to create the histogram");
+      "Number of bins in the histogram");
 
     AddParameter(ParameterType_Float , "hfact" , "Contrast Limitation");  
     SetParameterDescription("hfact","This parameter will set the maximum "
       "height accepted in a bin on the input image histogram. "
       "The maximum height will be computed as hfact*eqHeight where eqHeight "
       "is the height of the theoretical flat histogram. The higher hfact, the "
-      "higher the contrast.");
+      "higher the contrast."
+      "\nWhen using 'luminance mode', it is recommended to limit this factor to a small value (ex: 4)");
     MandatoryOff("hfact");
 
     AddParameter(ParameterType_Float , "nodata" , "Nodata Value");
@@ -208,38 +210,45 @@ private:
       "for the histogram computation");
     AddChoice( "spatial.local" , "Local" );
     SetParameterDescription("spatial.local" , "The histograms will be "
-      "computed on the each thumbnail. Each of the histogram will be "
+      "computed on each thumbnail. Each of the histogram will be "
       "equalized and the corresponding gain will be interpolated.");
     AddChoice( "spatial.global" , "Global" );
     SetParameterDescription("spatial.global" , "The histogram will be "
-      "computed on the whole image. The equalization will be done on "
-      "this single histogram.");
+      "computed on the whole image. The equalization will be computed on "
+      "this histogram.");
 
  
     AddParameter(ParameterType_Int,"spatial.local.h" , 
-      "Thumbnail height in pixel");
+      "Thumbnail height");
+    SetParameterDescription("spatial.local.h","Height of the thumbnail "
+      "over which the histogram will be computed. The value is in pixels.");
     AddParameter(ParameterType_Int,"spatial.local.w" , 
-      "Thumbnail width in pixel");
+      "Thumbnail width");
+    SetParameterDescription("spatial.local.w","Width of the thumbnail "
+      "over which the histogram will be computed. The value is in pixels.");
 
     AddParameter(ParameterType_Choice , "minmax" , "Minimum and maximum "
-      "definition");
+      "settings");
     SetParameterDescription("minmax","Minimum and maximum value that will "
-      "bound the histogram.");
+      "bound the histogram and thus the dynamic of the resulting image. Values "
+      "over those boundaries will be clipped.");
     AddChoice( "minmax.auto" , "Automatic" );
     SetParameterDescription("minmax.auto" , "Minimum and maximum value will "
       "be computed on the image (nodata value won't be taken "
       "into account) . Each band will have a minimum and a maximum.");
-    AddParameter(ParameterType_Empty, "minmax.auto.global", "Global");
-    SetParameterDescription("minmax.auto.global" , "Automatic"
+    AddParameter(ParameterType_Bool, "minmax.auto.global", "Global");
+    SetParameterDescription("minmax.auto.global" , 
       "Min/max computation will result in the same minimum and maximum for "
       "all the bands.");
-    AddChoice( "minmax.manuel" , "Manuel" );
-    SetParameterDescription("minmax.auto","Minimum and maximum value will be "
+    AddChoice( "minmax.manual" , "Manual settings for min/max values" );
+    SetParameterDescription("minmax.manual","Minimum and maximum value will be "
       "set by the user");
-    AddParameter(ParameterType_Float , "minmax.manuel.min" , "Minimum");
-    AddParameter(ParameterType_Float , "minmax.manuel.max" , "Maximum");
-    MandatoryOff("minmax.manuel.min");
-    MandatoryOff("minmax.manuel.max");
+    AddParameter(ParameterType_Float , "minmax.manual.min" , "Minimum value");
+    AddParameter(ParameterType_Float , "minmax.manual.max" , "Maximum value");
+    // SetDefaultParameterFloat("minmax.manual.min", 0 );
+    // SetDefaultParameterFloat("minmax.manual.max", 255 );
+    MandatoryOff("minmax.manual.min");
+    MandatoryOff("minmax.manual.max");
 
     AddParameter(ParameterType_Choice , "mode" , "What to equalized");
     AddChoice( "mode.each" , "Channels" );
@@ -247,28 +256,33 @@ private:
       "Each channel is equalized independently" );
     AddChoice( "mode.lum" , "Luminance" );
     SetParameterDescription( "mode.lum" ,
-      "The luminance is equalized and then a gain is applied "
-      "on each channels. This gain for each channels will depend on"
-      "the weight (coef) of the channel in the luminance." );
-    AddParameter(ParameterType_Group , "mode.lum.red" , "Red Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red Channel" );
+      "The relative luminance is computed according to the coefficients."
+      "Then the histogram is equalized and the gain is applied to each of the "
+      "channels. The channel gain will depend on "
+      "the weight (coef) of the channel in the luminance." 
+      "\nNote that default values come from color space theories "
+      "on how human eyes perceive colors)" 
+
+);
+    AddParameter(ParameterType_Group , "mode.lum.red" , "Red channel" );
+    AddParameter(ParameterType_Int , "mode.lum.red.ch" , "Red channel" );
     SetDefaultParameterInt("mode.lum.red.ch", 0 );
     AddParameter(ParameterType_Float , "mode.lum.red.coef" ,
-      "Value for luminance computation" );
+      "Value for luminance computation for the red channel" );
     SetDefaultParameterFloat("mode.lum.red.coef", 0.21 );
 
-    AddParameter(ParameterType_Group , "mode.lum.green" , "Green Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.green.ch" , "Greenen Channel" );
+    AddParameter(ParameterType_Group , "mode.lum.green" , "Green channel" );
+    AddParameter(ParameterType_Int , "mode.lum.green.ch" , "Green channel" );
     SetDefaultParameterInt("mode.lum.green.ch", 1 );
     AddParameter(ParameterType_Float , "mode.lum.green.coef" ,
-      "Value for luminance computation" );
+      "Value for luminance computation of the green channel" );
     SetDefaultParameterFloat("mode.lum.green.coef", 0.71 );
 
-    AddParameter(ParameterType_Group , "mode.lum.blue" , "Blue Channel" );
-    AddParameter(ParameterType_Int , "mode.lum.blue.ch" , "Blue Channel" );
+    AddParameter(ParameterType_Group , "mode.lum.blue" , "Blue channel" );
+    AddParameter(ParameterType_Int , "mode.lum.blue.ch" , "Blue channel" );
     SetDefaultParameterInt("mode.lum.blue.ch", 2 );
     AddParameter(ParameterType_Float , "mode.lum.blue.coef" ,
-      "Value for luminance computation" );
+      "Value for luminance computation of the blue channel" );
     SetDefaultParameterFloat("mode.lum.blue.coef", 0.08 );
 
     SetDefaultParameterInt( "spatial.local.w" , 256 );
@@ -282,8 +296,8 @@ private:
     SetMinimumParameterIntValue("spatial.local.w", 1);
 
     SetExampleComment( "Local contrast enhancement by luminance" , 0 );
-    SetDocExampleParameterValue( "in" , "couleurs.tif" );
-    SetDocExampleParameterValue( "out" , "equalizedcouleurs.tif float" );
+    SetDocExampleParameterValue( "in" , "colours.tif" );
+    SetDocExampleParameterValue( "out" , "equalizedcolors.tif float" );
     SetDocExampleParameterValue( "bins" , "256" );
     SetDocExampleParameterValue( "spatial.local.w" , "500" );
     SetDocExampleParameterValue( "spatial.local.h" , "500");
@@ -300,12 +314,6 @@ private:
       FloatVectorImageType::RegionType::SizeType size;
       size = inImage->GetLargestPossibleRegion().GetSize() ;
 
-      // if ( !HasUserValue("spatial.local.w") )
-      //   SetParameterInt( "spatial.local.w" , size[0] );
-        
-      // if ( !HasUserValue("spatial.local.h") )
-      //   SetParameterInt( "spatial.local.h" , size[1] );
-      
       if ( GetParameterString("spatial") == "local" &&
            HasValue("spatial.local.h") && HasValue("spatial.local.w") &&
            HasValue("bins") )
@@ -320,37 +328,17 @@ private:
            !HasUserValue("mode.lum.green.ch") &&
            !HasUserValue("mode.lum.blue.ch") )
         SetDefaultValue( inImage , "RGB" );
-
-      // if ( HasUserValue("minmax.manuel.min") && 
-      //      HasUserValue("minmax.manuel.max") )
-      //   {
-      //   if ( GetParameterFloat( "minmax.manuel.min" ) > 
-      //        GetParameterFloat( "minmax.manuel.max" ) )
-      //     {
-      //     float temp = GetParameterFloat( "minmax.manuel.min" );
-      //     SetParameterFloat( "minmax.manuel.min" , 
-      //                        GetParameterFloat( "minmax.manuel.max" ));
-      //     SetParameterFloat( "minmax.manuel.max" , temp );
-      //     }
-      //   else if ( GetParameterFloat( "minmax.manuel.min" ) == 
-      //             GetParameterFloat( "minmax.manuel.max" ) )
-      //     {
-      //     std::ostringstream oss;
-      //     oss<<"Warning minimum and maximum are equal."<<std::endl;
-      //     otbAppLogINFO( << oss.str() );
-      //     }
-      //   }
       }
 
-    if ( GetParameterString("minmax") == "manuel" )
+    if ( GetParameterString("minmax") == "manual" )
       {
-      MandatoryOn("minmax.manuel.min");
-      MandatoryOn("minmax.manuel.max");
+      MandatoryOn("minmax.manual.min");
+      MandatoryOn("minmax.manual.max");
       }
     else if ( GetParameterString("minmax") == "auto" )
       {
-      MandatoryOff("minmax.manuel.min");
-      MandatoryOff("minmax.manuel.max");
+      MandatoryOff("minmax.manual.min");
+      MandatoryOff("minmax.manual.max");
       }
   }
 
@@ -488,15 +476,15 @@ private:
     if ( m_MinMaxMode == "auto" )
       {
       oss << "automatic";
-      if ( IsParameterEnabled( "minmax.auto.global" ) )
+      if ( GetParameterInt( "minmax.auto.global" ) )
         { 
         oss << " and global";
         }
       }
     else 
       {
-      oss << GetParameterFloat("minmax.manuel.min") << "/" << 
-        GetParameterFloat("minmax.manuel.max");
+      oss << GetParameterFloat("minmax.manual.min") << "/" << 
+        GetParameterFloat("minmax.manual.max");
       }
 
     otbAppLogINFO( << oss.str() );
@@ -530,14 +518,14 @@ private:
   // Check for min max validity 
   void WarningMinMax()
   {
-    if ( m_MinMaxMode == "manuel" &&  
-         GetParameterFloat( "minmax.manuel.min" ) > 
-         GetParameterFloat( "minmax.manuel.max" ) )
+    if ( m_MinMaxMode == "manual" &&  
+         GetParameterFloat( "minmax.manual.min" ) > 
+         GetParameterFloat( "minmax.manual.max" ) )
       {
       std::ostringstream oss;
-      oss<<"The minimum (" << GetParameterFloat( "minmax.manuel.min" ) <<
+      oss<<"The minimum (" << GetParameterFloat( "minmax.manual.min" ) <<
       ") is superior to the maximum (" 
-      << GetParameterFloat( "minmax.manuel.max" )
+      << GetParameterFloat( "minmax.manual.max" )
       << ") please correct this error or allow the application to compute "
       "those parameters";
       otbAppLogFATAL( << oss.str() )
@@ -564,10 +552,10 @@ private:
                             FloatVectorImageType::PixelType & max ,
                             FloatVectorImageType::PixelType & min )
   {
-    if ( m_MinMaxMode == "manuel" )
+    if ( m_MinMaxMode == "manual" )
       {
-      min.Fill( GetParameterFloat("minmax.manuel.min") );
-      max.Fill( GetParameterFloat("minmax.manuel.max") );
+      min.Fill( GetParameterFloat("minmax.manual.min") );
+      max.Fill( GetParameterFloat("minmax.manual.max") );
       }
     else
       {
@@ -584,7 +572,7 @@ private:
       statFilter->Update();
       min = statFilter->GetMinimum();
       max = statFilter->GetMaximum();
-      if ( IsParameterEnabled("minmax.auto.global") )
+      if ( GetParameterInt("minmax.auto.global") )
         {
         float temp(min[0]);
         for ( unsigned int i = 1 ; i < min.GetSize() ; i++ )
@@ -602,8 +590,8 @@ private:
       }
     std::ostringstream oss;
     oss<<"Minimum and maximum are for each channel : ";
-    if ( IsParameterEnabled("minmax.auto.global") || 
-          m_MinMaxMode == "manuel" )
+    if ( GetParameterInt("minmax.auto.global") || 
+          m_MinMaxMode == "manual" )
       {
       oss<<std::endl<<min[0]<<" and "<<max[0];
       }

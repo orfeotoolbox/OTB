@@ -71,11 +71,11 @@ public:
 protected:
   CloudDetectionFilter();
 
-  ~CloudDetectionFilter() ITK_OVERRIDE {}
+  ~CloudDetectionFilter() override {}
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   CloudDetectionFilter(const Self &); //purposely not implemented

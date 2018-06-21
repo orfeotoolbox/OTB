@@ -34,7 +34,6 @@ function(install_importlibs)
   #required .lib files in install directory.
   file(GLOB import_lib_files
     "${SUPERBUILD_INSTALL_DIR}/lib/*.lib"
-    "${SUPERBUILD_INSTALL_DIR}/bin/itk*.dll"
     )
   foreach( import_lib_file ${import_lib_files})
     install_rule(${import_lib_file})

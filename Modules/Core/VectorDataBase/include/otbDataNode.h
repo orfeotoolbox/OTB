@@ -290,9 +290,9 @@ protected:
   /** Constructor */
   DataNode();
   /** Destructor */
-  ~DataNode() ITK_OVERRIDE {}
+  ~DataNode() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   OGRGeometry* ConvertDataNodeToOGRGeometry(const DataNode* dataNode);
 

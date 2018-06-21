@@ -52,7 +52,7 @@ public:
 
   itkTypeMacro(MRFOptimizerICM, MRFOptimizer);
 
-  inline bool Compute(double deltaEnergy) ITK_OVERRIDE
+  inline bool Compute(double deltaEnergy) override
   {
     if (deltaEnergy < 0)
       {
@@ -66,7 +66,7 @@ public:
 
 protected:
   MRFOptimizerICM() {}
-  ~MRFOptimizerICM() ITK_OVERRIDE {}
+  ~MRFOptimizerICM() override {}
 
 };
 

@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -95,7 +95,7 @@ public:
   PixelDescriptionWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
-  ~PixelDescriptionWidget() ITK_OVERRIDE;
+  ~PixelDescriptionWidget() override;
 
   /** Get TreeWidget */
   QTreeWidget * GetDescriptionTree();

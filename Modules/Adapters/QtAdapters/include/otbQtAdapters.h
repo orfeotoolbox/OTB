@@ -118,7 +118,7 @@ GetExistingDirectory( QWidget * p = 0,
  */
 QString
 OTBQtAdapters_EXPORT
-GetOpenFileName( QWidget * p =0,
+GetOpenFilename( QWidget * p =0,
 		 const QString & caption = QString(),
 		 const QString & dir = QString(),
 		 const QString & filter = QString(),
@@ -145,7 +145,7 @@ GetOpenFileName( QWidget * p =0,
  */
 QStringList
 OTBQtAdapters_EXPORT
-GetOpenFileNames( QWidget * p =0,
+GetOpenFilenames( QWidget * p =0,
 		  const QString & caption = QString(),
 		  const QString & dir = QString(),
 		  const QString & filter = QString(),
@@ -172,7 +172,7 @@ GetOpenFileNames( QWidget * p =0,
  */
 QString
 OTBQtAdapters_EXPORT
-GetSaveFileName( QWidget * p =0,
+GetSaveFilename( QWidget * p =0,
 		 const QString & caption = QString(),
 		 const QString & dir = QString(),
 		 const QString & filter = QString(),

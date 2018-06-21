@@ -74,14 +74,14 @@ public:
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
 
   /** Compute the world coordinates. */
-  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
+  OutputPointType TransformPoint(const InputPointType& point) const override;
 
 protected:
   ForwardSensorModel();
-  ~ForwardSensorModel() ITK_OVERRIDE;
+  ~ForwardSensorModel() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 

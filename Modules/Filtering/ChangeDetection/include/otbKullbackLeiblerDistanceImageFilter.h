@@ -170,7 +170,7 @@ public:
 
 protected:
   KullbackLeiblerDistanceImageFilter() {}
-  ~KullbackLeiblerDistanceImageFilter() ITK_OVERRIDE {}
+  ~KullbackLeiblerDistanceImageFilter() override {}
 
 private:
   KullbackLeiblerDistanceImageFilter(const Self &); //purposely not implemented

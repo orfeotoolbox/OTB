@@ -1,4 +1,4 @@
-# ![OTB](https://git.orfeo-toolbox.org/otb.git/blob_plain/HEAD:/Utilities/Doxygen/logoVectoriel.png) Orfeo Toolbox
+# ![OTB](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/master/Utilities/Doxygen/logoVectoriel.png) Orfeo Toolbox
 ## Open Source processing of remote sensing images
 
 Orfeo ToolBox (OTB) is an open-source project for state-of-the-art remote
@@ -17,18 +17,18 @@ It is community driven, extensible and heavily documented.  Orfeo ToolBox is
 not a black box!
 
 [![Travis Build Status](https://travis-ci.org/orfeotoolbox/OTB.png?branch=develop)](https://travis-ci.org/orfeotoolbox/OTB)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/2405/badge.svg)](https://scan.coverity.com/projects/orfeo-toolbox)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/2405/badge.svg)](https://scan.coverity.com/projects/orfeotoolbox)
 
 ### Resources
 * [OTB's website](https://www.orfeo-toolbox.org/)
 * [Documentation](https://www.orfeo-toolbox.org/documentation/)
 * [Downloads](https://www.orfeo-toolbox.org/download/)
-* [Public git repositories](https://git.orfeo-toolbox.org/)
+* [Public git repositories](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb)
 * [GitHub mirror](https://github.com/orfeotoolbox/)
 * [Build status](http://dash.orfeo-toolbox.org/index.php?project=OTB)
-* [Bug tracker](https://bugs.orfeo-toolbox.org/)
+* [Bug tracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug)
 * [Wiki](http://wiki.orfeo-toolbox.org/index.php/Main_Page)
-* [Task tracking](http://scrum.orfeo-toolbox.org)
+* [Task tracking](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
 
 ### Join the community
 Get help, share your experience and contribute to the Orfeo-Toolbox project by
@@ -37,10 +37,13 @@ joining our community and mailing lists.
 [https://www.orfeo-toolbox.org/community/](https://www.orfeo-toolbox.org/community/)
 
 ### Contributing
-Please see the wiki for contributors guidelines.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for contributors guidelines.
 
 ### License
 Please see the license and the Copyright directory for legal issues on the use of the software.
 
 ### Issues
-Please report any issue you might encouter to [our bugtracker](http://bugs.orfeo-toolbox.org).
+Please report any issue you might encouter to [our bugtracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug).
+
+### Governance
+The Orfeo ToolBox project is governed by the [Project Steering Committee](PSC.md) and its members.

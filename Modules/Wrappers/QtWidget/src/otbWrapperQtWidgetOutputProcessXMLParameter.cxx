@@ -82,7 +82,7 @@ QtWidgetOutputProcessXMLParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetSaveFileName(
+    otb::GetSaveFilename(
       this,
       QString(),
       m_Input->text(),

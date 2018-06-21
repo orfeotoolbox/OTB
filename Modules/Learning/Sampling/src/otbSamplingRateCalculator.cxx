@@ -233,7 +233,7 @@ SamplingRateCalculator
         std::string::size_type pos5 = line.find_first_not_of(" \t", parts[2].begin() - line.begin());
         std::string::size_type pos6 = line.find_last_not_of(" \t", parts[2].end() - line.begin() -1);
         std::string::size_type pos7 = line.find_first_not_of(" \t", parts[3].begin() - line.begin());
-        std::string::size_type pos8 = line.find_last_not_of(" \t", parts[3].end() - line.begin() -1);
+        std::string::size_type pos8 = line.find_last_not_of(" \t\r", parts[3].end() - line.begin() -1);
         if (pos2 != std::string::npos && pos1 <= pos2 &&
             pos4 != std::string::npos && pos3 <= pos4 &&
             pos6 != std::string::npos && pos5 <= pos6 &&
@@ -336,7 +336,7 @@ SamplingRateCalculator
         std::string::size_type pos1 = line.find_first_not_of(" \t", parts[0].begin() - line.begin());
         std::string::size_type pos2 = line.find_last_not_of(" \t", parts[0].end() - line.begin() -1);
         std::string::size_type pos3 = line.find_first_not_of(" \t", parts[1].begin() - line.begin());
-        std::string::size_type pos4 = line.find_last_not_of(" \t", parts[1].end() - line.begin() -1);
+        std::string::size_type pos4 = line.find_last_not_of(" \t\r", parts[1].end() - line.begin() -1);
         if (pos2 != std::string::npos && pos1 <= pos2 &&
             pos4 != std::string::npos && pos3 <= pos4)
           {

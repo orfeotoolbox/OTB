@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "otbDEMHandler.h"
+#include "itkPoint.h"
 
 namespace ossimplugins
 {
@@ -62,6 +63,9 @@ public:
 
   typedef std::auto_ptr<ossimplugins::ossimSarSensorModel> InternalModelPointer;
 
+  using Point2DType = itk::Point<double,2>;
+  using Point3DType = itk::Point<double,3>;
+  
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -80,6 +84,21 @@ public:
   /** Deburst metadata if possible and return lines to keep in image file */
   bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines);
 
+  /** Transform world point (lat,lon,hgt) to input image point
+  (col,row) and YZ frame */
+  bool WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType & yz) const;
+
+  /** Transform world point (lat,lon,hgt) to input image point
+  (col,row) */
+  bool WorldToLineSample(const Point3DType & inGEoPOint, Point2DType & cr) const;
+
+/** Transform world point (lat,lon,hgt) to satellite position (x,y,z) and satellite velocity */
+  bool WorldToSatPositionAndVelocity(const Point3DType & inGeoPoint, Point3DType & satellitePosition,  
+				     Point3DType & satelliteVelocity) const;
+
+  /** Transform world point (lat,lon,hgt) to cartesian point (x,y,z) */
+  static bool WorldToCartesian(const Point3DType & inGeoPoint, Point3DType & outCartesianPoint);
+
   static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
 
   static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
@@ -87,7 +106,7 @@ public:
   
 protected:
   SarSensorModelAdapter();
-  virtual ~SarSensorModelAdapter() ITK_OVERRIDE;
+  virtual ~SarSensorModelAdapter() override;
 
 private:
   SarSensorModelAdapter(const Self &); //purposely not implemented

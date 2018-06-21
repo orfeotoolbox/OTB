@@ -40,7 +40,7 @@
 #include "mvdStackedLayerModel.h"
 
 //
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT
 #  include "mvdOTBApplicationsModel.h"
 #endif
 
@@ -121,7 +121,7 @@ void
 Application
 ::OpenApplicationsBrowser()
 {
-#ifdef OTB_USE_QT4
+#ifdef OTB_USE_QT
   m_OTBApplicationsModel = new OTBApplicationsModel( this );
 
   m_OTBApplicationsModel->BuildModel();
