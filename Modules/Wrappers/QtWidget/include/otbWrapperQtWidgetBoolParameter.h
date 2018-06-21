@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetBoolParameter_h
 
 #include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperBoolParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -42,8 +40,8 @@ class OTBQtWidget_EXPORT QtWidgetBoolParameter : public QtWidgetParameterBase
   Q_OBJECT
 
 public:
-  QtWidgetBoolParameter(BoolParameter*, QtWidgetModel*);
-  ~QtWidgetBoolParameter() ITK_OVERRIDE;
+  QtWidgetBoolParameter(BoolParameter*, QtWidgetModel*, QWidget*);
+  ~QtWidgetBoolParameter() override;
 
 public slots:
   void SetValue( bool value );
@@ -52,9 +50,9 @@ private:
   QtWidgetBoolParameter(const QtWidgetBoolParameter&) = delete;
   void operator=(const QtWidgetBoolParameter&) = delete;
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   QToolButton *m_Button;
 };

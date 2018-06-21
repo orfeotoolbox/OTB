@@ -94,8 +94,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ProfileToProfileDerivativeFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ProfileToProfileDerivativeFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Subtract filter for the dervivative */
   SubtractFilterPointerType m_SubtractFilter;

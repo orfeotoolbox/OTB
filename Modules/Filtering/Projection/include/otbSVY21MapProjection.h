@@ -65,8 +65,8 @@ protected:
   ~SVY21MapProjection() override {}
 
 private:
-  SVY21MapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SVY21MapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

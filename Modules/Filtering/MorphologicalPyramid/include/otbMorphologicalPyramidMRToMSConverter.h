@@ -160,8 +160,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  MRToMSConverter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  MRToMSConverter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace MorphologicalPyramid
 } // End namespace otb

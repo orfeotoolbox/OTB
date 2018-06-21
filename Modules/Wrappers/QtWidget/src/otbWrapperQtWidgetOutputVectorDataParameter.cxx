@@ -28,8 +28,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetOutputVectorDataParameter::QtWidgetOutputVectorDataParameter(OutputVectorDataParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetOutputVectorDataParameter::QtWidgetOutputVectorDataParameter(OutputVectorDataParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_OutputVectorDataParam(param)
 {
 }
@@ -48,11 +48,11 @@ void QtWidgetOutputVectorDataParameter::DoUpdateGUI()
 
 void QtWidgetOutputVectorDataParameter::DoCreateWidget()
 {
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_OutputVectorDataParam->GetDescription() )
   );
@@ -60,7 +60,7 @@ void QtWidgetOutputVectorDataParameter::DoCreateWidget()
   connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
   m_HLayout->addWidget(m_Input);
 
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select output filename...");
   m_Button->setMaximumWidth(m_Button->width());
@@ -78,7 +78,7 @@ QtWidgetOutputVectorDataParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetSaveFileName(
+    otb::GetSaveFilename(
       this,
       QString(),
       m_Input->text(),

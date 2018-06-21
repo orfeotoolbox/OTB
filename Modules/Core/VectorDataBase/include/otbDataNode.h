@@ -297,8 +297,8 @@ protected:
   OGRGeometry* ConvertDataNodeToOGRGeometry(const DataNode* dataNode);
 
 private:
-  DataNode(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DataNode(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** typedef of the data associated with the node */
   typedef struct

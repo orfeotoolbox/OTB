@@ -183,8 +183,8 @@ protected:
   void Modified() const override;
 
 private:
-  GCPsToRPCSensorModelImageFilter (const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  GCPsToRPCSensorModelImageFilter (const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Transform all GCPs and compute the error and mean error */
   void ComputeErrors();

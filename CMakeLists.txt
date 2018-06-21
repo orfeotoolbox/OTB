@@ -100,9 +100,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
-include( i18n_qt4 )
+include( i18n_qt )
 
-reset_qt4_i18n_sources()
+reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -123,7 +123,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "5")
+set(OTB_VERSION_MINOR "7")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -165,13 +165,17 @@ if(NOT OTB_INSTALL_JAVA_DIR)
   set(OTB_INSTALL_JAVA_DIR "lib/otb/java")
 endif()
 if(NOT OTB_INSTALL_DATA_DIR)
-  set(OTB_INSTALL_DATA_DIR share/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  set(OTB_INSTALL_DATA_DIR share/otb)
 endif()
 if(NOT OTB_INSTALL_DOC_DIR)
   set(OTB_INSTALL_DOC_DIR share/doc/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
 endif()
 if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+endif()
+
+if(NOT OTB_INSTALL_DESCR_DIR)
+  set (OTB_INSTALL_DESCR_DIR "share/otb/description")
 endif()
 
 #convert path to native for reconfiguring otbcli.bat.in
@@ -531,7 +535,7 @@ endforeach()
 # message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
 # unset(modules_list_for_summary)
 
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT4")
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT")
 foreach(item ${option_list})
   if(NOT ${item})
     list(REMOVE_ITEM option_list "${item}" )
@@ -550,7 +554,7 @@ list(APPEND option_list TINYXML)
 #Q: Why these two guys here? we already have option_list
 #A: Because cmake case sensitivity with variables.
 
-if(OTB_USE_QT4)
+if(OTB_USE_QT)
   list(APPEND option_list QT)
 endif()
 #sort again!

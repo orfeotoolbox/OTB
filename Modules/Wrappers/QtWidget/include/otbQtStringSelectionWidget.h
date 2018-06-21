@@ -21,11 +21,9 @@
 #ifndef otbQtStringSelectionWidget_h
 #define otbQtStringSelectionWidget_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 #include "OTBQtWidgetExport.h"
 
 namespace otb
@@ -73,7 +71,7 @@ public:
 
   std::string ToStdString()
   {
-    return m_Input->text().toAscii().constData();
+    return m_Input->text().toLatin1().constData();
   }
 
   void ClearText()
@@ -86,8 +84,8 @@ protected slots:
    void OnEditionFinished();
 
 private:
-  QtStringSelectionWidget(const QtStringSelectionWidget&); //purposely not implemented
-  void operator=(const QtStringSelectionWidget&); //purposely not implemented
+  QtStringSelectionWidget(const QtStringSelectionWidget&) = delete;
+  void operator=(const QtStringSelectionWidget&) = delete;
 
   virtual void DoCreateWidget();
 

@@ -94,14 +94,14 @@ public:
   /** Returns true if the line is evaluable at the requested point,
    *  false otherwise. */
   bool IsEvaluableAt(const PointType& point,
-                     unsigned int depth = 0, char * name = ITK_NULLPTR) const override;
+                     unsigned int depth = 0, char * name = nullptr) const override;
 
   /** Returns the value of the line at that point.
    * Currently this function returns a binary value,
    * but it might want to return a degree of membership
    * in case of fuzzy Lines. */
   bool ValueAt(const PointType& point, double& value,
-               unsigned int depth = 0, char * name = ITK_NULLPTR) const override;
+               unsigned int depth = 0, char * name = nullptr) const override;
 
   /** Returns true if the point is inside the line, false otherwise. */
   bool IsInside(const PointType& point,
@@ -124,8 +124,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LineSpatialObject(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LineSpatialObject(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Point list */
   PointListType m_Points;

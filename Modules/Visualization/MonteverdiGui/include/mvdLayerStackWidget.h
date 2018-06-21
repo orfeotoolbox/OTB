@@ -33,7 +33,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -159,6 +159,10 @@ public slots:
 //
 // Signals.
 signals:
+  /**
+  */
+  //bugFix for layer deletion
+  void LayerDeletingWidget( unsigned int index );
   /**
    */
   void CurrentChanged( int );

@@ -138,8 +138,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HistogramOfOrientedGradientCovariantImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  HistogramOfOrientedGradientCovariantImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Radius over which the principal orientation will be computed
   unsigned int m_NeighborhoodRadius;

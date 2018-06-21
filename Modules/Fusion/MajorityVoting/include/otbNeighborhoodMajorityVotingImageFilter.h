@@ -199,8 +199,8 @@ protected:
                                                          const KernelIteratorType kernelEnd) const;
 
 private:
-  NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  NeighborhoodMajorityVotingImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Default boundary condition for majority voting filter, defaults to
   DefaultBoundaryConditionType m_MajorityVotingBoundaryCondition;

@@ -154,8 +154,8 @@ protected:
   bool       m_RegionSetByUser;
 
 private:
-  ContinuousMinimumMaximumImageCalculator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ContinuousMinimumMaximumImageCalculator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

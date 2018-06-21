@@ -61,8 +61,8 @@ protected:
   ~KMLVectorDataIOFactory() override;
 
 private:
-  KMLVectorDataIOFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KMLVectorDataIOFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

@@ -133,8 +133,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SubsampleImageFilter (const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  SubsampleImageFilter (const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputImageIndexType m_SubsampleFactor;
 }; // end of class

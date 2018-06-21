@@ -148,9 +148,9 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  ConcatenateScalarValueImageFilter(const Self &); //purposely not implemented
+  ConcatenateScalarValueImageFilter(const Self &) = delete;
 
-  void operator =(const Self&); //purposely not implemented
+  void operator =(const Self&) = delete;
 
 };
 

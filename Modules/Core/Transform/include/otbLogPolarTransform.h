@@ -133,8 +133,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LogPolarTransform(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  LogPolarTransform(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputPointType m_Center;
   ScaleType      m_Scale;

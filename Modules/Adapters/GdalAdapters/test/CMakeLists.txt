@@ -67,17 +67,17 @@ otb_add_test(NAME TvOGRExtendedFilename
 otb_add_test(NAME TvOGRExtendedFilenameGDALCreate
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALCreate
-         test.shp?gdal:co:creationOption=OPTION
+         test_OGRExtendedFilenameGDALCreate.shp?gdal:co:creationOption=OPTION
           )
 
 otb_add_test(NAME TvOGRExtendedFilenameGDALLayer
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALLayer
-         test.shp?&gdal:lco:layeroption=OPTION
+         test_OGRExtendedFilenameGDALLayer.shp?&gdal:lco:layeroption=OPTION
           )
 
 otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALLayerOption
-         test.shp
+         test_OGRExtendedFilenameGDALLayerOption.shp
           )

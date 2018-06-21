@@ -64,8 +64,8 @@ protected:
   ~SOMModelFactory() override;
 
 private:
-  SOMModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SOMModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

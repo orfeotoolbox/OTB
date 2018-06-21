@@ -463,7 +463,7 @@ GlView
       }
 
   delete[] glBuffer;
-  glBuffer = ITK_NULLPTR;
+  glBuffer = nullptr;
 
   //
   // Setup import RGBA-image filter.

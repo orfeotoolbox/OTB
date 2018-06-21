@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetInputImageParameter_h
 #define otbWrapperQtWidgetInputImageParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetInputImageParameter : public QtWidgetParameterB
 {
   Q_OBJECT
 public:
-  QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*);
+  QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;
@@ -59,8 +57,8 @@ private slots:
   void OnEditingFinished();
 
 private:
-  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
+  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&) = delete;
+  void operator=(const QtWidgetInputImageParameter&) = delete;
 
   void DoCreateWidget() override;
 

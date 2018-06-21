@@ -160,8 +160,8 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  StreamingImageVirtualWriter(const StreamingImageVirtualWriter &); //purposely not implemented
-  void operator =(const StreamingImageVirtualWriter&); //purposely not implemented
+  StreamingImageVirtualWriter(const StreamingImageVirtualWriter &) = delete;
+  void operator =(const StreamingImageVirtualWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {

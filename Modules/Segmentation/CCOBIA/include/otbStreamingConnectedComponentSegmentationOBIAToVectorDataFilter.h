@@ -116,6 +116,8 @@ public:
 
   typedef typename RelabelComponentFilterType::ObjectSizeType ObjectSizeType;
 
+  typedef itk::ExtractImageFilter<VectorImageType, VectorImageType> ExtractImageFilterType;
+
 
   /* Set the mathematical expression used for the mask */
   itkSetStringMacro(MaskExpression);

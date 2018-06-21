@@ -87,7 +87,7 @@ void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
  {
-  if (this->GetInput() == ITK_NULLPTR)
+  if (this->GetInput() == nullptr)
     {
       itkExceptionMacro(<< "Input must be set before updating the atmospheric radiative terms");
     }
@@ -164,7 +164,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::UpdateFunctors()
  {
 
-  if (this->GetInput() == ITK_NULLPTR)
+  if (this->GetInput() == nullptr)
     {
     itkExceptionMacro(<< "Input must be set before updating the functors");
     }

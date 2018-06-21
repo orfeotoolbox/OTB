@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetComplexInputImageParameter_h
 #define otbWrapperQtWidgetComplexInputImageParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetComplexInputImageParameter : public QtWidgetPar
 {
   Q_OBJECT
 public:
-  QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*);
+  QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetComplexInputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;
@@ -53,8 +51,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetComplexInputImageParameter(const QtWidgetComplexInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetComplexInputImageParameter&); //purposely not implemented
+  QtWidgetComplexInputImageParameter(const QtWidgetComplexInputImageParameter&) = delete;
+  void operator=(const QtWidgetComplexInputImageParameter&) = delete;
 
   void DoCreateWidget() override;
 

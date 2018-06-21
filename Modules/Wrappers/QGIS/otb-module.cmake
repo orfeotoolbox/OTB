@@ -18,7 +18,17 @@
 # limitations under the License.
 #
 
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL) # QtXml )
-mark_as_advanced( QT_QMAKE_EXECUTABLE )
-#set( QT_USE_QTXML 1 )
-include( ${QT_USE_FILE} )
+set(DOCUMENTATION "This module allows to generate application descriptor files for QGIS processing plugin.")
+
+otb_module(OTBQgis
+  DEPENDS
+    OTBITK
+    OTBApplicationEngine
+    
+  TEST_DEPENDS
+    OTBTestKernel
+
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)
+

@@ -107,8 +107,8 @@ protected:
   ~Log10ThresholdedImageFilter() override {}
 
 private:
-  Log10ThresholdedImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  Log10ThresholdedImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

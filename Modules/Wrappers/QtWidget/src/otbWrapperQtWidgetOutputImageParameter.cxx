@@ -28,8 +28,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetOutputImageParameter::QtWidgetOutputImageParameter(OutputImageParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetOutputImageParameter::QtWidgetOutputImageParameter(OutputImageParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_OutputImageParam(param)
 {
 }
@@ -54,10 +54,10 @@ void QtWidgetOutputImageParameter::DoUpdateGUI()
 void QtWidgetOutputImageParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit();
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_OutputImageParam->GetDescription() )
   );
@@ -66,7 +66,7 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   m_HLayout->addWidget(m_Input);
 
   // Set the Output PixelType choice Combobox
-  m_ComboBox = new QComboBox;
+  m_ComboBox = new QComboBox(this);
   m_ComboBox->setToolTip("Output Pixel Type");
   m_ComboBox->addItem( "uint 8");
   m_ComboBox->addItem( "int 16");
@@ -85,7 +85,7 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   m_HLayout->addWidget(m_ComboBox);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select output filename...");
   m_Button->setMaximumWidth(m_Button->width());
@@ -102,7 +102,7 @@ QtWidgetOutputImageParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetSaveFileName(
+    otb::GetSaveFilename(
       this,
       QString(),
       m_Input->text(),

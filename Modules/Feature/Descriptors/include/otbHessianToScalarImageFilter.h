@@ -110,8 +110,8 @@ protected:
   ~HessianToScalarImageFilter() override {}
 
 private:
-  HessianToScalarImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  HessianToScalarImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

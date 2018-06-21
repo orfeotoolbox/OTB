@@ -169,8 +169,8 @@ protected:
   void GenerateData() override;
 
 private:
-  DisparityMapMedianFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DisparityMapMedianFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius of median filter */
   SizeType m_Radius;

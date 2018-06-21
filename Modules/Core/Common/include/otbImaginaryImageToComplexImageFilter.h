@@ -95,8 +95,8 @@ protected:
   ~ImaginaryImageToComplexImageFilter() override {}
 
 private:
-  ImaginaryImageToComplexImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImaginaryImageToComplexImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

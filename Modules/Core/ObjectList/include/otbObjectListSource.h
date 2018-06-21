@@ -193,8 +193,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  ObjectListSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ObjectListSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

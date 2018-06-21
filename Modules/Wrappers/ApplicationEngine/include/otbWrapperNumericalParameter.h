@@ -141,8 +141,8 @@ protected:
   ScalarType m_MaximumValue;
 
 private:
-  NumericalParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  NumericalParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
 }; // End class Numerical Parameter
 

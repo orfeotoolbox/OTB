@@ -73,7 +73,7 @@ ConcatenateVectorDataFilter<TVectorData>
 {
   if (this->GetNumberOfInputs() < idx)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const VectorDataType *>(this->Superclass::GetInput(idx));
 }
@@ -125,7 +125,7 @@ void
 ConcatenateVectorDataFilter<TVectorData>
 ::ProcessNode(TreeNodeType * source, DataNodeType * outputDocument)
 {
-  if (source == ITK_NULLPTR)
+  if (source == nullptr)
     return;
 
 

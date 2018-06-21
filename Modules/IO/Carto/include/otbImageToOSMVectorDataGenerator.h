@@ -90,8 +90,8 @@ protected:
   ~ImageToOSMVectorDataGenerator() override {}
 
 private:
-  ImageToOSMVectorDataGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToOSMVectorDataGenerator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ImageExtentType                            m_ImageExtent;
 

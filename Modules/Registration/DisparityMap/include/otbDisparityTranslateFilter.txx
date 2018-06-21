@@ -105,7 +105,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -117,7 +117,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TDisparityImage *>(this->itk::ProcessObject::GetInput(1));
 }
@@ -129,7 +129,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<3)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TGridImage *>(this->itk::ProcessObject::GetInput(2));
 }
@@ -141,7 +141,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<4)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TGridImage *>(this->itk::ProcessObject::GetInput(3));
 }
@@ -153,7 +153,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<5)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(4));
 }
@@ -165,7 +165,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfInputs()<6)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const TSensorImage *>(this->itk::ProcessObject::GetInput(5));
 }
@@ -177,7 +177,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -189,7 +189,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   if (this->GetNumberOfOutputs()<2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<TDisparityImage *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -258,7 +258,6 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 
   IndexType minIndex,maxIndex;
   // -Wmaybe-uninitialized
-  typedef typename IndexType::IndexValueType IndexValueType;
   minIndex.Fill(itk::NumericTraits<IndexValueType>::Zero);
   maxIndex.Fill(itk::NumericTraits<IndexValueType>::Zero);
 
@@ -382,7 +381,6 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
       leftGrid->TransformPhysicalPointToContinuousIndex(pointSensor, indexGrid);
 
       // Interpolate in left grid
-      typedef typename IndexType::IndexValueType IndexValueType;
       IndexType ul;
       ul[0] = static_cast<long> (vcl_floor(indexGrid[0]));
       ul[1] = static_cast<long> (vcl_floor(indexGrid[1]));

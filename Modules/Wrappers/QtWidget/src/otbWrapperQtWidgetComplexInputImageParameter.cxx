@@ -27,8 +27,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetComplexInputImageParameter::QtWidgetComplexInputImageParameter(ComplexInputImageParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetComplexInputImageParameter::QtWidgetComplexInputImageParameter(ComplexInputImageParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_ComplexInputImageParam(param)
 {
 }
@@ -56,7 +56,7 @@ void QtWidgetComplexInputImageParameter::DoUpdateGUI()
 void QtWidgetComplexInputImageParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
   m_Input = new QLineEdit;
@@ -86,7 +86,7 @@ QtWidgetComplexInputImageParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetOpenFileName(
+    otb::GetOpenFilename(
       this,
       QString(),
       m_Input->text(),

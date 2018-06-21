@@ -62,8 +62,8 @@ protected:
   virtual ~SharkKMeansMachineLearningModelFactory();
 
 private:
-  SharkKMeansMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SharkKMeansMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

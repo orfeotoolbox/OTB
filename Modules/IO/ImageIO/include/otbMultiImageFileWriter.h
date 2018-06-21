@@ -175,7 +175,7 @@ protected:
   virtual void GenerateData(void);
 
   /** GenerateInputRequestedRegion can predict approximate input regions
-   *  based on the requested region of the fake output. Only usefull for
+   *  based on the requested region of the fake output. Only useful for
    *  pipeline memory print estimation
    */
   virtual void GenerateInputRequestedRegion();
@@ -184,14 +184,14 @@ protected:
   virtual void InitializeStreaming();
 
   /** Goes up the pipeline starting at imagePtr, resetting all requested regions
-   *  to a null region. This may be usefull when mixing inputs of different
+   *  to a null region. This may be useful when mixing inputs of different
    *  resolutions. */
   void ResetAllRequestedRegions(ImageBaseType* imagePtr);
 
   /** Returns the current stream region of the given input */
   virtual RegionType GetStreamRegion(int inputIndex);
 
-  void operator =(const MultiImageFileWriter&); //purposely not implemented
+  void operator =(const MultiImageFileWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event)
   {

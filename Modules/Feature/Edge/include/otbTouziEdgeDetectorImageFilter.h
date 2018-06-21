@@ -122,8 +122,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  TouziEdgeDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TouziEdgeDetectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius declaration */
   SizeType m_Radius;

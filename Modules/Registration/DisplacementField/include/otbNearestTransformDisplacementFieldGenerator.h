@@ -74,8 +74,8 @@ protected:
   void GenerateData() override;
 
 private:
-  NearestTransformDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NearestTransformDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

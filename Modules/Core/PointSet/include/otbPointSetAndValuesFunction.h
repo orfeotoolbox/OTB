@@ -107,8 +107,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PointSetAndValuesFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PointSetAndValuesFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** PointSet */
   PointSetConstPointerType m_PointSet;

@@ -29,8 +29,8 @@ for /f %%i in ('dir /b include\OTB*') do rd /S /Q include\%%i
 echo - Clean lib\cmake\OTB*
 for /f %%i in ('dir /b lib\cmake\OTB*') do rd /S /Q lib\cmake\%%i
 
-echo - Clean share\OTB*
-for /f %%i in ('dir /b share\OTB*') do rd /S /Q share\%%i
+echo - Clean share\otb
+rd /S /Q share\otb
 
 echo - Clean lib\otb
 rd /S /Q lib\otb

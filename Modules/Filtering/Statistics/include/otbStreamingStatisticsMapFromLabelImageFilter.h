@@ -257,8 +257,8 @@ protected:
   void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId ) override;
 
 private:
-  PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   AccumulatorMapCollectionType           m_AccumulatorMaps;
 
@@ -404,8 +404,8 @@ protected:
   ~StreamingStatisticsMapFromLabelImageFilter() override {}
 
 private:
-  StreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingStatisticsMapFromLabelImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

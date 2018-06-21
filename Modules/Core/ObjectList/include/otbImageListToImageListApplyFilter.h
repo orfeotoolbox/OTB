@@ -97,8 +97,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageListToImageListApplyFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageListToImageListApplyFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The processing filter */
   FilterPointerType m_Filter;

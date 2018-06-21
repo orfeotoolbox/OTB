@@ -116,8 +116,8 @@ protected:
   typedef typename VectorDataExtractROIType::RegionType         RemoteSensingRegionType;
 
 private:
-  VectorDataIntoImageProjectionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataIntoImageProjectionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ImagePointerType m_InputImage;
 

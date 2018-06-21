@@ -156,8 +156,8 @@ protected:
   }
 
 private:
-  ImageToNoDataMaskFilter(const Self&); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  ImageToNoDataMaskFilter(const Self&) = delete;
+  void operator =(const Self&) = delete;
 }; 
 
 } // End namespace otb

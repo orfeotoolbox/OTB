@@ -18,10 +18,9 @@
 # limitations under the License.
 #
 
-project( OTBQt4 )
-
-set( OTBQt4_SYSTEM_INCLUDE_DIRS ${QT_INCLUDE_DIRS} )
-set( OTBQt4_LIBRARIES "${QT_LIBRARIES}" )
-set( QT_VERSION "${QTVERSION}" CACHE INTERNAL "" FORCE )
-
-otb_module_impl()
+function(install_qgis_bindings)
+  if(HAVE_QGIS)
+    install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/share/otb/description
+      DESTINATION ${PKG_STAGE_DIR})
+  endif()
+endfunction()

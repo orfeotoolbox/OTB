@@ -71,7 +71,7 @@ ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequency
 {
   if (this->GetNumberOfInputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const ListSampleType* >
     (this->itk::ProcessObject::GetInput(0) );

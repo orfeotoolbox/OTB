@@ -88,7 +88,7 @@ protected:
 
   ComputeConfusionMatrix()
     {
-    m_Input = ITK_NULLPTR;
+    m_Input = nullptr;
     }
 
 private:

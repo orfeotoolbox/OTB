@@ -19,6 +19,15 @@
  */
 
 #include "otbExtendedFilenameHelper.h"
+
+#include <cassert>
+#include <ostream>
+#include <stdexcept>
+#include <string>
+
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+
 #include "otb_boost_string_header.h"
 #include "otbStringUtils.h"
 
@@ -29,7 +38,7 @@ void
 ExtendedFilenameHelper
 ::SetExtendedFileName(const char *extFname)
 {
-  if (extFname == ITK_NULLPTR)
+  if (extFname == nullptr)
   {
     itkGenericExceptionMacro( << "Filename is NULL" );
   }

@@ -124,15 +124,15 @@ protected:
   ~BoostMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
 
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BoostMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BoostMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 #ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::Boost> m_BoostModel;

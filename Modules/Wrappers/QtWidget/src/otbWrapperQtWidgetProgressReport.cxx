@@ -30,8 +30,9 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model)
-  : m_CurrentProcess()
+QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model, QWidget * parent)
+  : QWidget(parent)
+  , m_CurrentProcess()
 {
   m_Model = model;
   connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(show()) );
@@ -39,7 +40,7 @@ QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model)
   connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(RemoveLayout()) );
   connect(this, SIGNAL(AddNewProcessToReport()), this, SLOT(ReportProcess()) );
 
-  m_Layout = new QVBoxLayout;
+  m_Layout = new QVBoxLayout(this);
   this->setLayout(m_Layout);
 
   m_AddProcessCommand = AddProcessCommandType::New();
@@ -50,7 +51,6 @@ QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model)
 
 QtWidgetProgressReport::~QtWidgetProgressReport()
 {
-  delete m_Layout;
 }
 
 void QtWidgetProgressReport::SetApplication(Application::Pointer app)
@@ -88,7 +88,7 @@ void QtWidgetProgressReport::ReportProcess ( )
   bar->Observe(m_CurrentProcess);
 
   // label
-  QLabel *label = new QLabel(QString(m_CurrentDescription.c_str()));
+  QLabel *label = new QLabel(QString(m_CurrentDescription.c_str()), this);
 
   // Build the layout and store the pointers
   m_Layout->addWidget(label);
@@ -99,7 +99,7 @@ void QtWidgetProgressReport::RemoveLayout()
 {
   // Remove the children of the layout (progress bar widgets)
   QLayoutItem *child;
-  while ((child = this->layout()->takeAt(0)) != ITK_NULLPTR)
+  while ((child = this->layout()->takeAt(0)) != nullptr)
     {
     delete child->widget();
     delete child;

@@ -99,8 +99,8 @@ protected:
   ~WorldFile() override {}
 
 private:
-  WorldFile(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WorldFile(const Self &) = delete;
+  void operator =(const Self&) = delete;
   double      m_LonOrigin;
   double      m_LatOrigin;
   double      m_LonSpacing;

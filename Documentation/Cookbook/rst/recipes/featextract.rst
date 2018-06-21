@@ -208,7 +208,7 @@ parameters:
 
 -``-out`` the output filtered image
 
-The application can be used like this:
+The application can be used as follows:
 
 ::
 
@@ -253,7 +253,7 @@ input parameters:
 
 -``-out`` the output filtered image
 
-The application can be used like this:
+The application can be used as follows:
 
 ::
 

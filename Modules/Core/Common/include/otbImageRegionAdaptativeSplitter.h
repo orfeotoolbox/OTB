@@ -157,8 +157,8 @@ private:
   vector */
   void EstimateSplitMap();
 
-  ImageRegionAdaptativeSplitter(const ImageRegionAdaptativeSplitter &); //purposely not implemented
-  void operator =(const ImageRegionAdaptativeSplitter&); //purposely not implemented
+  ImageRegionAdaptativeSplitter(const ImageRegionAdaptativeSplitter &) = delete;
+  void operator =(const ImageRegionAdaptativeSplitter&) = delete;
 
   // This reflects the input image tiling
   SizeType   m_TileHint;

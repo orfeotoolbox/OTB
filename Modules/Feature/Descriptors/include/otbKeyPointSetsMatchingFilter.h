@@ -116,8 +116,8 @@ protected:
   NeighborSearchResultType NearestNeighbor(const PointDataType& data1, const PointSetType * pointset);
 
 private:
-  KeyPointSetsMatchingFilter(const Self &); // purposely not implemented
-  void operator =(const Self&);             // purposely not implemented
+  KeyPointSetsMatchingFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Find back matches from 2 to 1 to validate them
   bool m_UseBackMatching;

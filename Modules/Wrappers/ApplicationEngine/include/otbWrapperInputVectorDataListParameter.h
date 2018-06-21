@@ -99,11 +99,8 @@ protected:
 		const std::string & ) const override;
 
 private:
-  // Purposely not implemented
-  InputVectorDataListParameter( const Parameter & );
-
-  // Purposely not implemented
-  void operator = ( const Parameter & );
+  InputVectorDataListParameter( const Parameter & ) = delete;
+  void operator = ( const Parameter & ) = delete;
 
   InputVectorDataParameter::Pointer
     FromVectorData( VectorDataType * );

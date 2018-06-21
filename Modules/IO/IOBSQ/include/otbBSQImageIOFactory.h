@@ -62,8 +62,8 @@ protected:
   ~BSQImageIOFactory() override;
 
 private:
-  BSQImageIOFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BSQImageIOFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

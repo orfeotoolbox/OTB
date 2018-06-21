@@ -156,8 +156,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StandardDSCostFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StandardDSCostFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
   typename VectorDataType::Pointer            m_GTVectorData; //Ground Truth

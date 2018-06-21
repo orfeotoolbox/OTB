@@ -65,8 +65,8 @@ protected:
   ~RandomForestsMachineLearningModelFactory() override;
 
 private:
-  RandomForestsMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RandomForestsMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

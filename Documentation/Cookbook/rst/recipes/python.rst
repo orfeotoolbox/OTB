@@ -9,7 +9,7 @@ In the ``otbApplication`` module, two main classes can be manipulated :
 -  ``Registry``, which provides access to the list of available
    applications, and can create applications.
 
--  ``Application``, the base class for all applications. This allows to
+-  ``Application``, the base class for all applications. This allows one to
    interact with an application instance created by the ``Registry``.
 
 Here is one example of how to use Python to run the ``Smoothing``
@@ -69,7 +69,7 @@ Numpy array processing
 ----------------------
 
 Input and output images to any OTB application in the form of NumPy array is now possible in OTB Python wrapping.
-The Python wrapping only exposes OTB Application engine module (called *ApplicationEngine*) which allows to access existing C++ applications.
+The Python wrapping only exposes OTB Application engine module (called *ApplicationEngine*) which allows one to access existing C++ applications.
 Due to blissful nature of ApplicationEngine's loading mechanism no specific wrapping is required for each application.
 
 NumPy extension to Python wrapping allows data exchange to application as an array rather than a disk file.

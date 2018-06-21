@@ -175,8 +175,8 @@ protected:
 
 
 private:
-  DisparityMapToDEMFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DisparityMapToDEMFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Minimum elevation of the DEM in meters */
   double m_ElevationMin;

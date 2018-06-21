@@ -62,8 +62,8 @@ protected:
   ~Sentinel1ImageMetadataInterfaceFactory() override;
 
 private:
-  Sentinel1ImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Sentinel1ImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

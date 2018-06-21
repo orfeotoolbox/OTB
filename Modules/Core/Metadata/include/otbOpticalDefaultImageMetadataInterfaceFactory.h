@@ -63,8 +63,8 @@ protected:
   ~OpticalDefaultImageMetadataInterfaceFactory() override;
 
 private:
-  OpticalDefaultImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OpticalDefaultImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

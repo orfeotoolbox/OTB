@@ -145,8 +145,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  DotProductImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DotProductImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

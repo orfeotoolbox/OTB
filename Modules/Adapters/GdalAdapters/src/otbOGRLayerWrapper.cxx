@@ -279,7 +279,7 @@ OGRSpatialReference const* otb::ogr::Layer::GetSpatialRef() const
 std::string otb::ogr::Layer::GetProjectionRef() const
 {
   assert(m_Layer && "OGRLayer not initialized");
-  char * wkt = ITK_NULLPTR;
+  char * wkt = nullptr;
   OGRSpatialReference const* srs = GetSpatialRef();
   if(srs)
     {

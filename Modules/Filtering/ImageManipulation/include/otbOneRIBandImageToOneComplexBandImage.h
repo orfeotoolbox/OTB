@@ -81,8 +81,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  OneRIBandImageToOneComplexBandImage(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OneRIBandImageToOneComplexBandImage(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
 };

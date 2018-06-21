@@ -114,8 +114,8 @@ protected:
   }
 
 private:
-  LabelMapFeaturesFunctorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelMapFeaturesFunctorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The functor */
   FunctorType m_Functor;

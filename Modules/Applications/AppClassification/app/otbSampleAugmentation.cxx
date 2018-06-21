@@ -51,7 +51,7 @@ public:
 private:
   SampleAugmentation() {}
 
-  void DoInit()
+  void DoInit() override
   {
     SetName("SampleAugmentation");
     SetDescription("Generates synthetic samples from a sample data file.");
@@ -145,7 +145,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
     if ( HasValue("in") )
       {
@@ -182,7 +182,7 @@ private:
       }
   }
 
-  void DoExecute()
+  void DoExecute() override
     {
     ogr::DataSource::Pointer vectors;
     ogr::DataSource::Pointer output;

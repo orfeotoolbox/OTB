@@ -74,8 +74,8 @@ protected:
 
 
 private:
-  ApplicationHtmlDocGenerator(const ApplicationHtmlDocGenerator &); //purposely not implemented
-  void operator =(const ApplicationHtmlDocGenerator&); //purposely not implemented
+  ApplicationHtmlDocGenerator(const ApplicationHtmlDocGenerator &) = delete;
+  void operator =(const ApplicationHtmlDocGenerator&) = delete;
 
 }; // End class InputImage Parameter
 

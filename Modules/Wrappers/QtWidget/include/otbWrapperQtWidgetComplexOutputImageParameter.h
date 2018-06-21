@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetComplexOutputImageParameter_h
 #define otbWrapperQtWidgetComplexOutputImageParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetComplexOutputImageParameter : public QtWidgetPa
 {
   Q_OBJECT
 public:
-  QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*);
+  QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetComplexOutputImageParameter() override;
 
   inline const QLineEdit* GetInput() const;
@@ -59,8 +57,8 @@ protected slots:
   void SetPixelType(int pixelType);
 
 private:
-  QtWidgetComplexOutputImageParameter(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
+  QtWidgetComplexOutputImageParameter(const QtWidgetComplexOutputImageParameter&) = delete;
+  void operator=(const QtWidgetComplexOutputImageParameter&) = delete;
 
   void DoCreateWidget() override;
 

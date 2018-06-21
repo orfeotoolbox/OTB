@@ -68,6 +68,7 @@ public:
   typedef typename Superclass::OutputVectorDataType        OutputVectorDataType;
   typedef typename Superclass::OutputVectorDataPointerType OutputVectorDataPointerType;
 
+  typedef typename Superclass::ExtractImageFilterType      ExtractImageFilterType;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -82,8 +83,8 @@ protected:
   void GenerateInputRequestedRegion() override;
 
 private:
-  PersistentStreamingLineSegmentDetector(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentStreamingLineSegmentDetector(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputVectorDataPointerType ProcessTile() override;
 };

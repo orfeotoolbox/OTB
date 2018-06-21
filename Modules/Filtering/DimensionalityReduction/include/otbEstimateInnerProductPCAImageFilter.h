@@ -95,8 +95,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  EstimateInnerProductPCAImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EstimateInnerProductPCAImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The number of output Principal Components */
   unsigned int m_NumberOfPrincipalComponentsRequired;

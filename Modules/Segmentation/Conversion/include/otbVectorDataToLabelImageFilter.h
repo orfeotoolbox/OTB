@@ -120,6 +120,14 @@ public:
   itkSetStringMacro(BurnAttribute);
   itkGetStringMacro(BurnAttribute);
 
+  /** Set the background value */
+  itkSetMacro(BackgroundValue, OutputImageInternalPixelType);
+  itkGetMacro(BackgroundValue, OutputImageInternalPixelType);
+
+  /** Set the default burn value */
+  itkSetMacro(DefaultBurnValue, OutputImageInternalPixelType);
+  itkGetMacro(DefaultBurnValue, OutputImageInternalPixelType);
+
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
@@ -135,7 +143,7 @@ protected:
       OGR_G_DestroyGeometry(m_SrcDataSetGeometries[idx]);
       }
 
-    if (m_OGRDataSourcePointer != ITK_NULLPTR)
+    if (m_OGRDataSourcePointer != nullptr)
       {
       ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }
@@ -146,8 +154,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorDataToLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataToLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
 
@@ -163,6 +171,9 @@ private:
 
   // Default burn value
   double                        m_DefaultBurnValue;
+
+  // Background value
+  OutputImageInternalPixelType  m_BackgroundValue;
 
   // Output params
   std::string                   m_OutputProjectionRef;

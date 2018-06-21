@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetInputProcessXMLParameter_h
 #define otbWrapperQtWidgetInputProcessXMLParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetInputProcessXMLParameter : public QtWidgetParam
 {
   Q_OBJECT
 public:
-  QtWidgetInputProcessXMLParameter(InputProcessXMLParameter*, QtWidgetModel*);
+  QtWidgetInputProcessXMLParameter(InputProcessXMLParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputProcessXMLParameter() override;
 
   inline const QLineEdit* GetInput() const;
@@ -53,8 +51,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetInputProcessXMLParameter(const QtWidgetInputProcessXMLParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputProcessXMLParameter&); //purposely not implemented
+  QtWidgetInputProcessXMLParameter(const QtWidgetInputProcessXMLParameter&) = delete;
+  void operator=(const QtWidgetInputProcessXMLParameter&) = delete;
 
   void DoCreateWidget() override;
 

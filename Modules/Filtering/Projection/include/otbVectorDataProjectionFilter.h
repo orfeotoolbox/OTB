@@ -188,8 +188,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  VectorDataProjectionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataProjectionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InternalTransformPointerType m_Transform;
   std::string                  m_InputProjectionRef;

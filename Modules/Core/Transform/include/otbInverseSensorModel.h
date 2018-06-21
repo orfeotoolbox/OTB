@@ -87,8 +87,8 @@ protected:
 
 private:
 
-  InverseSensorModel(const Self &); //purposely not implemented
-  void operator =(const Self&);     //purposely not implemented
+  InverseSensorModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

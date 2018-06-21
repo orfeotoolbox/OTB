@@ -64,7 +64,7 @@ RADImageIO::RADImageIO()
   // (consistency between ImageIO, see Mantis #942)
   m_Origin[0] = 0.5;
   m_Origin[1] = 0.5;
-  m_ChannelsFile = ITK_NULLPTR;
+  m_ChannelsFile = nullptr;
   m_FlagWriteImageInformation = true;
 
   this->AddSupportedWriteExtension(".rad");
@@ -82,7 +82,7 @@ RADImageIO::~RADImageIO()
     {
     m_HeaderFile.close();
     }
-  if (m_ChannelsFile !=  ITK_NULLPTR)
+  if (m_ChannelsFile !=  nullptr)
     {
     for (unsigned int numChannel = 0; numChannel < m_NbOfChannels; ++numChannel)
       {
@@ -161,7 +161,7 @@ void RADImageIO::Read(void* buffer)
   step = step * (unsigned long) (this->GetComponentSize());
 
   char * value = new char[numberOfBytesToBeRead];
-  if (value == ITK_NULLPTR)
+  if (value == nullptr)
     {
     itkExceptionMacro(<< "RADImageIO::Read(): Bad alloc");
     return;
@@ -223,7 +223,7 @@ void RADImageIO::Read(void* buffer)
     }
 
   delete[] value;
-  value = ITK_NULLPTR;
+  value = nullptr;
 
 }
 
@@ -547,7 +547,7 @@ void RADImageIO::Write(const void* buffer)
   const char * p = static_cast<const char *>(buffer);
 
   char* value = new char[numberOfBytesToBeWrite];
-  if (value == ITK_NULLPTR)
+  if (value == nullptr)
     {
     itkExceptionMacro(<< "RADImageIO::Write : Bad Alloc");
     return;

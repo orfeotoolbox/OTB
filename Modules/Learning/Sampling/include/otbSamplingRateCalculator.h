@@ -117,8 +117,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SamplingRateCalculator(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  SamplingRateCalculator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Update the computed rate for a given class.*/
   void UpdateRate(const std::string &name);

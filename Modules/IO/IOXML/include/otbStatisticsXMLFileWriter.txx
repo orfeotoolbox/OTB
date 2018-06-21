@@ -85,7 +85,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
 
-  TiXmlElement * root = ITK_NULLPTR;
+  TiXmlElement * root = nullptr;
   if (m_MeasurementVectorContainer.size())
     {
     root = new TiXmlElement( "FeatureStatistics");
@@ -114,7 +114,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     }
     
   // Iterate on map containers
-  TiXmlElement * mapRoot = ITK_NULLPTR;
+  TiXmlElement * mapRoot = nullptr;
   if (m_GenericMapContainer.size())
     {
     mapRoot = new TiXmlElement( "GeneralStatistics");

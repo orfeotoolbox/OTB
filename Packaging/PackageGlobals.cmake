@@ -43,30 +43,42 @@ elseif(APPLE)
 endif()
 
 set(WINDOWS_SYSTEM_DLLS
-  user32.dll
-  gdi32.dll
-  shell32.dll
-  kernel32.dll
-  ws2_32.dll
-  wldap32.dll
-  ole32.dll
-  comdlg32.dll
-  shfolder.dll
-  secur32.dll
-  wsock32.dll
   advapi32.dll
+  comdlg32.dll
   crypt32.dll
-  imm32.dll
-  oleaut32.dll
-  winmm.dll
-  opengl32.dll
+  dnsapi.dll
+  dwmapi.dll
+  dwrite.dll
+  d2d1.dll
+  d3d9.dll
+  d3d11.dll
+  gdi32.dll
   glu32.dll
-  rpcrt4.dll
-  winspool.drv
+  imm32.dll
+  iphlpapi.dll
+  kernel32.dll
+  netapi32.dll
   normaliz.dll
+  mpr.dll
   odbc32.dll
+  ole32.dll
+  oleaut32.dll
+  opengl32.dll
   psapi.dll
   python...dll
+  rpcrt4.dll
+  secur32.dll
+  shell32.dll
+  shfolder.dll
+  user32.dll
+  userenv.dll
+  uxtheme.dll
+  version.dll
+  winmm.dll
+  winspool.drv
+  wldap32.dll
+  ws2_32.dll
+  wsock32.dll
   )
 
 set(LINUX_SYSTEM_DLLS
@@ -96,6 +108,13 @@ set(LINUX_SYSTEM_DLLS
   libICE.so*
   libXrandr.so*
   libpython*
+  libxcb.so*
+  libxcb-glx.so*
+  libX11-xcb.so*
+  libmysqlclient.so*
+  libodbc.so*
+  libpq.so*
+  libEGL.so*
   )
   # libexpat.so.*
   # libfontconfig.so*
@@ -121,6 +140,7 @@ set(APPLE_SYSTEM_DLLS
   AGL.framework
   OpenGL.framework
   libgcc_s.*dylib
+  libcups.*dylib
   )
 
 if(WIN32)

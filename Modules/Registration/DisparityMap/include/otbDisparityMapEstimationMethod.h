@@ -195,8 +195,8 @@ protected:
   void  GenerateData() override;
 
 private:
-  DisparityMapEstimationMethod(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DisparityMapEstimationMethod(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /**
    * The metric used for local registration.
    */

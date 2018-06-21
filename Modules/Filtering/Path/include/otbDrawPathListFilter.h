@@ -118,8 +118,8 @@ protected:
   void GenerateData() override;
 
 private:
-  DrawPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DrawPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Default value to draw */
   OutputImagePixelType m_PathValue;

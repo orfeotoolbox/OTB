@@ -88,8 +88,8 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
   if (m_AutomaticInputMinMaxComputation)
     {
 
-    typedef  typename Superclass::InputImageType    InputImageType;
-    typedef  typename Superclass::InputImagePointer InputImagePointer;
+    // typedef  typename Superclass::InputImageType    InputImageType;
+    // typedef  typename Superclass::InputImagePointer InputImagePointer;
 
     // Get the input
     InputImagePointer inputImage =   this->GetInput();

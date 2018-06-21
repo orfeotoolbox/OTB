@@ -77,8 +77,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetToPointSetFilter(const PointSetToPointSetFilter &); //purposely not implemented
-  void operator =(const PointSetToPointSetFilter&); //purposely not implemented
+  PointSetToPointSetFilter(const PointSetToPointSetFilter &) = delete;
+  void operator =(const PointSetToPointSetFilter&) = delete;
 
 };
 

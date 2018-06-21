@@ -141,7 +141,7 @@ protected:
   RasterizeVectorDataFilter();
   ~RasterizeVectorDataFilter() override
   {
-    if (m_OGRDataSourcePointer != ITK_NULLPTR)
+    if (m_OGRDataSourcePointer != nullptr)
       {
       ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }
@@ -152,8 +152,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RasterizeVectorDataFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RasterizeVectorDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
 

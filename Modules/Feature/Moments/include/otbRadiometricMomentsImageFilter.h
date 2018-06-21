@@ -98,8 +98,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  RadiometricMomentsImageFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  RadiometricMomentsImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputImageSizeType m_Radius;
   FunctorType m_Functor;

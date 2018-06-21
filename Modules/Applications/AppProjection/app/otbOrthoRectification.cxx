@@ -90,12 +90,9 @@ private:
   void DoInit() override
   {
     SetName("OrthoRectification");
-    std::ostringstream oss;
-    oss << "This application allows ortho-rectifying optical and radar images from supported sensors." << std::endl;
-    SetDescription(oss.str());
-    // Documentation
+    SetDescription("This application allows ortho-rectifying optical and radar images from supported sensors.");
     SetDocName("Ortho-rectification");
-    oss.str("");
+    std::ostringstream oss;
     oss<<"This application uses inverse sensor modelling combined with a choice of interpolation functions to resample a sensor geometry image into a ground geometry regular grid. ";
     oss<<"The ground geometry regular grid is defined with respect to a map projection (see map parameter). The application offers several modes to estimate the output grid parameters (origin and ground sampling distance), including automatic estimation of image size, ground sampling distance, or both, from image metadata, user-defined ROI corners, or another ortho-image.";
     oss<<"A digital Elevation Model along with a geoid file can be specified to account for terrain deformations.";
@@ -632,23 +629,18 @@ private:
       {
       case Interpolator_Linear:
       {
-      typedef itk::LinearInterpolateImageFunction<FloatVectorImageType,
-        double>          LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_ResampleFilter->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
       {
-      typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType,
-        double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_ResampleFilter->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
       {
-      typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>     BCOInterpolationType;
       BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_ResampleFilter->SetInterpolator(interpolator);

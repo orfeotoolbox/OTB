@@ -70,8 +70,8 @@ protected:
   }
 
 private:
-  GeometricMomentPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);                //purposely not implemented
+  GeometricMomentPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

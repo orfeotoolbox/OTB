@@ -62,8 +62,8 @@ protected:
   ~FormosatImageMetadataInterfaceFactory() override;
 
 private:
-  FormosatImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  FormosatImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

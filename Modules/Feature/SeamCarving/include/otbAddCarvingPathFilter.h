@@ -125,8 +125,8 @@ protected:
   void GenerateData() override;
 
 private:
-  AddCarvingPathFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AddCarvingPathFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputImagePixelType m_Value;
   unsigned int         m_Direction;

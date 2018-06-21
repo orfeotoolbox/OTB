@@ -203,11 +203,15 @@ private:
   GeometriesType::Pointer inputGeomSet;
   ProjectionFilterType::Pointer geometriesProjFilter;
   GeometriesType::Pointer outputGeomSet;
+  const OGRSpatialReference imgOGRSref = 
+        OGRSpatialReference( imageProjectionRef.c_str() );
+    const OGRSpatialReference vectorOGRSref = 
+        OGRSpatialReference( vectorProjectionRef.c_str() );
   bool doReproj = true;
   // don't reproject for these cases
-  if (vectorProjectionRef.empty() ||
-      (imageProjectionRef == vectorProjectionRef) ||
-      (imageProjectionRef.empty() && imageKwl.GetSize() == 0))
+  if (  vectorProjectionRef.empty() 
+     || ( imgOGRSref.IsSame( &vectorOGRSref ) ) 
+     || ( imageProjectionRef.empty() && imageKwl.GetSize() == 0) )
     doReproj = false;
 
   if (doReproj)

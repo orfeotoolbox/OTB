@@ -149,8 +149,8 @@ protected:
   void BeforeThreadedGenerateData() override;
 
 private:
-  TerraSarBrightnessImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TerraSarBrightnessImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

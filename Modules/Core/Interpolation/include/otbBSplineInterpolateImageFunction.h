@@ -140,7 +140,7 @@ public:
 protected:
   BSplineInterpolateImageFunction();
   ~BSplineInterpolateImageFunction() override {}
-  void operator =(const Self&);  //purposely not implemented
+  void operator =(const Self&) = delete;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   // These are needed by the smoothing spline routine.
@@ -151,7 +151,7 @@ protected:
   typename CoefficientImageType::ConstPointer m_Coefficients;       // Spline coefficients
 
 private:
-  BSplineInterpolateImageFunction(const Self &);  //purposely not implemented
+  BSplineInterpolateImageFunction(const Self &) = delete;
   /** Determines the weights for interpolation of the value x */
   void SetInterpolationWeights(const ContinuousIndexType& x,
                                const vnl_matrix<long>& EvaluateIndex,

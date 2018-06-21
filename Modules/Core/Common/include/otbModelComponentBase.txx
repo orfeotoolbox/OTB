@@ -36,9 +36,9 @@ template<class TSample>
 ModelComponentBase<TSample>
 ::ModelComponentBase()
 {
-  m_Sample = ITK_NULLPTR;
-  m_PdfFunction = ITK_NULLPTR;
-  m_CdfFunction = ITK_NULLPTR;
+  m_Sample = nullptr;
+  m_PdfFunction = nullptr;
+  m_CdfFunction = nullptr;
   m_SampleModified = 0;
 }
 
@@ -50,7 +50,7 @@ ModelComponentBase<TSample>
   Superclass::PrintSelf(os, indent);
 
   os << indent << "Sample: ";
-  if (m_Sample != ITK_NULLPTR)
+  if (m_Sample != nullptr)
     {
     os << m_Sample << std::endl;
     }
@@ -60,7 +60,7 @@ ModelComponentBase<TSample>
     }
 
   os << indent << "Membership Function for pdf: ";
-  if (m_PdfFunction != ITK_NULLPTR)
+  if (m_PdfFunction != nullptr)
     {
     os << m_PdfFunction << std::endl;
     }
@@ -70,7 +70,7 @@ ModelComponentBase<TSample>
     }
 
   os << indent << "Membership Function for cdf: ";
-  if (m_CdfFunction != ITK_NULLPTR)
+  if (m_CdfFunction != nullptr)
     {
     os << m_CdfFunction << std::endl;
     }

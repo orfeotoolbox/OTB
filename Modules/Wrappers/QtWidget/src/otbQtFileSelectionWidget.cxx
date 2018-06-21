@@ -98,14 +98,14 @@ QtFileSelectionWidget
 
   QString filename(
     m_IOMode == IO_MODE_INPUT
-    ? GetOpenFileName(
+    ? otb::GetOpenFilename(
         this,
 	QString(),
 	m_Input->text(),
 	tr( "All files (*)" ),
 	NULL,
 	QFileDialog::ReadOnly )
-    : GetSaveFileName(
+    : otb::GetSaveFilename(
         this,
 	QString(),
 	m_Input->text(),

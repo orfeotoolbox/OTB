@@ -148,8 +148,8 @@ protected:
 
 
 private:
-  PersistentImageToOGRLayerSegmentationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageToOGRLayerSegmentationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OGRDataSourcePointerType ProcessTile() override;
 
@@ -352,8 +352,8 @@ protected:
   ~StreamingImageToOGRLayerSegmentationFilter() override {}
 
 private:
-  StreamingImageToOGRLayerSegmentationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingImageToOGRLayerSegmentationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 

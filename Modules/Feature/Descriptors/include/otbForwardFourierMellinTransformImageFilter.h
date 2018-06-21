@@ -140,8 +140,8 @@ protected:
   void GenerateData() override;
 
 private:
-  ForwardFourierMellinTransformImageFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ForwardFourierMellinTransformImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Sigma for normalization */
   double m_Sigma;

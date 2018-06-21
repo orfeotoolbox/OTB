@@ -18,15 +18,11 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module imports Qt4 to the build system")
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5OpenGL REQUIRED)
+find_package(Qt5LinguistTools)
+mark_as_advanced( QT_QMAKE_EXECUTABLE )
 
-otb_module(OTBQt4
-  DEPENDS
-    
-  TEST_DEPENDS
-    
-  DESCRIPTION
-    "${DOCUMENTATION}"
-  )
-
-otb_module_activation_option("Enable Qt4 dependent modules" OFF)
+set(QT_VERSION_STRING ${Qt5Core_VERSION})

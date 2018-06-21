@@ -120,8 +120,8 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-   SpatialisationFilter(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
+   SpatialisationFilter(const Self &) = delete;
+   void operator =(const Self&) = delete;
 
    /** Common size for all objects in number of pixels (number of rows, number of columns).*/
    SizeType m_ObjectSize;

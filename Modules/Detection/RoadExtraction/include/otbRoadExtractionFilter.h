@@ -153,8 +153,8 @@ protected:
 
 private:
 
-  RoadExtractionFilter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  RoadExtractionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** SpectralAngleDistanceImageFilter use by the composite filter */
   typename SpectralAngleDistanceImageFilterType::Pointer m_SpectralAngleDistanceImageFilter;

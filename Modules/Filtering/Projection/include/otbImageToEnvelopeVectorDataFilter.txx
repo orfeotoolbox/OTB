@@ -57,7 +57,7 @@ const TInputImage *
 ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 ::GetInput(void)
 {
-  if (this->GetNumberOfInputs() < 1) return ITK_NULLPTR;
+  if (this->GetNumberOfInputs() < 1) return nullptr;
 
   return dynamic_cast<const InputImageType*>
            (this->itk::ProcessObject::GetInput(0));

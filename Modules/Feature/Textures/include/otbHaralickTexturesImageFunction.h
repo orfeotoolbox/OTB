@@ -207,8 +207,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HaralickTexturesImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  HaralickTexturesImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the neighborhood over which to compute the textures */
   unsigned int m_NeighborhoodRadius;

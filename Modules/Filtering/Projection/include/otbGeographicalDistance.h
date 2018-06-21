@@ -90,8 +90,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GeographicalDistance(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  GeographicalDistance(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Earth radius */
   double m_EarthRadius;

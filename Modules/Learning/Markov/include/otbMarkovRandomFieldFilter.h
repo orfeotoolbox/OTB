@@ -340,8 +340,8 @@ protected:
   void EnlargeOutputRequestedRegion(itk::DataObject *) override;
   void GenerateOutputInformation() override;
 
-  MarkovRandomFieldFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MarkovRandomFieldFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typedef typename TInputImage::SizeType InputImageSizeType;
 

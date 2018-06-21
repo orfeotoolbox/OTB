@@ -52,9 +52,9 @@ QtWidgetView
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
 QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* p,
+		QWidget* parent,
 		Qt::WindowFlags flags ) :
-  QWidget( p, flags ),
+  QWidget( parent, flags ),
   m_IconPathDone(""),
   m_IconPathFailed(""),
   m_Model( NULL ),
@@ -96,37 +96,37 @@ QtWidgetView::~QtWidgetView()
 void QtWidgetView::CreateGui()
 {
   // Create a VBoxLayout with the header, the input widgets, and the footer
-  QVBoxLayout *mainLayout = new QVBoxLayout();
-  m_TabWidget = new QTabWidget();
+  QVBoxLayout *mainLayout = new QVBoxLayout(this);
+  m_TabWidget = new QTabWidget(this);
 
   m_TabWidget->addTab(CreateInputWidgets(), tr("Parameters"));
-  m_LogText = new QTextEdit();
+  m_LogText = new QTextEdit(this);
   connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), m_LogText, SLOT(append(QString) ) );
   m_TabWidget->addTab(m_LogText, tr("Logs"));
   m_TabWidget->addTab(CreateDoc(), tr("Documentation"));
   mainLayout->addWidget(m_TabWidget);
 
-  m_Message = new QLabel("<center><font color=\"#FF0000\">"+tr("Select parameters")+"</font></center>");
+  m_Message = new QLabel("<center><font color=\"#FF0000\">"+tr("Select parameters")+"</font></center>", this);
   connect( m_Model, SIGNAL(SetApplicationReady(bool)), this, SLOT( UpdateMessageAfterApplicationReady(bool)) );
   connect( m_Model, SIGNAL(SetProgressReportDone(int)), this, SLOT(UpdateMessageAfterExecution(int)) );
   mainLayout->addWidget(m_Message);
 
-  otb::Wrapper::QtWidgetSimpleProgressReport * progressReport = new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model);
+  otb::Wrapper::QtWidgetSimpleProgressReport * progressReport = new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model, this);
   progressReport->SetApplication(m_Model->GetApplication());
 
   QWidget* footer = CreateFooter();
    
-  QHBoxLayout *footLayout = new QHBoxLayout;
+  QHBoxLayout *footLayout = new QHBoxLayout(this);
   footLayout->addWidget(progressReport);
   footLayout->addWidget(footer);
   mainLayout->addLayout(footLayout);
 
   footLayout->setAlignment(footer, Qt::AlignBottom);
 
-  QGroupBox *mainGroup = new QGroupBox();
+  QGroupBox *mainGroup = new QGroupBox(this);
   mainGroup->setLayout(mainLayout);
 
-  QVBoxLayout  *finalLayout = new QVBoxLayout();
+  QVBoxLayout  *finalLayout = new QVBoxLayout(this);
   finalLayout->addWidget(mainGroup);
 
   // Make the final layout to the widget
@@ -162,11 +162,12 @@ void QtWidgetView::UpdateMessageAfterApplicationReady( bool val )
 
 QWidget* QtWidgetView::CreateInputWidgets()
 {
-  QScrollArea *scrollArea = new QScrollArea;
+  QScrollArea *scrollArea = new QScrollArea(this);
 
   scrollArea->setWidget( otb::Wrapper::QtWidgetParameterFactory::CreateQtWidget(
       m_Model->GetApplication()->GetParameterList(),
-      m_Model));
+      m_Model,
+      this));
   scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setWidgetResizable(true);
@@ -178,8 +179,8 @@ QWidget* QtWidgetView::CreateInputWidgets()
 QWidget* QtWidgetView::CreateFooter()
 {
   // an HLayout with two buttons : Execute and Quit
-  QGroupBox *footerGroup = new QGroupBox;
-  QHBoxLayout *footerLayout = new QHBoxLayout;
+  QGroupBox *footerGroup = new QGroupBox(this);
+  QHBoxLayout *footerLayout = new QHBoxLayout(this);
  
   footerGroup->setFixedHeight(40);
   footerGroup->setContentsMargins(0, 0, 0, 0);
@@ -213,10 +214,10 @@ QWidget* QtWidgetView::CreateFooter()
 
 QWidget* QtWidgetView::CreateDoc()
 {
-  QTextEdit *text = new QTextEdit;
+  QTextEdit *text = new QTextEdit(this);
   text->setReadOnly(true);
 
-  QTextDocument * doc = new QTextDocument();
+  QTextDocument * doc = new QTextDocument(this);
 
   std::string docContain;
   otb::Wrapper::ApplicationHtmlDocGenerator::GenerateDoc( GetModel()->GetApplication(), docContain);

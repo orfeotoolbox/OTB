@@ -27,8 +27,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetOutputFilenameParameter::QtWidgetOutputFilenameParameter(OutputFilenameParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetOutputFilenameParameter::QtWidgetOutputFilenameParameter(OutputFilenameParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_FilenameParam(param)
 {
 }
@@ -53,10 +53,10 @@ void QtWidgetOutputFilenameParameter::DoUpdateGUI()
 void QtWidgetOutputFilenameParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_FilenameParam->GetDescription() )
   );
@@ -66,7 +66,7 @@ void QtWidgetOutputFilenameParameter::DoCreateWidget()
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
@@ -83,7 +83,7 @@ QtWidgetOutputFilenameParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetSaveFileName(
+    otb::GetSaveFilename(
       this,
       QString(),
       m_Input->text(),

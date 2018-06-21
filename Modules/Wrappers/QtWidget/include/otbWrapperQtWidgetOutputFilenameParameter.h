@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetOutputFilenameParameter_h
 #define otbWrapperQtWidgetOutputFilenameParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetOutputFilenameParameter : public QtWidgetParame
 {
   Q_OBJECT
 public:
-  QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*);
+  QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputFilenameParameter() override;
 
   inline const QLineEdit* GetInput() const;
@@ -55,8 +53,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetOutputFilenameParameter(const QtWidgetOutputFilenameParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputFilenameParameter&); //purposely not implemented
+  QtWidgetOutputFilenameParameter(const QtWidgetOutputFilenameParameter&) = delete;
+  void operator=(const QtWidgetOutputFilenameParameter&) = delete;
 
   void DoCreateWidget() override;
 

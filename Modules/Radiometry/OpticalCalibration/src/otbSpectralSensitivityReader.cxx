@@ -53,7 +53,7 @@ SpectralSensitivityReader
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<WavelengthSpectralBandVectorType *> (this->ProcessObject::GetOutput(0));
 }
@@ -64,7 +64,7 @@ SpectralSensitivityReader
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const WavelengthSpectralBandVectorType *> (this->ProcessObject::GetOutput(0));
 }

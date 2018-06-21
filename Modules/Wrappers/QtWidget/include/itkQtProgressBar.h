@@ -22,10 +22,8 @@
 #ifndef __itkQtProgressBar_h
 #define __itkQtProgressBar_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "itkCommand.h"
-#endif //tag=QT4-boost-compatibility
 #include "OTBQtWidgetExport.h"
 
 namespace itk {

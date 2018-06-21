@@ -65,8 +65,8 @@ protected:
   ~NeuralNetworkMachineLearningModelFactory() override;
 
 private:
-  NeuralNetworkMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NeuralNetworkMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

@@ -102,8 +102,8 @@ protected:
   virtual double ComputeDistanceFromPointToSegment(PointType rAngle, LineType * line);
 
 private:
-  VectorDataToRightAngleVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToRightAngleVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double m_DistanceThreshold;
   double m_AngleThreshold;

@@ -88,8 +88,8 @@ protected:
   void EnlargeOutputRequestedRegion(itk::DataObject *){};
 
 private:
-  LabelMapToLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapToLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 

@@ -140,7 +140,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 #else
   // Set up SVM's parameters
   CvTermCriteria term_crit   = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
-  CvSVMParams params( m_SVMType, m_KernelType, m_Degree, m_Gamma, m_Coef0, m_C, m_Nu, m_P, ITK_NULLPTR , term_crit );
+  CvSVMParams params( m_SVMType, m_KernelType, m_Degree, m_Gamma, m_Coef0, m_C, m_Nu, m_P, nullptr , term_crit );
 
   // Train the SVM
   if (!m_ParameterOptimization)
@@ -190,7 +190,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
   target[0] = static_cast<TOutputValue>(result);
 
-  if (quality != ITK_NULLPTR)
+  if (quality != nullptr)
     {
 #ifdef OTB_OPENCV_3
     (*quality) = m_SVMModel->predict(sample,cv::noArray(),cv::ml::StatModel::RAW_OUTPUT);
@@ -214,7 +214,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   fs.release();
 #else
   if (name == "")
-    m_SVMModel->save(filename.c_str(), ITK_NULLPTR);
+    m_SVMModel->save(filename.c_str(), nullptr);
   else
     m_SVMModel->save(filename.c_str(), name.c_str());
 #endif
@@ -230,7 +230,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   m_SVMModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
 #else
   if (name == "")
-    m_SVMModel->load(filename.c_str(), ITK_NULLPTR);
+    m_SVMModel->load(filename.c_str(), nullptr);
   else
     m_SVMModel->load(filename.c_str(), name.c_str());
 #endif

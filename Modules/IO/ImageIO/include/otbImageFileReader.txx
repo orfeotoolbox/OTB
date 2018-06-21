@@ -164,7 +164,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     ioSize[i] = dimSize[i];
     }
 
-  typedef typename TOutputImage::IndexType IndexType;
   IndexType start;
   if (!this->m_ImageIO->CanStreamRead()) start.Fill(0);
   else start = output->GetRequestedRegion().GetIndex();
@@ -520,8 +519,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     output->SetMetaDataDictionary(dictLight);
     this->SetMetaDataDictionary(dictLight);
     }
-
-  typedef typename TOutputImage::IndexType IndexType;
 
   IndexType start;
   start.Fill(0);

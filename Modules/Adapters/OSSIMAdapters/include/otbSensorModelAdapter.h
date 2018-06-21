@@ -114,8 +114,8 @@ protected:
   ~SensorModelAdapter() override;
 
 private:
-  SensorModelAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SensorModelAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InternalMapProjectionPointer m_SensorModel;
 

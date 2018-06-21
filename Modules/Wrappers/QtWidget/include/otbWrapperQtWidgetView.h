@@ -21,15 +21,12 @@
 #ifndef otbWrapperQtWidgetView_h
 #define otbWrapperQtWidgetView_h
 
-#include <QtGui>
-#include <QShortcut>
+#include <QtWidgets>
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
-#endif //tag=QT4-boost-compatibility
 #include "OTBQtWidgetExport.h"
 
 namespace otb
@@ -71,7 +68,7 @@ public:
 
   /** \brief Constructor. */
   QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* p =0,
+		QWidget* parent,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
@@ -156,8 +153,8 @@ protected slots:
 // Private methods.
 private:
 
-  QtWidgetView(const QtWidgetView&); //purposely not implemented
-  void operator=(const QtWidgetView&); //purposely not implemented
+  QtWidgetView(const QtWidgetView&) = delete;
+  void operator=(const QtWidgetView&) = delete;
 
   QWidget* CreateFooter();
 
