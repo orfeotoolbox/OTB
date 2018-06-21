@@ -181,8 +181,14 @@ private:
 
 } // end namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionAdaptativeSplitter.txx"
-#endif
+#include "otbImageRegionAdaptativeSplitter.txx"
+
+namespace otb {
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class ImageRegionAdaptativeSplitter<2u>;
+
+}
 
 #endif

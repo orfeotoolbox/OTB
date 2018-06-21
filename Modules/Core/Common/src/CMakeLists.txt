@@ -32,6 +32,7 @@ set(OTBCommon_SRC
   otbExtendedFilenameHelper.cxx
   otbLogger.cxx
   otbImageRegionSquareTileSplitter.cxx
+  otbImageRegionAdaptativeSplitter.cxx
   )
 
 add_library(OTBCommon ${OTBCommon_SRC})
