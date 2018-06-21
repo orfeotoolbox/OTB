@@ -351,10 +351,10 @@ int testDisparityMap(int argc, char *argv[])
   m_LeftMedianFilter->SetFilter(LMedian);
   m_LeftMedianFilter->SetInput(inLeft->GetOutput()); 
 
-  // FloatVectorImageWriterType::Pointer LeftMedianwriter = FloatVectorImageWriterType::New();
-  // LeftMedianwriter->SetFileName( FILENAME("LeftMedianVectorImage.tif"));
-  // LeftMedianwriter->SetInput( m_LeftMedianFilter->GetOutput() );
-  // LeftMedianwriter->Update();
+  FloatVectorImageWriterType::Pointer LeftMedianwriter = FloatVectorImageWriterType::New();
+  LeftMedianwriter->SetFileName( FILENAME("LeftMedianVectorImage.tif"));
+  LeftMedianwriter->SetInput( m_LeftMedianFilter->GetOutput() );
+  LeftMedianwriter->Update();
 
   typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
   ConcatenateVectorImageFilterType::Pointer m_ConcatenateDispEndInLeftImage = ConcatenateVectorImageFilterType::New();

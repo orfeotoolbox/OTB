@@ -114,7 +114,7 @@ public:
       tmp = *std::max_element(tmp_vector.begin(),tmp_vector.end())  ; 
       }
     }
-  output = 255-tmp*((grayMax-grayMin)/(m_dispMax-m_dispMin)) ;
+  output = tmp ;
 
   return output ;
 
