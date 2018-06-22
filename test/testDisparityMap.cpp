@@ -60,6 +60,14 @@
 #include <otbConvolutionImageFilter.h>
 #include <itkArray.h>
 
+//
+
+#include "otbBijectionCoherencyFilter.h"
+#include "otbFillOcclusionDisparityImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
+#include "otbFillOcclusionImageFilter.h"
+
+
 	
 int testDisparityMap(int argc, char *argv[])
   {
@@ -79,6 +87,7 @@ int testDisparityMap(int argc, char *argv[])
 
 
 
+
   typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorImageReaderType;
   typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType;
 
@@ -88,7 +97,7 @@ int testDisparityMap(int argc, char *argv[])
   typedef otb::ImageFileReader< IntImageType > IntImageReaderType;
   typedef otb::ImageFileWriter< IntImageType > IntImageWriterType;  
 
-    typedef otb::ImageFileReader< FloatImageType > FloatImageReaderType;
+  typedef otb::ImageFileReader< FloatImageType > FloatImageReaderType;
   typedef otb::ImageFileWriter< FloatImageType > FloatImageWriterType;  
 
 
@@ -102,35 +111,17 @@ int testDisparityMap(int argc, char *argv[])
   inRight->SetFileName(argv[2]);//RightImage
   inRight->UpdateOutputInformation();
 
-  unsigned int dispMin = atoi(argv[3]);
-	unsigned int dispMax  = atoi(argv[4]);
+  int dispMin = atoi(argv[3]);
+	int dispMax  = atoi(argv[4]);
   long unsigned int r = atoi(argv[5]);	
   unsigned int rwmf = atoi(argv[6]);
+
+  std::cout << "disMin : " << dispMin << std::endl ;
+   std::cout << "disMax : " << dispMax << std::endl ;
 
 
   std::string argv7 = std::string(argv[7]);
   #define FILENAME(n) std::string( argv7 + std::string(n)).c_str()
-
-
-
-  // // // CALCUL GRADIENT
-  // typedef otb::LocalGradientVectorImageFilter<FloatVectorImageType, FloatVectorImageType> GradientType;
-  // GradientType::Pointer m_GradientXLeft = GradientType::New();
-  // GradientType::Pointer m_GradientXRight = GradientType::New();
-  // m_GradientXLeft->SetInput(inLeft->GetOutput());
-  // m_GradientXRight->SetInput(inRight->GetOutput());
-
-  
-  // FloatVectorImageWriterType::Pointer writer_gradL = FloatVectorImageWriterType::New();
-  // writer_gradL->SetFileName( FILENAME("LeftGradient.tif"));
-  // writer_gradL->SetInput(m_GradientXLeft->GetOutput());
-  // writer_gradL->Update();
-
-  
-  // FloatVectorImageWriterType::Pointer writer_gradR = FloatVectorImageWriterType::New();
-  // writer_gradR->SetFileName( FILENAME("RightGradient.tif"));
-  // writer_gradR->SetInput(m_GradientXRight->GetOutput());
-  // writer_gradR->Update();
 
 
 
@@ -164,6 +155,7 @@ int testDisparityMap(int argc, char *argv[])
   VectorFilterType::Pointer m_GradientXLeft = VectorFilterType::New();
   m_GradientXLeft->SetFilter(m_convFilterXLeft);
   m_GradientXLeft->SetInput(inLeft->GetOutput());
+  m_GradientXLeft->UpdateOutputInformation();
  
   FloatVectorImageWriterType::Pointer writerGradientXLeft = FloatVectorImageWriterType::New();
   writerGradientXLeft->SetFileName( FILENAME("GradientXLeft.tif"));
@@ -173,6 +165,7 @@ int testDisparityMap(int argc, char *argv[])
   VectorFilterType::Pointer m_GradientXRight = VectorFilterType::New();
   m_GradientXRight->SetFilter(m_convFilterXRight);
   m_GradientXRight->SetInput(inRight->GetOutput());
+  m_GradientXRight->UpdateOutputInformation();
  
   FloatVectorImageWriterType::Pointer writerGradientXRight = FloatVectorImageWriterType::New();
   writerGradientXRight->SetFileName( FILENAME("GradientXRight.tif"));
@@ -308,37 +301,34 @@ int testDisparityMap(int argc, char *argv[])
   MinCostVolume::Pointer m_LeftDisparity = MinCostVolume::New();
   m_LeftDisparity->SetInput(m_meanLeftWeights->GetOutput());
 
-  //typedef otb::ImageFileWriter< IntImageType > IntImageWriterType; 
 
-  IntImageWriterType::Pointer writer_LeftDisparity = IntImageWriterType::New();
-  writer_LeftDisparity->SetFileName( FILENAME("LeftDisparity.tif"));
-  writer_LeftDisparity->SetInput(m_LeftDisparity->GetOutput());
-  writer_LeftDisparity->Update(); 
+  // IntImageWriterType::Pointer writer_LeftDisparity = IntImageWriterType::New();
+  // writer_LeftDisparity->SetFileName( FILENAME("LeftDisparity.tif"));
+  // writer_LeftDisparity->SetInput(m_LeftDisparity->GetOutput());
+  // writer_LeftDisparity->Update(); 
   
       // --- RIGHT
 
   typedef otb::MaximumNBandsImageFilter< FloatVectorImageType, IntImageType > MaxCostVolume;  
   MaxCostVolume::Pointer m_RightDisparity = MaxCostVolume::New();
   m_RightDisparity->SetInput(m_meanRightWeights->GetOutput());
-
-
-
   
-  IntImageWriterType::Pointer writer_RightDisparity = IntImageWriterType::New();
-  writer_RightDisparity->SetFileName( FILENAME("RightDisparity.tif"));
-  writer_RightDisparity->SetInput(m_RightDisparity->GetOutput());
-  writer_RightDisparity->Update(); 
+  // IntImageWriterType::Pointer writer_RightDisparity = IntImageWriterType::New();
+  // writer_RightDisparity->SetFileName( FILENAME("RightDisparity.tif"));
+  // writer_RightDisparity->SetInput(m_RightDisparity->GetOutput());
+  // writer_RightDisparity->Update(); 
 
 
   //FILTRAGE LEFT DISPARITY PAR FILTRE MEDIAN
   typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastIntImageIntoFloatVecImageFilter;
   CastIntImageIntoFloatVecImageFilter::Pointer m_CastLeftDisparity = CastIntImageIntoFloatVecImageFilter::New();
-  m_CastLeftDisparity-> SetInput( const_cast <IntImageType *>( m_LeftDisparity->GetOutput() ));
+  m_CastLeftDisparity-> SetInput(  m_LeftDisparity->GetOutput());
 
   // FloatVectorImageWriterType::Pointer writer_FloatVectLeftDisparity = FloatVectorImageWriterType::New();
   // writer_FloatVectLeftDisparity->SetFileName( FILENAME("FloatVectLeftDisparity.tif"));
   // writer_FloatVectLeftDisparity->SetInput(m_CastLeftDisparity->GetOutput());
   // writer_FloatVectLeftDisparity->Update(); 
+
 
   typedef itk::MedianImageFilter< FloatImageType, FloatImageType > MedianFilterType;
   MedianFilterType::Pointer LMedian = MedianFilterType::New();
@@ -351,10 +341,10 @@ int testDisparityMap(int argc, char *argv[])
   m_LeftMedianFilter->SetFilter(LMedian);
   m_LeftMedianFilter->SetInput(inLeft->GetOutput()); 
 
-  FloatVectorImageWriterType::Pointer LeftMedianwriter = FloatVectorImageWriterType::New();
-  LeftMedianwriter->SetFileName( FILENAME("LeftMedianVectorImage.tif"));
-  LeftMedianwriter->SetInput( m_LeftMedianFilter->GetOutput() );
-  LeftMedianwriter->Update();
+  // FloatVectorImageWriterType::Pointer LeftMedianwriter = FloatVectorImageWriterType::New();
+  // LeftMedianwriter->SetFileName( FILENAME("LeftMedianVectorImage.tif"));
+  // LeftMedianwriter->SetInput( m_LeftMedianFilter->GetOutput() );
+  // LeftMedianwriter->Update();
 
   typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
   ConcatenateVectorImageFilterType::Pointer m_ConcatenateDispEndInLeftImage = ConcatenateVectorImageFilterType::New();
@@ -362,25 +352,24 @@ int testDisparityMap(int argc, char *argv[])
   m_ConcatenateDispEndInLeftImage->SetInput2(m_LeftMedianFilter->GetOutput());
 
 
-  typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatVectorImageType > WeightMedianType;
+  typedef  otb::WeightMedianImageFilter< FloatVectorImageType, IntImageType > WeightMedianType;
    //Left
    WeightMedianType::Pointer m_LeftDispMedian = WeightMedianType::New();
-   m_LeftDispMedian-> SetInput(m_ConcatenateDispEndInLeftImage->GetOutput());
-    
+   m_LeftDispMedian-> SetInput(m_ConcatenateDispEndInLeftImage->GetOutput());    
    
   FloatVectorImageType::SizeType radiusWM;
   radiusWM[0] = rwmf;
   radiusWM[1] = rwmf;   
   m_LeftDispMedian->SetRadius(radiusWM) ;
 
-  FloatVectorImageWriterType::Pointer writer_LeftDispMedian = FloatVectorImageWriterType::New();
+  IntImageWriterType::Pointer writer_LeftDispMedian = IntImageWriterType::New();
   writer_LeftDispMedian->SetFileName( FILENAME("LeftMedianDisparity.tif"));
   writer_LeftDispMedian->SetInput(m_LeftDispMedian->GetOutput());
   writer_LeftDispMedian->Update(); 
 
   //FAIRE PAREIL POUR RIGHT DISPARITY
   CastIntImageIntoFloatVecImageFilter::Pointer m_CastRightDisparity = CastIntImageIntoFloatVecImageFilter::New();
-  m_CastRightDisparity-> SetInput( const_cast <IntImageType *>( m_RightDisparity->GetOutput() ));
+  m_CastRightDisparity-> SetInput( m_RightDisparity->GetOutput() );
 
   // FloatVectorImageWriterType::Pointer writer_FloatVectRightDisparity = FloatVectorImageWriterType::New();
   // writer_FloatVectRightDisparity->SetFileName( FILENAME("FloatVectRightDisparity.tif"));
@@ -404,10 +393,11 @@ int testDisparityMap(int argc, char *argv[])
   m_RightDispMedian-> SetInput(m_ConcatenateDispEndInRightImage->GetOutput());    
   m_RightDispMedian->SetRadius(radiusWM) ;
 
-  FloatVectorImageWriterType::Pointer writer_RightDispMedian = FloatVectorImageWriterType::New();
-  writer_RightDispMedian->SetFileName( FILENAME("RightMedianDisparity.tif"));
-  writer_RightDispMedian->SetInput(m_RightDispMedian->GetOutput());
-  writer_RightDispMedian->Update(); 
+  // FloatVectorImageWriterType::Pointer writer_RightDispMedian = FloatVectorImageWriterType::New();
+  // writer_RightDispMedian->SetFileName( FILENAME("RightMedianDisparity.tif"));
+  // writer_RightDispMedian->SetInput(m_RightDispMedian->GetOutput());
+  // writer_RightDispMedian->Update(); 
+
 
 
   return EXIT_SUCCESS;

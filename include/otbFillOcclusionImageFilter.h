@@ -43,9 +43,9 @@ public:
 	  TOutput output (1 );
 	  output.Fill(0);
 	   
-	  double temp(0.);
+	  float temp(0.);
 	
-	std::vector<double> vect;
+	std::vector<float> vect;
     vect.resize(input.Size(),0);
 	   
 	  	

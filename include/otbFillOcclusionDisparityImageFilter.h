@@ -61,27 +61,6 @@ public:
       m_RadiusMax = max > min ? max : min;
     }
 
-  void SetDispMax( int disp)
-    {
-       m_dispMax = disp ;
-    }
-
-  int GetDispMax()
-    {
-      return m_dispMax ;
-    }
-
-  void SetDispMin( int disp)
-    {
-       m_dispMin = disp ;
-    }
-
-   int GetDispMin()
-    {
-      return m_dispMin ;
-    }
-
-
 
 
   
@@ -92,35 +71,30 @@ public:
   TOutput output(1); 
   output=0; 
 
-  double tmp(0.);
-  std::vector<double> tmp_vector;
-  tmp_vector.resize(input1.Size(),0);
-  int grayMin = 255;
-  int grayMax = 0 ; 
+  std::vector<int> vect;
+  vect.resize(input1.Size(),0);
 
-  for(unsigned int i=0; i<input2.Size(); i++)
+  for(unsigned int i=0; i < input1.Size(); i++)
     {
-    tmp_vector[i] = input2.GetPixel(i);
+    vect[i] = input2.GetPixel(i);   
+   // output = vect[i] ;
     }
 
-  for(unsigned int i=0;i<input1.Size(); i++ )
-    {
-    if(input1.GetPixel(i)==255)
+  for( unsigned int i = 0; i < input1.Size(); ++i )
+    { 
+      if(input1.GetCenterPixel()==255)
       {
-      tmp = input2.GetPixel(i);
+        output = input2.GetCenterPixel();
       }
-    else
+      else
       {
-      tmp = *std::max_element(tmp_vector.begin(),tmp_vector.end())  ; 
+        output = *std::max_element(vect.begin(),vect.end()) ;
       }
-    }
-  output = tmp ;
+    }        
+
+   
 
   return output ;
-
-
-
-
 	
   
   } // end operator ()
@@ -128,8 +102,6 @@ public:
 protected:
   unsigned char                   m_RadiusMin;
   unsigned char                   m_RadiusMax;
-  int                             m_dispMin;
-  int                             m_dispMax;
   unsigned int                    m_numberOfComponents ;
 
 }; // end of functor class  FillOcclusion operator
@@ -166,26 +138,6 @@ public:
 
     /** Creation through object factory macro */
   itkTypeMacro(FillOcclusionDisparityImageFilter, ImageToImageFilter);
-
-   int GetDispMax()
-    {
-     return this->GetFunctor().GetDispMax();     
-    }
-
-  int GetDispMin()
-    {
-     return this->GetFunctor().GetDispMin();     
-    }
-
-  void SetDispMax(int disp)
-    {
-      this->GetFunctor().SetDispMax(disp);
-    }
-
-  void SetDispMin(int disp)
-    {
-      this->GetFunctor().SetDispMin(disp);
-    }
 
 
 protected:
