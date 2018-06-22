@@ -50,8 +50,9 @@ public:
 
    // unsigned int Nband = input.GetPixel(0).Size(); // nbr de bande 4
     TOutput output ( 1);
- //   output.Fill(0); 
-   output = 0;  
+    output = 0 ;
+    // output.Fill(0); 
+     
      
     unsigned int Wsize = input.Size();  //taille de la fenetre ipol 19*19 ;
    
@@ -101,8 +102,8 @@ PixelType I(3);
            if (Wtemp >= Wt){
 ;        d = it->first; 
          //std::cout << "Element found in myvector: " << d << '\n';
-       //  output[0] = static_cast<typename TOutput::ValueType>(d) ;
-         output = d;
+         // output[0] = static_cast<typename TOutput::ValueType>(d) ;
+        output = d ;
          break;
     }   
   

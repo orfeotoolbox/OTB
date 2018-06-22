@@ -46,6 +46,7 @@ REGISTER_TEST( testPatchMatch );
 REGISTER_TEST( testCVF );
 REGISTER_TEST( testOcclusionsFilter ) ;
 REGISTER_TEST( testDisparityMap ) ;
+REGISTER_TEST( testAllFilters ) ;
 
 }
 
