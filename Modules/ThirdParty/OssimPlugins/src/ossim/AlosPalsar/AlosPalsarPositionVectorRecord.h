@@ -27,7 +27,7 @@
 #ifndef AlosPalsarPositionVectorRecord_h
 #define AlosPalsarPositionVectorRecord_h
 
-#include <iostream>
+#include <iosfwd>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecord.h>
 

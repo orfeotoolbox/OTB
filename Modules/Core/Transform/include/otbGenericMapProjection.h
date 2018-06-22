@@ -21,7 +21,7 @@
 #ifndef otbGenericMapProjection_h
 #define otbGenericMapProjection_h
 
-#include <iostream>
+#include <iosfwd>
 #include <sstream>
 
 #include "otbTransform.h"

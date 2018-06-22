@@ -25,7 +25,7 @@
 // store the nodes (points) coordinates
 #include <map>
 #include <string>
-#include <fstream>
+#include <iosfwd>
 
 #include "OTBCartoExport.h"
 #include "otbVectorData.h"

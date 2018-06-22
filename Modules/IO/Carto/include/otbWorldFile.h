@@ -22,7 +22,7 @@
 #define otbWorldFile_h
 
 #include <iomanip>
-#include <fstream>
+#include <iosfwd>
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"

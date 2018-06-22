@@ -27,7 +27,7 @@
 #ifndef AlosPalsarRadiometricData_h
 #define AlosPalsarRadiometricData_h
 
-#include <iostream>
+#include <iosfwd>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecord.h>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>

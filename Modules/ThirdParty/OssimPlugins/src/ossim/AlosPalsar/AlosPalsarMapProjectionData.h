@@ -27,7 +27,7 @@
 #ifndef AlosPalsarMapProjectionData_h
 #define AlosPalsarMapProjectionData_h
 
-#include <iostream>
+#include <iosfwd>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <AlosPalsar/AlosPalsarRecord.h>

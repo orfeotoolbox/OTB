@@ -26,7 +26,7 @@
 #ifndef ErsSarPlatformPositionData_h
 #define ErsSarPlatformPositionData_h
 
-#include <iostream>
+#include <iosfwd>
 #include "erssar/ErsSarRecord.h"
 #include "erssar/ErsSarRecordHeader.h"
 

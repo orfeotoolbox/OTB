@@ -25,7 +25,7 @@
 
 #include <map>
 #include <string>
-#include <iostream>
+#include <iosfwd>
 
 #include "itkMultiThreader.h"
 #include "otbMacro.h"

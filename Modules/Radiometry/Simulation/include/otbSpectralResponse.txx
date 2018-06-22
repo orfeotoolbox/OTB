@@ -26,6 +26,7 @@
 #include "otbSpectralResponse.h"
 
 #include <algorithm>
+#include <fstream>
 
 namespace otb
 {

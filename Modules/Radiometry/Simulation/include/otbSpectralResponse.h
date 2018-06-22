@@ -25,7 +25,7 @@
 #include <itkObjectFactory.h>
 #include <vector>
 #include <utility>
-#include <fstream>
+#include <iosfwd>
 #include <limits>
 
 #include "otbVectorImage.h"

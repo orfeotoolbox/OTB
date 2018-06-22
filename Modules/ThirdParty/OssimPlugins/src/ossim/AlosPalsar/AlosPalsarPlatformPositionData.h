@@ -27,7 +27,7 @@
 #ifndef AlosPalsarPlatformPositionData_h
 #define AlosPalsarPlatformPositionData_h
 
-#include <iostream>
+#include <iosfwd>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecord.h>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>

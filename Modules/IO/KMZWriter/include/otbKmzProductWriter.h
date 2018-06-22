@@ -21,7 +21,7 @@
 #ifndef otbKmzProductWriter_h
 #define otbKmzProductWriter_h
 
-#include <fstream>
+#include <iosfwd>
 
 #include "itkObjectFactory.h"
 

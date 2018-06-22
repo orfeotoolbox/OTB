@@ -26,7 +26,7 @@
 #ifndef ErsSarFacilityData_h
 #define ErsSarFacilityData_h
 
-#include <iostream>
+#include <iosfwd>
 #include <cstdlib>
 #include "erssar/ErsSarRecordHeader.h"
 #include "erssar/ErsSarRecord.h"

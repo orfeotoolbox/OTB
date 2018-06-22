@@ -26,7 +26,7 @@
 #ifndef BeamInformationRecord_h
 #define BeamInformationRecord_h
 
-#include <iostream>
+#include <iosfwd>
 
 #include <RadarSat/RadarSatRecord.h>
 

@@ -34,7 +34,7 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimString.h>
-#include <iostream>
+#include <iosfwd>
 #include <list>
 
 #include <otb/CivilDateTime.h>

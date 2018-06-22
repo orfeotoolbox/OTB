@@ -23,7 +23,7 @@
 
 #include "otbMath.h"
 #include "itkNumericTraits.h"
-#include <iostream>
+#include <iosfwd>
 #include <vector>
 
 namespace otb

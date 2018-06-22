@@ -26,7 +26,7 @@
 #ifndef PositionVectorRecord_h
 #define PositionVectorRecord_h
 
-#include <iostream>
+#include <iosfwd>
 #include <RadarSat/RadarSatRecord.h>
 
 namespace ossimplugins

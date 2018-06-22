@@ -26,7 +26,7 @@
 #ifndef EnvisatAsarData_h
 #define EnvisatAsarData_h
 
-#include <iostream>
+#include <iosfwd>
 #include "sph.h"
 #include "mph.h"
 #include "SQ_ADSR.h"

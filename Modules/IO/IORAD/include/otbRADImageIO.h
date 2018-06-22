@@ -22,7 +22,7 @@
 #define otbRADImageIO_h
 
 #include "otbImageIOBase.h"
-#include <fstream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 
@@ -145,7 +145,7 @@ private:
   void operator =(const Self&) = delete;
 
   /** Internal method to read header information */
-  bool InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError);
+  bool InternalReadHeaderInformation(const std::string& file_name, std::fstream * file, const bool reportError);
 
 #define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
     { \
@@ -177,7 +177,7 @@ private:
 
   bool                        m_FlagWriteImageInformation;
   otb::ImageIOBase::ByteOrder m_FileByteOrder;
-  std::fstream                m_HeaderFile;
+  std::fstream *              m_HeaderFile;
   std::string                 m_TypeRAD;
   std::vector<std::string>    m_ChannelsFileName;
   std::fstream *              m_ChannelsFile;

@@ -26,7 +26,7 @@
 #ifndef ProcessingParameters_h
 #define ProcessingParameters_h
 
-#include <iostream>
+#include <iosfwd>
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 

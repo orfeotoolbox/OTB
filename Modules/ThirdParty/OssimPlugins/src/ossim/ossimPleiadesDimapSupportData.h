@@ -45,7 +45,7 @@
 
 
 #include <vector>
-#include <iostream>
+#include <iosfwd>
 
 
 class ossimKeywordlist;

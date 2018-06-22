@@ -23,7 +23,7 @@
 
 #include "itkByteSwapper.h"
 #include "otbImageIOBase.h"
-#include <fstream>
+#include <iosfwd>
 
 namespace otb
 {
@@ -146,8 +146,8 @@ protected:
   int m_NbBands;
   /** Buffer*/
   //float **pafimas;
-  std::fstream m_Datafile;
-  std::fstream m_Headerfile;
+  std::fstream * m_Datafile;
+  std::fstream * m_Headerfile;
 
 private:
   ONERAImageIO(const Self &) = delete;

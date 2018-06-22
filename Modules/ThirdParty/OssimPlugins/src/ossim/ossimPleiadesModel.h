@@ -32,7 +32,7 @@
 
 #include <ossim/base/ossimFilename.h>
 
-#include <iostream>
+#include <iosfwd>
 
 
 namespace ossimplugins

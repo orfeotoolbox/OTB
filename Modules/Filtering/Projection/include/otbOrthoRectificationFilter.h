@@ -21,7 +21,7 @@
 #ifndef otbOrthoRectificationFilter_h
 #define otbOrthoRectificationFilter_h
 
-#include <iostream>
+#include <iosfwd>
 #include <sstream>
 #include <stdio.h>
 

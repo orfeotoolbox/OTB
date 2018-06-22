@@ -30,7 +30,7 @@
 #include <random>
 #include <ctime>
 #include <cassert>
-#include <iostream>
+#include <iosfwd>
 
 namespace otb
 {

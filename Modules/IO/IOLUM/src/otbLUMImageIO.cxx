@@ -31,7 +31,9 @@ namespace otb
 
 LUMImageIO::LUMImageIO()
 {
-  // By default set number of dimensions to two.
+  m_File = new std::fstream();
+
+// By default set number of dimensions to two.
   this->SetNumberOfDimensions(2);
   m_PixelType = SCALAR;
   m_ComponentType = UCHAR;
@@ -77,9 +79,13 @@ LUMImageIO::LUMImageIO()
 
 LUMImageIO::~LUMImageIO()
 {
-  if (m_File.is_open())
+  if(m_File != nullptr)
     {
-    m_File.close();
+    if (m_File->is_open())
+      {
+      m_File->close();
+      }
+    delete m_File;
     }
 }
 
@@ -96,9 +102,9 @@ bool LUMImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (m_File.is_open())
+  if (m_File->is_open())
     {
-    m_File.close();
+    m_File->close();
     }
 
   std::fstream header_file;
@@ -110,7 +116,7 @@ bool LUMImageIO::CanReadFile(const char* filename)
     }
 
   //Read header information
-  bool lResult = InternalReadHeaderInformation(header_file, false);
+  bool lResult = InternalReadHeaderInformation(&header_file, false);
   header_file.close();
   return (lResult);
 }
@@ -151,14 +157,14 @@ void LUMImageIO::Read(void* buffer)
     {
     offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
     offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
-    m_File.seekg(offset, std::ios::beg);
-    m_File.read(static_cast<char *>(p + cpt), numberOfBytesToBeRead);
-    numberOfBytesRead = m_File.gcount();
+    m_File->seekg(offset, std::ios::beg);
+    m_File->read(static_cast<char *>(p + cpt), numberOfBytesToBeRead);
+    numberOfBytesRead = m_File->gcount();
 #ifdef __APPLE_CC__
     // fail() is broken in the Mac. It returns true when reaches eof().
     if (numberOfBytesRead != numberOfBytesToBeRead)
 #else
-    if ((numberOfBytesRead != numberOfBytesToBeRead)  || m_File.fail())
+    if ((numberOfBytesRead != numberOfBytesToBeRead)  || m_File->fail())
 #endif
       {
       itkExceptionMacro(<< "LUMImageIO::Read() Can Read the specified Region"); // read failed
@@ -187,13 +193,13 @@ void LUMImageIO::Read(void* buffer)
 
 void LUMImageIO::ReadImageInformation()
 {
-  if (m_File.is_open())
+  if (m_File->is_open())
     {
-    m_File.close();
+    m_File->close();
     }
 
-  m_File.open(m_FileName.c_str(),  std::ios::in | std::ios::binary);
-  if (m_File.fail())
+  m_File->open(m_FileName.c_str(),  std::ios::in | std::ios::binary);
+  if (m_File->fail())
     {
     itkExceptionMacro(<< "LUMImageIO::ReadImageInformation() failed header open ! ");
     }
@@ -211,7 +217,7 @@ void LUMImageIO::ReadImageInformation()
 
 }
 
-bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool reportError)
+bool LUMImageIO::InternalReadHeaderInformation(std::fstream* file, const bool reportError)
 {
 
   std::string lStrTypeImage;
@@ -219,8 +225,8 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
   std::string lStrTypeMachine;
   int         lNbBits(-1);
   char        TypeCode[5];
-  file.seekg(8, std::ios::beg);
-  file.read((char*) (TypeCode), 4);
+  (*file).seekg(8, std::ios::beg);
+  (*file).read((char*) (TypeCode), 4);
   TypeCode[4] = '\0';
   int lTaille = CaiGetTypeLum(TypeCode,
                               lStrTypeImage,
@@ -295,9 +301,9 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
   int NbLig(-1);
 
   //Read image dimensions
-  file.seekg(0, std::ios::beg);
-  file.read((char*) (&NbCol), 4);
-  file.read((char*) (&NbLig), 4);
+  (*file).seekg(0, std::ios::beg);
+  (*file).read((char*) (&NbCol), 4);
+  (*file).read((char*) (&NbLig), 4);
 
   //Swapp if necessary
   otbSwappFileOrderToSystemOrderMacro(int, &NbCol, 1);
@@ -373,8 +379,8 @@ void LUMImageIO::Write(const void* buffer)
     {
     offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
     offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
-    m_File.seekp(offset, std::ios::beg);
-    m_File.write(static_cast<const char *>(p + cpt), numberOfBytesToBeWrite);
+    m_File->seekp(offset, std::ios::beg);
+    m_File->write(static_cast<const char *>(p + cpt), numberOfBytesToBeWrite);
     cpt += numberOfBytesToBeWrite;
     }
 }
@@ -391,15 +397,15 @@ void LUMImageIO::WriteImageInformation()
     itkExceptionMacro(<< "The file " << m_FileName.c_str() << " is not defined as a LUM file");
     }
   // Close file from any previous image
-  if (m_File.is_open())
+  if (m_File->is_open())
     {
-    m_File.close();
+    m_File->close();
     }
 
   // Open the new file for writing
   // Actually open the file
-  m_File.open(m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
-  if (m_File.fail())
+  m_File->open(m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
+  if (m_File->fail())
     {
     itkExceptionMacro(<< "Cannot write requested file " << m_FileName.c_str() << ".");
     }
@@ -407,12 +413,12 @@ void LUMImageIO::WriteImageInformation()
   //Writing header information
   std::streamsize headerLength = static_cast<std::streamsize>(this->GetComponentSize() * m_Dimensions[0]);
 
-  m_File.seekp(0, std::ios::beg);
+  m_File->seekp(0, std::ios::beg);
   char* value = new char[headerLength];
   //Write Header line and all file (whitout information)
   for (unsigned int numLigne = 0; numLigne < (m_Dimensions[1] + 1); numLigne++)
     {
-    m_File.write(value, headerLength);
+    m_File->write(value, headerLength);
     }
   delete[] value;
   value = nullptr;
@@ -431,11 +437,11 @@ void LUMImageIO::WriteImageInformation()
     itkExceptionMacro(<< "LUM format doesn't accept LONG or ULONG data type");
     }
 
-  m_File.seekp(0, std::ios::beg);
+  m_File->seekp(0, std::ios::beg);
   //Write image size
-  m_File.write((char*) (&(m_Dimensions[0])), 4);
-  m_File.write((char*) (&(m_Dimensions[1])), 4);
-  m_File.write((char*) (m_TypeLum.data()), 4);
+  m_File->write((char*) (&(m_Dimensions[0])), 4);
+  m_File->write((char*) (&(m_Dimensions[1])), 4);
+  m_File->write((char*) (m_TypeLum.data()), 4);
 
   otbMsgDebugMacro(<< "Driver to write: LUM");
   otbMsgDebugMacro(<< "         Write file         : " << m_FileName);

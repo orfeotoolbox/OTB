@@ -26,7 +26,7 @@
 #ifndef VolumeDir_h
 #define VolumeDir_h
 
-#include <iostream>
+#include <iosfwd>
 #include <RadarSat/VolumeDir/FilePointerRecord.h>
 #include <RadarSat/VolumeDir/VolumeDescriptorRecord.h>
 #include <RadarSat/VolumeDir/TextRecord.h>

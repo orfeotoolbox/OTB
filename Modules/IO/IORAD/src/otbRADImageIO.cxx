@@ -78,9 +78,9 @@ RADImageIO::RADImageIO()
 RADImageIO::~RADImageIO()
 {
 
-  if (m_HeaderFile.is_open())
+  if (m_HeaderFile->is_open())
     {
-    m_HeaderFile.close();
+    m_HeaderFile->close();
     }
   if (m_ChannelsFile !=  nullptr)
     {
@@ -116,7 +116,7 @@ bool RADImageIO::CanReadFile(const char* filename)
     }
 
   //Read header information
-  bool lResult = InternalReadHeaderInformation(lFileName, header_file, true);
+  bool lResult = InternalReadHeaderInformation(lFileName, &header_file, true);
   header_file.close();
   return (lResult);
 }
@@ -229,12 +229,12 @@ void RADImageIO::Read(void* buffer)
 
 void RADImageIO::ReadImageInformation()
 {
-  if (m_HeaderFile.is_open())
+  if (m_HeaderFile->is_open())
     {
-    m_HeaderFile.close();
+    m_HeaderFile->close();
     }
-  m_HeaderFile.open(m_FileName.c_str(),  std::ios::in);
-  if (m_HeaderFile.fail())
+  m_HeaderFile->open(m_FileName.c_str(),  std::ios::in);
+  if (m_HeaderFile->fail())
     {
     itkExceptionMacro(<< "RADImageIO::ReadImageInformation() failed header open ! ");
     }
@@ -252,14 +252,14 @@ void RADImageIO::ReadImageInformation()
 
 }
 
-bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError)
+bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std::fstream * file, const bool reportError)
 {
 
   std::string lString;
   std::string lStrCodePix;
 
   // Read NBCOLONNES information
-  file >> lString;
+  (*file) >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if ((lString != "NBCOLONNES") && (lString != "NBCOLUMNS"))
     {
@@ -272,10 +272,10 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       return false;
       }
     }
-  file >> m_Dimensions[0];
+  (*file) >> m_Dimensions[0];
 
   // Read NBLIGNES information
-  file >> lString;
+  (*file) >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if ((lString != "NBLIGNES") && (lString != "NBLINES"))
     {
@@ -288,10 +288,10 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       return false;
       }
     }
-  file >> m_Dimensions[1];
+  (*file) >> m_Dimensions[1];
 
   // Read NBPLANS information
-  file >> lString;
+  (*file) >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if ((lString != "NBPLANS") && (lString != "NBBANDS"))
     {
@@ -304,12 +304,12 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       return false;
       }
     }
-  file >> m_NbOfChannels;
+  (*file) >> m_NbOfChannels;
   // Because we read complex : *2
   this->SetNumberOfComponents(2 * m_NbOfChannels);
 
   // Read TYPECODAGE information
-  file >> lString;
+  (*file) >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if ((lString != "TYPECODAGE") && (lString != "TYPE"))
     {
@@ -322,7 +322,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       return false;
       }
     }
-  file >> lStrCodePix;
+  (*file) >> lStrCodePix;
 
   lStrCodePix = itksys::SystemTools::UpperCase(lStrCodePix);
   if (lStrCodePix == "OCT" || lStrCodePix == "BYT")
@@ -420,13 +420,13 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
     }
 
   // Read "SENSCODAGE" information (optional)
-  file >> lString;
+  (*file) >> lString;
   if (lString.empty() == false)
     {
     lString = itksys::SystemTools::UpperCase(lString);
     if ((lString == "SENSCODAGE") || (lString == "ORDER"))
       {
-      file >> lString;
+      (*file) >> lString;
       lString = itksys::SystemTools::UpperCase(lString);
       if (lString == "INTEL")
         {
@@ -457,13 +457,13 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   m_ChannelsFileName.clear();
   for (unsigned int i = 0; i < m_NbOfChannels; ++i)
     {
-    file >> lString;
+    (*file) >> lString;
     std::ostringstream lStream;
     lStream << lPathName << "/" << lString;
     m_ChannelsFileName.push_back(lStream.str());
 
     }
-  file.close();
+  file->close();
 
   m_ChannelsFile = new std::fstream[m_NbOfChannels];
 
@@ -588,34 +588,34 @@ void RADImageIO::WriteImageInformation()
     }
 
   // Close file from any previous image
-  if (m_HeaderFile.is_open())
+  if (m_HeaderFile->is_open())
     {
-    m_HeaderFile.close();
+    m_HeaderFile->close();
     }
 
   // Open the new file for writing
   // Actually open the file
-  m_HeaderFile.open(m_FileName.c_str(),  std::ios::out | std::ios::trunc);
-  if (m_HeaderFile.fail())
+  m_HeaderFile->open(m_FileName.c_str(),  std::ios::out | std::ios::trunc);
+  if (m_HeaderFile->fail())
     {
     itkExceptionMacro(<< "Cannot write requested file " << m_FileName.c_str() << ".");
     }
 
   //Write COLUMNS information
-  m_HeaderFile <<  "NBCOLUMNS ";
-  m_HeaderFile << m_Dimensions[0] << std::endl;
+  (*m_HeaderFile) <<  "NBCOLUMNS ";
+  (*m_HeaderFile) << m_Dimensions[0] << std::endl;
 
   //Write LINES information
-  m_HeaderFile <<  "NBLINES ";
-  m_HeaderFile << m_Dimensions[1] << std::endl;
+  (*m_HeaderFile) <<  "NBLINES ";
+  (*m_HeaderFile) << m_Dimensions[1] << std::endl;
 
   //Write CHANNELS information
-  m_HeaderFile << "NBBANDS ";
-  m_HeaderFile << m_NbOfChannels << std::endl;
+  (*m_HeaderFile) << "NBBANDS ";
+  (*m_HeaderFile) << m_NbOfChannels << std::endl;
 
   std::string lString;
   //Write TYPE information
-  m_HeaderFile << "TYPECODAGE ";
+  (*m_HeaderFile) << "TYPECODAGE ";
 
   std::string lExtension;
   std::string lStringPixelType = itksys::SystemTools::UpperCase(this->GetPixelTypeAsString(m_PixelType));
@@ -705,17 +705,17 @@ void RADImageIO::WriteImageInformation()
       lExtension = ".cr8";
       }
     }
-  m_HeaderFile << m_TypeRAD << std::endl;
+  (*m_HeaderFile) << m_TypeRAD << std::endl;
 
   //Write "SENSCODAGE" information
-  m_HeaderFile <<  "SENSCODAGE "; // << std::endl;
+  (*m_HeaderFile) <<  "SENSCODAGE "; // << std::endl;
   if (m_ByteOrder == LittleEndian)
     {
-    m_HeaderFile <<  "INTEL" << std::endl;
+    (*m_HeaderFile) <<  "INTEL" << std::endl;
     }
   else
     {
-    m_HeaderFile <<  "IEEE" << std::endl;
+    (*m_HeaderFile) <<  "IEEE" << std::endl;
     }
 
   //Define channels file name
@@ -730,9 +730,9 @@ void RADImageIO::WriteImageInformation()
 
   for (unsigned int i = 0; i < m_NbOfChannels; ++i)
     {
-    m_HeaderFile << itksys::SystemTools::GetFilenameName(this->m_ChannelsFileName[i].c_str()) << std::endl;
+    (*m_HeaderFile) << itksys::SystemTools::GetFilenameName(this->m_ChannelsFileName[i].c_str()) << std::endl;
     }
-  m_HeaderFile.close();
+  m_HeaderFile->close();
 
   //Allocate  buffer of stream file
   m_ChannelsFile = new std::fstream[m_NbOfChannels];

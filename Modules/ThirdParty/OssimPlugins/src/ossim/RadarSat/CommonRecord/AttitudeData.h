@@ -26,7 +26,7 @@
 #ifndef AttitudeData_h
 #define AttitudeData_h
 
-#include <iostream>
+#include <iosfwd>
 
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>

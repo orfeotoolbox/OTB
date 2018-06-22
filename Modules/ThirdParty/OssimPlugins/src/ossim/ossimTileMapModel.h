@@ -32,7 +32,7 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimMatrix3x3.h>
-#include <iostream>
+#include <iosfwd>
 
 class ossimMapProjection;
 

@@ -39,7 +39,7 @@
 #include <RadarSat/Trailer/Trailer.h>
 #include <RadarSat/VolumeDir/VolumeDir.h>
 
-#include <iostream>
+#include <iosfwd>
 
 namespace ossimplugins
 {

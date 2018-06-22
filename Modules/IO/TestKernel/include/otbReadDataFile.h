@@ -22,7 +22,7 @@
 #include "otb_boost_string_header.h"
 
 #include "itkListSample.h"
-#include <fstream>
+#include <iosfwd>
 #include <string>
 #include <algorithm>
 

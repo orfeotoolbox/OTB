@@ -28,7 +28,7 @@
 
 
 #include "erssar/ErsSarRecordHeader.h"
-#include <iostream>
+#include <iosfwd>
 
 namespace ossimplugins
 {

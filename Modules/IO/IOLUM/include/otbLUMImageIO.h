@@ -22,7 +22,7 @@
 #define otbLUMImageIO_h
 
 #include "otbImageIOBase.h"
-#include <fstream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 
@@ -143,7 +143,7 @@ private:
   void operator =(const Self&) = delete;
 
   /** Internal method to read header information */
-  bool InternalReadHeaderInformation(std::fstream& file, const bool reportError);
+  bool InternalReadHeaderInformation(std::fstream* file, const bool reportError);
   /** This method get the LUM type */
   int CaiGetTypeLum(const char *          type_code,
                     std::string&   str_sens_code,
@@ -189,7 +189,7 @@ private:
   std::vector<std::string>    m_CaiLumTyp;     //used for read
   std::string                 m_TypeLum; //used for write
   otb::ImageIOBase::ByteOrder m_FileByteOrder;
-  std::fstream                m_File;
+  std::fstream*               m_File;
 
 };
 

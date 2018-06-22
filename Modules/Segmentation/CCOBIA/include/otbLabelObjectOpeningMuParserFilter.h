@@ -24,7 +24,7 @@
 #define otbLabelObjectOpeningMuParserFilter_h
 
 #include "itkProgressReporter.h"
-#include <iostream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 

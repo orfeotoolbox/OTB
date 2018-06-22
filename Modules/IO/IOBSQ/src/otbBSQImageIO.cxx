@@ -58,6 +58,7 @@ BSQImageIO::BSQImageIO()
   m_Origin[0] = 0.5;
   m_Origin[1] = 0.5;
   m_ChannelsFile = nullptr;
+  m_HeaderFile = new std::fstream();
   m_FlagWriteImageInformation = true;
 
   this->AddSupportedWriteExtension(".hd");
@@ -70,9 +71,13 @@ BSQImageIO::BSQImageIO()
 
 BSQImageIO::~BSQImageIO()
 {
-  if (m_HeaderFile.is_open())
+  if(m_HeaderFile != nullptr)
     {
-    m_HeaderFile.close();
+    if (m_HeaderFile->is_open())
+      {
+      m_HeaderFile->close();
+      }
+    delete m_HeaderFile;
     }
   if (m_ChannelsFile !=  nullptr)
     {
@@ -112,7 +117,7 @@ bool BSQImageIO::CanReadFile(const char* filename)
     return false;
     }
   //Read header information
-  bool lResult = InternalReadHeaderInformation(lFileName, header_file, false);
+  bool lResult = InternalReadHeaderInformation(lFileName, &header_file, false);
   header_file.close();
   return (lResult);
 }
@@ -224,12 +229,12 @@ void BSQImageIO::Read(void* buffer)
 
 void BSQImageIO::ReadImageInformation()
 {
-  if (m_HeaderFile.is_open())
+  if (m_HeaderFile->is_open())
     {
-    m_HeaderFile.close();
+    m_HeaderFile->close();
     }
-  m_HeaderFile.open(m_FileName.c_str(),  std::ios::in);
-  if (m_HeaderFile.fail())
+  m_HeaderFile->open(m_FileName.c_str(),  std::ios::in);
+  if (m_HeaderFile->fail())
     {
     itkExceptionMacro(<< "BSQImageIO::ReadImageInformation() failed header open ! ");
     }
@@ -247,13 +252,13 @@ void BSQImageIO::ReadImageInformation()
 
 }
 
-bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError)
+bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std::fstream * file, const bool reportError)
 {
 
   std::string lString;
   std::string lStrCodePix;
   //Read TYPE information
-  file >> lString;
+  *file >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "TYPE")
     {
@@ -266,7 +271,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       return false;
       }
     }
-  file >> lStrCodePix;
+  *file >> lStrCodePix;
   lStrCodePix = itksys::SystemTools::UpperCase(lStrCodePix);
   if (lStrCodePix == "OCT")
     {
@@ -314,7 +319,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       }
     }
   //Read LABEL information
-  file >> lString;
+  *file >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "LABEL")
     {
@@ -327,9 +332,9 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       return false;
       }
     }
-  while ((lString != "CHANNELS") || (file.eof()))
+  while ((lString != "CHANNELS") || (file->eof()))
     {
-    file >> lString;
+    *file >> lString;
     lString = itksys::SystemTools::UpperCase(lString);
     }
   if (lString != "CHANNELS")
@@ -344,11 +349,11 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       }
     }
   unsigned int lNbChannels;
-  file >> lNbChannels;
+  *file >> lNbChannels;
   this->SetNumberOfComponents(lNbChannels);
 
   //Read LINES information
-  file >> lString;
+  *file >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "LINES")
     {
@@ -361,9 +366,9 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       return false;
       }
     }
-  file >> m_Dimensions[1];
+  *file >> m_Dimensions[1];
   //Read COLUMNS information
-  file >> lString;
+  *file >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "COLUMNS")
     {
@@ -376,14 +381,14 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       return false;
       }
     }
-  file >> m_Dimensions[0];
+  *file >> m_Dimensions[0];
 
   //Read "BITS PER PIXEL" information
-  file >> lString;
+  *file >> lString;
   std::string lStrBitsPerPixels(lString);
-  file >> lString;
+  *file >> lString;
   lStrBitsPerPixels = lStrBitsPerPixels + " " + lString;
-  file >> lString;
+  *file >> lString;
   lStrBitsPerPixels = lStrBitsPerPixels + " " + lString;
   lStrBitsPerPixels = itksys::SystemTools::UpperCase(lStrBitsPerPixels);
   if (lStrBitsPerPixels != "BITS PER PIXEL")
@@ -398,16 +403,16 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       }
     }
   int lNbBitsPerPixels;
-  file >> lNbBitsPerPixels;
+  *file >> lNbBitsPerPixels;
 
   //Read "SENSCODAGE" information (optional)
-  file >> lString;
+  *file >> lString;
   if (lString.empty() == false)
     {
     lString = itksys::SystemTools::UpperCase(lString);
     if (lString == "SENSCODAGE")
       {
-      file >> lString;
+      *file >> lString;
       lString = itksys::SystemTools::UpperCase(lString);
       if (lString == "INTEL")
         {
@@ -432,7 +437,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
         }
       }
     }
-  file.close();
+  file->close();
 
   //Define channels file name
   std::string lRootName = System::GetRootName(file_name);
@@ -572,15 +577,15 @@ void BSQImageIO::WriteImageInformation()
     itkExceptionMacro(<< "The file " << m_FileName.c_str() << " is not defined as a BSQ file");
     }
   // Close file from any previous image
-  if (m_HeaderFile.is_open())
+  if (m_HeaderFile->is_open())
     {
-    m_HeaderFile.close();
+    m_HeaderFile->close();
     }
 
   // Open the new file for writing
   // Actually open the file
-  m_HeaderFile.open(m_FileName.c_str(),  std::ios::out | std::ios::trunc);
-  if (m_HeaderFile.fail())
+  m_HeaderFile->open(m_FileName.c_str(),  std::ios::out | std::ios::trunc);
+  if (m_HeaderFile->fail())
     {
     itkExceptionMacro(<< "Cannot write requested file " << m_FileName.c_str() << ".");
     }
@@ -601,40 +606,40 @@ void BSQImageIO::WriteImageInformation()
 
   std::string lString;
   //Write TYPE information
-  m_HeaderFile << "TYPE" << std::endl;
-  m_HeaderFile << m_TypeBsq << std::endl;
+  *m_HeaderFile << "TYPE" << std::endl;
+  *m_HeaderFile << m_TypeBsq << std::endl;
 
   //Write LABEL information
-  m_HeaderFile << "LABEL" << std::endl;
-  m_HeaderFile << m_TypeBsq << " - This BSQ image file was producted by OTB software." << std::endl;
+  *m_HeaderFile << "LABEL" << std::endl;
+  *m_HeaderFile << m_TypeBsq << " - This BSQ image file was producted by OTB software." << std::endl;
 
   //Write CHANNELS information
-  m_HeaderFile << "CHANNELS" << std::endl;
-  m_HeaderFile << this->GetNumberOfComponents() << std::endl;
+  *m_HeaderFile << "CHANNELS" << std::endl;
+  *m_HeaderFile << this->GetNumberOfComponents() << std::endl;
 
   //Write LINES information
-  m_HeaderFile <<  "LINES" << std::endl;
-  m_HeaderFile << m_Dimensions[1] << std::endl;
+  *m_HeaderFile <<  "LINES" << std::endl;
+  *m_HeaderFile << m_Dimensions[1] << std::endl;
   //Write COLUMNS information
-  m_HeaderFile <<  "COLUMNS" << std::endl;
-  m_HeaderFile << m_Dimensions[0] << std::endl;
+  *m_HeaderFile <<  "COLUMNS" << std::endl;
+  *m_HeaderFile << m_Dimensions[0] << std::endl;
 
   //Write "BITS PER PIXEL" information
-  m_HeaderFile <<  "BITS PER PIXEL" << std::endl;
-  m_HeaderFile << this->GetComponentSize() * 8 << std::endl;
+  *m_HeaderFile <<  "BITS PER PIXEL" << std::endl;
+  *m_HeaderFile << this->GetComponentSize() * 8 << std::endl;
 
   //Write "SENSCODAGE" information
-  m_HeaderFile <<  "SENSCODAGE" << std::endl;
+  *m_HeaderFile <<  "SENSCODAGE" << std::endl;
   if (m_ByteOrder == LittleEndian)
     {
-    m_HeaderFile <<  "INTEL" << std::endl;
+    *m_HeaderFile <<  "INTEL" << std::endl;
     }
   else
     {
-    m_HeaderFile <<  "IEEE" << std::endl;
+    *m_HeaderFile <<  "IEEE" << std::endl;
     }
 
-  m_HeaderFile.close();
+  m_HeaderFile->close();
 
   //Create channels files
 

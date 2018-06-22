@@ -26,7 +26,7 @@
 #ifndef AntennaElevationPatterns_h
 #define AntennaElevationPatterns_h
 
-#include <iostream>
+#include <iosfwd>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 
 namespace ossimplugins

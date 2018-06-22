@@ -22,7 +22,7 @@
 
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"
-#include <fstream>
+#include <iosfwd>
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push

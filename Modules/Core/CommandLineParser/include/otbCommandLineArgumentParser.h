@@ -21,7 +21,7 @@
 #ifndef otbCommandLineArgumentParser_h
 #define otbCommandLineArgumentParser_h
 
-#include <iostream>
+#include <iosfwd>
 #include <vector>
 #include <string>
 #include <map>

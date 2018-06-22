@@ -26,7 +26,7 @@
 #ifndef DopplerCentroidParameters_h
 #define DopplerCentroidParameters_h
 
-#include <iostream>
+#include <iosfwd>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 
 namespace ossimplugins

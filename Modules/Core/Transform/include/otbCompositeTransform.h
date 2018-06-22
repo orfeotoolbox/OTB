@@ -21,7 +21,7 @@
 #ifndef otbCompositeTransform_h
 #define otbCompositeTransform_h
 
-#include <iostream>
+#include <iosfwd>
 #include <sstream>
 #include <stdio.h>
 #include "otbTransform.h"

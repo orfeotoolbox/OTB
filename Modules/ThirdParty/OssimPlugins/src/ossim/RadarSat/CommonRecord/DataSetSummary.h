@@ -26,7 +26,7 @@
 #ifndef DataSetSummary_h
 #define DataSetSummary_h
 
-#include <iostream>
+#include <iosfwd>
 #include <RadarSat/RadarSatRecordHeader.h>
 #include <RadarSat/RadarSatRecord.h>
 

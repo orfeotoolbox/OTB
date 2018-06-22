@@ -26,7 +26,7 @@
 #ifndef EnvisatAsarRecord_h
 #define EnvisatAsarRecord_h
 
-#include <iostream>
+#include <iosfwd>
 #include <cstdlib>
 #include <cstring>
 #include <ossim/base/ossimCommon.h>

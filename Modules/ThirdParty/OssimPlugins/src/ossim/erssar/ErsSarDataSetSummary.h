@@ -26,7 +26,7 @@
 #ifndef ErsSarDataSetSummary_h
 #define ErsSarDataSetSummary_h
 
-#include <iostream>
+#include <iosfwd>
 #include <cstdlib>
 #include "erssar/ErsSarRecordHeader.h"
 #include "erssar/ErsSarRecord.h"

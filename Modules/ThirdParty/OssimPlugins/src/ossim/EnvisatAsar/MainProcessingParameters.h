@@ -26,7 +26,7 @@
 #ifndef MainProcessingParameters_h
 #define MainProcessingParameters_h
 
-#include <iostream>
+#include <iosfwd>
 #include <sstream>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 

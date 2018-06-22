@@ -41,7 +41,7 @@
 #include <ossim/base/ossimEcefPoint.h>
 
 #include <vector>
-#include <iostream>
+#include <iosfwd>
 
 class ossimKeywordlist;
 // class ossimRefPtr;

@@ -22,7 +22,7 @@
 #define otbFilterFunctionValues_h
 
 #include <vector>
-#include <iostream>
+#include <iosfwd>
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

@@ -27,7 +27,7 @@
 #include "otbMacro.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 
-#include <fstream>
+#include <iosfwd>
 
 namespace otb
 {

@@ -21,7 +21,7 @@
 #ifndef otbMapFileProductWriter_h
 #define otbMapFileProductWriter_h
 
-#include <fstream>
+#include <iosfwd>
 
 #include "itkObjectFactory.h"
 

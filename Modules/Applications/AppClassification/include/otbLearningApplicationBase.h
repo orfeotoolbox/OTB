@@ -25,7 +25,7 @@
 
 #include "otbWrapperApplication.h"
 
-#include <iostream>
+#include <iosfwd>
 
 // ListSample
 #include "itkListSample.h"

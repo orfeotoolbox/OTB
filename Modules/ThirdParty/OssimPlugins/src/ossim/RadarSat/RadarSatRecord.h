@@ -28,7 +28,7 @@
 
 
 #include <RadarSat/RadarSatRecordHeader.h>
-#include <iostream>
+#include <iosfwd>
 #include <cstdlib>
 
 namespace ossimplugins

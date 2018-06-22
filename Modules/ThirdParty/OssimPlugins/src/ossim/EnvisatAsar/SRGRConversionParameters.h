@@ -26,7 +26,7 @@
 #ifndef SRGRConversionParameters_h
 #define SRGRConversionParameters_h
 
-#include <iostream>
+#include <iosfwd>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 
 namespace ossimplugins

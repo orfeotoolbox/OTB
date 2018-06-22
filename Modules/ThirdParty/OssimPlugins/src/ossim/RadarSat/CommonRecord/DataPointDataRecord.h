@@ -26,7 +26,7 @@
 #ifndef DataPointDataRecord_h
 #define DataPointDataRecord_h
 
-#include <iostream>
+#include <iosfwd>
 
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
