@@ -83,6 +83,7 @@ const char* Application::GetName() const
 void Application::SetDescription(const std::string& description)
 {
   m_Description = description;
+  this->Modified();
 }
 
 const char* Application::GetDescription() const
@@ -93,6 +94,7 @@ const char* Application::GetDescription() const
 void Application::SetHaveInXML(bool haveInXML)
 {
   m_HaveInXML = haveInXML;
+  this->Modified();
 }
 
 bool Application::GetHaveInXML() const
@@ -103,6 +105,7 @@ bool Application::GetHaveInXML() const
 void Application::SetHaveOutXML(bool haveOutXML)
 {
   m_HaveOutXML = haveOutXML;
+  this->Modified();
 }
 
 bool Application::GetHaveOutXML() const
@@ -113,6 +116,7 @@ bool Application::GetHaveOutXML() const
 void Application::SetDocName(const std::string& value)
 {
   m_DocName = value;
+  this->Modified();
 }
 
 const char* Application::GetDocName() const
@@ -123,6 +127,7 @@ const char* Application::GetDocName() const
 void Application::SetDocLongDescription(const std::string& value)
 {
   m_DocLongDescription = value;
+  this->Modified();
 }
 
 const char* Application::GetDocLongDescription() const
@@ -133,6 +138,7 @@ const char* Application::GetDocLongDescription() const
 void Application::SetDocAuthors(const std::string& value)
 {
   m_DocAuthors = value;
+  this->Modified();
 }
 
 const char* Application::GetDocAuthors() const
@@ -143,6 +149,7 @@ const char* Application::GetDocAuthors() const
 void Application::SetDocLimitations(const std::string& value)
 {
   m_DocLimitations = value;
+  this->Modified();
 }
 
 const char* Application::GetDocLimitations() const
@@ -153,6 +160,7 @@ const char* Application::GetDocLimitations() const
 void Application::SetDocSeeAlso(const std::string& value)
 {
   m_DocSeeAlso = value;
+  this->Modified();
 }
 
 const char* Application::GetDocSeeAlso() const
@@ -308,6 +316,7 @@ void Application::SetLogger(otb::Logger *logger)
     {
     m_Logger = logger;
     }
+  this->Modified();
 }
 
 std::vector<std::string>
