@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSOMbasedImageFilter_txx
-#define otbSOMbasedImageFilter_txx
+#ifndef otbSOMbasedImageFilter_hxx
+#define otbSOMbasedImageFilter_hxx
 
 #include "otbSOMbasedImageFilter.h"
 

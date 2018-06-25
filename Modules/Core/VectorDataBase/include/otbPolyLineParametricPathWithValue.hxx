@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPolyLineParametricPathWithValue_txx
-#define otbPolyLineParametricPathWithValue_txx
+#ifndef otbPolyLineParametricPathWithValue_hxx
+#define otbPolyLineParametricPathWithValue_hxx
 
 #include "otbPolyLineParametricPathWithValue.h"
 

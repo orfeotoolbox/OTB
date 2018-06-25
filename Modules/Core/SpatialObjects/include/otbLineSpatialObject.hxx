@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLineSpatialObject_txx
-#define otbLineSpatialObject_txx
+#ifndef otbLineSpatialObject_hxx
+#define otbLineSpatialObject_hxx
 
 
 #include "otbLineSpatialObject.h"

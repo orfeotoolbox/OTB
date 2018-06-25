@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageSimulationMethod_txx
-#define otbImageSimulationMethod_txx
+#ifndef otbImageSimulationMethod_hxx
+#define otbImageSimulationMethod_hxx
 
 #include "otbImageSimulationMethod.h"
 

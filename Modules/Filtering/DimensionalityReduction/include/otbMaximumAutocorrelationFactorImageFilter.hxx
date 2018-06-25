@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMaximumAutocorrelationFactorImageFilter_txx
-#define otbMaximumAutocorrelationFactorImageFilter_txx
+#ifndef otbMaximumAutocorrelationFactorImageFilter_hxx
+#define otbMaximumAutocorrelationFactorImageFilter_hxx
 
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 #include "otbMultiChannelExtractROI.h"

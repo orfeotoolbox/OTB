@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSpectralAngleDataNodeFeatureFunction_txx
-#define otbSpectralAngleDataNodeFeatureFunction_txx
+#ifndef otbSpectralAngleDataNodeFeatureFunction_hxx
+#define otbSpectralAngleDataNodeFeatureFunction_hxx
 
 #include "otbSpectralAngleDataNodeFeatureFunction.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLocalHistogramImageFunction_txx
-#define otbLocalHistogramImageFunction_txx
+#ifndef otbLocalHistogramImageFunction_hxx
+#define otbLocalHistogramImageFunction_hxx
 
 #include "otbLocalHistogramImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

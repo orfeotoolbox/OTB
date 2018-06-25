@@ -19,8 +19,8 @@
  */
 
 
-#ifndef __otbWaveletInverseImageFilter_txx
-#define __otbWaveletInverseImageFilter_txx
+#ifndef __otbWaveletInverseImageFilter_hxx
+#define __otbWaveletInverseImageFilter_hxx
 
 #include "otbWaveletInverseImageFilter.h"
 

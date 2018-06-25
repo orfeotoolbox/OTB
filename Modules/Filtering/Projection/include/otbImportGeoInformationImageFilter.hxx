@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImportGeoInformationImageFilter_txx
-#define otbImportGeoInformationImageFilter_txx
+#ifndef otbImportGeoInformationImageFilter_hxx
+#define otbImportGeoInformationImageFilter_hxx
 
 #include "otbImportGeoInformationImageFilter.h"
 #include "itkMetaDataObject.h"

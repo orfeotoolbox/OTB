@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToEnvelopeVectorDataFilter_txx
-#define otbImageToEnvelopeVectorDataFilter_txx
+#ifndef otbImageToEnvelopeVectorDataFilter_hxx
+#define otbImageToEnvelopeVectorDataFilter_hxx
 
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbDataNode.h"

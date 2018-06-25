@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFourierMellinDescriptorsIFFactory_txx
-#define otbFourierMellinDescriptorsIFFactory_txx
+#ifndef otbFourierMellinDescriptorsIFFactory_hxx
+#define otbFourierMellinDescriptorsIFFactory_hxx
 
 #include "otbFourierMellinDescriptorsIFFactory.h"
 

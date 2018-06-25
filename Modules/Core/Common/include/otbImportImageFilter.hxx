@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImportImageFilter_txx
-#define otbImportImageFilter_txx
+#ifndef otbImportImageFilter_hxx
+#define otbImportImageFilter_hxx
 
 #include "otbImportImageFilter.h"
 #include "itkObjectFactory.h"

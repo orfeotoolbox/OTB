@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbScalarImageToPanTexTextureFilter_txx
-#define otbScalarImageToPanTexTextureFilter_txx
+#ifndef otbScalarImageToPanTexTextureFilter_hxx
+#define otbScalarImageToPanTexTextureFilter_hxx
 
 #include "otbScalarImageToPanTexTextureFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

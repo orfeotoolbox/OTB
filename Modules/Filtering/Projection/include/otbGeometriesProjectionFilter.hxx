@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGeometriesProjectionFilter_txx
-#define otbGeometriesProjectionFilter_txx
+#ifndef otbGeometriesProjectionFilter_hxx
+#define otbGeometriesProjectionFilter_hxx
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/

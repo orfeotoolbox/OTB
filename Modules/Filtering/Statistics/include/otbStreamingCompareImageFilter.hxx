@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingCompareImageFilter_txx
-#define otbStreamingCompareImageFilter_txx
+#ifndef otbStreamingCompareImageFilter_hxx
+#define otbStreamingCompareImageFilter_hxx
 #include "otbStreamingCompareImageFilter.h"
 
 #include "itkImageRegionIterator.h"

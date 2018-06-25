@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOGRLayerStreamStitchingFilter_txx
-#define otbOGRLayerStreamStitchingFilter_txx
+#ifndef otbOGRLayerStreamStitchingFilter_hxx
+#define otbOGRLayerStreamStitchingFilter_hxx
 
 #include "otbOGRLayerStreamStitchingFilter.h"
 #include "itkContinuousIndex.h"

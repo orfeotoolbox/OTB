@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBandMathXImageFilter_txx
-#define otbBandMathXImageFilter_txx
+#ifndef otbBandMathXImageFilter_hxx
+#define otbBandMathXImageFilter_hxx
 #include "otbBandMathXImageFilter.h"
 
 #include "itkImageRegionIterator.h"

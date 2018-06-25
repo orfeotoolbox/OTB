@@ -159,7 +159,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNCCRegistrationFilter.txx"
+#include "otbNCCRegistrationFilter.hxx"
 #endif
 
 #endif

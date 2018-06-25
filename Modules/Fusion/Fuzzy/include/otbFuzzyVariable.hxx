@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFuzzyVariable_txx
-#define otbFuzzyVariable_txx
+#ifndef otbFuzzyVariable_hxx
+#define otbFuzzyVariable_hxx
 
 
 #include "otbFuzzyVariable.h"

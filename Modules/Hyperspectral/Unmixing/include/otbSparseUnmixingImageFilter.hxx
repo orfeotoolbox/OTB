@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSparseUnmixingImageFilter_txx
-#define otbSparseUnmixingImageFilter_txx
+#ifndef otbSparseUnmixingImageFilter_hxx
+#define otbSparseUnmixingImageFilter_hxx
 
 #include "otbSparseUnmixingImageFilter.h"
 

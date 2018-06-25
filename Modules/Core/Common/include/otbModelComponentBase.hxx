@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbModelComponentBase_txx
-#define otbModelComponentBase_txx
+#ifndef otbModelComponentBase_hxx
+#define otbModelComponentBase_hxx
 
 #include <iostream>
 

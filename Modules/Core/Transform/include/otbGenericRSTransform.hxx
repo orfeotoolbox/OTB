@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGenericRSTransform_txx
-#define otbGenericRSTransform_txx
+#ifndef otbGenericRSTransform_hxx
+#define otbGenericRSTransform_hxx
 
 #include "otbGenericRSTransform.h"
 #include "otbMacro.h"

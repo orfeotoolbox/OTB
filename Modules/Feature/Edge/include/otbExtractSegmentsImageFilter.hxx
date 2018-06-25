@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbExtractSegmentsImageFilter_txx
-#define otbExtractSegmentsImageFilter_txx
+#ifndef otbExtractSegmentsImageFilter_hxx
+#define otbExtractSegmentsImageFilter_hxx
 
 #include "otbExtractSegmentsImageFilter.h"
 

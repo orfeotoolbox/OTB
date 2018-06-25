@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelizeNeighborhoodConnectedImageFilter_txx
-#define otbLabelizeNeighborhoodConnectedImageFilter_txx
+#ifndef otbLabelizeNeighborhoodConnectedImageFilter_hxx
+#define otbLabelizeNeighborhoodConnectedImageFilter_hxx
 
 #include "otbLabelizeNeighborhoodConnectedImageFilter.h"
 

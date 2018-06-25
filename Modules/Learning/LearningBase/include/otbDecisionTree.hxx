@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDecisionTree_txx
-#define otbDecisionTree_txx
+#ifndef otbDecisionTree_hxx
+#define otbDecisionTree_hxx
 
 #include "otbDecisionTree.h"
 #include "otbMacro.h"

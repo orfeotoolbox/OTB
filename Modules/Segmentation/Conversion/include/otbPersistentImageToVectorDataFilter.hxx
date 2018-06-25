@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPersistentImageToVectorDataFilter_txx
-#define otbPersistentImageToVectorDataFilter_txx
+#ifndef otbPersistentImageToVectorDataFilter_hxx
+#define otbPersistentImageToVectorDataFilter_hxx
 
 #include "otbPersistentImageToVectorDataFilter.h"
 

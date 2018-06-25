@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTrainLibSVM_txx
-#define otbTrainLibSVM_txx
+#ifndef otbTrainLibSVM_hxx
+#define otbTrainLibSVM_hxx
 #include "otbLearningApplicationBase.h"
 #include "otbLibSVMMachineLearningModel.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKMeansImageClassificationFilter_txx
-#define otbKMeansImageClassificationFilter_txx
+#ifndef otbKMeansImageClassificationFilter_hxx
+#define otbKMeansImageClassificationFilter_hxx
 
 #include "otbKMeansImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"

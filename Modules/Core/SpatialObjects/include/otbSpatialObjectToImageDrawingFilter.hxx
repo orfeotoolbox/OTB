@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSpatialObjectToImageDrawingFilter_txx
-#define otbSpatialObjectToImageDrawingFilter_txx
+#ifndef otbSpatialObjectToImageDrawingFilter_hxx
+#define otbSpatialObjectToImageDrawingFilter_hxx
 
 #include "otbSpatialObjectToImageDrawingFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

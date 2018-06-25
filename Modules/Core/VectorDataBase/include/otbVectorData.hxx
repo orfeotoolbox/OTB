@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorData_txx
-#define otbVectorData_txx
+#ifndef otbVectorData_hxx
+#define otbVectorData_hxx
 
 #include "otbVectorData.h"
 #include "itkPreOrderTreeIterator.h"

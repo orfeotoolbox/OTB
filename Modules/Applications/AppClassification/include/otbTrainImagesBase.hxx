@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTrainImagesBase_txx
-#define otbTrainImagesBase_txx
+#ifndef otbTrainImagesBase_hxx
+#define otbTrainImagesBase_hxx
 
 #include "otbTrainImagesBase.h"
 

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKullbackLeiblerDistanceImageFilter_txx
-#define otbKullbackLeiblerDistanceImageFilter_txx
+#ifndef otbKullbackLeiblerDistanceImageFilter_hxx
+#define otbKullbackLeiblerDistanceImageFilter_hxx
 
 #include "otbKullbackLeiblerDistanceImageFilter.h"
 #include <vector>

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLeeImageFilter_txx
-#define otbLeeImageFilter_txx
+#ifndef otbLeeImageFilter_hxx
+#define otbLeeImageFilter_hxx
 
 #include "otbLeeImageFilter.h"
 

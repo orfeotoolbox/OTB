@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTerraSarBrightnessImageFilter_txx
-#define otbTerraSarBrightnessImageFilter_txx
+#ifndef otbTerraSarBrightnessImageFilter_hxx
+#define otbTerraSarBrightnessImageFilter_hxx
 
 #include "otbTerraSarBrightnessImageFilter.h"
 #include "otbTerraSarImageMetadataInterface.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRAMDrivenAdaptativeStreamingManager_txx
-#define otbRAMDrivenAdaptativeStreamingManager_txx
+#ifndef otbRAMDrivenAdaptativeStreamingManager_hxx
+#define otbRAMDrivenAdaptativeStreamingManager_hxx
 
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 #include "otbMacro.h"

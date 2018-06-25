@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbListSampleToBalancedListSampleFilter_txx
-#define otbListSampleToBalancedListSampleFilter_txx
+#ifndef otbListSampleToBalancedListSampleFilter_hxx
+#define otbListSampleToBalancedListSampleFilter_hxx
 
 #include "otbListSampleToBalancedListSampleFilter.h"
 #include "itkProgressReporter.h"

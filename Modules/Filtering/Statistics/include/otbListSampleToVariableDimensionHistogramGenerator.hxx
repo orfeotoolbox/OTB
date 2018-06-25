@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbListSampleToVariableDimensionHistogramGenerator_txx
-#define otbListSampleToVariableDimensionHistogramGenerator_txx
+#ifndef otbListSampleToVariableDimensionHistogramGenerator_hxx
+#define otbListSampleToVariableDimensionHistogramGenerator_hxx
 
 #include "otbListSampleToVariableDimensionHistogramGenerator.h"
 #include "otbMacro.h"

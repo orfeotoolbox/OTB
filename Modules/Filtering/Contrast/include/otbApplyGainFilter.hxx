@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbApplyGainFilter_txx
-#define otbApplyGainFilter_txx
+#ifndef otbApplyGainFilter_hxx
+#define otbApplyGainFilter_hxx
 
 #include "otbApplyGainFilter.h"
 #include "itkImageRegionIterator.h"

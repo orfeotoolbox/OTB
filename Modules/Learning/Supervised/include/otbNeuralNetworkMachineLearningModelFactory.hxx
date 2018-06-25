@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNeuralNetworkMachineLearningModelFactory_txx
-#define otbNeuralNetworkMachineLearningModelFactory_txx
+#ifndef otbNeuralNetworkMachineLearningModelFactory_hxx
+#define otbNeuralNetworkMachineLearningModelFactory_hxx
 
 #include "otbNeuralNetworkMachineLearningModelFactory.h"
 

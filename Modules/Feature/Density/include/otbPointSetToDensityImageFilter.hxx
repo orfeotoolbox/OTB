@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPointSetToDensityImageFilter_txx
-#define otbPointSetToDensityImageFilter_txx
+#ifndef otbPointSetToDensityImageFilter_hxx
+#define otbPointSetToDensityImageFilter_hxx
 
 #include "otbPointSetToDensityImageFilter.h"
 #include "itkImageRegionIterator.h"

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelImageToLabelMapWithAdjacencyFilter_txx
-#define otbLabelImageToLabelMapWithAdjacencyFilter_txx
+#ifndef otbLabelImageToLabelMapWithAdjacencyFilter_hxx
+#define otbLabelImageToLabelMapWithAdjacencyFilter_hxx
 
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
 #include "itkNumericTraits.h"

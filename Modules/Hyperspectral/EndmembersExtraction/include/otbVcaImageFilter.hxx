@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVCAImageFilter_txx
-#define otbVCAImageFilter_txx
+#ifndef otbVCAImageFilter_hxx
+#define otbVCAImageFilter_hxx
 
 #include "otbVcaImageFilter.h"
 #include "otbStandardWriterWatcher.h"

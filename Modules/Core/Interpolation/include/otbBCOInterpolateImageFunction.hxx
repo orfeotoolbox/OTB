@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBCOInterpolateImageFunction_txx
-#define otbBCOInterpolateImageFunction_txx
+#ifndef otbBCOInterpolateImageFunction_hxx
+#define otbBCOInterpolateImageFunction_hxx
 
 #include "otbBCOInterpolateImageFunction.h"
 

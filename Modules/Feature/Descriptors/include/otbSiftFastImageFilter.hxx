@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbSiftFastImageFilter_txx
-#define otbSiftFastImageFilter_txx
+#ifndef otbSiftFastImageFilter_hxx
+#define otbSiftFastImageFilter_hxx
 
 #include "otbSiftFastImageFilter.h"
 

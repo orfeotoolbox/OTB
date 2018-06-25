@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSarRadiometricCalibrationToImageFilter_txx
-#define otbSarRadiometricCalibrationToImageFilter_txx
+#ifndef otbSarRadiometricCalibrationToImageFilter_hxx
+#define otbSarRadiometricCalibrationToImageFilter_hxx
 
 #include "otbSarRadiometricCalibrationToImageFilter.h"
 #include "otbSarImageMetadataInterfaceFactory.h"

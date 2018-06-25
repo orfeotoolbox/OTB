@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTwoNRIBandsImageToNComplexBandsImage_txx
-#define otbTwoNRIBandsImageToNComplexBandsImage_txx
+#ifndef otbTwoNRIBandsImageToNComplexBandsImage_hxx
+#define otbTwoNRIBandsImageToNComplexBandsImage_hxx
 
 #include "otbTwoNRIBandsImageToNComplexBandsImage.h"
 

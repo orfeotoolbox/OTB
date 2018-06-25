@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSOMClassifier_txx
-#define otbSOMClassifier_txx
+#ifndef otbSOMClassifier_hxx
+#define otbSOMClassifier_hxx
 
 #include "otbSOMClassifier.h"
 #include "otbMacro.h"

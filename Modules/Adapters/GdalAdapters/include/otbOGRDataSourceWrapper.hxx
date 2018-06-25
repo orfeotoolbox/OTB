@@ -20,12 +20,12 @@
 
 
 /**\ingroup Geometry
- * \file    otbOGRDataSourceWrapper.txx
+ * \file    otbOGRDataSourceWrapper.hxx
  * \internal this file is meant to be included by otbOGRDataSourceWrapper.h
  */
 
-#ifndef otbOGRDataSourceWrapper_txx
-#define otbOGRDataSourceWrapper_txx
+#ifndef otbOGRDataSourceWrapper_hxx
+#define otbOGRDataSourceWrapper_hxx
 
 #include "otbOGRDataSourceWrapper.h"
 
@@ -132,4 +132,4 @@ Value otb::ogr::DataSource::layer_iter<Value>::dereference() const
 }
 
 
-#endif // otbOGRDataSourceWrapper_txx
+#endif // otbOGRDataSourceWrapper_hxx

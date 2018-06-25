@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbReduceSpectralResponse_txx
-#define otbReduceSpectralResponse_txx
+#ifndef otbReduceSpectralResponse_hxx
+#define otbReduceSpectralResponse_hxx
 
 #include <algorithm>
 #include "itkNumericTraits.h"

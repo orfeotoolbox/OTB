@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTrainNormalBayes_txx
-#define otbTrainNormalBayes_txx
+#ifndef otbTrainNormalBayes_hxx
+#define otbTrainNormalBayes_hxx
 #include "otbLearningApplicationBase.h"
 #include "otbNormalBayesMachineLearningModel.h"
 

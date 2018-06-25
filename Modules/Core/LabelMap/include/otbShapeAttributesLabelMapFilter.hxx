@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbShapeAttributesLabelMapFilter_txx
-#define otbShapeAttributesLabelMapFilter_txx
+#ifndef otbShapeAttributesLabelMapFilter_hxx
+#define otbShapeAttributesLabelMapFilter_hxx
 
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "itkProgressReporter.h"

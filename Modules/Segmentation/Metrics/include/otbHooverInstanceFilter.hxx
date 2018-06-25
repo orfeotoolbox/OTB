@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHooverInstanceFilter_txx
-#define otbHooverInstanceFilter_txx
+#ifndef otbHooverInstanceFilter_hxx
+#define otbHooverInstanceFilter_hxx
 
 #include "otbHooverInstanceFilter.h"
 #include "otbMacro.h"

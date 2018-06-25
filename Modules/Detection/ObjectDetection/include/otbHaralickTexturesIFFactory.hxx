@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHaralickTexturesIFFactory_txx
-#define otbHaralickTexturesIFFactory_txx
+#ifndef otbHaralickTexturesIFFactory_hxx
+#define otbHaralickTexturesIFFactory_hxx
 
 #include "otbHaralickTexturesIFFactory.h"
 

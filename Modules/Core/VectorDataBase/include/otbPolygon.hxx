@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPolygon_txx
-#define otbPolygon_txx
+#ifndef otbPolygon_hxx
+#define otbPolygon_hxx
 
 #include "otbPolygon.h"
 

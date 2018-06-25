@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSOMWithMissingValue_txx
-#define otbSOMWithMissingValue_txx
+#ifndef otbSOMWithMissingValue_hxx
+#define otbSOMWithMissingValue_hxx
 
 #include "otbSOMWithMissingValue.h"
 

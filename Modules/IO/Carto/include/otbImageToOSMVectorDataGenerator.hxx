@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToOSMVectorDataGenerator_txx
-#define otbImageToOSMVectorDataGenerator_txx
+#ifndef otbImageToOSMVectorDataGenerator_hxx
+#define otbImageToOSMVectorDataGenerator_hxx
 
 #include "otbImageToOSMVectorDataGenerator.h"
 #include "otbGeoInformationConversion.h"

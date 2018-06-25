@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGenericMapProjection_txx
-#define otbGenericMapProjection_txx
+#ifndef otbGenericMapProjection_hxx
+#define otbGenericMapProjection_hxx
 
 #include "otbGenericMapProjection.h"
 #include "otbMacro.h"

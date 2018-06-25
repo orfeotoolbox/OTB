@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGeocentricTransform_txx
-#define otbGeocentricTransform_txx
+#ifndef otbGeocentricTransform_hxx
+#define otbGeocentricTransform_hxx
 
 #include "otbGeocentricTransform.h"
 

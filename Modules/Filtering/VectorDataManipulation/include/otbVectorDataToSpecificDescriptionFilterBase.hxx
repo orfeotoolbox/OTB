@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataToSpecificDescriptionFilterBase_txx
-#define otbVectorDataToSpecificDescriptionFilterBase_txx
+#ifndef otbVectorDataToSpecificDescriptionFilterBase_hxx
+#define otbVectorDataToSpecificDescriptionFilterBase_hxx
 
 #include "otbVectorDataToSpecificDescriptionFilterBase.h"
 

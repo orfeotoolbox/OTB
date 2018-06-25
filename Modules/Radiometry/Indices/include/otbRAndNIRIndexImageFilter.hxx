@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRAndNIRIndexImageFilter_txx
-#define otbRAndNIRIndexImageFilter_txx
+#ifndef otbRAndNIRIndexImageFilter_hxx
+#define otbRAndNIRIndexImageFilter_hxx
 
 #include "otbRAndNIRIndexImageFilter.h"
 #include "itkImageRegionIterator.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRCC8Graph_txx
-#define otbRCC8Graph_txx
+#ifndef otbRCC8Graph_hxx
+#define otbRCC8Graph_hxx
 
 #include "otbRCC8Graph.h"
 

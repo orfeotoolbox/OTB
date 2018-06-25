@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbPCAFactory_txx
-#define otbPCAFactory_txx
+#ifndef otbPCAFactory_hxx
+#define otbPCAFactory_hxx
 
 #include "otbPCAModelFactory.h"
 

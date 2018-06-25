@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKeyPointDensityImageFilter_txx
-#define otbKeyPointDensityImageFilter_txx
+#ifndef otbKeyPointDensityImageFilter_hxx
+#define otbKeyPointDensityImageFilter_hxx
 
 #include "otbKeyPointDensityImageFilter.h"
 #include "itkImageRegionIterator.h"

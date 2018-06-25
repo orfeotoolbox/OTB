@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbCLHistogramEqualizationFilter_txx
-#define otbCLHistogramEqualizationFilter_txx
+#ifndef otbCLHistogramEqualizationFilter_hxx
+#define otbCLHistogramEqualizationFilter_hxx
 
 #include "otbCLHistogramEqualizationFilter.h"
 #include "itkImageRegionIterator.h"

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNormalizeAttributesLabelMapFilter_txx
-#define otbNormalizeAttributesLabelMapFilter_txx
+#ifndef otbNormalizeAttributesLabelMapFilter_hxx
+#define otbNormalizeAttributesLabelMapFilter_hxx
 
 #include "otbNormalizeAttributesLabelMapFilter.h"
 

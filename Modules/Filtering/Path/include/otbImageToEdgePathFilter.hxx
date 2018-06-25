@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToEdgePathFilter_txx
-#define otbImageToEdgePathFilter_txx
+#ifndef otbImageToEdgePathFilter_hxx
+#define otbImageToEdgePathFilter_hxx
 
 #include "otbImageToEdgePathFilter.h"
 #include "otbMacro.h"

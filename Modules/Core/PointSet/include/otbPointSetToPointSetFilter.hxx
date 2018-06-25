@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPointSetToPointSetFilter_txx
-#define otbPointSetToPointSetFilter_txx
+#ifndef otbPointSetToPointSetFilter_hxx
+#define otbPointSetToPointSetFilter_hxx
 
 #include "otbPointSetToPointSetFilter.h"
 

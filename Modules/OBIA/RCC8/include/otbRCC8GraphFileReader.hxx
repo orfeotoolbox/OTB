@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRCC8GraphFileReader_txx
-#define otbRCC8GraphFileReader_txx
+#ifndef otbRCC8GraphFileReader_hxx
+#define otbRCC8GraphFileReader_hxx
 
 #include "otbRCC8GraphFileReader.h"
 #include "otbRCC8VertexIterator.h"

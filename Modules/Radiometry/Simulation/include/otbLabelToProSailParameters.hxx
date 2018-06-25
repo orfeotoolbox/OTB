@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelToProSailParameters_txx
-#define otbLabelToProSailParameters_txx
+#ifndef otbLabelToProSailParameters_hxx
+#define otbLabelToProSailParameters_hxx
 
 #include "itkNumericTraits.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTrainSharkRandomForests_txx
-#define otbTrainSharkRandomForests_txx
+#ifndef otbTrainSharkRandomForests_hxx
+#define otbTrainSharkRandomForests_hxx
 
 #include "otbLearningApplicationBase.h"
 #include "otbSharkRandomForestsMachineLearningModel.h"

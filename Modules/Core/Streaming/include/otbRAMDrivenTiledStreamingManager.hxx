@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRAMDrivenTiledStreamingManager_txx
-#define otbRAMDrivenTiledStreamingManager_txx
+#ifndef otbRAMDrivenTiledStreamingManager_hxx
+#define otbRAMDrivenTiledStreamingManager_hxx
 
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbMacro.h"

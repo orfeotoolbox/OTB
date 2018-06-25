@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbTrainVectorBase_txx
-#define otbTrainVectorBase_txx
+#ifndef otbTrainVectorBase_hxx
+#define otbTrainVectorBase_hxx
 
 #include "otbTrainVectorBase.h"
 

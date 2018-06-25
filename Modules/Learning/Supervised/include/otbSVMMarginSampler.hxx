@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSVMMarginSampler_txx
-#define otbSVMMarginSampler_txx
+#ifndef otbSVMMarginSampler_hxx
+#define otbSVMMarginSampler_hxx
 
 #include "otbSVMMarginSampler.h"
 #include "otbMacro.h"

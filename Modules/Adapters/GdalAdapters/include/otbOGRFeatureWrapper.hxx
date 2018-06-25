@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOGRFeatureWrapper_txx
-#define otbOGRFeatureWrapper_txx
+#ifndef otbOGRFeatureWrapper_hxx
+#define otbOGRFeatureWrapper_hxx
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
@@ -208,4 +208,4 @@ void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
   UncheckedPrintSelf(os, indent);
 }
 
-#endif // otbOGRFeatureWrapper_txx
+#endif // otbOGRFeatureWrapper_hxx

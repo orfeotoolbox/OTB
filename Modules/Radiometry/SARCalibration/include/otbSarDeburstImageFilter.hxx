@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSarDeburstImageFilter_txx
-#define otbSarDeburstImageFilter_txx
+#ifndef otbSarDeburstImageFilter_hxx
+#define otbSarDeburstImageFilter_hxx
 
 #include "otbSarDeburstImageFilter.h"
 

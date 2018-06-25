@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMapFileProductWriter_txx
-#define otbMapFileProductWriter_txx
+#ifndef otbMapFileProductWriter_hxx
+#define otbMapFileProductWriter_hxx
 
 #include "otbMapFileProductWriter.h"
 #include "itksys/SystemTools.hxx"

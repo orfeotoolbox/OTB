@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbContingencyTableCalculator_txx
-#define otbContingencyTableCalculator_txx
+#ifndef otbContingencyTableCalculator_hxx
+#define otbContingencyTableCalculator_hxx
 
 #include "otbContingencyTableCalculator.h"
 #include "itkMacro.h"

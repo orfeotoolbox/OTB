@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDrawLineSpatialObjectFilter_txx
-#define otbDrawLineSpatialObjectFilter_txx
+#ifndef otbDrawLineSpatialObjectFilter_hxx
+#define otbDrawLineSpatialObjectFilter_hxx
 
 #include "otbDrawLineSpatialObjectFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDataNodeVectorDataFunction_txx
-#define otbDataNodeVectorDataFunction_txx
+#ifndef otbDataNodeVectorDataFunction_hxx
+#define otbDataNodeVectorDataFunction_hxx
 
 #include "otbDataNodeVectorDataFunction.h"
 

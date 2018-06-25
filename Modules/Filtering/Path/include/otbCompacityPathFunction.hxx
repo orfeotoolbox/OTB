@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbCompacityPathFunction_txx
-#define otbCompacityPathFunction_txx
+#ifndef otbCompacityPathFunction_hxx
+#define otbCompacityPathFunction_hxx
 
 #include "otbCompacityPathFunction.h"
 #include "itkNumericTraits.h"

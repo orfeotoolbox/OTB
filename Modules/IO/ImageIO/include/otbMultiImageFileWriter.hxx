@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMultiImageFileWriter_txx
-#define otbMultiImageFileWriter_txx
+#ifndef otbMultiImageFileWriter_hxx
+#define otbMultiImageFileWriter_hxx
 
 #include "otbMultiImageFileWriter.h"
 #include "otbImageIOFactory.h"
@@ -86,4 +86,4 @@ MultiImageFileWriter::Sink<TImage>
 
 } // end of namespace otb
 
-#endif // otbMultiImageFileWriter_txx
+#endif // otbMultiImageFileWriter_hxx

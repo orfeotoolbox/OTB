@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataIntoImageProjectionFilter_txx
-#define otbVectorDataIntoImageProjectionFilter_txx
+#ifndef otbVectorDataIntoImageProjectionFilter_hxx
+#define otbVectorDataIntoImageProjectionFilter_hxx
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
 #include "otb_boost_string_header.h"

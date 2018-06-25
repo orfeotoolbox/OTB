@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbSharkKMeansMachineLearningModel_txx
-#define otbSharkKMeansMachineLearningModel_txx
+#ifndef otbSharkKMeansMachineLearningModel_hxx
+#define otbSharkKMeansMachineLearningModel_hxx
 
 #include <fstream>
 #include "boost/make_shared.hpp"

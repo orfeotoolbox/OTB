@@ -284,7 +284,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSubPixelDisparityImageFilter.txx"
+#include "otbSubPixelDisparityImageFilter.hxx"
 #endif
 
 #endif

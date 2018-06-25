@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSimpleParallelTiffWriter_txx
-#define otbSimpleParallelTiffWriter_txx
+#ifndef otbSimpleParallelTiffWriter_hxx
+#define otbSimpleParallelTiffWriter_hxx
 
 #include "otbSimpleParallelTiffWriter.h"
 #include "otbStopwatch.h"

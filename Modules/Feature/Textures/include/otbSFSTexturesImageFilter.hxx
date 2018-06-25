@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSFSTexturesImageFilter_txx
-#define otbSFSTexturesImageFilter_txx
+#ifndef otbSFSTexturesImageFilter_hxx
+#define otbSFSTexturesImageFilter_hxx
 
 #include "otbSFSTexturesImageFilter.h"
 

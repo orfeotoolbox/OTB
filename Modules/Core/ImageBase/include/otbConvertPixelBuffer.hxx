@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConvertPixelBuffer_txx
-#define otbConvertPixelBuffer_txx
+#ifndef otbConvertPixelBuffer_hxx
+#define otbConvertPixelBuffer_hxx
 #include "otbConvertPixelBuffer.h"
 
 #include "itkConvertPixelBuffer.h"

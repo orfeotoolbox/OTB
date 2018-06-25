@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRadiometricMomentsIFFactory_txx
-#define otbRadiometricMomentsIFFactory_txx
+#ifndef otbRadiometricMomentsIFFactory_hxx
+#define otbRadiometricMomentsIFFactory_hxx
 
 #include "otbRadiometricMomentsIFFactory.h"
 

@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbOGRFieldWrapper_txx
-#define otbOGRFieldWrapper_txx
+#ifndef otbOGRFieldWrapper_hxx
+#define otbOGRFieldWrapper_hxx
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/
@@ -495,4 +495,4 @@ OGRField & otb::ogr::Field::ogr() const
   return const_cast <Field*>(this)->ogr();
 }
 
-#endif // otbOGRFieldWrapper_txx
+#endif // otbOGRFieldWrapper_hxx

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbParserConditionDataNodeFeatureFunction_txx
-#define otbParserConditionDataNodeFeatureFunction_txx
+#ifndef otbParserConditionDataNodeFeatureFunction_hxx
+#define otbParserConditionDataNodeFeatureFunction_hxx
 
 #include "otbParserConditionDataNodeFeatureFunction.h"
 

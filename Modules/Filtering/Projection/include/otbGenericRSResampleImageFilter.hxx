@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGenericRSResampleImageFilter_txx
-#define otbGenericRSResampleImageFilter_txx
+#ifndef otbGenericRSResampleImageFilter_hxx
+#define otbGenericRSResampleImageFilter_hxx
 
 #include "otbGenericRSResampleImageFilter.h"
 

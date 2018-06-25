@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbCloudEstimatorFilter_txx
-#define otbCloudEstimatorFilter_txx
+#ifndef otbCloudEstimatorFilter_hxx
+#define otbCloudEstimatorFilter_hxx
 
 #include "otbCloudEstimatorFilter.h"
 

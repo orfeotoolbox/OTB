@@ -90,7 +90,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleSource.txx"
+#include "otbListSampleSource.hxx"
 #endif
 
 #endif

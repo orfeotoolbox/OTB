@@ -235,7 +235,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageAndVectorImageOperationFilter.txx"
+#include "otbImageAndVectorImageOperationFilter.hxx"
 #endif
 
 #endif

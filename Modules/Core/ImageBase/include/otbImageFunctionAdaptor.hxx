@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageFunctionAdaptor_txx
-#define otbImageFunctionAdaptor_txx
+#ifndef otbImageFunctionAdaptor_hxx
+#define otbImageFunctionAdaptor_hxx
 
 #include "otbImageFunctionAdaptor.h"
 

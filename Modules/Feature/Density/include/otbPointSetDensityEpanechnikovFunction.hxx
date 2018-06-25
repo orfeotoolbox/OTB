@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPointSetDensityEpanechnikovFunction_txx
-#define otbPointSetDensityEpanechnikovFunction_txx
+#ifndef otbPointSetDensityEpanechnikovFunction_hxx
+#define otbPointSetDensityEpanechnikovFunction_hxx
 
 #include "otbPointSetDensityEpanechnikovFunction.h"
 #include "otbMath.h"

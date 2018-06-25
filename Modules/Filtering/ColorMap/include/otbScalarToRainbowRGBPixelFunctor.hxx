@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbScalarToRainbowRGBPixelFunctor_txx
-#define otbScalarToRainbowRGBPixelFunctor_txx
+#ifndef otbScalarToRainbowRGBPixelFunctor_hxx
+#define otbScalarToRainbowRGBPixelFunctor_hxx
 
 #include "otbScalarToRainbowRGBPixelFunctor.h"
 

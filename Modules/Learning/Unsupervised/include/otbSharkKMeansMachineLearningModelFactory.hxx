@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbSharkKMeansMachineLearningModelFactory_txx
-#define otbSharkKMeansMachineLearningModelFactory_txx
+#ifndef otbSharkKMeansMachineLearningModelFactory_hxx
+#define otbSharkKMeansMachineLearningModelFactory_hxx
 
 #include "otbSharkKMeansMachineLearningModelFactory.h"
 

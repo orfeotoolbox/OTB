@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbMarkovRandomFieldFilter_txx
-#define otbMarkovRandomFieldFilter_txx
+#ifndef otbMarkovRandomFieldFilter_hxx
+#define otbMarkovRandomFieldFilter_hxx
 #include "otbMarkovRandomFieldFilter.h"
 
 namespace otb

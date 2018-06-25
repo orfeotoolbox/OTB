@@ -104,7 +104,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataProperties.txx"
+#include "otbVectorDataProperties.hxx"
 #endif
 
 #endif

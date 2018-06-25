@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageListToImageListApplyFilter_txx
-#define otbImageListToImageListApplyFilter_txx
+#ifndef otbImageListToImageListApplyFilter_hxx
+#define otbImageListToImageListApplyFilter_hxx
 
 #include "otbImageListToImageListApplyFilter.h"
 

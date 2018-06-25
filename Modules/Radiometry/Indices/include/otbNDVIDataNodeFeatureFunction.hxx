@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNDVIDataNodeFeatureFunction_txx
-#define otbNDVIDataNodeFeatureFunction_txx
+#ifndef otbNDVIDataNodeFeatureFunction_hxx
+#define otbNDVIDataNodeFeatureFunction_hxx
 
 #include "otbNDVIDataNodeFeatureFunction.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageOfVectorsToMonoChannelExtractROI_txx
-#define otbImageOfVectorsToMonoChannelExtractROI_txx
+#ifndef otbImageOfVectorsToMonoChannelExtractROI_hxx
+#define otbImageOfVectorsToMonoChannelExtractROI_hxx
 
 #include "otbImageOfVectorsToMonoChannelExtractROI.h"
 

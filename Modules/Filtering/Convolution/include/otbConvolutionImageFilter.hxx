@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConvolutionImageFilter_txx
-#define otbConvolutionImageFilter_txx
+#ifndef otbConvolutionImageFilter_hxx
+#define otbConvolutionImageFilter_hxx
 #include "otbConvolutionImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"

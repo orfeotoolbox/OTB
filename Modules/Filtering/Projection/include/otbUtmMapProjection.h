@@ -73,7 +73,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUtmMapProjection.txx"
+#include "otbUtmMapProjection.hxx"
 #endif
 
 #endif

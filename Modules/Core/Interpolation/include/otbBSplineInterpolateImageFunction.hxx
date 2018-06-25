@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBSplineInterpolateImageFunction_txx
-#define otbBSplineInterpolateImageFunction_txx
+#ifndef otbBSplineInterpolateImageFunction_hxx
+#define otbBSplineInterpolateImageFunction_hxx
 #include "otbBSplineInterpolateImageFunction.h"
 #include "itkImageLinearIteratorWithIndex.h"
 #include "itkImageRegionConstIteratorWithIndex.h"

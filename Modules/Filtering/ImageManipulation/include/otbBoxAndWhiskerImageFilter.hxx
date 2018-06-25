@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBoxAndWhiskerImageFilter_txx
-#define otbBoxAndWhiskerImageFilter_txx
+#ifndef otbBoxAndWhiskerImageFilter_hxx
+#define otbBoxAndWhiskerImageFilter_hxx
 
 #include <vector>
 #include <algorithm>

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToGenericRSOutputParameters_txx
-#define otbImageToGenericRSOutputParameters_txx
+#ifndef otbImageToGenericRSOutputParameters_hxx
+#define otbImageToGenericRSOutputParameters_hxx
 
 
 #include "otbImageToGenericRSOutputParameters.h"

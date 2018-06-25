@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataToRoadDescriptionFilter_txx
-#define otbVectorDataToRoadDescriptionFilter_txx
+#ifndef otbVectorDataToRoadDescriptionFilter_hxx
+#define otbVectorDataToRoadDescriptionFilter_hxx
 
 #include "otbVectorDataToRoadDescriptionFilter.h"
 

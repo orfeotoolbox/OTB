@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNAPCAImageFilter_txx
-#define otbNAPCAImageFilter_txx
+#ifndef otbNAPCAImageFilter_hxx
+#define otbNAPCAImageFilter_hxx
 #include "otbNAPCAImageFilter.h"
 
 #include "itkMacro.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLinkPathListFilter_txx
-#define otbLinkPathListFilter_txx
+#ifndef otbLinkPathListFilter_hxx
+#define otbLinkPathListFilter_hxx
 
 #include "otbLinkPathListFilter.h"
 #include "otbMath.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataToLabelImageFilter_txx
-#define otbVectorDataToLabelImageFilter_txx
+#ifndef otbVectorDataToLabelImageFilter_hxx
+#define otbVectorDataToLabelImageFilter_hxx
 
 #include "gdal_alg.h"
 #include "ogr_srs_api.h"

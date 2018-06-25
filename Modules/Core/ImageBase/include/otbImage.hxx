@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImage_txx
-#define otbImage_txx
+#ifndef otbImage_hxx
+#define otbImage_hxx
 
 
 #include "otbImage.h"

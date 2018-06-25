@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageMultiSegmentationToRCC8GraphFilter_txx
-#define otbImageMultiSegmentationToRCC8GraphFilter_txx
+#ifndef otbImageMultiSegmentationToRCC8GraphFilter_hxx
+#define otbImageMultiSegmentationToRCC8GraphFilter_hxx
 
 #include "otbImageMultiSegmentationToRCC8GraphFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"

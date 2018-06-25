@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbEigenvalueLikelihoodMaximisation_txx
-#define otbEigenvalueLikelihoodMaximisation_txx
+#ifndef otbEigenvalueLikelihoodMaximisation_hxx
+#define otbEigenvalueLikelihoodMaximisation_hxx
 
 #include "otbEigenvalueLikelihoodMaximisation.h"
 

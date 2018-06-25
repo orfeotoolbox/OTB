@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMulti3DMapToDEMFilter_txx
-#define otbMulti3DMapToDEMFilter_txx
+#ifndef otbMulti3DMapToDEMFilter_hxx
+#define otbMulti3DMapToDEMFilter_hxx
 
 #include "otbMulti3DMapToDEMFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"

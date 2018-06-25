@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKullbackLeiblerProfileImageFilter_txx
-#define otbKullbackLeiblerProfileImageFilter_txx
+#ifndef otbKullbackLeiblerProfileImageFilter_hxx
+#define otbKullbackLeiblerProfileImageFilter_hxx
 
 #include <vector>
 

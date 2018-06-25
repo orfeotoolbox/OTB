@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDecisionTreeMachineLearningModelFactory_txx
-#define otbDecisionTreeMachineLearningModelFactory_txx
+#ifndef otbDecisionTreeMachineLearningModelFactory_hxx
+#define otbDecisionTreeMachineLearningModelFactory_hxx
 
 #include "otbDecisionTreeMachineLearningModelFactory.h"
 

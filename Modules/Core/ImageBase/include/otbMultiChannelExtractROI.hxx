@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMultiChannelExtractROI_txx
-#define otbMultiChannelExtractROI_txx
+#ifndef otbMultiChannelExtractROI_hxx
+#define otbMultiChannelExtractROI_hxx
 
 #include "otbMultiChannelExtractROI.h"
 

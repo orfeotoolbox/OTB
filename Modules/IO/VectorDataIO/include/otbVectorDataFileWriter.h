@@ -124,7 +124,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataFileWriter.txx"
+#include "otbVectorDataFileWriter.hxx"
 #endif
 
 #endif // otbVectorDataFileWriter_h

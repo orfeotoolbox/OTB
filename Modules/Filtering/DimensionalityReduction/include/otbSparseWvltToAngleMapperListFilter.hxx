@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSparseWvltToAngleMapperListFilter_txx
-#define otbSparseWvltToAngleMapperListFilter_txx
+#ifndef otbSparseWvltToAngleMapperListFilter_hxx
+#define otbSparseWvltToAngleMapperListFilter_hxx
 #include "otbSparseWvltToAngleMapperListFilter.h"
 
 #include <vnl/vnl_math.h>

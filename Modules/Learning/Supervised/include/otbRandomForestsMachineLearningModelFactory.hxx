@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRandomForestsMachineLearningModelFactory_txx
-#define otbRandomForestsMachineLearningModelFactory_txx
+#ifndef otbRandomForestsMachineLearningModelFactory_hxx
+#define otbRandomForestsMachineLearningModelFactory_hxx
 
 #include "otbRandomForestsMachineLearningModelFactory.h"
 

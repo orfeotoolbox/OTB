@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConcatenateScalarValueImageFilter_txx
-#define otbConcatenateScalarValueImageFilter_txx
+#ifndef otbConcatenateScalarValueImageFilter_hxx
+#define otbConcatenateScalarValueImageFilter_hxx
 
 #include "otbConcatenateScalarValueImageFilter.h"
 

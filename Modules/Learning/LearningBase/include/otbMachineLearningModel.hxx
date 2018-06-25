@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMachineLearningModel_txx
-#define otbMachineLearningModel_txx
+#ifndef otbMachineLearningModel_hxx
+#define otbMachineLearningModel_hxx
 
 #ifdef _OPENMP
  # include <omp.h>

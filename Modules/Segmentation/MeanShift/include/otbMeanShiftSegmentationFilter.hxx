@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMeanShiftSegmentationFilter_txx
-#define otbMeanShiftSegmentationFilter_txx
+#ifndef otbMeanShiftSegmentationFilter_hxx
+#define otbMeanShiftSegmentationFilter_hxx
 
 #include "otbMeanShiftSegmentationFilter.h"
 

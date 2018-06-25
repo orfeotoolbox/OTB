@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStandardDSCostFunction_txx
-#define otbStandardDSCostFunction_txx
+#ifndef otbStandardDSCostFunction_hxx
+#define otbStandardDSCostFunction_hxx
 
 #include "otbStandardDSCostFunction.h"
 

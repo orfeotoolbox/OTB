@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingImageVirtualWriter_txx
-#define otbStreamingImageVirtualWriter_txx
+#ifndef otbStreamingImageVirtualWriter_hxx
+#define otbStreamingImageVirtualWriter_hxx
 #include "otbStreamingImageVirtualWriter.h"
 
 #include "otbMacro.h"

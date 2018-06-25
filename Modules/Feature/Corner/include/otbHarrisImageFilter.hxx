@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHarrisImageFilter_txx
-#define otbHarrisImageFilter_txx
+#ifndef otbHarrisImageFilter_hxx
+#define otbHarrisImageFilter_hxx
 
 #include "otbHarrisImageFilter.h"
 

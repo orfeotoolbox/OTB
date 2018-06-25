@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbImageDimensionalityReductionFilter_txx
-#define otbImageDimensionalityReductionFilter_txx
+#ifndef otbImageDimensionalityReductionFilter_hxx
+#define otbImageDimensionalityReductionFilter_hxx
 
 #include "otbImageDimensionalityReductionFilter.h"
 #include "itkImageRegionIterator.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGeographicalDistance_txx
-#define otbGeographicalDistance_txx
+#ifndef otbGeographicalDistance_hxx
+#define otbGeographicalDistance_hxx
 
 #include "otbGeographicalDistance.h"
 #include "otbMath.h"

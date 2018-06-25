@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
-#define otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
+#ifndef otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_hxx
+#define otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_hxx
 
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 #include "otbVectorDataTransformFilter.h"

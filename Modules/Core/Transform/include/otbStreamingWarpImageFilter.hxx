@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingWarpImageFilter_txx
-#define otbStreamingWarpImageFilter_txx
+#ifndef otbStreamingWarpImageFilter_hxx
+#define otbStreamingWarpImageFilter_hxx
 
 #include "otbStreamingWarpImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

@@ -90,7 +90,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTwoNRIBandsImageToNComplexBandsImage.txx"
+#include "otbTwoNRIBandsImageToNComplexBandsImage.hxx"
 #endif
 
 #endif

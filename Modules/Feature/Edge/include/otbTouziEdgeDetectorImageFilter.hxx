@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTouziEdgeDetectorImageFilter_txx
-#define otbTouziEdgeDetectorImageFilter_txx
+#ifndef otbTouziEdgeDetectorImageFilter_hxx
+#define otbTouziEdgeDetectorImageFilter_hxx
 
 #include "otbTouziEdgeDetectorImageFilter.h"
 

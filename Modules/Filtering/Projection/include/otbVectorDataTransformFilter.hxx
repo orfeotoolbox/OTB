@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataTransformFilter_txx
-#define otbVectorDataTransformFilter_txx
+#ifndef otbVectorDataTransformFilter_hxx
+#define otbVectorDataTransformFilter_hxx
 
 #include "otbVectorDataTransformFilter.h"
 #include "itkProgressReporter.h"

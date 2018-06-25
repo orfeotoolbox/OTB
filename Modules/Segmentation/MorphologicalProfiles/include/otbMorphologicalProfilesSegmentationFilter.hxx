@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMorphologicalProfilesSegmentationFilter_txx
-#define otbMorphologicalProfilesSegmentationFilter_txx
+#ifndef otbMorphologicalProfilesSegmentationFilter_hxx
+#define otbMorphologicalProfilesSegmentationFilter_hxx
 
 #include "otbMorphologicalProfilesSegmentationFilter.h"
 

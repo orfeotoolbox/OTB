@@ -20,8 +20,8 @@
  */
 
 
-#ifndef otbFlexibleDistanceWithMissingValue_txx
-#define otbFlexibleDistanceWithMissingValue_txx
+#ifndef otbFlexibleDistanceWithMissingValue_hxx
+#define otbFlexibleDistanceWithMissingValue_hxx
 
 #include "otbFlexibleDistanceWithMissingValue.h"
 #include "itkNumericTraits.h"

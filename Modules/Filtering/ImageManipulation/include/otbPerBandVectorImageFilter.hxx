@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPerBandVectorImageFilter_txx
-#define otbPerBandVectorImageFilter_txx
+#ifndef otbPerBandVectorImageFilter_hxx
+#define otbPerBandVectorImageFilter_hxx
 
 #include "otbPerBandVectorImageFilter.h"
 

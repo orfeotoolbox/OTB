@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPrintableImageFilter_txx
-#define otbPrintableImageFilter_txx
+#ifndef otbPrintableImageFilter_hxx
+#define otbPrintableImageFilter_hxx
 
 #include "otbPrintableImageFilter.h"
 

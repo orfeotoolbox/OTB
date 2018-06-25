@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConcatenateSampleListFilter_txx
-#define otbConcatenateSampleListFilter_txx
+#ifndef otbConcatenateSampleListFilter_hxx
+#define otbConcatenateSampleListFilter_hxx
 
 #include "otbConcatenateSampleListFilter.h"
 #include "itkProgressReporter.h"

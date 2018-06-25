@@ -178,7 +178,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVMMachineLearningModel.txx"
+#include "otbSVMMachineLearningModel.hxx"
 #endif
 
 #endif

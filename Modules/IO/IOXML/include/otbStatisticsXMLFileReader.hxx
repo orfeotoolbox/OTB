@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStatisticsXMLFileReader_txx
-#define otbStatisticsXMLFileReader_txx
+#ifndef otbStatisticsXMLFileReader_hxx
+#define otbStatisticsXMLFileReader_hxx
 
 #include "otbStatisticsXMLFileReader.h"
 #include "itkMacro.h"

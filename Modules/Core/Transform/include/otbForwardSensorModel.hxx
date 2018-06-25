@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbForwardSensorModel_txx
-#define otbForwardSensorModel_txx
+#ifndef otbForwardSensorModel_hxx
+#define otbForwardSensorModel_hxx
 
 #include "otbForwardSensorModel.h"
 #include "otbMacro.h"

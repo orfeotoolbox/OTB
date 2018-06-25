@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSOMImageClassificationFilter_txx
-#define otbSOMImageClassificationFilter_txx
+#ifndef otbSOMImageClassificationFilter_hxx
+#define otbSOMImageClassificationFilter_hxx
 
 #include "otbSOMImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"

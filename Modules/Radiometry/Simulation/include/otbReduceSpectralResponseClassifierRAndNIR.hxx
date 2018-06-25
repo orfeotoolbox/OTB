@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbReduceSpectralResponseClassifierRAndNIR_txx
-#define otbReduceSpectralResponseClassifierRAndNIR_txx
+#ifndef otbReduceSpectralResponseClassifierRAndNIR_hxx
+#define otbReduceSpectralResponseClassifierRAndNIR_hxx
 
 #include "otbReduceSpectralResponseClassifierRAndNIR.h"
 

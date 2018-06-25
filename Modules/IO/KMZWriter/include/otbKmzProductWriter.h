@@ -320,7 +320,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKmzProductWriter.txx"
+#include "otbKmzProductWriter.hxx"
 #endif
 
 #endif

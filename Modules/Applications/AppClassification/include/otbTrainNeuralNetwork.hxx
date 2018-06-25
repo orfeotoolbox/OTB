@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTrainNeuralNetwork_txx
-#define otbTrainNeuralNetwork_txx
+#ifndef otbTrainNeuralNetwork_hxx
+#define otbTrainNeuralNetwork_hxx
 #include <boost/lexical_cast.hpp>
 #include "otbLearningApplicationBase.h"
 #include "otbNeuralNetworkMachineLearningModel.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLineOfSightOptimizer_txx
-#define otbLineOfSightOptimizer_txx
+#ifndef otbLineOfSightOptimizer_hxx
+#define otbLineOfSightOptimizer_hxx
 
 #include "otbLineOfSightOptimizer.h"
 

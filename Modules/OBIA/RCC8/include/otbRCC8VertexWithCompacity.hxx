@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRCC8VertexWithCompacity_txx
-#define otbRCC8VertexWithCompacity_txx
+#ifndef otbRCC8VertexWithCompacity_hxx
+#define otbRCC8VertexWithCompacity_hxx
 
 #include "otbRCC8VertexWithCompacity.h"
 

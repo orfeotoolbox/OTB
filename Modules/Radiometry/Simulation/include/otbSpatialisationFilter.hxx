@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSpatialisationFilter_txx
-#define otbSpatialisationFilter_txx
+#ifndef otbSpatialisationFilter_hxx
+#define otbSpatialisationFilter_hxx
 
 #include "itkNumericTraits.h"
 

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVirtualDimensionality_txx
-#define otbVirtualDimensionality_txx
+#ifndef otbVirtualDimensionality_hxx
+#define otbVirtualDimensionality_hxx
 
 #include "otbVirtualDimensionality.h"
 

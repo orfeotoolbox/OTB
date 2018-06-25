@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbObjectListToObjectListFilter_txx
-#define otbObjectListToObjectListFilter_txx
+#ifndef otbObjectListToObjectListFilter_hxx
+#define otbObjectListToObjectListFilter_hxx
 
 #include "otbObjectListToObjectListFilter.h"
 #include "itkProgressReporter.h"
@@ -80,7 +80,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
                                           ));
   if (stopIndex > requestedElements) stopIndex = requestedElements;
 
-  //Note: check the itkImageSource.txx for the compuration done there.
+  //Note: check the itkImageSource.hxx for the compuration done there.
   // for now, there is no requested region for ObjectListFilter, so we don't
   // compute anything here.
   return threadCount;

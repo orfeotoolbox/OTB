@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLibSVMMachineLearningModel_txx
-#define otbLibSVMMachineLearningModel_txx
+#ifndef otbLibSVMMachineLearningModel_hxx
+#define otbLibSVMMachineLearningModel_hxx
 
 #include <fstream>
 #include "otbLibSVMMachineLearningModel.h"

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbShiftScaleVectorImageFilter_txx
-#define otbShiftScaleVectorImageFilter_txx
+#ifndef otbShiftScaleVectorImageFilter_hxx
+#define otbShiftScaleVectorImageFilter_hxx
 
 #include "otbShiftScaleVectorImageFilter.h"
 

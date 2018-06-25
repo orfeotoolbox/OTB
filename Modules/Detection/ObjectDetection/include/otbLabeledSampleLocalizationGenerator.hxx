@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabeledSampleLocalizationGenerator_txx
-#define otbLabeledSampleLocalizationGenerator_txx
+#ifndef otbLabeledSampleLocalizationGenerator_hxx
+#define otbLabeledSampleLocalizationGenerator_hxx
 
 #include "otbLabeledSampleLocalizationGenerator.h"
 

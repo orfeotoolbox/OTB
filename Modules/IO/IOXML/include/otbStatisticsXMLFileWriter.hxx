@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStatisticsXMLFileWriter_txx
-#define otbStatisticsXMLFileWriter_txx
+#ifndef otbStatisticsXMLFileWriter_hxx
+#define otbStatisticsXMLFileWriter_hxx
 
 #include "otbStatisticsXMLFileWriter.h"
 #include "itkMacro.h"

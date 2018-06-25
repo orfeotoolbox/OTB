@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingHistogramVectorImageFilter_txx
-#define otbStreamingHistogramVectorImageFilter_txx
+#ifndef otbStreamingHistogramVectorImageFilter_hxx
+#define otbStreamingHistogramVectorImageFilter_hxx
 #include "otbStreamingHistogramVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"

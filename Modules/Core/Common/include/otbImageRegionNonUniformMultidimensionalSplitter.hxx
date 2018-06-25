@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageRegionNonUniformMultidimensionalSplitter_txx
-#define otbImageRegionNonUniformMultidimensionalSplitter_txx
+#ifndef otbImageRegionNonUniformMultidimensionalSplitter_hxx
+#define otbImageRegionNonUniformMultidimensionalSplitter_hxx
 #include "otbImageRegionNonUniformMultidimensionalSplitter.h"
 
 namespace otb

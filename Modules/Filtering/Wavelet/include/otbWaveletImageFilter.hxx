@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbWaveletImageFilter_txx
-#define otbWaveletImageFilter_txx
+#ifndef otbWaveletImageFilter_hxx
+#define otbWaveletImageFilter_hxx
 
 #include "otbWaveletImageFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHoughTransform2DLinesImageFilter_txx
-#define otbHoughTransform2DLinesImageFilter_txx
+#ifndef otbHoughTransform2DLinesImageFilter_hxx
+#define otbHoughTransform2DLinesImageFilter_hxx
 
 #include "otbHoughTransform2DLinesImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"

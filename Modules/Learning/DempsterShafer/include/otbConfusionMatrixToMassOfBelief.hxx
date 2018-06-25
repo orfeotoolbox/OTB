@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConfusionMatrixToMassOfBelief_txx
-#define otbConfusionMatrixToMassOfBelief_txx
+#ifndef otbConfusionMatrixToMassOfBelief_hxx
+#define otbConfusionMatrixToMassOfBelief_hxx
 
 #include "otbConfusionMatrixToMassOfBelief.h"
 

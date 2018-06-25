@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbObjectListSource_txx
-#define otbObjectListSource_txx
+#ifndef otbObjectListSource_hxx
+#define otbObjectListSource_hxx
 
 #include "otbObjectListSource.h"
 #include "itkProgressReporter.h"

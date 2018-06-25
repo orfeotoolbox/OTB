@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGradientBoostedTreeMachineLearningModelFactory_txx
-#define otbGradientBoostedTreeMachineLearningModelFactory_txx
+#ifndef otbGradientBoostedTreeMachineLearningModelFactory_hxx
+#define otbGradientBoostedTreeMachineLearningModelFactory_hxx
 
 #include "otbGradientBoostedTreeMachineLearningModelFactory.h"
 

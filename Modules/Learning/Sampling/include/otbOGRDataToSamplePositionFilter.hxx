@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOGRDataToSamplePositionFilter_txx
-#define otbOGRDataToSamplePositionFilter_txx
+#ifndef otbOGRDataToSamplePositionFilter_hxx
+#define otbOGRDataToSamplePositionFilter_hxx
 
 #include "otbOGRDataToSamplePositionFilter.h"
 

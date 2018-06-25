@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingInnerProductVectorImageFilter_txx
-#define otbStreamingInnerProductVectorImageFilter_txx
+#ifndef otbStreamingInnerProductVectorImageFilter_hxx
+#define otbStreamingInnerProductVectorImageFilter_hxx
 #include "otbStreamingInnerProductVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDecisionTreeMachineLearningModel_txx
-#define otbDecisionTreeMachineLearningModel_txx
+#ifndef otbDecisionTreeMachineLearningModel_hxx
+#define otbDecisionTreeMachineLearningModel_hxx
 
 #include "otbDecisionTreeMachineLearningModel.h"
 #include "otbOpenCVUtils.h"

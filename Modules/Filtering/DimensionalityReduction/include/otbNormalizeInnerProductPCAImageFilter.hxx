@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNormalizeInnerProductPCAImageFilter_txx
-#define otbNormalizeInnerProductPCAImageFilter_txx
+#ifndef otbNormalizeInnerProductPCAImageFilter_hxx
+#define otbNormalizeInnerProductPCAImageFilter_hxx
 
 #include "otbNormalizeInnerProductPCAImageFilter.h"
 #include "itkImageRegionIterator.h"

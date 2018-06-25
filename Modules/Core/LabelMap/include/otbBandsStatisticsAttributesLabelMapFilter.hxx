@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBandsStatisticsAttributesLabelMapFilter_txx
-#define otbBandsStatisticsAttributesLabelMapFilter_txx
+#ifndef otbBandsStatisticsAttributesLabelMapFilter_hxx
+#define otbBandsStatisticsAttributesLabelMapFilter_hxx
 
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 #include "itkUnaryFunctorImageFilter.h"

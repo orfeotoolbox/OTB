@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelImageToVectorDataFilter_txx
-#define otbLabelImageToVectorDataFilter_txx
+#ifndef otbLabelImageToVectorDataFilter_hxx
+#define otbLabelImageToVectorDataFilter_hxx
 
 #include "otbLabelImageToVectorDataFilter.h"
 #include "otbOGRIOHelper.h"

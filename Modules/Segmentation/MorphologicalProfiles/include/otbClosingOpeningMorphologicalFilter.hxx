@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbClosingOpeningMorphologicalFilter_txx
-#define otbClosingOpeningMorphologicalFilter_txx
+#ifndef otbClosingOpeningMorphologicalFilter_hxx
+#define otbClosingOpeningMorphologicalFilter_hxx
 
 #include "otbClosingOpeningMorphologicalFilter.h"
 #include "itkUnaryFunctorImageFilter.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbListSampleGenerator_txx
-#define otbListSampleGenerator_txx
+#ifndef otbListSampleGenerator_hxx
+#define otbListSampleGenerator_hxx
 
 #include "otbListSampleGenerator.h"
 

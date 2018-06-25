@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperInputImageParameter_txx
-#define otbWrapperInputImageParameter_txx
+#ifndef otbWrapperInputImageParameter_hxx
+#define otbWrapperInputImageParameter_hxx
 
 #include "otbWrapperInputImageParameter.h"
 

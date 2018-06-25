@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPointSetFunction_txx
-#define otbPointSetFunction_txx
+#ifndef otbPointSetFunction_hxx
+#define otbPointSetFunction_hxx
 
 #include "otbPointSetFunction.h"
 

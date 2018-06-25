@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTrainKNN_txx
-#define otbTrainKNN_txx
+#ifndef otbTrainKNN_hxx
+#define otbTrainKNN_hxx
 #include "otbLearningApplicationBase.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 

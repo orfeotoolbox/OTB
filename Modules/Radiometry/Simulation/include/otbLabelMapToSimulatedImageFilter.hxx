@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelMapToSimulatedImageFilter_txx
-#define otbLabelMapToSimulatedImageFilter_txx
+#ifndef otbLabelMapToSimulatedImageFilter_hxx
+#define otbLabelMapToSimulatedImageFilter_hxx
 
 #include "otbLabelMapToSimulatedImageFilter.h"
 

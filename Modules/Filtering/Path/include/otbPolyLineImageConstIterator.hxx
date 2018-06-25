@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPolyLineImageConstIterator_txx
-#define otbPolyLineImageConstIterator_txx
+#ifndef otbPolyLineImageConstIterator_hxx
+#define otbPolyLineImageConstIterator_hxx
 
 #include "otbPolyLineImageConstIterator.h"
 #include "otbMacro.h"

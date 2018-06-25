@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKMeansAttributesLabelMapFilter_txx
-#define otbKMeansAttributesLabelMapFilter_txx
+#ifndef otbKMeansAttributesLabelMapFilter_hxx
+#define otbKMeansAttributesLabelMapFilter_hxx
 
 #include "otbKMeansAttributesLabelMapFilter.h"
 #include "itkNumericTraits.h"

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPersistentVectorizationImageFilter_txx
-#define otbPersistentVectorizationImageFilter_txx
+#ifndef otbPersistentVectorizationImageFilter_hxx
+#define otbPersistentVectorizationImageFilter_hxx
 
 #include "otbPersistentVectorizationImageFilter.h"
 

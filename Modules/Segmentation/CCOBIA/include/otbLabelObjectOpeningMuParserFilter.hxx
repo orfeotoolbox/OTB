@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelObjectOpeningMuParserFilter_txx
-#define otbLabelObjectOpeningMuParserFilter_txx
+#ifndef otbLabelObjectOpeningMuParserFilter_hxx
+#define otbLabelObjectOpeningMuParserFilter_hxx
 
 #include "otbLabelObjectOpeningMuParserFilter.h"
 #include <iostream>

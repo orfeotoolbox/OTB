@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelizeImageFilterBase_txx
-#define otbLabelizeImageFilterBase_txx
+#ifndef otbLabelizeImageFilterBase_hxx
+#define otbLabelizeImageFilterBase_hxx
 
 #include "otbLabelizeImageFilterBase.h"
 

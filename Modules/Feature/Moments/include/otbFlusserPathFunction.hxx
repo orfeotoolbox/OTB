@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFlusserPathFunction_txx
-#define otbFlusserPathFunction_txx
+#ifndef otbFlusserPathFunction_hxx
+#define otbFlusserPathFunction_hxx
 
 #include "otbFlusserPathFunction.h"
 #include "otbComplexMomentPathFunction.h"

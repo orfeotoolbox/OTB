@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairReciprocalImageFilter_txx
-#define otbSinclairReciprocalImageFilter_txx
+#ifndef otbSinclairReciprocalImageFilter_hxx
+#define otbSinclairReciprocalImageFilter_hxx
 
 #include "otbSinclairReciprocalImageFilter.h"
 #include "otbMath.h"

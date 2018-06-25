@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGaussianModelComponent_txx
-#define otbGaussianModelComponent_txx
+#ifndef otbGaussianModelComponent_hxx
+#define otbGaussianModelComponent_hxx
 
 #include <iostream>
 

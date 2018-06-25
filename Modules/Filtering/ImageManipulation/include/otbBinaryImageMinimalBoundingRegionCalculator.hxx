@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBinaryImageMinimalBoundingRegionCalculator_txx
-#define otbBinaryImageMinimalBoundingRegionCalculator_txx
+#ifndef otbBinaryImageMinimalBoundingRegionCalculator_hxx
+#define otbBinaryImageMinimalBoundingRegionCalculator_hxx
 
 #include "otbBinaryImageMinimalBoundingRegionCalculator.h"
 #include "itkImageSliceConstIteratorWithIndex.h"

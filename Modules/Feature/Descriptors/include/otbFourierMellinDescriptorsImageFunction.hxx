@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFourierMellinDescriptorsImageFunction_txx
-#define otbFourierMellinDescriptorsImageFunction_txx
+#ifndef otbFourierMellinDescriptorsImageFunction_hxx
+#define otbFourierMellinDescriptorsImageFunction_hxx
 
 #include "otbFourierMellinDescriptorsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

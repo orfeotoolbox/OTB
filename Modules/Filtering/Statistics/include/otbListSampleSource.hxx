@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbListSampleSource_txx
-#define otbListSampleSource_txx
+#ifndef otbListSampleSource_hxx
+#define otbListSampleSource_hxx
 
 #include "otbListSampleSource.h"
 

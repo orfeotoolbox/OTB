@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLineSegmentDetector_txx
-#define otbLineSegmentDetector_txx
+#ifndef otbLineSegmentDetector_hxx
+#define otbLineSegmentDetector_hxx
 
 #include "otbLineSegmentDetector.h"
 #include "itkImageRegionIterator.h"

@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbBinaryImageDensityFunction_txx
-#define otbBinaryImageDensityFunction_txx
+#ifndef otbBinaryImageDensityFunction_hxx
+#define otbBinaryImageDensityFunction_hxx
 
 #include "otbBinaryImageDensityFunction.h"
 

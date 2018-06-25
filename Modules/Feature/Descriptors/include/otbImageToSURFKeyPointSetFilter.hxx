@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToSURFKeyPointSetFilter_txx
-#define otbImageToSURFKeyPointSetFilter_txx
+#ifndef otbImageToSURFKeyPointSetFilter_hxx
+#define otbImageToSURFKeyPointSetFilter_hxx
 
 #include "otbImageToSURFKeyPointSetFilter.h"
 #include "itkCenteredRigid2DTransform.h"

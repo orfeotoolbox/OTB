@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToSIFTKeyPointSetFilter_txx
-#define otbImageToSIFTKeyPointSetFilter_txx
+#ifndef otbImageToSIFTKeyPointSetFilter_hxx
+#define otbImageToSIFTKeyPointSetFilter_hxx
 
 #include "otbImageToSIFTKeyPointSetFilter.h"
 

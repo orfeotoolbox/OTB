@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbGreyLevelCooccurrenceIndexedList_txx
-#define otbGreyLevelCooccurrenceIndexedList_txx
+#ifndef otbGreyLevelCooccurrenceIndexedList_hxx
+#define otbGreyLevelCooccurrenceIndexedList_hxx
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 

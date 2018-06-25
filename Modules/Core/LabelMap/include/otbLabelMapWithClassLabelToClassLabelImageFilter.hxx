@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelMapWithClassLabelToClassLabelImageFilter_txx
-#define otbLabelMapWithClassLabelToClassLabelImageFilter_txx
+#ifndef otbLabelMapWithClassLabelToClassLabelImageFilter_hxx
+#define otbLabelMapWithClassLabelToClassLabelImageFilter_hxx
 
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
 #include "itkNumericTraits.h"

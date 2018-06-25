@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageFileReader_txx
-#define otbImageFileReader_txx
+#ifndef otbImageFileReader_hxx
+#define otbImageFileReader_hxx
 
 #include "otbImageFileReader.h"
 #include "otbConfigure.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRadiometricMomentsImageFunction_txx
-#define otbRadiometricMomentsImageFunction_txx
+#ifndef otbRadiometricMomentsImageFunction_hxx
+#define otbRadiometricMomentsImageFunction_hxx
 
 #include "otbRadiometricMomentsImageFunction.h"
 #include "itkMacro.h"

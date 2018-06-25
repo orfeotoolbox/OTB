@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRCC8VertexWithRegionCenter_txx
-#define otbRCC8VertexWithRegionCenter_txx
+#ifndef otbRCC8VertexWithRegionCenter_hxx
+#define otbRCC8VertexWithRegionCenter_hxx
 
 #include "otbRCC8VertexWithRegionCenter.h"
 

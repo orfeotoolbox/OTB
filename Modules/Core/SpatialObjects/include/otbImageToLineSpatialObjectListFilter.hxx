@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToLineSpatialObjectListFilter_txx
-#define otbImageToLineSpatialObjectListFilter_txx
+#ifndef otbImageToLineSpatialObjectListFilter_hxx
+#define otbImageToLineSpatialObjectListFilter_hxx
 
 #include "otbImageToLineSpatialObjectListFilter.h"
 

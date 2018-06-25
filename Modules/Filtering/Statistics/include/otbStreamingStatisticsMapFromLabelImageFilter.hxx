@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingStatisticsMapFromLabelImageFilter_txx
-#define otbStreamingStatisticsMapFromLabelImageFilter_txx
+#ifndef otbStreamingStatisticsMapFromLabelImageFilter_hxx
+#define otbStreamingStatisticsMapFromLabelImageFilter_hxx
 #include "otbStreamingStatisticsMapFromLabelImageFilter.h"
 
 #include "itkInputDataObjectIterator.h"

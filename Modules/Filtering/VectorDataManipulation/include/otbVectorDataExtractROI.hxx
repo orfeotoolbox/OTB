@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataExtractROI_txx
-#define otbVectorDataExtractROI_txx
+#ifndef otbVectorDataExtractROI_hxx
+#define otbVectorDataExtractROI_hxx
 
 #include "otbVectorDataExtractROI.h"
 

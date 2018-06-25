@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbEdgeDensityImageFilter_txx
-#define otbEdgeDensityImageFilter_txx
+#ifndef otbEdgeDensityImageFilter_hxx
+#define otbEdgeDensityImageFilter_hxx
 
 #include "otbEdgeDensityImageFilter.h"
 

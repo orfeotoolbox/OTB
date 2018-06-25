@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbThresholdImageToPointSetFilter_txx
-#define otbThresholdImageToPointSetFilter_txx
+#ifndef otbThresholdImageToPointSetFilter_hxx
+#define otbThresholdImageToPointSetFilter_hxx
 
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkImageRegionConstIterator.h"

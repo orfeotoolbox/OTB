@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRectangle_txx
-#define otbRectangle_txx
+#ifndef otbRectangle_hxx
+#define otbRectangle_hxx
 
 #include "otbRectangle.h"
 

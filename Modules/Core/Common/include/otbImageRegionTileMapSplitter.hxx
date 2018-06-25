@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageRegionTileMapSplitter_txx
-#define otbImageRegionTileMapSplitter_txx
+#ifndef otbImageRegionTileMapSplitter_hxx
+#define otbImageRegionTileMapSplitter_hxx
 
 #include "otbImageRegionTileMapSplitter.h"
 #include "otbMath.h"

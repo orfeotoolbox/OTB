@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMinMaxAttributesLabelMapFilter_txx
-#define otbMinMaxAttributesLabelMapFilter_txx
+#ifndef otbMinMaxAttributesLabelMapFilter_hxx
+#define otbMinMaxAttributesLabelMapFilter_hxx
 
 #include "otbMinMaxAttributesLabelMapFilter.h"
 #include "itkNumericTraits.h"

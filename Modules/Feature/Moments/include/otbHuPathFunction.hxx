@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHuPathFunction_txx
-#define otbHuPathFunction_txx
+#ifndef otbHuPathFunction_hxx
+#define otbHuPathFunction_hxx
 
 #include "otbHuPathFunction.h"
 #include "otbComplexMomentPathFunction.h"

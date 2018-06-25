@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbComplexMomentsImageFunction_txx
-#define otbComplexMomentsImageFunction_txx
+#ifndef otbComplexMomentsImageFunction_hxx
+#define otbComplexMomentsImageFunction_hxx
 
 #include "otbComplexMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToProfileFilter_txx
-#define otbImageToProfileFilter_txx
+#ifndef otbImageToProfileFilter_hxx
+#define otbImageToProfileFilter_hxx
 
 #include "otbImageToProfileFilter.h"
 

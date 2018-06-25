@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelMapWithClassLabelToLabeledSampleListFilter_txx
-#define otbLabelMapWithClassLabelToLabeledSampleListFilter_txx
+#ifndef otbLabelMapWithClassLabelToLabeledSampleListFilter_hxx
+#define otbLabelMapWithClassLabelToLabeledSampleListFilter_hxx
 
 #include "otbLabelMapWithClassLabelToLabeledSampleListFilter.h"
 #include "itkDataObject.h"

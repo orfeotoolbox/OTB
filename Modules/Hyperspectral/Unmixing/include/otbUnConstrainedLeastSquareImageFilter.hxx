@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbUnConstrainedLeastSquareImageFilter_txx
-#define otbUnConstrainedLeastSquareImageFilter_txx
+#ifndef otbUnConstrainedLeastSquareImageFilter_hxx
+#define otbUnConstrainedLeastSquareImageFilter_hxx
 
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 

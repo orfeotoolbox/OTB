@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGeometriesToGeometriesFilter_txx
-#define otbGeometriesToGeometriesFilter_txx
+#ifndef otbGeometriesToGeometriesFilter_hxx
+#define otbGeometriesToGeometriesFilter_hxx
 
 /*===========================================================================*/
 /*===============================[ Includes ]================================*/

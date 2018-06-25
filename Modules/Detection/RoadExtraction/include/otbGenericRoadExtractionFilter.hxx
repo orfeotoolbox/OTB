@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGenericRoadExtractionFilter_txx
-#define otbGenericRoadExtractionFilter_txx
+#ifndef otbGenericRoadExtractionFilter_hxx
+#define otbGenericRoadExtractionFilter_hxx
 
 #include "otbGenericRoadExtractionFilter.h"
 #include "otbMath.h"

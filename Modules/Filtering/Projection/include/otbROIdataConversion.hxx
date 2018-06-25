@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbROIdataConversion_txx
-#define otbROIdataConversion_txx
+#ifndef otbROIdataConversion_hxx
+#define otbROIdataConversion_hxx
 
 #include "itkVector.h"
 

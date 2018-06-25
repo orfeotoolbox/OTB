@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbWaveletsBandsListToWaveletsSynopsisImageFilter_txx
-#define otbWaveletsBandsListToWaveletsSynopsisImageFilter_txx
+#ifndef otbWaveletsBandsListToWaveletsSynopsisImageFilter_hxx
+#define otbWaveletsBandsListToWaveletsSynopsisImageFilter_hxx
 
 #include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.h"
 #include "itkImageRegionIterator.h"

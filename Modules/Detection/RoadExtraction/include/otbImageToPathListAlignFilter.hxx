@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToPathListAlignFilter_txx
-#define otbImageToPathListAlignFilter_txx
+#ifndef otbImageToPathListAlignFilter_hxx
+#define otbImageToPathListAlignFilter_hxx
 
 #include "otbImageToPathListAlignFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbProfileDerivativeToMultiScaleCharacteristicsFilter_txx
-#define otbProfileDerivativeToMultiScaleCharacteristicsFilter_txx
+#ifndef otbProfileDerivativeToMultiScaleCharacteristicsFilter_hxx
+#define otbProfileDerivativeToMultiScaleCharacteristicsFilter_hxx
 
 #include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.h"
 #include "itkImageRegionIterator.h"

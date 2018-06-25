@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbObjectDetectionClassifier_txx
-#define otbObjectDetectionClassifier_txx
+#ifndef otbObjectDetectionClassifier_hxx
+#define otbObjectDetectionClassifier_hxx
 
 #include "otbObjectDetectionClassifier.h"
 

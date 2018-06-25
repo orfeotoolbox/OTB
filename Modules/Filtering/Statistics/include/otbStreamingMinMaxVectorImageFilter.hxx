@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingMinMaxVectorImageFilter_txx
-#define otbStreamingMinMaxVectorImageFilter_txx
+#ifndef otbStreamingMinMaxVectorImageFilter_hxx
+#define otbStreamingMinMaxVectorImageFilter_hxx
 #include "otbStreamingMinMaxVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"

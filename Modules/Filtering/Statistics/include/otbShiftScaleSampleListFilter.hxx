@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbShiftScaleSampleListFilter_txx
-#define otbShiftScaleSampleListFilter_txx
+#ifndef otbShiftScaleSampleListFilter_hxx
+#define otbShiftScaleSampleListFilter_hxx
 
 #include "otbShiftScaleSampleListFilter.h"
 #include "itkProgressReporter.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFastICAImageFilter_txx
-#define otbFastICAImageFilter_txx
+#ifndef otbFastICAImageFilter_hxx
+#define otbFastICAImageFilter_hxx
 
 #include "otbFastICAImageFilter.h"
 

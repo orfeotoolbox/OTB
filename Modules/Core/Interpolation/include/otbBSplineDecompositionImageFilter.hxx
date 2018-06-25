@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBSplineDecompositionImageFilter_txx
-#define otbBSplineDecompositionImageFilter_txx
+#ifndef otbBSplineDecompositionImageFilter_hxx
+#define otbBSplineDecompositionImageFilter_hxx
 #include "otbBSplineDecompositionImageFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"

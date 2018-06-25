@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbProjectiveProjectionImageFilter_txx
-#define otbProjectiveProjectionImageFilter_txx
+#ifndef otbProjectiveProjectionImageFilter_hxx
+#define otbProjectiveProjectionImageFilter_hxx
 
 #include "otbProjectiveProjectionImageFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbModulusAndDirectionImageToImageFilter_txx
-#define otbModulusAndDirectionImageToImageFilter_txx
+#ifndef otbModulusAndDirectionImageToImageFilter_hxx
+#define otbModulusAndDirectionImageToImageFilter_hxx
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "itkProcessObject.h"

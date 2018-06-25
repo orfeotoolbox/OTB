@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSOMActivationBuilder_txx
-#define otbSOMActivationBuilder_txx
+#ifndef otbSOMActivationBuilder_hxx
+#define otbSOMActivationBuilder_hxx
 
 #include "otbSOMActivationBuilder.h"
 #include "itkImageRegionIterator.h"

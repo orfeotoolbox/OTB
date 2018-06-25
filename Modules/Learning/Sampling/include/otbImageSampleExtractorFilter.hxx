@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageSampleExtractorFilter_txx
-#define otbImageSampleExtractorFilter_txx
+#ifndef otbImageSampleExtractorFilter_hxx
+#define otbImageSampleExtractorFilter_hxx
 
 #include "otbImageSampleExtractorFilter.h"
 #include "itkDefaultConvertPixelTraits.h"

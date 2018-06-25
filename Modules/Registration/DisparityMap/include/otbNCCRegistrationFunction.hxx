@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNCCRegistrationFunction_txx
-#define otbNCCRegistrationFunction_txx
+#ifndef otbNCCRegistrationFunction_hxx
+#define otbNCCRegistrationFunction_hxx
 
 #include "vnl/vnl_math.h"
 #include "itkNeighborhoodIterator.h"

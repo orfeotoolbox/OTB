@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbUnaryImageFunctorWithVectorImageFilter_txx
-#define otbUnaryImageFunctorWithVectorImageFilter_txx
+#ifndef otbUnaryImageFunctorWithVectorImageFilter_hxx
+#define otbUnaryImageFunctorWithVectorImageFilter_hxx
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "itkImageRegionIterator.h"

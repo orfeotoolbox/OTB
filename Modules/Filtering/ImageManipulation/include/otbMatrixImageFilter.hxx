@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMatrixImageFilter_txx
-#define otbMatrixImageFilter_txx
+#ifndef otbMatrixImageFilter_hxx
+#define otbMatrixImageFilter_hxx
 
 #include "otbMatrixImageFilter.h"
 #include "itkImageRegionIterator.h"

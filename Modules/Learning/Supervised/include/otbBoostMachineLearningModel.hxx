@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBoostMachineLearningModel_txx
-#define otbBoostMachineLearningModel_txx
+#ifndef otbBoostMachineLearningModel_hxx
+#define otbBoostMachineLearningModel_hxx
 
 #include "otbBoostMachineLearningModel.h"
 #include "otbOpenCVUtils.h"

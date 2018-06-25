@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRCC8OutEdgeIterator_txx
-#define otbRCC8OutEdgeIterator_txx
+#ifndef otbRCC8OutEdgeIterator_hxx
+#define otbRCC8OutEdgeIterator_hxx
 
 #include "otbRCC8OutEdgeIterator.h"
 

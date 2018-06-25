@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbCommandProgressUpdate_txx
-#define otbCommandProgressUpdate_txx
+#ifndef otbCommandProgressUpdate_hxx
+#define otbCommandProgressUpdate_hxx
 
 #include "otbCommandProgressUpdate.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConfusionMatrixMeasurements_txx
-#define otbConfusionMatrixMeasurements_txx
+#ifndef otbConfusionMatrixMeasurements_hxx
+#define otbConfusionMatrixMeasurements_hxx
 
 #include "otbConfusionMatrixMeasurements.h"
 

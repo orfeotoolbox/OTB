@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairImageFilter_txx
-#define otbSinclairImageFilter_txx
+#ifndef otbSinclairImageFilter_hxx
+#define otbSinclairImageFilter_hxx
 
 #include "otbSinclairImageFilter.h"
 #include "otbMath.h"

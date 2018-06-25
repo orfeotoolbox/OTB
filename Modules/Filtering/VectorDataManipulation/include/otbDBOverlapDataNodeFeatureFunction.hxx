@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDBOverlapDataNodeFeatureFunction_txx
-#define otbDBOverlapDataNodeFeatureFunction_txx
+#ifndef otbDBOverlapDataNodeFeatureFunction_hxx
+#define otbDBOverlapDataNodeFeatureFunction_hxx
 
 #include "otbDBOverlapDataNodeFeatureFunction.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGridResampleImageFilter_txx
-#define otbGridResampleImageFilter_txx
+#ifndef otbGridResampleImageFilter_hxx
+#define otbGridResampleImageFilter_hxx
 
 #include "otbGridResampleImageFilter.h"
 

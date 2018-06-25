@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorRescaleIntensityImageFilter_txx
-#define otbVectorRescaleIntensityImageFilter_txx
+#ifndef otbVectorRescaleIntensityImageFilter_hxx
+#define otbVectorRescaleIntensityImageFilter_hxx
 
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "itkSampleToHistogramFilter.h"

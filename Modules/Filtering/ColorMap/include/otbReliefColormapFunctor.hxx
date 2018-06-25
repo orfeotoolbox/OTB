@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbReliefColormapFunctor_txx
-#define otbReliefColormapFunctor_txx
+#ifndef otbReliefColormapFunctor_hxx
+#define otbReliefColormapFunctor_hxx
 
 #include "otbReliefColormapFunctor.h"
 

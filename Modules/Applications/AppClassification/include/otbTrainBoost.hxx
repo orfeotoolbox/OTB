@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTrainBoost_txx
-#define otbTrainBoost_txx
+#ifndef otbTrainBoost_hxx
+#define otbTrainBoost_hxx
 #include "otbLearningApplicationBase.h"
 #include "otbBoostMachineLearningModel.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFastICAInternalOptimizerVectorImageFilter_txx
-#define otbFastICAInternalOptimizerVectorImageFilter_txx
+#ifndef otbFastICAInternalOptimizerVectorImageFilter_hxx
+#define otbFastICAInternalOptimizerVectorImageFilter_hxx
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
 #include <itkMacro.h>

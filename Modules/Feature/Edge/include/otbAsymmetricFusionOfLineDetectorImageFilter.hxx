@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbAsymmetricFusionOfLineDetectorImageFilter_txx
-#define otbAsymmetricFusionOfLineDetectorImageFilter_txx
+#ifndef otbAsymmetricFusionOfLineDetectorImageFilter_hxx
+#define otbAsymmetricFusionOfLineDetectorImageFilter_hxx
 
 #include "otbAsymmetricFusionOfLineDetectorImageFilter.h"
 

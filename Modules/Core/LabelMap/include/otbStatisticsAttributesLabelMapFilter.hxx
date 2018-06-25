@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStatisticsAttributesLabelMapFilter_txx
-#define otbStatisticsAttributesLabelMapFilter_txx
+#ifndef otbStatisticsAttributesLabelMapFilter_hxx
+#define otbStatisticsAttributesLabelMapFilter_hxx
 
 #include "otbStatisticsAttributesLabelMapFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPCAImageFilter_txx
-#define otbPCAImageFilter_txx
+#ifndef otbPCAImageFilter_hxx
+#define otbPCAImageFilter_hxx
 #include "otbPCAImageFilter.h"
 
 #include "itkMacro.h"
@@ -481,6 +481,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
 } // end of namespace otb
 
-#endif // otbPCAImageFilter_txx
+#endif // otbPCAImageFilter_hxx
 
 

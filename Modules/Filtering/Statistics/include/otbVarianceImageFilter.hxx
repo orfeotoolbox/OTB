@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVarianceImageFilter_txx
-#define otbVarianceImageFilter_txx
+#ifndef otbVarianceImageFilter_hxx
+#define otbVarianceImageFilter_hxx
 
 #include "otbVarianceImageFilter.h"
 

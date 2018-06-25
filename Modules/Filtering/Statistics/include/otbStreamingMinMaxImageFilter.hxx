@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingMinMaxImageFilter_txx
-#define otbStreamingMinMaxImageFilter_txx
+#ifndef otbStreamingMinMaxImageFilter_hxx
+#define otbStreamingMinMaxImageFilter_hxx
 #include "otbStreamingMinMaxImageFilter.h"
 
 #include <algorithm>

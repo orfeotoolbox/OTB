@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHaralickTexturesImageFunction_txx
-#define otbHaralickTexturesImageFunction_txx
+#ifndef otbHaralickTexturesImageFunction_hxx
+#define otbHaralickTexturesImageFunction_hxx
 
 #include "otbHaralickTexturesImageFunction.h"
 #include "itkImageRegionIteratorWithIndex.h"

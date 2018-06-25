@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataToLabelMapWithAttributesFilter_txx
-#define otbVectorDataToLabelMapWithAttributesFilter_txx
+#ifndef otbVectorDataToLabelMapWithAttributesFilter_hxx
+#define otbVectorDataToLabelMapWithAttributesFilter_hxx
 
 #include "otbVectorDataToLabelMapWithAttributesFilter.h"
 #include "itkBinaryImageToLabelMapFilter.h"

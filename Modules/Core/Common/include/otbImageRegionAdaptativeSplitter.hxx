@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageRegionAdaptativeSplitter_txx
-#define otbImageRegionAdaptativeSplitter_txx
+#ifndef otbImageRegionAdaptativeSplitter_hxx
+#define otbImageRegionAdaptativeSplitter_hxx
 
 #include "otbImageRegionAdaptativeSplitter.h"
 #include "otbMath.h"

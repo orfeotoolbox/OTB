@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStereoSensorModelToElevationMapFilter_txx
-#define otbStereoSensorModelToElevationMapFilter_txx
+#ifndef otbStereoSensorModelToElevationMapFilter_hxx
+#define otbStereoSensorModelToElevationMapFilter_hxx
 
 #include "otbStereorectificationDisplacementFieldSource.h"
 #include "itkProgressReporter.h"

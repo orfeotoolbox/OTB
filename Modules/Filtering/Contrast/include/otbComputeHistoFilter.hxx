@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbComputeHistoFilter_txx
-#define otbComputeHistoFilter_txx
+#ifndef otbComputeHistoFilter_hxx
+#define otbComputeHistoFilter_hxx
 
 #include "otbComputeHistoFilter.h"
 

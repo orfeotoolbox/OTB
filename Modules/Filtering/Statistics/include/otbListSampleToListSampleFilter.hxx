@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbListSampleToListSample_txx
-#define otbListSampleToListSample_txx
+#ifndef otbListSampleToListSample_hxx
+#define otbListSampleToListSample_hxx
 
 #include "otbListSampleToListSampleFilter.h"
 #include "itkProgressReporter.h"

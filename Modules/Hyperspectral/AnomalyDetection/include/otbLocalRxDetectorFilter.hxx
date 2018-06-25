@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbLocalRxDetectorFilter_txx
-#define otbLocalRxDetectorFilter_txx
+#ifndef otbLocalRxDetectorFilter_hxx
+#define otbLocalRxDetectorFilter_hxx
 
 #include "otbLocalRxDetectorFilter.h"
 

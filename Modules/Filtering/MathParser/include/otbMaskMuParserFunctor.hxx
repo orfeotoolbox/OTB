@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMaskMuParserFunctor_txx
-#define otbMaskMuParserFunctor_txx
+#ifndef otbMaskMuParserFunctor_hxx
+#define otbMaskMuParserFunctor_hxx
 
 #include "otbMaskMuParserFunctor.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLocalHistogramIFFactory_txx
-#define otbLocalHistogramIFFactory_txx
+#ifndef otbLocalHistogramIFFactory_hxx
+#define otbLocalHistogramIFFactory_hxx
 
 #include "otbLocalHistogramIFFactory.h"
 

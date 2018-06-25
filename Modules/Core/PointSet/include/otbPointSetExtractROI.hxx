@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPointSetExtractROI_txx
-#define otbPointSetExtractROI_txx
+#ifndef otbPointSetExtractROI_hxx
+#define otbPointSetExtractROI_hxx
 
 #include "otbPointSetExtractROI.h"
 #include "itkMacro.h"

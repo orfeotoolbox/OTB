@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRCC8VertexIterator_txx
-#define otbRCC8VertexIterator_txx
+#ifndef otbRCC8VertexIterator_hxx
+#define otbRCC8VertexIterator_hxx
 
 #include "otbRCC8VertexIterator.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLineDetectorImageFilterBase_txx
-#define otbLineDetectorImageFilterBase_txx
+#ifndef otbLineDetectorImageFilterBase_hxx
+#define otbLineDetectorImageFilterBase_hxx
 
 #include "otbLineDetectorImageFilterBase.h"
 

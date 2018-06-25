@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbChangeLabelImageFilter_txx
-#define otbChangeLabelImageFilter_txx
+#ifndef otbChangeLabelImageFilter_hxx
+#define otbChangeLabelImageFilter_hxx
 
 #include "otbChangeLabelImageFilter.h"
 

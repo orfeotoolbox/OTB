@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTileDimensionTiledStreamingManager_txx
-#define otbTileDimensionTiledStreamingManager_txx
+#ifndef otbTileDimensionTiledStreamingManager_hxx
+#define otbTileDimensionTiledStreamingManager_hxx
 
 #include "otbTileDimensionTiledStreamingManager.h"
 #include "otbMacro.h"

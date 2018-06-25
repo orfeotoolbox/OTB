@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelMapToSampleListFilter_txx
-#define otbLabelMapToSampleListFilter_txx
+#ifndef otbLabelMapToSampleListFilter_hxx
+#define otbLabelMapToSampleListFilter_hxx
 
 #include "otbLabelMapToSampleListFilter.h"
 

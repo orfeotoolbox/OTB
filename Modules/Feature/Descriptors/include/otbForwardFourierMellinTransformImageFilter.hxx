@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbForwardFourierMellinTransformImageFilter_txx
-#define otbForwardFourierMellinTransformImageFilter_txx
+#ifndef otbForwardFourierMellinTransformImageFilter_hxx
+#define otbForwardFourierMellinTransformImageFilter_hxx
 
 #include "otbForwardFourierMellinTransformImageFilter.h"
 #include "itkImageDuplicator.h"

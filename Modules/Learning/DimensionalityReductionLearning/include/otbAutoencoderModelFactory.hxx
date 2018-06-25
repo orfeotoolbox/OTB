@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbAutoencoderModelFactory_txx
-#define otbAutoencoderModelFactory_txx
+#ifndef otbAutoencoderModelFactory_hxx
+#define otbAutoencoderModelFactory_hxx
 
 #include "otbAutoencoderModelFactory.h"
 #include "otbAutoencoderModel.h"

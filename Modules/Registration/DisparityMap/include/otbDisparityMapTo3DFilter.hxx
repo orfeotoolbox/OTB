@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDisparityMapTo3DFilter_txx
-#define otbDisparityMapTo3DFilter_txx
+#ifndef otbDisparityMapTo3DFilter_hxx
+#define otbDisparityMapTo3DFilter_hxx
 
 #include "otbDisparityMapTo3DFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSarBrightnessToImageFilter_txx
-#define otbSarBrightnessToImageFilter_txx
+#ifndef otbSarBrightnessToImageFilter_hxx
+#define otbSarBrightnessToImageFilter_hxx
 
 #include "otbSarBrightnessToImageFilter.h"
 

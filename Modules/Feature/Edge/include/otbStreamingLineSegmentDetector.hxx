@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingLineSegmentDetector_txx
-#define otbStreamingLineSegmentDetector_txx
+#ifndef otbStreamingLineSegmentDetector_hxx
+#define otbStreamingLineSegmentDetector_hxx
 
 #include "otbStreamingLineSegmentDetector.h"
 

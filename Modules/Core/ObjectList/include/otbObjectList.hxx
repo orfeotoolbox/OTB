@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbObjectList_txx
-#define otbObjectList_txx
+#ifndef otbObjectList_hxx
+#define otbObjectList_hxx
 
 #include "otbObjectList.h"
 #include "itkMacro.h"

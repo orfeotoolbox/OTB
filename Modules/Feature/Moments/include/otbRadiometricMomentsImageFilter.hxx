@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRadiometricMomentsImageFilter_txx
-#define otbRadiometricMomentsImageFilter_txx
+#ifndef otbRadiometricMomentsImageFilter_hxx
+#define otbRadiometricMomentsImageFilter_hxx
 
 #include "otbRadiometricMomentsImageFilter.h"
 #include "itkImageRegionIterator.h"

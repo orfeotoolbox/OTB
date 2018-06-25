@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbLambertConformalConicMapProjection_txx
-#define otbLambertConformalConicMapProjection_txx
+#ifndef otbLambertConformalConicMapProjection_hxx
+#define otbLambertConformalConicMapProjection_hxx
 
 #include "otbLambertConformalConicMapProjection.h"
 #include "otbUtils.h"

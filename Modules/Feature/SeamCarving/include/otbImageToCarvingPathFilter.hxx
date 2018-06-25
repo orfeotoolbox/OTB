@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToCarvingPathFilter_txx
-#define otbImageToCarvingPathFilter_txx
+#ifndef otbImageToCarvingPathFilter_hxx
+#define otbImageToCarvingPathFilter_hxx
 
 #include "otbImageToCarvingPathFilter.h"
 #include "otbMacro.h"

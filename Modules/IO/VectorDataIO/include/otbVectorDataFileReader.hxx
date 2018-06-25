@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbVectorDataFileReader_txx
-#define otbVectorDataFileReader_txx
+#ifndef otbVectorDataFileReader_hxx
+#define otbVectorDataFileReader_hxx
 
 #include <fstream>
 

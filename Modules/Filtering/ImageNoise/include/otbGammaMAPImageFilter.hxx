@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGammaMAPImageFilter_txx
-#define otbGammaMAPImageFilter_txx
+#ifndef otbGammaMAPImageFilter_hxx
+#define otbGammaMAPImageFilter_hxx
 
 #include "otbGammaMAPImageFilter.h"
 

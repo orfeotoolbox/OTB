@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMNFImageFilter_txx
-#define otbMNFImageFilter_txx
+#ifndef otbMNFImageFilter_hxx
+#define otbMNFImageFilter_hxx
 #include "otbMNFImageFilter.h"
 
 #include "itkMacro.h"
@@ -500,6 +500,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 } // end of namespace otb
 
-#endif // otbMNFImageFilter_txx
+#endif // otbMNFImageFilter_hxx
 
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelizeConfidenceConnectedImageFilter_txx
-#define otbLabelizeConfidenceConnectedImageFilter_txx
+#ifndef otbLabelizeConfidenceConnectedImageFilter_hxx
+#define otbLabelizeConfidenceConnectedImageFilter_hxx
 
 #include "itkNumericTraits.h"
 

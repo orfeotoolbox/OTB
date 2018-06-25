@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorizationPathListFilter_txx
-#define otbVectorizationPathListFilter_txx
+#ifndef otbVectorizationPathListFilter_hxx
+#define otbVectorizationPathListFilter_hxx
 
 #include "otbVectorizationPathListFilter.h"
 #include "otbMacro.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLineSpatialObjectListToPointSetFilter_txx
-#define otbLineSpatialObjectListToPointSetFilter_txx
+#ifndef otbLineSpatialObjectListToPointSetFilter_hxx
+#define otbLineSpatialObjectListToPointSetFilter_hxx
 
 #include "otbLineSpatialObjectListToPointSetFilter.h"
 

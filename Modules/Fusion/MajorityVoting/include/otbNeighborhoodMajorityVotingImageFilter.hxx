@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNeighborhoodMajorityVotingImageFilter_txx
-#define otbNeighborhoodMajorityVotingImageFilter_txx
+#ifndef otbNeighborhoodMajorityVotingImageFilter_hxx
+#define otbNeighborhoodMajorityVotingImageFilter_hxx
 
 // First make sure that the configuration is available.
 // This line can be removed once the optimized versions

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSEMClassifier_txx
-#define otbSEMClassifier_txx
+#ifndef otbSEMClassifier_hxx
+#define otbSEMClassifier_hxx
 
 #include <cstdlib>
 

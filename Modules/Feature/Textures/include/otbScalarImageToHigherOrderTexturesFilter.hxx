@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbScalarImageToHigherOrderTexturesFilter_txx
-#define otbScalarImageToHigherOrderTexturesFilter_txx
+#ifndef otbScalarImageToHigherOrderTexturesFilter_hxx
+#define otbScalarImageToHigherOrderTexturesFilter_hxx
 
 #include "otbScalarImageToHigherOrderTexturesFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

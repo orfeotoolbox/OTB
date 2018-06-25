@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTextureImageFunction_txx
-#define otbTextureImageFunction_txx
+#ifndef otbTextureImageFunction_hxx
+#define otbTextureImageFunction_hxx
 
 #include "otbTextureImageFunction.h"
 

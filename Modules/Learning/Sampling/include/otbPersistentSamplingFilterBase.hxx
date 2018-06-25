@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPersistentSamplingFilterBase_txx
-#define otbPersistentSamplingFilterBase_txx
+#ifndef otbPersistentSamplingFilterBase_hxx
+#define otbPersistentSamplingFilterBase_hxx
 
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbMaskedIteratorDecorator.h"

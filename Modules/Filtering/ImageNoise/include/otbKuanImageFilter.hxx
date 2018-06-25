@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKuanImageFilter_txx
-#define otbKuanImageFilter_txx
+#ifndef otbKuanImageFilter_hxx
+#define otbKuanImageFilter_hxx
 
 #include "otbKuanImageFilter.h"
 

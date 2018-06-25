@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGCPsToRPCSensorModelImageFilter_txx
-#define otbGCPsToRPCSensorModelImageFilter_txx
+#ifndef otbGCPsToRPCSensorModelImageFilter_hxx
+#define otbGCPsToRPCSensorModelImageFilter_hxx
 
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 

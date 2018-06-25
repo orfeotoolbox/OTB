@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDEMCaracteristicsExtractor_txx
-#define otbDEMCaracteristicsExtractor_txx
+#ifndef otbDEMCaracteristicsExtractor_hxx
+#define otbDEMCaracteristicsExtractor_hxx
 
 #include "otbDEMCaracteristicsExtractor.h"
 #include "itkImageRegionIterator.h"

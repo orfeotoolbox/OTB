@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDisparityMapMedianFilter_txx
-#define otbDisparityMapMedianFilter_txx
+#ifndef otbDisparityMapMedianFilter_hxx
+#define otbDisparityMapMedianFilter_hxx
 
 #ifdef ITK_USE_CONSOLIDATED_MORPHOLOGY
 #else

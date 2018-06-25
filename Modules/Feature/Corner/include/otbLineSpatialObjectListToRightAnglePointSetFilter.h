@@ -157,7 +157,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineSpatialObjectListToRightAnglePointSetFilter.txx"
+#include "otbLineSpatialObjectListToRightAnglePointSetFilter.hxx"
 #endif
 
 #endif

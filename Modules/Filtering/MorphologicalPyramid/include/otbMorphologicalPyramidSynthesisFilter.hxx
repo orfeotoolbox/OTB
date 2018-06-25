@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMorphologicalPyramidSynthesisFilter_txx
-#define otbMorphologicalPyramidSynthesisFilter_txx
+#ifndef otbMorphologicalPyramidSynthesisFilter_hxx
+#define otbMorphologicalPyramidSynthesisFilter_hxx
 
 #include "otbMorphologicalPyramidSynthesisFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDEMToImageGenerator_txx
-#define otbDEMToImageGenerator_txx
+#ifndef otbDEMToImageGenerator_hxx
+#define otbDEMToImageGenerator_hxx
 
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"

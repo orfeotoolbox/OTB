@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGeodesicMorphologyDecompositionImageFilter_txx
-#define otbGeodesicMorphologyDecompositionImageFilter_txx
+#ifndef otbGeodesicMorphologyDecompositionImageFilter_hxx
+#define otbGeodesicMorphologyDecompositionImageFilter_hxx
 
 #include "otbGeodesicMorphologyDecompositionImageFilter.h"
 

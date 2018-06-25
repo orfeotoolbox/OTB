@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDifferenceImageFilter_txx
-#define otbDifferenceImageFilter_txx
+#ifndef otbDifferenceImageFilter_hxx
+#define otbDifferenceImageFilter_hxx
 
 #include "otbDifferenceImageFilter.h"
 

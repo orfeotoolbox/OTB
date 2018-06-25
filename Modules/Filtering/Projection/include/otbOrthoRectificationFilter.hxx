@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOrthoRectificationFilter_txx
-#define otbOrthoRectificationFilter_txx
+#ifndef otbOrthoRectificationFilter_hxx
+#define otbOrthoRectificationFilter_hxx
 
 #include "otbOrthoRectificationFilter.h"
 #include "itkMetaDataObject.h"

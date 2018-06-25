@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbScalarBufferToImageFileWriter_txx
-#define otbScalarBufferToImageFileWriter_txx
+#ifndef otbScalarBufferToImageFileWriter_hxx
+#define otbScalarBufferToImageFileWriter_hxx
 
 #include "otbMacro.h"
 

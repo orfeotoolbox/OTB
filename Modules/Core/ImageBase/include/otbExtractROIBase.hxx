@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbExtractROIBase_txx
-#define otbExtractROIBase_txx
+#ifndef otbExtractROIBase_hxx
+#define otbExtractROIBase_hxx
 
 #include "otbExtractROIBase.h"
 #include "itkImageRegionIterator.h"

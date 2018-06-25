@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLineSpatialObjectListToRightAnglePointSetFilter_txx
-#define otbLineSpatialObjectListToRightAnglePointSetFilter_txx
+#ifndef otbLineSpatialObjectListToRightAnglePointSetFilter_hxx
+#define otbLineSpatialObjectListToRightAnglePointSetFilter_hxx
 
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 #include "itkLineIterator.h"

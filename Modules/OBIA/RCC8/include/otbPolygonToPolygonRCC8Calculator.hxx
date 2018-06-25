@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPolygonToPolygonRCC8Calculator_txx
-#define otbPolygonToPolygonRCC8Calculator_txx
+#ifndef otbPolygonToPolygonRCC8Calculator_hxx
+#define otbPolygonToPolygonRCC8Calculator_hxx
 
 #include "otbPolygonToPolygonRCC8Calculator.h"
 #include "otbMacro.h"

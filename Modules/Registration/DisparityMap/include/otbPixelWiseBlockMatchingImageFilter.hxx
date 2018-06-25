@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPixelWiseBlockMatchingImageFilter_txx
-#define otbPixelWiseBlockMatchingImageFilter_txx
+#ifndef otbPixelWiseBlockMatchingImageFilter_hxx
+#define otbPixelWiseBlockMatchingImageFilter_hxx
 
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "itkProgressReporter.h"

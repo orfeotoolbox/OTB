@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFunctionWithNeighborhoodToImageFilter_txx
-#define otbFunctionWithNeighborhoodToImageFilter_txx
+#ifndef otbFunctionWithNeighborhoodToImageFilter_hxx
+#define otbFunctionWithNeighborhoodToImageFilter_hxx
 
 #include "otbFunctionWithNeighborhoodToImageFilter.h"
 #include "otbMacro.h"

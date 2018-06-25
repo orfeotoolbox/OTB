@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDisparityTranslateFilter_txx
-#define otbDisparityTranslateFilter_txx
+#ifndef otbDisparityTranslateFilter_hxx
+#define otbDisparityTranslateFilter_hxx
 
 #include "otbDisparityTranslateFilter.h"
 

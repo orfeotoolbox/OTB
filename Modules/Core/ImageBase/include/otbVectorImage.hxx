@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorImage_txx
-#define otbVectorImage_txx
+#ifndef otbVectorImage_hxx
+#define otbVectorImage_hxx
 
 
 #include "otbVectorImage.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPixelSuppressionByDirectionImageFilter_txx
-#define otbPixelSuppressionByDirectionImageFilter_txx
+#ifndef otbPixelSuppressionByDirectionImageFilter_hxx
+#define otbPixelSuppressionByDirectionImageFilter_hxx
 
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBijectionCoherencyFilter_txx
-#define otbBijectionCoherencyFilter_txx
+#ifndef otbBijectionCoherencyFilter_hxx
+#define otbBijectionCoherencyFilter_hxx
 
 #include "otbBijectionCoherencyFilter.h"
 

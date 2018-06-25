@@ -151,7 +151,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftConnectedComponentSegmentationFilter.txx"
+#include "otbMeanShiftConnectedComponentSegmentationFilter.hxx"
 #endif
 
 #endif

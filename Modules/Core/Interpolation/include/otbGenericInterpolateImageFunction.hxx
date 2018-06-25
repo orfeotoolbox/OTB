@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGenericInterpolateImageFunction_txx
-#define otbGenericInterpolateImageFunction_txx
+#ifndef otbGenericInterpolateImageFunction_hxx
+#define otbGenericInterpolateImageFunction_hxx
 #include "otbGenericInterpolateImageFunction.h"
 #include "vnl/vnl_math.h"
 

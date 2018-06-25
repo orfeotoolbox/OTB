@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRCC8GraphFileWriter_txx
-#define otbRCC8GraphFileWriter_txx
+#ifndef otbRCC8GraphFileWriter_hxx
+#define otbRCC8GraphFileWriter_hxx
 
 #include "otbRCC8GraphFileWriter.h"
 #include "otbRCC8VertexIterator.h"

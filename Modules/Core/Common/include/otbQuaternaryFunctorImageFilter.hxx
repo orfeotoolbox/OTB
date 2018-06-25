@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbQuaternaryFunctorImageFilter_txx
-#define otbQuaternaryFunctorImageFilter_txx
+#ifndef otbQuaternaryFunctorImageFilter_hxx
+#define otbQuaternaryFunctorImageFilter_hxx
 
 #include "otbQuaternaryFunctorImageFilter.h"
 #include "itkImageRegionIterator.h"

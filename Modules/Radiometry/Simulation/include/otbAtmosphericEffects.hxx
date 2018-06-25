@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbAtmosphericEffects_txx
-#define otbAtmosphericEffects_txx
+#ifndef otbAtmosphericEffects_hxx
+#define otbAtmosphericEffects_hxx
 
 #include "otbAtmosphericEffects.h"
 #include "otbSurfaceReflectanceToReflectanceFilter.h"

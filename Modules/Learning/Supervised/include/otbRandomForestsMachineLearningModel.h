@@ -226,7 +226,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRandomForestsMachineLearningModel.txx"
+#include "otbRandomForestsMachineLearningModel.hxx"
 #endif
 
 #endif

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDataNodeImageFunction_txx
-#define otbDataNodeImageFunction_txx
+#ifndef otbDataNodeImageFunction_hxx
+#define otbDataNodeImageFunction_hxx
 
 #include "otbDataNodeImageFunction.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbAdhesionCorrectionFilter_txx
-#define otbAdhesionCorrectionFilter_txx
+#ifndef otbAdhesionCorrectionFilter_hxx
+#define otbAdhesionCorrectionFilter_hxx
 
 #include "otbAdhesionCorrectionFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbJointMassOfBeliefFilter_txx
-#define otbJointMassOfBeliefFilter_txx
+#ifndef otbJointMassOfBeliefFilter_hxx
+#define otbJointMassOfBeliefFilter_hxx
 
 #include "otbJointMassOfBeliefFilter.h"
 
@@ -211,7 +211,7 @@ JointMassOfBeliefFilter<TMassFunction>
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbJointMassOfBeliefFilter.txx"
+#include "otbJointMassOfBeliefFilter.hxx"
 #endif
 
 #endif

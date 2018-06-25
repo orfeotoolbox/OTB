@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRandomForestsMachineLearningModel_txx
-#define otbRandomForestsMachineLearningModel_txx
+#ifndef otbRandomForestsMachineLearningModel_hxx
+#define otbRandomForestsMachineLearningModel_hxx
 
 #include <fstream>
 #include "itkMacro.h"

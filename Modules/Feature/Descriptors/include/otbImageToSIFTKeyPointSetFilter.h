@@ -398,7 +398,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToSIFTKeyPointSetFilter.txx"
+#include "otbImageToSIFTKeyPointSetFilter.hxx"
 #endif
 
 #endif

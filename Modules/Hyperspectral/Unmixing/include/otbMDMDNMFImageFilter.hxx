@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMDMDNMFImageFilter_txx
-#define otbMDMDNMFImageFilter_txx
+#ifndef otbMDMDNMFImageFilter_hxx
+#define otbMDMDNMFImageFilter_hxx
 
 #include "otbMDMDNMFImageFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelMapClassifier_txx
-#define otbLabelMapClassifier_txx
+#ifndef otbLabelMapClassifier_hxx
+#define otbLabelMapClassifier_hxx
 
 #include "otbLabelMapClassifier.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRasterizeVectorDataFilter_txx
-#define otbRasterizeVectorDataFilter_txx
+#ifndef otbRasterizeVectorDataFilter_hxx
+#define otbRasterizeVectorDataFilter_hxx
 
 #include "otbRasterizeVectorDataFilter.h"
 #include "otbOGRIOHelper.h"

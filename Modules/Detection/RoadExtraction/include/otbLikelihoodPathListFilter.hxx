@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLikelihoodPathListFilter_txx
-#define otbLikelihoodPathListFilter_txx
+#ifndef otbLikelihoodPathListFilter_hxx
+#define otbLikelihoodPathListFilter_hxx
 
 #include "otbLikelihoodPathListFilter.h"
 #include "otbPolyLineImageConstIterator.h"

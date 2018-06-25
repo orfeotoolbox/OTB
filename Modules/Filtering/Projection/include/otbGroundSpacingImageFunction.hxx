@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbGroundSpacingImageFunction_txx
-#define otbGroundSpacingImageFunction_txx
+#ifndef otbGroundSpacingImageFunction_hxx
+#define otbGroundSpacingImageFunction_hxx
 
 #include "otbMath.h"
 #include "itkConstNeighborhoodIterator.h"

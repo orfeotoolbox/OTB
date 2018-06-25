@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSatelliteRSR_txx
-#define otbSatelliteRSR_txx
+#ifndef otbSatelliteRSR_hxx
+#define otbSatelliteRSR_hxx
 
 #include "otbSatelliteRSR.h"
 

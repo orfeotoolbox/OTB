@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbParallelLinePathListFilter_txx
-#define otbParallelLinePathListFilter_txx
+#ifndef otbParallelLinePathListFilter_hxx
+#define otbParallelLinePathListFilter_hxx
 
 #include "otbParallelLinePathListFilter.h"
 #include "otbMath.h"

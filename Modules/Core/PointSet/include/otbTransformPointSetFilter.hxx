@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTransformPointSetFilter_txx
-#define otbTransformPointSetFilter_txx
+#ifndef otbTransformPointSetFilter_hxx
+#define otbTransformPointSetFilter_hxx
 
 #include "otbTransformPointSetFilter.h"
 #include "itkMacro.h"

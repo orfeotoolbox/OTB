@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbScalarImageToTexturesFilter_txx
-#define otbScalarImageToTexturesFilter_txx
+#ifndef otbScalarImageToTexturesFilter_hxx
+#define otbScalarImageToTexturesFilter_hxx
 
 #include "otbScalarImageToTexturesFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

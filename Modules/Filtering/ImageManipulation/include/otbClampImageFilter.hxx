@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbClampImageFilter_txx
-#define otbClampImageFilter_txx
+#ifndef otbClampImageFilter_hxx
+#define otbClampImageFilter_hxx
 
 #include "otbClampImageFilter.h"
 #include "itkImageRegionIterator.h"

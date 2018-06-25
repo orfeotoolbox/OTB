@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTileMapTransform_txx
-#define otbTileMapTransform_txx
+#ifndef otbTileMapTransform_hxx
+#define otbTileMapTransform_hxx
 
 #include "otbTileMapTransform.h"
 #include "otbMacro.h"

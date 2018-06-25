@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbUrbanAreaDetectionImageFilter_txx
-#define otbUrbanAreaDetectionImageFilter_txx
+#ifndef otbUrbanAreaDetectionImageFilter_hxx
+#define otbUrbanAreaDetectionImageFilter_hxx
 
 #include "otbUrbanAreaDetectionImageFilter.h"
 #include "itkProgressAccumulator.h"

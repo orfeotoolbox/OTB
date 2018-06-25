@@ -19,10 +19,10 @@
  */
 
 
-// Adapted from otbImageToPathListAlignFilter.txx
+// Adapted from otbImageToPathListAlignFilter.hxx
 
-#ifndef otbRegionImageToRectangularPathListFilter_txx
-#define otbRegionImageToRectangularPathListFilter_txx
+#ifndef otbRegionImageToRectangularPathListFilter_hxx
+#define otbRegionImageToRectangularPathListFilter_hxx
 
 #include <iostream>
 #include <exception>

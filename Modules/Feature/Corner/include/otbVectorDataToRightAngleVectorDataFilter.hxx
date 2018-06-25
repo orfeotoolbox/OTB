@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataToRightAngleVectorDataFilter_txx
-#define otbVectorDataToRightAngleVectorDataFilter_txx
+#ifndef otbVectorDataToRightAngleVectorDataFilter_hxx
+#define otbVectorDataToRightAngleVectorDataFilter_hxx
 
 #include "otbVectorDataToRightAngleVectorDataFilter.h"
 #include "otbVectorData.h"

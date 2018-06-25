@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRAMDrivenStrippedStreamingManager_txx
-#define otbRAMDrivenStrippedStreamingManager_txx
+#ifndef otbRAMDrivenStrippedStreamingManager_hxx
+#define otbRAMDrivenStrippedStreamingManager_hxx
 
 #include "otbRAMDrivenStrippedStreamingManager.h"
 #include "otbMacro.h"

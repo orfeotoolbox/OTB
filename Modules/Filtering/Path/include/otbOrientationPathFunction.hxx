@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOrientationPathFunction_txx
-#define otbOrientationPathFunction_txx
+#ifndef otbOrientationPathFunction_hxx
+#define otbOrientationPathFunction_hxx
 
 #include "otbOrientationPathFunction.h"
 #include "otbPathFunction.h"

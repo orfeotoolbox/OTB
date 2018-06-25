@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLineRatioDetectorImageFilter_txx
-#define otbLineRatioDetectorImageFilter_txx
+#ifndef otbLineRatioDetectorImageFilter_hxx
+#define otbLineRatioDetectorImageFilter_hxx
 
 #include "otbLineRatioDetectorImageFilter.h"
 #include "otbMacro.h"

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbListSampleToHistogramListGenerator_txx
-#define otbListSampleToHistogramListGenerator_txx
+#ifndef otbListSampleToHistogramListGenerator_hxx
+#define otbListSampleToHistogramListGenerator_hxx
 
 #include "otbListSampleToHistogramListGenerator.h"
 #include "itkArray.h"

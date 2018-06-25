@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPersistentImageToOGRLayerFilter_txx
-#define otbPersistentImageToOGRLayerFilter_txx
+#ifndef otbPersistentImageToOGRLayerFilter_hxx
+#define otbPersistentImageToOGRLayerFilter_hxx
 
 #include "otbPersistentImageToOGRLayerFilter.h"
 #include "otbStopwatch.h"

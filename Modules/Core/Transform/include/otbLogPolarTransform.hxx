@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLogPolarTransform_txx
-#define otbLogPolarTransform_txx
+#ifndef otbLogPolarTransform_hxx
+#define otbLogPolarTransform_hxx
 
 #include "otbLogPolarTransform.h"
 #include "otbMacro.h"

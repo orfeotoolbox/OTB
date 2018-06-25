@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToLabelMapWithAttributesFilter_txx
-#define otbImageToLabelMapWithAttributesFilter_txx
+#ifndef otbImageToLabelMapWithAttributesFilter_hxx
+#define otbImageToLabelMapWithAttributesFilter_hxx
 
 #include "otbImageToLabelMapWithAttributesFilter.h"
 #include "itkProcessObject.h"

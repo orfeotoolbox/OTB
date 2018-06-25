@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbRGBAPixelConverter_txx
-#define otbRGBAPixelConverter_txx
+#ifndef otbRGBAPixelConverter_hxx
+#define otbRGBAPixelConverter_hxx
 
 #include "otbRGBAPixelConverter.h"
 

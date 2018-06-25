@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbProlateInterpolateImageFunction_txx
-#define otbProlateInterpolateImageFunction_txx
+#ifndef otbProlateInterpolateImageFunction_hxx
+#define otbProlateInterpolateImageFunction_hxx
 
 #include "otbProlateInterpolateImageFunction.h"
 

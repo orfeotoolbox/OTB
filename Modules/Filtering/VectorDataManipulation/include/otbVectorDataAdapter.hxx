@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataAdapterFilter_txx
-#define otbVectorDataAdapterFilter_txx
+#ifndef otbVectorDataAdapterFilter_hxx
+#define otbVectorDataAdapterFilter_hxx
 
 #include "otbVectorDataAdapter.h"
 

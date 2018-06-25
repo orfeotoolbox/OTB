@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbWaveletsSynopsisImageToWaveletsBandsListFilter_txx
-#define otbWaveletsSynopsisImageToWaveletsBandsListFilter_txx
+#ifndef otbWaveletsSynopsisImageToWaveletsBandsListFilter_hxx
+#define otbWaveletsSynopsisImageToWaveletsBandsListFilter_hxx
 
 #include "otbWaveletsSynopsisImageToWaveletsBandsListFilter.h"
 

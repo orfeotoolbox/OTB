@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRealMomentsImageFunction_txx
-#define otbRealMomentsImageFunction_txx
+#ifndef otbRealMomentsImageFunction_hxx
+#define otbRealMomentsImageFunction_hxx
 
 #include "otbRealMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

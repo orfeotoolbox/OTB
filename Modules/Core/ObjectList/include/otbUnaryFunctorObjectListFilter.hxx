@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbUnaryFunctorObjectListFilter_txx
-#define otbUnaryFunctorObjectListFilter_txx
+#ifndef otbUnaryFunctorObjectListFilter_hxx
+#define otbUnaryFunctorObjectListFilter_hxx
 
 #include "otbUnaryFunctorObjectListFilter.h"
 #include "itkProgressReporter.h"

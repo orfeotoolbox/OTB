@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHistogramOfOrientedGradientCovariantImageFunction_txx
-#define otbHistogramOfOrientedGradientCovariantImageFunction_txx
+#ifndef otbHistogramOfOrientedGradientCovariantImageFunction_hxx
+#define otbHistogramOfOrientedGradientCovariantImageFunction_hxx
 
 #include "otbHistogramOfOrientedGradientCovariantImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDataNode_txx
-#define otbDataNode_txx
+#ifndef otbDataNode_hxx
+#define otbDataNode_hxx
 
 #include "otbDataNode.h"
 #include "otbMetaDataKey.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbCompositeTransform_txx
-#define otbCompositeTransform_txx
+#ifndef otbCompositeTransform_hxx
+#define otbCompositeTransform_hxx
 
 #include "otbCompositeTransform.h"
 

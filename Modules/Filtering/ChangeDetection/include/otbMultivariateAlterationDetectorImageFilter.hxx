@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMultivariateAlterationDetectorImageFilter_txx
-#define otbMultivariateAlterationDetectorImageFilter_txx
+#ifndef otbMultivariateAlterationDetectorImageFilter_hxx
+#define otbMultivariateAlterationDetectorImageFilter_hxx
 
 #include "otbMultivariateAlterationDetectorImageFilter.h"
 #include "otbMath.h"

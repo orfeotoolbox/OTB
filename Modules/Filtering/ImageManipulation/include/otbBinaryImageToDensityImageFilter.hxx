@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBinaryImageToDensityImageFilter_txx
-#define otbBinaryImageToDensityImageFilter_txx
+#ifndef otbBinaryImageToDensityImageFilter_hxx
+#define otbBinaryImageToDensityImageFilter_hxx
 
 #include "otbBinaryImageToDensityImageFilter.h"
 #include "itkImageRegionIterator.h"

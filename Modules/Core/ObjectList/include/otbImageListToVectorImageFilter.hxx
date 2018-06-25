@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageListToVectorImageFilter_txx
-#define otbImageListToVectorImageFilter_txx
+#ifndef otbImageListToVectorImageFilter_hxx
+#define otbImageListToVectorImageFilter_hxx
 
 #include "otbImageListToVectorImageFilter.h"
 #include "itkImageRegionIterator.h"

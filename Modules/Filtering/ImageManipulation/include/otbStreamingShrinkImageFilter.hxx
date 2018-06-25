@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingShrinkImageFilter_txx
-#define otbStreamingShrinkImageFilter_txx
+#ifndef otbStreamingShrinkImageFilter_hxx
+#define otbStreamingShrinkImageFilter_hxx
 
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"

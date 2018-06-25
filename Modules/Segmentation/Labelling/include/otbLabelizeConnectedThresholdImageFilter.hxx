@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelizeConnectedThresholdImageFilter_txx
-#define otbLabelizeConnectedThresholdImageFilter_txx
+#ifndef otbLabelizeConnectedThresholdImageFilter_hxx
+#define otbLabelizeConnectedThresholdImageFilter_hxx
 
 #include "itkNumericTraits.h"
 

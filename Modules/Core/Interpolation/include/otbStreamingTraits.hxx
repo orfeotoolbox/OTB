@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingTraits_txx
-#define otbStreamingTraits_txx
+#ifndef otbStreamingTraits_hxx
+#define otbStreamingTraits_hxx
 
 #include "otbStreamingTraits.h"
 

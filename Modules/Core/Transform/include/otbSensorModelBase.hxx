@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSensorModelBase_txx
-#define otbSensorModelBase_txx
+#ifndef otbSensorModelBase_hxx
+#define otbSensorModelBase_hxx
 
 #include "otbSensorModelBase.h"
 

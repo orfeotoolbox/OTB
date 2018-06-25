@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbISRAUnmixingImageFilter_txx
-#define otbISRAUnmixingImageFilter_txx
+#ifndef otbISRAUnmixingImageFilter_hxx
+#define otbISRAUnmixingImageFilter_hxx
 
 #include "otbISRAUnmixingImageFilter.h"
 #include <algorithm>

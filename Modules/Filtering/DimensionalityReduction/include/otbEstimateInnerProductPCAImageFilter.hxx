@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbEstimateInnerProductPCAImageFilter_txx
-#define otbEstimateInnerProductPCAImageFilter_txx
+#ifndef otbEstimateInnerProductPCAImageFilter_hxx
+#define otbEstimateInnerProductPCAImageFilter_hxx
 
 #include "otbEstimateInnerProductPCAImageFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTransMercatorMapProjection_txx
-#define otbTransMercatorMapProjection_txx
+#ifndef otbTransMercatorMapProjection_hxx
+#define otbTransMercatorMapProjection_hxx
 
 #include "otbTransMercatorMapProjection.h"
 #include "otbUtils.h"

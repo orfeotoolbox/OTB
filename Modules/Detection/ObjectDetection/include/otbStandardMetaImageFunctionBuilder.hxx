@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStandardMetaImageFunctionBuilder_txx
-#define otbStandardMetaImageFunctionBuilder_txx
+#ifndef otbStandardMetaImageFunctionBuilder_hxx
+#define otbStandardMetaImageFunctionBuilder_hxx
 
 #include "otbStandardMetaImageFunctionBuilder.h"
 

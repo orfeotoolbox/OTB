@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbAngularProjectionBinaryImageFilter_txx
-#define otbAngularProjectionBinaryImageFilter_txx
+#ifndef otbAngularProjectionBinaryImageFilter_hxx
+#define otbAngularProjectionBinaryImageFilter_hxx
 #include "otbAngularProjectionBinaryImageFilter.h"
 
 #include <vnl/vnl_math.h>

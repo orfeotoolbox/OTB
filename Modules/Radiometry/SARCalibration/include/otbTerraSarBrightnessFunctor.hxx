@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTerraSarBrightnessFunctor_txx
-#define otbTerraSarBrightnessFunctor_txx
+#ifndef otbTerraSarBrightnessFunctor_hxx
+#define otbTerraSarBrightnessFunctor_hxx
 
 #include "otbTerraSarBrightnessFunctor.h"
 

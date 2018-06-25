@@ -159,7 +159,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidSegmentationFilter.txx"
+#include "otbMorphologicalPyramidSegmentationFilter.hxx"
 #endif
 
 #endif

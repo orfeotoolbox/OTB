@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
-#define otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_txx
+#ifndef otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_hxx
+#define otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_hxx
 
 #include "otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.h"
 

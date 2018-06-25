@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGaborFilterGenerator_txx
-#define otbGaborFilterGenerator_txx
+#ifndef otbGaborFilterGenerator_hxx
+#define otbGaborFilterGenerator_hxx
 
 #include "otbGaborFilterGenerator.h"
 #include "otbMath.h"

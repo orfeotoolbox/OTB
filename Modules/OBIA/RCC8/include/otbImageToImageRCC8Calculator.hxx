@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToImageRCC8Calculator_txx
-#define otbImageToImageRCC8Calculator_txx
+#ifndef otbImageToImageRCC8Calculator_hxx
+#define otbImageToImageRCC8Calculator_hxx
 
 #include "otbImageToImageRCC8Calculator.h"
 #include "itkUnaryFunctorImageFilter.h"

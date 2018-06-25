@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMachineLearningModelFactory_txx
-#define otbMachineLearningModelFactory_txx
+#ifndef otbMachineLearningModelFactory_hxx
+#define otbMachineLearningModelFactory_hxx
 
 #include "otbMachineLearningModelFactory.h"
 #include "otbConfigure.h"

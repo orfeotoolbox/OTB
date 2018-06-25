@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbVectorDataFileWriter_txx
-#define otbVectorDataFileWriter_txx
+#ifndef otbVectorDataFileWriter_hxx
+#define otbVectorDataFileWriter_hxx
 
 #include "otbMacro.h"
 #include "otbVectorDataFileWriter.h"

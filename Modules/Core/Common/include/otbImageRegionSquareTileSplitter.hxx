@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageRegionSquareTileSplitter_txx
-#define otbImageRegionSquareTileSplitter_txx
+#ifndef otbImageRegionSquareTileSplitter_hxx
+#define otbImageRegionSquareTileSplitter_hxx
 
 #include "otbImageRegionSquareTileSplitter.h"
 #include "otbMath.h"

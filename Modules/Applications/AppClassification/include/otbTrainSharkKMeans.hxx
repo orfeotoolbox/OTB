@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbTrainSharkKMeans_txx
-#define otbTrainSharkKMeans_txx
+#ifndef otbTrainSharkKMeans_hxx
+#define otbTrainSharkKMeans_hxx
 
 #include "otbLearningApplicationBase.h"
 #include "otbSharkKMeansMachineLearningModel.h"

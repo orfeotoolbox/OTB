@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageAndVectorImageOperationFilter_txx
-#define otbImageAndVectorImageOperationFilter_txx
+#ifndef otbImageAndVectorImageOperationFilter_hxx
+#define otbImageAndVectorImageOperationFilter_hxx
 
 #include "otbImageAndVectorImageOperationFilter.h"
 #include "itkObjectFactory.h"

@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBayesianFusionFilter_txx
-#define otbBayesianFusionFilter_txx
+#ifndef otbBayesianFusionFilter_hxx
+#define otbBayesianFusionFilter_hxx
 
 #include "otbBayesianFusionFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbCloudDetectionFilter_txx
-#define otbCloudDetectionFilter_txx
+#ifndef otbCloudDetectionFilter_hxx
+#define otbCloudDetectionFilter_hxx
 
 #include "otbCloudDetectionFilter.h"
 

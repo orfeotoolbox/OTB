@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbDimensionalityReductionTrainAutoencoder_txx
-#define otbDimensionalityReductionTrainAutoencoder_txx
+#ifndef otbDimensionalityReductionTrainAutoencoder_hxx
+#define otbDimensionalityReductionTrainAutoencoder_hxx
 
 #include "otbTrainDimensionalityReductionApplicationBase.h"
 #include "otbAutoencoderModel.h"

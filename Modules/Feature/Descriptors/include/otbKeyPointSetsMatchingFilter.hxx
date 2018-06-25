@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKeyPointSetsMatchingFilter_txx
-#define otbKeyPointSetsMatchingFilter_txx
+#ifndef otbKeyPointSetsMatchingFilter_hxx
+#define otbKeyPointSetsMatchingFilter_hxx
 
 #include "otbKeyPointSetsMatchingFilter.h"
 

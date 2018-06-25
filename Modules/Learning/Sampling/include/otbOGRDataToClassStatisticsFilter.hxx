@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOGRDataToClassStatisticsFilter_txx
-#define otbOGRDataToClassStatisticsFilter_txx
+#ifndef otbOGRDataToClassStatisticsFilter_hxx
+#define otbOGRDataToClassStatisticsFilter_hxx
 
 #include "otbOGRDataToClassStatisticsFilter.h"
 

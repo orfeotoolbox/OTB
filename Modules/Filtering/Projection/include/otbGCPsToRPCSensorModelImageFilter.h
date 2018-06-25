@@ -225,7 +225,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGCPsToRPCSensorModelImageFilter.txx"
+#include "otbGCPsToRPCSensorModelImageFilter.hxx"
 #endif
 
 #endif

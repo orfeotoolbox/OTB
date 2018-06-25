@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFunctionToImageFilter_txx
-#define otbFunctionToImageFilter_txx
+#ifndef otbFunctionToImageFilter_hxx
+#define otbFunctionToImageFilter_hxx
 
 #include "otbFunctionToImageFilter.h"
 #include "itkImageRegionConstIterator.h"

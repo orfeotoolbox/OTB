@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbPathListToHistogramGenerator_txx
-#define otbPathListToHistogramGenerator_txx
+#ifndef otbPathListToHistogramGenerator_hxx
+#define otbPathListToHistogramGenerator_hxx
 
 #include "otbPathListToHistogramGenerator.h"
 

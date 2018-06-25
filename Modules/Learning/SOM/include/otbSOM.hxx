@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSOM_txx
-#define otbSOM_txx
+#ifndef otbSOM_hxx
+#define otbSOM_hxx
 
 #include "otbSOM.h"
 #include "itkImageRegionIteratorWithIndex.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorImageTo3DScalarImageFilter_txx
-#define otbVectorImageTo3DScalarImageFilter_txx
+#ifndef otbVectorImageTo3DScalarImageFilter_hxx
+#define otbVectorImageTo3DScalarImageFilter_hxx
 
 #include "otbVectorImageTo3DScalarImageFilter.h"
 #include "itkImageRegionConstIterator.h"

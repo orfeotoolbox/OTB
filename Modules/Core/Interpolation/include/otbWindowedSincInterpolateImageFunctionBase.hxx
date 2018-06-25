@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbWindowedSincInterpolateImageFunctionBase_txx
-#define otbWindowedSincInterpolateImageFunctionBase_txx
+#ifndef otbWindowedSincInterpolateImageFunctionBase_hxx
+#define otbWindowedSincInterpolateImageFunctionBase_hxx
 
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
 

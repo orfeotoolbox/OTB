@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbTileImageFilter_txx
-#define otbTileImageFilter_txx
+#ifndef otbTileImageFilter_hxx
+#define otbTileImageFilter_hxx
 
 #include "otbTileImageFilter.h"
 #include "itkImageRegionIterator.h"

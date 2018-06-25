@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBSplinesInterpolateDisplacementFieldGenerator_txx
-#define otbBSplinesInterpolateDisplacementFieldGenerator_txx
+#ifndef otbBSplinesInterpolateDisplacementFieldGenerator_hxx
+#define otbBSplinesInterpolateDisplacementFieldGenerator_hxx
 
 #include "otbBSplinesInterpolateDisplacementFieldGenerator.h"
 // Disabling deprecation warning if on visual

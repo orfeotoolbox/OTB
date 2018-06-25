@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKNearestNeighborsMachineLearningModel_txx
-#define otbKNearestNeighborsMachineLearningModel_txx
+#ifndef otbKNearestNeighborsMachineLearningModel_hxx
+#define otbKNearestNeighborsMachineLearningModel_hxx
 
 #include <boost/lexical_cast.hpp>
 #include "otbKNearestNeighborsMachineLearningModel.h"

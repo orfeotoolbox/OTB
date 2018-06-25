@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToPathFilter_txx
-#define otbImageToPathFilter_txx
+#ifndef otbImageToPathFilter_hxx
+#define otbImageToPathFilter_hxx
 
 #include "otbImageToPathFilter.h"
 

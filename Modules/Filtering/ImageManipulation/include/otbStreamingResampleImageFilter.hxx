@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingResampleImageFilter_txx
-#define otbStreamingResampleImageFilter_txx
+#ifndef otbStreamingResampleImageFilter_hxx
+#define otbStreamingResampleImageFilter_hxx
 
 #include "otbStreamingResampleImageFilter.h"
 #include "itkProgressAccumulator.h"

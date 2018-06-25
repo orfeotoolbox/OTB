@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelImageToOGRDataSourceFilter_txx
-#define otbLabelImageToOGRDataSourceFilter_txx
+#ifndef otbLabelImageToOGRDataSourceFilter_hxx
+#define otbLabelImageToOGRDataSourceFilter_hxx
 
 #include "otbLabelImageToOGRDataSourceFilter.h"
 #include "otbGdalDataTypeBridge.h"

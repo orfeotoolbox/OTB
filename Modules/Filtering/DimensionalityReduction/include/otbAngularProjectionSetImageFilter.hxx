@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbAngularProjectionSetImageFilter_txx
-#define otbAngularProjectionSetImageFilter_txx
+#ifndef otbAngularProjectionSetImageFilter_hxx
+#define otbAngularProjectionSetImageFilter_hxx
 #include "otbAngularProjectionSetImageFilter.h"
 
 #include <vnl/vnl_math.h>

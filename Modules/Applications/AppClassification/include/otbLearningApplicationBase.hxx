@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLearningApplicationBase_txx
-#define otbLearningApplicationBase_txx
+#ifndef otbLearningApplicationBase_hxx
+#define otbLearningApplicationBase_hxx
 
 #include "otbLearningApplicationBase.h"
 // only need this filter as a dummy process object

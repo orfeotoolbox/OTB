@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSimpleRcsPanSharpeningFusionImageFilter_txx
-#define otbSimpleRcsPanSharpeningFusionImageFilter_txx
+#ifndef otbSimpleRcsPanSharpeningFusionImageFilter_hxx
+#define otbSimpleRcsPanSharpeningFusionImageFilter_hxx
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 

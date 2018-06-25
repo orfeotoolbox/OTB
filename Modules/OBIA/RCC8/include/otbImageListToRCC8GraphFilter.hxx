@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageListToRCC8GraphFilter_txx
-#define otbImageListToRCC8GraphFilter_txx
+#ifndef otbImageListToRCC8GraphFilter_hxx
+#define otbImageListToRCC8GraphFilter_hxx
 
 #include "otbImageListToRCC8GraphFilter.h"
 

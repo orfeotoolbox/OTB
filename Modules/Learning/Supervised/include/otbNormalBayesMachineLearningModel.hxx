@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNormalBayesMachineLearningModel_txx
-#define otbNormalBayesMachineLearningModel_txx
+#ifndef otbNormalBayesMachineLearningModel_hxx
+#define otbNormalBayesMachineLearningModel_hxx
 
 #include <fstream>
 #include "itkMacro.h"

@@ -98,7 +98,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentFilterStreamingDecorator.txx"
+#include "otbPersistentFilterStreamingDecorator.hxx"
 #endif
 
 #endif

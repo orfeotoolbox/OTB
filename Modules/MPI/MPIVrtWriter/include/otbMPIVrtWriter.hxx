@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMPIVrtWriter_txx
-#define otbMPIVrtWriter_txx
+#ifndef otbMPIVrtWriter_hxx
+#define otbMPIVrtWriter_hxx
 
 #include "otbMPIVrtWriter.h"
 #include "otbMacro.h"

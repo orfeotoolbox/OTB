@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbTrainDimensionalityReductionApplicationBase_txx
-#define otbTrainDimensionalityReductionApplicationBase_txx
+#ifndef otbTrainDimensionalityReductionApplicationBase_hxx
+#define otbTrainDimensionalityReductionApplicationBase_hxx
 
 #include "otbTrainDimensionalityReductionApplicationBase.h"
 

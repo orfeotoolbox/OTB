@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNormalizeVectorImageFilter_txx
-#define otbNormalizeVectorImageFilter_txx
+#ifndef otbNormalizeVectorImageFilter_hxx
+#define otbNormalizeVectorImageFilter_hxx
 #include "otbNormalizeVectorImageFilter.h"
 
 namespace otb
@@ -86,4 +86,4 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
 
 } // end of namespace otb
 
-#endif // otbNormalizeVectorImageFilter_txx
+#endif // otbNormalizeVectorImageFilter_hxx

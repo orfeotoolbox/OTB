@@ -229,7 +229,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStereorectificationDisplacementFieldSource.txx"
+#include "otbStereorectificationDisplacementFieldSource.hxx"
 #endif
 
 #endif

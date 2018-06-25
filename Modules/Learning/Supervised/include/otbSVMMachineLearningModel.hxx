@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSVMMachineLearningModel_txx
-#define otbSVMMachineLearningModel_txx
+#ifndef otbSVMMachineLearningModel_hxx
+#define otbSVMMachineLearningModel_hxx
 
 #include <fstream>
 #include "itkMacro.h"

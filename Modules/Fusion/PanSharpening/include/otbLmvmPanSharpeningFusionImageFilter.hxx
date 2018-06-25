@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLmvmPanSharpeningFusionImageFilter_txx
-#define otbLmvmPanSharpeningFusionImageFilter_txx
+#ifndef otbLmvmPanSharpeningFusionImageFilter_hxx
+#define otbLmvmPanSharpeningFusionImageFilter_hxx
 
 #include "otbLmvmPanSharpeningFusionImageFilter.h"
 

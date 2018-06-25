@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbSarParametricMapFunction_txx
-#define otbSarParametricMapFunction_txx
+#ifndef otbSarParametricMapFunction_hxx
+#define otbSarParametricMapFunction_hxx
 
 #include "otbSarParametricMapFunction.h"
 #include "itkNumericTraits.h"

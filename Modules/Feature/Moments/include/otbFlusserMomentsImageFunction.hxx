@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFlusserMomentsImageFunction_txx
-#define otbFlusserMomentsImageFunction_txx
+#ifndef otbFlusserMomentsImageFunction_hxx
+#define otbFlusserMomentsImageFunction_hxx
 
 #include "otbFlusserMomentsImageFunction.h"
 #include "itkConstNeighborhoodIterator.h"

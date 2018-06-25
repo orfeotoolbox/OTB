@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbLabelMapToAttributeImageFilter_txx
-#define otbLabelMapToAttributeImageFilter_txx
+#ifndef otbLabelMapToAttributeImageFilter_hxx
+#define otbLabelMapToAttributeImageFilter_hxx
 
 #include "otbLabelMapToAttributeImageFilter.h"
 #include "otbMacro.h"

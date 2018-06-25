@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNumberOfDivisionsTiledStreamingManager_txx
-#define otbNumberOfDivisionsTiledStreamingManager_txx
+#ifndef otbNumberOfDivisionsTiledStreamingManager_hxx
+#define otbNumberOfDivisionsTiledStreamingManager_hxx
 
 #include "otbNumberOfDivisionsTiledStreamingManager.h"
 #include "otbMacro.h"

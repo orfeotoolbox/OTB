@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSubPixelDisparityImageFilter_txx
-#define otbSubPixelDisparityImageFilter_txx
+#ifndef otbSubPixelDisparityImageFilter_hxx
+#define otbSubPixelDisparityImageFilter_hxx
 
 #include "otbSubPixelDisparityImageFilter.h"
 

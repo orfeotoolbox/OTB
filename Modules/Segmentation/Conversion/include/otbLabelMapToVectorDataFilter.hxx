@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelMapToVectorDataFilter_txx
-#define otbLabelMapToVectorDataFilter_txx
+#ifndef otbLabelMapToVectorDataFilter_hxx
+#define otbLabelMapToVectorDataFilter_hxx
 
 #include "otbLabelMapToVectorDataFilter.h"
 

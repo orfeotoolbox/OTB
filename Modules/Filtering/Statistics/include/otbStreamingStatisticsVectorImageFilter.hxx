@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingStatisticsVectorImageFilter_txx
-#define otbStreamingStatisticsVectorImageFilter_txx
+#ifndef otbStreamingStatisticsVectorImageFilter_hxx
+#define otbStreamingStatisticsVectorImageFilter_hxx
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 #include "itkImageRegionIterator.h"

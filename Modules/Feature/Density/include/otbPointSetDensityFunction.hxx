@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPointSetDensityFunction_txx
-#define otbPointSetDensityFunction_txx
+#ifndef otbPointSetDensityFunction_hxx
+#define otbPointSetDensityFunction_hxx
 
 #include "otbPointSetDensityFunction.h"
 #include "otbMath.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNearestTransformDisplacementFieldGenerator_txx
-#define otbNearestTransformDisplacementFieldGenerator_txx
+#ifndef otbNearestTransformDisplacementFieldGenerator_hxx
+#define otbNearestTransformDisplacementFieldGenerator_hxx
 
 #include "otbNearestTransformDisplacementFieldGenerator.h"
 #include "itkImageRegionIteratorWithIndex.h"

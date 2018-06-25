@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingManager_txx
-#define otbStreamingManager_txx
+#ifndef otbStreamingManager_hxx
+#define otbStreamingManager_hxx
 
 #include "otbStreamingManager.h"
 #include "otbConfigurationManager.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSpectralAngleDistanceImageFilter_txx
-#define otbSpectralAngleDistanceImageFilter_txx
+#ifndef otbSpectralAngleDistanceImageFilter_hxx
+#define otbSpectralAngleDistanceImageFilter_hxx
 
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "itkImageRegionIterator.h"

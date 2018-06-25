@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSVMCrossValidationCostFunction_txx
-#define otbSVMCrossValidationCostFunction_txx
+#ifndef otbSVMCrossValidationCostFunction_hxx
+#define otbSVMCrossValidationCostFunction_hxx
 
 #include "otbSVMCrossValidationCostFunction.h"
 #include "otbMacro.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNeighborhoodScalarProductFilter_txx
-#define otbNeighborhoodScalarProductFilter_txx
+#ifndef otbNeighborhoodScalarProductFilter_hxx
+#define otbNeighborhoodScalarProductFilter_hxx
 
 #include "otbNeighborhoodScalarProductFilter.h"
 #include "itkImageRegionIterator.h"

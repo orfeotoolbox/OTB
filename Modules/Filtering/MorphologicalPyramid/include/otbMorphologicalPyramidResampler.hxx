@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMorphologicalPyramidResampler_txx
-#define otbMorphologicalPyramidResampler_txx
+#ifndef otbMorphologicalPyramidResampler_hxx
+#define otbMorphologicalPyramidResampler_hxx
 #include "otbMorphologicalPyramidResampler.h"
 #include "itkResampleImageFilter.h"
 #include "itkScalableAffineTransform.h"

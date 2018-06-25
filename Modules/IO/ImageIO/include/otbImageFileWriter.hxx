@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageFileWriter_txx
-#define otbImageFileWriter_txx
+#ifndef otbImageFileWriter_hxx
+#define otbImageFileWriter_hxx
 
 #include "otbImageFileWriter.h"
 #include "itkImageFileWriter.h"

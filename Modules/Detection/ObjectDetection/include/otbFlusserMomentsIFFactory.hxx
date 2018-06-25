@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFlusserMomentsIFFactory_txx
-#define otbFlusserMomentsIFFactory_txx
+#ifndef otbFlusserMomentsIFFactory_hxx
+#define otbFlusserMomentsIFFactory_hxx
 
 #include "otbFlusserMomentsIFFactory.h"
 

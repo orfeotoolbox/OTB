@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMorphologicalPyramidMRToMSConverter_txx
-#define otbMorphologicalPyramidMRToMSConverter_txx
+#ifndef otbMorphologicalPyramidMRToMSConverter_hxx
+#define otbMorphologicalPyramidMRToMSConverter_hxx
 
 #include "otbMorphologicalPyramidMRToMSConverter.h"
 #include "otbMorphologicalPyramidResampler.h"

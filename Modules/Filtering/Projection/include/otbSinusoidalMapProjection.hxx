@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbSinusoidalMapProjection_txx
-#define otbSinusoidalMapProjection_txx
+#ifndef otbSinusoidalMapProjection_hxx
+#define otbSinusoidalMapProjection_hxx
 
 #include "otbSinusoidalMapProjection.h"
 #include "otbUtils.h"

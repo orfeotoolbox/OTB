@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbComplexMomentPathFunction_txx
-#define otbComplexMomentPathFunction_txx
+#ifndef otbComplexMomentPathFunction_hxx
+#define otbComplexMomentPathFunction_hxx
 
 #include "otbComplexMomentPathFunction.h"
 #include "itkImageRegionIterator.h"

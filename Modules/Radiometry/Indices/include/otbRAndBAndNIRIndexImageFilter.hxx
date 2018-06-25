@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRAndBAndNIRIndexImageFilter_txx
-#define otbRAndBAndNIRIndexImageFilter_txx
+#ifndef otbRAndBAndNIRIndexImageFilter_hxx
+#define otbRAndBAndNIRIndexImageFilter_hxx
 
 #include "otbRAndBAndNIRIndexImageFilter.h"
 

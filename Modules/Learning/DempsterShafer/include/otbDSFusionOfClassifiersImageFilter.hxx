@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDSFusionOfClassifiersImageFilter_txx
-#define otbDSFusionOfClassifiersImageFilter_txx
+#ifndef otbDSFusionOfClassifiersImageFilter_hxx
+#define otbDSFusionOfClassifiersImageFilter_hxx
 
 #include "otbDSFusionOfClassifiersImageFilter.h"
 #include "itkImageRegionIterator.h"

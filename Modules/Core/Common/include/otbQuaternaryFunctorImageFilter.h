@@ -171,7 +171,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbQuaternaryFunctorImageFilter.txx"
+#include "otbQuaternaryFunctorImageFilter.hxx"
 #endif
 
 #endif

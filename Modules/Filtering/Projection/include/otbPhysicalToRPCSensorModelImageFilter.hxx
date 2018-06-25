@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPhysicalToRPCSensorModelImageFilter_txx
-#define otbPhysicalToRPCSensorModelImageFilter_txx
+#ifndef otbPhysicalToRPCSensorModelImageFilter_hxx
+#define otbPhysicalToRPCSensorModelImageFilter_hxx
 
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
 #include "otbDEMHandler.h"

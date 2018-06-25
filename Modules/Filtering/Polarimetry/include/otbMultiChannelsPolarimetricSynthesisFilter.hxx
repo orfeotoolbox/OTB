@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMultiChannelsPolarimetricSynthesisFilter_txx
-#define otbMultiChannelsPolarimetricSynthesisFilter_txx
+#ifndef otbMultiChannelsPolarimetricSynthesisFilter_hxx
+#define otbMultiChannelsPolarimetricSynthesisFilter_hxx
 
 #include <complex>
 

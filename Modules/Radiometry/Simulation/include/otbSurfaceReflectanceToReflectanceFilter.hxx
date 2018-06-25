@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSurfaceReflectanceToReflectanceFilter_txx
-#define otbSurfaceReflectanceToReflectanceFilter_txx
+#ifndef otbSurfaceReflectanceToReflectanceFilter_hxx
+#define otbSurfaceReflectanceToReflectanceFilter_hxx
 
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLabelObjectToPolygonFunctor_txx
-#define otbLabelObjectToPolygonFunctor_txx
+#ifndef otbLabelObjectToPolygonFunctor_hxx
+#define otbLabelObjectToPolygonFunctor_hxx
 
 
 #include "otbLabelObjectToPolygonFunctor.h"

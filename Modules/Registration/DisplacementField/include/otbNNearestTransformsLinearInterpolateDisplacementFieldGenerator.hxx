@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator_txx
-#define otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator_txx
+#ifndef otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator_hxx
+#define otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator_hxx
 
 #define EPSILON 1e-15
 

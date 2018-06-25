@@ -149,7 +149,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMModel.txx"
+#include "otbSOMModel.hxx"
 #endif
 
 #endif

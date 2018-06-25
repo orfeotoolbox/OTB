@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFineRegistrationImageFilter_txx
-#define otbFineRegistrationImageFilter_txx
+#ifndef otbFineRegistrationImageFilter_hxx
+#define otbFineRegistrationImageFilter_hxx
 
 #include "otbFineRegistrationImageFilter.h"
 

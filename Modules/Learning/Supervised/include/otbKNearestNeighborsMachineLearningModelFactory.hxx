@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKNearestNeighborsMachineLearningModelFactory_txx
-#define otbKNearestNeighborsMachineLearningModelFactory_txx
+#ifndef otbKNearestNeighborsMachineLearningModelFactory_hxx
+#define otbKNearestNeighborsMachineLearningModelFactory_hxx
 
 #include "otbKNearestNeighborsMachineLearningModelFactory.h"
 

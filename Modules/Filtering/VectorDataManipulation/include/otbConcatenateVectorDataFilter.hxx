@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConcatenateVectorDataFilter_txx
-#define otbConcatenateVectorDataFilter_txx
+#ifndef otbConcatenateVectorDataFilter_hxx
+#define otbConcatenateVectorDataFilter_hxx
 
 #include "otbConcatenateVectorDataFilter.h"
 

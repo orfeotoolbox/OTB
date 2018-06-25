@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHarrisImageToPointSetFilter_txx
-#define otbHarrisImageToPointSetFilter_txx
+#ifndef otbHarrisImageToPointSetFilter_hxx
+#define otbHarrisImageToPointSetFilter_hxx
 
 #include "otbHarrisImageToPointSetFilter.h"
 

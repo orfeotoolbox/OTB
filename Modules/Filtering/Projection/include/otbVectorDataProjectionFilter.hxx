@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataProjectionFilter_txx
-#define otbVectorDataProjectionFilter_txx
+#ifndef otbVectorDataProjectionFilter_hxx
+#define otbVectorDataProjectionFilter_hxx
 
 #include "otbVectorDataProjectionFilter.h"
 #include "itkProgressReporter.h"

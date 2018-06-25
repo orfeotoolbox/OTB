@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbFrostImageFilter_txx
-#define otbFrostImageFilter_txx
+#ifndef otbFrostImageFilter_hxx
+#define otbFrostImageFilter_hxx
 
 #include "otbFrostImageFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageFittingPolygonListFilter_txx
-#define otbImageFittingPolygonListFilter_txx
+#ifndef otbImageFittingPolygonListFilter_hxx
+#define otbImageFittingPolygonListFilter_hxx
 
 #include "otbImageFittingPolygonListFilter.h"
 #include "otbPolyLineImageConstIterator.h"

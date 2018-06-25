@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSpatialObjectSource_txx
-#define otbSpatialObjectSource_txx
+#ifndef otbSpatialObjectSource_hxx
+#define otbSpatialObjectSource_hxx
 
 #include "otbSpatialObjectSource.h"
 

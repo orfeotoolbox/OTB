@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingMatrixTransposeMatrixImageFilter_txx
-#define otbStreamingMatrixTransposeMatrixImageFilter_txx
+#ifndef otbStreamingMatrixTransposeMatrixImageFilter_hxx
+#define otbStreamingMatrixTransposeMatrixImageFilter_hxx
 
 #include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 

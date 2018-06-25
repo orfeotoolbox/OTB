@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbChangeInformationImageFilter_txx
-#define otbChangeInformationImageFilter_txx
+#ifndef otbChangeInformationImageFilter_hxx
+#define otbChangeInformationImageFilter_hxx
 
 #include "otbChangeInformationImageFilter.h"
 #include "itkMetaDataObject.h"

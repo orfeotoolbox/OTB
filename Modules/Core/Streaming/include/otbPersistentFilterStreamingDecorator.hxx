@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPersistentFilterStreamingDecorator_txx
-#define otbPersistentFilterStreamingDecorator_txx
+#ifndef otbPersistentFilterStreamingDecorator_hxx
+#define otbPersistentFilterStreamingDecorator_hxx
 
 #include "otbPersistentFilterStreamingDecorator.h"
 

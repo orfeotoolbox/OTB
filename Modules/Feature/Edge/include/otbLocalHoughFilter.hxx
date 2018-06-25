@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbLocalHoughFilter_txx
-#define otbLocalHoughFilter_txx
+#ifndef otbLocalHoughFilter_hxx
+#define otbLocalHoughFilter_hxx
 
 #include "otbLocalHoughFilter.h"
 #include "otbImage.h"

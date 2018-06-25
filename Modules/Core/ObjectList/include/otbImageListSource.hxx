@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbImageListSource_txx
-#define otbImageListSource_txx
+#ifndef otbImageListSource_hxx
+#define otbImageListSource_hxx
 
 #include "otbImageListSource.h"
 

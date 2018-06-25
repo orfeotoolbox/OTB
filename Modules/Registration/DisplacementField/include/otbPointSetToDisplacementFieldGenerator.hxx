@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPointSetToDisplacementFieldGenerator_txx
-#define otbPointSetToDisplacementFieldGenerator_txx
+#ifndef otbPointSetToDisplacementFieldGenerator_hxx
+#define otbPointSetToDisplacementFieldGenerator_hxx
 
 #include "otbPointSetToDisplacementFieldGenerator.h"
 #include "otbMacro.h"

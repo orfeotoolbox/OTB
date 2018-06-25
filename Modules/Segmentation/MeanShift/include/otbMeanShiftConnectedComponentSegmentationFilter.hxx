@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMeanShiftConnectedComponentSegmentationFilter_txx
-#define otbMeanShiftConnectedComponentSegmentationFilter_txx
+#ifndef otbMeanShiftConnectedComponentSegmentationFilter_hxx
+#define otbMeanShiftConnectedComponentSegmentationFilter_hxx
 
 #include "otbMeanShiftConnectedComponentSegmentationFilter.h"
 #include "itkExtractImageFilter.h"

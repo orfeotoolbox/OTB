@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRCC8VertexBase_txx
-#define otbRCC8VertexBase_txx
+#ifndef otbRCC8VertexBase_hxx
+#define otbRCC8VertexBase_hxx
 
 #include "otbRCC8VertexBase.h"
 

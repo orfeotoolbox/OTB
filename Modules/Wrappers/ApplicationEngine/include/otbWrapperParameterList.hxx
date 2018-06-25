@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperParameterList_txx
-#define otbWrapperParameterList_txx
+#ifndef otbWrapperParameterList_hxx
+#define otbWrapperParameterList_hxx
 
 
 #include <algorithm>

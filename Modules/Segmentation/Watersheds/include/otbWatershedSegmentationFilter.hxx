@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbWatershedSegmentationFilter_txx
-#define otbWatershedSegmentationFilter_txx
+#ifndef otbWatershedSegmentationFilter_hxx
+#define otbWatershedSegmentationFilter_hxx
 
 #include "otbWatershedSegmentationFilter.h"
 

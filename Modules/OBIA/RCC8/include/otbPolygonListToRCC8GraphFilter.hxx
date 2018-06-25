@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPolygonListToRCC8GraphFilter_txx
-#define otbPolygonListToRCC8GraphFilter_txx
+#ifndef otbPolygonListToRCC8GraphFilter_hxx
+#define otbPolygonListToRCC8GraphFilter_hxx
 
 #include "otbPolygonListToRCC8GraphFilter.h"
 #include "itkProgressReporter.h"

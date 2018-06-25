@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPointSetDensityGaussianFunction_txx
-#define otbPointSetDensityGaussianFunction_txx
+#ifndef otbPointSetDensityGaussianFunction_hxx
+#define otbPointSetDensityGaussianFunction_hxx
 
 #include "otbPointSetDensityGaussianFunction.h"
 #include "otbMath.h"

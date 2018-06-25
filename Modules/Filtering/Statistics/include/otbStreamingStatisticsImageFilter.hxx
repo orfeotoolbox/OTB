@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingStatisticsImageFilter_txx
-#define otbStreamingStatisticsImageFilter_txx
+#ifndef otbStreamingStatisticsImageFilter_hxx
+#define otbStreamingStatisticsImageFilter_hxx
 #include "otbStreamingStatisticsImageFilter.h"
 
 #include "itkImageRegionIterator.h"

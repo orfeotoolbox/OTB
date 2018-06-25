@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbPathFunction_txx
-#define otbPathFunction_txx
+#ifndef otbPathFunction_hxx
+#define otbPathFunction_hxx
 
 #include "otbPathFunction.h"
 

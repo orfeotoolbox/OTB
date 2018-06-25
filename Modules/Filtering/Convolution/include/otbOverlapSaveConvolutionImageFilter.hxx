@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOverlapSaveConvolutionImageFilter_txx
-#define otbOverlapSaveConvolutionImageFilter_txx
+#ifndef otbOverlapSaveConvolutionImageFilter_hxx
+#define otbOverlapSaveConvolutionImageFilter_hxx
 
 #include "itkConfigure.h"
 

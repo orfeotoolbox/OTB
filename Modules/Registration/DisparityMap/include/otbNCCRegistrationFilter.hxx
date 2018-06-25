@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNCCRegistrationFilter_txx
-#define otbNCCRegistrationFilter_txx
+#ifndef otbNCCRegistrationFilter_hxx
+#define otbNCCRegistrationFilter_hxx
 #include "otbNCCRegistrationFilter.h"
 
 namespace otb

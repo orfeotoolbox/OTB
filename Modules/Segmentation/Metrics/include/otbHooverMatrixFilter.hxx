@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbHooverMatrixFilter_txx
-#define otbHooverMatrixFilter_txx
+#ifndef otbHooverMatrixFilter_hxx
+#define otbHooverMatrixFilter_hxx
 
 #include "otbHooverMatrixFilter.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMorphologicalPyramidSegmentationFilter_txx
-#define otbMorphologicalPyramidSegmentationFilter_txx
+#ifndef otbMorphologicalPyramidSegmentationFilter_hxx
+#define otbMorphologicalPyramidSegmentationFilter_hxx
 
 #include "otbMorphologicalPyramidSegmentationFilter.h"
 

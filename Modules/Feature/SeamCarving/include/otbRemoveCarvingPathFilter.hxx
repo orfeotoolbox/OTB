@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbRemoveCarvingPathFilter_txx
-#define otbRemoveCarvingPathFilter_txx
+#ifndef otbRemoveCarvingPathFilter_hxx
+#define otbRemoveCarvingPathFilter_hxx
 
 #include "otbRemoveCarvingPathFilter.h"
 #include "itkMacro.h"

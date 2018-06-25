@@ -20,8 +20,8 @@
  */
 
 
-#ifndef otbWaveletTransform_txx
-#define otbWaveletTransform_txx
+#ifndef otbWaveletTransform_hxx
+#define otbWaveletTransform_hxx
 #include "otbWaveletTransform.h"
 
 #include "itkImageRegionIterator.h"

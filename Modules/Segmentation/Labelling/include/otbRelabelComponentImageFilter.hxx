@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRelabelComponentImageFilter_txx
-#define otbRelabelComponentImageFilter_txx
+#ifndef otbRelabelComponentImageFilter_hxx
+#define otbRelabelComponentImageFilter_hxx
 
 #include "otbRelabelComponentImageFilter.h"
 #include "itkImageRegionIterator.h"

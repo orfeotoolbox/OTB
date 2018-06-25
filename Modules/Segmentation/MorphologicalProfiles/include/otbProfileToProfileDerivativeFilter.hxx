@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbProfileToProfileDerivativeFilter_txx
-#define otbProfileToProfileDerivativeFilter_txx
+#ifndef otbProfileToProfileDerivativeFilter_hxx
+#define otbProfileToProfileDerivativeFilter_hxx
 
 #include "otbProfileToProfileDerivativeFilter.h"
 

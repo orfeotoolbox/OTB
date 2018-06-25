@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataToRandomLineGenerator_txx
-#define otbVectorDataToRandomLineGenerator_txx
+#ifndef otbVectorDataToRandomLineGenerator_hxx
+#define otbVectorDataToRandomLineGenerator_hxx
 
 #include "otbVectorDataToRandomLineGenerator.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNCLSUnmixingImageFilter_txx
-#define otbNCLSUnmixingImageFilter_txx
+#ifndef otbNCLSUnmixingImageFilter_hxx
+#define otbNCLSUnmixingImageFilter_hxx
 
 #include "otbNCLSUnmixingImageFilter.h"
 #include <algorithm>

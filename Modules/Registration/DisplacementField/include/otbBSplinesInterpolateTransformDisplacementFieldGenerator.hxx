@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBSplinesInterpolateTransformDisplacementFieldGenerator_txx
-#define otbBSplinesInterpolateTransformDisplacementFieldGenerator_txx
+#ifndef otbBSplinesInterpolateTransformDisplacementFieldGenerator_hxx
+#define otbBSplinesInterpolateTransformDisplacementFieldGenerator_hxx
 
 #include "otbBSplinesInterpolateTransformDisplacementFieldGenerator.h"
 #include "itkLandmarkDisplacementFieldSource.h"

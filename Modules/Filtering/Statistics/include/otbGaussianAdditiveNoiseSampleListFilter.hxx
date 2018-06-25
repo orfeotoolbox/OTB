@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbGaussianAdditiveNoiseSampleListFilter_txx
-#define otbGaussianAdditiveNoiseSampleListFilter_txx
+#ifndef otbGaussianAdditiveNoiseSampleListFilter_hxx
+#define otbGaussianAdditiveNoiseSampleListFilter_hxx
 
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"

@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbLabelImageRegionMergingFilter_txx
-#define otbLabelImageRegionMergingFilter_txx
+#ifndef otbLabelImageRegionMergingFilter_hxx
+#define otbLabelImageRegionMergingFilter_hxx
 
 #include "otbLabelImageRegionMergingFilter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"

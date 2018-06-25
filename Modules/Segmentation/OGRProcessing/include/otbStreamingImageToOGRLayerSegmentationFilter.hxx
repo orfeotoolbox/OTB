@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbStreamingImageToOGRLayerSegmentationFilter_txx
-#define otbStreamingImageToOGRLayerSegmentationFilter_txx
+#ifndef otbStreamingImageToOGRLayerSegmentationFilter_hxx
+#define otbStreamingImageToOGRLayerSegmentationFilter_hxx
 
 #include "otbStreamingImageToOGRLayerSegmentationFilter.h"
 

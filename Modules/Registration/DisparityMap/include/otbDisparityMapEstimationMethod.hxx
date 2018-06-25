@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDisparityMapEstimationMethod_txx
-#define otbDisparityMapEstimationMethod_txx
+#ifndef otbDisparityMapEstimationMethod_hxx
+#define otbDisparityMapEstimationMethod_hxx
 
 #include "otbDisparityMapEstimationMethod.h"
 #include "itkImageRegistrationMethod.h"

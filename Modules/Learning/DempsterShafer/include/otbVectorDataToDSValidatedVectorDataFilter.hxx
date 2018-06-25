@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVectorDataToDSValidatedVectorDataFilter_txx
-#define otbVectorDataToDSValidatedVectorDataFilter_txx
+#ifndef otbVectorDataToDSValidatedVectorDataFilter_hxx
+#define otbVectorDataToDSValidatedVectorDataFilter_hxx
 
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
 #include <iostream>

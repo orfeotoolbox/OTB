@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConfusionMatrixCalculator_txx
-#define otbConfusionMatrixCalculator_txx
+#ifndef otbConfusionMatrixCalculator_hxx
+#define otbConfusionMatrixCalculator_hxx
 
 #include "otbConfusionMatrixCalculator.h"
 

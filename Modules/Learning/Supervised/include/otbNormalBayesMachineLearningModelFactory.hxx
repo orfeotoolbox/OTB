@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbNormalBayesMachineLearningModelFactory_txx
-#define otbNormalBayesMachineLearningModelFactory_txx
+#ifndef otbNormalBayesMachineLearningModelFactory_hxx
+#define otbNormalBayesMachineLearningModelFactory_hxx
 
 #include "otbNormalBayesMachineLearningModelFactory.h"
 

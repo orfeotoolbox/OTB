@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbBreakAngularPathListFilter_txx
-#define otbBreakAngularPathListFilter_txx
+#ifndef otbBreakAngularPathListFilter_hxx
+#define otbBreakAngularPathListFilter_hxx
 
 #include "otbBreakAngularPathListFilter.h"
 #include "otbMath.h"

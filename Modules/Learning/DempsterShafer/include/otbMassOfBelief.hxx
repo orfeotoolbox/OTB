@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMassOfBelief_txx
-#define otbMassOfBelief_txx
+#ifndef otbMassOfBelief_hxx
+#define otbMassOfBelief_hxx
 
 #include "otbMassOfBelief.h"
 

@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbVariableLengthVectorConverter_txx
-#define otbVariableLengthVectorConverter_txx
+#ifndef otbVariableLengthVectorConverter_hxx
+#define otbVariableLengthVectorConverter_hxx
 
 #include "otbVariableLengthVectorConverter.h"
 #include <complex>

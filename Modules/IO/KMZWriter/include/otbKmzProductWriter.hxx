@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbKmzProductWriter_txx
-#define otbKmzProductWriter_txx
+#ifndef otbKmzProductWriter_hxx
+#define otbKmzProductWriter_hxx
 
 #include <string>
 
