@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#include <string>
+
 #include "otbCommandLineArgumentParser.h"
 
 #include <assert.h>

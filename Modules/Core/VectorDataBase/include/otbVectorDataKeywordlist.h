@@ -21,9 +21,11 @@
 #ifndef otbVectorDataKeywordlist_h
 #define otbVectorDataKeywordlist_h
 
+#include <iosfwd>
+#include <vector>
+
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
-#include <vector>
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"

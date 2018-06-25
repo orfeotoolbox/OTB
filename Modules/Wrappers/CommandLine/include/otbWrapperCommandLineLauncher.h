@@ -168,7 +168,16 @@ protected:
   unsigned int GetMaxKeySize() const;
 
 private:
+  /** \return false if paramKey is a missing mandatory parameter */
+  bool CheckMissingMandatoryParameter(const std::string & paramKey) const;
 
+  /** Prints a warning to std::cerr if paramKey is an unused parameter */
+  void CheckUnusedParameter(const std::string & paramKey) const;
+
+  /** \return false if paramKey is an OutputFilename parameter
+  pointing to a path that does not exist */
+  bool CheckOutputPathsValidity(const std::string & paramKey) const;
+  
   CommandLineLauncher(const CommandLineLauncher &) = delete;
   void operator =(const CommandLineLauncher&) = delete;
 

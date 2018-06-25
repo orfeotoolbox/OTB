@@ -21,6 +21,8 @@
 #ifndef otbLogger_h
 #define otbLogger_h
 
+#include <string>
+
 #include "itkLoggerBase.h"
 #include "itkLogger.h"
 #include "OTBCommonExport.h"

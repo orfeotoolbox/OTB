@@ -511,32 +511,89 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
       }
     }
 
-  // SECOND PASS : check mandatory parameters
-  for (unsigned int i = 0; i < appKeyList.size(); i++)
+  // SECOND PASS : checks
+  for (const auto & paramKey : appKeyList)
     {
-    const std::string paramKey(appKeyList[i]);
-    ParameterType type = m_Application->GetParameterType(paramKey);
-    if (m_Application->IsParameterMissing(paramKey))
-      {
-      std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
+    // Check for missing mandatory parameters
+    if(!CheckMissingMandatoryParameter(paramKey))
       return MISSINGMANDATORYPARAMETER;
-      }
 
-    // Check output paths validity
-    if (m_Application->HasValue(paramKey) &&
-        type == ParameterType_OutputFilename)
-      {
-      std::string filename = m_Application->GetParameterString(paramKey);
-      itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
-      if (path!="" && !itksys::SystemTools::FileIsDirectory(path.c_str()))
-        {
-        std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
-        return WRONGPARAMETERVALUE;
-        }
-      }
+    // Check and warn unused parameters
+    CheckUnusedParameter(paramKey);
+
+    // Check output paths are valid
+    if(!CheckOutputPathsValidity(paramKey))
+      return WRONGPARAMETERVALUE;
     }
 
   return OKPARAM;
+}
+
+bool CommandLineLauncher::CheckOutputPathsValidity(const std::string & paramKey) const
+{
+  ParameterType type = m_Application->GetParameterType(paramKey);
+  if (m_Application->HasValue(paramKey) &&
+      type == ParameterType_OutputFilename)
+    {
+    std::string filename = m_Application->GetParameterString(paramKey);
+    itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
+    if (path!="" && !itksys::SystemTools::FileIsDirectory(path.c_str()))
+      {
+      std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
+      return false;
+        }
+      }
+  return true;
+}
+
+bool CommandLineLauncher::CheckMissingMandatoryParameter(const std::string & paramKey) const
+{
+    if (m_Application->IsParameterMissing(paramKey))
+      {
+      std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
+      return false;
+      }
+    return true;
+}
+
+void CommandLineLauncher::CheckUnusedParameter(const std::string & paramKey) const
+{
+  // Check for ignored parameters
+    if(m_Application->HasUserValue(paramKey))
+      {
+
+      // Find the position of the next dot
+      unsigned int start = 0;
+      auto end = paramKey.find_first_of('.',start);
+
+      // Until we reach en of key
+      while(end != std::string::npos)
+        {
+        // Extract key until the current dot
+        const std::string & key = paramKey.substr(0,end);
+
+        // Find the corresponding parameter type
+        ParameterType type = m_Application->GetParameterType(key);
+
+        // In any case update the position of current and next dot
+        start = end+1;
+        end = paramKey.find_first_of('.',start);
+
+        // If the current parameter (paramKey) has a choice in it
+        if(type == ParameterType_Choice)
+          {
+          const std::string & value = m_Application->GetParameterString(key);
+
+          // Check that this choice is active
+          if(paramKey.find(value) == std::string::npos)
+            {
+            std::cerr<<"WARNING: Parameter -"<<paramKey<<" will be ignored because -"<<key<<" is "<<value<<"."<<std::endl;
+            
+            break;
+            }
+          }
+        }
+      }
 }
 
 void CommandLineLauncher::LinkWatchers(itk::Object * itkNotUsed(caller), const itk::EventObject & event)

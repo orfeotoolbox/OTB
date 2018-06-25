@@ -21,6 +21,7 @@
 #include "otbConfigurationManager.h"
 
 #include "otbMacro.h"
+#include "otbLogger.h"
 
 #include "itksys/SystemTools.hxx"
 
