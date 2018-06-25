@@ -300,7 +300,7 @@ protected:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTrainImagesBase.txx"
+#include "otbTrainImagesBase.hxx"
 #endif
 
 #endif //otbTrainImagesBase_h

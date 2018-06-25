@@ -281,7 +281,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingHistogramVectorImageFilter.txx"
+#include "otbStreamingHistogramVectorImageFilter.hxx"
 #endif
 
 #endif

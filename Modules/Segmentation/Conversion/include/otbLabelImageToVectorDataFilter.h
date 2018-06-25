@@ -124,7 +124,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageToVectorDataFilter.txx"
+#include "otbLabelImageToVectorDataFilter.hxx"
 #endif
 
 #endif

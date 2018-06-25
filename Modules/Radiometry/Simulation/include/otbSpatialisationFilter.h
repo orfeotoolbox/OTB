@@ -140,7 +140,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpatialisationFilter.txx"
+#include "otbSpatialisationFilter.hxx"
 #endif
 
 #endif

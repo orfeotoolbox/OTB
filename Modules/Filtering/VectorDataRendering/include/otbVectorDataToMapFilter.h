@@ -260,7 +260,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToMapFilter.txx"
+#include "otbVectorDataToMapFilter.hxx"
 #endif
 
 #endif

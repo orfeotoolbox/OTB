@@ -212,7 +212,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorImage.txx"
+#include "otbVectorImage.hxx"
 #endif
 
 #endif

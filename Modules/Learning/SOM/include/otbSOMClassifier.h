@@ -102,7 +102,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMClassifier.txx"
+#include "otbSOMClassifier.hxx"
 #endif
 
 #endif

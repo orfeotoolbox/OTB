@@ -108,7 +108,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVMMarginSampler.txx"
+#include "otbSVMMarginSampler.hxx"
 #endif
 
 #endif

@@ -182,7 +182,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConfusionMatrixCalculator.txx"
+#include "otbConfusionMatrixCalculator.hxx"
 #endif
 
 #endif

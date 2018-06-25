@@ -125,7 +125,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEdgeDensityImageFilter.txx"
+#include "otbEdgeDensityImageFilter.hxx"
 #endif
 
 #endif

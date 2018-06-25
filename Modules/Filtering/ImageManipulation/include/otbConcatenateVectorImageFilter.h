@@ -109,6 +109,6 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConcatenateVectorImageFilter.txx"
+#include "otbConcatenateVectorImageFilter.hxx"
 #endif
 #endif

@@ -133,7 +133,7 @@ private:
 } // end of namespace OTB
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPathListToHistogramGenerator.txx"
+#include "otbPathListToHistogramGenerator.hxx"
 #endif
 
 #endif

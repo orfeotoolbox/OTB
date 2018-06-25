@@ -138,7 +138,7 @@ protected:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidSynthesisFilter.txx"
+#include "otbMorphologicalPyramidSynthesisFilter.hxx"
 #endif
 
 #endif

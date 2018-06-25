@@ -141,7 +141,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageToOGRDataSourceFilter.txx"
+#include "otbLabelImageToOGRDataSourceFilter.hxx"
 #endif
 
 #endif

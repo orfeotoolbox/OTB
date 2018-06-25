@@ -161,7 +161,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericInterpolateImageFunction.txx"
+#include "otbGenericInterpolateImageFunction.hxx"
 #endif
 
 #endif

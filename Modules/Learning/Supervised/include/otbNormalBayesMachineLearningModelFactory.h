@@ -73,7 +73,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNormalBayesMachineLearningModelFactory.txx"
+#include "otbNormalBayesMachineLearningModelFactory.hxx"
 #endif
 
 #endif

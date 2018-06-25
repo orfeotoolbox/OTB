@@ -110,7 +110,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToRightAngleVectorDataFilter.txx"
+#include "otbVectorDataToRightAngleVectorDataFilter.hxx"
 #endif
 
 #endif

@@ -290,7 +290,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingMinMaxImageFilter.txx"
+#include "otbStreamingMinMaxImageFilter.hxx"
 #endif
 
 #endif

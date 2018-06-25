@@ -84,7 +84,7 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8VertexWithRegionCenter.txx"
+#include "otbRCC8VertexWithRegionCenter.hxx"
 #endif
 
 #endif

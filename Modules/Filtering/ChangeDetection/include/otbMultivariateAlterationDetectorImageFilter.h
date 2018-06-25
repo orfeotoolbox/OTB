@@ -179,7 +179,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultivariateAlterationDetectorImageFilter.txx"
+#include "otbMultivariateAlterationDetectorImageFilter.hxx"
 #endif
 
 #endif

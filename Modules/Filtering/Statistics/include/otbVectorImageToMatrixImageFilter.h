@@ -207,7 +207,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorImageToMatrixImageFilter.txx"
+#include "otbVectorImageToMatrixImageFilter.hxx"
 #endif
 
 #endif

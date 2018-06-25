@@ -187,7 +187,7 @@ private:
 
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToLabelImageFilter.txx"
+#include "otbVectorDataToLabelImageFilter.hxx"
 #endif
 
 #endif

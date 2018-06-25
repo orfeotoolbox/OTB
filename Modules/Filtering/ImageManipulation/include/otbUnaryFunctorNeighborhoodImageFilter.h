@@ -153,7 +153,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorNeighborhoodImageFilter.txx"
+#include "otbUnaryFunctorNeighborhoodImageFilter.hxx"
 #endif
 
 #endif

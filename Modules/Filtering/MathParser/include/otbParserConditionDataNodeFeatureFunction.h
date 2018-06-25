@@ -119,7 +119,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbParserConditionDataNodeFeatureFunction.txx"
+#include "otbParserConditionDataNodeFeatureFunction.hxx"
 #endif
 
 #endif

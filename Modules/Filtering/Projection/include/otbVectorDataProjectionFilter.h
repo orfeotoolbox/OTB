@@ -207,7 +207,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataProjectionFilter.txx"
+#include "otbVectorDataProjectionFilter.hxx"
 #endif
 
 #endif

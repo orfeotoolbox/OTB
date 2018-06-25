@@ -170,7 +170,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDSFusionOfClassifiersImageFilter.txx"
+#include "otbDSFusionOfClassifiersImageFilter.hxx"
 #endif
 
 #endif

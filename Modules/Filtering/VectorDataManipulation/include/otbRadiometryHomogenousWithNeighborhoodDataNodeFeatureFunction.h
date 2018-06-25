@@ -158,7 +158,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.txx"
+#include "otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.hxx"
 #endif
 
 #endif
