@@ -27,6 +27,7 @@
 #include "itkObjectFactory.h"
 #include "itkIndex.h"
 #include "itkSize.h"
+#include "OTBCommonExport.h"
 
 namespace otb
 {
@@ -72,7 +73,7 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class ITK_EXPORT ImageRegionSquareTileSplitter : public itk::ImageRegionSplitter<VImageDimension>
+class OTBCommon_EXPORT ImageRegionSquareTileSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */

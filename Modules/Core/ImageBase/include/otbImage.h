@@ -31,6 +31,7 @@
 #endif
 
 #include "otbImageMetadataInterfaceBase.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -85,7 +86,7 @@ namespace otb
  */
 
 template <class TPixel, unsigned int VImageDimension = 2>
-class ITK_EXPORT Image : public itk::Image<TPixel, VImageDimension>
+class OTBImageBase_EXPORT Image : public itk::Image<TPixel, VImageDimension>
 {
 public:
   /** Standard class typedefs. */
