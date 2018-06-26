@@ -23,12 +23,13 @@
 namespace otb {
 
 // Explicit instanciation of common types
-template class ImageFileReader<otb::Image<unsigned int, 2>>;
-template class ImageFileReader<otb::Image<int, 2>>;
-template class ImageFileReader<otb::Image<unsigned char, 2>>;
-template class ImageFileReader<otb::Image<char, 2>>;
-template class ImageFileReader<otb::Image<unsigned short, 2>>;
-template class ImageFileReader<otb::Image<short, 2>>;
-template class ImageFileReader<otb::Image<float, 2>>;
-template class ImageFileReader<otb::Image<double, 2>>;
+template class ImageFileReader<Image<unsigned int, 2>>;
+template class ImageFileReader<Image<int, 2>>;
+template class ImageFileReader<Image<unsigned char, 2>>;
+template class ImageFileReader<Image<char, 2>>;
+template class ImageFileReader<Image<unsigned short, 2>>;
+template class ImageFileReader<Image<short, 2>>;
+template class ImageFileReader<Image<float, 2>>;
+template class ImageFileReader<Image<double, 2>>;
+
 }
