@@ -20,10 +20,10 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-#include "otbMultiToMonoChannelExtractROI.h"
 
 #include "itkComplexToPhaseImageFilter.h"
 #include "itkComplexToModulusImageFilter.h"
+
 #include "itkMacro.h"
 
 namespace otb
@@ -52,7 +52,6 @@ public:
   itkTypeMacro(ComputeModulusAndPhase, otb::Wrapper::Application);
 
   //typedefs for the application
-  typedef otb::MultiToMonoChannelExtractROI<ComplexFloatVectorImageType::InternalPixelType, ComplexFloatImageType::PixelType> ExtractFilterType;
   typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
 
@@ -60,23 +59,23 @@ private:
   void DoInit() override
   {
     SetName("ComputeModulusAndPhase");
-    SetDescription("This application computes the modulus and the phase of a complex SAR image.");
+    SetDescription("This application computes the modulus and the phase of a complex SAR image or an image with 2 components (real and imaginary parts).");
 
-    SetDocName("Compute Modulus And Phase");
+    SetDocName("Compute Modulus and Phase");
     SetDocLongDescription(
       "This application computes the modulus and the phase of a "
       "complex SAR image. The input should be a single band image with "
-      "complex pixels."
+      "complex pixels or a 2 bands image (real and imaginary components in separate bands)."
     );
-    SetDocLimitations("The application takes as input single band image with complex pixels.");
+    SetDocLimitations("The application takes as input single band image with complex pixels or a 2 bands image (real and imaginary part in separate bands).");
     SetDocAuthors("Alexia Mondot (alexia.mondot@c-s.fr) and Mickael Savinaud (mickael.savinaud@c-s.fr)");
     SetDocSeeAlso("Despeckle, SARPolarMatrixConvert, SARPolarSynth");
 
     AddDocTag(Tags::SAR);
     AddDocTag(Tags::Manip);
     // Input images
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image (complex single band)");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in","Input image (complex single band or 2 bands (real/imaginary parts))");
 
     // Outputs
     AddParameter(ParameterType_OutputImage, "modulus", "Modulus");
@@ -110,26 +109,20 @@ private:
     m_Modulus = ModulusFilterType::New();
     m_Phase = PhaseFilterType::New();
 
-    ComplexFloatVectorImageType::Pointer inImage = GetParameterComplexFloatVectorImage("in");
-
-    if (inImage->GetNumberOfComponentsPerPixel() != 1)
-    {
-        otbAppLogFATAL("Input must be a single band complex image.");
-    }
-
-    // Get first band
-    m_Extract = ExtractFilterType::New();
-    m_Extract->SetInput(inImage);
+    // Read the input as a complex image (with one component) Input with 2
+    // components are also supported (band 1 is interpreted as the real part and
+    // band 2 as the imaginary part VectorImage of complex image are not
+    // supported by the application
+    ComplexFloatImageType::Pointer inImage = GetParameterComplexFloatImage("in");
 
     // Compute modulus and phase
-    m_Modulus->SetInput(m_Extract->GetOutput());
-    m_Phase->SetInput(m_Extract->GetOutput());
+    m_Modulus->SetInput(inImage);
+    m_Phase->SetInput(inImage);
 
-    SetParameterOutputImage("modulus", m_Modulus->GetOutput() );
+    SetParameterOutputImage("modulus", m_Modulus->GetOutput());
     SetParameterOutputImage("phase", m_Phase->GetOutput());
   }
 
-  ExtractFilterType::Pointer m_Extract;
   ModulusFilterType::Pointer m_Modulus;
   PhaseFilterType::Pointer m_Phase;
 };
