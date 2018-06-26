@@ -20,6 +20,7 @@
 
 set(OTBImageManipulation_SRC
   otbStreamingShrinkImageFilter.cxx
+  otbConvertTypeFunctor.cxx
   )
 
 add_library(OTBImageManipulation ${OTBImageManipulation_SRC})
