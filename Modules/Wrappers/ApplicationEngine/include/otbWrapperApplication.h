@@ -49,7 +49,7 @@ namespace otb
  *
  * \ingroup OTBApplicationEngine
  */
-class ApplicationException : public itk::ExceptionObject
+class OTBApplicationEngine_EXPORT ApplicationException : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
