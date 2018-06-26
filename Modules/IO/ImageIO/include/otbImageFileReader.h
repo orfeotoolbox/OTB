@@ -210,9 +210,15 @@ private:
 
 } //namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageFileReader.txx"
+#endif
+
+// Include only for forward declare
+#define OTB_MANUAL_INSTANTIATION
 #include "otbImage.h"
 #include "otbVectorImage.h"
+#undef OTB_MANUAL_INSTANTIATION
 
 namespace otb {
 

@@ -181,7 +181,9 @@ private:
 
 } // end namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageRegionAdaptativeSplitter.txx"
+#endif
 
 namespace otb {
 

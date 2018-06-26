@@ -270,7 +270,9 @@ private:
 
 } // end namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImage.txx"
+#endif
 
 namespace otb {
 
