@@ -27,8 +27,8 @@ template class ImageFileWriter<Image<unsigned int, 2>>;
 template class ImageFileWriter<Image<int, 2>>;
 template class ImageFileWriter<Image<unsigned char, 2>>;
 template class ImageFileWriter<Image<char, 2>>;
-template class ImageFileWriter<otb::Image<unsigned short, 2>>;
-template class ImageFileWriter<otb::Image<short, 2>>;
+template class ImageFileWriter<Image<unsigned short, 2>>;
+template class ImageFileWriter<Image<short, 2>>;
 template class ImageFileWriter<Image<float, 2>>;
 template class ImageFileWriter<Image<double, 2>>;
 
