@@ -254,24 +254,17 @@ RegionType inputLeftRequestedRegion;
 
 
 
-for(int iteration_disp=m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
-  {
-  ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRightRequestedRegion, iteration_disp);      
+// for(int iteration_disp=m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
+//   {
+  ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRightRequestedRegion, 0);      
      
   // The calculation of the non-shifted inputs
-  if(inLeftPtr)
-    {
-    inLeftPtr->SetRequestedRegion( outputRequestedRegion);
-    }
-  if(inLeftGradientXPtr)
-    {
-     inLeftGradientXPtr->SetRequestedRegion( outputRequestedRegion);
-    }
-  // The calculation of the shifted inputs
 
+  inLeftPtr->SetRequestedRegion( outputRequestedRegion);
+  inLeftGradientXPtr->SetRequestedRegion( outputRequestedRegion);
   inRightPtr->SetRequestedRegion(inputRightRequestedRegion);
   inRightGradientXPtr->SetRequestedRegion( inputRightRequestedRegion );
-  }   
+  // }   
     
 } // end of GenerateInputRequestedRegion
 
@@ -392,10 +385,12 @@ typename TInputImage::Pointer  inRightPtr = const_cast<InputImageType *>(this->G
 
 typename RegionType::IndexType RighttRequestedRegionIndex = outputRegion.GetIndex();  
 typename RegionType::IndexType  shift;
-  
- 
+
+
   shift[0] = iteration_disp;
   shift[1] = m_VerticalDisparity;   
+
+  std::cout << iteration_disp << std::endl ;
   
   RighttRequestedRegionIndex[0]+= shift[0];
   RighttRequestedRegionIndex[1]+= shift[1];

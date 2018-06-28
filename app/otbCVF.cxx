@@ -74,6 +74,8 @@
 #include "otbFillOcclusionImageFilter.h"
 #include "otbConvertValueFrom0To255.h"
 
+#include "otbCostVolumeImageFilter.h"
+
 
 
 namespace otb
@@ -185,7 +187,9 @@ class CVF : public Application
   void DoExecute() ITK_OVERRIDE
     { 
     FloatVectorImageType::Pointer inLeft = GetParameterFloatVectorImage("io.inleft");
+    inLeft->UpdateOutputInformation();
     FloatVectorImageType::Pointer inRight = GetParameterFloatVectorImage("io.inright");
+    inRight->UpdateOutputInformation();
     int dispMin = GetParameterInt("dmin");
     int dispMax = GetParameterInt("dmax");
     unsigned int r  = GetParameterInt("radius");
@@ -193,12 +197,13 @@ class CVF : public Application
 
    
 
-      const unsigned int Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef otb::VectorImage<float> FloatVectorImageType;
   typedef otb::VectorImage<int> IntVectorImageType;
 
   typedef otb::Image< float, Dimension > FloatImageType;
   typedef otb::Image< int, Dimension > IntImageType;
+
 
 
     std::cout << "disMin : " << dispMin << std::endl ;
@@ -222,7 +227,7 @@ class CVF : public Application
   filterCoeffsX[1] = 0;
 
   m_convFilterXLeft->SetRadius(radiusG);
-  m_convFilterXLeft->SetFilter(filterCoeffsX);  
+  m_convFilterXLeft->SetFilter(filterCoeffsX); 
   m_convFilterXRight->SetRadius(radiusG);
   m_convFilterXRight->SetFilter(filterCoeffsX);
 
@@ -239,6 +244,8 @@ class CVF : public Application
   m_GradientXRight->SetInput(inRight);
   m_GradientXRight->UpdateOutputInformation();
 
+
+
   
   // COST VOLUME  
   typedef otb::LeftCostVolumeImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType >  LeftCostVolumeType; 
@@ -251,6 +258,8 @@ class CVF : public Application
   m_LeftCost->SetMinDisp(dispMin);
   m_LeftCost->SetMaxDisp(dispMax);
   m_LeftCost->UpdateOutputInformation();
+
+
 
   typedef otb::RightCostVolumeImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > RightCostVolumeType; 
     // --- RIGHT
@@ -298,10 +307,12 @@ class CVF : public Application
   typedef otb::MinimumNBandsImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;  
   MinCostVolume::Pointer m_LeftDisparity = MinCostVolume::New();
   m_LeftDisparity->SetInput(m_meanLeftWeights->GetOutput());
+  m_LeftDisparity->UpdateOutputInformation();
       // --- RIGHT
   typedef otb::MaximumNBandsImageFilter< FloatVectorImageType, IntImageType > MaxCostVolume;  
   MaxCostVolume::Pointer m_RightDisparity = MaxCostVolume::New();
   m_RightDisparity->SetInput(m_meanRightWeights->GetOutput());
+  m_RightDisparity->UpdateOutputInformation();
   
 
 
@@ -338,6 +349,7 @@ class CVF : public Application
   radiusWM[0] = r;
   radiusWM[1] = r;   
   m_LeftDispMedian->SetRadius(radiusWM) ;
+
 
 
   //FAIRE PAREIL POUR RIGHT DISPARITY
@@ -405,7 +417,7 @@ class CVF : public Application
   m_convertSmoothDisparity->SetDispMin(dispMin);
   m_convertSmoothDisparity->SetDispMax(dispMax);
   m_convertSmoothDisparity->Update();
-  
+
    SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
     }  
 

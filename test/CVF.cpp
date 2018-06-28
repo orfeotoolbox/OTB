@@ -80,7 +80,7 @@ int testCVF(int argc, char *argv[])
   	return EXIT_FAILURE;
   	}
 
-  const unsigned int Dimension = 2;
+  static const unsigned int Dimension = 2;
   typedef otb::VectorImage<float> FloatVectorImageType;
     typedef otb::VectorImage<int> IntVectorImageType;
 
@@ -112,8 +112,8 @@ int testCVF(int argc, char *argv[])
   inRight->SetFileName(argv[2]);//RightImage
   inRight->UpdateOutputInformation();
 
-  unsigned int dispMin = atoi(argv[3]);
-	unsigned int dispMax  = atoi(argv[4]);
+  int dispMin = atoi(argv[3]);
+	int dispMax  = atoi(argv[4]);
   long unsigned int r = atoi(argv[5]);	
   int rmf = atoi(argv[6]) ;
   int rwmf = atoi(argv[7]) ;
@@ -123,35 +123,34 @@ int testCVF(int argc, char *argv[])
   #define FILENAME(n) std::string( argv8 + std::string(n)).c_str()
 
 
-/*
   // CALCUL GRADIENT
   typedef otb::LocalGradientVectorImageFilter<FloatVectorImageType, FloatVectorImageType> GradientType;
-  GradientType::Pointer gradX = GradientType::New();
-  GradientType::Pointer gradY = GradientType::New();
-  gradX->SetInput(inLeft->GetOutput());
-  gradY->SetInput(inRight->GetOutput());
+  GradientType::Pointer reader_XL = GradientType::New();
+  GradientType::Pointer reader_XR = GradientType::New();
+  reader_XL->SetInput(inLeft->GetOutput());
+  reader_XR->SetInput(inRight->GetOutput());
 
   
   ImageWriterType::Pointer writer_gradX = ImageWriterType::New();
   writer_gradX->SetFileName( FILENAME("LeftGradient.tif"));
-  writer_gradX->SetInput(gradX->GetOutput());
+  writer_gradX->SetInput(reader_XL->GetOutput());
   writer_gradX->Update();
 
   
   ImageWriterType::Pointer writer_gradY = ImageWriterType::New();
   writer_gradY->SetFileName( FILENAME("RightGradient.tif"));
-  writer_gradY->SetInput(gradY->GetOutput());
+  writer_gradY->SetInput(reader_XR->GetOutput());
   writer_gradY->Update();
 
-*/
 
-  ReaderType::Pointer reader_XL = ReaderType::New();
-  reader_XL->SetFileName("/home/julie/Documents/PROJETS/CVF/results/scene/testCostVolumeFilter/GradientXLeft.tif"); //LeftImage  
-  reader_XL->UpdateOutputInformation();
 
-  ReaderType::Pointer reader_XR = ReaderType::New();
-  reader_XR->SetFileName("/home/julie/Documents/PROJETS/CVF/results/scene/testCostVolumeFilter/GradientXRight.tif"); //LeftImage  
-  reader_XR->UpdateOutputInformation();
+  // ReaderType::Pointer reader_XL = ReaderType::New();
+  // reader_XL->SetFileName("/home/julie/Documents/PROJETS/CVF/results/scene/testCostVolumeFilter/GradientXLeft.tif"); //LeftImage  
+  // reader_XL->UpdateOutputInformation();
+
+  // ReaderType::Pointer reader_XR = ReaderType::New();
+  // reader_XR->SetFileName("/home/julie/Documents/PROJETS/CVF/results/scene/testCostVolumeFilter/GradientXRight.tif"); //LeftImage  
+  // reader_XR->UpdateOutputInformation();
 
 
  
@@ -342,65 +341,65 @@ int testCVF(int argc, char *argv[])
 
 
 
-// OCCLUSION DETECTION
-  typedef otb::BijectionCoherencyFilter< IntImageType, IntImageType > OcclusionType;
-  OcclusionType::Pointer m_OcclusionFilter = OcclusionType::New();  
-  m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
-  m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
+// // OCCLUSION DETECTION
+//   typedef otb::BijectionCoherencyFilter< IntImageType, IntImageType > OcclusionType;
+//   OcclusionType::Pointer m_OcclusionFilter = OcclusionType::New();  
+//   m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
+//   m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
    
-  m_OcclusionFilter->SetMaxHDisp(dispMax);
-  m_OcclusionFilter->SetMinHDisp(dispMin);
-  m_OcclusionFilter->SetMinVDisp(0);
-  m_OcclusionFilter->SetMaxVDisp(0);
-  m_OcclusionFilter->SetTolerance(1);
+//   m_OcclusionFilter->SetMaxHDisp(dispMax);
+//   m_OcclusionFilter->SetMinHDisp(dispMin);
+//   m_OcclusionFilter->SetMinVDisp(0);
+//   m_OcclusionFilter->SetMaxVDisp(0);
+//   m_OcclusionFilter->SetTolerance(1);
   
 
-  IntImageWriterType::Pointer OcclusionWriter = IntImageWriterType::New(); 
-  OcclusionWriter->SetFileName( FILENAME("Occlusions.tif"));
-  OcclusionWriter->SetInput( m_OcclusionFilter->GetOutput() );  
-  OcclusionWriter->Update(); 
+//   IntImageWriterType::Pointer OcclusionWriter = IntImageWriterType::New(); 
+//   OcclusionWriter->SetFileName( FILENAME("Occlusions.tif"));
+//   OcclusionWriter->SetInput( m_OcclusionFilter->GetOutput() );  
+//   OcclusionWriter->Update(); 
 
 
- typedef otb::FillOcclusionDisparityImageFilter<IntImageType, IntImageType, IntImageType> FillOcclusionFilter ;
- FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
- m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
- m_FillOccDisparityMap->SetInput2(m_LeftDisparity->GetOutput() );
- m_FillOccDisparityMap->SetRadius(0,4);
+//  typedef otb::FillOcclusionDisparityImageFilter<IntImageType, IntImageType, IntImageType> FillOcclusionFilter ;
+//  FillOcclusionFilter::Pointer m_FillOccDisparityMap = FillOcclusionFilter::New();
+//  m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
+//  m_FillOccDisparityMap->SetInput2(m_LeftDisparity->GetOutput() );
+//  m_FillOccDisparityMap->SetRadius(0,4);
 
 
- IntImageWriterType::Pointer writer_FillOcclusions = IntImageWriterType::New(); 
- writer_FillOcclusions->SetFileName( FILENAME("FillOcclusions.tif"));
- writer_FillOcclusions->SetInput( m_FillOccDisparityMap->GetOutput() );  
- writer_FillOcclusions->Update(); 
+//  IntImageWriterType::Pointer writer_FillOcclusions = IntImageWriterType::New(); 
+//  writer_FillOcclusions->SetFileName( FILENAME("FillOcclusions.tif"));
+//  writer_FillOcclusions->SetInput( m_FillOccDisparityMap->GetOutput() );  
+//  writer_FillOcclusions->Update(); 
 
 
-  typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastImageFilter;
-  CastImageFilter::Pointer m_CastOccMap = CastImageFilter::New();
-  m_CastOccMap-> SetInput( const_cast <IntImageType *>( m_FillOccDisparityMap->GetOutput() ));
-
-
-
-  typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
-  ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage = ConcatenateVectorImageFilterType::New();
-  m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastOccMap->GetOutput());
-  m_ConcatenateCastOccMapAndLeftImage->SetInput2(m_LeftMedianFilter->GetOutput());
-
-
-  typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatVectorImageType > WeightMedianFilter;
-  WeightMedianFilter::Pointer m_WeightOccMapAndLeftImageFilter = WeightMedianFilter::New();
-  m_WeightOccMapAndLeftImageFilter->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
-
-  FloatVectorImageType::SizeType radiusM;
-  radiusM[0] = r;
-  radiusM[1] = r;   
-  m_WeightOccMapAndLeftImageFilter->SetRadius(radiusM);
+//   typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastImageFilter;
+//   CastImageFilter::Pointer m_CastOccMap = CastImageFilter::New();
+//   m_CastOccMap-> SetInput( const_cast <IntImageType *>( m_FillOccDisparityMap->GetOutput() ));
 
 
 
-  ImageWriterType::Pointer writer_smoothFillDisparity = ImageWriterType::New();
-  writer_smoothFillDisparity->SetFileName( FILENAME("SmoothFillDisparity.tif"));
- writer_smoothFillDisparity->SetInput( m_WeightOccMapAndLeftImageFilter->GetOutput() );  
- writer_smoothFillDisparity->Update(); 
+//   typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
+//   ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage = ConcatenateVectorImageFilterType::New();
+//   m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastOccMap->GetOutput());
+//   m_ConcatenateCastOccMapAndLeftImage->SetInput2(m_LeftMedianFilter->GetOutput());
+
+
+//   typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatVectorImageType > WeightMedianFilter;
+//   WeightMedianFilter::Pointer m_WeightOccMapAndLeftImageFilter = WeightMedianFilter::New();
+//   m_WeightOccMapAndLeftImageFilter->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
+
+//   FloatVectorImageType::SizeType radiusM;
+//   radiusM[0] = r;
+//   radiusM[1] = r;   
+//   m_WeightOccMapAndLeftImageFilter->SetRadius(radiusM);
+
+
+
+//   ImageWriterType::Pointer writer_smoothFillDisparity = ImageWriterType::New();
+//   writer_smoothFillDisparity->SetFileName( FILENAME("SmoothFillDisparity.tif"));
+//  writer_smoothFillDisparity->SetInput( m_WeightOccMapAndLeftImageFilter->GetOutput() );  
+//  writer_smoothFillDisparity->Update(); 
 
 
 
