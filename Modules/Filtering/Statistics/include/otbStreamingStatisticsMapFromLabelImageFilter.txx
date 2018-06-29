@@ -56,9 +56,9 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 {
   switch (output)
   {
-    case 1: [[fallthrough]] // [[fallthrough]] is a C++17 attribute that'll simply be ignored in C++11-14
-    case 2: [[fallthrough]]
-    case 3: [[fallthrough]]
+    case 1: [[fallthrough]]; // [[fallthrough]] is a C++17 attribute that'll simply be ignored in C++11-14
+    case 2: [[fallthrough]];
+    case 3: [[fallthrough]];
     case 4:
       return static_cast<itk::DataObject*>(PixelValueMapObjectType::New().GetPointer());
   }
