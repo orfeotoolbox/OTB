@@ -390,7 +390,7 @@ typename RegionType::IndexType  shift;
   shift[0] = iteration_disp;
   shift[1] = m_VerticalDisparity;   
 
-  std::cout << iteration_disp << std::endl ;
+//  std::cout << iteration_disp << std::endl ;
   
   RighttRequestedRegionIndex[0]+= shift[0];
   RighttRequestedRegionIndex[1]+= shift[1];

@@ -338,6 +338,7 @@ class CVF : public Application
   ConcatenateVectorImageFilterType::Pointer m_ConcatenateDispEndInLeftImage = ConcatenateVectorImageFilterType::New();
   m_ConcatenateDispEndInLeftImage->SetInput1(m_CastLeftDisparity->GetOutput());
   m_ConcatenateDispEndInLeftImage->SetInput2(m_LeftMedianFilter->GetOutput());
+  m_ConcatenateDispEndInLeftImage->UpdateOutputInformation();
 
 
   typedef  otb::WeightMedianImageFilter< FloatVectorImageType, IntImageType > WeightMedianType;
@@ -349,6 +350,7 @@ class CVF : public Application
   radiusWM[0] = r;
   radiusWM[1] = r;   
   m_LeftDispMedian->SetRadius(radiusWM) ;
+
 
 
 
@@ -381,6 +383,7 @@ class CVF : public Application
   m_OcclusionFilter->SetMinVDisp(0);
   m_OcclusionFilter->SetMaxVDisp(0);
   m_OcclusionFilter->SetTolerance(2);  
+  m_OcclusionFilter->UpdateOutputInformation();
 
 
    typedef otb::FillOcclusionDisparityImageFilter<IntImageType, IntImageType, IntImageType> FillOcclusionFilter ;
@@ -388,6 +391,7 @@ class CVF : public Application
    m_FillOccDisparityMap->SetInput1(m_OcclusionFilter->GetOutput() );
    m_FillOccDisparityMap->SetInput2(m_LeftDispMedian->GetOutput() );
    m_FillOccDisparityMap->SetRadius(0,1);
+   m_FillOccDisparityMap->UpdateOutputInformation();
 
    typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastImageFilter;
   CastImageFilter::Pointer m_CastOccMap = CastImageFilter::New();
@@ -399,6 +403,7 @@ class CVF : public Application
   ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage = ConcatenateVectorImageFilterType::New();
   m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastOccMap->GetOutput());
   m_ConcatenateCastOccMapAndLeftImage->SetInput2(m_LeftMedianFilter->GetOutput());
+  m_ConcatenateCastOccMapAndLeftImage->UpdateOutputInformation();
 
 
   typedef  otb::WeightMedianImageFilter< FloatVectorImageType, FloatVectorImageType > WeightMedianFilter;
@@ -409,6 +414,8 @@ class CVF : public Application
   radiusM[0] = rwmf;
   radiusM[1] = rwmf;   
   m_WeightOccMapAndLeftImageFilter->SetRadius(radiusM);
+  m_WeightOccMapAndLeftImageFilter->UpdateOutputInformation();
+
 
 
   typedef otb::ConvertValueFrom0To255<FloatVectorImageType, IntImageType > ConvertValue ;
@@ -416,10 +423,11 @@ class CVF : public Application
   m_convertSmoothDisparity->SetInput(m_WeightOccMapAndLeftImageFilter->GetOutput());
   m_convertSmoothDisparity->SetDispMin(dispMin);
   m_convertSmoothDisparity->SetDispMax(dispMax);
+  // m_convertSmoothDisparity->GetOutput()->UpdateOutputInformation();
   m_convertSmoothDisparity->Update();
 
    SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
-    }  
+  }  
 
   }; //end class
 

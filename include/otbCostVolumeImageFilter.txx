@@ -400,6 +400,8 @@ typename RegionType::IndexType  shift;
   RighttRequestedRegionIndex[0]+= shift[0];
   RighttRequestedRegionIndex[1]+= shift[1];
 
+  std::cout <<"RighttRequestedRegionIndex[0] :" << RighttRequestedRegionIndex[0] << std::endl ;
+
   
   RightRegion.SetIndex(RighttRequestedRegionIndex);
 	
@@ -436,6 +438,8 @@ typename RegionType::IndexType  ShiftInv;
   IndexInv[1]+=ShiftInv[1];
   
 LeftRegion.SetIndex(IndexInv);	
+
+std::cout << RightRegion.GetIndex() << std::endl ;
 
 
 

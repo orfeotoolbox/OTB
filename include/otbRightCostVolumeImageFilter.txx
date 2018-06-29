@@ -254,9 +254,9 @@ RegionType inputLeftRequestedRegion;
 
 
 
-for(int iteration_disp=m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
-  {
-  ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRightRequestedRegion, iteration_disp);      
+// for(int iteration_disp=m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
+//   {
+  ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRightRequestedRegion, 0);      
      
   // The calculation of the non-shifted inputs
   if(inLeftPtr)
@@ -271,7 +271,7 @@ for(int iteration_disp=m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMax
 
   inRightPtr->SetRequestedRegion(inputRightRequestedRegion);
   inRightGradientXPtr->SetRequestedRegion( inputRightRequestedRegion );
-  }   
+  // }   
     
 } // end of GenerateInputRequestedRegion
 
