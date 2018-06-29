@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-#detection of OpenGL is apply is bit tricy as we deactivate
+#detection of OpenGL is apply is a bit tricky as we deactivate
 #framework on OSX globally. see mantis #1193
 if(APPLE)
   set( OPENGL_FOUND FALSE )
@@ -38,7 +38,7 @@ if(APPLE)
     PATHS "/System/Library/Frameworks/"
     DOC "OpenGL lib for OSX"
     )
-  
+
   find_library(
     OPENGL_glu_LIBRARY AGL
     PATHS "/System/Library/Frameworks/"
@@ -61,7 +61,11 @@ if(APPLE)
     OPENGL_gl_LIBRARY
     )
 else(APPLE)
+  # CMake 3.11+ setting; see 'cmake --help-policy CMP0072'
+  set( OpenGL_GL_PREFERENCE "GLVND" )
+
   find_package(OpenGL REQUIRED)
+
   mark_as_advanced(OPENGL_INCLUDE_DIR)
   mark_as_advanced(OPENGL_LIBRARIES)
 endif(APPLE)
@@ -80,4 +84,3 @@ endif()
 if(NOT OPENGL_glu_LIBRARY)
   message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_glu_LIBRARY")
 endif()
-
