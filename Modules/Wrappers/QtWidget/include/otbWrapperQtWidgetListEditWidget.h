@@ -135,6 +135,7 @@ signals:
   /** */
   void Updated();
 
+  void ValueChanged();
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //

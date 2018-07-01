@@ -83,7 +83,13 @@ QtWidgetParameterList
   setLayout( gLayout );
 
   //
-  // Connections.
+  // Connections (Update UserValue flag).
+  QObject::connect(
+    widget, &ListEditWidget::ValueChanged,
+    this, [=] () { emit ParameterChanged( GetParam()->GetKey() ); }
+  );
+
+  // Connections (Update app parameters).
   QObject::connect(
     widget, SIGNAL( Updated() ),
     this, SIGNAL( NotifyUpdate() )
