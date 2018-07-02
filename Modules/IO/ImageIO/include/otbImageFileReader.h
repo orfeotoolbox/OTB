@@ -36,6 +36,7 @@
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
+#include "OTBImageIOExport.h"
 
 namespace otb
 {
@@ -46,7 +47,7 @@ namespace otb
  *
  * \ingroup OTBImageIO
  */
-class ImageFileReaderException : public itk::ExceptionObject
+class OTBImageIO_EXPORT ImageFileReaderException : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
@@ -87,7 +88,7 @@ public:
 template <class TOutputImage,
           class ConvertPixelTraits=DefaultConvertPixelTraits<
                    typename TOutputImage::IOPixelType > >
-class ITK_EXPORT ImageFileReader : public itk::ImageSource<TOutputImage>
+class OTBImageIO_EXPORT ImageFileReader : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs. */

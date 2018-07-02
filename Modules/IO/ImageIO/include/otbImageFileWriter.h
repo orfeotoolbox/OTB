@@ -26,6 +26,7 @@
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
 #include "itkFastMutexLock.h"
+#include "OTBImageIOExport.h"
 
 namespace otb
 {
@@ -60,7 +61,7 @@ namespace otb
  * \ingroup OTBImageIO
  */
 template <class TInputImage>
-class ITK_EXPORT ImageFileWriter : public itk::ProcessObject
+class OTBImageIO_EXPORT ImageFileWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
