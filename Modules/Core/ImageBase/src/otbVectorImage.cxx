@@ -31,6 +31,10 @@ template class VectorImage<unsigned short, 2>;
 template class VectorImage<short, 2>;
 template class VectorImage<float, 2>;
 template class VectorImage<double, 2>;
+template class VectorImage<std::complex<int>, 2>;
+template class VectorImage<std::complex<short>, 2>;
+template class VectorImage<std::complex<float>, 2>;
+template class VectorImage<std::complex<double>, 2>;
 
 }
 

@@ -287,6 +287,10 @@ extern template class Image<unsigned short, 2>;
 extern template class Image<short, 2>;
 extern template class Image<float, 2>;
 extern template class Image<double, 2>;
+extern template class Image<std::complex<int>, 2>;
+extern template class Image<std::complex<short>, 2>;
+extern template class Image<std::complex<float>, 2>;
+extern template class Image<std::complex<double>, 2>;
 
 }
 

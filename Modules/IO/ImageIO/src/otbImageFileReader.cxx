@@ -43,5 +43,21 @@ template class ImageFileReader<Image<unsigned short, 2>>;
 template class ImageFileReader<Image<short, 2>>;
 template class ImageFileReader<Image<float, 2>>;
 template class ImageFileReader<Image<double, 2>>;
+template class ImageFileReader<Image<std::complex<int>, 2>>;
+template class ImageFileReader<Image<std::complex<short>, 2>>;
+template class ImageFileReader<Image<std::complex<float>, 2>>;
+template class ImageFileReader<Image<std::complex<double>, 2>>;
+template class ImageFileReader<VectorImage<unsigned int, 2>>;
+template class ImageFileReader<VectorImage<int, 2>>;
+template class ImageFileReader<VectorImage<unsigned char, 2>>;
+template class ImageFileReader<VectorImage<char, 2>>;
+template class ImageFileReader<VectorImage<unsigned short, 2>>;
+template class ImageFileReader<VectorImage<short, 2>>;
+template class ImageFileReader<VectorImage<float, 2>>;
+template class ImageFileReader<VectorImage<double, 2>>;
+template class ImageFileReader<VectorImage<std::complex<int>, 2>>;
+template class ImageFileReader<VectorImage<std::complex<short>, 2>>;
+template class ImageFileReader<VectorImage<std::complex<float>, 2>>;
+template class ImageFileReader<VectorImage<std::complex<double>, 2>>;
 
 }

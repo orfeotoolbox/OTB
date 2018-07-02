@@ -31,5 +31,21 @@ template class ImageFileWriter<Image<unsigned short, 2>>;
 template class ImageFileWriter<Image<short, 2>>;
 template class ImageFileWriter<Image<float, 2>>;
 template class ImageFileWriter<Image<double, 2>>;
+template class ImageFileWriter<Image<std::complex<int>, 2>>;
+template class ImageFileWriter<Image<std::complex<short>, 2>>;
+template class ImageFileWriter<Image<std::complex<float>, 2>>;
+template class ImageFileWriter<Image<std::complex<double>, 2>>;
+template class ImageFileWriter<VectorImage<unsigned int, 2>>;
+template class ImageFileWriter<VectorImage<int, 2>>;
+template class ImageFileWriter<VectorImage<unsigned char, 2>>;
+template class ImageFileWriter<VectorImage<char, 2>>;
+template class ImageFileWriter<VectorImage<unsigned short, 2>>;
+template class ImageFileWriter<VectorImage<short, 2>>;
+template class ImageFileWriter<VectorImage<float, 2>>;
+template class ImageFileWriter<VectorImage<double, 2>>;
+template class ImageFileWriter<VectorImage<std::complex<int>, 2>>;
+template class ImageFileWriter<VectorImage<std::complex<short>, 2>>;
+template class ImageFileWriter<VectorImage<std::complex<float>, 2>>;
+template class ImageFileWriter<VectorImage<std::complex<double>, 2>>;
 
 }

@@ -31,4 +31,8 @@ template class Image<unsigned short, 2>;
 template class Image<short, 2>;
 template class Image<float, 2>;
 template class Image<double, 2>;
+template class Image<std::complex<int>, 2>;
+template class Image<std::complex<short>, 2>;
+template class Image<std::complex<float>, 2>;
+template class Image<std::complex<double>, 2>;
 }
