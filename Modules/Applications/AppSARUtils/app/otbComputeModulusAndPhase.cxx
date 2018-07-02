@@ -82,7 +82,7 @@ private:
     SetParameterDescription("modulus", "Modulus of the input image computes with the\n"
                             "following formula: :math:`\\sqrt{real*real + imag*imag}` where real and imag \n"
                             "are respectively the real and the imaginary part of the input complex image.\n");
-    
+
     AddParameter(ParameterType_OutputImage, "phase", "Phase");
     SetParameterDescription("phase", "Phase of the input image computes with the following formula:\n"
     ":math:`\\tan^{-1}(\\frac{imag}{real})` where real and imag are respectively the real and\n"
@@ -106,25 +106,24 @@ private:
   // DoExecute() contains the application core.
   void DoExecute() override
   {
-    m_Modulus = ModulusFilterType::New();
-    m_Phase = PhaseFilterType::New();
-
     // Read the input as a complex image (with one component) Input with 2
     // components are also supported (band 1 is interpreted as the real part and
     // band 2 as the imaginary part VectorImage of complex image are not
     // supported by the application
     ComplexFloatImageType::Pointer inImage = GetParameterComplexFloatImage("in");
 
+    ModulusFilterType::Pointer modulus = ModulusFilterType::New();
+    PhaseFilterType::Pointer   phase = PhaseFilterType::New();
+
     // Compute modulus and phase
-    m_Modulus->SetInput(inImage);
-    m_Phase->SetInput(inImage);
+    modulus->SetInput(inImage);
+    phase->SetInput(inImage);
 
-    SetParameterOutputImage("modulus", m_Modulus->GetOutput());
-    SetParameterOutputImage("phase", m_Phase->GetOutput());
+    SetParameterOutputImage("modulus", modulus->GetOutput());
+    SetParameterOutputImage("phase", phase->GetOutput());
+
+    RegisterPipeline();
   }
-
-  ModulusFilterType::Pointer m_Modulus;
-  PhaseFilterType::Pointer m_Phase;
 };
 
 } // namespace Wrapper
