@@ -122,6 +122,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRectangle.txx"
+#include "otbRectangle.hxx"
 #endif
 #endif

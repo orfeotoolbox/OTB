@@ -181,7 +181,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKullbackLeiblerDistanceImageFilter.txx"
+#include "otbKullbackLeiblerDistanceImageFilter.hxx"
 #endif
 
 #endif

@@ -167,7 +167,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLocalHoughFilter.txx"
+#include "otbLocalHoughFilter.hxx"
 #endif
 
 #endif

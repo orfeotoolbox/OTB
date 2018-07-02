@@ -157,7 +157,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNormalizeAttributesLabelMapFilter.txx"
+#include "otbNormalizeAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

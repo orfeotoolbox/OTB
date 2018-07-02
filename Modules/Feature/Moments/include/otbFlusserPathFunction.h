@@ -115,7 +115,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFlusserPathFunction.txx"
+#include "otbFlusserPathFunction.hxx"
 #endif
 
 #endif

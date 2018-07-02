@@ -90,7 +90,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTileDimensionTiledStreamingManager.txx"
+#include "otbTileDimensionTiledStreamingManager.hxx"
 #endif
 
 #endif

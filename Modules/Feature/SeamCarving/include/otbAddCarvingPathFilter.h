@@ -135,7 +135,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAddCarvingPathFilter.txx"
+#include "otbAddCarvingPathFilter.hxx"
 #endif
 
 #endif

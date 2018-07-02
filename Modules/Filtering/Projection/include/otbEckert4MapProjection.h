@@ -72,7 +72,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEckert4MapProjection.txx"
+#include "otbEckert4MapProjection.hxx"
 #endif
 
 #endif

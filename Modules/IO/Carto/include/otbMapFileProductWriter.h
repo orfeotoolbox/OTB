@@ -240,7 +240,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMapFileProductWriter.txx"
+#include "otbMapFileProductWriter.hxx"
 #endif
 
 #endif

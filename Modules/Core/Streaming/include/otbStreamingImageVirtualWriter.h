@@ -200,7 +200,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingImageVirtualWriter.txx"
+#include "otbStreamingImageVirtualWriter.hxx"
 #endif
 
 #endif

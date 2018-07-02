@@ -179,7 +179,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOverlapSaveConvolutionImageFilter.txx"
+#include "otbOverlapSaveConvolutionImageFilter.hxx"
 #endif
 
 #endif

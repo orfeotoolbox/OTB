@@ -492,7 +492,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletFilterBank.txx"
+#include "otbWaveletFilterBank.hxx"
 #endif
 
 #endif

@@ -125,7 +125,7 @@ RegionType InputRegionToOutputRegion(unsigned int tileIndex, const RegionType & 
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTileImageFilter.txx"
+#include "otbTileImageFilter.hxx"
 #endif
 
 #endif

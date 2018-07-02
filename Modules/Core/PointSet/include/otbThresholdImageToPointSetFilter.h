@@ -100,7 +100,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbThresholdImageToPointSetFilter.txx"
+#include "otbThresholdImageToPointSetFilter.hxx"
 #endif
 
 #endif

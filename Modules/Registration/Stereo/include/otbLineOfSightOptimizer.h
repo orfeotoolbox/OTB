@@ -109,7 +109,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineOfSightOptimizer.txx"
+#include "otbLineOfSightOptimizer.hxx"
 #endif
 
 #endif

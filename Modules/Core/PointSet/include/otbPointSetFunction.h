@@ -86,7 +86,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetFunction.txx"
+#include "otbPointSetFunction.hxx"
 #endif
 
 #endif

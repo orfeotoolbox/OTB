@@ -93,7 +93,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTransformPointSetFilter.txx"
+#include "otbTransformPointSetFilter.hxx"
 #endif
 
 #endif

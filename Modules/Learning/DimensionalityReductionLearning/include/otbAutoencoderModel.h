@@ -186,7 +186,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAutoencoderModel.txx"
+#include "otbAutoencoderModel.hxx"
 #endif
 
 #endif

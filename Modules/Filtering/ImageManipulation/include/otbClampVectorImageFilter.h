@@ -145,7 +145,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbClampVectorImageFilter.txx"
+#include "otbClampVectorImageFilter.hxx"
 #endif
 
 #endif

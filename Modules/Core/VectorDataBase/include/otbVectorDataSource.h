@@ -99,7 +99,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataSource.txx"
+#include "otbVectorDataSource.hxx"
 #endif
 
 #endif // otbVectorDataSource_h

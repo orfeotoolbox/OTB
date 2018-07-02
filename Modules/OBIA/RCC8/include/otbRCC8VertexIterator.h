@@ -118,7 +118,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8VertexIterator.txx"
+#include "otbRCC8VertexIterator.hxx"
 #endif
 
 #endif

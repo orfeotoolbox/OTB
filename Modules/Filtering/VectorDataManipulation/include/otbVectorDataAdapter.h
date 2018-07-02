@@ -94,7 +94,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataAdapter.txx"
+#include "otbVectorDataAdapter.hxx"
 #endif
 
 #endif

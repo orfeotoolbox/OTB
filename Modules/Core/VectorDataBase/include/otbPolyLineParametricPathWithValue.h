@@ -138,7 +138,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolyLineParametricPathWithValue.txx"
+#include "otbPolyLineParametricPathWithValue.hxx"
 #endif
 
 #endif

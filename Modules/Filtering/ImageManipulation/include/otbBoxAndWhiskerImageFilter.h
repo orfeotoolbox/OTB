@@ -117,7 +117,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBoxAndWhiskerImageFilter.txx"
+#include "otbBoxAndWhiskerImageFilter.hxx"
 #endif
 
 #endif
