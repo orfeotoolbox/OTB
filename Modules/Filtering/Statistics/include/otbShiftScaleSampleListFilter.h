@@ -109,7 +109,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShiftScaleSampleListFilter.txx"
+#include "otbShiftScaleSampleListFilter.hxx"
 #endif
 
 #endif

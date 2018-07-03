@@ -98,6 +98,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOpeningClosingMorphologicalFilter.txx"
+#include "otbOpeningClosingMorphologicalFilter.hxx"
 #endif
 #endif

@@ -163,7 +163,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpatialObjectToImageDrawingFilter.txx"
+#include "otbSpatialObjectToImageDrawingFilter.hxx"
 #endif
 
 #endif

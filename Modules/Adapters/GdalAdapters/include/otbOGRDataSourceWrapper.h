@@ -572,7 +572,7 @@ namespace boost { namespace foreach {
 #endif
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataSourceWrapper.txx"
+#include "otbOGRDataSourceWrapper.hxx"
 #endif
 
 #endif // otbOGRDataSourceWrapper_h

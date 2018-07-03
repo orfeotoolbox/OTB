@@ -239,7 +239,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHoughTransform2DLinesImageFilter.txx"
+#include "otbHoughTransform2DLinesImageFilter.hxx"
 #endif
 
 #endif

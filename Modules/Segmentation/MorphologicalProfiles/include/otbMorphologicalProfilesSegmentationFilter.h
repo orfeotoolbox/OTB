@@ -130,7 +130,7 @@ double       m_Sigma;
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalProfilesSegmentationFilter.txx"
+#include "otbMorphologicalProfilesSegmentationFilter.hxx"
 #endif
 
 #endif

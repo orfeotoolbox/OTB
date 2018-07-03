@@ -78,7 +78,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDimensionalityReductionModelFactory.txx"
+#include "otbDimensionalityReductionModelFactory.hxx"
 #endif
 
 #endif

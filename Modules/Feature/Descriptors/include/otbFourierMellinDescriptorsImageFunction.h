@@ -149,7 +149,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFourierMellinDescriptorsImageFunction.txx"
+#include "otbFourierMellinDescriptorsImageFunction.hxx"
 #endif
 
 #endif

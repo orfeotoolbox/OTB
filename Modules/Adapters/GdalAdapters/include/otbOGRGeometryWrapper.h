@@ -161,7 +161,7 @@ OTBGdalAdapters_EXPORT UniqueGeometryPtr SimplifyPreserveTopology(OGRGeometry co
 } } // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbOGRGeometryWrapper.txx"
+// #include "otbOGRGeometryWrapper.hxx"
 #endif
 
 #endif // otbOGRGeometryWrapper_h

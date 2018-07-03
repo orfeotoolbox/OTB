@@ -100,7 +100,7 @@ private:
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.txx"
+#include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.hxx"
 #endif
 
 #endif

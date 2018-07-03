@@ -98,7 +98,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidResampler.txx"
+#include "otbMorphologicalPyramidResampler.hxx"
 #endif
 
 #endif

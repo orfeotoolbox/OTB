@@ -75,7 +75,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGradientBoostedTreeMachineLearningModelFactory.txx"
+#include "otbGradientBoostedTreeMachineLearningModelFactory.hxx"
 #endif
 
 #endif

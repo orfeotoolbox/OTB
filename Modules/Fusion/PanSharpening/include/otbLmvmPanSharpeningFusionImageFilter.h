@@ -265,7 +265,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLmvmPanSharpeningFusionImageFilter.txx"
+#include "otbLmvmPanSharpeningFusionImageFilter.hxx"
 #endif
 
 #endif

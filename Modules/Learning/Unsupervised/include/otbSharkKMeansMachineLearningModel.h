@@ -165,7 +165,7 @@ private:
 
 #ifndef OTB_MANUAL_INSTANTIATION
 
-#include "otbSharkKMeansMachineLearningModel.txx"
+#include "otbSharkKMeansMachineLearningModel.hxx"
 
 #endif
 

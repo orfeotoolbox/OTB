@@ -96,7 +96,7 @@ private:
 } // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbLabelMapToLabelImageFilter.txx"
+#include "otbLabelMapToLabelImageFilter.hxx"
 #endif
 
 #endif

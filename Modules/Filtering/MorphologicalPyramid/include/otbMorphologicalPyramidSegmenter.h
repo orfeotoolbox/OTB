@@ -153,7 +153,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidSegmenter.txx"
+#include "otbMorphologicalPyramidSegmenter.hxx"
 #endif
 
 #endif

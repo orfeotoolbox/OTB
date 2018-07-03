@@ -90,7 +90,7 @@ private:
 }
 
 //#ifndef OTB_MANUAL_INSTANTIATION
-//#include "otbWrapperProxyParameter.txx"
+//#include "otbWrapperProxyParameter.hxx"
 //#endif
 
 #endif

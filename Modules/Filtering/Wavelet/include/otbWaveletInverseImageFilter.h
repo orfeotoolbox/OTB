@@ -111,7 +111,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletInverseImageFilter.txx"
+#include "otbWaveletInverseImageFilter.hxx"
 #endif
 
 #endif

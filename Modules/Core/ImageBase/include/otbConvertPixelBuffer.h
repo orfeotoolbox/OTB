@@ -83,7 +83,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConvertPixelBuffer.txx"
+#include "otbConvertPixelBuffer.hxx"
 #endif
 
 #endif // otbConvertPixelBuffer_h

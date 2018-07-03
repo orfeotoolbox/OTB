@@ -178,7 +178,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOM.txx"
+#include "otbSOM.hxx"
 #endif
 
 #endif

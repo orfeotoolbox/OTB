@@ -94,7 +94,7 @@ TResult apply(TGeometry * geometry, TFunctor functor)
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbOGRGeometriesVisitor.txx"
+// #include "otbOGRGeometriesVisitor.hxx"
 #endif
 
 #endif // otbOGRGeometriesVisitor_h

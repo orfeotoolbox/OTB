@@ -199,7 +199,7 @@ protected:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbWrapperParameterList.txx"
+# include "otbWrapperParameterList.hxx"
 #endif
 
 #endif

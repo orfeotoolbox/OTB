@@ -72,7 +72,7 @@ private:
 } //namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAutoencoderModelFactory.txx"
+#include "otbAutoencoderModelFactory.hxx"
 #endif
 
 #endif

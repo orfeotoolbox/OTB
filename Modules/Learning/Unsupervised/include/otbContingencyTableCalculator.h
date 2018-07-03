@@ -98,7 +98,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbContingencyTableCalculator.txx"
+#include "otbContingencyTableCalculator.hxx"
 #endif
 
 #endif //otbContingencyTableCalculator_h

@@ -160,7 +160,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMbasedImageFilter.txx"
+#include "otbSOMbasedImageFilter.hxx"
 #endif
 
 #endif

@@ -105,7 +105,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNeighborhoodScalarProductFilter.txx"
+#include "otbNeighborhoodScalarProductFilter.hxx"
 #endif
 
 #endif

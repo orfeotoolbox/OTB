@@ -128,7 +128,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToRandomLineGenerator.txx"
+#include "otbVectorDataToRandomLineGenerator.hxx"
 #endif
 
 #endif

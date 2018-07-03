@@ -83,7 +83,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListToRCC8GraphFilter.txx"
+#include "otbImageListToRCC8GraphFilter.hxx"
 #endif
 
 #endif
