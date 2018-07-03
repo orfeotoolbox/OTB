@@ -135,12 +135,12 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTrainDimensionalityReductionApplicationBase.txx"
-#include "otbDimensionalityReductionTrainSOM.txx"
+#include "otbTrainDimensionalityReductionApplicationBase.hxx"
+#include "otbDimensionalityReductionTrainSOM.hxx"
 
 #ifdef OTB_USE_SHARK
-#include "otbDimensionalityReductionTrainAutoencoder.txx"
-#include "otbDimensionalityReductionTrainPCA.txx"
+#include "otbDimensionalityReductionTrainAutoencoder.hxx"
+#include "otbDimensionalityReductionTrainPCA.hxx"
 #endif
 #endif
 

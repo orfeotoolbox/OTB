@@ -160,7 +160,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetToDisplacementFieldGenerator.txx"
+#include "otbPointSetToDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

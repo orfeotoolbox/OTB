@@ -125,7 +125,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMImageClassificationFilter.txx"
+#include "otbSOMImageClassificationFilter.hxx"
 #endif
 
 #endif

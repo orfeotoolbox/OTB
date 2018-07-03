@@ -191,7 +191,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpectralResponse.txx"
+#include "otbSpectralResponse.hxx"
 #endif
 
 #endif

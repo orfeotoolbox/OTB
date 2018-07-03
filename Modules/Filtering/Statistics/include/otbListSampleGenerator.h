@@ -207,7 +207,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleGenerator.txx"
+#include "otbListSampleGenerator.hxx"
 #endif
 
 #endif

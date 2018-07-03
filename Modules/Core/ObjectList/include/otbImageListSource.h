@@ -76,6 +76,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListSource.txx"
+#include "otbImageListSource.hxx"
 #endif
 #endif

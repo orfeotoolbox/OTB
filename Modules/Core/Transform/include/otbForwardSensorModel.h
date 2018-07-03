@@ -93,7 +93,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbForwardSensorModel.txx"
+#include "otbForwardSensorModel.hxx"
 #endif
 
 #endif

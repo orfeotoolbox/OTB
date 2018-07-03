@@ -168,7 +168,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaximumAutocorrelationFactorImageFilter.txx"
+#include "otbMaximumAutocorrelationFactorImageFilter.hxx"
 #endif
 
 #endif

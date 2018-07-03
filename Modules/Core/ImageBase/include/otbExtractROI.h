@@ -101,7 +101,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbExtractROI.txx"
+#include "otbExtractROI.hxx"
 #endif
 
 #endif

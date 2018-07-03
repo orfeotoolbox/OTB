@@ -128,7 +128,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRadiometricMomentsImageFunction.txx"
+#include "otbRadiometricMomentsImageFunction.hxx"
 #endif
 
 #endif

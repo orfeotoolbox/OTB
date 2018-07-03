@@ -137,7 +137,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVirtualDimensionality.txx"
+#include "otbVirtualDimensionality.hxx"
 #endif
 
 #endif

@@ -154,7 +154,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRGBAPixelConverter.txx"
+#include "otbRGBAPixelConverter.hxx"
 #endif
 
 #endif

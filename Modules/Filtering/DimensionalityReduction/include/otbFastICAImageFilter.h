@@ -199,7 +199,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFastICAImageFilter.txx"
+#include "otbFastICAImageFilter.hxx"
 #endif
 
 

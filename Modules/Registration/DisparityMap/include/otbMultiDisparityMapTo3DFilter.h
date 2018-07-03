@@ -190,7 +190,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiDisparityMapTo3DFilter.txx"
+#include "otbMultiDisparityMapTo3DFilter.hxx"
 #endif
 
 #endif

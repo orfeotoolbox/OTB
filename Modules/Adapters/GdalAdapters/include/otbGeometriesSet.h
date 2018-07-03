@@ -172,7 +172,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbGeometriesSet.txx"
+// #include "otbGeometriesSet.hxx"
 #endif
 
 #endif // otbGeometriesSet_h

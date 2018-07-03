@@ -187,7 +187,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNCLSUnmixingImageFilter.txx"
+#include "otbNCLSUnmixingImageFilter.hxx"
 #endif
 
 #endif

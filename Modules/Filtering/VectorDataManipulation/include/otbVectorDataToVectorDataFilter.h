@@ -131,7 +131,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToVectorDataFilter.txx"
+#include "otbVectorDataToVectorDataFilter.hxx"
 #endif
 
 #endif

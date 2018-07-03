@@ -295,7 +295,7 @@ private:
 }// namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVariableLengthVectorConverter.txx"
+#include "otbVariableLengthVectorConverter.hxx"
 #endif
 
 #endif

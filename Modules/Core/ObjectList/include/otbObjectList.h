@@ -619,7 +619,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectList.txx"
+#include "otbObjectList.hxx"
 #endif
 
 #endif

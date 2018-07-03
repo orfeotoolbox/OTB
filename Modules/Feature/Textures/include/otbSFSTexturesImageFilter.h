@@ -238,7 +238,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSFSTexturesImageFilter.txx"
+#include "otbSFSTexturesImageFilter.hxx"
 #endif
 
 #endif

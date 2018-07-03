@@ -89,7 +89,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToSpecificDescriptionFilterBase.txx"
+#include "otbVectorDataToSpecificDescriptionFilterBase.hxx"
 #endif
 
 #endif

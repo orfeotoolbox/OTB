@@ -262,7 +262,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUrbanAreaDetectionImageFilter.txx"
+#include "otbUrbanAreaDetectionImageFilter.hxx"
 #endif
 
 #endif

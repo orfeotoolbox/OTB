@@ -160,6 +160,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolygon.txx"
+#include "otbPolygon.hxx"
 #endif
 #endif

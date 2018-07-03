@@ -178,7 +178,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineDetectorImageFilterBase.txx"
+#include "otbLineDetectorImageFilterBase.hxx"
 #endif
 
 #endif
