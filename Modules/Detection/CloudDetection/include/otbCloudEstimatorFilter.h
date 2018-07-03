@@ -88,7 +88,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCloudEstimatorFilter.txx"
+#include "otbCloudEstimatorFilter.hxx"
 #endif
 
 #endif

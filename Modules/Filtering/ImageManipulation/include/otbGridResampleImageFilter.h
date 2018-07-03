@@ -216,7 +216,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGridResampleImageFilter.txx"
+#include "otbGridResampleImageFilter.hxx"
 #endif
 
 #endif

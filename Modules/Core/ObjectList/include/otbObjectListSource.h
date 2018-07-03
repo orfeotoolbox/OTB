@@ -201,7 +201,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectListSource.txx"
+#include "otbObjectListSource.hxx"
 #endif
 
 #endif

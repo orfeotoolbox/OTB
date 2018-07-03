@@ -123,7 +123,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHistogramStatisticsFunction.txx"
+#include "otbHistogramStatisticsFunction.hxx"
 #endif
 
 #endif

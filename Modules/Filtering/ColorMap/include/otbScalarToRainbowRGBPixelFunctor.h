@@ -171,7 +171,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbScalarToRainbowRGBPixelFunctor.txx"
+#include "otbScalarToRainbowRGBPixelFunctor.hxx"
 #endif
 
 #endif

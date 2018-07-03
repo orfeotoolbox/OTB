@@ -373,7 +373,7 @@ public:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDescriptorsListSampleGenerator.txx"
+#include "otbDescriptorsListSampleGenerator.hxx"
 #endif
 
 #endif

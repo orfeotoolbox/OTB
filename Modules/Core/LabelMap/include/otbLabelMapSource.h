@@ -80,7 +80,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapSource.txx"
+#include "otbLabelMapSource.hxx"
 #endif
 
 #endif // otbLabelMapSource_h

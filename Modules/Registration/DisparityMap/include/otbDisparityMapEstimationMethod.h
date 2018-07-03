@@ -228,7 +228,7 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityMapEstimationMethod.txx"
+#include "otbDisparityMapEstimationMethod.hxx"
 #endif
 
 #endif

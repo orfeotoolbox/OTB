@@ -136,7 +136,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPeriodicSOM.txx"
+#include "otbPeriodicSOM.hxx"
 #endif
 
 #endif

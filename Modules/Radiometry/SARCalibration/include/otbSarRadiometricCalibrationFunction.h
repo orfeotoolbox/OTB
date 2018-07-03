@@ -204,7 +204,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbSarRadiometricCalibrationFunction.txx"
+# include "otbSarRadiometricCalibrationFunction.hxx"
 #endif
 
 #endif

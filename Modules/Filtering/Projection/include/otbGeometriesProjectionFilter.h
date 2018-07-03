@@ -295,7 +295,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeometriesProjectionFilter.txx"
+#include "otbGeometriesProjectionFilter.hxx"
 #endif
 
 #endif // otbGeometriesProjectionFilter_h

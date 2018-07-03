@@ -149,7 +149,7 @@ namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbReduceSpectralResponseClassifierRAndNIR.txx"
+#include "otbReduceSpectralResponseClassifierRAndNIR.hxx"
 #endif
 
 #endif

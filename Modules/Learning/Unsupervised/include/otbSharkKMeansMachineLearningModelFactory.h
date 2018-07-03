@@ -70,7 +70,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSharkKMeansMachineLearningModelFactory.txx"
+#include "otbSharkKMeansMachineLearningModelFactory.hxx"
 #endif
 
 #endif

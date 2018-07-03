@@ -70,7 +70,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMollweidMapProjection.txx"
+#include "otbMollweidMapProjection.hxx"
 #endif
 
 #endif

@@ -333,7 +333,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingShrinkImageFilter.txx"
+#include "otbStreamingShrinkImageFilter.hxx"
 #endif
 
 #endif

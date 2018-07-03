@@ -208,7 +208,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDecisionTreeMachineLearningModel.txx"
+#include "otbDecisionTreeMachineLearningModel.hxx"
 #endif
 
 #endif

@@ -72,7 +72,7 @@ private:
 } //namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMModelFactory.txx"
+#include "otbSOMModelFactory.hxx"
 #endif
 
 #endif

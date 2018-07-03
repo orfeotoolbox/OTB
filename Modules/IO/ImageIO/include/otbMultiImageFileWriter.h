@@ -290,7 +290,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiImageFileWriter.txx"
+#include "otbMultiImageFileWriter.hxx"
 #endif
 
 #endif // otbMultiImageFileWriter_h

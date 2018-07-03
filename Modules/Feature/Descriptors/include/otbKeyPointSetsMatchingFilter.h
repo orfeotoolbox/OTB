@@ -132,6 +132,6 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKeyPointSetsMatchingFilter.txx"
+#include "otbKeyPointSetsMatchingFilter.hxx"
 #endif
 #endif

@@ -82,7 +82,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeocentricTransform.txx"
+#include "otbGeocentricTransform.hxx"
 #endif
 
 #endif

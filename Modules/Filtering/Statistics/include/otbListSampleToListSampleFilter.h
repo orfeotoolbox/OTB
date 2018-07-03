@@ -101,7 +101,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleToListSampleFilter.txx"
+#include "otbListSampleToListSampleFilter.hxx"
 #endif
 
 #endif

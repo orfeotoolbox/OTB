@@ -162,7 +162,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbReduceSpectralResponse.txx"
+#include "otbReduceSpectralResponse.hxx"
 #endif
 
 #endif

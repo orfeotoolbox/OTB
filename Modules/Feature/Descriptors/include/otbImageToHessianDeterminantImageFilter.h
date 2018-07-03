@@ -155,7 +155,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToHessianDeterminantImageFilter.txx"
+#include "otbImageToHessianDeterminantImageFilter.hxx"
 #endif
 
 #endif

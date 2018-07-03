@@ -120,7 +120,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMWithMissingValue.txx"
+#include "otbSOMWithMissingValue.hxx"
 #endif
 
 #endif

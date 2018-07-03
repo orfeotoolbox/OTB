@@ -150,7 +150,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleToBalancedListSampleFilter.txx"
+#include "otbListSampleToBalancedListSampleFilter.hxx"
 #endif
 
 #endif

@@ -152,7 +152,7 @@ private:
 
 // Software Guide : BeginLatex
 //
-// Pay attention to the fact that no \code{.txx} file is needed, since
+// Pay attention to the fact that no \code{.hxx} file is needed, since
 // filtering operation is implemented in the
 // \doxygen{otb}{BinaryFunctorNeighborhoodImageFilter} class. So all
 // the algorithmics part is inside the functor.

@@ -369,7 +369,7 @@ private:
 } // end of namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletPacketTransform.txx"
+#include "otbWaveletPacketTransform.hxx"
 #endif
 
 #endif

@@ -132,7 +132,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToPointSetFilter.txx"
+#include "otbImageToPointSetFilter.hxx"
 #endif
 
 #endif

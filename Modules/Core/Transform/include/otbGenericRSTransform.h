@@ -223,7 +223,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericRSTransform.txx"
+#include "otbGenericRSTransform.hxx"
 #endif
 
 #endif

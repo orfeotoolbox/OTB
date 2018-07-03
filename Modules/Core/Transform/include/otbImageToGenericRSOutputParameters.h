@@ -192,7 +192,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToGenericRSOutputParameters.txx"
+#include "otbImageToGenericRSOutputParameters.hxx"
 #endif
 
 #endif

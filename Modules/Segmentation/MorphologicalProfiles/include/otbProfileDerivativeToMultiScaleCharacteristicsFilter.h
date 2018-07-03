@@ -118,7 +118,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.txx"
+#include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.hxx"
 #endif
 
 #endif
