@@ -181,12 +181,12 @@ std::vector<std::string> Application::GetDocTags() const
 
 void Application::AddDocTag(const std::string & tag)
 {
-  for (unsigned int i=0; i<m_DocTags.size(); i++)
-  {
-    if (m_DocTags[i].compare(tag) == 0) return;
-  }
-  m_DocTags.push_back( tag );
-  this->Modified();
+  const auto wh = std::find(begin(m_DocTags), end(m_DocTags), tag);
+  if (wh == end(m_DocTags))
+    {
+    m_DocTags.push_back(tag);
+    this->Modified();
+    }
 }
 
 DocExampleStructure::Pointer Application::GetDocExample()
