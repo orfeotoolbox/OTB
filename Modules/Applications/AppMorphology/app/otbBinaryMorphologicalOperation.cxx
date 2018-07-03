@@ -22,9 +22,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "itkBinaryBallStructuringElement.h"
-#include "itkBinaryCrossStructuringElement.h"
-#include "itkKernelImageFilter.h"
+#include "itkFlatStructuringElement.h"
 
 #include "itkBinaryDilateImageFilter.h"
 #include "itkBinaryErodeImageFilter.h"
@@ -116,9 +114,8 @@ AddParameter( ParameterType_Int, "yradius", "Structuring element Y radius" );
 SetParameterDescription( "yradius" , "The structuring element radius along the Y axis." );
 SetDefaultParameterInt( "yradius" , 5 );
 
-//Ball
+AddChoice( "structype.box" , "Box" );
 AddChoice( "structype.ball" , "Ball" );
-//Cross
 AddChoice( "structype.cross" , "Cross" );
 
 AddParameter(ParameterType_Choice, "filter", "Morphological Operation");
@@ -210,7 +207,11 @@ void DoExecute() override
   rad[1] = this->GetParameterInt("yradius");
 
   StructuringType se;
-  if(GetParameterString("structype") == "ball")
+  if(GetParameterString("structype") == "box")
+    {
+    se = StructuringType::Box(rad);
+    }
+  else if(GetParameterString("structype") == "ball")
     {
     se = StructuringType::Ball(rad);
     }
@@ -228,8 +229,7 @@ void DoExecute() override
     m_DilFilter->SetBackgroundValue(GetParameterFloat("filter.dilate.backval"));
     SetParameterOutputImage("out", m_DilFilter->GetOutput());
     }
-
-  if(GetParameterString("filter") == "erode")
+  else if(GetParameterString("filter") == "erode")
     {
     m_EroFilter = ErodeFilterType::New();
     m_EroFilter->SetKernel(se);
@@ -238,8 +238,7 @@ void DoExecute() override
     m_EroFilter->SetBackgroundValue(GetParameterFloat("filter.erode.backval"));
     SetParameterOutputImage("out", m_EroFilter->GetOutput());
     }
-
-  if(GetParameterString("filter") == "opening")
+  else if(GetParameterString("filter") == "opening")
     {
     m_OpeFilter = OpeningFilterType::New();
     m_OpeFilter->SetKernel(se);
@@ -248,8 +247,7 @@ void DoExecute() override
     m_OpeFilter->SetBackgroundValue(GetParameterFloat("filter.opening.backval"));
     SetParameterOutputImage("out", m_OpeFilter->GetOutput());
     }
-
-  if(GetParameterString("filter") == "closing")
+  else if(GetParameterString("filter") == "closing")
     {
     m_CloFilter = ClosingFilterType::New();
     m_CloFilter->SetKernel(se);
