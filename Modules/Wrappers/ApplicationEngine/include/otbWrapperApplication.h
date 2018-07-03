@@ -1150,7 +1150,7 @@ private:
 
 
 //#ifndef OTB_MANUAL_INSTANTIATION
-//#include "otbWrapperApplication.txx"
+//#include "otbWrapperApplication.hxx"
 //#endif
 
 

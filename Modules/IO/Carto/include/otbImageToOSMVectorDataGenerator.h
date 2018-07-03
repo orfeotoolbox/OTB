@@ -100,7 +100,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToOSMVectorDataGenerator.txx"
+#include "otbImageToOSMVectorDataGenerator.hxx"
 #endif
 
 #endif

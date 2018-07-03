@@ -156,7 +156,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeodesicMorphologyIterativeDecompositionImageFilter.txx"
+#include "otbGeodesicMorphologyIterativeDecompositionImageFilter.hxx"
 #endif
 
 #endif

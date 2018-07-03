@@ -145,7 +145,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLocalHistogramImageFunction.txx"
+#include "otbLocalHistogramImageFunction.hxx"
 #endif
 
 #endif

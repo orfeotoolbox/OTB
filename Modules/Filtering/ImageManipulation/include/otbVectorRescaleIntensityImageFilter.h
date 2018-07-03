@@ -294,7 +294,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorRescaleIntensityImageFilter.txx"
+#include "otbVectorRescaleIntensityImageFilter.hxx"
 #endif
 
 #endif

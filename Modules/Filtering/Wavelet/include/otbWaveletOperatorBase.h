@@ -276,7 +276,7 @@ protected:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletOperatorBase.txx"
+#include "otbWaveletOperatorBase.hxx"
 #endif
 
 #endif

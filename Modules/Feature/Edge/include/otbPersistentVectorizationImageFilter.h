@@ -107,7 +107,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentVectorizationImageFilter.txx"
+#include "otbPersistentVectorizationImageFilter.hxx"
 #endif
 
 #endif

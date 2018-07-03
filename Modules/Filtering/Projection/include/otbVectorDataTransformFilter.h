@@ -121,7 +121,7 @@ private:
 } // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbVectorDataTransformFilter.txx"
+#include "otbVectorDataTransformFilter.hxx"
 #endif
 
 #endif

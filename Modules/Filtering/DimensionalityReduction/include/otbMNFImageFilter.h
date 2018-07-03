@@ -210,7 +210,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMNFImageFilter.txx"
+#include "otbMNFImageFilter.hxx"
 #endif
 
 

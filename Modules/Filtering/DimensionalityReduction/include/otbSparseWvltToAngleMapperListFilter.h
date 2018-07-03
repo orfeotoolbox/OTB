@@ -135,7 +135,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSparseWvltToAngleMapperListFilter.txx"
+#include "otbSparseWvltToAngleMapperListFilter.hxx"
 #endif
 
 #endif

@@ -117,7 +117,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLocalRxDetectorFilter.txx"
+#include "otbLocalRxDetectorFilter.hxx"
 #endif
 
 #endif

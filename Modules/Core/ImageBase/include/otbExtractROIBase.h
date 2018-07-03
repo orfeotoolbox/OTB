@@ -181,7 +181,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbExtractROIBase.txx"
+#include "otbExtractROIBase.hxx"
 #endif
 
 #endif

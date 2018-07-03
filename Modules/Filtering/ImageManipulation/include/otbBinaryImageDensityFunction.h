@@ -121,7 +121,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbBinaryImageDensityFunction.txx"
+# include "otbBinaryImageDensityFunction.hxx"
 #endif
 
 #endif

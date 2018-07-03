@@ -197,7 +197,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToImageRCC8Calculator.txx"
+#include "otbImageToImageRCC8Calculator.hxx"
 #endif
 
 #endif

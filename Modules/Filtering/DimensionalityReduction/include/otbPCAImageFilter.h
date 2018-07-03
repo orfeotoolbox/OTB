@@ -216,7 +216,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPCAImageFilter.txx"
+#include "otbPCAImageFilter.hxx"
 #endif
 
 #endif // otbPCAImageFilter_h

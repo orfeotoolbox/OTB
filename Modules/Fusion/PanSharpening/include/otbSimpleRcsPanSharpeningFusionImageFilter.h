@@ -272,7 +272,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSimpleRcsPanSharpeningFusionImageFilter.txx"
+#include "otbSimpleRcsPanSharpeningFusionImageFilter.hxx"
 #endif
 
 #endif

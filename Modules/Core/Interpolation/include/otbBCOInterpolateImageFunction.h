@@ -211,7 +211,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBCOInterpolateImageFunction.txx"
+#include "otbBCOInterpolateImageFunction.hxx"
 #endif
 
 #endif

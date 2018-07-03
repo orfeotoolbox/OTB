@@ -329,7 +329,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingCompareImageFilter.txx"
+#include "otbStreamingCompareImageFilter.hxx"
 #endif
 
 #endif

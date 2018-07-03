@@ -111,7 +111,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapClassifier.txx"
+#include "otbLabelMapClassifier.hxx"
 #endif
 
 #endif

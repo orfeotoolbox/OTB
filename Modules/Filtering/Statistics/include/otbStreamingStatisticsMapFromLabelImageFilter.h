@@ -411,7 +411,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingStatisticsMapFromLabelImageFilter.txx"
+#include "otbStreamingStatisticsMapFromLabelImageFilter.hxx"
 #endif
 
 #endif

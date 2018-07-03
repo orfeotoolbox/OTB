@@ -150,7 +150,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataExtractROI.txx"
+#include "otbVectorDataExtractROI.hxx"
 #endif
 
 #endif

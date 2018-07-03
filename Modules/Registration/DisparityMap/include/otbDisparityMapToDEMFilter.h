@@ -206,7 +206,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityMapToDEMFilter.txx"
+#include "otbDisparityMapToDEMFilter.hxx"
 #endif
 
 #endif

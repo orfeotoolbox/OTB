@@ -119,7 +119,7 @@ protected: //made protected so other iterators can access
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolyLineImageConstIterator.txx"
+#include "otbPolyLineImageConstIterator.hxx"
 #endif
 
 #endif

@@ -253,7 +253,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFineRegistrationImageFilter.txx"
+#include "otbFineRegistrationImageFilter.hxx"
 #endif
 
 #endif

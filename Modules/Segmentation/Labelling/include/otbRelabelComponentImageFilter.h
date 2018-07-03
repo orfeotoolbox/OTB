@@ -154,7 +154,7 @@ private:
 } // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbRelabelComponentImageFilter.txx"
+#include "otbRelabelComponentImageFilter.hxx"
 #endif
 
 #endif

@@ -117,7 +117,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbGroundSpacingImageFunction.txx"
+# include "otbGroundSpacingImageFunction.hxx"
 #endif
 
 #endif

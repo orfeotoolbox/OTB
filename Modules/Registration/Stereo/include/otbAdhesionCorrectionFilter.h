@@ -184,7 +184,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAdhesionCorrectionFilter.txx"
+#include "otbAdhesionCorrectionFilter.hxx"
 #endif
 
 #endif

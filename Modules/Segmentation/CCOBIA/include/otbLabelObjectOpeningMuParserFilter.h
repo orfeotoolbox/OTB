@@ -136,7 +136,7 @@ private:
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelObjectOpeningMuParserFilter.txx"
+#include "otbLabelObjectOpeningMuParserFilter.hxx"
 #endif
 
 #endif

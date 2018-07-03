@@ -343,7 +343,7 @@ private:
 } // end of namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletTransform.txx"
+#include "otbWaveletTransform.hxx"
 #endif
 
 #endif

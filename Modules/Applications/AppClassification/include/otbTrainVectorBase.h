@@ -190,7 +190,7 @@ protected:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTrainVectorBase.txx"
+#include "otbTrainVectorBase.hxx"
 #endif
 
 #endif
