@@ -2436,19 +2436,18 @@ Application::GetImageBasePixelType(const std::string & key, unsigned int idx)
 #define otbGetParameterImageMacro( Image )                              \
   Image##Type * Application::GetParameter##Image(std::string parameter) \
     {                                                                   \
-    Image##Type::Pointer ret;                                           \
     Parameter* param = GetParameterByKey(parameter);                    \
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
-    ComplexInputImageParameter* paramDownC = dynamic_cast<ComplexInputImageParameter*>(param); \
     if ( paramDown )                                                    \
       {                                                                 \
-      ret = paramDown->Get##Image();                                    \
+      return paramDown->Get##Image();                                   \
       }                                                                 \
-    else if ( paramDownC )  /* Support of ComplexInputImageParameter */ \
+    ComplexInputImageParameter* paramDownC = dynamic_cast<ComplexInputImageParameter*>(param); \
+    if ( paramDownC )                                                   \
       {                                                                 \
-      ret = paramDownC->Get##Image();                                   \
+      return paramDownC->Get##Image();                                  \
       }                                                                 \
-    return ret;                                                         \
+    return Image##Type::Pointer();                                      \
     }
 
 otbGetParameterImageMacro(UInt8Image);
