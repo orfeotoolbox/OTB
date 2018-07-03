@@ -103,7 +103,7 @@ private:
         " * grayscale :  to display mono image as standard color image \n"
         " * rgb : select 3 bands in the input image (multi-bands) \n"
         " * all : keep all bands.");
-    SetDocLimitations("None");
+    SetDocLimitations("The application does not support complex pixel types as output.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
 
@@ -508,7 +508,9 @@ private:
         GenericDoExecute<DoubleVectorImageType>();
         break;
       default:
-        itkExceptionMacro("Unknown pixel type "<<this->GetParameterOutputImagePixelType("out")<<".");
+        itkExceptionMacro("Unknown pixel type " << this->GetParameterOutputImagePixelType("out") <<"." << std::endl
+                          << "The Convert application does not support complex pixel type as output." << std::endl
+                          << "You can use instead the ExtractROI application to perform complex image conversion.");
         break;
       }
   }
