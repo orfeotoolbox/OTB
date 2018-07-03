@@ -165,17 +165,14 @@ if(NOT OTB_INSTALL_JAVA_DIR)
   set(OTB_INSTALL_JAVA_DIR "lib/otb/java")
 endif()
 if(NOT OTB_INSTALL_DATA_DIR)
-  set(OTB_INSTALL_DATA_DIR share/otb)
+  set(OTB_INSTALL_DATA_DIR "share/otb")
 endif()
+
 if(NOT OTB_INSTALL_DOC_DIR)
-  set(OTB_INSTALL_DOC_DIR share/doc/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  set(OTB_INSTALL_DOC_DIR "share/doc/otb")
 endif()
 if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-endif()
-
-if(NOT OTB_INSTALL_DESCR_DIR)
-  set (OTB_INSTALL_DESCR_DIR "share/otb/description")
 endif()
 
 #convert path to native for reconfiguring otbcli.bat.in
@@ -422,11 +419,13 @@ install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
 
 # TODO : install release notes, copyright notice, ...
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
-install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 # Configure and install VERSION file
 configure_file(VERSION VERSION @ONLY)
-install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR} )
+
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
 
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)

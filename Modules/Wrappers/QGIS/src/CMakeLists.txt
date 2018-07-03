@@ -22,9 +22,9 @@ target_link_libraries(otbQgisDescriptor ${OTBQgis_LIBRARIES})
 otb_module_target(otbQgisDescriptor)
 
 add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
-  COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Cleaning ${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
-  COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
-  COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
+  COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Cleaning ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
+  COMMAND "${CMAKE_COMMAND}" "-E" "remove_directory" "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
+  COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
   )
 
 set(app_names ${OTB_APPLICATIONS_NAME_LIST})
@@ -41,19 +41,16 @@ if(CMAKE_SKIP_RPATH AND "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
 endif()
 foreach(app_name ${app_names})
   add_dependencies(otbQgisDescriptor otbapp_${app_name})
-  set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/${app_name}.txt")
+  set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/${app_name}.txt")
   add_custom_command(OUTPUT "${dfile}"
     COMMAND ${generate_descriptor_cmd}
-    "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}/"
+    "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
     WORKING_DIRECTORY ${OTB_BINARY_DIR}
-    COMMENT "./bin/otbQgisDescriptor ${app_name} ./${OTB_INSTALL_APP_DIR} ./${OTB_INSTALL_DESCR_DIR}/"
+    COMMENT "./bin/otbQgisDescriptor ${app_name} ./${OTB_INSTALL_APP_DIR} ./${OTB_INSTALL_DATA_DIR}/description/"
     VERBATIM)
   list(APPEND dfiles "${dfile}")
 endforeach()
 
 add_custom_target(generate_descriptors DEPENDS ${dfiles} )
 add_dependencies(${otb-module}-all generate_descriptors)
-
-install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DESCR_DIR}
-  DESTINATION share/otb)
 
