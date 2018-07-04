@@ -23,16 +23,16 @@
 namespace otb {
 
 // Explicit instanciation of common types
-template class Image<unsigned int, 2>;
-template class Image<int, 2>;
-template class Image<unsigned char, 2>;
-template class Image<char, 2>;
-template class Image<unsigned short, 2>;
-template class Image<short, 2>;
-template class Image<float, 2>;
-template class Image<double, 2>;
-template class Image<std::complex<int>, 2>;
-template class Image<std::complex<short>, 2>;
-template class Image<std::complex<float>, 2>;
-template class Image<std::complex<double>, 2>;
+template class OTBImageBase_EXPORT Image<unsigned int, 2>;
+template class OTBImageBase_EXPORT Image<int, 2>;
+template class OTBImageBase_EXPORT Image<unsigned char, 2>;
+template class OTBImageBase_EXPORT Image<char, 2>;
+template class OTBImageBase_EXPORT Image<unsigned short, 2>;
+template class OTBImageBase_EXPORT Image<short, 2>;
+template class OTBImageBase_EXPORT Image<float, 2>;
+template class OTBImageBase_EXPORT Image<double, 2>;
+template class OTBImageBase_EXPORT Image<std::complex<int>, 2>;
+template class OTBImageBase_EXPORT Image<std::complex<short>, 2>;
+template class OTBImageBase_EXPORT Image<std::complex<float>, 2>;
+template class OTBImageBase_EXPORT Image<std::complex<double>, 2>;
 }

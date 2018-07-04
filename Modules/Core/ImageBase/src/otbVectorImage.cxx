@@ -23,18 +23,18 @@
 namespace otb {
 
 // Explicit instanciation of common types
-template class VectorImage<unsigned int, 2>;
-template class VectorImage<int, 2>;
-template class VectorImage<unsigned char, 2>;
-template class VectorImage<char, 2>;
-template class VectorImage<unsigned short, 2>;
-template class VectorImage<short, 2>;
-template class VectorImage<float, 2>;
-template class VectorImage<double, 2>;
-template class VectorImage<std::complex<int>, 2>;
-template class VectorImage<std::complex<short>, 2>;
-template class VectorImage<std::complex<float>, 2>;
-template class VectorImage<std::complex<double>, 2>;
+template class OTBImageBase_EXPORT VectorImage<unsigned int, 2>;
+template class OTBImageBase_EXPORT VectorImage<int, 2>;
+template class OTBImageBase_EXPORT VectorImage<unsigned char, 2>;
+template class OTBImageBase_EXPORT VectorImage<char, 2>;
+template class OTBImageBase_EXPORT VectorImage<unsigned short, 2>;
+template class OTBImageBase_EXPORT VectorImage<short, 2>;
+template class OTBImageBase_EXPORT VectorImage<float, 2>;
+template class OTBImageBase_EXPORT VectorImage<double, 2>;
+template class OTBImageBase_EXPORT VectorImage<std::complex<int>, 2>;
+template class OTBImageBase_EXPORT VectorImage<std::complex<short>, 2>;
+template class OTBImageBase_EXPORT VectorImage<std::complex<float>, 2>;
+template class OTBImageBase_EXPORT VectorImage<std::complex<double>, 2>;
 
 }
 

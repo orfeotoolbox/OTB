@@ -191,40 +191,36 @@ private:
 #include "otbImageFileReader.txx"
 #endif
 
-// Include only for forward declare
-#define OTB_MANUAL_INSTANTIATION
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#undef OTB_MANUAL_INSTANTIATION
 
 namespace otb {
-
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class ImageFileReader<Image<unsigned int, 2>>;
-extern template class ImageFileReader<Image<int, 2>>;
-extern template class ImageFileReader<Image<unsigned char, 2>>;
-extern template class ImageFileReader<Image<char, 2>>;
-extern template class ImageFileReader<Image<unsigned short, 2>>;
-extern template class ImageFileReader<Image<short, 2>>;
-extern template class ImageFileReader<Image<float, 2>>;
-extern template class ImageFileReader<Image<double, 2>>;
-extern template class ImageFileReader<Image<std::complex<int>, 2>>;
-extern template class ImageFileReader<Image<std::complex<short>, 2>>;
-extern template class ImageFileReader<Image<std::complex<float>, 2>>;
-extern template class ImageFileReader<Image<std::complex<double>, 2>>;
-extern template class ImageFileReader<VectorImage<unsigned int, 2>>;
-extern template class ImageFileReader<VectorImage<int, 2>>;
-extern template class ImageFileReader<VectorImage<unsigned char, 2>>;
-extern template class ImageFileReader<VectorImage<char, 2>>;
-extern template class ImageFileReader<VectorImage<unsigned short, 2>>;
-extern template class ImageFileReader<VectorImage<short, 2>>;
-extern template class ImageFileReader<VectorImage<float, 2>>;
-extern template class ImageFileReader<VectorImage<double, 2>>;
-extern template class ImageFileReader<VectorImage<std::complex<int>, 2>>;
-extern template class ImageFileReader<VectorImage<std::complex<short>, 2>>;
-extern template class ImageFileReader<VectorImage<std::complex<float>, 2>>;
-extern template class ImageFileReader<VectorImage<std::complex<double>, 2>>;
+extern template class ImageFileReader<otb::Image<unsigned int, 2> >;
+extern template class ImageFileReader<otb::Image<int, 2>>;
+extern template class ImageFileReader<otb::Image<unsigned char, 2>>;
+extern template class ImageFileReader<otb::Image<char, 2>>;
+extern template class ImageFileReader<otb::Image<unsigned short, 2>>;
+extern template class ImageFileReader<otb::Image<short, 2>>;
+extern template class ImageFileReader<otb::Image<float, 2>>;
+extern template class ImageFileReader<otb::Image<double, 2>>;
+extern template class ImageFileReader<otb::Image<std::complex<int>, 2>>;
+extern template class ImageFileReader<otb::Image<std::complex<short>, 2>>;
+extern template class ImageFileReader<otb::Image<std::complex<float>, 2>>;
+extern template class ImageFileReader<otb::Image<std::complex<double>, 2>>;
+extern template class ImageFileReader<otb::VectorImage<unsigned int, 2>>;
+extern template class ImageFileReader<otb::VectorImage<int, 2>>;
+extern template class ImageFileReader<otb::VectorImage<unsigned char, 2>>;
+extern template class ImageFileReader<otb::VectorImage<char, 2>>;
+extern template class ImageFileReader<otb::VectorImage<unsigned short, 2>>;
+extern template class ImageFileReader<otb::VectorImage<short, 2>>;
+extern template class ImageFileReader<otb::VectorImage<float, 2>>;
+extern template class ImageFileReader<otb::VectorImage<double, 2>>;
+extern template class ImageFileReader<otb::VectorImage<std::complex<int>, 2>>;
+extern template class ImageFileReader<otb::VectorImage<std::complex<short>, 2>>;
+extern template class ImageFileReader<otb::VectorImage<std::complex<float>, 2>>;
+extern template class ImageFileReader<otb::VectorImage<std::complex<double>, 2>>;
 
 }
 

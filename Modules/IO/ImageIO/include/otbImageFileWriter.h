@@ -291,10 +291,10 @@ private:
 #include "otbImageFileWriter.txx"
 #endif
 
-#define OTB_MANUAL_INSTANTIATION
+
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#undef OTB_MANUAL_INSTANTIATION
+
 
 namespace otb {
 
