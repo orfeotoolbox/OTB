@@ -279,18 +279,18 @@ namespace otb {
 
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class Image<unsigned int, 2>;
-extern template class Image<int, 2>;
-extern template class Image<unsigned char, 2>;
-extern template class Image<char, 2>;
-extern template class Image<unsigned short, 2>;
-extern template class Image<short, 2>;
-extern template class Image<float, 2>;
-extern template class Image<double, 2>;
-extern template class Image<std::complex<int>, 2>;
-extern template class Image<std::complex<short>, 2>;
-extern template class Image<std::complex<float>, 2>;
-extern template class Image<std::complex<double>, 2>;
+extern template class OTBImageBase_EXPORT Image<unsigned int, 2>;
+extern template class OTBImageBase_EXPORT Image<int, 2>;
+extern template class OTBImageBase_EXPORT Image<unsigned char, 2>;
+extern template class OTBImageBase_EXPORT Image<char, 2>;
+extern template class OTBImageBase_EXPORT Image<unsigned short, 2>;
+extern template class OTBImageBase_EXPORT Image<short, 2>;
+extern template class OTBImageBase_EXPORT Image<float, 2>;
+extern template class OTBImageBase_EXPORT Image<double, 2>;
+extern template class OTBImageBase_EXPORT Image<std::complex<int>, 2>;
+extern template class OTBImageBase_EXPORT Image<std::complex<short>, 2>;
+extern template class OTBImageBase_EXPORT Image<std::complex<float>, 2>;
+extern template class OTBImageBase_EXPORT Image<std::complex<double>, 2>;
 
 }
 

@@ -189,7 +189,7 @@ namespace otb {
 
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class ImageRegionAdaptativeSplitter<2u>;
+extern template class OTBCommon_EXPORT ImageRegionAdaptativeSplitter<2u>;
 
 }
 

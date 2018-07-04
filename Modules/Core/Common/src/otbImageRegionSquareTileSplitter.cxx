@@ -23,6 +23,6 @@
 namespace otb {
 
 // Explicit instanciation of common types
-template class ImageRegionSquareTileSplitter<2u>;
+template class OTBCommon_EXPORT ImageRegionSquareTileSplitter<2u>;
 
 }

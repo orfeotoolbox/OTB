@@ -23,6 +23,6 @@
 namespace otb {
 
 // Explicit instanciation of common types
-template class ImageRegionAdaptativeSplitter<2u>;
+template class OTBCommon_EXPORT ImageRegionAdaptativeSplitter<2u>;
 
 }
