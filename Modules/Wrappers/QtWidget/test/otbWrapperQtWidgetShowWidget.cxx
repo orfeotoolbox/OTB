@@ -77,7 +77,7 @@ int otbWrapperQtWidgetShowWidget(int argc, char* argv[])
     gui->CreateGui();
   
     // Connect the View "Quit" signal, to the mainWindow close slot
-    QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
+    QObject::connect(gui, &QtWidgetView::QuitSignal, mainWindow, &QMainWindow::close);
   
     // Create a progressReport object
     QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel(), mainWindow);

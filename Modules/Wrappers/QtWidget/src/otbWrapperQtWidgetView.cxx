@@ -72,18 +72,18 @@ QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
   m_QuitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
 
   QObject::connect(
-    m_Model, SIGNAL( SetProgressReportBegin() ),
-    this, SLOT( OnProgressReportBegin() )
+    m_Model, &QtWidgetModel::SetProgressReportBegin,
+    this, &QtWidgetView::OnProgressReportBegin
   );
 
   QObject::connect(
-    m_Model, SIGNAL( SetProgressReportDone( int ) ),
-    this, SLOT( OnProgressReportEnd( int ) )
+    m_Model, &QtWidgetModel::SetProgressReportDone,
+    this, &QtWidgetView::OnProgressReportEnd
   );
 
   QObject::connect(
-    m_Model, SIGNAL( ExceptionRaised( QString ) ),
-    this, SLOT( OnExceptionRaised( QString ) )
+    m_Model, &QtWidgetModel::ExceptionRaised,
+    this, &QtWidgetView::OnExceptionRaised
   );
 }
 
@@ -101,14 +101,14 @@ void QtWidgetView::CreateGui()
 
   m_TabWidget->addTab(CreateInputWidgets(), tr("Parameters"));
   m_LogText = new QTextEdit(this);
-  connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), m_LogText, SLOT(append(QString) ) );
+  connect( m_Model->GetLogOutput(), &QtLogOutput::NewContentLog, m_LogText, &QTextEdit::append );
   m_TabWidget->addTab(m_LogText, tr("Logs"));
   m_TabWidget->addTab(CreateDoc(), tr("Documentation"));
   mainLayout->addWidget(m_TabWidget);
 
   m_Message = new QLabel("<center><font color=\"#FF0000\">"+tr("Select parameters")+"</font></center>", this);
-  connect( m_Model, SIGNAL(SetApplicationReady(bool)), this, SLOT( UpdateMessageAfterApplicationReady(bool)) );
-  connect( m_Model, SIGNAL(SetProgressReportDone(int)), this, SLOT(UpdateMessageAfterExecution(int)) );
+  connect( m_Model, &QtWidgetModel::SetApplicationReady, this, &QtWidgetView::UpdateMessageAfterApplicationReady );
+  connect( m_Model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetView::UpdateMessageAfterExecution );
   mainLayout->addWidget(m_Message);
 
   otb::Wrapper::QtWidgetSimpleProgressReport * progressReport = new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model, this);
@@ -190,17 +190,17 @@ QWidget* QtWidgetView::CreateFooter()
   m_ExecButton->setDefault(true);
   m_ExecButton->setEnabled(false);
   m_ExecButton->setText(QObject::tr("Execute"));
-  connect( m_Model, SIGNAL( SetApplicationReady( bool ) ), m_ExecButton, SLOT( setEnabled( bool ) ));
-  QObject::connect( m_ExecButton, SIGNAL( clicked() ), this, SLOT( OnExecButtonClicked() ));
-  QObject::connect( this, SIGNAL( ExecuteAndWriteOutput() ), m_Model, SLOT( ExecuteAndWriteOutputSlot() ));
-  QObject::connect( this, SIGNAL( Stop() ), m_Model, SIGNAL( Stop() ));
+  connect( m_Model, &QtWidgetModel::SetApplicationReady, m_ExecButton, &QPushButton::setEnabled );
+  connect( m_ExecButton, &QPushButton::clicked, this, &QtWidgetView::OnExecButtonClicked );
+  connect( this, &QtWidgetView::ExecuteAndWriteOutput, m_Model, &QtWidgetModel::ExecuteAndWriteOutputSlot );
+  connect( this, &QtWidgetView::Stop, m_Model, &QtWidgetModel::Stop );
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
-  connect(m_QuitButton, SIGNAL( clicked() ), this, SLOT( close() ));
+  connect(m_QuitButton, &QPushButton::clicked, this, &QtWidgetView::close );
 
   // Add Ctrl-Q shortcut to quit
-  connect( m_QuitShortcut, SIGNAL(activated()), this, SLOT(close()) );
+  connect( m_QuitShortcut, &QShortcut::activated, this, &QtWidgetView::close );
 
   // Put the buttons on the right
   footerLayout->addStretch();

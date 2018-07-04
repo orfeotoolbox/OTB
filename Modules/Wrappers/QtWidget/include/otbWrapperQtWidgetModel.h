@@ -146,16 +146,6 @@ signals:
 
   void Stop();
 
-protected slots:
-  /**
-   * \brief Slot called when execution is requested (e.g. by
-   * otb::Wrapper::QtWidgetView).
-   *
-   * This slot is protected so it can only be called via Qt
-   * signal/slot mechanism and not directly by extern caller.
-   */
-  void ExecuteAndWriteOutputSlot();
-
 public slots:
   /**
    * \brief Slots called every time one of the widget needs to be
@@ -163,6 +153,12 @@ public slots:
    *
    */
   void NotifyUpdate();
+
+  /**
+   * \brief Slot called when execution is requested (e.g. by
+   * otb::Wrapper::QtWidgetView).
+   */
+  void ExecuteAndWriteOutputSlot();
 
 private slots:
   /**

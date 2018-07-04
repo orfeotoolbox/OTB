@@ -103,6 +103,8 @@ public:
 // Public SLOTS.
 public slots:
 
+  void UnhandledException(QString message);
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -144,7 +146,6 @@ protected slots:
    */
   void OnExecButtonClicked();
 
-  void UnhandledException(QString message);
   void OnExceptionRaised( QString what );
   
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
