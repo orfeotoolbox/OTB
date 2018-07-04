@@ -318,7 +318,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMulti3DMapToDEMFilter.txx"
+#include "otbMulti3DMapToDEMFilter.hxx"
 #endif
 
 #endif

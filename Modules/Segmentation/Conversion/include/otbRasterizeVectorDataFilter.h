@@ -170,7 +170,7 @@ private:
 
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbRasterizeVectorDataFilter.txx"
+#include "otbRasterizeVectorDataFilter.hxx"
 #endif
 
 #endif

@@ -95,7 +95,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSarDeburstImageFilter.txx"
+#include "otbSarDeburstImageFilter.hxx"
 #endif
 
 

@@ -89,7 +89,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNumberOfLinesStrippedStreamingManager.txx"
+#include "otbNumberOfLinesStrippedStreamingManager.hxx"
 #endif
 
 #endif

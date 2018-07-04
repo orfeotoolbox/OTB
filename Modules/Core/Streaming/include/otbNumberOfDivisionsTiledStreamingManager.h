@@ -84,7 +84,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNumberOfDivisionsTiledStreamingManager.txx"
+#include "otbNumberOfDivisionsTiledStreamingManager.hxx"
 #endif
 
 #endif

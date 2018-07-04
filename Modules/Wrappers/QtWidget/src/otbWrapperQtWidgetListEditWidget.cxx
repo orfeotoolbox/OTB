@@ -619,6 +619,11 @@ ListEditWidget
 
   assert( GetItemModel()!=nullptr );
 
+  //Notify the ParameterList that the parameter has been modified (UserValue)
+  // ParameterList is not available in this class, transfer the signal to WidgetParameterList
+  emit ValueChanged();
+
+  //Then, trigger the update the application parameters
   emit Updated();
 }
 

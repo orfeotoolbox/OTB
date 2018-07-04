@@ -130,7 +130,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDifferenceImageFilter.txx"
+#include "otbDifferenceImageFilter.hxx"
 #endif
 
 #endif

@@ -107,7 +107,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRandomPointSetSource.txx"
+#include "otbRandomPointSetSource.hxx"
 #endif
 
 #endif

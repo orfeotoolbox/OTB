@@ -387,7 +387,7 @@ public:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectDetectionClassifier.txx"
+#include "otbObjectDetectionClassifier.hxx"
 #endif
 
 #endif

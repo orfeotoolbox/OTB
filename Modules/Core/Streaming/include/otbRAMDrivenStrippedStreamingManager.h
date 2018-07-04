@@ -101,7 +101,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAMDrivenStrippedStreamingManager.txx"
+#include "otbRAMDrivenStrippedStreamingManager.hxx"
 #endif
 
 #endif

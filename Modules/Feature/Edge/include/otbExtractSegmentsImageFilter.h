@@ -155,7 +155,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbExtractSegmentsImageFilter.txx"
+#include "otbExtractSegmentsImageFilter.hxx"
 #endif
 
 #endif

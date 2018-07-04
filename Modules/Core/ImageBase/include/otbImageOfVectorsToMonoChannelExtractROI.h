@@ -116,7 +116,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageOfVectorsToMonoChannelExtractROI.txx"
+#include "otbImageOfVectorsToMonoChannelExtractROI.hxx"
 #endif
 
 #endif

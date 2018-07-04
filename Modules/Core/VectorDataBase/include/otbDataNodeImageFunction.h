@@ -206,7 +206,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDataNodeImageFunction.txx"
+#include "otbDataNodeImageFunction.hxx"
 #endif
 
 #endif

@@ -125,7 +125,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRegionImageToRectangularPathListFilter.txx"
+#include "otbRegionImageToRectangularPathListFilter.hxx"
 #endif
 
 #endif

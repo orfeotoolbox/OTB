@@ -390,7 +390,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMarkovRandomFieldFilter.txx"
+#include "otbMarkovRandomFieldFilter.hxx"
 #endif
 
 #endif

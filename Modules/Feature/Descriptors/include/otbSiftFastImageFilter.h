@@ -110,7 +110,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSiftFastImageFilter.txx"
+#include "otbSiftFastImageFilter.hxx"
 #endif
 
 #endif

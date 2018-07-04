@@ -74,7 +74,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLambertConformalConicMapProjection.txx"
+#include "otbLambertConformalConicMapProjection.hxx"
 #endif
 
 #endif

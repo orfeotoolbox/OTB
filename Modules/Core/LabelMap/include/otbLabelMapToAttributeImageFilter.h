@@ -121,7 +121,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapToAttributeImageFilter.txx"
+#include "otbLabelMapToAttributeImageFilter.hxx"
 #endif
 
 #endif

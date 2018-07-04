@@ -360,7 +360,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingImageToOGRLayerSegmentationFilter.txx"
+#include "otbStreamingImageToOGRLayerSegmentationFilter.hxx"
 #endif
 
 #endif

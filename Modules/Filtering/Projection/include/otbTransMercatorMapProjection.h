@@ -75,7 +75,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTransMercatorMapProjection.txx"
+#include "otbTransMercatorMapProjection.hxx"
 #endif
 
 #endif

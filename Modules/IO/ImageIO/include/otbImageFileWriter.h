@@ -27,6 +27,8 @@
 #include "otbExtendedFilenameToWriterOptions.h"
 #include "itkFastMutexLock.h"
 #include "OTBImageIOExport.h"
+#include "otbImage.h"
+#include "otbVectorImage.h"
 
 namespace otb
 {
@@ -288,13 +290,8 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFileWriter.txx"
+#include "otbImageFileWriter.hxx"
 #endif
-
-
-#include "otbImage.h"
-#include "otbVectorImage.h"
-
 
 namespace otb {
 

@@ -110,7 +110,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDecimateImageFilter.txx"
+#include "otbDecimateImageFilter.hxx"
 #endif
 
 #endif

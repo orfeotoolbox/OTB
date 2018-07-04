@@ -201,7 +201,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingResampleImageFilter.txx"
+#include "otbStreamingResampleImageFilter.hxx"
 #endif
 
 #endif

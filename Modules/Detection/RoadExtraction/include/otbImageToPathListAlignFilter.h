@@ -152,7 +152,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToPathListAlignFilter.txx"
+#include "otbImageToPathListAlignFilter.hxx"
 #endif
 
 #endif

@@ -89,7 +89,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMActivationBuilder.txx"
+#include "otbSOMActivationBuilder.hxx"
 #endif
 
 #endif

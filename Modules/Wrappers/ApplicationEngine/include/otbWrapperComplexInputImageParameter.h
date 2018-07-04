@@ -143,7 +143,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWrapperComplexInputImageParameter.txx"
+#include "otbWrapperComplexInputImageParameter.hxx"
 #endif
 
 #endif

@@ -32,6 +32,8 @@
 #include "otbImageIOBase.h"
 #include "otbImageFileReaderException.h"
 #include "itkImageRegion.h"
+#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
@@ -188,11 +190,8 @@ private:
 } //namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFileReader.txx"
+#include "otbImageFileReader.hxx"
 #endif
-
-#include "otbImage.h"
-#include "otbVectorImage.h"
 
 namespace otb {
 // Prevent implicit instanciation of common types to improve build performance

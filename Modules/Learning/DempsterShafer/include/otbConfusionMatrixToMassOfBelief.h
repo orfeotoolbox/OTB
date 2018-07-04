@@ -164,7 +164,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConfusionMatrixToMassOfBelief.txx"
+#include "otbConfusionMatrixToMassOfBelief.hxx"
 #endif
 
 #endif
