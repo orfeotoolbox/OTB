@@ -30,9 +30,8 @@
 #include "itkImageSource.h"
 #endif
 #include "otbImageIOBase.h"
-#include "itkExceptionObject.h"
+#include "otbImageFileReaderException.h"
 #include "itkImageRegion.h"
-
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
@@ -40,29 +39,6 @@
 
 namespace otb
 {
-
-/** \class ImageFileReaderException
- *
- * \brief Base exception class for IO conflicts.
- *
- * \ingroup OTBImageIO
- */
-class OTBImageIO_EXPORT ImageFileReaderException : public itk::ExceptionObject
-{
-public:
-  /** Run-time information. */
-  itkTypeMacro( ImageFileReaderException, ExceptionObject );
-
-  /** Constructor. */
-  ImageFileReaderException(const char *file, unsigned int line,
-                           const std::string& desc = "",
-                           const std::string& filename = "");
-
-  /** Destructor. */
-  ~ImageFileReaderException();
-
-  std::string m_Filename;
-};
 
 /** \class ImageFileReader
  * \brief  Reads image data.

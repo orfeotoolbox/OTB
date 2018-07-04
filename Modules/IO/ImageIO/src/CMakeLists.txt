@@ -21,6 +21,7 @@
 set(OTBImageIO_SRC
   otbImageIOFactory.cxx
   otbMultiImageFileWriter.cxx
+  otbImageFileReaderException.cxx
   otbImageFileReader.cxx
   otbImageFileWriter.cxx
   )
