@@ -172,7 +172,7 @@ private:
 } // end of namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleToHistogramListGenerator.txx"
+#include "otbListSampleToHistogramListGenerator.hxx"
 #endif
 
 #endif

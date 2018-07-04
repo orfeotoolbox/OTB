@@ -105,7 +105,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDrawPathFilter.txx"
+#include "otbDrawPathFilter.hxx"
 #endif
 
 #endif

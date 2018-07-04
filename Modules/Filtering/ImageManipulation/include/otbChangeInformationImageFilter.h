@@ -86,7 +86,7 @@ private:
 } // End of namespace OTB
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbChangeInformationImageFilter.txx"
+#include "otbChangeInformationImageFilter.hxx"
 #endif
 
 #endif

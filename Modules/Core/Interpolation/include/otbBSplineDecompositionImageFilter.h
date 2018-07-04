@@ -125,7 +125,7 @@ private:
 } // namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBSplineDecompositionImageFilter.txx"
+#include "otbBSplineDecompositionImageFilter.hxx"
 #endif
 
 #endif

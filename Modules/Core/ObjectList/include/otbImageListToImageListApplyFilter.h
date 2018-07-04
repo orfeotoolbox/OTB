@@ -107,7 +107,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListToImageListApplyFilter.txx"
+#include "otbImageListToImageListApplyFilter.hxx"
 #endif
 
 #endif

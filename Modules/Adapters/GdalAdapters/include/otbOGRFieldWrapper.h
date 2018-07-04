@@ -222,7 +222,7 @@ private:
 } // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRFieldWrapper.txx"
+#include "otbOGRFieldWrapper.hxx"
 #endif
 
 #endif // otbOGRFieldWrapper_h

@@ -228,7 +228,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingInnerProductVectorImageFilter.txx"
+#include "otbStreamingInnerProductVectorImageFilter.hxx"
 #endif
 
 #endif

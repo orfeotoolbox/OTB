@@ -245,7 +245,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToSURFKeyPointSetFilter.txx"
+#include "otbImageToSURFKeyPointSetFilter.hxx"
 #endif
 
 #endif

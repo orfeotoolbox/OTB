@@ -146,7 +146,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFlusserMomentsImageFunction.txx"
+#include "otbFlusserMomentsImageFunction.hxx"
 #endif
 
 #endif

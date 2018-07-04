@@ -277,7 +277,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbReflectanceToSurfaceReflectanceImageFilter.txx"
+#include "otbReflectanceToSurfaceReflectanceImageFilter.hxx"
 #endif
 
 #endif

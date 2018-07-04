@@ -218,7 +218,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNormalizeVectorImageFilter.txx"
+#include "otbNormalizeVectorImageFilter.hxx"
 #endif
 
 #endif // otbNormalizeVectorImageFilter_h

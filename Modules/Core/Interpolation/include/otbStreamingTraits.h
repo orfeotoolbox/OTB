@@ -122,7 +122,7 @@ public:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingTraits.txx"
+#include "otbStreamingTraits.hxx"
 #endif
 
 #endif

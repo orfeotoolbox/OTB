@@ -71,7 +71,7 @@ private:
 } //namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPCAModelFactory.txx"
+#include "otbPCAModelFactory.hxx"
 #endif
 
 #endif

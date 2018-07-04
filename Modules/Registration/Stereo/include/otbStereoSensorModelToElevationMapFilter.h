@@ -251,7 +251,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStereoSensorModelToElevationMapFilter.txx"
+#include "otbStereoSensorModelToElevationMapFilter.hxx"
 #endif
 
 #endif

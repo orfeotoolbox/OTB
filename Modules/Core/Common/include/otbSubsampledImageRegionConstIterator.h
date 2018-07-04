@@ -250,7 +250,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSubsampledImageRegionConstIterator.txx"
+#include "otbSubsampledImageRegionConstIterator.hxx"
 #endif
 
 #endif

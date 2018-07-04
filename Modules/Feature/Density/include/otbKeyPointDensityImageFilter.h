@@ -121,7 +121,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKeyPointDensityImageFilter.txx"
+#include "otbKeyPointDensityImageFilter.hxx"
 #endif
 
 #endif

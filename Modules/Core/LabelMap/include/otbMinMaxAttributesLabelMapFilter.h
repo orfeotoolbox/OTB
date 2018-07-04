@@ -111,7 +111,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMinMaxAttributesLabelMapFilter.txx"
+#include "otbMinMaxAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

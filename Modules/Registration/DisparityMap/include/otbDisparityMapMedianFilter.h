@@ -182,7 +182,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityMapMedianFilter.txx"
+#include "otbDisparityMapMedianFilter.hxx"
 #endif
 
 #endif

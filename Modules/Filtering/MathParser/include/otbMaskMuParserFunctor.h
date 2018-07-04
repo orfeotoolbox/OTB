@@ -127,7 +127,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaskMuParserFunctor.txx"
+#include "otbMaskMuParserFunctor.hxx"
 #endif
 
 #endif

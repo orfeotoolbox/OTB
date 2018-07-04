@@ -185,7 +185,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityMapTo3DFilter.txx"
+#include "otbDisparityMapTo3DFilter.hxx"
 #endif
 
 #endif

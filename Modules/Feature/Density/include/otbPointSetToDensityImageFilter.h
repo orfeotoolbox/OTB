@@ -113,7 +113,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetToDensityImageFilter.txx"
+#include "otbPointSetToDensityImageFilter.hxx"
 #endif
 
 #endif

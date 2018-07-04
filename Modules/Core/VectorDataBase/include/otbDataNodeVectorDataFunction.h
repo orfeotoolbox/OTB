@@ -106,7 +106,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDataNodeVectorDataFunction.txx"
+#include "otbDataNodeVectorDataFunction.hxx"
 #endif
 
 #endif

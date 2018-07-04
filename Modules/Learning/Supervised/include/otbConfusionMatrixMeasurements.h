@@ -184,7 +184,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConfusionMatrixMeasurements.txx"
+#include "otbConfusionMatrixMeasurements.hxx"
 #endif
 
 #endif

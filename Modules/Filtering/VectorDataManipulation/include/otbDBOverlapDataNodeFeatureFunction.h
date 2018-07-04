@@ -100,7 +100,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDBOverlapDataNodeFeatureFunction.txx"
+#include "otbDBOverlapDataNodeFeatureFunction.hxx"
 #endif
 
 #endif
