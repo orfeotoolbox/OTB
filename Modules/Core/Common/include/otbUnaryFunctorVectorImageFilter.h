@@ -124,7 +124,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorVectorImageFilter.txx"
+#include "otbUnaryFunctorVectorImageFilter.hxx"
 #endif
 
 #endif

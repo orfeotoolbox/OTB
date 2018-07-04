@@ -155,7 +155,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFunctionWithNeighborhoodToImageFilter.txx"
+#include "otbFunctionWithNeighborhoodToImageFilter.hxx"
 #endif
 
 #endif

@@ -118,7 +118,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDrawLineSpatialObjectFilter.txx"
+#include "otbDrawLineSpatialObjectFilter.hxx"
 #endif
 
 #endif

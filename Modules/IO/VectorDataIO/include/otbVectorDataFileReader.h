@@ -151,7 +151,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataFileReader.txx"
+#include "otbVectorDataFileReader.hxx"
 #endif
 
 #endif // otbVectorDataFileReader_h

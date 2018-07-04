@@ -281,7 +281,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHooverInstanceFilter.txx"
+#include "otbHooverInstanceFilter.hxx"
 #endif
 
 #endif

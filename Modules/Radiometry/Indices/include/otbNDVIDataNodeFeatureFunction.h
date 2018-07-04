@@ -131,7 +131,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNDVIDataNodeFeatureFunction.txx"
+#include "otbNDVIDataNodeFeatureFunction.hxx"
 #endif
 
 #endif

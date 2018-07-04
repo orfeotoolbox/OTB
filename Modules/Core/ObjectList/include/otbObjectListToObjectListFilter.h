@@ -122,7 +122,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectListToObjectListFilter.txx"
+#include "otbObjectListToObjectListFilter.hxx"
 #endif
 
 #endif

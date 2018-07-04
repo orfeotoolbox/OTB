@@ -173,7 +173,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbImageReference.txx"
+// #include "otbImageReference.hxx"
 #endif
 
 #endif // otbImageReference_h

@@ -73,7 +73,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSinusoidalMapProjection.txx"
+#include "otbSinusoidalMapProjection.hxx"
 #endif
 
 #endif

@@ -191,7 +191,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftSegmentationFilter.txx"
+#include "otbMeanShiftSegmentationFilter.hxx"
 #endif
 
 #endif

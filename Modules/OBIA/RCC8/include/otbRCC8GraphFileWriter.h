@@ -152,7 +152,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8GraphFileWriter.txx"
+#include "otbRCC8GraphFileWriter.hxx"
 #endif
 
 #endif

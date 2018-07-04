@@ -146,7 +146,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapToSimulatedImageFilter.txx"
+#include "otbLabelMapToSimulatedImageFilter.hxx"
 #endif
 
 #endif

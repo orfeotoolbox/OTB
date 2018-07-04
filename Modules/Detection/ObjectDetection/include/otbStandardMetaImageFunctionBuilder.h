@@ -190,7 +190,7 @@ private:
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStandardMetaImageFunctionBuilder.txx"
+#include "otbStandardMetaImageFunctionBuilder.hxx"
 #endif
 
 #endif

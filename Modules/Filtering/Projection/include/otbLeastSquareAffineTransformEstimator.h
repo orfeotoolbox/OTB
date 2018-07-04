@@ -170,7 +170,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLeastSquareAffineTransformEstimator.txx"
+#include "otbLeastSquareAffineTransformEstimator.hxx"
 #endif
 
 #endif

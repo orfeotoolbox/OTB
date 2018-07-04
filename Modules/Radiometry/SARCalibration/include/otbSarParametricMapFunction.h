@@ -146,7 +146,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSarParametricMapFunction.txx"
+#include "otbSarParametricMapFunction.hxx"
 #endif
 
 #endif

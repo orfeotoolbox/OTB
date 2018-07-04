@@ -149,7 +149,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGaborFilterGenerator.txx"
+#include "otbGaborFilterGenerator.hxx"
 #endif
 
 #endif

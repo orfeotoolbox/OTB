@@ -119,7 +119,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPerBandVectorImageFilter.txx"
+#include "otbPerBandVectorImageFilter.hxx"
 #endif
 
 #endif

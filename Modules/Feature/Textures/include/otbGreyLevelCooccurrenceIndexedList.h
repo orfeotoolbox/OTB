@@ -191,7 +191,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGreyLevelCooccurrenceIndexedList.txx"
+#include "otbGreyLevelCooccurrenceIndexedList.hxx"
 #endif
 
 #endif

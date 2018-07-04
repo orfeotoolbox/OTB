@@ -97,7 +97,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWatershedSegmentationFilter.txx"
+#include "otbWatershedSegmentationFilter.hxx"
 #endif
 
 #endif

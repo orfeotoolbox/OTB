@@ -93,7 +93,7 @@ private:
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFlusserMomentsIFFactory.txx"
+#include "otbFlusserMomentsIFFactory.hxx"
 #endif
 
 #endif

@@ -183,7 +183,7 @@ private:
 } // end namespace otb
 
 // #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbPathListSource.txx"
+// #include "otbPathListSource.hxx"
 // #endif
 
 #endif

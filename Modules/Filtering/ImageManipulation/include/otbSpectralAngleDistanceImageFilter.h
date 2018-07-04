@@ -111,7 +111,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpectralAngleDistanceImageFilter.txx"
+#include "otbSpectralAngleDistanceImageFilter.hxx"
 #endif
 
 #endif

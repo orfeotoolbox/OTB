@@ -146,7 +146,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbScalarImageToPanTexTextureFilter.txx"
+#include "otbScalarImageToPanTexTextureFilter.hxx"
 #endif
 
 #endif

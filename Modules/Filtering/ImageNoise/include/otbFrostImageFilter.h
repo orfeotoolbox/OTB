@@ -129,7 +129,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFrostImageFilter.txx"
+#include "otbFrostImageFilter.hxx"
 #endif
 
 #endif

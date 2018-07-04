@@ -87,7 +87,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAndBAndNIRIndexImageFilter.txx"
+#include "otbRAndBAndNIRIndexImageFilter.hxx"
 #endif
 
 #endif

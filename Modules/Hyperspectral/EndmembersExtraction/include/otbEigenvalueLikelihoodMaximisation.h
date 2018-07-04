@@ -124,7 +124,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEigenvalueLikelihoodMaximisation.txx"
+#include "otbEigenvalueLikelihoodMaximisation.hxx"
 #endif
 
 #endif

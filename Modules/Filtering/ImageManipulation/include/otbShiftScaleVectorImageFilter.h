@@ -220,7 +220,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShiftScaleVectorImageFilter.txx"
+#include "otbShiftScaleVectorImageFilter.hxx"
 #endif
 
 #endif

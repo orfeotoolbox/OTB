@@ -88,7 +88,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryImageMinimalBoundingRegionCalculator.txx"
+#include "otbBinaryImageMinimalBoundingRegionCalculator.hxx"
 #endif
 
 #endif

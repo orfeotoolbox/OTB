@@ -553,7 +553,7 @@ inline bool operator!=(Layer const& lhs, Layer const& rhs)
 } } // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbLayerWrapper.txx"
+// #include "otbLayerWrapper.hxx"
 #endif
 
 #endif // otbOGRLayerWrapper_h

@@ -115,7 +115,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFittingPolygonListFilter.txx"
+#include "otbImageFittingPolygonListFilter.hxx"
 #endif
 
 #endif

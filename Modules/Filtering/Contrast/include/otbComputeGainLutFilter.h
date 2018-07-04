@@ -122,7 +122,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComputeGainLutFilter.txx"
+#include "otbComputeGainLutFilter.hxx"
 #endif
 
 #endif
