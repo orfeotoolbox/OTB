@@ -124,6 +124,20 @@ otb_test_application(NAME apTvUtDynamicConvertFloat
                              ${OTBAPP_BASELINE}/apTvUtDynamicConvertFloatOutput.tif
                              ${TEMP}/apTvUtDynamicConvertFloatOutput.tif)
 
+otb_test_application(NAME apTvUtDynamicConvertMask
+                     APP DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -out ${TEMP}/apTvUtDynamicConvertMaskOutput.tif
+                             -outmin 0
+                             -outmax 255
+                             -quantile.low 4
+                             -quantile.high 4
+                             -mask ${INPUTDATA}/QB_Toulouse_Ortho_PAN_mask.tif
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/apTvUtDynamicConvertMaskOutput.tif
+                             ${TEMP}/apTvUtDynamicConvertMaskOutput.tif)
+
+
 #----------- PixelInfo TESTS ----------------
 
 #----------- ExtractROI TESTS ----------------

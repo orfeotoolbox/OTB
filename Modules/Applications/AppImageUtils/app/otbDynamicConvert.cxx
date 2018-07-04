@@ -78,6 +78,8 @@ public:
   typedef StreamingShrinkImageFilter<FloatVectorImageType,
     FloatVectorImageType> ShrinkFilterType;
 
+  typedef StreamingShrinkImageFilter<UInt8ImageType, UInt8ImageType> UInt8ShrinkFilterType;
+
   typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
   typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
     FloatVectorImageType,
@@ -135,8 +137,9 @@ private:
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
     SetParameterDescription("mask",
-      "The masked pixels won't be used to adapt the dynamic "
-      "(the mask must have the same dimensions as the input image)");
+      "Optional binary mask to only process part of the input image."
+      "Pixels where the mask is zero will not be processed."
+      "The mask must have the same dimensions as the input image.");
     MandatoryOff("mask");
     DisableParameter("mask");
 
@@ -300,15 +303,15 @@ private:
     // Now we generate the list of samples
     if (IsParameterEnabled("mask"))
     {
-      FloatVectorImageType::Pointer mask = this->GetParameterImage("mask");
-      ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
+      UInt8ImageType::Pointer mask = this->GetParameterUInt8Image("mask");
+      UInt8ShrinkFilterType::Pointer maskShrinkFilter = UInt8ShrinkFilterType::New();
       maskShrinkFilter->SetShrinkFactor(shrinkFactor);
       maskShrinkFilter->SetInput(mask);
       maskShrinkFilter->GetStreamer()->
         SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
       maskShrinkFilter->Update();
 
-      auto itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
+      auto itMask = itk::ImageRegionConstIterator<UInt8ImageType>(
         maskShrinkFilter->GetOutput(),
         maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
 
@@ -317,8 +320,8 @@ private:
       itMask.GoToBegin();
       for(; !it.IsAtEnd(); ++it, ++itMask)
       {
-        // float values, so the threshold is set to 0.5
-        if (itMask.Get()[0] > 0.5)
+        // valid pixels are non zero
+        if (itMask.Get() != 0)
         {
           listSample->PushBack(it.Get());
         }
