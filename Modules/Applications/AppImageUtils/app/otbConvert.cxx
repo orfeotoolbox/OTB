@@ -129,8 +129,8 @@ private:
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
     SetParameterDescription("mask",
-      "Optional binary mask to only process part of the input image."
-      "Only pixels where the mask is less than 0.5 will be processed."
+      "Optional binary mask to only process part of the input image. "
+      "Only pixels where the mask is less than 0.5 will be processed. "
       "The mask must have the same dimensions as the input image.");
     MandatoryOff("mask");
     DisableParameter("mask");
