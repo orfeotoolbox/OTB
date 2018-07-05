@@ -291,15 +291,12 @@ protected:
         itkExceptionMacro(<< "File : " << modelFileName << " couldn't be opened");
       }
 
-      // get the line with the centroids (starts with "2 ")
+      // get the end line with the centroids
       std::string line, centroidLine;
       while(std::getline(infile,line))
       {
-        if (line.size() > 2 && line[0] == '2' && line[1] == ' ')
-          {
+        if (!line.empty())
           centroidLine = line;
-          break;
-          }
       }
 
       std::vector<std::string> centroidElm;

@@ -33,9 +33,8 @@
 #endif
 #include "otb_shark.h"
 #include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
-#include <shark/Models/LinearModel.h>
-#include <shark/Models/ConcatenatedModel.h>
-#include <shark/Models/NeuronLayers.h>
+#include <shark/Models/FFNet.h>
+#include <shark/Models/Autoencoder.h>
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
@@ -77,9 +76,9 @@ public:
   typedef typename Superclass::ConfidenceListSampleType         ConfidenceListSampleType;
 
   /// Neural network related typedefs
-  typedef shark::ConcatenatedModel<shark::RealVector> ModelType;
-  typedef shark::LinearModel<shark::RealVector,NeuronType> LayerType;
-  typedef shark::LinearModel<shark::RealVector, shark::LinearNeuron> OutLayerType;
+  typedef shark::Autoencoder<NeuronType,shark::LinearNeuron> OutAutoencoderType;
+  typedef shark::Autoencoder<NeuronType,NeuronType> AutoencoderType;
+  typedef shark::FFNet<NeuronType,shark::LinearNeuron> NetworkType;
 
   itkNewMacro(Self);
   itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
@@ -128,16 +127,18 @@ public:
 
   void Train() override;
 
-  template <class T>
+  template <class T, class Autoencoder>
   void TrainOneLayer(
     shark::AbstractStoppingCriterion<T> & criterion,
+    Autoencoder &,
     unsigned int,
     shark::Data<shark::RealVector> &,
     std::ostream&);
 
-  template <class T>
+  template <class T, class Autoencoder>
   void TrainOneSparseLayer(
     shark::AbstractStoppingCriterion<T> & criterion,
+    Autoencoder &,
     unsigned int,
     shark::Data<shark::RealVector> &,
     std::ostream&);
@@ -165,9 +166,7 @@ protected:
 
 private:
   /** Internal Network */
-  ModelType m_Encoder;
-  std::vector<LayerType> m_InLayers;
-  OutLayerType m_OutLayer;
+  NetworkType m_Net;
   itk::Array<unsigned int> m_NumberOfHiddenNeurons;
   /** Training parameters */
   unsigned int m_NumberOfIterations; // stop the training after a fixed number of iterations
@@ -179,7 +178,7 @@ private:
   itk::Array<double> m_Beta; // Sparsity regularization parameter
   double m_InitFactor; // Weight initialization factor (the weights are intialized at m_initfactor/sqrt(inputDimension)  )
 
-  bool m_WriteLearningCurve; // Flag for writting the learning curve into a txt file
+  bool m_WriteLearningCurve; // Flag for writing the learning curve into a txt file
   std::string m_LearningCurveFileName; // Name of the output learning curve printed after training
   bool m_WriteWeights;
 };
