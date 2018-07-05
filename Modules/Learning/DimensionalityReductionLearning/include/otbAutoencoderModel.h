@@ -33,8 +33,9 @@
 #endif
 #include "otb_shark.h"
 #include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
-#include <shark/Models/FFNet.h>
-#include <shark/Models/Autoencoder.h>
+#include <shark/Models/LinearModel.h>
+#include <shark/Models/ConcatenatedModel.h>
+#include <shark/Models/NeuronLayers.h>
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
@@ -76,9 +77,9 @@ public:
   typedef typename Superclass::ConfidenceListSampleType         ConfidenceListSampleType;
 
   /// Neural network related typedefs
-  typedef shark::Autoencoder<NeuronType,shark::LinearNeuron> OutAutoencoderType;
-  typedef shark::Autoencoder<NeuronType,NeuronType> AutoencoderType;
-  typedef shark::FFNet<NeuronType,shark::LinearNeuron> NetworkType;
+  typedef shark::ConcatenatedModel<shark::RealVector> ModelType;
+  typedef shark::LinearModel<shark::RealVector,NeuronType> LayerType;
+  typedef shark::LinearModel<shark::RealVector, shark::LinearNeuron> OutLayerType;
 
   itkNewMacro(Self);
   itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
@@ -127,18 +128,16 @@ public:
 
   void Train() override;
 
-  template <class T, class Autoencoder>
+  template <class T>
   void TrainOneLayer(
     shark::AbstractStoppingCriterion<T> & criterion,
-    Autoencoder &,
     unsigned int,
     shark::Data<shark::RealVector> &,
     std::ostream&);
 
-  template <class T, class Autoencoder>
+  template <class T>
   void TrainOneSparseLayer(
     shark::AbstractStoppingCriterion<T> & criterion,
-    Autoencoder &,
     unsigned int,
     shark::Data<shark::RealVector> &,
     std::ostream&);
@@ -166,7 +165,9 @@ protected:
 
 private:
   /** Internal Network */
-  NetworkType m_Net;
+  ModelType m_Encoder;
+  std::vector<LayerType> m_InLayers;
+  OutLayerType m_OutLayer;
   itk::Array<unsigned int> m_NumberOfHiddenNeurons;
   /** Training parameters */
   unsigned int m_NumberOfIterations; // stop the training after a fixed number of iterations

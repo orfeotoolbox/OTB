@@ -137,11 +137,11 @@ PCAModel<TInputValue>::Load(const std::string & filename, const std::string & /*
   ifs.close();
   if (this->m_Dimension ==0)
   {
-    this->m_Dimension = m_Encoder.outputSize();
+    this->m_Dimension = m_Encoder.outputShape()[0];
   }
 
   auto eigenvectors = m_Encoder.matrix();
-  eigenvectors.resize(this->m_Dimension,m_Encoder.inputSize());
+  eigenvectors.resize(this->m_Dimension,m_Encoder.inputShape()[0]);
 
   m_Encoder.setStructure(eigenvectors, m_Encoder.offset() );
 }

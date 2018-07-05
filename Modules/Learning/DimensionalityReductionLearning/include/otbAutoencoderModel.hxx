@@ -34,18 +34,17 @@
 #include "otbSharkUtils.h"
 //include train function
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
-#include <shark/ObjectiveFunctions/SparseAutoencoderError.h>//the error function performing the regularisation of the hidden neurons
+//~ #include <shark/ObjectiveFunctions/SparseAutoencoderError.h>//the error function performing the regularisation of the hidden neurons
 
 #include <shark/Algorithms/GradientDescent/Rprop.h>// the RProp optimization algorithm
 #include <shark/ObjectiveFunctions/Loss/SquaredLoss.h> // squared loss used for regression
 #include <shark/ObjectiveFunctions/Regularizer.h> //L2 regulariziation
-#include <shark/Models/ImpulseNoiseModel.h> //noise source to corrupt the inputs
-#include <shark/Models/ConcatenatedModel.h>//to concatenate the noise with the model
+//~ #include <shark/Models/ImpulseNoiseModel.h> //noise source to corrupt the inputs
 
 #include <shark/Algorithms/StoppingCriteria/MaxIterations.h> //A simple stopping criterion that stops after a fixed number of iterations
 #include <shark/Algorithms/StoppingCriteria/TrainingProgress.h> //Stops when the algorithm seems to converge, Tracks the progress of the training error over a period of time
 
-#include <shark/Algorithms/GradientDescent/SteepestDescent.h>
+#include <shark/Algorithms/GradientDescent/Adam.h>
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
@@ -83,96 +82,56 @@ AutoencoderModel<TInputValue,NeuronType>
     }
 
   // Initialization of the feed forward neural network
-  std::vector<size_t> layers;
-  layers.push_back(shark::dataDimension(inputSamples));
+  m_Encoder = ModelType();
+  m_InLayers.clear();
+  size_t previousShape = shark::dataDimension(inputSamples);
   for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
     {
-    layers.push_back(m_NumberOfHiddenNeurons[i]);
+    m_InLayers.push_back( LayerType(previousShape, m_NumberOfHiddenNeurons[i]) );
+    previousShape = m_NumberOfHiddenNeurons[i];
+    m_Encoder.add(&(m_InLayers.back()), true);
     }
-
   for (unsigned int i = std::max(0,static_cast<int>(m_NumberOfHiddenNeurons.Size()-1)) ; i > 0; --i)
     {
-    layers.push_back(m_NumberOfHiddenNeurons[i-1]);
+    m_InLayers.push_back( LayerType(previousShape, m_NumberOfHiddenNeurons[i-1]) );
+    previousShape = m_NumberOfHiddenNeurons[i-1];
     }
+  m_OutLayer = OutLayerType(previousShape, shark::dataDimension(inputSamples));
 
-  layers.push_back(shark::dataDimension(inputSamples));
-  m_Net.setStructure(layers);
-  shark::initRandomNormal(m_Net,0.1);
-
-  // Training of the first Autoencoder (first and last layer of the FF network)
-  if (m_Epsilon > 0)
+  // Training of the autoencoders pairwise, starting from the first and last layers
+  for (unsigned int i = 0 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
     {
-    shark::TrainingProgress<> criterion(5,m_Epsilon);
-
-    OutAutoencoderType net;
-    // Shark doesn't allow to train a layer using a sparsity term AND a noisy input. 
-    if (m_Noise[0] != 0)
+    if (m_Epsilon > 0)
       {
-      TrainOneLayer(criterion, net, 0, inputSamples, ofs);
-      }
-    else
-      {
-      TrainOneSparseLayer(criterion, net, 0, inputSamples, ofs);
-      }
-    criterion.reset();
-    }
-  else
-    {
-    shark::MaxIterations<> criterion(m_NumberOfIterations);
-
-    OutAutoencoderType net;
-    // Shark doesn't allow to train a layer using a sparsity term AND a noisy input.
-    if (m_Noise[0] != 0)
-      {
-      TrainOneLayer(criterion, net, 0, inputSamples, ofs);
-      otbMsgDevMacro(<< "m_Noise " << m_Noise[0]);
-      }
-    else
-      {
-      TrainOneSparseLayer(criterion, net, 0, inputSamples, ofs);
-      }
-    criterion.reset();
-    }
-
-  // Training of the other autoencoders
-  if (m_Epsilon > 0)
-    {
-    shark::TrainingProgress<> criterion(5,m_Epsilon);
-
-    for (unsigned int i = 1 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
-      {
-      AutoencoderType net;
+      shark::TrainingProgress<> criterion(5,m_Epsilon);
       // Shark doesn't allow to train a layer using a sparsity term AND a noisy input.
       if (m_Noise[i] != 0)
         {
-        TrainOneLayer(criterion, net, i, inputSamples, ofs);
+        TrainOneLayer(criterion, i, inputSamples, ofs);
         }
       else
         {
-        TrainOneSparseLayer(criterion, net, i, inputSamples, ofs);
+        TrainOneSparseLayer(criterion, i, inputSamples, ofs);
         }
       criterion.reset();
       }
-    }
-  else
-    {
-    shark::MaxIterations<> criterion(m_NumberOfIterations);
-
-    for (unsigned int i = 1 ; i < m_NumberOfHiddenNeurons.Size(); ++i)
+    else
       {
-      AutoencoderType net;
+      shark::MaxIterations<> criterion(m_NumberOfIterations);
       // Shark doesn't allow to train a layer using a sparsity term AND a noisy input.
       if (m_Noise[i] != 0)
         {
-        TrainOneLayer(criterion, net, i, inputSamples, ofs);
+        TrainOneLayer(criterion, i, inputSamples, ofs);
         otbMsgDevMacro(<< "m_Noise " << m_Noise[0]);
         }
       else
         {
-        TrainOneSparseLayer( criterion, net, i, inputSamples, ofs);
+        TrainOneSparseLayer( criterion, i, inputSamples, ofs);
         }
       criterion.reset();
       }
+    // encode the samples with the last encoder trained
+    inputSamples = m_InLayers[i](inputSamples);
     }
   if (m_NumberOfIterationsFineTuning > 0)
     {
@@ -183,31 +142,37 @@ AutoencoderModel<TInputValue,NeuronType>
 }
 
 template <class TInputValue, class NeuronType>
-template <class T, class Autoencoder>
+template <class T>
 void
 AutoencoderModel<TInputValue,NeuronType>
 ::TrainOneLayer(
   shark::AbstractStoppingCriterion<T> & criterion,
-  Autoencoder & net,
   unsigned int layer_index,
   shark::Data<shark::RealVector> &samples,
   std::ostream& File)
 {
+  typedef shark::AbstractModel<shark::RealVector,shark::RealVector> BaseModelType;
+  ModelType net;
+  net.add(&(m_InLayers[layer_index]), true);
+  net.add( (layer_index ?
+    (BaseModelType*) &(m_InLayers[m_NumberOfHiddenNeurons.Size()*2 - 1 - layer_index]) :
+    (BaseModelType*) &m_OutLayer) , true);
+
   otbMsgDevMacro(<< "Noise " <<  m_Noise[layer_index]);
   std::size_t inputs = dataDimension(samples);
-  net.setStructure(inputs, m_NumberOfHiddenNeurons[layer_index]);
   initRandomUniform(net,-m_InitFactor*std::sqrt(1.0/inputs),m_InitFactor*std::sqrt(1.0/inputs));
 
-  shark::ImpulseNoiseModel noise(inputs,m_Noise[layer_index],1.0); //set an input pixel with probability m_Noise to 0
-  shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> net;
+  //~ shark::ImpulseNoiseModel noise(inputs,m_Noise[layer_index],1.0); //set an input pixel with probability m_Noise to 0
+  //~ shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> net;
   shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
   shark::SquaredLoss<shark::RealVector> loss;
-  shark::ErrorFunction error(trainSet, &model, &loss);
+  //~ shark::ErrorFunction error(trainSet, &model, &loss);
+  shark::ErrorFunction<> error(trainSet, &net, &loss);
 
-  shark::TwoNormRegularizer regularizer(error.numberOfVariables());
+  shark::TwoNormRegularizer<> regularizer(error.numberOfVariables());
   error.setRegularizer(m_Regularization[layer_index],&regularizer);
 
-  shark::IRpropPlusFull optimizer;
+  shark::Adam<> optimizer;
   error.init();
   optimizer.init(error);
 
@@ -230,35 +195,37 @@ AutoencoderModel<TInputValue,NeuronType>
     } while( !criterion.stop( optimizer.solution() ) );
 
   net.setParameterVector(optimizer.solution().point);
-  m_Net.setLayer(layer_index,net.encoderMatrix(),net.hiddenBias());  // Copy the encoder in the FF neural network
-  m_Net.setLayer( m_NumberOfHiddenNeurons.Size()*2 - 1 - layer_index,net.decoderMatrix(),net.outputBias()); // Copy the decoder in the FF neural network
-  samples = net.encode(samples);
 }
 
 template <class TInputValue, class NeuronType>
-template <class T, class Autoencoder>
+template <class T>
 void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(
   shark::AbstractStoppingCriterion<T> & criterion,
-  Autoencoder & net,
   unsigned int layer_index,
   shark::Data<shark::RealVector> &samples,
   std::ostream& File)
 {
-  //AutoencoderType net;
-  std::size_t inputs = dataDimension(samples);
-  net.setStructure(inputs, m_NumberOfHiddenNeurons[layer_index]);
+  typedef shark::AbstractModel<shark::RealVector,shark::RealVector> BaseModelType;
+  ModelType net;
+  net.add(&(m_InLayers[layer_index]), true);
+  net.add( (layer_index ?
+    (BaseModelType*) &(m_InLayers[m_NumberOfHiddenNeurons.Size()*2 - 1 - layer_index]) :
+    (BaseModelType*) &m_OutLayer) , true);
 
+  std::size_t inputs = dataDimension(samples);
   shark::initRandomUniform(net,-m_InitFactor*std::sqrt(1.0/inputs),m_InitFactor*std::sqrt(1.0/inputs));
 
   // Idea : set the initials value for the output weights higher than the input weights
 
   shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);//labels identical to inputs
   shark::SquaredLoss<shark::RealVector> loss;
-  shark::SparseAutoencoderError error(trainSet,&net, &loss, m_Rho[layer_index], m_Beta[layer_index]);
-
-  shark::TwoNormRegularizer regularizer(error.numberOfVariables());
+  //~ shark::SparseAutoencoderError error(trainSet,&net, &loss, m_Rho[layer_index], m_Beta[layer_index]);
+  // SparseAutoencoderError doesn't exist anymore, for now use a plain ErrorFunction
+  shark::ErrorFunction<> error(trainSet, &net, &loss);
+  
+  shark::TwoNormRegularizer<> regularizer(error.numberOfVariables());
   error.setRegularizer(m_Regularization[layer_index],&regularizer);
-  shark::IRpropPlusFull optimizer;
+  shark::Adam<> optimizer;
   error.init();
   optimizer.init(error);
 
@@ -279,9 +246,6 @@ void AutoencoderModel<TInputValue,NeuronType>::TrainOneSparseLayer(
     File << "end layer" << std::endl;
     }
   net.setParameterVector(optimizer.solution().point);
-  m_Net.setLayer(layer_index,net.encoderMatrix(),net.hiddenBias());  // Copy the encoder in the FF neural network
-  m_Net.setLayer( m_NumberOfHiddenNeurons.Size()*2 - 1 - layer_index,net.decoderMatrix(),net.outputBias()); // Copy the decoder in the FF neural network
-  samples = net.encode(samples);
 }
 
 template <class TInputValue, class NeuronType>
@@ -293,15 +257,23 @@ AutoencoderModel<TInputValue,NeuronType>
   shark::Data<shark::RealVector> &samples,
   std::ostream& File)
 {
+  // create full network
+  ModelType net;
+  for (auto &layer : m_InLayers)
+    {
+    net.add(&layer, true);
+    }
+  net.add(&m_OutLayer, true);
+  
   //labels identical to inputs
   shark::LabeledData<shark::RealVector,shark::RealVector> trainSet(samples,samples);
   shark::SquaredLoss<shark::RealVector> loss;
 
-  shark::ErrorFunction error(trainSet, &m_Net, &loss);
-  shark::TwoNormRegularizer regularizer(error.numberOfVariables());
+  shark::ErrorFunction<> error(trainSet, &net, &loss);
+  shark::TwoNormRegularizer<> regularizer(error.numberOfVariables());
   error.setRegularizer(m_Regularization[0],&regularizer);
 
-  shark::IRpropPlusFull optimizer;
+  shark::Adam<> optimizer;
   error.init();
   optimizer.init(error);
   otbMsgDevMacro(<<"Error before training : " << optimizer.solution().value);
@@ -326,7 +298,6 @@ AutoencoderModel<TInputValue,NeuronType>
   try
     {
     this->Load(filename);
-    m_Net.name();
     }
   catch(...)
     {
@@ -350,22 +321,15 @@ AutoencoderModel<TInputValue,NeuronType>
 {
   otbMsgDevMacro(<< "saving model ...");
   std::ofstream ofs(filename);
-  ofs << m_Net.name() << std::endl; // the first line of the model file contains a key
+  ofs << "Autoencoder" << std::endl; // the first line of the model file contains a key
+  ofs << (m_InLayers.size() + 1) << std::endl; // second line is the number of encoders/decoders 
   shark::TextOutArchive oa(ofs);
-  oa << m_Net;
-  ofs.close();
-
-  if (this->m_WriteWeights == true)     // output the map vectors in a txt file
+  for (const auto &layer : m_InLayers)
     {
-    std::ofstream otxt(filename+".txt");
-    for (unsigned int i = 0 ; i < m_Net.layerMatrices().size(); ++i)
-      {
-      otxt << "layer " << i << std::endl;
-      otxt << m_Net.layerMatrix(i) << std::endl;
-      otxt << m_Net.bias(i) << std::endl;
-      otxt << std::endl;
-      }
+    oa << layer;
     }
+  oa << m_OutLayer;
+  ofs.close();
 }
 
 template <class TInputValue, class NeuronType>
@@ -373,23 +337,39 @@ void
 AutoencoderModel<TInputValue,NeuronType>
 ::Load(const std::string & filename, const std::string & /*name*/)
 {
-  NetworkType net;
   std::ifstream ifs(filename);
-  char autoencoder[256];
-  ifs.getline(autoencoder,256);
-  std::string autoencoderstr(autoencoder);
-
-  if (autoencoderstr != net.name()){
+  char buffer[256];
+  // check first line
+  ifs.getline(buffer,256);
+  std::string bufferStr(buffer);
+  if (bufferStr != "Autoencoder"){
     itkExceptionMacro(<< "Error opening " << filename.c_str() );
     }
+  // check second line
+  ifs.getline(buffer,256);
+  int nbLevels = boost::lexical_cast<int>(buffer);
+  if (nbLevels < 2 || nbLevels%2 == 1)
+    {
+    itkExceptionMacro(<< "Unexpected number of levels : "<<buffer );
+    }
+  m_InLayers.clear();
+  m_Encoder = ModelType();
   shark::TextInArchive ia(ifs);
-  ia >> m_Net;
+  for (int i=0 ; (i+1) < nbLevels ; i++)
+    {
+    LayerType layer;
+    ia >> layer;
+    m_InLayers.push_back(layer);
+    }
+  ia >> m_OutLayer;
   ifs.close();
 
-  // This gives us the dimension if we keep the encoder and decoder
-  size_t feature_layer_index = m_Net.layerMatrices().size()/2;
-  // number of neurons in the feature layer (second dimension of the first decoder weight matrix)
-  this->SetDimension(m_Net.layerMatrix(feature_layer_index).size2());
+  for (int i=0 ; i < nbLevels/2 ; i++)
+    {
+    m_Encoder.add(&(m_InLayers[i]) ,true);
+    }
+
+  this->SetDimension( m_Encoder.outputShape()[0] );
 }
 
 template <class TInputValue, class NeuronType>
@@ -409,7 +389,7 @@ AutoencoderModel<TInputValue,NeuronType>
   shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
 
   // features layer for a network containing the encoder and decoder part
-  data = m_Net.evalLayer( m_Net.layerMatrices().size()/2-1 ,data);
+  data = m_Encoder(data);
   TargetSampleType target;
   target.SetSize(this->m_Dimension);
 
@@ -435,7 +415,7 @@ AutoencoderModel<TInputValue,NeuronType>
   shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
   TargetSampleType target;
   // features layer for a network containing the encoder and decoder part
-  data = m_Net.evalLayer( m_Net.layerMatrices().size()/2-1 ,data);
+  data = m_Encoder(data);
 
   unsigned int id = startIndex;
   target.SetSize(this->m_Dimension);
