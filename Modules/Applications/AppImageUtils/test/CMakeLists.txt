@@ -132,7 +132,7 @@ otb_test_application(NAME apTvUtDynamicConvertMask
                              -outmax 255
                              -quantile.low 4
                              -quantile.high 4
-                             -mask ${INPUTDATA}/QB_Toulouse_Ortho_PAN_mask.tif
+                             -mask ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
                      VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/apTvUtDynamicConvertMaskOutput.tif
                              ${TEMP}/apTvUtDynamicConvertMaskOutput.tif)
