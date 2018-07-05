@@ -83,7 +83,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetDensityEpanechnikovFunction.txx"
+#include "otbPointSetDensityEpanechnikovFunction.hxx"
 #endif
 
 #endif

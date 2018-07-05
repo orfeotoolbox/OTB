@@ -19,7 +19,11 @@
  * limitations under the License.
  */
 
+#include <iostream>
+#include <sstream>
+
 #include "otbStandardOneLineFilterWatcher.h"
+#include "otbStopwatch.h"
 
 namespace otb
 {

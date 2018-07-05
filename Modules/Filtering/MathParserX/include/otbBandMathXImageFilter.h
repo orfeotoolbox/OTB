@@ -195,7 +195,7 @@ private :
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandMathXImageFilter.txx"
+#include "otbBandMathXImageFilter.hxx"
 #endif
 
 #endif

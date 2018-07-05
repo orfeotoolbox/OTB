@@ -176,7 +176,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolygonListToRCC8GraphFilter.txx"
+#include "otbPolygonListToRCC8GraphFilter.hxx"
 #endif
 
 #endif

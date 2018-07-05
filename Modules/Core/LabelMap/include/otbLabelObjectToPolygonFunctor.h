@@ -235,7 +235,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelObjectToPolygonFunctor.txx"
+#include "otbLabelObjectToPolygonFunctor.hxx"
 #endif
 
 #endif

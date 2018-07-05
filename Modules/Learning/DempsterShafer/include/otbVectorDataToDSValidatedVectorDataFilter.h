@@ -197,7 +197,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToDSValidatedVectorDataFilter.txx"
+#include "otbVectorDataToDSValidatedVectorDataFilter.hxx"
 #endif
 
 #endif

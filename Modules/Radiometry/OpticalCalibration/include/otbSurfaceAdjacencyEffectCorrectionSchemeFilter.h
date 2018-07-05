@@ -308,7 +308,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.txx"
+#include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.hxx"
 #endif
 
 #endif

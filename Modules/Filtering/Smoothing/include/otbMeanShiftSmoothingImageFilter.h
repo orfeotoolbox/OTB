@@ -682,7 +682,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftSmoothingImageFilter.txx"
+#include "otbMeanShiftSmoothingImageFilter.hxx"
 #endif
 
 #endif

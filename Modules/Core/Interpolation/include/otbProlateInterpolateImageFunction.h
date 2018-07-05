@@ -324,7 +324,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbProlateInterpolateImageFunction.txx"
+#include "otbProlateInterpolateImageFunction.hxx"
 #endif
 
 #endif

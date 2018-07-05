@@ -19,6 +19,9 @@
  */
 
 
+#include <complex>
+#include <ostream>
+
 #include "otbPipelineMemoryPrintCalculator.h"
 
 #include "otbMacro.h"

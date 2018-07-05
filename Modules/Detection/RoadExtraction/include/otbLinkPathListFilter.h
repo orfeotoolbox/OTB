@@ -123,7 +123,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLinkPathListFilter.txx"
+#include "otbLinkPathListFilter.hxx"
 #endif
 
 #endif

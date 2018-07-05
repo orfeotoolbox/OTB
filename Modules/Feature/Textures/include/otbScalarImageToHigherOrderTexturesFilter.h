@@ -242,7 +242,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbScalarImageToHigherOrderTexturesFilter.txx"
+#include "otbScalarImageToHigherOrderTexturesFilter.hxx"
 #endif
 
 #endif

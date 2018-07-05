@@ -112,7 +112,7 @@ public:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingLineSegmentDetector.txx"
+#include "otbStreamingLineSegmentDetector.hxx"
 #endif
 
 #endif

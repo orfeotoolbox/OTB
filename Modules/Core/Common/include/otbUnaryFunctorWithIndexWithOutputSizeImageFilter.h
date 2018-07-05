@@ -156,7 +156,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorWithIndexWithOutputSizeImageFilter.txx"
+#include "otbUnaryFunctorWithIndexWithOutputSizeImageFilter.hxx"
 #endif
 
 #endif

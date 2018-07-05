@@ -142,7 +142,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSubsampleImageFilter.txx"
+#include "otbSubsampleImageFilter.hxx"
 #endif
 
 #endif

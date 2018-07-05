@@ -98,7 +98,7 @@ protected:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNAPCAImageFilter.txx"
+#include "otbNAPCAImageFilter.hxx"
 #endif
 
 #endif

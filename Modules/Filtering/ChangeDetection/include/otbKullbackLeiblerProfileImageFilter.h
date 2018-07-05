@@ -198,7 +198,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKullbackLeiblerProfileImageFilter.txx"
+#include "otbKullbackLeiblerProfileImageFilter.hxx"
 #endif
 
 #endif

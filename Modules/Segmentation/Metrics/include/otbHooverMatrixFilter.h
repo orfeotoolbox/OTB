@@ -119,7 +119,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHooverMatrixFilter.txx"
+#include "otbHooverMatrixFilter.hxx"
 #endif
 
 #endif

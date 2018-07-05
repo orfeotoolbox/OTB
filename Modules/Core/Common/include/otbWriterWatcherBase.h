@@ -22,10 +22,11 @@
 #ifndef otbWriterWatcherBase_h
 #define otbWriterWatcherBase_h
 
-#include "otbStopwatch.h"
+#include <string>
 
 #include "itkCommand.h"
 #include "itkProcessObject.h"
+#include "otbStopwatch.h"
 
 #include "OTBCommonExport.h"
 

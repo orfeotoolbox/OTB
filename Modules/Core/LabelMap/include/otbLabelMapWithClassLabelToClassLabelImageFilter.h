@@ -90,7 +90,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapWithClassLabelToClassLabelImageFilter.txx"
+#include "otbLabelMapWithClassLabelToClassLabelImageFilter.hxx"
 #endif
 
 #endif

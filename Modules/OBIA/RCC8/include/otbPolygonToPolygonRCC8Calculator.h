@@ -131,7 +131,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolygonToPolygonRCC8Calculator.txx"
+#include "otbPolygonToPolygonRCC8Calculator.hxx"
 #endif
 
 #endif

@@ -174,7 +174,7 @@ private:
 
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataSourceToLabelImageFilter.txx"
+#include "otbOGRDataSourceToLabelImageFilter.hxx"
 #endif
 
 #endif

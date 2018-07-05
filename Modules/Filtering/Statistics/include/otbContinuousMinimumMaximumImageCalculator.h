@@ -162,7 +162,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbContinuousMinimumMaximumImageCalculator.txx"
+#include "otbContinuousMinimumMaximumImageCalculator.hxx"
 #endif
 
 #endif

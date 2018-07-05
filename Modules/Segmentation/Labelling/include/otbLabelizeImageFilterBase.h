@@ -135,7 +135,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelizeImageFilterBase.txx"
+#include "otbLabelizeImageFilterBase.hxx"
 #endif
 
 #endif

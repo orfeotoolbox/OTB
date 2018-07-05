@@ -28,6 +28,8 @@
 #include "vnl/vnl_vector.h"
 
 #include <string>
+#include <typeinfo>
+#include <vector>
 
 #include "OTBImageBaseExport.h"
 

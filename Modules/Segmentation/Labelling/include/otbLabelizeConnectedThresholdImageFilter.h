@@ -106,7 +106,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelizeConnectedThresholdImageFilter.txx"
+#include "otbLabelizeConnectedThresholdImageFilter.hxx"
 #endif
 
 #endif
