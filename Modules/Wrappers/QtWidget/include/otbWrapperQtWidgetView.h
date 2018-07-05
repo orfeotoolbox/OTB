@@ -22,9 +22,6 @@
 #define otbWrapperQtWidgetView_h
 
 #include <QtWidgets>
-
-//
-// OTB includes (sorted by alphabetic order)
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
 #include "OTBQtWidgetExport.h"
@@ -34,9 +31,6 @@ namespace otb
 namespace Wrapper
 {
 
-/*****************************************************************************/
-/* CLASS DEFINITION SECTION                                                  */
-
 /**
  * \class QtWidgetView
  *
@@ -44,26 +38,17 @@ namespace Wrapper
  *
  * \brief WIP.
  */
-
 class OTBQtWidget_EXPORT QtWidgetView :
     public QWidget
 {
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
   Q_OBJECT
 
   Q_PROPERTY( bool isClosable
 	      READ IsClosable
 	      WRITE SetClosable );
 
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public methods.
 public:
 
-  /**
-   */
   static char const * const OBJECT_NAME;
 
   /** \brief Constructor. */
@@ -93,45 +78,26 @@ public:
     //~ );
   //~ }
 
-  /**
-   */
   inline bool IsClosable() const;
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
 public slots:
 
   void UnhandledException(QString message);
 
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
 signals:
   void QuitSignal();
   void ExecuteAndWriteOutput();
   void Stop();
 
-
-  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
-
-//
-// Protected methods.
 protected:
 
   bool IsRunning();
 
   virtual QWidget* CreateInputWidgets();
 
-  //
   // QWidget overloads.
-
   void closeEvent( QCloseEvent * event ) override;
 
-//
-// Protected attributes.
 protected:
 
   /** Html section for 'Done' icon */
@@ -142,15 +108,10 @@ protected:
 
 protected slots:
 
-  /**
-   */
   void OnExecButtonClicked();
 
   void OnExceptionRaised( QString what );
-  
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
 // Private methods.
 private:
 
@@ -162,9 +123,7 @@ private:
   QWidget* CreateDoc();
 
 
-//
 // Private attributes.
-
 private:
 
   otb::Wrapper::QtWidgetModel* m_Model;
@@ -180,10 +139,6 @@ private:
 
   bool m_IsRunning;
 
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
 private slots:
   void UpdateMessageAfterExecution(int status);
   void UpdateMessageAfterApplicationReady(bool val);
