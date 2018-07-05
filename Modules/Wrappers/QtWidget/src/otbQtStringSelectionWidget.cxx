@@ -56,17 +56,9 @@ void QtStringSelectionWidget::DoCreateWidget()
 
   m_HLayout->addWidget(m_Input);
 
-  QObject::connect(
-          m_Checkbox, SIGNAL( toggled( bool ) ),
-          m_Input, SLOT( setEnabled( bool ) )
-  );
+  connect( m_Checkbox, &QCheckBox::toggled, m_Input, &QLineEdit::setEnabled );
 
-  QObject::connect(
-        m_Input,
-        SIGNAL( editingFinished( ) ),
-        this,
-        SLOT( OnEditionFinished() )
-        );
+  connect( m_Input, &QLineEdit::editingFinished, this, &QtStringSelectionWidget::OnEditionFinished );
 
   this->setLayout(m_HLayout);
 }
