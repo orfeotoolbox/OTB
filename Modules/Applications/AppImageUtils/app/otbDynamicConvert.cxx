@@ -92,9 +92,7 @@ private:
     SetName("DynamicConvert");
     SetDescription("Change the pixel type and rescale the image's dynamic");
 
-    // Documentation
     SetDocName("Dynamic Conversion");
-    // TODO
     SetDocLongDescription("This application performs an image pixel type "
       "conversion (short, ushort, uchar, int, uint, float and double types are "
       "handled). The output image is written in the specified format (ie. "
@@ -137,8 +135,8 @@ private:
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
     SetParameterDescription("mask",
-      "Optional binary mask to only process part of the input image. "
-      "Pixels where the mask is zero will not be processed. "
+      "Optional mask to indicate which pixels are valid for computing the histogram quantiles. "
+      "Pixels where the mask is zero will not contribute to the histogram. "
       "The mask must have the same dimensions as the input image.");
     MandatoryOff("mask");
     DisableParameter("mask");
