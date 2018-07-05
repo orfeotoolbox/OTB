@@ -194,7 +194,7 @@ public:
     // Covariance matrix
     typedef itk::Matrix<double, 3, 3> MatrixType;
     MatrixType M;
-    unsigned int epsilon = 0.0001 ; 
+    unsigned int epsilon = 255*255*0.0001 ; 
 
 
     //Calcul ak

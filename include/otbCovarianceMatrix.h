@@ -184,7 +184,7 @@ public:
     //covariance matrix
     typedef itk::Matrix<double, 3, 3> MatrixType;
     MatrixType M;
-    unsigned int epsilon = 0.0001 ;
+    double epsilon = 6.5025 ;
 
     //Calcul ai
     //r

@@ -86,6 +86,9 @@ public:
 
   void GenerateOutputInformation(void) override
     {
+
+
+      std::cout << "MAXIMUM NBANDS IMAGE FILTER" << std::endl ;
     Superclass::GenerateOutputInformation();
 
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);

@@ -61,16 +61,11 @@ public:
   TOutput operator() ( TInput input )
     {
 
-    unsigned int size ( input.GetSize() ) ;
-
     TOutput output(1); 
     output = 0;
     float grayMin = 255;
     float grayMax = 0;
     float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
-    int b = (grayMin*m_dispMax-grayMax*m_dispMin)/(m_dispMax-m_dispMin) ;
-    // std::cout << "a : " << a << std::endl;
-
 
     output = 255-a*input[0]+0.5 ;
    
@@ -139,6 +134,8 @@ public:
 
   void GenerateOutputInformation(void) override
     {
+
+    std::cout << "VALUES CONVERSION FROM 0 TO 255" << std::endl ;
     Superclass::GenerateOutputInformation();
 
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);

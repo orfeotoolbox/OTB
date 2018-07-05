@@ -81,22 +81,22 @@ int testAllFilters(int argc, char *argv[])
 
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<float> FloatVectorImageType;
-  typedef otb::VectorImage<int> IntVectorImageType;
+  // typedef otb::VectorImage<int> IntVectorImageType;
 
   typedef otb::Image< float, Dimension > FloatImageType;
   typedef otb::Image< int, Dimension > IntImageType;
 
   typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorImageReaderType;
-  typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType;
+  // typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType;
 
-  typedef otb::ImageFileReader<IntVectorImageType> IntVectorImageReaderType;
-  typedef otb::ImageFileWriter<IntVectorImageType> IntVectorImageWriterType;
+  // typedef otb::ImageFileReader<IntVectorImageType> IntVectorImageReaderType;
+  // typedef otb::ImageFileWriter<IntVectorImageType> IntVectorImageWriterType;
   
-  typedef otb::ImageFileReader< IntImageType > IntImageReaderType;
+  // typedef otb::ImageFileReader< IntImageType > IntImageReaderType;
   typedef otb::ImageFileWriter< IntImageType > IntImageWriterType;  
 
-  typedef otb::ImageFileReader< FloatImageType > FloatImageReaderType;
-  typedef otb::ImageFileWriter< FloatImageType > FloatImageWriterType;  
+  // typedef otb::ImageFileReader< FloatImageType > FloatImageReaderType;
+  // typedef otb::ImageFileWriter< FloatImageType > FloatImageWriterType;  
 
 
   FloatVectorImageReaderType::Pointer inLeft = FloatVectorImageReaderType::New();
@@ -341,9 +341,6 @@ int testAllFilters(int argc, char *argv[])
   writer_convertSmoothFillDisparity->SetFileName( FILENAME("ConvertSmoothFillDisparity.tif"));
   writer_convertSmoothFillDisparity->SetInput( m_convertSmoothDisparity->GetOutput() ); 
   writer_convertSmoothFillDisparity->Update();
-
-
-
 
 
 

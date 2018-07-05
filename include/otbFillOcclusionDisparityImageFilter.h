@@ -149,6 +149,8 @@ FillOcclusionDisparityImageFilter()
 
     void GenerateOutputInformation(void) override
     {
+
+        std::cout << "FILL OCCLUSIONS" << std::endl ;
     Superclass::GenerateOutputInformation();
     unsigned int nb_comp (this->GetInput(1)->GetNumberOfComponentsPerPixel());
     this->GetOutput()->SetNumberOfComponentsPerPixel(nb_comp);

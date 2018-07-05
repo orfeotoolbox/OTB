@@ -59,7 +59,7 @@ public:
    
     // std::cout << " Nband = "<< Nband; 
   double sSpace = 9;
-  double sColor = 25.5;
+  double sColor = 255*0.1;
   
    sSpace = 1.0f/(sSpace*sSpace);
    sColor = 1.0f/(sColor*sColor);
@@ -77,10 +77,16 @@ PixelType I(3);
         I[0] = input.GetCenterPixel()[1]- input.GetPixel(j)[1];
         I[1] = input.GetCenterPixel()[2]- input.GetPixel(j)[2];
         I[2] = input.GetCenterPixel()[3]- input.GetPixel(j)[3];
+
+      //  std::cout << input[0][j] << std::endl ;
+
+       // std::cout << input.GetPixel(j)[0] <<  " -- " << Offset_j[0] << std::endl ;
         
                 
         W =  std::exp( - (std::pow(Offset_j[0],2.0)+std::pow(Offset_j[1],2.0)) *sSpace 
         -(I.GetSquaredNorm())*sColor);
+
+     //   W = std::exp( - (std::pow(Offset_j[0],2.0))*sSpace) * std::exp(-(I.GetSquaredNorm())*sColor);
         
       //  - std::pow((double)(input.GetCenterPixel()[1]- input.GetPixel(j)[1]),2.0) *sColor);
         
@@ -100,7 +106,7 @@ PixelType I(3);
      for (std::vector<pairCord>::iterator it=duo.begin(); it !=duo.end(); ++it){
            Wtemp += it->second ;
            if (Wtemp >= Wt){
-;        d = it->first; 
+        d = it->first; 
          //std::cout << "Element found in myvector: " << d << '\n';
          // output[0] = static_cast<typename TOutput::ValueType>(d) ;
         output = d ;
@@ -173,6 +179,8 @@ void GenerateOutputInformation(void) ITK_OVERRIDE;
 template < class TInputImage, class TOutputImage >
 void WeightMedianImageFilter < TInputImage, TOutputImage >
 ::GenerateOutputInformation(void){
+
+  std::cout << "WEIGHTED MEDIAN IMAGE FILTER" << std::endl ;
  Superclass::GenerateOutputInformation();
 
 

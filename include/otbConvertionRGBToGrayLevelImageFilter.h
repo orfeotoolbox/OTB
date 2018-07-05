@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMinimumNBandsImageFilter_h
-#define otbMinimumNBandsImageFilter_h
+#ifndef otbConvertionRGBToGrayLevelImageFilter_h
+#define otbConvertionRGBToGrayLevelImageFilter_h
 
 #include "otbUnaryFunctorVectorImageFilter.h"
 
@@ -29,33 +29,25 @@ namespace otb
 namespace Functor
 {
 template<class TInput, class TOutput>
-class MinVectorImage
+class RGBToGrayLevelOperator
 {
 public:
-  MinVectorImage(){}
-  virtual ~MinVectorImage() {} 
-
-
+  RGBToGrayLevelOperator(){}
+  virtual ~RGBToGrayLevelOperator() {} 
 
 
 
   TOutput operator() ( TInput input )
     {
 
-    unsigned int size ( input.GetSize() ) ;
+    //unsigned int size ( input.GetSize() ) ;
 
     TOutput output(1); 
-    output = 0;
-    typename TInput::ValueType min ( input[0] );
+    output.Fill(0) ;
 
-    for(unsigned int i=0; i<size; i++)
-      {
-      if (input[i]<min)
-        {
-        min = input[i] ;
-        output = -i ;
-        }
-      }
+    output[0] = 0.299*input[0] + 0.587*input[1] + 0.0721*input[2] ;
+    output[1] = output[0] ;
+    output[2] = output[0] ;
 
     return output;
     }
@@ -65,22 +57,22 @@ public:
 } // end Functor
 
 
-  // class MinimumNBandsImageFilter
+  // class ConvertionRGBToGrayLevelImageFilter
   template <class TInputImage, class TOutputImage>
-  class ITK_EXPORT MinimumNBandsImageFilter :
+  class ITK_EXPORT ConvertionRGBToGrayLevelImageFilter :
     public otb::UnaryFunctorVectorImageFilter<
         TInputImage, TOutputImage,
-        Functor::MinVectorImage<
+        Functor::RGBToGrayLevelOperator<
             typename TInputImage::PixelType,
             typename TOutputImage::PixelType> >
   {
   public:
   /** Standard class typedefs. */
-  typedef MinimumNBandsImageFilter Self;
+  typedef ConvertionRGBToGrayLevelImageFilter Self;
   typedef typename otb::UnaryFunctorVectorImageFilter<
       TInputImage,
       TOutputImage,
-      Functor::MinVectorImage<
+      Functor::RGBToGrayLevelOperator<
           typename TInputImage::PixelType,
           typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -92,25 +84,25 @@ public:
 
 
   protected:
-  MinimumNBandsImageFilter() {}
-  ~MinimumNBandsImageFilter() override {}
+  ConvertionRGBToGrayLevelImageFilter() {}
+  ~ConvertionRGBToGrayLevelImageFilter() override {}
 
 
   void GenerateOutputInformation(void) override
     {
-      std::cout << "MINIMUM NBANDS IMAGE FILTER" << std::endl ;
+
     Superclass::GenerateOutputInformation();
 
-    this->GetOutput()->SetNumberOfComponentsPerPixel(1);
+    this->GetOutput()->SetNumberOfComponentsPerPixel(3);
     }
 
 
   private:
-  MinimumNBandsImageFilter(const Self &) = delete; //purposely not implemented
+  ConvertionRGBToGrayLevelImageFilter(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 
 
-  }; // end of MinimumNBandsImageFilter class
+  }; // end of ConvertionRGBToGrayLevelImageFilter class
 
 } // end namespace otb
 

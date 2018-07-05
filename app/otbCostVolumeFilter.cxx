@@ -810,7 +810,7 @@ m_OtbImageRightMedian->Update();
   
   //m_FillMedian->Update();
  
-  SetParameterOutputImage("io.out",m_FillMedian->GetOutput());
+  SetParameterOutputImage("io.out",m_LeftMedian->GetOutput());
   
   }
   

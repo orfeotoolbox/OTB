@@ -277,18 +277,20 @@ LeftCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 { 
 
- RegionType LeftRegionForThread;
- RegionType RightRegionForThread; 
 
- typename TOutputImage::PixelType OutPixel(1);
- OutPixel.Fill(0);
+  std::cout << "-------- LEFT COST VOLUME IMAGE FILTER " << std::endl ;
 
- 
- //  Setting parameters
+   //  Setting parameters
   double alpha = 0.9; 
   double taux1 = 7;  
   double taux2 = 2;   
 
+ RegionType LeftRegionForThread;
+ RegionType RightRegionForThread; 
+
+ typename TOutputImage::PixelType OutPixel(1);
+
+ OutPixel.Fill(0);
 
 
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
@@ -329,23 +331,25 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     double costColorNorm;
     double costGradientNorm;
      
-    costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;        
-    //b=  costColor.GetSquaredNorm ();
-    costColorNorm=  costColor.GetNorm ();                                       
+    costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;      
+    costColorNorm = (1/3)*(costColor.GetNorm());                                       
              
                if(costColorNorm > taux1) 
                   costColorNorm = taux1;
-                    // if  To take the minimum   
+                    // if  To take the minimum  
+
                
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= costGradient.GetNorm () ;               
+    costGradientNorm= (costGradient.GetNorm())/3.0  ;               
                  
                  if(costGradientNorm > taux2) 
                    costGradientNorm = taux2;
-                   // if To take the minimum                             
+                   // if To take the minimum     
+             
                                                            
            
     OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-alpha)*costColorNorm + alpha*costGradientNorm );  
+
    outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;
    // outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;
     //outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)]=OutPixel[0] ;

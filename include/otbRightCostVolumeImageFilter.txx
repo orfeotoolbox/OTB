@@ -284,6 +284,9 @@ RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {	
 
+std::cout << "-------- RIGHT COST VOLUME IMAGE FILTER " << std::endl ;
+
+
  RegionType LeftRegionForThread;
  RegionType RightRegionForThread; 
 
@@ -343,14 +346,14 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
      
     costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;        
     //b=  costColor.GetSquaredNorm ();
-    costColorNorm=  costColor.GetNorm ();                                       
+    costColorNorm=  (1/3)*(costColor.GetNorm());                                   
              
                if(costColorNorm > taux1) 
                   costColorNorm = taux1;
                     // if  To take the minimum   
                
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= costGradient.GetNorm () ;               
+    costGradientNorm= (costGradient.GetNorm())/3.0;     
                  
                  if(costGradientNorm > taux2) 
                    costGradientNorm = taux2;
