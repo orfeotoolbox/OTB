@@ -63,22 +63,9 @@ public:
   void CreateGui();
 
   /** \brief Model Accessor */
-  inline otb::Wrapper::QtWidgetModel* GetModel()
-  {
-    return m_Model;
-  }
+  QtWidgetModel* GetModel() const;
 
-  /**
-   * \return The OTB-application pointer of this view.
-   */
-  //~ otb::Wrapper::Application::ConstPointer GetApplication() const
-  //~ {
-    //~ return otb::ConstCast< otb::Wrapper::Application >(
-      //~ m_Application
-    //~ );
-  //~ }
-
-  inline bool IsClosable() const;
+  bool IsClosable() const;
 
 public slots:
 
@@ -91,7 +78,7 @@ signals:
 
 protected:
 
-  bool IsRunning();
+  bool IsRunning() const;
 
   virtual QWidget* CreateInputWidgets();
 
@@ -122,7 +109,6 @@ private:
 
   QWidget* CreateDoc();
 
-
 // Private attributes.
 private:
 
@@ -136,80 +122,17 @@ private:
   QTabWidget *m_TabWidget;
 
   bool m_IsClosable : 1;
-
   bool m_IsRunning;
 
 private slots:
   void UpdateMessageAfterExecution(int status);
   void UpdateMessageAfterApplicationReady(bool val);
 
-  /**
-   */
-  inline void OnProgressReportBegin();
-
-  /**
-   */
-  inline void OnProgressReportEnd( int status );
-
-  /**
-   */
-  inline void SetClosable( bool );
+  void OnProgressReportBegin();
+  void OnProgressReportEnd( int status );
+  void SetClosable( bool );
 
 };
-
-} // end namespace 'Wrapper'
-
-} // end namespace 'otb'
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-namespace otb
-{
-
-namespace Wrapper
-{
-
-/*****************************************************************************/
-inline
-bool
-QtWidgetView
-::IsClosable() const
-{
-  return m_IsClosable;
-}
-
-/*****************************************************************************/
-inline
-void
-QtWidgetView
-::SetClosable( bool enabled )
-{
-  m_IsClosable = enabled;
-
-  setEnabled( true );
-
-  if( m_QuitButton!=NULL )
-    m_QuitButton->setEnabled( m_IsClosable );
-}
-
-/*******************************************************************************/
-inline
-void
-QtWidgetView
-::OnProgressReportBegin()
-{
-  SetClosable( false );
-}
-
-/*******************************************************************************/
-inline
-void
-QtWidgetView
-::OnProgressReportEnd( int )
-{
-  SetClosable( true );
-}
 
 } // end namespace 'Wrapper'
 

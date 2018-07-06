@@ -285,9 +285,39 @@ void QtWidgetView::OnExceptionRaised( QString /*message*/)
   m_TabWidget->setCurrentIndex(1);
 }
 
-bool QtWidgetView::IsRunning()
+bool QtWidgetView::IsRunning() const
 {
   return m_IsRunning;
+}
+
+QtWidgetModel* QtWidgetView::GetModel() const
+{
+return m_Model;
+}
+
+bool QtWidgetView::IsClosable() const
+{
+  return m_IsClosable;
+}
+
+void QtWidgetView::SetClosable( bool enabled )
+{
+  m_IsClosable = enabled;
+
+  setEnabled( true );
+
+  if( m_QuitButton!=NULL )
+    m_QuitButton->setEnabled( m_IsClosable );
+}
+
+void QtWidgetView::OnProgressReportBegin()
+{
+  SetClosable( false );
+}
+
+void QtWidgetView::OnProgressReportEnd( int )
+{
+  SetClosable( true );
 }
 
 } // end of namespace Wrapper
