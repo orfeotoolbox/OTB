@@ -24,6 +24,9 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbCurlHelper.h"
 
+#include <sstream>
+#include <iomanip>
+
 namespace otb
 {
 
@@ -93,13 +96,12 @@ private:
 
   std::string SRTMIdToName(const SRTMTileId &id) const
     {
-    char name[8];
-    sprintf(name,"%c%02d%c%03d",
-      (id.Lat < 0 ? 'S' : 'N'),
-      vcl_abs(id.Lat),
-      (id.Lon < 0 ? 'W' : 'E'),
-      vcl_abs(id.Lon));
-    return std::string(name);
+    std::ostringstream oss;
+    oss << (id.Lat < 0 ? 'S' : 'N');
+    oss << std::setfill('0') << std::setw(2) << vcl_abs(id.Lat);
+    oss << (id.Lon < 0 ? 'W' : 'E');
+    oss << std::setfill('0') << std::setw(3) << vcl_abs(id.Lon);
+    return oss.str();
     }
 
   std::string SRTMIdToContinent(const SRTMTileId &id) const
