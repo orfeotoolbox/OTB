@@ -45,6 +45,20 @@ QtWidgetInputImageParameter::~QtWidgetInputImageParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetInputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetInputImageParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetInputImageParameter::DoUpdateGUI()
 {
   //update lineedit if HasUserValue flag is set(from xml)

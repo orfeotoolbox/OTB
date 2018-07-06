@@ -39,6 +39,20 @@ QtWidgetComplexOutputImageParameter::~QtWidgetComplexOutputImageParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetComplexOutputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetComplexOutputImageParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetComplexOutputImageParameter::DoUpdateGUI()
 {
   // Update the lineEdit

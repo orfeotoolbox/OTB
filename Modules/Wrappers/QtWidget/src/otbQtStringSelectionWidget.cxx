@@ -35,6 +35,36 @@ QtStringSelectionWidget::~QtStringSelectionWidget()
 {
 }
 
+bool QtStringSelectionWidget::IsChecked() const
+{
+return m_Checkbox->isChecked();
+}
+
+void QtStringSelectionWidget::SetChecked( bool val )
+{
+return m_Checkbox->setChecked( val );
+}
+
+const QString QtStringSelectionWidget::GetText() const
+{
+return m_Input->text();
+}
+
+void QtStringSelectionWidget::SetText( const QString& qString)
+{
+m_Input->setText(qString);
+}
+
+std::string QtStringSelectionWidget::ToStdString()
+{
+return m_Input->text().toLatin1().constData();
+}
+
+void QtStringSelectionWidget::ClearText()
+{
+m_Input->clear();
+}
+
 void QtStringSelectionWidget::DoUpdateGUI()
 {
 }

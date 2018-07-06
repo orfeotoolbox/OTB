@@ -36,6 +36,19 @@ QtWidgetComplexInputImageParameter::QtWidgetComplexInputImageParameter(ComplexIn
 QtWidgetComplexInputImageParameter::~QtWidgetComplexInputImageParameter()
 {
 }
+const QLineEdit*
+QtWidgetComplexInputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetComplexInputImageParameter
+::GetInput()
+{
+  return m_Input;
+}
 
 void QtWidgetComplexInputImageParameter::DoUpdateGUI()
 {

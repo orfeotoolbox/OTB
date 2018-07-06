@@ -39,6 +39,20 @@ QtWidgetInputProcessXMLParameter::~QtWidgetInputProcessXMLParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetInputProcessXMLParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetInputProcessXMLParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetInputProcessXMLParameter::DoUpdateGUI()
 {
   if (m_XMLParam->HasUserValue())

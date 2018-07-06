@@ -37,14 +37,14 @@ class OTBQtWidget_EXPORT AppliThread : public QThread
  Q_OBJECT
 
  public:
-  inline AppliThread(Application* app)
+  AppliThread(Application* app)
     {
       m_Application = app;
     }
 
   ~AppliThread() override;
 
-  inline void Execute()
+  void Execute()
   {
     // Call the signal start to begin running the program
     start();

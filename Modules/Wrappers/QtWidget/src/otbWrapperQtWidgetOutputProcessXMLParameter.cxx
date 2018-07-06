@@ -37,6 +37,20 @@ QtWidgetOutputProcessXMLParameter::~QtWidgetOutputProcessXMLParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetOutputProcessXMLParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetOutputProcessXMLParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetOutputProcessXMLParameter::DoUpdateGUI()
 {
   // Update the lineEdit

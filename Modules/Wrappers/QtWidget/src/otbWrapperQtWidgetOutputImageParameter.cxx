@@ -38,6 +38,20 @@ QtWidgetOutputImageParameter::~QtWidgetOutputImageParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetOutputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetOutputImageParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetOutputImageParameter::DoUpdateGUI()
 {
   // Update the lineEdit

@@ -38,6 +38,20 @@ QtWidgetOutputVectorDataParameter::~QtWidgetOutputVectorDataParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetOutputVectorDataParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetOutputVectorDataParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetOutputVectorDataParameter::DoUpdateGUI()
 {
   //update lineedit

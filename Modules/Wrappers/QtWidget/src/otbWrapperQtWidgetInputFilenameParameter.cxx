@@ -41,6 +41,20 @@ QtWidgetInputFilenameParameter::~QtWidgetInputFilenameParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetInputFilenameParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetInputFilenameParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetInputFilenameParameter::DoUpdateGUI()
 {
   // Update the lineEdit
