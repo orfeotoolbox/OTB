@@ -99,7 +99,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLikelihoodPathListFilter.txx"
+#include "otbLikelihoodPathListFilter.hxx"
 #endif
 
 #endif

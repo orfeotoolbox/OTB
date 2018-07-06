@@ -126,7 +126,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKNearestNeighborsMachineLearningModel.txx"
+#include "otbKNearestNeighborsMachineLearningModel.hxx"
 #endif
 
 #endif

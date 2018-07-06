@@ -151,7 +151,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabeledSampleLocalizationGenerator.txx"
+#include "otbLabeledSampleLocalizationGenerator.hxx"
 #endif
 
 #endif

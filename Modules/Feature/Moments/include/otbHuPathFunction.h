@@ -112,7 +112,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHuPathFunction.txx"
+#include "otbHuPathFunction.hxx"
 #endif
 
 #endif

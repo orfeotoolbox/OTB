@@ -113,7 +113,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGaussianModelComponent.txx"
+#include "otbGaussianModelComponent.hxx"
 #endif
 
 #endif

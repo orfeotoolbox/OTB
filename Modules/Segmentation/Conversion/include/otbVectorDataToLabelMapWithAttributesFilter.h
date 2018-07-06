@@ -242,7 +242,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToLabelMapWithAttributesFilter.txx"
+#include "otbVectorDataToLabelMapWithAttributesFilter.hxx"
 #endif
 
 #endif

@@ -152,7 +152,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageRegionMergingFilter.txx"
+#include "otbLabelImageRegionMergingFilter.hxx"
 #endif
 
 #endif

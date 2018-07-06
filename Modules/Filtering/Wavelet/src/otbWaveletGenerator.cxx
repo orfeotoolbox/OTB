@@ -62,7 +62,7 @@ WaveletGenerator<TMotherWaveletOperator>
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
-  msg << " is unknown or has to be implemented (check the txx file)...\n";
+  msg << " is unknown or has to be implemented (check the hxx file)...\n";
   throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
 }
 

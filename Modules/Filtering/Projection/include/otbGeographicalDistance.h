@@ -100,7 +100,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbGeographicalDistance.txx"
+# include "otbGeographicalDistance.hxx"
 #endif
 
 #endif

@@ -126,7 +126,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSinclairImageFilter.txx"
+#include "otbSinclairImageFilter.hxx"
 #endif
 
 #endif

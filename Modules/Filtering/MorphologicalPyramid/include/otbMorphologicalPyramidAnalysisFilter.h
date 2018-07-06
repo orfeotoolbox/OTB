@@ -135,7 +135,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidAnalysisFilter.txx"
+#include "otbMorphologicalPyramidAnalysisFilter.hxx"
 #endif
 
 #endif

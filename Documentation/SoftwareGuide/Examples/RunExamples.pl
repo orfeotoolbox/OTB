@@ -2,7 +2,7 @@
 
 #
 #
-# This Script is used to infer figure dependencies from the .cxx/.txx source
+# This Script is used to infer figure dependencies from the .cxx/.hxx source
 # files in the Insight/Examples directory.
 # 
 # This automatic generation mechanism guaranties that the figures 
@@ -77,7 +77,7 @@ $numArgs = $#ARGV + 1;
 if( $numArgs < 5 )
   {
       print "Usage arguments: \n";
-      print "  Name of the .cxx/.txx file (with extension).\n";
+      print "  Name of the .cxx/.hxx file (with extension).\n";
       print "  OTBExecsDirectoryPath \n";
       print "  Cmake file to be generated\n";
       print "  Name of the TEX file generated, so dependencies can be specified\n";
@@ -121,7 +121,7 @@ sub GetArgsAndFilenames {
   #Exec file anme is assumed to be the same as the source filename
   my $volume; my $directories;
   ($volume,$directories,$inputsourcefile) = File::Spec->splitpath( $inputfilename );
-  $inputsourcefile =~ m/(.*)(\.cxx|\.CXX|\.txx|\.TXX)/; 
+  $inputsourcefile =~ m/(.*)(\.cxx|\.CXX|\.hxx|\.HXX)/; 
   my $execfilenamebase = $1;
 
   #If the paths have a trailing /, remove it.

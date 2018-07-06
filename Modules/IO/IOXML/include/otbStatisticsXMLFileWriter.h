@@ -108,7 +108,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStatisticsXMLFileWriter.txx"
+#include "otbStatisticsXMLFileWriter.hxx"
 #endif
 
 #endif

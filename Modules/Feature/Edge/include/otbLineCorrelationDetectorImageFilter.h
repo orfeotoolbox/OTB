@@ -99,7 +99,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineCorrelationDetectorImageFilter.txx"
+#include "otbLineCorrelationDetectorImageFilter.hxx"
 #endif
 
 #endif

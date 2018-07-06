@@ -143,7 +143,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionSquareTileSplitter.txx"
+# include "otbImageRegionSquareTileSplitter.hxx"
 #endif
 
 #endif

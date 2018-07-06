@@ -124,7 +124,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRealMomentsImageFunction.txx"
+#include "otbRealMomentsImageFunction.hxx"
 #endif
 
 #endif

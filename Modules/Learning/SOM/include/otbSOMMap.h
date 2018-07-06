@@ -103,7 +103,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMMap.txx"
+#include "otbSOMMap.hxx"
 #endif
 
 #endif

@@ -99,7 +99,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSarBrightnessToImageFilter.txx"
+#include "otbSarBrightnessToImageFilter.hxx"
 #endif
 
 #endif

@@ -101,7 +101,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToEdgePathFilter.txx"
+#include "otbImageToEdgePathFilter.hxx"
 #endif
 
 #endif

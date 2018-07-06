@@ -83,7 +83,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOrientationPathFunction.txx"
+#include "otbOrientationPathFunction.hxx"
 #endif
 
 #endif

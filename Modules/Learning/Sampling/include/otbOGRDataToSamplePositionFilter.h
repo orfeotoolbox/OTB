@@ -269,7 +269,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataToSamplePositionFilter.txx"
+#include "otbOGRDataToSamplePositionFilter.hxx"
 #endif
 
 #endif

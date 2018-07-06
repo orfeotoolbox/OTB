@@ -97,7 +97,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToLineSpatialObjectListFilter.txx"
+#include "otbImageToLineSpatialObjectListFilter.hxx"
 #endif
 
 #endif

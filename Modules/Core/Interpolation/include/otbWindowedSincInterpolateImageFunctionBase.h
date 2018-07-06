@@ -190,7 +190,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWindowedSincInterpolateImageFunctionBase.txx"
+#include "otbWindowedSincInterpolateImageFunctionBase.hxx"
 #endif
 
 #endif

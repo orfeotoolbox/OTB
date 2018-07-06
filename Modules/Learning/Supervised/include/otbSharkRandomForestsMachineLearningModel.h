@@ -180,7 +180,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSharkRandomForestsMachineLearningModel.txx"
+#include "otbSharkRandomForestsMachineLearningModel.hxx"
 #endif
 
 #endif

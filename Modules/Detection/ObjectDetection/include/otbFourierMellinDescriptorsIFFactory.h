@@ -92,7 +92,7 @@ private:
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFourierMellinDescriptorsIFFactory.txx"
+#include "otbFourierMellinDescriptorsIFFactory.hxx"
 #endif
 
 #endif

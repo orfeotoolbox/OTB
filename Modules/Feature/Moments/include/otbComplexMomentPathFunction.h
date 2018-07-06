@@ -117,7 +117,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComplexMomentPathFunction.txx"
+#include "otbComplexMomentPathFunction.hxx"
 #endif
 
 #endif

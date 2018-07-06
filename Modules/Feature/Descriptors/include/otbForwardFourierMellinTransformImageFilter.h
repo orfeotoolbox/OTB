@@ -169,7 +169,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbForwardFourierMellinTransformImageFilter.txx"
+#include "otbForwardFourierMellinTransformImageFilter.hxx"
 #endif
 
 #endif
