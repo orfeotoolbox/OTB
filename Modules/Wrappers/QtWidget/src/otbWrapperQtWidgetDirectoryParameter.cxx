@@ -67,7 +67,7 @@ void QtWidgetDirectoryParameter::DoCreateWidget()
   // Set up input text edit
   m_Button = new QPushButton(this);
   m_Button->setText("...");
-  m_Button->setToolTip("Select d Directory...");
+  m_Button->setToolTip("Select a directory...");
   m_Button->setMaximumWidth(m_Button->width());
   connect( m_Button, &QPushButton::clicked, this, &QtWidgetDirectoryParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
