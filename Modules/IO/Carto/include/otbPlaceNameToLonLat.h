@@ -75,7 +75,6 @@ private:
   double           m_Lon;
   double           m_Lat;
   std::string      m_PlaceName;
-  SearchMethodEnum m_SearchMethod; //Not implemented yet TODO
 
   CurlHelperInterface::Pointer m_Curl;
   std::string                  m_CurlOutput;
