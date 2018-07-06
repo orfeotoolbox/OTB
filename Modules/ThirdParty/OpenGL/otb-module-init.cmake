@@ -61,9 +61,6 @@ if(APPLE)
     OPENGL_gl_LIBRARY
     )
 else(APPLE)
-  # CMake 3.11+ setting; see 'cmake --help-policy CMP0072'
-  set( OpenGL_GL_PREFERENCE "GLVND" )
-
   find_package(OpenGL REQUIRED)
 
   mark_as_advanced(OPENGL_INCLUDE_DIR)
