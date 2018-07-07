@@ -27,7 +27,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
-
+#include <cmath>
 
 namespace otb
 {
@@ -201,7 +201,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 
       // Unbiased standard deviation (not sure unbiased is usefull here)
       const double variance = (sqSum[band] - (sum[band] * mean[band])) / (count - 1);
-      std[band] = vcl_sqrt(variance);
+      std[band] = std::sqrt(variance);
       }
     m_MeanRadiometricValue[label] = mean;
     m_StDevRadiometricValue[label] = std;
