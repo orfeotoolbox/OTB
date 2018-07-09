@@ -30,7 +30,7 @@
 #include "otbTileImageFilter.h"
 
 #include <time.h>
-#include <vcl_algorithm.h>
+#include <algorithm>
 #include <climits>
 
 #include "otbWrapperApplication.h"

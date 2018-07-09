@@ -22,7 +22,7 @@
 #define otbSinclairToReciprocalCoherencyMatrixFunctor_h
 
 #include "itkMacro.h"
-#include "std::complex.h"
+#include <complex>
 #include "otbMath.h"
 #include "vnl/vnl_matrix.h"
 

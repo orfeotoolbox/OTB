@@ -35,7 +35,7 @@
 #include "otbImportGeoInformationImageFilter.h"
 
 #include <time.h>
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
