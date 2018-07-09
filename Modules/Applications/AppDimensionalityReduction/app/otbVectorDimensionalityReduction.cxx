@@ -143,7 +143,7 @@ private:
       "parameter can't be used for other models"); //
     MandatoryOff("pcadim");
     
-    AddParameter(ParameterType_Choice, "mode", "Writting mode"); //
+    AddParameter(ParameterType_Choice, "mode", "Writing mode"); //
     SetParameterDescription("mode", "This parameter determines if the output "
       "file is overwritten or updated [overwrite/update]. If an output file "
       "name is given, the original file is copied before creating the new features.");
@@ -325,7 +325,7 @@ private:
       else
         {
         otbAppLogFATAL(<< "Error when creating the output file" <<
-          GetParameterString("mode") << " : unsupported writting mode type");
+          GetParameterString("mode") << " : unsupported writing mode type");
         }
       }
 
