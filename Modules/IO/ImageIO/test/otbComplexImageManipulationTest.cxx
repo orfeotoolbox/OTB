@@ -37,7 +37,7 @@ bool IsEqual(TPixel output, TPixel expected)
   RealType outputReal   = static_cast<RealType>(output);
   RealType expectedReal = static_cast<RealType>(expected);
   // avoid division by zero
-  return outputReal == expectedReal || (vcl_abs(expectedReal - outputReal) / vcl_abs(expectedReal) < Epsilon);
+  return outputReal == expectedReal || (std::abs(expectedReal - outputReal) / std::abs(expectedReal) < Epsilon);
 }
 
 template<class TPixel>
@@ -50,7 +50,7 @@ bool IsEqual(std::complex<TPixel> output, std::complex<TPixel> expected)
   RealType expectedReal( static_cast<ScalarRealType>(expected.real()), static_cast<ScalarRealType>(expected.imag()) );
 
   // avoid division by zero
-  return outputReal == expectedReal || (vcl_abs(expectedReal - outputReal) / vcl_abs(expectedReal) < Epsilon);
+  return outputReal == expectedReal || (std::abs(expectedReal - outputReal) / std::abs(expectedReal) < Epsilon);
 }
 
 template<class TInternalPixel>
@@ -202,7 +202,7 @@ int otbMonobandComplexToImageScalarGeneric(int itkNotUsed(argc), char * argv[])
     ComplexType expected = ComplexType(count, count+1);
     RealType    expectedReal( static_cast<ScalarRealType>(expected.real()), static_cast<ScalarRealType>(expected.imag()) );
 
-    if ( !TestCompare(it.GetIndex(), it.Get(), static_cast<InputType>(vcl_abs(expectedReal)) ) )
+    if ( !TestCompare(it.GetIndex(), it.Get(), static_cast<InputType>(std::abs(expectedReal)) ) )
       return EXIT_FAILURE;
     }
 

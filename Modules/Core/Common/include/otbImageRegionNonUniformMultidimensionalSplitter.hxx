@@ -38,7 +38,7 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 
   // requested number of splits per dimension
   double splitsPerDimension[VImageDimension];
-//     ::ceil( vcl_pow((double) requestedNumber, 1.0/(double) VImageDimension));
+//     ::ceil( std::pow((double) requestedNumber, 1.0/(double) VImageDimension));
 
   unsigned int numberOfPiecesLeft = requestedNumber;
   unsigned int j, numPieces;
@@ -100,7 +100,7 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 
   // requested number of splits per dimension
   double splitsPerDimension[VImageDimension];
-//     ::ceil( vcl_pow((double) numberOfPieces, 1.0/(double) VImageDimension));
+//     ::ceil( std::pow((double) numberOfPieces, 1.0/(double) VImageDimension));
 
   unsigned int numberOfPiecesLeft = numberOfPieces;
 

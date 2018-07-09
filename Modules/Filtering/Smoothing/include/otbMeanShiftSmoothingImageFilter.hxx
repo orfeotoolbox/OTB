@@ -362,16 +362,16 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   // Calculates current pixel neighborhood region, restricted to the output image region
   for (unsigned int comp = 0; comp < ImageDimension; ++comp)
     {
-    inputIndex[comp] = vcl_floor(jointPixel[comp] + 0.5) - m_GlobalShift[comp];
+    inputIndex[comp] = std::floor(jointPixel[comp] + 0.5) - m_GlobalShift[comp];
 
-    regionIndex[comp] = vcl_max(static_cast<long int> (outputRegion.GetIndex().GetElement(comp)),
+    regionIndex[comp] = std::max(static_cast<long int> (outputRegion.GetIndex().GetElement(comp)),
                                 static_cast<long int> (inputIndex[comp] - m_SpatialRadius[comp] - 1));
-    const long int indexRight = vcl_min(
+    const long int indexRight = std::min(
                                         static_cast<long int> (outputRegion.GetIndex().GetElement(comp)
                                             + outputRegion.GetSize().GetElement(comp) - 1),
                                         static_cast<long int> (inputIndex[comp] + m_SpatialRadius[comp] + 1));
 
-    regionSize[comp] = vcl_max(0l, indexRight - static_cast<long int> (regionIndex[comp]) + 1);
+    regionSize[comp] = std::max(0l, indexRight - static_cast<long int> (regionIndex[comp]) + 1);
     }
 
   RegionType neighborhoodRegion;
@@ -637,7 +637,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
         // Find index of the pixel closest to the current jointPixel (not normalized by bandwidth)
         for (unsigned int comp = 0; comp < ImageDimension; comp++)
           {
-          modeCandidate[comp] = vcl_floor(jointPixel[comp] - m_GlobalShift[comp] + 0.5);
+          modeCandidate[comp] = std::floor(jointPixel[comp] - m_GlobalShift[comp] + 0.5);
           }
         // Check status of candidate mode
 

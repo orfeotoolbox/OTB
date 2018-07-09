@@ -165,11 +165,11 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       Ci2    = Var_I / (E_I * E_I);
 
       const double epsilon = 0.0000000001;
-      if (vcl_abs(E_I) < epsilon)
+      if (std::abs(E_I) < epsilon)
       {
         dPixel = itk::NumericTraits<OutputPixelType>::Zero;
       }
-      else if (vcl_abs(Var_I) < epsilon)
+      else if (std::abs(Var_I) < epsilon)
       {
 		dPixel = E_I;
       }

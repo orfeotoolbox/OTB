@@ -46,7 +46,7 @@ public:
 
   inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    return static_cast<TOutputPixel>(2 * vcl_sqrt(input[0] * input[0] + input[1] * input[1]));
+    return static_cast<TOutputPixel>(2 * std::sqrt(input[0] * input[0] + input[1] * input[1]));
   }
 };
 
@@ -63,7 +63,7 @@ public:
 
   inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    return static_cast<TOutputPixel>(vcl_atan2(input[0], -input[1]));
+    return static_cast<TOutputPixel>(std::atan2(input[0], -input[1]));
   }
 };
 }  // end namespace Functor

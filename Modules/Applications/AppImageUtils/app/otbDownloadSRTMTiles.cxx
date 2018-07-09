@@ -98,9 +98,9 @@ private:
     {
     std::ostringstream oss;
     oss << (id.Lat < 0 ? 'S' : 'N');
-    oss << std::setfill('0') << std::setw(2) << vcl_abs(id.Lat);
+    oss << std::setfill('0') << std::setw(2) << std::abs(id.Lat);
     oss << (id.Lon < 0 ? 'W' : 'E');
-    oss << std::setfill('0') << std::setw(3) << vcl_abs(id.Lon);
+    oss << std::setfill('0') << std::setw(3) << std::abs(id.Lon);
     return oss.str();
     }
 

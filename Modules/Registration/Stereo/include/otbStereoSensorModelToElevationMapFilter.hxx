@@ -551,7 +551,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
     squareSumMaster += (master[i]-meanMaster) * (master[i]-meanMaster);
     }
 
-  correlationValue = vcl_abs(crossProd/(vcl_sqrt(squareSumSlave)*vcl_sqrt(squareSumMaster)));
+  correlationValue = std::abs(crossProd/(std::sqrt(squareSumSlave)*std::sqrt(squareSumMaster)));
 
   return correlationValue;
 }

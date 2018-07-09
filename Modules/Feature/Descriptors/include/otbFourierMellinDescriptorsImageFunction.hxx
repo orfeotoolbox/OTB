@@ -116,9 +116,9 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
         {
         ScalarComplexType power(double(p-2.0+m_Sigma)/2.0, -double(q)/2.0);
 	
-	if(x!=0 || y !=0) // vcl_pow limitation
+	if(x!=0 || y !=0) // std::pow limitation
 	  {	    
-	    coefs.at(p).at(q) += vcl_pow(xplusiy, -static_cast<double>(p)) * vcl_pow(x2plusy2, power) * value;
+	    coefs.at(p).at(q) += std::pow(xplusiy, -static_cast<double>(p)) * std::pow(x2plusy2, power) * value;
 	  }
 	}
       }
@@ -132,7 +132,7 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
       {
       coefs.at(p).at(q) /= 2*CONST_PI * coefs.at(0).at(0);
 
-      descriptors.at(p).at(q) = vcl_sqrt((coefs.at(p).at(q).real() * coefs.at(p).at(q).real()
+      descriptors.at(p).at(q) = std::sqrt((coefs.at(p).at(q).real() * coefs.at(p).at(q).real()
                                           + coefs.at(p).at(q).imag() * coefs.at(p).at(q).imag()));
       }
     }

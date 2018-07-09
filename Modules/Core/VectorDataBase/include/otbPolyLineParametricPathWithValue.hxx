@@ -84,7 +84,7 @@ PolyLineParametricPathWithValue<TValue, VDimension>
         {
         accum += (pt1[i] - pt2[i]) * (pt1[i] - pt2[i]);
         }
-      length += vcl_sqrt(accum);
+      length += std::sqrt(accum);
       ++it;
       }
 

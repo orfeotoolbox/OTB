@@ -129,7 +129,7 @@ public:
 
   RealType operator()(RealType x) const
   {
-    return vcl_exp(-0.5 * x);
+    return std::exp(-0.5 * x);
   }
 
   RealType GetRadius(RealType bandwidth) const
@@ -246,8 +246,8 @@ public:
     while (!inputIt.IsAtEnd())
       {
       const PixelType &p = inputIt.Get();
-      minValue = vcl_min(minValue, p[m_SpectralCoordinate]);
-      maxValue = vcl_max(maxValue, p[m_SpectralCoordinate]);
+      minValue = std::min(minValue, p[m_SpectralCoordinate]);
+      maxValue = std::max(maxValue, p[m_SpectralCoordinate]);
       ++inputIt;
       }
 

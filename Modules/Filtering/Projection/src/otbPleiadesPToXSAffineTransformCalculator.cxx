@@ -164,7 +164,7 @@ PleiadesPToXSAffineTransformCalculator
 
     This leads to the following formula:
      */
-    double lineShift_MS_P = -vcl_floor((timeDelta/(linePeriodPan/1000)+0.5))+1.5;
+    double lineShift_MS_P = -std::floor((timeDelta/(linePeriodPan/1000)+0.5))+1.5;
     double colShift_MS_P =  -((colStartXS-1)*4 - colStartPan + 1)+1.5;
 
     OffsetType offset;

@@ -49,11 +49,11 @@ PointSetDensityGaussianFunction<TPointSet,   TOutput>
       float distY = input[1] - it.Value()[1];
       float distsq = distX * distX + distY * distY;
 
-      accu += vcl_exp(-distsq / radiussq / 2);
+      accu += std::exp(-distsq / radiussq / 2);
 
       ++it;
       }
-    accu /= vcl_sqrt(2 * CONST_PI * radiussq);
+    accu /= std::sqrt(2 * CONST_PI * radiussq);
     }
 
   return accu;

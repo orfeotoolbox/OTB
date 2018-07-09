@@ -136,7 +136,7 @@ void SamplingRateCalculator
   MapRateType::iterator it = m_RatesByClass.begin();
   for (; it != m_RatesByClass.end() ; ++it)
     {
-    it->second.Required = static_cast<unsigned long>(vcl_floor(0.5+percent * it->second.Tot));
+    it->second.Required = static_cast<unsigned long>(std::floor(0.5+percent * it->second.Tot));
     it->second.Rate = percent;
     }
 }

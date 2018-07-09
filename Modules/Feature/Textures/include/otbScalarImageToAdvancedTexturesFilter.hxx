@@ -303,7 +303,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   unsigned int minRadius = 0;
   for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
     {
-    unsigned int distance = vcl_abs(m_Offset[i]);
+    unsigned int distance = std::abs(m_Offset[i]);
     if ( distance > minRadius )
       {
       minRadius = distance;
@@ -354,7 +354,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   ic1It.GoToBegin();
   ic2It.GoToBegin();
 
-  const double log2 = vcl_log(2.0);
+  const double log2 = std::log(2.0);
   const unsigned int histSize = m_NumberOfBinsPerAxis;
   const long unsigned int twiceHistSize = 2 * m_NumberOfBinsPerAxis;
 
@@ -462,7 +462,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       CooccurrenceIndexType index = (*constVectorIt).first;
       double frequency = (*constVectorIt).second / totalFrequency;
       m_Mean += static_cast<double>(index[0]) * frequency;
-      Entropy -= (frequency > 0.0001) ? frequency * vcl_log(frequency) / log2 : 0.;
+      Entropy -= (frequency > 0.0001) ? frequency * std::log(frequency) / log2 : 0.;
       unsigned int i = index[1];
       unsigned int j = index[0];
       hx[j] += frequency;
@@ -491,7 +491,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       double index0 = static_cast<double>(index[0]);
       m_Variance += ((index0 - m_Mean) * (index0 - m_Mean)) * frequency;
       double pipj = hx[j] * hy[i];
-      hxy1 -= (pipj > 0.0001) ? frequency * vcl_log(pipj) : 0.;
+      hxy1 -= (pipj > 0.0001) ? frequency * std::log(pipj) : 0.;
       ++constVectorIt;
       }
 
@@ -500,7 +500,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     for(long unsigned int k = histSize; k < twiceHistSize; k++)
       {
       m_SumAverage += k * pdxy[k];
-      m_SumEntropy -= (pdxy[k] > 0.0001) ? pdxy[k] * vcl_log(pdxy[k]) / log2 : 0;
+      m_SumEntropy -= (pdxy[k] > 0.0001) ? pdxy[k] * std::log(pdxy[k]) / log2 : 0;
       PSSquareCumul += k * k * pdxy[k];
       }
     m_SumVariance = PSSquareCumul - m_SumAverage * m_SumAverage;
@@ -514,15 +514,15 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       {
       double pdTmp = pdxy[i];
       PDCumul += i * pdTmp;
-      m_DifferenceEntropy -= (pdTmp > 0.0001) ? pdTmp * vcl_log(pdTmp) / log2 : 0;
+      m_DifferenceEntropy -= (pdTmp > 0.0001) ? pdTmp * std::log(pdTmp) / log2 : 0;
       PDSquareCumul += i * i * pdTmp;
 
       //comput hxCumul and hyCumul
       double marginalfreq = hx[i];
-      hxCumul += (marginalfreq > 0.0001) ? vcl_log (marginalfreq) * marginalfreq : 0;
+      hxCumul += (marginalfreq > 0.0001) ? std::log (marginalfreq) * marginalfreq : 0;
 
       marginalfreq = hy[i];
-      hyCumul += (marginalfreq > 0.0001) ? vcl_log (marginalfreq) * marginalfreq : 0;
+      hyCumul += (marginalfreq > 0.0001) ? std::log (marginalfreq) * marginalfreq : 0;
       }
     m_DifferenceVariance = PDSquareCumul - PDCumul * PDCumul;
 
@@ -534,16 +534,16 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       for(unsigned int j = 0; j < histSize; ++j)
         {
         double pipj = hx[j] * hy[i];
-        hxy2 -= (pipj > 0.0001) ? pipj * vcl_log(pipj) : 0.;
+        hxy2 -= (pipj > 0.0001) ? pipj * std::log(pipj) : 0.;
         double frequency = GLCIList->GetFrequency(i,j, glcVector) / totalFrequency;
         m_Dissimilarity+= ( static_cast<double>(j) - static_cast<double>(i) ) * (frequency * frequency);
         }
       }
 
     //Information measures of correlation 1 & 2
-    m_IC1 = (vcl_abs(std::max (hxCumul, hyCumul)) > 0.0001) ? (Entropy - hxy1) / (std::max (hxCumul, hyCumul)) : 0;
-    m_IC2 = 1 - vcl_exp (-2. * vcl_abs (hxy2 - Entropy));
-    m_IC2 = (m_IC2 >= 0) ? vcl_sqrt (m_IC2) : 0;
+    m_IC1 = (std::abs(std::max (hxCumul, hyCumul)) > 0.0001) ? (Entropy - hxy1) / (std::max (hxCumul, hyCumul)) : 0;
+    m_IC2 = 1 - std::exp (-2. * std::abs (hxy2 - Entropy));
+    m_IC2 = (m_IC2 >= 0) ? std::sqrt (m_IC2) : 0;
 
     // Fill outputs
     meanIt.Set(m_Mean);

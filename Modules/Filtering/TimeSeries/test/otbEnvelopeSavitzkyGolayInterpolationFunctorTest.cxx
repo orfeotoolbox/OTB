@@ -43,7 +43,7 @@ int otbEnvelopeSavitzkyGolayInterpolationFunctorTest(int itkNotUsed(argc), char*
 
   for(unsigned int i=0; i<nbDates; ++i)
     {
-    inSeries[i] = 10*vcl_cos(i/10.0);
+    inSeries[i] = 10*std::cos(i/10.0);
     cleanSeries[i] = inSeries[i];
     doySeries[i] = i;
     weightSeries[i] = 1;
@@ -72,7 +72,7 @@ int otbEnvelopeSavitzkyGolayInterpolationFunctorTest(int itkNotUsed(argc), char*
   for(unsigned int i=0; i<nbDates; ++i)
     {
 
-    interpolError += vcl_fabs(outSeries[i]-cleanSeries[i]);
+    interpolError += std::fabs(outSeries[i]-cleanSeries[i]);
 
     }
 

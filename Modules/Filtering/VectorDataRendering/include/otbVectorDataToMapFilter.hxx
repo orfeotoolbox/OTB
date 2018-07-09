@@ -254,8 +254,8 @@ VectorDataToMapFilter<TVectorData, TImage>
   RegionType   requestedRegion = output->GetRequestedRegion();
   otbMsgDevMacro("requestedRegion: " << requestedRegion);
 
-  m_NbTile = (vcl_pow(std::max(vcl_floor((double)requestedRegion.GetSize()[0] / 16000),
-                          vcl_floor((double)requestedRegion.GetSize()[1] / 16000))+1, 2));
+  m_NbTile = (std::pow(std::max(std::floor((double)requestedRegion.GetSize()[0] / 16000),
+                          std::floor((double)requestedRegion.GetSize()[1] / 16000))+1, 2));
 
   //std::cout << "nbTile: " << m_NbTile << std::endl;
   //std::cout << "requestedRegion: " << requestedRegion << std::endl;
@@ -268,12 +268,12 @@ VectorDataToMapFilter<TVectorData, TImage>
   unsigned int stdXOffset;
   unsigned int stdYOffset;
 
-  stdXOffset = vcl_floor((double)requestedRegion.GetSize()[0]/ (m_NbTile/2))+1;
-  stdYOffset = vcl_floor((double)requestedRegion.GetSize()[1]/ (m_NbTile/2))+1;
+  stdXOffset = std::floor((double)requestedRegion.GetSize()[0]/ (m_NbTile/2))+1;
+  stdYOffset = std::floor((double)requestedRegion.GetSize()[1]/ (m_NbTile/2))+1;
 
-  for(unsigned int i=0; i < vcl_floor((double)(m_NbTile)/2 + 0.5); ++i)
+  for(unsigned int i=0; i < std::floor((double)(m_NbTile)/2 + 0.5); ++i)
     {
-    for(unsigned int j=0; j < vcl_floor((double)(m_NbTile)/2 + 0.5); ++j)
+    for(unsigned int j=0; j < std::floor((double)(m_NbTile)/2 + 0.5); ++j)
       {
       //Set Regions
       SizeType size;

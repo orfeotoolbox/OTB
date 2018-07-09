@@ -48,12 +48,12 @@ EigenvalueLikelihoodMaximisation<TInputImage>
   // Compute diagonalisation of covariance and correlation
   vnl_symmetric_eigensystem<PrecisionType> eigenK(m_Covariance);
   VectorType eigenCovariance = eigenK.D.diagonal();
-  vcl_sort(eigenCovariance.begin(), eigenCovariance.end());
+  std::sort(eigenCovariance.begin(), eigenCovariance.end());
   eigenCovariance.flip();
 
   vnl_symmetric_eigensystem<PrecisionType> eigenR(m_Correlation);
   VectorType eigenCorrelation = eigenR.D.diagonal();
-  vcl_sort(eigenCorrelation.begin(), eigenCorrelation.end());
+  std::sort(eigenCorrelation.begin(), eigenCorrelation.end());
   eigenCorrelation.flip();
 
   // Compute likelihood log
@@ -74,7 +74,7 @@ EigenvalueLikelihoodMaximisation<TInputImage>
       //std::cout << "sigma[" << j << "]=" << sigma[j] << std::endl;
       t[j] = (r - k) * (r - k) / sigma[j];
       //std::cout << "t[" << j <<"]=" << t[j] << std::endl;
-      sigma[j] = vcl_log(sigma[j]);
+      sigma[j] = std::log(sigma[j]);
       }
     m_Likelihood(i) = -0.5*t.sum() - 0.5*sigma.sum();
     }

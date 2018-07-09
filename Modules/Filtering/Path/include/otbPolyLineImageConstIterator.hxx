@@ -42,7 +42,7 @@ PolyLineImageConstIterator<TImage, TPath>
   IndexType source, target;
   for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
     {
-    source[i] = static_cast<unsigned int> (vcl_floor(m_InternalVertexIterator.Value()[i] + 0.5));
+    source[i] = static_cast<unsigned int> (std::floor(m_InternalVertexIterator.Value()[i] + 0.5));
     }
   ++m_InternalVertexIterator;
   if (m_InternalVertexIterator != m_Path->GetVertexList()->End())
@@ -50,7 +50,7 @@ PolyLineImageConstIterator<TImage, TPath>
 
     for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
       {
-      target[i] = static_cast<unsigned int> (vcl_floor(m_InternalVertexIterator.Value()[i] + 0.5));
+      target[i] = static_cast<unsigned int> (std::floor(m_InternalVertexIterator.Value()[i] + 0.5));
       }
     }
   else
@@ -81,7 +81,7 @@ PolyLineImageConstIterator<TImage, TPath>
   IndexType source, target;
   for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
     {
-    source[i] = static_cast<unsigned int> (vcl_floor(m_InternalVertexIterator.Value()[i] + 0.5));
+    source[i] = static_cast<unsigned int> (std::floor(m_InternalVertexIterator.Value()[i] + 0.5));
     }
   ++m_InternalVertexIterator;
   if (m_InternalVertexIterator != m_Path->GetVertexList()->End())
@@ -89,7 +89,7 @@ PolyLineImageConstIterator<TImage, TPath>
 
     for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
       {
-      target[i] = static_cast<unsigned int> (vcl_floor(m_InternalVertexIterator.Value()[i] + 0.5));
+      target[i] = static_cast<unsigned int> (std::floor(m_InternalVertexIterator.Value()[i] + 0.5));
       }
     }
   else
@@ -113,7 +113,7 @@ PolyLineImageConstIterator<TImage, TPath>
       IndexType source;
       for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
         {
-        source[i] = static_cast<unsigned int> (vcl_floor(m_InternalVertexIterator.Value()[i] + 0.5));
+        source[i] = static_cast<unsigned int> (std::floor(m_InternalVertexIterator.Value()[i] + 0.5));
         }
       // otbMsgDebugMacro(<<"Source: "<<source);
       ++m_InternalVertexIterator;
@@ -122,7 +122,7 @@ PolyLineImageConstIterator<TImage, TPath>
         IndexType target;
         for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
           {
-          target[i] = static_cast<unsigned int> (vcl_floor(m_InternalVertexIterator.Value()[i] + 0.5));
+          target[i] = static_cast<unsigned int> (std::floor(m_InternalVertexIterator.Value()[i] + 0.5));
           }
         // otbMsgDebugMacro(<<"Target: "<<target);
         m_InternalImageIterator = InternalImageIteratorType(const_cast<ImageType *> (m_Image.GetPointer()), source,

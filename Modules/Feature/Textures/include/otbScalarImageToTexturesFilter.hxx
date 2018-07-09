@@ -278,7 +278,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   unsigned int minRadius = 0;
   for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
     {
-    unsigned int distance = vcl_abs(m_Offset[i]);
+    unsigned int distance = std::abs(m_Offset[i]);
     if ( distance > minRadius )
       {
       minRadius = distance;
@@ -323,7 +323,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   clusterProminenceIt.GoToBegin();
   haralickCorIt.GoToBegin();
 
-  const double log2 = vcl_log(2.0);
+  const double log2 = std::log(2.0);
 
   InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
 
@@ -411,7 +411,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
        M(1) = x(1), M(k) = M(k-1) + (x(k) - M(k-1) ) / k
        S(1) = 0, S(k) = S(k-1) + (x(k) - M(k-1)) * (x(k) - M(k))
        for 2 <= k <= n, then
-       sigma = vcl_sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
+       sigma = std::sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
        population SD).
      */
     std::vector<double>::const_iterator msIt = marginalSums.begin();
@@ -466,12 +466,12 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       CooccurrenceIndexType index = (*constVectorIt).first;
       RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
       energy += frequency * frequency;
-      entropy -= ( frequency > GetPixelValueTolerance() ) ? frequency *vcl_log(frequency) / log2 : 0;
+      entropy -= ( frequency > GetPixelValueTolerance() ) ? frequency *std::log(frequency) / log2 : 0;
       correlation += ( ( index[0] - pixelMean ) * ( index[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
       inverseDifferenceMoment += frequency / ( 1.0 + ( index[0] - index[1] ) * ( index[0] - index[1] ) );
       inertia += ( index[0] - index[1] ) * ( index[0] - index[1] ) * frequency;
-      clusterShade += vcl_pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 3 ) * frequency;
-      clusterProminence += vcl_pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 4 ) * frequency;
+      clusterShade += std::pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 3 ) * frequency;
+      clusterProminence += std::pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 4 ) * frequency;
       haralickCorrelation += index[0] * index[1] * frequency;
       ++constVectorIt;
       }

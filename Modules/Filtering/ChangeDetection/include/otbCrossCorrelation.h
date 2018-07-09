@@ -74,10 +74,10 @@ public:
       {
 
       varA +=
-        static_cast<TOutput>(vcl_pow(static_cast<double>(itA.GetPixel(pos)) - static_cast<double>(meanA),
+        static_cast<TOutput>(std::pow(static_cast<double>(itA.GetPixel(pos)) - static_cast<double>(meanA),
                                      static_cast<double>(2.0)));
       varB +=
-        static_cast<TOutput>(vcl_pow(static_cast<double>(itB.GetPixel(pos)) - static_cast<double>(meanB),
+        static_cast<TOutput>(std::pow(static_cast<double>(itB.GetPixel(pos)) - static_cast<double>(meanB),
                                      static_cast<double>(2.0)));
 
       }
@@ -94,7 +94,7 @@ public:
         crossCorrel +=
           (static_cast<TOutput>(itA.GetPixel(pos)) -
            meanA) *
-          (static_cast<TOutput>(itB.GetPixel(pos)) - meanB) / (itA.Size() * vcl_sqrt(static_cast<double>(varA * varB)));
+          (static_cast<TOutput>(itB.GetPixel(pos)) - meanB) / (itA.Size() * std::sqrt(static_cast<double>(varA * varB)));
         }
       }
     else if (varA == itk::NumericTraits<TOutput>::Zero && varB == itk::NumericTraits<TOutput>::Zero)

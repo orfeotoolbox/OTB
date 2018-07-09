@@ -157,7 +157,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         origin[i] += m_VectorDataProperties->GetBoundingRegion().GetSize(i);
         }
       origin[i] += (0.5 - m_StartIndex[i]) * spacing[i];
-      size[i] = static_cast<unsigned long>(vcl_ceil(vcl_abs(
+      size[i] = static_cast<unsigned long>(std::ceil(std::abs(
         m_VectorDataProperties->GetBoundingRegion().GetSize(i)/spacing[i])));
       }
 

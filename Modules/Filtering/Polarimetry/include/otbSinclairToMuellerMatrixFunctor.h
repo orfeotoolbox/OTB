@@ -21,7 +21,7 @@
 #ifndef otbSinclairToMuellerMatrixFunctor_h
 #define otbSinclairToMuellerMatrixFunctor_h
 
-#include "vcl_complex.h"
+#include "std::complex.h"
 
 namespace otb
 {
@@ -101,10 +101,10 @@ public:
     const ComplexType Tyx = static_cast<ComplexType>(Svh);
     const ComplexType Tyy = static_cast<ComplexType>(Svv);
 
-    const ComplexType conjTxx = vcl_conj(Txx);
-    const ComplexType conjTxy = vcl_conj(Txy);
-    const ComplexType conjTyx = vcl_conj(Tyx);
-    const ComplexType conjTyy = vcl_conj(Tyy);
+    const ComplexType conjTxx = std::conj(Txx);
+    const ComplexType conjTxy = std::conj(Txy);
+    const ComplexType conjTyx = std::conj(Tyx);
+    const ComplexType conjTyy = std::conj(Tyy);
 
     result[0]  = static_cast<OutputValueType>( 0.5 * ( std::norm(Txx) + std::norm(Txy) + std::norm(Tyx) + std::norm(Tyy) ) );
     result[1]  = static_cast<OutputValueType>( 0.5 * ( std::norm(Txx) - std::norm(Txy) + std::norm(Tyx) - std::norm(Tyy) ) );

@@ -128,10 +128,10 @@ public:
     typename ImageRegionType::IndexType irIndex;
     typename ImageRegionType::SizeType irSize;
 
-    irIndex[0] = static_cast<unsigned long>(vcl_floor(m_Index[0]));
-    irIndex[1] = static_cast<unsigned long>(vcl_floor(m_Index[1]));
-    irSize[0] = static_cast<unsigned long>(vcl_ceil(m_Size[0]));
-    irSize[1] = static_cast<unsigned long>(vcl_ceil(m_Size[1]));
+    irIndex[0] = static_cast<unsigned long>(std::floor(m_Index[0]));
+    irIndex[1] = static_cast<unsigned long>(std::floor(m_Index[1]));
+    irSize[0] = static_cast<unsigned long>(std::ceil(m_Size[0]));
+    irSize[1] = static_cast<unsigned long>(std::ceil(m_Size[1]));
 
     imageRegion.SetIndex(irIndex);
     imageRegion.SetSize(irSize);

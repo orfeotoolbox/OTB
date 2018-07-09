@@ -63,13 +63,13 @@ int otbGeographicalDistance(int itkNotUsed(argc), char * argv[])
   bool failFlag = false;
   std::cerr.setf(std::ios_base::fixed);
   std::cerr.precision(5);
-  if(vcl_abs(distEvaluate1 - expectedDistance) > tolerance)
+  if(std::abs(distEvaluate1 - expectedDistance) > tolerance)
     {
     std::cerr<<"Evaluate("<<a<<") with origin "<<o<<" is inaccurate: expected "<< expectedDistance<<", found "<<distEvaluate1<<std::endl;
     failFlag = true;
     }
 
-  if(vcl_abs(distEvaluate2 - expectedDistance) > tolerance)
+  if(std::abs(distEvaluate2 - expectedDistance) > tolerance)
     {
     std::cerr<<"Evaluate("<<a<<", "<<b<<") is inaccurate: expected "<< expectedDistance<<", found "<<distEvaluate2<<std::endl;
     failFlag = true;

@@ -97,7 +97,7 @@ ExhaustiveExponentialOptimizer
   for (unsigned int i = 0; i < spaceDimension; ++i)
     {
     position[i] = this->GetInitialPosition()[i] *
-                  vcl_pow(m_GeometricProgression, -static_cast<double>(m_NumberOfSteps[i]) * m_StepLength) * scales[i];
+                  std::pow(m_GeometricProgression, -static_cast<double>(m_NumberOfSteps[i]) * m_StepLength) * scales[i];
     }
   this->SetCurrentPosition(position);
 
@@ -208,7 +208,7 @@ ExhaustiveExponentialOptimizer
     {
     newPosition[i] = this->GetInitialPosition()[i]
                      * this->GetScales()[i]
-                     * vcl_pow(m_GeometricProgression,
+                     * std::pow(m_GeometricProgression,
                                static_cast<double>(m_CurrentIndex[i] - m_NumberOfSteps[i]) * m_StepLength);
     }
 }

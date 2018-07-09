@@ -113,7 +113,7 @@ public:
     m_IntensityP1 = m_IntensityP1 / (static_cast<double> (m_NbOfBands));
     m_IntensityP2 = m_IntensityP2 / (static_cast<double> (m_NbOfBands));
 
-    m_Distance = vcl_sqrt(m_Distance);
+    m_Distance = std::sqrt(m_Distance);
 
     //compute spectralAngle
     double scalarProd = 0.0;
@@ -135,7 +135,7 @@ public:
       }
     else
       {
-      m_SpectralAngle = vcl_acos(scalarProd / vcl_sqrt(normProd));
+      m_SpectralAngle = std::acos(scalarProd / std::sqrt(normProd));
       }
 
     //

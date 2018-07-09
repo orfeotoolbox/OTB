@@ -73,13 +73,13 @@ public:
     const ComplexType C33 =  static_cast<ComplexType>(Covariance[5]);
     
     const ComplexType two = ComplexType(2.0, 0.0);
-    const ComplexType rootTwo = ComplexType(vcl_sqrt(2.0), 0.0);
+    const ComplexType rootTwo = ComplexType(std::sqrt(2.0), 0.0);
     
-    result[0] = static_cast<OutputValueType>( C33 + C13 + vcl_conj(C13) + C11 );
-    result[1] = static_cast<OutputValueType>( -C33 - C13 + vcl_conj(C13) + C11 );
-    result[2] = static_cast<OutputValueType>( rootTwo*C12 + rootTwo*vcl_conj(C23) );
-    result[3] = static_cast<OutputValueType>( C33 - C13 - vcl_conj(C13) + C11 );
-    result[4] = static_cast<OutputValueType>( rootTwo*C12 - rootTwo*vcl_conj(C23) );
+    result[0] = static_cast<OutputValueType>( C33 + C13 + std::conj(C13) + C11 );
+    result[1] = static_cast<OutputValueType>( -C33 - C13 + std::conj(C13) + C11 );
+    result[2] = static_cast<OutputValueType>( rootTwo*C12 + rootTwo*std::conj(C23) );
+    result[3] = static_cast<OutputValueType>( C33 - C13 - std::conj(C13) + C11 );
+    result[4] = static_cast<OutputValueType>( rootTwo*C12 - rootTwo*std::conj(C23) );
     result[5] = static_cast<OutputValueType>( two * C22 );
 
     result /= 2.0;

@@ -207,7 +207,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     {
     // The following "if" block is equivalent to the following line without
     // having to call floor.
-    //    baseIndex[dim] = (long) vcl_floor(index[dim] );
+    //    baseIndex[dim] = (long) std::floor(index[dim] );
     if (index[dim] >= 0.0)
       {
       baseIndex[dim] = (long) index[dim];
@@ -262,7 +262,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       {
       // Increment the offset, taking it through the range
       // (dist + rad - 1, ..., dist - rad), i.e. all x
-      // such that vcl_abs(x) <= rad
+      // such that std::abs(x) <= rad
       x -= 1.0;
       // Compute the weight for this m
       xWeight[dim][i] = m_Function(x);

@@ -345,8 +345,8 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     horizDisp->TransformIndexToPhysicalPoint(horizIt.GetIndex(),epiPoint);
     leftGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
 
-    ulIndex[0] = static_cast<int>(vcl_floor(gridIndexConti[0]));
-    ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
+    ulIndex[0] = static_cast<int>(std::floor(gridIndexConti[0]));
+    ulIndex[1] = static_cast<int>(std::floor(gridIndexConti[1]));
     if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
     if (ulIndex[1] < gridRegion.GetIndex(1)) ulIndex[1] = gridRegion.GetIndex(1);
     if (ulIndex[0] > (gridRegion.GetIndex(0) + static_cast<int>(gridRegion.GetSize(0)) - 2))
@@ -401,8 +401,8 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     horizDisp->TransformContinuousIndexToPhysicalPoint(rightIndexEstimate,epiPoint);
     rightGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
 
-    ulIndex[0] = static_cast<int>(vcl_floor(gridIndexConti[0]));
-    ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
+    ulIndex[0] = static_cast<int>(std::floor(gridIndexConti[0]));
+    ulIndex[1] = static_cast<int>(std::floor(gridIndexConti[1]));
     if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
     if (ulIndex[1] < gridRegion.GetIndex(1)) ulIndex[1] = gridRegion.GetIndex(1);
     if (ulIndex[0] > (gridRegion.GetIndex(0) + static_cast<int>(gridRegion.GetSize(0)) - 2))

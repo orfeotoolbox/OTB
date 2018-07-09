@@ -158,7 +158,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
       {
       for (unsigned int j = 0; j <= 5; ++j)
         {
-        error += vcl_pow(vcl_abs(resultAdaptedFMD[rsltIdx] - resultFMD.at(i).at(j)), 2);
+        error += std::pow(std::abs(resultAdaptedFMD[rsltIdx] - resultFMD.at(i).at(j)), 2);
 
         std::cout << "resultAdaptedFMD : " << resultAdaptedFMD[rsltIdx]
             << "\t - resultFMD : " << resultFMD.at(i).at(j) << std::endl;
@@ -194,7 +194,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
       {
       for (unsigned int j = 0; j <= 5; ++j)
         {
-        error += vcl_pow(vcl_abs(resultAdaptedRM[rsltIdx] - resultRM.at(i).at(j)), 2);
+        error += std::pow(std::abs(resultAdaptedRM[rsltIdx] - resultRM.at(i).at(j)), 2);
 
         std::cout << "resultAdaptedRM : " << resultAdaptedRM[rsltIdx] << "\t - resultRM : " << resultRM.at(i).at(j)
             << std::endl;
@@ -229,11 +229,11 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
       {
       for (unsigned int j = 0; j <= 5; ++j)
         {
-        error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).real()), 2);
+        error += std::pow(std::abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).real()), 2);
         std::cout << "resultAdaptedCM : (" << resultAdaptedCM[rsltIdx] << "," << resultAdaptedCM[rsltIdx + 1] << ")"
             << "\t - resultCM : " << resultCM.at(i).at(j) << std::endl;
         rsltIdx++;
-        error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).imag()), 2);
+        error += std::pow(std::abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).imag()), 2);
         rsltIdx++;
         }
       }
@@ -259,7 +259,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     rsltIdx = 0;
     for (unsigned int i = 0; i < 11; ++i)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedFM[rsltIdx] - resultFM[i]), 2);
+      error += std::pow(std::abs(resultAdaptedFM[rsltIdx] - resultFM[i]), 2);
 
       std::cout << "resultAdaptedFM : " << resultAdaptedFM[rsltIdx] << "\t - resultFM : " << resultFM[i] << std::endl;
       rsltIdx++;
@@ -286,7 +286,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     rsltIdx = 0;
     for (unsigned int i = 0; i < 7; ++i)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
+      error += std::pow(std::abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
 
       std::cout << "resultAdaptedHM : " << resultAdaptedHM[rsltIdx] << "\t - resultHM : " << resultHM[i] << std::endl;
       rsltIdx++;
@@ -313,7 +313,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     rsltIdx = 0;
     for (unsigned int i = 0; i < 4; ++i)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedRaM[rsltIdx] - resultRaM[i]), 2);
+      error += std::pow(std::abs(resultAdaptedRaM[rsltIdx] - resultRaM[i]), 2);
 
       std::cout << "resultAdaptedRaM : " << resultAdaptedRaM[rsltIdx] << "\t - resultRaM : " << resultRaM[i]
           << std::endl;
@@ -347,7 +347,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     rsltIdx = 0;
     for (unsigned int i = 0; i < 64; ++i)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedLH[rsltIdx] - resultLH->GetFrequency(i)), 2);
+      error += std::pow(std::abs(resultAdaptedLH[rsltIdx] - resultLH->GetFrequency(i)), 2);
 
       std::cout << "resultAdaptedLH : " << resultAdaptedLH[rsltIdx] << "\t - resultLH : " << resultLH->GetFrequency(i)
           << std::endl;
@@ -362,7 +362,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     return EXIT_FAILURE;
     }
 
-  error = vcl_sqrt(error);
+  error = std::sqrt(error);
   std::cout << std::endl << "Error : " << error << std::endl
             << std::endl;
 
