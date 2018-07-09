@@ -24,7 +24,7 @@
 
 #include "otbVirtualDimensionality.h"
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 #include "otb_boost_math_normal_header.h"
 
 namespace otb

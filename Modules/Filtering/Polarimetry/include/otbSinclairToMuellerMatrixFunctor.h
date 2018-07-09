@@ -21,7 +21,7 @@
 #ifndef otbSinclairToMuellerMatrixFunctor_h
 #define otbSinclairToMuellerMatrixFunctor_h
 
-#include "std::complex.h"
+#include <complex>
 
 namespace otb
 {

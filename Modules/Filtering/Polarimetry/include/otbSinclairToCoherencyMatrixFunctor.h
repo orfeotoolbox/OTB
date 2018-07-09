@@ -21,7 +21,7 @@
 #ifndef otbSinclairToCoherencyMatrixFunctor_h
 #define otbSinclairToCoherencyMatrixFunctor_h
 
-#include "std::complex.h"
+#include <complex>
 
 namespace otb
 {

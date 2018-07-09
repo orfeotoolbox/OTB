@@ -29,7 +29,7 @@
 #include "otbOGRFeatureWrapper.h"
 
 #include <time.h>
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 namespace otb
 {

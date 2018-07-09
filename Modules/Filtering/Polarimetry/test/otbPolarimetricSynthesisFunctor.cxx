@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include "std::complex.h"
-#include "vcl_cmath.h"
+#include <complex>
+#include <cmath>
 #include "otbPolarimetricSynthesisFunctor.h"
 
 int otbPolarimetricSynthesisFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])

@@ -26,7 +26,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageLinearConstIteratorWithIndex.h"
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 namespace otb
 {
