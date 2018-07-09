@@ -80,7 +80,7 @@ LineOfSightOptimizer<TPrecision,TLabel>
     vi(1,0) = itPointB.Value()[1] - itPointA.Value()[1];
     vi(2,0) = itPointB.Value()[2] - itPointA.Value()[2];
 
-    PrecisionType norm_inv = 1. / vcl_sqrt(vi(0,0)*vi(0,0)+vi(1,0)*vi(1,0)+vi(2,0)*vi(2,0));
+    PrecisionType norm_inv = 1. / std::sqrt(vi(0,0)*vi(0,0)+vi(1,0)*vi(1,0)+vi(2,0)*vi(2,0));
 
     vi(0,0) *= norm_inv;
     vi(1,0) *= norm_inv;
@@ -126,14 +126,14 @@ LineOfSightOptimizer<TPrecision,TLabel>
 
     res2 = std::max(0.0,dot_product(AC,AC) - (dot_product(AB,AC) * dot_product(AB,AC)) / (dot_product(AB,AB)));
 
-    m_Residues.push_back( vcl_sqrt( res2 ) );
+    m_Residues.push_back( std::sqrt( res2 ) );
     m_GlobalResidue += res2;
 
     ++itPointA;
     ++itPointB;
   }
 
-  m_GlobalResidue = vcl_sqrt(m_GlobalResidue);
+  m_GlobalResidue = std::sqrt(m_GlobalResidue);
 
   return result;
 }

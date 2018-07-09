@@ -164,7 +164,7 @@ private:
 
       TInternalPrecision scale = 1.;
 
-      if(vcl_abs(stdPanchroPixel) > 1e-10)
+      if(std::abs(stdPanchroPixel) > 1e-10)
       {
         scale = 1.0/stdPanchroPixel;
       }

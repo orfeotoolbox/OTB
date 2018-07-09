@@ -275,7 +275,7 @@ BayesianFusionFilter<TInputMultiSpectralImage,
   eye.Fill(itk::NumericTraits<InputMultiSpectralInterpRealType>::Zero);
   for (unsigned int r = 1; r < eye.Rows(); ++r)
     {
-    eye(r, r) = vcl_pow(10., -12.);
+    eye(r, r) = std::pow(10., -12.);
     }
 
   /** TODO

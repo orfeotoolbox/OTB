@@ -58,13 +58,13 @@ public:
       HistogramFrequencyType freq = histogram->GetFrequency(index);
       if (freq > 0)
         {
-        jointEntropy += freq * vcl_log(freq);
+        jointEntropy += freq * std::log(freq);
         }
 
       }
 
     jointEntropy = -jointEntropy / static_cast<TOutput>(totalFreq) +
-                   vcl_log(totalFreq);
+                   std::log(totalFreq);
 
     return jointEntropy;
   }

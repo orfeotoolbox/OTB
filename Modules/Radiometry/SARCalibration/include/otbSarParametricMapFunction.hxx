@@ -95,7 +95,7 @@ SarParametricMapFunction<TInputImage, TCoordRep>
        //std::cout << "m_Coeff(" << ycoeff-1 << "," << xcoeff-1 << ") = " << m_Coeff(ycoeff-1, xcoeff-1) << std::endl;
        intermediate = intermediate * point[0] + m_Coeff(ycoeff-1, xcoeff-1);
        }
-     result += vcl_pow( static_cast<double>(point[1]), static_cast<double>(ycoeff-1) ) * intermediate;
+     result += std::pow( static_cast<double>(point[1]), static_cast<double>(ycoeff-1) ) * intermediate;
      }
 
   return result;
@@ -165,10 +165,10 @@ SarParametricMapFunction<TInputImage, TCoordRep>
 
       for (unsigned int xcoeff = 0; xcoeff < m_Coeff.Cols(); ++xcoeff)
         {
-        double xpart = vcl_pow( static_cast<double>(point[0]) / m_ProductWidth, static_cast<double>(xcoeff));
+        double xpart = std::pow( static_cast<double>(point[0]) / m_ProductWidth, static_cast<double>(xcoeff));
         for (unsigned int ycoeff = 0; ycoeff < m_Coeff.Rows(); ++ycoeff)
           {
-          double ypart = vcl_pow( static_cast<double>(point[1]) / m_ProductHeight, static_cast<double>(ycoeff));
+          double ypart = std::pow( static_cast<double>(point[1]) / m_ProductHeight, static_cast<double>(ycoeff));
           a(i, xcoeff * m_Coeff.Rows() + ycoeff) = xpart * ypart;
           //std::cout << "a(" << i << "," << xcoeff * m_Coeff.Rows() + ycoeff << ") = " <<  xpart * ypart << std::endl;
           }

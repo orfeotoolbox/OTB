@@ -50,18 +50,18 @@ VirtualDimensionality<TInputImage>
   // Compute diagonalisation of sample covariance and correlation matrices
   vnl_symmetric_eigensystem<PrecisionType> eigenK(m_Covariance);
   VectorType eigenCovariance = eigenK.D.diagonal();
-  vcl_sort(eigenCovariance.begin(), eigenCovariance.end());
+  std::sort(eigenCovariance.begin(), eigenCovariance.end());
   eigenCovariance.flip();
 
   vnl_symmetric_eigensystem<PrecisionType> eigenR(m_Correlation);
   VectorType eigenCorrelation = eigenR.D.diagonal();
-  vcl_sort(eigenCorrelation.begin(), eigenCorrelation.end());
+  std::sort(eigenCorrelation.begin(), eigenCorrelation.end());
   eigenCorrelation.flip();
 
   m_NumberOfEndmembers = 0;
   for(unsigned int i = 0; i < nbBands; ++i)
     {
-    double sigma = vcl_sqrt( 2.0 / m_NumberOfPixels
+    double sigma = std::sqrt( 2.0 / m_NumberOfPixels
                               * (eigenCovariance[i] + eigenCorrelation[i]
                                  + eigenCovariance[i] * eigenCorrelation[i]) );
     boost::math::normal normalDist(0, sigma);

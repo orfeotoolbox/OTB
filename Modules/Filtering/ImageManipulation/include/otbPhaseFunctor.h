@@ -124,7 +124,7 @@ public:
 private:
   inline ScalarType ComputePhase(ScalarType a, ScalarType b) const
   {
-    return vcl_atan2(b, a);
+    return std::atan2(b, a);
   }
 
 };

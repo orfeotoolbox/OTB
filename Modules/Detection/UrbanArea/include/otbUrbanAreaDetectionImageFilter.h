@@ -79,7 +79,7 @@ public:
       lVIval = static_cast<ValueType>(std::max(0., m_VegetationFunctor(pInPix)));
       lWIval = static_cast<ValueType>(std::max(0., m_WaterFunctor(pInPix)));
 
-      lOutPix = vcl_sqrt(vcl_abs((1 - lVIval) * (1 - lWIval)));
+      lOutPix = std::sqrt(std::abs((1 - lVIval) * (1 - lWIval)));
       }
     else lOutPix = 0;
 

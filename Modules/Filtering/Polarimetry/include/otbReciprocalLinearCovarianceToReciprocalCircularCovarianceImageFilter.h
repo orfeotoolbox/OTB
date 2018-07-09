@@ -23,7 +23,7 @@
 #define otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "vcl_complex.h"
+#include "std::complex.h"
 
 namespace otb
  {
@@ -79,15 +79,15 @@ public:
     const ComplexType C33 =  static_cast<ComplexType>(  Covariance[5]    );     //   <vv.vv*>
     
     
-    const ComplexType cst1 = ComplexType(0.0, vcl_sqrt(2.0));
+    const ComplexType cst1 = ComplexType(0.0, std::sqrt(2.0));
     const ComplexType two = ComplexType(2.0, 0 );
 
-    result[0] = static_cast<ComplexType>( C33-cst1*C23-C13+cst1*vcl_conj(C23)-vcl_conj(C13)+two*C22-cst1*C12+cst1*vcl_conj(C12)+C11  ) ;
-    result[1] = static_cast<ComplexType>( cst1*C33+two*C23-cst1*C13+cst1*vcl_conj(C13)+two*vcl_conj(C12)-cst1*C11 );
-    result[2] = static_cast<ComplexType>( -C33+cst1*C23+C13+cst1*vcl_conj(C23)+vcl_conj(C13)+two*C22-cst1*C12-cst1*vcl_conj(C12)-C11  ) ;
-    result[3] = static_cast<ComplexType>( two*C33+two*C13+two*vcl_conj(C13)+two*C11 ) ;
-    result[4] = static_cast<ComplexType>( cst1*C33+cst1*C13+two*vcl_conj(C23)-cst1*vcl_conj(C13)+two*C12-cst1*C11 ) ;
-    result[5] = static_cast<ComplexType>( C33+cst1*C23-C13-cst1*vcl_conj(C23)-vcl_conj(C13)+two*C22+cst1*C12-cst1*vcl_conj(C12)+C11 ) ;
+    result[0] = static_cast<ComplexType>( C33-cst1*C23-C13+cst1*std::conj(C23)-std::conj(C13)+two*C22-cst1*C12+cst1*std::conj(C12)+C11  ) ;
+    result[1] = static_cast<ComplexType>( cst1*C33+two*C23-cst1*C13+cst1*std::conj(C13)+two*std::conj(C12)-cst1*C11 );
+    result[2] = static_cast<ComplexType>( -C33+cst1*C23+C13+cst1*std::conj(C23)+std::conj(C13)+two*C22-cst1*C12-cst1*std::conj(C12)-C11  ) ;
+    result[3] = static_cast<ComplexType>( two*C33+two*C13+two*std::conj(C13)+two*C11 ) ;
+    result[4] = static_cast<ComplexType>( cst1*C33+cst1*C13+two*std::conj(C23)-cst1*std::conj(C13)+two*C12-cst1*C11 ) ;
+    result[5] = static_cast<ComplexType>( C33+cst1*C23-C13-cst1*std::conj(C23)-std::conj(C13)+two*C22+cst1*C12-cst1*std::conj(C12)+C11 ) ;
 
 	result /= 4.0;
 

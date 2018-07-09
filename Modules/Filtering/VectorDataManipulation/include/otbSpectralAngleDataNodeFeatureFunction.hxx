@@ -176,7 +176,7 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
   if (centralNbVisitedPixel != 0.)
     {
     meanCentral = static_cast<double> (centralAccSpectralAngle) / centralNbVisitedPixel;
-    //stddevCentral = vcl_sqrt( centralAccSpectralAngleSecondOrder/centralNbVisitedPixel - meanCentral*meanCentral );
+    //stddevCentral = std::sqrt( centralAccSpectralAngleSecondOrder/centralNbVisitedPixel - meanCentral*meanCentral );
     }
 
   if (meanCentral == 0.)

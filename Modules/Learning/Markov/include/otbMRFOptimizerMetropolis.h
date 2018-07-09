@@ -84,7 +84,7 @@ public:
       }
     else
       {
-      double proba = vcl_exp(-(deltaEnergy) / this->m_Parameters[0]);
+      double proba = std::exp(-(deltaEnergy) / this->m_Parameters[0]);
       if ((m_Generator->GetIntegerVariate() % 10000) < proba * 10000)
         {
         return true;

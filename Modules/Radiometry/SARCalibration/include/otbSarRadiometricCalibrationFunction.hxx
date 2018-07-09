@@ -112,12 +112,12 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     this->GetInputImage()->TransformIndexToPhysicalPoint( index, point);
 
   /** digitalNumber:
-    * For complex pixel type, vcl_abs() returns the modulus. which is
+    * For complex pixel type, std::abs() returns the modulus. which is
     * sqrt((I*I) + (Q*Q)). Where I and Q are real and imaginary part of the
     * complex pixel. So to to get (I*I) + (Q*Q) in our calculation, the output
-    * of vcl_abs() is squared. See below (digitalNumber * digitalNumber) where
-    * digitalNumber is the output of vcl_abs() which is sqrt((I*I) + (Q*Q)). For
-    * non-complex pixel types, vcl_abs() simply returns absolute value.
+    * of std::abs() is squared. See below (digitalNumber * digitalNumber) where
+    * digitalNumber is the output of std::abs() which is sqrt((I*I) + (Q*Q)). For
+    * non-complex pixel types, std::abs() simply returns absolute value.
     */
 
 	const std::complex<float> pVal = this->GetInputImage()->GetPixel(index);
@@ -134,7 +134,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
   /** Apply incidence angle correction if needed */
   if (m_ApplyIncidenceAngleCorrection)
     {
-    sigma *= vcl_sin(static_cast<RealType>(m_IncidenceAngle->Evaluate(point)));
+    sigma *= std::sin(static_cast<RealType>(m_IncidenceAngle->Evaluate(point)));
     }
 
   /** Apply old and new antenna pattern gain. */

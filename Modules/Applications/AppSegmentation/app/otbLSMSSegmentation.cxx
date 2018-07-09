@@ -387,8 +387,8 @@ private:
         // Compute extraction parameters
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
-        unsigned long sizeX = vcl_min(sizeTilesX+1,sizeImageX-startX+1);
-        unsigned long sizeY = vcl_min(sizeTilesY+1,sizeImageY-startY+1);
+        unsigned long sizeX = std::min(sizeTilesX+1,sizeImageX-startX+1);
+        unsigned long sizeY = std::min(sizeTilesY+1,sizeImageY-startY+1);
 
         //Tiles extraction of :
         //- the input image (filtering image)
@@ -475,8 +475,8 @@ private:
         {
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
-        unsigned long sizeX = vcl_min(sizeTilesX+1,sizeImageX-startX+1);
-        unsigned long sizeY = vcl_min(sizeTilesY+1,sizeImageY-startY+1);
+        unsigned long sizeX = std::min(sizeTilesX+1,sizeImageX-startX+1);
+        unsigned long sizeY = std::min(sizeTilesY+1,sizeImageY-startY+1);
 
         std::string tileIn = CreateFileName(row,column,"SEG");
 
@@ -589,8 +589,8 @@ private:
         {
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
-        unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
-        unsigned long sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
+        unsigned long sizeX = std::min(sizeTilesX,sizeImageX-startX);
+        unsigned long sizeY = std::min(sizeTilesY,sizeImageY-startY);
 
         std::string tileIn = CreateFileName(row,column,"SEG");
 

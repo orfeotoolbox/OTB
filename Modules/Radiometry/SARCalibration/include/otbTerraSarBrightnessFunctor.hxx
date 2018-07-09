@@ -47,7 +47,7 @@ TerraSarBrightnessFunctor<TInput, TOutput>
   // Formula: Beta^0 = Ks * |DN|^2
 
   // First, square the input pixel
-  double squareInPix = vcl_pow(static_cast<double>(inPix), 2.);
+  double squareInPix = std::pow(static_cast<double>(inPix), 2.);
 
   // Then apply the calibration factor
   double beta = m_CalibrationFactor * squareInPix;
@@ -57,7 +57,7 @@ TerraSarBrightnessFunctor<TInput, TOutput>
   // Results in decibels case
   if (m_ResultsInDecibels)
     {
-    beta = 10 * vcl_log10(beta);
+    beta = 10 * std::log10(beta);
     }
 
   return static_cast<TOutput>(beta);
@@ -69,8 +69,8 @@ TerraSarBrightnessFunctor<TInput, TOutput>
 ::operator() (const std::complex<TInput> &inPix)
   {
   // First, extract modulus and phase
-  double modulus = vcl_sqrt(inPix.real() * inPix.real() + inPix.imag() * inPix.imag());
-  double phase   = vcl_atan2(inPix.imag(), inPix.real());
+  double modulus = std::sqrt(inPix.real() * inPix.real() + inPix.imag() * inPix.imag());
+  double phase   = std::atan2(inPix.imag(), inPix.real());
 
   // Then, calibrate the modulus
   double beta = this->operator() (modulus);

@@ -60,7 +60,7 @@ public:
     double x = static_cast<double>(A);
     double px = CONST_PI * x;
     double temp = 1.0 - x * m_Factor * x;
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
   // Equal to \f$ \frac{1}{m^2} \f$

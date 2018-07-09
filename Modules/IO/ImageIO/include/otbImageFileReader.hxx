@@ -372,7 +372,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       {
       if ( m_FilenameHelper->GetResolutionFactor() != 0 )
         {
-        spacing[i] = 1.0*vcl_pow((double)2, (double)m_FilenameHelper->GetResolutionFactor());
+        spacing[i] = 1.0*std::pow((double)2, (double)m_FilenameHelper->GetResolutionFactor());
         }
       else
         {
@@ -460,19 +460,19 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
                                       resolution);
     double idSpacing = 1.0;
     if (resolution != 0)
-      idSpacing = 1.0 * vcl_pow((double)2.0, (double)resolution);
+      idSpacing = 1.0 * std::pow((double)2.0, (double)resolution);
 
  std::cout << "?" << std::endl;
- std::cout << vcl_abs(origin[0] - 0.5 * spacing[0]) << std::endl;
-  std::cout << vcl_abs(origin[1] - 0.5 * spacing[1]) << std::endl;
-   std::cout << vcl_abs(spacing[0] - idSpacing) << std::endl;
-    std::cout << vcl_abs(spacing[1] - idSpacing) << std::endl;
+ std::cout << std::abs(origin[0] - 0.5 * spacing[0]) << std::endl;
+  std::cout << std::abs(origin[1] - 0.5 * spacing[1]) << std::endl;
+   std::cout << std::abs(spacing[0] - idSpacing) << std::endl;
+    std::cout << std::abs(spacing[1] - idSpacing) << std::endl;
     const double epsilon = 1.0E-12;
     if ( projRef.empty()
-         && vcl_abs(origin[0] - 0.5 * spacing[0]) > epsilon
-         && vcl_abs(origin[1] - 0.5 * spacing[1]) > epsilon
-         && (vcl_abs(spacing[0] - idSpacing) > epsilon
-         && vcl_abs(spacing[1] - idSpacing) > epsilon))
+         && std::abs(origin[0] - 0.5 * spacing[0]) > epsilon
+         && std::abs(origin[1] - 0.5 * spacing[1]) > epsilon
+         && (std::abs(spacing[0] - idSpacing) > epsilon
+         && std::abs(spacing[1] - idSpacing) > epsilon))
       {
           std::cout << "Force the projection ref" << std::endl;
       std::string wgs84ProjRef =

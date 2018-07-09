@@ -81,10 +81,10 @@ public:
   HillShadingFunctor() : m_AzimuthLight(30.0 * CONST_PI_180), m_ElevationLight(45.0 *CONST_PI_180),
     m_XRes(100.0), m_YRes(100.0), m_Scale(0.1)
   {
-    m_SinElev = vcl_sin(m_ElevationLight);
-    m_CosElev = vcl_cos(m_ElevationLight);
-    m_SinAz = vcl_sin(m_AzimuthLight);
-    m_CosAz = vcl_cos(m_AzimuthLight);
+    m_SinElev = std::sin(m_ElevationLight);
+    m_CosElev = std::cos(m_ElevationLight);
+    m_SinAz = std::sin(m_AzimuthLight);
+    m_CosAz = std::cos(m_AzimuthLight);
   }
   ~HillShadingFunctor() {}
 
@@ -100,12 +100,12 @@ public:
 
   void SetXRes(double res)
   {
-    m_XRes = vcl_abs(res);
+    m_XRes = std::abs(res);
   }
 
   void SetYRes(double res)
   {
-    m_YRes = vcl_abs(res);
+    m_YRes = std::abs(res);
   }
 
   double GetScale() const
@@ -126,8 +126,8 @@ public:
   void SetAzimuthLight(double az)
   {
     m_AzimuthLight = az;
-    m_SinAz = vcl_sin(m_AzimuthLight);
-    m_CosAz = vcl_cos(m_AzimuthLight);
+    m_SinAz = std::sin(m_AzimuthLight);
+    m_CosAz = std::cos(m_AzimuthLight);
   }
 
   double GetElevationLight() const
@@ -138,8 +138,8 @@ public:
   void SetElevationLight(double el)
   {
     m_ElevationLight = el;
-    m_SinElev = vcl_sin(m_ElevationLight);
-    m_CosElev = vcl_cos(m_ElevationLight);
+    m_SinElev = std::sin(m_ElevationLight);
+    m_CosElev = std::cos(m_ElevationLight);
   }
 
   inline TOutput operator ()(const TNeighIter& it) const
@@ -166,7 +166,7 @@ public:
 
     // permutation between x and y as the azimuth angle is given compared to the north-south axis
     float lambertian = ((m_CosElev * m_CosAz * ySlope) + (m_CosElev * m_SinAz * xSlope) + m_SinElev)
-                       / vcl_sqrt(xSlope * xSlope + ySlope * ySlope + 1);
+                       / std::sqrt(xSlope * xSlope + ySlope * ySlope + 1);
 
     return (lambertian + 1) / 2; //normalize between 0 and 1
 

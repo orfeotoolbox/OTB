@@ -132,9 +132,9 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
     norm = itk::NumericTraits<InputRealType>::Zero;
     for (i = 0; i < neighborhoodSize; ++i)
       {
-      norm += static_cast<InputRealType>(vcl_abs(m_Filter(i)));
+      norm += static_cast<InputRealType>(std::abs(m_Filter(i)));
       }
-    norm_double = static_cast<double>(vcl_abs(norm));
+    norm_double = static_cast<double>(std::abs(norm));
     }
 
   while (!inputIt.IsAtEnd())

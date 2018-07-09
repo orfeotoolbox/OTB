@@ -33,8 +33,8 @@
 
 namespace otb
 {
-const double PipelineMemoryPrintCalculator::ByteToMegabyte = 1./vcl_pow(2.0, 20);
-const double PipelineMemoryPrintCalculator::MegabyteToByte = vcl_pow(2.0, 20);
+const double PipelineMemoryPrintCalculator::ByteToMegabyte = 1./std::pow(2.0, 20);
+const double PipelineMemoryPrintCalculator::MegabyteToByte = std::pow(2.0, 20);
 
 PipelineMemoryPrintCalculator
 ::PipelineMemoryPrintCalculator()
@@ -54,7 +54,7 @@ PipelineMemoryPrintCalculator
 ::EstimateOptimalNumberOfStreamDivisions(MemoryPrintType memoryPrint, MemoryPrintType availableMemory)
 {
   unsigned long divisions;
-  divisions = vcl_ceil(static_cast<double>(memoryPrint)
+  divisions = std::ceil(static_cast<double>(memoryPrint)
                        / availableMemory);
   return divisions;
 }

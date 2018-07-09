@@ -58,7 +58,7 @@ public:
       {
       m_RefNorm += ref[i] * ref[i];
       }
-    m_RefNorm = vcl_sqrt(static_cast<double>(m_RefNorm));
+    m_RefNorm = std::sqrt(static_cast<double>(m_RefNorm));
   }
   TInput GetReferencePixel() const
   {
@@ -83,14 +83,14 @@ protected:
       normProd1 += inPix[i] * inPix[i];
       }
     normProd = normProd1 * m_RefNorm * m_RefNorm;
-    sqrtNormProd = vcl_sqrt(normProd);
+    sqrtNormProd = std::sqrt(normProd);
     if ((sqrtNormProd == 0.0) || (scalarProd / sqrtNormProd > 1))
       {
       dist = 0.0;
       }
     else
       {
-      dist = vcl_acos(scalarProd / sqrtNormProd);
+      dist = std::acos(scalarProd / sqrtNormProd);
       }
 
     out = static_cast<TOutputValue>(dist);

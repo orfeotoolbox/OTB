@@ -21,7 +21,7 @@
 #ifndef otbSinclairToCoherencyMatrixFunctor_h
 #define otbSinclairToCoherencyMatrixFunctor_h
 
-#include "vcl_complex.h"
+#include "std::complex.h"
 
 namespace otb
 {
@@ -87,14 +87,14 @@ public:
     const ComplexType jHVMinusVH = (S_hv - S_vh) * ComplexType(0., 1.);
 
     result[0] = static_cast<OutputValueType>( std::norm(HHPlusVV) );
-    result[1] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HHMinusVV) );
-    result[2] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(HVPlusVH) );
-    result[3] = static_cast<OutputValueType>( HHPlusVV * vcl_conj(jHVMinusVH) );
+    result[1] = static_cast<OutputValueType>( HHPlusVV * std::conj(HHMinusVV) );
+    result[2] = static_cast<OutputValueType>( HHPlusVV * std::conj(HVPlusVH) );
+    result[3] = static_cast<OutputValueType>( HHPlusVV * std::conj(jHVMinusVH) );
     result[4] = static_cast<OutputValueType>( std::norm(HHMinusVV) );
-    result[5] = static_cast<OutputValueType>( HHMinusVV * vcl_conj(HVPlusVH) );
-    result[6] = static_cast<OutputValueType>( HHMinusVV * vcl_conj(jHVMinusVH) );
+    result[5] = static_cast<OutputValueType>( HHMinusVV * std::conj(HVPlusVH) );
+    result[6] = static_cast<OutputValueType>( HHMinusVV * std::conj(jHVMinusVH) );
     result[7] = static_cast<OutputValueType>( std::norm(HVPlusVH) );
-    result[8] = static_cast<OutputValueType>( HVPlusVH * vcl_conj(jHVMinusVH) );
+    result[8] = static_cast<OutputValueType>( HVPlusVH * std::conj(jHVMinusVH) );
     result[9] = static_cast<OutputValueType>( std::norm(jHVMinusVH) );
 
     result /= 2.0;

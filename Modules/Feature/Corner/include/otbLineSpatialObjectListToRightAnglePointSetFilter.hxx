@@ -111,7 +111,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
         double Angle = this->ComputeAngleFormedBySegments(*itLinesListTest, *itLinesListCur);
 
         /** Check if the angle is a right one */
-        if (vcl_abs(Angle - CONST_PI_2) <= m_ThresholdAngle)
+        if (std::abs(Angle - CONST_PI_2) <= m_ThresholdAngle)
           {
           /** Right angle coordinate*/
           PointType RightAngleCoordinate;
@@ -122,7 +122,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
           double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, *itLinesListCur);
 
           /** Use Pythagore to compute the distance between the two segments*/
-          double SegmentDistance = vcl_sqrt(dist1 * dist1 + dist2 * dist2);
+          double SegmentDistance = std::sqrt(dist1 * dist1 + dist2 * dist2);
 
 //                 if(this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, *itLinesListTest) <m_ThresholdDistance &&
 //                    this->ComputeDistanceFromPointToSegment(RightAngleCoordinate, *itLinesListCur) <m_ThresholdDistance)
@@ -159,8 +159,8 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   double X2 = (*itPointsDst).GetPosition()[0];  //xq2
   double Y2 = (*itPointsDst).GetPosition()[1];  //yq2
 
-  double dist1 = vcl_sqrt((X1 - rAngle[0]) * (X1 - rAngle[0]) + (Y1 - rAngle[1]) * (Y1 - rAngle[1]));
-  double dist2 = vcl_sqrt((X2 - rAngle[0]) * (X2 - rAngle[0]) + (Y2 - rAngle[1]) * (Y2 - rAngle[1]));
+  double dist1 = std::sqrt((X1 - rAngle[0]) * (X1 - rAngle[0]) + (Y1 - rAngle[1]) * (Y1 - rAngle[1]));
+  double dist2 = std::sqrt((X2 - rAngle[0]) * (X2 - rAngle[0]) + (Y2 - rAngle[1]) * (Y2 - rAngle[1]));
 
   return std::min(dist1, dist2);
 }
@@ -177,7 +177,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   double oriDst = this->ComputeOrientation(lineDst);
   double oriSrc = this->ComputeOrientation(lineSrc);
 
-  return vcl_abs(oriDst  - oriSrc);
+  return std::abs(oriDst  - oriSrc);
 }
 
 /**
@@ -200,7 +200,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   //Compute the orientation
   double dx = Xp1 - Xp2;
   double dy = Yp1 - Yp2;
-  double orientation = vcl_atan2(dy, dx);
+  double orientation = std::atan2(dy, dx);
   if (orientation < 0) orientation += CONST_PI;
 
   return orientation;
@@ -244,7 +244,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   double LengthSegmentAy = 0., lengthSegmentBy = 0.;
 
   /** Equation of the first Line*/
-  if (vcl_abs(Xp2 - Xp1) < 1e-10) Xp2 = 0.0001;
+  if (std::abs(Xp2 - Xp1) < 1e-10) Xp2 = 0.0001;
 
   if (Xp1 < Xp2) LengthSegmentAy = Yp2 - Yp1;
   else LengthSegmentAy = Yp1 - Yp2;
@@ -253,7 +253,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   originA = Yp1 - (slopeA * Xp1);
 
   /** Equation of the second Line*/
-  if (vcl_abs(Xq2 - Xq1) < 1e-10) Xq2 = 0.0001;
+  if (std::abs(Xq2 - Xq1) < 1e-10) Xq2 = 0.0001;
 
   if (Xq1 < Xq2) lengthSegmentBy = Yq2 - Yq1;
   else lengthSegmentBy = Yq1 - Yq2;
@@ -263,7 +263,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
 
   /** Avoid the case of parallel lines*/
   double denum = 0.;
-  if (vcl_abs(slopeA - slopeB) < 1e-5) denum = 0.001;
+  if (std::abs(slopeA - slopeB) < 1e-5) denum = 0.001;
   else denum = slopeA - slopeB;
 
   /** Compute the coordinate of the intersection point Y =AX+B*/

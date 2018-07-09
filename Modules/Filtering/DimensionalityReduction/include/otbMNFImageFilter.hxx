@@ -418,7 +418,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   for ( unsigned int i = 0; i < transf.rows(); ++i )
   {
-    double norm = 1. / vcl_sqrt( normMat.get(i, i) );
+    double norm = 1. / std::sqrt( normMat.get(i, i) );
     for ( unsigned int j = 0; j < transf.cols(); ++j )
       transf.put( j, i, transf.get(j, i) * norm );
   }

@@ -88,8 +88,8 @@ FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, TFunction>
 
   // pad the input requested region by the operator radius
   InputImageSizeType maxRad;
-  maxRad[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
-  maxRad[1] = m_Radius[0] + vcl_abs(m_Offset[1]);
+  maxRad[0] = m_Radius[0] + std::abs(m_Offset[0]);
+  maxRad[1] = m_Radius[0] + std::abs(m_Offset[1]);
   inputRequestedRegion.PadByRadius(maxRad);
 
   // crop the input requested region at the input's largest possible region

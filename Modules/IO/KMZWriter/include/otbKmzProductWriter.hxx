@@ -288,8 +288,8 @@ KmzProductWriter<TInputImage>
 
   // Compute max depth
   unsigned int maxDepth =
-    static_cast<unsigned int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
-                              vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
+    static_cast<unsigned int>(std::max(std::ceil(std::log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / std::log(2.0)),
+                              std::ceil(std::log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / std::log(2.0))));
   m_MaxDepth = maxDepth;
   m_CurIdx = 0;
 
@@ -298,7 +298,7 @@ KmzProductWriter<TInputImage>
 
   for (unsigned int i = 0; i <= maxDepth; ++i)
     {
-    unsigned int ratio = static_cast<unsigned int>(vcl_pow(2.,static_cast<int>((static_cast<int>(maxDepth) - i))));
+    unsigned int ratio = static_cast<unsigned int>(std::pow(2.,static_cast<int>((static_cast<int>(maxDepth) - i))));
     nbTile += (((sizeX / ratio) / m_TileSize) + 1)  * (((sizeY / ratio) / m_TileSize) + 1);
     }
 

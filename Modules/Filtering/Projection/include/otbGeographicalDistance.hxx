@@ -66,13 +66,13 @@ GeographicalDistance<TVector>
   const double Deg2Rad = CONST_PI/180.;
 
   // Compute latitude and longitude differences
-  double dLat = (vcl_fabs(x[1] - y[1])) * Deg2Rad;
-  double dLon = (vcl_fabs(x[0] - y[0])) * Deg2Rad;
+  double dLat = (std::fabs(x[1] - y[1])) * Deg2Rad;
+  double dLon = (std::fabs(x[0] - y[0])) * Deg2Rad;
 
   // Compute dx in meters
-  double a = vcl_sin(dLat / Two) * vcl_sin(dLat / Two) + vcl_cos(y[1] * Deg2Rad) * vcl_cos(
-    x[1] * Deg2Rad) * vcl_sin(dLon / Two) * vcl_sin(dLon / Two);
-  double c = Two * vcl_atan2(vcl_sqrt(a), vcl_sqrt(One - a));
+  double a = std::sin(dLat / Two) * std::sin(dLat / Two) + std::cos(y[1] * Deg2Rad) * std::cos(
+    x[1] * Deg2Rad) * std::sin(dLon / Two) * std::sin(dLon / Two);
+  double c = Two * std::atan2(std::sqrt(a), std::sqrt(One - a));
   double d = m_EarthRadius * c;
 
   // Return result

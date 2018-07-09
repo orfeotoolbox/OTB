@@ -98,7 +98,7 @@ SamplerBase::SetRate(double rate, unsigned long total)
     }
   if (modified)
     {
-    m_NeededElements = (unsigned long)(vcl_floor(0.5 + m_Rate * (double)(m_TotalElements) ));
+    m_NeededElements = (unsigned long)(std::floor(0.5 + m_Rate * (double)(m_TotalElements) ));
     this->Modified();
     }
 }

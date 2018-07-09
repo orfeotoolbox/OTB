@@ -86,7 +86,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
                                                         itVectorCur.Get()->GetLine());
 
       // Check if the angle is a right one
-      if (vcl_abs(Angle - CONST_PI_2) <= m_AngleThreshold)
+      if (std::abs(Angle - CONST_PI_2) <= m_AngleThreshold)
         {
         // Right angle coordinate
         PointType RightAngleCoordinate;
@@ -155,7 +155,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   double oriDst = this->ComputeOrientation(lineDst);
   double oriSrc = this->ComputeOrientation(lineSrc);
 
-  return vcl_abs(oriDst  - oriSrc);
+  return std::abs(oriDst  - oriSrc);
 }
 
 template <class TVectorData>
@@ -174,7 +174,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   //Compute the orientation
   double dx = Xp1 - Xp2;
   double dy = Yp1 - Yp2;
-  double orientation = vcl_atan2(dy, dx);
+  double orientation = std::atan2(dy, dx);
   if (orientation < 0) orientation += CONST_PI;
 
   return orientation;
