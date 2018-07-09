@@ -22,7 +22,7 @@
 #define otbPolarimetricSynthesisFunctor_h
 
 #include "otbMath.h"
-#include "std::complex.h"
+#include <complex>
 #include "itkFixedArray.h"
 
 namespace otb

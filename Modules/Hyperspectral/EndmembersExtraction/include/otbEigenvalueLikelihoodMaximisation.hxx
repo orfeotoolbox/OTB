@@ -24,7 +24,7 @@
 
 #include "otbEigenvalueLikelihoodMaximisation.h"
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 namespace otb
 {

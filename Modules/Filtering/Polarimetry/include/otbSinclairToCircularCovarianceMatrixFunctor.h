@@ -21,7 +21,7 @@
 #ifndef otbSinclairToCircularCovarianceMatrixFunctor_h
 #define otbSinclairToCircularCovarianceMatrixFunctor_h
 
-#include "std::complex.h"
+#include <complex>
 #include "otbSinclairToCovarianceMatrixFunctor.h"
 
 namespace otb

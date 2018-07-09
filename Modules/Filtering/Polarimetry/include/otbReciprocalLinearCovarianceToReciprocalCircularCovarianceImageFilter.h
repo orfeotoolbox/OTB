@@ -23,7 +23,7 @@
 #define otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
-#include "std::complex.h"
+#include <complex>
 
 namespace otb
  {

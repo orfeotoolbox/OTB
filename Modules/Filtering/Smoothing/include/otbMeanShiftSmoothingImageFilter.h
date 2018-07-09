@@ -26,7 +26,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 
 namespace otb

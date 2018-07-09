@@ -21,7 +21,7 @@
 #ifndef otbSinclairToCovarianceMatrixFunctor_h
 #define otbSinclairToCovarianceMatrixFunctor_h
 
-#include "std::complex.h"
+#include <complex>
 
 namespace otb
 {

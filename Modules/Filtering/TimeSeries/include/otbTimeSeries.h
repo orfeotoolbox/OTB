@@ -22,7 +22,7 @@
 #define otbTimeSeries_h
 
 #include "itkFixedArray.h"
-#include <vcl_cmath.h>
+#include <cmath>
 
 namespace otb
 {

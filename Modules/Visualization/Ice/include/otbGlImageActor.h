@@ -22,7 +22,7 @@
 #define otb_GlImageActor_h
 
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 #include "itkCenteredRigid2DTransform.h"
 
