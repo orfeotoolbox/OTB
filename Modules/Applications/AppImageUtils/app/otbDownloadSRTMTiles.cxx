@@ -96,9 +96,9 @@ private:
     char name[8];
     sprintf(name,"%c%02d%c%03d",
       (id.Lat < 0 ? 'S' : 'N'),
-      vcl_abs(id.Lat),
+      std::abs(id.Lat),
       (id.Lon < 0 ? 'W' : 'E'),
-      vcl_abs(id.Lon));
+      std::abs(id.Lon));
     return std::string(name);
     }
 

@@ -61,14 +61,14 @@ public:
       norma += a[i] * a[i];
       normb += b[i] * b[i];
       }
-    sqrtNormProd = vcl_sqrt(norma * normb);
-    if ( vcl_abs(sqrtNormProd) < Epsilon || scalarProd / sqrtNormProd > 1 )
+    sqrtNormProd = std::sqrt(norma * normb);
+    if ( std::abs(sqrtNormProd) < Epsilon || scalarProd / sqrtNormProd > 1 )
       {
       dist = 0.0;
       }
     else
       {
-      dist = vcl_acos(scalarProd / sqrtNormProd);
+      dist = std::acos(scalarProd / sqrtNormProd);
       }
 
     return static_cast<TOutputValue>(dist);

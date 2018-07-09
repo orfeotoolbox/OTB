@@ -317,7 +317,7 @@ private:
     for (unsigned int i = 0; i < descList.size(); ++i)
       {
       double mean = accFirstOrderPS[i] / accNbElemPS;
-      double stddev = vcl_sqrt(accSecondOrderPS[i] / accNbElemPS - mean * mean);
+      double stddev = std::sqrt(accSecondOrderPS[i] / accNbElemPS - mean * mean);
       otbAppLogINFO( << descList[i] << "  :  " << mean << " +/- " << stddev << "  (min: " << minPS[i] << "  max: " << maxPS[i] << ")"<< std::endl);
       }
 
@@ -325,7 +325,7 @@ private:
     for (unsigned int i = 0; i < descList.size(); ++i)
       {
       double mean = accFirstOrderNS[i] / accNbElemNS;
-      double stddev = vcl_sqrt(accSecondOrderNS[i] / accNbElemNS - mean * mean);
+      double stddev = std::sqrt(accSecondOrderNS[i] / accNbElemNS - mean * mean);
       otbAppLogINFO(<< descList[i] << "  :  " << mean << " +/- " << stddev << "  (min: " << minNS[i] << "  max: " << maxNS[i] << ")"<< std::endl);
       }
 

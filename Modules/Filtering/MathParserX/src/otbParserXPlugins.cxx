@@ -116,7 +116,7 @@ void ElementWiseDivision::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
           {
-            assert(vcl_abs(b.At(p,k).GetFloat()) > 1e-9);
+            assert(std::abs(b.At(p,k).GetFloat()) > 1e-9);
             res.At(p,k) = a.At(p,k).GetFloat() / b.At(p,k).GetFloat();
           }
           
@@ -152,7 +152,7 @@ void DivisionByScalar::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_p
         break;
       }
       
-      assert(vcl_abs(scalar) > 1e-9);
+      assert(std::abs(scalar) > 1e-9);
 
       int nbrows = a.GetRows();
       int nbcols = a.GetCols();
@@ -257,7 +257,7 @@ void ElementWisePower::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_p
         for (int p=0; p<nbrows; ++p)
         {
           assert(a.At(p,k).GetFloat() >= 0 );
-          res.At(p,k) = vcl_pow(a.At(p,k).GetFloat(),b.At(p,k).GetFloat());
+          res.At(p,k) = std::pow(a.At(p,k).GetFloat(),b.At(p,k).GetFloat());
         }
 
       // The return value is passed by writing it to the reference ret
@@ -298,7 +298,7 @@ void PowerByScalar::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_pow(a.At(p,k).GetFloat() , scalar);
+          res.At(p,k) = std::pow(a.At(p,k).GetFloat() , scalar);
           
 
       // The return value is passed by writing it to the reference ret
@@ -318,7 +318,7 @@ void ndvi::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
 
      // The return value is passed by writing it to the reference ret
-      if ( vcl_abs(r + niri) < 1E-6 )
+      if ( std::abs(r + niri) < 1E-6 )
           *ret = 0.;
       else
           *ret = (niri-r)/(niri+r);
@@ -453,7 +453,7 @@ void var::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_iA
 
             for (int i=0; i<nbrows; i++)
               for (int j=0; j<nbcols; j++)
-                sum += vcl_pow(mean - m1.At(i,j).GetFloat(),2);
+                sum += std::pow(mean - m1.At(i,j).GetFloat(),2);
           
             vect.push_back( sum / (double) (nbrows*nbcols) );
     
@@ -502,7 +502,7 @@ void corr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
       double var1=0.0;
       for (int i=0; i<nbrows; i++)
         for (int j=0; j<nbcols; j++)
-          var1 += vcl_pow(mean1 - a.At(i,j).GetFloat(),2);
+          var1 += std::pow(mean1 - a.At(i,j).GetFloat(),2);
       var1 = var1 / (double) (nbrows*nbcols);
 
       double mean2=0.0;
@@ -514,7 +514,7 @@ void corr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
       double var2=0.0;
       for (int i=0; i<nbrows; i++)
         for (int j=0; j<nbcols; j++)
-          var2 += vcl_pow(mean2 - b.At(i,j).GetFloat(),2);
+          var2 += std::pow(mean2 - b.At(i,j).GetFloat(),2);
       var2 = var2 / (double) (nbrows*nbcols);
 
       double cross=0.0;
@@ -524,7 +524,7 @@ void corr::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int itk
       cross = cross / (double) (nbrows*nbcols);
 
 
-      *ret = cross / ( vcl_sqrt(var1)*vcl_sqrt(var2) );
+      *ret = cross / ( std::sqrt(var1)*std::sqrt(var2) );
     }
 
 
@@ -665,11 +665,11 @@ void vnorm::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
 
       for (int i=0; i<nbrows; i++)
         for (int j=0; j<nbcols; j++)
-          sum += vcl_pow(m1.At(i,j).GetFloat(),2.0);
+          sum += std::pow(m1.At(i,j).GetFloat(),2.0);
 
 
       // The return value is passed by writing it to the reference ret
-      mup::matrix_type res(1,1,vcl_sqrt(sum));
+      mup::matrix_type res(1,1,std::sqrt(sum));
       *ret = res;
   }
 
@@ -778,7 +778,7 @@ void vcos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_cos(a.At(p,k).GetFloat());
+          res.At(p,k) = std::cos(a.At(p,k).GetFloat());
           
 
       // The return value is passed by writing it to the reference ret
@@ -804,7 +804,7 @@ void vacos::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_acos(a.At(p,k).GetFloat());
+          res.At(p,k) = std::acos(a.At(p,k).GetFloat());
           
 
       // The return value is passed by writing it to the reference ret
@@ -829,7 +829,7 @@ void vsin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_sin(a.At(p,k).GetFloat());
+          res.At(p,k) = std::sin(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -854,7 +854,7 @@ void vasin::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_asin(a.At(p,k).GetFloat());
+          res.At(p,k) = std::asin(a.At(p,k).GetFloat());
           
 
       // The return value is passed by writing it to the reference ret
@@ -879,7 +879,7 @@ void vtan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_tan(a.At(p,k).GetFloat());
+          res.At(p,k) = std::tan(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -903,7 +903,7 @@ void vatan::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_atan(a.At(p,k).GetFloat());
+          res.At(p,k) = std::atan(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -928,7 +928,7 @@ void vtanh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_tanh(a.At(p,k).GetFloat());
+          res.At(p,k) = std::tanh(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -953,7 +953,7 @@ void vsinh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_sinh(a.At(p,k).GetFloat());
+          res.At(p,k) = std::sinh(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -978,7 +978,7 @@ void vcosh::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_cosh(a.At(p,k).GetFloat());
+          res.At(p,k) = std::cosh(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -1002,7 +1002,7 @@ void vlog::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_log(a.At(p,k).GetFloat());
+          res.At(p,k) = std::log(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -1027,7 +1027,7 @@ void vlog10::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_log10(a.At(p,k).GetFloat());
+          res.At(p,k) = std::log10(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -1051,7 +1051,7 @@ void vabs::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_abs(a.At(p,k).GetFloat());
+          res.At(p,k) = std::abs(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -1076,7 +1076,7 @@ void vexp::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_i
 
       for (int k=0; k<nbcols; ++k)
         for (int p=0; p<nbrows; ++p)
-          res.At(p,k) = vcl_exp(a.At(p,k).GetFloat());
+          res.At(p,k) = std::exp(a.At(p,k).GetFloat());
 
       // The return value is passed by writing it to the reference ret
       *ret = res;
@@ -1102,7 +1102,7 @@ void vsqrt::Eval(mup::ptr_val_type &ret, const mup::ptr_val_type *a_pArg, int a_
         for (int p=0; p<nbrows; ++p)
         {
           assert(a.At(p,k).GetFloat() >= 0 );
-          res.At(p,k) = vcl_sqrt(a.At(p,k).GetFloat());
+          res.At(p,k) = std::sqrt(a.At(p,k).GetFloat());
         }
 
       // The return value is passed by writing it to the reference ret

@@ -214,8 +214,8 @@ MapFileProductWriter<TInputImage>
 
   // Compute max depth
   unsigned int maxDepth =
-    static_cast<unsigned int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
-                                  vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
+    static_cast<unsigned int>(std::max(std::ceil(std::log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / std::log(2.0)),
+                                  std::ceil(std::log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / std::log(2.0))));
 
   // Extract size & index
   SizeType  extractSize;

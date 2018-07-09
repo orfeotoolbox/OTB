@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "vcl_complex.h"
+#include "std::complex.h"
 #include "vcl_cmath.h"
 #include "otbPolarimetricSynthesisFunctor.h"
 
@@ -45,7 +45,7 @@ int otbPolarimetricSynthesisFunctor(int itkNotUsed(argc), char * itkNotUsed(argv
   outputFunct = funct.operator ()( ComplexType(1.5, 4.5), ComplexType(2.5, 3.5), ComplexType(3.5, 2.5), ComplexType(4.5, 1.5) );
 
 
-  if( vcl_abs(result-outputFunct) > 1e-10 )
+  if( std::abs(result-outputFunct) > 1e-10 )
   {
     std::cout<<"Test gives :"<<std::endl;
     std::cout<<outputFunct<<std::endl;

@@ -363,7 +363,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   for ( unsigned int i = 0; i < valP.size(); ++i )
   {
     if (  valP[i] != 0. )
-      valP[i] = 1. / vcl_sqrt( vcl_abs( valP[i] ) );
+      valP[i] = 1. / std::sqrt( std::abs( valP[i] ) );
     else
       throw itk::ExceptionObject( __FILE__, __LINE__,
             "Null Eigen value !!", ITK_LOCATION );
@@ -394,12 +394,12 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   {
     if (  valP(i, i) > 0. )
     {
-      valP(i, i) = 1. / vcl_sqrt( valP(i, i) );
+      valP(i, i) = 1. / std::sqrt( valP(i, i) );
     }
     else if ( valP(i, i) < 0. )
     {
       otbMsgDebugMacro( << "ValP(" << i << ") neg : " << valP(i, i) << " taking abs value" );
-      valP(i, i) = 1. / vcl_sqrt( vcl_abs( valP(i, i) ) );
+      valP(i, i) = 1. / std::sqrt( std::abs( valP(i, i) ) );
     }
     else
     {

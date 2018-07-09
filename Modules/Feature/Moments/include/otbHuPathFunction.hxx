@@ -88,7 +88,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision>
       function->SetQ(2);
       C02 = function->Evaluate();
 
-      HuValue = vcl_abs(C20 * C02);
+      HuValue = std::abs(C20 * C02);
 
       }
       break;
@@ -102,7 +102,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision>
       function->SetQ(3);
       C03 = function->Evaluate();
 
-      HuValue = vcl_abs(C30 * C03);
+      HuValue = std::abs(C30 * C03);
       }
       break;
     case 4:
@@ -115,7 +115,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision>
       function->SetQ(2);
       C12 = function->Evaluate();
 
-      HuValue = vcl_abs(C21 * C12);
+      HuValue = std::abs(C21 * C12);
       }
       break;
 
@@ -129,7 +129,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision>
       function->SetQ(2);
       C12 = function->Evaluate();
 
-      HuValueComplex = C30 * vcl_pow(C12, 3);
+      HuValueComplex = C30 * std::pow(C12, 3);
       HuValue = HuValueComplex.real();
       }
       break;
@@ -144,7 +144,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision>
       function->SetQ(2);
       C12 = function->Evaluate();
 
-      HuValueComplex = C20 * vcl_pow(C12, 2);
+      HuValueComplex = C20 * std::pow(C12, 2);
       HuValue = HuValueComplex.real();
       }
       break;
@@ -159,7 +159,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision>
       function->SetQ(2);
       C12 = function->Evaluate();
 
-      HuValueComplex = C30 * vcl_pow(C12, 3);
+      HuValueComplex = C30 * std::pow(C12, 3);
       HuValue = HuValueComplex.imag();
       }
       break;

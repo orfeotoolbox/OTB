@@ -72,20 +72,20 @@ public:
   /** Gets the distance between the origin and x */
   double Evaluate(const TVector& x) const override
   {
-    return ::vcl_sqrt(Superclass::Evaluate(x));
+    return ::std::sqrt(Superclass::Evaluate(x));
   }
 
   /** Gets the distance between x1 and x2 */
   double Evaluate(const TVector& x1, const TVector& x2) const override
   {
-    return ::vcl_sqrt(Superclass::Evaluate(x1, x2));
+    return ::std::sqrt(Superclass::Evaluate(x1, x2));
   }
 
   /** Gets the cooridnate distance between a and b. NOTE: a and b
   * should be type of component */
   double Evaluate(const ValueType& a, const ValueType& b) const
   {
-    return ::vcl_sqrt(Superclass::Evaluate(a, b));
+    return ::std::sqrt(Superclass::Evaluate(a, b));
   }
 
   /** Returns true if the distance between x and the origin is less

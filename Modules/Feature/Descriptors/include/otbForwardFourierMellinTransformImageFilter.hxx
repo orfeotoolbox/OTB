@@ -89,9 +89,9 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
   this->GetInput()->TransformContinuousIndexToPhysicalPoint(centre,centrePt);
 
   // Compute physical radius in the input image
-  double radius = vcl_log(vcl_sqrt(
-    vcl_pow(static_cast<double>(inputSize[0])*inputSpacing[0],2.0) +
-    vcl_pow(static_cast<double>(inputSize[1])*inputSpacing[1],2.0)) / 2.0);
+  double radius = std::log(std::sqrt(
+    std::pow(static_cast<double>(inputSize[0])*inputSpacing[0],2.0) +
+    std::pow(static_cast<double>(inputSize[1])*inputSpacing[1],2.0)) / 2.0);
 
   params[0] = centrePt[0];
   params[1] = centrePt[1];
@@ -100,9 +100,9 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
   m_Transform->SetParameters(params);
 
   // Compute rho scaling parameter in index space
-  double rhoScaleIndex = vcl_log(vcl_sqrt(
-    vcl_pow(static_cast<double>(inputSize[0]),2.0) +
-    vcl_pow(static_cast<double>(inputSize[1]),2.0)) / 2.0) / m_OutputSize[1];
+  double rhoScaleIndex = std::log(std::sqrt(
+    std::pow(static_cast<double>(inputSize[0]),2.0) +
+    std::pow(static_cast<double>(inputSize[1]),2.0)) / 2.0) / m_OutputSize[1];
 
   // log polar resampling
   m_ResampleFilter->SetInput(this->GetInput());
@@ -134,7 +134,7 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
     double    Rho   = (0.5 + static_cast<double>(iter.GetIndex()[1])) * rhoScaleIndex;
     PixelType pixval;
     double    valueTemp = static_cast<double>(iter.Get());
-    valueTemp *= vcl_exp(m_Sigma * Rho);
+    valueTemp *= std::exp(m_Sigma * Rho);
     valueTemp *= rhoScaleIndex;
     PixelType value = static_cast<PixelType>(valueTemp);
 

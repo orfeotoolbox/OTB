@@ -585,7 +585,7 @@ FormosatImageMetadataInterface::GetSatAzimuth() const
       valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
       double sceneOrientation( atof(valueString.c_str()) );
 
-      double alpha = vcl_atan( vcl_tan( viewingAngleAcrossTrack * CONST_PI_180 ) /  vcl_tan( viewingAngleAlongTrack * CONST_PI_180 ) ) * CONST_180_PI;
+      double alpha = std::atan( std::tan( viewingAngleAcrossTrack * CONST_PI_180 ) /  std::tan( viewingAngleAlongTrack * CONST_PI_180 ) ) * CONST_180_PI;
 
       if( viewingAngleAlongTrack < 0 )
         {

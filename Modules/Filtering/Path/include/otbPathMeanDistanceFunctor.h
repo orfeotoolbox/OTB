@@ -74,7 +74,7 @@ public:
       {
       v1 = v2;
       v2 = beginIt.Value();
-      meanDistance += vcl_sqrt(vcl_pow(v1[0] - v2[0], 2) + vcl_pow(v1[1] - v2[1], 2));
+      meanDistance += std::sqrt(std::pow(v1[0] - v2[0], 2) + std::pow(v1[1] - v2[1], 2));
       ++beginIt;
       }
 

@@ -68,7 +68,7 @@ HarrisImageFilter<TInputImage, TOutputImage>
   m_HessianToScalarFilter->SetAlpha(this->m_Alpha);
 
   m_MultiplyScalarFilter->SetInput(m_HessianToScalarFilter->GetOutput());
-  m_MultiplyScalarFilter->SetCoef(vcl_pow(m_SigmaD, 4.0));
+  m_MultiplyScalarFilter->SetCoef(std::pow(m_SigmaD, 4.0));
 
   m_MultiplyScalarFilter->GraftOutput(this->GetOutput());
   m_MultiplyScalarFilter->Update();

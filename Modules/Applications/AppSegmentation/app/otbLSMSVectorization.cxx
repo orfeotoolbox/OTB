@@ -216,8 +216,8 @@ private:
        {
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
-        unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
-          unsigned long sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
+        unsigned long sizeX = std::min(sizeTilesX,sizeImageX-startX);
+          unsigned long sizeY = std::min(sizeTilesY,sizeImageY-startY);
 
         //Tiles extraction of the input image
         MultiChannelExtractROIFilterType::Pointer imageROI = MultiChannelExtractROIFilterType::New();

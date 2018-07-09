@@ -122,9 +122,9 @@ ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
   if (m_NumberOfSamples > 0)
     {
     this->m_OverallAccuracy /= static_cast<double>(m_NumberOfSamples);
-    luckyRate /= vcl_pow(m_NumberOfSamples, 2.0);
+    luckyRate /= std::pow(m_NumberOfSamples, 2.0);
 
-    if (vcl_abs(1 - luckyRate) > epsilon)
+    if (std::abs(1 - luckyRate) > epsilon)
       {
       m_KappaIndex = (m_OverallAccuracy - luckyRate) / (1 - luckyRate);
       }
@@ -143,19 +143,19 @@ ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
 
   for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
     {
-    if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalsePositiveValues[i]) > epsilon)
+    if (std::abs(this->m_TruePositiveValues[i] + this->m_FalsePositiveValues[i]) > epsilon)
       {
       this->m_Precisions[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
           + this->m_FalsePositiveValues[i]);
       }
 
-    if (vcl_abs(this->m_TruePositiveValues[i] + this->m_FalseNegativeValues[i]) > epsilon)
+    if (std::abs(this->m_TruePositiveValues[i] + this->m_FalseNegativeValues[i]) > epsilon)
       {
       this->m_Recalls[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
           + this->m_FalseNegativeValues[i]);
       }
 
-    if (vcl_abs(this->m_Recalls[i] + this->m_Precisions[i]) > epsilon)
+    if (std::abs(this->m_Recalls[i] + this->m_Precisions[i]) > epsilon)
       {
       this->m_FScores[i] = 2 * this->m_Recalls[i] * this->m_Precisions[i]
           / (this->m_Recalls[i] + this->m_Precisions[i]);
@@ -165,15 +165,15 @@ ConfusionMatrixMeasurements<TConfusionMatrix, TLabel>
 
   if (m_NumberOfClasses == 2)
     {
-    if (vcl_abs(this->m_TruePositiveValue + this->m_FalsePositiveValue) > epsilon)
+    if (std::abs(this->m_TruePositiveValue + this->m_FalsePositiveValue) > epsilon)
       {
       this->m_Precision = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalsePositiveValue);
       }
-    if (vcl_abs(this->m_TruePositiveValue + this->m_FalseNegativeValue) > epsilon)
+    if (std::abs(this->m_TruePositiveValue + this->m_FalseNegativeValue) > epsilon)
       {
       this->m_Recall = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalseNegativeValue);
       }
-    if (vcl_abs(this->m_Recall + this->m_Precision) > epsilon)
+    if (std::abs(this->m_Recall + this->m_Precision) > epsilon)
       {
       this->m_FScore = 2 * this->m_Recall * this->m_Precision / (this->m_Recall + this->m_Precision);
       }

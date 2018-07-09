@@ -50,12 +50,12 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
   {
     if (  vectValPn[i] > 0. )
     {
-      valPn(i, i) = 1. / vcl_sqrt( vectValPn[i] );
+      valPn(i, i) = 1. / std::sqrt( vectValPn[i] );
     }
     else if ( vectValPn[i] < 0. )
     {
       otbMsgDebugMacro( << "ValPn(" << i << ") neg : " << vectValPn[i] << " taking abs value" );
-      valPn(i, i) = 1. / vcl_sqrt( vcl_abs( vectValPn[i] ) );
+      valPn(i, i) = 1. / std::sqrt( std::abs( vectValPn[i] ) );
     }
     else
     {

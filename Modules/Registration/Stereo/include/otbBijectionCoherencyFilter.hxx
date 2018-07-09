@@ -256,8 +256,8 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
     // Interpolate in reverse disparity map
     typedef typename IndexType::IndexValueType IndexValueType;
     IndexType ul,ur,ll,lr;
-    ul[0] = static_cast<long>(vcl_floor(tmpIndex[0]));
-    ul[1] = static_cast<long>(vcl_floor(tmpIndex[1]));
+    ul[0] = static_cast<long>(std::floor(tmpIndex[0]));
+    ul[1] = static_cast<long>(std::floor(tmpIndex[1]));
     if (ul[0] < buffered.GetIndex()[0])
       ul[0] = buffered.GetIndex()[0];
     if (ul[1] < buffered.GetIndex()[1])
@@ -293,8 +293,8 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
                           ry * ((1. - rx) * reverseVmap->GetPixel(ll) + rx * reverseVmap->GetPixel(lr));
       }
 
-    if (vcl_abs(backIndex[0] - static_cast<double>(startIndex[0]))< this->m_Tolerance &&
-        vcl_abs(backIndex[1] - static_cast<double>(startIndex[1]))< this->m_Tolerance)
+    if (std::abs(backIndex[0] - static_cast<double>(startIndex[0]))< this->m_Tolerance &&
+        std::abs(backIndex[1] - static_cast<double>(startIndex[1]))< this->m_Tolerance)
       {
       outIter.Set(255);
       }

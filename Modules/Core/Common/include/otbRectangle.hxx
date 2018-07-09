@@ -49,7 +49,7 @@ Rectangle<TValue>
   VertexType p2 = it.Value();
 
   /** Compute Length of the rectangle*/
-  double lengthSeg = vcl_sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
+  double lengthSeg = std::sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]));
 
   /** Orthogonal segment containing the middle of the segment */
   VertexType middleP;
@@ -57,8 +57,8 @@ Rectangle<TValue>
   middleP[1] = (p1[1] + p2[1]) / 2.;
 
   VertexType corner;
-  corner[0] = middleP[0] + (m_Width / 2) * vcl_sin(m_Orientation);
-  corner[1] = middleP[1] - (m_Width / 2) * vcl_cos(m_Orientation);
+  corner[0] = middleP[0] + (m_Width / 2) * std::sin(m_Orientation);
+  corner[1] = middleP[1] - (m_Width / 2) * std::cos(m_Orientation);
 
   /** Compute the distance to the orthogonal median of the rectangle*/
   if (this->ComputeEuclideanDistanceMetricToSegment(p1, p2, point) - (m_Width / 2.) < 1e-10
@@ -81,9 +81,9 @@ Rectangle<TValue>
   double xp = p[0];
   double yp = p[1];
 
-  double SegmentLength = vcl_sqrt((Xq1 - Xq2) * (Xq1 - Xq2) + (Yq1 - Yq2) * (Yq1 - Yq2));
+  double SegmentLength = std::sqrt((Xq1 - Xq2) * (Xq1 - Xq2) + (Yq1 - Yq2) * (Yq1 - Yq2));
   double CrossProduct  =   Xq1 * Yq2 - Xq2 * Yq1;
-  double Num   = vcl_abs(xp * (Yq1 - Yq2) + yp * (Xq2 - Xq1) + CrossProduct);
+  double Num   = std::abs(xp * (Yq1 - Yq2) + yp * (Xq2 - Xq1) + CrossProduct);
 
   /** distance from Point P to Segment Q1Q2*/
   return  (Num / SegmentLength);
@@ -106,8 +106,8 @@ Rectangle<TValue>
   VertexType p2 = it.Value();
 
   /** Compute the four corners of the recatangle*/
-  double dx        = vcl_cos(m_Orientation);
-  double dy        = vcl_sin(m_Orientation);
+  double dx        = std::cos(m_Orientation);
+  double dy        = std::sin(m_Orientation);
   double halfWidth = m_Width / 2;
 
   VertexListPointerType cornersVertex = VertexListType::New();

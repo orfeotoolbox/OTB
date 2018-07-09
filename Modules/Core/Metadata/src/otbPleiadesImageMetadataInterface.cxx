@@ -168,7 +168,7 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
   if (outputValues.size() == 1)
     {
     // Pan
-    if (vcl_abs(outputValues[0] - defaultRadianceP) > (tolerance * defaultRadianceP))
+    if (std::abs(outputValues[0] - defaultRadianceP) > (tolerance * defaultRadianceP))
       {
       outputValuesVariableLengthVector[0] = defaultRadianceP;
       }
@@ -183,7 +183,7 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
     for (unsigned int i = 0; i < outputValues.size(); ++i)
       {
       int wavelenghPos = this->BandIndexToWavelengthPosition(i);
-      if (vcl_abs(outputValues[wavelenghPos] - defaultRadianceMS[wavelenghPos]) >
+      if (std::abs(outputValues[wavelenghPos] - defaultRadianceMS[wavelenghPos]) >
           (tolerance * defaultRadianceMS[wavelenghPos]))
         {
         outputValuesVariableLengthVector[i] = defaultRadianceMS[wavelenghPos];
@@ -762,7 +762,7 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
     //Compute Satellite azimuthal angle using the azimuthal angle and the along
     //and across track incidence angle
 
-    double satAz = (cap - vcl_atan2(vcl_tan(ortho * CONST_PI_180),vcl_tan(along * CONST_PI_180)) * CONST_180_PI);
+    double satAz = (cap - std::atan2(std::tan(ortho * CONST_PI_180),std::tan(along * CONST_PI_180)) * CONST_180_PI);
 
     satAz = fmod(satAz,360);
 

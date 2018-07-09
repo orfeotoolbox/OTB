@@ -150,7 +150,7 @@ if(argc!=8)
     fail = true;
     }
 
-  double error = vcl_abs(height-target);
+  double error = std::abs(height-target);
 
   if(error>tolerance)
     {

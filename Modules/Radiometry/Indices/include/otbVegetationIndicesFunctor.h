@@ -429,7 +429,7 @@ protected:
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if (vcl_abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -466,7 +466,7 @@ protected:
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if (vcl_abs(dr)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dr)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -504,7 +504,7 @@ public:
   void SetA(const double A)
   {
     m_A = A;
-    m_Coeff = 1. / (vcl_sqrt(m_A * m_A + 1.));
+    m_Coeff = 1. / (std::sqrt(m_A * m_A + 1.));
   }
   double GetA(void) const
   {
@@ -576,7 +576,7 @@ protected:
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
     double denominator = dnir + dr + m_L;
-    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -647,7 +647,7 @@ protected:
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
     double denominator = m_A * dnir + dr + m_X * (1. + m_A * m_A);
-    if (vcl_abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -771,7 +771,7 @@ protected:
 
     double denominator = dnir + dr + dL;
 
-    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -820,7 +820,7 @@ protected:
       {
       return static_cast<TOutput>(0.);
       }
-    return (static_cast<TOutput>((2 * dnir + 1 - vcl_sqrt(sqrt_value)) / 2.));
+    return (static_cast<TOutput>((2 * dnir + 1 - std::sqrt(sqrt_value)) / 2.));
   }
 
 };
@@ -857,7 +857,7 @@ protected:
     double dnu;
     double dnumerateur_nu;
     double ddenominateur_nu = dnir + dr + 0.5;
-    if (vcl_abs(ddenominateur_nu)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(ddenominateur_nu)  < this->m_EpsilonToBeConsideredAsZero)
       {
       dnu = 0;
       }
@@ -868,7 +868,7 @@ protected:
       }
 
     double ddenominateur_GEMI = 1 - dr;
-    if (vcl_abs(ddenominateur_GEMI)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(ddenominateur_GEMI)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -939,22 +939,22 @@ protected:
     double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
     double dterm1;
     double dterm2;
-    if (vcl_abs(dnir - dr)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dnir - dr)  < this->m_EpsilonToBeConsideredAsZero)
       {
       dterm1 = 0;
       }
     else
       {
-      dterm1 = vcl_atan(dfact1 / (dnir - dr));
+      dterm1 = std::atan(dfact1 / (dnir - dr));
       }
 
-    if (vcl_abs(dg - dr)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dg - dr)  < this->m_EpsilonToBeConsideredAsZero)
       {
       dterm2 = 0;
       }
     else
       {
-      dterm2 = vcl_atan(dfact2 / (dg - dr));
+      dterm2 = std::atan(dfact2 / (dg - dr));
       }
 
     return static_cast<TOutput>(dterm1 + dterm2);
@@ -1015,7 +1015,7 @@ protected:
     double dnir = static_cast<double>(nir);
     double RHOrb = dr - m_Gamma * (db - dr);
     double denominator = dnir + RHOrb;
-    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -1095,7 +1095,7 @@ protected:
     double dnir = static_cast<double>(nir);
     double dRB = dr - m_Gamma * (db - dr);
     double denominator = dRB + m_A * dnir - m_A * m_B + m_X * (1. + m_A * m_A);
-    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -1181,7 +1181,7 @@ protected:
     double db = static_cast<double>(b);
     double dnir = static_cast<double>(nir);
     double denominator = dnir + m_C1 * dr - m_C2 * db + m_L;
-    if (vcl_abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
       {
       return (static_cast<TOutput>(0.));
       }
@@ -1231,7 +1231,7 @@ protected:
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if (vcl_abs(dnir + dr)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dnir + dr)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -1281,7 +1281,7 @@ protected:
       }
     else
       {
-      return (static_cast<TOutput>(vcl_sqrt(dval)));
+      return (static_cast<TOutput>(std::sqrt(dval)));
       }
   }
 private:
@@ -1361,7 +1361,7 @@ protected:
     else
       {
       return (static_cast<TOutput>(
-    -(1.0/m_ExtinctionCoefficient)*vcl_log((dval- m_NdviInf)/(m_NdviSoil-m_NdviInf))
+    -(1.0/m_ExtinctionCoefficient)*std::log((dval- m_NdviInf)/(m_NdviSoil-m_NdviInf))
     ));
       }
   }
@@ -1483,12 +1483,12 @@ private:
 
       double dr = static_cast<double>(r);
       double dnir = static_cast<double>(nir);
-      if (vcl_abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
+      if (std::abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
         {
         return static_cast<TOutput>(0.);
         }
 
-      return  static_cast<TOutput>(a*(vcl_exp(static_cast<double>(dnir-dr)/static_cast<double>(dr+dnir)*b)-vcl_exp(c*b)));
+      return  static_cast<TOutput>(a*(std::exp(static_cast<double>(dnir-dr)/static_cast<double>(dr+dnir)*b)-std::exp(c*b)));
     };
 
 

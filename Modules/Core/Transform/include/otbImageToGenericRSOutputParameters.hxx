@@ -186,8 +186,8 @@ ImageToGenericRSOutputParameters<TImage>
 ::EstimateOutputSpacing()
 {
   // Compute the output size
-  double sizeCartoX = vcl_abs(m_OutputExtent.maxX - m_OutputExtent.minX);
-  double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
+  double sizeCartoX = std::abs(m_OutputExtent.maxX - m_OutputExtent.minX);
+  double sizeCartoY = std::abs(m_OutputExtent.minY - m_OutputExtent.maxY);
  
   PointType o, oX, oY;
   o[0] = m_OutputExtent.minX;
@@ -213,11 +213,11 @@ ImageToGenericRSOutputParameters<TImage>
   // Evaluate Ox and Oy length in number of pixels
   double OxLength, OyLength;
 
-  OxLength = vcl_sqrt(vcl_pow((double) ioIndex[0] - (double) ioXIndex[0], 2)
-                      +  vcl_pow((double) ioIndex[1] - (double) ioXIndex[1], 2));
+  OxLength = std::sqrt(std::pow((double) ioIndex[0] - (double) ioXIndex[0], 2)
+                      +  std::pow((double) ioIndex[1] - (double) ioXIndex[1], 2));
 
-  OyLength = vcl_sqrt(vcl_pow((double) ioIndex[0] - (double) ioYIndex[0], 2)
-                      +  vcl_pow((double) ioIndex[1] - (double) ioYIndex[1], 2));
+  OyLength = std::sqrt(std::pow((double) ioIndex[0] - (double) ioYIndex[0], 2)
+                      +  std::pow((double) ioIndex[1] - (double) ioYIndex[1], 2));
   
   // Evaluate spacing
   SpacingType outputSpacing;
@@ -248,13 +248,13 @@ ImageToGenericRSOutputParameters<TImage>
 ::EstimateOutputSize()
 {
   // Compute the output size
-  double sizeCartoX = vcl_abs(m_OutputExtent.maxX - m_OutputExtent.minX);
-  double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
+  double sizeCartoX = std::abs(m_OutputExtent.maxX - m_OutputExtent.minX);
+  double sizeCartoY = std::abs(m_OutputExtent.minY - m_OutputExtent.maxY);
 
   // Evaluate output size
   SizeType outputSize;
-  outputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX / this->GetOutputSpacing()[0])));
-  outputSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoY / this->GetOutputSpacing()[1])));
+  outputSize[0] = static_cast<unsigned int>(std::floor(std::abs(sizeCartoX / this->GetOutputSpacing()[0])));
+  outputSize[1] = static_cast<unsigned int>(std::floor(std::abs(sizeCartoY / this->GetOutputSpacing()[1])));
 
   // if ForceSizeTo used don't update the output size with the value
   // computed : the value is computed to update the spacing knowing

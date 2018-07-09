@@ -103,8 +103,8 @@ WaveletsSynopsisImageToWaveletsBandsListFilter<TImage,TImageList>
         unsigned int currentLevel =   (i-1)/3;
         unsigned int currentSubBand = (i-1)%3;
 
-        unsigned int offsetX = largestSize[0]/(unsigned int)vcl_pow((double)m_DecimationRatio,(double)m_NumberOfLevels-currentLevel);
-        unsigned int offsetY = largestSize[1]/(unsigned int)vcl_pow((double)m_DecimationRatio,(double)m_NumberOfLevels-currentLevel);
+        unsigned int offsetX = largestSize[0]/(unsigned int)std::pow((double)m_DecimationRatio,(double)m_NumberOfLevels-currentLevel);
+        unsigned int offsetY = largestSize[1]/(unsigned int)std::pow((double)m_DecimationRatio,(double)m_NumberOfLevels-currentLevel);
 
         // Compute current size
         currentSize[0] = offsetX;
@@ -128,8 +128,8 @@ WaveletsSynopsisImageToWaveletsBandsListFilter<TImage,TImageList>
       else
         {
         // The coarsest scale size
-        currentSize[0] = largestSize[0]/(unsigned int)vcl_pow((double)m_DecimationRatio,(double)m_NumberOfLevels);
-        currentSize[1] = largestSize[1]/(unsigned int)vcl_pow((double)m_DecimationRatio,(double)m_NumberOfLevels);
+        currentSize[0] = largestSize[0]/(unsigned int)std::pow((double)m_DecimationRatio,(double)m_NumberOfLevels);
+        currentSize[1] = largestSize[1]/(unsigned int)std::pow((double)m_DecimationRatio,(double)m_NumberOfLevels);
         }
       // Build current region
       currentRegion.SetIndex(currentIndex);

@@ -210,7 +210,7 @@ private:
     stddev.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
     for (unsigned int i = 0; i < totalVariancePerBand.GetSize(); ++i)
       {
-      stddev[i] = vcl_sqrt(totalVariancePerBand[i]);
+      stddev[i] = std::sqrt(totalVariancePerBand[i]);
       }
 
     if( HasValue( "out" ) )

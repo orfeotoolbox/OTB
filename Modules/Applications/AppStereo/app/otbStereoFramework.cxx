@@ -744,8 +744,8 @@ private:
       epipolarGridSource->Update();
 
       FloatImageType::SpacingType epiSpacing;
-      epiSpacing[0] = 0.5 * (vcl_abs(inleft->GetSignedSpacing()[0]) + vcl_abs(inleft->GetSignedSpacing()[1]));
-      epiSpacing[1] = 0.5 * (vcl_abs(inleft->GetSignedSpacing()[0]) + vcl_abs(inleft->GetSignedSpacing()[1]));
+      epiSpacing[0] = 0.5 * (std::abs(inleft->GetSignedSpacing()[0]) + std::abs(inleft->GetSignedSpacing()[1]));
+      epiSpacing[1] = 0.5 * (std::abs(inleft->GetSignedSpacing()[0]) + std::abs(inleft->GetSignedSpacing()[1]));
 
       FloatImageType::SizeType epiSize;
       epiSize = epipolarGridSource->GetRectifiedImageSize();
@@ -757,8 +757,8 @@ private:
 
       double meanBaseline = epipolarGridSource->GetMeanBaselineRatio();
 
-      double minDisp = vcl_floor((-1.0) * overElev * meanBaseline / epiSpacing[0]);
-      double maxDisp = vcl_ceil((-1.0) * underElev * meanBaseline / epiSpacing[0]);
+      double minDisp = std::floor((-1.0) * overElev * meanBaseline / epiSpacing[0]);
+      double maxDisp = std::ceil((-1.0) * underElev * meanBaseline / epiSpacing[0]);
       otbAppLogINFO(<<"Minimum disparity : "<<minDisp);
       otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
 

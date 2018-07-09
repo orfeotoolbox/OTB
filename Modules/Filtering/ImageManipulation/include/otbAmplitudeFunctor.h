@@ -126,7 +126,7 @@ public:
 private:
   inline ScalarType ComputeAmplitude(ScalarType a, ScalarType b) const
   {
-    return vcl_sqrt(a * a + b * b);
+    return std::sqrt(a * a + b * b);
   }
 
 };

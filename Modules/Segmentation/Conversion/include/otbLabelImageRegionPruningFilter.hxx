@@ -468,7 +468,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
   while(!it.IsAtEnd())
     {
     LabelType label = it.Get();
-    maxLabel = vcl_max(maxLabel, label);
+    maxLabel = std::max(maxLabel, label);
     ++it;
     }
 

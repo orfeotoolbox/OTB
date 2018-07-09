@@ -209,8 +209,8 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), 
   RemoteSensingRegionType::SizeType rsSize;
   rsOrigin[0] = std::min(pul[0], plr[0]);
   rsOrigin[1] = std::min(pul[1], plr[1]);
-  rsSize[0] = vcl_abs(pul[0] - plr[0]);
-  rsSize[1] = vcl_abs(pul[1] - plr[1]);
+  rsSize[0] = std::abs(pul[0] - plr[0]);
+  rsSize[1] = std::abs(pul[1] - plr[1]);
 
   rsRegion.SetOrigin(rsOrigin);
   rsRegion.SetSize(rsSize);

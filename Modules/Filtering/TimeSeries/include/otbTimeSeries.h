@@ -62,7 +62,7 @@ public:
   {
     CoefficientsPrecisionType tmpVal = 0;
     for( unsigned int i=0; i<=TDegree; ++i)
-      tmpVal += m_Coefficients[i]*vcl_pow(val, static_cast<CoefficientsPrecisionType>(i));
+      tmpVal += m_Coefficients[i]*std::pow(val, static_cast<CoefficientsPrecisionType>(i));
     return tmpVal;
   }
 

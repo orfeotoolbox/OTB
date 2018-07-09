@@ -49,7 +49,7 @@ public:
   ~LogFunctor(){};
   TScalar operator() (const TScalar& v) const
   {
-    return vcl_log(v);
+    return std::log(v);
   }
 };
 } // end namespace Functor
