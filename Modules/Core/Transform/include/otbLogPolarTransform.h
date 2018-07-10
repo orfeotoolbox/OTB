@@ -141,7 +141,7 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLogPolarTransform.txx"
+#include "otbLogPolarTransform.hxx"
 #endif
 
 #endif

@@ -197,7 +197,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMassOfBelief.txx"
+#include "otbMassOfBelief.hxx"
 #endif
 
 #endif

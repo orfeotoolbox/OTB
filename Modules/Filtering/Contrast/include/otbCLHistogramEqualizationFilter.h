@@ -179,7 +179,7 @@ private :
 }  // End namespace otb
   
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCLHistogramEqualizationFilter.txx"
+#include "otbCLHistogramEqualizationFilter.hxx"
 #endif
 
 

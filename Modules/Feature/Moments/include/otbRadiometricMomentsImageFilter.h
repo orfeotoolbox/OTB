@@ -108,7 +108,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRadiometricMomentsImageFilter.txx"
+#include "otbRadiometricMomentsImageFilter.hxx"
 #endif
 
 #endif

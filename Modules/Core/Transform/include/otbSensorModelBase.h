@@ -111,7 +111,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSensorModelBase.txx"
+#include "otbSensorModelBase.hxx"
 #endif
 
 #endif

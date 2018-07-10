@@ -193,7 +193,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataToClassStatisticsFilter.txx"
+#include "otbOGRDataToClassStatisticsFilter.hxx"
 #endif
 
 #endif

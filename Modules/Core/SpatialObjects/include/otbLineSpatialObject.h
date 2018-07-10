@@ -132,7 +132,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineSpatialObject.txx"
+#include "otbLineSpatialObject.hxx"
 #endif
 
 #endif

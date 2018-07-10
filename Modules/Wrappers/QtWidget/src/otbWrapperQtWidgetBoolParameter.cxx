@@ -82,12 +82,15 @@ void QtWidgetBoolParameter::DoCreateWidget()
     m_Button->setText("Off");
     }
 
-  connect( m_Button, SIGNAL(toggled(bool)), this, SLOT(SetValue(bool)) );
-  connect( m_Button, SIGNAL(toggled(bool)), GetModel(), SLOT(NotifyUpdate()) );
+  //Set the tool tip associated to the parameter
+  m_Button->setToolTip(QString::fromStdString( paramDown->GetDescription() ));
+
+  connect( m_Button, &QToolButton::toggled, this, &QtWidgetBoolParameter::SetValue );
+  connect( m_Button, &QToolButton::toggled, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   hLayout->addWidget(m_Button);
   hLayout->addStretch();
-  
+
   this->setLayout(hLayout);
 }
 

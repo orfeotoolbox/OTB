@@ -106,7 +106,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageMultiSegmentationToRCC8GraphFilter.txx"
+#include "otbImageMultiSegmentationToRCC8GraphFilter.hxx"
 #endif
 
 #endif

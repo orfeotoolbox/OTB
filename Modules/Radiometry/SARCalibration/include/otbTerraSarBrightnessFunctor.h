@@ -110,7 +110,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTerraSarBrightnessFunctor.txx"
+#include "otbTerraSarBrightnessFunctor.hxx"
 #endif
 
 #endif

@@ -197,7 +197,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConvolutionImageFilter.txx"
+#include "otbConvolutionImageFilter.hxx"
 #endif
 
 #endif

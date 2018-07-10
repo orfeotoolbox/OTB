@@ -76,7 +76,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNearestPointDisplacementFieldGenerator.txx"
+#include "otbNearestPointDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

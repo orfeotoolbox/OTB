@@ -121,7 +121,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapWithClassLabelToLabeledSampleListFilter.txx"
+#include "otbLabelMapWithClassLabelToLabeledSampleListFilter.hxx"
 #endif
 
 #endif

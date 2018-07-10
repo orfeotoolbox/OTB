@@ -25,7 +25,7 @@ otb_test_application(NAME  apTvFEBinaryMorphologicalOperation
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
                              -channel 1
                              -structype ball
-                             -structype.ball.xradius 10
+                             -xradius 10
                              -filter opening
                              -filter.opening.foreval 1.0
                              -filter.opening.backval 0.0
@@ -41,7 +41,7 @@ otb_test_application(NAME  apTvFEGrayScaleMorphologicalOperation
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                              -channel 1
                              -structype ball
-                             -structype.ball.xradius 10
+                             -xradius 10
                              -filter opening
                              -out ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif
                      VALID   --compare-image ${NOTOL}

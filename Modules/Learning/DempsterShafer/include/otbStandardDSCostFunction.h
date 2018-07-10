@@ -177,7 +177,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStandardDSCostFunction.txx"
+#include "otbStandardDSCostFunction.hxx"
 #endif
 
 #endif

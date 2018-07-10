@@ -114,7 +114,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPCAModel.txx"
+#include "otbPCAModel.hxx"
 #endif
 
 

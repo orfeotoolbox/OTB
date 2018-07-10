@@ -93,7 +93,7 @@ private:
 } // end of namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListToSingleImageFilter.txx"
+#include "otbImageListToSingleImageFilter.hxx"
 #endif
 
 #endif

@@ -171,7 +171,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSatelliteRSR.txx"
+#include "otbSatelliteRSR.hxx"
 #endif
 
 #endif

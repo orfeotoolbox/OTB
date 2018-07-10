@@ -158,7 +158,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbSarBrightnessFunction.txx"
+# include "otbSarBrightnessFunction.hxx"
 #endif
 
 #endif

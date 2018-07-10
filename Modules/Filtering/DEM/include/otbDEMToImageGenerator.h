@@ -201,7 +201,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDEMToImageGenerator.txx"
+#include "otbDEMToImageGenerator.hxx"
 #endif
 
 #endif

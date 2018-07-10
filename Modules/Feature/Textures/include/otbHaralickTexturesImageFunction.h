@@ -233,7 +233,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHaralickTexturesImageFunction.txx"
+#include "otbHaralickTexturesImageFunction.hxx"
 #endif
 
 #endif

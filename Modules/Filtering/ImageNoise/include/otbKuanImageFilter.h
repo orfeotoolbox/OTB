@@ -116,7 +116,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKuanImageFilter.txx"
+#include "otbKuanImageFilter.hxx"
 #endif
 
 #endif

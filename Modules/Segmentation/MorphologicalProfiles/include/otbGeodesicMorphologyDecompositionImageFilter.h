@@ -183,7 +183,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeodesicMorphologyDecompositionImageFilter.txx"
+#include "otbGeodesicMorphologyDecompositionImageFilter.hxx"
 #endif
 
 #endif

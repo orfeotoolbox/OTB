@@ -88,7 +88,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbModulusAndDirectionImageToImageFilter.txx"
+#include "otbModulusAndDirectionImageToImageFilter.hxx"
 #endif
 
 #endif

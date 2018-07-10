@@ -142,7 +142,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHuMomentsImageFunction.txx"
+#include "otbHuMomentsImageFunction.hxx"
 #endif
 
 #endif

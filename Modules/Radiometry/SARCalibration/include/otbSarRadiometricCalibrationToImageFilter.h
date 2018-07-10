@@ -133,7 +133,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSarRadiometricCalibrationToImageFilter.txx"
+#include "otbSarRadiometricCalibrationToImageFilter.hxx"
 #endif
 
 #endif

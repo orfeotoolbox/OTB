@@ -151,7 +151,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHistogramOfOrientedGradientCovariantImageFunction.txx"
+#include "otbHistogramOfOrientedGradientCovariantImageFunction.hxx"
 #endif
 
 #endif

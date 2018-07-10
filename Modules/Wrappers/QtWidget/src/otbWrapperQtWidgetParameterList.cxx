@@ -39,8 +39,8 @@ QtWidgetParameterList
   assert( m!=nullptr );
 
   QObject::connect(
-    this, SIGNAL( NotifyUpdate() ),
-    m, SLOT( NotifyUpdate() )
+    this, &QtWidgetParameterList::NotifyUpdate ,
+    m, &QtWidgetModel::NotifyUpdate
   );
 }
 
@@ -83,10 +83,16 @@ QtWidgetParameterList
   setLayout( gLayout );
 
   //
-  // Connections.
+  // Connections (Update UserValue flag).
   QObject::connect(
-    widget, SIGNAL( Updated() ),
-    this, SIGNAL( NotifyUpdate() )
+    widget, &ListEditWidget::ValueChanged,
+    this, [=] () { emit ParameterChanged( GetParam()->GetKey() ); }
+  );
+
+  // Connections (Update app parameters).
+  QObject::connect(
+    widget, &ListEditWidget::Updated,
+    this, &QtWidgetParameterList::NotifyUpdate
   );
 }
 

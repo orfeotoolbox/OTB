@@ -81,7 +81,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNNearestPointsLinearInterpolateDisplacementFieldGenerator.txx"
+#include "otbNNearestPointsLinearInterpolateDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

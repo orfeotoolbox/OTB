@@ -130,7 +130,7 @@ private:
 #endif
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "otbImageRegionNonUniformMultidimensionalSplitter.txx"
+# include "otbImageRegionNonUniformMultidimensionalSplitter.hxx"
 #endif
 
 #endif

@@ -135,6 +135,6 @@ private:
 
 } // end namesapce otb
 
-#include "otbVcaImageFilter.txx"
+#include "otbVcaImageFilter.hxx"
 
 #endif /* otbVCAImageFilter_h */

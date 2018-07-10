@@ -145,7 +145,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCompositeTransform.txx"
+#include "otbCompositeTransform.hxx"
 #endif
 
 #endif

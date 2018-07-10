@@ -117,7 +117,7 @@ class AtmosphericEffects
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAtmosphericEffects.txx"
+#include "otbAtmosphericEffects.hxx"
 #endif
 
 #endif

@@ -325,7 +325,7 @@ private:
 } // end namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDataNode.txx"
+#include "otbDataNode.hxx"
 #endif
 
 #endif

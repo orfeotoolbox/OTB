@@ -142,7 +142,7 @@ private:
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaskMuParserFilter.txx"
+#include "otbMaskMuParserFilter.hxx"
 #endif
 
 #endif

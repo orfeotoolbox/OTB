@@ -128,7 +128,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaskedIteratorDecorator.txx"
+#include "otbMaskedIteratorDecorator.hxx"
 #endif
 
 #endif

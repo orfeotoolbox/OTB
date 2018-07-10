@@ -87,7 +87,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCompacityPathFunction.txx"
+#include "otbCompacityPathFunction.hxx"
 #endif
 
 #endif

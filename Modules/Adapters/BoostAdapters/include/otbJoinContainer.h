@@ -61,7 +61,7 @@ std::ostream & Join(std::ostream &os, TRange const& range, std::string const& se
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbJoinContainer.txx"
+// #include "otbJoinContainer.hxx"
 #endif
 
 #endif // otbJoinContainer_h

@@ -95,7 +95,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbInverseSensorModel.txx"
+#include "otbInverseSensorModel.hxx"
 #endif
 
 #endif

@@ -102,7 +102,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryImageToDensityImageFilter.txx"
+#include "otbBinaryImageToDensityImageFilter.hxx"
 #endif
 
 #endif

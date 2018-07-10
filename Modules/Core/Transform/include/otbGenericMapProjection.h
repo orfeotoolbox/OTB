@@ -126,7 +126,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericMapProjection.txx"
+#include "otbGenericMapProjection.hxx"
 #endif
 
 #endif

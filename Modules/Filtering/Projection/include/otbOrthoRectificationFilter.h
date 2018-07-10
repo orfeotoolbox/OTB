@@ -111,7 +111,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOrthoRectificationFilter.txx"
+#include "otbOrthoRectificationFilter.hxx"
 #endif
 
 #endif
