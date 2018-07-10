@@ -230,7 +230,14 @@ endif()
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 mark_as_advanced(OTB_USE_DEPRECATED)
 
+# Although the OpenMP option looks like a 3rd party module, it is NOT. This option
+# is handled with other compilation flags in file OTBSetStandardCompilerFlags.cmake
+# before any module is parsed or enabled (see OTBModuleEnablement.cmake later on
+# during configure). Trying to modify this option from any module is
+# useless. Any 3rd party module dragging OpenMP should append
+# the corresponding flags to CMAKE_CXX_FLAGS, CMAKE_EXE_LINKER_FLAGS, and so on.
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
+
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
 
 include(OTBSetStandardCompilerFlags)

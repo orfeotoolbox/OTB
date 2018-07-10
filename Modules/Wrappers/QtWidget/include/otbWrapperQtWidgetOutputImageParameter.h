@@ -43,8 +43,8 @@ public:
   QtWidgetOutputImageParameter(OutputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputImageParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -75,22 +75,6 @@ private:
 
 };
 
-
-inline
-const QLineEdit*
-QtWidgetOutputImageParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputImageParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }
