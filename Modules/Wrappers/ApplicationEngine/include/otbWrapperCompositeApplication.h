@@ -144,8 +144,8 @@ protected:
   void UpdateInternalParameters(std::string key);
 
 private:
-  CompositeApplication(const CompositeApplication &); //purposely not implemented
-  void operator =(const CompositeApplication&); //purposely not implemented
+  CompositeApplication(const CompositeApplication &) = delete;
+  void operator =(const CompositeApplication&) = delete;
 
   InternalAppContainer m_AppContainer;
 

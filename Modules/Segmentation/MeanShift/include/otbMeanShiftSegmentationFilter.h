@@ -67,8 +67,8 @@ public:
 
 private:
 
-  ConnectedLabelFunctor(const Self &); //purposely not implemented
-  void operator =(const Self &); //purposely not implemented
+  ConnectedLabelFunctor(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
 };
 
@@ -191,7 +191,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftSegmentationFilter.txx"
+#include "otbMeanShiftSegmentationFilter.hxx"
 #endif
 
 #endif

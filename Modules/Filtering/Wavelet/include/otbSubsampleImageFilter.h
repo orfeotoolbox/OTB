@@ -133,8 +133,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SubsampleImageFilter (const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  SubsampleImageFilter (const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputImageIndexType m_SubsampleFactor;
 }; // end of class
@@ -142,7 +142,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSubsampleImageFilter.txx"
+#include "otbSubsampleImageFilter.hxx"
 #endif
 
 #endif

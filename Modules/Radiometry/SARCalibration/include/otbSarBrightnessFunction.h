@@ -144,8 +144,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SarBrightnessFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  SarBrightnessFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorRealType             m_Scale;
   ParametricFunctionPointer   m_Noise;
@@ -158,7 +158,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbSarBrightnessFunction.txx"
+# include "otbSarBrightnessFunction.hxx"
 #endif
 
 #endif

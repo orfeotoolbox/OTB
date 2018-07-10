@@ -208,8 +208,8 @@ protected:
 
 
 private:
-  MDMDNMFImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MDMDNMFImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   static void AddOneRowOfOnes(const MatrixType & m, MatrixType & M);
 
@@ -281,7 +281,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMDMDNMFImageFilter.txx"
+#include "otbMDMDNMFImageFilter.hxx"
 #endif
 
 #endif

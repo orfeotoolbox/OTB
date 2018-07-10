@@ -37,7 +37,7 @@
 #include <QPixmap>
 #include <QSplashScreen>
 
-#define USE_SPLASH_SCREEN ( ( !defined( OTB_DEBUG ) && 0 ) || 0 )
+#define USE_SPLASH_SCREEN 0
 
 //
 // System includes (sorted by alphabetic order)

@@ -88,8 +88,8 @@ protected slots:
   void SetFileName(const QString &);
 
 private:
-  QtFileSelectionWidget(const QtFileSelectionWidget&); //purposely not implemented
-  void operator=(const QtFileSelectionWidget&); //purposely not implemented
+  QtFileSelectionWidget(const QtFileSelectionWidget&) = delete;
+  void operator=(const QtFileSelectionWidget&) = delete;
 
   virtual void DoCreateWidget();
 

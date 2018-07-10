@@ -178,8 +178,8 @@ private:
   // Retrieve the real source file name if derived dataset */
   std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
   
-  ImageFileReader(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageFileReader(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   otb::ImageIOBase::Pointer m_ImageIO;
   bool                 m_UserSpecifiedImageIO; // keep track whether the
@@ -212,7 +212,7 @@ private:
 } //namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFileReader.txx"
+#include "otbImageFileReader.hxx"
 #endif
 
 #endif // otbImageFileReader_h

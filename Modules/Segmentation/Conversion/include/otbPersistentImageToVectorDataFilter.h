@@ -109,8 +109,8 @@ protected:
   OutputVectorDataPointerType m_OutputVectorData;
 
 private:
-  PersistentImageToVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageToVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   virtual OutputVectorDataPointerType ProcessTile() = 0;
 
@@ -121,7 +121,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentImageToVectorDataFilter.txx"
+#include "otbPersistentImageToVectorDataFilter.hxx"
 #endif
 
 #endif

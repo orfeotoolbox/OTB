@@ -21,6 +21,8 @@
 #ifndef otbLogger_h
 #define otbLogger_h
 
+#include <string>
+
 #include "itkLoggerBase.h"
 #include "itkLogger.h"
 #include "OTBCommonExport.h"
@@ -70,11 +72,11 @@ public:
 
 protected:
   Logger();
-  virtual ~Logger() ITK_OVERRIDE;
+  virtual ~Logger() override;
 
 private:
-  Logger(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Logger(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   static Pointer CreateInstance();
 

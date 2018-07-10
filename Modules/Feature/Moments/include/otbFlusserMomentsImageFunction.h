@@ -137,8 +137,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  FlusserMomentsImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  FlusserMomentsImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NeighborhoodRadius;
 };
@@ -146,7 +146,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFlusserMomentsImageFunction.txx"
+#include "otbFlusserMomentsImageFunction.hxx"
 #endif
 
 #endif

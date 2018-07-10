@@ -195,8 +195,8 @@ protected:
 
 
 private:
-  ParserImpl(const Self &);             //purposely not implemented
-  void operator =(const Self &);    //purposely not implemented
+  ParserImpl(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
   mu::Parser m_MuParser;
 

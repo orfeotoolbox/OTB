@@ -103,8 +103,8 @@ protected:
 
 
 private:
-  TileImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TileImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Compute the overlapping region between the output requested
   // region and the nth input tile largest region
@@ -125,7 +125,7 @@ RegionType InputRegionToOutputRegion(unsigned int tileIndex, const RegionType & 
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTileImageFilter.txx"
+#include "otbTileImageFilter.hxx"
 #endif
 
 #endif

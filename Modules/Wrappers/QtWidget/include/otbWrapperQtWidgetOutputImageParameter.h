@@ -40,11 +40,11 @@ class OTBQtWidget_EXPORT QtWidgetOutputImageParameter : public QtWidgetParameter
 {
   Q_OBJECT
 public:
-  QtWidgetOutputImageParameter(OutputImageParameter*, QtWidgetModel*);
+  QtWidgetOutputImageParameter(OutputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputImageParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -57,8 +57,8 @@ protected slots:
   void SetPixelType(int pixelType);
 
 private:
-  QtWidgetOutputImageParameter(const QtWidgetOutputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputImageParameter&); //purposely not implemented
+  QtWidgetOutputImageParameter(const QtWidgetOutputImageParameter&) = delete;
+  void operator=(const QtWidgetOutputImageParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -75,22 +75,6 @@ private:
 
 };
 
-
-inline
-const QLineEdit*
-QtWidgetOutputImageParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputImageParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

@@ -92,8 +92,8 @@ private:
 
   std::string    m_FileName;
 
-  InputProcessXMLParameter(const InputProcessXMLParameter &); //purposely not implemented
-  void operator =(const InputProcessXMLParameter&); //purposely not implemented
+  InputProcessXMLParameter(const InputProcessXMLParameter &) = delete;
+  void operator =(const InputProcessXMLParameter&) = delete;
 
 
 }; // End class Parameter

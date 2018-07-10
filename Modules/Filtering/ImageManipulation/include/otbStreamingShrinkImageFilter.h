@@ -93,8 +93,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StreamingShrinkImageRegionSplitter(const StreamingShrinkImageRegionSplitter &); //purposely not implemented
-  void operator =(const StreamingShrinkImageRegionSplitter&); //purposely not implemented
+  StreamingShrinkImageRegionSplitter(const StreamingShrinkImageRegionSplitter &) = delete;
+  void operator =(const StreamingShrinkImageRegionSplitter&) = delete;
 
   itk::FixedArray<unsigned int, ImageDimension> m_SplitsPerDimension;
   unsigned int m_TileDimension;
@@ -147,8 +147,8 @@ protected:
   ~StreamingShrinkStreamingManager() override;
 
 private:
-  StreamingShrinkStreamingManager(const StreamingShrinkStreamingManager &); //purposely not implemented
-  void operator =(const StreamingShrinkStreamingManager&); //purposely not implemented
+  StreamingShrinkStreamingManager(const StreamingShrinkStreamingManager &) = delete;
+  void operator =(const StreamingShrinkStreamingManager&) = delete;
 
   unsigned int m_ShrinkFactor;
 };
@@ -233,8 +233,8 @@ protected:
 
 
 private:
-  PersistentShrinkImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentShrinkImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /* the output shrunk image */
   OutputImagePointer m_ShrunkOutput;
@@ -324,8 +324,8 @@ protected:
   ~StreamingShrinkImageFilter() override {}
 
 private:
-  StreamingShrinkImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingShrinkImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   StreamingShrinkStreamingManagerPointerType m_StreamingManager;
 };
@@ -333,7 +333,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingShrinkImageFilter.txx"
+#include "otbStreamingShrinkImageFilter.hxx"
 #endif
 
 #endif

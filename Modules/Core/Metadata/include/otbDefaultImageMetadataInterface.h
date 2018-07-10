@@ -197,8 +197,8 @@ protected:
 
 private:
 
-  DefaultImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DefaultImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

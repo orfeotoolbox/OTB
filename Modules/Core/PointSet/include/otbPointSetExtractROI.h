@@ -85,8 +85,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  PointSetExtractROI(const PointSetExtractROI &); //purposely not implemented
-  void operator =(const PointSetExtractROI&); //purposely not implemented
+  PointSetExtractROI(const PointSetExtractROI &) = delete;
+  void operator =(const PointSetExtractROI&) = delete;
 
   /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
@@ -99,7 +99,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetExtractROI.txx"
+#include "otbPointSetExtractROI.hxx"
 #endif
 
 #endif

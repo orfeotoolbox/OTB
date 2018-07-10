@@ -234,7 +234,7 @@ public:
    */
   operator int boolean ::* () const
     {
-    return m_Layer ? &boolean::i : ITK_NULLPTR;
+    return m_Layer ? &boolean::i : nullptr;
     }
 
   /** Access to raw \c OGRLayer.
@@ -336,12 +336,12 @@ public:
     struct enabler {};
   public:
     feature_iter()
-      : m_Layer(ITK_NULLPTR), m_Crt(ITK_NULLPTR) {}
+      : m_Layer(nullptr), m_Crt(nullptr) {}
     explicit feature_iter(otb::ogr::Layer & layer)
       : m_Layer(&layer), m_Crt(layer.GetNextFeature()) {}
     template <class OtherValue> feature_iter(
       feature_iter<OtherValue> const& other,
-      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*> >::type* = ITK_NULLPTR
+      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*> >::type* = nullptr
     )
       : m_Layer(other.m_Layer), m_Crt(other.m_Crt)
       {}
@@ -553,7 +553,7 @@ inline bool operator!=(Layer const& lhs, Layer const& rhs)
 } } // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbLayerWrapper.txx"
+// #include "otbLayerWrapper.hxx"
 #endif
 
 #endif // otbOGRLayerWrapper_h

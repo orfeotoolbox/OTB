@@ -89,7 +89,7 @@ protected:
   {}
 
 private:
-  DirectoryParameter(const DirectoryParameter &); //purposely not implemented
+  DirectoryParameter(const DirectoryParameter &) = delete;
   void operator =(const DirectoryParameter&); //purposely not
                                               //implemented
 

@@ -137,8 +137,8 @@ protected:
   void  GenerateData() override;
 
 private:
-  PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   MeanValueMapType                       m_RadiometricValueAccumulator;
   LabelPopulationMapType                 m_LabelPopulation;
@@ -261,14 +261,14 @@ protected:
   ~StreamingStatisticsMapFromLabelImageFilter() override {}
 
 private:
-  StreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingStatisticsMapFromLabelImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingStatisticsMapFromLabelImageFilter.txx"
+#include "otbStreamingStatisticsMapFromLabelImageFilter.hxx"
 #endif
 
 #endif

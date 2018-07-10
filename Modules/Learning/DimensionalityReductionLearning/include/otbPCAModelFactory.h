@@ -64,14 +64,14 @@ protected:
   ~PCAModelFactory() override;
 
 private:
-  PCAModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PCAModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } //namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPCAModelFactory.txx"
+#include "otbPCAModelFactory.hxx"
 #endif
 
 #endif

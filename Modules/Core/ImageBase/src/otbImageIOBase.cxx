@@ -19,6 +19,10 @@
  * limitations under the License.
  */
 
+#include <complex>
+#include <sstream>
+#include <string>
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -29,7 +33,6 @@
 #include "itkPoint.h"
 #include "itkCovariantVector.h"
 #include "itkDiffusionTensor3D.h"
-#include "itkImageRegionSplitter.h"
 
 namespace otb
 {
@@ -91,7 +94,7 @@ void ImageIOBase::Resize(const unsigned int numDimensions,
                          const unsigned int* dimensions)
 {
   m_NumberOfDimensions = numDimensions;
-  if (dimensions != ITK_NULLPTR)
+  if (dimensions != nullptr)
     {
     for (unsigned int i=0; i < m_NumberOfDimensions; i++)
       {

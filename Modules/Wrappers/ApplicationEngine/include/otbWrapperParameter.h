@@ -235,8 +235,8 @@ protected:
   std::vector<Parameter::Pointer >   m_ChildrenList;
 
 private:
-  Parameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  Parameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
 }; // End class Parameter
 

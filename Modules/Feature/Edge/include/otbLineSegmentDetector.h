@@ -260,8 +260,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LineSegmentDetector(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  LineSegmentDetector(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   VectorOfIndexVectorType m_RegionList;
   DirectionVectorType     m_DirectionVector;
@@ -286,7 +286,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineSegmentDetector.txx"
+#include "otbLineSegmentDetector.hxx"
 #endif
 
 #endif

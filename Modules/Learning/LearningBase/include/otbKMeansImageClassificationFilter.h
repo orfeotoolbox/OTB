@@ -116,8 +116,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  KMeansImageClassificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KMeansImageClassificationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Centroids used for classification */
   KMeansParametersType m_Centroids;
@@ -128,7 +128,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKMeansImageClassificationFilter.txx"
+#include "otbKMeansImageClassificationFilter.hxx"
 #endif
 
 #endif

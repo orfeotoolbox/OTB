@@ -128,15 +128,15 @@ protected:
   }
 
 private:
-  PeriodicSOM(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  PeriodicSOM(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 }; // end of class
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPeriodicSOM.txx"
+#include "otbPeriodicSOM.hxx"
 #endif
 
 #endif

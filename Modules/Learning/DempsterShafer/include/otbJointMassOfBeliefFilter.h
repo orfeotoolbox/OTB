@@ -97,8 +97,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  JointMassOfBeliefFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  JointMassOfBeliefFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Combine masses from input and output into output */
   void CombineMasses(const MassFunctionType * input, MassFunctionType * output);
@@ -107,7 +107,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbJointMassOfBeliefFilter.txx"
+#include "otbJointMassOfBeliefFilter.hxx"
 #endif
 
 #endif

@@ -28,14 +28,28 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetOutputVectorDataParameter::QtWidgetOutputVectorDataParameter(OutputVectorDataParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetOutputVectorDataParameter::QtWidgetOutputVectorDataParameter(OutputVectorDataParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_OutputVectorDataParam(param)
 {
 }
 
 QtWidgetOutputVectorDataParameter::~QtWidgetOutputVectorDataParameter()
 {
+}
+
+const QLineEdit*
+QtWidgetOutputVectorDataParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetOutputVectorDataParameter
+::GetInput()
+{
+  return m_Input;
 }
 
 void QtWidgetOutputVectorDataParameter::DoUpdateGUI()
@@ -48,23 +62,23 @@ void QtWidgetOutputVectorDataParameter::DoUpdateGUI()
 
 void QtWidgetOutputVectorDataParameter::DoCreateWidget()
 {
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_OutputVectorDataParam->GetDescription() )
   );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetOutputVectorDataParameter::SetFileName );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
   m_HLayout->addWidget(m_Input);
 
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select output filename...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetOutputVectorDataParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);

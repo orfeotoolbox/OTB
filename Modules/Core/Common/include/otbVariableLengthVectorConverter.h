@@ -82,8 +82,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 // VariableLengthVector
@@ -125,8 +125,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 
@@ -166,8 +166,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 
@@ -207,8 +207,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 
@@ -248,8 +248,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 //Histogram
@@ -288,14 +288,14 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 }// namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVariableLengthVectorConverter.txx"
+#include "otbVariableLengthVectorConverter.hxx"
 #endif
 
 #endif

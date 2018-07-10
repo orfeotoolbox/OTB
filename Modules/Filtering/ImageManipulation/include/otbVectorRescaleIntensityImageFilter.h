@@ -278,8 +278,8 @@ protected:
   ~VectorRescaleIntensityImageFilter() override {}
 
 private:
-  VectorRescaleIntensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorRescaleIntensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputPixelType m_OutputMinimum;
   OutputPixelType m_OutputMaximum;
@@ -294,7 +294,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorRescaleIntensityImageFilter.txx"
+#include "otbVectorRescaleIntensityImageFilter.hxx"
 #endif
 
 #endif

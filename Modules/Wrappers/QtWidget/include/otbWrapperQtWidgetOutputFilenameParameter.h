@@ -40,11 +40,11 @@ class OTBQtWidget_EXPORT QtWidgetOutputFilenameParameter : public QtWidgetParame
 {
   Q_OBJECT
 public:
-  QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*);
+  QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputFilenameParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
 public slots:
   void SetFileName( const QString& value );
@@ -53,8 +53,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetOutputFilenameParameter(const QtWidgetOutputFilenameParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputFilenameParameter&); //purposely not implemented
+  QtWidgetOutputFilenameParameter(const QtWidgetOutputFilenameParameter&) = delete;
+  void operator=(const QtWidgetOutputFilenameParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -67,24 +67,6 @@ private:
   QLineEdit*    m_Input;
   QPushButton * m_Button;
 };
-
-
-inline
-const QLineEdit*
-QtWidgetOutputFilenameParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputFilenameParameter
-::GetInput()
-{
-  return m_Input;
-}
-
 
 }
 }

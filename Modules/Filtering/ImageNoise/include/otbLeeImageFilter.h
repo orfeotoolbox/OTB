@@ -119,8 +119,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  LeeImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LeeImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   SizeType m_Radius;
@@ -130,7 +130,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLeeImageFilter.txx"
+#include "otbLeeImageFilter.hxx"
 #endif
 
 #endif

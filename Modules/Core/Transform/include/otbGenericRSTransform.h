@@ -195,8 +195,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GenericRSTransform(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  GenericRSTransform(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ImageKeywordlist m_InputKeywordList;
   ImageKeywordlist m_OutputKeywordList;
@@ -223,7 +223,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericRSTransform.txx"
+#include "otbGenericRSTransform.hxx"
 #endif
 
 #endif

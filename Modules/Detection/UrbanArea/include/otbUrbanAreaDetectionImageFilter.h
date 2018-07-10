@@ -239,8 +239,8 @@ protected:
   ~UrbanAreaDetectionImageFilter() override{}
 
 private:
-  UrbanAreaDetectionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UrbanAreaDetectionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Filters */
   IntensityFilterPointerType          m_IntensityFilter;
@@ -262,7 +262,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUrbanAreaDetectionImageFilter.txx"
+#include "otbUrbanAreaDetectionImageFilter.hxx"
 #endif
 
 #endif

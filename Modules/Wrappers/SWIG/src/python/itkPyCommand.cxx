@@ -26,7 +26,7 @@ namespace itk
 
 PyCommand::PyCommand()
 {
-    this->obj = ITK_NULLPTR;
+    this->obj = nullptr;
 }
 
 PyCommand::~PyCommand()
@@ -35,7 +35,7 @@ PyCommand::~PyCommand()
     {
         Py_DECREF(this->obj);
     }
-    this->obj = ITK_NULLPTR;
+    this->obj = nullptr;
 }
 
 void PyCommand::SetCommandCallable(PyObject *theObj)
@@ -92,7 +92,7 @@ void PyCommand::PyExecute()
     {
         PyObject *result;
 
-        result = PyEval_CallObject(this->obj, (PyObject *)ITK_NULLPTR);
+        result = PyEval_CallObject(this->obj, (PyObject *)nullptr);
 
         if (result)
         {

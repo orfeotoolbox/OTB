@@ -150,8 +150,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OGRDataSourceToLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  OGRDataSourceToLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::vector< OGRLayerH >    m_SrcDataSetLayers;
   std::vector<int>            m_BandsToBurn;
@@ -174,7 +174,7 @@ private:
 
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataSourceToLabelImageFilter.txx"
+#include "otbOGRDataSourceToLabelImageFilter.hxx"
 #endif
 
 #endif

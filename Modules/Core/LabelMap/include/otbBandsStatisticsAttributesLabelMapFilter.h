@@ -206,15 +206,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BandsStatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BandsStatisticsAttributesLabelMapFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 }; // end of class
 
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandsStatisticsAttributesLabelMapFilter.txx"
+#include "otbBandsStatisticsAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

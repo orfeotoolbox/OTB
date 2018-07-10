@@ -127,8 +127,8 @@ protected:
   PointVectorType PointDensification(DataNodeType * node);
 
 private:
-  LabeledSampleLocalizationGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabeledSampleLocalizationGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string GetNextID()
   {
@@ -151,7 +151,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabeledSampleLocalizationGenerator.txx"
+#include "otbLabeledSampleLocalizationGenerator.hxx"
 #endif
 
 #endif

@@ -152,7 +152,7 @@ private:
 
 //  char m_Delimiter;
 
-//  void operator=(const Self&); //purposely not implemented
+//  void operator=(const Self&) = delete;
 
 };
 

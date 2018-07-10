@@ -21,6 +21,9 @@
 #ifndef otbExtendedFilenameHelper_h
 #define otbExtendedFilenameHelper_h
 
+#include <map>
+#include <vector>
+
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "OTBCommonExport.h"
@@ -86,8 +89,8 @@ protected:
   ~ExtendedFilenameHelper() override {}
 
 private:
-  ExtendedFilenameHelper(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ExtendedFilenameHelper(const Self &) = delete;
+  void operator =(const Self&) = delete;
   itkSetStringMacro(SimpleFileName);
 
   std::string                          m_ExtendedFileName;

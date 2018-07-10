@@ -147,8 +147,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  ConfusionMatrixToMassOfBelief(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ConfusionMatrixToMassOfBelief(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ConfusionMatrixType m_ConfusionMatrix;
   typename ConfusionMatrixMeasurementsType::Pointer m_ConfMatMeasurements;
@@ -164,7 +164,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConfusionMatrixToMassOfBelief.txx"
+#include "otbConfusionMatrixToMassOfBelief.hxx"
 #endif
 
 #endif

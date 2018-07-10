@@ -124,8 +124,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  TextureImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  TextureImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   SizeType   m_Radius;
   OffsetType m_Offset;
@@ -135,7 +135,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbTextureImageFunction.txx"
+# include "otbTextureImageFunction.hxx"
 #endif
 
 #endif

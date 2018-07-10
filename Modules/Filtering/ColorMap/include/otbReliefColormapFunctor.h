@@ -65,8 +65,8 @@ protected:
   ~ReliefColormapFunctor() override {}
 
 private:
-  ReliefColormapFunctor(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ReliefColormapFunctor(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace functor
@@ -74,7 +74,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbReliefColormapFunctor.txx"
+#include "otbReliefColormapFunctor.hxx"
 #endif
 
 #endif

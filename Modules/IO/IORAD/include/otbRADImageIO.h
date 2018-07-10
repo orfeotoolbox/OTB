@@ -141,8 +141,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RADImageIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RADImageIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Internal method to read header information */
   bool InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError);

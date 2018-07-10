@@ -128,8 +128,8 @@ protected:
   itk::ProcessObject::Pointer m_Caster;
 
 private:
-  ComplexInputImageParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  ComplexInputImageParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
   /** Store the loaded image filename */
   std::string m_PreviousFileName;
@@ -143,7 +143,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWrapperComplexInputImageParameter.txx"
+#include "otbWrapperComplexInputImageParameter.hxx"
 #endif
 
 #endif

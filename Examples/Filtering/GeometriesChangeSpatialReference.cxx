@@ -65,7 +65,7 @@ private:
 otb::ogr::UniqueGeometryPtr
 ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
 {
-  otb::ogr::UniqueGeometryPtr out(in ? in->clone() : ITK_NULLPTR);
+  otb::ogr::UniqueGeometryPtr out(in ? in->clone() : nullptr);
   if (out)
     {
     const OGRErr err = out->transform(m_reprojector.get());
@@ -102,11 +102,11 @@ protected:
   /** Default constructor. */
   MyReprojectionFilter(){ }
   /** Destructor. */
-  ~MyReprojectionFilter() ITK_OVERRIDE{ }
+  ~MyReprojectionFilter() override{ }
 
 private:
 
-  OGRSpatialReference*     DoDefineNewLayerSpatialReference(otb::ogr::Layer const& itkNotUsed(source)) const ITK_OVERRIDE
+  OGRSpatialReference*     DoDefineNewLayerSpatialReference(otb::ogr::Layer const& itkNotUsed(source)) const override
     {
     return m_osr.get();
     }
@@ -207,7 +207,7 @@ int main (int argc, char **argv)
 
     otb::ogr::DataSource::Pointer output
       = options.workingInplace ? input
-      : options.outputIsStdout ? ITK_NULLPTR
+      : options.outputIsStdout ? nullptr
       : otb::ogr::DataSource::New( options.outputFile, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
     std::cout << "input: " << otb::ogr::version_proxy::GetFileListAsStringVector(&input->ogr())[0] << " should be: " << options.inputFile << "\n";
     if (output)
@@ -234,7 +234,7 @@ int main (int argc, char **argv)
       }
     else
       {
-      filter->UpdateOutputData(ITK_NULLPTR);
+      filter->UpdateOutputData(nullptr);
       assert(filter->GetOutput() && "output not set");
       filter->GetOutput()->Print(std::cout, 0);
       }

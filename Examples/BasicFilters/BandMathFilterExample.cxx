@@ -31,7 +31,7 @@
 //  The built in functions and operators list is available at:
 //  \url{http://muparser.sourceforge.net/mup_features.html}.
 //
-//  In order to use this filter, at least one input image is to be
+//  In order to use this filter, at least one input image should be
 // set. An associated variable name can be specified or not by using
 // the corresponding SetNthInput method. For the nth input image, if
 // no associated variable name has been specified, a default variable
@@ -57,10 +57,10 @@
 
 //  Software Guide : BeginLatex
 //
-// We start by including the needed header file.
+// We start by including the required header file.
 // The aim of this example is to compute the Normalized Difference Vegetation Index (NDVI)
-// from a multispecral image and perform a threshold on this
-// indice to extract area containing a dense vegetation canopy.
+// from a multispectral image and then apply a threshold to this
+// index to extract areas containing a dense vegetation canopy.
 //
 //  Software Guide : EndLatex
 
@@ -82,8 +82,8 @@ int main( int argc, char* argv[])
 //
 //  We start by the classical \code{typedef}s needed for reading and
 //  writing the images. The \doxygen{otb}{BandMathImageFilter} class
-// works with \doxygen{otb}{Image} as input so we need to define additional
-// filters to extract each layer of the multispectral image
+//  works with \doxygen{otb}{Image} as input, so we need to define additional
+//  filters to extract each layer of the multispectral image.
 //
 //  Software Guide : EndLatex
 
@@ -130,9 +130,9 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-//  We need now to extract now each band from the input \doxygen{otb}{VectorImage},
+//  We now need to extract each band from the input \doxygen{otb}{VectorImage},
 //  it illustrates the use of the \doxygen{otb}{VectorImageToImageList}.
-//  Each extracted layer are inputs of the \doxygen{otb}{BandMathImageFilter}:
+//  Each extracted layer is an input to the \doxygen{otb}{BandMathImageFilter}:
 //
 //  Software Guide : EndLatex
 
@@ -183,22 +183,22 @@ int main( int argc, char* argv[])
 
 //  Software Guide : BeginLatex
 //
-// The muParser library offers also the possibility to extended existing built-in functions. For example,
-// you can use the OTB expression "ndvi(b3, b4)" with the filter. The mathematical expression would be in
-// this case \textit{if($ndvi(b3, b4)>0.4$, 255, 0)}. It will return the same result.
+//  The muParser library also provides the possibility to extend existing built-in functions. For example,
+//  you can use the OTB expression "ndvi(b3, b4)" with the filter. In this instance, the mathematical expression would be 
+//  \textit{if($ndvi(b3, b4)>0.4$, 255, 0)}, which would return the same result.
 //
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginLatex
 //
-// Figure~\ref{fig:BandMathImageFilter} shows the result of the threshold over the NDVI indice
-// to a Quickbird image.
+// Figure~\ref{fig:BandMathImageFilter} shows the result of the threshold applied to the NDVI index
+// of a Quickbird image.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.45\textwidth]{qb_ExtractRoad_pretty.eps}
 // \includegraphics[width=0.45\textwidth]{qb_BandMath-pretty.eps}
 // \itkcaption[Band Math]{From left to right:
-// Original image, thresholded NDVI indice.}
+// Original image, thresholded NDVI index.}
 // \label{fig:BandMathImageFilter}
 // \end{figure}
 //

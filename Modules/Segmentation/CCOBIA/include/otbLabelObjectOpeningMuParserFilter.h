@@ -125,8 +125,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LabelObjectOpeningMuParserFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelObjectOpeningMuParserFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FunctorType m_Functor;
   std::string m_Expression;
@@ -136,7 +136,7 @@ private:
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelObjectOpeningMuParserFilter.txx"
+#include "otbLabelObjectOpeningMuParserFilter.hxx"
 #endif
 
 #endif

@@ -143,8 +143,8 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  UnaryFunctorNeighborhoodImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorNeighborhoodImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputImageSizeType m_Radius;
   FunctorType        m_Functor;
@@ -153,7 +153,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorNeighborhoodImageFilter.txx"
+#include "otbUnaryFunctorNeighborhoodImageFilter.hxx"
 #endif
 
 #endif

@@ -115,7 +115,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8GraphFileReader.txx"
+#include "otbRCC8GraphFileReader.hxx"
 #endif
 
 #endif

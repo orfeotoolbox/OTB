@@ -211,8 +211,8 @@ protected:
 
 
 private:
-  StereoSensorModelToElevationFilter(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  StereoSensorModelToElevationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   inline double Correlation(const std::vector<double>& master,
                             const std::vector<double>& slave) const;
@@ -251,7 +251,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStereoSensorModelToElevationMapFilter.txx"
+#include "otbStereoSensorModelToElevationMapFilter.hxx"
 #endif
 
 #endif

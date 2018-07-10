@@ -92,14 +92,14 @@ protected:
   double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3) override;
 
 private:
-  LineCorrelationDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LineCorrelationDetectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineCorrelationDetectorImageFilter.txx"
+#include "otbLineCorrelationDetectorImageFilter.hxx"
 #endif
 
 #endif

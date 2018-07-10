@@ -63,8 +63,8 @@ protected:
   ~Lambert93Projection() override {}
 
 private:
-  Lambert93Projection(const Self &); //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  Lambert93Projection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

@@ -111,8 +111,8 @@ protected:
   {}
 
 private:
-  RAMParameter(const RAMParameter &); //purposely not implemented
-  void operator =(const RAMParameter&); //purposely not implemented
+  RAMParameter(const RAMParameter &) = delete;
+  void operator =(const RAMParameter&) = delete;
 
   UnsignedIntParameter::Pointer         m_UnsignedIntParam;
 };

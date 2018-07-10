@@ -141,18 +141,18 @@ public:
 
 protected:
   MyChangeDetectorImageFilter() {}
-  ~MyChangeDetectorImageFilter() ITK_OVERRIDE {}
+  ~MyChangeDetectorImageFilter() override {}
 
 private:
-  MyChangeDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MyChangeDetectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
-// Pay attention to the fact that no \code{.txx} file is needed, since
+// Pay attention to the fact that no \code{.hxx} file is needed, since
 // filtering operation is implemented in the
 // \doxygen{otb}{BinaryFunctorNeighborhoodImageFilter} class. So all
 // the algorithmics part is inside the functor.

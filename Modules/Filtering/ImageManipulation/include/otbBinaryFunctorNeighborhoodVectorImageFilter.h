@@ -143,15 +143,15 @@ protected:
   RadiusSizeType m_Radius;
 
 private:
-  BinaryFunctorNeighborhoodVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryFunctorNeighborhoodVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 };
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryFunctorNeighborhoodVectorImageFilter.txx"
+#include "otbBinaryFunctorNeighborhoodVectorImageFilter.hxx"
 #endif
 
 #endif

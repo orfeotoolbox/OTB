@@ -40,11 +40,11 @@ class OTBQtWidget_EXPORT QtWidgetInputImageParameter : public QtWidgetParameterB
 {
   Q_OBJECT
 public:
-  QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*);
+  QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputImageParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
 signals:
   void FileNameIsSet();
@@ -57,8 +57,8 @@ private slots:
   void OnEditingFinished();
 
 private:
-  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
+  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&) = delete;
+  void operator=(const QtWidgetInputImageParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -72,21 +72,6 @@ private:
   QPushButton * m_Button;
 };
 
-inline
-const QLineEdit*
-QtWidgetInputImageParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetInputImageParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 } // Wrapper
 

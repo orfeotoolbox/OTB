@@ -32,10 +32,10 @@ int otbSystemTest(int itkNotUsed(argc), char * argv[])
   std::ostringstream msg;
 
   // Check instantiation test
-  otb::System * var(ITK_NULLPTR);
+  otb::System * var(nullptr);
   var = new otb::System();
   delete var;
-  var = ITK_NULLPTR;
+  var = nullptr;
 
   if (itksys::SystemTools::FileExists(inputFileName, true) == false)
     {

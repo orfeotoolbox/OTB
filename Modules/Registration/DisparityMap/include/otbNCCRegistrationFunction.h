@@ -164,8 +164,8 @@ protected:
   };
 
 private:
-  NCCRegistrationFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NCCRegistrationFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Cache fixed image information. */
   SpacingType m_FixedImageSpacing;
@@ -193,7 +193,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNCCRegistrationFunction.txx"
+#include "otbNCCRegistrationFunction.hxx"
 #endif
 
 #endif

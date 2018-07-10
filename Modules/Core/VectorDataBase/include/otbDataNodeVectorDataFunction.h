@@ -99,14 +99,14 @@ protected:
   VectorDataConstPointerType  m_VectorData;
 
 private:
-  DataNodeVectorDataFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DataNodeVectorDataFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDataNodeVectorDataFunction.txx"
+#include "otbDataNodeVectorDataFunction.hxx"
 #endif
 
 #endif

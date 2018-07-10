@@ -175,8 +175,8 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  ImageSimulationMethod(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageSimulationMethod(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfComponentsPerPixel;
   unsigned int m_Radius; //radius of prolate interpolate
@@ -203,7 +203,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageSimulationMethod.txx"
+#include "otbImageSimulationMethod.hxx"
 #endif
 
 #endif

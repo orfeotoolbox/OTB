@@ -127,8 +127,8 @@ protected:
   static ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
 
 private:
-  CoordinateToName(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CoordinateToName(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double m_Lon;
   double m_Lat;

@@ -39,15 +39,15 @@ class OTBQtWidget_EXPORT QtWidgetStringParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetStringParameter(StringParameter*, QtWidgetModel*);
+  QtWidgetStringParameter(StringParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetStringParameter() override;
 
 protected slots:
   void SetValue( const QString& value );
 
 private:
-  QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented
-  void operator=(const QtWidgetStringParameter&); //purposely not implemented
+  QtWidgetStringParameter(const QtWidgetStringParameter&) = delete;
+  void operator=(const QtWidgetStringParameter&) = delete;
 
   void DoCreateWidget() override;
 

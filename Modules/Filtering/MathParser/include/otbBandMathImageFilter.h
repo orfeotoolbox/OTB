@@ -136,8 +136,8 @@ protected :
   void AfterThreadedGenerateData() override;
 
 private :
-  BandMathImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BandMathImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::string                           m_Expression;
   std::vector<ParserType::Pointer>      m_VParser;
@@ -157,7 +157,7 @@ private :
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandMathImageFilter.txx"
+#include "otbBandMathImageFilter.hxx"
 #endif
 
 #endif

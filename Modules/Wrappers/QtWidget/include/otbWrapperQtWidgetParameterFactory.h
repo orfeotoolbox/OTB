@@ -57,16 +57,16 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(QtWidgetParameterFactory, Object);
 
-  /** Create the appropriate ImageIO depending on the particulars of the file. */
-  static QtWidgetParameterBase* CreateQtWidget( Parameter* param, QtWidgetModel* model );
+  /** Create the appropriate QtWidget depending on the particulars of the parameter */
+  static QtWidgetParameterBase* CreateQtWidget( Parameter* param, QtWidgetModel* model, QWidget * parent );
 
 protected:
   QtWidgetParameterFactory();
   ~QtWidgetParameterFactory() override;
 
 private:
-  QtWidgetParameterFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  QtWidgetParameterFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

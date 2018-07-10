@@ -42,7 +42,7 @@ class OTBQtWidget_EXPORT QtWidgetSimpleProgressReport : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetSimpleProgressReport(QtWidgetModel * model);
+  QtWidgetSimpleProgressReport(QtWidgetModel * model, QWidget * parent);
   ~QtWidgetSimpleProgressReport() override;
 
   void SetApplication(Application::Pointer app);
@@ -59,7 +59,7 @@ public slots:
   void AddNewProcessToReport();
 
 private:
-  QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&); //purposely not implemented
+  QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&) = delete;
   void operator=(const QtWidgetSimpleProgressReport&); //purposely not
                                                        //implemented
 

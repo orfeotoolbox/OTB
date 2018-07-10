@@ -125,8 +125,8 @@ protected:
   void GenerateData() override;
 
 private:
-  RemoveCarvingPathFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RemoveCarvingPathFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputImagePixelType m_Value;
   unsigned int         m_Direction;
@@ -135,7 +135,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRemoveCarvingPathFilter.txx"
+#include "otbRemoveCarvingPathFilter.hxx"
 #endif
 
 #endif

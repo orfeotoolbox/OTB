@@ -22,7 +22,11 @@
 #ifndef otbStandardWriterWatcher_h
 #define otbStandardWriterWatcher_h
 
+#include <iosfwd>
+
 #include "otbWriterWatcherBase.h"
+
+#include "OTBCommonExport.h"
 
 namespace otb
 {

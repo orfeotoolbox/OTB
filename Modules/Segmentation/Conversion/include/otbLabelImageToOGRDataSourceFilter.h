@@ -128,8 +128,8 @@ protected:
   using Superclass::MakeOutput;
 
 private:
-  LabelImageToOGRDataSourceFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  LabelImageToOGRDataSourceFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string m_FieldName;
   bool m_Use8Connected;
@@ -141,7 +141,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageToOGRDataSourceFilter.txx"
+#include "otbLabelImageToOGRDataSourceFilter.hxx"
 #endif
 
 #endif

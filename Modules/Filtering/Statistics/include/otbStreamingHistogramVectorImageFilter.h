@@ -188,8 +188,8 @@ protected:
   void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentHistogramVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentHistogramVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ArrayHistogramListType   m_ThreadHistogramList;
   CountVectorType          m_Size;
@@ -274,14 +274,14 @@ protected:
   ~StreamingHistogramVectorImageFilter() override {}
 
 private:
-  StreamingHistogramVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingHistogramVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingHistogramVectorImageFilter.txx"
+#include "otbStreamingHistogramVectorImageFilter.hxx"
 #endif
 
 #endif

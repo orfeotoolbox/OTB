@@ -73,8 +73,8 @@ protected:
   }
 
 private:
-  RGBAPixelConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RGBAPixelConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 //RGBA to RGBA
@@ -110,8 +110,8 @@ protected:
   }
 
 private:
-  RGBAPixelConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RGBAPixelConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 //RGBA to RGB
@@ -147,14 +147,14 @@ protected:
   }
 
 private:
-  RGBAPixelConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RGBAPixelConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRGBAPixelConverter.txx"
+#include "otbRGBAPixelConverter.hxx"
 #endif
 
 #endif

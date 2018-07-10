@@ -128,8 +128,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  FunctionToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  FunctionToImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The function that will be evaluated over the image */
   FunctionPointer m_PixelFunction;
@@ -138,7 +138,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFunctionToImageFilter.txx"
+#include "otbFunctionToImageFilter.hxx"
 #endif
 
 #endif

@@ -119,8 +119,8 @@ class ITK_EXPORT ProSailParameters : public itk::DataObject
 
 
    private:
-      ProSailParameters(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+      ProSailParameters(const Self&) = delete;
+      void operator=(const Self&) = delete;
 
       double m_Cab; //Chlorophyll content
       double m_Car; //Carotenoid content

@@ -136,8 +136,8 @@ protected:
   void EnlargeOutputRequestedRegion(void);
 
 private:
-  Segmenter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  Segmenter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Minimum size for the segmented object */
   unsigned long m_MinimumObjectSize;
   /** Quantile for seeds determination */
@@ -153,7 +153,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidSegmenter.txx"
+#include "otbMorphologicalPyramidSegmenter.hxx"
 #endif
 
 #endif

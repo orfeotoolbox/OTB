@@ -62,8 +62,8 @@ protected:
   ~OGRVectorDataIOFactory() override;
 
 private:
-  OGRVectorDataIOFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OGRVectorDataIOFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

@@ -149,8 +149,8 @@ protected:
   void Modified() const override;
 
 private:
-  Polygon(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Polygon(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double         m_Epsilon;
   mutable double m_Area;
@@ -160,6 +160,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolygon.txx"
+#include "otbPolygon.hxx"
 #endif
 #endif

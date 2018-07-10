@@ -30,15 +30,15 @@
 // In this example, we present a system that places measurement vectors into
 // two Gaussian classes. The Figure~\ref{fig:BayesianPluginClassifier} shows
 // all the components of the classifier system and the data flow. This system
-// differs with the previous k-means clustering algorithms in several
+// differs from the previous k-means clustering algorithms in several
 // ways. The biggest difference is that this classifier uses the
 // \subdoxygen{itk}{Statistics}{GaussianMembershipFunction} as membership functions
 // instead of the \subdoxygen{itk}{Statistics}{EuclideanDistanceMetric}. Since the
-// membership function is different, the membership function requires a
+// membership function is different, it requires a
 // different set of parameters, mean vectors and covariance matrices. We
 // choose the \subdoxygen{itk}{Statistics}{MeanSampleFilter} (sample mean) and the
 // \subdoxygen{itk}{Statistics}{CovarianceSampleFilter} (sample covariance) for the
-// estimation algorithms of the two parameters. If we want more robust
+// estimation algorithms of the two parameters. If we want more a robust
 // estimation algorithm, we can replace these estimation algorithms with more
 // alternatives without changing other components in the classifier system.
 //
@@ -69,7 +69,7 @@
 
 // Software Guide : BeginLatex
 //
-// The following two files provides us the parameter estimation algorithms.
+// The following two files provides us with the parameter estimation algorithms.
 //
 // Software Guide : EndLatex
 
@@ -95,7 +95,7 @@
 // Software Guide : BeginLatex
 //
 // We will fill the sample with random variables from two normal
-// distribution using the \subdoxygen{itk}{Statistics}{NormalVariateGenerator}.
+// distributions using the \subdoxygen{itk}{Statistics}{NormalVariateGenerator}.
 //
 // Software Guide : EndLatex
 
@@ -142,9 +142,9 @@ int main(int,  char *[])
   // The following code snippet creates a NormalVariateGenerator
   // object. Since the random variable generator returns values according to
   // the standard normal distribution (the mean is zero, and the standard
-  // deviation is one) before pushing random values into the \code{sample},
-  // we change the mean and standard deviation. We want two normal (Gaussian)
-  // distribution data. We have two for loops. Each for loop uses different
+  // deviation is one), before pushing random values into the \code{sample},
+  // we change the mean and standard deviation. We need two normally (Gaussian)
+  // distributed datasets. We have two for loops, within which each uses a different
   // mean and standard deviation. Before we fill the \code{sample} with the
   // second distribution data, we call \code{Initialize(random seed)} method,
   // to recreate the pool of random variables in the
@@ -190,7 +190,7 @@ int main(int,  char *[])
   //
   // In the following code snippet, notice that the template argument for the
   // MeanSampleFilter and CovarianceFilter is \code{ClassSampleType} (i.e.,
-  // type of Subsample) instead of SampleType (i.e., type of ListSample). This
+  // type of Subsample) instead of SampleType (i.e. type of ListSample). This
   // is because the parameter estimation algorithms are applied to the class
   // sample.
   //
@@ -238,8 +238,8 @@ int main(int,  char *[])
   //
   // After creating a SampleClassifierFilter object and a
   // MaximumRatioDecisionRule object, we plug in the
-  // \code{decisionRule} and the \code{sample} to the classifier. Then,
-  // we specify the number of classes that will be considered using
+  // \code{decisionRule} and the \code{sample} to the classifier. We  
+  // then specify the number of classes that will be considered using
   // the \code{SetNumberOfClasses()} method.
   //
   // The MaximumRatioDecisionRule requires a vector of \emph{a
@@ -304,7 +304,7 @@ int main(int,  char *[])
   // Euclidean distance functions. The distance function (model) has only one
   // parameter, the mean (centroid) set by the \code{SetOrigin()} method. To
   // plug-in two distance functions, we call the
-  // \code{AddMembershipFunction()} method. Then invocation of the
+  // \code{AddMembershipFunction()} method. Finally, the invocation of the
   // \code{Update()} method will perform the classification.
   //
   // Software Guide : EndLatex

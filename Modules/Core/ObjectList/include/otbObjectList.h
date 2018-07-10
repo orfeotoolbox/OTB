@@ -611,15 +611,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ObjectList(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ObjectList(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** The internal std::vector object container */
   InternalContainerType m_InternalContainer;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectList.txx"
+#include "otbObjectList.hxx"
 #endif
 
 #endif

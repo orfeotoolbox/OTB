@@ -101,8 +101,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  DecimateImageFilter (const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  DecimateImageFilter (const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_DecimationFactor;
 }; // end of class
@@ -110,7 +110,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDecimateImageFilter.txx"
+#include "otbDecimateImageFilter.hxx"
 #endif
 
 #endif

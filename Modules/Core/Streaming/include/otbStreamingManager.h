@@ -113,8 +113,8 @@ protected:
   AbstractSplitterPointerType m_Splitter;
 
 private:
-  StreamingManager(const StreamingManager &); //purposely not implemented
-  void operator =(const StreamingManager&);   //purposely not implemented
+  StreamingManager(const StreamingManager &) = delete;
+  void operator =(const StreamingManager&) = delete;
 
   /** Compute the available RAM in Bytes from an input value in MByte.
    *  If the input value is 0, it uses the m_DefaultRAM value.
@@ -128,7 +128,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingManager.txx"
+#include "otbStreamingManager.hxx"
 #endif
 
 #endif

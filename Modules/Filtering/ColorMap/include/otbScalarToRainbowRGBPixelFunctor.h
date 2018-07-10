@@ -160,8 +160,8 @@ protected:
   RGBPixelType HSVToRGB(double h, double s, double v) const;
 
 private:
-  ScalarToRainbowRGBPixelFunctor(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ScalarToRainbowRGBPixelFunctor(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   HSVToRGBFunctorType m_HSVToRGBFunctor;
 };
@@ -171,7 +171,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbScalarToRainbowRGBPixelFunctor.txx"
+#include "otbScalarToRainbowRGBPixelFunctor.hxx"
 #endif
 
 #endif

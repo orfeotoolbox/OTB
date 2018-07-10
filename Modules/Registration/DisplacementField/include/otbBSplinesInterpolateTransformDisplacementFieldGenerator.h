@@ -121,8 +121,8 @@ protected:
   bool IsAngular(unsigned int index);
 
 private:
-  BSplinesInterpolateTransformDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BSplinesInterpolateTransformDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   IndexVectorType m_AngularParameters;
 
@@ -132,7 +132,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBSplinesInterpolateTransformDisplacementFieldGenerator.txx"
+#include "otbBSplinesInterpolateTransformDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

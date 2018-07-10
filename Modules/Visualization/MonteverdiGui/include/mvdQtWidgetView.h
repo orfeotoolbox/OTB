@@ -125,8 +125,8 @@ protected slots:
 // Private methods.
 private:
 
-  QtWidgetView(const QtWidgetView&); //purposely not implemented
-  void operator=(const QtWidgetView&); //purposely not implemented
+  QtWidgetView(const QtWidgetView&) = delete;
+  void operator=(const QtWidgetView&) = delete;
 
   /**
    */

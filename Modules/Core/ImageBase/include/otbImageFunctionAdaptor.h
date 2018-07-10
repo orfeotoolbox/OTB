@@ -115,8 +115,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageFunctionAdaptor(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ImageFunctionAdaptor(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Internal Image Function //
   typename InternalImageFunctionType::Pointer    m_InternalImageFunction;
@@ -127,7 +127,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFunctionAdaptor.txx"
+#include "otbImageFunctionAdaptor.hxx"
 #endif
 
 #endif

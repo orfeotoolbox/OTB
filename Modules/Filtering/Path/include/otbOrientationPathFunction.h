@@ -75,15 +75,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OrientationPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  OrientationPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOrientationPathFunction.txx"
+#include "otbOrientationPathFunction.hxx"
 #endif
 
 #endif

@@ -107,8 +107,8 @@ protected:
   /** End Multi-threading implementation */
 
 private:
-  UnaryFunctorObjectListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorObjectListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 
@@ -117,7 +117,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorObjectListFilter.txx"
+#include "otbUnaryFunctorObjectListFilter.hxx"
 #endif
 
 #endif

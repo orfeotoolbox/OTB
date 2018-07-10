@@ -32,17 +32,31 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_InputImageParam(param),
-  m_HLayout( ITK_NULLPTR ),
-  m_Input( ITK_NULLPTR ),
-  m_Button( ITK_NULLPTR )
+  m_HLayout( nullptr ),
+  m_Input( nullptr ),
+  m_Button( nullptr )
 {
 }
 
 QtWidgetInputImageParameter::~QtWidgetInputImageParameter()
 {
+}
+
+const QLineEdit*
+QtWidgetInputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetInputImageParameter
+::GetInput()
+{
+  return m_Input;
 }
 
 void QtWidgetInputImageParameter::DoUpdateGUI()
@@ -64,26 +78,26 @@ void QtWidgetInputImageParameter::DoUpdateGUI()
 void QtWidgetInputImageParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
 
   m_Input->setToolTip(
     QString::fromStdString( m_InputImageParam->GetDescription() )
   );
 
-  connect( m_Input, SIGNAL(editingFinished()), this, SLOT(OnEditingFinished()) );
-  connect( this, SIGNAL(FileNameIsSet()), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::editingFinished, this, &QtWidgetInputImageParameter::OnEditingFinished );
+  connect( this, &QtWidgetInputImageParameter::FileNameIsSet, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetInputImageParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);

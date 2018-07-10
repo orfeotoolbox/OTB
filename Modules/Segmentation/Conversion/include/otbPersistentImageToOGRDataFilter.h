@@ -145,8 +145,8 @@ protected:
 
 
 private:
-  PersistentImageToOGRDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageToOGRDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   virtual OGRDataSourcePointerType ProcessTile() = 0;
 
@@ -161,7 +161,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentImageToOGRDataFilter.txx"
+#include "otbPersistentImageToOGRDataFilter.hxx"
 #endif
 
 #endif

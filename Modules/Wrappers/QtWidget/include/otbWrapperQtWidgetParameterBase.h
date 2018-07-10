@@ -43,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterBase : public QWidget
   Q_OBJECT
   friend class QtWidgetParameterGroup;
 public:
-  QtWidgetParameterBase( Parameter *, QtWidgetModel * );
+  QtWidgetParameterBase( Parameter *, QtWidgetModel * , QWidget * parent);
   ~QtWidgetParameterBase() override;
 
   void CreateWidget();
@@ -79,8 +79,8 @@ protected:
   Parameter * GetParam();
 
 private:
-  QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
-  void operator=(const QtWidgetParameterBase&); //purposely not implemented
+  QtWidgetParameterBase(const QtWidgetParameterBase&) = delete;
+  void operator=(const QtWidgetParameterBase&) = delete;
 
   virtual void DoUpdateGUI() = 0;
 

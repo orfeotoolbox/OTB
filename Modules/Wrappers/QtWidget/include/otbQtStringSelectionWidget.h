@@ -49,43 +49,24 @@ public:
   QtStringSelectionWidget();
   ~QtStringSelectionWidget() override;
 
-  bool IsChecked()
-  {
-    return m_Checkbox->isChecked();
-  }
+  bool IsChecked() const;
 
-  void SetChecked( bool val )
-  {
-    return m_Checkbox->setChecked( val );
-  }
+  void SetChecked( bool val );
 
-  inline const QString GetText() const
-  {
-    return m_Input->text();
-  }
+  const QString GetText() const;
 
-  inline void SetText( const QString& qString)
-  {
-    m_Input->setText(qString);
-  }
+  void SetText( const QString& qString);
 
-  std::string ToStdString()
-  {
-    return m_Input->text().toLatin1().constData();
-  }
+  std::string ToStdString();
 
-  void ClearText()
-  {
-    m_Input->clear();
-  }
-
+  void ClearText();
 
 protected slots:
    void OnEditionFinished();
 
 private:
-  QtStringSelectionWidget(const QtStringSelectionWidget&); //purposely not implemented
-  void operator=(const QtStringSelectionWidget&); //purposely not implemented
+  QtStringSelectionWidget(const QtStringSelectionWidget&) = delete;
+  void operator=(const QtStringSelectionWidget&) = delete;
 
   virtual void DoCreateWidget();
 

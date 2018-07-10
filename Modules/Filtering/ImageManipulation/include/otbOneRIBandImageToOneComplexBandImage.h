@@ -81,15 +81,15 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  OneRIBandImageToOneComplexBandImage(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OneRIBandImageToOneComplexBandImage(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOneRIBandImageToOneComplexBandImage.txx"
+#include "otbOneRIBandImageToOneComplexBandImage.hxx"
 #endif
 
 #endif

@@ -180,7 +180,7 @@ int main(int ac, char* av[])
     {
     argv[i + 1] = remainingArgs[i];
     }
-  argv[remainingArgs.size() + 1] = ITK_NULLPTR;
+  argv[remainingArgs.size() + 1] = nullptr;
 
   /** Call to the otbTestMain */
   return otbTestMain(static_cast<int>(remainingArgs.size()), argv);
@@ -198,7 +198,7 @@ int Execute(int argc, char * argv[])
   itksysProcess_SetPipeShared(process, itksysProcess_Pipe_STDOUT, true);
   itksysProcess_SetPipeShared(process, itksysProcess_Pipe_STDERR, true);
   itksysProcess_Execute(process);
-  itksysProcess_WaitForExit(process, ITK_NULLPTR);
+  itksysProcess_WaitForExit(process, nullptr);
   int retCode = itksysProcess_GetExitValue(process);
   return retCode;
 }

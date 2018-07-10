@@ -73,12 +73,12 @@ protected:
   void GenerateData() override;
 
 private:
-  BSplinesInterpolateDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BSplinesInterpolateDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBSplinesInterpolateDisplacementFieldGenerator.txx"
+#include "otbBSplinesInterpolateDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

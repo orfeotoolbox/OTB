@@ -148,8 +148,8 @@ protected:
   InputSpectralResponsePointerType m_InputSpectralResponse;
 
 private:
-  ReduceSpectralResponse(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ReduceSpectralResponse(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** the computed response */
   InputSpectralResponsePointerType m_ReduceResponse;
@@ -162,7 +162,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbReduceSpectralResponse.txx"
+#include "otbReduceSpectralResponse.hxx"
 #endif
 
 #endif

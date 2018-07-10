@@ -260,7 +260,7 @@ private:
 if(IsParameterEnabled("outvector"))
   {
   // Create the datasource (for matches export)
-  otb::ogr::Layer layer(ITK_NULLPTR, false);
+  otb::ogr::Layer layer(nullptr, false);
   otb::ogr::DataSource::Pointer ogrDS;
 
   ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);

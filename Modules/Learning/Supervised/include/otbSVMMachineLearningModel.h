@@ -141,15 +141,15 @@ protected:
   ~SVMMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
 
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SVMMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SVMMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 #ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::SVM> m_SVMModel;
 #else
@@ -178,7 +178,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVMMachineLearningModel.txx"
+#include "otbSVMMachineLearningModel.hxx"
 #endif
 
 #endif

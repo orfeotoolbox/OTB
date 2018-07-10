@@ -134,8 +134,8 @@ protected:
   }
 
 private:
-  WindowedSincInterpolateImageCosineFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageCosineFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

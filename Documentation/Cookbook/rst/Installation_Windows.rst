@@ -43,7 +43,7 @@ start Visual Studio.
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Starting from OTB 5.8.0, OTB bindings for Python 2.7 are distributed with binary
+Starting from OTB 5.8.0, OTB bindings for Python 2.7 are distributed as a binary
 package. With OTB 6.4.0, additional bindings for Python 3.5 are also included.
 Please note that using a different Python version may not be compatible with
 OTB wrappings. If no compatible Python 2.x version is found a

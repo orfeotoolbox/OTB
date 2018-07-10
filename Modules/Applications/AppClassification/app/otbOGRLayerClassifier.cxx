@@ -101,7 +101,7 @@ private:
       std::string shapefile = GetParameterString("inshp");
 
       otb::ogr::DataSource::Pointer ogrDS;
-      otb::ogr::Layer layer(ITK_NULLPTR, false);
+      otb::ogr::Layer layer(nullptr, false);
       
       OGRSpatialReference oSRS("");
       std::vector<std::string> options;
@@ -183,7 +183,7 @@ private:
          input->PushBack(mv);
          target->PushBack(feature.ogr().GetFieldAsInteger("class"));
          feature = layer.ogr().GetNextFeature();
-         goesOn = feature.addr() != ITK_NULLPTR;
+         goesOn = feature.addr() != nullptr;
        }
 
     ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
@@ -223,7 +223,7 @@ private:
         feature2.ogr().SetField(GetParameterString("cfield").c_str(),(int)labelListSample->GetMeasurementVector(count)[0]);
          layer2.SetFeature(feature2);
          feature2 = layer2.ogr().GetNextFeature();
-         goesOn2 = feature2.addr() != ITK_NULLPTR;
+         goesOn2 = feature2.addr() != nullptr;
          count++;
        }
     

@@ -97,7 +97,7 @@ private:
   //  \code{DoInit()} method contains class information and description, parameter set up, and example values.
   //  Software Guide : EndLatex
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
 
     // Software Guide : BeginLatex

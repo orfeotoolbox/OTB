@@ -89,7 +89,7 @@ protected:
   {}
 
 private:
-  InputFilenameParameter(const InputFilenameParameter &); //purposely not implemented
+  InputFilenameParameter(const InputFilenameParameter &) = delete;
   void operator =(const InputFilenameParameter&); //purposely not
                                                   //implemented
 

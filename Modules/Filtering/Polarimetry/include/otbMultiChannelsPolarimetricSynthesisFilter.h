@@ -193,7 +193,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  MultiChannelsPolarimetricSynthesisFilter(const Self &); //purposely not implemented
+  MultiChannelsPolarimetricSynthesisFilter(const Self &) = delete;
 
   /** Psi Incident */
   double m_PsiI;
@@ -229,7 +229,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiChannelsPolarimetricSynthesisFilter.txx"
+#include "otbMultiChannelsPolarimetricSynthesisFilter.hxx"
 #endif
 
 #endif

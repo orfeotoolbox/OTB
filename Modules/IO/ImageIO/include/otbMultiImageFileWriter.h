@@ -191,7 +191,7 @@ protected:
   /** Returns the current stream region of the given input */
   virtual RegionType GetStreamRegion(int inputIndex);
 
-  void operator =(const MultiImageFileWriter&); //purposely not implemented
+  void operator =(const MultiImageFileWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event)
   {
@@ -290,7 +290,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiImageFileWriter.txx"
+#include "otbMultiImageFileWriter.hxx"
 #endif
 
 #endif // otbMultiImageFileWriter_h

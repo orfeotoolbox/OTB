@@ -209,8 +209,8 @@ protected:
   virtual void BeforeThreadedGenerateData();
 
 private:
-  VectorDataToMapFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  VectorDataToMapFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void ProcessNode(InternalTreeNodeType * source, datasource_ptr mDatasource);
 
@@ -260,7 +260,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToMapFilter.txx"
+#include "otbVectorDataToMapFilter.hxx"
 #endif
 
 #endif

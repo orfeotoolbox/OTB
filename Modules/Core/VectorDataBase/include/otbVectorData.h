@@ -140,8 +140,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorData(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorData(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** Data tree */
   DataTreePointerType m_DataTree;
@@ -152,7 +152,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorData.txx"
+#include "otbVectorData.hxx"
 #endif
 
 #endif

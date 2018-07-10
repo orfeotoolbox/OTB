@@ -145,8 +145,8 @@ protected:
 
 private:
 
-  LineSpatialObjectListToRightAnglePointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LineSpatialObjectListToRightAnglePointSetFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Smart pointer on the output PointSet*/
   OutputPointSetPointerType m_OutputPointSet;
@@ -157,7 +157,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineSpatialObjectListToRightAnglePointSetFilter.txx"
+#include "otbLineSpatialObjectListToRightAnglePointSetFilter.hxx"
 #endif
 
 #endif

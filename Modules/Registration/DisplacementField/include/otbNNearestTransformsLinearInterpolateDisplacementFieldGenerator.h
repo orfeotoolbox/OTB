@@ -81,14 +81,14 @@ protected:
   void GenerateData() override;
 
 private:
-  NNearestTransformsLinearInterpolateDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NNearestTransformsLinearInterpolateDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfPoints;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator.txx"
+#include "otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

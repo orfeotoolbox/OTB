@@ -65,15 +65,15 @@ protected:
   ~BoostMachineLearningModelFactory() override;
 
 private:
-  BoostMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BoostMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBoostMachineLearningModelFactory.txx"
+#include "otbBoostMachineLearningModelFactory.hxx"
 #endif
 
 #endif

@@ -70,12 +70,12 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageListSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageListSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListSource.txx"
+#include "otbImageListSource.hxx"
 #endif
 #endif

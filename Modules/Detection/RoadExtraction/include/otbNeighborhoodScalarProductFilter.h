@@ -100,12 +100,12 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             itk::ThreadIdType threadId) override;
 private:
-  NeighborhoodScalarProductFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NeighborhoodScalarProductFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNeighborhoodScalarProductFilter.txx"
+#include "otbNeighborhoodScalarProductFilter.hxx"
 #endif
 
 #endif

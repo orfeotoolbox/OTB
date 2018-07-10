@@ -64,8 +64,8 @@ protected:
   ~ImageMetadataInterfaceFactory() override;
 
 private:
-  ImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

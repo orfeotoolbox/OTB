@@ -112,8 +112,8 @@ protected:
   void GenerateData() override;
 
 private:
-  LabelImageToVectorDataFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  LabelImageToVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string m_FieldName;
   bool m_Use8Connected;
@@ -124,7 +124,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageToVectorDataFilter.txx"
+#include "otbLabelImageToVectorDataFilter.hxx"
 #endif
 
 #endif

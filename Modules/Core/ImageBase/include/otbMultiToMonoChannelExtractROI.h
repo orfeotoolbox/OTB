@@ -113,8 +113,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  MultiToMonoChannelExtractROI(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiToMonoChannelExtractROI(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Channel to process [1...] */
   unsigned int m_Channel;
@@ -123,7 +123,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiToMonoChannelExtractROI.txx"
+#include "otbMultiToMonoChannelExtractROI.hxx"
 #endif
 
 #endif

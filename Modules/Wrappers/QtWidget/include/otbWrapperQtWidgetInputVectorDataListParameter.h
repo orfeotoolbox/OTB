@@ -52,7 +52,7 @@ class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter
 // Public methods.
 public:
   QtWidgetInputVectorDataListParameter( InputVectorDataListParameter *,
-					QtWidgetModel * );
+					QtWidgetModel *, QWidget * );
 
   ~QtWidgetInputVectorDataListParameter() override;
 
@@ -60,11 +60,8 @@ public:
 //
 // Private methods.
 private:
-  // Purposely not implemented
-  QtWidgetInputVectorDataListParameter( const QtWidgetInputVectorDataListParameter & );
-
-  // Purposely not implemented
-  void operator = ( const QtWidgetInputVectorDataListParameter & );
+  QtWidgetInputVectorDataListParameter( const QtWidgetInputVectorDataListParameter & ) = delete;
+  void operator = ( const QtWidgetInputVectorDataListParameter & ) = delete;
 };
 
 

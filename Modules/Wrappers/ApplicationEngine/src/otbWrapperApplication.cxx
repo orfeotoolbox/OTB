@@ -50,8 +50,235 @@
 
 namespace otb
 {
+
+ApplicationException::ApplicationException(const char *file, unsigned int line,
+                   const char* message, const char* loc) :
+ExceptionObject(file, line, message, loc)
+{
+}
+
+/** Constructor. */
+ApplicationException::ApplicationException(const std::string &file, unsigned int line,
+                   const char* message, const char* loc) :
+ExceptionObject(file, line, message, loc)
+{
+}
+
 namespace Wrapper
 {
+
+void Application::SetName( const std::string & name )
+{
+  m_Name = name;
+  GetDocExample()->SetApplicationName(name);
+  this->Modified();
+  m_Logger->SetName(name);
+}
+
+const char* Application::GetName() const
+{
+  return m_Name.c_str();
+}
+
+void Application::SetDescription(const std::string& description)
+{
+  m_Description = description;
+  this->Modified();
+}
+
+const char* Application::GetDescription() const
+{
+  return m_Description.c_str();
+}
+
+void Application::SetHaveInXML(bool haveInXML)
+{
+  m_HaveInXML = haveInXML;
+  this->Modified();
+}
+
+bool Application::GetHaveInXML() const
+{
+  return m_HaveInXML;
+}
+
+void Application::SetHaveOutXML(bool haveOutXML)
+{
+  m_HaveOutXML = haveOutXML;
+  this->Modified();
+}
+
+bool Application::GetHaveOutXML() const
+{
+  return m_HaveOutXML;
+}
+
+void Application::SetDocName(const std::string& value)
+{
+  m_DocName = value;
+  this->Modified();
+}
+
+const char* Application::GetDocName() const
+{
+  return m_DocName.c_str();
+}
+
+void Application::SetDocLongDescription(const std::string& value)
+{
+  m_DocLongDescription = value;
+  this->Modified();
+}
+
+const char* Application::GetDocLongDescription() const
+{
+  return m_DocLongDescription.c_str();
+}
+
+void Application::SetDocAuthors(const std::string& value)
+{
+  m_DocAuthors = value;
+  this->Modified();
+}
+
+const char* Application::GetDocAuthors() const
+{
+  return m_DocAuthors.c_str();
+}
+
+void Application::SetDocLimitations(const std::string& value)
+{
+  m_DocLimitations = value;
+  this->Modified();
+}
+
+const char* Application::GetDocLimitations() const
+{
+  return m_DocLimitations.c_str();
+}
+
+void Application::SetDocSeeAlso(const std::string& value)
+{
+  m_DocSeeAlso = value;
+  this->Modified();
+}
+
+const char* Application::GetDocSeeAlso() const
+{
+  return m_DocSeeAlso.c_str();
+}
+
+void Application::SetDocTags(std::vector<std::string> value)
+{
+  m_DocTags = value;
+  this->Modified();
+}
+
+std::vector<std::string> Application::GetDocTags() const
+{
+  return m_DocTags;
+}
+
+void Application::AddDocTag(const std::string & tag)
+{
+  const auto wh = std::find(begin(m_DocTags), end(m_DocTags), tag);
+  if (wh == end(m_DocTags))
+    {
+    m_DocTags.push_back(tag);
+    this->Modified();
+    }
+}
+
+DocExampleStructure::Pointer Application::GetDocExample()
+{
+  if (!IsInitialized())
+  {
+    Init();
+  }
+
+  return m_DocExample;
+}
+
+unsigned int Application::GetNumberOfExamples()
+{
+  return GetDocExample()->GetNbOfExamples();
+}
+
+std::string Application::GetExampleComment(unsigned int id)
+{
+  return GetDocExample()->GetExampleComment(id);
+}
+
+unsigned int Application::GetExampleNumberOfParameters(unsigned int id)
+{
+  return GetDocExample()->GetNumberOfParameters(id);
+}
+
+std::string Application::GetExampleParameterKey(unsigned int exId, unsigned int paramId)
+{
+  return GetDocExample()->GetParameterKey(paramId, exId);
+}
+
+std::string Application::GetExampleParameterValue(unsigned int exId, unsigned int paramId)
+{
+  return GetDocExample()->GetParameterValue(paramId, exId);
+}
+
+void Application::SetDocExampleParameterValue(const std::string key, const std::string value, unsigned int exId)
+{
+  GetDocExample()->AddParameter( key, value, exId );
+  this->Modified();
+}
+
+void Application::SetExampleComment( const std::string & comm, unsigned int i )
+{
+  GetDocExample()->SetExampleComment( comm, i );
+  this->Modified();
+}
+
+unsigned int Application::AddExample(const std::string & comm)
+{
+  unsigned int id = GetDocExample()->AddExample( comm );
+  this->Modified();
+  return id;
+}
+
+std::string Application::GetCLExample()
+{
+  return GetDocExample()->GenerateCLExample();
+}
+
+std::string Application::GetHtmlExample()
+{
+  return GetDocExample()->GenerateHtmlExample();
+}
+
+void Application::ForceInXMLParseFlag()
+{
+  m_IsInXMLParsed = false;
+}
+
+void Application::SetDocLink(const std::string & link)
+{
+  if (m_Doclink.compare(link) != 0)
+  {
+    m_Doclink = link;
+    this->Modified();
+  }
+}
+
+const std::string& Application::GetDocLink() const
+{
+  return m_Doclink;
+}
+
+void Application::SetOfficialDocLink()
+{
+  std::string link = "http://www.orfeo-toolbox.org/Applications/";
+  link.append(this->GetName());
+  link.append(".html");
+  this->SetDocLink(link);
+}
 
 Application::Application()
   : m_Name(""),
@@ -89,6 +316,7 @@ void Application::SetLogger(otb::Logger *logger)
     {
     m_Logger = logger;
     }
+  this->Modified();
 }
 
 std::vector<std::string>
@@ -366,7 +594,7 @@ void Application::UpdateParameters()
       {
       Parameter* param = GetParameterByKey(inXMLKey);
       InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
-      if(inXMLParam!=ITK_NULLPTR)
+      if(inXMLParam!=nullptr)
         {
         // switch on 'm_IsInXMLParsed' before Read() to avoid cyclic calls
         m_IsInXMLParsed = true;
@@ -606,7 +834,7 @@ int Application::Execute()
          UseSpecificSeed = true;
       Parameter* param = GetParameterByKey(key);
       IntParameter* randParam = dynamic_cast<IntParameter*> (param);
-      if(randParam!=ITK_NULLPTR)
+      if(randParam!=nullptr)
         {
         int seed = randParam->GetValue();
         itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(seed);
@@ -627,7 +855,7 @@ int Application::Execute()
     {
     OutputImageParameter * outImgParamPtr = dynamic_cast<OutputImageParameter *>(GetParameterByKey(*it));
     // If this is an OutputImageParameter
-    if(outImgParamPtr != ITK_NULLPTR)
+    if(outImgParamPtr != nullptr)
       {
       // If the parameter is enabled
       if(IsParameterEnabled(*it))
@@ -667,7 +895,7 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
-          if(ramParam!=ITK_NULLPTR)
+          if(ramParam!=nullptr)
             {
             ram = ramParam->GetValue();
             useRAM = true;
@@ -686,7 +914,7 @@ int Application::ExecuteAndWriteOutput()
           Parameter* param = GetParameterByKey(key);
           OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
 
-          if(outputParam!=ITK_NULLPTR)
+          if(outputParam!=nullptr)
             {
             std::string checkReturn = outputParam->CheckFileName(true);
             if (!checkReturn.empty())
@@ -709,7 +937,7 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-          if(outputParam!=ITK_NULLPTR)
+          if(outputParam!=nullptr)
             {
             outputParam->InitializeWriters();
             std::ostringstream progressId;
@@ -724,7 +952,7 @@ int Application::ExecuteAndWriteOutput()
           Parameter* param = GetParameterByKey(key);
           ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
 
-          if(outputParam!=ITK_NULLPTR)
+          if(outputParam!=nullptr)
             {
             outputParam->InitializeWriters();
             if (useRAM)
@@ -743,7 +971,7 @@ int Application::ExecuteAndWriteOutput()
           {
           Parameter* param = GetParameterByKey(key);
           OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-          if(outXMLParam!=ITK_NULLPTR)
+          if(outXMLParam!=nullptr)
             {
             outXMLParam->Write(this);
             }
@@ -1653,29 +1881,14 @@ unsigned int Application::GetNumberOfElementsInParameterInputImageList(std::stri
 
 }
 
-
-
 FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {
-  FloatVectorImageType::Pointer ret = ITK_NULLPTR;
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<InputImageParameter*> (param))
-    {
-    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*> (param);
-    ret = paramDown->GetImage();
-    }
-  else
-    {
-    itkExceptionMacro(<<parameter << " parameter can't be casted to ImageType");
-    }
-
-  return ret;
+  return this->GetParameterImage<FloatVectorImageType>(parameter);
 }
 
 FloatVectorImageListType* Application::GetParameterImageList(std::string parameter)
 {
-  FloatVectorImageListType::Pointer ret=ITK_NULLPTR;
+  FloatVectorImageListType::Pointer ret=nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputImageListParameter*>(param))
@@ -1693,7 +1906,7 @@ FloatVectorImageListType* Application::GetParameterImageList(std::string paramet
 
 ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string parameter)
 {
-  ComplexFloatVectorImageType::Pointer ret=ITK_NULLPTR;
+  ComplexFloatVectorImageType::Pointer ret=nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<ComplexInputImageParameter*>(param))
@@ -1711,7 +1924,7 @@ ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string p
 
 VectorDataType* Application::GetParameterVectorData(std::string parameter)
 {
-  VectorDataType::Pointer ret=ITK_NULLPTR;
+  VectorDataType::Pointer ret=nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputVectorDataParameter*>(param))
@@ -1728,7 +1941,7 @@ VectorDataType* Application::GetParameterVectorData(std::string parameter)
 
 VectorDataListType* Application::GetParameterVectorDataList(std::string parameter)
 {
-  VectorDataListType::Pointer ret=ITK_NULLPTR;
+  VectorDataListType::Pointer ret=nullptr;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputVectorDataListParameter*>(param))
@@ -2219,6 +2432,53 @@ Application::GetImageBasePixelType(const std::string & key, unsigned int idx)
   // by default uint8
   return ImagePixelType_uint8;
 }
+
+#define otbGetParameterImageMacro( Image )                              \
+  Image##Type * Application::GetParameter##Image(std::string parameter) \
+    {                                                                   \
+    Parameter* param = GetParameterByKey(parameter);                    \
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
+    if ( paramDown )                                                    \
+      {                                                                 \
+      return paramDown->Get##Image();                                   \
+      }                                                                 \
+    ComplexInputImageParameter* paramDownC = dynamic_cast<ComplexInputImageParameter*>(param); \
+    if ( paramDownC )                                                   \
+      {                                                                 \
+      return paramDownC->Get##Image();                                  \
+      }                                                                 \
+    return Image##Type::Pointer();                                      \
+    }
+
+otbGetParameterImageMacro(UInt8Image);
+otbGetParameterImageMacro(UInt16Image);
+otbGetParameterImageMacro(Int16Image);
+otbGetParameterImageMacro(UInt32Image);
+otbGetParameterImageMacro(Int32Image);
+otbGetParameterImageMacro(FloatImage);
+otbGetParameterImageMacro(DoubleImage);
+
+otbGetParameterImageMacro(UInt8VectorImage);
+otbGetParameterImageMacro(UInt16VectorImage);
+otbGetParameterImageMacro(Int16VectorImage);
+otbGetParameterImageMacro(UInt32VectorImage);
+otbGetParameterImageMacro(Int32VectorImage);
+otbGetParameterImageMacro(FloatVectorImage);
+otbGetParameterImageMacro(DoubleVectorImage);
+
+otbGetParameterImageMacro(UInt8RGBImage);
+otbGetParameterImageMacro(UInt8RGBAImage);
+
+// Complex image
+otbGetParameterImageMacro(ComplexInt16Image);
+otbGetParameterImageMacro(ComplexInt32Image);
+otbGetParameterImageMacro(ComplexFloatImage);
+otbGetParameterImageMacro(ComplexDoubleImage);
+otbGetParameterImageMacro(ComplexInt16VectorImage);
+otbGetParameterImageMacro(ComplexInt32VectorImage);
+otbGetParameterImageMacro(ComplexFloatVectorImage);
+otbGetParameterImageMacro(ComplexDoubleVectorImage);
+
 
 }
 }

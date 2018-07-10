@@ -40,11 +40,11 @@ class OTBQtWidget_EXPORT QtWidgetOutputProcessXMLParameter : public QtWidgetPara
 {
   Q_OBJECT
 public:
-  QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter*, QtWidgetModel*);
+  QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputProcessXMLParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
 public slots:
   void SetFileName( const QString& value );
@@ -53,8 +53,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetOutputProcessXMLParameter(const QtWidgetOutputProcessXMLParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputProcessXMLParameter&); //purposely not implemented
+  QtWidgetOutputProcessXMLParameter(const QtWidgetOutputProcessXMLParameter&) = delete;
+  void operator=(const QtWidgetOutputProcessXMLParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -68,22 +68,6 @@ private:
   QPushButton * m_Button;
 };
 
-
-inline
-const QLineEdit*
-QtWidgetOutputProcessXMLParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputProcessXMLParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

@@ -272,8 +272,8 @@ protected:
   }
 
 private:
-  ConvexOrConcaveClassificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConvexOrConcaveClassificationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Label of the convex class */
   LabelType m_ConvexLabel;

@@ -25,8 +25,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetBoolParameter::QtWidgetBoolParameter(BoolParameter* boolParam, QtWidgetModel* m)
-  : QtWidgetParameterBase(boolParam, m)
+QtWidgetBoolParameter::QtWidgetBoolParameter(BoolParameter* boolParam, QtWidgetModel* m, QWidget * parent)
+  : QtWidgetParameterBase(boolParam, m, parent)
 {
 }
 
@@ -64,11 +64,11 @@ void QtWidgetBoolParameter::DoUpdateGUI()
 
 void QtWidgetBoolParameter::DoCreateWidget()
 {
-  QHBoxLayout *hLayout = new QHBoxLayout;
+  QHBoxLayout *hLayout = new QHBoxLayout(this);
   hLayout->setSpacing(0);
   hLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_Button = new QToolButton;
+  m_Button = new QToolButton(this);
   m_Button->setCheckable(true);
   BoolParameter* paramDown = dynamic_cast<BoolParameter*>(this->GetParam());
   assert(paramDown && "Not a BoolParameter");
@@ -82,12 +82,15 @@ void QtWidgetBoolParameter::DoCreateWidget()
     m_Button->setText("Off");
     }
 
-  connect( m_Button, SIGNAL(toggled(bool)), this, SLOT(SetValue(bool)) );
-  connect( m_Button, SIGNAL(toggled(bool)), GetModel(), SLOT(NotifyUpdate()) );
+  //Set the tool tip associated to the parameter
+  m_Button->setToolTip(QString::fromStdString( paramDown->GetDescription() ));
+
+  connect( m_Button, &QToolButton::toggled, this, &QtWidgetBoolParameter::SetValue );
+  connect( m_Button, &QToolButton::toggled, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   hLayout->addWidget(m_Button);
   hLayout->addStretch();
-  
+
   this->setLayout(hLayout);
 }
 

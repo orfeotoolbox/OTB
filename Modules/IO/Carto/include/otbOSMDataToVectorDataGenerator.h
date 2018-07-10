@@ -189,8 +189,8 @@ protected:
   ~OSMDataToVectorDataGenerator() override;
 
 private:
-  OSMDataToVectorDataGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  OSMDataToVectorDataGenerator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Private method to add the key, type to the map
   void AddKeyTypeToMap(const std::string& key, const std::string& value);

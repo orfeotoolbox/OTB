@@ -35,6 +35,36 @@ QtStringSelectionWidget::~QtStringSelectionWidget()
 {
 }
 
+bool QtStringSelectionWidget::IsChecked() const
+{
+return m_Checkbox->isChecked();
+}
+
+void QtStringSelectionWidget::SetChecked( bool val )
+{
+return m_Checkbox->setChecked( val );
+}
+
+const QString QtStringSelectionWidget::GetText() const
+{
+return m_Input->text();
+}
+
+void QtStringSelectionWidget::SetText( const QString& qString)
+{
+m_Input->setText(qString);
+}
+
+std::string QtStringSelectionWidget::ToStdString()
+{
+return m_Input->text().toLatin1().constData();
+}
+
+void QtStringSelectionWidget::ClearText()
+{
+m_Input->clear();
+}
+
 void QtStringSelectionWidget::DoUpdateGUI()
 {
 }
@@ -56,17 +86,9 @@ void QtStringSelectionWidget::DoCreateWidget()
 
   m_HLayout->addWidget(m_Input);
 
-  QObject::connect(
-          m_Checkbox, SIGNAL( toggled( bool ) ),
-          m_Input, SLOT( setEnabled( bool ) )
-  );
+  connect( m_Checkbox, &QCheckBox::toggled, m_Input, &QLineEdit::setEnabled );
 
-  QObject::connect(
-        m_Input,
-        SIGNAL( editingFinished( ) ),
-        this,
-        SLOT( OnEditionFinished() )
-        );
+  connect( m_Input, &QLineEdit::editingFinished, this, &QtStringSelectionWidget::OnEditionFinished );
 
   this->setLayout(m_HLayout);
 }

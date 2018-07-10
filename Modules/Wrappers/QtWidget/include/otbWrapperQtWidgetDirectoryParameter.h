@@ -40,7 +40,7 @@ class OTBQtWidget_EXPORT QtWidgetDirectoryParameter : public QtWidgetParameterBa
 {
   Q_OBJECT
 public:
-  QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*);
+  QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetDirectoryParameter() override;
 
 protected slots:
@@ -48,8 +48,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetDirectoryParameter(const QtWidgetDirectoryParameter&); //purposely not implemented
-  void operator=(const QtWidgetDirectoryParameter&); //purposely not implemented
+  QtWidgetDirectoryParameter(const QtWidgetDirectoryParameter&) = delete;
+  void operator=(const QtWidgetDirectoryParameter&) = delete;
 
   void DoCreateWidget() override;
 

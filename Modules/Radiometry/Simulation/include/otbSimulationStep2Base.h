@@ -75,8 +75,8 @@ protected:
   }
 
 private:
-  SimulationStep2Base(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SimulationStep2Base(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ParametersType m_Parameters;
 

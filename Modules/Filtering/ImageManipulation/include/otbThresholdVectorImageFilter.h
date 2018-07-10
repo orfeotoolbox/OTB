@@ -122,8 +122,8 @@ protected:
   }
 
 private:
-  ThresholdVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ThresholdVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   OutputImageInternalPixelType m_OutsideValue;
   InputImageInternalPixelType m_Lower;
@@ -134,7 +134,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbThresholdVectorImageFilter.txx"
+#include "otbThresholdVectorImageFilter.hxx"
 #endif
 
 #endif

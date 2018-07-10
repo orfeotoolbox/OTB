@@ -81,8 +81,8 @@ protected:
   virtual ~GISConnectionImplementation(){};
 
 private:
-  GISConnectionImplementation(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GISConnectionImplementation(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string m_Host;
   std::string m_DBName;

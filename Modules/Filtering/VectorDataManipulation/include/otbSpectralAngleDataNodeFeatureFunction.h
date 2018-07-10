@@ -116,8 +116,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SpectralAngleDataNodeFeatureFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpectralAngleDataNodeFeatureFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** SpectralAngle Functor & ReferencePixel*/
   ReferencePixelType          m_RefPixel;
@@ -129,7 +129,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpectralAngleDataNodeFeatureFunction.txx"
+#include "otbSpectralAngleDataNodeFeatureFunction.hxx"
 #endif
 
 #endif

@@ -114,7 +114,7 @@ public:
     * quality value, or NULL
     * \return The predicted label
      */
-  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = ITK_NULLPTR) const;
+  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = nullptr) const;
 
   /**\name Set and get the dimension of the model for dimensionality reduction models */
   //@{
@@ -130,7 +130,7 @@ public:
     * Note that this method will be multi-threaded if OTB is built
     * with OpenMP.
      */
-  typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
+  typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = nullptr) const;
   
 /**\name Classification model file manipulation */
 //@{
@@ -230,7 +230,7 @@ private:
     * Also set m_IsDoPredictBatchMultiThreaded to true if internal
     * implementation allows for parallel batch prediction.
     */
-  virtual void DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * target, ConfidenceListSampleType * quality = ITK_NULLPTR) const;
+  virtual void DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * target, ConfidenceListSampleType * quality = nullptr) const;
 
   /** Actual implementation of single sample prediction
    *  \param input sample to predict
@@ -238,15 +238,15 @@ private:
    *  or NULL
    *  \return The predicted label
    */ 
-  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality= ITK_NULLPTR) const = 0;  
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality= nullptr) const = 0;  
  
-  MachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMachineLearningModel.txx"
+#include "otbMachineLearningModel.hxx"
 #endif
 
 #endif

@@ -261,8 +261,8 @@ private:
 
   void SetOutputParametersFromImage();
 
-  Multi3DMapToDEMFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  Multi3DMapToDEMFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Keywordlist of each map */
  // std::vector<ImageKeywordListType> m_MapKeywordLists;
@@ -318,7 +318,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMulti3DMapToDEMFilter.txx"
+#include "otbMulti3DMapToDEMFilter.hxx"
 #endif
 
 #endif

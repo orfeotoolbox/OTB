@@ -159,8 +159,8 @@ protected:
 
 private:
 
-  GreyLevelCooccurrenceIndexedList(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GreyLevelCooccurrenceIndexedList(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** LookupArray instance */
   LookupArrayType m_LookupArray;
@@ -191,7 +191,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGreyLevelCooccurrenceIndexedList.txx"
+#include "otbGreyLevelCooccurrenceIndexedList.hxx"
 #endif
 
 #endif

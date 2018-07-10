@@ -92,14 +92,14 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LikelihoodPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LikelihoodPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string m_Key;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLikelihoodPathListFilter.txx"
+#include "otbLikelihoodPathListFilter.hxx"
 #endif
 
 #endif

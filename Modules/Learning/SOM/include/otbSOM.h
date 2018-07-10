@@ -147,8 +147,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOM(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  SOM(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Size of the neurons map */
   SizeType m_MapSize;
   /** Number of iterations */
@@ -178,7 +178,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOM.txx"
+#include "otbSOM.hxx"
 #endif
 
 #endif

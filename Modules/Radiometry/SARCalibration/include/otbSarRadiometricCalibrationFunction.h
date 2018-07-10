@@ -180,8 +180,8 @@ protected:
   /** Flags to indicate if these values needs to be applied in calibration*/
 
 private:
-  SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  SarRadiometricCalibrationFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   RealType             m_Scale;
   bool                        m_EnableNoise;
@@ -204,7 +204,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbSarRadiometricCalibrationFunction.txx"
+# include "otbSarRadiometricCalibrationFunction.hxx"
 #endif
 
 #endif

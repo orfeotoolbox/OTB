@@ -117,8 +117,8 @@ protected:
 
 private:
 
-  WorldView2ImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WorldView2ImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

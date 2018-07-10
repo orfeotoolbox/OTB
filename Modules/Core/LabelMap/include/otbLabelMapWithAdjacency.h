@@ -241,8 +241,8 @@ protected:
   }
 
 private:
-  LabelMapWithAdjacency(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapWithAdjacency(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The adjacency map */
   AdjacencyMapType m_AdjacencyMap;

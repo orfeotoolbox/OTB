@@ -153,8 +153,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageMetadataCorrectionParameters(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageMetadataCorrectionParameters(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The Solar zenithal angle */
   double m_SolarZenithalAngle;
