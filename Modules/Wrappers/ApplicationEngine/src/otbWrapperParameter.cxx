@@ -29,9 +29,9 @@ namespace Wrapper
 
 // TODO: Constructor/destructor
 Parameter::Parameter() :
-    m_Name( "" ),
-    m_Description( "" ),
-    m_Key( "" ),
+    m_Name(),
+    m_Description(),
+    m_Key(),
     m_Mandatory( true ),
     m_Active( false ),
     m_UserValue( false ),
