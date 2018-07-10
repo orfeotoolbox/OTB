@@ -37,14 +37,14 @@ class OTBQtWidget_EXPORT AppliThread : public QThread
  Q_OBJECT
 
  public:
-  inline AppliThread(Application* app)
+  AppliThread(Application* app)
     {
       m_Application = app;
     }
 
   ~AppliThread() override;
 
-  inline void Execute()
+  void Execute()
   {
     // Call the signal start to begin running the program
     start();
@@ -146,16 +146,6 @@ signals:
 
   void Stop();
 
-protected slots:
-  /**
-   * \brief Slot called when execution is requested (e.g. by
-   * otb::Wrapper::QtWidgetView).
-   *
-   * This slot is protected so it can only be called via Qt
-   * signal/slot mechanism and not directly by extern caller.
-   */
-  void ExecuteAndWriteOutputSlot();
-
 public slots:
   /**
    * \brief Slots called every time one of the widget needs to be
@@ -163,6 +153,12 @@ public slots:
    *
    */
   void NotifyUpdate();
+
+  /**
+   * \brief Slot called when execution is requested (e.g. by
+   * otb::Wrapper::QtWidgetView).
+   */
+  void ExecuteAndWriteOutputSlot();
 
 private slots:
   /**

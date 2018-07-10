@@ -43,8 +43,8 @@ public:
   QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputImageParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
 signals:
   void FileNameIsSet();
@@ -72,21 +72,6 @@ private:
   QPushButton * m_Button;
 };
 
-inline
-const QLineEdit*
-QtWidgetInputImageParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetInputImageParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 } // Wrapper
 

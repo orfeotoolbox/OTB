@@ -21,43 +21,9 @@
 #ifndef otbListEditItemModel_h
 #define otbListEditItemModel_h
 
-//
-// Configuration include.
-//// Included at first position before any other ones.
 #include "otbMacro.h"
-
 #include "OTBQtWidgetExport.h"
-
-/*****************************************************************************/
-/* INCLUDE SECTION                                                           */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
 #include <QtCore>
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-
-/*****************************************************************************/
-/* PRE-DECLARATION SECTION                                                   */
-
-//
-// External classes pre-declaration.
-namespace
-{
-
-}
 
 namespace otb
 {
@@ -65,13 +31,8 @@ namespace otb
 namespace Wrapper
 {
 
-//
-// Internal classes pre-declaration.
+// Internal classes forward declarations
 class StringListInterface;
-
-
-/*****************************************************************************/
-/* CLASS DEFINITION SECTION                                                  */
 
 /**
  * \class ListEditItemModel
@@ -84,14 +45,9 @@ class OTBQtWidget_EXPORT ListEditItemModel :
     public QAbstractItemModel
 {
 
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
   Q_OBJECT;
 
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public types.
+// Public types
 public:
 
   enum Columns
@@ -111,8 +67,7 @@ public:
     USER_ROLE_FILTER,
   };
 
-//
-// Public methods.
+// Public methods
 public:
 
   /** \brief Constructor. */
@@ -122,7 +77,6 @@ public:
   /** \brief Destructor. */
   ~ListEditItemModel() override;
 
-  //
   // QAbstractItemModel overloads.
 
   /**
@@ -202,85 +156,22 @@ public:
              const QVariant & value,
              int role = Qt::EditRole ) override;
 
-  /** */
   virtual bool Swap( int, int );
 
-  /** */
   virtual bool IsInput() const;
 
-  /** */
   virtual QString GetFilter() const;
 
-  /** */
   virtual bool IsBrowsable() const;
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
-public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
-
-  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
-
-//
-// Protected methods.
-protected:
-
-//
-// Protected attributes.
-protected:
-
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private methods.
+// Private attributes
 private:
-
-
-//
-// Private attributes.
-private:
-  /** */
   StringListInterface * m_StringList;
 
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
 };
 
 } // end namespace 'Wrapper'.
 
 } // end namespace 'otb'.
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-namespace otb
-{
-} // end namespace 'otb'
 
 #endif // otbListEditItemModel_h
