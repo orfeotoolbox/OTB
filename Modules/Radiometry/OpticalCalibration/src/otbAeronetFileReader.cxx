@@ -226,7 +226,7 @@ AeronetFileReader
   std::string   line;
 
   // open file input stream
-  fin.open(m_FileName.c_str());
+  fin.open(m_FileName);
 
   // Test if the file has been opened correctly
   if (!fin)
@@ -235,7 +235,7 @@ AeronetFileReader
     std::ostringstream         msg;
     msg << " Could not open IO object for file ";
     msg << m_FileName << "." << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     return;
     }
@@ -270,7 +270,7 @@ AeronetFileReader
     std::ostringstream         msg;
     msg << " The file ";
     msg << m_FileName << " is not conform." << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     return;
     }

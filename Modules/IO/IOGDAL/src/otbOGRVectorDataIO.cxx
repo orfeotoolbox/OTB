@@ -193,7 +193,7 @@ bool OGRVectorDataIO::CanWriteFile(const char* filename) const
 {
 
   std::string lFileName(filename);
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }

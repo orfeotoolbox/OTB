@@ -80,7 +80,7 @@ public:
     worldFilename = m_ImageFilename.substr(0, i) + ".wld";
 
     std::ofstream file;
-    file.open(worldFilename.c_str());
+    file.open(worldFilename);
     file << std::setprecision(15);
     file << m_LonSpacing << std::endl;
     file << m_LatRotation << std::endl; //yes, in this order

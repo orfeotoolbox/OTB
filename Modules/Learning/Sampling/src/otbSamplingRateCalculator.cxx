@@ -167,7 +167,7 @@ void
 SamplingRateCalculator
 ::Write(std::string filename)
 {
-  std::ofstream file(filename.c_str(), std::ios::out | std::ios::trunc);
+  std::ofstream file(filename, std::ios::out | std::ios::trunc);
 
   if (file)
     {
@@ -185,7 +185,7 @@ void
 SamplingRateCalculator
 ::Read(std::string filename)
 {
-  std::ifstream ifs(filename.c_str());
+  std::ifstream ifs(filename);
 
   typedef std::vector<boost::iterator_range<std::string::const_iterator> > ListType;
 
@@ -293,7 +293,7 @@ SamplingRateCalculator
 ::ReadRequiredSamples(const std::string& filename)
 {
   ClassCountMapType output;
-  std::ifstream ifs(filename.c_str());
+  std::ifstream ifs(filename);
 
   typedef std::vector<boost::iterator_range<std::string::const_iterator> > ListType;
 

@@ -207,7 +207,7 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Save(const std::string & filename, const std::string & itkNotUsed(name))
 {
-  std::ofstream ofs(filename.c_str());
+  std::ofstream ofs(filename);
   if(!ofs)
     {
     itkExceptionMacro(<< "Error opening " << filename.c_str() );
@@ -234,7 +234,7 @@ void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
-  std::ifstream ifs(filename.c_str());
+  std::ifstream ifs(filename);
   if( ifs.good() )
     {
     // Check if the first line is a comment and verify the name of the model in this case.

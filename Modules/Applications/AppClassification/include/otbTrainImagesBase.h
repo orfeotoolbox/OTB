@@ -272,7 +272,7 @@ protected:
     bool RemoveFile(std::string &filePath)
     {
       bool res = true;
-      if( itksys::SystemTools::FileExists( filePath.c_str() ) )
+      if( itksys::SystemTools::FileExists( filePath ) )
         {
         size_t posExt = filePath.rfind( '.' );
         if( posExt != std::string::npos && filePath.compare( posExt, std::string::npos, ".shp" ) == 0 )
@@ -284,7 +284,7 @@ protected:
           RemoveFile( dbfPath );
           RemoveFile( prjPath );
           }
-        res = itksys::SystemTools::RemoveFile( filePath.c_str() );
+        res = itksys::SystemTools::RemoveFile( filePath );
         if( !res )
           {
           //otbAppLogINFO( <<"Unable to remove file  "<<filePath );

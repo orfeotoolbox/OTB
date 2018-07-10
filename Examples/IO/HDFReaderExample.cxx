@@ -115,7 +115,7 @@ int main(int itkNotUsed(argc), char * argv[])
             vectorSubdatasetDescriptions.size(); itSubDataset++ )
         {
         std::cout << "Dataset Number " <<  itSubDataset << " name is: " << vectSubdatasetNames[itSubDataset].c_str()
-            << " and description is: " << vectSubdatasetNames[itSubDataset].c_str() << std::endl;
+            << " and description is: " << vectSubdatasetNames[itSubDataset] << std::endl;
         }
       }
     }

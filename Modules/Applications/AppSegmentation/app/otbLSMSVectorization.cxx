@@ -184,8 +184,8 @@ private:
     std::vector<std::string> options;
 
     ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Overwrite);
-    std::string layername = itksys::SystemTools::GetFilenameName(shapefile.c_str());
-    std::string extension = itksys::SystemTools::GetFilenameLastExtension(shapefile.c_str());
+    std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
+    std::string extension = itksys::SystemTools::GetFilenameLastExtension(shapefile);
     layername = layername.substr(0,layername.size()-(extension.size()));
     layer = ogrDS->CreateLayer(layername, &oSRS, wkbMultiPolygon, options);
 

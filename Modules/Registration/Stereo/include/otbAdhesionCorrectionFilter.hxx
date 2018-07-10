@@ -247,7 +247,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(canny_edges);
     throw e;
@@ -270,7 +270,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(old_disparityPtr);
     throw e;
@@ -293,7 +293,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(old_maskPtr);
     throw e;
@@ -316,7 +316,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(canny_disparity);
     throw e;
@@ -339,7 +339,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(subpixelmaskPtr);
     throw e;

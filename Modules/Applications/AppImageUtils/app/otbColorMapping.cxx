@@ -757,7 +757,7 @@ private:
   {
     std::ifstream ifs;
 
-    ifs.open(GetParameterString("method.custom.lut").c_str());
+    ifs.open(GetParameterString("method.custom.lut"));
 
     if (!ifs)
       {

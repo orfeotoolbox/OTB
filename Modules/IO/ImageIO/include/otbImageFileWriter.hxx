@@ -438,8 +438,8 @@ ImageFileWriter<TInputImage>
     {
     itk::ImageFileWriterException e(__FILE__, __LINE__);
     std::ostringstream msg;
-    msg << "Cannot write image " << m_FileName.c_str() << ". Probably unsupported format or incorrect filename extension.";
-    e.SetDescription(msg.str().c_str());
+    msg << "Cannot write image " << m_FileName << ". Probably unsupported format or incorrect filename extension.";
+    e.SetDescription(msg.str());
     e.SetLocation(ITK_LOCATION);
     throw e;
     }
@@ -455,7 +455,7 @@ ImageFileWriter<TInputImage>
       itk::ImageFileWriterException e(__FILE__, __LINE__);
       std::ostringstream msg;
       msg << " ImageIO is of kind GDALImageIO, but fails to dynamic_cast (this should never happen)."<< std::endl;
-      e.SetDescription(msg.str().c_str());
+      e.SetDescription(msg.str());
       throw e;
       }
 
@@ -801,7 +801,7 @@ ImageFileWriter<TInputImage>
       msg << ioRegion;
       msg << "Actual:" << std::endl;
       msg << bufferedRegion;
-      e.SetDescription(msg.str().c_str());
+      e.SetDescription(msg.str());
       e.SetLocation(ITK_LOCATION);
       throw e;
       }

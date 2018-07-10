@@ -95,7 +95,7 @@ DataHistogramRecord& DataHistogramRecord::operator=(const DataHistogramRecord& r
 
 std::ostream& operator<<(std::ostream& os, const DataHistogramRecord& data)
 {
-	os<<"hist_desc:"<<data._hist_desc.c_str()<<std::endl;
+	os<<"hist_desc:"<<data._hist_desc <<std::endl;
 
     os<<"nrec:"<<data._nrec<<std::endl;
 

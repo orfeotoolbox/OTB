@@ -187,7 +187,7 @@ KmzProductWriter<TInputImage>
   logoFilename << m_Path;
   logoFilename << "/logo.jpeg";
 
-  if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
+  if (!itksys::SystemTools::MakeDirectory(m_Path))
     {
     itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
     }
@@ -403,7 +403,7 @@ KmzProductWriter<TInputImage>
           }
 
         // Generate pathname
-        if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
+        if (!itksys::SystemTools::MakeDirectory(m_Path))
           {
           itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
           }
@@ -648,7 +648,7 @@ KmzProductWriter<TInputImage>
   kmlname << "/";
   kmlname << m_FileName;
   kmlname << m_KmlExtension;
-  m_RootKmlFile.open(kmlname.str().c_str());
+  m_RootKmlFile.open(kmlname.str());
   m_RootKmlFile << std::fixed << std::setprecision(6);
 
   m_RootKmlFile << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
@@ -897,7 +897,7 @@ KmzProductWriter<TInputImage>
   kmlname << pathname;
   kmlname << "/";
   kmlname << y << "xt.kml";
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 
@@ -952,7 +952,7 @@ KmzProductWriter<TInputImage>
   kmlname << pathname;
   kmlname << "/";
   kmlname << y << ".kml";
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 
@@ -1005,7 +1005,7 @@ KmzProductWriter<TInputImage>
   kmlname << pathname;
   kmlname << "/";
   kmlname << y << "xt.kml";
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 
@@ -1188,7 +1188,7 @@ KmzProductWriter<TInputImage>
   kmlname << pathname;
   kmlname << "/";
   kmlname << y << ".kml";
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 
@@ -1366,7 +1366,7 @@ KmzProductWriter<TInputImage>
   kmlname << m_Path;
   kmlname << "/";
   kmlname << "bound_0" << m_KmlExtension;
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 

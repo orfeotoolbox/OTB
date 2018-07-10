@@ -586,7 +586,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     std::string fileToCheck = GetDerivedDatasetSourceFileName(m_FileName);
 
     // Test if the file exists.
-    if (!itksys::SystemTools::FileExists(fileToCheck.c_str()))
+    if (!itksys::SystemTools::FileExists(fileToCheck))
     {
       throw otb::ImageFileReaderException (__FILE__, __LINE__, "The file does not exist.", fileToCheck);
     }
@@ -889,7 +889,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         << std::endl << "    " << typeid(float).name()
         << std::endl << "    " << typeid(double).name()
         << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     e.SetLocation(ITK_LOCATION);
     throw e;
     return;

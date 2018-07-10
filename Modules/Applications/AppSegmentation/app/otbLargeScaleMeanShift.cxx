@@ -216,9 +216,9 @@ private:
       otbAppLogINFO( <<"Final clean-up ..." );
       for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)
         {
-        if(itksys::SystemTools::FileExists(tmpFilenames[i].c_str()))
+        if(itksys::SystemTools::FileExists(tmpFilenames[i]))
           {
-          itksys::SystemTools::RemoveFile(tmpFilenames[i].c_str());
+          itksys::SystemTools::RemoveFile(tmpFilenames[i]);
           }
         }
       }

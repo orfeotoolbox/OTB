@@ -147,11 +147,11 @@ private:
       }
     // try different filenames
     std::string filepath(path+name+HGTExtension);
-    bool exists = itksys::SystemTools::FileExists(filepath.c_str());
+    bool exists = itksys::SystemTools::FileExists(filepath);
     if (!exists)
       {
       filepath += ZIPExtension;
-      exists = itksys::SystemTools::FileExists(filepath.c_str());
+      exists = itksys::SystemTools::FileExists(filepath);
       }
 
     if (!exists)
@@ -159,11 +159,11 @@ private:
       std::string lowerName(name);
       std::transform(name.begin(), name.end(), lowerName.begin(), ::tolower);
       filepath = path + lowerName + HGTExtension;
-      exists = itksys::SystemTools::FileExists(filepath.c_str());
+      exists = itksys::SystemTools::FileExists(filepath);
       if (!exists)
         {
         filepath += ZIPExtension;
-        exists = itksys::SystemTools::FileExists(filepath.c_str());
+        exists = itksys::SystemTools::FileExists(filepath);
         }
       }
     return exists;
@@ -177,9 +177,9 @@ private:
       path += Sep;
       }
     path += "foo";
-    if( itksys::SystemTools::Touch( path.c_str(), true ) )
+    if( itksys::SystemTools::Touch( path, true ) )
       {
-      itksys::SystemTools::RemoveFile( path.c_str() );
+      itksys::SystemTools::RemoveFile( path );
       }
     else
       {

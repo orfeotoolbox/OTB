@@ -138,7 +138,7 @@ VectorDataFileWriter<TInputVectorData>
     VectorDataFileWriterException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << " Could not create IO object for file "
-        << m_FileName.c_str() << std::endl;
+        << m_FileName << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
@@ -151,7 +151,7 @@ VectorDataFileWriter<TInputVectorData>
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     e.SetLocation(ITK_LOCATION);
     throw e;
     }

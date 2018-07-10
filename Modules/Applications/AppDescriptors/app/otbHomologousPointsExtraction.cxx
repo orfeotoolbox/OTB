@@ -348,7 +348,7 @@ private:
 
     // Setting up output file
     std::ofstream file;
-    file.open(GetParameterString("out").c_str());
+    file.open(GetParameterString("out"));
     file<<std::fixed;
     file.precision(12);
 

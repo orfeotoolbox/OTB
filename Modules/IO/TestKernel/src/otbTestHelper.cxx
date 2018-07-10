@@ -114,7 +114,7 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
     std::cout << "Number of baseline images: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on image: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on image: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestImage(cpt, testFilenameImage.c_str(),
                                                         (baseline->first).c_str(),
@@ -160,7 +160,7 @@ int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMet
     std::cout << "Number of baseline images: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on image: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on image: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestMetaData(testFilenameImage.c_str(),
                                                            (baseline->first).c_str(),
@@ -220,7 +220,7 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestAsciiFile(testFilenameAscii.c_str(),
                                                             (baseline->first).c_str(),
@@ -283,7 +283,7 @@ int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestDiffFile(testFilenameAscii.c_str(),
                                                             (baseline->first).c_str(),
@@ -333,7 +333,7 @@ int TestHelper::RegressionTestAllBinary(const StringList& baselineFilenamesBinar
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestBinaryFile(testFilenameBinary.c_str(),
                                                              (baseline->first).c_str());
@@ -378,7 +378,7 @@ int TestHelper::RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
     std::cout << "Number of baseline OGR files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on OGR file: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on OGR file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestOgrFile(testFilenameOgr.c_str(),
                                                           (baseline->first).c_str(),
@@ -414,7 +414,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   std::ofstream fluxfilediff;
   if (m_ReportErrors)
     {
-    fluxfilediff.open(diffAsciiFileName.c_str());
+    fluxfilediff.open(diffAsciiFileName);
     }
 
   std::string strfiletest;
@@ -644,7 +644,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
   std::ofstream fluxfilediff;
   if (m_ReportErrors)
     {
-    fluxfilediff.open(diffAsciiFileName.c_str());
+    fluxfilediff.open(diffAsciiFileName);
     }
 
   std::string strfiletest;
