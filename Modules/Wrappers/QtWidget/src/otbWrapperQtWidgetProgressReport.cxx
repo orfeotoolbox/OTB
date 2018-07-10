@@ -35,10 +35,10 @@ QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model, QWidget * 
   , m_CurrentProcess()
 {
   m_Model = model;
-  connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(show()) );
-  connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(close()) );
-  connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(RemoveLayout()) );
-  connect(this, SIGNAL(AddNewProcessToReport()), this, SLOT(ReportProcess()) );
+  connect(model, &QtWidgetModel::SetProgressReportBegin, this, &QtWidgetProgressReport::show );
+  connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetProgressReport::close );
+  connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetProgressReport::RemoveLayout );
+  connect(this, &QtWidgetProgressReport::AddNewProcessToReport, this, &QtWidgetProgressReport::ReportProcess );
 
   m_Layout = new QVBoxLayout(this);
   this->setLayout(m_Layout);
@@ -83,8 +83,8 @@ void QtWidgetProgressReport::ReportProcess ( )
 
   // Create a itk::QtProgressBar, observing the event ProgressEvent
   itk::QtProgressBar * bar =  new itk::QtProgressBar(this);
-  connect( bar, SIGNAL(SetValueChanged(int)), bar, SLOT(setValue(int)) );
-  connect( m_Model, SIGNAL(SetProgressReportDone()), bar, SLOT(reset()) );
+  connect( bar, &itk::QtProgressBar::SetValueChanged, bar, &itk::QtProgressBar::setValue );
+  connect( m_Model, &QtWidgetModel::SetProgressReportDone, bar, &itk::QtProgressBar::reset );
   bar->Observe(m_CurrentProcess);
 
   // label

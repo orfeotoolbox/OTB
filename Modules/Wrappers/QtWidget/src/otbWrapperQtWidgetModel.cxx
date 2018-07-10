@@ -51,12 +51,7 @@ QtWidgetModel
   m_Timer = new QTimer(this);
   m_Timer->setSingleShot(true);
   m_Timer->setInterval(1000);
-  QObject::connect(
-    m_Timer,
-    SIGNAL( timeout() ),
-    this,
-    SLOT( TimerDone() )
-    );
+  QObject::connect( m_Timer, &QTimer::timeout, this, &QtWidgetModel::TimerDone );
 }
 
 QtWidgetModel::~QtWidgetModel()
@@ -202,35 +197,17 @@ QtWidgetModel
   // launch the output image writing
   AppliThread *taskAppli = new AppliThread( m_Application );
 
-  QObject::connect(
-    taskAppli,
-    SIGNAL( ExceptionRaised( QString ) ),
-    // to:
-    this,
-    SIGNAL( ExceptionRaised( QString ) )
-  );
+  QObject::connect( taskAppli, &AppliThread::ExceptionRaised,
+                    this, &QtWidgetModel::ExceptionRaised );
 
-  QObject::connect(
-    taskAppli,
-    SIGNAL( ApplicationExecutionDone( int ) ),
-    // to:
-    this,
-    SLOT( OnApplicationExecutionDone( int ) )
-  );
+  QObject::connect( taskAppli, &AppliThread::ApplicationExecutionDone,
+                    this, &QtWidgetModel::OnApplicationExecutionDone );
 
-  QObject::connect(
-    taskAppli,
-    SIGNAL( finished() ),
-    taskAppli,
-    SLOT( deleteLater() )
-  );
+  QObject::connect( taskAppli, &AppliThread::finished,
+                    taskAppli, &AppliThread::deleteLater );
 
-  QObject::connect(
-    this,
-    SIGNAL( Stop() ),
-    taskAppli,
-    SLOT( Stop() )
-  );
+  QObject::connect( this, &QtWidgetModel::Stop,
+                    taskAppli, &AppliThread::Stop );
 
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();

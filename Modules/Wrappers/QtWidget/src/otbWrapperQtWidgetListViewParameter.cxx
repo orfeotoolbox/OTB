@@ -115,7 +115,7 @@ void QtWidgetListViewParameter::DoCreateWidget()
     m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
 
-  connect( m_ListView, SIGNAL(itemSelectionChanged()), this, SLOT(SelectedItems()) );
+  connect( m_ListView, &QListWidget::itemSelectionChanged, this, &QtWidgetListViewParameter::SelectedItems );
 
   m_VLayout = new QHBoxLayout(this);
   m_VLayout->setContentsMargins(0, 0, 0, 0);
