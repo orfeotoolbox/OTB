@@ -114,15 +114,17 @@ otb_add_test(NAME prTeEstimateRPCSensorModelExampleTest COMMAND ${OTB_TEST_DRIVE
     577 183 -22.551654 -43.271813 0.
 )
 
-otb_add_test(NAME prTePlaceNameToLonLatExampleTest COMMAND ${OTB_TEST_DRIVER}
-  Execute $<TARGET_FILE:PlaceNameToLonLatExample>
-    Toulouse
-)
-otb_add_test(NAME prTeCoordinateToNameExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${NOTOL}
-    ${BASELINE}/CoordinateToNameExample.txt
-    ${TEMP}/CoordinateToNameExample.txt
-  Execute $<TARGET_FILE:CoordinateToNameExample>
-    103.78 1.29
-    ${TEMP}/CoordinateToNameExample.txt
-)
+# These two tests use a web service which sometimes times out. Keep them disabled
+# to make tests more deterministic.
+#otb_add_test(NAME prTePlaceNameToLonLatExampleTest COMMAND ${OTB_TEST_DRIVER}
+#  Execute $<TARGET_FILE:PlaceNameToLonLatExample>
+#    Toulouse
+#)
+#otb_add_test(NAME prTeCoordinateToNameExampleTest COMMAND ${OTB_TEST_DRIVER}
+#  --compare-ascii ${NOTOL}
+#    ${BASELINE}/CoordinateToNameExample.txt
+#    ${TEMP}/CoordinateToNameExample.txt
+#  Execute $<TARGET_FILE:CoordinateToNameExample>
+#    103.78 1.29
+#    ${TEMP}/CoordinateToNameExample.txt
+#)
