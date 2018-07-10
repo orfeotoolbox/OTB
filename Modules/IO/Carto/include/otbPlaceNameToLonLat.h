@@ -55,8 +55,6 @@ public:
 
   itkSetMacro(PlaceName, std::string);
 
-  typedef enum {ALL, GEONAMES, GOOGLE, YAHOO} SearchMethodEnum; //Not implemented yet TODO
-
   virtual bool Evaluate();
 
 protected:
