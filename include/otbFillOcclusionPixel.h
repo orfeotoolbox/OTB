@@ -1,5 +1,5 @@
-#ifndef otbWeightedMedianImageFilter_h
-#define otbWeightedMedianImageFilter_h
+#ifndef otbFillPixelFilter_h
+#define otbFillPixelFilter_h
 
 /*===================================================================================================
 
@@ -23,19 +23,19 @@ namespace Functor
 {
 
 
-/** \class WeightMedianImageOperator
+/** \class FillPixelFilterOperator
 
  */
 template < class TInput, class TOutput >
-class WeightMedianImageOperator
+class FillPixelFilterOperator
 {
 public:
 typedef typename TInput::OffsetType      OffsetType;
 typedef std::pair<int,double> pairCord;
 typedef typename TInput::PixelType               PixelType;
 public:
-  WeightMedianImageOperator() { }
-  virtual ~WeightMedianImageOperator() { }
+  FillPixelFilterOperator() { }
+  virtual ~FillPixelFilterOperator() { }
   static bool comparePair(pairCord i,pairCord j) { 
   if( i.first < j.first ) return true;
     if( j.first < i.first ) return false;
@@ -49,17 +49,15 @@ public:
   {  
 
    // unsigned int Nband = input.GetPixel(0).Size(); // nbr de bande 4
-    TOutput output ( 1);
-    output = 0 ;
-    // output.Fill(0); 
-     
-     
-    unsigned int Wsize = input.Size();  //taille de la fenetre ipol 19*19 ;
+    TOutput output (1);
    
-   
-    // std::cout << " Nband = "<< Nband; 
+    unsigned int Wsize = input.Size();
+
+
+
+       // std::cout << " Nband = "<< Nband; 
   double sSpace = 9;
-  double sColor = 255*0.1f;
+  double sColor = 255*0.1;
   
    sSpace = 1.0f/(sSpace*sSpace);
    sColor = 1.0f/(sColor*sColor);
@@ -71,8 +69,11 @@ std::vector< std::pair<int,double> > duo(Wsize);
 
   
 PixelType I(3);
-            
-  for (unsigned int j  = 0; j< Wsize; j++){
+
+   if(input.GetCenterPixel()[4] == 0.0)
+       {
+
+          for (unsigned int j  = 0; j< Wsize; j++){
     Offset_j = input.GetOffset(j);      
         I[0] = input.GetCenterPixel()[1]- input.GetPixel(j)[1];
         I[1] = input.GetCenterPixel()[2]- input.GetPixel(j)[2];
@@ -114,35 +115,51 @@ PixelType I(3);
     }   
   
    
-     }
-     
+     }  
+
+
+
+
+
+       }
+       else
+       {
+         output = input.GetCenterPixel()[0] ;
+
+       }
+
+
+
+
+
+
    
   return output;
   } // end operator ()
 
-}; // end of functor class  WeightMedianImageOperator
+}; // end of functor class  FillPixelFilterOperator
 
 }  // end of fonctor 
 
 
-/** \class WeightMedianImageFilter  ToutputImage correspond Ã  la carte de disparitÃ© filtrÃ© 
+/** \class FillPixelFilter  ToutputImage correspond Ã  la carte de disparitÃ© filtrÃ© 
  *                  donc Ã  une seule composante
  *
  * \ingroup OTBImageManipulation
  */
 template < class TInputImage, class TOutputImage >
-class ITK_EXPORT WeightMedianImageFilter
+class ITK_EXPORT FillPixelFilter
  : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::WeightMedianImageOperator<
+            Functor::FillPixelFilterOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,
               typename TOutputImage::PixelType > >
            
 {
 public:
   /** Standard class typedefs */
-  typedef WeightMedianImageFilter Self;
+  typedef FillPixelFilter Self;
   typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::WeightMedianImageOperator<
+            Functor::FillPixelFilterOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,
               typename TOutputImage::PixelType > >  Superclass;
               
@@ -156,28 +173,28 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
- // itkTypeMacro(WeightMedianImageFilter, BinaryFunctorImageFilter);
+ // itkTypeMacro(FillPixelFilter, BinaryFunctorImageFilter);
     /** Creation through object factory macro */
-  itkTypeMacro(WeightMedianImageFilter, ImageToImageFilter);
+  itkTypeMacro(FillPixelFilter, ImageToImageFilter);
 
 
 protected:
 
-WeightMedianImageFilter()
+FillPixelFilter()
   {
 
   }
-  ~WeightMedianImageFilter() ITK_OVERRIDE { }
+  ~FillPixelFilter() ITK_OVERRIDE { }
 void GenerateOutputInformation(void) ITK_OVERRIDE;
 
-  WeightMedianImageFilter( const Self & ); // Not implemented
+  FillPixelFilter( const Self & ); // Not implemented
   void operator=( const Self & ); // Not implemented
-}; // end of class WeightMedianImageFilter
+}; // end of class FillPixelFilter
 
 
 //========
 template < class TInputImage, class TOutputImage >
-void WeightMedianImageFilter < TInputImage, TOutputImage >
+void FillPixelFilter < TInputImage, TOutputImage >
 ::GenerateOutputInformation(void){
 
   std::cout << "WEIGHTED MEDIAN IMAGE FILTER" << std::endl ;

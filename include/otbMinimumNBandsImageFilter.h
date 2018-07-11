@@ -53,6 +53,7 @@ public:
       if (input[i]<min)
         {
         min = input[i] ;
+
         output = -i ;
         }
       }

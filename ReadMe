@@ -23,15 +23,23 @@
 Cost-volume filtering parameters:
 
 
-     radius: radius of the guided filter (1)
+     radius: radius of the guided filter (9)
      alpha: value of alpha (0.9)
      epsilon: regularization parameter (6.5025)
      tau1: max for color difference (7)
      tau2: max for gradient difference (2)
 
-     radius: radius of the weighted median filter (1)
+     radius: radius of the weighted median filter (9)
      sigmac: value of sigma_color (25.5)
      sigmas: value of sigma_space (9)
+
+     sSpace : radius of the weighted median filter (9)
+     sColor : value of sigma_color (25.5)
+
+     grayMin: value of gray for min disparity (255)
+     grayMax: value of gray for max disparity (0)
+
+
 
 Execution:
  ./bin/otbStereoFiltersTestDriver testCostVolumeFilter Radius Min_Disp Max_Disp

@@ -62,7 +62,6 @@ public:
     }
 
 
-
   
  TOutput operator() (const TInput1 & input1, const TInput2 & input2)
   {
@@ -74,10 +73,11 @@ public:
   std::vector<int> vect;
   vect.resize(input1.Size(),0);
 
+
+
   for(unsigned int i=0; i < input1.Size(); i++)
     {
     vect[i] = input2.GetPixel(i);   
-   // output = vect[i] ;
     }
 
   for( unsigned int i = 0; i < input1.Size(); ++i )

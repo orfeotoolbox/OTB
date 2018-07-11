@@ -264,7 +264,7 @@ public:
   class ITK_EXPORT LocalStatImageFilter :
     public otb::BinaryFunctorNeighborhoodVectorImageFilter<
         TInputImage1, TInputImage2, TOutputImage,
-        Functor::LocalStatVectorImage<
+        Functor::LocalStatVectorImage1<
             typename itk::ConstNeighborhoodIterator<TInputImage1>,
             typename itk::ConstNeighborhoodIterator<TInputImage2>,
             typename TOutputImage::PixelType> >
@@ -276,7 +276,7 @@ public:
       TInputImage1,
       TInputImage2,
       TOutputImage,
-      Functor::LocalStatVectorImage<
+      Functor::LocalStatVectorImage1<
           typename itk::ConstNeighborhoodIterator<TInputImage1>,
           typename itk::ConstNeighborhoodIterator<TInputImage2>,
           typename TOutputImage::PixelType> > Superclass;
