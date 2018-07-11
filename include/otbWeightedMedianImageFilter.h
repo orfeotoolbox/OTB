@@ -180,10 +180,7 @@ template < class TInputImage, class TOutputImage >
 void WeightMedianImageFilter < TInputImage, TOutputImage >
 ::GenerateOutputInformation(void){
 
-  std::cout << "WEIGHTED MEDIAN IMAGE FILTER" << std::endl ;
  Superclass::GenerateOutputInformation();
-
-
  
  this->GetOutput()->SetNumberOfComponentsPerPixel(1);
 

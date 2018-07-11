@@ -278,7 +278,6 @@ LeftCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 { 
 
 
-  std::cout << "-------- LEFT COST VOLUME IMAGE FILTER " << std::endl ;
 
    //  Setting parameters
   double alpha = 0.9; 

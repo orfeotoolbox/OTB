@@ -101,9 +101,8 @@ int testDisparityMap(int argc, char *argv[])
   // typedef otb::ImageFileReader< IntImageType > IntImageReaderType;
   typedef otb::ImageFileWriter< IntImageType > IntImageWriterType;  
 
-  typedef otb::ImageFileReader< FloatImageType > FloatImageReaderType;
-  typedef otb::ImageFileWriter< FloatImageType > FloatImageWriterType;  
-
+  // typedef otb::ImageFileReader< FloatImageType > FloatImageReaderType;
+  // typedef otb::ImageFileWriter< FloatImageType > FloatImageWriterType;  
 
 
 

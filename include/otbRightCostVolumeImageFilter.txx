@@ -284,7 +284,7 @@ RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {	
 
-std::cout << "-------- RIGHT COST VOLUME IMAGE FILTER " << std::endl ;
+
 
 
  RegionType LeftRegionForThread;

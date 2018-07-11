@@ -99,7 +99,7 @@ public:
 
   void GenerateOutputInformation(void) override
     {
-      std::cout << "MINIMUM NBANDS IMAGE FILTER" << std::endl ;
+
     Superclass::GenerateOutputInformation();
 
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
