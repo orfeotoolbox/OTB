@@ -20,6 +20,12 @@
 
 set(OTBTransform_SRC
   otbGeoInformationConversion.cxx
+  otbTransform.cxx
+  otbSensorModelBase.cxx
+  otbForwardSensorModel.cxx
+  otbInverseSensorModel.cxx
+  otbGenericRSTransform.cxx
+  otbCompositeTransform.cxx
   )
 
 add_library(OTBTransform ${OTBTransform_SRC})

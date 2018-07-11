@@ -22,6 +22,7 @@
 #define otbGenericRSTransform_h
 
 #include "otbCompositeTransform.h"
+#include "OTBTransformExport.h"
 
 namespace otb
 {
@@ -47,7 +48,7 @@ enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
 template <class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
-class ITK_EXPORT GenericRSTransform : public otb::Transform<TScalarType,          // Data type for scalars
+class OTBTransform_EXPORT GenericRSTransform : public otb::Transform<TScalarType,          // Data type for scalars
       NInputDimensions,                                                       // Number of dimensions in the input space
       NOutputDimensions>                                                       // Number of dimensions in the output space
 {
@@ -225,5 +226,10 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbGenericRSTransform.hxx"
 #endif
+
+namespace otb {
+extern template class OTBTransform_EXPORT GenericRSTransform<double,2,2>;
+extern template class OTBTransform_EXPORT GenericRSTransform<double,3,3>;
+}
 
 #endif

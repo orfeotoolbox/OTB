@@ -20,6 +20,9 @@
 
 set(OTBStreaming_SRC
   otbPipelineMemoryPrintCalculator.cxx
+  otbStreamingManager.cxx
+  otbRAMDrivenAdaptativeStreamingManager.cxx
+  otbStreamingImageVirtualWriter.cxx
   )
 
 add_library(OTBStreaming ${OTBStreaming_SRC})

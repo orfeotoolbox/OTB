@@ -25,6 +25,7 @@
 #include "OTBVectorDataBaseExport.h"
 #include "itkProcessObject.h"
 #include "itkMacro.h"
+#include "OTBVectorDataBaseExport.h"
 
 namespace otb
 {
@@ -39,7 +40,7 @@ namespace otb
  */
 
 template <class TOutputVectorData>
-class ITK_ABI_EXPORT VectorDataSource : public itk::ProcessObject
+class OTBVectorDataBase_EXPORT VectorDataSource : public itk::ProcessObject
 {
 public:
 
@@ -101,5 +102,11 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataSource.hxx"
 #endif
+
+#include "otbVectorData.h"
+
+namespace otb {
+extern template class OTBVectorDataBase_EXPORT VectorDataSource<VectorData<double,2,double>>;
+}
 
 #endif // otbVectorDataSource_h

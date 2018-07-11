@@ -22,6 +22,7 @@
 #define otbRAMDrivenAdaptativeStreamingManager_h
 
 #include "otbStreamingManager.h"
+#include "OTBStreamingExport.h"
 
 namespace otb
 {
@@ -46,7 +47,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template<class TImage>
-class ITK_EXPORT RAMDrivenAdaptativeStreamingManager : public StreamingManager<TImage>
+class OTBStreaming_EXPORT RAMDrivenAdaptativeStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */
@@ -105,6 +106,13 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbRAMDrivenAdaptativeStreamingManager.hxx"
 #endif
+
+#include "otbVectorImage.h"
+
+namespace otb
+{
+extern template class OTBStreaming_EXPORT RAMDrivenAdaptativeStreamingManager<VectorImage<float>>;
+}
 
 #endif
 

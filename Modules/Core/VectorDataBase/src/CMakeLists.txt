@@ -21,6 +21,11 @@
 set(OTBVectorDataBase_SRC
   otbVectorDataIOBase.cxx
   otbVectorDataKeywordlist.cxx
+  otbPolyLineParametricPathWithValue.cxx
+  otbPolygon.cxx
+  otbDataNode.cxx
+  otbVectorData.cxx
+  otbVectorDataSource.cxx
   )
 
 add_library(OTBVectorDataBase ${OTBVectorDataBase_SRC})

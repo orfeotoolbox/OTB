@@ -24,6 +24,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkSmartPointer.h"
 #include "itkExtractImageFilterRegionCopier.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -45,7 +46,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ExtractROIBase :
+class OTBImageBase_EXPORT ExtractROIBase :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -183,5 +184,13 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbExtractROIBase.hxx"
 #endif
+
+#include "otbVectorImage.h"
+#include "otbImage.h"
+
+namespace otb {
+// Most commonly used instanciation
+extern template class OTBImageBase_EXPORT ExtractROIBase<otb::VectorImage<float>,Image<float>>;
+}
 
 #endif

@@ -27,6 +27,7 @@
 
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -55,7 +56,7 @@ namespace otb
  */
 
 template <class TType>
-class ITK_EXPORT RemoteSensingRegion : public itk::Region
+class OTBImageBase_EXPORT RemoteSensingRegion : public itk::Region
 {
 public:
   /** Standard class typedefs. */
@@ -392,5 +393,9 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
 
 
 } // end namespace otb
+
+namespace otb {
+extern template class OTBImageBase_EXPORT RemoteSensingRegion<double>;
+}
 
 #endif

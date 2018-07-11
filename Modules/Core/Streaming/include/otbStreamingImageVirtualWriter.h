@@ -25,6 +25,7 @@
 #include "itkImageToImageFilter.h"
 #include "otbStreamingManager.h"
 #include "itkFastMutexLock.h"
+#include "OTBStreamingExport.h"
 
 namespace otb
 {
@@ -57,7 +58,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template <class TInputImage >
-class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
+class OTBStreaming_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -202,5 +203,11 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbStreamingImageVirtualWriter.hxx"
 #endif
+
+#include "otbVectorImage.h"
+
+namespace otb {
+extern template class OTBStreaming_EXPORT StreamingImageVirtualWriter<VectorImage<float> >;
+}
 
 #endif

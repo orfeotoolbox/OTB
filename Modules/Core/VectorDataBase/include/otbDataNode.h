@@ -25,6 +25,7 @@
 #include "otbPolygon.h"
 #include "otbObjectList.h"
 #include "otbVectorDataKeywordlist.h"
+#include "OTBVectorDataBaseExport.h"
 
 #include <iostream>
 
@@ -72,7 +73,7 @@ enum
  * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned VDimension = 2, class TValuePrecision = double>
-class DataNode
+class OTBVectorDataBase_EXPORT DataNode
   : public itk::Object
 {
 public:
@@ -327,5 +328,9 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbDataNode.hxx"
 #endif
+
+namespace otb {
+extern template class OTBVectorDataBase_EXPORT DataNode<double,2,double>;
+}
 
 #endif
