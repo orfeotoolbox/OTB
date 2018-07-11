@@ -136,7 +136,6 @@ public:
   void GenerateOutputInformation(void) override
     {
 
-    std::cout << "VALUES CONVERSION FROM 0 TO 255" << std::endl ;
     Superclass::GenerateOutputInformation();
 
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);

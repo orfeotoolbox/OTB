@@ -87,6 +87,8 @@ public:
   void GenerateOutputInformation(void) override
     {
 
+
+
     Superclass::GenerateOutputInformation();
 
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);

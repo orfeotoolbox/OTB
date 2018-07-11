@@ -72,11 +72,11 @@ int testOcclusionsFilter(int argc, char *argv[])
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<float> FloatVectorImageType;
   // typedef otb::VectorImage<int> IntVectorImageType;
-  typedef otb::Image< double, Dimension > FloatImageType;
+  // typedef otb::Image< double, Dimension > FloatImageType;
   typedef otb::Image< int, Dimension > IntImageType;
 
   typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorImageReaderType;
-  typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType;
+  // typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType;
 
 
   // typedef otb::ImageFileReader<IntVectorImageType> IntVectorImageReaderType;
@@ -87,7 +87,7 @@ int testOcclusionsFilter(int argc, char *argv[])
   typedef otb::ImageFileWriter<IntImageType> IntWriterType;
 
   //   typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
-  typedef otb::ImageFileWriter<FloatImageType> FloatWriterType;
+  // typedef otb::ImageFileWriter<FloatImageType> FloatWriterType;
 
 
 
@@ -107,13 +107,12 @@ int testOcclusionsFilter(int argc, char *argv[])
   int dispMin = atoi(argv[4]);
   int dispMax = atoi(argv[5]);
 
-  unsigned int rFillOcc = atoi(argv[6]);
-  int rwmf = atoi(argv[7]) ;
+  int rwmf = atoi(argv[6]) ;
 
 
 
-  std::string argv8 = std::string(argv[8]);
-  #define FILENAME(n) std::string( argv8 + std::string(n)).c_str()
+  std::string argv7 = std::string(argv[7]);
+  #define FILENAME(n) std::string( argv7 + std::string(n)).c_str()
 
 
 
