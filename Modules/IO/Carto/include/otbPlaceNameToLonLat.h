@@ -55,8 +55,6 @@ public:
 
   itkSetMacro(PlaceName, std::string);
 
-  typedef enum {ALL, GEONAMES, GOOGLE, YAHOO} SearchMethodEnum; //Not implemented yet TODO
-
   virtual bool Evaluate();
 
 protected:
@@ -75,7 +73,6 @@ private:
   double           m_Lon;
   double           m_Lat;
   std::string      m_PlaceName;
-  SearchMethodEnum m_SearchMethod; //Not implemented yet TODO
 
   CurlHelperInterface::Pointer m_Curl;
   std::string                  m_CurlOutput;
