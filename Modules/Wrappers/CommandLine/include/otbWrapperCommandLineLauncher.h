@@ -172,6 +172,12 @@ private:
   CommandLineLauncher(const CommandLineLauncher &); //purposely not implemented
   void operator =(const CommandLineLauncher&); //purposely not implemented
 
+  /** 
+   * Actually launch the process and write outputs, without catching exceptions.
+   */
+  bool ExecuteAndWriteOutputNoCatch();
+
+  
   std::string                       m_Path;
 
   Application::Pointer              m_Application;
