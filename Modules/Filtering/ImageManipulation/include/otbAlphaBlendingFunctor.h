@@ -86,7 +86,7 @@ public:
     OutputPixelType resp;
     double alpha = this->GetAlpha();
 
-    resp = static_cast<OutputPixelType>(vcl_floor(0.5 + (1.0 - alpha) * static_cast<double>(input1)
+    resp = static_cast<OutputPixelType>(std::floor(0.5 + (1.0 - alpha) * static_cast<double>(input1)
                                                        + alpha * static_cast<double>(input2)));
     return resp;
   }
@@ -120,15 +120,15 @@ public:
     resp.Fill(itk::NumericTraits<InternalOutputPixelType>::max());
     double alpha = static_cast<double>(input2.GetAlpha()) / 255.0 * this->GetAlpha();
 
-    resp.SetRed(static_cast<InternalOutputPixelType>(vcl_floor(0.5 +
+    resp.SetRed(static_cast<InternalOutputPixelType>(std::floor(0.5 +
                                                        (1.0 - alpha) * static_cast<double>(input1.GetRed())
                                                        + alpha * static_cast<double>(input2.GetRed())
                                                        )));
-    resp.SetGreen(static_cast<InternalOutputPixelType>(vcl_floor(0.5 +
+    resp.SetGreen(static_cast<InternalOutputPixelType>(std::floor(0.5 +
                                                          (1.0 - alpha) * static_cast<double>(input1.GetGreen())
                                                          + alpha * static_cast<double>(input2.GetGreen())
                                                          )));
-    resp.SetBlue(static_cast<InternalOutputPixelType>(vcl_floor(0.5 +
+    resp.SetBlue(static_cast<InternalOutputPixelType>(std::floor(0.5 +
                                                         (1.0 - alpha) * static_cast<double>(input1.GetBlue())
                                                         + alpha * static_cast<double>(input2.GetBlue())
                                                         )));

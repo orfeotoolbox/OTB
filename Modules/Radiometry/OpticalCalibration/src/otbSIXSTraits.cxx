@@ -178,7 +178,7 @@ SIXSTraits::ComputeWavelengthSpectralBandValuesFor6S(
     }
 
   // Generate WavelengthSpectralBand if the step is not the official 6S step value
-  if (vcl_abs(L_userStep - SIXSStepOfWavelengthSpectralBandValues) > epsilon)
+  if (std::abs(L_userStep - SIXSStepOfWavelengthSpectralBandValues) > epsilon)
     {
     ValuesVectorType values(1, FilterFunctionValues[0]); //vector size 1 with the value vect[0]
 

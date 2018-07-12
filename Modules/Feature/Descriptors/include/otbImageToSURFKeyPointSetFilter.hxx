@@ -487,7 +487,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
                                       ds * solution[2]);
 
   // DoG threshold : ignore detected extrema if is not sufficiently noticeable
-  accepted = vcl_abs(lDoHInterpolated) > vcl_abs(det * m_DoHThreshold);
+  accepted = std::abs(lDoHInterpolated) > std::abs(det * m_DoHThreshold);
 
   if (!accepted)
     {
@@ -503,9 +503,9 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     solution /= det;
     }
   /* check that the translation found is inside a cubic pixel */
-  if (vcl_abs(static_cast<double>(solution[0])) > 1.0
-      || vcl_abs(static_cast<double>(solution[1])) > 1.0
-      || vcl_abs(static_cast<double>(solution[2])) > 1.0)
+  if (std::abs(static_cast<double>(solution[0])) > 1.0
+      || std::abs(static_cast<double>(solution[1])) > 1.0
+      || std::abs(static_cast<double>(solution[2])) > 1.0)
   {
         accepted = false;
         //solution.Fill(0);
@@ -546,7 +546,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     {
     col = i % Largeur - rayon;
     raw = i / Largeur - rayon;
-    dist = vcl_sqrt(static_cast<double>(col * col  + raw * raw));
+    dist = std::sqrt(static_cast<double>(col * col  + raw * raw));
     col += rayon;
     raw += rayon;                           // Backup to the image coordinate axes
 
@@ -556,7 +556,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       if ((col > pas && col < Largeur - pas) && (raw > pas && raw < Largeur - pas))
         {
 
-        w  = vcl_exp(-((col - rayon) * (col - rayon) + (raw - rayon) * (raw - rayon)) / (2 * 2.5 * 2.5 * S * S));
+        w  = std::exp(-((col - rayon) * (col - rayon) + (raw - rayon) * (raw - rayon)) / (2 * 2.5 * 2.5 * S * S));
         pt[0] = (neigh[(col + pas) + raw * Largeur] - neigh[(col - pas) + raw * Largeur]) * w;
         pt[1] = (neigh[col + (raw + pas) * Largeur] - neigh[col + (raw - pas) * Largeur]) * w;
 
@@ -586,7 +586,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   // Detecting current point orientation
   for (int ii = 0; ii < NbBins * 2; ii = ii + 2)
     {
-    length = vcl_sqrt(tab[ii] * tab[ii] + tab[ii + 1] * tab[ii + 1]);
+    length = std::sqrt(tab[ii] * tab[ii] + tab[ii + 1] * tab[ii + 1]);
     if (length > max)
       {
       max = length;
@@ -646,7 +646,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       {
       double distanceX = (raw - r);
       double distanceY = (col - r);
-      dist = vcl_sqrt(distanceX * distanceX + distanceY * distanceY);
+      dist = std::sqrt(distanceX * distanceX + distanceY * distanceY);
 
       if (dist <= r)
         {
@@ -656,8 +656,8 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
         pSrc = eulerTransform->TransformPoint(pDst);
 
         /** New Coordinates (rotated) */
-        col = static_cast<int>(vcl_floor(pSrc[0]));
-        raw = static_cast<int>(vcl_floor(pSrc[1]));
+        col = static_cast<int>(std::floor(pSrc[0]));
+        raw = static_cast<int>(std::floor(pSrc[1]));
 
         if (raw == 0) raw = +1;
         if (col == 0) col += 1;
@@ -671,15 +671,15 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           double distanceXcompensee_2 = (pSrc[0] - r) * (pSrc[0] - r);
           double distanceYcompensee_2 = (pSrc[1] - r) * (pSrc[1] - r);
 
-          w = vcl_exp(-(distanceXcompensee_2 + distanceYcompensee_2) / (2 * 3.3 * 3.3 * S * S));
+          w = std::exp(-(distanceXcompensee_2 + distanceYcompensee_2) / (2 * 3.3 * 3.3 * S * S));
 
           dx = 0.5 * (neigh[(col + pas) + raw * Largeur] - neigh[(col - pas) + raw * Largeur]) * w;
           dy = 0.5 * (neigh[col + (raw + pas) * Largeur] - neigh[col + (raw - pas) * Largeur])  * w;
 
           descriptorVector[4 * Nbin] += dx;
           descriptorVector[4 * Nbin + 1] += dy;
-          descriptorVector[4 * Nbin + 2] += vcl_abs(dx);
-          descriptorVector[4 * Nbin + 3] += vcl_abs(dy);
+          descriptorVector[4 * Nbin + 2] += std::abs(dx);
+          descriptorVector[4 * Nbin + 3] += std::abs(dy);
           }
         }
       }
@@ -691,7 +691,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     accu += descriptorVector[ii] * descriptorVector[ii];
 
   for (int jj = 0; jj < 64; ++jj)
-    descriptorVector[jj] /= vcl_sqrt(accu);
+    descriptorVector[jj] /= std::sqrt(accu);
 
   return descriptorVector;
 

@@ -71,8 +71,8 @@ int otbLogPolarTransform(int itkNotUsed(argc), char* argv[])
     double logRho   = (*it)[1] * radialStep;
 
     file << "Rho: " << logRho << ", Theta: " << theta << std::endl;
-    pprime[0] = vcl_exp(logRho) * vcl_cos(theta);
-    pprime[1] = vcl_exp(logRho) * vcl_sin(theta);
+    pprime[0] = std::exp(logRho) * std::cos(theta);
+    pprime[1] = std::exp(logRho) * std::sin(theta);
 
     file << "Original Point: " << (*it) << ", Reference point: " << pprime << ", Transformed point: " << p <<
     std::endl << std::endl;

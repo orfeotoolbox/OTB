@@ -54,7 +54,7 @@ NumberOfLinesStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject
   if (numberLinesOfRegion > m_NumberOfLinesPerStrip && m_NumberOfLinesPerStrip > 0)
     {
     nbSplit =
-      static_cast<unsigned long>(vcl_ceil(static_cast<double>(numberLinesOfRegion) /
+      static_cast<unsigned long>(std::ceil(static_cast<double>(numberLinesOfRegion) /
                                           static_cast<double>(m_NumberOfLinesPerStrip) ) );
     }
   else

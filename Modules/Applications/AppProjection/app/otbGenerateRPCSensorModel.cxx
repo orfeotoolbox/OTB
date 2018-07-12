@@ -234,13 +234,13 @@ private:
   meany/=tiepoints.size();
 
 
-  double stdevx = vcl_sqrt(rmsex - meanx * meanx);
-  double stdevy = vcl_sqrt(rmsey - meany * meany);
+  double stdevx = std::sqrt(rmsex - meanx * meanx);
+  double stdevy = std::sqrt(rmsey - meany * meany);
 
 
-  rmse=vcl_sqrt(rmse);
-  rmsex=vcl_sqrt(rmsex);
-  rmsey=vcl_sqrt(rmsey);
+  rmse=std::sqrt(rmse);
+  rmsex=std::sqrt(rmsex);
+  rmsey=std::sqrt(rmsey);
 
   otbAppLogINFO("Estimation of final accuracy: ");
 

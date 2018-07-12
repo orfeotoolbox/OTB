@@ -56,8 +56,8 @@ int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
     pathElt->AddVertex(cindex);
 
     float Theta = 2.0 * static_cast<float>(otb::CONST_PI) * static_cast<float>(i) / static_cast<float>(NbAngle);
-    cindex[0] = 30 + vcl_cos(Theta);
-    cindex[1] = 30 + vcl_sin(Theta);
+    cindex[0] = 30 + std::cos(Theta);
+    cindex[1] = 30 + std::sin(Theta);
     pathElt->AddVertex(cindex);
 
     PathList->PushBack(pathElt);

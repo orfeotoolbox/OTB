@@ -127,7 +127,7 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
   OGRLayerType tmpLayer = tmpDS->GetLayer(0);
 
   const typename InputImageType::SpacingType inSpacing = this->GetInput()->GetSignedSpacing();
-  const double tol = m_SimplificationTolerance * std::max(vcl_abs(inSpacing[0]),vcl_abs(inSpacing[1]));
+  const double tol = m_SimplificationTolerance * std::max(std::abs(inSpacing[0]),std::abs(inSpacing[1]));
 
   typename OGRLayerType::iterator featIt = tmpLayer.begin();
   for(featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
@@ -154,7 +154,7 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
         double area = static_cast<const OGRPolygon *>((*featIt).GetGeometry())->get_Area();
         //convert into pixel coordinates
         typename InputImageType::SpacingType spacing = this->GetInput()->GetSignedSpacing();
-        double pixelsArea = area / (vcl_abs(spacing[0]*spacing[1]));
+        double pixelsArea = area / (std::abs(spacing[0]*spacing[1]));
         otbMsgDebugMacro(<<"DN = "<<field.GetValue<int>()<<", area = "<<pixelsArea);
         if( pixelsArea < m_MinimumObjectSize )
         {

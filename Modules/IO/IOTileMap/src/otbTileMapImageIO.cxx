@@ -272,9 +272,9 @@ void TileMapImageIO::GenerateURL(double x, double y)
     {
     urlStream << m_ServerName;
     urlStream << "hl=en&x=";
-    urlStream << vcl_floor(x * (1 << m_Depth));
+    urlStream << std::floor(x * (1 << m_Depth));
     urlStream << "&y=";
-    urlStream << vcl_floor(y * (1 << m_Depth));
+    urlStream << std::floor(y * (1 << m_Depth));
     urlStream << "&z=";
     urlStream << m_Depth;
     urlStream << "&nml=Vert&s=Ga";

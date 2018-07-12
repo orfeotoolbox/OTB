@@ -100,14 +100,14 @@ SVMMarginSampler< TSample, TModel >
 
     // Get distances to the hyperplanes
     m_Model->Predict(modelMeasurement, &(hdistances[0]));
-    double minDistance = vcl_abs(hdistances[0]);
+    double minDistance = std::abs(hdistances[0]);
 
     // Compute th min distances
     for(unsigned int j = 1; j<hdistances.size(); ++j)
       {
-      if(vcl_abs(hdistances[j])<minDistance)
+      if(std::abs(hdistances[j])<minDistance)
         {
-        minDistance = vcl_abs(hdistances[j]);
+        minDistance = std::abs(hdistances[j]);
         }
       }
     // Keep index and min distance

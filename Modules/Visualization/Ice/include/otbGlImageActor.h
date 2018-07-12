@@ -22,7 +22,7 @@
 #define otb_GlImageActor_h
 
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 #include "itkCenteredRigid2DTransform.h"
 
@@ -144,7 +144,7 @@ public:
   {
   if ( this->m_RedIdx != idx )
    { 
-   this->m_RedIdx = vcl_min(this->GetNumberOfComponents(),idx);
+   this->m_RedIdx = std::min(this->GetNumberOfComponents(),idx);
    this->Modified();
    }
   }
@@ -153,7 +153,7 @@ public:
   {
   if ( this->m_GreenIdx != idx )
     { 
-    this->m_GreenIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    this->m_GreenIdx = std::min(this->GetNumberOfComponents(),idx);
     this->Modified();
     }
   }  
@@ -162,7 +162,7 @@ public:
   {
   if ( this->m_BlueIdx != idx )
     { 
-    this->m_BlueIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    this->m_BlueIdx = std::min(this->GetNumberOfComponents(),idx);
     this->Modified(); 
     }
   }

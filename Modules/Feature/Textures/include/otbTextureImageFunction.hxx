@@ -70,8 +70,8 @@ TextureImageFunction<TInputImage, TFunctor, TCoordRep>
     }
 
   SizeType radiusOff;
-  radiusOff[0] = (m_Radius[0]) + vcl_abs(m_Offset[0]);
-  radiusOff[1] = (m_Radius[1]) + vcl_abs(m_Offset[1]);
+  radiusOff[0] = (m_Radius[0]) + std::abs(m_Offset[0]);
+  radiusOff[1] = (m_Radius[1]) + std::abs(m_Offset[1]);
   IteratorType itOff(radiusOff, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
   itOff.SetLocation(index);
 

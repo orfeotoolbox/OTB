@@ -88,8 +88,8 @@ public:
     
     ComplexType VAL4 = static_cast<ComplexType>( (Coherency[1] - Coherency[3]) );
     ComplexType VAL5 = static_cast<ComplexType>( (Coherency[1] - Coherency[0]) );
-	ComplexType VAL0 = static_cast<ComplexType>( Coherency[5] ) + VAL5 - vcl_conj(VAL4);
-    ComplexType VAL1 = static_cast<ComplexType>( -Coherency[5] ) + VAL5 - vcl_conj(VAL4);
+	ComplexType VAL0 = static_cast<ComplexType>( Coherency[5] ) + VAL5 - std::conj(VAL4);
+    ComplexType VAL1 = static_cast<ComplexType>( -Coherency[5] ) + VAL5 - std::conj(VAL4);
 
     result[0] = 0.5*(T1+T2+T3);                               
     result[1] = static_cast<double>( Coherency[1].real()+Coherency[3].imag() );
@@ -105,7 +105,7 @@ public:
 	result[11] = static_cast<double>( 0.5*VAL0.imag() ); 
 	result[12] = static_cast<double>( Coherency[4].imag() ); 
 	result[13] = static_cast<double>( Coherency[2].imag() );
-	result[14] = static_cast<double>( 0.5*vcl_conj(VAL1).imag() ); 
+	result[14] = static_cast<double>( 0.5*std::conj(VAL1).imag() ); 
 	result[15] = static_cast<double>( 0.5*VAL0.real() ); 
 
     return result;

@@ -125,13 +125,13 @@ int otbBandMathImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
     PixelType ndvi_expected;
     PixelType error;
 
-    if ( vcl_abs( px1 + px2) < 1E-6 )
+    if ( std::abs( px1 + px2) < 1E-6 )
       ndvi_expected = 0.0;
     else
       ndvi_expected = (px2-px1)/(px2+px1);
 
-    PixelType expected = vcl_cos( 2 * otb::CONST_PI * px1 ) / ( 2 * otb::CONST_PI * px2 + 1E-3 ) * vcl_sin( otb::CONST_PI * px3 )
-      + ndvi_expected * vcl_sqrt(PixelType(2)) * px3;
+    PixelType expected = std::cos( 2 * otb::CONST_PI * px1 ) / ( 2 * otb::CONST_PI * px2 + 1E-3 ) * std::sin( otb::CONST_PI * px3 )
+      + ndvi_expected * std::sqrt(PixelType(2)) * px3;
 
     /*
     std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Pixel_3 =  " << it3.Get()

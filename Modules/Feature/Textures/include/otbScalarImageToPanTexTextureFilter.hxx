@@ -172,7 +172,7 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
       unsigned int minRadius = 0;
       for ( unsigned int i = 0; i < currentOffset.GetOffsetDimension(); i++ )
         {
-        unsigned int distance = vcl_abs(currentOffset[i]);
+        unsigned int distance = std::abs(currentOffset[i]);
         if ( distance > minRadius )
           {
           minRadius = distance;

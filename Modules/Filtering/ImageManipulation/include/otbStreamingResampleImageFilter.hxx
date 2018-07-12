@@ -81,15 +81,15 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 
   for(unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
     {
-    // vcl_ceil to avoid numerical problems due to division of
+    // std::ceil to avoid numerical problems due to division of
     // spacings
     // + 1 :  We need to enlarge the displacement field size cause
     // itk::WarpImageFilter::EvaluateDisplacementAtPhysicalPoint needs
     // 4 neighbors and in the edges we can need 1 neighbor pixel
     // outside the field
     displacementFieldLargestSize[dim] = static_cast<unsigned int>(
-      vcl_ceil( largestSize[dim]*
-                vcl_abs(this->GetOutputSpacing()[dim] /
+      std::ceil( largestSize[dim]*
+                std::abs(this->GetOutputSpacing()[dim] /
                         this->GetDisplacementFieldSpacing()[dim]))) + 1;
     }
   m_DisplacementFilter->SetOutputSize(displacementFieldLargestSize);

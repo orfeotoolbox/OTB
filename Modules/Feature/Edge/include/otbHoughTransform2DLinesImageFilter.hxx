@@ -36,7 +36,7 @@ template<typename TInputPixelType, typename TOutputPixelType>
 HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
 ::HoughTransform2DLinesImageFilter()
 {
-  const double nPI = 4.0 * vcl_atan(1.0);
+  const double nPI = 4.0 * std::atan(1.0);
 
   m_Threshold = 0; // by default
 
@@ -146,12 +146,12 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
   std::vector<double> cosAngle(nbAngles, 0.);
   std::vector<double> sinAngle(nbAngles, 0.);
 
-  //const double nPI = 4.0 * vcl_atan( 1.0 ); Unused in this method
+  //const double nPI = 4.0 * std::atan( 1.0 ); Unused in this method
   for (unsigned int indexAngle = 0; indexAngle < nbAngles; indexAngle++)
     {
     double angle = this->GetAngleValue(indexAngle);
-    cosAngle[indexAngle] = vcl_cos(angle);
-    sinAngle[indexAngle] = vcl_sin(angle);
+    cosAngle[indexAngle] = std::cos(angle);
+    sinAngle[indexAngle] = std::sin(angle);
     }
 
   while (!image_it.IsAtEnd())
@@ -217,7 +217,7 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
       maxIndex[1] = 0;
       for (double angle = m_AngleAxisMinimum; angle < m_AngleAxisMaximum; angle += m_AngleAxisIncrement)
         {
-        index[0] = (long int) (image_it.GetIndex()[0] * vcl_cos(angle) + image_it.GetIndex()[1] * vcl_sin(angle)); // m_R
+        index[0] = (long int) (image_it.GetIndex()[0] * std::cos(angle) + image_it.GetIndex()[1] * std::sin(angle)); // m_R
         index[1] = (long int) (this->GetAngleIndex(angle)); // m_Theta
 
         if (outputImage->GetBufferedRegion().IsInside(index))
@@ -297,7 +297,7 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
   itk::ImageRegionIterator<InternalImageType>
   it_input(postProcessImage, postProcessImage->GetLargestPossibleRegion());
 
-  const double nPI = 4.0 * vcl_atan(1.0);
+  const double nPI = 4.0 * std::atan(1.0);
 
   itk::Index<2> index;
 
@@ -321,9 +321,9 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
 
         double radius = this->GetDistanceValue(it_input.GetIndex()[0]);
         double teta   = this->GetAngleValue(it_input.GetIndex()[1]);
-        double Vx = radius * vcl_cos(teta);
-        double Vy = radius * vcl_sin(teta);
-        double norm = vcl_sqrt(Vx * Vx + Vy * Vy);
+        double Vx = radius * std::cos(teta);
+        double Vy = radius * std::sin(teta);
+        double norm = std::sqrt(Vx * Vx + Vy * Vy);
         double VxNorm = Vx / norm;
         double VyNorm = Vy / norm;
 
@@ -363,8 +363,8 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
           {
           for (double length = 0; length < m_DiscRadius; length += 1)
             {
-            index[0] = (long int) (it_input.GetIndex()[0] + length * vcl_cos(angle));
-            index[1] = (long int) (it_input.GetIndex()[1] + length * vcl_sin(angle));
+            index[0] = (long int) (it_input.GetIndex()[0] + length * std::cos(angle));
+            index[1] = (long int) (it_input.GetIndex()[1] + length * std::sin(angle));
             if (postProcessImage->GetBufferedRegion().IsInside(index))
               {
               postProcessImage->SetPixel(index, 0);

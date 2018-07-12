@@ -188,15 +188,15 @@ bool
 ParallelLinePathListFilter<TPath>
 ::VerifyAngularCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4)
 {
-  double alpha1 = vcl_atan2((v2[1] - v1[1]), (v2[0] - v1[0]));
-  double alpha2 = vcl_atan2((v4[1] - v3[1]), (v4[0] - v3[0]));
+  double alpha1 = std::atan2((v2[1] - v1[1]), (v2[0] - v1[0]));
+  double alpha2 = std::atan2((v4[1] - v3[1]), (v4[0] - v3[0]));
 
   alpha1 = (alpha1 >= 0) ? alpha1 : (alpha1 + CONST_PI);
   alpha2 = (alpha2 >= 0) ? alpha2 : (alpha2 + CONST_PI);
 
   // Return true if the angle between the two lines is smaller than
   // the specified threshold.
-  bool angle = (vcl_abs(alpha1 - alpha2) < static_cast<double>(m_AngularThreshold));
+  bool angle = (std::abs(alpha1 - alpha2) < static_cast<double>(m_AngularThreshold));
 
   return angle;
 }
@@ -226,7 +226,7 @@ ParallelLinePathListFilter<TPath>
   // Compute the orthogonal distance between the two parallel lines
   // with equation d = |(v3 - v1)X(v2 - v1)|/|v2 - v1|
   double distance = 0., denominator = 0., nominator = 0.;
-  denominator = vcl_abs((v3[0] - v1[0]) * vectorDir12[1] - (v3[1] - v1[1]) * vectorDir12[0]);
+  denominator = std::abs((v3[0] - v1[0]) * vectorDir12[1] - (v3[1] - v1[1]) * vectorDir12[0]);
   nominator = sqrt(pow(vectorDir12[0], 2) + pow(vectorDir12[1], 2));
   distance = denominator / nominator;
   //std::cout<< "Distance between two parallel lines: " << distance <<std::endl;
@@ -328,7 +328,7 @@ ParallelLinePathListFilter<TPath>
         {
         sinealpha = (v1[0] - v2[0]) / length12;
         }
-      double alpha1 = vcl_asin(sinealpha);
+      double alpha1 = std::asin(sinealpha);
 
       // Translation
       temptransv3[0] = v3[0] - v1[0];
@@ -382,7 +382,7 @@ ParallelLinePathListFilter<TPath>
         sinealpha = (v1[0] - v2[0]) / length12;
         }
 
-      double alpha1 = vcl_asin(sinealpha);
+      double alpha1 = std::asin(sinealpha);
 
       // Translation
       temptransv3[0] = v3[0] - v2[0];
@@ -420,7 +420,7 @@ ParallelLinePathListFilter<TPath>
       {
       if (tempv4[1] >= 0)
         {
-        commonDist = vcl_abs(tempv4[1] - tempv3[1]);
+        commonDist = std::abs(tempv4[1] - tempv3[1]);
         }
 
       else if (tempv4[1] < 0)
@@ -444,7 +444,7 @@ ParallelLinePathListFilter<TPath>
     else if (tempv4[1] >= tempv2[1])
       { // No overlapping parts exist. The (negative) distance
         // between the two closest endpoints is calculated.
-      commonDist = -vcl_abs(tempv4[1] - tempv2[1]);
+      commonDist = -std::abs(tempv4[1] - tempv2[1]);
       }
     else if (tempv3[1] < 0)
       { // No overlapping parts exist. The (negative) distance
@@ -459,7 +459,7 @@ ParallelLinePathListFilter<TPath>
       {
       if (tempv3[1] >= 0)
         {
-        commonDist = vcl_abs(tempv3[1] - tempv4[1]);
+        commonDist = std::abs(tempv3[1] - tempv4[1]);
         }
 
       else if (tempv3[1] < 0)
@@ -483,7 +483,7 @@ ParallelLinePathListFilter<TPath>
     else if (tempv3[1] >= tempv2[1])
       { // No overlapping parts exist. The (negative) distance
         // between the two closest endpoints is calculated.
-      commonDist = -vcl_abs(tempv3[1] - tempv2[1]);
+      commonDist = -std::abs(tempv3[1] - tempv2[1]);
       }
     else if (tempv4[1] < 0)
       { // No overlapping parts exist. The (negative) distance

@@ -93,7 +93,7 @@ LinkPathListFilter<TPath>
             VertexType v3 = vTargetIt.Value();
             ++vTargetIt;
             VertexType v4 = vTargetIt.Value();
-            double     tmpDistance = vcl_sqrt(vcl_pow(v2[0] - v3[0], 2) + vcl_pow(v2[1] - v3[1], 2));
+            double     tmpDistance = std::sqrt(std::pow(v2[0] - v3[0], 2) + std::pow(v2[1] - v3[1], 2));
             if ((tmpDistance < static_cast<double>(m_DistanceThreshold)) && ((!found) || (tmpDistance < distance)))
               {
               if (VerifyAngularCondition(v1, v2, v3, v4))
@@ -116,7 +116,7 @@ LinkPathListFilter<TPath>
             v3 = vTargetIt.Value();
             --vTargetIt;
             v4 = vTargetIt.Value();
-            tmpDistance = vcl_sqrt(vcl_pow(v2[0] - v3[0], 2) + vcl_pow(v2[1] - v3[1], 2));
+            tmpDistance = std::sqrt(std::pow(v2[0] - v3[0], 2) + std::pow(v2[1] - v3[1], 2));
 
             if ((tmpDistance < static_cast<double>(m_DistanceThreshold)) && ((!found) || (tmpDistance < distance)))
               {
@@ -139,7 +139,7 @@ LinkPathListFilter<TPath>
             v2 = vSourceIt.Value();
             ++vSourceIt;
             v1 = vSourceIt.Value();
-            tmpDistance = vcl_sqrt(vcl_pow(v2[0] - v3[0], 2) + vcl_pow(v2[1] - v3[1], 2));
+            tmpDistance = std::sqrt(std::pow(v2[0] - v3[0], 2) + std::pow(v2[1] - v3[1], 2));
 
             if ((tmpDistance < static_cast<double>(m_DistanceThreshold)) && ((!found) || (tmpDistance < distance)))
               {
@@ -162,7 +162,7 @@ LinkPathListFilter<TPath>
             v3 = vTargetIt.Value();
             ++vTargetIt;
             v4 = vTargetIt.Value();
-            tmpDistance = vcl_sqrt(vcl_pow(v2[0] - v3[0], 2) + vcl_pow(v2[1] - v3[1], 2));
+            tmpDistance = std::sqrt(std::pow(v2[0] - v3[0], 2) + std::pow(v2[1] - v3[1], 2));
             if ((tmpDistance < static_cast<double>(m_DistanceThreshold)) && ((!found) || (tmpDistance < distance)))
               {
               if (VerifyAngularCondition(v1, v2, v3, v4))
@@ -229,9 +229,9 @@ bool
 LinkPathListFilter<TPath>
 ::VerifyAngularCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4)
 {
-  double alpha1 = vcl_atan2((v2[1] - v1[1]), (v2[0] - v1[0]));
-  double alpha2 = vcl_atan2((v4[1] - v3[1]), (v4[0] - v3[0]));
-  double alpha3 = vcl_atan2((v3[1] - v2[1]), (v3[0] - v2[0]));
+  double alpha1 = std::atan2((v2[1] - v1[1]), (v2[0] - v1[0]));
+  double alpha2 = std::atan2((v4[1] - v3[1]), (v4[0] - v3[0]));
+  double alpha3 = std::atan2((v3[1] - v2[1]), (v3[0] - v2[0]));
 
   if (m_ModuloPI)
     {
@@ -246,9 +246,9 @@ LinkPathListFilter<TPath>
     alpha3 = (alpha3 >= 0) ? alpha3 : (alpha3 + CONST_2PI);
     }
 
-  bool resp = (vcl_abs(alpha1 - alpha2) < static_cast<double>(m_AngularThreshold))
-              && (vcl_abs(alpha1 - alpha3) < static_cast<double>(m_AngularThreshold))
-              && (vcl_abs(alpha2 - alpha3) < static_cast<double>(m_AngularThreshold));
+  bool resp = (std::abs(alpha1 - alpha2) < static_cast<double>(m_AngularThreshold))
+              && (std::abs(alpha1 - alpha3) < static_cast<double>(m_AngularThreshold))
+              && (std::abs(alpha2 - alpha3) < static_cast<double>(m_AngularThreshold));
   return resp;
 }
 /**

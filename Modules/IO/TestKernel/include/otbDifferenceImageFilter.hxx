@@ -229,14 +229,14 @@ DifferenceImageFilter<TInputImage, TOutputImage>
         }
 
       //for complex and vector type. FIXME: module might be better
-//        ScalarRealType tMax=vcl_abs(t[0]);
+//        ScalarRealType tMax=std::abs(t[0]);
       ScalarRealType tMax = 0.01; //Avoiding the 0 case for neighborhood computing
       // NB: still more restrictive than before for small values.
       for (unsigned int j = 0; j < itk::NumericTraits<InputPixelType>::GetLength(t); ++j)
         {
         ScalarRealType tc = static_cast<ScalarRealType>(
           itk::DefaultConvertPixelTraits<InputPixelType>::GetNthComponent(j,t));
-        if (vcl_abs(tc) > tMax) tMax = vcl_abs(tc);
+        if (std::abs(tc) > tMax) tMax = std::abs(tc);
         }
 
       // Check if difference is above threshold

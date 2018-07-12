@@ -72,42 +72,42 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
 
   IndexType indexSrcX, indexSrcY;
   indexSrcX[0] =
-    static_cast<IndexValueType>(vcl_fabs(static_cast<ValueType>(this->GetInputImage()->GetLargestPossibleRegion().
+    static_cast<IndexValueType>(std::fabs(static_cast<ValueType>(this->GetInputImage()->GetLargestPossibleRegion().
                                                                 GetSize()[0] -
                                                                 index[0])));                                                                 // x position
   indexSrcX[1] = index[1];   // y position
 
   indexSrcY[0] = index[0];   // x position
   indexSrcY[1] =
-    static_cast<IndexValueType>(vcl_fabs(static_cast<ValueType>(this->GetInputImage()->GetLargestPossibleRegion().
+    static_cast<IndexValueType>(std::fabs(static_cast<ValueType>(this->GetInputImage()->GetLargestPossibleRegion().
                                                                 GetSize()[1] -
                                                                 index[1])));
 
   PointType pointSrcX = this->GetPixelLocation(indexSrcX);
   PointType pointSrcY = this->GetPixelLocation(indexSrcY);
 
-  ValueType dLatX = (vcl_fabs(pointSrcX[1] - point[1])) * m_Deg2radCoef;
-  ValueType dLonX = (vcl_fabs(pointSrcX[0] - point[0])) * m_Deg2radCoef;
+  ValueType dLatX = (std::fabs(pointSrcX[1] - point[1])) * m_Deg2radCoef;
+  ValueType dLonX = (std::fabs(pointSrcX[0] - point[0])) * m_Deg2radCoef;
 
   const ValueType One = itk::NumericTraits<ValueType>::One;
   const ValueType Two = One + One;
 
-  ValueType aX = vcl_sin(dLatX / Two) * vcl_sin(dLatX / Two) + vcl_cos(point[1] * m_Deg2radCoef) * vcl_cos(
-    pointSrcX[1] * m_Deg2radCoef) * vcl_sin(dLonX / Two) * vcl_sin(dLonX / Two);
-  ValueType cX = Two * vcl_atan2(vcl_sqrt(aX), vcl_sqrt(One - aX));
+  ValueType aX = std::sin(dLatX / Two) * std::sin(dLatX / Two) + std::cos(point[1] * m_Deg2radCoef) * std::cos(
+    pointSrcX[1] * m_Deg2radCoef) * std::sin(dLonX / Two) * std::sin(dLonX / Two);
+  ValueType cX = Two * std::atan2(std::sqrt(aX), std::sqrt(One - aX));
   ValueType dX = m_R * cX;
 
-  ValueType dLatY = (vcl_fabs(pointSrcY[1] - point[1])) * m_Deg2radCoef;
-  ValueType dLonY = (vcl_fabs(pointSrcY[0] - point[0])) * m_Deg2radCoef;
+  ValueType dLatY = (std::fabs(pointSrcY[1] - point[1])) * m_Deg2radCoef;
+  ValueType dLonY = (std::fabs(pointSrcY[0] - point[0])) * m_Deg2radCoef;
 
-  ValueType aY = vcl_sin(dLatY / Two) * vcl_sin(dLatY / Two) + vcl_cos(point[1] * m_Deg2radCoef) * vcl_cos(
-    pointSrcY[1] * m_Deg2radCoef) * vcl_sin(dLonY / Two) * vcl_sin(dLonY / Two);
-  ValueType cY = Two * vcl_atan2(vcl_sqrt(aY), vcl_sqrt(One - aY));
+  ValueType aY = std::sin(dLatY / Two) * std::sin(dLatY / Two) + std::cos(point[1] * m_Deg2radCoef) * std::cos(
+    pointSrcY[1] * m_Deg2radCoef) * std::sin(dLonY / Two) * std::sin(dLonY / Two);
+  ValueType cY = Two * std::atan2(std::sqrt(aY), std::sqrt(One - aY));
   ValueType dY = m_R * cY;
 
   //FloatType var;
-  var[0] = dX / (vcl_fabs(static_cast<ValueType>(indexSrcX[0] - index[0])));
-  var[1] = dY / (vcl_fabs(static_cast<ValueType>(indexSrcY[1] - index[1])));
+  var[0] = dX / (std::fabs(static_cast<ValueType>(indexSrcX[0] - index[0])));
+  var[1] = dY / (std::fabs(static_cast<ValueType>(indexSrcY[1] - index[1])));
 
   return var;
 }

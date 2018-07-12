@@ -157,12 +157,12 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
 
     // Compute canonical correlation matrix
     m_Rho = ges.D.get_diagonal();
-    m_Rho = m_Rho.apply(&vcl_sqrt);
+    m_Rho = m_Rho.apply(&std::sqrt);
 
     // We do not need to scale v1 since the
     // vnl_generalized_eigensystem already gives unit variance
 
-    VnlMatrixType invstderr1 = s11.apply(&vcl_sqrt);
+    VnlMatrixType invstderr1 = s11.apply(&std::sqrt);
     invstderr1 = invstderr1.apply(&InverseValue);
     VnlVectorType diag1 = invstderr1.get_diagonal();
     invstderr1.fill(0);
@@ -189,7 +189,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     // Scale v2 for unit variance
     VnlMatrixType aux1 = m_V2.transpose() * (s22 * m_V2);
     VnlVectorType aux2 = aux1.get_diagonal();
-    aux2 = aux2.apply(&vcl_sqrt);
+    aux2 = aux2.apply(&std::sqrt);
     aux2 = aux2.apply(&InverseValue);
     VnlMatrixType aux3 = VnlMatrixType(aux2.size(), aux2.size(), 0);
     aux3.fill(0);
@@ -221,14 +221,14 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     VnlMatrixType aux1 = m_V1.transpose() * (s11 * m_V1);
 
     VnlVectorType aux2 = aux1.get_diagonal();
-    aux2 = aux2.apply(&vcl_sqrt);
+    aux2 = aux2.apply(&std::sqrt);
     aux2 = aux2.apply(&InverseValue);
 
     VnlMatrixType aux3 = VnlMatrixType(aux2.size(), aux2.size(), 0);
     aux3.set_diagonal(aux2);
     m_V1 = m_V1 * aux3;
 
-    VnlMatrixType invstderr1 = s11.apply(&vcl_sqrt);
+    VnlMatrixType invstderr1 = s11.apply(&std::sqrt);
     invstderr1 = invstderr1.apply(&InverseValue);
     VnlVectorType diag1 = invstderr1.get_diagonal();
     invstderr1.fill(0);
@@ -253,7 +253,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     // Scale v2 for unit variance
     aux1 = m_V2.transpose() * (s22 * m_V2);
     aux2 = aux1.get_diagonal();
-    aux2 = aux2.apply(&vcl_sqrt);
+    aux2 = aux2.apply(&std::sqrt);
     aux2 = aux2.apply(&InverseValue);
     aux3 = VnlMatrixType(aux2.size(), aux2.size(), 0);
     aux3.fill(0);
@@ -349,7 +349,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
 
         if(i < outNbComp - std::min(nbComp1, nbComp2))
           {
-          outPixel[i]*=vcl_sqrt(2.);
+          outPixel[i]*=std::sqrt(2.);
           }
         }
       }

@@ -89,7 +89,7 @@ ComplexCast(const std::complex<InputType>& in, const OutputType& itkNotUsed(dumm
 
   RealType    inReal( static_cast<ScalarRealType>(in.real()), static_cast<ScalarRealType>(in.imag()) );
 
-  return static_cast < OutputType >( vcl_abs(inReal) );
+  return static_cast < OutputType >( std::abs(inReal) );
 }
 
 template<typename InputType, typename OutputType>

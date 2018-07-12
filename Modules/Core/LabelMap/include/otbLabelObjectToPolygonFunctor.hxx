@@ -482,7 +482,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
            PolygonType * polygon,
            const StateType state)
 {
-   if( vcl_abs(static_cast<long int>(line + m_LineOffset - endPoint[1])) > 1 )
+   if( std::abs(static_cast<long int>(line + m_LineOffset - endPoint[1])) > 1 )
      {
        itkExceptionMacro("End point not with +/-1 line from line")
      }
@@ -558,7 +558,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
             const StateType state)
 {
 
-   if( vcl_abs(static_cast<long int>(line + m_LineOffset - endPoint[1])) > 1 )
+   if( std::abs(static_cast<long int>(line + m_LineOffset - endPoint[1])) > 1 )
      {
        itkExceptionMacro("End point not with +/-1 line from line")
      }

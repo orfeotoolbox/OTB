@@ -436,8 +436,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   double ratioX = dispSpacing[0] / leftSpacing[0];
   double ratioY = dispSpacing[1] / leftSpacing[1];
-  int stepX = static_cast<int>(vcl_floor(ratioX + 0.5));
-  int stepY = static_cast<int>(vcl_floor(ratioY + 0.5));
+  int stepX = static_cast<int>(std::floor(ratioX + 0.5));
+  int stepY = static_cast<int>(std::floor(ratioY + 0.5));
   if (stepX < 1 || stepY < 1 || stepX != stepY)
     {
     itkExceptionMacro(<<"Incompatible spacing values between disparity map and input image. Left spacing: "<<leftSpacing<<", disparity spacing: "<< dispSpacing);
@@ -446,8 +446,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   double shiftX = (dispOrigin[0] - leftOrigin[0]) / leftSpacing[0];
   double shiftY = (dispOrigin[1] - leftOrigin[1]) / leftSpacing[1];
-  this->m_GridIndex[0] = static_cast<typename IndexType::IndexValueType>(vcl_floor(shiftX + 0.5));
-  this->m_GridIndex[1] = static_cast<typename IndexType::IndexValueType>(vcl_floor(shiftY + 0.5));
+  this->m_GridIndex[0] = static_cast<typename IndexType::IndexValueType>(std::floor(shiftX + 0.5));
+  this->m_GridIndex[1] = static_cast<typename IndexType::IndexValueType>(std::floor(shiftY + 0.5));
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -731,7 +731,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       if (useHorizontalDisparity)
         {
         hDisp_f = static_cast<float>(inHDispIt.Get()) * stepDisparity;
-        hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
+        hDisp_i = static_cast<int>(std::floor(hDisp_f + 0.5));
         curRightPos[0] = curLeftPos[0] + hDisp_i;
         }
       else
@@ -744,7 +744,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       if (useVerticalDisparity)
         {
         vDisp_f = static_cast<float>(inVDispIt.Get()) * stepDisparity;
-        vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
+        vDisp_i = static_cast<int>(std::floor(vDisp_f + 0.5));
         curRightPos[1] = curLeftPos[1] + vDisp_i;
         }
       else
@@ -937,7 +937,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
         double dyy = neighborsMetric[1][2] + neighborsMetric[1][0] - 2.0 * neighborsMetric[1][1];
         double dxy = 0.25*(neighborsMetric[2][2] + neighborsMetric[0][0] - neighborsMetric[0][2] - neighborsMetric[2][0]);
         double det = dxx*dyy - dxy*dxy;
-        if (vcl_abs(det) < (1e-10))
+        if (std::abs(det) < (1e-10))
           {
           verticalInterpolation = false;
           horizontalInterpolation = false;
@@ -1164,7 +1164,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       if (useHorizontalDisparity)
         {
         hDisp_f = static_cast<float>(inHDispIt.Get()) * stepDisparity;
-        hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
+        hDisp_i = static_cast<int>(std::floor(hDisp_f + 0.5));
         curRightPos[0] = curLeftPos[0] + hDisp_i;
         }
       else
@@ -1177,7 +1177,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       if (useVerticalDisparity)
         {
         vDisp_f = static_cast<float>(inVDispIt.Get()) * stepDisparity;
-        vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
+        vDisp_i = static_cast<int>(std::floor(vDisp_f + 0.5));
         curRightPos[1] = curLeftPos[1] + vDisp_i;
         }
       else
@@ -1650,7 +1650,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       if (useHorizontalDisparity)
         {
         hDisp_f = static_cast<float>(inHDispIt.Get()) * stepDisparity;
-        hDisp_i = static_cast<int>(vcl_floor(hDisp_f + 0.5));
+        hDisp_i = static_cast<int>(std::floor(hDisp_f + 0.5));
         curRightPos[0] = curLeftPos[0] + hDisp_i;
         }
       else
@@ -1663,7 +1663,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
       if (useVerticalDisparity)
         {
         vDisp_f = static_cast<float>(inVDispIt.Get()) * stepDisparity;
-        vDisp_i = static_cast<int>(vcl_floor(vDisp_f + 0.5));
+        vDisp_i = static_cast<int>(std::floor(vDisp_f + 0.5));
         curRightPos[1] = curLeftPos[1] + vDisp_i;
         }
       else

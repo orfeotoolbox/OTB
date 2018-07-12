@@ -280,8 +280,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     itk::ContinuousIndex<double,2> indexGrid;
     leftGrid->TransformPhysicalPointToContinuousIndex(pointSensor,indexGrid);
     IndexType ul;
-    ul[0] = static_cast<long>(vcl_floor(indexGrid[0]));
-    ul[1] = static_cast<long>(vcl_floor(indexGrid[1]));
+    ul[0] = static_cast<long>(std::floor(indexGrid[0]));
+    ul[1] = static_cast<long>(std::floor(indexGrid[1]));
     if (ul[0] < gridLargest.GetIndex()[0]) ul[0] = gridLargest.GetIndex()[0];
     if (ul[1] < gridLargest.GetIndex()[1]) ul[1] = gridLargest.GetIndex()[1];
     if (ul[0] > static_cast<IndexValueType>(gridLargest.GetIndex()[0] + gridLargest.GetSize()[0]-2))
@@ -310,17 +310,17 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     horizIn->TransformPhysicalPointToContinuousIndex(pointEpi,indexEpi);
     if (k == 0)
       {
-      minIndex[0] = static_cast<long>(vcl_floor(indexEpi[0]));
-      minIndex[1] = static_cast<long>(vcl_floor(indexEpi[1]));
-      maxIndex[0] = static_cast<long>(vcl_ceil(indexEpi[0]));
-      maxIndex[1] = static_cast<long>(vcl_ceil(indexEpi[1]));
+      minIndex[0] = static_cast<long>(std::floor(indexEpi[0]));
+      minIndex[1] = static_cast<long>(std::floor(indexEpi[1]));
+      maxIndex[0] = static_cast<long>(std::ceil(indexEpi[0]));
+      maxIndex[1] = static_cast<long>(std::ceil(indexEpi[1]));
       }
     else
       {
-      if (minIndex[0]>static_cast<long>(vcl_floor(indexEpi[0])))  minIndex[0]=static_cast<long>(vcl_floor(indexEpi[0]));
-      if (minIndex[1]>static_cast<long>(vcl_floor(indexEpi[1])))  minIndex[1]=static_cast<long>(vcl_floor(indexEpi[1]));
-      if (maxIndex[0]<static_cast<long>(vcl_ceil(indexEpi[0])))   maxIndex[0]=static_cast<long>(vcl_ceil(indexEpi[0]));
-      if (maxIndex[1]<static_cast<long>(vcl_ceil(indexEpi[1])))   maxIndex[1]=static_cast<long>(vcl_ceil(indexEpi[1]));
+      if (minIndex[0]>static_cast<long>(std::floor(indexEpi[0])))  minIndex[0]=static_cast<long>(std::floor(indexEpi[0]));
+      if (minIndex[1]>static_cast<long>(std::floor(indexEpi[1])))  minIndex[1]=static_cast<long>(std::floor(indexEpi[1]));
+      if (maxIndex[0]<static_cast<long>(std::ceil(indexEpi[0])))   maxIndex[0]=static_cast<long>(std::ceil(indexEpi[0]));
+      if (maxIndex[1]<static_cast<long>(std::ceil(indexEpi[1])))   maxIndex[1]=static_cast<long>(std::ceil(indexEpi[1]));
       }
     }
 
@@ -382,8 +382,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 
       // Interpolate in left grid
       IndexType ul;
-      ul[0] = static_cast<long> (vcl_floor(indexGrid[0]));
-      ul[1] = static_cast<long> (vcl_floor(indexGrid[1]));
+      ul[0] = static_cast<long> (std::floor(indexGrid[0]));
+      ul[1] = static_cast<long> (std::floor(indexGrid[1]));
       if (ul[0] < leftLargest.GetIndex()[0]) ul[0] = leftLargest.GetIndex()[0];
       if (ul[1] < leftLargest.GetIndex()[1]) ul[1] = leftLargest.GetIndex()[1];
       if (ul[0] > static_cast<IndexValueType>(leftLargest.GetIndex()[0] + leftLargest.GetSize()[0] - 2))
@@ -412,8 +412,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
       horizIn->TransformPhysicalPointToContinuousIndex(pointEpi, indexEpi);
 
       // Interpolate in disparity map
-      ul[0] = static_cast<long> (vcl_floor(indexEpi[0]));
-      ul[1] = static_cast<long> (vcl_floor(indexEpi[1]));
+      ul[0] = static_cast<long> (std::floor(indexEpi[0]));
+      ul[1] = static_cast<long> (std::floor(indexEpi[1]));
       if (ul[0] < buffered.GetIndex()[0]) ul[0] = buffered.GetIndex()[0];
       if (ul[1] < buffered.GetIndex()[1]) ul[1] = buffered.GetIndex()[1];
       if (ul[0] > static_cast<IndexValueType>(buffered.GetIndex()[0] + buffered.GetSize()[0] - 2))
@@ -453,8 +453,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
         rightGrid->TransformPhysicalPointToContinuousIndex(pointRight, indexGridRight);
 
         // Interpolate in right grid
-        ul[0] = static_cast<long> (vcl_floor(indexGridRight[0]));
-        ul[1] = static_cast<long> (vcl_floor(indexGridRight[1]));
+        ul[0] = static_cast<long> (std::floor(indexGridRight[0]));
+        ul[1] = static_cast<long> (std::floor(indexGridRight[1]));
         if (ul[0] < rightLargest.GetIndex()[0]) ul[0] = rightLargest.GetIndex()[0];
         if (ul[1] < rightLargest.GetIndex()[1]) ul[1] = rightLargest.GetIndex()[1];
         if (ul[0] > static_cast<IndexValueType>(rightLargest.GetIndex()[0] + rightLargest.GetSize()[0] - 2))

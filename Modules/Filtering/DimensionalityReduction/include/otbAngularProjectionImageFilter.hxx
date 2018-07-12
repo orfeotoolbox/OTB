@@ -113,17 +113,17 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
   if ( this->GetNumberOfInputs() == 2 )
   {
     PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[0] );
-    output = static_cast<PrecisionType>( it[0].Get() ) * vcl_cos( alpha )
-              - static_cast<PrecisionType>( it[1].Get() ) * vcl_sin( alpha );
+    output = static_cast<PrecisionType>( it[0].Get() ) * std::cos( alpha )
+              - static_cast<PrecisionType>( it[1].Get() ) * std::sin( alpha );
   }
   else if ( this->GetNumberOfInputs() == 3 )
   {
     PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[0] );
     PrecisionType beta = static_cast<PrecisionType>( m_AngleArray[1] );
 
-    output = static_cast<PrecisionType>( it[0].Get() ) * vcl_cos( alpha )
-            - static_cast<PrecisionType>( it[1].Get() ) * vcl_sin( alpha ) * vcl_cos ( beta )
-            + static_cast<PrecisionType>( it[2].Get() ) * vcl_sin( alpha ) * vcl_sin ( beta );
+    output = static_cast<PrecisionType>( it[0].Get() ) * std::cos( alpha )
+            - static_cast<PrecisionType>( it[1].Get() ) * std::sin( alpha ) * std::cos ( beta )
+            + static_cast<PrecisionType>( it[2].Get() ) * std::sin( alpha ) * std::sin ( beta );
   }
   else
   {
@@ -132,8 +132,8 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
 
     do {
       PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[i] );
-      output = static_cast<PrecisionType>( it[i].Get() ) * vcl_cos( alpha )
-                - output * vcl_sin( alpha );
+      output = static_cast<PrecisionType>( it[i].Get() ) * std::cos( alpha )
+                - output * std::sin( alpha );
     } while ( i-- == 0 );
   }
 

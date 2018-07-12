@@ -57,18 +57,18 @@ int otbMuellerToReciprocalCovarianceFunctor(int itkNotUsed(argc), char * itkNotU
   outputFunct = funct.operator ()( input );
   std::cout<<outputFunct<<std::endl;
 
-  if( vcl_abs(result[0].real()-outputFunct[0].real()) > 1e-10 ||
-      vcl_abs(result[0].imag()-outputFunct[0].imag()) > 1e-10 ||
-      vcl_abs(result[1].real()-outputFunct[1].real()) > 1e-10 ||
-      vcl_abs(result[1].imag()-outputFunct[1].imag()) > 1e-10 ||
-      vcl_abs(result[2].real()-outputFunct[2].real()) > 1e-10 ||
-      vcl_abs(result[2].imag()-outputFunct[2].imag()) > 1e-10 ||
-      vcl_abs(result[3].real()-outputFunct[3].real()) > 1e-10 ||
-      vcl_abs(result[3].imag()-outputFunct[3].imag()) > 1e-10 ||
-      vcl_abs(result[4].real()-outputFunct[4].real()) > 1e-10 ||
-      vcl_abs(result[4].imag()-outputFunct[4].imag()) > 1e-10 ||
-      vcl_abs(result[5].real()-outputFunct[5].real()) > 1e-10 ||
-      vcl_abs(result[5].imag()-outputFunct[5].imag()) > 1e-10    )
+  if( std::abs(result[0].real()-outputFunct[0].real()) > 1e-10 ||
+      std::abs(result[0].imag()-outputFunct[0].imag()) > 1e-10 ||
+      std::abs(result[1].real()-outputFunct[1].real()) > 1e-10 ||
+      std::abs(result[1].imag()-outputFunct[1].imag()) > 1e-10 ||
+      std::abs(result[2].real()-outputFunct[2].real()) > 1e-10 ||
+      std::abs(result[2].imag()-outputFunct[2].imag()) > 1e-10 ||
+      std::abs(result[3].real()-outputFunct[3].real()) > 1e-10 ||
+      std::abs(result[3].imag()-outputFunct[3].imag()) > 1e-10 ||
+      std::abs(result[4].real()-outputFunct[4].real()) > 1e-10 ||
+      std::abs(result[4].imag()-outputFunct[4].imag()) > 1e-10 ||
+      std::abs(result[5].real()-outputFunct[5].real()) > 1e-10 ||
+      std::abs(result[5].imag()-outputFunct[5].imag()) > 1e-10    )
 
     {
       std::cout<<"Test gives :"<<std::endl;

@@ -165,7 +165,7 @@ AeronetFileReader
   internal::Date current_date = internal::ParseDate(line[col_date], line[col_time]);
   double       dcurrent_date = GetJulian(current_date);
   // Check hour +/- epsilon
-  if (vcl_abs(dcurrent_date - ref_date) < epsilon)
+  if (std::abs(dcurrent_date - ref_date) < epsilon)
     {
     double dwater = atof(line[col_vapor].c_str());
     double dangst = atof(line[col_angst].c_str());
