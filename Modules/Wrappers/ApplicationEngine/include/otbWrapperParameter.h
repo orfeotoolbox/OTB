@@ -133,10 +133,10 @@ public:
 
 protected:
   /** Constructor */
-  Parameter();
+  Parameter() = default;
 
   /** Destructor */
-  ~Parameter() override;
+  ~Parameter() override = default;
 
   /** Name of the parameter */
   std::string                        m_Name;
