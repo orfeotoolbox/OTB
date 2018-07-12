@@ -21,5 +21,5 @@
 #include "otbPolygon.h"
 
 namespace otb {
-template class Polygon<double>;
+template class OTBVectorDataBase_EXPORT_EXPLICIT_TEMPLATE Polygon<double>;
 }

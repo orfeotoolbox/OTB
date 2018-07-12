@@ -58,7 +58,7 @@ template <class TFirstTransform,
     class TScalarType = typename TFirstTransform::ScalarType,
     unsigned int NInputDimensions = TFirstTransform::InputSpaceDimension,
     unsigned int NOutputDimensions = TSecondTransform::OutputSpaceDimension>
-class OTBTransform_EXPORT CompositeTransform : public Transform<TScalarType,  // Data type for scalars
+class OTBTransform_EXPORT_TEMPLATE CompositeTransform : public Transform<TScalarType,  // Data type for scalars
       NInputDimensions,                                                       // Number of dimensions in the input space
       NOutputDimensions>                                                       // Number of dimensions in the output space
 {
@@ -150,8 +150,8 @@ private:
 #endif
 
 namespace otb {
-extern template class OTBTransform_EXPORT CompositeTransform<itk::Transform<double,2,2>,itk::Transform<double,2,2>>;
-extern template class OTBTransform_EXPORT CompositeTransform<itk::Transform<double,3,3>,itk::Transform<double,3,3>>;
+extern template class OTBTransform_EXPORT_TEMPLATE CompositeTransform<itk::Transform<double,2,2>,itk::Transform<double,2,2>>;
+extern template class OTBTransform_EXPORT_TEMPLATE CompositeTransform<itk::Transform<double,3,3>,itk::Transform<double,3,3>>;
 }
 
 #endif

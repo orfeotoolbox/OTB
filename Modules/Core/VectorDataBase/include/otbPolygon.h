@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template<class TValue = double>
-class OTBVectorDataBase_EXPORT Polygon
+class OTBVectorDataBase_EXPORT_TEMPLATE Polygon
   : public PolyLineParametricPathWithValue<TValue, 2>
 {
 public:
@@ -165,7 +165,7 @@ private:
 #endif
 
 namespace otb {
-extern template class Polygon<double>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Polygon<double>;
 }
 
 #endif

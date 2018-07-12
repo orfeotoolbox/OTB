@@ -47,7 +47,7 @@ namespace otb
 template <class TScalarType,
     unsigned int NInputDimensions = 3,
     unsigned int NOutputDimensions = 2>
-class OTBTransform_EXPORT SensorModelBase : public Transform<TScalarType,
+class OTBTransform_EXPORT_TEMPLATE SensorModelBase : public Transform<TScalarType,
       NInputDimensions,
       NOutputDimensions>
 {
@@ -116,8 +116,8 @@ private:
 #endif
 
 namespace otb {
-extern template class OTBTransform_EXPORT SensorModelBase<double,2,2>;
-extern template class OTBTransform_EXPORT SensorModelBase<double,3,3>;
+extern template class OTBTransform_EXPORT_TEMPLATE SensorModelBase<double,2,2>;
+extern template class OTBTransform_EXPORT_TEMPLATE SensorModelBase<double,3,3>;
 }
 
 #endif

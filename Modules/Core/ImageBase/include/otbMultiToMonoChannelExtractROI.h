@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputPixelType, class TOutputPixelType>
-class OTBImageBase_EXPORT MultiToMonoChannelExtractROI :
+class OTBImageBase_EXPORT_TEMPLATE MultiToMonoChannelExtractROI :
 //    public ExtractROIBase< itk::VectorImage<TInputPixelType, 2> , itk::Image<TOutputPixelType, 2> >
   public ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> >
 {
@@ -128,7 +128,7 @@ private:
 
 namespace otb {
 // Most commonly used instanciation
-extern template class OTBImageBase_EXPORT MultiToMonoChannelExtractROI<float,float>;
+extern template class OTBImageBase_EXPORT_TEMPLATE MultiToMonoChannelExtractROI<float,float>;
 }
 
 #endif

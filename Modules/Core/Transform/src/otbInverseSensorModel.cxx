@@ -21,6 +21,6 @@
 #include "otbInverseSensorModel.h"
 
 namespace otb {
-template class OTBTransform_EXPORT InverseSensorModel<double,2,2>;
-template class OTBTransform_EXPORT InverseSensorModel<double,3,3>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE InverseSensorModel<double,2,2>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE InverseSensorModel<double,3,3>;
 }

@@ -73,7 +73,7 @@ enum
  * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned VDimension = 2, class TValuePrecision = double>
-class OTBVectorDataBase_EXPORT DataNode
+class OTBVectorDataBase_EXPORT_TEMPLATE DataNode
   : public itk::Object
 {
 public:
@@ -330,7 +330,7 @@ private:
 #endif
 
 namespace otb {
-extern template class OTBVectorDataBase_EXPORT DataNode<double,2,double>;
+extern template class OTBVectorDataBase_EXPORT_TEMPLATE DataNode<double,2,double>;
 }
 
 #endif

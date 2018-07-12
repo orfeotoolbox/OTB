@@ -21,5 +21,5 @@
 #include "otbPolyLineParametricPathWithValue.h"
 
 namespace otb {
-template class OTBVectorDataBase_EXPORT PolyLineParametricPathWithValue<double>;
+template class OTBVectorDataBase_EXPORT_EXPLICIT_TEMPLATE PolyLineParametricPathWithValue<double>;
 }

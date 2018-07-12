@@ -21,5 +21,5 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 
 namespace otb {
-template class OTBImageBase_EXPORT MultiToMonoChannelExtractROI<float,float>;
+template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE MultiToMonoChannelExtractROI<float,float>;
 }

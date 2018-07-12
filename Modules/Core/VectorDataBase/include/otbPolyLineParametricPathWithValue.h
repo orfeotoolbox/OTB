@@ -47,7 +47,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template <class TValue, unsigned int VDimension = 2>
-class OTBVectorDataBase_EXPORT PolyLineParametricPathWithValue
+class OTBVectorDataBase_EXPORT_TEMPLATE PolyLineParametricPathWithValue
   : public itk::PolyLineParametricPath<VDimension>
 {
 public:
@@ -143,7 +143,7 @@ private:
 #endif
 
 namespace otb {
-extern template class OTBVectorDataBase_EXPORT PolyLineParametricPathWithValue<double>;
+extern template class OTBVectorDataBase_EXPORT_TEMPLATE PolyLineParametricPathWithValue<double>;
 }
 
 #endif

@@ -22,6 +22,6 @@
 
 namespace otb {
 // Most commonly used instanciation
-template class OTBImageBase_EXPORT ExtractROIBase< VectorImage<float>, Image<float> >;
+template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE ExtractROIBase< VectorImage<float>, Image<float> >;
 }
 

@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template<class TImage>
-class OTBStreaming_EXPORT StreamingManager : public itk::Object
+class OTBStreaming_EXPORT_TEMPLATE StreamingManager : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -132,8 +132,8 @@ private:
 #include "otbImage.h"
 
 namespace otb {
-extern template class OTBStreaming_EXPORT StreamingManager<VectorImage<float>>;
-extern template class OTBStreaming_EXPORT StreamingManager<Image<float>>;
+extern template class OTBStreaming_EXPORT_TEMPLATE StreamingManager<VectorImage<float>>;
+extern template class OTBStreaming_EXPORT_TEMPLATE StreamingManager<Image<float>>;
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

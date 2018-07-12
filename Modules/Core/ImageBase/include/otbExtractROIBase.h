@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputImage, class TOutputImage>
-class OTBImageBase_EXPORT ExtractROIBase :
+class OTBImageBase_EXPORT_TEMPLATE ExtractROIBase :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -190,7 +190,7 @@ private:
 
 namespace otb {
 // Most commonly used instanciation
-extern template class OTBImageBase_EXPORT ExtractROIBase<otb::VectorImage<float>,Image<float>>;
+extern template class OTBImageBase_EXPORT_TEMPLATE ExtractROIBase<otb::VectorImage<float>,Image<float>>;
 }
 
 #endif

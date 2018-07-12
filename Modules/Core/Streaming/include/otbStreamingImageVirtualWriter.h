@@ -58,7 +58,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template <class TInputImage >
-class OTBStreaming_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
+class OTBStreaming_EXPORT_TEMPLATE StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -207,7 +207,7 @@ private:
 #include "otbVectorImage.h"
 
 namespace otb {
-extern template class OTBStreaming_EXPORT StreamingImageVirtualWriter<VectorImage<float> >;
+extern template class OTBStreaming_EXPORT_TEMPLATE StreamingImageVirtualWriter<VectorImage<float> >;
 }
 
 #endif

@@ -21,6 +21,6 @@
 #include "otbSensorModelBase.h"
 
 namespace otb {
-template class OTBTransform_EXPORT SensorModelBase<double,2,2>;
-template class OTBTransform_EXPORT SensorModelBase<double,3,3>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE SensorModelBase<double,2,2>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE SensorModelBase<double,3,3>;
 }

@@ -56,7 +56,7 @@ namespace otb
  */
 
 template <class TType>
-class OTBImageBase_EXPORT RemoteSensingRegion : public itk::Region
+class OTBImageBase_EXPORT_TEMPLATE RemoteSensingRegion : public itk::Region
 {
 public:
   /** Standard class typedefs. */
@@ -395,7 +395,7 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
 } // end namespace otb
 
 namespace otb {
-extern template class OTBImageBase_EXPORT RemoteSensingRegion<double>;
+extern template class OTBImageBase_EXPORT_TEMPLATE RemoteSensingRegion<double>;
 }
 
 #endif

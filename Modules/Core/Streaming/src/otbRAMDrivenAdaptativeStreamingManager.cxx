@@ -22,5 +22,5 @@
 
 namespace otb
 {
-template class OTBStreaming_EXPORT RAMDrivenAdaptativeStreamingManager<VectorImage<float>>;
+template class OTBStreaming_EXPORT_EXPLICIT_TEMPLATE RAMDrivenAdaptativeStreamingManager<VectorImage<float>>;
 }

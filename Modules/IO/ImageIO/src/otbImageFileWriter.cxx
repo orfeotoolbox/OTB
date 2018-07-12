@@ -23,29 +23,29 @@
 namespace otb {
 
 // Explicit instanciation of common types
-template class OTBImageIO_EXPORT ImageFileWriter<Image<unsigned int, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<int, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<unsigned char, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<char, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<unsigned short, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<short, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<float, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<double, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<std::complex<int>, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<std::complex<short>, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<std::complex<float>, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<Image<std::complex<double>, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<unsigned int, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<int, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<unsigned char, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<char, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<unsigned short, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<short, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<float, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<double, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<std::complex<int>, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<std::complex<short>, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<std::complex<float>, 2>>;
-template class OTBImageIO_EXPORT ImageFileWriter<VectorImage<std::complex<double>, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<unsigned int, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<int, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<unsigned char, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<char, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<unsigned short, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<short, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<float, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<double, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<std::complex<int>, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<std::complex<short>, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<std::complex<float>, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<std::complex<double>, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<unsigned int, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<int, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<unsigned char, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<char, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<unsigned short, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<short, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<float, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<double, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<std::complex<int>, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<std::complex<short>, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<std::complex<float>, 2>>;
+template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<VectorImage<std::complex<double>, 2>>;
 
 }

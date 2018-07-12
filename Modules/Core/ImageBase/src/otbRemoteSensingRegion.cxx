@@ -21,5 +21,5 @@
 #include "otbRemoteSensingRegion.h"
 
 namespace otb {
-template class OTBImageBase_EXPORT RemoteSensingRegion<double>;
+template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE RemoteSensingRegion<double>;
 }

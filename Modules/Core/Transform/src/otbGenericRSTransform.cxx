@@ -21,6 +21,6 @@
 #include "otbGenericRSTransform.h"
 
 namespace otb {
-template class OTBTransform_EXPORT GenericRSTransform<double,2,2>;
-template class OTBTransform_EXPORT GenericRSTransform<double,3,3>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE GenericRSTransform<double,2,2>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE GenericRSTransform<double,3,3>;
 }

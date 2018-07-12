@@ -21,6 +21,6 @@
 #include "otbCompositeTransform.h"
 
 namespace otb {
-template class OTBTransform_EXPORT CompositeTransform<itk::Transform<double,2,2>,itk::Transform<double,2,2>>;
-template class OTBTransform_EXPORT CompositeTransform<itk::Transform<double,3,3>,itk::Transform<double,3,3>>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE CompositeTransform<itk::Transform<double,2,2>,itk::Transform<double,2,2>>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE CompositeTransform<itk::Transform<double,3,3>,itk::Transform<double,3,3>>;
 }

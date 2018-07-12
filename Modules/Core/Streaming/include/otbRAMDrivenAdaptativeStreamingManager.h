@@ -47,7 +47,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template<class TImage>
-class OTBStreaming_EXPORT RAMDrivenAdaptativeStreamingManager : public StreamingManager<TImage>
+class OTBStreaming_EXPORT_TEMPLATE RAMDrivenAdaptativeStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */
@@ -111,7 +111,7 @@ private:
 
 namespace otb
 {
-extern template class OTBStreaming_EXPORT RAMDrivenAdaptativeStreamingManager<VectorImage<float>>;
+extern template class OTBStreaming_EXPORT_TEMPLATE RAMDrivenAdaptativeStreamingManager<VectorImage<float>>;
 }
 
 #endif

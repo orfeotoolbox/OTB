@@ -21,5 +21,5 @@
 #include "otbTransform.h"
 
 namespace otb {
-template class OTBTransform_EXPORT Transform<double,2,2>;
+template class OTBTransform_EXPORT_EXPLICIT_TEMPLATE Transform<double,2,2>;
 }

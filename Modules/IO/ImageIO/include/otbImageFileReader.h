@@ -66,7 +66,7 @@ namespace otb
 template <class TOutputImage,
           class ConvertPixelTraits=DefaultConvertPixelTraits<
                    typename TOutputImage::IOPixelType > >
-class OTBImageIO_EXPORT ImageFileReader : public itk::ImageSource<TOutputImage>
+class OTBImageIO_EXPORT_TEMPLATE ImageFileReader : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -196,30 +196,30 @@ private:
 namespace otb {
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<unsigned int, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<int, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<unsigned char, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<char, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<unsigned short, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<short, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<float, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<double, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<std::complex<int>, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<std::complex<short>, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<std::complex<float>, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::Image<std::complex<double>, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<unsigned int, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<int, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<unsigned char, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<char, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<unsigned short, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<short, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<float, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<double, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<std::complex<int>, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<std::complex<short>, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<std::complex<float>, 2>>;
-extern template class OTBImageIO_EXPORT ImageFileReader<otb::VectorImage<std::complex<double>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<unsigned int, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<int, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<unsigned char, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<char, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<unsigned short, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<short, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<float, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<double, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<std::complex<int>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<std::complex<short>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<std::complex<float>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::Image<std::complex<double>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<unsigned int, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<int, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<unsigned char, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<char, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<unsigned short, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<short, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<float, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<double, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<std::complex<int>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<std::complex<short>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<std::complex<float>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<otb::VectorImage<std::complex<double>, 2>>;
 
 }
 

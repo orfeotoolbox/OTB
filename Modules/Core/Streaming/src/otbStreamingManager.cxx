@@ -21,6 +21,6 @@
 #include "otbStreamingManager.h"
 
 namespace otb {
-template class OTBStreaming_EXPORT StreamingManager<VectorImage<float>>;
-template class OTBStreaming_EXPORT StreamingManager<Image<float>>;
+template class OTBStreaming_EXPORT_EXPLICIT_TEMPLATE StreamingManager<VectorImage<float>>;
+template class OTBStreaming_EXPORT_EXPLICIT_TEMPLATE StreamingManager<Image<float>>;
 }

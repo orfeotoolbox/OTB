@@ -21,5 +21,5 @@
 #include "otbDataNode.h"
 
 namespace otb {
-template class OTBVectorDataBase_EXPORT DataNode<double,2,double>;
+template class OTBVectorDataBase_EXPORT_EXPLICIT_TEMPLATE DataNode<double,2,double>;
 }

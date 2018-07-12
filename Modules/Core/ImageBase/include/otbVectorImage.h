@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TPixel, unsigned int VImageDimension = 2>
-class OTBImageBase_EXPORT VectorImage : public itk::VectorImage<TPixel, VImageDimension>
+class OTBImageBase_EXPORT_TEMPLATE VectorImage : public itk::VectorImage<TPixel, VImageDimension>
 {
 public:
 
@@ -220,18 +220,18 @@ namespace otb {
 
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBImageBase_EXPORT VectorImage<unsigned int, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<int, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<unsigned char, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<char, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<unsigned short, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<short, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<float, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<double, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<std::complex<int>, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<std::complex<short>, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<std::complex<float>, 2>;
-extern template class OTBImageBase_EXPORT VectorImage<std::complex<double>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned int, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<int, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned char, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<char, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned short, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<short, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<float, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<double, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<int>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<short>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<float>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<double>, 2>;
 }
 
 #endif

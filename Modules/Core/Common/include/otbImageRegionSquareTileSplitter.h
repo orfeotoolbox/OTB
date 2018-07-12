@@ -73,7 +73,7 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class OTBCommon_EXPORT ImageRegionSquareTileSplitter : public itk::ImageRegionSplitter<VImageDimension>
+class OTBCommon_EXPORT_TEMPLATE ImageRegionSquareTileSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */
@@ -151,7 +151,7 @@ namespace otb {
 
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBCommon_EXPORT ImageRegionSquareTileSplitter<2u>;
+extern template class OTBCommon_EXPORT_TEMPLATE ImageRegionSquareTileSplitter<2u>;
 
 }
 

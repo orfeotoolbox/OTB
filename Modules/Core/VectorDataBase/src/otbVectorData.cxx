@@ -21,5 +21,5 @@
 #include "otbVectorData.h"
 
 namespace otb {
-template class OTBVectorDataBase_EXPORT VectorData<double,2,double>;
+template class OTBVectorDataBase_EXPORT_EXPLICIT_TEMPLATE VectorData<double,2,double>;
 }

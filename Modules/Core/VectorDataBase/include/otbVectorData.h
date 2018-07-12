@@ -56,7 +56,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned int VDimension = 2, class TValuePrecision = double>
-class OTBVectorDataBase_EXPORT VectorData
+class OTBVectorDataBase_EXPORT_TEMPLATE VectorData
   : public itk::DataObject
 {
 public:
@@ -157,7 +157,7 @@ private:
 #endif
 
 namespace otb {
-extern template class OTBVectorDataBase_EXPORT VectorData<double,2,double>;
+extern template class OTBVectorDataBase_EXPORT_TEMPLATE VectorData<double,2,double>;
 }
 
 

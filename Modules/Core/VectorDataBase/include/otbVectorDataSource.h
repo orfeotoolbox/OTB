@@ -40,7 +40,7 @@ namespace otb
  */
 
 template <class TOutputVectorData>
-class OTBVectorDataBase_EXPORT VectorDataSource : public itk::ProcessObject
+class OTBVectorDataBase_EXPORT_TEMPLATE VectorDataSource : public itk::ProcessObject
 {
 public:
 
@@ -106,7 +106,7 @@ private:
 #include "otbVectorData.h"
 
 namespace otb {
-extern template class OTBVectorDataBase_EXPORT VectorDataSource<VectorData<double,2,double>>;
+extern template class OTBVectorDataBase_EXPORT_TEMPLATE VectorDataSource<VectorData<double,2,double>>;
 }
 
 #endif // otbVectorDataSource_h
