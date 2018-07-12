@@ -135,9 +135,6 @@ protected:
   /** Constructor */
   Parameter();
 
-  /** Destructor */
-  ~Parameter() override;
-
   /** Name of the parameter */
   std::string                        m_Name;
 

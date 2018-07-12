@@ -40,11 +40,6 @@ Parameter::Parameter() :
     m_Root( this )
   {}
 
-  /** Destructor */
-  Parameter::~Parameter() {}
-
-
-
 /** Set/get the parameter name */
 void Parameter::SetName(const std::string& name)
 {
