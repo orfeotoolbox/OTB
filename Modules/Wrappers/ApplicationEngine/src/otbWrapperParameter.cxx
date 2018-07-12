@@ -26,6 +26,25 @@ namespace otb
 {
 namespace Wrapper
 {
+
+// TODO: Constructor/destructor
+Parameter::Parameter() :
+    m_Name(),
+    m_Description(),
+    m_Key(),
+    m_Mandatory( true ),
+    m_Active( false ),
+    m_UserValue( false ),
+    m_UserLevel( UserLevel_Basic ),
+    m_Role( Role_Input ),
+    m_Root( this )
+  {}
+
+  /** Destructor */
+  Parameter::~Parameter() {}
+
+
+
 /** Set/get the parameter name */
 void Parameter::SetName(const std::string& name)
 {
