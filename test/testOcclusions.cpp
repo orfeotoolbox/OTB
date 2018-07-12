@@ -50,7 +50,7 @@
 #include "otbConcatenateVectorImageFilter.h"
 #include "otbWeightedMedianImageFilter.h"
 #include "otbBijectionCoherencyFilter.h"
-#include "otbFillOcclusionDisparityImageFilter.h"
+
 #include "otbImageToVectorImageCastFilter.h"
 
 #include "otbConvertValueFrom0To255.h"
@@ -58,13 +58,13 @@
 #include "otbFillOcclusionPixel.h"
 
 
-	
+  
 int testOcclusionsFilter(int argc, char *argv[])
   {
   if(argc < 3) {
-  	std::cerr << "Usage: " << argv[0] << " LeftDisparityMap RigthDisparityMap inMedianLeftImage minDisp maxDisp rFillOcc rwmf outputPathFolder" << std::endl;
-  	return EXIT_FAILURE;
-  	}
+    std::cerr << "Usage: " << argv[0] << " LeftDisparityMap RigthDisparityMap inMedianLeftImage minDisp maxDisp rFillOcc rwmf outputPathFolder" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   std::cout << "OCCLUSIONS FILTER TEST"  << std::endl ; 
 

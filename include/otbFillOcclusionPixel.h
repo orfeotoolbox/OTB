@@ -1,5 +1,5 @@
-#ifndef otbFillPixelFilter_h
-#define otbFillPixelFilter_h
+#ifndef otbFillOcclusionPixel_h
+#define otbFillOcclusionPixel_h
 
 /*===================================================================================================
 

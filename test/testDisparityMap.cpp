@@ -72,15 +72,15 @@
 #include "otbConvertValueFrom0To255.h"
 
 
-	
+  
 int testDisparityMap(int argc, char *argv[])
   {
 
 
   if(argc < 7) {
-  	std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp radius rwmf outputPathFolder" << std::endl;
-  	return EXIT_FAILURE;
-  	}
+    std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp radius rwmf outputPathFolder" << std::endl;
+    return EXIT_FAILURE;
+    }
 
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<float> FloatVectorImageType;
@@ -115,8 +115,8 @@ int testDisparityMap(int argc, char *argv[])
   inRight->UpdateOutputInformation();
 
   int dispMin = atoi(argv[3]);
-	int dispMax  = atoi(argv[4]);
-  long unsigned int r = atoi(argv[5]);	
+  int dispMax  = atoi(argv[4]);
+  long unsigned int r = atoi(argv[5]);  
   unsigned int rwmf = atoi(argv[6]);
 
   std::cout << "disMin : " << dispMin << std::endl ;
