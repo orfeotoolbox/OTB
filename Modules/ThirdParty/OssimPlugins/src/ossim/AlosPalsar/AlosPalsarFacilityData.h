@@ -29,6 +29,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <AlosPalsar/AlosPalsarRecord.h>
 
