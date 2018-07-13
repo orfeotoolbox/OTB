@@ -28,7 +28,6 @@
 #define AlosPalsarSignalData_h
 
 
-#include <iostream>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <AlosPalsar/AlosPalsarRecord.h>

@@ -22,7 +22,6 @@
 #define otbWorldFile_h
 
 #include <iomanip>
-#include <fstream>
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -68,29 +67,8 @@ public:
   itkGetStringMacro(ImageFilename)
   itkSetStringMacro(ImageFilename)
 
-  void Update()
-  {
-    if (m_ImageFilename.empty())
-      {
-      itkExceptionMacro(<< "The image filename must be provided");
-      }
-
-    std::string worldFilename;
-    int         i = m_ImageFilename.find_last_of('.');
-    worldFilename = m_ImageFilename.substr(0, i) + ".wld";
-
-    std::ofstream file;
-    file.open(worldFilename.c_str());
-    file << std::setprecision(15);
-    file << m_LonSpacing << std::endl;
-    file << m_LatRotation << std::endl; //yes, in this order
-    file << m_LonRotation << std::endl;
-    file << m_LatSpacing << std::endl;
-    file << m_LonOrigin << std::endl;
-    file << m_LatOrigin << std::endl;
-    file.close();
-  }
-
+  void Update();
+  
 protected:
   WorldFile() : m_LonOrigin(0.0), m_LatOrigin(0.0),
     m_LonSpacing(0.0), m_LatSpacing(0.0),

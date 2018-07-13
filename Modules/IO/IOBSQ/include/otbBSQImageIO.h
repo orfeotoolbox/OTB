@@ -21,9 +21,9 @@
 #ifndef otbBSQImageIO_h
 #define otbBSQImageIO_h
 
-#include <fstream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include "otbImageIOBase.h"
 

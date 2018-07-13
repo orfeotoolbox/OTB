@@ -26,7 +26,6 @@
 #include <itkObjectFactory.h>
 #include <vector>
 #include <utility>
-#include <fstream>
 #include <limits>
 
 namespace otb

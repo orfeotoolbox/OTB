@@ -26,7 +26,6 @@
 #ifndef ErsSarLeader_h
 #define ErsSarLeader_h
 
-#include <iostream>
 #include "ErsSarFileDescriptor.h"
 #include "ErsSarDataSetSummary.h"
 #include "ErsSarMapProjectionData.h"

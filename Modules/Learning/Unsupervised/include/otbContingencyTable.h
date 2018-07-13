@@ -22,7 +22,6 @@
 #define otbContingencyTable_h
 
 #include <vector>
-#include <iostream>
 #include <iomanip>
 #include <itkObject.h>
 #include <itkObjectFactory.h>

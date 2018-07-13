@@ -26,7 +26,6 @@
 #ifndef ErsSarPositionVectorRecord_h
 #define ErsSarPositionVectorRecord_h
 
-#include <iostream>
 #include <cstdlib>
 #include "erssar/ErsSarRecord.h"
 

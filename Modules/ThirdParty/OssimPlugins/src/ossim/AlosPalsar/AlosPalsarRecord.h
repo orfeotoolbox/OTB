@@ -29,7 +29,6 @@
 
 
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
-#include <iostream>
 
 namespace ossimplugins
 {

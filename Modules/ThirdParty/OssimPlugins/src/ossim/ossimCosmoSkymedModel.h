@@ -35,7 +35,6 @@
 
 #include <otb/CivilDateTime.h>
 
-#include <iostream>
 #include <list>
 
 namespace ossimplugins

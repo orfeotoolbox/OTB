@@ -26,7 +26,6 @@
 #ifndef DataHistogramSignalData_h
 #define DataHistogramSignalData_h
 
-#include <iostream>
 
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>

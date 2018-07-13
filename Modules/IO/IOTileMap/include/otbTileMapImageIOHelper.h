@@ -26,7 +26,6 @@
 #include "itkObjectFactory.h"
 
 #include <string>
-#include <iostream>
 #include <sstream>
 
 #include "OTBIOTileMapExport.h"

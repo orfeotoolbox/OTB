@@ -26,7 +26,6 @@
 #ifndef BeamPixelCountRecord_h
 #define BeamPixelCountRecord_h
 
-#include <iostream>
 
 #include <RadarSat/RadarSatRecord.h>
 

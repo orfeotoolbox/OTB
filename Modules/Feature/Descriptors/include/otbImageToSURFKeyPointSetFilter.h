@@ -30,7 +30,6 @@
 #include "otbImageToPointSetFilter.h"
 #include "itkVector.h"
 
-#include <iostream>
 namespace otb
 {
 

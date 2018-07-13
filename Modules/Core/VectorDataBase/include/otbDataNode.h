@@ -26,7 +26,6 @@
 #include "otbObjectList.h"
 #include "otbVectorDataKeywordlist.h"
 
-#include <iostream>
 
 #include "ogrsf_frmts.h"
 

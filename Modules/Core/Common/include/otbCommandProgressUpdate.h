@@ -23,7 +23,6 @@
 
 #include "itkCommand.h"
 #include <sstream>
-#include <iostream>
 
 namespace otb
 {

@@ -30,7 +30,6 @@
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
-#include <iostream>
 
 //
 // Qt includes (sorted by alphabetic order)

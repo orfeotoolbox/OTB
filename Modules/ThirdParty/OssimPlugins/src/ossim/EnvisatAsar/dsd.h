@@ -26,7 +26,6 @@
 #ifndef dsd_h
 #define dsd_h
 
-#include <iostream>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 
 namespace ossimplugins

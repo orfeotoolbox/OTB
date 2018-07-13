@@ -22,6 +22,7 @@ set(OTBCarto_SRC
   otbCoordinateToName.cxx
   otbOSMDataToVectorDataGenerator.cxx
   otbPlaceNameToLonLat.cxx
+  otbWorldFile.cxx
   )
 
 add_library(OTBCarto ${OTBCarto_SRC})

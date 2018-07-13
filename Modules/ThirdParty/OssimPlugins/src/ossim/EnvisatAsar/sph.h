@@ -26,7 +26,6 @@
 #ifndef sph_h
 #define sph_h
 
-#include <iostream>
 #include <vector>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 #include <EnvisatAsar/mph.h>

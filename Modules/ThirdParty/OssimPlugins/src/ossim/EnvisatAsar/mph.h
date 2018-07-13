@@ -26,7 +26,6 @@
 #ifndef mph_h
 #define mph_h
 
-#include <iostream>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 
 namespace ossimplugins

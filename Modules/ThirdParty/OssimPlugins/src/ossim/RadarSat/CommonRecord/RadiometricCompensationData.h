@@ -26,7 +26,6 @@
 #ifndef RadiometricCompensationData_h
 #define RadiometricCompensationData_h
 
-#include <iostream>
 
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>

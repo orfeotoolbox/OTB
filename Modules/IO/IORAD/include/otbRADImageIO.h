@@ -22,9 +22,9 @@
 #define otbRADImageIO_h
 
 #include "otbImageIOBase.h"
-#include <fstream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 namespace otb
 {

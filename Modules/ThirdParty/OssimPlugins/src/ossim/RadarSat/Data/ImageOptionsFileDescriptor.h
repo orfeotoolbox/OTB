@@ -26,7 +26,6 @@
 #ifndef ImageOptionsFileDescriptor_h
 #define ImageOptionsFileDescriptor_h
 
-#include <iostream>
 
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
