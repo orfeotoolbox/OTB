@@ -25,6 +25,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "OTBCartoExport.h"
 
 namespace otb {
 
@@ -39,7 +40,7 @@ namespace otb {
  * \ingroup OTBCarto
  */
 
-class ITK_EXPORT WorldFile : public itk::Object
+class OTBCarto_EXPORT WorldFile : public itk::Object
 {
 public:
 
