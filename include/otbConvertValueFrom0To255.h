@@ -68,7 +68,7 @@ public:
     float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
 
     // output = (255-a*input[0]+0.5) ;
-     output =a*input[0]+0.5f;
+     output = a*input+0.5f;
    
     return output;
     }

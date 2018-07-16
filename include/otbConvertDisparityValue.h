@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
  *
@@ -18,8 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef otbMinimumNBandsImageFilter_h
-#define otbMinimumNBandsImageFilter_h
+#ifndef otbConvertDisparityValue_h
+#define otbConvertDisparityValue_h
 
 #include "otbUnaryFunctorVectorImageFilter.h"
 
@@ -29,58 +30,74 @@ namespace otb
 namespace Functor
 {
 template<class TInput, class TOutput>
-class MinVectorImage
+class ComputeDisparityValue
 {
 public:
-  MinVectorImage(){}
-  virtual ~MinVectorImage() {} 
+  ComputeDisparityValue(){}
+  virtual ~ComputeDisparityValue() {} 
+
+   int GetDispMax()
+    {
+     return m_dispMax;     
+    }
+
+  int GetDispMin()
+    {
+     return m_dispMin;     
+    }
+
+  void SetDispMax(int disp)
+    {
+      m_dispMax = disp;
+    }
+
+  void SetDispMin(int disp)
+    {
+      m_dispMin = disp;
+    }
 
 
 
   TOutput operator() ( TInput input )
     {
 
-    unsigned int size ( input.GetSize() ) ;
-
     TOutput output(1); 
     output = 0;
-    typename TInput::ValueType min ( input[0] );
+    float grayMin = 255;
+    float grayMax = 0;
+    float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
 
-    for(unsigned int i=0; i<size; i++)
-      {
-      if (input[i]<min)
-        {
-        min = input[i] ;
-
-        output = -i;
-        }
-      }
-
+    // output = (255-a*input[0]+0.5) ;
+     output = input + m_dispMax ;
+   
     return output;
     }
 
+  protected:
+    int                             m_dispMin;
+    int                             m_dispMax;
 
 }; //end class
 
 } // end Functor
 
 
-  // class MinimumNBandsImageFilter
+  // class ConvertDisparityValue
   template <class TInputImage, class TOutputImage>
-  class ITK_EXPORT MinimumNBandsImageFilter :
+  class ITK_EXPORT ConvertDisparityValue :
     public otb::UnaryFunctorVectorImageFilter<
         TInputImage, TOutputImage,
-        Functor::MinVectorImage<
+        Functor::ComputeDisparityValue<
             typename TInputImage::PixelType,
             typename TOutputImage::PixelType> >
   {
   public:
   /** Standard class typedefs. */
-  typedef MinimumNBandsImageFilter Self;
+  typedef ConvertDisparityValue Self;
   typedef typename otb::UnaryFunctorVectorImageFilter<
       TInputImage,
       TOutputImage,
-      Functor::MinVectorImage<
+      Functor::ComputeDisparityValue<
           typename TInputImage::PixelType,
           typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -90,10 +107,30 @@ public:
   itkNewMacro(Self);
 
 
+  int GetDispMax()
+    {
+     return this->GetFunctor().GetDispMax();     
+    }
+
+  int GetDispMin()
+    {
+     return this->GetFunctor().GetDispMin();     
+    }
+
+  void SetDispMax(int disp)
+    {
+      this->GetFunctor().SetDispMax(disp);
+    }
+
+  void SetDispMin(int disp)
+    {
+      this->GetFunctor().SetDispMin(disp);
+    }
+
 
   protected:
-  MinimumNBandsImageFilter() {}
-  ~MinimumNBandsImageFilter() override {}
+  ConvertDisparityValue() {}
+  ~ConvertDisparityValue() override {}
 
 
   void GenerateOutputInformation(void) override
@@ -106,11 +143,11 @@ public:
 
 
   private:
-  MinimumNBandsImageFilter(const Self &) = delete; //purposely not implemented
+  ConvertDisparityValue(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 
 
-  }; // end of MinimumNBandsImageFilter class
+  }; // end of ConvertDisparityValue class
 
 } // end namespace otb
 

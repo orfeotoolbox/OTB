@@ -80,7 +80,7 @@
 #include "otbConvertValueFrom0To255.h"
 #include "otbFillOcclusionPixel.h"
 
-
+#include "otbConvertDisparityValue.h"
 
 
 
@@ -118,12 +118,12 @@ class CVF : public Application
   typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastIntImageIntoFloatVecImageFilter;
   typedef itk::MedianImageFilter< FloatImageType, FloatImageType > MedianFilterType;
   typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, MedianFilterType> PerBand; 
-  typedef otb::ConvertValueFrom0To255<FloatVectorImageType, IntImageType > ConvertValue ;
-
+  typedef otb::ConvertValueFrom0To255<IntImageType, IntImageType > ConvertValue ;
   typedef otb::BijectionCoherencyFilter< IntImageType, IntImageType > OcclusionType;
-
-    typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;
+  typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;
   typedef otb::FillPixelFilter< FloatVectorImageType, IntImageType > FillOccFilter ;
+
+  typedef otb::ConvertDisparityValue<IntImageType, IntImageType > ConvertToDisparityValue ;
 
 
   
@@ -218,7 +218,6 @@ class CVF : public Application
         m_CastLeftDisparity = CastIntImageIntoFloatVecImageFilter::New();
         LMedian = MedianFilterType::New();
         m_LeftMedianFilter = PerBand::New();
-        m_convertLeftDisparity = ConvertValue::New();
         m_OcclusionFilter = OcclusionType::New();  
         m_CastOccMap = CastIntImageIntoFloatVecImageFilter::New();
         m_ConcatenateLeftMedianIAndOccMap = ConcatenateVectorImageFilterType::New();
@@ -226,6 +225,8 @@ class CVF : public Application
         m_FillOcc = FillOccFilter::New();
         m_CastFillOccFilter= CastIntImageIntoFloatVecImageFilter::New();
         m_convertSmoothDisparity = ConvertValue::New();
+        m_DispValueFilter = ConvertToDisparityValue::New();
+
     }
 
   void DoExecute() ITK_OVERRIDE
@@ -246,8 +247,6 @@ class CVF : public Application
 
 // GRADIENT CALCULATIONS
 // ConvolutionImageFilter 
-
-
   // Gradient X  
   ConvFilterType::InputSizeType radiusG;
   radiusG[0] = 1;
@@ -264,25 +263,16 @@ class CVF : public Application
 
   m_convFilterXRight->SetRadius(radiusG);
   m_convFilterXRight->SetFilter(filterCoeffsX);
- 
-
   m_LeftGrayVectorImage->SetInput(inLeft);
-
-  m_RightGrayVectorImage->SetInput(inRight);
-
-  
-// //--Left---------------  
- 
-
+  m_RightGrayVectorImage->SetInput(inRight);  
+    //--Left---------------  
   m_GradientXLeft->SetFilter(m_convFilterXLeft);
   m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
   m_GradientXLeft->UpdateOutputInformation(); 
-
-
+    //--Right--------------- 
   m_GradientXRight->SetFilter(m_convFilterXRight);
   m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
   m_GradientXRight->UpdateOutputInformation(); 
-
 
 
   // COST VOLUME  
@@ -302,7 +292,6 @@ class CVF : public Application
   m_RightCost->SetMinDisp(-dispMax);
   m_RightCost->SetMaxDisp(-dispMin);     
   m_RightCost->UpdateOutputInformation(); 
-
  
 
   //WEIGHTS  
@@ -336,6 +325,7 @@ class CVF : public Application
     // --- LEFT
   m_LeftDisparity->SetInput(m_meanLeftWeights->GetOutput()); 
   m_LeftDisparity->UpdateOutputInformation(); 
+  
       // --- RIGHT
   m_RightDisparity->SetInput(m_meanRightWeights->GetOutput());  
   m_RightDisparity->UpdateOutputInformation(); 
@@ -349,56 +339,45 @@ class CVF : public Application
   m_LeftMedianFilter->SetFilter(LMedian);
   m_LeftMedianFilter->SetInput(inLeft); 
 
- m_convertLeftDisparity->SetInput(m_CastLeftDisparity->GetOutput());
- m_convertLeftDisparity->SetDispMin(dispMin);
- m_convertLeftDisparity->SetDispMax(dispMax);
 
-
-
- m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(const_cast <IntImageType *>( m_LeftDisparity->GetOutput())); 
-  m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(const_cast <IntImageType *>( m_RightDisparity->GetOutput())); 
-   
-  m_OcclusionFilter->SetMaxHDisp(dispMax);
-  m_OcclusionFilter->SetMinHDisp(dispMin);
+  m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
+  m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
+  m_OcclusionFilter->SetMaxHDisp(0);
+  m_OcclusionFilter->SetMinHDisp(-(dispMax-dispMin+1));
   m_OcclusionFilter->SetMinVDisp(0);
   m_OcclusionFilter->SetMaxVDisp(0);
   m_OcclusionFilter->SetTolerance(2);
 
-
   
-  m_CastOccMap-> SetInput( const_cast <IntImageType *>( m_OcclusionFilter->GetOutput() ));
-
-  
-
+  m_CastOccMap-> SetInput( const_cast <IntImageType *>( m_OcclusionFilter->GetOutput() )); 
   m_ConcatenateLeftMedianIAndOccMap->SetInput1(m_LeftMedianFilter->GetOutput());
   m_ConcatenateLeftMedianIAndOccMap->SetInput2(m_CastOccMap->GetOutput());
-
-
 
   m_ConcatenateCastOccMapAndLeftImage->SetInput1(m_CastLeftDisparity->GetOutput());
   m_ConcatenateCastOccMapAndLeftImage->SetInput2(m_ConcatenateLeftMedianIAndOccMap->GetOutput());
 
-
-
-
-
-    m_FillOcc->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
-
+  m_FillOcc->SetInput(m_ConcatenateCastOccMapAndLeftImage->GetOutput());
   FloatVectorImageType::SizeType radiusM;
   radiusM[0] = rwmf;
   radiusM[1] = rwmf;   
   m_FillOcc->SetRadius(radiusM);
 
-  m_CastFillOccFilter-> SetInput( m_FillOcc->GetOutput());
+  m_DispValueFilter->SetInput(m_FillOcc->GetOutput());
+  m_DispValueFilter->SetDispMax(dispMax);
+
+//////
+
+  // m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
+  // m_convertSmoothDisparity->SetDispMin(dispMin);
+  // m_convertSmoothDisparity->SetDispMax(dispMax);
 
 
- m_convertSmoothDisparity->SetInput(m_CastFillOccFilter->GetOutput());
- m_convertSmoothDisparity->SetDispMin(dispMin);
- m_convertSmoothDisparity->SetDispMax(dispMax);
+  // m_convFilledDisparityMap->SetInput(m_FillOcc->GetOutput());
+  // m_convFilledDisparityMap->SetDispMin(dispMin);
+  // m_convFilledDisparityMap->SetDispMax(dispMax);
 
-
-
-  SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
+  
+  SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
 
 
 
@@ -421,17 +400,15 @@ class CVF : public Application
   MaxCostVolume::Pointer m_RightDisparity ;
   CastIntImageIntoFloatVecImageFilter::Pointer m_CastLeftDisparity;
   PerBand::Pointer m_LeftMedianFilter ;
-  ConvertValue::Pointer m_convertLeftDisparity ;
   MedianFilterType::Pointer LMedian ;
   OcclusionType::Pointer m_OcclusionFilter ;
-
-   CastIntImageIntoFloatVecImageFilter::Pointer m_CastOccMap;
- ConcatenateVectorImageFilterType::Pointer m_ConcatenateLeftMedianIAndOccMap ;
-ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage;
-FillOccFilter::Pointer m_FillOcc ;
-CastIntImageIntoFloatVecImageFilter::Pointer m_CastFillOccFilter;
-ConvertValue::Pointer m_convertSmoothDisparity ;
-
+  CastIntImageIntoFloatVecImageFilter::Pointer m_CastOccMap;
+  ConcatenateVectorImageFilterType::Pointer m_ConcatenateLeftMedianIAndOccMap ;
+  ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndLeftImage;
+  FillOccFilter::Pointer m_FillOcc ;
+  CastIntImageIntoFloatVecImageFilter::Pointer m_CastFillOccFilter;
+  ConvertValue::Pointer m_convertSmoothDisparity ;
+  ConvertToDisparityValue::Pointer m_DispValueFilter ;
 
 
  

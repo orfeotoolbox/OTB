@@ -35,6 +35,8 @@ public:
   MaxVectorImage(){}
   virtual ~MaxVectorImage() {}
 
+
+
   TOutput operator() ( TInput input )
     {
     unsigned int size ( input.GetSize() ) ;
@@ -47,12 +49,13 @@ public:
       if (input[i]<min)
         {
         min = input[i] ;
-        output = i;
+        output = i ;
         }
       }
 
     return output;
     }
+
 
 }; //end class
 

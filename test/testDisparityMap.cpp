@@ -346,6 +346,19 @@ int testDisparityMap(int argc, char *argv[])
   LeftMedianwriter->SetInput( m_LeftMedianFilter->GetOutput() );
   LeftMedianwriter->Update();
 
+  // typedef otb::ConvertValueFrom0To255<FloatVectorImageType, IntImageType > ConvertValue ;
+  // ConvertValue::Pointer m_convertLeftDisparity = ConvertValue::New();
+  // m_convertLeftDisparity->SetInput(m_CastLeftDisparity->GetOutput());
+  // m_convertLeftDisparity->SetDispMin(dispMin);
+  // m_convertLeftDisparity->SetDispMax(dispMax);
+
+  // IntImageWriterType::Pointer writer_m_convertLeftDisparity = IntImageWriterType::New();
+  // writer_m_convertLeftDisparity->SetFileName( FILENAME("ConvertLeftDisparity.tif"));
+  // writer_m_convertLeftDisparity->SetInput( m_convertLeftDisparity->GetOutput() ); 
+  // writer_m_convertLeftDisparity->Update();
+
+
+
 
 
   // typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;  
@@ -408,16 +421,6 @@ int testDisparityMap(int argc, char *argv[])
   // writer_RightDispMedian->Update(); 
 
 
-   typedef otb::ConvertValueFrom0To255<FloatVectorImageType, IntImageType > ConvertValue ;
- ConvertValue::Pointer m_convertLeftDisparity = ConvertValue::New();
- m_convertLeftDisparity->SetInput(m_CastLeftDisparity->GetOutput());
- m_convertLeftDisparity->SetDispMin(dispMin);
- m_convertLeftDisparity->SetDispMax(dispMax);
-
-   IntImageWriterType::Pointer writer_m_convertLeftDisparity = IntImageWriterType::New();
-  writer_m_convertLeftDisparity->SetFileName( FILENAME("ConvertLeftDisparity.tif"));
- writer_m_convertLeftDisparity->SetInput( m_convertLeftDisparity->GetOutput() ); 
- writer_m_convertLeftDisparity->Update();
 
 
   return EXIT_SUCCESS;

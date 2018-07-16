@@ -183,16 +183,16 @@ int testOcclusionsFilter(int argc, char *argv[])
    CastImageFilter::Pointer m_CastFillOccFilter= CastImageFilter::New();
   m_CastFillOccFilter-> SetInput( m_FillOcc->GetOutput());
 
- typedef otb::ConvertValueFrom0To255<FloatVectorImageType, IntImageType > ConvertValue ;
- ConvertValue::Pointer m_convertSmoothDisparity = ConvertValue::New();
- m_convertSmoothDisparity->SetInput(m_CastFillOccFilter->GetOutput());
- m_convertSmoothDisparity->SetDispMin(dispMin);
- m_convertSmoothDisparity->SetDispMax(dispMax);
+ // typedef otb::ConvertValueFrom0To255<FloatVectorImageType, IntImageType > ConvertValue ;
+ // ConvertValue::Pointer m_convertSmoothDisparity = ConvertValue::New();
+ // m_convertSmoothDisparity->SetInput(m_CastFillOccFilter->GetOutput());
+ // m_convertSmoothDisparity->SetDispMin(dispMin);
+ // m_convertSmoothDisparity->SetDispMax(dispMax);
 
-   IntWriterType::Pointer writer_convertSmoothFillDisparity = IntWriterType::New();
-  writer_convertSmoothFillDisparity->SetFileName( FILENAME("ConvertSmoothFillDisparity.tif"));
- writer_convertSmoothFillDisparity->SetInput( m_convertSmoothDisparity->GetOutput() ); 
- writer_convertSmoothFillDisparity->Update();
+ //   IntWriterType::Pointer writer_convertSmoothFillDisparity = IntWriterType::New();
+ //  writer_convertSmoothFillDisparity->SetFileName( FILENAME("ConvertSmoothFillDisparity.tif"));
+ // writer_convertSmoothFillDisparity->SetInput( m_convertSmoothDisparity->GetOutput() ); 
+ // writer_convertSmoothFillDisparity->Update();
 
 
 
