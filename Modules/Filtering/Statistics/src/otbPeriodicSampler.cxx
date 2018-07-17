@@ -80,7 +80,7 @@ PeriodicSampler::TakeSample(void)
   //  if ceil(val) > 0; then take the sample
   this->m_ProcessedElements += 1UL;
   double val = ((double)(this->m_ProcessedElements) - m_OffsetValue )*this->GetRate() - (double)(this->m_ChosenElements);
-  if (0 < (int)(vcl_ceil(val)))
+  if (0 < (int)(std::ceil(val)))
     {
     this->m_ChosenElements += 1UL;
     if (m_JitterSize > 0.0)

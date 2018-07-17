@@ -64,11 +64,11 @@ public:
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<OutputInternalPixelType>::max());
-    resp.SetRed(static_cast<OutputInternalPixelType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetRed())   +
+    resp.SetRed(static_cast<OutputInternalPixelType>(std::floor(m_Alpha * static_cast<double>(input1.GetRed())   +
                                                        (1 - m_Alpha) * static_cast<double>(input2.GetRed())  + 0.5)));
-    resp.SetGreen(static_cast<OutputInternalPixelType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetGreen()) +
+    resp.SetGreen(static_cast<OutputInternalPixelType>(std::floor(m_Alpha * static_cast<double>(input1.GetGreen()) +
                                                          (1 - m_Alpha) * static_cast<double>(input2.GetGreen()) + 0.5)));
-    resp.SetBlue(static_cast<OutputInternalPixelType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetBlue())  +
+    resp.SetBlue(static_cast<OutputInternalPixelType>(std::floor(m_Alpha * static_cast<double>(input1.GetBlue())  +
                                                         (1 - m_Alpha) * static_cast<double>(input2.GetBlue()) + 0.5)));
     return resp;
   }

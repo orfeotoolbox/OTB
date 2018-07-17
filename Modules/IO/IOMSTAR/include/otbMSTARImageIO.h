@@ -101,20 +101,20 @@ public:
     // resolution overview.
     return 1;
   }
-  
+
   /** Get information about overviews available into the file specified
-   * This imageIO didn't support overviews */ 
+   * This imageIO didn't support overviews */
   std::vector<std::string> GetOverviewsInfo() override
   {
     std::vector<std::string> desc;
     return desc;
   }
-  
+
   /** Provide hist about the output container to deal with complex pixel
-   *  type (Not used here) */ 
-  void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
+   *  type (Not used here) */
+  void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType),
                                         bool itkNotUsed(isVectorImage)) override{}
-  
+
 private:
   MSTARImageIO(const Self &) = delete;
   void operator =(const Self&) = delete;
@@ -133,7 +133,6 @@ private:
 
   const char *MSTARname;      /* Input MSTAR filename           */
   char        RAWname[80];   /* Output MSTAR RAW filename      */
-  char        HDRname[80];   /* Phoenix header filename buffer */
 
   int  outOpt;               /* ALL data, or MAG ONLY...    */
   int  phlen, nhlen, mstartype;

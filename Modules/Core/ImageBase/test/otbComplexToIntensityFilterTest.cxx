@@ -135,7 +135,7 @@ int otbComplexToIntensityFilterTest(int, char* [] )
     std::cout <<  output << " = ";
     std::cout <<  intensity  << std::endl;
 
-    if( vcl_fabs( intensity - output ) > epsilon )
+    if( std::fabs( intensity - output ) > epsilon )
       {
       std::cerr << "Error in itkComplexToIntensityImageFilterTest " << std::endl;
       std::cerr << " intensity( " << input << ") = " << intensity << std::endl;

@@ -49,11 +49,11 @@ int otbFlexibleDistanceWithMissingValue(int itkNotUsed(argc), char * argv[])
   double                distanceValue = dist->Evaluate(x, y);
   std::cout << std::setprecision(20) << std::endl;
   std::cout << "dim, a, b          : " << dim << "," << a << "," << b << std::endl;
-  std::cout << "dim*vcl_pow(3, b) : " << dim*vcl_pow(3, b) << std::endl;
+  std::cout << "dim*std::pow(3, b) : " << dim*std::pow(3, b) << std::endl;
   std::cout << "Distance         : " << distanceValue << std::endl;
   std::cout << "Epsilon          : " << epsilon << std::endl;
-  std::cout << "-> Tests diff    : " << vcl_abs(distanceValue - dim * vcl_pow(3, b)) << std::endl;
+  std::cout << "-> Tests diff    : " << std::abs(distanceValue - dim * std::pow(3, b)) << std::endl;
 
-  if (vcl_abs(distanceValue - dim * vcl_pow(3, b)) < epsilon) return EXIT_SUCCESS;
+  if (std::abs(distanceValue - dim * std::pow(3, b)) < epsilon) return EXIT_SUCCESS;
   else return EXIT_FAILURE;
 }

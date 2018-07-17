@@ -423,12 +423,12 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 
     // Split the adjacency matrix in strip of equal dimension
     start =
-      static_cast<unsigned int>(vcl_floor(total *
-                                          vcl_sqrt(static_cast<double>(threadId) /
+      static_cast<unsigned int>(std::floor(total *
+                                          std::sqrt(static_cast<double>(threadId) /
                                                    static_cast<double>(threadCount)) + 0.5));
     stop =
-      static_cast<unsigned int>(vcl_floor(total *
-                                          vcl_sqrt(static_cast<double>(threadId +
+      static_cast<unsigned int>(std::floor(total *
+                                          std::sqrt(static_cast<double>(threadId +
                                                                        1) / static_cast<double>(threadCount)) + 0.5));
     if (stop > total) stop = total;
 

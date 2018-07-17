@@ -41,7 +41,7 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   m_Beta = 0.;
   m_Den = 0.;
 
-  m_ContrastFunction = &vcl_tanh;
+  m_ContrastFunction = &std::tanh;
 
   m_TransformFilter = TransformFilterType::New();
 }
@@ -105,7 +105,7 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
     double x_g_x = x * g_x;
     beta += x_g_x;
 
-    double gp = 1. - vcl_pow( g_x, 2. );
+    double gp = 1. - std::pow( g_x, 2. );
     den += gp;
 
     nbSample += 1.;

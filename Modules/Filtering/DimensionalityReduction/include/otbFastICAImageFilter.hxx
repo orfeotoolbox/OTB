@@ -48,7 +48,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_NumberOfIterations = 50;
   m_ConvergenceThreshold = 1E-4;
-  m_ContrastFunction = &vcl_tanh;
+  m_ContrastFunction = &std::tanh;
   m_Mu = 1.;
 
   m_PCAFilter = PCAFilterType::New();
@@ -291,10 +291,10 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       {
         W(band, bd) -= m_Mu * ( estimator->GetMean()[bd]
                               - optimizer->GetBeta() * W(band, bd) / optimizer->GetDen() );
-        norm += vcl_pow( W(band, bd), 2. );
+        norm += std::pow( W(band, bd), 2. );
       }
       for ( unsigned int bd = 0; bd < size; bd++ )
-        W(band, bd) /= vcl_sqrt( norm );
+        W(band, bd) /= std::sqrt( norm );
     }
 
     // Decorrelation of the W vectors
@@ -302,7 +302,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     vnl_svd< MatrixElementType > solver ( W_tmp );
     InternalMatrixType valP = solver.W();
     for ( unsigned int i = 0; i < valP.rows(); ++i )
-      valP(i, i) = 1. / vcl_sqrt( static_cast<double>( valP(i, i) ) ); // Watch for 0 or neg
+      valP(i, i) = 1. / std::sqrt( static_cast<double>( valP(i, i) ) ); // Watch for 0 or neg
     InternalMatrixType transf = solver.U();
     W_tmp = transf * valP * transf.transpose();
     W = W_tmp * W;
@@ -311,7 +311,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     convergence = 0.;
     for ( unsigned int i = 0; i < W.rows(); ++i )
       for ( unsigned int j = 0; j < W.cols(); ++j )
-        convergence += vcl_abs( W(i, j) - W_old(i, j) );
+        convergence += std::abs( W(i, j) - W_old(i, j) );
 
     reporter.CompletedPixel();
   } // end of while loop

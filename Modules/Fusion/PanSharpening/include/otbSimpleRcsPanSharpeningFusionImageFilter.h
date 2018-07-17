@@ -127,7 +127,7 @@ private:
 
       TInternalPrecision scale = 1.;
 
-      if(vcl_abs(smoothPanchroPixel) > 1e-10)
+      if(std::abs(smoothPanchroPixel) > 1e-10)
         {
         scale = sharpPanchroPixel/smoothPanchroPixel;
         }
@@ -174,7 +174,7 @@ private:
 
       TInternalPrecision scale = 1.;
 
-      if(vcl_abs(smoothPanchroPixel) > 1e-10)
+      if(std::abs(smoothPanchroPixel) > 1e-10)
         {
         scale = sharpPanchroPixel/smoothPanchroPixel;
         }

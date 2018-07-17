@@ -524,8 +524,8 @@ private:
       const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans,
                                                         upperThresholdNBSamplesForKMeans);
 
-      const double shrinkFactor = vcl_floor(
-                                            vcl_sqrt(
+      const double shrinkFactor = std::floor(
+                                            std::sqrt(
                                                       supportImage->GetLargestPossibleRegion().GetNumberOfPixels()
                                                           / actualNBSamplesForKMeans));
       imageSampler->SetShrinkFactor(shrinkFactor);
@@ -653,7 +653,7 @@ private:
             // Convert the radiometric value to [0, 255]
             // using the clamping from histogram cut
             // Since an UInt8 output value is expected, the rounding instruction is used (floor(x+0.5) as rounding method)
-            double val = vcl_floor((255 * (meanValue[dispIndex] - minVal[dispIndex])
+            double val = std::floor((255 * (meanValue[dispIndex] - minVal[dispIndex])
                                    / (maxVal[dispIndex] - minVal[dispIndex])) + 0.5);
 
             val = val < 0.0 ? 0.0 : ( val > 255.0 ? 255.0 : val );

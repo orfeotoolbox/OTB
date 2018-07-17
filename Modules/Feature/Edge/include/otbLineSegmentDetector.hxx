@@ -157,8 +157,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   RegionType largestRegion = this->GetInput()->GetLargestPossibleRegion();
 
   // Compute the minimum region size
-  double logNT = 5. * vcl_log10( static_cast<double>(largestRegion.GetNumberOfPixels()) ) / 2.;
-  double log1_p = vcl_log10(m_DirectionsAllowed);
+  double logNT = 5. * std::log10( static_cast<double>(largestRegion.GetNumberOfPixels()) ) / 2.;
+  double log1_p = std::log10(m_DirectionsAllowed);
   double rapport = logNT / log1_p;
   m_MinimumRegionSize = static_cast<unsigned int>(-rapport);
 
@@ -272,7 +272,7 @@ LineSegmentDetector<TInputImage, TPrecision>
           double nfa = ImproveRectangle(rectangle);
 
           double density =  (double)region.size() /
-            ( vcl_sqrt((rectangle[2]-rectangle[0])*(rectangle[2]-rectangle[0])
+            ( std::sqrt((rectangle[2]-rectangle[0])*(rectangle[2]-rectangle[0])
                        +(rectangle[3]-rectangle[1])*(rectangle[3]-rectangle[1])) * rectangle[4] );
           if (density < 0.7)
             {
@@ -431,10 +431,10 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
     if ((r[4] - delta) >= 0.5)
       {
-      r[0] += -vcl_sin(r[5]) * delta_2;
-      r[1] +=  vcl_cos(r[5]) * delta_2;
-      r[2] += -vcl_sin(r[5]) * delta_2;
-      r[3] +=  vcl_cos(r[5]) * delta_2;
+      r[0] += -std::sin(r[5]) * delta_2;
+      r[1] +=  std::cos(r[5]) * delta_2;
+      r[2] += -std::sin(r[5]) * delta_2;
+      r[3] +=  std::cos(r[5]) * delta_2;
       r[4] -= delta;
 
       nfa_new = this->ComputeRectNFA(r);
@@ -452,10 +452,10 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
     if ((r[4] - delta) >= 0.5)
       {
-      r[0] -= -vcl_sin(r[5]) * delta_2;
-      r[1] -=  vcl_cos(r[5]) * delta_2;
-      r[2] -= -vcl_sin(r[5]) * delta_2;
-      r[3] -=  vcl_cos(r[5]) * delta_2;
+      r[0] -= -std::sin(r[5]) * delta_2;
+      r[1] -=  std::cos(r[5]) * delta_2;
+      r[2] -= -std::sin(r[5]) * delta_2;
+      r[3] -=  std::cos(r[5]) * delta_2;
       r[4] -= delta;
 
       nfa_new = this->ComputeRectNFA(r);
@@ -670,9 +670,9 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
     itNeigh.SetLocation(region[cpt]);
     itNeighDir.SetLocation(region[cpt]);
-    sumX += vcl_cos(*(itNeighDir.GetCenterValue()));
-    sumY += vcl_sin(*(itNeighDir.GetCenterValue()));
-    regionAngle = vcl_atan2(sumY, sumX);
+    sumX += std::cos(*(itNeighDir.GetCenterValue()));
+    sumY += std::sin(*(itNeighDir.GetCenterValue()));
+    regionAngle = std::atan2(sumY, sumX);
 
     unsigned int s = 0;
     while (s < neighSize)
@@ -781,8 +781,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   MagnitudeVector sum_l(2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   MagnitudeVector sum_w(2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
 
-  double dx = vcl_cos(theta);
-  double dy = vcl_sin(theta);
+  double dx = std::cos(theta);
+  double dy = std::sin(theta);
 
   it = region.begin();
   while (it != region.end())
@@ -801,8 +801,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     if (w > w_max)
       w_max = w;
 
-    sum_l[static_cast < int > (vcl_floor(l) + 0.5) + Diagonal] +=  static_cast<MagnitudePixelType>(weight);
-    sum_w[static_cast < int > (vcl_floor(w) + 0.5) + Diagonal] +=  static_cast<MagnitudePixelType>(weight);
+    sum_l[static_cast < int > (std::floor(l) + 0.5) + Diagonal] +=  static_cast<MagnitudePixelType>(weight);
+    sum_w[static_cast < int > (std::floor(w) + 0.5) + Diagonal] +=  static_cast<MagnitudePixelType>(weight);
 
     ++it;
     }
@@ -844,8 +844,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   RectangleType          rec(8, 0.);       // Definition of a
                                            // rectangle : 8 components
 
-  if (vcl_abs(wl - wr)
-      - vcl_sqrt( static_cast<double> (largestRegion.GetSize(0) * largestRegion.GetSize(0) +
+  if (std::abs(wl - wr)
+      - std::sqrt( static_cast<double> (largestRegion.GetSize(0) * largestRegion.GetSize(0) +
                                        largestRegion.GetSize(1) * largestRegion.GetSize(1)))
       < 1e-10 )
     {
@@ -917,7 +917,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   typedef itk::SymmetricEigenAnalysis<MatrixType, MatrixEigenType> EigenAnalysisType;
   EigenAnalysisType eigenFilter(2);
   eigenFilter.ComputeEigenValuesAndVectors(Inertie, eigenMatrix, eigenVector);
-  theta = vcl_atan2(eigenVector[1][1], -eigenVector[1][0]);
+  theta = std::atan2(eigenVector[1][1], -eigenVector[1][0]);
 
   /* the previous procedure don't cares orientations,
      so it could be wrong by 180 degrees.
@@ -1002,7 +1002,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Compute the NFA from the rectangle computed below*/
   RegionType largestRegion = const_cast<Self*>(this)->GetInput()->GetLargestPossibleRegion();
-  double logNT = 5. * vcl_log10( static_cast<double>(largestRegion.GetNumberOfPixels()) ) / 2.;
+  double logNT = 5. * std::log10( static_cast<double>(largestRegion.GetNumberOfPixels()) ) / 2.;
 
   nfa_val = NFA(pts, NbAligned, m_DirectionsAllowed, logNT);
 

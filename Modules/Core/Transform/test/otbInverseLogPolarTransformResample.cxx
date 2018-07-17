@@ -59,8 +59,8 @@ int otbInverseLogPolarTransformResample(int itkNotUsed(argc), char* argv[])
   params[0] = 0.5 * static_cast<double>(size[0]);
   params[1] = 0.5 * static_cast<double>(size[1]);
   params[2] = 360. / reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
-  params[3] = vcl_log(vcl_sqrt(vcl_pow(static_cast<double>(size[0]), 2.)
-                               + vcl_pow(static_cast<double>(size[1]),
+  params[3] = std::log(std::sqrt(std::pow(static_cast<double>(size[0]), 2.)
+                               + std::pow(static_cast<double>(size[1]),
                                          2.)) / 2) / reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
   transform->SetParameters(params);
 

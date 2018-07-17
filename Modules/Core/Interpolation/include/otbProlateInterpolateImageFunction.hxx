@@ -32,7 +32,7 @@ double
 ProlateFunction<TInput, TOutput>
 ::ComputeEnergy(double resampleRatio) const
 {
-  vnl_vector<vcl_complex<double> > resampledProfile(1024);
+  vnl_vector<std::complex<double> > resampledProfile(1024);
   resampledProfile.fill(0);
 
   for (unsigned int i = 0; i < m_Radius + 1; ++i)

@@ -21,7 +21,6 @@
 #ifndef otbTwoNRIBandsImageToNComplexBandsImage_h
 #define otbTwoNRIBandsImageToNComplexBandsImage_h
 
-#include <vcl_deprecated_header.h>
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 #include "itkNumericTraits.h"

@@ -246,20 +246,20 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
   double DTOR = CONST_PI_180;
   double real, imag;
 
-  real = vcl_cos(DTOR * m_PsiI) * vcl_cos(DTOR * m_KhiI);
-  imag = -vcl_sin(DTOR * m_PsiI) * vcl_sin(DTOR * m_KhiI);
+  real = std::cos(DTOR * m_PsiI) * std::cos(DTOR * m_KhiI);
+  imag = -std::sin(DTOR * m_PsiI) * std::sin(DTOR * m_KhiI);
   ComplexType Ei0(real, imag);
 
-  real = vcl_sin(DTOR * m_PsiI) * vcl_cos(DTOR * m_KhiI);
-  imag = vcl_cos(DTOR * m_PsiI) * vcl_sin(DTOR * m_KhiI);
+  real = std::sin(DTOR * m_PsiI) * std::cos(DTOR * m_KhiI);
+  imag = std::cos(DTOR * m_PsiI) * std::sin(DTOR * m_KhiI);
   ComplexType Ei1(real, imag);
 
-  real = vcl_cos(DTOR * m_PsiR) * vcl_cos(DTOR * m_KhiR);
-  imag = -vcl_sin(DTOR * m_PsiR) * vcl_sin(DTOR * m_KhiR);
+  real = std::cos(DTOR * m_PsiR) * std::cos(DTOR * m_KhiR);
+  imag = -std::sin(DTOR * m_PsiR) * std::sin(DTOR * m_KhiR);
   ComplexType Er0(real, imag);
 
-  real = vcl_sin(DTOR * m_PsiR) * vcl_cos(DTOR * m_KhiR);
-  imag = vcl_cos(DTOR * m_PsiR) * vcl_sin(DTOR * m_KhiR);
+  real = std::sin(DTOR * m_PsiR) * std::cos(DTOR * m_KhiR);
+  imag = std::cos(DTOR * m_PsiR) * std::sin(DTOR * m_KhiR);
   ComplexType Er1(real, imag);
 
   AEi[0] = Ei0;

@@ -77,10 +77,10 @@ public:
     double l  = this->m_Parameters[3*value2+1];
     double m  = this->m_Parameters[3*value2+2];
 
-    double result = -vcl_log((boost::math::tgamma(l+m)/(boost::math::tgamma(l)*boost::math::tgamma(m)))
-                             * (2/(mu)) * (vcl_sqrt(l/m)) *
-                             ((vcl_pow((vcl_sqrt(l/m)*(val1/mu)), ((2*l)-1))) /
-                              (vcl_pow(1+(vcl_sqrt(l/m)*(val1/mu)*vcl_sqrt(l/m)*(val1/mu)), (l+m)))));
+    double result = -std::log((boost::math::tgamma(l+m)/(boost::math::tgamma(l)*boost::math::tgamma(m)))
+                             * (2/(mu)) * (std::sqrt(l/m)) *
+                             ((std::pow((std::sqrt(l/m)*(val1/mu)), ((2*l)-1))) /
+                              (std::pow(1+(std::sqrt(l/m)*(val1/mu)*std::sqrt(l/m)*(val1/mu)), (l+m)))));
 
     return result;
   }

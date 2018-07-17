@@ -159,7 +159,7 @@ int otbFourierMellinDescriptorsScaleInvariant(int itkNotUsed(argc), char * argv[
     {
     for (unsigned int l=0; l<=q; ++l)
       {
-      error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
+      error += std::pow(std::abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
 
       std::cout << "Original - D" << k << l
                 << " : " << Result1.at(k).at(l)
@@ -168,7 +168,7 @@ int otbFourierMellinDescriptorsScaleInvariant(int itkNotUsed(argc), char * argv[
       }
     }
 
-  error = vcl_sqrt(error)/(q+p);
+  error = std::sqrt(error)/(q+p);
   std::cout << "Error : " << error << std::endl
             << std::endl;
 
@@ -237,7 +237,7 @@ int otbFourierMellinDescriptorsRotationInvariant(int itkNotUsed(argc), char * ar
   translation1[1] =   -imageCenterY;
   transform->Translate( translation1 );
 
-  const double degreesToRadians = vcl_atan(1.0) / 45.0;
+  const double degreesToRadians = std::atan(1.0) / 45.0;
   const double angle = angleInDegrees * degreesToRadians;
   transform->Rotate2D( -angle, false );
 
@@ -273,7 +273,7 @@ int otbFourierMellinDescriptorsRotationInvariant(int itkNotUsed(argc), char * ar
     {
     for (unsigned int l=0; l<=q; ++l)
       {
-      error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
+      error += std::pow(std::abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
 
       std::cout << "Original - D" << k << l
                 << " : " << Result1.at(k).at(l)
@@ -282,7 +282,7 @@ int otbFourierMellinDescriptorsRotationInvariant(int itkNotUsed(argc), char * ar
       }
     }
 
-  error = vcl_sqrt(error)/(q+p);
+  error = std::sqrt(error)/(q+p);
   std::cout << "Error : " << error << std::endl
             << std::endl;
 

@@ -65,7 +65,7 @@ int otbVirtualDimensionalityTest(int itkNotUsed(argc), char * argv[])
 
   for (int i = 2; i < 10; ++i)
     {
-    double falseAlarmRate = vcl_pow(static_cast<double>(10), static_cast<double>(-i));
+    double falseAlarmRate = std::pow(static_cast<double>(10), static_cast<double>(-i));
     vd->SetFAR(falseAlarmRate);
     vd->Compute();
 

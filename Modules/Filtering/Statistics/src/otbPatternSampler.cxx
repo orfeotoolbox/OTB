@@ -59,7 +59,7 @@ PatternSampler::Reset(void)
   if (this->m_Parameters.Seed)
     {
     unsigned long T1 = FindBestSize(this->GetTotalElements());
-    unsigned long N1 = static_cast<unsigned long>(vcl_floor( this->GetRate() * T1 ));
+    unsigned long N1 = static_cast<unsigned long>(std::floor( this->GetRate() * T1 ));
 
     double selected_ratio = static_cast<double>(N1)/static_cast<double>(T1);
 
@@ -78,7 +78,7 @@ PatternSampler::Reset(void)
       T2 = FindBestSize(this->GetTotalElements()/T1*(T1-N1));
       if (T2>0)
         {
-        N2 = static_cast<unsigned long>(vcl_ceil( ratio2 * T2 ));
+        N2 = static_cast<unsigned long>(std::ceil( ratio2 * T2 ));
         }   
       }
 

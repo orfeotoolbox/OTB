@@ -110,7 +110,7 @@ void ViewSettings::UpdateRotation(const PointType & newCenter, double newAngle)
 
     m_RotationAngle = -std::arg(theta1*theta2);
 
-    if(vcl_abs(m_RotationAngle) > 1e-9)
+    if(std::abs(m_RotationAngle) > 1e-9)
       {
       // Compute new center
       std::complex<double> c1(m_RotationCenter[0],m_RotationCenter[1]);
@@ -153,7 +153,7 @@ void ViewSettings::SetPersepectiveAngle()
 
   RSTransformType::InputPointType centerPoint3d2 = inverseTransform->TransformPoint(groundPoint3d1);
 
-  double angle = -vcl_atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
+  double angle = -std::atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
   
   this->UpdateRotation(centerPoint,M_PI/2 - angle);
 }
@@ -187,7 +187,7 @@ void ViewSettings::SetNorthUpAngle()
   
   RSTransformType::InputPointType centerPoint3d2 = inverseTransform->TransformPoint(groundPoint3d1);
   
-  double angle = -vcl_atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
+  double angle = -std::atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
 
   this->UpdateRotation(centerPoint, M_PI/2 - angle);
 
@@ -208,8 +208,8 @@ ViewSettings
 
   SpacingType scale( spacing );
 
-  scale[ 0 ] = vcl_abs( scale[ 0 ] );
-  scale[ 1 ] = vcl_abs( scale[ 1 ] );
+  scale[ 0 ] = std::abs( scale[ 0 ] );
+  scale[ 1 ] = std::abs( scale[ 1 ] );
 
   if( scale[ 0 ]>scale[ 1 ] )
     return

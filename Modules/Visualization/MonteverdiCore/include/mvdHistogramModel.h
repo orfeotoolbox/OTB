@@ -618,7 +618,7 @@ HistogramModel
         // make sure the epsilon is not hidden when using large values
         if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
           {
-          double absValue = vcl_abs(minPixel[i]);
+          double absValue = std::abs(minPixel[i]);
           // compute smallest epsilon for absolute pixel value (1.5 factor is for safety)
           double limitEpsilon = absValue *
             (double)std::numeric_limits<DefaultImageType::PixelType::ValueType>::epsilon()

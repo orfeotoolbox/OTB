@@ -142,7 +142,7 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   cosAAzimut->SetInput(addAzimut->GetOutput());
 
   typename MultiplyByScalarImageFilterType::Pointer sinSsinSolarAngleFilter = MultiplyByScalarImageFilterType::New();
-  sinSsinSolarAngleFilter->SetCoef(vcl_sin(m_SolarAngle / rad2degCoef));
+  sinSsinSolarAngleFilter->SetCoef(std::sin(m_SolarAngle / rad2degCoef));
   sinSsinSolarAngleFilter->SetInput(sinS->GetOutput());
 
   typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinAngle =  MultiplyImageFilterType::New();
@@ -150,7 +150,7 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   cosAAzimuthsinSsinAngle->SetInput2(cosAAzimut->GetOutput());
 
   typename MultiplyByScalarImageFilterType::Pointer cosScosSolarAngleFilter = MultiplyByScalarImageFilterType::New();
-  cosScosSolarAngleFilter->SetCoef(vcl_cos(m_SolarAngle / rad2degCoef));
+  cosScosSolarAngleFilter->SetCoef(std::cos(m_SolarAngle / rad2degCoef));
   cosScosSolarAngleFilter->SetInput(cosS->GetOutput());
 
   typename AddImageFilterType::Pointer cosIncidence = AddImageFilterType::New();
@@ -178,7 +178,7 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   cosAAzimut2->SetInput(addAzimut2->GetOutput());
 
   typename MultiplyByScalarImageFilterType::Pointer sinSsinSolarAngleFilter2 = MultiplyByScalarImageFilterType::New();
-  sinSsinSolarAngleFilter2->SetCoef(vcl_sin(m_ViewAngle / rad2degCoef));
+  sinSsinSolarAngleFilter2->SetCoef(std::sin(m_ViewAngle / rad2degCoef));
   sinSsinSolarAngleFilter2->SetInput(sinS->GetOutput());
 
   typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinAngle2 =  MultiplyImageFilterType::New();
@@ -186,7 +186,7 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   cosAAzimuthsinSsinAngle2->SetInput2(cosAAzimut2->GetOutput());
 
   typename MultiplyByScalarImageFilterType::Pointer cosScosSolarAngleFilter2 = MultiplyByScalarImageFilterType::New();
-  cosScosSolarAngleFilter2->SetCoef(vcl_cos(m_ViewAngle / rad2degCoef));
+  cosScosSolarAngleFilter2->SetCoef(std::cos(m_ViewAngle / rad2degCoef));
   cosScosSolarAngleFilter2->SetInput(cosS->GetOutput());
 
   typename AddImageFilterType::Pointer cosIncidence2 = AddImageFilterType::New();

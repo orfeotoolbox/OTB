@@ -146,8 +146,8 @@ WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList,TImage>
     currentSubBand = (bandIndex-1)%3;
 
     // Compute potentiel offset in x and y
-    unsigned int offsetX = largestSize[0]/(unsigned int)vcl_pow((double)m_DecimationRatio,(double)1+numberOfDecompositionLevels-currentLevel);
-    unsigned int offsetY = largestSize[1]/(unsigned int)vcl_pow((double)m_DecimationRatio,(double)1+numberOfDecompositionLevels-currentLevel);
+    unsigned int offsetX = largestSize[0]/(unsigned int)std::pow((double)m_DecimationRatio,(double)1+numberOfDecompositionLevels-currentLevel);
+    unsigned int offsetY = largestSize[1]/(unsigned int)std::pow((double)m_DecimationRatio,(double)1+numberOfDecompositionLevels-currentLevel);
 
     // Compute final offset according to the subband index
     if(currentSubBand == 0)

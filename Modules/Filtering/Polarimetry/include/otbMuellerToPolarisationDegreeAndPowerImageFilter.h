@@ -143,7 +143,7 @@ public:
               }
             else
               {
-                deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
+                deg_pol = std::sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
               }
 
             if (P > l_PowerMax)

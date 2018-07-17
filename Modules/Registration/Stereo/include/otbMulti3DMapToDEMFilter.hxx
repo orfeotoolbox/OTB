@@ -240,7 +240,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   // TODO : use a clean RS transform instead
   typename TOutputDEMImage::SpacingType outSpacing;
   //std::cout<<" GrisStep "<<m_DEMGridStep<<std::endl;
-  outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
+  outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * std::cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
   outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
   outputPtr->SetSignedSpacing(outSpacing);
 
@@ -254,8 +254,8 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   typename TOutputDEMImage::RegionType outRegion;
   outRegion.SetIndex(0, 0);
   outRegion.SetIndex(1, 0);
-  outRegion.SetSize(0, static_cast<unsigned int>(vcl_floor((box_xmax - box_xmin) / vcl_abs(outSpacing[0]) + 0.5)));
-  outRegion.SetSize(1, static_cast<unsigned int>(vcl_floor((box_ymax - box_ymin) / vcl_abs(outSpacing[1]) + 0.5)));
+  outRegion.SetSize(0, static_cast<unsigned int>(std::floor((box_xmax - box_xmin) / std::abs(outSpacing[0]) + 0.5)));
+  outRegion.SetSize(1, static_cast<unsigned int>(std::floor((box_ymax - box_ymin) / std::abs(outSpacing[1]) + 0.5)));
   outputPtr->SetLargestPossibleRegion(outRegion);
   outputPtr->SetNumberOfComponentsPerPixel(1);
 
@@ -287,7 +287,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
      outRegion2.SetIndex(1, 0);
      outRegion2.SetSize(0, genericRSEstimator->GetOutputSize()[0]);
      //TODO JGT check the size
-     //outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / vcl_abs(outSpacing[1])+1));
+     //outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / std::abs(outSpacing[1])+1));
      outRegion2.SetSize(1, genericRSEstimator->GetOutputSize()[1]);
      outputPtr->SetLargestPossibleRegion(outRegion2);
      outputPtr->SetNumberOfComponentsPerPixel(1);
@@ -669,8 +669,8 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
           // The DEM cell at index 'n' contains continuous indexes from 'n-0.5' to 'n+0.5'
           outputPtr->TransformPhysicalPointToContinuousIndex(point2D, continuousIndex);
           typename OutputImageType::IndexType cellIndex;
-          cellIndex[0] = static_cast<int> (vcl_floor(continuousIndex[0] + 0.5));
-          cellIndex[1] = static_cast<int> (vcl_floor(continuousIndex[1] + 0.5));
+          cellIndex[0] = static_cast<int> (std::floor(continuousIndex[0] + 0.5));
+          cellIndex[1] = static_cast<int> (std::floor(continuousIndex[1] + 0.5));
           //std::cout<<"cellindex "<<cellIndex<<std::endl;
           //index from physical
           /** -Wunused-variable

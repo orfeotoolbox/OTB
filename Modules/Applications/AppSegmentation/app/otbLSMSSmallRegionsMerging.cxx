@@ -30,7 +30,7 @@
 #include "otbTileImageFilter.h"
 
 #include <time.h>
-#include <vcl_algorithm.h>
+#include <algorithm>
 #include <climits>
 
 #include "otbWrapperApplication.h"
@@ -197,8 +197,8 @@ private:
        {
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
-        unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
-        unsigned long sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
+        unsigned long sizeX = std::min(sizeTilesX,sizeImageX-startX);
+        unsigned long sizeY = std::min(sizeTilesY,sizeImageY-startY);
 
         //Tiles extraction of the input image
         MultiChannelExtractROIFilterType::Pointer imageROI = MultiChannelExtractROIFilterType::New();
@@ -263,8 +263,8 @@ private:
           std::map<int,std::set<int> > adjMap;
 
           unsigned long startX = column*sizeTilesX, startY = row*sizeTilesY;
-          unsigned long sizeX = vcl_min(sizeTilesX+size+1,sizeImageX-startX),
-            sizeY = vcl_min(sizeTilesY+size+1,sizeImageY-startY);
+          unsigned long sizeX = std::min(sizeTilesX+size+1,sizeImageX-startX),
+            sizeY = std::min(sizeTilesY+size+1,sizeImageY-startY);
 
           ExtractROIFilterType::Pointer labelImageROI = ExtractROIFilterType::New();
           labelImageROI->SetInput(labelIn);

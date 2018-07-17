@@ -36,7 +36,7 @@ int otbLAIFromNDVILogarithmic(int itkNotUsed(argc), char * argv[])
   double extCoef(::atof(argv[5]));
 
   double ndvi = (nirValue-redValue)/(nirValue+redValue);
-  double goodResult = -1/extCoef*vcl_log((ndvi-ndviInf)/(ndviSoil-ndviInf));
+  double goodResult = -1/extCoef*std::log((ndvi-ndviInf)/(ndviSoil-ndviInf));
 
   laiFunct.SetNdviInf(ndviInf);
   laiFunct.SetNdviSoil(ndviSoil);

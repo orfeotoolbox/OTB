@@ -21,7 +21,6 @@
 #ifndef otbClampVectorImageFilter_h
 #define otbClampVectorImageFilter_h
 
-#include <vcl_deprecated_header.h>
 #include "itkImageToImageFilter.h"
 
 namespace otb
