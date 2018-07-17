@@ -182,6 +182,11 @@ class CVF : public Application
     SetParameterDescription("rwmf", "Radius for median filter");
     SetDefaultParameterInt("rwmf",9);  
 
+    AddParameter(ParameterType_Int, "range", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255");
+    SetParameterDescription("range", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255" );
+    SetDefaultParameterInt("range",0);
+
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -193,6 +198,7 @@ class CVF : public Application
     SetDocExampleParameterValue("rwmf","9");
     SetDocExampleParameterValue("radius","9");
     SetDocExampleParameterValue("io.out","MyCVFDisparity.tif");
+    SetDocExampleParameterValue("range","0");
 
     }
 
@@ -246,6 +252,7 @@ class CVF : public Application
     long unsigned int r  = GetParameterInt("radius");
     unsigned int rwmf = GetParameterInt("rwmf") ;   
     unsigned int s = GetParameterInt("sense") ;
+    unsigned int range = GetParameterInt("range") ;
 
 
     std::cout << "disMin : " << dispMin << std::endl ;
@@ -417,33 +424,34 @@ class CVF : public Application
     radiusM[0] = rwmf;
     radiusM[1] = rwmf;   
     m_FillOcc->SetRadius(radiusM);
-
-    m_DispValueFilter->SetInput(m_FillOcc->GetOutput());
-    
-
-    if(s==0)
+        
+    if(range==1)
       {
-      m_DispValueFilter->SetDisp(dispMax);
+      m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
+      m_convertSmoothDisparity->SetDispMin(dispMin);
+      m_convertSmoothDisparity->SetDispMax(dispMax);
+      SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
       }
     else
-     {
-      m_DispValueFilter->SetDisp(dispMin);
-     }
+      {
+      m_DispValueFilter->SetInput(m_FillOcc->GetOutput());
+      if(s==0)
+        {
+        m_DispValueFilter->SetDisp(dispMax);
+        }
+      else
+        {
+        m_DispValueFilter->SetDisp(dispMin);
+        }
+      SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
+      }
 
-
-  //////
-
-    // m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
-    // m_convertSmoothDisparity->SetDispMin(dispMin);
-    // m_convertSmoothDisparity->SetDispMax(dispMax);
-
-
-    // m_convFilledDisparityMap->SetInput(m_FillOcc->GetOutput());
-    // m_convFilledDisparityMap->SetDispMin(dispMin);
-    // m_convFilledDisparityMap->SetDispMax(dispMax);
 
     
-    SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
+
+
+    
+    
 
     }
 
