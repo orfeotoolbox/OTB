@@ -36,46 +36,28 @@ public:
   ComputeDisparityValue(){}
   virtual ~ComputeDisparityValue() {} 
 
-   int GetDispMax()
+   int GetDisp()
     {
-     return m_dispMax;     
+     return m_disp;     
     }
 
-  int GetDispMin()
+  void SetDisp(int disp)
     {
-     return m_dispMin;     
+      m_disp = disp;
     }
-
-  void SetDispMax(int disp)
-    {
-      m_dispMax = disp;
-    }
-
-  void SetDispMin(int disp)
-    {
-      m_dispMin = disp;
-    }
-
-
 
   TOutput operator() ( TInput input )
     {
 
     TOutput output(1); 
     output = 0;
-    float grayMin = 255;
-    float grayMax = 0;
-    float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
-
-    // output = (255-a*input[0]+0.5) ;
-     output = input + m_dispMax ;
+     output = input + m_disp ;
    
     return output;
     }
 
   protected:
-    int                             m_dispMin;
-    int                             m_dispMax;
+    int                             m_disp;
 
 }; //end class
 
@@ -107,24 +89,14 @@ public:
   itkNewMacro(Self);
 
 
-  int GetDispMax()
+  int GetDisp()
     {
-     return this->GetFunctor().GetDispMax();     
+     return this->GetFunctor().GetDisp();     
     }
 
-  int GetDispMin()
+  void SetDisp(int disp)
     {
-     return this->GetFunctor().GetDispMin();     
-    }
-
-  void SetDispMax(int disp)
-    {
-      this->GetFunctor().SetDispMax(disp);
-    }
-
-  void SetDispMin(int disp)
-    {
-      this->GetFunctor().SetDispMin(disp);
+      this->GetFunctor().SetDisp(disp);
     }
 
 
