@@ -154,12 +154,12 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 
   VnlMatrixType invstderr = VnlMatrixType(nbComp, nbComp, 0);
   invstderr.set_diagonal(sigma.get_diagonal());
-  invstderr = invstderr.apply(&vcl_sqrt);
+  invstderr = invstderr.apply(&std::sqrt);
   invstderr = invstderr.apply(&InverseValue);
 
   VnlMatrixType invstderrmaf = VnlMatrixType(nbComp, nbComp, 0);
   invstderrmaf.set_diagonal((m_V.transpose() * sigma * m_V).get_diagonal());
-  invstderrmaf = invstderrmaf.apply(&vcl_sqrt);
+  invstderrmaf = invstderrmaf.apply(&std::sqrt);
   invstderrmaf = invstderrmaf.apply(&InverseValue);
 
   VnlMatrixType aux1 = invstderr * sigma * m_V * invstderrmaf;

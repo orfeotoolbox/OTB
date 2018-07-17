@@ -104,8 +104,8 @@ int main(int argc, char* argv[])
     double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
     double radius = random->GetUniformVariate(prmin, prmax);
     SampleType pSample(2);
-    pSample[0] = cpx+radius*vcl_sin(angle);
-    pSample[1] = cpy+radius*vcl_cos(angle);
+    pSample[0] = cpx+radius*std::sin(angle);
+    pSample[1] = cpy+radius*std::cos(angle);
     TrainingSampleType label;
     label[0]=1;
     trainingSamples->PushBack(pSample);
@@ -117,8 +117,8 @@ int main(int argc, char* argv[])
     angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
     radius = random->GetUniformVariate(nrmin, nrmax);
     SampleType nSample(2);
-    nSample[0] = cnx+radius*vcl_sin(angle);
-    nSample[1] = cny+radius*vcl_cos(angle);
+    nSample[0] = cnx+radius*std::sin(angle);
+    nSample[1] = cny+radius*std::cos(angle);
     label[0]=2;
     trainingSamples->PushBack(nSample);
     trainingLabels->PushBack(label);
@@ -137,8 +137,8 @@ int main(int argc, char* argv[])
       double angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
       double radius = random->GetUniformVariate(prmin, prmax);
       SampleType pSample(2);
-      pSample[0] = cpx+radius*vcl_sin(angle);
-      pSample[1] = cpy+radius*vcl_cos(angle);
+      pSample[0] = cpx+radius*std::sin(angle);
+      pSample[1] = cpy+radius*std::cos(angle);
       TrainingSampleType label;
       label[0]=1;
       validationSamples->PushBack(pSample);
@@ -149,8 +149,8 @@ int main(int argc, char* argv[])
       angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
       radius = random->GetUniformVariate(nrmin, nrmax);
       SampleType nSample(2);
-      nSample[0] = cnx+radius*vcl_sin(angle);
-      nSample[1] = cny+radius*vcl_cos(angle);
+      nSample[0] = cnx+radius*std::sin(angle);
+      nSample[1] = cny+radius*std::cos(angle);
       label[0]=2;
       validationSamples->PushBack(nSample);
       validationLabels->PushBack(label);

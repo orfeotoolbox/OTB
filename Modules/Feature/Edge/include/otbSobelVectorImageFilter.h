@@ -58,7 +58,7 @@ public:
                   + ( input.GetPixel(2)[i] - input.GetPixel(8)[i] ) );
 
       output[i] = static_cast<typename TOutput::ValueType>(
-                    vcl_sqrt( vcl_pow( hori, 2. ) + vcl_pow( vert, 2. ) ) );
+                    std::sqrt( std::pow( hori, 2. ) + std::pow( vert, 2. ) ) );
     }
     return output;
   }

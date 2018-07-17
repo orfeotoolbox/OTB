@@ -159,13 +159,13 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
   // final computations
   const double mean = sum / totalFreq;
   const double variance = (sum2 - (sum * sum / totalFreq)) / (totalFreq - 1);
-  const double sigma = vcl_sqrt(variance);
+  const double sigma = std::sqrt(variance);
   const double mean2 = mean * mean;
   double skewness = 0;
   double kurtosis = 0;
 
   const double epsilon = 1E-10;
-  if (vcl_abs(variance) > epsilon)
+  if (std::abs(variance) > epsilon)
     {
     skewness = ((sum3 - 3.0 * mean * sum2) / totalFreq + 2.0 * mean * mean2) / (variance * sigma);
     kurtosis = ((sum4 - 4.0 * mean * sum3 + 6.0 * mean2 * sum2) / totalFreq - 3.0 * mean2 * mean2) / (variance
@@ -217,7 +217,7 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
       vnl_diag_matrix<double> pm = eigen.D;
       for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
         {
-        //    principalMoments[i] = 4 * vcl_sqrt( pm(i, i) );
+        //    principalMoments[i] = 4 * std::sqrt( pm(i, i) );
         principalMoments[i] = pm(i, i);
         }
       principalAxes = eigen.V.transpose();
@@ -225,8 +225,8 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
       // Add a final reflection if needed for a proper rotation,
       // by multiplying the last row by the determinant
       vnl_real_eigensystem eigenrot(principalAxes.GetVnlMatrix());
-      vnl_diag_matrix<vcl_complex<double> > eigenval = eigenrot.D;
-      vcl_complex<double> det(1.0, 0.0);
+      vnl_diag_matrix<std::complex<double> > eigenval = eigenrot.D;
+      std::complex<double> det(1.0, 0.0);
 
       for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
         {
@@ -241,7 +241,7 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
       if (principalMoments[0] != 0)
         {
         //    elongation = principalMoments[TFeatureImage::ImageDimension-1] / principalMoments[0];
-          elongation = vcl_sqrt(principalMoments[TFeatureImage::ImageDimension - 1] / principalMoments[0]);
+          elongation = std::sqrt(principalMoments[TFeatureImage::ImageDimension - 1] / principalMoments[0]);
           }
         }
       else

@@ -82,7 +82,7 @@ NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>
   m_CoefNorm.SetSize(means.Size());
   for (unsigned int i = 0; i < m_CoefNorm.Size(); ++i)
     {
-    m_CoefNorm[i] = (1. / vcl_sqrt(NbPixels * (cov[i][i] + means[i] * means[i])));
+    m_CoefNorm[i] = (1. / std::sqrt(NbPixels * (cov[i][i] + means[i] * means[i])));
     }
 }
 /**

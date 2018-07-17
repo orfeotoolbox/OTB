@@ -100,7 +100,7 @@ int otbJointMassOfBeliefFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
   for (unsigned int i=0; i<baseline.size(); ++i)
     {
-    if (vcl_abs(baseline[i] - results[i]) >= .000001)
+    if (std::abs(baseline[i] - results[i]) >= .000001)
       {
       std::cout << "Non-regression test [" << i << "] failed: "
                 << "baseline[i](" << baseline[i]

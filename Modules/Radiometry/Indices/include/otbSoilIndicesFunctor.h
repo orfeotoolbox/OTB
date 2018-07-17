@@ -302,7 +302,7 @@ protected:
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if (vcl_abs(dGreen) < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dGreen) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -345,7 +345,7 @@ protected:
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if (vcl_abs(dGreen + dRed) < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dGreen + dRed) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -385,7 +385,7 @@ protected:
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
 
-    return (static_cast<TOutput>(vcl_sqrt((dRed * dRed + dGreen * dGreen) / 2.)));
+    return (static_cast<TOutput>(std::sqrt((dRed * dRed + dGreen * dGreen) / 2.)));
   }
 };
 
@@ -421,7 +421,7 @@ protected:
     double dRed = static_cast<double>(pRed);
     double dNir = static_cast<double>(pNir);
 
-    return (static_cast<TOutput>(vcl_sqrt((dRed * dRed + dGreen * dGreen + dNir * dNir) / 3.)));
+    return (static_cast<TOutput>(std::sqrt((dRed * dRed + dGreen * dGreen + dNir * dNir) / 3.)));
   }
 };
 

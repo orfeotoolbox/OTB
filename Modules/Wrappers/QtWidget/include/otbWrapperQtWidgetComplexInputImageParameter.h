@@ -43,8 +43,8 @@ public:
   QtWidgetComplexInputImageParameter(ComplexInputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetComplexInputImageParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
 protected slots:
   bool SetFileName( const QString& value );
@@ -65,22 +65,6 @@ private:
   QLineEdit*    m_Input;
   QPushButton * m_Button;
 };
-
-inline
-const QLineEdit*
-QtWidgetComplexInputImageParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetComplexInputImageParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

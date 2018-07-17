@@ -178,7 +178,7 @@ public:
       else
         {
         RealType scaledComponent = static_cast<RealType>(x[i] - m_InputMinimum[i])/ static_cast<RealType> (m_InputMaximum[i] - m_InputMinimum[i]);
-        scaledComponent = vcl_pow(scaledComponent,1./m_Gamma);
+        scaledComponent = std::pow(scaledComponent,1./m_Gamma);
         scaledComponent *= static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i]);
         result[i] = static_cast<typename TOutput::ValueType>(scaledComponent + m_OutputMinimum[i]);
         }

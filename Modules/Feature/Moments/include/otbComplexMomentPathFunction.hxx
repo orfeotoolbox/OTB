@@ -144,7 +144,7 @@ ComplexMomentPathFunction<TInputPath, TOutput, TPrecision>
     dest[1]  -= centroid[1];
 
     // Don't forget the ds part of the integration process
-    ds = vcl_sqrt(vcl_pow(dest[0] - source[0], 2.) + vcl_pow(dest[1] - source[1], 2.));
+    ds = std::sqrt(std::pow(dest[0] - source[0], 2.) + std::pow(dest[1] - source[1], 2.));
     norm += ds;
     value += ds * EvaluateComplexMomentAtIndex(source);
     source = dest;
@@ -154,10 +154,10 @@ ComplexMomentPathFunction<TInputPath, TOutput, TPrecision>
   dest = vertexList->Begin().Value();
   dest[0]  -= centroid[0];
   dest[1]  -= centroid[1];
-  ds = vcl_sqrt(vcl_pow(dest[0] - source[0], 2.) + vcl_pow(dest[1] - source[1], 2.));
+  ds = std::sqrt(std::pow(dest[0] - source[0], 2.) + std::pow(dest[1] - source[1], 2.));
   norm += ds;
   value += EvaluateComplexMomentAtIndex(source) * ds;
-  norm = vcl_pow(norm, ((PrecisionType) m_P + (PrecisionType) m_Q) / 2.);
+  norm = std::pow(norm, ((PrecisionType) m_P + (PrecisionType) m_Q) / 2.);
 
   // Normalize with edge perimeter
   value /= norm;

@@ -300,7 +300,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 
   /** Equation of the first Line*/
 
-  if (vcl_abs((*otherIndex)[0] - (*indexToCrop)[0]) < 1e-4) tempOtherIndexX = 0.000001;
+  if (std::abs((*otherIndex)[0] - (*indexToCrop)[0]) < 1e-4) tempOtherIndexX = 0.000001;
   else tempOtherIndexX = static_cast<double>((*otherIndex)[0]);
 
   if ((*indexToCrop)[0] < (*otherIndex)[0]) lengthSegment = (*otherIndex)[1] - (*indexToCrop)[1];

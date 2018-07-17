@@ -270,7 +270,7 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
 
   const double oa = 3 / static_cast<double>(nbSamples);
 
-  if (vcl_abs (calculator->GetOverallAccuracy() - oa) > 0.000001)
+  if (std::abs (calculator->GetOverallAccuracy() - oa) > 0.000001)
     {
     return EXIT_FAILURE;
     }

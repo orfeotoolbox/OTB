@@ -216,15 +216,15 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
         for (regionIterator = regionContainer.begin(); regionIterator != regionContainer.end(); ++regionIterator)
           {
           explorerIndex = *regionIterator;
-          ax = vcl_abs(explorerIndex[0] - avgX);
-          ay = vcl_abs(explorerIndex[1] - avgY);
+          ax = std::abs(explorerIndex[0] - avgX);
+          ay = std::abs(explorerIndex[1] - avgY);
           sumAX += ax;
           sumAY += ay;
           crossTermAXY += ax * ay;
           }
         adevX = sumAX / n;
         adevY = sumAY / n;
-        adevXY = vcl_sqrt(crossTermAXY) / n;
+        adevXY = std::sqrt(crossTermAXY) / n;
 
         // Compute eigenvalues and eigenvectors of variance-covariance matrix (for DIRECTION)
         double delta,
@@ -234,8 +234,8 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
                x2 = 1, /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
                alpha /* main direction */;
         delta = (varX - varY) * (varX - varY) + 4 * covarXY * covarXY;
-        l1 = (varX + varY + vcl_sqrt(delta)) / 2;
-        l2 = (varX + varY - vcl_sqrt(delta)) / 2;
+        l1 = (varX + varY + std::sqrt(delta)) / 2;
+        l2 = (varX + varY - std::sqrt(delta)) / 2;
         if (covarXY != 0.0)        // ZZ or larger than a small epsilon ? (eg 10^(-15)...)
           {
           y1 = (l1 - varX) / covarXY; // for x1 = 1
@@ -255,8 +255,8 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
                ax1 = 1, /* first eigenvector x coordinate */
                ax2 = 1; /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
         adelta = (adevX - adevY) * (adevX - adevY) + 4 * adevXY * adevXY;
-        al1 = (adevX + adevY + vcl_sqrt(adelta)) / 2;
-        al2 = (adevX + adevY - vcl_sqrt(adelta)) / 2;
+        al1 = (adevX + adevY + std::sqrt(adelta)) / 2;
+        al2 = (adevX + adevY - std::sqrt(adelta)) / 2;
         if (adevXY != 0.0)        // ZZ or larger than a small epsilon ? (eg 10^(-15)...)
           {
           ay1 = (al1 - adevX) / adevXY; // for x1 = 1
@@ -269,7 +269,7 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
           ay2 = 1;
           }
 
-        if (y1 != 0) alpha = vcl_atan(1 / y1) * 180 / vnl_math::pi;
+        if (y1 != 0) alpha = std::atan(1 / y1) * 180 / vnl_math::pi;
         else alpha = 90;
         if (alpha < 0) alpha += 180;  // Conventionnaly given as a value between 0 and 180 degrees
 
@@ -277,12 +277,12 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
         double length, width;
         if (al2 != 0)
           {
-          length = vcl_sqrt(vcl_abs(al1 / al2) * n);
-          //length = vcl_sqrt(l1 / l2 * n);
-          if (al1 != 0) width = vcl_abs(al2 / al1) * length;
+          length = std::sqrt(std::abs(al1 / al2) * n);
+          //length = std::sqrt(l1 / l2 * n);
+          if (al1 != 0) width = std::abs(al2 / al1) * length;
           else // l1 == 0 and l2 == 0
             {
-            length = width = vcl_sqrt(static_cast<double>(n)); // should happen only when n == 1 anyway
+            length = width = std::sqrt(static_cast<double>(n)); // should happen only when n == 1 anyway
             }
           }
         else
@@ -293,14 +293,14 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
 
         // Normalize eigenvectors (for following tests)
         double norm;
-        norm = vcl_sqrt(x1 * x1 + y1 * y1);
+        norm = std::sqrt(x1 * x1 + y1 * y1);
         assert (norm != 0); //(by construction of eigenvectors)
         if (norm != 0)
           {
           x1 /= norm;
           y1 /= norm;
           }
-        norm = vcl_sqrt(x2 * x2 + y2 * y2);
+        norm = std::sqrt(x2 * x2 + y2 * y2);
         assert (norm != 0); //(by construction of eigenvectors)
         if (norm != 0)
           {
@@ -309,14 +309,14 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
           }
 
         // Normalize eigenvectors (for following tests) (No : used only for printing values for debugging)
-        norm = vcl_sqrt(ax1 * ax1 + ay1 * ay1);
+        norm = std::sqrt(ax1 * ax1 + ay1 * ay1);
         assert (norm != 0); //(by construction of eigenvectors)
         if (norm != 0)
           {
           ax1 /= norm;
           ay1 /= norm;
           }
-        norm = vcl_sqrt(ax2 * ax2 + ay2 * ay2);
+        norm = std::sqrt(ax2 * ax2 + ay2 * ay2);
         assert (norm != 0); //(by construction of eigenvectors)
         if (norm != 0)
           {
@@ -334,8 +334,8 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
           explorerIndex = *regionIterator;
           vx = explorerIndex[0] - avgX;
           vy = explorerIndex[1] - avgY;
-          if (vcl_abs(vx * x1 + vy * y1) <= halfLength
-              && vcl_abs(vx * x2 + vy * y2) <= halfWidth) countWithin++;
+          if (std::abs(vx * x1 + vy * y1) <= halfLength
+              && std::abs(vx * x2 + vy * y2) <= halfWidth) countWithin++;
           }
 
         if (regionCount <= regionDebugNumber)

@@ -112,7 +112,7 @@ public:
                                                                           valueCurrent));
 
       m_Energy[valueCurrent] = this->m_EnergyCurrent;
-      m_RepartitionFunction[valueCurrent] = vcl_exp(-this->m_EnergyCurrent) + totalProba;
+      m_RepartitionFunction[valueCurrent] = std::exp(-this->m_EnergyCurrent) + totalProba;
       totalProba = m_RepartitionFunction[valueCurrent];
 
       }

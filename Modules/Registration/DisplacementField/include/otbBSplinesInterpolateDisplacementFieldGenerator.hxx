@@ -70,7 +70,7 @@ BSplinesInterpolateDisplacementFieldGenerator<TPointSet, TDisplacementField>
     {
     typename PointDataContainer::Element valueAndDisplacements = pointDataIterator.Value();
 
-    if (vcl_abs(valueAndDisplacements[0]) >= this->GetMetricThreshold())
+    if (std::abs(valueAndDisplacements[0]) >= this->GetMetricThreshold())
       {
       typename PointSetType::PointType p = pointIterator.Value();   // access the point
       sourcePoint[0] = p[0];

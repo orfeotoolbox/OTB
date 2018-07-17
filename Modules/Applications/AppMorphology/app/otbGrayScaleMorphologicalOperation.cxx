@@ -22,8 +22,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "itkBinaryBallStructuringElement.h"
-#include "itkBinaryCrossStructuringElement.h"
+#include "itkFlatStructuringElement.h"
 
 #include "itkGrayscaleDilateImageFilter.h"
 #include "itkGrayscaleErodeImageFilter.h"
@@ -51,10 +50,8 @@ typedef itk::SmartPointer<const Self> ConstPointer;
 typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,FloatVectorImageType::InternalPixelType>
 ExtractorFilterType;
 
-typedef itk::BinaryBallStructuringElement<FloatImageType::PixelType, 2>        BallStructuringType;
-typedef BallStructuringType::RadiusType                                        RadiusType;
-typedef BallStructuringType::Superclass                                        StructuringType;
-typedef itk::BinaryCrossStructuringElement<FloatImageType::PixelType, 2>       CrossStructuringType;
+typedef itk::FlatStructuringElement<2>                                         StructuringType;
+typedef StructuringType::RadiusType                                            RadiusType;
 
 typedef itk::GrayscaleDilateImageFilter<FloatImageType, FloatImageType, StructuringType>
                                                                                DilateFilterType;
@@ -104,39 +101,31 @@ AddRAMParameter();
 
 AddParameter(ParameterType_Choice, "structype", "Structuring Element Type");
 SetParameterDescription("structype", "Choice of the structuring element type");
-//Ball
+AddParameter(ParameterType_Int, "xradius", "Structuring element X radius");
+SetParameterDescription("xradius", "The structuring element radius along the X axis.");
+SetDefaultParameterInt("xradius", 5);
+AddParameter(ParameterType_Int, "yradius", "Structuring element Y radius");
+SetParameterDescription("yradius", "The structuring element radius along the Y axis.");
+SetDefaultParameterInt("yradius", 5);
+
+AddChoice("structype.box", "Box");
 AddChoice("structype.ball", "Ball");
-AddParameter(ParameterType_Int, "structype.ball.xradius", "The Structuring Element X Radius");
-SetParameterDescription("structype.ball.xradius", "The Structuring Element X Radius");
-SetDefaultParameterInt("structype.ball.xradius", 5);
-AddParameter(ParameterType_Int, "structype.ball.yradius", "The Structuring Element Y Radius");
-SetParameterDescription("structype.ball.yradius", "The Structuring Element Y Radius");
-SetDefaultParameterInt("structype.ball.yradius", 5);
-//Cross
 AddChoice("structype.cross", "Cross");
 
 AddParameter(ParameterType_Choice, "filter", "Morphological Operation");
 SetParameterDescription("filter", "Choice of the morphological operation");
 
-//Dilate
 AddChoice("filter.dilate", "Dilate");
-
-//Erode
 AddChoice("filter.erode", "Erode");
-
-//Opening
 AddChoice("filter.opening", "Opening");
-
-//Closing
 AddChoice("filter.closing", "Closing");
-
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("out", "opened.tif");
 SetDocExampleParameterValue("channel", "1");
-SetDocExampleParameterValue("structype.ball.xradius", "5");
-SetDocExampleParameterValue("structype.ball.yradius", "5");
+SetDocExampleParameterValue("xradius", "5");
+SetDocExampleParameterValue("yradius", "5");
 SetDocExampleParameterValue("filter", "erode");
 
 SetOfficialDocLink();
@@ -167,83 +156,51 @@ void DoExecute() override
   m_ExtractorFilter->SetChannel(GetParameterInt("channel"));
   m_ExtractorFilter->UpdateOutputInformation();
 
-  if(GetParameterString("structype") == "ball")
+  RadiusType rad;
+  rad[0] = this->GetParameterInt("xradius");
+  rad[1] = this->GetParameterInt("yradius");
+
+  StructuringType se;
+  if(GetParameterString("structype") == "box")
     {
-    BallStructuringType se;
-    RadiusType rad;
-    rad[0] = this->GetParameterInt("structype.ball.xradius");
-    rad[1] = this->GetParameterInt("structype.ball.yradius");
-    se.SetRadius(rad);
-    se.CreateStructuringElement();
-
-    if(GetParameterString("filter") == "dilate")
-      {
-      m_DilFilter = DilateFilterType::New();
-      m_DilFilter->SetKernel(se);
-      m_DilFilter->SetInput(m_ExtractorFilter->GetOutput());
-      SetParameterOutputImage("out", m_DilFilter->GetOutput());
-      }
-
-    if(GetParameterString("filter") == "erode")
-      {
-      m_EroFilter = ErodeFilterType::New();
-      m_EroFilter->SetKernel(se);
-      m_EroFilter->SetInput(m_ExtractorFilter->GetOutput());
-      SetParameterOutputImage("out", m_EroFilter->GetOutput());
-      }
-
-    if(GetParameterString("filter") == "opening")
-      {
-      m_OpeFilter = OpeningFilterType::New();
-      m_OpeFilter->SetKernel(se);
-      m_OpeFilter->SetInput(m_ExtractorFilter->GetOutput());
-      SetParameterOutputImage("out", m_OpeFilter->GetOutput());
-      }
-
-    if(GetParameterString("filter") == "closing")
-      {
-      m_CloFilter = ClosingFilterType::New();
-      m_CloFilter->SetKernel(se);
-      m_CloFilter->SetInput(m_ExtractorFilter->GetOutput());
-      SetParameterOutputImage("out", m_CloFilter->GetOutput());
-      }
+    se = StructuringType::Box(rad);
     }
-  if(GetParameterString("structype") == "cross")
+  else if(GetParameterString("structype") == "ball")
     {
-    CrossStructuringType se;
-    se.CreateStructuringElement();
+    se = StructuringType::Ball(rad);
+    }
+  else if(GetParameterString("structype") == "cross")
+    {
+    se = StructuringType::Cross(rad);
+    }
 
-    if(GetParameterString("filter") == "dilate")
-      {
-      m_DilFilter = DilateFilterType::New();
-      m_DilFilter->SetKernel(se);
-      m_DilFilter->SetInput(m_ExtractorFilter->GetOutput());
-      SetParameterOutputImage("out", m_DilFilter->GetOutput());
-      }
-
-    if(GetParameterString("filter") == "erode")
-      {
-      m_EroFilter = ErodeFilterType::New();
-      m_EroFilter->SetKernel(se);
-      m_EroFilter->SetInput(m_ExtractorFilter->GetOutput());
-      SetParameterOutputImage("out", m_EroFilter->GetOutput());
-      }
-
-    if(GetParameterString("filter") == "opening")
-      {
-      m_OpeFilter = OpeningFilterType::New();
-      m_OpeFilter->SetKernel(se);
-      m_OpeFilter->SetInput(m_ExtractorFilter->GetOutput());
-      SetParameterOutputImage("out", m_OpeFilter->GetOutput());
-      }
-
-    if(GetParameterString("filter") == "closing")
-      {
-      m_CloFilter = ClosingFilterType::New();
-      m_CloFilter->SetKernel(se);
-      m_CloFilter->SetInput(m_ExtractorFilter->GetOutput());
-      SetParameterOutputImage("out", m_CloFilter->GetOutput());
-      }
+  if(GetParameterString("filter") == "dilate")
+    {
+    m_DilFilter = DilateFilterType::New();
+    m_DilFilter->SetKernel(se);
+    m_DilFilter->SetInput(m_ExtractorFilter->GetOutput());
+    SetParameterOutputImage("out", m_DilFilter->GetOutput());
+    }
+  else if(GetParameterString("filter") == "erode")
+    {
+    m_EroFilter = ErodeFilterType::New();
+    m_EroFilter->SetKernel(se);
+    m_EroFilter->SetInput(m_ExtractorFilter->GetOutput());
+    SetParameterOutputImage("out", m_EroFilter->GetOutput());
+    }
+  else if(GetParameterString("filter") == "opening")
+    {
+    m_OpeFilter = OpeningFilterType::New();
+    m_OpeFilter->SetKernel(se);
+    m_OpeFilter->SetInput(m_ExtractorFilter->GetOutput());
+    SetParameterOutputImage("out", m_OpeFilter->GetOutput());
+    }
+  else if (GetParameterString("filter") == "closing")
+    {
+    m_CloFilter = ClosingFilterType::New();
+    m_CloFilter->SetKernel(se);
+    m_CloFilter->SetInput(m_ExtractorFilter->GetOutput());
+    SetParameterOutputImage("out", m_CloFilter->GetOutput());
     }
 }
 

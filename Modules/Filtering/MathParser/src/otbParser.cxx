@@ -203,7 +203,7 @@ private:
   //----------  User Defined Functions  ----------//BEGIN
   static ValueType NDVI(ValueType r, ValueType niri)
   {
-    if ( vcl_abs(r + niri) < 1E-6 )
+    if ( std::abs(r + niri) < 1E-6 )
       {
       return 0.;
       }
@@ -212,7 +212,7 @@ private:
   
   static ValueType ATAN2(ValueType y, ValueType x)
   {
-    return vcl_atan2(y,x);
+    return std::atan2(y,x);
   }
 
 #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS

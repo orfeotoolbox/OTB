@@ -57,7 +57,7 @@ Polygon<TValue>
     {
     double xb = it.Value()[0];
     double yb = it.Value()[1];
-    if (vcl_abs(xb - xa) < m_Epsilon)
+    if (std::abs(xb - xa) < m_Epsilon)
       {
       if (ya > yb && xa > x && y >= yb && y < ya)
         {
@@ -68,7 +68,7 @@ Polygon<TValue>
         ++crossingCount;
         }
       }
-    else if (vcl_abs(yb - ya) >= m_Epsilon)
+    else if (std::abs(yb - ya) >= m_Epsilon)
       {
       double xcross = xa + (xb - xa) * (y - ya) / (yb - ya);
 
@@ -87,7 +87,7 @@ Polygon<TValue>
     }
   double xb = this->GetVertexList()->Begin().Value()[0];
   double yb = this->GetVertexList()->Begin().Value()[1];
-  if (vcl_abs(xb - xa) < m_Epsilon)
+  if (std::abs(xb - xa) < m_Epsilon)
     {
     if (ya > yb && xa > x && y >= yb && y < ya)
       {
@@ -98,7 +98,7 @@ Polygon<TValue>
       ++crossingCount;
       }
     }
-  else if (vcl_abs(yb - ya) >= m_Epsilon)
+  else if (std::abs(yb - ya) >= m_Epsilon)
     {
     double xcross = xa + (xb - xa) * (y - ya) / (yb - ya);
 
@@ -140,13 +140,13 @@ Polygon<TValue>
     {
     xb = it.Value()[0];
     yb = it.Value()[1];
-    if (vcl_abs(xb - xa) >= m_Epsilon)
+    if (std::abs(xb - xa) >= m_Epsilon)
       {
       double cd = (yb - ya) / (xb - xa);
       double oo = (ya - cd * xa);
       double xmin = std::min(xa, xb);
       double xmax = std::max(xa, xb);
-      if ((vcl_abs(y - cd * x - oo) < m_Epsilon)
+      if ((std::abs(y - cd * x - oo) < m_Epsilon)
           && (x <= xmax)
           && (x >= xmin))
         {
@@ -158,7 +158,7 @@ Polygon<TValue>
       {
       double ymin = std::min(ya, yb);
       double ymax = std::max(ya, yb);
-      if ((vcl_abs(x - xa) < m_Epsilon)
+      if ((std::abs(x - xa) < m_Epsilon)
           && (y <= ymax)
           && (y >= ymin))
         {
@@ -172,14 +172,14 @@ Polygon<TValue>
     }
   xb = xbegin;
   yb = ybegin;
-  if (vcl_abs(xb - xa) >= m_Epsilon)
+  if (std::abs(xb - xa) >= m_Epsilon)
     {
     double cd = (yb - ya) / (xb - xa);
     double oo = (ya - cd * xa);
     double xmin = std::min(xa, xb);
     double xmax = std::max(xa, xb);
 
-    if ((vcl_abs(y - cd * x - oo) < m_Epsilon)
+    if ((std::abs(y - cd * x - oo) < m_Epsilon)
         && (x <= xmax)
         && (x >= xmin))
       {
@@ -191,7 +191,7 @@ Polygon<TValue>
     {
     double ymin = std::min(ya, yb);
     double ymax = std::max(ya, yb);
-    if ((vcl_abs(x - xa) <= m_Epsilon)
+    if ((std::abs(x - xa) <= m_Epsilon)
         && (y <= ymax)
         && (y >= ymin))
       {
@@ -292,11 +292,11 @@ Polygon<TValue>
   double xamax = std::max(a1[0], a2[0]);
   double yamin = std::min(a1[1], a2[1]);
   double yamax = std::max(a1[1], a2[1]);
-  if (vcl_abs(a1[0] - a2[0]) < m_Epsilon && vcl_abs(b1[0] - b2[0]) < m_Epsilon)
+  if (std::abs(a1[0] - a2[0]) < m_Epsilon && std::abs(b1[0] - b2[0]) < m_Epsilon)
     {
     resp = false;
     }
-  else if (vcl_abs(a1[0] - a2[0]) < m_Epsilon)
+  else if (std::abs(a1[0] - a2[0]) < m_Epsilon)
     {
     double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
     double oo2 = b1[1] - cd2 * b1[0];
@@ -304,7 +304,7 @@ Polygon<TValue>
     resp = (xbmin <a1[0] && xbmax> a1[0]
             && yamin <ycross && yamax> ycross);
     }
-  else if (vcl_abs(b1[0] - b2[0]) < m_Epsilon)
+  else if (std::abs(b1[0] - b2[0]) < m_Epsilon)
     {
     double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
     double oo1 = a1[1] - cd1 * a1[0];
@@ -349,38 +349,38 @@ Polygon<TValue>
   double xamax = std::max(a1[0], a2[0]);
   double yamin = std::min(a1[1], a2[1]);
   double yamax = std::max(a1[1], a2[1]);
-  if (vcl_abs(a1[0] - a2[0]) < m_Epsilon && vcl_abs(b1[0] - b2[0]) < m_Epsilon)
+  if (std::abs(a1[0] - a2[0]) < m_Epsilon && std::abs(b1[0] - b2[0]) < m_Epsilon)
     {
-    resp = (vcl_abs(a1[0] - b1[0]) < m_Epsilon)
+    resp = (std::abs(a1[0] - b1[0]) < m_Epsilon)
            && ((a1[1] <= ybmax && a1[1] >= ybmin)
                ||  (a2[1] <= ybmax && a2[1] >= ybmin)
                ||  (b1[1] <= yamax && b1[1] >= yamin)
                ||  (b2[1] <= yamax && b2[1] >= yamin));
     }
-  else if (vcl_abs(a1[0] - a2[0]) < m_Epsilon)
+  else if (std::abs(a1[0] - a2[0]) < m_Epsilon)
     {
     double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
     double oo2 = b1[1] - cd2 * b1[0];
 
-    if (vcl_abs(a1[1] - cd2 * a1[0] - oo2) < m_Epsilon)
+    if (std::abs(a1[1] - cd2 * a1[0] - oo2) < m_Epsilon)
       {
       resp = (a1[0] >= xbmin && a1[0] <= xbmax);
       }
-    else if (vcl_abs(a2[1] - cd2 * a2[0] - oo2) < m_Epsilon)
+    else if (std::abs(a2[1] - cd2 * a2[0] - oo2) < m_Epsilon)
       {
       resp = (a2[0] >= xbmin && a2[0] <= xbmax);
       }
     }
-  else if (vcl_abs(b1[0] - b2[0]) < m_Epsilon)
+  else if (std::abs(b1[0] - b2[0]) < m_Epsilon)
     {
     double cd1 = (a2[1] - a1[1]) / (a2[0] - a1[0]);
     double oo1 = a1[1] - cd1 * a1[0];
 
-    if (vcl_abs(b1[1] - cd1 * b1[0] - oo1) < m_Epsilon)
+    if (std::abs(b1[1] - cd1 * b1[0] - oo1) < m_Epsilon)
       {
       resp = (b1[0] >= xamin && b1[0] <= xamax);
       }
-    else if (vcl_abs(b2[1] - cd1 * b2[0] - oo1) < m_Epsilon)
+    else if (std::abs(b2[1] - cd1 * b2[0] - oo1) < m_Epsilon)
       {
       resp = (b2[0] >= xamin && b2[0] <= xamax);
       }
@@ -391,7 +391,7 @@ Polygon<TValue>
     double oo1 = a1[1] - cd1 * a1[0];
     double cd2 = (b2[1] - b1[1]) / (b2[0] - b1[0]);
     double oo2 = b1[1] - cd2 * b1[0];
-    if (vcl_abs(cd1 - cd2) < m_Epsilon && vcl_abs(oo1 - oo2) < m_Epsilon)
+    if (std::abs(cd1 - cd2) < m_Epsilon && std::abs(oo1 - oo2) < m_Epsilon)
       {
       resp = ((xamin <= xbmax && xamin >= xbmin)
               ||   (xamax <= xbmax && xamax >= xbmin)
@@ -400,19 +400,19 @@ Polygon<TValue>
       }
     else
       {
-      if (vcl_abs(a1[1] - cd2 * a1[0] - oo2) < m_Epsilon)
+      if (std::abs(a1[1] - cd2 * a1[0] - oo2) < m_Epsilon)
         {
         resp = (a1[0] >= xbmin && a1[0] <= xbmax);
         }
-      else if (vcl_abs(a2[1] - cd2 * a2[0] - oo2) < m_Epsilon)
+      else if (std::abs(a2[1] - cd2 * a2[0] - oo2) < m_Epsilon)
         {
         resp = (a2[0] >= xbmin && a2[0] <= xbmax);
         }
-      if (vcl_abs(b1[1] - cd1 * b1[0] - oo1) < m_Epsilon)
+      if (std::abs(b1[1] - cd1 * b1[0] - oo1) < m_Epsilon)
         {
         resp = (b1[0] >= xamin && b1[0] <= xamax);
         }
-      else if (vcl_abs(b2[1] - cd1 * b2[0] - oo1) < m_Epsilon)
+      else if (std::abs(b2[1] - cd1 * b2[0] - oo1) < m_Epsilon)
         {
         resp = (b2[0] >= xamin && b2[0] <= xamax);
         }
@@ -506,7 +506,7 @@ double Polygon<TValue>
         {
         accum += (pt1[i] - pt2[i]) * (pt1[i] - pt2[i]);
         }
-      length += vcl_sqrt(accum);
+      length += std::sqrt(accum);
       ++it;
       }
 
@@ -516,7 +516,7 @@ double Polygon<TValue>
       {
       accum += (origin[i] - pt2[i]) * (origin[i] - pt2[i]);
       }
-    length += vcl_sqrt(accum);
+    length += std::sqrt(accum);
 
     }
   else //if there is strictly less than 2 points, length is 0

@@ -390,8 +390,8 @@ GlView
   y[ 0 ] -= center[ 0 ];
   y[ 1 ] -= center[ 1 ];
 
-  spacing[ 0 ] = vcl_sqrt( x[ 0 ] * x[ 0 ] + x[ 1 ] * x[ 1 ] ) / norm;
-  spacing[ 1 ] = vcl_sqrt( y[ 0 ] * y[ 0 ] + y[ 1 ] * y[ 1 ] ) / norm;
+  spacing[ 0 ] = std::sqrt( x[ 0 ] * x[ 0 ] + x[ 1 ] * x[ 1 ] ) / norm;
+  spacing[ 1 ] = std::sqrt( y[ 0 ] * y[ 0 ] + y[ 1 ] * y[ 1 ] ) / norm;
 
   // New spacing signs should match signs of the reference image spacing
   
@@ -676,8 +676,8 @@ GlView
   // MANTIS-1203: absolute value of native spacing should be
   // considered (to avoid flipping effects).
   spacing[ 0 ] =
-    vcl_abs( n_spacing[ 0 ] ) * units * spacing[ 0 ] /
-    vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+    std::abs( n_spacing[ 0 ] ) * units * spacing[ 0 ] /
+    std::sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
   //
   // Consider arbitrary point on the Y-axis.
@@ -700,8 +700,8 @@ GlView
   // MANTIS-1203: absolute value of native spacing should be
   // considered (to avoid flipping effects).
   spacing[ 1 ] =
-    vcl_abs( n_spacing[ 1 ] ) * units * spacing[ 1 ] /
-    vcl_sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
+    std::abs( n_spacing[ 1 ] ) * units * spacing[ 1 ] /
+    std::sqrt( e[ 0 ] * e[ 0 ] + e[ 1 ] * e[ 1 ] );
 
   // std::cout << "-> spacing: " << spacing[ 0 ] << ", " << spacing[ 1 ] << std::endl;
 
@@ -713,10 +713,10 @@ GlView
   //
   // MANTIS-1203: restore sign of axis when applying isotrop spacing.
   // {
-  if( vcl_abs( spacing[ 0 ] ) < vcl_abs( spacing[ 1 ] ) )
-    spacing[ 1 ] = ( spacing[ 1 ]<0.0 ? -1 : +1 ) * vcl_abs( spacing[ 0 ] );
+  if( std::abs( spacing[ 0 ] ) < std::abs( spacing[ 1 ] ) )
+    spacing[ 1 ] = ( spacing[ 1 ]<0.0 ? -1 : +1 ) * std::abs( spacing[ 0 ] );
   else
-    spacing[ 0 ] = ( spacing[ 0 ]<0.0 ? -1 : +1 ) * vcl_abs( spacing[ 1 ] );
+    spacing[ 0 ] = ( spacing[ 0 ]<0.0 ? -1 : +1 ) * std::abs( spacing[ 1 ] );
   // }
   // MANTIS-1202
 

@@ -45,6 +45,20 @@ QtWidgetInputImageParameter::~QtWidgetInputImageParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetInputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetInputImageParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetInputImageParameter::DoUpdateGUI()
 {
   //update lineedit if HasUserValue flag is set(from xml)
@@ -73,8 +87,8 @@ void QtWidgetInputImageParameter::DoCreateWidget()
     QString::fromStdString( m_InputImageParam->GetDescription() )
   );
 
-  connect( m_Input, SIGNAL(editingFinished()), this, SLOT(OnEditingFinished()) );
-  connect( this, SIGNAL(FileNameIsSet()), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::editingFinished, this, &QtWidgetInputImageParameter::OnEditingFinished );
+  connect( this, &QtWidgetInputImageParameter::FileNameIsSet, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   m_HLayout->addWidget(m_Input);
 
@@ -83,7 +97,7 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetInputImageParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);

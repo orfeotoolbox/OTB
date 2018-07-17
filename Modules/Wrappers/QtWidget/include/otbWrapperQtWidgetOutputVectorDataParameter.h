@@ -43,8 +43,8 @@ public:
   QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputVectorDataParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -73,24 +73,6 @@ private:
   int           m_PixelType;
 
 };
-
-
-
-inline
-const QLineEdit*
-QtWidgetOutputVectorDataParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputVectorDataParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

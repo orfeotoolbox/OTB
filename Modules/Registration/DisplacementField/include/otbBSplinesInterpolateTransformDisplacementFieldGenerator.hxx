@@ -78,7 +78,7 @@ BSplinesInterpolateTransformDisplacementFieldGenerator<TPointSet, TDisplacementF
          it != this->GetPointSet()->GetPoints()->End();
          ++it)
       {
-      if (vcl_abs(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[0]) >= this->GetMetricThreshold())
+      if (std::abs(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[0]) >= this->GetMetricThreshold())
         {
         typename InternalPointSetType::PixelType V(0.0);
 
@@ -90,10 +90,10 @@ BSplinesInterpolateTransformDisplacementFieldGenerator<TPointSet, TDisplacementF
         else
           {
           V[0] =
-            static_cast<ValueType>(vcl_cos(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex
+            static_cast<ValueType>(std::cos(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex
                                                                                                              + 3]));
           V[1] =
-            static_cast<ValueType>(vcl_sin(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex
+            static_cast<ValueType>(std::sin(this->GetPointSet()->GetPointData()->GetElement(pointDataCounter)[paramIndex
                                                                                                              + 3]));
           }
         unsigned long nbPoints = tmpPointSet->GetNumberOfPoints();
@@ -154,7 +154,7 @@ BSplinesInterpolateTransformDisplacementFieldGenerator<TPointSet, TDisplacementF
       else
         {
         V = splineIntList->GetNthElement(paramIndex)->EvaluateAtParametricPoint(p);
-        params[paramIndex] = vcl_atan2(V[1], V[0]);
+        params[paramIndex] = std::atan2(V[1], V[0]);
         }
       // We then compute the target point using the transform
       this->GetTransform()->SetParameters(params);

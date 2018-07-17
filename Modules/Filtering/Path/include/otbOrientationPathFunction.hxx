@@ -64,7 +64,7 @@ OrientationPathFunction<TInputPath, TOutput>
     RealType x2 = cindex[0];
     RealType y2 = cindex[1];
 
-    Theta = vcl_atan2(y2 - y1, x2 - x1);
+    Theta = std::atan2(y2 - y1, x2 - x1);
     } // IF loop
   else
     {

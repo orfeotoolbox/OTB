@@ -306,7 +306,7 @@ ImageToPathListAlignFilter<TInputImage, TOutputPath>
       norm = gx * gx + gy * gy;
 
       if (norm <= threshold) m_AngleImage->SetPixel(adr, static_cast<RealType>(-1000.0));
-      else m_AngleImage->SetPixel(adr, static_cast<RealType>(vcl_atan2(gx, -gy)));
+      else m_AngleImage->SetPixel(adr, static_cast<RealType>(std::atan2(gx, -gy)));
       }
 }
 
@@ -346,12 +346,12 @@ ImageToPathListAlignFilter<TInputImage, TOutputPath>
   Taille = InputImage->GetLargestPossibleRegion().GetSize();
   nx = Taille[0];
   ny = Taille[1];
-  max_nfa = vcl_pow(10.0, -(m_Eps));
+  max_nfa = std::pow(10.0, -(m_Eps));
 
 //  typename InputImageType::IndexType adr;
 
   /*** maximal length for a line */
-  n = (int) vcl_ceil(hypot((double) nx, (double) ny)) + 1;
+  n = (int) std::ceil(hypot((double) nx, (double) ny)) + 1;
 
   /*** compute angle map of u ***/
   RealImageTypePointer lAngleImagePointer = RealImageType::New();
@@ -402,8 +402,8 @@ ImageToPathListAlignFilter<TInputImage, TOutputPath>
       printf(".");
       fflush(stdout);
       theta = theta0 + (double) (itheta) * dtheta;
-      dx = (double) vcl_cos((double) theta);
-      dy = (double) vcl_sin((double) theta);
+      dx = (double) std::cos((double) theta);
+      dy = (double) std::sin((double) theta);
 
       /*** third loop : start positions ***/
       for (pos = 0; pos < posmax; ++pos)

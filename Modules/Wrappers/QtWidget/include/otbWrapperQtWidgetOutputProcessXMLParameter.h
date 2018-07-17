@@ -43,8 +43,8 @@ public:
   QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputProcessXMLParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
 public slots:
   void SetFileName( const QString& value );
@@ -68,22 +68,6 @@ private:
   QPushButton * m_Button;
 };
 
-
-inline
-const QLineEdit*
-QtWidgetOutputProcessXMLParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputProcessXMLParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

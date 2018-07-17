@@ -22,7 +22,7 @@
 
 #include "otbWaveletGenerator.h"
 
-#include <vcl_cmath.h>
+#include <cmath>
 #include "itkMacro.h"
 #include "otbMath.h"
 

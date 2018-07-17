@@ -62,8 +62,8 @@ void QtWidgetStringParameter::DoCreateWidget()
   );
   m_HLayout->addWidget(m_Input);
 
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetValue(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetStringParameter::SetValue );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   this->setLayout(m_HLayout);
 

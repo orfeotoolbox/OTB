@@ -179,7 +179,7 @@ private:
   itk::Array<double> m_Beta; // Sparsity regularization parameter
   double m_InitFactor; // Weight initialization factor (the weights are intialized at m_initfactor/sqrt(inputDimension)  )
 
-  bool m_WriteLearningCurve; // Flag for writting the learning curve into a txt file
+  bool m_WriteLearningCurve; // Flag for writing the learning curve into a txt file
   std::string m_LearningCurveFileName; // Name of the output learning curve printed after training
   bool m_WriteWeights;
 };

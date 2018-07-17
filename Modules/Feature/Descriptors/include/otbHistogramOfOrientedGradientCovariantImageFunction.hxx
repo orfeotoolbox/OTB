@@ -105,7 +105,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         {
         // If so, compute the gaussian weighting (this could be
         // computed once for all for the sake of optimisation)
-        double gWeight = (1/vcl_sqrt(otb::CONST_2PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
+        double gWeight = (1/std::sqrt(otb::CONST_2PI*squaredSigma)) * std::exp(- currentSquaredRadius/(2*squaredSigma));
 
         // Compute pixel location
         offset[0]=i;
@@ -115,14 +115,14 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         InputPixelType gradient = it.GetPixel(offset);
 
         // Then, compute the gradient orientation
-        double angle = vcl_atan2(gradient[1], gradient[0]);
+        double angle = std::atan2(gradient[1], gradient[0]);
 
         // Also compute its magnitude
-        TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
+        TOutputPrecision magnitude = std::sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
 
         // Determine the bin index (shift of otb::CONST_PI since atan2 values
         // lies in [-pi, pi]
-        unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
+        unsigned int binIndex = std::floor((otb::CONST_PI + angle)/orientationBinWidth);
 
         // Handle special case where angle = pi, and binIndex is out-of-bound
         if(binIndex == m_NumberOfOrientationBins)
@@ -173,7 +173,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         {
         // If so, compute the gaussian weighting (this could be
         // computed once for all for the sake of optimisation)
-        double gWeight = (1/vcl_sqrt(otb::CONST_2PI * squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
+        double gWeight = (1/std::sqrt(otb::CONST_2PI * squaredSigma)) * std::exp(- currentSquaredRadius/(2*squaredSigma));
 
         // Compute pixel location
         offset[0]=i;
@@ -183,7 +183,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         InputPixelType gradient = it.GetPixel(offset);
 
         // Then, compute the compensated gradient orientation
-        double angle = vcl_atan2(gradient[1], gradient[0]) - principalOrientation;
+        double angle = std::atan2(gradient[1], gradient[0]) - principalOrientation;
 
         // Angle is supposed to lie with [-pi, pi], so we ensure that
         // compenstation did not introduce out-of-range values
@@ -197,17 +197,17 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
           }
 
         // Also compute its magnitude
-        TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
+        TOutputPrecision magnitude = std::sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
 
         // Determine the bin index (shift of otb::CONST_PI since atan2 values
         // lies in [-pi, pi]
-        unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
+        unsigned int binIndex = std::floor((otb::CONST_PI + angle)/orientationBinWidth);
 
         if(binIndex == m_NumberOfOrientationBins)
           binIndex=m_NumberOfOrientationBins-1;
 
         // Compute the angular position
-        double angularPosition = vcl_atan2((double)j, (double)i) - principalOrientation;
+        double angularPosition = std::atan2((double)j, (double)i) - principalOrientation;
 
         // Angle is supposed to lie within [-pi, pi], so we ensure that
         // the compensation did not introduce out-of-range values
@@ -271,7 +271,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
       {
       squaredCumul += (*vIt)*(*vIt);
       }
-    double scale = 1/vcl_sqrt(squaredCumul);
+    double scale = 1/std::sqrt(squaredCumul);
     // Apply normalisation factor
     for(typename std::vector<TOutputPrecision>::iterator vIt = oIt->begin();
         vIt!=oIt->end(); ++vIt)

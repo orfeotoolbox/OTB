@@ -167,8 +167,8 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 
     // Ensure correct rounding of coordinates
    
-    inULIndex[dim] = vcl_floor(inULCIndex[dim]);
-    inLRIndex[dim] = vcl_ceil(inLRCIndex[dim]);
+    inULIndex[dim] = std::floor(inULCIndex[dim]);
+    inLRIndex[dim] = std::ceil(inLRCIndex[dim]);
     
     inSize[dim] = static_cast<typename SizeType::SizeValueType>(inLRIndex[dim]-inULIndex[dim])+1;
     }
@@ -277,12 +277,12 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 
   IndexType outputIndex;
   // This needs to take into account negative spacing
-  outputIndex[0] = vcl_ceil(std::min(outUL[0],outLR[0]));
-  outputIndex[1] = vcl_ceil(std::min(outUL[1],outLR[1]));
+  outputIndex[0] = std::ceil(std::min(outUL[0],outLR[0]));
+  outputIndex[1] = std::ceil(std::min(outUL[1],outLR[1]));
 
   SizeType outputSize;
-  outputSize[0] = vcl_floor(std::max(outUL[0],outLR[0])) - outputIndex[0] + 1;
-  outputSize[1] = vcl_floor(std::max(outUL[1],outLR[1])) - outputIndex[1] + 1;
+  outputSize[0] = std::floor(std::max(outUL[0],outLR[0])) - outputIndex[0] + 1;
+  outputSize[1] = std::floor(std::max(outUL[1],outLR[1])) - outputIndex[1] + 1;
 
   m_ReachableOutputRegion.SetIndex(outputIndex);
   m_ReachableOutputRegion.SetSize(outputSize);

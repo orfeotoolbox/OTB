@@ -73,7 +73,7 @@ DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
   double dx = x - p[0];
   double dy = y - p[1];
 
-  return vcl_sqrt(dx*dx + dy*dy);
+  return std::sqrt(dx*dx + dy*dy);
  }
 
 template <class TCoordRep, class TPrecision>

@@ -268,7 +268,7 @@ PersistentCompareImageFilter<TInputImage>
   mae = (count != 0) ? absoluteValueOfDifferences / static_cast<RealType>(count) : 0.;
 
   //compute psnr
-  psnr = (vcl_abs(mse)>0.0000000001 && (maximumRef-minimumRef)>0.0000000001) ? 10.*vcl_log10(((maximumRef-minimumRef)*(maximumRef-minimumRef))/mse):0.;
+  psnr = (std::abs(mse)>0.0000000001 && (maximumRef-minimumRef)>0.0000000001) ? 10.*std::log10(((maximumRef-minimumRef)*(maximumRef-minimumRef))/mse):0.;
   // Set the output
   this->GetMSEOutput()->Set(mse);
   this->GetMAEOutput()->Set(mae);
@@ -353,7 +353,7 @@ PersistentCompareImageFilter<TInputImage>
     
     RealType diffVal = realValue1 - realValue2;
     m_SquareOfDifferences[threadId] +=  diffVal * diffVal;
-    m_AbsoluteValueOfDifferences[threadId] += vcl_abs( diffVal );
+    m_AbsoluteValueOfDifferences[threadId] += std::abs( diffVal );
     if (! itk::Math::FloatAlmostEqual(realValue1, realValue2))
       {
       m_DiffCount[threadId]++;

@@ -138,8 +138,8 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
   {
     for ( unsigned int i = 0; i < outIter.size(); ++i )
     {
-      outIter[i].Set( vcl_cos( m_AngleSet[i] ) * iter1.Get()
-                      + vcl_sin( m_AngleSet[i] ) * iter2.Get() );
+      outIter[i].Set( std::cos( m_AngleSet[i] ) * iter1.Get()
+                      + std::sin( m_AngleSet[i] ) * iter2.Get() );
       ++outIter[i];
     }
 

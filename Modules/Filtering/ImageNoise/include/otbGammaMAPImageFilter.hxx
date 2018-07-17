@@ -126,7 +126,7 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
 
   //Compute the ratio using the number of looks
   Cu2 = 1.0/m_NbLooks;
-  Cu = vcl_sqrt(Cu2);
+  Cu = std::sqrt(Cu2);
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
@@ -164,14 +164,14 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       I = static_cast<double>(bit.GetCenterPixel());
       
       Ci2 = Var_I / (E_I * E_I);
-      Ci  = vcl_sqrt(Ci2);
+      Ci  = std::sqrt(Ci2);
 
       const double epsilon = 0.0000000001;
-      if (vcl_abs(E_I) < epsilon)
+      if (std::abs(E_I) < epsilon)
       {
         dPixel = itk::NumericTraits<OutputPixelType>::Zero;
       }
-      else if (vcl_abs(Var_I) < epsilon)
+      else if (std::abs(Var_I) < epsilon)
       {
 		dPixel = E_I;
       }
@@ -181,14 +181,14 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       }
       else
       {
-        Cmax = vcl_sqrt(2.0) * Cu;
+        Cmax = std::sqrt(2.0) * Cu;
       
         if (Ci < Cmax) 
         {
                 alpha = (1 + Cu2) / (Ci2 - Cu2);
                 b = alpha - m_NbLooks - 1;
                 d = E_I * E_I * b * b + 4 * alpha * m_NbLooks * E_I * I;
-                dPixel = (b * E_I + vcl_sqrt(d)) / (2 * alpha);
+                dPixel = (b * E_I + std::sqrt(d)) / (2 * alpha);
         }
         else
 			dPixel = I;

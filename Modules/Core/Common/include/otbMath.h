@@ -28,7 +28,7 @@
  * All mathematics constans, functions (used in the OTB code) are the vcl version (vcl..., CONST_PI, ).
  */
 
-#include "vcl_cmath.h"
+#include <cmath>
 
 namespace otb {
 
@@ -37,7 +37,7 @@ namespace otb {
 #define _MATH_DEFINES_DEFINED
 #endif
 
-/** Define constants if not define in the "vcl_cmath.h" */
+/** Define constants if not define in the "cmath" */
 
 /* Some useful constants.  */
 const double CONST_E =        2.7182818284590452354;   /* e */

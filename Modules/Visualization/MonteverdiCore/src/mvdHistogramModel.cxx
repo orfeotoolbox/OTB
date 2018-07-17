@@ -197,7 +197,7 @@ HistogramModel
 
   assert( minI <= maxI );
 
-  MeasurementType rangeI = vcl_abs( maxI - minI );
+  MeasurementType rangeI = std::abs( maxI - minI );
 
   // Frequency of current bin
   Histogram::AbsoluteFrequencyType frequency(

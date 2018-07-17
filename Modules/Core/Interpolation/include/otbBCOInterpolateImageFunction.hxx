@@ -96,19 +96,19 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
     {
 
     // Compute the BCO coefficients according to alpha.
-    dist = vcl_abs(position - offset*step);
+    dist = std::abs(position - offset*step);
 
     if( dist <= 2. )
       {
       if (dist <= 1.)
         {
-        BCOCoef[i] = (m_Alpha + 2.)*vcl_abs(dist * dist * dist)
+        BCOCoef[i] = (m_Alpha + 2.)*std::abs(dist * dist * dist)
           - (m_Alpha + 3.)*dist*dist + 1;
         }
       else
         {
-        BCOCoef[i] = m_Alpha*vcl_abs(dist * dist * dist) - 5
-          *m_Alpha*dist*dist + 8*m_Alpha*vcl_abs(dist) - 4*m_Alpha;
+        BCOCoef[i] = m_Alpha*std::abs(dist * dist * dist) - 5
+          *m_Alpha*dist*dist + 8*m_Alpha*std::abs(dist) - 4*m_Alpha;
         }
       }
     else

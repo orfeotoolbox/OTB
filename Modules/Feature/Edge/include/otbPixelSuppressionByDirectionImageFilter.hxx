@@ -238,20 +238,20 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Threaded
           // No calculation on the central pixel
           if ((x == 0) && (y == 0)) continue;
 
-          Thetaxtyt = vcl_atan2(static_cast<double>(y), static_cast<double>(x));   //result is [-PI, PI]
+          Thetaxtyt = std::atan2(static_cast<double>(y), static_cast<double>(x));   //result is [-PI, PI]
           while (Thetaxtyt < 0)
             Thetaxtyt = CONST_PI + Thetaxtyt;  // Theta is now [0, PI] as is
           // the result of detectors
           while (Thetaxtyt > CONST_PI_2)
             Thetaxtyt = Thetaxtyt - CONST_PI;  // Theta is now [-PI/2, PI/2]
 
-          if ((vcl_abs(vcl_cos(Thetaxtyt - ThetaXcYc)) >= vcl_cos(m_AngularBeam)) // this
+          if ((std::abs(std::cos(Thetaxtyt - ThetaXcYc)) >= std::cos(m_AngularBeam)) // this
               // pixel
               // is
               // in
               // the
               // angular beam
-              && (vcl_abs(vcl_cos(bit.GetPixel(off) - ThetaXcYc)) >= vcl_cos(m_AngularBeam))) //and
+              && (std::abs(std::cos(bit.GetPixel(off) - ThetaXcYc)) >= std::cos(m_AngularBeam))) //and
           //its
           //direction
           //is

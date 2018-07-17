@@ -84,9 +84,9 @@ void QtWidgetChoiceParameter::DoCreateWidget()
       }
     }
 
-  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetValue(int)) );
-  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), m_StackWidget, SLOT(setCurrentIndex(int)) );
-  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &QtWidgetChoiceParameter::SetValue);
+  connect( m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), m_StackWidget, &QStackedWidget::setCurrentIndex);
+  connect( m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), GetModel(), &QtWidgetModel::NotifyUpdate );
 
   m_VLayout = new QVBoxLayout(this);
   m_VLayout->addWidget(m_ComboBox);

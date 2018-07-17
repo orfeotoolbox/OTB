@@ -98,8 +98,8 @@ LogPolarTransform<TScalarType>
   double          logRho   = point[1] * m_Scale[1];
   result[0] = m_Center[0];
   result[1] = m_Center[1];
-  result[0] += vcl_exp(logRho) * vcl_cos(theta);
-  result[1] += vcl_exp(logRho) * vcl_sin(theta);
+  result[0] += std::exp(logRho) * std::cos(theta);
+  result[1] += std::exp(logRho) * std::sin(theta);
   return result;
 }
 /**
@@ -118,8 +118,8 @@ LogPolarTransform<TScalarType>
   double           logRho   = vector[1] * m_Scale[1];
   result[0] = 0.;
   result[1] = 0.;
-  result[0] += vcl_exp(logRho) * vcl_cos(theta);
-  result[1] += vcl_exp(logRho) * vcl_sin(theta);
+  result[0] += std::exp(logRho) * std::cos(theta);
+  result[1] += std::exp(logRho) * std::sin(theta);
 
   return result;
 }
@@ -139,8 +139,8 @@ LogPolarTransform<TScalarType>
   double              logRho   = vector[1] * m_Scale[1];
   result[0] = 0.;
   result[1] = 0.;
-  result[0] += vcl_exp(logRho) * vcl_cos(theta);
-  result[1] += vcl_exp(logRho) * vcl_sin(theta);
+  result[0] += std::exp(logRho) * std::cos(theta);
+  result[1] += std::exp(logRho) * std::sin(theta);
 
   return result;
 }

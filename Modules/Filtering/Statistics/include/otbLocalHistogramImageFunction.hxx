@@ -114,7 +114,7 @@ LocalHistogramImageFunction<TInputImage, TCoordRep>
         double gWeight = 1.;
         if(m_GaussianSmoothing)
           {
-          gWeight = (1/vcl_sqrt(otb::CONST_2PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
+          gWeight = (1/std::sqrt(otb::CONST_2PI*squaredSigma)) * std::exp(- currentSquaredRadius/(2*squaredSigma));
           }
 
         // Compute pixel location
