@@ -34,16 +34,17 @@ void WorldFile::Update()
     int         i = m_ImageFilename.find_last_of('.');
     worldFilename = m_ImageFilename.substr(0, i) + ".wld";
 
-    std::ofstream file;
-    file.open(worldFilename.c_str());
+    std::ofstream file(worldFilename.c_str());
+
+    if(!file)
+      itkExceptionMacro(<<"Can not open file "<<worldFilename<<" for output");
     file << std::setprecision(15);
-    file << m_LonSpacing << std::endl;
-    file << m_LatRotation << std::endl; //yes, in this order
-    file << m_LonRotation << std::endl;
-    file << m_LatSpacing << std::endl;
-    file << m_LonOrigin << std::endl;
-    file << m_LatOrigin << std::endl;
-    file.close();
+    file << m_LonSpacing << "\n";
+    file << m_LatRotation << "\n"; //yes, in this order
+    file << m_LonRotation << "\n";
+    file << m_LatSpacing << "\n";
+    file << m_LonOrigin << "\n";
+    file << m_LatOrigin << "\n";
   }
 
 
