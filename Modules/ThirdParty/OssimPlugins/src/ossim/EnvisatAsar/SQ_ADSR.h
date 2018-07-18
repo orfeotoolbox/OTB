@@ -26,7 +26,6 @@
 #ifndef SQ_ADSR_h
 #define SQ_ADSR_h
 
-#include <iostream>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 
 namespace ossimplugins

@@ -26,7 +26,6 @@
 #ifndef ErsSarMapProjectionData_h
 #define ErsSarMapProjectionData_h
 
-#include <iostream>
 #include <cstdlib>
 #include "erssar/ErsSarRecordHeader.h"
 #include "erssar/ErsSarRecord.h"

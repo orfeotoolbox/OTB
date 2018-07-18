@@ -26,7 +26,6 @@
 #ifndef ChirpParameters_h
 #define ChirpParameters_h
 
-#include <iostream>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 
 namespace ossimplugins

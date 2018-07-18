@@ -19,6 +19,7 @@
  */
 
 #include "otbStringToHTML.h"
+#include <ostream>
 
 namespace otb
 {

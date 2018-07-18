@@ -27,7 +27,6 @@
 #ifndef AlosPalsarLeader_h
 #define AlosPalsarLeader_h
 
-#include <iostream>
 #include "AlosPalsar/AlosPalsarFileDescriptor.h"
 #include "AlosPalsar/AlosPalsarDataSetSummary.h"
 #include "AlosPalsar/AlosPalsarMapProjectionData.h"

@@ -26,7 +26,6 @@
 #ifndef RadiometricData_h
 #define RadiometricData_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 

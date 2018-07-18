@@ -28,7 +28,6 @@
 #include "itkListSample.h"
 #include "itkVariableLengthVector.h"
 
-#include <iostream>
 
 namespace otb
 {

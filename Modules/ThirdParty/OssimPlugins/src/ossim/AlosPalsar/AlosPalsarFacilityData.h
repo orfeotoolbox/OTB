@@ -27,7 +27,6 @@
 #ifndef AlosPalsarFacilityData_h
 #define AlosPalsarFacilityData_h
 
-#include <iostream>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <AlosPalsar/AlosPalsarRecord.h>

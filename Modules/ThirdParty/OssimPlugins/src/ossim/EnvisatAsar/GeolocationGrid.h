@@ -26,7 +26,6 @@
 #ifndef GeolocationGrid_h
 #define GeolocationGrid_h
 
-#include <iostream>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 
 namespace ossimplugins

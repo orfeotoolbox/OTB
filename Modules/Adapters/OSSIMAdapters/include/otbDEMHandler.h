@@ -21,7 +21,6 @@
 #ifndef otbDEMHandler_h
 #define otbDEMHandler_h
 
-#include <iostream>
 #include <cstdio>
 
 #include "itkIndent.h"

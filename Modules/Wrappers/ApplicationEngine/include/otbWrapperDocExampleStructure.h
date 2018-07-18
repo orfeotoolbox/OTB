@@ -25,7 +25,6 @@
 #include "itkObjectFactory.h"
 
 #include <string>
-#include <iostream>
 #include <vector>
 #include "otbConfigure.h"
 #include "itkFixedArray.h"
