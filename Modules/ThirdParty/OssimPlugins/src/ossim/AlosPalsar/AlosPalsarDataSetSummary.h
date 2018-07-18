@@ -28,6 +28,7 @@
 #define AlosPalsarDataSetSummary_h
 
 #include <iostream>
+#include <string>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <AlosPalsar/AlosPalsarRecord.h>

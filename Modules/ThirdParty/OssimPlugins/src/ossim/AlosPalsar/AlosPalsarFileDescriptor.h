@@ -29,7 +29,8 @@
 
 // TODO Rename to AlosPalsarLeaderFileDescriptor
 
-#include<iostream>
+#include <iostream>
+#include <string>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <AlosPalsar/AlosPalsarRecord.h>
