@@ -23,6 +23,7 @@
 
 #include "otbExtendedFilenameHelper.h"
 #include "otbGDALImageIO.h"
+#include <string>
 
 namespace otb
 {

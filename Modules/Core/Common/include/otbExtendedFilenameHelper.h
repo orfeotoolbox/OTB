@@ -27,6 +27,7 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "OTBCommonExport.h"
+#include <string>
 
 namespace otb
 {

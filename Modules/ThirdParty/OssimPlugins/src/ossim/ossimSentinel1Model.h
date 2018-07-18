@@ -27,6 +27,7 @@
 #define ossimSentinel1Model_HEADER
 
 #include <iosfwd>
+#include <string>
 #include <boost/config.hpp>
 
 #include <ossim/base/ossimCommon.h>

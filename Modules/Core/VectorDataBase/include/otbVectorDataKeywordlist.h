@@ -23,6 +23,7 @@
 
 #include <iosfwd>
 #include <vector>
+#include <string>
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"

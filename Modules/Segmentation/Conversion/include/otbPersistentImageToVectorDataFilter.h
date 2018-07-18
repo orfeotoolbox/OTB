@@ -28,6 +28,7 @@
 #include "otbConcatenateVectorDataFilter.h"
 #include "otbOGRVectorDataIO.h"
 #include "itkMacro.h"
+#include <string>
 
 namespace otb
 {

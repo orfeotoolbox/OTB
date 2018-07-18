@@ -28,6 +28,7 @@
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbSamplingRateCalculator.h"
 #include "otbOGRDataToSamplePositionFilter.h"
+#include <string>
 
 namespace otb
 {

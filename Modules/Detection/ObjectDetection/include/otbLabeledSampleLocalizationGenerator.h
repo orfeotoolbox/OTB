@@ -26,6 +26,7 @@
 #include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "itkEuclideanDistanceMetric.h"
+#include <string>
 
 
 namespace otb

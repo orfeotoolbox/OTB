@@ -22,6 +22,7 @@
 #define otbFormosatImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
+#include <string>
 
 namespace otb
 {

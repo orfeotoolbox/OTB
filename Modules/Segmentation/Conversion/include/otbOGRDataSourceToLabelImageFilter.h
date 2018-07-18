@@ -28,6 +28,7 @@
 #include "gdal.h"
 #include "gdal_alg.h"
 #include "otbOGRDataSourceWrapper.h"
+#include <string>
 
 namespace otb {
 

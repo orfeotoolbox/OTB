@@ -50,6 +50,8 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdTypes.h"
 
+#include <string>
+
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 

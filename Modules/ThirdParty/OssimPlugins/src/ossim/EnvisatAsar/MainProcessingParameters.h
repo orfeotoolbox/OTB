@@ -28,6 +28,7 @@
 
 #include <sstream>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

@@ -22,6 +22,7 @@
 #define otbPleiadesImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
+#include <string>
 
 namespace otb
 {

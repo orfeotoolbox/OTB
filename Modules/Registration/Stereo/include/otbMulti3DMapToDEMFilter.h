@@ -29,6 +29,7 @@
 #include "otbImage.h"
 #include "itkImageRegionSplitter.h"
 #include "otbObjectList.h"
+#include <string>
 
 namespace otb
 {

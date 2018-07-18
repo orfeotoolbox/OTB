@@ -24,6 +24,7 @@
 #include "otbImageFileReader.h"
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
+#include <string>
 
 namespace otb
 {

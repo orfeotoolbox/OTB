@@ -25,6 +25,7 @@
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include "itkMatrix.h"
 #include "itkVector.h"
+#include <string>
 
 namespace otb
 {

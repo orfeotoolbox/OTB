@@ -26,6 +26,7 @@
 #include "otbSamplingRateCalculator.h"
 #include "otbPeriodicSampler.h"
 #include "otbImage.h"
+#include <string>
 
 namespace otb
 {

@@ -25,6 +25,7 @@
 #include "otbWrapperQtWidgetModel.h"
 #include "itkQtProgressBar.h"
 #include "itkProcessObject.h"
+#include <string>
 
 
 namespace otb

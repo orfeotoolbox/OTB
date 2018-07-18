@@ -24,6 +24,7 @@
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
 #include "otbBandName.h"
+#include <string>
 
 namespace otb
 {

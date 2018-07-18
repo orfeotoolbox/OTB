@@ -25,6 +25,7 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
+#include <string>
 
 namespace otb
 {
