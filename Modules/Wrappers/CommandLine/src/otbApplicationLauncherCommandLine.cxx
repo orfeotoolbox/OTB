@@ -52,7 +52,7 @@ std::string PrepareExpressionFromXML(std::string filename)
   //Use itksys::SystemTools::FOpen() and close it below because
   //TiXmlDocument::TiXmlFileOpen( ) is not exposed from tinyXML library. Even
   //though its available in the TiXmlDocument::SaveFile().
-  FILE* fp =  itksys::SystemTools::Fopen(filename.c_str(), "rb");
+  FILE* fp =  itksys::SystemTools::Fopen(filename, "rb");
 
   if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {
@@ -174,7 +174,7 @@ std::vector<std::string> PrepareVectorExpressionFromXML(std::string filename)
   //Use itksys::SystemTools::FOpen() and close it below because
   //TiXmlDocument::TiXmlFileOpen( ) is not exposed from tinyXML library. Even
   //though its available in the TiXmlDocument::SaveFile().
-  FILE* fp =  itksys::SystemTools::Fopen(filename.c_str(), "rb");
+  FILE* fp =  itksys::SystemTools::Fopen(filename, "rb");
 
   if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {

@@ -212,7 +212,7 @@ void GDALImageIO::Read(void* buffer)
    if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       }
 
     otbLogMacro(Debug,<< "GDAL read took " << chrono.GetElapsedMilliseconds() << " ms")
@@ -271,7 +271,7 @@ void GDALImageIO::Read(void* buffer)
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       return;
       }
 
@@ -1199,7 +1199,7 @@ void GDALImageIO::Write(const void* buffer)
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while writing image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       }
 
     otbLogMacro(Debug,<< "GDAL write took " << chrono.GetElapsedMilliseconds() << " ms")
@@ -1227,7 +1227,7 @@ void GDALImageIO::Write(const void* buffer)
     if(!hOutputDS)
     {
       itkExceptionMacro(<< "Error while writing image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
     }
     else
     {
@@ -1364,7 +1364,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (driverShortName == "NOT-FOUND")
     {
     itkExceptionMacro(
-      << "GDAL Writing failed: the image file name '" << m_FileName.c_str() << "' is not recognized by GDAL.");
+      << "GDAL Writing failed: the image file name '" << m_FileName << "' is not recognized by GDAL.");
     }
 
   if (m_CanStreamWrite)

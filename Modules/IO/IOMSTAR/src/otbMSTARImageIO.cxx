@@ -272,7 +272,7 @@ void MSTARImageIO::Read(void* buffer)
   MSTARfp = fopen(MSTARname, "rb");
   if (MSTARfp == nullptr)
     {
-    itkExceptionMacro(<< "Error: Unable to open file for reading!\n\n " << m_FileName.c_str() << ").");
+    itkExceptionMacro(<< "Error: Unable to open file for reading!\n\n " << m_FileName << ").");
     }
 
   /****************************************************

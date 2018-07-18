@@ -188,7 +188,7 @@ void
 SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::Save(const std::string &filename, const std::string & itkNotUsed( name ))
 {
-  std::ofstream ofs( filename.c_str());
+  std::ofstream ofs( filename);
   if( !ofs )
     {
     itkExceptionMacro( << "Error opening " << filename.c_str());
@@ -204,7 +204,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::Load(const std::string &filename, const std::string & itkNotUsed( name ))
 {
   m_CanRead = false;
-  std::ifstream ifs( filename.c_str());
+  std::ifstream ifs( filename);
   if(ifs.good())
     {
     // Check if first line contains model name
