@@ -156,18 +156,6 @@ public:
   }
 
 protected:
-  /** SetInput is changed to protected. Use AddInputImage to connect the
-   *  pipeline to the writer
-   */
-  virtual void SetInput(const itk::ProcessObject::DataObjectIdentifierType & key, itk::DataObject* image) override
-    { this->Superclass::SetInput(key, image); }
-
-  /** SetNthInput is changed to protected. Use AddInputImage to connect the
-   *  pipeline to the writer
-   */
-  virtual void SetNthInput(itk::ProcessObject::DataObjectPointerArraySizeType i, itk::DataObject* image) override
-    { this->Superclass::SetNthInput(i, image); }
-
   MultiImageFileWriter();
   virtual ~MultiImageFileWriter() {}
 
