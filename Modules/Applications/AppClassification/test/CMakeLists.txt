@@ -149,7 +149,7 @@ foreach(classifier ${classifierList})
   set(OUTMODELFILE cl${classifier}_ModelQB1${${lclassifier}_output_format})
 
   # special case for DT, use OpenCV 2.x model file if not using OpenCV 3.x
-  if(${classifier} EQUAL "DT" AND NOT OTB_OPENCV_3)
+  if(${classifier} STREQUAL "DT" AND NOT OTB_OPENCV_3)
     set(OUTMODELFILE clDT_ModelQB1-opencv2.dt)
   endif()
 
