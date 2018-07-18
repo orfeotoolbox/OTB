@@ -620,14 +620,14 @@ private:
       AddProcess(m_StatisticsMapFromLabelImageFilter->GetStreamer(), "Computing statistics on labels...");
       m_StatisticsMapFromLabelImageFilter->Update();
 
-      StreamingStatisticsMapFromLabelImageFilterType::MeanValueMapType
+      StreamingStatisticsMapFromLabelImageFilterType::PixelValueMapType
           labelToMeanIntensityMap = m_StatisticsMapFromLabelImageFilter->GetMeanValueMap();
 
       m_RBGFromImageMapper = ChangeLabelFilterType::New();
       m_RBGFromImageMapper->SetInput(m_CasterToLabelImage->GetOutput());
       m_RBGFromImageMapper->SetNumberOfComponentsPerPixel(3);
 
-      StreamingStatisticsMapFromLabelImageFilterType::MeanValueMapType::const_iterator
+      StreamingStatisticsMapFromLabelImageFilterType::PixelValueMapType::const_iterator
           mapIt = labelToMeanIntensityMap.begin();
       FloatVectorImageType::PixelType meanValue;
 

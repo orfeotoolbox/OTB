@@ -27,7 +27,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
-
+#include <cmath>
 
 namespace otb
 {
@@ -41,8 +41,8 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   //
   // allocate the data objects for the outputs which are
   // just decorators around pixel types
-  typename MeanValueMapObjectType::Pointer output
-      = static_cast<MeanValueMapObjectType*>(this->MakeOutput(1).GetPointer());
+  typename PixelValueMapObjectType::Pointer output
+      = static_cast<PixelValueMapObjectType*>(this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, output.GetPointer());
 
   this->Reset();
@@ -54,19 +54,7 @@ typename itk::DataObject::Pointer
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::MakeOutput(DataObjectPointerArraySizeType output)
 {
-  switch (output)
-    {
-    case 0:
-      return static_cast<itk::DataObject*>(TInputVectorImage::New().GetPointer());
-      break;
-    case 1:
-      return static_cast<itk::DataObject*>(MeanValueMapObjectType::New().GetPointer());
-      break;
-    default:
-      // might as well make an image
-      return static_cast<itk::DataObject*>(TInputVectorImage::New().GetPointer());
-      break;
-    }
+  return static_cast<itk::DataObject*>(PixelValueMapObjectType::New().GetPointer());
 }
 
 template<class TInputVectorImage, class TLabelImage>
@@ -90,11 +78,35 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 }
 
 template<class TInputVectorImage, class TLabelImage>
-typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::MeanValueMapType
+typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::PixelValueMapType
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::GetMeanValueMap() const
 {
-  return m_RadiometricValueAccumulator;
+  return m_MeanRadiometricValue;
+}
+
+template<class TInputVectorImage, class TLabelImage>
+typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::PixelValueMapType
+PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
+::GetStandardDeviationValueMap() const
+{
+  return m_StDevRadiometricValue;
+}
+
+template<class TInputVectorImage, class TLabelImage>
+typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::PixelValueMapType
+PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
+::GetMinValueMap() const
+{
+  return m_MinRadiometricValue;
+}
+
+template<class TInputVectorImage, class TLabelImage>
+typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::PixelValueMapType
+PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
+::GetMaxValueMap() const
+{
+  return m_MaxRadiometricValue;
 }
 
 template<class TInputVectorImage, class TLabelImage>
@@ -140,20 +152,74 @@ template<class TInputVectorImage, class TLabelImage>
 void
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::Synthetize()
-{
-   typename MeanValueMapType::iterator it;
-   for(it = m_RadiometricValueAccumulator.begin(); it != m_RadiometricValueAccumulator.end(); it++)
-   {
-      it->second = it->second / m_LabelPopulation[it->first];
-   }
-}
+ {
+  // Update temporary accumulator
+  AccumulatorMapType outputAcc;
+
+  for (auto const& threadAccMap: m_AccumulatorMaps)
+    {
+    for(auto const& it: threadAccMap)
+      {
+      const LabelPixelType label = it.first;
+      if (outputAcc.count(label) <= 0)
+        {
+        AccumulatorType newAcc(it.second);
+        outputAcc[label] = newAcc;
+        }
+      else
+        {
+        outputAcc[label].Update(it.second);
+        }
+      }
+    }
+
+  // Publish output maps
+  for(auto& it: outputAcc)
+    {
+    const LabelPixelType label = it.first;
+    const double count = it.second.GetCount();
+    const RealVectorPixelType sum   = it.second.GetSum();
+    const RealVectorPixelType sqSum = it.second.GetSqSum();
+
+    // Count
+    m_LabelPopulation[label] = count;
+
+    // Mean & stdev
+    RealVectorPixelType mean (sum);
+    RealVectorPixelType std (sqSum);
+    for (unsigned int band = 0 ; band < mean.GetSize() ; band++)
+      {
+      // Mean
+      mean[band] /= count;
+
+      // Unbiased standard deviation (not sure unbiased is usefull here)
+      const double variance = (sqSum[band] - (sum[band] * mean[band])) / (count - 1);
+      std[band] = std::sqrt(variance);
+      }
+    m_MeanRadiometricValue[label] = mean;
+    m_StDevRadiometricValue[label] = std;
+
+    // Min & max
+    m_MinRadiometricValue[label] = it.second.GetMin();
+    m_MaxRadiometricValue[label] = it.second.GetMax();
+    }
+
+ }
 
 template<class TInputVectorImage, class TLabelImage>
 void
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::Reset()
 {
-  m_RadiometricValueAccumulator.clear();
+  m_AccumulatorMaps.clear();
+
+  m_MeanRadiometricValue.clear();
+  m_StDevRadiometricValue.clear();
+  m_MinRadiometricValue.clear();
+  m_MaxRadiometricValue.clear();
+  m_LabelPopulation.clear();
+  m_AccumulatorMaps.resize(this->GetNumberOfThreads());
+
 }
 
 template<class TInputVectorImage, class TLabelImage>
@@ -189,7 +255,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 template<class TInputVectorImage, class TLabelImage>
 void
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
-::GenerateData()
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId )
 {
   /**
    * Grab the input
@@ -197,14 +263,12 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   InputVectorImagePointer inputPtr =  const_cast<TInputVectorImage *>(this->GetInput());
   LabelImagePointer labelInputPtr =  const_cast<TLabelImage *>(this->GetInputLabelImage());
 
-  itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, inputPtr->GetRequestedRegion());
-  itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, labelInputPtr->GetRequestedRegion());
-
-  itk::VariableLengthVector<double> zeroValue(inputPtr->GetNumberOfComponentsPerPixel());
-  zeroValue.Fill(0.0);
+  itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, outputRegionForThread);
+  itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, outputRegionForThread);
 
   typename VectorImageType::PixelType value;
   typename LabelImageType::PixelType label;
+
   // do the work
   for (inIt.GoToBegin(), labelIt.GoToBegin();
        !inIt.IsAtEnd() && !labelIt.IsAtEnd();
@@ -212,18 +276,17 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
     {
       value = inIt.Get();
       label = labelIt.Get();
-      if (m_RadiometricValueAccumulator.count(label)<=0) //add new element to the map
-      {
-        // use a zero pixel with the right number of components to support scalar images
-        m_RadiometricValueAccumulator[label] = (zeroValue + value);
-        m_LabelPopulation[label] = 1;
-      }
-      else
-      {
-        m_RadiometricValueAccumulator[label] += value;
-        m_LabelPopulation[label] ++;
-      }
 
+      // Update the accumulator
+      if (m_AccumulatorMaps[threadId].count(label) <= 0) //add new element to the map
+        {
+        AccumulatorType newAcc(value);
+        m_AccumulatorMaps[threadId][label] = newAcc;
+        }
+      else
+        {
+        m_AccumulatorMaps[threadId][label].Update(value);
+        }
     }
 }
 
