@@ -22,9 +22,7 @@ otb_module_test()
 set(OTBTimeSeriesTests
   otbEnvelopeSavitzkyGolayInterpolationFunctorTest.cxx
   otbPolynomialTimeSeriesTest.cxx
-  otbSavitzkyGolayInterpolationFunctorNew.cxx
   otbSavitzkyGolayInterpolationFunctorTest.cxx
-  otbTimeSeriesLeastSquareFittingFunctorNew.cxx
   otbTimeSeriesLeastSquareFittingFunctorTest.cxx
   otbTimeSeriesLeastSquareFittingFunctorWeightsTest.cxx
   otbTimeSeriesTestDriver.cxx  )

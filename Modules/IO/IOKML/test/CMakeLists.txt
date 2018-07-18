@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBIOKMLTests
 otbIOKMLTestDriver.cxx
-otbKMLVectorDataIONew.cxx
 otbKMLVectorDataIOTestFileReader.cxx
 otbKMLVectorDataIOTestCanWrite.cxx
 otbKMLVectorDataIOTestCanRead.cxx

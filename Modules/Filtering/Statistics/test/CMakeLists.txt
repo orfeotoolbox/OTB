@@ -22,14 +22,8 @@ otb_module_test()
 
 set(OTBStatisticsTests
 otbStatisticsTestDriver.cxx
-otbListSampleToHistogramListGeneratorNew.cxx
 otbStreamingMinMaxImageFilter.cxx
-otbStreamingMinMaxVectorImageFilterNew.cxx
-otbVarianceImageFilterNew.cxx
-otbStreamingStatisticsImageFilterNew.cxx
-otbListSampleToVariableDimensionHistogramGeneratorNew.cxx
 otbStreamingHistogramVectorImageFilter.cxx
-otbStreamingStatisticsVectorImageFilterNew.cxx
 otbRealImageToComplexImageFilterTest.cxx
 otbHistogramStatisticsFunction.cxx
 otbContinuousMinimumMaximumImageCalculatorTest.cxx
@@ -37,19 +31,15 @@ otbGaussianAdditiveNoiseSampleListFilter.cxx
 otbNormalizeVectorImageFilter.cxx
 otbVectorImageToMatrixImageFilter.cxx
 otbListSampleToVariableDimensionHistogramGenerator.cxx
-otbStreamingMinMaxImageFilterNew.cxx
 otbShiftScaleSampleListFilter.cxx
 otbVectorImageToIntensityImageFilter.cxx
 otbVarianceImageFilter.cxx
 otbConcatenateSampleListFilter.cxx
 otbLocalHistogramImageFunctionTest.cxx
-otbVectorImageToIntensityImageFilterNew.cxx
 otbProjectiveProjection.cxx
 otbShiftScaleVectorImageFilterTest.cxx
-otbContinuousMinimumMaximumImageCalculatorNew.cxx
 otbStreamingCompareImageFilter.cxx
 otbStreamingStatisticsMapFromLabelImageFilterTest.cxx
-otbLocalHistogramImageFunctionNew.cxx
 otbRealAndImaginaryImageToComplexImageFilterTest.cxx
 otbStreamingStatisticsImageFilter.cxx
 otbListSampleToBalancedListSampleFilter.cxx
@@ -67,9 +57,6 @@ otb_module_target_label(otbStatisticsTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME bfTuListSampleToHistogramListGeneratorNew COMMAND otbStatisticsTestDriver
-  otbListSampleToHistogramListGeneratorNew)
-
 otb_add_test(NAME bfTvStreamingMinMaxImageFilter COMMAND otbStatisticsTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/bfTvStreamingMinMaxImageFilterResults.txt
@@ -79,28 +66,10 @@ otb_add_test(NAME bfTvStreamingMinMaxImageFilter COMMAND otbStatisticsTestDriver
   ${TEMP}/bfTvStreamingMinMaxImageFilterResults.txt
   )
 
-otb_add_test(NAME bfTuStreamingMinMaxVectorImageFilterNew COMMAND otbStatisticsTestDriver
-  otbStreamingMinMaxVectorImageFilterNew)
-
-otb_add_test(NAME bfTuVarianceImageFilterNew COMMAND otbStatisticsTestDriver
-  otbVarianceImageFilterNew)
-
-otb_add_test(NAME bfTuStreamingStatisticsImageFilterNew COMMAND otbStatisticsTestDriver
-  otbStreamingStatisticsImageFilterNew)
-
-otb_add_test(NAME bfTuListSampleToVariableDimensionHistogramGeneratorNew COMMAND otbStatisticsTestDriver
-  otbListSampleToVariableDimensionHistogramGeneratorNew)
-
-otb_add_test(NAME bfTuStreamingHistogramVIFilterNew COMMAND otbStatisticsTestDriver
-  otbStreamingHistogramVectorImageFilterNew
-  )
 
 otb_add_test(NAME bfTvStreamingHistogramVIFilterTest COMMAND otbStatisticsTestDriver
   otbStreamingHistogramVectorImageFilterTest
   )
-
-otb_add_test(NAME bfTuStreamingStatisticsVectorImageFilterNew COMMAND otbStatisticsTestDriver
-  otbStreamingStatisticsVectorImageFilterNew)
 
 
 
@@ -116,9 +85,6 @@ otb_add_test(NAME coTuHistogramStatisticsFunction COMMAND otbStatisticsTestDrive
 otb_add_test(NAME bfTvContinuousMinimumMaximumImageCalculatorTest COMMAND otbStatisticsTestDriver
   otbContinuousMinimumMaximumImageCalculatorTest
   ${INPUTDATA}/QB_Suburb.png )
-
-otb_add_test(NAME leTuGaussianAdditiveNoiseSampleListFilterNew COMMAND otbStatisticsTestDriver
-  otbGaussianAdditiveNoiseSampleListFilterNew)
 
 otb_add_test(NAME leTvGaussianAdditiveNoiseSampleListFilter COMMAND otbStatisticsTestDriver
   --compare-ascii ${NOTOL}
@@ -145,9 +111,6 @@ otb_add_test(NAME bfTvNormalizeVectorImageFilter COMMAND otbStatisticsTestDriver
   -in ${INPUTDATA}/cupriteSubHsi.tif
   -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
 
-otb_add_test(NAME bfTuVectorImageToMatrixNew COMMAND otbStatisticsTestDriver
-  otbVectorImageToMatrixNewTest)
-
 otb_add_test(NAME bfTvVectorImageToMatrix COMMAND otbStatisticsTestDriver
   otbVectorImageToMatrixTest)
 
@@ -160,12 +123,6 @@ otb_add_test(NAME bfTvListSampleToVariableDimensionHistogramGenerator COMMAND ot
   ${TEMP}/bfTvListSampleToVariableDimensionHistogramGeneratorOutput.txt
   10 1
   )
-
-otb_add_test(NAME bfTuStreamingMinMaxImageFilterNew COMMAND otbStatisticsTestDriver
-  otbStreamingMinMaxImageFilterNew)
-
-otb_add_test(NAME leTuShiftScaleSampleListFilterNew COMMAND otbStatisticsTestDriver
-  otbShiftScaleSampleListFilterNew)
 
 otb_add_test(NAME leTvShiftScaleSampleListFilter COMMAND otbStatisticsTestDriver
   --compare-ascii ${NOTOL}
@@ -199,9 +156,6 @@ otb_add_test(NAME bfTvVarianceImageFilter COMMAND otbStatisticsTestDriver
   ${TEMP}/bfVarianceImageFilter.tif
   )
 
-otb_add_test(NAME leTuConcatenateSampleListFilterNew COMMAND otbStatisticsTestDriver
-  otbConcatenateSampleListFilterNew)
-
 otb_add_test(NAME leTvConcatenateSampleListFilter COMMAND otbStatisticsTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/leTvConcatenateSampleListFilterOutput.txt
@@ -226,12 +180,6 @@ otb_add_test(NAME feTvLocalHistogramImageFunctionTest COMMAND otbStatisticsTestD
   127 127 127 0 128
   )
 
-otb_add_test(NAME bfTuVectorImageToIntensityImageFilterNew COMMAND otbStatisticsTestDriver
-  otbVectorImageToIntensityImageFilterNew)
-
-otb_add_test(NAME bfTuProjectiveProjectionNew COMMAND otbStatisticsTestDriver
-  otbProjectiveProjectionNew)
-
 otb_add_test(NAME bfTvProjectiveProjectionTestHighSNR COMMAND otbStatisticsTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvProjectiveProjectionTestHighSNR.tif
@@ -250,12 +198,6 @@ otb_add_test(NAME bfTvShiftScaleVectorImageFilter COMMAND otbStatisticsTestDrive
   ${TEMP}/bfTvShiftScaleVImageOutput.tif
   )
 
-otb_add_test(NAME bfTuContinuousMinimumMaximumImageCalculatorNew COMMAND otbStatisticsTestDriver
-  otbContinuousMinimumMaximumImageCalculatorNew
-  )
-
-otb_add_test(NAME bfTuStreamingCompareImageFilterNew COMMAND otbStatisticsTestDriver
-  otbStreamingCompareImageFilterNew)
 
 otb_add_test(NAME bfTvStreamingCompareImageFilter COMMAND otbStatisticsTestDriver
   --compare-ascii ${NOTOL}
@@ -265,9 +207,6 @@ otb_add_test(NAME bfTvStreamingCompareImageFilter COMMAND otbStatisticsTestDrive
   ${INPUTDATA}/small_poupees_1canal.hd
   ${TEMP}/bfStreamingCompareImageFilterResults.txt)
 
-otb_add_test(NAME feTuLocalHistogramImageFunctionNew COMMAND otbStatisticsTestDriver
-  otbLocalHistogramImageFunctionNew
-  )
 
 otb_add_test(NAME bfTvRealAndImaginaryImageToComplexImageFilterTest COMMAND otbStatisticsTestDriver
   otbRealAndImaginaryImageToComplexImageFilterTest
@@ -327,9 +266,6 @@ foreach(inputFileType "UINT8" "UINT16" "INT16" "UINT32" "INT32" "FLOAT" "DOUBLE"
     )
   endforeach()
 endforeach()
-
-otb_add_test(NAME leTuListSampleToBalancedListSampleFilterNew COMMAND otbStatisticsTestDriver
-  otbListSampleToBalancedListSampleFilterNew)
 
 otb_add_test(NAME leTvListSampleToBalancedListSampleFilter COMMAND otbStatisticsTestDriver
   --compare-ascii ${NOTOL}
@@ -391,9 +327,6 @@ otb_add_test(NAME bfTvStreamingMinMaxVectorImageFilter COMMAND otbStatisticsTest
   ${INPUTDATA}/couleurs_extrait.png
   ${TEMP}/bfTvStreamingMinMaxVectorImageFilterResults.txt
   )
-
-otb_add_test(NAME leTuListSampleGeneratorNew COMMAND otbStatisticsTestDriver
-  otbListSampleGeneratorNew)
 
 otb_add_test(NAME leTvListSampleGenerator4 COMMAND otbStatisticsTestDriver
   --compare-n-ascii ${NOTOL} 2

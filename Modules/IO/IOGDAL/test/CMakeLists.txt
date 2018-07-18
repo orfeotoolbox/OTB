@@ -25,7 +25,6 @@ otbIOGDALTestDriver.cxx
 otbGDALImageIOTest.cxx
 otbGDALImageIOTestWriteMetadata.cxx
 otbGDALOverviewsBuilder.cxx
-otbOGRVectorDataIONew.cxx
 otbGDALImageIOTestCanWrite.cxx
 otbOGRVectorDataIOCanWrite.cxx
 otbGDALReadPxlComplex.cxx

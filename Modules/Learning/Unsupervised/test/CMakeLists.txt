@@ -8,9 +8,6 @@ set(OTBUnsupervisedTests
 
 # Tests Declaration
 
-otb_add_test(NAME leTuContingencyTableCalculatorNew COMMAND otbUnsupervisedTestDriver
-  otbContingencyTableCalculatorNew)
-
 otb_add_test(NAME leTvContingencyTableCalculatorSetListSamples COMMAND otbUnsupervisedTestDriver
   otbContingencyTableCalculatorSetListSamples 1000 4)
 

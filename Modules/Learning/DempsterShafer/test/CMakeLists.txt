@@ -74,9 +74,6 @@ otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestAccuracy COMMAND otbDemps
   otbConfusionMatrixToMassOfBeliefTest
   ACCURACY)
 
-otb_add_test(NAME fzTuConfusionMatrixToMassOfBeliefNew COMMAND otbDempsterShaferTestDriver
-  otbConfusionMatrixToMassOfBeliefNew)
-
 otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestPrecision COMMAND otbDempsterShaferTestDriver
   otbConfusionMatrixToMassOfBeliefTest
   PRECISION)
@@ -98,9 +95,6 @@ otb_add_test(NAME fzTvVectorDataToDSValidatedVectorDataFilter COMMAND otbDempste
   ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
   )
 set_property(TEST fzTvVectorDataToDSValidatedVectorDataFilter PROPERTY DEPENDS fzTvVectorDataToRoadDescriptionFilter)
-
-otb_add_test(NAME fzTuVectorDataToDSValidatedVectorDataFilterNew COMMAND otbDempsterShaferTestDriver
-  otbVectorDataToDSValidatedVectorDataFilterNew)
 
 otb_add_test(NAME fzDSFusionTestConfMatFileVCMTestPrecision COMMAND otbDempsterShaferTestDriver
   otbDempsterShaferFusionConfMatFileTest
@@ -335,9 +329,6 @@ otb_add_test(NAME fzTvDSFusionOfClassifiersImageFilterRecall COMMAND otbDempster
   ${TEMP}/QB_1_ortho_DS_FUSED_RECALL.tif
   )
 
-otb_add_test(NAME fzTuDSFusionOfClassifiersImageFilterNew COMMAND otbDempsterShaferTestDriver
-  otbDSFusionOfClassifiersImageFilterNew)
-
 otb_add_test(NAME fzTvDSFusionOfClassifiersImageFilterAccuracy COMMAND otbDempsterShaferTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/QB_1_ortho_DS_FUSED_ACCURACY.tif
@@ -369,7 +360,4 @@ otb_add_test(NAME fzTvJointMassOfBeliefFilter COMMAND otbDempsterShaferTestDrive
 
 otb_add_test(NAME fzTvMassOfBelief COMMAND otbDempsterShaferTestDriver
   otbMassOfBelief)
-
-otb_add_test(NAME fzTuStandardDSCostFunctionNew COMMAND otbDempsterShaferTestDriver
-  otbStandardDSCostFunctionNew)
 

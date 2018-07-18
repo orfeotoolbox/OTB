@@ -22,21 +22,15 @@ otb_module_test()
 
 set(OTBDimensionalityReductionTests
 otbDimensionalityReductionTestDriver.cxx
-otbNormalizeInnerProductPCAImageFilterNew.cxx
 otbFastICAImageFilter.cxx
 otbNormalizeInnerProductPCAImageFilter.cxx
 otbMaximumAutocorrelationFactorImageFilter.cxx
 otbMNFImageFilter.cxx
 otbInnerProductPCAImageFilter.cxx
-otbEstimateInnerProductPCAImageFilterNew.cxx
 otbEstimateInnerProductPCAImageFilter.cxx
 otbPCAImageFilter.cxx
 otbAngularProjectionSetImageFilter.cxx
-otbAngularProjectionSetImageFilterNew.cxx
 otbNAPCAImageFilter.cxx
-otbInnerProductPCAImageFilterNew.cxx
-otbSparseWvltToAngleMapperListFilterNew.cxx
-otbAngularProjectionImageFilterNew.cxx
 otbAngularProjectionImageFilter.cxx
 otbAngularProjectionBinaryImageFilter.cxx
 otbSparseWvltToAngleMapperListFilter.cxx
@@ -49,12 +43,6 @@ otb_module_target_label(otbDimensionalityReductionTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME bfTuNormalizeInnerProductPCAImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbNormalizeInnerProductPCAImageFilterNew )
-
-otb_add_test(NAME bfTuFastICAImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbFastICAImageFilterNewTest)
-
 #otb_add_test(NAME bfTvFastICAImageFilter COMMAND otbDimensionalityReductionTestDriver
   #--compare-n-images ${EPSILON_7} 2
   #${BASELINE}/hyTvFastICAImageFilter.tif
@@ -65,9 +53,6 @@ otb_add_test(NAME bfTuFastICAImageFilterNew COMMAND otbDimensionalityReductionTe
   #-in ${INPUTDATA}/cupriteSubHsi.tif
   #-inv ${TEMP}/hyTvFastICAImageFilterInv.tif
   #-out ${TEMP}/hyTvFastICAImageFilter.tif)
-
-otb_add_test(NAME bfTuFastICAInternalOptimizerVectorImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbFastICAInternalOptimizerVectorImageFilterNewTest)
 
 otb_add_test(NAME bfTvNormalizeInnerProductPCAImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_12}
@@ -87,9 +72,6 @@ otb_add_test(NAME bfTvMaximumAutocorrelationFactorImageFilter COMMAND otbDimensi
   ${TEMP}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
   )
 
-otb_add_test(NAME bfTuMaximumAutocorrelationFactorImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbMaximumAutocorrelationFactorImageFilterNew
-  )
 
 otb_add_test(NAME bfTvMNFImageFilter3 COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -230,9 +212,6 @@ otb_add_test(NAME bfTvInnerProductPCAImageFilter COMMAND otbDimensionalityReduct
   ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
   )
 
-otb_add_test(NAME bfTuEstimateInnerProductPCAImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbEstimateInnerProductPCAImageFilterNew )
-
 otb_add_test(NAME bfTvEstimateInnerProductPCAImageFilterDisableCenterData COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfEstimateInnerProductPCAImageFilterDisableCenterData.tif
@@ -276,9 +255,6 @@ otb_add_test(NAME bfTvEstimateInnerProductPCAImageFilter COMMAND otbDimensionali
   3
   1 #center data
   )
-
-otb_add_test(NAME bfTuPCAImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbPCAImageFilterNewTest)
 
 otb_add_test(NAME bfTvPCAImageFilter2 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
@@ -348,12 +324,6 @@ otb_add_test(NAME bfTvPCAImageFilter3Norm COMMAND otbDimensionalityReductionTest
   -inv ${TEMP}/bfTvPCAImageFilter3InvNorm.tif
   -norm)
 
-otb_add_test(NAME bfTuAngularProjectionSetImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbAngularProjectionSetImageFilterNew)
-
-otb_add_test(NAME bfTuNAPCAImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbNAPCAImageFilterNewTest)
-
 otb_add_test(NAME bfTvNAPCAImageFilter1 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${INPUTDATA}/cupriteSubHsi.tif
@@ -398,18 +368,6 @@ otb_add_test(NAME bfTvNAPCAImageFilter4 COMMAND otbDimensionalityReductionTestDr
   -norm
   -n 4)
 
-otb_add_test(NAME bfTuInnerProductPCAImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbInnerProductPCAImageFilterNew )
-
-otb_add_test(NAME bfTuSparseWvltToAngleMapperListFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbSparseWvltToAngleMapperListFilterNew)
-
-otb_add_test(NAME bfTuAngularProjectionImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbAngularProjectionImageFilterNew)
-
-otb_add_test(NAME bfTuLocalActivityVectorImageFilterNew COMMAND otbDimensionalityReductionTestDriver
-  otbLocalActivityVectorImageFilterNewTest)
-otb_add_test(NAME bfTvLocalActivityVectorImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
   ${TEMP}/bfTvLocalActivityVectorImageFilter.tif

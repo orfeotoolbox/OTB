@@ -33,9 +33,6 @@ otb_module_target_label(otbQtWidgetTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME owTvQtLogOutputNew COMMAND otbQtWidgetTestDriver
-  otbQtLogOutputNew)
-
 otb_add_test(NAME owTvQtWidgetParameterGroup COMMAND otbQtWidgetTestDriver
   otbWrapperQtWidgetParameterGroup)
 

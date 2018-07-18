@@ -41,12 +41,6 @@ otb_add_test(NAME hyTvEigenvalueLikelihoodMaximizationTest COMMAND otbEndmembers
   ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
   ${TEMP}/hyTvEigenvalueLikelihoodMaximizationTest.txt)
 
-otb_add_test(NAME hyTuEigenvalueLikelihoodMaximizationNew COMMAND otbEndmembersExtractionTestDriver
-  otbEigenvalueLikelihoodMaximizationNewTest)
-
-otb_add_test(NAME hyTuVirtualDimensionalityNew COMMAND otbEndmembersExtractionTestDriver
-  otbVirtualDimensionalityNewTest)
-
 otb_add_test(NAME hyTvVirtualDimensionalityTest COMMAND otbEndmembersExtractionTestDriver
   --compare-ascii ${EPSILON_9}
   ${BASELINE_FILES}/hyTvVirtualDimensionalityTest.txt
@@ -65,9 +59,6 @@ otb_add_test(NAME hyTvVCAImageFilterTest1 COMMAND otbEndmembersExtractionTestDri
   ${TEMP}/hyTvVCAImageFilterTest.tif
   5 )
 
-otb_add_test(NAME hyTuVCAImageFilterNew COMMAND otbEndmembersExtractionTestDriver
-  otbVCAImageFilterNew
-  ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
   ${TEMP}/synthetic_vca_5.hdr
   5 )
 

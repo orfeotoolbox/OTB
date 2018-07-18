@@ -152,9 +152,6 @@ otb_add_test(NAME owTvApplicationHtmlDocGeneratorTest
   0 # don't show key in the parameterdescription
   )
 
-otb_add_test(NAME owTvApplicationHtmlDocGeneratorNew COMMAND otbApplicationEngineTestDriver
-  otbWrapperApplicationHtmlDocGeneratorNew
-  )
 
 otb_add_test(NAME owTuInputVectorDataParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperInputVectorDataParameterNew
@@ -186,9 +183,6 @@ otb_add_test(NAME owTvDocExampleStructureTest COMMAND otbApplicationEngineTestDr
   ${TEMP}/owTuDocExampleStructureTest.txt
   )
 
-otb_add_test(NAME owTuDocExampleStructureNew COMMAND otbApplicationEngineTestDriver
-  otbWrapperDocExampleStructureNew
-  )
 
 # Warning this test require otbapp_Smoothing and otbapp_ConcatenateImages to be built
 otb_add_test(NAME owTvApplicationMemoryConnectTest COMMAND otbApplicationEngineTestDriver otbApplicationMemoryConnectTest

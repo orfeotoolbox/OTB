@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBMathParserTests
 otbMathParserTestDriver.cxx
-otbMaskMuParserFilterNew.cxx
 otbMaskMuParserFilterTest.cxx
 otbParserConditionDataNodeFeatureFunction.cxx
 otbParserTest.cxx
@@ -38,9 +37,6 @@ otb_module_target_label(otbMathParserTestDriver)
 
 
 
-otb_add_test(NAME bfTuMaskMuParserFilterNew COMMAND otbMathParserTestDriver
-  otbMaskMuParserFilterNew
-  )
 
 otb_add_test(NAME bfTvMaskMuParserFilterTest COMMAND otbMathParserTestDriver
   --compare-image ${NOTOL}
@@ -85,9 +81,6 @@ otb_add_test(NAME coTvParser COMMAND otbMathParserTestDriver
 otb_add_test(NAME coTuParser COMMAND otbMathParserTestDriver
   otbParserTestNew
   )
-
-otb_add_test(NAME bfTuImageListToSingleImageFilterNew COMMAND otbMathParserTestDriver
-  otbImageListToSingleImageFilterNew)
 
 otb_add_test(NAME bfTvImageListToSingleImageFilter COMMAND otbMathParserTestDriver
   --compare-image ${NOTOL}

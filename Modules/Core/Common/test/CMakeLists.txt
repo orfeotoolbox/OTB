@@ -27,14 +27,10 @@ otbImageRegionTileMapSplitter.cxx
 otbImageRegionAdaptativeSplitter.cxx
 otbRGBAPixelConverter.cxx
 otbRectangle.cxx
-otbImageRegionNonUniformMultidimensionalSplitterNew.cxx
 otbSystemTest.cxx
 otbImageRegionSquareTileSplitter.cxx
-otbImageRegionTileMapSplitterNew.cxx
 otbImageRegionNonUniformMultidimensionalSplitter.cxx
-otbRectangleNew.cxx
 otbConfigurationManagerTest.cxx
-otbStandardFilterWatcherNew.cxx
 otbStandardOneLineFilterWatcherTest.cxx
 otbStandardWriterWatcher.cxx
 otbStopwatchTest.cxx
@@ -59,9 +55,6 @@ otb_add_test(NAME coTvImageRegionTileMapSplitter COMMAND otbCommonTestDriver
   ${TEMP}/coImageRegionTileMapSplitter.txt
   )
 
-
-otb_add_test(NAME coTuImageRegionAdaptativeSplitterNew COMMAND otbCommonTestDriver
-  otbImageRegionAdaptativeSplitterNew)
 
 otb_add_test(NAME coTvImageRegionAdaptativeSplitterStripSmallStream COMMAND otbCommonTestDriver
   --compare-ascii ${NOTOL}
@@ -151,9 +144,6 @@ otb_add_test(NAME coTvRectangle COMMAND otbCommonTestDriver
 
 
 
-otb_add_test(NAME coTuImageRegionNonUniformMultidimensionalSplitterNew COMMAND otbCommonTestDriver
-  otbImageRegionNonUniformMultidimensionalSplitterNew
-  )
 
 
 
@@ -177,9 +167,6 @@ otb_add_test(NAME coTvParseHdfSubsetName COMMAND otbCommonTestDriver
 otb_add_test(NAME coTvParseHdfFileName COMMAND otbCommonTestDriver
   otbParseHdfFileName)
 
-otb_add_test(NAME coTuImageRegionSquareTileSplitterNew COMMAND otbCommonTestDriver
-  otbImageRegionSquareTileSplitterNew
-  )
 
 otb_add_test(NAME coTvImageRegionSquareTileSplitter COMMAND otbCommonTestDriver
   --compare-ascii ${NOTOL}
@@ -194,9 +181,6 @@ otb_add_test(NAME coTvImageRegionSquareTileSplitter COMMAND otbCommonTestDriver
 
 
 
-otb_add_test(NAME coTuImageRegionTileMapSplitterNew COMMAND otbCommonTestDriver
-  otbImageRegionTileMapSplitterNew
-  )
 
 
 
@@ -214,9 +198,6 @@ otb_add_test(NAME coTvImageRegionNonUniformMultidimensionalSplitter COMMAND otbC
   )
 
 
-otb_add_test(NAME coTuRectangleNew COMMAND otbCommonTestDriver
-  otbRectangleNew)
-
 otb_add_test(NAME coTvConfigurationManagerDefault COMMAND otbCommonTestDriver
   otbConfigurationManagerTest
   128)
@@ -229,10 +210,7 @@ otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbTestDriver
   otbConfigurationManagerTest
   256 /path/to/dem/ /path/to/geoid.file)
 
-otb_add_test(NAME coTuStandardFilterWatcherNew COMMAND otbCommonTestDriver
-  otbStandardFilterWatcherNew
-  ${INPUTDATA}/qb_RoadExtract.img
-  )
+
 otb_add_test(NAME coTuStandardOneLineFilterWatcher COMMAND otbCommonTestDriver
   otbStandardOneLineFilterWatcherTest
   ${INPUTDATA}/qb_RoadExtract.img

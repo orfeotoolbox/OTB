@@ -25,8 +25,6 @@ otbCloudDetectionTestDriver.cxx
 otbCloudEstimatorDefaultFilter.cxx
 otbCloudDetectionFilter.cxx
 otbCloudEstimatorFilter.cxx
-otbCloudEstimatorFilterNew.cxx
-otbCloudDetectionFilterNew.cxx
 )
 
 add_executable(otbCloudDetectionTestDriver ${OTBCloudDetectionTests})
@@ -77,10 +75,4 @@ otb_add_test(NAME feTvCloudEstimatorFilter COMMAND otbCloudDetectionTestDriver
   632
   0.25    # variance
   )
-
-otb_add_test(NAME feTuCloudEstimatorFilterNew COMMAND otbCloudDetectionTestDriver
-  otbCloudEstimatorFilterNew)
-
-otb_add_test(NAME feTuCloudDetectionFilterNew COMMAND otbCloudDetectionTestDriver
-  otbCloudDetectionFilterNew)
 

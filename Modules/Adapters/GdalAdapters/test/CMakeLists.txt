@@ -27,9 +27,6 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
     ${OTBGdalAdapters-Test_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
   
-  add_test(NAME coTuOGRDataSourceWrapperNew
-           COMMAND otbOGRTests coTuOGRDataSourceWrapperNew
-           WORKING_DIRECTORY ${TEMP})
 endif()
 
 add_executable(otbOGRTestsIO otbOGRDataSourceWrapperIO.cxx)

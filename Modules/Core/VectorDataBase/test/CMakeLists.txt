@@ -25,13 +25,8 @@ otbVectorDataBaseTestDriver.cxx
 otbVectorData.cxx
 otbVectorDataKeywordlistTest.cxx
 otbPolygon.cxx
-otbVectorDataSourceNew.cxx
 otbDataNodeTest.cxx
 otbRemoteSensingRegion.cxx
-otbPolygonNew.cxx
-otbPolyLineParametricPathWithValueNew.cxx
-otbRemoteSensingRegionNew.cxx
-otbVectorDataNew.cxx
 )
 
 add_executable(otbVectorDataBaseTestDriver ${OTBVectorDataBaseTests})
@@ -49,9 +44,6 @@ otb_add_test(NAME coTvVectorData COMMAND otbVectorDataBaseTestDriver
   ${TEMP}/coTvVectorData.txt
   )
 
-otb_add_test(NAME ioTuVectorDataKeywordlistNew COMMAND otbVectorDataBaseTestDriver
-  otbVectorDataKeywordlistNew
-  )
 
 otb_add_test(NAME ioTvVectorDataKeywordlist COMMAND otbVectorDataBaseTestDriver
   --compare-ascii ${EPSILON_9}
@@ -86,15 +78,6 @@ otb_add_test(NAME coTvRemoteSensingRegion COMMAND otbVectorDataBaseTestDriver
   1.21 2.33 58.47 59.49  #size et index of the region
   0. 0.                  # Point to check
   )
-
-otb_add_test(NAME coTuPolygonNew COMMAND otbVectorDataBaseTestDriver
-  otbPolygonNew)
-
-otb_add_test(NAME coTuPolyLineParametricPathWithValueNew COMMAND otbVectorDataBaseTestDriver
-  otbPolyLineParametricPathWithValueNew)
-
-otb_add_test(NAME coTuRemoteSensingRegionNew COMMAND otbVectorDataBaseTestDriver
-  otbRemoteSensingRegionNew )
 
 
 otb_add_test(NAME coTuVectorData COMMAND otbVectorDataBaseTestDriver

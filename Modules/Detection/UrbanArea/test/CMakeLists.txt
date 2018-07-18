@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBUrbanAreaTests
 otbUrbanAreaTestDriver.cxx
-otbUrbanAreaDetectionImageFilterNew.cxx
 otbUrbanAreaDetectionImageFilter.cxx
 )
 
@@ -32,9 +31,6 @@ otb_module_target_label(otbUrbanAreaTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME raTuUrbanAreaDetectionImageFilterNew COMMAND otbUrbanAreaTestDriver
-  otbUrbanAreaDetectionImageFilterNew
-  )
 
 otb_add_test(NAME raTvUrbanAreaDetectionImageFilter COMMAND otbUrbanAreaTestDriver
   --compare-image ${EPSILON_8}   ${BASELINE}/raTvUrbanAreaDetection.png

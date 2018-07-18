@@ -50,7 +50,6 @@ otbMultiResolutionReadingInfo.cxx
 otbImageFileReaderTestFloat.cxx
 otbComplexImageTests.cxx
 otbImageFileReaderRADChar.cxx
-otbScalarBufferToImageFileWriterNew.cxx
 otbShortImageIOTest.cxx
 otbImageSeriesFileReader.cxx
 otbStreamingShortImageFileWriterTest.cxx
@@ -72,7 +71,6 @@ otbStreamingImageFilterTest.cxx
 otbImageFileWriterRGBTest.cxx
 otbComplexImageManipulationTest.cxx
 otbImageFileWriterTest.cxx
-otbImageIOFactoryNew.cxx
 otbCompareWritingComplexImage.cxx
 otbImageFileReaderOptBandTest.cxx
 otbImageFileWriterOptBandTest.cxx
@@ -603,9 +601,6 @@ otb_add_test(NAME ioTvImageComplexFloatTest COMMAND otbImageIOTestDriver
   ${INPUTDATA}/multibandComplexFloat_2bands.hdr
   )
 
-otb_add_test(NAME ioTuVectorImageComplexNew COMMAND otbImageIOTestDriver
-  otbVectorImageComplexNew)
-
 otb_add_test(NAME ioTvImageComplexDoubleTest COMMAND otbImageIOTestDriver
   otbImageComplexDoubleTest
   ${INPUTDATA}/multibandComplexDouble_2bands.hdr
@@ -929,9 +924,6 @@ otb_add_test(NAME ioTvImageFileWriterPNG2BSQ COMMAND otbImageIOTestDriver
   otbImageFileWriterTest
   ${INPUTDATA}/cthead1.png
   ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
-
-otb_add_test(NAME ioTuImageIOFactoryNew COMMAND otbImageIOTestDriver
-  otbImageIOFactoryNew )
 
 otb_add_test(NAME ioTvCompareWritingComplexImage_TIF COMMAND otbImageIOTestDriver
   otbCompareWritingComplexImageTest

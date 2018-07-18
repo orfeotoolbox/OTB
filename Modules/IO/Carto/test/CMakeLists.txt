@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBCartoTests
 otbCartoTestDriver.cxx
-otbMapFileProductWriterNew.cxx
 otbImageToOSMVectorDataGenerator.cxx
 otbMapFileProductWriter.cxx
 otbOSMDataToVectorDataTests.cxx
@@ -35,13 +34,7 @@ otb_module_target_label(otbCartoTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME ioTuMapFileProductWriterNew COMMAND otbCartoTestDriver
-  otbMapFileProductWriterNew
-  )
 
-otb_add_test(NAME ioTuImageToOSMVectorDataGeneratorNew COMMAND otbCartoTestDriver
-  otbImageToOSMVectorDataGeneratorNew
-  )
 
 otb_add_test(NAME ioTvImageToOSMVectorDataGenerator COMMAND otbCartoTestDriver
   --compare-ogr ${EPSILON_9}
