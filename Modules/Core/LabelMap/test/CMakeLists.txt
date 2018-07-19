@@ -57,10 +57,12 @@ otb_add_test(NAME obTvImageToLabelMapWithAttributesFilter COMMAND otbLabelMapTes
   otbImageToLabelMapWithAttributesFilter
   ${INPUTDATA}/maur.tif
   ${INPUTDATA}/maur_labelled.tif)
+otb_add_test(NAME obTvKMeansAttributesLabelMapFilter COMMAND otbLabelMapTestDriver
   otbKMeansAttributesLabelMapFilter
   ${INPUTDATA}/maur.tif
   ${INPUTDATA}/maur_labelled.tif
   ${TEMP}/obTvKMeansAttributesLabelMapFilter.txt)
+otb_add_test(NAME obTvLabelMapToSampleListFilter COMMAND otbLabelMapTestDriver
   otbLabelMapToSampleListFilter
   ${OTB_DATA_ROOT}/Input/rcc8_mire1.png
   SHAPE::Flusser01 SHAPE::Flusser02 SHAPE::Flusser03 SHAPE::Flusser04
@@ -72,6 +74,7 @@ otb_add_test(NAME obTvLabelMapWithClassLabelToLabeledSampleListFilter COMMAND ot
   SHAPE::Flusser01  SHAPE::Flusser02  SHAPE::Flusser03 SHAPE::Flusser04
   SHAPE::Flusser05  SHAPE::Flusser06  SHAPE::Flusser07 SHAPE::Flusser08
   SHAPE::Flusser09 SHAPE::Flusser10  SHAPE::Flusser11)
+otb_add_test(NAME obTvMinMaxAttributesLabelMapFilter COMMAND otbLabelMapTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/obTvMinMaxAttributesLabelMapFilter.txt
   ${TEMP}/obTvMinMaxAttributesLabelMapFilter.txt
@@ -79,6 +82,7 @@ otb_add_test(NAME obTvLabelMapWithClassLabelToLabeledSampleListFilter COMMAND ot
   ${INPUTDATA}/maur.tif
   ${INPUTDATA}/maur_labelled.tif
   ${TEMP}/obTvMinMaxAttributesLabelMapFilter.txt)
+otb_add_test(NAME obTvNormalizeAttributesLabelMapFilter COMMAND otbLabelMapTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/obTvNormalizeAttributesLabelMapFilter.txt
   ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt
@@ -86,7 +90,6 @@ otb_add_test(NAME obTvLabelMapWithClassLabelToLabeledSampleListFilter COMMAND ot
   ${INPUTDATA}/maur.tif
   ${INPUTDATA}/maur_labelled.tif
   ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt)
-  otbBandsStatisticsAttributesLabelMapFilterNew)
 otb_add_test(NAME obTvBandsStatisticsAttributesLabelMapFilter COMMAND otbLabelMapTestDriver
   otbBandsStatisticsAttributesLabelMapFilter
   ${INPUTDATA}/maur.tif

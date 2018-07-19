@@ -223,6 +223,7 @@ otb_add_test(NAME bfTvBCOInterpolateImageFunctionOverVectorImage COMMAND otbInte
   127.255 128.73
   -1 -1
   )
+otb_add_test(NAME bfTvBCOInterpolateImageFunction2 COMMAND otbInterpolationTestDriver
   otbBCOInterpolateImageFunction2
   3 # radius
   -0.5 # optimised bicubic

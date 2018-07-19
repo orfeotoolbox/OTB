@@ -33,7 +33,6 @@ otbAngularProjectionSetImageFilter.cxx
 otbNAPCAImageFilter.cxx
 otbAngularProjectionImageFilter.cxx
 otbAngularProjectionBinaryImageFilter.cxx
-otbSparseWvltToAngleMapperListFilter.cxx
 otbLocalActivityVectorImageFilter.cxx
 )
 
@@ -368,6 +367,7 @@ otb_add_test(NAME bfTvNAPCAImageFilter4 COMMAND otbDimensionalityReductionTestDr
   -norm
   -n 4)
 
+otb_add_test(NAME bfTvLocalActivityVectorImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
   ${TEMP}/bfTvLocalActivityVectorImageFilter.tif

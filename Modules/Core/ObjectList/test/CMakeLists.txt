@@ -38,13 +38,14 @@ otb_add_test(NAME coTvObjectList COMMAND otbObjectListTestDriver
   ${INPUTDATA}/poupees.png
   ${INPUTDATA}/couleurs_extrait.png
   )
+otb_add_test(NAME coTvImageList COMMAND otbObjectListTestDriver
   --compare-image ${NOTOL}   ${INPUTDATA}/amst.png
   ${TEMP}/amst.png
   otbImageList
   ${INPUTDATA}/amst.png
   ${TEMP}/amst.png
   )
-  otbImageListSourceNew)
+otb_add_test(NAME bfTvImageListToImageListApplyFilter COMMAND otbObjectListTestDriver
   --compare-n-images ${EPSILON_7} 3
   ${BASELINE}/bfTvImageListToImageListApplyFilterBand1.png
   ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
@@ -60,7 +61,6 @@ otb_add_test(NAME coTvObjectList COMMAND otbObjectListTestDriver
   ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
   ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
   )
-  otbImageListToImageListFilterNew)
 otb_add_test(NAME coTvImageListToVectorImageFilter2 COMMAND otbObjectListTestDriver
   otbImageListToVectorImageFilter2
   ${INPUTDATA}/poupees_c1.hdr
@@ -77,9 +77,9 @@ otb_add_test(NAME coTvImageListToVectorImageFilter COMMAND otbObjectListTestDriv
   ${INPUTDATA}/poupees_c3.hdr
   ${TEMP}/coTvImageListToVectorImageFilter.png
   )
+otb_add_test(NAME coTvObjectListTestNotValid COMMAND otbObjectListTestDriver
   otbObjectList2
   )
-  otbImageToImageListFilterNew)
 otb_add_test(NAME bfTvVectorImageToImageListFilter COMMAND otbObjectListTestDriver
   --compare-n-images ${EPSILON_7} 3
   ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png

@@ -109,10 +109,6 @@ otb_add_test(NAME bfTvLogPolarTransform COMMAND otbTransformTestDriver
   5 0 0 0 10 45 0 3.14 3.14 18 1
   )
 
-  otbLogPolarTransformNew)
-
-
-
 otb_add_test(NAME prTvGeocentricTransform COMMAND otbTransformTestDriver
   --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvGeocentricTransform.txt
   ${TEMP}/prTvGeocentricTransform.txt
@@ -130,6 +126,7 @@ otb_add_test(NAME prTvTestCreateProjectionWithOTB_Cevennes COMMAND otbTransformT
   LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
   )
 
+otb_add_test(NAME dmTvStreamingWarpImageFilter COMMAND otbTransformTestDriver
   --compare-image ${EPSILON_10}
   ${BASELINE}/dmStreamingWarpImageFilterOutput.tif
   ${TEMP}/dmStreamingWarpImageFilterOutput.tif
@@ -171,6 +168,7 @@ otb_add_test(NAME bfTvInverseLogPolarTransform COMMAND otbTransformTestDriver
   ${TEMP}/bfInverseLogPolarTransformResults.txt
   6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
   )
+otb_add_test(NAME bfTvInverseLogPolarTransformResample COMMAND otbTransformTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.hdr
   ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
   otbInverseLogPolarTransformResample

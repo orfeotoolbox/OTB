@@ -59,6 +59,8 @@ otb_add_test(NAME hyTvVCAImageFilterTest1 COMMAND otbEndmembersExtractionTestDri
   ${TEMP}/hyTvVCAImageFilterTest.tif
   5 )
 
+otb_add_test(NAME hyTuVCAImageFilterNew COMMAND otbEndmembersExtractionTestDriver
+  otbVCAImageFilterNew
   ${TEMP}/synthetic_vca_5.hdr
   5 )
 

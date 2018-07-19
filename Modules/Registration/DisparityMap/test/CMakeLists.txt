@@ -237,7 +237,7 @@ otb_add_test(NAME dmTvNCCRegistrationFilter COMMAND otbDisparityMapTestDriver
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
   ${TEMP}/dmNCCRegistrationFilterOutput.tif
   5 1.0 2)
-  otbPixelWiseBlockMatchingImageFilterNew)
+
 otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilterNCC COMMAND otbDisparityMapTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif

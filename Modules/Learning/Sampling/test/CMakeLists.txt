@@ -35,7 +35,6 @@ otb_module_target_label(otbSamplingTestDriver)
 
 # Tests Declaration
 # ---------------- SamplingRateCalculator ------------------------------------
-  )
 
 otb_add_test(NAME leTvSamplingRateCalculator COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}
@@ -103,7 +102,6 @@ otb_add_test(NAME leTvImageSampleExtractorFilterUpdate COMMAND otbSamplingTestDr
   ${TEMP}/leTvImageSampleExtractorFilterUpdateTest.shp)
 
 # ---------------- SamplingRateCalculatorList ---------------------------------
-  )
 
 otb_add_test(NAME leTvSamplingRateCalculatorList COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}
