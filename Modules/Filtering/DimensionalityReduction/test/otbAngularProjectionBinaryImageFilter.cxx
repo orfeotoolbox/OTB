@@ -29,19 +29,6 @@
 
 #include "otbAngularProjectionBinaryImageFilter.h"
 
-int otbAngularProjectionBinaryImageFilterNewTest ( int itkNotUsed(argc), char * itkNotUsed(argv)[] )
-{
-  const unsigned int Dimension = 2;
-  typedef float PixelType;
-  typedef otb::Image< PixelType, Dimension > ImageType;
-  typedef double PrecisionType;
-
-  typedef otb::AngularProjectionBinaryImageFilter< ImageType, ImageType, PrecisionType >
-    FilterType;
-  FilterType::Pointer filter = FilterType::New();
-  return EXIT_SUCCESS;
-}
-
 int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;

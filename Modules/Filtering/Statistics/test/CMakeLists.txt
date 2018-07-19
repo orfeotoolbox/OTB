@@ -100,9 +100,6 @@ otb_add_test(NAME leTvGaussianAdditiveNoiseSampleListFilter COMMAND otbStatistic
   0 -1
   )
 
-otb_add_test(NAME bfTuNormalizeVectorImageFilter COMMAND otbStatisticsTestDriver
-  otbNormalizeVectorImageFilterNewTest)
-
 otb_add_test(NAME bfTvNormalizeVectorImageFilter COMMAND otbStatisticsTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
