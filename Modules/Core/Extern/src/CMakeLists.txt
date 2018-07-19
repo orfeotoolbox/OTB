@@ -18,38 +18,14 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains classes that ease the implementation of
-applications (see chapter 'How to write an application' of the SoftwareGuide).")
+set(OTBExtern_SRC
+  otbImageExtern.cxx
+  otbVectorImageExtern.cxx
+  otbImageFileReaderExtern.cxx
+  otbImageFileWriterExtern.cxx
+  )
 
-otb_module(OTBApplicationEngine
-ENABLE_SHARED
-  DEPENDS
-    OTBExtern
-    OTBVectorDataBase
-    OTBImageIO
-    OTBProjection
-    OTBVectorDataIO
-    OTBTransform
-    OTBImageManipulation
-    OTBTinyXML
-    OTBImageBase
-    OTBCommon
-    OTBObjectList
-    OTBBoostAdapters
-    OTBOSSIMAdapters
-    OTBITK
+add_library(OTBExtern ${OTBExtern_SRC})
+target_link_libraries(OTBExtern ${OTBITK_LIBRARIES} ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES})
 
-    OPTIONAL_DEPENDS
-    OTBMPIVrtWriter
-    OTBMPITiffWriter
-    
-  TEST_DEPENDS
-    OTBTestKernel
-    OTBCommandLine
-    OTBEdge
-    OTBAppImageUtils
-    OTBAppFiltering
-    
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+otb_module_target(OTBExtern)

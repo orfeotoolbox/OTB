@@ -18,38 +18,14 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains classes that ease the implementation of
-applications (see chapter 'How to write an application' of the SoftwareGuide).")
+set(DOCUMENTATION "Extern templates for commonly used template classes")
 
-otb_module(OTBApplicationEngine
+otb_module(OTBExtern
 ENABLE_SHARED
   DEPENDS
-    OTBExtern
-    OTBVectorDataBase
-    OTBImageIO
-    OTBProjection
-    OTBVectorDataIO
-    OTBTransform
-    OTBImageManipulation
-    OTBTinyXML
-    OTBImageBase
-    OTBCommon
-    OTBObjectList
-    OTBBoostAdapters
-    OTBOSSIMAdapters
-    OTBITK
-
-    OPTIONAL_DEPENDS
-    OTBMPIVrtWriter
-    OTBMPITiffWriter
-    
-  TEST_DEPENDS
-    OTBTestKernel
-    OTBCommandLine
-    OTBEdge
-    OTBAppImageUtils
-    OTBAppFiltering
-    
+  OTBITK
+  OTBImageIO
+  OTBImageBase
   DESCRIPTION
     "${DOCUMENTATION}"
 )

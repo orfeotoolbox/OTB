@@ -23,6 +23,7 @@
 
 #include <string>
 #include <set>
+#include "otbExtern.h"
 #include "otbWrapperTypes.h"
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"
