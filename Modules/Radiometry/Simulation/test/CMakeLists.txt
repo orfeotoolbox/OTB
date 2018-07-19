@@ -34,6 +34,7 @@ otbReduceSpectralResponseSVMClassifier.cxx
 otbProspectTransTest.cxx
 otbReduceSpectralResponseClassifierRAndNIR.cxx
 otbSatelliteRSR.cxx
+otbSurfaceReflectanceToReflectanceFilterNew.cxx
 otbImageSimulationMethodWithSpatialisationTest.cxx
 otbImageSimulationMethodSVMClassif.cxx
 otbReduceSpectralResponse.cxx
@@ -91,7 +92,6 @@ otb_add_test(NAME siTuReduceSpectralResponseClassifierRAndNIR COMMAND otbSimulat
   2 #NIR index
   )
 
-
 otb_add_test(NAME siTuSatelliteRSRCheckValue COMMAND otbSimulationTestDriver
   otbSatelliteRSRCheckValue
   ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
@@ -134,6 +134,9 @@ otb_add_test(NAME siTuSatelliteRSRCheckValue2 COMMAND otbSimulationTestDriver
   0.717 #expected
   )            
 
+otb_add_test(NAME siTuReflectanceToSurfaceReflectanceFilterNew COMMAND otbSimulationTestDriver
+  otbSurfaceReflectanceToReflectanceFilterNew )
+
 otb_add_test(NAME siTuImageSimulationMethodWithSpatialisationTest COMMAND otbSimulationTestDriver
   otbImageSimulationMethodWithSpatialisationTest
   ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
@@ -143,7 +146,6 @@ otb_add_test(NAME siTuImageSimulationMethodWithSpatialisationTest COMMAND otbSim
   ${TEMP}/ImageSimulationMethodWithSpatialisationTest.tif
   ${TEMP}/LabelImageSimulationMethodWithSpatialisationTest.tif
   )
-
 
 otb_add_test(NAME siTuReduceSpectralResponseReflectanceMode COMMAND otbSimulationTestDriver
   otbReduceSpectralResponse
@@ -194,7 +196,6 @@ otb_add_test(NAME siTvProspectReflTest COMMAND otbSimulationTestDriver
   1.2 #N
   ${TEMP}/siTvProspectReflTest.txt
   )
-
 
 otb_add_test(NAME siTuLabelMapToSimulatedImageFilterTest COMMAND otbSimulationTestDriver
   otbLabelMapToSimulatedImageFilterTest
@@ -259,7 +260,6 @@ otb_add_test(NAME siTvSailReflVTest COMMAND otbSimulationTestDriver
   0 #PSI
   ${TEMP}/siTvSailReflVTest.txt
   )
-
 
 otb_add_test(NAME siTvSailReflHTest COMMAND otbSimulationTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvSailReflHTest.txt

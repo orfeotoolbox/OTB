@@ -31,6 +31,7 @@ otbSystemTest.cxx
 otbImageRegionSquareTileSplitter.cxx
 otbImageRegionNonUniformMultidimensionalSplitter.cxx
 otbConfigurationManagerTest.cxx
+otbStandardFilterWatcherNew.cxx
 otbStandardOneLineFilterWatcherTest.cxx
 otbStandardWriterWatcher.cxx
 otbStopwatchTest.cxx
@@ -43,10 +44,6 @@ otb_module_target_label(otbCommonTestDriver)
 # Tests Declaration
 
 
-otb_add_test(NAME coTuVariableLengthVectorConverter COMMAND otbCommonTestDriver
-  otbVariableLengthVectorConverterNew
-  )
-
 otb_add_test(NAME coTvImageRegionTileMapSplitter COMMAND otbCommonTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/coImageRegionTileMapSplitter.txt
@@ -54,7 +51,6 @@ otb_add_test(NAME coTvImageRegionTileMapSplitter COMMAND otbCommonTestDriver
   otbImageRegionTileMapSplitter
   ${TEMP}/coImageRegionTileMapSplitter.txt
   )
-
 
 otb_add_test(NAME coTvImageRegionAdaptativeSplitterStripSmallStream COMMAND otbCommonTestDriver
   --compare-ascii ${NOTOL}
@@ -122,10 +118,6 @@ otb_add_test(NAME coTvImageRegionAdaptativeSplitterDivideBlock COMMAND otbCommon
   ${TEMP}/coTvImageRegionAdaptativeSplitterDivideBlock.txt
   )
 
-otb_add_test(NAME coTuRGBAPixelConverter COMMAND otbCommonTestDriver
-  otbRGBAPixelConverterNew
-  )
-
 otb_add_test(NAME coTvRGBAPixelConverter COMMAND otbCommonTestDriver
   otbRGBAPixelConverter
   )
@@ -138,19 +130,6 @@ otb_add_test(NAME coTvRectangle COMMAND otbCommonTestDriver
   ${TEMP}/otbRectangleTest.txt
   2.12 2.35 12.54 2.45   3. 0.15  1. 1.
   )
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 otb_add_test(NAME coTuSystemTests_IsA_Methods COMMAND otbCommonTestDriver
   otbSystemTest
@@ -167,7 +146,6 @@ otb_add_test(NAME coTvParseHdfSubsetName COMMAND otbCommonTestDriver
 otb_add_test(NAME coTvParseHdfFileName COMMAND otbCommonTestDriver
   otbParseHdfFileName)
 
-
 otb_add_test(NAME coTvImageRegionSquareTileSplitter COMMAND otbCommonTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/coImageRegionSquareTileSplitter.txt
@@ -175,15 +153,6 @@ otb_add_test(NAME coTvImageRegionSquareTileSplitter COMMAND otbCommonTestDriver
   otbImageRegionSquareTileSplitter
   ${TEMP}/coImageRegionSquareTileSplitter.txt
   )
-
-
-
-
-
-
-
-
-
 
 otb_add_test(NAME coTvImageRegionNonUniformMultidimensionalSplitter COMMAND otbCommonTestDriver
   --compare-ascii ${NOTOL}
@@ -197,7 +166,6 @@ otb_add_test(NAME coTvImageRegionNonUniformMultidimensionalSplitter COMMAND otbC
   ${TEMP}/coImageRegionNonUniformMultidimensionalSplitter.txt
   )
 
-
 otb_add_test(NAME coTvConfigurationManagerDefault COMMAND otbCommonTestDriver
   otbConfigurationManagerTest
   128)
@@ -210,7 +178,10 @@ otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbTestDriver
   otbConfigurationManagerTest
   256 /path/to/dem/ /path/to/geoid.file)
 
-
+otb_add_test(NAME coTuStandardFilterWatcherNew COMMAND otbCommonTestDriver
+  otbStandardFilterWatcherNew
+  ${INPUTDATA}/qb_RoadExtract.img
+  )
 otb_add_test(NAME coTuStandardOneLineFilterWatcher COMMAND otbCommonTestDriver
   otbStandardOneLineFilterWatcherTest
   ${INPUTDATA}/qb_RoadExtract.img
