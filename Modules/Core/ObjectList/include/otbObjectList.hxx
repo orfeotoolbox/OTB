@@ -247,7 +247,7 @@ ObjectList<TObject>
 ::Insert(ReverseIterator position, ObjectPointerType element)
 {
   ReverseIterator iter(
-    InternalContainerType::reverse_iterator(
+    (typename InternalContainerType::reverse_iterator)(
       m_InternalContainer.insert(position.GetIter().base(), element)
       )
     );
