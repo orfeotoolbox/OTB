@@ -26,6 +26,7 @@ ENABLE_SHARED
   OTBITK
   OTBImageIO
   OTBImageBase
+  OTBObjectList
   DESCRIPTION
     "${DOCUMENTATION}"
 )

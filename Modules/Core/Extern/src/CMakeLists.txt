@@ -23,6 +23,8 @@ set(OTBExtern_SRC
   otbVectorImageExtern.cxx
   otbImageFileReaderExtern.cxx
   otbImageFileWriterExtern.cxx
+  otbObjectListExtern.cxx
+  itkImageSourceExtern.cxx
   )
 
 add_library(OTBExtern ${OTBExtern_SRC})

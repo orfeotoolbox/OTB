@@ -23,5 +23,9 @@
 
 #include "otbImageExtern.h"
 #include "otbVectorImageExtern.h"
+#include "itkImageSourceExtern.h"
+#include "otbImageFileReaderExtern.h"
+#include "otbImageFileWriterExtern.h"
+#include "otbObjectListExtern.h"
 
 #endif
