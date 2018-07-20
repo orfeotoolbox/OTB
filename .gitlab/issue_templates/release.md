@@ -2,20 +2,20 @@ We are ready to release OTB version MAJOR.MINOR.PATCH. The following steps need 
 
 ### 1. Branches
 
-* [ ] **(if major or minor release)** Feature freeze: [create the new release branch](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#create_release_branch)
+* [ ] **(if major or minor release)** Feature freeze: [create the new release branch](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#create-release-branch)
 * [ ] **(if patch release)** Work on the already existing branch `release-MAJOR-MINOR`
 * [ ] Make sure the version number in `CMakeLists.txt` is MAJOR.MINOR.PATCH
 
 ### 2. Housekeeping
 * [ ] In this story, make a list of blocking issues for the release (if any)
 * [ ] [Update dashboard scripts](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#dashboard) to support new version numbers
-* [ ] [Update the SuperBuild archive](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#superBuild_archive) (if needed)
+* [ ] [Update the SuperBuild archive](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#superbuild-archive) (if needed)
 * [ ] Update release notes (walk the GitLab MR merged history and log all improvements)
 * [ ] Update the date in RELEASE_NOTES.txt
-* [ ] Run Debian [spelling](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#spelling_check) checker
+* [ ] Run Debian [spelling](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#spelling-check) checker
 * [ ] Run shellcheck script from [OTB-Devutils/Scripts/](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils/blob/master/Scripts/run_shellcheck.sh)
-* [ ] [Update translation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#translation_for_Monteverdi_.26_Mapla) for Monteverdi and Mapla
-* [ ] [Sanity check the binary packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#standalone_packages_sanity_check)
+* [ ] [Update translation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#translation-for-Monteverdi_.26_Mapla) for Monteverdi and Mapla
+* [ ] [Sanity check the binary packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#standalone-packages-sanity-check)
     * [ ]  Windows
     * [ ]  Linux
     * [ ]  Mac
@@ -23,16 +23,16 @@ We are ready to release OTB version MAJOR.MINOR.PATCH. The following steps need 
 ### 3. Actual release
 
 Once all blocking issues are closed, and the previous steps are done:
-* [ ] [Tag the release or RC](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#release_tag)
+* [ ] [Tag the release or RC](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#release-tag)
 * [ ] **(if major or minor release)**: Merge the release into develop
 * [ ] **(if it's the latest release)**: Merge the release into master
 * [ ] **(if patch release)**: Backport fixes
 * [ ] Update GIT_TAG for all official remote modules (if needed)
 
 ### 4. Publish and plan next release
-* [ ]   [Prepare and upload source packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#prepare_and_upload_source_packages)
-* [ ]   [Promote nightly packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#promote_nightly_packages)
-* [ ]   [Update documentation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#update_documentation)
+* [ ]   [Prepare and upload source packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#prepare-and-upload-source-packages)
+* [ ]   [Promote nightly packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#promote-nightly-packages)
+* [ ]   [Update documentation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#update-documentation)
     * [ ] Software Guide
     * [ ] Cookbook
     * [ ] Doxygen
@@ -45,7 +45,7 @@ Once all blocking issues are closed, and the previous steps are done:
 * [ ] Announcement on social networks (twitter, google+)
 * [ ] Forward announcement to news_item@osgeo.org ([OSGeo news](https://www.osgeo.org/foundation-news/))
 * [ ] Plan the next release (nominate new release manager, setup PSC meeting on IRC)
-* [ ] Contact QGis processing plugin maintainer to update XML description for new OTB-Applications (or [supply it](https://wiki.orfeo-toolbox.org/index.php/QGIS_access_to_OTB_applications#updating_the_XML_descriptors))
+* [ ] Contact QGis processing plugin maintainer to update XML description for new OTB-Applications (or [supply it](https://wiki.orfeo-toolbox.org/index.php/QGIS_access_to_OTB_applications#updating-the-XML-descriptors))
 * [ ] Remove public branches related to MR or bugfix merged before the release
 
 /label ~story
