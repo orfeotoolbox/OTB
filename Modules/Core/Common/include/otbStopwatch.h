@@ -22,6 +22,7 @@
 #define otbStopwatch_h
 
 #include <cstdint>
+#include <string>
 
 #include "OTBCommonExport.h"
 
@@ -62,6 +63,9 @@ public:
 
   /** Get the total duration, excluding the current iteration */
   DurationType GetElapsedMilliseconds() const;
+
+  /** Get the total duration in human readable format */
+  std::string  GetElapsedHumanReadableTime() const;
 
   /** Returns whether the stopwatch is running */
   bool IsRunning() const;
