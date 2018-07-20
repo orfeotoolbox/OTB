@@ -2,8 +2,8 @@ We are ready to release OTB version MAJOR.MINOR.PATCH. The following steps need 
 
 ### 1. Branches
 
-* [ ] **(if major or minor release)** [Create the new release branch](https://wiki.orfeo-toolbox.org/index.php/Help_for_release_actions#Create_release_branch)
-* [ ] **(if patch release)** Checkout the existing branch `release-MAJOR-MINOR`
+* [ ] **(if major or minor release)** Feature freeze: [create the new release branch](https://wiki.orfeo-toolbox.org/index.php/Help_for_release_actions#Create_release_branch)
+* [ ] **(if patch release)** Work on the already existing branch `release-MAJOR-MINOR`
 * [ ] Make sure the version number in `CMakeLists.txt` is MAJOR.MINOR.PATCH
 
 ### 2. Housekeeping
@@ -22,14 +22,14 @@ We are ready to release OTB version MAJOR.MINOR.PATCH. The following steps need 
 
 ### 3. Actual release
 
-Once all blocking issues are closed:
+Once all blocking issues are closed, and the previous steps are done:
 * [ ] [Tag the release or RC](https://wiki.orfeo-toolbox.org/index.php/Help_for_release_actions#Release_tag)
 * [ ] **(if major or minor release)**: Merge the release into develop
 * [ ] **(if it's the latest release)**: Merge the release into master
 * [ ] **(if patch release)**: Backport fixes
 * [ ] Update GIT_TAG for all official remote modules (if needed)
 
-### Publish and plan next release
+### 4. Publish and plan next release
 * [ ]   [Prepare and upload source packages](https://wiki.orfeo-toolbox.org/index.php/Help_for_release_actions#Prepare_and_upload_source_packages)
 * [ ]   [Promote nightly packages](https://wiki.orfeo-toolbox.org/index.php/Help_for_release_actions#Promote_nightly_packages)
 * [ ]   [Update documentation](https://wiki.orfeo-toolbox.org/index.php/Help_for_release_actions#Update_documentation)
