@@ -177,3 +177,19 @@ Regarding labels, we use the following set:
 * ~"To Do": action is planned
 * ~Doing: work in progress
 * ~api ~app ~documentation ~monteverdi ~packaging ~qgis: optional context information
+
+## Versioning
+
+Starting from OTB 7.0.0, we use [semantic versioning](https://semver.org/). See the website for the full spec, in summary:
+
+> Given a version number MAJOR.MINOR.PATCH, increment the:
+>
+>  1. MAJOR version when you make incompatible API changes,
+>  2. MINOR version when you add functionality in a backwards-compatible manner, and
+>  3. PATCH version when you make backwards-compatible bug fixes.
+>
+> Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
+The branch develop is always on the next MAJOR.MINOR release version number. PATCH releases are done on their respective release branches (for example release 7.0.1 is on branch release-7.0).
+
+For the purpose of defining backwards compatibility, OTB API covers the C++ API, the Python bindings, application names and application parameters.
