@@ -33,7 +33,6 @@ otb_module_target_label(otbDimensionalityReductionLearningTestDriver)
 
 # Tests Declaration
 # --------------- Autoencoder --------------------------------
-  )
 
 otb_add_test(NAME leTvAutoencoderModelTrain COMMAND
   otbDimensionalityReductionLearningTestDriver
@@ -51,7 +50,6 @@ otb_add_test(NAME leTvAutoencoderModelCanRead COMMAND
 set_property(TEST leTvAutoencoderModelCanRead APPEND PROPERTY DEPENDS leTvAutoencoderModelTrain)
 
 # --------------- PCA --------------------------------
-  )
 
 otb_add_test(NAME leTvPCAModelTrain COMMAND
   otbDimensionalityReductionLearningTestDriver
@@ -69,7 +67,6 @@ otb_add_test(NAME leTvPCAModelCanRead COMMAND
 set_property(TEST leTvPCAModelCanRead APPEND PROPERTY DEPENDS leTvPCAModelTrain)
 
 # --------------- SOM --------------------------------
-  )
 
 otb_add_test(NAME leTvSOMModelTrain COMMAND
   otbDimensionalityReductionLearningTestDriver
