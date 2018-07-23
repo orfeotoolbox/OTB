@@ -51,7 +51,7 @@ public:
 
     TOutput output(1); 
     output = 0;
-     output = input + m_disp ;
+    output = input + m_disp ;
    
     return output;
     }

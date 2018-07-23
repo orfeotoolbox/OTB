@@ -122,13 +122,7 @@ class CVF : public Application
   typedef otb::BijectionCoherencyFilter< IntImageType, IntImageType > OcclusionType;
   typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;
   typedef otb::FillPixelFilter< FloatVectorImageType, IntImageType > FillOccFilter ;
-
   typedef otb::ConvertDisparityValue<IntImageType, IntImageType > ConvertToDisparityValue ;
-
-
-  
-
-
 
   itkNewMacro(Self);
   itkTypeMacro(CVF, otb::Application);
@@ -178,13 +172,21 @@ class CVF : public Application
     SetParameterDescription("dmax","Maximum horizontal disparity to explore (can be negative)");
     SetDefaultParameterInt("dmax",-4);
     
-    AddParameter(ParameterType_Int,"rwmf", "Radiusf or median filter");
+    AddParameter(ParameterType_Int,"rwmf", "Radius for median filter");
     SetParameterDescription("rwmf", "Radius for median filter");
     SetDefaultParameterInt("rwmf",9);  
+
+    AddParameter(ParameterType_Int,"tol", "Tolerance for left-right disp. diff");
+    SetParameterDescription("tol", "Tolerance for left-right disp. diff");
+    SetDefaultParameterInt("tol",2);
 
     AddParameter(ParameterType_Int, "range", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255");
     SetParameterDescription("range", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255" );
     SetDefaultParameterInt("range",0);
+
+    AddParameter(ParameterType_Int, "choice", "Output image files : '1' DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter");
+    SetParameterDescription("choice", "DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter" );
+    SetDefaultParameterInt("choice",3);
 
 
     AddRAMParameter();
@@ -197,8 +199,10 @@ class CVF : public Application
     SetDocExampleParameterValue("dmax","0");
     SetDocExampleParameterValue("rwmf","9");
     SetDocExampleParameterValue("radius","9");
+    SetDocExampleParameterValue("tol","2");
     SetDocExampleParameterValue("io.out","MyCVFDisparity.tif");
     SetDocExampleParameterValue("range","0");
+    SetDocExampleParameterValue("choice","3");
 
     }
 
@@ -246,17 +250,17 @@ class CVF : public Application
     FloatVectorImageType::Pointer inRight = GetParameterFloatVectorImage("io.inright");
     inRight->UpdateOutputInformation();
 
-
     int dispMin = GetParameterInt("dmin");
     int dispMax = GetParameterInt("dmax");
     long unsigned int r  = GetParameterInt("radius");
     unsigned int rwmf = GetParameterInt("rwmf") ;   
     unsigned int s = GetParameterInt("sense") ;
     unsigned int range = GetParameterInt("range") ;
+    unsigned int tol = GetParameterInt("tol") ;
+    unsigned int choice = GetParameterInt("choice") ;
 
-
-    std::cout << "disMin : " << dispMin << std::endl ;
-    std::cout << "disMax : " << dispMax << std::endl ;
+    std::cout << "dispMin : " << dispMin << std::endl ;
+    std::cout << "dispMax : " << dispMax << std::endl ;
 
   // GRADIENT CALCULATIONS
   // ConvolutionImageFilter 
@@ -289,7 +293,6 @@ class CVF : public Application
 
 
     // COST VOLUME  
-
     if(s==0)
       {          // --- LEFT
       m_LeftCost->SetLeftInputImage(inLeft);
@@ -326,9 +329,7 @@ class CVF : public Application
       m_RightCost->SetMaxDisp(dispMax);     
       m_RightCost->UpdateOutputInformation();   
       }
-
-   
-   
+  
 
     //WEIGHTS  
       // --- LEFT
@@ -341,7 +342,6 @@ class CVF : public Application
     m_meanRightCost->SetInput2(m_RightCost->GetOutput());  
     m_meanRightCost->SetRadius(0,r);  
     m_meanRightCost->UpdateOutputInformation(); 
-
 
 
     //MEAN WEIGHTS   
@@ -364,77 +364,9 @@ class CVF : public Application
     m_RightDisparity->SetInput(m_meanRightWeights->GetOutput());  
     m_RightDisparity->UpdateOutputInformation(); 
 
-
-
-
-    //FILTRAGE LEFT DISPARITY PAR FILTRE MEDIAN
-    m_CastLeftDisparity-> SetInput(  m_LeftDisparity->GetOutput());
-    m_CastRightDisparity->SetInput( m_RightDisparity->GetOutput());
-
-    MedianFilterType::RadiusType MedianRadius = {{rwmf,rwmf}};
-    LMedian->SetRadius(MedianRadius); 
-
-    m_LeftMedianFilter->SetFilter(LMedian);
-    m_LeftMedianFilter->SetInput(inLeft); 
-
-    m_RightMedianFilter->SetFilter(LMedian);
-    m_RightMedianFilter->SetInput(inRight);
-
-    if(s==0)
+    if(choice == 1)
       {
-      m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
-      m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
-      m_OcclusionFilter->SetMaxHDisp(0);
-      m_OcclusionFilter->SetMinHDisp(-(dispMax-dispMin));
-      }
-    else
-      {
-      m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
-      m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
-      m_OcclusionFilter->SetMaxHDisp(dispMax-dispMin);
-      m_OcclusionFilter->SetMinHDisp(0);
-      }
-
-    m_OcclusionFilter->SetMinVDisp(0);
-    m_OcclusionFilter->SetMaxVDisp(0);
-    m_OcclusionFilter->SetTolerance(2);
-
-    m_CastOccMap-> SetInput( const_cast <IntImageType *>( m_OcclusionFilter->GetOutput() )); 
-
-    if(s==0)
-      {      
-      m_ConcatenateMedianImageAndOccMap->SetInput1(m_LeftMedianFilter->GetOutput());
-      m_ConcatenateMedianImageAndOccMap->SetInput2(m_CastOccMap->GetOutput());
-
-      m_ConcatenateCastOccMapAndInputImage->SetInput1(m_CastLeftDisparity->GetOutput());
-      m_ConcatenateCastOccMapAndInputImage->SetInput2(m_ConcatenateMedianImageAndOccMap->GetOutput());
-      }
-    else
-      {      
-      m_ConcatenateMedianImageAndOccMap->SetInput1(m_RightMedianFilter->GetOutput());
-      m_ConcatenateMedianImageAndOccMap->SetInput2(m_CastOccMap->GetOutput());
-      m_ConcatenateCastOccMapAndInputImage->SetInput1(m_CastRightDisparity->GetOutput());
-      m_ConcatenateCastOccMapAndInputImage->SetInput2(m_ConcatenateMedianImageAndOccMap->GetOutput());
-
-      }   
-
-
-    m_FillOcc->SetInput(m_ConcatenateCastOccMapAndInputImage->GetOutput());
-    FloatVectorImageType::SizeType radiusM;
-    radiusM[0] = rwmf;
-    radiusM[1] = rwmf;   
-    m_FillOcc->SetRadius(radiusM);
-        
-    if(range==1)
-      {
-      m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
-      m_convertSmoothDisparity->SetDispMin(dispMin);
-      m_convertSmoothDisparity->SetDispMax(dispMax);
-      SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
-      }
-    else
-      {
-      m_DispValueFilter->SetInput(m_FillOcc->GetOutput());
+      m_DispValueFilter->SetInput(m_LeftDisparity->GetOutput());
       if(s==0)
         {
         m_DispValueFilter->SetDisp(dispMax);
@@ -445,14 +377,103 @@ class CVF : public Application
         }
       SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
       }
+    else
+      {
+      //FILTRAGE LEFT DISPARITY PAR FILTRE MEDIAN
+      m_CastLeftDisparity-> SetInput(  m_LeftDisparity->GetOutput());
+      m_CastRightDisparity->SetInput( m_RightDisparity->GetOutput());
 
+      MedianFilterType::RadiusType MedianRadius = {{rwmf,rwmf}};
+      LMedian->SetRadius(MedianRadius); 
 
-    
+      m_LeftMedianFilter->SetFilter(LMedian);
+      m_LeftMedianFilter->SetInput(inLeft); 
 
+      m_RightMedianFilter->SetFilter(LMedian);
+      m_RightMedianFilter->SetInput(inRight);
 
-    
-    
+      if(s==0)
+        {
+        m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
+        m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
+        m_OcclusionFilter->SetMaxHDisp(0);
+        m_OcclusionFilter->SetMinHDisp(-(dispMax-dispMin));
+        }
+      else
+        {
+        m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
+        m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
+        m_OcclusionFilter->SetMaxHDisp(dispMax-dispMin);
+        m_OcclusionFilter->SetMinHDisp(0);
+        }
 
+      m_OcclusionFilter->SetMinVDisp(0);
+      m_OcclusionFilter->SetMaxVDisp(0);
+      m_OcclusionFilter->SetTolerance(tol);
+
+      if(choice == 2)
+        {
+        SetParameterOutputImage("io.out", m_OcclusionFilter->GetOutput());
+        }
+      else
+        {
+        m_CastOccMap-> SetInput( const_cast <IntImageType *>( m_OcclusionFilter->GetOutput() )); 
+
+        if(s==0)
+          {      
+          m_ConcatenateMedianImageAndOccMap->SetInput1(m_LeftMedianFilter->GetOutput());
+          m_ConcatenateMedianImageAndOccMap->SetInput2(m_CastOccMap->GetOutput());
+          m_ConcatenateCastOccMapAndInputImage->SetInput1(m_CastLeftDisparity->GetOutput());
+          m_ConcatenateCastOccMapAndInputImage->SetInput2(m_ConcatenateMedianImageAndOccMap->GetOutput());
+          }
+        else
+          {      
+          m_ConcatenateMedianImageAndOccMap->SetInput1(m_RightMedianFilter->GetOutput());
+          m_ConcatenateMedianImageAndOccMap->SetInput2(m_CastOccMap->GetOutput());
+          m_ConcatenateCastOccMapAndInputImage->SetInput1(m_CastRightDisparity->GetOutput());
+          m_ConcatenateCastOccMapAndInputImage->SetInput2(m_ConcatenateMedianImageAndOccMap->GetOutput());
+          }   
+
+        m_FillOcc->SetInput(m_ConcatenateCastOccMapAndInputImage->GetOutput());
+        FloatVectorImageType::SizeType radiusM;
+        radiusM[0] = rwmf;
+        radiusM[1] = rwmf;   
+        m_FillOcc->SetRadius(radiusM);
+
+            
+        if(range==1)
+          {
+          m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
+          if(s==0)
+            {
+            m_convertSmoothDisparity->SetDispMin(dispMin);
+            m_convertSmoothDisparity->SetDispMax(dispMax); 
+            m_convertSmoothDisparity->SetOffset(0);
+            }
+          else
+            {
+            m_convertSmoothDisparity->SetDispMin(-dispMax);
+            m_convertSmoothDisparity->SetDispMax(-dispMin); 
+            m_convertSmoothDisparity->SetOffset(255); 
+            }
+          
+          SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
+          }
+        else
+          {
+          m_DispValueFilter->SetInput(m_FillOcc->GetOutput());
+          if(s==0)
+            {
+            m_DispValueFilter->SetDisp(dispMax);
+            }
+          else
+            {
+            m_DispValueFilter->SetDisp(dispMin);
+            }
+          SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
+          }
+        }   
+      }      
     }
 
     ConvFilterType::Pointer m_convFilterXLeft ;

@@ -46,6 +46,11 @@ public:
      return m_dispMin;     
     }
 
+  int GetOffset()
+    {
+     return m_offset;     
+    }
+
   void SetDispMax(int disp)
     {
       m_dispMax = disp;
@@ -54,6 +59,11 @@ public:
   void SetDispMin(int disp)
     {
       m_dispMin = disp;
+    }
+
+  void SetOffset(int disp)
+    {
+      m_offset = disp ;
     }
 
 
@@ -68,7 +78,7 @@ public:
     float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
 
     // output = (255-a*input[0]+0.5) ;
-     output = a*input+0.5f;
+     output = a*input+0.5f + m_offset;
    
     return output;
     }
@@ -76,6 +86,7 @@ public:
   protected:
     int                             m_dispMin;
     int                             m_dispMax;
+    int                             m_offset ;
 
 }; //end class
 
@@ -117,6 +128,11 @@ public:
      return this->GetFunctor().GetDispMin();     
     }
 
+  int GetOffset()
+    {
+     return this->GetFunctor().GetOffset();     
+    }
+
   void SetDispMax(int disp)
     {
       this->GetFunctor().SetDispMax(disp);
@@ -125,6 +141,11 @@ public:
   void SetDispMin(int disp)
     {
       this->GetFunctor().SetDispMin(disp);
+    }
+
+  void SetOffset(int disp)
+    {
+      this->GetFunctor().SetOffset(disp);
     }
 
 

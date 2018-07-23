@@ -42,6 +42,7 @@ public:
 
     unsigned int size ( input.GetSize() ) ;
 
+
     TOutput output(1); 
     output = 0;
     typename TInput::ValueType min ( input[0] );
