@@ -26,6 +26,7 @@ otb_module(OTBCommandLineParser
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

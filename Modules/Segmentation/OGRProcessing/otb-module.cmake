@@ -35,6 +35,7 @@ otb_module(OTBOGRProcessing
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

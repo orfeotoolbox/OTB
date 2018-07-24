@@ -34,6 +34,7 @@ otb_module(OTBCorner
     OTBCommon
 
   TEST_DEPENDS
+    OTBExtern
     OTBVectorDataIO
     OTBTestKernel
     OTBImageIO

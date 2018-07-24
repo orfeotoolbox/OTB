@@ -29,6 +29,7 @@ ENABLE_SHARED
     OTBQtAdapters
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

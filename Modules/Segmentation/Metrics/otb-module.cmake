@@ -27,6 +27,7 @@ otb_module(OTBMetrics
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBLabelMap
     OTBTestKernel
     OTBImageIO

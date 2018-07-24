@@ -33,6 +33,7 @@ otb_module(OTBPath
     OTBCommon
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBVectorDataIO

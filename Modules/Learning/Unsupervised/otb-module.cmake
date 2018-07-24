@@ -12,6 +12,7 @@ otb_module(OTBUnsupervised
   OTBShark
 
   TEST_DEPENDS
+    OTBExtern
   OTBTestKernel
   OTBImageIO
   OTBImageBase

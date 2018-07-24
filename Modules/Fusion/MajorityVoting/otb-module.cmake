@@ -28,6 +28,7 @@ otb_module(OTBMajorityVoting
     OTBOSSIMAdapters
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

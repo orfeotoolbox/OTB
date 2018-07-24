@@ -28,6 +28,7 @@ otb_module(OTBInterpolation
     OTBImageBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBImageManipulation
     OTBTestKernel

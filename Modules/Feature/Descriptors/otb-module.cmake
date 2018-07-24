@@ -36,6 +36,7 @@ otb_module(OTBDescriptors
     OTBSiftFast
     
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBImageManipulation
     OTBInterpolation

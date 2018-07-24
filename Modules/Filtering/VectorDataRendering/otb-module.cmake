@@ -30,6 +30,7 @@ otb_module(OTBVectorDataRendering
     OTBCommon
 
   TEST_DEPENDS
+    OTBExtern
     OTBVectorDataBase
     OTBTestKernel
     OTBImageIO

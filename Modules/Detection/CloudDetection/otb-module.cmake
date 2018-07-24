@@ -28,6 +28,7 @@ otb_module(OTBCloudDetection
     OTBImageManipulation
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBTestKernel

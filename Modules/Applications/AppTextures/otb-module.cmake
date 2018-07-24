@@ -30,6 +30,7 @@ otb_module(OTBAppTextures
     OTBObjectList
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

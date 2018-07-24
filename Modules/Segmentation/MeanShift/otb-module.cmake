@@ -30,6 +30,7 @@ otb_module(OTBMeanShift
     OTBMathParser
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

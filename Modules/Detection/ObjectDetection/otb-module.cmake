@@ -35,6 +35,7 @@ otb_module(OTBObjectDetection
     OTBVectorDataBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBIOXML
     OTBImageIO
     OTBLibSVM

@@ -29,6 +29,7 @@ otb_module(OTBMorphologicalProfiles
     OTBObjectList
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBTestKernel
 

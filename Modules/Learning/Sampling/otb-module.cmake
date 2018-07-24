@@ -30,6 +30,7 @@ otb_module(OTBSampling
     OTBStatistics
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

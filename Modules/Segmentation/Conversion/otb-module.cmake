@@ -38,6 +38,7 @@ otb_module(OTBConversion
     OTBCommon
 
   TEST_DEPENDS
+    OTBExtern
     OTBVectorDataIO
     OTBSmoothing
     OTBImageIO

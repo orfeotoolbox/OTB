@@ -44,6 +44,7 @@ otb_module(OTBAppSegmentation
     OTBProjection
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

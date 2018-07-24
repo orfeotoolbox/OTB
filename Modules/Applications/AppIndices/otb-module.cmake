@@ -26,6 +26,7 @@ otb_module(OTBAppIndices
     OTBApplicationEngine
     OTBObjectList
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
   

@@ -28,6 +28,7 @@ otb_module(OTBContrast
   	OTBImageBase  
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageBase
     OTBImageIO

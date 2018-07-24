@@ -29,6 +29,7 @@ otb_module(OTBAppSARPolarSynth
     OTBImageBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

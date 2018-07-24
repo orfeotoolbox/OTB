@@ -26,6 +26,7 @@ otb_module(OTBQgis
     OTBApplicationEngine
     
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

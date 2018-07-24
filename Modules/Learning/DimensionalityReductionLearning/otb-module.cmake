@@ -29,6 +29,7 @@ otb_module(OTBDimensionalityReductionLearning
     OTBLearningBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

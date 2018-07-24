@@ -27,6 +27,7 @@ otb_module(OTBTextures
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

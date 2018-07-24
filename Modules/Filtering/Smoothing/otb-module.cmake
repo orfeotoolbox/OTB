@@ -28,6 +28,7 @@ otb_module(OTBSmoothing
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
 

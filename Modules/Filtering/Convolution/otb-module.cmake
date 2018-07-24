@@ -28,6 +28,7 @@ otb_module(OTBConvolution
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

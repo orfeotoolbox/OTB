@@ -44,6 +44,7 @@ ENABLE_SHARED
     OTBMPITiffWriter
     
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
     OTBEdge

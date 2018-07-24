@@ -34,6 +34,7 @@ otb_module(OTBStereo
     OTBTransform
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBTestKernel
 

@@ -30,6 +30,7 @@ otb_module(OTBUrbanArea
     OTBIndices
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
 

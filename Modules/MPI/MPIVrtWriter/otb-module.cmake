@@ -28,6 +28,8 @@ otb_module(OTBMPIVrtWriter
     OTBProjection
     OTBInterpolation
     OTBTestKernel
+  TEST_DEPENDS
+    OTBExtern
     
   DESCRIPTION
     "${DOCUMENTATION}"

@@ -26,6 +26,7 @@ otb_module(OTBAppChangeDetection
     OTBApplicationEngine
     OTBChangeDetection
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
   

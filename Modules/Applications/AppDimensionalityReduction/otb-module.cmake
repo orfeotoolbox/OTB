@@ -30,6 +30,7 @@ otb_module(OTBAppDimensionalityReduction
     OTBDimensionalityReduction
     OTBDimensionalityReductionLearning
     TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
   

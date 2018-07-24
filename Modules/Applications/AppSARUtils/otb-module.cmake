@@ -8,6 +8,7 @@ otb_module(OTBAppSARUtils
     OTBITK
     
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

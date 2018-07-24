@@ -30,6 +30,7 @@ otb_module(OTBMarkov
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

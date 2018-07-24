@@ -34,6 +34,7 @@ otb_module(OTBVectorDataIO
     OTBIOKML
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBOSSIMAdapters
 

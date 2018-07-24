@@ -31,6 +31,7 @@ otb_module(OTBAppFiltering
     OTBStreaming
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

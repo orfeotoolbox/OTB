@@ -36,6 +36,7 @@ otb_module(OTBRCC8
     OTBObjectList
 
   TEST_DEPENDS
+    OTBExtern
     OTBVectorDataBase
     OTBTestKernel
     OTBImageIO

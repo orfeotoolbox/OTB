@@ -32,6 +32,7 @@ ENABLE_SHARED
     OTBObjectList
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBVectorDataIO
 

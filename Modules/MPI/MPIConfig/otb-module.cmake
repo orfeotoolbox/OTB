@@ -27,6 +27,7 @@ otb_module(OTBMPIConfig
     OTBStreaming
     OTBMPI
   TEST_DEPENDS
+    OTBExtern
     OTBBoost
     OTBImageBase
     OTBImageManipulation

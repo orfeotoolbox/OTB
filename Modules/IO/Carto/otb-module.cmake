@@ -42,6 +42,7 @@ ENABLE_SHARED
     OTBVectorDataIO
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLineParser
     OTBOpenThreadsAdapters
     OTBTestKernel

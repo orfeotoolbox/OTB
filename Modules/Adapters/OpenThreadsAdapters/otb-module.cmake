@@ -26,6 +26,7 @@ otb_module(OTBOpenThreadsAdapters
     OTBOpenThreads
 
   TEST_DEPENDS
+    OTBExtern
     OTBITK
     OTBTestKernel
 

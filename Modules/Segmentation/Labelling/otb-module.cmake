@@ -33,6 +33,7 @@ otb_module(OTBLabelling
     OTBPointSet
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBTestKernel

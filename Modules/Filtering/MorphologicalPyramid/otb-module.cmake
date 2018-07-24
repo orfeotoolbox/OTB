@@ -34,6 +34,7 @@ otb_module(OTBMorphologicalPyramid
     OTBPointSet
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBMorphologicalProfiles
     OTBTestKernel

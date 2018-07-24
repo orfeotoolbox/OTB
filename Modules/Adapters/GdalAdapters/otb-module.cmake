@@ -30,6 +30,7 @@ ENABLE_SHARED
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     
   DESCRIPTION

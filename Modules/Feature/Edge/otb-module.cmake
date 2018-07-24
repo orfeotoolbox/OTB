@@ -37,6 +37,7 @@ otb_module(OTBEdge
     OTBVectorDataBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLineParser
     OTBImageIO
     OTBTestKernel

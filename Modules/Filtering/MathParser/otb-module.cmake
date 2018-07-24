@@ -32,6 +32,7 @@ otb_module(OTBMathParser
     OTBVectorDataBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBObjectList

@@ -29,6 +29,7 @@ otb_module(OTBAppMorphology
     OTBMorphologicalProfiles
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

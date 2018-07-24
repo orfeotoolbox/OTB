@@ -31,6 +31,7 @@ otb_module(OTBPolarimetry
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBTestKernel

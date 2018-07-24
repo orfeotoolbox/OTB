@@ -17,6 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "otbExtern.h"
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )

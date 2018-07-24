@@ -30,6 +30,7 @@ otb_module(OTBDEM
     OTBTransform
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBTestKernel
 

@@ -31,6 +31,7 @@ otb_module(OTBDensity
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBDescriptors
     OTBTestKernel
     OTBImageIO

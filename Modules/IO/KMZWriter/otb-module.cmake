@@ -34,6 +34,7 @@ otb_module(OTBKMZWriter
     OTBlibkml
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLineParser
     OTBProjection
     OTBTestKernel

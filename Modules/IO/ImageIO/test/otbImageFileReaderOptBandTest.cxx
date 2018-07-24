@@ -15,6 +15,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbExtern.h"
 #include "otbImage.h"
 #include "itkMacro.h"
 #include <iostream>

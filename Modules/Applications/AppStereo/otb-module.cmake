@@ -37,6 +37,7 @@ otb_module(OTBAppStereo
     OTBTransform
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLine
     OTBTestKernel
 

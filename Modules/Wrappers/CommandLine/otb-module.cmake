@@ -31,6 +31,7 @@ otb_module(OTBCommandLine
     OTBMPIConfig
     
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBAppImageUtils
 

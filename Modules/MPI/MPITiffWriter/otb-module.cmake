@@ -36,6 +36,7 @@ otb_module(OTBMPITiffWriter
     OTBMPI
     OTBMPIConfig
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

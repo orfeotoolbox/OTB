@@ -32,6 +32,7 @@ ENABLE_SHARED
     OTBCommon
     
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

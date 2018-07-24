@@ -24,6 +24,7 @@ otb_module(OTBAppTest
   DEPENDS
     OTBApplicationEngine
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
   DESCRIPTION

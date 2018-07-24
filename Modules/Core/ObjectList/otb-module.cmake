@@ -29,6 +29,7 @@ otb_module(OTBObjectList
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBTestKernel

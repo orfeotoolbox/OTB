@@ -28,6 +28,7 @@ otb_module(OTBIOMSTAR
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

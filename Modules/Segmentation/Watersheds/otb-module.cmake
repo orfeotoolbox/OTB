@@ -26,6 +26,7 @@ otb_module(OTBWatersheds
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

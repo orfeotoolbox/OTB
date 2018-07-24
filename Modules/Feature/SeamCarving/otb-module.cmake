@@ -30,6 +30,7 @@ otb_module(OTBSeamCarving
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageBase
 

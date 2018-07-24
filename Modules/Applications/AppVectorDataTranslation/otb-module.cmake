@@ -27,6 +27,7 @@ otb_module(OTBAppVectorDataTranslation
     OTBApplicationEngine
     OTBTransform
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
   

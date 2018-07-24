@@ -31,6 +31,7 @@ otb_module(OTBFuzzy
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

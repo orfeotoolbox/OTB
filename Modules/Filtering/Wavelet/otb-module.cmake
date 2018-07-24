@@ -27,6 +27,7 @@ otb_module(OTBWavelet
     OTBObjectList
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBTestKernel

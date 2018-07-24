@@ -25,6 +25,7 @@ otb_module(OTBLandSatClassifier
     OTBIndices
 
   TEST_DEPENDS
+    OTBExtern
     OTBITK
     OTBImageBase
     OTBImageIO

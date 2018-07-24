@@ -41,6 +41,7 @@ otb_module(OTBImageIO
     OTBStreaming
 
   TEST_DEPENDS
+    OTBExtern
     OTBStatistics
     OTBTestKernel
 

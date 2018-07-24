@@ -29,6 +29,7 @@ otb_module(OTBSARCalibration
     OTBOSSIMAdapters
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBStatistics

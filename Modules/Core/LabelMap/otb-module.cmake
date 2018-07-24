@@ -33,6 +33,7 @@ otb_module(OTBLabelMap
     OTBVectorDataManipulation
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBProjection
     OTBTestKernel

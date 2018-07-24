@@ -34,6 +34,7 @@ otb_module(OTBPointSet
     OTBCommon
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

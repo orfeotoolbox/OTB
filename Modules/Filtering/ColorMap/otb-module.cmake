@@ -30,6 +30,7 @@ otb_module(OTBColorMap
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBTestKernel

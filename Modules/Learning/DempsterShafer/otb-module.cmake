@@ -36,6 +36,7 @@ otb_module(OTBDempsterShafer
     OTBMathParser
 
   TEST_DEPENDS
+    OTBExtern
     OTBVectorDataIO
     OTBTestKernel
     OTBImageIO

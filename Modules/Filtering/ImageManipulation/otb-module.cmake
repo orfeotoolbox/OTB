@@ -38,6 +38,8 @@ otb_module(OTBImageManipulation
     OTBTransform
 
   TEST_DEPENDS
+    OTBExtern
+    OTBExtern
     OTBCommandLineParser
     OTBDensity
     OTBImageIO

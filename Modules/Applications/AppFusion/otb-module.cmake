@@ -30,6 +30,7 @@ otb_module(OTBAppFusion
     OTBInterpolation
     OTBAppProjection
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

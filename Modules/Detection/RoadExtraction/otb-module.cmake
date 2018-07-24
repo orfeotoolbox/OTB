@@ -33,6 +33,7 @@ otb_module(OTBRoadExtraction
     OTBCommon
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBProjection

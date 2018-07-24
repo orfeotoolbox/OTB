@@ -36,6 +36,7 @@ otb_module( OTBMonteverdiGUI
     OTBQtWidget
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

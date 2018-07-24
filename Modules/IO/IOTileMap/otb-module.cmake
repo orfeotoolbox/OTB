@@ -32,6 +32,7 @@ ENABLE_SHARED
     OTBOSSIMAdapters
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBProjection
     OTBImageIO

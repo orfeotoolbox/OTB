@@ -35,6 +35,7 @@ otb_module(OTBDisparityMap
     OTBTransform
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBObjectList
     OTBTestKernel

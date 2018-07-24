@@ -51,6 +51,7 @@ otb_module(OTBAppClassification
     OTBSampling
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
     OTBAppProjection

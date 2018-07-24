@@ -34,6 +34,7 @@ otb_module(OTBVectorDataManipulation
     OTBVectorDataBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLineParser
     OTBImageIO
     OTBProjection

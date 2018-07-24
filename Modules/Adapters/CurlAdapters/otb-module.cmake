@@ -30,6 +30,7 @@ ENABLE_SHARED
     OTBCurl
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBTinyXML
 

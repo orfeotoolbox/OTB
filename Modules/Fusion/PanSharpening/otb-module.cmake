@@ -34,6 +34,7 @@ otb_module(OTBPanSharpening
     OTBImageManipulation
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
 

@@ -33,6 +33,7 @@ otb_module(OTBDisplacementField
     OTBObjectList
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBTestKernel
 

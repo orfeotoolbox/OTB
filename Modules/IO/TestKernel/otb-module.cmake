@@ -37,7 +37,8 @@ otb_module(OTBTestKernel
 
     OPTIONAL_DEPENDS
     OTBMPIConfig
-
+    TEST_DEPENDS
+    OTBExtern
   DESCRIPTION
     "${DOCUMENTATION}"
 )

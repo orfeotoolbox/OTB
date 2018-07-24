@@ -32,6 +32,7 @@ otb_module(OTBAppEdge
     OTBProjection
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

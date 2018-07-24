@@ -17,6 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "otbExtern.h"
 
 /* 
 This test code will run a WaveletImageFilter on given input image. Output 

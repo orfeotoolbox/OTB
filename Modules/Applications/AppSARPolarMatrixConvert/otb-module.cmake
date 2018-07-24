@@ -29,6 +29,7 @@ otb_module(OTBAppSARPolarMatrixConvert
     OTBImageBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

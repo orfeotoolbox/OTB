@@ -32,6 +32,7 @@ otb_module(OTBCCOBIA
     OTBStreaming
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBSmoothing

@@ -40,6 +40,7 @@ otb_module(OTBAppImageUtils
     OTBTransform
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLine
     OTBTestKernel
 

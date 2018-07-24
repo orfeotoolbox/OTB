@@ -34,6 +34,7 @@ otb_module(OTBSpatialObjects
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

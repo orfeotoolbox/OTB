@@ -41,6 +41,7 @@ ENABLE_SHARED
     OTBObjectList
 
   TEST_DEPENDS
+    OTBExtern
     OTBVectorDataBase
     OTBConversion
     OTBImageIO

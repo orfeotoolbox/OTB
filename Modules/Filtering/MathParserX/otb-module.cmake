@@ -28,6 +28,7 @@ otb_module(OTBMathParserX
     OTBStatistics
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBTestKernel

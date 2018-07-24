@@ -33,6 +33,7 @@ ENABLE_SHARED
     OTBObjectList
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBStatistics
     OTBTestKernel

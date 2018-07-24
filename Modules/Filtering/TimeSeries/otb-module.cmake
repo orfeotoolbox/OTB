@@ -25,6 +25,7 @@ otb_module(OTBTimeSeries
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

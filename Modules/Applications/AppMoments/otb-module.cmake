@@ -28,6 +28,7 @@ otb_module(OTBAppMoments
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

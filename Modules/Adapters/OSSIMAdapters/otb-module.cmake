@@ -34,6 +34,7 @@ ENABLE_SHARED
     OTBOssim
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageBase
     OTBImageIO

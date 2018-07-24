@@ -26,6 +26,7 @@ otb_module(OTBComplexImage
     OTBCommon
 
   TEST_DEPENDS
+    OTBExtern
     OTBITK
     OTBImageBase
     OTBImageIO

@@ -31,6 +31,7 @@ otb_module(OTBSOM
     OTBImageBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageIO
     OTBImageManipulation
     OTBTestKernel

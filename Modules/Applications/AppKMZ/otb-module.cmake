@@ -26,6 +26,7 @@ otb_module(OTBAppKMZ
     OTBKMZWriter
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLine
     OTBTestKernel
 

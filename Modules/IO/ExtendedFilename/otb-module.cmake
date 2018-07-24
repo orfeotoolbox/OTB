@@ -31,6 +31,7 @@ otb_module(OTBExtendedFilename
     OTBITK
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

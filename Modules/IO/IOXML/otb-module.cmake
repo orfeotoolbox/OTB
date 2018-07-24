@@ -28,6 +28,7 @@ otb_module(OTBIOXML
     OTBTinyXML
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

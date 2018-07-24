@@ -29,6 +29,7 @@ otb_module(OTBAppOpticalCalibration
     OTBProjection
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

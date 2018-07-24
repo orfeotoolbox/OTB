@@ -29,6 +29,7 @@ otb_module(OTBAppSARDecompositions
     OTBImageBase
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
 

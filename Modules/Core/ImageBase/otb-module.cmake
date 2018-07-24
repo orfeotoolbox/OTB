@@ -30,6 +30,7 @@ ENABLE_SHARED
     OTBOSSIMAdapters
 
   TEST_DEPENDS
+    OTBExtern
     OTBBoost
     OTBDescriptors
     OTBImageIO

@@ -35,6 +35,7 @@ otb_module(OTBChangeDetection
     OTBImageManipulation
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
     OTBImageBase

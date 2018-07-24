@@ -25,6 +25,7 @@ otb_module(OTBAppSARCalibration
     OTBSARCalibration
     OTBApplicationEngine
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
   

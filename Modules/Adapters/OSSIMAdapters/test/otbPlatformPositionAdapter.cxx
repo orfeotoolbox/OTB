@@ -16,6 +16,7 @@
    limitations under the License.
 
 =========================================================================*/
+#include "otbExtern.h"
 #include <iomanip>
 
 #include "otbImage.h"

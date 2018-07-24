@@ -31,6 +31,7 @@ ENABLE_SHARED
     OTBBoostAdapters
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBTestKernel

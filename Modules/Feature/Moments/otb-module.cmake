@@ -30,6 +30,7 @@ otb_module(OTBMoments
     OTBPath
 
   TEST_DEPENDS
+    OTBExtern
     OTBImageBase
     OTBImageIO
     OTBImageManipulation

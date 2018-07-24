@@ -33,6 +33,7 @@ otb_module(OTBEndmembersExtraction
     OTBCommon
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBImageIO
 

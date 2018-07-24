@@ -29,6 +29,7 @@ otb_module(OTBAppDescriptors
     OTBImageBase
     OTBGDAL
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
     OTBCommandLine
   

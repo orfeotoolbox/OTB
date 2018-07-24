@@ -33,6 +33,7 @@ otb_module( OTBMonteverdi
   OPTIONAL_DEPENDS
 
   TEST_DEPENDS
+    OTBExtern
     OTBTestKernel
 
   DESCRIPTION

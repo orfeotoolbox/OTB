@@ -32,6 +32,7 @@ otb_module(OTBAppVectorUtils
     OTBVectorDataManipulation
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLine
     OTBTestKernel
 

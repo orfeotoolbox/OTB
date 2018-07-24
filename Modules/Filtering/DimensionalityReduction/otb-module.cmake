@@ -35,6 +35,7 @@ otb_module(OTBDimensionalityReduction
     OTBStatistics
 
   TEST_DEPENDS
+    OTBExtern
     OTBCommandLineParser
     OTBImageIO
     OTBTestKernel
