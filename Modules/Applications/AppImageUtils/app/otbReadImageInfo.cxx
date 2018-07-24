@@ -274,6 +274,7 @@ private:
 
     ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO(GetParameterString("in").c_str(),
 								  ImageIOFactory::ReadMode);
+    imageIO->ReadImageInformation();
     std::string pixeltypeasstring = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
 
     SetParameterString("pixeltype", pixeltypeasstring);
