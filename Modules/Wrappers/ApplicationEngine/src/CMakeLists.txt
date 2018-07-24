@@ -63,6 +63,7 @@ set( OTBApplicationEngine_SRC
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})
 target_link_libraries(OTBApplicationEngine
+  ${OTBExtern_LIBRARIES}
   ${OTBVectorDataBase_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   ${OTBImageIO_LIBRARIES}
