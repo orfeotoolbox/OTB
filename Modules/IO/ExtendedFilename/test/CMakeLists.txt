@@ -58,7 +58,7 @@ otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_FullOptions COMMAND otbExt
   ${BASELINE}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   otbExtendedFilenameToReaderOptions
-  /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On&bands=-23,:3,45:,-6:-6,234:-5,nodata=-99999
+  /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On&bands=-23,:3,45:,-6:-6,234:-5&nodata=-99999
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   )
 
