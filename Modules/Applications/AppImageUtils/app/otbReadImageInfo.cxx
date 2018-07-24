@@ -274,38 +274,7 @@ private:
 
     ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO(GetParameterString("in").c_str(),
 								  ImageIOFactory::ReadMode);
-    std::string componentTypeInfo(imageIO->GetComponentTypeInfo().name());
-
-    std::string pixeltypeasstring = "unknown";
-
-    if( componentTypeInfo == typeid(unsigned char).name())
-      {
-	pixeltypeasstring = "uint8";
-      }
-    else if( componentTypeInfo == typeid(unsigned short).name())
-      {
-	pixeltypeasstring = "uint16";
-      }
-    else if( componentTypeInfo == typeid(short).name())
-      {
-	pixeltypeasstring = "int16";
-      }
-    else if( componentTypeInfo == typeid(unsigned int).name())
-      {
-	pixeltypeasstring = "uint32";
-      }
-    else if( componentTypeInfo == typeid(int).name())
-      {
-	pixeltypeasstring = "int32";
-      }
-    else if( componentTypeInfo == typeid(float).name())
-      {
-	pixeltypeasstring = "float";
-      }
-    else if( componentTypeInfo == typeid(double).name())
-      {
-	pixeltypeasstring = "double";
-      }
+    std::string pixeltypeasstring = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
 
     SetParameterString("pixeltype", pixeltypeasstring);
     ossOutput << "\tPixel type : " << GetParameterString("pixeltype") << std::endl;
