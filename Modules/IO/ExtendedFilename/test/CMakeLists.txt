@@ -174,8 +174,8 @@ otb_add_test(NAME ioTvImageFileReaderExtendedFileName_SkipPR COMMAND otbExtended
   ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
   )
 
-otb_add_test(NAME ioTvImageFileReaderExtendedFileName_NODATA COMMAND otbExtendedFilenameTestDriver
-  otbImageFileReaderWithExtendedFilename
+otb_add_test(NAME ioTvImageFileWriterExtendedFileName_NODATA COMMAND otbExtendedFilenameTestDriver
+  otbImageFileWriterWithExtendedFilename
   ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&nodata=1:-99999,2:-88888
   ${TEMP}/ioImageFileReaderExtendedFileName_NODATA.txt
   )
