@@ -89,10 +89,10 @@ Stopwatch
 ::GetElapsedHumanReadableTime() const
 {
   auto result = this->GetElapsedMilliseconds();
-  int seconds = result / 1000;
-  int hours = seconds / 3600;
+  DurationType seconds = result / 1000;
+  DurationType hours = seconds / 3600;
   seconds -= hours * 3600;
-  int minutes = seconds / 60;
+  DurationType minutes = seconds / 60;
   seconds -= minutes * 60;
   std::ostringstream os;
   if (hours > 0)
