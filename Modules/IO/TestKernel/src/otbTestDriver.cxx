@@ -193,6 +193,7 @@ int Execute(int argc, char * argv[])
   argc -= 1;
   argv += 1;
   // Create the appropriate itk process
+  itksysProcess * process = itksysProcess_New();
   itksysProcess_SetCommand(process, argv);
   itksysProcess_SetPipeShared(process, itksysProcess_Pipe_STDOUT, true);
   itksysProcess_SetPipeShared(process, itksysProcess_Pipe_STDERR, true);
