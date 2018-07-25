@@ -23,10 +23,8 @@ otb_module_test()
 set(OTBLearningBaseTests
 otbLearningBaseTestDriver.cxx
 otbDecisionTreeBuild.cxx
-otbGaussianModelComponent.cxx
 otbKMeansImageClassificationFilter.cxx
 otbDecisionTreeWithRealValues.cxx
-otbMachineLearningModelTemplates.cxx
 )
 
 if(OTB_USE_SHARK)

@@ -23,7 +23,6 @@ otb_module_test()
 set(OTBQtWidgetTests
 otbQtWidgetTestDriver.cxx
 otbWrapperQtWidgetShowWidget.cxx
-otbQtLogOutputTests.cxx
 otbWrapperQtWidgetParameterFactory.cxx
 )
 

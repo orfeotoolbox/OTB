@@ -24,7 +24,6 @@ set(OTBVectorDataManipulationTests
 otbVectorDataManipulationTestDriver.cxx
 otbDBOverlapDataNodeFeatureFunction.cxx
 otbVectorDataExtractROI.cxx
-otbVectorDataToSpecificDescriptionFilterBase.cxx
 otbPolygonCompacityFunctor.cxx
 otbVectorDataToRandomLineGenerator.cxx
 otbConcatenateVectorDataFilter.cxx

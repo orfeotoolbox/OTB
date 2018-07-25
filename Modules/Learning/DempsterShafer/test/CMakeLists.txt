@@ -29,7 +29,6 @@ otbDempsterShaferFusionTests.cxx
 otbDSFusionOfClassifiersImageFilterTest.cxx
 otbJointMassOfBeliefFilter.cxx
 otbMassOfBelief.cxx
-otbStandardDSCostFunction.cxx
 )
 
 add_executable(otbDempsterShaferTestDriver ${OTBDempsterShaferTests})

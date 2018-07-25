@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBCommonTests
 otbCommonTestDriver.cxx
-otbVariableLengthVectorConverter.cxx
 otbImageRegionTileMapSplitter.cxx
 otbImageRegionAdaptativeSplitter.cxx
 otbRGBAPixelConverter.cxx
