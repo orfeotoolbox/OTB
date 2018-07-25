@@ -24,6 +24,7 @@
 #include "itkSingleValuedCostFunction.h"
 
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
+#include <string>
 
 namespace otb
 {

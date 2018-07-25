@@ -136,6 +136,7 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbTrainDimensionalityReductionApplicationBase.hxx"
 #include "otbDimensionalityReductionTrainSOM.hxx"
+#include <string>
 
 #ifdef OTB_USE_SHARK
 #include "otbDimensionalityReductionTrainAutoencoder.hxx"

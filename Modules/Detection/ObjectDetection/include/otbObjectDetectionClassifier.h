@@ -22,6 +22,7 @@
 #define otbObjectDetectionClassifier_h
 
 #include <vector>
+#include <string>
 
 #include "itkImageRegion.h"
 #include "itkFixedArray.h"

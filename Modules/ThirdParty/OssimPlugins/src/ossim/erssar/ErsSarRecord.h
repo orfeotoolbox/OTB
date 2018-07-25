@@ -28,6 +28,7 @@
 
 
 #include "erssar/ErsSarRecordHeader.h"
+#include <string>
 
 namespace ossimplugins
 {

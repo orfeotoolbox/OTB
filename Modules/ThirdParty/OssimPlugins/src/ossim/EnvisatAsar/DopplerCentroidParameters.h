@@ -27,6 +27,7 @@
 #define DopplerCentroidParameters_h
 
 #include <EnvisatAsar/EnvisatAsarRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

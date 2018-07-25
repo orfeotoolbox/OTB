@@ -120,12 +120,12 @@ SpectralSensitivityReader
 
   WavelengthSpectralBandVectorType * wavelengthSpectralBand = this->GetOutput();
 
-  if ( !itksys::SystemTools::FileExists(m_FileName.c_str()) )
+  if ( !itksys::SystemTools::FileExists(m_FileName) )
     {
     itkExceptionMacro(<< m_FileName << " does not exist.");
     }
 
-  std::ifstream file(m_FileName.c_str());
+  std::ifstream file(m_FileName);
   if (!file) itkExceptionMacro(<< "Enable to read " <<  m_FileName << " file.");
 
   std::string line;

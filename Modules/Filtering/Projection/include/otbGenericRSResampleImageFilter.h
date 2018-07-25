@@ -23,6 +23,7 @@
 
 #include "otbStreamingResampleImageFilter.h"
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
+#include <string>
 
 namespace otb
 {

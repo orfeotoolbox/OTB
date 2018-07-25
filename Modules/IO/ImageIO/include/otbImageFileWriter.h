@@ -26,6 +26,7 @@
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
 #include "itkFastMutexLock.h"
+#include <string>
 
 namespace otb
 {

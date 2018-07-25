@@ -22,6 +22,7 @@
 #define otbStatisticsXMLFileReader_h
 
 #include "itkProcessObject.h"
+#include <string>
 
 namespace otb {
 

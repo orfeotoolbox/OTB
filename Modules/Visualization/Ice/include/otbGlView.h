@@ -29,6 +29,7 @@
 #include <map>
 #include <vector>
 #include <cassert>
+#include <string>
 
 namespace otb
 {

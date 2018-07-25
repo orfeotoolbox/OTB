@@ -26,6 +26,7 @@
 #include <itkObject.h>
 #include <itkObjectFactory.h>
 #include <itkVariableSizeMatrix.h>
+#include <string>
 
 namespace otb
 {

@@ -26,6 +26,7 @@
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
 #include "OTBOpticalCalibrationExport.h"
+#include <string>
 
 namespace otb
 {

@@ -37,6 +37,7 @@
 
 // projection filter
 #include "otbGenericRSResampleImageFilter.h"
+#include <string>
 
 namespace otb
 {

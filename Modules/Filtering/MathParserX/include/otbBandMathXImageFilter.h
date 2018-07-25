@@ -31,6 +31,7 @@
 #include "otbParserX.h"
 
 #include <vector>
+#include <string>
 
 
 namespace otb

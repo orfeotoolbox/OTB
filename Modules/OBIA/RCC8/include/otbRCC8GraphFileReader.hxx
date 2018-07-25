@@ -113,7 +113,7 @@ RCC8GraphFileReader<TOutputGraph>
   std::string   line;
 
   // open file input stream
-  fin.open(m_FileName.c_str());
+  fin.open(m_FileName);
 
   // Test if the file has been opened correctly
   if (!fin)
@@ -122,7 +122,7 @@ RCC8GraphFileReader<TOutputGraph>
     std::ostringstream msg;
     msg << " Could not create IO object for file ";
     msg << m_FileName << "." << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     return;
     }

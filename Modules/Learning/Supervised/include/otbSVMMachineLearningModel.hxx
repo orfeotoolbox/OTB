@@ -242,7 +242,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 ::CanReadFile(const std::string & file)
 {
   std::ifstream ifs;
-  ifs.open(file.c_str());
+  ifs.open(file);
 
   if(!ifs)
     {

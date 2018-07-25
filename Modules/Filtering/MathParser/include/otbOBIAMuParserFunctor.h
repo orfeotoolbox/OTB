@@ -25,6 +25,7 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
+#include <string>
 
 
 namespace otb

@@ -123,7 +123,7 @@ bool SceneCoord::loadState(const ossimKeywordlist& kwl, const char* prefix)
    else
    {
      ossimNotify(ossimNotifyLevel_WARN)
-        << MODULE << " Keyword not found: " << NUMBER_OF_SCENE_CORNER_COORD << " in "<<pfx.c_str()<<" path.\n";
+        << MODULE << " Keyword not found: " << NUMBER_OF_SCENE_CORNER_COORD << " in "<<pfx <<" path.\n";
      result = false;
    }
    

@@ -33,6 +33,7 @@
 #include "itkMetaDataObject.h"
 #include "otbRemoteSensingRegion.h"
 #include "otbMacro.h"
+#include <string>
 
 namespace otb
 {

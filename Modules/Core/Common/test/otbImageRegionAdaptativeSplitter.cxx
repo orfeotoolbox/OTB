@@ -52,7 +52,7 @@ int otbImageRegionAdaptativeSplitter(int itkNotUsed(argc), char * argv[])
   requestedNbSplits = atoi(argv[7]);
   std::string outfname = argv[8];
 
-  std::ofstream outfile(outfname.c_str());
+  std::ofstream outfile(outfname);
 
   region.SetSize(regionSize);
   region.SetIndex(regionIndex);

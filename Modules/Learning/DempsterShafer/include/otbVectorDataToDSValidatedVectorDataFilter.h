@@ -32,6 +32,7 @@
 #include "otbFuzzyVariable.h"
 #include "otbJointMassOfBeliefFilter.h"
 #include "otbParser.h"
+#include <string>
 
 namespace otb
 {
