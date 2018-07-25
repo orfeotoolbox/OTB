@@ -64,11 +64,6 @@ otb_add_test(NAME coTvPolygon COMMAND otbVectorDataBaseTestDriver
   next 6 10 11 10 11 2 4 2 3 4 8 4 8 7 6 7
   )
 
-otb_add_test(NAME coTuVectorDataSource COMMAND otbVectorDataBaseTestDriver
-  otbVectorDataSourceNew
-  )
-
-
 otb_add_test(NAME coTvDataNode COMMAND otbVectorDataBaseTestDriver
   otbDataNodeTest
   )
@@ -78,9 +73,3 @@ otb_add_test(NAME coTvRemoteSensingRegion COMMAND otbVectorDataBaseTestDriver
   1.21 2.33 58.47 59.49  #size et index of the region
   0. 0.                  # Point to check
   )
-
-
-otb_add_test(NAME coTuVectorData COMMAND otbVectorDataBaseTestDriver
-  otbVectorDataNew
-  )
-

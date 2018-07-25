@@ -58,10 +58,6 @@ otb_add_test(NAME ioTvMapFileProductWriter COMMAND otbCartoTestDriver
   )
 set_property(TEST ioTvMapFileProductWriter PROPERTY RESOURCE_LOCK web_access)
 
-otb_add_test(NAME ioTuOSMToVectorDataGenerator COMMAND otbCartoTestDriver
-  otbOSMToVectorDataGeneratorNew
-  )
-
 otb_add_test(NAME ioTvOSMToVectorDataGeneratorByName COMMAND otbCartoTestDriver
   --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/ioTvOSMToVectorDataFilterByName_highway.shp

@@ -78,10 +78,6 @@ otb_add_test(NAME coTvParser COMMAND otbMathParserTestDriver
   otbParserTest
   )
 
-otb_add_test(NAME coTuParser COMMAND otbMathParserTestDriver
-  otbParserTestNew
-  )
-
 otb_add_test(NAME bfTvImageListToSingleImageFilter COMMAND otbMathParserTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/bfTvImageListToSingleImageFilter.tif
@@ -90,11 +86,6 @@ otb_add_test(NAME bfTvImageListToSingleImageFilter COMMAND otbMathParserTestDriv
   ${INPUTDATA}/poupees.png
   ${TEMP}/bfTvImageListToSingleImageFilterOut.tif
   )
-
-
-
-
-
 
 otb_add_test(NAME bfTvBandMathImageFilterWithIdx COMMAND otbMathParserTestDriver
   otbBandMathImageFilterWithIdx

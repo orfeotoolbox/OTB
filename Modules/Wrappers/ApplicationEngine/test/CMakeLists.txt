@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBApplicationEngineTests
 otbApplicationEngineTestDriver.cxx
-otbWrapperApplicationTest.cxx
 otbWrapperInputImageParameterTest.cxx
 otbWrapperNumericalParameterTest.cxx
 otbWrapperStringParameterTest.cxx
@@ -50,10 +49,6 @@ otb_module_target_label(otbApplicationEngineTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME owTuApplication COMMAND otbApplicationEngineTestDriver
-  otbWrapperApplicationNew
-  )
-
 otb_add_test(NAME owTvInputImageParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperInputImageParameterTest1
   ${INPUTDATA}/poupees.tif
@@ -61,23 +56,11 @@ otb_add_test(NAME owTvInputImageParameter COMMAND otbApplicationEngineTestDriver
   "my description"
   )
 
-otb_add_test(NAME owTuInputImageParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperInputImageParameterNew
-  )
-
-otb_add_test(NAME owTuNumericalParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperNumericalParameterNew
-  )
-
 otb_add_test(NAME owTvNumericalParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperNumericalParameterTest1
   42.42
   "mykey"
   "my description"
-  )
-
-otb_add_test(NAME owTuStringParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperStringParameterNew
   )
 
 otb_add_test(NAME owTvStringParameter COMMAND otbApplicationEngineTestDriver
@@ -89,10 +72,6 @@ otb_add_test(NAME owTvStringParameter COMMAND otbApplicationEngineTestDriver
 
 otb_add_test(NAME owTvApplicationRegistry COMMAND otbApplicationEngineTestDriver
   otbWrapperApplicationRegistry
-  )
-
-otb_add_test(NAME owTuStringListParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperStringListParameterNew
   )
 
 otb_add_test(NAME owTvStringListParameter COMMAND otbApplicationEngineTestDriver
@@ -112,24 +91,12 @@ otb_add_test(NAME owTvParameterKey COMMAND otbApplicationEngineTestDriver
   otbWrapperParameterKey
   )
 
-otb_add_test(NAME owTuEmptyParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperEmptyParameterNew
-  )
-
-otb_add_test(NAME owTuInputImageListParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperInputImageListParameterNew
-  )
-
 otb_add_test(NAME owTvInputImageListParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperInputImageListParameterTest1
   ${INPUTDATA}/poupees_c1.hdr
   ${INPUTDATA}/poupees.tif
   "mykey"
   "my description"
-  )
-
-otb_add_test(NAME owTuInputVectorDataListParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperInputVectorDataListParameterNew
   )
 
 otb_add_test(NAME owTvInputVectorDataListParameter COMMAND otbApplicationEngineTestDriver
@@ -150,15 +117,6 @@ otb_add_test(NAME owTvApplicationHtmlDocGeneratorTest
   $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
   ${TEMP}/owTvOReadImageInfoDoc.html
   0 # don't show key in the parameterdescription
-  )
-
-
-otb_add_test(NAME owTuInputVectorDataParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperInputVectorDataParameterNew
-  )
-
-otb_add_test(NAME owTuOutputImageParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperOutputImageParameterNew
   )
 
 otb_add_test(NAME owTvOutputImageParameter COMMAND otbApplicationEngineTestDriver

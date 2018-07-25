@@ -36,14 +36,8 @@ otb_add_test(NAME mtTvEnvelopeSavitzkyGolayInterpolationFunctorTest COMMAND otbT
 otb_add_test(NAME mtTvPolynomialTimeSeriesTest1 COMMAND otbTimeSeriesTestDriver
   otbPolynomialTimeSeriesTest
   )
-otb_add_test(NAME mtTuSavitzkyGolayInterpolationFunctor COMMAND otbTimeSeriesTestDriver
-  otbSavitzkyGolayInterpolationFunctorNew
-  )
 otb_add_test(NAME mtTvSavitzkyGolayInterpolationFunctorTest COMMAND otbTimeSeriesTestDriver
   otbSavitzkyGolayInterpolationFunctorTest
-  )
-otb_add_test(NAME mtTuTimeSeriesLeastSquaresFittingFunctor COMMAND otbTimeSeriesTestDriver
-  otbTimeSeriesLeastSquareFittingFunctorNew
   )
 otb_add_test(NAME mtTvTimeSeriesLeastSquaresFittingFunctor2 COMMAND otbTimeSeriesTestDriver
   otbTimeSeriesLeastSquareFittingFunctorTest
