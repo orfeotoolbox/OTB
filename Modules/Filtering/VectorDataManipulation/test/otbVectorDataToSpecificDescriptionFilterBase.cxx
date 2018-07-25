@@ -24,17 +24,3 @@
 
 #include "otbVectorData.h"
 
-int otbVectorDataToSpecificDescriptionFilterBaseNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef float                           PrecisionType;
-  typedef otb::VectorData<PrecisionType>  VectorDataType;
-  typedef otb::VectorDataToSpecificDescriptionFilterBase<VectorDataType>
-                                          VectorDataToSpecificDescriptionFilterType;
-
-  VectorDataToSpecificDescriptionFilterType::Pointer filter =
-    VectorDataToSpecificDescriptionFilterType::New();
-
-  std::cout<<filter<<std::endl;
-
-  return EXIT_SUCCESS;
-}

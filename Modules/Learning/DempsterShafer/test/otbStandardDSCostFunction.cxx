@@ -23,18 +23,3 @@
 #include "otbStandardDSCostFunction.h"
 
 
-int otbStandardDSCostFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef double                          PrecisionType;
-  typedef otb::VectorData<PrecisionType>  VectorDataType;
-  typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
-                                          VectorDataValidationFilterType;
-  typedef otb::StandardDSCostFunction<VectorDataValidationFilterType>
-                                          CostFunctionType;
-
-  CostFunctionType::Pointer costFunction = CostFunctionType::New();
-
-  std::cout<<costFunction<<std::endl;
-
-  return EXIT_SUCCESS;
-}

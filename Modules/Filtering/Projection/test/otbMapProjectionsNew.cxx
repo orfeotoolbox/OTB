@@ -27,35 +27,6 @@
 #include "otbImage.h"
 #include "otbMapProjections.h"
 
-int otbMapProjectionsNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  otb::Eckert4InverseProjection::Pointer               lEckert4Projection = otb::Eckert4InverseProjection::New();
-  otb::Eckert4ForwardProjection::Pointer               lEckert4Projection2 = otb::Eckert4ForwardProjection::New();
-  otb::LambertConformalConicInverseProjection::Pointer lLambertConformalConicProjection =
-    otb::LambertConformalConicInverseProjection::New();
-  otb::LambertConformalConicForwardProjection::Pointer lLambertConformalConicProjection2 =
-    otb::LambertConformalConicForwardProjection::New();
-  otb::Lambert2EtenduInverseProjection::Pointer lLambert2Etendu = otb::Lambert2EtenduInverseProjection::New();
-  otb::Lambert2EtenduForwardProjection::Pointer lLambert2Etendu2 = otb::Lambert2EtenduForwardProjection::New();
-  otb::Lambert3CartoSudInverseProjection::Pointer lLambert3CartoSud = otb::Lambert3CartoSudInverseProjection::New();
-  otb::Lambert3CartoSudForwardProjection::Pointer lLambert3CartoSud2 = otb::Lambert3CartoSudForwardProjection::New();
-  otb::Lambert93InverseProjection::Pointer      lLambert93 = otb::Lambert93InverseProjection::New();
-  otb::Lambert93ForwardProjection::Pointer      lLambert93_2 = otb::Lambert93ForwardProjection::New();
-  otb::MollweidInverseProjection::Pointer          lMollweidProjection = otb::MollweidInverseProjection::New();
-  otb::MollweidForwardProjection::Pointer          lMollweidProjection2 = otb::MollweidForwardProjection::New();
-  otb::SinusoidalInverseProjection::Pointer           lSinusoidalProjection = otb::SinusoidalInverseProjection::New();
-  otb::SinusoidalForwardProjection::Pointer           lSinusoidalProjection2 = otb::SinusoidalForwardProjection::New();
-  otb::SVY21InverseProjection::Pointer          lSVY21 = otb::SVY21InverseProjection::New();
-  otb::SVY21ForwardProjection::Pointer          lSVY21_2 = otb::SVY21ForwardProjection::New();
-  otb::TransMercatorInverseProjection::Pointer lTransMercatorProjection =
-    otb::TransMercatorInverseProjection::New();
-  otb::TransMercatorForwardProjection::Pointer lTransMercatorProjection2 =
-    otb::TransMercatorForwardProjection::New();
-  otb::UtmInverseProjection::Pointer           lUtmProjection = otb::UtmInverseProjection::New();
-  otb::UtmForwardProjection::Pointer           lUtmProjection2 = otb::UtmForwardProjection::New();
-  
-  return EXIT_SUCCESS;
-}
 
 
 //Test the specific accessors for some map projection

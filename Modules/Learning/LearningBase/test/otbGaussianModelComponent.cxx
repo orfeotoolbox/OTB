@@ -24,15 +24,3 @@
 #include "otbGaussianModelComponent.h"
 #include "itkVariableLengthVector.h"
 
-int otbGaussianModelComponentNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-
-  typedef itk::Statistics::ListSample<itk::VariableLengthVector<double> >  SampleType;
-  typedef itk::Statistics::Subsample< SampleType >                   ClassSampleType;
-  typedef otb::Statistics::GaussianModelComponent<ClassSampleType>   GaussianModelType;
-
-  GaussianModelType::Pointer filter = GaussianModelType::New();
-
-  return EXIT_SUCCESS;
-
-}

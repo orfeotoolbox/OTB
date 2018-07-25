@@ -27,17 +27,6 @@
 
 #include "otbListSampleGenerator.h"
 
-int otbListSampleGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::VectorImage<float, 2>                          ImageType;
-  typedef otb::VectorData<double, 2>                          VectorDataType;
-  typedef otb::ListSampleGenerator<ImageType, VectorDataType> ListSampleGeneratorType;
-  ListSampleGeneratorType::Pointer generator = ListSampleGeneratorType::New();
-
-  std::cout << generator << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbListSampleGenerator(int argc, char* argv[])
 {

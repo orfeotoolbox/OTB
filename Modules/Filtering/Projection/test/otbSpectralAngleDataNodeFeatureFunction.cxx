@@ -30,20 +30,6 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbSpectralAngleDataNodeFeatureFunctionNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef double CoordRepType;
-  typedef double PrecisionType;
-  typedef otb::VectorImage<double, 2>  ImageType;
-  typedef otb::SpectralAngleDataNodeFeatureFunction<ImageType, CoordRepType, PrecisionType>
-                                       DataNodeFeaturefunctionType;
-
-  DataNodeFeaturefunctionType::Pointer featureFunction = DataNodeFeaturefunctionType::New();
-
-  std::cout << featureFunction << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbSpectralAngleDataNodeFeatureFunction(int itkNotUsed(argc), char* argv[])
 {

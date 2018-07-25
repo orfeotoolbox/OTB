@@ -24,9 +24,3 @@
 
 #include "otbWrapperApplication.h"
 
-int otbWrapperApplicationNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-//  typedef otb::Wrapper::Application ApplicationType;
-//  ApplicationType application = ApplicationType::New();
-  return EXIT_SUCCESS;
-}

@@ -25,8 +25,3 @@
 #include "otbQtLogOutput.h"
 
 
-int otbQtLogOutputNew(int /*argc*/, char* /*argv*/ [])
-{
-  otb::QtLogOutput::Pointer log = otb::QtLogOutput::New();
-  return EXIT_SUCCESS;
-}

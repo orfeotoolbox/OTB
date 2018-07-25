@@ -24,12 +24,3 @@
 
 #include "otbWrapperEmptyParameter.h"
 
-int otbWrapperEmptyParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::EmptyParameter EmptyParameterType;
-  EmptyParameterType::Pointer parameter = EmptyParameterType::New();
-
-  //std::cout << parameter << std::endl;
-
-  return EXIT_SUCCESS;
-}

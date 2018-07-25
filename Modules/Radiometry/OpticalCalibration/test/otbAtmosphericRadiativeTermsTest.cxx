@@ -25,26 +25,7 @@
 #include "otbAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 
-int otbAtmosphericRadiativeTermsNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::AtmosphericRadiativeTerms AtmosphericRadiativeTermsType;
 
-  // Instantiating object
-  AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();
-
-  return EXIT_SUCCESS;
-}
-
-int otbAtmosphericRadiativeTermsSingleChannelNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::AtmosphericRadiativeTermsSingleChannel AtmosphericRadiativeTermsType;
-
-  // Instantiating object
-  AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();
-
-  std::cout << object << std::endl;
-  return EXIT_SUCCESS;
-}
 
 std::ostream& operator<<(std::ostream& os, const otb::AtmosphericRadiativeTerms::DataVectorType& values)
 {
