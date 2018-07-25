@@ -107,9 +107,9 @@ StandardOneLineFilterWatcher
 {
   m_Stopwatch.Stop();
 
-  std::cout << " ("
-            << m_Stopwatch.GetElapsedHumanReadableTime()
-            << ")"
+  std::cout << " (";
+  m_Stopwatch.GetElapsedHumanReadableTime(std::cout);
+  std::cout << ")"
             << std::endl;
 }
 
