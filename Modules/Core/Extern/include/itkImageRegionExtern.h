@@ -18,22 +18,18 @@
  * limitations under the License.
  */
 
-#ifndef otbExtern_h
-#define otbExtern_h
+#ifndef itkImageRegionExtern_h
+#define itkImageRegionExtern_h
 
-#include "itkIteratorsExtern.h"
-#include "itkBaseTypesExtern.h"
-#include "itkOptimizersExtern.h"
-#include "itkImageRegionExtern.h"
-#include "itkImageBaseExtern.h"
-#include "itkImageExtern.h"
-#include "itkVectorImageExtern.h"
-#include "otbImageExtern.h"
-#include "itkImageToImageFilterExtern.h"
-#include "otbVectorImageExtern.h"
-#include "itkImageSourceExtern.h"
-#include "otbImageFileReaderExtern.h"
-#include "otbImageFileWriterExtern.h"
-#include "otbObjectListExtern.h"
-#include "otbPolyLineParametricPathWithValueExtern.h"
-#endif
+#include "OTBExternExport.h"
+#include "itkImageRegion.h"
+#include "itkImageRegionSplitter.h"
+
+namespace itk {
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class OTBExtern_EXPORT_TEMPLATE ImageRegion<2>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionSplitter<2>;
+}
+
+#endif // otbImageRegion_h

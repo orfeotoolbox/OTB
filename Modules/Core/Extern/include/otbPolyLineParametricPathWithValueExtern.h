@@ -18,22 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef otbExtern_h
-#define otbExtern_h
+#ifndef otbPolyLineParametricPathWithValueExtern_h
+#define otbPolyLineParametricPathWithValueExtern_h
 
-#include "itkIteratorsExtern.h"
-#include "itkBaseTypesExtern.h"
-#include "itkOptimizersExtern.h"
-#include "itkImageRegionExtern.h"
-#include "itkImageBaseExtern.h"
-#include "itkImageExtern.h"
-#include "itkVectorImageExtern.h"
-#include "otbImageExtern.h"
-#include "itkImageToImageFilterExtern.h"
-#include "otbVectorImageExtern.h"
-#include "itkImageSourceExtern.h"
-#include "otbImageFileReaderExtern.h"
-#include "otbImageFileWriterExtern.h"
-#include "otbObjectListExtern.h"
-#include "otbPolyLineParametricPathWithValueExtern.h"
+#include "OTBExternExport.h"
+#include "otbPolyLineParametricPathWithValue.h"
+
+namespace otb {
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class OTBExtern_EXPORT_TEMPLATE PolyLineParametricPathWithValue<double, 2>;
+}
+
 #endif

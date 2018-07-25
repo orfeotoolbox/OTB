@@ -19,12 +19,21 @@
 #
 
 set(OTBExtern_SRC
+  itkBaseTypesExtern.cxx
+  itkOptimizersExtern.cxx
+  itkIteratorsExtern.cxx
+  itkImageRegionExtern.cxx
+  itkImageBaseExtern.cxx
+  itkImageToImageFilterExtern.cxx
+  itkImageExtern.cxx
   otbImageExtern.cxx
+  itkVectorImageExtern.cxx
   otbVectorImageExtern.cxx
   otbImageFileReaderExtern.cxx
   otbImageFileWriterExtern.cxx
   otbObjectListExtern.cxx
   itkImageSourceExtern.cxx
+  otbPolyLineParametricPathWithValueExtern.cxx
   )
 
 add_library(OTBExtern ${OTBExtern_SRC})

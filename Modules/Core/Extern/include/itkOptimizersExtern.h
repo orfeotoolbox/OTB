@@ -18,22 +18,22 @@
  * limitations under the License.
  */
 
-#ifndef otbExtern_h
-#define otbExtern_h
+#ifndef itkOptimizersExtern_h
+#define itkOptimizersExtern_h
 
-#include "itkIteratorsExtern.h"
+#include "OTBExternExport.h"
+#include "itkOptimizerParameters.h"
+#include "itkOptimizerParametersHelper.h"
+#include "itkSymmetricEigenAnalysis.h"
 #include "itkBaseTypesExtern.h"
-#include "itkOptimizersExtern.h"
-#include "itkImageRegionExtern.h"
-#include "itkImageBaseExtern.h"
-#include "itkImageExtern.h"
-#include "itkVectorImageExtern.h"
-#include "otbImageExtern.h"
-#include "itkImageToImageFilterExtern.h"
-#include "otbVectorImageExtern.h"
-#include "itkImageSourceExtern.h"
-#include "otbImageFileReaderExtern.h"
-#include "otbImageFileWriterExtern.h"
-#include "otbObjectListExtern.h"
-#include "otbPolyLineParametricPathWithValueExtern.h"
-#endif
+#include "itkFixedArray.h"
+
+namespace itk {
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class OTBExtern_EXPORT_TEMPLATE OptimizerParameters<double>;
+extern template class OTBExtern_EXPORT_TEMPLATE OptimizerParametersHelper<double>;
+extern template class OTBExtern_EXPORT_TEMPLATE SymmetricEigenAnalysis<itk::Matrix<double, 3u, 3u>, itk::FixedArray<double, 3u>, itk::Matrix<double, 3u, 3u> >;
+}
+
+#endif // itkOptimizersExtern_h
