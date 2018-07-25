@@ -84,9 +84,9 @@ Stopwatch
   return result;
 }
 
-std::string
+void
 Stopwatch
-::GetElapsedHumanReadableTime() const
+::GetElapsedHumanReadableTime(std::ostream & oss) const
 {
   auto result = this->GetElapsedMilliseconds();
   DurationType seconds = result / 1000;
@@ -96,11 +96,19 @@ Stopwatch
   seconds -= minutes * 60;
   std::ostringstream os;
   if (hours > 0)
-    os << hours << "h " << std::setfill('0') << std::setw(2);
+    oss << hours << "h " << std::setfill('0') << std::setw(2);
   if (minutes > 0 || hours > 0)
-    os << minutes << "m " << std::setfill('0') << std::setw(2);
-  os << seconds << "s";
-  return os.str();
+    oss << minutes << "m " << std::setfill('0') << std::setw(2);
+  oss << seconds << "s";
+}
+
+std::string
+Stopwatch
+::GetElapsedHumanReadableTime() const
+{
+  std::ostringstream oss;
+  GetElapsedHumanReadableTime(oss);
+  return oss.str();
 }
 
 bool

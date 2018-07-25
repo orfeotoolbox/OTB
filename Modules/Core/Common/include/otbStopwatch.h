@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <string>
+#include <iosfwd>
 
 #include "OTBCommonExport.h"
 
@@ -63,6 +64,10 @@ public:
 
   /** Get the total duration, excluding the current iteration */
   DurationType GetElapsedMilliseconds() const;
+
+  /** Get the total duration in human readable format (ostream
+    * version) */
+  void GetElapsedHumanReadableTime(std::ostream & oss) const;
 
   /** Get the total duration in human readable format */
   std::string  GetElapsedHumanReadableTime() const;
