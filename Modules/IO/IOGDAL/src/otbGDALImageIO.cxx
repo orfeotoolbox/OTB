@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -1565,6 +1566,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
         }
       }
     }
+
+  for (auto const& noData : m_NoDataList)
+    dataset->GetRasterBand(noData.first)->SetNoDataValue(noData.second);
+
 }
 
 std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -77,12 +78,22 @@ public:
     std::vector<std::string>                     optionList;
   };
 
+  typedef std::pair<int, double> NoDataPairType;
+  typedef std::vector<NoDataPairType> NoDataListType;
+  NoDataListType m_NoDataList;
+  bool has_noDataValue;
+
   /* Set Methods */
   void SetExtendedFileName(const char * extFname) override;
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
+  bool NoDataValueIsSet () const;
   bool WriteGEOMFileIsSet () const;
   bool WriteRPCTagsIsSet() const;
+  NoDataListType GetNoDataList () const {
+    return m_NoDataList;
+  }
+
   bool GetWriteGEOMFile () const;
   bool GetWriteRPCTags() const;
   bool gdalCreationOptionsIsSet () const;
