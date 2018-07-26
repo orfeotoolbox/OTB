@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "itkBaseTypesExtern.h"
+#include "otbBaseTypesExtern.h"
 
 namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
@@ -41,4 +41,12 @@ template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE Vector<float>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE Path<double, itk::ContinuousIndex<double, 2>, 2>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ParametricPath<2>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE PolyLineParametricPath<2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE MetaDataObject<otb::ImageKeywordlist>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE SimpleDataObjectDecorator<double>;
+}
+
+namespace otb {
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE VectorData<double,2,double>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE Polygon<double>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE DataNode<double,2,double>;
 }

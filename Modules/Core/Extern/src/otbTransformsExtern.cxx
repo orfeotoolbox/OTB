@@ -18,11 +18,24 @@
  * limitations under the License.
  */
 
-#include "itkTransformExtern.h"
+#include "otbTransformsExtern.h"
 
 namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE Transform<double,2,2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE IdentityTransform<double,2>;
+}
+
+namespace otb {
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE Transform<double,2,2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE SensorModelBase<double,2,2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE GenericMapProjection<otb::TransformDirection::FORWARD, double, 2u, 2u>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE GenericMapProjection<otb::TransformDirection::INVERSE, double, 2u, 2u>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE InverseSensorModel<double,2,2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ForwardSensorModel<double,2,2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE GenericRSTransform<double,2,2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE CompositeTransform<itk::Transform<double, 2, 2>, itk::Transform<double, 2, 2>, double, 2, 2>;
 
 }
+

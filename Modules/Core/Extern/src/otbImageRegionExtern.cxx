@@ -18,12 +18,16 @@
  * limitations under the License.
  */
 
-#include "itkImageRegionExtern.h"
+#include "otbImageRegionExtern.h"
 
-namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
+namespace itk {
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageRegion<2>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageRegionSplitter<2>;
-
+}
+namespace otb{
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageRegionSquareTileSplitter<2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageRegionAdaptativeSplitter<2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE RemoteSensingRegion<double>;
 }

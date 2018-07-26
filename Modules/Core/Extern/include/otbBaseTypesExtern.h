@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef itkBaseTypesExtern_h
-#define itkBaseTypesExtern_h
+#ifndef otbBaseTypesExtern_h
+#define otbBaseTypesExtern_h
 
 #include "OTBExternExport.h"
 #include "itkVariableLengthVector.h"
@@ -30,6 +30,12 @@
 #include "itkParametricPath.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkContinuousIndex.h"
+#include "itkSimpleDataObjectDecorator.h"
+#include "itkMetaDataObject.h"
+#include "otbImageKeywordlist.h"
+#include "otbVectorData.h"
+#include "otbPolygon.h"
+#include "otbDataNode.h"
 
 namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
@@ -51,7 +57,14 @@ extern template class OTBExtern_EXPORT_TEMPLATE Vector<float>;
 extern template class OTBExtern_EXPORT_TEMPLATE Path<double, itk::ContinuousIndex<double, 2>, 2>;
 extern template class OTBExtern_EXPORT_TEMPLATE ParametricPath<2>;
 extern template class OTBExtern_EXPORT_TEMPLATE PolyLineParametricPath<2>;
+extern template class OTBExtern_EXPORT_TEMPLATE MetaDataObject<otb::ImageKeywordlist>;
+extern template class OTBExtern_EXPORT_TEMPLATE SimpleDataObjectDecorator<double>;
+}
 
+namespace otb {
+extern template class OTBExtern_EXPORT_TEMPLATE VectorData<double,2,double>;
+extern template class OTBExtern_EXPORT_TEMPLATE Polygon<double>;
+extern template class OTBExtern_EXPORT_TEMPLATE DataNode<double,2,double>;
 }
 
 #endif // otbBaseTypes_h

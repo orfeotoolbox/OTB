@@ -31,4 +31,18 @@ template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageRegionConstIterator<otb::
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageRegionConstIterator<otb::Image<double>>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageScanlineConstIterator<otb::VectorImage<double>>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageScanlineConstIterator<otb::Image<double>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE Neighborhood<double,2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageBoundaryCondition<otb::Image<double, 2>, otb::Image<double, 2> >;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ZeroFluxNeumannBoundaryCondition<otb::Image<double, 2>, otb::Image<double, 2> >;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE itk::ConstNeighborhoodIterator<otb::Image<double, 2> >;
+
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageConstIterator<otb::Image<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageRegionConstIterator<otb::VectorImage<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageRegionConstIterator<otb::Image<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageScanlineConstIterator<otb::VectorImage<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageScanlineConstIterator<otb::Image<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE Neighborhood<float,2>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageBoundaryCondition<otb::Image<float, 2>, otb::Image<float, 2> >;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ZeroFluxNeumannBoundaryCondition<otb::Image<float, 2>, otb::Image<float, 2> >;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE itk::ConstNeighborhoodIterator<otb::Image<float, 2> >;
 }

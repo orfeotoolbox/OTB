@@ -25,6 +25,9 @@
 #include "itkImageConstIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageScanlineConstIterator.h"
+#include "itkConstNeighborhoodIterator.h"
+#include "itkNeighborhood.h"
+#include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "otbVectorImageExtern.h"
 #include "otbImageExtern.h"
 
@@ -39,6 +42,20 @@ extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionConstIterator<otb::Ve
 extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionConstIterator<otb::Image<double>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageScanlineConstIterator<otb::VectorImage<double>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageScanlineConstIterator<otb::Image<double>>;
+extern template class OTBExtern_EXPORT_TEMPLATE Neighborhood<double,2>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageBoundaryCondition<otb::Image<double, 2>, otb::Image<double, 2> >;
+extern template class OTBExtern_EXPORT_TEMPLATE ZeroFluxNeumannBoundaryCondition<otb::Image<double, 2>, otb::Image<double, 2> >;
+extern template class OTBExtern_EXPORT_TEMPLATE ConstNeighborhoodIterator<otb::Image<double, 2> >;
+
+extern template class OTBExtern_EXPORT_TEMPLATE ImageConstIterator<otb::Image<float>>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionConstIterator<otb::VectorImage<float>>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionConstIterator<otb::Image<float>>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageScanlineConstIterator<otb::VectorImage<float>>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageScanlineConstIterator<otb::Image<float>>;
+extern template class OTBExtern_EXPORT_TEMPLATE Neighborhood<float,2>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageBoundaryCondition<otb::Image<float, 2>, otb::Image<float, 2> >;
+extern template class OTBExtern_EXPORT_TEMPLATE ZeroFluxNeumannBoundaryCondition<otb::Image<float, 2>, otb::Image<float, 2> >;
+extern template class OTBExtern_EXPORT_TEMPLATE ConstNeighborhoodIterator<otb::Image<float, 2> >;
 }
 
 #endif // itkIteratorsExtern_h

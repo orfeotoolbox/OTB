@@ -25,7 +25,7 @@
 #include "itkOptimizerParameters.h"
 #include "itkOptimizerParametersHelper.h"
 #include "itkSymmetricEigenAnalysis.h"
-#include "itkBaseTypesExtern.h"
+#include "otbBaseTypesExtern.h"
 #include "itkFixedArray.h"
 
 namespace itk {

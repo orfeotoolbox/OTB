@@ -47,5 +47,5 @@ template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ObjectList<otb::VectorImage<st
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ObjectList<otb::VectorImage<std::complex<short>, 2>>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ObjectList<otb::VectorImage<std::complex<float>, 2>>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ObjectList<otb::VectorImage<std::complex<double>, 2>>;
-
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ObjectList<otb::Polygon<double> >;
 }

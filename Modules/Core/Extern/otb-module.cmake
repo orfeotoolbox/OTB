@@ -27,6 +27,7 @@ ENABLE_SHARED
   OTBImageIO
   OTBImageBase
   OTBObjectList
+  OTBTransform
   DESCRIPTION
     "${DOCUMENTATION}"
 )

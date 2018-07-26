@@ -22,9 +22,10 @@
 #define otbExtern_h
 
 #include "itkIteratorsExtern.h"
-#include "itkBaseTypesExtern.h"
+#include "otbBaseTypesExtern.h"
 #include "itkOptimizersExtern.h"
-#include "itkImageRegionExtern.h"
+#include "otbTransformsExtern.h"
+#include "otbImageRegionExtern.h"
 #include "itkImageBaseExtern.h"
 #include "itkImageExtern.h"
 #include "itkVectorImageExtern.h"

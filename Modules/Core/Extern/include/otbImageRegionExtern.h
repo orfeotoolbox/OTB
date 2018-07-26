@@ -18,17 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef itkTransformExtern_h
-#define itkTransformExtern_h
+#ifndef itkImageRegionExtern_h
+#define itkImageRegionExtern_h
 
 #include "OTBExternExport.h"
-#include "itkTransform.h"
+#include "itkImageRegion.h"
+#include "itkImageRegionSplitter.h"
+#include "otbImageRegionSquareTileSplitter.h"
+#include "otbImageRegionAdaptativeSplitter.h"
+#include "otbRemoteSensingRegion.h"
 
 namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBExtern_EXPORT_TEMPLATE Transform<double,2,2>;
-
+extern template class OTBExtern_EXPORT_TEMPLATE ImageRegion<2>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionSplitter<2>;
 }
 
-#endif // itkTransformExtern_h
+namespace otb {
+extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionSquareTileSplitter<2>;
+extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionAdaptativeSplitter<2>;
+extern template class OTBExtern_EXPORT_TEMPLATE RemoteSensingRegion<double>;
+}
+
+#endif // otbImageRegion_h

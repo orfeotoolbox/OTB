@@ -24,5 +24,24 @@
 namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageSource<otb::Image<double>>;
 template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageToImageFilter<otb::Image<double>, otb::Image<double>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE InPlaceImageFilter<otb::Image<double>, otb::Image<double>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageSource<otb::VectorImage<double>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE InPlaceImageFilter<otb::VectorImage<double>, otb::VectorImage<double>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageToImageFilter<otb::VectorImage<double>, otb::VectorImage<double>>;
+
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageSource<otb::Image<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageToImageFilter<otb::Image<float>, otb::Image<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE InPlaceImageFilter<otb::Image<float>, otb::Image<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageSource<otb::VectorImage<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE InPlaceImageFilter<otb::VectorImage<float>, otb::VectorImage<float>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageToImageFilter<otb::VectorImage<float>, otb::VectorImage<float>>;
+
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageSource<otb::Image<unsigned char>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageToImageFilter<otb::Image<unsigned char>, otb::Image<unsigned char>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE InPlaceImageFilter<otb::Image<unsigned char>, otb::Image<unsigned char>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageSource<otb::VectorImage<unsigned char>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE InPlaceImageFilter<otb::VectorImage<unsigned char>, otb::VectorImage<unsigned char>>;
+template class OTBExtern_EXPORT_EXPLICIT_TEMPLATE ImageToImageFilter<otb::VectorImage<unsigned char>, otb::VectorImage<unsigned char>>;
 }

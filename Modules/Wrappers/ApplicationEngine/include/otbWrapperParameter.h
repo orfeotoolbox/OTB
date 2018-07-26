@@ -21,6 +21,7 @@
 #ifndef otbWrapperParameter_h
 #define otbWrapperParameter_h
 
+#include "otbExtern.h"
 #include "otbMacro.h"
 #include "itkObjectFactory.h"
 
