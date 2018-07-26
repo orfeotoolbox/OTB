@@ -22,6 +22,7 @@
 #define otbPolygon_h
 
 #include "otbPolyLineParametricPathWithValue.h"
+#include "OTBVectorDataBaseExport.h"
 
 namespace otb
 {
@@ -41,7 +42,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template<class TValue = double>
-class ITK_EXPORT Polygon
+class OTBVectorDataBase_EXPORT_TEMPLATE Polygon
   : public PolyLineParametricPathWithValue<TValue, 2>
 {
 public:

@@ -25,7 +25,7 @@
 #include "otbPolygon.h"
 #include "otbObjectList.h"
 #include "otbVectorDataKeywordlist.h"
-
+#include "OTBVectorDataBaseExport.h"
 
 #include "ogrsf_frmts.h"
 
@@ -71,7 +71,7 @@ enum
  * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned VDimension = 2, class TValuePrecision = double>
-class DataNode
+class OTBVectorDataBase_EXPORT_TEMPLATE DataNode
   : public itk::Object
 {
 public:

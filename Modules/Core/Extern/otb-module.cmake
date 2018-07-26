@@ -28,6 +28,7 @@ ENABLE_SHARED
   OTBImageBase
   OTBObjectList
   OTBTransform
+  OTBVectorDataBase
   DESCRIPTION
     "${DOCUMENTATION}"
 )

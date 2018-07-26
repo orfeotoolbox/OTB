@@ -38,6 +38,6 @@ set(OTBExtern_SRC
   )
 
 add_library(OTBExtern ${OTBExtern_SRC})
-target_link_libraries(OTBExtern ${OTBITK_LIBRARIES} ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES} ${OTBObjectList_LIBRARIES} ${OTBTransform_LIBRARIES})
+target_link_libraries(OTBExtern ${OTBITK_LIBRARIES} ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES} ${OTBObjectList_LIBRARIES} ${OTBTransform_LIBRARIES} ${OTBVectorDataBase_LIBRARIES})
 
 otb_module_target(OTBExtern)

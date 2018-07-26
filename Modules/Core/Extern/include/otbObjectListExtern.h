@@ -23,7 +23,6 @@
 
 #include "OTBExternExport.h"
 #include "otbObjectList.h"
-#include "otbBaseTypesExtern.h"
 #include "otbImageExtern.h"
 #include "otbVectorImageExtern.h"
 #include <complex>
@@ -55,8 +54,6 @@ extern template class OTBExtern_EXPORT_TEMPLATE ObjectList<otb::VectorImage<std:
 extern template class OTBExtern_EXPORT_TEMPLATE ObjectList<otb::VectorImage<std::complex<short>, 2>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ObjectList<otb::VectorImage<std::complex<float>, 2>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ObjectList<otb::VectorImage<std::complex<double>, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ObjectList<otb::Polygon<double> >;
-
 }
 
 #endif // otbObjectList_h
