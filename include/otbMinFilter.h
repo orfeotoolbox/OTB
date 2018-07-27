@@ -9,10 +9,6 @@ Implementation of the minimum between two pixels of two images and calculation o
 
 
 #include <itkBinaryFunctorImageFilter.h>
-#include <itkNumericTraits.h>
-#include <itkConstNeighborhoodIterator.h>
-
-#include "otbCostVolumeImageFilter.h"
 
 namespace otb
 {
@@ -41,30 +37,26 @@ public:
 
 	double temp0(0.);
 	double temp1(0.);
-    TOutput OutDisp(2);
+  TOutput OutDisp(2);
    
-    // 1st band = inDisp
-     // 2nd band = min_Cost
+  // 1st band = inDisp
+  // 2nd band = min_Cost
     
-		 		if((double)Cost[0] < (double)input[1]){
-		 		
-		 		temp0 = m_disp;
-		 		temp1 = Cost[0]; 
-		 		//std::cout << " temp1= "<< temp1; 
-				}
-				
-				else{
-				temp0 = input[0] ;
-				temp1 = input[1];
-				}
+	if( (double)Cost[0] < (double)input[1] )
+    {
+		temp0 = m_disp;
+		temp1 = Cost[0]; 
+		//std::cout << " temp1= "<< temp1; 
+		}		
+	else
+    {
+		temp0 = input[0] ;
+		temp1 = input[1];
+		}
 
-        		OutDisp[0] = static_cast<typename TOutput::ValueType>(temp0) ;
-				OutDisp[1] = static_cast<typename TOutput::ValueType>(temp1) ;
+    OutDisp[0] = static_cast<typename TOutput::ValueType>(temp0) ;
+		OutDisp[1] = static_cast<typename TOutput::ValueType>(temp1) ;
   
-   
- 	 
-
-	
    	return OutDisp;
   } // end operator ()
 
@@ -97,8 +89,6 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
-
-
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -112,13 +102,13 @@ MinFilter()
   {
 
   }
-  ~MinFilter() ITK_OVERRIDE { }
-void GenerateOutputInformation(void) ITK_OVERRIDE;
+  ~MinFilter() override { }
+void GenerateOutputInformation(void) override;
 
 
 
-  MinFilter( const Self & ); // Not implemented
-  void operator=( const Self & ); // Not implemented
+  MinFilter( const Self & ) = delete ;
+  void operator=( const Self & ) = delete ;
 }; // end of class MinFilter
 
 
