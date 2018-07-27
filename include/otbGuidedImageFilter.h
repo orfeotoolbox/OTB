@@ -8,13 +8,7 @@ eq 15 mean(ai).I(i)+mean(bk)
  b += aR.boxFilter(r)*im1R+aG.boxFilter(r)*im1G+aB.boxFilter(r)*im1B;	
 
 =====================================================================================================*/
-
-
 #include <itkBinaryFunctorImageFilter.h>
-#include <itkNumericTraits.h>
-#include <itkConstNeighborhoodIterator.h>
-
-
 
 namespace otb
 {
@@ -36,20 +30,15 @@ public:
 
   
   
- TOutput operator() (  TInput  input, TInputCoeff  Coeff )
-  {	 
-
-	TOutput OutCost(1);
-     OutCost.Fill(0);
- 
-     
-     OutCost[0]	 = static_cast<typename TOutput::ValueType>( Coeff[0]*input[0]+Coeff[1]*input[1]+Coeff[2]*input[2] +Coeff[3] );
-         //eq 15 mean(ai).I(i)+mean(bk)
-        // b += aR.boxFilter(r)*im1R+aG.boxFilter(r)*im1G+aB.boxFilter(r)*im1B;	
-
-
-   	return OutCost;
-  } // end operator ()
+  TOutput operator() (  TInput  input, TInputCoeff  Coeff )
+    {	 
+    TOutput OutCost(1);
+    OutCost.Fill(0);
+    OutCost[0]	 = static_cast<typename TOutput::ValueType>( Coeff[0]*input[0]+Coeff[1]*input[1]+Coeff[2]*input[2] +Coeff[3] );
+    //eq 15 mean(ai).I(i)+mean(bk)
+    // b += aR.boxFilter(r)*im1R+aG.boxFilter(r)*im1G+aB.boxFilter(r)*im1B;	
+    return OutCost;
+    } // end operator ()
 
 }; // end of functor class  GuidedOperator
 
@@ -91,37 +80,19 @@ public:
 
 protected:
 
-GuidedImageFilter()
+GuidedImageFilter() = default;
+  ~GuidedImageFilter() override = default;
+void GenerateOutputInformation(void) override
   {
-
+  Superclass::GenerateOutputInformation();
+  this->GetOutput()->SetNumberOfComponentsPerPixel(1);;
   }
-  ~GuidedImageFilter() ITK_OVERRIDE { }
-void GenerateOutputInformation(void) ITK_OVERRIDE;
 
-
-
-
-  GuidedImageFilter( const Self & ); // Not implemented
-  void operator=( const Self & ); // Not implemented
+  GuidedImageFilter( const Self & ) = delete ;
+  void operator=( const Self & ) = delete ;
 }; // end of class GuidedImageFilter
 
-
-// surchage
-template < class TInputImage, class TInputCostImage, class TOutputImage >
-void GuidedImageFilter<TInputImage,TInputCostImage, TOutputImage>
-::GenerateOutputInformation(void){
- Superclass::GenerateOutputInformation();
-
- this->GetOutput()->SetNumberOfComponentsPerPixel(1);
- 
-
-}
-
 } // end of namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-
-#endif
 
 #endif
 
