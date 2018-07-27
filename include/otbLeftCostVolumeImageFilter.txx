@@ -331,7 +331,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     double costGradientNorm;
      
     costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;      
-    costColorNorm = (1/3)*(costColor.GetNorm());                                       
+    costColorNorm = (costColor.GetNorm());                                       
              
                if(costColorNorm > taux1) 
                   costColorNorm = taux1;
@@ -339,7 +339,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
 
                
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= (costGradient.GetNorm())/3.0  ;               
+    costGradientNorm= (costGradient.GetNorm()) ;               
                  
                  if(costGradientNorm > taux2) 
                    costGradientNorm = taux2;
@@ -423,8 +423,6 @@ typename RegionType::IndexType  shift;
 // shift -1
 typename RegionType::IndexType IndexInv = RightRegion.GetIndex(); 
 typename RegionType::IndexType  ShiftInv;
-
-
 
 
   ShiftInv[0] = -iteration_disp;

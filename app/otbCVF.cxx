@@ -280,15 +280,18 @@ class CVF : public Application
 
     m_convFilterXRight->SetRadius(radiusG);
     m_convFilterXRight->SetFilter(filterCoeffsX);
+
     m_LeftGrayVectorImage->SetInput(inLeft);
     m_RightGrayVectorImage->SetInput(inRight);  
       //--Left---------------  
     m_GradientXLeft->SetFilter(m_convFilterXLeft);
-    m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
+    m_GradientXLeft->SetInput(inLeft);
+    // m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
     m_GradientXLeft->UpdateOutputInformation(); 
       //--Right--------------- 
     m_GradientXRight->SetFilter(m_convFilterXRight);
-    m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
+    m_GradientXRight->SetInput(inRight);
+    // m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
     m_GradientXRight->UpdateOutputInformation(); 
 
 
@@ -366,19 +369,24 @@ class CVF : public Application
 
     if(choice == 1)
       {
-      m_DispValueFilter->SetInput(m_LeftDisparity->GetOutput());
+     
       if(s==0)
         {
+        m_DispValueFilter->SetInput(m_LeftDisparity->GetOutput());
         m_DispValueFilter->SetDisp(dispMax);
+        SetParameterOutputImage("io.out", m_LeftDisparity->GetOutput());
         }
       else
         {
-        m_DispValueFilter->SetDisp(dispMin);
+          SetParameterOutputImage("io.out", m_RightDisparity->GetOutput());
+        // m_DispValueFilter->SetInput(m_RightDisparity->GetOutput());
+        // m_DispValueFilter->SetDisp(dispMin);
         }
-      SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
+      // SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
       }
     else
       {
+
       //FILTRAGE LEFT DISPARITY PAR FILTRE MEDIAN
       m_CastLeftDisparity-> SetInput(  m_LeftDisparity->GetOutput());
       m_CastRightDisparity->SetInput( m_RightDisparity->GetOutput());
@@ -394,16 +402,19 @@ class CVF : public Application
 
       if(s==0)
         {
+
         m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
-        m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
+        m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput());
         m_OcclusionFilter->SetMaxHDisp(0);
-        m_OcclusionFilter->SetMinHDisp(-(dispMax-dispMin));
+        m_OcclusionFilter->SetMinHDisp(dispMin); 
+        // m_OcclusionFilter->SetMaxHDisp(0);
+        // m_OcclusionFilter->SetMinHDisp(-(dispMax-dispMin));
         }
       else
         {
         m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
         m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
-        m_OcclusionFilter->SetMaxHDisp(dispMax-dispMin);
+        m_OcclusionFilter->SetMaxHDisp(dispMax);
         m_OcclusionFilter->SetMinHDisp(0);
         }
 

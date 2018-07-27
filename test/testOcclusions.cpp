@@ -62,7 +62,7 @@
 int testOcclusionsFilter(int argc, char *argv[])
   {
   if(argc < 3) {
-    std::cerr << "Usage: " << argv[0] << " LeftDisparityMap RigthDisparityMap inMedianLeftImage minDisp maxDisp rFillOcc rwmf outputPathFolder" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " LeftDisparityMap RigthDisparityMap inMedianLeftImage minDisp maxDisp rwmf outputPathFolder" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -175,10 +175,10 @@ int testOcclusionsFilter(int argc, char *argv[])
   m_FillOcc->SetRadius(radiusM);
 
 
-  IntWriterType::Pointer writer_FillOccFilter = IntWriterType::New();
-  writer_FillOccFilter->SetFileName( FILENAME("SmoothFillDisparity.tif"));
- writer_FillOccFilter->SetInput( m_FillOcc->GetOutput() );  
- writer_FillOccFilter->Update(); 
+ //  IntWriterType::Pointer writer_FillOccFilter = IntWriterType::New();
+ //  writer_FillOccFilter->SetFileName( FILENAME("SmoothFillDisparity.tif"));
+ // writer_FillOccFilter->SetInput( m_FillOcc->GetOutput() );  
+ // writer_FillOccFilter->Update(); 
 
    CastImageFilter::Pointer m_CastFillOccFilter= CastImageFilter::New();
   m_CastFillOccFilter-> SetInput( m_FillOcc->GetOutput());

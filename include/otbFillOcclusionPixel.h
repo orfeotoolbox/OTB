@@ -107,6 +107,7 @@ PixelType I(3);
      for (std::vector<pairCord>::iterator it=duo.begin(); it !=duo.end(); ++it){
            Wtemp += it->second ;
            if (Wtemp >= Wt){
+
         d = it->first; 
          //std::cout << "Element found in myvector: " << d << '\n';
          // output[0] = static_cast<typename TOutput::ValueType>(d) ;
@@ -116,9 +117,6 @@ PixelType I(3);
   
    
      }  
-
-
-
 
 
        }

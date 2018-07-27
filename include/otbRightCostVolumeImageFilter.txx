@@ -293,9 +293,11 @@ RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
  typename TOutputImage::PixelType OutPixel(1);
  OutPixel.Fill(0);
 
+
  
  //  Setting parameters
 	double alpha = 0.9; 
+  std::cout << "RC alpha : " << alpha << std::endl ;
 	double taux1 = 7;  
 	double taux2 = 2; 
 
@@ -434,22 +436,22 @@ typename RegionType::IndexType  shift;
  
    
     	
-// shift -1
-typename RegionType::IndexType IndexInv = RightRegion.GetIndex();	
-typename RegionType::IndexType  ShiftInv;
+// // shift -1
+// typename RegionType::IndexType IndexInv = RightRegion.GetIndex();	
+// typename RegionType::IndexType  ShiftInv;
 
 
-  ShiftInv[0] = -iteration_disp;
-  ShiftInv[1] =  -m_VerticalDisparity;   
+//   ShiftInv[0] = -iteration_disp;
+//   ShiftInv[1] =  -m_VerticalDisparity;   
   
-  IndexInv[0]+=ShiftInv[0];
-  IndexInv[1]+=ShiftInv[1];
+//   IndexInv[0]+=ShiftInv[0];
+//   IndexInv[1]+=ShiftInv[1];
   
-LeftRegion.SetIndex(IndexInv);	
+// LeftRegion.SetIndex(IndexInv);	
 
 
 
-LeftRegion.SetSize(RightRegion.GetSize());		
+// LeftRegion.SetSize(RightRegion.GetSize());		
 	
 } // End of ComputeInputRegions
 
