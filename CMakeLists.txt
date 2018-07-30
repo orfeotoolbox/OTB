@@ -91,6 +91,8 @@ if( CMAKE_HOST_WIN32 )
   endif()
 
 endif()
+set(OTB_APPLICATIONS_NAME_LIST "" CACHE STRING "List of all applications" FORCE)
+mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 
 set(OTB_CMAKE_DIR ${OTB_SOURCE_DIR}/CMake)
 set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
