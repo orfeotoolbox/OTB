@@ -81,7 +81,7 @@ public:
     unsigned int Nband_weights = input_weights.GetPixel(0).Size();
     unsigned int Nband_I = input_I.GetPixel(0).Size();
 
-
+    
 
     TOutput output(Nband_weights/(Nband_I+1)); 
     output.Fill(0); 
@@ -126,9 +126,6 @@ public:
          
         output[b] = static_cast<typename TOutput::ValueType>(qi);
         }
-  
-    
-
     return output ;
     }
 
@@ -137,11 +134,9 @@ public:
     unsigned char                   m_RadiusMax;
     unsigned int                    m_numberOfComponents ;
 
-
 };
 
 } // end namespace functor
-
 
 
 // class MeanVectorImageFilter

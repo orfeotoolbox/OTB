@@ -40,13 +40,14 @@ otb_module_test()
 
 set(OTBStereoFiltersTests
   otbStereoFiltersTestDriver.cxx
-  CostVolumeFilter.cpp
-  PatchMatch.cpp
-  CVF.cpp
-  testOcclusions.cpp
+   CostVolumeFilter.cpp
+   PatchMatch.cpp
+   CVF.cpp
+   testOcclusions.cpp
   testDisparityMap.cpp
-  testAllFilters.cpp
-
+   testAllFilters.cpp
+   testCostVolumeFilters.cpp
+   testGuidedFilter.cpp
 )
 
 add_executable(otbStereoFiltersTestDriver ${OTBStereoFiltersTests})

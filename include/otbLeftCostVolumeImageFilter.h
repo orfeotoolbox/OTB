@@ -63,6 +63,10 @@ public:
 	int GetHorizontalMinDisparity() const ;
   int GetHorizontalMaxDisparity() const ;
 
+  float GetAlpha() const ;
+  float GetTau1() const ;
+  float GetTau2() const ;
+
 
 
       
@@ -96,6 +100,24 @@ public:
   {
     m_HorizontalMaxDisparity  = disp;
   }
+
+  void SetAlpha(float param)
+    {
+    m_Alpha = param ;
+    }
+
+  void SetTau1(float param)
+    {
+    m_Tau1 = param ;
+    }
+
+  void SetTau2(float param)
+    {
+    m_Tau2 = param ;
+    }
+
+
+
 
 
   int GetBandNumber()
@@ -137,6 +159,9 @@ private:
 
    /** The min disparity to explore */
   int                           m_VerticalDisparity;
+  float                           m_Alpha ;
+  float                           m_Tau1 ;
+  float                           m_Tau2 ;
 
 
      

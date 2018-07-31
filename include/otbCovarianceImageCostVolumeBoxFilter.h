@@ -3,15 +3,17 @@
 
 /*===================================================================================================
 
-InputMutilply: contains the multiplication of the input image of 3 bands and the cost volume
+TInputMutilply: contains the multiplication of the input image of 3 bands and the cost volume
 InputMean: Contains The local mean of the input image
 =====================================================================================================*/
 
 
-#include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
-#include "otbBinaryFunctorNeighborhoodVectorImageFilter.h"
+// #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
+// #include "otbBinaryFunctorNeighborhoodVectorImageFilter.h"
 #include <itkNumericTraits.h>
 #include <itkConstNeighborhoodIterator.h>
+
+#include <itkBinaryFunctorImageFilter.h>
 
 namespace otb
 {
@@ -32,20 +34,22 @@ public:
  
     
  TOutput operator() ( const TInputMutilply & inputMul, const TInputMean & inputMean )
-  {	TOutput OutCov(3); 
-	  OutCov.Fill(0);   
-        	
-        OutCov[0] = static_cast<typename TOutput::ValueType>(inputMul[0]- inputMean[0]*inputMean[3]) ; //Meam(R*Cost)-mean(R) *mean(Cost)
-				OutCov[1] = static_cast<typename TOutput::ValueType>(inputMul[1]- inputMean[1]*inputMean[3]) ;
-				OutCov[2] = static_cast<typename TOutput::ValueType>(inputMul[2]- inputMean[2]*inputMean[3]) ;
-			
+  { TOutput OutCov(3); 
+    OutCov.Fill(0);   
+          
+            OutCov[0] = static_cast<typename TOutput::ValueType>(inputMul[0]- inputMean[0]*inputMean[3]) ; //Moy(R*Cost)-mu_R *mu_Cost
+        OutCov[1] = static_cast<typename TOutput::ValueType>(inputMul[1]- inputMean[1]*inputMean[3]) ;
+        OutCov[2] = static_cast<typename TOutput::ValueType>(inputMul[2]- inputMean[2]*inputMean[3]) ;
+      
 
-   	return OutCov;
+    return OutCov;
   }
 
 }; // end of functor class  CovarianceBoxOperator
 
 }  // end of fonctor 
+
+
 
 
 
@@ -100,7 +104,7 @@ void GenerateOutputInformation(void) ITK_OVERRIDE;
 
 
 
-/*===========================Overload of GenerateOutputInformation ===========================*/
+/*===========================Surchage de GenerateOutputInformation ===========================*/
 template < class TInputImageMultiply,class TInputImageMean, class TOutputImage >
 void CovarianceImageCostVolumeBoxFilter< TInputImageMultiply, TInputImageMean, TOutputImage >
 ::GenerateOutputInformation(void){

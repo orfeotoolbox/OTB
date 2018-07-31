@@ -188,6 +188,19 @@ class CVF : public Application
     SetParameterDescription("choice", "DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter" );
     SetDefaultParameterInt("choice",3);
 
+    AddParameter(ParameterType_Float, "alpha", "alpha parameter for the cost volume filter");
+    SetParameterDescription("alpha", "alpha parameter for the cost volume filter" );
+    SetDefaultParameterInt("alpha", 0.9);
+
+    AddParameter(ParameterType_Float, "tau1", "max for color difference ");
+    SetParameterDescription("tau1", "max for color difference " );
+    SetDefaultParameterInt("tau1", 7.0);
+
+    AddParameter(ParameterType_Float, "tau2", "max for gradient difference");
+    SetParameterDescription("tau2", "max for gradient difference" );
+    SetDefaultParameterInt("tau2", 2.0);
+
+
 
     AddRAMParameter();
 
@@ -203,6 +216,8 @@ class CVF : public Application
     SetDocExampleParameterValue("io.out","MyCVFDisparity.tif");
     SetDocExampleParameterValue("range","0");
     SetDocExampleParameterValue("choice","3");
+    SetDocExampleParameterValue("tau1","7.0");
+    SetDocExampleParameterValue("tau2","2.0");
 
     }
 
@@ -258,6 +273,9 @@ class CVF : public Application
     unsigned int range = GetParameterInt("range") ;
     unsigned int tol = GetParameterInt("tol") ;
     unsigned int choice = GetParameterInt("choice") ;
+    float alpha = GetParameterFloat("alpha");
+    float tau1 = GetParameterFloat("tau1");
+    float tau2 = GetParameterFloat("tau2");
 
     std::cout << "dispMin : " << dispMin << std::endl ;
     std::cout << "dispMax : " << dispMax << std::endl ;
@@ -303,15 +321,22 @@ class CVF : public Application
       m_LeftCost->SetLeftGradientXInput(m_GradientXLeft->GetOutput() ); 
       m_LeftCost->SetRightGradientXInput(m_GradientXRight->GetOutput() );      
       m_LeftCost->SetMinDisp(dispMin);
-      m_LeftCost->SetMaxDisp(dispMax); 
+      m_LeftCost->SetMaxDisp(dispMax);
+      m_LeftCost->SetAlpha(alpha);
+      m_LeftCost->SetTau1(tau1);
+      m_LeftCost->SetTau2(tau2);
       m_LeftCost->UpdateOutputInformation(); 
+
       //   // --- RIGHT
       m_RightCost->SetLeftInputImage(inRight);
       m_RightCost->SetRightInputImage(inLeft );  
       m_RightCost->SetLeftGradientXInput(m_GradientXRight->GetOutput() ); 
       m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() );      
       m_RightCost->SetMinDisp(-dispMax);
-      m_RightCost->SetMaxDisp(-dispMin);     
+      m_RightCost->SetMaxDisp(-dispMin);   
+      m_RightCost->SetAlpha(alpha);
+      m_RightCost->SetTau1(tau1);
+      m_RightCost->SetTau2(tau2);  
       m_RightCost->UpdateOutputInformation();  
       }
     else
@@ -322,6 +347,9 @@ class CVF : public Application
       m_LeftCost->SetRightGradientXInput(m_GradientXRight->GetOutput() );      
       m_LeftCost->SetMinDisp(-dispMax);
       m_LeftCost->SetMaxDisp(-dispMin); 
+      m_LeftCost->SetAlpha(alpha);
+      m_LeftCost->SetTau1(tau1);
+      m_LeftCost->SetTau2(tau2);
       m_LeftCost->UpdateOutputInformation(); 
       //   // --- RIGHT
       m_RightCost->SetLeftInputImage(inRight);
@@ -329,11 +357,13 @@ class CVF : public Application
       m_RightCost->SetLeftGradientXInput(m_GradientXRight->GetOutput() ); 
       m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() );      
       m_RightCost->SetMinDisp(dispMin);
-      m_RightCost->SetMaxDisp(dispMax);     
+      m_RightCost->SetMaxDisp(dispMax);  
+      m_RightCost->SetAlpha(alpha);
+      m_RightCost->SetTau1(tau1);
+      m_RightCost->SetTau2(tau2);     
       m_RightCost->UpdateOutputInformation();   
       }
   
-
     //WEIGHTS  
       // --- LEFT
     m_meanLeftCost->SetInput1(inLeft);
@@ -345,7 +375,6 @@ class CVF : public Application
     m_meanRightCost->SetInput2(m_RightCost->GetOutput());  
     m_meanRightCost->SetRadius(0,r);  
     m_meanRightCost->UpdateOutputInformation(); 
-
 
     //MEAN WEIGHTS   
       // --- LEFT
@@ -368,25 +397,22 @@ class CVF : public Application
     m_RightDisparity->UpdateOutputInformation(); 
 
     if(choice == 1)
-      {
-     
+      {     
       if(s==0)
         {
         m_DispValueFilter->SetInput(m_LeftDisparity->GetOutput());
         m_DispValueFilter->SetDisp(dispMax);
-        SetParameterOutputImage("io.out", m_LeftDisparity->GetOutput());
+     
         }
       else
         {
-          SetParameterOutputImage("io.out", m_RightDisparity->GetOutput());
-        // m_DispValueFilter->SetInput(m_RightDisparity->GetOutput());
-        // m_DispValueFilter->SetDisp(dispMin);
+        m_DispValueFilter->SetInput(m_RightDisparity->GetOutput());
+        m_DispValueFilter->SetDisp(dispMin);
         }
-      // SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
+       SetParameterOutputImage("io.out", m_DispValueFilter->GetOutput());
       }
     else
       {
-
       //FILTRAGE LEFT DISPARITY PAR FILTRE MEDIAN
       m_CastLeftDisparity-> SetInput(  m_LeftDisparity->GetOutput());
       m_CastRightDisparity->SetInput( m_RightDisparity->GetOutput());
@@ -402,7 +428,6 @@ class CVF : public Application
 
       if(s==0)
         {
-
         m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
         m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput());
         m_OcclusionFilter->SetMaxHDisp(0);

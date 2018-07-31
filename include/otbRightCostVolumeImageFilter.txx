@@ -209,6 +209,31 @@ RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
        return m_HorizontalMaxDisparity;
     }
 
+template <class TInputImage, class TGradientImage, class TOutputImage >
+float
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+::GetAlpha() const
+     {
+       return m_Alpha;
+    }
+
+template <class TInputImage, class TGradientImage, class TOutputImage >
+float
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+::GetTau1() const
+     {
+       return m_Tau1;
+    }
+
+template <class TInputImage, class TGradientImage, class TOutputImage >
+float
+RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+::GetTau2() const
+     {
+       return m_Tau2;
+    }
+
+
 
     
 //============================================  GenerateOutputInformation  ========================================================
@@ -283,6 +308,7 @@ void
 RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {	
+  std::cout << "RIGHT : alpha : " << m_Alpha << " " << "tau1 : " << m_Tau1 << " " << "tau2 : " << m_Tau2 << std::endl ;
 
 
 
@@ -293,13 +319,15 @@ RightCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
  typename TOutputImage::PixelType OutPixel(1);
  OutPixel.Fill(0);
 
-
  
- //  Setting parameters
-	double alpha = 0.9; 
-  std::cout << "RC alpha : " << alpha << std::endl ;
-	double taux1 = 7;  
-	double taux2 = 2; 
+ // //  Setting parameters
+	// double alpha = 0.9; 
+	// double taux1 = 7;  
+	// double taux2 = 2; 
+
+ //    int c = 14;
+ //  int g = 4 ;
+ //  std::cout << "c = " << c << " g = " << g << std::endl ; 
 
 
 typedef otb::VectorImage<float> FloatVectorImageType;
@@ -310,7 +338,6 @@ ImageWriterType::Pointer img = ImageWriterType::New();
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
   {
   ComputeInputRegions( outputRegionForThread, LeftRegionForThread, RightRegionForThread, iteration_disp); 
-
 
    //créer l'intérator     
          
@@ -342,34 +369,30 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     costColor.Fill(0);
     PixelType costGradient;
     costGradient.Fill(0);
-    
-    double costColorNorm;
+        double costColorNorm;
     double costGradientNorm;
      
-    costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;        
-    //b=  costColor.GetSquaredNorm ();
-    costColorNorm=  (1/3)*(costColor.GetNorm());                                   
-             
-               if(costColorNorm > taux1) 
-                  costColorNorm = taux1;
-                    // if  To take the minimum   
+    costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;      
+   costColorNorm = (costColor.GetNorm());  
+
+               if(costColorNorm > m_Tau1)   
+                {
+                costColorNorm = m_Tau1;
+                }                 
+
+                    // if  To take the minimum  
                
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= (costGradient.GetNorm())/3.0;     
+    costGradientNorm= (costGradient.GetNorm());         
                  
-                 if(costGradientNorm > taux2) 
-                   costGradientNorm = taux2;
-                   // if To take the minimum     
-    //std::cout << "costColor : " << costColor << std::endl ;
-    //std::cout << "costGradient : " << costGradient << std::endl;                        
+                 if(costGradientNorm > m_Tau2 )
+                   costGradientNorm = m_Tau2;
+                   // if To take the minimum                    
                                                            
            
-    OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>(((1-alpha)*costColorNorm + alpha*costGradientNorm) );  
+    OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-m_Alpha)*costColorNorm + m_Alpha*costGradientNorm );  
     outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;
-
-    //outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;
-     //  outputIt.Set(OutPixel);
-     //  std::cout << " cost volume = "<< OutPixel[0] ;              
+         
     ++LeftInputImageIt;
     ++RightInputImageIt;
     ++LeftGradientXInputIt;
@@ -436,22 +459,22 @@ typename RegionType::IndexType  shift;
  
    
     	
-// // shift -1
-// typename RegionType::IndexType IndexInv = RightRegion.GetIndex();	
-// typename RegionType::IndexType  ShiftInv;
+// shift -1
+typename RegionType::IndexType IndexInv = RightRegion.GetIndex();	
+typename RegionType::IndexType  ShiftInv;
 
 
-//   ShiftInv[0] = -iteration_disp;
-//   ShiftInv[1] =  -m_VerticalDisparity;   
+  ShiftInv[0] = -iteration_disp;
+  ShiftInv[1] =  -m_VerticalDisparity;   
   
-//   IndexInv[0]+=ShiftInv[0];
-//   IndexInv[1]+=ShiftInv[1];
+  IndexInv[0]+=ShiftInv[0];
+  IndexInv[1]+=ShiftInv[1];
   
-// LeftRegion.SetIndex(IndexInv);	
+LeftRegion.SetIndex(IndexInv);	
 
 
 
-// LeftRegion.SetSize(RightRegion.GetSize());		
+LeftRegion.SetSize(RightRegion.GetSize());		
 	
 } // End of ComputeInputRegions
 
