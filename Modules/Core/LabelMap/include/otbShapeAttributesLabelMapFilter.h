@@ -22,13 +22,18 @@
 #ifndef otbShapeAttributesLabelMapFilter_h
 #define otbShapeAttributesLabelMapFilter_h
 
+#include "itkConfigure.h"
+
+#if ITK_VERSION_MAJOR > 4
+#include "itkLexicographicCompare.h"
+#endif
+
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include "otbImage.h"
 #include "otbPolygon.h"
 #include "otbLabelObjectToPolygonFunctor.h"
 #include "otbFlusserPathFunction.h"
 #include "otbSimplifyPathFunctor.h"
-
 
 namespace otb
 {
@@ -148,9 +153,15 @@ private:
   typedef itk::Offset<3>                                                          Offset3Type;
   typedef itk::Vector<double, 2>                                                  Spacing2Type;
   typedef itk::Vector<double, 3>                                                  Spacing3Type;
-  typedef std::map<Offset2Type, itk::SizeValueType, Offset2Type::LexicographicCompare> MapIntercept2Type;
-  typedef std::map<Offset3Type, itk::SizeValueType, Offset3Type::LexicographicCompare> MapIntercept3Type;
-
+  #if ITK_VERSION_MAJOR > 4
+  typedef itk::Functor::LexicographicCompare<Offset2Type>                         LexicographicCompare2;
+  typedef itk::Functor::LexicographicCompare<Offset3Type>                         LexicographicCompare3;
+  #else
+  typedef typename Offset2Type::LexicographicCompare  LexicographicCompare2;
+  typedef typename Offset3Type::LexicographicCompare  LexicographicCompare3;
+  #endif
+  typedef std::map<Offset2Type, itk::SizeValueType, LexicographicCompare2> MapIntercept2Type;
+  typedef std::map<Offset3Type, itk::SizeValueType, LexicographicCompare3> MapIntercept3Type;
   template<class TMapIntercept, class TSpacing> double PerimeterFromInterceptCount( TMapIntercept & intercepts, const TSpacing & spacing );
 
 #if ! defined(ITK_DO_NOT_USE_PERIMETER_SPECIALIZATION)
