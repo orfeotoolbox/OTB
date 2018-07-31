@@ -36,7 +36,7 @@ template <class TInputImage, class TOutputImage>
 VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
 ::VectorImageToIntensityImageFilter()
 {
-OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT
 }
 
 template <class TInputImage, class TOutputImage>
