@@ -71,7 +71,7 @@ set(OTBITK_ITK_REQUIRED_MODULE_LIST
     ITKEigen
     #ITKFEM
     ITKNarrowBand
-    ITKNeuralNetworks
+    #ITKNeuralNetworks #5.0
     ITKOptimizers
     ITKOptimizersv4
     ITKPolynomials
