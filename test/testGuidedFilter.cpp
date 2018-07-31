@@ -82,7 +82,7 @@ int testGuidedFilter(int argc, char *argv[])
   inRight->UpdateOutputInformation();
   int dispMin = atoi(argv[3]);
   int dispMax  = atoi(argv[4]);
-  
+
   float alpha = atoi(argv[5]);
   float tau1L = atoi(argv[6]);
   float tau2L = atoi(argv[7]);
@@ -254,6 +254,7 @@ int testGuidedFilter(int argc, char *argv[])
   writer_m_LeftDisparity->SetFileName( FILENAME("LeftDisparity.tif"));
   writer_m_LeftDisparity->SetInput(m_LeftDisparity->GetOutput());
   writer_m_LeftDisparity->Update();
+  
   IntImageWriterType::Pointer writer_m_RightDisparity = IntImageWriterType::New();
   writer_m_RightDisparity->SetFileName( FILENAME("RightDisparity.tif"));
   writer_m_RightDisparity->SetInput(m_RightDisparity->GetOutput());
