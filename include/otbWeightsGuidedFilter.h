@@ -305,11 +305,29 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  //  int GetRadiusMin()
+  //   {
+  //    return this->GetFunctor().GetRadiusMin();     
+  //   }
+
+  // int GetRadiusMax()
+  //   {
+  //    return this->GetFunctor().GetRadiusMax();     
+  //   }
+
+  //   void SetRadius(int min, int max)
+  //   {
+  //     this->GetFunctor().SetRadius(min, max);
+  //   }
+
 
 
   protected:
   WeightsGuidedFilter() {}
   ~WeightsGuidedFilter() override {}
+
+
+ 
 
   void GenerateOutputInformation(void) override
     {
@@ -320,6 +338,7 @@ public:
     this->GetFunctor().SetNumberOfComponent((bandI+1)*nb_comp);      
 
     } 
+
 
   virtual void GenerateInputRequestedRegion() ITK_OVERRIDE
     {
@@ -343,6 +362,7 @@ public:
 
     // pad the input requested region by the operator radius
     inputRequestedRegion1.PadByRadius(9);
+
 
     // crop the input requested region at the input's largest possible region
     if ( inputRequestedRegion1.Crop( inputPtr1->GetLargestPossibleRegion() ) )
