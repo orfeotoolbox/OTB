@@ -30,6 +30,7 @@
 #include "otbDEMToImageGenerator.h"
 #include "otbHillShadingFilter.h"
 
+#include "itkBinaryFunctorImageFilter.h"
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbReliefColormapFunctor.h"
 #include "itkMultiplyImageFilter.h"
