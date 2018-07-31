@@ -68,8 +68,6 @@ public:
   float GetTau2() const ;
 
 
-
-      
 //=============== Seters ====================================================================================
   /** Set left input */
   void SetLeftInputImage( const TInputImage * image);

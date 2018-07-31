@@ -77,6 +77,8 @@ int testGuidedFilter(int argc, char *argv[])
   FloatVectorImageReaderType::Pointer inLeft = FloatVectorImageReaderType::New();
   inLeft->SetFileName(argv[1]); //LeftImage  
   inLeft->UpdateOutputInformation();
+  
+
   FloatVectorImageReaderType::Pointer inRight = FloatVectorImageReaderType::New();
   inRight->SetFileName(argv[2]);//RightImage
   inRight->UpdateOutputInformation();
@@ -147,13 +149,11 @@ int testGuidedFilter(int argc, char *argv[])
   m_RightGrayVectorImage->SetInput(inRight->GetOutput());  
   //--Left---------------  
   m_GradientXLeft->SetFilter(m_convFilterXLeft);
-  m_GradientXLeft->SetInput(inLeft->GetOutput());
-  // m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
+  m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
   m_GradientXLeft->UpdateOutputInformation(); 
   //--Right--------------- 
   m_GradientXRight->SetFilter(m_convFilterXRight);
-  m_GradientXRight->SetInput(inRight->GetOutput());
-  // m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
+  m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
   m_GradientXRight->UpdateOutputInformation(); 
 
   // COST VOLUME  

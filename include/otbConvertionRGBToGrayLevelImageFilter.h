@@ -45,7 +45,15 @@ public:
     TOutput output(1); 
     output.Fill(0) ;
 
-    output[0] = 0.299*input[0] + 0.587*input[1] + 0.0721*input[2] ;
+    if(input.GetSize() == 3) 
+      {
+      output[0] = 0.299*input[0] + 0.587*input[1] + 0.0721*input[2] ;
+      }
+    else
+      {
+      output[0] = input[0] ;
+      }
+
     output[1] = output[0] ;
     output[2] = output[0] ;
 

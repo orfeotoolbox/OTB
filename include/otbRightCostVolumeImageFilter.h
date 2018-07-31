@@ -110,7 +110,7 @@ public:
     return b ;
   }
 
-    void SetAlpha(float param)
+  void SetAlpha(float param)
     {
     m_Alpha = param ;
     }
@@ -150,7 +150,7 @@ protected:
 private:
   RightCostVolumeImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted  
- void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp); 
+  void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp); 
 
    /** The min disparity to explore */
   int                           m_HorizontalMinDisparity;

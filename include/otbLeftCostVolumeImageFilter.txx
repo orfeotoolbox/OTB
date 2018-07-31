@@ -324,7 +324,6 @@ LeftCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 
  OutPixel.Fill(0);
 
-
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
   {
   ComputeInputRegions( outputRegionForThread, LeftRegionForThread, RightRegionForThread, iteration_disp); 
@@ -340,6 +339,8 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
    LeftGradientXInputIt.GoToBegin();
    itk::ImageRegionConstIterator<TInputImage> RightGradientXInputIt ( this->GetRightGradientXInput(), RightRegionForThread );
    RightGradientXInputIt.GoToBegin();   
+
+
             
    itk::ImageRegionIterator<TOutputImage> outputIt ( this->GetOutputImage(), LeftRegionForThread );
    outputIt.GoToBegin();           
@@ -364,7 +365,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     double costGradientNorm;
      
     costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;      
-   costColorNorm = (costColor.GetNorm());  
+   costColorNorm = (costColor.GetNorm())/3;  
 
     // costColorNorm = (costColor.GetNorm())/c;  
                                     
@@ -381,14 +382,14 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
 
                
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= (costGradient.GetNorm()); 
+    costGradientNorm= (costGradient.GetNorm())/3; 
      // costGradientNorm= (costGradient.GetNorm())/g;               
                  
                  if(costGradientNorm > m_Tau2 )
                    costGradientNorm = m_Tau2;
                    // if To take the minimum     
 
-   OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-m_Alpha)*costColorNorm + m_Alpha*costGradientNorm );  
+   OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-(0.9))*costColorNorm + (0.9)*costGradientNorm );  
   // OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( ((1-m_Alpha)/c)*costColorNorm + (m_Alpha/g)*costGradientNorm );  
 
 
