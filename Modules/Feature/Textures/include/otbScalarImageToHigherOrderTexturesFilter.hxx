@@ -21,6 +21,7 @@
 #ifndef otbScalarImageToHigherOrderTexturesFilter_hxx
 #define otbScalarImageToHigherOrderTexturesFilter_hxx
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbScalarImageToHigherOrderTexturesFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
@@ -39,6 +40,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   m_SubsampleFactor(),
   m_SubsampleOffset()
 {
+  OTB_DISABLE_DYNAMIC_MT
   // There are 11 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(10);
 

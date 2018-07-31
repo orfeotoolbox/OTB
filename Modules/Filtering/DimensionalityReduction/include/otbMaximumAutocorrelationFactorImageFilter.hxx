@@ -39,6 +39,7 @@ template <class TInputImage, class TOutputImage>
 MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 ::MaximumAutocorrelationFactorImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_CovarianceEstimator = CovarianceEstimatorType::New();
   m_CovarianceEstimatorH = CovarianceEstimatorType::New();
   m_CovarianceEstimatorV = CovarianceEstimatorType::New();

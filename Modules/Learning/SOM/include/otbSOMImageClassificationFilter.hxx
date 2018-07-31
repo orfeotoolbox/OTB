@@ -34,6 +34,7 @@ template <class TInputImage, class TOutputImage, class TSOMMap, class TMaskImage
 SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage>
 ::SOMImageClassificationFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();

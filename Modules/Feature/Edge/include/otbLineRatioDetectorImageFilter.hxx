@@ -42,6 +42,7 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection, cl
 LineRatioDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::LineRatioDetectorImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->m_Radius.Fill(1);
   this->m_LengthLine = 1;
   this->m_WidthLine = 0;

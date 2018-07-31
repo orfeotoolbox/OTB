@@ -21,6 +21,7 @@
 #ifndef otbBijectionCoherencyFilter_hxx
 #define otbBijectionCoherencyFilter_hxx
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbBijectionCoherencyFilter.h"
 
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -33,6 +34,7 @@ template <class TDisparityImage, class TOutputImage>
 BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 ::BijectionCoherencyFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   // Set the number of inputs (1 moving image by default -> 3 inputs)
   this->SetNumberOfRequiredInputs(4);
   this->SetNumberOfRequiredInputs(1);

@@ -24,7 +24,7 @@
 
 #include <vector>
 #include <algorithm>
-
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
@@ -39,6 +39,7 @@ template <class TInputImage>
 BoxAndWhiskerImageFilter <TInputImage>
 ::BoxAndWhiskerImageFilter ()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
   this->InPlaceOn();

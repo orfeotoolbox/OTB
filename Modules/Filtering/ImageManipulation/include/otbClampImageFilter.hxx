@@ -23,6 +23,7 @@
 #define otbClampImageFilter_hxx
 
 #include "otbClampImageFilter.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
 #include <limits>
@@ -39,6 +40,7 @@ template <class TInputImage, class TOutputImage>
 ClampImageFilter<TInputImage, TOutputImage>
 ::ClampImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_Lower = std::numeric_limits < OutputPixelValueType >::lowest();
   m_Upper = std::numeric_limits < OutputPixelValueType >::max();
 }

@@ -22,6 +22,7 @@
 #ifndef otbFunctionToImageFilter_hxx
 #define otbFunctionToImageFilter_hxx
 
+#include "otbMacro.h" // for OTB_DISABLE_DYNAMIC_MT
 #include "otbFunctionToImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
@@ -36,6 +37,7 @@ template<class TInputImage, class TOutputImage, class TFunction>
 FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
 ::FunctionToImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->InPlaceOff();
   m_PixelFunction = FunctionType::New();
 }

@@ -21,15 +21,13 @@
 #ifndef otbNRIBandImagesToOneNComplexBandsImage_hxx
 #define otbNRIBandImagesToOneNComplexBandsImage_hxx
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbNRIBandImagesToOneNComplexBandsImage.h"
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 #include "itkVariableLengthVector.h"
-
-
-
 
 namespace otb
 {
@@ -41,6 +39,7 @@ template <class TInputImage, class TOutputImage>
 NRIBandImagesToOneNComplexBandsImage<TInputImage, TOutputImage>::NRIBandImagesToOneNComplexBandsImage()
 {
 	//this->SetNumberOfThreads(1);
+  OTB_DISABLE_DYNAMIC_MT
 }
 
 /**

@@ -32,6 +32,7 @@ template<class TDEMImage>
 DEMToImageGenerator<TDEMImage>
 ::DEMToImageGenerator()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_DEMHandler = DEMHandlerType::Instance();
   m_OutputSpacing[0] = 0.0001;
   m_OutputSpacing[1] = -0.0001;

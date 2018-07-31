@@ -22,7 +22,7 @@
 #define otbDisparityTranslateFilter_hxx
 
 #include "otbDisparityTranslateFilter.h"
-
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 
@@ -33,6 +33,7 @@ template <class TDisparityImage, class TGridImage, class TSensorImage, class TMa
 DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 ::DisparityTranslateFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_NoDataValue = -32768;
   // Set the number of inputs (1 moving image by default -> 3 inputs)
   this->SetNumberOfRequiredInputs(6);

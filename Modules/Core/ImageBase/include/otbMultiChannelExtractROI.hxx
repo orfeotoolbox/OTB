@@ -42,6 +42,7 @@ MultiChannelExtractROI<TInputPixelType, TOutputPixelType>
   m_LastChannel(0),
   m_ChannelsKind(0)
 {
+   OTB_DISABLE_DYNAMIC_MT
   ClearChannels();
 }
 

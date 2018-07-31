@@ -27,6 +27,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 #include "otbMath.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 
 namespace otb
 {
@@ -38,6 +39,7 @@ template <class TInputImage, class TOutputImage, class TFunction>
 MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
 ::MultiChannelsPolarimetricSynthesisFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
   SetEmissionH(false);

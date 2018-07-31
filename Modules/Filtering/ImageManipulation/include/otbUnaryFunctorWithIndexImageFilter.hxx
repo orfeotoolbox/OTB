@@ -24,6 +24,7 @@
 #include "otbUnaryFunctorWithIndexImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 
 namespace otb
 {
@@ -34,6 +35,7 @@ template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>
 ::UnaryFunctorWithIndexImageFilter()
 {
+OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(1);
 }
 template <class TInputImage, class TOutputImage, class TFunction>

@@ -36,6 +36,7 @@ template <class TInputImage, class TOutputImage>
 NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>
 ::NormalizeInnerProductPCAImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
   this->InPlaceOff();

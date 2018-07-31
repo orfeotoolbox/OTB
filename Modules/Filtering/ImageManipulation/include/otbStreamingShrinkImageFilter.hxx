@@ -64,6 +64,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
 ::PersistentShrinkImageFilter()
  : m_ShrinkFactor(10)
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 }

@@ -36,6 +36,7 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
     m_NoClassLabel(0),
     m_GridStep(10)
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(1);
 
   // Have 2 outputs : the image created by Superclass, a vector data with points

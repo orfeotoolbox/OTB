@@ -38,6 +38,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
  m_IsSetAcquiCorrectionParameters(false),
  m_UseGenerateParameters(true)
  {
+   OTB_DISABLE_DYNAMIC_MT
     m_AtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New();
     m_AtmoCorrectionParameters  = AtmoCorrectionParametersType::New();
     m_AcquiCorrectionParameters = AcquiCorrectionParametersType::New();
