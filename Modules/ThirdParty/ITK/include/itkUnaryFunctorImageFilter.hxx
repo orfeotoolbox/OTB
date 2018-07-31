@@ -31,6 +31,9 @@ template< class TInputImage, class TOutputImage, class TFunction  >
 UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
 ::UnaryFunctorImageFilter()
 {
+  #if ITK_VERSION_MAJOR > 4
+  this->DynamicMultiThreadingOff();
+  #endif
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
 }
