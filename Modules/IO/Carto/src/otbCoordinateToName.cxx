@@ -57,7 +57,7 @@ CoordinateToName::CoordinateToName() :
 
   m_Curl = CurlHelper::New();
 
-  m_Threader = itk::MultiThreader::New();
+  m_Threader = PlatformMultiThreader::New();
 
   m_UpdateDistance = 0.01; //about 1km at equator
 
@@ -80,6 +80,7 @@ bool CoordinateToName::Evaluate()
 {
   if (m_Multithread)
     {
+    /* SpawnThread should be replace by std::thread in future */
     m_Threader->SpawnThread(ThreadFunction, this);
     }
   else
