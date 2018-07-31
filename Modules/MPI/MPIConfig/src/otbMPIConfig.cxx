@@ -59,15 +59,15 @@
 namespace otb {
 
 /** Initialize the singleton */
-MPIConfig::Pointer MPIConfig::m_Singleton = NULL;
+MPIConfig::Pointer MPIConfig::m_Singleton = nullptr;
 
 MPIConfig::Pointer MPIConfig::Instance()
 {
-  if(m_Singleton.GetPointer() == NULL)
+  if(m_Singleton.GetPointer() == nullptr)
     {
     m_Singleton = itk::ObjectFactory<Self>::Create();
 
-    if(m_Singleton.GetPointer() == NULL)
+    if(m_Singleton.GetPointer() == nullptr)
       {
       m_Singleton = new MPIConfig;
       }
