@@ -49,22 +49,22 @@ public:
   itkTypeMacro(PointSetFunction, itk::SpatialFunction);
 
   /** PointSet Type typedef Support*/
-  typedef TPointSet                            PointSetType;
-  typedef typename  PointSetType::ConstPointer PointSetPointerType;
-
-  /** TOutput typedef suppoty*/
+  typedef TPointSet                              PointSetType;
+  typedef typename  PointSetType::Pointer        PointSetPointer;
+  typedef typename  PointSetType::ConstPointer   PointSetConstPointer;
+  /** TOutput typedef support*/
   typedef TOutput OutputType;
 
   /** Set the input image (reimplemented since we need to set the detector input) */
   itkGetConstObjectMacro(PointSet, PointSetType);
 
-  void SetPointSet(PointSetType * PointSet)
+  void SetPointSet(PointSetPointer PointSet)
   {
     m_PointSet = PointSet;
   }
 
   /** SetPointSet() to maintain the const correctness of the pointset*/
-  void SetPointSet(PointSetPointerType PointSet)
+  void SetPointSet(PointSetConstPointer PointSet)
   {
     m_PointSet = PointSet;
   }
@@ -79,7 +79,7 @@ private:
   PointSetFunction(const Self &) = delete;
   void operator =(const Self&) = delete;
 
-  PointSetPointerType m_PointSet;
+  PointSetConstPointer m_PointSet;
 
 };
 
