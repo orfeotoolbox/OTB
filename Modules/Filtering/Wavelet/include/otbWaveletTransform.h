@@ -29,6 +29,8 @@
 #include "otbWaveletGenerator.h"
 #include "otbWaveletOperatorBase.h"
 
+#include "itkMultiThreader.h"
+
 namespace otb {
 
 /** \class WaveletTransform

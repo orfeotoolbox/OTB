@@ -21,6 +21,7 @@
 #ifndef otbObjectListToObjectListFilter_h
 #define otbObjectListToObjectListFilter_h
 
+#include "itkMultiThreader.h"
 #include "otbObjectListSource.h"
 
 namespace otb
