@@ -47,8 +47,11 @@ REGISTER_TEST( testCVF );
 REGISTER_TEST( testOcclusionsFilter ) ;
 REGISTER_TEST( testDisparityMap ) ;
 REGISTER_TEST( testAllFilters) ;
+
 REGISTER_TEST( testCostVolumeFilters ) ;
 REGISTER_TEST( testGuidedFilter ) ;
+REGISTER_TEST( testOcclusionsDetectionFilter) ;
+REGISTER_TEST( testFillOcclusionsFilter ) ;
 
 }
 

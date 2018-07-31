@@ -48,6 +48,8 @@ set(OTBStereoFiltersTests
    testAllFilters.cpp
    testCostVolumeFilters.cpp
    testGuidedFilter.cpp
+   testOcclusionsDetectionFilter.cpp
+   testFillOcclusionsFilter.cpp
 )
 
 add_executable(otbStereoFiltersTestDriver ${OTBStereoFiltersTests})
