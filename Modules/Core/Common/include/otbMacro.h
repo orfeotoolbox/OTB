@@ -42,7 +42,51 @@
 namespace otb
 {
 } // end namespace otb - this is here for documentation purposes
-
+/* ITK 5.0 uses a different threading model compared to ITK 4.x.
+ * This has a significant impact on OTB as we make heavy use of itk filters.
+ * DynamicThreadedGenerateData() is the newer variant without threadId,
+ * and is the preferred signature, which is called by default. This
+ * variant can split the requested region into different number of
+ * pieces depending on current multi-processing load, which allows
+ * better load balancing. The non-dynamic (also known as classic)
+ * ThreadedGenerateData() signature has threadId, and number of pieces
+ * to be split into is known in advance. It is activated by calling
+ * this->DynamicMultiThreadingOff(); in derived class constructor.
+ *
+ * OTB uses ThreadedGenerateData() with threadId and thus required
+ * to call this->DynamicMultiThreadingOff(); in filter's constructor.
+ *
+ * OTB_DISABLE_DYNAMIC_MT is a simple macro that insert this
+ * function call *IF* itk version used is 5.0 or above.
+ * This macro expands to empty when OTB is built with ITK 4.x and
+ * this ease from ITK 4.x to ITK 5.x. Ideally ThreadedGenerateData() function
+ * everywhere in OTB must be replace with DynamicThreadedGenerateData().
+ * This for sure is not a glorified sed command. Usage of function parameter
+ * threadId (and progress reporter) must be removed as well.
+ *
+ * It also leads us into a situation that OTB will no longer work with ITK 4.x.
+ * We cannot break that until ITK 5.0 is available on all platforms and is well tested.
+ * As time of writing this patch ITK 5.0 is in alpha release.
+ * Eventually OTB can move up in direction where it is requires ITK 5.0 or.
+ * But until things are resolved this macro based compatibility must stay.
+ *
+ * Finally please note that OTB_DISABLE_DYNAMIC_MT does not disable multithreading.
+ * Method or macro name can sometimes cause confusion when reading code.
+ *
+ * sample run-time exception:
+ * =========================
+ * 2018-06-04 15:30:09 (DEBUG): Caught itk::ExceptionObject during application execution:
+ * 2018-06-04 15:30:09 (DEBUG): /usr/src/ports/itk/Modules/Core/Common/src/itkPoolMultiThreader.cxx:202:
+ * itk::ERROR: PoolMultiThreader(0xabad1dea): Exception occurred during SingleMethodExecute
+ * /home/rashad/local/include/ITK-5.0/itkImageSource.hxx:276:
+ * itk::ERROR: ShiftScaleImageFilter(0xabad1deaff): Subclass should override this method!!! 
+ * If old behavior is desired invoke this->DynamicMultiThreadingOff(); before Update() is called. The best place is in class constructor.
+ */
+#if ITK_VERSION_MAJOR < 5
+#define OTB_DISABLE_DYNAMIC_MT
+#else
+#define OTB_DISABLE_DYNAMIC_MT this->DynamicMultiThreadingOff();
+#endif
 
 #define otbFileContext(x) \
   << "file " __FILE__ ", line " << __LINE__<<", " x

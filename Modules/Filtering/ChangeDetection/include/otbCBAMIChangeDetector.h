@@ -83,7 +83,7 @@ public:
   itkTypeMacro(CBAMIChangeDetector, SuperClass);
 
 protected:
-  CBAMIChangeDetector() {}
+  CBAMIChangeDetector() {OTB_DISABLE_DYNAMIC_MT}
   ~CBAMIChangeDetector() override {}
 
 private:

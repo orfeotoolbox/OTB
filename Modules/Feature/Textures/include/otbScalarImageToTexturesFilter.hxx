@@ -30,6 +30,7 @@
 #include "itkNumericTraits.h"
 #include <vector>
 #include <cmath>
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 
 namespace otb
 {
@@ -45,6 +46,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 , m_SubsampleFactor()
 , m_SubsampleOffset()
 {
+  OTB_DISABLE_DYNAMIC_MT
   // There are 8 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(8);
 

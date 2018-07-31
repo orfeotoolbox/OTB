@@ -259,6 +259,7 @@ protected:
     m_IsSetSolarDistance(false),
     m_UseClamp(true)
     {
+      OTB_DISABLE_DYNAMIC_MT
     m_SolarIllumination.SetSize(0);
     };
 

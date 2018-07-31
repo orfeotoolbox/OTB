@@ -21,6 +21,7 @@
 #ifndef otbEstimateInnerProductPCAImageFilter_hxx
 #define otbEstimateInnerProductPCAImageFilter_hxx
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbEstimateInnerProductPCAImageFilter.h"
 
 #include <vnl/algo/vnl_generalized_eigensystem.h>
@@ -36,6 +37,7 @@ template <class TInputImage, class TOutputImage>
 EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
 ::EstimateInnerProductPCAImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_NumberOfPrincipalComponentsRequired = 1;
 }
 

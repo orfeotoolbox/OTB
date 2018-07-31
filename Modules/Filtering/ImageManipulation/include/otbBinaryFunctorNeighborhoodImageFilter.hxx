@@ -25,7 +25,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
-
+#include "otbMacro.h"
 namespace otb
 {
 
@@ -37,6 +37,7 @@ template <class TInputImage1, class TInputImage2,
 BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::BinaryFunctorNeighborhoodImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(2);
   m_Radius.Fill(3);
 }

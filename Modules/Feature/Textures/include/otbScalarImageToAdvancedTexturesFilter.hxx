@@ -28,7 +28,7 @@
 #include "itkProgressReporter.h"
 #include "itkNumericTraits.h"
 #include <algorithm>
-
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 namespace otb
 {
 template <class TInputImage, class TOutputImage>
@@ -43,6 +43,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 , m_SubsampleFactor()
 , m_SubsampleOffset()
 {
+  OTB_DISABLE_DYNAMIC_MT
   // There are 10 outputs corresponding to the 9 textures indices
   this->SetNumberOfRequiredOutputs(10);
 

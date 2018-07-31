@@ -35,6 +35,7 @@ template<class TInputImage>
 PersistentVectorImageToMatrixFilter<TInputImage>
 ::PersistentVectorImageToMatrixFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   // first output is a copy of the image, DataObject created by
   // superclass
   //

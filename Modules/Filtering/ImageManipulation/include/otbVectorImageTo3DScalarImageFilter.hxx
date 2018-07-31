@@ -21,6 +21,7 @@
 #ifndef otbVectorImageTo3DScalarImageFilter_hxx
 #define otbVectorImageTo3DScalarImageFilter_hxx
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbVectorImageTo3DScalarImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageSliceIteratorWithIndex.h"
@@ -33,7 +34,9 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
 ::VectorImageTo3DScalarImageFilter()
-{}
+{
+  OTB_DISABLE_DYNAMIC_MT
+}
 /** Generate output information */
 template <class TInputImage, class TOutputImage>
 void

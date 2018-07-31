@@ -25,6 +25,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkContinuousIndex.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 
 #include <limits>
 
@@ -34,6 +35,7 @@ template <class TInputImage , class TLut , class TOutputImage >
 ApplyGainFilter < TInputImage , TLut , TOutputImage >
 ::ApplyGainFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(2);
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();

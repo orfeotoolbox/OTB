@@ -81,7 +81,7 @@ public:
   itkTypeMacro(MeanDifferenceImageFilter, SuperClass);
 
 protected:
-  MeanDifferenceImageFilter() {}
+  MeanDifferenceImageFilter() {OTB_DISABLE_DYNAMIC_MT}
   ~MeanDifferenceImageFilter() override {}
 
 private:

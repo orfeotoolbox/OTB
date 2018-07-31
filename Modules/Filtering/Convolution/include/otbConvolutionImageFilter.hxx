@@ -38,6 +38,7 @@ template <class TInputImage, class TOutputImage, class TBoundaryCondition, class
 ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>
 ::ConvolutionImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_Radius.Fill(1);
   m_Filter.SetSize(3 * 3);
   m_Filter.Fill(1);

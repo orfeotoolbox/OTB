@@ -83,7 +83,9 @@ public:
   itkTypeMacro(JoinHistogramMIImageFilter, SuperClass);
 
 protected:
-  JoinHistogramMIImageFilter() {}
+  JoinHistogramMIImageFilter() {
+OTB_DISABLE_DYNAMIC_MT
+  }
   ~JoinHistogramMIImageFilter() override {}
 
 private:

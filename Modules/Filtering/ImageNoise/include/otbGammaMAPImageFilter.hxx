@@ -30,7 +30,7 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
-
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 namespace otb
 {
 
@@ -40,6 +40,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 GammaMAPImageFilter<TInputImage, TOutputImage>::GammaMAPImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_Radius.Fill(1);
   SetNbLooks(1.0);
 }

@@ -23,6 +23,7 @@
 
 #include "otbLeeImageFilter.h"
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "itkDataObject.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodInnerProduct.h"
@@ -40,6 +41,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 LeeImageFilter<TInputImage, TOutputImage>::LeeImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_Radius.Fill(1);
   SetNbLooks(1.0);
 }

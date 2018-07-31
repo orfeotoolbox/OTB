@@ -37,7 +37,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
 ::SarRadiometricCalibrationToImageFilter()
 : m_LookupSelected(0)
 {
-
+  OTB_DISABLE_DYNAMIC_MT
 }
 
 template<class TInputImage, class TOutputImage>

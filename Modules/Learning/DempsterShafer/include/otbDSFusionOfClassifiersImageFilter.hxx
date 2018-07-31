@@ -27,6 +27,7 @@
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 
 namespace otb
 {
@@ -37,6 +38,7 @@ template <class TInputImage, class TOutputImage, class TMaskImage>
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 ::DSFusionOfClassifiersImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
 

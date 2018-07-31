@@ -108,7 +108,7 @@ public:
   itkTypeMacro(LocalActivityVectorImageFilter, ImageToImageFilter);
 
 protected:
-  LocalActivityVectorImageFilter() { }
+  LocalActivityVectorImageFilter() { OTB_DISABLE_DYNAMIC_MT }
   ~LocalActivityVectorImageFilter() override { }
 
 private:

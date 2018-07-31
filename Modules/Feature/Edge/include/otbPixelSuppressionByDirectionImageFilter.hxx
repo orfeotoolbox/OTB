@@ -21,6 +21,7 @@
 #ifndef otbPixelSuppressionByDirectionImageFilter_hxx
 #define otbPixelSuppressionByDirectionImageFilter_hxx
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 
 #include "itkDataObject.h"
@@ -42,7 +43,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::PixelSuppressionByDirectionImageFilter()
 {
-
+OTB_DISABLE_DYNAMIC_MT
   m_Radius.Fill(1);
   m_AngularBeam = static_cast<double>(0.);
 

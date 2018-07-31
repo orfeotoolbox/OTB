@@ -22,9 +22,9 @@
 #define otbComputeHistoFilter_hxx
 
 #include "otbComputeHistoFilter.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 
 #include <limits>
-
 namespace otb
 {
 
@@ -32,6 +32,7 @@ template <class TInputImage, class TOutputImage >
 ComputeHistoFilter < TInputImage , TOutputImage >
 ::ComputeHistoFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput( 0, this->MakeOutput(0) );
   this->SetNthOutput( 1, this->MakeOutput(1) );

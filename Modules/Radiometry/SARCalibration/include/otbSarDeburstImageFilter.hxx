@@ -25,6 +25,7 @@
 
 #include "otbSarSensorModelAdapter.h"
 #include "otbImageKeywordlist.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "itkImageScanlineIterator.h"
 #include "itkImageScanlineConstIterator.h"
 #include "itkImageRegionIterator.h"
@@ -35,7 +36,9 @@ namespace otb
 // Constructor
 template <class TImage> SarDeburstImageFilter<TImage>::SarDeburstImageFilter()
   : m_LinesRecord(), m_SamplesRecord(), m_OnlyValidSample(false)
-{}
+{
+   OTB_DISABLE_DYNAMIC_MT
+}
 
 // Needs to be re-implemented since size of output is modified
 template< class TImage>

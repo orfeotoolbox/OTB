@@ -63,6 +63,7 @@ public:
 
 protected:
   InPlacePassFilter() {
+    OTB_DISABLE_DYNAMIC_MT
     this->InPlaceOn();
   }
 

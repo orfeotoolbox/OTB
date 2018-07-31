@@ -21,6 +21,8 @@
 #ifndef otbBinaryFunctorNeighborhoodVectorImageFilter_hxx
 #define otbBinaryFunctorNeighborhoodVectorImageFilter_hxx
 
+#include "otbMath.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbBinaryFunctorNeighborhoodVectorImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
@@ -37,6 +39,7 @@ template <class TInputImage1, class TInputImage2,
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::BinaryFunctorNeighborhoodVectorImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   this->SetNumberOfRequiredInputs(2);
   this->InPlaceOff();
   m_Radius = 3;

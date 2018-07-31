@@ -21,6 +21,7 @@
 #ifndef otbVarianceImageFilter_hxx
 #define otbVarianceImageFilter_hxx
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbVarianceImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
@@ -37,6 +38,7 @@ template <class TInputImage, class TOutputImage>
 VarianceImageFilter<TInputImage, TOutputImage>
 ::VarianceImageFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_Radius.Fill(1);
 }
 

@@ -37,6 +37,7 @@ m_ApplyGainFilter ( ApplyGainFilter::New() ) ,
 m_StreamingImageFilter ( StreamingImageFilter::New() ) ,
 m_BufferFilter ( BufferFilter::New() )
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_Min = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_Max = std::numeric_limits< InputPixelType >::quiet_NaN();
   m_NbBin = 256;

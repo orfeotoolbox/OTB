@@ -47,6 +47,7 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
     m_Interpolator(),
     m_ReachableOutputRegion()
 {
+  OTB_DISABLE_DYNAMIC_MT
   // Set linear interpolator as default
   m_Interpolator = dynamic_cast<InterpolatorType *>(DefaultInterpolatorType::New().GetPointer());
 

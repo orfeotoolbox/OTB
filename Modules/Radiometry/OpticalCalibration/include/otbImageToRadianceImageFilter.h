@@ -165,6 +165,7 @@ protected:
   /** Constructor */
   ImageToRadianceImageFilter()
     {
+    OTB_DISABLE_DYNAMIC_MT
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
     };

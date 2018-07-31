@@ -27,6 +27,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 #include "itkNumericTraits.h"
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 
 namespace otb
 {
@@ -37,6 +38,7 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
  m_InputImageMinimum(0),
  m_InputImageMaximum(255)
 {
+  OTB_DISABLE_DYNAMIC_MT
   // There are 1 output corresponding to the Pan Tex texture indice
   this->SetNumberOfRequiredOutputs(1);
 

@@ -22,6 +22,7 @@
 #ifndef otbLabelImageToLabelMapWithAdjacencyFilter_hxx
 #define otbLabelImageToLabelMapWithAdjacencyFilter_hxx
 
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
@@ -34,6 +35,7 @@ template <class TInputImage, class TOutputImage>
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 ::LabelImageToLabelMapWithAdjacencyFilter()
 {
+  OTB_DISABLE_DYNAMIC_MT
   m_BackgroundValue = itk::NumericTraits<OutputImagePixelType>::NonpositiveMin();
 }
 
