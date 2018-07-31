@@ -45,41 +45,44 @@ public:
   //   return std::shared_ptr<Self>( new Self() );
   //   }
 
-  virtual void SetDefaultValue( any_numeric val )
-  {
-    assert ( val <= m_Boundaries[2] );
-    assert ( val >= m_Boundaries[0] );
-    m_Boundaries[1] = val ;
-  }
+  /**
+  * Set default value of the numerical parameter 
+  */
+  virtual void SetDefaultValue( any_numeric val );
 
-  virtual const any_numeric GetDefaultValue() const
-  {
+  /**
+  * Get default value of the numerical parameter as an any_numeric 
+  */
+  virtual const any_numeric & GetDefaultValue() const
+    {
     return m_Boundaries[1];
-  }
+    }
 
-  virtual void SetMinimumValue( any_numeric val )
-  {
-    assert ( val <= m_Boundaries[2] );
-    m_Boundaries[1] = ( val <= m_Boundaries[1] ) ? m_Boundaries[1] : val ; 
-    m_Boundaries[0] = val ;
-  }
+  /**
+  * Set minimum value of the numerical parameter 
+  */
+  virtual void SetMinimumValue( any_numeric val );
 
-  virtual const any_numeric GetMinimumValue() const
-  {
+  /**
+  * Get minimum value of the numerical parameter as an any_numeric
+  */
+  virtual const any_numeric & GetMinimumValue() const
+    {
     return m_Boundaries[0];
-  }
+    }
 
-  virtual void SetMaximumValue( any_numeric val )
-  {
-    assert ( val >= m_Boundaries[0] );
-    m_Boundaries[1] = ( val >= m_Boundaries[1] ) ? m_Boundaries[1] : val ; 
-    m_Boundaries[2] = val ;
-  }
+  /**
+  * Set maximum value of the numerical parameter 
+  */
+  virtual void SetMaximumValue( any_numeric val );
 
-  virtual const any_numeric GetMaximumValue() const
-  {
+  /**
+  * Get maximum value of the numerical parameter as an any_numeric
+  */
+  virtual const any_numeric & GetMaximumValue() const
+    {
     return m_Boundaries[2];
-  }
+    }
 
   virtual double GetFloattingPointValue() const = 0 ;
 
@@ -92,7 +95,7 @@ public:
 protected:
   NumericalParameterInterface() ;
 
-  void CheckInvariant( any_numeric val , int n );
+  void CheckInvariant( any_numeric val , int n ){}
 
   std::array< any_numeric , 3 > m_Boundaries;
 

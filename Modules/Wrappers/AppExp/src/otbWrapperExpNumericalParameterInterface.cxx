@@ -25,5 +25,39 @@ namespace otb
 namespace WrapperExp
 {
 
+NumericalParameterInterface::NumericalParameterInterface() :
+m_Boundaries({ any_numeric( std::numeric_limits< double >::lowest() ),
+               any_numeric::DefaultInit(),
+               any_numeric( std::numeric_limits< double >::max() ) })
+{
+}
+
+void 
+NumericalParameterInterface::
+SetDefaultValue( any_numeric val )
+{
+  assert ( val <= m_Boundaries[2] );
+  assert ( val >= m_Boundaries[0] );
+  m_Boundaries[1] = val ;
+}
+
+void 
+NumericalParameterInterface::
+SetMinimumValue( any_numeric val )
+{
+  assert ( val <= m_Boundaries[2] );
+  m_Boundaries[1] = ( val <= m_Boundaries[1] ) ? m_Boundaries[1] : val ; 
+  m_Boundaries[0] = val ;
+}
+
+void 
+NumericalParameterInterface::
+SetMaximumValue( any_numeric val )
+{
+  assert ( val >= m_Boundaries[0] );
+  m_Boundaries[1] = ( val >= m_Boundaries[1] ) ? m_Boundaries[1] : val ; 
+  m_Boundaries[2] = val ;
+}
+
 } // end namespace WrapperExp
 } //end namespace otb
