@@ -229,7 +229,7 @@ LocalHoughFilter<TInputImage>
       // Get the list of LineSpatialObject lines
       // ---------------------------------------
 
-      #if !defined(ITK_LEGACY_REMOVE)
+      #if ITK_VERSION_MAJOR < 5
       lines = houghFilter->GetLines(m_NumberOfLines);
       #else
       lines = houghFilter->GetLines();
