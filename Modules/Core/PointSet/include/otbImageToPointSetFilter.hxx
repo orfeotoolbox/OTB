@@ -22,6 +22,7 @@
 #define otbImageToPointSetFilter_hxx
 
 #include "otbImageToPointSetFilter.h"
+#include "itkMultiThreader.h" //itk5 - itk4 compat
 
 namespace otb
 {

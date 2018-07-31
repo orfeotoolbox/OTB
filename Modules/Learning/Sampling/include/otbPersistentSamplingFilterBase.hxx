@@ -28,6 +28,7 @@
 #include "otbMacro.h"
 #include "otbStopwatch.h"
 #include "itkProgressReporter.h"
+#include "itkMultiThreader.h" //itk5 - itk4 compat
 
 namespace otb
 {

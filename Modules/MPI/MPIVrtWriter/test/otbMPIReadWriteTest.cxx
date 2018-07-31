@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbMPIConfig.h"
 #include "otbMPIVrtWriter.h"
-
+#include "itkMultiThreader.h"
 #include <cstdlib>
 #include <iostream>
 

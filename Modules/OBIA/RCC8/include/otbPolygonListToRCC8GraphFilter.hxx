@@ -23,6 +23,7 @@
 
 #include "otbPolygonListToRCC8GraphFilter.h"
 #include "itkProgressReporter.h"
+#include "itkMultiThreader.h"
 
 namespace otb
 {
