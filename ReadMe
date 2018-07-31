@@ -42,7 +42,7 @@ Cost-volume filtering parameters:
 
 
 Execution:
- ./bin/otbStereoFiltersTestDriver testCostVolumeFilter Radius Min_Disp Max_Disp
+ ./bin/otbStereoFiltersTestDriver testCVF Radius Min_Disp Max_Disp
  Left_Image(3bands) Right_Image(3bands) Path_Of_Outputs_Images/ 
 
 

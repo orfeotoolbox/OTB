@@ -5,7 +5,6 @@
  *  Date:      $Date$
  * Version:   $Revision$
  *
- * Copyright (C) Damia Belazouz - 2017
  *
  *  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
  * See OTBCopyright.txt for details.
@@ -40,14 +39,6 @@
 
 void RegisterTests()
 {
-
-REGISTER_TEST( testCostVolumeFilter );
-REGISTER_TEST( testPatchMatch );
-REGISTER_TEST( testCVF );
-REGISTER_TEST( testOcclusionsFilter ) ;
-REGISTER_TEST( testDisparityMap ) ;
-REGISTER_TEST( testAllFilters) ;
-
 REGISTER_TEST( testCostVolumeFilters ) ;
 REGISTER_TEST( testGuidedFilter ) ;
 REGISTER_TEST( testOcclusionsDetectionFilter) ;

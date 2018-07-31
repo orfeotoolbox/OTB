@@ -40,12 +40,6 @@ otb_module_test()
 
 set(OTBStereoFiltersTests
   otbStereoFiltersTestDriver.cxx
-   CostVolumeFilter.cpp
-   PatchMatch.cpp
-   CVF.cpp
-   testOcclusions.cpp
-  testDisparityMap.cpp
-   testAllFilters.cpp
    testCostVolumeFilters.cpp
    testGuidedFilter.cpp
    testOcclusionsDetectionFilter.cpp
@@ -57,40 +51,25 @@ target_link_libraries(otbStereoFiltersTestDriver ${OTBStereoFilters-Test_LIBRARI
 otb_module_target_label(otbStereoFiltersTestDriver)
 
 
-otb_add_test(NAME dmTvPatchMatch COMMAND otbStereoFiltersTestDriver testPatchMatch 9 -15 0 
-${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif 
-${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif 
-${TEMP}/dmTvPatchMatch/)
+#otb_add_test(NAME dmTvPatchMatch COMMAND otbStereoFiltersTestDriver testPatchMatch 9 -15 0 
+#${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif 
+#${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif 
+#${TEMP}/dmTvPatchMatch/)
 
 
 #----------- StereoFilters TESTS ----------------
-otb_test_application(NAME CostVolumeFilterTest
-                     APP  CostVolumeFilter
-                     OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif
-                             -io.inright ${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif
-                             -io.out ${TEMP}/apTvCostVolumeFilterTest.tif
-                             -hdispmin -15
-                             -hdispmax 0                                          
-                             -radius 9
-                             -rmf 19
-                             
-                     VALID   --compare-image ${EPSILON_10}
-                         ${BASELINE}/apTvCostVolumeFilterTest.tif
-                         ${TEMP}/apTvCostVolumeFilterTest.tif
-                     )
+#otb_test_application(NAME CostVolumeFilterTest
+#                     APP  CostVolumeFilter
+#                     OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif
+#                             -io.inright ${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif
+#                             -io.out ${TEMP}/apTvCostVolumeFilterTest.tif
+#                             -hdispmin -15
+#                             -hdispmax 0                                          
+#                             -radius 9
+#                             -rmf 19
+#                             
+#                     VALID   --compare-image ${EPSILON_10}
+#                         ${BASELINE}/apTvCostVolumeFilterTest.tif
+#                         ${TEMP}/apTvCostVolumeFilterTest.tif
+#                     )
 
-
-otb_test_application(NAME PatchMatchTest
-                     APP  PatchMatch
-                     OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left_gridbasedresampling.tif
-                             -io.inright ${INPUTDATA}/sensor_stereo_right_gridbasedresampling.tif
-                             -io.out ${TEMP}/apTvPatchMatchTest.tif
-                             -hdispmin -15
-                             -hdispmax 0                                          
-                             -radius 9
-                             -rmf 19
-                             
-                     VALID   --compare-image ${EPSILON_10}
-                         ${BASELINE}/apTvPatchMatchTest.tif
-                         ${TEMP}/apTvPatchMatchTest.tif
-                     )

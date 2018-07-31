@@ -186,15 +186,13 @@ int testFillOcclusionsFilter(int argc, char *argv[])
     writer_FillOcclusions->SetInput(m_convertSmoothDisparity->GetOutput());
     writer_FillOcclusions->Update();
     }
-
-else
-  {
-  IntImageWriterType::Pointer writer_FillOcclusions = IntImageWriterType::New();
-  writer_FillOcclusions->SetFileName( FILENAME("FillOcclusions.tif"));
-  writer_FillOcclusions->SetInput(m_FillOcc->GetOutput());
-  writer_FillOcclusions->Update();
-  }
-
+  else
+    {
+    IntImageWriterType::Pointer writer_FillOcclusions = IntImageWriterType::New();
+    writer_FillOcclusions->SetFileName( FILENAME("FillOcclusions.tif"));
+    writer_FillOcclusions->SetInput(m_FillOcc->GetOutput());
+    writer_FillOcclusions->Update();
+    }
   
   return EXIT_SUCCESS;
 
