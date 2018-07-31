@@ -228,6 +228,7 @@ LocalHoughFilter<TInputImage>
       // ---------------------------------------
       // Get the list of LineSpatialObject lines
       // ---------------------------------------
+
       #if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 12)
       lines = houghFilter->GetLines(m_NumberOfLines);
       #else
