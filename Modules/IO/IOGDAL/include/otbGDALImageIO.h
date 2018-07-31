@@ -116,7 +116,29 @@ public:
     m_CreationOptions = opts;
   }
 
-  itkSetMacro(NoDataList, NoDataListType);
+  /* Using itkSetMacro(NoDataList, NoDataListType)
+   *  throw a compile error on debug builds.
+   *  ```
+   *  ......
+   *  error: cannot bind 'std::basic_ostream<char>' lvalue to 'std::basic_ostream<char>&&'"
+   *        itkSetMacro(NoDataList, NoDataListType)
+   *        ^
+   *  ......
+   *  ```
+   *  compile error is triggered from `itkDebugMacro()` call which is called from `itkSetMacro()`
+   *  It won't be triggered if OTB is compiled with CMAKE_BUILD_TYPE other than Debug.
+   *  So instead of patching itkmacro.h or itkDebugMacro we simply write this function.
+   *  After all `itkSetMacro` update a class memeber with m_NAME and call `this->Modified()`. 
+   *  So we will embrace this boiler plate code and restoring sanity thusly..
+   */
+  virtual void SetNoDataList(const NoDataListType n)
+  {
+    if (this->m_NoDataList != n)
+      {
+	this->m_NoDataList = n;
+	this->Modified();
+      }
+  }
 
   GDALCreationOptionsType GetOptions(void)
   {
