@@ -190,7 +190,7 @@ Starting from OTB 7.0.0, we use [semantic versioning](https://semver.org/). See 
 >
 > Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
 
-The branch develop is always on the next MAJOR.MINOR release version number. PATCH releases are done on their respective release branches (for example release 7.0.1 is on branch release-7.0).
+The develop branch is always the place where the upcoming major or minor release is worked on. Patch releases are done on release branches, for example 7.0.1 and 7.0.2 could be found on the release-7.0 branch.
 
 For the purpose of defining backwards compatibility, the OTB API covers (not an exhaustive list): the C++ API, the Python bindings, application names, application parameters, output format and interpretation of input data.
 
