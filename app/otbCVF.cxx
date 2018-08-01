@@ -49,15 +49,16 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbLocalGradientVectorImageFilter.h"
-#include "otbCostVolumeFilter.h"
-#include "otbMinimumVectorImageFilter.h"
-#include <otbConvolutionImageFilter.h>
-#include <otbPerBandVectorImageFilter.h>
-#include "otbConvertionRGBToGrayLevelImageFilter.h"
-#include "otbWeightsGuidedFilter.h"
-#include "otbMeanVectorImageFilter.h"
+#include "otbBijectionCoherencyFilter.h"
 #include "otbConvertDisparityValue.h"
+#include "otbConvertionRGBToGrayLevelImageFilter.h"
+#include <otbConvolutionImageFilter.h>
+#include "otbCostVolumeFilter.h"
+#include "otbLocalGradientVectorImageFilter.h"
+#include "otbMeanVectorImageFilter.h"
+#include "otbMinimumVectorImageFilter.h"
+#include <otbPerBandVectorImageFilter.h>
+#include "otbWeightsGuidedFilter.h"
 
 #include <itkConstantBoundaryCondition.h>
 #include <itkArray.h>
@@ -93,6 +94,7 @@ class CVF : public Application
   typedef otb::WeightsGuidedFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > Weights_ak_bk;
   typedef otb::MeanVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > MeanVectorImage;
   typedef otb::ConvertDisparityValue<IntImageType, IntImageType > ConvertToDisparityValue ;
+  typedef otb::BijectionCoherencyFilter< IntImageType, IntImageType > OcclusionType;
 
 
 
@@ -165,21 +167,21 @@ class CVF : public Application
     SetParameterDescription("alpha", "alpha parameter for the cost volume filter" );
     SetDefaultParameterInt("alpha", 0.9);
 
-    AddParameter(ParameterType_Float, "tau1l", "max for color difference(Right Image)");
-    SetParameterDescription("tau1l", "max for color difference (Left Image) " );
+    AddParameter(ParameterType_Float, "tau1l", "max for color difference(left image)");
+    SetParameterDescription("tau1l", "max for color difference (left image) " );
     SetDefaultParameterInt("tau1l", 7.0);
 
-    AddParameter(ParameterType_Float, "tau2l", "max for gradient difference (Right Image)");
-    SetParameterDescription("tau2l", "max for gradient difference (Right Image)" );
+    AddParameter(ParameterType_Float, "tau2l", "max for gradient difference (left image)");
+    SetParameterDescription("tau2l", "max for gradient difference (left image)" );
     SetDefaultParameterInt("tau2l", 2.0);
 
-
-    AddParameter(ParameterType_Float, "tau1r ", "max for color difference (Right Image) ");
-    SetParameterDescription("tau1r", "max for color difference (Right Image) " );
+    AddParameter(ParameterType_Float, "tau1r", "max for gradient difference (left image)");
+    SetParameterDescription("tau1r", "max for gradient difference (left image)" );
     SetDefaultParameterInt("tau1r", 7.0);
 
-    AddParameter(ParameterType_Float, "tau2r", "max for gradient difference (Right Image)");
-    SetParameterDescription("tau2r", "max for gradient difference (Right Image)" );
+
+    AddParameter(ParameterType_Float, "tau2r", "max for gradient difference (right image)");
+    SetParameterDescription("tau2r", "max for gradient difference (right image)" );
     SetDefaultParameterInt("tau2r", 2.0);
 
 
@@ -227,6 +229,7 @@ class CVF : public Application
     m_meanRightWeights = MeanVectorImage::New() ;
     m_LeftDisparity = ConvertToDisparityValue::New();
     m_RightDisparity = ConvertToDisparityValue::New();
+    m_OcclusionFilter = OcclusionType::New();
     }
 
   void DoExecute() ITK_OVERRIDE
@@ -376,7 +379,27 @@ class CVF : public Application
     m_RightDisparity->SetDisp(dispMin);
     }
 
-  SetParameterOutputImage("io.out", m_LeftDisparity->GetOutput());
+  if(sense==0)
+    {
+    m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
+    m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput());
+    }
+  else
+    {
+    m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_RightDisparity->GetOutput()); 
+    m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_LeftDisparity->GetOutput());
+    }
+  
+  m_OcclusionFilter->SetMaxHDisp(dispMax);
+  m_OcclusionFilter->SetMinHDisp(dispMin); 
+  m_OcclusionFilter->SetMinVDisp(0);
+  m_OcclusionFilter->SetMaxVDisp(0);
+  m_OcclusionFilter->SetTolerance(tol);
+
+
+
+
+  SetParameterOutputImage("io.out", m_OcclusionFilter->GetOutput());
 
 
  
@@ -398,6 +421,7 @@ class CVF : public Application
   MeanVectorImage::Pointer m_meanRightWeights;
   ConvertToDisparityValue::Pointer m_LeftDisparity;
   ConvertToDisparityValue::Pointer m_RightDisparity;
+  OcclusionType::Pointer m_OcclusionFilter ;
 
 
  
