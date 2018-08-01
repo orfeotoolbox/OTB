@@ -272,8 +272,12 @@ private:
     SetParameterInt("numberbands",inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
 
-    ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO(GetParameterString("in").c_str(), ImageIOFactory::ReadMode);
-    imageIO->ReadImageInformation();
+    // Dummy float reader, just to parse the extended filename and get the pixel type
+    typedef otb::ImageFileReader<otb::Image<float, 2>> ReaderType;
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName(GetParameterString("in"));
+    reader->GenerateOutputInformation();
+    ImageIOBase::Pointer imageIO = reader->GetImageIO();
     std::string pixeltypeasstring = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
 
     SetParameterString("pixeltype", pixeltypeasstring);
