@@ -48,20 +48,27 @@
 #include "otbImageList.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 #include "otbBijectionCoherencyFilter.h"
+#include "otbConcatenateVectorImageFilter.h"
 #include "otbConvertDisparityValue.h"
 #include "otbConvertionRGBToGrayLevelImageFilter.h"
-#include <otbConvolutionImageFilter.h>
+#include "otbConvertValueFrom0To255.h"
+#include "otbConvolutionImageFilter.h"
 #include "otbCostVolumeFilter.h"
+#include "otbFillOcclusionPixel.h"
 #include "otbLocalGradientVectorImageFilter.h"
 #include "otbMeanVectorImageFilter.h"
 #include "otbMinimumVectorImageFilter.h"
 #include <otbPerBandVectorImageFilter.h>
 #include "otbWeightsGuidedFilter.h"
 
-#include <itkConstantBoundaryCondition.h>
+
 #include <itkArray.h>
+#include "itkMedianImageFilter.h"
+#include <itkConstantBoundaryCondition.h>
+
 
 
 
@@ -95,6 +102,13 @@ class CVF : public Application
   typedef otb::MeanVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > MeanVectorImage;
   typedef otb::ConvertDisparityValue<IntImageType, IntImageType > ConvertToDisparityValue ;
   typedef otb::BijectionCoherencyFilter< IntImageType, IntImageType > OcclusionType;
+  typedef itk::MedianImageFilter< FloatImageType, FloatImageType > MedianFilterType;
+  typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, MedianFilterType> PerBand;
+  typedef otb::ImageToVectorImageCastFilter<IntImageType,FloatVectorImageType> CastIntImageIntoFloatVecImageFilter; 
+  typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;
+  typedef otb::FillPixelFilter< FloatVectorImageType, IntImageType > FillOccFilter ;
+  typedef otb::ConvertValueFrom0To255<IntImageType, IntImageType > ConvertValue ;
+  
 
 
 
@@ -128,9 +142,9 @@ class CVF : public Application
     AddParameter(ParameterType_InputImage,"io.inright","Right input image");
     SetParameterDescription("io.inright","The right input (secondary)");
 
-    AddParameter(ParameterType_Int, "sense", "Direction of camera motion : '0' from left to right, '1' from right to left" );
-    SetParameterDescription("sense", "Direction of camera motion : '0' from left to right, '1' from right to left");
-    SetDefaultParameterInt("sense",0);
+    AddParameter(ParameterType_Int, "sense", "Direction of camera motion : '1' from left to right, '2' from right to left" );
+    SetParameterDescription("sense", "Direction of camera motion : '1' from left to right, '2' from right to left");
+    SetDefaultParameterInt("sense",1);
 
     AddParameter(ParameterType_OutputImage, "io.out", "The output disparity map");
     SetParameterDescription("io.out","An image containing the estimated disparities");
@@ -155,9 +169,9 @@ class CVF : public Application
     SetParameterDescription("tol", "Tolerance for left-right disp. diff");
     SetDefaultParameterInt("tol",2);
 
-    AddParameter(ParameterType_Int, "range", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255");
-    SetParameterDescription("range", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255" );
-    SetDefaultParameterInt("range",0);
+    AddParameter(ParameterType_Int, "convertion", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255");
+    SetParameterDescription("convertion", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255" );
+    SetDefaultParameterInt("convertion",0);
 
     AddParameter(ParameterType_Int, "choice", "Output image files : '1' DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter");
     SetParameterDescription("choice", "DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter" );
@@ -184,27 +198,24 @@ class CVF : public Application
     SetParameterDescription("tau2r", "max for gradient difference (right image)" );
     SetDefaultParameterInt("tau2r", 2.0);
 
-
-
     AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("io.inleft","StereoFixed.png");
     SetDocExampleParameterValue("io.inright","StereoMoving.png");
-    SetDocExampleParameterValue("sense", "0") ;
+    SetDocExampleParameterValue("sense", "1") ;
     SetDocExampleParameterValue("dmin","-15");
     SetDocExampleParameterValue("dmax","0");
     SetDocExampleParameterValue("rwmf","9");
     SetDocExampleParameterValue("radius","9");
     SetDocExampleParameterValue("tol","2");
     SetDocExampleParameterValue("io.out","MyCVFDisparity.tif");
-    SetDocExampleParameterValue("range","0");
+    SetDocExampleParameterValue("convertion","0");
     SetDocExampleParameterValue("choice","3");
     SetDocExampleParameterValue("tau1l","7.0");
     SetDocExampleParameterValue("tau2l","2.0");
     SetDocExampleParameterValue("tau1r","7.0");
     SetDocExampleParameterValue("tau2r","2.0");
-
     }
 
 
@@ -230,7 +241,18 @@ class CVF : public Application
     m_LeftDisparity = ConvertToDisparityValue::New();
     m_RightDisparity = ConvertToDisparityValue::New();
     m_OcclusionFilter = OcclusionType::New();
+    LMedian = MedianFilterType::New();
+    m_LeftMedianFilter = PerBand::New();
+    m_RightMedianFilter = PerBand::New();
+    m_CastOccMap = CastIntImageIntoFloatVecImageFilter::New(); 
+    m_CastLeftDisparity = CastIntImageIntoFloatVecImageFilter::New();
+    m_CastRightDisparity = CastIntImageIntoFloatVecImageFilter::New();
+    m_ConcatenateMedianImageAndOccMap = ConcatenateVectorImageFilterType::New();
+    m_ConcatenateCastOccMapAndInputImage = ConcatenateVectorImageFilterType::New() ;
+    m_FillOcc = FillOccFilter::New();
+    m_convertSmoothDisparity = ConvertValue::New() ;    
     }
+
 
   void DoExecute() ITK_OVERRIDE
     { 
@@ -250,7 +272,7 @@ class CVF : public Application
     float tau1l = GetParameterFloat("tau1l");
     float tau2l = GetParameterFloat("tau2l");
 
-    unsigned int range = GetParameterInt("range") ;
+    unsigned int convertion = GetParameterInt("convertion") ;
     unsigned int rwmf = GetParameterInt("rwmf") ; 
     unsigned int choice = GetParameterInt("choice") ;
 
@@ -308,7 +330,7 @@ class CVF : public Application
   m_RightCost->SetLeftGradientXInput(m_GradientXRight->GetOutput() ); 
   m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() ); 
 
-  if(sense==0)
+  if(sense==1)
     {
     m_LeftCost->SetMinDisp(dispMin);
     m_LeftCost->SetMaxDisp(dispMax);
@@ -368,7 +390,7 @@ class CVF : public Application
   m_LeftDisparity->SetInput(m_minLeftGF->GetOutput());
   m_RightDisparity->SetInput(m_minRightGF->GetOutput());
 
-  if(sense==0)
+  if(sense==1)
     {
     m_LeftDisparity->SetDisp(dispMax);
     m_RightDisparity->SetDisp(-dispMax);
@@ -379,7 +401,7 @@ class CVF : public Application
     m_RightDisparity->SetDisp(dispMin);
     }
 
-  if(sense==0)
+  if(sense==1)
     {
     m_OcclusionFilter->SetDirectHorizontalDisparityMapInput(m_LeftDisparity->GetOutput()); 
     m_OcclusionFilter->SetReverseHorizontalDisparityMapInput(m_RightDisparity->GetOutput());
@@ -397,13 +419,99 @@ class CVF : public Application
   m_OcclusionFilter->SetTolerance(tol);
 
 
+  //MEDIAN IMAGES
+  MedianFilterType::RadiusType MedianRadius = {{rwmf,rwmf}};
+  LMedian->SetRadius(MedianRadius); 
+  m_LeftMedianFilter->SetFilter(LMedian);
+  m_LeftMedianFilter->SetInput(inLeft); 
+  m_RightMedianFilter->SetFilter(LMedian);
+  m_RightMedianFilter->SetInput(inRight); 
 
+  m_CastOccMap-> SetInput( m_OcclusionFilter->GetOutput() ); 
+  m_CastLeftDisparity-> SetInput( m_LeftDisparity->GetOutput() );
+  m_CastRightDisparity->SetInput( m_RightDisparity->GetOutput() );
 
-  SetParameterOutputImage("io.out", m_OcclusionFilter->GetOutput());
-
-
- 
+  if(sense==1)
+    {        
+    m_ConcatenateMedianImageAndOccMap->SetInput1(m_LeftMedianFilter->GetOutput());
+    m_ConcatenateMedianImageAndOccMap->SetInput2(m_CastOccMap->GetOutput());
+    m_ConcatenateCastOccMapAndInputImage->SetInput1(m_CastLeftDisparity->GetOutput());
+    m_ConcatenateCastOccMapAndInputImage->SetInput2(m_ConcatenateMedianImageAndOccMap->GetOutput());
     }
+  else
+    {      
+    m_ConcatenateMedianImageAndOccMap->SetInput1(m_RightMedianFilter->GetOutput());
+    m_ConcatenateMedianImageAndOccMap->SetInput2(m_CastOccMap->GetOutput());
+    m_ConcatenateCastOccMapAndInputImage->SetInput1(m_CastRightDisparity->GetOutput());
+    m_ConcatenateCastOccMapAndInputImage->SetInput2(m_ConcatenateMedianImageAndOccMap->GetOutput());
+    } 
+   
+  m_FillOcc->SetInput(m_ConcatenateCastOccMapAndInputImage->GetOutput());
+  FloatVectorImageType::SizeType radiusM;
+  radiusM[0] = rwmf;
+  radiusM[1] = rwmf;   
+  m_FillOcc->SetRadius(radiusM);
+
+
+  //OUTPUT  
+  if(choice==1)
+    {
+    std::cout << "DISPARITY MAP... " << std::endl ;
+    if(sense==1)
+      {
+      if(convertion==1)
+        {
+        m_convertSmoothDisparity->SetInput(m_LeftDisparity->GetOutput());
+        m_convertSmoothDisparity->SetDispMin(dispMin);
+        m_convertSmoothDisparity->SetDispMax(dispMax);       
+        m_convertSmoothDisparity->SetOffset(0);
+        SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
+        }
+      else
+        {
+        SetParameterOutputImage("io.out", m_LeftDisparity->GetOutput()); 
+        }
+      }
+    else
+      {
+      if(convertion==1)
+        {
+        m_convertSmoothDisparity->SetInput(m_RightDisparity->GetOutput());
+        m_convertSmoothDisparity->SetDispMin(dispMin);
+        m_convertSmoothDisparity->SetDispMax(dispMax);       
+        m_convertSmoothDisparity->SetOffset(0);
+        SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
+        }
+      else
+        {
+        SetParameterOutputImage("io.out", m_RightDisparity->GetOutput()); 
+        }
+      }
+    }
+
+  if(choice==2)
+    {
+    std::cout << "OCCLUSIONS MASK... " << std::endl ;
+    SetParameterOutputImage("io.out", m_OcclusionFilter->GetOutput());
+    }
+
+  if(choice==3)
+    {
+      std::cout << "FILLED DISPARITY MAP... " << std::endl ;
+    if(convertion==1)
+      {
+      m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
+      m_convertSmoothDisparity->SetDispMin(dispMin);
+      m_convertSmoothDisparity->SetDispMax(dispMax);       
+      m_convertSmoothDisparity->SetOffset(0);
+      SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
+      }
+    else
+      {
+      SetParameterOutputImage("io.out", m_FillOcc->GetOutput()); 
+      }   
+    }
+  }
 
   ConvFilterType::Pointer m_convFilterXLeft;
   ConvFilterType::Pointer m_convFilterXRight;
@@ -422,7 +530,17 @@ class CVF : public Application
   ConvertToDisparityValue::Pointer m_LeftDisparity;
   ConvertToDisparityValue::Pointer m_RightDisparity;
   OcclusionType::Pointer m_OcclusionFilter ;
+  MedianFilterType::Pointer LMedian;
+  PerBand::Pointer m_LeftMedianFilter;
+  PerBand::Pointer m_RightMedianFilter ;
 
+  CastIntImageIntoFloatVecImageFilter::Pointer m_CastOccMap ;
+  CastIntImageIntoFloatVecImageFilter::Pointer m_CastLeftDisparity ;
+  CastIntImageIntoFloatVecImageFilter::Pointer m_CastRightDisparity ;
+  ConcatenateVectorImageFilterType::Pointer m_ConcatenateMedianImageAndOccMap;
+  ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndInputImage;
+  FillOccFilter::Pointer m_FillOcc ;
+  ConvertValue::Pointer m_convertSmoothDisparity ;
 
  
   }; //end class
