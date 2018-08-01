@@ -41,13 +41,9 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 #include "otbLocalGradientVectorImageFilter.h"
-#include "otbLeftCostVolumeImageFilter.h"
-#include "otbRightCostVolumeImageFilter.h"
-#include "otbMinimumNBandsImageFilter.h"
-#include "otbMaximumNBandsImageFilter.h"
-
+#include "otbCostVolumeFilter.h"
+#include "otbMinimumVectorImageFilter.h"
 #include <itkConstantBoundaryCondition.h>
 #include <otbConvolutionImageFilter.h>
 #include <itkArray.h>
@@ -91,10 +87,10 @@ int testCostVolumeFilters(int argc, char *argv[])
   typedef otb::ConvolutionImageFilter<FloatImageType, FloatImageType, BoundaryConditionType> ConvFilterType;
   typedef otb::ConvertionRGBToGrayLevelImageFilter<FloatVectorImageType,FloatVectorImageType> RGBTograylevelFilter ;
   typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, ConvFilterType> VectorFilterType;
-  typedef otb::LeftCostVolumeImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType >  LeftCostVolumeType;  
-  typedef otb::RightCostVolumeImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > RightCostVolumeType; 
-  typedef otb::MinimumNBandsImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;  
-  typedef otb::MaximumNBandsImageFilter< FloatVectorImageType, IntImageType > MaxCostVolume; 
+  typedef otb::CostVolumeFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType >  LeftCostVolumeType;  
+  typedef otb::CostVolumeFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > RightCostVolumeType; 
+  typedef otb::MinimumVectorImageFilter<  FloatVectorImageType, IntImageType> MinLeftCostVolume;  
+  typedef otb::MinimumVectorImageFilter< FloatVectorImageType, IntImageType > MinRightCostVolume; 
 
   ConvFilterType::Pointer m_convFilterXLeft = ConvFilterType::New();
   ConvFilterType::Pointer m_convFilterXRight = ConvFilterType::New() ;
@@ -104,10 +100,10 @@ int testCostVolumeFilters(int argc, char *argv[])
   VectorFilterType::Pointer m_GradientXRight = VectorFilterType::New();
   LeftCostVolumeType::Pointer m_LeftCost = LeftCostVolumeType::New();
   RightCostVolumeType::Pointer m_RightCost = RightCostVolumeType::New() ;
-  MinCostVolume::Pointer m_LeftDisparity = MinCostVolume::New();
-  MaxCostVolume::Pointer m_RightDisparity = MaxCostVolume::New();
+  MinLeftCostVolume::Pointer m_minLeftCost = MinLeftCostVolume::New();
+  MinRightCostVolume::Pointer m_minRightCost = MinRightCostVolume::New();
 
-  // GRADIENT CALCULATIONS
+  // GRADIENT CALCULATION
   ConvFilterType::InputSizeType radiusG;
   radiusG[0] = 1;
   radiusG[1] = 0;
@@ -120,77 +116,87 @@ int testCostVolumeFilters(int argc, char *argv[])
   m_convFilterXLeft->SetFilter(filterCoeffsX);  
   m_convFilterXRight->SetRadius(radiusG);
   m_convFilterXRight->SetFilter(filterCoeffsX);
-  m_LeftGrayVectorImage->SetInput(inLeft->GetOutput());
-  m_RightGrayVectorImage->SetInput(inRight->GetOutput());  
+  
   //--Left---------------  
   m_GradientXLeft->SetFilter(m_convFilterXLeft);
-  m_GradientXLeft->SetInput(inLeft->GetOutput());
-  // m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
-  m_GradientXLeft->UpdateOutputInformation(); 
-  //--Right--------------- 
-  m_GradientXRight->SetFilter(m_convFilterXRight);
-  m_GradientXRight->SetInput(inRight->GetOutput());
-  // m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
-  m_GradientXRight->UpdateOutputInformation(); 
-
-  // COST VOLUME  
-  if(sense==0)
-    {          // --- LEFT
-    m_LeftCost->SetLeftInputImage(inLeft->GetOutput());
-    m_LeftCost->SetRightInputImage(inRight->GetOutput());  
-    m_LeftCost->SetLeftGradientXInput(m_GradientXLeft->GetOutput() ); 
-    m_LeftCost->SetRightGradientXInput(m_GradientXRight->GetOutput() );      
-    m_LeftCost->SetMinDisp(dispMin);
-    m_LeftCost->SetMaxDisp(dispMax);
-    m_LeftCost->SetAlpha(alpha);
-    m_LeftCost->SetTau1(tau1);
-    m_LeftCost->SetTau2(tau2);
-    m_LeftCost->UpdateOutputInformation(); 
-    //   // --- RIGHT
-    m_RightCost->SetLeftInputImage(inRight->GetOutput());
-    m_RightCost->SetRightInputImage(inLeft->GetOutput() );  
-    m_RightCost->SetLeftGradientXInput(m_GradientXRight->GetOutput() ); 
-    m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() );      
-    m_RightCost->SetMinDisp(-dispMax);
-    m_RightCost->SetMaxDisp(-dispMin);   
-    m_RightCost->SetAlpha(alpha);
-    m_RightCost->SetTau1(tau1);
-    m_RightCost->SetTau2(tau2);  
-    m_RightCost->UpdateOutputInformation();    
+  if( inLeft->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
+    {
+    m_LeftGrayVectorImage->SetInput(inLeft->GetOutput());
+    m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
     }
   else
     {
-    m_LeftCost->SetLeftInputImage(inLeft->GetOutput());
-    m_LeftCost->SetRightInputImage(inRight->GetOutput());  
-    m_LeftCost->SetLeftGradientXInput(m_GradientXLeft->GetOutput() ); 
-    m_LeftCost->SetRightGradientXInput(m_GradientXRight->GetOutput() );      
+    m_GradientXLeft->SetInput(inLeft->GetOutput());
+    }
+  m_GradientXLeft->UpdateOutputInformation(); 
+
+  //--Right--------------- 
+  m_GradientXRight->SetFilter(m_convFilterXRight);
+  if( inRight->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
+    {
+    m_RightGrayVectorImage->SetInput(inRight->GetOutput());
+    m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
+    }
+  else
+    {
+    m_GradientXRight->SetInput(inRight->GetOutput());
+    }
+  m_GradientXRight->UpdateOutputInformation(); 
+
+
+  // COST VOLUME 
+  m_LeftCost->SetLeftInputImage(inLeft->GetOutput());
+  m_LeftCost->SetRightInputImage(inRight->GetOutput());  
+  m_LeftCost->SetSide('l') ;
+  m_LeftCost->SetLeftGradientXInput(m_GradientXLeft->GetOutput() ); 
+  m_LeftCost->SetRightGradientXInput(m_GradientXRight->GetOutput() );  
+
+  m_RightCost->SetLeftInputImage(inRight->GetOutput());
+  m_RightCost->SetRightInputImage(inLeft->GetOutput() );  
+  m_RightCost->SetSide('r');
+  m_RightCost->SetLeftGradientXInput(m_GradientXRight->GetOutput() ); 
+  m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() ); 
+
+  if(sense==0)
+    {
+    m_LeftCost->SetMinDisp(dispMin);
+    m_LeftCost->SetMaxDisp(dispMax);
+    m_RightCost->SetMinDisp(-dispMax);
+    m_RightCost->SetMaxDisp(-dispMin);
+    }
+  else
+    {
     m_LeftCost->SetMinDisp(-dispMax);
     m_LeftCost->SetMaxDisp(-dispMin); 
-    m_LeftCost->SetAlpha(alpha);
-    m_LeftCost->SetTau1(tau1);
-    m_LeftCost->SetTau2(tau2);
-    m_LeftCost->UpdateOutputInformation(); 
-    //   // --- RIGHT
-    m_RightCost->SetLeftInputImage(inRight->GetOutput());
-    m_RightCost->SetRightInputImage(inLeft->GetOutput());  
-    m_RightCost->SetLeftGradientXInput(m_GradientXRight->GetOutput() ); 
-    m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() );      
     m_RightCost->SetMinDisp(dispMin);
-    m_RightCost->SetMaxDisp(dispMax);  
-    m_RightCost->SetAlpha(alpha);
-    m_RightCost->SetTau1(tau1);
-    m_RightCost->SetTau2(tau2);     
-    m_RightCost->UpdateOutputInformation();   
+    m_RightCost->SetMaxDisp(dispMax); 
     }
-  m_LeftDisparity->SetInput(m_LeftCost->GetOutput());
-  m_RightDisparity->SetInput(m_RightCost->GetOutput());  
+
+  m_LeftCost->SetAlpha(alpha);
+  m_LeftCost->SetTau1(tau1);
+  m_LeftCost->SetTau2(tau2); 
+  m_LeftCost->UpdateOutputInformation(); 
+         
+  m_RightCost->SetAlpha(alpha);
+  m_RightCost->SetTau1(tau1);
+  m_RightCost->SetTau2(tau2);    
+  m_RightCost->UpdateOutputInformation(); 
+
+  // EXTRACTION OF THE MIN OF THE COST VOLUME
+  m_minLeftCost->SetInput(m_LeftCost->GetOutput());
+  m_minLeftCost->SetSide('l');
+  m_minRightCost->SetInput(m_RightCost->GetOutput());  
+  m_RightCost->SetSide('r');
+
+  // OUTPUTS 
   IntImageWriterType::Pointer writer_m_minLeftCost = IntImageWriterType::New();
   writer_m_minLeftCost->SetFileName( FILENAME("MinLeftCost.tif"));
-  writer_m_minLeftCost->SetInput(m_LeftDisparity->GetOutput());
+  writer_m_minLeftCost->SetInput(m_minLeftCost->GetOutput());
   writer_m_minLeftCost->Update();
+
   IntImageWriterType::Pointer writer_m_minRightCost = IntImageWriterType::New();
   writer_m_minRightCost->SetFileName( FILENAME("MinRightCost.tif"));
-  writer_m_minRightCost->SetInput(m_RightDisparity->GetOutput());
+  writer_m_minRightCost->SetInput(m_minRightCost->GetOutput());
   writer_m_minRightCost->Update();
   
   return EXIT_SUCCESS;

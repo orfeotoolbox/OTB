@@ -233,6 +233,15 @@ LeftCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
        return m_Tau2;
     }
 
+template <class TInputImage, class TGradientImage, class TOutputImage >
+char
+LeftCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
+::GetSide() 
+     {
+       return m_Side;
+    }
+
+
 
     
 //============================================  GenerateOutputInformation  ========================================================
@@ -261,13 +270,10 @@ typename TInputImage::Pointer  inRightPtr = const_cast<InputImageType *>(this->G
 typename TInputImage::Pointer  inLeftGradientXPtr = const_cast<InputImageType *>(this->GetLeftGradientXInput());
 typename TInputImage::Pointer  inRightGradientXPtr = const_cast<InputImageType *>(this->GetRightGradientXInput());
 
-//~ typename TInputImage::Pointer  inLeftGradientYPtr = const_cast<InputImageType *>(this->GetLeftGradientYInput());
-//~ typename TInputImage::Pointer  inRightGradientYPtr = const_cast<InputImageType *>(this->GetRightGradientYInput());
-
 typename TOutputImage::ConstPointer outputPtr = this->GetOutputImage();
         
 //Non-null Pointer Verification           
-if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr /*|| !inLeftGradientYPtr  || !inRightGradientYPtr */||!outputPtr )
+if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr ||!outputPtr )
     {
     return;
     } 
@@ -276,19 +282,14 @@ RegionType outputRequestedRegion = outputPtr->GetRequestedRegion()  ;
 RegionType inputRightRequestedRegion;
 RegionType inputLeftRequestedRegion;
 
-
-
-// for(int iteration_disp=m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
-//   {
   ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRightRequestedRegion, 0);      
      
   // The calculation of the non-shifted inputs
-
   inLeftPtr->SetRequestedRegion( outputRequestedRegion);
   inLeftGradientXPtr->SetRequestedRegion( outputRequestedRegion);
   inRightPtr->SetRequestedRegion(inputRightRequestedRegion);
   inRightGradientXPtr->SetRequestedRegion( inputRightRequestedRegion );
-  // }   
+  
     
 } // end of GenerateInputRequestedRegion
 
@@ -301,21 +302,7 @@ LeftCostVolumeImageFilter<TInputImage, TGradientImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 { 
 
-  std::cout << "LEFT : alpha : " << m_Alpha << " " << "tau1 : " << m_Tau1 << " " << "tau2 : " << m_Tau2 << std::endl ;
-
-
-  // int c = 14;
-  // int g = 4 ;
-  // std::cout << "c = " << c << " g = " << g << std::endl ; 
-
-
-   //  Setting parameters
-  // double m_Alpha = 0.1; 
- 
-  // // double m_Tau1 = 7;  
-  // // double m_Tau2 = 2;   
-  //   double m_Tau1 = 58;  
-  // double m_Tau2 = 25;   
+  std::cout << m_Side << std::endl ;
 
  RegionType LeftRegionForThread;
  RegionType RightRegionForThread; 
@@ -329,7 +316,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
   ComputeInputRegions( outputRegionForThread, LeftRegionForThread, RightRegionForThread, iteration_disp); 
 
 
-   //créer l'intérator     
+   //créer l'intérator    
          
    itk::ImageRegionConstIterator<TInputImage> LeftInputImageIt ( this->GetLeftInputImage(), LeftRegionForThread );
    LeftInputImageIt.GoToBegin(); 
@@ -344,12 +331,6 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
             
    itk::ImageRegionIterator<TOutputImage> outputIt ( this->GetOutputImage(), LeftRegionForThread );
    outputIt.GoToBegin();           
-   // test 
-    //~ if (threadId == 0){
-       //~ std::cout<< "outputRegionForThread" <<  outputRegionForThread<< std::endl;    
-   //~ std::cout<< "LeftRegionForThread" <<  LeftRegionForThread<< std::endl; 
-   //~ std::cout<< "RightRegionForThread" <<  RightRegionForThread<< std::endl; 
-   //~ } 
           
    //  Cost computation    
        
@@ -365,39 +346,27 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     double costGradientNorm;
      
     costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;      
-   costColorNorm = (costColor.GetNorm())/3;  
-
-    // costColorNorm = (costColor.GetNorm())/c;  
-                                    
+   costColorNorm = (costColor.GetNorm())/3;                                      
              
                if(costColorNorm > m_Tau1)   
                 {
                 //std::cout << costColorNorm << std::endl ;
                 costColorNorm = m_Tau1;
-                }
-                 
+                }               
+                // if  To take the minimum  
 
-                    // if  To take the minimum  
-    // std::cout << "costColorNorm :" << costColorNorm << std::endl ;
 
                
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= (costGradient.GetNorm())/3; 
-     // costGradientNorm= (costGradient.GetNorm())/g;               
+    costGradientNorm= (costGradient.GetNorm())/3;             
                  
                  if(costGradientNorm > m_Tau2 )
                    costGradientNorm = m_Tau2;
                    // if To take the minimum     
 
-   OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-(0.9))*costColorNorm + (0.9)*costGradientNorm );  
-  // OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( ((1-m_Alpha)/c)*costColorNorm + (m_Alpha/g)*costGradientNorm );  
+   OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-m_Alpha)*costColorNorm + m_Alpha*costGradientNorm );  
+   outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;     
 
-
-   outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;
-   // outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;
-    //outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)]=OutPixel[0] ;
-     //  outputIt.Set(OutPixel);
-     //  std::cout << " cost volume = "<< OutPixel[0] ;              
     ++LeftInputImageIt;
     ++RightInputImageIt;
     ++LeftGradientXInputIt;
@@ -407,8 +376,6 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     }  // end of while 
   }
 
-  
-  
  
 } //end of threaded generate data
 

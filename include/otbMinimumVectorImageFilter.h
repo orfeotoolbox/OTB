@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConvertionRGBToGrayLevelImageFilter_h
-#define otbConvertionRGBToGrayLevelImageFilter_h
+#ifndef otbMinimumVectorImageFilter_h
+#define otbMinimumVectorImageFilter_h
 
 #include "otbUnaryFunctorVectorImageFilter.h"
 
@@ -29,46 +29,77 @@ namespace otb
 namespace Functor
 {
 template<class TInput, class TOutput>
-class RGBToGrayLevelOperator
+class MinOperator
 {
 public:
-  RGBToGrayLevelOperator(){}
-  virtual ~RGBToGrayLevelOperator() {} 
+  MinOperator(){}
+  virtual ~MinOperator() {} 
 
+  char GetSide()
+    {
+     return m_Side;     
+    }
+
+  void SetSide(char side)
+    {
+      m_Side = side;
+    }
 
 
   TOutput operator() ( TInput input )
     {
 
-    //unsigned int size ( input.GetSize() ) ;
+    unsigned int size ( input.GetSize() ) ;    
 
     TOutput output(1); 
-    output = 0 ; 
-    output = 0.299*input[0] + 0.587*input[1] + 0.0721*input[2] ;
+    output = 0;
+    typename TInput::ValueType min ( input[0] );
+
+    for(unsigned int i=0; i<size; i++)
+      {
+      if (input[i]<min)
+        {
+        min = input[i] ;
+
+        if(m_Side=='r')
+          {
+          //Minimum of the Right cost volume
+          output = i ;
+          }
+        else
+          {
+          //Minimum of the Left cost volume
+          output = -i;
+          }        
+        }
+      }
+
     return output;
     }
+  protected:
+    char m_Side ;
 
 }; //end class
 
 } // end Functor
 
 
-  // class ConvertionRGBToGrayLevelImageFilter
+  // class MinimumVectorImageFilter
   template <class TInputImage, class TOutputImage>
-  class ITK_EXPORT ConvertionRGBToGrayLevelImageFilter :
+  class ITK_EXPORT MinimumVectorImageFilter :
     public otb::UnaryFunctorVectorImageFilter<
         TInputImage, TOutputImage,
-        Functor::RGBToGrayLevelOperator<
+        Functor::MinOperator<
             typename TInputImage::PixelType,
             typename TOutputImage::PixelType> >
   {
   public:
   /** Standard class typedefs. */
-  typedef ConvertionRGBToGrayLevelImageFilter Self;
+  typedef MinimumVectorImageFilter Self;
   typedef typename otb::UnaryFunctorVectorImageFilter<
       TInputImage,
       TOutputImage,
-      Functor::RGBToGrayLevelOperator<
+      Functor::MinOperator<
           typename TInputImage::PixelType,
           typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -78,10 +109,22 @@ public:
   itkNewMacro(Self);
 
 
+  char GetSide()
+    {
+    return this->GetFunctor().GetSide();     
+    }
+
+  void SetSide(char side)
+    {
+    this->GetFunctor().SetSide(side);
+    }
+
+
+
 
   protected:
-  ConvertionRGBToGrayLevelImageFilter() {}
-  ~ConvertionRGBToGrayLevelImageFilter() override {}
+  MinimumVectorImageFilter() {}
+  ~MinimumVectorImageFilter() override {}
 
 
   void GenerateOutputInformation(void) override
@@ -94,11 +137,11 @@ public:
 
 
   private:
-  ConvertionRGBToGrayLevelImageFilter(const Self &) = delete; //purposely not implemented
+  MinimumVectorImageFilter(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 
 
-  }; // end of ConvertionRGBToGrayLevelImageFilter class
+  }; // end of MinimumVectorImageFilter class
 
 } // end namespace otb
 

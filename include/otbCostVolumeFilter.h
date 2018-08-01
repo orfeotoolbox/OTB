@@ -1,6 +1,6 @@
 
-#ifndef otbLeftLeftCostVolumeImageFilter_h
-#define otbLeftLeftCostVolumeImageFilter_h
+#ifndef otbCostVolumeFilter_h
+#define otbCostVolumeFilter_h
 
 
 #include "itkImageToImageFilter.h"
@@ -13,12 +13,12 @@ namespace otb
 
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
-class ITK_EXPORT LeftCostVolumeImageFilter :
+class ITK_EXPORT CostVolumeFilter :
     public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedef */
-  typedef LeftCostVolumeImageFilter       Self; 
+  typedef CostVolumeFilter       Self; 
   typedef itk::ImageToImageFilter<TInputImage, 
                                   TOutputImage>    Superclass; 
   typedef itk::SmartPointer<Self>                           Pointer;
@@ -28,7 +28,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LeftCostVolumeImageFilter, ImageToImageFilter); 
+  itkTypeMacro(CostVolumeFilter, ImageToImageFilter); 
 
   /** Useful typedefs */
    
@@ -119,20 +119,14 @@ public:
     {
     m_Side = side ;
     }
-
-  // int GetBandNumber()
-  // {
-  //   unsigned int b = m_HorizontalMaxDisparity - m_HorizontalMinDisparity +1 ;
-  //   return b ;
-  // }
-
+    
 
 protected:
   /** Constructor */
-  LeftCostVolumeImageFilter();
+  CostVolumeFilter();
 
   /** Destructor */
-  ~LeftCostVolumeImageFilter() ITK_OVERRIDE;
+  ~CostVolumeFilter() ITK_OVERRIDE;
 
   /** Generate output information */
   void GenerateOutputInformation() ITK_OVERRIDE; 
@@ -145,14 +139,13 @@ protected:
   void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
 
 private:
-  LeftCostVolumeImageFilter(const Self&); //purposely not implemented
+  CostVolumeFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted  
  void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp); 
 
    /** The min disparity to explore */
   int                           m_HorizontalMinDisparity;
   int                           m_HorizontalMaxDisparity;
-
 
    /** The min disparity to explore */
   int                             m_VerticalDisparity;
@@ -162,16 +155,11 @@ private:
   char                            m_Side ;        
 
 
-     
-
-  
-
-
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLeftCostVolumeImageFilter.txx"
+#include "otbCostVolumeFilter.txx"
 #endif
 
 #endif
