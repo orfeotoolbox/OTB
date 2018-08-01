@@ -179,24 +179,24 @@ class CVF : public Application
 
     AddParameter(ParameterType_Float, "alpha", "alpha parameter for the cost volume filter");
     SetParameterDescription("alpha", "alpha parameter for the cost volume filter" );
-    SetDefaultParameterInt("alpha", 0.9);
+    SetDefaultParameterFloat("alpha", 0.9);
 
     AddParameter(ParameterType_Float, "tau1l", "max for color difference(left image)");
     SetParameterDescription("tau1l", "max for color difference (left image) " );
-    SetDefaultParameterInt("tau1l", 7.0);
+    SetDefaultParameterFloat("tau1l", 7.0);
 
     AddParameter(ParameterType_Float, "tau2l", "max for gradient difference (left image)");
     SetParameterDescription("tau2l", "max for gradient difference (left image)" );
-    SetDefaultParameterInt("tau2l", 2.0);
+    SetDefaultParameterFloat("tau2l", 2.0);
 
     AddParameter(ParameterType_Float, "tau1r", "max for gradient difference (left image)");
     SetParameterDescription("tau1r", "max for gradient difference (left image)" );
-    SetDefaultParameterInt("tau1r", 7.0);
+    SetDefaultParameterFloat("tau1r", 7.0);
 
 
     AddParameter(ParameterType_Float, "tau2r", "max for gradient difference (right image)");
     SetParameterDescription("tau2r", "max for gradient difference (right image)" );
-    SetDefaultParameterInt("tau2r", 2.0);
+    SetDefaultParameterFloat("tau2r", 2.0);
 
     AddRAMParameter();
 
@@ -212,6 +212,7 @@ class CVF : public Application
     SetDocExampleParameterValue("io.out","MyCVFDisparity.tif");
     SetDocExampleParameterValue("convertion","0");
     SetDocExampleParameterValue("choice","3");
+    SetDocExampleParameterValue("alpha","0.9");
     SetDocExampleParameterValue("tau1l","7.0");
     SetDocExampleParameterValue("tau2l","2.0");
     SetDocExampleParameterValue("tau1r","7.0");
