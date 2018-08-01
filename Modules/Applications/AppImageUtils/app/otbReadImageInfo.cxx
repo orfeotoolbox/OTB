@@ -278,9 +278,9 @@ private:
     reader->SetFileName(GetParameterString("in"));
     reader->GenerateOutputInformation();
     ImageIOBase::Pointer imageIO = reader->GetImageIO();
-    std::string datatypeasstring = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
+    std::string dataTypeAsString = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
 
-    SetParameterString("datatype", datatypeasstring);
+    SetParameterString("datatype", dataTypeAsString);
     ossOutput << "\tData type : " << GetParameterString("datatype") << std::endl;
 
     std::vector<bool> noDataValueAvailable;
