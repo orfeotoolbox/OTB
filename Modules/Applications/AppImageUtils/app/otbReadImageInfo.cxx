@@ -114,9 +114,9 @@ private:
     SetParameterDescription("numberbands", "Number of bands");
     SetParameterRole("numberbands", Role_Output);
 
-    AddParameter(ParameterType_String,"pixeltype","Type of Pixels");
-    SetParameterDescription("pixeltype", "Type of Pixels");
-    SetParameterRole("pixeltype", Role_Output);
+    AddParameter(ParameterType_String,"datatype","Data type of pixels");
+    SetParameterDescription("datatype", "Type of Pixels");
+    SetParameterRole("datatype", Role_Output);
 
     AddParameter(ParameterType_String,"sensor","Sensor id");
     SetParameterDescription("sensor", "Sensor identifier");
@@ -272,16 +272,16 @@ private:
     SetParameterInt("numberbands",inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
 
-    // Dummy float reader, just to parse the extended filename and get the pixel type
+    // Dummy float reader, just to parse the extended filename and get the data type
     typedef otb::ImageFileReader<otb::Image<float, 2>> ReaderType;
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(GetParameterString("in"));
     reader->GenerateOutputInformation();
     ImageIOBase::Pointer imageIO = reader->GetImageIO();
-    std::string pixeltypeasstring = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
+    std::string datatypeasstring = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
 
-    SetParameterString("pixeltype", pixeltypeasstring);
-    ossOutput << "\tPixel type : " << GetParameterString("pixeltype") << std::endl;
+    SetParameterString("datatype", datatypeasstring);
+    ossOutput << "\tData type : " << GetParameterString("datatype") << std::endl;
 
     std::vector<bool> noDataValueAvailable;
     bool ret = itk::ExposeMetaData<std::vector<bool> >(inImage->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
