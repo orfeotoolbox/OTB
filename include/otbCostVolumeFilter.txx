@@ -320,7 +320,6 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
    itk::ImageRegionConstIterator<TInputImage> RightGradientXInputIt ( this->GetRightGradientXInput(), RightRegionForThread );
    RightGradientXInputIt.GoToBegin();   
 
-
             
    itk::ImageRegionIterator<TOutputImage> outputIt ( this->GetOutputImage(), LeftRegionForThread );
    outputIt.GoToBegin();           
@@ -328,8 +327,11 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
    //  Cost computation    
        
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+
+
   while ( !outputIt.IsAtEnd() && !LeftInputImageIt.IsAtEnd() )
     { 
+
     PixelType costColor;
     costColor.Fill(0);
     PixelType costGradient;
@@ -338,20 +340,25 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     double costColorNorm;
     double costGradientNorm;
      
-    costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;      
-   costColorNorm = (costColor.GetNorm())/3;                                      
-             
+   costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;    
+
+  if(this->GetLeftInputImage()->GetNumberOfComponentsPerPixel() == 3)
+    {
+    costColorNorm = (costColor.GetNorm())/3; 
+    }
+  else
+    {
+    costColorNorm = (costColor.GetNorm());   
+    }                                     
+            
                if(costColorNorm > m_Tau1)   
                 {
-                //std::cout << costColorNorm << std::endl ;
                 costColorNorm = m_Tau1;
                 }               
                 // if  To take the minimum  
-
-
                
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= (costGradient.GetNorm())/3;             
+    costGradientNorm= (costGradient.GetNorm());             
                  
                  if(costGradientNorm > m_Tau2 )
                    costGradientNorm = m_Tau2;

@@ -76,9 +76,10 @@ public:
     float grayMin = 255;
     float grayMax = 0;
     float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
+    float b = (grayMin*m_dispMax - grayMax*m_dispMin)/(m_dispMax-m_dispMin);
 
     // output = (255-a*input[0]+0.5) ;
-     output = a*input+0.5f + m_offset;
+     output = a*input+0.5f + b + m_offset;
    
     return output;
     }

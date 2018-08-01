@@ -55,7 +55,7 @@
 int testCostVolumeFilters(int argc, char *argv[])
   {
 
-  if(argc < 9) {
+  if(argc < 11) {
     std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp alpha tau1 tau2 sense outputPathFolder" << std::endl;
     return EXIT_FAILURE;
     }
@@ -75,22 +75,23 @@ int testCostVolumeFilters(int argc, char *argv[])
   inRight->UpdateOutputInformation();
   int dispMin = atoi(argv[3]);
   int dispMax  = atoi(argv[4]);
-  float alpha = atoi(argv[5]);
-  float tau1 = atoi(argv[6]);
-  float tau2 = atoi(argv[7]);
-  int sense = atoi(argv[8]) ;
+  float alpha = atof(argv[5]);
+  float tau1L = atof(argv[6]);
+  float tau2L = atof(argv[7]);
+  float tau1R = atof(argv[8]);
+  float tau2R = atof(argv[9]);
+  int sense = atoi(argv[10]) ;
 
-  std::string argv9 = std::string(argv[9]);
-  #define FILENAME(n) std::string( argv9 + std::string(n)).c_str()
+  std::string argv11 = std::string(argv[11]);
+  #define FILENAME(n) std::string( argv11 + std::string(n)).c_str()
 
   typedef itk::ConstantBoundaryCondition<FloatImageType> BoundaryConditionType;
   typedef otb::ConvolutionImageFilter<FloatImageType, FloatImageType, BoundaryConditionType> ConvFilterType;
   typedef otb::ConvertionRGBToGrayLevelImageFilter<FloatVectorImageType,FloatVectorImageType> RGBTograylevelFilter ;
   typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, ConvFilterType> VectorFilterType;
-  typedef otb::CostVolumeFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType >  LeftCostVolumeType;  
-  typedef otb::CostVolumeFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > RightCostVolumeType; 
-  typedef otb::MinimumVectorImageFilter<  FloatVectorImageType, IntImageType> MinLeftCostVolume;  
-  typedef otb::MinimumVectorImageFilter< FloatVectorImageType, IntImageType > MinRightCostVolume; 
+  typedef otb::CostVolumeFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType >  CostVolumeType;  
+  typedef otb::MinimumVectorImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;  
+
 
   ConvFilterType::Pointer m_convFilterXLeft = ConvFilterType::New();
   ConvFilterType::Pointer m_convFilterXRight = ConvFilterType::New() ;
@@ -98,10 +99,10 @@ int testCostVolumeFilters(int argc, char *argv[])
   RGBTograylevelFilter::Pointer m_RightGrayVectorImage = RGBTograylevelFilter::New() ;
   VectorFilterType::Pointer m_GradientXLeft = VectorFilterType::New();
   VectorFilterType::Pointer m_GradientXRight = VectorFilterType::New();
-  LeftCostVolumeType::Pointer m_LeftCost = LeftCostVolumeType::New();
-  RightCostVolumeType::Pointer m_RightCost = RightCostVolumeType::New() ;
-  MinLeftCostVolume::Pointer m_minLeftCost = MinLeftCostVolume::New();
-  MinRightCostVolume::Pointer m_minRightCost = MinRightCostVolume::New();
+  CostVolumeType::Pointer m_LeftCost = CostVolumeType::New();
+  CostVolumeType::Pointer m_RightCost = CostVolumeType::New() ;
+  MinCostVolume::Pointer m_minLeftCost = MinCostVolume::New();
+  MinCostVolume::Pointer m_minRightCost = MinCostVolume::New();
 
   // GRADIENT CALCULATION
   ConvFilterType::InputSizeType radiusG;
@@ -173,13 +174,13 @@ int testCostVolumeFilters(int argc, char *argv[])
     }
 
   m_LeftCost->SetAlpha(alpha);
-  m_LeftCost->SetTau1(tau1);
-  m_LeftCost->SetTau2(tau2); 
+  m_LeftCost->SetTau1(tau1L);
+  m_LeftCost->SetTau2(tau2L); 
   m_LeftCost->UpdateOutputInformation(); 
          
   m_RightCost->SetAlpha(alpha);
-  m_RightCost->SetTau1(tau1);
-  m_RightCost->SetTau2(tau2);    
+  m_RightCost->SetTau1(tau1R);
+  m_RightCost->SetTau2(tau2R);    
   m_RightCost->UpdateOutputInformation(); 
 
   // EXTRACTION OF THE MIN OF THE COST VOLUME

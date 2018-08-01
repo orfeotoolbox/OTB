@@ -54,12 +54,12 @@ public:
 
    unsigned char GetRadiusMin(void)
     {
-     return m_RadiusMax;     
+     return m_RadiusMin;     
     }
 
   unsigned char GetRadiusMax(void)
     {
-    return m_RadiusMin;
+    return m_RadiusMax;
     }
 
   void SetRadius(const unsigned char& min, const unsigned char& max)
@@ -169,6 +169,11 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+    int GetRadiusMax()
+    {
+     return this->GetFunctor().GetRadiusMax();     
+    }
+
 
 
   protected:
@@ -201,9 +206,10 @@ public:
     typename TInputImage2::RegionType inputRequestedRegion2;
     inputRequestedRegion2 = inputPtr2->GetRequestedRegion();
 
+
     // pad the input requested region by the operator radius
-    inputRequestedRegion1.PadByRadius(9);
-    inputRequestedRegion2.PadByRadius(9);
+    inputRequestedRegion1.PadByRadius(this->GetRadiusMax());
+    inputRequestedRegion2.PadByRadius(this->GetRadiusMax());
 
     // crop the input requested region at the input's largest possible region
     if ( inputRequestedRegion1.Crop( inputPtr1->GetLargestPossibleRegion() ))

@@ -165,27 +165,17 @@ int testFillOcclusionsFilter(int argc, char *argv[])
   ConvertValue::Pointer m_convertSmoothDisparity = ConvertValue::New() ;
 
   if(conversion==1)
-    {
-    if(sense==0)
-      {
-      m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
-      m_convertSmoothDisparity->SetDispMin(dispMin);
-      m_convertSmoothDisparity->SetDispMax(dispMax); 
-      m_convertSmoothDisparity->SetOffset(0);
-      }
-    else
-      {
-      m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
-      m_convertSmoothDisparity->SetDispMin(-dispMax);
-      m_convertSmoothDisparity->SetDispMax(-dispMin); 
-      m_convertSmoothDisparity->SetOffset(255); 
-      }  
+    {   
+    m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
+    m_convertSmoothDisparity->SetDispMin(dispMin);
+    m_convertSmoothDisparity->SetDispMax(dispMax);       
+    m_convertSmoothDisparity->SetOffset(0);
 
     IntImageWriterType::Pointer writer_FillOcclusions = IntImageWriterType::New();
     writer_FillOcclusions->SetFileName( FILENAME("ConvertFillOcclusions.tif"));
     writer_FillOcclusions->SetInput(m_convertSmoothDisparity->GetOutput());
     writer_FillOcclusions->Update();
-    }
+    }     
   else
     {
     IntImageWriterType::Pointer writer_FillOcclusions = IntImageWriterType::New();
