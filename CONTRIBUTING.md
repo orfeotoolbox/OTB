@@ -192,4 +192,4 @@ Starting from OTB 7.0.0, we use [semantic versioning](https://semver.org/). See 
 
 The branch develop is always on the next MAJOR.MINOR release version number. PATCH releases are done on their respective release branches (for example release 7.0.1 is on branch release-7.0).
 
-For the purpose of defining backwards compatibility, OTB API covers the C++ API, the Python bindings, application names and application parameters.
+For the purpose of defining backwards compatibility, the OTB API covers (not an exhaustive list): the C++ API, the Python bindings, application names, application parameters, output format and interpretation of input data.
