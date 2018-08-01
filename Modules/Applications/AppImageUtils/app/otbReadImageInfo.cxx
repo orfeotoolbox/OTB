@@ -272,8 +272,7 @@ private:
     SetParameterInt("numberbands",inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
 
-    ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO(GetParameterString("in").c_str(),
-								  ImageIOFactory::ReadMode);
+    ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO(GetParameterString("in").c_str(), ImageIOFactory::ReadMode);
     imageIO->ReadImageInformation();
     std::string pixeltypeasstring = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
 
@@ -290,29 +289,29 @@ private:
       ossOutput<<"\tNo data flags :";
 
       if(ret)
-	{
+        {
 
-	for(unsigned int b = 0;b< inImage->GetNumberOfComponentsPerPixel();++b)
-	  {
-	  ossOutput<<"\n\t\tBand "<<b+1<<": ";
+        for(unsigned int b = 0;b< inImage->GetNumberOfComponentsPerPixel();++b)
+          {
+          ossOutput<<"\n\t\tBand "<<b+1<<": ";
 
-	  if(noDataValueAvailable[b])
-	    ossOutput<<noDataValues[b];
-	  else
-	    ossOutput<<"No";
-	  }
-	}
+          if(noDataValueAvailable[b])
+            ossOutput<<noDataValues[b];
+          else
+            ossOutput<<"No";
+          }
+        }
       else
-	{
-	ossOutput<<" Not found";
-	}
+        {
+        ossOutput<<" Not found";
+        }
       ossOutput<<std::endl;
 
     //Get image size
     SetParameterInt("indexx",inImage->GetLargestPossibleRegion().GetIndex()[0]);
     SetParameterInt("indexy",inImage->GetLargestPossibleRegion().GetIndex()[1]);
 
-	ossOutput << "\tStart index :  [" << GetParameterInt("indexx") << "," << GetParameterInt("indexy") << "]" << std::endl;
+    ossOutput << "\tStart index :  [" << GetParameterInt("indexx") << "," << GetParameterInt("indexy") << "]" << std::endl;
 
     //Get image size
     SetParameterInt("sizex",inImage->GetLargestPossibleRegion().GetSize()[0]);
@@ -380,16 +379,16 @@ private:
       std::ostringstream osstime;
       osstime<<metadataInterface->GetYear()<<"-";
       if(metadataInterface->GetMonth()<10)
-	osstime<<"0";
+        osstime<<"0";
       osstime<<metadataInterface->GetMonth()<<"-";
       if(metadataInterface->GetDay()<10)
-	osstime<<"0";
+        osstime<<"0";
       osstime<<metadataInterface->GetDay()<<"T";
       if(metadataInterface->GetHour()<10)
-	osstime<<"0";
+        osstime<<"0";
       osstime<<metadataInterface->GetHour()<<":";
       if(metadataInterface->GetMinute()<10)
-	osstime<<"0";
+        osstime<<"0";
       osstime<<metadataInterface->GetMinute();
       osstime<<":00";
       SetParameterString("time", osstime.str());
@@ -420,20 +419,20 @@ private:
       coord2name->Evaluate();
 
       if( !coord2name->GetCountryName().empty() )
-	{
-	SetParameterString("country", coord2name->GetCountryName());
-	ossOutput << "\tCountry : " << GetParameterString("country") << std::endl;
-	}
+        {
+        SetParameterString("country", coord2name->GetCountryName());
+        ossOutput << "\tCountry : " << GetParameterString("country") << std::endl;
+        }
       else
-	SetParameterString("country", "Not available");
+        SetParameterString("country", "Not available");
 
       if( !coord2name->GetPlaceName().empty() )
-	{
-	SetParameterString("town", coord2name->GetPlaceName());
-	ossOutput << "\tTown : " << GetParameterString("town") << std::endl;
-	}
+        {
+        SetParameterString("town", coord2name->GetPlaceName());
+        ossOutput << "\tTown : " << GetParameterString("town") << std::endl;
+        }
       else
-	SetParameterString("town", "Not available");
+        SetParameterString("town", "Not available");
 
       // Retrieve footprint
       SetParameterFloat("ullat",ullat);
@@ -476,7 +475,7 @@ private:
     for(int gcpIdx = 0; gcpIdx  < GetParameterInt("gcp.count"); ++ gcpIdx)
       {
       if (gcpIdx == 0)
-	ossOutput << "\tGCP individual information:" << std::endl;
+        ossOutput << "\tGCP individual information:" << std::endl;
 
       gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
       gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
