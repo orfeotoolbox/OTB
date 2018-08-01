@@ -193,3 +193,5 @@ Starting from OTB 7.0.0, we use [semantic versioning](https://semver.org/). See 
 The branch develop is always on the next MAJOR.MINOR release version number. PATCH releases are done on their respective release branches (for example release 7.0.1 is on branch release-7.0).
 
 For the purpose of defining backwards compatibility, the OTB API covers (not an exhaustive list): the C++ API, the Python bindings, application names, application parameters, output format and interpretation of input data.
+
+When we deprecate part of our public API, we should do two things: (1) update our documentation to let users know about the change, (2) issue a new minor or major release with the deprecation in place.
