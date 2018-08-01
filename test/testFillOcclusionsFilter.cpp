@@ -54,7 +54,7 @@ int testFillOcclusionsFilter(int argc, char *argv[])
 
   if(argc < 11) 
     {
-    std::cerr << "Usage: " << argv[0] << "leftImage rightImage leftDisparityMap rightDisparityMap dmin dmax tolerance radiusWMF sense convertionFrom0To255 outputPathFolder" << std::endl;
+    std::cerr << "Usage: " << argv[0] << "leftImage rightImage leftDisparityMap rightDisparityMap dmin dmax tolerance radiusWMF sense conversionFrom0To255 outputPathFolder" << std::endl;
     return EXIT_FAILURE;
     }
 

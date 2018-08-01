@@ -169,12 +169,12 @@ class CVF : public Application
     SetParameterDescription("tol", "Tolerance for left-right disp. diff");
     SetDefaultParameterInt("tol",2);
 
-    AddParameter(ParameterType_Int, "convertion", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255");
-    SetParameterDescription("convertion", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255" );
-    SetDefaultParameterInt("convertion",0);
+    AddParameter(ParameterType_Int, "conversion", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255");
+    SetParameterDescription("conversion", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255" );
+    SetDefaultParameterInt("conversion",0);
 
     AddParameter(ParameterType_Int, "choice", "Output image files : '1' DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter");
-    SetParameterDescription("choice", "DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter" );
+    SetParameterDescription("choice", " '1' DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter" );
     SetDefaultParameterInt("choice",3);
 
     AddParameter(ParameterType_Float, "alpha", "alpha parameter for the cost volume filter");
@@ -210,7 +210,7 @@ class CVF : public Application
     SetDocExampleParameterValue("radius","9");
     SetDocExampleParameterValue("tol","2");
     SetDocExampleParameterValue("io.out","MyCVFDisparity.tif");
-    SetDocExampleParameterValue("convertion","0");
+    SetDocExampleParameterValue("conversion","0");
     SetDocExampleParameterValue("choice","3");
     SetDocExampleParameterValue("alpha","0.9");
     SetDocExampleParameterValue("tau1l","7.0");
@@ -273,7 +273,7 @@ class CVF : public Application
     float tau1l = GetParameterFloat("tau1l");
     float tau2l = GetParameterFloat("tau2l");
 
-    unsigned int convertion = GetParameterInt("convertion") ;
+    unsigned int conversion = GetParameterInt("conversion") ;
     unsigned int rwmf = GetParameterInt("rwmf") ; 
     unsigned int choice = GetParameterInt("choice") ;
 
@@ -460,7 +460,7 @@ class CVF : public Application
     std::cout << "DISPARITY MAP... " << std::endl ;
     if(sense==1)
       {
-      if(convertion==1)
+      if(conversion==1)
         {
         m_convertSmoothDisparity->SetInput(m_LeftDisparity->GetOutput());
         m_convertSmoothDisparity->SetDispMin(dispMin);
@@ -475,7 +475,7 @@ class CVF : public Application
       }
     else
       {
-      if(convertion==1)
+      if(conversion==1)
         {
         m_convertSmoothDisparity->SetInput(m_RightDisparity->GetOutput());
         m_convertSmoothDisparity->SetDispMin(dispMin);
@@ -499,7 +499,7 @@ class CVF : public Application
   if(choice==3)
     {
       std::cout << "FILLED DISPARITY MAP... " << std::endl ;
-    if(convertion==1)
+    if(conversion==1)
       {
       m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
       m_convertSmoothDisparity->SetDispMin(dispMin);
