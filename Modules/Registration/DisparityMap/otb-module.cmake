@@ -38,6 +38,7 @@ otb_module(OTBDisparityMap
     OTBImageIO
     OTBObjectList
     OTBTestKernel
+    OTBConvolution
 
   DESCRIPTION
     "${DOCUMENTATION}"

@@ -36,9 +36,9 @@ otbNCCRegistrationFilter.cxx
 otbNCCRegistrationFilterNew.cxx
 otbPixelWiseBlockMatchingImageFilter.cxx
 otbCostVolumeFiltersTest.cxx
-otbtestGuidedFilterTest.cxx
-otbtestOcclusionsDetectionFilterTest.cxx
-otbtestFillOcclusionsFilterTest.cxx
+otbGuidedFilterTest.cxx
+otbOcclusionsDetectionFilterTest.cxx
+otbFillOcclusionsFilterTest.cxx
 
 
 

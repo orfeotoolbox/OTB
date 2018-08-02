@@ -44,10 +44,10 @@
 #include "otbLocalGradientVectorImageFilter.h"
 #include "otbCostVolumeFilter.h"
 #include "otbMinimumVectorImageFilter.h"
-#include <itkConstantBoundaryCondition.h>
-#include <otbConvolutionImageFilter.h>
-#include <itkArray.h>
-#include <otbPerBandVectorImageFilter.h>
+#include "itkConstantBoundaryCondition.h"
+#include "otbConvolutionImageFilter.h"
+#include "itkArray.h"
+#include "otbPerBandVectorImageFilter.h"
 
 #include "otbConvertionRGBToGrayLevelImageFilter.h"
 

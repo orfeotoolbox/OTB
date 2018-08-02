@@ -1,6 +1,6 @@
 
-#ifndef otbCostVolumeFilter_txx
-#define otbCostVolumeFilter_txx
+#ifndef otbCostVolumeFilter_hxx
+#define otbCostVolumeFilter_hxx
 
 
 #include "otbCostVolumeFilter.h"
@@ -14,7 +14,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 
-#include "otbImageFileWriter.h"
+//#include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 
 
