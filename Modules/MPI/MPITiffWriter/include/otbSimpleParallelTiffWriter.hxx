@@ -824,21 +824,24 @@ SimpleParallelTiffWriter<TInputImage>
 template <class TInputImage>
 void
 SimpleParallelTiffWriter<TInputImage>
-::SetFileName(std::string extendedFileName)
- {
-  this->SetFileName(extendedFileName.c_str());
- }
+::SetFileName(const std::string& extendedFileName)
+{
+  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
+  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
+  m_ImageIO = NULL;
+  this->Modified();
+}
 
 template <class TInputImage>
 void
 SimpleParallelTiffWriter<TInputImage>
 ::SetFileName(const char* extendedFileName)
- {
-  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
-  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-  m_ImageIO = NULL;
-  this->Modified();
- }
+{
+  if (extendedFileName)
+    {
+    this->SetFileName(std::string(extendedFileName));
+    }
+}
 
 template <class TInputImage>
 const char*

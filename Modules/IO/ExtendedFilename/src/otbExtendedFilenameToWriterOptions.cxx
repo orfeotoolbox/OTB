@@ -61,7 +61,17 @@ ExtendedFilenameToWriterOptions
 
 void
 ExtendedFilenameToWriterOptions
-::SetExtendedFileName(const char *extFname)
+::SetExtendedFileName(const char* extFname)
+{
+  if (extFname)
+    {
+    this->SetExtendedFileName(std::string(extFname));
+    }
+}
+
+void
+ExtendedFilenameToWriterOptions
+::SetExtendedFileName(const std::string& extFname)
 {
   this->Superclass::SetExtendedFileName(extFname);
   // TODO: Rename map to a less confusing (with std::map) name
