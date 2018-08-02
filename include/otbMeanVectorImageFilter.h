@@ -180,7 +180,7 @@ public:
   MeanVectorImageFilter() {}
   ~MeanVectorImageFilter() override {}
 
-   virtual void GenerateInputRequestedRegion() ITK_OVERRIDE
+   virtual void GenerateInputRequestedRegion() override
     {
     // this->GetOutput()->GetRequestedRegion();
       // call the superclass' implementation of this method

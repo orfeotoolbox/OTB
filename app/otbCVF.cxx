@@ -61,15 +61,12 @@
 #include "otbLocalGradientVectorImageFilter.h"
 #include "otbMeanVectorImageFilter.h"
 #include "otbMinimumVectorImageFilter.h"
-#include <otbPerBandVectorImageFilter.h>
+#include "otbPerBandVectorImageFilter.h"
 #include "otbWeightsGuidedFilter.h"
 
-
-#include <itkArray.h>
+#include "itkArray.h"
 #include "itkMedianImageFilter.h"
-#include <itkConstantBoundaryCondition.h>
-
-
+#include "itkConstantBoundaryCondition.h"
 
 
 
@@ -110,15 +107,12 @@ class CVF : public Application
   typedef otb::ConvertValueFrom0To255<IntImageType, IntImageType > ConvertValue ;
   
 
-
-
-
   itkNewMacro(Self);
   itkTypeMacro(CVF, otb::Application);
 
   private:
 
-  void DoInit() ITK_OVERRIDE 
+  void DoInit() override 
     {
     SetDescription("Performs Fast Cost Volume Filter to estimate a disparty map between two images");
 
@@ -220,7 +214,7 @@ class CVF : public Application
     }
 
 
-  void DoUpdateParameters() ITK_OVERRIDE {}
+  void DoUpdateParameters() override {}
 
 
   CVF()
@@ -255,7 +249,7 @@ class CVF : public Application
     }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     { 
     FloatVectorImageType::Pointer inLeft = GetParameterFloatVectorImage("io.inleft");
     inLeft->UpdateOutputInformation();

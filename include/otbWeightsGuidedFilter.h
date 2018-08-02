@@ -128,9 +128,6 @@ public:
         v_var[bandI] = var ;
       }
 
-
-
-
     //variance rg, rb
     for(unsigned int bandI = 1 ; bandI < Nband ; ++bandI)
       {
@@ -305,22 +302,6 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  //  int GetRadiusMin()
-  //   {
-  //    return this->GetFunctor().GetRadiusMin();     
-  //   }
-
-  // int GetRadiusMax()
-  //   {
-  //    return this->GetFunctor().GetRadiusMax();     
-  //   }
-
-  //   void SetRadius(int min, int max)
-  //   {
-  //     this->GetFunctor().SetRadius(min, max);
-  //   }
-
-
 
   protected:
   WeightsGuidedFilter() {}
@@ -334,85 +315,10 @@ public:
     unsigned int bandI (this->GetInput(0)->GetNumberOfComponentsPerPixel());
     this->GetOutput()->SetNumberOfComponentsPerPixel((bandI+1)*nb_comp);
     this->GetFunctor().SetNumberOfComponent((bandI+1)*nb_comp);      
-
     } 
 
 
-  // virtual void GenerateInputRequestedRegion() ITK_OVERRIDE
-  //   {
-  //   // this->GetOutput()->GetRequestedRegion();
-  //     // call the superclass' implementation of this method
-  //   Superclass::GenerateInputRequestedRegion();
-
-  //   // get pointers to the input and output
-  //   typename Superclass::InputImagePointer inputPtr1 =
-  //     const_cast< TInputImage1 * >( this->GetInput() );
-
-  //   if ( !inputPtr1 )
-  //     {
-  //     return;
-  //     }
-
-  //   // get a copy of the input requested region (should equal the output
-  //   // requested region)
-  //   typename TInputImage1::RegionType inputRequestedRegion1;
-  //   inputRequestedRegion1 = inputPtr1->GetRequestedRegion();
-
-  //   // pad the input requested region by the operator radius
-  //   inputRequestedRegion1.PadByRadius(9);
-
-
-  //   // crop the input requested region at the input's largest possible region
-  //   if ( inputRequestedRegion1.Crop( inputPtr1->GetLargestPossibleRegion() ) )
-  //     {
-  //     inputPtr1->SetRequestedRegion(inputRequestedRegion1);
-  //     return;
-  //     }
-  // //
-
-  //       typename Superclass::InputImagePointer inputPtr2 =
-  //     const_cast< TInputImage2 * >( this->GetInput() );
-
-  //   if ( !inputPtr2 )
-  //     {
-  //     return;
-  //     }
-
-  //   // get a copy of the input requested region (should equal the output
-  //   // requested region)
-  //   typename TInputImage2::RegionType inputRequestedRegion2;
-  //   inputRequestedRegion2 = inputPtr2->GetRequestedRegion();
-
-  //   // pad the input requested region by the operator radius
-  //   inputRequestedRegion2.PadByRadius(9);
-
-  //   // crop the input requested region at the input's largest possible region
-  //   if ( inputRequestedRegion2.Crop( inputPtr2->GetLargestPossibleRegion() ) )
-  //     {
-  //     inputPtr2->SetRequestedRegion(inputRequestedRegion2);
-  //     return;
-  //     }
-  //   else
-  //     {
-  //     // Couldn't crop the region (requested region is outside the largest
-  //     // possible region).  Throw an exception.
-
-  //     // store what we tried to request (prior to trying to crop)
-  //     inputPtr1->SetRequestedRegion(inputRequestedRegion1);
-
-  //     // build an exception
-  //     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-  //     std::ostringstream          msg;
-  //     msg << static_cast< const char * >( this->GetNameOfClass() )
-  //         << "::GenerateInputRequestedRegion()";
-  //     e.SetLocation( msg.str().c_str() );
-  //     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-  //     e.SetDataObject(inputPtr1);
-  //     throw e;
-  //     }
-  //   } 
-
- // private:
+  private:
   WeightsGuidedFilter(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 

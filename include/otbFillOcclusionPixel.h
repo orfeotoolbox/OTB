@@ -182,8 +182,8 @@ FillPixelFilter()
   {
 
   }
-  ~FillPixelFilter() ITK_OVERRIDE { }
-void GenerateOutputInformation(void) ITK_OVERRIDE;
+  ~FillPixelFilter() override { }
+void GenerateOutputInformation(void) override;
 
   FillPixelFilter( const Self & ); // Not implemented
   void operator=( const Self & ); // Not implemented

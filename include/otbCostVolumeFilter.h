@@ -126,17 +126,17 @@ protected:
   CostVolumeFilter();
 
   /** Destructor */
-  ~CostVolumeFilter() ITK_OVERRIDE;
+  ~CostVolumeFilter() override;
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE; 
+  void GenerateOutputInformation() override; 
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE; 
+  void GenerateInputRequestedRegion() override; 
 
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
   CostVolumeFilter(const Self&); //purposely not implemented
