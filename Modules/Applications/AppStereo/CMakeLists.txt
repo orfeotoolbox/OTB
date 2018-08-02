@@ -1,9 +1,9 @@
 #
 # Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
 #
-# This file is part of Orfeo Toolbox
+#  This file is part of Orfeo Toolbox
 #
-#     https://www.orfeo-toolbox.org/
+#    https://www.orfeo-toolbox.org/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

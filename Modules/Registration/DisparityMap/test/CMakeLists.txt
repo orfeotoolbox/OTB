@@ -35,6 +35,13 @@ otbFineRegistrationImageFilterTest.cxx
 otbNCCRegistrationFilter.cxx
 otbNCCRegistrationFilterNew.cxx
 otbPixelWiseBlockMatchingImageFilter.cxx
+otbCostVolumeFiltersTest.cxx
+otbtestGuidedFilterTest.cxx
+otbtestOcclusionsDetectionFilterTest.cxx
+otbtestFillOcclusionsFilterTest.cxx
+
+
+
 )
 
 add_executable(otbDisparityMapTestDriver ${OTBDisparityMapTests})
