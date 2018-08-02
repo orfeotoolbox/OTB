@@ -141,7 +141,7 @@ public:
   itkGetObjectMacro(ImageIO,otb::ImageIOBase);
 
   virtual void SetFileName(const char* extendedFileName);
-  virtual void SetFileName(std::string extendedFileName);
+  virtual void SetFileName(const std::string& extendedFileName);
   virtual const char* GetFileName () const;
 
   /** Get the resolution information from the file */

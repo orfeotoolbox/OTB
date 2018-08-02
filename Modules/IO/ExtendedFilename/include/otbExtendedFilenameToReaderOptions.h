@@ -80,7 +80,9 @@ public:
   };
 
   /* Set Methods */
-  void SetExtendedFileName(const char * extFname) override;
+  void SetExtendedFileName(const char*) override;
+  void SetExtendedFileName(const std::string&) override;
+
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
   bool ExtGEOMFileNameIsSet () const;

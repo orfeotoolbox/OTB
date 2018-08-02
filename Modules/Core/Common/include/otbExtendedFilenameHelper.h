@@ -56,6 +56,7 @@ public:
   typedef std::map< std::string, std::string > OptionMapType;
 
   virtual void SetExtendedFileName(const char * extFname);
+  virtual void SetExtendedFileName(const std::string& extFname);
   const OptionMapType & GetOptionMap(void) const;
   
   itkGetStringMacro(ExtendedFileName);

@@ -72,7 +72,8 @@ public:
   };
 
   /** Set extended filename */
-  void SetExtendedFileName(const char * extFname) override;
+  void SetExtendedFileName(const char* extFname) override;
+  void SetExtendedFileName(const std::string& extFname) override;
 
   /** Get the GDAL option for type operation */
   GDALOptionType GetGDALOptions( const std::string & type ) const ;

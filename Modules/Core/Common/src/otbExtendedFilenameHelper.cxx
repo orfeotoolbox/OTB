@@ -38,10 +38,16 @@ void
 ExtendedFilenameHelper
 ::SetExtendedFileName(const char *extFname)
 {
-  if (extFname == nullptr)
-  {
-    itkGenericExceptionMacro( << "Filename is NULL" );
-  }
+  if (extFname)
+    {
+    this->SetExtendedFileName(std::string(extFname));
+    }
+}
+
+void
+ExtendedFilenameHelper
+::SetExtendedFileName(const std::string& extFname)
+{
   this->m_ExtendedFileName = extFname;
   this->m_OptionMap.clear();
   std::vector<std::string> tmp1;

@@ -832,9 +832,12 @@ ImageFileWriter<TInputImage>
 template <class TInputImage>
 void
 ImageFileWriter<TInputImage>
-::SetFileName(std::string extendedFileName)
+::SetFileName(const std::string& extendedFileName)
 {
-  this->SetFileName(extendedFileName.c_str());
+  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
+  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
+  m_ImageIO = nullptr;
+  this->Modified();
 }
 
 template <class TInputImage>
@@ -842,10 +845,10 @@ void
 ImageFileWriter<TInputImage>
 ::SetFileName(const char* extendedFileName)
 {
-  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
-  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-  m_ImageIO = nullptr;
-  this->Modified();
+  if (extendedFileName)
+    {
+    this->SetFileName(std::string(extendedFileName));
+    }
 }
 
 template <class TInputImage>
