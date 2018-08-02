@@ -40,7 +40,7 @@ QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model, QWidget * 
   connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetProgressReport::RemoveLayout );
   connect(this, &QtWidgetProgressReport::AddNewProcessToReport, this, &QtWidgetProgressReport::ReportProcess );
 
-  m_Layout = new QVBoxLayout(this);
+  m_Layout = new QVBoxLayout;
   this->setLayout(m_Layout);
 
   m_AddProcessCommand = AddProcessCommandType::New();
