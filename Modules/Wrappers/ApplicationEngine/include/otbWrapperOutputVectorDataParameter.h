@@ -86,7 +86,7 @@ public:
   }
   void SetFileName (const std::string& filename)
   {
-    this->SetFileName(filename.c_str());
+    this->SetFileName(filename);
   }
 
   itkGetStringMacro(FileName);

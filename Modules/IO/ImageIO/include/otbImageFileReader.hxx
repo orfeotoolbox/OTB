@@ -134,7 +134,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Tell the ImageIO to read the file
   OutputImagePixelType *buffer =
     output->GetPixelContainer()->GetBufferPointer();
-  this->m_ImageIO->SetFileName(this->m_FileName.c_str());
+  this->m_ImageIO->SetFileName(this->m_FileName);
 
   itk::ImageIORegion ioRegion(TOutputImage::ImageDimension);
 
@@ -305,7 +305,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
   //
-  this->m_ImageIO->SetFileName(this->m_FileName.c_str());
+  this->m_ImageIO->SetFileName(this->m_FileName);
   this->m_ImageIO->ReadImageInformation();
   // Initialize the number of component per pixel
   // THOMAS: This is not in ITK!
