@@ -457,7 +457,7 @@ class CVF : public Application
   //OUTPUT  
   if(choice==1)
     {
-    std::cout << "DISPARITY MAP... " << std::endl ;
+    //std::cout << "DISPARITY MAP... " << std::endl ;
     if(sense==1)
       {
       if(conversion==1)
@@ -492,13 +492,13 @@ class CVF : public Application
 
   if(choice==2)
     {
-    std::cout << "OCCLUSIONS MASK... " << std::endl ;
+    //std::cout << "OCCLUSIONS MASK... " << std::endl ;
     SetParameterOutputImage("io.out", m_OcclusionFilter->GetOutput());
     }
 
   if(choice==3)
     {
-      std::cout << "FILLED DISPARITY MAP... " << std::endl ;
+      //std::cout << "FILLED DISPARITY MAP... " << std::endl ;
     if(conversion==1)
       {
       m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
