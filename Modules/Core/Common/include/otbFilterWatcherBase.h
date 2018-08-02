@@ -22,6 +22,8 @@
 #ifndef otbFilterWatcherBase_h
 #define otbFilterWatcherBase_h
 
+#include <string>
+
 #include "otbStopwatch.h"
 #include "itkCommand.h"
 #include "itkProcessObject.h"

@@ -37,9 +37,9 @@ BeamInformationRecord::~BeamInformationRecord()
 
 std::ostream& operator<<(std::ostream& os, const BeamInformationRecord& data)
 {
-	os<<"beam_type:"<<data._beam_type.c_str()<<std::endl;
+	os<<"beam_type:"<<data._beam_type <<std::endl;
 
-	os<<"beam_look_src:"<<data._beam_look_src.c_str()<<std::endl;
+	os<<"beam_look_src:"<<data._beam_look_src <<std::endl;
 
     os<<"beam_look_ang:"<<data._beam_look_ang<<std::endl;
 

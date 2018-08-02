@@ -21,8 +21,8 @@
 #ifndef otbDEMToImageGenerator_h
 #define otbDEMToImageGenerator_h
 
-#include <iostream>
 #include <stdio.h>
+#include <string>
 
 #include "itkImageSource.h"
 #include "otbImage.h"
@@ -192,8 +192,8 @@ protected:
   bool                    m_AboveEllipsoid;
 
 private:
-  DEMToImageGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DEMToImageGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   GenericRSTransformPointerType      m_Transform;
 };
@@ -201,7 +201,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDEMToImageGenerator.txx"
+#include "otbDEMToImageGenerator.hxx"
 #endif
 
 #endif

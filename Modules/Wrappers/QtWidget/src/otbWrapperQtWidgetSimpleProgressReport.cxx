@@ -30,15 +30,16 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model)
-  : m_CurrentProcess()
+QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model, QWidget * parent)
+  : QWidget(parent)
+  , m_CurrentProcess()
 {
   m_Model = model;
-  connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(show()) );
-  connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(Init()) );
-  connect(this, SIGNAL(AddNewProcessToReport()), this, SLOT(ReportProcess()) );
+  connect(model, &QtWidgetModel::SetProgressReportBegin, this, &QtWidgetSimpleProgressReport::show );
+  connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetSimpleProgressReport::Init );
+  connect(this, &QtWidgetSimpleProgressReport::AddNewProcessToReport, this, &QtWidgetSimpleProgressReport::ReportProcess );
 
-  m_Layout = new QVBoxLayout;
+  m_Layout = new QVBoxLayout(this);
   this->setLayout(m_Layout);
 
   m_AddProcessCommand = AddProcessCommandType::New();
@@ -46,10 +47,10 @@ QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model
 
   m_Bar =  new itk::QtProgressBar(this);
 
-  m_Label = new QLabel("No process");
+  m_Label = new QLabel("No process", this);
   m_Label->setWordWrap(true);
-  connect( m_Bar, SIGNAL(SetValueChanged(int)), m_Bar, SLOT(setValue(int)) );
-  connect( m_Model, SIGNAL(SetProgressReportDone()), m_Bar, SLOT(reset()) );
+  connect( m_Bar, &itk::QtProgressBar::SetValueChanged, m_Bar, &itk::QtProgressBar::setValue );
+  connect( m_Model, &QtWidgetModel::SetProgressReportDone, m_Bar, &itk::QtProgressBar::reset );
 
   m_Layout->addWidget(m_Label);
   m_Layout->addWidget(m_Bar);

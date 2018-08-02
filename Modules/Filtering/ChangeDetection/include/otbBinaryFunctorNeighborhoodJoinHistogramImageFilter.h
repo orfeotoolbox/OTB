@@ -175,8 +175,8 @@ protected:
   HistogramType::Pointer m_Histogram;
 
 private:
-  BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void ComputeHistogram();
 
@@ -197,7 +197,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryFunctorNeighborhoodJoinHistogramImageFilter.txx"
+#include "otbBinaryFunctorNeighborhoodJoinHistogramImageFilter.hxx"
 #endif
 
 #endif

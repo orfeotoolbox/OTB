@@ -23,6 +23,7 @@
 
 #include "otbStreamingResampleImageFilter.h"
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
+#include <string>
 
 namespace otb
 {
@@ -284,8 +285,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GenericRSResampleImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GenericRSResampleImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Method to estimate the input & output rpc model
   void EstimateOutputRpcModel();
@@ -306,7 +307,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericRSResampleImageFilter.txx"
+#include "otbGenericRSResampleImageFilter.hxx"
 #endif
 
 #endif

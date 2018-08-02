@@ -111,11 +111,11 @@ public:
     VNLVectorType sortedGreaterEigenVector(3, eigenVectors[0][0]);
     for(unsigned int i=0; i<3; ++i)
       {
-        if( vcl_abs( eigenValues[1].real()-sortedRealEigenValues[i] ) < m_Epsilon )
+        if( std::abs( eigenValues[1].real()-sortedRealEigenValues[i] ) < m_Epsilon )
           {
             sortedGreaterEigenVector[i] = eigenVectors[1][0];
           }
-        else if( vcl_abs( eigenValues[2].real()-sortedRealEigenValues[i] ) < m_Epsilon )
+        else if( std::abs( eigenValues[2].real()-sortedRealEigenValues[i] ) < m_Epsilon )
           {
             sortedGreaterEigenVector[i] = eigenVectors[2][0];
           }
@@ -149,13 +149,13 @@ public:
     double a0, a1, a2;
 
     val0 = std::abs(sortedGreaterEigenVector[0]);
-    a0=acos(vcl_abs(val0)) * CONST_180_PI;
+    a0=acos(std::abs(val0)) * CONST_180_PI;
 
     val1 = std::abs(sortedGreaterEigenVector[1]);
-    a1=acos(vcl_abs(val1)) * CONST_180_PI;
+    a1=acos(std::abs(val1)) * CONST_180_PI;
 
     val2= std::abs(sortedGreaterEigenVector[2]);
-    a2=acos(vcl_abs(val2)) * CONST_180_PI;
+    a2=acos(std::abs(val2)) * CONST_180_PI;
 
     alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
 
@@ -223,8 +223,8 @@ protected:
   ~ReciprocalHAlphaImageFilter() override {}
 
 private:
-  ReciprocalHAlphaImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);            //purposely not implemented
+  ReciprocalHAlphaImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

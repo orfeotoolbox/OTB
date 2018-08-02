@@ -24,6 +24,7 @@
 #include "itkMacro.h"
 #include "itkImageToImageFilter.h"
 #include "otbStreamingManager.h"
+#include "itkFastMutexLock.h"
 
 namespace otb
 {
@@ -142,6 +143,11 @@ public:
    *  This filter does not produce an output */
   void Update() override;
 
+  /** This override doesn't return a const ref on the actual boolean */
+  const bool & GetAbortGenerateData() const override;
+
+  void SetAbortGenerateData(const bool val) override;
+
 protected:
   StreamingImageVirtualWriter();
 
@@ -154,8 +160,8 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  StreamingImageVirtualWriter(const StreamingImageVirtualWriter &); //purposely not implemented
-  void operator =(const StreamingImageVirtualWriter&); //purposely not implemented
+  StreamingImageVirtualWriter(const StreamingImageVirtualWriter &) = delete;
+  void operator =(const StreamingImageVirtualWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {
@@ -186,12 +192,15 @@ private:
 
   bool          m_IsObserving;
   unsigned long m_ObserverID;
+
+  /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingImageVirtualWriter.txx"
+#include "otbStreamingImageVirtualWriter.hxx"
 #endif
 
 #endif

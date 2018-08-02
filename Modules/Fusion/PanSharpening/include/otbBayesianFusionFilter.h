@@ -326,7 +326,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBayesianFusionFilter.txx"
+#include "otbBayesianFusionFilter.hxx"
 #endif
 
 #endif

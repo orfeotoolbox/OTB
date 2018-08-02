@@ -64,8 +64,8 @@ protected:
   ~DimensionalityReductionModelFactory() override;
 
 private:
-  DimensionalityReductionModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DimensionalityReductionModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
@@ -78,7 +78,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDimensionalityReductionModelFactory.txx"
+#include "otbDimensionalityReductionModelFactory.hxx"
 #endif
 
 #endif

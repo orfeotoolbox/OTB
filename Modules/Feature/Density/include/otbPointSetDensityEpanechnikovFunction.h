@@ -74,8 +74,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetDensityEpanechnikovFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  PointSetDensityEpanechnikovFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Radius;
 };
@@ -83,7 +83,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetDensityEpanechnikovFunction.txx"
+#include "otbPointSetDensityEpanechnikovFunction.hxx"
 #endif
 
 #endif

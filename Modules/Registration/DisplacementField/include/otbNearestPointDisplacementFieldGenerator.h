@@ -71,12 +71,12 @@ protected:
   void GenerateData() override;
 
 private:
-  NearestPointDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NearestPointDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNearestPointDisplacementFieldGenerator.txx"
+#include "otbNearestPointDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

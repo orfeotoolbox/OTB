@@ -122,7 +122,7 @@ private:
 
     // Parse the input file for ground control points
     std::ifstream ifs;
-    ifs.open(GetParameterString("inpoints").c_str());
+    ifs.open(GetParameterString("inpoints"));
 
     TiePointsType tiepoints;
 
@@ -185,7 +185,7 @@ private:
   ofs.precision(12);
   if(IsParameterEnabled("outstat"))
     {
-    ofs.open(GetParameterString("outstat").c_str());
+    ofs.open(GetParameterString("outstat"));
     ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat elevation x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
     }
 
@@ -234,13 +234,13 @@ private:
   meany/=tiepoints.size();
 
 
-  double stdevx = vcl_sqrt(rmsex - meanx * meanx);
-  double stdevy = vcl_sqrt(rmsey - meany * meany);
+  double stdevx = std::sqrt(rmsex - meanx * meanx);
+  double stdevy = std::sqrt(rmsey - meany * meany);
 
 
-  rmse=vcl_sqrt(rmse);
-  rmsex=vcl_sqrt(rmsex);
-  rmsey=vcl_sqrt(rmsey);
+  rmse=std::sqrt(rmse);
+  rmsex=std::sqrt(rmsex);
+  rmsey=std::sqrt(rmsey);
 
   otbAppLogINFO("Estimation of final accuracy: ");
 
@@ -260,7 +260,7 @@ private:
 if(IsParameterEnabled("outvector"))
   {
   // Create the datasource (for matches export)
-  otb::ogr::Layer layer(ITK_NULLPTR, false);
+  otb::ogr::Layer layer(nullptr, false);
   otb::ogr::DataSource::Pointer ogrDS;
 
   ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);

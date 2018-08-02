@@ -21,7 +21,7 @@
 #ifndef otbSinclairToCircularCovarianceMatrixFunctor_h
 #define otbSinclairToCircularCovarianceMatrixFunctor_h
 
-#include "vcl_complex.h"
+#include <complex>
 #include "otbSinclairToCovarianceMatrixFunctor.h"
 
 namespace otb
@@ -102,10 +102,10 @@ public:
     const ComplexType Srl = coef*( jS_hh-S_hv+S_vh+jS_vv );
     const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
 
-    //const ComplexType conjSll = vcl_conj(Sll);
-    //const ComplexType conjSlr = vcl_conj(Slr);
-    //const ComplexType conjSrl = vcl_conj(Srl);
-    //const ComplexType conjSrr = vcl_conj(Srr);
+    //const ComplexType conjSll = std::conj(Sll);
+    //const ComplexType conjSlr = std::conj(Slr);
+    //const ComplexType conjSrl = std::conj(Srl);
+    //const ComplexType conjSrr = std::conj(Srr);
 
     SinclairToCovarianceFunctorType funct;
     return ( funct( Sll, Slr, Srl, Srr ) );

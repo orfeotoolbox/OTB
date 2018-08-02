@@ -149,7 +149,7 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write(const itk::DataObject* data, char ** papszOptions = ITK_NULLPTR) = 0;
+  virtual void Write(const itk::DataObject* data, char ** papszOptions = nullptr) = 0;
 
 protected:
   VectorDataIOBase();
@@ -170,8 +170,8 @@ protected:
   virtual void Reset(const bool freeDynamic = true);
 
 private:
-  VectorDataIOBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataIOBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

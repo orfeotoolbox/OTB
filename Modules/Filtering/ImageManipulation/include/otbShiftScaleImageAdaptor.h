@@ -169,8 +169,8 @@ protected:
   ~ShiftScaleImageAdaptor() override {}
 
 private:
-  ShiftScaleImageAdaptor(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ShiftScaleImageAdaptor(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

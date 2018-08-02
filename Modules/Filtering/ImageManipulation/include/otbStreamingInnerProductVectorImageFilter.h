@@ -126,8 +126,8 @@ protected:
   void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentInnerProductVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentInnerProductVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ArrayMatrixType m_ThreadInnerProduct;
 
@@ -220,15 +220,15 @@ protected:
   ~StreamingInnerProductVectorImageFilter() override {}
 
 private:
-  StreamingInnerProductVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingInnerProductVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingInnerProductVectorImageFilter.txx"
+#include "otbStreamingInnerProductVectorImageFilter.hxx"
 #endif
 
 #endif

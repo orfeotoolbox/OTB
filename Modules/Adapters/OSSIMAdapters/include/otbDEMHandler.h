@@ -21,7 +21,6 @@
 #ifndef otbDEMHandler_h
 #define otbDEMHandler_h
 
-#include <iostream>
 #include <cstdio>
 
 #include "itkIndent.h"
@@ -30,6 +29,7 @@
 #include "itkPoint.h"
 
 #include "OTBOSSIMAdaptersExport.h"
+#include <string>
 
 class ossimElevManager;
 

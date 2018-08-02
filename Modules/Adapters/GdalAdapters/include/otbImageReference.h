@@ -138,7 +138,7 @@ public:
    * \return the point projected in the image coordinates system.
    * \throw None
    */
-  void TransformPointToPhysicalPoint(const PointType& point) const
+  PointType TransformPointToPhysicalPoint(const PointType& point) const
     {
     // why no loop on VDimension ?
     PointType physicalPoint;
@@ -173,7 +173,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbImageReference.txx"
+// #include "otbImageReference.hxx"
 #endif
 
 #endif // otbImageReference_h

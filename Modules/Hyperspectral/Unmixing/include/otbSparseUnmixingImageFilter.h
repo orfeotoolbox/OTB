@@ -167,8 +167,8 @@ protected:
   void GenerateData() override;
   virtual void GenerateNumberOfComponentsRequired ();
 private:
-  SparseUnmixingImageFilter(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  SparseUnmixingImageFilter(const Self &) = delete;
+  void operator=(const Self &) = delete;
 
   unsigned int         m_NumberOfComponentsRequired;
   unsigned int         m_NumberOfHistogramBins;
@@ -183,7 +183,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSparseUnmixingImageFilter.txx"
+#include "otbSparseUnmixingImageFilter.hxx"
 #endif
 
 #endif

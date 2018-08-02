@@ -105,8 +105,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LocalRxDetectorNonThreadFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LocalRxDetectorNonThreadFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   int m_InternalRadius;
   int m_ExternalRadius;
@@ -116,7 +116,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLocalRxDetectorNonThreadFilter.txx"
+#include "otbLocalRxDetectorNonThreadFilter.hxx"
 #endif
 
 #endif

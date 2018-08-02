@@ -21,11 +21,10 @@
 #ifndef otbWrapperQtWidgetOutputVectorDataParameter_h
 #define otbWrapperQtWidgetOutputVectorDataParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+#include <string>
 
 
 namespace otb
@@ -42,11 +41,11 @@ class OTBQtWidget_EXPORT QtWidgetOutputVectorDataParameter : public QtWidgetPara
 {
   Q_OBJECT
 public:
-  QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*);
+  QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputVectorDataParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -58,8 +57,8 @@ protected slots:
   void SelectFile();
 
 private:
-  QtWidgetOutputVectorDataParameter(const QtWidgetOutputVectorDataParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputVectorDataParameter&); //purposely not implemented
+  QtWidgetOutputVectorDataParameter(const QtWidgetOutputVectorDataParameter&) = delete;
+  void operator=(const QtWidgetOutputVectorDataParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -75,24 +74,6 @@ private:
   int           m_PixelType;
 
 };
-
-
-
-inline
-const QLineEdit*
-QtWidgetOutputVectorDataParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputVectorDataParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

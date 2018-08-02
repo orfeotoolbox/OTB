@@ -21,6 +21,9 @@
 #ifndef otbUtils_h
 #define otbUtils_h
 
+#include <sstream>
+#include <string>
+
 #include "itkMacro.h"
 #include "OTBCommonExport.h"
 
@@ -51,6 +54,9 @@ namespace Utils
   /** Function that prints nothing (useful to disable libsvm logs)*/
   void OTBCommon_EXPORT PrintNothing(const char *s);
 
+  extern OTBCommon_EXPORT bool const TrueConstant;
+
+  extern OTBCommon_EXPORT bool const FalseConstant;
 }
 
 } // namespace otb

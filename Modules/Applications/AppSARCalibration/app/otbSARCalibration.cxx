@@ -48,7 +48,7 @@ private:
   void DoInit() override
   {
     SetName("SARCalibration");
-    SetDescription("Perform radiometric calibration of SAR images. Following sensors are supported: TerraSAR-X, Sentinel1 and Radarsat-2.Both Single Look Complex(SLC) and detected products are supported as input.\n");
+    SetDescription("Perform radiometric calibration of SAR images. Following sensors are supported: TerraSAR-X, Sentinel1 and Radarsat-2.Both Single Look Complex(SLC) and detected products are supported as input.");
 
     // Documentation
     SetDocName("SAR Radiometric calibration");

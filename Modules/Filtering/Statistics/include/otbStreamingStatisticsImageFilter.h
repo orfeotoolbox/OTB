@@ -173,8 +173,8 @@ protected:
                              itk::ThreadIdType threadId) override;
 
 private:
-  PersistentStatisticsImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentStatisticsImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   itk::Array<RealType>       m_ThreadSum;
   itk::Array<RealType>       m_SumOfSquares;
@@ -361,14 +361,14 @@ protected:
   ~StreamingStatisticsImageFilter() override {}
 
 private:
-  StreamingStatisticsImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingStatisticsImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingStatisticsImageFilter.txx"
+#include "otbStreamingStatisticsImageFilter.hxx"
 #endif
 
 #endif

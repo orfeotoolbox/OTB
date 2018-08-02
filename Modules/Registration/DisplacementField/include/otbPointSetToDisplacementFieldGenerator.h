@@ -142,8 +142,8 @@ protected:
   double EuclideanDistanceMetric(IndexType index, PointType p);
 
 private:
-  PointSetToDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PointSetToDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /**
    * The threshold of metric value.
@@ -160,7 +160,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetToDisplacementFieldGenerator.txx"
+#include "otbPointSetToDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

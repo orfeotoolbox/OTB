@@ -32,6 +32,7 @@
 #include "otbFuzzyVariable.h"
 #include "otbJointMassOfBeliefFilter.h"
 #include "otbParser.h"
+#include <string>
 
 namespace otb
 {
@@ -177,8 +178,8 @@ protected:
     }
 
 private:
-  VectorDataToDSValidatedVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToDSValidatedVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Descriptor bench
   DescriptorModelsType                            m_DescriptorModels;
@@ -197,7 +198,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToDSValidatedVectorDataFilter.txx"
+#include "otbVectorDataToDSValidatedVectorDataFilter.hxx"
 #endif
 
 #endif

@@ -130,11 +130,11 @@ protected:
 
   /** Predict values using the model */
   virtual TargetSampleType
-  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = ITK_NULLPTR) const override;
+  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = nullptr) const override;
 
 
   virtual void DoPredictBatch(const InputListSampleType *, const unsigned int &startIndex, const unsigned int &size,
-                              TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const override;
+                              TargetListSampleType *, ConfidenceListSampleType * = nullptr) const override;
 
   template<typename DataType>
   DataType NormalizeData(const DataType &data) const;
@@ -143,8 +143,8 @@ protected:
   void PrintSelf(std::ostream &os, itk::Indent indent) const override;
 
 private:
-  SharkKMeansMachineLearningModel(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  SharkKMeansMachineLearningModel(const Self &) = delete;
+  void operator=(const Self &) = delete;
 
   // Parameters set by the user
   bool m_Normalized;
@@ -165,7 +165,7 @@ private:
 
 #ifndef OTB_MANUAL_INSTANTIATION
 
-#include "otbSharkKMeansMachineLearningModel.txx"
+#include "otbSharkKMeansMachineLearningModel.hxx"
 
 #endif
 

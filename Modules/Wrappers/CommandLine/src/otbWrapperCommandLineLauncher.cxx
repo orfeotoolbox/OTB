@@ -59,7 +59,7 @@ namespace Wrapper
 CommandLineLauncher::CommandLineLauncher() :
   /*m_Expression(""),*/m_VExpression(), m_WatcherList(), m_ReportProgress(true)
 {
-  m_Application = ITK_NULLPTR;
+  m_Application = nullptr;
   m_Parser = CommandLineParser::New();
   m_LogOutput = itk::StdStreamLogOutput::New();
   m_LogOutput->SetStream(std::cout);
@@ -72,7 +72,7 @@ CommandLineLauncher::CommandLineLauncher() :
 CommandLineLauncher::~CommandLineLauncher()
 {
   this->DeleteWatcherList();
-  m_Application = ITK_NULLPTR;
+  m_Application = nullptr;
   ApplicationRegistry::CleanRegistry();
 }
 
@@ -81,7 +81,7 @@ void CommandLineLauncher::DeleteWatcherList()
   for (unsigned int i = 0; i < m_WatcherList.size(); i++)
     {
     delete m_WatcherList[i];
-    m_WatcherList[i] = ITK_NULLPTR;
+    m_WatcherList[i] = nullptr;
     }
   m_WatcherList.clear();
 }
@@ -137,68 +137,79 @@ bool CommandLineLauncher::Execute()
     return false;
 }
 
+bool CommandLineLauncher::ExecuteAndWriteOutputNoCatch()
+{
+   if (this->BeforeExecute() == false)
+      {
+      return false;
+      }
+    if( m_Application->ExecuteAndWriteOutput() == 0 )
+      {
+      this->DisplayOutputParameters();
+      }
+    else
+      {
+      return false;
+      }
+    return true;
+}
+
 bool CommandLineLauncher::ExecuteAndWriteOutput()
 {
-  try
-  {
-    if (this->BeforeExecute() == false)
+  // If testenv is used, do not catch exceptions
+  if (m_Parser->IsAttributExists("-testenv", m_VExpression) == true)
     {
-      return false;
+    return ExecuteAndWriteOutputNoCatch();
     }
-
-    if( m_Application->ExecuteAndWriteOutput() == 0 )
+  else
     {
-      this->DisplayOutputParameters();
-    }
-    else
-    {
-      return false;
-    }
-  }
-  catch(otb::ApplicationException& err)
-  {
+    try
+      {
+      return ExecuteAndWriteOutputNoCatch();
+      }
+    catch(otb::ApplicationException& err)
+      {
       // These are thrown with otbAppLogFATAL, a macro which logs a user
       // friendly error message before throwing. So log exception details only
       // in debug.
       m_Application->GetLogger()->Debug("Caught otb::ApplicationException during application execution:\n");
       m_Application->GetLogger()->Debug(string(err.what()) + "\n");
       return false;
-  }
-  catch(otb::ImageFileReaderException& err)
-  {
+      }
+    catch(otb::ImageFileReaderException& err)
+      {
       m_Application->GetLogger()->Debug("Caught otb::ImageFileReaderException during application execution:\n");
       m_Application->GetLogger()->Debug(string(err.what()) + "\n");
       m_Application->GetLogger()->Fatal(string("Cannot open image ") + err.m_Filename + string(". ") + err.GetDescription() + string("\n"));
       return false;
-  }
-  catch(itk::ExceptionObject& err)
-  {
-    m_Application->GetLogger()->Debug("Caught itk::ExceptionObject during application execution:\n");
-    m_Application->GetLogger()->Debug(string(err.what()) + "\n");
-    m_Application->GetLogger()->Fatal(string(err.GetDescription()) + "\n");
-    return false;
-  }
-  catch(std::exception& err)
-  {
-    m_Application->GetLogger()->Fatal(std::string("Caught std::exception during application execution: ") + err.what() + "\n");
-    return false;
-  }
-  catch(...)
-  {
-    m_Application->GetLogger()->Fatal("Caught unknown exception during application execution.\n");
-    return false;
-  }
-
-  return true;
+      }
+    catch(itk::ExceptionObject& err)
+      {
+      m_Application->GetLogger()->Debug("Caught itk::ExceptionObject during application execution:\n");
+      m_Application->GetLogger()->Debug(string(err.what()) + "\n");
+      m_Application->GetLogger()->Fatal(string(err.GetDescription()) + "\n");
+      return false;
+      }
+    catch(std::exception& err)
+      {
+      m_Application->GetLogger()->Fatal(std::string("Caught std::exception during application execution: ") + err.what() + "\n");
+      return false;
+      }
+    catch(...)
+      {
+      m_Application->GetLogger()->Fatal("Caught unknown exception during application execution.\n");
+      return false;
+      }
+    }
 }
 
 bool CommandLineLauncher::BeforeExecute()
 {
   if (m_Application.IsNull())
-  {
+    {
     std::cerr << "ERROR: No loaded application." << std::endl;
     return false;
-  }
+    }
 
   // Check if there's keys in the expression if the application takes
   // at least 1 mandatory parameter
@@ -263,15 +274,15 @@ bool CommandLineLauncher::BeforeExecute()
   ParamResultType result = this->LoadParameters();
 
   if (result == MISSINGMANDATORYPARAMETER)
-  {
+    {
     std::cerr << std::endl;
     this->DisplayHelp();
     return false;
-  }
+    }
   else if (result != OKPARAM)
-  {
+    {
     return false;
-  }
+    }
 
   return true;
 }
@@ -365,22 +376,22 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
   // Check for the progress report parameter
   if (m_Parser->IsAttributExists("-progress", m_VExpression) == true)
-  {
+    {
     std::vector<std::string> val = m_Parser->GetAttribut("-progress", m_VExpression);
     if (val.size() == 1 && (val[0] == "1" || val[0] == "true"))
-    {
+      {
       m_ReportProgress = true;
-    }
+      }
     else if (val.size() == 1 && (val[0] == "0" || val[0] == "false"))
-    {
+      {
       m_ReportProgress = false;
-    }
+      }
     else
-    {
+      {
       std::cerr << "ERROR: Invalid value for parameter -progress. It must be 0, 1, false or true." << std::endl;
       return WRONGPARAMETERVALUE;
+      }
     }
-  }
 
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   // Loop over each parameter key declared in the application
@@ -421,22 +432,22 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           m_Application->SetParameterStringList(paramKey, values);
           }
         else if (type == ParameterType_Choice ||
-            type == ParameterType_Float ||
-            type == ParameterType_Int ||
-            type == ParameterType_Radius ||
-            type == ParameterType_Directory ||
-            type == ParameterType_String ||
-            type == ParameterType_InputFilename ||
-            type == ParameterType_OutputFilename ||
-            type == ParameterType_ComplexInputImage ||
-            type == ParameterType_InputImage ||
-            type == ParameterType_OutputImage ||
-            type == ParameterType_ComplexOutputImage ||
-            type == ParameterType_InputVectorData ||
-            type == ParameterType_OutputVectorData ||
-            type == ParameterType_RAM ||
-            type == ParameterType_OutputProcessXML ||
-            type == ParameterType_Bool) // || type == ParameterType_InputProcessXML)
+                 type == ParameterType_Float ||
+                 type == ParameterType_Int ||
+                 type == ParameterType_Radius ||
+                 type == ParameterType_Directory ||
+                 type == ParameterType_String ||
+                 type == ParameterType_InputFilename ||
+                 type == ParameterType_OutputFilename ||
+                 type == ParameterType_ComplexInputImage ||
+                 type == ParameterType_InputImage ||
+                 type == ParameterType_OutputImage ||
+                 type == ParameterType_ComplexOutputImage ||
+                 type == ParameterType_InputVectorData ||
+                 type == ParameterType_OutputVectorData ||
+                 type == ParameterType_RAM ||
+                 type == ParameterType_OutputProcessXML ||
+                 type == ParameterType_Bool) // || type == ParameterType_InputProcessXML)
           {
           // Single value parameter
           m_Application->SetParameterString(paramKey, values[0]);
@@ -459,7 +470,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
               {
               std::cerr << "ERROR: Too many values for parameter -" <<
                 paramKey << " (expected 2 or 1, got " << values.size() << ")."
-                << std::endl;
+                        << std::endl;
               return INVALIDNUMBEROFVALUE;
               }
             }
@@ -511,32 +522,89 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
       }
     }
 
-  // SECOND PASS : check mandatory parameters
-  for (unsigned int i = 0; i < appKeyList.size(); i++)
+  // SECOND PASS : checks
+  for (const auto & paramKey : appKeyList)
     {
-    const std::string paramKey(appKeyList[i]);
-    ParameterType type = m_Application->GetParameterType(paramKey);
-    if (m_Application->IsParameterMissing(paramKey))
-      {
-      std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
+    // Check for missing mandatory parameters
+    if(!CheckMissingMandatoryParameter(paramKey))
       return MISSINGMANDATORYPARAMETER;
-      }
 
-    // Check output paths validity
-    if (m_Application->HasValue(paramKey) &&
-        type == ParameterType_OutputFilename)
-      {
-      std::string filename = m_Application->GetParameterString(paramKey);
-      itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
-      if (path!="" && !itksys::SystemTools::FileIsDirectory(path.c_str()))
-        {
-        std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
-        return WRONGPARAMETERVALUE;
-        }
-      }
+    // Check and warn unused parameters
+    CheckUnusedParameter(paramKey);
+
+    // Check output paths are valid
+    if(!CheckOutputPathsValidity(paramKey))
+      return WRONGPARAMETERVALUE;
     }
 
   return OKPARAM;
+}
+
+bool CommandLineLauncher::CheckOutputPathsValidity(const std::string & paramKey) const
+{
+  ParameterType type = m_Application->GetParameterType(paramKey);
+  if (m_Application->HasValue(paramKey) &&
+      type == ParameterType_OutputFilename)
+    {
+    std::string filename = m_Application->GetParameterString(paramKey);
+    itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
+    if (path!="" && !itksys::SystemTools::FileIsDirectory(path))
+      {
+      std::cerr <<"ERROR: Directory doesn't exist : "<< path << std::endl;
+      return false;
+        }
+      }
+  return true;
+}
+
+bool CommandLineLauncher::CheckMissingMandatoryParameter(const std::string & paramKey) const
+{
+    if (m_Application->IsParameterMissing(paramKey))
+      {
+      std::cerr << "ERROR: Missing mandatory parameter -" << paramKey << "." << std::endl;
+      return false;
+      }
+    return true;
+}
+
+void CommandLineLauncher::CheckUnusedParameter(const std::string & paramKey) const
+{
+  // Check for ignored parameters
+    if(m_Application->HasUserValue(paramKey))
+      {
+
+      // Find the position of the next dot
+      unsigned int start = 0;
+      auto end = paramKey.find_first_of('.',start);
+
+      // Until we reach en of key
+      while(end != std::string::npos)
+        {
+        // Extract key until the current dot
+        const std::string & key = paramKey.substr(0,end);
+
+        // Find the corresponding parameter type
+        ParameterType type = m_Application->GetParameterType(key);
+
+        // In any case update the position of current and next dot
+        start = end+1;
+        end = paramKey.find_first_of('.',start);
+
+        // If the current parameter (paramKey) has a choice in it
+        if(type == ParameterType_Choice)
+          {
+          const std::string & value = m_Application->GetParameterString(key);
+
+          // Check that this choice is active
+          if(paramKey.find(value) == std::string::npos)
+            {
+            std::cerr<<"WARNING: Parameter -"<<paramKey<<" will be ignored because -"<<key<<" is "<<value<<"."<<std::endl;
+            
+            break;
+            }
+          }
+        }
+      }
 }
 
 void CommandLineLauncher::LinkWatchers(itk::Object * itkNotUsed(caller), const itk::EventObject & event)
@@ -729,7 +797,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
       {
       defPixType = OutputImageParameter::ConvertPixelTypeToString(paramDown->GetDefaultPixelType());
       }
-    oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double]";
+    oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double/cint16/cint32/cfloat/cdouble]";
     oss << " (default value is " << defPixType <<")";
     }
 
@@ -756,11 +824,11 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 
       oss << "[";
       for(unsigned int i=0; i<keys.size(); i++)
-      {
+        {
         oss<<keys[i];
         if( i != keys.size()-1 )
           oss << "/";
-      }
+        }
 
       oss << "]";
       }
@@ -789,7 +857,13 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     
     if(m_Application->HasValue(paramKey))
       {
-      oss<<", default value is "<<m_Application->GetParameterAsString(paramKey);
+      if ( m_Application->GetParameterAsString(paramKey).empty() )
+        oss<<", no default value";
+      else
+        {
+        oss<<", default value is "
+           <<m_Application->GetParameterAsString(paramKey);
+        }
       }
     oss<<")";
     }
@@ -924,7 +998,7 @@ void CommandLineLauncher::DisplayOutputParameters()
     std::vector<std::string> val = m_Parser->GetAttribut("-testenv", m_VExpression);
     if( val.size() == 1 )
       {
-      std::ofstream ofs(val[0].c_str());
+      std::ofstream ofs(val[0]);
       if (!ofs.is_open())
         {
         fprintf(stderr, "Error, can't open file");

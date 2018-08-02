@@ -89,7 +89,7 @@ protected:
   {}
 
 private:
-  OutputFilenameParameter(const OutputFilenameParameter &); //purposely not implemented
+  OutputFilenameParameter(const OutputFilenameParameter &) = delete;
   void operator =(const OutputFilenameParameter&); //purposely not
                                                   //implemented
 

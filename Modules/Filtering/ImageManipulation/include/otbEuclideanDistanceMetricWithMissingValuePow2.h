@@ -101,7 +101,7 @@ protected:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEuclideanDistanceMetricWithMissingValuePow2.txx"
+#include "otbEuclideanDistanceMetricWithMissingValuePow2.hxx"
 #endif
 
 #endif

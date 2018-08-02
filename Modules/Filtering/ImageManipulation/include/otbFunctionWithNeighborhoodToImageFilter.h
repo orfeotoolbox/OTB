@@ -142,8 +142,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  FunctionWithNeighborhoodToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  FunctionWithNeighborhoodToImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   //FunctionPointerType  m_Function;
   FunctionPointerType              m_Function;
@@ -155,7 +155,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFunctionWithNeighborhoodToImageFilter.txx"
+#include "otbFunctionWithNeighborhoodToImageFilter.hxx"
 #endif
 
 #endif

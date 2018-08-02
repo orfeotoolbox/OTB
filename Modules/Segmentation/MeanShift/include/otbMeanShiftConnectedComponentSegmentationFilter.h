@@ -29,6 +29,7 @@
 #include "itkRelabelComponentImageFilter.h"
 
 #include "otbMeanShiftSmoothingImageFilter.h"
+#include <string>
 
 namespace otb {
 
@@ -151,7 +152,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftConnectedComponentSegmentationFilter.txx"
+#include "otbMeanShiftConnectedComponentSegmentationFilter.hxx"
 #endif
 
 #endif

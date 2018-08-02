@@ -162,8 +162,8 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  MultivariateAlterationDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultivariateAlterationDetectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   CovarianceEstimatorPointer m_CovarianceEstimator;
   MatrixType                 m_CovarianceMatrix;
@@ -179,7 +179,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultivariateAlterationDetectorImageFilter.txx"
+#include "otbMultivariateAlterationDetectorImageFilter.hxx"
 #endif
 
 #endif

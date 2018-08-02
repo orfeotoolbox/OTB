@@ -265,13 +265,13 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
     ImageType::IndexType index;
 
-    index[0] = static_cast<unsigned int>(vcl_floor(
+    index[0] = static_cast<unsigned int>(std::floor(
                                            static_cast<double>(
                                              (pIt.Value()[0] -
                                               origin[0]) / spacing[0] + 0.5
                                              )));
 
-    index[1] = static_cast<unsigned int>(vcl_floor(
+    index[1] = static_cast<unsigned int>(std::floor(
                                            static_cast<double>(
                                              (pIt.Value()[1] -
                                               origin[1]) / spacing[1] + 0.5

@@ -72,9 +72,9 @@ namespace ossimplugins
          os<<"longs["<<i<<"]:"<<data._longs[i]<<std::endl;
       }
 
-      os<<"last_zero_doppler_time:"<<data._last_zero_doppler_time.c_str()<<std::endl;
+      os<<"last_zero_doppler_time:"<<data._last_zero_doppler_time <<std::endl;
 
-      os<<"last_line_tie_points:"<<data._last_line_tie_points.c_str()<<std::endl;
+      os<<"last_line_tie_points:"<<data._last_line_tie_points <<std::endl;
 
       return os;
 

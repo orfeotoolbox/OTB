@@ -22,6 +22,7 @@
 #define otbWrapperOutputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
+#include <string>
 
 namespace otb
 {
@@ -109,8 +110,8 @@ private:
   /** Temporary pointer to the application to parse (internal) */
   Application::Pointer m_Appli;
 
-  OutputProcessXMLParameter(const OutputProcessXMLParameter &); //purposely not implemented
-  void operator =(const OutputProcessXMLParameter&); //purposely not implemented
+  OutputProcessXMLParameter(const OutputProcessXMLParameter &) = delete;
+  void operator =(const OutputProcessXMLParameter&) = delete;
 
 
 }; // End class Parameter

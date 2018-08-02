@@ -92,8 +92,8 @@ protected:
   }
 
 private:
-  VectorImageToAmplitudeImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorImageToAmplitudeImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // End namespace otb

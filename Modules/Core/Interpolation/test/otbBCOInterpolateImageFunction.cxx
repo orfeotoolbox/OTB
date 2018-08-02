@@ -173,7 +173,7 @@ int otbBCOInterpolateImageFunction2(int argc, char * argv[])
   for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin(); it != indicesList.end(); ++it)
     {
       std::cout << (*it) << " -> " << filter->EvaluateAtContinuousIndex((*it)) << std::endl;
-      if (vcl_abs(filter->EvaluateAtContinuousIndex((*it))-1.0)>1e-6)
+      if (std::abs(filter->EvaluateAtContinuousIndex((*it))-1.0)>1e-6)
         return EXIT_FAILURE;
     }
 

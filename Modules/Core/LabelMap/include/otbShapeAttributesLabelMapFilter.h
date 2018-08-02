@@ -303,15 +303,15 @@ protected:
   void EnlargeOutputRequestedRegion(itk::DataObject *) override{};
 
 private:
-  ShapeAttributesLabelMapFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ShapeAttributesLabelMapFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 }; // end of class
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShapeAttributesLabelMapFilter.txx"
+#include "otbShapeAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

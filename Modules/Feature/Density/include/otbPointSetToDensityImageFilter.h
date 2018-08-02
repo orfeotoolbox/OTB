@@ -106,14 +106,14 @@ protected:
 
 private:
 
-  PointSetToDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PointSetToDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Radius;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetToDensityImageFilter.txx"
+#include "otbPointSetToDensityImageFilter.hxx"
 #endif
 
 #endif

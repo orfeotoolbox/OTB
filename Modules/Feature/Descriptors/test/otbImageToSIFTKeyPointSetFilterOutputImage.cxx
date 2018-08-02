@@ -125,11 +125,11 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int itkNotUsed(argc), char * argv
     ImageType::IndexType index;
 
     index[0] = (unsigned int)
-               (vcl_floor
+               (std::floor
                   ((double) ((pIt.Value()[0] - origin[0]) / spacing[0] + 0.5)));
 
     index[1] = (unsigned int)
-               (vcl_floor
+               (std::floor
                   ((double) ((pIt.Value()[1] - origin[1]) / spacing[1] + 0.5)));
 
     OutputImageType::PixelType keyPixel;

@@ -25,10 +25,9 @@
 
 #include <map>
 #include <string>
-#include <iostream>
 
 #include "itkMultiThreader.h"
-#include "itkMacro.h"
+#include "otbMacro.h"
 
 #include "otbOGRDriversInit.h"
 #include "otbTestHelper.h"
@@ -298,6 +297,7 @@ int main(int ac, char* av[])
       }
   else
     {
+    otb::Logger::Instance()->LogSetupInformation();
     MainFuncPointer f = j->second;
     int             result;
     try

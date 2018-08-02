@@ -21,14 +21,13 @@
 #ifndef otbQtFileSelectionWidget_h
 #define otbQtFileSelectionWidget_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBQtWidgetExport.h"
+#include <string>
 
 namespace otb
 {
@@ -90,8 +89,8 @@ protected slots:
   void SetFileName(const QString &);
 
 private:
-  QtFileSelectionWidget(const QtFileSelectionWidget&); //purposely not implemented
-  void operator=(const QtFileSelectionWidget&); //purposely not implemented
+  QtFileSelectionWidget(const QtFileSelectionWidget&) = delete;
+  void operator=(const QtFileSelectionWidget&) = delete;
 
   virtual void DoCreateWidget();
 

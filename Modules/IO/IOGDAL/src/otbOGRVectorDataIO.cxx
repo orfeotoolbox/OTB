@@ -35,7 +35,7 @@ namespace otb
 
 OGRVectorDataIO
 ::OGRVectorDataIO() :
-  m_DataSource(ITK_NULLPTR)
+  m_DataSource(nullptr)
 {
   // OGR factory registration
   OGRRegisterAll();
@@ -44,7 +44,7 @@ OGRVectorDataIO
 
 OGRVectorDataIO::~OGRVectorDataIO()
 {
-  if (m_DataSource != ITK_NULLPTR)
+  if (m_DataSource != nullptr)
     {
     this->CloseInternalDataSource();
     }
@@ -56,7 +56,7 @@ OGRVectorDataIO::CanReadFile(const char* filename) const
 {
   otb::ogr::version_proxy::GDALDatasetType * poDS = ogr::version_proxy::Open(filename, true);
 
-  if (poDS == ITK_NULLPTR)
+  if (poDS == nullptr)
     {
     std::cerr<<"Can not read file "<<filename<<" with GDALOpen"<<std::endl;
     return false;
@@ -88,14 +88,14 @@ OGRVectorDataIO
     itkExceptionMacro(<<"Failed to dynamic cast to otb::VectorData (this should never happen)");
     }
 
-  if (m_DataSource != ITK_NULLPTR)
+  if (m_DataSource != nullptr)
     {
     this->CloseInternalDataSource();
     }
 
   m_DataSource = ogr::version_proxy::Open(this->m_FileName.c_str(),true);
 
-  if (m_DataSource == ITK_NULLPTR)
+  if (m_DataSource == nullptr)
     {
     itkExceptionMacro(<< "Failed to open data file " << this->m_FileName);
     }
@@ -110,11 +110,11 @@ OGRVectorDataIO
   DataTreePointerType tree = data->GetDataTree();
   DataNodePointerType root = tree->GetRoot()->Get();
 
-  OGRSpatialReference * oSRS = ITK_NULLPTR;
+  OGRSpatialReference * oSRS = nullptr;
   //We take the assumption that the spatial reference is common to all layers
   oSRS = m_DataSource->GetLayer(0)->GetSpatialRef();
 
-  if (oSRS != ITK_NULLPTR)
+  if (oSRS != nullptr)
     {
     char * projectionRefChar;
     oSRS->exportToWkt(&projectionRefChar);
@@ -185,7 +185,7 @@ void OGRVectorDataIO::CloseInternalDataSource()
 {
   assert(m_DataSource != NULL && "m_DataSource cannot be NULL");
   ogr::version_proxy::Close(m_DataSource);
-  m_DataSource = ITK_NULLPTR;
+  m_DataSource = nullptr;
 }
 
 
@@ -193,7 +193,7 @@ bool OGRVectorDataIO::CanWriteFile(const char* filename) const
 {
 
   std::string lFileName(filename);
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -218,13 +218,13 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   ogr::version_proxy::GDALDriverType * ogrDriver =
     ogr::version_proxy::GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
 
-  if (ogrDriver == ITK_NULLPTR)
+  if (ogrDriver == nullptr)
     {
     itkExceptionMacro(<< "No OGR driver found to write file " << this->m_FileName);
     }
 
   // free an existing previous data source, if any
-  if (m_DataSource != ITK_NULLPTR)
+  if (m_DataSource != nullptr)
     {
     ogr::version_proxy::Close(m_DataSource);
     }
@@ -236,7 +236,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   m_DataSource = ogr::version_proxy::Create(ogrDriver,this->m_FileName.c_str());
 
   // check the created data source
-  if (m_DataSource == ITK_NULLPTR)
+  if (m_DataSource == nullptr)
     {
     itkExceptionMacro(
       << "Failed to create OGR data source for file " << this->m_FileName <<
@@ -258,7 +258,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
     }
 
   //TODO georeference here from OGRSpatialReference http://www.gdal.org/ogr/classOGRDataSource.html
-  OGRSpatialReference * oSRS = ITK_NULLPTR;
+  OGRSpatialReference * oSRS = nullptr;
   if (projectionInformationAvailable)
     {
     oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
@@ -266,16 +266,16 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
 
   // Retrieving root node
   DataTreeConstPointerType tree = data->GetDataTree();
-  if (tree->GetRoot() == ITK_NULLPTR)
+  if (tree->GetRoot() == nullptr)
     {
     itkExceptionMacro(<< "Data tree is empty: Root == NULL");
     }
   DataNodePointerType root = tree->GetRoot()->Get();
 
   unsigned int layerKept;
-  OGRLayer *   ogrCurrentLayer = ITK_NULLPTR;
+  OGRLayer *   ogrCurrentLayer = nullptr;
 //   OGRFeatureVectorType ogrFeatures;
-  OGRGeometryCollection * ogrCollection = ITK_NULLPTR;
+  OGRGeometryCollection * ogrCollection = nullptr;
   // OGRGeometry * ogrCurrentGeometry = NULL;
 
   // Get the input tree root
@@ -289,9 +289,9 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   (void)layerKept; // keep compiler happy
 
   otb::ogr::version_proxy::Close(m_DataSource);
-  m_DataSource = ITK_NULLPTR;
+  m_DataSource = nullptr;
 
-  if (oSRS != ITK_NULLPTR)
+  if (oSRS != nullptr)
     {
     OSRRelease(oSRS);
     }

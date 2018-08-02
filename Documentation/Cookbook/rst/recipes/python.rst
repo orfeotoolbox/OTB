@@ -9,7 +9,7 @@ In the ``otbApplication`` module, two main classes can be manipulated :
 -  ``Registry``, which provides access to the list of available
    applications, and can create applications.
 
--  ``Application``, the base class for all applications. This allows to
+-  ``Application``, the base class for all applications. This allows one to
    interact with an application instance created by the ``Registry``.
 
 Here is one example of how to use Python to run the ``Smoothing``
@@ -29,14 +29,14 @@ application, changing the algorithm at each iteration.
     import otbApplication
 
     # otbApplication.Registry can tell you what application are available
-    print "Available applications: "
-    print str( otbApplication.Registry.GetAvailableApplications() )
+    print('Available applications: ')
+    print (str( otbApplication.Registry.GetAvailableApplications()))
 
     # Let's create the application  "Smoothing"
     app = otbApplication.Registry.CreateApplication("Smoothing")
 
     # We print the keys of all its parameters
-    print app.GetParametersKeys()
+    print (app.GetParametersKeys())
 
     # First, we set the input image filename
     app.SetParameterString("in", argv[1])
@@ -45,7 +45,7 @@ application, changing the algorithm at each iteration.
     # and can take 3 values: 'mean', 'gaussian', 'anidif'
     for type in ['mean', 'gaussian', 'anidif']:
 
-      print 'Running with ' + type + ' smoothing type'
+      print('Running with ' + type + ' smoothing type')
 
       # Now we configure the smoothing algorithm
       app.SetParameterString("type", type)
@@ -69,7 +69,7 @@ Numpy array processing
 ----------------------
 
 Input and output images to any OTB application in the form of NumPy array is now possible in OTB Python wrapping.
-The Python wrapping only exposes OTB Application engine module (called *ApplicationEngine*) which allows to access existing C++ applications.
+The Python wrapping only exposes OTB Application engine module (called *ApplicationEngine*) which allows one to access existing C++ applications.
 Due to blissful nature of ApplicationEngine's loading mechanism no specific wrapping is required for each application.
 
 NumPy extension to Python wrapping allows data exchange to application as an array rather than a disk file.
@@ -303,7 +303,7 @@ Here is a small example of what can be done:
   # Check the result of ReadImageInfo
   someKeys = ['sizex', 'sizey', 'spacingx', 'spacingy', 'sensor', 'projectionref']
   for key in someKeys:
-    print(key + ' : ' + str(app2.GetParameterValue(key)) )
+    print(key + ' : ' + str(app2.GetParameterValue(key)))
   
   # Only a portion of "out" was exported but ReadImageInfo is still able to detect the 
   # correct full size of the image

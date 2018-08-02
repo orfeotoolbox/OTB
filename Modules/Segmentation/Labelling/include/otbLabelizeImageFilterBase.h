@@ -127,15 +127,15 @@ protected:
   unsigned long m_ObjectCount;
 
 private:
-  LabelizeImageFilterBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelizeImageFilterBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 }; // end class LabelizeImageFilterBase
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelizeImageFilterBase.txx"
+#include "otbLabelizeImageFilterBase.hxx"
 #endif
 
 #endif

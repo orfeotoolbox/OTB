@@ -22,7 +22,6 @@
 #include "otb_boost_string_header.h"
 
 #include "itkListSample.h"
-#include <fstream>
 #include <string>
 #include <algorithm>
 
@@ -42,7 +41,7 @@ bool ReadDataFile(
   typedef typename itk::Statistics::ListSample<TTarget>::MeasurementType TValueType;
 
   std::ifstream ifs;
-  ifs.open(infname.c_str());
+  ifs.open(infname);
 
   if(!ifs)
     {

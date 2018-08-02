@@ -22,12 +22,10 @@
 #define otbWrapperQtWidgetInputVectorDataListParameter_h
 
 
-#include <QtGui>
+#include <QtWidgets>
 
 
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #  include "otbWrapperQtWidgetParameterList.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -54,7 +52,7 @@ class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter
 // Public methods.
 public:
   QtWidgetInputVectorDataListParameter( InputVectorDataListParameter *,
-					QtWidgetModel * );
+					QtWidgetModel *, QWidget * );
 
   ~QtWidgetInputVectorDataListParameter() override;
 
@@ -62,11 +60,8 @@ public:
 //
 // Private methods.
 private:
-  // Purposely not implemented
-  QtWidgetInputVectorDataListParameter( const QtWidgetInputVectorDataListParameter & );
-
-  // Purposely not implemented
-  void operator = ( const QtWidgetInputVectorDataListParameter & );
+  QtWidgetInputVectorDataListParameter( const QtWidgetInputVectorDataListParameter & ) = delete;
+  void operator = ( const QtWidgetInputVectorDataListParameter & ) = delete;
 };
 
 

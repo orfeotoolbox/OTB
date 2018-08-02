@@ -22,6 +22,7 @@
 #define otbSpotImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
+#include <string>
 
 namespace otb
 {
@@ -132,8 +133,8 @@ protected:
 
 private:
 
-  SpotImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SpotImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

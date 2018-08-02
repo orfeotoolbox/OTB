@@ -22,6 +22,7 @@
 #define otbWrapperListViewParameter_h
 
 #include "otbWrapperParameterGroup.h"
+#include <string>
 
 namespace otb
 {
@@ -174,8 +175,8 @@ protected:
   bool                                m_SingleSelection;
 
 private:
-  ListViewParameter(const ListViewParameter &); //purposely not implemented
-  void operator =(const ListViewParameter&); //purposely not implemented
+  ListViewParameter(const ListViewParameter &) = delete;
+  void operator =(const ListViewParameter&) = delete;
 
 }; // End class Parameter
 

@@ -27,14 +27,28 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetOutputProcessXMLParameter::QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetOutputProcessXMLParameter::QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_XMLParam(param)
 {
 }
 
 QtWidgetOutputProcessXMLParameter::~QtWidgetOutputProcessXMLParameter()
 {
+}
+
+const QLineEdit*
+QtWidgetOutputProcessXMLParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetOutputProcessXMLParameter
+::GetInput()
+{
+  return m_Input;
 }
 
 void QtWidgetOutputProcessXMLParameter::DoUpdateGUI()
@@ -51,24 +65,24 @@ void QtWidgetOutputProcessXMLParameter::DoUpdateGUI()
 void QtWidgetOutputProcessXMLParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_XMLParam->GetDescription() )
   );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetOutputProcessXMLParameter::SetFileName );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetOutputProcessXMLParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
@@ -82,7 +96,7 @@ QtWidgetOutputProcessXMLParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetSaveFileName(
+    otb::GetSaveFilename(
       this,
       QString(),
       m_Input->text(),

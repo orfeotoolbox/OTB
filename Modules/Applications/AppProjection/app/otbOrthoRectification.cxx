@@ -90,12 +90,9 @@ private:
   void DoInit() override
   {
     SetName("OrthoRectification");
-    std::ostringstream oss;
-    oss << "This application allows ortho-rectifying optical and radar images from supported sensors." << std::endl;
-    SetDescription(oss.str());
-    // Documentation
+    SetDescription("This application allows ortho-rectifying optical and radar images from supported sensors.");
     SetDocName("Ortho-rectification");
-    oss.str("");
+    std::ostringstream oss;
     oss<<"This application uses inverse sensor modelling combined with a choice of interpolation functions to resample a sensor geometry image into a ground geometry regular grid. ";
     oss<<"The ground geometry regular grid is defined with respect to a map projection (see map parameter). The application offers several modes to estimate the output grid parameters (origin and ground sampling distance), including automatic estimation of image size, ground sampling distance, or both, from image metadata, user-defined ROI corners, or another ortho-image.";
     oss<<"A digital Elevation Model along with a geoid file can be specified to account for terrain deformations.";
@@ -488,10 +485,10 @@ private:
           spacing[1] = GetParameterFloat("outputs.spacingy");
 
           // Set the  processed size relative to this forced spacing
-          if (vcl_abs(spacing[0]) > 0.0)
-            SetParameterInt("outputs.sizex",static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lrx")-GetParameterFloat("outputs.ulx"))/spacing[0])));
-          if (vcl_abs(spacing[1]) > 0.0)
-            SetParameterInt("outputs.sizey",static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lry")-GetParameterFloat("outputs.uly"))/spacing[1])));
+          if (std::abs(spacing[0]) > 0.0)
+            SetParameterInt("outputs.sizex",static_cast<int>(std::ceil((GetParameterFloat("outputs.lrx")-GetParameterFloat("outputs.ulx"))/spacing[0])));
+          if (std::abs(spacing[1]) > 0.0)
+            SetParameterInt("outputs.sizey",static_cast<int>(std::ceil((GetParameterFloat("outputs.lry")-GetParameterFloat("outputs.uly"))/spacing[1])));
         }
         break;
         case Mode_OrthoFit:
@@ -589,7 +586,7 @@ private:
                          << ygridspacing << " degrees" );
 
           // Use the smallest spacing (more precise grid)
-          double optimalSpacing = std::min( vcl_abs(xgridspacing), vcl_abs(ygridspacing) );
+          double optimalSpacing = std::min( std::abs(xgridspacing), std::abs(ygridspacing) );
           otbAppLogINFO( "Setting grid spacing to " << optimalSpacing );
           SetParameterFloat("opt.gridspacing",optimalSpacing);
           }
@@ -632,23 +629,18 @@ private:
       {
       case Interpolator_Linear:
       {
-      typedef itk::LinearInterpolateImageFunction<FloatVectorImageType,
-        double>          LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_ResampleFilter->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
       {
-      typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType,
-        double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_ResampleFilter->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
       {
-      typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>     BCOInterpolationType;
       BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_ResampleFilter->SetInterpolator(interpolator);
@@ -707,9 +699,9 @@ private:
 
       // Predict size of deformation grid
       ResampleFilterType::SpacingType deformationGridSize;
-      deformationGridSize[0] = static_cast<ResampleFilterType::SpacingType::ValueType >(vcl_abs(
+      deformationGridSize[0] = static_cast<ResampleFilterType::SpacingType::ValueType >(std::abs(
           GetParameterInt("outputs.sizex") * GetParameterFloat("outputs.spacingx") / GetParameterFloat("opt.gridspacing") ));
-      deformationGridSize[1] = static_cast<ResampleFilterType::SpacingType::ValueType>(vcl_abs(
+      deformationGridSize[1] = static_cast<ResampleFilterType::SpacingType::ValueType>(std::abs(
           GetParameterInt("outputs.sizey") * GetParameterFloat("outputs.spacingy") / GetParameterFloat("opt.gridspacing") ));
       otbAppLogINFO("Using a deformation grid of size " << deformationGridSize);
 
@@ -720,8 +712,8 @@ private:
             "opt.gridspacing units are the same as outputs.spacing units");
         }
 
-      if (vcl_abs(GetParameterFloat("opt.gridspacing")) < vcl_abs(GetParameterFloat("outputs.spacingx"))
-           || vcl_abs(GetParameterFloat("opt.gridspacing")) < vcl_abs(GetParameterFloat("outputs.spacingy")) )
+      if (std::abs(GetParameterFloat("opt.gridspacing")) < std::abs(GetParameterFloat("outputs.spacingx"))
+           || std::abs(GetParameterFloat("opt.gridspacing")) < std::abs(GetParameterFloat("outputs.spacingy")) )
         {
         otbAppLogWARNING("Spacing of deformation grid should be at least equal to "
             "spacing of output image. Otherwise, computation time will be slow, "

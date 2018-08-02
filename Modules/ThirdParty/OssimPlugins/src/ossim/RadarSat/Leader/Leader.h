@@ -26,7 +26,6 @@
 #ifndef Leader_h
 #define Leader_h
 
-#include <iostream>
 #include <RadarSat/CommonRecord/FileDescriptor.h>
 #include <RadarSat/CommonRecord/DataSetSummary.h>
 #include <RadarSat/CommonRecord/DataQuality.h>

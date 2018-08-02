@@ -122,8 +122,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VirtualDimensionality(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VirtualDimensionality(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   MatrixType m_Covariance;
   MatrixType m_Correlation;
@@ -137,7 +137,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVirtualDimensionality.txx"
+#include "otbVirtualDimensionality.hxx"
 #endif
 
 #endif

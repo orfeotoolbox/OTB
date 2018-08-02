@@ -31,9 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include <QFileDialog>
-#endif //tag=QT4-boost-compatibility
 
 //
 // System includes (sorted by alphabetic order)
@@ -118,7 +116,7 @@ GetExistingDirectory( QWidget * p = 0,
  */
 QString
 OTBQtAdapters_EXPORT
-GetOpenFileName( QWidget * p =0,
+GetOpenFilename( QWidget * p =0,
 		 const QString & caption = QString(),
 		 const QString & dir = QString(),
 		 const QString & filter = QString(),
@@ -145,7 +143,7 @@ GetOpenFileName( QWidget * p =0,
  */
 QStringList
 OTBQtAdapters_EXPORT
-GetOpenFileNames( QWidget * p =0,
+GetOpenFilenames( QWidget * p =0,
 		  const QString & caption = QString(),
 		  const QString & dir = QString(),
 		  const QString & filter = QString(),
@@ -172,7 +170,7 @@ GetOpenFileNames( QWidget * p =0,
  */
 QString
 OTBQtAdapters_EXPORT
-GetSaveFileName( QWidget * p =0,
+GetSaveFilename( QWidget * p =0,
 		 const QString & caption = QString(),
 		 const QString & dir = QString(),
 		 const QString & filter = QString(),

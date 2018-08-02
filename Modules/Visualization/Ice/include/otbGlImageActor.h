@@ -22,7 +22,7 @@
 #define otb_GlImageActor_h
 
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 #include "itkCenteredRigid2DTransform.h"
 
@@ -35,6 +35,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
+#include <string>
 
 
 namespace otb
@@ -144,7 +145,7 @@ public:
   {
   if ( this->m_RedIdx != idx )
    { 
-   this->m_RedIdx = vcl_min(this->GetNumberOfComponents(),idx);
+   this->m_RedIdx = std::min(this->GetNumberOfComponents(),idx);
    this->Modified();
    }
   }
@@ -153,7 +154,7 @@ public:
   {
   if ( this->m_GreenIdx != idx )
     { 
-    this->m_GreenIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    this->m_GreenIdx = std::min(this->GetNumberOfComponents(),idx);
     this->Modified();
     }
   }  
@@ -162,7 +163,7 @@ public:
   {
   if ( this->m_BlueIdx != idx )
     { 
-    this->m_BlueIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    this->m_BlueIdx = std::min(this->GetNumberOfComponents(),idx);
     this->Modified(); 
     }
   }
@@ -229,7 +230,7 @@ protected:
         m_RedIdx(1),
         m_GreenIdx(2),
         m_BlueIdx(3),
-        m_RescaleFilter(ITK_NULLPTR)
+        m_RescaleFilter(nullptr)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);

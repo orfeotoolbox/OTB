@@ -216,6 +216,8 @@ macro(otb_module_impl)
     endif()
 
     # Generate the export macro header for symbol visibility/Windows DLL declspec
+    # This header is called *Modulename*Export.h in the build directory,
+    # and contains defines for _EXPORT macros such as OTBApplicationEngine_EXPORT
     generate_export_header(${otb-module}
       EXPORT_FILE_NAME ${_export_header_file}
       EXPORT_MACRO_NAME ${otb-module}_EXPORT
@@ -276,6 +278,12 @@ macro(otb_module_test)
   otb_module_use(${OTB_MODULE_${otb-module-test}_DEPENDS})
   foreach(dep IN LISTS OTB_MODULE_${otb-module-test}_DEPENDS)
     list(APPEND ${otb-module-test}_LIBRARIES "${${dep}_LIBRARIES}")
+  endforeach()
+  # make sure the test can link with optional libs
+  foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
+    if (${dep}_ENABLED)
+      list(APPEND ${otb-module-test}_LIBRARIES "${${dep}_LIBRARIES}")
+    endif()
   endforeach()
 endmacro()
 

@@ -17,9 +17,9 @@
 /* Modify the interface for C++.  */
 #ifdef __cplusplus
 # undef complex
-# include <vcl_complex.h>
-# define otb_6S_complex vcl_complex<float>
-# define otb_6S_doublecomplex vcl_complex<double>
+# include <complex>
+# define otb_6S_complex std::complex<float>
+# define otb_6S_doublecomplex std::complex<double>
 #endif
 
 /* Include the netlib interface.  */

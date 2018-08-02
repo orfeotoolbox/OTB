@@ -113,8 +113,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RealMomentsImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);           //purposely not implemented
+  RealMomentsImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Pmax;
   unsigned int m_Qmax;
@@ -124,7 +124,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRealMomentsImageFunction.txx"
+#include "otbRealMomentsImageFunction.hxx"
 #endif
 
 #endif

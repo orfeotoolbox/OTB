@@ -183,8 +183,8 @@ protected:
     throw(itk::InvalidRequestedRegionError) override;
 
 private:
-  ConvolutionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConvolutionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   InputSizeType m_Radius;
@@ -197,7 +197,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConvolutionImageFilter.txx"
+#include "otbConvolutionImageFilter.hxx"
 #endif
 
 #endif

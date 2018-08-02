@@ -22,6 +22,7 @@
 #define otbLandsatTMSRBC_h
 
 #include "otbLandsatTMIndices.h"
+#include <string>
 
 namespace otb
 {

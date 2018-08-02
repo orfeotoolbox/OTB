@@ -92,7 +92,7 @@ bool LUMImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -192,7 +192,7 @@ void LUMImageIO::ReadImageInformation()
     m_File.close();
     }
 
-  m_File.open(m_FileName.c_str(),  std::ios::in | std::ios::binary);
+  m_File.open(m_FileName,  std::ios::in | std::ios::binary);
   if (m_File.fail())
     {
     itkExceptionMacro(<< "LUMImageIO::ReadImageInformation() failed header open ! ");
@@ -320,7 +320,7 @@ bool LUMImageIO::CanWriteFile(const char* filename)
     {
     return false;
     }
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -388,7 +388,7 @@ void LUMImageIO::WriteImageInformation()
     }
   if (CanWriteFile(m_FileName.c_str()) == false)
     {
-    itkExceptionMacro(<< "The file " << m_FileName.c_str() << " is not defined as a LUM file");
+    itkExceptionMacro(<< "The file " << m_FileName << " is not defined as a LUM file");
     }
   // Close file from any previous image
   if (m_File.is_open())
@@ -398,10 +398,10 @@ void LUMImageIO::WriteImageInformation()
 
   // Open the new file for writing
   // Actually open the file
-  m_File.open(m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
+  m_File.open(m_FileName,  std::ios::out | std::ios::trunc | std::ios::binary);
   if (m_File.fail())
     {
-    itkExceptionMacro(<< "Cannot write requested file " << m_FileName.c_str() << ".");
+    itkExceptionMacro(<< "Cannot write requested file " << m_FileName << ".");
     }
 
   //Writing header information
@@ -415,7 +415,7 @@ void LUMImageIO::WriteImageInformation()
     m_File.write(value, headerLength);
     }
   delete[] value;
-  value = ITK_NULLPTR;
+  value = nullptr;
   //Set m_TypeLum
   if (0) {}
   otbSetTypeLumMacro(CHAR,   "08BI", "08LI")
@@ -467,7 +467,7 @@ int LUMImageIO::CaiGetTypeLum(const char *          type_code,
   taille = -1;
   int nbbits = -1;
   ind = 0;
-  pch0 = ITK_NULLPTR;
+  pch0 = nullptr;
 
   std::string str_type_code(type_code);
   while ((trouve == -1) && (ind < m_CaiLumTyp.size()))
@@ -502,17 +502,17 @@ int LUMImageIO::CaiGetTypeLum(const char *          type_code,
       pch0 = const_cast<char *>(strstr(type_code, "U"));
       if (taille == 1)
         {
-        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "OCT");
+        if (pch0 == nullptr) sprintf(cod_pix, "OCT");
         else sprintf(cod_pix, "UOCT");
         }
       else if (taille == 2)
         {
-        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "I2");
+        if (pch0 == nullptr) sprintf(cod_pix, "I2");
         else sprintf(cod_pix, "UI2");
         }
       else if (taille == 4)
         {
-        if (pch0 == ITK_NULLPTR) sprintf(cod_pix, "I4");
+        if (pch0 == nullptr) sprintf(cod_pix, "I4");
         else sprintf(cod_pix, "UI4");
         }
       else taille = -1;

@@ -21,11 +21,11 @@
 #ifndef otbWrapperQtWidgetIntParameter_h
 #define otbWrapperQtWidgetIntParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+
+#include "otbWrapperQtWidgetSpinBoxes.h"
 
 
 namespace otb
@@ -42,22 +42,25 @@ class OTBQtWidget_EXPORT QtWidgetIntParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
+  QtWidgetIntParameter(IntParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetIntParameter() override;
 
-protected slots:
-  void SetValue( int value );
+private slots:
+  void OnCleared();
+  void OnValueChanged(int);
+  void OnEditingFinished();
 
 private:
-  QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
-  void operator=(const QtWidgetIntParameter&); //purposely not implemented
+  QtWidgetIntParameter(const QtWidgetIntParameter&) = delete;
+  void operator=(const QtWidgetIntParameter&) = delete;
 
   void DoCreateWidget() override;
-
   void DoUpdateGUI() override;
 
+  bool eventFilter( QObject * o, QEvent * e ) override;
+
   QHBoxLayout *         m_QHBoxLayout;
-  QSpinBox *            m_QSpinBox;
+  QtWidgetSpinBox* m_QSpinBox;
 
   IntParameter::Pointer m_IntParam;
 };

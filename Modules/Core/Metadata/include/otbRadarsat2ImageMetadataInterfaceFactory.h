@@ -62,8 +62,8 @@ protected:
   ~Radarsat2ImageMetadataInterfaceFactory() override;
 
 private:
-  Radarsat2ImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Radarsat2ImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

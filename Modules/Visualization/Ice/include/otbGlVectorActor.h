@@ -31,6 +31,7 @@
 
 #include "itkCenteredRigid2DTransform.h"
 #include "itkVector.h"
+#include <string>
 
 
 // Forward declaration of GLUtesselator

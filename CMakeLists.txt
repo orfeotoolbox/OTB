@@ -91,6 +91,8 @@ if( CMAKE_HOST_WIN32 )
   endif()
 
 endif()
+set(OTB_APPLICATIONS_NAME_LIST "" CACHE STRING "List of all applications" FORCE)
+mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 
 set(OTB_CMAKE_DIR ${OTB_SOURCE_DIR}/CMake)
 set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
@@ -100,9 +102,9 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
-include( i18n_qt4 )
+include( i18n_qt )
 
-reset_qt4_i18n_sources()
+reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -123,7 +125,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "5")
+set(OTB_VERSION_MINOR "7")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -165,10 +167,11 @@ if(NOT OTB_INSTALL_JAVA_DIR)
   set(OTB_INSTALL_JAVA_DIR "lib/otb/java")
 endif()
 if(NOT OTB_INSTALL_DATA_DIR)
-  set(OTB_INSTALL_DATA_DIR share/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  set(OTB_INSTALL_DATA_DIR "share/otb")
 endif()
+
 if(NOT OTB_INSTALL_DOC_DIR)
-  set(OTB_INSTALL_DOC_DIR share/doc/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  set(OTB_INSTALL_DOC_DIR "share/doc/otb")
 endif()
 if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
@@ -229,7 +232,14 @@ endif()
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 mark_as_advanced(OTB_USE_DEPRECATED)
 
+# Although the OpenMP option looks like a 3rd party module, it is NOT. This option
+# is handled with other compilation flags in file OTBSetStandardCompilerFlags.cmake
+# before any module is parsed or enabled (see OTBModuleEnablement.cmake later on
+# during configure). Trying to modify this option from any module is
+# useless. Any 3rd party module dragging OpenMP should append
+# the corresponding flags to CMAKE_CXX_FLAGS, CMAKE_EXE_LINKER_FLAGS, and so on.
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
+
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
 
 include(OTBSetStandardCompilerFlags)
@@ -418,11 +428,13 @@ install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
 
 # TODO : install release notes, copyright notice, ...
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
-install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 # Configure and install VERSION file
 configure_file(VERSION VERSION @ONLY)
-install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} )
+
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
 
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
@@ -531,7 +543,7 @@ endforeach()
 # message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
 # unset(modules_list_for_summary)
 
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT4")
+list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT")
 foreach(item ${option_list})
   if(NOT ${item})
     list(REMOVE_ITEM option_list "${item}" )
@@ -550,7 +562,7 @@ list(APPEND option_list TINYXML)
 #Q: Why these two guys here? we already have option_list
 #A: Because cmake case sensitivity with variables.
 
-if(OTB_USE_QT4)
+if(OTB_USE_QT)
   list(APPEND option_list QT)
 endif()
 #sort again!

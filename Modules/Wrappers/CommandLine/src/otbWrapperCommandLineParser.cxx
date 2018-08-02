@@ -116,8 +116,8 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::vector
       break;
       }
     // Add path to result
-    std::string fullPath = itksys::SystemTools::CollapseFullPath(tmpPath.c_str());
-    if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
+    std::string fullPath = itksys::SystemTools::CollapseFullPath(tmpPath);
+    if( !itksys::SystemTools::FileIsDirectory(fullPath) )
       {
       std::cerr<<"Invalid module path: "<<fullPath<<std::endl;
       return INVALIDMODULEPATH;
@@ -153,7 +153,7 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
 
   if( tempModPath.size() > 0 )
     {
-    std::vector<itksys::String> pathAttribut = itksys::SystemTools::SplitString(tempModPath.substr(0, tempModPath.size()).c_str(), ' ', false);
+    std::vector<itksys::String> pathAttribut = itksys::SystemTools::SplitString(tempModPath, ' ', false);
 
 
     // Remove " " string element
@@ -165,9 +165,9 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
       pathAttribut[i].erase(0, 1);
       }
 
-      std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
+      std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i]);
 
-      if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
+      if( !itksys::SystemTools::FileIsDirectory(fullPath) )
         {
         std::cerr<<"Invalid module path: "<<fullPath<<std::endl;
         return INVALIDMODULEPATH;
@@ -216,7 +216,7 @@ CommandLineParser::GetModuleName( std::string & modName, const std::vector<std::
 CommandLineParser::ParseResultType
 CommandLineParser::GetModuleName( std::string & modName, const std::string & exp )
 {
-  std::vector<itksys::String> spaceSplitExp = itksys::SystemTools::SplitString(exp.c_str(), ' ', false);
+  std::vector<itksys::String> spaceSplitExp = itksys::SystemTools::SplitString(exp, ' ', false);
   // if the chain is "  module", SplitString will return: [ ], [module]
   for(unsigned int i=0; i<spaceSplitExp.size(); i++)
     {
@@ -360,7 +360,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
   // Only if the key has values associated
   if( tempModKey.size() > 0 )
     {
-    std::vector<itksys::String> spaceSplit = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()).c_str(), ' ', false);
+    std::vector<itksys::String> spaceSplit = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()), ' ', false);
 
     // Remove " " string element
     for(unsigned int i=0; i<spaceSplit.size(); i++)

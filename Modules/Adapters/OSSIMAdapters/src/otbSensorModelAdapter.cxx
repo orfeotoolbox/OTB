@@ -54,7 +54,7 @@ namespace otb
 {
 
 SensorModelAdapter::SensorModelAdapter():
-  m_SensorModel(ITK_NULLPTR), m_TiePoints(ITK_NULLPTR) // FIXME keeping the original value but...
+  m_SensorModel(nullptr), m_TiePoints(nullptr) // FIXME keeping the original value but...
 {
   m_DEMHandler = DEMHandler::Instance();
   m_TiePoints = new ossimTieGptSet();
@@ -75,7 +75,7 @@ void SensorModelAdapter::CreateProjection(const ImageKeywordlist& image_kwl)
   otbMsgDevMacro(<< "* type: " << geom.find("type"));
 
   m_SensorModel = ossimSensorModelFactory::instance()->createProjection(geom);
-  if (m_SensorModel == ITK_NULLPTR)
+  if (m_SensorModel == nullptr)
     {
     m_SensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
     }
@@ -83,13 +83,13 @@ void SensorModelAdapter::CreateProjection(const ImageKeywordlist& image_kwl)
 
 bool SensorModelAdapter::IsValidSensorModel() const
 {
-  return m_SensorModel != ITK_NULLPTR;
+  return m_SensorModel != nullptr;
 }
 
 void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
                                                double& lon, double& lat, double& h) const
 {
-  if (this->m_SensorModel == ITK_NULLPTR)
+  if (this->m_SensorModel == nullptr)
     {
     itkExceptionMacro(<< "ForwardTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
@@ -108,7 +108,7 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
 void SensorModelAdapter::ForwardTransformPoint(double x, double y,
                                                double& lon, double& lat, double& h) const
 {
-  if (this->m_SensorModel == ITK_NULLPTR)
+  if (this->m_SensorModel == nullptr)
     {
     itkExceptionMacro(<< "ForwardTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
@@ -127,7 +127,7 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y,
 void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
                                                double& x, double& y, double& z) const
 {
-  if (this->m_SensorModel == ITK_NULLPTR)
+  if (this->m_SensorModel == nullptr)
     {
     itkExceptionMacro(<< "InverseTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
@@ -147,7 +147,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
 void SensorModelAdapter::InverseTransformPoint(double lon, double lat,
                                                double& x, double& y, double& z) const
 {
-  if (this->m_SensorModel == ITK_NULLPTR)
+  if (this->m_SensorModel == nullptr)
     {
     itkExceptionMacro(<< "InverseTransformPoint(): Invalid sensor model (m_SensorModel pointer is null)");
     }
@@ -202,7 +202,7 @@ double SensorModelAdapter::Optimize()
 {
   double precision = 0.;
   // If tie points and model are allocated
-  if(m_SensorModel != ITK_NULLPTR)
+  if(m_SensorModel != nullptr)
     {
     // try to retrieve a sensor model
 
@@ -211,15 +211,15 @@ double SensorModelAdapter::Optimize()
     ossimRpcProjection * simpleRpcModel = dynamic_cast<ossimRpcProjection *>(m_SensorModel);
 
      //Handle exceptions
-    if ( (sensorModel == ITK_NULLPTR ) && (simpleRpcModel == ITK_NULLPTR ) )
+    if ( (sensorModel == nullptr ) && (simpleRpcModel == nullptr ) )
        itkExceptionMacro(<< "Optimize(): error, both dynamic_cast from ossimProjection* to ossimSensorModel* / ossimRpcProjection* failed.");
 
-    if(sensorModel != ITK_NULLPTR )
+    if(sensorModel != nullptr )
       {
       // Call optimize fit
       precision  = sensorModel->optimizeFit(*m_TiePoints);
       }
-    else if (simpleRpcModel != ITK_NULLPTR)
+    else if (simpleRpcModel != nullptr)
       {
       // Call optimize fit
       precision  = simpleRpcModel->optimizeFit(*m_TiePoints);
@@ -238,19 +238,19 @@ bool SensorModelAdapter::ReadGeomFile(const std::string & infile)
 
   m_SensorModel = ossimSensorModelFactory::instance()->createProjection(geom);
 
-  if (m_SensorModel == ITK_NULLPTR)
+  if (m_SensorModel == nullptr)
     {
     m_SensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
     }
 
   // otbMsgDevMacro(<< "ReadGeomFile("<<geom<<") -> " << m_SensorModel);
-  return (m_SensorModel != ITK_NULLPTR);
+  return (m_SensorModel != nullptr);
 }
 
 bool SensorModelAdapter::WriteGeomFile(const std::string & outfile)
 {
   // If tie points and model are allocated
-  if(m_SensorModel != ITK_NULLPTR)
+  if(m_SensorModel != nullptr)
     {
     // try to retrieve a sensor model
     ossimSensorModel * sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
@@ -258,17 +258,17 @@ bool SensorModelAdapter::WriteGeomFile(const std::string & outfile)
     ossimRpcProjection * simpleRpcModel = dynamic_cast<ossimRpcProjection *>(m_SensorModel);
 
     //Handle exceptions
-    if ( (sensorModel == ITK_NULLPTR ) && (simpleRpcModel == ITK_NULLPTR ) )
+    if ( (sensorModel == nullptr ) && (simpleRpcModel == nullptr ) )
        itkExceptionMacro(<< "Optimize(): error, both dynamic_cast from ossimProjection* to ossimSensorModel* / ossimRpcProjection* failed.");
 
     ossimKeywordlist geom;
     bool success = false;
-    if(sensorModel != ITK_NULLPTR )
+    if(sensorModel != nullptr )
       {
       // Save state
       success = sensorModel->saveState(geom);
       }
-    else if (simpleRpcModel != ITK_NULLPTR)
+    else if (simpleRpcModel != nullptr)
       {
       // Save state
       success = simpleRpcModel->saveState(geom);

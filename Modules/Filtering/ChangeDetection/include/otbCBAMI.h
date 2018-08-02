@@ -60,7 +60,7 @@ public:
     normalizeInPlace(vecA);
     normalizeInPlace(vecB);
 
-    return static_cast<TOutput>(-vcl_log(static_cast<double>(PhiMI(vecA, vecB) + epsilon)));
+    return static_cast<TOutput>(-std::log(static_cast<double>(PhiMI(vecA, vecB) + epsilon)));
   }
 
 protected:
@@ -83,14 +83,14 @@ protected:
 
     for (itx = vx.begin(); itx < vx.end(); ++itx)
       {
-      Vx += static_cast<TOutput>(vcl_pow(static_cast<double>((*itx) - Ex), 2));
+      Vx += static_cast<TOutput>(std::pow(static_cast<double>((*itx) - Ex), 2));
       }
 
     Vx /= (vx.size());
 
     for (itx = vx.begin(); itx < vx.end(); ++itx)
       {
-      (*itx) = ((*itx) - Ex) / static_cast<TOutput>(vcl_sqrt(static_cast<double>(Vx)));
+      (*itx) = ((*itx) - Ex) / static_cast<TOutput>(std::sqrt(static_cast<double>(Vx)));
       }
 
   }
@@ -246,7 +246,7 @@ protected:
     for (iti = donnees.begin(); iti < donnees.end(); ++iti)
       for (itj = donnees.begin(); itj < donnees.end(); ++itj)
         {
-        if (iti != itj) termeR += static_cast<TOutput>(vcl_pow(static_cast<double>(Rxy((*iti), (*itj))), 2));
+        if (iti != itj) termeR += static_cast<TOutput>(std::pow(static_cast<double>(Rxy((*iti), (*itj))), 2));
 
         for (itk = donnees.begin(); itk < donnees.end(); ++itk)
           for (itl = donnees.begin(); itl < donnees.end(); itl++)
@@ -255,7 +255,7 @@ protected:
                 (iti !=
                  itl))
               termeQ +=
-                static_cast<TOutput>(vcl_pow(static_cast<double>(Qxijkl((*iti), (*itj), (*itk), (*itl))), 2));
+                static_cast<TOutput>(std::pow(static_cast<double>(Qxijkl((*iti), (*itj), (*itk), (*itl))), 2));
             }
         }
 

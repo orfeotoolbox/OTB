@@ -131,8 +131,8 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  UnaryFunctorWithIndexImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorWithIndexImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 };
@@ -140,7 +140,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorWithIndexImageFilter.txx"
+#include "otbUnaryFunctorWithIndexImageFilter.hxx"
 #endif
 
 #endif

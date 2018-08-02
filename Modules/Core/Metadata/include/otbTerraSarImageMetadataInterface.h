@@ -188,8 +188,8 @@ protected:
   double GetNoiseReferencePoint(unsigned int noiseRecord) const;
 
 private:
-  TerraSarImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TerraSarImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

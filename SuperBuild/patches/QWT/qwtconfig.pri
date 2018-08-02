@@ -20,6 +20,7 @@ QWT_INSTALL_PREFIX = @SB_INSTALL_PREFIX@
 QWT_INSTALL_DOCS      = $${QWT_INSTALL_PREFIX}/doc
 QWT_INSTALL_HEADERS   = $${QWT_INSTALL_PREFIX}/include
 QWT_INSTALL_LIBS      = $${QWT_INSTALL_PREFIX}/lib
+QWT_INSTALL_BIN       = $${QWT_INSTALL_PREFIX}/bin
 
 ######################################################################
 # Designer plugin

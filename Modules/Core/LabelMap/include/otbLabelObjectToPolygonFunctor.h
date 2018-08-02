@@ -24,7 +24,7 @@
 #include <vector>
 
 //TODO change this include  have to define from what inherate this class
-#include "otbPolyLineParametricPathWithValue.h" //for vcl_abs
+#include "otbPolyLineParametricPathWithValue.h" //for std::abs
 
 #include "itkPoint.h"
 #include "itkIndex.h"
@@ -120,7 +120,7 @@ public:
   }
 
   /** Constructor */
-  LabelObjectToPolygonFunctor() : m_Polygon(ITK_NULLPTR),
+  LabelObjectToPolygonFunctor() : m_Polygon(nullptr),
     m_CurrentState(UP_LEFT),
     m_PositionFlag(LEFT_END),
     m_StartingPoint(),
@@ -235,7 +235,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelObjectToPolygonFunctor.txx"
+#include "otbLabelObjectToPolygonFunctor.hxx"
 #endif
 
 #endif

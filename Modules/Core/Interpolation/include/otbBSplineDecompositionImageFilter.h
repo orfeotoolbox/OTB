@@ -92,8 +92,8 @@ protected:
   unsigned int m_IteratorDirection;              // Direction for iterator incrementing
 
 private:
-  BSplineDecompositionImageFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  BSplineDecompositionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Determines the poles given the Spline Order. */
   virtual void SetPoles();
@@ -125,7 +125,7 @@ private:
 } // namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBSplineDecompositionImageFilter.txx"
+#include "otbBSplineDecompositionImageFilter.hxx"
 #endif
 
 #endif

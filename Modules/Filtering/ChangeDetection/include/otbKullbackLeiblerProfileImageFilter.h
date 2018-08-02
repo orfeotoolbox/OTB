@@ -190,15 +190,15 @@ protected:
   ~KullbackLeiblerProfileImageFilter() override {}
 
 private:
-  KullbackLeiblerProfileImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KullbackLeiblerProfileImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKullbackLeiblerProfileImageFilter.txx"
+#include "otbKullbackLeiblerProfileImageFilter.hxx"
 #endif
 
 #endif

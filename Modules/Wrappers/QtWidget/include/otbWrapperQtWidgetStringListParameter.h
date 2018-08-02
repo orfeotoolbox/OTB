@@ -50,18 +50,16 @@ class OTBQtWidget_EXPORT QtWidgetStringListParameter :
 //
 // Public methods.
 public:
-  QtWidgetStringListParameter( StringListParameter *, QtWidgetModel * );
+  QtWidgetStringListParameter( StringListParameter *, QtWidgetModel * , QWidget *);
   ~QtWidgetStringListParameter() override;
 
 
 //
 // Private methods.
 private:
-   // Purposely not implemented.
-  QtWidgetStringListParameter( const QtWidgetStringListParameter & );
+  QtWidgetStringListParameter( const QtWidgetStringListParameter & ) = delete;
 
-  // Purposely not implemented
-  void operator = ( const QtWidgetStringListParameter & );
+  void operator = ( const QtWidgetStringListParameter & ) = delete;
 };
 
 

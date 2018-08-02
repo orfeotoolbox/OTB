@@ -70,8 +70,8 @@ protected:
   ~EllipsoidAdapter() override;
 
 private:
-  EllipsoidAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EllipsoidAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ossimEllipsoid* m_Ellipsoid;
 };

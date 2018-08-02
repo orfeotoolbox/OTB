@@ -85,15 +85,15 @@ protected:
   typename TransformType::Pointer m_Transform;
 
 private:
-  TransformPointSetFilter(const TransformPointSetFilter &); //purposely not implemented
-  void operator =(const TransformPointSetFilter&); //purposely not implemented
+  TransformPointSetFilter(const TransformPointSetFilter &) = delete;
+  void operator =(const TransformPointSetFilter&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTransformPointSetFilter.txx"
+#include "otbTransformPointSetFilter.hxx"
 #endif
 
 #endif

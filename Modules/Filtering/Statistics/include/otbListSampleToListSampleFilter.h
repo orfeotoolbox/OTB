@@ -92,8 +92,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ListSampleToListSampleFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ListSampleToListSampleFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class ListSampleToListSampleFilter
 
@@ -101,7 +101,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleToListSampleFilter.txx"
+#include "otbListSampleToListSampleFilter.hxx"
 #endif
 
 #endif

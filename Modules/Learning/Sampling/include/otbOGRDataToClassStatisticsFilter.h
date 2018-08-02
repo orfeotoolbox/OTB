@@ -24,6 +24,7 @@
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "itkSimpleDataObjectDecorator.h"
+#include <string>
 
 namespace otb
 {
@@ -102,8 +103,8 @@ protected:
                       itk::ThreadIdType& threadid) override;
 
 private:
-  PersistentOGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentOGRDataToClassStatisticsFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Number of pixels in all the polygons (per thread) */
   std::vector<unsigned long> m_NbPixelsThread;
@@ -186,14 +187,14 @@ protected:
   ~OGRDataToClassStatisticsFilter() override {}
 
 private:
-  OGRDataToClassStatisticsFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OGRDataToClassStatisticsFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataToClassStatisticsFilter.txx"
+#include "otbOGRDataToClassStatisticsFilter.hxx"
 #endif
 
 #endif

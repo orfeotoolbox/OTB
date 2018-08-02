@@ -26,11 +26,11 @@
 #ifndef ErsSarPlatformPositionData_h
 #define ErsSarPlatformPositionData_h
 
-#include <iostream>
 #include "erssar/ErsSarRecord.h"
 #include "erssar/ErsSarRecordHeader.h"
 
 #include "erssar/ErsSarPositionVectorRecord.h"
+#include <string>
 
 
 namespace ossimplugins

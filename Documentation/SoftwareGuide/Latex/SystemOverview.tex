@@ -8,18 +8,15 @@ OTB. In this chapter, we will make reference either to \emph{OTB
   features} or \emph{ITK features} without distinction. Bear in mind
 that OTB uses ITK as its core element, so all the fundamental elements
 of OTB come from ITK. OTB extends the functionalities of ITK for the
-remote sensing image processing comunity. We benefit from the Open
+remote sensing image processing community. We benefit from the Open
 Source development approach chosen for ITK, which allows us to provide
-an impressive set of functionalities with much lesser effort than it
+an impressive set of functionalities with much less effort than
 would have been the case in a closed source universe!
 
 \section{System Organization}
 \label{sec:SystemOrganization}
 
-The ORFEO Toolbox consists of several subsystems. A brief
-description of these subsystems follows. Later sections in this chapter---and
-in some cases additional chapters---cover these concepts in more detail. (Note:
-in the previous chapter, another module---\code{OTB-Documents} is briefly described.)
+The Orfeo Toolbox consists of several subsystems:
 
 \begin{description}
 	\item[Essential System Concepts.] Like any software system, OTB is
@@ -120,14 +117,14 @@ found in ITK and therefore also in OTB.
 \index{template}
 
 Generic programming is a method of organizing libraries consisting of
-generic---or reusable---software components \cite{Musser1996}. The idea is to
+generic---or reusable---software components. The idea is to
 make software that is capable of ``plugging together'' in an efficient,
 adaptable manner. The essential ideas of generic programming are
 \emph{containers} to hold data, \emph{iterators} to access the data, and 
 \emph{generic algorithms} that use containers and iterators to create 
 efficient, fundamental algorithms such as sorting. Generic programming is
 implemented in C++ with the \emph{template} programming mechanism and the 
-use of the STL Standard Template Library \cite{Austern1999}.
+use of the STL Standard Template Library.
 
 C++ templating is a programming technique allowing users to write software in
 terms of one or more unknown types \code{T}. To create executable code, the
@@ -148,32 +145,27 @@ compiler can optimize the code to deliver maximal performance. The
 disadvantage of generic programming is that many compilers still do not
 support these advanced concepts and cannot compile OTB. And even if they do,
 they may produce completely undecipherable error messages due to even the
-simplest syntax errors. If you are not familiar with templated code and
-generic programming, we recommend the two books cited above.
+simplest syntax errors.
 
 \subsection{Include Files and Class Definitions}
 \label{sec:IncludeFiles}
 
 In ITK and OTB classes are defined by a maximum of two files: a header \code{.h} file
 and an implementation file---\code{.cxx} if a non-templated class, and a
-\code{.txx} if a templated class.
+\code{.hxx} if a templated class.
 The header files contain class declarations
 and formatted comments that are used by the Doxygen documentation
 system to automatically produce HTML manual pages.
 
-In addition to class headers, there are a few other important header files.
+In addition to class headers, there are a few other important ITK header files.
 \begin{description}
-        \item[\code{itkMacro.h}] is found in the
-        \code{Utilities/ITK/Code/Common} directory
-        and defines standard system-wide macros (such as \code{Set/Get},
+        \item[\code{itkMacro.h}] defines standard system-wide macros (such as \code{Set/Get},
         constants, and other parameters).
 
-        \item[\code{itkNumericTraits.h}] is found in the \code{Utilities/ITK/Code/Common}
-        directory and defines numeric characteristics for native types such
+        \item[\code{itkNumericTraits.h}] defines numeric characteristics for native types such
         as its maximum and minimum possible values.
 
-        \item[\code{itkWin32Header.h}] is found in the \code{Utilities/ITK/Code/Common}
-        and is used to define operating system parameters to control
+        \item[\code{itkWin32Header.h}] is used to define operating system parameters to control
         the compilation process.
 \end{description}
 
@@ -205,7 +197,7 @@ specialized image processing hardware (i.e., to realize a performance
 gain). By using the object factory mechanism, it is possible at run-time to
 replace the creation of a particular OTB filter with such a custom class. (Of
 course, the class must provide the exact same API as the one it is
-replacing.) To do this, the user compiles her class (using the same compiler,
+replacing.) To do this, the user compiles their class (using the same compiler,
 build options, etc.) and inserts the object code into a shared library or
 DLL. The library is then placed in a directory referred to by the
 \code{OTB\_AUTOLOAD\_PATH} environment variable. On instantiation, the object
@@ -219,7 +211,7 @@ In practice object factories are used mainly (and generally transparently) by
 the OTB input/output (IO) classes. For most users the greatest impact is on
 the use of the \code{New()} method to create a class. Generally the
 \code{New()} method is declared and implemented via the macro
-\code{itkNewMacro()} found in \code{Utilities/ITK/Common/itkMacro.h}.
+\code{itkNewMacro()} found in \code{Modules/Core/Common/include/itkMacro.h}.
 
 
 \subsection{Smart Pointers and Memory Management}
@@ -356,7 +348,7 @@ can trap \emph{any} OTB exception by catching ExceptionObject.
 \index{InvokeEvent()}
 
 Event handling in OTB is implemented using the Subject/Observer design
-pattern \cite{Gamma1995} (sometimes referred to as the Command/Observer
+pattern (sometimes referred to as the Command/Observer
 design pattern). In this approach, objects indicate that they are watching
 for a particular event---invoked by a particular instance--by registering
 with the instance that they are watching.  For example, filters in OTB
@@ -432,7 +424,7 @@ Invoking methods on the same instance in different threads is to be avoided.
 \index{VNL}
 \index{numerics}
 
-OTB; as ITK, uses the VNL numerics library to provide resources for numerical
+OTB, like ITK, uses the VNL numerics library to provide resources for numerical
 programming combining the ease of use of packages like Mathematica and Matlab
 with the speed of C and the elegance of C++. It provides a C++ interface to
 the high-quality Fortran routines made available in the public domain by

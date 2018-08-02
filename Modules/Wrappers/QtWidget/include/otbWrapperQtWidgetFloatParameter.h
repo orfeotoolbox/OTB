@@ -21,11 +21,11 @@
 #ifndef otbWrapperQtWidgetFloatParameter_h
 #define otbWrapperQtWidgetFloatParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+
+#include "otbWrapperQtWidgetSpinBoxes.h"
 
 namespace otb
 {
@@ -41,22 +41,25 @@ class OTBQtWidget_EXPORT QtWidgetFloatParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*);
+  QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetFloatParameter() override;
 
-protected slots:
-  void SetValue( double value );
+private slots:
+  void OnCleared();
+  void OnValueChanged(double);
+  void OnEditingFinished();
 
 private:
-  QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
-  void operator=(const QtWidgetFloatParameter&); //purposely not implemented
+  QtWidgetFloatParameter(const QtWidgetFloatParameter&) = delete;
+  void operator=(const QtWidgetFloatParameter&) = delete;
 
   void DoCreateWidget() override;
-
   void DoUpdateGUI() override;
 
+  bool eventFilter(QObject * o, QEvent * e) override;
+
   QHBoxLayout *           m_QHBoxLayout;
-  QDoubleSpinBox *        m_QDoubleSpinBox;
+  QtWidgetDoubleSpinBox *    m_QDoubleSpinBox;
 
   FloatParameter::Pointer m_FloatParam;
 };

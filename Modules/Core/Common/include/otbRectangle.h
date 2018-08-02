@@ -111,8 +111,8 @@ protected:
   /** */
 
 private:
-  Rectangle(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  Rectangle(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ValueType m_Orientation;
   ValueType m_Width;
@@ -122,6 +122,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRectangle.txx"
+#include "otbRectangle.hxx"
 #endif
 #endif

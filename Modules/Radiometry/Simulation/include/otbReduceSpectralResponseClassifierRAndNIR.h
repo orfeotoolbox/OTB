@@ -130,8 +130,8 @@ namespace otb
           //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
         private:
-          ReduceSpectralResponseClassifierRAndNIR(const Self&); //purposely not implemented
-          void operator=(const Self&); //purposely not implemented
+          ReduceSpectralResponseClassifierRAndNIR(const Self&) = delete;
+          void operator=(const Self&) = delete;
 
           /** Input reduce spectral sensor model of response */
           InputReduceSpectralResponsePointerType  m_InputReduceSpectralResponse;
@@ -149,7 +149,7 @@ namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbReduceSpectralResponseClassifierRAndNIR.txx"
+#include "otbReduceSpectralResponseClassifierRAndNIR.hxx"
 #endif
 
 #endif

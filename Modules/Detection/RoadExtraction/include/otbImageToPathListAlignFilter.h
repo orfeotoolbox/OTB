@@ -137,8 +137,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageToPathListAlignFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToPathListAlignFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   bool                m_isMeaningfulSegment; /// to get all meaningful segments (maximal or not
   int                 m_NbGradDirection; /// Number of allowed gradient direction, default 16
   int                 m_NbLineDirection; /// Number of line directions to scan, default 96)
@@ -152,7 +152,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToPathListAlignFilter.txx"
+#include "otbImageToPathListAlignFilter.hxx"
 #endif
 
 #endif

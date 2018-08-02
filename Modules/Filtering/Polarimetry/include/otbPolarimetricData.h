@@ -84,8 +84,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PolarimetricData(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PolarimetricData(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Architecture Type */
   ArchitectureType m_ArchitectureType;

@@ -79,15 +79,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  CompacityPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CompacityPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCompacityPathFunction.txx"
+#include "otbCompacityPathFunction.hxx"
 #endif
 
 #endif

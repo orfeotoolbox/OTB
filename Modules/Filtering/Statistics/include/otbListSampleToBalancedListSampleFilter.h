@@ -137,8 +137,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ListSampleToBalancedListSampleFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ListSampleToBalancedListSampleFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   GaussianAdditiveNoisePointerType       m_AddGaussianNoiseFilter;
   std::vector<unsigned int>              m_MultiplicativeCoefficient;
@@ -150,7 +150,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleToBalancedListSampleFilter.txx"
+#include "otbListSampleToBalancedListSampleFilter.hxx"
 #endif
 
 #endif

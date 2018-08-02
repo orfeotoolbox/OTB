@@ -21,7 +21,6 @@
 #ifndef otbMapFileProductWriter_h
 #define otbMapFileProductWriter_h
 
-#include <fstream>
 
 #include "itkObjectFactory.h"
 
@@ -38,6 +37,7 @@
 
 // projection filter
 #include "otbGenericRSResampleImageFilter.h"
+#include <string>
 
 namespace otb
 {
@@ -174,8 +174,8 @@ protected:
   virtual void Write();
 
 private:
-  MapFileProductWriter(const Self &); //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  MapFileProductWriter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
    /** Mehtod to initialize the variables*/
    virtual void Initialize();
@@ -240,7 +240,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMapFileProductWriter.txx"
+#include "otbMapFileProductWriter.hxx"
 #endif
 
 #endif

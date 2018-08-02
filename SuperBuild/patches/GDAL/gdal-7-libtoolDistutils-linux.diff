@@ -1,0 +1,14 @@
+--- gdal-2.2.1-orig/swig/python/setup.py	2017-06-23 14:18:44.000000000 +0200
++++ gdal-2.2.1/swig/python/setup.py	2018-03-14 15:42:14.058663110 +0100
+@@ -27,6 +27,11 @@
+     print('WARNING: "CXX=%s" was defined in the environment and contains more than one word. Unsetting it since that is incompatible of distutils' % os.environ['CXX'])
+     del os.environ['CXX']
+ 
++# do the same for CC for consistent results
++if 'CC' in os.environ and os.environ['CC'].strip().find(' ') >= 0:
++    print('WARNING: "CC=%s" was defined in the environment and contains more than one word. Unsetting it since that is incompatible of distutils' % os.environ['CC'])
++    del os.environ['CC']
++
+ # ---------------------------------------------------------------------------
+ # Switches
+ # ---------------------------------------------------------------------------

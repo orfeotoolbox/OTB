@@ -25,8 +25,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_StringParam(param)
 {
 }
@@ -52,18 +52,18 @@ void QtWidgetStringParameter::DoUpdateGUI()
 void QtWidgetStringParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_HLayout = new QHBoxLayout;
+  m_HLayout = new QHBoxLayout(this);
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_StringParam->GetDescription() )
   );
   m_HLayout->addWidget(m_Input);
 
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetValue(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetStringParameter::SetValue );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   this->setLayout(m_HLayout);
 
@@ -75,7 +75,7 @@ void QtWidgetStringParameter::DoCreateWidget()
 
 void QtWidgetStringParameter::SetValue(const QString& value)
 {
-  m_StringParam->SetValue(value.toAscii().constData());
+  m_StringParam->SetValue(value.toLatin1().constData());
   // notify of value change
   QString key( m_StringParam->GetKey() );
   emit ParameterChanged(key);

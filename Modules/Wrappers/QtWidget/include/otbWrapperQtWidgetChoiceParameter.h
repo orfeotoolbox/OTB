@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetChoiceParameter_h
 #define otbWrapperQtWidgetChoiceParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -41,15 +39,15 @@ class OTBQtWidget_EXPORT QtWidgetChoiceParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*);
+  QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetChoiceParameter() override;
 
 protected slots:
   void SetValue( int value );
 
 private:
-  QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
-  void operator=(const QtWidgetChoiceParameter&); //purposely not implemented
+  QtWidgetChoiceParameter(const QtWidgetChoiceParameter&) = delete;
+  void operator=(const QtWidgetChoiceParameter&) = delete;
 
   void DoCreateWidget() override;
 

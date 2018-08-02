@@ -79,17 +79,17 @@ public:
 
     if ((C11 >m_Epsilon) && (C33 > m_Epsilon))
       {
-      result[0] = vcl_abs(C13) / vcl_sqrt(C11 * C33); // |<hh.vv*|/sqrt(<hh.hh*><vv.vv*>)
+      result[0] = std::abs(C13) / std::sqrt(C11 * C33); // |<hh.vv*|/sqrt(<hh.hh*><vv.vv*>)
       }
 
     if ((C22 > m_Epsilon) && (C33 > m_Epsilon))
       {
-      result[1] = vcl_abs(C23) / vcl_sqrt(C22 * C33);  // |<hv.vv*|/sqrt(<hv.hv*><vv.vv*>)
+      result[1] = std::abs(C23) / std::sqrt(C22 * C33);  // |<hv.vv*|/sqrt(<hv.hv*><vv.vv*>)
       }
 
     if ((C11 > m_Epsilon) && (C22 > m_Epsilon) )
       {
-      result[2] = vcl_abs(C12) / vcl_sqrt(C11 * C22);  // |<hh.hv*|/sqrt(<hh.hh*><hv.hv*>)
+      result[2] = std::abs(C12) / std::sqrt(C11 * C22);  // |<hh.hv*|/sqrt(<hh.hh*><hv.hv*>)
       }
 
     return result;
@@ -150,8 +150,8 @@ protected:
   ~ReciprocalCovarianceToCoherencyDegreeImageFilter() override {}
 
 private:
-  ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);                  //purposely not implemented
+  ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 
 };

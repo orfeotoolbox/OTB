@@ -88,7 +88,7 @@ public:
       }
 
     m_IterationThreshold = static_cast<unsigned int>(
-      static_cast<double>(iterMax) * (1.0 - 1.0 / ::vcl_sqrt(V0)));
+      static_cast<double>(iterMax) * (1.0 - 1.0 / ::std::sqrt(V0)));
   }
 
   /** Functor */

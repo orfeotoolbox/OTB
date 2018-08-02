@@ -82,7 +82,7 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8VertexWithCompacity.txx"
+#include "otbRCC8VertexWithCompacity.hxx"
 #endif
 
 #endif

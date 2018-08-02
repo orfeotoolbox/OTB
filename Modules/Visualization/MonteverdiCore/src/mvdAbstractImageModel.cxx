@@ -231,7 +231,7 @@ AbstractImageModel
 	  " (" +
 	  qApp->translate(
 	    "mvd::AbstractImageModel",
-	    it2->toAscii().constData()
+	    it2->toLatin1().constData()
 	  )
 	  + ")"
 	);

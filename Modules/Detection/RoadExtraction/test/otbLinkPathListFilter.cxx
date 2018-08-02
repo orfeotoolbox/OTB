@@ -43,7 +43,7 @@ int otbLinkPathListFilter(int itkNotUsed(argc), char * argv[])
   int cpt = 4;
   ListPoints.clear();
 
-  while (argv[cpt] != ITK_NULLPTR)
+  while (argv[cpt] != nullptr)
     {
     if (argv[cpt][0] == '|')
       {

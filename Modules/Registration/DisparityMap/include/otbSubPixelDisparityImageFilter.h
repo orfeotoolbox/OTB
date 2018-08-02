@@ -235,8 +235,8 @@ protected:
   void AfterThreadedGenerateData() override;
 
 private:
-  SubPixelDisparityImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SubPixelDisparityImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** parabolic refinement method */
   void ParabolicRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
@@ -284,7 +284,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSubPixelDisparityImageFilter.txx"
+#include "otbSubPixelDisparityImageFilter.hxx"
 #endif
 
 #endif

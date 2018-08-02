@@ -26,6 +26,7 @@
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
 #include "OTBOpticalCalibrationExport.h"
+#include <string>
 
 namespace otb
 {
@@ -103,8 +104,8 @@ protected:
 
 
 private:
-  SpectralSensitivityReader(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SpectralSensitivityReader(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string      m_FileName;
   std::string      m_DataPath;

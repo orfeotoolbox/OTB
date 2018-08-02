@@ -100,8 +100,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  WaveletInverseImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WaveletInverseImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   WaveletsSynopsisImageToWaveletsBandsListFilterPointerType m_SynopsisImageToWaveletsBandsList;
   WaveletInverseTransformFilterPointerType m_WaveletTransform;
@@ -111,7 +111,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletInverseImageFilter.txx"
+#include "otbWaveletInverseImageFilter.hxx"
 #endif
 
 #endif

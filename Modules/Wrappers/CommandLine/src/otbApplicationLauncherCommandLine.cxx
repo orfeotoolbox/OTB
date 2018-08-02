@@ -52,7 +52,7 @@ std::string PrepareExpressionFromXML(std::string filename)
   //Use itksys::SystemTools::FOpen() and close it below because
   //TiXmlDocument::TiXmlFileOpen( ) is not exposed from tinyXML library. Even
   //though its available in the TiXmlDocument::SaveFile().
-  FILE* fp =  itksys::SystemTools::Fopen(filename.c_str(), "rb");
+  FILE* fp =  itksys::SystemTools::Fopen(filename, "rb");
 
   if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {
@@ -107,18 +107,18 @@ std::string PrepareExpressionFromXML(std::string filename)
 
   expression.append(moduleName);
 
-  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != ITK_NULLPTR;
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != nullptr;
        n_Parameter = n_Parameter->NextSiblingElement() )
     {
     std::string key="-";
     key.append(GetChildNodeTextOf(n_Parameter, "key"));
 
-    TiXmlElement* n_Values = ITK_NULLPTR;
+    TiXmlElement* n_Values = nullptr;
     n_Values = n_Parameter->FirstChildElement("values");
     if(n_Values)
       {
       std::string values;
-      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != ITK_NULLPTR;
+      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != nullptr;
           n_Value = n_Value->NextSiblingElement())
         {
         values.append(n_Value->GetText());
@@ -174,7 +174,7 @@ std::vector<std::string> PrepareVectorExpressionFromXML(std::string filename)
   //Use itksys::SystemTools::FOpen() and close it below because
   //TiXmlDocument::TiXmlFileOpen( ) is not exposed from tinyXML library. Even
   //though its available in the TiXmlDocument::SaveFile().
-  FILE* fp =  itksys::SystemTools::Fopen(filename.c_str(), "rb");
+  FILE* fp =  itksys::SystemTools::Fopen(filename, "rb");
 
   if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {
@@ -204,19 +204,19 @@ std::vector<std::string> PrepareVectorExpressionFromXML(std::string filename)
 
   expression.push_back(CleanWord(moduleName));
 
-  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != ITK_NULLPTR;
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != nullptr;
        n_Parameter = n_Parameter->NextSiblingElement() )
     {
     std::string key="-";
     key.append(GetChildNodeTextOf(n_Parameter, "key"));
     expression.push_back(CleanWord(key));
 
-    TiXmlElement* n_Values = ITK_NULLPTR;
+    TiXmlElement* n_Values = nullptr;
     n_Values = n_Parameter->FirstChildElement("values");
     if(n_Values)
       {
       std::string values;
-      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != ITK_NULLPTR;
+      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != nullptr;
           n_Value = n_Value->NextSiblingElement())
         {
         expression.push_back(CleanWord(n_Value->GetText()));
@@ -270,7 +270,7 @@ int main(int argc, char* argv[])
   if (argc < 2)
   {
       ShowUsage(argv);
-      return false;
+      return EXIT_FAILURE;
   }
 
   std::vector<std::string> vexp;
@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
   if (vexp.empty())
   {
     ShowUsage(argv);
-    return false;
+    return EXIT_FAILURE;
   }
 
   bool success = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();
@@ -320,7 +320,7 @@ const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string ke
 
   if(parentElement)
     {
-    TiXmlElement* childElement = ITK_NULLPTR;
+    TiXmlElement* childElement = nullptr;
     childElement = parentElement->FirstChildElement(key.c_str());
 
     //same as childElement->GetText() does but that call is failing if there is

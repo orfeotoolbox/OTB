@@ -81,15 +81,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOMActivationBuilder(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  SOMActivationBuilder(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** ListSample object */
   ListSamplePointerType m_ListSample;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMActivationBuilder.txx"
+#include "otbSOMActivationBuilder.hxx"
 #endif
 
 #endif

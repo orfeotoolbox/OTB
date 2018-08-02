@@ -86,15 +86,15 @@ protected:
   OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const override;
 
 private:
-  VectorDataAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataAdapter.txx"
+#include "otbVectorDataAdapter.hxx"
 #endif
 
 #endif

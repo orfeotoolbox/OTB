@@ -23,6 +23,7 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbWrapperParameter.h"
+#include <string>
 
 namespace otb
 {
@@ -82,8 +83,8 @@ protected:
   std::string m_PreviousFileName;
 
 private:
-  InputVectorDataParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  InputVectorDataParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
 };
 

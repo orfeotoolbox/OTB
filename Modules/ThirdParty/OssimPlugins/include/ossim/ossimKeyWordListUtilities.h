@@ -32,6 +32,7 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimXmlNode.h>
 #include <stdexcept>
+#include <string>
 
 namespace ossimplugins {
    class kw_runtime_error : public std::runtime_error {

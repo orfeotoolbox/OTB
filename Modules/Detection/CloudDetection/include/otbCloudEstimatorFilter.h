@@ -80,15 +80,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  CloudEstimatorFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  CloudEstimatorFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCloudEstimatorFilter.txx"
+#include "otbCloudEstimatorFilter.hxx"
 #endif
 
 #endif

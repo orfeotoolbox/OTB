@@ -25,6 +25,7 @@
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
 #include "otbImageFileWriter.h"
+#include <string>
 
 namespace otb
 {
@@ -117,14 +118,8 @@ protected:
   /** Destructor */
   ~OutputImageParameter() override;
 
-  template <class TInputVectorImageType>
-    void SwitchVectorImageWrite();
-
-  template <class TInputVectorImageType>
-    void SwitchRGBImageWrite();
-
-  template <class TInputVectorImageType>
-    void SwitchRGBAImageWrite();
+  template <class TInput>
+    int SwitchInput(TInput *img);
 
   //FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
@@ -132,45 +127,27 @@ protected:
   ImagePixelType         m_PixelType;
   ImagePixelType         m_DefaultPixelType;
 
-  typedef otb::ImageFileWriter<UInt8VectorImageType>  VectorUInt8WriterType;
-  typedef otb::ImageFileWriter<Int16VectorImageType>  VectorInt16WriterType;
-  typedef otb::ImageFileWriter<UInt16VectorImageType> VectorUInt16WriterType;
-  typedef otb::ImageFileWriter<Int32VectorImageType>  VectorInt32WriterType;
-  typedef otb::ImageFileWriter<UInt32VectorImageType> VectorUInt32WriterType;
-  typedef otb::ImageFileWriter<FloatVectorImageType>  VectorFloatWriterType;
-  typedef otb::ImageFileWriter<DoubleVectorImageType> VectorDoubleWriterType;
-
-  typedef otb::ImageFileWriter<UInt8RGBAImageType>  RGBAUInt8WriterType;
-  typedef otb::ImageFileWriter<UInt8RGBImageType>   RGBUInt8WriterType;
-
-  typedef otb::ImageFileWriter<ComplexInt16VectorImageType>  ComplexVectorInt16WriterType;
-  typedef otb::ImageFileWriter<ComplexInt32VectorImageType>  ComplexVectorInt32WriterType;
-  typedef otb::ImageFileWriter<ComplexFloatVectorImageType>  ComplexVectorFloatWriterType;
-  typedef otb::ImageFileWriter<ComplexDoubleVectorImageType> ComplexVectorDoubleWriterType;
-
-  VectorUInt8WriterType::Pointer  m_VectorUInt8Writer;
-  VectorInt16WriterType::Pointer  m_VectorInt16Writer;
-  VectorUInt16WriterType::Pointer m_VectorUInt16Writer;
-  VectorInt32WriterType::Pointer  m_VectorInt32Writer;
-  VectorUInt32WriterType::Pointer m_VectorUInt32Writer;
-  VectorFloatWriterType::Pointer  m_VectorFloatWriter;
-  VectorDoubleWriterType::Pointer m_VectorDoubleWriter;
-
-  RGBUInt8WriterType::Pointer   m_RGBUInt8Writer;
-  RGBAUInt8WriterType::Pointer  m_RGBAUInt8Writer;
-
-  ComplexVectorInt16WriterType::Pointer  m_ComplexVectorInt16Writer;
-  ComplexVectorInt32WriterType::Pointer  m_ComplexVectorInt32Writer;
-  ComplexVectorFloatWriterType::Pointer  m_ComplexVectorFloatWriter;
-  ComplexVectorDoubleWriterType::Pointer m_ComplexVectorDoubleWriter;
-
 private:
-  OutputImageParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  OutputImageParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
   unsigned int                  m_RAMValue;
 
+  itk::ProcessObject::Pointer m_Caster;
+
+  itk::ProcessObject::Pointer m_Writer;
+
 }; // End class OutputImage Parameter
+
+// Declare specialisation for UInt8RGBAImageType
+template <>
+int
+OutputImageParameter::SwitchInput(UInt8RGBAImageType *img);
+
+// Declare specialisation for UInt8RGBImageType
+template <>
+int
+OutputImageParameter::SwitchInput(UInt8RGBImageType *img);
 
 } // End namespace Wrapper
 } // End namespace otb

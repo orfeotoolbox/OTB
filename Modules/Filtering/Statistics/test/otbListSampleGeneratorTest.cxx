@@ -102,7 +102,7 @@ int otbListSampleGenerator(int argc, char* argv[])
     typedef ListSampleGeneratorType::ListLabelType::ConstIterator  LabelIterator;
 
     std::ofstream trainingFile;
-    trainingFile.open(outputSampleList.c_str());
+    trainingFile.open(outputSampleList);
 
     SampleIterator sampleIt = samples->Begin();
     LabelIterator  labelIt = labels->Begin();
@@ -131,7 +131,7 @@ int otbListSampleGenerator(int argc, char* argv[])
     typedef ListSampleGeneratorType::ListLabelType::ConstIterator  LabelIterator;
 
     std::ofstream validationFile;
-    validationFile.open(outputSampleListValidation.c_str());
+    validationFile.open(outputSampleListValidation);
 
     SampleIterator sampleIt = samples->Begin();
     LabelIterator  labelIt = labels->Begin();

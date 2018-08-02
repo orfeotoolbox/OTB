@@ -62,8 +62,8 @@ public:
   /** Set the value */
   void SetValue( ScalarType value)
   {
-    // TODO check minimum/maximum
-    m_Value = value;
+    m_Value = ( value < m_MinimumValue ) ? m_MinimumValue :
+              ( value < m_MaximumValue ) ? value : m_MaximumValue ;
 
     // Set Active only if the parameter is not automatically set
     if (!GetAutomaticValue())
@@ -141,8 +141,8 @@ protected:
   ScalarType m_MaximumValue;
 
 private:
-  NumericalParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  NumericalParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
 }; // End class Numerical Parameter
 

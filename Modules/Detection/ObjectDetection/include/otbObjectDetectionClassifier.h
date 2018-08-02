@@ -22,6 +22,7 @@
 #define otbObjectDetectionClassifier_h
 
 #include <vector>
+#include <string>
 
 #include "itkImageRegion.h"
 #include "itkFixedArray.h"
@@ -186,8 +187,8 @@ protected:
                              itk::ThreadIdType threadId) override;
 
 private:
-  PersistentObjectDetectionClassifier(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentObjectDetectionClassifier(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   template <typename TCoordRepType>
   bool
@@ -380,14 +381,14 @@ public:
     ~ObjectDetectionClassifier() override;
 
   private:
-    ObjectDetectionClassifier(const Self &); //purposely not implemented
-    void operator =(const Self&); //purposely not implemented
+    ObjectDetectionClassifier(const Self &) = delete;
+    void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectDetectionClassifier.txx"
+#include "otbObjectDetectionClassifier.hxx"
 #endif
 
 #endif

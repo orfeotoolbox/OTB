@@ -186,8 +186,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  MassOfBelief(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MassOfBelief(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The masses map */
   MassMapType  m_MassesMap;
@@ -197,7 +197,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMassOfBelief.txx"
+#include "otbMassOfBelief.hxx"
 #endif
 
 #endif

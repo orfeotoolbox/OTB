@@ -102,8 +102,8 @@ class AtmosphericEffects
 
 
         private:
-           AtmosphericEffects(const Self&); //purposely not implemented
-           void operator=(const Self&); //purposely not implemented
+           AtmosphericEffects(const Self&) = delete;
+           void operator=(const Self&) = delete;
 
            AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
            InputSpectralResponsePointerType m_InputSpectralResponse;
@@ -117,7 +117,7 @@ class AtmosphericEffects
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAtmosphericEffects.txx"
+#include "otbAtmosphericEffects.hxx"
 #endif
 
 #endif

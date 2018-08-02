@@ -38,9 +38,6 @@ Logger::Pointer Logger::CreateInstance()
   defaultOutput->SetStream(std::cout);
   
   instance->AddLogOutput(defaultOutput);
-  
-  // Log setup information
-  instance->LogSetupInformation();
 
   return instance;
 }
@@ -61,6 +58,8 @@ Logger::Logger()
 
   this->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
   this->SetHumanReadableFormat("%Y-%m-%d %H:%M:%S");
+
+  m_LogSetupInfoDone = false;
 }
 
 Logger::~Logger()
@@ -69,22 +68,30 @@ Logger::~Logger()
 
 void Logger::LogSetupInformation()
 {
-  std::ostringstream oss;
-  
-  oss<<"Default RAM limit for OTB is "<<otb::ConfigurationManager::GetMaxRAMHint()<<" MB"<<std::endl;
-  this->Info(oss.str());
-  oss.str("");
-  oss.clear();
+  if (! IsLogSetupInformationDone())
+    {
+    std::ostringstream oss;
 
-  oss<<"GDAL maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" MB"<<std::endl;
-  this->Info(oss.str());
-  oss.str("");
-  oss.clear();
+    oss<<"Default RAM limit for OTB is "<<otb::ConfigurationManager::GetMaxRAMHint()<<" MB"<<std::endl;
+    this->Info(oss.str());
+    oss.str("");
+    oss.clear();
 
-  oss<<"OTB will use at most "<<itk::MultiThreader::GetGlobalDefaultNumberOfThreads()<<" threads"<<std::endl;
-  this->Info(oss.str());
-  oss.str("");
-  oss.clear();
+    oss<<"GDAL maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" MB"<<std::endl;
+    this->Info(oss.str());
+    oss.str("");
+    oss.clear();
+
+    oss<<"OTB will use at most "<<itk::MultiThreader::GetGlobalDefaultNumberOfThreads()<<" threads"<<std::endl;
+    this->Info(oss.str());
+    oss.str("");
+    oss.clear();
+
+    // ensure LogSetupInformation is done once per logger, and also that it is
+    // skipped by the singleton when it has already been printed by an other instance
+    LogSetupInformationDone();
+    Instance()->LogSetupInformationDone();
+    }
 }
 
 std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const & content)
@@ -114,6 +121,16 @@ std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, st
   s << " " << levelString[level] << ": " << content;
 
   return s.str();
+}
+
+bool Logger::IsLogSetupInformationDone()
+{
+  return m_LogSetupInfoDone;
+}
+
+void Logger::LogSetupInformationDone()
+{
+  m_LogSetupInfoDone = true;
 }
 
 } // namespace otb

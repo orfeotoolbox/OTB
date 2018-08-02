@@ -122,8 +122,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  TouziEdgeDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TouziEdgeDetectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius declaration */
   SizeType m_Radius;
@@ -133,7 +133,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTouziEdgeDetectorImageFilter.txx"
+#include "otbTouziEdgeDetectorImageFilter.hxx"
 #endif
 
 #endif

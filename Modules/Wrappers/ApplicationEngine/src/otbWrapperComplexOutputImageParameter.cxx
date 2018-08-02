@@ -253,26 +253,28 @@ ComplexOutputImageParameter::Write()
 itk::ProcessObject*
 ComplexOutputImageParameter::GetWriter()
 {
-  itk::ProcessObject* writer = ITK_NULLPTR;
+  itk::ProcessObject* writer = nullptr;
   switch ( GetComplexPixelType() )
     {
     case ComplexImagePixelType_int16:
     {
       writer = m_ComplexVectorInt16Writer;
+      break;
     }
     case ComplexImagePixelType_int32:
     {
       writer = m_ComplexVectorInt32Writer;
+      break;
     }
     case ComplexImagePixelType_float:
     {
       writer = m_ComplexVectorFloatWriter;
-    break;
+      break;
     }
     case ComplexImagePixelType_double:
     {
       writer = m_ComplexVectorDoubleWriter;
-    break;
+      break;
     }
     }
   return writer;

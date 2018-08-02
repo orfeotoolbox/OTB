@@ -59,5 +59,17 @@ function(patch_cmake_files)
   #   endforeach()
   # endif()
   # file(WRITE "${otb_opengl}" ${otb_opengl_cmake_NEW})
+
+  #patch for ABI compatibility
+  if(EXISTS "${PATCH_STAGE_DIR}/UseOTB.cmake")
+    file(APPEND "${PATCH_STAGE_DIR}/UseOTB.cmake" 
+"\n\n# ABI compatibility \
+\nif ( CMAKE_CXX_COMPILER_ID STREQUAL \"GNU\") \
+\n  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 5.0 ) \
+\n    add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0) \
+\n  endif() \
+\nendif()" )
+  endif()
+
   
 endfunction()

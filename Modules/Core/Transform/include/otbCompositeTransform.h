@@ -21,7 +21,6 @@
 #ifndef otbCompositeTransform_h
 #define otbCompositeTransform_h
 
-#include <iostream>
 #include <sstream>
 #include <stdio.h>
 #include "otbTransform.h"
@@ -137,15 +136,15 @@ protected:
   SecondTransformPointerType m_SecondTransform;
 
 private:
-  CompositeTransform(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  CompositeTransform(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCompositeTransform.txx"
+#include "otbCompositeTransform.hxx"
 #endif
 
 #endif

@@ -22,7 +22,7 @@
 
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"
-#include <fstream>
+#include <string>
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -33,8 +33,9 @@
 #endif
 #include "otb_shark.h"
 #include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
-#include <shark/Models/FFNet.h>
-#include <shark/Models/Autoencoder.h>
+#include <shark/Models/LinearModel.h>
+#include <shark/Models/ConcatenatedModel.h>
+#include <shark/Models/NeuronLayers.h>
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
@@ -76,9 +77,9 @@ public:
   typedef typename Superclass::ConfidenceListSampleType         ConfidenceListSampleType;
 
   /// Neural network related typedefs
-  typedef shark::Autoencoder<NeuronType,shark::LinearNeuron> OutAutoencoderType;
-  typedef shark::Autoencoder<NeuronType,NeuronType> AutoencoderType;
-  typedef shark::FFNet<NeuronType,shark::LinearNeuron> NetworkType;
+  typedef shark::ConcatenatedModel<shark::RealVector> ModelType;
+  typedef shark::LinearModel<shark::RealVector,NeuronType> LayerType;
+  typedef shark::LinearModel<shark::RealVector, shark::LinearNeuron> OutLayerType;
 
   itkNewMacro(Self);
   itkTypeMacro(AutoencoderModel, DimensionalityReductionModel);
@@ -127,18 +128,16 @@ public:
 
   void Train() override;
 
-  template <class T, class Autoencoder>
+  template <class T>
   void TrainOneLayer(
     shark::AbstractStoppingCriterion<T> & criterion,
-    Autoencoder &,
     unsigned int,
     shark::Data<shark::RealVector> &,
     std::ostream&);
 
-  template <class T, class Autoencoder>
+  template <class T>
   void TrainOneSparseLayer(
     shark::AbstractStoppingCriterion<T> & criterion,
-    Autoencoder &,
     unsigned int,
     shark::Data<shark::RealVector> &,
     std::ostream&);
@@ -155,18 +154,20 @@ protected:
 
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const override;
+    ConfidenceValueType * quality = nullptr) const override;
 
   virtual void DoPredictBatch(
     const InputListSampleType *,
     const unsigned int & startIndex,
     const unsigned int & size,
     TargetListSampleType *,
-    ConfidenceListSampleType * quality = ITK_NULLPTR) const override;
+    ConfidenceListSampleType * quality = nullptr) const override;
 
 private:
   /** Internal Network */
-  NetworkType m_Net;
+  ModelType m_Encoder;
+  std::vector<LayerType> m_InLayers;
+  OutLayerType m_OutLayer;
   itk::Array<unsigned int> m_NumberOfHiddenNeurons;
   /** Training parameters */
   unsigned int m_NumberOfIterations; // stop the training after a fixed number of iterations
@@ -178,14 +179,14 @@ private:
   itk::Array<double> m_Beta; // Sparsity regularization parameter
   double m_InitFactor; // Weight initialization factor (the weights are intialized at m_initfactor/sqrt(inputDimension)  )
 
-  bool m_WriteLearningCurve; // Flag for writting the learning curve into a txt file
+  bool m_WriteLearningCurve; // Flag for writing the learning curve into a txt file
   std::string m_LearningCurveFileName; // Name of the output learning curve printed after training
   bool m_WriteWeights;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAutoencoderModel.txx"
+#include "otbAutoencoderModel.hxx"
 #endif
 
 #endif

@@ -40,7 +40,7 @@ AlosPalsarPlatformPositionData::~AlosPalsarPlatformPositionData()
 
 std::ostream& operator<<(std::ostream& os, const AlosPalsarPlatformPositionData& data)
 {
-  os << "orbit_ele_desg:" << data._orbit_ele_desg.c_str() << std::endl;
+  os << "orbit_ele_desg:" << data._orbit_ele_desg << std::endl;
 
   for (int i = 0; i < 6; i++)
   {
@@ -61,7 +61,7 @@ std::ostream& operator<<(std::ostream& os, const AlosPalsarPlatformPositionData&
 
   os << "data_int:" << data._data_int << std::endl;
 
-  os << "ref_coord:" << data._ref_coord.c_str() << std::endl;
+  os << "ref_coord:" << data._ref_coord << std::endl;
 
   os << "hr_angle:" << data._hr_angle << std::endl;
 

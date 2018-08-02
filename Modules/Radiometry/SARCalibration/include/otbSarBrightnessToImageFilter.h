@@ -91,15 +91,15 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 private:
-  SarBrightnessToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarBrightnessToImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSarBrightnessToImageFilter.txx"
+#include "otbSarBrightnessToImageFilter.hxx"
 #endif
 
 #endif

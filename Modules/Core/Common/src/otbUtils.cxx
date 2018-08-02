@@ -20,7 +20,6 @@
 
 
 #include "otbUtils.h"
-#include <sstream>
 
 namespace otb
 {
@@ -40,6 +39,10 @@ bool IsLonLatValid(double lon, double lat)
 void PrintNothing(const char * /* s */)
 {
 }
+
+bool const TrueConstant = true;
+
+bool const FalseConstant = false;
 
 }
 

@@ -291,12 +291,15 @@ protected:
         itkExceptionMacro(<< "File : " << modelFileName << " couldn't be opened");
       }
 
-      // get the end line with the centroids
+      // get the line with the centroids (starts with "2 ")
       std::string line, centroidLine;
       while(std::getline(infile,line))
       {
-        if (!line.empty())
+        if (line.size() > 2 && line[0] == '2' && line[1] == ' ')
+          {
           centroidLine = line;
+          break;
+          }
       }
 
       std::vector<std::string> centroidElm;
@@ -353,7 +356,7 @@ protected:
       bool RemoveFile(const std::string &filePath)
       {
         bool res = true;
-        if( itksys::SystemTools::FileExists( filePath.c_str() ) )
+        if( itksys::SystemTools::FileExists( filePath ) )
           {
           size_t posExt = filePath.rfind( '.' );
           if( posExt != std::string::npos && filePath.compare( posExt, std::string::npos, ".shp" ) == 0 )
@@ -365,7 +368,7 @@ protected:
             RemoveFile( dbfPath );
             RemoveFile( prjPath );
             }
-          res = itksys::SystemTools::RemoveFile( filePath.c_str() );
+          res = itksys::SystemTools::RemoveFile( filePath );
           if( !res )
             {
             //otbAppLogINFO( <<"Unable to remove file  "<<filePath );

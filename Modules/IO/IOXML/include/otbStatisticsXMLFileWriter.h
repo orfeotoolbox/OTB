@@ -96,8 +96,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StatisticsXMLFileWriter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StatisticsXMLFileWriter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::string                 m_FileName;
   MeasurementVectorContainer  m_MeasurementVectorContainer;
@@ -108,7 +108,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStatisticsXMLFileWriter.txx"
+#include "otbStatisticsXMLFileWriter.hxx"
 #endif
 
 #endif

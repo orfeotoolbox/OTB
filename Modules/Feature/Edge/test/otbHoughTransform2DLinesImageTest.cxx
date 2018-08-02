@@ -92,7 +92,7 @@ int otbHoughTransform2DLinesImageTest(int itkNotUsed(argc), char* argv[])
 
   unsigned int maxval = size[0] * size[1];
 
-  const double nPI = 4.0 * vcl_atan(1.0);
+  const double nPI = 4.0 * std::atan(1.0);
 
   for (unsigned int i = 0; i < maxval; i += 1)
     {

@@ -67,15 +67,15 @@ protected:
   ~GradientBoostedTreeMachineLearningModelFactory() override;
 
 private:
-  GradientBoostedTreeMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GradientBoostedTreeMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGradientBoostedTreeMachineLearningModelFactory.txx"
+#include "otbGradientBoostedTreeMachineLearningModelFactory.hxx"
 #endif
 
 #endif

@@ -71,7 +71,7 @@ public:
         {
         if ((*it).first == app)
           {
-          (*it).first = ITK_NULLPTR;
+          (*it).first = nullptr;
           }
         ++it;
         }
@@ -85,13 +85,13 @@ public:
     AppHandleContainerType::iterator it;
     for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
       {
-      if ((*it).first == ITK_NULLPTR)
+      if ((*it).first == nullptr)
         {
         itk::DynamicLoader::CloseLibrary( static_cast<itk::LibHandle>((*it).second));
-        (*it).second = ITK_NULLPTR;
+        (*it).second = nullptr;
         }
       }
-    m_Container.remove(AppHandlePairType((Application*) ITK_NULLPTR, (void*) ITK_NULLPTR));
+    m_Container.remove(AppHandlePairType((Application*) nullptr, (void*) nullptr));
     }
 
   /** close all handles at program exit */
@@ -144,7 +144,7 @@ ApplicationRegistry::SetApplicationPath(std::string newpath)
   putEnvPath << OTB_APPLICATION_VAR << "=" << newpath;
 
   // do NOT use putenv() directly, since the string memory must be managed carefully
-  itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
+  itksys::SystemTools::PutEnv(putEnvPath.str());
 }
 
 void
@@ -170,7 +170,7 @@ ApplicationRegistry::AddApplicationPath(std::string newpath)
     }
 
   // do NOT use putenv() directly, since the string memory must be managed carefully
-  itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
+  itksys::SystemTools::PutEnv(putEnvPath.str());
 }
 
 std::string
@@ -222,7 +222,7 @@ typedef itk::ObjectFactoryBase * ( *ITK_LOAD_FUNCTION )();
 Application::Pointer
 ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 {
-  ApplicationPointer appli = ITK_NULLPTR;
+  ApplicationPointer appli = nullptr;
 
   std::string appExtension = itksys::DynamicLoader::LibExtension();
 #ifdef __APPLE__
@@ -247,7 +247,7 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
   std::vector<itksys::String> pathList;
   if (!otbAppPath.empty())
     {
-    pathList = itksys::SystemTools::SplitString(otbAppPath.c_str(),pathSeparator,false);
+    pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
     }
   for (unsigned int i=0 ; i<pathList.size() ; ++i)
     {
@@ -296,7 +296,7 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
   std::vector<itksys::String> pathList;
   if (!otbAppPath.empty())
     {
-    pathList = itksys::SystemTools::SplitString(otbAppPath.c_str(),pathSeparator,false);
+    pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
     }
   for (unsigned int k=0 ; k<pathList.size() ; ++k)
     {
@@ -328,7 +328,7 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
           {
           appSet.insert(name);
           }
-        appli = ITK_NULLPTR;
+        appli = nullptr;
         }
       }
     }
@@ -365,7 +365,7 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
 {
   Application::Pointer appli;
 
-  if (itksys::SystemTools::FileExists(path.c_str(),true))
+  if (itksys::SystemTools::FileExists(path,true))
     {
 #if defined(_WIN32) && !defined(__CYGWIN__)
     int cp = CP_UTF8;

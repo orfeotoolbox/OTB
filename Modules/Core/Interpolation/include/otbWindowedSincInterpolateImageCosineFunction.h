@@ -59,8 +59,8 @@ public:
   {
     double x = static_cast<double>(A);
     double px = CONST_PI * x;
-    double temp = vcl_cos(x * m_Factor);
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    double temp = std::cos(x * m_Factor);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
   // Equal to \f$ \frac{\pi}{2 m} \f$
@@ -134,8 +134,8 @@ protected:
   }
 
 private:
-  WindowedSincInterpolateImageCosineFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageCosineFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -94,14 +94,14 @@ protected:
  
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const override;
+    ConfidenceValueType * quality = nullptr) const override;
 
   virtual void DoPredictBatch(
     const InputListSampleType *,
     const unsigned int & startIndex,
     const unsigned int & size,
     TargetListSampleType *,
-    ConfidenceListSampleType * quality = ITK_NULLPTR) const override;
+    ConfidenceListSampleType * quality = nullptr) const override;
 
 private:
   shark::LinearModel<> m_Encoder;
@@ -114,7 +114,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPCAModel.txx"
+#include "otbPCAModel.hxx"
 #endif
 
 

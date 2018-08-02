@@ -21,7 +21,8 @@
 set(OTBSampling_SRC
   otbSamplingRateCalculator.cxx
   otbSamplingRateCalculatorList.cxx
-)
+  otbSampleAugmentationFilter.cxx
+  )
 
 add_library(OTBSampling ${OTBSampling_SRC})
 target_link_libraries(OTBSampling

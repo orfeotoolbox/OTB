@@ -21,7 +21,7 @@
 #ifndef otbSinclairToReciprocalCovarianceMatrixFunctor_h
 #define otbSinclairToReciprocalCovarianceMatrixFunctor_h
 
-#include "vcl_complex.h"
+#include <complex>
 #include "otbMath.h"
 #include "vnl/vnl_matrix.h"
 

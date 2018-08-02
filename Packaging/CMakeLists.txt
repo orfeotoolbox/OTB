@@ -167,9 +167,9 @@ check_cmake_variables()
 
 cleanup_package()
 
-set(HAVE_QT4 FALSE CACHE INTERNAL "HAVE_QT4")
+set(HAVE_QT FALSE CACHE INTERNAL "HAVE_QT")
 if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherQt${EXE_EXT}")
-  set(HAVE_QT4 TRUE)
+  set(HAVE_QT TRUE)
 endif()
 
 set(HAVE_MVD FALSE  CACHE INTERNAL "HAVE_MVD")
@@ -192,7 +192,7 @@ if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar")
   set(HAVE_JAVA TRUE)
 endif()
 
-  #only for *nix
+#only for *nix
 if(UNIX)
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks   "#!/bin/sh\n")
 endif()

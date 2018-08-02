@@ -19,7 +19,11 @@
  * limitations under the License.
  */
 
+#include <iostream>
+#include <sstream>
+
 #include "otbStandardOneLineFilterWatcher.h"
+#include "otbStopwatch.h"
 
 namespace otb
 {
@@ -103,14 +107,9 @@ StandardOneLineFilterWatcher
 {
   m_Stopwatch.Stop();
 
-  // Ensure we don't depend on std::cout configuration
-  std::ostringstream elapsedTime;
-  elapsedTime.precision(1);
-  elapsedTime << m_Stopwatch.GetElapsedMilliseconds() / 1000;
-
-  std::cout << " ("
-            << elapsedTime.str()
-            << " seconds)"
+  std::cout << " (";
+  m_Stopwatch.GetElapsedHumanReadableTime(std::cout);
+  std::cout << ")"
             << std::endl;
 }
 

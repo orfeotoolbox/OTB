@@ -127,8 +127,8 @@ protected:
 
 
 private:
-  KMeansAttributesLabelMapFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  KMeansAttributesLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputImagePointer m_InputLabelMap;
   CentroidsVectorType m_Centroids;
@@ -141,7 +141,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKMeansAttributesLabelMapFilter.txx"
+#include "otbKMeansAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

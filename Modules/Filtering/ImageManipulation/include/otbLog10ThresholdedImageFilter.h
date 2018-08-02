@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class Log10ThresholdedImageFilter
- * \brief Computes the 10 * vcl_log10(x) pixel-wise with a threshold for the lowest values
+ * \brief Computes the 10 * std::log10(x) pixel-wise with a threshold for the lowest values
  *
  * \ingroup OTBImageManipulation
  */
@@ -57,11 +57,11 @@ public:
   {
     if ((static_cast<double> (A) >= m_ThresholdValue) && (A == A))
       {
-      return static_cast<TOutput> (10.0 * vcl_log10(static_cast<double> (A)));
+      return static_cast<TOutput> (10.0 * std::log10(static_cast<double> (A)));
       }
     else // If (A != A) then A is a NaN
       {
-      return static_cast<TOutput> (10.0 * vcl_log10(m_ThresholdValue));
+      return static_cast<TOutput> (10.0 * std::log10(m_ThresholdValue));
       }
   }
 
@@ -107,8 +107,8 @@ protected:
   ~Log10ThresholdedImageFilter() override {}
 
 private:
-  Log10ThresholdedImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  Log10ThresholdedImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

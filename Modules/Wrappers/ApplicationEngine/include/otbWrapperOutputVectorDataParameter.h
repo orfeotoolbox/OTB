@@ -25,6 +25,7 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
+#include <string>
 
 namespace otb
 {
@@ -126,8 +127,8 @@ protected:
   otb::VectorDataFileWriter<VectorDataType>::Pointer m_Writer;
 
 private:
-  OutputVectorDataParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  OutputVectorDataParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
 };
 

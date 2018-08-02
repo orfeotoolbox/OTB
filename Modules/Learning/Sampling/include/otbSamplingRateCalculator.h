@@ -24,6 +24,7 @@
 #include "itkImageRegion.h"
 #include "itkVectorContainer.h"
 #include <set>
+#include "OTBSamplingExport.h"
 
 namespace otb
 {
@@ -36,7 +37,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 
-class ITK_EXPORT SamplingRateCalculator
+class OTBSampling_EXPORT SamplingRateCalculator
   : public itk::Object
 {
 public:
@@ -49,7 +50,7 @@ public:
   /** typdefs **/
   typedef std::map<std::string, unsigned long>  ClassCountMapType;
   typedef ClassCountMapType::const_iterator constItMapType;
-  typedef struct Triplet
+  typedef struct OTBSampling_EXPORT Triplet
    {
      unsigned long Required;
      unsigned long Tot;
@@ -116,8 +117,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SamplingRateCalculator(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  SamplingRateCalculator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Update the computed rate for a given class.*/
   void UpdateRate(const std::string &name);

@@ -26,7 +26,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageLinearConstIteratorWithIndex.h"
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 namespace otb
 {
@@ -163,8 +163,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  AdhesionCorrectionFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AdhesionCorrectionFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   SizeType                      m_ImageSize;
   /** The radius for correlation */
@@ -184,7 +184,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAdhesionCorrectionFilter.txx"
+#include "otbAdhesionCorrectionFilter.hxx"
 #endif
 
 #endif

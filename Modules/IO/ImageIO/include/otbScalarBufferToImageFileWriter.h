@@ -105,8 +105,8 @@ protected:
 
 private:
 
-  ScalarBufferToImageFileWriter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ScalarBufferToImageFileWriter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
   /** Writer */
@@ -128,7 +128,7 @@ private:
 } // end namespace otb
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbScalarBufferToImageFileWriter.txx"
+#include "otbScalarBufferToImageFileWriter.hxx"
 #endif
 
 #endif

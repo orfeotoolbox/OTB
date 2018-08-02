@@ -54,8 +54,10 @@ function(prepare_file_list file_list_result)
   endforeach()
 
   #Qt stuff
-  if(HAVE_QT4)
+  if(HAVE_QT)
     list(APPEND file_list "lrelease${EXE_EXT}")
+    list(APPEND file_list "lupdate${EXE_EXT}")
+    list(APPEND file_list "lconvert${EXE_EXT}")
     list(APPEND file_list "moc${EXE_EXT}")
     list(APPEND file_list "qmake${EXE_EXT}")
     list(APPEND file_list "rcc${EXE_EXT}")
@@ -80,15 +82,40 @@ function(prepare_file_list file_list_result)
     "${OTB_BINARY_DIR}/bin/otbgui_TestApplication")
   
   foreach(otb_test_exe   ${otb_test_exe_list})
-    get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
-    list(APPEND file_list ${otb_test_exe_name})
+    # filter .py files
+    get_filename_component(otb_test_exe_ext ${otb_test_exe} EXT)
+    if (NOT otb_test_exe_ext STREQUAL ".py")
+      get_filename_component(otb_test_exe_name ${otb_test_exe} NAME)
+      list(APPEND file_list ${otb_test_exe_name})
+    endif()
+  endforeach()
+
+  # find ITK targets
+  set(_itk_targets_path
+    "${SUPERBUILD_INSTALL_DIR}/lib/cmake/ITK-${PKG_ITK_SB_VERSION}")
+  file(GLOB _itk_targets_config_files "${_itk_targets_path}/ITKTargets-*.cmake")
+  foreach(f ${_itk_targets_config_files})
+    file(STRINGS ${f} _f_content REGEX " IMPORTED_LOCATION_[A-Z]+ ")
+    string(REGEX REPLACE " +IMPORTED_LOCATION_[A-Z]+ \"([^\"]+)\"" "\\1;" _filtered ${_f_content})
+    string(CONFIGURE "${_filtered}" _configured)
+    list(APPEND file_list "${_configured}")
   endforeach()
   
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
   # for proj.dll, see Mantis-1424
+  # libEGL needed by Qt 5 at runtime
   if(MSVC)
     list(APPEND file_list "ucrtbase.dll")
     list(APPEND file_list "proj.dll")
+  endif()
+
+  # Qt plugins
+  if(HAVE_QT)
+    file(GLOB _qt_plugins "${SUPERBUILD_INSTALL_DIR}/plugins/*/${LIB_PREFIX}*${LIB_EXT}")
+    foreach(_qt_plugin ${_qt_plugins})
+      get_filename_component(_qt_plugin_name ${_qt_plugin} NAME)
+      list(APPEND file_list ${_qt_plugin_name})
+    endforeach()
   endif()
 
   set(${file_list_result} ${file_list} PARENT_SCOPE)

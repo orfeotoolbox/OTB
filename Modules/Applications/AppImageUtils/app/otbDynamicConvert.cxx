@@ -78,6 +78,8 @@ public:
   typedef StreamingShrinkImageFilter<FloatVectorImageType,
     FloatVectorImageType> ShrinkFilterType;
 
+  typedef StreamingShrinkImageFilter<UInt8ImageType, UInt8ImageType> UInt8ShrinkFilterType;
+
   typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
   typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
     FloatVectorImageType,
@@ -90,9 +92,7 @@ private:
     SetName("DynamicConvert");
     SetDescription("Change the pixel type and rescale the image's dynamic");
 
-    // Documentation
     SetDocName("Dynamic Conversion");
-    // TODO
     SetDocLongDescription("This application performs an image pixel type "
       "conversion (short, ushort, uchar, int, uint, float and double types are "
       "handled). The output image is written in the specified format (ie. "
@@ -105,7 +105,7 @@ private:
       "available choices are: \n * grayscale :  to display mono image as "
       "standard color image \n * rgb : select 3 bands in the input image "
       "(multi-bands) \n * all : keep all bands.");
-    SetDocLimitations("None");
+    SetDocLimitations("The application does not support complex pixel types as output.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Convert, Rescale");
 
@@ -135,8 +135,9 @@ private:
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
     SetParameterDescription("mask",
-      "The masked pixels won't be used to adapt the dynamic "
-      "(the mask must have the same dimensions as the input image)");
+      "Optional mask to indicate which pixels are valid for computing the histogram quantiles. "
+      "Pixels where the mask is zero will not contribute to the histogram. "
+      "The mask must have the same dimensions as the input image.");
     MandatoryOff("mask");
     DisableParameter("mask");
 
@@ -300,15 +301,15 @@ private:
     // Now we generate the list of samples
     if (IsParameterEnabled("mask"))
     {
-      FloatVectorImageType::Pointer mask = this->GetParameterImage("mask");
-      ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
+      UInt8ImageType::Pointer mask = this->GetParameterUInt8Image("mask");
+      UInt8ShrinkFilterType::Pointer maskShrinkFilter = UInt8ShrinkFilterType::New();
       maskShrinkFilter->SetShrinkFactor(shrinkFactor);
       maskShrinkFilter->SetInput(mask);
       maskShrinkFilter->GetStreamer()->
         SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
       maskShrinkFilter->Update();
 
-      auto itMask = itk::ImageRegionConstIterator<FloatVectorImageType>(
+      auto itMask = itk::ImageRegionConstIterator<UInt8ImageType>(
         maskShrinkFilter->GetOutput(),
         maskShrinkFilter->GetOutput()->GetLargestPossibleRegion());
 
@@ -317,8 +318,8 @@ private:
       itMask.GoToBegin();
       for(; !it.IsAtEnd(); ++it, ++itMask)
       {
-        // float values, so the threshold is set to 0.5
-        if (itMask.Get()[0] > 0.5)
+        // valid pixels are non zero
+        if (itMask.Get() != 0)
         {
           listSample->PushBack(it.Get());
         }
@@ -516,8 +517,9 @@ private:
         GenericDoExecute<DoubleVectorImageType>();
         break;
       default:
-        itkExceptionMacro("Unknown pixel type "
-          <<this->GetParameterOutputImagePixelType("out")<<".");
+        itkExceptionMacro("Unknown pixel type " << this->GetParameterOutputImagePixelType("out") <<"." << std::endl
+                          << "The DynamicConvert application does not support complex pixel type as output." << std::endl
+                          << "You can use instead the ExtractROI application to perform complex image conversion.");
         break;
     }
   }

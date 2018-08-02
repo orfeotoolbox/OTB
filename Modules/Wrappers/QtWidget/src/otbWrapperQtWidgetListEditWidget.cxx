@@ -87,23 +87,23 @@ ListEditWidget
   m_UI->treeView->setModel( model );
 
   QObject::connect(
-    model, SIGNAL( dataChanged( const QModelIndex &, const QModelIndex & ) ),
-    this, SLOT( OnDataChanged( const QModelIndex &, const QModelIndex & ) )
+    model, &ListEditItemModel::dataChanged,
+    this, &ListEditWidget::OnDataChanged
   );
 
   QObject::connect(
-    model, SIGNAL( modelReset() ),
-    this, SLOT( OnModelReset() )
+    model, &ListEditItemModel::modelReset,
+    this, &ListEditWidget::OnModelReset
   );
 
   QObject::connect(
-    model, SIGNAL( rowsInserted( const QModelIndex &, int, int ) ),
-    this, SLOT( OnRowsInserted( const QModelIndex &, int, int ) )
+    model, &ListEditItemModel::rowsInserted,
+    this, &ListEditWidget::OnRowsInserted
   );
 
   QObject::connect(
-    model, SIGNAL( rowsRemoved( const QModelIndex &, int, int ) ),
-    this, SLOT( OnRowsRemoved( const QModelIndex &, int, int ) )
+    model, &ListEditItemModel::rowsRemoved,
+    this, &ListEditWidget::OnRowsRemoved
   );
 
   //
@@ -111,15 +111,8 @@ ListEditWidget
   assert( m_UI->treeView->selectionModel()!=nullptr );
 
   QObject::connect(
-    m_UI->treeView->selectionModel(),
-    SIGNAL(
-      selectionChanged( const QItemSelection & , const QItemSelection & )
-    ),
-    // to:
-    this,
-    SLOT(
-      OnSelectionChanged( const QItemSelection & , const QItemSelection & )
-    )
+    m_UI->treeView->selectionModel(), &QItemSelectionModel::selectionChanged,
+    this, &ListEditWidget::OnSelectionChanged
   );
 
   //
@@ -257,7 +250,7 @@ ListEditWidget
     {
     if (multi)
       {
-      output = GetOpenFileNames(
+      output = otb::GetOpenFilenames(
         this,
         tr( "Select input filename..." ),
         filePath,
@@ -268,7 +261,7 @@ ListEditWidget
     else
       {
       output.push_back(
-        GetOpenFileName(
+        otb::GetOpenFilename(
           this,
           tr( "Select input filename..." ),
           filePath,
@@ -281,7 +274,7 @@ ListEditWidget
   else
     {
     output.push_back(
-      GetSaveFileName(
+      otb::GetSaveFilename(
         this,
         tr( "Select output filename..." ),
         filePath,
@@ -619,6 +612,11 @@ ListEditWidget
 
   assert( GetItemModel()!=nullptr );
 
+  //Notify the ParameterList that the parameter has been modified (UserValue)
+  // ParameterList is not available in this class, transfer the signal to WidgetParameterList
+  emit ValueChanged();
+
+  //Then, trigger the update the application parameters
   emit Updated();
 }
 

@@ -26,6 +26,7 @@
 #include "otbParser.h"
 #include "otbMacro.h"
 #include "otbBinarySpectralAngleFunctor.h"
+#include <string>
 
 namespace otb
 {
@@ -102,8 +103,8 @@ protected:
 
 private:
 
-  MaskMuParserFunctor(const Self &); //purposely not implemented
-  void operator =(const Self &); //purposely not implemented
+  MaskMuParserFunctor(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
   std::string m_Expression;
   ParserType::Pointer m_Parser;
@@ -127,7 +128,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaskMuParserFunctor.txx"
+#include "otbMaskMuParserFunctor.hxx"
 #endif
 
 #endif

@@ -121,8 +121,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  VarianceImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VarianceImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputSizeType m_Radius;
 };
@@ -130,7 +130,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVarianceImageFilter.txx"
+#include "otbVarianceImageFilter.hxx"
 #endif
 
 #endif

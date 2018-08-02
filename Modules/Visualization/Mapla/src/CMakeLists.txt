@@ -61,14 +61,14 @@ if (WIN32)
 endif()
 
 #############################################################################
-qt4_wrap_cpp( OTBMapla_SRC_MOC ${OTBMapla_HEADERS_MOC} )
-qt4_wrap_ui( OTBMapla_FORMS_HEADERS ${OTBMapla_FORMS}  )
-qt4_add_resources( OTBMapla_RESOURCES_RCC ${OTBMapla_RESOURCES} OPTIONS "-no-compress")
+qt5_wrap_cpp( OTBMapla_SRC_MOC ${OTBMapla_HEADERS_MOC} )
+qt5_wrap_ui( OTBMapla_FORMS_HEADERS ${OTBMapla_FORMS}  )
+qt5_add_resources( OTBMapla_RESOURCES_RCC ${OTBMapla_RESOURCES} OPTIONS "-no-compress")
 
 #############################################################################
-add_to_qt4_i18n_sources( ${OTBMapla_SRCS} )
-add_to_qt4_i18n_headers( "../include" ${OTBMapla_SRCS} )
-add_to_qt4_i18n_forms( ${OTBMapla_FORMS} )
+add_to_qt_i18n_sources( ${OTBMapla_SRCS} )
+add_to_qt_i18n_headers( "../include" ${OTBMapla_SRCS} )
+add_to_qt_i18n_forms( ${OTBMapla_FORMS} )
 
 ##########################[Mapla library]####################################
 add_library( OTBMapla
@@ -79,7 +79,7 @@ add_library( OTBMapla
 target_link_libraries( OTBMapla
   ${OTBMonteverdiCore_LIBRARIES}
   ${OTBMonteverdiGUI_LIBRARIES}
-  ${OTBQt4_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   )
 otb_module_target( OTBMapla )
 

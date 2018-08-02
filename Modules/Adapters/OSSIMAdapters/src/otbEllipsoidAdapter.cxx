@@ -44,7 +44,7 @@ EllipsoidAdapter::EllipsoidAdapter()
 
 EllipsoidAdapter::~EllipsoidAdapter()
 {
-  if (m_Ellipsoid != ITK_NULLPTR)
+  if (m_Ellipsoid != nullptr)
     {
     delete m_Ellipsoid;
     }

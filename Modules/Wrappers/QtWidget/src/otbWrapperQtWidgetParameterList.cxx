@@ -33,14 +33,14 @@ namespace Wrapper
 
 /*****************************************************************************/
 QtWidgetParameterList
-::QtWidgetParameterList( AbstractParameterList * param, QtWidgetModel * m ) :
-  QtWidgetParameterBase( param, m )
+::QtWidgetParameterList( AbstractParameterList * param, QtWidgetModel * m , QWidget * parent) :
+  QtWidgetParameterBase( param, m , parent)
 {
   assert( m!=nullptr );
 
   QObject::connect(
-    this, SIGNAL( NotifyUpdate() ),
-    m, SLOT( NotifyUpdate() )
+    this, &QtWidgetParameterList::NotifyUpdate ,
+    m, &QtWidgetModel::NotifyUpdate
   );
 }
 
@@ -67,12 +67,13 @@ QtWidgetParameterList
   assert( dynamic_cast< StringListInterface * >( GetParam() )!=nullptr );
 
   ListEditWidget * widget = new ListEditWidget(
-    dynamic_cast< StringListInterface * >( GetParam() )
+    dynamic_cast< StringListInterface * >( GetParam() ),
+    this
   );
 
   //
   // Global Layout
-  QGridLayout * gLayout = new QGridLayout();
+  QGridLayout * gLayout = new QGridLayout(this);
 
   gLayout->setSpacing( 1 );
   gLayout->setContentsMargins( 2, 2, 2, 2 );
@@ -82,10 +83,16 @@ QtWidgetParameterList
   setLayout( gLayout );
 
   //
-  // Connections.
+  // Connections (Update UserValue flag).
   QObject::connect(
-    widget, SIGNAL( Updated() ),
-    this, SIGNAL( NotifyUpdate() )
+    widget, &ListEditWidget::ValueChanged,
+    this, [=] () { emit ParameterChanged( GetParam()->GetKey() ); }
+  );
+
+  // Connections (Update app parameters).
+  QObject::connect(
+    widget, &ListEditWidget::Updated,
+    this, &QtWidgetParameterList::NotifyUpdate
   );
 }
 

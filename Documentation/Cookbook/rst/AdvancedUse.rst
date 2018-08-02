@@ -11,14 +11,33 @@ that they only affect default values, and that settings in extended
 filenames, applications, monteverdi or custom C++ code might override
 those values.
 
-* ``OTB_DEM_DIRECTORY``: Default directory were DEM tiles are stored. It should only contain ```.hgt`` or or georeferenced ``.tif`` files. Empty if not set (no directory set)
-* ``OTB_GEOID_FILE``: Default path to the geoid file that will be used to retrieve height of DEM above ellipsoid. Empty if not set (no geoid set)
-* ``OTB_MAX_RAM_HINT``: Default maximum memory that OTB should use for processing, in MB. If not set, default value is 128 MB.
-* ``OTB_LOGGER_LEVEL``: Default level of logging for OTB. Should be one of  ``DEBUG``, ``INFO``, ``WARNING``, ``CRITICAL`` or ``FATAL``, by increasing order of priority. Only messages with a higher priority than the level of logging will be displayed. If not set, default level is ``INFO``.
+* ``OTB_DEM_DIRECTORY``: Default directory were DEM tiles are
+  stored. It should only contain ```.hgt`` or or georeferenced
+  ``.tif`` files. Empty if not set (no directory set)
+* ``OTB_GEOID_FILE``: Default path to the geoid file that will be used
+  to retrieve height of DEM above ellipsoid. Empty if not set (no
+  geoid set)
+* ``OTB_MAX_RAM_HINT``: Default maximum memory that OTB should use for
+  processing, in MB. If not set, default value is 128 MB.
+* ``OTB_LOGGER_LEVEL``: Default level of logging for OTB. Should be
+  one of ``DEBUG``, ``INFO``, ``WARNING``, ``CRITICAL`` or ``FATAL``,
+  by increasing order of priority. Only messages with a higher
+  priority than the level of logging will be displayed. If not set,
+  default level is ``INFO``.
+
+In addition to OTB specific environment variables, the following
+environment variable are parsed by third party libraries and also
+affect how OTB works:
+
+* ``GDAL_CACHEMAX``: Gdal has an internal cache mechanism to avoid reading or decoding again image chunks. This environnement variable controls how much memory Gdal can use for caching. By default, Gdal can use up to 5 percents of available RAM on system, which may be a lot. Moreover, caching is only needed if the processing chain is likely to request the same chunk several times, which is not likely  to happen for a standard pixel based OTB pipeline. Setting a lower value allows to allocate more memory to OTB itself (using applications ``-ram`` parameter or ``OTB_MAX_RAM_HINT`` environment variable). If value is small (less than 100 000, it is assumed to be in megabytes, otherwise, it is assumed to be in bytes.
+* ``GDAL_NUM_THREADS``: Gdal can take advantage of multi-threading to decode some formats. This variable controls the number of threads Gdal is allowed to use.
+* ``OPJ_NUM_THREADS``: OpenJpeg can take advantage of mutli-threading when decoding images. This variable controls the number of threads OpenJpeg is allowed to use.
+* ``ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS``: This variable allows to control the number of threads used by ITK for processing. 
+  
+.. _extended-filenames:
 
 Extended filenames
 ------------------
-.. _extended-filenames:
 
 Extended filenames is an interesting feature of OTB. With it, you can control
 several aspects of the beahvior of the OTB in the OTB-Applications or in our
@@ -314,7 +333,53 @@ The available syntax for boolean options are:
 
 -  OFF, Off, off, false, False, 0 are available for setting a ’false’
    boolean value
+
+::
+
+   &nodata=(double) value / [int:double, int:double ...]
+
+-   This options allows one to set specific nodata values for all or selected bands.
+
+    There are two ways of setting nodata values. simple scalar values of band,value pair.
+    OTB will select either one of them depending on type of nodata value string
    
+-    If value is scalar (without bandindex), it will be applied only to first band of image.
+
+-    If value is given as "bandindex:value" pair separated by a ":" then
+     nodata value is applied to only those selected band.
+
+- By default OTB will not alter any existing nodata value.
+
+OGR DataSource options
+^^^^^^^^^^^^^^^^^^^^^^^
+
+We extended this process to OGR DataSource. There are three different type of
+option : open, creation and layer creation. Those options come from the GDAL 
+API. In order to use them one just need to specify to which of this family 
+the option one want to use is from.
+
+For open option :
+
+::
+
+    &gdal:oo:<GDALKEY>=<VALUE>
+
+
+For creation option :
+
+::
+
+    &gdal:co:<GDALKEY>=<VALUE>
+
+
+For layer creation option :
+
+::
+
+    &gdal:lco:<GDALKEY>=<VALUE>
+
+
+
 Examples
 ^^^^^^^^^^^^^^
 

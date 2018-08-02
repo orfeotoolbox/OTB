@@ -146,8 +146,8 @@ protected:
                              itk::ThreadIdType threadId) override;
 
 private:
-  PersistentMinMaxImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentMinMaxImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::vector<PixelType> m_ThreadMin;
   std::vector<PixelType> m_ThreadMax;
@@ -283,14 +283,14 @@ protected:
   ~StreamingMinMaxImageFilter() override {}
 
 private:
-  StreamingMinMaxImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingMinMaxImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingMinMaxImageFilter.txx"
+#include "otbStreamingMinMaxImageFilter.hxx"
 #endif
 
 #endif

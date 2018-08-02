@@ -227,8 +227,8 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  SFSTexturesImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SFSTexturesImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Radius;
   FunctorType  m_Functor;
@@ -238,7 +238,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSFSTexturesImageFilter.txx"
+#include "otbSFSTexturesImageFilter.hxx"
 #endif
 
 #endif

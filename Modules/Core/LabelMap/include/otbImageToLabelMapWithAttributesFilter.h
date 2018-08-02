@@ -93,8 +93,8 @@ protected:
 
 
 private:
-  ImageToLabelMapWithAttributesFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToLabelMapWithAttributesFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   typename LabelMapType::Pointer   m_Output;
 
@@ -102,7 +102,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToLabelMapWithAttributesFilter.txx"
+#include "otbImageToLabelMapWithAttributesFilter.hxx"
 #endif
 #endif
 

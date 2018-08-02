@@ -130,15 +130,15 @@ protected:
   ~GradientBoostedTreeMachineLearningModel() override;
 
     /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
 
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GradientBoostedTreeMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GradientBoostedTreeMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   CvGBTrees * m_GBTreeModel;
 
@@ -154,7 +154,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGradientBoostedTreeMachineLearningModel.txx"
+#include "otbGradientBoostedTreeMachineLearningModel.hxx"
 #endif
 
 #endif

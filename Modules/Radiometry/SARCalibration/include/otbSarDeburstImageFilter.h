@@ -84,8 +84,8 @@ protected:
   RegionType OutputRegionToInputRegion(const RegionType& outputRegion) const;
   
 private:
-  SarDeburstImageFilter(const Self&); // purposely not implemented
-  void operator=(const Self &); // purposely not implemented
+  SarDeburstImageFilter(const Self&) = delete;
+  void operator=(const Self &) = delete;
 
   // Vector of line records
   LinesRecordVectorType m_LinesRecord;
@@ -95,7 +95,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSarDeburstImageFilter.txx"
+#include "otbSarDeburstImageFilter.hxx"
 #endif
 
 

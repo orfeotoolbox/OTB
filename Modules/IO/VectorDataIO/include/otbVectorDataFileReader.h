@@ -23,6 +23,7 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorDataIOBase.h"
+#include <string>
 
 namespace otb
 {
@@ -138,8 +139,8 @@ protected:
   std::string m_FileName; // The file to be read
 
 private:
-  VectorDataFileReader(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataFileReader(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Test whether the given filename exist and it is readable.
       If the file doesn't exist or it is not readable, and exception with an
@@ -151,7 +152,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataFileReader.txx"
+#include "otbVectorDataFileReader.hxx"
 #endif
 
 #endif // otbVectorDataFileReader_h

@@ -25,7 +25,6 @@
 
 #include "otbWrapperApplication.h"
 
-#include <iostream>
 
 // ListSample
 #include "itkListSample.h"
@@ -33,6 +32,7 @@
 
 //Estimator
 #include "otbMachineLearningModelFactory.h"
+#include <string>
 
 namespace otb
 {
@@ -214,23 +214,23 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLearningApplicationBase.txx"
+#include "otbLearningApplicationBase.hxx"
 #ifdef OTB_USE_OPENCV
-#include "otbTrainBoost.txx"
-#include "otbTrainDecisionTree.txx"
-#include "otbTrainGradientBoostedTree.txx"
-#include "otbTrainKNN.txx"
-#include "otbTrainNeuralNetwork.txx"
-#include "otbTrainNormalBayes.txx"
-#include "otbTrainRandomForests.txx"
-#include "otbTrainSVM.txx"
+#include "otbTrainBoost.hxx"
+#include "otbTrainDecisionTree.hxx"
+#include "otbTrainGradientBoostedTree.hxx"
+#include "otbTrainKNN.hxx"
+#include "otbTrainNeuralNetwork.hxx"
+#include "otbTrainNormalBayes.hxx"
+#include "otbTrainRandomForests.hxx"
+#include "otbTrainSVM.hxx"
 #endif
 #ifdef OTB_USE_LIBSVM
-#include "otbTrainLibSVM.txx"
+#include "otbTrainLibSVM.hxx"
 #endif
 #ifdef OTB_USE_SHARK
-#include "otbTrainSharkRandomForests.txx"
-#include "otbTrainSharkKMeans.txx"
+#include "otbTrainSharkRandomForests.hxx"
+#include "otbTrainSharkKMeans.hxx"
 #endif
 #endif
 

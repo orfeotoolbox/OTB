@@ -147,6 +147,13 @@ foreach(classifier ${classifierList})
 
   # Derive output file name
   set(OUTMODELFILE cl${classifier}_ModelQB1${${lclassifier}_output_format})
+
+  # special case for DT, use OpenCV 2.x model file if not using OpenCV 3.x
+  if(${classifier} STREQUAL "DT" AND NOT OTB_OPENCV_3)
+    set(OUTMODELFILE clDT_ModelQB1-opencv2.dt)
+  endif()
+
+
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
   set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
 
@@ -972,3 +979,39 @@ otb_test_application(
   ${OTBAPP_BASELINE_FILES}/apTvClMultiImageSamplingRate_out_3.csv
   ${TEMP}/apTvClMultiImageSamplingRate_out_3.csv
 )
+
+#------------ SampleAgmentation TESTS ----------------
+otb_test_application(NAME apTvClSampleAugmentationReplicate
+  APP  SampleAugmentation
+  OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+  -field class
+  -label 3
+  -samples 100
+  -out ${TEMP}/apTvClSampleAugmentationReplicate.sqlite
+  -exclude originfid
+  -strategy replicate
+  )
+
+otb_test_application(NAME apTvClSampleAugmentationJitter
+  APP  SampleAugmentation
+  OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+  -field class
+  -label 3
+  -samples 100
+  -out ${TEMP}/apTvClSampleAugmentationJitter.sqlite
+  -exclude originfid
+  -strategy jitter
+  -strategy.jitter.stdfactor 10
+  )
+
+otb_test_application(NAME apTvClSampleAugmentationSmote
+  APP  SampleAugmentation
+  OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+  -field class
+  -label 3
+  -samples 100
+  -out ${TEMP}/apTvClSampleAugmentationSmote.sqlite
+  -exclude originfid
+  -strategy smote
+  -strategy.smote.neighbors 5
+  )

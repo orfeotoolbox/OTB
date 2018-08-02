@@ -88,7 +88,7 @@ protected:
 
   ComputeConfusionMatrix()
     {
-    m_Input = ITK_NULLPTR;
+    m_Input = nullptr;
     }
 
 private:
@@ -221,7 +221,7 @@ private:
   void m_WriteContingencyTable(const ContingencyTablePointerType& contingencyTable)
   {
     std::ofstream outFile;
-    outFile.open( this->GetParameterString( "out" ).c_str() );
+    outFile.open( this->GetParameterString( "out" ) );
     outFile << contingencyTable->ToCSV();
     outFile.close();
   }
@@ -528,7 +528,7 @@ private:
 
 
     std::ofstream outFile;
-    outFile.open(this->GetParameterString("out").c_str());
+    outFile.open(this->GetParameterString("out"));
     outFile << std::fixed;
     outFile.precision(10);
 

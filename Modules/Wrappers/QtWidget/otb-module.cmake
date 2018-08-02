@@ -25,7 +25,7 @@ ENABLE_SHARED
   DEPENDS
     OTBApplicationEngine
     OTBITK
-    OTBQt4
+    OTBQt
     OTBQtAdapters
 
   TEST_DEPENDS

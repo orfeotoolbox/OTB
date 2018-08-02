@@ -25,9 +25,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -37,32 +35,25 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include <exception>
-#endif //tag=QT4-boost-compatibility
+#include <string>
 
 //
 // ITK includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include <itkArray.h>
 #include <itkImageRegion.h>
-#endif //tag=QT4-boost-compatibility
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See:
-		   // https://bugreports.qt-project.org/browse/QTBUG-22829
-		   // //tag=QT4-boost-compatibility
 #include <otbCast.h>
 #include <otbImage.h>
 #include <otbImageFileReader.h>
 #include <otbImageFileWriter.h>
 #include <otbVectorImage.h>
-#endif //tag=QT4-boost-compatibility
 
 //
 // Monteverdi includes (sorted by alphabetic order)

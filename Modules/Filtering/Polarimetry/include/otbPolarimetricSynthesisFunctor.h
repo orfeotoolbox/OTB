@@ -22,7 +22,7 @@
 #define otbPolarimetricSynthesisFunctor_h
 
 #include "otbMath.h"
-#include "vcl_complex.h"
+#include <complex>
 #include "itkFixedArray.h"
 
 namespace otb
@@ -74,10 +74,10 @@ public:
     ComplexType tmp;
     double      scalar;
 
-    tmp =   vcl_conj(m_Er[0]) * (m_Ei[0] * static_cast<ComplexType>(Shh) + m_Ei[1] * static_cast<ComplexType>(Shv))
-          + vcl_conj(m_Er[1]) * (m_Ei[0] * static_cast<ComplexType>(Svh) + m_Ei[1] * static_cast<ComplexType>(Svv));
+    tmp =   std::conj(m_Er[0]) * (m_Ei[0] * static_cast<ComplexType>(Shh) + m_Ei[1] * static_cast<ComplexType>(Shv))
+          + std::conj(m_Er[1]) * (m_Ei[0] * static_cast<ComplexType>(Svh) + m_Ei[1] * static_cast<ComplexType>(Svv));
 
-    scalar = static_cast<double>(vcl_abs(tmp)) * static_cast<double>(vcl_abs(tmp));
+    scalar = static_cast<double>(std::abs(tmp)) * static_cast<double>(std::abs(tmp));
 
     return (static_cast<TOutput>(scalar));
   }

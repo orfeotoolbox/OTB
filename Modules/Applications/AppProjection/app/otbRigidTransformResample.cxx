@@ -414,8 +414,8 @@ private:
 
       //size of output image
       FloatVectorImageType::PointType size;
-      size[0]=vcl_abs(maxX-minX);
-      size[1]=vcl_abs(maxY-minY);
+      size[0]=std::abs(maxX-minX);
+      size[1]=std::abs(maxY-minY);
 
       // Evaluate spacing
       FloatVectorImageType::SpacingType OutputSpacing;
@@ -430,8 +430,8 @@ private:
 
       // Evaluate size
       ResampleFilterType::SizeType recomputedSize;
-      recomputedSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(size[0]/OutputSpacing[0])));
-      recomputedSize[1] = static_cast<unsigned int>(vcl_floor(vcl_abs(size[1]/OutputSpacing[1])));
+      recomputedSize[0] = static_cast<unsigned int>(std::floor(std::abs(size[0]/OutputSpacing[0])));
+      recomputedSize[1] = static_cast<unsigned int>(std::floor(std::abs(size[1]/OutputSpacing[1])));
       m_Resampler->SetOutputSize( recomputedSize );
       otbAppLogINFO( << "Output image size : " << recomputedSize );
 

@@ -114,8 +114,8 @@ protected:
                             itk::ThreadIdType threadId ) override;
 
 private:
-  StreamingWarpImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingWarpImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   //Because of itk positive spacing we need this member to be compliant with otb
   //signed spacing
@@ -128,7 +128,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingWarpImageFilter.txx"
+#include "otbStreamingWarpImageFilter.hxx"
 #endif
 
 #endif

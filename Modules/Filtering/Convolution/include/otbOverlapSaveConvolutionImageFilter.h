@@ -164,8 +164,8 @@ protected:
   // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
-  OverlapSaveConvolutionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OverlapSaveConvolutionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   InputSizeType m_Radius;
@@ -179,7 +179,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOverlapSaveConvolutionImageFilter.txx"
+#include "otbOverlapSaveConvolutionImageFilter.hxx"
 #endif
 
 #endif

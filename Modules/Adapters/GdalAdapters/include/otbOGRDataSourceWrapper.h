@@ -46,6 +46,7 @@
 
 #include "otbOGRLayerWrapper.h"
 #include "otbOGRVersionProxy.h"
+#include "otbOGRExtendedFilenameToOptions.h"
 
 class OGRLayer;
 class OGRSpatialReference;
@@ -88,6 +89,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
   //@}
 
+  typedef OGRExtendedFilenameToOptions FileNameHelperType;
   /**\name Standard macros */
   //@{
   /** Default builder.
@@ -162,7 +164,7 @@ public:
    * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(GDALDataset *)
    */
-  static Pointer New(ogr::version_proxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read);
+  static Pointer New(ogr::version_proxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read , const std::vector< std::string > & layerOptions = std::vector< std::string >() );
   //@}
 
   /**\name Projection Reference property */
@@ -281,7 +283,7 @@ public:
    *  \return the extent of all layers
    *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
    */
-  OGREnvelope GetGlobalExtent(bool force = false, std::string * outwkt=ITK_NULLPTR) const;
+  OGREnvelope GetGlobalExtent(bool force = false, std::string * outwkt=nullptr) const;
 
   /** Grafts data and information from one data source to another.
    * \deprecated \c OGRLayer has an embedded input iterator. As a consequence,
@@ -328,7 +330,7 @@ public:
    */
   Layer CreateLayer(
     std::string        const& name,
-    OGRSpatialReference     * poSpatialRef = ITK_NULLPTR,
+    OGRSpatialReference     * poSpatialRef = nullptr,
     OGRwkbGeometryType        eGType = wkbUnknown,
     std::vector<std::string> const& papszOptions = std::vector<std::string>());
 
@@ -368,7 +370,7 @@ public:
   Layer CopyLayer(
     Layer            & srcLayer,
     std::string const& newName,
-    char            ** papszOptions = ITK_NULLPTR);
+    std::vector<std::string> const& papszOptions = std::vector<std::string>() );
   //@}
 
   /**\name Layers access
@@ -471,7 +473,7 @@ public:
    * \see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
    */
   operator int boolean ::* () const {
-    return m_DataSource ? &boolean::i : ITK_NULLPTR;
+    return m_DataSource ? &boolean::i : nullptr;
     }
 
   /** Flushes all changes to disk.
@@ -497,6 +499,10 @@ public:
    */
     ogr::version_proxy::GDALDatasetType & ogr();
 
+    void SetLayerCreationOptions( const std::vector< std::string > & options );
+    void AddLayerCreationOptions( std::vector< std::string > options );
+    const std::vector< std::string > & GetLayerCreationOptions() const ;
+
 protected:
   /** Default constructor.
    * The actual \c GDALDataset is using the <em>in-memory</em> \c
@@ -511,7 +517,7 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode);
+  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode , const std::vector< std::string > & layerOption = std::vector< std::string >() );
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
@@ -549,6 +555,7 @@ private:
 
 private:
   ogr::version_proxy::GDALDatasetType *m_DataSource;
+  std::vector< std::string > m_LayerOptions;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;
   }; // end class DataSource
@@ -565,7 +572,7 @@ namespace boost { namespace foreach {
 #endif
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataSourceWrapper.txx"
+#include "otbOGRDataSourceWrapper.hxx"
 #endif
 
 #endif // otbOGRDataSourceWrapper_h
