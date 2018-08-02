@@ -26,8 +26,6 @@
 #include <itkDataObject.h>
 
 
-
-
 namespace otb
 {
 
@@ -47,7 +45,7 @@ public:
     }
 
 
-   unsigned char GetRadiusMin(void)
+  unsigned char GetRadiusMin(void)
     {
      return m_RadiusMax;     
     }

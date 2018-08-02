@@ -74,11 +74,11 @@ namespace otb
 {
 namespace Wrapper
 {
-class CVF : public Application
+class CostVolumeFilter : public Application
   {
   public:
   /** Standard class typedefs. */
-  typedef CVF                 Self;
+  typedef CostVolumeFilter                 Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;    
@@ -108,7 +108,7 @@ class CVF : public Application
   
 
   itkNewMacro(Self);
-  itkTypeMacro(CVF, otb::Application);
+  itkTypeMacro(CostVolumeFilter, otb::Application);
 
   private:
 
@@ -116,12 +116,12 @@ class CVF : public Application
     {
     SetDescription("Performs Fast Cost Volume Filter to estimate a disparty map between two images");
 
-    SetDocName("CVF");
+    SetDocName("CostVolumeFilter");
     SetDocLongDescription("This application allows Fast Cost Volume Filter to estimate a disparty map between two images "
      "to present parameters types," 
       " and Application class framework. " 
       "It is used to generate Software guide documentation" 
-      " for Application chapter CVF.");
+      " for Application chapter CostVolumeFilter.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("");
@@ -203,7 +203,7 @@ class CVF : public Application
     SetDocExampleParameterValue("rwmf","9");
     SetDocExampleParameterValue("radius","9");
     SetDocExampleParameterValue("tol","2");
-    SetDocExampleParameterValue("io.out","MyCVFDisparity.tif");
+    SetDocExampleParameterValue("io.out","MyCostVolumeFilterDisparity.tif");
     SetDocExampleParameterValue("conversion","0");
     SetDocExampleParameterValue("choice","3");
     SetDocExampleParameterValue("alpha","0.9");
@@ -217,7 +217,7 @@ class CVF : public Application
   void DoUpdateParameters() override {}
 
 
-  CVF()
+  CostVolumeFilter()
     {
     m_convFilterXLeft = ConvFilterType::New() ;
     m_convFilterXRight = ConvFilterType::New() ;
@@ -543,4 +543,4 @@ class CVF : public Application
 } // end Wrapper 
 } //end otb
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::CVF)
+OTB_APPLICATION_EXPORT(otb::Wrapper::CostVolumeFilter)

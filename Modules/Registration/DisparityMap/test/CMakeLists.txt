@@ -5,8 +5,6 @@
 # *  Date:      $Date$
 # * Version:   $Revision$
 # *
-# * Copyright (C) Damia Belazouz - 2017
-# *
 # *  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 # * See OTBCopyright.txt for details.
 # *
@@ -36,17 +34,18 @@
 # 
 #=========================================================================*/
 
+otb_module_test()
 
+set(OTBStereoFiltersTests
+  otbStereoFiltersTestDriver.cxx
+   testCostVolumeFilters.cpp
+   testGuidedFilter.cpp
+   testOcclusionsDetectionFilter.cpp
+   testFillOcclusionsFilter.cpp
+)
 
-cmake_minimum_required(VERSION 2.8.9)
-project(OTBStereoFilters)
-
-if(NOT OTB_SOURCE_DIR)
-  find_package(OTB REQUIRED)
-  list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
-  include(OTBModuleExternal)
-else()
-  otb_module_impl()
-endif()
+add_executable(otbStereoFiltersTestDriver ${OTBStereoFiltersTests})
+target_link_libraries(otbStereoFiltersTestDriver ${OTBStereoFilters-Test_LIBRARIES})
+otb_module_target_label(otbStereoFiltersTestDriver)
 
 
