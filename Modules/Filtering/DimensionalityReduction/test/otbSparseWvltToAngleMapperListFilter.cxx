@@ -95,7 +95,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
   for ( unsigned int i = 0; i < nbInputImages; i++ )
   {
     reader->SetNthElement(i, ReaderType::New());
-    reader->GetNthElement(i)->SetFileName( inputImageName[i].c_str() );
+    reader->GetNthElement(i)->SetFileName( inputImageName[i] );
     reader->GetNthElement(i)->Update();
 
     // Here, we will have 'nbInputImages' image lists of one image each only

@@ -81,7 +81,7 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
   for ( unsigned int i = 0; i < nbInputImages; i++ )
   {
     reader->SetNthElement(i, ReaderType::New());
-    reader->GetNthElement(i)->SetFileName( inputImageName[i].c_str() );
+    reader->GetNthElement(i)->SetFileName( inputImageName[i] );
     reader->GetNthElement(i)->Update();
   }
 
@@ -118,7 +118,7 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
 
     writers->SetNthElement(i, WriterType::New());
     WriterType::Pointer writer = writers->GetNthElement(i);
-    writer->SetFileName( title.str().c_str() );
+    writer->SetFileName( title.str() );
     writer->SetInput( filter->GetOutput()->GetNthElement(i) );
     writer->Update();
   }

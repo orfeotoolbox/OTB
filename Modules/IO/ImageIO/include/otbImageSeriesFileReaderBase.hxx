@@ -43,7 +43,7 @@ void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::SetFileName(const std::string& file)
 {
-  return SetFileName(file.c_str());
+  return SetFileName(file);
 }
 
 template <class TImage, class TInternalImage>

@@ -571,7 +571,7 @@ ImageFileWriter<TInputImage>
   /** Create Image file */
   // Setup the image IO for writing.
   //
-  m_ImageIO->SetFileName(m_FileName.c_str());
+  m_ImageIO->SetFileName(m_FileName);
 
   m_ImageIO->WriteImageInformation();
 }
