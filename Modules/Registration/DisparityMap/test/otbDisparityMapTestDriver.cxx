@@ -43,4 +43,9 @@ void RegisterTests()
   REGISTER_TEST(otbPixelWiseBlockMatchingImageFilter);
   REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNew);
   REGISTER_TEST(otbPixelWiseBlockMatchingImageFilterNCC);
+
+  REGISTER_TEST( otbCostVolumeFiltersTest ) ;
+  REGISTER_TEST( otbGuidedFilterTest ) ;
+  REGISTER_TEST( otbOcclusionsDetectionFilterTest) ;
+  REGISTER_TEST( otbFillOcclusionsFilterTest ) ;
 }

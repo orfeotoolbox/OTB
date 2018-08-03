@@ -40,8 +40,6 @@ otbGuidedFilterTest.cxx
 otbOcclusionsDetectionFilterTest.cxx
 otbFillOcclusionsFilterTest.cxx
 
-
-
 )
 
 add_executable(otbDisparityMapTestDriver ${OTBDisparityMapTests})

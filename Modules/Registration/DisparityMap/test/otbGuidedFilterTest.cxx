@@ -58,7 +58,7 @@
 
 
   
-int testGuidedFilter(int argc, char *argv[])
+int otbGuidedFilterTest(int argc, char *argv[])
   {
 
   if(argc < 12) 
@@ -77,10 +77,12 @@ int testGuidedFilter(int argc, char *argv[])
 
   FloatVectorImageReaderType::Pointer inLeft = FloatVectorImageReaderType::New();
   inLeft->SetFileName(argv[1]); //LeftImage  
+  std::cout <<"Left"<< inLeft->GetFileName()<< std::endl;
   inLeft->UpdateOutputInformation();
   
   FloatVectorImageReaderType::Pointer inRight = FloatVectorImageReaderType::New();
   inRight->SetFileName(argv[2]);//RightImage
+  std::cout <<"Right"<< inRight->GetFileName()<< std::endl;
   inRight->UpdateOutputInformation();
   int dispMin = atoi(argv[3]);
   int dispMax  = atoi(argv[4]);
@@ -144,10 +146,13 @@ int testGuidedFilter(int argc, char *argv[])
   m_convFilterXLeft->SetFilter(filterCoeffsX);  
   m_convFilterXRight->SetRadius(radiusG);
   m_convFilterXRight->SetFilter(filterCoeffsX);
+
+  std::cout << "band number : " << inLeft->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl ;
+  
   
   //--Left---------------  
   m_GradientXLeft->SetFilter(m_convFilterXLeft);
-  if( inLeft->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
+  if( inLeft->GetOutput()->GetNumberOfComponentsPerPixel() > 1)
     {
     m_LeftGrayVectorImage->SetInput(inLeft->GetOutput());
     m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
@@ -160,7 +165,7 @@ int testGuidedFilter(int argc, char *argv[])
 
   //--Right--------------- 
   m_GradientXRight->SetFilter(m_convFilterXRight);
-  if( inRight->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
+  if( inRight->GetOutput()->GetNumberOfComponentsPerPixel() > 1)
     {
     m_RightGrayVectorImage->SetInput(inRight->GetOutput());
     m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());

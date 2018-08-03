@@ -49,7 +49,7 @@
 #include "itkMedianImageFilter.h"
 
   
-int testFillOcclusionsFilter(int argc, char *argv[])
+int otbFillOcclusionsFilterTest(int argc, char *argv[])
   {
 
   if(argc < 11) 

@@ -304,6 +304,8 @@ CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 
  OutPixel.Fill(0);
 
+ int bandNumber = this->GetLeftInputImage()->GetNumberOfComponentsPerPixel() ;
+
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
   {
   ComputeInputRegions( outputRegionForThread, LeftRegionForThread, RightRegionForThread, iteration_disp); 
@@ -342,9 +344,9 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
      
    costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;    
 
-  if(this->GetLeftInputImage()->GetNumberOfComponentsPerPixel() == 3)
+  if(bandNumber > 1)
     {
-    costColorNorm = (costColor.GetNorm())/3; 
+    costColorNorm = (costColor.GetNorm())/bandNumber; 
     }
   else
     {
@@ -357,8 +359,16 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
                 }               
                 // if  To take the minimum  
                
-    costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= (costGradient.GetNorm());             
+  costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
+
+  if(bandNumber > 1)
+    {
+    costGradientNorm= (costGradient.GetNorm())/bandNumber; 
+    }
+  else
+    {
+    costGradientNorm= (costGradient.GetNorm());    
+    }              
                  
                  if(costGradientNorm > m_Tau2 )
                    costGradientNorm = m_Tau2;
