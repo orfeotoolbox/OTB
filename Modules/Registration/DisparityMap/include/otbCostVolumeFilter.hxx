@@ -359,9 +359,8 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
                 }               
                 // if  To take the minimum  
                
-  costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-  costGradientNorm= (costGradient.GetNorm());    
-                 
+    costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
+    costGradientNorm= (costGradient.GetNorm());             
                  
                  if(costGradientNorm > m_Tau2 )
                    costGradientNorm = m_Tau2;

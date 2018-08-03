@@ -77,10 +77,12 @@ int otbGuidedFilterTest(int argc, char *argv[])
 
   FloatVectorImageReaderType::Pointer inLeft = FloatVectorImageReaderType::New();
   inLeft->SetFileName(argv[1]); //LeftImage   
+  std::cout <<"Left"<< inLeft->GetFileName()<< std::endl;
   inLeft->UpdateOutputInformation();
   
   FloatVectorImageReaderType::Pointer inRight = FloatVectorImageReaderType::New();
   inRight->SetFileName(argv[2]);//RightImage  
+  std::cout <<"Right"<< inRight->GetFileName()<< std::endl;
   inRight->UpdateOutputInformation();
   int dispMin = atoi(argv[3]);
   int dispMax  = atoi(argv[4]);
@@ -147,6 +149,9 @@ int otbGuidedFilterTest(int argc, char *argv[])
   m_convFilterXRight->SetRadius(radiusG);
   m_convFilterXRight->SetFilter(filterCoeffsX);
 
+  std::cout << "band number : " << inLeft->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl ;
+  
+  
   //--Left---------------  
   m_GradientXLeft->SetFilter(m_convFilterXLeft);
   if( inLeft->GetOutput()->GetNumberOfComponentsPerPixel() > 1)
