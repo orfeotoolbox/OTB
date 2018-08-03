@@ -310,11 +310,48 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbDisparityMapT
   ${BASELINE}/dmTvGuidedFilterOutputRightDisparity.tif
   ${TEMP}/dmTvGuidedFilterOutputRightDisparity.tif
   otbGuidedFilterTest
-  ${INPUT}/"anaglyphInput2.tif?&bands=1,2,3"
-  ${INPUT}/"anaglyphInput1.tif?&bands=1,2,3"
-  ${TEMP}/dmTvGuidedFilterOutputLeftDisparity.tif
-  ${TEMP}/dmTvGuidedFilterOutputRightDisparity.tif
-  -14 0
+  ${INPUTDATA}/anaglyphInput2.tif?&bands=1,2,3
+  ${INPUTDATA}/anaglyphInput1.tif?&bands=1,2,3
+  -15 0 0.9 7 2 7 2 9 0 
+  ${TEMP}/dmTvGuidedFilterOutput
   )
 
+
+  otb_add_test(NAME dmTvCostVolumeFilters COMMAND otbDisparityMapTestDriver
+  --compare-n-images ${NOTOL} 2
+  ${BASELINE}/dmTvCostVolumeFiltersOutputMinLeftCost.tif
+  ${TEMP}/dmTvCostVolumeFiltersOutputMinLeftCost.tif
+  ${BASELINE}/dmTvCostVolumeFiltersOutputMinRightCost.tif
+  ${TEMP}/dmTvCostVolumeFiltersOutputMinRightCost.tif
+  otbCostVolumeFiltersTest
+  ${INPUTDATA}/anaglyphInput2.tif?&bands=1,2,3
+  ${INPUTDATA}/anaglyphInput1.tif?&bands=1,2,3
+  -15 0 0.9 7 2 7 2 0 
+  ${TEMP}/dmTvCostVolumeFiltersOutput
+  )
+
+
+  otb_add_test(NAME dmTvOcclusionsDetectionFilter COMMAND otbDisparityMapTestDriver
+  --compare-image ${NOTOL}
+  ${BASELINE}/dmTvOcclusionsDetectionFilterOutputOcclusionsMask.tif
+  ${TEMP}/dmTvOcclusionsDetectionFilterOutputOcclusionsMask.tif
+  otbOcclusionsDetectionFilterTest
+  ${BASELINE}/dmTvGuidedFilterOutputLeftDisparity.tif
+  ${BASELINE}/dmTvGuidedFilterOutputRightDisparity.tif
+  -15 0 2 0 
+  ${TEMP}/dmTvOcclusionsDetectionFilterOutput
+  )
+
+  otb_add_test(NAME dmTvFillOcclusionsFilter COMMAND otbDisparityMapTestDriver
+  --compare-image ${NOTOL} 
+  ${BASELINE}/dmTvFillOcclusionsFilterOutputFillOcclusions.tif
+  ${TEMP}/dmTvFillOcclusionsFilterOutputFillOcclusions.tif
+  otbFillOcclusionsFilterTest
+  ${INPUTDATA}/anaglyphInput2.tif?&bands=1,2,3
+  ${INPUTDATA}/anaglyphInput1.tif?&bands=1,2,3
+  ${BASELINE}/dmTvGuidedFilterOutputLeftDisparity.tif
+  ${BASELINE}/dmTvGuidedFilterOutputRightDisparity.tif
+  -15 0 2 9 0 0
+  ${TEMP}/dmTvFillOcclusionsFilterOutput
+  )
 

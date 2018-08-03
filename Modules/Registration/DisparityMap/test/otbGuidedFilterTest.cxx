@@ -101,7 +101,6 @@ int otbGuidedFilterTest(int argc, char *argv[])
   std::string argv12 = std::string(argv[12]);
   #define FILENAME(n) std::string( argv12 + std::string(n)).c_str()
 
-  std::cout << "band : " << inLeft->GetOutput()->GetNumberOfComponentsPerPixel()  << std::endl ;
 
   
   typedef itk::ConstantBoundaryCondition<FloatImageType> BoundaryConditionType;
@@ -149,7 +148,6 @@ int otbGuidedFilterTest(int argc, char *argv[])
   m_convFilterXRight->SetRadius(radiusG);
   m_convFilterXRight->SetFilter(filterCoeffsX);
 
-  std::cout << "band number : " << inLeft->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl ;
   
   
   //--Left---------------  
