@@ -53,7 +53,7 @@ public:
     {
     return m_Default;
     }
-    
+
   virtual void Reset() override 
     {
     m_Value = m_Default;
@@ -62,7 +62,7 @@ public:
   virtual ~StringParameter() override = default ;
 
 protected:
-  StringParameter();
+  StringParameter() : m_Default(""){};
 
 
 private:

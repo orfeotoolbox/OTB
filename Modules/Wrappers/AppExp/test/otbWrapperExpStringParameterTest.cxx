@@ -18,13 +18,23 @@
  * limitations under the License.
  */
 
-#include "otbTestMain.h"
+#include "otbWrapperExpStringParameter.h"
+using namespace otb::WrapperExp;
 
-void RegisterTests()
+int StringParameterTest( int  , char **  )
 {
-  REGISTER_TEST(NumericalInstantiationTest);
-  REGISTER_TEST(NumericalManipulationTest);
-  REGISTER_TEST(AnyNumericTest);
-  REGISTER_TEST(AnyNumericComp);
-  REGISTER_TEST(StringParameterTest);
+  StringParameter::Pointer param (StringParameter::New());
+  param->SetDefaultValue("toto");
+  param->SetValue("titi");
+  if (param->GetValue() != "titi")
+    {
+    return EXIT_FAILURE;
+    }
+  param->Reset();
+  if (param->GetValue() != "toto")
+    {
+    return EXIT_FAILURE;
+    }
+  return EXIT_SUCCESS;
 }
+

@@ -24,6 +24,7 @@ set(OTBExpApplicationEngineTests
 otbExpApplicationEngineTestDriver.cxx
 otbWrapperExpNumericalParameterTest.cxx
 otbWrapperExpAnyNumericTest.cxx
+otbWrapperExpStringParameterTest.cxx
 )
 
 add_executable(otbExpApplicationEngineTestDriver ${OTBExpApplicationEngineTests})
@@ -46,4 +47,8 @@ otb_add_test(NAME TuExpAnyNumeric COMMAND otbExpApplicationEngineTestDriver
 
 otb_add_test(NAME TvExpAnyNumeric COMMAND otbExpApplicationEngineTestDriver
   AnyNumericComp
+  )
+
+otb_add_test(NAME TvExpStringParam COMMAND otbExpApplicationEngineTestDriver
+  StringParameterTest
   )
