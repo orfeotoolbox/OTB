@@ -22,8 +22,6 @@ namespace otb
  */
 
 
-
-
 template <class TInputImage, class TGradientImage, class TOutputImage >
 class ITK_EXPORT CostVolumeFilter :
     public itk::ImageToImageFilter<TInputImage,TOutputImage>

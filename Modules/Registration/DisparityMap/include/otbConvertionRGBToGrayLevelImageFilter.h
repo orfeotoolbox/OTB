@@ -65,6 +65,8 @@ public:
  * \ingroup OTBDisparityMap
  */
 
+
+
   // class ConvertionRGBToGrayLevelImageFilter
   template <class TInputImage, class TOutputImage>
   class ITK_EXPORT ConvertionRGBToGrayLevelImageFilter :
