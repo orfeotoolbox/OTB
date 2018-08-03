@@ -23,7 +23,7 @@ using namespace otb::WrapperExp;
 
 int StringParameterTest( int  , char **  )
 {
-  StringParameter::Pointer param (StringParameter::New());
+  auto param (StringParameter::New());
   param->SetDefaultValue("toto");
   param->SetValue("titi");
   if (param->GetValue() != "titi")

@@ -59,10 +59,10 @@ public:
     m_Value = m_Default;
     }
 
-  virtual ~StringParameter() override = default ;
+  virtual ~StringParameter() override = default;
 
 protected:
-  StringParameter() : m_Default(""){};
+  StringParameter() = default;
 
 
 private:
