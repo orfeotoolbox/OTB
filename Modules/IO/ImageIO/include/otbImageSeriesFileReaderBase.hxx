@@ -43,7 +43,13 @@ void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::SetFileName(const std::string& file)
 {
-  return SetFileName(file);
+  if (file == m_FileName) return;
+
+  this->m_FileName = file;
+  ReadMetaFile();
+  AllocateListOfComponents();
+
+  this->Modified();
 }
 
 template <class TImage, class TInternalImage>
@@ -51,17 +57,10 @@ void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::SetFileName(const char * file)
 {
-  if (file && (file == m_FileName)) return;
-
   if (file)
-    {
-    this->m_FileName = file;
-    ReadMetaFile();
-    AllocateListOfComponents();
-    }
-  else this->m_FileName = "";
-
-  this->Modified();
+  {
+    this->SetFileName(std::string(file));
+  }
 }
 
 template <class TImage, class TInternalImage>
