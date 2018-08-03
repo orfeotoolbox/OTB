@@ -144,8 +144,7 @@ public:
    */
   virtual void Reset() {};
 
-  /** Check wether the parameter has a value. Default implementation set  
-   *  m_Valule to an empty string.
+  /** Check wether the parameter has a value.
    */
   virtual bool HasValue() const 
   {
