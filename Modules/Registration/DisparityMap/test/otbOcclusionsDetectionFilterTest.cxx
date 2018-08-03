@@ -43,7 +43,7 @@
 #include "otbBijectionCoherencyFilter.h"
 
   
-int testOcclusionsDetectionFilter(int argc, char *argv[])
+int otbOcclusionsDetectionFilterTest(int argc, char *argv[])
   {
 
   if(argc < 7) 

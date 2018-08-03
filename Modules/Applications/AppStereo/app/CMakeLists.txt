@@ -47,3 +47,9 @@ otb_create_application(
   NAME           BlockMatching
   SOURCES        otbBlockMatching.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+NAME           CostVolumeFilter
+SOURCES        otbCostVolumeFilter.cxx
+LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+

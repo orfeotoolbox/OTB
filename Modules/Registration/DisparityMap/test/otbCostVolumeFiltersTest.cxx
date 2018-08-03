@@ -52,11 +52,11 @@
 #include "otbConvertionRGBToGrayLevelImageFilter.h"
 
   
-int testCostVolumeFilters(int argc, char *argv[])
+int otbCostVolumeFiltersTest(int argc, char *argv[])
   {
 
   if(argc < 11) {
-    std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp alpha tau1 tau2 sense outputPathFolder" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " leftImage rightImage minDisp maxDisp alpha tau1L tau2L tau1R tau2R sense outputPathFolder" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -120,7 +120,7 @@ int testCostVolumeFilters(int argc, char *argv[])
   
   //--Left---------------  
   m_GradientXLeft->SetFilter(m_convFilterXLeft);
-  if( inLeft->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
+  if( inLeft->GetOutput()->GetNumberOfComponentsPerPixel() > 1)
     {
     m_LeftGrayVectorImage->SetInput(inLeft->GetOutput());
     m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
@@ -133,7 +133,7 @@ int testCostVolumeFilters(int argc, char *argv[])
 
   //--Right--------------- 
   m_GradientXRight->SetFilter(m_convFilterXRight);
-  if( inRight->GetOutput()->GetNumberOfComponentsPerPixel() == 3)
+  if( inRight->GetOutput()->GetNumberOfComponentsPerPixel() > 1)
     {
     m_RightGrayVectorImage->SetInput(inRight->GetOutput());
     m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());

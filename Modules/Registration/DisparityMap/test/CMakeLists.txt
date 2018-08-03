@@ -40,8 +40,6 @@ otbGuidedFilterTest.cxx
 otbOcclusionsDetectionFilterTest.cxx
 otbFillOcclusionsFilterTest.cxx
 
-
-
 )
 
 add_executable(otbDisparityMapTestDriver ${OTBDisparityMapTests})
@@ -303,3 +301,20 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbDisparityMapT
   2
   -10 +10
   )
+
+
+  otb_add_test(NAME dmTvGuidedFilter COMMAND otbDisparityMapTestDriver
+  --compare-n-images ${NOTOL} 2
+  ${BASELINE}/dmTvGuidedFilterOutputLeftDisparity.tif
+  ${TEMP}/dmTvGuidedFilterOutputLeftDisparity.tif
+  ${BASELINE}/dmTvGuidedFilterOutputRightDisparity.tif
+  ${TEMP}/dmTvGuidedFilterOutputRightDisparity.tif
+  otbGuidedFilterTest
+  ${INPUT}/"anaglyphInput2.tif?&bands=1,2,3"
+  ${INPUT}/"anaglyphInput1.tif?&bands=1,2,3"
+  ${TEMP}/dmTvGuidedFilterOutputLeftDisparity.tif
+  ${TEMP}/dmTvGuidedFilterOutputRightDisparity.tif
+  -14 0
+  )
+
+

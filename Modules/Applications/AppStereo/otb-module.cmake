@@ -35,6 +35,7 @@ otb_module(OTBAppStereo
     OTBStatistics
     OTBStereo
     OTBTransform
+    OTBConvolution
 
   TEST_DEPENDS
     OTBCommandLine

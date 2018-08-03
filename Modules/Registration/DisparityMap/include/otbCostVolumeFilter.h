@@ -11,6 +11,18 @@
 namespace otb
 {
 
+  /** \class CostVolumeFilter
+ *  \brief Perform the disparity-space range  of the reference image
+ *
+ *  Pixel-to-pixel comparison is done using the input images (left and right) and the luminence gradient of each 
+ *  ones.
+ *
+ *
+ * \ingroup OTBDisparityMap
+ */
+
+
+
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 class ITK_EXPORT CostVolumeFilter :
