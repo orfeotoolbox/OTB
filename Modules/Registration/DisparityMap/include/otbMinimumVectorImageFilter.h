@@ -28,6 +28,11 @@ namespace otb
 
 namespace Functor
 {
+/** \class MinOperator
+ *  \brief Functor to extract the index of the minimum value in a volume
+ *
+ * \ingroup OTBDisparityMap
+ */
 template<class TInput, class TOutput>
 class MinOperator
 {
@@ -84,7 +89,12 @@ public:
 } // end Functor
 
 
-  // class MinimumVectorImageFilter
+
+/** \class MinimumVectorImageFilter
+ *  \brief Get the index of the minimum value in a volume
+ *
+ * \ingroup OTBDisparityMap
+ */
   template <class TInputImage, class TOutputImage>
   class ITK_EXPORT MinimumVectorImageFilter :
     public otb::UnaryFunctorVectorImageFilter<
@@ -118,7 +128,6 @@ public:
     {
     this->GetFunctor().SetSide(side);
     }
-
 
 
 

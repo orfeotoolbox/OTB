@@ -29,11 +29,14 @@ namespace otb
 {
 namespace Functor
 {
-/** \class MeanVectorFunctor
- *  \brief This functor generate the mean value of a vector
+
+/**\class MeanVectorFunctor
+ * \brief This functor performs the multiplication between the local mean of the first image and the pixel value of the second image. 
+ * It is templated by the type of inputs images and the output image, and is using two neighborhood iterators as inputs. 
  *
- * \ingroup OTBImageManipulation
+ * \ingroup OTBDisparityMap
  */
+
 template<class TInput1, class TInput2, class TOutput>
 class MeanVectorFunctor
 {
@@ -138,6 +141,14 @@ public:
 
 } // end namespace functor
 
+
+
+/**\class MeanVectorFunctor
+ * \brief Performs the multiplication between the local mean of the first image and the pixel value of the second image. 
+ * It is templated by the type of inputs images and the output image, and is using two neighborhood iterators as inputs. 
+ *
+ * \ingroup OTBDisparityMap
+ */
 
 // class MeanVectorImageFilter
   template <class TInputImage1, class TInputImage2,  class TOutputImage>

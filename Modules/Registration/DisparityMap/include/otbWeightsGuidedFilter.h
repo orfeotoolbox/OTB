@@ -29,8 +29,20 @@
 namespace otb
 {
 
+
 namespace Functor
 {
+
+/** \class Weights
+ *  \brief Functor to perform the calculation of the coefficients of the guided filter 
+ *
+ *  The functor is templated by the type of inputs images (guidance image and its cost volume) and the output image,
+ *  and is using two neighborhood iterators as inputs.
+ *
+ * \ingroup OTBDisparityMap
+ */
+
+
 template<class TInput_I, class TInput_CostVolume, class TOutput> 
 class Weights
 {
@@ -268,6 +280,16 @@ public:
 }; //end class
 
 } // end Functor
+
+
+
+/** \class Weights
+ *  \brief Calculation of the coefficients of the guided filter 
+ * 
+ * The output of this filter is a volume which contains the coefficients of the guided filter in each pixel of the input image.
+ *
+ * \ingroup OTBDisparityMap
+ */
 
 
   // class LocalMeanGuidanceImageFilter

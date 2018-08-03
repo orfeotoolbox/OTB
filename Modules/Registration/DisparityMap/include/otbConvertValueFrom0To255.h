@@ -29,6 +29,14 @@ namespace otb
 
 namespace Functor
 {
+
+/** \class ConvertValue
+ *
+ *  \brief Functor to convert pixel values of the disparity map from dmin..dmax integer to 0..255
+ *
+ * \ingroup OTBDisparityMap
+ */
+
 template<class TInput, class TOutput>
 class ConvertValue
 {
@@ -92,6 +100,16 @@ public:
 }; //end class
 
 } // end Functor
+
+
+
+/** \class ConvertValueFrom0To255
+ *
+ *  \brief Scale each pixel value of the disparityMap to the range 0 - 255
+ *
+ * \ingroup OTBDisparityMap
+ */
+
 
 
   // class ConvertValueFrom0To255

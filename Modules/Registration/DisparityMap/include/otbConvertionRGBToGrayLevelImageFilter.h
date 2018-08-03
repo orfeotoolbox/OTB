@@ -29,7 +29,7 @@ namespace otb
 namespace Functor
 {
 
-  /** \class RGBToGrayLevelOperator
+/** \class RGBToGrayLevelOperator
  *
  *  \brief Functor to perform the gray-level conversion of a RGB image. 
  *
@@ -58,9 +58,9 @@ public:
 
 
 
-  /** \class ConvertionRGBToGrayLevelImageFilter
+/** \class ConvertionRGBToGrayLevelImageFilter
  *
- *  \brief Perform gray-level conversion of a RGB image. 
+ *  \brief Perform gray-level conversion of RGB image. 
  *
  * \ingroup OTBDisparityMap
  */

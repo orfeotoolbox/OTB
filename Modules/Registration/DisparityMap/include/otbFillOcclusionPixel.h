@@ -24,8 +24,14 @@ namespace Functor
 
 
 /** \class FillPixelFilterOperator
-
+ *
+ * \brief Functor to fill the occluded pixel in a disparity map. The filter used is a bilateral filter.
+ *
+ * \ingroup OTBDisparityMap
  */
+
+
+
 template < class TInput, class TOutput >
 class FillPixelFilterOperator
 {
@@ -140,11 +146,14 @@ PixelType I(3);
 }  // end of fonctor 
 
 
-/** \class FillPixelFilter  ToutputImage correspond Ã  la carte de disparitÃ© filtrÃ© 
- *                  donc Ã  une seule composante
+
+/** \class FillPixelFilter
  *
- * \ingroup OTBImageManipulation
+ * \brief Fill the occluded pixel in a disparity map. The filter used is a bilateral filter.
+ *
+ * \ingroup OTBDisparityMap
  */
+
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT FillPixelFilter
  : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,

@@ -29,9 +29,19 @@ namespace otb
 
 namespace Functor
 {
+
+/** \class ComputeDisparityValue
+ *
+ * \brief Functor to add an integer value of each pixel of an image.
+ *
+ * \ingroup OTBDisparityMap
+ */
+
+
 template<class TInput, class TOutput>
 class ComputeDisparityValue
 {
+
 public:
   ComputeDisparityValue(){}
   virtual ~ComputeDisparityValue() {} 
@@ -62,6 +72,17 @@ public:
 }; //end class
 
 } // end Functor
+
+
+
+
+/** \class ConvertDisparityValue
+ *
+ * \brief Add an integer value to each pixel in an image
+ *
+ * \ingroup OTBDisparityMap
+ */
+
 
 
   // class ConvertDisparityValue

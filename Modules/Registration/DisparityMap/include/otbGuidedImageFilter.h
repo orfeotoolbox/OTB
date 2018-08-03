@@ -16,10 +16,16 @@ namespace otb
 namespace Functor
 {
 
- 
 /** \class GuidedOperator
-
+ *  \brief Functor to perform calculation of the coefficients of the guided filter
+ *
+ *  The functor is templated by the type of inputs images and output metric image,
+ *  and is using two neighborhood iterators as inputs.
+ *
+ * \ingroup OTBDisparityMap
  */
+
+
 template < class TInput,class TInputCoeff, class TOutput >
 class GuidedOperator
 {
