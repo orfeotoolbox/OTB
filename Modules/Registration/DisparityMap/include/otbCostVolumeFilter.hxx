@@ -20,47 +20,33 @@
  * limitations under the License.
 */
 
-
-
-
-
 #ifndef otbCostVolumeFilter_hxx
 #define otbCostVolumeFilter_hxx
-
 
 #include "otbCostVolumeFilter.h"
 #include "itkProgressReporter.h"
 #include "itkConstantBoundaryCondition.h"
 #include "itkConstNeighborhoodIterator.h"
 
-
 #include "itkImageToImageFilter.h" 
 #include "itkObjectFactory.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
-
-//#include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 
 
-
 namespace otb
-{ 
-  
+{   
 template <class TInputImage, class TGradientImage, class TOutputImage >
 CostVolumeFilter<TInputImage,TGradientImage,TOutputImage>
 ::CostVolumeFilter()
 {
   // Set the number of inputs
-  this->SetNumberOfRequiredInputs(4);  
-
+  this->SetNumberOfRequiredInputs(4); 
   // Set the outputs
   this->SetNumberOfRequiredOutputs(0);
-  this->SetNthOutput(0,TOutputImage::New());  
-  
+  this->SetNthOutput(0,TOutputImage::New());    
   m_VerticalDisparity = 0;
-
- // this->SetNumberOfThreads(1);
 }
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
@@ -112,7 +98,6 @@ void
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::SetLeftGradientYInput(const TGradientImage * image)
 {
-
   this->SetNthInput(4, const_cast<TGradientImage *>( image ));
 }
 
@@ -233,58 +218,53 @@ template <class TInputImage, class TGradientImage, class TOutputImage >
 float
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetAlpha() const
-     {
-       return m_Alpha;
+    {
+    return m_Alpha;
     }
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 float
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetTau1() const
-     {
-       return m_Tau1;
+    {
+    return m_Tau1;
     }
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 float
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetTau2() const
-     {
-       return m_Tau2;
+    {
+    return m_Tau2;
     }
 
 template <class TInputImage, class TGradientImage, class TOutputImage >
 char
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::GetSide() 
-     {
-       return m_Side;
+    {
+    return m_Side;
     }
 
-
-
-    
-//============================================  GenerateOutputInformation  ========================================================
+ //============================================  GenerateOutputInformation  ========================================================
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::GenerateOutputInformation()
-{
+  {
   // Call superclass implementation
-  Superclass::GenerateOutputInformation();
-  
-  this->GetOutput()->SetNumberOfComponentsPerPixel(m_HorizontalMaxDisparity - m_HorizontalMinDisparity +1 ); 
- 
-}
+  Superclass::GenerateOutputInformation();  
+  this->GetOutput()->SetNumberOfComponentsPerPixel(m_HorizontalMaxDisparity - m_HorizontalMinDisparity +1 );  
+  }
+
 //============================================  GenerateInputRequestedRegion  ========================================================
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::GenerateInputRequestedRegion()
 {
- Superclass::GenerateInputRequestedRegion();  
+Superclass::GenerateInputRequestedRegion();  
  
-// 
 typename TInputImage::Pointer  inLeftPtr = const_cast<InputImageType *>(this->GetLeftInputImage());
 typename TInputImage::Pointer  inRightPtr = const_cast<InputImageType *>(this->GetRightInputImage());
 typename TInputImage::Pointer  inLeftGradientXPtr = const_cast<InputImageType *>(this->GetLeftGradientXInput());
@@ -296,19 +276,16 @@ typename TOutputImage::ConstPointer outputPtr = this->GetOutputImage();
 if (!inLeftPtr || !inRightPtr  || !inLeftGradientXPtr  || !inRightGradientXPtr ||!outputPtr )
     {
     return;
-    } 
- 
+    }  
 RegionType outputRequestedRegion = outputPtr->GetRequestedRegion()  ;
 RegionType inputRightRequestedRegion;
 RegionType inputLeftRequestedRegion;
-
-  ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRightRequestedRegion, 0);      
-     
-  // The calculation of the non-shifted inputs
-  inLeftPtr->SetRequestedRegion( outputRequestedRegion);
-  inLeftGradientXPtr->SetRequestedRegion( outputRequestedRegion);
-  inRightPtr->SetRequestedRegion(inputRightRequestedRegion);
-  inRightGradientXPtr->SetRequestedRegion( inputRightRequestedRegion );
+ComputeInputRegions( outputRequestedRegion, inputLeftRequestedRegion, inputRightRequestedRegion, 0);    
+// The calculation of the non-shifted inputs
+inLeftPtr->SetRequestedRegion( outputRequestedRegion);
+inLeftGradientXPtr->SetRequestedRegion( outputRequestedRegion);
+inRightPtr->SetRequestedRegion(inputRightRequestedRegion);
+inRightGradientXPtr->SetRequestedRegion( inputRightRequestedRegion );
   
     
 } // end of GenerateInputRequestedRegion
@@ -322,96 +299,76 @@ CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 { 
   
- RegionType LeftRegionForThread;
- RegionType RightRegionForThread; 
-
- typename TOutputImage::PixelType OutPixel(1);
-
- OutPixel.Fill(0);
-
- int bandNumber = this->GetLeftInputImage()->GetNumberOfComponentsPerPixel() ;
+RegionType LeftRegionForThread;
+RegionType RightRegionForThread; 
+typename TOutputImage::PixelType OutPixel(1);
+OutPixel.Fill(0);
+int bandNumber = this->GetLeftInputImage()->GetNumberOfComponentsPerPixel() ;
 
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
   {
   ComputeInputRegions( outputRegionForThread, LeftRegionForThread, RightRegionForThread, iteration_disp); 
 
-
-   //créer l'intérator    
-         
-   itk::ImageRegionConstIterator<TInputImage> LeftInputImageIt ( this->GetLeftInputImage(), LeftRegionForThread );
-   LeftInputImageIt.GoToBegin(); 
-   itk::ImageRegionConstIterator<TInputImage> RightInputImageIt ( this->GetRightInputImage(), RightRegionForThread );
-   RightInputImageIt.GoToBegin();
-   itk::ImageRegionConstIterator<TInputImage> LeftGradientXInputIt ( this->GetLeftGradientXInput(), LeftRegionForThread );
-   LeftGradientXInputIt.GoToBegin();
-   itk::ImageRegionConstIterator<TInputImage> RightGradientXInputIt ( this->GetRightGradientXInput(), RightRegionForThread );
-   RightGradientXInputIt.GoToBegin();   
-
-            
-   itk::ImageRegionIterator<TOutputImage> outputIt ( this->GetOutputImage(), LeftRegionForThread );
-   outputIt.GoToBegin();           
+  //créer l'intérator             
+  itk::ImageRegionConstIterator<TInputImage> LeftInputImageIt ( this->GetLeftInputImage(), LeftRegionForThread );
+  LeftInputImageIt.GoToBegin(); 
+  itk::ImageRegionConstIterator<TInputImage> RightInputImageIt ( this->GetRightInputImage(), RightRegionForThread );
+  RightInputImageIt.GoToBegin();
+  itk::ImageRegionConstIterator<TInputImage> LeftGradientXInputIt ( this->GetLeftGradientXInput(), LeftRegionForThread );
+  LeftGradientXInputIt.GoToBegin();
+  itk::ImageRegionConstIterator<TInputImage> RightGradientXInputIt ( this->GetRightGradientXInput(), RightRegionForThread );
+  RightGradientXInputIt.GoToBegin();   
           
-   //  Cost computation    
-       
+  itk::ImageRegionIterator<TOutputImage> outputIt ( this->GetOutputImage(), LeftRegionForThread );
+  outputIt.GoToBegin();           
+          
+  //  Cost computation    
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
 
   while ( !outputIt.IsAtEnd() && !LeftInputImageIt.IsAtEnd() )
     { 
-
     PixelType costColor;
     costColor.Fill(0);
     PixelType costGradient;
-    costGradient.Fill(0);
-    
+    costGradient.Fill(0);    
     double costColorNorm;
     double costGradientNorm;
      
-   costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;    
-
-  if(bandNumber > 1)
-    {
+    costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;       
     costColorNorm = (costColor.GetNorm())/bandNumber; 
-    }
-  else
-    {
-    costColorNorm = (costColor.GetNorm());   
-    }                                     
-            
-               if(costColorNorm > m_Tau1)   
-                {
-                costColorNorm = m_Tau1;
-                }               
-                // if  To take the minimum  
+    
+    if(costColorNorm > m_Tau1)   
+      {
+      costColorNorm = m_Tau1;
+      } // if  To take the minimum  
                
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
     costGradientNorm= (costGradient.GetNorm());             
-                 
-                 if(costGradientNorm > m_Tau2 )
-                   costGradientNorm = m_Tau2;
-                   // if To take the minimum     
+    
+    if(costGradientNorm > m_Tau2 )
+      {
+      costGradientNorm = m_Tau2; 
+      }// if To take the minimum     
 
-   OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-m_Alpha)*costColorNorm + m_Alpha*costGradientNorm ); 
+    OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-m_Alpha)*costColorNorm + m_Alpha*costGradientNorm ); 
 
-   if(m_Side=='r')
-    {    
-    outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;  
-    }   
-  else
-    {     
-    outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;  
-    }      
+    if(m_Side=='r')
+      {    
+      outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;  
+      }   
+    else
+      {     
+      outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;  
+      }      
 
     ++LeftInputImageIt;
     ++RightInputImageIt;
     ++LeftGradientXInputIt;
     ++RightGradientXInputIt;   
     ++outputIt;       
-      progress.CompletedPixel();
+    progress.CompletedPixel();
     }  // end of while 
   }
-
- 
 } //end of threaded generate data
 
 
@@ -421,40 +378,26 @@ void
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp)
 {
-//   
-
 typename TInputImage::Pointer  inLeftPtr = const_cast<InputImageType *>(this->GetLeftInputImage());
 typename TInputImage::Pointer  inRightPtr = const_cast<InputImageType *>(this->GetRightInputImage());
-
-
 //  Regions  
-
- LeftRegion = outputRegion;
- RightRegion =  outputRegion;
-
+LeftRegion = outputRegion;
+RightRegion =  outputRegion;
 typename RegionType::IndexType RighttRequestedRegionIndex = outputRegion.GetIndex();  
 typename RegionType::IndexType  shift;
 
+shift[0] = iteration_disp;
+shift[1] = m_VerticalDisparity;   
 
-  shift[0] = iteration_disp;
-  shift[1] = m_VerticalDisparity;   
-
-//  std::cout << iteration_disp << std::endl ;
-  
-  RighttRequestedRegionIndex[0]+= shift[0];
-  RighttRequestedRegionIndex[1]+= shift[1];
-
-  
-  RightRegion.SetIndex(RighttRequestedRegionIndex);
-  
-  
-   
+RighttRequestedRegionIndex[0]+= shift[0];
+RighttRequestedRegionIndex[1]+= shift[1];  
+RightRegion.SetIndex(RighttRequestedRegionIndex);
+     
 // Crop  inputRightRegion
-  if ( RightRegion.Crop(inRightPtr->GetLargestPossibleRegion()))
-  {
-  
+if( RightRegion.Crop(inRightPtr->GetLargestPossibleRegion()))
+  {  
   }
-  else
+else
   {           
   // Build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
@@ -462,28 +405,18 @@ typename RegionType::IndexType  shift;
     e.SetDescription("Requested region is (at least partially) (je suis dans le cost)outside the largest possible region.");
     e.SetDataObject(inRightPtr);   
     throw e;
-   } 
- 
-         
+  } 
+          
 // shift -1
 typename RegionType::IndexType IndexInv = RightRegion.GetIndex(); 
 typename RegionType::IndexType  ShiftInv;
 
-
-
-
-  ShiftInv[0] = -iteration_disp;
-  ShiftInv[1] =  -m_VerticalDisparity;   
-  
-  IndexInv[0]+=ShiftInv[0];
-  IndexInv[1]+=ShiftInv[1];
-  
+ShiftInv[0] = -iteration_disp;
+ShiftInv[1] = -m_VerticalDisparity;     
+IndexInv[0]+=ShiftInv[0];
+IndexInv[1]+=ShiftInv[1];  
 LeftRegion.SetIndex(IndexInv);  
-
-
-
-LeftRegion.SetSize(RightRegion.GetSize());    
-  
+LeftRegion.SetSize(RightRegion.GetSize());      
 } // End of ComputeInputRegions
 
 
