@@ -24,6 +24,7 @@
 #include <QtWidgets>
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
+#include <string>
 
 
 namespace otb
@@ -43,8 +44,8 @@ public:
   QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetComplexOutputImageParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -74,22 +75,6 @@ private:
   int           m_ComplexPixelType;
 
 };
-
-inline
-const QLineEdit*
-QtWidgetComplexOutputImageParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetComplexOutputImageParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

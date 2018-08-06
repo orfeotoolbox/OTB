@@ -36,6 +36,19 @@ QtWidgetComplexInputImageParameter::QtWidgetComplexInputImageParameter(ComplexIn
 QtWidgetComplexInputImageParameter::~QtWidgetComplexInputImageParameter()
 {
 }
+const QLineEdit*
+QtWidgetComplexInputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetComplexInputImageParameter
+::GetInput()
+{
+  return m_Input;
+}
 
 void QtWidgetComplexInputImageParameter::DoUpdateGUI()
 {
@@ -63,8 +76,8 @@ void QtWidgetComplexInputImageParameter::DoCreateWidget()
   m_Input->setToolTip(
     QString::fromStdString( m_ComplexInputImageParam->GetDescription() )
   );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetComplexInputImageParameter::SetFileName );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   m_HLayout->addWidget(m_Input);
 
@@ -73,7 +86,7 @@ void QtWidgetComplexInputImageParameter::DoCreateWidget()
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetComplexInputImageParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);

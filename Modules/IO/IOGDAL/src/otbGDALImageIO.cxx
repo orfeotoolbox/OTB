@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -212,7 +213,7 @@ void GDALImageIO::Read(void* buffer)
    if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       }
 
     otbLogMacro(Debug,<< "GDAL read took " << chrono.GetElapsedMilliseconds() << " ms")
@@ -271,7 +272,7 @@ void GDALImageIO::Read(void* buffer)
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       return;
       }
 
@@ -875,8 +876,8 @@ void GDALImageIO::InternalReadImageInformation()
     }
 
   // Compute final spacing with the resolution factor
-  m_Spacing[0] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
-  m_Spacing[1] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[0] *= std::pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[1] *= std::pow(2.0, static_cast<double>(m_ResolutionFactor));
   // Now that the spacing is known, apply the half-pixel shift
   m_Origin[0] += 0.5*m_Spacing[0];
   m_Origin[1] += 0.5*m_Spacing[1];
@@ -1199,7 +1200,7 @@ void GDALImageIO::Write(const void* buffer)
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while writing image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       }
 
     otbLogMacro(Debug,<< "GDAL write took " << chrono.GetElapsedMilliseconds() << " ms")
@@ -1227,7 +1228,7 @@ void GDALImageIO::Write(const void* buffer)
     if(!hOutputDS)
     {
       itkExceptionMacro(<< "Error while writing image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
     }
     else
     {
@@ -1364,7 +1365,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (driverShortName == "NOT-FOUND")
     {
     itkExceptionMacro(
-      << "GDAL Writing failed: the image file name '" << m_FileName.c_str() << "' is not recognized by GDAL.");
+      << "GDAL Writing failed: the image file name '" << m_FileName << "' is not recognized by GDAL.");
     }
 
   if (m_CanStreamWrite)
@@ -1421,10 +1422,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   const double Epsilon = 1E-10;
   if (projectionRef.empty()
-      &&  (vcl_abs(m_Origin[0] - 0.5) > Epsilon
-           || vcl_abs(m_Origin[1] - 0.5) > Epsilon
-           || vcl_abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon
-           || vcl_abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon) )
+      &&  (std::abs(m_Origin[0] - 0.5) > Epsilon
+           || std::abs(m_Origin[1] - 0.5) > Epsilon
+           || std::abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon
+           || std::abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon) )
     {
     // See issue #303 :
     // If there is no ProjectionRef, and the GeoTransform is not the identity,
@@ -1503,10 +1504,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   /*  Set the six coefficients of affine geoTransform                     */
   /* -------------------------------------------------------------------- */
-  if ( vcl_abs(m_Origin[0] - 0.5) > Epsilon
-    || vcl_abs(m_Origin[1] - 0.5) > Epsilon
-    || vcl_abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon
-    || vcl_abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon )
+  if ( std::abs(m_Origin[0] - 0.5) > Epsilon
+    || std::abs(m_Origin[1] - 0.5) > Epsilon
+    || std::abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon
+    || std::abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon )
     {
     // Only set the geotransform if it is not identity (it may erase GCP)
     itk::VariableLengthVector<double> geoTransform(6);
@@ -1565,6 +1566,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
         }
       }
     }
+
+  for (auto const& noData : m_NoDataList)
+    dataset->GetRasterBand(noData.first)->SetNoDataValue(noData.second);
+
 }
 
 std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const

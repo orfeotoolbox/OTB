@@ -65,11 +65,11 @@ BreakAngularPathListFilter<TPath>
         {
         pixel3 = pathIt.Value();
 
-        alpha1 = vcl_atan2((pixel1[1] - pixel2[1]), (pixel1[0] - pixel2[0]));
-        alpha2 = vcl_atan2((pixel2[1] - pixel3[1]), (pixel2[0] - pixel3[0]));
+        alpha1 = std::atan2((pixel1[1] - pixel2[1]), (pixel1[0] - pixel2[0]));
+        alpha2 = std::atan2((pixel2[1] - pixel3[1]), (pixel2[0] - pixel3[0]));
         alpha1 = (alpha1 >= 0) ? alpha1 : (alpha1 + CONST_2PI);
         alpha2 = (alpha2 >= 0) ? alpha2 : (alpha2 + CONST_2PI);
-        if (vcl_abs(alpha1 - alpha2) > static_cast<double>(maxAngle))
+        if (std::abs(alpha1 - alpha2) > static_cast<double>(maxAngle))
           {
           // Add Pixel 2
           newPath->AddVertex(pixel2);

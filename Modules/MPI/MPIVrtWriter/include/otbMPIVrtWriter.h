@@ -26,8 +26,8 @@
 #include "itkRegionOfInterestImageFilter.h"
 #include "otbNumberOfDivisionsTiledStreamingManager.h"
 #include <vector>
-#include <iostream>
 #include <sstream>
+#include <string>
 
 #include <itksys/SystemTools.hxx>
 

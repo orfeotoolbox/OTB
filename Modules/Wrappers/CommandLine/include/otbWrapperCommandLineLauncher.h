@@ -34,6 +34,7 @@
 #include "itkCommand.h"
 
 #include <vector>
+#include <string>
 
 namespace otb
 {
@@ -181,6 +182,12 @@ private:
   CommandLineLauncher(const CommandLineLauncher &) = delete;
   void operator =(const CommandLineLauncher&) = delete;
 
+  /** 
+   * Actually launch the process and write outputs, without catching exceptions.
+   */
+  bool ExecuteAndWriteOutputNoCatch();
+
+  
   std::string                       m_Path;
 
   Application::Pointer              m_Application;

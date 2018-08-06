@@ -85,7 +85,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
 
   // Define the size of the facelist by taking into account the rotation of the region
   m_FaceList[0] =
-    static_cast<unsigned int>(vcl_sqrt(static_cast<double>(
+    static_cast<unsigned int>(std::sqrt(static_cast<double>(
                                          (m_Radius[0] * m_Radius[0]) + (m_Radius[1] * m_Radius[1]))) + 1);
   m_FaceList[1] = m_FaceList[0];
 
@@ -114,7 +114,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
     std::ostringstream msg;
     msg << static_cast<const char *>(this->GetNameOfClass())
         << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
@@ -324,8 +324,8 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
             {
             //ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
 
-            xout = (X - Xc) * vcl_cos(Theta[dir]) - (Y - Yc) * vcl_sin(Theta[dir]);
-            yout = (X - Xc) * vcl_sin(Theta[dir]) + (Y - Yc) * vcl_cos(Theta[dir]);
+            xout = (X - Xc) * std::cos(Theta[dir]) - (Y - Yc) * std::sin(Theta[dir]);
+            yout = (X - Xc) * std::sin(Theta[dir]) + (Y - Yc) * std::cos(Theta[dir]);
 
             Index[0] = static_cast<CoordRepType>(xout + Xc);
             Index[1] = static_cast<CoordRepType>(yout + Yc);

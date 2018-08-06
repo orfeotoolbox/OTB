@@ -121,7 +121,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
 
   // for each octave, compute the difference of gaussian
   unsigned int lOctave = 0;
-  m_Sigmak = vcl_pow(2, static_cast<double>(1 / (double) (m_ScalesNumber + 1)));
+  m_Sigmak = std::pow(2, static_cast<double>(1 / (double) (m_ScalesNumber + 1)));
   m_RatioEdgeThreshold = (m_EdgeThreshold + 1) * (m_EdgeThreshold + 1) / m_EdgeThreshold;
 
   for (lOctave = 0; lOctave != m_OctavesNumber; lOctave++)
@@ -213,8 +213,8 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
   //
   // with multiply by spacing before filtering, length sigma gaussian
   // is compute in pixel
-  double xsigman = vcl_abs(input->GetSignedSpacing()[0]) * m_Sigma0;
-  double ysigman = vcl_abs(input->GetSignedSpacing()[1]) * m_Sigma0;
+  double xsigman = std::abs(input->GetSignedSpacing()[0]) * m_Sigma0;
+  double ysigman = std::abs(input->GetSignedSpacing()[1]) * m_Sigma0;
 
   for (lScale = 0; lScale != m_ScalesNumber + 2; lScale++)
     {
@@ -604,7 +604,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     // check if pixel is inside the circle of radius
     float dx = lIterMagn.GetIndex()[0] - currentScale.GetIndex()[0];
     float dy = lIterMagn.GetIndex()[1] - currentScale.GetIndex()[1];
-    float dist = vcl_sqrt(dx * dx + dy * dy);
+    float dist = std::sqrt(dx * dx + dy * dy);
 
     // If we are in the circle
     if (dist < radius)
@@ -614,10 +614,10 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
       PixelType lMagnitude = lIterMagn.Get();
 
       // Compute the gaussian weight
-      double lWeightMagnitude = vcl_exp(-dist * dist / (2 * lSigma * lSigma));
+      double lWeightMagnitude = std::exp(-dist * dist / (2 * lSigma * lSigma));
 
       // Compute the histogram bin index
-      unsigned int lHistoIndex = static_cast<unsigned int>(vcl_floor(nbBins * lOrientation / (CONST_2PI)));
+      unsigned int lHistoIndex = static_cast<unsigned int>(std::floor(nbBins * lOrientation / (CONST_2PI)));
 
       // Update the histogram value
       lHistogram[lHistoIndex] += lMagnitude * lWeightMagnitude;
@@ -793,22 +793,22 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     // check if pixel is inside the circle of radius
     float dx = lIterMagnitude.GetIndex()[0] - currentScale.GetIndex()[0];
     float dy = lIterMagnitude.GetIndex()[1] - currentScale.GetIndex()[1];
-    float dist = vcl_sqrt(dx * dx + dy * dy);
+    float dist = std::sqrt(dx * dx + dy * dy);
 
     // If we are in the circle
     if (dist < radius)
       {
       // rotate the pixel location to compensate sift orientation
       float angle = orientation * CONST_PI_180;
-      float cosangle = vcl_cos(-angle);
-      float sinangle = vcl_sin(-angle);
+      float cosangle = std::cos(-angle);
+      float sinangle = std::sin(-angle);
       float rdx = dx * cosangle - dy * sinangle;
       float rdy = dx * sinangle + dy * cosangle;
       // decide to which histogram the pixel contributes
       unsigned int xHistogramIndex =
-        static_cast<unsigned int>(vcl_floor((rdx + radius) / static_cast<float>(nbPixelsPerHistogram)));
+        static_cast<unsigned int>(std::floor((rdx + radius) / static_cast<float>(nbPixelsPerHistogram)));
       unsigned int yHistogramIndex =
-        static_cast<unsigned int>(vcl_floor((rdy + radius) / static_cast<float>(nbPixelsPerHistogram)));
+        static_cast<unsigned int>(std::floor((rdy + radius) / static_cast<float>(nbPixelsPerHistogram)));
 
       // decide to which bin of the histogram the pixel contributes
       float compensatedOrientation =  lIterOrientation.Get() - angle;
@@ -821,10 +821,10 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
         compensatedOrientation -= CONST_2PI;
         }
       unsigned int histogramBin =
-        static_cast<unsigned int>(vcl_floor(compensatedOrientation * nbBinsPerHistogram / (CONST_2PI)));
+        static_cast<unsigned int>(std::floor(compensatedOrientation * nbBinsPerHistogram / (CONST_2PI)));
 
       // Compute the wheight of the pixel in the histogram
-      double lWeightMagnitude = vcl_exp(-(dist * dist) / (2 * lSigma * lSigma));
+      double lWeightMagnitude = std::exp(-(dist * dist) / (2 * lSigma * lSigma));
 
       // Compute the global descriptor index
       unsigned int descriptorIndex = yHistogramIndex * nbBinsPerHistogram * nbHistograms
@@ -845,7 +845,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     lNorm = lNorm + (*lIterHisto) * (*lIterHisto);
     ++lIterHisto;
     }
-  lNorm = vcl_sqrt(lNorm);
+  lNorm = std::sqrt(lNorm);
 
   lIterHisto = lHistogram.begin();
   while (lIterHisto != lHistogram.end())
@@ -876,7 +876,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     lNorm = lNorm + (*lIterHisto) * (*lIterHisto);
     ++lIterHisto;
     }
-  lNorm = vcl_sqrt(lNorm);
+  lNorm = std::sqrt(lNorm);
 
   lIterHisto = lHistogram.begin();
   while (lIterHisto != lHistogram.end())

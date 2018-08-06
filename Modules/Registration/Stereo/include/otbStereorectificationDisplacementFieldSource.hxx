@@ -159,9 +159,9 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   // First, spacing : choose a square spacing,
   SpacingType outputSpacing;
   outputSpacing.Fill(m_Scale * m_GridStep);
-  double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSignedSpacing()[0])+vcl_abs(m_LeftImage->GetSignedSpacing()[1]));
-  //double ratio_x = mean_spacing / vcl_abs(m_LeftImage->GetSignedSpacing()[0]);
-  //double ratio_y = mean_spacing / vcl_abs(m_LeftImage->GetSignedSpacing()[1]);
+  double mean_spacing=0.5*(std::abs(m_LeftImage->GetSignedSpacing()[0])+std::abs(m_LeftImage->GetSignedSpacing()[1]));
+  //double ratio_x = mean_spacing / std::abs(m_LeftImage->GetSignedSpacing()[0]);
+  //double ratio_y = mean_spacing / std::abs(m_LeftImage->GetSignedSpacing()[1]);
 
   outputSpacing[0]*=mean_spacing;
   outputSpacing[1]*=mean_spacing;
@@ -218,11 +218,11 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
              / (leftEpiLineEnd[0] - leftEpiLineStart[0]);
     if (leftEpiLineEnd[0] > leftEpiLineStart[0])
       {
-      alpha = vcl_atan(a);
+      alpha = std::atan(a);
       }
     else
       {
-      alpha = otb::CONST_PI + vcl_atan(a);
+      alpha = otb::CONST_PI + std::atan(a);
       }
 
     }
@@ -230,10 +230,10 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   // And compute the unitary vectors of the new axis (equivalent to
   // the column of the rotation matrix)
   // TODO: Check if we need to use the input image spacing here
-  double ux =   vcl_cos(alpha);
-  double uy =   vcl_sin(alpha);
-  double vx = - vcl_sin(alpha);
-  double vy =   vcl_cos(alpha);
+  double ux =   std::cos(alpha);
+  double uy =   std::sin(alpha);
+  double vx = - std::sin(alpha);
+  double vy =   std::cos(alpha);
 
   // Now, we will compute the bounding box of the left input image in
   // this rotated geometry
@@ -333,7 +333,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
 
   // Use the mean spacing as before
-  double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSignedSpacing()[0])+vcl_abs(m_LeftImage->GetSignedSpacing()[1]));
+  double mean_spacing=0.5*(std::abs(m_LeftImage->GetSignedSpacing()[0])+std::abs(m_LeftImage->GetSignedSpacing()[1]));
 
   // Initialize
   currentPoint1 = m_OutputOriginInLeftImage;
@@ -420,7 +420,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
     endLine1 = m_RightToLeftTransform->TransformPoint(epiPoint2);
 
     // Estimate the local baseline ratio
-    double localBaselineRatio = vcl_sqrt((endLine1[0] - startLine1[0])
+    double localBaselineRatio = std::sqrt((endLine1[0] - startLine1[0])
                                 *  (endLine1[0] - startLine1[0])
                                 +  (endLine1[1] - startLine1[1])
                                 *  (endLine1[1] - startLine1[1]))
@@ -447,11 +447,11 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
       a1 = (endLine1[1] - startLine1[1]) / (endLine1[0] - startLine1[0]);
       if (endLine1[0] > startLine1[0])
         {
-        alpha1 = vcl_atan(a1);
+        alpha1 = std::atan(a1);
         }
       else
         {
-        alpha1 = otb::CONST_PI + vcl_atan(a1);
+        alpha1 = otb::CONST_PI + std::atan(a1);
         }
       }
 
@@ -470,9 +470,9 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
     // We want to move m_Scale pixels away in the epipolar line of the
     // first image
     // Take into account height direction
-    //double alpha1 = otb::CONST_PI - vcl_atan(a1);
-    double deltax1 =  m_Scale * m_GridStep * mean_spacing * vcl_cos(alpha1);
-    double deltay1 =  m_Scale * m_GridStep * mean_spacing * vcl_sin(alpha1);
+    //double alpha1 = otb::CONST_PI - std::atan(a1);
+    double deltax1 =  m_Scale * m_GridStep * mean_spacing * std::cos(alpha1);
+    double deltay1 =  m_Scale * m_GridStep * mean_spacing * std::sin(alpha1);
 
     // Now we move currentPoint1
     currentPoint1[0]+=deltax1;
@@ -496,8 +496,8 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
       {
       // We want to move 1 pixel away in the direction orthogonal to
       // epipolar line
-      double nextdeltax1 = -m_Scale * mean_spacing * m_GridStep * vcl_sin(alpha1);
-      double nextdeltay1 = m_Scale * mean_spacing * m_GridStep * vcl_cos(alpha1);
+      double nextdeltax1 = -m_Scale * mean_spacing * m_GridStep * std::sin(alpha1);
+      double nextdeltay1 = m_Scale * mean_spacing * m_GridStep * std::cos(alpha1);
 
       // We can then update nextLineStart1
       nextLineStart1[0] = currentPoint1[0] - deltax1 + nextdeltax1;

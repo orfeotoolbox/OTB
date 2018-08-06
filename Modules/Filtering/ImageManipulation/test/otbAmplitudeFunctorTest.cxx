@@ -57,8 +57,8 @@ int otbAmplitudeFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       channels.push_back(j);
       funct.SetChannelList(channels);
       output = funct.operator ()(vectorPixel);
-      result = vcl_sqrt(vectorPixel[i] * vectorPixel[i] + vectorPixel[j] * vectorPixel[j]);
-      if( vcl_abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
+      result = std::sqrt(vectorPixel[i] * vectorPixel[i] + vectorPixel[j] * vectorPixel[j]);
+      if( std::abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
         {
           std::cout << "vectorPixelType Test VectorPixelType failed for channels " << i<< " and "
               << j << " !" << std::endl;
@@ -81,8 +81,8 @@ int otbAmplitudeFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       channels.push_back(j);
       funct.SetChannelList(channels);
       output = funct.operator ()(rgbPixel);
-      result = vcl_sqrt(rgbPixel[i] * rgbPixel[i] + rgbPixel[j] * rgbPixel[j]);
-      if( vcl_abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
+      result = std::sqrt(rgbPixel[i] * rgbPixel[i] + rgbPixel[j] * rgbPixel[j]);
+      if( std::abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
         {
           std::cout << "vectorPixelType Test RGBPixelType failed for channels " << i<< " and "
               << j << " !" << std::endl;
@@ -110,7 +110,7 @@ int otbAmplitudeFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       channels.push_back(j);
       funct.SetChannelList(channels);
       output = funct.operator ()(rgbaPixel);
-      result = vcl_sqrt(rgbaPixel[i] * rgbaPixel[i] + rgbaPixel[j] * rgbaPixel[j]);
+      result = std::sqrt(rgbaPixel[i] * rgbaPixel[i] + rgbaPixel[j] * rgbaPixel[j]);
       if( std::abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
         {
           std::cout << "vectorPixelType Test RGBAPixelType failed for channels " << i<< " and "

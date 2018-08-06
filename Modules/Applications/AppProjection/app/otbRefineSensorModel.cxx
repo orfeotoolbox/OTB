@@ -126,7 +126,7 @@ private:
 
     // Parse the input file for ground control points
     std::ifstream ifs;
-    ifs.open(GetParameterString("inpoints").c_str());
+    ifs.open(GetParameterString("inpoints"));
 
   TiePointsType tiepoints;
 
@@ -206,7 +206,7 @@ private:
   ofs.precision(12);
   if(IsParameterEnabled("outstat"))
     {
-    ofs.open(GetParameterString("outstat").c_str());
+    ofs.open(GetParameterString("outstat"));
     ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat predicted_elev x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
     }
 
@@ -282,20 +282,20 @@ private:
   meany_ref/=tiepoints.size();
 
 
-  double stdevx = vcl_sqrt(rmsex - meanx * meanx);
-  double stdevy = vcl_sqrt(rmsey - meany * meany);
+  double stdevx = std::sqrt(rmsex - meanx * meanx);
+  double stdevy = std::sqrt(rmsey - meany * meany);
 
-  double stdevx_ref = vcl_sqrt(rmsex_ref - meanx_ref * meanx_ref);
-  double stdevy_ref = vcl_sqrt(rmsey_ref - meany_ref * meany_ref);
+  double stdevx_ref = std::sqrt(rmsex_ref - meanx_ref * meanx_ref);
+  double stdevy_ref = std::sqrt(rmsey_ref - meany_ref * meany_ref);
 
 
-  rmse=vcl_sqrt(rmse);
-  rmsex=vcl_sqrt(rmsex);
-  rmsey=vcl_sqrt(rmsey);
+  rmse=std::sqrt(rmse);
+  rmsex=std::sqrt(rmsex);
+  rmsey=std::sqrt(rmsey);
 
-  rmse_ref=vcl_sqrt(rmse_ref);
-  rmsex_ref=vcl_sqrt(rmsex_ref);
-  rmsey_ref=vcl_sqrt(rmsey_ref);
+  rmse_ref=std::sqrt(rmse_ref);
+  rmsex_ref=std::sqrt(rmsex_ref);
+  rmsey_ref=std::sqrt(rmsey_ref);
 
   otbAppLogINFO("Estimation of input geom file accuracy: ");
   otbAppLogINFO("Overall Root Mean Square Error: "<<rmse_ref<<" meters");

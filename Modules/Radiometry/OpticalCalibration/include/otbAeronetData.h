@@ -25,6 +25,7 @@
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
 #include "OTBOpticalCalibrationExport.h"
+#include <string>
 
 namespace otb
 {

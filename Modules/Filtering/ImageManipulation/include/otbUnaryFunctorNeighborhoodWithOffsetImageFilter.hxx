@@ -80,8 +80,8 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
 
   // pad the input requested region by the operator radius
   InputImageSizeType maxRad;
-  maxRad[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
-  maxRad[1] = m_Radius[1] + vcl_abs(m_Offset[1]);
+  maxRad[0] = m_Radius[0] + std::abs(m_Offset[0]);
+  maxRad[1] = m_Radius[1] + std::abs(m_Offset[1]);
   inputRequestedRegion.PadByRadius(maxRad);
 
   // crop the input requested region at the input's largest possible region
@@ -103,7 +103,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
     std::ostringstream msg;
     msg << this->GetNameOfClass()
         << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
@@ -130,8 +130,8 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
 
   // Neighborhood+offset iterator
   RadiusType rOff;
-  rOff[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
-  rOff[1] = m_Radius[1] + vcl_abs(m_Offset[1]);
+  rOff[0] = m_Radius[0] + std::abs(m_Offset[0]);
+  rOff[1] = m_Radius[1] + std::abs(m_Offset[1]);
   NeighborhoodIteratorType neighInputOffIt;
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceListOff;

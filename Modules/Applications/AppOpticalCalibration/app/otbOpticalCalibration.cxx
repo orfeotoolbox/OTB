@@ -610,7 +610,7 @@ private:
       // Try to retrieve information from file provided by user
       std::string filename(GetParameterString("acqui.gainbias"));
 
-      std::ifstream file(filename.c_str(), std::ios::in);
+      std::ifstream file(filename, std::ios::in);
       if(file)
       {
         std::string line;
@@ -682,7 +682,7 @@ private:
       // Try to retrieve information from file provided by user
       std::string filename(GetParameterString("acqui.solarilluminations"));
 
-      std::ifstream file(filename.c_str(), std::ios::in);
+      std::ifstream file(filename, std::ios::in);
       if(file)
       {
         std::string line;

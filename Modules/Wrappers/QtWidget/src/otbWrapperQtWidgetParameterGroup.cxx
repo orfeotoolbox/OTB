@@ -82,10 +82,10 @@ void QtWidgetParameterGroup::DoCreateWidget()
 
         // CheckBox (col 0)
         QCheckBox * checkBox = new QCheckBox(this);
-        connect( checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
-        connect( checkBox, SIGNAL(clicked(bool)), GetModel(), SLOT(NotifyUpdate()) );
-        connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), checkBox, SLOT(setChecked(bool)));
-        connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), specificWidget, SLOT(SetActivationState(bool)));
+        connect( checkBox, &QCheckBox::clicked, specificWidget, &QtWidgetParameterBase::SetActivationState );
+        connect( checkBox, &QCheckBox::clicked, GetModel(), &QtWidgetModel::NotifyUpdate );
+        connect( specificWidget, &QtWidgetParameterBase::ParameterActiveStatus, checkBox, &QCheckBox::setChecked );
+        connect( specificWidget, &QtWidgetParameterBase::ParameterActiveStatus, specificWidget, &QtWidgetParameterBase::SetActivationState );
 
         // if Mandatory make the checkbox checked and deactivated
         if (param->GetMandatory())
@@ -130,7 +130,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
           {
           param->SetActive(true);
           }
-        connect(group, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
+        connect(group, &QGroupBox::clicked, specificWidget, &QtWidgetParameterBase::SetActivationState );
 
         group->setTitle(rawParam->GetName());
         gridLayout->addWidget(group, i, 0, 1, -1);

@@ -23,8 +23,6 @@
 #ifndef otbImageSeriesFileReaderBase_h
 #define otbImageSeriesFileReaderBase_h
 
-#include <iostream>
-#include <fstream>
 #include <string>
 
 #include "itkMacro.h"

@@ -150,7 +150,7 @@ int main(int argc, char * argv[])
     std::ofstream file;
     if (parseResult->IsOptionPresent("--outputText"))
       {
-      file.open(parseResult->GetParameterString("--outputText").c_str());
+      file.open(parseResult->GetParameterString("--outputText"));
       }
 
     double minSize = -1;

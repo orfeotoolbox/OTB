@@ -23,6 +23,7 @@
 
 #include "itkObject.h"
 #include "otbGenericRSTransform.h"
+#include <string>
 
 namespace otb {
 

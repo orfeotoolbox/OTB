@@ -393,7 +393,7 @@ ImageMetadataInterfaceBase::GetBandName() const
          if (imageKeywordlist.HasKey("support_data.band_name_list"))
          {
                 std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
-                itksys::SystemTools::Split(valueString.c_str(), outputValues, ' ');
+                itksys::SystemTools::Split(valueString, outputValues, ' ');
          }
          else
                 return outputValues;
@@ -401,7 +401,7 @@ ImageMetadataInterfaceBase::GetBandName() const
   else
     {
          std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name");
-         itksys::SystemTools::Split(valueString.c_str(), outputValues, '/');
+         itksys::SystemTools::Split(valueString, outputValues, '/');
     }
 
   return outputValues;

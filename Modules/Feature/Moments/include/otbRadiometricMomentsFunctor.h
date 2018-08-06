@@ -81,11 +81,11 @@ public:
     // Variance
     moments[1] = (sum2 - (sum1 * moments[0])) / (size - 1);
 
-    ScalarRealType sigma      = vcl_sqrt(moments[1]);
+    ScalarRealType sigma      = std::sqrt(moments[1]);
     ScalarRealType mean2      = moments[0] * moments[0];
 
     const double epsilon = 1E-10;
-    if (vcl_abs(moments[1]) > epsilon)
+    if (std::abs(moments[1]) > epsilon)
       {
       // Skewness
       moments[2] = ((sum3 - 3.0 * moments[0] * sum2) / size + 2.0 * moments[0] * mean2) / (moments[1] * sigma);

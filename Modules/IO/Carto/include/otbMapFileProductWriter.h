@@ -21,7 +21,6 @@
 #ifndef otbMapFileProductWriter_h
 #define otbMapFileProductWriter_h
 
-#include <fstream>
 
 #include "itkObjectFactory.h"
 
@@ -38,6 +37,7 @@
 
 // projection filter
 #include "otbGenericRSResampleImageFilter.h"
+#include <string>
 
 namespace otb
 {

@@ -95,9 +95,9 @@ int main(int argc, char* argv[])
   gui->CreateGui();
 
   // Connect the View "Quit" signal, to the mainWindow close slot
-  QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
+  QObject::connect(gui, &QtWidgetView::QuitSignal, mainWindow, &QMainWindow::close);
 
-  QObject::connect(&qtApp, SIGNAL(UnhandledException(QString)), gui, SLOT(UnhandledException(QString)));
+  QObject::connect(&qtApp, &QtApplication::UnhandledException, gui, &QtWidgetView::UnhandledException);
 
 
   // build the main window, central widget is the plugin view, other

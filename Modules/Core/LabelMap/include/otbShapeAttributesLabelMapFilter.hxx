@@ -205,13 +205,13 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   double sizePerPixel = 1;
   for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
-    sizePerPixel *= vcl_abs(m_LabelImage->GetSignedSpacing()[i]);
+    sizePerPixel *= std::abs(m_LabelImage->GetSignedSpacing()[i]);
     }
 
   typename std::vector<double> sizePerPixelPerDimension;
   for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
-    sizePerPixelPerDimension.push_back(sizePerPixel / vcl_abs(m_LabelImage->GetSignedSpacing()[i]));
+    sizePerPixelPerDimension.push_back(sizePerPixel / std::abs(m_LabelImage->GetSignedSpacing()[i]));
     }
 
   // compute the max the index on the border of the image
@@ -406,7 +406,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     {
     centroid[i] /= size;
     regionSize[i] = maxs[i] - mins[i] + 1;
-    double s = regionSize[i] * vcl_abs(m_LabelImage->GetSignedSpacing()[i]);
+    double s = regionSize[i] * std::abs(m_LabelImage->GetSignedSpacing()[i]);
     minSize = std::min(s, minSize);
     maxSize = std::max(s, maxSize);
     for (DimensionType j = 0; j < LabelObjectType::ImageDimension; ++j)
@@ -433,7 +433,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   vnl_diag_matrix<double> pm = eigen.D;
   for (unsigned int i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
-//    principalMoments[i] = 4 * vcl_sqrt( pm(i, i) );
+//    principalMoments[i] = 4 * std::sqrt( pm(i, i) );
     principalMoments[i] = pm(i, i);
     }
   itk::Matrix<double, LabelObjectType::ImageDimension, LabelObjectType::ImageDimension>
@@ -442,8 +442,8 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   // Add a final reflection if needed for a proper rotation,
   // by multiplying the last row by the determinant
   vnl_real_eigensystem eigenrot(principalAxes.GetVnlMatrix());
-  vnl_diag_matrix<vcl_complex<double> > eigenval = eigenrot.D;
-  vcl_complex<double> det(1.0, 0.0);
+  vnl_diag_matrix<std::complex<double> > eigenval = eigenrot.D;
+  std::complex<double> det(1.0, 0.0);
 
   for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
@@ -459,7 +459,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   if (principalMoments[LabelObjectType::ImageDimension - 2] != 0)
     {
     elongation =
-      vcl_sqrt(principalMoments[LabelObjectType::ImageDimension -
+      std::sqrt(principalMoments[LabelObjectType::ImageDimension -
                                 1] / principalMoments[LabelObjectType::ImageDimension - 2]);
     }
 
@@ -474,10 +474,10 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     {
     edet *= principalMoments[i];
     }
-  edet = vcl_pow(edet, 1.0 / LabelObjectType::ImageDimension);
+  edet = std::pow(edet, 1.0 / LabelObjectType::ImageDimension);
   for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
     {
-    ellipsoidSize[i] = 2.0 * equivalentRadius * vcl_sqrt(principalMoments[i] / edet);
+    ellipsoidSize[i] = 2.0 * equivalentRadius * std::sqrt(principalMoments[i] / edet);
     }
 
 
@@ -522,24 +522,24 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
       // normalize
       c11 /= physicalSize * physicalSize;
       c20 /= physicalSize * physicalSize;
-      c12 /= vcl_pow(physicalSize, 5.0 / 2);
-      c21 /= vcl_pow(physicalSize, 5.0 / 2);
-      c30 /= vcl_pow(physicalSize, 5.0 / 2);
-      c22 /= vcl_pow(physicalSize, 3);
-      c31 /= vcl_pow(physicalSize, 3);
-      c40 /= vcl_pow(physicalSize, 3);
+      c12 /= std::pow(physicalSize, 5.0 / 2);
+      c21 /= std::pow(physicalSize, 5.0 / 2);
+      c30 /= std::pow(physicalSize, 5.0 / 2);
+      c22 /= std::pow(physicalSize, 3);
+      c31 /= std::pow(physicalSize, 3);
+      c40 /= std::pow(physicalSize, 3);
 
       lo->SetAttribute("SHAPE::Flusser01", c11.real());
       lo->SetAttribute("SHAPE::Flusser02", (c21 * c12).real());
-      lo->SetAttribute("SHAPE::Flusser03", (c20 * vcl_pow(c12, 2)).real());
-      lo->SetAttribute("SHAPE::Flusser04", (c20 * vcl_pow(c12, 2)).imag());
-      lo->SetAttribute("SHAPE::Flusser05", (c30 * vcl_pow(c12, 3)).real());
-      lo->SetAttribute("SHAPE::Flusser06", (c30 * vcl_pow(c12, 3)).imag());
+      lo->SetAttribute("SHAPE::Flusser03", (c20 * std::pow(c12, 2)).real());
+      lo->SetAttribute("SHAPE::Flusser04", (c20 * std::pow(c12, 2)).imag());
+      lo->SetAttribute("SHAPE::Flusser05", (c30 * std::pow(c12, 3)).real());
+      lo->SetAttribute("SHAPE::Flusser06", (c30 * std::pow(c12, 3)).imag());
       lo->SetAttribute("SHAPE::Flusser07", c22.real());
-      lo->SetAttribute("SHAPE::Flusser08", (c31 * vcl_pow(c12, 2)).real());
-      lo->SetAttribute("SHAPE::Flusser09", (c31 * vcl_pow(c12, 2)).imag());
-      lo->SetAttribute("SHAPE::Flusser10", (c40 * vcl_pow(c12, 4)).real());
-      lo->SetAttribute("SHAPE::Flusser11", (c40 * vcl_pow(c12, 4)).imag());
+      lo->SetAttribute("SHAPE::Flusser08", (c31 * std::pow(c12, 2)).real());
+      lo->SetAttribute("SHAPE::Flusser09", (c31 * std::pow(c12, 2)).imag());
+      lo->SetAttribute("SHAPE::Flusser10", (c40 * std::pow(c12, 4)).real());
+      lo->SetAttribute("SHAPE::Flusser11", (c40 * std::pow(c12, 4)).imag());
       }
     }
 
@@ -622,7 +622,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
         double length = 0;
         for (DimensionType i = 0; i < LabelObjectType::ImageDimension; ++i)
           {
-          length += vcl_pow((iIt1->operator[] (i) - iIt2->operator[] (i)) * m_LabelImage->GetSignedSpacing()[i], 2);
+          length += std::pow((iIt1->operator[] (i) - iIt2->operator[] (i)) * m_LabelImage->GetSignedSpacing()[i], 2);
           }
         if (feretDiameter < length)
           {
@@ -631,7 +631,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
         }
       }
     // final computation
-    feretDiameter = vcl_sqrt(feretDiameter);
+    feretDiameter = std::sqrt(feretDiameter);
 
     // finally put the values in the label object
     lo->SetAttribute("SHAPE::FeretDiameter", feretDiameter);
@@ -737,7 +737,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   // a data structure to store the number of intercepts on each direction
   typedef typename std::map<OffsetType, itk::SizeValueType, typename OffsetType::LexicographicCompare> MapInterceptType;
   MapInterceptType intercepts;
-  // int nbOfDirections = (int)vcl_pow( 2.0, (int)ImageDimension ) - 1;
+  // int nbOfDirections = (int)std::pow( 2.0, (int)ImageDimension ) - 1;
   // intecepts.resize(nbOfDirections + 1);  // code begins at position 1
 
   // now iterate over the vectors of lines
@@ -922,10 +922,10 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   double dx = spacing[0];
   double dy = spacing[1];
   double dz = spacing[2];
-  double dxy = vcl_sqrt( spacing[0]*spacing[0] + spacing[1]*spacing[1] );
-  double dxz = vcl_sqrt( spacing[0]*spacing[0] + spacing[2]*spacing[2] );
-  double dyz = vcl_sqrt( spacing[1]*spacing[1] + spacing[2]*spacing[2] );
-  double dxyz = vcl_sqrt( spacing[0]*spacing[0] + spacing[1]*spacing[1] + spacing[2]*spacing[2] );
+  double dxy = std::sqrt( spacing[0]*spacing[0] + spacing[1]*spacing[1] );
+  double dxz = std::sqrt( spacing[0]*spacing[0] + spacing[2]*spacing[2] );
+  double dyz = std::sqrt( spacing[1]*spacing[1] + spacing[2]*spacing[2] );
+  double dxyz = std::sqrt( spacing[0]*spacing[0] + spacing[1]*spacing[1] + spacing[2]*spacing[2] );
   double vol = spacing[0]*spacing[1]*spacing[2];
 
   // 'magical numbers', corresponding to area of voronoi partition on the
@@ -1005,7 +1005,7 @@ double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     }
   else
     {
-    return otb::CONST_SQRTPI * doubleFactorial(n) / vcl_pow(2, (n + 1) / 2.0);
+    return otb::CONST_SQRTPI * doubleFactorial(n) / std::pow(2, (n + 1) / 2.0);
     }
 }
 
@@ -1014,8 +1014,8 @@ template <class TLabelObject, class TLabelImage>
 double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 ::hyperSphereVolume(double radius)
 {
-  return vcl_pow(otb::CONST_PI, LabelObjectType::ImageDimension /
-                 2.0) * vcl_pow(radius, LabelObjectType::ImageDimension) / gammaN2p1(LabelObjectType::ImageDimension);
+  return std::pow(otb::CONST_PI, LabelObjectType::ImageDimension /
+                 2.0) * std::pow(radius, LabelObjectType::ImageDimension) / gammaN2p1(LabelObjectType::ImageDimension);
 }
 
 /** Convenience internal method  */
@@ -1031,8 +1031,8 @@ template <class TLabelObject, class TLabelImage>
 double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 ::hyperSphereRadiusFromVolume(double volume)
 {
-  return vcl_pow(volume * gammaN2p1(LabelObjectType::ImageDimension) /
-                 vcl_pow(otb::CONST_PI, LabelObjectType::ImageDimension / 2.0), 1.0 / LabelObjectType::ImageDimension);
+  return std::pow(volume * gammaN2p1(LabelObjectType::ImageDimension) /
+                 std::pow(otb::CONST_PI, LabelObjectType::ImageDimension / 2.0), 1.0 / LabelObjectType::ImageDimension);
 }
 
 } // End namespace Functor

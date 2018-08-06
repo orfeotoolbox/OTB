@@ -26,7 +26,6 @@
 #ifndef Trailer_h
 #define Trailer_h
 
-#include <iostream>
 #include <RadarSat/CommonRecord/FileDescriptor.h>
 #include <RadarSat/CommonRecord/DataSetSummary.h>
 #include <RadarSat/CommonRecord/DataQuality.h>

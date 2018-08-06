@@ -29,7 +29,7 @@
 #include "otbOGRFeatureWrapper.h"
 
 #include <time.h>
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 namespace otb
 {
@@ -184,8 +184,8 @@ private:
     std::vector<std::string> options;
 
     ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Overwrite);
-    std::string layername = itksys::SystemTools::GetFilenameName(shapefile.c_str());
-    std::string extension = itksys::SystemTools::GetFilenameLastExtension(shapefile.c_str());
+    std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
+    std::string extension = itksys::SystemTools::GetFilenameLastExtension(shapefile);
     layername = layername.substr(0,layername.size()-(extension.size()));
     layer = ogrDS->CreateLayer(layername, &oSRS, wkbMultiPolygon, options);
 
@@ -216,8 +216,8 @@ private:
        {
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
-        unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
-          unsigned long sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
+        unsigned long sizeX = std::min(sizeTilesX,sizeImageX-startX);
+          unsigned long sizeY = std::min(sizeTilesY,sizeImageY-startY);
 
         //Tiles extraction of the input image
         MultiChannelExtractROIFilterType::Pointer imageROI = MultiChannelExtractROIFilterType::New();

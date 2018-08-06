@@ -39,8 +39,8 @@ QtWidgetParameterList
   assert( m!=nullptr );
 
   QObject::connect(
-    this, SIGNAL( NotifyUpdate() ),
-    m, SLOT( NotifyUpdate() )
+    this, &QtWidgetParameterList::NotifyUpdate ,
+    m, &QtWidgetModel::NotifyUpdate
   );
 }
 
@@ -91,8 +91,8 @@ QtWidgetParameterList
 
   // Connections (Update app parameters).
   QObject::connect(
-    widget, SIGNAL( Updated() ),
-    this, SIGNAL( NotifyUpdate() )
+    widget, &ListEditWidget::Updated,
+    this, &QtWidgetParameterList::NotifyUpdate
   );
 }
 

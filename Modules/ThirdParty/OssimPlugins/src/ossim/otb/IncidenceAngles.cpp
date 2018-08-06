@@ -119,7 +119,7 @@ bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
    else
    {
      ossimNotify(ossimNotifyLevel_WARN)
-        << MODULE << " Keyword not found: " << NUMBER_OF_CORNER_INCIDENCE_ANGLES << " in "<<pfx.c_str()<<" path.\n";
+        << MODULE << " Keyword not found: " << NUMBER_OF_CORNER_INCIDENCE_ANGLES << " in "<<pfx <<" path.\n";
      result = false;
    }
    

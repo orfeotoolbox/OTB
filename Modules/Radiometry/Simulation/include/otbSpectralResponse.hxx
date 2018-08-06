@@ -26,6 +26,7 @@
 #include "otbSpectralResponse.h"
 
 #include <algorithm>
+#include <fstream>
 
 namespace otb
 {
@@ -45,7 +46,7 @@ void SpectralResponse<TPrecision, TValuePrecision>::Load(const std::string & fil
 {
   //Parse JPL file spectral response (ASCII file)
   //Begin line 27
-  std::ifstream fin(filename.c_str());
+  std::ifstream fin(filename);
   if (fin.fail())
     {
     itkExceptionMacro(<<"Error opening file" << filename);

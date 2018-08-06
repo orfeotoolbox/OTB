@@ -22,6 +22,7 @@
 #define otbWrapperChoiceParameter_h
 
 #include "otbWrapperParameterGroup.h"
+#include <string>
 
 namespace otb
 {

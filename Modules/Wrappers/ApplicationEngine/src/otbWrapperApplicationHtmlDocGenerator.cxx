@@ -163,7 +163,7 @@ ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const s
 
   ApplicationHtmlDocGenerator::GenerateDoc( app, doc, showKey );
 
-  std::ofstream ofs(filename.c_str());
+  std::ofstream ofs(filename);
   if (!ofs.is_open())
     {
     fprintf(stderr, "Error, can't open file");

@@ -337,7 +337,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   // Compute step :
   // TODO : use a clean RS transform instead
   typename TOutputDEMImage::SpacingType outSpacing;
-  outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
+  outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * std::cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
   outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
   outputPtr->SetSignedSpacing(outSpacing);
 
@@ -351,8 +351,8 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typename DEMImageType::RegionType outRegion;
   outRegion.SetIndex(0,0);
   outRegion.SetIndex(1,0);
-  outRegion.SetSize(0, static_cast<unsigned int>((box_xmax - box_xmin) / vcl_abs(outSpacing[0])));
-  outRegion.SetSize(1, static_cast<unsigned int>((box_ymax - box_ymin) / vcl_abs(outSpacing[1])));
+  outRegion.SetSize(0, static_cast<unsigned int>((box_xmax - box_xmin) / std::abs(outSpacing[0])));
+  outRegion.SetSize(1, static_cast<unsigned int>((box_ymax - box_ymin) / std::abs(outSpacing[1])));
 
   outputPtr->SetLargestPossibleRegion(outRegion);
   outputPtr->SetNumberOfComponentsPerPixel(1);
@@ -534,8 +534,8 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       else
         {
         // Shift the gridIndex
-        int a_grid_int = static_cast<int>(gridIndex[0]) + static_cast<int>(vcl_floor(a_grid));
-        int b_grid_int = static_cast<int>(gridIndex[1]) + static_cast<int>(vcl_floor(b_grid));
+        int a_grid_int = static_cast<int>(gridIndex[0]) + static_cast<int>(std::floor(a_grid));
+        int b_grid_int = static_cast<int>(gridIndex[1]) + static_cast<int>(std::floor(b_grid));
 
         if (a_grid_int < minGridIndex[0]) a_grid_int = minGridIndex[0];
         if (a_grid_int > maxGridIndex[0]) a_grid_int = maxGridIndex[0];
@@ -565,10 +565,10 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     }
 
   typename DisparityMapType::RegionType inputDisparityRegion;
-  inputDisparityRegion.SetIndex(0, static_cast<int>(vcl_floor(epiIndexMin[0] + 0.5)));
-  inputDisparityRegion.SetIndex(1, static_cast<int>(vcl_floor(epiIndexMin[1] + 0.5)));
-  inputDisparityRegion.SetSize(0, 1 + static_cast<unsigned int>(vcl_floor(epiIndexMax[0] - epiIndexMin[0] + 0.5)));
-  inputDisparityRegion.SetSize(1, 1 + static_cast<unsigned int>(vcl_floor(epiIndexMax[1] - epiIndexMin[1] + 0.5)));
+  inputDisparityRegion.SetIndex(0, static_cast<int>(std::floor(epiIndexMin[0] + 0.5)));
+  inputDisparityRegion.SetIndex(1, static_cast<int>(std::floor(epiIndexMin[1] + 0.5)));
+  inputDisparityRegion.SetSize(0, 1 + static_cast<unsigned int>(std::floor(epiIndexMax[0] - epiIndexMin[0] + 0.5)));
+  inputDisparityRegion.SetSize(1, 1 + static_cast<unsigned int>(std::floor(epiIndexMax[1] - epiIndexMin[1] + 0.5)));
 
   // crop the disparity region at the largest possible region
   if ( inputDisparityRegion.Crop(horizDisp->GetLargestPossibleRegion()))
@@ -611,7 +611,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       std::ostringstream msg;
       msg << this->GetNameOfClass()
                   << "::GenerateInputRequestedRegion()";
-      e.SetLocation(msg.str().c_str());
+      e.SetLocation(msg.str());
       e.SetDescription("Requested region is (at least partially) outside the largest possible region of disparity map.");
       e.SetDataObject(horizDisp);
       throw e;
@@ -759,8 +759,8 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     horizDisp->TransformIndexToPhysicalPoint(horizIt.GetIndex(),epiPoint);
     leftGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
 
-    ulIndex[0] = static_cast<int>(vcl_floor(gridIndexConti[0]));
-    ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
+    ulIndex[0] = static_cast<int>(std::floor(gridIndexConti[0]));
+    ulIndex[1] = static_cast<int>(std::floor(gridIndexConti[1]));
     if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
     if (ulIndex[1] < gridRegion.GetIndex(1)) ulIndex[1] = gridRegion.GetIndex(1);
     if (ulIndex[0] > (gridRegion.GetIndex(0) + static_cast<int>(gridRegion.GetSize(0)) - 2))
@@ -812,8 +812,8 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     horizDisp->TransformContinuousIndexToPhysicalPoint(rightIndexEstimate,epiPoint);
     rightGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
 
-    ulIndex[0] = static_cast<int>(vcl_floor(gridIndexConti[0]));
-    ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
+    ulIndex[0] = static_cast<int>(std::floor(gridIndexConti[0]));
+    ulIndex[1] = static_cast<int>(std::floor(gridIndexConti[1]));
     if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
     if (ulIndex[1] < gridRegion.GetIndex(1)) ulIndex[1] = gridRegion.GetIndex(1);
     if (ulIndex[0] > (gridRegion.GetIndex(0) + static_cast<int>(gridRegion.GetSize(0)) - 2))
@@ -897,8 +897,8 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     //TODO JGT check if cellIndex should be calculed from the center of the pixel
     // TransformContinuousIndexToPhysicalPoint with index [0,0] returns Origin of image
     // TransformContinuousIndexToPhysicalPoint with index [0.5,0.5] returns a slight difference from Origin of image
-    cellIndex[0] = static_cast<int>(vcl_floor(midIndex[0] + 0.5));
-    cellIndex[1] = static_cast<int>(vcl_floor(midIndex[1] + 0.5));
+    cellIndex[0] = static_cast<int>(std::floor(midIndex[0] + 0.5));
+    cellIndex[1] = static_cast<int>(std::floor(midIndex[1] + 0.5));
 
     if (outputRequestedRegion.IsInside(cellIndex))
       {

@@ -23,6 +23,7 @@
 
 #include "otbRCC8GraphSource.h"
 #include "itkMacro.h"
+#include <string>
 
 namespace otb
 {

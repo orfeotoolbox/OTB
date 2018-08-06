@@ -26,13 +26,13 @@
 #ifndef DataQuality_h
 #define DataQuality_h
 
-#include <iostream>
 
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 
 #include "RadiometryUncertaintyRecord.h"
 #include "MisregistrationRecord.h"
+#include <string>
 
 namespace ossimplugins
 {

@@ -26,7 +26,6 @@
 #ifndef TemperatureSettingsRecord_h
 #define TemperatureSettingsRecord_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecord.h>
 
 namespace ossimplugins

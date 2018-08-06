@@ -43,8 +43,8 @@ public:
   QtWidgetInputVectorDataParameter(InputVectorDataParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputVectorDataParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
 protected slots:
   bool SetFileName( const QString& value );
@@ -66,22 +66,6 @@ private:
   QPushButton * m_Button;
 };
 
-
-inline
-const QLineEdit*
-QtWidgetInputVectorDataParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetInputVectorDataParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 } // Wrapper
 

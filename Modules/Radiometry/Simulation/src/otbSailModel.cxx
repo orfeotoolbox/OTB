@@ -217,13 +217,13 @@ SailModel
    this->Calc_LIDF(m_Angl, lidf);
 
    double cts, cto, ctscto, tants, tanto, cospsi, dso;
-   cts = vcl_cos(rd*m_TTS);
-   cto = vcl_cos(rd*m_TTO);
+   cts = std::cos(rd*m_TTS);
+   cto = std::cos(rd*m_TTO);
    ctscto = cts*cto;
-   tants = vcl_tan(rd*m_TTS);
-   tanto = vcl_tan(rd*m_TTO);
-   cospsi = vcl_cos(rd*m_PSI);
-   dso = vcl_sqrt(tants*tants+tanto*tanto-2.*tants*tanto*cospsi);
+   tants = std::tan(rd*m_TTS);
+   tanto = std::tan(rd*m_TTO);
+   cospsi = std::cos(rd*m_PSI);
+   dso = std::sqrt(tants*tants+tanto*tanto-2.*tants*tanto*cospsi);
 
    // angular distance, compensation of shadow length
    // Calculate geometric factors associated with extinction and scattering
@@ -241,7 +241,7 @@ SailModel
    for(unsigned int i=0; i<lidf.size(); ++i)
    {
       ttl = 2.5+5*i;       // leaf inclination discrete values
-      ctl = vcl_cos(rd*ttl);
+      ctl = std::cos(rd*ttl);
       // SAIL volume scattering phase function gives interception and portions to be
       // multiplied by rho and tau
 
@@ -334,7 +334,7 @@ SailModel
       att = 1.-sigf;
       m2 = (att+sigb)*(att-sigb);
       if(m2<=0) m2 = 0;
-      m = vcl_sqrt(m2);
+      m = std::sqrt(m2);
 
 
       sb = sdb*rho+sdf*tau;
@@ -422,7 +422,7 @@ SailModel
         else
           {
           // Outside the hotspot
-          fhot=m_LAI*vcl_sqrt(ko*ks);
+          fhot=m_LAI*std::sqrt(ko*ks);
           // Integrate by exponential Simpson method in 20 steps
           // the steps are arranged according to equal partitioning
           // of the slope of the joint probability function
@@ -434,7 +434,7 @@ SailModel
 
           for(unsigned int j=1; j<=20; ++j)
             {
-            if (j<20) x2 = -vcl_log(1.-j*fint)/alf;
+            if (j<20) x2 = -std::log(1.-j*fint)/alf;
             else x2 = 1;
             y2 = -(ko+ks)*m_LAI*x2+fhot*(1.-exp(-alf*x2))/alf;
             f2 = exp(y2);
@@ -500,7 +500,7 @@ SailModel
 ::Campbell(const double ala, VectorType &freq) const
 {
    unsigned int n=18;
-   double excent = exp(-1.6184e-5*vcl_pow(ala, 3)+2.1145e-3*ala*ala-1.2390e-1*ala+3.2491);
+   double excent = exp(-1.6184e-5*std::pow(ala, 3)+2.1145e-3*ala*ala-1.2390e-1*ala+3.2491);
    double sum=0;
    unsigned int tx2, tx1;
    double tl1, tl2, x1, x2, v, alpha, alpha2, x12, x22, alpx1, alpx2, dum, almx1, almx2;
@@ -514,26 +514,26 @@ SailModel
       tl2 = tx2*CONST_PI/180;
 
 
-      x1 = excent/sqrt(1.+excent*excent*vcl_tan(tl1)*vcl_tan(tl1));
-      x2 = excent/sqrt(1.+excent*excent*vcl_tan(tl2)*vcl_tan(tl2));
+      x1 = excent/sqrt(1.+excent*excent*std::tan(tl1)*std::tan(tl1));
+      x2 = excent/sqrt(1.+excent*excent*std::tan(tl2)*std::tan(tl2));
       if(excent==1)
       {
-         v = vcl_abs(cos(tl1)-cos(tl2));
+         v = std::abs(cos(tl1)-cos(tl2));
          temp.push_back( v );
          sum = sum + v;
       }
       else
       {
-         alpha = excent/vcl_sqrt(vcl_abs(1.-excent*excent));
+         alpha = excent/std::sqrt(std::abs(1.-excent*excent));
          alpha2 = alpha*alpha;
          x12 = x1*x1;
          x22 = x2*x2;
          if(excent>1)
          {
-            alpx1 = vcl_sqrt(alpha2+x12);
-            alpx2 = vcl_sqrt(alpha2+x22);
+            alpx1 = std::sqrt(alpha2+x12);
+            alpx2 = std::sqrt(alpha2+x22);
             dum   = x1*alpx1+alpha2*log(x1+alpx1);
-            v = vcl_abs(dum-(x2*alpx2+alpha2*log(x2+alpx2)));
+            v = std::abs(dum-(x2*alpx2+alpha2*log(x2+alpx2)));
             temp.push_back( v );
             sum = sum + v;
          }
@@ -542,7 +542,7 @@ SailModel
             almx1 = sqrt(alpha2-x12);
             almx2 = sqrt(alpha2-x22);
             dum   = x1*almx1+alpha2*asin(x1/alpha);
-            v = vcl_abs(dum-(x2*almx2+alpha2*asin(x2/alpha)));
+            v = std::abs(dum-(x2*almx2+alpha2*asin(x2/alpha)));
             temp.push_back( v );
             sum = sum + v;
          }
@@ -563,14 +563,14 @@ SailModel
 {
 
    double rd = CONST_PI/180;
-   double costs = vcl_cos(rd*tts);
-   double costo = vcl_cos(rd*tto);
-   double sints = vcl_sin(rd*tts);
-   double sinto = vcl_sin(rd*tto);
-   double cospsi = vcl_cos(rd*psi);
+   double costs = std::cos(rd*tts);
+   double costo = std::cos(rd*tto);
+   double sints = std::sin(rd*tts);
+   double sinto = std::sin(rd*tto);
+   double cospsi = std::cos(rd*psi);
    double psir = rd*psi;
-   double costl = vcl_cos(rd*ttl);
-   double sintl = vcl_sin(rd*ttl);
+   double costl = std::cos(rd*ttl);
+   double sintl = std::sin(rd*ttl);
    double cs = costl*costs;
    double co = costl*costo;
    double ss = sintl*sints;
@@ -588,15 +588,15 @@ SailModel
    double btran1, btran2, bt1, bt2, bt3, t1, t2 , denom, frho, ftau;
 
    cosbts = 5;
-   if (vcl_abs(ss)>1e-6) cosbts = -cs/ss;
+   if (std::abs(ss)>1e-6) cosbts = -cs/ss;
 
    cosbto=5;
-   if (vcl_abs(so)>1e-6) cosbto = -co/so;
+   if (std::abs(so)>1e-6) cosbto = -co/so;
 
 
-   if (vcl_abs(cosbts)<1)
+   if (std::abs(cosbts)<1)
    {
-      bts = vcl_acos(cosbts);
+      bts = std::acos(cosbts);
       ds = ss;
    }
    else
@@ -605,11 +605,11 @@ SailModel
       ds = cs;
    }
 
-   chi_s = 2./CONST_PI*((bts-CONST_PI*0.5)*cs+vcl_sin(bts)*ss);
+   chi_s = 2./CONST_PI*((bts-CONST_PI*0.5)*cs+std::sin(bts)*ss);
 
-   if (vcl_abs(cosbto)<1)
+   if (std::abs(cosbto)<1)
    {
-      bto = vcl_acos(cosbto);
+      bto = std::acos(cosbto);
       doo = so;
    }
    else if(tto<90)
@@ -622,15 +622,15 @@ SailModel
       bto = 0;
       doo = -co;
    }
-   chi_o = 2./CONST_PI*((bto-CONST_PI*0.5)*co+vcl_sin(bto)*so);
+   chi_o = 2./CONST_PI*((bto-CONST_PI*0.5)*co+std::sin(bto)*so);
 
    // ..............................................................................
    //   Computation of auxiliary azimut angles bt1, bt2, bt3 used
    //   for the computation of the bidirectional scattering coefficient w
    // .............................................................................
 
-   btran1 = vcl_abs(bts-bto);
-   btran2 = CONST_PI - vcl_abs(bts+bto-CONST_PI);
+   btran1 = std::abs(bts-bto);
+   btran2 = CONST_PI - std::abs(bts+bto-CONST_PI);
 
    if (psir<=btran1)
    {
@@ -678,7 +678,7 @@ SailModel
    //J1 function with avoidance of singularity problem
    double v;
    double del=(k-l)*t;
-   if(vcl_abs(del)>1e-3)
+   if(std::abs(del)>1e-3)
    {
       v = (exp(-l*t)-exp(-k*t))/(k-l);
       return v;

@@ -65,7 +65,7 @@ namespace otb
 
       om = (double) (j - 4) * .9856 * CONST_PI_180;
       /* Computing 2nd power */
-      d__1 = 1. - vcl_cos(om) * .01673;
+      d__1 = 1. - std::cos(om) * .01673;
       return 1. / (d__1 * d__1);
     }
   };

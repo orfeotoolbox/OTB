@@ -40,6 +40,20 @@ QtWidgetInputVectorDataParameter::~QtWidgetInputVectorDataParameter()
 {
 }
 
+const QLineEdit*
+QtWidgetInputVectorDataParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetInputVectorDataParameter
+::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetInputVectorDataParameter::DoUpdateGUI()
 {
   //update lineedit
@@ -64,8 +78,8 @@ void QtWidgetInputVectorDataParameter::DoCreateWidget()
   m_Input->setToolTip(
     QString::fromStdString( m_InputVectorDataParam->GetDescription() )
   );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetInputVectorDataParameter::SetFileName );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   m_HLayout->addWidget(m_Input);
 
@@ -74,7 +88,7 @@ void QtWidgetInputVectorDataParameter::DoCreateWidget()
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetInputVectorDataParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);

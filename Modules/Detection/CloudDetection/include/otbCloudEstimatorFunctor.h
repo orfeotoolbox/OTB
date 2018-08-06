@@ -66,8 +66,8 @@ public:
       {
       lCurPixNorm += inPix[i] * inPix[i];
       }
-    lCurPixNorm = vcl_sqrt(static_cast<double>(lCurPixNorm));
-    lGaussianCoef = vcl_exp(-vcl_pow((lCurPixNorm - m_RefNorm), 2) / m_Denom);
+    lCurPixNorm = std::sqrt(static_cast<double>(lCurPixNorm));
+    lGaussianCoef = std::exp(-std::pow((lCurPixNorm - m_RefNorm), 2) / m_Denom);
 
     // Reverse the SpectralAngle values and set them between [0; 1]
     lRes =  lGaussianCoef * ((CONST_PI - m_SpectralAngleFunctor(inPix)) / CONST_PI);
@@ -86,7 +86,7 @@ public:
       {
       m_RefNorm += ref[i] * ref[i];
       }
-    m_RefNorm = vcl_sqrt(static_cast<double>(m_RefNorm));
+    m_RefNorm = std::sqrt(static_cast<double>(m_RefNorm));
     SetVariance(m_Variance);
   }
 

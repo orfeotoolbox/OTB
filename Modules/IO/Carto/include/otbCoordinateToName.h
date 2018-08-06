@@ -25,6 +25,7 @@
 #include "itkMultiThreader.h"
 #include "otbCurlHelperInterface.h"
 #include "OTBCartoExport.h"
+#include <string>
 
 namespace otb
 {
@@ -68,7 +69,7 @@ public:
    */
   bool SetLonLat(PointType point)
   {
-    if ((vcl_abs(point[0] - m_Lon) > m_UpdateDistance) || (vcl_abs(point[1] - m_Lat) > m_UpdateDistance))
+    if ((std::abs(point[0] - m_Lon) > m_UpdateDistance) || (std::abs(point[1] - m_Lat) > m_UpdateDistance))
       {
 //      std::cout << "Update lon/lat " << m_Lon << ", " << m_Lat << " -> " << point << std::endl;
       m_Lon = point[0];

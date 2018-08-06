@@ -34,7 +34,7 @@ ImageRegionSquareTileSplitter<VImageDimension>
 ::GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber)
 {
   unsigned int theoricalNbPixelPerTile = region.GetNumberOfPixels() / requestedNumber;
-  unsigned int theoricalTileDimension = static_cast<unsigned int> (vcl_sqrt(static_cast<double>(theoricalNbPixelPerTile)) );
+  unsigned int theoricalTileDimension = static_cast<unsigned int> (std::sqrt(static_cast<double>(theoricalNbPixelPerTile)) );
 
   // Take the next multiple of m_TileSizeAlignment (eventually generate more splits than requested)
   m_TileDimension = (theoricalTileDimension + m_TileSizeAlignment - 1) / m_TileSizeAlignment * m_TileSizeAlignment;

@@ -26,6 +26,7 @@
 #include "itkListSample.h"
 #include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
+#include <string>
 
 namespace otb
 {

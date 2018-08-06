@@ -21,7 +21,6 @@
 #ifndef otbSensorModelBase_h
 #define otbSensorModelBase_h
 
-#include <iostream>
 
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"

@@ -30,7 +30,6 @@
 #include <random>
 #include <ctime>
 #include <cassert>
-#include <iostream>
 
 namespace otb
 {

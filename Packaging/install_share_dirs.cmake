@@ -32,12 +32,6 @@ function(install_share_dirs)
   if(NOT EXISTS "${MVD_I18N_SOURCE_DIR}")
     message(FATAL_ERROR "Error ${MVD_I18N_SOURCE_DIR} not exists")
   endif()
-  file(GLOB MVD_APP_TS_FILES ${PACKAGE_OTB_SRC_DIR}/i18n/*.ts) # qm files
-  foreach(APP_TS_FILE ${MVD_APP_TS_FILES})
-    get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
-    install(FILES ${MVD_I18N_SOURCE_DIR}/${APP_TS_FILENAME}.qm
-      DESTINATION ${PKG_SHARE_DEST_DIR}/otb/i18n)
-  endforeach()
 
   ####################### install GDAL data ############################
   set(GDAL_DATA_DIR ${PKG_SHARE_SOURCE_DIR}/gdal)
@@ -68,12 +62,8 @@ function(install_share_dirs)
   install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE
     DESTINATION ${PKG_STAGE_DIR})
 
-  ####################### Install VERSION ##########################
-  set(PKG_VERSION_FILE
-    "${SUPERBUILD_INSTALL_DIR}/share/doc/${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}/VERSION")
-  if(EXISTS ${PKG_VERSION_FILE} )
-    install(FILES ${PKG_VERSION_FILE} DESTINATION ${PKG_STAGE_DIR})
-  endif()
- 
+  ####################### install share/otb ###########################
+  install_without_message("${PKG_SHARE_SOURCE_DIR}/otb" "share" )
+
 endfunction()
 

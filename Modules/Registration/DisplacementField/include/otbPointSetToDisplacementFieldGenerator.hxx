@@ -108,7 +108,7 @@ PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
     PointType p;
     p[0] = it.Value()[0];
     p[1] = it.Value()[1];
-    if (vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0]) >= m_MetricThreshold)
+    if (std::abs(this->GetPointSet()->GetPointData()->GetElement(j)[0]) >= m_MetricThreshold)
       {
 
       distanceVector.push_back(EuclideanDistanceMetric(index, p));
@@ -141,7 +141,7 @@ PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
   PointType pprime;
   // our point are expressed in index and not in physical coordinates
   //this->GetOutput()->TransformIndexToPhysicalPoint(index, pprime);
-  return vcl_sqrt(vcl_pow(index[0] - p[0], 2) + vcl_pow(index[1] - p[1], 2));
+  return std::sqrt(std::pow(index[0] - p[0], 2) + std::pow(index[1] - p[1], 2));
 }
 /**
  * PrintSelf Method

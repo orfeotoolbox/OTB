@@ -339,7 +339,7 @@ void GlVectorActor::UpdateData()
     m_ExtentLRX = lrx;
     m_ExtentLRY = lry;
 
-    double areaOfScreenPixel = vcl_abs(lrx-ulx)*vcl_abs(lry-uly)
+    double areaOfScreenPixel = std::abs(lrx-ulx)*std::abs(lry-uly)
       /(settings->GetViewportSize()[0]*settings->GetViewportSize()[1]);
 
     OGRPolygon spatialFilter;
@@ -386,7 +386,7 @@ void GlVectorActor::UpdateData()
       newInternalFeature.m_SourceFeature = srcFeature.Clone();
       if(m_OptimizedRenderingActive)
         {
-        newInternalFeature.m_SourceFeature.SetGeometry(srcFeature.GetGeometry()->SimplifyPreserveTopology(vcl_sqrt(areaOfScreenPixel)));
+        newInternalFeature.m_SourceFeature.SetGeometry(srcFeature.GetGeometry()->SimplifyPreserveTopology(std::sqrt(areaOfScreenPixel)));
         }
       m_InternalFeatures.push_back(newInternalFeature);
       }

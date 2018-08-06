@@ -247,7 +247,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(canny_edges);
     throw e;
@@ -270,7 +270,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(old_disparityPtr);
     throw e;
@@ -293,7 +293,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(old_maskPtr);
     throw e;
@@ -316,7 +316,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(canny_disparity);
     throw e;
@@ -339,7 +339,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(subpixelmaskPtr);
     throw e;
@@ -489,7 +489,7 @@ AdhesionCorrectionFilter<TImage, TMask>
               index[0]=index_pos[0]-1;
               index2[0]=index_pos[0]+i;
               index2[1]=index_pos[1];
-              if (vcl_abs(old_disparityPtr->GetPixel(index) - old_disparityPtr->GetPixel(index2)) > m_Tolerance)
+              if (std::abs(old_disparityPtr->GetPixel(index) - old_disparityPtr->GetPixel(index2)) > m_Tolerance)
                 {
                 if (old_disparityPtr->GetPixel(index) < old_disparityPtr->GetPixel(index2))
                   {
@@ -583,7 +583,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       old_maskIt.SetIndex(index_pos);
       if (old_maskIt.Get() != 0 && old_maskPtr->GetPixel(index) != 0)
         {
-        if (vcl_abs(old_disparityPtr->GetPixel(index_pos) - old_disparityPtr->GetPixel(index)) > m_Tolerance)
+        if (std::abs(old_disparityPtr->GetPixel(index_pos) - old_disparityPtr->GetPixel(index)) > m_Tolerance)
           {
           if (old_disparityPtr->GetPixel(index) > old_disparityPtr->GetPixel(index_pos) &&
               disparity_jump->GetPixel(index_pos) == 0)
@@ -853,7 +853,7 @@ AdhesionCorrectionFilter<TImage, TMask>
               l++;
               }
             }
-          dif = (int) vcl_abs(pix[0]-pix[1]);
+          dif = (int) std::abs(pix[0]-pix[1]);
           risk_edgesIt.SetIndex(index_pos);
           if (dif==1 || dif==7) risk_edgesIt.Set(2);
           }
@@ -896,7 +896,7 @@ AdhesionCorrectionFilter<TImage, TMask>
             // The extend the border, it has to be as prevalent as before //
             canny_edgesIt.SetIndex(index_pos_actual);
             if (canny_edgesIt.Get()>m_DiscontinuityHighThreshold &&
-                vcl_abs(canny_edgesIt.Get() - canny_edges->GetPixel(index_pos_old)) < m_MaxEdgeGap)
+                std::abs(canny_edgesIt.Get() - canny_edges->GetPixel(index_pos_old)) < m_MaxEdgeGap)
               {
               if (outputriskedgesPtr->GetPixel(index_pos_actual) ==0 && canny_edges->GetPixel(index_pos_actual) > m_max)
                 {
@@ -1459,7 +1459,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       if (old_maskIt.Get() == 0) k++;
       else
         {
-        if (vcl_abs(old_disparityPtr->GetPixel(index_pos)-disp)>m_Tolerance && k<=win)
+        if (std::abs(old_disparityPtr->GetPixel(index_pos)-disp)>m_Tolerance && k<=win)
           {//only small holes
           disparity_jump2It.SetIndex(index_pos);
           if (old_disparityPtr->GetPixel(index_pos)>disp)  disparity_jump2It.Set(5);
@@ -1503,7 +1503,7 @@ AdhesionCorrectionFilter<TImage, TMask>
             if (old_maskPtr->GetPixel(index_pos0)==0) k++;
             else
               {
-              if (vcl_abs(old_disparityPtr->GetPixel(index_pos0)-disp)>m_Tolerance/2 && k<=win)
+              if (std::abs(old_disparityPtr->GetPixel(index_pos0)-disp)>m_Tolerance/2 && k<=win)
                 {//only small holes
                 disparity_jump2It.SetIndex(index_pos0);
                 if (old_disparityPtr->GetPixel(index_pos0)>disp)  disparity_jump2It.Set(8);
@@ -1583,7 +1583,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       index_pos = new_disparityIt.GetIndex();
       if (outputriskedgesPtr->GetPixel(index_pos) != 0)
         {
-        int l = 0 - vcl_min(big_dist,static_cast<int>(index_pos[1])); //out of bound checking
+        int l = 0 - std::min(big_dist,static_cast<int>(index_pos[1])); //out of bound checking
         index[0] = index_pos[0];
         index[1] = index_pos[1] + l;
 
@@ -1607,7 +1607,7 @@ AdhesionCorrectionFilter<TImage, TMask>
           }
 
         int maxSize=static_cast<int>(disparity_jump2->GetRequestedRegion().GetSize()[1]);
-        l = vcl_min(static_cast<int>((maxSize-1)- index_pos[1]),big_dist); //out of bound checking
+        l = std::min(static_cast<int>((maxSize-1)- index_pos[1]),big_dist); //out of bound checking
         index[0] = index_pos[0];
         index[1] = index_pos[1] + l;
         while (l >= 0 && disparity_jump2->GetPixel(index) != 6)
@@ -1626,7 +1626,7 @@ AdhesionCorrectionFilter<TImage, TMask>
           new_disparityIt.Set(0);
           new_maskIt.Set(0);
           }
-        l = 0 - vcl_min(big_dist,static_cast<int>(index_pos[1]));
+        l = 0 - std::min(big_dist,static_cast<int>(index_pos[1]));
 
         index[0] = index_pos[0];
         index[1] = index_pos[1]+l;
@@ -1648,7 +1648,7 @@ AdhesionCorrectionFilter<TImage, TMask>
           new_maskIt.Set(0);
           }
 
-        l = vcl_min(static_cast<int>((maxSize-1)- index_pos[1]),big_dist);
+        l = std::min(static_cast<int>((maxSize-1)- index_pos[1]),big_dist);
 
         index[0] = index_pos[0];
         index[1] = index_pos[1] + l;

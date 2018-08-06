@@ -117,7 +117,7 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -206,7 +206,7 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -274,7 +274,7 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
 
   const float age = 15;
 
-  if ( vcl_abs(age - predicted->GetMeasurementVector(0)[0]) <= 0.3 )
+  if ( std::abs(age - predicted->GetMeasurementVector(0)[0]) <= 0.3 )
     {
     return EXIT_SUCCESS;
     }
@@ -352,7 +352,7 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -438,7 +438,7 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -524,7 +524,7 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -614,7 +614,7 @@ int otbANNMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -691,7 +691,7 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -768,7 +768,7 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -846,7 +846,7 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-  if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
     {
     return EXIT_SUCCESS;
     }
@@ -958,7 +958,7 @@ int otbSharkRFMachineLearningModel(int argc, char * argv[])
    std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
 
 
-   if ( vcl_abs(kappaIdxLoad - kappaIdx) < 0.00000001)
+   if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
      {
      return EXIT_SUCCESS;
      }

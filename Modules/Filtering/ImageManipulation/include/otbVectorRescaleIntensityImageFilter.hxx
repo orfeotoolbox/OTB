@@ -139,7 +139,7 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
       size.SetSize(sl->GetNthElement(i)->GetMeasurementVectorSize());
 
       if (m_ClampThreshold > 0.)
-        size.Fill(static_cast<unsigned int>(vcl_ceil(1 / m_ClampThreshold) * 10));
+        size.Fill(static_cast<unsigned int>(std::ceil(1 / m_ClampThreshold) * 10));
       else
         size.Fill(256);
 

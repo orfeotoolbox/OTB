@@ -21,8 +21,8 @@
 #ifndef otbDEMToImageGenerator_h
 #define otbDEMToImageGenerator_h
 
-#include <iostream>
 #include <stdio.h>
+#include <string>
 
 #include "itkImageSource.h"
 #include "otbImage.h"

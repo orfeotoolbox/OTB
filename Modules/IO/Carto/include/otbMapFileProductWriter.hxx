@@ -214,8 +214,8 @@ MapFileProductWriter<TInputImage>
 
   // Compute max depth
   unsigned int maxDepth =
-    static_cast<unsigned int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
-                                  vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
+    static_cast<unsigned int>(std::max(std::ceil(std::log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / std::log(2.0)),
+                                  std::ceil(std::log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / std::log(2.0))));
 
   // Extract size & index
   SizeType  extractSize;
@@ -297,7 +297,7 @@ MapFileProductWriter<TInputImage>
     std::ostringstream path;
     path << m_ShapeIndexPath<<"/tiles";
 
-    if (!itksys::SystemTools::MakeDirectory(path.str().c_str()))
+    if (!itksys::SystemTools::MakeDirectory(path.str()))
       {
       itkExceptionMacro(<< "Error while creating cache directory" << path.str());
       }
@@ -497,13 +497,13 @@ MapFileProductWriter<TInputImage>
   std::ostringstream path;
   path << itksys::SystemTools::GetFilenamePath(m_FileName);
 
-  if (!itksys::SystemTools::MakeDirectory(path.str().c_str()))
+  if (!itksys::SystemTools::MakeDirectory(path.str()))
     {
     itkExceptionMacro(<< "Error while creating cache directory" << path.str());
     }
 
   // Create a mapfile
-  m_File.open(m_FileName.c_str());
+  m_File.open(m_FileName);
   m_File << std::fixed << std::setprecision(6);
 
   // Get the name of the layer

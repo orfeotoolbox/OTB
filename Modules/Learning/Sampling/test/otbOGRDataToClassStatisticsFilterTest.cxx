@@ -103,7 +103,7 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   FilterType::PolygonSizeMapType::const_iterator itPoly;
   
   std::ofstream ofs;
-  ofs.open(outputPath.c_str());
+  ofs.open(outputPath);
   ofs << "# Layer 0 : polygons"<<std::endl;
   ofs << "# Class sample counts"<<std::endl;
   for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)

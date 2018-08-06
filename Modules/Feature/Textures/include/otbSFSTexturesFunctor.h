@@ -23,7 +23,6 @@
 
 #include "otbMath.h"
 #include "itkNumericTraits.h"
-#include <iostream>
 #include <vector>
 
 namespace otb
@@ -133,8 +132,8 @@ public:
       angle = m_DirectionStep * static_cast<double>(d);
 
       // last offset in the direction respecting spatial threshold
-      off[0] = static_cast<int>(vcl_floor(SpatialThresholdDouble * vcl_cos(angle) + 0.5));
-      off[1] = static_cast<int>(vcl_floor(SpatialThresholdDouble * vcl_sin(angle) + 0.5));
+      off[0] = static_cast<int>(std::floor(SpatialThresholdDouble * std::cos(angle) + 0.5));
+      off[1] = static_cast<int>(std::floor(SpatialThresholdDouble * std::sin(angle) + 0.5));
       // last indices in the direction respecting spectral threshold
       OffsetType offEnd = this->FindLastOffset(it, off);
 
@@ -144,7 +143,7 @@ public:
       OffsetType offStart = this->FindLastOffset(it, off);
 
       // computes distance = dist between the 2 segment point.
-      dist = vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]-offStart[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]-offStart[1]), 2));
+      dist = std::sqrt(std::pow(static_cast<double>(offEnd[0]-offStart[0]), 2) + std::pow(static_cast<double>(offEnd[1]-offStart[1]), 2));
 
       // for length computation
       if (m_SelectedTextures[0] == true) if (dist > length) length = dist;
@@ -190,7 +189,7 @@ public:
       di[d] = dist;
       if (m_SelectedTextures[3] == true)
         {
-        lengthLine[d] = static_cast<unsigned int>(dist);    //static_cast<unsigned int>( vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2)) );
+        lengthLine[d] = static_cast<unsigned int>(dist);    //static_cast<unsigned int>( std::sqrt(std::pow(static_cast<double>(offEnd[0]), 2) + std::pow(static_cast<double>(offEnd[1]), 2)) );
         sti[d] = sdiVal;
         if (sdiVal != 0.) sumWMean += (m_Alpha * (dist - 1) * dist /*lengthLine[n]*di[n]*/) / sdiVal;
         }
@@ -215,7 +214,7 @@ public:
         sumMin += minSorted[t];
         sumMax += maxSorted[t];
         }
-      if (sumMax != 0.) out[4] = static_cast<OutputValueType>(vcl_atan(sumMin / sumMax));
+      if (sumMax != 0.) out[4] = static_cast<OutputValueType>(std::atan(sumMin / sumMax));
       else if (sumMax == 0. && sumMin == 0.) out[4] = static_cast<OutputValueType>(1.);
       }
     // SD
@@ -223,8 +222,8 @@ public:
       {
       double sumPSI = 0;
       for (unsigned int n = 0; n < di.size(); ++n)
-        sumPSI += vcl_pow(di[n] - sumWMean / NumberOfDirectionsDouble, 2);
-      out[5] = static_cast<OutputValueType>(vcl_sqrt(sumPSI) / (NumberOfDirectionsDouble - 1.));
+        sumPSI += std::pow(di[n] - sumWMean / NumberOfDirectionsDouble, 2);
+      out[5] = static_cast<OutputValueType>(std::sqrt(sumPSI) / (NumberOfDirectionsDouble - 1.));
       }
 
     return out;
@@ -253,7 +252,7 @@ public:
       {
       this->ComputePointLine(currentOff, slop, signY, stopOffset[0]);
 
-      if (vcl_abs(it.GetPixel(currentOff) - it.GetCenterPixel()) > m_SpectralThreshold)
+      if (std::abs(it.GetPixel(currentOff) - it.GetCenterPixel()) > m_SpectralThreshold)
         {
         res = false;
         }
@@ -291,7 +290,7 @@ public:
       mean += static_cast<double>(it.GetPixel(currentOff));
       nbElt++;
 
-      if (vcl_abs(it.GetPixel(currentOff) - it.GetCenterPixel()) >= m_SpectralThreshold) canGo = false;
+      if (std::abs(it.GetPixel(currentOff) - it.GetCenterPixel()) >= m_SpectralThreshold) canGo = false;
       else currentOff[0] += signX;
 
       isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
@@ -306,14 +305,14 @@ public:
       {
       this->ComputePointLine(currentOff, slop, signY, stopOffset[0]);
 
-      SDi += vcl_pow((static_cast<double>(it.GetPixel(currentOff)) - mean), 2);
-      if (vcl_abs(it.GetPixel(currentOff) - it.GetCenterPixel()) >= m_SpectralThreshold) canGo = false;
+      SDi += std::pow((static_cast<double>(it.GetPixel(currentOff)) - mean), 2);
+      if (std::abs(it.GetPixel(currentOff) - it.GetCenterPixel()) >= m_SpectralThreshold) canGo = false;
       else currentOff[0] += signX;
 
       isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
 
       }
-    return vcl_sqrt(SDi);
+    return std::sqrt(SDi);
   }
 
   /** Check if the current offset is inside the stop one. */
@@ -332,7 +331,7 @@ public:
    */
   void ComputePointLine(OffsetType& currentOff, const double& slop, const int& signY, const int& stopOffsetX)
   {
-    if (stopOffsetX != 0) currentOff[1] = static_cast<int>(vcl_floor(slop * static_cast<double>(currentOff[0]) + 0.5));
+    if (stopOffsetX != 0) currentOff[1] = static_cast<int>(std::floor(slop * static_cast<double>(currentOff[0]) + 0.5));
     else currentOff[1] += signY;
   }
 

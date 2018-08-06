@@ -28,6 +28,7 @@
 #include "otbGenericRSTransform.h"
 
 #include "OTBProjectionExport.h"
+#include <string>
 
 class OGRCoordinateTransformation;
 

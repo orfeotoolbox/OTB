@@ -93,7 +93,7 @@ FillGapsFilter
 
   PointListType::const_iterator itPoints;
 
-  CosTheta = vcl_cos(m_AngularBeam);
+  CosTheta = std::cos(m_AngularBeam);
   --itLineListAEnd;
 
   while (itLineListA != itLineListAEnd)
@@ -140,10 +140,10 @@ FillGapsFilter
 
       // Calculate the radius for each point of each line
 
-      R13 = vcl_sqrt((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3));
-      R14 = vcl_sqrt((x1 - x4) * (x1 - x4) + (y1 - y4) * (y1 - y4));
-      R23 = vcl_sqrt((x2 - x3) * (x2 - x3) + (y2 - y3) * (y2 - y3));
-      R24 = vcl_sqrt((x2 - x4) * (x2 - x4) + (y2 - y4) * (y2 - y4));
+      R13 = std::sqrt((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3));
+      R14 = std::sqrt((x1 - x4) * (x1 - x4) + (y1 - y4) * (y1 - y4));
+      R23 = std::sqrt((x2 - x3) * (x2 - x3) + (y2 - y3) * (y2 - y3));
+      R24 = std::sqrt((x2 - x4) * (x2 - x4) + (y2 - y4) * (y2 - y4));
 
       double Rmin = m_Radius;
 
@@ -192,9 +192,9 @@ FillGapsFilter
 
         //Estimate the norm each line
         /*  double Norm12, Norm23, Norm34;
-          Norm12 = vcl_sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
-          Norm23 = vcl_sqrt( (x2-x3)*(x2-x3) + (y2-y3)*(y2-y3) );
-          Norm34 = vcl_sqrt( (x3-x4)*(x3-x4) + (y3-y4)*(y3-y4) );
+          Norm12 = std::sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
+          Norm23 = std::sqrt( (x2-x3)*(x2-x3) + (y2-y3)*(y2-y3) );
+          Norm34 = std::sqrt( (x3-x4)*(x3-x4) + (y3-y4)*(y3-y4) );
           */
         double Angle12_23, Angle12_34, Angle23_34;
         //Estimate the angle between lines 12-23 and lines 12-34
@@ -204,9 +204,9 @@ FillGapsFilter
         Angle12_34 = (x2-x1)*(x4-x3) + (y2-y1)*(y4-y3);
         Angle12_34 = Angle12_34 / Norm12 / Norm34; */
 
-        Angle12_23 = vcl_cos(vcl_atan2((y2 - y1), (x2 - x1)) - vcl_atan2((y3 - y2), (x3 - x2)));
-        Angle12_34 = vcl_cos(vcl_atan2((y2 - y1), (x2 - x1)) - vcl_atan2((y4 - y3), (x4 - x3)));
-        Angle23_34 = vcl_cos(vcl_atan2((y3 - y2), (x3 - x2)) - vcl_atan2((y4 - y3), (x4 - x3)));
+        Angle12_23 = std::cos(std::atan2((y2 - y1), (x2 - x1)) - std::atan2((y3 - y2), (x3 - x2)));
+        Angle12_34 = std::cos(std::atan2((y2 - y1), (x2 - x1)) - std::atan2((y4 - y3), (x4 - x3)));
+        Angle23_34 = std::cos(std::atan2((y3 - y2), (x3 - x2)) - std::atan2((y4 - y3), (x4 - x3)));
 
         if ((Angle12_23 > CosTheta) && (Angle12_34 > CosTheta) && (Angle23_34 > CosTheta))
           {

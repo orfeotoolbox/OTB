@@ -503,7 +503,7 @@ BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>
     {
     if (splineOrder & 1)     // Use this index calculation for odd splineOrder
       {
-      indx = (long) vcl_floor((float) x[n]) - splineOrder / 2;
+      indx = (long) std::floor((float) x[n]) - splineOrder / 2;
       //std::cout<<"x: "<<x<<std::endl;
       //std::cout<<"splineOrder: "<<splineOrder<<std::endl;
       //std::cout<<"indx: "<<indx<<std::endl;
@@ -515,7 +515,7 @@ BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>
     else                       // Use this index calculation for even splineOrder
       {
 
-      indx = (long) vcl_floor((float) (x[n] + 0.5)) - splineOrder / 2;
+      indx = (long) std::floor((float) (x[n] + 0.5)) - splineOrder / 2;
       //std::cout<<"x: "<<x<<std::endl;
       //std::cout<<"splineOrder: "<<splineOrder<<std::endl;
       //std::cout<<"indx: "<<indx<<std::endl;

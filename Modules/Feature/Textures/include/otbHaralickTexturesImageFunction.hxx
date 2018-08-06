@@ -80,7 +80,7 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
     return textures;
     }
 
-  const double log2 = vcl_log(2.0);
+  const double log2 = std::log(2.0);
   // Retrieve the input pointer
   InputImagePointerType inputPtr = const_cast<InputImageType *> (this->GetInputImage());
 
@@ -107,7 +107,7 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
   unsigned int minRadius = 0;
   for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
     {
-    unsigned int distance = vcl_abs(m_Offset[i]);
+    unsigned int distance = std::abs(m_Offset[i]);
     if ( distance > minRadius )
       {
       minRadius = distance;
@@ -163,7 +163,7 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
      M(1) = x(1), M(k) = M(k-1) + (x(k) - M(k-1) ) / k
      S(1) = 0, S(k) = S(k-1) + (x(k) - M(k-1)) * (x(k) - M(k))
      for 2 <= k <= n, then
-     sigma = vcl_sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
+     sigma = std::sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
      population SD).
   */
   std::vector<double>::const_iterator msIt = marginalSums.begin();
@@ -208,12 +208,12 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
     CooccurrenceIndexType index2 = (*constVectorIt).first;
     RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
     textures[0] += frequency * frequency;
-    textures[1] -= ( frequency > GetPixelValueTolerance() ) ? frequency *vcl_log(frequency) / log2:0;
+    textures[1] -= ( frequency > GetPixelValueTolerance() ) ? frequency *std::log(frequency) / log2:0;
     textures[2] += ( ( index2[0] - pixelMean ) * ( index2[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
     textures[3] += frequency / ( 1.0 + ( index2[0] - index2[1] ) * ( index2[0] - index2[1] ) );
     textures[4] += ( index2[0] - index2[1] ) * ( index2[0] - index2[1] ) * frequency;
-    textures[5] += vcl_pow( ( index2[0] - pixelMean ) + ( index2[1] - pixelMean ), 3 ) * frequency;
-    textures[6] += vcl_pow( ( index2[0] - pixelMean ) + ( index2[1] - pixelMean ), 4 ) * frequency;
+    textures[5] += std::pow( ( index2[0] - pixelMean ) + ( index2[1] - pixelMean ), 3 ) * frequency;
+    textures[6] += std::pow( ( index2[0] - pixelMean ) + ( index2[1] - pixelMean ), 4 ) * frequency;
     textures[7] += index2[0] * index2[1] * frequency;
     ++constVectorIt;
     }

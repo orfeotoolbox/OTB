@@ -36,7 +36,6 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
 
-#include <iostream>
 
 namespace ossimplugins
 {

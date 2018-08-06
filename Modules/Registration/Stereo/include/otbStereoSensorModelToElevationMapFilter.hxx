@@ -235,7 +235,7 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(masterPtr);
     throw e;
@@ -551,7 +551,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
     squareSumMaster += (master[i]-meanMaster) * (master[i]-meanMaster);
     }
 
-  correlationValue = vcl_abs(crossProd/(vcl_sqrt(squareSumSlave)*vcl_sqrt(squareSumMaster)));
+  correlationValue = std::abs(crossProd/(std::sqrt(squareSumSlave)*std::sqrt(squareSumMaster)));
 
   return correlationValue;
 }

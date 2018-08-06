@@ -49,7 +49,7 @@ public:
   ~LogFunctor(){};
   TScalar operator() (const TScalar& v) const
   {
-    return vcl_log(v);
+    return std::log(v);
   }
 };
 } // end namespace Functor
@@ -128,8 +128,10 @@ private:
     MandatoryOff("type.linear.gamma");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
-    SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic "
-      "(the mask must have the same dimensions as the input image)");
+    SetParameterDescription("mask",
+      "Optional mask to indicate which pixels are valid for computing the histogram quantiles. "
+      "Only pixels where the mask is less than 0.5 will contribute to the histogram. "
+      "The mask must have the same dimensions as the input image.");
     MandatoryOff("mask");
     DisableParameter("mask");
 

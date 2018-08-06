@@ -22,6 +22,7 @@
 #define otbPatternSampler_h
 
 #include "otbSamplerBase.h"
+#include <string>
 
 namespace otb
 {

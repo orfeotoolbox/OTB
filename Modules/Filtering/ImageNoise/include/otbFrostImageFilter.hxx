@@ -87,7 +87,7 @@ void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
     std::ostringstream msg;
     msg << static_cast<const char *>(this->GetNameOfClass())
         << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
@@ -162,11 +162,11 @@ void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       Variance  = sum2 / double(neighborhoodSize-1);
 
       const double epsilon = 0.0000000001;
-      if (vcl_abs(Mean) < epsilon)
+      if (std::abs(Mean) < epsilon)
       {
         dPixel = itk::NumericTraits<OutputPixelType>::Zero;
       }
-      else if (vcl_abs(Variance) < epsilon)
+      else if (std::abs(Variance) < epsilon)
       {
 		dPixel = Mean;
       }
@@ -184,13 +184,13 @@ void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
 			{
 			for (int y = -rad_y; y <= rad_y; ++y)
 			  {
-			  double Dist = vcl_sqrt(static_cast<double>(x * x + y * y));
+			  double Dist = std::sqrt(static_cast<double>(x * x + y * y));
 			  off[0] = x;
 			  off[1] = y;
 
 			  dPixel = static_cast<double>(bit.GetPixel(off));
 
-			  CoefFilter = vcl_exp(-Alpha * Dist);
+			  CoefFilter = std::exp(-Alpha * Dist);
 			  NormFilter += CoefFilter;
 			  FrostFilter += (CoefFilter * dPixel);
 			  }

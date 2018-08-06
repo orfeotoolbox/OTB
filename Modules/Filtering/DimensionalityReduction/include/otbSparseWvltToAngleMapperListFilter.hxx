@@ -192,10 +192,10 @@ SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputI
   double modulus = 0;
   for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
   {
-    modulus += vcl_pow( static_cast<double>( it[i].Get() ), 2. );
+    modulus += std::pow( static_cast<double>( it[i].Get() ), 2. );
   }
   // The modulus cannot be nul since it is over the threshold...
-  modulus = vcl_sqrt( modulus );
+  modulus = std::sqrt( modulus );
 
   // FIXME test if NaN nor infinite
 
@@ -206,20 +206,20 @@ SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputI
   {
     if ( it[1].Get() < 0 )
     {
-      angle[0] = vcl_acos( it[0].Get() / modulus );
+      angle[0] = std::acos( it[0].Get() / modulus );
     }
     else
     {
-      angle[0] = - vcl_acos( it[0].Get() / modulus );
+      angle[0] = - std::acos( it[0].Get() / modulus );
     }
   }
   else
   {
     for ( unsigned int k = 0; k < angle.Size()-1; ++k )
     {
-      double phase = vcl_acos( it[k].Get() / modulus );
+      double phase = std::acos( it[k].Get() / modulus );
       angle[k] = phase;
-      modulus *= vcl_sin( phase );
+      modulus *= std::sin( phase );
 
       // FIXME test also if not finite
       if ( modulus < 1e-5 )
@@ -237,11 +237,11 @@ SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputI
     double sign = NumberOfInputImages == 3 ? -1. : 1.;
     if ( it[ NumberOfInputImages-1 ].Get() < 0 )
     {
-      angle[ angle.Size()-1 ] = sign * vcl_acos( it[ NumberOfInputImages-2 ].Get() / modulus );
+      angle[ angle.Size()-1 ] = sign * std::acos( it[ NumberOfInputImages-2 ].Get() / modulus );
     }
     else
     {
-      angle[ angle.Size()-1 ] = - sign * vcl_acos( it[ NumberOfInputImages-2 ].Get() / modulus );
+      angle[ angle.Size()-1 ] = - sign * std::acos( it[ NumberOfInputImages-2 ].Get() / modulus );
     }
   }
 

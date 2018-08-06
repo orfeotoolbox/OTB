@@ -29,7 +29,7 @@
 
 
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
-#include <iostream>
+#include <string>
 
 namespace ossimplugins
 {

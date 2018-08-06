@@ -150,7 +150,7 @@ MorphologicalPyramidAnalysisFilter<TInputImage, TOutputImage, TMorphoFilter>
   typename InputImageType::Pointer upsampled;
 
   // Structuring element size computation
-  const int structElementDimension = static_cast<int>(vcl_ceil(this->GetDecimationRatio() / 2.));
+  const int structElementDimension = static_cast<int>(std::ceil(this->GetDecimationRatio() / 2.));
 
   // Structuring element creation
   KernelType structuringElement;
@@ -217,7 +217,7 @@ MorphologicalPyramidAnalysisFilter<TInputImage, TOutputImage, TMorphoFilter>
       {
       sizeTmp = size[j];
       // As we knwow that our values will always be positive ones, we can simulate round by ceil(value+0.5)
-      size[j] = static_cast<unsigned int>(vcl_ceil((static_cast<double>(sizeTmp) / this->GetDecimationRatio()) + 0.5));
+      size[j] = static_cast<unsigned int>(std::ceil((static_cast<double>(sizeTmp) / this->GetDecimationRatio()) + 0.5));
       }
     otbMsgDevMacro(<< "New size: " << size);
 

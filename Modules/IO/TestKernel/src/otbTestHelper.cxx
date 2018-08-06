@@ -114,7 +114,7 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
     std::cout << "Number of baseline images: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on image: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on image: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestImage(cpt, testFilenameImage.c_str(),
                                                         (baseline->first).c_str(),
@@ -160,7 +160,7 @@ int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMet
     std::cout << "Number of baseline images: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on image: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on image: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestMetaData(testFilenameImage.c_str(),
                                                            (baseline->first).c_str(),
@@ -220,7 +220,7 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestAsciiFile(testFilenameAscii.c_str(),
                                                             (baseline->first).c_str(),
@@ -283,7 +283,7 @@ int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestDiffFile(testFilenameAscii.c_str(),
                                                             (baseline->first).c_str(),
@@ -333,7 +333,7 @@ int TestHelper::RegressionTestAllBinary(const StringList& baselineFilenamesBinar
     std::cout << "Number of baseline files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestBinaryFile(testFilenameBinary.c_str(),
                                                              (baseline->first).c_str());
@@ -378,7 +378,7 @@ int TestHelper::RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
     std::cout << "Number of baseline OGR files: " << baselines.size() << std::endl;
     while (baseline != baselines.rend() && (multiResult != 0))
       {
-      std::cout << "Testing non-regression on OGR file: " << (baseline->first).c_str() << std::endl;
+      std::cout << "Testing non-regression on OGR file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestOgrFile(testFilenameOgr.c_str(),
                                                           (baseline->first).c_str(),
@@ -414,7 +414,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   std::ofstream fluxfilediff;
   if (m_ReportErrors)
     {
-    fluxfilediff.open(diffAsciiFileName.c_str());
+    fluxfilediff.open(diffAsciiFileName);
     }
 
   std::string strfiletest;
@@ -644,7 +644,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
   std::ofstream fluxfilediff;
   if (m_ReportErrors)
     {
-    fluxfilediff.open(diffAsciiFileName.c_str());
+    fluxfilediff.open(diffAsciiFileName);
     }
 
   std::string strfiletest;
@@ -864,9 +864,9 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
             if (isRefTokenNum && isTestTokenNum)
               {
               // test difference against epsilon
-              vNorm = (vcl_abs(vRef) + vcl_abs(vTest)) * 0.5;
+              vNorm = (std::abs(vRef) + std::abs(vTest)) * 0.5;
               if ((vNorm <= m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
-                || (vcl_abs(vRef-vTest) <= epsilon * vNorm)) //epsilon as relative error
+                || (std::abs(vRef-vTest) <= epsilon * vNorm)) //epsilon as relative error
                 {
                 // these tokens are equivalent
                 areTokensEquivalent = true;
@@ -2357,16 +2357,16 @@ bool TestHelper::CompareLines(const std::string& strfileref,
           {
           float vRef = atof(strRef.c_str());
           float vTest = atof(strTest.c_str());
-          float vNorm = (vcl_abs(vRef) + vcl_abs(vTest))/2;
+          float vNorm = (std::abs(vRef) + std::abs(vTest))/2;
           //otbMsgDevMacro(<< "numerical comparison: " <<vRef << " vs " <<vTest << " -> "
-          //               << "vNorm= " << vNorm << ", " << vcl_abs(vRef-vTest) << " > "<< epsilon * vNorm
-          //               << "? -> " << (vcl_abs(vRef-vTest) > epsilon * vNorm ));
+          //               << "vNorm= " << vNorm << ", " << std::abs(vRef-vTest) << " > "<< epsilon * vNorm
+          //               << "? -> " << (std::abs(vRef-vTest) > epsilon * vNorm ));
           if ((vNorm > m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
-              && (vcl_abs(vRef-vTest) > epsilon * vNorm)) //epsilon as relative error
+              && (std::abs(vRef-vTest) > epsilon * vNorm)) //epsilon as relative error
             {
             if (m_ReportErrors)
               {
-              fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strRef << ") - (" << strTest
+              fluxfilediff << "Diff at line " << numLine << " : std::abs ( (" << strRef << ") - (" << strTest
                   << ") ) > " << epsilon << std::endl;
               differenceFoundInCurrentLine = true;
               }
@@ -2417,13 +2417,13 @@ bool TestHelper::CompareLines(const std::string& strfileref,
           else if ((etatCour == ETAT_CHAR) && (etatPrec == ETAT_NUM))
             {
 
-            if ((strNumRef != strNumTest) && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
-                && (vcl_abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str()))
-                    > epsilon * vcl_abs(atof(strNumRef.c_str())))) //epsilon as relative error
+            if ((strNumRef != strNumTest) && (std::abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
+                && (std::abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str()))
+                    > epsilon * std::abs(atof(strNumRef.c_str())))) //epsilon as relative error
               {
               if (m_ReportErrors)
                 {
-                fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" << strNumRef << ") - ("
+                fluxfilediff << "Diff at line " << numLine << " : std::abs ( (" << strNumRef << ") - ("
                              << strNumTest << ") ) > " << epsilon << std::endl;
                 differenceFoundInCurrentLine = true;
                 }
@@ -2468,13 +2468,13 @@ bool TestHelper::CompareLines(const std::string& strfileref,
           }
         else
           {
-          if ((strNumRef != strNumTest) && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
-              && (vcl_abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str()))
-                  > epsilon * vcl_abs(atof(strNumRef.c_str()))))    //epsilon as relative error
+          if ((strNumRef != strNumTest) && (std::abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
+              && (std::abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str()))
+                  > epsilon * std::abs(atof(strNumRef.c_str()))))    //epsilon as relative error
             {
             if (m_ReportErrors)
               {
-              fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" << strNumRef << ") - (" << strNumTest
+              fluxfilediff << "Diff at line " << numLine << " : std::abs( (" << strNumRef << ") - (" << strNumTest
                             << ") ) > " << epsilon << std::endl;
               differenceFoundInCurrentLine = true;
               }

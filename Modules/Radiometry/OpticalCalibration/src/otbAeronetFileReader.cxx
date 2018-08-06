@@ -165,7 +165,7 @@ AeronetFileReader
   internal::Date current_date = internal::ParseDate(line[col_date], line[col_time]);
   double       dcurrent_date = GetJulian(current_date);
   // Check hour +/- epsilon
-  if (vcl_abs(dcurrent_date - ref_date) < epsilon)
+  if (std::abs(dcurrent_date - ref_date) < epsilon)
     {
     double dwater = atof(line[col_vapor].c_str());
     double dangst = atof(line[col_angst].c_str());
@@ -226,7 +226,7 @@ AeronetFileReader
   std::string   line;
 
   // open file input stream
-  fin.open(m_FileName.c_str());
+  fin.open(m_FileName);
 
   // Test if the file has been opened correctly
   if (!fin)
@@ -235,7 +235,7 @@ AeronetFileReader
     std::ostringstream         msg;
     msg << " Could not open IO object for file ";
     msg << m_FileName << "." << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     return;
     }
@@ -270,7 +270,7 @@ AeronetFileReader
     std::ostringstream         msg;
     msg << " The file ";
     msg << m_FileName << " is not conform." << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     return;
     }

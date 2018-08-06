@@ -147,7 +147,7 @@ int otbHuMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * argv[])
 
   for (unsigned int j = 1; j < 8; ++j)
     {
-    error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
+    error += std::pow(std::abs( Result1[j-1] - Result2[j-1]), 2);
 
     std::cout << "Original -H" << j
               << " : " << Result1[j-1]
@@ -155,7 +155,7 @@ int otbHuMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * argv[])
               << " : " << Result2[j-1] << std::endl;
     }
 
-  error = vcl_sqrt(error)/7.0;
+  error = std::sqrt(error)/7.0;
   std::cout << "Error : " << error << std::endl
             << std::endl;
 
@@ -223,7 +223,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char * argv
   translation1[1] =   -imageCenterY;
   transform->Translate( translation1 );
 
-  const double degreesToRadians = vcl_atan(1.0) / 45.0;
+  const double degreesToRadians = std::atan(1.0) / 45.0;
   const double angle = angleInDegrees * degreesToRadians;
   transform->Rotate2D( -angle, false );
 
@@ -253,7 +253,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char * argv
 
   for (unsigned int j = 1; j < 8; ++j)
     {
-    error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
+    error += std::pow(std::abs( Result1[j-1] - Result2[j-1]), 2);
 
     std::cout << "Original -H" << j
               << " : " << Result1[j-1]
@@ -261,7 +261,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char * argv
               << " : " << Result2[j-1] << std::endl;
     }
 
-  error = vcl_sqrt(error)/7.0;
+  error = std::sqrt(error)/7.0;
   std::cout << "Error : " << error << std::endl
             << std::endl;
 

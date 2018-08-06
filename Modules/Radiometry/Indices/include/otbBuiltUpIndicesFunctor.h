@@ -22,6 +22,7 @@
 #define otbBuiltUpIndicesFunctor_h
 
 #include "otbVegetationIndicesFunctor.h"
+#include <string>
 
 namespace otb
 {

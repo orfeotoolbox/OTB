@@ -187,7 +187,7 @@ KmzProductWriter<TInputImage>
   logoFilename << m_Path;
   logoFilename << "/logo.jpeg";
 
-  if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
+  if (!itksys::SystemTools::MakeDirectory(m_Path))
     {
     itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
     }
@@ -288,8 +288,8 @@ KmzProductWriter<TInputImage>
 
   // Compute max depth
   unsigned int maxDepth =
-    static_cast<unsigned int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
-                              vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
+    static_cast<unsigned int>(std::max(std::ceil(std::log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / std::log(2.0)),
+                              std::ceil(std::log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / std::log(2.0))));
   m_MaxDepth = maxDepth;
   m_CurIdx = 0;
 
@@ -298,7 +298,7 @@ KmzProductWriter<TInputImage>
 
   for (unsigned int i = 0; i <= maxDepth; ++i)
     {
-    unsigned int ratio = static_cast<unsigned int>(vcl_pow(2.,static_cast<int>((static_cast<int>(maxDepth) - i))));
+    unsigned int ratio = static_cast<unsigned int>(std::pow(2.,static_cast<int>((static_cast<int>(maxDepth) - i))));
     nbTile += (((sizeX / ratio) / m_TileSize) + 1)  * (((sizeY / ratio) / m_TileSize) + 1);
     }
 
@@ -403,7 +403,7 @@ KmzProductWriter<TInputImage>
           }
 
         // Generate pathname
-        if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
+        if (!itksys::SystemTools::MakeDirectory(m_Path))
           {
           itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
           }
@@ -648,7 +648,7 @@ KmzProductWriter<TInputImage>
   kmlname << "/";
   kmlname << m_FileName;
   kmlname << m_KmlExtension;
-  m_RootKmlFile.open(kmlname.str().c_str());
+  m_RootKmlFile.open(kmlname.str());
   m_RootKmlFile << std::fixed << std::setprecision(6);
 
   m_RootKmlFile << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
@@ -897,7 +897,7 @@ KmzProductWriter<TInputImage>
   kmlname << pathname;
   kmlname << "/";
   kmlname << y << "xt.kml";
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 
@@ -952,7 +952,7 @@ KmzProductWriter<TInputImage>
   kmlname << pathname;
   kmlname << "/";
   kmlname << y << ".kml";
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 
@@ -1005,7 +1005,7 @@ KmzProductWriter<TInputImage>
   kmlname << pathname;
   kmlname << "/";
   kmlname << y << "xt.kml";
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 
@@ -1188,7 +1188,7 @@ KmzProductWriter<TInputImage>
   kmlname << pathname;
   kmlname << "/";
   kmlname << y << ".kml";
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 
@@ -1366,7 +1366,7 @@ KmzProductWriter<TInputImage>
   kmlname << m_Path;
   kmlname << "/";
   kmlname << "bound_0" << m_KmlExtension;
-  std::ofstream fileTest(kmlname.str().c_str());
+  std::ofstream fileTest(kmlname.str());
 
   fileTest << std::fixed << std::setprecision(6);
 

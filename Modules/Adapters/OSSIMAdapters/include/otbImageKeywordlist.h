@@ -21,7 +21,6 @@
 #ifndef otbImageKeywordlist_h
 #define otbImageKeywordlist_h
 
-#include <iostream>
 #include <map>
 
 #include "gdal.h"

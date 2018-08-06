@@ -124,9 +124,9 @@ int main(int argc, char * argv[])
     double lat1 = origin[1];
     double lat2 = origin[1] + size[1] * spacing[1];
     double R = 6371; // km
-    double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
-                        vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
-    res = d / vcl_sqrt(2.0);
+    double d = std::acos(std::sin(lat1) * std::sin(lat2) +
+                        std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)) * R;
+    res = d / std::sqrt(2.0);
     }
   // Software Guide : BeginLatex
   //

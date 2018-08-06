@@ -28,7 +28,7 @@
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
 #include <vector>
-#include <iostream>
+#include <string>
 
 namespace otb
 {

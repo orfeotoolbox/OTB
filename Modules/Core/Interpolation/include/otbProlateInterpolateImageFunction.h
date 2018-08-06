@@ -204,11 +204,11 @@ public:
   {
     const size_t originalProfileSize = m_OriginalProfile.size();
     TOutput val = itk::NumericTraits<TOutput>::Zero;
-    if (A != itk::NumericTraits<TInput>::Zero && vcl_abs(A) != static_cast<TInput>(m_Radius) && m_Radius != 0)
+    if (A != itk::NumericTraits<TInput>::Zero && std::abs(A) != static_cast<TInput>(m_Radius) && m_Radius != 0)
       {
-      double ival = static_cast<double>(originalProfileSize - 1) * static_cast<double>(vcl_abs(A)) /
+      double ival = static_cast<double>(originalProfileSize - 1) * static_cast<double>(std::abs(A)) /
                     static_cast<double>(m_Radius);
-      double ivalFloor = vcl_floor(ival);
+      double ivalFloor = std::floor(ival);
       double left = ival - ivalFloor;
 
       if (static_cast<unsigned int>(ivalFloor) + 1 < originalProfileSize)
@@ -229,7 +229,7 @@ public:
         }
       else
         {
-        if (vcl_abs(A) == static_cast<TInput>(m_Radius))
+        if (std::abs(A) == static_cast<TInput>(m_Radius))
           {
           val = m_OriginalProfile[originalProfileSize - 1];
           }

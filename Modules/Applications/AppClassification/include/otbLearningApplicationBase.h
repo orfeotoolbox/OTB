@@ -25,7 +25,6 @@
 
 #include "otbWrapperApplication.h"
 
-#include <iostream>
 
 // ListSample
 #include "itkListSample.h"
@@ -33,6 +32,7 @@
 
 //Estimator
 #include "otbMachineLearningModelFactory.h"
+#include <string>
 
 namespace otb
 {
