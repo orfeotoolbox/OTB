@@ -329,46 +329,42 @@ An other way exists to construct the horizontal disparity map...
 Disparity estimation : Cost Volume Filtering 
 --------------------------------------------
 
-The CostVolumeFilter application performs the disparity map for a pair of images in epipolar geometry and it is based on the method proposed by Rhemann et al. (`see here <http://wwwpub.zih.tu-dresden.de/~cvweb/publications/papers/2011/rhemannEtAl.pdf>`_ ) which constists basically into : 1) Construct a disparity-space range, 2) Apply a guided filter to each slice of the cost volume in order to reduce noise, 3) Minimize the cost in order to generate a disparity map (winner-take-all label selection), and finally 4) Detect and fill the occluded pixels thanks to the weighted median filter to complete the existing information.
-An implementation of this method has been written by Pauline Tan and Pascal Monasse (`see here <https://hal-enpc.archives-ouvertes.fr/hal-01086731/document>`_ '). Moreover, it cannot be used for large inputs, like satellite images, because the algorithm needs to store the whole image to perform the calculation what causes memory problems ! The **Orfeo ToolBox** allows to solve this problem using multithreaded filters.
+The CostVolumeFilter application computes the disparity map for a pair of images in epipolar geometry and it is based on the method proposed by `Rhemann et al. <http://wwwpub.zih.tu-dresden.de/~cvweb/publications/papers/2011/rhemannEtAl.pdf>`_ which consists basically into :
 
-Note that the way to find the disparity interval for horizontal exploration is identical to the previous *BlockMatching* example. Therefore the interval is 
-:math:`[-28,1]`.
+1) Construct a disparity-space range,
+2) Apply a guided filter to each slice of the cost volume in order to reduce noise,
+3) Minimize the cost in order to generate a disparity map (winner-take-all label selection), and finally
+4) Detect and fill the occluded pixels thanks to the weighted median filter to complete the existing information.
+
+An implementation of this method has been written by `Pauline Tan and Pascal Monasse <https://hal-enpc.archives-ouvertes.fr/hal-01086731/document>`_ . However, it cannot be used for large inputs, such as satellite images, because the algorithm needs to store the whole image to perform the calculation what causes memory problems ! The **Orfeo ToolBox** allows to solve this problem using streamed filters.
+
+Note that the way to find the disparity interval for horizontal exploration is identical to the previous *BlockMatching* example. Therefore the interval is :math:`[-28,1]`.
 
 The command line for the *CostVolumeFilter* application is:
 
 ::
+
     otbcli_CostVolumeFilter -io.inleft epi_image1.tif
                             -io.inright epi_image2.tif
                             -io.out disparity_map_cvf.tif
                             -dmin -28
-			    -dmax 1
-			    -radius 9
-			    -sense 1
-			    -choice 1
-			    -tau1l 7
-			    -tau2l 2
-			    -tau1r 7
-			    -tau2r 2
-
+                            -dmax 1
+                            -radius 9
+                            -sense 1
+                            -choice 1
+                            -tau1l 7
+                            -tau2l 2
+                            -tau1r 7
+                            -tau2r 2
 
 Be carreful when defining the color and gradient parameters (tau1,tau2) of both images. The default values (tau1=7, tau2=2) are defined for 8-bit images. To find their value for images which range is [min, max] you have to apply this formula :
 
-.. math:: tau1 = frac{7*(min/max)}{255}
-.. math:: tau2 = frac{2*(min/max)}{255}
-
+.. math:: tau1 = 7 * \frac{max-min}{255}
+.. math:: tau2 = 2 * \frac{max-min}{255}
 
 The *CostVolumeFilter* application creates by default the disparity map with densification process (occluded pixels are filled). But you can choose to create the disparity map without post-processing filters or just to create the Occlusions Mask.
 
-
-
 .. figure:: ../Art/MonteverdiImages/stereo_dem_disparity_cvf.png.tif
-
-Figure 3: Left Horizontal disparity map
-
-
-
-
 
 From disparity to Digital Surface Model
 ---------------------------------------
