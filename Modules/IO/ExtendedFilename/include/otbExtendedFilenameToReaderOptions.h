@@ -80,8 +80,8 @@ public:
   };
 
   /* Set Methods */
-  void SetExtendedFileName(const char*) override;
-  void SetExtendedFileName(const std::string&) override;
+  void SetExtendedFileName(const char* extFname) override;
+  void SetExtendedFileName(const std::string& extFname) override;
 
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
