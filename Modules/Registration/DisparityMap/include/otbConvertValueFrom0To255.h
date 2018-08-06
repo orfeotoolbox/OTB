@@ -1,6 +1,5 @@
-
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2017-2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,6 +18,7 @@
  * limitations under the License.
  */
 
+
 #ifndef otbConvertValueFrom0To255_h
 #define otbConvertValueFrom0To255_h
 
@@ -29,14 +29,12 @@ namespace otb
 
 namespace Functor
 {
-
 /** \class ConvertValue
  *
- *  \brief Functor to convert pixel values of the disparity map from dmin..dmax integer to 0..255
+ *  \brief Functor to convert pixel values of the disparity map from [dmin;dmax] integer to [0;255]
  *
  * \ingroup OTBDisparityMap
  */
-
 template<class TInput, class TOutput>
 class ConvertValue
 {
@@ -44,7 +42,7 @@ public:
   ConvertValue(){}
   virtual ~ConvertValue() {} 
 
-   int GetDispMax()
+  int GetDispMax()
     {
      return m_dispMax;     
     }
@@ -75,20 +73,15 @@ public:
     }
 
 
-
   TOutput operator() ( TInput input )
     {
-
     TOutput output(1); 
     output = 0;
     float grayMin = 255;
     float grayMax = 0;
     float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
     float b = (grayMin*m_dispMax - grayMax*m_dispMin)/(m_dispMax-m_dispMin);
-
-    // output = (255-a*input[0]+0.5) ;
-     output = a*input+0.5f + b + m_offset;
-   
+     output = a*input+0.5f + b + m_offset;   
     return output;
     }
 
@@ -109,19 +102,15 @@ public:
  *
  * \ingroup OTBDisparityMap
  */
-
-
-
-  // class ConvertValueFrom0To255
-  template <class TInputImage, class TOutputImage>
-  class ITK_EXPORT ConvertValueFrom0To255 :
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT ConvertValueFrom0To255 :
     public otb::UnaryFunctorVectorImageFilter<
         TInputImage, TOutputImage,
         Functor::ConvertValue<
             typename TInputImage::PixelType,
             typename TOutputImage::PixelType> >
-  {
-  public:
+{
+public:
   /** Standard class typedefs. */
   typedef ConvertValueFrom0To255 Self;
   typedef typename otb::UnaryFunctorVectorImageFilter<
@@ -175,14 +164,11 @@ public:
 
   void GenerateOutputInformation(void) override
     {
-
     Superclass::GenerateOutputInformation();
-
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
 
-
-  private:
+private:
   ConvertValueFrom0To255(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 

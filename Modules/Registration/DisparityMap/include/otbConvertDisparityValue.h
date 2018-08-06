@@ -1,6 +1,5 @@
-
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2017-2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,6 +18,7 @@
  * limitations under the License.
  */
 
+
 #ifndef otbConvertDisparityValue_h
 #define otbConvertDisparityValue_h
 
@@ -29,50 +29,41 @@ namespace otb
 
 namespace Functor
 {
-
 /** \class ComputeDisparityValue
  *
  * \brief Functor to add an integer value of each pixel of an image.
  *
  * \ingroup OTBDisparityMap
  */
-
-
 template<class TInput, class TOutput>
 class ComputeDisparityValue
 {
-
 public:
   ComputeDisparityValue(){}
   virtual ~ComputeDisparityValue() {} 
-
-   int GetDisp()
+  int GetDisp()
     {
      return m_disp;     
     }
-
   void SetDisp(int disp)
     {
       m_disp = disp;
     }
 
+
   TOutput operator() ( TInput input )
     {
-
     TOutput output(1); 
     output = 0;
-    output = input + m_disp ;
-   
+    output = input + m_disp ;   
     return output;
     }
 
-  protected:
-    int                             m_disp;
-
+protected:
+  int                             m_disp;
 }; //end class
 
 } // end Functor
-
 
 
 
@@ -82,19 +73,15 @@ public:
  *
  * \ingroup OTBDisparityMap
  */
-
-
-
-  // class ConvertDisparityValue
-  template <class TInputImage, class TOutputImage>
-  class ITK_EXPORT ConvertDisparityValue :
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT ConvertDisparityValue :
     public otb::UnaryFunctorVectorImageFilter<
         TInputImage, TOutputImage,
         Functor::ComputeDisparityValue<
             typename TInputImage::PixelType,
             typename TOutputImage::PixelType> >
-  {
-  public:
+{
+public:
   /** Standard class typedefs. */
   typedef ConvertDisparityValue Self;
   typedef typename otb::UnaryFunctorVectorImageFilter<
@@ -109,36 +96,31 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-
+  /** Get the disparity */
   int GetDisp()
     {
      return this->GetFunctor().GetDisp();     
     }
 
+  /** Set the disparity */
   void SetDisp(int disp)
     {
       this->GetFunctor().SetDisp(disp);
     }
 
-
-  protected:
+protected:
   ConvertDisparityValue() {}
   ~ConvertDisparityValue() override {}
 
-
   void GenerateOutputInformation(void) override
     {
-
     Superclass::GenerateOutputInformation();
-
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
-
 
   private:
   ConvertDisparityValue(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
-
 
   }; // end of ConvertDisparityValue class
 

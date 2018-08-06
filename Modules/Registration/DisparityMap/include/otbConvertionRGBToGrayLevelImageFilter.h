@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2017-2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+
 #ifndef otbConvertionRGBToGrayLevelImageFilter_h
 #define otbConvertionRGBToGrayLevelImageFilter_h
 
@@ -28,21 +29,18 @@ namespace otb
 
 namespace Functor
 {
-
 /** \class RGBToGrayLevelOperator
  *
  *  \brief Functor to perform the gray-level conversion of a RGB image. 
  *
  * \ingroup OTBDisparityMap
  */
-
 template<class TInput, class TOutput>
 class RGBToGrayLevelOperator
 {
 public:
   RGBToGrayLevelOperator(){}
   virtual ~RGBToGrayLevelOperator() {} 
-
 
   TOutput operator() ( TInput input )
     {
@@ -64,19 +62,15 @@ public:
  *
  * \ingroup OTBDisparityMap
  */
-
-
-
-  // class ConvertionRGBToGrayLevelImageFilter
-  template <class TInputImage, class TOutputImage>
-  class ITK_EXPORT ConvertionRGBToGrayLevelImageFilter :
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT ConvertionRGBToGrayLevelImageFilter :
     public otb::UnaryFunctorVectorImageFilter<
         TInputImage, TOutputImage,
         Functor::RGBToGrayLevelOperator<
             typename TInputImage::PixelType,
             typename TOutputImage::PixelType> >
-  {
-  public:
+{
+public:
   /** Standard class typedefs. */
   typedef ConvertionRGBToGrayLevelImageFilter Self;
   typedef typename otb::UnaryFunctorVectorImageFilter<
@@ -92,22 +86,18 @@ public:
   itkNewMacro(Self);
 
 
-
-  protected:
+protected:
   ConvertionRGBToGrayLevelImageFilter() {}
   ~ConvertionRGBToGrayLevelImageFilter() override {}
 
 
   void GenerateOutputInformation(void) override
     {
-
     Superclass::GenerateOutputInformation();
-
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
 
-
-  private:
+private:
   ConvertionRGBToGrayLevelImageFilter(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 

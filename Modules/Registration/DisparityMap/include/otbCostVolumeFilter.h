@@ -1,4 +1,30 @@
 
+/*
+ * Copyright (C) 2017-2018 CS Systemes d'Information (CS SI)
+ * Copyright (C) 2017 Damia Belazouz
+
+ *
+ * This file is part of Orfeo Toolbox
+ *
+ *     https://www.orfeo-toolbox.org/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
+
+
+
+
 #ifndef otbCostVolumeFilter_h
 #define otbCostVolumeFilter_h
 
@@ -10,18 +36,14 @@
 
 namespace otb
 {
-
   /** \class CostVolumeFilter
  *  \brief Perform the disparity-space range  of the reference image
  *
  *  Pixel-to-pixel comparison is done using the input images (left and right) and the luminence gradient of each 
  *  ones.
  *
- *
  * \ingroup OTBDisparityMap
  */
-
-
 template <class TInputImage, class TGradientImage, class TOutputImage >
 class ITK_EXPORT CostVolumeFilter :
     public itk::ImageToImageFilter<TInputImage,TOutputImage>
@@ -52,12 +74,10 @@ public:
   
 /**  iterators */ 
   typedef itk::ConstNeighborhoodIterator<TInputImage> NeighborhoodIteratorType;
-    
   typedef typename NeighborhoodIteratorType::RadiusType      RadiusType;
  
 
 // ====================== Geters ==============================================================================
-
   /** Get the inputs */
   const TInputImage * GetLeftInputImage() const;
   const TInputImage * GetRightInputImage() const;
@@ -95,20 +115,19 @@ public:
   void SetRightGradientYInput(const TGradientImage * image);
  
   void SetMinDisp(int disp)
-  {
+    {
     m_HorizontalMinDisparity  = disp;
-  }
-
+    }
 
   void SetMaxDisp(int disp)
-  {
+    {
     m_HorizontalMaxDisparity  = disp;
-  }
+    }
 
   void SetDisp(int disp)
-  {
+    {
     m_HorizontalMaxDisparity  = disp;
-  }
+    }
 
   void SetAlpha(float param)
     {
@@ -144,7 +163,6 @@ protected:
   /** Generate input requested region */
   void GenerateInputRequestedRegion() override; 
 
-
   /** Threaded generate data */
   void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
@@ -153,11 +171,11 @@ private:
   void operator=(const Self&); //purposely not implemeFnted  
  void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp); 
 
-   /** The min disparity to explore */
+   /** The min horizontal disparity to explore */
   int                           m_HorizontalMinDisparity;
+  /** The max horizontal disparity to explore */
   int                           m_HorizontalMaxDisparity;
 
-   /** The min disparity to explore */
   int                             m_VerticalDisparity;
   float                           m_Alpha ;
   float                           m_Tau1 ;

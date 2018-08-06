@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2017-2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+
 #ifndef otbMeanVectorImageFilter_h
 #define otbMeanVectorImageFilter_h
 
@@ -29,33 +30,25 @@ namespace otb
 {
 namespace Functor
 {
-
 /**\class MeanVectorFunctor
  * \brief This functor performs the multiplication between the local mean of the first image and the pixel value of the second image. 
  * It is templated by the type of inputs images and the output image, and is using two neighborhood iterators as inputs. 
  *
  * \ingroup OTBDisparityMap
  */
-
 template<class TInput1, class TInput2, class TOutput>
 class MeanVectorFunctor
 {
 public:
-  //typedef MeanFunctor<TInput, TOutputValue> MeanVectorFunctorType;
-
   MeanVectorFunctor(){}
   ~MeanVectorFunctor() {}
-
-
-
 
   int  GetNumberOfComponentsPerPixel() const
     {
     return m_numberOfComponents;   
     }
 
-
-   unsigned char GetRadiusMin(void)
+  unsigned char GetRadiusMin(void)
     {
      return m_RadiusMin;     
     }
@@ -72,29 +65,21 @@ public:
     }
 
   void SetNumberOfComponent( unsigned int nb)
-  {
+    {
     m_numberOfComponents = nb;
-  }
-
+    }
 
 
   TOutput operator() (TInput1 input_weights, TInput2 input_I)
-    {  
-     
+    {      
     unsigned int Nband_weights = input_weights.GetPixel(0).Size();
-    unsigned int Nband_I = input_I.GetPixel(0).Size();
-
-    
+    unsigned int Nband_I = input_I.GetPixel(0).Size();   
 
     TOutput output(Nband_weights/(Nband_I+1)); 
-    output.Fill(0); 
-
-    
+    output.Fill(0);     
     typename TInput1::RadiusType r_Box = input_weights.GetRadius(); 
     unsigned int r_Mean = r_Box[0];
-    unsigned int size_Mean = 2*r_Mean+1;
-
-      
+    unsigned int size_Mean = 2*r_Mean+1;      
 
     std::vector<double> v_mean_ai;
     v_mean_ai.resize(Nband_weights,0);
@@ -104,31 +89,25 @@ public:
         double mean_ak(0.);
         for(unsigned int i = 0 ; i < input_weights.Size() ; ++i)
           {
-
           mean_ak += input_weights.GetPixel(i)[b] ;
           }
           mean_ak /= size_Mean*size_Mean ;
-
           v_mean_ai[b] = mean_ak ;
-       // output[b] = static_cast<typename TOutput::ValueType>(mean_ak) ;
-      }
-    
+      }   
 
-
-      for(unsigned int b = 0 ; b < Nband_weights/(Nband_I+1) ; ++b)
+    for(unsigned int b = 0 ; b < Nband_weights/(Nband_I+1) ; ++b)
+      {
+      double qi(0.);
+      if(Nband_I>1)
         {
-          double qi(0.);
-          if(Nband_I>1)
-            {
-            qi = v_mean_ai[(Nband_I+1)*b] * input_I.GetCenterPixel()[0] + v_mean_ai[(Nband_I+1)*b+1] * input_I.GetCenterPixel()[1] + v_mean_ai[(Nband_I+1)*b+2] * input_I.GetCenterPixel()[2] + v_mean_ai[(Nband_I+1)*b+3] ;
-            }
-          else
-            {
-            qi = v_mean_ai[(Nband_I+1)*b] * input_I.GetCenterPixel()[0] + v_mean_ai[(Nband_I+1)*b+1] ;
-            }
-         
-        output[b] = static_cast<typename TOutput::ValueType>(qi);
+        qi = v_mean_ai[(Nband_I+1)*b] * input_I.GetCenterPixel()[0] + v_mean_ai[(Nband_I+1)*b+1] * input_I.GetCenterPixel()[1] + v_mean_ai[(Nband_I+1)*b+2] * input_I.GetCenterPixel()[2] + v_mean_ai[(Nband_I+1)*b+3] ;
         }
+      else
+        {
+        qi = v_mean_ai[(Nband_I+1)*b] * input_I.GetCenterPixel()[0] + v_mean_ai[(Nband_I+1)*b+1] ;
+        }         
+      output[b] = static_cast<typename TOutput::ValueType>(qi);
+      }
     return output ;
     }
 
@@ -142,17 +121,14 @@ public:
 } // end namespace functor
 
 
-
 /**\class MeanVectorFunctor
  * \brief Performs the multiplication between the local mean of the first image and the pixel value of the second image. 
  * It is templated by the type of inputs images and the output image, and is using two neighborhood iterators as inputs. 
  *
  * \ingroup OTBDisparityMap
  */
-
-// class MeanVectorImageFilter
-  template <class TInputImage1, class TInputImage2,  class TOutputImage>
-  class ITK_EXPORT MeanVectorImageFilter :
+template <class TInputImage1, class TInputImage2,  class TOutputImage>
+class ITK_EXPORT MeanVectorImageFilter :
     public otb::BinaryFunctorNeighborhoodVectorImageFilter<
         TInputImage1,TInputImage2, TOutputImage,
         Functor::MeanVectorFunctor<
@@ -160,7 +136,7 @@ public:
             typename itk::ConstNeighborhoodIterator<TInputImage2>,
             typename TOutputImage::PixelType> >
   {
-  public:
+public:
   /** Standard class typedefs. */
   typedef MeanVectorImageFilter Self;
   typedef typename otb::BinaryFunctorNeighborhoodVectorImageFilter<
@@ -180,18 +156,16 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-    int GetRadiusMax()
+  int GetRadiusMax()
     {
      return this->GetFunctor().GetRadiusMax();     
     }
 
-
-
-  protected:
+protected:
   MeanVectorImageFilter() {}
   ~MeanVectorImageFilter() override {}
 
-   virtual void GenerateInputRequestedRegion() override
+  virtual void GenerateInputRequestedRegion() override
     {
     // this->GetOutput()->GetRequestedRegion();
       // call the superclass' implementation of this method
@@ -270,7 +244,7 @@ public:
       }
     } 
 
-   void GenerateOutputInformation(void) override
+  void GenerateOutputInformation(void) override
     {
     Superclass::GenerateOutputInformation();
     unsigned int nb_comp (this->GetInput(0)->GetNumberOfComponentsPerPixel());
@@ -279,15 +253,11 @@ public:
     this->GetFunctor().SetNumberOfComponent(nb_comp/(nb_inI+1));
     } 
 
-
-  private:
+private:
   MeanVectorImageFilter(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 
-
-  }; // end of MeanVectorImageFilter class
-
-
+}; // end of MeanVectorImageFilter class
 
 } // end namespace otb
 

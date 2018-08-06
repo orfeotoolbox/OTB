@@ -1,14 +1,5 @@
 /*
- *  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- * See OTBCopyright.txt for details.
- *
- *
- *     This software is distributed WITHOUT ANY WARRANTY; without even
- *     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- *    PURPOSE.  See the above copyright notices for more information.
- *
- *
- * Copyright (C) CS SI
+ * Copyright (C) 2017-2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,8 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- 
-=========================================================================*/
+ */
 
 #include <cstdio>
 #include <cmath>
