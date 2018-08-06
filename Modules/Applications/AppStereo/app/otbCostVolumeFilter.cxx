@@ -151,8 +151,10 @@ class CostVolumeFilter : public Application
     SetParameterDescription("conversion", "Range of the disparity map : '0' disparity from dmin to dmax, '1' disparity from 0 to 255" );
     SetDefaultParameterInt("conversion",0);
 
-    AddParameter(ParameterType_Int, "choice", "Output image files : '1' DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter");
-    SetParameterDescription("choice", " '1' DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification with weighted median filter" );
+    AddParameter(ParameterType_Int, "choice", "Output image files : '1' DisparityMap after cost-volume filtering, '2' Occlusions Mask, "
+      "'3' Disparity map after densification with weighted median filter");
+    SetParameterDescription("choice", " '1' DisparityMap after cost-volume filtering, '2' Occlusions Mask, '3' Disparity map after densification "
+      "with weighted median filter" );
     SetDefaultParameterInt("choice",3);
 
     AddParameter(ParameterType_Float, "alpha", "alpha parameter for the cost volume filter");
