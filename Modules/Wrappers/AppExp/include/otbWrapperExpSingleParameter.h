@@ -54,13 +54,13 @@ public:
     return m_Value;
     }
 
-  virtual void SetValue( const std::string & val , int i = 0 ) override 
+  virtual void SetValue( std::string val , int i = 0 ) override 
     {
     if ( i != 0 )
       {
       //log
       }
-    m_Value = val;
+    m_Value = std::move(val);
     }
 
   ~SingleParameter() override = default ;

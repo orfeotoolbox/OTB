@@ -46,7 +46,7 @@ public:
 
   virtual void SetDefaultValue( std::string val)
     {
-    m_Default = val;
+    m_Default = std::move(val);
     }
 
   virtual const std::string & GetDefaultValue() const
