@@ -64,7 +64,7 @@ void QtWidgetBoolParameter::DoUpdateGUI()
 
 void QtWidgetBoolParameter::DoCreateWidget()
 {
-  QHBoxLayout *hLayout = new QHBoxLayout(this);
+  QHBoxLayout *hLayout = new QHBoxLayout;
   hLayout->setSpacing(0);
   hLayout->setContentsMargins(0, 0, 0, 0);
 
