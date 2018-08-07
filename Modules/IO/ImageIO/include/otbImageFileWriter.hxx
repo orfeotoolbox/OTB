@@ -845,7 +845,7 @@ void
 ImageFileWriter<TInputImage>
 ::SetFileName(const char* extendedFileName)
 {
-  if (extFname == nullptr)
+  if (extendedFileName == nullptr)
   {
     itkGenericExceptionMacro( << "Filename is NULL" );
   }
