@@ -83,9 +83,11 @@ public:
   NoDataListType m_NoDataList;
   bool has_noDataValue;
 
-  /* Set Methods */
+  /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
   void SetExtendedFileName(const char* extFname) override;
+
   void SetExtendedFileName(const std::string& extFname) override;
+
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
   bool NoDataValueIsSet () const;
