@@ -40,15 +40,12 @@ template<class TInput1, class TInput2, class TOutput>
 class MeanVectorFunctor
 {
 public:
-  MeanVectorFunctor(){}
-  ~MeanVectorFunctor() {}
-
   int  GetNumberOfComponentsPerPixel() const
     {
     return m_numberOfComponents;   
     }
 
-  unsigned char GetRadiusMin(void)
+  unsigned char GetRadiusMin(void) 
     {
      return m_RadiusMin;     
     }
@@ -58,31 +55,36 @@ public:
     return m_RadiusMax;
     }
 
-  void SetRadius(const unsigned char& min, const unsigned char& max)
+  void SetRadius(std::uint8_t min, std::uint8_t max) 
     {
-      m_RadiusMin = min < max ? min : max;
-      m_RadiusMax = max > min ? max : min;
+    std::tie(m_RadiusMin, m_RadiusMax) = std::minmax(min, max);
     }
+
 
   void SetNumberOfComponent( unsigned int nb)
     {
     m_numberOfComponents = nb;
     }
 
+  typedef typename TInput2::PixelType               PixelType;
 
   TOutput operator() (TInput1 input_weights, TInput2 input_I)
     {      
     unsigned int Nband_weights = input_weights.GetPixel(0).Size();
     unsigned int Nband_I = input_I.GetPixel(0).Size();   
+    assert(Nband_weights % (Nband_I+1) == 0) ;
+    unsigned int Nband_output = Nband_weights/(Nband_I+1) ;
 
-    TOutput output(Nband_weights/(Nband_I+1)); 
+    PixelType I_pixel = input_I.GetCenterPixel();
+
+
+    TOutput output(Nband_output); 
     output.Fill(0);     
     typename TInput1::RadiusType r_Box = input_weights.GetRadius(); 
     unsigned int r_Mean = r_Box[0];
-    unsigned int size_Mean = 2*r_Mean+1;      
+    unsigned int size_Mean = 2*r_Mean+1;     
 
-    std::vector<double> v_mean_ai;
-    v_mean_ai.resize(Nband_weights,0);
+    std::vector<double> v_mean_ai(Nband_weights); 
 
     for(unsigned int b = 0 ; b < Nband_weights ; ++b )
       {
@@ -95,16 +97,16 @@ public:
           v_mean_ai[b] = mean_ak ;
       }   
 
-    for(unsigned int b = 0 ; b < Nband_weights/(Nband_I+1) ; ++b)
+    for(unsigned int b = 0 ; b < Nband_output ; ++b)
       {
       double qi(0.);
       if(Nband_I>1)
         {
-        qi = v_mean_ai[(Nband_I+1)*b] * input_I.GetCenterPixel()[0] + v_mean_ai[(Nband_I+1)*b+1] * input_I.GetCenterPixel()[1] + v_mean_ai[(Nband_I+1)*b+2] * input_I.GetCenterPixel()[2] + v_mean_ai[(Nband_I+1)*b+3] ;
+        qi = v_mean_ai[(Nband_I+1)*b] * I_pixel[0] + v_mean_ai[(Nband_I+1)*b+1] * I_pixel[1] + v_mean_ai[(Nband_I+1)*b+2] * I_pixel[2] + v_mean_ai[(Nband_I+1)*b+3] ;
         }
       else
         {
-        qi = v_mean_ai[(Nband_I+1)*b] * input_I.GetCenterPixel()[0] + v_mean_ai[(Nband_I+1)*b+1] ;
+        qi = v_mean_ai[(Nband_I+1)*b] * I_pixel[0] + v_mean_ai[(Nband_I+1)*b+1] ;
         }         
       output[b] = static_cast<typename TOutput::ValueType>(qi);
       }
@@ -153,6 +155,7 @@ public:
   typedef itk::ConstNeighborhoodIterator<TInputImage1> NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
 
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -162,8 +165,8 @@ public:
     }
 
 protected:
-  MeanVectorImageFilter() {}
-  ~MeanVectorImageFilter() override {}
+  MeanVectorImageFilter()=default ;
+  ~MeanVectorImageFilter() override =default ;
 
   virtual void GenerateInputRequestedRegion() override
     {
@@ -175,11 +178,7 @@ protected:
     typename Superclass::InputImagePointer inputPtr1 = const_cast< TInputImage1 * >( this->GetInput() );
     typename Superclass::InputImagePointer inputPtr2 = const_cast< TInputImage2 * >( this->GetInput() );
 
-    if ( !inputPtr1 )
-      {
-      return;
-      }
-    if ( !inputPtr2 )
+    if ( !inputPtr1 || !inputPtr2 )
       {
       return;
       }
@@ -191,7 +190,6 @@ protected:
     typename TInputImage2::RegionType inputRequestedRegion2;
     inputRequestedRegion2 = inputPtr2->GetRequestedRegion();
 
-
     // pad the input requested region by the operator radius
     inputRequestedRegion1.PadByRadius(this->GetRadiusMax());
     inputRequestedRegion2.PadByRadius(this->GetRadiusMax());
@@ -202,14 +200,12 @@ protected:
       inputPtr1->SetRequestedRegion(inputRequestedRegion1);
       return;
       }
-
     else
       {
       // Couldn't crop the region (requested region is outside the largest
       // possible region).  Throw an exception.
       // store what we tried to request (prior to trying to crop)
       inputPtr1->SetRequestedRegion(inputRequestedRegion1);
-
       // build an exception
       itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
       std::ostringstream          msg;

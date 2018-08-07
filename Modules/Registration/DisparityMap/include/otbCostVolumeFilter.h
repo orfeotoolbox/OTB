@@ -21,10 +21,6 @@
  * limitations under the License.
 */
 
-
-
-
-
 #ifndef otbCostVolumeFilter_h
 #define otbCostVolumeFilter_h
 
@@ -152,10 +148,10 @@ public:
 
 protected:
   /** Constructor */
-  CostVolumeFilter();
+  CostVolumeFilter() ;
 
   /** Destructor */
-  ~CostVolumeFilter() override;
+  ~CostVolumeFilter() ;
 
   /** Generate output information */
   void GenerateOutputInformation() override; 

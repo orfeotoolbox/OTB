@@ -91,23 +91,14 @@ public:
     output.Fill(0); 
 
     //moyenne rr, gg, bb
-    std::vector<double> v_mean;
-    v_mean.resize(Nband,0);
+    std::vector<double> v_mean(Nband); 
     //variance rr, gg, bb
-    std::vector<double> v_var;
-    v_var.resize(2*Nband,0);
+    std::vector<double> v_var(2*Nband); 
+    std::vector<double> v_pmean(disparity_max); 
+    std::vector<double> v_multr(disparity_max); 
+    std::vector<double> v_multg(disparity_max); 
+    std::vector<double> v_multb(disparity_max); 
 
-    std::vector<double> v_pmean;
-    v_pmean.resize(disparity_max,0) ;
-
-    std::vector<double> v_multr;
-    v_multr.resize(disparity_max,0) ;
-
-    std::vector<double> v_multg;
-    v_multg.resize(disparity_max,0) ;
-
-    std::vector<double> v_multb;
-    v_multb.resize(disparity_max,0) ;
 
     //moyennes rr gg bb et variances rr gg bb
     for(unsigned int bandI = 0; bandI < Nband ; ++bandI)
@@ -180,21 +171,18 @@ public:
 
     //Calcul ai
     //r
-    std::vector<double> elem1;
-    elem1.resize(disparity_max,0);
+    std::vector<double> elem1(disparity_max);
     //g
-    std::vector<double> elem2;
-    elem2.resize(disparity_max,0);
+    std::vector<double> elem2(disparity_max);
     //b
-    std::vector<double> elem3;
-    elem3.resize(disparity_max,0);
+    std::vector<double> elem3(disparity_max);
+
 
     for(unsigned int bandC = 0 ; bandC < disparity_max ; ++bandC)
       {
       if(Nband>1)
         {
-        std::vector<double> ak;
-        ak.resize(Nband,0); 
+        std::vector<double> ak(Nband);
         //matrice de covariance fenêtre k :
         M(0,0) = v_var[0] + epsilon;
         M(0,1) = v_var[3] ;

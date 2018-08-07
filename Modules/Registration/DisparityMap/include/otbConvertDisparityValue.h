@@ -39,9 +39,7 @@ template<class TInput, class TOutput>
 class ComputeDisparityValue
 {
 public:
-  ComputeDisparityValue(){}
-  virtual ~ComputeDisparityValue() {} 
-  int GetDisp()
+  int GetDisp() const
     {
      return m_disp;     
     }
@@ -50,16 +48,13 @@ public:
       m_disp = disp;
     }
 
-
-  TOutput operator() ( TInput input )
+  TOutput operator() ( TInput input ) const
     {
-    TOutput output(1); 
-    output = 0;
-    output = input + m_disp ;   
+    const TOutput output = input + m_disp ; 
     return output;
     }
 
-protected:
+private:
   int                             m_disp;
 }; //end class
 
@@ -97,7 +92,7 @@ public:
   itkNewMacro(Self);
 
   /** Get the disparity */
-  int GetDisp()
+  int GetDisp() const
     {
      return this->GetFunctor().GetDisp();     
     }
@@ -109,8 +104,8 @@ public:
     }
 
 protected:
-  ConvertDisparityValue() {}
-  ~ConvertDisparityValue() override {}
+  ConvertDisparityValue() = default ;
+  ~ConvertDisparityValue() override = default ;
 
   void GenerateOutputInformation(void) override
     {
@@ -118,7 +113,7 @@ protected:
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
 
-  private:
+private:
   ConvertDisparityValue(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented
 

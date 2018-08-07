@@ -39,17 +39,11 @@ template<class TInput, class TOutput>
 class RGBToGrayLevelOperator
 {
 public:
-  RGBToGrayLevelOperator(){}
-  virtual ~RGBToGrayLevelOperator() {} 
-
-  TOutput operator() ( TInput input )
+  TOutput operator() ( TInput input )  
     {
-    TOutput output(1); 
-    output = 0 ; 
-    output = 0.299*input[0] + 0.587*input[1] + 0.0721*input[2] ;
-    return output;
+    TOutput output(0);
+    return output = 0.299*input[0] + 0.587*input[1] + 0.0721*input[2] ;
     }
-
 }; //end class
 
 } // end Functor
@@ -87,8 +81,8 @@ public:
 
 
 protected:
-  ConvertionRGBToGrayLevelImageFilter() {}
-  ~ConvertionRGBToGrayLevelImageFilter() override {}
+  ConvertionRGBToGrayLevelImageFilter() =default ;
+  ~ConvertionRGBToGrayLevelImageFilter() override =default;
 
 
   void GenerateOutputInformation(void) override

@@ -39,20 +39,17 @@ template<class TInput, class TOutput>
 class ConvertValue
 {
 public:
-  ConvertValue(){}
-  virtual ~ConvertValue() {} 
-
-  int GetDispMax()
+  int GetDispMax() const
     {
      return m_dispMax;     
     }
 
-  int GetDispMin()
+  int GetDispMin() const
     {
      return m_dispMin;     
     }
 
-  int GetOffset()
+  int GetOffset() const
     {
      return m_offset;     
     }
@@ -72,16 +69,20 @@ public:
       m_offset = disp ;
     }
 
-
-  TOutput operator() ( TInput input )
+  int GetSubstractionBetweenMinMaxDisparity() const
     {
-    TOutput output(1); 
-    output = 0;
+    return m_dispSubtraction = m_dispMax-m_dispMin ;
+    }
+
+
+  TOutput operator() ( TInput input ) const
+    {
     float grayMin = 255;
     float grayMax = 0;
     float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
-    float b = (grayMin*m_dispMax - grayMax*m_dispMin)/(m_dispMax-m_dispMin);
-     output = a*input+0.5f + b + m_offset;   
+    float b = (grayMin*m_dispMax - grayMax*m_dispMin)/(m_dispSubtraction);
+    
+    const TOutput output = a*input+0.5f + b + m_offset;    
     return output;
     }
 
@@ -89,6 +90,7 @@ public:
     int                             m_dispMin;
     int                             m_dispMax;
     int                             m_offset ;
+    int                             m_dispSubtraction ;
 
 }; //end class
 
@@ -126,17 +128,17 @@ public:
   itkNewMacro(Self);
 
 
-  int GetDispMax()
+  int GetDispMax() const
     {
      return this->GetFunctor().GetDispMax();     
     }
 
-  int GetDispMin()
+  int GetDispMin() const
     {
      return this->GetFunctor().GetDispMin();     
     }
 
-  int GetOffset()
+  int GetOffset() const
     {
      return this->GetFunctor().GetOffset();     
     }
@@ -158,8 +160,8 @@ public:
 
 
   protected:
-  ConvertValueFrom0To255() {}
-  ~ConvertValueFrom0To255() override {}
+  ConvertValueFrom0To255() = default ;
+  ~ConvertValueFrom0To255() override = default ;
 
 
   void GenerateOutputInformation(void) override

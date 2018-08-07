@@ -38,10 +38,7 @@ template<class TInput, class TOutput>
 class MinOperator
 {
 public:
-  MinOperator(){}
-  virtual ~MinOperator() {} 
-
-  char GetSide()
+  char GetSide() 
     {
      return m_Side;     
     }
@@ -51,14 +48,11 @@ public:
       m_Side = side;
     }
 
-
-  TOutput operator() ( TInput input )
+  TOutput operator() ( TInput input ) const
     {
-
+    
     unsigned int size ( input.GetSize() ) ;    
-
-    TOutput output(1); 
-    output = 0;
+    int index = 0;
     typename TInput::ValueType min ( input[0] );
 
     for(unsigned int i=0; i<size; i++)
@@ -66,22 +60,22 @@ public:
       if (input[i]<min)
         {
         min = input[i] ;
-
-        if(m_Side=='r')
-          {
-          //Minimum of the Right cost volume
-          output = i ;
-          }
-        else
-          {
-          //Minimum of the Left cost volume
-          output = -i;
-          }        
+        index = i;
         }
-      }
+      } 
 
-    return output;
+    if(m_Side=='r') //Minimum of the Right cost volume
+      { 
+      const TOutput output = index ; 
+      return output ;
+      }
+    else //Minimum of the Left cost volume
+      {        
+      const TOutput output = -index ;  
+      return output ;
+      }  
     }
+
   protected:
     char m_Side ;
 
@@ -131,20 +125,16 @@ public:
     }
 
 
-
   protected:
-  MinimumVectorImageFilter() {}
-  ~MinimumVectorImageFilter() override {}
+  MinimumVectorImageFilter() =default ;
+  ~MinimumVectorImageFilter() override =default ;
 
 
   void GenerateOutputInformation(void) override
     {
-
     Superclass::GenerateOutputInformation();
-
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
-
 
   private:
   MinimumVectorImageFilter(const Self &) = delete; //purposely not implemented

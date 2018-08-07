@@ -20,8 +20,6 @@
  * limitations under the License.
 */
 
-
-
 #ifndef otbFillOcclusionPixel_h
 #define otbFillOcclusionPixel_h
 #include <utility> 
@@ -32,11 +30,8 @@
 #include <itkConstNeighborhoodIterator.h>
 
 
-
 namespace otb
 {
-
-
 namespace Functor
 {
 /** \class FillPixelFilterOperator
@@ -52,39 +47,35 @@ public:
   typedef typename TInput::OffsetType      OffsetType;
   typedef std::pair<int,double> pairCord;
   typedef typename TInput::PixelType               PixelType;
-public:
-  FillPixelFilterOperator() { }
-  virtual ~FillPixelFilterOperator() { }
+
+
   static bool comparePair(pairCord i,pairCord j) { 
-  if( i.first < j.first ) return true;
+  if( i.first < j.first ) return i.first <= j.first;
     if( j.first < i.first ) return false;
     return (i.first < j.first ); }
   
-  TOutput operator() (  const TInput & input)
+  TOutput operator() (  const TInput & input) const
     { 
-    TOutput output (1);   
     unsigned int Wsize = input.Size();
-    double sSpace = 9;
-    double sColor = 255*0.1;  
-    sSpace = 1.0f/(sSpace*sSpace);
-    sColor = 1.0f/(sColor*sColor);
-    OffsetType Offset_j;
-       
-    double d,Wtemp = 0., W = 0.,Wt = 0.;
+    PixelType input_center_pixel = input.GetCenterPixel() ;
+    const double sSpace = 9;
+    const double sColor = 255*0.1;  
+
     std::vector< std::pair<int,double> > duo(Wsize);   
   
     PixelType I(3);
-    if(input.GetCenterPixel()[4] == 0.0)
+    if(input_center_pixel[4] < 0.0000000001)
       {
+      double Wt=0. ;
       for (unsigned int j  = 0; j< Wsize; j++)
         {
-        Offset_j = input.GetOffset(j);      
-        I[0] = input.GetCenterPixel()[1]- input.GetPixel(j)[1];
-        I[1] = input.GetCenterPixel()[2]- input.GetPixel(j)[2];
-        I[2] = input.GetCenterPixel()[3]- input.GetPixel(j)[3];
+        const auto & Offset_j = input.GetOffset(j);
+        I[0] = input_center_pixel[1]- input.GetPixel(j)[1];
+        I[1] = input_center_pixel[2]- input.GetPixel(j)[2];
+        I[2] = input_center_pixel[3]- input.GetPixel(j)[3];
 
-        W =  std::exp( - (std::pow(Offset_j[0],2.0)+std::pow(Offset_j[1],2.0)) *sSpace 
-        -(I.GetSquaredNorm())*sColor);
+        const double W = std::exp( -(Offset_j[0]*Offset_j[0] + Offset_j[1]*Offset_j[1])/(sSpace*sSpace) 
+        -(I.GetSquaredNorm())/(sColor*sColor));
              
         duo[j].first = input.GetPixel(j)[0];               
         duo[j].second =  W; 
@@ -92,24 +83,20 @@ public:
         }
       Wt = Wt/2;    
       std::sort (duo.begin(), duo.end(), comparePair);
-   
-      for (std::vector<pairCord>::iterator it=duo.begin(); it !=duo.end(); ++it)
-        {
-        Wtemp += it->second ;
-        if (Wtemp >= Wt)
-          {
-          d = it->first; 
-          output = d ;
-          break;
-          }
-        } 
+
+      double Wtemp=0. ; 
+      for (auto const& d : duo) {
+          Wtemp += d.first;
+          if (Wtemp >= Wt)  return d.first;
+      }
+      assert(!"unreachable code");
       }
     else
       {
-      output = input.GetCenterPixel()[0] ;
-      }
-  
-    return output;
+      const TOutput output = input_center_pixel[0] ;
+      return output ;
+      }  
+
     } // end operator ()
 
 }; // end of functor class  FillPixelFilterOperator
@@ -151,8 +138,8 @@ public:
   itkTypeMacro(FillPixelFilter, ImageToImageFilter);
 
 protected:
-  FillPixelFilter(){}
-  ~FillPixelFilter() override { }
+  FillPixelFilter()=default ;
+  ~FillPixelFilter() override  =default ;
   void GenerateOutputInformation(void) override;
 
   FillPixelFilter( const Self & ); // Not implemented
@@ -160,7 +147,6 @@ protected:
 }; // end of class FillPixelFilter
 
 
-//========
 template < class TInputImage, class TOutputImage >
 void FillPixelFilter < TInputImage, TOutputImage >
 ::GenerateOutputInformation(void){
