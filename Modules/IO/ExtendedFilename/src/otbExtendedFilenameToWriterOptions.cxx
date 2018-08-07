@@ -63,10 +63,12 @@ void
 ExtendedFilenameToWriterOptions
 ::SetExtendedFileName(const char* extFname)
 {
-  if (extFname)
-    {
-    this->SetExtendedFileName(std::string(extFname));
-    }
+  if (extFname == nullptr)
+  {
+    itkGenericExceptionMacro( << "Filename is NULL" );
+  }
+
+  this->SetExtendedFileName(std::string(extFname));
 }
 
 void

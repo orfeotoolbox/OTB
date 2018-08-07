@@ -48,10 +48,7 @@ VectorDataType* OutputVectorDataParameter::GetValue( void )
 
 void OutputVectorDataParameter::SetFileName (const char* filename)
 {
-  if (filename)
-    {
-    this->SetFileName(std::string(filename));
-    }
+  this->SetFileName(std::string(filename));
 }
 
 void OutputVectorDataParameter::SetFileName (const std::string& filename)

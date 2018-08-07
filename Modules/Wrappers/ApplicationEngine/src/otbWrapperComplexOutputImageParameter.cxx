@@ -302,10 +302,7 @@ ComplexOutputImageParameter::HasValue() const
 
 void ComplexOutputImageParameter::SetFileName (const char* filename)
 {
-  if (filename)
-    {
-    this->SetFileName(std::string(filename));
-    }
+  this->SetFileName(std::string(filename));
 }
 
 void ComplexOutputImageParameter::SetFileName (const std::string& filename)

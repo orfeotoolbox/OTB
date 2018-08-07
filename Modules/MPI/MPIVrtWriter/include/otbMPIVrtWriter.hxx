@@ -63,7 +63,7 @@ template <typename TImage>
 void
 MPIVrtWriter<TImage>::SetFileName(const char* extendedFileName)
 {
-  if (extendedFileName)
+  if (m_Filename.compare(extendedFileName) != 0 )
     {
     this->SetFileName(std::string(extendedFileName));
     }
