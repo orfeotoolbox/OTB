@@ -23,8 +23,8 @@ otb_module_test()
 set(OTBIOTileMapTests
 otbIOTileMapTestDriver.cxx
 otbTileMapImageIOHelperTest.cxx
-otbTileMapImageIOTest.cxx
-otbTileMapWriter.cxx
+# otbTileMapImageIOTest.cxx
+# otbTileMapWriter.cxx
 )
 
 add_executable(otbIOTileMapTestDriver ${OTBIOTileMapTests})
@@ -43,7 +43,9 @@ otb_add_test(NAME ioTvTileMapImageIOHelperTest COMMAND otbIOTileMapTestDriver
   otbTileMapImageIOHelperTest
   ${TEMP}/ioTvTileMapImageIOHelperTest.txt
   )
-
+#[[ These two tests use a web service which sometimes times out. Keep 
+them disabled to make testing more deterministic. Moreover the classes that are
+tested are deprecated.
 otb_add_test(NAME ioTvTileMapImageIOWeb COMMAND otbIOTileMapTestDriver
   otbTileMapImageIOTest
   http://tile.openstreetmap.org/
@@ -61,6 +63,7 @@ otb_add_test(NAME ioTvTileMapImageIOFile COMMAND otbIOTileMapTestDriver
   1.4835345 43.55968261 13
   )
 set_property(TEST ioTvTileMapImageIOFile PROPERTY RESOURCE_LOCK web_access)
+]]
 
 #otb_add_test(NAME ioTvTileMapWriter COMMAND otbIOTileMapTestDriver
   #otbTileMapWriter
