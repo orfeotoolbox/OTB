@@ -837,7 +837,7 @@ void
 SimpleParallelTiffWriter<TInputImage>
 ::SetFileName(const char* extendedFileName)
 {
-  if (extFname == nullptr)
+  if (extendedFileName == nullptr)
   {
     itkGenericExceptionMacro( << "Filename is NULL" );
   }
