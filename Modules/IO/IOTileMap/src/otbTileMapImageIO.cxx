@@ -229,7 +229,7 @@ void TileMapImageIO::GenerateTileInfo(double x, double y, int numTileX, int numT
 bool TileMapImageIO::CanReadFromCache(const std::string& filename)
 {
   // Verify that the file exists and is not a directory
-  bool fileExists = itksys::SystemTools::FileExists(filename.c_str(), true);
+  bool fileExists = itksys::SystemTools::FileExists(filename, true);
   if (!fileExists)
     {
     return false;
@@ -402,7 +402,7 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
     ++i;
     }
 
-  itksys::SystemTools::MakeDirectory(directory.str().c_str());
+  itksys::SystemTools::MakeDirectory(directory.str());
 
   filename << directory.str();
   filename << "/";
@@ -439,7 +439,7 @@ void TileMapImageIO::ReadImageInformation()
 
   if (!m_FileNameIsServerName)
     {
-    std::ifstream file(m_FileName.c_str(), std::ifstream::in);
+    std::ifstream file(m_FileName, std::ifstream::in);
     std::getline(file, m_ServerName);
     if  (m_ServerName.find("http://") != 0)
       {
@@ -672,7 +672,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
   if (lCanWrite)
     {
-    itksys::SystemTools::RemoveFile(filename.str().c_str());
+    itksys::SystemTools::RemoveFile(filename.str());
 
     imageIO->CanStreamWrite();
     imageIO->SetNumberOfDimensions(2);
@@ -844,13 +844,13 @@ void TileMapImageIO::SetCacheDirectory(const char* _arg)
       {
          std::ostringstream oss;
          oss<<_arg<<"/foo";
-         if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
+         if( itksys::SystemTools::Touch( oss.str(), true ) == false )
          {
             itkExceptionMacro( "Error, no write permission in given CacheDirectory "<<_arg<<".");
          }
          else
          {
-            itksys::SystemTools::RemoveFile( oss.str().c_str() );
+            itksys::SystemTools::RemoveFile( oss.str() );
          }
       }
       // if existing file

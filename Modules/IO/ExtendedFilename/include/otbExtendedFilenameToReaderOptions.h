@@ -22,6 +22,7 @@
 #define otbExtendedFilenameToReaderOptions_h
 
 #include "otbExtendedFilenameHelper.h"
+#include <string>
 
 namespace otb
 {

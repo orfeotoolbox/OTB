@@ -23,6 +23,7 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorDataIOBase.h"
+#include <string>
 
 namespace otb
 {

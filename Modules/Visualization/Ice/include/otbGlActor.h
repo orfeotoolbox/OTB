@@ -25,6 +25,7 @@
 
 #include "otbViewSettings.h"
 #include "OTBIceExport.h"
+#include <string>
 
 namespace otb
 {

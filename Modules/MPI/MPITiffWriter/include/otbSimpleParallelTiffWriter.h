@@ -59,6 +59,7 @@
 // SPTW
 #include <algorithm>
 #include <vector>
+#include <string>
 
 #if defined(__GNUC__) || defined(__clang__)
 # pragma GCC diagnostic push

@@ -28,6 +28,7 @@
 
 #include <boost/config.hpp>
 #include "ossim/ossimSarSensorModel.h"
+#include <string>
 
 class ossimXmlDocument;
 class ossimString;

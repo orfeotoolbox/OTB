@@ -29,6 +29,7 @@
 
 #include "otbImageKeywordlist.h"
 #include "OTBIceExport.h"
+#include <string>
 
 namespace otb
 {

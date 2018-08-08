@@ -27,6 +27,7 @@
 #include "otbNumberOfDivisionsTiledStreamingManager.h"
 #include <vector>
 #include <sstream>
+#include <string>
 
 #include <itksys/SystemTools.hxx>
 

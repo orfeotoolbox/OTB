@@ -23,6 +23,7 @@
 
 #include "otbWrapperApplicationFactoryBase.h"
 #include "itkVersion.h"
+#include <string>
 
 namespace otb
 {

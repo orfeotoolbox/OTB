@@ -485,7 +485,7 @@ GDALOverviewsBuilder
   //       GDALDriverManagerWrapper::GetInstance().Open(m_InputFileName);
   //   if (wrappedDataset.IsNull())
   //     {
-  //     itkExceptionMacro(<< "Error while opening the file "<< m_InputFileName.c_str() << ".");
+  //     itkExceptionMacro(<< "Error while opening the file "<< m_InputFileName << ".");
   //     }
 
 
@@ -562,7 +562,7 @@ GDALOverviewsBuilder
 
   if (lCrGdal == CE_Failure)
     {
-    itkExceptionMacro(<< "Error while building the GDAL overviews from " << m_InputFileName.c_str() << ".");
+    itkExceptionMacro(<< "Error while building the GDAL overviews from " << m_InputFileName << ".");
     }
 }
 

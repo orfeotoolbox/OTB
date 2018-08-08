@@ -69,7 +69,7 @@ InputProcessXMLParameter::SetFileName(std::string value)
     // Check that the right extension is given : expected .xml
     if (itksys::SystemTools::GetFilenameLastExtension(value) == ".xml")
       {
-      if (itksys::SystemTools::FileExists(value.c_str(),true))
+      if (itksys::SystemTools::FileExists(value,true))
         {
         this->SetValue(value);
         return true;
@@ -187,7 +187,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
   //Use itksys::SystemTools::FOpen() and close it below because
   //TiXmlDocument::TiXmlFileOpen( ) is not exposed from tinyXML library. Even
   //though its available in the TiXmlDocument::SaveFile().
-  FILE* fp =  itksys::SystemTools::Fopen(m_FileName.c_str(), "rb");
+  FILE* fp =  itksys::SystemTools::Fopen(m_FileName, "rb");
 
   if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {
@@ -354,7 +354,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       }
     else if (type == ParameterType_InputImage)
       {
-      if(itksys::SystemTools::FileExists(value.c_str()))
+      if(itksys::SystemTools::FileExists(value))
 	{
 	InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
 	if(paramDown!=nullptr)
@@ -373,7 +373,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       }
     else if (type == ParameterType_ComplexInputImage)
       {
-      if(itksys::SystemTools::FileExists(value.c_str()))
+      if(itksys::SystemTools::FileExists(value))
 	{
 	ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
 	if(paramDown!=nullptr)
@@ -382,7 +382,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       }
     else if (dynamic_cast<InputVectorDataParameter*>(param))
       {
-      if(itksys::SystemTools::FileExists(value.c_str()))
+      if(itksys::SystemTools::FileExists(value))
 	{
 	InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
 	if ( !paramDown->SetFromFileName(value) )

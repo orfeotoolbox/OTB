@@ -30,6 +30,7 @@
 #include "otbConfigure.h"
 
 #include "OTBIOGDALExport.h"
+#include <string>
 
 namespace otb
 {

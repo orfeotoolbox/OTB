@@ -40,6 +40,7 @@
 //
 // System includes (sorted by alphabetic order)
 #include <exception>
+#include <string>
 
 //
 // ITK includes (sorted by alphabetic order)

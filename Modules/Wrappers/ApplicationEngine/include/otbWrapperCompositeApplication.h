@@ -23,6 +23,7 @@
 
 #include "otbWrapperApplication.h"
 #include "itkStdStreamLogOutput.h"
+#include <string>
 
 namespace otb
 {

@@ -37,7 +37,7 @@ SRGRCoefficientSetRecord::~SRGRCoefficientSetRecord()
 
 std::ostream& operator<<(std::ostream& os, const SRGRCoefficientSetRecord& data)
 {
-	os<<"srgr_update:"<<data._srgr_update.c_str()<<std::endl;
+	os<<"srgr_update:"<<data._srgr_update <<std::endl;
 	for (int i=0;i<6;i++)
 	{
 		os<<"srgr_coef["<<i<<"]:"<<data._srgr_coef[i]<<std::endl;

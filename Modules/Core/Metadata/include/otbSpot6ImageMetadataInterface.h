@@ -22,6 +22,7 @@
 #define otbSpot6ImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
+#include <string>
 
 namespace otb
 {

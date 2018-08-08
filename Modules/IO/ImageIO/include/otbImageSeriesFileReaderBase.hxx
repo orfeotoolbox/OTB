@@ -110,7 +110,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
   this->TestFileExistenceAndReadability(m_FileName, kFileName);
 
   std::string aLine;
-  std::ifstream inputFile(m_FileName.c_str(), std::ios_base::in);
+  std::ifstream inputFile(m_FileName, std::ios_base::in);
 
   inputFile >> aLine;
   if (aLine != "ENVI")
@@ -247,7 +247,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
       std::ostringstream msg;
       msg << e.GetDescription();
       msg << "Image FileName             : " << imageFileName << "\n";
-      e.SetDescription(msg.str().c_str());
+      e.SetDescription(msg.str());
       throw e;
       }
     m_ListOfBandSelection.push_back(bands);
@@ -414,7 +414,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::TestFileExistenceAndReadability(std::string& file, FileType fileType)
 {
   // Test if the file exists.
-  if (!itksys::SystemTools::FileExists(file.c_str()))
+  if (!itksys::SystemTools::FileExists(file))
     {
     if (fileType != kImageFileName)
       {
@@ -423,7 +423,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
       msg << "The file doesn't exist. \n";
       if (fileType == kFileName) msg << "Filename = " << file << "\n";
       else msg << "File = " << file << "\n";
-      e.SetDescription(msg.str().c_str());
+      e.SetDescription(msg.str());
       throw e;
       return;
       }
@@ -436,7 +436,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 
       std::string fullFileName = itksys::SystemTools::JoinPath(fullPath);
 
-      if (!itksys::SystemTools::FileExists(fullFileName.c_str()))
+      if (!itksys::SystemTools::FileExists(fullFileName))
         {
         ImageSeriesFileReaderException e(__FILE__, __LINE__);
         std::ostringstream msg;
@@ -444,7 +444,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
         msg << "ImageFileName     = " << file << "\n";
         msg << "tested path       = " << itksys::SystemTools::GetFilenamePath(m_FileName) << "\n";
         msg << "Other Tested File = " << fullFileName << "\n";
-        e.SetDescription(msg.str().c_str());
+        e.SetDescription(msg.str());
         throw e;
         return;
         }
@@ -458,7 +458,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 
   // Test if the file can be open for reading access.
   std::ifstream readTester;
-  readTester.open(file.c_str());
+  readTester.open(file);
   if (readTester.fail())
     {
     readTester.close();

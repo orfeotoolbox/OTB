@@ -36,6 +36,7 @@
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
+#include <string>
 
 namespace otb
 {

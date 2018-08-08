@@ -333,7 +333,23 @@ The available syntax for boolean options are:
 
 -  OFF, Off, off, false, False, 0 are available for setting a ’false’
    boolean value
+
+::
+
+   &nodata=(double) value / [int:double, int:double ...]
+
+-   This options allows one to set specific nodata values for all or selected bands.
+
+    There are two ways of setting nodata values. simple scalar values of band,value pair.
+    OTB will select either one of them depending on type of nodata value string
    
+-    If value is scalar (without bandindex), it will be applied only to first band of image.
+
+-    If value is given as "bandindex:value" pair separated by a ":" then
+     nodata value is applied to only those selected band.
+
+- By default OTB will not alter any existing nodata value.
+
 OGR DataSource options
 ^^^^^^^^^^^^^^^^^^^^^^^
 

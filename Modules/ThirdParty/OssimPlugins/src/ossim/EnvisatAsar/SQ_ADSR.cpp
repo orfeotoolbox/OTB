@@ -39,7 +39,7 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const SQ_ADSR& data)
    {
-      os<<"zero_doppler_time:"<<data._zero_doppler_time.c_str()<<std::endl;
+      os<<"zero_doppler_time:"<<data._zero_doppler_time <<std::endl;
 
       os<<"attach_flag:"<<data._attach_flag<<std::endl;
 

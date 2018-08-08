@@ -24,6 +24,7 @@
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
 #include "otbOGRDataSourceWrapper.h"
+#include <string>
 
 namespace otb
 {

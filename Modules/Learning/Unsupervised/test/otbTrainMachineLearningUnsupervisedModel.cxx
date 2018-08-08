@@ -46,7 +46,7 @@ typedef MachineLearningModelRegressionType::TargetListSampleType TargetListSampl
 
 bool SharkReadDataFile(const std::string & infname, InputListSampleType * samples, TargetListSampleType * labels)
 {
-  std::ifstream ifs(infname.c_str());
+  std::ifstream ifs(infname);
 
   if(!ifs)
     {

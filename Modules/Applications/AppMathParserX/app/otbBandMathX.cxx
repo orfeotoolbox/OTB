@@ -267,7 +267,7 @@ private:
       {
       std::string contextPath = GetParameterString("incontext");
       // check that file exists
-      if (itksys::SystemTools::FileExists(contextPath.c_str(),true))
+      if (itksys::SystemTools::FileExists(contextPath,true))
         {
         BandMathImageFilterType::Pointer dummyFilter =
           BandMathImageFilterType::New();

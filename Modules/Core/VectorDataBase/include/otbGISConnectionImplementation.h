@@ -23,6 +23,7 @@
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
+#include <string>
 
 namespace otb
 {

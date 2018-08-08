@@ -24,6 +24,7 @@
 #include <QtWidgets>
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
+#include <string>
 
 
 namespace otb

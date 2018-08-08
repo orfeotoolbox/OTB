@@ -28,6 +28,7 @@
 #include "otbGenericRSTransform.h"
 
 #include "otbGlActor.h"
+#include <string>
 
 namespace otb
 {

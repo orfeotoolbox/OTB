@@ -23,6 +23,7 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbWrapperParameter.h"
+#include <string>
 
 namespace otb
 {

@@ -157,14 +157,14 @@ void DoExecute() override
   DEMConverter->Convert(tempFilename, output);
 
   // remove the temprorary tif file
-  if( !itksys::SystemTools::RemoveFile(tempFilename.c_str()) )
+  if( !itksys::SystemTools::RemoveFile(tempFilename) )
     {
     itkExceptionMacro("Problem while removing the file " << tempFilename);
     }
 
   // remove the geom file if any
-  if( itksys::SystemTools::FileExists(tempFilenameGeom.c_str())
-      && !itksys::SystemTools::RemoveFile(tempFilenameGeom.c_str()))
+  if( itksys::SystemTools::FileExists(tempFilenameGeom)
+      && !itksys::SystemTools::RemoveFile(tempFilenameGeom))
     {
     itkExceptionMacro("Problem while removing the Geom file " << tempFilenameGeom);
     }
