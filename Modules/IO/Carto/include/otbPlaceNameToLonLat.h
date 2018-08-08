@@ -32,6 +32,7 @@ namespace otb
  * \class PlaceNameToLonLat
  * \brief Retrieve Longitude and Latitude coordinates from a place name
  *
+ * \deprecated in OTB 7.0
  *
  * \ingroup OTBCarto
  */

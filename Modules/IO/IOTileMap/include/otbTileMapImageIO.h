@@ -44,10 +44,10 @@ enum TileMapAddressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
 }
 
 /** \class TileMapImageIO
-   *
-   * \brief ImageIO object for reading and writing TileMap images
-   *
-   *
+ *
+ * \brief ImageIO object for reading and writing TileMap images
+ *
+ * \deprecated in OTB 7.0
  *
  * \ingroup OTBIOTileMap
  */
