@@ -47,7 +47,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
   //
   // allocate the data objects for the outputs which are
   // just decorators around pixel types and histogram list
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   m_Size.Fill(255);
   HistogramListPointerType output = static_cast<HistogramListType*>(this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, output.GetPointer());

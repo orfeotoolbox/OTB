@@ -25,7 +25,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 
 //Just to get the forward/inverse definitions
 #include "otbWaveletOperatorBase.h"
@@ -104,7 +104,7 @@ public:
 protected:
   SubsampleImageFilter ()
     {
-    OTB_DISABLE_DYNAMIC_MT
+    OTB_DISABLE_DYNAMIC_MT;
     m_SubsampleFactor.Fill(1);
     }
   ~SubsampleImageFilter() override {}

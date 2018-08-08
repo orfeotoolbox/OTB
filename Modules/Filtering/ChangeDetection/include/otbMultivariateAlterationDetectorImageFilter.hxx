@@ -36,7 +36,7 @@ template <class TInputImage, class TOutputImage>
 MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
 ::MultivariateAlterationDetectorImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(2);
   m_CovarianceEstimator = CovarianceEstimatorType::New();
 }

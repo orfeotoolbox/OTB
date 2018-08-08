@@ -21,7 +21,7 @@
 #ifndef otbSubPixelDisparityImageFilter_hxx
 #define otbSubPixelDisparityImageFilter_hxx
 
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "otbSubPixelDisparityImageFilter.h"
 
 namespace otb
@@ -32,7 +32,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::SubPixelDisparityImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
 // Set the number of required inputs
   this->SetNumberOfRequiredInputs(3);
 

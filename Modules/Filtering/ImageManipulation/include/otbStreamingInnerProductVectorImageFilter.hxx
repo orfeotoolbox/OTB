@@ -36,7 +36,7 @@ template<class TInputImage>
 PersistentInnerProductVectorImageFilter<TInputImage>
 ::PersistentInnerProductVectorImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   // first output is a copy of the image, DataObject created by
   // superclass
   //

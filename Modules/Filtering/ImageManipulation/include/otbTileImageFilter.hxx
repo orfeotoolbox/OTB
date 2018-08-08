@@ -23,7 +23,7 @@
 
 #include "otbTileImageFilter.h"
 #include "itkImageRegionIterator.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 
 namespace otb
 {
@@ -31,7 +31,7 @@ template <class TImage>
 TileImageFilter<TImage>
 ::TileImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
 }
 
 template <class TImage>

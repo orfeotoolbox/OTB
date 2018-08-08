@@ -84,7 +84,7 @@ public:
 
 protected:
   JoinHistogramMIImageFilter() {
-OTB_DISABLE_DYNAMIC_MT
+OTB_DISABLE_DYNAMIC_MT;
   }
   ~JoinHistogramMIImageFilter() override {}
 

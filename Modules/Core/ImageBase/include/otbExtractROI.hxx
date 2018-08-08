@@ -35,7 +35,7 @@ template <class TInputPixel, class TOutputPixel>
 ExtractROI<TInputPixel, TOutputPixel>
 ::ExtractROI() //: ExtractROIBase< itk::Image<TInputPixel, VImageDimension> , itk::Image<TOutputPixel, VImageDimension> >()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
 }
 
 /**

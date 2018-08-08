@@ -23,7 +23,7 @@
 
 #include "otbComputeGainLutFilter.h"
 #include "itkImageRegionIterator.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include <limits>
 #include <numeric>
 
@@ -34,7 +34,7 @@ template < class TInputImage, class TOutputImage >
 ComputeGainLutFilter < TInputImage , TOutputImage >
 ::ComputeGainLutFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
     m_NbBin = 256;
   m_NbPixel = 0;
   m_Min = std::numeric_limits< double >::quiet_NaN();

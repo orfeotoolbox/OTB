@@ -22,7 +22,7 @@
 #define otbImageClassificationFilter_hxx
 
 #include "otbImageClassificationFilter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
@@ -38,10 +38,8 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();
-
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredOutputs(3);
-  
   this->SetNthOutput(0,TOutputImage::New());
   this->SetNthOutput(1,ConfidenceImageType::New());
   this->SetNthOutput(2,ProbaImageType::New());

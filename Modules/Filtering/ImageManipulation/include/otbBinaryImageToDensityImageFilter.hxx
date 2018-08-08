@@ -36,7 +36,7 @@ template <class TInputImage, class TOutputImage, class TCountFunction>
 BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
 ::BinaryImageToDensityImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   m_NeighborhoodRadius.Fill(1);
   m_CountFunction = CountFunctionType::New();
 }

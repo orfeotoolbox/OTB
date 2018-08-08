@@ -241,7 +241,7 @@ protected:
     m_IsSetFluxNormalizationCoefficient(false),
     m_IsSetSolarDistance(false)
     {
-    OTB_DISABLE_DYNAMIC_MT
+    OTB_DISABLE_DYNAMIC_MT;
     m_SolarIllumination.SetSize(0);
     };
 
