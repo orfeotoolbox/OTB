@@ -35,7 +35,7 @@ template<class TInputImage>
 PersistentMinMaxImageFilter<TInputImage>
 ::PersistentMinMaxImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   // TODO : SetNumberOfRequiredOutputs
 
   // first output is a copy of the image, DataObject created by

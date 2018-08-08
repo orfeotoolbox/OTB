@@ -21,7 +21,7 @@
 #ifndef otbPixelWiseBlockMatchingImageFilter_hxx
 #define otbPixelWiseBlockMatchingImageFilter_hxx
 
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "itkProgressReporter.h"
 #include "itkConstantBoundaryCondition.h"
@@ -34,7 +34,7 @@ PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::PixelWiseBlockMatchingImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   // Set the number of inputs
   this->SetNumberOfRequiredInputs(6);
   this->SetNumberOfRequiredInputs(2);

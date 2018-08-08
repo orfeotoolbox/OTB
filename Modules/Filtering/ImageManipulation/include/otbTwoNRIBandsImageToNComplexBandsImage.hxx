@@ -21,7 +21,7 @@
 #ifndef otbTwoNRIBandsImageToNComplexBandsImage_hxx
 #define otbTwoNRIBandsImageToNComplexBandsImage_hxx
 
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "otbTwoNRIBandsImageToNComplexBandsImage.h"
 
 #include "itkImageRegionIterator.h"
@@ -41,7 +41,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 TwoNRIBandsImageToNComplexBandsImage<TInputImage, TOutputImage>::TwoNRIBandsImageToNComplexBandsImage()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
 	//this->SetNumberOfThreads(1);
 }
 

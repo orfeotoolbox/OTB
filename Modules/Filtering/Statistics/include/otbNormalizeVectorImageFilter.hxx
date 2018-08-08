@@ -29,7 +29,7 @@ template < class TInputImage, class TOutputImage >
 NormalizeVectorImageFilter< TInputImage, TOutputImage >
 ::NormalizeVectorImageFilter ()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   m_IsGivenMean = false;
   m_IsGivenStdDev = false;
 

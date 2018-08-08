@@ -33,7 +33,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
 ::PersistentDescriptorsListSampleGenerator()
   : m_NeighborhoodRadius(0)
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   // Need 2 inputs : a vector image and a vectordata
   this->SetNumberOfRequiredInputs(2);
 

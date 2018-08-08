@@ -23,7 +23,7 @@
 #define otbReciprocalCoherencyToReciprocalMuellerImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 namespace otb
  {
 
@@ -163,7 +163,7 @@ public:
 
 protected:
    ReciprocalCoherencyToReciprocalMuellerImageFilter() {
-     OTB_DISABLE_DYNAMIC_MT
+     OTB_DISABLE_DYNAMIC_MT;
    }
   ~ReciprocalCoherencyToReciprocalMuellerImageFilter() override {}
 

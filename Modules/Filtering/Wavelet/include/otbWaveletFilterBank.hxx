@@ -39,7 +39,7 @@ template <class TInputImage, class TOutputImage, class TWaveletOperator>
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 ::WaveletFilterBank ()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredInputs(1);
 
@@ -609,7 +609,7 @@ template <class TInputImage, class TOutputImage, class TWaveletOperator>
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 ::WaveletFilterBank ()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1 << InputImageDimension);
 
   m_UpSampleFilterFactor = 0;

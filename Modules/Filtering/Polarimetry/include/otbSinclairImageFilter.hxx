@@ -37,7 +37,7 @@ void
 SinclairImageFilter<TInputImageHH, TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputHH(const TInputImageHH * image)
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetInput1(image);
 }
 

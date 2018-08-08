@@ -41,7 +41,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::TouziEdgeDetectorImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   m_Radius.Fill(1);
 }
 

@@ -27,7 +27,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "otbMath.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 namespace otb
 {
 
@@ -35,7 +35,7 @@ template <class TInputImage, class TOutputImage>
 SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::SFSTexturesImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(6);

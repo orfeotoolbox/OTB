@@ -21,7 +21,7 @@
 #ifndef otbKMeansImageClassificationFilter_hxx
 #define otbKMeansImageClassificationFilter_hxx
 
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "otbKMeansImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
@@ -35,7 +35,7 @@ template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimensio
 KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, TMaskImage>
 ::KMeansImageClassificationFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();

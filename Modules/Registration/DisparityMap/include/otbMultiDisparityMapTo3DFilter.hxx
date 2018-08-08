@@ -33,7 +33,7 @@ class TMaskImage, class TResidueImage>
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::MultiDisparityMapTo3DFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   // Set the number of inputs (1 moving image by default -> 3 inputs)
   this->SetNumberOfRequiredInputs(3);
   this->SetNumberOfRequiredInputs(1);

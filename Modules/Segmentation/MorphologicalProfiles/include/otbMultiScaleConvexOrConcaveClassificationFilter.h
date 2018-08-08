@@ -22,7 +22,7 @@
 #define otbMultiScaleConvexOrConcaveClassificationFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 
 namespace otb
 {
@@ -234,7 +234,7 @@ protected:
   /** Constructor */
   MultiScaleConvexOrConcaveClassificationFilter()
     {
-    OTB_DISABLE_DYNAMIC_MT
+    OTB_DISABLE_DYNAMIC_MT;
     m_LabelSeparator = 10;
     m_Sigma          = 0.0;
     };

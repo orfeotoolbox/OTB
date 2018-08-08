@@ -22,7 +22,7 @@
 #define otbDrawLineSpatialObjectListFilter_hxx
 
 #include "otbDrawLineSpatialObjectListFilter.h"
-#include "otbMacro.h"  //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h"  //for OTB_DISABLE_DYNAMIC_MT;
 #include "itkLineIterator.h"
 #include "itkDataObject.h"
 #include "itkImageRegionIterator.h"
@@ -37,7 +37,7 @@ template <class TInputImage, class TOutputImage>
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::DrawLineSpatialObjectListFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
 

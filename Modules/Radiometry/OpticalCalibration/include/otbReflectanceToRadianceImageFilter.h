@@ -227,7 +227,7 @@ protected:
     m_Month(0),
     m_IsSetFluxNormalizationCoefficient(false)
     {
-    OTB_DISABLE_DYNAMIC_MT
+    OTB_DISABLE_DYNAMIC_MT;
     m_SolarIllumination.SetSize(0);
     };
 

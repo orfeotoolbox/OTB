@@ -82,7 +82,7 @@ public:
   itkTypeMacro(CorrelationChangeDetector, SuperClass);
 
 protected:
-  CorrelationChangeDetector() {OTB_DISABLE_DYNAMIC_MT}
+  CorrelationChangeDetector() {OTB_DISABLE_DYNAMIC_MT;}
   ~CorrelationChangeDetector() override {}
 
 private:

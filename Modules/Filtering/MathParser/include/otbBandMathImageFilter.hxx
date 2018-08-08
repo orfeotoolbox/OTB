@@ -42,7 +42,7 @@ BandMathImageFilter<TImage>
 {
   //This number will be incremented each time an image
   //is added over the one minimumrequired
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs( 1 );
   this->InPlaceOff();
 

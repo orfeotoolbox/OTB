@@ -26,7 +26,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "otbMath.h"
 
 namespace otb
@@ -38,7 +38,7 @@ template <class TInputImage, class TOutputModulus, class TOutputDirection>
 NeighborhoodScalarProductFilter<TInputImage, TOutputModulus, TOutputDirection>
 ::NeighborhoodScalarProductFilter()
 {
-OTB_DISABLE_DYNAMIC_MT
+OTB_DISABLE_DYNAMIC_MT;
 }
 
 template <class TInputImage, class TOutputModulus, class TOutputDirection>

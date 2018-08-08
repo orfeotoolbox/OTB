@@ -34,7 +34,7 @@ template <class TImageList, class TImage>
 WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList,TImage>
 ::WaveletsBandsListToWaveletsSynopsisImageFilter() : m_DecimationRatio(2)
 {
-OTB_DISABLE_DYNAMIC_MT
+OTB_DISABLE_DYNAMIC_MT;
 }
 
 /** Destructor */

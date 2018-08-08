@@ -27,7 +27,7 @@
 #include "itkMacro.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageIteratorWithIndex.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 namespace otb
 {
 
@@ -37,7 +37,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::DrawLineSpatialObjectFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
 

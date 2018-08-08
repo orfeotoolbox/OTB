@@ -27,7 +27,7 @@
 #include "itkProgressReporter.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkNeighborhoodAlgorithm.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 namespace otb
 {
 /**
@@ -37,7 +37,7 @@ template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
 ::UnaryFunctorNeighborhoodImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
 }

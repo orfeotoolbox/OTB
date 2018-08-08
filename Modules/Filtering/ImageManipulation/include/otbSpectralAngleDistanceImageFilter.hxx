@@ -36,7 +36,7 @@ template <class TInputImage, class TOutputImage>
 SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>
 ::SpectralAngleDistanceImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   m_ReferencePixel = 0;
 }
 

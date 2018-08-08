@@ -41,7 +41,7 @@ ExtractROIBase<TInputImage, TOutputImage>
   m_SizeX(0),
   m_SizeY(0)
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
 }
 
 /**

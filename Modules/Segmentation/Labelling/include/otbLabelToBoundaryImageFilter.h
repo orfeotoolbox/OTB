@@ -96,7 +96,7 @@ public:
 protected:
   LabelToBoundaryImageFilter()
   {
-    OTB_DISABLE_DYNAMIC_MT
+    OTB_DISABLE_DYNAMIC_MT;
     this->SetRadius(1);
   }
   ~LabelToBoundaryImageFilter() override { }

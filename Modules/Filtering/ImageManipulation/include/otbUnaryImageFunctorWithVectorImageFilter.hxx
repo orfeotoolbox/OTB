@@ -22,7 +22,7 @@
 #define otbUnaryImageFunctorWithVectorImageFilter_hxx
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
-#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT
+#include "otbMacro.h" //for OTB_DISABLE_DYNAMIC_MT;
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
@@ -36,7 +36,7 @@ template <class TInputImage, class TOutputImage, class TFunction>
 UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>
 ::UnaryImageFunctorWithVectorImageFilter()
 {
-  OTB_DISABLE_DYNAMIC_MT
+  OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
 }

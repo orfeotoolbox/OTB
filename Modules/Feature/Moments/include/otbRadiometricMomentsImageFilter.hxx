@@ -37,7 +37,7 @@ template <class TInputImage, class TOutputImage>
 RadiometricMomentsImageFilter<TInputImage, TOutputImage>
 ::RadiometricMomentsImageFilter()
 {
-    OTB_DISABLE_DYNAMIC_MT
+    OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
 }
