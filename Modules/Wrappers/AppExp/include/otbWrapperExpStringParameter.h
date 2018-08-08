@@ -18,11 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperExpSingleParameter_h
-#define otbWrapperExpSingleParameter_h
+#ifndef otbWrapperExpStringParameter_h
+#define otbWrapperExpStringParameter_h
 
-#include "otbWrapperExpTypes.h"
-#include "otbWrapperExpParameter.h"
+#include "otbWrapperExpSingleParameter.h"
 #include "OTBApplicationEngineExport.h"
 
 namespace otb
@@ -30,44 +29,46 @@ namespace otb
 namespace WrapperExp
 {
 
-class OTBApplicationEngine_EXPORT SingleParameter : public Parameter
+class OTBApplicationEngine_EXPORT StringParameter : public SingleParameter
 {
 public:
-  typedef SingleParameter              Self;
-  typedef Parameter                    Superclass;
-  typedef std::shared_ptr<Self>        Pointer;
-  typedef std::shared_ptr<const Self>  ConstPointer;
+  typedef StringParameter Self;
+  typedef SingleParameter Superclass;
+  typedef std::shared_ptr<Self> Pointer;
+  typedef std::shared_ptr<const Self> ConstPointer;
 
-  itkTypeMacro( SingleParameter , Parameter );
+  itkTypeMacro( StringParameter , SingleParameter );
 
   static Pointer New()
     {
     return std::shared_ptr<Self>( new Self() );
     }
 
-  virtual std::string GetValue( int i = -1 ) const override
+  virtual void SetDefaultValue( std::string val)
     {
-    if ( i != -1 )
-      {
-      //log
-      }
-    return m_Value;
+    m_Default = std::move(val);
     }
 
-  virtual void SetValue( std::string val , int i = 0 ) override 
+  virtual const std::string & GetDefaultValue() const
     {
-    if ( i != 0 )
-      {
-      //log
-      }
-    m_Value = std::move(val);
+    return m_Default;
     }
 
-  ~SingleParameter() override = default ;
+  virtual void Reset() override 
+    {
+    m_Value = m_Default;
+    }
+
+  virtual ~StringParameter() override = default;
+
 protected:
-  SingleParameter() = default ;
+  StringParameter() = default;
+
 
 private:
+
+  std::string m_Default;
+
 };
 
 } // end namespace WrapperExp

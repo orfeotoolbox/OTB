@@ -95,9 +95,9 @@ public:
 
   /** Set the parameter key */
   // itkSetStringMacro( Key );
-  void SetKey( const std::string & key )
+  void SetKey( std::string key )
     {
-    m_Key = key;
+    m_Key = std::move(key);
     }
 
   /** Get the parameter key */
@@ -144,8 +144,7 @@ public:
    */
   virtual void Reset() {};
 
-  /** Check wether the parameter has a value. Default implementation set  
-   *  m_Valule to an empty string.
+  /** Check wether the parameter has a value.
    */
   virtual bool HasValue() const 
   {
@@ -184,7 +183,7 @@ public:
 
   virtual std::string GetValue( int i = -1 ) const = 0;
 
-  virtual void SetValue( const std::string & val , int i = 0 ) = 0;
+  virtual void SetValue( std::string val , int i = 0 ) = 0;
 
   virtual ~Parameter() = default ;
   
