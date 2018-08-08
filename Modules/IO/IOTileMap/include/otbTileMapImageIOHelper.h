@@ -36,6 +36,7 @@ namespace otb
 /** \class TileMapImageIOHelper
  *  \brief This class IO TileMapImage
  *
+ * \deprecated in OTB 7.0
  *
  * \ingroup OTBIOTileMap
  */

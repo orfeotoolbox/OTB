@@ -30,6 +30,8 @@ namespace otb
 /** \class TileMapImageIOFactory
  * \brief Creation of a TileMapImageIO object using object factory.
  *
+ * \deprecated in OTB 7.0
+ 
  * \ingroup OTBIOTileMap
  */
 class OTBIOTileMap_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
