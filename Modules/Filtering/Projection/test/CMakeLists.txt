@@ -35,7 +35,6 @@ otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbRationalTransform.cxx
 otbGeometriesProjectionFilterFromMapToSensor.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
-otbMapProjectionsNew.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbGeometriesProjectionFilterFromMapToGeo.cxx
 otbROIdataConversion.cxx
@@ -460,12 +459,10 @@ otb_add_test(NAME prTvImageToEnvelopeVectorDataFilter COMMAND otbProjectionTestD
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   )
 
-otb_add_test(NAME prTuMapProjectionsNew COMMAND otbProjectionTestDriver  otbMapProjectionsNew )
-
 otb_add_test(NAME prTvMapProjectionsTest COMMAND otbProjectionTestDriver
   --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjectionsTest.txt
   ${TEMP}/prTvMapProjectionsTest.txt
-  otbMapProjectionsTest
+  otbMapProjectionAccessorsTest
   ${TEMP}/prTvMapProjectionsTest.txt
   )
 
