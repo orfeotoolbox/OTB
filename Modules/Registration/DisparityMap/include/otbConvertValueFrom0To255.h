@@ -49,11 +49,6 @@ public:
      return m_dispMin;     
     }
 
-  int GetOffset() const
-    {
-     return m_offset;     
-    }
-
   void SetDispMax(int disp)
     {
       m_dispMax = disp;
@@ -64,24 +59,12 @@ public:
       m_dispMin = disp;
     }
 
-  void SetOffset(int disp)
-    {
-      m_offset = disp ;
-    }
 
-  void SetSubstractionBetweenMinMaxDisparity() 
+  void PreComputeCachedData() 
     {
     m_dispSubtraction = m_dispMax-m_dispMin ;
-    }
-
-  void SetCoeff_a()
-    {
     m_coeff_a = -255/m_dispSubtraction ;
-    }
-
-  void SetCoeff_b()
-    {
-    m_coeff_b = (255*m_dispMax)/m_dispSubtraction ;
+    m_coeff_b = (255*m_dispMax)/m_dispSubtraction + 0.5f ;
     }
 
 
@@ -89,13 +72,12 @@ public:
 
   const TOutput operator() ( TInput input ) const
     {
-    return TOutput(m_coeff_a*input+0.5f + m_coeff_b + m_offset) ;
+    return TOutput(m_coeff_a*input+ m_coeff_b) ;
     }
 
   protected:
     int                             m_dispMin;
     int                             m_dispMax;
-    int                             m_offset ;
     int                             m_dispSubtraction ;
     int                             m_coeff_a;
     int                             m_coeff_b;
@@ -147,11 +129,6 @@ public:
      return this->GetFunctor().GetDispMin();     
     }
 
-  int GetOffset() const
-    {
-     return this->GetFunctor().GetOffset();     
-    }
-
   void SetDispMax(int disp)
     {
       this->GetFunctor().SetDispMax(disp);
@@ -160,11 +137,6 @@ public:
   void SetDispMin(int disp)
     {
       this->GetFunctor().SetDispMin(disp);
-    }
-
-  void SetOffset(int disp)
-    {
-      this->GetFunctor().SetOffset(disp);
     }
 
 
@@ -182,10 +154,7 @@ public:
   void GenerateData(void) override 
     {
     Superclass::GenerateData();
-    this->GetFunctor().SetCoeff_a() ;
-    this->GetFunctor().SetCoeff_b() ;
-    this->GetFunctor().SetSubstractionBetweenMinMaxDisparity() ;
-
+    this->GetFunctor().PreComputeCachedData() ;
     }
 
   //surcharger generate data

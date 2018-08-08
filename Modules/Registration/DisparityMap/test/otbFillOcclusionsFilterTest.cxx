@@ -158,7 +158,6 @@ int otbFillOcclusionsFilterTest(int argc, char *argv[])
     m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
     m_convertSmoothDisparity->SetDispMin(dispMin);
     m_convertSmoothDisparity->SetDispMax(dispMax);       
-    m_convertSmoothDisparity->SetOffset(0);
 
     IntImageWriterType::Pointer writer_FillOcclusions = IntImageWriterType::New();
     writer_FillOcclusions->SetFileName( FILENAME("ConvertFillOcclusions.tif"));

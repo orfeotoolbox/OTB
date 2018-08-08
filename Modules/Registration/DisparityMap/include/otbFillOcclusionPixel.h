@@ -54,41 +54,30 @@ public:
     if( j.first < i.first ) return false;
     return (i.first < j.first ); }
 
-  void SetWSize()
-    {
-      TInput input ;
-      m_Wsize = input.Size();
-    }
-
-  void SetParameter_sSpace()
-    {
-    m_sSpace = 9 ;
-    }
-
-  void SetParameter_sColor()
-    {
-    m_sColor = 255*0.1;  
-    }
   
   TOutput operator() (  const TInput & input) const
     { 
-    PixelType input_center_pixel = input.GetCenterPixel() ;
 
-    std::vector< std::pair<int,double> > duo(m_Wsize);   
+    PixelType input_center_pixel = input.GetCenterPixel() ;
+    unsigned int Wsize = input.Size();
+    const double sSpace = 9 ;
+    const double sColor = 255*0.1;
+
+    std::vector< std::pair<int,double> > duo(Wsize);   
   
     PixelType I(3);
     if(input_center_pixel[4] < 0.0000000001)
       {
       double Wt=0. ;
-      for (unsigned int j  = 0; j< m_Wsize; j++)
+      for (unsigned int j  = 0; j< Wsize; j++)
         {
         const auto & Offset_j = input.GetOffset(j);
         I[0] = input_center_pixel[1]- input.GetPixel(j)[1];
         I[1] = input_center_pixel[2]- input.GetPixel(j)[2];
         I[2] = input_center_pixel[3]- input.GetPixel(j)[3];
 
-        const double W = std::exp( -(Offset_j[0]*Offset_j[0] + Offset_j[1]*Offset_j[1])/(m_sSpace*m_sSpace) 
-        -(I.GetSquaredNorm())/(m_sColor*m_sColor));
+        const double W = std::exp( -(Offset_j[0]*Offset_j[0] + Offset_j[1]*Offset_j[1])/(sSpace*sSpace) 
+        -(I.GetSquaredNorm())/(sColor*sColor));
              
         duo[j].first = input.GetPixel(j)[0];               
         duo[j].second =  W; 
@@ -110,11 +99,6 @@ public:
       return TOutput(input_center_pixel[0]) ;
       }  
     } // end operator
-
-protected:
-  int                            m_Wsize ;
-  double                         m_sSpace ;
-  double                         m_sColor ;
 
 }; // end of functor class  FillPixelFilterOperator
 
@@ -158,16 +142,6 @@ protected:
   FillPixelFilter()=default ;
   ~FillPixelFilter() override  =default ;
   void GenerateOutputInformation(void) override;
-
-
-  void GenerateData(void) override 
-    {
-    Superclass::GenerateData();
-    this->GetFunctor().SetWSize() ;
-    this->GetFunctor().SetParameter_sSpace() ;
-    this->GetFunctor().SetParameter_sColor();
-    }
-
 
   FillPixelFilter( const Self & ); // Not implemented
   void operator=( const Self & ); // Not implemented

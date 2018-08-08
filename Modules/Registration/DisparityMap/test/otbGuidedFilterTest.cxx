@@ -216,7 +216,7 @@ int otbGuidedFilterTest(int argc, char *argv[])
   m_meanRightCost->SetRadius(0,r);  
   m_meanRightCost->UpdateOutputInformation(); 
   //MEAN WEIGHTS   
-    // --- LEFT
+  //  --- LEFT
   m_meanLeftWeights->SetInput1(m_meanLeftCost->GetOutput());
   m_meanLeftWeights->SetInput2(inLeft->GetOutput());
   m_meanLeftWeights->SetRadius(0,r);  

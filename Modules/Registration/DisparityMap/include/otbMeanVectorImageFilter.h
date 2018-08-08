@@ -66,22 +66,14 @@ public:
     m_numberOfComponents = nb;
     }
 
-  void SetNumberOfBands()
-    {
-    TInput1 input1 ;
-    TInput2 input2 ;
-    m_bandNumberInput1 = input1.GetPixel(0).Size();
-    m_bandNumberInput2 = input2.GetPixel(0).Size();
-    assert(m_bandNumberInput1 % (m_bandNumberInput2+1) == 0) ;
-    m_bandNumberOutput = m_bandNumberInput1/(m_bandNumberInput2+1) ;
-    }
-
-
   typedef typename TInput2::PixelType               PixelType;
 
+  unsigned int m_bandNumberInput1 ;
+  unsigned int m_bandNumberInput2 ;
+  unsigned int m_bandNumberOutput ;
+
   TOutput operator() (TInput1 input_weights, TInput2 input_I) const
-    {     
-   
+    {      
     PixelType I_pixel = input_I.GetCenterPixel();
 
     TOutput output(m_bandNumberOutput); 
@@ -90,7 +82,10 @@ public:
     unsigned int r_Mean = r_Box[0];
     unsigned int size_Mean = 2*r_Mean+1;     
 
+
     std::vector<double> v_mean_ai(m_bandNumberInput1); 
+
+
 
     for(unsigned int b = 0 ; b < m_bandNumberInput1 ; ++b )
       {
@@ -123,10 +118,6 @@ public:
     unsigned char                   m_RadiusMin;
     unsigned char                   m_RadiusMax;
     unsigned int                    m_numberOfComponents ;
-
-    unsigned int                    m_bandNumberInput1 ;
-    unsigned int                    m_bandNumberInput2 ;
-    unsigned int                    m_bandNumberOutput ;
 
 };
 
@@ -253,18 +244,15 @@ protected:
   void GenerateOutputInformation(void) override
     {
     Superclass::GenerateOutputInformation();
-    unsigned int nb_comp (this->GetInput(0)->GetNumberOfComponentsPerPixel());
-    unsigned int nb_inI (this->GetInput(1)->GetNumberOfComponentsPerPixel());
-    this->GetOutput()->SetNumberOfComponentsPerPixel(nb_comp/(nb_inI+1));
-    this->GetFunctor().SetNumberOfComponent(nb_comp/(nb_inI+1));
+    this->GetFunctor().m_bandNumberInput1 = this->GetInput(0)->GetNumberOfComponentsPerPixel() ;  
+    this->GetFunctor().m_bandNumberInput2 = this->GetInput(1)->GetNumberOfComponentsPerPixel() ; 
+    assert(this->GetFunctor().m_bandNumberInput1  % (this->GetFunctor().m_bandNumberInput2+1) == 0) ;
+    this->GetFunctor().m_bandNumberOutput = this->GetFunctor().m_bandNumberInput1/(this->GetFunctor().m_bandNumberInput2+1) ;
+
+    this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetFunctor().m_bandNumberOutput );
+    this->GetFunctor().SetNumberOfComponent( this->GetFunctor().m_bandNumberOutput );
+
     } 
-
-  void GenerateData(void) override 
-    {
-    Superclass::GenerateData();
-    this->GetFunctor().SetNumberOfBands() ;
-    }
-
 
 private:
   MeanVectorImageFilter(const Self &) = delete; //purposely not implemented

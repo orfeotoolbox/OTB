@@ -445,7 +445,6 @@ class CostVolumeFilter : public Application
         m_convertSmoothDisparity->SetInput(m_LeftDisparity->GetOutput());
         m_convertSmoothDisparity->SetDispMin(dispMin);
         m_convertSmoothDisparity->SetDispMax(dispMax);       
-        m_convertSmoothDisparity->SetOffset(0);
         SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
         }
       else
@@ -459,8 +458,7 @@ class CostVolumeFilter : public Application
         {
         m_convertSmoothDisparity->SetInput(m_RightDisparity->GetOutput());
         m_convertSmoothDisparity->SetDispMin(dispMin);
-        m_convertSmoothDisparity->SetDispMax(dispMax);       
-        m_convertSmoothDisparity->SetOffset(0);
+        m_convertSmoothDisparity->SetDispMax(dispMax);      
         SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
         }
       else
@@ -484,7 +482,6 @@ class CostVolumeFilter : public Application
       m_convertSmoothDisparity->SetInput(m_FillOcc->GetOutput());
       m_convertSmoothDisparity->SetDispMin(dispMin);
       m_convertSmoothDisparity->SetDispMax(dispMax);       
-      m_convertSmoothDisparity->SetOffset(0);
       SetParameterOutputImage("io.out", m_convertSmoothDisparity->GetOutput());
       }
     else
