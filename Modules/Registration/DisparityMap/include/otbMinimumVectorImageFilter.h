@@ -48,14 +48,18 @@ public:
       m_Side = side;
     }
 
-  TOutput operator() ( TInput input ) const
+  void SetSize()
     {
-    
-    unsigned int size ( input.GetSize() ) ;    
+    TInput input ;
+    m_Size = input.GetSize() ;
+    }
+
+  TOutput operator() ( TInput input ) const
+    { 
     int index = 0;
     typename TInput::ValueType min ( input[0] );
 
-    for(unsigned int i=0; i<size; i++)
+    for(unsigned int i=0; i<m_Size; i++)
       {
       if (input[i]<min)
         {
@@ -66,18 +70,17 @@ public:
 
     if(m_Side=='r') //Minimum of the Right cost volume
       { 
-      const TOutput output = index ; 
-      return output ;
+      return TOutput(index) ;
       }
     else //Minimum of the Left cost volume
       {        
-      const TOutput output = -index ;  
-      return output ;
+      return TOutput(-index) ;
       }  
     }
 
   protected:
     char m_Side ;
+    unsigned int m_Size ;
 
 }; //end class
 
@@ -135,6 +138,13 @@ public:
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
+  
+  void GenerateData(void) override 
+    {
+    Superclass::GenerateData();
+    this->GetFunctor().SetSize() ;
+    }
+
 
   private:
   MinimumVectorImageFilter(const Self &) = delete; //purposely not implemented

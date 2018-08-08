@@ -66,27 +66,33 @@ public:
     m_numberOfComponents = nb;
     }
 
+  void SetNumberOfBands()
+    {
+    TInput1 input1 ;
+    TInput2 input2 ;
+    m_bandNumberInput1 = input1.GetPixel(0).Size();
+    m_bandNumberInput2 = input2.GetPixel(0).Size();
+    assert(m_bandNumberInput1 % (m_bandNumberInput2+1) == 0) ;
+    m_bandNumberOutput = m_bandNumberInput1/(m_bandNumberInput2+1) ;
+    }
+
+
   typedef typename TInput2::PixelType               PixelType;
 
-  TOutput operator() (TInput1 input_weights, TInput2 input_I)
-    {      
-    unsigned int Nband_weights = input_weights.GetPixel(0).Size();
-    unsigned int Nband_I = input_I.GetPixel(0).Size();   
-    assert(Nband_weights % (Nband_I+1) == 0) ;
-    unsigned int Nband_output = Nband_weights/(Nband_I+1) ;
-
+  TOutput operator() (TInput1 input_weights, TInput2 input_I) const
+    {     
+   
     PixelType I_pixel = input_I.GetCenterPixel();
 
-
-    TOutput output(Nband_output); 
+    TOutput output(m_bandNumberOutput); 
     output.Fill(0);     
     typename TInput1::RadiusType r_Box = input_weights.GetRadius(); 
     unsigned int r_Mean = r_Box[0];
     unsigned int size_Mean = 2*r_Mean+1;     
 
-    std::vector<double> v_mean_ai(Nband_weights); 
+    std::vector<double> v_mean_ai(m_bandNumberInput1); 
 
-    for(unsigned int b = 0 ; b < Nband_weights ; ++b )
+    for(unsigned int b = 0 ; b < m_bandNumberInput1 ; ++b )
       {
         double mean_ak(0.);
         for(unsigned int i = 0 ; i < input_weights.Size() ; ++i)
@@ -97,16 +103,16 @@ public:
           v_mean_ai[b] = mean_ak ;
       }   
 
-    for(unsigned int b = 0 ; b < Nband_output ; ++b)
+    for(unsigned int b = 0 ; b < m_bandNumberOutput ; ++b)
       {
       double qi(0.);
-      if(Nband_I>1)
+      if(m_bandNumberInput2>1)
         {
-        qi = v_mean_ai[(Nband_I+1)*b] * I_pixel[0] + v_mean_ai[(Nband_I+1)*b+1] * I_pixel[1] + v_mean_ai[(Nband_I+1)*b+2] * I_pixel[2] + v_mean_ai[(Nband_I+1)*b+3] ;
+        qi = v_mean_ai[(m_bandNumberInput2+1)*b] * I_pixel[0] + v_mean_ai[(m_bandNumberInput2+1)*b+1] * I_pixel[1] + v_mean_ai[(m_bandNumberInput2+1)*b+2] * I_pixel[2] + v_mean_ai[(m_bandNumberInput2+1)*b+3] ;
         }
       else
         {
-        qi = v_mean_ai[(Nband_I+1)*b] * I_pixel[0] + v_mean_ai[(Nband_I+1)*b+1] ;
+        qi = v_mean_ai[(m_bandNumberInput2+1)*b] * I_pixel[0] + v_mean_ai[(m_bandNumberInput2+1)*b+1] ;
         }         
       output[b] = static_cast<typename TOutput::ValueType>(qi);
       }
@@ -117,6 +123,10 @@ public:
     unsigned char                   m_RadiusMin;
     unsigned char                   m_RadiusMax;
     unsigned int                    m_numberOfComponents ;
+
+    unsigned int                    m_bandNumberInput1 ;
+    unsigned int                    m_bandNumberInput2 ;
+    unsigned int                    m_bandNumberOutput ;
 
 };
 
@@ -248,6 +258,13 @@ protected:
     this->GetOutput()->SetNumberOfComponentsPerPixel(nb_comp/(nb_inI+1));
     this->GetFunctor().SetNumberOfComponent(nb_comp/(nb_inI+1));
     } 
+
+  void GenerateData(void) override 
+    {
+    Superclass::GenerateData();
+    this->GetFunctor().SetNumberOfBands() ;
+    }
+
 
 private:
   MeanVectorImageFilter(const Self &) = delete; //purposely not implemented

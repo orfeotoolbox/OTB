@@ -18,10 +18,8 @@
  * limitations under the License.
  */
 
-
 #ifndef otbConvertDisparityValue_h
 #define otbConvertDisparityValue_h
-
 #include "otbUnaryFunctorVectorImageFilter.h"
 
 namespace otb
@@ -50,8 +48,7 @@ public:
 
   TOutput operator() ( TInput input ) const
     {
-    const TOutput output = input + m_disp ; 
-    return output;
+    return TOutput(input + m_disp);
     }
 
 private:

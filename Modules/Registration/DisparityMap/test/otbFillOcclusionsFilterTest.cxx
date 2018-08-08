@@ -51,7 +51,6 @@ int otbFillOcclusionsFilterTest(int argc, char *argv[])
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<float> FloatVectorImageType;
   typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorImageReaderType; 
-  typedef otb::ImageFileWriter<FloatVectorImageType> FloatVectorImageWriterType ;
   
   typedef otb::Image< int, Dimension > IntImageType;
   typedef otb::Image< float, Dimension > FloatImageType;

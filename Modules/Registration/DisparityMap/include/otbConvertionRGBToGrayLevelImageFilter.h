@@ -39,10 +39,9 @@ template<class TInput, class TOutput>
 class RGBToGrayLevelOperator
 {
 public:
-  TOutput operator() ( TInput input )  
+  TOutput operator() ( TInput input ) const
     {
-    TOutput output(0);
-    return output = 0.299*input[0] + 0.587*input[1] + 0.0721*input[2] ;
+    return TOutput(0.299*input[0] + 0.587*input[1] + 0.0721*input[2]) ;
     }
 }; //end class
 

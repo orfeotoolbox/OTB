@@ -69,21 +69,27 @@ public:
       m_offset = disp ;
     }
 
-  int GetSubstractionBetweenMinMaxDisparity() const
+  void SetSubstractionBetweenMinMaxDisparity() 
     {
-    return m_dispSubtraction = m_dispMax-m_dispMin ;
+    m_dispSubtraction = m_dispMax-m_dispMin ;
+    }
+
+  void SetCoeff_a()
+    {
+    m_coeff_a = -255/m_dispSubtraction ;
+    }
+
+  void SetCoeff_b()
+    {
+    m_coeff_b = (255*m_dispMax)/m_dispSubtraction ;
     }
 
 
-  TOutput operator() ( TInput input ) const
+
+
+  const TOutput operator() ( TInput input ) const
     {
-    float grayMin = 255;
-    float grayMax = 0;
-    float a = (grayMax-grayMin)/(m_dispMax-m_dispMin) ;
-    float b = (grayMin*m_dispMax - grayMax*m_dispMin)/(m_dispSubtraction);
-    
-    const TOutput output = a*input+0.5f + b + m_offset;    
-    return output;
+    return TOutput(m_coeff_a*input+0.5f + m_coeff_b + m_offset) ;
     }
 
   protected:
@@ -91,6 +97,9 @@ public:
     int                             m_dispMax;
     int                             m_offset ;
     int                             m_dispSubtraction ;
+    int                             m_coeff_a;
+    int                             m_coeff_b;
+
 
 }; //end class
 
@@ -169,6 +178,17 @@ public:
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
+
+  void GenerateData(void) override 
+    {
+    Superclass::GenerateData();
+    this->GetFunctor().SetCoeff_a() ;
+    this->GetFunctor().SetCoeff_b() ;
+    this->GetFunctor().SetSubstractionBetweenMinMaxDisparity() ;
+
+    }
+
+  //surcharger generate data
 
 private:
   ConvertValueFrom0To255(const Self &) = delete; //purposely not implemented

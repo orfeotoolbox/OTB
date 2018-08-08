@@ -41,7 +41,7 @@ namespace Functor
  *
  * \ingroup OTBDisparityMap
  */
-template<class TInput_I, class TInput_CostVolume, class TOutput> 
+template<class TInput1, class TInput2, class TOutput> 
 class Weights
 {
 public:
@@ -76,72 +76,83 @@ public:
   }
 
 
-  TOutput operator() ( TInput_I input_I , TInput_CostVolume input_C )
+  void SetNumberOfBands()
     {
-    unsigned int Nband =  input_I.GetPixel(0).Size();
-    unsigned int Nband_C =  input_C.GetPixel(0).Size(); 
+    TInput1 input1 ;
+    TInput2 input2 ;
+    m_bandNumberInput1 = input1.GetPixel(0).Size();
+    m_bandNumberInput2 = input2.GetPixel(0).Size();
+    assert(m_bandNumberInput1 % (m_bandNumberInput2+1) == 0) ;
+    m_bandNumberOutput = m_bandNumberInput1/(m_bandNumberInput2+1) ;
+    }
 
-    typename TInput_I::RadiusType r_Box = input_I.GetRadius(); 
-    unsigned int r_Mean = r_Box[0];
-    unsigned int size_Mean = 2*r_Mean+1;
+  void SetWSize()
+    {
+    TInput1 input1 ;
+    typename TInput1::RadiusType r_Box = input1.GetRadius(); 
+    m_WSize = 2*r_Box[0]+1;
+    }
 
-    unsigned int disparity_max = Nband_C ;
 
+  TOutput operator() ( TInput1 input_I , TInput2 input_C )
+    {
     TOutput output(m_numberOfComponents); 
     output.Fill(0); 
 
+    unsigned int size_input_I = input_I.Size() ;
+
     //moyenne rr, gg, bb
-    std::vector<double> v_mean(Nband); 
+    std::vector<double> v_mean(m_bandNumberInput1); 
     //variance rr, gg, bb
-    std::vector<double> v_var(2*Nband); 
-    std::vector<double> v_pmean(disparity_max); 
-    std::vector<double> v_multr(disparity_max); 
-    std::vector<double> v_multg(disparity_max); 
-    std::vector<double> v_multb(disparity_max); 
+    std::vector<double> v_var(2*m_bandNumberInput1); 
+    std::vector<double> v_pmean(m_bandNumberInput2); 
+    std::vector<double> v_multr(m_bandNumberInput2); 
+    std::vector<double> v_multg(m_bandNumberInput2); 
+    std::vector<double> v_multb(m_bandNumberInput2); 
 
 
     //moyennes rr gg bb et variances rr gg bb
-    for(unsigned int bandI = 0; bandI < Nband ; ++bandI)
+    for(unsigned int bandI = 0; bandI < m_bandNumberInput1 ; ++bandI)
       {
       double mean(0.);  
       double var_tmp(0.);
       double var(0.);           
-      for(unsigned int i = 0 ; i < input_I.Size() ; ++i)
+      for(unsigned int i = 0 ; i < size_input_I ; ++i)
         {            
         mean += input_I.GetPixel(i)[bandI];
         var_tmp += input_I.GetPixel(i)[bandI] * input_I.GetPixel(i)[bandI] ;      
         }
-      mean /= size_Mean*size_Mean;
-      var = var_tmp/(size_Mean*size_Mean) - mean*mean ;
+      mean /= m_WSize*m_WSize;
+      var = var_tmp/(m_WSize*m_WSize) - mean*mean ;
       v_mean[bandI] = mean ; 
       v_var[bandI] = var ;
       }
 
     //variance rg, rb
-    for(unsigned int bandI = 1 ; bandI < Nband ; ++bandI)
+    for(unsigned int bandI = 1 ; bandI < m_bandNumberInput1 ; ++bandI)
       {
       double var_tmp(0.);
       double var(0.);
-      for(unsigned int i = 0 ; i < input_I.Size() ; ++i)
+      for(unsigned int i = 0 ; i < size_input_I ; ++i)
         {
         var_tmp += input_I.GetPixel(i)[0] * input_I.GetPixel(i)[bandI] ;
         }
-        var = var_tmp/(size_Mean*size_Mean) - v_mean[0] * v_mean[bandI] ; 
-        v_var[Nband+bandI-1] = var ;
+        var = var_tmp/(m_WSize*m_WSize) - v_mean[0] * v_mean[bandI] ; 
+        v_var[m_bandNumberInput1+bandI-1] = var ;
       }
 
     //variance gb
     double var_tmp(0.);
     double var(0.);
-    for(unsigned int i = 0 ; i < input_I.Size() ; ++i)
+    for(unsigned int i = 0 ; i < size_input_I ; ++i)
       {
       var_tmp += input_I.GetPixel(i)[1] * input_I.GetPixel(i)[2];
       }
-    var = var_tmp/(size_Mean*size_Mean) - v_mean[1]*v_mean[2] ;
-    v_var[2*Nband-1] = var ;
+    var = var_tmp/(m_WSize*m_WSize) - v_mean[1]*v_mean[2] ;
+    v_var[2*m_bandNumberInput1-1] = var ;
 
     //mean of each slice of the cost volume + sum(Ir(i)*p(i)) + sum(Ig(i)*p(i)) + sum(Ib(i)*p(i))
-    for(unsigned int bandC = 0 ; bandC < disparity_max ; ++bandC)
+    for(unsigned int bandC = 0 ; bandC < m_bandNumberInput2 ; ++bandC)
       {
       double mean_p(0.);
       double multr(0.);
@@ -154,10 +165,10 @@ public:
         multg += input_I.GetPixel(i)[1] * input_C.GetPixel(i)[bandC];
         multb += input_I.GetPixel(i)[2] * input_C.GetPixel(i)[bandC];
         }
-      mean_p /= size_Mean*size_Mean;
-      multr /= size_Mean*size_Mean;
-      multg /= size_Mean*size_Mean;
-      multb /= size_Mean*size_Mean;
+      mean_p /= m_WSize*m_WSize;
+      multr /= m_WSize*m_WSize;
+      multg /= m_WSize*m_WSize;
+      multb /= m_WSize*m_WSize;
       v_pmean[bandC] = mean_p;
       v_multr[bandC] = multr ;
       v_multg[bandC] = multg ;
@@ -171,18 +182,18 @@ public:
 
     //Calcul ai
     //r
-    std::vector<double> elem1(disparity_max);
+    std::vector<double> elem1(m_bandNumberInput2);
     //g
-    std::vector<double> elem2(disparity_max);
+    std::vector<double> elem2(m_bandNumberInput2);
     //b
-    std::vector<double> elem3(disparity_max);
+    std::vector<double> elem3(m_bandNumberInput2);
 
 
-    for(unsigned int bandC = 0 ; bandC < disparity_max ; ++bandC)
+    for(unsigned int bandC = 0 ; bandC < m_bandNumberInput2 ; ++bandC)
       {
-      if(Nband>1)
+      if(m_bandNumberInput1>1)
         {
-        std::vector<double> ak(Nband);
+        std::vector<double> ak(m_bandNumberInput1);
         //matrice de covariance fenêtre k :
         M(0,0) = v_var[0] + epsilon;
         M(0,1) = v_var[3] ;
@@ -217,10 +228,10 @@ public:
         double ak(0.) ;
         double bk(0.) ;
         elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;          
-        ak = elem1[bandC] / (v_var[Nband-1]+epsilon) ;
+        ak = elem1[bandC] / (v_var[m_bandNumberInput1-1]+epsilon) ;
         bk = v_pmean[bandC] - ak*v_mean[0] ;
-        output[(Nband+1)*bandC] = static_cast<typename TOutput::ValueType>(ak);
-        output[(Nband+1)*bandC+1] = static_cast<typename TOutput::ValueType>(bk);
+        output[(m_bandNumberInput1+1)*bandC] = static_cast<typename TOutput::ValueType>(ak);
+        output[(m_bandNumberInput1+1)*bandC+1] = static_cast<typename TOutput::ValueType>(bk);
         }
       }
     return output ; 
@@ -229,6 +240,10 @@ public:
     unsigned char                   m_RadiusMin;
     unsigned char                   m_RadiusMax;
     unsigned int                    m_numberOfComponents ;
+    unsigned int                    m_bandNumberInput1 ;
+    unsigned int                    m_bandNumberInput2 ;
+    unsigned int                    m_bandNumberOutput ;
+    unsigned int                    m_WSize;
 }; //end class
 
 } // end Functor
@@ -283,6 +298,14 @@ protected:
     this->GetOutput()->SetNumberOfComponentsPerPixel((bandI+1)*nb_comp);
     this->GetFunctor().SetNumberOfComponent((bandI+1)*nb_comp);      
     } 
+  
+  void GenerateData(void) override 
+    {
+    Superclass::GenerateData();
+    this->GetFunctor().SetNumberOfBands() ;
+    this->GetFunctor().SetWSize() ;
+    }
+
 
 private:
   WeightsGuidedFilter(const Self &) = delete; //purposely not implemented
