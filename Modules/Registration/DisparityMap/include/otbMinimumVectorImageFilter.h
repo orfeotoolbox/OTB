@@ -52,17 +52,9 @@ public:
 
   TOutput operator() ( TInput input ) const
     { 
-    int index = 0;
-    typename TInput::ValueType min ( input[0] );
 
-    for(unsigned int i=0; i<m_Size; i++)
-      {
-      if (input[i]<min)
-        {
-        min = input[i] ;
-        index = i;
-        }
-      } 
+    const auto pos = std::min_element(&input[0], &input[m_Size]);
+    const auto index = std::distance(pos, &input[0]);
 
     if(m_Side=='r') //Minimum of the Right cost volume
       { 
@@ -74,7 +66,7 @@ public:
       }  
     }
 
-  protected:
+  private:
     char m_Side ;
 
 

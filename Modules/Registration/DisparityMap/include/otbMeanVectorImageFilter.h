@@ -45,12 +45,12 @@ public:
     return m_numberOfComponents;   
     }
 
-  unsigned char GetRadiusMin(void) 
+  unsigned char GetRadiusMin() const
     {
      return m_RadiusMin;     
     }
 
-  unsigned char GetRadiusMax(void)
+  unsigned char GetRadiusMax() const
     {
     return m_RadiusMax;
     }
@@ -65,23 +65,22 @@ public:
     m_numberOfComponents = nb;
     }
 
-
   typedef typename TInput2::PixelType               PixelType;
 
   unsigned int m_bandNumberInput1 ;
   unsigned int m_bandNumberInput2 ;
   unsigned int m_bandNumberOutput ;
   unsigned int m_WSize ;
-
+  
 
 
   TOutput operator() (TInput1 input_weights, TInput2 input_I) const
     {      
-    PixelType I_pixel = input_I.GetCenterPixel();    
+    PixelType I_pixel = input_I.GetCenterPixel();   
+
 
     TOutput output(m_bandNumberOutput); 
     output.Fill(0);     
-
     std::vector<double> v_mean_ai(m_bandNumberInput1); 
 
     for(unsigned int b = 0 ; b < m_bandNumberInput1 ; ++b )
@@ -113,7 +112,7 @@ public:
     return output ;
     }
 
-  protected:
+  private:
     unsigned char                   m_RadiusMin;
     unsigned char                   m_RadiusMax;
     unsigned int                    m_numberOfComponents ;
@@ -264,3 +263,4 @@ private:
 } // end namespace otb
 
 #endif
+

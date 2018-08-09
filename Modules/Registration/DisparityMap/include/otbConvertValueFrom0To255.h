@@ -75,7 +75,7 @@ public:
     return TOutput(m_coeff_a*input+ m_coeff_b) ;
     }
 
-  protected:
+  private:
     int                             m_dispMin;
     int                             m_dispMax;
     int                             m_dispSubtraction ;

@@ -50,12 +50,12 @@ public:
     return m_numberOfComponents;   
     }
 
-  unsigned char GetRadiusMin(void) const
+  unsigned char GetRadiusMin() const
     {
      return m_RadiusMin;     
     }
 
-  unsigned char GetRadiusMax(void) const
+  unsigned char GetRadiusMax() const
     {
     return m_RadiusMax;
     }
@@ -227,7 +227,7 @@ public:
       }
     return output ; 
     }
-  protected:
+  private:
     unsigned char                   m_RadiusMin;
     unsigned char                   m_RadiusMax;
     unsigned int                    m_numberOfComponents ;

@@ -48,28 +48,20 @@ public:
   typedef std::pair<int,double> pairCord;
   typedef typename TInput::PixelType               PixelType;
 
+  unsigned int m_WSize;
+  const double sSpace = 9 ;
+  const double sColor = 255*0.1;
 
-  static bool comparePair(pairCord i,pairCord j) { 
-  if( i.first < j.first ) return i.first <= j.first;
-    if( j.first < i.first ) return false;
-    return (i.first < j.first ); }
-
-  
   TOutput operator() (  const TInput & input) const
     { 
-
     PixelType input_center_pixel = input.GetCenterPixel() ;
-    unsigned int Wsize = input.Size();
-    const double sSpace = 9 ;
-    const double sColor = 255*0.1;
-
-    std::vector< std::pair<int,double> > duo(Wsize);   
+    std::vector< std::pair<int,double> > duo(m_WSize);   
   
     PixelType I(3);
     if(input_center_pixel[4] < 0.0000000001)
       {
       double Wt=0. ;
-      for (unsigned int j  = 0; j< Wsize; j++)
+      for (unsigned int j  = 0; j< m_WSize; j++)
         {
         const auto & Offset_j = input.GetOffset(j);
         I[0] = input_center_pixel[1]- input.GetPixel(j)[1];
@@ -84,6 +76,7 @@ public:
         Wt += W ; 
         }
       Wt = Wt/2;    
+      auto comparePair = [](auto const& lhs, auto const& rhs) { return lhs.first < rhs.first; };
       std::sort (duo.begin(), duo.end(), comparePair);
 
       double Wtemp=0. ; 
@@ -153,6 +146,8 @@ void FillPixelFilter < TInputImage, TOutputImage >
 ::GenerateOutputInformation(void){
  Superclass::GenerateOutputInformation(); 
  this->GetOutput()->SetNumberOfComponentsPerPixel(1);
+
+ this->GetFunctor().m_WSize = (this->m_Radius[0]*2+1)*(this->m_Radius[0]*2+1);
 }
 
 } // end of namespace otb
@@ -162,6 +157,7 @@ void FillPixelFilter < TInputImage, TOutputImage >
 #endif
 
 #endif
+
 
 
 
