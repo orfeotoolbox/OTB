@@ -65,6 +65,8 @@ char const* TileHintY = "TileHintY";
 
 char const * NoDataValueAvailable = "NoDataValueAvailable";
 char const * NoDataValue = "NoDataValue";
+
+char const * OriginalPixelType = "OriginalPixelType";
 }
 
 const MetaDataKey::KeyTypeDef Types[] =
