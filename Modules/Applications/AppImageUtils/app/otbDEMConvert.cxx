@@ -109,40 +109,40 @@ void DoExecute() override
   paramOut->SetValue(inImage);
 
   // Set the output pixel type
-  ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO( GetParameterString("in").c_str(),
-                                                                      ImageIOFactory::ReadMode);
-  std::string componentTypeInfo(imageIO->GetComponentTypeInfo().name());
-  if( componentTypeInfo == typeid(unsigned char).name())
+  std::string typeInfo;
+  itk::ExposeMetaData< std::string >( inImage->GetMetaDataDictionary(), 
+          MetaDataKey::OriginalPixelType , typeInfo) ;
+  if( typeInfo == "unsigned char" )
     {
     paramOut->SetPixelType(ImagePixelType_uint8);
     }
-  else if( componentTypeInfo == typeid(unsigned short).name())
+  else if( typeInfo == "unsigned short" )
     {
     paramOut->SetPixelType(ImagePixelType_uint16);
     }
-  else if( componentTypeInfo == typeid(short).name())
+  else if( typeInfo == "short" )
     {
     paramOut->SetPixelType(ImagePixelType_int16);
     }
-  else if( componentTypeInfo == typeid(unsigned int).name())
+  else if( typeInfo == "unsigned int" )
     {
     paramOut->SetPixelType(ImagePixelType_uint32);
     }
-  else if( componentTypeInfo == typeid(int).name())
+  else if( typeInfo == "int" )
     {
     paramOut->SetPixelType(ImagePixelType_int32);
     }
-  else if( componentTypeInfo == typeid(float).name())
+  else if( typeInfo == "float" )
     {
     paramOut->SetPixelType(ImagePixelType_float);
     }
-  else if( componentTypeInfo == typeid(double).name())
+  else if( typeInfo == "double" )
     {
     paramOut->SetPixelType(ImagePixelType_double);
     }
   else
     {
-    itkExceptionMacro("This application doesn't support image pixel type " << componentTypeInfo);
+    itkExceptionMacro("This application doesn't support image pixel type " << typeInfo);
     }
 
   // Add the tempfilename to be written
