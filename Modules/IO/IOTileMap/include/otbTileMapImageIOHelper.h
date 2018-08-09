@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBIOTileMap
  */
 
-class OTBIOTileMap_EXPORT TileMapImageIOHelper: public itk::Object
+class OTBIOTileMap_DEPRECATED_EXPORT TileMapImageIOHelper: public itk::Object
 {
 public:
   /** Standard class typedefs. */

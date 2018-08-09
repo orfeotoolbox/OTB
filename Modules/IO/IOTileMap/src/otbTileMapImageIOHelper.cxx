@@ -22,7 +22,7 @@
 namespace otb
 {
 /** get scale from depth */
-const std::string TileMapImageIOHelper::ConvertDepthToScale(const unsigned int depth) const
+OTBIOTileMap_DEPRECATED const std::string TileMapImageIOHelper::ConvertDepthToScale(const unsigned int depth) const
 {
   std::string res;
   res += "level ";

@@ -17,8 +17,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-project(OTBIOTileMap)
-
-set(OTBIOTileMap_LIBRARIES OTBIOTileMap)
-otb_module_impl()
+if( OTB_USE_DEPRECATED )
+  project(OTBIOTileMap)
+  
+  set(OTBIOTileMap_LIBRARIES OTBIOTileMap)
+  otb_module_impl()
+  
+endif()

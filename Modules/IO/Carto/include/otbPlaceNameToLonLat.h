@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBCarto
  */
 
-class OTBCarto_EXPORT PlaceNameToLonLat : public itk::Object
+class OTBCarto_DEPRECATED_EXPORT PlaceNameToLonLat : public itk::Object
 {
 public:
   /** Standard class typedefs. */

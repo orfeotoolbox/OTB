@@ -221,6 +221,7 @@ macro(otb_module_impl)
     generate_export_header(${otb-module}
       EXPORT_FILE_NAME ${_export_header_file}
       EXPORT_MACRO_NAME ${otb-module}_EXPORT
+      DEPRECATED_MACRO_NAME ${otb-module}_DEPRECATED
       NO_EXPORT_MACRO_NAME ${otb-module}_HIDDEN
       STATIC_DEFINE OTB_STATIC )
     install(FILES

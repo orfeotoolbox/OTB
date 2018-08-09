@@ -34,7 +34,7 @@ namespace otb
  *
  * \ingroup OTBIOTileMap
  */
-class OTBIOTileMap_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
+class OTBIOTileMap_DEPRECATED TileMapImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
