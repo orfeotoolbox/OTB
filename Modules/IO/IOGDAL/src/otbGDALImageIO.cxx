@@ -697,7 +697,9 @@ void GDALImageIO::InternalReadImageInformation()
   /*  Get Pixel type                                                      */
   /* -------------------------------------------------------------------- */
 
-  itk::EncapsulateMetaData< IOComponentType >(dict, MetaDataKey::OriginalPixelType , this->GetComponentType() );
+  itk::EncapsulateMetaData< std::string >( dict, 
+          MetaDataKey::OriginalPixelType , 
+          this->GetComponentTypeAsString( this->GetComponentType() ) );
 
   /* -------------------------------------------------------------------- */
   /*  Get Spacing                                                         */
