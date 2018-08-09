@@ -56,6 +56,7 @@ int otbCostVolumeFiltersTest(int argc, char *argv[])
   typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorImageReaderType;  
   typedef otb::Image< int, Dimension > IntImageType;
   typedef otb::ImageFileWriter< IntImageType > IntImageWriterType;  
+   typedef otb::ImageFileWriter< FloatVectorImageType > FloatVectorImageWriterType;  
 
   FloatVectorImageReaderType::Pointer inLeft = FloatVectorImageReaderType::New();
   inLeft->SetFileName(argv[1]); //LeftImage  
@@ -177,7 +178,7 @@ int otbCostVolumeFiltersTest(int argc, char *argv[])
   m_minLeftCost->SetInput(m_LeftCost->GetOutput());
   m_minLeftCost->SetSide('l');
   m_minRightCost->SetInput(m_RightCost->GetOutput());  
-  m_RightCost->SetSide('r');
+  m_minRightCost->SetSide('r');
 
   // OUTPUTS 
   IntImageWriterType::Pointer writer_m_minLeftCost = IntImageWriterType::New();

@@ -48,11 +48,7 @@ public:
       m_Side = side;
     }
 
-  void SetSize()
-    {
-    TInput input ;
-    m_Size = input.GetSize() ;
-    }
+  unsigned int m_Size ;
 
   TOutput operator() ( TInput input ) const
     { 
@@ -80,7 +76,7 @@ public:
 
   protected:
     char m_Side ;
-    unsigned int m_Size ;
+
 
 }; //end class
 
@@ -137,14 +133,9 @@ public:
     {
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
+    this->GetFunctor().m_Size = this->GetInput()->GetNumberOfComponentsPerPixel() ;
     }
   
-  void GenerateData(void) override 
-    {
-    Superclass::GenerateData();
-    this->GetFunctor().SetSize() ;
-    }
-
 
   private:
   MinimumVectorImageFilter(const Self &) = delete; //purposely not implemented

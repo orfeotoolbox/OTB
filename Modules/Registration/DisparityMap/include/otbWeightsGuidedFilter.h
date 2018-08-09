@@ -52,12 +52,12 @@ public:
 
   unsigned char GetRadiusMin(void) const
     {
-     return m_RadiusMax;     
+     return m_RadiusMin;     
     }
 
   unsigned char GetRadiusMax(void) const
     {
-    return m_RadiusMin;
+    return m_RadiusMax;
     }
 
   void SetRadius(std::uint8_t min, std::uint8_t max) 
@@ -72,15 +72,10 @@ public:
 
   unsigned int m_bandNumberInput1;
   unsigned int m_bandNumberInput2;
+  unsigned int m_WSize ;
 
   TOutput operator() ( TInput1 input_I , TInput2 input_C ) const
     {
-    unsigned int m_bandNumberInput1 =  input_I.GetPixel(0).Size();
-    unsigned int m_bandNumberInput2 =  input_C.GetPixel(0).Size(); 
-
-    typename TInput1::RadiusType r_Box ;
-    r_Box = input_I.GetRadius(); 
-    unsigned int size_Mean = 2*r_Box[0]+1;
 
     TOutput output(m_numberOfComponents); 
     output.Fill(0); 
@@ -115,8 +110,8 @@ public:
         mean += input_I.GetPixel(i)[bandI];
         var_tmp += input_I.GetPixel(i)[bandI] * input_I.GetPixel(i)[bandI] ;      
         }
-      mean /= size_Mean*size_Mean;
-      var = var_tmp/(size_Mean*size_Mean) - mean*mean ;
+      mean /= m_WSize*m_WSize;
+      var = var_tmp/(m_WSize*m_WSize) - mean*mean ;
       v_mean[bandI] = mean ; 
       v_var[bandI] = var ;
       }
@@ -130,7 +125,7 @@ public:
         {
         var_tmp += input_I.GetPixel(i)[0] * input_I.GetPixel(i)[bandI] ;
         }
-        var = var_tmp/(size_Mean*size_Mean) - v_mean[0] * v_mean[bandI] ; 
+        var = var_tmp/(m_WSize*m_WSize) - v_mean[0] * v_mean[bandI] ; 
         v_var[m_bandNumberInput1+bandI-1] = var ;
       }
 
@@ -141,7 +136,7 @@ public:
       {
       var_tmp += input_I.GetPixel(i)[1] * input_I.GetPixel(i)[2];
       }
-    var = var_tmp/(size_Mean*size_Mean) - v_mean[1]*v_mean[2] ;
+    var = var_tmp/(m_WSize*m_WSize) - v_mean[1]*v_mean[2] ;
     v_var[2*m_bandNumberInput1-1] = var ;
 
     //mean of each slice of the cost volume + sum(Ir(i)*p(i)) + sum(Ig(i)*p(i)) + sum(Ib(i)*p(i))
@@ -158,10 +153,10 @@ public:
         multg += input_I.GetPixel(i)[1] * input_C.GetPixel(i)[bandC];
         multb += input_I.GetPixel(i)[2] * input_C.GetPixel(i)[bandC];
         }
-      mean_p /= size_Mean*size_Mean;
-      multr /= size_Mean*size_Mean;
-      multg /= size_Mean*size_Mean;
-      multb /= size_Mean*size_Mean;
+      mean_p /= m_WSize*m_WSize;
+      multr /= m_WSize*m_WSize;
+      multg /= m_WSize*m_WSize;
+      multb /= m_WSize*m_WSize;
       v_pmean[bandC] = mean_p;
       v_multr[bandC] = multr ;
       v_multg[bandC] = multg ;
@@ -290,6 +285,8 @@ protected:
     assert((this->GetFunctor().m_bandNumberInput1 + 1)  % (this->GetFunctor().m_bandNumberInput2) == 0) ;
     this->GetOutput()->SetNumberOfComponentsPerPixel((this->GetFunctor().m_bandNumberInput1+1)*this->GetFunctor().m_bandNumberInput2 );
     this->GetFunctor().SetNumberOfComponent((this->GetFunctor().m_bandNumberInput1+1)*this->GetFunctor().m_bandNumberInput2 );  
+
+    this->GetFunctor().m_WSize = (this->GetFunctor().GetRadiusMax())*2+1 ;
     } 
 
 private:

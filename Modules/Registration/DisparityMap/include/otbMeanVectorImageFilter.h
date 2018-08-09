@@ -60,32 +60,29 @@ public:
     std::tie(m_RadiusMin, m_RadiusMax) = std::minmax(min, max);
     }
 
-
   void SetNumberOfComponent( unsigned int nb)
     {
     m_numberOfComponents = nb;
     }
+
 
   typedef typename TInput2::PixelType               PixelType;
 
   unsigned int m_bandNumberInput1 ;
   unsigned int m_bandNumberInput2 ;
   unsigned int m_bandNumberOutput ;
+  unsigned int m_WSize ;
+
+
 
   TOutput operator() (TInput1 input_weights, TInput2 input_I) const
     {      
-    PixelType I_pixel = input_I.GetCenterPixel();
+    PixelType I_pixel = input_I.GetCenterPixel();    
 
     TOutput output(m_bandNumberOutput); 
     output.Fill(0);     
-    typename TInput1::RadiusType r_Box = input_weights.GetRadius(); 
-    unsigned int r_Mean = r_Box[0];
-    unsigned int size_Mean = 2*r_Mean+1;     
-
 
     std::vector<double> v_mean_ai(m_bandNumberInput1); 
-
-
 
     for(unsigned int b = 0 ; b < m_bandNumberInput1 ; ++b )
       {
@@ -94,8 +91,10 @@ public:
           {
           mean_ak += input_weights.GetPixel(i)[b] ;
           }
-          mean_ak /= size_Mean*size_Mean ;
+          mean_ak /= m_WSize*m_WSize ;
           v_mean_ai[b] = mean_ak ;
+
+
       }   
 
     for(unsigned int b = 0 ; b < m_bandNumberOutput ; ++b)
@@ -251,6 +250,8 @@ protected:
 
     this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetFunctor().m_bandNumberOutput );
     this->GetFunctor().SetNumberOfComponent( this->GetFunctor().m_bandNumberOutput );
+
+    this->GetFunctor().m_WSize = (this->GetFunctor().GetRadiusMax())*2+1;
 
     } 
 
