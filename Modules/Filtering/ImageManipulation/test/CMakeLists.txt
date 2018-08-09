@@ -159,9 +159,6 @@ otb_add_test(NAME bfTvUnaryImageFunctorWithVectorImageFilter COMMAND otbImageMan
   ${TEMP}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
   )
 
-otb_add_test(NAME coTuImageToVectorImageCastFilter COMMAND otbImageManipulationTestDriver
-  otbImageToVectorImageCastFilterNew)
-
 otb_add_test(NAME bfTvPrintableImageFilterWithMask COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/bfTvPrintableImageFilterWithMask.png
@@ -577,19 +574,19 @@ otb_add_test(NAME bfTvTwoNRIBandsImageToNComplexBandsImage COMMAND otbImageManip
   ${INPUTDATA}/RSAT_imagery_HH_HV_VV.tif
   ${TEMP}/bfTvTwoNRIBandsImageToNComplexBandsImage.tif
   )
-  
-  
+
+
 otb_add_test(NAME bfTvNRIBandImagesToOneNComplexBandsImage COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
   ${TEMP}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
-  otbNRIBandImagesToOneNComplexBandsImage 
+  otbNRIBandImagesToOneNComplexBandsImage
   ${INPUTDATA}/RSAT_imagery_HH.tif
   ${INPUTDATA}/RSAT_imagery_HV.tif
   ${INPUTDATA}/RSAT_imagery_VV.tif
   ${TEMP}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
   )
-  
+
 otb_add_test(NAME bfTvOneRIBandImageToOneComplexBandImage COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_3}
   ${INPUTDATA}/RSAT_imageryC_HH.tif

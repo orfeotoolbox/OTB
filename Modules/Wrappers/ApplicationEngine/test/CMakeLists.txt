@@ -81,10 +81,6 @@ otb_add_test(NAME owTvStringListParameter COMMAND otbApplicationEngineTestDriver
   "my description"
   )
 
-otb_add_test(NAME owTvParameterRAM COMMAND otbApplicationEngineTestDriver
-  otbWrapperRAMParameterNew
-  )
-
 otb_add_test(NAME owTvParameterKey COMMAND otbApplicationEngineTestDriver
   otbWrapperParameterKey
   )

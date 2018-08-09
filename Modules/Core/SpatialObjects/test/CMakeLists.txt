@@ -33,11 +33,6 @@ target_link_libraries(otbSpatialObjectsTestDriver ${OTBSpatialObjects-Test_LIBRA
 otb_module_target_label(otbSpatialObjectsTestDriver)
 
 # Tests Declaration
-
-
-otb_add_test(NAME coTuLineSpatialObjectListToPointSetFilter COMMAND otbSpatialObjectsTestDriver
-  otbLineSpatialObjectListToPointSetFilterNew)
-
 otb_add_test(NAME bfTvSpatialObjectToImageDrawingFilterWithoutInputImage COMMAND otbSpatialObjectsTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/bfTvSpatialObjectDrawingNoInput.png
@@ -62,4 +57,3 @@ otb_add_test(NAME coTuDrawLineSpatialObjectList COMMAND otbSpatialObjectsTestDri
   otbDrawLineSpatialObjectList
   ${INPUTDATA}/ImageLineDir.bsq
   ${TEMP}/coFiltreDrawLineList_ImageLineDir.png )
-

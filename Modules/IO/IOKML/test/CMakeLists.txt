@@ -33,9 +33,6 @@ otb_module_target_label(otbIOKMLTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME ioTuKMLVectorDataIO COMMAND otbIOKMLTestDriver
-  otbKMLVectorDataIONew )
-
 otb_add_test(NAME ioTvKMLVectorDataIOFileReaderExample COMMAND otbIOKMLTestDriver
   otbKMLVectorDataIOTestFileReader
   ${INPUTDATA}/MODIS20040214212340.kml
@@ -58,4 +55,3 @@ otb_add_test(NAME ioTuKMLVectorDataIOCanWrite COMMAND otbIOKMLTestDriver
 otb_add_test(NAME ioTuKMLVectorDataIOCanRead COMMAND otbIOKMLTestDriver
   otbKMLVectorDataIOTestCanRead
   ${INPUTDATA}/MODIS20040214212340.kml)
-

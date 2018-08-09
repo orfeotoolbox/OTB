@@ -606,9 +606,6 @@ otb_add_test(NAME ioTvImageComplexDoubleTest COMMAND otbImageIOTestDriver
   ${INPUTDATA}/multibandComplexDouble_2bands.hdr
   )
 
-otb_add_test(NAME ioTuScalarBufferToImageFileWriter COMMAND otbImageIOTestDriver
-  otbScalarBufferToImageFileWriterNew )
-
 otb_add_test(NAME ioTvImageFileReaderShortLUM2LUM COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.lum
   ${TEMP}/ioImageFileReaderI2_LUM2LUM.lum

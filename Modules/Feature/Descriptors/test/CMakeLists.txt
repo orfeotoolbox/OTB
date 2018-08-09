@@ -70,9 +70,6 @@ otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii 
   6 3 0.08 10.0
   )
 
-otb_add_test(NAME feTuHistogramOfOrientedGradientCovariantImageFunction COMMAND otbDescriptorsTestDriver
-  otbHistogramOfOrientedGradientCovariantImageFunctionNew)
-
 otb_add_test(NAME feTvHistogramOfOrientedGradientCovariantImageFunction COMMAND otbDescriptorsTestDriver
   --compare-ascii ${EPSILON_8}
   ${BASELINE_FILES}/feTvHistogramOfOrientedGradientCovariantImageFunction.txt
@@ -241,7 +238,7 @@ otb_add_test(NAME feTvFourierMellinDescriptors COMMAND otbDescriptorsTestDriver
   )
 
 otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterDistanceMap COMMAND otbDescriptorsTestDriver
-  --compare-ascii ${EPSILON_3} 
+  --compare-ascii ${EPSILON_3}
   ${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
   ${TEMP}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
   --ignore-lines-with 2 INFO DEBUG

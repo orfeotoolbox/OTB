@@ -93,9 +93,5 @@ otb_add_test(NAME bfTvBandMathImageFilterWithIdx COMMAND otbMathParserTestDriver
   ${TEMP}/bfTvBandMathImageFilterWithIdx2.tif
   )
 
-otb_add_test(NAME bfTuBandMathImageFilter COMMAND otbMathParserTestDriver
-  otbBandMathImageFilterNew)
-
 otb_add_test(NAME bfTvBandMathImageFilter COMMAND otbMathParserTestDriver
   otbBandMathImageFilter)
-
