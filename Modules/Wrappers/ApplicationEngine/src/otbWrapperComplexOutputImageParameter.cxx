@@ -300,5 +300,16 @@ ComplexOutputImageParameter::HasValue() const
   return !filename.empty();
 }
 
+void ComplexOutputImageParameter::SetFileName (const char* filename)
+{
+  this->SetFileName(std::string(filename));
+}
+
+void ComplexOutputImageParameter::SetFileName (const std::string& filename)
+{
+  m_FileName = filename;
+  SetActive(true);
+}
+
 }
 }

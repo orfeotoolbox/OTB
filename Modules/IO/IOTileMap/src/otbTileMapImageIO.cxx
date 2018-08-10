@@ -364,7 +364,7 @@ void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
 
   if (lCanRead == true)
     {
-    imageIO->SetFileName(filename.c_str());
+    imageIO->SetFileName(filename);
     imageIO->ReadImageInformation();
     itk::ImageIORegion ioRegion(2);
     ioRegion.SetIndex(0, 0);
@@ -695,7 +695,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
     imageIO->SetUseCompression(1);
 
-    imageIO->SetFileName(filename.str().c_str());
+    imageIO->SetFileName(filename.str());
     imageIO->WriteImageInformation();
 
     itk::ImageIORegion ioRegion(2);

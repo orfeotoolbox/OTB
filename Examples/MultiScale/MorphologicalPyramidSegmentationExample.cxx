@@ -209,7 +209,7 @@ int main(int itkNotUsed(argc), char * argv[])
     oss << outputFilenamePrefix << index << "." << outputFilenameSuffix;
     writer = WriterType::New();
     writer->SetInput(it.Get());
-    writer->SetFileName(oss.str().c_str());
+    writer->SetFileName(oss.str());
     writer->Update();
     std::cout << oss.str() << " file written." << std::endl;
     oss.str("");

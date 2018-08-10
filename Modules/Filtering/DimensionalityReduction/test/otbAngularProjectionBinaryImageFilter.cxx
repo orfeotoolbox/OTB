@@ -103,7 +103,7 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
     title << outputImageName << "_" << i << ".hdr";
 
     writers[i] = WriterType::New();
-    writers[i]->SetFileName( title.str().c_str() );
+    writers[i]->SetFileName( title.str() );
     writers[i]->SetInput( filter->GetOutput(i) );
     writers[i]->Update();
   }
