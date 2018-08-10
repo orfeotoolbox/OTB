@@ -33,6 +33,7 @@ otbAngularProjectionSetImageFilter.cxx
 otbNAPCAImageFilter.cxx
 otbAngularProjectionImageFilter.cxx
 otbAngularProjectionBinaryImageFilter.cxx
+otbSparseWvltToAngleMapperListFilter.cxx
 otbLocalActivityVectorImageFilter.cxx
 )
 

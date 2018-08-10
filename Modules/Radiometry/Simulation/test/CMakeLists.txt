@@ -34,6 +34,7 @@ otbReduceSpectralResponseSVMClassifier.cxx
 otbProspectTransTest.cxx
 otbReduceSpectralResponseClassifierRAndNIR.cxx
 otbSatelliteRSR.cxx
+otbSurfaceReflectanceToReflectanceFilter.cxx
 otbImageSimulationMethodWithSpatialisationTest.cxx
 otbImageSimulationMethodSVMClassif.cxx
 otbReduceSpectralResponse.cxx
