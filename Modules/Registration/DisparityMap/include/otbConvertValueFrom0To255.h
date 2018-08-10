@@ -139,24 +139,20 @@ public:
       this->GetFunctor().SetDispMin(disp);
     }
 
-
   protected:
   ConvertValueFrom0To255() = default ;
   ~ConvertValueFrom0To255() override = default ;
-
 
   void GenerateOutputInformation(void) override
     {
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
-
   void GenerateData(void) override 
     {
     Superclass::GenerateData();
     this->GetFunctor().PreComputeCachedData() ;
     }
-
   //surcharger generate data
 
 private:

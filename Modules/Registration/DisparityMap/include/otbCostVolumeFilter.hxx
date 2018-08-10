@@ -267,8 +267,8 @@ Superclass::GenerateInputRequestedRegion();
  
 typename TInputImage::Pointer  inLeftPtr = const_cast<InputImageType *>(this->GetLeftInputImage());
 typename TInputImage::Pointer  inRightPtr = const_cast<InputImageType *>(this->GetRightInputImage());
-typename TInputImage::Pointer  inLeftGradientXPtr = const_cast<InputImageType *>(this->GetLeftGradientXInput());
-typename TInputImage::Pointer  inRightGradientXPtr = const_cast<InputImageType *>(this->GetRightGradientXInput());
+typename TGradientImage::Pointer  inLeftGradientXPtr = const_cast<TGradientImage *>(this->GetLeftGradientXInput());
+typename TGradientImage::Pointer  inRightGradientXPtr = const_cast<TGradientImage *>(this->GetRightGradientXInput());
 
 typename TOutputImage::ConstPointer outputPtr = this->GetOutputImage();
         
@@ -314,9 +314,9 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
   LeftInputImageIt.GoToBegin(); 
   itk::ImageRegionConstIterator<TInputImage> RightInputImageIt ( this->GetRightInputImage(), RightRegionForThread );
   RightInputImageIt.GoToBegin();
-  itk::ImageRegionConstIterator<TInputImage> LeftGradientXInputIt ( this->GetLeftGradientXInput(), LeftRegionForThread );
+  itk::ImageRegionConstIterator<TGradientImage> LeftGradientXInputIt ( this->GetLeftGradientXInput(), LeftRegionForThread );
   LeftGradientXInputIt.GoToBegin();
-  itk::ImageRegionConstIterator<TInputImage> RightGradientXInputIt ( this->GetRightGradientXInput(), RightRegionForThread );
+  itk::ImageRegionConstIterator<TGradientImage> RightGradientXInputIt ( this->GetRightGradientXInput(), RightRegionForThread );
   RightGradientXInputIt.GoToBegin();   
           
   itk::ImageRegionIterator<TOutputImage> outputIt ( this->GetOutputImage(), LeftRegionForThread );

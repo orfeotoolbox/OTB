@@ -35,14 +35,13 @@
 #include <itkConstantBoundaryCondition.h>
 #include <otbConvolutionImageFilter.h>
 #include <itkArray.h>
-#include <otbPerBandVectorImageFilter.h>
 
 #include "otbConvertionRGBToGrayLevelImageFilter.h"
-
-
 #include "otbWeightsGuidedFilter.h"
 #include "otbMeanVectorImageFilter.h"
 #include "otbConvertDisparityValue.h"
+#include "itkVectorIndexSelectionCastImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 
 
@@ -91,13 +90,14 @@ int otbGuidedFilterTest(int argc, char *argv[])
   #define FILENAME(n) std::string( argv12 + std::string(n)).c_str()
 
 
-  
   typedef itk::ConstantBoundaryCondition<FloatImageType> BoundaryConditionType;
   typedef otb::ConvolutionImageFilter<FloatImageType, FloatImageType, BoundaryConditionType> ConvFilterType;
-  typedef otb::ConvertionRGBToGrayLevelImageFilter<FloatVectorImageType,FloatVectorImageType> RGBTograylevelFilter ;
-  typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, ConvFilterType> VectorFilterType;
+  typedef otb::ConvertionRGBToGrayLevelImageFilter<FloatVectorImageType,FloatImageType> RGBTograylevelFilter ;
   typedef otb::CostVolumeFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType >  CostVolumeType;  
-  typedef otb::MinimumVectorImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;    
+  typedef otb::MinimumVectorImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;  
+  typedef itk::VectorIndexSelectionCastImageFilter<FloatVectorImageType, FloatImageType> IndexSelectionType;
+  typedef otb::ImageToVectorImageCastFilter<FloatImageType,FloatVectorImageType> CastFloatImageIntoFloatVecImageFilter; 
+
   typedef otb::WeightsGuidedFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > Weights_ak_bk;
   typedef otb::MeanVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > MeanVectorImage;
   typedef otb::ConvertDisparityValue<IntImageType, IntImageType > ConvertToDisparityValue ;
@@ -106,8 +106,7 @@ int otbGuidedFilterTest(int argc, char *argv[])
   ConvFilterType::Pointer m_convFilterXRight = ConvFilterType::New() ;
   RGBTograylevelFilter::Pointer m_LeftGrayVectorImage = RGBTograylevelFilter::New() ;
   RGBTograylevelFilter::Pointer m_RightGrayVectorImage = RGBTograylevelFilter::New() ;
-  VectorFilterType::Pointer m_GradientXLeft = VectorFilterType::New();
-  VectorFilterType::Pointer m_GradientXRight = VectorFilterType::New();
+
   CostVolumeType::Pointer m_LeftCost = CostVolumeType::New() ;
   CostVolumeType::Pointer m_RightCost = CostVolumeType::New() ;
 
@@ -121,6 +120,12 @@ int otbGuidedFilterTest(int argc, char *argv[])
 
   ConvertToDisparityValue::Pointer m_LeftDisparity = ConvertToDisparityValue::New();
   ConvertToDisparityValue::Pointer m_RightDisparity = ConvertToDisparityValue::New();
+
+  IndexSelectionType::Pointer m_inLeftChannelSelection = IndexSelectionType::New();
+  IndexSelectionType::Pointer m_inRightChannelSelection = IndexSelectionType::New();
+
+  CastFloatImageIntoFloatVecImageFilter::Pointer m_convFilterXLeftCast = CastFloatImageIntoFloatVecImageFilter::New() ;
+  CastFloatImageIntoFloatVecImageFilter::Pointer m_convFilterXRightCast = CastFloatImageIntoFloatVecImageFilter::New() ;
 
 
   // GRADIENT CALCULATION
@@ -137,47 +142,42 @@ int otbGuidedFilterTest(int argc, char *argv[])
   m_convFilterXRight->SetRadius(radiusG);
   m_convFilterXRight->SetFilter(filterCoeffsX);
 
-  
-  
-  //--Left---------------  
-  m_GradientXLeft->SetFilter(m_convFilterXLeft);
   if( inLeft->GetOutput()->GetNumberOfComponentsPerPixel() > 1)
     {
     m_LeftGrayVectorImage->SetInput(inLeft->GetOutput());
-    m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
-    }
-  else
-    {
-    m_GradientXLeft->SetInput(inLeft->GetOutput());
-    }
-  m_GradientXLeft->UpdateOutputInformation(); 
-
-  //--Right--------------- 
-  m_GradientXRight->SetFilter(m_convFilterXRight);
-  if( inRight->GetOutput()->GetNumberOfComponentsPerPixel() > 1)
-    {
+    m_convFilterXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
     m_RightGrayVectorImage->SetInput(inRight->GetOutput());
-    m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
+    m_convFilterXRight->SetInput(m_RightGrayVectorImage->GetOutput());
+
     }
   else
     {
-    m_GradientXRight->SetInput(inRight->GetOutput());
+    m_inLeftChannelSelection->SetIndex(0);
+    m_inLeftChannelSelection->SetInput(inLeft->GetOutput());
+    m_convFilterXLeft->SetInput(m_inLeftChannelSelection->GetOutput());
+
+    m_inRightChannelSelection->SetIndex(0);
+    m_inRightChannelSelection->SetInput(inRight->GetOutput());
+    m_convFilterXRight->SetInput(m_inRightChannelSelection->GetOutput());
     }
-  m_GradientXRight->UpdateOutputInformation(); 
+
+  m_convFilterXLeftCast->SetInput(m_convFilterXLeft->GetOutput());
+  m_convFilterXRightCast->SetInput(m_convFilterXRight->GetOutput());
+
 
 
   // COST VOLUME 
   m_LeftCost->SetLeftInputImage(inLeft->GetOutput());
   m_LeftCost->SetRightInputImage(inRight->GetOutput());  
   m_LeftCost->SetSide('l') ;
-  m_LeftCost->SetLeftGradientXInput(m_GradientXLeft->GetOutput() ); 
-  m_LeftCost->SetRightGradientXInput(m_GradientXRight->GetOutput() );  
+  m_LeftCost->SetLeftGradientXInput(m_convFilterXLeftCast->GetOutput() ); 
+  m_LeftCost->SetRightGradientXInput(m_convFilterXRightCast->GetOutput() );  
 
   m_RightCost->SetLeftInputImage(inRight->GetOutput());
   m_RightCost->SetRightInputImage(inLeft->GetOutput() );  
   m_RightCost->SetSide('r');
-  m_RightCost->SetLeftGradientXInput(m_GradientXRight->GetOutput() ); 
-  m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() ); 
+  m_RightCost->SetLeftGradientXInput(m_convFilterXRightCast->GetOutput() ); 
+  m_RightCost->SetRightGradientXInput(m_convFilterXLeftCast->GetOutput() ); 
 
   if(sense==0)
     {
@@ -203,6 +203,9 @@ int otbGuidedFilterTest(int argc, char *argv[])
   m_RightCost->SetTau1(tau1R);
   m_RightCost->SetTau2(tau2R);    
   m_RightCost->UpdateOutputInformation(); 
+
+
+
 
   //WEIGHTS  
      // --- LEFT

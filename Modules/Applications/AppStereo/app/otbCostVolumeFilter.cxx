@@ -52,6 +52,9 @@
 #include "itkMedianImageFilter.h"
 #include "itkConstantBoundaryCondition.h"
 
+#include "itkVectorIndexSelectionCastImageFilter.h"
+#include "otbImageToVectorImageCastFilter.h"
+
 
 
 namespace otb
@@ -75,7 +78,7 @@ class CostVolumeFilter : public Application
 
   typedef itk::ConstantBoundaryCondition<FloatImageType> BoundaryConditionType;
   typedef otb::ConvolutionImageFilter<FloatImageType, FloatImageType, BoundaryConditionType> ConvFilterType;
-  typedef otb::ConvertionRGBToGrayLevelImageFilter<FloatVectorImageType,FloatVectorImageType> RGBTograylevelFilter ;
+  typedef otb::ConvertionRGBToGrayLevelImageFilter<FloatVectorImageType,FloatImageType> RGBTograylevelFilter ;
   typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, ConvFilterType> VectorFilterType;
   typedef otb::CostVolumeFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType >  CostVolumeType;  
   typedef otb::MinimumVectorImageFilter<  FloatVectorImageType, IntImageType> MinCostVolume;    
@@ -89,6 +92,11 @@ class CostVolumeFilter : public Application
   typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType> ConcatenateVectorImageFilterType;
   typedef otb::FillPixelFilter< FloatVectorImageType, IntImageType > FillOccFilter ;
   typedef otb::ConvertValueFrom0To255<IntImageType, IntImageType > ConvertValue ;
+
+  typedef itk::VectorIndexSelectionCastImageFilter<FloatVectorImageType, FloatImageType> IndexSelectionType;
+  typedef otb::ImageToVectorImageCastFilter<FloatImageType,FloatVectorImageType> CastFloatImageIntoFloatVecImageFilter; 
+
+
   
 
   itkNewMacro(Self);
@@ -232,6 +240,12 @@ class CostVolumeFilter : public Application
     m_ConcatenateCastOccMapAndInputImage = ConcatenateVectorImageFilterType::New() ;
     m_FillOcc = FillOccFilter::New();
     m_convertSmoothDisparity = ConvertValue::New() ;    
+    m_inLeftChannelSelection = IndexSelectionType::New();
+    m_inRightChannelSelection = IndexSelectionType::New();
+
+    m_convFilterXLeftCast = CastFloatImageIntoFloatVecImageFilter::New() ;
+    m_convFilterXRightCast = CastFloatImageIntoFloatVecImageFilter::New() ;
+
     }
 
 
@@ -270,46 +284,41 @@ class CostVolumeFilter : public Application
   m_convFilterXLeft->SetFilter(filterCoeffsX);  
   m_convFilterXRight->SetRadius(radiusG);
   m_convFilterXRight->SetFilter(filterCoeffsX);
-  
-  //--Left---------------  
-  m_GradientXLeft->SetFilter(m_convFilterXLeft);
-  if( inLeft->GetNumberOfComponentsPerPixel() == 3)
+
+  if( inLeft->GetNumberOfComponentsPerPixel() > 1)
     {
     m_LeftGrayVectorImage->SetInput(inLeft);
-    m_GradientXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
-    }
-  else
-    {
-    m_GradientXLeft->SetInput(inLeft);
-    }
-  m_GradientXLeft->UpdateOutputInformation(); 
-
-  //--Right--------------- 
-  m_GradientXRight->SetFilter(m_convFilterXRight);
-  if( inRight->GetNumberOfComponentsPerPixel() == 3)
-    {
+    m_convFilterXLeft->SetInput(m_LeftGrayVectorImage->GetOutput());
     m_RightGrayVectorImage->SetInput(inRight);
-    m_GradientXRight->SetInput(m_RightGrayVectorImage->GetOutput());
+    m_convFilterXRight->SetInput(m_RightGrayVectorImage->GetOutput());
+
     }
   else
     {
-    m_GradientXRight->SetInput(inRight);
-    }
-  m_GradientXRight->UpdateOutputInformation(); 
+    m_inLeftChannelSelection->SetIndex(0);
+    m_inLeftChannelSelection->SetInput(inLeft);
+    m_convFilterXLeft->SetInput(m_inLeftChannelSelection->GetOutput());
 
+    m_inRightChannelSelection->SetIndex(0);
+    m_inRightChannelSelection->SetInput(inRight);
+    m_convFilterXRight->SetInput(m_inRightChannelSelection->GetOutput());
+    }
+
+  m_convFilterXLeftCast->SetInput(m_convFilterXLeft->GetOutput());
+  m_convFilterXRightCast->SetInput(m_convFilterXRight->GetOutput());
 
   // COST VOLUME 
   m_LeftCost->SetLeftInputImage(inLeft);
   m_LeftCost->SetRightInputImage(inRight);  
   m_LeftCost->SetSide('l') ;
-  m_LeftCost->SetLeftGradientXInput(m_GradientXLeft->GetOutput() ); 
-  m_LeftCost->SetRightGradientXInput(m_GradientXRight->GetOutput() );  
+  m_LeftCost->SetLeftGradientXInput(m_convFilterXLeftCast->GetOutput() ); 
+  m_LeftCost->SetRightGradientXInput(m_convFilterXRightCast->GetOutput() );  
 
   m_RightCost->SetLeftInputImage(inRight);
-  m_RightCost->SetRightInputImage(inLeft );  
+  m_RightCost->SetRightInputImage(inLeft);  
   m_RightCost->SetSide('r');
-  m_RightCost->SetLeftGradientXInput(m_GradientXRight->GetOutput() ); 
-  m_RightCost->SetRightGradientXInput(m_GradientXLeft->GetOutput() ); 
+  m_RightCost->SetLeftGradientXInput(m_convFilterXRightCast->GetOutput() ); 
+  m_RightCost->SetRightGradientXInput(m_convFilterXLeftCast->GetOutput() ); 
 
   if(sense==1)
     {
@@ -519,6 +528,10 @@ class CostVolumeFilter : public Application
   ConcatenateVectorImageFilterType::Pointer m_ConcatenateCastOccMapAndInputImage;
   FillOccFilter::Pointer m_FillOcc ;
   ConvertValue::Pointer m_convertSmoothDisparity ;
+  IndexSelectionType::Pointer m_inLeftChannelSelection ;
+  IndexSelectionType::Pointer m_inRightChannelSelection ;
+  CastFloatImageIntoFloatVecImageFilter::Pointer m_convFilterXLeftCast ;
+  CastFloatImageIntoFloatVecImageFilter::Pointer m_convFilterXRightCast ;
 
  
   }; //end class

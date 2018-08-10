@@ -58,11 +58,11 @@ public:
 
     if(m_Side=='r') //Minimum of the Right cost volume
       { 
-      return TOutput(index) ;
+      return TOutput(-index) ;
       }
     else //Minimum of the Left cost volume
       {        
-      return TOutput(-index) ;
+      return TOutput(index) ;
       }  
     }
 

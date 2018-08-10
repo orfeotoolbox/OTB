@@ -31,7 +31,8 @@ namespace Functor
 {
 /** \class RGBToGrayLevelOperator
  *
- *  \brief Functor to perform the gray-level conversion of a RGB image.
+ *  \brief Functor to perform the gray-level conversion of a RGB image 
+ *  by forming a weighted sum of the R,G,B components. 
  *
  * \ingroup OTBDisparityMap
  */
@@ -41,9 +42,7 @@ class RGBToGrayLevelOperator
 public:
   TOutput operator() ( TInput input ) const
     {
-     TOutput output(1); 
-     output = 0.299*input[0] + 0.587*input[1] + 0.0721*input[2] ;
-     return output;
+    return TOutput(0.299*input[0] + 0.587*input[1] + 0.0721*input[2]);
     }
 }; //end class
 

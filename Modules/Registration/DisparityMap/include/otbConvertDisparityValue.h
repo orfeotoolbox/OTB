@@ -110,6 +110,13 @@ protected:
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
     }
 
+  void GenerateData(void)
+    {
+    Superclass::GenerateData();
+    this->GetFunctor().SetDisp(this->GetFunctor().GetDisp());
+
+    }
+
 private:
   ConvertDisparityValue(const Self &) = delete; //purposely not implemented
   void operator =(const Self&) = delete; //purposely not implemented

@@ -65,6 +65,8 @@ public:
   typedef typename InputImageType::IndexType                IndexType;
   typedef typename InputImageType::RegionType               RegionType;
   typedef typename InputImageType::PixelType               PixelType;
+
+  
   
   typedef TOutputImage										OutputImageType;
   
