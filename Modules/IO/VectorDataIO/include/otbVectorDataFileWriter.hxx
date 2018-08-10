@@ -194,7 +194,7 @@ VectorDataFileWriter<TInputVectorData>
 
   // Setup the vector data IO for writing.
   //
-  m_VectorDataIO->SetFileName(m_FileName.c_str());
+  m_VectorDataIO->SetFileName(m_FileName);
 
   typedef VectorDataAdapter<TInputVectorData, VectorData<double, 2> > AdapterType;
   typename AdapterType::Pointer adapter = AdapterType::New();

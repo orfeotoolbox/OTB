@@ -215,7 +215,7 @@ TrainVectorBase::GetStatistics(unsigned int nbFeatures)
     {
     StatisticsReader::Pointer statisticsReader = StatisticsReader::New();
     std::string XMLfile = GetParameterString( "io.stats" );
-    statisticsReader->SetFileName( XMLfile.c_str() );
+    statisticsReader->SetFileName( XMLfile );
     measurement.meanMeasurementVector = statisticsReader->GetStatisticVectorByName( "mean" );
     measurement.stddevMeasurementVector = statisticsReader->GetStatisticVectorByName( "stddev" );
     }

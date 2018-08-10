@@ -235,7 +235,7 @@ KmzProductWriter<TInputImage>
     castFiler->SetInput(legend);
 
     m_VectorWriter = VectorWriterType::New();
-    m_VectorWriter->SetFileName(legendName.str().c_str());
+    m_VectorWriter->SetFileName(legendName.str());
     m_VectorWriter->SetInput(castFiler->GetOutput());
     m_VectorWriter->Update();
 
@@ -439,7 +439,7 @@ KmzProductWriter<TInputImage>
 
         // Configure writer
         m_VectorWriter = VectorWriterType::New();
-        m_VectorWriter->SetFileName(ossFileName.str().c_str());
+        m_VectorWriter->SetFileName(ossFileName.str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
         m_VectorWriter->Update();
 
