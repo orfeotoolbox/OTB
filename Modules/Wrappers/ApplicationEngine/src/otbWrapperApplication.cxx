@@ -64,6 +64,12 @@ ExceptionObject(file, line, message, loc)
 {
 }
 
+ApplicationException::ApplicationException(const std::string &file, unsigned int line,
+                   const std::string& message, const std::string& loc) :
+ExceptionObject(file, line, message, loc)
+{
+}
+
 namespace Wrapper
 {
 
