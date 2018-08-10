@@ -1416,6 +1416,22 @@ void Application::SetListViewSingleSelectionMode(std::string parameter, bool sta
 
 }
 
+bool Application::GetListViewSingleSelectionMode(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  ListViewParameter* paramListView = dynamic_cast<ListViewParameter*>(param);
+  if (paramListView)
+    {
+    return paramListView->GetSingleSelection();
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << " parameter can't be casted to ListView");
+    return false;
+    }
+}
+
 
 void Application::SetParameterOutputImage(std::string parameter, FloatVectorImageType* value)
 {
