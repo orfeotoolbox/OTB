@@ -308,8 +308,7 @@ int bandNumber = this->GetLeftInputImage()->GetNumberOfComponentsPerPixel() ;
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
   {
   ComputeInputRegions( outputRegionForThread, LeftRegionForThread, RightRegionForThread, iteration_disp); 
-
-  //créer l'intérator             
+          
   itk::ImageRegionConstIterator<TInputImage> LeftInputImageIt ( this->GetLeftInputImage(), LeftRegionForThread );
   LeftInputImageIt.GoToBegin(); 
   itk::ImageRegionConstIterator<TInputImage> RightInputImageIt ( this->GetRightInputImage(), RightRegionForThread );
