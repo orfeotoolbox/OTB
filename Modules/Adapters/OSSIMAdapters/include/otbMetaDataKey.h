@@ -74,7 +74,7 @@ namespace MetaDataKey
   extern OTBOSSIMAdapters_EXPORT char const * NoDataValueAvailable;
   extern OTBOSSIMAdapters_EXPORT char const * NoDataValue;
 
-  extern OTBOSSIMAdapters_EXPORT char const * OriginalPixelType;
+  extern OTBOSSIMAdapters_EXPORT char const * DataType;
 
 
   enum  KeyType
