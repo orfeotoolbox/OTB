@@ -51,7 +51,7 @@ enum TileMapAddressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
  *
  * \ingroup OTBIOTileMap
  */
-class OTBIOTileMap_DEPRECATED TileMapImageIO : public otb::ImageIOBase
+class OTBIOTileMap_DEPRECATED_EXPORT TileMapImageIO : public otb::ImageIOBase
 {
 public:
 
