@@ -109,42 +109,60 @@ void DoExecute() override
   paramOut->SetValue(inImage);
 
   // Set the output pixel type
-  std::string typeInfo;
-  itk::ExposeMetaData< std::string >( inImage->GetMetaDataDictionary(), 
-          MetaDataKey::OriginalPixelType , typeInfo) ;
-  if( typeInfo == "unsigned char" )
+  ImageIOBase::IOComponentType typeInfo;
+  bool hasType( itk::ExposeMetaData< ImageIOBase::IOComponentType >( inImage->GetMetaDataDictionary(), 
+          MetaDataKey::DataType , typeInfo) );
+  if ( ! hasType )
+    itkExceptionMacro("The pixel type could not be retrieved.");
+  switch(typeInfo)
     {
-    paramOut->SetPixelType(ImagePixelType_uint8);
+    case ImageIOBase::UCHAR:
+      paramOut->SetPixelType(ImagePixelType_uint8);
+      break;
+    case ImageIOBase::CHAR:
+      itkExceptionMacro("This application doesn't support image pixel type char.");
+      break;
+    case ImageIOBase::USHORT:
+      paramOut->SetPixelType(ImagePixelType_uint16);
+      break;
+    case ImageIOBase::SHORT:
+      paramOut->SetPixelType(ImagePixelType_int16);
+      break;
+    case ImageIOBase::UINT:
+      paramOut->SetPixelType(ImagePixelType_uint32);
+      break;
+    case ImageIOBase::INT:
+      paramOut->SetPixelType(ImagePixelType_int32);
+      break;
+    case ImageIOBase::ULONG:
+      itkExceptionMacro("This application doesn't support image pixel type unsigned long.");
+      break;
+    case ImageIOBase::LONG:
+      itkExceptionMacro("This application doesn't support image pixel type long.");
+      break;
+    case ImageIOBase::FLOAT:
+      paramOut->SetPixelType(ImagePixelType_float);
+      break;
+    case ImageIOBase::DOUBLE:
+      paramOut->SetPixelType(ImagePixelType_double);
+      break;
+    case ImageIOBase::CSHORT:
+      paramOut->SetPixelType(ImagePixelType_cint16);
+      break;
+    case ImageIOBase::CINT:
+      paramOut->SetPixelType(ImagePixelType_cint32);
+      break;
+    case ImageIOBase::CFLOAT:
+      paramOut->SetPixelType(ImagePixelType_cfloat);
+      break;
+    case ImageIOBase::CDOUBLE:
+      paramOut->SetPixelType(ImagePixelType_cdouble);
+      break;
+    case ImageIOBase::UNKNOWNCOMPONENTTYPE:
+      itkExceptionMacro("The pixel type is unknown.");
+      break;
     }
-  else if( typeInfo == "unsigned short" )
-    {
-    paramOut->SetPixelType(ImagePixelType_uint16);
-    }
-  else if( typeInfo == "short" )
-    {
-    paramOut->SetPixelType(ImagePixelType_int16);
-    }
-  else if( typeInfo == "unsigned int" )
-    {
-    paramOut->SetPixelType(ImagePixelType_uint32);
-    }
-  else if( typeInfo == "int" )
-    {
-    paramOut->SetPixelType(ImagePixelType_int32);
-    }
-  else if( typeInfo == "float" )
-    {
-    paramOut->SetPixelType(ImagePixelType_float);
-    }
-  else if( typeInfo == "double" )
-    {
-    paramOut->SetPixelType(ImagePixelType_double);
-    }
-  else
-    {
-    itkExceptionMacro("This application doesn't support image pixel type " << typeInfo);
-    }
-
+  
   // Add the tempfilename to be written
   paramOut->InitializeWriters();
   AddProcess(paramOut->GetWriter(), osswriter.str());
