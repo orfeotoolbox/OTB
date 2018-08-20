@@ -21,16 +21,6 @@
 #include "itkPoint.h"
 #include "otbGeographicalDistance.h"
 
-int otbGeographicalDistanceNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef itk::Point<double, 2> PointType;
-  typedef otb::GeographicalDistance<PointType> DistanceType;
-
-  // Instantiation
-  DistanceType::Pointer distance = DistanceType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbGeographicalDistance(int itkNotUsed(argc), char * argv[])
 {

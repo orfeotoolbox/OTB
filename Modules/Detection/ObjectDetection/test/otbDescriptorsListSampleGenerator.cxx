@@ -100,15 +100,6 @@ std::ostream &operator<<(std::ostream &stream, SampleEntry entry)
   return stream;
 }
 
-int otbDescriptorsListSampleGeneratorNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  // instantiation
-  DescriptorsListSampleGeneratorType::Pointer generator = DescriptorsListSampleGeneratorType::New();
-
-  std::cout << generator << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbDescriptorsListSampleGenerator(int argc, char* argv[])
 {

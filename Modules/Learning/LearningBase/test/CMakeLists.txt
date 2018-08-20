@@ -23,13 +23,8 @@ otb_module_test()
 set(OTBLearningBaseTests
 otbLearningBaseTestDriver.cxx
 otbDecisionTreeBuild.cxx
-otbGaussianModelComponent.cxx
 otbKMeansImageClassificationFilter.cxx
 otbDecisionTreeWithRealValues.cxx
-otbSEMClassifierNew.cxx
-otbDecisionTreeNew.cxx
-otbKMeansImageClassificationFilterNew.cxx
-otbMachineLearningModelTemplates.cxx
 )
 
 if(OTB_USE_SHARK)
@@ -45,9 +40,6 @@ otb_module_target_label(otbLearningBaseTestDriver)
 otb_add_test(NAME leTvDecisionTreeBuild COMMAND otbLearningBaseTestDriver
   otbDecisionTreeBuild)
 
-otb_add_test(NAME leTuGaussianModelComponentNew COMMAND otbLearningBaseTestDriver
-  otbGaussianModelComponentNew)
-
 otb_add_test(NAME leTvDecisionTreeWithRealValues COMMAND otbLearningBaseTestDriver
   otbDecisionTreeWithRealValues)
 
@@ -62,15 +54,6 @@ otb_add_test(NAME leTvKMeansImageClassificationFilter COMMAND otbLearningBaseTes
   0 0 0 0
   255 255 255 255
   )
-
-otb_add_test(NAME leTuSEMClassifierNew COMMAND otbLearningBaseTestDriver
-  otbSEMClassifierNew)
-
-otb_add_test(NAME leTuDecisionTreeNew COMMAND otbLearningBaseTestDriver
-  otbDecisionTreeNew)
-
-otb_add_test(NAME leTuKMeansImageClassificationFilterNew COMMAND otbLearningBaseTestDriver
-  otbKMeansImageClassificationFilterNew)
 
 if(OTB_USE_SHARK)
   otb_add_test(NAME leTuSharkNormalizeLabels COMMAND otbLearningBaseTestDriver

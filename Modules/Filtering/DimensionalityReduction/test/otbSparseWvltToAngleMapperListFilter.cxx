@@ -31,7 +31,7 @@
 
 #include "otbSparseWvltToAngleMapperListFilter.h"
 
-int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
+int otbSparseWvltToAngleMapperListFilterTest ( int argc, char * argv[] )
 {
   // number of images to consider
   const unsigned int Dimension = 2;
@@ -121,5 +121,3 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

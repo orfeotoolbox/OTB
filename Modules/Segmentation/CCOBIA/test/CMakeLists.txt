@@ -25,7 +25,6 @@ otbCCOBIATestDriver.cxx
 otbStreamingConnectedComponentOBIATest.cxx
 otbConnectedComponentMuParserFunctorTest.cxx
 otbMeanShiftStreamingConnectedComponentOBIATest.cxx
-otbLabelObjectOpeningMuParserFilterNew.cxx
 otbLabelObjectOpeningMuParserFilterTest.cxx
 )
 
@@ -34,9 +33,6 @@ target_link_libraries(otbCCOBIATestDriver ${OTBCCOBIA-Test_LIBRARIES})
 otb_module_target_label(otbCCOBIATestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME obTuStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew COMMAND otbCCOBIATestDriver
-  otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew)
 
 otb_add_test(NAME obTvStreamingConnectedComponentSegmentationOBIAToVectorDataFilter COMMAND otbCCOBIATestDriver
   --compare-ogr ${NOTOL}
@@ -84,9 +80,6 @@ otb_add_test(NAME obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVect
   "SHAPE_Elongation>10"
   5)
 
-otb_add_test(NAME bfTuLabelObjectOpeningMuParserFilterNew COMMAND otbCCOBIATestDriver
-  otbLabelObjectOpeningMuParserFilterNew
-  )
 
 otb_add_test(NAME bfTvLabelObjectOpeningMuParserFilterTest COMMAND otbCCOBIATestDriver
   --compare-image ${NOTOL}

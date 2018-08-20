@@ -18,9 +18,6 @@
 # limitations under the License.
 #
 
-otb_add_test(NAME leTuSharkRFMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbSharkRFMachineLearningModelNew)
-
 otb_add_test(NAME leTvSharkRFMachineLearningModel COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModel
   ${INPUTDATA}/letter_light.scale

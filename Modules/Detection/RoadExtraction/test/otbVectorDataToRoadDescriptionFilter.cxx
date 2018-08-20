@@ -33,22 +33,6 @@
 
 
 
-int otbVectorDataToRoadDescriptionFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef double                          PrecisionType;
-  typedef otb::VectorData<PrecisionType>  VectorDataType;
-  typedef otb::VectorImage<PrecisionType> ImageType;
-
-  typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType>
-                                          VectorDataToRoadDescriptionFilterType;
-
-  VectorDataToRoadDescriptionFilterType::Pointer filter =
-    VectorDataToRoadDescriptionFilterType::New();
-
-  std::cout<<filter<<std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbVectorDataToRoadDescriptionFilter(int itkNotUsed(argc), char* argv[])
 {

@@ -22,11 +22,8 @@ otb_module_test()
 
 set(OTBIndicesTests
 otbIndicesTestDriver.cxx
-otbRAndGAndNIRVegetationIndexImageFilterNew.cxx
 otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx
 otbNDVIDataNodeFeatureFunction.cxx
-otbRAndNIRVegetationIndexImageFilterNew.cxx
-otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew.cxx
 otbLandsatTMIndexNDSITest.cxx
 otbLandsatTMIndexBIOTest.cxx
 otbLAIFromReflectancesLinearFunctorTest.cxx
@@ -42,10 +39,8 @@ otbLAIFromNDVILogarithmicFunctorTest.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbLandsatTMIndexVisTest.cxx
 otbWaterSqrtSpectralAngleImageFilter.cxx
-otbMultiChannelRAndGAndNIRIndexImageFilterNew.cxx
 otbLandsatTMIndexBrightTest.cxx
 otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
-otbMultiChannelRAndNIRVegetationIndexImageFilterNew.cxx
 otbLandsatTMBrightTest.cxx
 otbLandsatTMThinCloudTest.cxx
 otbISUMultiChannelRAndNIRIndexImageFilter.cxx
@@ -59,10 +54,8 @@ otbEVIRAndBAndNIRVegetationIndexImageFilter.cxx
 otbNDBITM4AndTM5IndexImageFilter.cxx
 otbLandsatTMIndexNDBBBITest.cxx
 otbIBGAndRAndNIRIndexImageFilter.cxx
-otbGAndRIndexImageFilterNew.cxx
 otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
 otbNDBIMultiChannelTM4AndTM5IndexImageFilter.cxx
-otbMultiChannelGAndRIndexImageFilterNew.cxx
 otbNDWIWaterIndexImageFilter.cxx
 otbLandsatTMIndexTIRTest.cxx
 otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
@@ -70,7 +63,6 @@ otbLandsatTMLinguisticLabelsTest.cxx
 otbNDWIMultiChannelWaterIndexImageFilter.cxx
 otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbLandsatTMIndexNDSIVisTest.cxx
-otbRAndBAndNIRVegetationIndexImageFilterNew.cxx
 otbLandsatTMIndexNIRTest.cxx
 otbSetASetBRAndNIRVegetationIndexImageFilter.cxx
 otbLandsatTMKernelSpectralRules.cxx
@@ -84,9 +76,6 @@ target_link_libraries(otbIndicesTestDriver ${OTBIndices-Test_LIBRARIES})
 otb_module_target_label(otbIndicesTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME raTuRAndGAndNIRVegetationIndexImageFilterNew COMMAND otbIndicesTestDriver
-  otbRAndGAndNIRVegetationIndexImageFilterNew )
 
 otb_add_test(NAME raTvAVI_MultiChannelRAndGAndNIRVegetationIndexImageFilter COMMAND otbIndicesTestDriver
   --compare-image ${EPSILON_12}   ${BASELINE}/raMultiChannelRAndGAndNIRVegetationIndex_AVI_qb_RoadExtract.tif
@@ -126,15 +115,6 @@ otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Line COMMAND otbIndicesTestDri
   0
   )
 
-otb_add_test(NAME bfTuNDVIDataNodeFeatureFunctionNew COMMAND otbIndicesTestDriver
-  otbNDVIDataNodeFeatureFunctionNew
-  )
-
-otb_add_test(NAME raTuRAndNIRVegetationIndexImageFilterNew COMMAND otbIndicesTestDriver
-  otbRAndNIRVegetationIndexImageFilterNew )
-
-otb_add_test(NAME raTuMultiChannelRAndBAndNIRVegetationIndexImageFilterNew COMMAND otbIndicesTestDriver
-  otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew )
 
 otb_add_test(NAME raTvLandsatTMIndexNDSITest COMMAND otbIndicesTestDriver
   otbLandsatTMIndexNDSI
@@ -316,9 +296,6 @@ otb_add_test(NAME raTvWaterSqrtSpectralAngleImageFilter COMMAND otbIndicesTestDr
   ${TEMP}/raWater_SqrtSpectralAngle.tif
   0 1 2 3
   )
-
-otb_add_test(NAME raTuMultiChannelRAndGAndNIRIndexImageFilterNew COMMAND otbIndicesTestDriver
-  otbMultiChannelRAndGAndNIRIndexImageFilterNew )
 
 otb_add_test(NAME raTvLandsatTMIndexBrightTest COMMAND otbIndicesTestDriver
   otbLandsatTMIndexBright
@@ -585,9 +562,6 @@ otb_add_test(NAME raTvIB2_GAndRAndNIRIndexImageFilter COMMAND otbIndicesTestDriv
   ${TEMP}/raGAndRAndNIRIndexImageFilter_IB2_verySmallFSATSW.tif
   )
 
-otb_add_test(NAME raTuGAndRIndexImageFilterNew COMMAND otbIndicesTestDriver
-  otbGAndRIndexImageFilterNew )
-
 otb_add_test(NAME raTvEVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter COMMAND otbIndicesTestDriver
   --compare-image ${EPSILON_12}   ${BASELINE}/raRAndBAndNIRVegetationIndex_EVI_qb_RoadExtract.tif
   ${TEMP}/raRAndBAndNIRVegetationIndex_EVI_qb_RoadExtract.tif
@@ -613,9 +587,6 @@ otb_add_test(NAME raTvNDBI_MultiChannelTM4AndTM5BuiltUpIndexImageFilter COMMAND 
   3   # red
   4   # nir
   )
-
-otb_add_test(NAME raTuMultiChannelGAndRIndexImageFilterNew COMMAND otbIndicesTestDriver
-  otbMultiChannelGAndRIndexImageFilterNew )
 
 otb_add_test(NAME raTvNDWI_WaterIndexImageFilter COMMAND otbIndicesTestDriver
   --compare-image ${EPSILON_12}   ${BASELINE}/raWaterIndex_NDWI_verySmallFSATSW.tif
@@ -708,9 +679,6 @@ otb_add_test(NAME raTvLandsatTMIndexNDSIVisTest COMMAND otbIndicesTestDriver
   8   #TM62
   21  #TM7
   )
-
-otb_add_test(NAME raTuRAndBAndNIRVegetationIndexImageFilterNew COMMAND otbIndicesTestDriver
-  otbRAndBAndNIRVegetationIndexImageFilterNew )
 
 otb_add_test(NAME raTvLandsatTMIndexNIRTest COMMAND otbIndicesTestDriver
   otbLandsatTMIndexNIR
