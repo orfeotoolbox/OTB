@@ -269,30 +269,14 @@ private:
       genericRSEstimator->SetOutputProjectionRef(m_OutputProjectionRef);
       genericRSEstimator->Compute();
 
-      // Fill the Gui with the computed parameters
-      if (!HasUserValue("outputs.sizex"))
-        SetParameterInt("outputs.sizex",genericRSEstimator->GetOutputSize()[0]);
-
-      if (!HasUserValue("outputs.sizey"))
-        SetParameterInt("outputs.sizey",genericRSEstimator->GetOutputSize()[1]);
-
-      if (!HasUserValue("outputs.spacingx"))
-        SetParameterFloat("outputs.spacingx",genericRSEstimator->GetOutputSpacing()[0]);
-
-      if (!HasUserValue("outputs.spacingy"))
-        SetParameterFloat("outputs.spacingy",genericRSEstimator->GetOutputSpacing()[1]);
-
-      if (!HasUserValue("outputs.ulx"))
-        SetParameterFloat("outputs.ulx",genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
-
-      if (!HasUserValue("outputs.uly"))
-        SetParameterFloat("outputs.uly",genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
-
-      if (!HasUserValue("outputs.lrx"))
-       SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
-
-      if (!HasUserValue("outputs.lry"))
-       SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
+      SetDefaultParameterInt("outputs.sizex", genericRSEstimator->GetOutputSize()[0]);
+      SetDefaultParameterInt("outputs.sizey", genericRSEstimator->GetOutputSize()[1]);
+      SetDefaultParameterFloat("outputs.spacingx", genericRSEstimator->GetOutputSpacing()[0]);
+      SetDefaultParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
+      SetDefaultParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
+      SetDefaultParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
+      SetDefaultParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+      SetDefaultParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
 
       // Handle the spacing and size field following the mode
       // chose by the user
@@ -300,16 +284,6 @@ private:
         {
         case Mode_UserDefined:
         {
-        // Automatic set to off except lower right coordinates
-        AutomaticValueOff("outputs.ulx");
-        AutomaticValueOff("outputs.uly");
-        AutomaticValueOff("outputs.sizex");
-        AutomaticValueOff("outputs.sizey");
-        AutomaticValueOff("outputs.spacingx");
-        AutomaticValueOff("outputs.spacingy");
-        AutomaticValueOn("outputs.lrx");
-        AutomaticValueOn("outputs.lry");
-
         // Enable all the parameters except lower right coordinates
         EnableParameter("outputs.ulx");
         EnableParameter("outputs.uly");
@@ -349,16 +323,6 @@ private:
         DisableParameter("outputs.lrx");
         DisableParameter("outputs.lry");
         DisableParameter("outputs.ortho");
-
-        // Update the automatic value mode of each filed
-        AutomaticValueOn("outputs.ulx");
-        AutomaticValueOn("outputs.uly");
-        AutomaticValueOn("outputs.sizex");
-        AutomaticValueOn("outputs.sizey");
-        AutomaticValueOff("outputs.spacingx");
-        AutomaticValueOff("outputs.spacingy");
-        AutomaticValueOn("outputs.lrx");
-        AutomaticValueOn("outputs.lry");
 
         // Adapat the status of the param to this mode
         MandatoryOff("outputs.ulx");
@@ -404,16 +368,6 @@ private:
         DisableParameter("outputs.lry");
         DisableParameter("outputs.ortho");
 
-        // Update the automatic value mode of each filed
-        AutomaticValueOn("outputs.ulx");
-        AutomaticValueOn("outputs.uly");
-        AutomaticValueOn("outputs.spacingx");
-        AutomaticValueOn("outputs.spacingy");
-        AutomaticValueOff("outputs.sizex");
-        AutomaticValueOff("outputs.sizey");
-        AutomaticValueOn("outputs.lrx");
-        AutomaticValueOn("outputs.lry");
-
         // Adapat the status of the param to this mode
         MandatoryOff("outputs.ulx");
         MandatoryOff("outputs.uly");
@@ -458,16 +412,6 @@ private:
           EnableParameter("outputs.lrx");
           EnableParameter("outputs.lry");
           DisableParameter("outputs.ortho");
-
-          // Update the automatic value mode of each filed
-          AutomaticValueOff("outputs.ulx");
-          AutomaticValueOff("outputs.uly");
-          AutomaticValueOn("outputs.sizex");
-          AutomaticValueOn("outputs.sizey");
-          AutomaticValueOff("outputs.spacingx");
-          AutomaticValueOff("outputs.spacingy");
-          AutomaticValueOff("outputs.lrx");
-          AutomaticValueOff("outputs.lry");
 
           // Adapt the status of the param to this mode
           MandatoryOn("outputs.ulx");
@@ -517,16 +461,6 @@ private:
 
           if (HasValue("outputs.ortho"))
           {
-            // Automatic set to on
-            AutomaticValueOn("outputs.ulx");
-            AutomaticValueOn("outputs.uly");
-            AutomaticValueOn("outputs.sizex");
-            AutomaticValueOn("outputs.sizey");
-            AutomaticValueOn("outputs.spacingx");
-            AutomaticValueOn("outputs.spacingy");
-            AutomaticValueOn("outputs.lrx");
-            AutomaticValueOn("outputs.lry");
-
             // input image
             FloatVectorImageType::Pointer inOrtho = GetParameterImage("outputs.ortho");
 
