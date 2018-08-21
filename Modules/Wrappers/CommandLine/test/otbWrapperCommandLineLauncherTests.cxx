@@ -25,13 +25,6 @@
 #include "otbWrapperCommandLineLauncher.h"
 
 
-int otbWrapperCommandLineLauncherNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::CommandLineLauncher LauncherType;
-  LauncherType::Pointer launcher = LauncherType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 

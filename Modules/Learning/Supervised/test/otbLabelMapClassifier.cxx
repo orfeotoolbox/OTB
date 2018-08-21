@@ -75,11 +75,6 @@ LabelObjectType::Pointer makeTrainingSample(LabelMapType* labelMap, LabelType la
   return newLabelObject;
 }
 
-int otbLabelMapClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  ClassifierType::Pointer classifier = ClassifierType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbLabelMapClassifier(int itkNotUsed(argc), char * argv[])
 {

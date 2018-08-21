@@ -62,7 +62,7 @@ void QtWidgetOutputVectorDataParameter::DoUpdateGUI()
 
 void QtWidgetOutputVectorDataParameter::DoCreateWidget()
 {
-  m_HLayout = new QHBoxLayout(this);
+  m_HLayout = new QHBoxLayout;
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
 

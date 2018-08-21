@@ -23,12 +23,9 @@ otb_module_test()
 set(OTBConvolutionTests
 otbConvolutionTestDriver.cxx
 otbConvolutionImageFilter.cxx
-otbConvolutionImageFilterNew.cxx
-otbOverlapSaveConvolutionImageFilterNew.cxx
 otbOverlapSaveConvolutionImageFilter.cxx
 otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 otbGaborFilterGenerator.cxx
-otbGaborFilterGeneratorNew.cxx
 )
 
 add_executable(otbConvolutionTestDriver ${OTBConvolutionTests})
@@ -45,12 +42,6 @@ otb_add_test(NAME bfTvConvolutionImageFilter COMMAND otbConvolutionTestDriver
   ${INPUTDATA}/QB_Suburb.png
   ${TEMP}/bfTvConvolutionImageFilter.tif
   )
-
-otb_add_test(NAME bfTuConvolutionImageFilterNew COMMAND otbConvolutionTestDriver
-  otbConvolutionImageFilterNew)
-
-otb_add_test(NAME bfTuOverlapSaveConvolutionImageFilterNew COMMAND otbConvolutionTestDriver
-  otbOverlapSaveConvolutionImageFilterNew)
 
 if(ITK_USE_FFTWD)
 otb_add_test(NAME bfTvOverlapSaveConvolutionImageFilter COMMAND otbConvolutionTestDriver
@@ -89,7 +80,4 @@ otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbConvolutionTestDriver
   -45 # theta
   0.0125 0.0125 #u0 v0
   0
-  )
-otb_add_test(NAME bfTuGaborFilterGeneratorNew COMMAND otbConvolutionTestDriver
-  otbGaborFilterGeneratorNew
   )

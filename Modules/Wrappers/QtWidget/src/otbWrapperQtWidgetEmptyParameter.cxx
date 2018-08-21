@@ -42,7 +42,7 @@ void QtWidgetEmptyParameter::DoUpdateGUI()
 void QtWidgetEmptyParameter::DoCreateWidget()
 {
   // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout(this);
+  QHBoxLayout *hLayout = new QHBoxLayout;
   hLayout->setSpacing(0);
   hLayout->setContentsMargins(0, 0, 0, 0);
 

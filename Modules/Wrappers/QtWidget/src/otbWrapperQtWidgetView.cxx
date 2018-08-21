@@ -96,7 +96,7 @@ QtWidgetView::~QtWidgetView()
 void QtWidgetView::CreateGui()
 {
   // Create a VBoxLayout with the header, the input widgets, and the footer
-  QVBoxLayout *mainLayout = new QVBoxLayout(this);
+  QVBoxLayout *mainLayout = new QVBoxLayout;
   m_TabWidget = new QTabWidget(this);
 
   m_TabWidget->addTab(CreateInputWidgets(), tr("Parameters"));
@@ -116,7 +116,7 @@ void QtWidgetView::CreateGui()
 
   QWidget* footer = CreateFooter();
    
-  QHBoxLayout *footLayout = new QHBoxLayout(this);
+  QHBoxLayout *footLayout = new QHBoxLayout;
   footLayout->addWidget(progressReport);
   footLayout->addWidget(footer);
   mainLayout->addLayout(footLayout);
@@ -126,7 +126,7 @@ void QtWidgetView::CreateGui()
   QGroupBox *mainGroup = new QGroupBox(this);
   mainGroup->setLayout(mainLayout);
 
-  QVBoxLayout  *finalLayout = new QVBoxLayout(this);
+  QVBoxLayout  *finalLayout = new QVBoxLayout;
   finalLayout->addWidget(mainGroup);
 
   // Make the final layout to the widget
@@ -180,7 +180,7 @@ QWidget* QtWidgetView::CreateFooter()
 {
   // an HLayout with two buttons : Execute and Quit
   QGroupBox *footerGroup = new QGroupBox(this);
-  QHBoxLayout *footerLayout = new QHBoxLayout(this);
+  QHBoxLayout *footerLayout = new QHBoxLayout;
  
   footerGroup->setFixedHeight(40);
   footerGroup->setContentsMargins(0, 0, 0, 0);

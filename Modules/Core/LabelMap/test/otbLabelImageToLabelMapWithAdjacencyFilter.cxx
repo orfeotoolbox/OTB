@@ -37,13 +37,6 @@ typedef otb::LabelImageToLabelMapWithAdjacencyFilter
 < LabelImageType, LabelMapType>                     FilterType;
 
 
-int otbLabelImageToLabelMapWithAdjacencyFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  // Instantiation
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbLabelImageToLabelMapWithAdjacencyFilter(int itkNotUsed(argc), char * argv[])
 {

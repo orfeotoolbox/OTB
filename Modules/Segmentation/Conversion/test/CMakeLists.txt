@@ -24,8 +24,6 @@ set(OTBConversionTests
 otbConversionTestDriver.cxx
 otbVectorDataToLabelMapFilter.cxx
 otbOGRDataSourceToLabelImageFilter.cxx
-otbVectorDataToLabelMapFilterNew.cxx
-otbLabelImageToVectorDataFilterNew.cxx
 otbLabelImageToVectorDataFilter.cxx
 otbLabelImageToOGRDataSourceFilter.cxx
 otbVectorDataToLabelImageFilter.cxx
@@ -34,7 +32,6 @@ otbVectorDataRasterizeFilter.cxx
 otbLabelImageRegionPruningFilter.cxx
 otbLabelImageRegionMergingFilter.cxx
 otbLabelMapToVectorDataFilter.cxx
-otbLabelMapToVectorDataFilterNew.cxx
 )
 
 add_executable(otbConversionTestDriver ${OTBConversionTests})
@@ -48,9 +45,6 @@ otb_add_test(NAME obTvVectorDataToLabelMapFilter COMMAND otbConversionTestDriver
   ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
   ${TEMP}/vectordataToLabelMap.png)
 
-otb_add_test(NAME coTuOGRDataSourceToLabelImageFilterNew COMMAND otbConversionTestDriver
-  otbOGRDataSourceToLabelImageFilterNew
-  )
 
 otb_add_test(NAME coTvOGRDataSourceToLabelImageFilterSHP COMMAND otbConversionTestDriver
   --compare-image 0.0
@@ -74,12 +68,6 @@ otb_add_test(NAME bfTvOGRDataSourceToLabelImageFilterSHPForegroundMode COMMAND o
   0 0 255
   )
 
-otb_add_test(NAME obTuVectorDataToLabelMapFilterNew COMMAND otbConversionTestDriver
-  otbVectorDataToLabelMapFilterNew)
-
-otb_add_test(NAME obTuLabelImageToVectorDataFilterNew COMMAND otbConversionTestDriver
-  otbLabelImageToVectorDataFilterNew)
-
 otb_add_test(NAME obTvLabelImageToVectorDataFilter COMMAND otbConversionTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter.shp
@@ -89,17 +77,11 @@ otb_add_test(NAME obTvLabelImageToVectorDataFilter COMMAND otbConversionTestDriv
   ${TEMP}/obTuLabelImageToVectorDataFilter.shp
   )
 
-otb_add_test(NAME obTuLabelImageToOGRDataSourceFilterNew COMMAND otbConversionTestDriver
-  otbLabelImageToOGRDataSourceFilterNew)
-
 otb_add_test(NAME obTvLabelImageToOGRDataSourceFilter COMMAND otbConversionTestDriver
   otbLabelImageToOGRDataSourceFilter
   ${INPUTDATA}/labelImage_UnsignedChar.tif
   )
 
-otb_add_test(NAME bfTuVectorDataToLabelImageFilterNew COMMAND otbConversionTestDriver
-  otbVectorDataToLabelImageFilterNew
-  )
 
 otb_add_test(NAME bfTvVectorDataToLabelImageFilterSHP COMMAND otbConversionTestDriver
   --compare-image 0.0
@@ -141,9 +123,6 @@ otb_add_test(NAME bfTvVectorDataRasterizeFilterKML COMMAND otbConversionTestDriv
   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
   )
 
-otb_add_test(NAME bfTuVectorDataRasterizeFilterNew COMMAND otbConversionTestDriver
-  otbVectorDataRasterizeFilterNew
-  )
 
 otb_add_test(NAME bfTvVectorDataRasterizeFilterSHP COMMAND otbConversionTestDriver
   --compare-image 0.0001
@@ -230,7 +209,4 @@ otb_add_test(NAME obTvLabelMapToVectorDataFilter COMMAND otbConversionTestDriver
   otbLabelMapToVectorDataFilter
   ${INPUTDATA}/rcc8_mire1.png
   ${TEMP}/obTvLabelMapToVectorDataFilter.shp)
-
-otb_add_test(NAME obTuLabelMapToVectorDataFilterNew COMMAND otbConversionTestDriver
-  otbLabelMapToVectorDataFilterNew)
 

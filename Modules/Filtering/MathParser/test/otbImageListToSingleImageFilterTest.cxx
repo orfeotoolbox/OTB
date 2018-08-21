@@ -28,23 +28,6 @@
 #include "otbImageFileWriter.h"
 #include "otbBandMathImageFilter.h"
 
-int otbImageListToSingleImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  const unsigned int Dimension = 2;
-
-  typedef unsigned char                          PixelType;
-  typedef otb::Image<PixelType, Dimension>       ImageType;
-  typedef otb::ImageList<ImageType>              ImageListType;
-
-  typedef otb::ImageListToSingleImageFilter<ImageListType::ImageType> ImageListToSingleImageFilter;
-
-  // Instantiating object
-  ImageListToSingleImageFilter::Pointer filter = ImageListToSingleImageFilter::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 
 

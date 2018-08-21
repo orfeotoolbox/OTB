@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBMajorityVotingTests
 otbMajorityVotingTestDriver.cxx
-otbNeighborhoodMajorityVotingImageFilterNew.cxx
 otbNeighborhoodMajorityVotingImageFilterTest.cxx
 )
 
@@ -31,9 +30,6 @@ target_link_libraries(otbMajorityVotingTestDriver ${OTBMajorityVoting-Test_LIBRA
 otb_module_target_label(otbMajorityVotingTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME leTuNeighborhoodMajorityVotingImageFilterNew COMMAND otbMajorityVotingTestDriver
-  otbNeighborhoodMajorityVotingImageFilterNew)
 
 otb_add_test(NAME leTvNeighborhoodMajorityVotingImageFilterTest COMMAND otbMajorityVotingTestDriver
   --compare-image ${NOTOL}
