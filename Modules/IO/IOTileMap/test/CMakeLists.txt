@@ -33,9 +33,6 @@ otb_module_target_label(otbIOTileMapTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME ioTuTileMapImageIOHelperNew COMMAND otbIOTileMapTestDriver
-  otbTileMapImageIOHelperNew
-  )
 
 otb_add_test(NAME ioTvTileMapImageIOHelperTest COMMAND otbIOTileMapTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTileMapImageIOHelperTest.txt

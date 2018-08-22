@@ -23,13 +23,9 @@ otb_module_test()
 set(OTBDescriptorsTests
 otbDescriptorsTestDriver.cxx
 otbImageToSURFKeyPointSetFilterOutputDescriptorAscii.cxx
-otbKeyPointSetsMatchingFilterNew.cxx
 otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
 otbHistogramOfOrientedGradientCovariantImageFunction.cxx
 otbImageToSURFKeyPointSetFilterOutputInterestPointAscii.cxx
-otbImageToSURFKeyPointSetFilterNew.cxx
-otbLandmarkNew.cxx
-otbImageToSIFTKeyPointSetFilterNew.cxx
 otbKeyPointSetsMatchingFilter.cxx
 otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
 otbImageToSIFTKeyPointSetFilterOutputAscii.cxx
@@ -38,13 +34,10 @@ otbImageToHessianDeterminantImageFilter.cxx
 otbImageToSIFTKeyPointSetFilterOutputImage.cxx
 otbFourierMellinDescriptors.cxx
 otbImageToSIFTKeyPointSetFilterDistanceMap.cxx
-otbImageToHessianDeterminantImageFilterNew.cxx
-otbFourierMellinImageFilterNew.cxx
 )
 
 if(OTB_USE_SIFTFAST)
   list(APPEND OTBDescriptorsTests
-       otbImageToFastSIFTKeyPointSetFilterNew.cxx
        otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx
        otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
        )
@@ -67,9 +60,6 @@ otb_add_test(NAME feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii COM
   )
 
 
-otb_add_test(NAME feTuKeyPointSetsMatchingFilterNew COMMAND otbDescriptorsTestDriver
-  otbKeyPointSetsMatchingFilterNew)
-
 otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii COMMAND otbDescriptorsTestDriver
   --ignore-order --compare-ascii ${EPSILON_3}
   ${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
@@ -79,9 +69,6 @@ otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterSceneOutputInterestPointAscii 
   ${TEMP}/feTvImageToSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
   6 3 0.08 10.0
   )
-
-otb_add_test(NAME feTuHistogramOfOrientedGradientCovariantImageFunction COMMAND otbDescriptorsTestDriver
-  otbHistogramOfOrientedGradientCovariantImageFunctionNew)
 
 otb_add_test(NAME feTvHistogramOfOrientedGradientCovariantImageFunction COMMAND otbDescriptorsTestDriver
   --compare-ascii ${EPSILON_8}
@@ -102,15 +89,6 @@ otb_add_test(NAME feTvImageToSURFKeyPointSetFilterSceneOutputInterestPointAscii 
   ${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputInterestPoint.txt
   3 3
   )
-
-otb_add_test(NAME feTuImageToSURFKeyPointSetFilterNew COMMAND otbDescriptorsTestDriver
-  otbImageToSURFKeyPointSetFilterNew)
-
-otb_add_test(NAME feTuLandmarkNew COMMAND otbDescriptorsTestDriver
-  otbLandmarkNew)
-
-otb_add_test(NAME feTuImageToSIFTKeyPointSetFilterNew COMMAND otbDescriptorsTestDriver
-  otbImageToSIFTKeyPointSetFilterNew)
 
 otb_add_test(NAME feTvKeyPointSetsMatchingFilter COMMAND otbDescriptorsTestDriver
   --compare-ascii ${EPSILON_3}
@@ -240,9 +218,6 @@ otb_add_test(NAME feTvFourierMellinDescriptorsRotationInvariant COMMAND otbDescr
   90
   )
 
-otb_add_test(NAME feTuFourierMellinDescriptorsNew COMMAND otbDescriptorsTestDriver
-  otbFourierMellinDescriptorsNew
-  )
 
 otb_add_test(NAME feTvFourierMellinDescriptorsScaleInvariant COMMAND otbDescriptorsTestDriver
   otbFourierMellinDescriptorsScaleInvariant
@@ -263,7 +238,7 @@ otb_add_test(NAME feTvFourierMellinDescriptors COMMAND otbDescriptorsTestDriver
   )
 
 otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterDistanceMap COMMAND otbDescriptorsTestDriver
-  --compare-ascii ${EPSILON_3} 
+  --compare-ascii ${EPSILON_3}
   ${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
   ${TEMP}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
   --ignore-lines-with 2 INFO DEBUG
@@ -276,16 +251,7 @@ otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterDistanceMap COMMAND otbDescrip
   ${TEMP}/feTvImageToSIFTKeyPointSetFilterDistanceMap.txt
   )
 
-otb_add_test(NAME feTuImageToHessianDeterminantImageFilterNew COMMAND otbDescriptorsTestDriver
-  otbImageToHessianDeterminantImageFilterNew)
-
-otb_add_test(NAME feTuForwardFourierMellinImageFilterNew COMMAND otbDescriptorsTestDriver
-  otbFourierMellinImageFilterNew)
-
 if(OTB_USE_SIFTFAST)
-otb_add_test(NAME feTuImageToFastSIFTKeyPointSetFilterNew COMMAND otbDescriptorsTestDriver
-  otbImageToFastSIFTKeyPointSetFilterNew)
-
 otb_add_test(NAME feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii COMMAND otbDescriptorsTestDriver
   --ignore-order --compare-ascii ${EPSILON_3}
   ${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt

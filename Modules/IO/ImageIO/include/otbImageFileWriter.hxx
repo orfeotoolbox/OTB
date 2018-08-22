@@ -571,7 +571,7 @@ ImageFileWriter<TInputImage>
   /** Create Image file */
   // Setup the image IO for writing.
   //
-  m_ImageIO->SetFileName(m_FileName.c_str());
+  m_ImageIO->SetFileName(m_FileName);
 
   m_ImageIO->WriteImageInformation();
 }
@@ -832,9 +832,12 @@ ImageFileWriter<TInputImage>
 template <class TInputImage>
 void
 ImageFileWriter<TInputImage>
-::SetFileName(std::string extendedFileName)
+::SetFileName(const std::string& extendedFileName)
 {
-  this->SetFileName(extendedFileName.c_str());
+  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
+  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
+  m_ImageIO = nullptr;
+  this->Modified();
 }
 
 template <class TInputImage>
@@ -842,10 +845,12 @@ void
 ImageFileWriter<TInputImage>
 ::SetFileName(const char* extendedFileName)
 {
-  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
-  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-  m_ImageIO = nullptr;
-  this->Modified();
+  if (extendedFileName == nullptr)
+  {
+    itkGenericExceptionMacro( << "Filename is NULL" );
+  }
+
+  this->SetFileName(std::string(extendedFileName));
 }
 
 template <class TInputImage>

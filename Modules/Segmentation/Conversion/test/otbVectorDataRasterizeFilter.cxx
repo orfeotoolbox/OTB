@@ -39,11 +39,6 @@ typedef otb::RasterizeVectorDataFilter<VectorDataType,
                                        ImageType,
                                        ImageType>             RasterizationFilterType;
 
-int otbVectorDataRasterizeFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbVectorDataRasterizeFilter(int itkNotUsed(argc), char * argv[])
 {

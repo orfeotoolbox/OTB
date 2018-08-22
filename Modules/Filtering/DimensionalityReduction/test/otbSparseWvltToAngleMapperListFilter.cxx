@@ -31,7 +31,7 @@
 
 #include "otbSparseWvltToAngleMapperListFilter.h"
 
-int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
+int otbSparseWvltToAngleMapperListFilterTest ( int argc, char * argv[] )
 {
   // number of images to consider
   const unsigned int Dimension = 2;
@@ -95,7 +95,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
   for ( unsigned int i = 0; i < nbInputImages; i++ )
   {
     reader->SetNthElement(i, ReaderType::New());
-    reader->GetNthElement(i)->SetFileName( inputImageName[i].c_str() );
+    reader->GetNthElement(i)->SetFileName( inputImageName[i] );
     reader->GetNthElement(i)->Update();
 
     // Here, we will have 'nbInputImages' image lists of one image each only
@@ -121,5 +121,3 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

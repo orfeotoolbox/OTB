@@ -27,14 +27,6 @@ typedef SplitterType::RegionType                      RegionType;
 typedef RegionType::SizeType                          SizeType;
 typedef RegionType::IndexType                         IndexType;
 
-int otbImageRegionAdaptativeSplitterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  SplitterType::Pointer splitter = SplitterType::New();
-
-  std::cout<<splitter<<std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbImageRegionAdaptativeSplitter(int itkNotUsed(argc), char * argv[])
 {

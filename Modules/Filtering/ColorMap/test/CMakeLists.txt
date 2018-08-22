@@ -23,7 +23,6 @@ otb_module_test()
 set(OTBColorMapTests
 otbColorMapTestDriver.cxx
 otbScalarToRainbowRGBPixelFunctor.cxx
-otbScalarToRainbowRGBPixelFunctorNew.cxx
 )
 
 add_executable(otbColorMapTestDriver ${OTBColorMapTests})
@@ -41,8 +40,5 @@ otb_add_test(NAME bfTvScalarToRainbowRGBPixelFunctor COMMAND otbColorMapTestDriv
   ${TEMP}/bfTvScalarToRainbowRGBPixelFunctor.png
   )
 
-
-otb_add_test(NAME bfTuScalarToRainbowRGBPixelFunctorNew COMMAND otbColorMapTestDriver
-  otbScalarToRainbowRGBPixelFunctorNew)
 
 

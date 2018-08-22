@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
- *
+ 
  * This file is part of Orfeo Toolbox
  *
  *     https://www.orfeo-toolbox.org/
@@ -23,16 +23,6 @@
 #include "otbImageFileWriter.h"
 #include "otbMDMDNMFImageFilter.h"
 #include "otbStandardWriterWatcher.h"
-
-int otbMDMDNMFImageFilterNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef double                                                    PixelType;
-  typedef otb::VectorImage<PixelType, 2>                            VectorImageType;
-  typedef otb::MDMDNMFImageFilter<VectorImageType, VectorImageType> MDMDNMFImageFilterType;
-
-  MDMDNMFImageFilterType::Pointer mdmd = MDMDNMFImageFilterType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbMDMDNMFImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
