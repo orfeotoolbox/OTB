@@ -52,7 +52,9 @@ private:
 
     SetDocName("DEM Conversion");
     SetDocLongDescription("In order to be understood by the Orfeo ToolBox and the underlying OSSIM library, a geo-referenced Digital Elevation Model image can be converted into a general raster image, which consists in 3 files with the following extensions: .ras, .geom and .omd. Once converted, you have to place these files in a separate directory, and you can then use this directory to set the \"DEM Directory\" parameter of a DEM based OTB application or filter.");
-    SetDocLimitations("None");
+    SetDocLimitations("For this application to work one need the input "
+      "pixel type to be retrieved. It can only be done through GDAL IO driver "
+      "for now.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
