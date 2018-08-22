@@ -83,7 +83,7 @@ public:
   }
 
   // Reimplement the SetActive method
-  void SetActive(  const bool value ) override
+  void SetActive( bool value ) override
   {
     Superclass::SetActive( value );
     m_UnsignedIntParam->SetActive( value );

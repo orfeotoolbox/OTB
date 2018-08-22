@@ -33,8 +33,10 @@
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#pragma GCC diagnostic ignored "-Wheader-guard"
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wheader-guard"
+#endif
 #endif
 #include "otb_shark.h"
 #include "shark/Algorithms/Trainers/RFTrainer.h"

@@ -29,6 +29,9 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wheader-guard"
+#endif
 #endif
 #include "otb_shark.h"
 #include "shark/Data/Dataset.h"
