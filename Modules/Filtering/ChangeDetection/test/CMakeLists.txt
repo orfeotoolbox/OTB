@@ -29,11 +29,8 @@ otbCBAMIChangeDetectionTest.cxx
 otbKullbackLeiblerSupervizedDistanceImageFilter.cxx
 otbCorrelChangeDetectionTest.cxx
 otbKullbackLeiblerProfileImageFilter.cxx
-otbKullbackLeiblerSupervizedDistanceImageFilterNew.cxx
-otbKullbackLeiblerProfileImageFilterNew.cxx
 otbKullbackLeiblerDistanceImageFilter.cxx
 otbMeanRatioChangeDetectionTest.cxx
-otbKullbackLeiblerDistanceImageFilterNew.cxx
 otbLHMIChangeDetectionTest.cxx
 )
 
@@ -64,9 +61,6 @@ otb_add_test(NAME cdTvMeanDiff COMMAND otbChangeDetectionTestDriver
   2
   ${TEMP}/cdMeanDiffImage.hdr
   )
-
-otb_add_test(NAME cdTuMultivariateAlterationDetectorImageFilterNew COMMAND otbChangeDetectionTestDriver
-  otbMultivariateAlterationDetectorImageFilterNew)
 
 otb_add_test(NAME cdTvMultivariateAlterationDetectorImageFilterSameNbBands COMMAND otbChangeDetectionTestDriver
   --compare-image 0.025
@@ -127,12 +121,6 @@ otb_add_test(NAME cdTvKullbackLeiblerProfileImageFilter COMMAND otbChangeDetecti
   ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
   5 51)
 
-otb_add_test(NAME cdTuKullbackLeiblerSupervizedDistanceImageFilterNew COMMAND otbChangeDetectionTestDriver
-  otbKullbackLeiblerSupervizedDistanceImageFilterNew)
-
-otb_add_test(NAME cdTuKullbackLeiblerProfileImageFilterNew COMMAND otbChangeDetectionTestDriver
-  otbKullbackLeiblerProfileImageFilterNew)
-
 otb_add_test(NAME cdTvKullbackLeiblerDistanceImageFilter COMMAND otbChangeDetectionTestDriver
   --compare-image ${EPSILON_10}
   ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
@@ -152,9 +140,6 @@ otb_add_test(NAME cdTvMeanRatio COMMAND otbChangeDetectionTestDriver
   2
   ${TEMP}/cdMeanRatioImage.png
   )
-
-otb_add_test(NAME cdTuKullbackLeiblerDistanceImageFilterNew COMMAND otbChangeDetectionTestDriver
-  otbKullbackLeiblerDistanceImageFilterNew)
 
 otb_add_test(NAME cdTvLHMI COMMAND otbChangeDetectionTestDriver
   otbLHMIChangeDetectionTest

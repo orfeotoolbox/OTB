@@ -24,21 +24,6 @@
 
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
 
-int otbSurfaceReflectanceToReflectanceFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  const unsigned int                            Dimension = 2;
-  typedef double                                PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef otb::SurfaceReflectanceToReflectanceFilter< ImageType, ImageType>  SurfaceReflectanceToReflectanceFilterType;
-  typedef SurfaceReflectanceToReflectanceFilterType::Pointer  SurfaceReflectanceToReflectanceFilterPointerType;
-
-  //Instantiation
-  SurfaceReflectanceToReflectanceFilterPointerType  object=SurfaceReflectanceToReflectanceFilterType::New();
-
-  std::cout << object << std::endl;
-
-  return EXIT_SUCCESS;
-}
 int otbSurfaceReflectanceToReflectanceFilterTest(int argc, char * argv[])
 {
   if ( argc != 7 )

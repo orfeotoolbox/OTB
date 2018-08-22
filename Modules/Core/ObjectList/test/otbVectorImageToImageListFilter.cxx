@@ -117,7 +117,7 @@ int otbVectorImageToImageListFilterIterator(int itkNotUsed(argc), char * argv[])
 
     writer->SetInput(itOutput.Get());
 
-    writer->SetFileName(oss.str().c_str());
+    writer->SetFileName(oss.str());
     writer->SetNumberOfDivisionsTiledStreaming(8);
     writer->Update();
 
@@ -135,7 +135,7 @@ int otbVectorImageToImageListFilterIterator(int itkNotUsed(argc), char * argv[])
 
     writer->SetInput(itOutput.Get());
 
-    writer->SetFileName(oss.str().c_str());
+    writer->SetFileName(oss.str());
 
     writer->Update();
 

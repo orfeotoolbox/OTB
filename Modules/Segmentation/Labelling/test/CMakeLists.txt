@@ -24,11 +24,7 @@ set(OTBLabellingTests
 otbLabellingTestDriver.cxx
 otbLabelizeConfidenceConnectedImageFilter.cxx
 otbLabelizeConnectedThresholdImageFilter.cxx
-otbLabelizeConnectedThresholdImageFilterNew.cxx
-otbLabelizeNeighborhoodConnectedImageFilterNew.cxx
 otbLabelizeNeighborhoodConnectedImageFilter.cxx
-otbLabelizeConfidenceConnectedImageFilterNew.cxx
-otbLabelToBoundaryImageFilterNew.cxx
 otbLabelToBoundaryImageFilter.cxx
 )
 
@@ -59,12 +55,6 @@ otb_add_test(NAME bfTvLabelizeConnectedThresholdImageFilter COMMAND otbLabelling
   80 80
   )
 
-otb_add_test(NAME bfTuLabelizeConnectedThresholdImageFilterNew COMMAND otbLabellingTestDriver
-  otbLabelizeConnectedThresholdImageFilterNew)
-
-otb_add_test(NAME bfTuLabelizeNeighborhoodConnectedImageFilterNew COMMAND otbLabellingTestDriver
-  otbLabelizeNeighborhoodConnectedImageFilterNew)
-
 otb_add_test(NAME bfTvLabelizeNeighborhoodConnectedImageFilter COMMAND otbLabellingTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvLabelizeNeighborhoodConnectedImageFilterOutput.png
@@ -75,12 +65,6 @@ otb_add_test(NAME bfTvLabelizeNeighborhoodConnectedImageFilter COMMAND otbLabell
   170 170
   80 80
   )
-
-otb_add_test(NAME bfTuLabelizeConfidenceConnectedImageFilterNew COMMAND otbLabellingTestDriver
-  otbLabelizeConfidenceConnectedImageFilterNew)
-
-otb_add_test(NAME bfTuLabelToBoundaryImageFilterNew COMMAND otbLabellingTestDriver
-  otbLabelToBoundaryImageFilterNew)
 
 otb_add_test(NAME bfTvLabelToBoundaryImageFilter COMMAND otbLabellingTestDriver
   --compare-image ${EPSILON_7}

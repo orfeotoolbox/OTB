@@ -18,12 +18,6 @@
 # limitations under the License.
 #
 
-otb_add_test(NAME leTuNormalBayesMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbNormalBayesMachineLearningModelNew)
-
-otb_add_test(NAME leTuRandomForestsMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbRandomForestsMachineLearningModelNew)
-
 otb_add_test(NAME leTvANNMachineLearningModel COMMAND otbSupervisedTestDriver
   otbANNMachineLearningModel
   ${INPUTDATA}/letter_light.scale
@@ -57,15 +51,6 @@ otb_add_test(NAME leTvRandomForestsMachineLearningModelReg COMMAND otbSupervised
   )
 # --------------------------------------------------------------
 
-otb_add_test(NAME leTuSVMMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbSVMMachineLearningModelNew)
-
-otb_add_test(NAME leTuDecisionTreeMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbDecisionTreeMachineLearningModelNew)
-
-otb_add_test(NAME leTuKNearestNeighborsMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbKNearestNeighborsMachineLearningModelNew)
-
 otb_add_test(NAME leTvSVMMachineLearningRegressionModel COMMAND otbSupervisedTestDriver
   otbSVMMachineLearningRegressionModel
   ${INPUTDATA}/abalone.scale
@@ -78,9 +63,6 @@ otb_add_test(NAME leTvSVMMachineLearningModel COMMAND otbSupervisedTestDriver
   ${TEMP}/svm_model.txt
   )
 
-otb_add_test(NAME leTuBoostMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbBoostMachineLearningModelNew)
-
 otb_add_test(NAME leTvNormalBayesMachineLearningModel COMMAND otbSupervisedTestDriver
   otbNormalBayesMachineLearningModel
   ${INPUTDATA}/letter_light.scale
@@ -88,13 +70,11 @@ otb_add_test(NAME leTvNormalBayesMachineLearningModel COMMAND otbSupervisedTestD
   )
 
 if(NOT OTB_OPENCV_3)
-otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModel COMMAND otbSupervisedTestDriver
-  otbGradientBoostedTreeMachineLearningModel
-  ${INPUTDATA}/letter_light.scale
-  ${TEMP}/gbt_model.txt
-  )
-otb_add_test(NAME leTuGradientBoostedTreeMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbGradientBoostedTreeMachineLearningModelNew)
+  otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModel COMMAND otbSupervisedTestDriver
+    otbGradientBoostedTreeMachineLearningModel
+    ${INPUTDATA}/letter_light.scale
+    ${TEMP}/gbt_model.txt
+    )
 endif()
 
 otb_add_test(NAME leTvRandomForestsMachineLearningModel COMMAND otbSupervisedTestDriver
@@ -102,9 +82,6 @@ otb_add_test(NAME leTvRandomForestsMachineLearningModel COMMAND otbSupervisedTes
   ${INPUTDATA}/letter_light.scale
   ${TEMP}/rf_model.txt
   )
-
-otb_add_test(NAME leTuANNMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbANNMachineLearningModelNew)
 
 otb_add_test(NAME leTvKNearestNeighborsMachineLearningModel COMMAND otbSupervisedTestDriver
   otbKNearestNeighborsMachineLearningModel
@@ -124,9 +101,6 @@ otb_add_test(NAME leTvBoostMachineLearningModel COMMAND otbSupervisedTestDriver
   ${TEMP}/boost_model.txt
   )
 
-otb_add_test(NAME leTuImageClassificationFilterNew COMMAND otbSupervisedTestDriver
-  otbImageClassificationFilterNew)
-
 otb_add_test(NAME leTvImageClassificationFilterSVM COMMAND otbSupervisedTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/leImageClassificationFilterSVMOutput.tif
@@ -144,11 +118,11 @@ otb_add_test(NAME leTvDecisionTreeMachineLearningModelCanRead COMMAND otbSupervi
 set_property(TEST leTvDecisionTreeMachineLearningModelCanRead APPEND PROPERTY DEPENDS leTvDecisionTreeMachineLearningModel)
 
 if(NOT OTB_OPENCV_3)
-otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
-  otbGradientBoostedTreeMachineLearningModelCanRead
-  ${TEMP}/gbt_model.txt
-  )
-set_property(TEST leTvGradientBoostedTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvGradientBoostedTreeMachineLearningModel)
+  otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
+    otbGradientBoostedTreeMachineLearningModelCanRead
+    ${TEMP}/gbt_model.txt
+    )
+  set_property(TEST leTvGradientBoostedTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvGradientBoostedTreeMachineLearningModel)
 endif()
 
 otb_add_test(NAME leTvNormalBayesMachineLearningModelCanRead COMMAND otbSupervisedTestDriver

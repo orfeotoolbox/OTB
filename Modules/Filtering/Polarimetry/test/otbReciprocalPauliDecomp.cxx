@@ -29,19 +29,6 @@
 #include "otbReciprocalPauliDecompImageFilter.h"
 #include "otbNRIBandImagesToOneNComplexBandsImage.h"
 
-int otbReciprocalPauliDecompImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  const unsigned int Dimension = 2;
-
-  typedef std::complex<double>   PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-
-  typedef otb::ReciprocalPauliDecompImageFilter<ImageType, ImageType> FilterType;
-
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbReciprocalPauliDecompImageFilter(int itkNotUsed(argc), char * argv[])

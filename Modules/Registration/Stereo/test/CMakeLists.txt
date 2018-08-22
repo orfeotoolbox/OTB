@@ -36,9 +36,6 @@ otb_module_target_label(otbStereoTestDriver)
 # Tests Declaration
 
 
-otb_add_test(NAME dmTuBijectionCoherencyFilterNew COMMAND otbStereoTestDriver
-  otbBijectionCoherencyFilterNew)
-
 otb_add_test(NAME dmTvBijectionCoherencyFilter COMMAND otbStereoTestDriver
   --compare-image ${EPSILON_6}
   ${BASELINE}/dmTvBijectionCoherencyFilterOutput.tif
@@ -179,9 +176,6 @@ otb_add_test(NAME dmTuMulti3DMapToDEMFilterMeanMultiThreadMultiStream COMMAND ot
   8
   4)
 
-otb_add_test(NAME dmTuMulti3DMapTo3DEMFilterNew COMMAND otbStereoTestDriver
-  otbMulti3DMapToDEMFilterNew)
-
 otb_add_test(NAME dmTvMulti3DMapToDEMFilterStadiumMeanNoData COMMAND otbStereoTestDriver
   --compare-image ${EPSILON_6}
   ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanNoData.tif
@@ -286,12 +280,6 @@ otb_add_test(NAME dmTvAdhesionCorrectionFilter COMMAND otbStereoTestDriver
   ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
   )
 
-otb_add_test(NAME dmTuAdhesionCorrectionFilterNew COMMAND otbStereoTestDriver
-  otbAdhesionCorrectionFilterNew)
-
-otb_add_test(NAME dmTuStereoSensorModelToElevationFilterNew COMMAND otbStereoTestDriver
-  otbStereoSensorModelToElevationMapFilterNew)
-
 #otb_add_test(NAME dmTvStereoSensorModelToElevationFilter COMMAND otbStereoTestDriver
   #--compare-image ${EPSILON_10}
   #${BASELINE}/feTvStereoSensorModelToElevationFilterOutput.tif
@@ -323,5 +311,3 @@ otb_add_test(NAME dmTvStereorectificationDisplacementFieldSource COMMAND otbSter
   0.5
   5
   )
-otb_add_test(NAME dmTuStereorectificationDisplacementFieldSourceNew COMMAND otbStereoTestDriver
-  otbStereorectificationDisplacementFieldSourceNew)
