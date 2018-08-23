@@ -77,6 +77,7 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::GCPCountKey,                       MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::GeoTransformKey,                   MetaDataKey::TVECTOR),
   MetaDataKey::KeyTypeDef(MetaDataKey::MetadataKey,                       MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::SubMetadataKey,                    MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::UpperLeftCornerKey,                MetaDataKey::TVECTOR),
   MetaDataKey::KeyTypeDef(MetaDataKey::UpperRightCornerKey,               MetaDataKey::TVECTOR),
   MetaDataKey::KeyTypeDef(MetaDataKey::LowerLeftCornerKey,                MetaDataKey::TVECTOR),
