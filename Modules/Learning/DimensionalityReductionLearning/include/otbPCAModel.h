@@ -29,6 +29,9 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wheader-guard"
+#endif
 #endif
 #include "otb_shark.h"
 #include <shark/Algorithms/Trainers/PCA.h>

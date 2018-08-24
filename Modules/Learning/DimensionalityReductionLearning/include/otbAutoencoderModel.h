@@ -30,6 +30,10 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wheader-guard"
+#pragma clang diagnostic ignored "-Wdivision-by-zero"
+#endif
 #endif
 #include "otb_shark.h"
 #include <shark/Algorithms/StoppingCriteria/AbstractStoppingCriterion.h>
