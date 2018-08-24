@@ -126,7 +126,7 @@ private:
 
     // Parse the input file for ground control points
     std::ifstream ifs;
-    ifs.open(GetParameterString("inpoints").c_str());
+    ifs.open(GetParameterString("inpoints"));
 
   TiePointsType tiepoints;
 
@@ -206,7 +206,7 @@ private:
   ofs.precision(12);
   if(IsParameterEnabled("outstat"))
     {
-    ofs.open(GetParameterString("outstat").c_str());
+    ofs.open(GetParameterString("outstat"));
     ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat predicted_elev x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
     }
 

@@ -1,8 +1,5 @@
 # kMeans Shark related tests
 
-otb_add_test(NAME leTvSharkKMeansMachineLearningModelNew COMMAND otbUnsupervisedTestDriver
-  otbSharkKMeansMachineLearningModelNew
-  )
 
 
 otb_add_test(NAME leTvSharkKMeansMachineLearningModel COMMAND otbUnsupervisedTestDriver

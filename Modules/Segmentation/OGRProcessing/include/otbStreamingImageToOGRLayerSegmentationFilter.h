@@ -31,6 +31,7 @@
 #include "otbLabeledOutputAccessor.h"
 
 #include "otbMeanShiftSmoothingImageFilter.h"
+#include <string>
 
 namespace otb
 {

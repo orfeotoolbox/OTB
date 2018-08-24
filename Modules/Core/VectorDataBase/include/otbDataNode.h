@@ -28,6 +28,7 @@
 
 
 #include "ogrsf_frmts.h"
+#include <string>
 
 namespace otb
 {

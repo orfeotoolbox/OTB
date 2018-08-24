@@ -111,7 +111,7 @@ set( OTBQtWidget_RESOURCES
   otbWrapperQtWidgetIcons.qrc
   )
 
-qt5_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} )
+qt5_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} OPTIONS -p "." )
 qt5_wrap_ui( OTBQtWidget_FORMS_HEADERS ${OTBQtWidget_FORMS} )
 qt5_add_resources( OTBQtWidget_RESOURCES_RCC ${OTBQtWidget_RESOURCES} OPTIONS "-no-compress")
 

@@ -28,6 +28,7 @@
 #include "otbReduceSpectralResponse.h"
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include "otbSatelliteRSR.h"
+#include <string>
 
 
 namespace otb

@@ -24,12 +24,10 @@ set(OTBVectorDataIOTests
 otbVectorDataIOTestDriver.cxx
 otbVectorDataFileReaderWriter.cxx
 otbVectorDataFileWriterPolygons.cxx
-otbVectorDataFileReaderNew.cxx
 otbVectorDataIOFactory.cxx
 otbVectorDataFileWriterMultiPolygons.cxx
 otbVectorDataFileReader.cxx
 otbVectorDataFileGeoReaderWriter.cxx
-otbVectorDataFileWriterNew.cxx
 otbVectorDataFileWriter.cxx
 )
 
@@ -55,9 +53,6 @@ otb_add_test(NAME ioTvVectorDataFileWriterPolygons COMMAND otbVectorDataIOTestDr
   otbVectorDataFileWriterPolygons
   ${TEMP}/ioTvVectorDataFileWriterPolygonsOutput.shp
   )
-
-otb_add_test(NAME ioTuVectorDataFileReaderNew COMMAND otbVectorDataIOTestDriver
-  otbVectorDataFileReaderNew )
 
 otb_add_test(NAME ioTuVectorDataIOFactory COMMAND otbVectorDataIOTestDriver
   otbVectorDataIOFactory
@@ -146,9 +141,6 @@ otb_add_test(NAME ioTvVectorDataFileGeoReaderWriter COMMAND otbVectorDataIOTestD
   ${INPUTDATA}/ToulouseRoad-examples.shp
   ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shp
   )
-
-otb_add_test(NAME ioTuVectorDataFileWriterNew COMMAND otbVectorDataIOTestDriver
-  otbVectorDataFileWriterNew )
 
 otb_add_test(NAME ioTvVectorDataFileWriter COMMAND otbVectorDataIOTestDriver
   --compare-ogr  ${EPSILON_9}

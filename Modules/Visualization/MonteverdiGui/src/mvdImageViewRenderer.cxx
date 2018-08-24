@@ -712,7 +712,7 @@ ImageViewRenderer
 	//
 	// qDebug()
 	//   << "alpha:" << settings.GetAlpha()
-	//   << "'" << it->first.c_str() << "'";
+	//   << "'" << it->first << "'";
 	imageSettings->SetAlpha( settings.GetAlpha() );
 
 	//

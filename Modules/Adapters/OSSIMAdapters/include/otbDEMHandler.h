@@ -29,6 +29,7 @@
 #include "itkPoint.h"
 
 #include "OTBOSSIMAdaptersExport.h"
+#include <string>
 
 class ossimElevManager;
 

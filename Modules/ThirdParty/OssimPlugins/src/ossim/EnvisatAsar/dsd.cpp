@@ -37,9 +37,9 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const dsd& data)
    {
-      os<<"ds_name:"<<data._ds_name.c_str()<<std::endl;
-      os<<"ds_type:"<<data._ds_type.c_str()<<std::endl;
-      os<<"filename:"<<data._filename.c_str()<<std::endl;
+      os<<"ds_name:"<<data._ds_name <<std::endl;
+      os<<"ds_type:"<<data._ds_type <<std::endl;
+      os<<"filename:"<<data._filename <<std::endl;
       os<<"ds_offset:"<<data._ds_offset<<std::endl;
       os<<"ds_size:"<<data._ds_size<<std::endl;
       os<<"num_dsr:"<<data._num_dsr<<std::endl;

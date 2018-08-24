@@ -35,48 +35,6 @@
 #include "otbLocalHistogramImageFunction.h"
 
 
-int otbImageFunctionAdaptorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef double InputPixelType;
-  typedef double PrecisionType;
-  const unsigned int Dimension = 2;
-
-  typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
-
-  typedef otb::FourierMellinDescriptorsImageFunction<InputImageType>    FMDFunctionType;
-  typedef otb::RealMomentsImageFunction<InputImageType>                 RMFunctionType;
-  typedef otb::ComplexMomentsImageFunction<InputImageType>              CMFunctionType;
-  typedef otb::FlusserMomentsImageFunction<InputImageType>              FMFunctionType;
-  typedef otb::HuMomentsImageFunction<InputImageType>                   HMFunctionType;
-  typedef otb::RadiometricMomentsImageFunction<InputImageType>          RaMFunctionType;
-  typedef otb::LocalHistogramImageFunction<InputImageType>              LHFunctionType;
-
-  typedef otb::ImageFunctionAdaptor<FMDFunctionType, PrecisionType>                    FMDImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RMFunctionType, PrecisionType>                     RMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<CMFunctionType, PrecisionType>                     CMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<FMFunctionType, PrecisionType>                     FMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<HMFunctionType, PrecisionType>                     HMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RaMFunctionType, PrecisionType>                    RaMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<LHFunctionType, PrecisionType>                     LHImageFunctionAdaptorType;
-
-  // Instantiating objects
-  FMDImageFunctionAdaptorType::Pointer FMDadaptedFunction = FMDImageFunctionAdaptorType::New();
-  std::cout << FMDadaptedFunction << std::endl;
-  RMImageFunctionAdaptorType::Pointer RMadaptedFunction = RMImageFunctionAdaptorType::New();
-  std::cout << RMadaptedFunction << std::endl;
-  CMImageFunctionAdaptorType::Pointer CMadaptedFunction = CMImageFunctionAdaptorType::New();
-  std::cout << CMadaptedFunction << std::endl;
-  FMImageFunctionAdaptorType::Pointer FMadaptedFunction = FMImageFunctionAdaptorType::New();
-  std::cout << FMadaptedFunction << std::endl;
-  HMImageFunctionAdaptorType::Pointer HMadaptedFunction = HMImageFunctionAdaptorType::New();
-  std::cout << HMadaptedFunction << std::endl;
-  RaMImageFunctionAdaptorType::Pointer RaMadaptedFunction = RaMImageFunctionAdaptorType::New();
-  std::cout << RaMadaptedFunction << std::endl;
-  LHImageFunctionAdaptorType::Pointer LHadaptedFunction = LHImageFunctionAdaptorType::New();
-  std::cout << LHadaptedFunction << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
 {

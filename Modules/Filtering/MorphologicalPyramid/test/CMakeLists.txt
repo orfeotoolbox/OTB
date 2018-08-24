@@ -22,17 +22,11 @@ otb_module_test()
 
 set(OTBMorphologicalPyramidTests
 otbMorphologicalPyramidTestDriver.cxx
-otbMorphologicalPyramidSegmentationFilterNew.cxx
 otbMorphologicalPyramidAnalysisFilter.cxx
 otbMorphologicalPyramidSegmenter.cxx
-otbMorphologicalPyramidSegmenterNew.cxx
 otbMorphologicalPyramidSynthesisFilter.cxx
 otbMorphologicalPyramidMRToMSConverter.cxx
-otbMorphologicalPyramidSynthesisFilterNew.cxx
-otbMorphologicalPyramidMRToMSConverterNew.cxx
 otbMorphologicalPyramidResampler.cxx
-otbMorphologicalPyramidAnalysisFilterNew.cxx
-otbMorphologicalPyramidResamplerNew.cxx
 otbMorphologicalPyramidSegmentationFilter.cxx
 )
 
@@ -41,9 +35,6 @@ target_link_libraries(otbMorphologicalPyramidTestDriver ${OTBMorphologicalPyrami
 otb_module_target_label(otbMorphologicalPyramidTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME msTuMorphoPyrSegmentationFilterNew COMMAND otbMorphologicalPyramidTestDriver
-  otbMorphologicalPyramidSegmentationFilterNew)
 
 otb_add_test(NAME msTvMorphoPyrAnalysisFilter COMMAND otbMorphologicalPyramidTestDriver
   --compare-n-images ${NOTOL} 5
@@ -94,9 +85,6 @@ otb_add_test(NAME msTvMorphoPyrSegmentDark COMMAND otbMorphologicalPyramidTestDr
   )
 set_property(TEST msTvMorphoPyrSegmentDark PROPERTY DEPENDS msTvMorphoPyrMRToMSConverter)
 
-otb_add_test(NAME msTuMorphoPyrSegmenterNew COMMAND otbMorphologicalPyramidTestDriver
-  otbMorphologicalPyramidSegmenterNew)
-
 otb_add_test(NAME msTvMorphoPyrSynthesisFilter COMMAND otbMorphologicalPyramidTestDriver
   --compare-image ${NOTOL}
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
@@ -123,12 +111,6 @@ otb_add_test(NAME msTvMorphoPyrMRToMSConverter COMMAND otbMorphologicalPyramidTe
   4
   2.0)
 
-otb_add_test(NAME msTuMorphoPyrSynthesisFilterNew COMMAND otbMorphologicalPyramidTestDriver
-  otbMorphologicalPyramidSynthesisFilterNew)
-
-otb_add_test(NAME msTuMorphoPyrMRToMSConverterNew COMMAND otbMorphologicalPyramidTestDriver
-  otbMorphologicalPyramidMRToMSConverterNew)
-
 otb_add_test(NAME msTvMorphoPyrResampler COMMAND otbMorphologicalPyramidTestDriver
   --compare-n-images ${EPSILON_8} 2
   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
@@ -142,12 +124,6 @@ otb_add_test(NAME msTvMorphoPyrResampler COMMAND otbMorphologicalPyramidTestDriv
   256
   256
   )
-
-otb_add_test(NAME msTuMorphoPyrAnalysisFilterNew COMMAND otbMorphologicalPyramidTestDriver
-  otbMorphologicalPyramidAnalysisFilterNew)
-
-otb_add_test(NAME msTuMorphoPyrResamplerNew COMMAND otbMorphologicalPyramidTestDriver
-  otbMorphologicalPyramidResamplerNew)
 
 otb_add_test(NAME msTvMorphoPyrSegmentationFilter COMMAND otbMorphologicalPyramidTestDriver
   --compare-n-images ${NOTOL} 4

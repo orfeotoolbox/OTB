@@ -25,22 +25,16 @@ otbSensorModel.cxx
 otbProjectionTestDriver.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
 otbOrthoRectificationFilter.cxx
-otbGCPsToRPCSensorModelImageFilterNew.cxx
 otbMapProjection.cxx
 otbGenericRSResampleImageFilter.cxx
 otbGeometriesProjectionFilter.cxx
 otbGenericRSTransformGenericTest.cxx
-otbLeastSquareAffineTransformEstimatorNew.cxx
 otbVectorDataTransformFilter.cxx
 otbRationalTransformToDisplacementFieldSource.cxx
-otbImportGeoInformationImageFilterNew.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
-otbCompositeTransformNew.cxx
 otbRationalTransform.cxx
 otbGeometriesProjectionFilterFromMapToSensor.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
-otbMapProjectionsNew.cxx
-otbOrthoRectificationFilterNew.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbGeometriesProjectionFilterFromMapToGeo.cxx
 otbROIdataConversion.cxx
@@ -52,7 +46,6 @@ otbGenericRSTransformFromImage.cxx
 otbCompositeTransform.cxx
 otbLeastSquareAffineTransformEstimator.cxx
 otbSpectralAngleDataNodeFeatureFunction.cxx
-otbROIdataConversionNew.cxx
 otbGCPsToRPCSensorModelImageFilterCheckRpcModel.cxx
 otbGeographicalDistance.cxx
 otbTileImageFilterRSTransformTest.cxx
@@ -64,7 +57,6 @@ otbGeometriesProjectionFilterFromMapToImage.cxx
 otbGeometriesProjectionFilterFromMapToEPSG.cxx
 otbVectorDataProjectionFilter.cxx
 otbUtmMapProjection.cxx
-otbVectorDataProjectionFilterNew.cxx
 otbTileMapTransform.cxx
 otbImportGeoInformationImageFilter.cxx
 )
@@ -349,18 +341,11 @@ endforeach()
 #------------------------------------------------------------------------
 
 
-otb_add_test(NAME prTuGCPsToRPCSensorModelImageFilterNew COMMAND otbProjectionTestDriver
-  otbGCPsToRPCSensorModelImageFilterNew)
-
 otb_add_test(NAME prTvMapProjection COMMAND otbProjectionTestDriver
   --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjection.txt
   ${TEMP}/prTvMapProjection.txt
   otbMapProjection
   ${TEMP}/prTvMapProjection.txt
-  )
-
-otb_add_test(NAME prTuotbGenericRSResampleImageFilterNew COMMAND otbProjectionTestDriver
-  otbGenericRSResampleImageFilterNew
   )
 
 otb_add_test(NAME prTvotbGenericRSResampleImageFilter COMMAND otbProjectionTestDriver
@@ -415,11 +400,6 @@ otb_add_test(NAME prTvGenericRSTransformGenericTestEPSG4326toEPSG4326 COMMAND ot
   otbGenericRSTransformGenericTest
   1.35617289802566 43.4876035537 1.35617289802566 43.4876035537 EPSG 4326 EPSG 4326 GEO 1e-6 GEO 1e-6 NOELEV)
 
-otb_add_test(NAME prTuLeastSquareAffineTransformEstimatorNew COMMAND otbProjectionTestDriver
-  otbLeastSquareAffineTransformEstimatorNew)
-
-otb_add_test(NAME prTuVectorDataTransformFilterNew COMMAND otbProjectionTestDriver
-  otbVectorDataTransformFilterNew)
 
 otb_add_test(NAME prTvVectorDataTransformFilter COMMAND otbProjectionTestDriver
   --compare-ogr ${EPSILON_4}
@@ -438,10 +418,6 @@ otb_add_test(NAME prTvRationalTransformToDisplacementFieldSourceTest COMMAND otb
   ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
   )
 
-otb_add_test(NAME bfTuImportGeoInformationImageFilterNew COMMAND otbProjectionTestDriver
-  otbImportGeoInformationImageFilterNew)
-
-
 otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToSensor COMMAND otbProjectionTestDriver
   --compare-ogr  ${NOTOL}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
@@ -451,8 +427,6 @@ otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToSensor COMMAND otbProje
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   )
-
-otb_add_test(NAME prTuCompositeTransformNew COMMAND otbProjectionTestDriver  otbCompositeTransformNew )
 
 otb_add_test(NAME prTvRationalTransform COMMAND otbProjectionTestDriver
   --compare-ascii ${NOTOL}
@@ -465,9 +439,6 @@ otb_add_test(NAME prTvRationalTransform COMMAND otbProjectionTestDriver
   10 10
   -10 -10
   )
-
-otb_add_test(NAME prTuRationalTransformNew COMMAND otbProjectionTestDriver
-  otbRationalTransformNew)
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToSensor COMMAND otbProjectionTestDriver
   --compare-ogr  ${NOTOL}
@@ -488,21 +459,12 @@ otb_add_test(NAME prTvImageToEnvelopeVectorDataFilter COMMAND otbProjectionTestD
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   )
 
-otb_add_test(NAME prTuImageToEnvelopeVectorDataFilterNew COMMAND otbProjectionTestDriver
-  otbImageToEnvelopeVectorDataFilterNew)
-
-otb_add_test(NAME prTuMapProjectionsNew COMMAND otbProjectionTestDriver  otbMapProjectionsNew )
-
 otb_add_test(NAME prTvMapProjectionsTest COMMAND otbProjectionTestDriver
   --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjectionsTest.txt
   ${TEMP}/prTvMapProjectionsTest.txt
-  otbMapProjectionsTest
+  otbMapProjectionAccessorsTest
   ${TEMP}/prTvMapProjectionsTest.txt
   )
-
-
-otb_add_test(NAME prTuOrthoRectificationFilterNew COMMAND otbProjectionTestDriver
-  otbOrthoRectificationFilterNew )
 
 otb_add_test(NAME prTvImageToGenericRSOutputParameters COMMAND otbProjectionTestDriver
   --compare-ascii ${NOTOL}
@@ -512,9 +474,6 @@ otb_add_test(NAME prTvImageToGenericRSOutputParameters COMMAND otbProjectionTest
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   ${TEMP}/prTvImageToGenericRSOutputParametersOutput.txt
   )
-
-otb_add_test(NAME prTuImageToGenericRSOutputParametersNew COMMAND otbProjectionTestDriver
-  otbImageToGenericRSOutputParametersNew)
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToGeo COMMAND otbProjectionTestDriver
   --compare-ogr ${NOTOL}
@@ -549,10 +508,6 @@ otb_add_test(NAME prTvPhysicalToRPCSensorModelImageFilter COMMAND otbProjectionT
   ${INPUTDATA}/ToulouseExtract_WithGeom.tif
   15
   ${TEMP}/prTvotbPhysicalToRPCSensorModelImageFilter.tif
-  )
-
-otb_add_test(NAME prTuPhysicalToRPCSensorModelImageFilterNew COMMAND otbProjectionTestDriver
-  otbPhysicalToRPCSensorModelImageFilter
   )
 
 otb_add_test(NAME prTuGeometriesProjectionFilterFromGeoToMap COMMAND otbProjectionTestDriver
@@ -658,10 +613,6 @@ otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Polygon COMMAND otbPr
   ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
   0 )
 
-otb_add_test(NAME bfTuSpectralAngleDataNodeFeatureFunctionNew COMMAND otbProjectionTestDriver
-  otbSpectralAngleDataNodeFeatureFunctionNew
-  )
-
 otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Line COMMAND otbProjectionTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
@@ -673,9 +624,6 @@ otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Line COMMAND otbProje
   ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
   0
   )
-
-otb_add_test(NAME leTuROIdataConversionNew COMMAND otbProjectionTestDriver
-  otbROIdataConversionNew)
 
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
@@ -891,9 +839,6 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_Wit
   2450 2450 1.43239 43.6034 0
   -err 10 # Tolerance in meters, the first goal of this test
   )
-
-otb_add_test(NAME prTuGeographicalDistanceNew COMMAND otbProjectionTestDriver
-  otbGeographicalDistanceNew)
 
 otb_add_test(NAME prTvGeographicalDistance COMMAND otbProjectionTestDriver
   otbGeographicalDistance
@@ -1211,8 +1156,6 @@ otb_add_test(NAME prTvUtmMapProjection COMMAND otbProjectionTestDriver
   otbUtmMapProjection
   ${TEMP}/prTvUtmMapProjection.txt
   )
-
-otb_add_test(NAME prTuVectorDataProjectionFilterNew COMMAND otbProjectionTestDriver  otbVectorDataProjectionFilterNew )
 
 otb_add_test(NAME prTvTileMapTransform COMMAND otbProjectionTestDriver
   --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvTileMapTransform.txt

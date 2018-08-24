@@ -27,6 +27,7 @@
 #include "otbFuzzyVariable.h"
 #include <vector>
 #include <algorithm>
+#include <string>
 
 namespace otb
 {

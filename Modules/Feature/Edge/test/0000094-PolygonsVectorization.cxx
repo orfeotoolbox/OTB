@@ -110,7 +110,7 @@ int main(int argc, char * argv[])
     //-----------------------------------------------------------------
     //read image
     ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName(parseResult->GetInputImage().c_str());
+    reader->SetFileName(parseResult->GetInputImage());
     reader->UpdateOutputInformation();
 
     ///////////////////////////////////////////////////////////////////
@@ -150,7 +150,7 @@ int main(int argc, char * argv[])
     std::ofstream file;
     if (parseResult->IsOptionPresent("--outputText"))
       {
-      file.open(parseResult->GetParameterString("--outputText").c_str());
+      file.open(parseResult->GetParameterString("--outputText"));
       }
 
     double minSize = -1;
@@ -258,7 +258,7 @@ int main(int argc, char * argv[])
     //-----------------------------------------------------------------
     //write image
     WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName(parseResult->GetOutputImage().c_str());
+    writer->SetFileName(parseResult->GetOutputImage());
     writer->SetInput(rescaler->GetOutput());
 
     try

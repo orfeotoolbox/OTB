@@ -100,8 +100,7 @@ In the new application framework, every input, output or parameter derive from
 \subdoxygen{otb}{Wrapper}{Parameter}. The application engine supplies the following 
 types of parameters:
 \begin{itemize}
-  \item \code{ParameterType\_Empty} : parameter without value (can be used to represent 
-  a flag)
+  \item \code{ParameterType\_Bool} : parameter storing a boolean. 
   \item \code{ParameterType\_Int} : parameter storing an integer.
   \item \code{ParameterType\_Radius} : parameter storing a radius.
   \item \code{ParameterType\_Float} : parameter storing a float.
@@ -128,6 +127,7 @@ types of parameters:
   \item \code{ParameterType\_OutputProcessXML} : parameter storing an output XML file name.
   \item \code{ParameterType\_RAM} : parameter storing the maximum amount of RAM to be used.
 \end{itemize}
+\textbf{Note :} The former \code{ParameterType\_Empty} is \textbf{deprecated} and shall be replaced by \code{ParameterType\_Bool}.
 
 \subsection{Parameters description}
 

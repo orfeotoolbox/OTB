@@ -66,14 +66,14 @@ VectorDataFileReader<TOutputVectorData>
 ::TestFileExistenceAndReadability()
 {
   // Test if the file exists.
-  if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
+  if (!itksys::SystemTools::FileExists(this->m_FileName))
     {
     VectorDataFileReaderException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << "The file doesn't exist. "
         << std::endl << "Filename = " << this->m_FileName
         << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     return;
     }
@@ -82,10 +82,10 @@ VectorDataFileReader<TOutputVectorData>
   //Only if m_FileName speciy a filename (not a dirname)
   // FIXME shapefile should be able to open a directory and load the
   // individual shapefiles as layers
-  if (itksys::SystemTools::FileExists(this->m_FileName.c_str(), true) == true)
+  if (itksys::SystemTools::FileExists(this->m_FileName, true) == true)
     {
     std::ifstream readTester;
-    readTester.open(this->m_FileName.c_str());
+    readTester.open(this->m_FileName);
     if (readTester.fail())
       {
       readTester.close();
@@ -155,7 +155,7 @@ VectorDataFileReader<TOutputVectorData>
     {
     std::ostringstream msg;
     msg << " Could not create IO object for file "
-        << m_FileName.c_str() << std::endl;
+        << m_FileName << std::endl;
     if (m_ExceptionMessage.size())
       {
       msg << m_ExceptionMessage;
@@ -179,7 +179,7 @@ VectorDataFileReader<TOutputVectorData>
     return;
     }
 
-  m_VectorDataIO->SetFileName(m_FileName.c_str());
+  m_VectorDataIO->SetFileName(m_FileName);
 
   //Copy MetaDataDictionary from instantiated reader to output VectorData.
   output->SetMetaDataDictionary(m_VectorDataIO->GetMetaDataDictionary());
@@ -208,7 +208,7 @@ VectorDataFileReader<TOutputVectorData>
     m_ExceptionMessage = err.GetDescription();
     }
 
-  m_VectorDataIO->SetFileName(m_FileName.c_str());
+  m_VectorDataIO->SetFileName(m_FileName);
 
   // Tell the VectorDataIO to read the file
   //

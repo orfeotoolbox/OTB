@@ -26,13 +26,6 @@
 #include "itksys/SystemTools.hxx"
 #include <fstream>
 
-int otbWrapperDocExampleStructureNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::DocExampleStructure DocExampleStructureType;
-  DocExampleStructureType::Pointer docStruct = DocExampleStructureType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbWrapperDocExampleStructureTest(int itkNotUsed(argc), char* argv[])

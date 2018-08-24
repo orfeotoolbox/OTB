@@ -32,6 +32,7 @@
 
 //Estimator
 #include "otbMachineLearningModelFactory.h"
+#include <string>
 
 namespace otb
 {

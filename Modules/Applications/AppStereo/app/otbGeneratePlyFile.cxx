@@ -255,7 +255,7 @@ private:
     interpolator->SetInputImage(colorPtr);
 
     // Start writing ply file
-    std::ofstream ofs(outfname.c_str());
+    std::ofstream ofs(outfname);
     std::ostringstream oss;
     oss<<std::fixed;
     oss.precision(12);

@@ -23,6 +23,7 @@
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
 #include <sstream>
+#include <string>
 
 namespace otb
 {

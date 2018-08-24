@@ -32,6 +32,7 @@
 
 #include "otbPolygon.h"
 #include <map>
+#include <string>
 
 namespace otb
 {

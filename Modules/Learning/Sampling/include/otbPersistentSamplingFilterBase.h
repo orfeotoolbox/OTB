@@ -24,6 +24,7 @@
 #include "otbPersistentImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbImage.h"
+#include <string>
 
 namespace otb
 {

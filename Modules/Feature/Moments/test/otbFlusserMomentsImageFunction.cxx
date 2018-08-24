@@ -34,21 +34,6 @@
 #include "itkAffineTransform.h"
 
 
-int otbFlusserMomentsImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
-
-  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::FlusserMomentsImageFunction<InputImageType>        FunctionType;
-
-  // Instantiating object
-  FunctionType::Pointer function       = FunctionType::New();
-
-  std::cout << function << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbFlusserMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 {

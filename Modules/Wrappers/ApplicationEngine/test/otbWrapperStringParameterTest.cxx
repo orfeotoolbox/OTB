@@ -24,13 +24,6 @@
 
 #include "otbWrapperStringParameter.h"
 
-int otbWrapperStringParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::StringParameter StringParameterType;
-  StringParameterType::Pointer parameter = StringParameterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbWrapperStringParameterTest1(int itkNotUsed(argc), char* argv[])

@@ -36,6 +36,7 @@
 #include "itkResampleImageFilter.h"
 #include "otbProlateInterpolateImageFunction.h"
 #include "itkLabelMapToLabelImageFilter.h"
+#include <string>
 
 namespace otb
 {

@@ -22,13 +22,6 @@
 #include "otbImageFileReader.h"
 #include "otbPlatformPositionAdapter.h"
 
-int otbPlatformPositionComputeBaselineNewTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  typedef otb::PlatformPositionAdapter PlatformType;
-  PlatformType::Pointer masterPlatform = PlatformType::New();
-  return EXIT_SUCCESS;
-}
-
 int otbPlatformPositionComputeBaselineTest(int argc, char* argv[])
 {
  if (argc != 3)

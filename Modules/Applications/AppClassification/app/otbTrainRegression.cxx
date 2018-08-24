@@ -213,7 +213,7 @@ void DoUpdateParameters() override
 void ParseCSVPredictors(std::string path, ListSampleType* outputList)
 {
   std::ifstream ifs;
-  ifs.open(path.c_str());
+  ifs.open(path);
   unsigned int nbCols = 0;
   char sep = '\t';
   std::istringstream iss;
@@ -235,24 +235,24 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
     // Avoid commented lines or too short ones
     if (!line.empty() && line[0] != '#')
       {
-      std::vector<itksys::String> words = itksys::SystemTools::SplitString(line.c_str(),sep);
+      std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,sep);
       if (nbCols == 0)
         {
         // detect separator and feature size
         if (words.size() < 2)
           {
           sep = ' ';
-          words = itksys::SystemTools::SplitString(line.c_str(),sep);
+          words = itksys::SystemTools::SplitString(line,sep);
           }
         if (words.size() < 2)
           {
           sep = ';';
-          words = itksys::SystemTools::SplitString(line.c_str(),sep);
+          words = itksys::SystemTools::SplitString(line,sep);
           }
         if (words.size() < 2)
           {
           sep = ',';
-          words = itksys::SystemTools::SplitString(line.c_str(),sep);
+          words = itksys::SystemTools::SplitString(line,sep);
           }
         if (words.size() < 2)
           {

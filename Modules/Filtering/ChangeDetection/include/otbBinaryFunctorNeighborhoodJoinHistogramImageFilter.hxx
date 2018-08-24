@@ -142,7 +142,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
     std::ostringstream msg;
     msg << this->GetNameOfClass()
         << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(inputPtr1);
     throw e;
@@ -164,7 +164,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
     std::ostringstream msg;
     msg << this->GetNameOfClass()
         << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of image 1.");
     e.SetDataObject(inputPtr2);
     throw e;

@@ -38,6 +38,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <string>
 
 //
 // ITK includes (sorted by alphabetic order)

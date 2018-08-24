@@ -27,6 +27,7 @@
 #include "otbWrapperQtWidgetParameterBase.h"
 
 #include "OTBQtWidgetExport.h"
+#include <string>
 
 namespace otb
 {

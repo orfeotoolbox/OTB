@@ -27,20 +27,6 @@
 #include "otbImageFileWriter.h"
 
 
-int otbComplexToVectorImageCastFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef std::complex<float>        ComplexType;
-  typedef otb::VectorImage<ComplexType, 2> CplxImageType;
-  typedef otb::VectorImage<float, 2> VectorImageType;
-
-  typedef otb::ComplexToVectorImageCastFilter<CplxImageType, VectorImageType> FilterType;
-
-  // Instantiating object
-  FilterType::Pointer caster = FilterType::New();
-
-
-  return EXIT_SUCCESS;
-}
 
 int otbComplexToVectorImageCastFilterTest(int itkNotUsed(argc), char * argv[])
 {

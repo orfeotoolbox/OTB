@@ -25,6 +25,7 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbSampleAugmentation.h"
 #include "OTBSamplingExport.h"
+#include <string>
 
 namespace otb
 {

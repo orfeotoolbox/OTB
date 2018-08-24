@@ -43,13 +43,6 @@ typedef ImageResamplerType::SpacingType             SpacingType;
 typedef otb::ImageFileReader<ImageType>             ReaderType;
 typedef otb::ImageFileWriter<ImageType>    WriterType;
 
-int otbGenericRSResampleImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  // SmartPointer instantiation
-  ImageResamplerType::Pointer resampler = ImageResamplerType::New();
-  std::cout << resampler << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbGenericRSResampleImageFilter(int itkNotUsed(argc), char* argv[])
 {

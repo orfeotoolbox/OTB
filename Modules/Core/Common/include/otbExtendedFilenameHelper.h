@@ -27,6 +27,7 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "OTBCommonExport.h"
+#include <string>
 
 namespace otb
 {
@@ -54,7 +55,11 @@ public:
 
   typedef std::map< std::string, std::string > OptionMapType;
 
+  /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
   virtual void SetExtendedFileName(const char * extFname);
+
+  virtual void SetExtendedFileName(const std::string& extFname);
+
   const OptionMapType & GetOptionMap(void) const;
   
   itkGetStringMacro(ExtendedFileName);

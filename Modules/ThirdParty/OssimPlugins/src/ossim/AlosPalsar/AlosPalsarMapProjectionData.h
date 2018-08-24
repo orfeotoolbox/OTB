@@ -30,6 +30,7 @@
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <AlosPalsar/AlosPalsarRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

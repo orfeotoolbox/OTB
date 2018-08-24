@@ -25,7 +25,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataToMapFilterWorld);
   REGISTER_TEST(otbVectorDataToMapFilter);
   REGISTER_TEST(otbVectorDataToMapFilterBinary);
-  REGISTER_TEST(otbVectorDataToMapFilterNew);
   REGISTER_TEST(otbVectorDataToMapFilterNoFonts);
   REGISTER_TEST(otbVectorDataToMapFilterSensorModel);
 }

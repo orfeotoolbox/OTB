@@ -34,6 +34,7 @@
 #include "itkCommand.h"
 
 #include <vector>
+#include <string>
 
 namespace otb
 {

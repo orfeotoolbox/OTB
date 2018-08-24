@@ -74,7 +74,7 @@ std::string CommandLineArgumentParseResult
     std::ostringstream msg;
     msg << "GetParameterString(): The following '" << option << "' option is unknown !!";
     CommandLineArgumentParserArgumentErrorException e(__FILE__, __LINE__);
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     }
   OptionMapType::const_iterator it = m_OptionMap.begin();
