@@ -429,6 +429,9 @@ public:
    * conversion)*/
   void DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList);
 
+  /** Returns a const ref to the list of attached files*/
+  itkGetConstReferenceMacro(AttachedFileNames, std::vector<std::string> );
+
 protected:
   ImageIOBase();
   ~ImageIOBase() override;
@@ -549,6 +552,9 @@ protected:
   virtual itk::ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
                                                                unsigned int numberOfActualSplits,
                                                                const itk::ImageIORegion &pasteRegion) const;
+
+  /** List of files part of the same dataset as the input filename */
+  std::vector<std::string> m_AttachedFileNames;
 
 private:
   ImageIOBase(const Self&) = delete;
