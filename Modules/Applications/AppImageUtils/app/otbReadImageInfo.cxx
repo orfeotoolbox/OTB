@@ -272,14 +272,13 @@ private:
     SetParameterInt("numberbands",inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
 
-    // Dummy float reader, just to parse the extended filename and get the data type
-    typedef otb::ImageFileReader<otb::Image<float, 2>> ReaderType;
-    ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName(GetParameterString("in"));
-    reader->GenerateOutputInformation();
-    ImageIOBase::Pointer imageIO = reader->GetImageIO();
-    std::string dataTypeAsString = imageIO->GetComponentTypeAsString(imageIO->GetComponentType());
-
+    // Get data type
+    ImageIOBase::IOComponentType typeInfo(ImageIOBase::UNKNOWNCOMPONENTTYPE);
+    itk::ExposeMetaData< ImageIOBase::IOComponentType >( inImage->GetMetaDataDictionary(),
+							 MetaDataKey::DataType , typeInfo);
+    // Dummy imageIO to get component type as string
+    ImageIOBase::Pointer imageIO;
+    const std::string dataTypeAsString = imageIO->GetComponentTypeAsString(typeInfo);
     SetParameterString("datatype", dataTypeAsString);
     ossOutput << "\tData type : " << GetParameterString("datatype") << std::endl;
 
