@@ -22,12 +22,51 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbVarianceImageFilter.h"
-#include "otbBandMathImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 
 #include "otbSubPixelDisparityImageFilter.h"
 #include "otbDisparityMapMedianFilter.h"
+
+#include "itkNaryFunctorImageFilter.h"
+
+template<typename TIn, typename TOut>
+class BlockMatchingMathFunctor{
+public:
+  BlockMatchingMathFunctor():
+    m_IsInputMask(false), m_IsInputVariance(false), m_IsInputNoData(false), m_VarianceThreshold(0),m_NoDataValue(0)
+  {
+  }
+	
+   inline TOut operator ()(const std::vector<TIn>& in){
+		bool result = false;
+		bool checkedInputMask = (m_IsInputMask) ? false : true;
+		bool checkedInputVariance = (m_IsInputVariance) ? false : true;
+		bool checkedInputNoData = (m_IsInputNoData) ? false : true;
+		for(auto val : in){
+		  if(m_IsInputMask && !checkedInputMask){
+		    result = result && (val > 0);
+		    checkedInputMask = true;
+		  }
+		  else if(m_IsInputVariance && !checkedInputVariance){
+		    result = result && (val > m_VarianceThreshold);
+		    checkedInputVariance = true;
+		  }
+		  else if(m_IsInputNoData && !checkedInputNoData){
+		    result = result && (val != m_NoDataValue);
+		    checkedInputNoData = true;
+		  }
+		}
+		TOut res = (result) ? 255 : 0;
+		return res;
+     }
+  
+	bool m_IsInputMask;
+	bool m_IsInputVariance;
+	bool m_IsInputNoData;
+	TOut m_VarianceThreshold;
+	TOut m_NoDataValue;
+};
 
 namespace otb
 {
@@ -68,8 +107,6 @@ public:
   typedef otb::VarianceImageFilter<FloatImageType,FloatImageType> VarianceFilterType;
 
 
-  typedef otb::BandMathImageFilter<FloatImageType>         BandMathFilterType;
-
   typedef otb::ImageList<FloatImageType>                   ImageListType;
 
   typedef otb::ImageListToVectorImageFilter<ImageListType,
@@ -97,6 +134,9 @@ public:
                                         FloatImageType,
                                         FloatImageType>   MedianFilterType;
 
+  using BlockMatchingMathFunctorType = BlockMatchingMathFunctor<FloatImageType::PixelType,FloatImageType::PixelType>;
+  using BlockMatchingMathFilterType = itk::NaryFunctorImageFilter<FloatImageType, FloatImageType, BlockMatchingMathFunctorType>;
+
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -116,8 +156,6 @@ private:
     m_LPSubPixFilter  = LPSubPixelDisparityFilterType::New();
     m_LVarianceFilter = VarianceFilterType::New();
     m_RVarianceFilter = VarianceFilterType::New();
-    m_LBandMathFilter = BandMathFilterType::New();
-    m_RBandMathFilter = BandMathFilterType::New();
     m_OutputImageList = ImageListType::New();
     m_ImageListFilter = ImageListToVectorImageFilterType::New();
     m_HMedianFilter   = MedianFilterType::New();
@@ -479,111 +517,67 @@ private:
     std::ostringstream leftBandMathCondition;
     std::ostringstream rightBandMathCondition;
 
-    unsigned int inputIdLeft = 0;
-    unsigned int inputIdRight = 0;
     bool maskingLeft = false;
     bool maskingRight = false;
     bool useInitialDispUniform = false;
     bool useInitialDispMap = false;
 
-    // Handle input mask if present
-    if(IsParameterEnabled("mask.inleft"))
-      {
+    auto leftMathFilter = BlockMatchingMathFilterType::New();
+    auto rightMathFilter = BlockMatchingMathFilterType::New();
+
+    // Substitution of the band math filter with muparser
+    
+
+    // Handle if input mask is present
+    if(IsParameterEnabled("mask.inleft")){
       leftmask = GetParameterFloatImage("mask.inleft");
-      m_LBandMathFilter->SetNthInput(inputIdLeft,leftmask,"inmask");
+      leftMathFilter->GetFunctor().m_IsInputMask = true;
+      leftMathFilter->PushBackInput(leftmask);
       maskingLeft = true;
-      ++inputIdLeft;
-      leftBandMathCondition<<"inmask > 0";
-      }
-    if(IsParameterEnabled("mask.inright"))
-      {
+    }
+
+    if(IsParameterEnabled("mask.inright")){
       rightmask = GetParameterFloatImage("mask.inright");
-      m_RBandMathFilter->SetNthInput(inputIdRight,rightmask,"inmask");
+      rightMathFilter->GetFunctor().m_IsInputMask = true;
+      rightMathFilter->PushBackInput(rightmask);
       maskingRight = true;
-      ++inputIdRight;
-      rightBandMathCondition<<"inmask > 0";
-      }
+    }
 
     // Handle variance threshold if present
-    if(IsParameterEnabled("mask.variancet"))
-      {
-      if(maskingLeft)
-        {
-        leftBandMathCondition<<" and ";
-        }
-      if(maskingRight)
-        {
-        rightBandMathCondition<<" and ";
-        }
-      // Left side
-      m_LVarianceFilter->SetInput(leftImage);
+    if(IsParameterEnabled("mask.variancet")){
+
+      float varThresh = GetParameterFloat("mask.variancet");
       VarianceFilterType::InputSizeType vradius;
       vradius.Fill(radius);
+
+      leftMathFilter->GetFunctor().m_VarianceThreshold = varThresh;
+      leftMathFilter->GetFunctor().m_IsInputVariance = true;
+      m_LVarianceFilter->SetInput(leftImage);
       m_LVarianceFilter->SetRadius(vradius);
+      leftMathFilter->PushBackInput(m_LVarianceFilter->GetOutput());
 
-      m_LBandMathFilter->SetNthInput(inputIdLeft,m_LVarianceFilter->GetOutput(),"variance");
-      leftBandMathCondition<<"variance > "<<GetParameterFloat("mask.variancet");
-      ++inputIdLeft;
-
-      // Right side
+      rightMathFilter->GetFunctor().m_VarianceThreshold = varThresh;
+      rightMathFilter->GetFunctor().m_IsInputVariance = true;
       m_RVarianceFilter->SetInput(rightImage);
       m_RVarianceFilter->SetRadius(vradius);
-
-      m_RBandMathFilter->SetNthInput(inputIdRight,m_RVarianceFilter->GetOutput(),"variance");
-      rightBandMathCondition<<"variance > "<<GetParameterFloat("mask.variancet");
-      ++inputIdRight;
+      rightMathFilter->PushBackInput(m_RVarianceFilter->GetOutput());
 
       maskingLeft = true;
       maskingRight = true;
-      }
+    }
 
-    // Handle nodata field if present
-    if(IsParameterEnabled("mask.nodata"))
-      {
-      if(maskingLeft)
-        {
-        leftBandMathCondition<<" and ";
-        }
-      if(maskingRight)
-        {
-        rightBandMathCondition<<" and ";
-        }
-      // Left side
-      m_LBandMathFilter->SetNthInput(inputIdLeft,leftImage,"leftimage");
-      leftBandMathCondition<<"leftimage != "<<GetParameterFloat("mask.nodata");
-
-      // Right side
-      m_RBandMathFilter->SetNthInput(inputIdRight,rightImage,"rightimage");
-      rightBandMathCondition<<"rightimage != "<<GetParameterFloat("mask.nodata");
-
+    // Handle nodata field is present
+    if(IsParameterEnabled("mask.nodata")){
+      float nodata = GetParameterFloat("mask.nodata");
+      leftMathFilter->GetFunctor().m_IsInputNoData = true;
+      leftMathFilter->GetFunctor().m_NoDataValue = nodata;
+      leftMathFilter->PushBackInput(leftImage);
+      rightMathFilter->GetFunctor().m_IsInputNoData = true;
+      rightMathFilter->GetFunctor().m_NoDataValue = nodata;
+      rightMathFilter->PushBackInput(rightImage);
       maskingLeft = true;
       maskingRight = true;
-      }
-
-    const std::string state = "255";
-    const std::string elseState = "0";
-
-    std::ostringstream leftBandMathExpression;
-    std::ostringstream rightBandMathExpression;
-
-    #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
-    leftBandMathExpression << leftBandMathCondition.str() << " ? " << state << " : " << elseState;
-    rightBandMathExpression << rightBandMathCondition.str() << " ? " << state << " : " << elseState;
-    #else
-    leftBandMathExpression << "if(" << leftBandMathCondition.str() << "," << state << "," << elseState << ")";
-    rightBandMathExpression << "if(" << rightBandMathCondition.str() << "," << state << "," << elseState << ")";
-    #endif
-
-    if(maskingLeft)
-      {
-      GetLogger()->Info("Masking criterion on left image: " + leftBandMathExpression.str() + '\n');
-      m_LBandMathFilter->SetExpression(leftBandMathExpression.str());
-      }
-    if(maskingRight)
-      {
-      GetLogger()->Info("Masking criterion on right image: " + rightBandMathExpression.str() + '\n');
-      m_RBandMathFilter->SetExpression(rightBandMathExpression.str());
-      }
+    }
 
     // Uniform initial disparity case
     if (GetParameterInt("bm.initdisp") == 1)
@@ -608,8 +602,8 @@ private:
     FloatImageType * maskLeftImage;
     FloatImageType * maskRightImage;
 
-    maskLeftImage = m_LBandMathFilter->GetOutput();
-    maskRightImage = m_RBandMathFilter->GetOutput();
+    maskLeftImage = leftMathFilter->GetOutput();
+    maskRightImage = rightMathFilter->GetOutput();
 
     // SSD case
     if(GetParameterInt("bm.metric") == 0)
@@ -886,12 +880,6 @@ private:
 
   // Variance filter for right image
   VarianceFilterType::Pointer         m_RVarianceFilter;
-
-  // Band-math filter for left mask
-  BandMathFilterType::Pointer         m_LBandMathFilter;
-
-  // Band-math filter for right mask
-  BandMathFilterType::Pointer         m_RBandMathFilter;
 
   // The Image list
   ImageListType::Pointer              m_OutputImageList;
