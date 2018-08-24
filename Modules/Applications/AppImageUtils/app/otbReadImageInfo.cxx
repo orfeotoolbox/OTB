@@ -114,8 +114,8 @@ private:
     SetParameterDescription("numberbands", "Number of bands");
     SetParameterRole("numberbands", Role_Output);
 
-    AddParameter(ParameterType_String,"datatype","Data type of pixels");
-    SetParameterDescription("datatype", "Type of Pixels");
+    AddParameter(ParameterType_String,"datatype","Data type");
+    SetParameterDescription("datatype", "Data type");
     SetParameterRole("datatype", Role_Output);
 
     AddParameter(ParameterType_String,"sensor","Sensor id");
