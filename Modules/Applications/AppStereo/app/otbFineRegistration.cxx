@@ -130,7 +130,8 @@ private:
       "X and Y offsets, as well as the metric value. A sub-pixel accuracy can "
       "be expected. The input images should have the same size and same "
       "physical space.");
-    SetDocLimitations("None");
+    SetDocLimitations("If the 'warp' option is activated, the pipeline will be "
+		      "executed twice.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
@@ -473,19 +474,26 @@ private:
 
     SetParameterOutputImage<VectorImageType>("out", m_Il2vi->GetOutput());
 
+    if (HasValue("w") && !HasValue("wo"))
+      {
+	otbAppLogWARNING("You need to set the file name of the warped output image");
+      }
+
+    if (!HasValue("w") && HasValue("wo"))
+      {
+	otbAppLogWARNING("You need to set the input image to warp");
+      }
+    
     // If an image to warp has been given
     if (HasValue("w") && HasValue("wo"))
       {
-      otbAppLogINFO("Doing warping : ON");
-
-      m_outputReader = InternalReaderType::New();
-      m_outputReader->SetFileName(GetParameterString("out"));
-
+      otbAppLogINFO("Output image will be warped");
+      otbAppLogWARNING("Warping will need to execute the pipeline twice");
       m_ExtractROIFilter = ExtractROIFilterType::New();
       m_ExtractROIFilter->SetChannel(1);
       m_ExtractROIFilter->SetChannel(2);
-      m_ExtractROIFilter->SetInput(m_outputReader->GetOutput());
-
+      m_ExtractROIFilter->SetInput(m_Il2vi->GetOutput());
+ 
       m_Cast = CastFilterType::New();
       m_Cast->SetInput(m_ExtractROIFilter->GetOutput());
 
@@ -501,10 +509,7 @@ private:
       SetParameterOutputImage("wo", m_Warp->GetOutput());
 
       }
-    else
-      {
-      otbAppLogINFO("Doing warping : OFF");
-      }
+   
 
   }
 
