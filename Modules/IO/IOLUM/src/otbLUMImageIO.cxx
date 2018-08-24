@@ -92,7 +92,7 @@ bool LUMImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -192,7 +192,7 @@ void LUMImageIO::ReadImageInformation()
     m_File.close();
     }
 
-  m_File.open(m_FileName.c_str(),  std::ios::in | std::ios::binary);
+  m_File.open(m_FileName,  std::ios::in | std::ios::binary);
   if (m_File.fail())
     {
     itkExceptionMacro(<< "LUMImageIO::ReadImageInformation() failed header open ! ");
@@ -320,7 +320,7 @@ bool LUMImageIO::CanWriteFile(const char* filename)
     {
     return false;
     }
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -388,7 +388,7 @@ void LUMImageIO::WriteImageInformation()
     }
   if (CanWriteFile(m_FileName.c_str()) == false)
     {
-    itkExceptionMacro(<< "The file " << m_FileName.c_str() << " is not defined as a LUM file");
+    itkExceptionMacro(<< "The file " << m_FileName << " is not defined as a LUM file");
     }
   // Close file from any previous image
   if (m_File.is_open())
@@ -398,10 +398,10 @@ void LUMImageIO::WriteImageInformation()
 
   // Open the new file for writing
   // Actually open the file
-  m_File.open(m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
+  m_File.open(m_FileName,  std::ios::out | std::ios::trunc | std::ios::binary);
   if (m_File.fail())
     {
-    itkExceptionMacro(<< "Cannot write requested file " << m_FileName.c_str() << ".");
+    itkExceptionMacro(<< "Cannot write requested file " << m_FileName << ".");
     }
 
   //Writing header information

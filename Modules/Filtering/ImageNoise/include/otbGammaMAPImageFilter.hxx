@@ -86,7 +86,7 @@ void GammaMAPImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegio
     std::ostringstream msg;
     msg << static_cast<const char *>(this->GetNameOfClass())
         << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;

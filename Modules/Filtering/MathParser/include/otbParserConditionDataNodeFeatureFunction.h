@@ -24,6 +24,7 @@
 #include "otbDataNodeImageFunction.h"
 #include "otbPolyLineImageConstIterator.h"
 #include "otbMaskMuParserFunctor.h"
+#include <string>
 
 namespace otb
 {

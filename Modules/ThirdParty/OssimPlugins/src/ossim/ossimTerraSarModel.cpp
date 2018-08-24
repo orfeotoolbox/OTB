@@ -887,7 +887,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
        << ALT_SR_GR_COEFFICIENT0_KW << ": " << _alt_srgr_coefset[0] << "\n"
        << ALT_SR_GR_COEFFICIENT1_KW << ": " <<_alt_srgr_coefset[1] << "\n"
        << ALT_SR_GR_COEFFICIENT2_KW << ": " <<_alt_srgr_coefset[2] << "\n"
-       << PRODUCT_XML_FILE_KW << ": " << _productXmlFile.c_str() << "\n";
+       << PRODUCT_XML_FILE_KW << ": " << _productXmlFile << "\n";
    
    ossimGeometricSarSensorModel::print(out);
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
@@ -929,17 +929,17 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
 
    ossimString kw = ACQUISITION_INFO;
    ossimString kw2 = kw + IMAGING_MODE;
-   out << kw2 <<  ": " << _imagingMode.c_str()<< "\n";
+   out << kw2 <<  ": " << _imagingMode << "\n";
    kw2 = kw + SENSOR;
-   out << kw2<<  ": " <<  _acquisitionSensor.c_str()<< "\n";
+   out << kw2<<  ": " <<  _acquisitionSensor << "\n";
    kw2 = kw + LOOK_DIRECTION;
-   out << kw2<<  ": " <<  _lookDirection.c_str()<< "\n";
+   out << kw2<<  ": " <<  _lookDirection << "\n";
    kw2 = kw + POLARISATION_MODE;
-   out << kw2<<  ": " <<  _polarisationMode.c_str()<< "\n";
+   out << kw2<<  ": " <<  _polarisationMode << "\n";
 /*   kw2 = kw + POLARISATION_LIST;
      for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
      {	
-     out << kw2 <<  "["<< i <<"] : " <<  _polLayer[i].c_str()<< "\n";
+     out << kw2 <<  "["<< i <<"] : " <<  _polLayer[i] << "\n";
      if ( _noise[i]->print(out) == false )
      {
      if (traceDebug())

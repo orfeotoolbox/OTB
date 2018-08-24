@@ -144,7 +144,7 @@ int otbGDALImageIOTestWriteMetadata(int itkNotUsed(argc), char * argv[])
 
   // Open file where save test result
   std::ofstream file;
-  file.open(filenameReport.c_str());
+  file.open(filenameReport);
 
   // None
   testWriteMetadata(filenameTIFF, filenameHDR, options, file);

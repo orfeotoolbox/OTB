@@ -24,6 +24,7 @@
 #include "itkProcessObject.h"
 #include "itkMacro.h"
 #include "otbRCC8Graph.h"
+#include <string>
 
 namespace otb
 {

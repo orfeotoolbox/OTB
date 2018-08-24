@@ -173,11 +173,9 @@ private:
           std::string tmpKey="field."+key.substr(0, end - key.begin());
           AddChoice(tmpKey,item);
           }
-        if( fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64( fieldType ) || fieldType == OFTReal )
-          {
-          std::string tmpKey = "exclude." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
-          AddChoice( tmpKey, item );
-          }
+
+        std::string tmpKey = "exclude." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
+        AddChoice( tmpKey, item );
         }
       }
   }

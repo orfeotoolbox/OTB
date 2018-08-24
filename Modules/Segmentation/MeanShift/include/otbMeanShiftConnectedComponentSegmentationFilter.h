@@ -29,6 +29,7 @@
 #include "itkRelabelComponentImageFilter.h"
 
 #include "otbMeanShiftSmoothingImageFilter.h"
+#include <string>
 
 namespace otb {
 

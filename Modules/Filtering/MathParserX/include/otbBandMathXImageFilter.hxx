@@ -400,7 +400,7 @@ void BandMathXImageFilter<TImage>
       vectFinal.push_back(str);
     }
 
-  std::ofstream exportFile(filename.c_str(), std::ios::out | std::ios::trunc);
+  std::ofstream exportFile(filename, std::ios::out | std::ios::trunc);
   if(exportFile)
     {
       for(unsigned int i=0; i<vectFinal.size(); ++i)
@@ -416,7 +416,7 @@ template< typename TImage >
 void BandMathXImageFilter<TImage>
 ::ImportContext(const std::string& filename)
 {
-  std::ifstream importFile(filename.c_str(), std::ios::in);
+  std::ifstream importFile(filename, std::ios::in);
 
   std::string wholeline,line,name,matrixdef;
   int pos,pos2,lineID=0,nbSuccesses=0;
@@ -978,9 +978,9 @@ void BandMathXImageFilter< TImage >
           std::ostringstream msg,msg2;
           msg << static_cast<const char *>(this->GetNameOfClass())
               << "::GenerateInputRequestedRegion()";
-          e.SetLocation(msg.str().c_str());
+          e.SetLocation(msg.str());
           msg2 << "Requested region is (at least partially) outside the largest possible region (input #" << m_NeighDetected[i] << ").";
-          e.SetDescription(msg2.str().c_str());
+          e.SetDescription(msg2.str());
           e.SetDataObject(inputPtr);
           throw e;
           }

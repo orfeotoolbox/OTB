@@ -38,14 +38,6 @@ typedef RunLengthFeaturesFilterType::OffsetType          OffsetType;
 typedef RunLengthFeaturesFilterType::OffsetVector        OffsetVector;
 typedef RunLengthFeaturesFilterType::OffsetVectorPointer OffsetVectorPointer;
 
-int otbScalarImageToHigherOrderTexturesFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  TexturesFilterType::Pointer filter = TexturesFilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 ImageType::Pointer ReadInputImage(const char *  filename)
 {

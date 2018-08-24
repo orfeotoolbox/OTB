@@ -31,21 +31,6 @@
 #include "itkAffineTransform.h"
 
 
-int otbFourierMellinDescriptorsNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  const unsigned int Dimension = 2;
-  typedef double     InputPixelType;
-
-  typedef otb::Image<InputPixelType,  Dimension>                     ImageType;
-  typedef otb::FourierMellinDescriptorsImageFunction<ImageType>      FunctionType;
-
-  // Instantiating object
-  FunctionType::Pointer function = FunctionType::New();
-
-  std::cout << function << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbFourierMellinDescriptors(int itkNotUsed(argc), char * argv[])
 {

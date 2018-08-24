@@ -100,7 +100,7 @@ int parseCommandLine(int ac, char * av[], std::vector<char *>& remainingArgs)
         libpath += KWSYS_SHARED_FORWARD_PATH_SEP;
         libpath += oldenv;
         }
-      itksys::SystemTools::PutEnv(libpath.c_str());
+      itksys::SystemTools::PutEnv(libpath);
       // on some 64 bit systems, LD_LIBRARY_PATH_64 is used before
       // LD_LIBRARY_PATH if it is set. It can lead the test to load
       // the system library instead of the expected one, so this
@@ -116,7 +116,7 @@ int parseCommandLine(int ac, char * av[], std::vector<char *>& remainingArgs)
           libpath64 += KWSYS_SHARED_FORWARD_PATH_SEP;
           libpath64 += oldenv2;
           }
-        itksys::SystemTools::PutEnv(libpath64.c_str());
+        itksys::SystemTools::PutEnv(libpath64);
         }
       i += 2;
       }
@@ -136,7 +136,7 @@ int parseCommandLine(int ac, char * av[], std::vector<char *>& remainingArgs)
         env += KWSYS_SHARED_FORWARD_PATH_SEP;
         env += oldenv;
         }
-      itksys::SystemTools::PutEnv(env.c_str());
+      itksys::SystemTools::PutEnv(env);
       i += 3;
       }
     else if (!skip && strcmp(av[i], "--help") == 0)

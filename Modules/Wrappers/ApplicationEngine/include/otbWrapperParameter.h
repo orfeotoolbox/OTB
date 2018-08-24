@@ -26,6 +26,7 @@
 
 #include "otbWrapperTypes.h"
 #include "OTBApplicationEngineExport.h"
+#include <string>
 
 namespace otb
 {

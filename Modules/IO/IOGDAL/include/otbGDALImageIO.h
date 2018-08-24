@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -81,6 +82,10 @@ public:
 
   typedef std::vector<std::string> GDALCreationOptionsType;
 
+  typedef  std::vector<
+    std::pair<int, double>
+    > NoDataListType;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -115,7 +120,13 @@ public:
   {
     return m_CreationOptions;
   }
-  
+
+  /** Set NoDataList */	  
+  void SetNoDataList(const NoDataListType& noDataList)
+  {
+    m_NoDataList = noDataList;
+  }
+
   /** Provide hist about the output container to deal with complex pixel
    *  type */ 
   void SetOutputImagePixelType( bool isComplexInternalPixelType, 
@@ -187,6 +198,8 @@ public:
 
   /** Returns gdal pixel type as string */
   std::string GetGdalPixelTypeAsString() const;
+
+  itkGetMacro(NbBands, int);
 
 protected:
   /**
@@ -281,6 +294,9 @@ private:
    * True if RPC tags should be exported
    */
   bool m_WriteRPCTags;
+
+
+  NoDataListType m_NoDataList;
   
 };
 

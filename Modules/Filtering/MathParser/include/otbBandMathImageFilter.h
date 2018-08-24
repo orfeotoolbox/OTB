@@ -28,6 +28,7 @@
 #include "itkArray.h"
 
 #include "otbParser.h"
+#include <string>
 
 namespace otb
 {

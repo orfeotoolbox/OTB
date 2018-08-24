@@ -36,13 +36,6 @@ typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
 typedef otb::ClampVectorImageFilter<InputImageType, OutputImageType>  FilterType;
 
-int otbClampVectorImageFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  /** instantiating the filter */
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbClampVectorImageFilterTest(int itkNotUsed(argc), char* argv[])
 {

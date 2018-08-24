@@ -36,6 +36,7 @@
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
+#include <string>
 
 namespace otb
 {
@@ -139,8 +140,11 @@ public:
   void  SetImageIO( otb::ImageIOBase * imageIO );
   itkGetObjectMacro(ImageIO,otb::ImageIOBase);
 
+  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
   virtual void SetFileName(const char* extendedFileName);
-  virtual void SetFileName(std::string extendedFileName);
+
+  virtual void SetFileName(const std::string& extendedFileName);
+
   virtual const char* GetFileName () const;
 
   /** Get the resolution information from the file */

@@ -24,6 +24,7 @@
 #include <QtWidgets>
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
+#include <string>
 
 
 namespace otb

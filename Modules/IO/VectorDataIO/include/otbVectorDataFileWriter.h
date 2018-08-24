@@ -24,6 +24,7 @@
 #include "itkProcessObject.h"
 #include "itkMacro.h"
 #include "otbVectorDataIOBase.h"
+#include <string>
 
 namespace otb
 {

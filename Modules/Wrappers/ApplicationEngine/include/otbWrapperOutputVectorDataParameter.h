@@ -25,6 +25,7 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
+#include <string>
 
 namespace otb
 {
@@ -59,61 +60,26 @@ public:
   itkGetObjectMacro(VectorData, VectorDataType);
 
   /** Return true if a filename is set */
-  bool HasValue() const override
-  {
-    std::string filename(this->GetFileName());
-    return !filename.empty();
-  }
+  bool HasValue() const override;
 
   /** Return any value */
-  void SetValue(VectorDataType* vd)
-  {
-    m_VectorData = vd;
-    SetActive(true);
-  }
+  void SetValue(VectorDataType* vd);
 
   /** Return any value */
-  VectorDataType* GetValue( void )
-  {
-    return m_VectorData;
-  }
+  VectorDataType* GetValue( void );
 
-  void SetFileName (const char* filename)
-  {
-    m_FileName = filename;
-    SetActive(true);
-  }
-  void SetFileName (const std::string& filename)
-  {
-    this->SetFileName(filename.c_str());
-  }
+  void SetFileName (const char* filename);
+  void SetFileName (const std::string& filename);
 
   itkGetStringMacro(FileName);
 
-  void Write()
-  {
-    m_Writer->SetFileName(m_FileName);
-    m_Writer->SetInput(m_VectorData);
-    m_Writer->Update();
-  }
-
-  itk::ProcessObject* GetWriter()
-  {
-    return m_Writer;
-  }
-
-  void InitializeWriters()
-  {
-    m_Writer = otb::VectorDataFileWriter<VectorDataType>::New();
-  }
+  void Write();
+  itk::ProcessObject* GetWriter();
+  void InitializeWriters();
 
 protected:
   /** Constructor */
-  OutputVectorDataParameter()
-  {
-    this->SetName("Output Vector Data");
-    this->SetKey("outvd");
-  }
+  OutputVectorDataParameter();
 
   /** Destructor */
   ~OutputVectorDataParameter() override

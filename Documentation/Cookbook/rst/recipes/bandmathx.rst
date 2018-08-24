@@ -16,16 +16,6 @@ A simple example is given below:
     #include "otbBandMathImageFilterX.h"
     #include "otbVectorImage.h"
 
-    int otbBandMathImageFilterXNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
-    {
-        typedef double                                                      PixelType;
-        typedef otb::VectorImage<PixelType, 2>                      ImageType;
-        typedef otb::BandMathImageFilterX<ImageType>                FilterType;
-
-        FilterType::Pointer         filter       = FilterType::New();
-
-        return EXIT_SUCCESS;
-    }
 
 As we can see, the new band math filter works with the class
 otb::VectorImage.

@@ -532,5 +532,16 @@ OutputImageParameter::SwitchInput(UInt8RGBImageType *img)
   return 1;
 }
 
+void OutputImageParameter::SetFileName (const char* filename)
+{
+  this->SetFileName(std::string(filename));
+}
+
+void OutputImageParameter::SetFileName (const std::string& filename)
+{
+  m_FileName = filename;
+  SetActive(true);
+}
+
 }
 }

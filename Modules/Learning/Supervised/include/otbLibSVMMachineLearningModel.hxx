@@ -238,7 +238,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 {
   //TODO: Rework.
   std::ifstream ifs;
-  ifs.open(file.c_str());
+  ifs.open(file);
 
   if(!ifs)
     {

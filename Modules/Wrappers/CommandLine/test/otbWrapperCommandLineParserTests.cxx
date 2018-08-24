@@ -26,12 +26,6 @@
 
 typedef otb::Wrapper::CommandLineParser ParserType;
 
-int otbWrapperCommandLineParserNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  ParserType::Pointer parser = ParserType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int CheckReturn(ParserType::ParseResultType res)
 {

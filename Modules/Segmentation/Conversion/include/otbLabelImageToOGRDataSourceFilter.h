@@ -23,6 +23,7 @@
 
 #include "itkProcessObject.h"
 #include "otbOGRDataSourceWrapper.h"
+#include <string>
 
 namespace otb
 {

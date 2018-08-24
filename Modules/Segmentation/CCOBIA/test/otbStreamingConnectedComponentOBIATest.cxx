@@ -43,14 +43,6 @@ typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
     MaskImageType,
     VectorDataType >  ConnectedComponentSegmentationOBIAToVectorDataFilterType;
 
-int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer connected
-    = ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
-  std::cout << connected << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int itkNotUsed(argc), char * argv[])
 {
