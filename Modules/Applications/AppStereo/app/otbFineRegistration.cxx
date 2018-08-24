@@ -476,12 +476,16 @@ private:
 
     if (HasValue("w") && !HasValue("wo"))
       {
-	otbAppLogWARNING("You need to set the file name of the warped output image");
+	otbAppLogWARNING("You should set a filename for the warped image");
       }
 
     if (!HasValue("w") && HasValue("wo"))
       {
-	otbAppLogWARNING("You need to set the input image to warp");
+	// in this case, the pipeline cannot be resolved : the output image (wo)
+	// won't be computed and a segfault can occur.
+	otbAppLogFATAL("w option has not been set : the ouput image cannot be produced."
+		       "Stop execution because the pipeline cannot be resolved");
+	
       }
     
     // If an image to warp has been given
