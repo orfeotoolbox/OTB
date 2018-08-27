@@ -61,7 +61,7 @@ public:
   itkTypeMacro(LabelImageVectorization, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("LabelImageVectorization");
     SetDescription("This application performs the vectorization of an "
@@ -134,12 +134,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Create the OGR DataSource with the appropriate fields
     std::string projRef = 

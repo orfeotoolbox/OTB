@@ -50,7 +50,7 @@ public:
   itkTypeMacro(LargeScaleConnectedComponent, otb::CompositeApplication);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
     {
     SetName("LargeScaleConnectedComponent");
     SetDescription("Large-scale segmentation using MeanShift");
@@ -145,10 +145,10 @@ private:
     SetOfficialDocLink();
     }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Start Timer for the application
     auto Timer = Stopwatch::StartNew();

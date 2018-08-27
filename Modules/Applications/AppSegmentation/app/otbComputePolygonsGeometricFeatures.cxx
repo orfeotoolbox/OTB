@@ -55,7 +55,7 @@ public:
   itkTypeMacro(ComputePolygonsGeometricFeatures, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ComputePolygonsGeometricFeatures");
     SetDescription("This application computes geometric features on the input vector data.");
@@ -91,12 +91,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   { 
     OGRDataSourceType::Pointer vectors;
     OGRDataSourceType::Pointer output;

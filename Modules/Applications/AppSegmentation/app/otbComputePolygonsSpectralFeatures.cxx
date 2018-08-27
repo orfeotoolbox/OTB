@@ -57,7 +57,7 @@ public:
   itkTypeMacro(ComputePolygonsSpectralFeatures, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ComputePolygonsSpectralFeatures");
     SetDescription("This application computes radiometric features on a set of polygons using a multi-band image");
@@ -113,12 +113,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Start Timer for the application
     auto Timer = Stopwatch::StartNew();

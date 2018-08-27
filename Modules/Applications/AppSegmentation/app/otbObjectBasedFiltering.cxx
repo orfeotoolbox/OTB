@@ -51,7 +51,7 @@ public:
   itkTypeMacro(ObjectBasedFiltering, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ObjectBasedFiltering");
     SetDescription("This application filters a layer of polygons using a mathematical expression on its features");
@@ -81,12 +81,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Start Timer for the application
     auto Timer = Stopwatch::StartNew();
