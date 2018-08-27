@@ -74,8 +74,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BreakAngularPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BreakAngularPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Calculate break angular for a path */
   void BreakAngularPath(const MaxAngleType maxAngle,
@@ -88,7 +88,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBreakAngularPathListFilter.txx"
+#include "otbBreakAngularPathListFilter.hxx"
 #endif
 
 #endif

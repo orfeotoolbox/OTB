@@ -22,41 +22,28 @@ otb_module_test()
 
 set(OTBEdgeTests
 otbEdgeTestDriver.cxx
-otbPixelSuppressionByDirectionNew.cxx
 otbEdgeDetectorImageFilter.cxx
 otbHorizontalSobelVectorImageFilter.cxx
 otbAsymmetricFusionOfLineDetector.cxx
 otbLocalHoughDraw.cxx
 otbAssociativeSymmetricalSum.cxx
-otbPersistentVectorizationFilterNew.cxx
-otbLineCorrelationDetectorNew.cxx
 otbPersistentVectorizationFilter.cxx
 otbEdgeDensityImageFilter.cxx
 otbLineCorrelationDetector.cxx
 otbSobelVectorImageFilter.cxx
-otbAssociativeSymmetricalSumNew.cxx
 otbHoughTransform2DLinesImageTest.cxx
 otbPixelSuppressionByDirection.cxx
-otbLocalHoughNew.cxx
-otbEdgeDetectorImageFilterNew.cxx
-otbEdgeDensityImageFilterNew.cxx
 otbLocalHough.cxx
 otbExtractSegments.cxx
-otbExtractSegmentsNew.cxx
-otbAsymmetricFusionOfLineDetectorNew.cxx
 otbLineRatioDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
-otbTouziEdgeDetectorNew.cxx
 otbVerticalSobelVectorImageFilter.cxx
 otbStreamingLineSegmentDetector.cxx
-otbLineRatioDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbLineRatioDetectorLinear.cxx
 otbLineSegmentDetector.cxx
 otbLineCorrelationDetectorLinear.cxx
-otbLineDetectorBaseNew.cxx
 otbFillGapsFilter.cxx
-otbFillGapsFilterNew.cxx
 )
 
 add_executable(otbEdgeTestDriver ${OTBEdgeTests})
@@ -64,9 +51,6 @@ target_link_libraries(otbEdgeTestDriver ${OTBEdge-Test_LIBRARIES})
 otb_module_target_label(otbEdgeTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME feTuPixelSuppressionByDirectionNew COMMAND otbEdgeTestDriver
-  otbPixelSuppressionByDirectionNew)
 
 otb_add_test(NAME bfTvEdgeDetectorImageFilter COMMAND otbEdgeTestDriver
   --compare-image ${NOTOL}
@@ -86,9 +70,6 @@ otb_add_test(NAME bfTvHorizontalSobelVectorImageFilter COMMAND otbEdgeTestDriver
   otbHorizontalSobelVectorImageFilterTest
   -in ${INPUTDATA}/cupriteSubHsi.tif
   -out ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif)
-
-otb_add_test(NAME bfTuHorizontalSobelVectorImageFilterNew COMMAND otbEdgeTestDriver
-  otbHorizontalSobelVectorImageFilterNewTest)
 
 otb_add_test(NAME feTvAsymmetricFusionOfLineDetector COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreAsymmetricFusion_amst_2_3.hdr
@@ -133,12 +114,6 @@ otb_add_test(NAME feTvAssociativeSymmetricalSum COMMAND otbEdgeTestDriver
 
 
 
-otb_add_test(NAME bfTuPersistentVectorizationImageFilterNew COMMAND otbEdgeTestDriver
-  otbPersistentVectorizationFilterNew
-  )
-
-otb_add_test(NAME feTuLineCorrelationNew COMMAND otbEdgeTestDriver
-  otbLineCorrelationDetectorNew)
 
 otb_add_test(NAME bfTvPersistentVectorizationImageFilter COMMAND otbEdgeTestDriver
   --compare-ascii ${NOTOL}
@@ -168,9 +143,6 @@ otb_add_test(NAME feTvLineCorrelation COMMAND otbEdgeTestDriver
   ${TEMP}/feFiltreLineCorrelation_amst_2_3.hdr
   2 3)
 
-otb_add_test(NAME bfTuSobelVectorImageFilterNew COMMAND otbEdgeTestDriver
-  otbSobelVectorImageFilterNewTest)
-
 otb_add_test(NAME bfTvSobelVectorImageFilter COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvSobelVectorImageFilter.tif
@@ -178,9 +150,6 @@ otb_add_test(NAME bfTvSobelVectorImageFilter COMMAND otbEdgeTestDriver
   otbSobelVectorImageFilterTest
   -in ${INPUTDATA}/cupriteSubHsi.tif
   -out ${TEMP}/bfTvSobelVectorImageFilter.tif)
-
-otb_add_test(NAME feTuAssociativeSymmetricalSumNew COMMAND otbEdgeTestDriver
-  otbAssociativeSymmetricalSumNew)
 
 otb_add_test(NAME feTvHoughTransform2DLinesImage COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}
@@ -199,16 +168,7 @@ otb_add_test(NAME feTvPixelSuppressionByDirection COMMAND otbEdgeTestDriver
   ${TEMP}/feFiltrePixelSuppr_ImageLine_2_0_3.hdr
   2 0.3)
 
-otb_add_test(NAME feTuLocalHoughNew COMMAND otbEdgeTestDriver
-  otbLocalHoughNew)
 
-otb_add_test(NAME bfTuEdgeDetectorImageFilterNew COMMAND otbEdgeTestDriver
-  otbEdgeDetectorImageFilterNew
-  )
-
-otb_add_test(NAME bfTuEdgeDensityImageFilterNew COMMAND  otbEdgeTestDriver
-  otbEdgeDensityImageFilterNew
-  )
 
 otb_add_test(NAME feTvLocalHough COMMAND otbEdgeTestDriver
   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/feTvLocaLHoughLinesDetected.txt
@@ -227,12 +187,6 @@ otb_add_test(NAME feTvExtractSegments COMMAND otbEdgeTestDriver
   ${TEMP}/feFiltreExtractSegments_ImageLine.hdr
   10  0.3 10 10 3 10 0.5)
 
-otb_add_test(NAME feTuExtractSegmentsNew COMMAND otbEdgeTestDriver
-  otbExtractSegmentsNew)
-
-otb_add_test(NAME feTuAsymmetricFusionOfLineDetectorNew COMMAND otbEdgeTestDriver
-  otbAsymmetricFusionOfLineDetectorNew)
-
 otb_add_test(NAME feTvLineRatio COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreLineRatio_amst_2_3.hdr
   ${TEMP}/feFiltreLineRatio_amst_2_3.hdr
@@ -249,9 +203,6 @@ otb_add_test(NAME feTvTouziDir COMMAND otbEdgeTestDriver
   ${TEMP}/feFiltreTouzi_amst_dir_3.hdr
   3)
 
-otb_add_test(NAME feTuTouziNew COMMAND otbEdgeTestDriver
-  otbTouziEdgeDetectorNew)
-
 otb_add_test(NAME bfTvVerticalSobelVectorImageFilter COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvVerticalSobelVectorImageFilter.tif
@@ -259,12 +210,6 @@ otb_add_test(NAME bfTvVerticalSobelVectorImageFilter COMMAND otbEdgeTestDriver
   otbVerticalSobelVectorImageFilterTest
   -in ${INPUTDATA}/cupriteSubHsi.tif
   -out ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif)
-
-otb_add_test(NAME bfTuVerticalSobelVectorImageFilterNew COMMAND otbEdgeTestDriver
-  otbVerticalSobelVectorImageFilterNewTest)
-
-otb_add_test(NAME feTuStreamingLineSegmentDetectorNew COMMAND otbEdgeTestDriver
-  otbStreamingLineSegmentDetectorNew)
 
 otb_add_test(NAME feTvStreamingLineSegmentDetector10 COMMAND otbEdgeTestDriver
   --compare-ogr  ${EPSILON_8}
@@ -285,9 +230,6 @@ otb_add_test(NAME feTvStreamingLineSegmentDetector1000 COMMAND otbEdgeTestDriver
   ${TEMP}/feTvStreamingLineSegmentDetectorOutput1000.shp
   1000
   )
-
-otb_add_test(NAME feTuLineRatioNew COMMAND otbEdgeTestDriver
-  otbLineRatioDetectorNew)
 
 otb_add_test(NAME feTvTouzi COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreTouzi_amst_3.hdr
@@ -321,9 +263,6 @@ otb_add_test(NAME feTvLineRatioLinear COMMAND otbEdgeTestDriver
   ${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
   2 3)
 
-otb_add_test(NAME feTuLineSegmentDetectorNew COMMAND otbEdgeTestDriver
-  otbLineSegmentDetectorNew)
-
 otb_add_test(NAME feTvLineSegmentDetector COMMAND otbEdgeTestDriver
   --compare-ogr  ${EPSILON_8}
   ${BASELINE_FILES}/feTvLineSegmentDetectorOutput.shp
@@ -345,9 +284,6 @@ otb_add_test(NAME feTvLineCorrelationLinear COMMAND otbEdgeTestDriver
   ${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
   2 3)
 
-otb_add_test(NAME feTuLineDetectorBaseNew COMMAND otbEdgeTestDriver
-  otbLineDetectorBaseNew)
-
 otb_add_test(NAME feTvFillGapsFilter COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}
   ${BASELINE}/feTvFillGapfilter.png
@@ -355,5 +291,3 @@ otb_add_test(NAME feTvFillGapsFilter COMMAND otbEdgeTestDriver
   otbFillGapsFilter
   ${INPUTDATA}/ImageLine.bsq.hdr
   ${TEMP}/feTvFillGapfilter.png)
-otb_add_test(NAME feTuFillGapsFilterNew COMMAND otbEdgeTestDriver
-  otbFillGapsFilterNew)

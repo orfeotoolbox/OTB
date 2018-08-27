@@ -31,6 +31,7 @@
 #include "otbParserX.h"
 
 #include <vector>
+#include <string>
 
 
 namespace otb
@@ -157,8 +158,8 @@ private :
   } adhocStruct;
 
 
-  BandMathXImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BandMathXImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void AddVariable(adhocStruct&);
   void CheckImageDimensions();
@@ -195,7 +196,7 @@ private :
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandMathXImageFilter.txx"
+#include "otbBandMathXImageFilter.hxx"
 #endif
 
 #endif

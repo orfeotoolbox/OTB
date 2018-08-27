@@ -69,9 +69,9 @@ public:
     else
       {
       double z = m_Factor * x;
-      temp =  vcl_sin(z) / z;
+      temp =  std::sin(z) / z;
       }
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
   // Equal to \f$ \frac{\pi}{m} \f$
@@ -145,8 +145,8 @@ protected:
   }
 
 private:
-  WindowedSincInterpolateImageLanczosFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageLanczosFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

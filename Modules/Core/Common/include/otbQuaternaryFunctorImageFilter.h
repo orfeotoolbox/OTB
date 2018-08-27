@@ -162,8 +162,8 @@ protected:
                             itk::ThreadIdType threadId) override;
 
 private:
-  QuaternaryFunctorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  QuaternaryFunctorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 };
@@ -171,7 +171,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbQuaternaryFunctorImageFilter.txx"
+#include "otbQuaternaryFunctorImageFilter.hxx"
 #endif
 
 #endif

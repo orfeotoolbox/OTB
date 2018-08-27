@@ -26,7 +26,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 
 namespace otb
@@ -129,7 +129,7 @@ public:
 
   RealType operator()(RealType x) const
   {
-    return vcl_exp(-0.5 * x);
+    return std::exp(-0.5 * x);
   }
 
   RealType GetRadius(RealType bandwidth) const
@@ -246,8 +246,8 @@ public:
     while (!inputIt.IsAtEnd())
       {
       const PixelType &p = inputIt.Get();
-      minValue = vcl_min(minValue, p[m_SpectralCoordinate]);
-      maxValue = vcl_max(maxValue, p[m_SpectralCoordinate]);
+      minValue = std::min(minValue, p[m_SpectralCoordinate]);
+      maxValue = std::max(maxValue, p[m_SpectralCoordinate]);
       ++inputIt;
       }
 
@@ -617,8 +617,8 @@ protected:
 #endif
 
 private:
-  MeanShiftSmoothingImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MeanShiftSmoothingImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Range bandwidth */
   RealType m_RangeBandwidth;
@@ -682,7 +682,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftSmoothingImageFilter.txx"
+#include "otbMeanShiftSmoothingImageFilter.hxx"
 #endif
 
 #endif

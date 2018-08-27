@@ -18,17 +18,16 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Required to generate descriptor files for QGIS processing plugin.")
+set(DOCUMENTATION "This module allows to generate application descriptor files for QGIS processing plugin.")
 
-otb_module(OTBQgis
+otb_module(OTBQGIS
   DEPENDS
     OTBITK
     OTBApplicationEngine
-    
+
   TEST_DEPENDS
     OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
 )
-

@@ -24,6 +24,7 @@
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
 #include "otbImageFileWriter.h"
+#include <string>
 
 namespace otb
 {
@@ -90,15 +91,8 @@ public:
   /** Return true if a filename is set */
   bool HasValue() const override;
 
-  void SetFileName (const char* filename)
-  {
-    m_FileName = filename;
-    SetActive(true);
-  }
-  void SetFileName (const std::string& filename)
-  {
-    this->SetFileName(filename.c_str());
-  }
+  void SetFileName (const char* filename);
+  void SetFileName (const std::string& filename);
 
   itkGetStringMacro(FileName);
 
@@ -137,8 +131,8 @@ protected:
 
 
 private:
-  ComplexOutputImageParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  ComplexOutputImageParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
   unsigned int                  m_RAMValue;
 

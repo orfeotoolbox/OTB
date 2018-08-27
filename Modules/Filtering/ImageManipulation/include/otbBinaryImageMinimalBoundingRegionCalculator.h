@@ -76,8 +76,8 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 private:
-  BinaryImageMinimalBoundingRegionCalculator(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  BinaryImageMinimalBoundingRegionCalculator(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** The computed region */
   RegionType m_Region;
   /** Toogle if pad wanted */
@@ -88,7 +88,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryImageMinimalBoundingRegionCalculator.txx"
+#include "otbBinaryImageMinimalBoundingRegionCalculator.hxx"
 #endif
 
 #endif

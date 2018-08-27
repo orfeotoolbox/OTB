@@ -97,8 +97,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageListToImageListApplyFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageListToImageListApplyFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The processing filter */
   FilterPointerType m_Filter;
@@ -107,7 +107,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListToImageListApplyFilter.txx"
+#include "otbImageListToImageListApplyFilter.hxx"
 #endif
 
 #endif

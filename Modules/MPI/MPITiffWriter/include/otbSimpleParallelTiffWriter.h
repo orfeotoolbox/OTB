@@ -59,6 +59,7 @@
 // SPTW
 #include <algorithm>
 #include <vector>
+#include <string>
 
 #if defined(__GNUC__) || defined(__clang__)
 # pragma GCC diagnostic push
@@ -217,9 +218,11 @@ public:
   /** Does the real work. */
   virtual void Update() override;
 
-  /** SimpleParallelTiffWriter Methods */
+  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
   virtual void SetFileName(const char* extendedFileName);
-  virtual void SetFileName(std::string extendedFileName);
+
+  virtual void SetFileName(const std::string& extendedFileName);
+
   virtual const char* GetFileName () const;
 
   /** Specify the region to write. If left NULL, then the whole image
@@ -264,8 +267,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SimpleParallelTiffWriter(const SimpleParallelTiffWriter &); //purposely not implemented
-  void operator =(const SimpleParallelTiffWriter&); //purposely not implemented
+  SimpleParallelTiffWriter(const SimpleParallelTiffWriter &) = delete;
+  void operator =(const SimpleParallelTiffWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {
@@ -342,7 +345,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSimpleParallelTiffWriter.txx"
+#include "otbSimpleParallelTiffWriter.hxx"
 #endif
 
 #endif

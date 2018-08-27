@@ -45,7 +45,7 @@ int otbOGRExtendedFileNameGDALLayer(int , char* argv[])
 {
   auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Update_LayerOverwrite);
   test->CreateLayer( "2layertest" , 
-      ITK_NULLPTR , 
+      nullptr , 
       wkbUnknown );
   std::string error = CPLGetLastErrorMsg();
   if ( error.find( "does not support layer creation option layeroption" ) )
@@ -58,7 +58,7 @@ int otbOGRExtendedFileNameGDALLayerOption(int , char* argv[])
   auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Update_LayerOverwrite);
   std::vector<std::string> option { "vectorlayeroption=OPTION" }; 
   test->CreateLayer( "2layertest" , 
-      ITK_NULLPTR , 
+      nullptr , 
       wkbUnknown ,
       option );
   std::string error = CPLGetLastErrorMsg();

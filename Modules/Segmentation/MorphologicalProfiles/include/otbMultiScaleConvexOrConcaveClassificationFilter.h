@@ -246,8 +246,8 @@ protected:
   }
 
 private:
-  MultiScaleConvexOrConcaveClassificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiScaleConvexOrConcaveClassificationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Label separator between convex and concave labels */
   LabelType m_LabelSeparator;

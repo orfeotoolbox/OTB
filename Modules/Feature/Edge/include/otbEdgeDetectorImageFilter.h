@@ -116,15 +116,15 @@ protected:
 
 private:
 
-  EdgeDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EdgeDetectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DetectionPointerType    m_Detector;
   BinaryFilterPointerType m_BinaryFilter;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEdgeDetectorImageFilter.txx"
+#include "otbEdgeDetectorImageFilter.hxx"
 #endif
 
 #endif

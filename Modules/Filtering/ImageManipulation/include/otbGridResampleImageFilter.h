@@ -189,8 +189,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GridResampleImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GridResampleImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   IndexType              m_OutputStartIndex;     // output image start index
   SizeType               m_OutputSize;            // output image size
@@ -216,7 +216,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGridResampleImageFilter.txx"
+#include "otbGridResampleImageFilter.hxx"
 #endif
 
 #endif

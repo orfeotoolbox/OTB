@@ -144,8 +144,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LeastSquareAffineTransformEstimator (const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  LeastSquareAffineTransformEstimator (const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Container of GCPs */
   TiePointsContainerType m_TiePointsContainer;
@@ -170,7 +170,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLeastSquareAffineTransformEstimator.txx"
+#include "otbLeastSquareAffineTransformEstimator.hxx"
 #endif
 
 #endif

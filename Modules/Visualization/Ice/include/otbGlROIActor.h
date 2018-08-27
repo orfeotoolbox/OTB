@@ -28,6 +28,7 @@
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
 #include "itkVector.h"
+#include <string>
 
 namespace otb
 {

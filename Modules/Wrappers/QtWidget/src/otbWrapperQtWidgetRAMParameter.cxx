@@ -25,8 +25,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetRAMParameter::QtWidgetRAMParameter(RAMParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetRAMParameter::QtWidgetRAMParameter(RAMParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_RAMParam(param)
 {
 }
@@ -42,13 +42,13 @@ void QtWidgetRAMParameter::DoCreateWidget()
   m_QHBoxLayout->setSpacing(0);
   m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_QSpinBox = new QSpinBox;
+  m_QSpinBox = new QSpinBox(this);
   m_QSpinBox->setToolTip(
     QString::fromStdString( m_RAMParam->GetDescription() )
   );
 
-  connect( m_QSpinBox, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
-  connect( m_QSpinBox, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_QSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &QtWidgetRAMParameter::SetValue );
+  connect( m_QSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), GetModel(), &QtWidgetModel::NotifyUpdate );
 
   // Set a valid range
   // Using m_UnsignedIntParam->GetMaximum() to set the maximum range

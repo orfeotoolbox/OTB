@@ -116,8 +116,8 @@ protected:
 
 private:
 
-  SinclairReciprocalImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SinclairReciprocalImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
@@ -125,7 +125,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSinclairReciprocalImageFilter.txx"
+#include "otbSinclairReciprocalImageFilter.hxx"
 #endif
 
 #endif

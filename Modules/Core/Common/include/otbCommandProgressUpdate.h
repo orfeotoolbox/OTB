@@ -23,7 +23,6 @@
 
 #include "itkCommand.h"
 #include <sstream>
-#include <iostream>
 
 namespace otb
 {
@@ -56,7 +55,7 @@ public:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCommandProgressUpdate.txx"
+#include "otbCommandProgressUpdate.hxx"
 #endif
 
 #endif

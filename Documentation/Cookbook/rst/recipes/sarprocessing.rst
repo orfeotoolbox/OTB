@@ -78,11 +78,11 @@ The produced images were then rescaled to intensities ranging from 0 to
 Polarimetry
 -----------
 
-In conventional imaging radar the measurement is a scalar which is
+In conventional imaging radar, the measurement is a scalar which is
 proportional to the received back-scattered power at a particular
 combination of linear polarization (HH, HV, VH or VV). Polarimetry is
 the measurement and interpretation of the polarization of this
-measurement which allows to measure various optical properties of a
+measurement. It allows for the measurement of various optical properties of a
 material. In polarimetry the basic measurement is a :math:`2x2` complex
 scattering matrix yielding an eight dimensional measurement space
 (Sinclair matrix). For reciprocal targets where :math:`HV=VH`, this

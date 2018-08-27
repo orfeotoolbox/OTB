@@ -87,8 +87,8 @@ protected:
   //void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ContingencyTableCalculator(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  ContingencyTableCalculator(const Self &) = delete;
+  void operator=(const Self &) = delete;
 
   MapOfClassesType m_LabelCount;
   unsigned long m_NumberOfRefClasses;
@@ -98,7 +98,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbContingencyTableCalculator.txx"
+#include "otbContingencyTableCalculator.hxx"
 #endif
 
 #endif //otbContingencyTableCalculator_h

@@ -26,9 +26,9 @@
 #ifndef MainProcessingParameters_h
 #define MainProcessingParameters_h
 
-#include <iostream>
 #include <sstream>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

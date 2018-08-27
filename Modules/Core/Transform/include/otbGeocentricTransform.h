@@ -74,15 +74,15 @@ protected:
   EllipsoidAdapter::Pointer m_Ellipsoid;
 
 private:
-  GeocentricTransform(const Self &);        //purposely not implemented
-  void operator =(const Self&);        //purposely not implemented
+  GeocentricTransform(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeocentricTransform.txx"
+#include "otbGeocentricTransform.hxx"
 #endif
 
 #endif

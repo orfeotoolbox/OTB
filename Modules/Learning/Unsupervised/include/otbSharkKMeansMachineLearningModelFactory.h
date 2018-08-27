@@ -62,15 +62,15 @@ protected:
   virtual ~SharkKMeansMachineLearningModelFactory();
 
 private:
-  SharkKMeansMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SharkKMeansMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSharkKMeansMachineLearningModelFactory.txx"
+#include "otbSharkKMeansMachineLearningModelFactory.hxx"
 #endif
 
 #endif

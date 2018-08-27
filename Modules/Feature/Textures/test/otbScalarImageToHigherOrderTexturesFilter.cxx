@@ -38,14 +38,6 @@ typedef RunLengthFeaturesFilterType::OffsetType          OffsetType;
 typedef RunLengthFeaturesFilterType::OffsetVector        OffsetVector;
 typedef RunLengthFeaturesFilterType::OffsetVectorPointer OffsetVectorPointer;
 
-int otbScalarImageToHigherOrderTexturesFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  TexturesFilterType::Pointer filter = TexturesFilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 ImageType::Pointer ReadInputImage(const char *  filename)
 {
@@ -221,15 +213,15 @@ int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
     std::cout << "Testing radius = " << radius << " and default offsets" << std::endl;
 
     ImageType::Pointer inputImage = ReadInputImage(infname);
-    std::vector<ImageType::Pointer> results = Compute(inputImage, nbBins, radius, ITK_NULLPTR);
+    std::vector<ImageType::Pointer> results = Compute(inputImage, nbBins, radius, nullptr);
 
-    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 7, 11) == EXIT_FAILURE )
+    if ( ValidateAt(inputImage, results, nbBins, radius, nullptr, 7, 11) == EXIT_FAILURE )
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 5, 5) == EXIT_FAILURE )
+    if ( ValidateAt(inputImage, results, nbBins, radius, nullptr, 5, 5) == EXIT_FAILURE )
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 7, 11) == EXIT_FAILURE )
+    if ( ValidateAt(inputImage, results, nbBins, radius, nullptr, 7, 11) == EXIT_FAILURE )
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 10, 5) == EXIT_FAILURE )
+    if ( ValidateAt(inputImage, results, nbBins, radius, nullptr, 10, 5) == EXIT_FAILURE )
       return EXIT_FAILURE;
   }
 

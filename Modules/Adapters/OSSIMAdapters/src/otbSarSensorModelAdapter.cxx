@@ -44,7 +44,7 @@ namespace otb
 {
 
 SarSensorModelAdapter::SarSensorModelAdapter():
-  m_SensorModel(ITK_NULLPTR)
+  m_SensorModel(nullptr)
 {
 }
 
@@ -66,7 +66,7 @@ bool SarSensorModelAdapter::LoadState(const ImageKeywordlist& image_kwl)
 
 bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
 {
-  if(m_SensorModel.get() != ITK_NULLPTR)
+  if(m_SensorModel.get() != nullptr)
     {
     ossimKeywordlist geom;
 
@@ -86,12 +86,12 @@ bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
 
 bool SarSensorModelAdapter::IsValidSensorModel() const
 {
-  return m_SensorModel.get() != ITK_NULLPTR;
+  return m_SensorModel.get() != nullptr;
 }
 
 bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines)
 {
-  if(m_SensorModel.get() != ITK_NULLPTR)
+  if(m_SensorModel.get() != nullptr)
     {
     return m_SensorModel->deburst(lines);
     }
@@ -111,7 +111,7 @@ void SarSensorModelAdapter::DeburstLineToImageLine(const std::vector<std::pair<u
 
 bool SarSensorModelAdapter::WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType & yz) const
 {
-  if(m_SensorModel.get() == ITK_NULLPTR)
+  if(m_SensorModel.get() == nullptr)
     {
     return false;
     }
@@ -139,7 +139,7 @@ bool SarSensorModelAdapter::WorldToLineSampleYZ(const Point3DType & inGeoPoint, 
 
 bool SarSensorModelAdapter::WorldToLineSample(const Point3DType & inGeoPoint, Point2DType & cr) const
 {
-  if(m_SensorModel.get() == ITK_NULLPTR)
+  if(m_SensorModel.get() == nullptr)
     {
     return false;
     }
@@ -182,10 +182,10 @@ bool SarSensorModelAdapter::WorldToCartesian(const Point3DType & inGeoPoint, Poi
 }
   
 bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & inGeoPoint, 
-							  Point3DType & satelitePosition, 
-							  Point3DType & sateliteVelocity) const
+							  Point3DType & satellitePosition, 
+							  Point3DType & satelliteVelocity) const
 {
-  if(m_SensorModel.get() == ITK_NULLPTR)
+  if(m_SensorModel.get() == nullptr)
     {
       return false;
     }
@@ -205,13 +205,13 @@ bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & in
   if(sensorPos.isNan() || !success)
     return false;
 
-  satelitePosition[0] = sensorPos.x();
-  satelitePosition[1] = sensorPos.y();
-  satelitePosition[2] = sensorPos.z();
+  satellitePosition[0] = sensorPos.x();
+  satellitePosition[1] = sensorPos.y();
+  satellitePosition[2] = sensorPos.z();
 
-  sateliteVelocity[0] = sensorVel.x();
-  sateliteVelocity[1] = sensorVel.y();
-  sateliteVelocity[2] = sensorVel.z();    
+  satelliteVelocity[0] = sensorVel.x();
+  satelliteVelocity[1] = sensorVel.y();
+  satelliteVelocity[2] = sensorVel.z();    
 
   return true;
 }

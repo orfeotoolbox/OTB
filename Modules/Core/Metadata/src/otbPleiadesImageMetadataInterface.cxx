@@ -168,7 +168,7 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
   if (outputValues.size() == 1)
     {
     // Pan
-    if (vcl_abs(outputValues[0] - defaultRadianceP) > (tolerance * defaultRadianceP))
+    if (std::abs(outputValues[0] - defaultRadianceP) > (tolerance * defaultRadianceP))
       {
       outputValuesVariableLengthVector[0] = defaultRadianceP;
       }
@@ -183,7 +183,7 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
     for (unsigned int i = 0; i < outputValues.size(); ++i)
       {
       int wavelenghPos = this->BandIndexToWavelengthPosition(i);
-      if (vcl_abs(outputValues[wavelenghPos] - defaultRadianceMS[wavelenghPos]) >
+      if (std::abs(outputValues[wavelenghPos] - defaultRadianceMS[wavelenghPos]) >
           (tolerance * defaultRadianceMS[wavelenghPos]))
         {
         outputValuesVariableLengthVector[i] = defaultRadianceMS[wavelenghPos];
@@ -762,7 +762,7 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
     //Compute Satellite azimuthal angle using the azimuthal angle and the along
     //and across track incidence angle
 
-    double satAz = (cap - vcl_atan2(vcl_tan(ortho * CONST_PI_180),vcl_tan(along * CONST_PI_180)) * CONST_180_PI);
+    double satAz = (cap - std::atan2(std::tan(ortho * CONST_PI_180),std::tan(along * CONST_PI_180)) * CONST_180_PI);
 
     satAz = fmod(satAz,360);
 
@@ -937,19 +937,48 @@ PleiadesImageMetadataInterface
     itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
     }
 
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-
   std::vector<unsigned int> rgb(3);
 
   rgb[0] = 0;
   rgb[1] = 1;
   rgb[2] = 2;
+
+  ImageKeywordlistType imageKeywordlist;
+  if (! dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    return rgb;
+    }
+  itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+
+  if ( !imageKeywordlist.HasKey( "support_data.band_name_list" ) )
+    {
+    return rgb;
+    }
+
+  const std::string & rgbOrder =
+    imageKeywordlist.GetMetadataByKey( "support_data.band_name_list" );
+
+  std::vector<std::string> bandList;
+  boost::split(bandList, rgbOrder, boost::is_any_of(" "));
+
+  if (bandList[0] == "P")
+    {
+    rgb[1] = 0;
+    rgb[2] = 0;
+    return rgb;
+    }
+
+  if (bandList.size() >= 3)
+    {
+    for (int i = 0 ; i < 3 ; i++ )
+      {
+      std::string band = bandList[i];
+      if (band[0] == 'B')
+        {
+        rgb[i] = lexical_cast<unsigned int>(band.c_str() + 1);
+        }
+      }
+    }
 
   return rgb;
 }

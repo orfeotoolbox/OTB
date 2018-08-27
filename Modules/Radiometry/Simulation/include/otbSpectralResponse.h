@@ -25,7 +25,6 @@
 #include <itkObjectFactory.h>
 #include <vector>
 #include <utility>
-#include <fstream>
 #include <limits>
 
 #include "otbVectorImage.h"
@@ -182,8 +181,8 @@ protected:
   void ComputeInterval();
 
 private:
-  SpectralResponse(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpectralResponse(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 
@@ -191,7 +190,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpectralResponse.txx"
+#include "otbSpectralResponse.hxx"
 #endif
 
 #endif

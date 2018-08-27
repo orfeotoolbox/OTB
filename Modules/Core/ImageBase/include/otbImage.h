@@ -256,7 +256,7 @@ protected:
 
 private:
   Image(const Self &) = delete;
-  void operator =(const Self&); //purposely not implemented
+  void operator =(const Self&) = delete;
 
     /** Return the ImageMetadataInterfacePointer associated to the data
    *  and creates it on first call
@@ -271,7 +271,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImage.txx"
+#include "otbImage.hxx"
 #endif
 
 #endif

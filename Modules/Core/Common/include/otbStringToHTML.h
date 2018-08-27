@@ -22,7 +22,6 @@
 #define otbStringToHTML_h
 
 #include <string>
-#include <iostream>
 
 #include "OTBCommonExport.h"
 

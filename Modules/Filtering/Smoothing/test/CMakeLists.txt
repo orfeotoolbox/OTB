@@ -24,7 +24,6 @@ set(OTBSmoothingTests
 otbSmoothingTestDriver.cxx
 otbMeanShiftSmoothingImageFilter.cxx
 otbMeanShiftSmoothingImageFilterSpatialStability.cxx
-otbMeanShiftSmoothingImageFilterNew.cxx
 otbMeanShiftSmoothingImageFilterThreading.cxx
 )
 

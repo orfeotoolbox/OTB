@@ -59,8 +59,8 @@ public:
   {
     double x = static_cast<double>(A);
     double px = CONST_PI * x;
-    double temp = vcl_exp(px * px * m_Factor);
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    double temp = std::exp(px * px * m_Factor);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
   double       m_Factor;
@@ -134,8 +134,8 @@ protected:
   }
 
 private:
-  WindowedSincInterpolateImageGaussianFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageGaussianFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

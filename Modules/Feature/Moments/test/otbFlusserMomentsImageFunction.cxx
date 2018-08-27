@@ -34,21 +34,6 @@
 #include "itkAffineTransform.h"
 
 
-int otbFlusserMomentsImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
-
-  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::FlusserMomentsImageFunction<InputImageType>        FunctionType;
-
-  // Instantiating object
-  FunctionType::Pointer function       = FunctionType::New();
-
-  std::cout << function << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbFlusserMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 {
@@ -148,7 +133,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * ar
 
   for (unsigned int j = 1; j < 12; ++j)
     {
-    error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
+    error += std::pow(std::abs( Result1[j-1] - Result2[j-1]), 2);
 
     std::cout << "Original -F" << j
               << " : " << Result1[j-1]
@@ -156,7 +141,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * ar
               << " : " << Result2[j-1] << std::endl;
     }
 
-  error = vcl_sqrt(error)/11.0;
+  error = std::sqrt(error)/11.0;
   std::cout << "Error : " << error << std::endl
             << std::endl;
 
@@ -224,7 +209,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char *
   translation1[1] =   -imageCenterY;
   transform->Translate( translation1 );
 
-  const double degreesToRadians = vcl_atan(1.0) / 45.0;
+  const double degreesToRadians = std::atan(1.0) / 45.0;
   const double angle = angleInDegrees * degreesToRadians;
   transform->Rotate2D( -angle, false );
 
@@ -254,7 +239,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char *
 
   for (unsigned int j = 1; j < 12; ++j)
     {
-    error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
+    error += std::pow(std::abs( Result1[j-1] - Result2[j-1]), 2);
 
     std::cout << "Original -F" << j
               << " : " << Result1[j-1]
@@ -262,7 +247,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char *
               << " : " << Result2[j-1] << std::endl;
     }
 
-  error = vcl_sqrt(error)/11.0;
+  error = std::sqrt(error)/11.0;
   std::cout << "Error : " << error << std::endl
             << std::endl;
 

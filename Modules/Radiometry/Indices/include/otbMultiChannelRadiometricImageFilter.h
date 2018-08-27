@@ -143,8 +143,8 @@ protected:
     os << indent << "MIR index: " << m_MIRIndex << std::endl;
   }
 private:
-  MultiChannelRadiometricImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiChannelRadiometricImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Blue channel index */
   unsigned int m_BlueIndex;
   /** Green channel index */

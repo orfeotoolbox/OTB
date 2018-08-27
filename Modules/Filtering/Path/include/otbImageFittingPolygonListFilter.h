@@ -109,13 +109,13 @@ protected:
   unsigned int m_NumberOfIterations;
 
 private:
-  ImageFittingPolygonListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageFittingPolygonListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFittingPolygonListFilter.txx"
+#include "otbImageFittingPolygonListFilter.hxx"
 #endif
 
 #endif

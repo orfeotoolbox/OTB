@@ -77,8 +77,8 @@ protected:
   }
 
 private:
-  UnaryFunctorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

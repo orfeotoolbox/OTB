@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetEmptyParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -42,12 +40,12 @@ class OTBQtWidget_EXPORT QtWidgetEmptyParameter : public QtWidgetParameterBase
   Q_OBJECT
 
 public:
-  QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*);
+  QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetEmptyParameter() override;
 
 private:
-  QtWidgetEmptyParameter(const QtWidgetEmptyParameter&); //purposely not implemented
-  void operator=(const QtWidgetEmptyParameter&); //purposely not implemented
+  QtWidgetEmptyParameter(const QtWidgetEmptyParameter&) = delete;
+  void operator=(const QtWidgetEmptyParameter&) = delete;
 
   void DoCreateWidget() override;
 

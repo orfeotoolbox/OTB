@@ -223,8 +223,8 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  ImageAndVectorImageOperationFilter(const ImageAndVectorImageOperationFilter &); //purposely not implemented
-  void operator =(const ImageAndVectorImageOperationFilter&); //purposely not implemented
+  ImageAndVectorImageOperationFilter(const ImageAndVectorImageOperationFilter &) = delete;
+  void operator =(const ImageAndVectorImageOperationFilter&) = delete;
 
   bool m_UseAddition;
   bool m_UseMultiplication;
@@ -235,7 +235,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageAndVectorImageOperationFilter.txx"
+#include "otbImageAndVectorImageOperationFilter.hxx"
 #endif
 
 #endif

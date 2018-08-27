@@ -21,9 +21,13 @@
 #ifndef otbExtendedFilenameHelper_h
 #define otbExtendedFilenameHelper_h
 
+#include <map>
+#include <vector>
+
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "OTBCommonExport.h"
+#include <string>
 
 namespace otb
 {
@@ -51,7 +55,11 @@ public:
 
   typedef std::map< std::string, std::string > OptionMapType;
 
+  /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
   virtual void SetExtendedFileName(const char * extFname);
+
+  virtual void SetExtendedFileName(const std::string& extFname);
+
   const OptionMapType & GetOptionMap(void) const;
   
   itkGetStringMacro(ExtendedFileName);
@@ -86,8 +94,8 @@ protected:
   ~ExtendedFilenameHelper() override {}
 
 private:
-  ExtendedFilenameHelper(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ExtendedFilenameHelper(const Self &) = delete;
+  void operator =(const Self&) = delete;
   itkSetStringMacro(SimpleFileName);
 
   std::string                          m_ExtendedFileName;

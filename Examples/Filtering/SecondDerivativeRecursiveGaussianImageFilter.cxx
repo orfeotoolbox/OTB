@@ -122,7 +122,7 @@ int main(int argc, char * argv[])
 
   writer->SetInput(Izz);
   outputFileName = outputPrefix + "-Izz.hdr";
-  writer->SetFileName(outputFileName.c_str());
+  writer->SetFileName(outputFileName);
   writer->Update();
 
   gc->SetDirection(1);    // gc now works along Y
@@ -135,7 +135,7 @@ int main(int argc, char * argv[])
 
   writer->SetInput(Iyy);
   outputFileName = outputPrefix + "-Iyy.hdr";
-  writer->SetFileName(outputFileName.c_str());
+  writer->SetFileName(outputFileName);
   writer->Update();
 
   gc->SetDirection(0);    // gc now works along X
@@ -148,7 +148,7 @@ int main(int argc, char * argv[])
 
   writer->SetInput(Ixx);
   outputFileName = outputPrefix + "-Ixx.hdr";
-  writer->SetFileName(outputFileName.c_str());
+  writer->SetFileName(outputFileName);
   writer->Update();
 
   ga->SetDirection(0);
@@ -166,7 +166,7 @@ int main(int argc, char * argv[])
 
   writer->SetInput(Iyz);
   outputFileName = outputPrefix + "-Iyz.hdr";
-  writer->SetFileName(outputFileName.c_str());
+  writer->SetFileName(outputFileName);
   writer->Update();
 
   ga->SetDirection(1);
@@ -184,7 +184,7 @@ int main(int argc, char * argv[])
 
   writer->SetInput(Ixz);
   outputFileName = outputPrefix + "-Ixz.hdr";
-  writer->SetFileName(outputFileName.c_str());
+  writer->SetFileName(outputFileName);
   writer->Update();
 
   ga->SetDirection(2);
@@ -202,7 +202,7 @@ int main(int argc, char * argv[])
 
   writer->SetInput(Ixy);
   outputFileName = outputPrefix + "-Ixy.hdr";
-  writer->SetFileName(outputFileName.c_str());
+  writer->SetFileName(outputFileName);
   writer->Update();
   // Software Guide : EndCodeSnippet
 

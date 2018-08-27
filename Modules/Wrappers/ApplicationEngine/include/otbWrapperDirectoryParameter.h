@@ -68,7 +68,7 @@ public:
   }
 
   // Reimplement the SetActive method
-  void SetActive(  const bool value ) override
+  void SetActive( bool value ) override
   {
     Superclass::SetActive( value );
     m_StringParam->SetActive( value );
@@ -89,7 +89,7 @@ protected:
   {}
 
 private:
-  DirectoryParameter(const DirectoryParameter &); //purposely not implemented
+  DirectoryParameter(const DirectoryParameter &) = delete;
   void operator =(const DirectoryParameter&); //purposely not
                                               //implemented
 

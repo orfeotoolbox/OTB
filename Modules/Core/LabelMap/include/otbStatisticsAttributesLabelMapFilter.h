@@ -25,6 +25,7 @@
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include "itkMatrix.h"
 #include "itkVector.h"
+#include <string>
 
 namespace otb
 {
@@ -204,14 +205,14 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StatisticsAttributesLabelMapFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 }; // end of class
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStatisticsAttributesLabelMapFilter.txx"
+#include "otbStatisticsAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

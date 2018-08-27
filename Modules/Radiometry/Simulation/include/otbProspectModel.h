@@ -87,8 +87,8 @@ class OTBSimulation_EXPORT ProspectModel : public SimulationStep1Base
       double Tav(const int theta, double ref);
 
    private:
-      ProspectModel(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+      ProspectModel(const Self&) = delete;
+      void operator=(const Self&) = delete;
 
 };
 

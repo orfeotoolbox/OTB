@@ -25,6 +25,7 @@
 #include "itkVariableLengthVector.h"
 #include "otbSqrtSpectralAngleFunctor.h"
 #include "otbBandName.h"
+#include <string>
 
 namespace otb
 {

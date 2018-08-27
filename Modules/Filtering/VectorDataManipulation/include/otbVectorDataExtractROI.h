@@ -134,8 +134,8 @@ protected:
   using Superclass::ProcessNode;
 
 private:
-  VectorDataExtractROI(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataExtractROI(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   int CounterClockWise(PointType firstPoint, PointType secondPoint, PointType thirdPoint);
   bool IsSegmentIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD);
@@ -150,7 +150,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataExtractROI.txx"
+#include "otbVectorDataExtractROI.hxx"
 #endif
 
 #endif

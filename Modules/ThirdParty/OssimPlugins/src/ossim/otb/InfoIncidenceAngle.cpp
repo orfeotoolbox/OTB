@@ -102,7 +102,7 @@ bool InfoIncidenceAngle::loadState(const ossimKeywordlist& kwl, const char* pref
   else
   {
     ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << REF_ROW << " in "<<pfx.c_str()<<" path.\n";
+         << MODULE << " Keyword not found: " << REF_ROW << " in "<<pfx <<" path.\n";
     result = false;
   }
   
@@ -115,7 +115,7 @@ bool InfoIncidenceAngle::loadState(const ossimKeywordlist& kwl, const char* pref
   else
   {
     ossimNotify(ossimNotifyLevel_WARN)
-	<< MODULE << " Keyword not found: " << REF_COLUMN << " in "<<pfx.c_str()<<" path.\n";
+	<< MODULE << " Keyword not found: " << REF_COLUMN << " in "<<pfx <<" path.\n";
     result = false;
   }
   
@@ -128,7 +128,7 @@ bool InfoIncidenceAngle::loadState(const ossimKeywordlist& kwl, const char* pref
   else
   {
     ossimNotify(ossimNotifyLevel_WARN)
-	<< MODULE << " Keyword not found: " << INCIDENCE_ANGLE << " in "<<pfx.c_str()<<" path.\n";
+	<< MODULE << " Keyword not found: " << INCIDENCE_ANGLE << " in "<<pfx <<" path.\n";
     result = false;
   }
 

@@ -269,30 +269,14 @@ private:
       genericRSEstimator->SetOutputProjectionRef(m_OutputProjectionRef);
       genericRSEstimator->Compute();
 
-      // Fill the Gui with the computed parameters
-      if (!HasUserValue("outputs.sizex"))
-        SetParameterInt("outputs.sizex",genericRSEstimator->GetOutputSize()[0]);
-
-      if (!HasUserValue("outputs.sizey"))
-        SetParameterInt("outputs.sizey",genericRSEstimator->GetOutputSize()[1]);
-
-      if (!HasUserValue("outputs.spacingx"))
-        SetParameterFloat("outputs.spacingx",genericRSEstimator->GetOutputSpacing()[0]);
-
-      if (!HasUserValue("outputs.spacingy"))
-        SetParameterFloat("outputs.spacingy",genericRSEstimator->GetOutputSpacing()[1]);
-
-      if (!HasUserValue("outputs.ulx"))
-        SetParameterFloat("outputs.ulx",genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
-
-      if (!HasUserValue("outputs.uly"))
-        SetParameterFloat("outputs.uly",genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
-
-      if (!HasUserValue("outputs.lrx"))
-       SetParameterFloat("outputs.lrx",GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
-
-      if (!HasUserValue("outputs.lry"))
-       SetParameterFloat("outputs.lry",GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
+      SetDefaultParameterInt("outputs.sizex", genericRSEstimator->GetOutputSize()[0]);
+      SetDefaultParameterInt("outputs.sizey", genericRSEstimator->GetOutputSize()[1]);
+      SetDefaultParameterFloat("outputs.spacingx", genericRSEstimator->GetOutputSpacing()[0]);
+      SetDefaultParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
+      SetDefaultParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
+      SetDefaultParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
+      SetDefaultParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
+      SetDefaultParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
 
       // Handle the spacing and size field following the mode
       // chose by the user
@@ -300,16 +284,6 @@ private:
         {
         case Mode_UserDefined:
         {
-        // Automatic set to off except lower right coordinates
-        AutomaticValueOff("outputs.ulx");
-        AutomaticValueOff("outputs.uly");
-        AutomaticValueOff("outputs.sizex");
-        AutomaticValueOff("outputs.sizey");
-        AutomaticValueOff("outputs.spacingx");
-        AutomaticValueOff("outputs.spacingy");
-        AutomaticValueOn("outputs.lrx");
-        AutomaticValueOn("outputs.lry");
-
         // Enable all the parameters except lower right coordinates
         EnableParameter("outputs.ulx");
         EnableParameter("outputs.uly");
@@ -349,16 +323,6 @@ private:
         DisableParameter("outputs.lrx");
         DisableParameter("outputs.lry");
         DisableParameter("outputs.ortho");
-
-        // Update the automatic value mode of each filed
-        AutomaticValueOn("outputs.ulx");
-        AutomaticValueOn("outputs.uly");
-        AutomaticValueOn("outputs.sizex");
-        AutomaticValueOn("outputs.sizey");
-        AutomaticValueOff("outputs.spacingx");
-        AutomaticValueOff("outputs.spacingy");
-        AutomaticValueOn("outputs.lrx");
-        AutomaticValueOn("outputs.lry");
 
         // Adapat the status of the param to this mode
         MandatoryOff("outputs.ulx");
@@ -403,16 +367,6 @@ private:
         DisableParameter("outputs.lrx");
         DisableParameter("outputs.lry");
         DisableParameter("outputs.ortho");
-
-        // Update the automatic value mode of each filed
-        AutomaticValueOn("outputs.ulx");
-        AutomaticValueOn("outputs.uly");
-        AutomaticValueOn("outputs.spacingx");
-        AutomaticValueOn("outputs.spacingy");
-        AutomaticValueOff("outputs.sizex");
-        AutomaticValueOff("outputs.sizey");
-        AutomaticValueOn("outputs.lrx");
-        AutomaticValueOn("outputs.lry");
 
         // Adapat the status of the param to this mode
         MandatoryOff("outputs.ulx");
@@ -459,16 +413,6 @@ private:
           EnableParameter("outputs.lry");
           DisableParameter("outputs.ortho");
 
-          // Update the automatic value mode of each filed
-          AutomaticValueOff("outputs.ulx");
-          AutomaticValueOff("outputs.uly");
-          AutomaticValueOn("outputs.sizex");
-          AutomaticValueOn("outputs.sizey");
-          AutomaticValueOff("outputs.spacingx");
-          AutomaticValueOff("outputs.spacingy");
-          AutomaticValueOff("outputs.lrx");
-          AutomaticValueOff("outputs.lry");
-
           // Adapt the status of the param to this mode
           MandatoryOn("outputs.ulx");
           MandatoryOn("outputs.uly");
@@ -485,10 +429,10 @@ private:
           spacing[1] = GetParameterFloat("outputs.spacingy");
 
           // Set the  processed size relative to this forced spacing
-          if (vcl_abs(spacing[0]) > 0.0)
-            SetParameterInt("outputs.sizex",static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lrx")-GetParameterFloat("outputs.ulx"))/spacing[0])));
-          if (vcl_abs(spacing[1]) > 0.0)
-            SetParameterInt("outputs.sizey",static_cast<int>(vcl_ceil((GetParameterFloat("outputs.lry")-GetParameterFloat("outputs.uly"))/spacing[1])));
+          if (std::abs(spacing[0]) > 0.0)
+            SetParameterInt("outputs.sizex",static_cast<int>(std::ceil((GetParameterFloat("outputs.lrx")-GetParameterFloat("outputs.ulx"))/spacing[0])));
+          if (std::abs(spacing[1]) > 0.0)
+            SetParameterInt("outputs.sizey",static_cast<int>(std::ceil((GetParameterFloat("outputs.lry")-GetParameterFloat("outputs.uly"))/spacing[1])));
         }
         break;
         case Mode_OrthoFit:
@@ -517,16 +461,6 @@ private:
 
           if (HasValue("outputs.ortho"))
           {
-            // Automatic set to on
-            AutomaticValueOn("outputs.ulx");
-            AutomaticValueOn("outputs.uly");
-            AutomaticValueOn("outputs.sizex");
-            AutomaticValueOn("outputs.sizey");
-            AutomaticValueOn("outputs.spacingx");
-            AutomaticValueOn("outputs.spacingy");
-            AutomaticValueOn("outputs.lrx");
-            AutomaticValueOn("outputs.lry");
-
             // input image
             FloatVectorImageType::Pointer inOrtho = GetParameterImage("outputs.ortho");
 
@@ -586,7 +520,7 @@ private:
                          << ygridspacing << " degrees" );
 
           // Use the smallest spacing (more precise grid)
-          double optimalSpacing = std::min( vcl_abs(xgridspacing), vcl_abs(ygridspacing) );
+          double optimalSpacing = std::min( std::abs(xgridspacing), std::abs(ygridspacing) );
           otbAppLogINFO( "Setting grid spacing to " << optimalSpacing );
           SetParameterFloat("opt.gridspacing",optimalSpacing);
           }
@@ -629,23 +563,18 @@ private:
       {
       case Interpolator_Linear:
       {
-      typedef itk::LinearInterpolateImageFunction<FloatVectorImageType,
-        double>          LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_ResampleFilter->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
       {
-      typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType,
-        double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_ResampleFilter->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
       {
-      typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>     BCOInterpolationType;
       BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_ResampleFilter->SetInterpolator(interpolator);
@@ -704,9 +633,9 @@ private:
 
       // Predict size of deformation grid
       ResampleFilterType::SpacingType deformationGridSize;
-      deformationGridSize[0] = static_cast<ResampleFilterType::SpacingType::ValueType >(vcl_abs(
+      deformationGridSize[0] = static_cast<ResampleFilterType::SpacingType::ValueType >(std::abs(
           GetParameterInt("outputs.sizex") * GetParameterFloat("outputs.spacingx") / GetParameterFloat("opt.gridspacing") ));
-      deformationGridSize[1] = static_cast<ResampleFilterType::SpacingType::ValueType>(vcl_abs(
+      deformationGridSize[1] = static_cast<ResampleFilterType::SpacingType::ValueType>(std::abs(
           GetParameterInt("outputs.sizey") * GetParameterFloat("outputs.spacingy") / GetParameterFloat("opt.gridspacing") ));
       otbAppLogINFO("Using a deformation grid of size " << deformationGridSize);
 
@@ -717,8 +646,8 @@ private:
             "opt.gridspacing units are the same as outputs.spacing units");
         }
 
-      if (vcl_abs(GetParameterFloat("opt.gridspacing")) < vcl_abs(GetParameterFloat("outputs.spacingx"))
-           || vcl_abs(GetParameterFloat("opt.gridspacing")) < vcl_abs(GetParameterFloat("outputs.spacingy")) )
+      if (std::abs(GetParameterFloat("opt.gridspacing")) < std::abs(GetParameterFloat("outputs.spacingx"))
+           || std::abs(GetParameterFloat("opt.gridspacing")) < std::abs(GetParameterFloat("outputs.spacingy")) )
         {
         otbAppLogWARNING("Spacing of deformation grid should be at least equal to "
             "spacing of output image. Otherwise, computation time will be slow, "

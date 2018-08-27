@@ -63,8 +63,8 @@ protected:
   ~CurlHelperStub() override {}
 
 private:
-  CurlHelperStub(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CurlHelperStub(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
 };

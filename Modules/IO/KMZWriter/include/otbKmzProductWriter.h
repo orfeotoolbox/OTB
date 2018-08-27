@@ -21,7 +21,6 @@
 #ifndef otbKmzProductWriter_h
 #define otbKmzProductWriter_h
 
-#include <fstream>
 
 #include "itkObjectFactory.h"
 
@@ -40,6 +39,7 @@
 // Possibility to includes vectordatas necessary includes
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
+#include <string>
 
 
 namespace otb
@@ -177,8 +177,8 @@ protected:
   virtual void Write();
 
 private:
-  KmzProductWriter(const Self &); //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  KmzProductWriter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
    /** Mehtod to initialize the variables*/
    virtual void Initialize();
@@ -320,7 +320,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKmzProductWriter.txx"
+#include "otbKmzProductWriter.hxx"
 #endif
 
 #endif

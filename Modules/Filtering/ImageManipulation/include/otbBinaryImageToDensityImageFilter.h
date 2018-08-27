@@ -90,8 +90,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BinaryImageToDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryImageToDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   CountFunctionPointerType m_CountFunction;
 
@@ -102,7 +102,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryImageToDensityImageFilter.txx"
+#include "otbBinaryImageToDensityImageFilter.hxx"
 #endif
 
 #endif

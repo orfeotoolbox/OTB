@@ -19,7 +19,10 @@
  * limitations under the License.
  */
 
+#include <iostream>
+
 #include "otbStandardWriterWatcher.h"
+#include "otbStopwatch.h"
 
 namespace otb
 {
@@ -159,9 +162,9 @@ StandardWriterWatcher
 ::EndWriter()
 {
   m_Stopwatch.Stop();
-  std::cout << std::endl << "Writing task took "
-            << m_Stopwatch.GetElapsedMilliseconds() / 1000
-            << " seconds." << std::endl;
+  std::cout << std::endl << "Writing task took ";
+  m_Stopwatch.GetElapsedHumanReadableTime(std::cout);
+  std::cout << std::endl;
 }
 
 } // end namespace otb

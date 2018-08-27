@@ -65,7 +65,7 @@ REF_SIZE=0
 REF_SIZE=$(nb_report_lines)
 
 # Check 1 : check binaries
-OTB_SO_LIBRARIES=$(find lib -name '*.so*')
+OTB_SO_LIBRARIES=$(find lib -name '*.so*' | grep -v 'python')
 OTB_DY_LIBRARIES=$(find lib -name '*.dylib')
 OTB_EXE="bin/mapla bin/monteverdi bin/otbApplicationLauncherQt bin/otbApplicationLauncherCommandLine"
 for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
@@ -217,7 +217,7 @@ else
 fi
 
 grep_cmd=$(which grep)
-grep_out=$($grep_cmd -Rs "/usr/" "$CUR_DIR/lib/cmake/")
+grep_out=$($grep_cmd -Rs "/usr/" "$CUR_DIR/lib/cmake/" | $grep_cmd -v "/usr/include/libdrm")
 grep_ret=$?
 if [ $grep_ret -ne 1 ]; then
     echo "Check 4/4 : FAIL"

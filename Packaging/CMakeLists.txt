@@ -141,7 +141,6 @@ include(install_include_dirs)
 include(install_importlibs)
 include(install_python_bindings)
 include(install_java_bindings)
-include(install_qgis_bindings)
 include(install_share_dirs)
 include(install_cmake_files)
 include(install_qtdev_files)
@@ -193,12 +192,7 @@ if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar")
   set(HAVE_JAVA TRUE)
 endif()
 
-set(HAVE_QGIS FALSE CACHE INTERNAL "QGIS wrappings")
-if(IS_DIRECTORY "${SUPERBUILD_INSTALL_DIR}/descriptors")
-  set(HAVE_QGIS TRUE)
-endif()
-
-  #only for *nix
+#only for *nix
 if(UNIX)
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks   "#!/bin/sh\n")
 endif()
@@ -222,8 +216,6 @@ install_importlibs()
 install_python_bindings()
 
 install_java_bindings()
-
-install_qgis_bindings()
 
 install_share_dirs()
 

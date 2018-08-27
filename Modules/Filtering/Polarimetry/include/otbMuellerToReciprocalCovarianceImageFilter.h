@@ -91,10 +91,10 @@ public:
 
     
     const ComplexType A(0.5*(M11+M22+2*M12));
-    const ComplexType B(0.5*vcl_sqrt(2.0)*(M13+M23), 0.5*vcl_sqrt(2.0)*(M14+M24));
+    const ComplexType B(0.5*std::sqrt(2.0)*(M13+M23), 0.5*std::sqrt(2.0)*(M14+M24));
     const ComplexType C(-0.5*(M33+M44), -M34);
     const ComplexType E(M11-M22, 0.0);
-    const ComplexType F(0.5*vcl_sqrt(2.0)*(M13-M23), 0.5*vcl_sqrt(2.0)*(M14-M24));
+    const ComplexType F(0.5*std::sqrt(2.0)*(M13-M23), 0.5*std::sqrt(2.0)*(M14-M24));
     const ComplexType I(0.5*(M11+M22-2*M12));
 
     result[0] = static_cast<OutputValueType>( A );
@@ -161,8 +161,8 @@ protected:
   ~MuellerToReciprocalCovarianceImageFilter() override {}
 
 private:
-  MuellerToReciprocalCovarianceImageFilter(const Self&); // purposely not implemented
-  void operator=(const Self&);          // purposely not implemented
+  MuellerToReciprocalCovarianceImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

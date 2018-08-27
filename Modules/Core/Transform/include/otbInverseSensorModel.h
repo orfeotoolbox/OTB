@@ -87,15 +87,15 @@ protected:
 
 private:
 
-  InverseSensorModel(const Self &); //purposely not implemented
-  void operator =(const Self&);     //purposely not implemented
+  InverseSensorModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbInverseSensorModel.txx"
+#include "otbInverseSensorModel.hxx"
 #endif
 
 #endif

@@ -156,8 +156,8 @@ protected:
   std::vector<FunctorType> m_FunctorList;
 
 private:
-  UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputImageSizeType m_Radius;
 
@@ -169,7 +169,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.txx"
+#include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.hxx"
 #endif
 
 #endif

@@ -64,8 +64,8 @@ protected:
   ~SarImageMetadataInterfaceFactory() override;
 
 private:
-  SarImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarImageMetadataInterfaceFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

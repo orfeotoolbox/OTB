@@ -21,6 +21,9 @@
 #ifndef otbUtils_h
 #define otbUtils_h
 
+#include <sstream>
+#include <string>
+
 #include "itkMacro.h"
 #include "OTBCommonExport.h"
 

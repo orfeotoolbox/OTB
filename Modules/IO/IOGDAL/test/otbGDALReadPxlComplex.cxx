@@ -59,7 +59,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
   GDALAllRegister();
 
   poDataset = (GDALDataset *) GDALOpen( argv[1], GA_ReadOnly );
-  if( poDataset == ITK_NULLPTR )
+  if( poDataset == nullptr )
     return EXIT_FAILURE;
 
   // Get some information from file
@@ -91,7 +91,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
                                        loadBuffer, // pData
                                        sizeX, sizeY,
                                        pxlTypeInFile,
-                                       nbBand, ITK_NULLPTR,
+                                       nbBand, nullptr,
                                        pixelOffset, lineOffset, bandOffset);
   // Check if gdal call succeed
   if (lCrGdal == CE_Failure)

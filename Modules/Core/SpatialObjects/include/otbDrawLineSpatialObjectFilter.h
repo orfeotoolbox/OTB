@@ -107,8 +107,8 @@ protected:
   void GenerateData() override;
 
 private:
-  DrawLineSpatialObjectFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DrawLineSpatialObjectFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputPixelType m_Value;
 
@@ -118,7 +118,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDrawLineSpatialObjectFilter.txx"
+#include "otbDrawLineSpatialObjectFilter.hxx"
 #endif
 
 #endif

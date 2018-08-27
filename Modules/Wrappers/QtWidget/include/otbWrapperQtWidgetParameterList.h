@@ -22,9 +22,7 @@
 #define otbWrapperQtWidgetParameterList_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #  include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -48,7 +46,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterList : public QtWidgetParameterBase
 //
 // Public methods.
 public:
-  QtWidgetParameterList( AbstractParameterList *, QtWidgetModel * );
+  QtWidgetParameterList( AbstractParameterList *, QtWidgetModel * , QWidget*);
   ~QtWidgetParameterList() override;
 
 //
@@ -59,8 +57,8 @@ signals:
 //
 // Private methods.
 private:
-  QtWidgetParameterList( const QtWidgetParameterList & ); // purposely not implemented
-  void operator = (const QtWidgetParameterList & ); // purposely not implemented
+  QtWidgetParameterList( const QtWidgetParameterList & ) = delete;
+  void operator = (const QtWidgetParameterList & ) = delete;
 
   void DoCreateWidget() override;
 

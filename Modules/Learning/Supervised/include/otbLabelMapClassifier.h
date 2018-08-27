@@ -97,8 +97,8 @@ protected:
 
 
 private:
-  LabelMapClassifier(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapClassifier(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The learning model used for classification */
   ModelPointer m_Model;
@@ -111,7 +111,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapClassifier.txx"
+#include "otbLabelMapClassifier.hxx"
 #endif
 
 #endif

@@ -26,7 +26,6 @@
 #ifndef DopplerCentroidEstimateRecord_h
 #define DopplerCentroidEstimateRecord_h
 
-#include <iostream>
 
 #include <RadarSat/RadarSatRecord.h>
 

@@ -220,9 +220,9 @@ StackedLayerModel
 /*****************************************************************************/
 void
 StackedLayerModel
-::Delete( SizeType index )
+::Deleting( unsigned int index )
 {
-  // qDebug() << this << "::Delete(" << index << ")";
+    // qDebug() << this << "::Delete(" << index << ")";
 
 
   //
@@ -297,7 +297,7 @@ StackedLayerModel
       index>m_Reference
       ? m_Reference
       : ( m_Reference > 0
-	  ? m_Reference - 1
+    ? m_Reference - 1
           : GetCount() > 0 ? 0 : StackedLayerModel::NIL_INDEX ),
       true
     );
@@ -309,8 +309,14 @@ StackedLayerModel
     delete layer;
     layer = NULL;
     }
+}
 
-  //
+void
+StackedLayerModel
+::Delete( SizeType index )
+{
+  // the work of deleting model is now done in the above function
+  // Deleting(unsigned int index)
   // Emit signals.
   emit LayerDeleted( index );
   emit ContentChanged();

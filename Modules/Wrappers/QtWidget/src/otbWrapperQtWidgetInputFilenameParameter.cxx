@@ -28,17 +28,31 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetInputFilenameParameter::QtWidgetInputFilenameParameter(InputFilenameParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetInputFilenameParameter::QtWidgetInputFilenameParameter(InputFilenameParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_FilenameParam(param),
-  m_HLayout( ITK_NULLPTR ),
-  m_Input( ITK_NULLPTR ),
-  m_Button( ITK_NULLPTR )
+  m_HLayout( nullptr ),
+  m_Input( nullptr ),
+  m_Button( nullptr )
 {
 }
 
 QtWidgetInputFilenameParameter::~QtWidgetInputFilenameParameter()
 {
+}
+
+const QLineEdit*
+QtWidgetInputFilenameParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetInputFilenameParameter
+::GetInput()
+{
+  return m_Input;
 }
 
 void QtWidgetInputFilenameParameter::DoUpdateGUI()
@@ -64,8 +78,8 @@ void QtWidgetInputFilenameParameter::DoCreateWidget()
   m_Input->setToolTip(
     QString::fromStdString( m_FilenameParam->GetDescription() )
   );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetInputFilenameParameter::SetFileName );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   m_HLayout->addWidget(m_Input);
 
@@ -74,7 +88,7 @@ void QtWidgetInputFilenameParameter::DoCreateWidget()
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetInputFilenameParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);

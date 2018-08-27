@@ -178,7 +178,7 @@ protected:
   ~NeuralNetworkMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
   
   void LabelsToMat(const TargetListSampleType * listSample, cv::Mat & output);
 
@@ -186,8 +186,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  NeuralNetworkMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NeuralNetworkMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void CreateNetwork();
   void SetupNetworkAndTrain(cv::Mat& labels);
@@ -217,7 +217,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNeuralNetworkMachineLearningModel.txx"
+#include "otbNeuralNetworkMachineLearningModel.hxx"
 #endif
 
 #endif

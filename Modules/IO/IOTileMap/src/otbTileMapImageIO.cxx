@@ -107,7 +107,7 @@ TileMapImageIO::~TileMapImageIO()
 bool TileMapImageIO::CanReadFile(const char* file)
 {
   // First check the extension
-  if (file == ITK_NULLPTR)
+  if (file == nullptr)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
@@ -148,7 +148,7 @@ void TileMapImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 void TileMapImageIO::Read(void* buffer)
 {
   unsigned char * p = static_cast<unsigned char *>(buffer);
-  if (p == ITK_NULLPTR)
+  if (p == nullptr)
     {
     itkExceptionMacro(<< "Memory allocation error");
     return;
@@ -229,7 +229,7 @@ void TileMapImageIO::GenerateTileInfo(double x, double y, int numTileX, int numT
 bool TileMapImageIO::CanReadFromCache(const std::string& filename)
 {
   // Verify that the file exists and is not a directory
-  bool fileExists = itksys::SystemTools::FileExists(filename.c_str(), true);
+  bool fileExists = itksys::SystemTools::FileExists(filename, true);
   if (!fileExists)
     {
     return false;
@@ -272,9 +272,9 @@ void TileMapImageIO::GenerateURL(double x, double y)
     {
     urlStream << m_ServerName;
     urlStream << "hl=en&x=";
-    urlStream << vcl_floor(x * (1 << m_Depth));
+    urlStream << std::floor(x * (1 << m_Depth));
     urlStream << "&y=";
-    urlStream << vcl_floor(y * (1 << m_Depth));
+    urlStream << std::floor(y * (1 << m_Depth));
     urlStream << "&z=";
     urlStream << m_Depth;
     urlStream << "&nml=Vert&s=Ga";
@@ -355,7 +355,7 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
 void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
 {
   otbMsgDevMacro(<< "Retrieving " << filename);
-  unsigned char *           bufferCacheFault = ITK_NULLPTR;
+  unsigned char *           bufferCacheFault = nullptr;
 
   otb::ImageIOBase::Pointer imageIO;
   imageIO = otb::GDALImageIO::New();
@@ -364,7 +364,7 @@ void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
 
   if (lCanRead == true)
     {
-    imageIO->SetFileName(filename.c_str());
+    imageIO->SetFileName(filename);
     imageIO->ReadImageInformation();
     itk::ImageIORegion ioRegion(2);
     ioRegion.SetIndex(0, 0);
@@ -402,7 +402,7 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
     ++i;
     }
 
-  itksys::SystemTools::MakeDirectory(directory.str().c_str());
+  itksys::SystemTools::MakeDirectory(directory.str());
 
   filename << directory.str();
   filename << "/";
@@ -439,7 +439,7 @@ void TileMapImageIO::ReadImageInformation()
 
   if (!m_FileNameIsServerName)
     {
-    std::ifstream file(m_FileName.c_str(), std::ifstream::in);
+    std::ifstream file(m_FileName, std::ifstream::in);
     std::getline(file, m_ServerName);
     if  (m_ServerName.find("http://") != 0)
       {
@@ -531,7 +531,7 @@ void TileMapImageIO::ReadImageInformation()
 bool TileMapImageIO::CanWriteFile(const char* name)
 {
   // First if filename is provided
-  if (name == ITK_NULLPTR)
+  if (name == nullptr)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
@@ -556,7 +556,7 @@ void TileMapImageIO::Write(const void* buffer)
 {
 
   const unsigned char * p = static_cast<const unsigned char *>(buffer);
-  if (p == ITK_NULLPTR)
+  if (p == nullptr)
     {
     itkExceptionMacro(<< "Memory allocation error");
     return;
@@ -672,7 +672,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
   if (lCanWrite)
     {
-    itksys::SystemTools::RemoveFile(filename.str().c_str());
+    itksys::SystemTools::RemoveFile(filename.str());
 
     imageIO->CanStreamWrite();
     imageIO->SetNumberOfDimensions(2);
@@ -695,7 +695,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
     imageIO->SetUseCompression(1);
 
-    imageIO->SetFileName(filename.str().c_str());
+    imageIO->SetFileName(filename.str());
     imageIO->WriteImageInformation();
 
     itk::ImageIORegion ioRegion(2);
@@ -844,13 +844,13 @@ void TileMapImageIO::SetCacheDirectory(const char* _arg)
       {
          std::ostringstream oss;
          oss<<_arg<<"/foo";
-         if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
+         if( itksys::SystemTools::Touch( oss.str(), true ) == false )
          {
             itkExceptionMacro( "Error, no write permission in given CacheDirectory "<<_arg<<".");
          }
          else
          {
-            itksys::SystemTools::RemoveFile( oss.str().c_str() );
+            itksys::SystemTools::RemoveFile( oss.str() );
          }
       }
       // if existing file

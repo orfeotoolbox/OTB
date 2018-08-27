@@ -92,15 +92,15 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  WaveletsBandsListToWaveletsSynopsisImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WaveletsBandsListToWaveletsSynopsisImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The decimation ratio used in the decomposition */
   unsigned int m_DecimationRatio;
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.txx"
+#include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.hxx"
 #endif
 
 #endif

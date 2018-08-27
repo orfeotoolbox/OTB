@@ -35,7 +35,6 @@
 #include <ossim/base/ossimDpt.h>
 #include <EnvisatAsar/EnvisatAsarData.h>
 
-#include <iostream>
 
 namespace ossimplugins
 {

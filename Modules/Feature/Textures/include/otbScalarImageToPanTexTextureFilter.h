@@ -121,8 +121,8 @@ protected:
   void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId) override;
 
 private:
-  ScalarImageToPanTexTextureFilter(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ScalarImageToPanTexTextureFilter(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** Convenient method to compute union of 2 regions */
   static OutputRegionType RegionUnion(const OutputRegionType& region1, const OutputRegionType& region2);
@@ -146,7 +146,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbScalarImageToPanTexTextureFilter.txx"
+#include "otbScalarImageToPanTexTextureFilter.hxx"
 #endif
 
 #endif

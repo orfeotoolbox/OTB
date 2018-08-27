@@ -95,8 +95,8 @@ protected:
   }
 
 private:
-  MorphologicalOpeningProfileFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MorphologicalOpeningProfileFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #endif

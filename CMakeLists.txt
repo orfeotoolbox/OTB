@@ -23,7 +23,8 @@ cmake_minimum_required(VERSION 3.1.0)
 foreach(p
     CMP0025 # CMake 3.0
     CMP0042 # CMake 3.0
-    CMP0058
+    CMP0058 # CMake 3.3
+    CMP0072 # CMake 3.11
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -91,6 +92,8 @@ if( CMAKE_HOST_WIN32 )
   endif()
 
 endif()
+set(OTB_APPLICATIONS_NAME_LIST "" CACHE STRING "List of all applications" FORCE)
+mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 
 set(OTB_CMAKE_DIR ${OTB_SOURCE_DIR}/CMake)
 set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
@@ -165,10 +168,11 @@ if(NOT OTB_INSTALL_JAVA_DIR)
   set(OTB_INSTALL_JAVA_DIR "lib/otb/java")
 endif()
 if(NOT OTB_INSTALL_DATA_DIR)
-  set(OTB_INSTALL_DATA_DIR share/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  set(OTB_INSTALL_DATA_DIR "share/otb")
 endif()
+
 if(NOT OTB_INSTALL_DOC_DIR)
-  set(OTB_INSTALL_DOC_DIR share/doc/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  set(OTB_INSTALL_DOC_DIR "share/doc/otb")
 endif()
 if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
@@ -229,7 +233,14 @@ endif()
 option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
 mark_as_advanced(OTB_USE_DEPRECATED)
 
+# Although the OpenMP option looks like a 3rd party module, it is NOT. This option
+# is handled with other compilation flags in file OTBSetStandardCompilerFlags.cmake
+# before any module is parsed or enabled (see OTBModuleEnablement.cmake later on
+# during configure). Trying to modify this option from any module is
+# useless. Any 3rd party module dragging OpenMP should append
+# the corresponding flags to CMAKE_CXX_FLAGS, CMAKE_EXE_LINKER_FLAGS, and so on.
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
+
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
 
 include(OTBSetStandardCompilerFlags)
@@ -418,11 +429,13 @@ install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
 
 # TODO : install release notes, copyright notice, ...
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
-install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 # Configure and install VERSION file
 configure_file(VERSION VERSION @ONLY)
-install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} )
+
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
 
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)

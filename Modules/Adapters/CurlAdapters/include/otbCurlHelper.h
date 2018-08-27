@@ -22,6 +22,7 @@
 #define otbCurlHelper_h
 
 #include "otbCurlHelperInterface.h"
+#include <string>
 
 namespace otb
 {
@@ -74,8 +75,8 @@ protected:
   ~CurlHelper() override {}
 
 private:
-  CurlHelper(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CurlHelper(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Need to use our writing function to handle windows segfaults
   // Need to be static cause the CURL_OPT is expecting a pure C

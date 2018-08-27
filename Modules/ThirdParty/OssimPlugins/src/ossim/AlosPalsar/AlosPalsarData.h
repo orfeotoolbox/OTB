@@ -27,7 +27,6 @@
 #ifndef AlosPalsarData_h
 #define AlosPalsarData_h
 
-#include <iostream>
 #include <map>
 
 class ossimKeywordlist;

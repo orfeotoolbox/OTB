@@ -151,7 +151,7 @@ protected:
 
 private:
   SOMbasedImageFilter (const Self &);
-  void operator =(const Self&); //purposely not implemented
+  void operator =(const Self&) = delete;
 
   MapPointerType m_Map;
 
@@ -160,7 +160,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMbasedImageFilter.txx"
+#include "otbSOMbasedImageFilter.hxx"
 #endif
 
 #endif

@@ -23,10 +23,8 @@
 
 #include <QtWidgets>
 #include <QTimer>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperApplication.h"
 #include "otbQtLogOutput.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -39,14 +37,14 @@ class OTBQtWidget_EXPORT AppliThread : public QThread
  Q_OBJECT
 
  public:
-  inline AppliThread(Application* app)
+  AppliThread(Application* app)
     {
       m_Application = app;
     }
 
   ~AppliThread() override;
 
-  inline void Execute()
+  void Execute()
   {
     // Call the signal start to begin running the program
     start();
@@ -79,8 +77,8 @@ protected:
   void run() override;
 
 private:
-  AppliThread(const AppliThread&); //purposely not implemented
-  void operator=(const AppliThread&); //purposely not implemented
+  AppliThread(const AppliThread&) = delete;
+  void operator=(const AppliThread&) = delete;
 
   Application::Pointer m_Application;
 };
@@ -148,24 +146,19 @@ signals:
 
   void Stop();
 
-protected slots:
-  /**
-   * \brief Slot called when execution is requested (e.g. by
-   * otb::Wrapper::QtWidgetView).
-   *
-   * This slot is protected so it can only be called via Qt
-   * signal/slot mechanism and not directly by extern caller.
-   */
-  void ExecuteAndWriteOutputSlot();
-
+public slots:
   /**
    * \brief Slots called every time one of the widget needs to be
    * updated (e.g. by specialized parameter widgets).
    *
-   * This slot is protected so it can only be called via Qt
-   * signal/slot mechanism and not directly by extern caller.
    */
   void NotifyUpdate();
+
+  /**
+   * \brief Slot called when execution is requested (e.g. by
+   * otb::Wrapper::QtWidgetView).
+   */
+  void ExecuteAndWriteOutputSlot();
 
 private slots:
   /**
@@ -178,8 +171,8 @@ private slots:
   void TimerDone();
 
 private:
-  QtWidgetModel(const QtWidgetModel&); //purposely not implemented
-  void operator=(const QtWidgetModel&); //purposely not implemented
+  QtWidgetModel(const QtWidgetModel&) = delete;
+  void operator=(const QtWidgetModel&) = delete;
 
   Application::Pointer m_Application;
 

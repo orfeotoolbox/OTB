@@ -68,8 +68,8 @@ protected:
   {}
 
 private:
-  RadiusParameter(const RadiusParameter &); //purposely not implemented
-  void operator =(const RadiusParameter&); //purposely not implemented
+  RadiusParameter(const RadiusParameter &) = delete;
+  void operator =(const RadiusParameter&) = delete;
 
 };
 

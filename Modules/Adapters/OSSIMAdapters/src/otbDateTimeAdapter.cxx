@@ -32,7 +32,7 @@ DateTimeAdapter::DateTimeAdapter()
 
 DateTimeAdapter::~DateTimeAdapter()
 {
-  if (m_LocalTm != ITK_NULLPTR)
+  if (m_LocalTm != nullptr)
     {
     delete m_LocalTm;
     }

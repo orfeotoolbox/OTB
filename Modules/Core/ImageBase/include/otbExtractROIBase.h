@@ -166,8 +166,8 @@ protected:
   OutputImageRegionType m_OutputImageRegion;
 
 private:
-  ExtractROIBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ExtractROIBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
@@ -181,7 +181,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbExtractROIBase.txx"
+#include "otbExtractROIBase.hxx"
 #endif
 
 #endif

@@ -40,12 +40,12 @@ typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType                 MapO
 int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &mapOfClassesRefClX, ConfusionMatrixType &confusionMatrixClX)
   {
     std::ifstream inFile;
-    inFile.open(fileName.c_str());
+    inFile.open(fileName);
 
     if (!inFile)
       {
       std::cerr << "Confusion Matrix File opening problem with file:" << std::endl;
-      std::cerr << fileName.c_str() << std::endl;
+      std::cerr << fileName << std::endl;
       return EXIT_FAILURE;
       }
     else
@@ -158,33 +158,6 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &m
 
 
 
-int otbDSFusionOfClassifiersImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  const  unsigned int Dimension = 2;
-
-  typedef otb::VectorImage<PixelType, Dimension>  VectorImageType;
-  typedef otb::Image<PixelType, Dimension>        OutputImageType;
-  typedef otb::Image<unsigned int, Dimension>     MaskType;
-
-  // filter types
-  typedef otb::DSFusionOfClassifiersImageFilter<VectorImageType, OutputImageType, MaskType>
-      DSFusionOfClassifiersImageFilter3TemplatesType;
-  typedef otb::DSFusionOfClassifiersImageFilter<VectorImageType, OutputImageType>
-      DSFusionOfClassifiersImageFilter2TemplatesType;
-
-  // filters
-  DSFusionOfClassifiersImageFilter3TemplatesType::Pointer
-      dsFusionOfClassifiersImageFilter3Templates = DSFusionOfClassifiersImageFilter3TemplatesType::New();
-  DSFusionOfClassifiersImageFilter2TemplatesType::Pointer
-      dsFusionOfClassifiersImageFilter2Templates = DSFusionOfClassifiersImageFilter2TemplatesType::New();
-
-  std::cout << dsFusionOfClassifiersImageFilter3Templates << std::endl;
-  std::cout << std::endl;
-  std::cout << dsFusionOfClassifiersImageFilter2Templates << std::endl;
-  std::cout << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 
 

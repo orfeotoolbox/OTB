@@ -100,7 +100,7 @@ protected:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbROIdataConversion.txx"
+#include "otbROIdataConversion.hxx"
 #endif
 
 #endif

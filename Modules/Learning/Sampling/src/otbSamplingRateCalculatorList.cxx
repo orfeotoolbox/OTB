@@ -155,7 +155,7 @@ SamplingRateCalculatorList
               it->second > 0UL)
             {
             unsigned long curTotal = (curIt->second).Tot;
-            needed[it->first] = static_cast<unsigned long>(vcl_floor(
+            needed[it->first] = static_cast<unsigned long>(std::floor(
               static_cast<double>(nb[0]) *
               static_cast<double>(curTotal) /
               static_cast<double>(it->second)));
@@ -174,7 +174,7 @@ SamplingRateCalculatorList
       for (unsigned int i=0 ; i<this->Size() ; i++)
         {
         this->GetNthElement(i)->SetNbOfSamplesAllClasses(
-          static_cast<unsigned long>(vcl_floor(
+          static_cast<unsigned long>(std::floor(
             (double)nb[0] / (double)this->Size())));
         }
       break;
@@ -226,7 +226,7 @@ SamplingRateCalculatorList
               it->second > 0UL)
             {
             unsigned long curTotal = (curIt->second).Tot;
-            needed[it->first] = static_cast<unsigned long>(vcl_floor(
+            needed[it->first] = static_cast<unsigned long>(std::floor(
               static_cast<double>(inputIt->second) *
               static_cast<double>(curTotal) /
               static_cast<double>(it->second)));
@@ -255,7 +255,7 @@ SamplingRateCalculatorList
               it->second > 0UL)
             {
             unsigned long curTotal = (curIt->second).Tot;
-            unsigned long curNeeded = static_cast<unsigned long>(vcl_floor(
+            unsigned long curNeeded = static_cast<unsigned long>(std::floor(
               static_cast<double>(inputIt->second) /
               static_cast<double>(this->Size())));
             needed[it->first] = std::min(curTotal,curNeeded);
@@ -315,7 +315,7 @@ SamplingRateCalculatorList
       needed.clear();
       for (it = m_GlobalCountMap.begin(); it != m_GlobalCountMap.end() ; ++it)
         {
-        needed[it->first]=static_cast<unsigned long>(vcl_floor(0.5 + it->second * p[0] / (double)this->Size()));
+        needed[it->first]=static_cast<unsigned long>(std::floor(0.5 + it->second * p[0] / (double)this->Size()));
         }
 
       
@@ -381,7 +381,7 @@ SamplingRateCalculatorList
           {
           if (total_nb_samples != 0)
             {
-            this->GetNthElement(i)->SetTotalNumberOfSamples(vcl_floor(0.5+tot[0]*nb_samples[i]/static_cast<double>(total_nb_samples)));
+            this->GetNthElement(i)->SetTotalNumberOfSamples(std::floor(0.5+tot[0]*nb_samples[i]/static_cast<double>(total_nb_samples)));
             }
           else
             {
@@ -398,7 +398,7 @@ SamplingRateCalculatorList
         
       if (sampleListSize != 0)
         {
-        total_by_image = static_cast<unsigned long>(vcl_floor(tot[0]/static_cast<double>(sampleListSize)));
+        total_by_image = static_cast<unsigned long>(std::floor(tot[0]/static_cast<double>(sampleListSize)));
         }
 
       for (unsigned int i=0 ; i<sampleListSize ; i++)

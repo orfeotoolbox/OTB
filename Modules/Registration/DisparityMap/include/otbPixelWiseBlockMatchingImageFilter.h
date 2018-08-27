@@ -165,12 +165,12 @@ public:
     cov/=size-1;
     sigmaA/=size-1;
     sigmaB/=size-1;
-    sigmaA = vcl_sqrt(sigmaA);
-    sigmaB = vcl_sqrt(sigmaB);
+    sigmaA = std::sqrt(sigmaA);
+    sigmaB = std::sqrt(sigmaB);
 
     if(sigmaA > 1e-20 && sigmaB > 1e-20)
       {
-      ncc = vcl_abs(cov)/(sigmaA*sigmaB);
+      ncc = std::abs(cov)/(sigmaA*sigmaB);
       }
     else
       {
@@ -223,7 +223,7 @@ public:
     // For some reason, iterators do not work on neighborhoods
     for(unsigned int i = 0; i<a.Size(); ++i)
       {
-      score += vcl_pow( vcl_abs(static_cast<double>(a.GetPixel(i)-b.GetPixel(i))) , m_P);
+      score += std::pow( std::abs(static_cast<double>(a.GetPixel(i)-b.GetPixel(i))) , m_P);
       }
 
     return score;
@@ -462,7 +462,7 @@ protected:
   void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
+  PixelWiseBlockMatchingImageFilter(const Self&) = delete;
   void operator=(const Self&); //purposely not implemeFnted
 
   /** The radius of the blocks */
@@ -509,7 +509,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPixelWiseBlockMatchingImageFilter.txx"
+#include "otbPixelWiseBlockMatchingImageFilter.hxx"
 #endif
 
 #endif

@@ -198,8 +198,8 @@ protected:
   }
 
 private:
-  RationalTransform(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  RationalTransform(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Degree of numerator
   unsigned int m_NumeratorDegree;

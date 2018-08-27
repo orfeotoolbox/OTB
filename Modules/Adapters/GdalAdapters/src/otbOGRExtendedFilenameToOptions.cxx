@@ -48,10 +48,21 @@ GetGDALLayerOptionsHelper( const GDALOptionType & options )
   return res;
 }
 
+void
+OGRExtendedFilenameToOptions::
+SetExtendedFileName(const char* extFname)
+{
+  if (extFname == nullptr)
+  {
+    itkGenericExceptionMacro( << "Filename is NULL" );
+  }
+
+  this->SetExtendedFileName(std::string(extFname));
+}
 
 void
 OGRExtendedFilenameToOptions::
-SetExtendedFileName(const char *extFname)
+SetExtendedFileName(const std::string& extFname)
 {
   Superclass::SetExtendedFileName(extFname);
   m_HasFileName = true;

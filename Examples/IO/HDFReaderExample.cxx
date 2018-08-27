@@ -101,7 +101,7 @@ int main(int itkNotUsed(argc), char * argv[])
   // Software Guide : BeginCodeSnippet
   otb::GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
 
-  readerGDAL->SetFileName(inputFilename.c_str());
+  readerGDAL->SetFileName(inputFilename);
 
   std::vector<std::string> vectSubdatasetNames;
   std::vector<std::string> vectorSubdatasetDescriptions;
@@ -115,7 +115,7 @@ int main(int itkNotUsed(argc), char * argv[])
             vectorSubdatasetDescriptions.size(); itSubDataset++ )
         {
         std::cout << "Dataset Number " <<  itSubDataset << " name is: " << vectSubdatasetNames[itSubDataset].c_str()
-            << " and description is: " << vectSubdatasetNames[itSubDataset].c_str() << std::endl;
+            << " and description is: " << vectSubdatasetNames[itSubDataset] << std::endl;
         }
       }
     }
@@ -146,7 +146,7 @@ int main(int itkNotUsed(argc), char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  writer->SetFileName(outputFilename.c_str());
+  writer->SetFileName(outputFilename);
   writer->SetInput(reader->GetOutput());
 
   writer->Update();

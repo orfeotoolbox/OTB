@@ -79,7 +79,7 @@ public:
       lVIval = static_cast<ValueType>(std::max(0., m_VegetationFunctor(pInPix)));
       lWIval = static_cast<ValueType>(std::max(0., m_WaterFunctor(pInPix)));
 
-      lOutPix = vcl_sqrt(vcl_abs((1 - lVIval) * (1 - lWIval)));
+      lOutPix = std::sqrt(std::abs((1 - lVIval) * (1 - lWIval)));
       }
     else lOutPix = 0;
 
@@ -239,8 +239,8 @@ protected:
   ~UrbanAreaDetectionImageFilter() override{}
 
 private:
-  UrbanAreaDetectionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UrbanAreaDetectionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Filters */
   IntensityFilterPointerType          m_IntensityFilter;
@@ -262,7 +262,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUrbanAreaDetectionImageFilter.txx"
+#include "otbUrbanAreaDetectionImageFilter.hxx"
 #endif
 
 #endif

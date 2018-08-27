@@ -111,8 +111,8 @@ protected:
   void RegionGrowing(const IndexType indexSeed) override;
 
 private:
-  LabelizeNeighborhoodConnectedImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelizeNeighborhoodConnectedImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Delta + threshold for growing region */
   InputPixelType m_UpperThresholdDelta;
@@ -128,7 +128,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelizeNeighborhoodConnectedImageFilter.txx"
+#include "otbLabelizeNeighborhoodConnectedImageFilter.hxx"
 #endif
 
 #endif

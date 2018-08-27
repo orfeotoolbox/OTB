@@ -53,7 +53,7 @@ SpectralSensitivityReader
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<WavelengthSpectralBandVectorType *> (this->ProcessObject::GetOutput(0));
 }
@@ -64,7 +64,7 @@ SpectralSensitivityReader
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<const WavelengthSpectralBandVectorType *> (this->ProcessObject::GetOutput(0));
 }
@@ -120,12 +120,12 @@ SpectralSensitivityReader
 
   WavelengthSpectralBandVectorType * wavelengthSpectralBand = this->GetOutput();
 
-  if ( !itksys::SystemTools::FileExists(m_FileName.c_str()) )
+  if ( !itksys::SystemTools::FileExists(m_FileName) )
     {
     itkExceptionMacro(<< m_FileName << " does not exist.");
     }
 
-  std::ifstream file(m_FileName.c_str());
+  std::ifstream file(m_FileName);
   if (!file) itkExceptionMacro(<< "Enable to read " <<  m_FileName << " file.");
 
   std::string line;

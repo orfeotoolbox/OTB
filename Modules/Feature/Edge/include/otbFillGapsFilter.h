@@ -78,8 +78,8 @@ protected:
   void GenerateData() override;
 
 private:
-  FillGapsFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  FillGapsFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double m_AngularBeam;
   double m_Radius;

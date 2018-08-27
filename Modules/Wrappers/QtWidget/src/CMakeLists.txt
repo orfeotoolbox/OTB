@@ -58,6 +58,7 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetListEditItemModel.cxx
   otbWrapperQtWidgetParameterList.cxx
   otbWrapperQtWidgetBoolParameter.cxx
+  otbWrapperQtWidgetSpinBoxes.cxx
   )
 
 set(OTBQtWidget_MOC_HDR
@@ -99,19 +100,26 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetListEditItemModel.h
   ../include/otbWrapperQtWidgetParameterList.h
   ../include/otbWrapperQtWidgetBoolParameter.h
+  ../include/otbWrapperQtWidgetSpinBoxes.h
   )
 
 set( OTBQtWidget_FORMS
   otbWrapperQtWidgetListEditWidget.ui
   )
 
-qt5_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} )
+set( OTBQtWidget_RESOURCES
+  otbWrapperQtWidgetIcons.qrc
+  )
+
+qt5_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} OPTIONS -p "." )
 qt5_wrap_ui( OTBQtWidget_FORMS_HEADERS ${OTBQtWidget_FORMS} )
+qt5_add_resources( OTBQtWidget_RESOURCES_RCC ${OTBQtWidget_RESOURCES} OPTIONS "-no-compress")
 
 add_library( OTBQtWidget
   ${OTBQtWidget_SRC}
   ${OTBQtWidget_FORMS_HEADERS}
   ${OTBQtWidget_MOC_SRC}
+  ${OTBQtWidget_RESOURCES_RCC}
   )
 
 target_link_libraries( OTBQtWidget

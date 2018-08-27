@@ -24,6 +24,7 @@
 #include "otbPersistentImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbImage.h"
+#include <string>
 
 namespace otb
 {
@@ -206,8 +207,8 @@ protected:
   ogr::Layer GetInMemoryOutput(unsigned int threadId, unsigned int index=0);
 
 private:
-  PersistentSamplingFilterBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentSamplingFilterBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Field name containing the class name*/
   std::string m_FieldName;
@@ -237,7 +238,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentSamplingFilterBase.txx"
+#include "otbPersistentSamplingFilterBase.hxx"
 #endif
 
 #endif

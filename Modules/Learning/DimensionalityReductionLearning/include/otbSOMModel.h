@@ -118,7 +118,7 @@ private:
 
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const override;
+    ConfidenceValueType * quality = nullptr) const override;
 
   /** Map size (width, height) */
   SizeType m_MapSize;
@@ -149,7 +149,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMModel.txx"
+#include "otbSOMModel.hxx"
 #endif
 
 #endif

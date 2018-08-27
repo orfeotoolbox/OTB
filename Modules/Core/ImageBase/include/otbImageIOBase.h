@@ -28,6 +28,8 @@
 #include "vnl/vnl_vector.h"
 
 #include <string>
+#include <typeinfo>
+#include <vector>
 
 #include "OTBImageBaseExport.h"
 
@@ -549,8 +551,8 @@ protected:
                                                                const itk::ImageIORegion &pasteRegion) const;
 
 private:
-  ImageIOBase(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageIOBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ArrayOfExtensionsType    m_SupportedReadExtensions;
   ArrayOfExtensionsType    m_SupportedWriteExtensions;

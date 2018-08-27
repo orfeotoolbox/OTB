@@ -108,8 +108,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ProfileDerivativeToMultiScaleCharacteristicsFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ProfileDerivativeToMultiScaleCharacteristicsFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The initial value of the profile */
   LabeledPixelType m_InitialValue;
@@ -118,7 +118,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.txx"
+#include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.hxx"
 #endif
 
 #endif

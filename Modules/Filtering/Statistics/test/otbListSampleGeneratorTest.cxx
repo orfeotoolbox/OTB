@@ -27,17 +27,6 @@
 
 #include "otbListSampleGenerator.h"
 
-int otbListSampleGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::VectorImage<float, 2>                          ImageType;
-  typedef otb::VectorData<double, 2>                          VectorDataType;
-  typedef otb::ListSampleGenerator<ImageType, VectorDataType> ListSampleGeneratorType;
-  ListSampleGeneratorType::Pointer generator = ListSampleGeneratorType::New();
-
-  std::cout << generator << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbListSampleGenerator(int argc, char* argv[])
 {
@@ -102,7 +91,7 @@ int otbListSampleGenerator(int argc, char* argv[])
     typedef ListSampleGeneratorType::ListLabelType::ConstIterator  LabelIterator;
 
     std::ofstream trainingFile;
-    trainingFile.open(outputSampleList.c_str());
+    trainingFile.open(outputSampleList);
 
     SampleIterator sampleIt = samples->Begin();
     LabelIterator  labelIt = labels->Begin();
@@ -131,7 +120,7 @@ int otbListSampleGenerator(int argc, char* argv[])
     typedef ListSampleGeneratorType::ListLabelType::ConstIterator  LabelIterator;
 
     std::ofstream validationFile;
-    validationFile.open(outputSampleListValidation.c_str());
+    validationFile.open(outputSampleListValidation);
 
     SampleIterator sampleIt = samples->Begin();
     LabelIterator  labelIt = labels->Begin();

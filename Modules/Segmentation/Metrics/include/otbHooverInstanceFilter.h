@@ -26,6 +26,7 @@
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
+#include <string>
 
 namespace otb
 {
@@ -281,7 +282,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHooverInstanceFilter.txx"
+#include "otbHooverInstanceFilter.hxx"
 #endif
 
 #endif

@@ -26,8 +26,8 @@
 #ifndef SRGRCoefficientSetRecord_h
 #define SRGRCoefficientSetRecord_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

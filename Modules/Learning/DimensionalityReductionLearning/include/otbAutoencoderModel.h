@@ -22,7 +22,7 @@
 
 #include "otbMachineLearningModelTraits.h"
 #include "otbMachineLearningModel.h"
-#include <fstream>
+#include <string>
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -154,14 +154,14 @@ protected:
 
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = ITK_NULLPTR) const override;
+    ConfidenceValueType * quality = nullptr) const override;
 
   virtual void DoPredictBatch(
     const InputListSampleType *,
     const unsigned int & startIndex,
     const unsigned int & size,
     TargetListSampleType *,
-    ConfidenceListSampleType * quality = ITK_NULLPTR) const override;
+    ConfidenceListSampleType * quality = nullptr) const override;
 
 private:
   /** Internal Network */
@@ -179,14 +179,14 @@ private:
   itk::Array<double> m_Beta; // Sparsity regularization parameter
   double m_InitFactor; // Weight initialization factor (the weights are intialized at m_initfactor/sqrt(inputDimension)  )
 
-  bool m_WriteLearningCurve; // Flag for writting the learning curve into a txt file
+  bool m_WriteLearningCurve; // Flag for writing the learning curve into a txt file
   std::string m_LearningCurveFileName; // Name of the output learning curve printed after training
   bool m_WriteWeights;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAutoencoderModel.txx"
+#include "otbAutoencoderModel.hxx"
 #endif
 
 #endif

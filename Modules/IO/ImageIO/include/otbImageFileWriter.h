@@ -26,6 +26,7 @@
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
 #include "itkFastMutexLock.h"
+#include <string>
 
 namespace otb
 {
@@ -171,9 +172,11 @@ public:
    *  has no output. */
   void Update() override;
 
-  /** ImageFileWriter Methods */
+  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
   virtual void SetFileName(const char* extendedFileName);
-  virtual void SetFileName(std::string extendedFileName);
+
+  virtual void SetFileName(const std::string& extendedFileName);
+
   virtual const char* GetFileName () const;
 
   /** Specify the region to write. If left NULL, then the whole image
@@ -217,8 +220,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  ImageFileWriter(const ImageFileWriter &); //purposely not implemented
-  void operator =(const ImageFileWriter&); //purposely not implemented
+  ImageFileWriter(const ImageFileWriter &) = delete;
+  void operator =(const ImageFileWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {
@@ -287,7 +290,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFileWriter.txx"
+#include "otbImageFileWriter.hxx"
 #endif
 
 #endif

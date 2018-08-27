@@ -26,6 +26,7 @@
 #include "otbSamplingRateCalculator.h"
 #include "otbPeriodicSampler.h"
 #include "otbImage.h"
+#include <string>
 
 namespace otb
 {
@@ -143,8 +144,8 @@ protected:
   void FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update) override;
 
 private:
-  PersistentOGRDataToSamplePositionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentOGRDataToSamplePositionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void ComputeClassPartition(void);
 
@@ -262,14 +263,14 @@ protected:
   ~OGRDataToSamplePositionFilter() override {}
 
 private:
-  OGRDataToSamplePositionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OGRDataToSamplePositionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataToSamplePositionFilter.txx"
+#include "otbOGRDataToSamplePositionFilter.hxx"
 #endif
 
 #endif

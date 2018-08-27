@@ -96,7 +96,7 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8VertexBase.txx"
+#include "otbRCC8VertexBase.hxx"
 #endif
 
 #endif

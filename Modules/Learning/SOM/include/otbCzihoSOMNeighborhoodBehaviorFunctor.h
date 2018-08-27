@@ -67,7 +67,7 @@ public:
                                     const itk::Size<VDimension>& sizeInit) const
   {
     itk::Size<VDimension> theSize;
-    double                weightening = ::vcl_pow(1.0
+    double                weightening = ::std::pow(1.0
                                                   - static_cast<double>(currentIteration)
                                                   / static_cast<double>(numberOfIterations),
                                                   2.0);

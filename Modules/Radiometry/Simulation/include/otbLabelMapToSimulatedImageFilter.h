@@ -28,6 +28,7 @@
 #include "otbReduceSpectralResponse.h"
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include "otbSatelliteRSR.h"
+#include <string>
 
 
 namespace otb
@@ -129,8 +130,8 @@ protected:
 
 
 private:
-   LabelMapToSimulatedImageFilter(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
+   LabelMapToSimulatedImageFilter(const Self &) = delete;
+   void operator =(const Self&) = delete;
 
    unsigned int m_NumberOfComponentsPerPixel;
    std::string m_SatRSRFilename;
@@ -146,7 +147,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapToSimulatedImageFilter.txx"
+#include "otbLabelMapToSimulatedImageFilter.hxx"
 #endif
 
 #endif

@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetInputVectorDataParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,19 +40,19 @@ class OTBQtWidget_EXPORT QtWidgetInputVectorDataParameter : public QtWidgetParam
 {
   Q_OBJECT
 public:
-  QtWidgetInputVectorDataParameter(InputVectorDataParameter*, QtWidgetModel*);
+  QtWidgetInputVectorDataParameter(InputVectorDataParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputVectorDataParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
 protected slots:
   bool SetFileName( const QString& value );
   void SelectFile();
 
 private:
-  QtWidgetInputVectorDataParameter(const QtWidgetInputVectorDataParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputVectorDataParameter&); //purposely not implemented
+  QtWidgetInputVectorDataParameter(const QtWidgetInputVectorDataParameter&) = delete;
+  void operator=(const QtWidgetInputVectorDataParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -68,22 +66,6 @@ private:
   QPushButton * m_Button;
 };
 
-
-inline
-const QLineEdit*
-QtWidgetInputVectorDataParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetInputVectorDataParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 } // Wrapper
 

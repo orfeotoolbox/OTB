@@ -165,8 +165,8 @@ protected:
   void VerifyInputInformation() override;
 
 private:
-  PersistentCompareImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentCompareImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   itk::Array<RealType>  m_SquareOfDifferences;
   itk::Array<RealType>  m_AbsoluteValueOfDifferences;
@@ -322,14 +322,14 @@ protected:
   ~StreamingCompareImageFilter() override {}
 
 private:
-  StreamingCompareImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingCompareImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingCompareImageFilter.txx"
+#include "otbStreamingCompareImageFilter.hxx"
 #endif
 
 #endif

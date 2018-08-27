@@ -91,8 +91,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ThresholdImageToPointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ThresholdImageToPointSetFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputPixelType m_LowerThreshold;
   InputPixelType m_UpperThreshold;
@@ -100,7 +100,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbThresholdImageToPointSetFilter.txx"
+#include "otbThresholdImageToPointSetFilter.hxx"
 #endif
 
 #endif

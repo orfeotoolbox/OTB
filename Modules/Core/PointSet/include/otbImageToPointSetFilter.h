@@ -124,15 +124,15 @@ protected:
   StreamingManagerPointer m_StreamingManager;
 
 private:
-  ImageToPointSetFilter(const ImageToPointSetFilter &); //purposely not implemented
-  void operator =(const ImageToPointSetFilter&); //purposely not implemented
+  ImageToPointSetFilter(const ImageToPointSetFilter &) = delete;
+  void operator =(const ImageToPointSetFilter&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToPointSetFilter.txx"
+#include "otbImageToPointSetFilter.hxx"
 #endif
 
 #endif

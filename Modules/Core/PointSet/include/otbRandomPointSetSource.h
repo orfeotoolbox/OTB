@@ -92,8 +92,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  RandomPointSetSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RandomPointSetSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfPoints;
 
@@ -107,7 +107,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRandomPointSetSource.txx"
+#include "otbRandomPointSetSource.hxx"
 #endif
 
 #endif

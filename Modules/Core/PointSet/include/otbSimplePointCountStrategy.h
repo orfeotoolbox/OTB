@@ -61,7 +61,7 @@ public:
         {
         float distX2 = (index[0] - it.Value()[0]) * (index[0] - it.Value()[0]);
         float distY2 = (index[1] - it.Value()[1]) * (index[1] - it.Value()[1]);
-        float dist = vcl_sqrt(distX2 + distY2);
+        float dist = std::sqrt(distX2 + distY2);
 
         if (dist <= size) accu++;
 

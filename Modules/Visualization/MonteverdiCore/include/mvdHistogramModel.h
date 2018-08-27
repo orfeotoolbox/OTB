@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -43,24 +41,18 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkHistogram.h"
-#endif //tag=QT4-boost-compatibility
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbObjectList.h"
-#endif //tag=QT4-boost-compatibility
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractModel.h"
 #include "mvdAlgorithm.h"
 #include "mvdCore.h"
 #include "mvdSerializableInterface.h"
-#endif //tag=QT4-boost-compatibility
 
 #define HISTOGRAM_CURVE_TYPE 2
 #define USE_FULL_IMAGE_FOR_PASS_1 0
@@ -308,17 +300,13 @@ private slots:
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbStreamingHistogramVectorImageFilter.h"
 #include "otbStreamingMinMaxVectorImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
-#endif //tag=QT4-boost-compatibility
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractImageModel.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace mvd
 {
@@ -630,7 +618,7 @@ HistogramModel
         // make sure the epsilon is not hidden when using large values
         if( boost::is_floating_point< DefaultImageType::PixelType::ValueType >::value )
           {
-          double absValue = vcl_abs(minPixel[i]);
+          double absValue = std::abs(minPixel[i]);
           // compute smallest epsilon for absolute pixel value (1.5 factor is for safety)
           double limitEpsilon = absValue *
             (double)std::numeric_limits<DefaultImageType::PixelType::ValueType>::epsilon()

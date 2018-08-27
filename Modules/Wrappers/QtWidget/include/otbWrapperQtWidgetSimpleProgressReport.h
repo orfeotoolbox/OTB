@@ -22,11 +22,10 @@
 #define otbWrapperQtWidgetSimpleProgressReport_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperQtWidgetModel.h"
 #include "itkProcessObject.h"
 #include "itkQtProgressBar.h"
-#endif //tag=QT4-boost-compatibility
+#include <string>
 
 
 namespace otb
@@ -44,7 +43,7 @@ class OTBQtWidget_EXPORT QtWidgetSimpleProgressReport : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetSimpleProgressReport(QtWidgetModel * model);
+  QtWidgetSimpleProgressReport(QtWidgetModel * model, QWidget * parent);
   ~QtWidgetSimpleProgressReport() override;
 
   void SetApplication(Application::Pointer app);
@@ -61,7 +60,7 @@ public slots:
   void AddNewProcessToReport();
 
 private:
-  QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&); //purposely not implemented
+  QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&) = delete;
   void operator=(const QtWidgetSimpleProgressReport&); //purposely not
                                                        //implemented
 

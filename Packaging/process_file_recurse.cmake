@@ -43,6 +43,12 @@ function(process_file_recurse input_file)
     message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
   endif()
 
+  get_filename_component(bn_name ${input_file_full_path} NAME)
+  if(${bn_name}_RESOLVED)
+    # item already resolved
+    return()
+  endif()
+
   if(NOT PKG_DEBUG)
     message("Processing ${input_file_full_path}")
   endif()
@@ -67,7 +73,6 @@ function(process_file_recurse input_file)
   string(REPLACE ";" "\\;" candidates "${loader_ov}")
   string(REPLACE "\n" "${LOADER_REGEX_EOL};" candidates "${candidates}")
   
-  get_filename_component(bn_name ${input_file_full_path} NAME)
   set(${bn_name}_USED TRUE CACHE INTERNAL "")
 
   if(PKG_DEBUG)

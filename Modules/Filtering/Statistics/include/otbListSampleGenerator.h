@@ -26,6 +26,7 @@
 #include "itkListSample.h"
 #include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
+#include <string>
 
 namespace otb
 {
@@ -164,8 +165,8 @@ protected:
   void GenerateClassStatistics();
 
 private:
-  ListSampleGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ListSampleGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typedef typename VectorDataType::DataNodeType         DataNodeType;
   typedef typename DataNodeType::PolygonType            PolygonType;
@@ -207,7 +208,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleGenerator.txx"
+#include "otbListSampleGenerator.hxx"
 #endif
 
 #endif

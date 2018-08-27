@@ -21,7 +21,6 @@
 #ifndef otbOrthoRectificationFilter_h
 #define otbOrthoRectificationFilter_h
 
-#include <iostream>
 #include <sstream>
 #include <stdio.h>
 
@@ -100,8 +99,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  OrthoRectificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OrthoRectificationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Map Projection used to transform cartographic coordinates in geographic  coordinates */
   MapProjectionPointerType m_MapProjection;
@@ -111,7 +110,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOrthoRectificationFilter.txx"
+#include "otbOrthoRectificationFilter.hxx"
 #endif
 
 #endif

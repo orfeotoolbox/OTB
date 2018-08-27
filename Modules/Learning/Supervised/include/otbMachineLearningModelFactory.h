@@ -63,8 +63,8 @@ protected:
   ~MachineLearningModelFactory() override;
 
 private:
-  MachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
@@ -78,7 +78,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMachineLearningModelFactory.txx"
+#include "otbMachineLearningModelFactory.hxx"
 #endif
 
 #endif

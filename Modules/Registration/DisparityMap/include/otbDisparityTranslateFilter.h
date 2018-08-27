@@ -139,8 +139,8 @@ protected:
 
 
 private:
-  DisparityTranslateFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DisparityTranslateFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   PixelType              m_NoDataValue;
 };
@@ -148,7 +148,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityTranslateFilter.txx"
+#include "otbDisparityTranslateFilter.hxx"
 #endif
 
 #endif

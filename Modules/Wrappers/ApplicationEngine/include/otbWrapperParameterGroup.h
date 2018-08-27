@@ -24,6 +24,7 @@
 #include "itkObject.h"
 #include "otbWrapperParameter.h"
 #include <vector>
+#include <string>
 
 namespace otb
 {
@@ -112,8 +113,8 @@ protected:
   ParameterListType m_ParameterList;
 
 private:
-  ParameterGroup(const ParameterGroup &); //purposely not implemented
-  void operator =(const ParameterGroup&); //purposely not implemented
+  ParameterGroup(const ParameterGroup &) = delete;
+  void operator =(const ParameterGroup&) = delete;
 
 };
 

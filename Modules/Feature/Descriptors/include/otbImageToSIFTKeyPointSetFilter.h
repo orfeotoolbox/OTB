@@ -56,7 +56,7 @@ public:
 
   inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    return vcl_sqrt(input[0] * input[0] + input[1] * input[1]);
+    return std::sqrt(input[0] * input[0] + input[1] * input[1]);
   }
 };
 
@@ -73,7 +73,7 @@ public:
 
   inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    TOutputPixel resp = vcl_atan2(input[1], input[0]);
+    TOutputPixel resp = std::atan2(input[1], input[0]);
     if (resp < 0)
       {
       resp += CONST_2PI;
@@ -305,8 +305,8 @@ protected:
                                                    const PixelType& orientation);
 
 private:
-  ImageToSIFTKeyPointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToSIFTKeyPointSetFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Number of octaves */
   unsigned int m_OctavesNumber;
@@ -398,7 +398,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToSIFTKeyPointSetFilter.txx"
+#include "otbImageToSIFTKeyPointSetFilter.hxx"
 #endif
 
 #endif

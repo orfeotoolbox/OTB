@@ -26,10 +26,10 @@
 #ifndef CompensationDataRecord_h
 #define CompensationDataRecord_h
 
-#include <iostream>
 
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
+#include <string>
 
 namespace ossimplugins
 {

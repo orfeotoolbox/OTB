@@ -165,8 +165,8 @@ protected:
   void EnlargeOutputRequestedRegion(itk::DataObject *output) override;
 
 private:
-  ImportImageFilter(const ImportImageFilter &); //purposely not implemented
-  void operator =(const ImportImageFilter&); //purposely not implemented
+  ImportImageFilter(const ImportImageFilter &) = delete;
+  void operator =(const ImportImageFilter&) = delete;
 
   RegionType    m_Region;
   double        m_Spacing[OutputImageType::ImageDimension];
@@ -181,7 +181,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImportImageFilter.txx"
+#include "otbImportImageFilter.hxx"
 #endif
 
 #endif

@@ -112,8 +112,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  VectorDataTransformFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataTransformFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   GenericTransformPointerType m_Transform;
 };
@@ -121,7 +121,7 @@ private:
 } // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbVectorDataTransformFilter.txx"
+#include "otbVectorDataTransformFilter.hxx"
 #endif
 
 #endif

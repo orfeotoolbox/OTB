@@ -34,8 +34,8 @@ namespace Wrapper
 /*****************************************************************************/
 QtWidgetInputVectorDataListParameter
 ::QtWidgetInputVectorDataListParameter( InputVectorDataListParameter * param,
-					QtWidgetModel* m ) :
-  QtWidgetParameterList( param, m )
+					QtWidgetModel* m , QWidget * parent) :
+  QtWidgetParameterList( param, m , parent)
 {
 }
 

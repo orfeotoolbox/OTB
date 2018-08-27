@@ -122,8 +122,8 @@ protected:
   }
 
 private:
-  RemoveWrongDirectionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RemoveWrongDirectionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #endif

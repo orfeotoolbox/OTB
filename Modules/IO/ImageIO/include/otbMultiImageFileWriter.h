@@ -113,7 +113,7 @@ public:
    *   is set from the CMake configuration option */
   void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
-  virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
+  virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output)) override;
 
   /** Connect a new input to the multi-writer. Only the input pointer is
    *  required. If the filename list is empty,
@@ -147,51 +147,39 @@ public:
     this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(writer->GetInput())));
   }
 
-  virtual void UpdateOutputInformation();
+  virtual void UpdateOutputInformation() override;
 
-  virtual void Update()
+  virtual void Update() override
   {
     this->UpdateOutputInformation();
     this->UpdateOutputData(NULL);
   }
 
 protected:
-  /** SetInput is changed to protected. Use AddInputImage to connect the
-   *  pipeline to the writer
-   */
-  virtual void SetInput(const itk::ProcessObject::DataObjectIdentifierType & key, itk::DataObject* image)
-    { this->Superclass::SetInput(key, image); }
-
-  /** SetNthInput is changed to protected. Use AddInputImage to connect the
-   *  pipeline to the writer
-   */
-  virtual void SetNthInput(itk::ProcessObject::DataObjectPointerArraySizeType i, itk::DataObject* image)
-    { this->Superclass::SetNthInput(i, image); }
-
   MultiImageFileWriter();
   virtual ~MultiImageFileWriter() {}
 
   /** GenerateData calls the Write method for each connected input */
-  virtual void GenerateData(void);
+  virtual void GenerateData(void) override;
 
   /** GenerateInputRequestedRegion can predict approximate input regions
-   *  based on the requested region of the fake output. Only usefull for
+   *  based on the requested region of the fake output. Only useful for
    *  pipeline memory print estimation
    */
-  virtual void GenerateInputRequestedRegion();
+  virtual void GenerateInputRequestedRegion() override;
 
   /** Computes the number of divisions */
   virtual void InitializeStreaming();
 
   /** Goes up the pipeline starting at imagePtr, resetting all requested regions
-   *  to a null region. This may be usefull when mixing inputs of different
+   *  to a null region. This may be useful when mixing inputs of different
    *  resolutions. */
   void ResetAllRequestedRegions(ImageBaseType* imagePtr);
 
   /** Returns the current stream region of the given input */
   virtual RegionType GetStreamRegion(int inputIndex);
 
-  void operator =(const MultiImageFileWriter&); //purposely not implemented
+  void operator =(const MultiImageFileWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event)
   {
@@ -290,7 +278,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiImageFileWriter.txx"
+#include "otbMultiImageFileWriter.hxx"
 #endif
 
 #endif // otbMultiImageFileWriter_h

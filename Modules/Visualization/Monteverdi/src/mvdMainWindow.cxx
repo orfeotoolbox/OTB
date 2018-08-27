@@ -109,7 +109,7 @@ namespace mvd
 
 #define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
 
-#define FORCE_NO_GLSL ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
+#define FORCE_NO_GLSL 0
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -1363,7 +1363,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImages( const QStringList & filenames, bool enableOverviews )
+::ImportImages( const QStringList & filenames, bool enableOverviews /*= true*/)
 {
   if( filenames.isEmpty() )
     return;
@@ -2370,6 +2370,7 @@ MainWindow
 
   // import the result image into the database
   ImportImage( outfname, false );
+  m_ImageView->updateGL();
 }
 
 /*****************************************************************************/

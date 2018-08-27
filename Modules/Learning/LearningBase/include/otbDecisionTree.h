@@ -107,8 +107,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  DecisionTree(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  DecisionTree(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Map holding the subtrees */
   TreeMapType* m_TreeMap;
@@ -127,7 +127,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDecisionTree.txx"
+#include "otbDecisionTree.hxx"
 #endif
 
 #endif

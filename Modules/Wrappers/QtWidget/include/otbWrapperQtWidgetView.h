@@ -22,22 +22,15 @@
 #define otbWrapperQtWidgetView_h
 
 #include <QtWidgets>
-
-//
-// OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
-#endif //tag=QT4-boost-compatibility
 #include "OTBQtWidgetExport.h"
+#include <string>
 
 namespace otb
 {
 namespace Wrapper
 {
-
-/*****************************************************************************/
-/* CLASS DEFINITION SECTION                                                  */
 
 /**
  * \class QtWidgetView
@@ -46,31 +39,22 @@ namespace Wrapper
  *
  * \brief WIP.
  */
-
 class OTBQtWidget_EXPORT QtWidgetView :
     public QWidget
 {
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
   Q_OBJECT
 
   Q_PROPERTY( bool isClosable
 	      READ IsClosable
 	      WRITE SetClosable );
 
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public methods.
 public:
 
-  /**
-   */
   static char const * const OBJECT_NAME;
 
   /** \brief Constructor. */
   QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* p =0,
+		QWidget* parent,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
@@ -80,58 +64,28 @@ public:
   void CreateGui();
 
   /** \brief Model Accessor */
-  inline otb::Wrapper::QtWidgetModel* GetModel()
-  {
-    return m_Model;
-  }
+  QtWidgetModel* GetModel() const;
 
-  /**
-   * \return The OTB-application pointer of this view.
-   */
-  //~ otb::Wrapper::Application::ConstPointer GetApplication() const
-  //~ {
-    //~ return otb::ConstCast< otb::Wrapper::Application >(
-      //~ m_Application
-    //~ );
-  //~ }
+  bool IsClosable() const;
 
-  /**
-   */
-  inline bool IsClosable() const;
-
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
 public slots:
 
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+  void UnhandledException(QString message);
 
-//
-// Signals.
 signals:
   void QuitSignal();
   void ExecuteAndWriteOutput();
   void Stop();
 
-
-  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
-
-//
-// Protected methods.
 protected:
 
-  bool IsRunning();
+  bool IsRunning() const;
 
   virtual QWidget* CreateInputWidgets();
 
-  //
   // QWidget overloads.
-
   void closeEvent( QCloseEvent * event ) override;
 
-//
-// Protected attributes.
 protected:
 
   /** Html section for 'Done' icon */
@@ -142,30 +96,21 @@ protected:
 
 protected slots:
 
-  /**
-   */
   void OnExecButtonClicked();
 
-  void UnhandledException(QString message);
   void OnExceptionRaised( QString what );
-  
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
 // Private methods.
 private:
 
-  QtWidgetView(const QtWidgetView&); //purposely not implemented
-  void operator=(const QtWidgetView&); //purposely not implemented
+  QtWidgetView(const QtWidgetView&) = delete;
+  void operator=(const QtWidgetView&) = delete;
 
   QWidget* CreateFooter();
 
   QWidget* CreateDoc();
 
-
-//
 // Private attributes.
-
 private:
 
   otb::Wrapper::QtWidgetModel* m_Model;
@@ -178,84 +123,17 @@ private:
   QTabWidget *m_TabWidget;
 
   bool m_IsClosable : 1;
-
   bool m_IsRunning;
 
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
 private slots:
   void UpdateMessageAfterExecution(int status);
   void UpdateMessageAfterApplicationReady(bool val);
 
-  /**
-   */
-  inline void OnProgressReportBegin();
-
-  /**
-   */
-  inline void OnProgressReportEnd( int status );
-
-  /**
-   */
-  inline void SetClosable( bool );
+  void OnProgressReportBegin();
+  void OnProgressReportEnd( int status );
+  void SetClosable( bool );
 
 };
-
-} // end namespace 'Wrapper'
-
-} // end namespace 'otb'
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-namespace otb
-{
-
-namespace Wrapper
-{
-
-/*****************************************************************************/
-inline
-bool
-QtWidgetView
-::IsClosable() const
-{
-  return m_IsClosable;
-}
-
-/*****************************************************************************/
-inline
-void
-QtWidgetView
-::SetClosable( bool enabled )
-{
-  m_IsClosable = enabled;
-
-  setEnabled( true );
-
-  if( m_QuitButton!=NULL )
-    m_QuitButton->setEnabled( m_IsClosable );
-}
-
-/*******************************************************************************/
-inline
-void
-QtWidgetView
-::OnProgressReportBegin()
-{
-  SetClosable( false );
-}
-
-/*******************************************************************************/
-inline
-void
-QtWidgetView
-::OnProgressReportEnd( int )
-{
-  SetClosable( true );
-}
 
 } // end namespace 'Wrapper'
 

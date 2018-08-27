@@ -23,7 +23,6 @@
 
 #include <vector>
 #include <utility>
-#include <fstream>
 #include <limits>
 
 #include "otbSpectralResponse.h"
@@ -155,8 +154,8 @@ protected:
   bool m_SortBands;
 
 private:
-  SatelliteRSR(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SatelliteRSR(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Vector of SpectralResponse */
   RSRVectorType m_RSR;
@@ -171,7 +170,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSatelliteRSR.txx"
+#include "otbSatelliteRSR.hxx"
 #endif
 
 #endif

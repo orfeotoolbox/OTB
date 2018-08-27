@@ -103,7 +103,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAMDrivenAdaptativeStreamingManager.txx"
+#include "otbRAMDrivenAdaptativeStreamingManager.hxx"
 #endif
 
 #endif

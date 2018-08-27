@@ -73,14 +73,14 @@ int otbWrapperQtWidgetShowWidget(int argc, char* argv[])
     QMainWindow* mainWindow =  new QMainWindow();
   
     // Create GUI based on module
-    QtWidgetView* gui = new QtWidgetView(app);
+    QtWidgetView* gui = new QtWidgetView(app, mainWindow);
     gui->CreateGui();
   
     // Connect the View "Quit" signal, to the mainWindow close slot
-    QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
+    QObject::connect(gui, &QtWidgetView::QuitSignal, mainWindow, &QMainWindow::close);
   
     // Create a progressReport object
-    QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel());
+    QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel(), mainWindow);
     progressReport->SetApplication(app);
   
     // Create a dock widget containing the progress widget

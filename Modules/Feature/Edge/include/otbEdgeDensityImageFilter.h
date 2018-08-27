@@ -116,8 +116,8 @@ protected:
 
 private:
 
-  EdgeDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EdgeDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DetectorPointerType     m_Detector;
   DensityImagePointerType m_DensityImageFilter;
@@ -125,7 +125,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEdgeDensityImageFilter.txx"
+#include "otbEdgeDensityImageFilter.hxx"
 #endif
 
 #endif

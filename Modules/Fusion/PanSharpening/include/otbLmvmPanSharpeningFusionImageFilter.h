@@ -164,7 +164,7 @@ private:
 
       TInternalPrecision scale = 1.;
 
-      if(vcl_abs(stdPanchroPixel) > 1e-10)
+      if(std::abs(stdPanchroPixel) > 1e-10)
       {
         scale = 1.0/stdPanchroPixel;
       }
@@ -265,7 +265,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLmvmPanSharpeningFusionImageFilter.txx"
+#include "otbLmvmPanSharpeningFusionImageFilter.hxx"
 #endif
 
 #endif

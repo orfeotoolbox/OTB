@@ -126,8 +126,8 @@ protected:
   void ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  BijectionCoherencyFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BijectionCoherencyFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Tolerance radius (in pixels) */
   double m_Tolerance;
@@ -148,7 +148,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBijectionCoherencyFilter.txx"
+#include "otbBijectionCoherencyFilter.hxx"
 #endif
 
 #endif

@@ -167,8 +167,8 @@ protected:
 
 
 private:
-  DisparityMapTo3DFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DisparityMapTo3DFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Keywordlist of left sensor image */
   ImageKeywordListType m_LeftKeywordList;
@@ -185,7 +185,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityMapTo3DFilter.txx"
+#include "otbDisparityMapTo3DFilter.hxx"
 #endif
 
 #endif

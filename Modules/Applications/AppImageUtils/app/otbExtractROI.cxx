@@ -61,6 +61,12 @@ public:
 
   typedef ExtractROIFilterType::InputImageType ImageType;
 
+protected:
+  ExtractROI()
+    : m_IsExtentInverted(false)
+    {
+    }
+
 private:
   void 
   DoInit() override
@@ -292,7 +298,7 @@ private:
       ListViewParameter *clParam = 
                   dynamic_cast<ListViewParameter*>(GetParameterByKey("cl"));
       // Update the values of the channels to be selected if nbComponents is changed
-      if (clParam != ITK_NULLPTR && clParam->GetNbChoices() != nbComponents)
+      if (clParam != nullptr && clParam->GetNbChoices() != nbComponents)
         {
         ClearChoices("cl");
         for (unsigned int idx = 0; idx < nbComponents; ++idx)
@@ -424,10 +430,11 @@ private:
       inImage->TransformPhysicalPointToIndex(ulp_out,uli);
       inImage->TransformPhysicalPointToIndex(lrp_out,lri);
       }
-      SetParameterInt( "startx", uli[0]);
-      SetParameterInt( "starty", uli[1]);
-      SetParameterInt( "sizex", lri[0] - uli[0] + 1);
-      SetParameterInt( "sizey", lri[1] - uli[1] + 1);
+    m_IsExtentInverted = ( lri[0] < uli[0] || lri[1] < uli[1] );
+    SetParameterInt( "startx", uli[0]);
+    SetParameterInt( "starty", uli[1]);
+    SetParameterInt( "sizex", lri[0] - uli[0] + 1);
+    SetParameterInt( "sizey", lri[1] - uli[1] + 1);
   }
 
   void
@@ -786,6 +793,13 @@ private:
       SetParameterInt("sizey",lri[1]-uli[1]);
 
       }
+    else if( GetParameterString( "mode" ) == "extent" )
+      {
+      if(m_IsExtentInverted)
+        {
+        otbAppLogFATAL(<< "Extent coordinates are inverted!");
+        }
+      }
 
     if ( !CropRegionOfInterest() )
       otbAppLogWARNING(<<"Could not extract the ROI as it is out of the "
@@ -806,6 +820,9 @@ private:
     SetParameterOutputImage("out", extractROIFilter->GetOutput());
     RegisterPipeline();
   }
+
+  /** flag to check if given extent was inverted */
+  bool m_IsExtentInverted;
 };
 
 }

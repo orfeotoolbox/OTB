@@ -25,10 +25,11 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterLabel::QtWidgetParameterLabel(Parameter* param)
+QtWidgetParameterLabel::QtWidgetParameterLabel(Parameter* param, QWidget * parent)
+  : QWidget(parent)
 {
   // Set up label
-  QLabel *label = new QLabel;
+  QLabel *label = new QLabel(this);
 
   label->setText(param->GetName());
   label->setToolTip(param->GetKey());

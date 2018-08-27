@@ -23,6 +23,7 @@
 
 #include "otbWrapperApplicationFactoryBase.h"
 #include "itkVersion.h"
+#include <string>
 
 namespace otb
 {
@@ -107,8 +108,8 @@ protected:
   }
 
 private:
-  ApplicationFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ApplicationFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
   
   std::string m_ClassName;
 };

@@ -45,6 +45,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperParameterKey.cxx
   otbWrapperDocExampleStructure.cxx
   otbWrapperInputVectorDataParameter.cxx
+  otbWrapperOutputVectorDataParameter.cxx
   otbWrapperInputProcessXMLParameter.cxx
   otbWrapperMapProjectionParametersHandler.cxx
   otbWrapperApplication.cxx
@@ -58,6 +59,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperParameterList.cxx
   otbWrapperBoolParameter.cxx
   otbWrapperMetaDataHelper.cxx
+  otbWrapperParameter.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})

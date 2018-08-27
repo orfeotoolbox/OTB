@@ -30,6 +30,7 @@
 #include "gdal.h"
 #include "ogr_api.h"
 #include "otbOGRVersionProxy.h"
+#include <string>
 
 namespace otb {
 
@@ -143,7 +144,7 @@ protected:
       OGR_G_DestroyGeometry(m_SrcDataSetGeometries[idx]);
       }
 
-    if (m_OGRDataSourcePointer != ITK_NULLPTR)
+    if (m_OGRDataSourcePointer != nullptr)
       {
       ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }
@@ -154,8 +155,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorDataToLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataToLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
 
@@ -187,7 +188,7 @@ private:
 
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToLabelImageFilter.txx"
+#include "otbVectorDataToLabelImageFilter.hxx"
 #endif
 
 #endif

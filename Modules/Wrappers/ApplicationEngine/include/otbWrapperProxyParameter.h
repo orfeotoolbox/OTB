@@ -80,8 +80,8 @@ protected:
   ~ProxyParameter() override {}
 
 private:
-  ProxyParameter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ProxyParameter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ProxyTargetType m_Target;
 };
@@ -90,7 +90,7 @@ private:
 }
 
 //#ifndef OTB_MANUAL_INSTANTIATION
-//#include "otbWrapperProxyParameter.txx"
+//#include "otbWrapperProxyParameter.hxx"
 //#endif
 
 #endif

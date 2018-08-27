@@ -21,7 +21,6 @@
 #ifndef otbClampVectorImageFilter_h
 #define otbClampVectorImageFilter_h
 
-#include <vcl_deprecated_header.h>
 #include "itkImageToImageFilter.h"
 
 namespace otb
@@ -131,8 +130,8 @@ protected:
   }
 
 private:
-  ClampVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ClampVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double m_DLower;
   double m_DUpper;
@@ -145,7 +144,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbClampVectorImageFilter.txx"
+#include "otbClampVectorImageFilter.hxx"
 #endif
 
 #endif

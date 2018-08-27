@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>../../../../Utilities/Data/Icons/mIconClearText.png</file>
+    <file>../../../../Utilities/Data/Icons/mIconClearTextHover.png</file>
+</qresource>
+</RCC>

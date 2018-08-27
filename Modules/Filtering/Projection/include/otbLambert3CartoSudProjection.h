@@ -67,8 +67,8 @@ protected:
   virtual ~Lambert3CartoSudProjection() {}
 
 private:
-  Lambert3CartoSudProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);                       //purposely not implemented
+  Lambert3CartoSudProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

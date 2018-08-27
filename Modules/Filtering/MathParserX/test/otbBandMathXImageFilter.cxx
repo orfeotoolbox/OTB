@@ -31,16 +31,6 @@
 
 #include "itkImageRegionIteratorWithIndex.h"
 
-int otbBandMathXImageFilterNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef double                                            PixelType;
-  typedef otb::VectorImage<PixelType, 2>                     ImageType;
-  typedef otb::BandMathXImageFilter<ImageType>               FilterType;
-
-   FilterType::Pointer         filter       = FilterType::New();
-
-   return EXIT_SUCCESS;
-}
 
 
 int otbBandMathXImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
@@ -150,9 +140,9 @@ int otbBandMathXImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
     double error1,error2,error3;
 
 
-    double expected1 = vcl_cos( 2 * otb::CONST_PI * px1[0] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * vcl_sin( otb::CONST_PI * px3[0] );
-    double expected2 = vcl_cos( 2 * otb::CONST_PI * px1[1] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * vcl_sin( otb::CONST_PI * px3[0] );
-    double expected3 = vcl_cos( 2 * otb::CONST_PI * px1[2] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * vcl_sin( otb::CONST_PI * px3[0] );
+    double expected1 = std::cos( 2 * otb::CONST_PI * px1[0] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * std::sin( otb::CONST_PI * px3[0] );
+    double expected2 = std::cos( 2 * otb::CONST_PI * px1[1] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * std::sin( otb::CONST_PI * px3[0] );
+    double expected3 = std::cos( 2 * otb::CONST_PI * px1[2] ) / ( 2 * otb::CONST_PI * px2[0] + 3.38 ) * std::sin( otb::CONST_PI * px3[0] );
 
     /*std::cout << "Pixel_1 =  " << it1.Get()[0] << "     Pixel_2 =  " << it2.Get()[0] << "     Pixel_3 =  " << it3.Get()[0]
         << "     Result =  " << itoutput1.Get()[0] << "     Expected =  " << expected1 << std::endl; */
@@ -285,7 +275,7 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
     n++;
 
     // Var of im1 band 3
-    imageAb3Var += vcl_pow(it1.GetCenterPixel()[2],2.0);
+    imageAb3Var += std::pow(it1.GetCenterPixel()[2],2.0);
 
     // Maximum of im2 band 1
     if (im2b1Maxi < it2.GetCenterPixel()[0])
@@ -353,9 +343,9 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
     for(unsigned int i=0; i<it1.Size(); ++i)
         px1[1] += coefs[i]*it1.GetPixel(i)[1];
 
-    px1[2]= vcl_pow(it2.GetCenterPixel()[0],expo);
+    px1[2]= std::pow(it2.GetCenterPixel()[0],expo);
 
-    px1[3]= vcl_cos(it3.GetCenterPixel()[0]);
+    px1[3]= std::cos(it3.GetCenterPixel()[0]);
 
     // mean var median
     std::vector<double> vect;
@@ -381,8 +371,8 @@ int otbBandMathXImageFilterConv( int itkNotUsed(argc), char* argv [])
     for (unsigned int i=0; i<it3.Size(); i++)
       vect2.push_back(it3.GetPixel(i)[0]);
     std::sort(vect2.begin(),vect2.end());
-    px2[0] = (vect2.back() + vect2.front())/2.0 + imageAb3Var / 2.0 + (imageAb2Mini / im2b1Maxi)*3.4 + vcl_pow(imageAb3Mean / imageAb1Sum * imageAb3Var,1.2);
-    if ( vcl_acos(0.5)+vcl_asin(0.5)+vcl_atan(0.5) > 2.0 )
+    px2[0] = (vect2.back() + vect2.front())/2.0 + imageAb3Var / 2.0 + (imageAb2Mini / im2b1Maxi)*3.4 + std::pow(imageAb3Mean / imageAb1Sum * imageAb3Var,1.2);
+    if ( std::acos(0.5)+std::asin(0.5)+std::atan(0.5) > 2.0 )
 		px2[1]=1.0;
 	else
 		px2[1]=0.0;

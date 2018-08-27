@@ -253,7 +253,7 @@ ComplexOutputImageParameter::Write()
 itk::ProcessObject*
 ComplexOutputImageParameter::GetWriter()
 {
-  itk::ProcessObject* writer = ITK_NULLPTR;
+  itk::ProcessObject* writer = nullptr;
   switch ( GetComplexPixelType() )
     {
     case ComplexImagePixelType_int16:
@@ -298,6 +298,17 @@ ComplexOutputImageParameter::HasValue() const
 {
   std::string filename(this->GetFileName());
   return !filename.empty();
+}
+
+void ComplexOutputImageParameter::SetFileName (const char* filename)
+{
+  this->SetFileName(std::string(filename));
+}
+
+void ComplexOutputImageParameter::SetFileName (const std::string& filename)
+{
+  m_FileName = filename;
+  SetActive(true);
 }
 
 }

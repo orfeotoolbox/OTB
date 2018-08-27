@@ -261,8 +261,8 @@ protected:
 
 
 private:
-  ParserXImpl(const Self &);             //purposely not implemented
-  void operator =(const Self &);    //purposely not implemented
+  ParserXImpl(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
   mup::ParserX m_MuParserX;
 

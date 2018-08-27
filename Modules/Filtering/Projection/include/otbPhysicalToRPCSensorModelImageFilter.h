@@ -125,8 +125,8 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  PhysicalToRPCSensorModelImageFilter(const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  PhysicalToRPCSensorModelImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The rpc model estimator */
   GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
@@ -138,7 +138,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPhysicalToRPCSensorModelImageFilter.txx"
+#include "otbPhysicalToRPCSensorModelImageFilter.hxx"
 #endif
 
 #endif

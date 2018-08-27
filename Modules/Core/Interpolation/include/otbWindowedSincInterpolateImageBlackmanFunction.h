@@ -64,8 +64,8 @@ public:
   {
     double x = static_cast<double>(A);
     double px = CONST_PI * x;
-    double temp = 0.42 + 0.5 * vcl_cos(x * m_Factor1) + 0.08 * vcl_cos(x * m_Factor2);
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    double temp = 0.42 + 0.5 * std::cos(x * m_Factor1) + 0.08 * std::cos(x * m_Factor2);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
   unsigned int m_Radius;
@@ -141,8 +141,8 @@ protected:
   }
 
 private:
-  WindowedSincInterpolateImageBlackmanFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageBlackmanFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

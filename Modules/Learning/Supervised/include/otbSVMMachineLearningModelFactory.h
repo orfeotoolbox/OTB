@@ -65,15 +65,15 @@ protected:
   ~SVMMachineLearningModelFactory() override;
 
 private:
-  SVMMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SVMMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVMMachineLearningModelFactory.txx"
+#include "otbSVMMachineLearningModelFactory.hxx"
 #endif
 
 #endif

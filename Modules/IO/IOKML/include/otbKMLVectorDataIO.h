@@ -102,7 +102,7 @@ public:
   bool CanWriteFile(const char*) const override;
 
   /** Writes the data to disk from the data structure provided */
-  void Write(const itk::DataObject* data, char ** papszOptions = ITK_NULLPTR) override;
+  void Write(const itk::DataObject* data, char ** papszOptions = nullptr) override;
 
 protected:
   /** Constructor.*/
@@ -136,8 +136,8 @@ protected:
                         kmldom::MultiGeometryPtr currentMultiGeometry);
 
 private:
-  KMLVectorDataIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KMLVectorDataIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DataTreePointerType m_Tree;
 

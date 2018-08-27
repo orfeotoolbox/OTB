@@ -83,8 +83,8 @@ protected:
 
 
 private:
-  ImageListToSingleImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageListToSingleImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_ExtractedImagePosition;
 
@@ -93,7 +93,7 @@ private:
 } // end of namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListToSingleImageFilter.txx"
+#include "otbImageListToSingleImageFilter.hxx"
 #endif
 
 #endif

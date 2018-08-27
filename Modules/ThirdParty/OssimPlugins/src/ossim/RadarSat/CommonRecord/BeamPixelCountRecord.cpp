@@ -37,7 +37,7 @@ BeamPixelCountRecord::~BeamPixelCountRecord()
 
 std::ostream& operator<<(std::ostream& os, const BeamPixelCountRecord& data)
 {
-	os<<"pix_update:"<<data._pix_update.c_str()<<std::endl;
+	os<<"pix_update:"<<data._pix_update <<std::endl;
 
 	for (int i=0;i<4;i++)
 	{

@@ -22,14 +22,12 @@
 #define otbWrapperQtWidgetParameterGroup_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperParameterGroup.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperOutputProcessXMLParameter.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -45,15 +43,15 @@ class OTBQtWidget_EXPORT QtWidgetParameterGroup : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
+  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*, QWidget*);
   ~QtWidgetParameterGroup() override;
 
 public slots:
   void SetActivationState( bool value ) override;
 
 private:
-  QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
-  void operator=(const QtWidgetParameterGroup&); //purposely not implemented
+  QtWidgetParameterGroup(const QtWidgetParameterGroup&) = delete;
+  void operator=(const QtWidgetParameterGroup&) = delete;
 
   void DoCreateWidget() override;
 

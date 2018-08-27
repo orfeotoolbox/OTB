@@ -91,8 +91,8 @@ protected:
 
 
 private:
-  LineOfSightOptimizer(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LineOfSightOptimizer(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** residues from the last computation on each line of sight */
   ResidueType m_Residues;
@@ -109,7 +109,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineOfSightOptimizer.txx"
+#include "otbLineOfSightOptimizer.hxx"
 #endif
 
 #endif

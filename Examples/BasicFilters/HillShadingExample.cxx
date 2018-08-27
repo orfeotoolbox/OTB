@@ -31,8 +31,8 @@
 // lighting source and generating the corresponding shadows. This principle is called
 // hill shading.
 //
-// Using a simple functor \doxygen{otb}{HillShadingFunctor} and the dem image generated
-// using the \doxygen{otb}{DEMToImageGenerator} (refer to \ref{sec:ReadDEM}) you can easily
+// Using a simple functor \doxygen{otb}{HillShadingFunctor} and the DEM image generated
+// using the \doxygen{otb}{DEMToImageGenerator} (refer to \ref{sec:ReadDEM}), you can easily
 // obtain a representation of the DEM. Better yet, using the
 // \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}, combined with the
 // \doxygen{otb}{ReliefColormapFunctor} you can easily generate the classic elevation maps.
@@ -124,13 +124,13 @@ int main(int argc, char * argv[])
     double lat1 = origin[1];
     double lat2 = origin[1] + size[1] * spacing[1];
     double R = 6371; // km
-    double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
-                        vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
-    res = d / vcl_sqrt(2.0);
+    double d = std::acos(std::sin(lat1) * std::sin(lat2) +
+                        std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)) * R;
+    res = d / std::sqrt(2.0);
     }
   // Software Guide : BeginLatex
   //
-  // After generating the dem image as in the DEMToImageGenerator example, you can declare
+  // After generating the DEM image as in the DEMToImageGenerator example, you can declare
   // the hill shading mechanism. The hill shading is implemented as a functor doing some
   // operations in its neighborhood. A convenient filter called \doxygen{otb}{HillShadingFilter}
   // is defined around this mechanism.

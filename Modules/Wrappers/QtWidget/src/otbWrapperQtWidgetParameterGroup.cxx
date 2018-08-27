@@ -28,8 +28,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterGroup::Pointer paramList, QtWidgetModel* m)
-: QtWidgetParameterBase(paramList, m),
+QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterGroup::Pointer paramList, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(paramList, m, parent),
   m_ParamList(paramList)
 {
 }
@@ -40,11 +40,10 @@ QtWidgetParameterGroup::~QtWidgetParameterGroup()
 
 void QtWidgetParameterGroup::DoUpdateGUI()
 {
-  WidgetListIteratorType it = m_WidgetList.begin();
-  for (it = m_WidgetList.begin(); it != m_WidgetList.end(); ++it)
-    {
-    (*it)->UpdateGUI();
-    }
+  // Note that we do not need to call each child widget's UpdateGUI here,
+  // because they already each have a signal/slot connection that triggers it
+  // when the model updates.
+  // It is created in QtWidgetParameterBase::CreateWidget()
 }
 
 void QtWidgetParameterGroup::DoCreateWidget()
@@ -60,7 +59,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
     Parameter* param = m_ParamList->GetParameterByIndex(i);
     Parameter* rawParam = m_ParamList->GetParameterByIndex(i,false);
 
-    if (param != ITK_NULLPTR)
+    if (param != nullptr)
       {
       ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
       ChoiceParameter* paramAsChoice = dynamic_cast<ChoiceParameter*>(param);
@@ -68,25 +67,25 @@ void QtWidgetParameterGroup::DoCreateWidget()
       InputProcessXMLParameter* paramAsOutXML = dynamic_cast<InputProcessXMLParameter*>(param);
 
       bool paramIsXML = false;
-      if(paramAsInXML != ITK_NULLPTR || paramAsOutXML != ITK_NULLPTR)
+      if(paramAsInXML != nullptr || paramAsOutXML != nullptr)
         paramIsXML = true;
 
-      if (paramAsGroup == ITK_NULLPTR && paramAsChoice == ITK_NULLPTR && !paramIsXML)
+      if (paramAsGroup == nullptr && paramAsChoice == nullptr && !paramIsXML)
         {
         // Label (col 1)
-        QWidget* label = new QtWidgetParameterLabel( rawParam );
+        QWidget* label = new QtWidgetParameterLabel( rawParam , this);
         gridLayout->addWidget(label, i, 1);
 
         // Parameter Widget (col 2)
-        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel(), this );
         gridLayout->addWidget(specificWidget, i, 2 );
 
         // CheckBox (col 0)
-        QCheckBox * checkBox = new QCheckBox;
-        connect( checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
-        connect( checkBox, SIGNAL(clicked(bool)), GetModel(), SLOT(NotifyUpdate()) );
-        connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), checkBox, SLOT(setChecked(bool)));
-        connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), specificWidget, SLOT(SetActivationState(bool)));
+        QCheckBox * checkBox = new QCheckBox(this);
+        connect( checkBox, &QCheckBox::clicked, specificWidget, &QtWidgetParameterBase::SetActivationState );
+        connect( checkBox, &QCheckBox::clicked, GetModel(), &QtWidgetModel::NotifyUpdate );
+        connect( specificWidget, &QtWidgetParameterBase::ParameterActiveStatus, checkBox, &QCheckBox::setChecked );
+        connect( specificWidget, &QtWidgetParameterBase::ParameterActiveStatus, specificWidget, &QtWidgetParameterBase::SetActivationState );
 
         // if Mandatory make the checkbox checked and deactivated
         if (param->GetMandatory())
@@ -103,35 +102,15 @@ void QtWidgetParameterGroup::DoCreateWidget()
           }
         gridLayout->addWidget(checkBox, i, 0);
 
-        // Reset Button
-        // Make sense only for NumericalParameter
-        if (dynamic_cast<IntParameter*>(param)
-            || dynamic_cast<FloatParameter*>(param)
-            || dynamic_cast<RadiusParameter*>(param)
-            /*|| dynamic_cast<RAMParameter*>(param)*/)
-          {
-          if( param->GetRole() != Role_Output )
-            {
-            QPushButton* resetButton = new QPushButton;
-            resetButton->setText("Reset");
-            resetButton->setToolTip("Reset the value of this parameter");
-            gridLayout->addWidget(resetButton, i, 3);
-
-            // Slots to connect to the reset button
-            connect( resetButton, SIGNAL(clicked()), specificWidget, SLOT(Reset()) );
-            connect( resetButton, SIGNAL(clicked()), GetModel(), SLOT(NotifyUpdate()) );
-            }
-          }
-
         m_WidgetList.push_back(specificWidget);
         }
       else
         {
-        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel(), this);
 
         QVBoxLayout* vboxLayout = new QVBoxLayout;
         vboxLayout->addWidget(specificWidget);
-        QGroupBox* group = new QGroupBox;
+        QGroupBox* group = new QGroupBox(this);
         group->setLayout(vboxLayout);
 
         // Make the parameter Group checkable when it is not mandatory
@@ -151,7 +130,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
           {
           param->SetActive(true);
           }
-        connect(group, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
+        connect(group, &QGroupBox::clicked, specificWidget, &QtWidgetParameterBase::SetActivationState );
 
         group->setTitle(rawParam->GetName());
         gridLayout->addWidget(group, i, 0, 1, -1);

@@ -178,7 +178,7 @@ public:
       else
         {
         RealType scaledComponent = static_cast<RealType>(x[i] - m_InputMinimum[i])/ static_cast<RealType> (m_InputMaximum[i] - m_InputMinimum[i]);
-        scaledComponent = vcl_pow(scaledComponent,1./m_Gamma);
+        scaledComponent = std::pow(scaledComponent,1./m_Gamma);
         scaledComponent *= static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i]);
         result[i] = static_cast<typename TOutput::ValueType>(scaledComponent + m_OutputMinimum[i]);
         }
@@ -229,8 +229,10 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  typedef TInputImage    InputImageType;
+  typedef typename InputImageType::ConstPointer InputImagePointer;
   typedef typename TOutputImage::PixelType                       OutputPixelType;
-  typedef typename TInputImage::PixelType                        InputPixelType;
+  typedef typename InputImageType::PixelType                     InputPixelType;
   typedef typename InputPixelType::ValueType                     InputValueType;
   typedef typename OutputPixelType::ValueType                    OutputValueType;
   typedef typename itk::NumericTraits<InputValueType>::RealType  InputRealType;
@@ -276,8 +278,8 @@ protected:
   ~VectorRescaleIntensityImageFilter() override {}
 
 private:
-  VectorRescaleIntensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorRescaleIntensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputPixelType m_OutputMinimum;
   OutputPixelType m_OutputMaximum;
@@ -292,7 +294,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorRescaleIntensityImageFilter.txx"
+#include "otbVectorRescaleIntensityImageFilter.hxx"
 #endif
 
 #endif

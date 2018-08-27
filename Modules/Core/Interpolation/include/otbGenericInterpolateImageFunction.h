@@ -130,8 +130,8 @@ protected:
   virtual void FillWeightOffsetTable();
 
 private:
-  GenericInterpolateImageFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GenericInterpolateImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Store the window radius. */
   //unsigned int m_Radius;
   // Constant to store twice the radius
@@ -161,7 +161,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericInterpolateImageFunction.txx"
+#include "otbGenericInterpolateImageFunction.hxx"
 #endif
 
 #endif
