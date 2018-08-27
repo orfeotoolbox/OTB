@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOGRDataToPolygonGeometricFeaturesFilter_txx
-#define otbOGRDataToPolygonGeometricFeaturesFilter_txx
+#ifndef otbOGRDataToPolygonGeometricFeaturesFilter_hxx
+#define otbOGRDataToPolygonGeometricFeaturesFilter_hxx
 
 #include "otbOGRDataToPolygonGeometricFeaturesFilter.h"
 #include "itkProgressReporter.h"

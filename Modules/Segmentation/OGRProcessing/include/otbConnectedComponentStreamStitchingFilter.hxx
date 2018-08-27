@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbConnectedComponentStreamStitchingFilter_txx
-#define otbConnectedComponentStreamStitchingFilter_txx
+#ifndef otbConnectedComponentStreamStitchingFilter_hxx
+#define otbConnectedComponentStreamStitchingFilter_hxx
 
 #include "otbConnectedComponentStreamStitchingFilter.h"
 #include "itkContinuousIndex.h"

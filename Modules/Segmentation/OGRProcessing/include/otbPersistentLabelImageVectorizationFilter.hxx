@@ -19,8 +19,8 @@
  */
  
  
-#ifndef PersistentLabelImageVectorizationFilter_txx
-#define PersistentLabelImageVectorizationFilter_txx
+#ifndef PersistentLabelImageVectorizationFilter_hxx
+#define PersistentLabelImageVectorizationFilter_hxx
 
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkProgressReporter.h"

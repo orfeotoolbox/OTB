@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbOGRDataToSpectralStatisticsFilter_txx
-#define otbOGRDataToSpectralStatisticsFilter_txx
+#ifndef otbOGRDataToSpectralStatisticsFilter_hxx
+#define otbOGRDataToSpectralStatisticsFilter_hxx
 
 #include "otbOGRDataToSpectralStatisticsFilter.h"
 

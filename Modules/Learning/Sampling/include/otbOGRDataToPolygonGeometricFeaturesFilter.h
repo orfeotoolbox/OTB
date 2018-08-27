@@ -177,7 +177,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataToPolygonGeometricFeaturesFilter.txx"
+#include "otbOGRDataToPolygonGeometricFeaturesFilter.hxx"
 #endif
 
 #endif

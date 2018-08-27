@@ -299,7 +299,7 @@ private:
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentLabelImageVectorizationFilter.txx"
+#include "otbPersistentLabelImageVectorizationFilter.hxx"
 #endif
 
 #endif

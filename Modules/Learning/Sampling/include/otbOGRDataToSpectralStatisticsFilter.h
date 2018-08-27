@@ -255,7 +255,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataToSpectralStatisticsFilter.txx"
+#include "otbOGRDataToSpectralStatisticsFilter.hxx"
 #endif
 
 #endif

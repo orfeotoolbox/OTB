@@ -239,7 +239,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConnectedComponentStreamStitchingFilter.txx"
+#include "otbConnectedComponentStreamStitchingFilter.hxx"
 #endif
 
 #endif
