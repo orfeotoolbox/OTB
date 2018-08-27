@@ -534,7 +534,6 @@ private:
 
   IL2VIFilterType::Pointer m_Il2vi;
 
-  InternalReaderType::Pointer m_outputReader;
   ExtractROIFilterType::Pointer m_ExtractROIFilter;
   CastFilterType::Pointer m_Cast;
   WarpFilterType::Pointer m_Warp;
