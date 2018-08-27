@@ -38,34 +38,44 @@ public:
   {
   }
 	
-   inline TOut operator ()(const std::vector<TIn>& in){
-		bool result = false;
-		bool checkedInputMask = (m_IsInputMask) ? false : true;
-		bool checkedInputVariance = (m_IsInputVariance) ? false : true;
-		bool checkedInputNoData = (m_IsInputNoData) ? false : true;
-		for(auto val : in){
+   inline TOut operator ()(const std::vector<TIn>& in) const{
+		bool checkedInputMask = !m_IsInputMask;
+		bool checkedInputVariance = !m_IsInputVariance;
+		bool checkedInputNoData = !m_IsInputNoData;
+		for(const auto val : in){
 		  if(m_IsInputMask && !checkedInputMask){
-		    result = result && (val > 0);
-		    checkedInputMask = true;
+		    if(val <= 0){
+			return 0;
+		    }
+		    else{
+			checkedInputMask = true;
+		    }
 		  }
 		  else if(m_IsInputVariance && !checkedInputVariance){
-		    result = result && (val > m_VarianceThreshold);
-		    checkedInputVariance = true;
+		    if(val <= m_VarianceThreshold){
+			return 0;
+		    }
+		    else{
+			checkedInputVariance = true;
+		    }
 		  }
 		  else if(m_IsInputNoData && !checkedInputNoData){
-		    result = result && (val != m_NoDataValue);
-		    checkedInputNoData = true;
+		    if(val == m_NoDataValue){
+			return 0;
+		    }
+		    else{
+			checkedInputNoData = true;
+		    }
 		  }
 		}
-		TOut res = (result) ? 255 : 0;
-		return res;
-     }
+		return  (TOut)255;
+      }
   
 	bool m_IsInputMask;
 	bool m_IsInputVariance;
 	bool m_IsInputNoData;
-	TOut m_VarianceThreshold;
-	TOut m_NoDataValue;
+	TIn m_VarianceThreshold;
+	TIn m_NoDataValue;
 };
 
 namespace otb
@@ -160,6 +170,8 @@ private:
     m_ImageListFilter = ImageListToVectorImageFilterType::New();
     m_HMedianFilter   = MedianFilterType::New();
     m_VMedianFilter   = MedianFilterType::New();
+    m_LeftMathFilter  = BlockMatchingMathFilterType::New();
+    m_RightMathFilter = BlockMatchingMathFilterType::New();
   }
 
   void DoInit() override
@@ -522,24 +534,19 @@ private:
     bool useInitialDispUniform = false;
     bool useInitialDispMap = false;
 
-    auto leftMathFilter = BlockMatchingMathFilterType::New();
-    auto rightMathFilter = BlockMatchingMathFilterType::New();
-
     // Substitution of the band math filter with muparser
-    
-
     // Handle if input mask is present
     if(IsParameterEnabled("mask.inleft")){
       leftmask = GetParameterFloatImage("mask.inleft");
-      leftMathFilter->GetFunctor().m_IsInputMask = true;
-      leftMathFilter->PushBackInput(leftmask);
+      m_LeftMathFilter->GetFunctor().m_IsInputMask = true;
+      m_LeftMathFilter->PushBackInput(leftmask);
       maskingLeft = true;
     }
 
     if(IsParameterEnabled("mask.inright")){
       rightmask = GetParameterFloatImage("mask.inright");
-      rightMathFilter->GetFunctor().m_IsInputMask = true;
-      rightMathFilter->PushBackInput(rightmask);
+      m_RightMathFilter->GetFunctor().m_IsInputMask = true;
+      m_RightMathFilter->PushBackInput(rightmask);
       maskingRight = true;
     }
 
@@ -550,17 +557,17 @@ private:
       VarianceFilterType::InputSizeType vradius;
       vradius.Fill(radius);
 
-      leftMathFilter->GetFunctor().m_VarianceThreshold = varThresh;
-      leftMathFilter->GetFunctor().m_IsInputVariance = true;
+      m_LeftMathFilter->GetFunctor().m_VarianceThreshold = varThresh;
+      m_LeftMathFilter->GetFunctor().m_IsInputVariance = true;
       m_LVarianceFilter->SetInput(leftImage);
       m_LVarianceFilter->SetRadius(vradius);
-      leftMathFilter->PushBackInput(m_LVarianceFilter->GetOutput());
+      m_LeftMathFilter->PushBackInput(m_LVarianceFilter->GetOutput());
 
-      rightMathFilter->GetFunctor().m_VarianceThreshold = varThresh;
-      rightMathFilter->GetFunctor().m_IsInputVariance = true;
+      m_RightMathFilter->GetFunctor().m_VarianceThreshold = varThresh;
+      m_RightMathFilter->GetFunctor().m_IsInputVariance = true;
       m_RVarianceFilter->SetInput(rightImage);
       m_RVarianceFilter->SetRadius(vradius);
-      rightMathFilter->PushBackInput(m_RVarianceFilter->GetOutput());
+      m_RightMathFilter->PushBackInput(m_RVarianceFilter->GetOutput());
 
       maskingLeft = true;
       maskingRight = true;
@@ -569,12 +576,12 @@ private:
     // Handle nodata field is present
     if(IsParameterEnabled("mask.nodata")){
       float nodata = GetParameterFloat("mask.nodata");
-      leftMathFilter->GetFunctor().m_IsInputNoData = true;
-      leftMathFilter->GetFunctor().m_NoDataValue = nodata;
-      leftMathFilter->PushBackInput(leftImage);
-      rightMathFilter->GetFunctor().m_IsInputNoData = true;
-      rightMathFilter->GetFunctor().m_NoDataValue = nodata;
-      rightMathFilter->PushBackInput(rightImage);
+      m_LeftMathFilter->GetFunctor().m_IsInputNoData = true;
+      m_LeftMathFilter->GetFunctor().m_NoDataValue = nodata;
+      m_LeftMathFilter->PushBackInput(leftImage);
+      m_RightMathFilter->GetFunctor().m_IsInputNoData = true;
+      m_RightMathFilter->GetFunctor().m_NoDataValue = nodata;
+      m_RightMathFilter->PushBackInput(rightImage);
       maskingLeft = true;
       maskingRight = true;
     }
@@ -602,8 +609,8 @@ private:
     FloatImageType * maskLeftImage;
     FloatImageType * maskRightImage;
 
-    maskLeftImage = leftMathFilter->GetOutput();
-    maskRightImage = rightMathFilter->GetOutput();
+    maskLeftImage = m_LeftMathFilter->GetOutput();
+    maskRightImage = m_RightMathFilter->GetOutput();
 
     // SSD case
     if(GetParameterInt("bm.metric") == 0)
@@ -892,6 +899,10 @@ private:
 
   // Vertical Median filter
   MedianFilterType::Pointer           m_VMedianFilter;
+
+  // BlockMatchingMath filter
+  BlockMatchingMathFilterType::Pointer m_LeftMathFilter;
+  BlockMatchingMathFilterType::Pointer m_RightMathFilter;
 };
 
 }
