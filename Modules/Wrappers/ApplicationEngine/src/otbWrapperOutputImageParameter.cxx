@@ -48,7 +48,6 @@ OutputImageParameter::OutputImageParameter()
 {
   this->SetName("Output Image");
   this->SetKey("out");
-  m_FileName = "";
 }
 
 
@@ -236,10 +235,10 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
-template <typename TInput, typename TOutput>
-std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer>
+template <typename TInput, typename TOutput> 
+std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer> 
 ClampAndWriteVectorImage( TInput * in ,
-                    const std::string & filename ,
+                    const std::string & filename , 
                     const unsigned int & ramValue )
 {
   std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer> ret;
@@ -248,7 +247,7 @@ ClampAndWriteVectorImage( TInput * in ,
 
   clampFilter->SetInput( in);
   ret.first = clampFilter.GetPointer();
-
+  
   bool useStandardWriter = true;
 
   #ifdef OTB_USE_MPI
@@ -285,17 +284,17 @@ ClampAndWriteVectorImage( TInput * in ,
       sptWriter->GetStreamingManager()->SetDefaultRAM(ramValue);
       ret.second = sptWriter.GetPointer();
       }
-
+    
     #endif
     else
       {
       itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
       }
-
+  
     }
-
+  
   #endif
-
+  
   if(useStandardWriter)
     {
     typename otb::ImageFileWriter<TOutput>::Pointer writer =
@@ -379,7 +378,7 @@ OutputImageParameter::SwitchInput(TInput *img)
     ret = ClampAndWriteVectorImage < TInput , ComplexInt16VectorImageType > (
       img ,
       m_FileName ,
-      m_RAMValue );
+      m_RAMValue ); 
     break;
     }
     case ImagePixelType_cint32:
@@ -387,7 +386,7 @@ OutputImageParameter::SwitchInput(TInput *img)
     ret = ClampAndWriteVectorImage < TInput , ComplexInt32VectorImageType > (
       img ,
       m_FileName ,
-      m_RAMValue );
+      m_RAMValue ); 
     break;
     }
     case ImagePixelType_cfloat:
@@ -395,7 +394,7 @@ OutputImageParameter::SwitchInput(TInput *img)
     ret = ClampAndWriteVectorImage < TInput , ComplexFloatVectorImageType > (
       img ,
       m_FileName ,
-      m_RAMValue );
+      m_RAMValue ); 
     break;
     }
     case ImagePixelType_cdouble:
@@ -448,7 +447,8 @@ OutputImageParameter::SetValue(ImageBaseType* image)
 bool
 OutputImageParameter::HasValue() const
 {
-  return !m_FileName.empty();
+  std::string filename(this->GetFileName());
+  return !filename.empty();
 }
 
 std::string
