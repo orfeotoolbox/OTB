@@ -433,7 +433,20 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         }
       else
         {
-        otbLogMacro(Info,<< "No kwl metadata found in file "<<lFileNameOssimKeywordlist);
+        // Try attached files
+        for (const std::string& path : m_ImageIO->GetAttachedFileNames())
+          {
+          otb_kwl = ReadGeometryFromImage(path,!m_FilenameHelper->GetSkipRpcTag());
+          if(!otb_kwl.Empty())
+            {
+            otbLogMacro(Info,<< "Loading kwl metadata in attached file "<<path);
+            break;
+            }
+          }
+        if (otb_kwl.Empty())
+          {
+          otbLogMacro(Info,<< "No kwl metadata found in file "<<lFileNameOssimKeywordlist);
+          }
         }
       }
 

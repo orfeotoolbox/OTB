@@ -435,7 +435,7 @@ void GDALImageIO::InternalReadImageInformation()
   // supported gdal format using the m_DatasetNumber value
   // HDF4_SDS:UNKNOWN:"myfile.hdf":2
   // and make m_Dataset point to it.
-  if (m_Dataset->GetDataSet()->GetRasterCount() == 0)
+  if (m_Dataset->GetDataSet()->GetRasterCount() == 0 || m_DatasetNumber > 0)
     {
     // this happen in the case of a hdf file with SUBDATASETS
     // Note: we assume that the datasets are in order
@@ -657,6 +657,24 @@ void GDALImageIO::InternalReadImageInformation()
       {
       this->SetPixelType(VECTOR);
       }
+    }
+
+  // get list of other files part of the same dataset
+  char** datasetFileList = dataset->GetFileList();
+  m_AttachedFileNames.clear();
+  if (datasetFileList != nullptr)
+    {
+    char** currentFile = datasetFileList;
+    while (*currentFile != nullptr)
+      {
+      if (m_FileName.compare(*currentFile) != 0)
+        {
+        m_AttachedFileNames.emplace_back(*currentFile);
+        otbLogMacro(Debug,<<"Found attached file : "<< *currentFile);
+        }
+      currentFile++;
+      }
+    CSLDestroy(datasetFileList);
     }
 
   /*----------------------------------------------------------------------*/
