@@ -222,11 +222,11 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
       inputImage->TransformIndexToPhysicalPoint(LowerRightCorner, lrCorner);
 
       m_OGRLayer.SetSpatialFilterRect(ulCorner[0],lrCorner[1],lrCorner[0],ulCorner[1]);
-
-      for(featIt = m_OGRLayer.begin(); featIt!=m_OGRLayer.end(); ++featIt)
+      
+      for (auto && feat : m_OGRLayer)
       {
         FeatureStruct s(m_OGRLayer.GetLayerDefn());
-        s.feat = *featIt;
+        s.feat = feat;
         s.fusioned = false;
         lowerStreamFeatureList.push_back(s);
       }

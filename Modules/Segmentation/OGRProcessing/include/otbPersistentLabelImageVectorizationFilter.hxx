@@ -104,19 +104,20 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   outLayer.CreateField(fieldPerimeter, true);
   */
   // Write output features
-  for(auto featIt = tmpLayer.begin(); featIt!=tmpLayer.end(); ++featIt)
+  
+  for (auto && feat : tmpLayer)
   {
     OGRFeatureType outFeature(outLayer.GetLayerDefn());
     
     // Only geometries whose attributes belong to the selected label list parameter are created. If the list is empty, all geometries are created except if the label is 0 (background)
-    if ( (std::find(m_Labels.begin(),m_Labels.end(),(*featIt)[m_FieldName].ogr::Field::template GetValue<int>()) != m_Labels.end() ) || ( (m_Labels.empty() ==true) &&  (*featIt)[m_FieldName].ogr::Field::template GetValue<int>() > 0 ))
+    if ( (std::find(m_Labels.begin(),m_Labels.end(),feat[m_FieldName].ogr::Field::template GetValue<int>()) != m_Labels.end() ) || ( (m_Labels.empty() ==true) &&  feat[m_FieldName].ogr::Field::template GetValue<int>() > 0 ))
     {
       //simplify
-      const OGRGeometry * geom = (*featIt).GetGeometry();
+      const OGRGeometry * geom = feat.GetGeometry();
       assert(geom && "geometry is NULL ! Can't simplify it.");
-      (*featIt).ogr::Feature::SetGeometryDirectly(ogr::Simplify( *geom->Buffer(0) ,m_Tolerance));
+      feat.ogr::Feature::SetGeometryDirectly(ogr::Simplify( *geom->Buffer(0) ,m_Tolerance));
      
-      outFeature.SetFrom( *featIt, TRUE );
+      outFeature.SetFrom( feat, TRUE );
       outLayer.CreateFeature( outFeature );
     }
     else

@@ -180,9 +180,9 @@ public:
       {
         fusionIndexes.push_back(idx);
         m_graph.find(idx)->second.isVisited = true;
-        for (std::vector<int>::iterator it = m_graph[idx].adjacencyList.begin(); it != m_graph[idx].adjacencyList.end(); it++)
+        for (auto const& node : m_graph[idx].adjacencyList)
         {
-          VisitNode( *it,fusionIndexes);
+          VisitNode( node,fusionIndexes);
         }
       }
     }	
