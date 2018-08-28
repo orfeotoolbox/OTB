@@ -424,7 +424,7 @@ private:
         "initialize cleanup parameter.\n"
         "For more information on shark KMeans algorithm [1].");
 
-    SetDocLimitations("None");
+    SetDocLimitations("The application doesn't support NaN in the input image");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageEnveloppe PolygonClassStatistics SampleSelection SamplesExtraction "
       "PolygonClassStatistics TrainVectorClassifier ImageClassifier\n"
