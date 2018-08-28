@@ -21,8 +21,6 @@
 
 #include "otbMetaDataKey.h"
 
-#define NBKEYS  24
-
 namespace otb
 {
 namespace MetaDataKey
@@ -65,6 +63,8 @@ char const* TileHintY = "TileHintY";
 
 char const * NoDataValueAvailable = "NoDataValueAvailable";
 char const * NoDataValue = "NoDataValue";
+
+char const * DataType = "DataType";
 }
 
 const MetaDataKey::KeyTypeDef Types[] =
@@ -77,6 +77,7 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::GCPCountKey,                       MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::GeoTransformKey,                   MetaDataKey::TVECTOR),
   MetaDataKey::KeyTypeDef(MetaDataKey::MetadataKey,                       MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::SubMetadataKey,                    MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::UpperLeftCornerKey,                MetaDataKey::TVECTOR),
   MetaDataKey::KeyTypeDef(MetaDataKey::UpperRightCornerKey,               MetaDataKey::TVECTOR),
   MetaDataKey::KeyTypeDef(MetaDataKey::LowerLeftCornerKey,                MetaDataKey::TVECTOR),
@@ -94,22 +95,24 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::TileHintX,                         MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::TileHintY,                         MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::NoDataValueAvailable,              MetaDataKey::TVECTOR),
-  MetaDataKey::KeyTypeDef(MetaDataKey::NoDataValue,                       MetaDataKey::TVECTOR)
+  MetaDataKey::KeyTypeDef(MetaDataKey::NoDataValue,                       MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::DataType,                          MetaDataKey::TENTIER),
   };
 
 MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
 {
-  MetaDataKey::KeyType ktype(MetaDataKey::TSTRING);
+  // MetaDataKey::KeyType ktype(MetaDataKey::TSTRING);
 
-  for (unsigned int i = 0; i < NBKEYS; ++i)
+  for ( const auto & key : Types )
     {
-    if ( name.find(Types[i].keyname) != std::string::npos )
+    if ( name.find(key.keyname) != std::string::npos )
       {
-      ktype = Types[i].type;
-      break;
+      return MetaDataKey::KeyType(key.type);
+      // ktype = key.type;
+      // return ktype;
       }
     }
-  return (ktype);
+  return MetaDataKey::KeyType(MetaDataKey::TSTRING);
 }
 
 OTB_GCP::OTB_GCP()
