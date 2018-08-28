@@ -34,6 +34,15 @@ namespace otb
  * 
  * \brief Persistent filter to compute spectral statistics based on vectors
  * 
+ * This filter takes as input an image and an OGR data-source containing polygons.
+ * an accumulator (min, max, mean, number of pixels and covariance) is created for each
+ * polygon of the input data-source. Note that the output data source is not updated in
+ * the 'GenerateData()' method of this filter, indeed, this filter is persistent :
+ * the output dataSource is updated during the synthetize method, using for each polygon
+ * the accumulators computed on each tile to obtain the final statistics. 
+ * 
+ * \sa OGRDataToSpectralStatisticsFilter
+ * 
  * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage>
@@ -180,6 +189,18 @@ private:
  * \class OGRDataToSpectralStatisticsFilter
  * 
  * \brief Computes class statistics based on vectors using a persistent filter
+ * 
+ * This filter takes as input a multi-spectral image and an OGR Data-Source and computes,
+ * for each polygon in the Data-Source, statistics based on the pixel of input image that intersects
+ * the polygon, and these statistics are written as attribute of thepolygons in 
+ * the Output Datasource. Computed statistics are for each band the minimum, the
+ * maximum, the mean, and the covariance matrix using all bands. the number of pixels
+ * is also written.
+ * 
+ * This filter is a PersistentFilterStreamingDecorator, templated over 
+ * PersistentOGRDataToSpectralStatisticsFilter. 
+ * 
+ * The name of the created fields of the created attributes can
  * 
  * \sa PersistentOGRDataToSpectralStatisticsFilter
  *
