@@ -30,11 +30,11 @@ namespace otb
 template<class TInputImage, class TMaskImage>
 PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 ::PersistentOGRDataToSpectralStatisticsFilter()
-  : m_MinField("Min")
-  , m_MaxField("Max")
-  , m_MeanField("Mean")
-  , m_CovField("Cov")
-  , m_NbPixelsField("Nbpixels")
+  : m_MinField("min")
+  , m_MaxField("max")
+  , m_MeanField("mean")
+  , m_CovField("cov")
+  , m_NbPixelsField("nbpixels")
 {  
   this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TInputImage::New());

@@ -76,10 +76,12 @@ private:
     
     AddParameter(ParameterType_String, "sizefield", "Size field name");
     SetParameterDescription("sizefield", "Name of the field containing polygon size");
-   
+    SetParameterString("sizefield","size");
+    
     AddParameter(ParameterType_String, "perimeterfield", "Perimeter field name");
     SetParameterDescription("perimeterfield", "Name of the field containing polygon perimeter");
-   
+    SetParameterString("perimeterfield","perimeter");
+    
     AddRAMParameter();
 
     // Doc example parameter settings

@@ -36,7 +36,6 @@ OGRDataToPolygonGeometricFeaturesFilter
   , m_SizeField("size")
   , m_PerimeterField("perimeter")
 {
-  std::cout << "constructor" << std::endl;
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 }
@@ -185,7 +184,6 @@ void
 OGRDataToPolygonGeometricFeaturesFilter
 ::AllocateOutputs(void)
 {
-  std::cout << "AllocateOutputs" << std::endl;
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetInput(0));
   ogr::Layer inLayer = vectors->GetLayer(0);
 
@@ -412,13 +410,10 @@ void
 OGRDataToPolygonGeometricFeaturesFilter
 ::ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid)
 {
-  std::cout << "ThreadedGenerateVectorData" << std::endl;
   ogr::Layer outLayer = this->GetInMemoryOutput(threadid);
 
   for (auto && feature : layerForThread)
   {
-    //std::cout << "FID : " <<feature.GetFID() << std::endl;
-    
     auto && geometry = feature.GetGeometry();
     assert(geometry->getGeometryType() == wkbPolygon); // otherwise get_area will crash with no explanation
     const double area = static_cast<OGRPolygon  const*>(geometry)->get_Area();
