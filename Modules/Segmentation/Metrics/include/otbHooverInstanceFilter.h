@@ -26,6 +26,7 @@
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
+#include <string>
 
 namespace otb
 {

@@ -37,13 +37,6 @@ typedef otb::Multi3DMapToDEMFilter
     ImageType>                              Multi3DFilterType;
 
 
-int otbMulti3DMapToDEMFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiation
-  Multi3DFilterType::Pointer multiFilter = Multi3DFilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbMulti3DMapToDEMFilterEPSG(int argc, char* argv[])
 {

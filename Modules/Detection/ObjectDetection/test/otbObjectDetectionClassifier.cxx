@@ -89,12 +89,6 @@ std::ostream &operator<<(std::ostream &stream, PointType p)
   return stream;
 }
 
-int otbObjectDetectionClassifierNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  ObjectDetectionClassifierType::Pointer object = ObjectDetectionClassifierType::New();
-  std::cout << object << std::endl;
-  return EXIT_SUCCESS;
-}
 
 
 int otbObjectDetectionClassifier(int argc, char* argv[])

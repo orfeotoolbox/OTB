@@ -26,13 +26,6 @@
 #include "otbImageFileReader.h"
 #include "otbGeometricSarSensorModelAdapter.h"
 
-int otbGeometricSarSensorModelAdapterNewTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  typedef otb::GeometricSarSensorModelAdapter SarSensorModelType;
-  SarSensorModelType::Pointer masterPlatform = SarSensorModelType::New();
-  return EXIT_SUCCESS;
-}
-
 int otbGeometricSarSensorModelAdapterTest(int argc, char* argv[])
 {
  if (argc != 3)

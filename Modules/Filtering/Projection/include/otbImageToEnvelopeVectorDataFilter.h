@@ -23,6 +23,7 @@
 
 #include "otbVectorDataSource.h"
 #include "otbGenericRSTransform.h"
+#include <string>
 
 namespace otb
 {

@@ -48,11 +48,6 @@ typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                        
 typedef otb::MinMaxAttributesLabelMapFilter<LabelMapType>                       MinMaxAttributesLabelMapFilterType;
 typedef otb::NormalizeAttributesLabelMapFilter<LabelMapType>                    NormalizeAttributesLabelMapFilterType;
 
-int otbNormalizeAttributesLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  NormalizeAttributesLabelMapFilterType::Pointer normalizeLabelMapFilter = NormalizeAttributesLabelMapFilterType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbNormalizeAttributesLabelMapFilter(int itkNotUsed(argc), char * argv[])
 {

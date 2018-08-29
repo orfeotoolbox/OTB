@@ -408,7 +408,7 @@ private:
         {
         //Write transformation matrix
         std::ofstream outFile;
-        outFile.open(this->GetParameterString("outmatrix").c_str());
+        outFile.open(this->GetParameterString("outmatrix"));
         outFile << std::fixed;
         outFile.precision(10);
 

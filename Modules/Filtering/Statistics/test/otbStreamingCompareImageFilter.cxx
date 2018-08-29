@@ -28,21 +28,6 @@
 #include <fstream>
 #include "otbStreamingTraits.h"
 
-int otbStreamingCompareImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-
-  typedef otb::Image<PixelType, Dimension>               ImageType;
-  typedef otb::StreamingCompareImageFilter<ImageType> StreamingCompareImageFilterType;
-
-  // Instantiating object
-  StreamingCompareImageFilterType::Pointer filter = StreamingCompareImageFilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbStreamingCompareImageFilter(int itkNotUsed(argc), char * argv[])
 {

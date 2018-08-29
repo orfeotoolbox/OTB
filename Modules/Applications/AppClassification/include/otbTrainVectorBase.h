@@ -36,6 +36,7 @@
 
 #include <algorithm>
 #include <locale>
+#include <string>
 
 namespace otb
 {

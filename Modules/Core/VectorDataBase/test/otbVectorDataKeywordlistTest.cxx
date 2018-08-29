@@ -27,12 +27,6 @@
 #include "otbVectorDataFileReader.h"
 #include "otbMetaDataKey.h"
 
-int otbVectorDataKeywordlistNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  otb::VectorDataKeywordlist kwl;
-  std::cout << kwl << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbVectorDataKeywordlist(int itkNotUsed(argc), char * argv[])
 {

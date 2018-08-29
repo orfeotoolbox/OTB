@@ -34,6 +34,7 @@
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbLabelObjectOpeningMuParserFilter.h"
 #include "otbLabelMapToVectorDataFilter.h"
+#include <string>
 
 namespace otb {
 

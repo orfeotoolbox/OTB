@@ -30,22 +30,6 @@
 
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 
-int otbReflectanceToSurfaceReflectanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  const unsigned int Dimension = 2;
-  typedef double                                 PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
-
-  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
-      InputImageType>
-  ReflectanceToSurfaceReflectanceImageFilterType;
-
-  // Instantiating object
-  ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter
-      = ReflectanceToSurfaceReflectanceImageFilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbReflectanceToSurfaceReflectanceImageFilterTest(int itkNotUsed(argc), char * argv[])
 {

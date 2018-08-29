@@ -80,7 +80,7 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
   for ( unsigned int i = 0; i < nbInputImages; i++ )
   {
     reader->SetNthElement(i, ReaderType::New());
-    reader->GetNthElement(i)->SetFileName( inputImageName[i].c_str() );
+    reader->GetNthElement(i)->SetFileName( inputImageName[i] );
     reader->GetNthElement(i)->Update();
   }
 
@@ -111,7 +111,7 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
     WriterType::Pointer writer = writers->GetNthElement(i);
     
     std::string stitle = title.str();
-    writer->SetFileName( stitle.c_str() );
+    writer->SetFileName( stitle );
     writer->SetInput( filter->GetOutput()->GetNthElement(i) );
     writer->Update();
   }

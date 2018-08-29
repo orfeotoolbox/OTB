@@ -18,7 +18,7 @@
 # limitations under the License.
 
 add_executable(otbQgisDescriptor otbQgisDescriptor.cxx)
-target_link_libraries(otbQgisDescriptor ${OTBQgis_LIBRARIES})
+target_link_libraries(otbQgisDescriptor ${OTBQGIS_LIBRARIES})
 otb_module_target(otbQgisDescriptor)
 
 add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
@@ -53,4 +53,3 @@ endforeach()
 
 add_custom_target(generate_descriptors DEPENDS ${dfiles} )
 add_dependencies(${otb-module}-all generate_descriptors)
-

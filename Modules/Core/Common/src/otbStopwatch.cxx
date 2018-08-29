@@ -19,6 +19,8 @@
  */
 
 #include <chrono>
+#include <sstream>
+#include <iomanip>
 
 #include "otbStopwatch.h"
 
@@ -80,6 +82,33 @@ Stopwatch
     result += this->GetRunningElapsedTime();
 
   return result;
+}
+
+void
+Stopwatch
+::GetElapsedHumanReadableTime(std::ostream & oss) const
+{
+  auto result = this->GetElapsedMilliseconds();
+  DurationType seconds = result / 1000;
+  DurationType hours = seconds / 3600;
+  seconds -= hours * 3600;
+  DurationType minutes = seconds / 60;
+  seconds -= minutes * 60;
+  std::ostringstream os;
+  if (hours > 0)
+    oss << hours << "h " << std::setfill('0') << std::setw(2);
+  if (minutes > 0 || hours > 0)
+    oss << minutes << "m " << std::setfill('0') << std::setw(2);
+  oss << seconds << "s";
+}
+
+std::string
+Stopwatch
+::GetElapsedHumanReadableTime() const
+{
+  std::ostringstream oss;
+  GetElapsedHumanReadableTime(oss);
+  return oss.str();
 }
 
 bool

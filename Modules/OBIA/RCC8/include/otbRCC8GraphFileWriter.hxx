@@ -134,7 +134,7 @@ RCC8GraphFileWriter<TInputGraph>
   std::ofstream out;
 
   // open the outputfile
-  out.open(m_FileName.c_str(), std::ios::out);
+  out.open(m_FileName, std::ios::out);
 
   // Test if the file has been opened correctly
   if (!out)
@@ -143,7 +143,7 @@ RCC8GraphFileWriter<TInputGraph>
     std::ostringstream msg;
     msg << " Could not create IO object for file ";
     msg << m_FileName << "." << std::endl;
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     return;
     }

@@ -611,7 +611,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
       std::ostringstream msg;
       msg << this->GetNameOfClass()
                   << "::GenerateInputRequestedRegion()";
-      e.SetLocation(msg.str().c_str());
+      e.SetLocation(msg.str());
       e.SetDescription("Requested region is (at least partially) outside the largest possible region of disparity map.");
       e.SetDataObject(horizDisp);
       throw e;

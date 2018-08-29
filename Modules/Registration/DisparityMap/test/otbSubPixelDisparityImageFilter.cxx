@@ -59,14 +59,6 @@
   typedef otb::ImageFileReader<FloatImageType>               ReaderType;
   typedef otb::ImageFileWriter<FloatImageType>      WriterType;
 
-int otbSubPixelDisparityImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-
-  // Instantiation
-  SSDSubPixelDisparityFilterType::Pointer filter = SSDSubPixelDisparityFilterType::New();
-
-   return EXIT_SUCCESS;
-}
 
 template<class TImage,class TFunctorType> int ProcessAndWriteOutput(otb::SubPixelDisparityImageFilter<TImage,
                                                        TImage,TImage,TImage,TFunctorType> * subPixFilter,int argc,char* argv[])

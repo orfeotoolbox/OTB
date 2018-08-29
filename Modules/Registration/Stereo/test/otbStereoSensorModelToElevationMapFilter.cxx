@@ -48,14 +48,6 @@ typedef itk::MedianImageFilter<HeightImageType, HeightImageType> MedianFilterTyp
 typedef otb::ImageFileWriter<HeightImageType> WriterType;
 
 
-int otbStereoSensorModelToElevationMapFilterNew( int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiation
-  StereoFilterType::Pointer stereoFilter = StereoFilterType::New();
-
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbStereoSensorModelToElevationMapFilter( int itkNotUsed(argc), char * argv[] )

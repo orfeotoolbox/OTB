@@ -26,7 +26,6 @@ otbMDMDNMFImageFilter.cxx
 otbNCLSUnmixingImageFilter.cxx
 otbISRAUnmixingImageFilter.cxx
 otbUnConstrainedLeastSquareImageFilter.cxx
-otbSparseUnmixingImageFilterNew.cxx
 otbSparseUnmixingImageFilter.cxx
 )
 
@@ -52,9 +51,6 @@ otb_add_test(NAME hyTvMDMDNMFImageFilterTest COMMAND otbUnmixingTestDriver
   ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
   100)
 
-otb_add_test(NAME hyTuMDMDNMFImageFilterNew COMMAND otbUnmixingTestDriver
-  otbMDMDNMFImageFilterNewTest)
-
 otb_add_test(NAME hyTvNCLSUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
   --compare-image ${EPSILON_9}
   ${BASELINE_FILES}/hyTvNCLSImageFilterTest.tif
@@ -64,9 +60,6 @@ otb_add_test(NAME hyTvNCLSUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
   ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
   ${TEMP}/hyTvNCLSImageFilterTest.tif
   10)
-
-otb_add_test(NAME hyTuNCLSUnmixingImageFilterNew COMMAND otbUnmixingTestDriver
-  otbNCLSUnmixingImageFilterNewTest)
 
 otb_add_test(NAME hyTvISRAUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
   --compare-image ${EPSILON_9}
@@ -78,12 +71,6 @@ otb_add_test(NAME hyTvISRAUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
   ${TEMP}/hyTvISRAUnmixingImageFilterTest.tif
   10)
 
-otb_add_test(NAME hyTuISRAUnmixingImageFilterNew COMMAND otbUnmixingTestDriver
-  otbISRAUnmixingImageFilterNewTest)
-
-otb_add_test(NAME hyTuUnConstrainedLeastSquareImageFilterNew COMMAND otbUnmixingTestDriver
-  otbUnConstrainedLeastSquareImageFilterNewTest)
-
 otb_add_test(NAME hyTvUnConstrainedLeastSquareImageFilterTest COMMAND otbUnmixingTestDriver
   --compare-image ${EPSILON_9}
   ${BASELINE_FILES}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
@@ -92,7 +79,4 @@ otb_add_test(NAME hyTvUnConstrainedLeastSquareImageFilterTest COMMAND otbUnmixin
   ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
   ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
   ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif)
-
-otb_add_test(NAME hyTuSparseUnmixingImageFilterNew COMMAND otbUnmixingTestDriver
-  otbSparseUnmixingImageFilterNew)
 

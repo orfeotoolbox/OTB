@@ -28,15 +28,6 @@
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperProxyParameter.h"
 
-int otbWrapperParameterListNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  using otb::Wrapper::ParameterGroup;
-  ParameterGroup::Pointer parameters = ParameterGroup::New();
-
-  //std::cout << parameter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbWrapperParameterList(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {

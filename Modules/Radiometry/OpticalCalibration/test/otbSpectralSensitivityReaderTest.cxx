@@ -27,15 +27,6 @@
 
 using namespace otb;
 
-int otbSpectralSensitivityReaderNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-
-  SpectralSensitivityReader::Pointer spectSen = SpectralSensitivityReader::New();
-
-  std::cout << spectSen << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbSpectralSensitivityReaderTest(int itkNotUsed(argc), char* argv[])
 {

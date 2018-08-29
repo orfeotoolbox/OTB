@@ -33,11 +33,6 @@ typedef otb::ImageFileReader<ImageType>                       ReaderType;
 typedef otb::ImageFileWriter<ImageType>              WriterType;
 typedef otb::OGRDataSourceToLabelImageFilter<ImageType>       RasterizationFilterType;
 
-int otbOGRDataSourceToLabelImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbOGRDataSourceToLabelImageFilter(int itkNotUsed(argc), char * argv[])
 {

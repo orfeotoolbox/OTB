@@ -548,9 +548,9 @@ bool CommandLineLauncher::CheckOutputPathsValidity(const std::string & paramKey)
     {
     std::string filename = m_Application->GetParameterString(paramKey);
     itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
-    if (path!="" && !itksys::SystemTools::FileIsDirectory(path.c_str()))
+    if (path!="" && !itksys::SystemTools::FileIsDirectory(path))
       {
-      std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
+      std::cerr <<"ERROR: Directory doesn't exist : "<< path << std::endl;
       return false;
         }
       }
@@ -998,7 +998,7 @@ void CommandLineLauncher::DisplayOutputParameters()
     std::vector<std::string> val = m_Parser->GetAttribut("-testenv", m_VExpression);
     if( val.size() == 1 )
       {
-      std::ofstream ofs(val[0].c_str());
+      std::ofstream ofs(val[0]);
       if (!ofs.is_open())
         {
         fprintf(stderr, "Error, can't open file");

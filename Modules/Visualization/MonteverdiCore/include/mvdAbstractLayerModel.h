@@ -51,6 +51,7 @@
 #include "mvdAbstractModel.h"
 #include "mvdTypes.h"
 #include "mvdVisibleInterface.h"
+#include <string>
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */

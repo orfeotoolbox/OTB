@@ -32,6 +32,7 @@
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 
 #include <AlosPalsar/AlosPalsarPositionVectorRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

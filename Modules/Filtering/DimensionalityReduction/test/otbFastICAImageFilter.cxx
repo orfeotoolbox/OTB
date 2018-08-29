@@ -28,25 +28,6 @@
 
 #include "otbFastICAImageFilter.h"
 
-int otbFastICAInternalOptimizerVectorImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
-{
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-  typedef otb::FastICAInternalOptimizerVectorImageFilter< ImageType, ImageType > FilterType;
-  FilterType::Pointer filter = FilterType::New();
-  return EXIT_SUCCESS;
-}
-
-int otbFastICAImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
-{
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-  typedef otb::FastICAImageFilter< ImageType, ImageType, otb::Transform::FORWARD > FilterType;
-  FilterType::Pointer filter = FilterType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbFastICAImageFilterTest ( int argc, char* argv[] )
 {

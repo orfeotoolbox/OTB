@@ -147,6 +147,13 @@ foreach(classifier ${classifierList})
 
   # Derive output file name
   set(OUTMODELFILE cl${classifier}_ModelQB1${${lclassifier}_output_format})
+
+  # special case for DT, use OpenCV 2.x model file if not using OpenCV 3.x
+  if(${classifier} STREQUAL "DT" AND NOT OTB_OPENCV_3)
+    set(OUTMODELFILE clDT_ModelQB1-opencv2.dt)
+  endif()
+
+
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
   set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
 

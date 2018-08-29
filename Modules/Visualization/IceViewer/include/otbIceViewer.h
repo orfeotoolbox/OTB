@@ -39,6 +39,7 @@
 #include "otbStandardShader.h"
 #include <GL/freeglut.h>
 #include  "OTBIceViewerExport.h"
+#include <string>
 
 namespace otb
 {

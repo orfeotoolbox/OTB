@@ -106,7 +106,7 @@ int otbOssimElevManagerTest4(int argc, char* argv[])
   std::stringstream headerName;
   headerName << outfname << ".hdr";
   std::ofstream headerFile;
-  headerFile.open(headerName.str().c_str());
+  headerFile.open(headerName.str());
   headerFile << "ENVI" << std::endl;
   headerFile << "samples = " << size[0] << std::endl;
   headerFile << "lines   = " << size[1] << std::endl;

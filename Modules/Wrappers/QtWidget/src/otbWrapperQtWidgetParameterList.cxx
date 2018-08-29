@@ -73,7 +73,7 @@ QtWidgetParameterList
 
   //
   // Global Layout
-  QGridLayout * gLayout = new QGridLayout(this);
+  QGridLayout * gLayout = new QGridLayout;
 
   gLayout->setSpacing( 1 );
   gLayout->setContentsMargins( 2, 2, 2, 2 );

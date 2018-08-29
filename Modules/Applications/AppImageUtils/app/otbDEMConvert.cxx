@@ -52,7 +52,9 @@ private:
 
     SetDocName("DEM Conversion");
     SetDocLongDescription("In order to be understood by the Orfeo ToolBox and the underlying OSSIM library, a geo-referenced Digital Elevation Model image can be converted into a general raster image, which consists in 3 files with the following extensions: .ras, .geom and .omd. Once converted, you have to place these files in a separate directory, and you can then use this directory to set the \"DEM Directory\" parameter of a DEM based OTB application or filter.");
-    SetDocLimitations("None");
+    SetDocLimitations("For this application to work one need the input "
+      "pixel type to be retrieved. It can only be done through GDAL IO driver "
+      "for now.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
@@ -109,42 +111,60 @@ void DoExecute() override
   paramOut->SetValue(inImage);
 
   // Set the output pixel type
-  ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO( GetParameterString("in").c_str(),
-                                                                      ImageIOFactory::ReadMode);
-  std::string componentTypeInfo(imageIO->GetComponentTypeInfo().name());
-  if( componentTypeInfo == typeid(unsigned char).name())
+  ImageIOBase::IOComponentType typeInfo;
+  bool hasType( itk::ExposeMetaData< ImageIOBase::IOComponentType >( inImage->GetMetaDataDictionary(), 
+          MetaDataKey::DataType , typeInfo) );
+  if ( ! hasType )
+    itkExceptionMacro("The pixel type could not be retrieved.");
+  switch(typeInfo)
     {
-    paramOut->SetPixelType(ImagePixelType_uint8);
+    case ImageIOBase::UCHAR:
+      paramOut->SetPixelType(ImagePixelType_uint8);
+      break;
+    case ImageIOBase::CHAR:
+      itkExceptionMacro("This application doesn't support image pixel type char.");
+      break;
+    case ImageIOBase::USHORT:
+      paramOut->SetPixelType(ImagePixelType_uint16);
+      break;
+    case ImageIOBase::SHORT:
+      paramOut->SetPixelType(ImagePixelType_int16);
+      break;
+    case ImageIOBase::UINT:
+      paramOut->SetPixelType(ImagePixelType_uint32);
+      break;
+    case ImageIOBase::INT:
+      paramOut->SetPixelType(ImagePixelType_int32);
+      break;
+    case ImageIOBase::ULONG:
+      itkExceptionMacro("This application doesn't support image pixel type unsigned long.");
+      break;
+    case ImageIOBase::LONG:
+      itkExceptionMacro("This application doesn't support image pixel type long.");
+      break;
+    case ImageIOBase::FLOAT:
+      paramOut->SetPixelType(ImagePixelType_float);
+      break;
+    case ImageIOBase::DOUBLE:
+      paramOut->SetPixelType(ImagePixelType_double);
+      break;
+    case ImageIOBase::CSHORT:
+      paramOut->SetPixelType(ImagePixelType_cint16);
+      break;
+    case ImageIOBase::CINT:
+      paramOut->SetPixelType(ImagePixelType_cint32);
+      break;
+    case ImageIOBase::CFLOAT:
+      paramOut->SetPixelType(ImagePixelType_cfloat);
+      break;
+    case ImageIOBase::CDOUBLE:
+      paramOut->SetPixelType(ImagePixelType_cdouble);
+      break;
+    case ImageIOBase::UNKNOWNCOMPONENTTYPE:
+      itkExceptionMacro("The pixel type is unknown.");
+      break;
     }
-  else if( componentTypeInfo == typeid(unsigned short).name())
-    {
-    paramOut->SetPixelType(ImagePixelType_uint16);
-    }
-  else if( componentTypeInfo == typeid(short).name())
-    {
-    paramOut->SetPixelType(ImagePixelType_int16);
-    }
-  else if( componentTypeInfo == typeid(unsigned int).name())
-    {
-    paramOut->SetPixelType(ImagePixelType_uint32);
-    }
-  else if( componentTypeInfo == typeid(int).name())
-    {
-    paramOut->SetPixelType(ImagePixelType_int32);
-    }
-  else if( componentTypeInfo == typeid(float).name())
-    {
-    paramOut->SetPixelType(ImagePixelType_float);
-    }
-  else if( componentTypeInfo == typeid(double).name())
-    {
-    paramOut->SetPixelType(ImagePixelType_double);
-    }
-  else
-    {
-    itkExceptionMacro("This application doesn't support image pixel type " << componentTypeInfo);
-    }
-
+  
   // Add the tempfilename to be written
   paramOut->InitializeWriters();
   AddProcess(paramOut->GetWriter(), osswriter.str());
@@ -157,14 +177,14 @@ void DoExecute() override
   DEMConverter->Convert(tempFilename, output);
 
   // remove the temprorary tif file
-  if( !itksys::SystemTools::RemoveFile(tempFilename.c_str()) )
+  if( !itksys::SystemTools::RemoveFile(tempFilename) )
     {
     itkExceptionMacro("Problem while removing the file " << tempFilename);
     }
 
   // remove the geom file if any
-  if( itksys::SystemTools::FileExists(tempFilenameGeom.c_str())
-      && !itksys::SystemTools::RemoveFile(tempFilenameGeom.c_str()))
+  if( itksys::SystemTools::FileExists(tempFilenameGeom)
+      && !itksys::SystemTools::RemoveFile(tempFilenameGeom))
     {
     itkExceptionMacro("Problem while removing the Geom file " << tempFilenameGeom);
     }

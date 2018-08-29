@@ -166,14 +166,14 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_shp_overwrite)
   const std::string workingdir = k_name + "/shp";
 
   // Create an empty temporary directory for the test
-  if ( itksys::SystemTools::FileExists(workingdir.c_str()) )
+  if ( itksys::SystemTools::FileExists(workingdir) )
     {
-    itksys::SystemTools::RemoveADirectory(workingdir.c_str());
+    itksys::SystemTools::RemoveADirectory(workingdir);
     }
-  itksys::SystemTools::MakeDirectory(workingdir.c_str());
+  itksys::SystemTools::MakeDirectory(workingdir);
 
   std::string filename = workingdir + "/" + k_name + ".shp";
-  filename = itksys::SystemTools::ConvertToOutputPath(filename.c_str());
+  filename = itksys::SystemTools::ConvertToOutputPath(filename);
 
   const std::string layer1 = k_name;
 
@@ -451,14 +451,14 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_sqlite_overwrite)
   const std::string workingdir = k_name + "/sqlite";
 
   // Create an empty temporary directory for the test
-  if ( itksys::SystemTools::FileExists(workingdir.c_str()) )
+  if ( itksys::SystemTools::FileExists(workingdir) )
     {
-    itksys::SystemTools::RemoveADirectory(workingdir.c_str());
+    itksys::SystemTools::RemoveADirectory(workingdir);
     }
-  itksys::SystemTools::MakeDirectory(workingdir.c_str());
+  itksys::SystemTools::MakeDirectory(workingdir);
 
   std::string filename = workingdir + "/" + k_name + ".sqlite";
-  filename = itksys::SystemTools::ConvertToOutputPath(filename.c_str());
+  filename = itksys::SystemTools::ConvertToOutputPath(filename);
 
   const std::string layer1 = boost::algorithm::to_lower_copy(k_name);
 

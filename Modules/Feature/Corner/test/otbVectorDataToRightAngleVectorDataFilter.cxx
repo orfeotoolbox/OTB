@@ -30,19 +30,6 @@
 #include "otbImageFileWriter.h"
 
 
-int otbVectorDataToRightAngleVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  /** Typedefs */
-  typedef otb::VectorData< >                    VectorDataType;
-  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>
-                                                RightAngleFilterType;
-
-  RightAngleFilterType::Pointer filter  = RightAngleFilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbVectorDataToRightAngleVectorDataFilter(int itkNotUsed(argc), char * argv[])

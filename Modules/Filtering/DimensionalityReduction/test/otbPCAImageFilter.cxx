@@ -28,21 +28,6 @@
 
 #include "otbPCAImageFilter.h"
 
-int otbPCAImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
-{
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-
-  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::FORWARD > FilterType;
-  FilterType::Pointer filter = FilterType::New();
-
-  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvFilterType;
-  InvFilterType::Pointer invFilter = InvFilterType::New();
-
-  return EXIT_SUCCESS;
-}
-
 int otbPCAImageFilterTest ( int argc, char* argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;

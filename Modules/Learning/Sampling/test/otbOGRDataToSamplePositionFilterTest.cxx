@@ -133,16 +133,6 @@ int TestPositionContainers(otb::ogr::DataSource *output, otb::ogr::DataSource *b
   return EXIT_SUCCESS;
 }
 
-int otbOGRDataToSamplePositionFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::VectorImage<float> InputImageType;
-  typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToSamplePositionFilter<InputImageType , MaskImageType> FilterType;
-  
-  FilterType::Pointer filter = FilterType::New();
-  std::cout << filter << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbOGRDataToSamplePositionFilter(int argc, char* argv[])
 {

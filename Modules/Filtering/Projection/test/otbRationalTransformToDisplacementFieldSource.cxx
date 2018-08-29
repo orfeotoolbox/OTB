@@ -133,7 +133,7 @@ int otbRationalTransformToDisplacementFieldSourceTest(int argc, char* argv[])
   /** Write deformation field to disk. */
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( defGenerator->GetOutput() );
-  writer->SetFileName( fileName.c_str() );
+  writer->SetFileName( fileName );
 
   try
     {

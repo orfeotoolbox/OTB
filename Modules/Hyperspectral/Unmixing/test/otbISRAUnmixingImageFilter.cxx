@@ -36,13 +36,6 @@ typedef otb::ISRAUnmixingImageFilter<ImageType, ImageType, PixelType> UnmixingIm
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<ImageType> WriterType;
 
-int otbISRAUnmixingImageFilterNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  UnmixingImageFilterType::Pointer filter = UnmixingImageFilterType::New();
-  std::cout << filter << std::endl;
-  return EXIT_SUCCESS;
-}
-
 int otbISRAUnmixingImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputImage = argv[1];

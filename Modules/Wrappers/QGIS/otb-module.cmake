@@ -20,11 +20,11 @@
 
 set(DOCUMENTATION "This module allows to generate application descriptor files for QGIS processing plugin.")
 
-otb_module(OTBQgis
+otb_module(OTBQGIS
   DEPENDS
     OTBITK
     OTBApplicationEngine
-    
+
   TEST_DEPENDS
     OTBExtern
     OTBTestKernel
@@ -32,4 +32,3 @@ otb_module(OTBQgis
   DESCRIPTION
     "${DOCUMENTATION}"
 )
-

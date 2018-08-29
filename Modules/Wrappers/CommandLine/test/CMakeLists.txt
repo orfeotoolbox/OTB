@@ -32,9 +32,6 @@ otb_module_target_label(otbCommandLineTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME clTuWrapperCommandLineLauncherNew
-  COMMAND otbCommandLineTestDriver otbWrapperCommandLineLauncherNew )
-
 otb_add_test(NAME clTvWrapperCommandLineLauncherTest_WrongParam
   COMMAND otbCommandLineTestDriver otbWrapperCommandLineLauncherTest
   "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale> -inn image)
@@ -96,9 +93,6 @@ otb_add_test(NAME clTvWrapperCommandLineParserTest_IsAttExistsEndNoParam
   COMMAND otbCommandLineTestDriver otbWrapperCommandLineParserTest4
   "-m"
   "TrainImagesClassifier" "test" "-il" "QB_1_ortho.tif" "-vd" "vd" ".shape" "test" "-m")
-
-otb_add_test(NAME clTuWrapperCommandLineParserNew
-  COMMAND otbCommandLineTestDriver otbWrapperCommandLineParserNew )
 
 otb_add_test(NAME clTvWrapperCommandLineParserTest_MultiplePathOneWrong
   COMMAND otbCommandLineTestDriver otbWrapperCommandLineParserTest2

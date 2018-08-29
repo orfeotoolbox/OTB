@@ -29,6 +29,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <ossim/base/ossimCommon.h>
+#include <string>
 
 namespace ossimplugins
 {

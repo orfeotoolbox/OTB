@@ -34,13 +34,6 @@ typedef otb::ImageFileReader<VectorImageType>          VectorImageReaderType;
 typedef otb::ImageFileWriter<VectorImageType> VectorImageWriterType;
 
 
-int otbTileImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  TileImageFilterType::Pointer tileFilter = TileImageFilterType::New();
-  TileVectorImageFilterType::Pointer tileVectorFilter = TileVectorImageFilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbTileImageFilter(int argc, char * argv[])
 {

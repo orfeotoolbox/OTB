@@ -26,11 +26,6 @@
 #include <stdlib.h>
 #include "itkMacro.h"
 
-int otbFuzzyDescriptorsModelManagerNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  otb::FuzzyDescriptorsModelManager mng;
-  return EXIT_SUCCESS;
-}
 
 
 int otbFuzzyDescriptorsModelManagerTest(int itkNotUsed(argc), char* argv[])

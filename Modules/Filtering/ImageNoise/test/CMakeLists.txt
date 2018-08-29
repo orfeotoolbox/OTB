@@ -26,7 +26,6 @@ otbFrostFilter.cxx
 otbLeeFilter.cxx
 otbGammaMAPFilter.cxx
 otbKuanFilter.cxx
-otbFrostFilterNew.cxx
 )
 
 add_executable(otbImageNoiseTestDriver ${OTBImageNoiseTests})
@@ -76,7 +75,4 @@ otb_add_test(NAME bfTvFiltreKuan COMMAND otbImageNoiseTestDriver
   ${TEMP}/bfFiltreKuan_05_05_12.tif
   05 05 12.0)  
   
-
-otb_add_test(NAME bfTuFrostFilterNew COMMAND otbImageNoiseTestDriver
-  otbFrostFilterNew)
 

@@ -23,6 +23,7 @@
 
 #include "otbCurlHelperInterface.h"
 #include "OTBCartoExport.h"
+#include <string>
 
 namespace otb
 {

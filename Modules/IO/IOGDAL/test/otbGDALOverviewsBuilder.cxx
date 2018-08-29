@@ -26,15 +26,6 @@
 
 using namespace otb;
 
-int otbGDALOverviewsBuilderNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::GDALOverviewsBuilder GDALOverviewsBuilderType;
-  GDALOverviewsBuilderType::Pointer object = GDALOverviewsBuilderType::New();
-
-  std::cout << object << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
 {

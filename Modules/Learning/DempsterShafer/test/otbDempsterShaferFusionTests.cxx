@@ -68,12 +68,12 @@ std::ostream& operator <<(std::ostream& os, const IntMassOfBeliefFunctionType::L
 int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &mapOfClassesRefClX, ConfusionMatrixType &confusionMatrixClX)
   {
     std::ifstream inFile;
-    inFile.open(fileName.c_str());
+    inFile.open(fileName);
 
     if (!inFile)
       {
       std::cerr << "Confusion Matrix File opening problem with file:" << std::endl;
-      std::cerr << fileName.c_str() << std::endl;
+      std::cerr << fileName << std::endl;
       return EXIT_FAILURE;
       }
     else

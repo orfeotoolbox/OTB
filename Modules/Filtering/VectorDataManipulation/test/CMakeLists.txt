@@ -24,12 +24,9 @@ set(OTBVectorDataManipulationTests
 otbVectorDataManipulationTestDriver.cxx
 otbDBOverlapDataNodeFeatureFunction.cxx
 otbVectorDataExtractROI.cxx
-otbVectorDataToSpecificDescriptionFilterBase.cxx
-otbVectorDataToVectorDataFilterNew.cxx
 otbPolygonCompacityFunctor.cxx
 otbVectorDataToRandomLineGenerator.cxx
 otbConcatenateVectorDataFilter.cxx
-otbVectorDataExtractROINew.cxx
 otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.cxx
 )
 
@@ -50,9 +47,6 @@ otb_add_test(NAME bfTvDBOverlapDataNodeFeatureFunction COMMAND otbVectorDataMani
   0
   )
 
-otb_add_test(NAME bfTuDBOverlapDataNodeFeatureFunctionNew COMMAND otbVectorDataManipulationTestDriver
-  otbDBOverlapDataNodeFeatureFunctionNew
-  )
 
 otb_add_test(NAME coTvVectorDataExtractROI COMMAND otbVectorDataManipulationTestDriver
   --compare-ogr ${NOTOL}
@@ -76,12 +70,6 @@ otb_add_test(NAME coTvVectorDataExtractROI2 COMMAND otbVectorDataManipulationTes
   1000.25 25000.2                               # Size of the Cartoregion
   )
 
-otb_add_test(NAME fzTuVectorDataToSpecificDescriptionFilterBaseNew COMMAND otbVectorDataManipulationTestDriver
-  otbVectorDataToSpecificDescriptionFilterBaseNew)
-
-otb_add_test(NAME coTuVectorDataToVectorDataFilterNew COMMAND otbVectorDataManipulationTestDriver
-  otbVectorDataToVectorDataFilterNew)
-
 otb_add_test(NAME bfTvPolygonCompacityFunctor COMMAND otbVectorDataManipulationTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/bfPolygonCompacityFunctorTest.txt
@@ -100,13 +88,7 @@ otb_add_test(NAME bfTvVectorDataToRandomLineGenerator COMMAND otbVectorDataManip
   ${TEMP}/bfTvVectorDataToRandomLineGeneratorOutput.shp
   )
 
-otb_add_test(NAME bfTuVectorDataToRandomLineGeneratorNew COMMAND otbVectorDataManipulationTestDriver
-  otbVectorDataToRandomLineGeneratorNew
-  )
 
-otb_add_test(NAME bfTuConcatenateVectorDataFilterNew COMMAND otbVectorDataManipulationTestDriver
-  otbConcatenateVectorDataFilterNew
-  )
 
 otb_add_test(NAME bfTvConcatenateVectorDataFilter COMMAND otbVectorDataManipulationTestDriver
   --compare-ogr ${NOTOL}
@@ -118,9 +100,6 @@ otb_add_test(NAME bfTvConcatenateVectorDataFilter COMMAND otbVectorDataManipulat
   -out ${TEMP}/otbConcatenateVectorDataFilter_Output.shp
   )
 
-otb_add_test(NAME coTuVectorDataExtractROINew COMMAND otbVectorDataManipulationTestDriver
-  otbVectorDataExtractROINew)
-
 otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Polygon COMMAND otbVectorDataManipulationTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
@@ -131,9 +110,6 @@ otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctio
   ${INPUTDATA}/DEM/srtm_directory
   ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
   0 )
-otb_add_test(NAME bfTuRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew COMMAND otbVectorDataManipulationTestDriver
-  otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew
-  )
 otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Line COMMAND otbVectorDataManipulationTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp

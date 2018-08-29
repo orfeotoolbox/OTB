@@ -26,12 +26,6 @@ typedef otb::PCAModel<double> PCAModelType;
 typedef PCAModelType::InputListSampleType InputListSampleType;
 typedef PCAModelType::TargetListSampleType TargetListSampleType;
 
-int otbPCAModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  PCAModelType::Pointer model = PCAModelType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbPCAModelCanRead(int argc, char * argv [])
 {

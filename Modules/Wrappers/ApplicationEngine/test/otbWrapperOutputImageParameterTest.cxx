@@ -29,13 +29,6 @@
 #include "otbWrapperTypes.h"
 #include <vector>
 
-int otbWrapperOutputImageParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::OutputImageParameter OutputImageParameterType;
-  OutputImageParameterType::Pointer parameter = OutputImageParameterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbWrapperOutputImageParameterTest1(int itkNotUsed(argc), char* argv[])
 {

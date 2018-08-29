@@ -62,7 +62,7 @@ void QtWidgetIntParameter::DoUpdateGUI()
 void QtWidgetIntParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_QHBoxLayout = new QHBoxLayout(this);
+  m_QHBoxLayout = new QHBoxLayout;
   m_QHBoxLayout->setSpacing(0);
   m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 

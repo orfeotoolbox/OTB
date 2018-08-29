@@ -30,21 +30,6 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbParserConditionDataNodeFeatureFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef double CoordRepType;
-  typedef double PrecisionType;
-  typedef otb::VectorImage<double, 2> ImageType;
-  typedef otb::ParserConditionDataNodeFeatureFunction<ImageType, CoordRepType, PrecisionType>
-      ParserConditionDataNodeFeaturefunctionType;
-
-  ParserConditionDataNodeFeaturefunctionType::Pointer
-      ParserConditionFeature = ParserConditionDataNodeFeaturefunctionType::New();
-
-  std::cout << ParserConditionFeature << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbParserConditionDataNodeFeatureFunction(int itkNotUsed(argc), char* argv[])
 {

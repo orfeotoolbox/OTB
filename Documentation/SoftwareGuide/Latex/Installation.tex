@@ -4,7 +4,7 @@
 \label{chapter:Installation}
 \index{Installation}
 
-There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources. 
+There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources.
 You can find information about the installation of binary packages for OTB and Monteverdi in the OTB-Cookbook.
 
 This chapter covers compilation of OTB library from source. Note that it covers
@@ -20,7 +20,7 @@ It is known to work with the following compilers in 32/64 bit:
 \item AppleClang on Mac~OS~X (10.8 or higher)
 \end{itemize}
 
-Since release version 6.2.0, OTB is compiled using the C++14 standard by default. 
+Since release version 6.2.0, OTB is compiled using the C++14 standard by default.
 
 \index{CMake}
 The challenge of supporting OTB across platforms has been solved through the use of CMake, a cross-platform, open-source
@@ -44,7 +44,7 @@ options specified by the user.
 
 There are (at least) two ways to use CMake :
 \begin{itemize}
-\item Using the command \texttt{ccmake} (on Unix) or \texttt{cmake-gui} (on Windows): 
+\item Using the command \texttt{ccmake} (on Unix) or \texttt{cmake-gui} (on Windows):
 it provides an interactive mode in which you iteratively select
 options and configure according to these options. The iteration
 proceeds until no more options remain to be selected. At this point, a
@@ -207,7 +207,7 @@ If you do not know which method to use and just want to compile OTB with all its
 \texttt{OTB\_WRAP\_JAVA}                & Enable Java wrapper \\
 
 \hline
-\multicolumn{2}{l}{\small \textbf{SuperBuild only}} \\ 
+\multicolumn{2}{l}{\small \textbf{SuperBuild only}} \\
 \texttt{DOWNLOAD\_LOCATION}             & Location to download dependencies \\
 \texttt{USE\_SYSTEM\_\textit{XXX}}      & Use the system's \textit{XXX} library \\
 
@@ -300,7 +300,8 @@ On a GNU/Linux you must have Qt X11 dependencies installed.
 See Qt 5 documentation for list of packages that needs to be installed
 before starting superbuild. https://doc.qt.io/qt-5/linux-requirements.html.
 For a Debian 8.1 system, I installed all Qt5 dependencies with below 'apt-get install'
-\texttt{apt-get install libx11-dev libxext-dev libxt-dev libxi-dev libxrandr-dev libgl-dev libglu-dev}
+\texttt{apt-get install libx11-dev libxext-dev libxt-dev libxi-dev libxrandr-dev
+libgl-dev libglu-dev libxinerama-dev libxcursor-dev}
 
 You can also deactivate QT5 and skip this by passing \texttt{-DOTB\_USE\_QT=OFF} to cmake.
 This will give you OTB install without monteverdi, mapla and gui application launchers.
@@ -454,17 +455,17 @@ Everything that is needed for OTB development on Windows, including compiling fr
 \label{sec:knownissues}
 
 \begin{itemize}
-\item  openjpeg/ITK 
+\item  openjpeg/ITK
 \end{itemize}
 
-It is important to know that the OpenJpeg library doesn't support name mangling since version 2.0. 
-As a consequence, if other libraries linked by your project already contain OpenJpeg, there may be a symbol conflict at run-time. 
-For instance, this was observed with OTB build on a recent ITK version (ver. 4). 
+It is important to know that the OpenJpeg library doesn't support name mangling since version 2.0.
+As a consequence, if other libraries linked by your project already contain OpenJpeg, there may be a symbol conflict at run-time.
+For instance, this was observed with OTB build on a recent ITK version (ver. 4).
 The ITK library already had a version of OpenJpeg in libitkopenjpeg-*.so, which contained the OpenJpeg symbols un-wrapped.
-These symbols were also loaded by the GDAL driver but only the first ones were used, which caused a crash. 
+These symbols were also loaded by the GDAL driver but only the first ones were used, which caused a crash.
 
 Hopefully, thanks to the modular architecture of ITK, the library libitkopenjpeg-*.so is not imported anymore inside OTB.
-However the OpenJPEG headers may be present in ITK include directory. As the current architecture doesn't allow to tune 
+However the OpenJPEG headers may be present in ITK include directory. As the current architecture doesn't allow to tune
 include order between modules, the OpenJPEG header from ITK can be included before your own OpenJPEG install. There are
 two ways to avoid this situation :
 \begin{itemize}
@@ -475,9 +476,8 @@ two ways to avoid this situation :
 More information can be found here : \url{http://wiki.orfeo-toolbox.org/index.php/JPEG2000_with_GDAL_OpenJpeg_plugin}
 
 \begin{itemize}
-\item  libkml / Ubuntu 12.04 
+\item  libkml / Ubuntu 12.04
 \end{itemize}
 
-Another issue is related to the official package of libkml under Ubuntu 12.4.
-Until this problem is addressed, users of this plateform should disable the option OTB\_USE\_KML, so that OTB won't be built with this third-party.
-
+Another issue is related to the official package of libkml under Ubuntu 12.04.
+Users of this plateform should disable the option OTB\_USE\_KML, so that OTB won't be built with this third-party.

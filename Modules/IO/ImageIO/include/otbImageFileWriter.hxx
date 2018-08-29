@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -438,15 +439,15 @@ ImageFileWriter<TInputImage>
     {
     itk::ImageFileWriterException e(__FILE__, __LINE__);
     std::ostringstream msg;
-    msg << "Cannot write image " << m_FileName.c_str() << ". Probably unsupported format or incorrect filename extension.";
-    e.SetDescription(msg.str().c_str());
+    msg << "Cannot write image " << m_FileName << ". Probably unsupported format or incorrect filename extension.";
+    e.SetDescription(msg.str());
     e.SetLocation(ITK_LOCATION);
     throw e;
     }
 
   // Manage extended filename
   if ((strcmp(m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
-      && (m_FilenameHelper->gdalCreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet())  )
+      && (m_FilenameHelper->gdalCreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet()  || m_FilenameHelper->NoDataValueIsSet()) )
     {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(m_ImageIO.GetPointer());
 
@@ -455,12 +456,14 @@ ImageFileWriter<TInputImage>
       itk::ImageFileWriterException e(__FILE__, __LINE__);
       std::ostringstream msg;
       msg << " ImageIO is of kind GDALImageIO, but fails to dynamic_cast (this should never happen)."<< std::endl;
-      e.SetDescription(msg.str().c_str());
+      e.SetDescription(msg.str());
       throw e;
       }
 
     imageIO->SetOptions(m_FilenameHelper->GetgdalCreationOptions());
     imageIO->SetWriteRPCTags(m_FilenameHelper->GetWriteRPCTags());
+    if (m_FilenameHelper->NoDataValueIsSet() )
+	imageIO->SetNoDataList(m_FilenameHelper->GetNoDataList());
     }
 
 
@@ -568,7 +571,7 @@ ImageFileWriter<TInputImage>
   /** Create Image file */
   // Setup the image IO for writing.
   //
-  m_ImageIO->SetFileName(m_FileName.c_str());
+  m_ImageIO->SetFileName(m_FileName);
 
   m_ImageIO->WriteImageInformation();
 }
@@ -801,7 +804,7 @@ ImageFileWriter<TInputImage>
       msg << ioRegion;
       msg << "Actual:" << std::endl;
       msg << bufferedRegion;
-      e.SetDescription(msg.str().c_str());
+      e.SetDescription(msg.str());
       e.SetLocation(ITK_LOCATION);
       throw e;
       }
@@ -829,9 +832,12 @@ ImageFileWriter<TInputImage>
 template <class TInputImage>
 void
 ImageFileWriter<TInputImage>
-::SetFileName(std::string extendedFileName)
+::SetFileName(const std::string& extendedFileName)
 {
-  this->SetFileName(extendedFileName.c_str());
+  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
+  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
+  m_ImageIO = nullptr;
+  this->Modified();
 }
 
 template <class TInputImage>
@@ -839,10 +845,12 @@ void
 ImageFileWriter<TInputImage>
 ::SetFileName(const char* extendedFileName)
 {
-  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
-  m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-  m_ImageIO = nullptr;
-  this->Modified();
+  if (extendedFileName == nullptr)
+  {
+    itkGenericExceptionMacro( << "Filename is NULL" );
+  }
+
+  this->SetFileName(std::string(extendedFileName));
 }
 
 template <class TInputImage>

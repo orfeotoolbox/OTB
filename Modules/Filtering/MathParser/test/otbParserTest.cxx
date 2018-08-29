@@ -24,13 +24,6 @@
 
 typedef otb::Parser ParserType;
 
-int otbParserTestNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiating object
-  ParserType::Pointer parser = ParserType::New();
-  std::cout << parser << std::endl;
-  return EXIT_SUCCESS;
-}
 
 void otbParserTest_ThrowIfNotEqual(double output, double ref, std::string testname, double epsilon = 1.0E-12)
 {

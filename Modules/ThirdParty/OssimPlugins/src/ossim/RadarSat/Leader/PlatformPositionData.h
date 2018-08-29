@@ -30,6 +30,7 @@
 #include <RadarSat/RadarSatRecordHeader.h>
 
 #include <RadarSat/Leader/PositionVectorRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

@@ -297,7 +297,7 @@ MapFileProductWriter<TInputImage>
     std::ostringstream path;
     path << m_ShapeIndexPath<<"/tiles";
 
-    if (!itksys::SystemTools::MakeDirectory(path.str().c_str()))
+    if (!itksys::SystemTools::MakeDirectory(path.str()))
       {
       itkExceptionMacro(<< "Error while creating cache directory" << path.str());
       }
@@ -354,7 +354,7 @@ MapFileProductWriter<TInputImage>
 
         // Configure writer
         m_VectorWriter = VectorWriterType::New();
-        m_VectorWriter->SetFileName(ossFileName.str().c_str());
+        m_VectorWriter->SetFileName(ossFileName.str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
         m_VectorWriter->Update();
 
@@ -497,13 +497,13 @@ MapFileProductWriter<TInputImage>
   std::ostringstream path;
   path << itksys::SystemTools::GetFilenamePath(m_FileName);
 
-  if (!itksys::SystemTools::MakeDirectory(path.str().c_str()))
+  if (!itksys::SystemTools::MakeDirectory(path.str()))
     {
     itkExceptionMacro(<< "Error while creating cache directory" << path.str());
     }
 
   // Create a mapfile
-  m_File.open(m_FileName.c_str());
+  m_File.open(m_FileName);
   m_File << std::fixed << std::setprecision(6);
 
   // Get the name of the layer

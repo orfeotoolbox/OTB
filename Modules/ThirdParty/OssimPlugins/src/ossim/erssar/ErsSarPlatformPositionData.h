@@ -30,6 +30,7 @@
 #include "erssar/ErsSarRecordHeader.h"
 
 #include "erssar/ErsSarPositionVectorRecord.h"
+#include <string>
 
 
 namespace ossimplugins

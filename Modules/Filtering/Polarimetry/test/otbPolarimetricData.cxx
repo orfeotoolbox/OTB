@@ -25,12 +25,6 @@
 
 #include "otbPolarimetricData.h"
 
-int otbPolarimetricDataNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  otb::PolarimetricData::Pointer  data = otb::PolarimetricData::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 

@@ -51,12 +51,6 @@ typedef otb::ConfusionMatrixCalculator<TargetListSampleType, TargetListSampleTyp
 
 #ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModel.h"
-int otbLibSVMMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::LibSVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
-  SVMType::Pointer svmclassifier = SVMType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbLibSVMMachineLearningModel(int argc, char * argv[])
 {
@@ -140,12 +134,6 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
 #include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 
-int otbSVMMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::SVMMachineLearningModel<InputValueType,TargetValueType> SVMType;
-  SVMType::Pointer svmclassifier = SVMType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbSVMMachineLearningModel(int argc, char * argv[])
 {
@@ -286,12 +274,6 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
     }
 }
 
-int otbKNearestNeighborsMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::KNearestNeighborsMachineLearningModel<InputValueType,TargetValueType> KNearestNeighborsType;
-  KNearestNeighborsType::Pointer knnclassifier = KNearestNeighborsType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
 {
@@ -363,12 +345,6 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbRandomForestsMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::RandomForestsMachineLearningModel<InputValueType,TargetValueType> RandomForestType;
-  RandomForestType::Pointer rfclassifier = RandomForestType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbRandomForestsMachineLearningModel(int argc, char * argv[])
 {
@@ -449,12 +425,6 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbBoostMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::BoostMachineLearningModel<InputValueType,TargetValueType> BoostType;
-  BoostType::Pointer classifier = BoostType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbBoostMachineLearningModel(int argc, char * argv[])
 {
@@ -535,12 +505,6 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbANNMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::NeuralNetworkMachineLearningModel<InputValueType, TargetValueType> ANNType;
-  ANNType::Pointer classifier = ANNType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbANNMachineLearningModel(int argc, char * argv[])
 {
@@ -625,12 +589,6 @@ int otbANNMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbNormalBayesMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::NormalBayesMachineLearningModel<InputValueType,TargetValueType> NormalBayesType;
-  NormalBayesType::Pointer classifier = NormalBayesType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbNormalBayesMachineLearningModel(int argc, char * argv[])
 {
@@ -702,12 +660,6 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbDecisionTreeMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::DecisionTreeMachineLearningModel<InputValueType,TargetValueType> DecisionTreeType;
-  DecisionTreeType::Pointer classifier = DecisionTreeType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
 {
@@ -780,12 +732,6 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
 }
 
 #ifndef OTB_OPENCV_3
-int otbGradientBoostedTreeMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType,TargetValueType> GBTreeType;
-  GBTreeType::Pointer classifier = GBTreeType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
 {
@@ -863,12 +809,6 @@ int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
 #include <chrono> // If shark is on, then we are using c++11
 
 #include "otbSharkRandomForestsMachineLearningModel.h"
-int otbSharkRFMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType,TargetValueType> SharkRFType;
-  SharkRFType::Pointer classifier = SharkRFType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbSharkRFMachineLearningModel(int argc, char * argv[])
 {
