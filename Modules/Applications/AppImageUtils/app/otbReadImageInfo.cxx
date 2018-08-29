@@ -276,9 +276,7 @@ private:
     ImageIOBase::IOComponentType typeInfo(ImageIOBase::UNKNOWNCOMPONENTTYPE);
     itk::ExposeMetaData< ImageIOBase::IOComponentType >( inImage->GetMetaDataDictionary(),
 							 MetaDataKey::DataType , typeInfo);
-    // Dummy imageIO to get component type as string
-    ImageIOBase::Pointer imageIO;
-    const std::string dataTypeAsString = imageIO->GetComponentTypeAsString(typeInfo);
+    const std::string dataTypeAsString = ImageIOBase::GetComponentTypeAsString(typeInfo);
     SetParameterString("datatype", dataTypeAsString);
     ossOutput << "\tData type : " << GetParameterString("datatype") << std::endl;
 
