@@ -124,7 +124,7 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
     {
     calculator->Compute();
     }
-  catch (itk::ExceptionObject)
+  catch (itk::ExceptionObject& e)
     {
     return EXIT_FAILURE;
     }
