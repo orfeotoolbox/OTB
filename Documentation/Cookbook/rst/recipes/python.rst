@@ -114,17 +114,17 @@ temporary file.
 In-memory connection
 --------------------
 
-Applications are often use as parts of larger processing
-workflow. Chaining applications currently requires to write/read back
+Applications are often used as part of larger processing
+workflows. Chaining applications currently requires to write/read back
 images between applications, resulting in heavy I/O operations and a
 significant amount of time dedicated to writing temporary files.
 
 Since OTB 5.8, it is possible to connect an output image parameter
 from one application to the input image parameter of the next
 parameter. This results in the wiring of the internal ITK/OTB
-pipelines together, allowing to perform image streaming between the
-applications. There is therefore no more writing of temporary
-images. The last application of the processing chain is responsible
+pipelines together, permitting image streaming between the
+applications. Consequently, this removes the need of writing temporary
+images and improves performance. Only the last application of the processing chain is responsible
 for writing the final result images.
 
 In-memory connection between applications is available both at the C++
@@ -180,8 +180,8 @@ Interactions with OTB pipeline
 
 The application framework has been extended in order to provide ways to
 interact with the pipelines inside each application. It applies only to
-applications that use input or output images. Let's check what are the 
-functions added to the ``Application`` class. There are a lot of getter 
+applications that use input or output images. Let's check which  
+functions added to the ``Application`` class. There is a lot of getter 
 functions:
 
 +---------------------------------+---------------------------------------+
@@ -222,10 +222,10 @@ There is also a function to send orders to the pipeline:
   an extract of the full output.
 
 Note: a requested region (like other regions in the C++ API of otb::Image) is 
-just a pair of an image index and a size, that define a rectangular extract of
+just a pair of an image index and a size, that defines a rectangular extract of
 the full image.
 
-This set of function has been used to enhance the bridge between OTB images
+This set of functions has been used to enhance the bridge between OTB images
 and Numpy arrays. There are now import and export functions available in
 Python that preserve the metadata of the image during conversions to Numpy
 arrays:
@@ -257,7 +257,7 @@ Now some basic Q&A about this interface:
     A: The first one is here for Applications that expect a monoband otb::Image.
     In most cases, you will use the second one: ImportVectorImage.
     
-    Q: What kind of object are there in this dictionary export?
+    Q: What kind of objects are there in this dictionary export?
     A: The array is a numpy.ndarray. The other fields are wrapped
     objects from the OTB library but you can interact with them in a
     Python way: they support ``len()`` and ``str()`` operator, as well as 
@@ -265,7 +265,7 @@ Now some basic Q&A about this interface:
     dictionaries.
     
 This interface allows you to export OTB images (or extracts) to Numpy array,
-process them  by other means, and re-import them with preserved metadatas. Please
+process them  by other means, and re-import them with preserved metadata. Please
 note that this is different from an in-memory connection.
 
 Here is a small example of what can be done:
@@ -368,9 +368,9 @@ arrays. For instance, when converting from OTB to NumPy array:
 * The pixel buffer is copied into a ``numpy.array``
 
 As you can see, there is no export of the metadata, such as origin, spacing,
-geographic projection. It means that if you want to import back a NumPy array into OTB,
-the image won't have any of these metadata. It can be a problem for applications
-doing geometry, projections, and also calibration.
+geographic projection. It means that if you want to re-import a NumPy array back into OTB,
+the image won't have any of these metadata. This can pose problems for applications
+that relate to geometry, projections, and also calibration.
 
 Future developments will probably offer a more adapted structure to import and
 export images between OTB and the Python world.

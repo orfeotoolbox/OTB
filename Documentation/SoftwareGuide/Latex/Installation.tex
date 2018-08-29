@@ -7,12 +7,12 @@
 There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources.
 You can find information about the installation of binary packages for OTB and Monteverdi in the OTB-Cookbook.
 
-This chapter covers compilation of OTB library from source. Note that it covers
-also the compilation of Monteverdi which is integrated as an OTB module since
+This chapter covers the compilation of OTB library from source. Note that it also includes
+the compilation of Monteverdi which is integrated as an OTB module since
 version 5.8.
 
 OTB has been developed and tested across different combinations of operating
-systems, compilers, and hardware platforms including Windows, Linux and Mac OSX.
+systems, compilers, and hardware platforms including Windows, GNU/Linux and Mac OS X.
 It is known to work with the following compilers in 32/64 bit:
 \begin{itemize}
 \item Visual Studio 2015 on Windows
@@ -29,13 +29,13 @@ configuration files.  CMake generates native makefiles and workspaces that can b
 your choice. CMake is quite sophisticated: it supports complex environments requiring system configuration, compiler
 feature testing, and code generation.
 
-CMake supports several generators to produce the compilation scripts, dependending on the platform and compiler. It can use :
+CMake supports several generators to produce the compilation scripts, dependending on the platform and compiler. It can use:
 \begin{itemize}
 \item Makefiles for Unix systems
 \item Visual Studio workspaces for Windows
 \item NMake Makefiles for Windows
 \item Ninja scripts
-\item and many more ...
+\item and many more...
 \end{itemize}
 The information used by CMake is provided by \code{CMakeLists.txt} files that
 are present in every directory of the OTB source tree. These files contain information that the user provides to CMake
@@ -54,7 +54,7 @@ configuration. This is the easiest way to start.
 \end{itemize}
 
 As shown in figure \ref{fig:CMakeGUI}, CMake has a different interfaces according to your system.
-Refer to section~\ref{sec:compiling-linux} for Linux and Mac~OS~X build instructions
+Refer to section~\ref{sec:compiling-linux} for GNU/Linux and Mac~OS~X build instructions
 and \ref{sec:compiling-windows} for Windows.
 
 \begin{figure}[tpb]
@@ -144,7 +144,7 @@ See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \end{tiny}
 \end{center}
 
-\section{Linux and Mac OS X}
+\section{GNU/Linux and Mac OS X}
 \label{sec:compiling-linux}
 
 \subsection{Setting up the build environment}
@@ -293,20 +293,20 @@ want to build) :
 \url{https://www.orfeo-toolbox.org/packages}
 \end{center}
 
-Qt library: Unlike other dependencies building Qt5 on all platform is not trivial task but
-OTB SuperBuild makes best effort to make it easier for you. So there is still
+Qt library: Unlike other dependencies, building Qt5 on all platforms is not a trivial task but
+OTB SuperBuild does its level best to facilitate this for the user. So there is still
 some additional package installation, one has to do as a pre-requistie for SuperBuild
 On a GNU/Linux you must have Qt X11 dependencies installed.
-See Qt 5 documentation for list of packages that needs to be installed
+See Qt 5 documentation for the list of packages that need to be installed
 before starting superbuild. https://doc.qt.io/qt-5/linux-requirements.html.
-For a Debian 8.1 system, I installed all Qt5 dependencies with below 'apt-get install'
+For a Debian 8.1 system, all Qt5 dependencies can be installed with the following 'apt-get install' command:
 \texttt{apt-get install libx11-dev libxext-dev libxt-dev libxi-dev libxrandr-dev
 libgl-dev libglu-dev libxinerama-dev libxcursor-dev}
 
-You can also deactivate QT5 and skip this by passing \texttt{-DOTB\_USE\_QT=OFF} to cmake.
-This will give you OTB install without monteverdi, mapla and gui application launchers.
+You can also deactivate Qt5 and skip this by passing \texttt{-DOTB\_USE\_QT=OFF} to cmake, but 
+this will install OTB without monteverdi, mapla and the gui application launchers.
 
-For Mac OSX you need to install XCode and Windows 7,8.1,10 requires MSVC 2015 or higher.
+For Mac OS X you need to install XCode and Windows 7,8.1,10 requires MSVC 2015 or higher.
 
 You are now ready to compile OTB!
 Simply use the make command (other targets can be generated with CMake's \texttt{-G} option):
@@ -328,19 +328,20 @@ while:
 \end{verbatim}
 will launch the graphical version.
 
-To be able to use your OTB build from everywhere, we recommend the following.
-First, add \texttt{bin/} directory to your PATH for easy access:
+In order to ensure access to your OTB build from anywhere within your system, we recommend setting the following 
+environment variables. 
+Firstly, add \texttt{bin/} directory to your PATH for easy access:
 \begin{verbatim}
 export PATH=$PATH:~/OTB/install/bin
 \end{verbatim}
 
-Second, add the \texttt{lib/} directory to your LD\_LIBRARY\_PATH:
+Secondly, add the \texttt{lib/} directory to your LD\_LIBRARY\_PATH:
 \begin{verbatim}
 export LD_LIBRARY_PATH=~/OTB/install/lib:$LD_LIBRARY_PATH
 \end{verbatim}
 
 Monteverdi is integrated as an OTB module since release 5.8 and it is compiled
-by the SuperBuild (as long as GLEW, GLUT, OPENGL, Qt and QWT modules are
+by the SuperBuild (provided that GLEW, GLUT, OPENGL, Qt and QWT modules are
 activated).
 
 To use OTB applications from within Monteverdi you will need to define the
@@ -377,8 +378,8 @@ off the CMake variable OTB\_BUILD\_DEFAULT\_MODULES, configure, and then switch
 off each \texttt{Module\_module\_name} variable.  To provide an overview on how
 things work, the option \texttt{COMPONENTS} of the CMake command find\_package
 is used in order to only load the requested modules.  This module-specific list
-prevent CMake from performing a blind search; it is also a convienent way to
-monitor the dependencies of each module.
+prevents CMake from performing a blind search; it is also a convienent way of
+monitoring the dependencies of each module.
 \begin{verbatim}
 find_package(OTB COMPONENTS OTBCommon OTBTransform [...])
 \end{verbatim} 
@@ -464,10 +465,10 @@ For instance, this was observed with OTB build on a recent ITK version (ver. 4).
 The ITK library already had a version of OpenJpeg in libitkopenjpeg-*.so, which contained the OpenJpeg symbols un-wrapped.
 These symbols were also loaded by the GDAL driver but only the first ones were used, which caused a crash.
 
-Hopefully, thanks to the modular architecture of ITK, the library libitkopenjpeg-*.so is not imported anymore inside OTB.
-However the OpenJPEG headers may be present in ITK include directory. As the current architecture doesn't allow to tune
+Hopefully, thanks to the modular architecture of ITK, the library libitkopenjpeg-*.so is no longer imported within OTB.
+However, the OpenJPEG headers may be present in the ITK include directory. As the current architecture doesn't allow to modify the
 include order between modules, the OpenJPEG header from ITK can be included before your own OpenJPEG install. There are
-two ways to avoid this situation :
+two ways to avoid this situation:
 \begin{itemize}
 \item Use an ITK without GDCM nor ITKReview (only these modules depend on OpenJPEG)
 \item Hide the header openjpeg.h in the ITK include directory.
@@ -480,4 +481,4 @@ More information can be found here : \url{http://wiki.orfeo-toolbox.org/index.ph
 \end{itemize}
 
 Another issue is related to the official package of libkml under Ubuntu 12.04.
-Users of this plateform should disable the option OTB\_USE\_KML, so that OTB won't be built with this third-party.
+Users of this platform should disable the option OTB\_USE\_KML, so that OTB won't be built with this third-party package.
