@@ -38,7 +38,7 @@ int otbAeronetExtractDataBadData(int itkNotUsed(argc), char * argv[])
     {
     reader->Update();
     }
-  catch (itk::ExceptionObject& e)
+  catch ( itk::ExceptionObject & )
     {
     return EXIT_SUCCESS;
     }
