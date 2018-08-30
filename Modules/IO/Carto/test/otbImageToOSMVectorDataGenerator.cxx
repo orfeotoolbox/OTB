@@ -57,7 +57,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     {
     parser->ParseCommandLine(argc, argv, parseResult);
     }
-  catch ( itk::ExceptionObject )
+  catch ( itk::ExceptionObject & err )
     {
     return EXIT_FAILURE;
     }
