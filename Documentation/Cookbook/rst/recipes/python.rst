@@ -221,8 +221,8 @@ There is also a function to send orders to the pipeline:
   can be used to measure the requested portion of input images necessary to produce
   an extract of the full output.
 
-Note: a requested region (like other regions in the C++ API of otb::Image) is 
-just a pair of an image index and a size, that defines a rectangular extract of
+Note: a requested region (like other regions in the C++ API of otb::Image) consists 
+of an image index and a size, which defines a rectangular extract of
 the full image.
 
 This set of functions has been used to enhance the bridge between OTB images
