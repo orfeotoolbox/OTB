@@ -206,7 +206,7 @@ ones. For instance:
 
 Note that the operator ’\*’ could have been used instead of ’pw’ one.
 But ’pw’ is a little bit more permisive, and can tolerate a
-one-dimensional vector as a right element.
+one-dimensional vector as the right operand.
 
 **Operators pow and pw** The first operator allows the definition of an
 element-wise exponentiation of two vectors (and even matrices), provided
