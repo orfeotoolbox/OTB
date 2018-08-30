@@ -80,7 +80,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
     {
     internalFunctionGT->SetDescriptorModels(descModel);
     }
-  catch ( itk::ExceptionObject & err )
+  catch ( itk::ExceptionObject & )
     {
     return 1;
     }
