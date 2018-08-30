@@ -263,6 +263,8 @@ private:
     SetDocExampleParameterValue("ery", "2");
     SetDocExampleParameterValue("mrx", "3");
     SetDocExampleParameterValue("mry", "3");
+    SetDocExampleParameterValue("w", "StereoMoving.png");
+    SetDocExampleParameterValue("wo", "StereoMoving_FineRegistered.png");
 
     SetOfficialDocLink();
   }
