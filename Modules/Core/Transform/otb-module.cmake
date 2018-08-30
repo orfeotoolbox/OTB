@@ -32,7 +32,7 @@ ENABLE_SHARED
     OTBITK
     OTBInterpolation
     OTBOSSIMAdapters
-
+    OTBGdalAdapters
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO

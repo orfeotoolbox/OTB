@@ -100,14 +100,9 @@ public:
 
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
-  virtual bool InstantiateProjection();
-
   const MapProjectionAdapter* GetMapProjection() const;
 
   virtual bool IsProjectionDefined() const;
-
-  void SetParameter(const std::string& key, const std::string& value);
-  std::string GetParameter(const std::string& key) const;
 
 protected:
   GenericMapProjection();

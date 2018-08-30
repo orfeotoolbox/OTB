@@ -44,16 +44,6 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-const MapProjectionAdapter*
-GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::GetMapProjection() const
-{
-  return m_MapProjection;
-}
-
-
-template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
 std::string
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::GetWkt()
@@ -69,15 +59,6 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 {
   m_MapProjection->SetWkt(projectionRefWkt);
   this->Modified();
-}
-
-template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-bool
-GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::InstantiateProjection()
-{
-  return m_MapProjection->InstantiateProjection();
 }
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
@@ -133,26 +114,9 @@ bool
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::IsProjectionDefined() const
 {
-  return (m_MapProjection->GetMapProjection() != nullptr);
+  return m_MapProjection->IsValid();
 }
 
-template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-  void
-GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::SetParameter(const std::string& key, const std::string& value)
-{
-  m_MapProjection->SetParameter(key, value);
-}
-
-template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-std::string
-GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::GetParameter(const std::string& key) const
-{
-  return m_MapProjection->GetParameter(key);
-}
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
