@@ -25,7 +25,6 @@ void RegisterTests()
   REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
   REGISTER_TEST(otbOrthoRectificationFilter);
-  REGISTER_TEST(otbMapProjection);
   REGISTER_TEST(otbGenericRSResampleImageFilter);
   REGISTER_TEST(otbGenericRSResampleImageFilterFromMap);
   REGISTER_TEST(otbGeometriesProjectionFilter);
@@ -36,7 +35,6 @@ void RegisterTests()
   REGISTER_TEST(otbRationalTransform);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToSensor);
   REGISTER_TEST(otbImageToEnvelopeVectorDataFilter);
-  REGISTER_TEST(otbMapProjectionAccessorsTest);
   REGISTER_TEST(otbImageToGenericRSOutputParameters);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToGeo);
   REGISTER_TEST(otbROIdataConversion);
@@ -59,7 +57,6 @@ void RegisterTests()
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToImage);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToEPSG);
   REGISTER_TEST(otbVectorDataProjectionFilter);
-  REGISTER_TEST(otbUtmMapProjection);
   REGISTER_TEST(otbTileMapTransform);
   REGISTER_TEST(otbImportGeoInformationImageFilter);
 }

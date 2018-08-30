@@ -60,12 +60,6 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           DEMConvert
-  SOURCES        otbDEMConvert.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-
-otb_create_application(
   NAME           ConcatenateImages
   SOURCES        otbConcatenateImages.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
