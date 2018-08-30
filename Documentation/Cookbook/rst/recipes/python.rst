@@ -181,7 +181,7 @@ Interactions with OTB pipeline
 The application framework has been extended in order to provide ways to
 interact with the pipelines inside each application. It applies only to
 applications that use input or output images. Let's check which  
-functions added to the ``Application`` class. There is a lot of getter 
+functions are available in the ``Application`` class. There are lots of getter 
 functions:
 
 +---------------------------------+---------------------------------------+
