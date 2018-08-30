@@ -126,10 +126,10 @@ private:
     // Default values
     SetParameterInt("connectivity", 0);
     SetDefaultParameterFloat("tolerance", 0.);
-    SetParameterInt("fusion", 0);
+    SetParameterInt("fusion", 1);
     
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "sar.tif");
+    SetDocExampleParameterValue("in", "ROI_QB_MUL_1_SVN_CLASS_MULTI.png");
     SetDocExampleParameterValue("out","test.sqlite");
     SetOfficialDocLink();
   }

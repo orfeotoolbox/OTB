@@ -107,9 +107,9 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("expr", "\"distance<10\"");
-    SetDocExampleParameterValue("in", "sar.tif");
-    SetDocExampleParameterValue("out","test.sqlite");
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
+    SetDocExampleParameterValue("vec", "qb_RoadExtract_classification.shp");
+    SetDocExampleParameterValue("out","output_segmentation.shp");
     SetOfficialDocLink();
   }
 

@@ -63,7 +63,7 @@ void
 PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 ::GenerateOutputInformation()
 {
-  Superclass::GenerateOutputInformation();
+  otb::PersistentImageFilter<TInputImage, TInputImage>::GenerateOutputInformation();
 }
 
 
@@ -539,23 +539,6 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 ::GetOutputSamples()
 {
   return this->GetFilter()->GetOutputSamples();
-}
-
-
-template<class TInputImage, class TMaskImage>
-void
-OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::SetMask(const TMaskImage* mask)
-{
-  this->GetFilter()->SetMask(mask);
-}
-
-template<class TInputImage, class TMaskImage>
-const TMaskImage*
-OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetMask()
-{
-  return this->GetFilter()->GetMask();
 }
 
 template<class TInputImage, class TMaskImage>

@@ -240,9 +240,6 @@ public:
   void SetOutputSamples(OGRDataType::Pointer data);
   const otb::ogr::DataSource* GetOutputSamples();
   
-  void SetMask(const TMaskImage* mask);
-  const TMaskImage* GetMask();
-  
   void SetFieldName(std::string key);
   std::string GetFieldName();
   

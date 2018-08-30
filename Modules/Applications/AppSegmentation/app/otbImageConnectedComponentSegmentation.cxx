@@ -116,10 +116,11 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("expr", "distance<10");
-    SetDocExampleParameterValue("mask", "b1<30");
-    SetDocExampleParameterValue("in", "sar.tif");
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("out","test.sqlite");
+    SetDocExampleParameterValue("expr", "distance<50");
+    SetDocExampleParameterValue("mask", "(b4-b1)/(b4+b1)>0.55");
+
     SetOfficialDocLink();
   }
 

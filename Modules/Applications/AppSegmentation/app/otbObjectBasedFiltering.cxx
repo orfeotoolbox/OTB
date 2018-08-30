@@ -70,7 +70,8 @@ private:
     MandatoryOff("out");
 
     AddParameter(ParameterType_String, "expr", "filter expression");
-    SetParameterDescription("expr","Mathemetical expression used for filtering.");
+    SetParameterDescription("expr","Mathemetical expression used for filtering. A geometry is deleted if the expression"
+    "evaluates to true");
 
     AddRAMParameter();
     

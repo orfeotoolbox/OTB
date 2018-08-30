@@ -98,11 +98,7 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   OGRLayerType outLayer = outDS->CreateLayer("Layer");
   OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
   outLayer.CreateField(field, true);
-  /*OGRFieldDefn fieldSize("size",OFTReal);
-  outLayer.CreateField(fieldSize, true);
-  OGRFieldDefn fieldPerimeter("perimeter",OFTReal);
-  outLayer.CreateField(fieldPerimeter, true);
-  */
+
   // Write output features
   
   for (auto && feat : tmpLayer)
@@ -110,7 +106,11 @@ PersistentLabelImageVectorizationFilter<TInputImage>
     OGRFeatureType outFeature(outLayer.GetLayerDefn());
     
     // Only geometries whose attributes belong to the selected label list parameter are created. If the list is empty, all geometries are created except if the label is 0 (background)
-    if ( (std::find(m_Labels.begin(),m_Labels.end(),feat[m_FieldName].ogr::Field::template GetValue<int>()) != m_Labels.end() ) || ( (m_Labels.empty() ==true) &&  feat[m_FieldName].ogr::Field::template GetValue<int>() > 0 ))
+    
+    const auto field_value = static_cast<otb::ogr::Field>(feat[m_FieldName]).GetValue<int>();
+    
+    if ( (std::find(m_Labels.begin(),m_Labels.end(), field_value ) != m_Labels.end() ) 
+          || ( (m_Labels.empty() ==true) &&  field_value > 0 ) )
     {
       //simplify
       const OGRGeometry * geom = feat.GetGeometry();
@@ -119,9 +119,6 @@ PersistentLabelImageVectorizationFilter<TInputImage>
      
       outFeature.SetFrom( feat, TRUE );
       outLayer.CreateFeature( outFeature );
-    }
-    else
-    {
     }
   }
   return outDS;

@@ -85,7 +85,7 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "vectorData.shp");
+    SetDocExampleParameterValue("in", "qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("out", "features.sqlite");
     SetDocExampleParameterValue("sizefield","size");
     SetDocExampleParameterValue("perimeterfield","perimeter");
