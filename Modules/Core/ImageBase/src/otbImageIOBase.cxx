@@ -739,7 +739,7 @@ std::string ImageIOBase::GetByteOrderAsString(ByteOrder t) const
     }
 }
 
-std::string ImageIOBase::GetComponentTypeAsString(IOComponentType t) const
+std::string ImageIOBase::GetComponentTypeAsString(IOComponentType t)
 {
   std::string s;
   switch(t)
