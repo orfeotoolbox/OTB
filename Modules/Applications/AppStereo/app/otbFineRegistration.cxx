@@ -111,7 +111,6 @@ public:
     <VectorImageType, FieldImageType, VLVToFixedArrayType>  CastFilterType;
   typedef StreamingWarpImageFilter
     <FloatVectorImageType, FloatVectorImageType, FieldImageType> WarpFilterType;
-  typedef otb::ImageFileReader<VectorImageType>         InternalReaderType;
 
 private:
   void DoInit() override
