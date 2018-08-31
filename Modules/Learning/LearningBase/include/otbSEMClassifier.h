@@ -125,11 +125,11 @@ public:
    * vector should be same as the number of component (or classes).
    * Choose between SetInitialProportions, SetClassLabels or
    * SetNumberOfComponents */
-  void SetInitialProportions(ProportionVectorType& propotion);
-  ProportionVectorType* GetInitialProportions();
+  void SetInitialProportions(ProportionVectorType& proportions);
+  itkGetConstReferenceMacro(InitialProportions,ProportionVectorType);	
 
   /** Gets the result proportion values */
-  ProportionVectorType* GetProportions();
+  itkGetConstReferenceMacro(Proportions,ProportionVectorType);	
 
   /** Set/Gets the initial segmentation. the size of the vector should be
    * the same as the number of samples (length of MeasurementVector) */
