@@ -310,43 +310,43 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                               ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
                      )
                      
-#----------- LargeScaleConnectedComponent with minsize TESTS ----
+#----------- LargeScaleConnectedComponent 
 otb_test_application(NAME     apTvLargeScaleConnectedComponentMinSize
                      APP      LargeScaleConnectedComponent
-                     OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
-                              -out ${TEMP}/LargeScaleConnectedComponentMinSize.sqlite
-                              -expr "distance<10"
-                              -filter "nbpixels<150"
-                              -mask "b1>30"
-                              -minsize 50
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
+                              -out ${TEMP}/apTvLargeScaleConnectedComponent.shp
+                              -expr "distance<50"
+                              -mask "(b4-b1)/(b4+b1)>0.65"
+                              -filter "meanb1<150"
                               -fusion 1
+                              -minsize 50
                      VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/LargeScaleConnectedComponentMinSize.sqlite
-                              ${TEMP}/LargeScaleConnectedComponentMinSize.sqlite                       
+                              ${BASELINE_FILES}/apTvLargeScaleConnectedComponent.shp
+                              ${TEMP}/apTvLargeScaleConnectedComponent.shp                      
                      )
-
+                     
 #----------- LargeScaleConnectedComponent 
 otb_test_application(NAME     apTvLargeScaleConnectedComponent
                      APP      LargeScaleConnectedComponent
-                     OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
-                              -out ${TEMP}/LargeScaleConnectedComponent.sqlite
-                              -expr "distance<100"
-                              -filter "nbpixels<15"
-                              -mask "b1>250"
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
+                              -out ${TEMP}/apTvLargeScaleConnectedComponent.shp
+                              -expr "distance<50"
+                              -mask "(b4-b1)/(b4+b1)>0.65"
+                              -filter "meanb1<150"
                               -fusion 1
                      VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/LargeScaleConnectedComponent.sqlite
-                              ${TEMP}/LargeScaleConnectedComponent.sqlite                      
+                              ${BASELINE_FILES}/apTvLargeScaleConnectedComponent.shp
+                              ${TEMP}/apTvLargeScaleConnectedComponent.shp                      
                      )
                      
                      
 #----------- ImageConnectedComponentSegmentation TESTS ----
 otb_test_application(NAME     apTvImageConnectedComponentSegmentation
                      APP      ImageConnectedComponentSegmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
                               -out ${TEMP}/apTvImageConnectedComponentSegmentation.tif
-                              -expr "distance<100"
-                              -mask "b1>250"
+                              -expr distance<50
+                              -mask "(b4-b1)/(b4+b1)>0.65"
                      VALID    --compare-image ${NOTOL}
                               ${BASELINE}/apTvImageConnectedComponentSegmentation.tif
                               ${TEMP}/apTvImageConnectedComponentSegmentation.tif    
@@ -356,44 +356,44 @@ otb_test_application(NAME     apTvImageConnectedComponentSegmentation
 otb_test_application(NAME     apTvLabelImageVectorization
                      APP      LabelImageVectorization
                      OPTIONS  -in ${BASELINE}/apTvImageConnectedComponentSegmentation.tif
-                              -out ${TEMP}/apTvLabelImageVectorization.sqlite
+                              -out ${TEMP}/apTvLabelImageVectorization.shp
                               -fusion 1
                     VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvLabelImageVectorization.sqlite
-                              ${TEMP}/apTvLabelImageVectorization.sqlite
+                              ${BASELINE_FILES}/apTvLabelImageVectorization.shp
+                              ${TEMP}/apTvLabelImageVectorization.shp
                      )
 
 #----------- ComputePolygonsGeometricFeatures TESTS -----------
 otb_test_application(NAME     apTvComputePolygonsGeometricFeatures
                      APP      ComputePolygonsGeometricFeatures
-                     OPTIONS  -in ${BASELINE_FILES}/apTvLabelImageVectorization.sqlite
-                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.sqlite
-                              -sizefield "size"
-                              -perimeterfield "perimeter"
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
+                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
+                              -sizefield size
+                              -perimeterfield perimeter
                      VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvComputePolygonsGeometricFeatures.sqlite
-                              ${TEMP}/apTvComputePolygonsGeometricFeatures.sqlite
+                              ${BASELINE_FILES}/apTvComputePolygonsGeometricFeatures.shp
+                              ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
                      )
 
 
 #----------- ComputePolygonsSpectralFeatures TESTS -----------
 otb_test_application(NAME     apTvComputePolygonsSpectralFeatures
                      APP      ComputePolygonsSpectralFeatures
-                     OPTIONS  -in ${EXAMPLEDATA}/ROI_QB_MUL_4.tif
-                              -vec ${BASELINE_FILES}/apTvComputePolygonsGeometricFeatures.sqlite
-                              -out ${TEMP}//apTvComputePolygonsSpectralFeatures.sqlite
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
+                              -vec ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
+                              -out ${TEMP}//apTvComputePolygonsSpectralFeatures.shp
                               VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}//apTvComputePolygonsSpectralFeatures.sqlite
-                              ${TEMP}//apTvComputePolygonsSpectralFeatures.sqlite
+                              ${BASELINE_FILES}//apTvComputePolygonsSpectralFeatures.shp
+                              ${TEMP}//apTvComputePolygonsSpectralFeatures.shp
                      )
 
 #----------- ObjectBasedFiltering TESTS -----------
 otb_test_application(NAME     apTvObjectBasedFiltering
                      APP      ObjectBasedFiltering
-                     OPTIONS  -in ${BASELINE_FILES}/apTvComputePolygonsSpectralFeatures.sqlite
-                              -expr "nbpixels<15"
-                              -out ${TEMP}//apTvObjectBasedFiltering.sqlite
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
+                              -expr class<3
+                              -out ${TEMP}//apTvObjectBasedFiltering.shp
                               VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvObjectBasedFiltering.sqlite
-                              ${TEMP}/apTvObjectBasedFiltering.sqlite
+                              ${BASELINE_FILES}/apTvObjectBasedFiltering.shp
+                              ${TEMP}/apTvObjectBasedFiltering.shp
                      )
