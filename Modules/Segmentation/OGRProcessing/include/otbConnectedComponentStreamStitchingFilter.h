@@ -209,11 +209,6 @@ protected:
     bool fusioned;
     unsigned int fusionIndex;
   };
-  struct SortFeatureStruct
-  {
-    bool operator() (FusionStruct f1, FusionStruct f2) { return (f1.overlap > f2.overlap); }
-  } SortFeature;
-
   /**
    Main computation method. if line is true process row part, else process column part.
    */
