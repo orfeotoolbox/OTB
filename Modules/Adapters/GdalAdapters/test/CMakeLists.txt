@@ -80,4 +80,20 @@ otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALLayerOption
          test_OGRExtendedFilenameGDALLayerOption.shp
-          )
+         )
+       
+add_executable(otbGdalAdaptersTestDriver
+               otbGdalAdaptersTestDriver.cxx
+               otbMapProjectionAdapterTest.cxx)
+             
+target_link_libraries(otbGdalAdaptersTestDriver ${OTBGdalAdapters-Test_LIBRARIES})
+otb_module_target_label(otbGdalAdaptersTestDriver)
+
+otb_add_test(NAME ioTvMapProjectionAdapterTest COMMAND otbGdalAdaptersTestDriver
+  --compare-ascii ${EPSILON_9}
+  ${BASELINE_FILES}/ioTvMapProjectionAdapterTest.txt
+  ${TEMP}/ioTvMapProjectionAdapterTest.txt
+  otbMapProjectionAdapterTest
+  ${TEMP}/ioTvMapProjectionAdapterTest.txt
+  )
+
