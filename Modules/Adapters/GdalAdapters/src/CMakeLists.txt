@@ -31,6 +31,8 @@ set(OTBGdalAdapters_SRC
   otbOGRVersionProxy.cxx
   otbOGRExtendedFilenameToOptions.cxx
   otbMapProjectionAdapter.cxx
+  otbOGRSpatialReferenceAdapter.cxx
+  otbOGRCoordinateTransformationAdapter.cxx
   )
 
 add_library(OTBGdalAdapters ${OTBGdalAdapters_SRC})
@@ -38,7 +40,6 @@ target_link_libraries(OTBGdalAdapters
   ${OTBBoost_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
-
   )
 
 otb_module_target(OTBGdalAdapters)
