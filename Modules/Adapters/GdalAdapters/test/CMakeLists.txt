@@ -84,7 +84,6 @@ otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
        
 add_executable(otbGdalAdaptersTestDriver
                otbGdalAdaptersTestDriver.cxx
-               otbMapProjectionAdapterTest.cxx
                otbOGRSpatialReferenceAdapterTest.cxx
                otbOGRCoordinateTransformationAdapterTest.cxx
                )
@@ -92,14 +91,6 @@ add_executable(otbGdalAdaptersTestDriver
 target_link_libraries(otbGdalAdaptersTestDriver ${OTBGdalAdapters-Test_LIBRARIES})
              
 otb_module_target_label(otbGdalAdaptersTestDriver)
-
-otb_add_test(NAME ioTvMapProjectionAdapterTest COMMAND otbGdalAdaptersTestDriver
-  --compare-ascii ${EPSILON_9}
-  ${BASELINE_FILES}/ioTvMapProjectionAdapterTest.txt
-  ${TEMP}/ioTvMapProjectionAdapterTest.txt
-  otbMapProjectionAdapterTest
-  ${TEMP}/ioTvMapProjectionAdapterTest.txt
-  )
 
 otb_add_test(NAME TuOGRSpatialReferenceAdapterTest
             COMMAND otbGdalAdaptersTestDriver otbOGRSpatialReferenceAdapterTest)

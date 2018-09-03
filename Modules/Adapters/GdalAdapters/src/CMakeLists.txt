@@ -30,7 +30,6 @@ set(OTBGdalAdapters_SRC
   otbOGRDataSourceWrapper.cxx
   otbOGRVersionProxy.cxx
   otbOGRExtendedFilenameToOptions.cxx
-  otbMapProjectionAdapter.cxx
   otbOGRSpatialReferenceAdapter.cxx
   otbOGRCoordinateTransformationAdapter.cxx
   )

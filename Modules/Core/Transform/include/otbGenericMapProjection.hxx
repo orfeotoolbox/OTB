@@ -30,10 +30,8 @@ namespace otb
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::GenericMapProjection() : Superclass(ParametersDimension)
-{
-  m_MapProjection = MapProjectionAdapter::New();
-}
+::GenericMapProjection() : Superclass(ParametersDimension), m_MapProjection()
+{}
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
@@ -48,7 +46,19 @@ std::string
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::GetWkt()
 {
-  return m_MapProjection->GetWkt();
+  if(m_MapProjection)
+    {
+    // Use partial template specialisation instead ?
+    if(DirectionOfMapping == TransformDirection::FORWARD)
+      {
+      return m_MapProjection->GetTargetSpatialReference().ToWkt();
+      }
+    else
+      {
+      return m_MapProjection->GetSourceSpatialReference().ToWkt();
+      }
+    }
+  return "";
 }
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
@@ -57,7 +67,24 @@ void
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::SetWkt(const std::string& projectionRefWkt)
 {
-  m_MapProjection->SetWkt(projectionRefWkt);
+  OGRSpatialReferenceAdapter wgs84("EPSG:4326");
+  OGRSpatialReferenceAdapter wktSpatialReference(projectionRefWkt);
+
+  if(DirectionOfMapping == TransformDirection::INVERSE)
+    {
+    std::unique_ptr<OGRCoordinateTransformationAdapter> newMapProjection(new OGRCoordinateTransformationAdapter(wktSpatialReference,wgs84));
+
+    if(newMapProjection)
+      m_MapProjection.swap(newMapProjection);
+    }
+  else
+    {
+    std::unique_ptr<OGRCoordinateTransformationAdapter> newMapProjection(new OGRCoordinateTransformationAdapter(wgs84,wktSpatialReference));
+
+    if(newMapProjection)
+      m_MapProjection.swap(newMapProjection);
+    }
+
   this->Modified();
 }
 
@@ -69,14 +96,14 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 {
   OutputPointType outputPoint;
 
+  // Can be collapsed
   if (DirectionOfMapping == TransformDirection::INVERSE)
     {
-
     double lon, lat, h;
     double z = 0.0;
     if (InputPointType::PointDimension == 3) z = point[2];
 
-    m_MapProjection->InverseTransform(point[0], point[1], z, lon, lat, h);
+    m_MapProjection->Transform(point[0], point[1], z, lon, lat, h);
 
     outputPoint[0] = lon;
     outputPoint[1] = lat;
@@ -89,24 +116,15 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
     double x, y, z;
     double h = 0.0;
     if (InputPointType::PointDimension == 3) h = point[2];
-    m_MapProjection->ForwardTransform(point[0], point[1], h, x, y, z);
+    m_MapProjection->Transform(point[0], point[1], h, x, y, z);
     outputPoint[0] = x;
     outputPoint[1] = y;
     if (OutputPointType::PointDimension == 3) outputPoint[2] = z;
-
     }
 
   return outputPoint;
 }
 
-template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-void
-GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::PrintMap() const
-{
-  m_MapProjection->PrintMap();
-}
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
@@ -114,9 +132,8 @@ bool
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::IsProjectionDefined() const
 {
-  return m_MapProjection->IsValid();
+  return m_MapProjection != nullptr;
 }
-
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
@@ -125,7 +142,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "ProjectionRefWkt: " << m_MapProjection->GetWkt() << std::endl;
+  os << indent << *m_MapProjection.get() << std::endl;
 }
 
 } // namespace otb
