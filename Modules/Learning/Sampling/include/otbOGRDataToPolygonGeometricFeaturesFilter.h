@@ -28,6 +28,18 @@ namespace otb
 {
 /**
  * \class OGRDataToPolygonGeometricFeaturesFilter
+ * 
+ * \brief Computes Geometric features (perimter and size) on ogr polygons.
+ * 
+ * This filter takes an OGR Data Source as input and computes size and perimeter of each polygon in it.
+ * Tbese features are then written as attributes of the polygon in the output Data Source.
+ * The name of the attributes can be specified using the setters 'SetSizeField' and 
+ * 'SetPerimeterField'.
+ * 
+ * This filter is able to work in place, updating the output Data-Source.
+ * 
+ * \ingroup OTBSampling
+ * 
  */
 
 class ITK_EXPORT OGRDataToPolygonGeometricFeaturesFilter
