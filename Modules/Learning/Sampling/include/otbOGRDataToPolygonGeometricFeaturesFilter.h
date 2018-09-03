@@ -73,6 +73,7 @@ public:
    * Get the output \c ogr::DataSource which is a "memory" datasource.
    */
   const OGRDataSourceType * GetOutput();
+  using Superclass::SetOutput;
   virtual void SetOutput(const OGRDataSourceType* ds);
   
   /** Set/Get macro for the layer name */
