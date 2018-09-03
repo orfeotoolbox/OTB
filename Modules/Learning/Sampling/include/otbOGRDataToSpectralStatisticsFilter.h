@@ -23,8 +23,8 @@
 
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-// #include "itkSimpleDataObjectDecorator.h" 
 
+#include "itkVariableSizeMatrix.h"
 #include "itkArray.h"
 namespace otb
 {
