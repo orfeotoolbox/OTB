@@ -142,6 +142,12 @@ private:
     Connect("spectral.ram","segmentation.ram");
     Connect("filtering.ram","segmentation.ram");
     
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
+    SetDocExampleParameterValue("out","segmentation.sqlite");
+    SetDocExampleParameterValue("mask","(b4-b1)/(b4+b1)>0.65");
+    SetDocExampleParameterValue("expr","distance<50");
+    SetDocExampleParameterValue("filter","meanb1<150");
+    
     SetOfficialDocLink();
     }
 

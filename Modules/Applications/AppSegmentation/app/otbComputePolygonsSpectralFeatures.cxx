@@ -64,10 +64,18 @@ private:
 
     // Documentation
     SetDocName("ComputePolygonsSpectralFeatures");
-    SetDocLongDescription("This application computes radiometric features on a set of polygons using a multi-band image");
+    SetDocLongDescription("This application computes radiometric features on a set of polygons contained in "
+    "an OGR Data Source, using a multi-band image. Computed features are minimum, maximum, mean and covariance of "
+    "the pixels of the input intersecting the polygons. The name of the field corresponding to each feature "
+    "in the output Data Source can be specified using the application parameters.This application can work "
+    "in place : if no -out parameter is given, the input datasource will be updated.");
+    
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    
+        
+    SetDocSeeAlso("LargeScaleConnectedComponent");
+    AddDocTag("LargeScaleConnectedComponent");
+
     
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");

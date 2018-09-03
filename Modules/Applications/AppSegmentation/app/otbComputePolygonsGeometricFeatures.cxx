@@ -62,10 +62,19 @@ private:
 
     // Documentation
     SetDocName("Compute Polygons Geometric Features");
-    SetDocLongDescription("This application computes geometric features on the input vector data.");
+    SetDocLongDescription("This application computes geometric features on the input data."
+      "It takes a vector Data Source as input and computes for each polygon contained in this "
+      "Data Source. Computed features are size and perimeters, and the features are written "
+      "as attributes in the output Data Source (the name of the corresponding fields can be "
+      "specified with the application parameters). This application is able to work in place :"
+      "if no -out parameter is given, the input Data Source will be updated.");
+    
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
+    SetDocSeeAlso("LargeScaleConnectedComponent");
+    AddDocTag("LargeScaleConnectedComponent");
+
     AddParameter(ParameterType_InputFilename, "in", "Name of the input vector data");
     SetParameterDescription("in","The input vector data.");
     

@@ -81,6 +81,9 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
+    SetDocSeeAlso("LargeScaleConnectedComponent");
+    AddDocTag("LargeScaleConnectedComponent");
+
     
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input multi-band image.");

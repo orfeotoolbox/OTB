@@ -62,6 +62,9 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
+    SetDocSeeAlso("LargeScaleConnectedComponent");
+    AddDocTag("Filtering");
+
     AddParameter(ParameterType_InputFilename, "in", "input vector data");
     SetParameterDescription("in","Name of the input vector data.");
 
