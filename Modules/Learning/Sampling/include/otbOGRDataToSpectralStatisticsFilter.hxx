@@ -242,18 +242,18 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     outFeat.SetGeometry( inLayer.GetFeature(fid).GetGeometry());
     
     outFeat.SetFID(fid);
-    outFeat[m_NbPixelsField].SetValue<int>(itSizeout->second);
+    outFeat[m_NbPixelsField].template SetValue<int>(itSizeout->second);
     for (unsigned int i =0; i < numberOfComponents ; i++)
     {
-      outFeat[m_MeanField+"b"+std::to_string(i)].SetValue<double>(itMeanout->second[i]);
-      outFeat[m_MinField+"b"+std::to_string(i)].SetValue<double>(itMinout->second[i]);
-      outFeat[m_MaxField+"b"+std::to_string(i)].SetValue<double>(itMaxout->second[i]);
+      outFeat[m_MeanField+"b"+std::to_string(i)].template SetValue<double>(itMeanout->second[i]);
+      outFeat[m_MinField+"b"+std::to_string(i)].template SetValue<double>(itMinout->second[i]);
+      outFeat[m_MaxField+"b"+std::to_string(i)].template SetValue<double>(itMaxout->second[i]);
     }
     for (unsigned int r =0; r < numberOfComponents ; r++)
     {
       for (unsigned int c =0; c < numberOfComponents ; c++)
       {
-        outFeat[m_CovField+"b"+std::to_string(r)+"b"+std::to_string(c)].SetValue<double>(itCovout->second[r][c]);
+        outFeat[m_CovField+"b"+std::to_string(r)+"b"+std::to_string(c)].template SetValue<double>(itCovout->second[r][c]);
       }
     } 
     if (m_updateMode==0)
@@ -315,13 +315,12 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template <class TInputImage, class TMaskImage>
 void
 PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::ProcessPolygon(const ogr::Feature& feature,
+::ProcessPolygon(const ogr::Feature& ,
                  OGRPolygon* polygon,
                  RegionType& region,
                  itk::ThreadIdType& threadid)
 {
   const TInputImage* img = this->GetInput();
-  TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
   typename TInputImage::IndexType imgIndex;
   typename TInputImage::PointType imgPoint;
   
