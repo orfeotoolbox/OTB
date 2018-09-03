@@ -18,6 +18,8 @@ not a black box!
 
 [![Travis Build Status](https://travis-ci.org/orfeotoolbox/OTB.png?branch=develop)](https://travis-ci.org/orfeotoolbox/OTB)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/2405/badge.svg)](https://scan.coverity.com/projects/orfeotoolbox)
+[![Code Quality: Cpp](https://img.shields.io/lgtm/grade/cpp/g/orfeotoolbox/OTB.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/orfeotoolbox/OTB/context:cpp)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/orfeotoolbox/OTB.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/orfeotoolbox/OTB/alerts)
 
 ### Resources
 * [OTB's website](https://www.orfeo-toolbox.org/)
