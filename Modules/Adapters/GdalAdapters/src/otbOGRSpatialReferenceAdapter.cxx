@@ -22,6 +22,8 @@
 
 #include "ogr_spatialref.h"
 
+#include <sstream>
+
 namespace otb {
 
 std::ostream & operator << (std::ostream& o, const OGRSpatialReferenceAdapter & i)
@@ -50,6 +52,37 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const std::string & descr
     }
 
   m_SR.swap(tmpSR);
+}
+
+OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const unsigned int & epsg)
+{
+  std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
+  OGRErr code = tmpSR->importFromEPSGA(epsg);
+
+  if(code!=OGRERR_NONE)
+    {
+    std::ostringstream oss;
+    oss<<"EPSG:"<<epsg;
+    throw InvalidSRDescriptionException(oss.str());
+    }
+
+  m_SR.swap(tmpSR);
+}
+
+OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const unsigned int & zone, bool north)
+{
+  std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
+  OGRErr code = tmpSR->SetUTM(zone,north);
+
+  if(code!=OGRERR_NONE)
+    {
+    std::ostringstream oss;
+    oss<<"UTM"<<zone<<(north?"N":"S");
+    throw InvalidSRDescriptionException(oss.str());
+    }
+
+  m_SR.swap(tmpSR);
+
 }
 
 OGRSpatialReferenceAdapter::~OGRSpatialReferenceAdapter() noexcept

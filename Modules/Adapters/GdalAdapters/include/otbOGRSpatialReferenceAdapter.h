@@ -57,6 +57,12 @@ public:
   // Default constructor builds an reference (m_Empty == true)
   OGRSpatialReferenceAdapter(const std::string & sr_description);
 
+  // Constructor from a EPSG code
+  OGRSpatialReferenceAdapter(const unsigned int & epsg);
+
+  // Constructor from a UTM zone and hemisphere
+  OGRSpatialReferenceAdapter(const unsigned int & zone, bool north);
+  
   // Default destructor builds an reference (m_Empty == true)
   ~OGRSpatialReferenceAdapter() noexcept;
 

@@ -33,6 +33,9 @@ int otbOGRSpatialReferenceAdapterTest(int, char**)
     OGRSpatialReferenceAdapter sr("EPSG:4326");
     OGRSpatialReferenceAdapter sr4("EPSG:32631");
 
+    OGRSpatialReferenceAdapter srFromEPSG(32631);
+    OGRSpatialReferenceAdapter srFromUTM(31,true);    
+    
     OGRSpatialReferenceAdapter sr2(sr);
 
     OGRSpatialReferenceAdapter sr3 = sr;
@@ -54,6 +57,18 @@ int otbOGRSpatialReferenceAdapterTest(int, char**)
       std::cerr<<"Fail: sr3 == sr";
       success = false;
       }
+
+    if(sr4 != srFromUTM)
+      {
+      std::cerr<<"Fail: sr4 == srFromUTM";
+      success = false;
+      }
+
+    if(sr4 != srFromEPSG)
+      {
+      std::cerr<<"Fail: sr4 == srFromEPSG";
+      success = false;
+      }
     
     std::cout<<sr<<std::endl;
     std::cout<<sr4<<std::endl;
@@ -68,6 +83,10 @@ int otbOGRSpatialReferenceAdapterTest(int, char**)
   try
     {
     OGRSpatialReferenceAdapter sr5("dummy");
+    // Wrong EPSG
+    OGRSpatialReferenceAdapter sr6(1000000);
+    // Wrong utm zone
+    OGRSpatialReferenceAdapter sr7(1000,false);
     std::cerr<<"Fail: Calling constructor with wrong description should throw"<<std::endl;
     success = false;
     }

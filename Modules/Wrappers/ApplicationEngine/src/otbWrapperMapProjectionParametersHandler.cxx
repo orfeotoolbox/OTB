@@ -21,7 +21,6 @@
 #include "otbWrapperMapProjectionParametersHandler.h"
 
 // Needed for methods relative to projections
-#include "otbMapProjections.h"
 #include "otbImageToGenericRSOutputParameters.h"
 #include "otbWrapperInputImageListParameter.h"
 
@@ -66,31 +65,6 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->AddChoice(oss.str(),  "Lambert93");
   app->SetParameterDescription(oss.str(), "This is a Lambert 93 projection mainly used in France.");
 
-  // Transmercator
-  /*oss.str("");
-  oss << key<<".transmercator";
-  app->AddChoice(oss.str(),  "Transmercator");
-  app->SetParameterDescription(oss.str(),
-                               "This is a Transverse Mercator, a cylindrical projection widely used. The required values are set by default.");
-
-  std::ostringstream subParamKey;
-  subParamKey<<oss.str()<<".falseeasting";
-  app->AddParameter(ParameterType_Float, subParamKey.str(), "False easting");
-  app->SetParameterDescription( subParamKey.str(), " Transmercator false easting value.");
-  app->SetDefaultParameterFloat(subParamKey.str(), 0.);
-
-  subParamKey.str("");
-  subParamKey<<oss.str()<<".falsenorthing";
-  app->AddParameter(ParameterType_Float, subParamKey.str(), "False northing");
-  app->SetParameterDescription(subParamKey.str(), " Transmercator false northing value.");
-  app->SetDefaultParameterFloat(subParamKey.str(), 0.);
-
-  subParamKey.str("");
-  subParamKey<<oss.str()<<".scale";
-  app->AddParameter(ParameterType_Float, subParamKey.str(), "Scale factor");
-  app->SetParameterDescription(subParamKey.str(), " Transmercator scale factor value.");
-  app->SetDefaultParameterFloat(subParamKey.str(), 1.);
-  */
   // wgs84
   oss.str("");
   oss << key<<".wgs";
@@ -128,70 +102,33 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
 
   std::ostringstream  epsgKey;
   epsgKey << key <<".epsg.code";
-
+  
   // Get the user choice
   switch ( app->GetParameterInt(key) )
     {
     case Map_Utm:
     {
-    otb::UtmInverseProjection::Pointer utmProjection =
-     otb::UtmInverseProjection::New();
-
-    // Set the zone
-    utmProjection->SetZone(app->GetParameterInt(zoneKey.str()));
-
-    // Set the hem
-    char hem = 'N';
-    if (!app->IsParameterEnabled(hemKey.str()))
-      hem = 'S';
-    utmProjection->SetHemisphere(hem);
-
-    // Get the projection ref
-    return utmProjection->GetWkt();
+    return OGRSpatialReferenceAdapter(app->GetParameterInt(zoneKey.str()),app->IsParameterEnabled(hemKey.str())).ToWkt();
     }
     break;
     case Map_Lambert2:
     {
-    otb::Lambert2EtenduForwardProjection::Pointer lambert2Projection =
-      otb::Lambert2EtenduForwardProjection::New();
-    return lambert2Projection->GetWkt();
+    return OGRSpatialReferenceAdapter("IGNF:LAMBE").ToWkt();
     }
     break;
     case Map_Lambert93:
     {
-    otb::Lambert93InverseProjection::Pointer lambert93Projection =
-      otb::Lambert93InverseProjection::New();
-    return lambert93Projection->GetWkt();
+    return OGRSpatialReferenceAdapter("IGNF:LAMB93").ToWkt();
     }
     break;
-    /*case Map_Transmercator:
-    {
-    typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
-    TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
-
-    // Get the Transmercator parameters
-    std::ostringstream falseeasting;
-    std::ostringstream falsenorthing;
-    std::ostringstream scale;
-
-    falseeasting  <<key <<".transmercator.falseeasting";
-    falsenorthing <<key <<".transmercator.falsenorthing";
-    scale         <<key <<".transmercator.scale";
-
-    transMercatorProjection->SetParameters(app->GetParameterFloat( falseeasting.str() ),
-                                           app->GetParameterFloat( falsenorthing.str() ),
-                                           app->GetParameterFloat( scale.str()) );
-    return transMercatorProjection->GetWkt();
-    }
-    break; */
     case Map_WGS84:
     {
-    return otb::GeoInformationConversion::ToWKT(4326);
+    return OGRSpatialReferenceAdapter("EPSG:4326").ToWkt();
     }
     break;
     case Map_Epsg:
     {
-    return otb::GeoInformationConversion::ToWKT(app->GetParameterInt(epsgKey.str()));
+    return OGRSpatialReferenceAdapter(app->GetParameterInt(epsgKey.str())).ToWkt();
     }
     break;
     }
