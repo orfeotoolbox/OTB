@@ -142,8 +142,13 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
     
     for (; itSize != m_PolygonSizeThread[threadId].end(); itSize++, itFirstOrder++, itSecondOrder++, itMax++, itMin++)
     {
+      assert(itFirstOrder != m_PolygonFirstOrderThread[threadId].end());
+      assert(itSecondOrder != m_PolygonSecondOrderThread[threadId].end());
+      assert(itMax != m_PolygonMaxThread[threadId].end());
+      assert(itMin != m_PolygonMinThread[threadId].end());
+      
       unsigned int fid = itSize->first;
-      if (!PolygonSize.count(fid))
+      if (PolygonSize.find(fid) == PolygonSize.end())
       {
         PolygonSize[fid] = itSize->second;
         PolygonFirstOrderComponent[fid] = itFirstOrder->second;
@@ -189,6 +194,10 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   
   for (; itMean !=  PolygonFirstOrderComponent.end(); itMean++,itSizeFull++, itCov++)
   {
+    
+    assert( itSizeFull != PolygonSize.end());
+    assert( itCov != PolygonSecondOrderComponent.end());
+    
     // Retrieve the feature corresponding to the fid in the output layer
     int fid = itMean->first;
     
@@ -225,15 +234,18 @@ PersistentOGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
   auto inLayer = inputDS->GetLayer(0);
   
   PolygonSizeMapType::iterator itSizeout = PolygonSize.begin();
-  PolygonVectorMapType::iterator itFirstOrderout = PolygonFirstOrderComponent.begin();
   PolygonVectorMapType::iterator itMeanout = PolygonMeanComponent.begin();
   PolygonVectorMapType::iterator itMaxout = PolygonMax.begin();
   PolygonVectorMapType::iterator itMinout = PolygonMin.begin();
   PolygonMatrixMapType::iterator itCovout = PolygonCovComponent.begin();
   
-  
-  for (; itSizeout != PolygonSize.end(); itSizeout++, itFirstOrderout++, itMeanout++, itCovout++, itMaxout++, itMinout++)
-  {  
+  for (; itSizeout != PolygonSize.end(); itSizeout++, itMeanout++, itCovout++, itMaxout++, itMinout++)
+  { 
+    assert ( itMeanout != PolygonMeanComponent.end());
+    assert ( itMaxout != PolygonMax.end());
+    assert ( itMinout != PolygonMin.end());
+    assert ( itCovout != PolygonCovComponent.end());
+    
     // Write features in the ouput shapefile
     int fid = itMeanout->first;
     //auto outFeat = inLayer.GetFeature(fid);

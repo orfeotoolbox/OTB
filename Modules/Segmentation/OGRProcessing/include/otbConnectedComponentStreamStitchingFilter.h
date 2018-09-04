@@ -165,7 +165,7 @@ public:
       {
         std::vector<int> fusionIndexes;
         VisitNode( (*it).first, fusionIndexes);
-        if (fusionIndexes.size() > 0)
+        if (!fusionIndexes.empty())
         {
           fusionList.push_back(fusionIndexes);
         }

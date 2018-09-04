@@ -89,7 +89,7 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
       {
         case wkbLinearRing:
         case wkbLineString:
-          dfLength += ((OGRCurve *) geom)->get_Length();
+          dfLength += (dynamic_cast<OGRCurve *> (geom))->get_Length();
           break;
         case wkbGeometryCollection:
           dfLength += GetLengthOGRGeometryCollection(dynamic_cast<OGRGeometryCollection *> (geom));
@@ -120,7 +120,7 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
 
     if (errStart != OGRERR_NONE)
     {
-      itkExceptionMacro(<< "Unable to start transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ".");
+      itkExceptionMacro(<< "Unable to start transaction for OGR layer " << m_OGRLayer.GetName() << ".");
     }
     
     for(unsigned int y=1; y<=nbRowStream; y++)

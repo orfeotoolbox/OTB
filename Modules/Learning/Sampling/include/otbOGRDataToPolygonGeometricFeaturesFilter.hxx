@@ -39,14 +39,6 @@ OGRDataToPolygonGeometricFeaturesFilter
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 }
-/**
- * Destructor.
- */
-
-OGRDataToPolygonGeometricFeaturesFilter
-::~OGRDataToPolygonGeometricFeaturesFilter()
-{}
-
 
 void
 OGRDataToPolygonGeometricFeaturesFilter
@@ -80,22 +72,17 @@ OGRDataToPolygonGeometricFeaturesFilter
 
 void
 OGRDataToPolygonGeometricFeaturesFilter
-::CreateAdditionalField(std::string name,
-                        OGRFieldType type,
+::CreateAdditionalField(std::string const & name,
+                        OGRFieldType const & type,
                         int width,
                         int precision)
 {
-  SimpleFieldDefn defn;
-  defn.Name = name;
-  defn.Type = type;
-  defn.Width = width;
-  defn.Precision = precision;
-  this->m_AdditionalFields.push_back(defn);
+  this->m_AdditionalFields.emplace_back( name, type, width,precision );
 }
 
 const std::vector<typename OGRDataToPolygonGeometricFeaturesFilter::SimpleFieldDefn>& 
-OGRDataToPolygonGeometricFeaturesFilter
-::GetAdditionalFields()
+OGRDataToPolygonGeometricFeaturesFilter 
+::GetAdditionalFields() const
 {
   return this->m_AdditionalFields;
 }
@@ -129,7 +116,7 @@ OGRDataToPolygonGeometricFeaturesFilter
     {
     std::string projectionRefWkt = inLayer.GetProjectionRef();
     bool projectionInformationAvailable = !projectionRefWkt.empty();
-    OGRSpatialReference * oSRS = ITK_NULLPTR;
+    OGRSpatialReference * oSRS = nullptr;
     if(projectionInformationAvailable)
       {
       oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
@@ -160,9 +147,9 @@ OGRDataToPolygonGeometricFeaturesFilter
   auto AdditionalFields = this->GetAdditionalFields();
   for (unsigned int k=0 ; k<AdditionalFields.size() ; k++)
     {
-    OGRFieldDefn ogrFieldDefinition(AdditionalFields[k].Name.c_str(),AdditionalFields[k].Type);
-    ogrFieldDefinition.SetWidth( AdditionalFields[k].Width );
-    ogrFieldDefinition.SetPrecision( AdditionalFields[k].Precision );
+    OGRFieldDefn ogrFieldDefinition(AdditionalFields[k].m_Name.c_str(),AdditionalFields[k].m_Type);
+    ogrFieldDefinition.SetWidth( AdditionalFields[k].m_Width );
+    ogrFieldDefinition.SetPrecision( AdditionalFields[k].m_Precision );
     ogr::FieldDefn fieldDef(ogrFieldDefinition);
     // test if field is already present
     if (currentFields.count(fieldDef.GetName()))
@@ -193,7 +180,7 @@ OGRDataToPolygonGeometricFeaturesFilter
   this->m_InMemoryInputs.clear();
   this->m_InMemoryInputs.reserve(numberOfThreads);
   std::string tmpLayerName("thread");
-  OGRSpatialReference * oSRS = ITK_NULLPTR;
+  OGRSpatialReference * oSRS = nullptr;
   if (inLayer.GetSpatialRef())
     {
     oSRS = inLayer.GetSpatialRef()->Clone();
@@ -331,7 +318,7 @@ OGRDataToPolygonGeometricFeaturesFilter
       }
     }
 
-  inLayer.SetSpatialFilter(ITK_NULLPTR);
+  inLayer.SetSpatialFilter(nullptr);
 }
 void
 OGRDataToPolygonGeometricFeaturesFilter

@@ -133,7 +133,7 @@ protected:
   virtual void ProcessPolygon(const ogr::Feature& feature,
                               OGRPolygon* polygon,
                               RegionType& region,
-                              itk::ThreadIdType& threadid);
+                              itk::ThreadIdType& threadid) override;
 
   /** Prepare temporary variables for the current feature */
   void PrepareFeature(const ogr::Feature& feature,

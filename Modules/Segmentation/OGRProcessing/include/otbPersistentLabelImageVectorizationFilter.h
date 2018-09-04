@@ -236,13 +236,13 @@ public:
   }
 
   /** Get the tolerance parameter used for polygon simplification */
-  const std::vector<int> & GetTolerance() const
+  double GetTolerance()
   {
     return this->GetFilter()->GetTolerance();
   }
   
   /** Retrieve the actual streamsize used */
-  SizeType GetStreamSize()
+  SizeType GetStreamSize() 
   {
     return this->GetFilter()->GetStreamSize();
   }

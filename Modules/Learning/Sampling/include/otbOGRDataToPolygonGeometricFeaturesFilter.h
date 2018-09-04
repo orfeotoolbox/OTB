@@ -88,12 +88,11 @@ public:
   itkSetMacro(PerimeterField, std::string);
   itkGetMacro(PerimeterField, std::string);
 
-
 protected:
   /** Constructor */
   OGRDataToPolygonGeometricFeaturesFilter();
   /** Destructor */
-  ~OGRDataToPolygonGeometricFeaturesFilter() override;
+  ~OGRDataToPolygonGeometricFeaturesFilter() override = default;
   /** Main computation method */
   void GenerateData() override;
 
@@ -137,21 +136,29 @@ protected:
 
   /** End Multi-threading implementation */
   
-  typedef struct {
-    std::string Name;
-    OGRFieldType Type;
-    int Width;
-    int Precision;
-    } SimpleFieldDefn;
+  struct SimpleFieldDefn {
+    SimpleFieldDefn( std::string const & name, 
+                    OGRFieldType const & type, 
+                    int width,
+                    int precision ) : 
+                    m_Name( name ), 
+                    m_Type( type ),
+                    m_Width( width ),
+                    m_Precision( precision)
+    {
+    }
+    
+    std::string m_Name;
+    OGRFieldType m_Type;
+    int m_Width;
+    int m_Precision;
+    };
   
   /** Create a new additional field */
-  void CreateAdditionalField(std::string name,
-                             OGRFieldType type,
-                             int width=0,
-                             int precision=0);
+  void CreateAdditionalField(std::string const & name, OGRFieldType const & type, int width, int precision);
 
   /** Get a reference over the additional fields */
-  const std::vector<SimpleFieldDefn>& GetAdditionalFields();
+  const std::vector<SimpleFieldDefn>& GetAdditionalFields() const;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
