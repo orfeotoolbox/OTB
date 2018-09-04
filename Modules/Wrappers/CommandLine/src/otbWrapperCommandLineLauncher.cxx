@@ -837,7 +837,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   if(type != ParameterType_Group)
     {
 
-    if(m_Application->IsMandatory(paramKey))
+    if(!m_Application->IsOptional(paramKey))
       {
       oss<<" (mandatory";
       }

@@ -163,11 +163,11 @@ public:
   /* Disable the use of an optional parameter. Returns the previous state  */
   void DisableParameter(std::string paramKey);
 
-  /* Return the enable state of an optional parameter  */
+  /* Return the enable state of an optional parameter */
   bool IsParameterEnabled(std::string paramKey, bool recurseParents = false) const;
 
-  /* Return true if the specified parameter is mandatory */
-  bool IsMandatory(std::string paramKey) const;
+  /* Return true if the specified parameter is optional */
+  bool IsOptional(std::string key);
 
   /* Return true if the specified parameter was set automatically in
    * the application

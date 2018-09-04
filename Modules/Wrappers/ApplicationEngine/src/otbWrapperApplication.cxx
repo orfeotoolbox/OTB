@@ -1012,10 +1012,71 @@ bool Application::IsParameterEnabled(std::string paramKey, bool recurseParents) 
   return GetParameterByKey(paramKey)->GetActive(recurseParents);
 }
 
-/* Return true if the specified parameter is mandatory */
-bool Application::IsMandatory(std::string paramKey) const
+/* Return true if the specified parameter is optional */
+bool Application::IsOptional(std::string key)
 {
-  return GetParameterByKey(paramKey)->GetMandatory();
+  auto param = GetParameterByKey(key);
+  bool mandatory_flag = param->GetMandatory();
+  /*
+  optional will be true if parameter with given key is not mandatory for running application.
+  Finding out that is not a straightforward rule due to complexity of application engine.
+  We employ couple of rules to detect optionality of parameter.
+
+  Rules to find if parmeter is optional.
+  1. Parameter is marked non-mandatory with MandatoryOff(key). found using Parameter::GetMandatory()
+  2. Parameter has a default value. found with param->HasValue()
+  3. If parameter has parent, and "parent_key.parent_value" is not found in curent parameter's key
+       Demo case:
+         -mode
+	 -mode.fit.im
+	 -mode.extent.ulx
+	 -mode.radius.r
+
+	 optional status if value of mode = fit.
+	 -mode  fit
+	 -mode.fit.im      optional=false
+	 -mode.extent.ulx  optional=true
+	 -mode.radius.r    optional=true
+
+	 optional status if value of mode = extent.
+	 -mode  fit
+	 -mode.fit.im      optional=true
+	 -mode.extent.ulx  optional=false
+	 -mode.radius.r    optional=false
+  */
+  /*
+    Intiailize optional with result of HasValue
+    and if does not has a value then check if it has MandatoryOff(key) set.
+    This kind of applies rule 1 and 2.
+  */
+  auto optional = param->HasValue() ? true : !mandatory_flag;
+  /*
+    Check number of dotted compoenents in parameter key.
+    If it is greater than 2 then we have to apply rule3
+  */
+  auto dotted_parts = ParameterKey(key).Split();
+  if (dotted_parts.size() > 2)
+    {
+      /* We are now dealing with some form sub parameters like "parent1.child1.child2". */
+      // First get root of current param
+      auto root_param = param->GetRoot();
+
+      // Traverse up and find a "root" parameter
+      while (!root_param->IsRoot())
+	root_param = root_param->GetRoot();
+
+      // Get key and value of root parameter
+      auto root_key = std::string(root_param->GetKey());
+      auto root_value = GetParameterAsString(root_key);
+      // Make a filter to update optional status
+      const std::string filter = root_key + "." + root_value + ".";
+      if (key.find(filter) != std::string::npos)
+	optional = false;
+      else
+	optional = true;
+    }
+
+  return optional;
 }
 
 void Application::MandatoryOn(std::string paramKey)
