@@ -261,7 +261,7 @@ public:
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
 
-  bool GetListViewSingleSelectionMode(std::string paramKey);
+  bool GetListViewSingleSelectionMode(const std::string& paramKey);
 
   ImageBaseType * GetParameterOutputImage(std::string parameter);
   void SetParameterInputImage(std::string parameter, ImageBaseType * inputImage);
