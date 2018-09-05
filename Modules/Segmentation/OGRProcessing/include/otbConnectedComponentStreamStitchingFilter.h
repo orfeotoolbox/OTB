@@ -161,15 +161,15 @@ public:
     std::vector< std::vector<int> > findConnectedComponents()
     {
       std::vector< std::vector<int> > fusionList;
-      for (typename GraphType::iterator it = m_graph.begin(); it != m_graph.end(); it++)
+      
+      for (auto const& node : m_graph)
       {
         std::vector<int> fusionIndexes;
-        VisitNode( (*it).first, fusionIndexes);
-        if (!fusionIndexes.empty())
-        {
-          fusionList.push_back(fusionIndexes);
-        }
+        VisitNode( node.first, fusionIndexes);
+        if (! fusionIndexes.empty())
+          fusionList.push_back(std::move(fusionIndexes)); 
       }
+      
       return fusionList;
     }
         
