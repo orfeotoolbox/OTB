@@ -63,8 +63,15 @@ private:
       "ObjectBasedFiltering [6].\n\n"
       "It generates a vector data file containing the regions extracted with "
       "the Connected components algorithm using a user defined criterion,  There is an optional step to remove small regions whose size "
-      "(in pixels) is less than the given 'minsize' parameter. Features (size, perimeter, min, max and mean for each band, and the covariance matrix) "
-      " are then extracted for each segment. Optionally, the segment are filtered using a criterion on the computed features."
+      "(in pixels) is less than the given 'minsize' parameter : these regions will be merged with the adjacent region with the "
+      "closest radiometry. Features are then extracted for each segment. The computed features are : "
+      "- size (field name 'size')"
+      "- perimeter (field name 'perimeter')"
+      "- minimum (field name for band i : 'minbi')"
+      "- maximum (field name for band i : 'maxbi')"
+      "- mean (field name for band i : 'meanbi' )"
+      "- covariance (field name for bands i and j : 'covbibj'"
+      " Optionally, the segment are filtered using a criterion on the computed features."
       );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
