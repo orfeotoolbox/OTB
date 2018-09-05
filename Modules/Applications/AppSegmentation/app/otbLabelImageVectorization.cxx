@@ -202,6 +202,7 @@ private:
     labelImageFilter->SetTolerance(this->GetParameterFloat("tolerance"));
     labelImageFilter->SetFieldName( field_name);
     labelImageFilter->Initialize();
+    AddProcess(labelImageFilter->GetStreamer(),"Vectorizing connected segments...");
     labelImageFilter->Update();
     ogrDS->SyncToDisk();
     
@@ -215,6 +216,7 @@ private:
       fusionFilter->SetInput(this->GetParameterUInt32Image("in"));
       fusionFilter->SetOGRLayer(layer);
       fusionFilter->SetStreamSize(labelImageFilter->GetStreamSize());
+      AddProcess(fusionFilter,"Merging connected segments splitted by streaming ...");
       fusionFilter->GenerateData();
     }
 

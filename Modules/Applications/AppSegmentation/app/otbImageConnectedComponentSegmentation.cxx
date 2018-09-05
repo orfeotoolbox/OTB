@@ -150,7 +150,6 @@ private:
     
     connected->SetInput(this->GetParameterImage("in"));
     connected->GetFunctor().SetExpression(GetParameterString("expr"));
-
     SetParameterOutputImage<LabelImageType>("out", connected->GetOutput());
     RegisterPipeline();
   }

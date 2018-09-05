@@ -174,6 +174,7 @@ private:
     SpectralStatisticsFilter->SetOGRData(vectors);
     SpectralStatisticsFilter->SetOutputSamples(output);
     SpectralStatisticsFilter->SetFieldName(field_name);
+    AddProcess(SpectralStatisticsFilter->GetStreamer(),"Computing spectral features ...");
     SpectralStatisticsFilter->Update();
     Timer.Stop();
     otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
