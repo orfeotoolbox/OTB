@@ -1416,7 +1416,7 @@ void Application::SetListViewSingleSelectionMode(std::string parameter, bool sta
 
 }
 
-bool Application::GetListViewSingleSelectionMode(std::string parameter)
+bool Application::GetListViewSingleSelectionMode(const std::string& parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -1428,7 +1428,6 @@ bool Application::GetListViewSingleSelectionMode(std::string parameter)
   else
     {
     itkExceptionMacro(<<parameter << " parameter can't be casted to ListView");
-    return false;
     }
 }
 

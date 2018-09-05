@@ -386,7 +386,7 @@ public:
    * Can be called for types:
    * \li ParameterType_ListView
    */
-  bool GetListViewSingleSelectionMode(std::string parameter);
+  bool GetListViewSingleSelectionMode(const std::string& parameter);
 
   /* Set an output image value
    *
