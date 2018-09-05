@@ -232,31 +232,31 @@ public:
 
   using Superclass::SetInput;
   virtual void SetInput(const TInputImage* image);
-  const TInputImage* GetInput();
+  const TInputImage* GetInput() const;
 
   void SetOGRData(const otb::ogr::DataSource* data);
-  const otb::ogr::DataSource* GetOGRData();
+  const otb::ogr::DataSource* GetOGRData() const;
   
   void SetOutputSamples(OGRDataType::Pointer data);
-  const otb::ogr::DataSource* GetOutputSamples();
+  const otb::ogr::DataSource* GetOutputSamples() const;
   
   void SetFieldName(std::string key);
-  std::string GetFieldName();
+  std::string GetFieldName() const;
   
   void SetMinField(std::string key);
-  std::string GetMinField();
+  std::string GetMinField() const;
   
   void SetMaxField(std::string key);
-  std::string GetMaxField();
+  std::string GetMaxField() const;
   
   void SetMeanField(std::string key);
-  std::string GetMeanField();
+  std::string GetMeanField() const;
   
   void SetCovField(std::string key);
-  std::string GetCovField();
+  std::string GetCovField() const; 
  
   void SetNbPixelsField(std::string key);
-  std::string GetNbPixelsField();
+  std::string GetNbPixelsField() const;
  
 protected:
   /** Constructor */

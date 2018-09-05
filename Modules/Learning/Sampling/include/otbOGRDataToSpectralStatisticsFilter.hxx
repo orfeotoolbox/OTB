@@ -515,7 +515,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 const TInputImage*
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetInput()
+::GetInput() const
 {
   return this->GetFilter()->GetInput();
 }
@@ -531,7 +531,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 const otb::ogr::DataSource*
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetOGRData()
+::GetOGRData() const
 {
   return this->GetFilter()->GetOGRData();
 }
@@ -547,7 +547,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 const otb::ogr::DataSource*
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetOutputSamples()
+::GetOutputSamples() const
 {
   return this->GetFilter()->GetOutputSamples();
 }
@@ -563,7 +563,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 std::string
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetFieldName()
+::GetFieldName() const
 {
   return this->GetFilter()->GetFieldName();
 }
@@ -579,7 +579,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 std::string
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetMinField()
+::GetMinField() const
 {
   return this->GetFilter()->GetMinField();
 }
@@ -595,7 +595,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 std::string
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetMaxField()
+::GetMaxField() const
 {
   return this->GetFilter()->GetMaxField();
 }
@@ -611,7 +611,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 std::string
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetMeanField()
+::GetMeanField() const
 {
   return this->GetFilter()->GetMeanField();
 }
@@ -627,7 +627,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 std::string
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetCovField()
+::GetCovField() const
 {
   return this->GetFilter()->GetCovField();
 }
@@ -643,7 +643,7 @@ OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
 template<class TInputImage, class TMaskImage>
 std::string
 OGRDataToSpectralStatisticsFilter<TInputImage,TMaskImage>
-::GetNbPixelsField()
+::GetNbPixelsField() const
 {
   return this->GetFilter()->GetNbPixelsField();
 }

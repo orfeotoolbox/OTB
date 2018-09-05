@@ -194,7 +194,7 @@ public:
   }
   
   /** Get the input image */
-  const InputImageType * GetInput()
+  const InputImageType * GetInput() const
   {
     return this->GetFilter()->GetInput();
   }
@@ -236,13 +236,13 @@ public:
   }
 
   /** Get the tolerance parameter used for polygon simplification */
-  double GetTolerance()
+  double GetTolerance() const
   {
     return this->GetFilter()->GetTolerance();
   }
   
   /** Retrieve the actual streamsize used */
-  SizeType GetStreamSize() 
+  SizeType GetStreamSize()  
   {
     return this->GetFilter()->GetStreamSize();
   }
@@ -266,7 +266,7 @@ public:
   /**
    * Get the value of the enlarge flag
    */
-  bool GetEnlarge()
+  bool GetEnlarge() const
   {
      return this->GetFilter()->GetEnlarge();
   }
@@ -282,7 +282,7 @@ public:
   /**
    * Get the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
    */
-  bool GetUse8Connected()
+  bool GetUse8Connected() const
   {
      return this->GetFilter()->GetUse8Connected();
   }
