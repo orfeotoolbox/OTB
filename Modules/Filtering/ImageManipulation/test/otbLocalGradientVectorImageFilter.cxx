@@ -28,18 +28,6 @@
 
 #include "otbLocalGradientVectorImageFilter.h"
 
-int otbLocalGradientVectorImageFilterNewTest ( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
-{
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-   typedef otb::LocalGradientVectorImageFilter< ImageType, ImageType >
-    FilterType;
-  FilterType::Pointer filter = FilterType::New();
-  std::cout << filter << std::endl;
-  return EXIT_SUCCESS;
-}
-
 int otbLocalGradientVectorImageFilterTest ( int argc, char* argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;

@@ -24,13 +24,6 @@
 
 #include "otbWrapperInputImageListParameter.h"
 
-int otbWrapperInputImageListParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::InputImageListParameter ParameterType;
-  ParameterType::Pointer parameter = ParameterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbWrapperInputImageListParameterTest1(int itkNotUsed(argc), char* argv[])

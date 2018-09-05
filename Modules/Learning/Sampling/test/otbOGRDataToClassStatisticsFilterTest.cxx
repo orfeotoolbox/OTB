@@ -24,16 +24,6 @@
 #include "otbImage.h"
 #include <fstream>
 
-int otbOGRDataToClassStatisticsFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::VectorImage<float> InputImageType;
-  typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToClassStatisticsFilter<InputImageType,MaskImageType> FilterType;
-  
-  FilterType::Pointer filter = FilterType::New();
-  std::cout << filter << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
 {

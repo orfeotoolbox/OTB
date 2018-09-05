@@ -18,27 +18,38 @@
  * limitations under the License.
  */
 
-
-
+#include "otbVectorImage.h"
 #include "itkMacro.h"
 #include <iostream>
 
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbMultiChannelsPolarimetricSynthesisFilter.h"
+#include "otbImageFileReader.h"
 
-int otbMultiChannelsPolarimetricSynthesisFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbWriteGeomFile(int itkNotUsed(argc), char* argv[])
 {
+
+  // Verify the number of parameters in the command line
+  std::string inputFilename(argv[1]);
+  std::string outputFilename(argv[2]);
+
   typedef double InputPixelType;
-  typedef double OutputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension>       OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
 
-  typedef otb::MultiChannelsPolarimetricSynthesisFilter<InputImageType, OutputImageType> FilterType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputFilename);
+  reader->UpdateOutputInformation();
 
-  FilterType::Pointer filter = FilterType::New();
+  otb::ImageKeywordlist otb_kwl;
+  itk::MetaDataDictionary &dict = reader->GetOutput()->GetMetaDataDictionary();
+  itk::ExposeMetaData<otb::ImageKeywordlist>(dict, otb::MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+  if (otb_kwl.Empty())
+    {
+    return EXIT_FAILURE;
+    }
+
+  otb::WriteGeometry(otb_kwl, outputFilename);
 
   return EXIT_SUCCESS;
 }

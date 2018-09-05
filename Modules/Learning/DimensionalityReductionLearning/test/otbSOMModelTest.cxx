@@ -29,15 +29,6 @@ typedef otb::SOMModel<double,5> SOMModel5D;
 typedef SOMModel2D::InputListSampleType InputListSampleType;
 typedef SOMModel2D::TargetListSampleType TargetListSampleType;
 
-int otbSOMModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  SOMModel2D::Pointer model2D = SOMModel2D::New();
-  SOMModel3D::Pointer model3D = SOMModel3D::New();
-  SOMModel4D::Pointer model4D = SOMModel4D::New();
-  SOMModel5D::Pointer model5D = SOMModel5D::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbSOMModelCanRead(int argc, char * argv [])
 {

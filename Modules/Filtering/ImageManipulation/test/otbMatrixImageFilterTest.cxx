@@ -27,17 +27,6 @@
 #include "otbImageFileWriter.h"
 #include <complex>
 
-int otbMatrixImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef std::complex<double> PixelType;
-
-  typedef otb::VectorImage<PixelType> ImageType;
-  typedef otb::MatrixImageFilter<ImageType, ImageType> FilterType;
-
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbMatrixImageFilterTest(int itkNotUsed(argc), char * argv[])
