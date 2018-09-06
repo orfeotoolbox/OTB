@@ -121,7 +121,7 @@ private:
       "If activated, the application will try to clean all temporary files it created."
       "Note that temporary files are only created if the minsize option"
       "is activated");
-    SetDefaultParameterInt("cleanup", 1);
+    SetParameterInt("cleanup", 1);
     MandatoryOff( "cleanup" );
 
     AddParameter(ParameterType_Directory,"tmpdir","Directory where to "
