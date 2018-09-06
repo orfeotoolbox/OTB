@@ -197,7 +197,11 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
       mean[band] /= count;
 
       // Unbiased standard deviation (not sure unbiased is usefull here)
-      const double variance = (sqSum[band] - (sum[band] * mean[band])) / (count - 1);
+      double variance = 0;
+      if (count > 1)
+        {
+        variance = (sqSum[band] - (sum[band] * mean[band])) / (count - 1);
+        }
       std[band] = std::sqrt(variance);
       }
     m_MeanRadiometricValue[label] = mean;
