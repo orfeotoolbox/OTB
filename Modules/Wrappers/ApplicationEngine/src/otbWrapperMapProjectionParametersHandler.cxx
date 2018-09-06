@@ -123,7 +123,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     break;
     case Map_WGS84:
     {
-    return OGRSpatialReferenceAdapter("EPSG:4326").ToWkt();
+    return OGRSpatialReferenceAdapter().ToWkt();
     }
     break;
     case Map_Epsg:
