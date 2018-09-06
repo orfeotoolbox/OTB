@@ -1017,7 +1017,7 @@ otb_test_application(NAME apTvClSampleAugmentationSmote
   )
 
 #----------- ZonalStatistics TESTS ----------------
-otb_test_application(NAME apTvClZonalStatistics
+otb_test_application(NAME apTvClZonalStatisticsVec
   APP  ZonalStatistics
   OPTIONS -mode vector -mode.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
   -mode.vector.out ${TEMP}/apTvClVectorData_QB1_ter_with_stats.shp
@@ -1026,7 +1026,7 @@ otb_test_application(NAME apTvClZonalStatistics
   ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_with_stats.dbf
   ${TEMP}/apTvClVectorData_QB1_ter_with_stats.dbf)
 
-otb_test_application(NAME apTvClZonalStatistics
+otb_test_application(NAME apTvClZonalStatisticsImg
   APP  ZonalStatistics
   OPTIONS -mode raster -mode.raster.in ${INPUTDATA}/Classification/VectorData_QB1_ter.tif
   -mode.vector.out ${TEMP}/apTvClVectorData_QB1_ter_stats.xml
@@ -1035,7 +1035,7 @@ otb_test_application(NAME apTvClZonalStatistics
   ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_stats.xml
   ${TEMP}/apTvClVectorData_QB1_ter_stats.xml)
 
-otb_test_application(NAME apTvClZonalStatistics
+otb_test_application(NAME apTvClZonalStatisticsImgNoData
   APP  ZonalStatistics
   OPTIONS -mode raster -mode.raster.in ${INPUTDATA}/Classification/VectorData_QB1_ter.tif
   -mode.vector.out ${TEMP}/apTvClVectorData_QB1_ter_stats_nodata.xml
