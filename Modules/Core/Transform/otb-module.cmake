@@ -24,7 +24,6 @@ itk -see itk::Transform-). this mainly concerns transformations of coordinates
 from any map projection or sensor model to any map projection or sensor model.")
 
 otb_module(OTBTransform
-ENABLE_SHARED
   DEPENDS
     OTBBoost
     OTBCommon

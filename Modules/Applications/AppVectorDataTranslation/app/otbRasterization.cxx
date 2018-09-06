@@ -21,7 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbGeoInformationConversion.h"
+#include "otbOGRSpatialReferenceAdapter.h"
 
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "otbGenericRSTransform.h"
@@ -240,7 +240,7 @@ private:
       if (HasValue("epsg"))
         {
         unsigned int RSID = GetParameterInt("epsg");
-        outputProjectionRef = otb::GeoInformationConversion::ToWKT(RSID);
+        outputProjectionRef = otb::OGRSpatialReferenceAdapter(RSID).ToWkt();
         }
       else
         {

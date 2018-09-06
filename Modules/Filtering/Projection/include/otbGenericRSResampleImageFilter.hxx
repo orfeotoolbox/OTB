@@ -33,7 +33,7 @@
 #include "ogr_spatialref.h"
 #include "cpl_conv.h"
 
-#include "otbGeoInformationConversion.h"
+#include "otbOGRSpatialReferenceAdapter.h"
 #include "otbImageToGenericRSOutputParameters.h"
 
 namespace otb
@@ -294,25 +294,17 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);
 
     // Guess the zone and the hemisphere
-    int zone = Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
-    bool hem = (geoPoint[1]>1e-10)?true:false;
+    unsigned int zone(0);
+    bool north(true);
+    otb::OGRSpatialReferenceAdapter::UTMFromGeoPoint(geoPoint[0],geoPoint[1],zone,north);
 
-    // Build the output UTM projection ref
-    OGRSpatialReferenceH oSRS = OSRNewSpatialReference(nullptr);
-    OSRSetProjCS(oSRS, "UTM");
-    OSRSetWellKnownGeogCS(oSRS, "WGS84");
-    OSRSetUTM(oSRS, zone, hem);
-
-    char * utmRefC = nullptr;
-    OSRExportToWkt(oSRS, &utmRefC);
-    projectionRef = utmRefC;
-
-    CPLFree(utmRefC);
-    OSRRelease(oSRS);
+    otb::OGRSpatialReferenceAdapter oSRS(zone,north);
+    
+    projectionRef = oSRS.ToWkt();
     }
   else if(strcmp(map.c_str(),"WGS84")==0)
     {
-    projectionRef = otb::GeoInformationConversion::ToWKT(4326); //WGS84
+    projectionRef = otb::OGRSpatialReferenceAdapter().ToWkt(); //WGS84
     }
   else
     {

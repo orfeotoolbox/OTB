@@ -240,13 +240,13 @@ set(UTMZONES
 )
 
 set(HEMIS
-N
-N
-N
-N
-N
-S
-N
+1
+1
+1
+1
+1
+0
+1
 )
 
 set(RESOL

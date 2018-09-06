@@ -20,7 +20,7 @@
 
 
 #include "otbOSMDataToVectorDataGenerator.h"
-#include "otbGeoInformationConversion.h"
+#include "otbOGRSpatialReferenceAdapter.h"
 #include "itksys/SystemTools.hxx"
 #include "itkDataObject.h"
 #include "itkMacro.h"
@@ -279,7 +279,7 @@ OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, const st
   m_OutputVectorData = VectorDataType::New();
 
   // Intitialize the vectordata : EPSG 4326 is for WGS84
-  m_OutputVectorData->SetProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+  m_OutputVectorData->SetProjectionRef(otb::OGRSpatialReferenceAdapter().ToWkt());
   DataNodeType::Pointer root = m_OutputVectorData->GetDataTree()->GetRoot()->Get();
   DataNodeType::Pointer document = DataNodeType::New();
   DataNodeType::Pointer folder = DataNodeType::New();
