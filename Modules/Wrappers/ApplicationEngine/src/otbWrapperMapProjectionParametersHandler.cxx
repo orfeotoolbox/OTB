@@ -171,14 +171,18 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
         genericRSEstimator->SetInput(app->GetParameterImageList(imageKey)->GetNthElement(0));
         }
 
-    genericRSEstimator->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+    genericRSEstimator->SetOutputProjectionRef(OGRSpatialReferenceAdapter().ToWkt());
     genericRSEstimator->Compute();
 
-    int zone = otb::Utils::GetZoneFromGeoPoint(genericRSEstimator->GetOutputOrigin()[0],
-                                               genericRSEstimator->GetOutputOrigin()[1]);
+    unsigned int zone(0);
+    bool north(true);
+
+    otb::OGRSpatialReferenceAdapter::UTMFromGeoPoint(genericRSEstimator->GetOutputOrigin()[0],
+                                                     genericRSEstimator->GetOutputOrigin()[1], zone, north);
+    
     // Update the UTM Gui fields
     app->SetParameterInt(zoneKey.str(), zone);
-    if (genericRSEstimator->GetOutputOrigin()[1] > 0.)
+    if (north)
       {
       app->EnableParameter(hemKey.str());
       }
