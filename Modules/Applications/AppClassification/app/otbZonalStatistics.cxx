@@ -192,7 +192,7 @@ public:
       m_RasterizeFilter->SetOutputSize(img->GetLargestPossibleRegion().GetSize());
       m_RasterizeFilter->SetOutputProjectionRef(img->GetProjectionRef());
       m_RasterizeFilter->SetBurnAttribute("________");
-      m_RasterizeFilter->SetDefaultBurnValue(intNoData);
+      m_RasterizeFilter->SetDefaultBurnValue(0);
       m_RasterizeFilter->SetGlobalWarningDisplay(false);
       m_RasterizeFilter->SetBackgroundValue(intNoData);
 
