@@ -314,15 +314,15 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
 otb_test_application(NAME     apTvLargeScaleConnectedComponentMinSize
                      APP      LargeScaleConnectedComponent
                      OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
-                              -out ${TEMP}/apTvLargeScaleConnectedComponent.shp
+                              -out ${TEMP}/apTvLargeScaleConnectedComponentMinSize.shp
                               -expr "distance<50"
                               -mask "(b4-b1)/(b4+b1)>0.65"
                               -filter "meanb1<150"
                               -fusion 1
                               -minsize 50
                      VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvLargeScaleConnectedComponent.shp
-                              ${TEMP}/apTvLargeScaleConnectedComponent.shp                      
+                              ${BASELINE_FILES}/apTvLargeScaleConnectedComponentMinSize.shp
+                              ${TEMP}/apTvLargeScaleConnectedComponentMinSize.shp                      
                      )
                      
 #----------- LargeScaleConnectedComponent 
