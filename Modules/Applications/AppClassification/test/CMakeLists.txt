@@ -1015,3 +1015,34 @@ otb_test_application(NAME apTvClSampleAugmentationSmote
   -strategy smote
   -strategy.smote.neighbors 5
   )
+
+#----------- ZonalStatistics TESTS ----------------
+otb_test_application(NAME apTvClZonalStatistics
+  APP  ZonalStatistics
+  OPTIONS -mode vector -mode.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
+  -mode.vector.out ${TEMP}/apTvClVectorData_QB1_ter_with_stats.shp
+  -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_with_stats.dbf
+  ${TEMP}/apTvClVectorData_QB1_ter_with_stats.dbf)
+
+otb_test_application(NAME apTvClZonalStatistics
+  APP  ZonalStatistics
+  OPTIONS -mode raster -mode.raster.in ${INPUTDATA}/Classification/VectorData_QB1_ter.tif
+  -mode.vector.out ${TEMP}/apTvClVectorData_QB1_ter_stats.xml
+  -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_stats.xml
+  ${TEMP}/apTvClVectorData_QB1_ter_stats.xml)
+
+otb_test_application(NAME apTvClZonalStatistics
+  APP  ZonalStatistics
+  OPTIONS -mode raster -mode.raster.in ${INPUTDATA}/Classification/VectorData_QB1_ter.tif
+  -mode.vector.out ${TEMP}/apTvClVectorData_QB1_ter_stats_nodata.xml
+  -in ${INPUTDATA}/Classification/QB_1_ortho.tif
+  -mode.raster.nodata -1
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_stats_nodata.xml
+  ${TEMP}/apTvClVectorData_QB1_ter_stats_nodata.xml)
+
+  
