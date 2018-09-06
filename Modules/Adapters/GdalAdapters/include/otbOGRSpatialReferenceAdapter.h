@@ -54,7 +54,10 @@ class OTBGdalAdapters_EXPORT OGRSpatialReferenceAdapter
 friend class OGRCoordinateTransformationAdapter;
 
 public:
-  // Default constructor builds an reference (m_Empty == true)
+  // Default constructor builds wgs84
+  OGRSpatialReferenceAdapter();
+
+  // Constructor from a description string
   OGRSpatialReferenceAdapter(const std::string & sr_description);
 
   // Constructor from a EPSG code
@@ -81,6 +84,15 @@ public:
   // Export to Wkt
   std::string ToWkt() const;
 
+  // ESRI normalization. Return true on success. If false is returned,
+  // SRS remains unmodified
+  bool NormalizeESRI();
+
+  // Export to EPSG
+  int ToEPSG() const;
+
+  static void UTMFromGeoPoint(const double & lat, const double & lon, unsigned int & zone, bool & north);
+  
 protected:
   // Constructor from wrapped type
   OGRSpatialReferenceAdapter(const OGRSpatialReference * ref) noexcept;

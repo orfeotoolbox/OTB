@@ -22,6 +22,8 @@
 
 #include "ogr_spatialref.h"
 
+#include "boost/lexical_cast.hpp"
+
 #include <sstream>
 
 namespace otb {
@@ -41,12 +43,25 @@ const char * InvalidSRDescriptionException::what() const noexcept
   return m_Description.c_str();
 }
 
+OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter()
+{
+  std::unique_ptr<OGRSpatialReference> tmpSR(OGRSpatialReference::GetWGS84SRS()->Clone());  
+
+  if(!tmpSR)
+    {
+    throw InvalidSRDescriptionException("WGS84");
+    }
+
+  m_SR.swap(tmpSR);
+}
+
+
 OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const std::string & description)
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
-  OGRErr code = tmpSR->SetFromUserInput(description.c_str());
-
-  if(code!=OGRERR_NONE)
+  OGRErr code1 = tmpSR->SetFromUserInput(description.c_str());
+  
+  if(code1!=OGRERR_NONE)
     {
     throw InvalidSRDescriptionException(description);
     }
@@ -120,5 +135,96 @@ std::string OGRSpatialReferenceAdapter::ToWkt() const
   delete cwkt;
 
   return wkt;
+}
+
+int OGRSpatialReferenceAdapter::ToEPSG() const
+{
+  int code = -1;
+  
+  std::unique_ptr<OGRSpatialReference> tmpSRS(m_SR->Clone());
+
+  tmpSRS->Fixup();
+  tmpSRS->AutoIdentifyEPSG();
+  
+  const char * epsg = nullptr;
+  if (tmpSRS->IsGeographic())
+    {
+    code = 0;
+    epsg = tmpSRS->GetAuthorityCode("GEOGCS");
+    }
+  else if (tmpSRS->IsProjected())
+    {
+    code = 0;
+    epsg = tmpSRS->GetAuthorityCode("PROJCS");
+    }
+  if (epsg!=nullptr && strcmp( epsg, "" )!=0 )
+    {
+    try
+      {
+      code = boost::lexical_cast<int>(epsg);
+      }
+    catch(boost::bad_lexical_cast &)
+      {
+      code = 0;
+      }
+    }
+  return code;
+}
+
+bool OGRSpatialReferenceAdapter::NormalizeESRI()
+{
+  std::unique_ptr<OGRSpatialReference> tmpSRS(m_SR->Clone());
+
+  // Morph to ESRI
+  OGRErr code = tmpSRS->morphToESRI();
+
+  // Check if it is still valid
+  if(code != OGRERR_NONE || tmpSRS->Validate() != OGRERR_NONE)
+    return false;
+
+  m_SR.swap(tmpSRS);
+  return true;
+}
+
+void OGRSpatialReferenceAdapter::UTMFromGeoPoint(const double & lat, const double & lon, unsigned int & zone, bool & north)
+{
+  // Pre-conditions
+  assert(lat_Degrees>-90);
+  assert(lon_Degrees>-180);
+  assert(lat_Degrees<90);
+  assert(lon_Degrees<180);
+  
+  zone = 0;
+  north = lat>0;
+
+  // TODO: Code forked from OSSIM. Copyright ?
+  int lat_Degrees  = (int)(lat + 0.00000005);
+  int long_Degrees = (int)(lon + 0.00000005);
+  
+  if (lon < 180)
+     zone = (int)( (31 + (lon / (6 * 180)) )+ 0.00000005);
+   else
+     zone = (int)( ((lon / (6 * 180)) - 29) + 0.00000005);
+   if (zone > 60)
+     zone = 1;
+   /* UTM special cases */
+   if ((lat_Degrees > 55) && (lat_Degrees < 64) && (long_Degrees > -1)
+       && (long_Degrees < 3))
+     zone = 31;
+   if ((lat_Degrees > 55) && (lat_Degrees < 64) && (long_Degrees > 2)
+       && (long_Degrees < 12))
+     zone = 32;
+   if ((lat_Degrees > 71) && (long_Degrees > -1) && (long_Degrees < 9))
+     zone = 31;
+   if ((lat_Degrees > 71) && (long_Degrees > 8) && (long_Degrees < 21))
+     zone = 33;
+   if ((lat_Degrees > 71) && (long_Degrees > 20) && (long_Degrees < 33))
+     zone = 35;
+   if ((lat_Degrees > 71) && (long_Degrees > 32) && (long_Degrees < 42))
+     zone = 37;
+
+   // post conditions
+   assert(zone>=0);
+   assert(zone<=60);
 }
 }
