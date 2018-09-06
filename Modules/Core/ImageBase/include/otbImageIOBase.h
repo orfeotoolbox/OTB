@@ -204,7 +204,7 @@ public:
 
   /** Convenience method returns the IOComponentType as a string. This can be
    * used for writing output files. */
-  std::string GetComponentTypeAsString(IOComponentType) const;
+  static std::string GetComponentTypeAsString(IOComponentType);
 
   /** Convenience method returns the IOPixelType as a string. This can be
    * used for writing output files. */

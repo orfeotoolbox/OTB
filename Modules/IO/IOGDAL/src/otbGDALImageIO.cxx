@@ -711,9 +711,16 @@ void GDALImageIO::InternalReadImageInformation()
       }
   }
 
+  /* -------------------------------------------------------------------- */
+  /*  Get Pixel type                                                      */
+  /* -------------------------------------------------------------------- */
+
+  itk::EncapsulateMetaData< IOComponentType >( dict, 
+          MetaDataKey::DataType , 
+          this->GetComponentType() );
 
   /* -------------------------------------------------------------------- */
-  /*  Get Spacing                */
+  /*  Get Spacing                                                         */
   /* -------------------------------------------------------------------- */
 
   // Default Spacing
