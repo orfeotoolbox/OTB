@@ -25,7 +25,7 @@
 
 #include "otbTransform.h"
 #include "itkMacro.h"
-#include "otbOGRCoordinateTransformationAdapter.h"
+#include "otbCoordinateTransformation.h"
 #include <string>
 
 namespace otb
@@ -105,7 +105,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  std::unique_ptr<OGRCoordinateTransformationAdapter> m_MapProjection;
+  std::unique_ptr<CoordinateTransformation> m_MapProjection;
   
 private:
   GenericMapProjection(const Self &) = delete;

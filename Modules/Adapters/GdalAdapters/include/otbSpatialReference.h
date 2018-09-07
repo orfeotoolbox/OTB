@@ -54,7 +54,7 @@ public:
  */
 class OTBGdalAdapters_EXPORT SpatialReference
 {
-friend class OGRCoordinateTransformationAdapter;
+friend class CoordinateTransformation;
 friend bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
 friend bool operator!=(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
 

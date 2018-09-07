@@ -72,14 +72,14 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 
   if(DirectionOfMapping == TransformDirection::INVERSE)
     {
-    std::unique_ptr<OGRCoordinateTransformationAdapter> newMapProjection(new OGRCoordinateTransformationAdapter(wktSpatialReference,wgs84));
+    std::unique_ptr<CoordinateTransformation> newMapProjection(new CoordinateTransformation(wktSpatialReference,wgs84));
 
     if(newMapProjection)
       m_MapProjection.swap(newMapProjection);
     }
   else
     {
-    std::unique_ptr<OGRCoordinateTransformationAdapter> newMapProjection(new OGRCoordinateTransformationAdapter(wgs84,wktSpatialReference));
+    std::unique_ptr<CoordinateTransformation> newMapProjection(new CoordinateTransformation(wgs84,wktSpatialReference));
 
     if(newMapProjection)
       m_MapProjection.swap(newMapProjection);

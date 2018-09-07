@@ -23,5 +23,5 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbSpatialReferenceTest);
-  REGISTER_TEST(otbOGRCoordinateTransformationAdapterTest);
+  REGISTER_TEST(otbCoordinateTransformationTest);
 }

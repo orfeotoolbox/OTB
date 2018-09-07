@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#include "otbOGRCoordinateTransformationAdapter.h"
+#include "otbCoordinateTransformation.h"
 
 #include <iostream>
 
 using namespace otb;
 
-int otbOGRCoordinateTransformationAdapterTest(int, char**)
+int otbCoordinateTransformationTest(int, char**)
 {
   bool success = true;
   
@@ -34,11 +34,11 @@ int otbOGRCoordinateTransformationAdapterTest(int, char**)
 
   try
     {
-    OGRCoordinateTransformationAdapter transformation(inSR,outSR);
+    CoordinateTransformation transformation(inSR,outSR);
     
-    OGRCoordinateTransformationAdapter transformation2(transformation);
-    OGRCoordinateTransformationAdapter transformation3 = transformation;
-    OGRCoordinateTransformationAdapter transformation4(inSR,outSRBis);
+    CoordinateTransformation transformation2(transformation);
+    CoordinateTransformation transformation3 = transformation;
+    CoordinateTransformation transformation4(inSR,outSRBis);
     
   if(!(transformation==transformation2))
     {

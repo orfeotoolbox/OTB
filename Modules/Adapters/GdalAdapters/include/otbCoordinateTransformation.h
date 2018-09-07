@@ -17,8 +17,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef otbOGRCoordinateTransformationAdapter_h
-#define otbOGRCoordinateTransformationAdapter_h
+#ifndef otbCoordinateTransformation_h
+#define otbCoordinateTransformation_h
 
 #include "otbSpatialReference.h"
 
@@ -39,7 +39,7 @@ namespace otb
  * \brief Exception for invalid coordinate transform
  *
  * This class describes an exception that might be thrown by
- * OGRCoordinateTransformationAdapter constructors
+ * CoordinateTransformation constructors
  */
 class OTBGdalAdapters_EXPORT InvalidCoordinateTransfromationException : public std::runtime_error
 {
@@ -53,7 +53,7 @@ public:
  * \brief Exception for failure of coordinate transform
  *
  * This class describes an exception that might be thrown by
- * OGRCoordinateTransformationAdapter::Transform()
+ * CoordinateTransformation::Transform()
  */
 class OTBGdalAdapters_EXPORT TransformFailureException : public std::runtime_error
 {
@@ -65,7 +65,7 @@ public:
 
 
 /**
- * \class OGRCoordinateTransformationAdapter
+ * \class CoordinateTransformation
  * \brief This class is a wrapper around OGRCoordinateTransformation
  * 
  * This class is a wrapper around OGRCoordinateTransformation. It aims
@@ -75,10 +75,10 @@ public:
  * definitive, valid object.
  */
 
-class OTBGdalAdapters_EXPORT OGRCoordinateTransformationAdapter
+class OTBGdalAdapters_EXPORT CoordinateTransformation
 {
-friend bool operator==(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter& ct2) noexcept;
-friend bool operator!=(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter & ct2) noexcept;
+friend bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
+friend bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
 
 public:
   /** 
@@ -89,16 +89,16 @@ public:
    *
    * \throws InvalidCoordinateTransfromationException in case of failure
    */
-  OGRCoordinateTransformationAdapter(const SpatialReference & source, const SpatialReference & destination);
+  CoordinateTransformation(const SpatialReference & source, const SpatialReference & destination);
 
   /// Destructor
-  ~OGRCoordinateTransformationAdapter() noexcept;
+  ~CoordinateTransformation() noexcept;
 
   /// Copy constructor
-  OGRCoordinateTransformationAdapter(const OGRCoordinateTransformationAdapter& other);
+  CoordinateTransformation(const CoordinateTransformation& other);
 
   /// Asignment operator
-  OGRCoordinateTransformationAdapter & operator=(const OGRCoordinateTransformationAdapter& other) noexcept;
+  CoordinateTransformation & operator=(const CoordinateTransformation& other) noexcept;
 
   /// \return The source spatial reference
   SpatialReference GetSourceSpatialReference() const;
@@ -128,13 +128,13 @@ private:
   std::unique_ptr<OGRCoordinateTransformation> m_Transform;
 };
 
-std::ostream & OTBGdalAdapters_EXPORT operator << (std::ostream& o, const OGRCoordinateTransformationAdapter & i);
+std::ostream & OTBGdalAdapters_EXPORT operator << (std::ostream& o, const CoordinateTransformation & i);
 
   /// equal operator
-bool OTBGdalAdapters_EXPORT operator==(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter& ct2) noexcept;
+bool OTBGdalAdapters_EXPORT operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
 
   /// different operator
-bool OTBGdalAdapters_EXPORT operator!=(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter & ct2) noexcept;
+bool OTBGdalAdapters_EXPORT operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
 
 }
 
