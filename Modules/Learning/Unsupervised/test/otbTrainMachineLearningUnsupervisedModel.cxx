@@ -111,12 +111,6 @@ bool SharkReadDataFile(const std::string & infname, InputListSampleType * sample
 }
 
 
-int otbSharkKMeansMachineLearningModelNew(int itkNotUsed( argc ), char *itkNotUsed( argv )[])
-{
-  typedef otb::SharkKMeansMachineLearningModel<InputValueType, TargetValueType> SharkRFType;
-  SharkRFType::Pointer classifier = SharkRFType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbSharkKMeansMachineLearningModelTrain(int argc, char *argv[])
 {

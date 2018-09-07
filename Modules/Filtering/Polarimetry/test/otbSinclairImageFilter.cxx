@@ -33,20 +33,6 @@
 #include "otbMultiChannelExtractROI.h"
 
 
-int otbSinclairImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef std::complex<float>        ComplexType;
-  typedef otb::Image<ComplexType, 2> CplxImageType;
-  typedef otb::VectorImage<ComplexType, 2> VCplxImageType;
-
-  typedef otb::SinclairImageFilter<CplxImageType, CplxImageType, CplxImageType, CplxImageType, VCplxImageType> FilterType;
-
-  // Instantiating object
-  FilterType::Pointer filter = FilterType::New();
-
-
-  return EXIT_SUCCESS;
-}
 
 
 template<class TInputPixel, class TOutputPixel, class TFunction>

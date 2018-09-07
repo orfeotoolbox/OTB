@@ -179,7 +179,7 @@ VectorDataFileReader<TOutputVectorData>
     return;
     }
 
-  m_VectorDataIO->SetFileName(m_FileName.c_str());
+  m_VectorDataIO->SetFileName(m_FileName);
 
   //Copy MetaDataDictionary from instantiated reader to output VectorData.
   output->SetMetaDataDictionary(m_VectorDataIO->GetMetaDataDictionary());
@@ -208,7 +208,7 @@ VectorDataFileReader<TOutputVectorData>
     m_ExceptionMessage = err.GetDescription();
     }
 
-  m_VectorDataIO->SetFileName(m_FileName.c_str());
+  m_VectorDataIO->SetFileName(m_FileName);
 
   // Tell the VectorDataIO to read the file
   //

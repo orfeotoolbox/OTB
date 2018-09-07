@@ -32,12 +32,6 @@ typedef double PixelType;
 typedef otb::VectorImage<PixelType> ImageType;
 typedef otb::ConcatenateScalarValueImageFilter<ImageType, ImageType> FilterType;
 
-int otbConcatenateScalarValueImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  FilterType::Pointer filter = FilterType::New();
-  std::cout << filter << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbConcatenateScalarValueImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

@@ -30,21 +30,6 @@
 #include "otbImageFileReader.h"
 #include "otbRadiometricMomentsImageFunction.h"
 
-int otbRadiometricMomentsImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
-
-  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::RadiometricMomentsImageFunction<InputImageType>    FunctionType;
-
-  // Instantiating object
-  FunctionType::Pointer function       = FunctionType::New();
-
-  std::cout << function << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbRadiometricMomentsImageFunction(int itkNotUsed(argc), char * argv[])

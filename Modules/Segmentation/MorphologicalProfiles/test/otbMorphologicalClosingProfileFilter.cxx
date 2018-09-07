@@ -71,7 +71,7 @@ int otbMorphologicalClosingProfileFilter(int itkNotUsed(argc), char * argv[])
     writer =  WriterType::New();
     oss << outputFilenamePrefix << i << "." << outputFilenameSuffix;
     writer->SetInput(profileFilter->GetOutput()->GetNthElement(i - 1));
-    writer->SetFileName(oss.str().c_str());
+    writer->SetFileName(oss.str());
     writer->Update();
     oss.str("");
     }

@@ -145,34 +145,6 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &m
 
 
 
-int otbConfusionMatrixMeasurementsNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  /*typedef unsigned long                                   ConfusionMatrixEltType;
-  typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
-  typedef unsigned char                                   LabelType; */
-
-  // filter types
-  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurements2TemplatesType;
-  typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType>                 ConfusionMatrixMeasurements1TemplateType;
-  typedef otb::ConfusionMatrixMeasurements<>                                    ConfusionMatrixMeasurements0TemplateType;
-
-  // filters
-  ConfusionMatrixMeasurements2TemplatesType::Pointer
-      confusionMatrixMeasurements2Templates = ConfusionMatrixMeasurements2TemplatesType::New();
-  ConfusionMatrixMeasurements1TemplateType::Pointer
-      confusionMatrixMeasurements1Template = ConfusionMatrixMeasurements1TemplateType::New();
-  ConfusionMatrixMeasurements0TemplateType::Pointer
-      confusionMatrixMeasurements0Template = ConfusionMatrixMeasurements0TemplateType::New();
-
-  std::cout << confusionMatrixMeasurements2Templates << std::endl;
-  std::cout << std::endl;
-  std::cout << confusionMatrixMeasurements1Template << std::endl;
-  std::cout << std::endl;
-  std::cout << confusionMatrixMeasurements0Template << std::endl;
-  std::cout << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbConfusionMatrixMeasurementsTest(int itkNotUsed(argc), char* itkNotUsed(argv) [])

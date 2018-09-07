@@ -91,15 +91,8 @@ public:
   /** Return true if a filename is set */
   bool HasValue() const override;
 
-  void SetFileName (const char* filename)
-  {
-    m_FileName = filename;
-    SetActive(true);
-  }
-  void SetFileName (const std::string& filename)
-  {
-    this->SetFileName(filename.c_str());
-  }
+  void SetFileName (const char* filename);
+  void SetFileName (const std::string& filename);
 
   itkGetStringMacro(FileName);
 

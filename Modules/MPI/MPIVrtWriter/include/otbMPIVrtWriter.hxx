@@ -65,16 +65,19 @@ MPIVrtWriter<TImage>::SetFileName(const char* extendedFileName)
 {
   if (m_Filename.compare(extendedFileName) != 0 )
     {
-    m_Filename = std::string(extendedFileName);
-    this->Modified();
+    this->SetFileName(std::string(extendedFileName));
     }
 }
 
 template <typename TImage>
 void
-MPIVrtWriter<TImage>::SetFileName(std::string extendedFileName)
+MPIVrtWriter<TImage>::SetFileName(const std::string& extendedFileName)
 {
-  this->SetFileName(extendedFileName.c_str());
+  if (m_Filename.compare(extendedFileName) != 0 )
+    {
+    m_Filename = extendedFileName;
+    this->Modified();
+    }
 }
 
 template <typename TImage>

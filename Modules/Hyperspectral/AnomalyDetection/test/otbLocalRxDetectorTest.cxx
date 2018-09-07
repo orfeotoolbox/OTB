@@ -26,17 +26,6 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int LocalRXDetectorNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-       typedef double PixelType;
-       typedef otb::VectorImage<PixelType, 2> VectorImageType;
-       typedef otb::Image<PixelType, 2> ImageType;
-       typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType;
-
-       LocalRxDetectorFilterType::Pointer rxDetector = LocalRxDetectorFilterType::New();
-        return EXIT_SUCCESS;
-}
-
 int LocalRXDetectorTest(int itkNotUsed(argc), char * argv[])
 {
        typedef double PixelType;
