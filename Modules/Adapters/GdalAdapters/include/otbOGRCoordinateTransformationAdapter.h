@@ -33,6 +33,14 @@ class OGRCoordinateTransformation;
 
 namespace otb
 {
+
+/**
+ * \class InvalidCoordinateTransfromationException
+ * \brief Exception for invalid coordinate transform
+ *
+ * This class describes an exception that might be thrown by
+ * OGRCoordinateTransformationAdapter constructors
+ */
 class OTBGdalAdapters_EXPORT InvalidCoordinateTransfromationException : std::exception
 {
 public:
@@ -49,39 +57,67 @@ private:
  * \class OGRCoordinateTransformationAdapter
  * \brief This class is a wrapper around OGRCoordinateTransformation
  * 
- * This class is a wrapper around OGRCoordinateTransformation.
+ * This class is a wrapper around OGRCoordinateTransformation. It aims
+ * at manipulating coordinate transformations between spatial
+ * reference systems within OTB, in a safe and easy way. The class
+ * constructors enforce RAII: either they fail or they provide a
+ * definitive, valid object.
  */
 
 class OTBGdalAdapters_EXPORT OGRCoordinateTransformationAdapter
 {
 public:
-  // Default constructor builds an reference (m_Empty == true)
+  /** 
+   * Builds a coordinate transformation out of source and target
+   * spatial reference systems.
+   * \param source The source spatial reference
+   * \param target The target spatial reference
+   *
+   * \throws InvalidCoordinateTransfromationException in case of failure
+   */
   OGRCoordinateTransformationAdapter(const OGRSpatialReferenceAdapter & source, const OGRSpatialReferenceAdapter & destination);
 
-  // Default destructor builds an reference (m_Empty == true)
+  /// Destructor
   ~OGRCoordinateTransformationAdapter() noexcept;
 
-  // Copy constructor
+  /// Copy constructor
   OGRCoordinateTransformationAdapter(const OGRCoordinateTransformationAdapter& other) noexcept;
 
-  // Asignment operator
+  /// Asignment operator
   OGRCoordinateTransformationAdapter & operator=(const OGRCoordinateTransformationAdapter& other) noexcept;
 
-  // equal operator
+  /// equal operator
   bool operator==(const OGRCoordinateTransformationAdapter& other) noexcept;
 
-  // different operator
+  /// different operator
   bool operator!=(const OGRCoordinateTransformationAdapter& other) noexcept;
 
-  
+  /// \return The source spatial reference
   OGRSpatialReferenceAdapter GetSourceSpatialReference() const;
 
+  /// \return The target spatial reference
   OGRSpatialReferenceAdapter GetTargetSpatialReference() const;
 
-  // 3D Transfrom of points
+  /**
+   * Transform a 3D point from source to target spatial reference
+   * \param inX input x coord
+   * \param inY input y coord
+   * \param inZ input z coord
+   * \param outX output x coord
+   * \param outY output y coord
+   * \param outZ output z coord
+   * \return true on success. If False, outX=inX, outY=inY, outZ=inZ
+   */
   bool Transform(const double& inX, const double& inY, const double& inZ, double & outX, double & outY, double & outZ) const;
 
-  // 2D transform of points
+  /**
+   * Transform a 2D point from source to target spatial reference
+   * \param inX input x coord
+   * \param inY input y coord
+   * \param outX output x coord
+   * \param outY output y coord
+   * \return true on success. If False, outX=inX, outY=inY
+   */
   bool Transform(const double& inX, const double& inY, double & outX, double & outY) const;
 
   

@@ -137,9 +137,9 @@ std::string OGRSpatialReferenceAdapter::ToWkt() const
   return wkt;
 }
 
-int OGRSpatialReferenceAdapter::ToEPSG() const
+unsigned int OGRSpatialReferenceAdapter::ToEPSG() const
 {
-  int code = -1;
+  unsigned int code = 0;
   
   std::unique_ptr<OGRSpatialReference> tmpSRS(m_SR->Clone());
 

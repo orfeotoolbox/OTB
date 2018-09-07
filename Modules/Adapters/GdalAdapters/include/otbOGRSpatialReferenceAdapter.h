@@ -29,6 +29,13 @@ class OGRSpatialReference;
 
 namespace otb
 {
+/**
+ * \class InvalidSRDescriptionException
+ * \brief Exception for invalid spatial reference description
+ *
+ * This class describes an exception that might be thrown by
+ * OGRSpatialReferenceAdapter constructors
+ */
 class OTBGdalAdapters_EXPORT InvalidSRDescriptionException : std::exception
 {
 public:
@@ -45,56 +52,102 @@ private:
  * \brief This class is a wrapper around OGRSpatialReference
  * 
  * This class is a wrapper around OGRSpatialReference. It aims at
- * manipulating spatial reference within OTB. Constructor builds a
- * spatial reference with an Empty state.
+ * manipulating spatial reference within OTB,  in a safe and easy way.
+ * The class provides several constructors that all enforce the RAII:
+ * either they fail or they provide a definitive, valid object.
  */
-
 class OTBGdalAdapters_EXPORT OGRSpatialReferenceAdapter
 {
 friend class OGRCoordinateTransformationAdapter;
 
 public:
-  // Default constructor builds wgs84
-  OGRSpatialReferenceAdapter();
+/**
+ * Default constructor builds a wgs84 spatial reference
+ * \throws InvalidSRDescriptionException (very unlikely since there is
+ * a standard method in gdal to build a WGS84 projection)
+ */
+OGRSpatialReferenceAdapter();
 
-  // Constructor from a description string
+/**
+ * Constructor from a description string. The description string is
+ * passed to OGRSpatialReference:SetFromUserInput()
+ * from GDAL. Currently, supported syntax is:
+ * - Well Known Text definition
+ * - "EPSG:n" and "EPSGA:n" form EPSG codes
+ * - PROJ definitions
+ * - WMS auto projections ...
+ * \param description a string containing the description of the
+ * spatial reference to parse
+ * \throws InvalidSRDescriptionException in case of failure of SetFromUserInput()
+ */
   OGRSpatialReferenceAdapter(const std::string & sr_description);
 
-  // Constructor from a EPSG code
+  /**
+   * Constructor from an epsg code
+   * \param epsg EPSG code passed to
+   * OGRSpatialReference::importFromEPSGA() from GDAL
+   *
+   * \throws InvalidSRDescriptionException in case of failure of
+   * importFromEPSGA()
+   */
   OGRSpatialReferenceAdapter(const unsigned int & epsg);
 
-  // Constructor from a UTM zone and hemisphere
+  /**
+   * Constructor from a UTM zone passed to
+   * OGRSpatialReference::SetUTM() from GDAL
+   * \param zone UTM zone to use
+   * \param north true for northern hemisphere, false otherwise
+   *
+   * \throws InvalidSRDescriptionException in case of failure of
+   * setUTM()
+   */
   OGRSpatialReferenceAdapter(const unsigned int & zone, bool north);
   
-  // Default destructor builds an reference (m_Empty == true)
+  /// Default destructor
   ~OGRSpatialReferenceAdapter() noexcept;
 
-  // Copy constructor
+  /// Copy constructor
   OGRSpatialReferenceAdapter(const OGRSpatialReferenceAdapter& other) noexcept;
 
-  // Asignment operator
+  /// Asignment operator
   OGRSpatialReferenceAdapter & operator=(const OGRSpatialReferenceAdapter& other) noexcept;
 
-  // equal operator
+  /// Equal operator (based on OGRSpatialReference::IsSame())
   bool operator==(const OGRSpatialReferenceAdapter& other) noexcept;
   
-  // equal operator
+  /// Different operator (based on OGRSpatialReference::IsSame())
   bool operator!=(const OGRSpatialReferenceAdapter& other) noexcept;
 
-  // Export to Wkt
+  /**
+   * Export the spatial reference to a Well Known Text string
+   * \return A string containing the Well Known Text description
+   */
   std::string ToWkt() const;
 
-  // ESRI normalization. Return true on success. If false is returned,
-  // SRS remains unmodified
+  /**
+   * Try to normalize spatial reference fields to be compatible with
+   * ESRI.
+   * \returns True on success. Not modified if false is returned
+   */
   bool NormalizeESRI();
 
-  // Export to EPSG
-  int ToEPSG() const;
+  /** 
+   * Convert the spatial reference to an EPSG code
+   * \returns If no EPSG code was found or the EPSG code
+   */
+  unsigned int ToEPSG() const;
 
+  /**
+   * Find which UTM zone a given (lat,lon) point falls in.
+   * \param lat Point lattitude
+   * \param lon Point longitude
+   * \param zone Output UTM zone
+   * \param north Output hemisphere (true if north, false if south)
+   */ 
   static void UTMFromGeoPoint(const double & lat, const double & lon, unsigned int & zone, bool & north);
   
 protected:
-  // Constructor from wrapped type
+  /// Constructor from wrapped type
   OGRSpatialReferenceAdapter(const OGRSpatialReference * ref) noexcept;
 
 private:
