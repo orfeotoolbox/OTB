@@ -35,6 +35,7 @@ namespace otb
 template<class TInputVectorImage, class TLabelImage>
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::PersistentStreamingStatisticsMapFromLabelImageFilter()
+    : m_UseNoDataValue()
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -161,11 +162,11 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
     {
     for(auto const& it: threadAccMap)
       {
-      const LabelPixelType label = it.first;
+      auto label = it.first;
       auto itAcc = outputAcc.find(label);
       if (itAcc == endAcc)
         {
-        outputAcc.emplace(label, AccumulatorType(it.second));
+        outputAcc.emplace(label, it.second);
         }
       else
         {
@@ -178,18 +179,20 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   for(auto& it: outputAcc)
     {
     const LabelPixelType label = it.first;
-    const double count = it.second.GetCount();
-    const RealVectorPixelType sum   = it.second.GetSum();
-    const RealVectorPixelType sqSum = it.second.GetSqSum();
+    const auto &bandCount = it.second.GetBandCount();
+    const auto &sum       = it.second.GetSum();
+    const auto &sqSum     = it.second.GetSqSum();
 
     // Count
-    m_LabelPopulation[label] = count;
+    m_LabelPopulation[label] = it.second.GetCount();
 
     // Mean & stdev
     RealVectorPixelType mean (sum);
     RealVectorPixelType std (sqSum);
     for (unsigned int band = 0 ; band < mean.GetSize() ; band++)
       {
+      // Number of valid pixels in band
+      auto count = bandCount[band];
       // Mean
       mean[band] /= count;
 
@@ -283,7 +286,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
       auto itAcc = acc.find(label);
       if (itAcc == endAcc)
         {
-        acc.emplace(label, AccumulatorType(value));
+        acc.emplace(label, AccumulatorType(this->GetNoDataValue(), this->GetUseNoDataValue(), value));
         }
       else
         {
