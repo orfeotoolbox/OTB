@@ -735,12 +735,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     }
 
   // a data structure to store the number of intercepts on each direction
-  #if ITK_VERSION_MAJOR > 4
-  typedef itk::Functor::LexicographicCompare<OffsetType>    LexicographicCompare;
-  #else
-  typedef typename OffsetType::LexicographicCompare  LexicographicCompare;
-  #endif
-  typedef typename std::map<OffsetType, itk::SizeValueType, LexicographicCompare> MapInterceptType;
+  typedef typename std::map<OffsetType, itk::SizeValueType, OffsetLexicographicCompare> MapInterceptType;
   MapInterceptType intercepts;
   // int nbOfDirections = (int)std::pow( 2.0, (int)ImageDimension ) - 1;
   // intecepts.resize(nbOfDirections + 1);  // code begins at position 1
