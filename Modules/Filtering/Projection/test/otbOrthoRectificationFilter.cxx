@@ -117,7 +117,7 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   orthoRectifFilter->SetOutputOrigin(origin);
 
   MapProjectionType::Pointer utmMapProjection = MapProjectionType::New();
-  utmMapProjection->SetWkt(otb::OGRSpatialReferenceAdapter(atoi(argv[9]),atoi(argv[10])).ToWkt());
+  utmMapProjection->SetWkt(otb::SpatialReference(atoi(argv[9]),atoi(argv[10])).ToWkt());
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 
   // Displacement Field spacing

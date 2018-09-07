@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 
 #include "ogr_spatialref.h"
 #include "cpl_conv.h"
@@ -29,24 +29,24 @@
 
 namespace otb {
 
-std::ostream & operator << (std::ostream& o, const OGRSpatialReferenceAdapter & i)
+std::ostream & operator << (std::ostream& o, const SpatialReference & i)
 {
   return o << i.ToWkt();
 }
 
-bool operator==(const OGRSpatialReferenceAdapter& sr1,const OGRSpatialReferenceAdapter& sr2) noexcept
+bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
   return sr1.m_SR->IsSame(sr2.m_SR.get());
 }
 
-bool operator!=(const OGRSpatialReferenceAdapter& sr1,const OGRSpatialReferenceAdapter& sr2) noexcept
+bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
   return !(sr1==sr2);
 }
 
 InvalidSRDescriptionException::InvalidSRDescriptionException(const std::string & description) : std::runtime_error(description) {};
 
-OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter()
+SpatialReference::SpatialReference()
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(OGRSpatialReference::GetWGS84SRS()->Clone());  
 
@@ -59,10 +59,10 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter()
 }
 
 // Destructor
-OGRSpatialReferenceAdapter::~OGRSpatialReferenceAdapter() noexcept {}
+SpatialReference::~SpatialReference() noexcept {}
 
 
-OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const std::string & description)
+SpatialReference::SpatialReference(const std::string & description)
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
   OGRErr code1 = tmpSR->SetFromUserInput(description.c_str());
@@ -75,7 +75,7 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const std::string & descr
   m_SR = std::move(tmpSR);
 }
 
-OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int epsg)
+SpatialReference::SpatialReference(unsigned int epsg)
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
   OGRErr code = tmpSR->importFromEPSGA(epsg);
@@ -90,7 +90,7 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int epsg)
   m_SR = std::move(tmpSR);
 }
 
-OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int zone, bool north)
+SpatialReference::SpatialReference(unsigned int zone, bool north)
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
   OGRErr code = tmpSR->SetUTM(zone,north);
@@ -106,21 +106,21 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int zone, bool n
 
 }
 
-OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const OGRSpatialReferenceAdapter & other) noexcept
+SpatialReference::SpatialReference(const SpatialReference & other) noexcept
   : m_SR(other.m_SR->Clone())
 {}
 
-OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const OGRSpatialReference * ref) noexcept
+SpatialReference::SpatialReference(const OGRSpatialReference * ref) noexcept
 : m_SR(ref->Clone())
 {}
 
-OGRSpatialReferenceAdapter & OGRSpatialReferenceAdapter::operator=(const OGRSpatialReferenceAdapter& other) noexcept
+SpatialReference & SpatialReference::operator=(const SpatialReference& other) noexcept
 {
   m_SR = std::unique_ptr<OGRSpatialReference>(other.m_SR->Clone());
   return *this;
 }
 
-std::string OGRSpatialReferenceAdapter::ToWkt() const
+std::string SpatialReference::ToWkt() const
 {
   char * cwkt;
   m_SR->exportToWkt(&cwkt);
@@ -131,7 +131,7 @@ std::string OGRSpatialReferenceAdapter::ToWkt() const
   return wkt;
 }
 
-unsigned int OGRSpatialReferenceAdapter::ToEPSG() const
+unsigned int SpatialReference::ToEPSG() const
 {
   unsigned int code = 0;
   
@@ -166,7 +166,7 @@ unsigned int OGRSpatialReferenceAdapter::ToEPSG() const
   return code;
 }
 
-bool OGRSpatialReferenceAdapter::NormalizeESRI()
+bool SpatialReference::NormalizeESRI()
 {
   std::unique_ptr<OGRSpatialReference> tmpSRS(m_SR->Clone());
 
@@ -181,7 +181,7 @@ bool OGRSpatialReferenceAdapter::NormalizeESRI()
   return true;
 }
 
-void OGRSpatialReferenceAdapter::UTMFromGeoPoint(double lat, double lon, unsigned int & zone, bool & north)
+void SpatialReference::UTMFromGeoPoint(double lat, double lon, unsigned int & zone, bool & north)
 {
   // Pre-conditions
   assert(lat>=-90);

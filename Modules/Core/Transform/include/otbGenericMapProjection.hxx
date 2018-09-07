@@ -67,8 +67,8 @@ void
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::SetWkt(const std::string& projectionRefWkt)
 {
-  OGRSpatialReferenceAdapter wgs84("EPSG:4326");
-  OGRSpatialReferenceAdapter wktSpatialReference(projectionRefWkt);
+  SpatialReference wgs84("EPSG:4326");
+  SpatialReference wktSpatialReference(projectionRefWkt);
 
   if(DirectionOfMapping == TransformDirection::INVERSE)
     {

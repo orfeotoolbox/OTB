@@ -20,7 +20,7 @@
 #ifndef otbOGRCoordinateTransformationAdapter_h
 #define otbOGRCoordinateTransformationAdapter_h
 
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 
 #include "OTBGdalAdaptersExport.h"
 
@@ -89,7 +89,7 @@ public:
    *
    * \throws InvalidCoordinateTransfromationException in case of failure
    */
-  OGRCoordinateTransformationAdapter(const OGRSpatialReferenceAdapter & source, const OGRSpatialReferenceAdapter & destination);
+  OGRCoordinateTransformationAdapter(const SpatialReference & source, const SpatialReference & destination);
 
   /// Destructor
   ~OGRCoordinateTransformationAdapter() noexcept;
@@ -101,10 +101,10 @@ public:
   OGRCoordinateTransformationAdapter & operator=(const OGRCoordinateTransformationAdapter& other) noexcept;
 
   /// \return The source spatial reference
-  OGRSpatialReferenceAdapter GetSourceSpatialReference() const;
+  SpatialReference GetSourceSpatialReference() const;
 
   /// \return The target spatial reference
-  OGRSpatialReferenceAdapter GetTargetSpatialReference() const;
+  SpatialReference GetTargetSpatialReference() const;
 
   /**
    * Transform a 3D point from source to target spatial reference

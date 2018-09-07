@@ -18,24 +18,24 @@
  * limitations under the License.
  */
 
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 
 #include <iostream>
 
 using namespace otb;
 
-int otbOGRSpatialReferenceAdapterTest(int, char**)
+int otbSpatialReferenceTest(int, char**)
 {
   bool success = true;
   
   try
     {
-    OGRSpatialReferenceAdapter sr;
-    OGRSpatialReferenceAdapter sr4("EPSG:32631");
-    OGRSpatialReferenceAdapter srFromEPSG(32631);
-    OGRSpatialReferenceAdapter srFromUTM(31,true);
-    OGRSpatialReferenceAdapter sr2(sr);
-    OGRSpatialReferenceAdapter sr3 = sr;
+    SpatialReference sr;
+    SpatialReference sr4("EPSG:32631");
+    SpatialReference srFromEPSG(32631);
+    SpatialReference srFromUTM(31,true);
+    SpatialReference sr2(sr);
+    SpatialReference sr3 = sr;
 
     if(sr4 == sr)
       {
@@ -97,7 +97,7 @@ int otbOGRSpatialReferenceAdapterTest(int, char**)
   double lon = 43.60426;
   double lat = 1.44367;
 
-  OGRSpatialReferenceAdapter::UTMFromGeoPoint(lat,lon,zone,north);
+  SpatialReference::UTMFromGeoPoint(lat,lon,zone,north);
 
   if(zone!=31 || !north)
     {
@@ -107,11 +107,11 @@ int otbOGRSpatialReferenceAdapterTest(int, char**)
   
   try
     {
-    OGRSpatialReferenceAdapter sr5("dummy");
+    SpatialReference sr5("dummy");
     // Wrong EPSG
-    OGRSpatialReferenceAdapter sr6(1000000);
+    SpatialReference sr6(1000000);
     // Wrong utm zone
-    OGRSpatialReferenceAdapter sr7(1000,false);
+    SpatialReference sr7(1000,false);
     std::cerr<<"Fail: Calling constructor with wrong description should throw"<<std::endl;
     success = false;
     }

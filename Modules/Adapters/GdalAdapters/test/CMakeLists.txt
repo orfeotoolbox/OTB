@@ -84,7 +84,7 @@ otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
        
 add_executable(otbGdalAdaptersTestDriver
                otbGdalAdaptersTestDriver.cxx
-               otbOGRSpatialReferenceAdapterTest.cxx
+               otbSpatialReferenceTest.cxx
                otbOGRCoordinateTransformationAdapterTest.cxx
                )
 
@@ -92,8 +92,8 @@ target_link_libraries(otbGdalAdaptersTestDriver ${OTBGdalAdapters-Test_LIBRARIES
              
 otb_module_target_label(otbGdalAdaptersTestDriver)
 
-otb_add_test(NAME TuOGRSpatialReferenceAdapterTest
-            COMMAND otbGdalAdaptersTestDriver otbOGRSpatialReferenceAdapterTest)
+otb_add_test(NAME TuSpatialReferenceTest
+            COMMAND otbGdalAdaptersTestDriver otbSpatialReferenceTest)
   
 otb_add_test(NAME TuOGRCoordinateTransformationAdapterTest
             COMMAND otbGdalAdaptersTestDriver otbOGRCoordinateTransformationAdapterTest)

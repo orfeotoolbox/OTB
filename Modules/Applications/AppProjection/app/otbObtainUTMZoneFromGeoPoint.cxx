@@ -21,7 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 
 namespace otb
 {
@@ -94,7 +94,7 @@ private:
     unsigned int utmZone = 0;
     bool north = false;
 
-    otb::OGRSpatialReferenceAdapter::UTMFromGeoPoint(GetParameterFloat("lon"),
+    otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lon"),
                                                      GetParameterFloat("lat"),utmZone,north);
 
     SetParameterInt("utm",utmZone);

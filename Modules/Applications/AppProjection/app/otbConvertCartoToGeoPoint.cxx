@@ -108,7 +108,7 @@ private:
     TransformType::Pointer  transform = TransformType::New();
     transform->SetInputProjectionRef(inputProjRef);
     // Default to wgs84
-    transform->SetOutputProjectionRef(otb::OGRSpatialReferenceAdapter().ToWkt());
+    transform->SetOutputProjectionRef(otb::SpatialReference().ToWkt());
     transform->InstantiateTransform();
 
     TransformType::InputPointType   cartoPoint;

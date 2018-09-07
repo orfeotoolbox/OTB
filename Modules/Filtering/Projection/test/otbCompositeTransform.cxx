@@ -26,7 +26,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbGenericMapProjection.h"
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 #include "otbCompositeTransform.h"
 #include "otbInverseSensorModel.h"
 
@@ -54,7 +54,7 @@ int otbCompositeTransform(int argc, char* argv[])
   
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
   // UTM31N
-  mapProjection->SetWkt(otb::OGRSpatialReferenceAdapter("EPSG:32631").ToWkt());
+  mapProjection->SetWkt(otb::SpatialReference("EPSG:32631").ToWkt());
   
   typedef otb::InverseSensorModel<double> SensorModelType;
   SensorModelType::Pointer sensorModel = SensorModelType::New();

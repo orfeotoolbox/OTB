@@ -33,7 +33,7 @@
 #include "ogr_spatialref.h"
 #include "cpl_conv.h"
 
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 #include "otbImageToGenericRSOutputParameters.h"
 
 namespace otb
@@ -296,15 +296,15 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     // Guess the zone and the hemisphere
     unsigned int zone(0);
     bool north(true);
-    otb::OGRSpatialReferenceAdapter::UTMFromGeoPoint(geoPoint[0],geoPoint[1],zone,north);
+    otb::SpatialReference::UTMFromGeoPoint(geoPoint[0],geoPoint[1],zone,north);
 
-    otb::OGRSpatialReferenceAdapter oSRS(zone,north);
+    otb::SpatialReference oSRS(zone,north);
     
     projectionRef = oSRS.ToWkt();
     }
   else if(strcmp(map.c_str(),"WGS84")==0)
     {
-    projectionRef = otb::OGRSpatialReferenceAdapter().ToWkt(); //WGS84
+    projectionRef = otb::SpatialReference().ToWkt(); //WGS84
     }
   else
     {

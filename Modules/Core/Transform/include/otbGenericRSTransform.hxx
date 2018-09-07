@@ -26,7 +26,7 @@
 #include "otbMetaDataKey.h"
 #include "itkMetaDataObject.h"
 
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 
 #include "ogr_spatialref.h"
 
@@ -117,8 +117,8 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   // - we do not want to mix the GeoInformationConversion (which uses gdal) in
   // the MapProjectionAdapter to keep ossim and gdal dependencies as separated
   // as possible.
-  m_InputProjectionRef = OGRSpatialReferenceAdapter(m_InputProjectionRef).ToWkt();
-  m_OutputProjectionRef = OGRSpatialReferenceAdapter(m_OutputProjectionRef).ToWkt();
+  m_InputProjectionRef = SpatialReference(m_InputProjectionRef).ToWkt();
+  m_OutputProjectionRef = SpatialReference(m_OutputProjectionRef).ToWkt();
 
   //*****************************
   //Set the input transformation

@@ -28,9 +28,9 @@ int otbOGRCoordinateTransformationAdapterTest(int, char**)
 {
   bool success = true;
   
-  OGRSpatialReferenceAdapter inSR("EPSG:4326");
-  OGRSpatialReferenceAdapter outSR("EPSG:32631");
-  OGRSpatialReferenceAdapter outSRBis("EPSG:2154");
+  SpatialReference inSR("EPSG:4326");
+  SpatialReference outSR("EPSG:32631");
+  SpatialReference outSRBis("EPSG:2154");
 
   try
     {

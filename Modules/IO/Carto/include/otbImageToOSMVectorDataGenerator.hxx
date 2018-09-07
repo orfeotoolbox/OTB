@@ -22,7 +22,7 @@
 #define otbImageToOSMVectorDataGenerator_hxx
 
 #include "otbImageToOSMVectorDataGenerator.h"
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 #include "otbGenericRSTransform.h"
 
 namespace otb {
@@ -97,7 +97,7 @@ ImageToOSMVectorDataGenerator<TImage>
   typename TransformType::Pointer transform = TransformType::New();
   transform->SetInputKeywordList(input->GetImageKeywordlist());
   transform->SetInputProjectionRef(input->GetProjectionRef());
-  transform->SetOutputProjectionRef(otb::OGRSpatialReferenceAdapter().ToWkt());
+  transform->SetOutputProjectionRef(otb::SpatialReference().ToWkt());
   transform->InstantiateTransform();
 
   // Compute the 4 corners in the cartographic coordinate system

@@ -108,27 +108,27 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     {
     case Map_Utm:
     {
-    return OGRSpatialReferenceAdapter(app->GetParameterInt(zoneKey.str()),app->IsParameterEnabled(hemKey.str())).ToWkt();
+    return SpatialReference(app->GetParameterInt(zoneKey.str()),app->IsParameterEnabled(hemKey.str())).ToWkt();
     }
     break;
     case Map_Lambert2:
     {
-    return OGRSpatialReferenceAdapter("IGNF:LAMBE").ToWkt();
+    return SpatialReference("IGNF:LAMBE").ToWkt();
     }
     break;
     case Map_Lambert93:
     {
-    return OGRSpatialReferenceAdapter("IGNF:LAMB93").ToWkt();
+    return SpatialReference("IGNF:LAMB93").ToWkt();
     }
     break;
     case Map_WGS84:
     {
-    return OGRSpatialReferenceAdapter().ToWkt();
+    return SpatialReference().ToWkt();
     }
     break;
     case Map_Epsg:
     {
-    return OGRSpatialReferenceAdapter(app->GetParameterInt(epsgKey.str())).ToWkt();
+    return SpatialReference(app->GetParameterInt(epsgKey.str())).ToWkt();
     }
     break;
     }
@@ -171,13 +171,13 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
         genericRSEstimator->SetInput(app->GetParameterImageList(imageKey)->GetNthElement(0));
         }
 
-    genericRSEstimator->SetOutputProjectionRef(OGRSpatialReferenceAdapter().ToWkt());
+    genericRSEstimator->SetOutputProjectionRef(SpatialReference().ToWkt());
     genericRSEstimator->Compute();
 
     unsigned int zone(0);
     bool north(true);
 
-    otb::OGRSpatialReferenceAdapter::UTMFromGeoPoint(genericRSEstimator->GetOutputOrigin()[0],
+    otb::SpatialReference::UTMFromGeoPoint(genericRSEstimator->GetOutputOrigin()[0],
                                                      genericRSEstimator->GetOutputOrigin()[1], zone, north);
     
     // Update the UTM Gui fields

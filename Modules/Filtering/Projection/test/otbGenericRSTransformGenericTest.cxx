@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itkEuclideanDistanceMetric.h"
-#include "otbOGRSpatialReferenceAdapter.h"
+#include "otbSpatialReference.h"
 #include "otbGeographicalDistance.h"
 
 typedef otb::Image<unsigned short>      ImageType;
@@ -82,7 +82,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
     }
   else if(inputType == "EPSG")
     {
-    std::string wktFromEpsg = otb::OGRSpatialReferenceAdapter(atoi(argv[6])).ToWkt();
+    std::string wktFromEpsg = otb::SpatialReference(atoi(argv[6])).ToWkt();
     transform->SetInputProjectionRef(wktFromEpsg);
 
     std::cout<<"Input projection read from epsg code: "<<atoi(argv[6])<<" and converted to wkt: "<<wktFromEpsg<<std::endl;
@@ -118,7 +118,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
     }
   else if(outputType == "EPSG")
     {
-    std::string wktFromEpsg = otb::OGRSpatialReferenceAdapter(atoi(argv[8])).ToWkt();
+    std::string wktFromEpsg = otb::SpatialReference(atoi(argv[8])).ToWkt();
     transform->SetOutputProjectionRef(wktFromEpsg);
 
     std::cout<<"Output projection read from epsg code: "<<atoi(argv[8])<<" and converted to wkt: "<<wktFromEpsg<<std::endl;

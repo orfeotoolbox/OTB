@@ -58,7 +58,7 @@ bool operator!=(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordina
 }
 
 // Constructor
-OGRCoordinateTransformationAdapter::OGRCoordinateTransformationAdapter(const OGRSpatialReferenceAdapter & source, const OGRSpatialReferenceAdapter & target)
+OGRCoordinateTransformationAdapter::OGRCoordinateTransformationAdapter(const SpatialReference & source, const SpatialReference & target)
 {
   std::unique_ptr<OGRCoordinateTransformation> tmpTransform(OGRCreateCoordinateTransformation(source.m_SR.get(),target.m_SR.get()));
 
@@ -107,14 +107,14 @@ OGRCoordinateTransformationAdapter & OGRCoordinateTransformationAdapter::operato
   return *this;
 }
     
-OGRSpatialReferenceAdapter OGRCoordinateTransformationAdapter::GetSourceSpatialReference() const
+SpatialReference OGRCoordinateTransformationAdapter::GetSourceSpatialReference() const
 {
-  return OGRSpatialReferenceAdapter(m_Transform->GetSourceCS());
+  return SpatialReference(m_Transform->GetSourceCS());
 }
 
-OGRSpatialReferenceAdapter OGRCoordinateTransformationAdapter::GetTargetSpatialReference() const
+SpatialReference OGRCoordinateTransformationAdapter::GetTargetSpatialReference() const
 {
-  return OGRSpatialReferenceAdapter(m_Transform->GetTargetCS());
+  return SpatialReference(m_Transform->GetTargetCS());
 }
 
 // 3D Transfrom of points
