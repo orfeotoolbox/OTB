@@ -55,7 +55,7 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter()
     throw InvalidSRDescriptionException("WGS84");
     }
 
-  m_SR.swap(tmpSR);
+  m_SR = std::move(tmpSR);
 }
 
 // Destructor
@@ -72,7 +72,7 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const std::string & descr
     throw InvalidSRDescriptionException(description);
     }
 
-  m_SR.swap(tmpSR);
+  m_SR = std::move(tmpSR);
 }
 
 OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int epsg)
@@ -87,7 +87,7 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int epsg)
     throw InvalidSRDescriptionException(oss.str());
     }
 
-  m_SR.swap(tmpSR);
+  m_SR = std::move(tmpSR);
 }
 
 OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int zone, bool north)
@@ -102,7 +102,7 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int zone, bool n
     throw InvalidSRDescriptionException(oss.str());
     }
 
-  m_SR.swap(tmpSR);
+  m_SR = std::move(tmpSR);
 
 }
 
@@ -177,7 +177,7 @@ bool OGRSpatialReferenceAdapter::NormalizeESRI()
   if(code != OGRERR_NONE || tmpSRS->Validate() != OGRERR_NONE)
     return false;
 
-  m_SR.swap(tmpSRS);
+  m_SR = std::move(tmpSRS);
   return true;
 }
 

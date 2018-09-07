@@ -71,7 +71,7 @@ OGRCoordinateTransformationAdapter::OGRCoordinateTransformationAdapter(const OGR
     }
   
   // Swap safely
-  m_Transform.swap(tmpTransform);
+  m_Transform = std::move(tmpTransform);
 }
 
 // Destructor
@@ -91,7 +91,7 @@ OGRCoordinateTransformationAdapter::OGRCoordinateTransformationAdapter(const OGR
     throw InvalidCoordinateTransfromationException(oss.str());
     }
 
-  m_Transform.swap(newTransform);
+  m_Transform = std::move(newTransform);
 }
 
 // Asignment operator
@@ -102,7 +102,7 @@ OGRCoordinateTransformationAdapter & OGRCoordinateTransformationAdapter::operato
 
   // Only update transfrom if newTransform is valid
   if(newTransform)
-    m_Transform.swap(newTransform);
+    m_Transform = std::move(newTransform);
   
   return *this;
 }
