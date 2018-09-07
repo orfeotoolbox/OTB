@@ -120,7 +120,7 @@ namespace ossimplugins
 
       bool initImageSize(ossimIpt& imageSize) const;
 
-      virtual void imagingRay(ossimDpt const& image_point, ossimEcefRay& image_ray) const;
+      virtual void imagingRay(ossimDpt const& image_point, ossimEcefRay& image_ray) const override;
 
       bool isSLC() const { return  theSLC; }
       bool isOCN() const { return  theOCN; }
@@ -140,8 +140,14 @@ namespace ossimplugins
          theManifestDirectory = d;
       }
    protected:
-
-      TYPE_DATA;
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+      TYPE_DATA
+#pragma clang diagnostic pop
+#else
+      TYPE_DATA
+#endif
 
    private:
       bool read(ossimFilename const& annotationXml);
