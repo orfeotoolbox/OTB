@@ -36,15 +36,11 @@ namespace otb
  * This class describes an exception that might be thrown by
  * OGRSpatialReferenceAdapter constructors
  */
-class OTBGdalAdapters_EXPORT InvalidSRDescriptionException : std::exception
+class OTBGdalAdapters_EXPORT InvalidSRDescriptionException : public std::runtime_error
 {
 public:
   InvalidSRDescriptionException(const std::string & description);
-  virtual ~InvalidSRDescriptionException();
-  virtual const char * what() const noexcept;
-
-private:
-  std::string m_Description;
+  virtual ~InvalidSRDescriptionException() = default;
 };
 
 /**
@@ -59,6 +55,8 @@ private:
 class OTBGdalAdapters_EXPORT OGRSpatialReferenceAdapter
 {
 friend class OGRCoordinateTransformationAdapter;
+friend bool operator==(const OGRSpatialReferenceAdapter& sr1, const OGRSpatialReferenceAdapter & sr2) noexcept;
+friend bool operator!=(const OGRSpatialReferenceAdapter& sr1, const OGRSpatialReferenceAdapter & sr2) noexcept;
 
 public:
 /**
@@ -90,7 +88,7 @@ OGRSpatialReferenceAdapter();
    * \throws InvalidSRDescriptionException in case of failure of
    * importFromEPSGA()
    */
-  OGRSpatialReferenceAdapter(const unsigned int & epsg);
+  OGRSpatialReferenceAdapter(unsigned int epsg);
 
   /**
    * Constructor from a UTM zone passed to
@@ -101,7 +99,7 @@ OGRSpatialReferenceAdapter();
    * \throws InvalidSRDescriptionException in case of failure of
    * setUTM()
    */
-  OGRSpatialReferenceAdapter(const unsigned int & zone, bool north);
+  OGRSpatialReferenceAdapter(unsigned int zone, bool north);
   
   /// Default destructor
   ~OGRSpatialReferenceAdapter() noexcept;
@@ -111,13 +109,7 @@ OGRSpatialReferenceAdapter();
 
   /// Asignment operator
   OGRSpatialReferenceAdapter & operator=(const OGRSpatialReferenceAdapter& other) noexcept;
-
-  /// Equal operator (based on OGRSpatialReference::IsSame())
-  bool operator==(const OGRSpatialReferenceAdapter& other) noexcept;
   
-  /// Different operator (based on OGRSpatialReference::IsSame())
-  bool operator!=(const OGRSpatialReferenceAdapter& other) noexcept;
-
   /**
    * Export the spatial reference to a Well Known Text string
    * \return A string containing the Well Known Text description
@@ -139,23 +131,30 @@ OGRSpatialReferenceAdapter();
 
   /**
    * Find which UTM zone a given (lat,lon) point falls in.
+   * \pre -90<=lat<=90
+   * \pre -180<=lon<=180
    * \param lat Point lattitude
    * \param lon Point longitude
    * \param zone Output UTM zone
    * \param north Output hemisphere (true if north, false if south)
    */ 
-  static void UTMFromGeoPoint(const double & lat, const double & lon, unsigned int & zone, bool & north);
-  
-protected:
+  static void UTMFromGeoPoint(double lat, double lon, unsigned int & zone, bool & north);
+
+private:
   /// Constructor from wrapped type
   OGRSpatialReferenceAdapter(const OGRSpatialReference * ref) noexcept;
 
-private:
   // unique ptr to the internal OGRSpatialReference
   std::unique_ptr<OGRSpatialReference> m_SR;
 };
 
 std::ostream & OTBGdalAdapters_EXPORT operator << (std::ostream& o, const OGRSpatialReferenceAdapter & i);
+
+/// Equal operator (based on OGRSpatialReference::IsSame())
+bool OTBGdalAdapters_EXPORT operator==(const OGRSpatialReferenceAdapter& sr1, const OGRSpatialReferenceAdapter & sr2) noexcept;
+  
+/// Different operator (based on OGRSpatialReference::IsSame())
+bool OTBGdalAdapters_EXPORT operator!=(const OGRSpatialReferenceAdapter& sr1,const OGRSpatialReferenceAdapter& sr2) noexcept;
 }
 
 #endif

@@ -103,7 +103,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
     double z = 0.0;
     if (InputPointType::PointDimension == 3) z = point[2];
 
-    m_MapProjection->Transform(point[0], point[1], z, lon, lat, h);
+    std::tie(lon,lat,h) = m_MapProjection->Transform(std::make_tuple(point[0], point[1], z));
 
     outputPoint[0] = lon;
     outputPoint[1] = lat;
@@ -116,7 +116,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
     double x, y, z;
     double h = 0.0;
     if (InputPointType::PointDimension == 3) h = point[2];
-    m_MapProjection->Transform(point[0], point[1], h, x, y, z);
+    std::tie(x,y,z) = m_MapProjection->Transform(std::make_tuple(point[0], point[1], h));
     outputPoint[0] = x;
     outputPoint[1] = y;
     if (OutputPointType::PointDimension == 3) outputPoint[2] = z;

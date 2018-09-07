@@ -78,15 +78,23 @@ int otbOGRCoordinateTransformationAdapterTest(int, char**)
 
   double outX, outY, outZ;
 
-  if(!transformation.Transform(x,y,z,outX,outY,outZ))
+  try
     {
-    std::cerr<<"Fail: transformation call to 3D version of Transform() returned error"<<std::endl;
+    std::tie(outX,outY,outZ) = transformation.Transform(std::make_tuple(x,y,z));
+    }
+    catch(TransformFailureException & err)
+    {
+    std::cerr<<"Fail: transformation call to 3D version of Transform() throws "<<err.what()<<std::endl;
     success = false;
     }
 
-  if(!transformation.Transform(x,y,outX,outY))
+    try
     {
-    std::cerr<<"Fail: transformation call to 2D version of Transform() returned error"<<std::endl;
+    std::tie(outX,outY) = transformation.Transform(std::make_tuple(x,y));
+    }
+    catch(TransformFailureException & err)
+    {
+    std::cerr<<"Fail: transformation call to 2D version of Transform() throws "<<err.what()<<std::endl;
     success = false;
     }
   }

@@ -21,6 +21,7 @@
 #include "otbOGRSpatialReferenceAdapter.h"
 
 #include "ogr_spatialref.h"
+#include "cpl_conv.h"
 
 #include "boost/lexical_cast.hpp"
 
@@ -33,15 +34,17 @@ std::ostream & operator << (std::ostream& o, const OGRSpatialReferenceAdapter & 
   return o << i.ToWkt();
 }
 
-InvalidSRDescriptionException::InvalidSRDescriptionException(const std::string & description) : m_Description(description) {};
-
-InvalidSRDescriptionException::~InvalidSRDescriptionException()
-{}
-
-const char * InvalidSRDescriptionException::what() const noexcept
+bool operator==(const OGRSpatialReferenceAdapter& sr1,const OGRSpatialReferenceAdapter& sr2) noexcept
 {
-  return m_Description.c_str();
+  return sr1.m_SR->IsSame(sr2.m_SR.get());
 }
+
+bool operator!=(const OGRSpatialReferenceAdapter& sr1,const OGRSpatialReferenceAdapter& sr2) noexcept
+{
+  return !(sr1==sr2);
+}
+
+InvalidSRDescriptionException::InvalidSRDescriptionException(const std::string & description) : std::runtime_error(description) {};
 
 OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter()
 {
@@ -54,6 +57,9 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter()
 
   m_SR.swap(tmpSR);
 }
+
+// Destructor
+OGRSpatialReferenceAdapter::~OGRSpatialReferenceAdapter() noexcept {}
 
 
 OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const std::string & description)
@@ -69,7 +75,7 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const std::string & descr
   m_SR.swap(tmpSR);
 }
 
-OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const unsigned int & epsg)
+OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int epsg)
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
   OGRErr code = tmpSR->importFromEPSGA(epsg);
@@ -77,14 +83,14 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const unsigned int & epsg
   if(code!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss<<"EPSG:"<<epsg;
+    oss << "EPSG:" << epsg;
     throw InvalidSRDescriptionException(oss.str());
     }
 
   m_SR.swap(tmpSR);
 }
 
-OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const unsigned int & zone, bool north)
+OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(unsigned int zone, bool north)
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
   OGRErr code = tmpSR->SetUTM(zone,north);
@@ -92,16 +98,13 @@ OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const unsigned int & zone
   if(code!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss<<"UTM"<<zone<<(north?"N":"S");
+    oss << "UTM" << zone << (north?"N":"S");
     throw InvalidSRDescriptionException(oss.str());
     }
 
   m_SR.swap(tmpSR);
 
 }
-
-OGRSpatialReferenceAdapter::~OGRSpatialReferenceAdapter() noexcept
-{}
 
 OGRSpatialReferenceAdapter::OGRSpatialReferenceAdapter(const OGRSpatialReferenceAdapter & other) noexcept
   : m_SR(other.m_SR->Clone())
@@ -117,22 +120,13 @@ OGRSpatialReferenceAdapter & OGRSpatialReferenceAdapter::operator=(const OGRSpat
   return *this;
 }
 
-bool OGRSpatialReferenceAdapter::operator==(const OGRSpatialReferenceAdapter& other) noexcept
-{
-  return m_SR->IsSame(other.m_SR.get());
-}
-
-bool OGRSpatialReferenceAdapter::operator!=(const OGRSpatialReferenceAdapter& other) noexcept
-{
-  return !(*this==other);
-}
-
 std::string OGRSpatialReferenceAdapter::ToWkt() const
 {
   char * cwkt;
   m_SR->exportToWkt(&cwkt);
   std::string wkt(cwkt);
-  delete cwkt;
+  // as recommanded in Gdal doc of exportToWkt()
+  CPLFree(cwkt);
 
   return wkt;
 }
@@ -157,7 +151,8 @@ unsigned int OGRSpatialReferenceAdapter::ToEPSG() const
     code = 0;
     epsg = tmpSRS->GetAuthorityCode("PROJCS");
     }
-  if (epsg!=nullptr && strcmp( epsg, "" )!=0 )
+  
+  if (epsg!=nullptr && std::string(epsg).compare("")!=0 )
     {
     try
       {
@@ -186,25 +181,25 @@ bool OGRSpatialReferenceAdapter::NormalizeESRI()
   return true;
 }
 
-void OGRSpatialReferenceAdapter::UTMFromGeoPoint(const double & lat, const double & lon, unsigned int & zone, bool & north)
+void OGRSpatialReferenceAdapter::UTMFromGeoPoint(double lat, double lon, unsigned int & zone, bool & north)
 {
   // Pre-conditions
-  assert(lat_Degrees>-90);
-  assert(lon_Degrees>-180);
-  assert(lat_Degrees<90);
-  assert(lon_Degrees<180);
+  assert(lat>=-90);
+  assert(lon>=-180);
+  assert(lat<=90);
+  assert(lon<=180);
   
   zone = 0;
   north = lat>0;
 
   // TODO: Code forked from OSSIM. Copyright ?
-  int lat_Degrees  = (int)(lat + 0.00000005);
-  int long_Degrees = (int)(lon + 0.00000005);
+  int lat_Degrees  = static_cast<int>(lat + 0.00000005);
+  int long_Degrees = static_cast<int>(lon + 0.00000005);
   
   if (lon < 180)
-     zone = (int)( (31 + (lon / (6 * 180)) )+ 0.00000005);
+     zone = static_cast<int>( (31 + (lon / (6 * 180)) )+ 0.00000005);
    else
-     zone = (int)( ((lon / (6 * 180)) - 29) + 0.00000005);
+     zone = static_cast<int>( ((lon / (6 * 180)) - 29) + 0.00000005);
    if (zone > 60)
      zone = 1;
    /* UTM special cases */

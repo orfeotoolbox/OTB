@@ -28,15 +28,33 @@
 namespace otb
 {
 InvalidCoordinateTransfromationException::InvalidCoordinateTransfromationException(const std::string & description)
-  : m_Description(description)
+  : std::runtime_error(description)
 {}
 
-InvalidCoordinateTransfromationException::~InvalidCoordinateTransfromationException()
+TransformFailureException::TransformFailureException(const std::string & description)
+  : std::runtime_error(description)
 {}
 
-const char * InvalidCoordinateTransfromationException::what() const noexcept
+std::ostream & operator << (std::ostream& o, const OGRCoordinateTransformationAdapter & i)
 {
-  return m_Description.c_str();
+  o << "Source: " << i.GetSourceSpatialReference() << ", Target: " << i.GetTargetSpatialReference();
+  return o;
+}
+
+// equal operator
+bool operator==(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter& ct2) noexcept
+{
+  auto thisSourceCS  = ct1.GetSourceSpatialReference();
+  auto thisTargetCS  = ct1.GetTargetSpatialReference();
+  auto otherSourceCS = ct2.GetSourceSpatialReference();
+  auto otherTargetCS = ct2.GetTargetSpatialReference();
+
+  return thisSourceCS == otherSourceCS && thisTargetCS == otherTargetCS;
+}
+
+bool operator!=(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter & ct2) noexcept
+{
+  return !(ct1==ct2);
 }
 
 // Constructor
@@ -48,7 +66,7 @@ OGRCoordinateTransformationAdapter::OGRCoordinateTransformationAdapter(const OGR
   if(!tmpTransform)
     {
     std::ostringstream oss;
-    oss<<"Source: "<<source<<", target: "<<target;
+    oss << "Source: " << source << ", target: " << target;
     throw InvalidCoordinateTransfromationException(oss.str());
     }
   
@@ -56,18 +74,24 @@ OGRCoordinateTransformationAdapter::OGRCoordinateTransformationAdapter(const OGR
   m_Transform.swap(tmpTransform);
 }
 
-// Default destructor
-OGRCoordinateTransformationAdapter::~OGRCoordinateTransformationAdapter() noexcept {}
-  
+// Destructor
+OGRCoordinateTransformationAdapter::~OGRCoordinateTransformationAdapter() noexcept {};
+
 // Copy constructor
-OGRCoordinateTransformationAdapter::OGRCoordinateTransformationAdapter(const OGRCoordinateTransformationAdapter& other) noexcept
+OGRCoordinateTransformationAdapter::OGRCoordinateTransformationAdapter(const OGRCoordinateTransformationAdapter& other)
 {
   // Mimic a clone operator
   std::unique_ptr<OGRCoordinateTransformation> newTransform (OGRCreateCoordinateTransformation(other.GetSourceSpatialReference().m_SR.get(),other.GetTargetSpatialReference().m_SR.get()));
-  
-  // Only update transfrom if newTransform is valid
-  if(newTransform)
-    m_Transform.swap(newTransform);
+
+  // Ensure that newTransform is valid
+  if(!newTransform)
+    {
+    std::ostringstream oss;
+    oss << "Source: " << other.GetSourceSpatialReference() << ", target: " << other.GetTargetSpatialReference();
+    throw InvalidCoordinateTransfromationException(oss.str());
+    }
+
+  m_Transform.swap(newTransform);
 }
 
 // Asignment operator
@@ -82,22 +106,6 @@ OGRCoordinateTransformationAdapter & OGRCoordinateTransformationAdapter::operato
   
   return *this;
 }
-
-// equal operator
-bool OGRCoordinateTransformationAdapter::operator==(const OGRCoordinateTransformationAdapter& other) noexcept
-{
-  auto thisSourceCS = OGRSpatialReferenceAdapter(m_Transform->GetSourceCS());
-  auto thisTargetCS = OGRSpatialReferenceAdapter(m_Transform->GetTargetCS());
-  auto otherSourceCS = OGRSpatialReferenceAdapter(other.m_Transform->GetSourceCS());
-  auto otherTargetCS = OGRSpatialReferenceAdapter(other.m_Transform->GetTargetCS());
-
-  return thisSourceCS == otherSourceCS && thisTargetCS == otherTargetCS;
-}
-
-bool OGRCoordinateTransformationAdapter::operator!=(const OGRCoordinateTransformationAdapter& other) noexcept
-{
-  return !(*this == other);
-}
     
 OGRSpatialReferenceAdapter OGRCoordinateTransformationAdapter::GetSourceSpatialReference() const
 {
@@ -109,36 +117,39 @@ OGRSpatialReferenceAdapter OGRCoordinateTransformationAdapter::GetTargetSpatialR
   return OGRSpatialReferenceAdapter(m_Transform->GetTargetCS());
 }
 
-
-std::ostream & operator << (std::ostream& o, const OGRCoordinateTransformationAdapter & i)
+// 3D Transfrom of points
+std::tuple<double,double,double> OGRCoordinateTransformationAdapter::Transform(const std::tuple<double,double,double> & in) const
 {
-  o << "Source: "<<i.GetSourceSpatialReference()<<", Target: "<<i.GetTargetSpatialReference();
-  return o;
-}
-
-
-  // 3D Transfrom of points
-bool OGRCoordinateTransformationAdapter::Transform(const double& inX, const double& inY, const double& inZ, double & outX, double & outY, double & outZ) const
-{
-  outX = inX;
-  outY = inY;
-  outZ = inZ;
-
+  double outX, outY, outZ;
+  std::tie(outX, outY,outZ) = in;
+  
   bool success = m_Transform->Transform(1,&outX,&outY,&outZ);
 
-  return success;
+  if(!success)
+    {
+    std::ostringstream oss;
+    oss<<"Transform: "<<this<<", Parameters: "<<std::get<0>(in)<<", "<<std::get<1>(in)<<", "<<std::get<2>(in);
+    throw new TransformFailureException(oss.str());
+    }
+
+  return std::make_tuple(outX,outY,outZ);
 }
 
-  // 2D transform of points
-bool OGRCoordinateTransformationAdapter::Transform(const double& inX, const double& inY, double & outX, double & outY) const
+// 2D Transfrom of points
+std::tuple<double,double> OGRCoordinateTransformationAdapter::Transform(const std::tuple<double,double> & in) const
 {
-  outX = inX;
-  outY = inY;
-
+  double outX, outY;
+  std::tie(outX, outY) = in;
+  
   bool success = m_Transform->Transform(1,&outX,&outY,nullptr);
 
-  return success;
-}
+  if(!success)
+    {
+    std::ostringstream oss;
+    oss<<"Transform: "<<this<<", Parameters: "<<std::get<0>(in)<<", "<<std::get<1>(in);
+    throw new TransformFailureException(oss.str());
+    }
 
-  
+  return std::make_tuple(outX,outY);
+}  
 }

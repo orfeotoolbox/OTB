@@ -26,7 +26,7 @@
 
 #include <memory>
 #include <stdexcept>
-
+#include <tuple>
 
 
 class OGRCoordinateTransformation;
@@ -41,16 +41,27 @@ namespace otb
  * This class describes an exception that might be thrown by
  * OGRCoordinateTransformationAdapter constructors
  */
-class OTBGdalAdapters_EXPORT InvalidCoordinateTransfromationException : std::exception
+class OTBGdalAdapters_EXPORT InvalidCoordinateTransfromationException : public std::runtime_error
 {
 public:
   InvalidCoordinateTransfromationException(const std::string & description);
-  virtual ~InvalidCoordinateTransfromationException();
-  virtual const char * what() const noexcept;
-
-private:
-  std::string m_Description;
+  virtual ~InvalidCoordinateTransfromationException() = default;
 };
+
+/**
+ * \class TransformFailureException
+ * \brief Exception for failure of coordinate transform
+ *
+ * This class describes an exception that might be thrown by
+ * OGRCoordinateTransformationAdapter::Transform()
+ */
+class OTBGdalAdapters_EXPORT TransformFailureException : public std::runtime_error
+{
+public:
+  TransformFailureException(const std::string & description);
+  virtual ~TransformFailureException() = default;
+};
+
 
 
 /**
@@ -66,6 +77,9 @@ private:
 
 class OTBGdalAdapters_EXPORT OGRCoordinateTransformationAdapter
 {
+friend bool operator==(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter& ct2) noexcept;
+friend bool operator!=(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter & ct2) noexcept;
+
 public:
   /** 
    * Builds a coordinate transformation out of source and target
@@ -81,16 +95,10 @@ public:
   ~OGRCoordinateTransformationAdapter() noexcept;
 
   /// Copy constructor
-  OGRCoordinateTransformationAdapter(const OGRCoordinateTransformationAdapter& other) noexcept;
+  OGRCoordinateTransformationAdapter(const OGRCoordinateTransformationAdapter& other);
 
   /// Asignment operator
   OGRCoordinateTransformationAdapter & operator=(const OGRCoordinateTransformationAdapter& other) noexcept;
-
-  /// equal operator
-  bool operator==(const OGRCoordinateTransformationAdapter& other) noexcept;
-
-  /// different operator
-  bool operator!=(const OGRCoordinateTransformationAdapter& other) noexcept;
 
   /// \return The source spatial reference
   OGRSpatialReferenceAdapter GetSourceSpatialReference() const;
@@ -100,25 +108,19 @@ public:
 
   /**
    * Transform a 3D point from source to target spatial reference
-   * \param inX input x coord
-   * \param inY input y coord
-   * \param inZ input z coord
-   * \param outX output x coord
-   * \param outY output y coord
-   * \param outZ output z coord
-   * \return true on success. If False, outX=inX, outY=inY, outZ=inZ
+   * \param input coords as a 3 double tuple
+   * \return output coords as a 3 double tuple
+   * \throws TransformFailureException if transform failed
    */
-  bool Transform(const double& inX, const double& inY, const double& inZ, double & outX, double & outY, double & outZ) const;
+  std::tuple<double,double,double> Transform(const std::tuple<double,double,double> & in) const;
 
   /**
    * Transform a 2D point from source to target spatial reference
-   * \param inX input x coord
-   * \param inY input y coord
-   * \param outX output x coord
-   * \param outY output y coord
-   * \return true on success. If False, outX=inX, outY=inY
+   * \param input coords as a 2 double tuple
+   * \return output coords as a 2 double tuple
+   * \throws TransformFailureException if transform failed
    */
-  bool Transform(const double& inX, const double& inY, double & outX, double & outY) const;
+  std::tuple<double,double> Transform(const std::tuple<double,double> & in) const;
 
   
 private:
@@ -127,6 +129,13 @@ private:
 };
 
 std::ostream & OTBGdalAdapters_EXPORT operator << (std::ostream& o, const OGRCoordinateTransformationAdapter & i);
+
+  /// equal operator
+bool OTBGdalAdapters_EXPORT operator==(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter& ct2) noexcept;
+
+  /// different operator
+bool OTBGdalAdapters_EXPORT operator!=(const OGRCoordinateTransformationAdapter& ct1, const OGRCoordinateTransformationAdapter & ct2) noexcept;
+
 }
 
 #endif
