@@ -57,7 +57,7 @@ public:
   typedef typename TRealVectorPixelType::ValueType RealValueType;
 
   // Constructor (default)
-  StatisticsAccumulator(){}
+  StatisticsAccumulator() : m_Count() {}
 
   // Constructor (initialize the accumulator with the given pixel)
   StatisticsAccumulator(const TRealVectorPixelType & pixel)
