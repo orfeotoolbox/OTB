@@ -336,7 +336,14 @@ public:
 
    virtual std::ostream& print(std::ostream& out) const override;
 protected:
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
    TYPE_DATA
+#pragma clang diagnostic pop
+#else
+   TYPE_DATA
+#endif
 
    /**
     * Compute range and doppler frequency from an input point, sensor
