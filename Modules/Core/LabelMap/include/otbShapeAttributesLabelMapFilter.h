@@ -24,10 +24,6 @@
 
 #include "itkConfigure.h"
 
-#if ITK_VERSION_MAJOR > 4
-#include "itkLexicographicCompare.h"
-#endif
-
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include "otbImage.h"
 #include "otbPolygon.h"
@@ -40,6 +36,34 @@ namespace otb
 
 namespace Functor
 {
+/** \class OffsetLexicographicCompare
+ * \brief Order Offset instances lexicographically.
+ *
+ * This is a comparison functor suitable for storing Offset instances
+ * in an STL container.  The ordering is total and unique but has
+ * little geometric meaning.
+ * This class is copied from ITK 4.12.0 for compatability with ITK 4, 5( alpha2), ITK5 (master)
+ * \ingroup OTBLabelMap
+ */
+template< unsigned int VOffsetDimension >
+class OffsetLexicographicCompare
+{
+public:
+  bool operator()(itk::Offset< VOffsetDimension > const & l,
+                  itk::Offset< VOffsetDimension > const & r) const
+  {
+    for ( unsigned int i = 0; i < VOffsetDimension; ++i )  {
+      if ( l.GetElement(i) < r.GetElement(i) )  {
+        return true;
+      }
+	else if ( l.GetElement(i) > r.GetElement(i) ) {
+        return false;
+      }
+    }
+    return false;
+  }
+};
+
 /** \class ShapeAttributesLabelObjectFunctor
 *   \brief Functor to compute shape attributes of one LabelObject.
 *
@@ -76,6 +100,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, TLabelObject::ImageDimension);
   typedef itk::ImageRegion< TLabelObject::ImageDimension > RegionType;
   typedef itk::Offset< TLabelObject::ImageDimension > OffsetType;
+  typedef otb::Functor::OffsetLexicographicCompare<TLabelObject::ImageDimension> OffsetLexicographicCompare;
   /** Constructor */
   ShapeAttributesLabelObjectFunctor();
 
@@ -153,15 +178,10 @@ private:
   typedef itk::Offset<3>                                                          Offset3Type;
   typedef itk::Vector<double, 2>                                                  Spacing2Type;
   typedef itk::Vector<double, 3>                                                  Spacing3Type;
-  #if ITK_VERSION_MAJOR > 4
-  typedef itk::Functor::LexicographicCompare<Offset2Type>                         LexicographicCompare2;
-  typedef itk::Functor::LexicographicCompare<Offset3Type>                         LexicographicCompare3;
-  #else
-  typedef typename Offset2Type::LexicographicCompare  LexicographicCompare2;
-  typedef typename Offset3Type::LexicographicCompare  LexicographicCompare3;
-  #endif
-  typedef std::map<Offset2Type, itk::SizeValueType, LexicographicCompare2> MapIntercept2Type;
-  typedef std::map<Offset3Type, itk::SizeValueType, LexicographicCompare3> MapIntercept3Type;
+  typedef otb::Functor::OffsetLexicographicCompare<2>                             OffsetLexicographicCompare2;
+  typedef otb::Functor::OffsetLexicographicCompare<3>                             OffsetLexicographicCompare3;
+  typedef std::map<Offset2Type, itk::SizeValueType, OffsetLexicographicCompare2>  MapIntercept2Type;
+  typedef std::map<Offset3Type, itk::SizeValueType, OffsetLexicographicCompare3>  MapIntercept3Type;
   template<class TMapIntercept, class TSpacing> double PerimeterFromInterceptCount( TMapIntercept & intercepts, const TSpacing & spacing );
 
 #if ! defined(ITK_DO_NOT_USE_PERIMETER_SPECIALIZATION)
