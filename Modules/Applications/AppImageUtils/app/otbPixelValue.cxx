@@ -244,7 +244,7 @@ private:
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       if ( HasUserValue("mode.epsg.code") )
         {
-        std::string wktFromEpsg = std::string wktFromEpsg = otb::OGRSpatialReferenceAdapter(GetParameterInt( "mode.epsg.code" )).ToWkt();
+        std::string wktFromEpsg  = otb::OGRSpatialReferenceAdapter(GetParameterInt( "mode.epsg.code" )).ToWkt();
         rsTransform->SetInputProjectionRef(wktFromEpsg);
         }      
       rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );

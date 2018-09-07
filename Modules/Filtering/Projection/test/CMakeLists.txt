@@ -48,6 +48,7 @@ otbSpectralAngleDataNodeFeatureFunction.cxx
 otbGCPsToRPCSensorModelImageFilterCheckRpcModel.cxx
 otbGeographicalDistance.cxx
 otbTileImageFilterRSTransformTest.cxx
+otbTileMapTransform.cxx
 otbGCPsToRPCSensorModelImageFilterAndOrtho.cxx
 otbVectorDataIntoImageProjectionFilterTest.cxx
 otbVectorDataExtractROIandProjection.cxx

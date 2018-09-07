@@ -23,8 +23,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-#include "otbMapProjections.h"
-
 #include <iostream>
 #include <fstream>
 
@@ -80,9 +78,7 @@ int otbImageToGenericRSOutputParameters (int itkNotUsed(argc), char * argv[])
   outfile<< std::endl;
 
   // Target SRS : lambertII
-  typedef otb::Lambert2EtenduForwardProjection Lambert2Type;
-  Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
-  std::string  lambertRef = lambert2Projection->GetWkt();
+  std::string  lambertRef = otb::OGRSpatialReferenceAdapter("IGNF:LAMBE").ToWkt();
 
   filter->SetOutputProjectionRef(lambertRef);
   filter->Compute();
