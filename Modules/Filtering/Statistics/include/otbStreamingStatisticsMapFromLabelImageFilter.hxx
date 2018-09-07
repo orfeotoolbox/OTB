@@ -265,6 +265,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 
   itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, outputRegionForThread);
   itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, outputRegionForThread);
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   typename VectorImageType::PixelType value;
   typename LabelImageType::PixelType label;
@@ -287,6 +288,8 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
         {
         m_AccumulatorMaps[threadId][label].Update(value);
         }
+
+      progress.CompletedPixel();
     }
 }
 
