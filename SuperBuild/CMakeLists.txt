@@ -52,7 +52,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
-option(BUILD_ALWAYS "Always build or install OTB." OFF)
+option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
