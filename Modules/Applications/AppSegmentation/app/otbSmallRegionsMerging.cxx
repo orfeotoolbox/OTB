@@ -192,7 +192,7 @@ private:
     }
     
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
-
+    RegisterPipeline();
     clock_t toc = clock();
 
     otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
