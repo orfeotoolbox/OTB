@@ -7,7 +7,7 @@
 There are two ways to install OTB library on your system: installing from a binary distribution or compiling from sources.
 You can find information about the installation of binary packages for OTB and Monteverdi in the OTB-Cookbook.
 
-This chapter covers the compilation of OTB library from source. Note that it also includes
+This chapter covers the compilation of OTB from source. Note that it also includes
 the compilation of Monteverdi which is integrated as an OTB module since
 version 5.8.
 
@@ -303,7 +303,7 @@ For a Debian 8.1 system, all Qt5 dependencies can be installed with the followin
 \texttt{apt-get install libx11-dev libxext-dev libxt-dev libxi-dev libxrandr-dev
 libgl-dev libglu-dev libxinerama-dev libxcursor-dev}
 
-You can also deactivate Qt5 and skip this by passing \texttt{-DOTB\_USE\_QT=OFF} to cmake, but 
+You can also deactivate Qt5 and skip this by passing \texttt{-DOTB\_USE\_QT=OFF} to cmake, but
 this will install OTB without monteverdi, mapla and the gui application launchers.
 
 For Mac OS X you need to install XCode and Windows 7,8.1,10 requires MSVC 2015 or higher.
@@ -328,8 +328,8 @@ while:
 \end{verbatim}
 will launch the graphical version.
 
-In order to ensure access to your OTB build from anywhere within your system, we recommend setting the following 
-environment variables. 
+In order to ensure access to your OTB build from anywhere within your system, we recommend setting the following
+environment variables.
 Firstly, add \texttt{bin/} directory to your PATH for easy access:
 \begin{verbatim}
 export PATH=$PATH:~/OTB/install/bin
