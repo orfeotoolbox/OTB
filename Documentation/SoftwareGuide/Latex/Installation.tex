@@ -455,30 +455,5 @@ Everything that is needed for OTB development on Windows, including compiling fr
 \section{Known issues}
 \label{sec:knownissues}
 
-\begin{itemize}
-\item  openjpeg/ITK
-\end{itemize}
-
-It is important to know that the OpenJpeg library doesn't support name mangling since version 2.0.
-As a consequence, if other libraries linked by your project already contain OpenJpeg, there may be a symbol conflict at run-time.
-For instance, this was observed with OTB build on a recent ITK version (ver. 4).
-The ITK library already had a version of OpenJpeg in libitkopenjpeg-*.so, which contained the OpenJpeg symbols un-wrapped.
-These symbols were also loaded by the GDAL driver but only the first ones were used, which caused a crash.
-
-Hopefully, thanks to the modular architecture of ITK, the library libitkopenjpeg-*.so is no longer imported within OTB.
-However, the OpenJPEG headers may be present in the ITK include directory. As the current architecture doesn't allow to modify the
-include order between modules, the OpenJPEG header from ITK can be included before your own OpenJPEG install. There are
-two ways to avoid this situation:
-\begin{itemize}
-\item Use an ITK without GDCM nor ITKReview (only these modules depend on OpenJPEG)
-\item Hide the header openjpeg.h in the ITK include directory.
-\end{itemize}
-
-More information can be found here : \url{http://wiki.orfeo-toolbox.org/index.php/JPEG2000_with_GDAL_OpenJpeg_plugin}
-
-\begin{itemize}
-\item  libkml / Ubuntu 12.04
-\end{itemize}
-
-Another issue is related to the official package of libkml under Ubuntu 12.04.
-Users of this platform should disable the option OTB\_USE\_KML, so that OTB won't be built with this third-party package.
+Please check \url{https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues} with
+an updated list of known issues (tag bug).
