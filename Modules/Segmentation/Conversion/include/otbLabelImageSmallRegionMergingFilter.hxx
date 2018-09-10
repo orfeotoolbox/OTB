@@ -98,7 +98,7 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
   std::cout << "Synthetize" << std::endl;
   NeigboursMapType neighboursMap;
   // Merge the neighbours maps from all threads
-  for( int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
+  for( unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
   {
     for (auto it = m_NeighboursMapsTmp[threadId].begin(); it != m_NeighboursMapsTmp[threadId].end(); it++)
     {
@@ -106,18 +106,54 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
     }
   }
   
-  for (auto itLabel = neighboursMap.begin(); itLabel != neighboursMap.end(); ++itLabel)
+  // For each label of the label map, find the "closest" connected label, according 
+  // to the euclidian distance between the corresponding m_labelStatistic elements.
+  for (auto neighbours : neighboursMap)
   {
-    InputLabelType neighbor = itLabel->first;
     double proximity = std::numeric_limits<double>::max();
+    InputLabelType label = neighbours.first;
+    InputLabelType closestNeighbour = label;
+    for (auto neighbour : neighbours.second)
+    {
+      
+      auto statsLabel = m_LabelStatistic[ label ];
+      auto statsNeighbour = m_LabelStatistic[ neighbour ];
+      assert( statsLabel.Size() == statsNeighbour.Size() );
+      double distance = 0;
+      for (int i = 0 ; i < statsLabel.Size(); i++)
+      {
+        distance += pow( statsLabel[i] - statsNeighbour[i] , 2);
+      }
+      
+      if (distance < proximity)
+      {
+        proximity = distance;
+        closestNeighbour = neighbour;
+      }
+      std::cout << label << " " << neighbour << " " << distance << " " << closestNeighbour <<std::endl;
+    }
+    m_CorrespondanceMap[label] = closestNeighbour;
+    //InputLabelType neighbor = itLabel->first;
+    //
     
-    for (auto itNeigh = itLabel->second.begin(); itNeigh != itLabel->second.end(); ++itNeigh)
+    /*for (auto itNeigh = itLabel->second.begin(); itNeigh != itLabel->second.end(); ++itNeigh)
     {
       // Compute squared distance between the current label and the current neighbour
       //double dist = std::abs( std::pow( m_labelStatistic[itLabel->first], 2) - std::pow( m_labelStatistic[*itNeigh], 2) );
-      
-    }
+      for (auto 
+    }*/
   }
+  
+  
+  // We have to update corresponding label to propagate the correspondance between the labels.
+  for (auto corres : m_CorrespondanceMap)
+  {
+    corres.second = FindCorrespondingLabel(corres.second);
+    std::cout << "label : " << corres.first << " closest : " << corres.second << std::endl;
+  }
+  
+  
+  
   /*
   for (auto it = m_NeighboursMap.begin(); it != m_NeighboursMap.end(); it++)
   {
@@ -127,6 +163,23 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
     std::cout << std::endl;
   }*/
 }
+
+template <class TInputLabelImage, class TInputSpectralImage>
+typename PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>::InputLabelType
+PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+::FindCorrespondingLabel( typename PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+                            ::InputLabelType label)
+{
+  auto correspondingLabel = m_CorrespondanceMap[label];
+  while (label != correspondingLabel)
+  {std::cout << "yo" << std::endl;
+    label = correspondingLabel;
+    correspondingLabel = m_CorrespondanceMap[correspondingLabel];
+  }
+  return correspondingLabel;
+}
+
+
 
 template <class TInputLabelImage, class TInputSpectralImage>
 void
@@ -141,7 +194,8 @@ void
 PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId )
 {
-  std::cout << threadId << std::endl;
+  std::cout << threadId << " " << outputRegionForThread.GetSize() << " " << outputRegionForThread.GetIndex() << std::endl;
+  
   using IteratorType = itk::ImageRegionConstIterator< TInputLabelImage >;
   using NeighborhoodIteratorType = itk::ConstShapedNeighborhoodIterator< TInputLabelImage >;
   typename NeighborhoodIteratorType::RadiusType radius;
@@ -171,8 +225,9 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
       //std::cout << it.Get() << std::endl;
       for (auto ci = itN.Begin() ; !ci.IsAtEnd(); ci++)
       {
-        int neighbourLabel = ci.Get();
-        if (neighbourLabel != it.Get())
+        int neighbourLabel = FindCorrespondingLabel(ci.Get() );
+        std::cout << neighbourLabel << " " << ci.Get() << " " << it.Get() << std::endl; 
+        if (neighbourLabel != it.Get() && m_LabelPopulation[neighbourLabel] > m_Size)
           m_NeighboursMapsTmp[threadId][ it.Get() ].insert( neighbourLabel );
       }
     }

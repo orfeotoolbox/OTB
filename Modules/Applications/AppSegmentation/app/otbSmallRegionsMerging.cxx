@@ -128,16 +128,6 @@ private:
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
 
-    AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
-    SetParameterDescription("tilesizex", "Size of tiles along the X-axis for tile-wise processing.");
-    SetDefaultParameterInt("tilesizex", 500);
-    SetMinimumParameterIntValue("tilesizex", 1);
-
-    AddParameter(ParameterType_Int, "tilesizey", "Size of tiles in pixel (Y-axis)");
-    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis for tile-wise processing.");
-    SetDefaultParameterInt("tilesizey", 500);
-    SetMinimumParameterIntValue("tilesizey", 1);
-
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -158,11 +148,8 @@ private:
   void DoExecute() override
   {
     clock_t tic = clock();
-
+  
     unsigned int minSize     = GetParameterInt("minsize");
-
-    unsigned long sizeTilesX = GetParameterInt("tilesizex");
-    unsigned long sizeTilesY = GetParameterInt("tilesizey");
 
     //Acquisition of the input image dimensions
     ImageType::Pointer imageIn = GetParameterImage("in");
@@ -176,16 +163,12 @@ private:
     AddProcess(labelStatsFilter->GetStreamer() , "Computing stats on input image ...");
     labelStatsFilter->Update();
     
-    auto meanMap = labelStatsFilter->GetMeanValueMap();
-    auto nbPixelsMap = labelStatsFilter->GetLabelPopulationMap();
-    
     // Merge small segments
-    
     auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
     regionMergingFilter->SetInputLabelImage( labelIn );
     regionMergingFilter->SetInputSpectralImage( imageIn );
     
-    regionMergingFilter->SetLabelPopulation( nbPixelsMap );
+    regionMergingFilter->SetLabelPopulation( labelStatsFilter->GetLabelPopulationMap() );
     regionMergingFilter->SetLabelStatistic( labelStatsFilter->GetMeanValueMap() );
     
     for (unsigned int size = 1 ; size < minSize ; size++)
@@ -194,20 +177,22 @@ private:
       regionMergingFilter->Update();
     }
     
-/*
     //Relabelling
-    m_ChangeLabelFilter = ChangeLabelImageFilterType::New();
-    m_ChangeLabelFilter->SetInput(labelIn);
-    for(LabelImagePixelType label = 1; label<regionCount+1; ++label)
+    auto changeLabelFilter = ChangeLabelImageFilterType::New();
+    changeLabelFilter->SetInput(labelIn);
+    
+    auto correspondanceMap = regionMergingFilter->GetCorrespondanceMap();
+    for (auto correspondance : correspondanceMap)
+    {
+      if (correspondance.first != correspondance.second)
       {
-      if(label!=LUT[label])
-        {
-        m_ChangeLabelFilter->SetChange(label,LUT[label]);
-        }
+        std::cout << correspondance.first << " " << correspondance.second << std::endl;
+        changeLabelFilter->SetChange(correspondance.first, correspondance.second);
       }
+    }
+    
+    SetParameterOutputImage("out", changeLabelFilter->GetOutput());
 
-    SetParameterOutputImage("out", m_ChangeLabelFilter->GetOutput());
-*/
     clock_t toc = clock();
 
     otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");

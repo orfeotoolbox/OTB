@@ -80,7 +80,7 @@ public:
   typedef std::map<InputLabelType, double>                                    LabelPopulationMapType;
   typedef std::map<InputLabelType, std::set<InputLabelType> >                 NeigboursMapType;
   typedef std::map<InputLabelType, RealVectorPixelType >                        LabelStatisticMapType;
-
+  typedef std::map<InputLabelType, InputLabelType>                      CorrespondanceMapType;
   /** Sets the input image where the value of a pixel is the region id */
   void SetInputLabelImage( const InputLabelImageType * labelImage);
   /** Sets the input image representing spectral values */
@@ -94,10 +94,15 @@ public:
   itkGetMacro(Size , unsigned int);
   itkSetMacro(Size , unsigned int);
 
-  /** Set/Get the Label population map */
+  /** Set/Get the Label population map and initialize the correspondance map*/
   void SetLabelPopulation( LabelPopulationMapType const & labelPopulation )
   {
     m_LabelPopulation = labelPopulation; 
+    // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
+    for (auto label : labelPopulation)
+    {
+      m_CorrespondanceMap[ label.first ] = label.first;
+    }
   }
   
   LabelPopulationMapType const & GetLabelPopulation() const
@@ -107,12 +112,17 @@ public:
 
   void SetLabelStatistic( LabelStatisticMapType const & labelStatistic )
   {
-    m_labelStatistic = labelStatistic;
+    m_LabelStatistic = labelStatistic;
   }
   
   LabelStatisticMapType const & GetLabelStatistic() const
   {
-    return m_labelStatistic;
+    return m_LabelStatistic;
+  }
+  
+  CorrespondanceMapType const & GetCorrespondanceMap() const
+  {
+    return m_CorrespondanceMap;
   }
   
   virtual void Reset(void);
@@ -125,6 +135,10 @@ protected:
 
    void ThreadedGenerateData(const RegionType&
                 outputRegionForThread, itk::ThreadIdType threadId) override;
+
+
+  // Use m_CorrespondanceMap recurively to find the label corresponding to the input label
+  InputLabelType FindCorrespondingLabel( InputLabelType label);
 
   /** Constructor */
   PersistentLabelImageSmallRegionMergingFilter();
@@ -142,12 +156,13 @@ private:
   unsigned int m_Size;
   LabelPopulationMapType m_LabelPopulation;
   
-  LabelStatisticMapType m_labelStatistic;
+  LabelStatisticMapType m_LabelStatistic;
   
   // Neigbours maps for each thread
   std::vector <NeigboursMapType > m_NeighboursMapsTmp;
-
-  NeigboursMapType m_NeighboursMap;
+  
+  CorrespondanceMapType m_CorrespondanceMap;
+  //NeigboursMapType m_NeighboursMap;
 };
 
 /** \class LabelImageSmallRegionMergingFilter
@@ -185,6 +200,7 @@ public:
   typedef typename PersistentFilterType::InputSpectralImageType InputSpectralImageType;
   typedef typename PersistentFilterType::LabelPopulationMapType LabelPopulationMapType;
   typedef typename PersistentFilterType::LabelStatisticMapType LabelStatisticMapType;
+  typedef typename PersistentFilterType::CorrespondanceMapType CorrespondanceMapType;
   
   /** Sets the input image where the value of a pixel is the region id */
   void SetInputLabelImage( const InputLabelImageType * labelImage)
@@ -246,6 +262,12 @@ public:
   {
     return this->GetFilter()->GetLabelStatistic();
   }
+  
+  CorrespondanceMapType const & GetCorrespondanceMap() const
+  {
+    return this->GetFilter()->GetCorrespondanceMap();
+  }
+  
   
 protected:
   /** Constructor */
