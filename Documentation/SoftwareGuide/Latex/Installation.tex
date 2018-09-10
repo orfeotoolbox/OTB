@@ -12,12 +12,12 @@ the compilation of Monteverdi which is integrated as an OTB module since
 version 5.8.
 
 OTB has been developed and tested across different combinations of operating
-systems, compilers, and hardware platforms including Windows, GNU/Linux and Mac OS X.
+systems, compilers, and hardware platforms including Windows, GNU/Linux and macOS.
 It is known to work with the following compilers in 32/64 bit:
 \begin{itemize}
 \item Visual Studio 2015 on Windows
 \item GCC 4.x,5.x or CLang 3.x on GNU/Linux
-\item AppleClang on Mac~OS~X (10.8 or higher)
+\item AppleClang on macOS (10.8 or higher)
 \end{itemize}
 
 Since release version 6.2.0, OTB is compiled using the C++14 standard by default.
@@ -54,7 +54,7 @@ configuration. This is the easiest way to start.
 \end{itemize}
 
 As shown in figure \ref{fig:CMakeGUI}, CMake has a different interfaces according to your system.
-Refer to section~\ref{sec:compiling-linux} for GNU/Linux and Mac~OS~X build instructions
+Refer to section~\ref{sec:compiling-linux} for GNU/Linux and macOS build instructions
 and \ref{sec:compiling-windows} for Windows.
 
 \begin{figure}[tpb]
@@ -144,7 +144,7 @@ See table \ref{tab:otb-dependencies} for the full list of dependencies.
 \end{tiny}
 \end{center}
 
-\section{GNU/Linux and Mac OS X}
+\section{GNU/Linux and macOS}
 \label{sec:compiling-linux}
 
 \subsection{Setting up the build environment}
@@ -306,7 +306,7 @@ libgl-dev libglu-dev libxinerama-dev libxcursor-dev}
 You can also deactivate Qt5 and skip this by passing \texttt{-DOTB\_USE\_QT=OFF} to cmake, but
 this will install OTB without Monteverdi, Mapla and the GUI application launchers.
 
-For Mac OS X you need to install XCode and Windows 7,8.1,10 requires MSVC 2015 or higher.
+For macOS you need to install XCode and Windows 7,8.1,10 requires MSVC 2015 or higher.
 
 You are now ready to compile OTB!
 Simply use the make command (other targets can be generated with CMake's \texttt{-G} option):
