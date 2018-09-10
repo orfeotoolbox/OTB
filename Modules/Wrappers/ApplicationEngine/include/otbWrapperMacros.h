@@ -30,7 +30,7 @@
     {                                                                                          \
       std::ostringstream message;                                                              \
       message << "otb::ApplicationException " x;                                               \
-      ::otb::ApplicationException e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
+      ::otb::ApplicationException e_(__FILE__, __LINE__, message.str(), ITK_LOCATION); \
       throw e_; /* Explicit naming to work around Intel compiler bug.  */                      \
     } \
   }
