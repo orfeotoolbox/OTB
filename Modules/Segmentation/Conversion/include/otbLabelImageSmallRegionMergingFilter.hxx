@@ -146,7 +146,7 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
   
   
   // We have to update corresponding label to propagate the correspondance between the labels.
-  for (auto corres : m_CorrespondanceMap)
+  for (auto & corres : m_CorrespondanceMap)
   {
     corres.second = FindCorrespondingLabel(corres.second);
     std::cout << "label : " << corres.first << " closest : " << corres.second << std::endl;
