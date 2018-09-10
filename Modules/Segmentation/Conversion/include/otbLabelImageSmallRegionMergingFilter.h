@@ -77,10 +77,17 @@ public:
   typedef typename TInputSpectralImage::PixelType SpectralPixelType;
   
   typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
-  typedef std::map<InputLabelType, double>                                    LabelPopulationMapType;
+  //typedef std::map<InputLabelType, double>                                    LabelPopulationMapType;
+  typedef std::vector<double>                                    LabelPopulationMapType;
+  
+  
   typedef std::map<InputLabelType, std::set<InputLabelType> >                 NeigboursMapType;
   typedef std::map<InputLabelType, RealVectorPixelType >                        LabelStatisticMapType;
-  typedef std::map<InputLabelType, InputLabelType>                      CorrespondanceMapType;
+  //typedef std::map<InputLabelType, InputLabelType>                      CorrespondanceMapType;
+  typedef std::vector<double>                      CorrespondanceMapType;
+  
+  
+  
   /** Sets the input image where the value of a pixel is the region id */
   void SetInputLabelImage( const InputLabelImageType * labelImage);
   /** Sets the input image representing spectral values */
@@ -95,13 +102,24 @@ public:
   itkSetMacro(Size , unsigned int);
 
   /** Set/Get the Label population map and initialize the correspondance map*/
-  void SetLabelPopulation( LabelPopulationMapType const & labelPopulation )
+  /*void SetLabelPopulation( LabelPopulationMapType const & labelPopulation )
   {
     m_LabelPopulation = labelPopulation; 
     // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
     for (auto label : labelPopulation)
     {
       m_CorrespondanceMap[ label.first ] = label.first;
+    }
+  }
+  */
+  void SetLabelPopulation( LabelPopulationMapType const & labelPopulation )
+  {
+    m_LabelPopulation = labelPopulation; 
+    // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
+    m_CorrespondanceMap.resize( labelPopulation.size() );
+    for (int i =0; i <labelPopulation.size(); i++)
+    {
+      m_CorrespondanceMap[ i ] = i;
     }
   }
   

@@ -168,29 +168,44 @@ private:
     regionMergingFilter->SetInputLabelImage( labelIn );
     regionMergingFilter->SetInputSpectralImage( imageIn );
     
-    regionMergingFilter->SetLabelPopulation( labelStatsFilter->GetLabelPopulationMap() );
-    regionMergingFilter->SetLabelStatistic( labelStatsFilter->GetMeanValueMap() );
+    auto myMap = labelStatsFilter->GetLabelPopulationMap();
+    std::vector<double> Test;
+    for (int i =0; i < myMap.rbegin()->first; i++)
+    {
+      Test.push_back(myMap[i]);
+    }
     
+    
+    //regionMergingFilter->SetLabelPopulation( labelStatsFilter->GetLabelPopulationMap() );
+    regionMergingFilter->SetLabelPopulation( Test );
+    regionMergingFilter->SetLabelStatistic( labelStatsFilter->GetMeanValueMap() );
+    clock_t tic2 = clock();
     for (unsigned int size = 1 ; size < minSize ; size++)
     {
       regionMergingFilter->SetSize( size );
       regionMergingFilter->Update();
     }
-    
+    clock_t toc2 = clock();
+    std::cout <<"Elapsed timeaazaed : "<<(double)(toc2 - tic2) / CLOCKS_PER_SEC<<" seconds" << std::endl;
     //Relabelling
     auto changeLabelFilter = ChangeLabelImageFilterType::New();
     changeLabelFilter->SetInput(labelIn);
     
     auto correspondanceMap = regionMergingFilter->GetCorrespondanceMap();
-    for (auto correspondance : correspondanceMap)
+    /*for (auto correspondance : correspondanceMap)
     {
       if (correspondance.first != correspondance.second)
       {
-        std::cout << correspondance.first << " " << correspondance.second << std::endl;
         changeLabelFilter->SetChange(correspondance.first, correspondance.second);
       }
-    }
-    
+    }*/ //TODO
+      for(int i = 0; i<correspondanceMap.size(); ++i)
+      { 
+        if(i!=correspondanceMap[i])
+        {
+          changeLabelFilter->SetChange(i,correspondanceMap[i]);
+        }
+      }
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
     RegisterPipeline();
     clock_t toc = clock();

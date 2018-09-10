@@ -27,7 +27,7 @@
 #include "itkConstShapedNeighborhoodIterator.h"
 #include "itkProgressReporter.h"
 
-
+#include <time.h>
 namespace otb
 {
 template <class TInputLabelImage, class TInputSpectralImage>
@@ -83,8 +83,6 @@ void
 PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
 ::Reset()
 {
-  std::cout << "Reset" << std::endl;
-  
   m_NeighboursMapsTmp.clear();
   m_NeighboursMapsTmp.resize( this->GetNumberOfThreads() );
 }
@@ -95,7 +93,7 @@ void
 PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
 ::Synthetize()
 {
-  std::cout << "Synthetize" << std::endl;
+  clock_t tic = clock();
   NeigboursMapType neighboursMap;
   // Merge the neighbours maps from all threads
   for( unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
@@ -130,38 +128,24 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
         proximity = distance;
         closestNeighbour = neighbour;
       }
-      std::cout << label << " " << neighbour << " " << distance << " " << closestNeighbour <<std::endl;
     }
     m_CorrespondanceMap[label] = closestNeighbour;
-    //InputLabelType neighbor = itLabel->first;
-    //
     
-    /*for (auto itNeigh = itLabel->second.begin(); itNeigh != itLabel->second.end(); ++itNeigh)
-    {
-      // Compute squared distance between the current label and the current neighbour
-      //double dist = std::abs( std::pow( m_labelStatistic[itLabel->first], 2) - std::pow( m_labelStatistic[*itNeigh], 2) );
-      for (auto 
-    }*/
+    // Update Stats
+    m_LabelStatistic[closestNeighbour] = (m_LabelStatistic[closestNeighbour]*m_LabelPopulation[closestNeighbour] + 
+                        m_LabelStatistic[label]*m_LabelPopulation[label] ) / (m_LabelPopulation[label]+m_LabelPopulation[closestNeighbour]);
+    m_LabelPopulation[closestNeighbour] += m_LabelPopulation[label];
+    
   }
-  
   
   // We have to update corresponding label to propagate the correspondance between the labels.
   for (auto & corres : m_CorrespondanceMap)
   {
-    corres.second = FindCorrespondingLabel(corres.second);
-    std::cout << "label : " << corres.first << " closest : " << corres.second << std::endl;
+    corres = FindCorrespondingLabel(corres);
+   // corres.second = FindCorrespondingLabel(corres.second); //TODO
   }
-  
-  
-  
-  /*
-  for (auto it = m_NeighboursMap.begin(); it != m_NeighboursMap.end(); it++)
-  {
-    std::cout << it->first << " " ;
-    for  (auto itSet = it->second.begin(); itSet != it->second.end(); itSet++)
-      std::cout << *itSet << " " ;
-    std::cout << std::endl;
-  }*/
+  clock_t toc = clock();
+  std::cout << "Synthetize : " << (double)(toc - tic) / CLOCKS_PER_SEC << std::endl;
 }
 
 template <class TInputLabelImage, class TInputSpectralImage>
@@ -172,7 +156,7 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
 {
   auto correspondingLabel = m_CorrespondanceMap[label];
   while (label != correspondingLabel)
-  {std::cout << "yo" << std::endl;
+  {
     label = correspondingLabel;
     correspondingLabel = m_CorrespondanceMap[correspondingLabel];
   }
@@ -193,15 +177,18 @@ template <class TInputLabelImage, class TInputSpectralImage>
 void
 PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId )
-{
-  std::cout << threadId << " " << outputRegionForThread.GetSize() << " " << outputRegionForThread.GetIndex() << std::endl;
+{ 
   
+  clock_t tic = clock();
   using IteratorType = itk::ImageRegionConstIterator< TInputLabelImage >;
   using NeighborhoodIteratorType = itk::ConstShapedNeighborhoodIterator< TInputLabelImage >;
+  
+  
   typename NeighborhoodIteratorType::RadiusType radius;
   radius.Fill(1);
 
   auto labelImage = this->GetInputLabelImage();
+  
   
   IteratorType it(labelImage, outputRegionForThread);
   NeighborhoodIteratorType itN(radius, labelImage, outputRegionForThread);
@@ -215,25 +202,26 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
   itN.ActivateOffset(right);
   typename IteratorType::OffsetType left = {{-1,0}};
   itN.ActivateOffset(left);
-    
+  
   for (it.GoToBegin(); ! it.IsAtEnd(); ++it, ++itN)
   {
     assert( !itN.IsAtEnd() );
     //if ( it.Get() == m_Size )
     if ( m_LabelPopulation[it.Get()] == m_Size )
     {
-      //std::cout << it.Get() << std::endl;
       for (auto ci = itN.Begin() ; !ci.IsAtEnd(); ci++)
       {
         int neighbourLabel = FindCorrespondingLabel(ci.Get() );
-        std::cout << neighbourLabel << " " << ci.Get() << " " << it.Get() << std::endl; 
         if (neighbourLabel != it.Get() && m_LabelPopulation[neighbourLabel] > m_Size)
           m_NeighboursMapsTmp[threadId][ it.Get() ].insert( neighbourLabel );
       }
     }
   }
 
-  
+  clock_t toc = clock();
+
+  if (threadId==0)
+    std::cout << threadId << " " << this->GetNumberOfThreads() << " Elapsed time : " << (double)(toc - tic) / CLOCKS_PER_SEC << std::endl;
   
 }
 
