@@ -104,9 +104,6 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
     }
   }
   
-  // LUTtmp creation in order to modify the LUT only at the end of the pass
-  auto CorrespondanceMapTmp (m_CorrespondanceMap);
-  
   // For each label of the label map, find the "closest" connected label, according 
   // to the euclidian distance between the corresponding m_labelStatistic elements.
   for (auto neighbours : neighboursMap)
@@ -136,23 +133,23 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
     auto curLabelLUT = label;
     auto adjLabelLUT = closestNeighbour;
     std::cout << label << " " << closestNeighbour;
-    while(CorrespondanceMapTmp[curLabelLUT] != curLabelLUT)
+    while(m_CorrespondanceMap[curLabelLUT] != curLabelLUT)
     {
-      curLabelLUT = CorrespondanceMapTmp[curLabelLUT];
+      curLabelLUT = m_CorrespondanceMap[curLabelLUT];
     }
-    while(CorrespondanceMapTmp[adjLabelLUT] != adjLabelLUT)
+    while(m_CorrespondanceMap[adjLabelLUT] != adjLabelLUT)
     {
-      adjLabelLUT = CorrespondanceMapTmp[adjLabelLUT];
+      adjLabelLUT = m_CorrespondanceMap[adjLabelLUT];
     }
     
     if(curLabelLUT < adjLabelLUT)
     {
-      CorrespondanceMapTmp[adjLabelLUT] = curLabelLUT;
+      m_CorrespondanceMap[adjLabelLUT] = curLabelLUT;
     }
     else
     {
-      CorrespondanceMapTmp[CorrespondanceMapTmp[curLabelLUT]] = adjLabelLUT; 
-      CorrespondanceMapTmp[curLabelLUT] = adjLabelLUT;
+      m_CorrespondanceMap[m_CorrespondanceMap[curLabelLUT]] = adjLabelLUT; 
+      m_CorrespondanceMap[curLabelLUT] = adjLabelLUT;
     }
                   
     
@@ -167,21 +164,20 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
     
   }
   
-  for(InputLabelType label = 0; label < CorrespondanceMapTmp.size(); ++label)
+  for(InputLabelType label = 0; label < m_CorrespondanceMap.size(); ++label)
   {
     InputLabelType can = label;
-    while(CorrespondanceMapTmp[can] != can)
+    while(m_CorrespondanceMap[can] != can)
     {
-      can = CorrespondanceMapTmp[can];
+      can = m_CorrespondanceMap[can];
     }
-  CorrespondanceMapTmp[label] = can;
+  m_CorrespondanceMap[label] = can;
   }
 
   
-  for(InputLabelType label = 0; label < CorrespondanceMapTmp.size(); ++label)
+  for(InputLabelType label = 0; label < m_CorrespondanceMap.size(); ++label)
   {
-    InputLabelType correspondingLabel = CorrespondanceMapTmp[label];
-    m_CorrespondanceMap[label] = correspondingLabel;
+    InputLabelType correspondingLabel = m_CorrespondanceMap[label];
     
     if((m_LabelPopulation[label]!=0) && (correspondingLabel != label))
     {
