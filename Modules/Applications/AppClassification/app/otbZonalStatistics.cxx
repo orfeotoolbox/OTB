@@ -166,6 +166,9 @@ public:
     m_StatsFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
     AddProcess(m_StatsFilter->GetStreamer(), "Computing statistics");
 
+    // Internal no-data value
+    LabelValueType intNoData = itk::NumericTraits<LabelValueType>::max();
+
     // Select zone definition mode
     if (GetParameterAsString("inzone") == "labelimage")
       {
@@ -174,6 +177,13 @@ public:
       // Computing stats
       m_StatsFilter->SetInputLabelImage(GetParameterInt32Image("inzone.labelimage.in"));
       m_StatsFilter->Update();
+
+      // In this zone definition mode, the user can provide a no-data value for the labels
+      if (HasUserValue("inzone.labelimage.nodata"))
+        intNoData = GetParameterInt("inzone.labelimage.nodata");
+
+      otbAppLogINFO("Using no-data value for the label image: " << intNoData);
+
       }
     else if (GetParameterAsString("inzone") == "vector")
       {
@@ -197,9 +207,6 @@ public:
         {
         m_VectorDataSrc = shp;
         }
-
-      // Internal no-data value
-      const LabelValueType intNoData = itk::NumericTraits<LabelValueType>::max();
 
       // Rasterize vector data
       m_RasterizeFilter = RasterizeFilterType::New();
@@ -231,13 +238,6 @@ public:
     if (( GetParameterAsString("inzone") == "labelimage" && HasUserValue("inzone.labelimage.nodata"))
         || (GetParameterAsString("inzone") == "vector")      )
       {
-      // Internal no-data value
-      const LabelValueType intNoData = itk::NumericTraits<LabelValueType>::max();
-      if (( GetParameterAsString("inzone") == "labelimage" && HasUserValue("inzone.labelimage.nodata")))
-        GetParameterInt("inzone.labelimage.nodata");
-
-      otbAppLogINFO("Using no-data value: " << intNoData);
-
       countMap.erase(intNoData);
       meanMap.erase(intNoData);
       stdMap.erase(intNoData);
