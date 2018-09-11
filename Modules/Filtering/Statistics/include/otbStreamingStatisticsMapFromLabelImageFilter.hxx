@@ -35,7 +35,6 @@ namespace otb
 template<class TInputVectorImage, class TLabelImage>
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::PersistentStreamingStatisticsMapFromLabelImageFilter()
-    : m_UseNoDataValue()
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -156,21 +155,20 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
  {
   // Update temporary accumulator
   AccumulatorMapType outputAcc;
-  auto endAcc = outputAcc.end();
 
   for (auto const& threadAccMap: m_AccumulatorMaps)
     {
     for(auto const& it: threadAccMap)
       {
-      auto label = it.first;
-      auto itAcc = outputAcc.find(label);
-      if (itAcc == endAcc)
+      const LabelPixelType label = it.first;
+      if (outputAcc.count(label) <= 0)
         {
-        outputAcc.emplace(label, it.second);
+        AccumulatorType newAcc(it.second);
+        outputAcc[label] = newAcc;
         }
       else
         {
-        itAcc->second.Update(it.second);
+        outputAcc[label].Update(it.second);
         }
       }
     }
@@ -179,29 +177,23 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   for(auto& it: outputAcc)
     {
     const LabelPixelType label = it.first;
-    const auto &bandCount = it.second.GetBandCount();
-    const auto &sum       = it.second.GetSum();
-    const auto &sqSum     = it.second.GetSqSum();
+    const double count = it.second.GetCount();
+    const RealVectorPixelType sum   = it.second.GetSum();
+    const RealVectorPixelType sqSum = it.second.GetSqSum();
 
     // Count
-    m_LabelPopulation[label] = it.second.GetCount();
+    m_LabelPopulation[label] = count;
 
     // Mean & stdev
     RealVectorPixelType mean (sum);
     RealVectorPixelType std (sqSum);
     for (unsigned int band = 0 ; band < mean.GetSize() ; band++)
       {
-      // Number of valid pixels in band
-      auto count = bandCount[band];
       // Mean
       mean[band] /= count;
 
       // Unbiased standard deviation (not sure unbiased is usefull here)
-      double variance = 0;
-      if (count > 1)
-        {
-        variance = (sqSum[band] - (sum[band] * mean[band])) / (count - 1);
-        }
+      const double variance = (sqSum[band] - (sum[band] * mean[band])) / (count - 1);
       std[band] = std::sqrt(variance);
       }
     m_MeanRadiometricValue[label] = mean;
@@ -273,31 +265,28 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 
   itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, outputRegionForThread);
   itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, outputRegionForThread);
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  auto &acc = m_AccumulatorMaps[threadId];
-  auto endAcc = acc.end();
+  typename VectorImageType::PixelType value;
+  typename LabelImageType::PixelType label;
 
   // do the work
   for (inIt.GoToBegin(), labelIt.GoToBegin();
        !inIt.IsAtEnd() && !labelIt.IsAtEnd();
        ++inIt, ++labelIt)
     {
-      const auto &value = inIt.Get();
-      auto label = labelIt.Get();
+      value = inIt.Get();
+      label = labelIt.Get();
 
       // Update the accumulator
-      auto itAcc = acc.find(label);
-      if (itAcc == endAcc)
+      if (m_AccumulatorMaps[threadId].count(label) <= 0) //add new element to the map
         {
-        acc.emplace(label, AccumulatorType(this->GetNoDataValue(), this->GetUseNoDataValue(), value));
+        AccumulatorType newAcc(value);
+        m_AccumulatorMaps[threadId][label] = newAcc;
         }
       else
         {
-        itAcc->second.Update(value);
+        m_AccumulatorMaps[threadId][label].Update(value);
         }
-
-      progress.CompletedPixel();
     }
 }
 
