@@ -93,7 +93,7 @@ VectorDataFileReader<TOutputVectorData>
       msg << "The file couldn't be opened for reading. "
           << std::endl << "Filename: " << this->m_FileName
           << std::endl;
-      VectorDataFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+      VectorDataFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
       throw e;
       return;
 
@@ -174,7 +174,7 @@ VectorDataFileReader<TOutputVectorData>
       msg << "  You probably failed to set a file suffix, or" << std::endl;
       msg << "    set the suffix to an unsupported type." << std::endl;
       }
-    VectorDataFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+    VectorDataFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
     throw e;
     return;
     }
