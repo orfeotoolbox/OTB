@@ -163,6 +163,8 @@ public:
     // Statistics filter
     m_StatsFilter = StatsFilterType::New();
     m_StatsFilter->SetInput(img);
+    m_StatsFilter->SetUseNoDataValue(HasUserValue("inbv"));
+    m_StatsFilter->SetNoDataValue(GetParameterFloat("inbv"));
     m_StatsFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
     AddProcess(m_StatsFilter->GetStreamer(), "Computing statistics");
 
@@ -176,8 +178,6 @@ public:
 
       // Computing stats
       m_StatsFilter->SetInputLabelImage(GetParameterInt32Image("inzone.labelimage.in"));
-      m_StatsFilter->SetUseNoDataValue(HasUserValue("inbv"));
-      m_StatsFilter->SetNoDataValue(GetParameterFloat("inbv"));
       m_StatsFilter->Update();
 
       // In this zone definition mode, the user can provide a no-data value for the labels
