@@ -169,6 +169,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
         typename TargetListSampleType::Pointer trainingLabeledListSample,
         std::string modelPath)
 {
+  otbAppLogINFO("Computing model file : "<<modelPath);
   // Setup fake reporter
   RGBAPixelConverter<int,int>::Pointer dummyFilter =
     RGBAPixelConverter<int,int>::New();
