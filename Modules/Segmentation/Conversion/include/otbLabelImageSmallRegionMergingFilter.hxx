@@ -104,6 +104,9 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
     }
   }
   
+  // LUTtmp creation in order to modify the LUT only at the end of the pass
+  auto CorrespondanceMapTmp (m_CorrespondanceMap);
+  
   // For each label of the label map, find the "closest" connected label, according 
   // to the euclidian distance between the corresponding m_labelStatistic elements.
   for (auto neighbours : neighboursMap)
@@ -122,29 +125,82 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
       {
         distance += pow( statsLabel[i] - statsNeighbour[i] , 2);
       }
-      
+      //std::cout << label << " " << neighbour << " " << distance << " " << m_LabelStatistic[ neighbour ]  <<std::endl;
       if (distance < proximity)
       {
         proximity = distance;
         closestNeighbour = neighbour;
       }
     }
-    m_CorrespondanceMap[label] = closestNeighbour;
+
+    auto curLabelLUT = label;
+    auto adjLabelLUT = closestNeighbour;
+    std::cout << label << " " << closestNeighbour;
+    while(CorrespondanceMapTmp[curLabelLUT] != curLabelLUT)
+    {
+      curLabelLUT = CorrespondanceMapTmp[curLabelLUT];
+    }
+    while(CorrespondanceMapTmp[adjLabelLUT] != adjLabelLUT)
+    {
+      adjLabelLUT = CorrespondanceMapTmp[adjLabelLUT];
+    }
+    
+    if(curLabelLUT < adjLabelLUT)
+    {
+      CorrespondanceMapTmp[adjLabelLUT] = curLabelLUT;
+    }
+    else
+    {
+      CorrespondanceMapTmp[CorrespondanceMapTmp[curLabelLUT]] = adjLabelLUT; 
+      CorrespondanceMapTmp[curLabelLUT] = adjLabelLUT;
+    }
+                  
+    
+    
+    
+    //m_CorrespondanceMap[label] = closestNeighbour;
     
     // Update Stats
-    m_LabelStatistic[closestNeighbour] = (m_LabelStatistic[closestNeighbour]*m_LabelPopulation[closestNeighbour] + 
+    /*m_LabelStatistic[closestNeighbour] = (m_LabelStatistic[closestNeighbour]*m_LabelPopulation[closestNeighbour] + 
                         m_LabelStatistic[label]*m_LabelPopulation[label] ) / (m_LabelPopulation[label]+m_LabelPopulation[closestNeighbour]);
-    m_LabelPopulation[closestNeighbour] += m_LabelPopulation[label];
+    m_LabelPopulation[closestNeighbour] += m_LabelPopulation[label];*/
     
   }
   
+  for(InputLabelType label = 0; label < CorrespondanceMapTmp.size(); ++label)
+  {
+    InputLabelType can = label;
+    while(CorrespondanceMapTmp[can] != can)
+    {
+      can = CorrespondanceMapTmp[can];
+    }
+  CorrespondanceMapTmp[label] = can;
+  }
+
+  
+  for(InputLabelType label = 0; label < CorrespondanceMapTmp.size(); ++label)
+  {
+    InputLabelType correspondingLabel = CorrespondanceMapTmp[label];
+    m_CorrespondanceMap[label] = correspondingLabel;
+    
+    if((m_LabelPopulation[label]!=0) && (correspondingLabel != label))
+    {
+      m_LabelStatistic[ correspondingLabel ] = (m_LabelStatistic[correspondingLabel]*m_LabelPopulation[correspondingLabel] + 
+                        m_LabelStatistic[label]*m_LabelPopulation[label] ) / (m_LabelPopulation[label]+m_LabelPopulation[correspondingLabel]);
+      m_LabelPopulation[ correspondingLabel ] += m_LabelPopulation[ label ] ;
+      m_LabelPopulation[ label ] = 0;
+    }
+    
+  }
+  /*
   // We have to update corresponding label to propagate the correspondance between the labels.
   for (auto & corres : m_CorrespondanceMap)
   {
     corres = FindCorrespondingLabel(corres);
    // corres.second = FindCorrespondingLabel(corres.second); //TODO
-  }
+  }*/
   clock_t toc = clock();
+  
   std::cout << "Synthetize : " << (double)(toc - tic) / CLOCKS_PER_SEC << std::endl;
 }
 
@@ -206,14 +262,18 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
   for (it.GoToBegin(); ! it.IsAtEnd(); ++it, ++itN)
   {
     assert( !itN.IsAtEnd() );
+    int currentLabel = FindCorrespondingLabel(it.Get());
+    
     //if ( it.Get() == m_Size )
-    if ( m_LabelPopulation[it.Get()] == m_Size )
+    if ( m_LabelPopulation[currentLabel] == m_Size )
     {
       for (auto ci = itN.Begin() ; !ci.IsAtEnd(); ci++)
       {
+        //int neighbourLabel = ci.Get();
         int neighbourLabel = FindCorrespondingLabel(ci.Get() );
-        if (neighbourLabel != it.Get() && m_LabelPopulation[neighbourLabel] > m_Size)
-          m_NeighboursMapsTmp[threadId][ it.Get() ].insert( neighbourLabel );
+        //if (neighbourLabel != it.Get() && m_LabelPopulation[neighbourLabel] > m_Size)
+        if (neighbourLabel != currentLabel)
+          m_NeighboursMapsTmp[threadId][ currentLabel ].insert( neighbourLabel );
       }
     }
   }

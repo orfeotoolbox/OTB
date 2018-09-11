@@ -170,11 +170,10 @@ private:
     
     auto myMap = labelStatsFilter->GetLabelPopulationMap();
     std::vector<double> Test;
-    for (int i =0; i < myMap.rbegin()->first; i++)
+    for (int i =0; i <= myMap.rbegin()->first; i++)
     {
       Test.push_back(myMap[i]);
     }
-    
     
     //regionMergingFilter->SetLabelPopulation( labelStatsFilter->GetLabelPopulationMap() );
     regionMergingFilter->SetLabelPopulation( Test );
@@ -190,7 +189,6 @@ private:
     //Relabelling
     auto changeLabelFilter = ChangeLabelImageFilterType::New();
     changeLabelFilter->SetInput(labelIn);
-    
     auto correspondanceMap = regionMergingFilter->GetCorrespondanceMap();
     /*for (auto correspondance : correspondanceMap)
     {
@@ -199,13 +197,14 @@ private:
         changeLabelFilter->SetChange(correspondance.first, correspondance.second);
       }
     }*/ //TODO
-      for(int i = 0; i<correspondanceMap.size(); ++i)
-      { 
-        if(i!=correspondanceMap[i])
-        {
-          changeLabelFilter->SetChange(i,correspondanceMap[i]);
-        }
+    for(int i = 0; i<correspondanceMap.size(); ++i)
+    { 
+      if(i!=correspondanceMap[i])
+      {
+        std::cout << i << " " << correspondanceMap[i] << std::endl;
+        changeLabelFilter->SetChange(i,correspondanceMap[i]);
       }
+    }
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
     RegisterPipeline();
     clock_t toc = clock();
