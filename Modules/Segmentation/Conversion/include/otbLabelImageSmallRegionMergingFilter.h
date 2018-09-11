@@ -82,7 +82,10 @@ public:
   
   
   typedef std::map<InputLabelType, std::set<InputLabelType> >                 NeigboursMapType;
-  typedef std::map<InputLabelType, RealVectorPixelType >                        LabelStatisticMapType;
+  //typedef std::map<InputLabelType, RealVectorPixelType >                        LabelStatisticMapType;
+  typedef std::vector<RealVectorPixelType >                        LabelStatisticMapType;
+  
+  
   //typedef std::map<InputLabelType, InputLabelType>                      CorrespondanceMapType;
   typedef std::vector<double>                      CorrespondanceMapType;
   

@@ -168,16 +168,22 @@ private:
     regionMergingFilter->SetInputLabelImage( labelIn );
     regionMergingFilter->SetInputSpectralImage( imageIn );
     
-    auto myMap = labelStatsFilter->GetLabelPopulationMap();
-    std::vector<double> Test;
-    for (int i =0; i <= myMap.rbegin()->first; i++)
+    auto labelPopulationMap = labelStatsFilter->GetLabelPopulationMap();
+    std::vector<double> labelPopulation;
+    for (int i =0; i <= labelPopulationMap.rbegin()->first; i++)
     {
-      Test.push_back(myMap[i]);
+      labelPopulation.push_back(labelPopulationMap[i]);
+    }
+    auto meanValueMap = labelStatsFilter->GetMeanValueMap();
+    std::vector<itk::VariableLengthVector<double> > meanValues;
+    for (int i =0; i <= meanValueMap.rbegin()->first; i++)
+    {
+      meanValues.push_back(meanValueMap[i]);
     }
     
     //regionMergingFilter->SetLabelPopulation( labelStatsFilter->GetLabelPopulationMap() );
-    regionMergingFilter->SetLabelPopulation( Test );
-    regionMergingFilter->SetLabelStatistic( labelStatsFilter->GetMeanValueMap() );
+    regionMergingFilter->SetLabelPopulation( labelPopulation );
+    regionMergingFilter->SetLabelStatistic( meanValues );
     clock_t tic2 = clock();
     for (unsigned int size = 1 ; size < minSize ; size++)
     {
