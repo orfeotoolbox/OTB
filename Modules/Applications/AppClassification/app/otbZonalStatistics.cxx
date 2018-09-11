@@ -95,29 +95,38 @@ public:
     // Input image
     AddParameter(ParameterType_InputImage, "in",  "Input Image");
 
-    // Processing mode
-    AddParameter(ParameterType_Choice, "mode", "Processing mode");
-    AddChoice("mode.vector",     "Input objects from vector data");
-    AddChoice("mode.labelimage", "Input objects from label image");
+    // Input zone mode
+    AddParameter(ParameterType_Choice, "inzone", "Type of input for the zone definitions");
+    AddChoice("inzone.vector",     "Input objects from vector data");
+    AddChoice("inzone.labelimage", "Input objects from label image");
 
     // Input for vector mode
-    AddParameter(ParameterType_InputVectorData,  "mode.vector.in",        "Input vector data");
-    AddParameter(ParameterType_Bool,             "mode.vector.reproject", "Reproject the input vector");
-    AddParameter(ParameterType_OutputVectorData, "mode.vector.out",       "Output vector data");
+    AddParameter(ParameterType_InputVectorData,  "inzone.vector.in",        "Input vector data");
+    AddParameter(ParameterType_Bool,             "inzone.vector.reproject", "Reproject the input vector");
+
 
     // Input for label image mode
-    AddParameter(ParameterType_InputImage, "mode.labelimage.in",     "Input label image");
-    AddParameter(ParameterType_Int,        "mode.labelimage.nodata", "No-data value for the input label image");
-    SetDefaultParameterInt                ("mode.labelimage.nodata", 0);
-    MandatoryOff                          ("mode.labelimage.nodata");
-    AddParameter(ParameterType_InputImage, "mode.labelimage.outxml", "Output XML file");
+    AddParameter(ParameterType_InputImage, "inzone.labelimage.in",     "Input label image");
+    AddParameter(ParameterType_Int,        "inzone.labelimage.nodata", "No-data value for the input label image");
+    SetDefaultParameterInt                ("inzone.labelimage.nodata", 0);
+    MandatoryOff                          ("inzone.labelimage.nodata");
+
+
+    // Output stats mode
+    AddParameter(ParameterType_Choice, "out", "Format of the output stats");
+    AddChoice("out.vector", "Output vector data");
+    AddParameter(ParameterType_OutputVectorData, "out.vector.filename", "Filename for the output vector data");
+    AddChoice("out.xml", "Output XML file");
+    AddParameter(ParameterType_String, "out.xml.filename", "");
+    AddChoice("out.raster", "Output raster image");
+    AddParameter(ParameterType_OutputImage, "out.raster.filename", "");
 
     AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "input.tif");
-    SetDocExampleParameterValue("mode.vector.in", "myvector.shp");
-    SetDocExampleParameterValue("mode.vector.out", "myvector_with_stats.shp");
+    SetDocExampleParameterValue("inzone.vector.in", "myvector.shp");
+    SetDocExampleParameterValue("out.vector.filename", "myvector_with_stats.shp");
 
 
   }
@@ -157,16 +166,24 @@ public:
     m_StatsFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
     AddProcess(m_StatsFilter->GetStreamer(), "Computing statistics");
 
-    // Select mode
-    if (GetParameterAsString("mode") == "vector")
+    // Select zone definition mode
+    if (GetParameterAsString("inzone") == "labelimage")
       {
-      otbAppLogINFO("Processing mode: vector");
+      otbAppLogINFO("Zone definition: label image");
+
+      // Computing stats
+      m_StatsFilter->SetInputLabelImage(GetParameterInt32Image("inzone.labelimage.in"));
+      m_StatsFilter->Update();
+      }
+    else if (GetParameterAsString("inzone") == "vector")
+      {
+      otbAppLogINFO("Zone definition: vector");
 
       otbAppLogINFO("Loading vector data...");
-      VectorDataType* shp = GetParameterVectorData("mode.vector.in");
+      VectorDataType* shp = GetParameterVectorData("inzone.vector.in");
 
       // Reproject vector data
-      if (GetParameterInt("mode.vector.reproject") != 0)
+      if (GetParameterInt("inzone.vector.reproject") != 0)
         {
         otbAppLogINFO("Vector data reprojection enabled");
         m_VectorDataReprojectionFilter = VectorDataReprojFilterType::New();
@@ -199,21 +216,42 @@ public:
       // Computing stats
       m_StatsFilter->SetInputLabelImage(m_RasterizeFilter->GetOutput());
       m_StatsFilter->Update();
+      }
+    else
+      {
+      otbAppLogFATAL("Unknown zone definition mode");
+      }
 
-      // Remove the no-data entry
-      StatsFilterType::LabelPopulationMapType countMap = m_StatsFilter->GetLabelPopulationMap();
-      StatsFilterType::PixelValueMapType meanMap = m_StatsFilter->GetMeanValueMap();
-      StatsFilterType::PixelValueMapType stdMap = m_StatsFilter->GetStandardDeviationValueMap();
-      StatsFilterType::PixelValueMapType minMap = m_StatsFilter->GetMinValueMap();
-      StatsFilterType::PixelValueMapType maxMap = m_StatsFilter->GetMaxValueMap();
+    // Remove the no-data entry
+    StatsFilterType::LabelPopulationMapType countMap = m_StatsFilter->GetLabelPopulationMap();
+    StatsFilterType::PixelValueMapType meanMap = m_StatsFilter->GetMeanValueMap();
+    StatsFilterType::PixelValueMapType stdMap = m_StatsFilter->GetStandardDeviationValueMap();
+    StatsFilterType::PixelValueMapType minMap = m_StatsFilter->GetMinValueMap();
+    StatsFilterType::PixelValueMapType maxMap = m_StatsFilter->GetMaxValueMap();
+    if (( GetParameterAsString("inzone") == "labelimage" && HasUserValue("inzone.labelimage.nodata"))
+        || (GetParameterAsString("inzone") == "vector")      )
+      {
+      // Internal no-data value
+      const LabelValueType intNoData = itk::NumericTraits<LabelValueType>::max();
+      if (( GetParameterAsString("inzone") == "labelimage" && HasUserValue("inzone.labelimage.nodata")))
+        GetParameterInt("inzone.labelimage.nodata");
+
+      otbAppLogINFO("Using no-data value: " << intNoData);
+
       countMap.erase(intNoData);
       meanMap.erase(intNoData);
       stdMap.erase(intNoData);
       minMap.erase(intNoData);
       maxMap.erase(intNoData);
+      }
 
-      // Add a statistics fields
-      otbAppLogINFO("Writing output vector data");
+
+    if (GetParameterAsString("out") == "vector")
+      {
+      if (GetParameterAsString("inzone") == "vector")
+        {
+        // Add a statistics fields
+        otbAppLogINFO("Writing output vector data");
       LabelValueType internalFID = 0;
       m_NewVectorData = VectorDataType::New();
       DataNodeType::Pointer root = m_NewVectorData->GetDataTree()->GetRoot()->Get();
@@ -253,38 +291,18 @@ public:
         ++itVector;
         } // next feature
 
-      SetParameterOutputVectorData("mode.vector.out", m_NewVectorData);
-      }
-    else if (GetParameterAsString("mode") == "labelimage")
-      {
-      otbAppLogINFO("Processing mode: label image");
-
-      // Computing stats
-      m_StatsFilter->SetInputLabelImage(GetParameterInt32Image("mode.labelimage.in"));
-      m_StatsFilter->Update();
-
-      // Remove the no-data entry
-      StatsFilterType::LabelPopulationMapType countMap = m_StatsFilter->GetLabelPopulationMap();
-      StatsFilterType::PixelValueMapType meanMap = m_StatsFilter->GetMeanValueMap();
-      StatsFilterType::PixelValueMapType stdMap = m_StatsFilter->GetStandardDeviationValueMap();
-      StatsFilterType::PixelValueMapType minMap = m_StatsFilter->GetMinValueMap();
-      StatsFilterType::PixelValueMapType maxMap = m_StatsFilter->GetMaxValueMap();
-      if (HasUserValue("mode.labelimage.nodata"))
-        {
-        // Internal no-data value
-        const LabelValueType intNoData = GetParameterInt("mode.labelimage.nodata");
-
-        otbAppLogINFO("Using no-data value: " << intNoData);
-
-        countMap.erase(intNoData);
-        meanMap.erase(intNoData);
-        stdMap.erase(intNoData);
-        minMap.erase(intNoData);
-        maxMap.erase(intNoData);
+      SetParameterOutputVectorData("out.vector.filename", m_NewVectorData);
         }
-
+      else if (GetParameterAsString("inzone") == "labelimage")
+        {
+          //vectorize the image
+        otbAppLogFATAL("Vector output from labelimage input not implemented yet");
+        }
+      }
+    else if (GetParameterAsString("out") == "xml")
+      {
       // Write stats
-      const std::string outXMLFile = this->GetParameterString("mode.labelimage.outxml");
+      const std::string outXMLFile = this->GetParameterString("out.xml.filename");
       otbAppLogINFO("Writing " + outXMLFile)
       StatsWriterType::Pointer statWriter = StatsWriterType::New();
       statWriter->SetFileName(outXMLFile);
@@ -298,7 +316,7 @@ public:
       }
     else
       {
-      otbAppLogFATAL("Unknow processing mode");
+      otbAppLogFATAL("Unknown output mode");
       }
 
   }
