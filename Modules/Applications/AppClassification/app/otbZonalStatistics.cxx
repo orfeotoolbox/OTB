@@ -93,7 +93,8 @@ public:
     AddDocTag(Tags::Analysis);
 
     // Input image
-    AddParameter(ParameterType_InputImage, "in",  "Input Image");
+    AddParameter(ParameterType_InputImage, "in",   "Input Image");
+    AddParameter(ParameterType_Float,      "inbv", "Background value to ignore in statistics computation");
 
     // Input zone mode
     AddParameter(ParameterType_Choice, "inzone", "Type of input for the zone definitions");
@@ -108,7 +109,6 @@ public:
     // Input for label image mode
     AddParameter(ParameterType_InputImage, "inzone.labelimage.in",     "Input label image");
     AddParameter(ParameterType_Int,        "inzone.labelimage.nodata", "No-data value for the input label image");
-    SetDefaultParameterInt                ("inzone.labelimage.nodata", 0);
     MandatoryOff                          ("inzone.labelimage.nodata");
 
 
