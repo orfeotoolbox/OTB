@@ -124,7 +124,7 @@ int otbMulti3DMapToDEMFilterEPSG(int argc, char* argv[])
   origin[1] = strtod(argv[argc-6], nullptr);
   multiFilter->SetOutputOrigin(origin);
 
-  std::string projectionRef=otb::SpatialReference(atoi(argv[argc-1])).ToWkt();
+  std::string projectionRef=otb::SpatialReference::FromEPSG(atoi(argv[argc-1])).ToWkt();
 
   std::cout<<"projection Reference :"<<std::endl<<projectionRef<<std::endl;
 

@@ -108,27 +108,27 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     {
     case Map_Utm:
     {
-    return SpatialReference(app->GetParameterInt(zoneKey.str()),app->IsParameterEnabled(hemKey.str())).ToWkt();
+    return SpatialReference::FromUTM(app->GetParameterInt(zoneKey.str()),app->IsParameterEnabled(hemKey.str())).ToWkt();
     }
     break;
     case Map_Lambert2:
     {
-    return SpatialReference("IGNF:LAMBE").ToWkt();
+    return SpatialReference::FromDescription("IGNF:LAMBE").ToWkt();
     }
     break;
     case Map_Lambert93:
     {
-    return SpatialReference("IGNF:LAMB93").ToWkt();
+    return SpatialReference::FromDescription("IGNF:LAMB93").ToWkt();
     }
     break;
     case Map_WGS84:
     {
-    return SpatialReference().ToWkt();
+    return SpatialReference::FromWGS84().ToWkt();
     }
     break;
     case Map_Epsg:
     {
-    return SpatialReference(app->GetParameterInt(epsgKey.str())).ToWkt();
+    return SpatialReference::FromEPSG(app->GetParameterInt(epsgKey.str())).ToWkt();
     }
     break;
     }
@@ -171,7 +171,7 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
         genericRSEstimator->SetInput(app->GetParameterImageList(imageKey)->GetNthElement(0));
         }
 
-    genericRSEstimator->SetOutputProjectionRef(SpatialReference().ToWkt());
+    genericRSEstimator->SetOutputProjectionRef(SpatialReference::FromWGS84().ToWkt());
     genericRSEstimator->Compute();
 
     unsigned int zone(0);

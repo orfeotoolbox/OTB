@@ -240,7 +240,7 @@ private:
       if (HasValue("epsg"))
         {
         unsigned int RSID = GetParameterInt("epsg");
-        outputProjectionRef = otb::SpatialReference(RSID).ToWkt();
+        outputProjectionRef = otb::SpatialReference::FromEPSG(RSID).ToWkt();
         }
       else
         {

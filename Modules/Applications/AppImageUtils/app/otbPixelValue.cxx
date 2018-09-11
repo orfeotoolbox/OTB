@@ -169,7 +169,7 @@ private:
       RSTransformType::Pointer inverse = RSTransformType::New();
       if ( HasUserValue("mode.epsg.code") )
         {
-        std::string wktFromEpsg = otb::SpatialReference(GetParameterInt( "mode.epsg.code" )).ToWkt();
+        std::string wktFromEpsg = otb::SpatialReference::FromEPSG(GetParameterInt( "mode.epsg.code" )).ToWkt();
         inverse->SetOutputProjectionRef(wktFromEpsg);
         }
       inverse->SetInputKeywordList( inImage->GetImageKeywordlist() );
@@ -244,7 +244,7 @@ private:
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       if ( HasUserValue("mode.epsg.code") )
         {
-        std::string wktFromEpsg  = otb::SpatialReference(GetParameterInt( "mode.epsg.code" )).ToWkt();
+        std::string wktFromEpsg  = otb::SpatialReference::FromEPSG(GetParameterInt( "mode.epsg.code" )).ToWkt();
         rsTransform->SetInputProjectionRef(wktFromEpsg);
         }      
       rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );

@@ -97,7 +97,7 @@ ImageToOSMVectorDataGenerator<TImage>
   typename TransformType::Pointer transform = TransformType::New();
   transform->SetInputKeywordList(input->GetImageKeywordlist());
   transform->SetInputProjectionRef(input->GetProjectionRef());
-  transform->SetOutputProjectionRef(otb::SpatialReference().ToWkt());
+  transform->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
   transform->InstantiateTransform();
 
   // Compute the 4 corners in the cartographic coordinate system

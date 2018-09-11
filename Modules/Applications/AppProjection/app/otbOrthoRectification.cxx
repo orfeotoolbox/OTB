@@ -486,7 +486,7 @@ private:
         {
         // Update opt.gridspacing
         // In case output coordinate system is WG84,
-        if (m_OutputProjectionRef == otb::SpatialReference().ToWkt())
+        if (m_OutputProjectionRef == otb::SpatialReference::FromWGS84().ToWkt())
           {
           // How much is 4 meters in degrees ?
           typedef itk::Point<float,2> FloatPointType;

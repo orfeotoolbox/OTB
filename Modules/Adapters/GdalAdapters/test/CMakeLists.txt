@@ -85,7 +85,7 @@ otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
 add_executable(otbGdalAdaptersTestDriver
                otbGdalAdaptersTestDriver.cxx
                otbSpatialReferenceTest.cxx
-               otbOGRCoordinateTransformationAdapterTest.cxx
+               otbCoordinateTransformationTest.cxx
                )
 
 target_link_libraries(otbGdalAdaptersTestDriver ${OTBGdalAdapters-Test_LIBRARIES})

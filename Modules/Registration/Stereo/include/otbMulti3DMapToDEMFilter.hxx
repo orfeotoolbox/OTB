@@ -262,15 +262,15 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
 
   itk::MetaDataDictionary & dictOutput =outputPtr->GetMetaDataDictionary();
    itk::EncapsulateMetaData<std::string> (dictOutput, MetaDataKey::ProjectionRefKey,
-                                             static_cast<std::string>(otb::SpatialReference().ToWkt()));
+                                          static_cast<std::string>(otb::SpatialReference::FromWGS84().ToWkt()));
 
   //test if WGS 84 -> true -> nothing to do
 
   //false project
 
-  bool isWGS84 =!(m_ProjectionRef.compare( static_cast<std::string>(otb::SpatialReference().ToWkt())));
- if(!m_ProjectionRef.empty() && !isWGS84)
-   {
+   bool isWGS84 =!(m_ProjectionRef.compare( static_cast<std::string>(otb::SpatialReference::FromWGS84().ToWkt())));
+   if(!m_ProjectionRef.empty() && !isWGS84)
+     {
 
    typename OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
 
@@ -550,7 +550,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
   if (!this->m_IsGeographic)
     {
     m_GroundTransform = RSTransform2DType::New();
-    m_GroundTransform->SetInputProjectionRef(static_cast<std::string> (otb::SpatialReference().ToWkt()));
+    m_GroundTransform->SetInputProjectionRef(static_cast<std::string> (otb::SpatialReference::FromWGS84().ToWkt()));
     m_GroundTransform->SetOutputProjectionRef(m_ProjectionRef);
     m_GroundTransform->InstantiateTransform();
     }

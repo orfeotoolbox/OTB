@@ -30,12 +30,12 @@ int otbSpatialReferenceTest(int, char**)
   
   try
     {
-    SpatialReference sr;
-    SpatialReference sr4("EPSG:32631");
-    SpatialReference srFromEPSG(32631);
-    SpatialReference srFromUTM(31,true);
+    auto sr = SpatialReference::FromWGS84();
+    auto sr4 = SpatialReference::FromDescription("EPSG:32631");
+    auto srFromEPSG = SpatialReference::FromEPSG(32631);
+    auto srFromUTM = SpatialReference::FromUTM(31,true);
     SpatialReference sr2(sr);
-    SpatialReference sr3 = sr;
+    auto sr3 = sr;
 
     if(sr4 == sr)
       {
@@ -107,11 +107,11 @@ int otbSpatialReferenceTest(int, char**)
   
   try
     {
-    SpatialReference sr5("dummy");
+    SpatialReference sr5 = SpatialReference::FromDescription("dummy");
     // Wrong EPSG
-    SpatialReference sr6(1000000);
+    SpatialReference sr6 = SpatialReference::FromEPSG(1000000);
     // Wrong utm zone
-    SpatialReference sr7(1000,false);
+    SpatialReference sr7 = SpatialReference::FromUTM(1000,false);
     std::cerr<<"Fail: Calling constructor with wrong description should throw"<<std::endl;
     success = false;
     }

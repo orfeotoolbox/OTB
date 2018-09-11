@@ -46,23 +46,47 @@ bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcep
 
 InvalidSRDescriptionException::InvalidSRDescriptionException(const std::string & description) : std::runtime_error(description) {};
 
-SpatialReference::SpatialReference()
+SpatialReference::SpatialReference(const SpatialReference & other) noexcept
+  : m_SR(other.m_SR->Clone())
+{}
+
+SpatialReference::SpatialReference(const OGRSpatialReference * ref)
 {
-  std::unique_ptr<OGRSpatialReference> tmpSR(OGRSpatialReference::GetWGS84SRS()->Clone());  
+  if(!ref)
+    throw InvalidSRDescriptionException("Can not construct SpatialReference from null pointer");
+  m_SR = std::unique_ptr<OGRSpatialReference>(ref->Clone());
+}
 
-  if(!tmpSR)
-    {
-    throw InvalidSRDescriptionException("WGS84");
-    }
+SpatialReference::SpatialReference(std::unique_ptr<OGRSpatialReference> ref)
+{
+  if(!ref)
+    throw InvalidSRDescriptionException("Can not construct SpatialReference from null pointer");
 
-  m_SR = std::move(tmpSR);
+  // Move (will empty ref)
+  m_SR = std::move(ref);
 }
 
 // Destructor
 SpatialReference::~SpatialReference() noexcept {}
 
+SpatialReference & SpatialReference::operator=(const SpatialReference& other) noexcept
+{
+  m_SR = std::unique_ptr<OGRSpatialReference>(other.m_SR->Clone());
+  return *this;
+}
 
-SpatialReference::SpatialReference(const std::string & description)
+
+SpatialReference SpatialReference::FromWGS84()
+{
+  std::unique_ptr<OGRSpatialReference> tmpSR(OGRSpatialReference::GetWGS84SRS()->Clone());
+
+  if(!tmpSR)
+    throw InvalidSRDescriptionException("WGS84");
+
+  return SpatialReference(std::move(tmpSR));
+}
+
+SpatialReference SpatialReference::FromDescription(const std::string & description)
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
   OGRErr code1 = tmpSR->SetFromUserInput(description.c_str());
@@ -72,11 +96,12 @@ SpatialReference::SpatialReference(const std::string & description)
     throw InvalidSRDescriptionException(description);
     }
 
-  m_SR = std::move(tmpSR);
+  return SpatialReference(std::move(tmpSR));
 }
 
-SpatialReference::SpatialReference(unsigned int epsg)
+SpatialReference SpatialReference::FromEPSG(unsigned int epsg)
 {
+  
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
   OGRErr code = tmpSR->importFromEPSGA(epsg);
 
@@ -87,10 +112,10 @@ SpatialReference::SpatialReference(unsigned int epsg)
     throw InvalidSRDescriptionException(oss.str());
     }
 
-  m_SR = std::move(tmpSR);
+  return SpatialReference(std::move(tmpSR));
 }
 
-SpatialReference::SpatialReference(unsigned int zone, bool north)
+SpatialReference SpatialReference::FromUTM(unsigned int zone, bool north)
 {
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
   OGRErr code = tmpSR->SetUTM(zone,north);
@@ -102,22 +127,7 @@ SpatialReference::SpatialReference(unsigned int zone, bool north)
     throw InvalidSRDescriptionException(oss.str());
     }
 
-  m_SR = std::move(tmpSR);
-
-}
-
-SpatialReference::SpatialReference(const SpatialReference & other) noexcept
-  : m_SR(other.m_SR->Clone())
-{}
-
-SpatialReference::SpatialReference(const OGRSpatialReference * ref) noexcept
-: m_SR(ref->Clone())
-{}
-
-SpatialReference & SpatialReference::operator=(const SpatialReference& other) noexcept
-{
-  m_SR = std::unique_ptr<OGRSpatialReference>(other.m_SR->Clone());
-  return *this;
+  return SpatialReference(std::move(tmpSR));
 }
 
 std::string SpatialReference::ToWkt() const

@@ -115,7 +115,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   origin[1] = strtod(argv[4], nullptr);         //Origin northing
   orthoRectifFilter->SetOutputOrigin(origin);
 
-  utmMapProjection->SetWkt(otb::SpatialReference(atoi(argv[9]),argv[10][0]=='N').ToWkt());
+  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[9]),argv[10][0]=='N').ToWkt());
 
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 

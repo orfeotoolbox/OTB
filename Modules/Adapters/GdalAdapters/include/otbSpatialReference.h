@@ -51,6 +51,9 @@ public:
  * manipulating spatial reference within OTB,  in a safe and easy way.
  * The class provides several constructors that all enforce the RAII:
  * either they fail or they provide a definitive, valid object.
+ * 
+ * Building a SpatialReference requires to call one of the From*()
+ * method. There are no public constructors (appart from copy and assignment)
  */
 class OTBGdalAdapters_EXPORT SpatialReference
 {
@@ -59,39 +62,39 @@ friend bool operator==(const SpatialReference& sr1, const SpatialReference & sr2
 friend bool operator!=(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
 
 public:
-/**
- * Default constructor builds a wgs84 spatial reference
- * \throws InvalidSRDescriptionException (very unlikely since there is
- * a standard method in gdal to build a WGS84 projection)
- */
-SpatialReference();
-
-/**
- * Constructor from a description string. The description string is
- * passed to OGRSpatialReference:SetFromUserInput()
- * from GDAL. Currently, supported syntax is:
- * - Well Known Text definition
- * - "EPSG:n" and "EPSGA:n" form EPSG codes
- * - PROJ definitions
- * - WMS auto projections ...
- * \param description a string containing the description of the
- * spatial reference to parse
- * \throws InvalidSRDescriptionException in case of failure of SetFromUserInput()
- */
-  SpatialReference(const std::string & sr_description);
+ /**
+  * Build a SpatialRereference from a description string. The description string is
+  * passed to OGRSpatialReference:SetFromUserInput()
+  * from GDAL. Currently, supported syntax is:
+  * - Well Known Text definition
+  * - "EPSG:n" and "EPSGA:n" form EPSG codes
+  * - PROJ definitions
+  * - WMS auto projections ...
+  * \param description a string containing the description of the
+  * spatial reference to parse
+  * \throws InvalidSRDescriptionException in case of failure of SetFromUserInput()
+  */
+  static SpatialReference FromDescription(const std::string & sr_description);
 
   /**
-   * Constructor from an epsg code
+   * Build a SpatialRereference for wgs84
+   * \throws InvalidSRDescriptionException (very unlikely since there is
+   * a standard method in gdal to build a WGS84 projection)
+   */
+  static SpatialReference FromWGS84();
+
+  /**
+   *  Build a SpatialReference from an epsg code
    * \param epsg EPSG code passed to
    * OGRSpatialReference::importFromEPSGA() from GDAL
    *
    * \throws InvalidSRDescriptionException in case of failure of
    * importFromEPSGA()
    */
-  SpatialReference(unsigned int epsg);
+  static SpatialReference FromEPSG(unsigned int epsg);
 
   /**
-   * Constructor from a UTM zone passed to
+   * Build a SpatialReference from a UTM zone passed to
    * OGRSpatialReference::SetUTM() from GDAL
    * \param zone UTM zone to use
    * \param north true for northern hemisphere, false otherwise
@@ -99,7 +102,7 @@ SpatialReference();
    * \throws InvalidSRDescriptionException in case of failure of
    * setUTM()
    */
-  SpatialReference(unsigned int zone, bool north);
+  static SpatialReference FromUTM(unsigned int zone, bool north);
   
   /// Default destructor
   ~SpatialReference() noexcept;
@@ -141,9 +144,13 @@ SpatialReference();
   static void UTMFromGeoPoint(double lat, double lon, unsigned int & zone, bool & north);
 
 private:
-  /// Constructor from wrapped type
-  SpatialReference(const OGRSpatialReference * ref) noexcept;
+  /// Constructor from wrapped type. ref will be cloned.
+  SpatialReference(const OGRSpatialReference * ref);
 
+  /// Constructor from unique_ptr to wrapped type. On success (no
+  /// throw) the passed unique_ptr will be cleared, and ownership transferred
+  SpatialReference(std::unique_ptr<OGRSpatialReference> ref);
+  
   // unique ptr to the internal OGRSpatialReference
   std::unique_ptr<OGRSpatialReference> m_SR;
 };

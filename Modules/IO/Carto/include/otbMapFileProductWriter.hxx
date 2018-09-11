@@ -126,7 +126,7 @@ MapFileProductWriter<TInputImage>
     {
     otbMsgDevMacro( "Sensor Model detected : Reprojecting in the targer SRID" );
     m_GenericRSResampler->SetInput(this->GetInput());
-    m_GenericRSResampler->SetOutputParametersFromMap(otb::SpatialReference(m_SRID).ToWkt());
+    m_GenericRSResampler->SetOutputParametersFromMap(otb::SpatialReference::FromEPSG(m_SRID).ToWkt());
     m_VectorImage = m_GenericRSResampler->GetOutput();
     m_VectorImage->UpdateOutputInformation();
     }
@@ -172,7 +172,7 @@ MapFileProductWriter<TInputImage>
 {
   // Intitialize the vectordata to build the indexTile
   m_VectorDataIndexTile  = VectorDataType::New();
-  m_VectorDataIndexTile->SetProjectionRef(otb::SpatialReference(m_SRID).ToWkt());
+  m_VectorDataIndexTile->SetProjectionRef(otb::SpatialReference::FromEPSG(m_SRID).ToWkt());
   DataNodeType::Pointer root = m_VectorDataIndexTile->GetDataTree()->GetRoot()->Get();
   DataNodeType::Pointer document = DataNodeType::New();
   m_Folder = DataNodeType::New();
@@ -368,7 +368,7 @@ MapFileProductWriter<TInputImage>
 
         m_Transform  = TransformType::New();
         m_Transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
-        m_Transform->SetOutputProjectionRef(otb::SpatialReference(m_SRID).ToWkt());
+        m_Transform->SetOutputProjectionRef(otb::SpatialReference::FromEPSG(m_SRID).ToWkt());
         m_Transform->InstantiateTransform();
 
         InputPointType  inputPoint;

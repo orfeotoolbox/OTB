@@ -28,9 +28,9 @@ int otbCoordinateTransformationTest(int, char**)
 {
   bool success = true;
   
-  SpatialReference inSR("EPSG:4326");
-  SpatialReference outSR("EPSG:32631");
-  SpatialReference outSRBis("EPSG:2154");
+  SpatialReference inSR = SpatialReference::FromDescription("EPSG:4326");
+  SpatialReference outSR= SpatialReference::FromDescription("EPSG:32631");
+  SpatialReference outSRBis= SpatialReference::FromDescription("EPSG:2154");
 
   try
     {

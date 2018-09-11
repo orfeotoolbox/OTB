@@ -298,13 +298,13 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     bool north(true);
     otb::SpatialReference::UTMFromGeoPoint(geoPoint[0],geoPoint[1],zone,north);
 
-    otb::SpatialReference oSRS(zone,north);
+    otb::SpatialReference oSRS = otb::SpatialReference::FromUTM(zone,north);
     
     projectionRef = oSRS.ToWkt();
     }
   else if(strcmp(map.c_str(),"WGS84")==0)
     {
-    projectionRef = otb::SpatialReference().ToWkt(); //WGS84
+    projectionRef = otb::SpatialReference::FromWGS84().ToWkt(); //WGS84
     }
   else
     {
