@@ -1019,10 +1019,10 @@ otb_test_application(NAME apTvClSampleAugmentationSmote
 #----------- ZonalStatistics TESTS ----------------
 otb_test_application(NAME apTvClZonalStatisticsVec
   APP  ZonalStatistics
-  OPTIONS -inzone vector -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp -out.vector.filename ${TEMP}/apTvClVectorData_QB1_ter_with_stats.shp -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.vector.reproject 1
+  OPTIONS -inzone vector -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp -out.vector.filename ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.vector.reproject 1
   VALID   --compare-ascii ${NOTOL}
-  ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_with_stats.dbf
-  ${TEMP}/apTvClVectorData_QB1_ter_with_stats.dbf)
+  ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_with_stats.sqlite
+  ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite)
 
 otb_test_application(NAME apTvClZonalStatisticsImg
   APP  ZonalStatistics
