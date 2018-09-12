@@ -188,6 +188,9 @@ public:
       m_VectorDataSrc = shp;
       }
     RasterizeInputVectorData();
+    // Computing stats
+    m_StatsFilter->SetInputLabelImage(m_RasterizeFilter->GetOutput());
+    m_StatsFilter->Update();
   }
 
   void ReprojectVectorDataIntoInputImage()
@@ -214,10 +217,6 @@ public:
     m_RasterizeFilter->SetDefaultBurnValue(0);
     m_RasterizeFilter->SetGlobalWarningDisplay(false);
     m_RasterizeFilter->SetBackgroundValue(m_IntNoData);
-
-    // Computing stats
-    m_StatsFilter->SetInputLabelImage(m_RasterizeFilter->GetOutput());
-    m_StatsFilter->Update();
   }
 
   void RemoveNoDataEntry()
