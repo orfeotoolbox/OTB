@@ -177,15 +177,11 @@ public:
   {
     otbAppLogINFO("Zone definition: vector");
     otbAppLogINFO("Loading vector data...");
-    shp = GetParameterVectorData("inzone.vector.in");
+    m_VectorDataSrc = GetParameterVectorData("inzone.vector.in");
     // Reproject vector data
     if (GetParameterInt("inzone.vector.reproject") != 0)
       {
       ReprojectVectorDataIntoInputImage();
-      }
-    else
-      {
-      m_VectorDataSrc = shp;
       }
     RasterizeInputVectorData();
     // Computing stats
@@ -197,7 +193,7 @@ public:
   {
     otbAppLogINFO("Vector data reprojection enabled");
     m_VectorDataReprojectionFilter = VectorDataReprojFilterType::New();
-    m_VectorDataReprojectionFilter->SetInputVectorData(shp);
+    m_VectorDataReprojectionFilter->SetInputVectorData(m_VectorDataSrc.GetPointer());
     m_VectorDataReprojectionFilter->SetInputImage(m_InputImage);
     AddProcess(m_VectorDataReprojectionFilter, "Reproject vector data");
     m_VectorDataReprojectionFilter->Update();
@@ -380,7 +376,6 @@ public:
 
   VectorDataType::Pointer m_VectorDataSrc;
   VectorDataType::Pointer m_NewVectorData;
-  VectorDataType* shp;
   VectorDataReprojFilterType::Pointer m_VectorDataReprojectionFilter;
   RasterizeFilterType::Pointer m_RasterizeFilter;
   StatsFilterType::Pointer m_StatsFilter;
