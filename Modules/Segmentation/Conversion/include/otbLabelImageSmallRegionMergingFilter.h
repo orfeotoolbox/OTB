@@ -21,19 +21,13 @@
 #ifndef otbLabelImageSmallRegionMergingFilter_h
 #define otbLabelImageSmallRegionMergingFilter_h
 
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "itkImageToImageFilter.h"
-
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-#include <set>
 
 namespace otb
 {
 
 /** \class PersistentLabelImageSmallRegionMergingFilter
- *
  *
  * This class merges regions in the input label image according to the input
  * image of spectral values and the RangeBandwidth parameter.
@@ -73,92 +67,64 @@ public:
   typedef TInputLabelImage                        InputLabelImageType;
   typedef typename InputLabelImageType::PixelType InputLabelType;
 
-  typedef TInputSpectralImage                     InputSpectralImageType;
-  typedef typename TInputSpectralImage::PixelType SpectralPixelType;
-  
   typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
-  //typedef std::map<InputLabelType, double>                                    LabelPopulationMapType;
-  typedef std::vector<double>                                    LabelPopulationMapType;
-  
   
   typedef std::map<InputLabelType, std::set<InputLabelType> >                 NeigboursMapType;
-  //typedef std::map<InputLabelType, RealVectorPixelType >                        LabelStatisticMapType;
-  typedef std::vector<RealVectorPixelType >                        LabelStatisticMapType;
-  
-  
-  //typedef std::map<InputLabelType, InputLabelType>                      CorrespondanceMapType;
-  typedef std::vector<double>                      CorrespondanceMapType;
-  
-  
-  
-  /** Sets the input image where the value of a pixel is the region id */
-  void SetInputLabelImage( const InputLabelImageType * labelImage);
-  /** Sets the input image representing spectral values */
-  void SetInputSpectralImage( const InputSpectralImageType * spectralImage);
-  /** Returns input label image */
-  InputLabelImageType * GetInputLabelImage();
-  /** Returns input spectral image */
-  InputSpectralImageType * GetInputSpectralImage();
+  typedef std::vector<RealVectorPixelType >                                   LabelStatisticType;
+  typedef std::vector<double>                                                 LabelPopulationType;
+  typedef std::vector<InputLabelType>                                          LUTType;
   
   /** Set/Get size of polygon to be merged */
   itkGetMacro(Size , unsigned int);
   itkSetMacro(Size , unsigned int);
 
-  /** Set/Get the Label population map and initialize the correspondance map*/
-  /*void SetLabelPopulation( LabelPopulationMapType const & labelPopulation )
+  /** Set the Label population  and initialize the LUT */
+  void SetLabelPopulation( LabelPopulationType const & labelPopulation )
   {
     m_LabelPopulation = labelPopulation; 
     // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
-    for (auto label : labelPopulation)
+    m_LUT.resize( labelPopulation.size() );
+    for (unsigned int i =0; i <labelPopulation.size(); i++)
     {
-      m_CorrespondanceMap[ label.first ] = label.first;
-    }
-  }
-  */
-  void SetLabelPopulation( LabelPopulationMapType const & labelPopulation )
-  {
-    m_LabelPopulation = labelPopulation; 
-    // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
-    m_CorrespondanceMap.resize( labelPopulation.size() );
-    for (int i =0; i <labelPopulation.size(); i++)
-    {
-      m_CorrespondanceMap[ i ] = i;
+      m_LUT[ i ] = i;
     }
   }
   
-  LabelPopulationMapType const & GetLabelPopulation() const
+  /** Get the Label population */
+  LabelPopulationType const & GetLabelPopulation() const
   {
     return m_LabelPopulation;
   }
 
-  void SetLabelStatistic( LabelStatisticMapType const & labelStatistic )
+  /** Set the label statistic */
+  void SetLabelStatistic( LabelStatisticType const & labelStatistic )
   {
     m_LabelStatistic = labelStatistic;
   }
   
-  LabelStatisticMapType const & GetLabelStatistic() const
+  /** Get the label statistic */
+  LabelStatisticType const & GetLabelStatistic() const
   {
     return m_LabelStatistic;
   }
   
-  CorrespondanceMapType const & GetCorrespondanceMap() const
+  /** Get the LUT */
+  LUTType const & GetLUT() const
   {
-    return m_CorrespondanceMap;
+    return m_LUT;
   }
   
   virtual void Reset(void);
   virtual void Synthetize(void);
 
 protected:
-  //void EnlargeOutputRequestedRegion( itk::DataObject *output ) override;
-
    void GenerateOutputInformation(void) override;
 
    void ThreadedGenerateData(const RegionType&
                 outputRegionForThread, itk::ThreadIdType threadId) override;
 
 
-  // Use m_CorrespondanceMap recurively to find the label corresponding to the input label
+  // Use m_LUT recurively to find the label corresponding to the input label
   InputLabelType FindCorrespondingLabel( InputLabelType label);
 
   /** Constructor */
@@ -175,15 +141,18 @@ private:
   void operator =(const Self&) = delete;
   
   unsigned int m_Size;
-  LabelPopulationMapType m_LabelPopulation;
   
-  LabelStatisticMapType m_LabelStatistic;
+  /** Vector containing at position i the population of the segment labelled i */
+  LabelPopulationType m_LabelPopulation;
   
-  // Neigbours maps for each thread
+  /** Vector containing at position i the population of mean of element of the segment labelled i*/
+  LabelStatisticType m_LabelStatistic;
+  
+  /** Neigbours maps for each thread */
   std::vector <NeigboursMapType > m_NeighboursMapsTmp;
   
-  CorrespondanceMapType m_CorrespondanceMap;
-  //NeigboursMapType m_NeighboursMap;
+  /** LUT giving correspondance between labels in the original segmentation and the merged labels */
+  LUTType m_LUT;
 };
 
 /** \class LabelImageSmallRegionMergingFilter
@@ -218,75 +187,61 @@ public:
 
   typedef PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage> PersistentFilterType;
   typedef typename PersistentFilterType::InputLabelImageType InputLabelImageType;
-  typedef typename PersistentFilterType::InputSpectralImageType InputSpectralImageType;
-  typedef typename PersistentFilterType::LabelPopulationMapType LabelPopulationMapType;
-  typedef typename PersistentFilterType::LabelStatisticMapType LabelStatisticMapType;
-  typedef typename PersistentFilterType::CorrespondanceMapType CorrespondanceMapType;
+  typedef typename PersistentFilterType::LabelPopulationType LabelPopulationType;
+  typedef typename PersistentFilterType::LabelStatisticType LabelStatisticType;
+  typedef typename PersistentFilterType::LUTType LUTType;
   
   /** Sets the input image where the value of a pixel is the region id */
   void SetInputLabelImage( const InputLabelImageType * labelImage)
   {
-    this->GetFilter()->SetInputLabelImage( labelImage );
-  }
-  
-  
-  /** Sets the input image representing spectral values */
-  void SetInputSpectralImage( const InputSpectralImageType * spectralImage)
-  {
-    this->GetFilter()->SetInputSpectralImage( spectralImage );
+    this->GetFilter()->SetInput( labelImage );
   }
   
   /** Returns input label image */
   InputLabelImageType * GetInputLabelImage()
   {
-    return this->GetFilter()->GetInputLabelImage();
+    return this->GetFilter()->GetInput();
   }
   
-  /** Returns input spectral image */
-  InputSpectralImageType * GetInputSpectralImage()
-  {
-    return this->GetFilter()->GetInputSpectralImage();
-  }
-  
-  /** Set size of polygon to be merged */
+  /** Set size of segments to be merged */
   void SetSize(unsigned int size) 
   {
     this->GetFilter()->SetSize( size );
   }
   
-  /** Get size of polygon to be merged */
+  /** Get size of segments to be merged */
   unsigned int GetSize()
   {
     return this->GetFilter()->GetSize();
   }
   
   /** Set the Label population map */
-  void SetLabelPopulation( LabelPopulationMapType const & labelPopulation )
+  void SetLabelPopulation( LabelPopulationType const & labelPopulation )
   {
     this->GetFilter()->SetLabelPopulation( labelPopulation );
   }
   
   /** Get the Label population map */
-  LabelPopulationMapType const & GetLabelPopulation(  ) const
+  LabelPopulationType const & GetLabelPopulation(  ) const
   {
     return this->GetFilter()->GetLabelPopulation();
   }
   
   /** Set the Label statistic map */
-  void SetLabelStatistic( LabelStatisticMapType const & labelStatistic )
+  void SetLabelStatistic( LabelStatisticType const & labelStatistic )
   {
     this->GetFilter()->SetLabelStatistic( labelStatistic );
   }
   
   /** Get the Label statistic map */
-  LabelStatisticMapType const & GetLabelStatistic( ) const
+  LabelStatisticType const & GetLabelStatistic( ) const
   {
     return this->GetFilter()->GetLabelStatistic();
   }
   
-  CorrespondanceMapType const & GetCorrespondanceMap() const
+  LUTType const & GetLUT() const
   {
-    return this->GetFilter()->GetCorrespondanceMap();
+    return this->GetFilter()->GetLUT();
   }
   
   

@@ -85,9 +85,8 @@ private:
     SetName("SmallRegionsMerging");
     SetDescription("This application performs the third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
 
-    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 3 (optional)");
-    SetDocLongDescription("Given a segmentation result (can be the out output parameter of the"
-                          " LSMSSegmentation application [2]) and the original image, it will"
+    SetDocName("Small Region Merging");
+    SetDocLongDescription("Given a segmentation result and the original image, it will"
                           " merge segments whose size in pixels is lower than minsize parameter"
                           " with the adjacent segments with the adjacent segment with closest"
                           " radiometry and acceptable size.\n\n"
@@ -96,22 +95,11 @@ private:
                           " segments, then all segments of area equal to 2 pixels will be processed,"
                           " until segments of area minsize. For large images one can use the"
                           " tilesizex and tilesizey parameters for tile-wise processing, with the"
-                          " guarantees of identical results.\n\n"
-                          "The output of this application can be passed to the"
-                          " LSMSVectorization application [3] to complete the LSMS workflow.");
-    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation"
-                      " workflow (LSMS) and may not be suited for any other purpose. This"
-                      " application is not compatible with in-memory connection since it does"
-                      " its own internal streaming.");
-    SetDocAuthors("David Youssefi");
-    SetDocSeeAlso( "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
-                   " mean-shift algorithm and its application to the segmentation of"
-                   " arbitrarily large remote sensing images. IEEE Transactions on"
-                   " Geoscience and Remote Sensing, 53(2), 952-964.\n"
-                   "[2] LSMSegmentation\n"
-                   "[3] LSMSVectorization");
+                          " guarantees of identical results.\n\n");
+    SetDocLimitations("This application is more efficient if the labels are contiguous, starting from 0.");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso( "Segmentation");
     AddDocTag(Tags::Segmentation);
-    AddDocTag("LSMS");
 
     AddParameter(ParameterType_InputImage,  "in",    "Input image");
     SetParameterDescription( "in", "The input image, containing initial spectral signatures corresponding to the segmented image (inseg)." );
@@ -123,9 +111,9 @@ private:
     SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
-    SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, a segment is of size lower than this criterion, the segment is merged with the segment that has the closest sepctral signature.");
+    SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, a segment is of size strictly lower than this criterion, the segment is merged with the segment that has the closest sepctral signature.");
     SetDefaultParameterInt("minsize", 50);
-    SetMinimumParameterIntValue("minsize", 0);
+    SetMinimumParameterIntValue("minsize", 1);
     MandatoryOff("minsize");
 
     AddRAMParameter();
@@ -135,8 +123,6 @@ private:
     SetDocExampleParameterValue("inseg","segmentation.tif");
     SetDocExampleParameterValue("out","merged.tif");
     SetDocExampleParameterValue("minsize","20");
-    SetDocExampleParameterValue("tilesizex","256");
-    SetDocExampleParameterValue("tilesizey","256");
 
     SetOfficialDocLink();
   }
@@ -163,52 +149,43 @@ private:
     AddProcess(labelStatsFilter->GetStreamer() , "Computing stats on input image ...");
     labelStatsFilter->Update();
     
-    // Merge small segments
-    auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
-    regionMergingFilter->SetInputLabelImage( labelIn );
-    regionMergingFilter->SetInputSpectralImage( imageIn );
-    
+    // Convert Map to Vector
     auto labelPopulationMap = labelStatsFilter->GetLabelPopulationMap();
     std::vector<double> labelPopulation;
-    for (int i =0; i <= labelPopulationMap.rbegin()->first; i++)
+    for (unsigned int i =0; i <= labelPopulationMap.rbegin()->first; i++)
     {
       labelPopulation.push_back(labelPopulationMap[i]);
     }
     auto meanValueMap = labelStatsFilter->GetMeanValueMap();
     std::vector<itk::VariableLengthVector<double> > meanValues;
-    for (int i =0; i <= meanValueMap.rbegin()->first; i++)
+    for (unsigned int i =0; i <= meanValueMap.rbegin()->first; i++)
     {
       meanValues.push_back(meanValueMap[i]);
     }
     
-    //regionMergingFilter->SetLabelPopulation( labelStatsFilter->GetLabelPopulationMap() );
+    // Merge small segments
+    auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
+    regionMergingFilter->SetInputLabelImage( labelIn );
     regionMergingFilter->SetLabelPopulation( labelPopulation );
     regionMergingFilter->SetLabelStatistic( meanValues );
-    clock_t tic2 = clock();
+    
     for (unsigned int size = 1 ; size < minSize ; size++)
     {
       regionMergingFilter->SetSize( size );
       regionMergingFilter->Update();
     }
-    clock_t toc2 = clock();
-    std::cout <<"Elapsed timeaazaed : "<<(double)(toc2 - tic2) / CLOCKS_PER_SEC<<" seconds" << std::endl;
+    
     //Relabelling
     auto changeLabelFilter = ChangeLabelImageFilterType::New();
     changeLabelFilter->SetInput(labelIn);
-    auto correspondanceMap = regionMergingFilter->GetCorrespondanceMap();
-    /*for (auto correspondance : correspondanceMap)
-    {
-      if (correspondance.first != correspondance.second)
-      {
-        changeLabelFilter->SetChange(correspondance.first, correspondance.second);
-      }
-    }*/ //TODO
-    for(int i = 0; i<correspondanceMap.size(); ++i)
+    auto LUT = regionMergingFilter->GetLUT();
+
+    for(unsigned int i = 0; i<LUT.size(); ++i)
     { 
-      if(i!=correspondanceMap[i])
+      if(i!=LUT[i])
       {
-        std::cout << i << " " << correspondanceMap[i] << std::endl;
-        changeLabelFilter->SetChange(i,correspondanceMap[i]);
+        std::cout << i << " " << LUT[i] << std::endl;
+        changeLabelFilter->SetChange(i,LUT[i]);
       }
     }
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
@@ -217,6 +194,7 @@ private:
 
     otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
   }
+  
 };
 }
 }
