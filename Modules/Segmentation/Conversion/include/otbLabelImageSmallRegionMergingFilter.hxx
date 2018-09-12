@@ -61,84 +61,83 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   NeigboursMapType neighboursMap;
   // Merge the neighbours maps from all threads
   for( unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
-  {
-    for (auto it = m_NeighboursMapsTmp[threadId].begin(); it != m_NeighboursMapsTmp[threadId].end(); it++)
     {
+    for (auto it = m_NeighboursMapsTmp[threadId].begin(); it != m_NeighboursMapsTmp[threadId].end(); it++)
+      {
       neighboursMap[ it->first ].insert( it->second.begin(), it->second.end() );
+      }
     }
-  }
   
   // For each label of the label map, find the "closest" connected label, according 
   // to the euclidian distance between the corresponding m_labelStatistic elements.
   for (auto neighbours : neighboursMap)
-  {
+    {
     double proximity = std::numeric_limits<double>::max();
     InputLabelType label = neighbours.first;
     InputLabelType closestNeighbour = label;
     for (auto neighbour : neighbours.second)
-    {
+      {
       
       auto statsLabel = m_LabelStatistic[ label ];
       auto statsNeighbour = m_LabelStatistic[ neighbour ];
       assert( statsLabel.Size() == statsNeighbour.Size() );
       double distance = 0;
       for (unsigned int i = 0 ; i < statsLabel.Size(); i++)
-      {
+        {
         distance += pow( statsLabel[i] - statsNeighbour[i] , 2);
-      }
+        }
       if (distance < proximity)
-      {
+        {
         proximity = distance;
         closestNeighbour = neighbour;
+        }
       }
-    }
 
     auto curLabelLUT = label;
     auto adjLabelLUT = closestNeighbour;
     while(m_LUT[curLabelLUT] != curLabelLUT)
-    {
+      {
       curLabelLUT = m_LUT[curLabelLUT];
-    }
+      }
     while(m_LUT[adjLabelLUT] != adjLabelLUT)
-    {
+      {
       adjLabelLUT = m_LUT[adjLabelLUT];
-    }
+      }
     
     if(curLabelLUT < adjLabelLUT)
-    {
+      {
       m_LUT[adjLabelLUT] = curLabelLUT;
-    }
+      }
     else
-    {
+      {
       m_LUT[m_LUT[curLabelLUT]] = adjLabelLUT; 
       m_LUT[curLabelLUT] = adjLabelLUT;
+      }
     }
-  }
   
   for(InputLabelType label = 0; label < m_LUT.size(); ++label)
-  {
+    {
     InputLabelType can = label;
     while(m_LUT[can] != can)
-    {
+      {
       can = m_LUT[can];
-    }
+      }
   m_LUT[label] = can;
-  }
+    }
 
   
   for(InputLabelType label = 0; label < m_LUT.size(); ++label)
-  {
+    {
     InputLabelType correspondingLabel = m_LUT[label];
     
     if((m_LabelPopulation[label]!=0) && (correspondingLabel != label))
-    {
+      {
       m_LabelStatistic[ correspondingLabel ] = (m_LabelStatistic[correspondingLabel]*m_LabelPopulation[correspondingLabel] + 
                         m_LabelStatistic[label]*m_LabelPopulation[label] ) / (m_LabelPopulation[label]+m_LabelPopulation[correspondingLabel]);
       m_LabelPopulation[ correspondingLabel ] += m_LabelPopulation[ label ] ;
       m_LabelPopulation[ label ] = 0;
+      }
     }
-    
-  }
 }
 
 template <class TInputLabelImage >
@@ -149,10 +148,10 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 {
   auto correspondingLabel = m_LUT[label];
   while (label != correspondingLabel)
-  {
+    {
     label = correspondingLabel;
     correspondingLabel = m_LUT[correspondingLabel];
-  }
+    }
   return correspondingLabel;
 }
 
@@ -219,7 +218,8 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   auto labelImage = this->GetInput();
   
   IteratorType it(labelImage, outputRegionForThread);
-  NeighborhoodIteratorType itN(radius, labelImage, outputRegionForThread);outputRegionForThread.GetSize() << std::endl;
+  NeighborhoodIteratorType itN(radius, labelImage, outputRegionForThread);
+  
   // 4 connected Neighborhood (top, bottom, left and right)
   typename IteratorType::OffsetType top = {{0,-1}};
   itN.ActivateOffset(top);
@@ -231,20 +231,20 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   itN.ActivateOffset(left);
   
   for (it.GoToBegin(); ! it.IsAtEnd(); ++it, ++itN)
-  {
+    {
     assert( !itN.IsAtEnd() );
     int currentLabel = FindCorrespondingLabel(it.Get());
     
     if ( m_LabelPopulation[currentLabel] == m_Size )
-    {
-      for (auto ci = itN.Begin() ; !ci.IsAtEnd(); ci++)
       {
+      for (auto ci = itN.Begin() ; !ci.IsAtEnd(); ci++)
+        {
         int neighbourLabel = FindCorrespondingLabel(ci.Get() );
         if (neighbourLabel != currentLabel)
           m_NeighboursMapsTmp[threadId][ currentLabel ].insert( neighbourLabel );
+        }
       }
     }
-  }
 }
 
 template <class TInputLabelImage >
@@ -271,10 +271,10 @@ LabelImageSmallRegionMergingFilter< TInputLabelImage >
   m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
   m_SmallRegionMergingFilter->GetStreamer()->SetAutomaticTiledStreaming();
   for (unsigned int size = 1; size < m_MinSize; size++)
-  {
+    {
     m_SmallRegionMergingFilter->GetFilter()->SetSize( size) ;
     m_SmallRegionMergingFilter->Update();
-  }
+    }
 }
 
 

@@ -91,9 +91,9 @@ public:
     // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
     m_LUT.resize( labelPopulation.size() );
     for (unsigned int i =0; i <labelPopulation.size(); i++)
-    {
+      {
       m_LUT[ i ] = i;
-    }
+      }
   }
   
   /** Get the Label population */

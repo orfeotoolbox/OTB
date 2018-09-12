@@ -149,15 +149,15 @@ private:
     auto labelPopulationMap = labelStatsFilter->GetLabelPopulationMap();
     std::vector<double> labelPopulation;
     for (unsigned int i =0; i <= labelPopulationMap.rbegin()->first; i++)
-    {
+      {
       labelPopulation.push_back(labelPopulationMap[i]);
-    }
+      }
     auto meanValueMap = labelStatsFilter->GetMeanValueMap();
     std::vector<itk::VariableLengthVector<double> > meanValues;
     for (unsigned int i =0; i <= meanValueMap.rbegin()->first; i++)
-    {
+      {
       meanValues.push_back(meanValueMap[i]);
-    }
+      }
     
     auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
     regionMergingFilter->SetInput( labelIn );
@@ -173,13 +173,12 @@ private:
     auto LUT = regionMergingFilter->GetLUT();
 
     for(unsigned int i = 0; i<LUT.size(); ++i)
-    { 
+      { 
       if(i!=LUT[i])
-      {
-        std::cout << i << " " << LUT[i] << std::endl;
+        {
         changeLabelFilter->SetChange(i,LUT[i]);
+        }
       }
-    }
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
     RegisterPipeline();
     clock_t toc = clock();
