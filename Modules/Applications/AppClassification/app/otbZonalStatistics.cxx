@@ -381,7 +381,7 @@ public:
   ThresholdFilterType::Pointer m_ThresholdFilter;
   FloatVectorImageType::Pointer m_InputImage;
   LabelValueType m_IntNoData = itk::NumericTraits<LabelValueType>::max();
-  bool m_FromLabelImage;
+  bool m_FromLabelImage = false;
   StatsFilterType::LabelPopulationMapType m_CountMap;
   StatsFilterType::PixelValueMapType m_MeanMap;
   StatsFilterType::PixelValueMapType m_StdMap;
