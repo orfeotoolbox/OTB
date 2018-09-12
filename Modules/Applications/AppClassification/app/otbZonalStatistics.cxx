@@ -336,8 +336,6 @@ public:
       }
     m_StatsFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
     AddProcess(m_StatsFilter->GetStreamer(), "Computing statistics");
-    // Internal no-data value
-    m_IntNoData = itk::NumericTraits<LabelValueType>::max();
     // Select zone definition mode
     m_FromLabelImage = (GetParameterAsString("inzone") == "labelimage");
     if (m_FromLabelImage)
@@ -382,7 +380,7 @@ public:
   LabelImageToVectorFilterType::Pointer m_LabelImageToVectorFilter;
   ThresholdFilterType::Pointer m_ThresholdFilter;
   FloatVectorImageType::Pointer m_InputImage;
-  LabelValueType m_IntNoData;
+  LabelValueType m_IntNoData = itk::NumericTraits<LabelValueType>::max();
   bool m_FromLabelImage;
   StatsFilterType::LabelPopulationMapType m_CountMap;
   StatsFilterType::PixelValueMapType m_MeanMap;
