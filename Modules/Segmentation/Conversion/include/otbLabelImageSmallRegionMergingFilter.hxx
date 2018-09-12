@@ -95,7 +95,6 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 
     auto curLabelLUT = label;
     auto adjLabelLUT = closestNeighbour;
-    std::cout << label << " " << closestNeighbour;
     while(m_LUT[curLabelLUT] != curLabelLUT)
     {
       curLabelLUT = m_LUT[curLabelLUT];
@@ -157,7 +156,46 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   return correspondingLabel;
 }
 
+template <class TInputLabelImage >
+void
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::GenerateInputRequestedRegion()
+{
+  // call the superclass' implementation of this method
+  Superclass::GenerateInputRequestedRegion();
 
+  // get pointers to the input
+  auto inputPtr = const_cast<TInputLabelImage *>(this->GetInput());
+    
+    
+  // get a copy of the input requested region
+  auto inputRequestedRegion = inputPtr->GetRequestedRegion();
+
+  // pad the input requested region by the operator radius
+  inputRequestedRegion.PadByRadius(1);
+  // crop the input requested region at the input's largest possible region
+  if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
+    {
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
+    return;
+    }
+  else
+    {
+    // Couldn't crop the region (requested region is outside the largest
+    // possible region).  Throw an exception.
+
+    // store what we tried to request (prior to trying to crop)
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
+
+    // build an exception
+    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+    e.SetLocation(ITK_LOCATION);
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+    e.SetDataObject(inputPtr);
+    throw e;
+    }
+  
+}
 
 template <class TInputLabelImage >
 void
@@ -181,8 +219,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   auto labelImage = this->GetInput();
   
   IteratorType it(labelImage, outputRegionForThread);
-  NeighborhoodIteratorType itN(radius, labelImage, outputRegionForThread);
-  
+  NeighborhoodIteratorType itN(radius, labelImage, outputRegionForThread);outputRegionForThread.GetSize() << std::endl;
   // 4 connected Neighborhood (top, bottom, left and right)
   typename IteratorType::OffsetType top = {{0,-1}};
   itN.ActivateOffset(top);
@@ -232,7 +269,7 @@ LabelImageSmallRegionMergingFilter< TInputLabelImage >
 {
   auto labelImage = this->GetInput();
   m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
-  
+  m_SmallRegionMergingFilter->GetStreamer()->SetAutomaticTiledStreaming();
   for (unsigned int size = 1; size < m_MinSize; size++)
   {
     m_SmallRegionMergingFilter->GetFilter()->SetSize( size) ;

@@ -124,9 +124,11 @@ public:
   virtual void Synthetize(void);
 
 protected:
-   void GenerateOutputInformation(void) override;
+  void GenerateInputRequestedRegion();
 
-   void ThreadedGenerateData(const RegionType&
+  void GenerateOutputInformation(void) override;
+
+  void ThreadedGenerateData(const RegionType&
                 outputRegionForThread, itk::ThreadIdType threadId) override;
 
 
