@@ -30,22 +30,22 @@
 #include <time.h>
 namespace otb
 {
-template <class TInputLabelImage, class TInputSpectralImage>
-PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+template <class TInputLabelImage >
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::PersistentLabelImageSmallRegionMergingFilter() : m_Size(1)
 {
 }
 
-template <class TInputLabelImage, class TInputSpectralImage>
-PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+template <class TInputLabelImage >
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::~PersistentLabelImageSmallRegionMergingFilter()
 {
 }
 
 
-template <class TInputLabelImage, class TInputSpectralImage>
+template <class TInputLabelImage >
 void
-PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::Reset()
 {
   m_NeighboursMapsTmp.clear();
@@ -53,9 +53,9 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
 }
 
 
-template <class TInputLabelImage, class TInputSpectralImage>
+template <class TInputLabelImage >
 void
-PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::Synthetize()
 {
   NeigboursMapType neighboursMap;
@@ -142,10 +142,10 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
   }
 }
 
-template <class TInputLabelImage, class TInputSpectralImage>
-typename PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>::InputLabelType
-PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
-::FindCorrespondingLabel( typename PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+template <class TInputLabelImage >
+typename PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >::InputLabelType
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::FindCorrespondingLabel( typename PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
                             ::InputLabelType label)
 {
   auto correspondingLabel = m_LUT[label];
@@ -159,17 +159,17 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
 
 
 
-template <class TInputLabelImage, class TInputSpectralImage>
+template <class TInputLabelImage >
 void
-PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 }
 
-template <class TInputLabelImage, class TInputSpectralImage>
+template <class TInputLabelImage >
 void
-PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId )
 { 
   using IteratorType = itk::ImageRegionConstIterator< TInputLabelImage >;
@@ -210,12 +210,34 @@ PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralIma
   }
 }
 
-template <class TInputLabelImage, class TInputSpectralImage>
+template <class TInputLabelImage >
 void
-PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage>
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+}
+
+template <class TInputLabelImage >
+LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::LabelImageSmallRegionMergingFilter() : m_MinSize(1)
+{
+  m_SmallRegionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
+}
+
+template <class TInputLabelImage >
+void
+LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::GenerateData()
+{
+  auto labelImage = this->GetInput();
+  m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
+  
+  for (unsigned int size = 1; size < m_MinSize; size++)
+  {
+    m_SmallRegionMergingFilter->GetFilter()->SetSize( size) ;
+    m_SmallRegionMergingFilter->Update();
+  }
 }
 
 

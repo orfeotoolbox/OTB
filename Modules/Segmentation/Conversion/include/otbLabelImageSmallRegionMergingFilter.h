@@ -29,15 +29,21 @@ namespace otb
 
 /** \class PersistentLabelImageSmallRegionMergingFilter
  *
- * This class merges regions in the input label image according to the input
- * image of spectral values and the RangeBandwidth parameter.
- *
+ * This class can be used to merge each segments of a given size in a label image to
+ * the connected segment with the closest radiometry.
+ * This persistent filter should be used as template parameter of a PersistentFilterStreamingDecorator
+ * It computes from an input label image an equivalence table
+ * that gives for each pixel, the corresponding label in the merged image. 
+ * The merged image can then be computed using a ChangeLabelImageFilter.
+ * 
+ * This filter can be updated several times for different values of size, the output
+ * equivalence table will be the results of all computations.
  *
  * \ingroup ImageSegmentation
  *
  * \ingroup OTBConversion
  */
-template <class TInputLabelImage, class TInputSpectralImage >
+template <class TInputLabelImage>
 class ITK_EXPORT PersistentLabelImageSmallRegionMergingFilter
   : public PersistentImageFilter<TInputLabelImage, TInputLabelImage>
 {
@@ -157,104 +163,92 @@ private:
 
 /** \class LabelImageSmallRegionMergingFilter
  *
- *
- * This class merges regions in the input label image according to the input
- * image of spectral values and the RangeBandwidth parameter.
- *
- *
+ * This filter computes from a label image an equivalence table that gives for each pixel, 
+ * the corresponding label in the merged image.
+ * It uses a PersistentFilterStreamingDecorator templated over a PersistentLabelImageSmallRegionMergingFilter
+ * to merge the segments recursively from segment of size 1 to segment of a sized specified
+ * by a parameter.
+ * The merged image can then be computed using a ChangeLabelImageFilterType.
+ * 
  * \ingroup ImageSegmentation
  *
  * \ingroup OTBConversion
  */
-template <class TInputLabelImage,  class TInputSpectralImage>
-class ITK_EXPORT LabelImageSmallRegionMergingFilter :
-public PersistentFilterStreamingDecorator<PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage> >
+template <class TInputLabelImage>
+class ITK_EXPORT LabelImageSmallRegionMergingFilter 
+  : public itk::ImageToImageFilter<TInputLabelImage, TInputLabelImage>
 {
-  
 public:
   /** Standard Self typedef */
-  typedef LabelImageSmallRegionMergingFilter                                                 Self;
-  typedef PersistentFilterStreamingDecorator
-    <PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage> >   Superclass;
-  typedef itk::SmartPointer<Self>                                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                                      ConstPointer;
+  typedef LabelImageSmallRegionMergingFilter                         Self;
+  typedef itk::ImageToImageFilter<TInputLabelImage, TInputLabelImage>      Superclass;
+  typedef itk::SmartPointer<Self>                                     Pointer;
+  typedef itk::SmartPointer<const Self>                               ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(LabelImageSmallRegionMergingFilter, PersistentFilterStreamingDecorator);
+  itkTypeMacro(LabelImageSmallRegionMergingFilter, itk::ImageToImageFilter);
 
-  typedef PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage, TInputSpectralImage> PersistentFilterType;
-  typedef typename PersistentFilterType::InputLabelImageType InputLabelImageType;
-  typedef typename PersistentFilterType::LabelPopulationType LabelPopulationType;
-  typedef typename PersistentFilterType::LabelStatisticType LabelStatisticType;
-  typedef typename PersistentFilterType::LUTType LUTType;
+  // Small region merging filter typedefs
+  typedef PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage > PersistentLabelImageSmallRegionMergingFilterType;
+  typedef PersistentFilterStreamingDecorator < PersistentLabelImageSmallRegionMergingFilterType >   LabelImageSmallRegionMergingFilterType;
   
-  /** Sets the input image where the value of a pixel is the region id */
-  void SetInputLabelImage( const InputLabelImageType * labelImage)
-  {
-    this->GetFilter()->SetInput( labelImage );
-  }
+  typedef typename PersistentLabelImageSmallRegionMergingFilterType::LabelPopulationType LabelPopulationType;
+  typedef typename PersistentLabelImageSmallRegionMergingFilterType::LabelStatisticType LabelStatisticType;
+  typedef typename PersistentLabelImageSmallRegionMergingFilterType::LUTType LUTType;
   
-  /** Returns input label image */
-  InputLabelImageType * GetInputLabelImage()
-  {
-    return this->GetFilter()->GetInput();
-  }
   
-  /** Set size of segments to be merged */
-  void SetSize(unsigned int size) 
-  {
-    this->GetFilter()->SetSize( size );
-  }
-  
-  /** Get size of segments to be merged */
-  unsigned int GetSize()
-  {
-    return this->GetFilter()->GetSize();
-  }
-  
+  /** Set/Get size of polygon to be merged */
+  itkGetMacro(MinSize , unsigned int);
+  itkSetMacro(MinSize , unsigned int);
+
   /** Set the Label population map */
   void SetLabelPopulation( LabelPopulationType const & labelPopulation )
   {
-    this->GetFilter()->SetLabelPopulation( labelPopulation );
+    m_SmallRegionMergingFilter->GetFilter()->SetLabelPopulation( labelPopulation );
   }
   
   /** Get the Label population map */
   LabelPopulationType const & GetLabelPopulation(  ) const
   {
-    return this->GetFilter()->GetLabelPopulation();
+    return m_SmallRegionMergingFilter->GetFilter()->GetLabelPopulation();
   }
   
   /** Set the Label statistic map */
   void SetLabelStatistic( LabelStatisticType const & labelStatistic )
   {
-    this->GetFilter()->SetLabelStatistic( labelStatistic );
+    m_SmallRegionMergingFilter->GetFilter()->SetLabelStatistic( labelStatistic );
   }
   
   /** Get the Label statistic map */
   LabelStatisticType const & GetLabelStatistic( ) const
   {
-    return this->GetFilter()->GetLabelStatistic();
+    return m_SmallRegionMergingFilter->GetFilter()->GetLabelStatistic();
   }
   
-  LUTType const & GetLUT() const
+  /** Get the Label statistic map */
+  LUTType const & GetLUT( ) const
   {
-    return this->GetFilter()->GetLUT();
+    return m_SmallRegionMergingFilter->GetFilter()->GetLUT();
   }
-  
   
 protected:
   /** Constructor */
-  LabelImageSmallRegionMergingFilter() {}
+  LabelImageSmallRegionMergingFilter();
   /** Destructor */
   ~LabelImageSmallRegionMergingFilter() override {}
 
+  /** Generate Data method (Update LabelImageSmallRegionMergingFilterType recursively) */
+  void GenerateData();
+  
 private:
   LabelImageSmallRegionMergingFilter(const Self &) = delete;
   void operator =(const Self&) = delete;
 
+  typename LabelImageSmallRegionMergingFilterType::Pointer m_SmallRegionMergingFilter;
+  unsigned int m_MinSize;
 };
 
 } // end namespace otb

@@ -66,14 +66,10 @@ public:
   //typedef otb::StreamingStatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
   typedef otb::StreamingStatisticsMapFromLabelImageFilter<ImageType, LabelImageType> StatisticsMapFromLabelImageFilterType;
 
-  typedef otb::LabelImageSmallRegionMergingFilter<LabelImageType, ImageType> LabelImageSmallRegionMergingFilterType;
-
-  typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
-  typedef itk::ImageRegionConstIterator<ImageType> ImageIterator;
+  typedef otb::LabelImageSmallRegionMergingFilter<LabelImageType> LabelImageSmallRegionMergingFilterType;
 
   typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> ChangeLabelImageFilterType;
-  typedef otb::TileImageFilter<LabelImageType> TileImageFilterType;
-
+ 
   itkNewMacro(Self);
   itkTypeMacro(Merging, otb::Application);
 
@@ -163,17 +159,13 @@ private:
       meanValues.push_back(meanValueMap[i]);
     }
     
-    // Merge small segments
     auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
-    regionMergingFilter->SetInputLabelImage( labelIn );
+    regionMergingFilter->SetInput( labelIn );
     regionMergingFilter->SetLabelPopulation( labelPopulation );
     regionMergingFilter->SetLabelStatistic( meanValues );
     
-    for (unsigned int size = 1 ; size < minSize ; size++)
-    {
-      regionMergingFilter->SetSize( size );
-      regionMergingFilter->Update();
-    }
+    regionMergingFilter->SetMinSize( minSize);
+    regionMergingFilter->Update();
     
     //Relabelling
     auto changeLabelFilter = ChangeLabelImageFilterType::New();
