@@ -165,6 +165,8 @@ private:
     regionMergingFilter->SetLabelStatistic( meanValues );
     
     regionMergingFilter->SetMinSize( minSize);
+    
+    AddProcess(regionMergingFilter, "Computing LUT ...");
     regionMergingFilter->Update();
     
     //Relabelling

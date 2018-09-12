@@ -77,7 +77,6 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     InputLabelType closestNeighbour = label;
     for (auto neighbour : neighbours.second)
       {
-      
       auto statsLabel = m_LabelStatistic[ label ];
       auto statsNeighbour = m_LabelStatistic[ neighbour ];
       assert( statsLabel.Size() == statsNeighbour.Size() );
@@ -93,17 +92,9 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
         }
       }
 
-    auto curLabelLUT = label;
-    auto adjLabelLUT = closestNeighbour;
-    while(m_LUT[curLabelLUT] != curLabelLUT)
-      {
-      curLabelLUT = m_LUT[curLabelLUT];
-      }
-    while(m_LUT[adjLabelLUT] != adjLabelLUT)
-      {
-      adjLabelLUT = m_LUT[adjLabelLUT];
-      }
-    
+    auto curLabelLUT = FindCorrespondingLabel(label);
+    auto adjLabelLUT = FindCorrespondingLabel(closestNeighbour);
+
     if(curLabelLUT < adjLabelLUT)
       {
       m_LUT[adjLabelLUT] = curLabelLUT;
@@ -122,7 +113,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
       {
       can = m_LUT[can];
       }
-  m_LUT[label] = can;
+    m_LUT[label] = can;
     }
 
   
@@ -267,6 +258,7 @@ void
 LabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::GenerateData()
 {
+  this->SetProgress(0.0);
   auto labelImage = this->GetInput();
   m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
   m_SmallRegionMergingFilter->GetStreamer()->SetAutomaticTiledStreaming();
@@ -274,6 +266,7 @@ LabelImageSmallRegionMergingFilter< TInputLabelImage >
     {
     m_SmallRegionMergingFilter->GetFilter()->SetSize( size) ;
     m_SmallRegionMergingFilter->Update();
+    this->UpdateProgress(static_cast<double>(size+1)/m_MinSize);
     }
 }
 
