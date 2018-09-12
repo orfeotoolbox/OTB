@@ -157,8 +157,7 @@ public:
   FloatVectorImageType::PixelType NullPixel(FloatVectorImageType::Pointer & img)
   {
     const unsigned int nBands = img->GetNumberOfComponentsPerPixel();
-    FloatVectorImageType::PixelType pix;
-    pix.SetSize(nBands);
+    FloatVectorImageType::PixelType pix(nBands);
     pix.Fill(0);
     return pix;
   }
