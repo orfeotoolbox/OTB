@@ -54,6 +54,13 @@ public:
     itk::ExceptionObject(file, line, message, loc)
   {
   }
+
+  VectorDataFileReaderException(const std::string& file, unsigned int line,
+                                const std::string& message = "Error in IO",
+                                const char* loc = "Unknown") :
+    itk::ExceptionObject(file, line, message, loc)
+  {
+  }
 };
 
 /** \brief Data source that reads vector data from a single file.
