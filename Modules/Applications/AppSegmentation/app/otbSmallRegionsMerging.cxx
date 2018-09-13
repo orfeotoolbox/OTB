@@ -19,29 +19,14 @@
  */
 
 
-#include "otbMultiChannelExtractROI.h"
-#include "otbExtractROI.h"
-
-//#include "otbStreamingStatisticsImageFilter.h"
-#include "otbSystem.h"
-#include "itkUnaryFunctorImageFilter.h"
-#include "itkChangeLabelImageFilter.h"
-
-#include "otbTileImageFilter.h"
-
 #include <time.h>
-#include <algorithm>
-#include <climits>
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbStandardWriterWatcher.h"
-
-// New includes
-
 #include "otbStreamingStatisticsMapFromLabelImageFilter.h"
 #include "otbLabelImageSmallRegionMergingFilter.h"
+#include "itkChangeLabelImageFilter.h"
 
 namespace otb
 {
@@ -60,9 +45,6 @@ public:
   typedef UInt32ImageType                   LabelImageType;
   typedef LabelImageType::InternalPixelType LabelImagePixelType;
 
-  typedef otb::MultiChannelExtractROI <ImagePixelType,ImagePixelType > MultiChannelExtractROIFilterType;
-  typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType;
-
   //typedef otb::StreamingStatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
   typedef otb::StreamingStatisticsMapFromLabelImageFilter<ImageType, LabelImageType> StatisticsMapFromLabelImageFilterType;
 
@@ -79,7 +61,7 @@ private:
   void DoInit() override
   {
     SetName("SmallRegionsMerging");
-    SetDescription("This application performs the third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
+    SetDescription("This application merges small regions of a segmentation result to connected region.");
 
     SetDocName("Small Region Merging");
     SetDocLongDescription("Given a segmentation result and the original image, it will"
@@ -89,21 +71,20 @@ private:
                           "Small segments will be processed by increasing size: first all segments"
                           " for which area is equal to 1 pixel will be merged with adjacent"
                           " segments, then all segments of area equal to 2 pixels will be processed,"
-                          " until segments of area minsize. For large images one can use the"
-                          " tilesizex and tilesizey parameters for tile-wise processing, with the"
-                          " guarantees of identical results.\n\n");
+                          " until segments of area minsize."
+                          " \n\n");
     SetDocLimitations("This application is more efficient if the labels are contiguous, starting from 0.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso( "Segmentation");
     AddDocTag(Tags::Segmentation);
 
-    AddParameter(ParameterType_InputImage,  "in",    "Input image");
+    AddParameter(ParameterType_InputImage,  "in", "Input image");
     SetParameterDescription( "in", "The input image, containing initial spectral signatures corresponding to the segmented image (inseg)." );
-    AddParameter(ParameterType_InputImage,  "inseg",    "Segmented image");
+    AddParameter(ParameterType_InputImage,  "inseg", "Segmented image");
     SetParameterDescription( "inseg", "Segmented image where each pixel value is the unique integer label of the segment it belongs to." );
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription( "out", "The output image. The output image is the segmented image where the minimal segments have been merged. An ecoding of uint32 is advised." );
+    SetParameterDescription( "out", "The output image. The output image is the segmented image where the minimal segments have been merged." );
     SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
@@ -118,7 +99,7 @@ private:
     SetDocExampleParameterValue("in","smooth.tif");
     SetDocExampleParameterValue("inseg","segmentation.tif");
     SetDocExampleParameterValue("out","merged.tif");
-    SetDocExampleParameterValue("minsize","20");
+    SetDocExampleParameterValue("minsize","50");
 
     SetOfficialDocLink();
   }
@@ -159,6 +140,7 @@ private:
       meanValues.push_back(meanValueMap[i]);
       }
     
+    // Compute the LUT from the original label image to the merged output label image.
     auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
     regionMergingFilter->SetInput( labelIn );
     regionMergingFilter->SetLabelPopulation( labelPopulation );
@@ -169,7 +151,7 @@ private:
     AddProcess(regionMergingFilter, "Computing LUT ...");
     regionMergingFilter->Update();
     
-    //Relabelling
+    // Relabelling using the LUT
     auto changeLabelFilter = ChangeLabelImageFilterType::New();
     changeLabelFilter->SetInput(labelIn);
     auto LUT = regionMergingFilter->GetLUT();
@@ -184,7 +166,6 @@ private:
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
     RegisterPipeline();
     clock_t toc = clock();
-
     otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
   }
   

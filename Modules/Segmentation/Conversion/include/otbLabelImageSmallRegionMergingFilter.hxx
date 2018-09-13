@@ -37,13 +37,6 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 }
 
 template <class TInputLabelImage >
-PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
-::~PersistentLabelImageSmallRegionMergingFilter()
-{
-}
-
-
-template <class TInputLabelImage >
 void
 PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::Reset()
@@ -51,7 +44,6 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   m_NeighboursMapsTmp.clear();
   m_NeighboursMapsTmp.resize( this->GetNumberOfThreads() );
 }
-
 
 template <class TInputLabelImage >
 void
@@ -106,6 +98,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
       }
     }
   
+  // Update the LUT
   for(InputLabelType label = 0; label < m_LUT.size(); ++label)
     {
     InputLabelType can = label;
@@ -116,7 +109,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     m_LUT[label] = can;
     }
 
-  
+  // Update Statistics
   for(InputLabelType label = 0; label < m_LUT.size(); ++label)
     {
     InputLabelType correspondingLabel = m_LUT[label];
@@ -261,7 +254,8 @@ LabelImageSmallRegionMergingFilter< TInputLabelImage >
   this->SetProgress(0.0);
   auto labelImage = this->GetInput();
   m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
-  m_SmallRegionMergingFilter->GetStreamer()->SetAutomaticTiledStreaming();
+
+  // Update the filter for all sizes.
   for (unsigned int size = 1; size < m_MinSize; size++)
     {
     m_SmallRegionMergingFilter->GetFilter()->SetSize( size) ;

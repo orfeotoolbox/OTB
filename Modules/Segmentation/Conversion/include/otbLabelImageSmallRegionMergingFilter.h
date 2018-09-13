@@ -139,7 +139,7 @@ protected:
   PersistentLabelImageSmallRegionMergingFilter();
 
   /** Destructor */
-  ~PersistentLabelImageSmallRegionMergingFilter() override;
+  ~PersistentLabelImageSmallRegionMergingFilter() override = default;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
@@ -240,7 +240,7 @@ protected:
   /** Constructor */
   LabelImageSmallRegionMergingFilter();
   /** Destructor */
-  ~LabelImageSmallRegionMergingFilter() override {}
+  ~LabelImageSmallRegionMergingFilter() override = default;
 
   /** Generate Data method (Update LabelImageSmallRegionMergingFilterType recursively) */
   void GenerateData();
