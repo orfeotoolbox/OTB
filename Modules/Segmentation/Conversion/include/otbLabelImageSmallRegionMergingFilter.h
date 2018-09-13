@@ -80,7 +80,7 @@ public:
   typedef std::vector<double>                                                 LabelPopulationType;
   typedef std::vector<InputLabelType>                                          LUTType;
   
-  /** Set/Get size of polygon to be merged */
+  /** Set/Get size of segments to be merged */
   itkGetMacro(Size , unsigned int);
   itkSetMacro(Size , unsigned int);
 
@@ -124,15 +124,16 @@ public:
   virtual void Synthetize(void);
 
 protected:
+  /** The input requested region should be padded by a radius of 1 to use the neigbourhood iterator*/
   void GenerateInputRequestedRegion();
 
-  void GenerateOutputInformation(void) override;
-
+  /** Threaded Generate Data : find the neighbours of each segments of size m_Size for each tile and store them in
+   * an accumulator */ 
   void ThreadedGenerateData(const RegionType&
                 outputRegionForThread, itk::ThreadIdType threadId) override;
 
 
-  // Use m_LUT recurively to find the label corresponding to the input label
+  // Use the LUT recursively to find the label corresponding to the input label
   InputLabelType FindCorrespondingLabel( InputLabelType label);
 
   /** Constructor */
@@ -148,6 +149,7 @@ private:
   PersistentLabelImageSmallRegionMergingFilter(const Self &) = delete;
   void operator =(const Self&) = delete;
   
+  /** Size of the segments to be merged */
   unsigned int m_Size;
   
   /** Vector containing at position i the population of the segment labelled i */

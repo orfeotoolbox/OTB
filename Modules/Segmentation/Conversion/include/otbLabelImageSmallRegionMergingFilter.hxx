@@ -183,14 +183,6 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 template <class TInputLabelImage >
 void
 PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
-::GenerateOutputInformation()
-{
-  Superclass::GenerateOutputInformation();
-}
-
-template <class TInputLabelImage >
-void
-PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId )
 { 
   using IteratorType = itk::ImageRegionConstIterator< TInputLabelImage >;
