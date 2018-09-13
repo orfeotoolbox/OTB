@@ -49,6 +49,11 @@ public:
                                  const char* message = "Error in IO",
                                  const char* loc = "Unknown") :
     itk::ExceptionObject(file, line, message, loc) {}
+
+  ImageSeriesFileReaderException(const std::string& file, unsigned int line,
+                                 const std::string& message = "Error in IO",
+                                 const std::string& loc = "Unknown") :
+    itk::ExceptionObject(file, line, message, loc) {}
 };
 
 /** \class ImageSeriesFileReaderBase

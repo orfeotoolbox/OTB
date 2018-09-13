@@ -61,9 +61,13 @@ public:
                        const char* loc = "Unknown");
 
   /** Constructor. */
-  ApplicationException(const std::string &file, unsigned int line,
+  ApplicationException(const std::string& file, unsigned int line,
                        const char* message = "Application error.",
                        const char* loc = "Unknown");
+
+  ApplicationException(const std::string& file, unsigned int line,
+                       const std::string& message = "Application error.",
+                       const std::string& loc = "Unknown");
 };
 
 namespace Wrapper
