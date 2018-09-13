@@ -250,6 +250,20 @@ otb_test_application(NAME     apTvLSMS3SmallRegionsMerging
 
 set_property(TEST apTvLSMS3SmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation)
 
+#----------- SmallRegionsMerging TESTS ----------------
+otb_test_application(NAME     apTvSmallRegionsMerging
+                     APP      SmallRegionsMerging
+                     OPTIONS  -in ${BASELINE}/apTvLSMS1_filtered_range.tif
+                              -inseg  ${BASELINE}/apTvLSMS2_Segmentation.tif
+                              -out ${TEMP}/apTvSmallMerged.tif uint32
+                              -minsize 10
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvSmallMerged.tif
+                              ${TEMP}/apTvSmallMerged.tif
+                     )
+                     
+set_property(TEST apTvLSMS3SmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation)
+
 #----------- LSMSVectorization TESTS ----------------
 otb_test_application(NAME     apTvLSMS4Vectorization_SmallMerged
                      APP      LSMSVectorization
@@ -308,3 +322,4 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                               ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
                               ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
                      )
+                     
