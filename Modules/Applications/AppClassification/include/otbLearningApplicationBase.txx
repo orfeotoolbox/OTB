@@ -138,7 +138,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   RGBAPixelConverter<int,int>::Pointer dummyFilter =
     RGBAPixelConverter<int,int>::New();
   dummyFilter->SetProgress(0.0f);
-  this->AddProcess(dummyFilter,"Classify...");
+  this->AddProcess(dummyFilter,"Validation...");
   dummyFilter->InvokeEvent(itk::StartEvent());
 
   // load a machine learning model from file and predict the input sample list
@@ -169,6 +169,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
         typename TargetListSampleType::Pointer trainingLabeledListSample,
         std::string modelPath)
 {
+  otbAppLogINFO("Computing model file : "<<modelPath);
   // Setup fake reporter
   RGBAPixelConverter<int,int>::Pointer dummyFilter =
     RGBAPixelConverter<int,int>::New();
