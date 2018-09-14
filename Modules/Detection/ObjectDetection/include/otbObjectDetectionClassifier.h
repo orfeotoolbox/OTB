@@ -193,7 +193,6 @@ private:
   bool
   IsInsideWithNeighborhoodRadius(const RegionType& region, const ContinuousIndexType &index) const
     {
-    typedef typename RegionType::IndexType     IndexType;
     typedef typename IndexType::IndexValueType IndexValueType;
 
     for(unsigned int i=0; i<ImageDimension; ++i)

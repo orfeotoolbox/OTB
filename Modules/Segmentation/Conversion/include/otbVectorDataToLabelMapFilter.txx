@@ -295,7 +295,6 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap>
         CorrectFunctorType correct;
         PolygonPointerType correctPolygonExtRing = correct(dataNode->GetPolygonExteriorRing());
 
-        typedef typename DataNodeType::PolygonType PolygonType;
         typedef typename PolygonType::RegionType   RegionType;
         typedef typename PolygonType::VertexType   VertexType;
         typedef typename IndexType::IndexValueType IndexValueType;

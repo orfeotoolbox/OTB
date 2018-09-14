@@ -87,12 +87,13 @@ public:
   typedef typename InputGraphType::VertexDescriptorType VertexDescriptorType;
   typedef typename InputGraphType::RCC8ValueType        RCC8ValueType;
   typedef typename VertexType::AttributesMapType        AttributesMapType;
+  typedef typename AttributesMapType::iterator          IteratorType;
 
   /** Set the filename */
   itkSetStringMacro(FileName);
   /** Get the filename */
   itkGetStringMacro(FileName);
-  
+
   using Superclass::SetInput;
   /**
    * Set the input graph.

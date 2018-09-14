@@ -57,12 +57,6 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
            const typename TInput2::ImageType * img2,
            const TInputROIImage * imgROI)
 {
-  typedef ROIdataConversion<typename TInput1::ImageType, TInputROIImage>
-  ROIConversionType1;
-
-  typedef itk::ConstNeighborhoodIterator<
-      typename ROIConversionType1::OutputImageType> ROIInputType1;
-
   typename ROIConversionType1::Pointer conversion1 = ROIConversionType1::New();
   conversion1->SetInputImage(img1);
   conversion1->SetROIImage(imgROI);
