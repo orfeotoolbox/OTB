@@ -71,7 +71,7 @@ SpatialReference::~SpatialReference() noexcept {}
 
 SpatialReference & SpatialReference::operator=(const SpatialReference& other) noexcept
 {
-  m_SR = std::unique_ptr<OGRSpatialReference>(other.m_SR->Clone());
+  m_SR.reset(other.m_SR->Clone());
   return *this;
 }
 
