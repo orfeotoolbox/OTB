@@ -24,7 +24,9 @@ otb_module(OTBMapnik
   DEPENDS
     
   TEST_DEPENDS
-    
+
+  DEPRECATED
+
   DESCRIPTION
     "${DOCUMENTATION}"
   )
