@@ -134,7 +134,7 @@ VectorImageModel
   // Setup GenericRSTransform
   m_ToWgs84 = otb::GenericRSTransform<>::New();
   m_ToWgs84->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
-  m_ToWgs84->SetOutputProjectionRef(otb::SpatialReference().ToWkt());
+  m_ToWgs84->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
   m_ToWgs84->InstantiateTransform();
 
   //Compute estimated spacing here

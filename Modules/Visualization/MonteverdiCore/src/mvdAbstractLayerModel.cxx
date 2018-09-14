@@ -156,7 +156,7 @@ AbstractLayerModel
 	  ? ToStdString( tr( STR_SENSOR ) )
 	  : ToStdString( tr( STR_UNKNOWN ) ) );
 
-  int code = otb::SpatialReference(wkt).ToEPSG();
+  int code = otb::SpatialReference::FromDescription(wkt).ToEPSG();
   if(code < 0)
     return ToStdString( tr( STR_UNKNOWN ) );
   else if(code == 0)
