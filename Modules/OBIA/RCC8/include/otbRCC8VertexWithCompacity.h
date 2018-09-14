@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TPath, class TPrecision = float>
-class ITK_EXPORT RCC8VertexWithCompacity
+class RCC8VertexWithCompacity
   : public RCC8VertexBase<TPath>
 {
 public:

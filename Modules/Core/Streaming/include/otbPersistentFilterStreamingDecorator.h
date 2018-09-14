@@ -44,7 +44,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template <class TFilter>
-class ITK_EXPORT PersistentFilterStreamingDecorator
+class PersistentFilterStreamingDecorator
   : public itk::ProcessObject
 {
 public:

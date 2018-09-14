@@ -39,7 +39,7 @@ namespace otb
  *
  * \ingroup OTBIOONERA
  */
-class ITK_EXPORT ONERAImageIO : public otb::ImageIOBase
+class ONERAImageIO : public otb::ImageIOBase
 {
 public:
 

@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT NormalBayesMachineLearningModelFactory : public itk::ObjectFactoryBase
+class NormalBayesMachineLearningModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TPixel, unsigned int VImageDimension = 2>
-class ITK_EXPORT VectorImage : public itk::VectorImage<TPixel, VImageDimension>
+class VectorImage : public itk::VectorImage<TPixel, VImageDimension>
 {
 public:
 

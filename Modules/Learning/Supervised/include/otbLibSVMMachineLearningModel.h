@@ -30,7 +30,7 @@
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT LibSVMMachineLearningModel
+class LibSVMMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

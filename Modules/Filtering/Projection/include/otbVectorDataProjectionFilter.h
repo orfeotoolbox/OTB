@@ -65,7 +65,7 @@ namespace otb
   */
 
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataProjectionFilter :
+class VectorDataProjectionFilter :
   public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
 

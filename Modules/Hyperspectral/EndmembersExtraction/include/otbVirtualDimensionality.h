@@ -56,7 +56,7 @@ namespace otb
  * \ingroup OTBEndmembersExtraction
  */
 template<class TPrecision>
-class ITK_EXPORT VirtualDimensionality :
+class VirtualDimensionality :
   public itk::LightObject
 {
 public:

@@ -38,7 +38,7 @@ namespace otb
  */
 
 template <class TVectorData>
-class ITK_EXPORT VectorDataProperties : public itk::DataObject
+class VectorDataProperties : public itk::DataObject
 {
 public:
   /** Standard class typedefs. */

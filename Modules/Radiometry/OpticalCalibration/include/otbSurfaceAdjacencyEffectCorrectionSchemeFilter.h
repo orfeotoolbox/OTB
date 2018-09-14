@@ -138,7 +138,7 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SurfaceAdjacencyEffectCorrectionSchemeFilter :
+class SurfaceAdjacencyEffectCorrectionSchemeFilter :
   public UnaryFunctorNeighborhoodImageFilter<
       TInputImage,
       TOutputImage,

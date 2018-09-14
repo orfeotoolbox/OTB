@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBStereo
  */
 template <class TPrecision = float, class TLabel = int>
-class ITK_EXPORT LineOfSightOptimizer :
+class LineOfSightOptimizer :
   public itk::Object
 {
 public:

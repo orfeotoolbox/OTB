@@ -71,7 +71,7 @@ namespace otb
  * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
-class ITK_EXPORT FineRegistrationImageFilter : public itk::ImageToImageFilter<TInputImage, T0utputCorrelation>
+class FineRegistrationImageFilter : public itk::ImageToImageFilter<TInputImage, T0utputCorrelation>
 {
 public:
   /** Standard class typedefs. */

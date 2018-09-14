@@ -57,8 +57,8 @@ namespace Functor
 {
 
 template<class TLabelObject>
-//class ITK_EXPORT OBIAMuParserFunctor : public itk::LightObject
-class ITK_EXPORT OBIAMuParserFunctor
+//class OBIAMuParserFunctor : public itk::LightObject
+class OBIAMuParserFunctor
 {
 public:
   typedef Parser ParserType;

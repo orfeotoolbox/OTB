@@ -54,7 +54,7 @@ namespace otb
  * \ingroup OTBEndmembersExtraction
  */
 template<class TPrecision>
-class ITK_EXPORT EigenvalueLikelihoodMaximisation :
+class EigenvalueLikelihoodMaximisation :
   public itk::LightObject
 {
 public:

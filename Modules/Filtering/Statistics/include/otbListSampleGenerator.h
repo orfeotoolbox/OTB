@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template <class TImage, class TVectorData>
-class ITK_EXPORT ListSampleGenerator :
+class ListSampleGenerator :
   public itk::ProcessObject
 {
 public:

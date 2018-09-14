@@ -65,7 +65,7 @@ namespace otb
  */
 
 template <class TLabel>
-class ITK_EXPORT LabelToProSailParameters : public LabelToSimulationParametersBase<TLabel>
+class LabelToProSailParameters : public LabelToSimulationParametersBase<TLabel>
 {
 public:
 

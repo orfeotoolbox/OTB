@@ -31,7 +31,7 @@ namespace otb
  * \ingroup OTBUnsupervised
  */
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT SharkKMeansMachineLearningModelFactory : public itk::ObjectFactoryBase
+class SharkKMeansMachineLearningModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

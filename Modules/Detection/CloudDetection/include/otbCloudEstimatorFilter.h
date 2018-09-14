@@ -39,7 +39,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor<
         typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-class ITK_EXPORT CloudEstimatorFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+class CloudEstimatorFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */

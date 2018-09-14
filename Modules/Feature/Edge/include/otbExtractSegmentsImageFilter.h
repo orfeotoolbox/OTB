@@ -47,7 +47,7 @@ namespace otb
 
 template <class TInputImage,
     class TOutputImage>
-class ITK_EXPORT ExtractSegmentsImageFilter :
+class ExtractSegmentsImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -44,7 +44,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TInputImageList, class TOutputImageList, class TFilter>
-class ITK_EXPORT ImageListToImageListApplyFilter
+class ImageListToImageListApplyFilter
   : public ImageListToImageListFilter<typename TInputImageList::ImageType,
       typename TOutputImageList::ImageType>
 {

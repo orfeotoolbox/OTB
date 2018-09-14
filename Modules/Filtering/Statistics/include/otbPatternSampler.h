@@ -36,7 +36,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class ITK_EXPORT PatternSampler : public SamplerBase
+class PatternSampler : public SamplerBase
 {
 public:
   typedef PatternSampler  Self;

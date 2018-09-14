@@ -113,7 +113,7 @@ public:
 
 // Software Guide : BeginCodeSnippet
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT MyChangeDetectorImageFilter :
+class MyChangeDetectorImageFilter :
   public otb::BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       MyChangeDetector<

@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT FastICAInternalOptimizerVectorImageFilter
+class FastICAInternalOptimizerVectorImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

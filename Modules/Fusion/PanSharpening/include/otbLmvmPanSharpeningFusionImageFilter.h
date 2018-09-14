@@ -55,7 +55,7 @@ namespace otb
  **/
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
-class ITK_EXPORT LmvmPanSharpeningFusionImageFilter :
+class LmvmPanSharpeningFusionImageFilter :
   public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
 {
 public:

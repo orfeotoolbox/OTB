@@ -63,7 +63,7 @@ public:
 }
 
 template <class TInputImageRealPart, class TInputImageImaginaryPart, class TOutputImage>
-class ITK_EXPORT RealAndImaginaryImageToComplexImageFilter :
+class RealAndImaginaryImageToComplexImageFilter :
     public itk::BinaryFunctorImageFilter<TInputImageRealPart,
                         TInputImageImaginaryPart, TOutputImage,
                         Function::RealAndImaginaryToComplex<

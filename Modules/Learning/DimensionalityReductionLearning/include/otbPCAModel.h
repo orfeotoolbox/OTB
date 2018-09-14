@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue>
-class ITK_EXPORT PCAModel
+class PCAModel
   : public  MachineLearningModel<
     itk::VariableLengthVector< TInputValue >,
     itk::VariableLengthVector< TInputValue > >    

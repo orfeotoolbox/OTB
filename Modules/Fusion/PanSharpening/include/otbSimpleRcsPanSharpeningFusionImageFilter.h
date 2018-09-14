@@ -49,7 +49,7 @@ namespace otb
  *
  */
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
-class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
+class SimpleRcsPanSharpeningFusionImageFilter :
   public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
 {
 public:

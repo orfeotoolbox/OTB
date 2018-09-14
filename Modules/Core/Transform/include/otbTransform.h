@@ -37,7 +37,7 @@ namespace otb
 template< class TScalarType,
           unsigned int NInputDimensions = 3,
           unsigned int NOutputDimensions = 3 >
-class ITK_EXPORT Transform : public itk::Transform<TScalarType,          // Data type for scalars
+class Transform : public itk::Transform<TScalarType,          // Data type for scalars
       NInputDimensions,                                                       // Number of dimensions in the input space
       NOutputDimensions>                                                       // Number of dimensions in the output space
 {

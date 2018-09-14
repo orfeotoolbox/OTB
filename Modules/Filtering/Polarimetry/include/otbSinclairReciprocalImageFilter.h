@@ -63,7 +63,7 @@ template <class TInputImageHH, class TInputImageHV_VH,
         typename TInputImageHV_VH::PixelType,
         typename TInputImageVV::PixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT SinclairReciprocalImageFilter :  public itk::TernaryFunctorImageFilter<TInputImageHH,
+class SinclairReciprocalImageFilter :  public itk::TernaryFunctorImageFilter<TInputImageHH,
       TInputImageHV_VH, TInputImageVV,
       TOutputImage, TFunction>
 {

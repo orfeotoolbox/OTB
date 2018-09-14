@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBSimulation
  */
 
-class ITK_EXPORT ProSailParameters : public itk::DataObject
+class ProSailParameters : public itk::DataObject
 {
    public:
       /** Standard class typedefs */

@@ -48,7 +48,7 @@ class TImage,
 class TCoordRep = double,
 class TPrecision = double
 >
-class ITK_EXPORT NDVIDataNodeFeatureFunction :
+class NDVIDataNodeFeatureFunction :
     public DataNodeImageFunction<TImage, std::vector<TPrecision>, TCoordRep, TPrecision>
 {
 public:

@@ -43,7 +43,7 @@ namespace otb
 
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT RadiometricMomentsImageFilter :
+class RadiometricMomentsImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

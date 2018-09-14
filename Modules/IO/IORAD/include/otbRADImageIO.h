@@ -40,7 +40,7 @@ namespace otb
  *
  * \ingroup OTBIORAD
  */
-class ITK_EXPORT RADImageIO : public otb::ImageIOBase
+class RADImageIO : public otb::ImageIOBase
 {
 public:
 

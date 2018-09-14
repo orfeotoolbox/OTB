@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template<class TImage>
-class ITK_EXPORT NumberOfDivisionsTiledStreamingManager : public StreamingManager<TImage>
+class NumberOfDivisionsTiledStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */

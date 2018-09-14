@@ -207,7 +207,7 @@ private:
 template<class TImage,
     class TLabelImage = Image<typename TImage::PixelType,
         TImage::ImageDimension> >
-class ITK_EXPORT ShapeAttributesLabelMapFilter
+class ShapeAttributesLabelMapFilter
   : public otb::LabelMapFeaturesFunctorImageFilter
   <TImage,
       typename Functor::ShapeAttributesLabelObjectFunctor

@@ -41,7 +41,7 @@ namespace otb
 template <class TInputImage,
     class TOutputImage,
     class TOutputImageDirection = TOutputImage>
-class ITK_EXPORT ImageToModulusAndDirectionImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ImageToModulusAndDirectionImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */

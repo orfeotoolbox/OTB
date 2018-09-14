@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBTestKernel
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DifferenceImageFilter :
+class DifferenceImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

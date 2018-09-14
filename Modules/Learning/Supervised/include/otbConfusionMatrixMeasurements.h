@@ -50,7 +50,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TConfusionMatrix = itk::VariableSizeMatrix<unsigned long>, class TLabel = int >
-class ITK_EXPORT ConfusionMatrixMeasurements :
+class ConfusionMatrixMeasurements :
   public itk::Object
 {
 public:

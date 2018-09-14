@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBMarkov
  */
 template< class TInput1, class TInput2>
-class ITK_EXPORT MRFEnergyFisherClassification: public MRFEnergy< TInput1, TInput2>
+class MRFEnergyFisherClassification: public MRFEnergy< TInput1, TInput2>
 {
 public:
   typedef MRFEnergyFisherClassification   Self;

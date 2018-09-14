@@ -59,7 +59,7 @@ namespace otb
 
 template <typename TInputImage, typename TOutputImage,
           typename TInterpolatorPrecision = double>
-class ITK_EXPORT GridResampleImageFilter :
+class GridResampleImageFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

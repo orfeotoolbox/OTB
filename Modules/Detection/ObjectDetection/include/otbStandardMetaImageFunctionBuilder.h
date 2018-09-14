@@ -56,7 +56,7 @@ namespace otb
  */
 
 template <class TPrecision = double, class TCoordRep = double>
-class ITK_EXPORT StandardMetaImageFunctionBuilder :
+class StandardMetaImageFunctionBuilder :
     public itk::LightObject
 {
 public:

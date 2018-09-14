@@ -39,7 +39,7 @@ namespace otb
  */
 
 template < class TInputImage , class TLut , class TOutputImage >
-class ITK_EXPORT ApplyGainFilter :
+class ApplyGainFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public :

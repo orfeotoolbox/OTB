@@ -49,7 +49,7 @@ namespace otb
  * \ingroup OTBDescriptors
  */
 template <class TInputImage, class TOutputPointSet>
-class ITK_EXPORT SiftFastImageFilter
+class SiftFastImageFilter
   : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 public:

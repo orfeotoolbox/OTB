@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template<class TImage>
-class ITK_EXPORT RAMDrivenTiledStreamingManager : public StreamingManager<TImage>
+class RAMDrivenTiledStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */

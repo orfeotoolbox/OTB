@@ -50,7 +50,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage, class TSampler>
-class ITK_EXPORT PersistentOGRDataToSamplePositionFilter :
+class PersistentOGRDataToSamplePositionFilter :
   public PersistentSamplingFilterBase<TInputImage, TMaskImage>
 {
 public:
@@ -173,7 +173,7 @@ private:
  * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage = otb::Image<unsigned char> , class TSampler = otb::PeriodicSampler >
-class ITK_EXPORT OGRDataToSamplePositionFilter :
+class OGRDataToSamplePositionFilter :
   public PersistentFilterStreamingDecorator<PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler> >
 {
 public:

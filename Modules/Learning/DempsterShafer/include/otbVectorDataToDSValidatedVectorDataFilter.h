@@ -75,7 +75,7 @@ namespace otb
  */
 
 template <class TVectorData, class TPrecision=float>
-class ITK_EXPORT VectorDataToDSValidatedVectorDataFilter :
+class VectorDataToDSValidatedVectorDataFilter :
 public otb::VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:

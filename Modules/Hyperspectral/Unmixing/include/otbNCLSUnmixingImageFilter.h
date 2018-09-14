@@ -122,7 +122,7 @@ private:
  * \ingroup OTBUnmixing
  */
 template <class TInputImage, class TOutputImage, class TPrecision>
-class ITK_EXPORT NCLSUnmixingImageFilter :
+class NCLSUnmixingImageFilter :
   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::NCLSUnmixingFunctor<typename TInputImage::PixelType,
           typename TOutputImage::PixelType, TPrecision> >

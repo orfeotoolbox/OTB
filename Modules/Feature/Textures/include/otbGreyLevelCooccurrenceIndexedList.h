@@ -63,7 +63,7 @@ namespace otb
 */
 
 template <class TPixel>
-class ITK_EXPORT GreyLevelCooccurrenceIndexedList : public itk::LightObject
+class GreyLevelCooccurrenceIndexedList : public itk::LightObject
 {
 public:
 

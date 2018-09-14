@@ -47,7 +47,7 @@ namespace otb
 */
 
 template<class TInput1, class TInput2>
-class ITK_EXPORT MRFEnergyEdgeFidelity : public MRFEnergy<TInput1, TInput2>
+class MRFEnergyEdgeFidelity : public MRFEnergy<TInput1, TInput2>
 {
 public:
   typedef MRFEnergyEdgeFidelity         Self;

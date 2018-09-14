@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
-class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<TTransform>
+class SVY21MapProjection : public TransMercatorMapProjection<TTransform>
 {
 public:
   /** Standard class typedefs. */

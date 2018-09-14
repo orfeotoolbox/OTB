@@ -46,7 +46,7 @@ namespace otb {
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage>
-class ITK_EXPORT BoxAndWhiskerImageFilter
+class BoxAndWhiskerImageFilter
   : public itk::InPlaceImageFilter<TInputImage>
 {
 public:

@@ -59,7 +59,7 @@ template <TransformDirection::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
-class ITK_EXPORT GenericMapProjection : public Transform<TScalarType,       // Data type for scalars
+class GenericMapProjection : public Transform<TScalarType,       // Data type for scalars
       NInputDimensions,                                                         // Number of dimensions in the input space
       NOutputDimensions>                                                         // Number of dimensions in the output space
 {

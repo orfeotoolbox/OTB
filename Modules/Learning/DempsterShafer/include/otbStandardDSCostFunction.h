@@ -56,7 +56,7 @@ namespace otb
  */
 
 template <class TDSValidationFilter>
-class ITK_EXPORT StandardDSCostFunction :
+class StandardDSCostFunction :
 public itk::SingleValuedCostFunction
 {
 public:

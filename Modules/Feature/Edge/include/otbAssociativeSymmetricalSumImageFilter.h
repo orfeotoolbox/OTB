@@ -49,7 +49,7 @@ namespace Functor
  * \ingroup OTBEdge
  */
 template<class TInput1, class TInput2, class TOutput>
-class ITK_EXPORT AssociativeSymmetricalSum
+class AssociativeSymmetricalSum
 {
 public:
   AssociativeSymmetricalSum() {};
@@ -69,7 +69,7 @@ public:
 }
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT AssociativeSymmetricalSumImageFilter :
+class AssociativeSymmetricalSumImageFilter :
   public
   itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage,
       Functor::AssociativeSymmetricalSum<

@@ -32,7 +32,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT LibSVMMachineLearningModelFactory : public itk::ObjectFactoryBase
+class LibSVMMachineLearningModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

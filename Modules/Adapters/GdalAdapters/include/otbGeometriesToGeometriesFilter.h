@@ -331,7 +331,7 @@ private:
  * \ingroup OTBGdalAdapters
  */
 template <class TransformationFunctor, class FieldTransformationPolicy = FieldCopyTransformation>
-class ITK_EXPORT DefaultGeometriesToGeometriesFilter
+class DefaultGeometriesToGeometriesFilter
 : public GeometriesToGeometriesFilter
 , public TransformationFunctorDispatcher<TransformationFunctor, typename TransformationFunctor::TransformedElementType, FieldTransformationPolicy>
 {

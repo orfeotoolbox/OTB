@@ -68,7 +68,7 @@ template<
          class TOutputImage=TInputImage,
          class TKernel=typename itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension>
          >
-class ITK_EXPORT NeighborhoodMajorityVotingImageFilter :
+class NeighborhoodMajorityVotingImageFilter :
     public itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
 {
 public:

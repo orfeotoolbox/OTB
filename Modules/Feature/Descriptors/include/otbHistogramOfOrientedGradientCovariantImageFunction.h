@@ -68,7 +68,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputPrecision = double, class TCoordRep = double >
-class ITK_EXPORT HistogramOfOrientedGradientCovariantImageFunction :
+class HistogramOfOrientedGradientCovariantImageFunction :
   public itk::ImageFunction< TInputImage, std::vector< std::vector<
        TOutputPrecision > >, TCoordRep >
 {

@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBUnsupervised
  */
 template<class TClassLabel>
-class ITK_EXPORT ContingencyTableCalculator : public itk::Object
+class ContingencyTableCalculator : public itk::Object
 {
 public:
   /** Standard class typedefs */

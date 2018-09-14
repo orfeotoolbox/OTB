@@ -49,7 +49,7 @@ namespace otb
  */
 
 template<class TInput1, class TInput2>
-class ITK_EXPORT MRFEnergyGaussian : public MRFEnergy<TInput1, TInput2>
+class MRFEnergyGaussian : public MRFEnergy<TInput1, TInput2>
 {
 public:
   typedef MRFEnergyGaussian             Self;

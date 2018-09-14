@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBEdge
  */
 template<class TInputImage, class TOutputPath>
-class ITK_EXPORT PersistentVectorizationImageFilter :
+class PersistentVectorizationImageFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:

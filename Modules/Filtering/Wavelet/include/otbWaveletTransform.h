@@ -55,7 +55,7 @@ namespace otb {
  */
 template <class TInputImage, class TOutputImage, class TFilter,
     Wavelet::WaveletDirection TDirectionOfTransformation>
-class ITK_EXPORT WaveletTransform
+class WaveletTransform
   : public itk::ImageSource<TOutputImage>
 {
 public:
@@ -106,7 +106,7 @@ private:
  * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
+class WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
   : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
@@ -232,7 +232,7 @@ private:
  * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
+class WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
   : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
 public:

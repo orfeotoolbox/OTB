@@ -68,7 +68,7 @@ namespace otb
  * \ingroup OTBCarto
  */
 template <class TInputImage>
-class ITK_EXPORT MapFileProductWriter : public itk::ProcessObject
+class MapFileProductWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

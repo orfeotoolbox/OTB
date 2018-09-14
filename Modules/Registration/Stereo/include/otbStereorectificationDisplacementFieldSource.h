@@ -87,7 +87,7 @@ namespace otb
  * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputImage >
-class ITK_EXPORT StereorectificationDisplacementFieldSource
+class StereorectificationDisplacementFieldSource
   : public itk::ImageSource<TOutputImage>
 {
 public:

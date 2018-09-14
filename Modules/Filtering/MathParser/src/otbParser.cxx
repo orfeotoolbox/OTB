@@ -26,7 +26,7 @@
 namespace otb
 {
 
-class ITK_EXPORT ParserImpl : public itk::LightObject
+class ParserImpl : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */

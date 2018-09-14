@@ -136,7 +136,7 @@ public:
  * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MuellerToReciprocalCovarianceImageFilter :
+class MuellerToReciprocalCovarianceImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::MuellerToReciprocalCovarianceFunctor<
     typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {

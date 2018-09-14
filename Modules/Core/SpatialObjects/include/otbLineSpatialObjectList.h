@@ -35,7 +35,7 @@ namespace otb
  * \ingroup OTBSpatialObjects
  */
 
-class ITK_EXPORT LineSpatialObjectList :        public std::list<itk::LineSpatialObject<2>::Pointer>,
+class LineSpatialObjectList :        public std::list<itk::LineSpatialObject<2>::Pointer>,
   public itk::DataObject
 
 {

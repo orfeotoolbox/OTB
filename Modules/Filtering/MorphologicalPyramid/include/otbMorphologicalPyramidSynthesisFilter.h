@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MorphologicalPyramidSynthesisFilter
+class MorphologicalPyramidSynthesisFilter
   : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:

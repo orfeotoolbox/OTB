@@ -45,7 +45,7 @@ namespace Statistics {
 template < class TInputSampleList,
            class TLabelSampleList,
            class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ListSampleToBalancedListSampleFilter :
+class ListSampleToBalancedListSampleFilter :
     public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList,
                                                          TOutputSampleList>
 {

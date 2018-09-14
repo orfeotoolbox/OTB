@@ -107,7 +107,7 @@ namespace otb
  * \ingroup OTBMPITiffWriter
  */
 template <class TInputImage>
-class ITK_EXPORT SimpleParallelTiffWriter : public itk::ProcessObject
+class SimpleParallelTiffWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

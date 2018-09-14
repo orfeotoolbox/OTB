@@ -30,7 +30,7 @@ namespace otb
  *
  * \ingroup OTBIOMSTAR
  */
-class ITK_EXPORT MSTARImageIOFactory : public itk::ObjectFactoryBase
+class MSTARImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

@@ -75,7 +75,7 @@ public:
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TInputMaps, class TOutputImage>
-class ITK_EXPORT GeodesicMorphologyLevelingFilter
+class GeodesicMorphologyLevelingFilter
   : public itk::TernaryFunctorImageFilter<TInputImage, TInputImage,
       TInputImage, TOutputImage,
       Functor::LevelingFunctor<typename TInputImage::PixelType,

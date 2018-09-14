@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
   template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ClampImageFilter 
+  class ClampImageFilter 
   : public itk::UnaryFunctorImageFilter< TInputImage , TOutputImage ,
       Functor::ConvertTypeFunctor <typename TInputImage::PixelType ,
                                    typename TOutputImage::PixelType> >

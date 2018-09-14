@@ -62,7 +62,7 @@ namespace otb
  */
 
 template <class TInputImage>
-class ITK_EXPORT ContinuousMinimumMaximumImageCalculator :
+class ContinuousMinimumMaximumImageCalculator :
   public itk::Object
 {
 public:

@@ -43,7 +43,7 @@ namespace otb
 
 template <class TInputPath,
     class TOutput      = double>
-class ITK_EXPORT CompacityPathFunction :
+class CompacityPathFunction :
   public PathFunction<TInputPath, TOutput>
 {
 public:

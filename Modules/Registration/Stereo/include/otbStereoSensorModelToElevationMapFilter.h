@@ -80,7 +80,7 @@ namespace otb
  * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputHeight>
-class ITK_EXPORT StereoSensorModelToElevationFilter
+class StereoSensorModelToElevationFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputHeight>
 {
 public:

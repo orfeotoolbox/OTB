@@ -67,7 +67,7 @@ private:
  * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
-class ITK_EXPORT PointSetToDisplacementFieldGenerator
+class PointSetToDisplacementFieldGenerator
   : public itk::ImageSource<TDisplacementField>
 {
 public:

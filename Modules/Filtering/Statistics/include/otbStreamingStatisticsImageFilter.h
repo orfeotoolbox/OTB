@@ -49,7 +49,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template<class TInputImage>
-class ITK_EXPORT PersistentStatisticsImageFilter :
+class PersistentStatisticsImageFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -227,7 +227,7 @@ private:
  */
 
 template<class TInputImage>
-class ITK_EXPORT StreamingStatisticsImageFilter :
+class StreamingStatisticsImageFilter :
   public PersistentFilterStreamingDecorator<PersistentStatisticsImageFilter<TInputImage> >
 {
 public:

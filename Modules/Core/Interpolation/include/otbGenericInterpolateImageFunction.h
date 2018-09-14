@@ -42,7 +42,7 @@ namespace otb
  */
 template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
     class TCoordRep = double>
-class ITK_EXPORT GenericInterpolateImageFunction :
+class GenericInterpolateImageFunction :
   public itk::InterpolateImageFunction<TInputImage, TCoordRep>
 {
 public:

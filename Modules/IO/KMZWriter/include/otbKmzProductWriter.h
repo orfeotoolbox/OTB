@@ -64,7 +64,7 @@ namespace otb
  * \ingroup OTBKMZWriter
  */
 template <class TInputImage>
-class ITK_EXPORT KmzProductWriter : public itk::ProcessObject
+class KmzProductWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

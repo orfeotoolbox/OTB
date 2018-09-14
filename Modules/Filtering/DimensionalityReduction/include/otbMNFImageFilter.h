@@ -45,7 +45,7 @@ namespace otb {
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT MNFImageFilter
+class MNFImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -130,7 +130,7 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReflectanceToSurfaceReflectanceImageFilter :
+class ReflectanceToSurfaceReflectanceImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
       TOutputImage,
       typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<

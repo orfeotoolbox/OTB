@@ -36,7 +36,7 @@ class CvNormalBayesClassifier;
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT NormalBayesMachineLearningModel
+class NormalBayesMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

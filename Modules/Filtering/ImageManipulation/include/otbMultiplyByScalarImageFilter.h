@@ -68,7 +68,7 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MultiplyByScalarImageFilter :
+class MultiplyByScalarImageFilter :
   public itk::UnaryFunctorImageFilter<
       TInputImage, TOutputImage,
       Functor::MultiplyByScalar<

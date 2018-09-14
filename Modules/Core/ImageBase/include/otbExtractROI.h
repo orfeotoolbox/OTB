@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputPixel, class TOutputPixel>
-class ITK_EXPORT ExtractROI :
+class ExtractROI :
   public ExtractROIBase<Image<TInputPixel, 2>, Image<TOutputPixel, 2> >
 {
 public:

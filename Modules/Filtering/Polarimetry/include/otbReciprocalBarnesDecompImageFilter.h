@@ -130,7 +130,7 @@ private:
  * \sa ReciprocalBarnesDecompFunctor
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalBarnesDecompImageFilter :
+class ReciprocalBarnesDecompImageFilter :
    public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalBarnesDecompFunctor<
     typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {

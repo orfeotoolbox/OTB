@@ -43,7 +43,7 @@ template <Wavelet::Wavelet TMotherWaveletOperator,
     Wavelet::WaveletDirection TDirectionOfTransformation,
     class TPixel, unsigned int VDimension,
     class TAllocator = itk::NeighborhoodAllocator<TPixel> >
-class ITK_EXPORT WaveletHighPassOperator
+class WaveletHighPassOperator
   : public WaveletOperatorBase<TMotherWaveletOperator,
       TPixel, VDimension, TAllocator>
 {

@@ -136,7 +136,7 @@ private:
  * \ingroup OTBLabelMap
  */
 template<class TImage, class TFeatureImage>
-class ITK_EXPORT BandsStatisticsAttributesLabelMapFilter
+class BandsStatisticsAttributesLabelMapFilter
   : public LabelMapFeaturesFunctorImageFilter
   <TImage,
       typename Functor::BandStatsAttributesLabelObjectFunctor

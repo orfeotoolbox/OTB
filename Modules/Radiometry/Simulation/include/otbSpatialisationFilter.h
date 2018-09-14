@@ -50,7 +50,7 @@ namespace otb
  */
 
 template <class TLabelMap>
-class ITK_EXPORT SpatialisationFilter :
+class SpatialisationFilter :
   public LabelMapSource<TLabelMap>
 
 {

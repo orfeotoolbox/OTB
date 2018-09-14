@@ -32,7 +32,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TPath>
-class ITK_EXPORT PathListToPathListFilter
+class PathListToPathListFilter
   : public ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >
 {
 public:

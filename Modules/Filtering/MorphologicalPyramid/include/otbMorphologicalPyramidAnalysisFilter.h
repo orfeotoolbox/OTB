@@ -52,7 +52,7 @@ namespace otb
  * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage, class TMorphoFilter>
-class ITK_EXPORT MorphologicalPyramidAnalysisFilter
+class MorphologicalPyramidAnalysisFilter
   : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:

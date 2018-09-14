@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBSOM
  */
 template <class TInputImage, class TOutputImage, class TSOMMap, class TMaskImage = TOutputImage>
-class ITK_EXPORT SOMImageClassificationFilter
+class SOMImageClassificationFilter
   : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:

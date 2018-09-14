@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBMarkov
  */
 
-class ITK_EXPORT MRFOptimizer : public itk::Object
+class MRFOptimizer : public itk::Object
 {
 public:
   typedef MRFOptimizer                  Self;

@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBAnomalyDetection
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LocalRxDetectorNonThreadFilter:
+class LocalRxDetectorNonThreadFilter:
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

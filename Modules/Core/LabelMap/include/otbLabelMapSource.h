@@ -38,7 +38,7 @@ namespace otb
  */
 
 template <class TOutputLabelMap>
-class ITK_EXPORT LabelMapSource : public itk::ProcessObject
+class LabelMapSource : public itk::ProcessObject
 {
 public:
 

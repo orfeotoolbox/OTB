@@ -40,7 +40,7 @@ namespace otb
  */
 
 
-class ITK_EXPORT SimulationStep1Base : public itk::ProcessObject
+class SimulationStep1Base : public itk::ProcessObject
 {
 public:
 

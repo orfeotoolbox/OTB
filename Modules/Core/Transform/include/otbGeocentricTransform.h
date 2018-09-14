@@ -37,7 +37,7 @@ template <TransformDirection::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 3,
     unsigned int NOutputDimensions = 3>
-class ITK_EXPORT GeocentricTransform :
+class GeocentricTransform :
     public Transform<TScalarType,  // Data type for scalars
                      NInputDimensions,  // Number of dimensions in the input space
                      NOutputDimensions>  // Number of dimensions in the output space

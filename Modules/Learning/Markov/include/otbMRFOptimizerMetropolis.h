@@ -48,7 +48,7 @@ namespace otb
  * \ingroup OTBMarkov
  */
 
-class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
+class MRFOptimizerMetropolis : public MRFOptimizer
 {
 public:
 

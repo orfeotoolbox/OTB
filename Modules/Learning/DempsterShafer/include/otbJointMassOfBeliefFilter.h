@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBDempsterShafer
  */
 template <class TMassFunction>
-class ITK_EXPORT JointMassOfBeliefFilter : public itk::ProcessObject
+class JointMassOfBeliefFilter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */

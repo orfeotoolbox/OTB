@@ -42,7 +42,7 @@ namespace otb
  */
 
 template<class TInput1, class TInput2>
-class ITK_EXPORT MRFSamplerMAP : public MRFSampler<TInput1, TInput2>
+class MRFSamplerMAP : public MRFSampler<TInput1, TInput2>
 {
 public:
 

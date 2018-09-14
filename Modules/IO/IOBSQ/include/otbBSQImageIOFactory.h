@@ -30,7 +30,7 @@ namespace otb
  *
  * \ingroup OTBIOBSQ
  */
-class ITK_EXPORT BSQImageIOFactory : public itk::ObjectFactoryBase
+class BSQImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

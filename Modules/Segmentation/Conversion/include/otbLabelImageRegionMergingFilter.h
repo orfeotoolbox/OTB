@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBConversion
  */
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage = TInputLabelImage, class TOutputClusteredImage = TInputSpectralImage>
-class ITK_EXPORT LabelImageRegionMergingFilter
+class LabelImageRegionMergingFilter
   : public itk::ImageToImageFilter<TInputLabelImage, TOutputLabelImage>
 {
 public:

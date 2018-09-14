@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TCountFunction>
-class ITK_EXPORT BinaryImageToDensityImageFilter
+class BinaryImageToDensityImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

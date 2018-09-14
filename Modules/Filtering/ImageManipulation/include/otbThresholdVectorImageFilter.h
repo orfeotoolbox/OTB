@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
   template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ThresholdVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+  class ThresholdVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */

@@ -61,7 +61,7 @@ namespace otb
   */
 
 template <class TInputImage, class TInputPath, class TOutputImage>
-class ITK_EXPORT RemoveCarvingPathFilter : public itk::ImageAndPathToImageFilter<TInputImage, TInputPath, TOutputImage>
+class RemoveCarvingPathFilter : public itk::ImageAndPathToImageFilter<TInputImage, TInputPath, TOutputImage>
 {
 public:
   /** Standard class typedefs. */

@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
-class ITK_EXPORT NearestTransformDisplacementFieldGenerator
+class NearestTransformDisplacementFieldGenerator
   : public PointSetWithTransformToDisplacementFieldGenerator<TPointSet, TDisplacementField>
 {
 public:

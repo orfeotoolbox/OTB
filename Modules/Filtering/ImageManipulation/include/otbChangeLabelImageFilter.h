@@ -116,7 +116,7 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ChangeLabelImageFilter :
+class ChangeLabelImageFilter :
   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::VectorChangeLabel<typename TInputImage::PixelType,
           typename TOutputImage::PixelType> >

@@ -49,7 +49,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT VectorImageToIntensityImageFilter
+class VectorImageToIntensityImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

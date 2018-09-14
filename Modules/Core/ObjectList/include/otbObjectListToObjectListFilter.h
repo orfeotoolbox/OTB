@@ -43,7 +43,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TInputList, class TOutputList>
-class ITK_EXPORT ObjectListToObjectListFilter : public otb::ObjectListSource<TOutputList>
+class ObjectListToObjectListFilter : public otb::ObjectListSource<TOutputList>
 {
 public:
   /** Standard class typedefs. */

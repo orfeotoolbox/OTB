@@ -39,7 +39,7 @@ namespace Functor {
  * \ingroup OTBSOM
  */
 template <class TInput, class TOutput, class TDistanceMetric, class TMap>
-class ITK_EXPORT SOMbasedImageFilterFunctor
+class SOMbasedImageFilterFunctor
 {
 public:
   /** Standard typedefs */
@@ -101,7 +101,7 @@ private:
  */
 template <class TInputImage, class TOutputImage,
     class TDistanceMetric, class TMap>
-class ITK_EXPORT SOMbasedImageFilter
+class SOMbasedImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::SOMbasedImageFilterFunctor<typename TInputImage::PixelType,
           typename TOutputImage::PixelType,

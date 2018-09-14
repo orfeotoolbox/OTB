@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TPolygonList, class TOutputGraph>
-class ITK_EXPORT PolygonListToRCC8GraphFilter
+class PolygonListToRCC8GraphFilter
   : public RCC8GraphSource<TOutputGraph>
 {
 public:

@@ -59,7 +59,7 @@ namespace otb
  * \ingroup OTBRoadExtraction
  */
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT RoadExtractionFilter
+class RoadExtractionFilter
   : public ImageToPathListFilter<TInputImage, TOutputPath>
 {
 public:

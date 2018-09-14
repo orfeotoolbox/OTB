@@ -46,7 +46,7 @@ namespace MorphologicalPyramid
  * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT Resampler
+class Resampler
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

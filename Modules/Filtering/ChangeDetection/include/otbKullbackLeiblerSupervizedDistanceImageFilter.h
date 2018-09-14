@@ -108,7 +108,7 @@ private:
 } // Functor
 
 template <class TInputImage1, class TInputImage2, class TInputROIImage, class TOutputImage>
-class ITK_EXPORT KullbackLeiblerSupervizedDistanceImageFilter :
+class KullbackLeiblerSupervizedDistanceImageFilter :
   public otb::BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       Functor::KullbackLeiblerSupervizedDistance<

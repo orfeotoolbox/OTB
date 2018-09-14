@@ -41,7 +41,7 @@ class ParserImpl;
  *
  * \ingroup OTBMathParser
  */
-class ITK_EXPORT Parser : public itk::LightObject
+class Parser : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */

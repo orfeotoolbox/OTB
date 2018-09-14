@@ -86,7 +86,7 @@ private:
  */
 template<class TInputImage, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
-class ITK_EXPORT WindowedSincInterpolateImageGaussianFunction :
+class WindowedSincInterpolateImageGaussianFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
       typename Function::GaussianWindowFunction<TInputInterpolator,
           TOutputInterpolator>,

@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBProjection
   */
 template <class TInputImage, class TOutputVectorData>
-class ITK_EXPORT ImageToEnvelopeVectorDataFilter :
+class ImageToEnvelopeVectorDataFilter :
   public otb::VectorDataSource<TOutputVectorData>
 {
 

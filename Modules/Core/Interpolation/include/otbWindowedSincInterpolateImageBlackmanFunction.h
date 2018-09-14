@@ -93,7 +93,7 @@ private:
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
-class ITK_EXPORT WindowedSincInterpolateImageBlackmanFunction :
+class WindowedSincInterpolateImageBlackmanFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
       typename Function::BlackmanWindowFunction<TInputInterpolator,
           TOutputInterpolator>,

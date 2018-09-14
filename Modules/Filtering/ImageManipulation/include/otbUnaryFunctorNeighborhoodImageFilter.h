@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT UnaryFunctorNeighborhoodImageFilter
+class UnaryFunctorNeighborhoodImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

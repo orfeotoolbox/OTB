@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBRCC8
  */
-class ITK_EXPORT RCC8GraphFileReaderException
+class RCC8GraphFileReaderException
   : public itk::ExceptionObject
 {
 public:
@@ -65,7 +65,7 @@ public:
  * \ingroup OTBRCC8
  */
 template <class TOutputGraph>
-class ITK_EXPORT RCC8GraphFileReader : public RCC8GraphSource<TOutputGraph>
+class RCC8GraphFileReader : public RCC8GraphSource<TOutputGraph>
 {
 public:
   /** Standards typedef */

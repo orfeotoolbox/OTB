@@ -59,7 +59,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputPointSet>
-class ITK_EXPORT ImageToSURFKeyPointSetFilter
+class ImageToSURFKeyPointSetFilter
   : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 

@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBLearningBase
  */
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension = 10, class TMaskImage = TOutputImage>
-class ITK_EXPORT KMeansImageClassificationFilter
+class KMeansImageClassificationFilter
   : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:

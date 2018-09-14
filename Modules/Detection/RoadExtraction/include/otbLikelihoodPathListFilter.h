@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBRoadExtraction
  */
 template <class TPath, class TImage>
-class ITK_EXPORT LikelihoodPathListFilter
+class LikelihoodPathListFilter
   : public PathListToPathListFilter<TPath>
 {
 public:

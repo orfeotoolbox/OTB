@@ -55,7 +55,7 @@ namespace otb
 
 //   template <class TPath>
 template <class TPath>
-class ITK_EXPORT RemoveTortuousPathListFilter :
+class RemoveTortuousPathListFilter :
   public UnaryFunctorObjectListBooleanFilter<
       ObjectList<TPath>,
       ObjectList<TPath>,

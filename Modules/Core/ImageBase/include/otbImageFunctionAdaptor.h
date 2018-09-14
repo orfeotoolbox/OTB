@@ -46,7 +46,7 @@ namespace otb
  */
 
 template< class TInternalImageFunctionType, class TOutputPrecision = double >
-class ITK_EXPORT ImageFunctionAdaptor :
+class ImageFunctionAdaptor :
     public itk::ImageFunction< typename TInternalImageFunctionType::InputImageType,
                                itk::VariableLengthVector<TOutputPrecision>,
                                typename TInternalImageFunctionType::CoordRepType >

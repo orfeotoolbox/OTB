@@ -40,7 +40,7 @@ namespace otb {
  * \ingroup OTBCommon
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DecimateImageFilter :
+class DecimateImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

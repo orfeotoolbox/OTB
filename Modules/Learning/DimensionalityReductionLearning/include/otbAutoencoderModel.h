@@ -56,7 +56,7 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, class NeuronType>
-class ITK_EXPORT AutoencoderModel
+class AutoencoderModel
   : public  MachineLearningModel<
     itk::VariableLengthVector< TInputValue>,
     itk::VariableLengthVector< TInputValue> >

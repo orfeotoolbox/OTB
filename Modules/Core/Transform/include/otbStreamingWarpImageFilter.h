@@ -49,7 +49,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TDisplacementField>
-class ITK_EXPORT StreamingWarpImageFilter
+class StreamingWarpImageFilter
   :  public itk::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 {
 public:

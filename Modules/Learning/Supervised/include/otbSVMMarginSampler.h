@@ -35,7 +35,7 @@ namespace otb
  */
 
 template< class TSample, class TModel >
-class ITK_EXPORT SVMMarginSampler :
+class SVMMarginSampler :
       public itk::Statistics::SampleClassifierFilter< TSample >
 {
 public:

@@ -30,7 +30,7 @@ namespace otb
  *
  * \ingroup OTBIOONERA
  */
-class ITK_EXPORT ONERAImageIOFactory : public itk::ObjectFactoryBase
+class ONERAImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

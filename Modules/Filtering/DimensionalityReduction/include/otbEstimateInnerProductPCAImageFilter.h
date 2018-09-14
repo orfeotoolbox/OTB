@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT EstimateInnerProductPCAImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class EstimateInnerProductPCAImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */

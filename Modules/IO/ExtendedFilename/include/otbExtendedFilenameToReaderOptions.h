@@ -49,7 +49,7 @@ namespace otb
  * \ingroup OTBExtendedFilename
  */
 
-class ITK_EXPORT ExtendedFilenameToReaderOptions : public ExtendedFilenameHelper
+class ExtendedFilenameToReaderOptions : public ExtendedFilenameHelper
 {
 public:
 /** Standard class typedefs. */

@@ -36,7 +36,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT GradientBoostedTreeMachineLearningModelFactory : public itk::ObjectFactoryBase
+class GradientBoostedTreeMachineLearningModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

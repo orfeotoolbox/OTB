@@ -91,7 +91,7 @@ public:
  */
 
 template <class TInputImage, class TPrecision = double>
-class ITK_EXPORT LineSegmentDetector :
+class LineSegmentDetector :
     public VectorDataSource< otb::VectorData<TPrecision> >
 {
 public:

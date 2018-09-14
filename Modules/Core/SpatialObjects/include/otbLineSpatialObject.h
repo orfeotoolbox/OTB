@@ -36,7 +36,7 @@ namespace otb
  * \ingroup OTBSpatialObjects
  */
 template <unsigned int VDimension = 3>
-class ITK_EXPORT LineSpatialObject
+class LineSpatialObject
   : public itk::PointBasedSpatialObject<VDimension>
 {
 public:

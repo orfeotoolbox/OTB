@@ -71,7 +71,7 @@ namespace otb
 
 template<class TInputImage, class TOutputImage, class TFunction = Functor::MaskMuParserFunctor<
     typename TInputImage::PixelType> >
-class ITK_EXPORT MaskMuParserFilter: public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class MaskMuParserFilter: public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */

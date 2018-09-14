@@ -37,7 +37,7 @@ namespace otb
  */
 
 template <class TLinesList, class TPointSet>
-class ITK_EXPORT LineSpatialObjectListToPointSetFilter : public itk::ProcessObject
+class LineSpatialObjectListToPointSetFilter : public itk::ProcessObject
 {
 public:
 

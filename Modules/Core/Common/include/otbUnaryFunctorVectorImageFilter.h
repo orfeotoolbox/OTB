@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBCommon
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT UnaryFunctorVectorImageFilter
+class UnaryFunctorVectorImageFilter
   : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:

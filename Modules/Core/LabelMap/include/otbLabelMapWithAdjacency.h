@@ -38,7 +38,7 @@ namespace otb
 */
 
 template <class TLabelObject >
-class ITK_EXPORT LabelMapWithAdjacency : public itk::LabelMap<TLabelObject>
+class LabelMapWithAdjacency : public itk::LabelMap<TLabelObject>
 {
 public:
   /** Standard class typedefs */

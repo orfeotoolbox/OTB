@@ -33,7 +33,7 @@ namespace otb
  *
  * \ingroup OTBRCC8
  */
-class ITK_EXPORT RCC8GraphFileWriterException
+class RCC8GraphFileWriterException
   : public itk::ExceptionObject
 {
 public:
@@ -67,7 +67,7 @@ public:
  * \ingroup OTBRCC8
  */
 template <class TInputGraph>
-class ITK_EXPORT RCC8GraphFileWriter
+class RCC8GraphFileWriter
   : public itk::ProcessObject
 {
 public:

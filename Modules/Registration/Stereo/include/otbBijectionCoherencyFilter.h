@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBStereo
  */
 template <class TDisparityImage, class TOutputImage = otb::Image<unsigned char> >
-class ITK_EXPORT BijectionCoherencyFilter :
+class BijectionCoherencyFilter :
     public itk::ImageToImageFilter<TDisparityImage,TOutputImage>
 {
 public:

@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBEdge
  */
-class ITK_EXPORT FillGapsFilter : public itk::ProcessObject
+class FillGapsFilter : public itk::ProcessObject
 {
 
 public:

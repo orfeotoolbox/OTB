@@ -44,7 +44,7 @@ namespace otb
  *
  * \ingroup OTBIOKML
  */
-class ITK_EXPORT KMLVectorDataIO
+class KMLVectorDataIO
   : public VectorDataIOBase
 {
 public:

@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-class ITK_EXPORT PerBandVectorImageFilter
+class PerBandVectorImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

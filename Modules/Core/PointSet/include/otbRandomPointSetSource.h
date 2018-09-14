@@ -44,7 +44,7 @@ namespace otb
  */
 
 template <class TOutputPointSet>
-class ITK_EXPORT RandomPointSetSource
+class RandomPointSetSource
   : public PointSetSource<TOutputPointSet>
 {
 

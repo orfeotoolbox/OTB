@@ -47,7 +47,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LeeImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class LeeImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimension */

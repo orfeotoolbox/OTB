@@ -64,7 +64,7 @@ namespace otb
  * \ingroup OTBSARCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT TerraSarBrightnessImageFilter :
+class TerraSarBrightnessImageFilter :
   public itk::UnaryFunctorImageFilter<
       TInputImage,
       TOutputImage,

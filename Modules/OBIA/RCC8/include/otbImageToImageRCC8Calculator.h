@@ -52,7 +52,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TInputImage>
-class ITK_EXPORT ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage, TInputImage>
+class ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */

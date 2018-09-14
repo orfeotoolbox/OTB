@@ -30,7 +30,7 @@ namespace otb
  *
  * \ingroup OTBIOLUM
  */
-class ITK_EXPORT LUMImageIOFactory : public itk::ObjectFactoryBase
+class LUMImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

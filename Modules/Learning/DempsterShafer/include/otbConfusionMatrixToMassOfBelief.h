@@ -52,7 +52,7 @@ namespace otb
  */
 
 template <class TConfusionMatrix = itk::VariableSizeMatrix<double>, class TLabel = int >
-class ITK_EXPORT ConfusionMatrixToMassOfBelief :
+class ConfusionMatrixToMassOfBelief :
   public itk::ProcessObject
 {
 public:

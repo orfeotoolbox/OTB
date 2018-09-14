@@ -52,7 +52,7 @@ namespace otb
  * \ingroup OTBRoadExtraction
  */
 template <class TPath>
-class ITK_EXPORT ParallelLinePathListFilter
+class ParallelLinePathListFilter
   : public PathListToPathListFilter<TPath>
 {
 public:

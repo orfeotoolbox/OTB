@@ -33,7 +33,7 @@ namespace otb
 namespace Functor
 {
 template <typename TInput, typename TVectorInput, typename TOutput>
-class ITK_EXPORT ImageAndVectorImageOperationFunctor
+class ImageAndVectorImageOperationFunctor
 {
 public:
   typedef typename TVectorInput::ValueType                        InternalInputPixelType;
@@ -121,7 +121,7 @@ protected:
  */
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-class ITK_EXPORT ImageAndVectorImageOperationFilter :
+class ImageAndVectorImageOperationFilter :
   public itk::BinaryFunctorImageFilter<TInputImage,
       TVectorInputImage,
       TOutputImage,

@@ -180,7 +180,7 @@ protected:
  * \ingroup OTBStatistics
  */
 template<class TInputVectorImage, class TLabelImage>
-class ITK_EXPORT PersistentStreamingStatisticsMapFromLabelImageFilter :
+class PersistentStreamingStatisticsMapFromLabelImageFilter :
 public PersistentImageFilter<TInputVectorImage, TInputVectorImage>
 {
 public:
@@ -347,7 +347,7 @@ private:
  */
 
 template<class TInputVectorImage, class TLabelImage>
-class ITK_EXPORT StreamingStatisticsMapFromLabelImageFilter :
+class StreamingStatisticsMapFromLabelImageFilter :
 public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage> >
 {
 public:

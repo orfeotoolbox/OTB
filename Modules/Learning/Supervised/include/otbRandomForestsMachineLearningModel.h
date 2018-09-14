@@ -34,7 +34,7 @@ class CvRTreesWrapper;
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT RandomForestsMachineLearningModel
+class RandomForestsMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

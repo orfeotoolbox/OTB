@@ -73,7 +73,7 @@ namespace otb
    */
 
 template <class TVectorData, class TImage>
-class ITK_EXPORT VectorDataToMapFilter : public itk::ImageSource<TImage>
+class VectorDataToMapFilter : public itk::ImageSource<TImage>
 {
 public:
   /** Standard class typedefs. */

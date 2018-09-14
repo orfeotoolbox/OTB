@@ -101,7 +101,7 @@ private:
  *
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalHuynenDecompImageFilter :
+class ReciprocalHuynenDecompImageFilter :
    public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalHuynenDecompFunctor<
     typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {

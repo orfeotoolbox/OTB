@@ -35,7 +35,7 @@ namespace otb
 namespace WrapperTest
 {
 
-class ITK_EXPORT StubApplication : public otb::Wrapper::Application
+class StubApplication : public otb::Wrapper::Application
 {
 public:
   /** Standard class typedefs. */

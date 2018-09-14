@@ -41,7 +41,7 @@ namespace Functor
  * \ingroup OTBColorMap
  */
 template<class TRGBPixel>
-class ITK_EXPORT HSVToRGBFunctor
+class HSVToRGBFunctor
 {
 public:
   HSVToRGBFunctor(){};
@@ -133,7 +133,7 @@ namespace Functor
  * \ingroup OTBColorMap
  */
 template<class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char> >
-class ITK_EXPORT ScalarToRainbowRGBPixelFunctor
+class ScalarToRainbowRGBPixelFunctor
   : public itk::Function::ColormapFunction<TScalar, TRGBPixel>
 //      public itk::Functor::ScalarToRGBPixelFunctor<TScalar>
 {

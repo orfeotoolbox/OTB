@@ -55,7 +55,7 @@ namespace otb {
  */
 template<class TLabelMap, class TVectorData,
          class TFieldsFunctor = Functor::LabelObjectFieldsFunctor<typename TLabelMap::LabelObjectType> >
-class ITK_EXPORT LabelMapToVectorDataFilter :
+class LabelMapToVectorDataFilter :
   public VectorDataSource<TVectorData>
 {
 public:

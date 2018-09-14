@@ -92,7 +92,7 @@ private:
  *
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalPauliDecompImageFilter :
+class ReciprocalPauliDecompImageFilter :
    public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalPauliDecompFunctor<
     typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {

@@ -38,7 +38,7 @@ namespace otb
 
 template <class TInputPointSet, class TOutputImage,
     class TDensityFunction = PointSetDensityFunction<TInputPointSet, typename TOutputImage::PixelType> >
-class ITK_EXPORT PointSetToDensityImageFilter
+class PointSetToDensityImageFilter
   : public itk::PointSetToImageFilter<TInputPointSet, TOutputImage>
 {
 

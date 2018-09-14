@@ -50,7 +50,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TInputPolygon>
-class ITK_EXPORT PolygonToPolygonRCC8Calculator : public itk::Object
+class PolygonToPolygonRCC8Calculator : public itk::Object
 {
 public:
   /** Standard class typedefs. */

@@ -66,7 +66,7 @@ template <class TInputImage,
     class TOutputImage,
     class TOutputImageDirection = TOutputImage,
     class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineRatioDetectorImageFilter :  public LineDetectorImageFilterBase<TInputImage, TOutputImage,
+class LineRatioDetectorImageFilter :  public LineDetectorImageFilterBase<TInputImage, TOutputImage,
       TOutputImageDirection,
       TInterpolator>
 {

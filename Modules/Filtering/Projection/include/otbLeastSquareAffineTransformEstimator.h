@@ -65,7 +65,7 @@ namespace otb {
  * \ingroup OTBProjection
  */
 template <class TPoint>
-class ITK_EXPORT LeastSquareAffineTransformEstimator :
+class LeastSquareAffineTransformEstimator :
   public itk::Object
 {
 public:

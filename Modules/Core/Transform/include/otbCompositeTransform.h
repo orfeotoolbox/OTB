@@ -56,7 +56,7 @@ template <class TFirstTransform,
     class TScalarType = typename TFirstTransform::ScalarType,
     unsigned int NInputDimensions = TFirstTransform::InputSpaceDimension,
     unsigned int NOutputDimensions = TSecondTransform::OutputSpaceDimension>
-class ITK_EXPORT CompositeTransform : public Transform<TScalarType,  // Data type for scalars
+class CompositeTransform : public Transform<TScalarType,  // Data type for scalars
       NInputDimensions,                                                       // Number of dimensions in the input space
       NOutputDimensions>                                                       // Number of dimensions in the output space
 {

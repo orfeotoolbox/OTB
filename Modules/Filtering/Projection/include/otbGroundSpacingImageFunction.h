@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT GroundSpacingImageFunction :
+class GroundSpacingImageFunction :
     public itk::ImageFunction<TInputImage, itk::Vector<float, 2>,
       TCoordRep>
 {

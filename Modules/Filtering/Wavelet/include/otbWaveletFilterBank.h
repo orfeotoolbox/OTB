@@ -85,7 +85,7 @@ namespace otb {
 template <class TInputImage, class TOutputImage,
     class TWaveletOperator,
     Wavelet::WaveletDirection TDirectionOfTransformation>
-class ITK_EXPORT WaveletFilterBank
+class WaveletFilterBank
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -154,7 +154,7 @@ private:
  * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
-class ITK_EXPORT WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
+class WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -339,7 +339,7 @@ private:
  * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
-class ITK_EXPORT WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
+class WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

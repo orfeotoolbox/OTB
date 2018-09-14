@@ -42,7 +42,7 @@ namespace otb
   */
 
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataTransformFilter :
+class VectorDataTransformFilter :
       public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
 

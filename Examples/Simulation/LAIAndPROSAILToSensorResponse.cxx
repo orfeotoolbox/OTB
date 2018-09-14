@@ -69,7 +69,7 @@ namespace otb
 
 // Software Guide : BeginCodeSnippet
 template < class TImage >
-class ITK_EXPORT ImageUniqueValuesCalculator : public itk::Object
+class ImageUniqueValuesCalculator : public itk::Object
 {
 public:
   typedef ImageUniqueValuesCalculator<TImage>   Self;
@@ -429,7 +429,7 @@ protected:
 // Software Guide : BeginCodeSnippet
 template <class TInputImage1, class TInputImage2, class TInputImage3,
     class TOutputImage, class TFunctor>
-class ITK_EXPORT TernaryFunctorImageFilterWithNBands :
+class TernaryFunctorImageFilterWithNBands :
   public itk::TernaryFunctorImageFilter< TInputImage1, TInputImage2,
   TInputImage3, TOutputImage, TFunctor >
 {

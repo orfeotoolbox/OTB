@@ -34,7 +34,7 @@ namespace otb
  *
  * \ingroup OTBRCC8
  */
-class ITK_EXPORT RCC8Edge : public itk::DataObject
+class RCC8Edge : public itk::DataObject
 {
 public:
   /** Standard class typedefs */

@@ -43,7 +43,7 @@ namespace Statistics {
  * \ingroup OTBStatistics
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT GaussianAdditiveNoiseSampleListFilter :
+class GaussianAdditiveNoiseSampleListFilter :
     public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 {
 public:

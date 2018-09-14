@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT ConcatenateVectorImageFilter
+class ConcatenateVectorImageFilter
   : public itk::ImageToImageFilter<TInputImage1, TOutputImage>
 {
 public:

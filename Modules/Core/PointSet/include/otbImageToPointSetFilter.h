@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TInputImage, class TOutputPointSet>
-class ITK_EXPORT ImageToPointSetFilter : public PointSetSource<TOutputPointSet>
+class ImageToPointSetFilter : public PointSetSource<TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */

@@ -43,7 +43,7 @@ namespace otb
 
 //RGBA to Scalar
 template <class TInternalInputPixelType, class TOutputPixelType>
-class ITK_EXPORT RGBAPixelConverter :
+class RGBAPixelConverter :
 public itk::ProcessObject
 {
 public:
@@ -79,7 +79,7 @@ private:
 
 //RGBA to RGBA
 template <class TInternalInputPixelType, class TInternalOutputPixelType>
-class ITK_EXPORT RGBAPixelConverter<TInternalInputPixelType,
+class RGBAPixelConverter<TInternalInputPixelType,
                                     typename itk::RGBAPixel<TInternalOutputPixelType> > :
 public itk::ProcessObject
 {
@@ -116,7 +116,7 @@ private:
 
 //RGBA to RGB
 template <class TInternalInputPixelType, class TInternalOutputPixelType>
-class ITK_EXPORT RGBAPixelConverter<TInternalInputPixelType,
+class RGBAPixelConverter<TInternalInputPixelType,
                                     typename itk::RGBPixel<TInternalOutputPixelType> > :
 public itk::ProcessObject
 {

@@ -36,7 +36,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class ITK_EXPORT RandomSampler : public SamplerBase
+class RandomSampler : public SamplerBase
 {
 public:
   typedef RandomSampler  Self;

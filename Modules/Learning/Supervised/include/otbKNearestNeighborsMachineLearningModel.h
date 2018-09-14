@@ -36,7 +36,7 @@ class CvKNearest;
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT KNearestNeighborsMachineLearningModel
+class KNearestNeighborsMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

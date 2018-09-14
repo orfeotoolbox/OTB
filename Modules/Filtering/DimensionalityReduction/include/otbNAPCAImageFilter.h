@@ -48,7 +48,7 @@ namespace otb {
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT NAPCAImageFilter
+class NAPCAImageFilter
   : public MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 {
 public:

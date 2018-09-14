@@ -38,7 +38,7 @@ namespace Functor
  * \ingroup OTBLabelMap
  */
 template<class TLabelObject>
-class ITK_EXPORT LabelObjectWithClassLabelFieldsFunctor
+class LabelObjectWithClassLabelFieldsFunctor
 {
 public:
   // The Label Object typedef

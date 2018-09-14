@@ -80,7 +80,7 @@ public:
  * \ingroup OTBRoadExtraction
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
-class ITK_EXPORT RemoveIsolatedByDirectionFilter
+class RemoveIsolatedByDirectionFilter
   : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
 {
 public:

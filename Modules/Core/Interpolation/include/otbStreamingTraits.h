@@ -52,7 +52,7 @@ namespace otb
  * \ingroup OTBInterpolation
  */
 template <class TImage>
-class ITK_EXPORT StreamingTraits
+class StreamingTraits
 {
 public:
   /** Standard class typedefs. */
@@ -95,7 +95,7 @@ public:
  * \ingroup OTBInterpolation
   */
 template <typename TPixel, unsigned int VImageDimension>
-class ITK_EXPORT StreamingTraits< otb::VectorImage<TPixel, VImageDimension> >
+class StreamingTraits< otb::VectorImage<TPixel, VImageDimension> >
 {
 public:
   /** Standard class typedefs. */

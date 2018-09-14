@@ -65,7 +65,7 @@ template <class TInputImageHH, class TInputImageHV,
         typename TInputImageVH::PixelType,
         typename TInputImageVV::PixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT SinclairImageFilter :  public otb::QuaternaryFunctorImageFilter<TInputImageHH,
+class SinclairImageFilter :  public otb::QuaternaryFunctorImageFilter<TInputImageHH,
       TInputImageHV, TInputImageVH,
       TInputImageVV, TOutputImage,
       TFunction>

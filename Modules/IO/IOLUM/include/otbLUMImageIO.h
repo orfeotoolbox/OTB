@@ -40,7 +40,7 @@ namespace otb
  *
  * \ingroup OTBIOLUM
  */
-class ITK_EXPORT LUMImageIO : public otb::ImageIOBase
+class LUMImageIO : public otb::ImageIOBase
 {
 public:
 

@@ -60,7 +60,7 @@ namespace otb
  */
 
 template <class TLabel>
-class ITK_EXPORT LabelToSimulationParametersBase : public itk::ProcessObject
+class LabelToSimulationParametersBase : public itk::ProcessObject
 {
 public:
 

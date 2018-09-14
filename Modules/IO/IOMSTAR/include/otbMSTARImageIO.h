@@ -37,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBIOMSTAR
  */
-class ITK_EXPORT MSTARImageIO : public otb::ImageIOBase
+class MSTARImageIO : public otb::ImageIOBase
 {
 public:
   /** Standard class typedefs. */

@@ -40,7 +40,7 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-  class ITK_EXPORT VarSol
+  class VarSol
   {
   public:
 

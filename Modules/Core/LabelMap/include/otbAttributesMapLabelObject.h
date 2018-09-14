@@ -51,7 +51,7 @@ namespace Functor
  * \ingroup OTBLabelMap
  */
 template<class TLabelObject>
-class ITK_EXPORT AttributesMapLabelObjectAccessor
+class AttributesMapLabelObjectAccessor
 {
 public:
   // The Label Object typedef
@@ -169,7 +169,7 @@ private:
  * \ingroup OTBLabelMap
  */
 template <class TLabel, unsigned int VImageDimension, class TAttributesValue>
-class ITK_EXPORT AttributesMapLabelObject
+class AttributesMapLabelObject
   : public itk::LabelObject<TLabel, VImageDimension>
 {
 public:

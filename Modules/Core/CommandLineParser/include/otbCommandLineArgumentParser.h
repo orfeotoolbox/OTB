@@ -32,7 +32,7 @@
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParserHelpException
+class CommandLineArgumentParserHelpException
   : public itk::ExceptionObject
 {
 public:
@@ -56,7 +56,7 @@ public:
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParserVersionException
+class CommandLineArgumentParserVersionException
   : public itk::ExceptionObject
 {
 public:
@@ -80,7 +80,7 @@ public:
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParserArgumentErrorException
+class CommandLineArgumentParserArgumentErrorException
   : public itk::ExceptionObject
 {
 public:
@@ -112,7 +112,7 @@ namespace otb
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
+class CommandLineArgumentParseResult : public itk::ProcessObject
 {
 public:
   typedef CommandLineArgumentParseResult Self;
@@ -214,7 +214,7 @@ private:
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParser : public itk::ProcessObject
+class CommandLineArgumentParser : public itk::ProcessObject
 {
 public:
   typedef CommandLineArgumentParser     Self;

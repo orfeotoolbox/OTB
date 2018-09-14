@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction>
-class ITK_EXPORT BinaryFunctorImageFilter : public itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
+class BinaryFunctorImageFilter : public itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */

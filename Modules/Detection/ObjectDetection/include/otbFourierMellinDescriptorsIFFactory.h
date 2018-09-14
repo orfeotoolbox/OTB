@@ -44,7 +44,7 @@ namespace otb
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT FourierMellinDescriptorsIFFactory :
+class FourierMellinDescriptorsIFFactory :
     public itk::LightObject
 {
 public:

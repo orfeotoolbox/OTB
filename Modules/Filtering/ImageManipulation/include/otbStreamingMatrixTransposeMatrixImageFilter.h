@@ -52,7 +52,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TInputImage2>
-class ITK_EXPORT PersistentMatrixTransposeMatrixImageFilter :
+class PersistentMatrixTransposeMatrixImageFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -207,7 +207,7 @@ private:
  */
 
 template<class TInputImage1, class TInputImage2>
-class ITK_EXPORT StreamingMatrixTransposeMatrixImageFilter :
+class StreamingMatrixTransposeMatrixImageFilter :
   public PersistentFilterStreamingDecorator
   <PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> >
 {

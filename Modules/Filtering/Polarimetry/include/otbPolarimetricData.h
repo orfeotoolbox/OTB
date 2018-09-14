@@ -51,7 +51,7 @@ typedef enum
  * \ingroup OTBPolarimetry
 */
 
-class ITK_EXPORT PolarimetricData : public itk::DataObject
+class PolarimetricData : public itk::DataObject
 {
 public:
 

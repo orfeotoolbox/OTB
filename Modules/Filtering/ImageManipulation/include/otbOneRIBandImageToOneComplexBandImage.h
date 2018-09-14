@@ -37,7 +37,7 @@ namespace otb
 
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT OneRIBandImageToOneComplexBandImage :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class OneRIBandImageToOneComplexBandImage :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimension */

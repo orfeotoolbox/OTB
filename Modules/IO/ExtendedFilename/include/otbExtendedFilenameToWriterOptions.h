@@ -44,7 +44,7 @@ namespace otb
  * \ingroup OTBExtendedFilename
  */
 
-class ITK_EXPORT ExtendedFilenameToWriterOptions : public ExtendedFilenameHelper
+class ExtendedFilenameToWriterOptions : public ExtendedFilenameHelper
 {
 public:
 /** Standard class typedefs. */

@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBMarkov
  */
 template<class TInput1, class TInput2>
-class ITK_EXPORT MRFEnergy : public itk::Object
+class MRFEnergy : public itk::Object
 {
 public:
   typedef MRFEnergy                     Self;
@@ -148,7 +148,7 @@ protected:
 };
 
 template<class TInput2>
-class ITK_EXPORT MRFEnergy<TInput2, TInput2> : public itk::Object
+class MRFEnergy<TInput2, TInput2> : public itk::Object
 {
 public:
   typedef MRFEnergy                     Self;

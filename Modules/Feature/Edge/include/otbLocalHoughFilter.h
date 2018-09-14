@@ -46,7 +46,7 @@ namespace otb
  */
 
 template <class TInputImage>
-class ITK_EXPORT LocalHoughFilter : public ImageToLineSpatialObjectListFilter<TInputImage>
+class LocalHoughFilter : public ImageToLineSpatialObjectListFilter<TInputImage>
 {
 public:
 

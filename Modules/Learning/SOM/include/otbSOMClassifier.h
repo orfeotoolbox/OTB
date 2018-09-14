@@ -44,7 +44,7 @@ namespace otb
  */
 
 template<class TSample, class TSOMMap, class TLabel>
-class ITK_EXPORT SOMClassifier :
+class SOMClassifier :
   public itk::ProcessObject
 {
 public:

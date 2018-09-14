@@ -41,7 +41,7 @@ template <
 class TCoordRep = double,
 class TPrecision = double
 >
-class ITK_EXPORT DBOverlapDataNodeFeatureFunction :
+class DBOverlapDataNodeFeatureFunction :
     public DataNodeVectorDataFunction<std::vector<TPrecision>, TCoordRep, TPrecision>
 {
 public:

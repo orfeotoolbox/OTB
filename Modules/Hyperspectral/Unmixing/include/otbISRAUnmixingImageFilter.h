@@ -119,7 +119,7 @@ private:
  * \ingroup OTBUnmixing
  */
 template <class TInputImage, class TOutputImage, class TPrecision>
-class ITK_EXPORT ISRAUnmixingImageFilter :
+class ISRAUnmixingImageFilter :
   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::ISRAUnmixingFunctor<typename TInputImage::PixelType,
           typename TOutputImage::PixelType, TPrecision> >

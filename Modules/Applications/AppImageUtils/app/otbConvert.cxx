@@ -42,7 +42,7 @@ namespace Wrapper
 namespace Functor
 {
 template< class TScalar >
-class ITK_EXPORT LogFunctor
+class LogFunctor
 {
 public:
   LogFunctor(){};

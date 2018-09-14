@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage1, class TInputImage2, class TInputImage3, class TOutputImage, class TFunction>
-class ITK_EXPORT TernaryFunctorImageFilter : public itk::TernaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunction>
+class TernaryFunctorImageFilter : public itk::TernaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */

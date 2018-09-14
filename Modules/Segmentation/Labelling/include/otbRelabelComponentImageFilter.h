@@ -77,7 +77,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT RelabelComponentImageFilter :
+class RelabelComponentImageFilter :
     public itk::RelabelComponentImageFilter< TInputImage, TOutputImage >
 {
 public:

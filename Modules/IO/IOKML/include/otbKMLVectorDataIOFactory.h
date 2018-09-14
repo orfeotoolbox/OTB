@@ -30,7 +30,7 @@ namespace otb
  *
  * \ingroup OTBIOKML
  */
-class ITK_EXPORT KMLVectorDataIOFactory : public itk::ObjectFactoryBase
+class KMLVectorDataIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

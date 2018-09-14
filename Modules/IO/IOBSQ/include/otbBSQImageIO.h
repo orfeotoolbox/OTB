@@ -41,7 +41,7 @@ namespace otb
  *
  * \ingroup OTBIOBSQ
  */
-class ITK_EXPORT BSQImageIO : public otb::ImageIOBase
+class BSQImageIO : public otb::ImageIOBase
 {
 public:
 

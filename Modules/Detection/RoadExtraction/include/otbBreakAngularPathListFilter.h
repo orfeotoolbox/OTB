@@ -35,7 +35,7 @@ namespace otb
  * \ingroup OTBRoadExtraction
  */
 template <class TPath>
-class ITK_EXPORT BreakAngularPathListFilter
+class BreakAngularPathListFilter
   : public PathListToPathListFilter<TPath>
 {
 public:

@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBLabelling
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelizeConnectedThresholdImageFilter
+class LabelizeConnectedThresholdImageFilter
   : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
       itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> >
 {

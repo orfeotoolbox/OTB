@@ -31,7 +31,7 @@
 namespace otb
 {
 
-class ITK_EXPORT StreamingShrinkImageRegionSplitter : public itk::ImageRegionSplitter<2>
+class StreamingShrinkImageRegionSplitter : public itk::ImageRegionSplitter<2>
 {
 public:
   /** Standard class typedefs. */
@@ -104,7 +104,7 @@ private:
 
 
 template <class TInputImage>
-class ITK_EXPORT StreamingShrinkStreamingManager : public StreamingManager<TInputImage>
+class StreamingShrinkStreamingManager : public StreamingManager<TInputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -165,7 +165,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TOutputImage = TInputImage>
-class ITK_EXPORT PersistentShrinkImageFilter :
+class PersistentShrinkImageFilter :
   public PersistentImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -262,7 +262,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TOutputImage = TInputImage>
-class ITK_EXPORT StreamingShrinkImageFilter :
+class StreamingShrinkImageFilter :
   public PersistentFilterStreamingDecorator< PersistentShrinkImageFilter<TInputImage, TOutputImage> >
 {
 public:

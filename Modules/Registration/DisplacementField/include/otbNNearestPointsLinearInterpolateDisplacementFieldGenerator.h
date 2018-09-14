@@ -32,7 +32,7 @@ namespace otb
  * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
-class ITK_EXPORT NNearestPointsLinearInterpolateDisplacementFieldGenerator
+class NNearestPointsLinearInterpolateDisplacementFieldGenerator
   : public PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
 {
 public:

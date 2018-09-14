@@ -83,7 +83,7 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
-class ITK_EXPORT GeodesicMorphologyDecompositionImageFilter
+class GeodesicMorphologyDecompositionImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

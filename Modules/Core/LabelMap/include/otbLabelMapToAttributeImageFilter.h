@@ -41,7 +41,7 @@ namespace otb
 
 template< class TInputImage, class TOutputImage , class TAttributeAccessor=
     typename Functor::AttributesMapLabelObjectAccessor< typename TInputImage::LabelObjectType > >
-class ITK_EXPORT LabelMapToAttributeImageFilter :
+class LabelMapToAttributeImageFilter :
     public itk::LabelMapFilter< TInputImage , TOutputImage >
 {
 public:

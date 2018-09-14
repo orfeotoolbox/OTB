@@ -35,7 +35,7 @@ namespace otb {
  * \ingroup OTBLabelMap
  */
 template<class TInputImage>
-class ITK_EXPORT KMeansAttributesLabelMapFilter :
+class KMeansAttributesLabelMapFilter :
     public itk::Object
 {
 public:

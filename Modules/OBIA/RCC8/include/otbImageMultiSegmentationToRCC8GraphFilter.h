@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TInputImage, class TOutputGraph>
-class ITK_EXPORT ImageMultiSegmentationToRCC8GraphFilter
+class ImageMultiSegmentationToRCC8GraphFilter
   : public ImageListToRCC8GraphFilter<TInputImage, TOutputGraph>
 {
 public:

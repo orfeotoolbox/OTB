@@ -42,7 +42,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DrawLineSpatialObjectFilter :
+class DrawLineSpatialObjectFilter :
   //public itk::SpatialObjectToImageFilter< itk::LineSpatialObject<2>, TOutputImage >
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {

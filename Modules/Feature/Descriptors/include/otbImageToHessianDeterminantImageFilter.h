@@ -82,7 +82,7 @@ public:
  * \ingroup OTBDescriptors
  */
 template <class TInputImage, class TOutputImage, class TPrecision = double>
-class ITK_EXPORT ImageToHessianDeterminantImageFilter
+class ImageToHessianDeterminantImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 

@@ -71,7 +71,7 @@ public:
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputVectorImage>
-class ITK_EXPORT ImageToVectorImageCastFilter
+class ImageToVectorImageCastFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
       Functor::VectorCast<typename TInputImage::PixelType,
           typename TOutputVectorImage::PixelType> >

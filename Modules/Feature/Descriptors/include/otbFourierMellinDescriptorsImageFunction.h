@@ -59,7 +59,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = double>
-class ITK_EXPORT FourierMellinDescriptorsImageFunction :
+class FourierMellinDescriptorsImageFunction :
     public itk::ImageFunction <TInputImage,
                                std::vector< std::vector<
                                typename itk::NumericTraits<

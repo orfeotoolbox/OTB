@@ -44,7 +44,7 @@ namespace otb
  */
 
 template < class TInputImage , class TOutputImage >
-class ITK_EXPORT CLHistogramEqualizationFilter :
+class CLHistogramEqualizationFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public :

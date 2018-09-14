@@ -26,7 +26,7 @@
 namespace otb
 {
 
-class ITK_EXPORT ParserXImpl : public itk::LightObject
+class ParserXImpl : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */

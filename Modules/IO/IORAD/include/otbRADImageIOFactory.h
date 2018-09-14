@@ -30,7 +30,7 @@ namespace otb
  *
  * \ingroup OTBIORAD
  */
-class ITK_EXPORT RADImageIOFactory : public itk::ObjectFactoryBase
+class RADImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

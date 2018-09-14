@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT NeuralNetworkMachineLearningModelFactory : public itk::ObjectFactoryBase
+class NeuralNetworkMachineLearningModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

@@ -199,7 +199,7 @@ private:
  *
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalHAlphaImageFilter :
+class ReciprocalHAlphaImageFilter :
    public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalHAlphaFunctor<
     typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {

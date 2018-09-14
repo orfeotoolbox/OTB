@@ -60,7 +60,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage,
     class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage> >
-class ITK_EXPORT OverlapSaveConvolutionImageFilter
+class OverlapSaveConvolutionImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

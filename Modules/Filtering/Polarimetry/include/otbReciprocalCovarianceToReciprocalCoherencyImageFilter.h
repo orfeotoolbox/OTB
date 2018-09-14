@@ -116,7 +116,7 @@ private:
  * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalCovarianceToReciprocalCoherencyImageFilter :
+class ReciprocalCovarianceToReciprocalCoherencyImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<
     typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {

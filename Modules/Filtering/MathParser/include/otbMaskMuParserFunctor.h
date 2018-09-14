@@ -58,7 +58,7 @@ namespace Functor
 {
 
 template<class TInputPixel>
-class ITK_EXPORT MaskMuParserFunctor: public itk::LightObject
+class MaskMuParserFunctor: public itk::LightObject
 {
 public:
   typedef MaskMuParserFunctor           Self;

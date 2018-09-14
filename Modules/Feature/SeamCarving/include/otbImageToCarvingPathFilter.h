@@ -57,7 +57,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT ImageToCarvingPathFilter
+class ImageToCarvingPathFilter
   : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:

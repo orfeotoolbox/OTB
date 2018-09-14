@@ -49,7 +49,7 @@ namespace otb {
  * \ingroup OTBLabelMap
  */
 template<class TImage, class TFunctor>
-class ITK_EXPORT LabelMapFeaturesFunctorImageFilter :
+class LabelMapFeaturesFunctorImageFilter :
   public itk::InPlaceLabelMapFilter<TImage>
 {
 public:

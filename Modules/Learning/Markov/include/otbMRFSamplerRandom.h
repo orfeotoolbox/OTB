@@ -43,7 +43,7 @@ namespace otb
  */
 
 template<class TInput1, class TInput2>
-class ITK_EXPORT MRFSamplerRandom : public MRFSampler<TInput1, TInput2>
+class MRFSamplerRandom : public MRFSampler<TInput1, TInput2>
 {
 public:
   typedef MRFSamplerRandom                  Self;

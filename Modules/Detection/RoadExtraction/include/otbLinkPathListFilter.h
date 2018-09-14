@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBRoadExtraction
  */
 template <class TPath>
-class ITK_EXPORT LinkPathListFilter
+class LinkPathListFilter
   : public PathListToPathListFilter<TPath>
 {
 public:

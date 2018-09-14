@@ -43,7 +43,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TImage, class TPath>
-class ITK_EXPORT PolyLineImageConstIterator
+class PolyLineImageConstIterator
 {
 public:
   /** Standard typedefs */

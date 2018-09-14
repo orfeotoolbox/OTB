@@ -160,7 +160,7 @@ private:
  * \ingroup OTBSimulation
  */
 template <class TInputImage, class TOutputImage >
-class ITK_EXPORT SurfaceReflectanceToReflectanceFilter :
+class SurfaceReflectanceToReflectanceFilter :
       public UnaryImageFunctorWithVectorImageFilter< TInputImage,
       TOutputImage,
       typename Functor::ReflectanceToSurfaceReflectanceImageFunctor< typename TInputImage::InternalPixelType,

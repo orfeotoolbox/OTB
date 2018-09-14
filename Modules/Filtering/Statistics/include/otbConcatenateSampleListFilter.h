@@ -37,7 +37,7 @@ namespace Statistics {
  * \ingroup OTBStatistics
  */
 template < class TSampleList >
-class ITK_EXPORT ConcatenateSampleListFilter :
+class ConcatenateSampleListFilter :
   public otb::Statistics::ListSampleToListSampleFilter<TSampleList, TSampleList>
 {
 public:

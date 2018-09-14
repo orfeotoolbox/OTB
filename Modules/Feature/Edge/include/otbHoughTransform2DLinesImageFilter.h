@@ -62,7 +62,7 @@ namespace otb
  * */
 
 template<typename TInputPixelType, typename TOutputPixelType>
-class ITK_EXPORT HoughTransform2DLinesImageFilter :
+class HoughTransform2DLinesImageFilter :
   public itk::ImageToImageFilter< Image<TInputPixelType, 2>, Image<TOutputPixelType, 2> >
 {
 public:

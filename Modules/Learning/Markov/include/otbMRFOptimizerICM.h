@@ -39,7 +39,7 @@ namespace otb
  *
  * \ingroup OTBMarkov
  */
-class ITK_EXPORT MRFOptimizerICM : public MRFOptimizer
+class MRFOptimizerICM : public MRFOptimizer
 {
 public:
 

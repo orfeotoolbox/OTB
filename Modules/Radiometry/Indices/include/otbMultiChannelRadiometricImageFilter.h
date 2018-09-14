@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBIndices
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT MultiChannelRadiometricImageFilter
+class MultiChannelRadiometricImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:

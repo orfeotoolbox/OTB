@@ -39,7 +39,7 @@ namespace otb
 
 template <class TInputPath,
     class TOutput      = double>
-class ITK_EXPORT OrientationPathFunction :
+class OrientationPathFunction :
   public PathFunction<TInputPath, TOutput>
 {
 public:

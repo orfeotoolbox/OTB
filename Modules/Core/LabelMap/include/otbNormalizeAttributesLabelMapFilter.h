@@ -95,7 +95,7 @@ private:
  * \ingroup OTBLabelMap
  */
 template<class TImage>
-class ITK_EXPORT NormalizeAttributesLabelMapFilter
+class NormalizeAttributesLabelMapFilter
   : public otb::LabelMapFeaturesFunctorImageFilter
   <TImage,
       typename Functor::NormalizeAttributesLabelObjectFunctor

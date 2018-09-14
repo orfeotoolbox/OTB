@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ExtractROIBase :
+class ExtractROIBase :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

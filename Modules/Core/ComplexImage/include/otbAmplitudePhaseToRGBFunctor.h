@@ -47,7 +47,7 @@ namespace Functor
  * \ingroup OTBComplexImage
  */
 template<class TInput1, class TInput2 = TInput1, class TInput3 = TInput1, class TOutput = TInput1>
-class ITK_EXPORT AmplitudePhaseToRGBFunctor
+class AmplitudePhaseToRGBFunctor
 {
 public:
   typedef TOutput                          RGBPixelType;

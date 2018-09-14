@@ -161,7 +161,7 @@ protected:
  * \ingroup OTBChangeDetection
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT KullbackLeiblerProfileImageFilter :
+class KullbackLeiblerProfileImageFilter :
   public BinaryFunctorNeighborhoodVectorImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       Functor::KullbackLeiblerProfile<

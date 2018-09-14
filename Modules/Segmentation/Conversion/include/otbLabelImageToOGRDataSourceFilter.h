@@ -45,7 +45,7 @@ namespace otb
  */
 
 template <class TInputImage>
-class ITK_EXPORT LabelImageToOGRDataSourceFilter :
+class LabelImageToOGRDataSourceFilter :
     public itk::ProcessObject
 {
 public:

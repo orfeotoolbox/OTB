@@ -45,7 +45,7 @@ template <class TInputImage,
     class TOutputImage,
     class TOutputImageDirection = TOutputImage,
     class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT AsymmetricFusionOfLineDetectorImageFilter :
+class AsymmetricFusionOfLineDetectorImageFilter :
   public LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 {
 public:

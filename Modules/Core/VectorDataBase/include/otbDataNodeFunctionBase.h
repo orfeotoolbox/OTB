@@ -46,7 +46,7 @@ namespace otb
  */
 
 template <class TDataNode, class TOutput>
-class ITK_EXPORT DataNodeFunctionBase :
+class DataNodeFunctionBase :
     public itk::FunctionBase<TDataNode, TOutput>
 {
 public:

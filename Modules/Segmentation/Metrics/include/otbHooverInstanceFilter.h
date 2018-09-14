@@ -71,7 +71,7 @@ namespace otb
  */
 
 template< class TLabelMap >
-class ITK_EXPORT HooverInstanceFilter :
+class HooverInstanceFilter :
     public itk::InPlaceLabelMapFilter< TLabelMap >
 {
 public:

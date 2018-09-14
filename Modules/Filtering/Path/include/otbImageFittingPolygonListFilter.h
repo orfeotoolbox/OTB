@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TPath, class TImage>
-class ITK_EXPORT ImageFittingPolygonListFilter
+class ImageFittingPolygonListFilter
   : public PathListToPathListFilter<TPath>
 {
 public:

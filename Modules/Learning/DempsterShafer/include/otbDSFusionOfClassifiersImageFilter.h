@@ -66,7 +66,7 @@ namespace otb
  * \ingroup OTBDempsterShafer
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
-class ITK_EXPORT DSFusionOfClassifiersImageFilter :
+class DSFusionOfClassifiersImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

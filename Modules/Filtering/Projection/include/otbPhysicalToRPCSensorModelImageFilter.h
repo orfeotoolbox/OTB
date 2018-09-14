@@ -58,7 +58,7 @@ namespace otb {
  * \ingroup OTBProjection
  */
 template <class TImage>
-class ITK_EXPORT PhysicalToRPCSensorModelImageFilter :
+class PhysicalToRPCSensorModelImageFilter :
   public itk::CastImageFilter<TImage, TImage>
 {
 public:

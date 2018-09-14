@@ -110,7 +110,7 @@ public:
 
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ComplexToVectorImageCastFilter :
+class ComplexToVectorImageCastFilter :
     public
 itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
                         typename Functor::ComplexToVector<

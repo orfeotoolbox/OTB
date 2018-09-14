@@ -52,7 +52,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TVertex>
-class ITK_EXPORT RCC8Graph  :
+class RCC8Graph  :
   public itk::DataObject
 {
 public:

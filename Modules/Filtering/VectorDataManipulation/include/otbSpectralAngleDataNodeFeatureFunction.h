@@ -55,7 +55,7 @@ class TImage,
 class TCoordRep = double,
 class TPrecision = double
 >
-class ITK_EXPORT SpectralAngleDataNodeFeatureFunction :
+class SpectralAngleDataNodeFeatureFunction :
     public DataNodeImageFunction<TImage, std::vector<TPrecision>, TCoordRep, TPrecision>
 {
 public:

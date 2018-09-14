@@ -54,7 +54,7 @@ template < class TInputImage, class TOutputImage,
             unsigned int VNbInputImage,
             class TPrecision = double,
             Wavelet::Wavelet TMotherWaveletOperator = Wavelet::SYMLET8 >
-class ITK_EXPORT SparseUnmixingImageFilter
+class SparseUnmixingImageFilter
   : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:

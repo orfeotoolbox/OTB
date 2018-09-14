@@ -82,7 +82,7 @@ namespace otb
  */
 
 template <class TInputImage, class TClassifiedImage>
-class ITK_EXPORT MarkovRandomFieldFilter :
+class MarkovRandomFieldFilter :
   public itk::ImageToImageFilter<TInputImage, TClassifiedImage>
 {
 public:

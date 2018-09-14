@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
-class ITK_EXPORT PointSetWithTransformToDisplacementFieldGenerator
+class PointSetWithTransformToDisplacementFieldGenerator
   : public PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
 {
 public:

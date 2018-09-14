@@ -40,7 +40,7 @@ namespace Statistics {
  * \ingroup OTBStatistics
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ListSampleSource :
+class ListSampleSource :
   public itk::ProcessObject
 {
 public:

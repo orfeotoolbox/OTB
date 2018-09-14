@@ -48,7 +48,7 @@ namespace otb {
 template<class TListSample,
     class THistogramMeasurement,
          class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer2>
-class ITK_EXPORT ListSampleToVariableDimensionHistogramGenerator :
+class ListSampleToVariableDimensionHistogramGenerator :
   public itk::ProcessObject
 {
 public:

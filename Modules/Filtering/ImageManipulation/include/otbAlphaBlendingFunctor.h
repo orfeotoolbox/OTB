@@ -42,7 +42,7 @@ namespace Functor
  */
 
 template<class TInputPixel1, class TInputPixel2, class TOutputPixel>
-class ITK_EXPORT AlphaBlendingFunctorBase
+class AlphaBlendingFunctorBase
 {
 public:
   AlphaBlendingFunctorBase(): m_Alpha(1.0) {}
@@ -70,7 +70,7 @@ protected:
 };
 
 template<class TInputPixel1, class TInputPixel2, class TOutputPixel>
-class ITK_EXPORT AlphaBlendingFunctor
+class AlphaBlendingFunctor
   :public AlphaBlendingFunctorBase< TInputPixel1, TInputPixel2, TOutputPixel >
 {
 public:
@@ -96,7 +96,7 @@ protected:
 };
 
 template<class TInputInternalPixel1, class TInputInternalPixel2, class TOutputInternalPixel>
-class ITK_EXPORT AlphaBlendingFunctor< itk::RGBAPixel<TInputInternalPixel1>,
+class AlphaBlendingFunctor< itk::RGBAPixel<TInputInternalPixel1>,
                                        itk::RGBAPixel<TInputInternalPixel2>,
                                        itk::RGBAPixel<TOutputInternalPixel> > :
   public AlphaBlendingFunctorBase<itk::RGBAPixel<TInputInternalPixel1>,

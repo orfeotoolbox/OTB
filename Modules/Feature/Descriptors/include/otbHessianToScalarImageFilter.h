@@ -74,7 +74,7 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT HessianToScalarImageFilter :
+class HessianToScalarImageFilter :
   public itk::UnaryFunctorImageFilter<
       TInputImage, TOutputImage,
       Functor::HessianToScalar<

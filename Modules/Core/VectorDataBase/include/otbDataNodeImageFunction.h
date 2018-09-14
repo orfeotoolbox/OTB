@@ -45,7 +45,7 @@ class TOutput,
 class TCoordRep = double,
 class TPrecision = double
 >
-class ITK_EXPORT DataNodeImageFunction :
+class DataNodeImageFunction :
     public DataNodeFunctionBase<DataNode<TCoordRep,
                                          TImage::ImageDimension,
                                          TPrecision>,

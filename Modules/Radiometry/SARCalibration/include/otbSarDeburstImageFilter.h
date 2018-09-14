@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBSARCalibration
  */
 
-template <class TImage> class ITK_EXPORT SarDeburstImageFilter :
+template <class TImage> class SarDeburstImageFilter :
     public itk::ImageToImageFilter<TImage,TImage>
 {
 public:

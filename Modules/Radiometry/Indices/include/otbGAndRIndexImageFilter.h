@@ -40,7 +40,7 @@ template <class TInputImageG, class TInputImageR, class TOutputImage,
     class TFunction = Functor::IR<typename TInputImageG::PixelType,
         typename TInputImageR::PixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT GAndRIndexImageFilter :  public itk::BinaryFunctorImageFilter<TInputImageG, TInputImageR, TOutputImage,
+class GAndRIndexImageFilter :  public itk::BinaryFunctorImageFilter<TInputImageG, TInputImageR, TOutputImage,
       TFunction>
 {
 public:

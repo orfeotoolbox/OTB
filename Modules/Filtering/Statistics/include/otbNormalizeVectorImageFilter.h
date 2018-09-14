@@ -130,7 +130,7 @@ protected:
  * \ingroup OTBStatistics
  */
 template < class TInputImage, class TOutputImage >
-class ITK_EXPORT NormalizeVectorImageFilter
+class NormalizeVectorImageFilter
   : public UnaryFunctorVectorImageFilter< TInputImage, TOutputImage,
             Functor::NormalizeVectorImageFunctor<
               typename TInputImage::PixelType,

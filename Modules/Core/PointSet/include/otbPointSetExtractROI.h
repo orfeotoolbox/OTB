@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TInputPointSet, class TOutputPointSet>
-class ITK_EXPORT PointSetExtractROI :
+class PointSetExtractROI :
   public PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
 {
 public:

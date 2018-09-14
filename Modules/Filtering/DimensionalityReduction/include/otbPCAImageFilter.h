@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage, Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT PCAImageFilter
+class PCAImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

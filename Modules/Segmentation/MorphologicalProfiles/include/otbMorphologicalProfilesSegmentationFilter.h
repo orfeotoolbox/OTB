@@ -58,7 +58,7 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
 */
 template <class TInputImage,  class TOutputImage, class TInternalPrecision = float, class TStructuringElement = itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension> >
-class ITK_EXPORT MorphologicalProfilesSegmentationFilter
+class MorphologicalProfilesSegmentationFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

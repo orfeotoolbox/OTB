@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TObject>
-class ITK_EXPORT ObjectList : public itk::DataObject , public DataObjectListInterface
+class ObjectList : public itk::DataObject , public DataObjectListInterface
 {
 public:
   /** Standard typedefs */
@@ -152,7 +152,7 @@ public:
  *
  * \ingroup OTBObjectList
    */
-  class ITK_EXPORT Iterator
+  class Iterator
   {
 public:
     friend class ObjectList;
@@ -274,7 +274,7 @@ private:
  *
  * \ingroup OTBObjectList
    */
-  class ITK_EXPORT ConstIterator
+  class ConstIterator
   {
 public:
     friend class ObjectList;
@@ -366,7 +366,7 @@ private:
  *
  * \ingroup OTBObjectList
    */
-  class ITK_EXPORT ReverseIterator
+  class ReverseIterator
   {
 public:
     friend class ObjectList;
@@ -460,7 +460,7 @@ private:
  *
  * \ingroup OTBObjectList
    */
-  class ITK_EXPORT ReverseConstIterator
+  class ReverseConstIterator
   {
 public:
     friend class ObjectList;

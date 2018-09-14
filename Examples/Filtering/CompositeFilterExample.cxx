@@ -69,7 +69,7 @@ namespace otb
 {
 
 template <class TImageType>
-class ITK_EXPORT CompositeExampleImageFilter :
+class CompositeExampleImageFilter :
   public itk::ImageToImageFilter<TImageType, TImageType>
 {
 public:

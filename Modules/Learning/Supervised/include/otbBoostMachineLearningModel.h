@@ -36,7 +36,7 @@ class CvBoost;
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT BoostMachineLearningModel
+class BoostMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

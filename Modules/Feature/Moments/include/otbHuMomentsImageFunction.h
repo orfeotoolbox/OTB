@@ -63,7 +63,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = double>
-class ITK_EXPORT HuMomentsImageFunction :
+class HuMomentsImageFunction :
 public itk::ImageFunction< TInputImage,
     itk::FixedArray<
     typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,

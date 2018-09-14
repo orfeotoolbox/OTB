@@ -43,7 +43,7 @@ namespace otb
 template <class TInputLabelMap, class TOutputSampleList,
     class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
     <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
-class ITK_EXPORT LabelMapToSampleListFilter : public itk::ProcessObject
+class LabelMapToSampleListFilter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

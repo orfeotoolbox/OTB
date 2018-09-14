@@ -53,7 +53,7 @@ namespace otb
  **/
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT GenericRSResampleImageFilter :
+class GenericRSResampleImageFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

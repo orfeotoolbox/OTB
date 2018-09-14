@@ -31,7 +31,7 @@ namespace otb
  *
  * \ingroup OTBVectorDataIO
  */
-class ITK_EXPORT VectorDataIOFactory : public itk::Object
+class VectorDataIOFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */

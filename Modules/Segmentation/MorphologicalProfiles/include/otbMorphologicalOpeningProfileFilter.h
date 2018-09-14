@@ -50,7 +50,7 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
-class ITK_EXPORT MorphologicalOpeningProfileFilter
+class MorphologicalOpeningProfileFilter
   : public ImageToProfileFilter<TInputImage, TOutputImage,
       itk::OpeningByReconstructionImageFilter
       <TInputImage, TOutputImage, TStructuringElement>,

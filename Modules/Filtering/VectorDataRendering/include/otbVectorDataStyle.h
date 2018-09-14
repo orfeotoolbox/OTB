@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBVectorDataRendering
  */
 
-class ITK_EXPORT VectorDataStyle : public itk::LightObject
+class VectorDataStyle : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */

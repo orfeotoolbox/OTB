@@ -48,7 +48,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT PixelSuppressionByDirectionImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class PixelSuppressionByDirectionImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimensions */
