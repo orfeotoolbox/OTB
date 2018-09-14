@@ -23,6 +23,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbTileMapImageIOHelperTest);
-  // REGISTER_TEST(otbTileMapImageIOTest);
-  // REGISTER_TEST(otbTileMapWriter);
+  REGISTER_TEST(otbTileMapImageIOTest);
+  REGISTER_TEST(otbTileMapWriter);
 }

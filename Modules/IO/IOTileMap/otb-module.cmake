@@ -38,6 +38,8 @@ ENABLE_SHARED
     OTBTransform
     OTBImageManipulation
 
+  DEPRECATED
+
   DESCRIPTION
     "${DOCUMENTATION}"
 )
