@@ -95,5 +95,5 @@ otb_module_target_label(otbGdalAdaptersTestDriver)
 otb_add_test(NAME TuSpatialReferenceTest
             COMMAND otbGdalAdaptersTestDriver otbSpatialReferenceTest)
   
-otb_add_test(NAME TuOGRCoordinateTransformationAdapterTest
-            COMMAND otbGdalAdaptersTestDriver otbOGRCoordinateTransformationAdapterTest)
+otb_add_test(NAME TuOCoordinateTransformationTest
+            COMMAND otbGdalAdaptersTestDriver otbCoordinateTransformationTest)
