@@ -64,7 +64,7 @@ namespace
 {
 } // end of anonymous namespace.
 
-ITK_EXPORT const char*
+const char*
 RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ] = {
   "RGBW_CHANNEL_RED",
   "RGBW_CHANNEL_GREEN",

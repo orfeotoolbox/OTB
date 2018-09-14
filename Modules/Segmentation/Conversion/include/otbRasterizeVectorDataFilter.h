@@ -60,7 +60,7 @@ namespace otb {
  * \ingroup OTBConversion
  */
 template <class TVectorData, class TInputImage, class TOutputImage = TInputImage  >
-class  ITK_EXPORT RasterizeVectorDataFilter :
+class RasterizeVectorDataFilter :
     public itk::CastImageFilter< TInputImage, TOutputImage>
 {
 public:

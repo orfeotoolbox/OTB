@@ -35,7 +35,7 @@ public:
 
 
 template <class TImage >
-class ITK_EXPORT NegateImageFilter :
+class NegateImageFilter :
     public
 UnaryFunctorImageFilter<TImage,TImage, Negate   >
 {

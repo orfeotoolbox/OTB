@@ -44,7 +44,7 @@ namespace Functor
  * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage>
-ITK_EXPORT class SSDBlockMatching
+class SSDBlockMatching
 {
 public:
   typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
