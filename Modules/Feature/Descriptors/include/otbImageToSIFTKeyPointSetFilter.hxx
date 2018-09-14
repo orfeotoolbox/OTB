@@ -58,7 +58,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
   m_GradientMagnitudeThreshold = 0.2;
 
   m_ExpandFilter = ExpandFilterType::New();
-  
+
   const double HistogramGaussianWeights[73] = {
     2.3771112282795414e-07, 3.8860734758633732e-07, 6.2655544995978937e-07, 9.9631120821413786e-07,
     1.5624909838697011e-06, 2.4167238265599128e-06, 3.6865788528530121e-06,
@@ -82,9 +82,9 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     2.4167238265599128e-06, 1.5624909838697011e-06, 9.9631120821413786e-07,
     6.2655544995978937e-07, 3.8860734758633732e-07, 2.3771112282795414e-07
   };
-  
+
   m_HistogramGaussianWeights = std::vector<double>(HistogramGaussianWeights,HistogramGaussianWeights+73);
-  
+
   m_Offsets[0][0]=-1;
   m_Offsets[0][1]=-1;
   m_Offsets[1][0]=-1;
@@ -896,9 +896,7 @@ void
 ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-
-  typedef itk::ProcessObject                                     ProcessObjectType;
-  const OutputPointSetType* output = dynamic_cast<const OutputPointSetType*>(this->ProcessObjectType::GetOutput(0));
+  const OutputPointSetType* output = dynamic_cast<const OutputPointSetType*>(this->Superclass::ProcessObjectType::GetOutput(0));
 
   Superclass::PrintSelf(os, indent);
   os << indent << "Number of octaves: " << m_OctavesNumber << std::endl;
