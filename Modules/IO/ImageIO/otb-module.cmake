@@ -33,12 +33,14 @@ otb_module(OTBImageIO
     OTBIOMSTAR
     OTBIOONERA
     OTBIORAD
-    OTBIOTileMap
     OTBITK
     OTBImageBase
     OTBOSSIMAdapters
     OTBObjectList
     OTBStreaming
+
+  OPTIONAL_DEPENDS
+    OTBIOTileMap
 
   TEST_DEPENDS
     OTBStatistics
