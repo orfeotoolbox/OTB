@@ -78,12 +78,9 @@ SpatialReference & SpatialReference::operator=(const SpatialReference& other) no
 
 SpatialReference SpatialReference::FromWGS84()
 {
-  std::unique_ptr<OGRSpatialReference> tmpSR(OGRSpatialReference::GetWGS84SRS()->Clone());
-
-  if(!tmpSR)
-    throw InvalidSRDescriptionException("WGS84");
-
-  return SpatialReference(std::move(tmpSR));
+  // GetWGS84SRS() is only avalaible since gdal 2.0, so we use the
+  // epsg code instead
+  return FromEPSG(4326);
 }
 
 SpatialReference SpatialReference::FromDescription(const std::string & description)
