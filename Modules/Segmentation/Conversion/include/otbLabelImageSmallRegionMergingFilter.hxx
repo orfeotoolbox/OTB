@@ -62,12 +62,12 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   
   // For each label of the label map, find the "closest" connected label, according 
   // to the euclidian distance between the corresponding m_labelStatistic elements.
-  for (auto neighbours : neighboursMap)
+  for (auto const & neighbours : neighboursMap)
     {
     double proximity = std::numeric_limits<double>::max();
     InputLabelType label = neighbours.first;
     InputLabelType closestNeighbour = label;
-    for (auto neighbour : neighbours.second)
+    for (auto const & neighbour : neighbours.second)
       {
       auto statsLabel = m_LabelStatistic[ label ];
       auto statsNeighbour = m_LabelStatistic[ neighbour ];
@@ -75,7 +75,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
       double distance = 0;
       for (unsigned int i = 0 ; i < statsLabel.Size(); i++)
         {
-        distance += pow( statsLabel[i] - statsNeighbour[i] , 2);
+        distance += (statsLabel[i] - statsNeighbour[i]) * (statsLabel[i] - statsNeighbour[i]);
         }
       if (distance < proximity)
         {
