@@ -40,6 +40,8 @@ namespace otb
  *
  * This class describes an exception that might be thrown by
  * CoordinateTransformation constructors
+ * 
+ * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT InvalidCoordinateTransfromationException : public std::runtime_error
 {
@@ -54,6 +56,8 @@ public:
  *
  * This class describes an exception that might be thrown by
  * CoordinateTransformation::Transform()
+ * 
+ * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT TransformFailureException : public std::runtime_error
 {
@@ -73,6 +77,8 @@ public:
  * reference systems within OTB, in a safe and easy way. The class
  * constructors enforce RAII: either they fail or they provide a
  * definitive, valid object.
+ *
+ * \ingroup OTBGdalAdapters 
  */
 
 class OTBGdalAdapters_EXPORT CoordinateTransformation

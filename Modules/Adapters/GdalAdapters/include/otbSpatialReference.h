@@ -35,6 +35,8 @@ namespace otb
  *
  * This class describes an exception that might be thrown by
  * SpatialReference constructors
+ * 
+ * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT InvalidSRDescriptionException : public std::runtime_error
 {
@@ -53,7 +55,10 @@ public:
  * either they fail or they provide a definitive, valid object.
  * 
  * Building a SpatialReference requires to call one of the From*()
- * method. There are no public constructors (appart from copy and assignment)
+ * method. There are no public constructors (appart from copy and
+ * assignment)
+ * 
+ * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT SpatialReference
 {
