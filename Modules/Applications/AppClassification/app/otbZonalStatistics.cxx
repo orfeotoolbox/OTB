@@ -39,6 +39,8 @@
 #include "otbLabelImageToVectorDataFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 
+#include "otbUnaryFunctorImageFilter.h"
+
 namespace otb
 {
 
@@ -77,6 +79,44 @@ public:
   typedef itk::BinaryThresholdImageFilter<LabelImageType,
                                           LabelImageType>                   ThresholdFilterType;
 
+  struct EncoderFunctorType
+  {
+    StatsFilterType::LabelPopulationMapType* m_CountMap;
+    StatsFilterType::PixelValueMapType* m_MeanMap;
+    StatsFilterType::PixelValueMapType* m_StdMap;
+    StatsFilterType::PixelValueMapType* m_MinMap;
+    StatsFilterType::PixelValueMapType* m_MaxMap;
+    size_t m_NbInputComponents;
+    static constexpr size_t m_NbStats{5};
+
+    size_t GetOutputSize()
+    {
+      return m_NbInputComponents*m_NbStats;
+    }
+
+    FloatVectorImageType::PixelType operator()(LabelValueType const &pix)
+    {
+      FloatVectorImageType::PixelType outPix(GetOutputSize());
+      outPix.Fill(0);
+      for(size_t i=0; i<m_NbInputComponents; ++i)
+        {
+        outPix[i*m_NbStats+0] = (*m_CountMap)[pix];
+        outPix[i*m_NbStats+1] = (*m_MeanMap)[pix][i];
+        outPix[i*m_NbStats+2] = (*m_StdMap)[pix][i];
+        outPix[i*m_NbStats+3] = (*m_MinMap)[pix][i];
+        outPix[i*m_NbStats+4] = (*m_MaxMap)[pix][i];
+        }
+      return outPix;
+    }
+    bool operator != (const EncoderFunctorType& other)
+    {
+      (void)other;
+      return false;
+    }
+  };
+  typedef otb::UnaryFunctorImageFilter<LabelImageType, 
+                                       FloatVectorImageType, 
+                                       EncoderFunctorType> EncoderFilterType;
   /** Standard macro */
   itkNewMacro(Self);
   itkTypeMacro(ZonalStatistics, Application);
@@ -127,10 +167,10 @@ public:
     AddParameter(ParameterType_OutputVectorData, "out.vector.filename", "Filename for the output vector data");
     AddChoice("out.xml", "Output XML file");
     AddParameter(ParameterType_String, "out.xml.filename", "");
-//    AddChoice("out.raster", "Output raster image");
-//    AddParameter(ParameterType_OutputImage, "out.raster.filename", "");
+   AddChoice("out.raster", "Output raster image");
+   AddParameter(ParameterType_OutputImage, "out.raster.filename", "");    
 
-    AddRAMParameter();
+   AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "input.tif");
@@ -162,6 +202,15 @@ public:
     return pix;
   }
 
+  void GetStats()
+  {
+    m_CountMap = m_StatsFilter->GetLabelPopulationMap();
+    m_MeanMap = m_StatsFilter->GetMeanValueMap();
+    m_StdMap = m_StatsFilter->GetStandardDeviationValueMap();
+    m_MinMap = m_StatsFilter->GetMinValueMap();
+    m_MaxMap = m_StatsFilter->GetMaxValueMap();
+  }
+
   void PrepareForLabelImageInput()
   {
     otbAppLogINFO("Zone definition: label image");
@@ -171,6 +220,7 @@ public:
     // In this zone definition mode, the user can provide a no-data value for the labels
     if (HasUserValue("inzone.labelimage.nodata"))
       m_IntNoData = GetParameterInt("inzone.labelimage.nodata");
+    GetStats();
   }
 
   void PrepareForVectorDataInput()
@@ -187,6 +237,7 @@ public:
     // Computing stats
     m_StatsFilter->SetInputLabelImage(m_RasterizeFilter->GetOutput());
     m_StatsFilter->Update();
+    GetStats();
   }
 
   void ReprojectVectorDataIntoInputImage()
@@ -213,15 +264,11 @@ public:
     m_RasterizeFilter->SetDefaultBurnValue(0);
     m_RasterizeFilter->SetGlobalWarningDisplay(false);
     m_RasterizeFilter->SetBackgroundValue(m_IntNoData);
+    AddProcess(m_RasterizeFilter, "Rasterize input vector data");
   }
 
   void RemoveNoDataEntry()
   {
-    m_CountMap = m_StatsFilter->GetLabelPopulationMap();
-    m_MeanMap = m_StatsFilter->GetMeanValueMap();
-    m_StdMap = m_StatsFilter->GetStandardDeviationValueMap();
-    m_MinMap = m_StatsFilter->GetMinValueMap();
-    m_MaxMap = m_StatsFilter->GetMaxValueMap();
     if (( GetParameterAsString("inzone") == "labelimage" && HasUserValue("inzone.labelimage.nodata"))
         || (GetParameterAsString("inzone") == "vector")      )
       {
@@ -235,28 +282,31 @@ public:
       }
   }
 
+  void ThresholdLabelImage(LabelImageType::Pointer inputImage, ThresholdFilterType::Pointer filter)
+  {
+    // Mask for label image
+    filter = ThresholdFilterType::New();
+    filter->SetInput(inputImage);
+    filter->SetInsideValue(0);
+    filter->SetOutsideValue(1);
+    filter->SetLowerThreshold(m_IntNoData);
+    filter->SetUpperThreshold(m_IntNoData);
+    filter->UpdateOutputInformation();
+    AddProcess(filter, "Threshold label image");
+  }
+
   void GenerateVectorDataFromLabelImage()
   {
-
-    // Mask for label image
-    m_ThresholdFilter = ThresholdFilterType::New();
-    m_ThresholdFilter->SetInput(GetParameterInt32Image("inzone.labelimage.in"));
-    m_ThresholdFilter->SetInsideValue(0);
-    m_ThresholdFilter->SetOutsideValue(1);
-    m_ThresholdFilter->SetLowerThreshold(m_IntNoData);
-    m_ThresholdFilter->SetUpperThreshold(m_IntNoData);
-
+    ThresholdLabelImage(GetParameterInt32Image("inzone.labelimage.in"), m_InputThresholdFilter);
     // Vectorize the image
     m_LabelImageToVectorFilter = LabelImageToVectorFilterType::New();
     m_LabelImageToVectorFilter->SetInput(GetParameterInt32Image("inzone.labelimage.in"));
-    m_LabelImageToVectorFilter->SetInputMask(m_ThresholdFilter->GetOutput());
+    m_LabelImageToVectorFilter->SetInputMask(m_InputThresholdFilter->GetOutput());
     m_LabelImageToVectorFilter->SetFieldName("polygon_id");
     AddProcess(m_LabelImageToVectorFilter, "Vectorize label image");
     m_LabelImageToVectorFilter->Update();
-
     // The source vector data is the vectorized label image
     m_VectorDataSrc = m_LabelImageToVectorFilter->GetOutput();
-      
   }
 
   void WriteVectorData()
@@ -307,70 +357,84 @@ public:
     SetParameterOutputVectorData("out.vector.filename", m_NewVectorData);
   }
 
+  void WriteRasterData()
+  {
+    
+    otbAppLogINFO("Writing output raster data");
+    auto encoderFunctor = EncoderFunctorType{&m_CountMap, &m_MeanMap, &m_StdMap,
+                                             &m_MinMap, &m_MaxMap, 
+                                             m_InputImage->GetNumberOfComponentsPerPixel() };
+    m_EncoderFilter = EncoderFilterType::New();
+
+    if(m_FromLabelImage)
+      {
+      ThresholdLabelImage(GetParameterInt32Image("inzone.labelimage.in"), 
+                          m_OutputThresholdFilter);
+      }
+    else
+      {
+      // ThresholdLabelImage(m_RasterizeFilter->GetOutput(),
+      //                     m_OutputThresholdFilter);
+      m_OutputThresholdFilter = ThresholdFilterType::New();
+      m_OutputThresholdFilter->SetInput(m_RasterizeFilter->GetOutput());
+      m_OutputThresholdFilter->SetInsideValue(0);
+      m_OutputThresholdFilter->SetOutsideValue(1);
+      m_OutputThresholdFilter->SetLowerThreshold(m_IntNoData);
+      m_OutputThresholdFilter->SetUpperThreshold(m_IntNoData);
+      m_OutputThresholdFilter->UpdateOutputInformation();
+      }
+    m_EncoderFilter->SetInput(m_OutputThresholdFilter->GetOutput());
+    m_EncoderFilter->SetFunctor(encoderFunctor);
+    AddProcess(m_EncoderFilter, "Encode output raster image");
+    SetParameterOutputImage("out.raster.filename", m_EncoderFilter->GetOutput());
+  }
+
   void WriteXMLStatsFile()
   {
     // Write statistics in XML file
     const std::string outXMLFile = this->GetParameterString("out.xml.filename");
     otbAppLogINFO("Writing " + outXMLFile)
-      StatsWriterType::Pointer statWriter = StatsWriterType::New();
-    statWriter->SetFileName(outXMLFile);
-    statWriter->AddInputMap<StatsFilterType::LabelPopulationMapType>("count",m_CountMap);
-    statWriter->AddInputMap<StatsFilterType::PixelValueMapType>("mean",m_MeanMap);
-    statWriter->AddInputMap<StatsFilterType::PixelValueMapType>("std",m_StdMap);
-    statWriter->AddInputMap<StatsFilterType::PixelValueMapType>("min",m_MinMap);
-    statWriter->AddInputMap<StatsFilterType::PixelValueMapType>("max",m_MaxMap);
-    statWriter->Update();
-  }
+        StatsWriterType::Pointer statWriter = StatsWriterType::New();
+      statWriter->SetFileName(outXMLFile);
+      statWriter->AddInputMap<StatsFilterType::LabelPopulationMapType>("count",m_CountMap);
+      statWriter->AddInputMap<StatsFilterType::PixelValueMapType>("mean",m_MeanMap);
+      statWriter->AddInputMap<StatsFilterType::PixelValueMapType>("std",m_StdMap);
+      statWriter->AddInputMap<StatsFilterType::PixelValueMapType>("min",m_MinMap);
+      statWriter->AddInputMap<StatsFilterType::PixelValueMapType>("max",m_MaxMap);
+      statWriter->Update();
+    }
 
-  void DoExecute()
-  {
-    // Get input image
-    m_InputImage = GetParameterImage("in");
-    // Statistics filter
-    m_StatsFilter = StatsFilterType::New();
-    m_StatsFilter->SetInput(m_InputImage);
-    if (HasUserValue("inbv"))
-      {
-      m_StatsFilter->SetUseNoDataValue(true);
-      m_StatsFilter->SetNoDataValue(GetParameterFloat("inbv"));
-      }
-    m_StatsFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
-    AddProcess(m_StatsFilter->GetStreamer(), "Computing statistics");
-    // Select zone definition mode
-    m_FromLabelImage = (GetParameterAsString("inzone") == "labelimage");
-    if (m_FromLabelImage)
-      {
-      PrepareForLabelImageInput();
-      }
-    else if (GetParameterAsString("inzone") == "vector")
-      {
-      PrepareForVectorDataInput();
-      }
-    else
-      {
-      otbAppLogFATAL("Unknown zone definition mode");
-      }
-    // Remove the no-data entry
-    RemoveNoDataEntry();
-    // Generate output
-    if (GetParameterAsString("out") == "vector")
-      {
-      if (m_FromLabelImage)
+    void DoExecute()
+    {
+      // Get input image
+      m_InputImage = GetParameterImage("in");
+      // Statistics filter
+      m_StatsFilter = StatsFilterType::New();
+      m_StatsFilter->SetInput(m_InputImage);
+      if (HasUserValue("inbv"))
         {
-        GenerateVectorDataFromLabelImage();
+        m_StatsFilter->SetUseNoDataValue(true);
+        m_StatsFilter->SetNoDataValue(GetParameterFloat("inbv"));
         }
-      WriteVectorData();
-      }
-    else if (GetParameterAsString("out") == "xml")
-      {
-      WriteXMLStatsFile();
-      }
-    else
-      {
-      otbAppLogFATAL("Unknown output mode");
-      }
-
-  }
+     m_StatsFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+     AddProcess(m_StatsFilter->GetStreamer(), "Computing statistics");
+     // Select zone definition mode
+     m_FromLabelImage = (GetParameterAsString("inzone") == "labelimage");
+     if (m_FromLabelImage) PrepareForLabelImageInput();
+     else if (GetParameterAsString("inzone") == "vector") PrepareForVectorDataInput();
+     else otbAppLogFATAL("Unknown zone definition mode");
+     // Remove the no-data entry
+     RemoveNoDataEntry();
+     // Generate output
+     if (GetParameterAsString("out") == "xml") WriteXMLStatsFile();
+     else     // vector or raster
+        {
+        if (m_FromLabelImage) GenerateVectorDataFromLabelImage();
+        if (GetParameterAsString("out") == "vector") WriteVectorData(); 
+        else if (GetParameterAsString("out") == "raster") WriteRasterData();
+        else otbAppLogFATAL("Unknown output mode");
+        }
+    }
 
   VectorDataType::Pointer m_VectorDataSrc;
   VectorDataType::Pointer m_NewVectorData;
@@ -378,7 +442,8 @@ public:
   RasterizeFilterType::Pointer m_RasterizeFilter;
   StatsFilterType::Pointer m_StatsFilter;
   LabelImageToVectorFilterType::Pointer m_LabelImageToVectorFilter;
-  ThresholdFilterType::Pointer m_ThresholdFilter;
+  ThresholdFilterType::Pointer m_InputThresholdFilter;
+  ThresholdFilterType::Pointer m_OutputThresholdFilter;
   FloatVectorImageType::Pointer m_InputImage;
   LabelValueType m_IntNoData = itk::NumericTraits<LabelValueType>::max();
   bool m_FromLabelImage = false;
@@ -387,6 +452,7 @@ public:
   StatsFilterType::PixelValueMapType m_StdMap;
   StatsFilterType::PixelValueMapType m_MinMap;
   StatsFilterType::PixelValueMapType m_MaxMap;
+  EncoderFilterType::Pointer m_EncoderFilter;
 
 };
 }
