@@ -618,8 +618,8 @@ void RADImageIO::WriteImageInformation()
   m_HeaderFile << "TYPECODAGE ";
 
   std::string lExtension;
-  std::string lStringPixelType = itksys::SystemTools::UpperCase(this->GetPixelTypeAsString(m_PixelType));
-  std::string lStringComponentType = itksys::SystemTools::UpperCase(this->GetComponentTypeAsString(this->GetComponentType()));
+  std::string lStringPixelType = itksys::SystemTools::UpperCase(ImageIOBase::GetPixelTypeAsString(m_PixelType));
+  std::string lStringComponentType = itksys::SystemTools::UpperCase(ImageIOBase::GetComponentTypeAsString(this->GetComponentType()));
 
   if (lStringPixelType == "SCALAR")
     {

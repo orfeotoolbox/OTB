@@ -709,7 +709,7 @@ unsigned int ImageIOBase::GetComponentSize() const
   return 0;
 }
 
-std::string ImageIOBase::GetFileTypeAsString(FileType t) const
+std::string ImageIOBase::GetFileTypeAsString(FileType t)
 {
   std::string s;
   switch(t)
@@ -724,7 +724,7 @@ std::string ImageIOBase::GetFileTypeAsString(FileType t) const
     }
 }
 
-std::string ImageIOBase::GetByteOrderAsString(ByteOrder t) const
+std::string ImageIOBase::GetByteOrderAsString(ByteOrder t)
 {
   std::string s;
   switch(t)
@@ -778,7 +778,7 @@ std::string ImageIOBase::GetComponentTypeAsString(IOComponentType t)
     }
 }
 
-std::string ImageIOBase::GetPixelTypeAsString(IOPixelType t) const
+std::string ImageIOBase::GetPixelTypeAsString(IOPixelType t)
 {
   std::string s;
   switch(t)
@@ -805,7 +805,7 @@ std::string ImageIOBase::GetPixelTypeAsString(IOPixelType t) const
       return (s = "complex");
     case UNKNOWNPIXELTYPE:
     default:
-      itkExceptionMacro ("Unknown pixel type: " << t);
+      return (s = "unknown");
     }
 }
 
@@ -1325,13 +1325,13 @@ void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os, indent);
 
   os << indent << "FileName: " << m_FileName << std::endl;
-  os << indent << "FileType: " << this->GetFileTypeAsString(m_FileType) << std::endl;
-  os << indent << "ByteOrder: " << this->GetByteOrderAsString(m_ByteOrder) << std::endl;
+  os << indent << "FileType: " << ImageIOBase::GetFileTypeAsString(m_FileType) << std::endl;
+  os << indent << "ByteOrder: " << ImageIOBase::GetByteOrderAsString(m_ByteOrder) << std::endl;
   os << indent << "IORegion: " << std::endl;
   m_IORegion.Print(os, indent.GetNextIndent());
   os << indent << "Number of Components/Pixel: " << m_NumberOfComponents << "\n";
-  os << indent << "Pixel Type: " << this->GetPixelTypeAsString(m_PixelType) << std::endl;
-  os << indent << "Component Type: " << this->GetComponentTypeAsString(m_ComponentType)
+  os << indent << "Pixel Type: " << ImageIOBase::GetPixelTypeAsString(m_PixelType) << std::endl;
+  os << indent << "Component Type: " << ImageIOBase::GetComponentTypeAsString(m_ComponentType)
      << std::endl;
   os << indent << "Dimensions: ( ";
   for (unsigned int i=0; i < m_NumberOfDimensions; i++)
