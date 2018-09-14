@@ -107,9 +107,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   bool outputTransformIsSensor = false;
   bool outputTransformIsMap = false;
 
-  m_InputProjectionRef = SpatialReference::FromDescription(m_InputProjectionRef).ToWkt();
-  m_OutputProjectionRef = SpatialReference::FromDescription(m_OutputProjectionRef).ToWkt();
-
   //*****************************
   //Set the input transformation
   //*****************************
