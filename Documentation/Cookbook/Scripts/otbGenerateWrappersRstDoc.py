@@ -133,7 +133,7 @@ def GenerateParameterType(app,param):
     if app.GetParameterType(param) == otbApplication.ParameterType_InputFilenameList :
         return "Input File name list"
     if app.GetParameterType(param) == otbApplication.ParameterType_ListView:
-        if app.GetListViewSingleSelectionMode():
+        if app.GetListViewSingleSelectionMode(param):
             return "String"
         else:
             return "String List"
