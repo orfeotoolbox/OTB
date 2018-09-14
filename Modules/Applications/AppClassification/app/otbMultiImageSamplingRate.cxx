@@ -339,9 +339,9 @@ private:
       {
       // Print results
       oss.str(std::string(""));
-      oss << " className  requiredSamples  totalSamples  rate" << std::endl;
+      oss << " className  requiredSamples  totalSamples  rate\n";
       MapRateType rates = m_CalculatorList->GetRatesByClass(i);
-      if(rates.size())
+      if(!rates.empty())
         {
         noSamples = false;
         }
