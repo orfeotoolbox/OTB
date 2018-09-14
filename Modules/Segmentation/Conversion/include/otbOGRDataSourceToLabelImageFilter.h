@@ -55,7 +55,7 @@ namespace otb {
  * \ingroup OTBConversion
  */
 template < class TOutputImage >
-class  ITK_EXPORT OGRDataSourceToLabelImageFilter :
+class OGRDataSourceToLabelImageFilter :
     public itk::ImageSource<TOutputImage>
 {
 public:

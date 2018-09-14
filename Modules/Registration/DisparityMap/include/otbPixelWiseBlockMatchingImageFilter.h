@@ -78,7 +78,7 @@ public:
  * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage>
-ITK_EXPORT class SSDDivMeanBlockMatching
+class SSDDivMeanBlockMatching
 {
 public:
   typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
@@ -123,7 +123,7 @@ public:
  * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage>
-ITK_EXPORT class NCCBlockMatching
+class NCCBlockMatching
 {
 public:
   typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
@@ -193,7 +193,7 @@ public:
  * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputMetricImage>
-ITK_EXPORT class LPBlockMatching
+class LPBlockMatching
 {
 public:
   typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;

@@ -253,7 +253,7 @@ section by deriving a new class from the decorated filter:
 
 \begin{cppcode}
 template<class TInputImage >
-  class ITK_EXPORT StreamingMeanImageFilter :
+  class StreamingMeanImageFilter :
     public PersistentFilterStreamingDecorator<
            PersistentImageFilter<TInputImage, TInputImage> >
 \end{cppcode}
