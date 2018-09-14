@@ -21,14 +21,9 @@
 set(OTBCarto_SRC
   otbCoordinateToName.cxx
   otbOSMDataToVectorDataGenerator.cxx
+  otbPlaceNameToLonLat.cxx
   otbWorldFile.cxx
   )
-
-if( OTB_USE_DEPRECATED )
-  set(OTBCarto_SRC 
-    ${OTBCarto_SRC}
-    otbPlaceNameToLonLat.cxx)
-endif()
 
 add_library(OTBCarto ${OTBCarto_SRC})
 target_link_libraries(OTBCarto 

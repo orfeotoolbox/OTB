@@ -32,12 +32,11 @@ namespace otb
  * \class PlaceNameToLonLat
  * \brief Retrieve Longitude and Latitude coordinates from a place name
  *
- * \deprecated in OTB 7.0
  *
  * \ingroup OTBCarto
  */
 
-class OTBCarto_DEPRECATED_EXPORT PlaceNameToLonLat : public itk::Object
+class OTBCarto_EXPORT PlaceNameToLonLat : public itk::Object
 {
 public:
   /** Standard class typedefs. */
