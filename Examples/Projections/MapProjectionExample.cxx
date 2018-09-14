@@ -51,7 +51,7 @@
 #include <iomanip>
 
 // Software Guide : BeginCodeSnippet
-#include "otbMapProjections.h"
+#include "otbSpatialReference.h"
 #include "otbGenericMapProjection.h"
 // Software Guide : EndCodeSnippet
 
@@ -103,10 +103,10 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  otb::UtmForwardProjection::Pointer utmProjection
-    = otb::UtmForwardProjection::New();
-  utmProjection->SetZone(31);
-  utmProjection->SetHemisphere('N');
+  typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> MapProjectionType;
+  otb::SpatialReference utmSRS = otb::SpatialReference::FromUTM(31,true);
+  MapProjectionType::Pointer utmProjection = MapProjectionType::New();
+  utmProjection->SetWkt(utmSRS.ToWkt());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -130,63 +130,15 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  otb::Lambert93ForwardProjection::Pointer lambertProjection
-    = otb::Lambert93ForwardProjection::New();
+  // IGNF:LAMB93 is the IGNF code for lambert 93
+  otb::SpatialReference lamb93SRS = otb::SpatialReference::FromDescription("IGNF:LAMB93");
+  MapProjectionType::Pointer lambertProjection = MapProjectionType::New();
+  lambertProjection->SetWkt(lamb93SRS.ToWkt());
 
   file << "Forward Lambert93 projection: " << std::endl;
   file << point << " -> ";
   file << lambertProjection->TransformPoint(point);
   file << std::endl << std::endl;
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // If you followed carefully the previous examples, you've noticed
-  // that the target projections have been directly coded, which means
-  // that they can't be changed at run-time. What happens if you don't
-  // know the target projection when you're writing the program? It
-  // can depend on some input provided by the user (image,
-  // shapefile).
-  //
-  // In this situation, you can use the
-  // \doxygen{otb}{GenericMapProjection}. It will accept a string to
-  // set the projection. This string should be in the WKT format.
-  //
-  // For example:
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  std::string projectionRefWkt = "PROJCS[\"UTM Zone 31, Northern Hemisphere\","
-                                 "GEOGCS[\"WGS 84\", DATUM[\"WGS_1984\", SPHEROID[\"WGS 84\", 6378137, 298.257223563,"
-                                 "AUTHORITY[\"EPSG\",\"7030\"]], TOWGS84[0, 0, 0, 0, 0, 0, 0],"
-                                 "AUTHORITY[\"EPSG\",\"6326\"]], PRIMEM[\"Greenwich\", 0, AUTHORITY[\"EPSG\",\"8901\"]],"
-                                 "UNIT[\"degree\", 0.0174532925199433, AUTHORITY[\"EPSG\",\"9108\"]],"
-                                 "AXIS[\"Lat\", NORTH], AXIS[\"Long\", EAST],"
-                                 "AUTHORITY[\"EPSG\",\"4326\"]], PROJECTION[\"Transverse_Mercator\"],"
-                                 "PARAMETER[\"latitude_of_origin\", 0], PARAMETER[\"central_meridian\", 3],"
-                                 "PARAMETER[\"scale_factor\", 0.9996], PARAMETER[\"false_easting\", 500000],"
-                                 "PARAMETER[\"false_northing\", 0], UNIT[\"Meter\", 1]]";
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
-  // This string is then passed to the projection using the
-  // \code{SetWkt()} method.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> GenericMapProjection;
-  GenericMapProjection::Pointer genericMapProjection =
-    GenericMapProjection::New();
-  genericMapProjection->SetWkt(projectionRefWkt);
-
-  file << "Forward generic projection: " << std::endl;
-  file << point << " -> ";
-  file << genericMapProjection->TransformPoint(point);
-  file << std::endl << std::endl;
-  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
@@ -209,8 +161,6 @@ int main(int argc, char* argv[])
   //   Forward Lambert93 projection:
   //      [1.4835345, 43.55968261] -> [577437.889798954, 6274578.791561]
   //
-  //   Forward generic projection:
-  //      [1.4835345, 43.55968261] -> [377522.448427013, 4824086.71129131]
   //   \end{verbatim}
   //
   // Software Guide : EndLatex

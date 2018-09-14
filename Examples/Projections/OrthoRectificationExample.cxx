@@ -39,7 +39,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbOrthoRectificationFilter.h"
-#include "otbMapProjections.h"
+#include "otbSpatialReference.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char* argv[])
@@ -88,9 +88,9 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::UtmInverseProjection utmMapProjectionType;
+  typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> MapProjectionType;
   typedef otb::OrthoRectificationFilter<VectorImageType, VectorImageType,
-      utmMapProjectionType>
+      MapProjectionType>
   OrthoRectifFilterType;
 
   OrthoRectifFilterType::Pointer orthoRectifFilter =
@@ -106,10 +106,10 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  utmMapProjectionType::Pointer utmMapProjection =
-    utmMapProjectionType::New();
-  utmMapProjection->SetZone(atoi(argv[3]));
-  utmMapProjection->SetHemisphere(*(argv[4]));
+  
+  MapProjectionType::Pointer utmMapProjection =
+    MapProjectionType::New();
+  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[3]),atoi(argv[4])).ToWkt());
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 // Software Guide : EndCodeSnippet
 
