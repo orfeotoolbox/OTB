@@ -137,6 +137,11 @@ public:
   itkGetConstReferenceMacro(BurnAttributeMode,bool);
   itkBooleanMacro(BurnAttributeMode);
 
+  /** Set/Get the AllTouched flag */
+  itkSetMacro(AllTouched,bool);
+  itkGetConstReferenceMacro(AllTouched,bool);
+  itkBooleanMacro(AllTouched);
+
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
@@ -169,6 +174,7 @@ private:
   OutputImageInternalPixelType  m_BackgroundValue;
   OutputImageInternalPixelType  m_ForegroundValue;
   bool                          m_BurnAttributeMode;
+  bool                          m_AllTouched;
 }; // end of class VectorDataToLabelImageFilter
 
 } // end of namespace otb
