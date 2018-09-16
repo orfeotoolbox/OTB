@@ -262,7 +262,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
 
   // Fill the buffer with the background value
   this->GetOutput()->FillBuffer(m_BackgroundValue);
-  
+
   // nb bands
   unsigned int nbBands =  this->GetOutput()->GetNumberOfComponentsPerPixel();
 
@@ -303,6 +303,12 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
   geoTransform[4] = 0.;
   GDALSetGeoTransform(dataset,const_cast<double*>(geoTransform.GetDataPointer()));
 
+  char **options = nullptr;
+  if (m_AllTouched)
+    {
+    options = CSLSetNameValue(options, "ALL_TOUCHED", "TRUE");
+    }
+
   // Burn the geometries into the dataset
    if (dataset != nullptr)
      {
@@ -311,8 +317,10 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
                           m_SrcDataSetGeometries.size(),
                           &(m_SrcDataSetGeometries[0]),
                           nullptr, nullptr, &(m_FullBurnValues[0]),
-                          nullptr,
+                          options,
                           GDALDummyProgress, nullptr );
+
+     CSLDestroy(options);
 
      // release the dataset
      GDALClose( dataset );
