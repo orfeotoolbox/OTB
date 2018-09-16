@@ -1047,7 +1047,12 @@ otb_test_application(NAME apTvClZonalStatisticsInVecOutRaster
   -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp  
   -inzone.vector.reproject 1
   -out raster  
-  -out.raster.filename ${TEMP}/apTvClZonalStats_QB1_ter_with_stats.tif  )
+  -out.raster.filename ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_invec.tif
+  -out.raster.bv -1  
+  VALID    --compare-image 1
+  ${OTBAPP_BASELINE}/apTvClZonalStats_QB1_ter_with_stats_invec.tif
+  ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_invec.tif
+  )
 
 otb_test_application(NAME apTvClZonalStatisticsInRasterOutRaster
   APP  ZonalStatistics
@@ -1057,4 +1062,8 @@ otb_test_application(NAME apTvClZonalStatisticsInRasterOutRaster
   -inzone.labelimage.in ${INPUTDATA}/Classification/VectorData_QB1_ter.tif
   -inzone.labelimage.nodata -1
   -out raster  
-  -out.raster.filename ${TEMP}/apTvClZonalStats_QB1_ter_with_stats.tif  )
+  -out.raster.filename ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_inraster.tif  
+  VALID    --compare-image 1
+  ${OTBAPP_BASELINE}/apTvClZonalStats_QB1_ter_with_stats_inraster.tif
+  ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_inraster.tif
+  )
