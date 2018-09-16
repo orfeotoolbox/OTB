@@ -145,12 +145,16 @@ public:
     // Documentation
     SetDocName("ZonalStatistics");
     SetDocLongDescription("This application computes zonal statistics from label image, or vector data. "
-                          "The application inputs one input multiband image, and a label input. "
-                          "If the label input is a raster, the output statistics are exported in a XML file. If the label "
-                          "input is a vector data, the output statistics are exported in a new vector data with statistics "
-                          "in the attribute table. The computed statistics are mean, min, max, and standard deviation.");
-    SetDocLimitations("The shapefile must fit in memory");
-    SetDocAuthors("Remi Cresson");
+                          "The application inputs one input multiband image, and another input for zones definition. "
+                          "Zones can be defined with a label image (inzone.labelimage.in) or a vector data layer "
+                          "(inzone.vector.in). The following statistics are computed over each zones: mean, min, max, "
+                          "and standard deviation. Statistics can be exported in a vector layer (if the input zone "
+                          "definition is a label image, it will be vectorized) or in a XML file");
+    SetDocLimitations("1) The inzone.vector.in must fit in memory (if \"inzone\" is \"vector\"). 2) The vectorized label "
+                      "image must also fit in memory (if \"out\" is \"vector\"): if not, consider using \"out\" to "
+                      "\"xml\"");
+    SetDocAuthors("Remi Cresson, Jordi Inglada");
+    SetDocSeeAlso("ComputeImagesStatistics");
 
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Analysis);
@@ -194,7 +198,7 @@ public:
     SetDocExampleParameterValue("inzone.vector.in", "myvector.shp");
     SetDocExampleParameterValue("out.vector.filename", "myvector_with_stats.shp");
 
-
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters()
