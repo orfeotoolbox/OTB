@@ -27,7 +27,7 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 TransMercatorMapProjection<TTransform>
 ::TransMercatorMapProjection()
 {
@@ -42,14 +42,14 @@ TransMercatorMapProjection<TTransform>
 }
 
 /// Desctructor
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 TransMercatorMapProjection<TTransform>
 ::~TransMercatorMapProjection()
 {
 }
 
 ///Set the false Easting
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void TransMercatorMapProjection<TTransform>
 ::SetFalseEasting(double falseEasting)
 {
@@ -58,7 +58,7 @@ void TransMercatorMapProjection<TTransform>
 }
 
 ///Set the False Northing
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void TransMercatorMapProjection<TTransform>
 ::SetFalseNorthing(double falseNorthing)
 {
@@ -67,7 +67,7 @@ void TransMercatorMapProjection<TTransform>
 }
 
 ///Set the scale factor
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void TransMercatorMapProjection<TTransform>
 ::SetScaleFactor(double scaleFactor)
 {
@@ -76,7 +76,7 @@ void TransMercatorMapProjection<TTransform>
 }
 
 ///Set the parameters
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void TransMercatorMapProjection<TTransform>
 ::SetParameters(double falseEasting, double falseNorthing, double scaleFactor)
 {
@@ -87,7 +87,7 @@ void TransMercatorMapProjection<TTransform>
 }
 
 ///\return the scale factor
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double TransMercatorMapProjection<TTransform>
 ::GetScaleFactor() const
 {
@@ -96,7 +96,7 @@ double TransMercatorMapProjection<TTransform>
 }
 
 ///\return the false northing (avoid negative coordinates)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double TransMercatorMapProjection<TTransform>
 ::GetFalseNorthing() const
 {
@@ -105,7 +105,7 @@ double TransMercatorMapProjection<TTransform>
 }
 
 ///\return the false easting (avoid negative coordinates)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double TransMercatorMapProjection<TTransform>
 ::GetFalseEasting() const
 {

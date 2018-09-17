@@ -39,11 +39,11 @@ int otbNAPCAImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) []
   typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
 
   typedef otb::NAPCAImageFilter< ImageType, ImageType,
-    NoiseFilterType, otb::Transform::FORWARD > FilterType;
+    NoiseFilterType, otb::TransformDirection::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
 
   typedef otb::NAPCAImageFilter< ImageType, ImageType,
-      NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
+      NoiseFilterType, otb::TransformDirection::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
 
   return EXIT_SUCCESS;
@@ -110,7 +110,7 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
 
   // Image filtering
   typedef otb::NAPCAImageFilter< ImageType, ImageType,
-    NoiseFilterType, otb::Transform::FORWARD > FilterType;
+    NoiseFilterType, otb::TransformDirection::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetNumberOfPrincipalComponentsRequired( nbComponents );
@@ -132,7 +132,7 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
   if ( parseResult->IsOptionPresent("--Inverse") )
   {
     typedef otb::NAPCAImageFilter< ImageType, ImageType,
-      NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
+      NoiseFilterType, otb::TransformDirection::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );
     invFilter->SetMeanValues( filter->GetMeanValues() );

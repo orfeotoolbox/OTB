@@ -53,22 +53,22 @@ public:
   typedef itk::ImageToImageFilter<FloatVectorImageType, FloatVectorImageType> DimensionalityReductionFilter;
 
   // Reduction dimensio filters
-  typedef otb::PCAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::Transform::FORWARD> PCAForwardFilterType;
-  typedef otb::PCAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::Transform::INVERSE> PCAInverseFilterType;
-  //typedef otb::PCAImageFilter< FloatVectorImageType, FloatVectorImageType, otb::Transform::FORWARD >
+  typedef otb::PCAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::TransformDirection::FORWARD> PCAForwardFilterType;
+  typedef otb::PCAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::TransformDirection::INVERSE> PCAInverseFilterType;
+  //typedef otb::PCAImageFilter< FloatVectorImageType, FloatVectorImageType, otb::TransformDirection::FORWARD >
 
   typedef otb::LocalActivityVectorImageFilter<FloatVectorImageType, FloatVectorImageType> NoiseFilterType;
 
-  typedef otb::NAPCAImageFilter<FloatVectorImageType, FloatVectorImageType, NoiseFilterType, otb::Transform::FORWARD>
+  typedef otb::NAPCAImageFilter<FloatVectorImageType, FloatVectorImageType, NoiseFilterType, otb::TransformDirection::FORWARD>
       NAPCAForwardFilterType;
-  typedef otb::NAPCAImageFilter<FloatVectorImageType, FloatVectorImageType, NoiseFilterType, otb::Transform::INVERSE>
+  typedef otb::NAPCAImageFilter<FloatVectorImageType, FloatVectorImageType, NoiseFilterType, otb::TransformDirection::INVERSE>
       NAPCAInverseFilterType;
 
   typedef otb::MaximumAutocorrelationFactorImageFilter<FloatVectorImageType, FloatVectorImageType> MAFForwardFilterType;
 
-  typedef otb::FastICAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::Transform::FORWARD>
+  typedef otb::FastICAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::TransformDirection::FORWARD>
       ICAForwardFilterType;
-  typedef otb::FastICAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::Transform::INVERSE>
+  typedef otb::FastICAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::TransformDirection::INVERSE>
       ICAInverseFilterType;
 
   typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StreamingStatisticsVectorImageFilterType;

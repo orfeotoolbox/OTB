@@ -34,10 +34,10 @@ int otbPCAImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
   typedef double PixelType;
   typedef otb::VectorImage< PixelType, Dimension > ImageType;
 
-  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::FORWARD > FilterType;
+  typedef otb::PCAImageFilter< ImageType, ImageType, otb::TransformDirection::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
 
-  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvFilterType;
+  typedef otb::PCAImageFilter< ImageType, ImageType, otb::TransformDirection::INVERSE > InvFilterType;
   InvFilterType::Pointer invFilter = InvFilterType::New();
 
   return EXIT_SUCCESS;
@@ -91,7 +91,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
   reader->SetFileName(inputImageName);
 
   // Image filtering
-  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::FORWARD > FilterType;
+  typedef otb::PCAImageFilter< ImageType, ImageType, otb::TransformDirection::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetNumberOfPrincipalComponentsRequired( nbComponents );
@@ -111,7 +111,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
 
   if ( parseResult->IsOptionPresent("--Inverse") )
   {
-    typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvFilterType;
+    typedef otb::PCAImageFilter< ImageType, ImageType, otb::TransformDirection::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );
     if ( normalization )

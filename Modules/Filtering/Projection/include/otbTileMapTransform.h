@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBProjection
  **/
 
-template <TransformDirection::TransformationDirection TTransformDirection,
+template <TransformDirection::TransformDirection TTransformDirection,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
@@ -60,7 +60,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(TileMapTransform, Transform);
 
-  static const TransformDirection::TransformationDirection DirectionOfMapping = TTransformDirection;
+  static const TransformDirection::TransformDirection DirectionOfMapping = TTransformDirection;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);

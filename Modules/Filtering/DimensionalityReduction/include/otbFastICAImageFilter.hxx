@@ -35,7 +35,7 @@ namespace otb
 {
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::FastICAImageFilter ()
 {
@@ -58,7 +58,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateOutputInformation()
@@ -68,7 +68,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   switch ( static_cast<int>(DirectionOfTransformation) )
   {
-  case static_cast<int>(Transform::FORWARD):
+  case static_cast<int>(TransformDirection::FORWARD):
     {
       if ( m_NumberOfPrincipalComponentsRequired == 0
           || m_NumberOfPrincipalComponentsRequired
@@ -82,7 +82,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
         m_NumberOfPrincipalComponentsRequired );
       break;
     }
-  case static_cast<int>(Transform::INVERSE):
+  case static_cast<int>(TransformDirection::INVERSE):
     {
       unsigned int theOutputDimension = 0;
       if ( m_GivenTransformationMatrix )
@@ -109,12 +109,12 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   switch ( static_cast<int>(DirectionOfTransformation) )
     {
-    case static_cast<int>(Transform::FORWARD):
+    case static_cast<int>(TransformDirection::FORWARD):
     {
     ForwardGenerateOutputInformation();
     break;
     }
-    case static_cast<int>(Transform::INVERSE):
+    case static_cast<int>(TransformDirection::INVERSE):
     {
     ReverseGenerateOutputInformation();
     break;
@@ -123,7 +123,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ForwardGenerateOutputInformation()
@@ -158,7 +158,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ReverseGenerateOutputInformation()
@@ -198,16 +198,16 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateData ()
 {
   switch ( static_cast<int>(DirectionOfTransformation) )
     {
-    case static_cast<int>(Transform::FORWARD):
+    case static_cast<int>(TransformDirection::FORWARD):
       return ForwardGenerateData();
-    case static_cast<int>(Transform::INVERSE):
+    case static_cast<int>(TransformDirection::INVERSE):
       return ReverseGenerateData();
     default:
       throw itk::ExceptionObject(__FILE__, __LINE__,
@@ -217,7 +217,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ForwardGenerateData ()
@@ -229,7 +229,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ReverseGenerateData ()
@@ -240,7 +240,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()

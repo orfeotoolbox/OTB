@@ -28,21 +28,21 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 MollweidMapProjection<TTransform>
 ::MollweidMapProjection()
 {
   this->SetWkt("ossimMollweidProjection");
 }
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 MollweidMapProjection<TTransform>
 ::~MollweidMapProjection()
 {
 }
 
 ///Set the false easting
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void MollweidMapProjection<TTransform>
 ::SetFalseEasting(double falseEasting)
 {
@@ -51,7 +51,7 @@ void MollweidMapProjection<TTransform>
 }
 
 ///Set the false Northing
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void MollweidMapProjection<TTransform>
 ::SetFalseNorthing(double falseNorthing)
 {
@@ -60,7 +60,7 @@ void MollweidMapProjection<TTransform>
 }
 
 ///\return the false northing (avoid negative coordinates)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double MollweidMapProjection<TTransform>
 ::GetFalseNorthing() const
 {
@@ -69,7 +69,7 @@ double MollweidMapProjection<TTransform>
 }
 
 ///\return the false easting (avoid negative coordinates)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double MollweidMapProjection<TTransform>
 ::GetFalseEasting() const
 {
@@ -77,7 +77,7 @@ double MollweidMapProjection<TTransform>
   return falseEasting;
 }
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void MollweidMapProjection<TTransform>
 ::SetParameters(double falseEasting, double falseNorthing)
 {

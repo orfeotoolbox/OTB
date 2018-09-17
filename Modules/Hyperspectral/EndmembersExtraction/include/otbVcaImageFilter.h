@@ -91,8 +91,8 @@ public:
   typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType, PrecisionType>             StreamingStatisticsVectorImageFilterType;
   typedef otb::StreamingStatisticsImageFilter<ImageType>                                        StreamingStatisticsImageFilterType;
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator                                RandomVariateGeneratorType;
-  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::FORWARD >      ForwardPCAImageFilterType;
-  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::INVERSE >      InversePCAImageFilterType;
+  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::TransformDirection::FORWARD >      ForwardPCAImageFilterType;
+  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::TransformDirection::INVERSE >      InversePCAImageFilterType;
   typedef otb::VectorImageToAmplitudeImageFilter< VectorImageType, ImageType >                  VectorImageToAmplitudeImageFilterType;
   typedef otb::ConcatenateScalarValueImageFilter< VectorImageType, VectorImageType >            ConcatenateScalarValueImageFilterType;
 

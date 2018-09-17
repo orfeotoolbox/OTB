@@ -26,18 +26,10 @@
 #include "otbTransform.h"
 #include "itkMacro.h"
 #include "otbMapProjectionAdapter.h"
+#include "otbTransformDirection.h"
 
 namespace otb
 {
-
-namespace TransformDirection
-{
-enum TransformationDirection
-  {
-  FORWARD = 0,
-  INVERSE = 1
-  };
-}
 
 /** \class GenericMapProjection
  *  \brief This is the base class for generic map projection transformation
@@ -54,7 +46,7 @@ enum TransformationDirection
  * \ingroup OTBTransform
  **/
 
-template <TransformDirection::TransformationDirection TDirectionOfMapping,
+template <TransformDirection::TransformDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
@@ -82,7 +74,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GenericMapProjection, Transform);
 
-  static const TransformDirection::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
+  static const TransformDirection::TransformDirection DirectionOfMapping = TDirectionOfMapping;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);

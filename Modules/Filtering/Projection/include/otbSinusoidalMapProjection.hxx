@@ -28,21 +28,21 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 SinusoidalMapProjection<TTransform>
 ::SinusoidalMapProjection()
 {
   this->SetWkt("ossimSinusoidalProjection");
 }
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 SinusoidalMapProjection<TTransform>
 ::~SinusoidalMapProjection()
 {
 }
 
 ///Set the false Easting
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void SinusoidalMapProjection<TTransform>
 ::SetFalseEasting(double falseEasting)
 {
@@ -51,7 +51,7 @@ void SinusoidalMapProjection<TTransform>
 }
 
 ///Set the False Northing
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void SinusoidalMapProjection<TTransform>
 ::SetFalseNorthing(double falseNorthing)
 {
@@ -60,7 +60,7 @@ void SinusoidalMapProjection<TTransform>
 }
 
 ///\return the False Northing (avoid negative coordinates)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double SinusoidalMapProjection<TTransform>
 ::GetFalseNorthing() const
 {
@@ -69,7 +69,7 @@ double SinusoidalMapProjection<TTransform>
 }
 
 ///\return the False Easting (avoid negative coordinates)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double SinusoidalMapProjection<TTransform>
 ::GetFalseEasting() const
 {
@@ -77,7 +77,7 @@ double SinusoidalMapProjection<TTransform>
   return falseEasting;
 }
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void SinusoidalMapProjection<TTransform>
 ::SetParameters(double falseEasting, double falseNorthing)
 {

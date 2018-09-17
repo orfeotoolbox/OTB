@@ -33,7 +33,7 @@ namespace otb
  *
  * \ingroup OTBTransform
  */
-template <TransformDirection::TransformationDirection TDirectionOfMapping,
+template <TransformDirection::TransformDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 3,
     unsigned int NOutputDimensions = 3>
@@ -59,7 +59,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GeocentricTransform, Transform);
 
-  static const TransformDirection::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
+  static const TransformDirection::TransformDirection DirectionOfMapping = TDirectionOfMapping;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);

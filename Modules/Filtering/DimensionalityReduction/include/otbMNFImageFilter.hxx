@@ -34,7 +34,7 @@ namespace otb
 {
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::MNFImageFilter ()
 {
@@ -61,7 +61,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::GenerateOutputInformation()
@@ -71,7 +71,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   switch ( static_cast<int>(DirectionOfTransformation) )
   {
-  case static_cast<int>(Transform::FORWARD):
+  case static_cast<int>(TransformDirection::FORWARD):
     {
       if ( m_NumberOfPrincipalComponentsRequired == 0
           || m_NumberOfPrincipalComponentsRequired
@@ -85,7 +85,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
         m_NumberOfPrincipalComponentsRequired );
       break;
     }
-  case static_cast<int>(Transform::INVERSE):
+  case static_cast<int>(TransformDirection::INVERSE):
     {
       unsigned int theOutputDimension = 0;
       if ( m_GivenTransformationMatrix )
@@ -118,12 +118,12 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   switch ( static_cast<int>(DirectionOfTransformation) )
     {
-    case static_cast<int>(Transform::FORWARD):
+    case static_cast<int>(TransformDirection::FORWARD):
     {
     ForwardGenerateOutputInformation();
     break;
     }
-    case static_cast<int>(Transform::INVERSE):
+    case static_cast<int>(TransformDirection::INVERSE):
     {
     ReverseGenerateOutputInformation();
     break;
@@ -133,7 +133,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::ForwardGenerateOutputInformation()
@@ -214,7 +214,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::ReverseGenerateOutputInformation()
@@ -315,16 +315,16 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::GenerateData ()
 {
   switch ( static_cast<int>(DirectionOfTransformation) )
   {
-  case static_cast<int>(Transform::FORWARD):
+  case static_cast<int>(TransformDirection::FORWARD):
     return ForwardGenerateData();
-  case static_cast<int>(Transform::INVERSE):
+  case static_cast<int>(TransformDirection::INVERSE):
     return ReverseGenerateData();
   default: // should not go so far
     throw itk::ExceptionObject(__FILE__, __LINE__,
@@ -335,7 +335,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::ForwardGenerateData ()
@@ -347,7 +347,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::ReverseGenerateData ()
@@ -359,7 +359,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()
@@ -439,7 +439,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::PrintSelf ( std::ostream& os, itk::Indent indent ) const

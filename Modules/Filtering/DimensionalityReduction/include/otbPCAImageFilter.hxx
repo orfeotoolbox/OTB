@@ -32,7 +32,7 @@ namespace otb
 {
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::PCAImageFilter ()
 {
@@ -56,7 +56,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateOutputInformation()
@@ -65,7 +65,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   switch ( static_cast<int>(DirectionOfTransformation) )
     {
-    case static_cast<int>(Transform::FORWARD):
+    case static_cast<int>(TransformDirection::FORWARD):
     {
     if ( m_NumberOfPrincipalComponentsRequired == 0
          || m_NumberOfPrincipalComponentsRequired
@@ -79,7 +79,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       m_NumberOfPrincipalComponentsRequired );
     break;
     }
-    case static_cast<int>(Transform::INVERSE):
+    case static_cast<int>(TransformDirection::INVERSE):
     {
     unsigned int theOutputDimension = 0;
     if ( m_GivenTransformationMatrix )
@@ -112,12 +112,12 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   
   switch ( static_cast<int>(DirectionOfTransformation) )
     {
-    case static_cast<int>(Transform::FORWARD):
+    case static_cast<int>(TransformDirection::FORWARD):
     {
     ForwardGenerateOutputInformation();
     break;
     }
-    case static_cast<int>(Transform::INVERSE):
+    case static_cast<int>(TransformDirection::INVERSE):
     {
     ReverseGenerateOutputInformation();
     break;
@@ -126,7 +126,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ForwardGenerateOutputInformation()
@@ -206,7 +206,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ReverseGenerateOutputInformation()
@@ -280,16 +280,16 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateData ()
 {
   switch ( static_cast<int>(DirectionOfTransformation) )
   {
-  case static_cast<int>(Transform::FORWARD):
+  case static_cast<int>(TransformDirection::FORWARD):
       return ForwardGenerateData();
-    case static_cast<int>(Transform::INVERSE):
+    case static_cast<int>(TransformDirection::INVERSE):
       return ReverseGenerateData();
     default:
       throw itk::ExceptionObject(__FILE__, __LINE__,
@@ -299,7 +299,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ForwardGenerateData ()
@@ -311,7 +311,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ReverseGenerateData ()
@@ -332,7 +332,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 }
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()
@@ -425,7 +425,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
 
 template < class TInputImage, class TOutputImage,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::PrintSelf ( std::ostream& os, itk::Indent indent ) const

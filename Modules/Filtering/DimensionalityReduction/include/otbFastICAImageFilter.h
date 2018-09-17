@@ -37,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBDimensionalityReduction
  */
-template <class TInputImage, class TOutputImage, Transform::TransformDirection TDirectionOfTransformation >
+template <class TInputImage, class TOutputImage, TransformDirection::TransformDirection TDirectionOfTransformation >
 class ITK_EXPORT FastICAImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -58,7 +58,7 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
-  typedef Transform::TransformDirection TransformDirectionEnumType;
+  typedef TransformDirection::TransformDirection TransformDirectionEnumType;
   itkStaticConstMacro(DirectionOfTransformation, TransformDirectionEnumType, TDirectionOfTransformation);
 
   /** typedefs */

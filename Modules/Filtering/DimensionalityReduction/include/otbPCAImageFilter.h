@@ -23,17 +23,12 @@
 
 #include "otbMacro.h"
 #include "otbMatrixImageFilter.h"
+#include "otbTransformDirection.h"
 #include "otbNormalizeVectorImageFilter.h"
 
 
 namespace otb
 {
-
-  namespace Transform
-  {
-    enum TransformDirection {FORWARD = 0, INVERSE = 1};
-  }
-
 /** \class PCAImageFilter
  * \brief Performs a Principal Component Analysis
  *
@@ -45,7 +40,7 @@ namespace otb
  *
  * \ingroup OTBDimensionalityReduction
  */
-template <class TInputImage, class TOutputImage, Transform::TransformDirection TDirectionOfTransformation >
+template <class TInputImage, class TOutputImage, TransformDirection::TransformDirection TDirectionOfTransformation >
 class ITK_EXPORT PCAImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -66,7 +61,7 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
-  typedef Transform::TransformDirection TransformDirectionEnumType;
+  typedef TransformDirection::TransformDirection TransformDirectionEnumType;
   itkStaticConstMacro(DirectionOfTransformation, TransformDirectionEnumType, TDirectionOfTransformation);
 
   /** Template parameters typedefs */

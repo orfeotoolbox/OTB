@@ -44,7 +44,7 @@ namespace otb {
  */
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 class ITK_EXPORT MNFImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -65,7 +65,7 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
-  typedef Transform::TransformDirection TransformDirectionEnumType;
+  typedef TransformDirection::TransformDirection TransformDirectionEnumType;
   itkStaticConstMacro(DirectionOfTransformation, TransformDirectionEnumType, TDirectionOfTransformation);
 
   /** Template parameters typedefs */

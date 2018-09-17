@@ -34,7 +34,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage,
             class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
+            TransformDirection::TransformDirection TDirectionOfTransformation >
 void
 NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()

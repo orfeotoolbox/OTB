@@ -28,21 +28,21 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 Eckert4MapProjection<TTransform>
 ::Eckert4MapProjection()
 {
   this->SetWkt("ossimEckert4Projection");
 }
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 Eckert4MapProjection<TTransform>
 ::~Eckert4MapProjection()
 {
 }
 
 ///False easting specification
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void Eckert4MapProjection<TTransform>
 ::SetFalseEasting(double falseEasting)
 {
@@ -51,7 +51,7 @@ void Eckert4MapProjection<TTransform>
 }
 
 ///False Northing specification
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void Eckert4MapProjection<TTransform>
 ::SetFalseNorthing(double falseNorthing)
 {
@@ -60,7 +60,7 @@ void Eckert4MapProjection<TTransform>
 }
 
 ///Get the false northing coordinates (avoid negative values)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double Eckert4MapProjection<TTransform>
 ::GetFalseNorthing() const
 {
@@ -69,7 +69,7 @@ double Eckert4MapProjection<TTransform>
 }
 
 ///Get the false easting coordinates (avoid negative values)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double Eckert4MapProjection<TTransform>
 ::GetFalseEasting() const
 {
@@ -77,7 +77,7 @@ double Eckert4MapProjection<TTransform>
   return falseEasting;
 }
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void Eckert4MapProjection<TTransform>
 ::SetParameters(double falseEasting, double falseNorthing)
 {

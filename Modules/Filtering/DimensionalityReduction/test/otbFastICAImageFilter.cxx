@@ -43,7 +43,7 @@ int otbFastICAImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) 
   const unsigned int Dimension = 2;
   typedef double PixelType;
   typedef otb::VectorImage< PixelType, Dimension > ImageType;
-  typedef otb::FastICAImageFilter< ImageType, ImageType, otb::Transform::FORWARD > FilterType;
+  typedef otb::FastICAImageFilter< ImageType, ImageType, otb::TransformDirection::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
   return EXIT_SUCCESS;
 }
@@ -100,7 +100,7 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
   reader->SetFileName(inputImageName);
 
   // Image filtering
-  typedef otb::FastICAImageFilter< ImageType, ImageType, otb::Transform::FORWARD > FilterType;
+  typedef otb::FastICAImageFilter< ImageType, ImageType, otb::TransformDirection::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetNumberOfPrincipalComponentsRequired( nbComponents );
@@ -124,7 +124,7 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
 
   if ( parseResult->IsOptionPresent("--Inverse") )
   {
-    typedef otb::FastICAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvFilterType;
+    typedef otb::FastICAImageFilter< ImageType, ImageType, otb::TransformDirection::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );
     invFilter->SetMeanValues( filter->GetMeanValues() );

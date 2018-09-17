@@ -26,7 +26,7 @@
 namespace otb
 {
 
-template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType,
+template<TransformDirection::TransformDirection TDirectionOfMapping, class TScalarType,
          unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::GeocentricTransform() : Superclass(ParametersDimension)
@@ -34,13 +34,13 @@ GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputD
   m_Ellipsoid = EllipsoidAdapter::New();
 }
 
-template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType,
+template<TransformDirection::TransformDirection TDirectionOfMapping, class TScalarType,
          unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::~GeocentricTransform()
 {}
 
-template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType,
+template<TransformDirection::TransformDirection TDirectionOfMapping, class TScalarType,
          unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename GeocentricTransform<TDirectionOfMapping, TScalarType,
                              NInputDimensions, NOutputDimensions>::OutputPointType

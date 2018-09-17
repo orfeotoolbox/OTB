@@ -28,7 +28,7 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 LambertConformalConicMapProjection<TTransform>
 ::LambertConformalConicMapProjection()
 {
@@ -36,7 +36,7 @@ LambertConformalConicMapProjection<TTransform>
 }
 
 /// Parallel1 specification
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
 ::SetStandardParallel1(double degree)
 {
@@ -45,7 +45,7 @@ void LambertConformalConicMapProjection<TTransform>
 }
 
 /// Parallel2 specification
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
 ::SetStandardParallel2(double degree)
 {
@@ -54,7 +54,7 @@ void LambertConformalConicMapProjection<TTransform>
 }
 
 /// Specification of the 2 parallels
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
 ::SetStandardParallels(double parallel1Degree, double parallel2Degree)
 {
@@ -64,7 +64,7 @@ void LambertConformalConicMapProjection<TTransform>
 }
 
 /// False easting specification
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
 ::SetFalseEasting(double falseEasting)
 {
@@ -73,7 +73,7 @@ void LambertConformalConicMapProjection<TTransform>
 }
 
 /// False Northing specification
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
 ::SetFalseNorthing(double falseNorthing)
 {
@@ -82,7 +82,7 @@ void LambertConformalConicMapProjection<TTransform>
 }
 
 /// Set the parameters
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
 ::SetAllParameters(double parallel1Degree, double parallel2Degree, double falseEasting, double falseNorthing)
 {
@@ -94,7 +94,7 @@ void LambertConformalConicMapProjection<TTransform>
 }
 
 /// Get the False Northing (avoid negative coordinates)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double LambertConformalConicMapProjection<TTransform>
 ::GetFalseNorthing() const
 {
@@ -103,7 +103,7 @@ double LambertConformalConicMapProjection<TTransform>
 }
 
 ///Get the False Easting (avoid negative coordinates)
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 double LambertConformalConicMapProjection<TTransform>
 ::GetFalseEasting() const
 {

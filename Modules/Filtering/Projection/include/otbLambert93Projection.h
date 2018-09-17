@@ -32,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBProjection
  */
-template <TransformDirection::TransformationDirection TTransform>
+template <TransformDirection::TransformDirection TTransform>
 class ITK_EXPORT Lambert93Projection : public LambertConformalConicMapProjection<TTransform>
 {
 public:
