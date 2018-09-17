@@ -157,12 +157,14 @@ private:
     changeLabelFilter->SetInput(labelIn);
     
     const auto & LUT = regionMergingFilter->GetLUT();
+
     for (auto label : LUT)
     {
       if (label.first != label.second)
+      {
         changeLabelFilter->SetChange(label.first, label.second);
+      }
     }
-    
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
     RegisterPipeline();
     clock_t toc = clock();

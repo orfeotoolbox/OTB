@@ -99,27 +99,20 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     }
   
   // Update the LUT
-  for(InputLabelType label = 0; label < m_LUT.size(); ++label)
+  for (auto & label : m_LUT)
     {
-    InputLabelType can = label;
-    while(m_LUT[can] != can)
-      {
-      can = m_LUT[can];
-      }
-    m_LUT[label] = can;
+    label.second = FindCorrespondingLabel( label.first );
     }
-
-  // Update Statistics
-  for(InputLabelType label = 0; label < m_LUT.size(); ++label)
+  
+  // Update statistics
+  for (auto label : m_LUT)
     {
-    InputLabelType correspondingLabel = m_LUT[label];
-    
-    if((m_LabelPopulation[label]!=0) && (correspondingLabel != label))
+     if((m_LabelPopulation[label.first]!=0) && (label.second != label.first))
       {
-      m_LabelStatistic[ correspondingLabel ] = (m_LabelStatistic[correspondingLabel]*m_LabelPopulation[correspondingLabel] + 
-                        m_LabelStatistic[label]*m_LabelPopulation[label] ) / (m_LabelPopulation[label]+m_LabelPopulation[correspondingLabel]);
-      m_LabelPopulation[ correspondingLabel ] += m_LabelPopulation[ label ] ;
-      m_LabelPopulation[ label ] = 0;
+      m_LabelStatistic[ label.second ] = (m_LabelStatistic[label.second]*m_LabelPopulation[label.second] + 
+                        m_LabelStatistic[label.first]*m_LabelPopulation[label.first] ) / (m_LabelPopulation[label.first]+m_LabelPopulation[label.second]);
+      m_LabelPopulation[ label.second ] += m_LabelPopulation[ label.first ] ;
+      m_LabelPopulation[ label.first ] = 0;
       }
     }
 }

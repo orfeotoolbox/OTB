@@ -123,12 +123,12 @@ public:
     return m_LUT;
   }
   
-  virtual void Reset(void);
-  virtual void Synthetize(void);
+  virtual void Reset(void) override;
+  virtual void Synthetize(void) override;
 
 protected:
   /** The input requested region should be padded by a radius of 1 to use the neigbourhood iterator*/
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() override;
 
   /** Threaded Generate Data : find the neighbours of each segments of size m_Size for each tile and store them in
    * an accumulator */ 
@@ -248,7 +248,7 @@ protected:
   ~LabelImageSmallRegionMergingFilter() override = default;
 
   /** Generate Data method (Update LabelImageSmallRegionMergingFilterType recursively) */
-  void GenerateData();
+  void GenerateData() override;
   
 private:
   LabelImageSmallRegionMergingFilter(const Self &) = delete;
