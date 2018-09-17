@@ -24,6 +24,8 @@
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
+#include <unordered_map>
+
 namespace otb
 {
 
@@ -76,9 +78,10 @@ public:
   typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
   
   typedef std::map<InputLabelType, std::set<InputLabelType> >                 NeigboursMapType;
-  typedef std::vector<RealVectorPixelType >                                   LabelStatisticType;
-  typedef std::vector<double>                                                 LabelPopulationType;
-  typedef std::vector<InputLabelType>                                          LUTType;
+
+  typedef std::unordered_map<InputLabelType , RealVectorPixelType >                                   LabelStatisticType;
+  typedef std::unordered_map<InputLabelType , double>                                                 LabelPopulationType;
+  typedef std::unordered_map<InputLabelType , InputLabelType>                                          LUTType;
   
   /** Set/Get size of segments to be merged */
   itkGetMacro(Size , unsigned int);
@@ -88,12 +91,12 @@ public:
   void SetLabelPopulation( LabelPopulationType const & labelPopulation )
   {
     m_LabelPopulation = labelPopulation; 
+    
     // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
-    m_LUT.resize( labelPopulation.size() );
-    for (unsigned int i =0; i <labelPopulation.size(); i++)
+    for (label : m_LabelPopulation)
       {
-      m_LUT[ i ] = i;
-      }
+      m_LUT[label.first] = label.first;
+      }  
   }
   
   /** Get the Label population */

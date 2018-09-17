@@ -210,7 +210,6 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     {
     assert( !itN.IsAtEnd() );
     int currentLabel = FindCorrespondingLabel(it.Get());
-    
     if ( m_LabelPopulation[currentLabel] == m_Size )
       {
       for (auto ci = itN.Begin() ; !ci.IsAtEnd(); ci++)

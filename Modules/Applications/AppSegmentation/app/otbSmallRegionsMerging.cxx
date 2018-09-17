@@ -125,20 +125,22 @@ private:
     labelStatsFilter->SetInputLabelImage(labelIn);
     AddProcess(labelStatsFilter->GetStreamer() , "Computing stats on input image ...");
     labelStatsFilter->Update();
-    
-    // Convert Map to Vector
+
+    // Convert Map to Unordered map
+
     auto labelPopulationMap = labelStatsFilter->GetLabelPopulationMap();
-    std::vector<double> labelPopulation;
-    for (unsigned int i =0; i <= labelPopulationMap.rbegin()->first; i++)
+    std::unordered_map< unsigned int,double> labelPopulation;
+    for (population : labelPopulationMap)
       {
-      labelPopulation.push_back(labelPopulationMap[i]);
+      labelPopulation[population.first]=population.second;
       }
     auto meanValueMap = labelStatsFilter->GetMeanValueMap();
-    std::vector<itk::VariableLengthVector<double> > meanValues;
-    for (unsigned int i =0; i <= meanValueMap.rbegin()->first; i++)
+    std::unordered_map< unsigned int, itk::VariableLengthVector<double> > meanValues;
+    for (mean : meanValueMap)
       {
-      meanValues.push_back(meanValueMap[i]);
-      }
+      meanValues[mean.first] = mean.second;
+      }  
+      
     
     // Compute the LUT from the original label image to the merged output label image.
     auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
