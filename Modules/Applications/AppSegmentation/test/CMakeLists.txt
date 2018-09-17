@@ -294,11 +294,7 @@ otb_test_application(NAME     apTvLSMS4Vectorization_NoSmall
 set_property(TEST apTvLSMS4Vectorization_NoSmall PROPERTY DEPENDS apTvLSMS2Segmentation_NoSmall)
 
 #----------- HooverCompareSegmentation TESTS ----------------
-otb_test_application(NAME
-Applications
-
-New application SmallRegionMerging in file otbSmallRegionMerging.cxx . The parameters are the same as the LSMSSmallRegionMerging application, except for the size tile parameter, as it is estimated automatically in the filters with the available RAM.
-Tests     apTvSeHooverCompareSegmentationTest
+otb_test_application(NAME     apTvSeHooverCompareSegmentationTest
                      APP      HooverCompareSegmentation
                      OPTIONS  -ingt ${INPUTDATA}/maur_GT.tif
                               -inms ${INPUTDATA}/maur_labelled.tif
