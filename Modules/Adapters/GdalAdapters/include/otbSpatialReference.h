@@ -160,13 +160,13 @@ private:
   std::unique_ptr<OGRSpatialReference> m_SR;
 };
 
-std::ostream & OTBGdalAdapters_EXPORT operator << (std::ostream& o, const SpatialReference & i);
+OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference & i);
 
 /// Equal operator (based on OGRSpatialReference::IsSame())
-bool OTBGdalAdapters_EXPORT operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
+ OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
   
 /// Different operator (based on OGRSpatialReference::IsSame())
-bool OTBGdalAdapters_EXPORT operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept;
+ OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept;
 }
 
 #endif
