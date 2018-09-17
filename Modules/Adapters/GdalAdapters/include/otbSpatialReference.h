@@ -60,6 +60,8 @@ public:
  * 
  * \ingroup OTBGdalAdapters
  */
+
+
 class OTBGdalAdapters_EXPORT SpatialReference
 {
 friend class CoordinateTransformation;
@@ -97,17 +99,19 @@ public:
    * importFromEPSGA()
    */
   static SpatialReference FromEPSG(unsigned int epsg);
-
+  
   /**
    * Build a SpatialReference from a UTM zone passed to
    * OGRSpatialReference::SetUTM() from GDAL
    * \param zone UTM zone to use
-   * \param north true for northern hemisphere, false otherwise
+   * \param hem hemisphere::north or hemisphere::south
    *
    * \throws InvalidSRDescriptionException in case of failure of
    * setUTM()
    */
-  static SpatialReference FromUTM(unsigned int zone, bool north);
+  enum class hemisphere {north, south};
+  
+  static SpatialReference FromUTM(unsigned int zone, hemisphere hem);
   
   /// Default destructor
   ~SpatialReference() noexcept;
@@ -144,9 +148,9 @@ public:
    * \param lat Point lattitude
    * \param lon Point longitude
    * \param zone Output UTM zone
-   * \param north Output hemisphere (true if north, false if south)
+   * \param hem output hemisphere
    */ 
-  static void UTMFromGeoPoint(double lat, double lon, unsigned int & zone, bool & north);
+  static void UTMFromGeoPoint(double lat, double lon, unsigned int & zone, hemisphere & hem);
 
 private:
   /// Constructor from wrapped type. ref will be cloned.
@@ -160,13 +164,15 @@ private:
   std::unique_ptr<OGRSpatialReference> m_SR;
 };
 
-std::ostream & OTBGdalAdapters_EXPORT operator << (std::ostream& o, const SpatialReference & i);
+OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere & hem);
+
+OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference & i);
 
 /// Equal operator (based on OGRSpatialReference::IsSame())
-bool OTBGdalAdapters_EXPORT operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
+OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
   
 /// Different operator (based on OGRSpatialReference::IsSame())
-bool OTBGdalAdapters_EXPORT operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept;
+OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept;
 }
 
 #endif

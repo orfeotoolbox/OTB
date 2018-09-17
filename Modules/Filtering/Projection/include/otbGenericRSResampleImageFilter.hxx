@@ -295,10 +295,10 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 
     // Guess the zone and the hemisphere
     unsigned int zone(0);
-    bool north(true);
-    otb::SpatialReference::UTMFromGeoPoint(geoPoint[0],geoPoint[1],zone,north);
+    otb::SpatialReference::hemisphere hem;
+    otb::SpatialReference::UTMFromGeoPoint(geoPoint[0],geoPoint[1],zone,hem);
 
-    otb::SpatialReference oSRS = otb::SpatialReference::FromUTM(zone,north);
+    otb::SpatialReference oSRS = otb::SpatialReference::FromUTM(zone,hem);
     
     projectionRef = oSRS.ToWkt();
     }

@@ -33,7 +33,7 @@ int otbSpatialReferenceTest(int, char**)
     auto sr = SpatialReference::FromWGS84();
     auto sr4 = SpatialReference::FromDescription("EPSG:32631");
     auto srFromEPSG = SpatialReference::FromEPSG(32631);
-    auto srFromUTM = SpatialReference::FromUTM(31,true);
+    auto srFromUTM = SpatialReference::FromUTM(31,SpatialReference::hemisphere::north);
     SpatialReference sr2(sr);
     auto sr3 = sr;
 
@@ -92,16 +92,16 @@ int otbSpatialReferenceTest(int, char**)
     }
 
   unsigned int zone;
-  bool north;
+  SpatialReference::hemisphere hem;
   // Lat and lon of Toulouse, France, in UTM31N
   double lon = 43.60426;
   double lat = 1.44367;
 
-  SpatialReference::UTMFromGeoPoint(lat,lon,zone,north);
+  SpatialReference::UTMFromGeoPoint(lat,lon,zone,hem);
 
-  if(zone!=31 || !north)
+  if(zone!=31 || hem != SpatialReference::hemisphere::north)
     {
-    std::cerr<<"Fail: Expected utm zone 31 N, got "<<zone<<(north?"N":"S")<<std::endl;
+    std::cerr<<"Fail: Expected utm zone 31 N, got "<<zone<<hem<<std::endl;
     success = false;
     }
   
@@ -111,7 +111,7 @@ int otbSpatialReferenceTest(int, char**)
     // Wrong EPSG
     SpatialReference sr6 = SpatialReference::FromEPSG(1000000);
     // Wrong utm zone
-    SpatialReference sr7 = SpatialReference::FromUTM(1000,false);
+    SpatialReference sr7 = SpatialReference::FromUTM(1000,SpatialReference::hemisphere::south);
     std::cerr<<"Fail: Calling constructor with wrong description should throw"<<std::endl;
     success = false;
     }

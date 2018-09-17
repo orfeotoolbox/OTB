@@ -34,6 +34,12 @@ std::ostream & operator << (std::ostream& o, const SpatialReference & i)
   return o << i.ToWkt();
 }
 
+std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere & hem)
+{
+  return o << (hem == SpatialReference::hemisphere::north ? "N" : "S");
+}
+
+
 bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
   return sr1.m_SR->IsSame(sr2.m_SR.get());
@@ -112,15 +118,26 @@ SpatialReference SpatialReference::FromEPSG(unsigned int epsg)
   return SpatialReference(std::move(tmpSR));
 }
 
-SpatialReference SpatialReference::FromUTM(unsigned int zone, bool north)
-{
+SpatialReference SpatialReference::FromUTM(unsigned int zone, hemisphere hem)
+{  
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
+  bool north = true;
+
+  switch(hem)
+    {
+    case hemisphere::north:
+      break;
+    case hemisphere::south:
+      north = false;
+      break;
+    }
+  
   OGRErr code = tmpSR->SetUTM(zone,north);
 
   if(code!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss << "UTM" << zone << (north?"N":"S");
+    oss << "UTM" << zone << hem;
     throw InvalidSRDescriptionException(oss.str());
     }
 
@@ -188,7 +205,7 @@ bool SpatialReference::NormalizeESRI()
   return true;
 }
 
-void SpatialReference::UTMFromGeoPoint(double lat, double lon, unsigned int & zone, bool & north)
+void SpatialReference::UTMFromGeoPoint(double lat, double lon, unsigned int & zone, hemisphere & hem)
 {
   // Pre-conditions
   assert(lat>=-90);
@@ -197,7 +214,7 @@ void SpatialReference::UTMFromGeoPoint(double lat, double lon, unsigned int & zo
   assert(lon<=180);
   
   zone = 0;
-  north = lat>0;
+  hem = lat>0 ? hemisphere::north : hemisphere::south;
 
   // TODO: Code forked from OSSIM. Copyright ?
   int lat_Degrees  = static_cast<int>(lat + 0.00000005);

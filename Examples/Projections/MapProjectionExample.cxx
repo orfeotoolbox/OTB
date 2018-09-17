@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> MapProjectionType;
-  otb::SpatialReference utmSRS = otb::SpatialReference::FromUTM(31,true);
+  otb::SpatialReference utmSRS = otb::SpatialReference::FromUTM(31,otb::SpatialReference::hemisphere::north);
   MapProjectionType::Pointer utmProjection = MapProjectionType::New();
   utmProjection->SetWkt(utmSRS.ToWkt());
   // Software Guide : EndCodeSnippet

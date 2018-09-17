@@ -134,13 +134,13 @@ private:
   std::unique_ptr<OGRCoordinateTransformation> m_Transform;
 };
 
-std::ostream & OTBGdalAdapters_EXPORT operator << (std::ostream& o, const CoordinateTransformation & i);
+OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i);
 
   /// equal operator
-bool OTBGdalAdapters_EXPORT operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
+OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
 
   /// different operator
-bool OTBGdalAdapters_EXPORT operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
+OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
 
 }
 
