@@ -81,7 +81,7 @@ public:
 
   typedef std::unordered_map<InputLabelType , RealVectorPixelType >                                   LabelStatisticType;
   typedef std::unordered_map<InputLabelType , double>                                                 LabelPopulationType;
-  typedef std::unordered_map<InputLabelType , InputLabelType>                                          LUTType;
+  typedef std::unordered_map<InputLabelType , InputLabelType>                                         LUTType;
   
   /** Set/Get size of segments to be merged */
   itkGetMacro(Size , unsigned int);
@@ -93,7 +93,7 @@ public:
     m_LabelPopulation = labelPopulation; 
     
     // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
-    for (label : m_LabelPopulation)
+    for (auto label : m_LabelPopulation)
       {
       m_LUT[label.first] = label.first;
       }  

@@ -128,20 +128,19 @@ private:
 
     // Convert Map to Unordered map
 
-    auto labelPopulationMap = labelStatsFilter->GetLabelPopulationMap();
+    auto  labelPopulationMap = labelStatsFilter->GetLabelPopulationMap();
     std::unordered_map< unsigned int,double> labelPopulation;
-    for (population : labelPopulationMap)
+    for (auto population : labelPopulationMap)
       {
       labelPopulation[population.first]=population.second;
       }
-    auto meanValueMap = labelStatsFilter->GetMeanValueMap();
+    auto  meanValueMap = labelStatsFilter->GetMeanValueMap();
     std::unordered_map< unsigned int, itk::VariableLengthVector<double> > meanValues;
-    for (mean : meanValueMap)
+    for (const auto & mean : meanValueMap)
       {
       meanValues[mean.first] = mean.second;
       }  
       
-    
     // Compute the LUT from the original label image to the merged output label image.
     auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
     regionMergingFilter->SetInput( labelIn );
@@ -156,15 +155,14 @@ private:
     // Relabelling using the LUT
     auto changeLabelFilter = ChangeLabelImageFilterType::New();
     changeLabelFilter->SetInput(labelIn);
-    auto LUT = regionMergingFilter->GetLUT();
-
-    for(unsigned int i = 0; i<LUT.size(); ++i)
-      { 
-      if(i!=LUT[i])
-        {
-        changeLabelFilter->SetChange(i,LUT[i]);
-        }
-      }
+    
+    const auto & LUT = regionMergingFilter->GetLUT();
+    for (auto label : LUT)
+    {
+      if (label.first != label.second)
+        changeLabelFilter->SetChange(label.first, label.second);
+    }
+    
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
     RegisterPipeline();
     clock_t toc = clock();
