@@ -28,18 +28,18 @@ namespace itk {
 
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBExtern_EXPORT_TEMPLATE Image<unsigned int, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<int, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<unsigned char, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<char, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<unsigned short, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<short, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<float, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<double, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<std::complex<int>, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<std::complex<short>, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<std::complex<float>, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE Image<std::complex<double>, 2>;
+extern template class Image<unsigned int, 2>;
+extern template class Image<int, 2>;
+extern template class Image<unsigned char, 2>;
+extern template class Image<char, 2>;
+extern template class Image<unsigned short, 2>;
+extern template class Image<short, 2>;
+extern template class Image<float, 2>;
+extern template class Image<double, 2>;
+extern template class Image<std::complex<int>, 2>;
+extern template class Image<std::complex<short>, 2>;
+extern template class Image<std::complex<float>, 2>;
+extern template class Image<std::complex<double>, 2>;
 }
 
 #endif

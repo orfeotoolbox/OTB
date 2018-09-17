@@ -29,18 +29,18 @@ namespace itk {
 
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<unsigned int, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<int, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<unsigned char, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<char, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<unsigned short, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<short, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<float, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<double, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<std::complex<int>, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<std::complex<short>, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<std::complex<float>, 2>;
-extern template class OTBExtern_EXPORT_TEMPLATE VectorImage<std::complex<double>, 2>;
+extern template class VectorImage<unsigned int, 2>;
+extern template class VectorImage<int, 2>;
+extern template class VectorImage<unsigned char, 2>;
+extern template class VectorImage<char, 2>;
+extern template class VectorImage<unsigned short, 2>;
+extern template class VectorImage<short, 2>;
+extern template class VectorImage<float, 2>;
+extern template class VectorImage<double, 2>;
+extern template class VectorImage<std::complex<int>, 2>;
+extern template class VectorImage<std::complex<short>, 2>;
+extern template class VectorImage<std::complex<float>, 2>;
+extern template class VectorImage<std::complex<double>, 2>;
 }
 
 #endif

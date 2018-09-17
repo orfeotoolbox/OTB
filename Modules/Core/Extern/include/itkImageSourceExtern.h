@@ -30,30 +30,30 @@
 namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<unsigned int, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<int, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<unsigned char, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<char, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<unsigned short, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<short, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<float, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<double, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<std::complex<int>, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<std::complex<short>, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<std::complex<float>, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<std::complex<double>, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<unsigned int, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<int, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<unsigned char, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<char, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<unsigned short, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<short, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<float, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<double, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<std::complex<int>, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<std::complex<short>, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<std::complex<float>, 2>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<std::complex<double>, 2>>;
+extern template class ImageSource<otb::Image<unsigned int, 2>>;
+extern template class ImageSource<otb::Image<int, 2>>;
+extern template class ImageSource<otb::Image<unsigned char, 2>>;
+extern template class ImageSource<otb::Image<char, 2>>;
+extern template class ImageSource<otb::Image<unsigned short, 2>>;
+extern template class ImageSource<otb::Image<short, 2>>;
+extern template class ImageSource<otb::Image<float, 2>>;
+extern template class ImageSource<otb::Image<double, 2>>;
+extern template class ImageSource<otb::Image<std::complex<int>, 2>>;
+extern template class ImageSource<otb::Image<std::complex<short>, 2>>;
+extern template class ImageSource<otb::Image<std::complex<float>, 2>>;
+extern template class ImageSource<otb::Image<std::complex<double>, 2>>;
+extern template class ImageSource<otb::VectorImage<unsigned int, 2>>;
+extern template class ImageSource<otb::VectorImage<int, 2>>;
+extern template class ImageSource<otb::VectorImage<unsigned char, 2>>;
+extern template class ImageSource<otb::VectorImage<char, 2>>;
+extern template class ImageSource<otb::VectorImage<unsigned short, 2>>;
+extern template class ImageSource<otb::VectorImage<short, 2>>;
+extern template class ImageSource<otb::VectorImage<float, 2>>;
+extern template class ImageSource<otb::VectorImage<double, 2>>;
+extern template class ImageSource<otb::VectorImage<std::complex<int>, 2>>;
+extern template class ImageSource<otb::VectorImage<std::complex<short>, 2>>;
+extern template class ImageSource<otb::VectorImage<std::complex<float>, 2>>;
+extern template class ImageSource<otb::VectorImage<std::complex<double>, 2>>;
 
 }
 

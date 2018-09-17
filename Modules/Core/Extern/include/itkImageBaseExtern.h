@@ -27,7 +27,7 @@
 namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBExtern_EXPORT_TEMPLATE ImageBase<2>;
+extern template class ImageBase<2>;
 
 }
 

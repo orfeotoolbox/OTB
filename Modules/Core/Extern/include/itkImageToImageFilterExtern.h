@@ -36,21 +36,21 @@ extern template class OTBExtern_EXPORT_TEMPLATE ImageToImageFilter<otb::Image<do
 extern template class OTBExtern_EXPORT_TEMPLATE InPlaceImageFilter<otb::Image<double>, otb::Image<double>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<double>>;
 extern template class OTBExtern_EXPORT_TEMPLATE InPlaceImageFilter<otb::VectorImage<double>, otb::VectorImage<double>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageToImageFilter<otb::VectorImage<double>, otb::VectorImage<double>>;
+extern template class ImageToImageFilter<otb::VectorImage<double>, otb::VectorImage<double>>;
 
 extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<float>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageToImageFilter<otb::Image<float>, otb::Image<float>>;
 extern template class OTBExtern_EXPORT_TEMPLATE InPlaceImageFilter<otb::Image<float>, otb::Image<float>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<float>>;
 extern template class OTBExtern_EXPORT_TEMPLATE InPlaceImageFilter<otb::VectorImage<float>, otb::VectorImage<float>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageToImageFilter<otb::VectorImage<float>, otb::VectorImage<float>>;
+extern template class ImageToImageFilter<otb::VectorImage<float>, otb::VectorImage<float>>;
 
 extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::Image<unsigned char>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageToImageFilter<otb::Image<unsigned char>, otb::Image<unsigned char>>;
 extern template class OTBExtern_EXPORT_TEMPLATE InPlaceImageFilter<otb::Image<unsigned char>, otb::Image<unsigned char>>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageSource<otb::VectorImage<unsigned char>>;
 extern template class OTBExtern_EXPORT_TEMPLATE InPlaceImageFilter<otb::VectorImage<unsigned char>, otb::VectorImage<unsigned char>>;
-extern template class OTBExtern_EXPORT_TEMPLATE ImageToImageFilter<otb::VectorImage<unsigned char>, otb::VectorImage<unsigned char>>;
+extern template class ImageToImageFilter<otb::VectorImage<unsigned char>, otb::VectorImage<unsigned char>>;
 }
 
 #endif // itkImageToImageFilterExtern_h

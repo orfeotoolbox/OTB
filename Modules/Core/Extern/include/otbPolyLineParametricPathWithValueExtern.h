@@ -28,7 +28,7 @@ namespace otb {
 
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBExtern_EXPORT_TEMPLATE PolyLineParametricPathWithValue<double, 2>;
+extern template class PolyLineParametricPathWithValue<double, 2>;
 }
 
 #endif

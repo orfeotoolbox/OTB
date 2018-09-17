@@ -47,7 +47,7 @@ extern template class OTBExtern_EXPORT_TEMPLATE GenericMapProjection<otb::Transf
 extern template class OTBExtern_EXPORT_TEMPLATE InverseSensorModel<double,2,2>;
 extern template class OTBExtern_EXPORT_TEMPLATE ForwardSensorModel<double,2,2>;
 extern template class OTBExtern_EXPORT_TEMPLATE GenericRSTransform<double,2,2>;
-extern template class OTBExtern_EXPORT_TEMPLATE CompositeTransform<itk::Transform<double, 2, 2>, itk::Transform<double, 2, 2>, double, 2, 2>;
+extern template class CompositeTransform<itk::Transform<double, 2, 2>, itk::Transform<double, 2, 2>, double, 2, 2>;
 }
 
 #endif // otbTransformsExtern_h

@@ -31,14 +31,14 @@
 namespace itk {
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
-extern template class OTBExtern_EXPORT_TEMPLATE ImageRegion<2>;
+extern template class ImageRegion<2>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionSplitter<2>;
 }
 
 namespace otb {
 extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionSquareTileSplitter<2>;
 extern template class OTBExtern_EXPORT_TEMPLATE ImageRegionAdaptativeSplitter<2>;
-extern template class OTBExtern_EXPORT_TEMPLATE RemoteSensingRegion<double>;
+extern template class RemoteSensingRegion<double>;
 }
 
 #endif // otbImageRegion_h

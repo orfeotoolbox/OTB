@@ -49,7 +49,7 @@ extern template class OTBExtern_EXPORT_TEMPLATE VariableLengthVector<short>;
 extern template class OTBExtern_EXPORT_TEMPLATE VariableLengthVector<unsigned char>;
 
 extern template class OTBExtern_EXPORT_TEMPLATE Point<double>;
-extern template class OTBExtern_EXPORT_TEMPLATE Matrix<double>;
+extern template class Matrix<double>;
 extern template class OTBExtern_EXPORT_TEMPLATE Vector<double>;
 extern template class OTBExtern_EXPORT_TEMPLATE Point<float>;
 extern template class OTBExtern_EXPORT_TEMPLATE Matrix<float>;
@@ -63,8 +63,8 @@ extern template class OTBExtern_EXPORT_TEMPLATE SimpleDataObjectDecorator<double
 
 namespace otb {
 extern template class OTBExtern_EXPORT_TEMPLATE VectorData<double,2,double>;
-extern template class OTBExtern_EXPORT_TEMPLATE Polygon<double>;
-extern template class OTBExtern_EXPORT_TEMPLATE DataNode<double,2,double>;
+extern template class Polygon<double>;
+extern template class DataNode<double,2,double>;
 }
 
 #endif // otbBaseTypes_h
