@@ -71,8 +71,8 @@ private:
                           "Small segments will be processed by increasing size: first all segments"
                           " for which area is equal to 1 pixel will be merged with adjacent"
                           " segments, then all segments of area equal to 2 pixels will be processed,"
-                          " until segments of area minsize."
-                          " \n\n");
+                          " until segments of area minsize.");
+                          
     SetDocLimitations("This application is more efficient if the labels are contiguous, starting from 0.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso( "Segmentation");
