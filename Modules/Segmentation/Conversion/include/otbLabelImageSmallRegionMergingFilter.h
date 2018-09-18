@@ -71,7 +71,7 @@ public:
 
   typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
   
-  typedef std::map<InputLabelType, std::set<InputLabelType> >                 NeigboursMapType;
+  typedef std::unordered_map<InputLabelType, std::set<InputLabelType> >                 NeigboursMapType;
 
   typedef std::unordered_map<InputLabelType , RealVectorPixelType >                                   LabelStatisticType;
   typedef std::unordered_map<InputLabelType , double>                                                 LabelPopulationType;

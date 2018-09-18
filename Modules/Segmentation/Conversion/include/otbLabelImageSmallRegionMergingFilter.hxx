@@ -54,9 +54,9 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   // Merge the neighbours maps from all threads
   for( unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
     {
-    for (auto it = m_NeighboursMapsTmp[threadId].begin(); it != m_NeighboursMapsTmp[threadId].end(); it++)
+    for (auto const & neighbours : m_NeighboursMapsTmp[threadId])
       {
-      neighboursMap[ it->first ].insert( it->second.begin(), it->second.end() );
+      neighboursMap[ neighbours.first ].insert( neighbours.second.begin(), neighbours.second.end() );
       }
     }
   
