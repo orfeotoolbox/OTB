@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBConversion
  */
 template <class TInputLabelImage>
-class ITK_EXPORT PersistentLabelImageSmallRegionMergingFilter
+class PersistentLabelImageSmallRegionMergingFilter
   : public PersistentImageFilter<TInputLabelImage, TInputLabelImage>
 {
 public:
@@ -64,16 +64,10 @@ public:
 
   typedef TInputLabelImage                        InputImageType;
   typedef typename InputImageType::Pointer        InputImagePointerType;
-  typedef typename InputImageType::PixelType      InputPixelType;
-  typedef typename InputImageType::IndexType      InputIndexType;
+  typedef typename InputImageType::PixelType      InputLabelType;
   typedef typename InputImageType::SizeType       InputSizeType;
-  typedef typename InputImageType::IndexValueType InputIndexValueType;
   typedef typename InputImageType::PointType      PointType;
   typedef typename InputImageType::RegionType     RegionType;
-  typedef typename InputImageType::SizeType       SizeType;
-  
-  typedef TInputLabelImage                        InputLabelImageType;
-  typedef typename InputLabelImageType::PixelType InputLabelType;
 
   typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
   
