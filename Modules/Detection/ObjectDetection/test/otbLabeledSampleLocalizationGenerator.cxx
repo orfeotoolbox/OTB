@@ -25,18 +25,6 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbLabeledSampleLocalizationGenerator.h"
 
-int otbLabeledSampleLocalizationGeneratorNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  typedef otb::VectorData<>                                        VectorDataType;
-  typedef otb::LabeledSampleLocalizationGenerator<VectorDataType>  GeneratorType;
-
-  // instantiation
-  GeneratorType::Pointer generator = GeneratorType::New();
-
-  std::cout << generator << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbLabeledSampleLocalizationGenerator(int itkNotUsed(argc), char* argv[])
 {

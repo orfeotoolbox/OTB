@@ -28,6 +28,7 @@
 #include "otbLabelImageRegionPruningFilter.h"
 #include "itkRelabelComponentImageFilter.h"
 #include "itkConnectedComponentFunctorImageFilter.h"
+#include <string>
 
 
 namespace otb {

@@ -25,14 +25,6 @@
 #include "otbStatisticsXMLFileReader.h"
 #include "itkVariableLengthVector.h"
 
-int otbSamplingRateCalculatorNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::SamplingRateCalculator RateCalculatorype;
-  
-  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
-  std::cout << rateCalculator << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbSamplingRateCalculator(int itkNotUsed(argc), char* argv[])
 {

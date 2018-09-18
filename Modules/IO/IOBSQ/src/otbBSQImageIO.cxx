@@ -96,7 +96,7 @@ bool BSQImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -105,7 +105,7 @@ bool BSQImageIO::CanReadFile(const char* filename)
     return false;
     }
 
-  header_file.open(lFileName.c_str(),  std::ios::in);
+  header_file.open(lFileName,  std::ios::in);
   if (header_file.fail())
     {
     otbMsgDevMacro(<< "BSQImageIO::CanReadFile() failed header open ! ");
@@ -228,7 +228,7 @@ void BSQImageIO::ReadImageInformation()
     {
     m_HeaderFile.close();
     }
-  m_HeaderFile.open(m_FileName.c_str(),  std::ios::in);
+  m_HeaderFile.open(m_FileName,  std::ios::in);
   if (m_HeaderFile.fail())
     {
     itkExceptionMacro(<< "BSQImageIO::ReadImageInformation() failed header open ! ");
@@ -449,7 +449,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   //Try to open channels file
   for (unsigned int channels = 0; channels < m_ChannelsFileName.size(); ++channels)
     {
-    m_ChannelsFile[channels].open(m_ChannelsFileName[channels].c_str(),  std::ios::in | std::ios::binary);
+    m_ChannelsFile[channels].open(m_ChannelsFileName[channels],  std::ios::in | std::ios::binary);
     if (m_ChannelsFile[channels].fail())
       {
       if (reportError == true)
@@ -476,7 +476,7 @@ bool BSQImageIO::CanWriteFile(const char* filename)
     {
     return false;
     }
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -569,7 +569,7 @@ void BSQImageIO::WriteImageInformation()
     }
   if (CanWriteFile(m_FileName.c_str()) == false)
     {
-    itkExceptionMacro(<< "The file " << m_FileName.c_str() << " is not defined as a BSQ file");
+    itkExceptionMacro(<< "The file " << m_FileName << " is not defined as a BSQ file");
     }
   // Close file from any previous image
   if (m_HeaderFile.is_open())
@@ -579,10 +579,10 @@ void BSQImageIO::WriteImageInformation()
 
   // Open the new file for writing
   // Actually open the file
-  m_HeaderFile.open(m_FileName.c_str(),  std::ios::out | std::ios::trunc);
+  m_HeaderFile.open(m_FileName,  std::ios::out | std::ios::trunc);
   if (m_HeaderFile.fail())
     {
-    itkExceptionMacro(<< "Cannot write requested file " << m_FileName.c_str() << ".");
+    itkExceptionMacro(<< "Cannot write requested file " << m_FileName << ".");
     }
 
   if (0) {}

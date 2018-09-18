@@ -34,6 +34,7 @@
 #include "BeamPixelCountRecord.h"
 #include "SRGRCoefficientSetRecord.h"
 #include "TemperatureSettingsRecord.h"
+#include <string>
 
 namespace ossimplugins
 {

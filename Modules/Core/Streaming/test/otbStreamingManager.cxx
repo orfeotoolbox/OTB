@@ -53,25 +53,6 @@ ImageType::Pointer makeImage(ImageType::RegionType region)
   return image;
 }
 
-int otbStreamingManagerNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  NbLinesStrippedStreamingManagerType::Pointer streamingManager1 = NbLinesStrippedStreamingManagerType::New();
-  std::cout << streamingManager1 << std::endl;
-
-  RAMDrivenStrippedStreamingManagerType::Pointer streamingManager2 = RAMDrivenStrippedStreamingManagerType::New();
-  std::cout << streamingManager2 << std::endl;
-
-  TileDimensionTiledStreamingManagerType::Pointer streamingManager3 = TileDimensionTiledStreamingManagerType::New();
-  std::cout << streamingManager3 << std::endl;
-
-  RAMDrivenTiledStreamingManagerType::Pointer streamingManager4 = RAMDrivenTiledStreamingManagerType::New();
-  std::cout << streamingManager4 << std::endl;
-
-  RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager5 = RAMDrivenAdaptativeStreamingManagerType::New();
-  std::cout<<streamingManager5<<std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbNumberOfLinesStrippedStreamingManager(int itkNotUsed(argc), char * argv[])

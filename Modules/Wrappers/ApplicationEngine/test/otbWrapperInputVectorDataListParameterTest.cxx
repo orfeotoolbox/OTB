@@ -25,13 +25,6 @@
 
 #include "otbWrapperInputVectorDataListParameter.h"
 
-int otbWrapperInputVectorDataListParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::InputVectorDataListParameter ParameterType;
-  ParameterType::Pointer parameter = ParameterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbWrapperInputVectorDataListParameterTest1(int itkNotUsed(argc), char* argv[])

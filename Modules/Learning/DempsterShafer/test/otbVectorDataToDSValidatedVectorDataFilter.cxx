@@ -26,21 +26,6 @@
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-int otbVectorDataToDSValidatedVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef float                           PrecisionType;
-  typedef otb::VectorData<PrecisionType>  VectorDataType;
-
-  typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
-                                          VectorDataValidationFilterType;
-
-  VectorDataValidationFilterType::Pointer filter =
-    VectorDataValidationFilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbVectorDataToDSValidatedVectorDataFilter(int itkNotUsed(argc), char* argv[])
 {

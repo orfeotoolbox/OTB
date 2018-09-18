@@ -30,25 +30,8 @@
 
 #include "otbLocalActivityVectorImageFilter.h"
 
-int otbMNFImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
-{
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-
-  typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
-
-  typedef otb::MNFImageFilter< ImageType, ImageType,
     NoiseFilterType, otb::TransformDirection::FORWARD > FilterType;
-  FilterType::Pointer filter = FilterType::New();
-
-  typedef otb::MNFImageFilter< ImageType, ImageType,
       NoiseFilterType, otb::TransformDirection::INVERSE > InvFilterType;
-    InvFilterType::Pointer invFilter = InvFilterType::New();
-
-  return EXIT_SUCCESS;
-}
-
 int otbMNFImageFilterTest ( int argc, char* argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;

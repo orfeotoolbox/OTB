@@ -25,16 +25,6 @@
 #include "otbImage.h"
 #include <fstream>
 
-int otbOGRDataToClassStatisticsFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::VectorImage<float> InputImageType;
-  typedef otb::Image<unsigned char> MaskImageType;
-  typedef otb::OGRDataToClassStatisticsFilter<InputImageType,MaskImageType> FilterType;
-  
-  FilterType::Pointer filter = FilterType::New();
-  std::cout << filter << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
 {
@@ -104,7 +94,7 @@ int otbOGRDataToClassStatisticsFilter(int argc, char* argv[])
   FilterType::PolygonSizeMapType::const_iterator itPoly;
   
   std::ofstream ofs;
-  ofs.open(outputPath.c_str());
+  ofs.open(outputPath);
   ofs << "# Layer 0 : polygons"<<std::endl;
   ofs << "# Class sample counts"<<std::endl;
   for (itClass = classCount.begin(); itClass != classCount.end() ; ++itClass)

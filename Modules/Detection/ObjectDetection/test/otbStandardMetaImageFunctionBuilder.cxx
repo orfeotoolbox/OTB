@@ -33,18 +33,6 @@
 #include "otbHaralickTexturesImageFunction.h"
 
 
-int otbStandardMetaImageFunctionBuilderNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
-{
-  typedef double                                                PrecisionType;
-  typedef otb::StandardMetaImageFunctionBuilder<PrecisionType>  BuilderType;
-
-  // instantiation
-  BuilderType::Pointer builder = BuilderType::New();
-
-  std::cout << builder << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbStandardMetaImageFunctionBuilder(int itkNotUsed(argc), char* argv[])
 {

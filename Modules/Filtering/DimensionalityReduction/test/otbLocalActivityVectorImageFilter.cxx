@@ -29,15 +29,6 @@
 
 #include "otbLocalActivityVectorImageFilter.h"
 
-int otbLocalActivityVectorImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
-{
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-  typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > FilterType;
-  FilterType::Pointer filter = FilterType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbLocalActivityVectorImageFilterTest ( int argc, char* argv[] )
 {

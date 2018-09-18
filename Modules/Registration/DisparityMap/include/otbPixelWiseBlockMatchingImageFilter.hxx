@@ -461,7 +461,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of left image.");
     e.SetDataObject(inLeftPtr);
     throw e;
@@ -485,7 +485,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+    e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region of right image.");
     e.SetDataObject(inRightPtr);
     throw e;

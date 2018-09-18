@@ -30,17 +30,6 @@
 #include "otbBandMathImageFilter.h"
 #include "otbImageFileWriter.h"
 
-int otbBandMathImageFilterNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef double                                            PixelType;
-  //typedef float                                             PixelType;
-  typedef otb::Image<PixelType, 2>                          ImageType;
-  typedef otb::BandMathImageFilter<ImageType>               FilterType;
-
-   FilterType::Pointer         filter       = FilterType::New();
-
-   return EXIT_SUCCESS;
-}
 
 int otbBandMathImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {

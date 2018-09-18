@@ -29,14 +29,6 @@ typedef SquareTileSplitterType::SizeType                        SizeType;
 typedef SquareTileSplitterType::RegionType                      RegionType;
 
 
-int otbImageRegionSquareTileSplitterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  SquareTileSplitterType::Pointer splitter = SquareTileSplitterType::New();
-
-  std::cout << splitter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int TestSplitter(const RegionType& region, unsigned int PixelSize, unsigned int MaxTileSize, std::ostream& os)
 {

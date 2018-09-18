@@ -57,12 +57,6 @@ typedef otb::DisparityTranslateFilter
     FloatImageType>                              TranslateFilter;
 
 
-int otbDisparityTranslateFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiation
-  TranslateFilter::Pointer filter = TranslateFilter::New();
-  return EXIT_SUCCESS;
-}
 
 int otbDisparityTranslateFilter(int argc, char* argv[])
 {

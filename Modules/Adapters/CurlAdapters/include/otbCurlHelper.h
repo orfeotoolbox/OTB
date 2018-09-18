@@ -22,6 +22,7 @@
 #define otbCurlHelper_h
 
 #include "otbCurlHelperInterface.h"
+#include <string>
 
 namespace otb
 {

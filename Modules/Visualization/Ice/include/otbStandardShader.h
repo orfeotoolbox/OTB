@@ -24,6 +24,7 @@
 #include <itkObjectFactory.h>
 #include "otbFragmentShader.h"
 #include "otbImageSettings.h"
+#include <string>
 
 namespace otb
 {

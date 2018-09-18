@@ -27,12 +27,6 @@ typedef otb::AutoencoderModel<double, shark::LogisticNeuron> LogAutoencoderModel
 typedef LogAutoencoderModel::InputListSampleType InputListSampleType;
 typedef LogAutoencoderModel::TargetListSampleType TargetListSampleType;
 
-int otbAutoencoderModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  LogAutoencoderModel::Pointer model = LogAutoencoderModel::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbAutoencoderModelCanRead(int argc, char * argv [])
 {

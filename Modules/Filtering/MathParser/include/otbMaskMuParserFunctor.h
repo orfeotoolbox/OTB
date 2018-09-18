@@ -26,6 +26,7 @@
 #include "otbParser.h"
 #include "otbMacro.h"
 #include "otbBinarySpectralAngleFunctor.h"
+#include <string>
 
 namespace otb
 {

@@ -29,17 +29,6 @@
 
 #include "otbVerticalSobelVectorImageFilter.h"
 
-int otbVerticalSobelVectorImageFilterNewTest ( int itkNotUsed(argc), char * itkNotUsed(argv) [] )
-{
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-  typedef otb::VerticalSobelVectorImageFilter< ImageType, ImageType >
-    FilterType;
-  FilterType::Pointer filter = FilterType::New();
-  return EXIT_SUCCESS;
-}
-
 int otbVerticalSobelVectorImageFilterTest ( int argc, char* argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;

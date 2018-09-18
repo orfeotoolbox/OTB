@@ -34,14 +34,6 @@ typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatistics
 
 typedef otb::EigenvalueLikelihoodMaximisation<double> ELMType;
 
-int otbEigenvalueLikelihoodMaximizationNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  ELMType::Pointer elm = ELMType::New();
-  std::cout << elm << std::endl;
-  return EXIT_SUCCESS;
-}
-
-
 int otbEigenvalueLikelihoodMaximizationTest(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];

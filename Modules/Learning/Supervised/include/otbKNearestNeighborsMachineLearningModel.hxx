@@ -174,7 +174,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   //there is no m_KNearestModel->save(filename.c_str(), name.c_str()).
   //We need to save the K parameter, IsRegression flag, DecisionRule and the samples.
 
-  std::ofstream ofs(filename.c_str());
+  std::ofstream ofs(filename);
   //Save K parameter and IsRegression flag.
   ofs << "K=" << m_K << "\n";
   ofs << "IsRegression=" << this->m_RegressionMode << "\n";
@@ -210,7 +210,7 @@ void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
-  std::ifstream ifs(filename.c_str());
+  std::ifstream ifs(filename);
   if(!ifs)
   {
     itkExceptionMacro(<<"Could not read file "<<filename);
@@ -236,7 +236,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
     m_DecisionRule = (int)(fs.getFirstTopLevelNode()["DecisionRule"]);
     return;
     }
-  ifs.open(filename.c_str());
+  ifs.open(filename);
 #endif
   //there is no m_KNearestModel->load(filename.c_str(), name.c_str());
   

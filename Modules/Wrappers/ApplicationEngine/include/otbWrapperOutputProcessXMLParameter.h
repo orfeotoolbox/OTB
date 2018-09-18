@@ -22,6 +22,7 @@
 #define otbWrapperOutputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
+#include <string>
 
 namespace otb
 {

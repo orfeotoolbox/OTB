@@ -102,7 +102,7 @@ private:
   std::string CreateFileName(unsigned int row, unsigned int column, std::string label)
   {
     std::string outfname = GetParameterString("out");
-    std::string tilesname = itksys::SystemTools::GetFilenameWithoutExtension(outfname.c_str());
+    std::string tilesname = itksys::SystemTools::GetFilenameWithoutExtension(outfname);
 
     std::stringstream tileOut;
     tileOut<<tilesname<<"_"<<row<<"_"<<column<<"_"<<label<<".tif";
@@ -143,19 +143,19 @@ private:
     if(GetParameterInt("cleanup"))
       {
         // Try to remove the geom file if existing
-      std::string geomfile = tile.substr(0,tile.size() - itksys::SystemTools::GetFilenameExtension(tile.c_str()).size()).append(".geom");
+      std::string geomfile = tile.substr(0,tile.size() - itksys::SystemTools::GetFilenameExtension(tile).size()).append(".geom");
 
-      if(itksys::SystemTools::FileExists(geomfile.c_str()))
+      if(itksys::SystemTools::FileExists(geomfile))
         {
-        bool res = itksys::SystemTools::RemoveFile(geomfile.c_str());
+        bool res = itksys::SystemTools::RemoveFile(geomfile);
         if (!res)
           {
           otbAppLogINFO(<<"Unable to remove file  "<<geomfile);
           }
         }
-      if(itksys::SystemTools::FileExists(tile.c_str()))
+      if(itksys::SystemTools::FileExists(tile))
         {
-        bool res = itksys::SystemTools::RemoveFile(tile.c_str());
+        bool res = itksys::SystemTools::RemoveFile(tile);
         if (!res)
           {
           otbAppLogINFO(<<"Unable to remove file  "<<tile);
@@ -171,7 +171,7 @@ private:
     std::string outfname = GetParameterString("out");
 
     std::stringstream vrtfOut;
-    vrtfOut<<itksys::SystemTools::GetFilenameWithoutExtension(outfname.c_str())<<".vrt";
+    vrtfOut<<itksys::SystemTools::GetFilenameWithoutExtension(outfname)<<".vrt";
 
     std::vector<std::string> joins;
     if(IsParameterEnabled("tmpdir"))
@@ -189,7 +189,7 @@ private:
     std::string vrtfname = itksys::SystemTools::JoinPath(joins);
     otbAppLogINFO(<<"Creating temporary vrt file: "<<vrtfname);
 
-    std::ofstream ofs(vrtfname.c_str());
+    std::ofstream ofs(vrtfname);
 
     ofs<<"<VRTDataset rasterXSize=\""<<imageSizeX<<"\" rasterYSize=\""<<imageSizeY<<"\">"<<std::endl;
     ofs<<"\t<VRTRasterBand dataType=\"UInt32\" band=\"1\">"<<std::endl;
@@ -342,12 +342,12 @@ private:
     // Ensure that temporary directory exists if activated:
     if(IsParameterEnabled("tmpdir"))
       {
-      if(!itksys::SystemTools::FileExists(GetParameterString("tmpdir").c_str()))
+      if(!itksys::SystemTools::FileExists(GetParameterString("tmpdir")))
         {
         m_TmpDirCleanup = true;
         }
       otbAppLogINFO(<<"Temporary directory "<<GetParameterString("tmpdir")<<" will be used");
-      itksys::SystemTools::MakeDirectory(GetParameterString("tmpdir").c_str());
+      itksys::SystemTools::MakeDirectory(GetParameterString("tmpdir"));
       }
 
     //Three steps :
@@ -740,7 +740,7 @@ private:
       if(IsParameterEnabled("tmpdir") && m_TmpDirCleanup)
         {
         otbAppLogINFO(<<"Removing tmp directory "<<GetParameterString("tmpdir")<<", since it has been created by the application");
-        itksys::SystemTools::RemoveADirectory(GetParameterString("tmpdir").c_str());
+        itksys::SystemTools::RemoveADirectory(GetParameterString("tmpdir"));
         }
       }
 

@@ -25,7 +25,6 @@ otbPointSetTestDriver.cxx
 otbPointSetSourceTest.cxx
 otbPointSetExtractROITest.cxx
 otbSimplePointCountStrategyTest.cxx
-otbThresholdImageToPointSetFilterNew.cxx
 otbRandomPointSetSourceTest.cxx
 otbImageToPointSetFilterTest.cxx
 otbTransformPointSetFilterTest.cxx
@@ -47,9 +46,6 @@ otb_add_test(NAME bfTvPointSetExtractROI COMMAND otbPointSetTestDriver
 otb_add_test(NAME feTvSimplePointCountStrategyTest COMMAND otbPointSetTestDriver
   otbSimplePointCountStrategyTest)
 
-otb_add_test(NAME feTuThresholdImageToPointSetFilterNew COMMAND otbPointSetTestDriver
-  otbThresholdImageToPointSetFilterNew
-  )
 
 otb_add_test(NAME bfTvRandomPointSetSource COMMAND otbPointSetTestDriver
   otbRandomPointSetSourceTest)

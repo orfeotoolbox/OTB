@@ -24,6 +24,7 @@
 #include "itkObject.h"
 #include "otbWrapperParameter.h"
 #include <vector>
+#include <string>
 
 namespace otb
 {

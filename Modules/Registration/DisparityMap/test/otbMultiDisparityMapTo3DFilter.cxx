@@ -35,13 +35,6 @@ typedef otb::MultiDisparityMapTo3DFilter
     FloatImageType>                              Multi3DFilterType;
 
 
-int otbMultiDisparityMapTo3DFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiation
-  Multi3DFilterType::Pointer multiFilter = Multi3DFilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbMultiDisparityMapTo3DFilter(int argc, char* argv[])
 {

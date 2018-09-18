@@ -32,16 +32,6 @@
 
 #include "itkImageRegionIteratorWithIndex.h"
 
-int otbBandMathXImageFilterNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef double                                            PixelType;
-  typedef otb::VectorImage<PixelType, 2>                     ImageType;
-  typedef otb::BandMathXImageFilter<ImageType>               FilterType;
-
-   FilterType::Pointer         filter       = FilterType::New();
-
-   return EXIT_SUCCESS;
-}
 
 
 int otbBandMathXImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])

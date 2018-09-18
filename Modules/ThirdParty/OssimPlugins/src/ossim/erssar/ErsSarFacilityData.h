@@ -29,6 +29,7 @@
 #include <cstdlib>
 #include "erssar/ErsSarRecordHeader.h"
 #include "erssar/ErsSarRecord.h"
+#include <string>
 
 namespace ossimplugins
 {

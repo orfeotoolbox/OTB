@@ -68,16 +68,6 @@ void FillHalf(typename ImageType::Pointer image, const typename ImageType::Regio
 }
 
 // Test template instantiation
-int otbMaskedIteratorDecoratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::Image<double, 2> ImageType;
-  ImageType::Pointer image = GetTestImage<ImageType>(10, 10);
-  ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
-  ImageType::RegionType region(image->GetLargestPossibleRegion());
-
-  otb::MaskedIteratorDecorator<itk::ImageRegionIterator<ImageType> > it(mask, image, region);
-  return EXIT_SUCCESS;
-}
 
 // ---------------------- Initialization code ----------------------------------
 template <typename IteratorType>

@@ -31,20 +31,6 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbNDVIDataNodeFeatureFunctionNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef double CoordRepType;
-  typedef double PrecisionType;
-  typedef otb::VectorImage<double, 2>  ImageType;
-  typedef otb::NDVIDataNodeFeatureFunction<ImageType, CoordRepType, PrecisionType>
-                                       NDVIDataNodeFeaturefunctionType;
-
-  NDVIDataNodeFeaturefunctionType::Pointer NDVIFeature = NDVIDataNodeFeaturefunctionType::New();
-
-  std::cout << NDVIFeature << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbNDVIDataNodeFeatureFunction(int itkNotUsed(argc), char* argv[])
 {

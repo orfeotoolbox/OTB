@@ -141,7 +141,7 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
   // Let's create a satellite RSR with 2 bands and constant solar irradiance per band
   // Disjoint bands and B0 is shorter wavelength than B1 for simplicity
   const std::string RSRfileName(argv[1]);
-  std::ofstream satFile(RSRfileName.c_str());
+  std::ofstream satFile(RSRfileName);
   const ResponseType::PrecisionType lambdaMinB0(0.45);
   const ResponseType::PrecisionType lambdaMaxB0(0.65);
   const ResponseType::PrecisionType lambdaMinB1(0.75);

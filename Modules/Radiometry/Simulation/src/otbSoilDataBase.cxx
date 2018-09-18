@@ -77,7 +77,7 @@ double SoilDataBase::GetReflectance(size_t SoilIndex, WavelenghtType wl) const
 
 size_t SoilDataBase::CountColumns(std::string fileName) const
 {
-  std::ifstream ifile(fileName.c_str());
+  std::ifstream ifile(fileName);
   std::string line;
   if (ifile.is_open())
        {

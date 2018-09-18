@@ -35,6 +35,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
+#include <string>
 
 
 namespace otb

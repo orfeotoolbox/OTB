@@ -22,16 +22,6 @@
 #include "itkListSample.h"
 #include "otbContingencyTableCalculator.h"
 
-int otbContingencyTableCalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-
-  typedef int                                             ClassLabelType;
-  typedef otb::ContingencyTableCalculator<ClassLabelType> CalculatorType;
-
-  CalculatorType::Pointer calculator = CalculatorType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 

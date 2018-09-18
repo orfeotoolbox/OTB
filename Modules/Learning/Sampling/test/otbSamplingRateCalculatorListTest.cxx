@@ -26,14 +26,6 @@
 #include "itkVariableLengthVector.h"
 #include <fstream>
 
-int otbSamplingRateCalculatorListNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::SamplingRateCalculatorList RateCalculatorListType;
-  
-  RateCalculatorListType::Pointer rateCalculator = RateCalculatorListType::New();
-  std::cout << rateCalculator << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbSamplingRateCalculatorList(int itkNotUsed(argc), char* argv[])
 {

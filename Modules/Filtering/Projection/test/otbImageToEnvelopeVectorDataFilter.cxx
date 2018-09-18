@@ -34,13 +34,6 @@ typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 typedef otb::ImageToEnvelopeVectorDataFilter
     <ImageType, VectorDataType>                    FilterType;
 
-int otbImageToEnvelopeVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  // Instantiation
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbImageToEnvelopeVectorDataFilter(int itkNotUsed(argc), char* argv[])
 {

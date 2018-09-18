@@ -23,22 +23,6 @@
 #include "itkListSample.h"
 #include "otbConfusionMatrixCalculator.h"
 
-int otbConfusionMatrixCalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-
-  typedef itk::VariableLengthVector<int>          PLabelType;
-  typedef itk::Statistics::ListSample<PLabelType> PListLabelType;
-  typedef itk::FixedArray<int, 1>                 RLabelType;
-  typedef itk::Statistics::ListSample<RLabelType> RListLabelType;
-  typedef otb::ConfusionMatrixCalculator<RListLabelType,
-      PListLabelType> CalculatorType;
-
-  CalculatorType::Pointer calculator = CalculatorType::New();
-
-  std::cout << calculator << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
 {

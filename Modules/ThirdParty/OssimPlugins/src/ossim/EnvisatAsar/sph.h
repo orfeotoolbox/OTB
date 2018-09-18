@@ -30,6 +30,7 @@
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 #include <EnvisatAsar/mph.h>
 #include <EnvisatAsar/dsd.h>
+#include <string>
 
 namespace ossimplugins
 {

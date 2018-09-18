@@ -34,7 +34,7 @@ void WorldFile::Update()
     int         i = m_ImageFilename.find_last_of('.');
     worldFilename = m_ImageFilename.substr(0, i) + ".wld";
 
-    std::ofstream file(worldFilename.c_str());
+    std::ofstream file(worldFilename);
 
     if(!file)
       itkExceptionMacro(<<"Can not open file "<<worldFilename<<" for output");

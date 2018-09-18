@@ -26,13 +26,6 @@
 #include "otbWrapperApplicationHtmlDocGenerator.h"
 #include "otbWrapperApplicationRegistry.h"
 
-int otbWrapperApplicationHtmlDocGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::ApplicationHtmlDocGenerator DocGeneratorType;
-  DocGeneratorType generator;
-
-  return EXIT_SUCCESS;
-}
 
 int otbWrapperApplicationHtmlDocGeneratorTest1(int argc, char * argv[])
 {

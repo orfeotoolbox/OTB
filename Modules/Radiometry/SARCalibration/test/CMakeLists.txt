@@ -26,7 +26,6 @@ otbSarBrightnessFunction.cxx
 otbSarBrightnessToImageFilterTestWithoutNoise.cxx
 otbTerraSarBrightnessImageFilterTest.cxx
 otbSarRadiometricCalibrationToImageFilterWithRealPixelTest.cxx
-otbTerraSarBrightnessImageFilterNew.cxx
 otbSarParametricMapFunctionToImageFilter.cxx
 otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest.cxx
 otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise.cxx
@@ -113,9 +112,6 @@ otb_add_test(NAME raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_PA
   #2000 2000 250 250 # Extract
   #)
 
-otb_add_test(NAME raTuTerraSarBrightnessImageFilterNew COMMAND otbSARCalibrationTestDriver
-  otbTerraSarBrightnessImageFilterNew
-  )
 
 otb_add_test(NAME raTvSarParametricMapFunctionToImageFilter COMMAND  otbSARCalibrationTestDriver
   --compare-image ${EPSILON_12}

@@ -24,6 +24,7 @@
 #include "otbPersistentSamplingFilterBase.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "itkSimpleDataObjectDecorator.h"
+#include <string>
 
 namespace otb
 {

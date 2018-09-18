@@ -59,7 +59,7 @@ bool
 KMLVectorDataIO::CanReadFile(const char* filename) const
 {
   std::string lFileName(filename);
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -511,7 +511,7 @@ KMLVectorDataIO
 bool KMLVectorDataIO::CanWriteFile(const char* filename) const
 {
   std::string lFileName(filename);
-  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
     {
     return false;
     }
@@ -591,7 +591,7 @@ void KMLVectorDataIO::Write(const itk::DataObject* datag, char ** itkNotUsed(pap
   kml_file->SerializeToString(&output);
 
   std::ofstream fout;
-  fout.open(this->m_FileName.c_str());
+  fout.open(this->m_FileName);
   fout << output;
   fout.close();
 

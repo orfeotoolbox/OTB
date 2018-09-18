@@ -24,6 +24,7 @@
 #include "itkEventObject.h"
 #include "itkProcessObject.h"
 #include "OTBApplicationEngineExport.h"
+#include <string>
 
 namespace otb
 {

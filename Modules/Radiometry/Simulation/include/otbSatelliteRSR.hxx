@@ -40,7 +40,7 @@ void SatelliteRSR<TPrecision, TValuePrecision>::Load(const std::string & filenam
   //Parse 6S file Reduce spectral response
   //Begin by getting the number of band of the satellite
   //unsigned int nbBands= this->SetNbBands ( filename );
-  std::ifstream fin(filename.c_str());
+  std::ifstream fin(filename);
   if (fin.fail())
     {
     itkExceptionMacro(<<"Error opening file" << filename);

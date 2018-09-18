@@ -25,6 +25,7 @@
 #include "otbVectorData.h"
 #include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
+#include <string>
 
 namespace otb
 {

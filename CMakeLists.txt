@@ -23,7 +23,8 @@ cmake_minimum_required(VERSION 3.1.0)
 foreach(p
     CMP0025 # CMake 3.0
     CMP0042 # CMake 3.0
-    CMP0058
+    CMP0058 # CMake 3.3
+    CMP0072 # CMake 3.11
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -91,6 +92,8 @@ if( CMAKE_HOST_WIN32 )
   endif()
 
 endif()
+set(OTB_APPLICATIONS_NAME_LIST "" CACHE STRING "List of all applications" FORCE)
+mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 
 set(OTB_CMAKE_DIR ${OTB_SOURCE_DIR}/CMake)
 set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})

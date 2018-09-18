@@ -215,8 +215,8 @@ int main(int argc, char * argv[])
     //  Software Guide : BeginLatex
 
     // Software Guide : BeginCodeSnippet
-    reader->SetFileName(parseResult->GetInputImage().c_str());
-    writer->SetFileName(parseResult->GetOutputImage().c_str());
+    reader->SetFileName(parseResult->GetInputImage());
+    writer->SetFileName(parseResult->GetOutputImage());
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex

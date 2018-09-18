@@ -24,35 +24,6 @@
 
 #include "otbConfusionMatrixToMassOfBelief.h"
 
-int otbConfusionMatrixToMassOfBeliefNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef unsigned long                                   ConfusionMatrixEltType;
-  typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
-  typedef int                                             LabelType;
-
-  // filter types
-  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelType>
-      ConfusionMatrixToMassOfBelief2TemplatesType;
-  typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType> ConfusionMatrixToMassOfBelief1TemplateType;
-  typedef otb::ConfusionMatrixToMassOfBelief<> ConfusionMatrixToMassOfBelief0TemplateType;
-
-  // filters
-  ConfusionMatrixToMassOfBelief2TemplatesType::Pointer
-      confusionMatrixToMassOfBelief2Templates = ConfusionMatrixToMassOfBelief2TemplatesType::New();
-  ConfusionMatrixToMassOfBelief1TemplateType::Pointer
-      confusionMatrixToMassOfBelief1Template = ConfusionMatrixToMassOfBelief1TemplateType::New();
-  ConfusionMatrixToMassOfBelief0TemplateType::Pointer
-      confusionMatrixToMassOfBelief0Template = ConfusionMatrixToMassOfBelief0TemplateType::New();
-
-  std::cout << confusionMatrixToMassOfBelief2Templates << std::endl;
-  std::cout << std::endl;
-  std::cout << confusionMatrixToMassOfBelief1Template << std::endl;
-  std::cout << std::endl;
-  std::cout << confusionMatrixToMassOfBelief0Template << std::endl;
-  std::cout << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbConfusionMatrixToMassOfBeliefTest(int itkNotUsed(argc), char* argv[])

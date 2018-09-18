@@ -27,6 +27,7 @@
 #include "itkMacro.h"
 #include "otbMapProjectionAdapter.h"
 #include "otbTransformDirection.h"
+#include <string>
 
 namespace otb
 {

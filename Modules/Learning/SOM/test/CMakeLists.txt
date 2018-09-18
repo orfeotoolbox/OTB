@@ -22,20 +22,12 @@ otb_module_test()
 
 set(OTBSOMTests
 otbSOMTestDriver.cxx
-otbSOMbasedImageFilterNew.cxx
 otbSOM.cxx
 otbSOMImageClassificationFilter.cxx
 otbSOMActivationBuilder.cxx
-otbSOMActivationBuilderNew.cxx
-otbSOMClassifierNew.cxx
-otbSOMImageClassificationFilterNew.cxx
 otbSOMWithMissingValue.cxx
-otbSOMNew.cxx
 otbSOMMap.cxx
-otbSOMWithMissingValueNew.cxx
-otbSOMMapNew.cxx
 otbPeriodicSOM.cxx
-otbPeriodicSOMNew.cxx
 otbSOMClassifier.cxx
 otbSOMbasedImageFilter.cxx
 )
@@ -45,9 +37,6 @@ target_link_libraries(otbSOMTestDriver ${OTBSOM-Test_LIBRARIES})
 otb_module_target_label(otbSOMTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME leTuSOMbasedImageFilterNew COMMAND otbSOMTestDriver
-  otbSOMbasedImageFilterNew )
 
 otb_add_test(NAME leTvSOM COMMAND otbSOMTestDriver
   --compare-image ${EPSILON_10}
@@ -78,15 +67,6 @@ otb_add_test(NAME leTvSOMActivationBuilder COMMAND otbSOMTestDriver
   ${TEMP}/leSOMPoupeesSubActivationMap1.tif
   32 32 10 10 5 1.0 0.1 128)
 
-otb_add_test(NAME leTuSOMActivationBuilderNew COMMAND otbSOMTestDriver
-  otbSOMActivationBuilderNew)
-
-otb_add_test(NAME leTuSOMClassifierNew COMMAND otbSOMTestDriver
-  otbSOMClassifierNew)
-
-otb_add_test(NAME leTuSOMImageClassificationFilterNew COMMAND otbSOMTestDriver
-  otbSOMImageClassificationFilterNew)
-
 otb_add_test(NAME leTvSOMWithMissingValue COMMAND otbSOMTestDriver
   --compare-image ${EPSILON_10}
   ${BASELINE}/leSOMWithMissingValue.hdr
@@ -96,17 +76,8 @@ otb_add_test(NAME leTvSOMWithMissingValue COMMAND otbSOMTestDriver
   ${TEMP}/leSOMWithMissingValue.hdr
   32 32 10 10 5 1.0 0.1 0)
 
-otb_add_test(NAME leTuSOMNew COMMAND otbSOMTestDriver
-  otbSOMNew)
-
 otb_add_test(NAME leTvSOMMap COMMAND otbSOMTestDriver
   otbSOMMap)
-
-otb_add_test(NAME leTuSOMWithMissingValueNew COMMAND otbSOMTestDriver
-  otbSOMWithMissingValueNew )
-
-otb_add_test(NAME leTuSOMMapNew COMMAND otbSOMTestDriver
-  otbSOMMapNew)
 
 otb_add_test(NAME leTvPeriodicSOM COMMAND otbSOMTestDriver
   --compare-image ${EPSILON_10}
@@ -116,9 +87,6 @@ otb_add_test(NAME leTvPeriodicSOM COMMAND otbSOMTestDriver
   ${INPUTDATA}/poupees_sub.png
   ${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
   32 32 10 10 5 1.0 0.1 0)
-
-otb_add_test(NAME leTuPeriodicSOMNew COMMAND otbSOMTestDriver
-  otbPeriodicSOMNew)
 
 otb_add_test(NAME leTvSOMClassifier COMMAND otbSOMTestDriver
   --compare-image ${NOTOL}

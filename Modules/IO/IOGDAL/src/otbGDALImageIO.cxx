@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -212,7 +213,7 @@ void GDALImageIO::Read(void* buffer)
    if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       }
 
     otbLogMacro(Debug,<< "GDAL read took " << chrono.GetElapsedMilliseconds() << " ms")
@@ -271,7 +272,7 @@ void GDALImageIO::Read(void* buffer)
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       return;
       }
 
@@ -434,7 +435,7 @@ void GDALImageIO::InternalReadImageInformation()
   // supported gdal format using the m_DatasetNumber value
   // HDF4_SDS:UNKNOWN:"myfile.hdf":2
   // and make m_Dataset point to it.
-  if (m_Dataset->GetDataSet()->GetRasterCount() == 0)
+  if (m_Dataset->GetDataSet()->GetRasterCount() == 0 || m_DatasetNumber > 0)
     {
     // this happen in the case of a hdf file with SUBDATASETS
     // Note: we assume that the datasets are in order
@@ -658,6 +659,24 @@ void GDALImageIO::InternalReadImageInformation()
       }
     }
 
+  // get list of other files part of the same dataset
+  char** datasetFileList = dataset->GetFileList();
+  m_AttachedFileNames.clear();
+  if (datasetFileList != nullptr)
+    {
+    char** currentFile = datasetFileList;
+    while (*currentFile != nullptr)
+      {
+      if (m_FileName.compare(*currentFile) != 0)
+        {
+        m_AttachedFileNames.emplace_back(*currentFile);
+        otbLogMacro(Debug,<<"Found attached file : "<< *currentFile);
+        }
+      currentFile++;
+      }
+    CSLDestroy(datasetFileList);
+    }
+
   /*----------------------------------------------------------------------*/
   /*-------------------------- METADATA ----------------------------------*/
   /*----------------------------------------------------------------------*/
@@ -692,9 +711,16 @@ void GDALImageIO::InternalReadImageInformation()
       }
   }
 
+  /* -------------------------------------------------------------------- */
+  /*  Get Pixel type                                                      */
+  /* -------------------------------------------------------------------- */
+
+  itk::EncapsulateMetaData< IOComponentType >( dict, 
+          MetaDataKey::DataType , 
+          this->GetComponentType() );
 
   /* -------------------------------------------------------------------- */
-  /*  Get Spacing                */
+  /*  Get Spacing                                                         */
   /* -------------------------------------------------------------------- */
 
   // Default Spacing
@@ -1199,7 +1225,7 @@ void GDALImageIO::Write(const void* buffer)
     if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while writing image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
       }
 
     otbLogMacro(Debug,<< "GDAL write took " << chrono.GetElapsedMilliseconds() << " ms")
@@ -1227,7 +1253,7 @@ void GDALImageIO::Write(const void* buffer)
     if(!hOutputDS)
     {
       itkExceptionMacro(<< "Error while writing image (GDAL format) '"
-        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
+        << m_FileName << "' : " << CPLGetLastErrorMsg());
     }
     else
     {
@@ -1364,7 +1390,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (driverShortName == "NOT-FOUND")
     {
     itkExceptionMacro(
-      << "GDAL Writing failed: the image file name '" << m_FileName.c_str() << "' is not recognized by GDAL.");
+      << "GDAL Writing failed: the image file name '" << m_FileName << "' is not recognized by GDAL.");
     }
 
   if (m_CanStreamWrite)
@@ -1565,6 +1591,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
         }
       }
     }
+
+  for (auto const& noData : m_NoDataList)
+    dataset->GetRasterBand(noData.first)->SetNoDataValue(noData.second);
+
 }
 
 std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const

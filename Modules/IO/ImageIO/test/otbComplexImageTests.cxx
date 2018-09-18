@@ -31,15 +31,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-int otbVectorImageComplexNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef std::complex<float>            PixelType;
-  typedef otb::VectorImage<PixelType, 2> ImageType;
-  ImageType::Pointer image = ImageType::New();
-  image->Initialize();
-
-  return EXIT_SUCCESS;
-}
 
 
 template<class InternalType>

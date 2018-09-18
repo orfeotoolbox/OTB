@@ -32,6 +32,7 @@
 
 #include "RadiometryUncertaintyRecord.h"
 #include "MisregistrationRecord.h"
+#include <string>
 
 namespace ossimplugins
 {

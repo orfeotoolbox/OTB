@@ -79,7 +79,7 @@ GDALDriverManagerWrapper::Open( std::string filename ) const
   if (strcmp(identifyDriver->GetDescription(),"JPEG2000") == 0)
     {
     itkGenericExceptionMacro(<< "Error : tried to open the file "
-      << filename.c_str() << " with GDAL driver Jasper "
+      << filename << " with GDAL driver Jasper "
       "(which fails on OTB). Try setting the environment variable GDAL_SKIP"
       " in order to avoid this driver.");
     }

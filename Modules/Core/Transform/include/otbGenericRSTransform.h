@@ -22,6 +22,7 @@
 #define otbGenericRSTransform_h
 
 #include "otbCompositeTransform.h"
+#include <string>
 
 namespace otb
 {
