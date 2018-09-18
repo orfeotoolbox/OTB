@@ -92,10 +92,11 @@ private:
   void DoExecute() override
   {
     unsigned int utmZone = 0;
-    bool north = false;
+    otb::SpatialReference::hemisphere hem;
+
 
     otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lon"),
-                                                     GetParameterFloat("lat"),utmZone,north);
+                                                     GetParameterFloat("lat"),utmZone,hem);
 
     SetParameterInt("utm",utmZone);
   }
