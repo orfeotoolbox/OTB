@@ -1313,7 +1313,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       }
     else
       {
-      itkExceptionMacro(<< "This complex type is not defined :" << this->GetPixelTypeAsString(this->GetPixelType()) );
+      itkExceptionMacro(<< "This complex type is not defined :" << ImageIOBase::GetPixelTypeAsString(this->GetPixelType()) );
       }
     }
   else
