@@ -93,11 +93,10 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
       }
     else
       {
-      m_LUT[m_LUT[curLabelLUT]] = adjLabelLUT; 
       m_LUT[curLabelLUT] = adjLabelLUT;
       }
     }
-  
+    
   // Update the LUT
   for (auto & label : m_LUT)
     {
@@ -202,12 +201,14 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   for (it.GoToBegin(); ! it.IsAtEnd(); ++it, ++itN)
     {
     assert( !itN.IsAtEnd() );
-    int currentLabel = FindCorrespondingLabel(it.Get());
+    int currentLabel = m_LUT[ it.Get() ];
+    
+    
     if ( m_LabelPopulation[currentLabel] == m_Size )
       {
       for (auto ci = itN.Begin() ; !ci.IsAtEnd(); ci++)
         {
-        int neighbourLabel = FindCorrespondingLabel(ci.Get() );
+        int neighbourLabel = m_LUT[ ci.Get() ];
         if (neighbourLabel != currentLabel)
           m_NeighboursMapsTmp[threadId][ currentLabel ].insert( neighbourLabel );
         }
