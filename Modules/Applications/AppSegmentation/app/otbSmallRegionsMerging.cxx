@@ -18,15 +18,14 @@
  * limitations under the License.
  */
 
-
-#include <time.h>
-
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbStreamingStatisticsMapFromLabelImageFilter.h"
 #include "otbLabelImageSmallRegionMergingFilter.h"
 #include "itkChangeLabelImageFilter.h"
+
+#include "otbStopwatch.h"
 
 namespace otb
 {
@@ -77,7 +76,9 @@ private:
                           " pixel will be merged with adjacent segments, then"
                           " all segments of area equal to 2 pixels will be"
                           " processed, until segments of area minsize.");
-                          
+    
+    SetDocLimitations( "None") ;
+    
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Segmentation");
     AddDocTag(Tags::Segmentation);
@@ -121,8 +122,9 @@ private:
 
   void DoExecute() override
   {
-    clock_t tic = clock();
-  
+    // Start Timer for the application
+    auto Timer = Stopwatch::StartNew();
+    
     unsigned int minSize     = GetParameterInt("minsize");
 
     //Acquisition of the input image dimensions
@@ -180,9 +182,10 @@ private:
     }
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
     RegisterPipeline();
-    clock_t toc = clock();
-    otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<
-      " seconds");
+
+    Timer.Stop();
+    otbAppLogINFO( "Total elapsed time: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
+
   }
   
 };
