@@ -23,11 +23,9 @@
 #define otbLabelImageSmallRegionMergingFilter_hxx
 
 #include "otbLabelImageSmallRegionMergingFilter.h"
-#include "itkImageConstIterator.h"
 #include "itkConstShapedNeighborhoodIterator.h"
 #include "itkProgressReporter.h"
 
-#include <time.h>
 namespace otb
 {
 template <class TInputLabelImage >
@@ -64,7 +62,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   // to the euclidian distance between the corresponding m_labelStatistic elements.
   for (auto const & neighbours : neighboursMap)
     {
-    double proximity = std::numeric_limits<double>::max();
+    double proximity = itk::NumericTraits<double>::max();
     InputLabelType label = neighbours.first;
     InputLabelType closestNeighbour = label;
     for (auto const & neighbour : neighbours.second)
@@ -72,11 +70,8 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
       auto statsLabel = m_LabelStatistic[ label ];
       auto statsNeighbour = m_LabelStatistic[ neighbour ];
       assert( statsLabel.Size() == statsNeighbour.Size() );
-      double distance = 0;
-      for (unsigned int i = 0 ; i < statsLabel.Size(); i++)
-        {
-        distance += (statsLabel[i] - statsNeighbour[i]) * (statsLabel[i] - statsNeighbour[i]);
-        }
+      
+      double distance = (statsLabel - statsNeighbour).GetSquaredNorm();
       if (distance < proximity)
         {
         proximity = distance;
@@ -203,7 +198,6 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     assert( !itN.IsAtEnd() );
     int currentLabel = m_LUT[ it.Get() ];
     
-    
     if ( m_LabelPopulation[currentLabel] == m_Size )
       {
       for (auto ci = itN.Begin() ; !ci.IsAtEnd(); ci++)
@@ -231,14 +225,20 @@ LabelImageSmallRegionMergingFilter< TInputLabelImage >
   m_SmallRegionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
 }
 
+template <class TInputLabelImage>
+void
+LabelImageSmallRegionMergingFilter<TInputLabelImage>
+::Update(void)
+{
+  this->GenerateData();
+}
+
 template <class TInputLabelImage >
 void
 LabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::GenerateData()
 {
   this->SetProgress(0.0);
-  auto labelImage = this->GetInput();
-  m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
 
   // Update the filter for all sizes.
   for (unsigned int size = 1; size < m_MinSize; size++)

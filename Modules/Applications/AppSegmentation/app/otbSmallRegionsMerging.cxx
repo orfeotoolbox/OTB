@@ -143,7 +143,7 @@ private:
       
     // Compute the LUT from the original label image to the merged output label image.
     auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
-    regionMergingFilter->SetInput( labelIn );
+    regionMergingFilter->SetInputLabelImage( labelIn );
     regionMergingFilter->SetLabelPopulation( labelPopulation );
     regionMergingFilter->SetLabelStatistic( meanValues );
     

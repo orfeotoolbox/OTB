@@ -25,6 +25,7 @@
 #include "otbPersistentFilterStreamingDecorator.h"
 
 #include <unordered_map>
+#include <unordered_set>
 
 namespace otb
 {
@@ -177,12 +178,12 @@ private:
  */
 template <class TInputLabelImage>
 class ITK_EXPORT LabelImageSmallRegionMergingFilter 
-  : public itk::ImageToImageFilter<TInputLabelImage, TInputLabelImage>
+  : public itk::ProcessObject
 {
 public:
   /** Standard Self typedef */
   typedef LabelImageSmallRegionMergingFilter                         Self;
-  typedef itk::ImageToImageFilter<TInputLabelImage, TInputLabelImage>      Superclass;
+  typedef itk::ProcessObject      Superclass;
   typedef itk::SmartPointer<Self>                                     Pointer;
   typedef itk::SmartPointer<const Self>                               ConstPointer;
 
@@ -190,7 +191,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(LabelImageSmallRegionMergingFilter, itk::ImageToImageFilter);
+  itkTypeMacro(LabelImageSmallRegionMergingFilter, itk::ProcessObject);
 
   // Small region merging filter typedefs
   typedef PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage > PersistentLabelImageSmallRegionMergingFilterType;
@@ -205,6 +206,12 @@ public:
   itkGetMacro(MinSize , unsigned int);
   itkSetMacro(MinSize , unsigned int);
 
+  /** Set the Label population map */
+  void SetInputLabelImage( const TInputLabelImage * labelImage )
+  {
+    m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
+  }
+  
   /** Set the Label population map */
   void SetLabelPopulation( LabelPopulationType const & labelPopulation )
   {
@@ -235,6 +242,8 @@ public:
     return m_SmallRegionMergingFilter->GetFilter()->GetLUT();
   }
   
+  void Update(void) override;
+
 protected:
   /** Constructor */
   LabelImageSmallRegionMergingFilter();
