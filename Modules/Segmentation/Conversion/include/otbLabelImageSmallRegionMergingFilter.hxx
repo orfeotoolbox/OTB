@@ -49,17 +49,21 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::Synthetize()
 {
   NeigboursMapType neighboursMap;
+  
   // Merge the neighbours maps from all threads
-  for( unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
+  for( unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); 
+        threadId++)
     {
     for (auto const & neighbours : m_NeighboursMapsTmp[threadId])
       {
-      neighboursMap[ neighbours.first ].insert( neighbours.second.begin(), neighbours.second.end() );
+      neighboursMap[ neighbours.first ].insert
+        ( neighbours.second.begin(), neighbours.second.end() );
       }
     }
   
-  // For each label of the label map, find the "closest" connected label, according 
-  // to the euclidian distance between the corresponding m_labelStatistic elements.
+  // For each label of the label map, find the "closest" connected label, 
+  // according to the euclidian distance between the corresponding 
+  // m_labelStatistic elements.
   for (auto const & neighbours : neighboursMap)
     {
     double proximity = itk::NumericTraits<double>::max();
@@ -82,6 +86,8 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     auto curLabelLUT = FindCorrespondingLabel(label);
     auto adjLabelLUT = FindCorrespondingLabel(closestNeighbour);
 
+    // Keep the smallest label (this prevents infinite loop in the LUT 
+    // (like LUT[i]=j and LUT[j]=i)
     if(curLabelLUT < adjLabelLUT)
       {
       m_LUT[adjLabelLUT] = curLabelLUT;
@@ -98,24 +104,31 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     label.second = FindCorrespondingLabel( label.first );
     }
   
-  // Update statistics
+  // Update statistics : for each newly merged segments, sum the population, and
+  // recompute the mean.
   for (auto label : m_LUT)
     {
      if((m_LabelPopulation[label.first]!=0) && (label.second != label.first))
       {
-      m_LabelStatistic[ label.second ] = (m_LabelStatistic[label.second]*m_LabelPopulation[label.second] + 
-                        m_LabelStatistic[label.first]*m_LabelPopulation[label.first] ) / (m_LabelPopulation[label.first]+m_LabelPopulation[label.second]);
+      m_LabelStatistic[ label.second ] = 
+        ( m_LabelStatistic[label.first]*m_LabelPopulation[label.first]
+          + m_LabelStatistic[label.second]*m_LabelPopulation[label.second] ) 
+          / (m_LabelPopulation[label.first]+m_LabelPopulation[label.second]);
+  
       m_LabelPopulation[ label.second ] += m_LabelPopulation[ label.first ] ;
+      
+      // Do not use this label anymore
       m_LabelPopulation[ label.first ] = 0;
       }
     }
 }
 
 template <class TInputLabelImage >
-typename PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >::InputLabelType
+typename PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::InputLabelType
 PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
-::FindCorrespondingLabel( typename PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
-                            ::InputLabelType label)
+::FindCorrespondingLabel( typename PersistentLabelImageSmallRegionMergingFilter
+        < TInputLabelImage >::InputLabelType label)
 {
   auto correspondingLabel = m_LUT[label];
   while (label != correspondingLabel)
@@ -160,7 +173,8 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+    e.SetDescription("Requested region is (at least partially) outside the "
+      "largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
     }
@@ -170,10 +184,12 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 template <class TInputLabelImage >
 void
 PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
-::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId )
+::ThreadedGenerateData(const RegionType& outputRegionForThread, 
+  itk::ThreadIdType threadId )
 { 
   using IteratorType = itk::ImageRegionConstIterator< TInputLabelImage >;
-  using NeighborhoodIteratorType = itk::ConstShapedNeighborhoodIterator< TInputLabelImage >;
+  using NeighborhoodIteratorType = 
+    itk::ConstShapedNeighborhoodIterator< TInputLabelImage >;
   
   typename NeighborhoodIteratorType::RadiusType radius;
   radius.Fill(1);
@@ -204,7 +220,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
         {
         int neighbourLabel = m_LUT[ ci.Get() ];
         if (neighbourLabel != currentLabel)
-          m_NeighboursMapsTmp[threadId][ currentLabel ].insert( neighbourLabel );
+          m_NeighboursMapsTmp[threadId][ currentLabel ].insert(neighbourLabel);
         }
       }
     }

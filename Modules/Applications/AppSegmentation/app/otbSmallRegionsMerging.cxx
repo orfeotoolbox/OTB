@@ -45,12 +45,14 @@ public:
   typedef UInt32ImageType                   LabelImageType;
   typedef LabelImageType::InternalPixelType LabelImagePixelType;
 
-  //typedef otb::StreamingStatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
-  typedef otb::StreamingStatisticsMapFromLabelImageFilter<ImageType, LabelImageType> StatisticsMapFromLabelImageFilterType;
+  typedef otb::StreamingStatisticsMapFromLabelImageFilter
+      <ImageType, LabelImageType> StatisticsMapFromLabelImageFilterType;
 
-  typedef otb::LabelImageSmallRegionMergingFilter<LabelImageType> LabelImageSmallRegionMergingFilterType;
+  typedef otb::LabelImageSmallRegionMergingFilter<LabelImageType> 
+                                  LabelImageSmallRegionMergingFilterType;
 
-  typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> ChangeLabelImageFilterType;
+  typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> 
+                                  ChangeLabelImageFilterType;
  
   itkNewMacro(Self);
   itkTypeMacro(Merging, otb::Application);
@@ -61,34 +63,43 @@ private:
   void DoInit() override
   {
     SetName("SmallRegionsMerging");
-    SetDescription("This application merges small regions of a segmentation result to connected region.");
+    SetDescription("This application merges small regions of a segmentation "
+      "result to connected region.");
 
     SetDocName("Small Region Merging");
-    SetDocLongDescription("Given a segmentation result and the original image, it will"
-                          " merge segments whose size in pixels is lower than minsize parameter"
-                          " with the adjacent segments with the adjacent segment with closest"
-                          " radiometry and acceptable size.\n\n"
-                          "Small segments will be processed by increasing size: first all segments"
-                          " for which area is equal to 1 pixel will be merged with adjacent"
-                          " segments, then all segments of area equal to 2 pixels will be processed,"
-                          " until segments of area minsize.");
+    SetDocLongDescription("Given a segmentation result and the original image,"
+                          " it will merge segments whose size in pixels is"
+                          " lower than minsize parameter with the adjacent"
+                          " segments with the adjacent segment with closest"
+                          " radiometry and acceptable size. \n\n"
+                          "Small segments will be processed by increasing size:"
+                          " first all segments for which area is equal to 1"
+                          " pixel will be merged with adjacent segments, then"
+                          " all segments of area equal to 2 pixels will be"
+                          " processed, until segments of area minsize.");
                           
-    SetDocLimitations("This application is more efficient if the labels are contiguous, starting from 0.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso( "Segmentation");
+    SetDocSeeAlso("Segmentation");
     AddDocTag(Tags::Segmentation);
 
     AddParameter(ParameterType_InputImage,  "in", "Input image");
-    SetParameterDescription( "in", "The input image, containing initial spectral signatures corresponding to the segmented image (inseg)." );
-    AddParameter(ParameterType_InputImage,  "inseg", "Segmented image");
-    SetParameterDescription( "inseg", "Segmented image where each pixel value is the unique integer label of the segment it belongs to." );
+    SetParameterDescription( "in", "The input image, containing initial"
+      " spectral signatures corresponding to the segmented image (inseg)." );
+    AddParameter(ParameterType_InputImage, "inseg", "Segmented image");
+    SetParameterDescription( "inseg", "Segmented image where each pixel value"
+    " is the unique integer label of the segment it belongs to." );
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription( "out", "The output image. The output image is the segmented image where the minimal segments have been merged." );
+    SetParameterDescription( "out", "The output image. The output image is the"
+    " segmented image where the minimal segments have been merged." );
     SetDefaultOutputPixelType("out",ImagePixelType_uint32);
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
-    SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, a segment is of size strictly lower than this criterion, the segment is merged with the segment that has the closest sepctral signature.");
+    SetParameterDescription("minsize", "Minimum Segment Size. If, after the "
+    " segmentation, a segment is of size strictly lower than this criterion,"
+    " the segment is merged with the segment that has the closest sepctral"
+    " signature.");
+    
     SetDefaultParameterInt("minsize", 50);
     SetMinimumParameterIntValue("minsize", 1);
     MandatoryOff("minsize");
@@ -123,7 +134,8 @@ private:
     auto labelStatsFilter = StatisticsMapFromLabelImageFilterType::New();
     labelStatsFilter->SetInput(imageIn);
     labelStatsFilter->SetInputLabelImage(labelIn);
-    AddProcess(labelStatsFilter->GetStreamer() , "Computing stats on input image ...");
+    AddProcess(labelStatsFilter->GetStreamer() , "Computing stats on input"
+      " image ...");
     labelStatsFilter->Update();
 
     // Convert Map to Unordered map
@@ -135,18 +147,19 @@ private:
       labelPopulation[population.first]=population.second;
       }
     auto  meanValueMap = labelStatsFilter->GetMeanValueMap();
-    std::unordered_map< unsigned int, itk::VariableLengthVector<double> > meanValues;
+    std::unordered_map< unsigned int, itk::VariableLengthVector<double> > 
+      meanValues;
     for (const auto & mean : meanValueMap)
       {
       meanValues[mean.first] = mean.second;
       }  
       
-    // Compute the LUT from the original label image to the merged output label image.
+    // Compute the LUT from the original label image to the merged output 
+    // label image.
     auto regionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
     regionMergingFilter->SetInputLabelImage( labelIn );
     regionMergingFilter->SetLabelPopulation( labelPopulation );
     regionMergingFilter->SetLabelStatistic( meanValues );
-    
     regionMergingFilter->SetMinSize( minSize);
     
     AddProcess(regionMergingFilter, "Computing LUT ...");
@@ -168,7 +181,8 @@ private:
     SetParameterOutputImage("out", changeLabelFilter->GetOutput());
     RegisterPipeline();
     clock_t toc = clock();
-    otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
+    otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<
+      " seconds");
   }
   
 };
