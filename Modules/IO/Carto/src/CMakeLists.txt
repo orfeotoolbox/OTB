@@ -21,9 +21,13 @@
 set(OTBCarto_SRC
   otbCoordinateToName.cxx
   otbOSMDataToVectorDataGenerator.cxx
-  otbPlaceNameToLonLat.cxx
   otbWorldFile.cxx
   )
+
+#Deprecated module
+if ( OTB_USE_DEPRECATED )
+  set(OTBCarto_SRC ${OTBCarto_SRC} otbPlaceNameToLonLat.cxx)
+endif()
 
 add_library(OTBCarto ${OTBCarto_SRC})
 target_link_libraries(OTBCarto 
@@ -37,7 +41,6 @@ target_link_libraries(OTBCarto
   ${OTBCurlAdapters_LIBRARIES}
   ${OTBVectorDataIO_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
-
   )
 
 otb_module_target(OTBCarto)
