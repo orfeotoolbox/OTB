@@ -184,7 +184,8 @@ private:
     RegisterPipeline();
 
     Timer.Stop();
-    otbAppLogINFO( "Total elapsed time: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
+    otbAppLogINFO( "Total elapsed time: "<< 
+      float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
 
   }
   
