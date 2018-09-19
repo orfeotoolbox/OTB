@@ -129,6 +129,11 @@ public:
   itkSetMacro(DefaultBurnValue, OutputImageInternalPixelType);
   itkGetMacro(DefaultBurnValue, OutputImageInternalPixelType);
 
+  /** Set/Get the AllTouchedMode flag */
+  itkSetMacro(AllTouchedMode,bool);
+  itkGetConstReferenceMacro(AllTouchedMode,bool);
+  itkBooleanMacro(AllTouchedMode);
+
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
@@ -175,6 +180,9 @@ private:
 
   // Background value
   OutputImageInternalPixelType  m_BackgroundValue;
+
+  // All touched mode
+  bool                          m_AllTouchedMode;
 
   // Output params
   std::string                   m_OutputProjectionRef;

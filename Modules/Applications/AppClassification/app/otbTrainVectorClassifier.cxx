@@ -63,7 +63,10 @@ protected:
     SetDocName( "Train Vector Classifier" );
     SetDocLongDescription( "This application trains a classifier based on "
       "labeled geometries and a list of features to consider for "
-      "classification." );
+      "classification.\nThis application is based on LibSVM, OpenCV Machine "
+      "Learning (2.3.1 and later), and Shark ML The output of this application "
+      "is a text model file, whose format corresponds to the ML model type "
+      "chosen. There is no image nor vector data output.");
     SetDocLimitations( " " );
     SetDocAuthors( "OTB Team" );
     SetDocSeeAlso( " " );

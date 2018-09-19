@@ -99,6 +99,11 @@ public:
 
   typedef itk::DataObject                        DataObjectType;
 
+  /** Set/Get the AllTouchedMode flag */
+  itkSetMacro(AllTouchedMode,bool);
+  itkGetConstReferenceMacro(AllTouchedMode,bool);
+  itkBooleanMacro(AllTouchedMode);
+
   const InputImageType * GetInput();
   const DataObjectType* GetInput(unsigned int idx);
 
@@ -163,6 +168,7 @@ private:
   std::vector<double>         m_BurnValues;
   std::vector<double>         m_FullBurnValues;
   std::vector<int>            m_BandsToBurn;
+  bool                        m_AllTouchedMode;
 
 }; // end of class RasterizeVectorDataFilter
 
