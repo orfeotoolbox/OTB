@@ -3,8 +3,8 @@ Advanced Use
 
 This section describes advanced configuration options and tricks.
 
-Environment variables that affects Orfeo ToolBox
-------------------------------------------------
+Environment variables that affect Orfeo ToolBox
+-----------------------------------------------
 
 The following environment variables are parsed by Orfeo ToolBox. Note
 that they only affect default values, and that settings in extended

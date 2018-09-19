@@ -889,7 +889,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     std::ostringstream msg;
     msg <<"Couldn't convert component type: "
         << std::endl << "    "
-        << m_ImageIO->GetComponentTypeAsString(m_ImageIO->GetComponentType())
+        << ImageIOBase::GetComponentTypeAsString(m_ImageIO->GetComponentType())
         << std::endl << "to one of: "
         << std::endl << "    " << typeid(unsigned char).name()
         << std::endl << "    " << typeid(char).name()
