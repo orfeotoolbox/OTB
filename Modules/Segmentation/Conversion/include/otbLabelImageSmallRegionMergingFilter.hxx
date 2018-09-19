@@ -69,7 +69,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     double proximity = itk::NumericTraits<double>::max();
     InputLabelType label = neighbours.first;
     InputLabelType closestNeighbour = label;
-    for (auto const & neighbour : neighbours.second)
+    for (auto neighbour : neighbours.second)
       {
       auto statsLabel = m_LabelStatistic[ label ];
       auto statsNeighbour = m_LabelStatistic[ neighbour ];
