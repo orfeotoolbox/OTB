@@ -49,7 +49,7 @@ namespace otb
  * \ingroup OTBConversion
  */
 template <class TInputLabelImage>
-class PersistentLabelImageSmallRegionMergingFilter
+class ITK_EXPORT PersistentLabelImageSmallRegionMergingFilter
   : public PersistentImageFilter<TInputLabelImage, TInputLabelImage>
 {
 public:
