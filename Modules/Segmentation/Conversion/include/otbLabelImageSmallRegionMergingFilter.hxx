@@ -69,10 +69,11 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     double proximity = itk::NumericTraits<double>::max();
     InputLabelType label = neighbours.first;
     InputLabelType closestNeighbour = label;
+    auto const& statsLabel = m_LabelStatistic[ label ];
+    
     for (auto neighbour : neighbours.second)
       {
-      auto statsLabel = m_LabelStatistic[ label ];
-      auto statsNeighbour = m_LabelStatistic[ neighbour ];
+      auto const & statsNeighbour = m_LabelStatistic[ neighbour ];
       assert( statsLabel.Size() == statsNeighbour.Size() );
       
       double distance = (statsLabel - statsNeighbour).GetSquaredNorm();
@@ -106,16 +107,22 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
   
   // Update statistics : for each newly merged segments, sum the population, and
   // recompute the mean.
-  for (auto label : m_LUT)
+  for (auto const & label : m_LUT)
     {
-     if((m_LabelPopulation[label.first]!=0) && (label.second != label.first))
+    if ((label.second != label.first) && (m_LabelPopulation[label.first]!=0))
       {
+      // Cache values to reduce number of lookups
+      auto const & populationFirst = m_LabelPopulation[label.first];
+      auto const & populationSecond = m_LabelPopulation[label.second];
+      auto const & statisticFirst = m_LabelStatistic[label.first];
+      auto const & statisticSecond = m_LabelStatistic[label.second];
+      
       m_LabelStatistic[ label.second ] = 
-        ( m_LabelStatistic[label.first]*m_LabelPopulation[label.first]
-          + m_LabelStatistic[label.second]*m_LabelPopulation[label.second] ) 
-          / (m_LabelPopulation[label.first]+m_LabelPopulation[label.second]);
-  
-      m_LabelPopulation[ label.second ] += m_LabelPopulation[ label.first ] ;
+        ( (statisticFirst * populationFirst) 
+          + (statisticSecond * populationSecond) )
+        / (populationFirst + populationSecond);
+      
+      m_LabelPopulation[ label.second ] += populationFirst;
       
       // Do not use this label anymore
       m_LabelPopulation[ label.first ] = 0;

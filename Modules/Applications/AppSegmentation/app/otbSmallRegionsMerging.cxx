@@ -63,7 +63,7 @@ private:
   {
     SetName("SmallRegionsMerging");
     SetDescription("This application merges small regions of a segmentation "
-      "result to connected region.");
+      "result.");
 
     SetDocName("Small Region Merging");
     SetDocLongDescription("Given a segmentation result and the original image,"
@@ -173,7 +173,7 @@ private:
     
     const auto & LUT = regionMergingFilter->GetLUT();
 
-    for (auto label : LUT)
+    for (auto const & label : LUT)
     {
       if (label.first != label.second)
       {
