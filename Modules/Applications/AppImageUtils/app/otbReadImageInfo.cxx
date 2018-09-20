@@ -114,6 +114,10 @@ private:
     SetParameterDescription("numberbands", "Number of bands");
     SetParameterRole("numberbands", Role_Output);
 
+    AddParameter(ParameterType_String,"datatype","Data type");
+    SetParameterDescription("datatype", "Data type");
+    SetParameterRole("datatype", Role_Output);
+
     AddParameter(ParameterType_String,"sensor","Sensor id");
     SetParameterDescription("sensor", "Sensor identifier");
     SetParameterRole("sensor", Role_Output);
@@ -267,6 +271,15 @@ private:
     //Get number of bands
     SetParameterInt("numberbands",inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
+
+    // Get data type
+    ImageIOBase::IOComponentType typeInfo(ImageIOBase::UNKNOWNCOMPONENTTYPE);
+    itk::ExposeMetaData< ImageIOBase::IOComponentType >( inImage->GetMetaDataDictionary(),
+							 MetaDataKey::DataType , typeInfo);
+    const std::string dataTypeAsString = ImageIOBase::GetComponentTypeAsString(typeInfo);
+    SetParameterString("datatype", dataTypeAsString);
+    ossOutput << "\tData type : " << GetParameterString("datatype") << std::endl;
+
     std::vector<bool> noDataValueAvailable;
     bool ret = itk::ExposeMetaData<std::vector<bool> >(inImage->GetMetaDataDictionary(),MetaDataKey::NoDataValueAvailable,noDataValueAvailable);
 
@@ -299,7 +312,7 @@ private:
     SetParameterInt("indexx",inImage->GetLargestPossibleRegion().GetIndex()[0]);
     SetParameterInt("indexy",inImage->GetLargestPossibleRegion().GetIndex()[1]);
 
-        ossOutput << "\tStart index :  [" << GetParameterInt("indexx") << "," << GetParameterInt("indexy") << "]" << std::endl;
+    ossOutput << "\tStart index :  [" << GetParameterInt("indexx") << "," << GetParameterInt("indexy") << "]" << std::endl;
 
     //Get image size
     SetParameterInt("sizex",inImage->GetLargestPossibleRegion().GetSize()[0]);

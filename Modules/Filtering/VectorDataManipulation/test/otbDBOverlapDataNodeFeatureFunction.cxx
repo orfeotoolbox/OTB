@@ -26,19 +26,6 @@
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-int otbDBOverlapDataNodeFeatureFunctionNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef double CoordRepType;
-  typedef double PrecisionType;
-  typedef otb::DBOverlapDataNodeFeatureFunction<CoordRepType, PrecisionType>
-                                       DataNodeFeaturefunctionType;
-
-  DataNodeFeaturefunctionType::Pointer DBOverlapFeature = DataNodeFeaturefunctionType::New();
-
-  std::cout << DBOverlapFeature<< std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbDBOverlapDataNodeFeatureFunction(int itkNotUsed(argc), char* argv[])
 {

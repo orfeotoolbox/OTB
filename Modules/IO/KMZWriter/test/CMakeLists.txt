@@ -63,9 +63,6 @@ otb_add_test(NAME ioTvKmzProductWriterWithGCP COMMAND otbKMZWriterTestDriver
   417.000000 2317.000000 -72.426552 18.540876 0.000000
   )
 
-otb_add_test(NAME ioTuKmzProductWriterNew COMMAND otbKMZWriterTestDriver
-  otbKmzProductWriterNew
-  )
 
 otb_add_test(NAME ioTvKmzProductWriterWithGCP_Logo_Legend COMMAND otbKMZWriterTestDriver
   otbKmzProductWriterWithLogoAndLegend

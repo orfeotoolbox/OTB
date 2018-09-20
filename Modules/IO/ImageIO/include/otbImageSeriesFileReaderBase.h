@@ -49,6 +49,11 @@ public:
                                  const char* message = "Error in IO",
                                  const char* loc = "Unknown") :
     itk::ExceptionObject(file, line, message, loc) {}
+
+  ImageSeriesFileReaderException(const std::string& file, unsigned int line,
+                                 const std::string& message = "Error in IO",
+                                 const std::string& loc = "Unknown") :
+    itk::ExceptionObject(file, line, message, loc) {}
 };
 
 /** \class ImageSeriesFileReaderBase
@@ -111,6 +116,13 @@ public:
    * selection
    */
   virtual void SetFileName(const std::string& file);
+
+  /**
+   * Set the file to be read. Once the Filename is set, ReadMeatFile is called in order to get
+   * the number of image files to be read, the images file names, the band and region
+   * selection
+   * \deprecated const char* overload of SetFileName is deprecated, use std::string instead
+   */
   virtual void SetFileName(const char * file);
 
   /** get the Filenames */

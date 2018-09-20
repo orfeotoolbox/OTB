@@ -1365,7 +1365,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
         {
         itkGenericExceptionMacro(<< "Error during rescale of " << diffName.str());
         }
-      writer->SetFileName(diffName.str().c_str());
+      writer->SetFileName(diffName.str());
       try
         {
         writer->Update();
@@ -1406,7 +1406,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
         }
       try
         {
-        writer->SetFileName(baseName.str().c_str());
+        writer->SetFileName(baseName.str());
         writer->Update();
         }
       catch (...)
@@ -1445,7 +1445,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
         }
       try
         {
-        writer->SetFileName(testName.str().c_str());
+        writer->SetFileName(testName.str());
         writer->Update();
         }
       catch (...)

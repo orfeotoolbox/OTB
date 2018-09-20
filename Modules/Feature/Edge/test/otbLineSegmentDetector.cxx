@@ -25,22 +25,6 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbImageFileWriter.h"
 
-int otbLineSegmentDetectorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-
-  typedef float InputPixelType;
-  const unsigned int Dimension = 2;
-
-  /** Typedefs */
-  typedef otb::Image<InputPixelType,  Dimension>                   InputImageType;
-  typedef otb::LineSegmentDetector<InputImageType, InputPixelType> lsdFilterType;
-
-  lsdFilterType::Pointer filter = lsdFilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbLineSegmentDetector(int argc, char * argv[])
 {

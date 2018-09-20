@@ -34,13 +34,6 @@ typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, PixelType
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<ImageType> WriterType;
 
-int otbUnConstrainedLeastSquareImageFilterNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  UnConstrainedLeastSquareSolverType::Pointer filter = UnConstrainedLeastSquareSolverType::New();
-  std::cout << filter << std::endl;
-  return EXIT_SUCCESS;
-}
-
 int otbUnConstrainedLeastSquareImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputImage = argv[1];

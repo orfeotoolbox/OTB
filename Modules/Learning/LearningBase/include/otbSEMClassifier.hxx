@@ -100,14 +100,6 @@ SEMClassifier<TInputImage, TOutputImage>
 }
 
 template<class TInputImage, class TOutputImage>
-typename SEMClassifier<TInputImage, TOutputImage>::ProportionVectorType*
-SEMClassifier<TInputImage, TOutputImage>
-::GetInitialProportions()
-{
-  return m_InitialProportions;
-}
-
-template<class TInputImage, class TOutputImage>
 void
 SEMClassifier<TInputImage, TOutputImage>
 ::SetClassLabels(OutputType * labels)
@@ -226,14 +218,6 @@ SEMClassifier<TInputImage, TOutputImage>
 ::GetClassLabels()
 {
   return m_ClassLabels;
-}
-
-template<class TInputImage, class TOutputImage>
-typename SEMClassifier<TInputImage, TOutputImage>::ProportionVectorType*
-SEMClassifier<TInputImage, TOutputImage>
-::GetProportions()
-{
-  return &m_Proportions;
 }
 
 template<class TInputImage, class TOutputImage>

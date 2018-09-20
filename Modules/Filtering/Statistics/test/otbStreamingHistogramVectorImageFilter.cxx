@@ -33,15 +33,6 @@ typedef itk::Statistics::Histogram< MeasurementType > Histogram;
 typedef otb::ObjectList< Histogram > HistogramList;
 
 
-int otbStreamingHistogramVectorImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-
-  SHVIFType::Pointer SHVIFFilter = SHVIFType::New();
-
-  std::cout << SHVIFFilter << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbStreamingHistogramVectorImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {

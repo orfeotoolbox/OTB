@@ -183,7 +183,6 @@ private:
 
   bool IsInsideWithNeighborhoodRadius(const RegionType& region, const ContinuousIndexType &index) const
     {
-    typedef typename RegionType::IndexType     IndexType;
     typedef typename IndexType::IndexValueType IndexValueType;
     typedef typename ContinuousIndexType::ValueType ContinuousIndexValueType;
 

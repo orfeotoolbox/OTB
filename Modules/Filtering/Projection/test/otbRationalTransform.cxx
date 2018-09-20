@@ -23,15 +23,6 @@
 #include "otbRationalTransform.h"
 #include <fstream>
 
-int otbRationalTransformNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::RationalTransform<> RationalTransformType;
-
-  // Instantiation
-  RationalTransformType::Pointer rt = RationalTransformType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbRationalTransform(int argc, char* argv[])
 {

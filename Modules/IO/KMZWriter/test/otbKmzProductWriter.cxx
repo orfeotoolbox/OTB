@@ -33,11 +33,6 @@ typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
 typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
 
 
-int otbKmzProductWriterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  KmzProductWriterType::Pointer  kmzWriter  = KmzProductWriterType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbKmzProductWriter(int argc, char* argv[])
 {

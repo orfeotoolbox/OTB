@@ -43,7 +43,13 @@ void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::SetFileName(const std::string& file)
 {
-  return SetFileName(file.c_str());
+  if (file == m_FileName) return;
+
+  this->m_FileName = file;
+  ReadMetaFile();
+  AllocateListOfComponents();
+
+  this->Modified();
 }
 
 template <class TImage, class TInternalImage>
@@ -51,17 +57,10 @@ void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::SetFileName(const char * file)
 {
-  if (file && (file == m_FileName)) return;
-
   if (file)
-    {
-    this->m_FileName = file;
-    ReadMetaFile();
-    AllocateListOfComponents();
-    }
-  else this->m_FileName = "";
-
-  this->Modified();
+  {
+    this->SetFileName(std::string(file));
+  }
 }
 
 template <class TImage, class TInternalImage>
@@ -118,7 +117,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     inputFile.close();
     std::ostringstream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
-    ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+    ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
     throw e;
     return;
     }
@@ -129,7 +128,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     inputFile.close();
     std::ostringstream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
-    ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+    ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
     throw e;
     return;
     }
@@ -140,7 +139,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     inputFile.close();
     std::ostringstream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
-    ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+    ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
     throw e;
     return;
     }
@@ -172,7 +171,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
         std::ostringstream msg;
         msg << "Unable to read image files in the  \"ENVI META FILE\" file \n";
         msg << "FileName: " << m_FileName << "\n";
-        ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+        ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
         throw e;
         return;
         }
@@ -206,7 +205,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
       std::ostringstream msg;
       msg << "Unable to read the number of bands in the images in the  \"ENVI META FILE\" file \n";
       msg << "FileName: " << m_FileName << "\n";
-      ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+      ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
       throw e;
       return;
       }
@@ -278,7 +277,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
         msg << "Unable to read image region in the  \"ENVI META FILE\" file \n";
         msg << "FileName : " << m_FileName << "\n";
         msg << "ImageName: " << imageFileName << "\n";
-        ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+        ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
         throw e;
         return;
         }
@@ -295,7 +294,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
       msg << "Unable to read image region selection in the  \"ENVI META FILE\" file \n";
       msg << "FileName : " << m_FileName << "\n";
       msg << "ImageName: " << imageFileName << "\n";
-      ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+      ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
       throw e;
       return;
       }
@@ -339,7 +338,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
   std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";
   msg << "\"ENVI META FILE\" FileName: " << m_FileName << "\n";
-  ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+  ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
   throw e;
 }
 
@@ -465,7 +464,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     std::ostringstream msg;
     msg << "The file couldn't be opened for reading. "
         << std::endl << "Filename: " << file << std::endl;
-    ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+    ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
     throw e;
     return;
     }

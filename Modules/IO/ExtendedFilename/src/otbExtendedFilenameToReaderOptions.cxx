@@ -63,7 +63,17 @@ ExtendedFilenameToReaderOptions
 
 void
 ExtendedFilenameToReaderOptions
-::SetExtendedFileName(const char *extFname)
+::SetExtendedFileName(const char* extFname)
+{
+  if (extFname)
+    {
+    this->SetExtendedFileName(std::string(extFname));
+    }
+}
+
+void
+ExtendedFilenameToReaderOptions
+::SetExtendedFileName(const std::string& extFname)
 {
   Superclass::SetExtendedFileName(extFname);
   MapType map = GetOptionMap();

@@ -23,7 +23,8 @@ cmake_minimum_required(VERSION 3.1.0)
 foreach(p
     CMP0025 # CMake 3.0
     CMP0042 # CMake 3.0
-    CMP0058
+    CMP0058 # CMake 3.3
+    CMP0072 # CMake 3.11
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -155,16 +156,16 @@ if(NOT OTB_INSTALL_INCLUDE_DIR)
   set(OTB_INSTALL_INCLUDE_DIR include/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
 endif()
 if(NOT OTB_INSTALL_APP_DIR)
-  set(OTB_INSTALL_APP_DIR "lib/otb/applications")
+  set(OTB_INSTALL_APP_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/applications")
 endif()
 if(NOT OTB_INSTALL_PYTHON_DIR)
-  set(OTB_INSTALL_PYTHON_DIR "lib/otb/python")
+  set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python")
 endif()
 if(NOT OTB_INSTALL_PYTHON3_DIR)
-  set(OTB_INSTALL_PYTHON3_DIR "lib/otb/python3")
+  set(OTB_INSTALL_PYTHON3_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python3")
 endif()
 if(NOT OTB_INSTALL_JAVA_DIR)
-  set(OTB_INSTALL_JAVA_DIR "lib/otb/java")
+  set(OTB_INSTALL_JAVA_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/java")
 endif()
 if(NOT OTB_INSTALL_DATA_DIR)
   set(OTB_INSTALL_DATA_DIR "share/otb")

@@ -134,7 +134,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Tell the ImageIO to read the file
   OutputImagePixelType *buffer =
     output->GetPixelContainer()->GetBufferPointer();
-  this->m_ImageIO->SetFileName(this->m_FileName.c_str());
+  this->m_ImageIO->SetFileName(this->m_FileName);
 
   itk::ImageIORegion ioRegion(TOutputImage::ImageDimension);
 
@@ -305,7 +305,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
   //
-  this->m_ImageIO->SetFileName(this->m_FileName.c_str());
+  this->m_ImageIO->SetFileName(this->m_FileName);
   this->m_ImageIO->ReadImageInformation();
   // Initialize the number of component per pixel
   // THOMAS: This is not in ITK!
@@ -433,7 +433,20 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         }
       else
         {
-        otbLogMacro(Info,<< "No kwl metadata found in file "<<lFileNameOssimKeywordlist);
+        // Try attached files
+        for (const std::string& path : m_ImageIO->GetAttachedFileNames())
+          {
+          otb_kwl = ReadGeometryFromImage(path,!m_FilenameHelper->GetSkipRpcTag());
+          if(!otb_kwl.Empty())
+            {
+            otbLogMacro(Info,<< "Loading kwl metadata in attached file "<<path);
+            break;
+            }
+          }
+        if (otb_kwl.Empty())
+          {
+          otbLogMacro(Info,<< "No kwl metadata found in file "<<lFileNameOssimKeywordlist);
+          }
         }
       }
 
@@ -658,64 +671,64 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::SetFileName(std::string extendedFileName)
+::SetFileName(const char* in)
 {
-  this->SetFileName(extendedFileName.c_str());
+  if (in)
+    {
+    this->SetFileName(std::string(in));
+    }
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::SetFileName(const char* in)
+::SetFileName(const std::string& extendedFileName)
 {
   const std::string skip_geom_key = "skipgeom";
   const std::string geom_key = "geom";
 
-  if (in)
+  // First, see if the simple filename has changed
+  typename FNameHelperType::Pointer helper = FNameHelperType::New();
+
+  helper->SetExtendedFileName(extendedFileName);
+  std::string simpleFileName = helper->GetSimpleFileName();
+
+  if(simpleFileName == this->m_FileName)
     {
-    // First, see if the simple filename has changed
-    typename FNameHelperType::Pointer helper = FNameHelperType::New();
+    // Then, see if the option map changed
+    const typename ExtendedFilenameHelper::OptionMapType & newMap = helper->GetOptionMap();
+    const typename ExtendedFilenameHelper::OptionMapType & oldMap = m_FilenameHelper->GetOptionMap();
 
-    helper->SetExtendedFileName(in);
-    std::string simpleFileName = helper->GetSimpleFileName();
-
-    if(simpleFileName == this->m_FileName)
+    // Both maps are not completely the same
+    if(oldMap.size() != newMap.size() || !std::equal(oldMap.begin(),oldMap.end(),newMap.begin()))
       {
-      // Then, see if the option map changed
-      const typename ExtendedFilenameHelper::OptionMapType & newMap = helper->GetOptionMap();
-      const typename ExtendedFilenameHelper::OptionMapType & oldMap = m_FilenameHelper->GetOptionMap();
+      this->Modified();
 
-      // Both maps are not completely the same
-      if(oldMap.size() != newMap.size() || !std::equal(oldMap.begin(),oldMap.end(),newMap.begin()))
+      // Now check if keywordlist needs to be generated again
+      // Condition is: one of the old or new map has the skip_geom
+      // key and the other does not
+      // OR
+      // one of the old or new map has the geom key and the other
+      // does not
+      // OR
+      // both have the geom key but the geom value is different
+      if((oldMap.count(skip_geom_key) != newMap.count(skip_geom_key))
+         || (oldMap.count(geom_key) != newMap.count(geom_key))
+         || ((oldMap.count(geom_key) && newMap.count(geom_key))
+             && oldMap.find(geom_key)->second != newMap.find(geom_key)->second))
         {
-        this->Modified();
-
-        // Now check if keywordlist needs to be generated again
-        // Condition is: one of the old or new map has the skip_geom
-        // key and the other does not
-        // OR
-        // one of the old or new map has the geom key and the other
-        // does not
-        // OR
-        // both have the geom key but the geom value is different
-        if((oldMap.count(skip_geom_key) != newMap.count(skip_geom_key))
-           || (oldMap.count(geom_key) != newMap.count(geom_key))
-           || ((oldMap.count(geom_key) && newMap.count(geom_key))
-               && oldMap.find(geom_key)->second != newMap.find(geom_key)->second))
-          {
-          m_KeywordListUpToDate = false;
-          }
+        m_KeywordListUpToDate = false;
         }
       }
-    else
-      {
-      this->m_FileName = simpleFileName;
-      m_KeywordListUpToDate = false;
-      this->Modified();
-      }
-
-    m_FilenameHelper = helper;
     }
+  else
+    {
+    this->m_FileName = simpleFileName;
+    m_KeywordListUpToDate = false;
+    this->Modified();
+    }
+
+  m_FilenameHelper = helper;
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
@@ -876,7 +889,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     std::ostringstream msg;
     msg <<"Couldn't convert component type: "
         << std::endl << "    "
-        << m_ImageIO->GetComponentTypeAsString(m_ImageIO->GetComponentType())
+        << ImageIOBase::GetComponentTypeAsString(m_ImageIO->GetComponentType())
         << std::endl << "to one of: "
         << std::endl << "    " << typeid(unsigned char).name()
         << std::endl << "    " << typeid(char).name()

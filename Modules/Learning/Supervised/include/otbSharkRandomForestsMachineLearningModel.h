@@ -33,8 +33,12 @@
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#pragma GCC diagnostic ignored "-Wheader-guard"
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wheader-guard"
+#else
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 #endif
 #include <shark/Models/Classifier.h>
 #include "otb_shark.h"

@@ -28,13 +28,10 @@ otbDisparityMapToDEMFilter.cxx
 otbDisparityMapMedianFilter.cxx
 otbDisparityTranslateFilter.cxx
 otbSubPixelDisparityImageFilter.cxx
-otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapTo3DFilter.cxx
 otbMultiDisparityMapTo3DFilter.cxx
-otbFineRegistrationImageFilterNew.cxx
 otbFineRegistrationImageFilterTest.cxx
 otbNCCRegistrationFilter.cxx
-otbNCCRegistrationFilterNew.cxx
 otbPixelWiseBlockMatchingImageFilter.cxx
 otbCostVolumeFiltersTest.cxx
 otbGuidedFilterTest.cxx
@@ -79,12 +76,6 @@ otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDr
   #${INPUTDATA}/sensor_stereo_dmap_mask.tif
   #)
 
-otb_add_test(NAME dmTuDisparityMapToDEMFilterNew COMMAND otbDisparityMapTestDriver
-  otbDisparityMapToDEMFilterNew)
-
-otb_add_test(NAME dmTuDisparityMapMedianFilterNew COMMAND otbDisparityMapTestDriver
-  otbDisparityMapMedianFilterNew)
-
 otb_add_test(NAME dmTvDisparityMapMedianFilter COMMAND otbDisparityMapTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/dmTvDisparityMapMedianFilterOutput.tif
@@ -107,9 +98,6 @@ otb_add_test(NAME dmTvDisparityTranslateFilter COMMAND otbDisparityMapTestDriver
   ${EXAMPLEDATA}/sensor_stereo_left.tif
   ${TEMP}/dmTvDisparityTranslateFilterOutput.tif
   )
-
-otb_add_test(NAME dmTuDisparityTranslateFilterNew COMMAND otbDisparityMapTestDriver
-  otbDisparityTranslateFilterNew)
 
 otb_add_test(NAME dmTvSubPixelDisparityImageFilterNCC COMMAND otbDisparityMapTestDriver
   --compare-n-images ${NOTOL} 3
@@ -134,12 +122,6 @@ otb_add_test(NAME dmTvSubPixelDisparityImageFilterNCC COMMAND otbDisparityMapTes
   -2 2 # vdisp threshold
   )
 
-otb_add_test(NAME dmTuSubPixelDisparityImageFilterNew COMMAND otbDisparityMapTestDriver
-  otbSubPixelDisparityImageFilterNew)
-
-otb_add_test(NAME dmTuDisparityMapEstimationMethodNew COMMAND otbDisparityMapTestDriver
-  otbDisparityMapEstimationMethodNew)
-
 #otb_add_test(NAME dmTvDisparityMapTo3DFilter COMMAND otbDisparityMapTestDriver
   #--compare-image ${EPSILON_6}
   #${BASELINE}/dmTvDisparityMapTo3DFilterOutput.tif
@@ -153,12 +135,6 @@ otb_add_test(NAME dmTuDisparityMapEstimationMethodNew COMMAND otbDisparityMapTes
   #${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
   #${INPUTDATA}/sensor_stereo_dmap_mask.tif
   #)
-
-otb_add_test(NAME dmTuDisparityMapTo3DFilterNew COMMAND otbDisparityMapTestDriver
-  otbDisparityMapTo3DFilterNew)
-
-otb_add_test(NAME dmTuMultiDisparityMapTo3DFilterNew COMMAND otbDisparityMapTestDriver
-  otbMultiDisparityMapTo3DFilterNew)
 
 otb_add_test(NAME dmTvMultiDisparityMapTo3DFilter COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_6} 2
@@ -178,9 +154,6 @@ otb_add_test(NAME dmTvMultiDisparityMapTo3DFilter COMMAND otbDisparityMapTestDri
   ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
   )
 
-otb_add_test(NAME dmTuFineRegistrationImageFilterNew COMMAND otbDisparityMapTestDriver
-  otbFineRegistrationImageFilterNew
-  )
 otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
@@ -270,10 +243,7 @@ otb_add_test(NAME dmTvNCCRegistrationFilter COMMAND otbDisparityMapTestDriver
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
   ${TEMP}/dmNCCRegistrationFilterOutput.tif
   5 1.0 2)
-otb_add_test(NAME dmTuNCCRegistrationFilterNew COMMAND otbDisparityMapTestDriver
-  otbNCCRegistrationFilterNew)
-otb_add_test(NAME dmTuPixelWiseBlockMatchingImageFilterNew COMMAND otbDisparityMapTestDriver
-  otbPixelWiseBlockMatchingImageFilterNew)
+
 otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilterNCC COMMAND otbDisparityMapTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif

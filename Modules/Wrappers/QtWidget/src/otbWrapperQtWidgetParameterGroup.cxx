@@ -49,7 +49,7 @@ void QtWidgetParameterGroup::DoUpdateGUI()
 void QtWidgetParameterGroup::DoCreateWidget()
 {
   // a GridLayout with two columns : parameter label / parameter widget
-  QGridLayout *gridLayout = new QGridLayout(this);
+  QGridLayout *gridLayout = new QGridLayout;
   gridLayout->setSpacing(1);
   gridLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -108,7 +108,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
         {
         QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel(), this);
 
-        QVBoxLayout* vboxLayout = new QVBoxLayout(this);
+        QVBoxLayout* vboxLayout = new QVBoxLayout;
         vboxLayout->addWidget(specificWidget);
         QGroupBox* group = new QGroupBox(this);
         group->setLayout(vboxLayout);

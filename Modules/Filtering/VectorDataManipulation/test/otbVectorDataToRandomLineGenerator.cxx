@@ -24,18 +24,6 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorDataToRandomLineGenerator.h"
 
-int otbVectorDataToRandomLineGeneratorNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::VectorData<>                                        VectorDataType;
-  typedef otb::VectorDataToRandomLineGenerator<VectorDataType>     GeneratorType;
-
-  // instantiation
-  GeneratorType::Pointer generator = GeneratorType::New();
-
-  std::cout << generator << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbVectorDataToRandomLineGenerator(int itkNotUsed(argc), char* argv[])
 {
