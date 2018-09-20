@@ -96,6 +96,8 @@ SpatialReference SpatialReference::FromDescription(const std::string & descripti
   
   if(code1!=OGRERR_NONE)
     {
+    std::ostringstream oss;
+    oss<<"FromDescription("<<description<<")";
     throw InvalidSRDescriptionException(description);
     }
 
@@ -111,7 +113,7 @@ SpatialReference SpatialReference::FromEPSG(unsigned int epsg)
   if(code!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss << "EPSG:" << epsg;
+    oss << "FromEPSG("<< epsg<<")";
     throw InvalidSRDescriptionException(oss.str());
     }
 
@@ -137,7 +139,7 @@ SpatialReference SpatialReference::FromUTM(unsigned int zone, hemisphere hem)
   if(code!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss << "UTM" << zone << hem;
+    oss << "FromUTM(" << zone <<", "<<hem<<")";
     throw InvalidSRDescriptionException(oss.str());
     }
 
@@ -221,9 +223,9 @@ void SpatialReference::UTMFromGeoPoint(double lat, double lon, unsigned int & zo
   int long_Degrees = static_cast<int>(lon + 0.00000005);
   
   if (lon < 180)
-     zone = static_cast<int>( (31 + (lon / (6 * 180)) )+ 0.00000005);
+     zone = static_cast<int>( (31 + (lon / 6) )+ 0.00000005);
    else
-     zone = static_cast<int>( ((lon / (6 * 180)) - 29) + 0.00000005);
+     zone = static_cast<int>( ((lon / 6) - 29) + 0.00000005);
    if (zone > 60)
      zone = 1;
    /* UTM special cases */
