@@ -94,8 +94,8 @@ int otbSpatialReferenceTest(int, char**)
   unsigned int zone;
   SpatialReference::hemisphere hem;
   // Lat and lon of Toulouse, France, in UTM31N
-  double lon = 43.60426;
-  double lat = 1.44367;
+  double lat = 43.60426;
+  double lon = 1.44367;
 
   SpatialReference::UTMFromGeoPoint(lat,lon,zone,hem);
 
