@@ -25,7 +25,6 @@
 #include "otbPersistentFilterStreamingDecorator.h"
 
 #include <unordered_map>
-#include <unordered_set>
 
 namespace otb
 {
@@ -80,7 +79,7 @@ public:
 
   typedef std::unordered_map<InputLabelType , RealVectorPixelType >   
                                                           LabelStatisticType;
-  typedef std::unordered_map<InputLabelType , double>                                                 
+  typedef std::unordered_map<InputLabelType , double>                           
                                                           LabelPopulationType;
   typedef std::unordered_map<InputLabelType , InputLabelType>   LUTType;
   
@@ -89,41 +88,20 @@ public:
   itkSetMacro(Size , unsigned int);
 
   /** Set the Label population  and initialize the LUT */
-  void SetLabelPopulation( LabelPopulationType const & labelPopulation )
-  {
-    m_LabelPopulation = labelPopulation; 
-    
-    // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
-    for (auto label : m_LabelPopulation)
-      {
-      m_LUT[label.first] = label.first;
-      }  
-  }
-  
+  void SetLabelPopulation( LabelPopulationType const & labelPopulation );
+
   /** Get the Label population */
-  LabelPopulationType const & GetLabelPopulation() const
-  {
-    return m_LabelPopulation;
-  }
+  LabelPopulationType const & GetLabelPopulation() const;
 
   /** Set the label statistic */
-  void SetLabelStatistic( LabelStatisticType const & labelStatistic )
-  {
-    m_LabelStatistic = labelStatistic;
-  }
-  
+  void SetLabelStatistic( LabelStatisticType const & labelStatistic );
+
   /** Get the label statistic */
-  LabelStatisticType const & GetLabelStatistic() const
-  {
-    return m_LabelStatistic;
-  }
-  
+  LabelStatisticType const & GetLabelStatistic() const;
+
   /** Get the LUT */
-  LUTType const & GetLUT() const
-  {
-    return m_LUT;
-  }
-  
+  LUTType const & GetLUT() const;
+
   virtual void Reset(void) override;
   virtual void Synthetize(void) override;
 
@@ -226,43 +204,25 @@ public:
   itkSetMacro(MinSize , unsigned int);
 
   /** Set the Label population map */
-  void SetInputLabelImage( const TInputLabelImage * labelImage )
-  {
-    m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
-  }
+  void SetInputLabelImage( const TInputLabelImage * labelImage );
   
   /** Set the Label population map */
-  void SetLabelPopulation( LabelPopulationType const & labelPopulation )
-  {
-    m_SmallRegionMergingFilter->GetFilter()
-      ->SetLabelPopulation(labelPopulation);
-  }
-  
+  void SetLabelPopulation( LabelPopulationType const & labelPopulation );
+
   /** Get the Label population map */
-  LabelPopulationType const & GetLabelPopulation(  ) const
-  {
-    return m_SmallRegionMergingFilter->GetFilter()->GetLabelPopulation();
-  }
+  LabelPopulationType const & GetLabelPopulation() const;
   
   /** Set the Label statistic map */
-  void SetLabelStatistic( LabelStatisticType const & labelStatistic )
-  {
-    m_SmallRegionMergingFilter->GetFilter()->SetLabelStatistic(labelStatistic);
-  }
+  void SetLabelStatistic( LabelStatisticType const & labelStatistic );
   
   /** Get the Label statistic map */
-  LabelStatisticType const & GetLabelStatistic() const
-  {
-    return m_SmallRegionMergingFilter->GetFilter()->GetLabelStatistic();
-  }
-  
+  LabelStatisticType const & GetLabelStatistic() const;
+
   /** Get the Label statistic map */
-  LUTType const & GetLUT( ) const
-  {
-    return m_SmallRegionMergingFilter->GetFilter()->GetLUT();
-  }
+  LUTType const & GetLUT() const;
   
-  void Update(void) override;
+  /** Call GenerateData() */
+  void Update() override;
 
 protected:
   /** Constructor */

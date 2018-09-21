@@ -37,6 +37,56 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 template <class TInputLabelImage >
 void
 PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::SetLabelPopulation( LabelPopulationType const & labelPopulation )
+{
+  m_LabelPopulation = labelPopulation; 
+    
+  // Initialize m_CorrespondingMap to the identity (i.e. m[label] = label)
+  for (auto label : m_LabelPopulation)
+    {
+    m_LUT[label.first] = label.first;
+    }  
+}
+  
+template <class TInputLabelImage >
+typename PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::LabelPopulationType const &
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::GetLabelPopulation() const
+{
+  return m_LabelPopulation;
+}
+
+  
+template <class TInputLabelImage >
+void
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::SetLabelStatistic( LabelStatisticType const & labelStatistic )
+{
+  m_LabelStatistic = labelStatistic;
+}
+
+template <class TInputLabelImage >
+typename PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::LabelStatisticType const &
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::GetLabelStatistic() const
+{
+  return m_LabelStatistic;
+}
+  
+template <class TInputLabelImage >
+typename PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::LUTType const &
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
+::GetLUT() const
+{
+  return m_LUT;
+}
+  
+template <class TInputLabelImage >
+void
+PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
 ::Reset()
 {
   m_NeighboursMapsTmp.clear();
@@ -248,10 +298,62 @@ LabelImageSmallRegionMergingFilter< TInputLabelImage >
   m_SmallRegionMergingFilter = LabelImageSmallRegionMergingFilterType::New();
 }
 
+template <class TInputLabelImage >
+void
+LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::SetInputLabelImage( const TInputLabelImage * labelImage )
+{
+  m_SmallRegionMergingFilter->GetFilter()->SetInput( labelImage );
+}
+
+template <class TInputLabelImage >
+void
+LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::SetLabelPopulation( LabelPopulationType const & labelPopulation )
+{
+  m_SmallRegionMergingFilter->GetFilter()
+    ->SetLabelPopulation(labelPopulation);
+}
+
+template <class TInputLabelImage >
+typename LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::LabelPopulationType const & 
+LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::GetLabelPopulation() const
+{
+  return m_SmallRegionMergingFilter->GetFilter()->GetLabelPopulation();
+}
+
+template <class TInputLabelImage >
+void
+LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::SetLabelStatistic( LabelStatisticType const & labelStatistic )
+{
+  m_SmallRegionMergingFilter->GetFilter()->SetLabelStatistic(labelStatistic);
+}
+
+template <class TInputLabelImage >
+typename LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::LabelStatisticType const & 
+LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::GetLabelStatistic() const
+{
+  return m_SmallRegionMergingFilter->GetFilter()->GetLabelStatistic();
+}
+
+template <class TInputLabelImage >
+typename LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::LUTType const & 
+LabelImageSmallRegionMergingFilter< TInputLabelImage >
+::GetLUT() const
+{
+  return m_SmallRegionMergingFilter->GetFilter()->GetLUT();
+}
+  
 template <class TInputLabelImage>
 void
 LabelImageSmallRegionMergingFilter<TInputLabelImage>
-::Update(void)
+::Update()
 {
   this->GenerateData();
 }
