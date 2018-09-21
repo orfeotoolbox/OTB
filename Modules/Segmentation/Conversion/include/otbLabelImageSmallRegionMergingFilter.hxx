@@ -121,7 +121,7 @@ PersistentLabelImageSmallRegionMergingFilter< TInputLabelImage >
     InputLabelType closestNeighbour = label;
     auto const& statsLabel = m_LabelStatistic[ label ];
     
-    for (auto neighbour : neighbours.second)
+    for (auto const & neighbour : neighbours.second)
       {
       auto const & statsNeighbour = m_LabelStatistic[ neighbour ];
       assert( statsLabel.Size() == statsNeighbour.Size() );
