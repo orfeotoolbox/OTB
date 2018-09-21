@@ -17,8 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#if OTB_USE_DEPRECATED
-
 #ifndef otbPlaceNameToLonLat_h
 #define otbPlaceNameToLonLat_h
 
@@ -30,7 +28,6 @@ namespace otb
 {
 
 /**
- * \deprecated 
  * \class PlaceNameToLonLat
  * \brief Retrieve Longitude and Latitude coordinates from a place name
  *
@@ -38,7 +35,7 @@ namespace otb
  * \ingroup OTBCarto
  */
 
-class OTBCarto_DEPRECATED_EXPORT PlaceNameToLonLat : public itk::Object
+class OTBCarto_EXPORT PlaceNameToLonLat : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -86,4 +83,3 @@ private:
 } // namespace otb
 
 #endif
-#endif // deprecated
