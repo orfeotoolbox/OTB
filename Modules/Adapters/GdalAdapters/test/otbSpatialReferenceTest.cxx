@@ -114,10 +114,16 @@ int otbSpatialReferenceTest(int, char**)
 
   //Norway
   success = success & CheckUTMZone(60.400929,3.972600,32,SpatialReference::hemisphere::north);
-  
-  //Nowrway corner case (zone 31 V)
+
+  //Norway corner case (zone 31 V)
   success = success & CheckUTMZone(60.308054,1.045553,31,SpatialReference::hemisphere::north);
-  
+
+  //Special case zone 33
+  success = success & CheckUTMZone( 74.8, 19.2,33,SpatialReference::hemisphere::north);
+
+  //Special case zone 36
+  success = success & CheckUTMZone( 71.9833, 30.0024,36,SpatialReference::hemisphere::north);
+
   try
     {
     SpatialReference sr5 = SpatialReference::FromDescription("dummy");
