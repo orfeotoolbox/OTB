@@ -120,8 +120,16 @@ add_custom_target(generate_otbapps_rst
   WORKING_DIRECTORY ${RST_BINARY_DIR}
   COMMENT "Auto-generating Application Reference Documentation in RST"
   DEPENDS OTBSWIGWrapper-all
-  # TODO add DEPENDS to all apps
   )
+
+# Add all applications as dependencies to rst generation
+set(app_names ${OTB_APPLICATIONS_NAME_LIST})
+list(REMOVE_ITEM app_names "TestApplication")
+list(REMOVE_ITEM app_names "ApplicationExample")
+list(REMOVE_DUPLICATES app_names)
+foreach(app_name ${app_names})
+  add_dependencies(generate_otbapps_rst otbapp_${app_name})
+endforeach()
 
 add_custom_target(CookBookHTML
   COMMAND ${SPHINX_BUILD}
