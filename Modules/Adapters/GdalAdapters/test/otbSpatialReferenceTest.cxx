@@ -118,11 +118,13 @@ int otbSpatialReferenceTest(int, char**)
   success = success & CheckUTMZone(60.308054,1.045553,31,SpatialReference::hemisphere::north);
 
   //Special case zone 33
-  success = success & CheckUTMZone( 74.8, 19.2,33,SpatialReference::hemisphere::north);
+  success = success & CheckUTMZone(74.8,19.2,33,SpatialReference::hemisphere::north);
 
   //Special case zone 36
-  success = success & CheckUTMZone( 71.9833, 30.0024,36,SpatialReference::hemisphere::north);
+  success = success & CheckUTMZone(71.9833,30.0024,36,SpatialReference::hemisphere::north);
 
+  //Case in south hemisphere
+  success = success & CheckUTMZone(-80.003,179.951,60,SpatialReference::hemisphere::south);
   try
     {
     SpatialReference sr5 = SpatialReference::FromDescription("dummy");
