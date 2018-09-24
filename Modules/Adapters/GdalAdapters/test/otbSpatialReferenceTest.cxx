@@ -25,42 +25,18 @@
 
 using namespace otb;
 
-bool compareLatLong(double lat, double lon, const double lat_ref, const double lon_ref)
-{
-  return ( ( std::abs(lat_ref-lat) < std::numeric_limits<double>::epsilon() ) &&  ( std::abs(lon_ref-lon) < std::numeric_limits<double>::epsilon() ) );
-}
-bool UTMFromGeoPointList(double lat, double lon)
+bool CheckUTMZone(double lat, double lon, unsigned int expected_zone, SpatialReference::hemisphere expected_hem)
 {
   unsigned int zone;
   SpatialReference::hemisphere hem;
-
   SpatialReference::UTMFromGeoPoint(lat,lon,zone,hem);
 
-  // Toulouse 43.60426, 1.44367
-  if (compareLatLong(lat, lon, 43.60426, 1.44367) )
+  if(expected_zone != zone || expected_hem != hem)
     {
-      return (zone == 31);
+    std::cerr<<"For ("<<lat<<", "<<lon<<"), expecting zone "<<expected_zone<<expected_hem<<", got "<<zone<<hem<<"\n";
+    return false;
     }
-  // New York 40.70516 -74.01331
-  else if ( compareLatLong(lat, lon, 40.70516, -74.01331) )
-    {
-      return (zone == 18);
-    }
-  //North sea (zone 32)
-  else if ( compareLatLong(lat, lon, 60.400929, 3.972600) )
-    {
-      return (zone == 32);
-    }
-  //Special case North sea (zone 31)
-  else if ( compareLatLong(lat, lon, 60.308054, 1.045553) )
-    {
-      return (zone == 31);
-    }
-  else
-    {
-      //Coordinates not tabulate yet
-      return false;
-    }
+  return true;
 }
 
 int otbSpatialReferenceTest(int, char**)
@@ -130,59 +106,18 @@ int otbSpatialReferenceTest(int, char**)
     success = false;
     }
 
-  unsigned int zone;
-  SpatialReference::hemisphere hem;
   // Lat and lon of Toulouse, France, in UTM31N
-  double lat = 43.60426;
-  double lon = 1.44367;
-
-  SpatialReference::UTMFromGeoPoint(lat,lon,zone,hem);
-
-  if(zone!=31 || hem != SpatialReference::hemisphere::north)
-    {
-    std::cerr<<"Fail: Expected utm zone 31 N, got "<<zone<<hem<<std::endl;
-    success = false;
-    }
-
-  // Test UTM Zone (not the hemispher) on some coordinates
-  if (!UTMFromGeoPointList(lat, lon))
-    {
-      std::cerr<<"Fail: Expected utm zone 31N, got "<<zone<<hem<<std::endl;
-      success = false;
-    }
+  success = success & CheckUTMZone(43.60426,1.44367,31,SpatialReference::hemisphere::north);
 
   //NYC
-  lat =  40.70516;
-  lon = -74.01331;
-  SpatialReference::UTMFromGeoPoint(lat,lon,zone,hem);
-
-  if (!UTMFromGeoPointList(lat, lon))
-    {
-      std::cerr<<"Fail: Expected utm zone 18, got "<<zone<<hem<<std::endl;
-      success = false;
-    }
+  success = success & CheckUTMZone(40.70516,-74.01331,18,SpatialReference::hemisphere::north);
 
   //Norway
-  lat =  60.400929;
-  lon = 3.972600;
-  SpatialReference::UTMFromGeoPoint(lat,lon,zone,hem);
-
-  if (!UTMFromGeoPointList(lat, lon))
-    {
-      std::cerr<<"Fail: Expected utm zone 32, got "<<zone<<hem<<std::endl;
-      success = false;
-    }
-
+  success = success & CheckUTMZone(60.400929,3.972600,32,SpatialReference::hemisphere::north);
+  
   //Nowrway corner case (zone 31 V)
-  lat = 60.308054;
-  lon = 1.045553;
-  SpatialReference::UTMFromGeoPoint(lat,lon,zone,hem);
-  if (!UTMFromGeoPointList(lat, lon))
-    {
-      std::cerr<<"Fail: Expected utm zone 31, got "<<zone<<hem<<std::endl;
-      success = false;
-    }
-
+  success = success & CheckUTMZone(60.308054,1.045553,31,SpatialReference::hemisphere::north);
+  
   try
     {
     SpatialReference sr5 = SpatialReference::FromDescription("dummy");
