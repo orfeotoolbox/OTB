@@ -37,7 +37,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbGeoInformationConversion.h"
+#include "otbSpatialReference.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAlgorithm.h"
@@ -156,7 +156,7 @@ AbstractLayerModel
 	  ? ToStdString( tr( STR_SENSOR ) )
 	  : ToStdString( tr( STR_UNKNOWN ) ) );
 
-  int code = otb::GeoInformationConversion::ToEPSG(wkt);
+  int code = otb::SpatialReference::FromDescription(wkt).ToEPSG();
   if(code < 0)
     return ToStdString( tr( STR_UNKNOWN ) );
   else if(code == 0)

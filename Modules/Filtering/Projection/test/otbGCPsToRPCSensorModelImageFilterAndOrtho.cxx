@@ -21,9 +21,8 @@
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbImageFileWriter.h"
-#include "otbMapProjections.h"
+#include "otbGenericMapProjection.h"
 #include "otbOrthoRectificationFilter.h"
-#include "otbMapProjections.h"
 
 int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 {
@@ -47,8 +46,8 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
   typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
   typedef otb::ImageFileWriter<ImageType>                                  WriterType;
-  typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
-  typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType;
+  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> MapProjectionType;
+  typedef otb::OrthoRectificationFilter<ImageType, ImageType, MapProjectionType> OrthoRectifFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -90,7 +89,9 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   WriterType::Pointer writer = WriterType::New();
 
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
-  UtmMapProjectionType::Pointer  utmMapProjection = UtmMapProjectionType::New();
+
+
+  MapProjectionType::Pointer  utmMapProjection = MapProjectionType::New();
 
   orthoRectifFilter->SetInput(rpcEstimator->GetOutput());
 
@@ -114,8 +115,8 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   origin[1] = strtod(argv[4], nullptr);         //Origin northing
   orthoRectifFilter->SetOutputOrigin(origin);
 
-  utmMapProjection->SetZone(atoi(argv[9]));
-  utmMapProjection->SetHemisphere(argv[10][0]);
+  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[9]),argv[10][0]=='N'?otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
+
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 
   ImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());

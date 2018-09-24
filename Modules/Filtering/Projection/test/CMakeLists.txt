@@ -25,7 +25,6 @@ otbSensorModel.cxx
 otbProjectionTestDriver.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
 otbOrthoRectificationFilter.cxx
-otbMapProjection.cxx
 otbGenericRSResampleImageFilter.cxx
 otbGeometriesProjectionFilter.cxx
 otbGenericRSTransformGenericTest.cxx
@@ -49,6 +48,7 @@ otbSpectralAngleDataNodeFeatureFunction.cxx
 otbGCPsToRPCSensorModelImageFilterCheckRpcModel.cxx
 otbGeographicalDistance.cxx
 otbTileImageFilterRSTransformTest.cxx
+otbTileMapTransform.cxx
 otbGCPsToRPCSensorModelImageFilterAndOrtho.cxx
 otbVectorDataIntoImageProjectionFilterTest.cxx
 otbVectorDataExtractROIandProjection.cxx
@@ -56,8 +56,6 @@ otbGCPsToRPCSensorModelImageFilterWithoutDEM.cxx
 otbGeometriesProjectionFilterFromMapToImage.cxx
 otbGeometriesProjectionFilterFromMapToEPSG.cxx
 otbVectorDataProjectionFilter.cxx
-otbUtmMapProjection.cxx
-otbTileMapTransform.cxx
 otbImportGeoInformationImageFilter.cxx
 )
 
@@ -243,13 +241,13 @@ set(UTMZONES
 )
 
 set(HEMIS
-N
-N
-N
-N
-N
-S
-N
+1
+1
+1
+1
+1
+0
+1
 )
 
 set(RESOL
@@ -339,14 +337,6 @@ endforeach()
 #------------------------------------------------------------------------
 #----------------- OrthoRectification tests (end) -----------------------
 #------------------------------------------------------------------------
-
-
-otb_add_test(NAME prTvMapProjection COMMAND otbProjectionTestDriver
-  --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjection.txt
-  ${TEMP}/prTvMapProjection.txt
-  otbMapProjection
-  ${TEMP}/prTvMapProjection.txt
-  )
 
 otb_add_test(NAME prTvotbGenericRSResampleImageFilter COMMAND otbProjectionTestDriver
   --compare-image ${EPSILON_4}
@@ -457,13 +447,6 @@ otb_add_test(NAME prTvImageToEnvelopeVectorDataFilter COMMAND otbProjectionTestD
   otbImageToEnvelopeVectorDataFilter
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
-  )
-
-otb_add_test(NAME prTvMapProjectionsTest COMMAND otbProjectionTestDriver
-  --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjectionsTest.txt
-  ${TEMP}/prTvMapProjectionsTest.txt
-  otbMapProjectionAccessorsTest
-  ${TEMP}/prTvMapProjectionsTest.txt
   )
 
 otb_add_test(NAME prTvImageToGenericRSOutputParameters COMMAND otbProjectionTestDriver
@@ -1148,13 +1131,6 @@ otb_add_test(NAME prTvVectorDataProjectionFilterPolygons COMMAND otbProjectionTe
   otbVectorDataProjectionFilter
   ${INPUTDATA}/Capitole-Shadows.shp
   ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
-  )
-
-otb_add_test(NAME prTvUtmMapProjection COMMAND otbProjectionTestDriver
-  --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvUtmMapProjection.txt
-  ${TEMP}/prTvUtmMapProjection.txt
-  otbUtmMapProjection
-  ${TEMP}/prTvUtmMapProjection.txt
   )
 
 otb_add_test(NAME prTvTileMapTransform COMMAND otbProjectionTestDriver

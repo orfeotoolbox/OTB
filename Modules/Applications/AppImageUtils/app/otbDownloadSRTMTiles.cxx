@@ -286,7 +286,7 @@ private:
       auto rsTransformToWGS84 = RSTransformType::New();
       rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
       rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
-      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
+      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::SpatialReference::FromWGS84().ToWkt()));
       rsTransformToWGS84->InstantiateTransform();
 
       const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
@@ -350,7 +350,7 @@ private:
 
       auto rsTransformToWGS84 = RSTransformType::New();
       rsTransformToWGS84->SetInputProjectionRef(currentWkt);
-      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
+      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::SpatialReference::FromWGS84().ToWkt()));
       rsTransformToWGS84->InstantiateTransform();
       PointType tmpPoint;
       tmpPoint[0] = envelope.MinX;

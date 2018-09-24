@@ -27,7 +27,6 @@ set(OTBOSSIMAdapters_SRC
   otbDEMConvertAdapter.cxx
   otbRPCSolverAdapter.cxx
   otbDateTimeAdapter.cxx
-  otbMapProjectionAdapter.cxx
   otbFilterFunctionValues.cxx
   otbMetaDataKey.cxx
   otbEllipsoidAdapter.cxx

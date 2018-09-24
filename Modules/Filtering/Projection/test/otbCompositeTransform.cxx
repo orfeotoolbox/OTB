@@ -25,9 +25,9 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-
+#include "otbGenericMapProjection.h"
+#include "otbSpatialReference.h"
 #include "otbCompositeTransform.h"
-#include "otbMapProjections.h"
 #include "otbInverseSensorModel.h"
 
 int otbCompositeTransform(int argc, char* argv[])
@@ -50,15 +50,12 @@ int otbCompositeTransform(int argc, char* argv[])
   reader->SetFileName(filename);
   reader->UpdateOutputInformation();
 
-  typedef otb::UtmInverseProjection MapProjectionType;
-
-  int  utmZone = 31;
-  char utmHemisphere = 'N';
-
+  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> MapProjectionType;
+  
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
-  mapProjection->SetZone(utmZone);
-  mapProjection->SetHemisphere(utmHemisphere);
-
+  // UTM31N
+  mapProjection->SetWkt(otb::SpatialReference::FromEPSG(32631).ToWkt());
+  
   typedef otb::InverseSensorModel<double> SensorModelType;
   SensorModelType::Pointer sensorModel = SensorModelType::New();
   sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());

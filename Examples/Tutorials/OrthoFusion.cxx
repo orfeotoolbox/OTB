@@ -116,9 +116,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> InverseProjectionType;
   InverseProjectionType::Pointer utmMapProjection = InverseProjectionType::New();
-  utmMapProjection->SetWkt("Utm");
-  utmMapProjection->SetParameter("Zone", argv[4]);
-  utmMapProjection->SetParameter("Hemisphere", argv[5]);
+  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[4]),argv[5][0]=='N' ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

@@ -486,7 +486,7 @@ private:
         {
         // Update opt.gridspacing
         // In case output coordinate system is WG84,
-        if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
+        if (m_OutputProjectionRef == otb::SpatialReference::FromWGS84().ToWkt())
           {
           // How much is 4 meters in degrees ?
           typedef itk::Point<float,2> FloatPointType;
@@ -524,10 +524,10 @@ private:
           otbAppLogINFO( "Setting grid spacing to " << optimalSpacing );
           SetParameterFloat("opt.gridspacing",optimalSpacing);
           }
-        else // if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
+        else // if (m_OutputProjectionRef == otb::SpatialReference().ToWkt())
           {
           SetParameterFloat("opt.gridspacing",DefaultGridSpacingMeter);
-          } // if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
+          } // if (m_OutputProjectionRef == otb::SpatialReference().ToWkt())
         } // if (!HasUserValue("opt.gridspacing"))
       } // if (HasValue("io.in"))
   }

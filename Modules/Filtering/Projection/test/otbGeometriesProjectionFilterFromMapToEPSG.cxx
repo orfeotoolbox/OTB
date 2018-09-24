@@ -46,7 +46,7 @@ int otbGeometriesProjectionFilterFromMapToEPSG(int argc, char * argv[])
   GeometriesFilterType::Pointer filter = GeometriesFilterType::New();
 
   filter->SetInput(in_set);
-  filter->SetOutputProjectionRef( otb::GeoInformationConversion::ToWKT(epsg) );
+  filter->SetOutputProjectionRef( otb::SpatialReference::FromEPSG(epsg).ToWkt() );
 
   otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(
       outputVDFilename, otb::ogr::DataSource::Modes::Overwrite);
