@@ -21,7 +21,6 @@
 #include "otbSpatialReference.h"
 
 #include <iostream>
-#include <limits>
 
 using namespace otb;
 
