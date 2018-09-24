@@ -22,22 +22,13 @@
 # Build the cookbook
 #
 
-message(STATUS "")
-message(STATUS "Configuring Cookbook...")
-message(STATUS "")
-
-find_package(OTB REQUIRED)
-
-if( OTB_FOUND )
-  include(${OTB_USE_FILE})
-  message(STATUS "Found OTB: ${OTB_DIR} (found version \"${OTB_VERSION}\")")
-else()
-  message(FATAL_ERROR "OTB not found while configuring cookbook")
+if (NOT UNIX)
+  message (STATUS "Not on Unix: skipping Cookbook build.")
   return()
 endif()
 
-message(STATUS "OTB_PYTHONPATH        = '${OTB_PYTHONPATH}'")
-message(STATUS "OTB_APPLICATION_PATH  = '${OTB_APPLICATION_PATH}'")
+message(STATUS "")
+message(STATUS "Configuring Cookbook...")
 
 # here we could add
 # find_package (Python3 COMPONENTS Interpreter)
@@ -60,15 +51,13 @@ mark_as_advanced(PDFLATEX_COMMAND)
 
 # Check that we found everything we need
 foreach(cmd
-    OTB_PYTHONPATH
-    OTB_APPLICATION_PATH
     LATEX_COMMAND
     TAR_COMMAND
     PDFLATEX_COMMAND
     SPHINX_BUILD
     SH_INTERP)
   if(NOT ${cmd})
-    message(FATAL_ERROR "${cmd} not set. Cannot continue")
+    message(FATAL_ERROR "Error while configuring Cookbook, ${cmd} not set. Cannot continue")
   endif()
 endforeach()
 
@@ -77,6 +66,7 @@ set(RST_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
 set(LATEX_DIR       ${CMAKE_CURRENT_BINARY_DIR}/latex)
 set(HTML_DIR        ${CMAKE_CURRENT_BINARY_DIR}/html)
 
+# Print summary of Cookbook configuration
 message(STATUS "RST_SOURCE_DIR = ${RST_SOURCE_DIR}")
 message(STATUS "RST_BINARY_DIR = ${RST_BINARY_DIR}")
 message(STATUS "LATEX_DIR = ${LATEX_DIR}")
