@@ -214,38 +214,43 @@ void SpatialReference::UTMFromGeoPoint(double lat, double lon, unsigned int & zo
   assert(lon>=-180);
   assert(lat<=90);
   assert(lon<=180);
-  
-  zone = 0;
+
+  // General expression
+  zone = 1 + static_cast<unsigned int>((lon + 180) / 6);
   hem = lat>0 ? hemisphere::north : hemisphere::south;
 
-  // TODO: Code forked from OSSIM. Copyright ?
-  int lat_Degrees  = static_cast<int>(lat + 0.00000005);
-  int long_Degrees = static_cast<int>(lon + 0.00000005);
-  
-  if (lon < 180)
-     zone = static_cast<int>( (31 + (lon / 6) )+ 0.00000005);
-   else
-     zone = static_cast<int>( ((lon / 6) - 29) + 0.00000005);
-   if (zone > 60)
-     zone = 1;
-   /* UTM special cases */
-   if ((lat_Degrees > 55) && (lat_Degrees < 64) && (long_Degrees > -1)
-       && (long_Degrees < 3))
-     zone = 31;
-   if ((lat_Degrees > 55) && (lat_Degrees < 64) && (long_Degrees > 2)
-       && (long_Degrees < 12))
-     zone = 32;
-   if ((lat_Degrees > 71) && (long_Degrees > -1) && (long_Degrees < 9))
-     zone = 31;
-   if ((lat_Degrees > 71) && (long_Degrees > 8) && (long_Degrees < 21))
-     zone = 33;
-   if ((lat_Degrees > 71) && (long_Degrees > 20) && (long_Degrees < 33))
-     zone = 35;
-   if ((lat_Degrees > 71) && (long_Degrees > 32) && (long_Degrees < 42))
-     zone = 37;
+  // Corner cases (from
+  // https://github.com/owaremx/LatLngUTMConverter/blob/master/LatLngUTMConverter.cs#L107 )
+  if (lon >= 8 && lon <= 13 && lat > 54.5 && lat < 58)
+    {
+    zone = 32;
+    }
+  else if (lat >= 56.0 && lat < 64.0 && lon >= 3.0 && lon < 12.0)
+    {
+    zone = 32;
+    }
+  else if (lat >= 72.0 && lat < 84.0)
+    {
+    if (lon >= 0.0 && lon < 9.0)
+      {
+      zone = 31;
+      }
+    else if (lon >= 9.0 && lon < 21.0)
+      {
+      zone = 33;
+      }
+    else if (lon >= 21.0 && lon < 33.0)
+      {
+      zone = 35;
+      }
+    else if (lon >= 33.0 && lon < 42.0)
+      {
+      zone = 37;
+      }
+    }
 
-   // post conditions
-   assert(zone>=0);
-   assert(zone<=60);
+  // post conditions
+  assert(zone>=0);
+  assert(zone<=60);
 }
 }
