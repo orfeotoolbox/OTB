@@ -31,10 +31,11 @@ namespace otb
  * 
  * \brief Computes Geometric features (perimter and size) on ogr polygons.
  * 
- * This filter takes an OGR Data Source as input and computes size and perimeter of each polygon in it.
- * Tbese features are then written as attributes of the polygon in the output Data Source.
- * The name of the attributes can be specified using the setters 'SetSizeField' and 
- * 'SetPerimeterField'.
+ * This filter takes an OGR Data Source as input and computes size and'
+ * perimeter of each polygon in it.
+ * These features are then written as attributes of the polygon in the output"
+ * Data Source. The name of the attributes can be specified using the setters'
+ * 'SetSizeField' and 'SetPerimeterField'.
  * 
  * This filter is able to work in place, updating the output Data-Source.
  * 
@@ -47,22 +48,21 @@ class ITK_EXPORT OGRDataToPolygonGeometricFeaturesFilter
 {
 public:
   /** Standard class typedefs. */
-  typedef OGRDataToPolygonGeometricFeaturesFilter  Self;
-  typedef itk::ProcessObject                Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef OGRDataToPolygonGeometricFeaturesFilter     Self;
+  typedef itk::ProcessObject                          Superclass;
+  typedef itk::SmartPointer<Self>                     Pointer;
+  typedef itk::SmartPointer<const Self>               ConstPointer;
   
   /** OGR related typedefs. */
-  typedef ogr::DataSource                            OGRDataSourceType;
-  typedef typename OGRDataSourceType::Pointer        OGRDataPointer;
-  typedef ogr::Layer                                 OGRLayerType;
+  typedef ogr::DataSource                             OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer         OGRDataPointer;
+  typedef ogr::Layer                                  OGRLayerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   
   /** Run-time type information. */
   itkTypeMacro(OGRDataToPolygonGeometricFeaturesFilter, itk::ProcessObject);
-  
   
   /** Set/Get the input OGRDataSource of this process object.  */
   using Superclass::SetInput;
@@ -97,7 +97,8 @@ protected:
   void GenerateData() override;
 
   /** Utility method to add new fields on an output layer */
-  virtual void InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS);
+  virtual void InitializeOutputDataSource(ogr::DataSource* inputDS
+    , ogr::DataSource* outputDS);
 
   /** Multi-threading implementation */
 
@@ -121,7 +122,8 @@ protected:
   virtual void AfterThreadedGenerateVectorData();
 
   /** Start of main processing loop */
-  virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid);
+  virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread,
+                                          itk::ThreadIdType threadid);
 
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the
@@ -155,7 +157,10 @@ protected:
     };
   
   /** Create a new additional field */
-  void CreateAdditionalField(std::string const & name, OGRFieldType const & type, int width, int precision);
+  void CreateAdditionalField(std::string const & name,
+                             OGRFieldType const & type,
+                             int width,
+                             int precision);
 
   /** Get a reference over the additional fields */
   const std::vector<SimpleFieldDefn>& GetAdditionalFields() const;

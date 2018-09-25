@@ -38,16 +38,17 @@ class ComputePolygonsGeometricFeatures : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef ComputePolygonsGeometricFeatures                        Self;
-  typedef Application                                             Superclass;
-  typedef itk::SmartPointer<Self>                                 Pointer;
-  typedef itk::SmartPointer<const Self>                           ConstPointer;
+  typedef ComputePolygonsGeometricFeatures                    Self;
+  typedef Application                                         Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
   
-  typedef otb::ogr::DataSource                                    OGRDataSourceType;
-  typedef otb::ogr::Layer                                         OGRLayerType;
-  typedef otb::ogr::Feature                                       OGRFeatureType;
+  typedef otb::ogr::DataSource                                OGRDataSourceType;
+  typedef otb::ogr::Layer                                     OGRLayerType;
+  typedef otb::ogr::Feature                                   OGRFeatureType;
   
-  typedef OGRDataToPolygonGeometricFeaturesFilter                         OGRDataToPolygonGeometricFeaturesFilterType;
+  typedef OGRDataToPolygonGeometricFeaturesFilter
+                              OGRDataToPolygonGeometricFeaturesFilterType;
   
   /** Standard macro */
   itkNewMacro(Self);
@@ -58,16 +59,18 @@ private:
   void DoInit() override
   {
     SetName("ComputePolygonsGeometricFeatures");
-    SetDescription("This application computes geometric features on the input vector data.");
+    SetDescription("This application computes geometric features on the input"
+    " vector data.");
 
     // Documentation
     SetDocName("Compute Polygons Geometric Features");
-    SetDocLongDescription("This application computes geometric features on the input data."
-      "It takes a vector Data Source as input and computes for each polygon contained in this "
-      "Data Source. Computed features are size and perimeters, and the features are written "
-      "as attributes in the output Data Source (the name of the corresponding fields can be "
-      "specified with the application parameters). This application is able to work in place :"
-      "if no -out parameter is given, the input Data Source will be updated.");
+    SetDocLongDescription("This application computes geometric features on the"
+    " input data. It takes a vector Data Source as input and computes for each"
+    " polygon contained in this Data Source. Computed features are size and"
+    " perimeters, and the features are written as attributes in the output Data"
+    " Source (the name of the corresponding fields can be specified with the "
+    " application parameters). This application is able to work in place: if no"
+    " -out parameter is given, the input Data Source will be updated.");
     
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -75,20 +78,26 @@ private:
     SetDocSeeAlso("LargeScaleConnectedComponent");
     AddDocTag("LargeScaleConnectedComponent");
 
-    AddParameter(ParameterType_InputFilename, "in", "Name of the input vector data");
+    AddParameter(ParameterType_InputFilename, "in", "Name of the input vector"
+    " data");
     SetParameterDescription("in","The input vector data.");
     
-    AddParameter(ParameterType_OutputFilename, "out", "Output vector data file containing class labels");
-    SetParameterDescription("out","Output vector data file storing sample values (OGR format)."
-      "If not given, the input vector data file is updated.");
+    AddParameter(ParameterType_OutputFilename, "out", "Output vector data file "
+    "containing class labels");
+    SetParameterDescription("out","Output vector data file storing sample"
+    " values (OGR format). If not given, the input vector data file is updated."
+    );
     MandatoryOff("out");
     
     AddParameter(ParameterType_String, "sizefield", "Size field name");
-    SetParameterDescription("sizefield", "Name of the field containing polygon size");
+    SetParameterDescription("sizefield", "Name of the field containing polygon "
+    " size");
     SetParameterString("sizefield","size");
     
-    AddParameter(ParameterType_String, "perimeterfield", "Perimeter field name");
-    SetParameterDescription("perimeterfield", "Name of the field containing polygon perimeter");
+    AddParameter(ParameterType_String, "perimeterfield", "Perimeter field"
+    " name");
+    SetParameterDescription("perimeterfield", "Name of the field containing "
+    " polygon perimeter");
     SetParameterString("perimeterfield","perimeter");
     
     AddRAMParameter();
@@ -125,9 +134,12 @@ private:
       output = vectors;
     }
     // With a threaded filter
-    auto GeometricFeaturesFilter = OGRDataToPolygonGeometricFeaturesFilterType::New();
-    GeometricFeaturesFilter->SetSizeField( this->GetParameterString("sizefield"));
-    GeometricFeaturesFilter->SetPerimeterField( this->GetParameterString("perimeterfield"));
+    auto GeometricFeaturesFilter = 
+      OGRDataToPolygonGeometricFeaturesFilterType::New();
+    GeometricFeaturesFilter
+      ->SetSizeField( this->GetParameterString("sizefield"));
+    GeometricFeaturesFilter
+      ->SetPerimeterField( this->GetParameterString("perimeterfield"));
     GeometricFeaturesFilter->SetInput(vectors);
     GeometricFeaturesFilter->SetOutput(output);
     GeometricFeaturesFilter->Update();

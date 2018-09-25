@@ -175,7 +175,8 @@ private:
       labelImageFilter->GetStreamer()->SetAutomaticTiledStreaming();
     }
     
-    // Enlarge is not a parameter of the application, if the fusion option is 'on' we enlarge, if it is 'off' we don't
+    /* Enlarge is not a parameter of the application, if the fusion option is 
+      'on' we enlarge, if it is 'off' we don't */
     if (this->GetParameterInt("fusion") == 1)
     {
       labelImageFilter->SetEnlarge(1);

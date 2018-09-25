@@ -405,7 +405,7 @@ OGRDataToPolygonGeometricFeaturesFilter
     assert(geometry->getGeometryType() == wkbPolygon); // otherwise get_area will crash with no explanation
     const double area = static_cast<OGRPolygon  const*>(geometry)->get_Area();
     const double perimeter = static_cast<OGRPolygon const*>(geometry)->getExteriorRing()->get_Length();
-    //(*featit)["yo"].SetValue<double>(featit->GetFID());
+
     ogr::Feature dstFeature(outLayer.GetLayerDefn());
     dstFeature.SetFrom( feature, TRUE );
     dstFeature.SetFID( feature.GetFID() );

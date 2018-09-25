@@ -36,7 +36,7 @@ class ObjectBasedFiltering : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef ObjectBasedFiltering                       Self;
+  typedef ObjectBasedFiltering                Self;
   typedef Application                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
@@ -54,11 +54,14 @@ private:
   void DoInit() override
   {
     SetName("ObjectBasedFiltering");
-    SetDescription("This application filters a layer of polygons using a mathematical expression on its features");
+    SetDescription("This application filters a layer of polygons using a"
+    " mathematical expression on its features");
 
     // Documentation
     SetDocName("ObjectBasedFiltering");
-    SetDocLongDescription("This application filters a layer of polygons using a mathematical expression on its features. It applies an sql query on the first layer contained in the vector data");
+    SetDocLongDescription("This application filters a layer of polygons using"
+    " a mathematical expression on its features. It applies an sql query on"
+    " the first layer contained in the vector data");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     
@@ -69,12 +72,13 @@ private:
     SetParameterDescription("in","Name of the input vector data.");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output vector data");
-    SetParameterDescription("out","Output filtered vector data, if no output vector is given the input layer is overwritten");
+    SetParameterDescription("out","Output filtered vector data, if no output"
+    " vector is given the input layer is overwritten");
     MandatoryOff("out");
 
     AddParameter(ParameterType_String, "expr", "filter expression");
-    SetParameterDescription("expr","Mathemetical expression used for filtering. A geometry is deleted if the expression"
-    "evaluates to true");
+    SetParameterDescription("expr","Mathemetical expression used for filtering."
+    " A geometry is deleted if the expression evaluates to true");
 
     AddRAMParameter();
     
@@ -96,22 +100,25 @@ private:
     auto Timer = Stopwatch::StartNew();
     
     // Open Input Datasource
-    auto source = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Read);
+    auto source = otb::ogr::DataSource::New(GetParameterString("in"), 
+      otb::ogr::DataSource::Modes::Read);
     auto layerIn = source->GetLayer(0);
     std::string layerName = layerIn.GetName();
     
     auto expr = this->GetParameterString("expr");
     
-    // Copy input layer and close input Datasource, so we can re-open it in overwrite mode later (if not output vector is specified)
+    // Copy input layer and close input Datasource, so we can re-open it in"
+    // overwrite mode later (if no output vector is specified)
     auto buffer = ogr::DataSource::New();
     auto layerInCpy = buffer->CopyLayer( layerIn, layerName);
     source->Clear();
     
-    // Apply SQL query, we use 'WHERE NOT' to delete element verifying the filtering expression
+    // Apply SQL query, we use 'WHERE NOT' to delete element verifying the 
+    // filtering expression
     std::ostringstream sqloss;
     sqloss.str("");
     sqloss<<"SELECT * FROM \""<<layerName<<"\" WHERE NOT "<< expr;
-    auto layerTmp=buffer->ExecuteSQL(sqloss.str().c_str(), ITK_NULLPTR, ITK_NULLPTR);
+    auto layerTmp=buffer->ExecuteSQL(sqloss.str().c_str(), nullptr, nullptr);
     
     // Get Ouput path (new File or Update)
     std::string outPath = "";
@@ -126,14 +133,16 @@ private:
     }
     
     // Create output DataSource
-    auto sourceOut = otb::ogr::DataSource::New(outPath, otb::ogr::DataSource::Modes::Overwrite);
+    auto sourceOut = otb::ogr::DataSource::New(outPath, 
+      otb::ogr::DataSource::Modes::Overwrite);
     auto layerOut = sourceOut->CopyLayer( layerTmp, layerName);
     otbAppLogINFO("filtering done")
     
     sourceOut->SyncToDisk();
     
     Timer.Stop();
-    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
+    otbAppLogINFO( "Elapsed: "
+      << float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
 }; 
 

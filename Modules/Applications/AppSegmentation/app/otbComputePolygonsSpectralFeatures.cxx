@@ -49,7 +49,8 @@ public:
   typedef otb::VectorImage<InputPixelType, 2> VectorImageType;
   typedef VectorImageType::PixelType VectorImagePixelType;
   
-  typedef OGRDataToSpectralStatisticsFilter<VectorImageType, MaskImageType>                         OGRDataToSpectralStatisticsFilterType;
+  typedef OGRDataToSpectralStatisticsFilter<VectorImageType, MaskImageType>
+    OGRDataToSpectralStatisticsFilterType;
   
   /** Standard macro */
   itkNewMacro(Self);
@@ -60,15 +61,18 @@ private:
   void DoInit() override
   {
     SetName("ComputePolygonsSpectralFeatures");
-    SetDescription("This application computes radiometric features on a set of polygons using a multi-band image");
+    SetDescription("This application computes radiometric features on a set of"
+    " polygons using a multi-band image");
 
     // Documentation
     SetDocName("ComputePolygonsSpectralFeatures");
-    SetDocLongDescription("This application computes radiometric features on a set of polygons contained in "
-    "an OGR Data Source, using a multi-band image. Computed features are minimum, maximum, mean and covariance of "
-    "the pixels of the input intersecting the polygons. The name of the field corresponding to each feature "
-    "in the output Data Source can be specified using the application parameters.This application can work "
-    "in place : if no -out parameter is given, the input datasource will be updated.");
+    SetDocLongDescription("This application computes radiometric features on a"
+    " set of polygons contained in an OGR Data Source, using a multi-band"
+    " image. Computed features are minimum, maximum, mean and covariance of the"
+    " pixels of the input intersecting the polygons. The name of the field"
+    " corresponding to each feature in the output Data Source can be specified"
+    " using the application parameters.This application can work in place: if"
+    " no -out parameter is given, the input datasource will be updated.");
     
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -80,32 +84,41 @@ private:
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
     
-    AddParameter(ParameterType_InputFilename, "vec", "Input sampling positions");
+    AddParameter(ParameterType_InputFilename, "vec", "Input sampling "
+    " positions");
     SetParameterDescription("vec","Vector data file containing sampling"
-                                  "positions. (OGR format)");
+    " positions. (OGR format)");
 
-    AddParameter(ParameterType_OutputFilename, "out", "Output vector data file ");
+    AddParameter(ParameterType_OutputFilename, "out", "Output vector data"
+    " file ");
     SetParameterDescription("out","Output vector");
     MandatoryOff("out");
     
     AddParameter(ParameterType_String, "minfield", "Min field prefix");
-    SetParameterDescription("minfield", "Prefix of the field containing minimum value for each band in the geometry");
+    SetParameterDescription("minfield", "Prefix of the field containing minimum"
+    " value for each band in the geometry");
     MandatoryOff("minfield");
       
     AddParameter(ParameterType_String, "maxfield", "Max field prefix");
-    SetParameterDescription("maxfield", "Prefix of the field containing maximum value for each band in the geometry");
+    SetParameterDescription("maxfield", "Prefix of the field containing maximum"
+    " value for each band in the geometry");
     MandatoryOff("maxfield");
     
     AddParameter(ParameterType_String, "meanfield", "Mean field prefix");
-    SetParameterDescription("meanfield", "Prefix of the field containing mean of the values in the geometry for each band");
+    SetParameterDescription("meanfield", "Prefix of the field containing mean"
+    " of the values in the geometry for each band");
     MandatoryOff("meanfield");
     
     AddParameter(ParameterType_String, "covfield", "Covariance field prefix");
-    SetParameterDescription("covfield", "Prefix of the field containing the covariance matrix between different bands, for samples inside the geometry");
+    SetParameterDescription("covfield", "Prefix of the field containing the"
+    " covariance matrix between different bands, for samples inside the"
+    " geometry");
     MandatoryOff("covfield");
     
-    AddParameter(ParameterType_String, "nbpixelfield", "Number of pixel field prefix");
-    SetParameterDescription("nbpixelfield", "Name of the field containing the number of pixel in each geometries");
+    AddParameter(ParameterType_String, "nbpixelfield", "Number of pixel"
+    " field prefix");
+    SetParameterDescription("nbpixelfield", "Name of the field containing the"
+    " number of pixel in each geometries");
     MandatoryOff("nbpixelfield");
     
     AddParameter(ParameterType_Int,"tile","Tile Size");
@@ -151,10 +164,12 @@ private:
                                     ogr::DataSource::Modes::Update_LayerUpdate);
       output = vectors;
     }
-    OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter = OGRDataToSpectralStatisticsFilterType::New();
+    OGRDataToSpectralStatisticsFilterType::Pointer SpectralStatisticsFilter 
+      = OGRDataToSpectralStatisticsFilterType::New();
     SpectralStatisticsFilter->SetInput(this->GetParameterImage("in"));
     if (IsParameterEnabled("tile") && HasValue("tile"))
-      SpectralStatisticsFilter->GetStreamer()->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
+      SpectralStatisticsFilter->GetStreamer()
+        ->SetTileDimensionTiledStreaming(this->GetParameterInt("tile"));
     else
       SpectralStatisticsFilter->GetStreamer()->SetAutomaticTiledStreaming();
     
@@ -168,16 +183,18 @@ private:
     if (IsParameterEnabled("covfield") && HasValue("covfield"))
       SpectralStatisticsFilter->SetCovField(GetParameterString("covfield"));
     if (IsParameterEnabled("nbpixelfield") && HasValue("nbpixelfield"))
-      SpectralStatisticsFilter->SetNbPixelsField(GetParameterString("nbpixelfield"));
-
+      SpectralStatisticsFilter
+        ->SetNbPixelsField(GetParameterString("nbpixelfield"));
     
     SpectralStatisticsFilter->SetOGRData(vectors);
     SpectralStatisticsFilter->SetOutputSamples(output);
     SpectralStatisticsFilter->SetFieldName(field_name);
-    AddProcess(SpectralStatisticsFilter->GetStreamer(),"Computing spectral features ...");
+    AddProcess(SpectralStatisticsFilter->GetStreamer(),"Computing spectral"
+    " features ...");
     SpectralStatisticsFilter->Update();
     Timer.Stop();
-    otbAppLogINFO( "Elapsed: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
+    otbAppLogINFO( "Elapsed: "
+      << float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
   
 }; 

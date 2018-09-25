@@ -31,9 +31,9 @@ namespace Wrapper
 /**
  * \class LargeScaleConnectedComponent
  *
- * \brief All-in-one application for the Large Scale connected component framework
+ * \brief All-in-one application for the Large Scale connected component
+ * framework
  *
- * 
  */
 class LargeScaleConnectedComponent : public CompositeApplication
 {
@@ -57,21 +57,27 @@ private:
 
     // Documentation
     SetDocName("Large-Scale MeanShift");
-    SetDocLongDescription("This application chains together the 6 steps of the "
-      "Connected components framework, that is the ImageConnectedComponentSegmentation [1], the "
-      "LabelImageVectorization [2], the ComputePolygonsGeometricFeatures [3], the small regions merging step [4], the ComputePolygonsSpectralFeatures [5] and the "
-      "ObjectBasedFiltering [6].\n\n"
-      "It generates a vector data file containing the regions extracted with "
-      "the Connected components algorithm using a user defined criterion,  There is an optional step to remove small regions whose size "
-      "(in pixels) is less than the given 'minsize' parameter : these regions will be merged with the adjacent region with the "
-      "closest radiometry. Features are then extracted for each segment. The computed features are : "
+    SetDocLongDescription("This application chains together the 6 steps of the"
+      " Connected components framework, that is the"
+      " ImageConnectedComponentSegmentation step [1], the" 
+      "LabelImageVectorization [2], the ComputePolygonsGeometricFeatures [3],"
+      " the small regions merging step [4], the ComputePolygonsSpectralFeatures"
+      " [5] and the ObjectBasedFiltering [6].\n\n"
+      "It generates a vector data file containing the regions extracted with"
+      " the Connected components algorithm using a user defined criterion, then"
+      " there is an optional step to remove small regions whose size (in"
+      " pixels) is less than the given 'minsize' parameter : these regions"
+      " will be merged with the adjacent region with the closest radiometry."
+      " Features are then extracted for each segment. The computed features"
+      " are: "
       "- size (field name 'size')"
       "- perimeter (field name 'perimeter')"
       "- minimum (field name for band i : 'minbi')"
       "- maximum (field name for band i : 'maxbi')"
       "- mean (field name for band i : 'meanbi' )"
       "- covariance (field name for bands i and j : 'covbibj'"
-      " Optionally, the segment are filtered using a criterion on the computed features."
+      " Optionally, the segment are filtered using a criterion on the computed"
+      " features."
       );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -86,11 +92,16 @@ private:
     AddDocTag("LSCC");
 
     ClearApplications();
-    AddApplication("ImageConnectedComponentSegmentation", "segmentation", "connected component segmentation step");
-    AddApplication("LabelImageVectorization", "vectorization", "Vectorization step");
-    AddApplication("LSMSSmallRegionsMerging", "merging", "Small region merging step");
-    AddApplication("ComputePolygonsGeometricFeatures", "geometric", "Geometric features computation step");
-    AddApplication("ComputePolygonsSpectralFeatures", "spectral", "Spectral features computation step");
+    AddApplication("ImageConnectedComponentSegmentation", "segmentation", 
+      "connected component segmentation step");
+    AddApplication("LabelImageVectorization", "vectorization",
+      "Vectorization step");
+    AddApplication("LSMSSmallRegionsMerging", "merging",
+      "Small region merging step");
+    AddApplication("ComputePolygonsGeometricFeatures", "geometric",
+      "Geometric features computation step");
+    AddApplication("ComputePolygonsSpectralFeatures", "spectral",
+      "Spectral features computation step");
     AddApplication("ObjectBasedFiltering", "filtering", "Filtering step");
 
     ShareParameter("in","segmentation.in");
@@ -104,11 +115,12 @@ private:
     MandatoryOff("fusion");
     
     AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
-    SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, "
-      "a segment is of size lower than this criterion, the segment is merged with the segment "
-      "that has the closest sepctral signature. If this option is used, the application will create"
-      "temporary files, and will remove them (if the parameter cleanup is set to true) at"
-      "the end of the app");
+    SetParameterDescription("minsize", "Minimum Segment Size. If, after the"
+    " segmentation, a segment is of size lower than this criterion, the segment"
+    " is merged with the segment that has the closest sepctral signature. If"
+    " this option is used, the application will create temporary files, and"
+    " will remove them (if the parameter cleanup is set to true) at the end of"
+    " the app");
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
     
@@ -118,19 +130,18 @@ private:
     AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
     EnableParameter( "cleanup" );
     SetParameterDescription( "cleanup",
-      "If activated, the application will try to clean all temporary files it created."
-      "Note that temporary files are only created if the minsize option"
-      "is activated");
+      "If activated, the application will try to clean all temporary files it"
+      " created. Note that temporary files are only created if the minsize"
+      " option is activated");
     SetParameterInt("cleanup", 1);
     MandatoryOff( "cleanup" );
 
     AddParameter(ParameterType_Directory,"tmpdir","Directory where to "
       "write temporary files");
-    SetParameterDescription("tmpdir","This applications need to write "
-      "temporary files for each tile (only if the minsize option"
-      "is activated).This parameter allows choosing the path where to" 
-      "write those files."
-      "If disabled, the directory of the out parameter will be used.");
+    SetParameterDescription("tmpdir","This applications need to write temporary"
+    " files for each tile (only if the minsize option is activated). This"
+    " parameter allows choosing the path where to write those files. If"
+    " disabled, the directory of the out parameter will be used.");
     MandatoryOff("tmpdir");
     DisableParameter("tmpdir");
 
@@ -181,8 +192,10 @@ private:
         TmpDirCleanup = true;
         itksys::SystemTools::MakeDirectory(GetParameterString("tmpdir").c_str());
       }
-      tmpFilenames.push_back(GetParameterString("tmpdir") + std::string("/labelmap.tif"));
-      tmpFilenames.push_back(GetParameterString("tmpdir") + std::string("/labelmap_merged.tif"));
+      tmpFilenames.push_back
+        (GetParameterString("tmpdir") + std::string("/labelmap.tif"));
+      tmpFilenames.push_back
+        (GetParameterString("tmpdir") + std::string("/labelmap_merged.tif"));
     }
     else
     {
@@ -190,7 +203,8 @@ private:
       tmpFilenames.push_back(outPath+std::string("_labelmap_merged.tif"));
     }    
       
-    // If the LSMSSmallRegionsMerging application is used, we can't use in-memory connection, so we have to write all outputs image files.
+    /* If the LSMSSmallRegionsMerging application is used, we can't use 
+     * in-memory connection, so we have to write all outputs image files.*/
     if (IsParameterEnabled("minsize") && HasValue("minsize"))
     {
       // Image to image connected components segmentation step
@@ -200,26 +214,34 @@ private:
       GetInternalApplication("segmentation")->ExecuteAndWriteOutput();
 
       // Optional small segments merging step
-      GetInternalApplication("merging")->SetParameterInt("minsize",this->GetParameterInt("minsize"));
-      GetInternalApplication("merging")->SetParameterString("inseg",tmpFilenames[0] );
-      GetInternalApplication("merging")->SetParameterString("out",tmpFilenames[1] );
+      GetInternalApplication("merging")
+        ->SetParameterInt("minsize",this->GetParameterInt("minsize"));
+      GetInternalApplication("merging")
+        ->SetParameterString("inseg",tmpFilenames[0] );
+      GetInternalApplication("merging")
+        ->SetParameterString("out",tmpFilenames[1] );
       GetInternalApplication("merging")->ExecuteAndWriteOutput();
       //ExecuteInternal("merging");
-      GetInternalApplication("vectorization")->SetParameterString("in", tmpFilenames[1]);
+      GetInternalApplication("vectorization")
+        ->SetParameterString("in", tmpFilenames[1]);
     }
     // In this case in-memory connection is used
     else
     {
       ExecuteInternal("segmentation");
-      GetInternalApplication("vectorization")->SetParameterInputImage("in", GetInternalApplication("segmentation")->GetParameterOutputImage("out"));
+      GetInternalApplication("vectorization")
+        ->SetParameterInputImage("in", GetInternalApplication("segmentation")
+                                            ->GetParameterOutputImage("out"));
     }
     
     // Label Image vectorization step
     ExecuteInternal("vectorization");
     
     // Geometric features computation step
-    GetInternalApplication("geometric")->SetParameterString("sizefield", "size");
-    GetInternalApplication("geometric")->SetParameterString("perimeterfield", "perimeter");
+    GetInternalApplication("geometric")
+      ->SetParameterString("sizefield", "size");
+    GetInternalApplication("geometric")
+      ->SetParameterString("perimeterfield", "perimeter");
     ExecuteInternal("geometric");
     
     // Spectral features computation step
@@ -242,13 +264,17 @@ private:
 
       if(IsParameterEnabled("tmpdir") && TmpDirCleanup)
       {
-        otbAppLogINFO(<<"Removing tmp directory "<<GetParameterString("tmpdir")<<", since it has been created by the application");
-        itksys::SystemTools::RemoveADirectory(GetParameterString("tmpdir").c_str());
+        otbAppLogINFO( "Removing tmp directory "
+          << GetParameterString("tmpdir")
+          << ", since it has been created by the application");
+        itksys::SystemTools::RemoveADirectory
+          (GetParameterString("tmpdir").c_str());
       }
     }
 
     Timer.Stop();
-    otbAppLogINFO( "Total elapsed time: "<< float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
+    otbAppLogINFO( "Total elapsed time: "
+      << float(Timer.GetElapsedMilliseconds())/1000 <<" seconds.");
   }
 
 };
