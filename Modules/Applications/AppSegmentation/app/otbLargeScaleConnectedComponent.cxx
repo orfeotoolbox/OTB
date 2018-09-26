@@ -61,8 +61,7 @@ private:
       " Connected components framework, that is the"
       " ImageConnectedComponentSegmentation step [1], the" 
       "LabelImageVectorization [2], the ComputePolygonsGeometricFeatures [3],"
-      " the small regions merging step [4], the ComputePolygonsSpectralFeatures"
-      " [5] and the ObjectBasedFiltering [6].\n\n"
+      " the small regions merging step [4], and the ObjectBasedFiltering [5].\n"
       "It generates a vector data file containing the regions extracted with"
       " the Connected components algorithm using a user defined criterion, then"
       " there is an optional step to remove small regions whose size (in"
@@ -72,10 +71,6 @@ private:
       " are: "
       "- size (field name 'size')"
       "- perimeter (field name 'perimeter')"
-      "- minimum (field name for band i : 'minbi')"
-      "- maximum (field name for band i : 'maxbi')"
-      "- mean (field name for band i : 'meanbi' )"
-      "- covariance (field name for bands i and j : 'covbibj'"
       " Optionally, the segment are filtered using a criterion on the computed"
       " features."
       );
@@ -85,8 +80,7 @@ private:
       "[2] LabelImageVectorization\n"
       "[3] LSMSSmallRegionsMerging\n"
       "[4] ComputePolygonsGeometricFeatures\n"
-      "[5] ComputePolygonsSpectralFeatures\n"
-      "[6] ObjectBasedFiltering");
+      "[5] ObjectBasedFiltering");
 
     AddDocTag(Tags::Segmentation);
     AddDocTag("LSCC");
@@ -100,8 +94,6 @@ private:
       "Small region merging step");
     AddApplication("ComputePolygonsGeometricFeatures", "geometric",
       "Geometric features computation step");
-    AddApplication("ComputePolygonsSpectralFeatures", "spectral",
-      "Spectral features computation step");
     AddApplication("ObjectBasedFiltering", "filtering", "Filtering step");
 
     ShareParameter("in","segmentation.in");
@@ -145,11 +137,8 @@ private:
     MandatoryOff("tmpdir");
     DisableParameter("tmpdir");
 
-    Connect("spectral.tile","vectorization.tile");
     Connect("geometric.in","vectorization.out");
-    Connect("spectral.in","segmentation.in");
     Connect("merging.in","segmentation.in");
-    Connect("spectral.vec","vectorization.out");
     Connect("filtering.in","vectorization.out");
 
     // Setup RAM
@@ -157,7 +146,6 @@ private:
     Connect("vectorization.ram","segmentation.ram");
     Connect("merging.ram","segmentation.ram");
     Connect("geometric.ram","segmentation.ram");
-    Connect("spectral.ram","segmentation.ram");
     Connect("filtering.ram","segmentation.ram");
     
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
@@ -243,9 +231,6 @@ private:
     GetInternalApplication("geometric")
       ->SetParameterString("perimeterfield", "perimeter");
     ExecuteInternal("geometric");
-    
-    // Spectral features computation step
-    ExecuteInternal("spectral");
     
     // Object based filtering step
     if (IsParameterEnabled("filter") && HasValue("filter"))

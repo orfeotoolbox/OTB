@@ -317,7 +317,7 @@ otb_test_application(NAME     apTvLargeScaleConnectedComponentMinSize
                               -out ${TEMP}/apTvLargeScaleConnectedComponentMinSize.shp
                               -expr "distance<50"
                               -mask "(b4-b1)/(b4+b1)>0.65"
-                              -filter "meanb1<150"
+                              -filter "perimeter<30"
                               -fusion 1
                               -minsize 50
                      VALID    --compare-ogr ${NOTOL}
@@ -332,7 +332,7 @@ otb_test_application(NAME     apTvLargeScaleConnectedComponent
                               -out ${TEMP}/apTvLargeScaleConnectedComponent.shp
                               -expr "distance<50"
                               -mask "(b4-b1)/(b4+b1)>0.65"
-                              -filter "meanb1<150"
+                              -filter "perimeter<30"
                               -fusion 1
                      VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/apTvLargeScaleConnectedComponent.shp
@@ -373,18 +373,6 @@ otb_test_application(NAME     apTvComputePolygonsGeometricFeatures
                      VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/apTvComputePolygonsGeometricFeatures.shp
                               ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
-                     )
-
-
-#----------- ComputePolygonsSpectralFeatures TESTS -----------
-otb_test_application(NAME     apTvComputePolygonsSpectralFeatures
-                     APP      ComputePolygonsSpectralFeatures
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
-                              -vec ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
-                              -out ${TEMP}//apTvComputePolygonsSpectralFeatures.shp
-                              VALID    --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}//apTvComputePolygonsSpectralFeatures.shp
-                              ${TEMP}//apTvComputePolygonsSpectralFeatures.shp
                      )
 
 #----------- ObjectBasedFiltering TESTS -----------
