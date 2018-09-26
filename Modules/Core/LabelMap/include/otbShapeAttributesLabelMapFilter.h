@@ -53,10 +53,10 @@ public:
                   itk::Offset< VOffsetDimension > const & r) const
   {
     for ( unsigned int i = 0; i < VOffsetDimension; ++i )  {
-      if ( l.GetElement(i) < r.GetElement(i) )  {
+      if ( l[i] < r[i] )  {
         return true;
       }
-	else if ( l.GetElement(i) > r.GetElement(i) ) {
+      else if ( l[i] > r[i] ) {
         return false;
       }
     }
