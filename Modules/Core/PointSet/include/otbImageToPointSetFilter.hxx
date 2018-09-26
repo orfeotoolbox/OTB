@@ -266,7 +266,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   std::ostringstream message;
   message << "itk::ERROR: " << this->GetNameOfClass()
           << "(" << this << "): " << "Subclass should override this method!!!";
-  itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION);
+  itk::ExceptionObject e_(__FILE__, __LINE__, message.str(), ITK_LOCATION);
   throw e_;
 
 }

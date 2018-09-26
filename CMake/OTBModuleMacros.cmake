@@ -69,6 +69,9 @@ macro(otb_module _name)
     elseif("${arg}" MATCHES "^ENABLE_SHARED$")
       set(_doing "")
       set(OTB_MODULE_${otb-module}_ENABLE_SHARED 1)
+    elseif("${arg}" MATCHES "^DEPRECATED$")
+      set(_doing "")
+      set(OTB_MODULE_${otb-module}_IS_DEPRECATED 1)
     elseif("${arg}" MATCHES "^[A-Z][A-Z][A-Z]$")
       set(_doing "")
       message(AUTHOR_WARNING "Unknown argument [${arg}]")
@@ -221,6 +224,7 @@ macro(otb_module_impl)
     generate_export_header(${otb-module}
       EXPORT_FILE_NAME ${_export_header_file}
       EXPORT_MACRO_NAME ${otb-module}_EXPORT
+      DEPRECATED_MACRO_NAME ${otb-module}_DEPRECATED
       NO_EXPORT_MACRO_NAME ${otb-module}_HIDDEN
       STATIC_DEFINE OTB_STATIC )
     install(FILES

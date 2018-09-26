@@ -174,7 +174,7 @@ namespace otb
       { \
       std::ostringstream message; \
       message << "otb::ERROR Unknown error while running " << # command << " (catch(...) )"; \
-      ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
+      ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str(), ITK_LOCATION); \
       throw e_; \
       } \
     std::cout << " Checking valid command " << # command " ok." << std::endl; \
@@ -205,14 +205,14 @@ namespace otb
       { \
       std::ostringstream message; \
       message << "otb::ERROR Unknown error while running " << # command << " (catch(...) )"; \
-      ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
+      ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str(), ITK_LOCATION); \
       throw e_; \
       } \
     if (result == 1) \
       { \
       std::ostringstream message; \
       message << "otb::ERROR: " << # command << " should be throwing an exception."; \
-      ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
+      ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str(), ITK_LOCATION); \
       throw e_; \
       } \
     }

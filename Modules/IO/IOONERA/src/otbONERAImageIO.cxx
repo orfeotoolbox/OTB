@@ -384,13 +384,13 @@ void ONERAImageIO::InternalReadImageInformation()
   otbMsgDebugMacro(<< "Driver to read: ONERA");
   otbMsgDebugMacro(<< "         Read  file         : " << m_FileName);
   otbMsgDebugMacro(<< "         Size               : " << m_Dimensions[0] << "," << m_Dimensions[1]);
-  otbMsgDebugMacro(<< "         PixelType          : " << this->GetPixelTypeAsString(this->GetPixelType()));
-  otbMsgDebugMacro(<< "         ComponentType      : " << this->GetComponentTypeAsString(this->GetComponentType()));
+  otbMsgDebugMacro(<< "         PixelType          : " << ImageIOBase::GetPixelTypeAsString(this->GetPixelType()));
+  otbMsgDebugMacro(<< "         ComponentType      : " << ImageIOBase::GetComponentTypeAsString(this->GetComponentType()));
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
   otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
-  otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
-  otbMsgDebugMacro(<< "         File byte order    : " << this->GetByteOrderAsString(m_FileByteOrder));
+  otbMsgDebugMacro(<< "         Host byte order    : " << ImageIOBase::GetByteOrderAsString(m_ByteOrder));
+  otbMsgDebugMacro(<< "         File byte order    : " << ImageIOBase::GetByteOrderAsString(m_FileByteOrder));
 
   delete [] sHeader;
 }
@@ -595,7 +595,7 @@ void ONERAImageIO::InternalWriteImageInformation()
     otbMsgDebugMacro(<< "         ComponentType      : " << this->GetComponentType());
     otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
     otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
-    otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
+    otbMsgDebugMacro(<< "         Host byte order    : " << ImageIOBase::GetByteOrderAsString(m_ByteOrder));
 }
 
 } // end namespace otb

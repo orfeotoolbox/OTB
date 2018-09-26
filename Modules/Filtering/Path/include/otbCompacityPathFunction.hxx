@@ -43,8 +43,6 @@ typename CompacityPathFunction<TInputPath,
 CompacityPathFunction<TInputPath, TOutput>
 ::Evaluate(const PathType& path) const
 {
-  typedef double RealType;
-
   VertexListPointer vertexList;
   VertexType        cindex;
   VertexType        IndexOut;
