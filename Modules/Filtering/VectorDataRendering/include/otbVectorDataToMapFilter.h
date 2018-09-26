@@ -68,12 +68,13 @@ namespace otb
    * otb::Image< itk::RGBAPixel<InternalPixelType> >,
    * otb::Image< itk::RGBPixel<InternalPixelType> >.
    *
- *
- * \ingroup OTBVectorDataRendering
+   * \deprecated
+   *
+   * \ingroup OTBVectorDataRendering
    */
 
 template <class TVectorData, class TImage>
-class ITK_EXPORT VectorDataToMapFilter : public itk::ImageSource<TImage>
+class [[deprecated]] VectorDataToMapFilter : public itk::ImageSource<TImage>
 {
 public:
   /** Standard class typedefs. */

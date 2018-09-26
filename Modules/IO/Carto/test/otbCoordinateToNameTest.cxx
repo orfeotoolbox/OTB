@@ -21,11 +21,12 @@
 
 
 #include <fstream>
+#include <chrono>
 #include <cstdlib>
+#include <thread>
 
 #include "otbCoordinateToName.h"
 #include "otbCurlHelperStub.h"
-#include "otbThreads.h"
 
 int otbCoordinateToNameTest(int argc, char* argv[])
 {
@@ -50,9 +51,10 @@ int otbCoordinateToNameTest(int argc, char* argv[])
 
   if ((argc > 4) && atoi(argv[4]) == 1)
     {
+    using namespace std::chrono_literals;
     conv->MultithreadOn();
     conv->Evaluate();
-    otb::Threads::Sleep(10000000); //Make sure that the web request has the time to complete
+    std::this_thread::sleep_for(10s);
     }
   else
     {

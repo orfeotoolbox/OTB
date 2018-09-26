@@ -43,7 +43,6 @@ ENABLE_SHARED
 
   TEST_DEPENDS
     OTBCommandLineParser
-    OTBOpenThreadsAdapters
     OTBTestKernel
 
   DESCRIPTION

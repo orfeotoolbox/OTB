@@ -334,12 +334,17 @@ private:
     std::string outputBase = outputPath.substr(0, outputPath.find_last_of('.'));
     std::string outputExt = outputPath.substr(outputPath.find_last_of('.'), std::string::npos);
     unsigned int overflowCount = 0;
+    bool noSamples=true;
     for (unsigned int i=0 ; i<nbInputs ; i++ )
       {
       // Print results
       oss.str(std::string(""));
-      oss << " className  requiredSamples  totalSamples  rate" << std::endl;
+      oss << " className  requiredSamples  totalSamples  rate\n";
       MapRateType rates = m_CalculatorList->GetRatesByClass(i);
+      if(!rates.empty())
+        {
+        noSamples = false;
+        }
       MapRateType::const_iterator itRates = rates.begin();
       for(; itRates != rates.end(); ++itRates)
         {
@@ -357,6 +362,10 @@ private:
       oss.str(std::string(""));
       oss << outputBase << "_" << i+1 << outputExt;
       m_CalculatorList->GetNthElement(i)->Write(oss.str());
+      }
+    if (noSamples)
+      {
+      otbAppLogFATAL("No samples found in the inputs!");
       }
     if (overflowCount)
       {
