@@ -346,6 +346,72 @@ ConnectedComponentStreamStitchingFilter<TImage>
   this->InvokeEvent(itk::EndEvent());
 }
 
+template<class TImage>
+void
+ConnectedComponentStreamStitchingFilter<TImage>::IntersectionGraph
+::registerEdge(int idx1, int idx2)
+{
+  if (idx1 != idx2)
+    {
+    if (m_graph.find(idx1) == m_graph.end()) // The node (key in the map) doesn't exist
+      {
+      NodeType node;
+      node.adjacencyList.push_back(idx2);
+      node.isVisited = false;
+      m_graph[idx1] = node; 
+      }
+    else
+      {
+      m_graph[idx1].adjacencyList.push_back(idx2);
+      }
+
+    if (m_graph.find(idx2) == m_graph.end())
+      {
+      NodeType node;
+      node.adjacencyList.push_back(idx1);
+      node.isVisited = false;
+      m_graph[idx2] = node; 
+      }
+    else
+      {
+        m_graph[idx2].adjacencyList.push_back(idx1);
+      }
+    }
+}
+
+template<class TImage>
+std::vector< std::vector<int> >
+ConnectedComponentStreamStitchingFilter<TImage>::IntersectionGraph
+::findConnectedComponents()
+{
+  std::vector< std::vector<int> > fusionList;
+      
+  for (auto const& node : m_graph)
+    {
+    std::vector<int> fusionIndexes;
+    VisitNode( node.first, fusionIndexes);
+    if (! fusionIndexes.empty())
+      fusionList.push_back(std::move(fusionIndexes)); 
+    }
+  return fusionList;
+}
+
+template<class TImage>
+void
+ConnectedComponentStreamStitchingFilter<TImage>::IntersectionGraph
+::VisitNode(int idx, std::vector<int>& fusionIndexes)
+{
+  if (m_graph[idx].isVisited == false) 
+    {
+    fusionIndexes.push_back(idx);
+    m_graph.find(idx)->second.isVisited = true;
+    for (auto const& node : m_graph[idx].adjacencyList)
+      {
+      VisitNode( node,fusionIndexes);
+      }
+    }
+}
+
 } // end namespace otb
 
 #endif

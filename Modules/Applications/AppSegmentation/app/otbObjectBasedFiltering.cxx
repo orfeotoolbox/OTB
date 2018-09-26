@@ -121,15 +121,11 @@ private:
     auto layerTmp=buffer->ExecuteSQL(sqloss.str().c_str(), nullptr, nullptr);
     
     // Get Ouput path (new File or Update)
-    std::string outPath = "";
+    std::string outPath(this->GetParameterString("in"));
     
     if (IsParameterEnabled("out") && HasValue("out"))
     {  
       outPath = this->GetParameterString("out");
-    }
-    else
-    {
-      outPath = this->GetParameterString("in");
     }
     
     // Create output DataSource

@@ -134,9 +134,7 @@ private:
 
   void DoExecute() override
   {
-    typename MaskImageType::Pointer mask;
-    typename MaskMuParserFilterType::Pointer maskFilter;
-    maskFilter = MaskMuParserFilterType::New();
+    auto maskFilter = MaskMuParserFilterType::New();
     ConnectedComponentFilterType::Pointer connected = 
       ConnectedComponentFilterType::New();
     if (IsParameterEnabled("mask") && HasValue("mask"))

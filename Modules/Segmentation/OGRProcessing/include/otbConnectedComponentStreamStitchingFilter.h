@@ -24,7 +24,6 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"
 
-
 #include "itkProgressReporter.h"
 
 #include <algorithm>
@@ -105,90 +104,6 @@ public:
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
   void GenerateData() override;
 
-  /** A class to find connected components on a graph, it is used to find all intersecting polygons from a set of intersecting pairs. */
-  class IntersectionGraph
-  {
-  public:
-  
-    /** struct to store a node of the graph, it contains the list of the node's neighbors, 
-     * and a flag to know if the node has been visited during the connected component algorithm
-     */
-    struct NodeType
-    {
-      bool isVisited;
-      std::vector<int> adjacencyList;
-    };
-
-    /** this container contains all the information of the graph */
-    typedef std::map<int, NodeType > GraphType;  
-        
-    IntersectionGraph() = default; // Constructor
-    ~IntersectionGraph() = default; // Destructor
-    
-    /** Method to add two adjacent nodes idx1 and idx2 to the graph, if they don't exist already, 
-     * and add the adjacency property for existing nodes */
-    void registerEdge(int idx1, int idx2)
-    {
-      if (idx1 != idx2)
-      {
-        if (m_graph.find(idx1) == m_graph.end()) // The node (key in the map) doesn't exist
-        {
-          NodeType node;
-          node.adjacencyList.push_back(idx2);
-          node.isVisited = false;
-          m_graph[idx1] = node; 
-        }
-        else
-        {
-          m_graph[idx1].adjacencyList.push_back(idx2);
-        }
-                  
-        if (m_graph.find(idx2) == m_graph.end())
-        {
-          NodeType node;
-          node.adjacencyList.push_back(idx1);
-          node.isVisited = false;
-          m_graph[idx2] = node; 
-        }
-        else
-        {
-          m_graph[idx2].adjacencyList.push_back(idx1);
-        }
-      }
-    }	
-    
-    /** Graph search to find the connected component in the graph (depth-first search using recursivity) */ 
-    std::vector< std::vector<int> > findConnectedComponents()
-    {
-      std::vector< std::vector<int> > fusionList;
-      
-      for (auto const& node : m_graph)
-      {
-        std::vector<int> fusionIndexes;
-        VisitNode( node.first, fusionIndexes);
-        if (! fusionIndexes.empty())
-          fusionList.push_back(std::move(fusionIndexes)); 
-      }
-      
-      return fusionList;
-    }
-        
-    /** Visit a node, and recursively call the method on its neighbors */    
-    void VisitNode(int idx, std::vector<int>& fusionIndexes)
-    {
-      if (m_graph[idx].isVisited == false) 
-      {
-        fusionIndexes.push_back(idx);
-        m_graph.find(idx)->second.isVisited = true;
-        for (auto const& node : m_graph[idx].adjacencyList)
-        {
-          VisitNode( node,fusionIndexes);
-        }
-      }
-    }	
-  private:
-    GraphType m_graph;
-  };
 
 protected:
   ConnectedComponentStreamStitchingFilter();
@@ -222,7 +137,41 @@ protected:
 
 private:
   ConnectedComponentStreamStitchingFilter(const Self &) = delete; 
-  void operator =(const Self&) = delete;      
+  void operator =(const Self&) = delete;
+  
+  /** A class to find connected components on a graph, it is used to find all intersecting polygons from a set of intersecting pairs. */
+  class IntersectionGraph
+  {
+  public:
+  
+    /** struct to store a node of the graph, it contains the list of the node's neighbors, 
+     * and a flag to know if the node has been visited during the connected component algorithm
+     */
+    struct NodeType
+    {
+      bool isVisited;
+      std::vector<int> adjacencyList;
+    };
+
+    /** this container contains all the information of the graph */
+    typedef std::map<int, NodeType > GraphType;
+        
+    IntersectionGraph() = default; // Constructor
+    ~IntersectionGraph() = default; // Destructor
+    
+    /** Method to add two adjacent nodes idx1 and idx2 to the graph, if they don't exist already, 
+     * and add the adjacency property for existing nodes */
+    void registerEdge(int idx1, int idx2);
+
+    /** Graph search to find the connected component in the graph (depth-first search using recursivity) */ 
+    std::vector< std::vector<int> > findConnectedComponents();
+
+    /** Visit a node, and recursively call the method on its neighbors */    
+    void VisitNode(int idx, std::vector<int>& fusionIndexes);
+
+  private:
+    GraphType m_graph;
+  };
 
   SizeType m_StreamSize;
   unsigned int m_Radius;

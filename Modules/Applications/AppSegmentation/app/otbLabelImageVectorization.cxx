@@ -159,8 +159,7 @@ private:
     layer.CreateField(field, true);
     
     // Mask FIlter : Vectorization of the input raster
-    LabelImageVectorizationFilterType::Pointer labelImageFilter = 
-      LabelImageVectorizationFilterType::New();
+    auto labelImageFilter = LabelImageVectorizationFilterType::New();
     
     // Labeled image to be vectorized
     labelImageFilter->SetInput(this->GetParameterUInt32Image("in"));
@@ -192,11 +191,6 @@ private:
         inputLabels.push_back(std::stoi(label));
       }
     }
-    else
-    {
-      // if no labels are given to the filter, they are all used
-      inputLabels.clear();
-    }
     
     labelImageFilter->SetLabels(inputLabels);
     labelImageFilter->SetUse8Connected(this->GetParameterInt("connectivity"));
@@ -212,8 +206,7 @@ private:
     // Fusion Filter : Regroup polygons splitted across tiles.
     if (this->GetParameterInt("fusion") == 1)
     {
-      ConnectedComponentStreamStitchingFilterType::Pointer fusionFilter = 
-                          ConnectedComponentStreamStitchingFilterType::New();
+      auto fusionFilter = ConnectedComponentStreamStitchingFilterType::New();
       fusionFilter->SetInput(this->GetParameterUInt32Image("in"));
       fusionFilter->SetOGRLayer(layer);
       fusionFilter->SetStreamSize(labelImageFilter->GetStreamSize());
