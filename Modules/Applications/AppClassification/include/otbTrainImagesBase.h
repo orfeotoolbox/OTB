@@ -54,7 +54,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro( TrainImagesBase, Superclass )
+  itkTypeMacro( TrainImagesBase, Superclass );
 
   /** filters typedefs*/
   typedef otb::OGRDataToSamplePositionFilter<FloatVectorImageType, UInt8ImageType, otb::PeriodicSampler> PeriodicSamplerType;

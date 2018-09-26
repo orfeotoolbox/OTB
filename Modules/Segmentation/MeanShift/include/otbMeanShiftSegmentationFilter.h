@@ -22,7 +22,7 @@
 #define otbMeanShiftSegmentationFilter_h
 
 #include "itkMacro.h"
-
+#include "otbMacro.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbLabelImageRegionMergingFilter.h"
 #include "otbLabelImageRegionPruningFilter.h"
