@@ -248,7 +248,6 @@ GCPsToRPCSensorModelImageFilter<TImage>
   rsTransform->SetInputKeywordList(m_Keywordlist);
   rsTransform->InstantiateTransform();
 
-  ContinuousIndexType   idFix, idOut;
   Continuous3DIndexType idOut3D, idTrans3D;
 
   Point2DType sensorPoint;
@@ -273,10 +272,6 @@ GCPsToRPCSensorModelImageFilter<TImage>
     sensorPointTemp[2] = groundPoint[2];
 
     groundPointTemp = rsTransform->TransformPoint(sensorPointTemp);
-
-    // Compute Euclidian distance
-    idFix[0] = sensorPoint[0];
-    idFix[1] = sensorPoint[1];
 
     idOut3D[0] = groundPoint[0];
     idOut3D[1] = groundPoint[1];

@@ -398,7 +398,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   while(!outputIt.IsAtEnd() && !inputIt.IsAtEnd())
     {
     // Define some loop variables
-    typename InputImageType::PointType inPoint, outPoint, currentPoint, optimalPoint;
+    typename InputImageType::PointType inPoint, outPoint;
     typename GenericRSTransform3DType::InputPointType in3DPoint, out3DPoint;
     typename InputImageType::IndexType index;
 

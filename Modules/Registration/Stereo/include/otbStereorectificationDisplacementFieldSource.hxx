@@ -171,7 +171,6 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 
   if(m_UseDEM)
     {
-    RSTransform2DType::InputPointType tmpPoint;
     localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(m_LeftImage->GetOrigin()));
     }
 

@@ -417,7 +417,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
 
     typename T3DImage::RegionType mapRegion = imgPtr->GetLargestPossibleRegion();
 
-    itk::ContinuousIndex<double, 2> mapContiIndex;
     long int maxMapIndex[2] = { 0, 0 };
     long int minMapIndex[2] = { 0, 0 };
     maxMapIndex[0] = static_cast<long int> (mapRegion.GetIndex(0) + mapRegion.GetSize(0));
@@ -570,7 +569,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
   TOutputDEMImage * outputPtr = this->GetOutput();
 
   typename OutputImageType::PointType pointRef;
-  typename OutputImageType::PointType pointRefStep;
   typename OutputImageType::RegionType requestedRegion = outputPtr->GetRequestedRegion();
 
 //  typename TOutputDEMImage::SpacingType step = outputPtr->GetSignedSpacing();
