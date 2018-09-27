@@ -82,3 +82,9 @@ otb_create_application(
   NAME           LargeScaleConnectedComponent
   SOURCES        otbLargeScaleConnectedComponent.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+
+otb_create_application(
+  NAME           SmallRegionsMerging
+  SOURCES        otbSmallRegionsMerging.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
