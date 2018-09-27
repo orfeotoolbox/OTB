@@ -143,10 +143,6 @@ public:
   virtual void SetFileName(std::string extendedFileName);
   virtual const char* GetFileName () const;
 
-  /** Get the resolution information from the file */
-  bool GetResolutionsInfo( std::vector<unsigned int>& res,
-                          std::vector<std::string>& desc);
-
   /** Get the number of overviews available into the file specified
    * Returns: overview count, zero if none. */
   unsigned int GetOverviewsCount();
