@@ -23,6 +23,7 @@
 
 #include "itkMultiThreader.h"
 #include "otbObjectListSource.h"
+#include "otbMacro.h" //for ITK_THREAD_RETURN_TYPE in ITK5
 
 namespace otb
 {

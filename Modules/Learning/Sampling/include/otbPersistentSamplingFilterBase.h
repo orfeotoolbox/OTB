@@ -24,6 +24,7 @@
 #include "otbPersistentImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbImage.h"
+#include "otbMacro.h" //for ITK_THREAD_RETURN_TYPE in ITK5
 #include <string>
 
 namespace otb

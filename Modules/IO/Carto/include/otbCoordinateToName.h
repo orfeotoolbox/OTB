@@ -27,6 +27,7 @@
 #include "itkConfigure.h"
 #include "otbCurlHelperInterface.h"
 #include "OTBCartoExport.h"
+#include "otbMacro.h" //for ITK_THREAD_RETURN_TYPE in ITK5
 #include <string>
 
 namespace otb
