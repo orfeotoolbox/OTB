@@ -104,6 +104,7 @@ private:
                    "[2] LSMSegmentation\n"
                    "[3] LSMSVectorization");
     AddDocTag(Tags::Segmentation);
+    AddDocTag(Tags::Deprecated);
     AddDocTag("LSMS");
 
     AddParameter(ParameterType_InputImage,  "in",    "Input image");
