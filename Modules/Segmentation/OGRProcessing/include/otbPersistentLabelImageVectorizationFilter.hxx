@@ -43,11 +43,19 @@ PersistentLabelImageVectorizationFilter<TInputImage>
 template<class TInputImage>
 void
 PersistentLabelImageVectorizationFilter<TInputImage>
-::Reset(void)
+::SetLabels( const std::vector<int> & labels)
 {
+  m_Labels = labels;
 }
 
-  
+template<class TInputImage>
+const std::vector<int> &
+PersistentLabelImageVectorizationFilter<TInputImage>
+::GetLabels() const
+{
+  return m_Labels;
+}
+
 template<class TInputImage>
 typename PersistentLabelImageVectorizationFilter<TInputImage>::OGRDataSourcePointerType
 PersistentLabelImageVectorizationFilter<TInputImage>
@@ -63,17 +71,17 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   
   // Expend input region to avoid touching but not overlapping polygons during fusion
   if (m_Enlarge)
-  {
+    {
     paddedRegionSize[0] += 1;
     paddedRegionSize[1] += 1;
-  }
+    }
   RegionType paddedRegion(  this->GetInput()->GetRequestedRegion().GetIndex() , paddedRegionSize );
   
   // Crop Enlarged Region to avoid asking for pixels outside the input image
   if (m_Enlarge)
-  {
+    {
     paddedRegion.Crop(this->GetInput()->GetLargestPossibleRegion());
-  }
+    }
   extract->SetExtractionRegion( paddedRegion );
   extract->Update();
 
@@ -102,7 +110,7 @@ PersistentLabelImageVectorizationFilter<TInputImage>
   // Write output features
   
   for (auto && feat : tmpLayer)
-  {
+    {
     OGRFeatureType outFeature(outLayer.GetLayerDefn());
     
     // Only geometries whose attributes belong to the selected label list parameter are created. If the list is empty, all geometries are created except if the label is 0 (background)
@@ -110,8 +118,8 @@ PersistentLabelImageVectorizationFilter<TInputImage>
     const auto field_value = static_cast<otb::ogr::Field>(feat[m_FieldName]).GetValue<int>();
     
     if ( (std::find(m_Labels.begin(),m_Labels.end(), field_value ) != m_Labels.end() ) 
-          || ( (m_Labels.empty() ==true) &&  field_value > 0 ) )
-    {
+          || ( (m_Labels.empty() ==true) && field_value > 0 ) )
+      {
       //simplify
       const OGRGeometry * geom = feat.GetGeometry();
       assert(geom && "geometry is NULL ! Can't simplify it.");
@@ -119,8 +127,8 @@ PersistentLabelImageVectorizationFilter<TInputImage>
      
       outFeature.SetFrom( feat, TRUE );
       outLayer.CreateFeature( outFeature );
+      }
     }
-  }
   return outDS;
 }
 

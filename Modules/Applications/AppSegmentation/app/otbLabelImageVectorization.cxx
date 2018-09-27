@@ -165,32 +165,32 @@ private:
     labelImageFilter->SetInput(this->GetParameterUInt32Image("in"));
     labelImageFilter->SetOGRLayer(layer) ;
     if (IsParameterEnabled("tile") && HasValue("tile"))
-    {
+      {
       labelImageFilter->GetStreamer()->SetTileDimensionTiledStreaming(
         this->GetParameterInt("tile"));
-    }
+      }
     else
-    {
+      {
       labelImageFilter->GetStreamer()->SetAutomaticTiledStreaming();
-    }
+      }
     
     /* Enlarge is not a parameter of the application, if the fusion option is 
       'on' we enlarge, if it is 'off' we don't */
     if (this->GetParameterInt("fusion") == 1)
-    {
+      {
       labelImageFilter->SetEnlarge(1);
-    }
+      }
     
     // Input labels : Labels in the input image that will be vectorized
     std::vector<int> inputLabels;
     if(IsParameterEnabled("feat") )
-    {
+      {
       std::vector<std::string> inputLabelsStr = GetParameterStringList("feat");
       for ( const auto & label : inputLabelsStr )
-      {
+        {
         inputLabels.push_back(std::stoi(label));
+        }
       }
-    }
     
     labelImageFilter->SetLabels(inputLabels);
     labelImageFilter->SetUse8Connected(this->GetParameterInt("connectivity"));
@@ -205,14 +205,14 @@ private:
     
     // Fusion Filter : Regroup polygons splitted across tiles.
     if (this->GetParameterInt("fusion") == 1)
-    {
+      {
       auto fusionFilter = ConnectedComponentStreamStitchingFilterType::New();
       fusionFilter->SetInput(this->GetParameterUInt32Image("in"));
       fusionFilter->SetOGRLayer(layer);
       fusionFilter->SetStreamSize(labelImageFilter->GetStreamSize());
       AddProcess(fusionFilter,"Merging connected segments splitted by streaming ...");
       fusionFilter->GenerateData();
-    }
+      }
 
   }
 }; 

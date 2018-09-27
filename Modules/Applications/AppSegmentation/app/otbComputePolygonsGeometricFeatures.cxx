@@ -121,18 +121,18 @@ private:
     OGRDataSourceType::Pointer vectors;
     OGRDataSourceType::Pointer output;
     if (IsParameterEnabled("out") && HasValue("out"))
-    {
+      {
       vectors = ogr::DataSource::New(this->GetParameterString("in"));
       output = ogr::DataSource::New(this->GetParameterString("out"),
                                     ogr::DataSource::Modes::Overwrite);
-    }
+      }
     else
-    {
+      {
       // Update mode
       vectors = ogr::DataSource::New(this->GetParameterString("in"),
                                     ogr::DataSource::Modes::Update_LayerUpdate);
       output = vectors;
-    }
+      }
     // With a threaded filter
     auto GeometricFeaturesFilter = 
       OGRDataToPolygonGeometricFeaturesFilterType::New();

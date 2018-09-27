@@ -75,7 +75,7 @@ public:
   void Synthetize(void) override{}
 
   /** Reset method called before starting the streaming*/
-  void Reset(void) override;
+  void Reset(void) override{};
   
   /** Get the sample names */
   const std::vector<std::string> & GetSampleFieldNames();
@@ -115,16 +115,10 @@ public:
   itkGetMacro(Use8Connected, bool);
 
   /** Set selected input labels to vectorize */
-  void SetLabels( const std::vector<int> & labels)
-  {
-    m_Labels = labels;
-  }
+  void SetLabels( const std::vector<int> & labels);
 
   /** Get selected input labels to vectorize */
-  const std::vector<int> & GetLabels() const
-  {
-    return m_Labels;
-  }
+  const std::vector<int> & GetLabels() const;
   
 protected:
   /** Constructor */

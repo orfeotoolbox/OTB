@@ -57,11 +57,12 @@ private:
 
     // Documentation
     SetDocName("Large-Scale MeanShift");
-    SetDocLongDescription("This application chains together the 6 steps of the"
+    SetDocLongDescription("This application chains together the 5 steps of the"
       " Connected components framework, that is the"
       " ImageConnectedComponentSegmentation step [1], the" 
-      "LabelImageVectorization [2], the ComputePolygonsGeometricFeatures [3],"
-      " the small regions merging step [4], and the ObjectBasedFiltering [5].\n"
+      "label image vectorization  step [2], the small regions merging step [3],"
+      " the computation of geometric features [4] and the object based"
+      " filtering step [5].\n"
       "It generates a vector data file containing the regions extracted with"
       " the Connected components algorithm using a user defined criterion, then"
       " there is an optional step to remove small regions whose size (in"
@@ -78,7 +79,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("[1] ImageConnectedComponentSegmentation\n"
       "[2] LabelImageVectorization\n"
-      "[3] LSMSSmallRegionsMerging\n"
+      "[3] SmallRegionsMerging\n"
       "[4] ComputePolygonsGeometricFeatures\n"
       "[5] ObjectBasedFiltering");
 
@@ -90,7 +91,7 @@ private:
       "connected component segmentation step");
     AddApplication("LabelImageVectorization", "vectorization",
       "Vectorization step");
-    AddApplication("LSMSSmallRegionsMerging", "merging",
+    AddApplication("SmallRegionsMerging", "merging",
       "Small region merging step");
     AddApplication("ComputePolygonsGeometricFeatures", "geometric",
       "Geometric features computation step");
@@ -173,28 +174,28 @@ private:
     bool TmpDirCleanup = false;
     
     if (IsParameterEnabled("tmpdir") && HasValue("tmpdir"))
-    {
+      {
       // Test if the temporary directory already exists
       if(!itksys::SystemTools::FileExists(GetParameterString("tmpdir").c_str()))
-      {
+        {
         TmpDirCleanup = true;
         itksys::SystemTools::MakeDirectory(GetParameterString("tmpdir").c_str());
-      }
+        }
       tmpFilenames.push_back
         (GetParameterString("tmpdir") + std::string("/labelmap.tif"));
       tmpFilenames.push_back
         (GetParameterString("tmpdir") + std::string("/labelmap_merged.tif"));
-    }
+      }
     else
-    {
+      {
       tmpFilenames.push_back(outPath+std::string("_labelmap.tif"));
       tmpFilenames.push_back(outPath+std::string("_labelmap_merged.tif"));
-    }    
+      }    
       
     /* If the LSMSSmallRegionsMerging application is used, we can't use 
      * in-memory connection, so we have to write all outputs image files.*/
     if (IsParameterEnabled("minsize") && HasValue("minsize"))
-    {
+      {
       // Image to image connected components segmentation step
       GetInternalApplication("segmentation")->SetParameterString("out",
         tmpFilenames[0]);
@@ -212,15 +213,15 @@ private:
       //ExecuteInternal("merging");
       GetInternalApplication("vectorization")
         ->SetParameterString("in", tmpFilenames[1]);
-    }
+      }
     // In this case in-memory connection is used
     else
-    {
+      {
       ExecuteInternal("segmentation");
       GetInternalApplication("vectorization")
         ->SetParameterInputImage("in", GetInternalApplication("segmentation")
                                             ->GetParameterOutputImage("out"));
-    }
+      }
     
     // Label Image vectorization step
     ExecuteInternal("vectorization");
@@ -234,28 +235,28 @@ private:
     
     // Object based filtering step
     if (IsParameterEnabled("filter") && HasValue("filter"))
-    {  
+      {
       ExecuteInternal("filtering");
-    }
+      }
 
     // Clean temporary files
     if(GetParameterInt("cleanup"))
-    {
+      {
       otbAppLogINFO(<<"Final clean-up ...");
       for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)
-      {
+        {
         itksys::SystemTools::RemoveFile(tmpFilenames[i].c_str());
-      }
+        }
 
       if(IsParameterEnabled("tmpdir") && TmpDirCleanup)
-      {
+        {
         otbAppLogINFO( "Removing tmp directory "
           << GetParameterString("tmpdir")
           << ", since it has been created by the application");
         itksys::SystemTools::RemoveADirectory
           (GetParameterString("tmpdir").c_str());
+        }
       }
-    }
 
     Timer.Stop();
     otbAppLogINFO( "Total elapsed time: "

@@ -124,9 +124,9 @@ private:
     std::string outPath(this->GetParameterString("in"));
     
     if (IsParameterEnabled("out") && HasValue("out"))
-    {  
+      {
       outPath = this->GetParameterString("out");
-    }
+      }
     
     // Create output DataSource
     auto sourceOut = otb::ogr::DataSource::New(outPath, 

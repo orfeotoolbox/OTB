@@ -138,13 +138,13 @@ private:
     ConnectedComponentFilterType::Pointer connected = 
       ConnectedComponentFilterType::New();
     if (IsParameterEnabled("mask") && HasValue("mask"))
-    {
+      {
       // Compute the mask
       maskFilter->SetInput(this->GetParameterImage("in"));
       maskFilter->SetExpression(this->GetParameterString("mask"));
       maskFilter->UpdateOutputInformation();
       connected->SetMaskImage(maskFilter->GetOutput());
-    }
+      }
     
     connected->SetInput(this->GetParameterImage("in"));
     connected->GetFunctor().SetExpression(GetParameterString("expr"));
