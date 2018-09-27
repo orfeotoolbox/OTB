@@ -64,6 +64,12 @@ ExceptionObject(file, line, message, loc)
 {
 }
 
+ApplicationException::ApplicationException(const std::string &file, unsigned int line,
+                   const std::string& message, const std::string& loc) :
+ExceptionObject(file, line, message, loc)
+{
+}
+
 namespace Wrapper
 {
 
@@ -1475,6 +1481,21 @@ void Application::SetListViewSingleSelectionMode(std::string parameter, bool sta
   else
     itkExceptionMacro(<<parameter << " parameter can't be casted to ListView");
 
+}
+
+bool Application::GetListViewSingleSelectionMode(const std::string& parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  ListViewParameter* paramListView = dynamic_cast<ListViewParameter*>(param);
+  if (paramListView)
+    {
+    return paramListView->GetSingleSelection();
+    }
+  else
+    {
+    itkExceptionMacro(<<parameter << " parameter can't be casted to ListView");
+    }
 }
 
 

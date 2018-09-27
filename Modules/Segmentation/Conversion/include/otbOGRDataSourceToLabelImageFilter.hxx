@@ -39,7 +39,8 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
 ::OGRDataSourceToLabelImageFilter() : m_BurnAttribute("DN"),
                                       m_BackgroundValue(0),
                                       m_ForegroundValue(255),
-                                      m_BurnAttributeMode(true)
+                                      m_BurnAttributeMode(true),
+                                      m_AllTouchedMode(false)
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -129,7 +130,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
     this->SetOutputOrigin ( image->GetOrigin() );
     this->SetOutputSpacing ( internal::GetSignedSpacing( image ) );
     this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
-    
+
     ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(image->GetMetaDataDictionary());
 
     this->SetOutputProjectionRef(imi->GetProjectionRef());
@@ -250,6 +251,10 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
      if(m_BurnAttributeMode)
        {
        options.push_back("ATTRIBUTE="+m_BurnAttribute);
+       }
+     if(m_AllTouchedMode)
+       {
+       options.push_back("ALL_TOUCHED=TRUE");
        }
 
      GDALRasterizeLayers( dataset, nbBands,

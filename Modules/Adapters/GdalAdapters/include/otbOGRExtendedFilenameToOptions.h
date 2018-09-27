@@ -71,8 +71,10 @@ public:
     std::unordered_map< std::string , std::string > gdalOptions;
   };
 
-  /** Set extended filename */
-  void SetExtendedFileName(const char * extFname) override;
+  /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
+  void SetExtendedFileName(const char* extFname) override;
+
+  void SetExtendedFileName(const std::string& extFname) override;
 
   /** Get the GDAL option for type operation */
   GDALOptionType GetGDALOptions( const std::string & type ) const ;

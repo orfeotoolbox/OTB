@@ -27,13 +27,6 @@ typedef otb::OSMDataToVectorDataGenerator                     FilterType;
 typedef otb::VectorDataFileWriter<FilterType::VectorDataType> VectorDataFileWriterType;
 
 
-int otbOSMToVectorDataGeneratorNew (int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
-
 int otbOSMToVectorDataGeneratorTest (int itkNotUsed(argc), char * argv[])
 {
   FilterType::Pointer filter = FilterType::New();
@@ -72,7 +65,7 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
     {
     parser->ParseCommandLine(argc, argv, parseResult);
     }
-  catch ( itk::ExceptionObject )
+  catch ( itk::ExceptionObject & )
     {
     return EXIT_FAILURE;
     }

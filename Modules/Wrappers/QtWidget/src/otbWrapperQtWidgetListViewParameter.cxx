@@ -117,7 +117,7 @@ void QtWidgetListViewParameter::DoCreateWidget()
 
   connect( m_ListView, &QListWidget::itemSelectionChanged, this, &QtWidgetListViewParameter::SelectedItems );
 
-  m_VLayout = new QHBoxLayout(this);
+  m_VLayout = new QHBoxLayout;
   m_VLayout->setContentsMargins(0, 0, 0, 0);
   m_VLayout->addWidget(m_ListView);
   m_ListView->setMaximumSize(m_ListView->width() ,  4* m_LineHeight);

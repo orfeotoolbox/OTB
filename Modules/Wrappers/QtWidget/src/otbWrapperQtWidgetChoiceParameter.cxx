@@ -88,7 +88,7 @@ void QtWidgetChoiceParameter::DoCreateWidget()
   connect( m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), m_StackWidget, &QStackedWidget::setCurrentIndex);
   connect( m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), GetModel(), &QtWidgetModel::NotifyUpdate );
 
-  m_VLayout = new QVBoxLayout(this);
+  m_VLayout = new QVBoxLayout;
   m_VLayout->addWidget(m_ComboBox);
   if (!m_WidgetList.empty())
     {

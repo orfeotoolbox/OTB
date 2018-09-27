@@ -174,7 +174,7 @@ if( OTBQtWidget_ENABLED )
 endif()
 
 #############################################################################
-qt5_wrap_cpp( OTBMonteverdiGUI_SRC_MOC ${OTBMonteverdiGUI_HEADERS_MOC} )
+qt5_wrap_cpp( OTBMonteverdiGUI_SRC_MOC ${OTBMonteverdiGUI_HEADERS_MOC} OPTIONS -p "." )
 qt5_wrap_ui( OTBMonteverdiGUI_FORMS_HEADERS ${OTBMonteverdiGUI_FORMS} )
 qt5_add_resources( OTBMonteverdiGUI_RESOURCES_RCC ${OTBMonteverdiGUI_RESOURCES} )
 

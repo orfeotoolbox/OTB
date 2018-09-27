@@ -33,6 +33,11 @@
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wheader-guard"
+#else
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 #endif
 
 #include "otb_shark.h"

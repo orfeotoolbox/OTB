@@ -30,11 +30,7 @@ otb_module_target_label(otbMathParserXTestDriver)
 otb_add_test(NAME coTvParserX COMMAND otbMathParserXTestDriver
   otbParserXTest
   )
-otb_add_test(NAME coTuParserX COMMAND otbMathParserXTestDriver
-  otbParserXTestNew
-  )
-otb_add_test(NAME bfTuBandMathXImageFilterNew COMMAND otbMathParserXTestDriver
-  otbBandMathXImageFilterNew)
+
 otb_add_test(NAME bfTvBandMathXImageFilterConv COMMAND otbMathParserXTestDriver
   otbBandMathXImageFilterConv
   ${BASELINE_FILES}/bfTvExportBandMathX.txt

@@ -45,6 +45,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperParameterKey.cxx
   otbWrapperDocExampleStructure.cxx
   otbWrapperInputVectorDataParameter.cxx
+  otbWrapperOutputVectorDataParameter.cxx
   otbWrapperInputProcessXMLParameter.cxx
   otbWrapperMapProjectionParametersHandler.cxx
   otbWrapperApplication.cxx

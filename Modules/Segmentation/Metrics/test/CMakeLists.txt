@@ -22,8 +22,6 @@ otb_module_test()
 
 set(OTBMetricsTests
 otbMetricsTestDriver.cxx
-otbHooverMatrixFilterNew.cxx
-otbHooverInstanceFilterNew.cxx
 otbHooverInstanceFilterToAttributeImage.cxx
 otbHooverMatrixFilter.cxx
 )
@@ -33,12 +31,6 @@ target_link_libraries(otbMetricsTestDriver ${OTBMetrics-Test_LIBRARIES})
 otb_module_target_label(otbMetricsTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME obTuHooverMatrixFilterNew COMMAND otbMetricsTestDriver
-  otbHooverMatrixFilterNew)
-
-otb_add_test(NAME obTuHooverInstanceFilterNew COMMAND otbMetricsTestDriver
-  otbHooverInstanceFilterNew)
 
 otb_add_test(NAME obTvHooverInstanceFilterToAttributeImage COMMAND otbMetricsTestDriver
   --compare-image ${EPSILON_9}

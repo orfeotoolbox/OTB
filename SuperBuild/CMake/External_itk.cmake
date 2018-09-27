@@ -143,14 +143,14 @@ endif()
 
 #variables are later used in packaging
 set(SB_ITK_VERSION_MAJOR "4")
-set(SB_ITK_VERSION_MINOR "12")
+set(SB_ITK_VERSION_MINOR "13")
 
 set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_ITK_VERSION_MINOR})
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "https://sourceforge.net/projects/itk/files/itk/4.12/InsightToolkit-4.12.0.tar.gz"
-  URL_MD5 561a403f93c88c64085b5623e8e61f79
+  URL "https://sourceforge.net/projects/itk/files/itk/4.13/InsightToolkit-4.13.1.tar.gz"
+  URL_MD5 c7e229802c4ee64e1b2a6d48b1df67e9
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

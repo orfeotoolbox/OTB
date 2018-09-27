@@ -34,9 +34,6 @@ otb_module_target_label(otbObjectDetectionTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME odTuLabeledSampleLocalizationGeneratorNew COMMAND otbObjectDetectionTestDriver
-  otbLabeledSampleLocalizationGeneratorNew
-  )
 
 otb_add_test(NAME odTvLabeledSampleLocalizationGenerator COMMAND otbObjectDetectionTestDriver
   --compare-ogr ${NOTOL}
@@ -48,9 +45,6 @@ otb_add_test(NAME odTvLabeledSampleLocalizationGenerator COMMAND otbObjectDetect
   ${TEMP}/TvLabeledSampleLocalizationGeneratorOutput.shp
   )
 
-otb_add_test(NAME odTuStandardMetaImageFunctionBuilderNew COMMAND otbObjectDetectionTestDriver
-  otbStandardMetaImageFunctionBuilderNew
-  )
 
 otb_add_test(NAME odTvStandardMetaImageFunctionBuilder COMMAND otbObjectDetectionTestDriver
   otbStandardMetaImageFunctionBuilder
@@ -94,13 +88,7 @@ otb_add_test(NAME odTvDescriptorsListSampleGeneratorNoStreaming COMMAND otbObjec
   5 # neighborhood radius
   )
 
-otb_add_test(NAME odTuDescriptorsListSampleGeneratorNew COMMAND otbObjectDetectionTestDriver
-  otbDescriptorsListSampleGeneratorNew
-  )
 
-otb_add_test(NAME odTuObjectDetectionClassifierNew COMMAND otbObjectDetectionTestDriver
-  otbObjectDetectionClassifierNew
-  )
 
 otb_add_test(NAME odTvObjectDetectionClassifierStreaming COMMAND otbObjectDetectionTestDriver
   --compare-ascii ${NOTOL}

@@ -48,11 +48,6 @@ typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>         
 typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> BandsStatisticsFilterType;
 
 
-int otbBandsStatisticsAttributesLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  BandsStatisticsFilterType::Pointer object = BandsStatisticsFilterType::New();
-  return EXIT_SUCCESS;
-}
 
 int otbBandsStatisticsAttributesLabelMapFilter(int itkNotUsed(argc), char* argv[])
 {
