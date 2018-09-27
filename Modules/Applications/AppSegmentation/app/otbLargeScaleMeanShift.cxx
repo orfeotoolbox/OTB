@@ -86,7 +86,7 @@ private:
     ClearApplications();
     AddApplication("MeanShiftSmoothing", "smoothing", "Smoothing step");
     AddApplication("LSMSSegmentation", "segmentation", "Segmentation step");
-    AddApplication("LSMSSmallRegionsMerging", "merging", "Small region merging step");
+    AddApplication("SmallRegionsMerging", "merging", "Small region merging step");
     AddApplication("LSMSVectorization", "vectorization", "Vectorization step");
 
     ShareParameter("in","smoothing.in");
@@ -130,8 +130,6 @@ private:
     Connect("merging.ram","smoothing.ram");
     Connect("vectorization.ram","smoothing.ram");
 
-    Connect("merging.tilesizex","segmentation.tilesizex");
-    Connect("merging.tilesizey","segmentation.tilesizey");
     Connect("vectorization.tilesizex","segmentation.tilesizex");
     Connect("vectorization.tilesizey","segmentation.tilesizey");
 
