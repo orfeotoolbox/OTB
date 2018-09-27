@@ -31,6 +31,7 @@
 
 #include "itkMacro.h"
 #include "itkObject.h"
+#include "itkThreadSupport.h"
 #include "otbConfigure.h"
 #include "otbLogger.h"
 
@@ -87,6 +88,14 @@ namespace otb
 #define OTB_DISABLE_DYNAMIC_MT
 #else
 #define OTB_DISABLE_DYNAMIC_MT this->DynamicMultiThreadingOff();
+#endif
+
+//ITK_THREAD_RETURN_TYPE and ITK_THREAD_RETURN_VALUE bas been changed in ITK5
+// we need to re-exposed to the global namespace to keep the
+// use of these items consistent.
+#if ITK_VERSION_MAJOR > 4
+#define ITK_THREAD_RETURN_TYPE  itk::ITK_THREAD_RETURN_TYPE
+#define ITK_THREAD_RETURN_VALUE itk::ITK_THREAD_RETURN_DEFAULT_VALUE
 #endif
 
 #define otbFileContext(x) \
