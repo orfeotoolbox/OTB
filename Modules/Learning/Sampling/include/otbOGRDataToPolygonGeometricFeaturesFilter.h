@@ -67,12 +67,12 @@ public:
   /** Set/Get the input OGRDataSource of this process object.  */
   using Superclass::SetInput;
   virtual void SetInput(const OGRDataSourceType* ds);
-  const OGRDataSourceType*  GetInput(unsigned int idx = 0);
+  const OGRDataSourceType*  GetInput(unsigned int idx = 0) const;
 
   /**
    * Get the output \c ogr::DataSource which is a "memory" datasource.
    */
-  const OGRDataSourceType * GetOutput();
+  const OGRDataSourceType * GetOutput() const;
   using Superclass::SetOutput;
   virtual void SetOutput(const OGRDataSourceType* ds);
   

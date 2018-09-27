@@ -49,9 +49,9 @@ OGRDataToPolygonGeometricFeaturesFilter
 
 const typename OGRDataToPolygonGeometricFeaturesFilter::OGRDataSourceType *
 OGRDataToPolygonGeometricFeaturesFilter
-::GetOutput()
+::GetOutput() const
 {
-  return static_cast< const OGRDataSourceType *>(
+  return dynamic_cast< const OGRDataSourceType *>(
     this->ProcessObject::GetOutput(0));
 }
 
@@ -64,9 +64,9 @@ OGRDataToPolygonGeometricFeaturesFilter
 
 const typename OGRDataToPolygonGeometricFeaturesFilter::OGRDataSourceType *
 OGRDataToPolygonGeometricFeaturesFilter
-::GetInput(unsigned int idx)
+::GetInput(unsigned int idx) const
 {
-  return static_cast<const OGRDataSourceType *>
+  return dynamic_cast<const OGRDataSourceType *>
     (this->itk::ProcessObject::GetInput(idx));
 }
 
