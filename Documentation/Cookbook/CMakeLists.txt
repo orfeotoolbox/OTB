@@ -70,7 +70,7 @@ elseif (OTB_WRAP_PYTHON)
     if (${PYTHONLIBS_VERSION_STRING} STRGREATER "3.0.0")
         set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python")
     else()
-        message(ERROR "Must wrap OTB with python lib 3+ to build the cookbook, but found version ${PYTHONLIBS_VERSION_STRING}")
+        message(FATAL_ERROR "Must wrap OTB with python lib 3+ to build the cookbook, but found version ${PYTHONLIBS_VERSION_STRING}")
     endif()
 endif()
 
