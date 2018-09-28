@@ -171,7 +171,7 @@ public:
   bool IsParameterEnabled(std::string paramKey, bool recurseParents = false) const;
 
   /* Return true if the specified parameter is optional */
-  bool IsOptional(std::string key);
+  bool IsOptional(std::string const& key);
 
   /* Return true if the specified parameter was set automatically in
    * the application

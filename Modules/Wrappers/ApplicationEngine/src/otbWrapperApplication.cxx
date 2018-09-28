@@ -1019,7 +1019,7 @@ bool Application::IsParameterEnabled(std::string paramKey, bool recurseParents) 
 }
 
 /* Return true if the specified parameter is optional */
-bool Application::IsOptional(std::string key)
+bool Application::IsOptional(std::string const& key)
 {
   auto param = GetParameterByKey(key);
   bool mandatory_flag = param->GetMandatory();
@@ -1076,10 +1076,7 @@ bool Application::IsOptional(std::string key)
       auto root_value = GetParameterAsString(root_key);
       // Make a filter to update optional status
       const std::string filter = root_key + "." + root_value + ".";
-      if (key.find(filter) != std::string::npos)
-	optional = false;
-      else
-	optional = true;
+      optional = key.find(filter) == std::string::npos;
     }
 
   return optional;
