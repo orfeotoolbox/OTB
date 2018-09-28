@@ -61,6 +61,19 @@ foreach(cmd
   endif()
 endforeach()
 
+# We need to set PYTHONPATH for the script otbGenerateWrappersRstDoc.py, depending on how the Python3 module was built
+if (OTB_WRAP_PYTHON3)
+    set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python3")
+elseif (OTB_WRAP_PYTHON)
+    # Cookbook only supports Python3
+    # But OTB_WRAP_PYTHON can wrap both python2 and python3
+    if (${PYTHONLIBS_VERSION_STRING} STRGREATER "3.0.0")
+        set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python")
+    else()
+        message(ERROR "Must wrap OTB with python lib 3+ to build the cookbook, but found version ${PYTHONLIBS_VERSION_STRING}")
+    endif()
+endif()
+
 set(RST_SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/rst)
 set(RST_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
 set(LATEX_DIR       ${CMAKE_CURRENT_BINARY_DIR}/latex)
@@ -71,6 +84,7 @@ message(STATUS "RST_SOURCE_DIR = ${RST_SOURCE_DIR}")
 message(STATUS "RST_BINARY_DIR = ${RST_BINARY_DIR}")
 message(STATUS "LATEX_DIR = ${LATEX_DIR}")
 message(STATUS "HTML_DIR = ${HTML_DIR}")
+message(STATUS "PYTHONPATH_COOKBOOK = ${PYTHONPATH_COOKBOOK}")
 
 # Clean any existing build
 macro(remove_and_make_directories)
@@ -105,14 +119,6 @@ string(TIMESTAMP OTB_COPYRIGHT_YEAR  "%Y")
 set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES.The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA)")
 
 configure_file(${RST_SOURCE_DIR}/conf.py.in ${SPHINX_CONF_DIR}/conf.py @ONLY)
-
-#configure_file(${RST_SOURCE_DIR}/Makefile.in ${RST_GENERATED_SOURCE_DIR}/Makefile.sphinx @ONLY)
-# Internal variables.
-# PAPEROPT_a4     = -D latex_paper_size=a4
-# PAPEROPT_letter = -D latex_paper_size=letter
-# ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
-# # the i18n builder cannot share the environment and doctrees with the others
-# I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 add_custom_target(generate_otbapps_rst
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
