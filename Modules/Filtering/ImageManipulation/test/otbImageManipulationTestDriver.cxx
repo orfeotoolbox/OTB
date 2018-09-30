@@ -74,4 +74,5 @@ void RegisterTests()
   REGISTER_TEST(otbMaskedIteratorDecoratorNominal);
   REGISTER_TEST(otbMaskedIteratorDecoratorDegenerate);
   REGISTER_TEST(otbMaskedIteratorDecoratorExtended);
+  REGISTER_TEST(otbFunctorImageFilter);
 }
