@@ -233,7 +233,6 @@ protected:
         sampleTrainOutputs.push_back( outModel + "_samplesTrain_" + strIndex + ".shp" );
         sampleValidOutputs.push_back( outModel + "_samplesValid_" + strIndex + ".shp" );
         }
-
     }
 
     void clear()
