@@ -1,62 +1,38 @@
-set(OUT_OF_SOURCE_BUILD FALSE)
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
-if(NOT PROJECT_NAME)
-  cmake_minimum_required(VERSION 3.0)
-  project(OTBCookBook)
-  set(OUT_OF_SOURCE_BUILD TRUE)
-  option(BUILD_TESTING "Build the testing tree." ON)
-endif()
+#
+# Build the cookbook
+#
 
-if(BUILD_TESTING)
-  enable_testing()
-  include(CTest)
-endif()
-
-string(TIMESTAMP OTB_COPYRIGHT_YEAR  "%Y")
-set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES.The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA)")
-
-#find OTB
-find_package(OTB REQUIRED)
-
-if( OTB_FOUND )
-  include(${OTB_USE_FILE})
-  message(STATUS "Found OTB: ${OTB_DIR} (found version \"${OTB_VERSION}\")")
-else()
-  message(FATAL_ERROR "OTB not found. Please set OTB_DIR")
+if (NOT UNIX)
+  message (STATUS "Not on Unix: skipping Cookbook build.")
   return()
 endif()
 
-get_filename_component(OTB_INSTALL_PREFIX ${OTB_MODULES_DIR} PATH)
-get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
-get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
-get_filename_component(OTB_INSTALL_PREFIX ${OTB_INSTALL_PREFIX} PATH)
+message(STATUS "")
+message(STATUS "Configuring Cookbook...")
 
-message(STATUS "OTB_PYTHONPATH        = '${OTB_PYTHONPATH}'")
-message(STATUS "OTB_APPLICATION_PATH  = '${OTB_APPLICATION_PATH}'")
-message(STATUS "OTB_INSTALL_PREFIX    = '${OTB_INSTALL_PREFIX}'")
-
-if(NOT OTB_PYTHONPATH)
-  message(FATAL_ERROR "OTB_PYTHONPATH empty")
-endif()
-
-if(NOT OTB_APPLICATION_PATH)
-  message(FATAL_ERROR "OTB_APPLICATION_PATH empty")
-endif()
-
-if(NOT OTB_INSTALL_PREFIX)
-  message(FATAL_ERROR "OTB_INSTALL_PREFIX empty")
-endif()
-
-
-macro(remove_and_make_directories)
-  foreach(dir in ${ARGV})
-    execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${dir})
-    execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${dir})
-  endforeach()
-endmacro()
-
-#find Python
-find_package(PythonInterp REQUIRED)
+# here we could add
+# find_package (Python3 COMPONENTS Interpreter)
+# but it requires cmake 3.12+
 
 find_program(SH_INTERP sh)
 mark_as_advanced(SH_INTERP)
@@ -73,18 +49,50 @@ mark_as_advanced(SPHINX_BUILD)
 find_program(PDFLATEX_COMMAND NAMES pdflatex )
 mark_as_advanced(PDFLATEX_COMMAND)
 
-foreach(cmd LATEX_COMMAND TAR_COMMAND PDFLATEX_COMMAND SPHINX_BUILD SH_INTERP)
+# Check that we found everything we need
+foreach(cmd
+    LATEX_COMMAND
+    TAR_COMMAND
+    PDFLATEX_COMMAND
+    SPHINX_BUILD
+    SH_INTERP)
   if(NOT ${cmd})
-    message(FATAL_ERROR "${cmd} not set. Cannot continue")
+    message(FATAL_ERROR "Error while configuring Cookbook, ${cmd} not set. Cannot continue")
   endif()
 endforeach()
 
-set(RST_SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/rst)
+# We need to set PYTHONPATH for the script otbGenerateWrappersRstDoc.py, depending on how the Python3 module was built
+if (OTB_WRAP_PYTHON3)
+    set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python3")
+elseif (OTB_WRAP_PYTHON)
+    # Cookbook only supports Python3
+    # But OTB_WRAP_PYTHON can wrap both python2 and python3
+    if (${PYTHONLIBS_VERSION_STRING} STRGREATER "3.0.0")
+        set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python")
+    else()
+        message(FATAL_ERROR "Must wrap OTB with python lib 3+ to build the cookbook, but found version ${PYTHONLIBS_VERSION_STRING}")
+    endif()
+endif()
 
+set(RST_SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/rst)
 set(RST_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
 set(LATEX_DIR       ${CMAKE_CURRENT_BINARY_DIR}/latex)
 set(HTML_DIR        ${CMAKE_CURRENT_BINARY_DIR}/html)
 
+# Print summary of Cookbook configuration
+message(STATUS "RST_SOURCE_DIR = ${RST_SOURCE_DIR}")
+message(STATUS "RST_BINARY_DIR = ${RST_BINARY_DIR}")
+message(STATUS "LATEX_DIR = ${LATEX_DIR}")
+message(STATUS "HTML_DIR = ${HTML_DIR}")
+message(STATUS "PYTHONPATH_COOKBOOK = ${PYTHONPATH_COOKBOOK}")
+
+# Clean any existing build
+macro(remove_and_make_directories)
+  foreach(dir in ${ARGV})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${dir})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${dir})
+  endforeach()
+endmacro()
 
 remove_and_make_directories(
   ${HTML_DIR}
@@ -107,22 +115,27 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Art DESTINATION  ${RST_BINARY_DIR})
 
 set(SPHINX_CONF_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
-configure_file(${RST_SOURCE_DIR}/conf.py.in ${SPHINX_CONF_DIR}/conf.py @ONLY)
+string(TIMESTAMP OTB_COPYRIGHT_YEAR  "%Y")
+set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES.The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA)")
 
-#configure_file(${RST_SOURCE_DIR}/Makefile.in ${RST_GENERATED_SOURCE_DIR}/Makefile.sphinx @ONLY)
-# Internal variables.
-# PAPEROPT_a4     = -D latex_paper_size=a4
-# PAPEROPT_letter = -D latex_paper_size=letter
-# ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
-# # the i18n builder cannot share the environment and doctrees with the others
-# I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
+configure_file(${RST_SOURCE_DIR}/conf.py.in ${SPHINX_CONF_DIR}/conf.py @ONLY)
 
 add_custom_target(generate_otbapps_rst
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
   ${RST_BINARY_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
   COMMENT "Auto-generating Application Reference Documentation in RST"
+  DEPENDS OTBSWIGWrapper-all
   )
+
+# Add all applications as dependencies to rst generation
+set(app_names ${OTB_APPLICATIONS_NAME_LIST})
+list(REMOVE_ITEM app_names "TestApplication")
+list(REMOVE_ITEM app_names "ApplicationExample")
+list(REMOVE_DUPLICATES app_names)
+foreach(app_name ${app_names})
+  add_dependencies(generate_otbapps_rst otbapp_${app_name})
+endforeach()
 
 add_custom_target(CookBookHTML
   COMMAND ${SPHINX_BUILD}
