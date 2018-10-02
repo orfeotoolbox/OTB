@@ -40,7 +40,7 @@ set(OTBImageBaseTests
   otbImageTest.cxx
   otbImageFunctionAdaptor.cxx
   otbMetaImageFunction.cxx
-
+  otbFunctorImageFilter.cxx
   )
 
 add_executable(otbImageBaseTestDriver ${OTBImageBaseTests})

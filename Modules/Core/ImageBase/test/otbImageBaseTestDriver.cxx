@@ -41,4 +41,5 @@ void RegisterTests()
   REGISTER_TEST(otbImageTest);
   REGISTER_TEST(otbImageFunctionAdaptor);
   REGISTER_TEST(otbMetaImageFunction);
+  REGISTER_TEST(otbFunctorImageFilter);
 }
