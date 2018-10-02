@@ -161,12 +161,12 @@ otb_test_application(NAME apTvDmBlockMatchingTest
 #----------- BlockMatching TESTS ----------------
 otb_test_application(NAME apTvDmCostVolumeFilterTest
                      APP  CostVolumeFilter
-                     OPTIONS -io.inleft ${INPUTDATA}/anaglyphInput2.tif?&bands=1,2,3
-                             -io.inright ${INPUTDATA}/anaglyphInput1.tif?&bands=1,2,3
+                     OPTIONS -io.inleft ${INPUTDATA}/anaglyphInput2_roi.tif?&bands=1,2,3
+                             -io.inright ${INPUTDATA}/anaglyphInput1_roi.tif?&bands=1,2,3
                              -io.out ${TEMP}/apTvDmCostVolumeFilterTest.tif
                              -dmin -15
                              -dmax 0       
-                     VALID   --compare-image ${NOTOL} 
+                     VALID   --compare-image ${EPSILON_2} 
                          ${BASELINE}/apTvDmCostVolumeFilterTest.tif
                          ${TEMP}/apTvDmCostVolumeFilterTest.tif
                      )
