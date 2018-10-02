@@ -283,7 +283,7 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbDisparityMapT
   otbGuidedFilterTest
   ${INPUTDATA}/anaglyphInput2_roi.tif?&bands=1,2,3
   ${INPUTDATA}/anaglyphInput1_roi.tif?&bands=1,2,3
-  -15 0 0.9 7 2 7 2 9 0 
+  -15 0 0.9 7 2 7 2 9 0
   ${TEMP}/dmTvGuidedFilterOutput
   )
 
