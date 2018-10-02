@@ -1,4 +1,24 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+#
+# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 import otbApplication
 import os
 import sys
@@ -59,7 +79,7 @@ def GetPixelType(value):
     # look for type
     foundcode = -1
     foundname = ""
-    for ptypename, ptypecode in pixeltypes.iteritems():
+    for ptypename, ptypecode in pixeltypes.items():
         if value.endswith(ptypename):
             foundcode = ptypecode
             foundname = ptypename
@@ -169,14 +189,14 @@ def FindLengthOfLargestColumnText(app,paramlist):
 
 def RstTableHeaderLine(strlist, listlen, delimiter):
     line = "+"
-    for i in xrange(len(strlist)):
+    for i in range(len(strlist)):
         line += delimiter * listlen[i] + '+'
     line += linesep
     return line
 
 def RstTableHeading(strlist, listlen):
     heading = RstTableHeaderLine(strlist, listlen, '-')
-    for i in xrange(len(strlist)):
+    for i in range(len(strlist)):
          spaces = ' ' * ((listlen[i] - len(strlist[i])) )
          heading += '|' + strlist[i] +  spaces
     heading += '|' + linesep
@@ -192,7 +212,7 @@ def GenerateParametersTable(app,paramlist):
     colLength = FindLengthOfLargestColumnText(app, paramlist)
     output = linesep + ".. [#] Table: Parameters table for " + ConvertString(app.GetDocName()) + "." + linesep + linesep
     headerlist = ["Parameter Key", "Parameter Name", "Parameter Type"]
-    for i in xrange(len(headerlist)):
+    for i in range(len(headerlist)):
         colLength[i] = len(headerlist[i]) if colLength[i] < len(headerlist[i]) else colLength[i]
     output += RstTableHeading(headerlist, colLength)
     for param in paramlist:
@@ -449,7 +469,7 @@ def ApplicationToRst(appname):
     try:
         app = otbApplication.Registry.CreateApplication(appname)
     except e:
-        print e
+        print(e)
     # TODO: remove this when bug 440 is fixed
     app.Init()
     output += RstHeading(app.GetName() + ' - ' + app.GetDocName(), '^')
@@ -519,18 +539,19 @@ def GenerateRstForApplications():
     allApps = None
     try:
         allApps = otbApplication.Registry.GetAvailableApplications( )
+        print(allApps)
     except:
-        print 'error in otbApplication.Registry.GetAvailableApplications()'
+        print('error in otbApplication.Registry.GetAvailableApplications()')
         sys.exit(1)
 
     if not allApps:
-	print 'No OTB applications available. Please check OTB_APPLICATION_PATH env variable'
-	sys.exit(1)
+        print('No OTB applications available. Please check OTB_APPLICATION_PATH env variable')
+        sys.exit(1)
 
     writtenTags = []
     appNames = [app for app in allApps if app not in blackList]
 
-    print "All apps: %s" % (appNames,)
+    print("All apps: %s" % (appNames,))
 
     appIndexFile = open(RST_DIR + '/Applications.rst', 'w')
     appIndexFile.write(RstPageHeading("Applications Reference Documentation", "2", ref="apprefdoc"))
@@ -538,7 +559,7 @@ def GenerateRstForApplications():
         tags = GetApplicationTags(appName)
 
         if not tags:
-            print "No tags for application: "  +  appName
+            print("No tags for application: "  +  appName)
             sys.exit(1)
 
         tag = tags[0]
@@ -548,7 +569,7 @@ def GenerateRstForApplications():
             tag_ = tag.replace(' ', '_')
 
         if not tag_:
-            print 'empty tag found for ' + appName
+            print('empty tag found for ' + appName)
 
         if not tag_ in writtenTags:
             appIndexFile.write('\tApplications/' + tag_ + '.rst' + linesep)
@@ -565,7 +586,7 @@ def GenerateRstForApplications():
             tagFile.write("\tapp_" + appName + linesep)
             tagFile.close()
 
-        print "Generating " + appName + ".rst" +  " on tag " + tag_
+        print("Generating " + appName + ".rst" +  " on tag " + tag_)
         appFile = open(RST_DIR + '/Applications/app_'  + appName + '.rst', 'w')
         out = ApplicationToRst(appName)
         appFile.write(out)
@@ -574,17 +595,16 @@ def GenerateRstForApplications():
     return out
 
 
-# Start parsing options
-parser = OptionParser(usage="Export application(s) to rst file.")
-parser.add_option("-a",dest="appname",help="Generate rst only for this application (eg: OrthoRectification)")
-parser.add_option("-m",dest="module",help="Generate rst only for this module (eg: Image Manipulation)")
-parser.add_option("-o",dest="rstdir",help="directory where rst files are generated")
-(options, args) = parser.parse_args()
+if __name__ == "__main__":
+    parser = OptionParser(usage="Export application(s) to rst file.")
+    parser.add_option("-a",dest="appname",help="Generate rst only for this application (eg: OrthoRectification)")
+    parser.add_option("-m",dest="module",help="Generate rst only for this module (eg: Image Manipulation)")
+    parser.add_option("-o",dest="rstdir",help="directory where rst files are generated")
+    (options, args) = parser.parse_args()
 
-RST_DIR = options.rstdir
+    RST_DIR = options.rstdir
 
-if not options.appname is None:
-    out = ApplicationToRst(options.appname)
-    #print out
-else:
-    GenerateRstForApplications()
+    if not options.appname is None:
+        out = ApplicationToRst(options.appname)
+    else:
+        GenerateRstForApplications()
