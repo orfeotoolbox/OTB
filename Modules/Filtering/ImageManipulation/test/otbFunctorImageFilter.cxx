@@ -49,12 +49,26 @@ struct Funct3 : otb::ImageFunctor<IntImageNeighborhood,
   }
 };
 
+auto Lambda1 = [](double p)
+               {
+                 return p;
+               };
 
-int otbFunctorFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+
+using OImage = typename otb::Image<int>;
+using Neig = typename itk::ConstNeighborhoodIterator<OImage>;
+
+static_assert(otb::IsNeighborhood<Neig>::value, "err");
+static_assert(!otb::IsNeighborhood<OImage>::value, "err");
+static_assert(!otb::IsNeighborhood<double>::value, "err");
+
+
+int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  auto filter1 = otb::FunctorImageFilter<Funct1>::New();
-  auto filter2 = otb::FunctorImageFilter<Funct2>::New();
-  auto filter3 = otb::FunctorImageFilter<Funct3>::New();
-  return EXIT_SUCCESS;
+  auto filter1 = otb::FunctorImageFilter<Funct1>::New(Funct1{});
+  auto filter2 = otb::FunctorImageFilter<Funct2>::New(Funct2{});
+  auto filter3 = otb::FunctorImageFilter<Funct3>::New(Funct3{});
+ auto filter4 = otb::FunctorImageFilter<decltype(Lambda1)>::New(Lambda1);
+ return EXIT_SUCCESS;
 }
 

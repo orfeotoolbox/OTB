@@ -29,6 +29,21 @@ namespace otb
 {
 
 template <class TFunction>
+FunctorImageFilter<TFunction>::FunctorImageFilter()
+{
+  //  this->SetNumberOfRequiredInputs(m_Functor.GetNumberOfInputs());
+  //  this->InPlaceOff();
+}
+
+template <class TFunction>
+typename FunctorImageFilter<TFunction>::Pointer 
+FunctorImageFilter<TFunction>::New(const TFunction& f) 
+{
+  Pointer p = new FunctorImageFilter<TFunction>(f);
+  return p;                                           
+}
+
+template <class TFunction>
 void
 FunctorImageFilter<TFunction>
 ::GenerateInputRequestedRegion()
