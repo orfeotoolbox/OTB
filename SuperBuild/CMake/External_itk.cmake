@@ -22,11 +22,6 @@ INCLUDE_ONCE_MACRO(ITK)
 
 SETUP_SUPERBUILD(ITK)
 
-# if(MSVC)
-# set(ITK_SB_SRC "C:/Temp/ITK")
-# set(ITK_SB_BUILD_DIR ${ITK_SB_SRC}/build)
-# endif()
-
 set(ITK_ENABLED_MODULES
   Common
   FiniteDifference
@@ -84,7 +79,6 @@ set(ITK_ENABLED_MODULES
   Eigen
   #FEM
   NarrowBand
-  NeuralNetworks
   Optimizers
   Optimizersv4
   Polynomials
@@ -139,15 +133,15 @@ if (WIN32)
 endif()
 
 #variables are later used in packaging
-set(SB_ITK_VERSION_MAJOR "4")
-set(SB_ITK_VERSION_MINOR "13")
+set(SB_ITK_VERSION_MAJOR "5")
+set(SB_ITK_VERSION_MINOR "0")
 
 set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_ITK_VERSION_MINOR})
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "https://sourceforge.net/projects/itk/files/itk/4.13/InsightToolkit-4.13.1.tar.gz"
-  URL_MD5 c7e229802c4ee64e1b2a6d48b1df67e9
+  URL "https://github.com/InsightSoftwareConsortium/ITK/archive/v5.0b01.tar.gz"
+  URL_MD5 7b4f2259160e4708ec30b385973f9eca
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
