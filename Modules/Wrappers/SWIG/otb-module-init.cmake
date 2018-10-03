@@ -20,9 +20,8 @@
 
 option ( OTB_WRAP_PYTHON "Wrap Python" OFF )
 
-<<<<<<< 26c5f08c18a5a1d7ea87a301124f7602ae1d9475
 if ( OTB_WRAP_PYTHON )
-  find_package ( SWIG 3.0 REQUIRED )
+  find_package ( SWIG 3.0.10 REQUIRED )
   mark_as_advanced(SWIG_DIR)
   mark_as_advanced(SWIG_EXECUTABLE)
   mark_as_advanced(SWIG_VERSION)
