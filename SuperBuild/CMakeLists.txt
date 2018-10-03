@@ -25,9 +25,6 @@ project(OTB-SuperBuild)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Path to additional CMake modules
-#MESSAGE(INFO "${CMAKE_SOURCE_DIR}")
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_SOURCE_DIR}/../CMake
@@ -39,16 +36,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 include(ExternalProject)
-
-# Not needed as OTB Superbuild requires c++14 since version 6.2
-# include(OTBCheckCpp11Keywords)
-
 include(OTBCheckTargetSystemArch)
-
-set(LINUX FALSE)
-if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
-  set(LINUX TRUE)
-endif()
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
@@ -90,6 +78,10 @@ find_path(DOWNLOAD_LOCATION
   NAMES OTBSuperBuild.readme
   HINTS $ENV{DOWNLOAD_LOCATION} "${CMAKE_CURRENT_BINARY_DIR}/Downloads"
   )
+
+if(NOT DOWNLOAD_LOCATION)
+  set(DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/Downloads")
+endif()
 
 # General options
 option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
@@ -406,15 +398,8 @@ if(FROM_SUPERBUILD_LIST)
   endforeach()
 endif()
 
-message(STATUS "OTB_TARGET_SYSTEM_ARCH=${OTB_TARGET_SYSTEM_ARCH}")
-message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64=${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
-
-if(DOWNLOAD_LOCATION)
-  message(STATUS "DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION}")
-  message(STATUS "Source archives for dependencies will be taken from '${DOWNLOAD_LOCATION}'")
-else()
-  message(STATUS "DOWNLOAD_LOCATION is not set. We will download all source archives during build!")
-endif()
-
-message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
+message(STATUS "OTB_TARGET_SYSTEM_ARCH_IS_X64  = ${OTB_TARGET_SYSTEM_ARCH_IS_X64}")
+message(STATUS "DOWNLOAD_LOCATION              = ${DOWNLOAD_LOCATION}")
+message(STATUS "CMAKE_INSTALL_PREFIX           = ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "SUPERBUILD_OTB_VERSION         = ${SUPERBUILD_OTB_VERSION}")
+message("\nCMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator\n")
