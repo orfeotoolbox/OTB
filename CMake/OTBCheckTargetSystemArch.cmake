@@ -44,10 +44,10 @@ macro(OTB_CHECK_TARGET_SYSTEM_ARCH _RESULT1 _RESULT2)
       OUTPUT_VARIABLE ov
       OUTPUT_STRIP_TRAILING_WHITESPACE
       )
-    
+
     set(${_RESULT1} "${ov}")
     set(${_RESULT2} FALSE)
-    if("${ov}" STREQUAL "x86_64")
+    if("${ov}" MATCHES "(x86_64|amd64)")
       set(${_RESULT2} TRUE)
     endif()
   endif()
