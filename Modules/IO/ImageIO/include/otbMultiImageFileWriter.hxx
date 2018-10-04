@@ -45,7 +45,7 @@ MultiImageFileWriter::Sink<TImage>
 ::Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer):
   SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput()->GetPointer())),
   m_Writer(writer),
-  m_ImageIO(NULL)
+  m_ImageIO(nullptr)
 {
 }
 
