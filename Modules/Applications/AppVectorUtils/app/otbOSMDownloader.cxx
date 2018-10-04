@@ -72,9 +72,7 @@ private:
     SetDocSeeAlso("[1] TrainImagesClassifier \n"
       "[2] http://www.openstreetmap.fr/");
 
-	AddDocTag("Miscellaneous");
-    AddDocTag(Tags::Meta);
-	AddDocTag(Tags::Vector);
+    AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output vector data");
     SetParameterDescription("out", "Vector data file to store downloaded features");
@@ -224,4 +222,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::OSMDownloader)
-

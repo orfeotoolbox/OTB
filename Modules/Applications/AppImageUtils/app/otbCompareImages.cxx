@@ -61,9 +61,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics");
 
-	AddDocTag("Miscellaneous");
-    AddDocTag("Statistics");
-	AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_Group, "ref", "Reference image properties");
     AddParameter(ParameterType_InputImage,  "ref.in",   "Reference image");
@@ -114,7 +112,7 @@ private:
     AddParameter(ParameterType_Float, "psnr",  "PSNR");
     SetParameterDescription("psnr", "Peak Signal to Noise Ratio value");
     SetParameterRole("psnr", Role_Output);
-    
+
     AddParameter(ParameterType_Float, "count",  "count");
     SetParameterDescription("count", "Nb of pixels which are different");
     SetParameterRole("count", Role_Output);
@@ -172,12 +170,12 @@ private:
   void DoExecute() override
   {
     // Init filters
-    ExtractROIMonoFilterType::Pointer extractRefFilter = 
+    ExtractROIMonoFilterType::Pointer extractRefFilter =
       ExtractROIMonoFilterType::New();
-    ExtractROIMonoFilterType::Pointer extractMeasFilter = 
+    ExtractROIMonoFilterType::Pointer extractMeasFilter =
       ExtractROIMonoFilterType::New();
-    StreamingCompareImageFilterType::Pointer compareFilter = 
-      StreamingCompareImageFilterType::New(); 
+    StreamingCompareImageFilterType::Pointer compareFilter =
+      StreamingCompareImageFilterType::New();
 
     // Get input image pointers
     FloatVectorImageType::Pointer refIm = this->GetParameterImage("ref.in");
