@@ -1,0 +1,9 @@
+diff -burN /tmp/ITK-5.0b01.orig/CMakeLists.txt /tmp/ITK-5.0b01/CMakeLists.txt
+--- /tmp/ITK-5.0b01.orig/CMakeLists.txt	Fri Oct  5 16:27:18 2018
++++ /tmp/ITK-5.0b01/CMakeLists.txt	Fri Oct  5 16:28:35 2018
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+ 
+ if(CMAKE_CXX_STANDARD EQUAL "98" )
+    message(FATAL_ERROR "CMAKE_CXX_STANDARD:STRING=98 is not supported in ITK version 5 and greater.")
