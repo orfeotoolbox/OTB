@@ -21,6 +21,7 @@
 set(DOCUMENTATION "Provides a helper class to configure and use MPI.")
 
 otb_module(OTBMPIConfig
+  ENABLE_SHARED
   DEPENDS
     OTBITK
     OTBImageIO

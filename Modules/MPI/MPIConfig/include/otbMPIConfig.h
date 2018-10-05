@@ -26,6 +26,8 @@
 #include "itkMacro.h"
 #include "itkObjectFactory.h"
 
+#include "OTBMPIConfigExport.h"
+
 namespace otb {
 
 /** \class MPI config
@@ -35,7 +37,7 @@ namespace otb {
   *
   * \ingroup OTBMPIConfig
   */
-class MPIConfig: public itk::LightObject
+class OTBMPIConfig_EXPORT MPIConfig: public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
