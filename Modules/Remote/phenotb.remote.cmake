@@ -27,5 +27,5 @@ A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/phenotb
 "
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/phenotb.git
-  GIT_TAG 72ba22feac301ae00869b5604c2eef17d6a3fae5
+  GIT_TAG master
   )
