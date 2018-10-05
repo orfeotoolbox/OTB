@@ -31,8 +31,11 @@ ENABLE_SHARED
     OTBCommon
     OTBTinyXML
     OTBGDAL
+    OTBBoost
     OTBBoostAdapters
     OTBOSSIMAdapters
+    OTBMetadata
+    OTBObjectList
 
   TEST_DEPENDS
     OTBTestKernel

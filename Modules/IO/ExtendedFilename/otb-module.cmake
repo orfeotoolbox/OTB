@@ -29,6 +29,8 @@ otb_module(OTBExtendedFilename
     OTBCommon
     OTBIOGDAL
     OTBITK
+    OTBBoostAdapters
+    OTBImageBase
 
   TEST_DEPENDS
     OTBTestKernel

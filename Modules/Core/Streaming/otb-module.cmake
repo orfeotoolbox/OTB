@@ -31,6 +31,8 @@ ENABLE_SHARED
     OTBImageBase
     OTBOSSIMAdapters
     OTBObjectList
+    OTBMetadata
+    OTBGDAL
 
   TEST_DEPENDS
     OTBImageIO

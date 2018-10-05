@@ -39,10 +39,14 @@ otb_module(OTBImageIO
     OTBOSSIMAdapters
     OTBObjectList
     OTBStreaming
+    OTBGDAL
+    OTBMetadata
 
   TEST_DEPENDS
     OTBStatistics
     OTBTestKernel
+    OTBGdalAdapters
+    OTBMPIConfig
 
   DESCRIPTION
     "${DOCUMENTATION}"

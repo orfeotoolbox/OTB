@@ -34,6 +34,12 @@ otb_module(OTBTestKernel
     OTBGDAL
     OTBOSSIMAdapters
     OTBImageManipulation
+    OTBBoostAdapters
+    OTBMetadata
+    OTBExtendedFilename
+    OTBStreaming
+    OTBIOGDAL
+    OTBObjectList
 
     OPTIONAL_DEPENDS
     OTBMPIConfig

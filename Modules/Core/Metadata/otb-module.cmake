@@ -29,7 +29,9 @@ ENABLE_SHARED
     OTBBoostAdapters
     OTBITK
     OTBOSSIMAdapters
+    OTBOssimPlugins
     OTBCommon
+    OTBGDAL
     
   TEST_DEPENDS
     OTBTestKernel

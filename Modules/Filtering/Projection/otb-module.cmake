@@ -28,6 +28,7 @@ solvers, re-project input vector data over input images, and so on.")
 otb_module(OTBProjection
 ENABLE_SHARED
   DEPENDS
+    OTBBoost
     OTBBoostAdapters
     OTBCommon
     OTBGDAL
@@ -37,6 +38,7 @@ ENABLE_SHARED
     OTBImageManipulation
     OTBMetadata
     OTBOSSIMAdapters
+    OTBObjectList
     OTBTransform
     OTBVectorDataBase
     OTBVectorDataManipulation
