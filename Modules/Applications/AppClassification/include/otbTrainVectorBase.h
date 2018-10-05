@@ -59,7 +59,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro(Self, Superclass)
+  itkTypeMacro(Self, Superclass);
 
   typedef Superclass::SampleType SampleType;
   typedef Superclass::ListSampleType ListSampleType;

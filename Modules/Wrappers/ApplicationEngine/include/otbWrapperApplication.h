@@ -384,6 +384,14 @@ public:
    */
   void SetListViewSingleSelectionMode(std::string parameter, bool status);
 
+  /**
+   * True if the parameter is a list view and is in single selection mode
+   *
+   * Can be called for types:
+   * \li ParameterType_ListView
+   */
+  bool GetListViewSingleSelectionMode(const std::string& parameter);
+
   /* Set an output image value
    *
    * Can be called for types :

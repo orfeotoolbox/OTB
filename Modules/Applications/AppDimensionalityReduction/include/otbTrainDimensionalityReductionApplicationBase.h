@@ -77,7 +77,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro(TrainDimensionalityReductionApplicationBase, otb::Application)
+  itkTypeMacro(TrainDimensionalityReductionApplicationBase, otb::Application);
 
   typedef TInputValue                             InputValueType;
   typedef TOutputValue                            OutputValueType;

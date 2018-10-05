@@ -455,6 +455,10 @@ add_subdirectory(Utilities/Doxygen)
 
 add_subdirectory(Utilities/Completion)
 
+if (BUILD_DOCUMENTATION)
+    add_subdirectory(Documentation/Cookbook)
+endif()
+
 #----------------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
 if(UNIX)
