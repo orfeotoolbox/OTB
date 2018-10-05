@@ -301,8 +301,8 @@ CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
   
 RegionType LeftRegionForThread;
 RegionType RightRegionForThread; 
-typename TOutputImage::PixelType OutPixel(1);
-OutPixel.Fill(0);
+typename TOutputImage::PixelType OutPixel(1); 
+
 int bandNumber = this->GetLeftInputImage()->GetNumberOfComponentsPerPixel() ;
 
 for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
@@ -319,13 +319,15 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
   RightGradientXInputIt.GoToBegin();   
           
   itk::ImageRegionIterator<TOutputImage> outputIt ( this->GetOutputImage(), LeftRegionForThread );
-  outputIt.GoToBegin();           
+  outputIt.GoToBegin();   
           
   //  Cost computation    
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+    
 
-  while ( !outputIt.IsAtEnd() && !LeftInputImageIt.IsAtEnd() )
+  while ( !outputIt.IsAtEnd() && !LeftInputImageIt.IsAtEnd()  )
     { 
+    
     PixelType costColor;
     costColor.Fill(0);
     PixelType costGradient;
@@ -349,7 +351,16 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
       costGradientNorm = m_Tau2; 
       }// if To take the minimum     
 
-    OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-m_Alpha)*costColorNorm + m_Alpha*costGradientNorm ); 
+    if((outputIt.GetIndex()[0] < abs(m_HorizontalMinDisparity)+1) || (outputIt.GetIndex()[0] > outputRegionForThread.GetSize()[0]-abs(m_HorizontalMaxDisparity)+1) )
+      { 
+      OutPixel.Fill(0);
+      }
+    else
+      {
+      // OutPixel.Fill(7);
+      OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-m_Alpha)*costColorNorm + m_Alpha*costGradientNorm ); 
+      }
+
 
     if(m_Side=='r')
       {    
@@ -358,7 +369,8 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     else
       {     
       outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;  
-      }      
+      } 
+
 
     ++LeftInputImageIt;
     ++RightInputImageIt;
@@ -368,6 +380,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
     progress.CompletedPixel();
     }  // end of while 
   }
+// }
 } //end of threaded generate data
 
 
