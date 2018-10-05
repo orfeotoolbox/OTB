@@ -22,51 +22,56 @@
 #define otbFunctorImageFilter_h
 
 #include "itkImageToImageFilter.h"
+#include "otbVariadicInputsImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkImageRegionConstIterator.h"
 #include "itkProcessObject.h"
 #include <type_traits>
 #include "otbFunctionTraits.h"
+#include "itkDefaultConvertPixelTraits.h"
 
 namespace otb
 {
 
-template<typename TOutput>
-struct ImageFunctorBase
+namespace functor_filter_details
 {
-  void SetRadius(size_t r)
+// Variadic creation of iterator tuple
+template <class T> auto MakeIterator(itk::SmartPointer<T> img)
+{
+  itk::ImageRegionConstIterator<T> it(img,img->GetLargestPossibleRegion());
+  return it;
+}
+
+template<class... T>  auto MakeIterators(itk::SmartPointer<T>... args)
   {
-    m_Radius = r;
-  }
-   
-  unsigned int GetNumberOfOutputBands() const
-  {
-    return 1;
+    return std::make_tuple(MakeIterator(args)...);
   }
 
-protected:
-  size_t m_Radius = 0;
+// Variadic call of operator from iterator tuple
+template <class Tuple, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, const Oper & oper,std::index_sequence<Is...>)
+{
+  return oper(std::get<Is>(t).Get()...);
+}
 
-};
+template <class Oper, typename ... Args> auto CallOperator(const Oper& oper, std::tuple<Args...> & t)
+{
+  return CallOperatorImpl(t,oper,std::make_index_sequence<sizeof...(Args)>{});
+}
 
-template<typename TInput, typename TOutput>
-struct ImageFunctor : ImageFunctorBase<TOutput> {
-  using HasNeighborhood = std::false_type;
-  using InputImageType = typename std::conditional<std::is_scalar<TInput>::value, 
-                                                   otb::Image<TInput>,
-                                                   otb::VectorImage<TInput>>::type;
+// Variadic move of iterators
+template<class Tuple,size_t...Is> auto MoveIteratorsImpl(Tuple & t, std::index_sequence<Is...>)
+{
+  return std::make_tuple(++(std::get<Is>(t) )...);
+}
 
-};
+template<typename ... Args> void MoveIterators(std::tuple<Args...> & t)
+{
+  MoveIteratorsImpl(t,std::make_index_sequence<sizeof...(Args)>{});
+}
 
-
-template<typename TInput, typename TOutput>
-struct ImageFunctor<typename itk::ConstNeighborhoodIterator<TInput>, 
-                    TOutput> : ImageFunctorBase<TOutput> {
-  using HasNeighborhood = std::true_type;
-  using InputImageType = TInput;
-};
-
+} // end namespace functor_filter_details
 
 template<typename T>
 using FTraits = typename FunctionTraits::function_traits<T>;
@@ -77,48 +82,65 @@ using FResultType = typename FTraits<T>::result_type;
 template<typename T, size_t i>
 using ArgType = typename FTraits<T>::template arg<i>::type;
 
+template <class T> struct IsNeighborhood
+{
+  using ValueType = std::false_type;
+  static constexpr bool value = false;
+  using PixelType = T;
+};
+
+  template <class T> struct IsNeighborhood<itk::Neighborhood<T>>
+{
+  using ValueType = std::true_type;
+  static constexpr bool value = true;
+  using PixelType = T;
+};
+
 template<typename T>
-using InputArgumentType = ArgType<T, 0>;
-
-
-template<class T, class R = void>  
-struct enable_if_type { typedef R type; };
-
-template<class T, class Enable = void>
-struct IsNeighborhood : std::false_type {};
-
-template<class T>
-struct IsNeighborhood<T, typename enable_if_type<typename T::NeighborhoodType>::type> : std::true_type
-{};
-
-template<typename TFunction, bool B = true>
-struct TII
+struct TInputImage
 {
-  using type = typename InputArgumentType<TFunction>::ImageType;
+  using ArgumentType = T; //ArgType<T,N>;
+  using PixelType = typename IsNeighborhood<typename std::remove_cv<typename std::remove_reference<ArgumentType>::type >::type>::PixelType;
+  using ScalarType = typename itk::DefaultConvertPixelTraits<PixelType>::ComponentType;
+  using ImageType = typename std::conditional<std::is_scalar<PixelType>::value,
+                                     otb::Image< ScalarType >,
+                                     otb::VectorImage< ScalarType > >::type;
 };
 
-template<typename TFunction>
-struct TII<TFunction, !IsNeighborhood<InputArgumentType<TFunction>>::value>
+
+template<typename T>
+struct TOutputImage
 {
-  using InputArgument = InputArgumentType<TFunction>;
-  using type = typename std::conditional<std::is_scalar<InputArgument>::value,
-                                         typename otb::Image<InputArgument>,
-                                         typename otb::VectorImage<InputArgument>
-                                         >::type ;
+  using ResultType = T; //FResultType<T>;
+  using ScalarType = typename itk::DefaultConvertPixelTraits<ResultType>::ComponentType;
+  using ImageType =  typename std::conditional<std::is_scalar<ResultType>::value,
+                                     typename otb::Image<ScalarType>,
+                                     typename otb::VectorImage<ScalarType> >::type;
 };
 
-template<typename TFunction>
-using TInputImage = typename TII<TFunction>::type;
 
-// OutputImageType: if the result of the 
-// functor is a scalar -> otb::Image,
-// otherwise, otb::VectorImage
-         template<typename TFunction, typename ResultType = FResultType<TFunction>>
-         using TOutputImage =   
-         typename std::conditional< std::is_scalar<ResultType>::value, 
-                                    typename otb::Image<ResultType>,
-                                    typename otb::VectorImage<ResultType>
-                                    >::type;
+
+template <typename T> struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<decltype(&T::operator())> {};
+
+
+template <typename R, typename... T> struct FunctorFilterSuperclassHelper<R(*)(T...)>
+{
+  using OutputImageType = typename TOutputImage<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename TInputImage<T>::ImageType...>;
+
+};
+
+template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...) const>
+{
+  using OutputImageType = typename TOutputImage<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename TInputImage<T>::ImageType...>;
+};
+
+template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...)>
+{
+  using OutputImageType = typename TOutputImage<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename TInputImage<T>::ImageType...>;
+};
 
 
 /** \class FunctorImageFilter
@@ -132,7 +154,7 @@ using TInputImage = typename TII<TFunction>::type;
  */
 template <class TFunction>
     class ITK_EXPORT FunctorImageFilter
-  : public itk::ImageToImageFilter<TInputImage<TFunction>, TOutputImage<TFunction>>
+  : public FunctorFilterSuperclassHelper<TFunction>::FilterType
 {
 
 public:
@@ -141,19 +163,21 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  using InputImageType = TInputImage<TFunction>;
-  using InputImagePointer = typename InputImageType::ConstPointer;
-  using InputImageRegionType = typename InputImageType::RegionType;
-  using InputImagePixelType = typename InputImageType::PixelType;
-  using InputImageSizeType = typename InputImageType::SizeType;
-  using InputImageIndexType = typename InputImageType::IndexType;
+  // using InputImageType = typename TInputImage<TFunction,0>::ImageType;
+  // using InputImagePointer = typename InputImageType::ConstPointer;
+  // using InputImageRegionType = typename InputImageType::RegionType;
+  // using InputImagePixelType = typename InputImageType::PixelType;
+  // using InputImageSizeType = typename InputImageType::SizeType;
+  // using InputImageIndexType = typename InputImageType::IndexType;
 
-  using OutputImageType = TOutputImage<TFunction>;
-  using OutputImagePointer = typename OutputImageType::Pointer;
+  // using OutputImageType = typename TOutputImage<TFunction>::ImageType;
+  // using OutputImagePointer = typename OutputImageType::Pointer;
+  // using OutputImageRegionType = typename OutputImageType::RegionType;
+  // using OutputImagePixelType = typename OutputImageType::PixelType;
+  using Superclass = typename FunctorFilterSuperclassHelper<TFunction>::FilterType;
+  using OutputImageType = typename Superclass::OutputImageType;
   using OutputImageRegionType = typename OutputImageType::RegionType;
-  using OutputImagePixelType = typename OutputImageType::PixelType;
-  using Superclass = itk::ImageToImageFilter<InputImageType, 
-                                             OutputImageType>;
+  
   using ProcessObjectType = itk::ProcessObject;
 
  /** Method for creation by passing the filter type. */
@@ -201,7 +225,7 @@ FunctorImageFilter();
 FunctorImageFilter(const FunctorType& f) : m_Functor(f) {};
 FunctorImageFilter(const Self &) ;
 void operator =(const Self&) ;
-~FunctorImageFilter() override {}
+~FunctorImageFilter() {}
 
 protected:
 
@@ -215,18 +239,18 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-    void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+    virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
    * Pad the input requested region by radius
    */
-  void GenerateInputRequestedRegion(void) override;
+  virtual void GenerateInputRequestedRegion(void) override;
 
 
   FunctorType m_Functor;
 };
 
-} // namespace otb
+}// namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbFunctorImageFilter.hxx"

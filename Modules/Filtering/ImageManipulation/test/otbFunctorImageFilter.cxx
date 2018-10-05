@@ -20,8 +20,17 @@
 
 #include "itkMacro.h"
 #include "otbFunctorImageFilter.h"
+#include "otbVariadicInputsImageFilter.h"
 
-struct Funct1 : otb::ImageFunctor<double, double>
+#include "otbImage.h"
+#include "otbVectorImage.h"
+#include "itkNeighborhood.h"
+#include "itkImageRegionIterator.h"
+#include "itkImageSource.h"
+#include <tuple>
+
+
+struct Funct1
 {
   double operator()(double p)
   {
@@ -29,9 +38,9 @@ struct Funct1 : otb::ImageFunctor<double, double>
   }
 };
 
-struct Funct2 : otb::ImageFunctor<double, itk::VariableLengthVector<double>>
+struct Funct2
 {
-  itk::VariableLengthVector<double> operator()(double p)
+  itk::VariableLengthVector<double> operator()(double p) const
   {
     itk::VariableLengthVector<double> result(2);
     result[0] = result[1] = p;
@@ -39,13 +48,12 @@ struct Funct2 : otb::ImageFunctor<double, itk::VariableLengthVector<double>>
   }
 };
 
-using IntImageNeighborhood = itk::ConstNeighborhoodIterator<otb::Image<int>>;
-struct Funct3 : otb::ImageFunctor<IntImageNeighborhood, 
-                                  double>
+using IntImageNeighborhood = itk::Neighborhood<int>;
+struct Funct3
 {
-  double operator()(IntImageNeighborhood p)
+  double operator()(const IntImageNeighborhood & p)
   {
-    return static_cast<double>(p.GetPixel(0));
+    return static_cast<double>(p.GetCenterValue());
   }
 };
 
@@ -54,17 +62,68 @@ auto Lambda1 = [](double p)
                  return p;
                };
 
+struct Funct4
+{
+  itk::VariableLengthVector<double> operator()(double p, const itk::VariableLengthVector<double> & vp) const
+  {
+    itk::VariableLengthVector<double> result(2);
+    result[0] = result[1] = p;
+    return result;
+  }
+};
 
 using OImage = typename otb::Image<int>;
-using Neig = typename itk::ConstNeighborhoodIterator<OImage>;
+using Neig = typename itk::Neighborhood<int>;
 
 static_assert(otb::IsNeighborhood<Neig>::value, "err");
 static_assert(!otb::IsNeighborhood<OImage>::value, "err");
 static_assert(!otb::IsNeighborhood<double>::value, "err");
 
 
+using namespace otb::functor_filter_details;
+using namespace otb;
+
 int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
+  // test functions in functor_filter_details namespace
+  using VectorImageType = VectorImage<double>;
+  using ImageType       = Image<unsigned int>;
+  using RegionType      = typename ImageType::RegionType;
+  using SizeType        = typename RegionType::SizeType;
+  using IndexType       = typename RegionType::IndexType;
+  
+  using NeighborhoodType = itk::Neighborhood<double,2>;
+  using VectorPixelType  = typename VectorImageType::PixelType;
+
+  auto vimage = VectorImageType::New();
+  auto image  = ImageType::New();
+
+  SizeType size = {200,200};
+  
+  vimage->SetRegions(size);
+  image->SetRegions(size);
+
+  auto iterators = MakeIterators(image,vimage);
+
+  MoveIterators(iterators);
+
+  Funct4 f{};
+  
+  auto res = CallOperator(f,iterators);
+
+  // Test VariadicInputsImageFilter
+
+  auto filter = otb::VariadicInputsImageFilter<VectorImageType,VectorImageType,ImageType>::New();
+
+  filter->SetVInput<0>(vimage);
+  filter->SetVInput<1>(image);
+
+  filter->SetVInputs(vimage,image);
+
+  std::cout<<filter->GetVInput<0>()<< filter->GetVInput<1>()<<std::endl;
+
+  
+  // test FunctorImageFilter
   auto filter1 = otb::FunctorImageFilter<Funct1>::New(Funct1{});
   auto filter2 = otb::FunctorImageFilter<Funct2>::New(Funct2{});
   auto filter3 = otb::FunctorImageFilter<Funct3>::New(Funct3{});
