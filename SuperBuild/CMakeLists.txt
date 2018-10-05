@@ -18,7 +18,8 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3.0)
+
 project(OTB-SuperBuild)
 
 set(CMAKE_CXX_STANDARD 14)
