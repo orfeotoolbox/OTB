@@ -28,7 +28,7 @@ namespace otb
 namespace Function
 {
 /** \class PhaseFunctor
-* \brief Compute the module from the selected channel in the input
+* \brief Compute the phase from the selected channel in the input
 *
 *  \ingroup Visualization
 *

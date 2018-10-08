@@ -115,7 +115,7 @@ template <class TInputImage, class TOutputImage>
 void
 DecimateImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType itkNotUsed(threadId))
+                       itk::ThreadIdType )
 {
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);

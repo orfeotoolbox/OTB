@@ -46,7 +46,7 @@ public:
   DotProductFunctor() {}
   virtual ~DotProductFunctor() {}
 
-  bool operator !=(const DotProductFunctor& itkNotUsed(other)) const
+  bool operator !=(const DotProductFunctor& ) const
   {
     return false;
   }
@@ -126,7 +126,7 @@ public:
   typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
 
-  const InputPixelType& GetVector()
+  const InputPixelType& GetVector() const
   {
     return this->GetFunctor().GetVector();
   }
@@ -138,11 +138,9 @@ public:
   }
 
 protected:
-  DotProductImageFilter();
+  DotProductImageFilter() = default;
 
-  ~DotProductImageFilter() override {}
-
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  ~DotProductImageFilter() override = default;
 
 private:
   DotProductImageFilter(const Self &) = delete;

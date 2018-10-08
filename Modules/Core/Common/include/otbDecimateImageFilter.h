@@ -75,11 +75,9 @@ public:
   itkSetMacro(DecimationFactor, unsigned int);
 
 protected:
-  DecimateImageFilter ()
-    {
-    m_DecimationFactor = 1;
-    }
-  virtual ~DecimateImageFilter() {}
+  DecimateImageFilter () : m_DecimationFactor(1) {};
+    
+  virtual ~DecimateImageFilter() = default;
 
   /** Since input and output image are very likely to be of different size.
    * Region estimation functions has to be reimplemented
