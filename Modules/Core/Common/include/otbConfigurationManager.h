@@ -46,9 +46,8 @@ namespace otb
  * Please refer to each static method documentation for available
  * configuration values and related environment variables.
  */
-class OTBCommon_EXPORT ConfigurationManager
+namespace ConfigurationManager OTBCommon_EXPORT
 {
-public:
 #if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
   typedef ::itksysFundamentalType_UInt64 RAMValueType;
 #else
@@ -62,7 +61,7 @@ public:
    * returns it contents as a string
    * Else, returns an empty string
    */
-  static std::string GetDEMDirectory();
+  std::string GetDEMDirectory();
 
   /**
    * GeoidFile is path to a geoid file.
@@ -71,7 +70,7 @@ public:
    * returns it contents as a string
    * Else, returns an empty string
    */
-  static std::string GetGeoidFile();
+  std::string GetGeoidFile();
 
   /**
    * MaxRAMHint denotes the maximum memory OTB should use for
@@ -82,7 +81,7 @@ public:
    * Else, returns default value, which is 128 Mb
    *
    */
-  static RAMValueType GetMaxRAMHint();
+  RAMValueType GetMaxRAMHint();
 
   /**
    * Logger level controls the level of logging that OTB will output.
@@ -102,16 +101,7 @@ public:
    * decoded), level is INFO.
    * 
    */
-  static itk::LoggerBase::PriorityLevelType GetLoggerLevel();
- 
-  
-private:
-  ConfigurationManager() = delete;
-  ~ConfigurationManager() = delete;
-  ConfigurationManager(const ConfigurationManager&) = delete;
-  void operator =(const ConfigurationManager&) = delete;
-
-
+  itk::LoggerBase::PriorityLevelType GetLoggerLevel();
 };
 }
 

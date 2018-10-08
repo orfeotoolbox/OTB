@@ -32,21 +32,24 @@
 namespace otb
 {
 
-std::string ConfigurationManager::GetDEMDirectory()
+namespace ConfigurationManager
+{
+
+std::string GetDEMDirectory()
 {
   std::string svalue;
   itksys::SystemTools::GetEnv("OTB_DEM_DIRECTORY",svalue);
   return svalue;
 }
 
-std::string ConfigurationManager::GetGeoidFile()
+std::string GetGeoidFile()
 {
   std::string svalue;
   itksys::SystemTools::GetEnv("OTB_GEOID_FILE",svalue);
   return svalue;
 }
 
-ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
+RAMValueType GetMaxRAMHint()
 {
   std::string svalue;
   
@@ -66,7 +69,7 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
   return value;
 }
 
-itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
+itk::LoggerBase::PriorityLevelType GetLoggerLevel()
 {
   std::string svalue;
 
@@ -99,4 +102,5 @@ itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
   return level;
 }
 
-}
+} // end namespace ConfigurationManager
+} // end namespace 
