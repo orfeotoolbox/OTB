@@ -63,14 +63,12 @@ public:
   /** Constructor */
   AmplitudeFunctor()
   {
-    std::vector<unsigned int> channels;
-    channels.push_back(0);
-    channels.push_back(1);
-    this->SetChannelList(channels);
+    this->m_ChannelList.resize(2,1);
+    this->m_ChannelList[1] = 1;
   }
 
   /** Destructor */
-  ~AmplitudeFunctor() override {}
+  ~AmplitudeFunctor() override = default;
 
   const char *GetDescription() const
   {return "Amplitude"; }
@@ -82,12 +80,11 @@ public:
 
   OutputPixelType operator ()(const VectorPixelType& inPixel) const override
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(1);
-    assert((this->GetChannelList()).size() == 2);
-    assert((this->GetChannelList())[0] < inPixel.Size());
-    assert((this->GetChannelList())[1] < inPixel.Size());
-    outPixel[0] = ComputeAmplitude(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+    OutputPixelType outPixel(1);
+    assert(this->m_ChannelList.size() == 2);
+    assert(this->m_ChannelList[0] < inPixel.Size());
+    assert(this->m_ChannelList[1] < inPixel.Size());
+    outPixel[0] = ComputeAmplitude(inPixel[this->m_ChannelList[0]], inPixel[this->m_ChannelList[1]]);
     return outPixel;
   }
 
@@ -99,32 +96,30 @@ public:
 
   OutputPixelType operator ()(const RGBPixelType& inPixel) const override
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(1);
+    OutputPixelType outPixel(1);
 
-    assert((this->GetChannelList()).size() == 2);
-    assert((this->GetChannelList())[0] < 3);
-    assert((this->GetChannelList())[1] < 3);
+    assert(this->m_ChannelList.size() == 2);
+    assert(this->m_ChannelList[0] < 3);
+    assert(this->m_ChannelList[1] < 3);
 
-    outPixel[0] = ComputeAmplitude(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+    outPixel[0] = ComputeAmplitude(inPixel[this->m_ChannelList[0]], inPixel[this->m_ChannelList[1]]);
     return outPixel;
   }
 
   OutputPixelType operator ()(const RGBAPixelType& inPixel) const override
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(1);
+    OutputPixelType outPixel(1);
 
-    assert((this->GetChannelList()).size() == 2);
-    assert((this->GetChannelList())[0] < 4);
-    assert((this->GetChannelList())[1] < 4);
+    assert(this->m_ChannelList.size() == 2);
+    assert(this->m_ChannelList[0] < 4);
+    assert(this->m_ChannelList[1] < 4);
 
-    outPixel[0] = ComputeAmplitude(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+    outPixel[0] = ComputeAmplitude(inPixel[this->m_ChannelList[0]], inPixel[this->m_ChannelList[1]]);
     return outPixel;
   }
 
 private:
-  inline ScalarType ComputeAmplitude(ScalarType a, ScalarType b) const
+  ScalarType ComputeAmplitude(ScalarType a, ScalarType b) const
   {
     return std::sqrt(a * a + b * b);
   }

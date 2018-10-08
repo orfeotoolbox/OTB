@@ -72,8 +72,7 @@ public:
   virtual OutputPixelType operator ()(const VectorPixelType& inPixel) const
   {
 //           otbMsgDevMacro(<<"Channel list "<< m_ChannelList[0]);
-    OutputPixelType outPixel;
-    outPixel.SetSize(m_ChannelList.size());
+    OutputPixelType outPixel( m_ChannelList.size() );
     for (unsigned int i = 0; i < m_ChannelList.size(); ++i)
       {
       // assert as the verification should be done outside and only
@@ -87,20 +86,19 @@ public:
 
   virtual OutputPixelType operator ()(ScalarType inPixel) const
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(1);
+    OutputPixelType outPixel(1);
     for (unsigned int i = 0; i < m_ChannelList.size(); ++i)
       {
-      assert(m_ChannelList[i] < 1);
-      outPixel[0] = inPixel;
+        assert(m_ChannelList[i] < 1);
       }
+
+    outPixel[0] = inPixel;
     return outPixel;
   }
 
   virtual OutputPixelType operator ()(const RGBPixelType& inPixel) const
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(m_ChannelList.size());
+    OutputPixelType outPixel( m_ChannelList.size() );
     for (unsigned int i = 0; i < m_ChannelList.size(); ++i)
       {
       assert(m_ChannelList[i] < 3);
@@ -111,8 +109,7 @@ public:
 
   virtual OutputPixelType operator ()(const RGBAPixelType& inPixel) const
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(m_ChannelList.size());
+    OutputPixelType outPixel( m_ChannelList.size() );
     for (unsigned int i = 0; i < m_ChannelList.size(); ++i)
       {
       assert(m_ChannelList[i] < 4);
@@ -133,8 +130,7 @@ public:
 
   virtual void SetChannelList(std::vector<unsigned int> channels)
   {
-    m_ChannelList = channels;
-    usingDefaultParameters = false;
+    m_ChannelList = std::move(channels);
   }
 
   virtual void SetChannelIndex(unsigned int channelPosition, unsigned int channel)
@@ -144,7 +140,6 @@ public:
       m_ChannelList.resize(channelPosition + 1, 0);
       }
     m_ChannelList[channelPosition] = channel;
-    usingDefaultParameters = false;
   }
 
   virtual unsigned int GetChannelIndex(unsigned int channelPosition) const
@@ -156,11 +151,10 @@ public:
         " element in the list");
       }
     return m_ChannelList[channelPosition];
-
   }
 
   /** Only for backward compatibility but should not be used*/
-  virtual void SetAllChannels(unsigned int channel)
+  [[deprecated]] virtual void SetAllChannels(unsigned int channel)
   {
     if (m_ChannelList.size() < 3)
       {
@@ -169,7 +163,6 @@ public:
     m_ChannelList[0] = channel;
     m_ChannelList[1] = channel;
     m_ChannelList[2] = channel;
-    usingDefaultParameters = false;
   }
   virtual void SetRedChannelIndex(unsigned int channel)
   {
@@ -178,7 +171,6 @@ public:
       m_ChannelList.resize(3, 0);
       }
     m_ChannelList[0] = channel;
-    usingDefaultParameters = false;
   }
 
   virtual void SetGreenChannelIndex(unsigned int channel)
@@ -188,7 +180,6 @@ public:
       m_ChannelList.resize(3, 0);
       }
     m_ChannelList[1] = channel;
-    usingDefaultParameters = false;
   }
 
   virtual void SetBlueChannelIndex(unsigned int channel)
@@ -198,7 +189,6 @@ public:
       m_ChannelList.resize(3, 0);
       }
     m_ChannelList[2] = channel;
-    usingDefaultParameters = false;
   }
 
   virtual unsigned int GetRedChannelIndex() const
@@ -214,15 +204,15 @@ public:
     return m_ChannelList[2];
   }
 
-  virtual bool IsUsingDefaultParameters()
+  [[deprecated("No more default parameters")]] virtual bool  
+  IsUsingDefaultParameters()
   {
-    return usingDefaultParameters;
+    return false;
   }
 protected:
 
   /** Constructor */
-  ChannelSelectorFunctor() :
-    usingDefaultParameters(true)
+  ChannelSelectorFunctor()
   {
     if (std::string(typeid(PixelType).name()).find("RGBAPixel") != std::string::npos)
       {
@@ -248,12 +238,11 @@ protected:
   }
 
   /** Destructor */
-  ~ChannelSelectorFunctor() override {}
-
-private:
+  ~ChannelSelectorFunctor() override = default;
 
   ChannelListType m_ChannelList;
-  bool            usingDefaultParameters;
+private:
+
 
 };
 

@@ -63,14 +63,12 @@ public:
   /** Constructor */
   PhaseFunctor()
   {
-    std::vector<unsigned int> channels;
-    channels.push_back(0);
-    channels.push_back(1);
-    this->SetChannelList(channels);
+    this->m_ChannelList.resize(2,1);
+    this->m_ChannelList[1] = 1;
   }
 
   /** Destructor */
-  ~PhaseFunctor() override {}
+  ~PhaseFunctor() override = default;
 
   const char *GetDescription() const
   {return "Phase"; }
@@ -82,12 +80,11 @@ public:
 
   OutputPixelType operator ()(const VectorPixelType& inPixel) const override
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(1);
-    assert((this->GetChannelList()).size() == 2);
-    assert((this->GetChannelList())[0] < inPixel.Size());
-    assert((this->GetChannelList())[1] < inPixel.Size());
-    outPixel[0] = ComputePhase(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+    OutputPixelType outPixel(1);
+    assert(this->m_ChannelList.size() == 2);
+    assert(this->m_ChannelList[0] < inPixel.Size());
+    assert(this->m_ChannelList[1] < inPixel.Size());
+    outPixel[0] = ComputePhase(inPixel[this->m_ChannelList[0]], inPixel[this->m_ChannelList[1]]);
     return outPixel;
   }
 
@@ -99,30 +96,28 @@ public:
 
   OutputPixelType operator ()(const RGBPixelType& inPixel) const override
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(1);
+    OutputPixelType outPixel(1);
 
-    assert((this->GetChannelList())[0] < 3);
-    assert((this->GetChannelList())[1] < 3);
+    assert(this->m_ChannelList[0] < 3);
+    assert(this->m_ChannelList[1] < 3);
 
-    outPixel[0] = ComputePhase(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+    outPixel[0] = ComputePhase(inPixel[this->m_ChannelList[0]], inPixel[this->m_ChannelList[1]]);
     return outPixel;
   }
 
   OutputPixelType operator ()(const RGBAPixelType& inPixel) const override
   {
-    OutputPixelType outPixel;
-    outPixel.SetSize(1);
+    OutputPixelType outPixel(1);
 
-    assert((this->GetChannelList())[0] < 4);
-    assert((this->GetChannelList())[1] < 4);
+    assert(this->m_ChannelList[0] < 4);
+    assert(this->m_ChannelList[1] < 4);
 
-    outPixel[0] = ComputePhase(inPixel[(this->GetChannelList())[0]], inPixel[(this->GetChannelList())[1]]);
+    outPixel[0] = ComputePhase(inPixel[this->m_ChannelList[0]], inPixel[this->m_ChannelList[1]]);
     return outPixel;
   }
 
 private:
-  inline ScalarType ComputePhase(ScalarType a, ScalarType b) const
+  ScalarType ComputePhase(ScalarType a, ScalarType b) const
   {
     return std::atan2(b, a);
   }
