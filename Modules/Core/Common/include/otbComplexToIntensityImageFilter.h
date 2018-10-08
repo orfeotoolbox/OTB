@@ -98,8 +98,8 @@ public:
 
 
 protected:
-  ComplexToIntensityImageFilter() {}
-  ~ComplexToIntensityImageFilter() override {}
+  ComplexToIntensityImageFilter() = default;
+  ~ComplexToIntensityImageFilter() override = default;
 
 private:
   ComplexToIntensityImageFilter(const Self&) = delete;

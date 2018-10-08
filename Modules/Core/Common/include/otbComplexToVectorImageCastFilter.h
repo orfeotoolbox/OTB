@@ -52,8 +52,7 @@ public:
 
   inline TOutput operator()( const TInput & A ) const
     {
-      TOutput output;
-      output.SetSize( 2 );
+      TOutput output(2);
 
       output[0] = static_cast<OutputValueType>(A.real());
       output[1] = static_cast<OutputValueType>(A.imag());
@@ -76,8 +75,7 @@ public:
 
   inline TOutput operator()( const TInput & A ) const
     {
-      TOutput output;
-      output.SetSize( 2*A.Size() );
+      TOutput output(2*A.Size());
 
       for(unsigned int i=0; i<A.Size(); ++i)
         {
@@ -139,29 +137,29 @@ public:
 
 
 protected:
-  ComplexToVectorImageCastFilter() {}
-  ~ComplexToVectorImageCastFilter() override {}
+  ComplexToVectorImageCastFilter() = default;
+  ~ComplexToVectorImageCastFilter() override = default;
 
   template<class T>
-  bool PixelIsSingle(const T& /*dummy*/)
+  bool PixelIsSingle(const T& /*dummy*/) const
   {
-              return true;
+    return true;
   }
 
   template<class T>
-  bool PixelIsSingle(const itk::VariableLengthVector<T>& /*dummy*/)
+  bool PixelIsSingle(const itk::VariableLengthVector<T>& /*dummy*/) const
   {
-              return false;
+    return false;
   }
 
   void GenerateOutputInformation() override
   {
-              Superclass::GenerateOutputInformation();
-              InputPixelType dummy;
-              if (!this->PixelIsSingle(dummy))
-              {
-                     this->GetOutput()->SetNumberOfComponentsPerPixel(2 * this->GetInput()->GetNumberOfComponentsPerPixel());
-              }
+    Superclass::GenerateOutputInformation();
+    InputPixelType dummy;
+    if (!this->PixelIsSingle(dummy))
+      {
+        this->GetOutput()->SetNumberOfComponentsPerPixel(2 * this->GetInput()->GetNumberOfComponentsPerPixel());
+      }
   }
 
 private:
