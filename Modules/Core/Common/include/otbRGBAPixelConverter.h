@@ -65,12 +65,8 @@ public:
   OutputPixelType Convert (InputPixelType input);
 
 protected:
-  RGBAPixelConverter(){}
-  ~RGBAPixelConverter() override{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
+  RGBAPixelConverter() = default;
+  ~RGBAPixelConverter() override = default;
 
 private:
   RGBAPixelConverter(const Self&) = delete;
@@ -102,12 +98,8 @@ public:
   OutputPixelType Convert (InputPixelType input);
 
 protected:
-  RGBAPixelConverter(){}
-  ~RGBAPixelConverter() override{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
+  RGBAPixelConverter() = default;
+  ~RGBAPixelConverter() override = default;
 
 private:
   RGBAPixelConverter(const Self&) = delete;
@@ -139,12 +131,8 @@ public:
   OutputPixelType Convert (InputPixelType input);
 
 protected:
-  RGBAPixelConverter(){}
-  ~RGBAPixelConverter() override{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
+  RGBAPixelConverter() = default;
+  ~RGBAPixelConverter() override = default;
 
 private:
   RGBAPixelConverter(const Self&) = delete;

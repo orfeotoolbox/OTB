@@ -56,7 +56,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
 template <unsigned int VImageDimension>
 itk::ImageRegion<VImageDimension>
 ImageRegionAdaptativeSplitter<VImageDimension>
-::GetSplit(unsigned int i, unsigned int itkNotUsed(numberOfPieces), const RegionType& region)
+::GetSplit(unsigned int i, unsigned int /*numberOfPieces*/, const RegionType& region)
 {
   // Set parameters
   this->SetImageRegion(region);

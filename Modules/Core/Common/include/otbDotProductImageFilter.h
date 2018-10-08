@@ -43,8 +43,8 @@ public:
   typedef TInput     InputType;
   typedef TOutput    OutputType;
 
-  DotProductFunctor() {}
-  virtual ~DotProductFunctor() {}
+  DotProductFunctor() = default;
+  virtual ~DotProductFunctor() = default;
 
   bool operator !=(const DotProductFunctor& ) const
   {
@@ -148,9 +148,5 @@ private:
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDotProductImageFilter.hxx"
-#endif
 
 #endif

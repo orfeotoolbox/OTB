@@ -81,7 +81,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, VImageDimension);
 
   /** Dimension of the image available at run time. */
-  static unsigned int GetImageDimension()
+  static constexpr unsigned int GetImageDimension()
   {
     return VImageDimension;
   }
@@ -147,9 +147,9 @@ protected:
                                     m_RequestedNumberOfSplits(0),
                                     m_StreamVector(),
                                     m_IsUpToDate(false)
-                                      {}
+                                    {};
 
-  ~ImageRegionAdaptativeSplitter() override {}
+  ~ImageRegionAdaptativeSplitter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:

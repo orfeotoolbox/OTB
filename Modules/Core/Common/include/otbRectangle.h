@@ -100,7 +100,7 @@ protected:
     };
 
   /** Destructor */
-  ~Rectangle() override {}
+  ~Rectangle() override = default;
 
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

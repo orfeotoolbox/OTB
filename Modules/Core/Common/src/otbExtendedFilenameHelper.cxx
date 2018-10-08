@@ -192,7 +192,7 @@ ExtendedFilenameHelper::GenericBandRange
 
 void
 ExtendedFilenameHelper::GenericBandRange
-::Print(std::ostream& os)
+::Print(std::ostream& os) const
   {
   if (this->first)
     {

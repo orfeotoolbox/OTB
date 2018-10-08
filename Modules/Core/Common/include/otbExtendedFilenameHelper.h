@@ -77,7 +77,7 @@ public:
 
     bool SetString(const std::string& str, size_t start=0 , size_t size=std::string::npos);
 
-    void Print(std::ostream& os);
+    void Print(std::ostream& os) const;
   };
 
   /**  Decode the string into a list of GenericBandRange, band indexes are
@@ -90,8 +90,8 @@ public:
   bool ResolveBandRange(const std::string &bandRange, const unsigned int &nbBands, std::vector<unsigned int> &output) const;
 
 protected:
-  ExtendedFilenameHelper() {}
-  ~ExtendedFilenameHelper() override {}
+  ExtendedFilenameHelper() = default;
+  ~ExtendedFilenameHelper() override = default;
 
 private:
   ExtendedFilenameHelper(const Self &) = delete;

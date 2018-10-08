@@ -62,10 +62,6 @@ Logger::Logger()
   m_LogSetupInfoDone = false;
 }
 
-Logger::~Logger()
-{
-}
-
 void Logger::LogSetupInformation()
 {
   if (! IsLogSetupInformationDone())
@@ -123,7 +119,7 @@ std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, st
   return s.str();
 }
 
-bool Logger::IsLogSetupInformationDone()
+bool Logger::IsLogSetupInformationDone() const
 {
   return m_LogSetupInfoDone;
 }

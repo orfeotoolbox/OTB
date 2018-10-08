@@ -44,13 +44,13 @@ public:
     {
     m_Operator = ADDITION;  //1;
     };
-  virtual ~ImageAndVectorImageOperationFunctor(){}
+  virtual ~ImageAndVectorImageOperationFunctor() = default;
 
   void SetOperator(OperatorType oper)
   {
     m_Operator = oper;
   }
-  OperatorType GetOperator()
+  OperatorType GetOperator() const
   {
     return m_Operator;
   }
@@ -167,8 +167,8 @@ public:
   void SetVectorInput(const VectorInputImageType *input);
 
   /** Get the input images of this process object.  */
-  const InputImageType * GetInput();
-  const VectorInputImageType * GetVectorInput();
+  const InputImageType * GetInput() const;
+  const VectorInputImageType * GetVectorInput() const;
 
   /** Accessors */
   itkGetMacro(UseAddition, bool);
@@ -215,7 +215,7 @@ public:
 
 protected:
   ImageAndVectorImageOperationFilter();
-  ~ImageAndVectorImageOperationFilter() override;
+  ~ImageAndVectorImageOperationFilter() override = default;
 
   /** This is a source, so it must set the spacing, size, and largest possible
    * region for the output image that it will produce.

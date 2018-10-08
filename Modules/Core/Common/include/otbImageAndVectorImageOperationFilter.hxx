@@ -36,12 +36,6 @@ ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::~ImageAndVectorImageOperationFilter()
-{
-}
-
-template <class TInputImage, class TVectorInputImage, class TOutputImage>
 void
 ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
 ::SetInput(const InputImageType *input)
@@ -60,7 +54,7 @@ ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
 const typename ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::InputImageType *
 ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::GetInput()
+::GetInput() const
 {
   if (this->GetNumberOfInputs() < 1) return 0;
 
@@ -70,7 +64,7 @@ ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
 const typename ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::VectorInputImageType *
 ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::GetVectorInput()
+::GetVectorInput() const
 {
   if (this->GetNumberOfInputs() < 2) return nullptr;
 

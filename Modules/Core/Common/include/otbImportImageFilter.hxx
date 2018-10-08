@@ -33,20 +33,17 @@ namespace otb
  */
 template <class TOutputImage>
 ImportImageFilter<TOutputImage>
-::ImportImageFilter()
+::ImportImageFilter() :
+    m_ImportPointer(nullptr),
+    m_FilterManageMemory(false),
+    m_Size(0)
 {
-  unsigned int idx;
-
-  for (idx = 0; idx < TOutputImage::ImageDimension; ++idx)
+  for (unsigned int idx = 0; idx < TOutputImage::ImageDimension; ++idx)
     {
     m_Spacing[idx] = 1.0;
     m_Origin[idx] = 0.0;
     }
   m_Direction.SetIdentity();
-
-  m_ImportPointer = nullptr;
-  m_FilterManageMemory = false;
-  m_Size = 0;
 }
 
 /**
@@ -127,9 +124,9 @@ ImportImageFilter<TOutputImage>
  *
  */
 template <class TOutputImage>
-typename ImportImageFilter<TOutputImage>::TPixel*
+const typename ImportImageFilter<TOutputImage>::TPixel*
 ImportImageFilter<TOutputImage>
-::GetImportPointer()
+::GetImportPointer() const
 {
   return m_ImportPointer;
 }
@@ -143,7 +140,8 @@ ImportImageFilter<TOutputImage>
 ::EnlargeOutputRequestedRegion(itk::DataObject *output)
 {
   // call the superclass' implementation of this method
-  Superclass::EnlargeOutputRequestedRegion(output);
+  // Superclass::EnlargeOutputRequestedRegion(output);
+  // Does nothing
 
   // get pointer to the output
   OutputImagePointer outputPtr = this->GetOutput();
@@ -162,7 +160,8 @@ ImportImageFilter<TOutputImage>
 ::GenerateOutputInformation()
 {
   // call the superclass' implementation of this method
-  Superclass::GenerateOutputInformation();
+  // Superclass::GenerateOutputInformation();
+  // Does nothing as this->GetPrimaryInput() = nullptr
 
   // get pointer to the output
   OutputImagePointer outputPtr = this->GetOutput();

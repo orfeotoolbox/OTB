@@ -86,12 +86,9 @@ public:
   /** Return the output image direction */
   OutputImageDirectionType * GetOutputDirection();
 
-  void GenerateInputRequestedRegion() override;
-
 protected:
   ImageToModulusAndDirectionImageFilter();
-  ~ImageToModulusAndDirectionImageFilter() override {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  ~ImageToModulusAndDirectionImageFilter() override = default;
 
 private:
   ImageToModulusAndDirectionImageFilter(const Self &) = delete;

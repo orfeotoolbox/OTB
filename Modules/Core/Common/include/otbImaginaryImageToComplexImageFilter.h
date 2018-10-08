@@ -91,8 +91,8 @@ public:
   typedef typename itk::NumericTraits< OutputPixelType >::ValueType OutputPixelValueType;
 
 protected:
-  ImaginaryImageToComplexImageFilter() {}
-  ~ImaginaryImageToComplexImageFilter() override {}
+  ImaginaryImageToComplexImageFilter() = default;
+  ~ImaginaryImageToComplexImageFilter() override = default;
 
 private:
   ImaginaryImageToComplexImageFilter(const Self&) = delete;

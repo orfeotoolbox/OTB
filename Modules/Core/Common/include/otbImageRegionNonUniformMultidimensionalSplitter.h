@@ -106,8 +106,8 @@ public:
                               const RegionType& region) override;
 
 protected:
-  ImageRegionNonUniformMultidimensionalSplitter() {}
-  ~ImageRegionNonUniformMultidimensionalSplitter() override {}
+  ImageRegionNonUniformMultidimensionalSplitter() = default;
+  ~ImageRegionNonUniformMultidimensionalSplitter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:

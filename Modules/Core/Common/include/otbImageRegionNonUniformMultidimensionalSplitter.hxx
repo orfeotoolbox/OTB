@@ -41,10 +41,9 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 //     ::ceil( std::pow((double) requestedNumber, 1.0/(double) VImageDimension));
 
   unsigned int numberOfPiecesLeft = requestedNumber;
-  unsigned int j, numPieces;
-  numPieces = 1;
+  unsigned int j(VImageDimension) , numPieces(1);
 
-  for (j = VImageDimension; j > 0; --j)
+  for (; j > 0 ; --j )
     {
     if (regionSize[j - 1] < numberOfPiecesLeft)
       {
@@ -87,16 +86,10 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 ::GetSplit(unsigned int i, unsigned int numberOfPieces,
            const RegionType& region)
 {
-  RegionType splitRegion;
-  IndexType  splitIndex;
-  SizeType   splitSize, regionSize;
-
   // Initialize the splitRegion to the requested region
-  splitRegion = region;
-  splitIndex = splitRegion.GetIndex();
-  splitSize = splitRegion.GetSize();
-
-  regionSize = region.GetSize();
+  RegionType splitRegion(region);
+  IndexType  splitIndex(region.GetIndex());
+  SizeType   splitSize(region.GetSize()) , regionSize(region.GetSize());
 
   // requested number of splits per dimension
   double splitsPerDimension[VImageDimension];
@@ -104,8 +97,8 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 
   unsigned int numberOfPiecesLeft = numberOfPieces;
 
-  unsigned int j;
-  for (j = VImageDimension; j > 0; --j)
+  unsigned int j(VImageDimension);
+  for (; j > 0; --j )
     {
     if (regionSize[j - 1] < numberOfPiecesLeft)
       {
@@ -122,10 +115,9 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
   // if a given dimension has fewer pixels that splitsPerDimension, then
   // only split number of pixels times
   unsigned int splits[VImageDimension], pixelsPerSplit[VImageDimension];
-  unsigned int numPieces;
+  unsigned int numPieces(1);
   unsigned int ijk[VImageDimension];
   unsigned int offsetTable[VImageDimension];
-  numPieces = 1;
   for (j = 0; j < VImageDimension; ++j)
     {
     offsetTable[j] = numPieces;

@@ -78,7 +78,7 @@ public:
   typedef typename OutputImageType::PixelType TPixel;
 
   /** Get the pointer from which the image data is imported. */
-  TPixel *GetImportPointer();
+  const TPixel *GetImportPointer() const;
 
   /** Set the pointer from which the image data is imported.  "num" is
    * the number of pixels in the block of memory. If

@@ -65,14 +65,14 @@ public:
   void LogSetupInformation();
 
   /** Return true if the LogSetupInformation has already been called*/
-  bool IsLogSetupInformationDone();
+  bool IsLogSetupInformationDone() const;
 
   /** Set the flag m_LogSetupInfoDone to true */
   void LogSetupInformationDone();
 
 protected:
   Logger();
-  virtual ~Logger() override;
+  virtual ~Logger() override = default;
 
 private:
   Logger(const Self &) = delete;

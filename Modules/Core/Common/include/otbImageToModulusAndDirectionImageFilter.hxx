@@ -34,9 +34,6 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 ImageToModulusAndDirectionImageFilter()
 {
-  this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfRequiredOutputs(2);
   this->SetNumberOfRequiredOutputs(2);
 
   this->SetNthOutput(0, OutputImageType::New());
@@ -52,7 +49,7 @@ GetOutput() const
 {
   if (this->GetNumberOfOutputs() < 1)
     {
-    return 0;
+    return nullptr;
     }
   return static_cast<const OutputImageType *>
            (this->itk::ProcessObject::GetOutput(0));
@@ -99,29 +96,6 @@ GetOutputDirection()
     }
   return static_cast<OutputImageDirectionType *>
            (this->itk::ProcessObject::GetOutput(1));
-}
-
-/**
- * Standard "GenerateInputRequestedRegion" method
- */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection>
-void
-ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
-::GenerateInputRequestedRegion()
-{
-  Superclass::GenerateInputRequestedRegion();
-}
-
-/**
- * Standard "PrintSelf" method
- */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection>
-void
-ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
-PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-
 }
 
 } // end namespace otb
