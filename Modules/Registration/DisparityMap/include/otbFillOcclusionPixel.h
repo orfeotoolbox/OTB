@@ -58,7 +58,7 @@ public:
     std::vector< std::pair<int,double> > duo(m_WSize);   
   
     PixelType I(3);
-    if(input_center_pixel[4] < 0.0000000001)
+    if((input_center_pixel[4] < 0.0000000001) && (input_center_pixel[0]>0.0000000001))
       {
       double Wt=0. ;
       for (unsigned int j  = 0; j< m_WSize; j++)
@@ -143,12 +143,12 @@ protected:
 
 template < class TInputImage, class TOutputImage >
 void FillPixelFilter < TInputImage, TOutputImage >
-::GenerateOutputInformation(void){
+::GenerateOutputInformation(void)
+  {
  Superclass::GenerateOutputInformation(); 
  this->GetOutput()->SetNumberOfComponentsPerPixel(1);
-
  this->GetFunctor().m_WSize = (this->m_Radius[0]*2+1)*(this->m_Radius[0]*2+1);
-}
+  }
 
 } // end of namespace otb
 
