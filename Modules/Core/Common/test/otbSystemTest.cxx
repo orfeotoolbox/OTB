@@ -31,12 +31,6 @@ int otbSystemTest(int itkNotUsed(argc), char * argv[])
   const char *       inputDirName   = argv[2];
   std::ostringstream msg;
 
-  // Check instantiation test
-  otb::System * var(nullptr);
-  var = new otb::System();
-  delete var;
-  var = nullptr;
-
   if (itksys::SystemTools::FileExists(inputFileName, true) == false)
     {
     itkGenericExceptionMacro(<< "itksys::SystemTools::FileExists() error : the filename " << inputFileName << " is not detected.");

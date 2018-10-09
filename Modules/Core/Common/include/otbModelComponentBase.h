@@ -130,7 +130,7 @@ public:
 
 protected:
   ModelComponentBase();
-  ~ModelComponentBase() override {}
+  ~ModelComponentBase() override =  default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void GenerateData();

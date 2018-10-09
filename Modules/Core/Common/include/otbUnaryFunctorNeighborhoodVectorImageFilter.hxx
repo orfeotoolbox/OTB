@@ -36,24 +36,8 @@ template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunction>
 ::UnaryFunctorNeighborhoodVectorImageFilter()
 {
-  this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
-  for ( unsigned int i = 0; i < InputImageDimension; ++i )
-    m_Radius[i] = 3;
-}
-
-/**
- * Generate the output information
- */
-template <class TInputImage, class TOutputImage, class TFunction>
-void
-UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunction>
-::GenerateOutputInformation(void)
-{
-  Superclass::GenerateOutputInformation();
-
-  this->GetOutput()->SetNumberOfComponentsPerPixel(
-    this->GetInput()->GetNumberOfComponentsPerPixel() );
+  m_Radius.Fill(3);
 }
 
 /**

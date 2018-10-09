@@ -26,13 +26,6 @@
 
 namespace otb
 {
-
-Stopwatch
-::Stopwatch()
-  : m_StartTime(), m_ElapsedMilliseconds(), m_IsRunning()
-{
-}
-
 void
 Stopwatch
 ::Start()
@@ -91,9 +84,9 @@ Stopwatch
   auto result = this->GetElapsedMilliseconds();
   DurationType seconds = result / 1000;
   DurationType hours = seconds / 3600;
-  seconds -= hours * 3600;
+  seconds %=  3600;
   DurationType minutes = seconds / 60;
-  seconds -= minutes * 60;
+  seconds %= 60;
   std::ostringstream os;
   if (hours > 0)
     oss << hours << "h " << std::setfill('0') << std::setw(2);

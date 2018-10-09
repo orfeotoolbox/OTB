@@ -107,11 +107,11 @@ protected:
   /**
    * Constructor
    */
-  UnaryFunctorWithIndexWithOutputSizeImageFilter();
+  UnaryFunctorWithIndexWithOutputSizeImageFilter() = default;
   /**
    * Destructor
    */
-  ~UnaryFunctorWithIndexWithOutputSizeImageFilter() override {}
+  ~UnaryFunctorWithIndexWithOutputSizeImageFilter() override = default;
 
   /** UnaryFunctorWithIndexWithOutputSizeImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine

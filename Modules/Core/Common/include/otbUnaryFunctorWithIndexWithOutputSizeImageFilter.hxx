@@ -27,15 +27,6 @@
 
 namespace otb
 {
-/**
- * Constructor
- */
-template <class TInputImage, class TOutputImage, class TFunction>
-UnaryFunctorWithIndexWithOutputSizeImageFilter<TInputImage, TOutputImage, TFunction>
-::UnaryFunctorWithIndexWithOutputSizeImageFilter()
-{
-  this->SetNumberOfRequiredInputs(1);
-}
 template <class TInputImage, class TOutputImage, class TFunction>
 void
 UnaryFunctorWithIndexWithOutputSizeImageFilter<TInputImage, TOutputImage, TFunction>

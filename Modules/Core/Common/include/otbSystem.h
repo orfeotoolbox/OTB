@@ -32,7 +32,7 @@
 namespace otb
 {
 
-/** \class System
+/** \namespace System
  * \brief System operations.
  *
  * System operations, filename or strings manipulations, etc.
@@ -40,27 +40,22 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-class OTBCommon_EXPORT System
+namespace System OTBCommon_EXPORT
 {
-public:
-
-  /** Standard class typedefs. */
-  typedef System Self;
-
   /** Get the root name */
-  static std::string GetRootName(const std::string& filename);
+  std::string GetRootName(const std::string& filename);
 
   /** Get list of file find in a directory */
-  static std::vector<std::string> Readdir(const std::string& pszPath);
+  std::vector<std::string> Readdir(const std::string& pszPath);
 
   /** Parse the hdf subset name */
-  static bool ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name);
+  bool ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name);
 
   /** Parse a filename with dataset information */
-  static bool ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum);
+  bool ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum);
 
   /** Parse a filename with additional information */
-  static bool ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum);
+  bool ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum);
 };
 
 } // namespace otb

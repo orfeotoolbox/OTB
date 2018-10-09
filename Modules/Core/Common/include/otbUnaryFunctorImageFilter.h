@@ -57,8 +57,8 @@ public:
   itkTypeMacro(UnaryFunctorImageFilter, itk::UnaryFunctorImageFilter);
 
 protected:
-  UnaryFunctorImageFilter() {};
-  ~UnaryFunctorImageFilter() override {}
+  UnaryFunctorImageFilter() = default;
+  ~UnaryFunctorImageFilter() override = default;
 
   /** UnaryFunctorImageFilter can produce an image which has a different number of bands
    * than its input image.  As such, UnaryFunctorImageFilter

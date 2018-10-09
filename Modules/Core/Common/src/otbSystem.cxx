@@ -44,9 +44,10 @@
 namespace otb
 {
 
+namespace System 
+{
 //GetRootName from uiig library.
-std::string
-System::GetRootName(const std::string& filename)
+std::string GetRootName(const std::string& filename)
 {
   const std::string fileExt = itksys::SystemTools::GetFilenameLastExtension(filename);
 
@@ -69,7 +70,7 @@ System::GetRootName(const std::string& filename)
                    WIN32 / MSVC++ implementation
  *====================================================================*/
 
-std::vector<std::string> System::Readdir(const std::string&  pszPath)
+std::vector<std::string> Readdir(const std::string&  pszPath)
 {
   struct _finddata_t       c_file;
   long                     hFile;
@@ -117,7 +118,7 @@ std::vector<std::string> System::Readdir(const std::string&  pszPath)
  * doesn't exist.
  */
 
-std::vector<std::string> System::Readdir(const std::string& pszPath)
+std::vector<std::string> Readdir(const std::string& pszPath)
 {
   DIR *                    hDir;
   std::vector<std::string> listFileFind;
@@ -146,7 +147,7 @@ std::vector<std::string> System::Readdir(const std::string& pszPath)
  * it will set key to SUBDATASET_7_NAME
  * and name to HDF4_EOS:EOS_GRID:"file/MOD13Q1.A2010001.h17v05.005.2010028003734.hdf":MODIS_Grid_16DAY...
  */
-bool System::ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name)
+bool ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name)
 {
   std::size_t pos = id.find("=");
   if (pos == std::string::npos) return false;
@@ -160,7 +161,7 @@ bool System::ParseHdfSubsetName(const std::string& id, std::string& key, std::st
  * it will return filelocation/file.hdf in file
  * and 10 in datasetNum
  */
-bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum)
+bool ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum)
 {
   std::size_t pos = id.rfind(":");
   if (pos == std::string::npos) return false;
@@ -183,7 +184,7 @@ bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned
  * it will return filelocation/file.*** in file
  * and 10 in addNum additional
  */
-bool System::ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum)
+bool ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum)
 {
   std::size_t pos = id.rfind(":");
   if (pos == std::string::npos) return false;
@@ -202,4 +203,5 @@ bool System::ParseFileNameForAdditionalInfo(const std::string& id, std::string& 
   return true;
 }
 
-}
+} // end namespace system
+} // end namespace otb

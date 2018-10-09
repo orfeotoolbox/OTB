@@ -35,22 +35,7 @@ template <class TInputImage, class TOutputImage, class TFunction>
 UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>
 ::UnaryFunctorVectorImageFilter()
 {
-  this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
-}
-
-/**
- * Generate the output information
- */
-template <class TInputImage, class TOutputImage, class TFunction>
-void
-UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>
-::GenerateOutputInformation(void)
-{
-  Superclass::GenerateOutputInformation();
-
-  this->GetOutput()->SetNumberOfComponentsPerPixel(
-    this->GetInput()->GetNumberOfComponentsPerPixel() );
 }
 
 /**

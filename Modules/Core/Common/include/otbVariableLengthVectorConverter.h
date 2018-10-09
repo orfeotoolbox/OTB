@@ -72,8 +72,8 @@ public:
   }
 
 protected:
-  VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() override{}
+  VariableLengthVectorConverter() = default;
+  ~VariableLengthVectorConverter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
@@ -115,8 +115,8 @@ public:
   }
 
 protected:
-  VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() override{}
+  VariableLengthVectorConverter() = default;
+  ~VariableLengthVectorConverter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
@@ -156,8 +156,8 @@ public:
   OutputType Convert(InputType input);
 
 protected:
-  VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() override{}
+  VariableLengthVectorConverter() = default;
+  ~VariableLengthVectorConverter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
@@ -197,8 +197,8 @@ public:
   OutputType Convert(InputType input);
 
 protected:
-  VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() override{}
+  VariableLengthVectorConverter() = default;
+  ~VariableLengthVectorConverter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
@@ -238,8 +238,8 @@ public:
   OutputType Convert(InputType input);
 
 protected:
-  VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() override{}
+  VariableLengthVectorConverter() = default;
+  ~VariableLengthVectorConverter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
@@ -278,8 +278,8 @@ public:
   OutputType Convert(InputType input);
 
 protected:
-  VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() override{}
+  VariableLengthVectorConverter() = default;
+  ~VariableLengthVectorConverter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);

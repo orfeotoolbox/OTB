@@ -93,7 +93,7 @@ public:
 
 protected:
   UnaryFunctorVectorImageFilter();
-  ~UnaryFunctorVectorImageFilter() override { }
+  ~UnaryFunctorVectorImageFilter() override = default;
 
   /** UnaryFunctorVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -108,11 +108,12 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                                     itk::ThreadIdType threadId) override;
 
-  /**
-   * Since the number of components per pixel depends on the radius range, one must reimplement
-   * this method to set the proper number of component on the filter output.
-   */
-  void GenerateOutputInformation(void) override;
+  ///**
+  // * Since the number of components per pixel depends on the radius range, one must reimplement
+  // * this method to set the proper number of component on the filter output.
+  // */
+  // void GenerateOutputInformation(void) override;
+  // No need as ProcessObject is calling ouput->CopyInformation(input);
 
 private:
   UnaryFunctorVectorImageFilter(const Self &) = delete;

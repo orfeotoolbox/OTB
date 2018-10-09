@@ -65,8 +65,8 @@ public:
   typedef typename Superclass::PixelContainerConstPointer PixelContainerConstPointer;
 
 protected:
-  VectorImageToASImageAdaptor() {}
-  ~VectorImageToASImageAdaptor() override {}
+  VectorImageToASImageAdaptor() = default;
+  ~VectorImageToASImageAdaptor() override = default;
 
 private:
   VectorImageToASImageAdaptor(const Self &) = delete;

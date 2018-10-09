@@ -48,7 +48,7 @@ public:
   typedef uint64_t   DurationType;
 
   /** Constructs a timer instance */
-  Stopwatch();
+  Stopwatch() = default;
 
   /** Start the timer if not already running */
   void Start();

@@ -43,7 +43,7 @@ class ITK_EXPORT UniformAlphaBlendingFunctor
 {
 public:
   UniformAlphaBlendingFunctor(): m_Alpha(0.5) {}
-  ~UniformAlphaBlendingFunctor(){}
+  ~UniformAlphaBlendingFunctor() = default;
 
   typedef TInputPixel                         InputPixelType;
   typedef TInputPixel2                        InputPixel2Type;
@@ -60,7 +60,7 @@ public:
     return m_Alpha;
   }
 
-  inline OutputPixelType operator ()(InputPixelType input1, InputPixel2Type input2) const
+  OutputPixelType operator ()(InputPixelType input1, InputPixel2Type input2) const
   {
     OutputPixelType resp;
     resp.Fill(itk::NumericTraits<OutputInternalPixelType>::max());
