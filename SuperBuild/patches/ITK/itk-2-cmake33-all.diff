@@ -1,9 +1,9 @@
 diff -burN ITK-5.0b01.orig/CMakeLists.txt ITK-5.0b01/CMakeLists.txt
---- ITK-5.0b01.orig/CMakeLists.txt	Mon Oct  8 09:07:50 2018
-+++ ITK-5.0b01/CMakeLists.txt	Thu Sep  6 00:23:21 2018
+--- ITK-5.0b01.orig/CMakeLists.txt	Tue Oct  9 10:56:04 2018
++++ ITK-5.0b01/CMakeLists.txt	Tue Oct  9 10:56:44 2018
 @@ -1,4 +1,4 @@
--cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
-+cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
+-cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
  
  if(CMAKE_CXX_STANDARD EQUAL "98" )
     message(FATAL_ERROR "CMAKE_CXX_STANDARD:STRING=98 is not supported in ITK version 5 and greater.")
