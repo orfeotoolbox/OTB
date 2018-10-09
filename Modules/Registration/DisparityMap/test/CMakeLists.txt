@@ -273,21 +273,6 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbDisparityMapT
   -10 +10
   )
 
-
-  otb_add_test(NAME dmTvGuidedFilter COMMAND otbDisparityMapTestDriver
-  --compare-n-images ${NOTOL} 2
-  ${BASELINE}/dmTvGuidedFilterOutputLeftDisparity.tif
-  ${TEMP}/dmTvGuidedFilterOutputLeftDisparity.tif
-  ${BASELINE}/dmTvGuidedFilterOutputRightDisparity.tif
-  ${TEMP}/dmTvGuidedFilterOutputRightDisparity.tif
-  otbGuidedFilterTest
-  ${INPUTDATA}/anaglyphInput2_roi.tif?&bands=1,2,3
-  ${INPUTDATA}/anaglyphInput1_roi.tif?&bands=1,2,3
-  -15 0 0.9 7 2 7 2 9 0
-  ${TEMP}/dmTvGuidedFilterOutput
-  )
-
-
   otb_add_test(NAME dmTvCostVolumeFilters COMMAND otbDisparityMapTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/dmTvCostVolumeFiltersOutputMinLeftCost.tif
@@ -300,8 +285,26 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbDisparityMapT
   -15 0 0.9 7 2 7 2 0 
   ${TEMP}/dmTvCostVolumeFiltersOutput
   )
-
-
+  otb_add_test(NAME dmTvLeftGuidedFilter COMMAND otbDisparityMapTestDriver
+  --compare-image ${NOTOL}
+  ${BASELINE}/dmTvGuidedFilterOutputLeftDisparity.tif
+  ${TEMP}/dmTvGuidedFilterOutputLeftDisparity.tif
+  otbGuidedFilterTest
+  ${INPUTDATA}/anaglyphInput2_roi.tif?&bands=1,2,3
+  ${INPUTDATA}/anaglyphInput1_roi.tif?&bands=1,2,3
+  -15 0 0.9 7 2 7 2 9 0
+  ${TEMP}/dmTvGuidedFilterOutputLeftDisparity.tif
+  )
+  otb_add_test(NAME dmTvRightGuidedFilter COMMAND otbDisparityMapTestDriver
+  --compare-image ${NOTOL}
+  ${BASELINE}/dmTvGuidedFilterOutputRightDisparity.tif
+  ${TEMP}/dmTvGuidedFilterOutputRightDisparity.tif
+  otbGuidedFilterTest
+  ${INPUTDATA}/anaglyphInput2_roi.tif?&bands=1,2,3
+  ${INPUTDATA}/anaglyphInput1_roi.tif?&bands=1,2,3
+  0 15 0.9 7 2 7 2 9 1
+  ${TEMP}/dmTvGuidedFilterOutputRightDisparity.tif
+  )
   otb_add_test(NAME dmTvOcclusionsDetectionFilter COMMAND otbDisparityMapTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/dmTvOcclusionsDetectionFilterOutputOcclusionsMask.tif
@@ -312,7 +315,6 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbDisparityMapT
   -15 0 2 0 
   ${TEMP}/dmTvOcclusionsDetectionFilterOutput
   )
-
   otb_add_test(NAME dmTvFillOcclusionsFilter COMMAND otbDisparityMapTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/dmTvFillOcclusionsFilterOutputFillOcclusions.tif
