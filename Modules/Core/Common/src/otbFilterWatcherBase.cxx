@@ -166,4 +166,68 @@ FilterWatcherBase
     }
 }
 
+const char *
+FilterWatcherBase
+::GetNameOfClass() const
+{
+  return (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None");
+}
+
+itk::ProcessObject *
+FilterWatcherBase
+::GetProcess() const
+{
+  return m_Process.GetPointer();
+}
+
+std::string
+FilterWatcherBase
+::GetComment() const
+{
+  return m_Comment;
+}
+
+const otb::Stopwatch& 
+FilterWatcherBase
+::GetStopwatch() const
+{
+  return m_Stopwatch;
+}
+
+otb::Stopwatch& 
+FilterWatcherBase
+::GetStopwatch()
+{
+  return m_Stopwatch;
+}
+
+void
+FilterWatcherBase
+::ShowProgressCallback()
+{
+  this->ShowProgress();
+}
+
+void 
+FilterWatcherBase
+::StartFilterCallback()
+{
+  if (!m_Started)
+    {
+    this->StartFilter();
+    m_Started = true;
+    }
+}
+
+void 
+FilterWatcherBase
+::EndFilterCallback()
+{
+  if (!m_Ended)
+    {
+    this->EndFilter();
+    m_Ended = true;
+    }
+}
+
 } // end namespace otb

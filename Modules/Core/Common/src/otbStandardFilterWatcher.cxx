@@ -27,27 +27,33 @@ namespace otb
 StandardFilterWatcher
 ::StandardFilterWatcher(itk::ProcessObject* process,
                         const char *comment)
-  : FilterWatcherBase(process, comment)
+  : FilterWatcherBase(process, comment) ,
+    m_StarsCount(50),
+    m_CurrentNbStars(-1)
 {
-  m_StarsCount = 50;
-  m_CurrentNbStars = -1;
 }
 
 StandardFilterWatcher
 ::StandardFilterWatcher(itk::ProcessObject* process,
                         const std::string& comment)
-  : FilterWatcherBase(process, comment.c_str())
+  : FilterWatcherBase(process, comment.c_str()),
+    m_StarsCount(50),
+    m_CurrentNbStars(-1)
 {
-  m_StarsCount = 50;
-  m_CurrentNbStars = -1;
 }
 
 StandardFilterWatcher
-::StandardFilterWatcher(const StandardFilterWatcher& watch) : FilterWatcherBase(watch)
+::StandardFilterWatcher(const StandardFilterWatcher& watch) 
+  : FilterWatcherBase(watch)
 {
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
   m_CurrentNbStars = watch.m_CurrentNbStars;
+}
+
+StandardFilterWatcher
+::StandardFilterWatcher() : m_StarsCount(0) 
+{
 }
 
 void
@@ -58,6 +64,20 @@ StandardFilterWatcher
   FilterWatcherBase::operator=(watch);
   m_StarsCount = watch.m_StarsCount;
   m_CurrentNbStars = watch.m_CurrentNbStars;
+}
+
+void 
+StandardFilterWatcher
+::SetStars(int count)
+{
+  m_StarsCount = count;
+}
+
+const int& 
+StandardFilterWatcher
+::GetStars() const
+{
+  return m_StarsCount;
 }
 
 void

@@ -372,4 +372,39 @@ WriterWatcherBase
     }
 }
 
+const char *
+WriterWatcherBase
+::GetNameOfClass()
+{
+  return (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None");
+}
+
+itk::ProcessObject *
+WriterWatcherBase
+::GetProcess() const
+{
+  return m_Process.GetPointer();
+}
+
+std::string 
+WriterWatcherBase
+::GetComment() const
+{
+  return m_Comment;
+}
+
+const otb::Stopwatch& 
+WriterWatcherBase
+::GetStopwatch() const
+{
+  return m_Stopwatch;
+}
+
+otb::Stopwatch& 
+WriterWatcherBase
+::GetStopwatch()
+{
+  return m_Stopwatch;
+}
+
 } // end namespace otb

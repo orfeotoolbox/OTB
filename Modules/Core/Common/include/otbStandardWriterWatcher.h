@@ -109,7 +109,7 @@ protected:
   void EndFilter() override {}
 
   /** This is the method invoked by ShowFilterProgress() and ShowWriterProgress() */
-  virtual void ShowProgress();
+  virtual void ShowProgress() const;
 
 private:
 

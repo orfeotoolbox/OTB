@@ -73,29 +73,21 @@ public:
   /** Destructor. */
   virtual ~WriterWatcherBase();
 
-  const char *GetNameOfClass()
-    {
-    return (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None");
-    }
+  const char *GetNameOfClass();
 
   /** Methods to access member data */
   /** Get a pointer to the process object being watched. */
-  itk::ProcessObject *GetProcess()
-  {
-    return m_Process.GetPointer();
-  }
+  itk::ProcessObject *GetProcess() const;
 
   /** Get the comment for the watcher. */
-  std::string GetComment() const
-  {
-    return m_Comment;
-  }
+  std::string GetComment() const;
+  // Q: Why not get a const &?
+
+  /** Get a const reference to the Stopwatch */
+  const otb::Stopwatch& GetStopwatch() const;
 
   /** Get a reference to the Stopwatch */
-  otb::Stopwatch& GetStopwatch()
-  {
-    return m_Stopwatch;
-  }
+  otb::Stopwatch& GetStopwatch();
 
 protected:
 

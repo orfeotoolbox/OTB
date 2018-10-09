@@ -66,57 +66,33 @@ public:
   /** Destructor. */
   virtual ~FilterWatcherBase();
 
-  const char *GetNameOfClass()
-    {
-    return (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None");
-    }
+  const char *GetNameOfClass() const;
 
   /** Methods to access member data */
   /** Get a pointer to the process object being watched. */
-  itk::ProcessObject *GetProcess()
-  {
-    return m_Process.GetPointer();
-  }
+  itk::ProcessObject *GetProcess() const;
+
 
   /** Get the comment for the watcher. */
-  std::string GetComment()
-  {
-    return m_Comment;
-  }
+  std::string GetComment() const;
+  // Q: Why not get a const &?
+
+  /** Get a const reference to the Stopwatch */
+  const otb::Stopwatch& GetStopwatch() const;
 
   /** Get a reference to the Stopwatch */
-  otb::Stopwatch& GetStopwatch()
-  {
-    return m_Stopwatch;
-  }
+  otb::Stopwatch& GetStopwatch();
 
 protected:
 
   /** Callback method to show the ProgressEvent */
-  virtual void ShowProgressCallback()
-  {
-    this->ShowProgress();
-  }
+  virtual void ShowProgressCallback();
 
   /** Callback method to show the StartEvent */
-  virtual void StartFilterCallback()
-  {
-    if (!m_Started)
-      {
-      this->StartFilter();
-      m_Started = true;
-      }
-  }
+  virtual void StartFilterCallback();
 
   /** Callback method to show the EndEvent */
-  virtual void EndFilterCallback()
-  {
-    if (!m_Ended)
-      {
-      this->EndFilter();
-      m_Ended = true;
-      }
-  }
+  virtual void EndFilterCallback();
 
   /** Callback method to show the ProgressEvent */
   virtual void ShowProgress() = 0;

@@ -30,40 +30,40 @@ namespace otb
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,
                         const char *comment)
-  : WriterWatcherBase(process, comment)
+  : WriterWatcherBase(process, comment) ,
+    m_StarsCount(50)
 {
-  m_StarsCount = 50;
 }
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
                         const char *comment)
-  : WriterWatcherBase(process, source, comment)
+  : WriterWatcherBase(process, source, comment) ,
+    m_StarsCount(50)
 {
-  m_StarsCount = 50;
 }
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,
                         const std::string& comment)
-  : WriterWatcherBase(process, comment.c_str())
+  : WriterWatcherBase(process, comment.c_str()) ,
+    m_StarsCount(50)
 {
-  m_StarsCount = 50;
 }
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
                         const std::string& comment)
-  : WriterWatcherBase(process, source, comment.c_str())
+  : WriterWatcherBase(process, source, comment.c_str()) ,
+    m_StarsCount(50)
 {
-  m_StarsCount = 50;
 }
 
 StandardWriterWatcher
-::StandardWriterWatcher(const StandardWriterWatcher& watch)  : WriterWatcherBase(watch)
+::StandardWriterWatcher(const StandardWriterWatcher& watch)
+  : WriterWatcherBase(watch) ,
+    m_StarsCount ( watch.m_StarsCount)
 {
-  // Initialize state
-  m_StarsCount = watch.m_StarsCount;
 }
 
 void
@@ -91,7 +91,7 @@ StandardWriterWatcher
 
 void
 StandardWriterWatcher
-::ShowProgress()
+::ShowProgress() const
 {
   std::ostringstream oss;
   oss.str("");

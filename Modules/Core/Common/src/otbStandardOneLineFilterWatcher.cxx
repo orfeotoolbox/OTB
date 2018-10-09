@@ -53,6 +53,20 @@ StandardOneLineFilterWatcher
 {
 }
 
+void 
+StandardOneLineFilterWatcher
+::SetStars(int count)
+{
+  m_StarsCount = count;
+}
+
+const int& 
+StandardOneLineFilterWatcher
+::GetStars() const
+{
+  return m_StarsCount;
+}
+
 void
 StandardOneLineFilterWatcher
 ::ShowProgress()

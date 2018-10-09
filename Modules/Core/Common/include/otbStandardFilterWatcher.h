@@ -62,7 +62,7 @@ public:
                         const std::string& comment = "");
 
   /** Default constructor */
-  StandardFilterWatcher() : m_StarsCount(0) {};
+  StandardFilterWatcher();
 
   /** Copy constructor */
   StandardFilterWatcher(const StandardFilterWatcher&);
@@ -71,14 +71,9 @@ public:
   void operator =(const StandardFilterWatcher&);
 
   /** Get/Set number of stars */
-  void SetStars(int count)
-  {
-    m_StarsCount = count;
-  }
-  const int& GetStars() const
-  {
-    return m_StarsCount;
-  }
+  void SetStars(int count) ;
+
+  const int& GetStars() const;
 
 protected:
 
