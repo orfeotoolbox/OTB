@@ -245,24 +245,20 @@ int otbGuidedFilterTest(int argc, char *argv[])
   if(sense==0)
     {
     m_LeftDisparity->SetDisp(dispMax);
-    m_RightDisparity->SetDisp(-dispMax);
+    IntImageWriterType::Pointer writer_m_LeftDisparity = IntImageWriterType::New();
+    writer_m_LeftDisparity->SetFileName( FILENAME(""));
+    writer_m_LeftDisparity->SetInput(m_LeftDisparity->GetOutput());
+    writer_m_LeftDisparity->Update();
     }
   else
     {
-    m_LeftDisparity->SetDisp(-dispMin);
     m_RightDisparity->SetDisp(dispMin);
+    IntImageWriterType::Pointer writer_m_RightDisparity = IntImageWriterType::New();
+    writer_m_RightDisparity->SetFileName( FILENAME(""));
+    writer_m_RightDisparity->SetInput(m_RightDisparity->GetOutput());
+    writer_m_RightDisparity->Update();
     }
-
-  IntImageWriterType::Pointer writer_m_LeftDisparity = IntImageWriterType::New();
-  writer_m_LeftDisparity->SetFileName( FILENAME("LeftDisparity.tif"));
-  writer_m_LeftDisparity->SetInput(m_LeftDisparity->GetOutput());
-  writer_m_LeftDisparity->Update();
   
-  IntImageWriterType::Pointer writer_m_RightDisparity = IntImageWriterType::New();
-  writer_m_RightDisparity->SetFileName( FILENAME("RightDisparity.tif"));
-  writer_m_RightDisparity->SetInput(m_RightDisparity->GetOutput());
-  writer_m_RightDisparity->Update();
-
   return EXIT_SUCCESS;
 
   }

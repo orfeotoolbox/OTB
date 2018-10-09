@@ -146,23 +146,30 @@ public:
       double multr(0.);
       double multg(0.);
       double multb(0.);
-      for (unsigned int i = 0; i < input_C.Size() ; ++i)
+
+      if(input_C.GetCenterPixel()[bandC] < 0.0000001 )
+      {        
+      }
+      else
+      {
+       for (unsigned int i = 0; i < input_C.Size() ; ++i)
         {
         mean_p += input_C.GetPixel(i)[bandC];   
         multr += input_I.GetPixel(i)[0] * input_C.GetPixel(i)[bandC];
         multg += input_I.GetPixel(i)[1] * input_C.GetPixel(i)[bandC];
         multb += input_I.GetPixel(i)[2] * input_C.GetPixel(i)[bandC];
         }
-      mean_p /= m_WSize*m_WSize;
-      multr /= m_WSize*m_WSize;
-      multg /= m_WSize*m_WSize;
-      multb /= m_WSize*m_WSize;
-      v_pmean[bandC] = mean_p;
-      v_multr[bandC] = multr ;
-      v_multg[bandC] = multg ;
-      v_multb[bandC] = multb ;
-      }
-      
+        mean_p /= m_WSize*m_WSize;
+        multr /= m_WSize*m_WSize;
+        multg /= m_WSize*m_WSize;
+        multb /= m_WSize*m_WSize;
+        v_pmean[bandC] = mean_p;
+        v_multr[bandC] = multr ;
+        v_multg[bandC] = multg ;
+        v_multb[bandC] = multb ;
+        }     
+      }      
+
     //covariance matrix
     typedef itk::Matrix<double, 3, 3> MatrixType;
     MatrixType M;
@@ -272,12 +279,14 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-
-protected:
-  WeightsGuidedFilter() =default ;
-  ~WeightsGuidedFilter() override =default ;
  
-  void GenerateOutputInformation(void) override
+protected:
+WeightsGuidedFilter() =default ;
+  
+~WeightsGuidedFilter() override =default ;
+
+
+void GenerateOutputInformation(void) override
     {
     Superclass::GenerateOutputInformation();
     this->GetFunctor().m_bandNumberInput1 = this->GetInput(0)->GetNumberOfComponentsPerPixel() ;  
@@ -285,9 +294,16 @@ protected:
     assert((this->GetFunctor().m_bandNumberInput1 + 1)  % (this->GetFunctor().m_bandNumberInput2) == 0) ;
     this->GetOutput()->SetNumberOfComponentsPerPixel((this->GetFunctor().m_bandNumberInput1+1)*this->GetFunctor().m_bandNumberInput2 );
     this->GetFunctor().SetNumberOfComponent((this->GetFunctor().m_bandNumberInput1+1)*this->GetFunctor().m_bandNumberInput2 );  
-
     this->GetFunctor().m_WSize = (this->GetFunctor().GetRadiusMax())*2+1 ;
     } 
+
+// void BeforeThreadedGenerateData(void) override 
+//   {
+//   // std::cout << " BeforeThreadedGenerateData " << std::endl ;
+//   // TOutputImage    * outImagePtr = this->GetOutput();
+//   // outImagePtr->FillBuffer(0.);
+
+//   }
 
 private:
   WeightsGuidedFilter(const Self &) = delete; //purposely not implemented

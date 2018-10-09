@@ -293,6 +293,7 @@ inRightGradientXPtr->SetRequestedRegion( inputRightRequestedRegion );
 //============================================  ThreadedGenerateData  ========================================================
 
 
+
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
@@ -351,7 +352,7 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
       costGradientNorm = m_Tau2; 
       }// if To take the minimum     
 
-    if((outputIt.GetIndex()[0] < abs(m_HorizontalMinDisparity)+1) || (outputIt.GetIndex()[0] > outputRegionForThread.GetSize()[0]-abs(m_HorizontalMaxDisparity)+1) )
+    if((outputIt.GetIndex()[0] < abs(m_HorizontalMinDisparity)) || (outputIt.GetIndex()[0] > outputRegionForThread.GetSize()[0]-abs(m_HorizontalMaxDisparity)) )
       { 
       OutPixel.Fill(0);
       }

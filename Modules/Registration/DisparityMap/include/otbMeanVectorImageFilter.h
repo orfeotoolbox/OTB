@@ -76,8 +76,7 @@ public:
 
   TOutput operator() (TInput1 input_weights, TInput2 input_I) const
     {      
-    PixelType I_pixel = input_I.GetCenterPixel();   
-
+    PixelType I_pixel = input_I.GetCenterPixel();  
 
     TOutput output(m_bandNumberOutput); 
     output.Fill(0);     
@@ -92,8 +91,6 @@ public:
           }
           mean_ak /= m_WSize*m_WSize ;
           v_mean_ai[b] = mean_ak ;
-
-
       }   
 
     for(unsigned int b = 0 ; b < m_bandNumberOutput ; ++b)
@@ -174,8 +171,8 @@ protected:
     Superclass::GenerateInputRequestedRegion();
 
     // get pointers to the input and output
-    typename Superclass::InputImagePointer inputPtr1 = const_cast< TInputImage1 * >( this->GetInput() );
-    typename Superclass::InputImagePointer inputPtr2 = const_cast< TInputImage2 * >( this->GetInput() );
+    typename Superclass::InputImagePointer inputPtr1 = const_cast< TInputImage1 * >( this->GetInput(0) );
+    typename Superclass::InputImagePointer inputPtr2 = const_cast< TInputImage2 * >( this->GetInput(1) );
 
     if ( !inputPtr1 || !inputPtr2 )
       {
