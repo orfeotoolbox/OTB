@@ -21,9 +21,9 @@
 #ifndef otbStringToHTML_h
 #define otbStringToHTML_h
 
-#include <string>
-
-#include "OTBCommonExport.h"
+#include <iosfwd>             // for ostream
+#include <string>             // for string
+#include "OTBCommonExport.h"  // for OTBCommon_EXPORT
 
 namespace otb
 {

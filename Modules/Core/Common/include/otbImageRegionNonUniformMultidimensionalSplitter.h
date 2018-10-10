@@ -22,11 +22,14 @@
 #ifndef otbImageRegionNonUniformMultidimensionalSplitter_h
 #define otbImageRegionNonUniformMultidimensionalSplitter_h
 
-#include "itkRegion.h"
-#include "itkObjectFactory.h"
-#include "itkIndex.h"
-#include "itkSize.h"
-#include "itkImageRegionSplitter.h"
+#include <iosfwd>                    // for ostream
+#include "itkImageRegion.h"          // for ImageRegion
+#include "itkIndent.h"               // for Indent
+#include "itkMacro.h"                // for ITK_EXPORT, ImageRegionNonUnifor...
+#include "itkSmartPointer.h"         // for SmartPointer
+#include "itkImageRegionSplitter.h"  // for ImageRegionSplitter
+#include "itkIndex.h"                // for Index
+#include "itkSize.h"                 // for Size
 
 namespace otb
 {

@@ -63,7 +63,7 @@ ImageRegionSquareTileSplitter<VImageDimension>
 template <unsigned int VImageDimension>
 itk::ImageRegion<VImageDimension>
 ImageRegionSquareTileSplitter<VImageDimension>
-::GetSplit(unsigned int i, unsigned int itkNotUsed(numberOfPieces), const RegionType& region)
+::GetSplit(unsigned int i, unsigned int , const RegionType& region)
 {
   RegionType splitRegion;
   IndexType  splitIndex;

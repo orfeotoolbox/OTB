@@ -24,7 +24,7 @@
 namespace otb
 {
 
-namespace Utils
+namespace Utils OTBCommon_EXPORT
 {
 
 bool IsLonLatValid(double lon, double lat)

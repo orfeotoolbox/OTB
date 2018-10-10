@@ -21,9 +21,14 @@
 #ifndef otbRectangle_h
 #define otbRectangle_h
 
-#include "itkImageRegion.h"
-
-#include "itkVectorContainer.h"
+#include <iosfwd>               // for ostream
+#include "itkContinuousIndex.h"  // for ContinuousIndex
+#include "itkIndent.h"           // for Indent
+#include "itkMacro.h"            // for itkGetMacro, itkSetMacro, ITK_EXPORT
+#include "itkObject.h"           // for Object
+#include "itkSmartPointer.h"     // for SmartPointer
+#include "itkImageRegion.h"      // for ImageRegion
+#include "itkVectorContainer.h"  // for VectorContainer
 
 namespace otb
 {

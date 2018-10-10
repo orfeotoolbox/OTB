@@ -22,11 +22,15 @@
 #ifndef otbImageRegionAdaptativeSplitter_h
 #define otbImageRegionAdaptativeSplitter_h
 
-#include "itkRegion.h"
-#include "itkImageRegionSplitter.h"
-#include "itkIndex.h"
-#include "itkSize.h"
-#include "itkFastMutexLock.h"
+#include <iosfwd>                    // for ostream
+#include "itkImageRegion.h"          // for ImageRegion
+#include "itkIndent.h"               // for Indent
+#include "itkMacro.h"                // for itkGetConstReferenceMacro, itkSe...
+#include "itkSimpleFastMutexLock.h"  // for SimpleFastMutexLock
+#include "itkSmartPointer.h"         // for SmartPointer
+#include "itkImageRegionSplitter.h"  // for ImageRegionSplitter
+#include "itkIndex.h"                // for Index
+#include "itkSize.h"                 // for Size
 
 namespace otb
 {

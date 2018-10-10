@@ -21,13 +21,10 @@
 #ifndef otbSystem_h
 #define otbSystem_h
 
-#include <string>
+#include <string>             // for string
 #include <vector>
-
 #include "itksys/SystemTools.hxx"
-#include "itkMacro.h"
-
-#include "OTBCommonExport.h"
+#include "OTBCommonExport.h"  // for OTBCommon_EXPORT
 
 namespace otb
 {

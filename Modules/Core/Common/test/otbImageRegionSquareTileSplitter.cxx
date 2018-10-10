@@ -75,7 +75,7 @@ int TestSplitter(const RegionType& region, unsigned int PixelSize, unsigned int 
 }
 
 
-int otbImageRegionSquareTileSplitter(int itkNotUsed(argc), char * argv[])
+int otbImageRegionSquareTileSplitter(int , char * argv[])
 {
   std::ofstream outfile(argv[1]);
   RegionType region;

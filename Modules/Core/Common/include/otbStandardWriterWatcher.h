@@ -22,11 +22,10 @@
 #ifndef otbStandardWriterWatcher_h
 #define otbStandardWriterWatcher_h
 
-#include <iosfwd>
-
-#include "otbWriterWatcherBase.h"
-
-#include "OTBCommonExport.h"
+#include <string>                  // for string
+#include "OTBCommonExport.h"       // for OTBCommon_EXPORT
+#include "otbWriterWatcherBase.h"  // for WriterWatcherBase
+namespace itk { class ProcessObject; }
 
 namespace otb
 {

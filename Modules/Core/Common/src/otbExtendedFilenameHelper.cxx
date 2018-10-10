@@ -19,15 +19,12 @@
  */
 
 #include "otbExtendedFilenameHelper.h"
-
-#include <cassert>
-#include <ostream>
-#include <stdexcept>
-#include <string>
-
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
-
+#include <cassert>    // for assert
+#include <ostream>    // for ostream
+#include <stdexcept>  // for range_error
+#include <string>     // for string
 #include "otb_boost_string_header.h"
 #include "otbStringUtils.h"
 

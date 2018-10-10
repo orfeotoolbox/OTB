@@ -21,13 +21,14 @@
 #ifndef otbExtendedFilenameHelper_h
 #define otbExtendedFilenameHelper_h
 
-#include <map>
-#include <vector>
-
-#include "itkObject.h"
+#include <iosfwd>             // for ostream
+#include <string>             // for string
+#include <utility>            // for pair
 #include "itkObjectFactory.h"
-#include "OTBCommonExport.h"
-#include <string>
+#include "itkMacro.h"        // for itkGetStringMacro, ExtendedFilenameHelp...
+#include "itkSmartPointer.h"  // for SmartPointer
+#include "itkObject.h"        // for Object
+#include "OTBCommonExport.h"  // for OTBCommon_EXPORT
 
 namespace otb
 {

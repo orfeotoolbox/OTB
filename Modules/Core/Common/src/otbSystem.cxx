@@ -20,8 +20,8 @@
 
 
 #include "otbSystem.h"
-#include <string> // strdup
-#include <cstdlib>
+#include <cstddef>  // for size_t
+#include <string>   // for string
 
 #if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 
@@ -44,7 +44,7 @@
 namespace otb
 {
 
-namespace System 
+namespace System OTBCommon_EXPORT
 {
 //GetRootName from uiig library.
 std::string GetRootName(const std::string& filename)

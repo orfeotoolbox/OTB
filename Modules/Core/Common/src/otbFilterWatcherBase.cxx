@@ -20,6 +20,7 @@
  */
 
 #include "otbFilterWatcherBase.h"
+namespace itk { class ProcessObject; }
 
 namespace otb
 {

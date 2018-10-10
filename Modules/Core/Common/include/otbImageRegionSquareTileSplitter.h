@@ -22,11 +22,15 @@
 #ifndef otbImageRegionSquareTileSplitter_h
 #define otbImageRegionSquareTileSplitter_h
 
-#include "itkRegion.h"
-#include "itkImageRegionSplitter.h"
-#include "itkObjectFactory.h"
-#include "itkIndex.h"
-#include "itkSize.h"
+#include <iosfwd>                    // for ostream
+#include "itkFixedArray.h"           // for FixedArray
+#include "itkImageRegion.h"          // for ImageRegion
+#include "itkIndent.h"               // for Indent
+#include "itkMacro.h"                // for itkGetMacro, ITK_EXPORT, ImageRe...
+#include "itkSmartPointer.h"         // for SmartPointer
+#include "itkImageRegionSplitter.h"  // for ImageRegionSplitter
+#include "itkIndex.h"                // for Index
+#include "itkSize.h"                 // for Size
 
 namespace otb
 {

@@ -21,11 +21,12 @@
 #ifndef otbLogger_h
 #define otbLogger_h
 
-#include <string>
-
-#include "itkLoggerBase.h"
-#include "itkLogger.h"
-#include "OTBCommonExport.h"
+#include <string>             // for string
+#include "itkMacro.h"         // for Logger::Clone, Logger::CreateAnother
+#include "itkSmartPointer.h"  // for SmartPointer
+#include "itkLogger.h"        // for Logger
+#include "itkLoggerBase.h"    // for LoggerBase::PriorityLevelType
+#include "OTBCommonExport.h"  // for OTBCommon_EXPORT
 
 namespace otb {
 

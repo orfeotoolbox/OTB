@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
+#include <iostream>                 // for ostringstream
 #include "otbLogger.h"
-#include "itksys/SystemTools.hxx"
+#include "itkStdStreamLogOutput.h"  // for StdStreamLogOutput, StdStreamLogO...
 #include "otbConfigurationManager.h"
-#include "itkStdStreamLogOutput.h"
-#include <iostream>
 #include "gdal.h"
 #include "itkMultiThreader.h"
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {

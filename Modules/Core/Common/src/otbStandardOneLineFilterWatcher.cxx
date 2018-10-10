@@ -19,11 +19,10 @@
  * limitations under the License.
  */
 
-#include <iostream>
-#include <sstream>
-
 #include "otbStandardOneLineFilterWatcher.h"
-#include "otbStopwatch.h"
+#include <iostream>        // for cout
+#include "otbStopwatch.h"  // for Stopwatch
+namespace itk { class ProcessObject; }
 
 namespace otb
 {

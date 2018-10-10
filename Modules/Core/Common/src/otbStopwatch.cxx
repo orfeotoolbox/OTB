@@ -18,11 +18,10 @@
  * limitations under the License.
  */
 
+#include "otbStopwatch.h"
 #include <chrono>
 #include <sstream>
 #include <iomanip>
-
-#include "otbStopwatch.h"
 
 namespace otb
 {

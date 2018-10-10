@@ -31,7 +31,7 @@
 
 using namespace std::chrono_literals;
 
-int otbStopwatchTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbStopwatchTest(int itkNotUsed(argc), char * [])
 {
   otb::Stopwatch sw;
 

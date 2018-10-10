@@ -29,10 +29,10 @@
 #include "itk_kwiml.h"
 #endif
 
-#include <string>
-#include <boost/cstdint.hpp>
-#include "itkLoggerBase.h"
-#include "OTBCommonExport.h"
+#include <stdint.h>           // for uint64_t
+#include <string>             // for string
+#include "OTBCommonExport.h"  // for OTBCommon_EXPORT
+#include "itkLoggerBase.h"    // for LoggerBase, LoggerBase::PriorityLevelType
 
 namespace otb
 {

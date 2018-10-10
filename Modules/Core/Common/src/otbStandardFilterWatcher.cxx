@@ -20,6 +20,9 @@
  */
 
 #include "otbStandardFilterWatcher.h"
+#include <iostream>        // for cout
+#include "otbStopwatch.h"  // for Stopwatch
+namespace itk { class ProcessObject; }
 
 namespace otb
 {

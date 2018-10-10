@@ -22,9 +22,10 @@
 #ifndef otbStandardOneLineFilterWatcher_h
 #define otbStandardOneLineFilterWatcher_h
 
-#include <iosfwd>
-
-#include "otbFilterWatcherBase.h"
+#include <string>                  // for string
+#include "OTBCommonExport.h"       // for OTBCommon_EXPORT
+#include "otbFilterWatcherBase.h"  // for FilterWatcherBase
+namespace itk { class ProcessObject; }
 
 namespace otb
 {

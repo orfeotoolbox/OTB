@@ -25,7 +25,7 @@
 #include "otbRGBAPixelConverter.h"
 
 
-int otbRGBAPixelConverter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbRGBAPixelConverter(int , char * [])
 {
   typedef unsigned int                                           PixelType0;
   typedef double                                                 PixelType1;

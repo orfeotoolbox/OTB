@@ -18,21 +18,16 @@
  * limitations under the License.
  */
 
-#include "otbConfigurationManager.h"
-
-#include "otbMacro.h"
-#include "otbLogger.h"
-
+#include <string>           // for string
+#include "itkLoggerBase.h"  // for LoggerBase, LoggerBase::::INFO, LoggerBas...
 #include "itksys/SystemTools.hxx"
-
-#include <cstdlib>
-#include <algorithm>
-#include <string>
+#include "otbConfigurationManager.h"
+#include "otbMacro.h"       // for otbLogMacro
 
 namespace otb
 {
 
-namespace ConfigurationManager
+namespace ConfigurationManager OTBCommon_EXPORT
 {
 
 std::string GetDEMDirectory()

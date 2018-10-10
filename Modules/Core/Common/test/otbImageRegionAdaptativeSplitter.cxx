@@ -28,7 +28,7 @@ typedef RegionType::SizeType                          SizeType;
 typedef RegionType::IndexType                         IndexType;
 
 
-int otbImageRegionAdaptativeSplitter(int itkNotUsed(argc), char * argv[])
+int otbImageRegionAdaptativeSplitter(int , char * argv[])
 {
   SizeType regionSize, tileHint;
   IndexType regionIndex;

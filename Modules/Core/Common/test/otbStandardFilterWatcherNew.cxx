@@ -25,7 +25,7 @@
 #include "otbStandardFilterWatcher.h"
 #include "itkGradientMagnitudeImageFilter.h"
 
-int otbStandardFilterWatcherNew(int itkNotUsed(argc), char * argv[])
+int otbStandardFilterWatcherNew(int , char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                    PixelType;

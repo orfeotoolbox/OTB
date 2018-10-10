@@ -27,7 +27,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
-int otbStandardWriterWatcher(int itkNotUsed(argc), char * argv[])
+int otbStandardWriterWatcher(int , char * argv[])
 {
   const char *       infname = argv[1];
   const char *       outfname = argv[2];

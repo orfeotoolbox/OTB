@@ -21,11 +21,9 @@
 #ifndef otbUtils_h
 #define otbUtils_h
 
-#include <sstream>
-#include <string>
-
-#include "itkMacro.h"
-#include "OTBCommonExport.h"
+#include <sstream>            // for stringstream
+#include <string>             // for string
+#include "OTBCommonExport.h"  // for OTBCommon_EXPORT
 
 namespace otb
 {
@@ -38,10 +36,10 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-namespace Utils
+namespace Utils OTBCommon_EXPORT
 {
   /** Check that the values for lon, lat are reasonable */
-  bool OTBCommon_EXPORT IsLonLatValid(double lon, double lat);
+  bool IsLonLatValid(double lon, double lat);
 
   template <class T>
     inline std::string ConvertToString (const T& v)
@@ -52,11 +50,11 @@ namespace Utils
   }
 
   /** Function that prints nothing (useful to disable libsvm logs)*/
-  void OTBCommon_EXPORT PrintNothing(const char *s);
+  void PrintNothing(const char *s);
 
-  extern OTBCommon_EXPORT bool const TrueConstant;
+  extern bool const TrueConstant;
 
-  extern OTBCommon_EXPORT bool const FalseConstant;
+  extern bool const FalseConstant;
 }
 
 } // namespace otb
