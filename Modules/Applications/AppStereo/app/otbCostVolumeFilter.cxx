@@ -106,18 +106,16 @@ class CostVolumeFilter : public Application
 
   void DoInit() override 
     {
+    SetName("CostVolumeFilter");
     SetDescription("Performs Fast Cost Volume Filter to estimate a disparty map between two images");
 
-    SetDocName("CostVolumeFilter");
-    SetDocLongDescription("This application allows Fast Cost Volume Filter to estimate a disparty map between two images "
-     "to present parameters types," 
-      " and Application class framework. " 
-      "It is used to generate Software guide documentation" 
-      " for Application chapter CostVolumeFilter.");
+    SetDocName("Generate DisparityMap");
+    SetDocLongDescription("This application allows Fast Cost Volume Filter to estimate a disparty map between two epipolar images."
+      "It is part of the stereo reconstruction framework");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("");
-
+    SetDocSeeAlso(" ");
+    AddDocTag(Tags::Stereo);
 
     AddParameter(ParameterType_Group,"io","Input and output data");
     SetParameterDescription("io","This group of parameters allows setting the input and output images.");
@@ -205,6 +203,8 @@ class CostVolumeFilter : public Application
     SetDocExampleParameterValue("tau2l","2.0");
     SetDocExampleParameterValue("tau1r","7.0");
     SetDocExampleParameterValue("tau2r","2.0");
+    SetOfficialDocLink();
+    
     }
 
 
