@@ -71,7 +71,6 @@ private:
     "unmix hyperspectral data, in IEEE Transactions on Geoscience and"
     "Remote Sensing, vol. 43, no. 4, pp. 898-910, April 2005.");
 
-    AddDocTag("Miscellaneous");
     AddDocTag(Tags::Hyperspectral);
     AddDocTag(Tags::DimensionReduction);
 

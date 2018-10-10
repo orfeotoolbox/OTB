@@ -205,7 +205,7 @@ private:
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso("[1] http://articles.beltoforion.de/article.php?a=muparserx\n"
       "[2] BandMath");
-    AddDocTag( "Miscellaneous" );
+    AddDocTag(Tags::Manip);
 
     AddParameter( ParameterType_InputImageList, "il", "Input image-list" );
     SetParameterDescription( "il", "Image-list to perform computation on." );

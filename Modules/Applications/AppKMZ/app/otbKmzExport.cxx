@@ -56,9 +56,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Conversion");
 
-	AddDocTag("Miscellaneous");
-    AddDocTag("KMZ");
-    AddDocTag("Export");
+    AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
@@ -138,4 +136,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::KmzExport)
-
