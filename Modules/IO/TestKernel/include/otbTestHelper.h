@@ -27,9 +27,6 @@
 #include <vector>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-#include "otbStringUtils.h"
-
-#include "otbMetaDataKey.h"
 
 class OGRFeature;
 class OGRGeometry;
@@ -58,6 +55,8 @@ public:
 
   typedef std::vector<std::string> StringList;
   typedef StringList::const_iterator StringListIt;
+
+  typedef int (*MainFuncPointer)(int, char*[]);
 
   TestHelper() :
     m_ToleranceDiffValue(0),
@@ -102,7 +101,17 @@ public:
   itkSetMacro(Epsilon, double);
   itkSetMacro(EpsilonBoundaryChecking, double);
 
+  void RegisterTest(std::string name, MainFuncPointer testFunc);
+
+  int Run(int ac, char* av[]);
+
 private:
+
+  void PrintAvailableTests();
+
+  std::map<std::string, MainFuncPointer> m_StringToTestFunctionMap;
+
+  void LoadTestEnv();
 
   std::map<std::string, int> RegressionTestBaselines(char *baselineFilename) const;
 
@@ -141,10 +150,7 @@ private:
   bool isHexaPointerAddress(const std::string& str) const;
   bool isHexaPointerAddress(const std::string& str, size_t pos, size_t size) const;
   bool isToBeIgnoredForAnyComparison(const std::string& str) const;
-  std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
   int TokenizeLine(const std::string &line, StringList &tokens) const;
-
-  static bool IsTokenEmpty(boost::iterator_range<std::string::const_iterator> &token);
 
   // TODO : maybe merge this function with isToBeIgnoredForAnyComparison
   bool IsLineValid(const std::string& str, const StringList &ignoredLines) const;
