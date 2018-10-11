@@ -594,7 +594,7 @@ class ApplicationProxy(object):
 			return s
 
 		def SetParameters(self, dict_params):
-			for param_key, param_value in dict_params.iteritems():
+			for param_key, param_value in dict_params.items():
 				self.SetParameterValue(param_key, param_value)
 
 		def SetParameterValue(self, paramKey, value):
