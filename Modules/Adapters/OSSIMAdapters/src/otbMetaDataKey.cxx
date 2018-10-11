@@ -115,6 +115,29 @@ MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
   return MetaDataKey::KeyType(MetaDataKey::TSTRING);
 }
 
+std::string MetaDataKey::VectorToString(const VectorType& vector)
+{
+  std::stringstream oss;
+  oss.str("");
+  otb::MetaDataKey::VectorType::const_iterator it = vector.begin();
+  oss << "[";
+  while (it != vector.end())
+    {
+    oss << (*it);
+    ++it;
+    if (it == vector.end())
+      {
+      oss << "]";
+      break;
+      }
+    else
+      {
+      oss << ", ";
+      }
+    }
+  return oss.str();
+}
+
 OTB_GCP::OTB_GCP()
  : m_GCPCol(0),
    m_GCPRow(0),

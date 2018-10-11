@@ -35,6 +35,10 @@ namespace otb
  */
 namespace MetaDataKey
 {
+  typedef std::vector<double>               VectorType;
+  typedef std::vector<bool>                 BoolVectorType;
+  typedef itk::VariableLengthVector<double> VariableLengthVectorType;
+
   extern OTBOSSIMAdapters_EXPORT char const* DriverShortNameKey;
   extern OTBOSSIMAdapters_EXPORT char const* DriverLongNameKey;
 
@@ -111,9 +115,8 @@ namespace MetaDataKey
 
   KeyType OTBOSSIMAdapters_EXPORT GetKeyType(const std::string& name);
 
-  typedef std::vector<double>               VectorType;
-  typedef std::vector<bool>                 BoolVectorType;
-  typedef itk::VariableLengthVector<double> VariableLengthVectorType;
+  std::string OTBOSSIMAdapters_EXPORT VectorToString(const VectorType& vector);
+
 }
 
 /** \class OTB_GCP
