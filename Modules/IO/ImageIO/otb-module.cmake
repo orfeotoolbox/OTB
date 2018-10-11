@@ -45,8 +45,6 @@ otb_module(OTBImageIO
   TEST_DEPENDS
     OTBStatistics
     OTBTestKernel
-    OTBGdalAdapters
-    OTBMPIConfig
 
   DESCRIPTION
     "${DOCUMENTATION}"
