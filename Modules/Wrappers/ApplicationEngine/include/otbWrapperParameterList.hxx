@@ -384,7 +384,7 @@ ParameterList< T >
   std::for_each(
     begin(),
     end(),
-    [ this_list, get ]( auto parameter ) -> void
+    [ this_list, get ]( typename T::Pointer parameter ) -> void
     {
       assert( parameter );
       assert( parameter==otb::DynamicCast< T >( parameter ) );
