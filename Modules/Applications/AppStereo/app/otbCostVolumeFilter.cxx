@@ -109,12 +109,13 @@ class CostVolumeFilter : public Application
     SetName("CostVolumeFilter");
     SetDescription("Performs Fast Cost Volume Filter to estimate a disparty map between two images");
 
-    SetDocName("Generate DisparityMap");
-    SetDocLongDescription("This application allows Fast Cost Volume Filter to estimate a disparty map between two epipolar images."
-      "It is part of the stereo reconstruction framework");
+    SetDocName("Cost Volume Filter");
+    SetDocLongDescription("This application allows Fast Cost Volume Filter to estimate a disparity map between two epipolar images."
+      "\nIt is part of the stereo reconstruction framework");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
+    
     AddDocTag(Tags::Stereo);
 
     AddParameter(ParameterType_Group,"io","Input and output data");
