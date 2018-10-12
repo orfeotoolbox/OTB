@@ -204,11 +204,11 @@ public:
 
   /** Convenience method returns the IOComponentType as a string. This can be
    * used for writing output files. */
-  std::string GetComponentTypeAsString(IOComponentType) const;
+  static std::string GetComponentTypeAsString(IOComponentType);
 
   /** Convenience method returns the IOPixelType as a string. This can be
    * used for writing output files. */
-  std::string GetPixelTypeAsString(IOPixelType) const;
+  static std::string GetPixelTypeAsString(IOPixelType);
 
   /** Enums used to specify write style: whether binary or ASCII. Some
    * subclasses use this, some ignore it. */
@@ -255,11 +255,11 @@ public:
 
   /** Convenience method returns the FileType as a string. This can be
    * used for writing output files. */
-  std::string GetFileTypeAsString(FileType) const;
+  static std::string GetFileTypeAsString(FileType);
 
   /** Convenience method returns the ByteOrder as a string. This can be
    * used for writing output files. */
-  std::string GetByteOrderAsString(ByteOrder) const;
+  static std::string GetByteOrderAsString(ByteOrder);
 
   /** Type for representing size of bytes, and or positions along a file */
   typedef std::streamoff SizeType;

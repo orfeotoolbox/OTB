@@ -1,6 +1,8 @@
 #!/bin/sh
 
-export LD_LIBRARY_PATH=@OTB_INSTALL_PREFIX@/lib:$LD_LIBRARY_PATH
-export PYTHONPATH=@OTB_PYTHONPATH@:$PYTHONPATH
-export OTB_APPLICATION_PATH=@OTB_APPLICATION_PATH@
-@PYTHON_EXECUTABLE@ @CMAKE_SOURCE_DIR@/Scripts/otbGenerateWrappersRstDoc.py -o "$1"
+#cmake builds with rpath in the binary dir, so we don't need to set LD_LIBRARY_PATH here
+#export LD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:$LD_LIBRARY_PATH
+export PYTHONPATH=@PYTHONPATH_COOKBOOK@:$PYTHONPATH
+export OTB_APPLICATION_PATH=@CMAKE_BINARY_DIR@/lib/otb/applications
+
+python3 @CMAKE_CURRENT_SOURCE_DIR@/Scripts/otbGenerateWrappersRstDoc.py -o "$1"

@@ -52,8 +52,9 @@ public:
                     "validation sets per class and per image.\n Several classifier parameters can be set depending on the chosen classifier. In the "
                     "validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels. "
                     "In the header of the optional confusion matrix output file, the validation (reference) and predicted (produced) class labels"
-                    " are ordered according to the rows/columns of the confusion matrix.\n This application is based on LibSVM and OpenCV Machine Learning "
-                    "(2.3.1 and later)." );
+                    " are ordered according to the rows/columns of the confusion matrix.\n This application is based on LibSVM, OpenCV Machine Learning "
+                    "(2.3.1 and later), and Shark ML. The output of this application is a text model file, whose format corresponds to the "
+                    "ML model type chosen. There is no image nor vector data output." );
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html " );
@@ -117,19 +118,20 @@ public:
       ComputePolygonStatistics( imageList, validationVectorFileList, fileNames.polyStatValidOutputs );
       ComputeSamplingRate( fileNames.polyStatValidOutputs, fileNames.rateValidOut, rates.fmv );
       SelectAndExtractValidationSamples( fileNames, imageList, validationVectorFileList );
-//    if( HasInputVector ) // if input vector is provided the sampleTrainOutputs is the previously extracted sampleOutputs
+
       fileNames.sampleTrainOutputs = fileNames.sampleOutputs;
       }
     else if(GetParameterFloat("sample.vtr") != 0.0)// Split training data to validation
       {
-//      if( !HasInputVector ) // Compute one class statistics and sampling rate for the generated vector.
-//        ComputePolygonStatistics( imageList, fileNames.sampleOutputs, fileNames.polyStatTrainOutputs );
-//        ComputeSamplingRate( fileNames.polyStatTrainOutputs, fileNames.rateTrainOut, rates.fmt );
       SplitTrainingToValidationSamples( fileNames, imageList );
       }
-    else // nothing to do, except update fileNames
+    else // Update sampleTrainOutputs and clear sampleValidOutputs
       {
       fileNames.sampleTrainOutputs = fileNames.sampleOutputs;
+
+      // Corner case where no dedicated validation set is provided and split ratio is set to 0 (all samples for training)
+      // In this case SampleValidOutputs should be cleared
+      fileNames.sampleValidOutputs.clear();
       }
   }
 

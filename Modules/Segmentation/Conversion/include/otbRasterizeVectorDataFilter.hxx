@@ -30,7 +30,8 @@ namespace otb
 template<class TVectorData, class TInputImage, class TOutputImage>
 RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 ::RasterizeVectorDataFilter()
- : m_OGRDataSourcePointer(nullptr)
+ : m_OGRDataSourcePointer(nullptr),
+   m_AllTouchedMode(false)
 {
   this->SetNumberOfRequiredInputs(1);
 }
@@ -188,6 +189,12 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
   geoTransform[4] = 0.;
   GDALSetGeoTransform(dataset,const_cast<double*>(geoTransform.GetDataPointer()));
 
+  char **options = nullptr;
+  if (m_AllTouchedMode)
+    {
+    options = CSLSetNameValue(options, "ALL_TOUCHED", "TRUE");
+    }
+
   // Burn the geometries into the dataset
    if (dataset != nullptr)
      {
@@ -196,8 +203,10 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
                           m_SrcDataSetLayers.size(),
                           &(m_SrcDataSetLayers[0]),
                           nullptr, nullptr, &(m_FullBurnValues[0]),
-                          nullptr,
+                          options,
                           GDALDummyProgress, nullptr );
+
+     CSLDestroy(options);
 
      // release the dataset
      GDALClose( dataset );

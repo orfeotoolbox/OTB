@@ -53,21 +53,21 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  itkGetMacro(LonOrigin, double)
-  itkSetMacro(LonOrigin, double)
-  itkGetMacro(LatOrigin, double)
-  itkSetMacro(LatOrigin, double)
-  itkGetMacro(LonSpacing, double)
-  itkSetMacro(LonSpacing, double)
-  itkGetMacro(LatSpacing, double)
-  itkSetMacro(LatSpacing, double)
-  itkGetMacro(LonRotation, double)
-  itkSetMacro(LonRotation, double)
-  itkGetMacro(LatRotation, double)
-  itkSetMacro(LatRotation, double)
+  itkGetMacro(LonOrigin, double);
+  itkSetMacro(LonOrigin, double);
+  itkGetMacro(LatOrigin, double);
+  itkSetMacro(LatOrigin, double);
+  itkGetMacro(LonSpacing, double);
+  itkSetMacro(LonSpacing, double);
+  itkGetMacro(LatSpacing, double);
+  itkSetMacro(LatSpacing, double);
+  itkGetMacro(LonRotation, double);
+  itkSetMacro(LonRotation, double);
+  itkGetMacro(LatRotation, double);
+  itkSetMacro(LatRotation, double);
 
-  itkGetStringMacro(ImageFilename)
-  itkSetStringMacro(ImageFilename)
+  itkGetStringMacro(ImageFilename);
+  itkSetStringMacro(ImageFilename);
 
   void Update();
   

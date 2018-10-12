@@ -54,35 +54,41 @@ class StatisticsAccumulator
 {
 public:
 
-  typedef typename TRealVectorPixelType::ValueType RealValueType;
+  typedef typename TRealVectorPixelType::ValueType  RealValueType;
+  typedef uint64_t                                  PixelCountType;
+  typedef itk::VariableLengthVector<PixelCountType> PixelCountVectorType;
 
   // Constructor (default)
-  StatisticsAccumulator(){}
+  StatisticsAccumulator() : m_Count(), m_NoDataValue(), m_UseNoDataValue() {}
 
   // Constructor (initialize the accumulator with the given pixel)
-  StatisticsAccumulator(const TRealVectorPixelType & pixel)
+  StatisticsAccumulator(RealValueType noDataValue,
+                        bool useNoDataValue,
+                        const TRealVectorPixelType & pixel)
+    : m_NoDataValue(noDataValue),
+      m_Count(1),
+      m_UseNoDataValue(useNoDataValue)
   {
     m_Count = 1;
     m_Sum = pixel;
     m_Min = pixel;
     m_Max = pixel;
     m_SqSum = pixel;
+    m_BandCount.SetSize(pixel.GetSize());
     for (unsigned int band = 0 ; band < m_SqSum.GetSize() ; band++)
-      m_SqSum[band] *= m_SqSum[band];
+      {
+      auto val = pixel[band];
+      if (!m_UseNoDataValue || val != m_NoDataValue)
+        {
+        m_BandCount[band] = 1;
+        m_SqSum[band] *= m_SqSum[band];
+        }
+      else
+        {
+        m_BandCount[band] = 0;
+        }
+    }
   }
-
-  // Constructor (other)
-  StatisticsAccumulator(const StatisticsAccumulator & other)
-  {
-    m_Count = other.m_Count;
-    m_Sum = other.m_Sum;
-    m_Min = other.m_Min;
-    m_Max = other.m_Max;
-    m_SqSum = other.m_SqSum;
-  }
-
-  // Destructor
-  ~StatisticsAccumulator(){}
 
   // Function update (pixel)
   void Update(const TRealVectorPixelType & pixel)
@@ -93,8 +99,13 @@ public:
       {
       const RealValueType value = pixel[band];
       const RealValueType sqValue = value * value;
-      UpdateValues(value, sqValue, value, value,
-                   m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
+
+      UpdateValues(!m_UseNoDataValue || value != m_NoDataValue,
+                   value, sqValue,
+                   value, value,
+                   m_BandCount[band],
+                   m_Sum[band], m_SqSum[band],
+                   m_Min[band], m_Max[band]);
       }
   }
 
@@ -105,12 +116,17 @@ public:
     const unsigned int nBands = other.m_Sum.GetSize();
     for (unsigned int band = 0 ; band < nBands ; band ++ )
       {
-      UpdateValues(other.m_Sum[band], other.m_SqSum[band], other.m_Min[band], other.m_Max[band],
-                   m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
+      UpdateValues(other.m_BandCount[band],
+                   other.m_Sum[band], other.m_SqSum[band],
+                   other.m_Min[band], other.m_Max[band],
+                   m_BandCount[band],
+                   m_Sum[band], m_SqSum[band],
+                   m_Min[band], m_Max[band]);
       }
   }
 
   // Accessors
+  itkGetMacro(BandCount, PixelCountVectorType);
   itkGetMacro(Sum, TRealVectorPixelType);
   itkGetMacro(SqSum, TRealVectorPixelType);
   itkGetMacro(Min, TRealVectorPixelType);
@@ -118,11 +134,14 @@ public:
   itkGetMacro(Count, double);
 
 private:
-  void UpdateValues(const RealValueType & otherSum, const RealValueType & otherSqSum,
-                    const RealValueType & otherMin, const RealValueType & otherMax,
+  void UpdateValues(PixelCountType otherCount,
+                    RealValueType otherSum, RealValueType otherSqSum,
+                    RealValueType otherMin, RealValueType otherMax,
+                    PixelCountType & count,
                     RealValueType & sum, RealValueType & sqSum,
                     RealValueType & min, RealValueType & max)
   {
+  count += otherCount;
   sum += otherSum;
   sqSum += otherSqSum;
   if (otherMin < min)
@@ -132,11 +151,14 @@ private:
   }
 
 protected:
+  PixelCountVectorType m_BandCount;
   TRealVectorPixelType m_Sum;
   TRealVectorPixelType m_SqSum;
   TRealVectorPixelType m_Min;
   TRealVectorPixelType m_Max;
-  double m_Count;
+  RealValueType m_NoDataValue;
+  PixelCountType m_Count;
+  bool m_UseNoDataValue;
 };
 
 /** \class PersistentStreamingStatisticsMapFromLabelImageFilter
@@ -197,6 +219,11 @@ public:
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputVectorImage::ImageDimension);
+
+  itkGetMacro(NoDataValue, VectorPixelValueType);
+  itkSetMacro(NoDataValue, VectorPixelValueType);
+  itkGetMacro(UseNoDataValue, bool);
+  itkSetMacro(UseNoDataValue, bool);
 
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
@@ -259,6 +286,9 @@ protected:
 private:
   PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &) = delete;
   void operator =(const Self&) = delete;
+
+  VectorPixelValueType                   m_NoDataValue;
+  bool                                   m_UseNoDataValue;
 
   AccumulatorMapCollectionType           m_AccumulatorMaps;
 
@@ -337,6 +367,9 @@ public:
   typedef TInputVectorImage                   VectorImageType;
   typedef TLabelImage                         LabelImageType;
 
+  typedef typename VectorImageType::PixelType                        VectorPixelType;
+  typedef typename VectorImageType::PixelType::ValueType             VectorPixelValueType;
+
   typedef typename Superclass::FilterType::PixelValueMapType         PixelValueMapType;
   typedef typename Superclass::FilterType::PixelValueMapObjectType   PixelValueMapObjectType;
 
@@ -395,6 +428,30 @@ public:
   LabelPopulationMapType GetLabelPopulationMap() const
   {
     return this->GetFilter()->GetLabelPopulationMap();
+  }
+
+  /** Set the no data value */
+  void SetNoDataValue(VectorPixelValueType value)
+  {
+      this->GetFilter()->SetNoDataValue(value);
+  }
+
+  /** Return the no data value */
+  VectorPixelValueType GetNoDataValue() const
+  {
+      return this->GetFilter()->GetNoDataValue();
+  }
+
+  /** Configure whether no data pixels ignored, treating each band independently */
+  void SetUseNoDataValue(bool useNoDataValue)
+  {
+      this->GetFilter()->SetUseNoDataValue(useNoDataValue);
+  }
+
+  /** Return whether no data pixels are ignored */
+  bool GetUseNoDataValue() const
+  {
+      return this->GetFilter()->GetUseNoDataValue();
   }
 
 protected:

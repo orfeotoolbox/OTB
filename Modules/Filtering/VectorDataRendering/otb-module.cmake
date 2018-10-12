@@ -37,6 +37,8 @@ otb_module(OTBVectorDataRendering
     OTBVectorDataIO
     OTBImageBase
 
+  DEPRECATED
+
   DESCRIPTION
     "${DOCUMENTATION}"
 )

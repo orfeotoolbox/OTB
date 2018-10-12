@@ -61,9 +61,13 @@ public:
                        const char* loc = "Unknown");
 
   /** Constructor. */
-  ApplicationException(const std::string &file, unsigned int line,
+  ApplicationException(const std::string& file, unsigned int line,
                        const char* message = "Application error.",
                        const char* loc = "Unknown");
+
+  ApplicationException(const std::string& file, unsigned int line,
+                       const std::string& message = "Application error.",
+                       const std::string& loc = "Unknown");
 };
 
 namespace Wrapper
@@ -379,6 +383,14 @@ public:
    * \li ParameterType_ListView
    */
   void SetListViewSingleSelectionMode(std::string parameter, bool status);
+
+  /**
+   * True if the parameter is a list view and is in single selection mode
+   *
+   * Can be called for types:
+   * \li ParameterType_ListView
+   */
+  bool GetListViewSingleSelectionMode(const std::string& parameter);
 
   /* Set an output image value
    *

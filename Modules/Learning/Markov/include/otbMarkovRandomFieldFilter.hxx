@@ -51,7 +51,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
     std::ostringstream msg;
     msg << "Input image dimension: " << InputImageDimension << " != output image dimension: " <<
     ClassifiedImageDimension;
-    throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+    throw itk::ExceptionObject(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
     }
   m_InputImageNeighborhoodRadius.Fill(m_NeighborhoodRadius);
   //     m_MRFNeighborhoodWeight.resize(0);
