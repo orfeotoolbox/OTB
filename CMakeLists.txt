@@ -455,7 +455,10 @@ add_subdirectory(Utilities/Doxygen)
 
 add_subdirectory(Utilities/Completion)
 
-if (BUILD_DOCUMENTATION)
+option(BUILD_COOKBOOK "Build the CookBook documentation." OFF)
+mark_as_advanced(BUILD_COOKBOOK)
+
+if (BUILD_COOKBOOK)
     add_subdirectory(Documentation/Cookbook)
 endif()
 
