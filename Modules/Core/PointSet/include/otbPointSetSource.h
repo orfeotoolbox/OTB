@@ -42,7 +42,7 @@ namespace otb
  */
 
 template <class TOutputPointSet>
-class ITK_EXPORT PointSetSource : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT PointSetSource : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

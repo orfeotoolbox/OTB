@@ -37,7 +37,7 @@ namespace otb
  */
 
 template <class TImageList, class TImage>
-class ITK_EXPORT WaveletsBandsListToWaveletsSynopsisImageFilter
+class ITK_TEMPLATE_EXPORT WaveletsBandsListToWaveletsSynopsisImageFilter
       : public ImageListToImageFilter<typename TImageList::ImageType, TImage>
 {
 public:

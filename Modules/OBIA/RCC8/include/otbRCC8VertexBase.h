@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TPath>
-class ITK_EXPORT RCC8VertexBase
+class ITK_TEMPLATE_EXPORT RCC8VertexBase
   : public itk::DataObject
 {
 public:

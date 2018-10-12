@@ -56,7 +56,7 @@ namespace otb
  */
 
 template <class TType>
-class ITK_EXPORT RemoteSensingRegion : public itk::Region
+class ITK_TEMPLATE_EXPORT RemoteSensingRegion : public itk::Region
 {
 public:
   /** Standard class typedefs. */

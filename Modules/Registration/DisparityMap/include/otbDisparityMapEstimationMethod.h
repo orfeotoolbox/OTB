@@ -53,7 +53,7 @@ namespace otb
  * \ingroup OTBDisparityMap
  */
 template <class TFixedImage, class TMovingImage, class TPointSet>
-class ITK_EXPORT DisparityMapEstimationMethod
+class ITK_TEMPLATE_EXPORT DisparityMapEstimationMethod
   : public PointSetSource<TPointSet>
 {
 public:

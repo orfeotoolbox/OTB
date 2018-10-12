@@ -53,7 +53,7 @@ namespace otb
 template <class TInputPath,
     class TOutput = std::complex<double>,
     class TPrecision = double>
-class ITK_EXPORT ComplexMomentPathFunction :
+class ITK_TEMPLATE_EXPORT ComplexMomentPathFunction :
   public GeometricMomentPathFunction<TInputPath,
       TOutput,
       TPrecision>

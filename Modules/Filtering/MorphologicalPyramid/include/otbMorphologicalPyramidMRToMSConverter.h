@@ -41,7 +41,7 @@ namespace MorphologicalPyramid
  * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MRToMSConverter
+class ITK_TEMPLATE_EXPORT MRToMSConverter
   : public ImageListToImageListFilter<TInputImage, TOutputImage>
 {
 public:

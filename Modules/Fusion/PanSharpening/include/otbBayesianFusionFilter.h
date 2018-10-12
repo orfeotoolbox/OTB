@@ -192,7 +192,7 @@ template <class TInputMultiSpectralImage,
     class TInputMultiSpectralInterpImage,
     class TInputPanchroImage,
     class TOutputImage>
-class ITK_EXPORT BayesianFusionFilter
+class ITK_TEMPLATE_EXPORT BayesianFusionFilter
   :  public FusionImageBase<TInputMultiSpectralImage,
       TInputMultiSpectralInterpImage,
       TInputPanchroImage,

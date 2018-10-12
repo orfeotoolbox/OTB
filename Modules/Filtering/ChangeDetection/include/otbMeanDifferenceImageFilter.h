@@ -53,7 +53,7 @@ namespace otb
  */
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT MeanDifferenceImageFilter :
+class ITK_TEMPLATE_EXPORT MeanDifferenceImageFilter :
   public BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       Functor::MeanDifference<

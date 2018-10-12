@@ -49,7 +49,7 @@ namespace otb
  * \ingroup OTBConversion
  */
 template<class TImage>
-class ITK_EXPORT PersistentImageToOGRDataFilter :
+class ITK_TEMPLATE_EXPORT PersistentImageToOGRDataFilter :
   public PersistentImageFilter<TImage, TImage>
 {
 public:

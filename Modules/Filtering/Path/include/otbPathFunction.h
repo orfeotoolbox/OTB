@@ -46,7 +46,7 @@ namespace otb
  */
 template <class TInputPath,
     class TOutput>
-class ITK_EXPORT PathFunction :
+class ITK_TEMPLATE_EXPORT PathFunction :
   public itk::FunctionBase<TInputPath, TOutput>
 {
 public:

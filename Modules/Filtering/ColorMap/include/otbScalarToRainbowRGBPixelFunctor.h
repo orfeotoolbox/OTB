@@ -41,7 +41,7 @@ namespace Functor
  * \ingroup OTBColorMap
  */
 template<class TRGBPixel>
-class ITK_EXPORT HSVToRGBFunctor
+class ITK_TEMPLATE_EXPORT HSVToRGBFunctor
 {
 public:
   HSVToRGBFunctor(){};

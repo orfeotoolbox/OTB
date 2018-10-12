@@ -44,7 +44,7 @@ template <class TInputImage, class TOutputImage,
         typename TInputImage::InternalPixelType,
         typename TInputImage::InternalPixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT MultiChannelRAndGAndNIRIndexImageFilter
+class ITK_TEMPLATE_EXPORT MultiChannelRAndGAndNIRIndexImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:

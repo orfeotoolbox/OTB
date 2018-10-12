@@ -58,7 +58,7 @@ namespace otb
  */
 
 template <class AttributeValueType, class LabelType>
-class ITK_EXPORT DecisionTree : public itk::DataObject
+class ITK_TEMPLATE_EXPORT DecisionTree : public itk::DataObject
 {
 public:
 

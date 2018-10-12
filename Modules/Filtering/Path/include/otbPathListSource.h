@@ -42,7 +42,7 @@ namespace otb
  */
 
 template <class TOutputPath>
-class ITK_EXPORT PathListSource : public ObjectListSource<ObjectList<TOutputPath> >
+class ITK_TEMPLATE_EXPORT PathListSource : public ObjectListSource<ObjectList<TOutputPath> >
 {
 public:
   /** Standard class typedefs. */

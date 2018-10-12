@@ -39,7 +39,7 @@ namespace Functor
  */
 
 template<class TInputPixel, class TInputPixel2, class TOutputPixel>
-class ITK_EXPORT UniformAlphaBlendingFunctor
+class ITK_TEMPLATE_EXPORT UniformAlphaBlendingFunctor
 {
 public:
   UniformAlphaBlendingFunctor(): m_Alpha(0.5) {}

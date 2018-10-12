@@ -54,7 +54,7 @@ namespace otb
  */
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT CorrelationChangeDetector :
+class ITK_TEMPLATE_EXPORT CorrelationChangeDetector :
   public BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       Functor::CrossCorrelation<

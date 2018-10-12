@@ -52,7 +52,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = double >
-class ITK_EXPORT LocalHistogramImageFunction :
+class ITK_TEMPLATE_EXPORT LocalHistogramImageFunction :
   public itk::ImageFunction< TInputImage,
                 typename itk::Statistics::Histogram<typename TInputImage::PixelType>::Pointer,
                 TCoordRep >

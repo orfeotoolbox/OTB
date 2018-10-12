@@ -58,7 +58,7 @@ namespace itk
  */
 template< class TOutputImage,
           class TTransformPrecisionType = double >
-class ITK_EXPORT TransformToDisplacementFieldSource:
+class ITK_TEMPLATE_EXPORT TransformToDisplacementFieldSource:
   public ImageSource< TOutputImage >
 {
 public:

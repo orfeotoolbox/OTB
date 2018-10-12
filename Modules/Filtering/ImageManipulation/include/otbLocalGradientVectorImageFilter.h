@@ -68,7 +68,7 @@ public:
  * \ingroup OTBImageManipulation
  */
 template < class TInputImage, class TOutputImage >
-class ITK_EXPORT LocalGradientVectorImageFilter
+class ITK_TEMPLATE_EXPORT LocalGradientVectorImageFilter
   : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
             Functor::LocalGradientOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,

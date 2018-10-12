@@ -45,7 +45,7 @@ namespace otb
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT HaralickTexturesIFFactory :
+class ITK_TEMPLATE_EXPORT HaralickTexturesIFFactory :
     public itk::LightObject
 {
 public:

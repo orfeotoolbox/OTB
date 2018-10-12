@@ -43,7 +43,7 @@ namespace otb
  */
 
 template <class TInputImage, class TInputPath, class TOutputImage>
-class ITK_EXPORT DrawPathFilter : public itk::ImageAndPathToImageFilter<TInputImage, TInputPath, TOutputImage>
+class ITK_TEMPLATE_EXPORT DrawPathFilter : public itk::ImageAndPathToImageFilter<TInputImage, TInputPath, TOutputImage>
 {
 public:
   /** Standard class typedefs. */

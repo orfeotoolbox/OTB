@@ -55,7 +55,7 @@ namespace otb
  */
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT CBAMIChangeDetector :
+class ITK_TEMPLATE_EXPORT CBAMIChangeDetector :
   public BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       Functor::CBAMI<

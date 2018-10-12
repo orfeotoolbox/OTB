@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template<class TImage>
-class ITK_EXPORT NumberOfLinesStrippedStreamingManager : public StreamingManager<TImage>
+class ITK_TEMPLATE_EXPORT NumberOfLinesStrippedStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */

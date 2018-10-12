@@ -41,7 +41,7 @@ namespace otb
  */
 
 template <class TInputImage, class TPrecision = double>
-class ITK_EXPORT LabelImageToVectorDataFilter :
+class ITK_TEMPLATE_EXPORT LabelImageToVectorDataFilter :
     public VectorDataSource< otb::VectorData<TPrecision> >
 {
 public:

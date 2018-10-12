@@ -52,7 +52,7 @@ template <class TPixel,
     class TInterpol,
     unsigned int Dimension = 2>
 
-class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
+class ITK_TEMPLATE_EXPORT ForwardFourierMellinTransformImageFilter :
   public itk::ImageToImageFilter<Image<TPixel, Dimension>,
                                  itk::Image<std::complex<TPixel>, Dimension> >
 {

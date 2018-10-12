@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 template <class TInputImage, class TMaskImage = otb::Image<unsigned char,2> >
-class ITK_EXPORT PersistentSamplingFilterBase
+class ITK_TEMPLATE_EXPORT PersistentSamplingFilterBase
   : public otb::PersistentImageFilter<TInputImage, TInputImage>
 {
 public:

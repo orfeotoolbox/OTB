@@ -57,7 +57,7 @@ public:
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT VectorImageToAmplitudeImageFilter
+class ITK_TEMPLATE_EXPORT VectorImageToAmplitudeImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::VectorToAmplitudeFunctor<
           typename TInputImage::PixelType, typename TOutputImage::PixelType> >

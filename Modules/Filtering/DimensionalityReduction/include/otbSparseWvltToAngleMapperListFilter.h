@@ -44,7 +44,7 @@ namespace otb {
  */
 template < class TInputImageList, class TOutputSampleList, unsigned int VNbInputImages >
 class SparseWvltToAngleMapperListFilter
-  : public ITK_EXPORT itk::ProcessObject
+  : public ITK_TEMPLATE_EXPORT itk::ProcessObject
 {
 public:
   /** Standard typedefs. */

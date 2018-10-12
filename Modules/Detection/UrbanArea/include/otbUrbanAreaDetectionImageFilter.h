@@ -154,7 +154,7 @@ template <class TInputImage, class TOutputImage,
     class TFunction = Functor::RadiometricNonWaterNonVegetationIndexFunctor<
         typename TInputImage::PixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT UrbanAreaDetectionImageFilter :
+class ITK_TEMPLATE_EXPORT UrbanAreaDetectionImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

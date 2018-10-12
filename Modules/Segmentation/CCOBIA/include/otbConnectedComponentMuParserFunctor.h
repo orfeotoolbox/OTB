@@ -71,7 +71,7 @@ namespace Functor
 {
 
 template<class TInput>
-class ITK_EXPORT ConnectedComponentMuParserFunctor
+class ITK_TEMPLATE_EXPORT ConnectedComponentMuParserFunctor
 {
 
 public:

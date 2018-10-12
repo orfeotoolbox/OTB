@@ -37,7 +37,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TEdgeDetector, class TDensityCount>
-class ITK_EXPORT EdgeDensityImageFilter
+class ITK_TEMPLATE_EXPORT EdgeDensityImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 

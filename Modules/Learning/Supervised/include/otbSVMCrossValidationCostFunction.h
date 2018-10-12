@@ -50,7 +50,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TModel>
-class ITK_EXPORT SVMCrossValidationCostFunction
+class ITK_TEMPLATE_EXPORT SVMCrossValidationCostFunction
   : public itk::SingleValuedCostFunction
 {
 public:

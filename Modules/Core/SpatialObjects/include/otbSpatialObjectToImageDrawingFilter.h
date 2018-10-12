@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBSpatialObjects
  */
 template <class TInputSpatialObject, class TOutputImage>
-class ITK_EXPORT SpatialObjectToImageDrawingFilter : public itk::ImageSource<TOutputImage>
+class ITK_TEMPLATE_EXPORT SpatialObjectToImageDrawingFilter : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs. */

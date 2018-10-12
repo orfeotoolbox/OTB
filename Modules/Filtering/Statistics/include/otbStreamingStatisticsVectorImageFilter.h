@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template<class TInputImage, class TPrecision >
-class ITK_EXPORT PersistentStreamingStatisticsVectorImageFilter :
+class ITK_TEMPLATE_EXPORT PersistentStreamingStatisticsVectorImageFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -283,7 +283,7 @@ private:
  */
 
 template<class TInputImage, class TPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>
-class ITK_EXPORT StreamingStatisticsVectorImageFilter :
+class ITK_TEMPLATE_EXPORT StreamingStatisticsVectorImageFilter :
   public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision> >
 {
 public:

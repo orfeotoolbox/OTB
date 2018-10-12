@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBLearningBase
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
-class ITK_EXPORT ImageClassificationFilter
+class ITK_TEMPLATE_EXPORT ImageClassificationFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

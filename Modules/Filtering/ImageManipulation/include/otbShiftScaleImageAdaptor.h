@@ -47,7 +47,7 @@ namespace Accessor
  * \ingroup OTBImageManipulation
  */
 template <class TPixelType, class TExternalType>
-class ITK_EXPORT ShiftScalePixelAccessor
+class ITK_TEMPLATE_EXPORT ShiftScalePixelAccessor
 {
 public:
   /** External typedef. It defines the external aspect
@@ -105,7 +105,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template <class TImage, class TOutputPixelType>
-class ITK_EXPORT ShiftScaleImageAdaptor : public
+class ITK_TEMPLATE_EXPORT ShiftScaleImageAdaptor : public
   itk::ImageAdaptor<TImage, Accessor::ShiftScalePixelAccessor<
           typename TImage::PixelType,
           TOutputPixelType> >

@@ -34,7 +34,7 @@ class CvGBTrees;
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT GradientBoostedTreeMachineLearningModel
+class ITK_TEMPLATE_EXPORT GradientBoostedTreeMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

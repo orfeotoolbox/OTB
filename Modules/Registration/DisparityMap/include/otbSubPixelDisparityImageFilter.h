@@ -65,7 +65,7 @@ namespace otb
 template <class TInputImage, class TOutputMetricImage, class TDisparityImage = TOutputMetricImage,
           class TMaskImage = otb::Image<unsigned char>,
           class TBlockMatchingFunctor = Functor::SSDBlockMatching<TInputImage,TOutputMetricImage> >
-class ITK_EXPORT SubPixelDisparityImageFilter :
+class ITK_TEMPLATE_EXPORT SubPixelDisparityImageFilter :
     public itk::ImageToImageFilter<TInputImage,TDisparityImage>
 {
 public:

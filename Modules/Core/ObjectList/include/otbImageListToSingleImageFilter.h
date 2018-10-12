@@ -40,7 +40,7 @@ namespace otb
  */
 
 template <class TInputImageType>
-class ITK_EXPORT ImageListToSingleImageFilter
+class ITK_TEMPLATE_EXPORT ImageListToSingleImageFilter
   : public ImageListToImageFilter<TInputImageType, TInputImageType>
 {
 public:

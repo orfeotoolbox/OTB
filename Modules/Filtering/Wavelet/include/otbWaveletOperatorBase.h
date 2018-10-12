@@ -71,7 +71,7 @@ enum WaveletDirection {FORWARD = 0, INVERSE = 1};
 template <Wavelet::Wavelet TMotherWaveletOperator,
     class TPixel, unsigned int VDimension,
     class TAllocator = itk::NeighborhoodAllocator<TPixel> >
-class ITK_EXPORT WaveletOperatorBase
+class ITK_TEMPLATE_EXPORT WaveletOperatorBase
   : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
 {
 public:

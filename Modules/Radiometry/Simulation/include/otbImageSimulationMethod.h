@@ -59,7 +59,7 @@ namespace otb
  */
 
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
-class ITK_EXPORT ImageSimulationMethod :
+class ITK_TEMPLATE_EXPORT ImageSimulationMethod :
   public itk::ImageSource <TOutputImage>
 
 {

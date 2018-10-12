@@ -42,7 +42,7 @@ namespace Functor
  */
 
 template<class TInputPixel, class TMaskPixel, class TOutputPixel>
-class ITK_EXPORT MaskFunctor
+class ITK_TEMPLATE_EXPORT MaskFunctor
 {
 public:
   MaskFunctor()
@@ -119,7 +119,7 @@ protected:
  **/
 
 template <class TInputImage, class TMaskImage = otb::Image<unsigned char, 2> >
-class ITK_EXPORT PrintableImageFilter :
+class ITK_TEMPLATE_EXPORT PrintableImageFilter :
   public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
 {
 public:

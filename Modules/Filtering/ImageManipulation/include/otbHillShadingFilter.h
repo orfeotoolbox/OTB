@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBImageManipulation
 */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT HillShadingFilter :
+class ITK_TEMPLATE_EXPORT HillShadingFilter :
   public UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage,
       Functor::HillShadingFunctor<itk::ConstNeighborhoodIterator<TInputImage>,
           TInputImage, typename TOutputImage::PixelType>

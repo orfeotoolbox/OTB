@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBLabelMap
  */
 template<class TImage >
-class ITK_EXPORT AttributesMapOpeningLabelMapFilter
+class ITK_TEMPLATE_EXPORT AttributesMapOpeningLabelMapFilter
   : public itk::AttributeOpeningLabelMapFilter<TImage,
       typename otb::Functor::AttributesMapLabelObjectAccessor< typename TImage::LabelObjectType> >
 {

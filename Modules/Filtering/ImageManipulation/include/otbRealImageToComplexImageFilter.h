@@ -62,7 +62,7 @@ public:
 }
 
 template <class TInputImageRealPart, class TOutputImage>
-class ITK_EXPORT RealImageToComplexImageFilter :
+class ITK_TEMPLATE_EXPORT RealImageToComplexImageFilter :
     public itk::UnaryFunctorImageFilter<TInputImageRealPart, TOutputImage,
                         Function::RealToComplex<
                                   typename TInputImageRealPart::PixelType,

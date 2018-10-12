@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBTransform
  */
 template <class TScalarType>
-class ITK_EXPORT LogPolarTransform
+class ITK_TEMPLATE_EXPORT LogPolarTransform
   : public Transform<TScalarType, 2, 2>
 {
 public:

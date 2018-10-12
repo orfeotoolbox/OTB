@@ -53,7 +53,7 @@ namespace otb
  */
 
 template <class TVectorData, class TOpticalImage>
-class ITK_EXPORT VectorDataToRoadDescriptionFilter :
+class ITK_TEMPLATE_EXPORT VectorDataToRoadDescriptionFilter :
 public otb::VectorDataToSpecificDescriptionFilterBase<TVectorData>
 {
 public:

@@ -76,7 +76,7 @@ public:
  * \ingroup OTBRoadExtraction
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
-class ITK_EXPORT RemoveWrongDirectionFilter
+class ITK_TEMPLATE_EXPORT RemoveWrongDirectionFilter
   : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
 {
 public:

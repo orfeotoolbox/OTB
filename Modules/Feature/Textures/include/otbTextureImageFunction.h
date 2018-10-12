@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBTextures
  */
 template <class TInputImage, class TFunctor, class TCoordRep = float>
-class ITK_EXPORT TextureImageFunction :
+class ITK_TEMPLATE_EXPORT TextureImageFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
       TCoordRep>
 {

@@ -33,7 +33,7 @@ namespace otb
 namespace Functor
 {
 template <typename TInput, typename TVectorInput, typename TOutput>
-class ITK_EXPORT ImageAndVectorImageOperationFunctor
+class ITK_TEMPLATE_EXPORT ImageAndVectorImageOperationFunctor
 {
 public:
   typedef typename TVectorInput::ValueType                        InternalInputPixelType;

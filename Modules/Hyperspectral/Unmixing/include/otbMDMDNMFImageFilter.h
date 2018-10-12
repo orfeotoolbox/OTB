@@ -125,7 +125,7 @@ namespace otb
  * \ingroup OTBUnmixing
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MDMDNMFImageFilter:
+class ITK_TEMPLATE_EXPORT MDMDNMFImageFilter:
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

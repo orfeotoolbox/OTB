@@ -85,7 +85,7 @@ namespace otb
  */
 
 template <class TPixel, unsigned int VImageDimension = 2>
-class ITK_EXPORT Image : public itk::Image<TPixel, VImageDimension>
+class ITK_TEMPLATE_EXPORT Image : public itk::Image<TPixel, VImageDimension>
 {
 public:
   /** Standard class typedefs. */

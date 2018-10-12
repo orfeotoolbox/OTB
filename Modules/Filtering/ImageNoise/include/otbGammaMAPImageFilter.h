@@ -40,7 +40,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT GammaMAPImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_TEMPLATE_EXPORT GammaMAPImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimension */

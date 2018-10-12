@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TOutputImage>
-class ITK_EXPORT ImageListSource
+class ITK_TEMPLATE_EXPORT ImageListSource
   : public itk::ProcessObject
 {
 public:

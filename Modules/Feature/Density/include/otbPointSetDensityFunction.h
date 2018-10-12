@@ -36,7 +36,7 @@ namespace otb
  * \ingroup OTBDensity
  */
 template <class TPointSet, class TOutput>
-class ITK_EXPORT PointSetDensityFunction : public PointSetFunction<TPointSet, TOutput>
+class ITK_TEMPLATE_EXPORT PointSetDensityFunction : public PointSetFunction<TPointSet, TOutput>
 {
 public:
   /** Standard class typedefs. */

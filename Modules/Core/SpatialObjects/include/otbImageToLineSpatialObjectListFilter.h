@@ -38,7 +38,7 @@ namespace otb
  */
 
 template <class TInputImage>
-class ITK_EXPORT ImageToLineSpatialObjectListFilter : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT ImageToLineSpatialObjectListFilter : public itk::ProcessObject
 {
 public:
 

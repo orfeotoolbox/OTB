@@ -144,7 +144,7 @@ public:
  * \ingroup OTBChangeDetection
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT KullbackLeiblerDistanceImageFilter :
+class ITK_TEMPLATE_EXPORT KullbackLeiblerDistanceImageFilter :
   public otb::BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       Functor::KullbackLeiblerDistance<

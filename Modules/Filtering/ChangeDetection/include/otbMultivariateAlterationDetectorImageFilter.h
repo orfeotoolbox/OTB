@@ -78,7 +78,7 @@ namespace otb
  * \ingroup OTBChangeDetection
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MultivariateAlterationDetectorImageFilter
+class ITK_TEMPLATE_EXPORT MultivariateAlterationDetectorImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

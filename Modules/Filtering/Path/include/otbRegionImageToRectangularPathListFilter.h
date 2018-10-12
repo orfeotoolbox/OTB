@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT RegionImageToRectangularPathListFilter : public ImageToPathListFilter<TInputImage, TOutputPath>
+class ITK_TEMPLATE_EXPORT RegionImageToRectangularPathListFilter : public ImageToPathListFilter<TInputImage, TOutputPath>
 {
 public:
   /** Standard class typedefs. */

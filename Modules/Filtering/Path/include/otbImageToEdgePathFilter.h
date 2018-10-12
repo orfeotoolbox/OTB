@@ -55,7 +55,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT ImageToEdgePathFilter
+class ITK_TEMPLATE_EXPORT ImageToEdgePathFilter
   : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:

@@ -47,7 +47,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <class TVector>
-class ITK_EXPORT GeographicalDistance :
+class ITK_TEMPLATE_EXPORT GeographicalDistance :
     public itk::Statistics::DistanceMetric<TVector>
 {
 public:

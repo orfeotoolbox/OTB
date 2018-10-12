@@ -50,7 +50,7 @@ namespace otb
  */
 
 template <class TInputLabelMap, class TSimuStep1, class TSimuStep2, class TOutputImage>
-class ITK_EXPORT LabelMapToSimulatedImageFilter :
+class ITK_TEMPLATE_EXPORT LabelMapToSimulatedImageFilter :
   public itk::LabelMapFilter <TInputLabelMap, TOutputImage>
 
 {

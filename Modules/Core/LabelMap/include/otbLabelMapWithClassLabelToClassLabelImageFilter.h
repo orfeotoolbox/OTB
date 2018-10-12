@@ -32,7 +32,7 @@ namespace otb {
  * \ingroup OTBLabelMap
  */
 template<class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelMapWithClassLabelToClassLabelImageFilter :
+class ITK_TEMPLATE_EXPORT LabelMapWithClassLabelToClassLabelImageFilter :
     public itk::LabelMapFilter<TInputImage, TOutputImage>
 {
 public:

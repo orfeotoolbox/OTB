@@ -36,7 +36,7 @@ namespace otb
  * \ingroup OTBCommon
  */
 template<class TValue = double>
-class ITK_EXPORT Rectangle
+class ITK_TEMPLATE_EXPORT Rectangle
   : public itk::Object
 {
 public:

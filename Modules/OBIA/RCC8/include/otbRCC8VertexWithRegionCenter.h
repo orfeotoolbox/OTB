@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TLabel, class TPrecision = float>
-class ITK_EXPORT RCC8VertexWithRegionCenter
+class ITK_TEMPLATE_EXPORT RCC8VertexWithRegionCenter
   : public RCC8VertexBase<TLabel>
 {
 public:

@@ -36,7 +36,7 @@ namespace otb
  * \ingroup OTBLabelling
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelizeConfidenceConnectedImageFilter
+class ITK_TEMPLATE_EXPORT LabelizeConfidenceConnectedImageFilter
   : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
       itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage> >
 {

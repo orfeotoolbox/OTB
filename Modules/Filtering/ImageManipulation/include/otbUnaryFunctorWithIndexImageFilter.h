@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT UnaryFunctorWithIndexImageFilter
+class ITK_TEMPLATE_EXPORT UnaryFunctorWithIndexImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

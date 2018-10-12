@@ -59,7 +59,7 @@ namespace otb
 template <class TListSample, class TMap,
     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
     class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
-class ITK_EXPORT PeriodicSOM
+class ITK_TEMPLATE_EXPORT PeriodicSOM
   : public SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 {
 public:

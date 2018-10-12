@@ -45,7 +45,7 @@ namespace otb
  */
 
 template <class TVectorData>
-class ITK_EXPORT VectorDataToRightAngleVectorDataFilter
+class ITK_TEMPLATE_EXPORT VectorDataToRightAngleVectorDataFilter
   : public otb::VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:

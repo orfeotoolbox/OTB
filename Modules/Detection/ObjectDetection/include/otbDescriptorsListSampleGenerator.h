@@ -53,7 +53,7 @@ public:
  * \ingroup OTBObjectDetection
  */
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabel>
-class ITK_EXPORT PersistentDescriptorsListSampleGenerator :
+class ITK_TEMPLATE_EXPORT PersistentDescriptorsListSampleGenerator :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -240,7 +240,7 @@ private:
  * \ingroup OTBObjectDetection
  */
 template <class TInputImage, class TVectorData, class TListSample, class TLabel, class TOutputPrecision = double, class TCoordRep = double>
-class ITK_EXPORT DescriptorsListSampleGenerator :
+class ITK_TEMPLATE_EXPORT DescriptorsListSampleGenerator :
     public PersistentFilterStreamingDecorator<
               PersistentDescriptorsListSampleGenerator< TInputImage,
                                                         TVectorData,

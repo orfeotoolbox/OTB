@@ -41,7 +41,7 @@ template <class TInputImageR, class TInputImageG, class TInputImageNIR, class TO
         typename TInputImageG::PixelType,
         typename TInputImageNIR::PixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT RAndGAndNIRIndexImageFilter :  public itk::TernaryFunctorImageFilter<TInputImageR, TInputImageG,
+class ITK_TEMPLATE_EXPORT RAndGAndNIRIndexImageFilter :  public itk::TernaryFunctorImageFilter<TInputImageR, TInputImageG,
       TInputImageNIR, TOutputImage,
       TFunction>
 {

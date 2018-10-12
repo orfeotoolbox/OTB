@@ -53,7 +53,7 @@ namespace otb
  * \ingroup OTBInterpolation
  */
 template< class TInputImage, class TCoordRep = double >
-class ITK_EXPORT BCOInterpolateImageFunctionBase :
+class ITK_TEMPLATE_EXPORT BCOInterpolateImageFunctionBase :
   public itk::InterpolateImageFunction<TInputImage, TCoordRep>
 {
 public:
@@ -133,7 +133,7 @@ private:
 
 
 template < class TInputImage, class TCoordRep = double >
-class ITK_EXPORT BCOInterpolateImageFunction :
+class ITK_TEMPLATE_EXPORT BCOInterpolateImageFunction :
     public otb::BCOInterpolateImageFunctionBase< TInputImage, TCoordRep >
 {
 public:
@@ -171,7 +171,7 @@ private:
 
 
 template < typename TPixel, unsigned int VImageDimension, class TCoordRep >
-class ITK_EXPORT BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordRep > :
+class ITK_TEMPLATE_EXPORT BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordRep > :
     public otb::BCOInterpolateImageFunctionBase< otb::VectorImage<TPixel, VImageDimension> , TCoordRep >
 {
 public:

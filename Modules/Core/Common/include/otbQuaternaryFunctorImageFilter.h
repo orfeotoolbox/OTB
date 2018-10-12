@@ -44,7 +44,7 @@ namespace otb
 template <class TInputImage1, class TInputImage2,
     class TInputImage3, class TInputImage4,
     class TOutputImage, class TFunction>
-class ITK_EXPORT QuaternaryFunctorImageFilter :
+class ITK_TEMPLATE_EXPORT QuaternaryFunctorImageFilter :
   public itk::InPlaceImageFilter<TInputImage1, TOutputImage>
 {
 public:

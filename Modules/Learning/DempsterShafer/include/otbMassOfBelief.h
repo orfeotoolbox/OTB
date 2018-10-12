@@ -87,7 +87,7 @@ namespace otb
  * \ingroup OTBDempsterShafer
  */
 template <class TLabel = unsigned short, class TMass = double>
-class ITK_EXPORT MassOfBelief : public itk::DataObject
+class ITK_TEMPLATE_EXPORT MassOfBelief : public itk::DataObject
 {
 public:
   /** Standard class typedefs */

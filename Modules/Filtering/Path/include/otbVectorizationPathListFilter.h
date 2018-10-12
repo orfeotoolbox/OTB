@@ -43,7 +43,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TInputModulus, class TInputDirection, class TOutputPath>
-class ITK_EXPORT VectorizationPathListFilter
+class ITK_TEMPLATE_EXPORT VectorizationPathListFilter
   : public PathListSource<TOutputPath>
 {
 public:

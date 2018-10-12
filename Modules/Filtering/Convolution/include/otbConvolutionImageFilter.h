@@ -66,7 +66,7 @@ namespace otb
 template <class TInputImage, class TOutputImage, class TBoundaryCondition =
       itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
     class TFilterPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>
-class ITK_EXPORT ConvolutionImageFilter :
+class ITK_TEMPLATE_EXPORT ConvolutionImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

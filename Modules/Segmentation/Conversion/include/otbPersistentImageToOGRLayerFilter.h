@@ -48,7 +48,7 @@ namespace otb
  * \ingroup OTBConversion
  */
 template<class TImage>
-class ITK_EXPORT PersistentImageToOGRLayerFilter :
+class ITK_TEMPLATE_EXPORT PersistentImageToOGRLayerFilter :
   public PersistentImageFilter<TImage, TImage>
 {
 public:

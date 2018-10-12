@@ -38,7 +38,7 @@ namespace otb {
  * \ingroup OTBSupervised
  */
 template<class TInputLabelMap>
-class ITK_EXPORT LabelMapClassifier :
+class ITK_TEMPLATE_EXPORT LabelMapClassifier :
     public itk::InPlaceLabelMapFilter<TInputLabelMap>
 {
 public:

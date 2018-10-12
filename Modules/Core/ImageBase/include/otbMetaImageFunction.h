@@ -44,7 +44,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TOutputPrecision = double, class TCoordRep = double>
-class ITK_EXPORT MetaImageFunction
+class ITK_TEMPLATE_EXPORT MetaImageFunction
 : public itk::FunctionBase<itk::Point<TCoordRep, 2>,
   itk::VariableLengthVector<TOutputPrecision> >
 {

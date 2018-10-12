@@ -46,7 +46,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT SarBrightnessFunction :
+class ITK_TEMPLATE_EXPORT SarBrightnessFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
       TCoordRep>
 {

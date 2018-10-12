@@ -52,7 +52,7 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TVectorData>
-class ITK_EXPORT VectorDataExtractROI :
+class ITK_TEMPLATE_EXPORT VectorDataExtractROI :
   public VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:

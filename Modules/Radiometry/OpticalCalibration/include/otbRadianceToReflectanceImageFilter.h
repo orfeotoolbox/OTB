@@ -130,7 +130,7 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT RadianceToReflectanceImageFilter :
+class ITK_TEMPLATE_EXPORT RadianceToReflectanceImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
       TOutputImage,
       typename Functor::RadianceToReflectanceImageFunctor<typename

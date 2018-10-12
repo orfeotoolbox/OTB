@@ -54,7 +54,7 @@ namespace otb
  * \ingroup OTBDEM
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DEMCaracteristicsExtractor :
+class ITK_TEMPLATE_EXPORT DEMCaracteristicsExtractor :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -61,7 +61,7 @@ namespace otb
  */
 template <class TDisparityImage, class TInputImage, class TOutputDEMImage = TDisparityImage,
           class TEpipolarGridImage = otb::VectorImage<float,2> , class TMaskImage = otb::Image<unsigned char> >
-class ITK_EXPORT DisparityMapToDEMFilter :
+class ITK_TEMPLATE_EXPORT DisparityMapToDEMFilter :
     public itk::ImageToImageFilter<TDisparityImage,TOutputDEMImage>
 {
 public:

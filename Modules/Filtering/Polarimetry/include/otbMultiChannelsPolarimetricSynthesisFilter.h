@@ -50,7 +50,7 @@ template <class TInputImage, class TOutputImage,
         typename TInputImage::InternalPixelType,
         typename TInputImage::InternalPixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT MultiChannelsPolarimetricSynthesisFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
+class ITK_TEMPLATE_EXPORT MultiChannelsPolarimetricSynthesisFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */

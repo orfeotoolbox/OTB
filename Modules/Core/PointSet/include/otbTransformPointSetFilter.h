@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TInputPointSet, class TOutputPointSet, class TTransform>
-class ITK_EXPORT TransformPointSetFilter :
+class ITK_TEMPLATE_EXPORT TransformPointSetFilter :
   public PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
 {
 public:

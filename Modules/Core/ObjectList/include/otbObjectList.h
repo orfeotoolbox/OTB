@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TObject>
-class ITK_EXPORT ObjectList : public itk::DataObject , public DataObjectListInterface
+class ITK_TEMPLATE_EXPORT ObjectList : public itk::DataObject , public DataObjectListInterface
 {
 public:
   /** Standard typedefs */

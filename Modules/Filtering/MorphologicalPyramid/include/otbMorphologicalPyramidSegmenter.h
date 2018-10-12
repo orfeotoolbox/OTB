@@ -48,7 +48,7 @@ namespace MorphologicalPyramid
  * \ingroup OTBMorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT Segmenter
+class ITK_TEMPLATE_EXPORT Segmenter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

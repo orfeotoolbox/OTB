@@ -45,7 +45,7 @@ namespace otb
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT LocalHistogramIFFactory :
+class ITK_TEMPLATE_EXPORT LocalHistogramIFFactory :
     public itk::LightObject
 {
 public:

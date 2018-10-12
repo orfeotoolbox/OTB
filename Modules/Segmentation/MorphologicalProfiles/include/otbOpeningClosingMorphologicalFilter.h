@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-class ITK_EXPORT OpeningClosingMorphologicalFilter
+class ITK_TEMPLATE_EXPORT OpeningClosingMorphologicalFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

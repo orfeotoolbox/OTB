@@ -85,7 +85,7 @@ public:
  * \ingroup OTBDimensionalityReduction
  */
 template < class TInputImage, class TOutputImage >
-class ITK_EXPORT LocalActivityVectorImageFilter
+class ITK_TEMPLATE_EXPORT LocalActivityVectorImageFilter
   : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
             Functor::LocalActivityOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,

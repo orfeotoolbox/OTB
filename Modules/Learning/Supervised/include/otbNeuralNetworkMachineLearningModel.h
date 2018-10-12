@@ -31,7 +31,7 @@
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT NeuralNetworkMachineLearningModel
+class ITK_TEMPLATE_EXPORT NeuralNetworkMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

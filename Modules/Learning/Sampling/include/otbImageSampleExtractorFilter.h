@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 template<class TInputImage>
-class ITK_EXPORT PersistentImageSampleExtractorFilter :
+class ITK_TEMPLATE_EXPORT PersistentImageSampleExtractorFilter :
   public PersistentSamplingFilterBase<TInputImage>
 {
 public:
@@ -126,7 +126,7 @@ private:
  * \ingroup OTBSampling
  */
 template<class TInputImage>
-class ITK_EXPORT ImageSampleExtractorFilter :
+class ITK_TEMPLATE_EXPORT ImageSampleExtractorFilter :
   public PersistentFilterStreamingDecorator<PersistentImageSampleExtractorFilter<TInputImage> >
 {
 public:

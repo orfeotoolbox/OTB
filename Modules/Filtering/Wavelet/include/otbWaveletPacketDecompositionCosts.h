@@ -40,7 +40,7 @@ namespace otb {
  * \ingroup OTBWavelet
  */
 template <class TImage>
-class ITK_EXPORT FullyDecomposedWaveletPacketCost
+class ITK_TEMPLATE_EXPORT FullyDecomposedWaveletPacketCost
   : public itk::Object
 {
 public:

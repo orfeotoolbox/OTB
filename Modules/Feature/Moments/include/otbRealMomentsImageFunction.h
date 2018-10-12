@@ -39,7 +39,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = double>
-class ITK_EXPORT RealMomentsImageFunction :
+class ITK_TEMPLATE_EXPORT RealMomentsImageFunction :
     public itk::ImageFunction<TInputImage,
                               std::vector< std::vector<
                               typename itk::NumericTraits<

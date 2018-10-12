@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBRoadExtraction
  */
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT ImageToPathListAlignFilter : public ImageToPathListFilter<TInputImage, TOutputPath>
+class ITK_TEMPLATE_EXPORT ImageToPathListAlignFilter : public ImageToPathListFilter<TInputImage, TOutputPath>
 {
 public:
   /** Standard class typedefs. */

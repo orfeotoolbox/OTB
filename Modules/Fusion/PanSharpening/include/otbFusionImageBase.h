@@ -34,7 +34,7 @@ namespace otb
  */
 template <class TInputMultiSpectralImage, class TInputMultiSpectralInterpImage, class TInputPanchroImage,
     class TOutputImage, class TFunctor>
-class ITK_EXPORT FusionImageBase :  public itk::TernaryFunctorImageFilter<TInputMultiSpectralImage,
+class ITK_TEMPLATE_EXPORT FusionImageBase :  public itk::TernaryFunctorImageFilter<TInputMultiSpectralImage,
       TInputMultiSpectralInterpImage,
       TInputPanchroImage, TOutputImage, TFunctor>
 {

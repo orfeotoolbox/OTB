@@ -39,7 +39,7 @@ namespace Functor
  * \ingroup OTBSARCalibration
  */
 template<class TInput, class TOutput>
-class ITK_EXPORT SarBrightnessFunctor
+class ITK_TEMPLATE_EXPORT SarBrightnessFunctor
 {
 public:
   typedef TInput                                            InputType;

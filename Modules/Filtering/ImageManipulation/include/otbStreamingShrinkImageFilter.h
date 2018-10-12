@@ -104,7 +104,7 @@ private:
 
 
 template <class TInputImage>
-class ITK_EXPORT StreamingShrinkStreamingManager : public StreamingManager<TInputImage>
+class ITK_TEMPLATE_EXPORT StreamingShrinkStreamingManager : public StreamingManager<TInputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -165,7 +165,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TOutputImage = TInputImage>
-class ITK_EXPORT PersistentShrinkImageFilter :
+class ITK_TEMPLATE_EXPORT PersistentShrinkImageFilter :
   public PersistentImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -262,7 +262,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TOutputImage = TInputImage>
-class ITK_EXPORT StreamingShrinkImageFilter :
+class ITK_TEMPLATE_EXPORT StreamingShrinkImageFilter :
   public PersistentFilterStreamingDecorator< PersistentShrinkImageFilter<TInputImage, TOutputImage> >
 {
 public:

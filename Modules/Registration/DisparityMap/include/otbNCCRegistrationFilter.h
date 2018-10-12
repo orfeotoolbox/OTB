@@ -69,7 +69,7 @@ namespace otb
  * \ingroup OTBDisparityMap
  */
 template<class TFixedImage, class TMovingImage, class TDisplacementField>
-class ITK_EXPORT NCCRegistrationFilter :
+class ITK_TEMPLATE_EXPORT NCCRegistrationFilter :
   public itk::PDEDeformableRegistrationFilter<TFixedImage, TMovingImage,
       TDisplacementField>
 {

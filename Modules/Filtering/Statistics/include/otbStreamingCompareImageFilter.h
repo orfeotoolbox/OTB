@@ -48,7 +48,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template<class TInputImage>
-class ITK_EXPORT PersistentCompareImageFilter :
+class ITK_TEMPLATE_EXPORT PersistentCompareImageFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -209,7 +209,7 @@ private:
  */
 
 template<class TInputImage>
-class ITK_EXPORT StreamingCompareImageFilter :
+class ITK_TEMPLATE_EXPORT StreamingCompareImageFilter :
   public PersistentFilterStreamingDecorator<PersistentCompareImageFilter<TInputImage> >
 {
 public:

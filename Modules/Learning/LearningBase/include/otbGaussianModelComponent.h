@@ -45,7 +45,7 @@ namespace Statistics
  */
 
 template<class TSample>
-class ITK_EXPORT GaussianModelComponent :
+class ITK_TEMPLATE_EXPORT GaussianModelComponent :
   public ModelComponentBase<TSample>
 {
 public:

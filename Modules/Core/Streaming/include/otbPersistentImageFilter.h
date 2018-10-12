@@ -44,7 +44,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT PersistentImageFilter
+class ITK_TEMPLATE_EXPORT PersistentImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

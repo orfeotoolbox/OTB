@@ -40,7 +40,7 @@ namespace otb {
  * \sa WaveletFilterBank
  */
 template <class TImage>
-class ITK_EXPORT SubsampledImageRegionConstIterator
+class ITK_TEMPLATE_EXPORT SubsampledImageRegionConstIterator
   : public itk::ImageRegionConstIterator<TImage>
 {
 public:

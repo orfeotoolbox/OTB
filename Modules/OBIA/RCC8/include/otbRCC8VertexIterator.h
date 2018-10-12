@@ -32,7 +32,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TGraph>
-class ITK_EXPORT RCC8VertexIterator
+class ITK_TEMPLATE_EXPORT RCC8VertexIterator
 {
 public:
   /** self typedef */

@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ProfileToProfileDerivativeFilter
+class ITK_TEMPLATE_EXPORT ProfileToProfileDerivativeFilter
   : public ImageListToImageListFilter<TInputImage, TOutputImage>
 {
 public:

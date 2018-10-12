@@ -61,7 +61,7 @@ enum Wavelet {
  * \ingroup OTBWavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator>
-class ITK_EXPORT WaveletGenerator
+class ITK_TEMPLATE_EXPORT WaveletGenerator
   : public itk::LightObject
 {
 public:

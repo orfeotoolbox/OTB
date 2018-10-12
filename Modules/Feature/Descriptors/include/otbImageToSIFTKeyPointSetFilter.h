@@ -115,7 +115,7 @@ public:
  * \ingroup OTBDescriptors
  */
 template <class TInputImage, class TOutputPointSet>
-class ITK_EXPORT ImageToSIFTKeyPointSetFilter
+class ITK_TEMPLATE_EXPORT ImageToSIFTKeyPointSetFilter
   : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 public:

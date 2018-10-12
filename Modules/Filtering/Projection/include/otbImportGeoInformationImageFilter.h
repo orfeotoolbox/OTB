@@ -43,7 +43,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <class TImage, class TSourceImage>
-class ITK_EXPORT ImportGeoInformationImageFilter
+class ITK_TEMPLATE_EXPORT ImportGeoInformationImageFilter
   : public itk::CastImageFilter<TImage, TImage>
 {
 public:

@@ -50,7 +50,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template<class TImage>
-class ITK_EXPORT StreamingManager : public itk::Object
+class ITK_TEMPLATE_EXPORT StreamingManager : public itk::Object
 {
 public:
   /** Standard class typedefs. */

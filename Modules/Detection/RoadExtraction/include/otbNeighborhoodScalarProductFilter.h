@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBRoadExtraction
  */
 template <class TInputImage, class TOutputModulus, class TOutputDirection>
-class ITK_EXPORT NeighborhoodScalarProductFilter
+class ITK_TEMPLATE_EXPORT NeighborhoodScalarProductFilter
   : public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputModulus, TOutputDirection>
 {
 public:

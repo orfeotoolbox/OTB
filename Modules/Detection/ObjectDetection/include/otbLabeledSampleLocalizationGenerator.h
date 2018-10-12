@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBObjectDetection
  */
 template <class TVectorData>
-class ITK_EXPORT LabeledSampleLocalizationGenerator :
+class ITK_TEMPLATE_EXPORT LabeledSampleLocalizationGenerator :
     public VectorDataSource<TVectorData>
 {
 public:

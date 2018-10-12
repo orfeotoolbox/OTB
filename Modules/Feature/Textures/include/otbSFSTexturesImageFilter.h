@@ -55,7 +55,7 @@ namespace otb
 */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SFSTexturesImageFilter :
+class ITK_TEMPLATE_EXPORT SFSTexturesImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

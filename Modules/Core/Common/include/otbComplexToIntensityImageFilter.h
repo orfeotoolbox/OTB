@@ -60,7 +60,7 @@ public:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ComplexToIntensityImageFilter :
+class ITK_TEMPLATE_EXPORT ComplexToIntensityImageFilter :
     public
 itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
                         Function::ComplexToIntensity<

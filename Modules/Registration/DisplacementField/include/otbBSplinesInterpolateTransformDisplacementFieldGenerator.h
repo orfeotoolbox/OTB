@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBDisplacementField
  */
 template <class TPointSet, class TDisplacementField>
-class ITK_EXPORT BSplinesInterpolateTransformDisplacementFieldGenerator
+class ITK_TEMPLATE_EXPORT BSplinesInterpolateTransformDisplacementFieldGenerator
   : public PointSetWithTransformToDisplacementFieldGenerator<TPointSet, TDisplacementField>
 {
 public:

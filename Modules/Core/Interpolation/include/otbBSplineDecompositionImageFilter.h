@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBInterpolation
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT BSplineDecompositionImageFilter :
+class ITK_TEMPLATE_EXPORT BSplineDecompositionImageFilter :
   public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

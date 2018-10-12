@@ -36,7 +36,7 @@ namespace otb
  */
 
 template <class TImage>
-class ITK_EXPORT ImageList
+class ITK_TEMPLATE_EXPORT ImageList
   : public ObjectList<TImage>
 {
 public:

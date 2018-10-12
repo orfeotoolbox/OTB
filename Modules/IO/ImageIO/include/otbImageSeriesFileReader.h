@@ -47,7 +47,7 @@ namespace otb {
  * \ingroup OTBImageIO
  */
 template <class TImage, class TInternalImage = TImage>
-class ITK_EXPORT ImageSeriesFileReader
+class ITK_TEMPLATE_EXPORT ImageSeriesFileReader
   : public ImageSeriesFileReaderBase<TImage, TInternalImage>
 {
 public:
@@ -160,7 +160,7 @@ private:
  * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
-class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
+class ITK_TEMPLATE_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
   : public ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2> >
 {
 public:
@@ -266,7 +266,7 @@ private:
  * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
-class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
+class ITK_TEMPLATE_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
   : public ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 {
 public:
@@ -373,7 +373,7 @@ private:
  * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
-class ITK_EXPORT ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
+class ITK_TEMPLATE_EXPORT ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
   : public ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 {
 public:

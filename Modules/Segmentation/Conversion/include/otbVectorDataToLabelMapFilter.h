@@ -55,7 +55,7 @@ namespace otb
  */
 
 template <class TVectorData, class TLabelMap>
-class ITK_EXPORT VectorDataToLabelMapFilter :
+class ITK_TEMPLATE_EXPORT VectorDataToLabelMapFilter :
   public LabelMapSource <TLabelMap>
 
 {

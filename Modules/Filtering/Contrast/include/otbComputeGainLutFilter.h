@@ -40,7 +40,7 @@ namespace otb
  */
 
 template <class TInputImage , class TOutputImage >
-class ITK_EXPORT ComputeGainLutFilter :
+class ITK_TEMPLATE_EXPORT ComputeGainLutFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public:

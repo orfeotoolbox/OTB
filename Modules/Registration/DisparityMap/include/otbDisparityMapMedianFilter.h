@@ -70,7 +70,7 @@ namespace otb
  * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputImage, class TMask>
-class ITK_EXPORT DisparityMapMedianFilter :
+class ITK_TEMPLATE_EXPORT DisparityMapMedianFilter :
     public itk::ImageToImageFilter< TInputImage, TOutputImage>
 {
 public:

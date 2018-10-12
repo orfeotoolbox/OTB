@@ -182,7 +182,7 @@ private:
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ConvexOrConcaveClassificationFilter
+class ITK_TEMPLATE_EXPORT ConvexOrConcaveClassificationFilter
   : public itk::BinaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage,
       Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
           typename TOutputImage::PixelType> >

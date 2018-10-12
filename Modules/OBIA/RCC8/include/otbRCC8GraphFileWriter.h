@@ -67,7 +67,7 @@ public:
  * \ingroup OTBRCC8
  */
 template <class TInputGraph>
-class ITK_EXPORT RCC8GraphFileWriter
+class ITK_TEMPLATE_EXPORT RCC8GraphFileWriter
   : public itk::ProcessObject
 {
 public:

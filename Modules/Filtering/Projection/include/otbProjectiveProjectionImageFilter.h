@@ -106,7 +106,7 @@ private:
  * \ingroup OTBProjection
  */
 template <class TInputImage, class TOutputImage, class TPrecision>
-class ITK_EXPORT ProjectiveProjectionImageFilter :
+class ITK_TEMPLATE_EXPORT ProjectiveProjectionImageFilter :
   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::ProjectiveProjectionFunctor<typename TInputImage::PixelType,
           typename TOutputImage::PixelType, TPrecision> >

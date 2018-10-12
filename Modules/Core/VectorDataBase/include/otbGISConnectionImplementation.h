@@ -36,7 +36,7 @@ namespace otb
  */
 
 template <class TransactorType>
-class ITK_EXPORT GISConnectionImplementation
+class ITK_TEMPLATE_EXPORT GISConnectionImplementation
   : public itk::DataObject
 {
 public:

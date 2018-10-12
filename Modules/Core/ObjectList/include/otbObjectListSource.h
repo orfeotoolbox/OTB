@@ -44,7 +44,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TOutputList>
-class ITK_EXPORT ObjectListSource : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT ObjectListSource : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

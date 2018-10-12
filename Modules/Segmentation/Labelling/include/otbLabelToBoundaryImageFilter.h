@@ -74,7 +74,7 @@ public:
  * \ingroup OTBLabelling
  */
 template < class TInputImage, class TOutputImage >
-class ITK_EXPORT LabelToBoundaryImageFilter
+class ITK_TEMPLATE_EXPORT LabelToBoundaryImageFilter
   : public UnaryFunctorNeighborhoodImageFilter< TInputImage, TOutputImage,
             Functor::LabelToBoundaryFunctor<
               typename itk::ConstNeighborhoodIterator<TInputImage>,

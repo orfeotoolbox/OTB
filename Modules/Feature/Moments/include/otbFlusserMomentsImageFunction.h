@@ -67,7 +67,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = double >
-class ITK_EXPORT FlusserMomentsImageFunction :
+class ITK_TEMPLATE_EXPORT FlusserMomentsImageFunction :
   public itk::ImageFunction< TInputImage,
     itk::FixedArray<
     typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,

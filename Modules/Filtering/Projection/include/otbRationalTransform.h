@@ -49,7 +49,7 @@ namespace otb
 
 template <class TScalarType = double,
           unsigned int Dimension = 2>
-class ITK_EXPORT RationalTransform : public Transform<TScalarType, Dimension, Dimension>
+class ITK_TEMPLATE_EXPORT RationalTransform : public Transform<TScalarType, Dimension, Dimension>
 {
 public:
   /** Standard class typedefs. */

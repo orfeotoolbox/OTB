@@ -94,7 +94,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ConcatenateScalarValueImageFilter :
+class ITK_TEMPLATE_EXPORT ConcatenateScalarValueImageFilter :
   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::ConcatenateScalarValueFunctor<typename TInputImage::PixelType,
           typename TOutputImage::PixelType> >

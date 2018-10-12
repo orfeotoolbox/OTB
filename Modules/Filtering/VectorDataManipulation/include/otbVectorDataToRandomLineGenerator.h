@@ -46,7 +46,7 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TVectorData>
-class ITK_EXPORT VectorDataToRandomLineGenerator :
+class ITK_TEMPLATE_EXPORT VectorDataToRandomLineGenerator :
     public VectorDataSource<TVectorData>
 {
 public:

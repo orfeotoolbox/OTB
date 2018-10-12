@@ -159,7 +159,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage = TInputImage>
-class ITK_EXPORT ShiftScaleVectorImageFilter :
+class ITK_TEMPLATE_EXPORT ShiftScaleVectorImageFilter :
     public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
                   Functor::VectorShiftScale<typename TInputImage::PixelType,
                                             typename TOutputImage::PixelType> >

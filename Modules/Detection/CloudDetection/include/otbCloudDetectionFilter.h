@@ -33,7 +33,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::CloudDetectionFunctor<
         typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-class ITK_EXPORT CloudDetectionFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+class ITK_TEMPLATE_EXPORT CloudDetectionFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */

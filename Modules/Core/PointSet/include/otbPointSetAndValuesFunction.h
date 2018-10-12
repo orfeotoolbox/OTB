@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TPointSet, class TValue, class TCoordRep = double>
-class ITK_EXPORT PointSetAndValuesFunction
+class ITK_TEMPLATE_EXPORT PointSetAndValuesFunction
   : public itk::FunctionBase<itk::Point<TCoordRep, TPointSet::PointDimension>, TValue>
 {
 public:

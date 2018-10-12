@@ -36,7 +36,7 @@ namespace otb
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageToLuminanceImageFilter :
+class ITK_TEMPLATE_EXPORT ImageToLuminanceImageFilter :
   public ImageToRadianceImageFilter<TInputImage, TOutputImage>
 {
 };

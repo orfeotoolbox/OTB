@@ -66,7 +66,7 @@ public:
  */
 
 template <class TInputVectorData>
-class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT VectorDataFileWriter : public itk::ProcessObject
 {
 public:
 

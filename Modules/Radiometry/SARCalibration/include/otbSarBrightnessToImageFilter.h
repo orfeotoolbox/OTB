@@ -39,7 +39,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SarBrightnessToImageFilter :
+class ITK_TEMPLATE_EXPORT SarBrightnessToImageFilter :
   public FunctionToImageFilter<TInputImage, TOutputImage,
                  SarBrightnessFunction<TInputImage> >
 {

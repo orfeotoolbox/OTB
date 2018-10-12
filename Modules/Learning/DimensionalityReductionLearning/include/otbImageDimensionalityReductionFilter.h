@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
-class ITK_EXPORT ImageDimensionalityReductionFilter
+class ITK_TEMPLATE_EXPORT ImageDimensionalityReductionFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TLabeledImage>
-class ITK_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter
+class ITK_TEMPLATE_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter
   : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataToVectorDataFilter : public VectorDataSource<TOutputVectorData>
+class ITK_TEMPLATE_EXPORT VectorDataToVectorDataFilter : public VectorDataSource<TOutputVectorData>
 {
 public:
   /** Standard class typedefs. */

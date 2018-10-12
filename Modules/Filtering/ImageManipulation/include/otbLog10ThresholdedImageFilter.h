@@ -80,7 +80,7 @@ private:
 } // End namespace Functor
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT Log10ThresholdedImageFilter :
+class ITK_TEMPLATE_EXPORT Log10ThresholdedImageFilter :
     public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::Log10Thresholded<typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {
 public:

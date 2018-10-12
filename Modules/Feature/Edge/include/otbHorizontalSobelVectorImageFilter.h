@@ -63,7 +63,7 @@ public:
  * \ingroup OTBEdge
  */
 template < class TInputImage, class TOutputImage >
-class ITK_EXPORT HorizontalSobelVectorImageFilter
+class ITK_TEMPLATE_EXPORT HorizontalSobelVectorImageFilter
   : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
             Functor::HorizontalSobelOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,

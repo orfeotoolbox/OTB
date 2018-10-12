@@ -43,7 +43,7 @@ namespace otb
   */
 
 template <class TInputVectorData, class TInputImage>
-class ITK_EXPORT VectorDataIntoImageProjectionFilter :
+class ITK_TEMPLATE_EXPORT VectorDataIntoImageProjectionFilter :
   public otb::VectorDataToVectorDataFilter<TInputVectorData, TInputVectorData>
 {
 

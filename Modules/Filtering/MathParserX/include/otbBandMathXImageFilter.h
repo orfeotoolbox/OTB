@@ -62,7 +62,7 @@ namespace otb
  */
 
 template< class TImage >
-class ITK_EXPORT BandMathXImageFilter
+class ITK_TEMPLATE_EXPORT BandMathXImageFilter
   : public itk::ImageToImageFilter< TImage , TImage >
 {
 public:

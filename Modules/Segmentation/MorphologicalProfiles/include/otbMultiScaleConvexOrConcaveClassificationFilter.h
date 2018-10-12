@@ -150,7 +150,7 @@ private:
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
+class ITK_TEMPLATE_EXPORT MultiScaleConvexOrConcaveClassificationFilter
   : public QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
       Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
           typename TOutputImage::PixelType> >

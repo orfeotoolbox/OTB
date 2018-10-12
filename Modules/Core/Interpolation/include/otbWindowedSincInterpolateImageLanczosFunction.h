@@ -97,7 +97,7 @@ private:
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
-class ITK_EXPORT WindowedSincInterpolateImageLanczosFunction :
+class ITK_TEMPLATE_EXPORT WindowedSincInterpolateImageLanczosFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
       typename Function::LanczosWindowFunction<TInputInterpolator,
           TOutputInterpolator>,

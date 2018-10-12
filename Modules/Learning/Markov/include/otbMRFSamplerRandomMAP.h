@@ -49,7 +49,7 @@ namespace otb
  */
 
 template<class TInput1, class TInput2>
-class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler<TInput1, TInput2>
+class ITK_TEMPLATE_EXPORT MRFSamplerRandomMAP : public MRFSampler<TInput1, TInput2>
 {
 public:
 

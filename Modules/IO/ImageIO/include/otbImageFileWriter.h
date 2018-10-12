@@ -61,7 +61,7 @@ namespace otb
  * \ingroup OTBImageIO
  */
 template <class TInputImage>
-class ITK_EXPORT ImageFileWriter : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT ImageFileWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

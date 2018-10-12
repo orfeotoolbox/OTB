@@ -50,7 +50,7 @@ namespace itk
  * \ingroup OTBITK
  */
 template< class TInputImage, class TOutputImage, class TFunction >
-class ITK_EXPORT UnaryFunctorImageFilter:public InPlaceImageFilter< TInputImage, TOutputImage >
+class ITK_TEMPLATE_EXPORT UnaryFunctorImageFilter:public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard class typedefs. */

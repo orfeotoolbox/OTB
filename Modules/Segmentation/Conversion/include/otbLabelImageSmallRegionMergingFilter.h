@@ -48,7 +48,7 @@ namespace otb
  * \ingroup OTBConversion
  */
 template <class TInputLabelImage>
-class ITK_EXPORT PersistentLabelImageSmallRegionMergingFilter
+class ITK_TEMPLATE_EXPORT PersistentLabelImageSmallRegionMergingFilter
   : public PersistentImageFilter<TInputLabelImage, TInputLabelImage>
 {
 public:
@@ -166,7 +166,7 @@ private:
  * \ingroup OTBConversion
  */
 template <class TInputLabelImage>
-class ITK_EXPORT LabelImageSmallRegionMergingFilter 
+class ITK_TEMPLATE_EXPORT LabelImageSmallRegionMergingFilter 
   : public itk::ProcessObject
 {
 public:

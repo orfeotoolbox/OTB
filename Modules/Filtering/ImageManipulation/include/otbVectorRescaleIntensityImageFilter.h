@@ -214,7 +214,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage = TInputImage>
-class ITK_EXPORT VectorRescaleIntensityImageFilter
+class ITK_TEMPLATE_EXPORT VectorRescaleIntensityImageFilter
   :  public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::VectorAffineTransform<
           typename TInputImage::PixelType,

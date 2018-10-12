@@ -195,7 +195,7 @@ private:
  * \ingroup OTBOGRProcessing
  */
 template <class TImageType,  class TSegmentationFilter>
-class ITK_EXPORT StreamingImageToOGRLayerSegmentationFilter :
+class ITK_TEMPLATE_EXPORT StreamingImageToOGRLayerSegmentationFilter :
 public PersistentFilterStreamingDecorator<PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter> >
 {
 

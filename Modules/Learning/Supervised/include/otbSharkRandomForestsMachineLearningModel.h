@@ -65,7 +65,7 @@
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT SharkRandomForestsMachineLearningModel
+class ITK_TEMPLATE_EXPORT SharkRandomForestsMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

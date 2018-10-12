@@ -51,7 +51,7 @@ template <class TInputVectorImage, class TOutputImage,
     class TFunction = Functor::WaterSqrtSpectralAngleFunctor <
         typename TInputVectorImage::PixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT WaterSqrtSpectralAngleImageFilter :
+class ITK_TEMPLATE_EXPORT WaterSqrtSpectralAngleImageFilter :
   public itk::UnaryFunctorImageFilter<TInputVectorImage, TOutputImage, TFunction>
 {
 public:

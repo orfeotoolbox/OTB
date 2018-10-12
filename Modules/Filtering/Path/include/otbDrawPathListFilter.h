@@ -47,7 +47,7 @@ namespace otb
  */
 
 template <class TInputImage, class TInputPath, class TOutputImage>
-class ITK_EXPORT DrawPathListFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_TEMPLATE_EXPORT DrawPathListFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */

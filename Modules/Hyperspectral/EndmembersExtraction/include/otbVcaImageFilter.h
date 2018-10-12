@@ -64,7 +64,7 @@ namespace otb {
  * \ingroup OTBEndmembersExtraction
  */
 template <class TVectorImage>
-class ITK_EXPORT VCAImageFilter : public itk::ImageToImageFilter<TVectorImage, TVectorImage>
+class ITK_TEMPLATE_EXPORT VCAImageFilter : public itk::ImageToImageFilter<TVectorImage, TVectorImage>
 {
 public:
   typedef VCAImageFilter                                            Self;

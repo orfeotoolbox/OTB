@@ -66,7 +66,7 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TImage, class TStructuringElement>
-class ITK_EXPORT GeodesicMorphologyIterativeDecompositionImageFilter
+class ITK_TEMPLATE_EXPORT GeodesicMorphologyIterativeDecompositionImageFilter
   : public ImageToImageListFilter<TImage, TImage>
 {
 public:

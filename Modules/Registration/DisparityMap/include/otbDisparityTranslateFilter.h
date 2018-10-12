@@ -45,7 +45,7 @@ namespace otb
  */
 template <class TDisparityImage,  class TGridImage = otb::VectorImage<float,2> ,
   class TSensorImage = otb::Image<unsigned short,2> , class TMaskImage = otb::Image<unsigned char,2> >
-class ITK_EXPORT DisparityTranslateFilter :
+class ITK_TEMPLATE_EXPORT DisparityTranslateFilter :
     public itk::ImageToImageFilter<TDisparityImage,TDisparityImage>
 {
 public:

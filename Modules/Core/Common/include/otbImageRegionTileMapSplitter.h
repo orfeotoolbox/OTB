@@ -72,7 +72,7 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class ITK_EXPORT ImageRegionTileMapSplitter : public itk::ImageRegionSplitter<VImageDimension>
+class ITK_TEMPLATE_EXPORT ImageRegionTileMapSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */

@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBDescriptors
  */
 template <class TPoint, class TPointData, class TLandmarkData = TPointData>
-class ITK_EXPORT Landmark
+class ITK_TEMPLATE_EXPORT Landmark
   : public itk::DataObject
 {
 public:

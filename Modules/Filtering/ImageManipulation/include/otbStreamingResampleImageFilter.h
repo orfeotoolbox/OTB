@@ -57,7 +57,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage,
           class TInterpolatorPrecisionType = double>
-class ITK_EXPORT StreamingResampleImageFilter :
+class ITK_TEMPLATE_EXPORT StreamingResampleImageFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -40,7 +40,7 @@ namespace otb
  */
 
 template< class TLabelMap >
-class ITK_EXPORT HooverMatrixFilter :
+class ITK_TEMPLATE_EXPORT HooverMatrixFilter :
     public itk::LabelMapFilter< TLabelMap, TLabelMap >
 {
 public:

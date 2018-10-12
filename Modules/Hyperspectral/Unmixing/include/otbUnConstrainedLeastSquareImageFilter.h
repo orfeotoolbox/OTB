@@ -128,7 +128,7 @@ private:
  * \ingroup OTBUnmixing
  */
 template <class TInputImage, class TOutputImage, class TPrecision>
-class ITK_EXPORT UnConstrainedLeastSquareImageFilter :
+class ITK_TEMPLATE_EXPORT UnConstrainedLeastSquareImageFilter :
   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::UnConstrainedLeastSquareFunctor<typename TInputImage::PixelType,
           typename TOutputImage::PixelType, TPrecision> >

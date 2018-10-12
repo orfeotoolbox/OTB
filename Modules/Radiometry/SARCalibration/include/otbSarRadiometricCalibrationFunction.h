@@ -44,7 +44,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT SarRadiometricCalibrationFunction :
+class ITK_TEMPLATE_EXPORT SarRadiometricCalibrationFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
       TCoordRep>
 {

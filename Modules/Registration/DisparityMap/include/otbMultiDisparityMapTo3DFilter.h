@@ -57,7 +57,7 @@ namespace otb
  */
 template <class TDisparityImage, class TOutputImage =  otb::VectorImage<float,2>,
           class TMaskImage = otb::Image<unsigned char>, class TResidueImage = otb::Image<float> >
-class ITK_EXPORT MultiDisparityMapTo3DFilter :
+class ITK_TEMPLATE_EXPORT MultiDisparityMapTo3DFilter :
     public itk::ImageToImageFilter<TDisparityImage,TOutputImage>
 {
 public:

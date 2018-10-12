@@ -34,7 +34,7 @@ namespace otb {
  * \ingroup OTBLabelMap
  */
 template<class TInputImage>
-class ITK_EXPORT MinMaxAttributesLabelMapFilter :
+class ITK_TEMPLATE_EXPORT MinMaxAttributesLabelMapFilter :
     public itk::LabelMapFilter<TInputImage, TInputImage>
 {
 public:

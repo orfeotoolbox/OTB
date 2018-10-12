@@ -65,7 +65,7 @@ public:
  * \ingroup OTBRCC8
  */
 template <class TOutputGraph>
-class ITK_EXPORT RCC8GraphFileReader : public RCC8GraphSource<TOutputGraph>
+class ITK_TEMPLATE_EXPORT RCC8GraphFileReader : public RCC8GraphSource<TOutputGraph>
 {
 public:
   /** Standards typedef */

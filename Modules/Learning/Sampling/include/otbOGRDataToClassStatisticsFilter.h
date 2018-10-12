@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage>
-class ITK_EXPORT PersistentOGRDataToClassStatisticsFilter :
+class ITK_TEMPLATE_EXPORT PersistentOGRDataToClassStatisticsFilter :
   public PersistentSamplingFilterBase<TInputImage, TMaskImage>
 {
 public:
@@ -129,7 +129,7 @@ private:
  * \ingroup OTBSampling
  */
 template<class TInputImage, class TMaskImage>
-class ITK_EXPORT OGRDataToClassStatisticsFilter :
+class ITK_TEMPLATE_EXPORT OGRDataToClassStatisticsFilter :
   public PersistentFilterStreamingDecorator<PersistentOGRDataToClassStatisticsFilter<TInputImage,TMaskImage> >
 {
 public:

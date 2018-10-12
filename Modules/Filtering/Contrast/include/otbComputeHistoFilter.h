@@ -40,7 +40,7 @@ namespace otb
  */
 
 template < class TInputImage , class TOutputImage >
-class ITK_EXPORT ComputeHistoFilter :
+class ITK_TEMPLATE_EXPORT ComputeHistoFilter :
   public itk::ImageToImageFilter< TInputImage , TOutputImage >
 {
 public:

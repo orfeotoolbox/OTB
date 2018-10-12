@@ -127,7 +127,7 @@ private:
  * \ingroup OTBLabelMap
  */
 template<class TImage, class TFeatureImage>
-class ITK_EXPORT StatisticsAttributesLabelMapFilter :
+class ITK_TEMPLATE_EXPORT StatisticsAttributesLabelMapFilter :
   public LabelMapFeaturesFunctorImageFilter
   <TImage,
       typename Functor::StatisticsAttributesLabelObjectFunctor

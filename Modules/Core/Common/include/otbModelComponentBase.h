@@ -62,7 +62,7 @@ namespace Statistics
  */
 
 template<class TSample>
-class ITK_EXPORT ModelComponentBase :
+class ITK_TEMPLATE_EXPORT ModelComponentBase :
   public itk::Object
 {
 public:

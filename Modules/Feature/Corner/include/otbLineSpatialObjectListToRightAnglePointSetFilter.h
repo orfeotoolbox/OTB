@@ -36,7 +36,7 @@ namespace otb
  */
 
 template <class TImage, class TLinesList, class TPointSet>
-class ITK_EXPORT LineSpatialObjectListToRightAnglePointSetFilter
+class ITK_TEMPLATE_EXPORT LineSpatialObjectListToRightAnglePointSetFilter
   : public otb::LineSpatialObjectListToPointSetFilter <TLinesList, TPointSet>
 {
 

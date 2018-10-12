@@ -43,7 +43,7 @@ class TOutput,
 class TCoordRep = double,
 class TPrecision = double
 >
-class ITK_EXPORT DataNodeVectorDataFunction :
+class ITK_TEMPLATE_EXPORT DataNodeVectorDataFunction :
     public DataNodeFunctionBase<DataNode<TCoordRep,
                                          2,
                                          TPrecision>,

@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
-class ITK_EXPORT SinusoidalMapProjection : public GenericMapProjection<TTransform>
+class ITK_TEMPLATE_EXPORT SinusoidalMapProjection : public GenericMapProjection<TTransform>
 {
 public:
 

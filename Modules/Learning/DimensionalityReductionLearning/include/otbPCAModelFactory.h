@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT PCAModelFactory : public itk::ObjectFactoryBase
+class ITK_TEMPLATE_EXPORT PCAModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

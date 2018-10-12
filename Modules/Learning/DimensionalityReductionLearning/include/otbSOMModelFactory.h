@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, class TTargetValue, unsigned int MapDimension>
-class ITK_EXPORT SOMModelFactory : public itk::ObjectFactoryBase
+class ITK_TEMPLATE_EXPORT SOMModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

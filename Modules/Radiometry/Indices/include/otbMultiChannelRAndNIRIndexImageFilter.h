@@ -43,7 +43,7 @@ template <class TInputImage, class TOutputImage,
     class TFunction = Functor::NDVI<typename TInputImage::InternalPixelType,
         typename TInputImage::InternalPixelType,
         typename TOutputImage::PixelType> >
-class ITK_EXPORT MultiChannelRAndNIRIndexImageFilter
+class ITK_TEMPLATE_EXPORT MultiChannelRAndNIRIndexImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:

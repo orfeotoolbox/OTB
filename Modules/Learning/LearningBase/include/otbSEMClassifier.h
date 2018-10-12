@@ -61,7 +61,7 @@ namespace otb
  * \ingroup OTBLearningBase
  */
 template<class TInputImage, class TOutputImage>
-class ITK_EXPORT SEMClassifier
+class ITK_TEMPLATE_EXPORT SEMClassifier
   : public itk::Statistics::SampleClassifierFilter<
       typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
 {

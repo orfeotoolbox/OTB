@@ -42,7 +42,7 @@ namespace otb
  */
 
 template <typename TOutputImageType>
-class ITK_EXPORT ImportImageFilter :
+class ITK_TEMPLATE_EXPORT ImportImageFilter :
   public itk::ImageSource<TOutputImageType>
 {
 public:

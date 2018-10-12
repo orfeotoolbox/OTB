@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT ImageToPathFilter
+class ITK_TEMPLATE_EXPORT ImageToPathFilter
   : public itk::PathSource<TOutputPath>
 {
 public:

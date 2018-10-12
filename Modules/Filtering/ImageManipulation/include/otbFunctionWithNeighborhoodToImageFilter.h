@@ -48,7 +48,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT FunctionWithNeighborhoodToImageFilter :
+class ITK_TEMPLATE_EXPORT FunctionWithNeighborhoodToImageFilter :
   public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:

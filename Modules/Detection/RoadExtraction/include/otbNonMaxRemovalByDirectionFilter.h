@@ -107,7 +107,7 @@ public:
  * \ingroup OTBRoadExtraction
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
-class ITK_EXPORT NonMaxRemovalByDirectionFilter
+class ITK_TEMPLATE_EXPORT NonMaxRemovalByDirectionFilter
   : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
 {
 public:

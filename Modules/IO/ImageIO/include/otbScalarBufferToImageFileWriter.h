@@ -39,7 +39,7 @@ namespace otb
  */
 
 template <class TBufferType, class TOutputPixelType=TBufferType>
-class ITK_EXPORT ScalarBufferToImageFileWriter : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT ScalarBufferToImageFileWriter : public itk::ProcessObject
 {
 public:
 

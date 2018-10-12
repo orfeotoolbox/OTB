@@ -44,7 +44,7 @@ namespace otb
  * \ingroup OTBFuzzy
  */
 template <class TLabel = unsigned short, class TPrecision=double>
-class ITK_EXPORT FuzzyVariable : public itk::DataObject
+class ITK_TEMPLATE_EXPORT FuzzyVariable : public itk::DataObject
 {
 public:
   /** Standard class typedefs */

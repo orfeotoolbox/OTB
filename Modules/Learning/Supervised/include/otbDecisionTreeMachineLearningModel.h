@@ -36,7 +36,7 @@ class CvDTree;
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT DecisionTreeMachineLearningModel
+class ITK_TEMPLATE_EXPORT DecisionTreeMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

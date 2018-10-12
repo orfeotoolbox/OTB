@@ -51,7 +51,7 @@ namespace otb {
  * \ingroup OTBConversion
  */
 template <class TVectorData, class TOutputImage  >
-class  ITK_EXPORT VectorDataToLabelImageFilter :
+class  ITK_TEMPLATE_EXPORT VectorDataToLabelImageFilter :
     public itk::ImageSource<TOutputImage>
 {
 public:

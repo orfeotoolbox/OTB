@@ -65,7 +65,7 @@ namespace otb
 
 
 template <class TImage, class TMask>
-class ITK_EXPORT AdhesionCorrectionFilter : public itk::ImageToImageFilter<TImage, TImage>
+class ITK_TEMPLATE_EXPORT AdhesionCorrectionFilter : public itk::ImageToImageFilter<TImage, TImage>
 {
 public:
   /** Standard class typedefs. */

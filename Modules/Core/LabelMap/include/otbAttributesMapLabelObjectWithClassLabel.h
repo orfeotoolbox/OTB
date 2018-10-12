@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBLabelMap
  */
 template < class TLabel, unsigned int VImageDimension, class TAttributesValue, class TClassLabel >
-class ITK_EXPORT AttributesMapLabelObjectWithClassLabel : public AttributesMapLabelObject<TLabel, VImageDimension, TAttributesValue>
+class ITK_TEMPLATE_EXPORT AttributesMapLabelObjectWithClassLabel : public AttributesMapLabelObject<TLabel, VImageDimension, TAttributesValue>
 {
 public:
   /** Standard class typedefs */

@@ -50,7 +50,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TImage>
-class ITK_EXPORT TileImageFilter :
+class ITK_TEMPLATE_EXPORT TileImageFilter :
     public itk::ImageToImageFilter<TImage, TImage>
 {
 public:

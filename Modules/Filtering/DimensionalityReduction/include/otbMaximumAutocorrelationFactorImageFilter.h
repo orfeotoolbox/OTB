@@ -66,7 +66,7 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MaximumAutocorrelationFactorImageFilter
+class ITK_TEMPLATE_EXPORT MaximumAutocorrelationFactorImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -297,7 +297,7 @@ private:
 
 template <class TInputImage, class TOutputMetricImage, class TOutputDisparityImage = TOutputMetricImage, class TMaskImage = otb::Image<unsigned char>,
           class TBlockMatchingFunctor = Functor::SSDBlockMatching<TInputImage,TOutputMetricImage> >
-class ITK_EXPORT PixelWiseBlockMatchingImageFilter :
+class ITK_TEMPLATE_EXPORT PixelWiseBlockMatchingImageFilter :
     public itk::ImageToImageFilter<TInputImage,TOutputDisparityImage>
 {
 public:

@@ -41,7 +41,7 @@ namespace otb
  */
 
 template<class TInput1, class TInput2>
-class ITK_EXPORT MRFSampler : public itk::Object
+class ITK_TEMPLATE_EXPORT MRFSampler : public itk::Object
 {
 public:
 

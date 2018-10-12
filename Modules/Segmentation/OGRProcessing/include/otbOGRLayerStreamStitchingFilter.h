@@ -56,7 +56,7 @@ namespace otb
  * \ingroup OTBOGRProcessing
  */
 template <class TInputImage>
-class ITK_EXPORT OGRLayerStreamStitchingFilter :
+class ITK_TEMPLATE_EXPORT OGRLayerStreamStitchingFilter :
     public itk::ProcessObject
 {
 public:

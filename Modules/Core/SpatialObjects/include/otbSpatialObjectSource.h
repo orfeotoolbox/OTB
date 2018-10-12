@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBSpatialObjects
  */
 template <class TSpatialObject>
-class ITK_EXPORT SpatialObjectSource
+class ITK_TEMPLATE_EXPORT SpatialObjectSource
   : public itk::ProcessObject
 {
 public:

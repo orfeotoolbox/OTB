@@ -457,7 +457,7 @@ private:
  */
 template<class TInputImage, class TOutputImage, class TKernel = Meanshift::KernelUniform,
     class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
-class ITK_EXPORT MeanShiftSmoothingImageFilter: public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_TEMPLATE_EXPORT MeanShiftSmoothingImageFilter: public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedef */

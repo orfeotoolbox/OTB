@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, unsigned int MapDimension>
-class ITK_EXPORT SOMModel
+class ITK_TEMPLATE_EXPORT SOMModel
   : public  MachineLearningModel<
     itk::VariableLengthVector< TInputValue >,
     itk::VariableLengthVector< TInputValue > >   

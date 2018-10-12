@@ -35,7 +35,7 @@ namespace otb {
  * \ingroup OTBLabelMap
  */
 template<class TInputImage, class TOutputImage=otb::LabelMapWithAdjacency< itk::LabelObject< typename TInputImage::PixelType, TInputImage::ImageDimension > > >
-class ITK_EXPORT LabelImageToLabelMapWithAdjacencyFilter :
+class ITK_TEMPLATE_EXPORT LabelImageToLabelMapWithAdjacencyFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

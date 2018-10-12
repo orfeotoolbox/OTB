@@ -49,7 +49,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision = double>
-class ITK_EXPORT OrthoRectificationFilter :
+class ITK_TEMPLATE_EXPORT OrthoRectificationFilter :
     public GenericRSResampleImageFilter<TInputImage, TOutputImage>
 {
 public:

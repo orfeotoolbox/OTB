@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SpectralAngleDistanceImageFilter
+class ITK_TEMPLATE_EXPORT SpectralAngleDistanceImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

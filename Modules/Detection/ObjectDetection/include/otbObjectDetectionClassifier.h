@@ -58,7 +58,7 @@ public:
  * \ingroup OTBObjectDetection
  */
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionType>
-class ITK_EXPORT PersistentObjectDetectionClassifier :
+class ITK_TEMPLATE_EXPORT PersistentObjectDetectionClassifier :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -257,7 +257,7 @@ private:
  * \ingroup OTBObjectDetection
  */
 template <class TInputImage, class TOutputVectorData, class TLabel, class TFunctionPrecision = double, class TCoordRep = double>
-class ITK_EXPORT ObjectDetectionClassifier :
+class ITK_TEMPLATE_EXPORT ObjectDetectionClassifier :
     public PersistentFilterStreamingDecorator<
               PersistentObjectDetectionClassifier< TInputImage,
                                                    TOutputVectorData,

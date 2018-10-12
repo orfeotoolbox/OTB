@@ -43,7 +43,7 @@ namespace otb
  * \ingroup OTBAnomalyDetection
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LocalRxDetectorFilter:
+class ITK_TEMPLATE_EXPORT LocalRxDetectorFilter:
 public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -68,7 +68,7 @@ namespace otb
  */
 
 template <class TInputValue, class TTargetValue, class TConfidenceValue = double >
-class ITK_EXPORT MachineLearningModel
+class ITK_TEMPLATE_EXPORT MachineLearningModel
   : public itk::Object
 {
 public:

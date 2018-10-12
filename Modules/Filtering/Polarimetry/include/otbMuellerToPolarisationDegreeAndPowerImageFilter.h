@@ -208,7 +208,7 @@ private:
  * \ingroup OTBPolarimetry
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MuellerToPolarisationDegreeAndPowerImageFilter :
+class ITK_TEMPLATE_EXPORT MuellerToPolarisationDegreeAndPowerImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::MuellerToPolarisationDegreeAndPowerFunctor<
     typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {

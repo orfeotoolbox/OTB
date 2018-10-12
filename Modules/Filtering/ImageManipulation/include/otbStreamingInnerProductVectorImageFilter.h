@@ -52,7 +52,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage>
-class ITK_EXPORT PersistentInnerProductVectorImageFilter :
+class ITK_TEMPLATE_EXPORT PersistentInnerProductVectorImageFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -159,7 +159,7 @@ private:
  */
 
 template<class TInputImage>
-class ITK_EXPORT StreamingInnerProductVectorImageFilter :
+class ITK_TEMPLATE_EXPORT StreamingInnerProductVectorImageFilter :
   public PersistentFilterStreamingDecorator<PersistentInnerProductVectorImageFilter<TInputImage> >
 {
 public:

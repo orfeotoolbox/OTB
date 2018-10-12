@@ -39,7 +39,7 @@ namespace otb {
  * \ingroup OTBDimensionalityReduction
  */
 template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
-class ITK_EXPORT AngularProjectionImageFilter
+class ITK_TEMPLATE_EXPORT AngularProjectionImageFilter
   : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

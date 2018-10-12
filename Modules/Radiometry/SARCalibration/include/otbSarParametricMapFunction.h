@@ -40,7 +40,7 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT SarParametricMapFunction :
+class ITK_TEMPLATE_EXPORT SarParametricMapFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType,
       TCoordRep>
 {

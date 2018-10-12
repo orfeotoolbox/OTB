@@ -46,7 +46,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TDetector>
-class ITK_EXPORT KeyPointDensityImageFilter
+class ITK_TEMPLATE_EXPORT KeyPointDensityImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 

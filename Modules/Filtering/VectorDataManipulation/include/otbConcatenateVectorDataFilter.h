@@ -43,7 +43,7 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TVectorData>
-class ITK_EXPORT ConcatenateVectorDataFilter :
+class ITK_TEMPLATE_EXPORT ConcatenateVectorDataFilter :
     public VectorDataSource<TVectorData>
 {
 public:

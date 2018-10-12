@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBLabelling
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelizeNeighborhoodConnectedImageFilter
+class ITK_TEMPLATE_EXPORT LabelizeNeighborhoodConnectedImageFilter
   : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
       itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage> >
 {

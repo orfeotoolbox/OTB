@@ -45,7 +45,7 @@ namespace otb
  */
 
 template <class TScalarType>
-class ITK_EXPORT InverseLogPolarTransform
+class ITK_TEMPLATE_EXPORT InverseLogPolarTransform
   : public Transform<TScalarType, 2, 2>
 {
 public:

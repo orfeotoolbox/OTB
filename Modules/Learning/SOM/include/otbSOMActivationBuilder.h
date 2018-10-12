@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBSOM
  */
 template <class TListSample, class TInputMap, class TOutputImage>
-class ITK_EXPORT SOMActivationBuilder
+class ITK_TEMPLATE_EXPORT SOMActivationBuilder
   : public itk::ImageToImageFilter<TInputMap, TOutputImage>
 {
 public:

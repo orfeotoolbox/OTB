@@ -43,7 +43,7 @@ namespace otb
  */
 
 template <class TVectorData>
-class ITK_EXPORT VectorDataToSpecificDescriptionFilterBase :
+class ITK_TEMPLATE_EXPORT VectorDataToSpecificDescriptionFilterBase :
   public VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:

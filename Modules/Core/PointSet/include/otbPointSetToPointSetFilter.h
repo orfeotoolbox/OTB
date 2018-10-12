@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TInputPointSet, class TOutputPointSet>
-class ITK_EXPORT PointSetToPointSetFilter : public PointSetSource<TOutputPointSet>
+class ITK_TEMPLATE_EXPORT PointSetToPointSetFilter : public PointSetSource<TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */

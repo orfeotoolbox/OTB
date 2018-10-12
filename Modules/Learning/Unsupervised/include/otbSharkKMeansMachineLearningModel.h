@@ -67,7 +67,7 @@
 namespace otb
 {
 template<class TInputValue, class TTargetValue>
-class ITK_EXPORT SharkKMeansMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
+class ITK_TEMPLATE_EXPORT SharkKMeansMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */

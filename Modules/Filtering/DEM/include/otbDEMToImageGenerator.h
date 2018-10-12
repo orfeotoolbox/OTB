@@ -48,7 +48,7 @@ namespace otb
  * \ingroup OTBDEM
  */
 template <class TDEMImage>
-class ITK_EXPORT DEMToImageGenerator :
+class ITK_TEMPLATE_EXPORT DEMToImageGenerator :
   public itk::ImageSource<TDEMImage>
 {
 public:

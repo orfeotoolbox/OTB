@@ -47,7 +47,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TMatrix = vnl_matrix<typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType> >
-class ITK_EXPORT MatrixImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_TEMPLATE_EXPORT MatrixImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract input and output images sizes. */

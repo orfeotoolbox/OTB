@@ -32,7 +32,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
-class ITK_EXPORT MollweidMapProjection : public GenericMapProjection<TTransform>
+class ITK_TEMPLATE_EXPORT MollweidMapProjection : public GenericMapProjection<TTransform>
 {
 public:
   /** Standard class typedefs. */

@@ -34,7 +34,7 @@ namespace otb
   */
 
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataAdapter :
+class ITK_TEMPLATE_EXPORT VectorDataAdapter :
     public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
 

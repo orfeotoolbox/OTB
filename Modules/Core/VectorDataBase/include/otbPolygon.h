@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template<class TValue = double>
-class ITK_EXPORT Polygon
+class ITK_TEMPLATE_EXPORT Polygon
   : public PolyLineParametricPathWithValue<TValue, 2>
 {
 public:

@@ -80,7 +80,7 @@ enum CellFusionMode {
  */
 template <class T3DImage =  otb::VectorImage<double,2>,
           class TMaskImage = otb::Image<unsigned char>, class TOutputDEMImage = otb::Image<double> >
-class ITK_EXPORT Multi3DMapToDEMFilter :
+class ITK_TEMPLATE_EXPORT Multi3DMapToDEMFilter :
     public itk::ImageToImageFilter<T3DImage,TOutputDEMImage>
 {
 public:

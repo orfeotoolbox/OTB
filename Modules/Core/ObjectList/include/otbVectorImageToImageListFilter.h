@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TVectorImageType, class TImageList>
-class ITK_EXPORT VectorImageToImageListFilter
+class ITK_TEMPLATE_EXPORT VectorImageToImageListFilter
   : public ImageToImageListFilter<TVectorImageType, typename TImageList::ImageType>
 {
 public:

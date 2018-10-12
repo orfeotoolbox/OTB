@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT BinaryImageDensityFunction :
+class ITK_TEMPLATE_EXPORT BinaryImageDensityFunction :
   public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
       TCoordRep>
 {

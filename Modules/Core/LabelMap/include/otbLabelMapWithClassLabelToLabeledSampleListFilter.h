@@ -42,7 +42,7 @@ namespace otb
 template <class TInputLabelMap, class TOutputSampleList, class TOutputTrainingSampleList,
     class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
     <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
-class ITK_EXPORT LabelMapWithClassLabelToLabeledSampleListFilter :
+class ITK_TEMPLATE_EXPORT LabelMapWithClassLabelToLabeledSampleListFilter :
     public LabelMapToSampleListFilter<TInputLabelMap, TOutputSampleList,TMeasurementFunctor>
 {
 public:

@@ -33,7 +33,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <TransformDirection::TransformationDirection TTransform>
-class ITK_EXPORT TransMercatorMapProjection : public GenericMapProjection<TTransform>
+class ITK_TEMPLATE_EXPORT TransMercatorMapProjection : public GenericMapProjection<TTransform>
 {
 public:
 

@@ -41,7 +41,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT VectorImageTo3DScalarImageFilter
+class ITK_TEMPLATE_EXPORT VectorImageTo3DScalarImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

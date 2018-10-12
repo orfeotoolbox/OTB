@@ -80,7 +80,7 @@ namespace otb
  */
 
 template< class TImage >
-class ITK_EXPORT BandMathImageFilter
+class ITK_TEMPLATE_EXPORT BandMathImageFilter
   : public itk::InPlaceImageFilter< TImage >
 {
 public:

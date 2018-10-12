@@ -49,7 +49,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template<class TInputImage>
-class ITK_EXPORT PersistentMinMaxImageFilter :
+class ITK_TEMPLATE_EXPORT PersistentMinMaxImageFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -189,7 +189,7 @@ private:
  */
 
 template<class TInputImage>
-class ITK_EXPORT StreamingMinMaxImageFilter :
+class ITK_TEMPLATE_EXPORT StreamingMinMaxImageFilter :
   public PersistentFilterStreamingDecorator<PersistentMinMaxImageFilter<TInputImage> >
 {
 public:

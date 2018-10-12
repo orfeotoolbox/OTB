@@ -38,7 +38,7 @@ namespace Statistics {
  * \ingroup OTBStatistics
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ListSampleToListSampleFilter :
+class ITK_TEMPLATE_EXPORT ListSampleToListSampleFilter :
   public ListSampleSource<TOutputSampleList>
 {
 public:

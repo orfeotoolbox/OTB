@@ -57,7 +57,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template <class TInputImage >
-class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
+class ITK_TEMPLATE_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */

@@ -45,7 +45,7 @@ namespace otb
  */
 
 template <class TImageType, class TCoordRep = double, class TPrecision = double>
-class ITK_EXPORT RadiometricMomentsIFFactory :
+class ITK_TEMPLATE_EXPORT RadiometricMomentsIFFactory :
     public itk::LightObject
 {
 public:

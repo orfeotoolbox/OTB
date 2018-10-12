@@ -32,7 +32,7 @@ namespace otb
  * \ingroup OTBRCC8
  */
 template <class TOutputGraph>
-class ITK_EXPORT RCC8GraphSource
+class ITK_TEMPLATE_EXPORT RCC8GraphSource
   : public itk::ProcessObject
 {
 public:

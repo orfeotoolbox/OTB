@@ -63,7 +63,7 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT InnerProductPCAImageFilter
+class ITK_TEMPLATE_EXPORT InnerProductPCAImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

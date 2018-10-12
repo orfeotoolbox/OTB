@@ -35,7 +35,7 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT NormalizeInnerProductPCAImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
+class ITK_TEMPLATE_EXPORT NormalizeInnerProductPCAImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 
 {
 public:

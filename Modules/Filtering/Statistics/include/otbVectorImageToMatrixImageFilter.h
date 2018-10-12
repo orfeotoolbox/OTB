@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template<class TInputImage>
-class ITK_EXPORT PersistentVectorImageToMatrixFilter :
+class ITK_TEMPLATE_EXPORT PersistentVectorImageToMatrixFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -146,7 +146,7 @@ private:
  */
 
 template<class TInputImage>
-class ITK_EXPORT VectorImageToMatrixImageFilter :
+class ITK_TEMPLATE_EXPORT VectorImageToMatrixImageFilter :
   public PersistentFilterStreamingDecorator<PersistentVectorImageToMatrixFilter<TInputImage> >
 {
 public:

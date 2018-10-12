@@ -43,7 +43,7 @@ namespace otb
 
 //Base
 template< class TInputType, class TPrecisionType = double >
-class ITK_EXPORT VariableLengthVectorConverter :
+class ITK_TEMPLATE_EXPORT VariableLengthVectorConverter :
 public itk::ProcessObject
 {
 public:
@@ -88,7 +88,7 @@ private:
 
 // VariableLengthVector
 template< class TInternalInputType, class TPrecisionType>
-class ITK_EXPORT VariableLengthVectorConverter< itk::VariableLengthVector< TInternalInputType > ,
+class ITK_TEMPLATE_EXPORT VariableLengthVectorConverter< itk::VariableLengthVector< TInternalInputType > ,
                                                TPrecisionType > :
 public itk::ProcessObject
 {
@@ -132,7 +132,7 @@ private:
 
 // Real Matrix
 template< class TInternalInputType, class TPrecisionType >
-class ITK_EXPORT VariableLengthVectorConverter<std::vector<std::vector<TInternalInputType> >,
+class ITK_TEMPLATE_EXPORT VariableLengthVectorConverter<std::vector<std::vector<TInternalInputType> >,
                                                TPrecisionType> :
 public itk::ProcessObject
 {
@@ -173,7 +173,7 @@ private:
 
 //Complex Matrix
 template< class TInternalInputType, class TPrecisionType >
-class ITK_EXPORT VariableLengthVectorConverter<std::vector<std::vector<std::complex<TInternalInputType> > >,
+class ITK_TEMPLATE_EXPORT VariableLengthVectorConverter<std::vector<std::vector<std::complex<TInternalInputType> > >,
                                                TPrecisionType> :
 public itk::ProcessObject
 {
@@ -214,7 +214,7 @@ private:
 
 //Fixed Array
 template< class TInternalInputType, unsigned int VArrayDimension, class TPrecisionType >
-class ITK_EXPORT VariableLengthVectorConverter<itk::FixedArray<TInternalInputType, VArrayDimension>,
+class ITK_TEMPLATE_EXPORT VariableLengthVectorConverter<itk::FixedArray<TInternalInputType, VArrayDimension>,
                                                TPrecisionType> :
 public itk::ProcessObject
 {
@@ -254,7 +254,7 @@ private:
 
 //Histogram
 template< class TPixel, class TPrecisionType >
-class ITK_EXPORT VariableLengthVectorConverter<typename itk::SmartPointer< itk::Statistics::Histogram<TPixel> >,
+class ITK_TEMPLATE_EXPORT VariableLengthVectorConverter<typename itk::SmartPointer< itk::Statistics::Histogram<TPixel> >,
                                                TPrecisionType> :
 public itk::ProcessObject
 {

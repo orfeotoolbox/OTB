@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageOfVectorsToMonoChannelExtractROI :
+class ITK_TEMPLATE_EXPORT ImageOfVectorsToMonoChannelExtractROI :
   public ExtractROIBase<TInputImage, TOutputImage>
 {
 public:

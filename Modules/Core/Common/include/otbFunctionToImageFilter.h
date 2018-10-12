@@ -52,7 +52,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT FunctionToImageFilter :
+class ITK_TEMPLATE_EXPORT FunctionToImageFilter :
   public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:

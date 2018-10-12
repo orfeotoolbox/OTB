@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
   template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ClampVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+  class ITK_TEMPLATE_EXPORT ClampVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */

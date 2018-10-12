@@ -43,7 +43,7 @@ namespace otb
 * through the otb::LibSVMMachineLearningModel.
 */ 
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT SVMMachineLearningModel
+class ITK_TEMPLATE_EXPORT SVMMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
 {
 public:

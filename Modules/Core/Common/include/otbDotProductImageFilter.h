@@ -94,7 +94,7 @@ private:
  * \ingroup OTBCommon
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DotProductImageFilter :
+class ITK_TEMPLATE_EXPORT DotProductImageFilter :
   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
       Functor::DotProductFunctor<typename TInputImage::PixelType,
           typename TOutputImage::PixelType> >

@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TImageList, class TVectorImage>
-class ITK_EXPORT ImageListToVectorImageFilter
+class ITK_TEMPLATE_EXPORT ImageListToVectorImageFilter
   : public ImageListToImageFilter<typename TImageList::ImageType, TVectorImage>
 {
 public:

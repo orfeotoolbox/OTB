@@ -55,7 +55,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TRefListLabel, class TProdListLabel>
-class ITK_EXPORT ConfusionMatrixCalculator :
+class ITK_TEMPLATE_EXPORT ConfusionMatrixCalculator :
   public itk::Object
 {
 public:

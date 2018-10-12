@@ -46,7 +46,7 @@ namespace Statistics {
  * \ingroup OTBStatistics
  */
 template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ShiftScaleSampleListFilter :
+class ITK_TEMPLATE_EXPORT ShiftScaleSampleListFilter :
   public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 {
 public:

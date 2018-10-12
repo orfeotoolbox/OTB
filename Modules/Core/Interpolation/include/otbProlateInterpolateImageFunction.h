@@ -262,7 +262,7 @@ private:
  */
 template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
-class ITK_EXPORT ProlateInterpolateImageFunction :
+class ITK_TEMPLATE_EXPORT ProlateInterpolateImageFunction :
   public GenericInterpolateImageFunction<TInputImage,
       typename Function::ProlateFunction<TInputInterpolator, TOutputInterpolator>,
       TBoundaryCondition,

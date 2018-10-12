@@ -38,7 +38,7 @@ namespace Functor
 {
 
 template<class TInput>
-class ITK_EXPORT ConnectedLabelFunctor
+class ITK_TEMPLATE_EXPORT ConnectedLabelFunctor
 {
 
 public:
@@ -88,7 +88,7 @@ private:
 
 
 template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage = TInputImage, class TKernel = Meanshift::KernelUniform>
-class ITK_EXPORT MeanShiftSegmentationFilter : public itk::ImageToImageFilter<TInputImage, TOutputLabelImage>
+class ITK_TEMPLATE_EXPORT MeanShiftSegmentationFilter : public itk::ImageToImageFilter<TInputImage, TOutputLabelImage>
 {
 public:
   /** Standard Self typedef */
