@@ -190,41 +190,19 @@ macro(check_compiler_platform_flags)
        endif()
   endif()
 
-  if(WIN32)
-    # Some libraries (e.g. vxl libs) have no dllexport markup, so we can
-    # build full shared libraries only with the GNU toolchain. For non
-    # gnu compilers on windows, only Common is shared.  This allows for
-    # plugin type applications to use a dll for OTBCommon which will contain
-    # the static for Modified time.
-    if(CMAKE_COMPILER_IS_GNUCXX)
-      # CMake adds --enable-all-exports on Cygwin (since Cygwin is
-      # supposed to be UNIX-like), but we need to add it explicitly for
-      # a native windows build with the MinGW tools.
-      if(MINGW)
-        set(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS
-          "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
-        set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
-          "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
-        set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
-      endif()
-    else()
-      if(MSVC)
-        set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /MANIFEST:NO")
-      endif()
-      # if CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS is on, then
-      # BUILD_SHARED_LIBS works as it would on other systems
-      if(NOT CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
-        if(BUILD_SHARED_LIBS)
-          set(OTB_LIBRARY_BUILD_TYPE "SHARED")
-        else()
-          set(OTB_LIBRARY_BUILD_TYPE "STATIC")
-        endif()
-        # turn off BUILD_SHARED_LIBS as OTB_LIBRARY_BUILD_TYPE
-        # is used on the libraries that have markup.
-        set(BUILD_SHARED_LIBS OFF)
-      endif()
-    endif()
+  # CMake adds --enable-all-exports on Cygwin (since Cygwin is
+  # supposed to be UNIX-like), but we need to add it explicitly for
+  # a native windows build with the MinGW tools.
+  if(WIN32 AND MINGW AND CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS
+      "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
+    set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
+      "-shared -Wl,--export-all-symbols -Wl,--enable-auto-import")
+    set(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-auto-import")
+  elseif(MSVC)
+    set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} /MANIFEST:NO")
   endif()
+
   #-----------------------------------------------------------------------------
   #OTB requires special compiler flags on some platforms.
   if(CMAKE_COMPILER_IS_GNUCXX)
