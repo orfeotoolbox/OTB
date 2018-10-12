@@ -39,7 +39,7 @@ namespace otb
 namespace Function {
 
 template< class TInputImageRealPart, class TInputImageImaginaryPart, class TOutput>
-class RealAndImaginaryToComplex
+class ITK_TEMPLATE_EXPORT RealAndImaginaryToComplex
 {
 public:
   typedef typename TOutput::value_type OutputValueType;

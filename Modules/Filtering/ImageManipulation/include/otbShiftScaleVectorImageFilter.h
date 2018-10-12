@@ -45,7 +45,7 @@ namespace Functor
  * \ingroup OTBImageManipulation
  */
 template<class TInput, class TOutput>
-class VectorShiftScale
+class ITK_TEMPLATE_EXPORT VectorShiftScale
 {
 public:
 public:

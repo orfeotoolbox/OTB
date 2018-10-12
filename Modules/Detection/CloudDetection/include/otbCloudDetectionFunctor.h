@@ -34,7 +34,7 @@ namespace otb
 namespace Functor
 {
 template<class TInput, class TOutputValue>
-class CloudDetectionFunctor
+class ITK_TEMPLATE_EXPORT CloudDetectionFunctor
 {
 public:
   typedef CloudEstimatorFunctor<TInput, TOutputValue> CloudEstimatorFunctorType;

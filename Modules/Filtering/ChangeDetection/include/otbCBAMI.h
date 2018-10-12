@@ -31,7 +31,7 @@ namespace Functor
 {
 
 template<class TInput1, class TInput2, class TOutput>
-class CBAMI
+class ITK_TEMPLATE_EXPORT CBAMI
 {
 public:
 

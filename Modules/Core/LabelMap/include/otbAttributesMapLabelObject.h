@@ -99,7 +99,7 @@ private:
  * \ingroup OTBLabelMap
 */
 template<class TLabelObject, class TMeasurementVector>
-class AttributesMapMeasurementFunctor
+class ITK_TEMPLATE_EXPORT AttributesMapMeasurementFunctor
 {
 public:
   typedef std::vector<std::string> AttributesListType;

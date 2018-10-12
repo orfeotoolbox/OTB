@@ -37,7 +37,7 @@ namespace Functor
  * \ingroup OTBRoadExtraction
  */
 template <class TInput1, class TInput2, class TOutput>
-class RemoveIsolatedByDirectionFunctor
+class ITK_TEMPLATE_EXPORT RemoveIsolatedByDirectionFunctor
 {
 public:
   RemoveIsolatedByDirectionFunctor() {}

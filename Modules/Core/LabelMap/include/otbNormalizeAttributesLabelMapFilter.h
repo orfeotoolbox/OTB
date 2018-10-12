@@ -42,7 +42,7 @@ namespace Functor
  * \ingroup OTBLabelMap
 */
 template <class TLabelObject>
-class NormalizeAttributesLabelObjectFunctor
+class ITK_TEMPLATE_EXPORT NormalizeAttributesLabelObjectFunctor
 {
 public:
   /** Self typedef */

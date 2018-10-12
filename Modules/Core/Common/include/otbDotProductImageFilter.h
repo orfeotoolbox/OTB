@@ -37,7 +37,7 @@ namespace Functor {
  * \ingroup OTBCommon
  */
 template<class TInput, class TOutput>
-class DotProductFunctor
+class ITK_TEMPLATE_EXPORT DotProductFunctor
 {
 public:
   typedef TInput     InputType;

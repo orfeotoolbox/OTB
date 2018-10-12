@@ -36,7 +36,7 @@ namespace Functor
  * \ingroup OTBImageManipulation
  */
 template <class TInputVectorPixel, class TOutputPixel>
-class SqrtSpectralAngleFunctor : public SpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
+class ITK_TEMPLATE_EXPORT SqrtSpectralAngleFunctor : public SpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
 {
 public:
   typedef SqrtSpectralAngleFunctor                              Self;

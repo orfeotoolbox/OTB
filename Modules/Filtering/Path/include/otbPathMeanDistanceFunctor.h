@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TInput1>
-class PathMeanDistanceFunctor
+class ITK_TEMPLATE_EXPORT PathMeanDistanceFunctor
 {
 public:
 

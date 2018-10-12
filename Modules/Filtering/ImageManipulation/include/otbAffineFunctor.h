@@ -40,7 +40,7 @@ namespace Functor
  * \ingroup OTBImageManipulation
  */
 template<class TInput, class TOutput, class TScale=double>
-class AffineFunctor
+class ITK_TEMPLATE_EXPORT AffineFunctor
 {
 public:
   /// Constructor

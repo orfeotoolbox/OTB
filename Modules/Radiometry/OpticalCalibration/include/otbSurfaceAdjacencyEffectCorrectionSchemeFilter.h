@@ -43,7 +43,7 @@ namespace Functor
  * \ingroup OTBOpticalCalibration
 */
 template <class TNeighIter, class TOutput>
-class ComputeNeighborhoodContributionFunctor
+class ITK_TEMPLATE_EXPORT ComputeNeighborhoodContributionFunctor
 {
 public:
   ComputeNeighborhoodContributionFunctor() {}

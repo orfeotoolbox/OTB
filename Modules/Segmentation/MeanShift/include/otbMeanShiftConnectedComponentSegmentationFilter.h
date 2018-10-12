@@ -55,7 +55,7 @@ namespace otb {
 
 
 template <class TVInputImage, class TMaskImage,class TLabelImage>
-class MeanShiftConnectedComponentSegmentationFilter : public itk::ImageToImageFilter<TVInputImage, TLabelImage>
+class ITK_TEMPLATE_EXPORT MeanShiftConnectedComponentSegmentationFilter : public itk::ImageToImageFilter<TVInputImage, TLabelImage>
 {
 public:
   /** Standard Self typedef */

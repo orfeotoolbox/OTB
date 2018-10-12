@@ -42,7 +42,7 @@ namespace Function
  * \ingroup OTBCommon
 */
 template <class TInputPixel>
-class ChannelSelectorFunctor : public itk::Object
+class ITK_TEMPLATE_EXPORT ChannelSelectorFunctor : public itk::Object
 {
 public:
   /** Standard class typedefs */

@@ -36,7 +36,7 @@ namespace Functor
 {
 
 template<class TInput, class TOutput>
-class HessianToScalar
+class ITK_TEMPLATE_EXPORT HessianToScalar
 {
 public:
   HessianToScalar()

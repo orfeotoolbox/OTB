@@ -37,7 +37,7 @@ namespace Functor {
  * \ingroup OTBImageManipulation
  */
 template<class TInput, class TOutput>
-class ConcatenateScalarValueFunctor
+class ITK_TEMPLATE_EXPORT ConcatenateScalarValueFunctor
 {
 public:
   typedef TInput     InputType;

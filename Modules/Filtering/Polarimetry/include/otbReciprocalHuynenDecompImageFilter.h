@@ -37,7 +37,7 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
-class ReciprocalHuynenDecompFunctor
+class ITK_TEMPLATE_EXPORT ReciprocalHuynenDecompFunctor
 {
 public:
 

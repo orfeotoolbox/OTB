@@ -42,7 +42,7 @@ namespace Functor
  * \ingroup OTBPolarimetry
  */
 template <class TInput1, class TInput2, class TInput3, class TInput4, class TOutput>
-class PolarimetricSynthesisFunctor
+class ITK_TEMPLATE_EXPORT PolarimetricSynthesisFunctor
 {
 public:
   /** Some typedefs. */

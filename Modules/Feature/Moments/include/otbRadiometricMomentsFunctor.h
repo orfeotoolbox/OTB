@@ -36,7 +36,7 @@ namespace Functor
  * \ingroup OTBMoments
  */
 template <class TNeighIter, class TPrecision = float>
-class RadiometricMomentsFunctor
+class ITK_TEMPLATE_EXPORT RadiometricMomentsFunctor
 {
 public:
 

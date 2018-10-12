@@ -38,7 +38,7 @@ namespace Function
  * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
-class HammingWindowFunction
+class ITK_TEMPLATE_EXPORT HammingWindowFunction
 {
 public:
   void SetRadius(unsigned int radius)

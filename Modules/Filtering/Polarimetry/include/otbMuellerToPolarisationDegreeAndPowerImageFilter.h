@@ -77,7 +77,7 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
-class MuellerToPolarisationDegreeAndPowerFunctor
+class ITK_TEMPLATE_EXPORT MuellerToPolarisationDegreeAndPowerFunctor
 {
 public:
   typedef typename TOutput::ValueType               OutputValueType;

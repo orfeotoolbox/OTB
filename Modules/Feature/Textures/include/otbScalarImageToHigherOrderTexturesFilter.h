@@ -70,7 +70,7 @@ namespace otb
  * \ingroup OTBTextures
  */
 template<class TInpuImage, class TOutputImage>
-class ScalarImageToHigherOrderTexturesFilter : public itk::ImageToImageFilter
+class ITK_TEMPLATE_EXPORT ScalarImageToHigherOrderTexturesFilter : public itk::ImageToImageFilter
   <TInpuImage, TOutputImage>
 {
 public:

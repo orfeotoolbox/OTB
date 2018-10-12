@@ -246,7 +246,7 @@ private:
    * \ingroup OTBImageIO
    */
   template <class TImage>
-  class Sink : public SinkBase
+  class ITK_TEMPLATE_EXPORT Sink : public SinkBase
   {
   public:
     Sink() {}

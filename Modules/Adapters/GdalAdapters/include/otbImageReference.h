@@ -35,7 +35,7 @@ namespace ogr
  *
  * \ingroup OTBGdalAdapters
  */
-template <typename TPrecision> class ImageReference
+template <typename TPrecision> class ITK_TEMPLATE_EXPORT ImageReference
 {
 public:
   typedef TPrecision PrecisionType;

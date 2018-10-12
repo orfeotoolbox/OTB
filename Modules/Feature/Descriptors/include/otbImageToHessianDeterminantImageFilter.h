@@ -44,7 +44,7 @@ namespace Functor
  * \ingroup OTBDescriptors
  */
 template <class TInput, class TOutput>
-class HessianDeterminant
+class ITK_TEMPLATE_EXPORT HessianDeterminant
 {
 public:
   HessianDeterminant() {}

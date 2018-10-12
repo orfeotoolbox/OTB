@@ -37,7 +37,7 @@ namespace Functor
  *  \ingroup OTBImageManipulation
  */
 template <typename TInputPixel, typename TOutputPixel> 
-class ChangeNoDataFunctor
+class ITK_TEMPLATE_EXPORT ChangeNoDataFunctor
 {
 public:
   ChangeNoDataFunctor():

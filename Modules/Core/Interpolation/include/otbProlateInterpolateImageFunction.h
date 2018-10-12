@@ -41,7 +41,7 @@ namespace Function
  * \ingroup OTBInterpolation
  */
 template<class TInput, class TOutput>
-class ProlateFunction
+class ITK_TEMPLATE_EXPORT ProlateFunction
 {
 public:
   ProlateFunction() : m_Radius(1)

@@ -31,7 +31,7 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, class TOutputValue>
-class DimensionalityReductionModelFactory : public MachineLearningModelFactoryBase
+class ITK_TEMPLATE_EXPORT DimensionalityReductionModelFactory : public MachineLearningModelFactoryBase
 {
 public:
   /** Standard class typedefs. */

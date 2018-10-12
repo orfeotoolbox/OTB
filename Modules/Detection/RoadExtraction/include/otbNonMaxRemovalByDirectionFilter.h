@@ -38,7 +38,7 @@ namespace Functor
  * \ingroup OTBRoadExtraction
  */
 template <class TInput1, class TInput2, class TOutput>
-class NonMaxRemovalByDirectionFunctor
+class ITK_TEMPLATE_EXPORT NonMaxRemovalByDirectionFunctor
 {
 public:
   NonMaxRemovalByDirectionFunctor() {}

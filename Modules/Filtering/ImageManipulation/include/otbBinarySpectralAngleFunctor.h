@@ -37,7 +37,7 @@ namespace otb
 namespace Functor
 {
 template<class TInput1, class TInput2, class TOutputValue>
-class BinarySpectralAngleFunctor
+class ITK_TEMPLATE_EXPORT BinarySpectralAngleFunctor
 {
 public:
   BinarySpectralAngleFunctor()

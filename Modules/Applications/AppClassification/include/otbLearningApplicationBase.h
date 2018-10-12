@@ -72,7 +72,7 @@ namespace Wrapper
  * \ingroup OTBAppClassification
  */
 template <class TInputValue, class TOutputValue>
-class LearningApplicationBase: public Application
+class ITK_TEMPLATE_EXPORT LearningApplicationBase : public Application
 {
 public:
   /** Standard class typedefs. */

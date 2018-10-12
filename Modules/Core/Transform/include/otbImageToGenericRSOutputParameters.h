@@ -52,7 +52,7 @@ namespace otb {
  **/
 
 template<class TImage>
-class  ImageToGenericRSOutputParameters :
+class ITK_TEMPLATE_EXPORT ImageToGenericRSOutputParameters :
     public itk::Object
 {
 public:

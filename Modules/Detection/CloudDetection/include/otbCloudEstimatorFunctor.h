@@ -38,7 +38,7 @@ namespace Functor
  */
 
 template<class TInput, class TOutputValue>
-class CloudEstimatorFunctor
+class ITK_TEMPLATE_EXPORT CloudEstimatorFunctor
 {
 public:
   typedef SpectralAngleFunctor<TInput, TOutputValue> SpectralAngleFunctorType;

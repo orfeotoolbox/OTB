@@ -44,7 +44,7 @@ namespace otb
  */
 
 template <class TIFFactory, class TInputImage>
-class MultiChannelIFFactory
+class ITK_TEMPLATE_EXPORT MultiChannelIFFactory
 {
 public:
   typedef TIFFactory                                    IFFactoryType;

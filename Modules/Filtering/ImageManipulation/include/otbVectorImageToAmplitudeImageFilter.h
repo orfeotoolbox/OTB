@@ -30,7 +30,7 @@ namespace otb
 namespace Functor
 {
 template <class TInput, class TOutput>
-class VectorToAmplitudeFunctor
+class ITK_TEMPLATE_EXPORT VectorToAmplitudeFunctor
 {
 public:
   VectorToAmplitudeFunctor() {}

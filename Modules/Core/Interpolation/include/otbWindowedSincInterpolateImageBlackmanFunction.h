@@ -38,7 +38,7 @@ namespace Function
  * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
-class BlackmanWindowFunction
+class ITK_TEMPLATE_EXPORT BlackmanWindowFunction
 {
 public:
   void SetRadius(unsigned int radius)

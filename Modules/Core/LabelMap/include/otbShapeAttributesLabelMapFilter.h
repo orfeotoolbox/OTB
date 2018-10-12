@@ -43,7 +43,7 @@ namespace Functor
  * \ingroup OTBLabelMap
 */
 template <class TLabelObject, class TLabelImage>
-class ShapeAttributesLabelObjectFunctor
+class ITK_TEMPLATE_EXPORT ShapeAttributesLabelObjectFunctor
 {
 public:
   /** Self typedef */

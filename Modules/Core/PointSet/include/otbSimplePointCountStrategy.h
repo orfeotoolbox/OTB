@@ -40,7 +40,7 @@ namespace otb
  */
 
 template<class TPointSet, class TRadiusType, class TIndexType>
-class Count
+class ITK_TEMPLATE_EXPORT Count
 {
 public:
   Count() {}

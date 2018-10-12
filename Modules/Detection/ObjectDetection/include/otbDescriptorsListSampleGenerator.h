@@ -38,7 +38,7 @@ namespace otb
 {
 
 template <class TOutputPrecision>
-class DefaultDescriptorsType
+class ITK_TEMPLATE_EXPORT DefaultDescriptorsType
 {
 public:
   typedef itk::VariableLengthVector<TOutputPrecision> Type;

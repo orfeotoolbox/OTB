@@ -39,7 +39,7 @@ namespace Functor {
  * \ingroup OTBUnmixing
  */
 template<class TInput, class TOutput, class TPrecision>
-class UnConstrainedLeastSquareFunctor
+class ITK_TEMPLATE_EXPORT UnConstrainedLeastSquareFunctor
 {
 public:
   typedef TInput     InputType;

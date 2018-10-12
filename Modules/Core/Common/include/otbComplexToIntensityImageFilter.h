@@ -39,7 +39,7 @@ namespace otb
 namespace Function {
 
 template< class TInput, class TOutput>
-class ComplexToIntensity
+class ITK_TEMPLATE_EXPORT ComplexToIntensity
 {
 public:
   ComplexToIntensity() {}

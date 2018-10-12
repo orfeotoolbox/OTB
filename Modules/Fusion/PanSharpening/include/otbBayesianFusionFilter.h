@@ -43,7 +43,7 @@ template <class TInputMultiSpectral,
     class TInputMultiSpectralInterp,
     class TInputPanchro,
     class TOutput>
-class BayesianFunctor
+class ITK_TEMPLATE_EXPORT BayesianFunctor
 {
 public:
   BayesianFunctor() {}

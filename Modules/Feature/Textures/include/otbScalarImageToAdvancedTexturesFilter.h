@@ -100,7 +100,7 @@ namespace otb
  * \ingroup OTBTextures
  */
 template<class TInpuImage, class TOutputImage>
-class ScalarImageToAdvancedTexturesFilter : public itk::ImageToImageFilter
+class ITK_TEMPLATE_EXPORT ScalarImageToAdvancedTexturesFilter : public itk::ImageToImageFilter
   <TInpuImage, TOutputImage>
 {
 public:

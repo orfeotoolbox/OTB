@@ -53,7 +53,7 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
-class ReciprocalCovarianceToReciprocalCoherencyFunctor
+class ITK_TEMPLATE_EXPORT ReciprocalCovarianceToReciprocalCoherencyFunctor
 {
 public:
   typedef typename std::complex <double>           ComplexType;

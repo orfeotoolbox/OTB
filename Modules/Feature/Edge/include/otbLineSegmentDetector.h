@@ -40,7 +40,7 @@ namespace Functor
  * \ingroup OTBEdge
  */
 template <class TInputPixel, class TOutputPixel>
-class MagnitudeFunctor
+class ITK_TEMPLATE_EXPORT MagnitudeFunctor
 {
 public:
 
@@ -57,7 +57,7 @@ public:
  * \ingroup OTBEdge
  */
 template <class TInputPixel, class TOutputPixel>
-class OrientationFunctor
+class ITK_TEMPLATE_EXPORT OrientationFunctor
 {
 public:
 

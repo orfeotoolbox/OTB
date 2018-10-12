@@ -40,7 +40,7 @@ namespace otb
  * \ingroup OTBChangeDetection
   */
 template <class TInput>
-class CumulantsForEdgeworthProfile
+class ITK_TEMPLATE_EXPORT CumulantsForEdgeworthProfile
 {
 public:
   typedef itk::Vector<double, 4>    CumulantType;
@@ -102,7 +102,7 @@ namespace Functor
  * \ingroup OTBChangeDetection
  */
 template<class TInput1, class TInput2, class TOutput>
-class KullbackLeiblerProfile
+class ITK_TEMPLATE_EXPORT KullbackLeiblerProfile
 {
 public:
   KullbackLeiblerProfile ();

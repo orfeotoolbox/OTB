@@ -62,7 +62,7 @@ namespace Functor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
-class SinclairToCovarianceMatrixFunctor
+class ITK_TEMPLATE_EXPORT SinclairToCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */

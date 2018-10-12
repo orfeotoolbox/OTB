@@ -45,7 +45,7 @@ namespace Functor
  * \ingroup OTBLabelMap
  */
 template <class TLabelObject >
-class MergeLabelObjectFunctor
+class ITK_TEMPLATE_EXPORT MergeLabelObjectFunctor
 {
 public:
   /** Template parameters typedefs */

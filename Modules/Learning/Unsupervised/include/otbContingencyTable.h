@@ -31,7 +31,7 @@
 namespace otb
 {
 template<class TClassLabel>
-class ContingencyTable : public itk::Object
+class ITK_TEMPLATE_EXPORT ContingencyTable : public itk::Object
 {
 public:
   /** Standard class typedefs */

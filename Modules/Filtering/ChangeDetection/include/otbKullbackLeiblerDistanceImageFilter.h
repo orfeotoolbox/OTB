@@ -35,7 +35,7 @@ namespace otb
  * \ingroup OTBChangeDetection
  */
 template <class TInput>
-class CumulantsForEdgeworth
+class ITK_TEMPLATE_EXPORT CumulantsForEdgeworth
 {
 public:
   CumulantsForEdgeworth (const TInput& input);
@@ -92,7 +92,7 @@ namespace Functor
  * \ingroup OTBChangeDetection
  */
 template <class TInput1, class TInput2, class TOutput>
-class KullbackLeiblerDistance
+class ITK_TEMPLATE_EXPORT KullbackLeiblerDistance
 {
 public:
   KullbackLeiblerDistance () {}

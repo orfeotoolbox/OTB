@@ -44,7 +44,7 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TInput1>
-class PolygonCompacityFunctor
+class ITK_TEMPLATE_EXPORT PolygonCompacityFunctor
 {
 public:
   void SetThreshold(double threshold)

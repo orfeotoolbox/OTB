@@ -49,7 +49,7 @@ namespace Functor
  * \ingroup OTBOpticalCalibration
  */
 template <class TInput, class TOutput>
-class RadianceToReflectanceImageFunctor
+class ITK_TEMPLATE_EXPORT RadianceToReflectanceImageFunctor
 {
 public:
   RadianceToReflectanceImageFunctor() :

@@ -49,7 +49,7 @@ namespace Functor
  * \ingroup OTBIndices
 */
 template<class TInput1, class TInput2, class TOutput>
-class GAndRIndexBase
+class ITK_TEMPLATE_EXPORT GAndRIndexBase
 {
 public:
   /// Vector pixel type used to support both vector images and multiple
@@ -153,7 +153,7 @@ private:
  * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
-class GAndRAndNirIndexBase
+class ITK_TEMPLATE_EXPORT GAndRAndNirIndexBase
 {
 public:
   /// Vector pixel type used to support both vector images and multiple
@@ -284,7 +284,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class IR : public GAndRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT IR : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -327,7 +327,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class IC : public GAndRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT IC : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -366,7 +366,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class IB : public GAndRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT IB : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -401,7 +401,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class IB2 : public GAndRAndNirIndexBase<TInput1, TInput2, TInput3, TOutput>
+class ITK_TEMPLATE_EXPORT IB2 : public GAndRAndNirIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
   /** Return the index name */

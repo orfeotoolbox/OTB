@@ -47,7 +47,7 @@ namespace otb
  */
 
 template<class TInpuImage, class TOutputImage>
-class ScalarImageToPanTexTextureFilter : public itk::ImageToImageFilter
+class ITK_TEMPLATE_EXPORT ScalarImageToPanTexTextureFilter : public itk::ImageToImageFilter
   <TInpuImage, TOutputImage>
 {
 public:

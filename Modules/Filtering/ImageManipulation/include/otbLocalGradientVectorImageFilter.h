@@ -36,7 +36,7 @@ namespace Functor
  * \ingroup OTBImageManipulation
  */
 template < class TInput, class TOutput >
-class LocalGradientOperator
+class ITK_TEMPLATE_EXPORT LocalGradientOperator
 {
 public:
   LocalGradientOperator() { }

@@ -38,7 +38,7 @@ namespace Function
  * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
-class GaussianWindowFunction
+class ITK_TEMPLATE_EXPORT GaussianWindowFunction
 {
 public:
   void SetRadius(unsigned int radius)

@@ -50,7 +50,7 @@ namespace Functor
  * \ingroup OTBDescriptors
  */
 template <class TInputPixel, class TOutputPixel>
-class MagnitudeFunctor
+class ITK_TEMPLATE_EXPORT MagnitudeFunctor
 {
 public:
 
@@ -67,7 +67,7 @@ public:
  * \ingroup OTBDescriptors
  */
 template <class TInputPixel, class TOutputPixel>
-class OrientationFunctor
+class ITK_TEMPLATE_EXPORT OrientationFunctor
 {
 public:
 

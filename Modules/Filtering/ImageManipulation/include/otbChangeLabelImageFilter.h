@@ -43,7 +43,7 @@ namespace otb
 namespace Functor {
 
 template<class TInput, class TOutput>
-class VectorChangeLabel
+class ITK_TEMPLATE_EXPORT VectorChangeLabel
 {
 public:
   typedef typename TOutput::ValueType ValueType;

@@ -38,7 +38,7 @@ namespace Functor
  * \ingroup OTBTimeSeries
  */
 template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries>
-class EnvelopeSavitzkyGolayInterpolationFunctor
+class ITK_TEMPLATE_EXPORT EnvelopeSavitzkyGolayInterpolationFunctor
 {
 public:
 

@@ -47,7 +47,7 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TOutput>
-class RAndNIRIndexBase
+class ITK_TEMPLATE_EXPORT RAndNIRIndexBase
 {
 public:
   /// Vector pixel type used to support both vector images and multiple
@@ -154,7 +154,7 @@ private:
  * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
-class RAndBAndNIRIndexBase
+class ITK_TEMPLATE_EXPORT RAndBAndNIRIndexBase
 {
 public:
   /// Vector pixel type used to support both vector images and multiple
@@ -283,7 +283,7 @@ private:
  * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TInput3, class TOutput>
-class RAndGAndNIRIndexBase
+class ITK_TEMPLATE_EXPORT RAndGAndNIRIndexBase
 {
 public:
   /// Vector pixel type used to support both vector images and multiple
@@ -410,7 +410,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT NDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
 
@@ -450,7 +450,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
 
@@ -490,7 +490,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -548,7 +548,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
 
@@ -602,7 +602,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
 

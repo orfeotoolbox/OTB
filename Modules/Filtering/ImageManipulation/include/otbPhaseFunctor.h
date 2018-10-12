@@ -37,7 +37,7 @@ namespace Function
  * \ingroup OTBImageManipulation
 */
 template <class TInputPixel>
-class PhaseFunctor : public ChannelSelectorFunctor<TInputPixel>
+class ITK_TEMPLATE_EXPORT PhaseFunctor : public ChannelSelectorFunctor<TInputPixel>
 {
 public:
   /** Standard class typedefs */

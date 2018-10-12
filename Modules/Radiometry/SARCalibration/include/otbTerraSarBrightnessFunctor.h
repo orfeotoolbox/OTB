@@ -49,7 +49,7 @@ namespace Functor
  */
 
 template <class TInput, class TOutput>
-class TerraSarBrightnessFunctor
+class ITK_TEMPLATE_EXPORT TerraSarBrightnessFunctor
 {
 public:
   TerraSarBrightnessFunctor();

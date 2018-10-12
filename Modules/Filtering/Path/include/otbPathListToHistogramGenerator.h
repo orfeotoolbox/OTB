@@ -46,7 +46,7 @@ namespace otb
  */
 
 template<class TPath, class TFunction>
-class PathListToHistogramGenerator : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT PathListToHistogramGenerator : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */

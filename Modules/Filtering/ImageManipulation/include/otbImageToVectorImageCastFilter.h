@@ -38,7 +38,7 @@ namespace Functor
  * \ingroup OTBImageManipulation
  */
 template <class TInput, class TOutput>
-class VectorCast
+class ITK_TEMPLATE_EXPORT VectorCast
 {
 public:
   typedef typename TOutput::ValueType OutputValueType;

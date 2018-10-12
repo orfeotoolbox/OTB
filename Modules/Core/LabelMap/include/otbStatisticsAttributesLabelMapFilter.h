@@ -39,7 +39,7 @@ namespace Functor
  * \ingroup OTBLabelMap
 */
 template <class TLabelObject, class TFeatureImage>
-class StatisticsAttributesLabelObjectFunctor
+class ITK_TEMPLATE_EXPORT StatisticsAttributesLabelObjectFunctor
 {
 public:
   // Self typedef

@@ -44,7 +44,7 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TOutput>
-class TM4AndTM5IndexBase
+class ITK_TEMPLATE_EXPORT TM4AndTM5IndexBase
 {
 public:
   /// Vector pixel type used to support both vector images and multiple
@@ -148,7 +148,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDBI : public TM4AndTM5IndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT NDBI : public TM4AndTM5IndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -187,7 +187,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class ISU : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT ISU : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */

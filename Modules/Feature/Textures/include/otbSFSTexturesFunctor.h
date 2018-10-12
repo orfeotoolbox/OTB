@@ -56,7 +56,7 @@ namespace otb
 namespace Functor
 {
 template<class TIter, class TOutputValue>
-class SFSTexturesFunctor
+class ITK_TEMPLATE_EXPORT SFSTexturesFunctor
 {
 public:
   SFSTexturesFunctor()

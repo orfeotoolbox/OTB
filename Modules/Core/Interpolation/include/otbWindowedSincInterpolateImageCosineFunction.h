@@ -38,7 +38,7 @@ namespace Function
  * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
-class CosineWindowFunction
+class ITK_TEMPLATE_EXPORT CosineWindowFunction
 {
 public:
   void SetRadius(unsigned int radius)

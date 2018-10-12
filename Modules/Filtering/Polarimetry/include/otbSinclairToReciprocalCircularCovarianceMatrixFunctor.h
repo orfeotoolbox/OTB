@@ -60,7 +60,7 @@ namespace Functor
  * \ingroup OTBPolarimetry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class SinclairToReciprocalCircularCovarianceMatrixFunctor
+class ITK_TEMPLATE_EXPORT SinclairToReciprocalCircularCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */

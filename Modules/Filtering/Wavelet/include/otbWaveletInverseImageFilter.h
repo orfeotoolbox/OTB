@@ -42,7 +42,7 @@ namespace otb {
 template < class TInputImage,
            class TOutputImage,
            Wavelet::Wavelet TMotherWaveletOperator >
-class WaveletInverseImageFilter :
+class ITK_TEMPLATE_EXPORT WaveletInverseImageFilter :
   public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

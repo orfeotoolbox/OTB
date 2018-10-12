@@ -44,7 +44,7 @@ namespace Functor
  */
 
 template<class TInput1, class TInput2, class TOutput>
-class CrossCorrelation
+class ITK_TEMPLATE_EXPORT CrossCorrelation
 {
 public:
   CrossCorrelation() {}

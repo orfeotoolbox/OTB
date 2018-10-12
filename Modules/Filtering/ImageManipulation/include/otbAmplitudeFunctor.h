@@ -37,7 +37,7 @@ namespace Function
  * \ingroup OTBImageManipulation
 */
 template <class TInputPixel>
-class AmplitudeFunctor : public ChannelSelectorFunctor<TInputPixel>
+class ITK_TEMPLATE_EXPORT AmplitudeFunctor : public ChannelSelectorFunctor<TInputPixel>
 {
 public:
   /** Standard class typedefs */

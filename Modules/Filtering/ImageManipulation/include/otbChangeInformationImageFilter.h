@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template< typename TInputImage >
-class ChangeInformationImageFilter:
+class ITK_TEMPLATE_EXPORT ChangeInformationImageFilter :
   public itk::ChangeInformationImageFilter< TInputImage >
 {
 public:

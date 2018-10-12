@@ -40,7 +40,7 @@ namespace otb {
  * \ingroup OTBIOXML
  */
 template < class TMeasurementVector>
-class  StatisticsXMLFileWriter :
+class ITK_TEMPLATE_EXPORT StatisticsXMLFileWriter :
     public itk::Object
 {
 public:

@@ -61,7 +61,7 @@ namespace otb
  * \ingroup OTBSimulation
  */
 template <class TSpectralResponse , class TRSR>
-class ReduceSpectralResponse : public itk::DataObject
+class ITK_TEMPLATE_EXPORT ReduceSpectralResponse : public itk::DataObject
 {
 
 public:

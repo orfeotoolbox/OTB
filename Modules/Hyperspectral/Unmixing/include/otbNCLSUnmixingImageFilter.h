@@ -40,7 +40,7 @@ namespace Functor {
  * \ingroup OTBUnmixing
  */
 template<class TInput, class TOutput, class TPrecision>
-class NCLSUnmixingFunctor
+class ITK_TEMPLATE_EXPORT NCLSUnmixingFunctor
 {
 public:
   typedef NCLSUnmixingFunctor<TInput, TOutput, TPrecision> Self;

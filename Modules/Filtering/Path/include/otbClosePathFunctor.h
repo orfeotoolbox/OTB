@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TInput, class TOutput>
-class ClosePathFunctor
+class ITK_TEMPLATE_EXPORT ClosePathFunctor
 {
 public:
 

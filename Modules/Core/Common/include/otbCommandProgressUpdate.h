@@ -35,7 +35,7 @@ namespace otb
  * \ingroup OTBCommon
 */
 template <class TFilter>
-class CommandProgressUpdate : public itk::Command
+class ITK_TEMPLATE_EXPORT CommandProgressUpdate : public itk::Command
 {
 public:
   typedef  CommandProgressUpdate   Self;

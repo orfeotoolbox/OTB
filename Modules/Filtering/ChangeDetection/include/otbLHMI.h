@@ -45,7 +45,7 @@ namespace Functor
  */
 
 template<class TInput1, class TInput2, class TOutput>
-class LHMI
+class ITK_TEMPLATE_EXPORT LHMI
 {
 
 public:

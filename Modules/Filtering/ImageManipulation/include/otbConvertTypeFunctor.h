@@ -35,7 +35,7 @@ namespace Functor
 {
 
 template < class TInputPixelType , class TOutputPixelType >
-class ConvertTypeFunctor
+class ITK_TEMPLATE_EXPORT ConvertTypeFunctor
 {
 public:
   typedef TInputPixelType InputPixelType;

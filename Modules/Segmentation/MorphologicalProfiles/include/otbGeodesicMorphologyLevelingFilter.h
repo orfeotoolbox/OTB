@@ -36,7 +36,7 @@ namespace Functor
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInput, class TInputMap, class TOutput>
-class LevelingFunctor
+class ITK_TEMPLATE_EXPORT LevelingFunctor
 {
 public:
   /// Constructor

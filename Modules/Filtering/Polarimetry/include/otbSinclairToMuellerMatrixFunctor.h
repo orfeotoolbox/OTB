@@ -81,7 +81,7 @@ namespace Functor
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
-class SinclairToMuellerMatrixFunctor
+class ITK_TEMPLATE_EXPORT SinclairToMuellerMatrixFunctor
 {
 public:
   /** Some typedefs. */

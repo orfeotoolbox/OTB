@@ -34,7 +34,7 @@ namespace Functor
  * \ingroup OTBEdge
  */
 template < class TInput, class TOutput >
-class VerticalSobelOperator
+class ITK_TEMPLATE_EXPORT VerticalSobelOperator
 {
 public:
   VerticalSobelOperator() { }

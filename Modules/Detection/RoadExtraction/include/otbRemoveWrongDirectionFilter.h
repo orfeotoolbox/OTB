@@ -41,7 +41,7 @@ namespace Functor
  * \ingroup OTBRoadExtraction
  */
 template <class TInput1, class TInput2, class TOutput>
-class RemoveWrongDirectionFunctor
+class ITK_TEMPLATE_EXPORT RemoveWrongDirectionFunctor
 {
 public:
   RemoveWrongDirectionFunctor() {}

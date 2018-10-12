@@ -50,7 +50,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template<class TRealVectorPixelType>
-class StatisticsAccumulator
+class ITK_TEMPLATE_EXPORT StatisticsAccumulator
 {
 public:
 

@@ -41,7 +41,7 @@ namespace Functor
  * \ingroup OTBImageManipulation
  */
 template<typename TInput, typename  TOutput>
-class VectorAffineTransform
+class ITK_TEMPLATE_EXPORT VectorAffineTransform
 {
 public:
   /// Real type typedef

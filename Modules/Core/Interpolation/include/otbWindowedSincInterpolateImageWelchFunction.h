@@ -38,7 +38,7 @@ namespace Function
  * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
-class WelchWindowFunction
+class ITK_TEMPLATE_EXPORT WelchWindowFunction
 {
 public:
   void SetRadius(unsigned int radius)

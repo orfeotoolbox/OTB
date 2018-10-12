@@ -31,7 +31,7 @@ namespace Functor
  * \ingroup OTBImageManipulation
  */
 template<class TInput, class TOutputValue>
-class MeanFunctor
+class ITK_TEMPLATE_EXPORT MeanFunctor
 {
 public:
   typedef MeanFunctor<TInput, TOutputValue> MeanFunctorType;

@@ -37,7 +37,7 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <typename TIteratorType,typename TMaskIteratorType = TIteratorType>
-class MaskedIteratorDecorator
+class ITK_TEMPLATE_EXPORT MaskedIteratorDecorator
 {
 public:
   typedef MaskedIteratorDecorator

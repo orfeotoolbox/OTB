@@ -47,7 +47,7 @@ namespace Functor
  * \ingroup OTBUrbanArea
  */
 template<class TInput, class TOutput = double>
-class RadiometricNonWaterNonVegetationIndexFunctor
+class ITK_TEMPLATE_EXPORT RadiometricNonWaterNonVegetationIndexFunctor
 {
 public:
   typedef Functor::NDVI<double, double, double>  VegetationFunctorType;
@@ -99,7 +99,7 @@ protected:
  * \ingroup OTBUrbanArea
  */
 template<class TInput, class TOutput>
-class RadiometricNonWaterNonVegetationDetectionFunctor
+class ITK_TEMPLATE_EXPORT RadiometricNonWaterNonVegetationDetectionFunctor
 {
 public:
   typedef RadiometricNonWaterNonVegetationIndexFunctor<TInput> RadiometricNonWaterNonVegetationIndexFunctorType;

@@ -65,7 +65,7 @@ namespace Functor {
  */
 
 template< class TInput, class TOutput>
-class MuellerToReciprocalCovarianceFunctor
+class ITK_TEMPLATE_EXPORT MuellerToReciprocalCovarianceFunctor
 {
 public:
   typedef std::complex<double>                      ComplexType;

@@ -48,7 +48,7 @@ namespace Functor
  * \ingroup OTBLabelMap
 */
 template <class TLabelObject, class TFeatureImage>
-class BandStatsAttributesLabelObjectFunctor
+class ITK_TEMPLATE_EXPORT BandStatsAttributesLabelObjectFunctor
 {
 public:
   // Self typedef

@@ -38,7 +38,7 @@ namespace otb {
  * \ingroup OTBIOXML
  */
 template < class TMeasurementVector>
-class  StatisticsXMLFileReader :
+class ITK_TEMPLATE_EXPORT StatisticsXMLFileReader :
     public itk::Object
 {
 public:

@@ -41,7 +41,7 @@ namespace otb
 {
 
 template <class TFunctionPrecision>
-class DefaultDescriptorType
+class ITK_TEMPLATE_EXPORT DefaultDescriptorType
 {
 public:
   typedef itk::VariableLengthVector<TFunctionPrecision> Type;

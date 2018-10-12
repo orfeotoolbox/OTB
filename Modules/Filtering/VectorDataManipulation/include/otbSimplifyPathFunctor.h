@@ -51,7 +51,7 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TInput, class TOutput>
-class SimplifyPathFunctor
+class ITK_TEMPLATE_EXPORT SimplifyPathFunctor
 {
 public:
 

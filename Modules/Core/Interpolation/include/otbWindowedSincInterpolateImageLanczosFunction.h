@@ -40,7 +40,7 @@ namespace Function
  * \ingroup OTBInterpolation
  */
 template<class TInput = double, class TOutput = double>
-class LanczosWindowFunction
+class ITK_TEMPLATE_EXPORT LanczosWindowFunction
 {
 public:
   void SetRadius(unsigned int radius)

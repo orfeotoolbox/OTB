@@ -39,7 +39,7 @@ namespace Functor {
  * \ingroup OTBUnmixing
  */
 template<class TInput, class TOutput, class TPrecision>
-class ISRAUnmixingFunctor
+class ITK_TEMPLATE_EXPORT ISRAUnmixingFunctor
 {
 public:
   typedef ISRAUnmixingFunctor<TInput, TOutput, TPrecision> Self;

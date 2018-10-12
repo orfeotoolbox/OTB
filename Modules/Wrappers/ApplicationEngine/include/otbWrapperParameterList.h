@@ -39,7 +39,7 @@ namespace Wrapper
  * \ingroup OTBApplicationEngine
  */
 template< typename T >
-class ParameterList :
+class ITK_TEMPLATE_EXPORT ParameterList :
     public AbstractParameterList
 {
 //

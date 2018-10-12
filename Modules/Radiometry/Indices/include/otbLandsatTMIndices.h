@@ -64,7 +64,7 @@ enum ReflectanceType {Thousands, Normalized};
  * \ingroup OTBIndices
  */
 template<class TInput, class TOutput>
-class LandsatTMIndexBase
+class ITK_TEMPLATE_EXPORT LandsatTMIndexBase
 {
 public:
 
@@ -333,7 +333,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class LandsatTMIndex : public LandsatTMIndexBase<TInput, TOutput>
+class ITK_TEMPLATE_EXPORT LandsatTMIndex : public LandsatTMIndexBase<TInput, TOutput>
 {
 public:
 
@@ -367,7 +367,7 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class Bright : public LandsatTMIndex<TInput, TOutput>
+class ITK_TEMPLATE_EXPORT Bright : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -408,7 +408,7 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class Vis : public LandsatTMIndex<TInput, TOutput>
+class ITK_TEMPLATE_EXPORT Vis : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -441,7 +441,7 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class NIR : public LandsatTMIndex<TInput, TOutput>
+class ITK_TEMPLATE_EXPORT NIR : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -473,7 +473,7 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class MIR1 : public LandsatTMIndex<TInput, TOutput>
+class ITK_TEMPLATE_EXPORT MIR1 : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -505,7 +505,7 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class MIR2 : public LandsatTMIndex<TInput, TOutput>
+class ITK_TEMPLATE_EXPORT MIR2 : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
@@ -537,7 +537,7 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class TIR : public LandsatTMIndex<TInput, TOutput>
+class ITK_TEMPLATE_EXPORT TIR : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */

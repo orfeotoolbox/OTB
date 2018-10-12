@@ -60,7 +60,7 @@ namespace otb {
  * \ingroup OTBCCOBIA
 */
 template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
-class PersistentConnectedComponentSegmentationOBIAToVectorDataFilter : public otb::PersistentImageToVectorDataFilter<TVImage, TOutputVectorData>
+class ITK_TEMPLATE_EXPORT PersistentConnectedComponentSegmentationOBIAToVectorDataFilter : public otb::PersistentImageToVectorDataFilter<TVImage, TOutputVectorData>
 {
 public:
   /** Standard Self typedef */
@@ -233,7 +233,7 @@ private:
  * \ingroup OTBCCOBIA
 */
 template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
-class StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
+class ITK_TEMPLATE_EXPORT StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
 {
 public:
 

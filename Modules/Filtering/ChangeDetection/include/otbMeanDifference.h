@@ -28,7 +28,7 @@ namespace Functor
 {
 
 template<class TInput1, class TInput2, class TOutput>
-class MeanDifference
+class ITK_TEMPLATE_EXPORT MeanDifference
 {
 public:
   MeanDifference() {}

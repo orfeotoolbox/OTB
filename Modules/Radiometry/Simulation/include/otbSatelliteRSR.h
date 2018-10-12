@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBSimulation
  */
 template<class TPrecision = double, class TValuePrecision = double>
-class SatelliteRSR: public itk::DataObject
+class ITK_TEMPLATE_EXPORT SatelliteRSR : public itk::DataObject
 {
 public:
   /** Standard class typedefs */

@@ -41,7 +41,7 @@ namespace Functor
  * \ingroup OTBImageManipulation
 */
 template<class TInput1, class TInput2 = TInput1, class TOutput = TInput1>
-class HillShadeModulationFunctor
+class ITK_TEMPLATE_EXPORT HillShadeModulationFunctor
 {
 public:
   HillShadeModulationFunctor() {}
@@ -70,7 +70,7 @@ public:
  * \ingroup OTBImageManipulation
 */
 template <class TNeighIter, class TInputImage, class TOutput>
-class HillShadingFunctor
+class ITK_TEMPLATE_EXPORT HillShadingFunctor
 {
 public:
 

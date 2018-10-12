@@ -41,7 +41,7 @@ namespace otb
  */
 
 template<class TInputHistogram, class TOutput>
-class HistogramStatisticsFunction :
+class ITK_TEMPLATE_EXPORT HistogramStatisticsFunction :
   public itk::HistogramAlgorithmBase<TInputHistogram>
 {
 public:

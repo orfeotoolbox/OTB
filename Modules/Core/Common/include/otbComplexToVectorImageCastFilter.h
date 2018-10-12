@@ -42,7 +42,7 @@ namespace otb
 namespace Functor {
 
 template<class TInput, class TOutput>
-class SingleComplexToVector
+class ITK_TEMPLATE_EXPORT SingleComplexToVector
 {
 public:
   typedef typename TOutput::ValueType OutputValueType;
@@ -64,7 +64,7 @@ public:
 
 
 template<class TInput, class TOutput>
-class VectorComplexToVector
+class ITK_TEMPLATE_EXPORT VectorComplexToVector
 {
 public:
   typedef typename TOutput::ValueType OutputValueType;
@@ -92,7 +92,7 @@ public:
 
 
 template< class TInput, class TOutput >
-class ComplexToVector
+class ITK_TEMPLATE_EXPORT ComplexToVector
 {
 public:
   typedef SingleComplexToVector<TInput, TOutput> FunctorType;
@@ -100,7 +100,7 @@ public:
 
 
 template< class TInput, class TOutput >
-class ComplexToVector<itk::VariableLengthVector<TInput>, TOutput>
+class ITK_TEMPLATE_EXPORT ComplexToVector<itk: :VariableLengthVector<TInput>, TOutput>
 {
 public:
   typedef VectorComplexToVector<itk::VariableLengthVector<TInput>, TOutput> FunctorType;

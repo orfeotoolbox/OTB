@@ -53,7 +53,7 @@ The interest points can then be extracted with a thresholding filter.
  */
 
 template <class TInputImage, class TOutputImage>
-class HarrisImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_TEMPLATE_EXPORT HarrisImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
 

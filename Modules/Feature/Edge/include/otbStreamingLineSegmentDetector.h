@@ -90,7 +90,7 @@ private:
 };
 
 template <class TImageType>
-class StreamingLineSegmentDetector
+class ITK_TEMPLATE_EXPORT StreamingLineSegmentDetector
 {
 public:
 

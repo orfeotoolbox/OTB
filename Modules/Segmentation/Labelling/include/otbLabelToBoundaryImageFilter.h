@@ -41,7 +41,7 @@ namespace Functor
  * \ingroup OTBLabelling
  */
 template < class TInput, class TOutput >
-class LabelToBoundaryFunctor
+class ITK_TEMPLATE_EXPORT LabelToBoundaryFunctor
 {
 public:
   LabelToBoundaryFunctor() { }

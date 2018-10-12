@@ -42,7 +42,7 @@ namespace Functor
  * \ingroup OTBSimulation
  */
 template <class TInput, class TOutput>
-class ReflectanceToSurfaceReflectanceImageFunctor
+class ITK_TEMPLATE_EXPORT ReflectanceToSurfaceReflectanceImageFunctor
 {
 public:
 

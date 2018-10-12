@@ -30,7 +30,7 @@ namespace Functor
 {
 
 template<class TInput1, class TInput2, class TOutput>
-class JoinHistogramMI
+class ITK_TEMPLATE_EXPORT JoinHistogramMI
 {
 public:
   typedef double                                                         HistogramFrequencyType;

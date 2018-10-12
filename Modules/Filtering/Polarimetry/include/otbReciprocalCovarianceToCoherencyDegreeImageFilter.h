@@ -49,7 +49,7 @@ namespace Functor {
  */
 
 template< class TInput, class TOutput>
-class ReciprocalCovarianceToCoherencyDegreeFunctor
+class ITK_TEMPLATE_EXPORT ReciprocalCovarianceToCoherencyDegreeFunctor
 {
 public:
   typedef double                                   RealType;

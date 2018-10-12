@@ -54,7 +54,7 @@ template<typename T> inline T simple_pow(T const& v, unsigned int p)
  * \ingroup OTBSmoothing
  */
 template<class TInputImage, class TOutputJointImage>
-class SpatialRangeJointDomainTransform
+class ITK_TEMPLATE_EXPORT SpatialRangeJointDomainTransform
 {
 public:
   typedef double RealType;
@@ -146,7 +146,7 @@ public:
  * \ingroup OTBSmoothing
  */
 template<typename TImage>
-class FastImageRegionConstIterator: public itk::ImageRegionConstIterator<TImage>
+class ITK_TEMPLATE_EXPORT FastImageRegionConstIterator : public itk::ImageRegionConstIterator<TImage>
 {
 public:
   /** Standard class typedef. */
@@ -195,7 +195,7 @@ private:
  * \ingroup OTBSmoothing
  */
 template<class TImage>
-class BucketImage
+class ITK_TEMPLATE_EXPORT BucketImage
 {
 public:
   typedef TImage ImageType;

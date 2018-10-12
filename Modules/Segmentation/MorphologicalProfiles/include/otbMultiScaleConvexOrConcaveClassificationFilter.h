@@ -58,7 +58,7 @@ namespace Functor
  * \ingroup OTBMorphologicalProfiles
  */
 template<class TInput, class TLabeled>
-class MultiScaleConvexOrConcaveDecisionRule
+class ITK_TEMPLATE_EXPORT MultiScaleConvexOrConcaveDecisionRule
 {
 
 public:

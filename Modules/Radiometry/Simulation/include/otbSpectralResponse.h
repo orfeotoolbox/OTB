@@ -54,7 +54,7 @@ namespace otb
  * \ingroup OTBSimulation
  */
 template<class TPrecision = double, class TValuePrecision = double>
-class SpectralResponse: public itk::DataObject
+class ITK_TEMPLATE_EXPORT SpectralResponse : public itk::DataObject
 {
 public:
   /** Standard class typedefs */

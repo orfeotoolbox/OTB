@@ -27,7 +27,7 @@
 namespace otb
 {
 template <unsigned int TDegree=2, class TCoefPrecision = double>
-class PolynomialTimeSeries
+class ITK_TEMPLATE_EXPORT PolynomialTimeSeries
 {
 public:
 

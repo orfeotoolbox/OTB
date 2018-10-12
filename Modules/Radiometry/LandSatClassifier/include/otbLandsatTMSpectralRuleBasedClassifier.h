@@ -60,7 +60,7 @@ namespace LandsatTM
  * \ingroup OTBLandSatClassifier
  */
 template <class TInput, class TOutput>
-class SpectralRuleBasedClassifier : public KernelSpectralRule<TInput, TOutput>
+class ITK_TEMPLATE_EXPORT SpectralRuleBasedClassifier : public KernelSpectralRule<TInput, TOutput>
 {
 public:
   // Spectral categories

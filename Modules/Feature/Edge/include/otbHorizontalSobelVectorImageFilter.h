@@ -34,7 +34,7 @@ namespace Functor
  * \ingroup OTBEdge
  */
 template < class TInput, class TOutput >
-class HorizontalSobelOperator
+class ITK_TEMPLATE_EXPORT HorizontalSobelOperator
 {
 public:
   HorizontalSobelOperator() { }

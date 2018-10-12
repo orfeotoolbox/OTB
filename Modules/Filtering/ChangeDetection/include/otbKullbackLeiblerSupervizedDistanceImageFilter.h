@@ -72,7 +72,7 @@ namespace Functor
  * \ingroup OTBChangeDetection
  */
 template <class TInput1, class TInput2, class TInputROIImage, class TOutput>
-class KullbackLeiblerSupervizedDistance
+class ITK_TEMPLATE_EXPORT KullbackLeiblerSupervizedDistance
 {
 public:
   KullbackLeiblerSupervizedDistance ();

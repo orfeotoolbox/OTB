@@ -46,7 +46,7 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template<class TInput1, class TInput2, class TOutput>
-class WaterIndexBase
+class ITK_TEMPLATE_EXPORT WaterIndexBase
 {
 public:
   /// Vector pixel type used to support both vector images and multiple
@@ -123,7 +123,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class WaterIndexFunctor : public WaterIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT WaterIndexFunctor : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -160,7 +160,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class SRWI : public WaterIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT SRWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -199,7 +199,7 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT NDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -284,7 +284,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDWI2 : public WaterIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT NDWI2 : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -369,7 +369,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class MNDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT MNDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -454,7 +454,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDPI : public WaterIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT NDPI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
@@ -539,7 +539,7 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDTI : public WaterIndexBase<TInput1, TInput2, TOutput>
+class ITK_TEMPLATE_EXPORT NDTI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */

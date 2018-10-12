@@ -36,7 +36,7 @@ namespace Functor
  * \ingroup OTBDimensionalityReduction
  */
 template < class TInput, class TOutput >
-class LocalActivityOperator
+class ITK_TEMPLATE_EXPORT LocalActivityOperator
 {
 public:
   LocalActivityOperator() { }

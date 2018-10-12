@@ -34,7 +34,7 @@ namespace otb
  * \ingroup OTBLabelling
  */
 template <class TFilter>
-class LabeledOutputAccessor
+class ITK_TEMPLATE_EXPORT LabeledOutputAccessor
 {
    public:
       typedef typename TFilter::OutputImageType    LabelImageType;

@@ -45,7 +45,7 @@ namespace Functor
  */
 
 template <class TInput, class TOutput>
-class RadianceToImageImageFunctor
+class ITK_TEMPLATE_EXPORT RadianceToImageImageFunctor
 {
 public:
   RadianceToImageImageFunctor() :

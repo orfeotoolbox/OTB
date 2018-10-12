@@ -56,7 +56,7 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
-class ReciprocalHAlphaFunctor
+class ITK_TEMPLATE_EXPORT ReciprocalHAlphaFunctor
 {
 public:
   typedef typename std::complex<double> ComplexType;

@@ -37,7 +37,7 @@ namespace Functor {
  * \ingroup OTBProjection
  */
 template<class TInput, class TOutput, class TPrecision>
-class ProjectiveProjectionFunctor
+class ITK_TEMPLATE_EXPORT ProjectiveProjectionFunctor
 {
 public:
   typedef TInput     InputType;

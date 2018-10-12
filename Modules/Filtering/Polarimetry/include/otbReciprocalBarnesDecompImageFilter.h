@@ -39,7 +39,7 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
-class ReciprocalBarnesDecompFunctor
+class ITK_TEMPLATE_EXPORT ReciprocalBarnesDecompFunctor
 {
 public:
   typedef typename std::complex<double> ComplexType;

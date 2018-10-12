@@ -36,7 +36,7 @@ namespace Functor
 {
 
 template<class TInput, class TOutput>
-class MultiplyByScalar
+class ITK_TEMPLATE_EXPORT MultiplyByScalar
 {
 public:
   MultiplyByScalar()

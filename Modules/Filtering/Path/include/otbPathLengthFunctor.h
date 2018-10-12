@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TInput1>
-class PathLengthFunctor
+class ITK_TEMPLATE_EXPORT PathLengthFunctor
 {
 public:
 

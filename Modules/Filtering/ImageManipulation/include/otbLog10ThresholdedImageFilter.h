@@ -34,7 +34,7 @@ namespace otb
 namespace Functor
 {
 template<class TInput, class TOutput>
-class Log10Thresholded
+class ITK_TEMPLATE_EXPORT Log10Thresholded
 {
 public:
   Log10Thresholded()

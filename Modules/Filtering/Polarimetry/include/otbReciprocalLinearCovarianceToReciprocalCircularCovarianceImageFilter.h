@@ -57,7 +57,7 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
-class ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+class ITK_TEMPLATE_EXPORT ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
 {
 public:
   typedef double                                   RealType;

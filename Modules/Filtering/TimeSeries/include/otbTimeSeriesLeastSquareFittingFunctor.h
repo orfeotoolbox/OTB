@@ -56,7 +56,7 @@ namespace Functor
  * \ingroup OTBTimeSeries
   */
 template <class TSeriesType, class TTimeFunction, class TDateType = TSeriesType, class TWeightType = TSeriesType>
-class TimeSeriesLeastSquareFittingFunctor
+class ITK_TEMPLATE_EXPORT TimeSeriesLeastSquareFittingFunctor
 {
 public:
 

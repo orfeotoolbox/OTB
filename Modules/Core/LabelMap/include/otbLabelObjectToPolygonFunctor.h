@@ -59,7 +59,7 @@ namespace Functor
  * \ingroup OTBLabelMap
  */
 template <class TLabelObject, class TPolygon>
-class LabelObjectToPolygonFunctor
+class ITK_TEMPLATE_EXPORT LabelObjectToPolygonFunctor
 {
 public:
   /** Template parameters typedefs */

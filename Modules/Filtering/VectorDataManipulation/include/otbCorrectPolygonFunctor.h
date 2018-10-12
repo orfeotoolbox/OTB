@@ -39,7 +39,7 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TPolygon>
-class CorrectPolygonFunctor
+class ITK_TEMPLATE_EXPORT CorrectPolygonFunctor
 {
 public:
 

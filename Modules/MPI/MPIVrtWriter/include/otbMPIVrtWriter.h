@@ -54,7 +54,7 @@ namespace otb {
  * \ingroup OTBMPIVrtWriter
  */
 template <typename TImage>
-class MPIVrtWriter: public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT MPIVrtWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */

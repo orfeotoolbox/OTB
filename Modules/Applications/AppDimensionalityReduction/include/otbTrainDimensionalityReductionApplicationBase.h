@@ -67,7 +67,7 @@ namespace Wrapper
  * \ingroup OTBAppDimensionalityReduction
  */
 template <class TInputValue, class TOutputValue>
-class TrainDimensionalityReductionApplicationBase: public Application
+class ITK_TEMPLATE_EXPORT TrainDimensionalityReductionApplicationBase : public Application
 {
 public:
 	/** Standard class typedefs. */

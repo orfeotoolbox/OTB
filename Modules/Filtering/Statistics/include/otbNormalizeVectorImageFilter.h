@@ -37,7 +37,7 @@ namespace Functor
  * \brief this functor performs affine transformation on VariableLengthVectors
  */
 template < class TInput, class TOutput >
-class NormalizeVectorImageFunctor
+class ITK_TEMPLATE_EXPORT NormalizeVectorImageFunctor
 {
 public:
   NormalizeVectorImageFunctor() { }

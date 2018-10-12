@@ -71,7 +71,7 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
-class ReciprocalCoherencyToReciprocalMuellerFunctor
+class ITK_TEMPLATE_EXPORT ReciprocalCoherencyToReciprocalMuellerFunctor
 {
 public:
   typedef typename std::complex <double>         ComplexType;
