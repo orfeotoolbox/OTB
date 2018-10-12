@@ -306,8 +306,8 @@ void GenerateOutputInformation(void) override
 //   }
 
 private:
-  WeightsGuidedFilter(const Self &) = delete; //purposely not implemented
-  void operator =(const Self&) = delete; //purposely not implemented
+  WeightsGuidedFilter(const Self &) = delete;
+  void operator =(const Self&) = delete; 
 
 }; // end of WeightsGuidedFilter class
 

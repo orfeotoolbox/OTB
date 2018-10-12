@@ -33,6 +33,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "otbVectorImage.h"
+#include  <algorithm>
 
 
 namespace otb
@@ -293,21 +294,23 @@ inRightGradientXPtr->SetRequestedRegion( inputRightRequestedRegion );
 //============================================  ThreadedGenerateData  ========================================================
 
 
-
 template <class TInputImage, class TGradientImage, class TOutputImage >
 void
 CostVolumeFilter<TInputImage, TGradientImage, TOutputImage >
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
-{ 
-  
+{   
 RegionType LeftRegionForThread;
 RegionType RightRegionForThread; 
 typename TOutputImage::PixelType OutPixel(1); 
 
 int bandNumber = this->GetLeftInputImage()->GetNumberOfComponentsPerPixel() ;
 
-for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
-  {
+const auto horizontal_disparity_used = (m_Side == 'r')
+    ? m_HorizontalMinDisparity
+    : m_HorizontalMaxDisparity;
+
+for(auto iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalMaxDisparity; iteration_disp++)
+  {  
   ComputeInputRegions( outputRegionForThread, LeftRegionForThread, RightRegionForThread, iteration_disp); 
           
   itk::ImageRegionConstIterator<TInputImage> LeftInputImageIt ( this->GetLeftInputImage(), LeftRegionForThread );
@@ -324,33 +327,17 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
           
   //  Cost computation    
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-    
+   
+  const auto disparity_offset = std::abs(horizontal_disparity_used - iteration_disp);
 
   while ( !outputIt.IsAtEnd() && !LeftInputImageIt.IsAtEnd()  )
     { 
-    
-    PixelType costColor;
-    costColor.Fill(0);
-    PixelType costGradient;
-    costGradient.Fill(0);    
-    double costColorNorm;
-    double costGradientNorm;
-     
-    costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ;       
-    costColorNorm = (costColor.GetNorm())/bandNumber; 
-    
-    if(costColorNorm > m_Tau1)   
-      {
-      costColorNorm = m_Tau1;
-      } // if  To take the minimum  
-               
+    const PixelType costColor = LeftInputImageIt.Get() - RightInputImageIt.Get() ; 
+    const double costColorNorm = std::min((double)m_Tau1, (costColor.GetNorm())/bandNumber);
+
+    PixelType costGradient ;
     costGradient = LeftGradientXInputIt.Get() - RightGradientXInputIt.Get();
-    costGradientNorm= (costGradient.GetNorm());             
-    
-    if(costGradientNorm > m_Tau2 )
-      {
-      costGradientNorm = m_Tau2; 
-      }// if To take the minimum     
+    const double costGradientNorm = std::min(double(m_Tau2), costGradient.GetNorm());    
 
     if((outputIt.GetIndex()[0] < abs(m_HorizontalMinDisparity)) || (outputIt.GetIndex()[0] > outputRegionForThread.GetSize()[0]-abs(m_HorizontalMaxDisparity)) )
       { 
@@ -358,20 +345,10 @@ for(int iteration_disp = m_HorizontalMinDisparity; iteration_disp<=m_HorizontalM
       }
     else
       {
-      // OutPixel.Fill(7);
       OutPixel[0] = static_cast<typename TOutputImage::InternalPixelType>( (1-m_Alpha)*costColorNorm + m_Alpha*costGradientNorm ); 
       }
 
-
-    if(m_Side=='r')
-      {    
-      outputIt.Get()[abs(m_HorizontalMinDisparity-iteration_disp)] = OutPixel[0] ;  
-      }   
-    else
-      {     
-      outputIt.Get()[abs(m_HorizontalMaxDisparity-iteration_disp)] = OutPixel[0] ;  
-      } 
-
+    outputIt.Get()[disparity_offset] = OutPixel[0] ; 
 
     ++LeftInputImageIt;
     ++RightInputImageIt;
@@ -407,18 +384,15 @@ RighttRequestedRegionIndex[1]+= shift[1];
 RightRegion.SetIndex(RighttRequestedRegionIndex);
      
 // Crop  inputRightRegion
-if( RightRegion.Crop(inRightPtr->GetLargestPossibleRegion()))
-  {  
+if (! RightRegion.Crop(inRightPtr->GetLargestPossibleRegion()))
+  {
+  itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+  e.SetLocation(ITK_LOCATION);
+  e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+  e.SetDataObject(inRightPtr);   
+  throw e;
   }
-else
-  {           
-  // Build an exception
-    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    e.SetLocation(ITK_LOCATION);
-    e.SetDescription("Requested region is (at least partially) (je suis dans le cost)outside the largest possible region.");
-    e.SetDataObject(inRightPtr);   
-    throw e;
-  } 
+
           
 // shift -1
 typename RegionType::IndexType IndexInv = RightRegion.GetIndex(); 

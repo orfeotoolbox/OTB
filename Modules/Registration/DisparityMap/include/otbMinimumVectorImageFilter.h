@@ -130,8 +130,8 @@ public:
   
 
   private:
-  MinimumVectorImageFilter(const Self &) = delete; //purposely not implemented
-  void operator =(const Self&) = delete; //purposely not implemented
+  MinimumVectorImageFilter(const Self &) = delete; 
+  void operator =(const Self&) = delete;
 
 
   }; // end of MinimumVectorImageFilter class

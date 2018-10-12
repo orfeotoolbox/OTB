@@ -136,8 +136,8 @@ protected:
   ~FillPixelFilter() override  =default ;
   void GenerateOutputInformation(void) override;
 
-  FillPixelFilter( const Self & ); // Not implemented
-  void operator=( const Self & ); // Not implemented
+  FillPixelFilter( const Self & )=delete; 
+  void operator=( const Self & )=delete; 
 }; // end of class FillPixelFilter
 
 

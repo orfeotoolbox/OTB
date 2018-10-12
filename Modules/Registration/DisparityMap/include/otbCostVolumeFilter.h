@@ -70,12 +70,11 @@ public:
   
   typedef TOutputImage										OutputImageType;
   
-/**  iterators */ 
+  /**  iterators */ 
   typedef itk::ConstNeighborhoodIterator<TInputImage> NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::RadiusType      RadiusType;
  
 
-// ====================== Geters ==============================================================================
   /** Get the inputs */
   const TInputImage * GetLeftInputImage() const;
   const TInputImage * GetRightInputImage() const;
@@ -96,8 +95,6 @@ public:
   float GetTau2() const ;
   char GetSide() ;
 
-
-//=============== Seters ====================================================================================
   /** Set left input */
   void SetLeftInputImage( const TInputImage * image);
 
@@ -165,15 +162,14 @@ protected:
   void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  CostVolumeFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemeFnted  
- void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp); 
+  CostVolumeFilter(const Self&)=delete; 
+  void operator=(const Self&)=delete; 
+  void ComputeInputRegions(const RegionType& outputRegion, RegionType& LeftRegion,RegionType& RightRegion, int iteration_disp); 
 
    /** The min horizontal disparity to explore */
   int                           m_HorizontalMinDisparity;
   /** The max horizontal disparity to explore */
   int                           m_HorizontalMaxDisparity;
-
   int                             m_VerticalDisparity;
   float                           m_Alpha ;
   float                           m_Tau1 ;

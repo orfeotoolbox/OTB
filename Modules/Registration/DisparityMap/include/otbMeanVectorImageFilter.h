@@ -164,7 +164,7 @@ protected:
   MeanVectorImageFilter()=default ;
   ~MeanVectorImageFilter() override =default ;
 
-  virtual void GenerateInputRequestedRegion() override
+  void GenerateInputRequestedRegion() override
     {
     // this->GetOutput()->GetRequestedRegion();
       // call the superclass' implementation of this method
@@ -252,8 +252,8 @@ protected:
     } 
 
 private:
-  MeanVectorImageFilter(const Self &) = delete; //purposely not implemented
-  void operator =(const Self&) = delete; //purposely not implemented
+  MeanVectorImageFilter(const Self &) = delete; 
+  void operator =(const Self&) = delete;
 
 }; // end of MeanVectorImageFilter class
 
