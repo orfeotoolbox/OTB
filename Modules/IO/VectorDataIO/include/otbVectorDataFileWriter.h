@@ -23,6 +23,7 @@
 
 #include "itkProcessObject.h"
 #include "itkMacro.h"
+#include "OTBVectorDataIOExport.h"
 #include "otbVectorDataIOBase.h"
 #include <string>
 
@@ -66,7 +67,7 @@ public:
  */
 
 template <class TInputVectorData>
-class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
+class ITK_TEMPLATE_EXPORT VectorDataFileWriter : public itk::ProcessObject
 {
 public:
 

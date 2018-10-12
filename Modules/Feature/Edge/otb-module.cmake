@@ -23,6 +23,7 @@ extraction. users can find classes that implement tools such as Sobel Detector, 
 Line Ratio Detector (SAR images), Hough Transform, and so on.")
 
 otb_module(OTBEdge
+ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBConversion

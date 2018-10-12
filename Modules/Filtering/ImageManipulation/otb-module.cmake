@@ -26,6 +26,7 @@ band, evaluating a ImageFunction onto a source image, generating an image from D
 data.")
 
 otb_module(OTBImageManipulation
+ENABLE_SHARED
   DEPENDS
     OTBBoostAdapters
     OTBCommon

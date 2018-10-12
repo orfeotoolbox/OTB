@@ -22,6 +22,7 @@
 #define otbONERAImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
+#include "OTBIOONERAExport.h"
 
 namespace otb
 {
@@ -30,7 +31,7 @@ namespace otb
  *
  * \ingroup OTBIOONERA
  */
-class ITK_EXPORT ONERAImageIOFactory : public itk::ObjectFactoryBase
+class OTBIOONERA_EXPORT ONERAImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

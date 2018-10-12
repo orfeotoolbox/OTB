@@ -23,6 +23,7 @@
 
 #include "itkByteSwapper.h"
 #include "otbImageIOBase.h"
+#include "OTBIOONERAExport.h"
 #include <fstream>
 
 namespace otb
@@ -39,7 +40,7 @@ namespace otb
  *
  * \ingroup OTBIOONERA
  */
-class ITK_EXPORT ONERAImageIO : public otb::ImageIOBase
+class OTBIOONERA_EXPORT ONERAImageIO : public otb::ImageIOBase
 {
 public:
 

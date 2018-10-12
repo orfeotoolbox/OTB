@@ -24,6 +24,7 @@
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "otbRCC8Value.h"
+#include "OTBRCC8Export.h"
 
 namespace otb
 {
@@ -34,7 +35,7 @@ namespace otb
  *
  * \ingroup OTBRCC8
  */
-class ITK_EXPORT RCC8Edge : public itk::DataObject
+class OTBRCC8_EXPORT RCC8Edge : public itk::DataObject
 {
 public:
   /** Standard class typedefs */

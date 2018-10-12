@@ -106,6 +106,9 @@ if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otbsiftfast PROPERTIES ${OTB_LIBRARY_PROPERTIES}) 
 endif()
 
+if(MSVC)
+  set_target_properties(otbsiftfast PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+endif()
 install(TARGETS otbsiftfast
   EXPORT ${OTB3P_INSTALL_EXPORT_NAME}
   RUNTIME DESTINATION ${OTB3P_INSTALL_RUNTIME_DIR} COMPONENT RuntimeLibraries

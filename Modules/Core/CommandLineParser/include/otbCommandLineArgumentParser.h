@@ -26,13 +26,14 @@
 #include <map>
 
 #include "itkProcessObject.h"
+#include "OTBCommandLineParserExport.h"
 
 /** \class CommandLineArgumentParserHelpException
  * \brief This exception is thrown when the help menu is displayed.
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParserHelpException
+class OTBCommandLineParser_EXPORT CommandLineArgumentParserHelpException
   : public itk::ExceptionObject
 {
 public:
@@ -56,7 +57,7 @@ public:
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParserVersionException
+class OTBCommandLineParser_EXPORT CommandLineArgumentParserVersionException
   : public itk::ExceptionObject
 {
 public:
@@ -80,7 +81,7 @@ public:
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParserArgumentErrorException
+class OTBCommandLineParser_EXPORT CommandLineArgumentParserArgumentErrorException
   : public itk::ExceptionObject
 {
 public:
@@ -112,7 +113,7 @@ namespace otb
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
+class OTBCommandLineParser_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
 {
 public:
   typedef CommandLineArgumentParseResult Self;
@@ -214,7 +215,7 @@ private:
  *
  * \ingroup OTBCommandLineParser
  */
-class ITK_EXPORT CommandLineArgumentParser : public itk::ProcessObject
+class OTBCommandLineParser_EXPORT CommandLineArgumentParser : public itk::ProcessObject
 {
 public:
   typedef CommandLineArgumentParser     Self;

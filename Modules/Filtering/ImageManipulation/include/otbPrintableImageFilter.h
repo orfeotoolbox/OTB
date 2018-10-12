@@ -119,7 +119,7 @@ protected:
  **/
 
 template <class TInputImage, class TMaskImage = otb::Image<unsigned char, 2> >
-class ITK_EXPORT PrintableImageFilter :
+class PrintableImageFilter :
   public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
 {
 public:

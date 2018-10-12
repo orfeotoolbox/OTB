@@ -22,6 +22,7 @@
 #define otbLUMImageIO_h
 
 #include "otbImageIOBase.h"
+#include "OTBIOLUMExport.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -40,7 +41,7 @@ namespace otb
  *
  * \ingroup OTBIOLUM
  */
-class ITK_EXPORT LUMImageIO : public otb::ImageIOBase
+class OTBIOLUM_EXPORT LUMImageIO : public otb::ImageIOBase
 {
 public:
 

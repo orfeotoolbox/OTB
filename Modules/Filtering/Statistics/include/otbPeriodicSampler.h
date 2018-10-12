@@ -22,6 +22,7 @@
 #define otbPeriodicSampler_h
 
 #include "otbSamplerBase.h"
+#include "OTBStatisticsExport.h"
 
 namespace otb
 {
@@ -35,7 +36,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class ITK_EXPORT PeriodicSampler : public SamplerBase
+class OTBStatistics_EXPORT PeriodicSampler : public SamplerBase
 {
 public:
   typedef PeriodicSampler  Self;

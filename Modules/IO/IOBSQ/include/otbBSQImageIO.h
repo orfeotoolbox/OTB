@@ -26,7 +26,7 @@
 #include <fstream>
 
 #include "otbImageIOBase.h"
-
+#include "OTBIOBSQExport.h"
 namespace otb
 {
 
@@ -41,7 +41,7 @@ namespace otb
  *
  * \ingroup OTBIOBSQ
  */
-class ITK_EXPORT BSQImageIO : public otb::ImageIOBase
+class OTBIOBSQ_EXPORT BSQImageIO : public otb::ImageIOBase
 {
 public:
 

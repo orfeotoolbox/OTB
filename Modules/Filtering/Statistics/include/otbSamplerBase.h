@@ -23,6 +23,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "OTBStatisticsExport.h"
 
 namespace otb
 {
@@ -34,7 +35,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class ITK_EXPORT SamplerBase : public itk::Object
+class OTBStatistics_EXPORT SamplerBase : public itk::Object
 {
 public:
   typedef SamplerBase  Self;

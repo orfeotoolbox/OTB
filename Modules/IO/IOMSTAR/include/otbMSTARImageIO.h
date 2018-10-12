@@ -22,6 +22,7 @@
 #define otbMSTARImageIO_h
 
 #include "otbImageIOBase.h"
+#include "OTBIOMSTARExport.h"
 
 namespace otb
 {
@@ -37,7 +38,7 @@ namespace otb
  *
  * \ingroup OTBIOMSTAR
  */
-class ITK_EXPORT MSTARImageIO : public otb::ImageIOBase
+class OTBIOMSTAR_EXPORT MSTARImageIO : public otb::ImageIOBase
 {
 public:
   /** Standard class typedefs. */

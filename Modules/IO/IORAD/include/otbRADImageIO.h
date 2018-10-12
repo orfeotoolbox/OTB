@@ -22,6 +22,7 @@
 #define otbRADImageIO_h
 
 #include "otbImageIOBase.h"
+#include "OTBIORADExport.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -40,7 +41,7 @@ namespace otb
  *
  * \ingroup OTBIORAD
  */
-class ITK_EXPORT RADImageIO : public otb::ImageIOBase
+class OTBIORAD_EXPORT RADImageIO : public otb::ImageIOBase
 {
 public:
 

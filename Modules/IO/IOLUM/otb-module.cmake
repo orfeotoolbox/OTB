@@ -21,6 +21,7 @@
 set(DOCUMENTATION "This module contains features to read LUM format images.")
 
 otb_module(OTBIOLUM
+ENABLE_SHARED
   DEPENDS
     OTBImageBase
     OTBCommon

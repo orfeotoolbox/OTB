@@ -22,6 +22,7 @@
 #define otbMSTARImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
+#include "OTBIOMSTARExport.h"
 
 namespace otb
 {
@@ -30,7 +31,7 @@ namespace otb
  *
  * \ingroup OTBIOMSTAR
  */
-class ITK_EXPORT MSTARImageIOFactory : public itk::ObjectFactoryBase
+class OTBIOMSTAR_EXPORT MSTARImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

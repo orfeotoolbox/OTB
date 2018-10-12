@@ -25,6 +25,7 @@ RCC8 constraint language has been popularly adopted by the GIS communities. This
 module provides classes related to this purpose.")
 
 otb_module(OTBRCC8
+ENABLE_SHARED
   DEPENDS
     OTBITK
     OTBImageBase
