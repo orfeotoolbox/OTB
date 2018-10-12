@@ -26,6 +26,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkImageScanlineIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProcessObject.h"
 #include <type_traits>
@@ -37,16 +38,76 @@ namespace otb
 
 namespace functor_filter_details
 {
-// Variadic creation of iterator tuple
-template <class T> auto MakeIterator(itk::SmartPointer<T> img)
+// Variadic SetRequestedRegion
+template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageRegion<2> & region, const itk::Size<2>& radius)
 {
-  itk::ImageRegionConstIterator<T> it(img,img->GetLargestPossibleRegion());
+  auto currentRegion = region;
+  currentRegion.PadByRadius(radius);
+
+  // The ugly cast in all ITK filters
+  T * nonConstImg = const_cast<T*>(img);
+
+  if(currentRegion.Crop(img->GetLargestPossibleRegion()))
+    {
+    nonConstImg->SetRequestedRegion(currentRegion);
+    return 0;
+    }
+  else
+    {
+    nonConstImg->SetRequestedRegion(currentRegion);
+        
+    // build an exception
+    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+    std::ostringstream msg;
+    msg << "::SetInputRequestedRegion<>()";
+    e.SetLocation(msg.str());
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+    e.SetDataObject(nonConstImg);
+    throw e;
+    }
+
+  return 0;
+}
+
+template <class Tuple, size_t...Is> auto SetInputRequestedRegionsImpl(Tuple & t, const itk::ImageRegion<2> & region, std::index_sequence<Is...>,const itk::Size<2> & radius)
+{
+  return std::make_tuple(SetInputRequestedRegion(std::get<Is>(t),region,radius)...);
+}
+
+template <typename... T> auto SetInputRequestedRegions(std::tuple<T...> && t,const itk::ImageRegion<2> & region, const itk::Size<2> & radius)
+{
+  return SetInputRequestedRegionsImpl(t,region,std::make_index_sequence<sizeof...(T)>{},radius);
+}
+
+
+// Variadic creation of iterator tuple
+template <class T> auto MakeIterator(const T * img, const itk::ImageRegion<2> & region)
+{
+  itk::ImageRegionConstIterator<T> it(img,region);
   return it;
 }
 
-template<class... T>  auto MakeIterators(itk::SmartPointer<T>... args)
+template <class T> auto MakeIterator(itk::SmartPointer<T> img, const itk::ImageRegion<2> & region)
+{
+  itk::ImageRegionConstIterator<T> it(img,region);
+  return it;
+}
+
+template <class T> auto MakeIterator(itk::SmartPointer<const T> img, const itk::ImageRegion<2> & region)
+{
+  itk::ImageRegionConstIterator<T> it(img,region);
+  return it;
+}
+
+
+template <class Tuple, size_t...Is> auto MakeIteratorsImpl(const Tuple& t, const itk::ImageRegion<2> & region, std::index_sequence<Is...>)
+{
+  return std::make_tuple(MakeIterator(std::get<Is>(t),region)...);
+}
+
+template<typename... T> auto MakeIterators(std::tuple<T...> &&t, const itk::ImageRegion<2> & region)
   {
-    return std::make_tuple(MakeIterator(args)...);
+    return MakeIteratorsImpl(t,region,std::make_index_sequence<sizeof...(T)>{});
   }
 
 // Variadic call of operator from iterator tuple
@@ -73,14 +134,6 @@ template<typename ... Args> void MoveIterators(std::tuple<Args...> & t)
 
 } // end namespace functor_filter_details
 
-template<typename T>
-using FTraits = typename FunctionTraits::function_traits<T>;
-
-template<typename T>
-using FResultType = typename FTraits<T>::result_type;
-
-template<typename T, size_t i>
-using ArgType = typename FTraits<T>::template arg<i>::type;
 
 template <class T> struct IsNeighborhood
 {
@@ -142,6 +195,24 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
   using FilterType = VariadicInputsImageFilter<OutputImageType,typename TInputImage<T>::ImageType...>;
 };
 
+// Default implementation does nothing
+template <class F, class O, class cond = void> struct NumberOfOutputComponents
+{
+  // We can not be here if output type is VectorImage
+  //static_assert(std::is_same<O, otb::VectorImage<typename O::InternalPixelType> >::value,"Return type of Functor is a VariableLenghtVector, add a constexpr size_t OutputSize member");
+  static void Set(const F&, O *){}
+};
+
+// Case 1: O is a VectorImage AND F has a fixed OuptutSize unsigned
+// int constexpr
+template <class F, class T> struct NumberOfOutputComponents<F,T,typename std::enable_if<std::is_same<size_t, decltype(F::OutputSize)>::value>::type >
+{
+static void Set(const F &, otb::VectorImage<T> * outputImage)
+  {
+    std::cout<<"Use OutputSize to set number of output components"<<std::endl;
+    outputImage->SetNumberOfComponentsPerPixel(F::OutputSize);
+  }
+};
 
 /** \class FunctorImageFilter
  * \brief Implements 
@@ -163,17 +234,6 @@ public:
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
-  // using InputImageType = typename TInputImage<TFunction,0>::ImageType;
-  // using InputImagePointer = typename InputImageType::ConstPointer;
-  // using InputImageRegionType = typename InputImageType::RegionType;
-  // using InputImagePixelType = typename InputImageType::PixelType;
-  // using InputImageSizeType = typename InputImageType::SizeType;
-  // using InputImageIndexType = typename InputImageType::IndexType;
-
-  // using OutputImageType = typename TOutputImage<TFunction>::ImageType;
-  // using OutputImagePointer = typename OutputImageType::Pointer;
-  // using OutputImageRegionType = typename OutputImageType::RegionType;
-  // using OutputImagePixelType = typename OutputImageType::PixelType;
   using Superclass = typename FunctorFilterSuperclassHelper<TFunction>::FilterType;
   using OutputImageType = typename Superclass::OutputImageType;
   using OutputImageRegionType = typename OutputImageType::RegionType;
@@ -246,7 +306,8 @@ protected:
    */
   virtual void GenerateInputRequestedRegion(void) override;
 
-
+  virtual void GenerateOutputInformation() override;
+  
   FunctorType m_Functor;
 };
 

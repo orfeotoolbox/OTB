@@ -50,6 +50,20 @@ FunctorImageFilter<TFunction>
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
+
+  // Get requested region for output
+  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+  auto requestedRegion = outputPtr->GetRequestedRegion();
+
+  // Propagate to each variadic inputs, including possible radius
+  functor_filter_details::SetInputRequestedRegions(this->GetVInputs(),requestedRegion, {{0,0}});
+}
+
+template <class TFunction>
+void
+FunctorImageFilter<TFunction>::GenerateOutputInformation()
+{
+  NumberOfOutputComponents<TFunction,OutputImageType>::Set(m_Functor,this->GetOutput());
 }
 
 /**
@@ -60,8 +74,23 @@ void
 FunctorImageFilter<TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
-  (void) outputRegionForThread;
-  (void) threadId;
+
+  
+  itk::ImageScanlineIterator<OutputImageType> outIt(this->GetOutput(),outputRegionForThread);
+  itk::ProgressReporter p(this,threadId,outputRegionForThread.GetNumberOfPixels());
+
+  auto inputIterators = functor_filter_details::MakeIterators(this->GetVInputs(),outputRegionForThread);
+  
+  while(!outIt.IsAtEnd())
+    {
+    for(;!outIt.IsAtEndOfLine();++outIt,functor_filter_details::MoveIterators(inputIterators))
+      {
+      outIt.Set(functor_filter_details::CallOperator(m_Functor,inputIterators));
+      // Update progress
+      p.CompletedPixel();
+      }
+    outIt.NextLine();
+    }
 }
 
 } // end namespace otb

@@ -32,7 +32,7 @@
 
 struct Funct1
 {
-  double operator()(double p)
+  double operator()(double p) const
   {
     return p;
   }
@@ -42,16 +42,18 @@ struct Funct2
 {
   itk::VariableLengthVector<double> operator()(double p) const
   {
-    itk::VariableLengthVector<double> result(2);
+    itk::VariableLengthVector<double> result(OutputSize);
     result[0] = result[1] = p;
     return result;
   }
+
+  static constexpr size_t OutputSize = 2;
 };
 
 using IntImageNeighborhood = itk::Neighborhood<int>;
 struct Funct3
 {
-  double operator()(const IntImageNeighborhood & p)
+  double operator()(const IntImageNeighborhood & p) const
   {
     return static_cast<double>(p.GetCenterValue());
   }
@@ -67,7 +69,7 @@ struct Funct4
   itk::VariableLengthVector<double> operator()(double p, const itk::VariableLengthVector<double> & vp) const
   {
     itk::VariableLengthVector<double> result(2);
-    result[0] = result[1] = p;
+    result.Fill(p);
     return result;
   }
 };
@@ -87,7 +89,7 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   // test functions in functor_filter_details namespace
   using VectorImageType = VectorImage<double>;
-  using ImageType       = Image<unsigned int>;
+  using ImageType       = Image<double>;
   using RegionType      = typename ImageType::RegionType;
   using SizeType        = typename RegionType::SizeType;
   using IndexType       = typename RegionType::IndexType;
@@ -98,12 +100,20 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   auto vimage = VectorImageType::New();
   auto image  = ImageType::New();
 
-  SizeType size = {200,200};
+  SizeType size = {{200,200}};
   
   vimage->SetRegions(size);
+  vimage->SetNumberOfComponentsPerPixel(2);
+  vimage->Allocate();
+  itk::VariableLengthVector<double> v(2);
+  v.Fill(0);
+  vimage->FillBuffer(v);
+  
   image->SetRegions(size);
+  image->Allocate();
+  image->FillBuffer(0);
 
-  auto iterators = MakeIterators(image,vimage);
+  auto iterators = MakeIterators(std::make_tuple(image,vimage),image->GetBufferedRegion());
 
   MoveIterators(iterators);
 
@@ -126,8 +136,23 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   // test FunctorImageFilter
   auto filter1 = otb::FunctorImageFilter<Funct1>::New(Funct1{});
   auto filter2 = otb::FunctorImageFilter<Funct2>::New(Funct2{});
-  auto filter3 = otb::FunctorImageFilter<Funct3>::New(Funct3{});
- auto filter4 = otb::FunctorImageFilter<decltype(Lambda1)>::New(Lambda1);
+  //auto filter3 = otb::FunctorImageFilter<Funct3>::New(Funct3{});
+  auto filter4 = otb::FunctorImageFilter<Funct4>::New(Funct4{});
+  auto filterLambda = otb::FunctorImageFilter<decltype(Lambda1)>::New(Lambda1);
+
+  filter1->SetVInputs(image);
+  filter1->Update();
+  
+  filter2->SetVInputs(image);
+  filter2->Update();
+
+  filter4->SetVInputs(image,vimage);
+  filter4->Update();
+
+  filterLambda->SetVInputs(image);
+  filterLambda->Update();
+
+  
  return EXIT_SUCCESS;
 }
 
