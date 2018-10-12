@@ -21,6 +21,7 @@
 set(DOCUMENTATION "This module contains features to read BSQ format images.")
 
 otb_module(OTBIOBSQ
+ENABLE_SHARED
   DEPENDS
     OTBImageBase
     OTBCommon

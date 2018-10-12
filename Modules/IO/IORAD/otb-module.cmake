@@ -21,6 +21,7 @@
 set(DOCUMENTATION "This module contains features to read RAD format images.")
 
 otb_module(OTBIORAD
+ENABLE_SHARED
   DEPENDS
     OTBImageBase
     OTBCommon

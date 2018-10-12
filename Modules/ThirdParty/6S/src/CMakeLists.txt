@@ -93,6 +93,10 @@ if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otb6S PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 endif()
 
+if(MSVC)
+  set_target_properties(otb6S PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+endif()
+
 # Below "extra" compile flags are needed for proper functioning of 6S
 # library. Without these flags especially /Oy- OpticalCalibration tests
 # are failing. the flags are automatially added by VS generator.

@@ -24,6 +24,7 @@
 
 #include "itkProcessObject.h"
 #include "otbLineSpatialObjectList.h"
+#include "OTBEdgeExport.h"
 
 namespace otb
 {
@@ -32,7 +33,7 @@ namespace otb
  *
  * \ingroup OTBEdge
  */
-class ITK_EXPORT FillGapsFilter : public itk::ProcessObject
+class OTBEdge_EXPORT FillGapsFilter : public itk::ProcessObject
 {
 
 public:

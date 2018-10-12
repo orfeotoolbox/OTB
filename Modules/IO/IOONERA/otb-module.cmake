@@ -21,6 +21,7 @@
 set(DOCUMENTATION "This module contains features to read ONERA format images.")
 
 otb_module(OTBIOONERA
+ENABLE_SHARED
   DEPENDS
     OTBImageBase
     OTBCommon

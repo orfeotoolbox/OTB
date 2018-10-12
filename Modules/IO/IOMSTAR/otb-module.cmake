@@ -22,6 +22,7 @@ set(DOCUMENTATION "This module contains features to read and write MSTAR format
 images.")
 
 otb_module(OTBIOMSTAR
+ENABLE_SHARED
   DEPENDS
     OTBImageBase
     OTBCommon

@@ -23,6 +23,7 @@
 #define otbExtendedFilenameToWriterOptions_h
 
 #include "otbExtendedFilenameHelper.h"
+#include "OTBExtendedFilenameExport.h"
 #include "otbGDALImageIO.h"
 #include <string>
 
@@ -44,7 +45,7 @@ namespace otb
  * \ingroup OTBExtendedFilename
  */
 
-class ITK_EXPORT ExtendedFilenameToWriterOptions : public ExtendedFilenameHelper
+class OTBExtendedFilename_EXPORT ExtendedFilenameToWriterOptions : public ExtendedFilenameHelper
 {
 public:
 /** Standard class typedefs. */

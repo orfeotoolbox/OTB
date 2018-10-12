@@ -22,7 +22,7 @@
 #define otbBSQImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
-
+#include "OTBIOBSQExport.h"
 namespace otb
 {
 /** \class BSQImageIOFactory
@@ -30,7 +30,7 @@ namespace otb
  *
  * \ingroup OTBIOBSQ
  */
-class ITK_EXPORT BSQImageIOFactory : public itk::ObjectFactoryBase
+class OTBIOBSQ_EXPORT BSQImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

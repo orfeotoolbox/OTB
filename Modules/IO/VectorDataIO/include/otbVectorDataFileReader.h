@@ -23,6 +23,7 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorDataIOBase.h"
+#include "OTBVectorDataIOExport.h"
 #include <string>
 
 namespace otb
@@ -90,7 +91,7 @@ public:
  */
 
 template <class TOutputVectorData>
-class ITK_EXPORT VectorDataFileReader : public VectorDataSource<TOutputVectorData>
+class ITK_TEMPLATE_EXPORT VectorDataFileReader : public VectorDataSource<TOutputVectorData>
 {
 public:
 

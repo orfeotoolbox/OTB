@@ -25,6 +25,7 @@
 #include "itkObjectFactory.h"
 
 #include "otb_muparser.h"
+#include "OTBMathParserExport.h"
 
 namespace otb
 {
@@ -41,7 +42,7 @@ class ParserImpl;
  *
  * \ingroup OTBMathParser
  */
-class ITK_EXPORT Parser : public itk::LightObject
+class OTBMathParser_EXPORT Parser : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */

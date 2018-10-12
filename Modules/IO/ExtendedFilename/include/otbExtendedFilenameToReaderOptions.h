@@ -22,6 +22,7 @@
 #define otbExtendedFilenameToReaderOptions_h
 
 #include "otbExtendedFilenameHelper.h"
+#include "OTBExtendedFilenameExport.h"
 #include <string>
 
 namespace otb
@@ -49,7 +50,7 @@ namespace otb
  * \ingroup OTBExtendedFilename
  */
 
-class ITK_EXPORT ExtendedFilenameToReaderOptions : public ExtendedFilenameHelper
+class OTBExtendedFilename_EXPORT ExtendedFilenameToReaderOptions : public ExtendedFilenameHelper
 {
 public:
 /** Standard class typedefs. */

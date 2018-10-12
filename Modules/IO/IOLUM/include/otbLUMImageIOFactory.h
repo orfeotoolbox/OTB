@@ -22,6 +22,7 @@
 #define otbLUMImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
+#include "OTBIOLUMExport.h"
 
 namespace otb
 {
@@ -30,7 +31,7 @@ namespace otb
  *
  * \ingroup OTBIOLUM
  */
-class ITK_EXPORT LUMImageIOFactory : public itk::ObjectFactoryBase
+class OTBIOLUM_EXPORT LUMImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

@@ -21,6 +21,7 @@
 #ifndef otbRADImageIOFactory_h
 #define otbRADImageIOFactory_h
 
+#include "OTBIORADExport.h"
 #include "itkObjectFactoryBase.h"
 
 namespace otb
@@ -30,7 +31,7 @@ namespace otb
  *
  * \ingroup OTBIORAD
  */
-class ITK_EXPORT RADImageIOFactory : public itk::ObjectFactoryBase
+class OTBIORAD_EXPORT RADImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

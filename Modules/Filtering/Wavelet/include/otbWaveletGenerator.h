@@ -26,6 +26,7 @@
 #include <vector>
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
+#include "OTBWaveletExport.h"
 
 namespace otb
 {
@@ -61,7 +62,7 @@ enum Wavelet {
  * \ingroup OTBWavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator>
-class ITK_EXPORT WaveletGenerator
+class OTBWavelet_EXPORT WaveletGenerator
   : public itk::LightObject
 {
 public:

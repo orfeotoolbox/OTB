@@ -23,6 +23,7 @@
 
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
+#include "OTBPolarimetryExport.h"
 
 namespace otb
 {
@@ -51,7 +52,7 @@ typedef enum
  * \ingroup OTBPolarimetry
 */
 
-class ITK_EXPORT PolarimetricData : public itk::DataObject
+class OTBPolarimetry_EXPORT PolarimetricData : public itk::DataObject
 {
 public:
 

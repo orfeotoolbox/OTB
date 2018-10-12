@@ -40,6 +40,7 @@
 #else
 #include "mpParser.h"
 #endif
+#include "OTBMathParserXExport.h"
 
 namespace otb
 {
@@ -56,7 +57,7 @@ class ParserXImpl;
  *
  * \ingroup OTBMathParserX
  */
-class ITK_EXPORT ParserX : public itk::LightObject
+class OTBMathParserX_EXPORT ParserX : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
