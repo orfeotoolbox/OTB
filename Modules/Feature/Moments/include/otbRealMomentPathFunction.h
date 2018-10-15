@@ -67,15 +67,15 @@ public:
 
 protected:
   RealMomentPathFunction() {}
-  ~RealMomentPathFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~RealMomentPathFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  RealMomentPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);                //purposely not implemented
+  RealMomentPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

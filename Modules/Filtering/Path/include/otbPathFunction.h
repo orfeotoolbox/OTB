@@ -80,21 +80,21 @@ public:
 
 protected:
   PathFunction();
-  ~PathFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PathFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   InputPathConstPointer m_Path;
 
 private:
-  PathFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPathFunction.txx"
+#include "otbPathFunction.hxx"
 #endif
 
 #endif

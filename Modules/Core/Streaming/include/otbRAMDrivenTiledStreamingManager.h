@@ -77,11 +77,11 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) ITK_OVERRIDE;
+  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
 
 protected:
   RAMDrivenTiledStreamingManager();
-  ~RAMDrivenTiledStreamingManager() ITK_OVERRIDE;
+  ~RAMDrivenTiledStreamingManager() override;
 
   /** The number of MegaBytes of RAM available */
   unsigned int m_AvailableRAMInMB;
@@ -97,7 +97,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAMDrivenTiledStreamingManager.txx"
+#include "otbRAMDrivenTiledStreamingManager.hxx"
 #endif
 
 #endif

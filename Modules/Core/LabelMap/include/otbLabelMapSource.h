@@ -64,23 +64,23 @@ public:
 
 protected:
   LabelMapSource();
-  ~LabelMapSource() ITK_OVERRIDE;
+  ~LabelMapSource() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Ensure that the output vector data are cleared before processing */
   virtual void  AllocateOutputs();
 
 private:
-  LabelMapSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelMapSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapSource.txx"
+#include "otbLabelMapSource.hxx"
 #endif
 
 #endif // otbLabelMapSource_h

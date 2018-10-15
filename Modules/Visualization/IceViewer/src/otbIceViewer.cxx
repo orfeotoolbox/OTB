@@ -41,7 +41,7 @@ GlVectorActor::ColorType BuildColor(double r, double g, double b)
 }
 
 IceViewer::IceViewer()
-  : m_Window(ITK_NULLPTR),
+  : m_Window(nullptr),
     m_View(),
     m_FastRendering(false),
     m_SelectedActor(""),
@@ -74,7 +74,7 @@ IceViewer::IceViewer()
 
 IceViewer::~IceViewer()
 {
-  if(m_Window != ITK_NULLPTR)
+  if(m_Window != nullptr)
     {
     glfwDestroyWindow(m_Window);
     }
@@ -91,8 +91,8 @@ void IceViewer::AddImage(const std::string & fname, const std::string & key, con
   
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
 
-  const char * glVersion = ITK_NULLPTR;
-  const char * glslVersion = ITK_NULLPTR;
+  const char * glVersion = nullptr;
+  const char * glslVersion = nullptr;
 
   if( GlVersionChecker::CheckGLCapabilities( glVersion,
 					     glslVersion ) )
@@ -229,19 +229,19 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
   // Initialize glut (ugly workaround)
   int fake_argc = 1;
   char fake_name[] = "fake";
-  char * fake_argv[] = {fake_name,ITK_NULLPTR};
+  char * fake_argv[] = {fake_name,nullptr};
   glutInit(&fake_argc,fake_argv);
 
   // Set glfw errors callback
   glfwSetErrorCallback(error_callback);
   
   // Create the window
-  if(m_Window != ITK_NULLPTR)
+  if(m_Window != nullptr)
     {
     glfwDestroyWindow(m_Window);
     }
   
-  m_Window = glfwCreateWindow(w, h,name.c_str(), ITK_NULLPTR, ITK_NULLPTR);
+  m_Window = glfwCreateWindow(w, h,name.c_str(), nullptr, nullptr);
   if (!m_Window)
     {
     itkExceptionMacro(<<"Could not create glfw window.");
@@ -348,7 +348,7 @@ void IceViewer::Start()
   double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
    
   otb::ViewSettings::SpacingType spacing;
-  spacing.Fill(std::min(vcl_abs(spacingx),vcl_abs(spacingy)));
+  spacing.Fill(std::min(std::abs(spacingx),std::abs(spacingy)));
 
   if(shouldHaveNegativeSpacing)
     {
@@ -1013,8 +1013,8 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double, double)
       double startx, starty;
       m_View->GetSettings()->ScreenToViewPortTransform(m_StartDrag[0],m_StartDrag[1],startx,starty);
 
-      double angle1 = vcl_atan2(vpy - m_View->GetSettings()->GetViewportCenter()[1],vpx - m_View->GetSettings()->GetViewportCenter()[0]);
-      double angle2 = vcl_atan2(starty - m_View->GetSettings()->GetViewportCenter()[1], startx - m_View->GetSettings()->GetViewportCenter()[0]);
+      double angle1 = std::atan2(vpy - m_View->GetSettings()->GetViewportCenter()[1],vpx - m_View->GetSettings()->GetViewportCenter()[0]);
+      double angle2 = std::atan2(starty - m_View->GetSettings()->GetViewportCenter()[1], startx - m_View->GetSettings()->GetViewportCenter()[0]);
 
       m_View->GetSettings()->UpdateRotation(m_View->GetSettings()->GetViewportCenter(),m_StartAngle+angle2-angle1);
       }
@@ -1280,8 +1280,8 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
     GlImageActor::SpacingType spacing;
 
-    spacing[0]=vcl_sqrt((tmpImPtX[0]-imCenter[0])*(tmpImPtX[0]-imCenter[0])+(tmpImPtX[1]-imCenter[1])*(tmpImPtX[1]-imCenter[1]))/1000;
-    spacing[1]=vcl_sqrt((tmpImPtY[0]-imCenter[0])*(tmpImPtY[0]-imCenter[0])+(tmpImPtY[1]-imCenter[1])*(tmpImPtY[1]-imCenter[1]))/1000;
+    spacing[0]=std::sqrt((tmpImPtX[0]-imCenter[0])*(tmpImPtX[0]-imCenter[0])+(tmpImPtX[1]-imCenter[1])*(tmpImPtX[1]-imCenter[1]))/1000;
+    spacing[1]=std::sqrt((tmpImPtY[0]-imCenter[0])*(tmpImPtY[0]-imCenter[0])+(tmpImPtY[1]-imCenter[1])*(tmpImPtY[1]-imCenter[1]))/1000;
 
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->UseProjectionOn();
@@ -1538,7 +1538,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     vpCenter[0]+=1000*m_View->GetSettings()->GetSpacing()[0];
     GlImageActor::PointType imCenter2 = actor->ViewportToImageTransform(vpCenter,false);
     
-    double length = vcl_sqrt((imCenter[0]-imCenter2[0])*(imCenter[0]-imCenter2[0])+(imCenter[1]-imCenter2[1])*(imCenter[1]-imCenter2[1]));
+    double length = std::sqrt((imCenter[0]-imCenter2[0])*(imCenter[0]-imCenter2[0])+(imCenter[1]-imCenter2[1])*(imCenter[1]-imCenter2[1]));
 
     GlImageActor::SpacingType spacing = m_View->GetSettings()->GetSpacing();
 
@@ -1554,7 +1554,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     vpCenter[1]+=1000*m_View->GetSettings()->GetSpacing()[1];
     imCenter2 = actor->ViewportToImageTransform(vpCenter,false);
     
-    length = vcl_sqrt((imCenter[0]-imCenter2[0])*(imCenter[0]-imCenter2[0])+(imCenter[1]-imCenter2[1])*(imCenter[1]-imCenter2[1]));
+    length = std::sqrt((imCenter[0]-imCenter2[0])*(imCenter[0]-imCenter2[0])+(imCenter[1]-imCenter2[1])*(imCenter[1]-imCenter2[1]));
 
     std::cout << "vp:" << vpCenter[ 0 ] << ", " << vpCenter[ 1 ] << std::endl;
     std::cout << "im-1:" << imCenter[ 0 ] << ", " << imCenter[ 1 ] << std::endl;

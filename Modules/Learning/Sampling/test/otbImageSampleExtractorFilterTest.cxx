@@ -26,15 +26,6 @@
 #include "itkPhysicalPointImageSource.h"
 #include <fstream>
 
-int otbImageSampleExtractorFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::VectorImage<float> InputImageType;
-  typedef otb::ImageSampleExtractorFilter<InputImageType> FilterType;
-
-  FilterType::Pointer filter = FilterType::New();
-  std::cout << filter << std::endl;
-  return EXIT_SUCCESS;
-}
 
 int otbImageSampleExtractorFilter(int argc, char* argv[])
 {
@@ -129,6 +120,7 @@ int otbImageSampleExtractorFilterUpdate(int argc, char* argv[])
   output->CreateLayer( inLayer.GetName(),
                        oSRS,
                        inLayer.GetLayerDefn().GetGeomType());
+  oSRS->Release();
   otb::ogr::Layer dstLayer = output->GetLayer(0);
   OGRFieldDefn labelField(classFieldName.c_str(),OFTString);
   dstLayer.CreateField(labelField, true);

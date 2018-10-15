@@ -66,16 +66,6 @@ void FillHalf(typename ImageType::Pointer image, const typename ImageType::Regio
 }
 
 // Test template instantiation
-int otbMaskedIteratorDecoratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::Image<double, 2> ImageType;
-  ImageType::Pointer image = GetTestImage<ImageType>(10, 10);
-  ImageType::Pointer mask = GetTestImage<ImageType>(10, 0);
-  ImageType::RegionType region(image->GetLargestPossibleRegion());
-
-  otb::MaskedIteratorDecorator<itk::ImageRegionIterator<ImageType> > it(mask, image, region);
-  return EXIT_SUCCESS;
-}
 
 // ---------------------- Initialization code ----------------------------------
 template <typename IteratorType>
@@ -348,12 +338,12 @@ int otbMaskedIteratorDecoratorExtended(int itkNotUsed(argc), char * itkNotUsed(a
 
   std::cout << std::endl << "itk::ImageRegionIterator without mask: ";
   ret = TripleTest< itk::ImageRegionIterator<ImageType>,
-                    itk::ImageRegionIterator<MaskType> >(image, ITK_NULLPTR, region);
+                    itk::ImageRegionIterator<MaskType> >(image, nullptr, region);
   retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
 
   std::cout << std::endl << "itk::ImageRegionConstIterator without mask: ";
   ret = TripleTest< itk::ImageRegionConstIterator<ImageType>,
-                    itk::ImageRegionConstIterator<MaskType> >(image, ITK_NULLPTR, region);
+                    itk::ImageRegionConstIterator<MaskType> >(image, nullptr, region);
   retGlobal = (ret == EXIT_FAILURE ? EXIT_FAILURE : retGlobal);
 
   return retGlobal;

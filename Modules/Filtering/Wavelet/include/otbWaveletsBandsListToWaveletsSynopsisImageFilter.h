@@ -68,19 +68,19 @@ public:
 
 protected:
   /** Main computation method */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
+  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
    * Copy information from the first image of the list if existing.
    **/
-  virtual void GenerateOutputInformation(void);
+  virtual void GenerateOutputInformation(void) override;
 
   /**
    * GenerateInputRequestedRegion
    * Set the requested region of each image in the list.
    */
-  virtual void GenerateInputRequestedRegion(void);
+  virtual void GenerateInputRequestedRegion(void) override;
 
   /** Constructor */
   WaveletsBandsListToWaveletsSynopsisImageFilter();
@@ -89,18 +89,18 @@ protected:
   virtual ~WaveletsBandsListToWaveletsSynopsisImageFilter();
 
   /**PrintSelf method */
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  WaveletsBandsListToWaveletsSynopsisImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WaveletsBandsListToWaveletsSynopsisImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The decimation ratio used in the decomposition */
   unsigned int m_DecimationRatio;
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.txx"
+#include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.hxx"
 #endif
 
 #endif

@@ -59,7 +59,7 @@ public:
 
   inline TOutput operator ()(const TInput& value) const
   {
-    RealType digitalNumber = static_cast<RealType> (vcl_abs(value));
+    RealType digitalNumber = static_cast<RealType> (std::abs(value));
     RealType beta;
 
     beta  = m_Scale * (digitalNumber * digitalNumber - m_Noise);

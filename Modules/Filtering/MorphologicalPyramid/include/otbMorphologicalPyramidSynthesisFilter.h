@@ -128,17 +128,17 @@ protected:
   /** Constructor */
   MorphologicalPyramidSynthesisFilter();
   /** Destructor */
-  ~MorphologicalPyramidSynthesisFilter() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE {}  // does nothing
+  ~MorphologicalPyramidSynthesisFilter() override;
+  void GenerateOutputInformation() override {}  // does nothing
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** Printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidSynthesisFilter.txx"
+#include "otbMorphologicalPyramidSynthesisFilter.hxx"
 #endif
 
 #endif

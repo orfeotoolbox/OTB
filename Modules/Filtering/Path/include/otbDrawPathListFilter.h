@@ -111,15 +111,15 @@ protected:
   /** Constructor */
   DrawPathListFilter();
   /** Desctructor */
-  ~DrawPathListFilter() ITK_OVERRIDE {}
+  ~DrawPathListFilter() override {}
   /** Printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
-  DrawPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DrawPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Default value to draw */
   OutputImagePixelType m_PathValue;
@@ -133,7 +133,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDrawPathListFilter.txx"
+#include "otbDrawPathListFilter.hxx"
 #endif
 
 #endif

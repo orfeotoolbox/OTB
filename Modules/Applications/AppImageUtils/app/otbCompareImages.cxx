@@ -49,7 +49,7 @@ public:
   typedef otb::StreamingCompareImageFilter<FloatImageType> StreamingCompareImageFilterType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("CompareImages");
     SetDescription("Estimator between 2 images.");
@@ -61,9 +61,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics");
 
-	AddDocTag("Miscellaneous");
-    AddDocTag("Statistics");
-	AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_Group, "ref", "Reference image properties");
     AddParameter(ParameterType_InputImage,  "ref.in",   "Reference image");
@@ -114,7 +112,7 @@ private:
     AddParameter(ParameterType_Float, "psnr",  "PSNR");
     SetParameterDescription("psnr", "Peak Signal to Noise Ratio value");
     SetParameterRole("psnr", Role_Output);
-    
+
     AddParameter(ParameterType_Float, "count",  "count");
     SetParameterDescription("count", "Nb of pixels which are different");
     SetParameterRole("count", Role_Output);
@@ -134,7 +132,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Set channel interval
     if( HasValue("ref.in") )
@@ -169,12 +167,15 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Init filters
-    m_ExtractRefFilter = ExtractROIMonoFilterType::New();
-    m_ExtractMeasFilter = ExtractROIMonoFilterType::New();
-    m_CompareFilter = StreamingCompareImageFilterType::New();
+    ExtractROIMonoFilterType::Pointer extractRefFilter =
+      ExtractROIMonoFilterType::New();
+    ExtractROIMonoFilterType::Pointer extractMeasFilter =
+      ExtractROIMonoFilterType::New();
+    StreamingCompareImageFilterType::Pointer compareFilter =
+      StreamingCompareImageFilterType::New();
 
     // Get input image pointers
     FloatVectorImageType::Pointer refIm = this->GetParameterImage("ref.in");
@@ -200,41 +201,37 @@ private:
       otbAppLogFATAL( << "ROI is not contained in the images regions");
       }
 
-    m_ExtractRefFilter->SetInput( refIm );
-    m_ExtractMeasFilter->SetInput( measIm );
+    extractRefFilter->SetInput( refIm );
+    extractMeasFilter->SetInput( measIm );
 
-    m_ExtractRefFilter->SetExtractionRegion(region);
-    m_ExtractMeasFilter->SetExtractionRegion(region);
+    extractRefFilter->SetExtractionRegion(region);
+    extractMeasFilter->SetExtractionRegion(region);
 
     // Set channels to extract
     otbAppLogINFO( << "reference image channel "<<this->GetParameterInt("ref.channel")<<" is compared with measured image channel "<<this->GetParameterInt("meas.channel"));
-    m_ExtractRefFilter->SetChannel( this->GetParameterInt("ref.channel") );
-    m_ExtractMeasFilter->SetChannel( this->GetParameterInt("meas.channel") );
+    extractRefFilter->SetChannel( this->GetParameterInt("ref.channel") );
+    extractMeasFilter->SetChannel( this->GetParameterInt("meas.channel") );
 
     // Compute comparison
-    m_CompareFilter->SetInput1(m_ExtractRefFilter->GetOutput());
-    m_CompareFilter->SetInput2(m_ExtractMeasFilter->GetOutput());
-    m_CompareFilter->SetPhysicalSpaceCheck(false);
-    m_CompareFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
-    AddProcess(m_CompareFilter->GetStreamer(), "Comparing...");
-    m_CompareFilter->Update();
+    compareFilter->SetInput1(extractRefFilter->GetOutput());
+    compareFilter->SetInput2(extractMeasFilter->GetOutput());
+    compareFilter->SetPhysicalSpaceCheck(false);
+    compareFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    AddProcess(compareFilter->GetStreamer(), "Comparing...");
+    compareFilter->Update();
 
     // Show result
-    otbAppLogINFO( << "MSE: " << m_CompareFilter->GetMSE() );
-    otbAppLogINFO( << "MAE: " << m_CompareFilter->GetMAE() );
-    otbAppLogINFO( << "PSNR: " << m_CompareFilter->GetPSNR() );
-    otbAppLogINFO( << "Number of Pixel different: " << m_CompareFilter->GetDiffCount() );
+    otbAppLogINFO( << "MSE: " << compareFilter->GetMSE() );
+    otbAppLogINFO( << "MAE: " << compareFilter->GetMAE() );
+    otbAppLogINFO( << "PSNR: " << compareFilter->GetPSNR() );
+    otbAppLogINFO( << "Number of Pixel different: " << compareFilter->GetDiffCount() );
 
-    SetParameterFloat( "mse",m_CompareFilter->GetMSE() , false);
-    SetParameterFloat( "mae",m_CompareFilter->GetMAE() , false);
-    SetParameterFloat( "psnr",m_CompareFilter->GetPSNR() , false);
-    SetParameterFloat( "count",m_CompareFilter->GetDiffCount() , false);
+    SetParameterFloat( "mse",compareFilter->GetMSE());
+    SetParameterFloat( "mae",compareFilter->GetMAE());
+    SetParameterFloat( "psnr",compareFilter->GetPSNR());
+    SetParameterFloat( "count",compareFilter->GetDiffCount());
+    RegisterPipeline();
   }
-
-
-  ExtractROIMonoFilterType::Pointer m_ExtractRefFilter;
-  ExtractROIMonoFilterType::Pointer m_ExtractMeasFilter;
-  StreamingCompareImageFilterType::Pointer m_CompareFilter;
 };
 
 }

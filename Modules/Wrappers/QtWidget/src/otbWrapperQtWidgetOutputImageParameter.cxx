@@ -28,14 +28,28 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetOutputImageParameter::QtWidgetOutputImageParameter(OutputImageParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetOutputImageParameter::QtWidgetOutputImageParameter(OutputImageParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_OutputImageParam(param)
 {
 }
 
 QtWidgetOutputImageParameter::~QtWidgetOutputImageParameter()
 {
+}
+
+const QLineEdit*
+QtWidgetOutputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetOutputImageParameter
+::GetInput()
+{
+  return m_Input;
 }
 
 void QtWidgetOutputImageParameter::DoUpdateGUI()
@@ -57,16 +71,16 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   m_HLayout = new QHBoxLayout;
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit();
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_OutputImageParam->GetDescription() )
   );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetOutputImageParameter::SetFileName );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
   m_HLayout->addWidget(m_Input);
 
   // Set the Output PixelType choice Combobox
-  m_ComboBox = new QComboBox;
+  m_ComboBox = new QComboBox(this);
   m_ComboBox->setToolTip("Output Pixel Type");
   m_ComboBox->addItem( "uint 8");
   m_ComboBox->addItem( "int 16");
@@ -75,17 +89,21 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   m_ComboBox->addItem( "uint 32");
   m_ComboBox->addItem( "float");
   m_ComboBox->addItem( "double");
+  m_ComboBox->addItem( "cint16");
+  m_ComboBox->addItem( "cint32");
+  m_ComboBox->addItem( "cfloat");
+  m_ComboBox->addItem( "cdouble");
   m_ComboBox->setCurrentIndex(m_OutputImageParam->GetPixelType());
-  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetPixelType(int)) );
-  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &QtWidgetOutputImageParameter::SetPixelType );
+  connect( m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), GetModel(), &QtWidgetModel::NotifyUpdate );
   m_HLayout->addWidget(m_ComboBox);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select output filename...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetOutputImageParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
@@ -98,7 +116,7 @@ QtWidgetOutputImageParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetSaveFileName(
+    otb::GetSaveFilename(
       this,
       QString(),
       m_Input->text(),

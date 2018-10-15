@@ -104,18 +104,18 @@ protected:
   /** Constructor */
   SOMImageClassificationFilter();
   /** Destructor */
-  ~SOMImageClassificationFilter() ITK_OVERRIDE {}
+  ~SOMImageClassificationFilter() override {}
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   /** Before threaded generate data */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOMImageClassificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SOMImageClassificationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The SOM model used for classification */
   SOMMapPointerType m_Map;
@@ -125,7 +125,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMImageClassificationFilter.txx"
+#include "otbSOMImageClassificationFilter.hxx"
 #endif
 
 #endif

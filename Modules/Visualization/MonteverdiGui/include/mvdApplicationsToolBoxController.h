@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -48,9 +46,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractModelController.h"
-#endif //tag=QT4-boost-compatibility
 //#include "mvdGui.h"
 
 
@@ -105,7 +101,7 @@ public:
   /**
    * \brief Destructor.
    */
-  ~ApplicationsToolBoxController() ITK_OVERRIDE;
+  ~ApplicationsToolBoxController() override;
 
   /** Get the seleceted application Gui */
   // QWidget * GetSelectedApplicationWidget(const QString& appName);
@@ -126,13 +122,13 @@ protected:
   //
   // AbstractModelController methods.
 
-  void Connect( AbstractModel* ) ITK_OVERRIDE;
+  void Connect( AbstractModel* ) override;
 
-  void ClearWidget() ITK_OVERRIDE;
+  void ClearWidget() override;
 
-  void virtual_ResetWidget( bool ) ITK_OVERRIDE;
+  void virtual_ResetWidget( bool ) override;
 
-  void Disconnect( AbstractModel* ) ITK_OVERRIDE;
+  void Disconnect( AbstractModel* ) override;
 
 //
 // Protected attributes.

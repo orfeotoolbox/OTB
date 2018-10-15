@@ -70,24 +70,24 @@ public:
   typedef double RealType;
 
   /** Evaluate the function at non-integer positions */
-  OutputType Evaluate(const PathType& path) const ITK_OVERRIDE;
+  OutputType Evaluate(const PathType& path) const override;
   virtual OutputType Evaluate() const;
 
 protected:
   CompacityPathFunction() {};
-  ~CompacityPathFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~CompacityPathFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  CompacityPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CompacityPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCompacityPathFunction.txx"
+#include "otbCompacityPathFunction.hxx"
 #endif
 
 #endif

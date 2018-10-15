@@ -88,7 +88,7 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
   /** Generate a white gaussian noise with mean m_Mean and variance
     * m_Variance
@@ -96,12 +96,12 @@ protected:
   void GenerateRandomSequence();
 
   GaussianAdditiveNoiseSampleListFilter();
-  ~GaussianAdditiveNoiseSampleListFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~GaussianAdditiveNoiseSampleListFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GaussianAdditiveNoiseSampleListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GaussianAdditiveNoiseSampleListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Mean and variance for the white gaussian noise to generate
   double              m_Mean;
@@ -115,7 +115,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGaussianAdditiveNoiseSampleListFilter.txx"
+#include "otbGaussianAdditiveNoiseSampleListFilter.hxx"
 #endif
 
 #endif

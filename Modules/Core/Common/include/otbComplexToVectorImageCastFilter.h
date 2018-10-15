@@ -140,7 +140,7 @@ public:
 
 protected:
   ComplexToVectorImageCastFilter() {}
-  ~ComplexToVectorImageCastFilter() ITK_OVERRIDE {}
+  ~ComplexToVectorImageCastFilter() override {}
 
   template<class T>
   bool PixelIsSingle(const T& /*dummy*/)
@@ -154,7 +154,7 @@ protected:
               return false;
   }
 
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
               Superclass::GenerateOutputInformation();
               InputPixelType dummy;
@@ -165,8 +165,8 @@ protected:
   }
 
 private:
-  ComplexToVectorImageCastFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ComplexToVectorImageCastFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

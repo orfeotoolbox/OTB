@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -101,7 +99,7 @@ public:
 public:
 
   /** \brief Destructor. */
-  ~ProcessObjectObserver() ITK_OVERRIDE;
+  ~ProcessObjectObserver() override;
 
   const ProgressInterface * GetProgressInterface() const;
   ProgressInterface * GetProgressInterface();
@@ -112,10 +110,10 @@ public:
   // itk::Command overloads.
 
   void Execute( itk::Object * caller,
-			const itk::EventObject & event ) ITK_OVERRIDE;
+			const itk::EventObject & event ) override;
 
   void Execute( const itk::Object * caller,
-			const itk::EventObject & event ) ITK_OVERRIDE;
+			const itk::EventObject & event ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

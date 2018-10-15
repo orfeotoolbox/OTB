@@ -22,6 +22,7 @@
 #define otbStatisticsXMLFileReader_h
 
 #include "itkProcessObject.h"
+#include <string>
 
 namespace otb {
 
@@ -64,7 +65,7 @@ public:
   typedef std::map<std::string , std::string>           GenericMapType;
   typedef std::map<std::string , GenericMapType>        GenericMapContainer;
 
-  void Modified() const ITK_OVERRIDE
+  void Modified() const override
     {
       m_IsUpdated = false;
     }
@@ -95,12 +96,12 @@ protected:
   virtual void Read();
 
   StatisticsXMLFileReader();
-  ~StatisticsXMLFileReader() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~StatisticsXMLFileReader() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StatisticsXMLFileReader(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StatisticsXMLFileReader(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::string                 m_FileName;
   MeasurementVectorContainer  m_MeasurementVectorContainer;
@@ -112,7 +113,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStatisticsXMLFileReader.txx"
+#include "otbStatisticsXMLFileReader.hxx"
 #endif
 
 #endif

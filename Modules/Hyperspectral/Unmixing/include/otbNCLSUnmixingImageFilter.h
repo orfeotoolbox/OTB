@@ -174,20 +174,20 @@ public:
 protected:
   NCLSUnmixingImageFilter();
 
-  ~NCLSUnmixingImageFilter() ITK_OVERRIDE;
+  ~NCLSUnmixingImageFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  NCLSUnmixingImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NCLSUnmixingImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNCLSUnmixingImageFilter.txx"
+#include "otbNCLSUnmixingImageFilter.hxx"
 #endif
 
 #endif

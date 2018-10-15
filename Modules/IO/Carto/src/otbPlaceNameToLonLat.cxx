@@ -29,7 +29,6 @@ namespace otb
 PlaceNameToLonLat::PlaceNameToLonLat() :
       m_Lon(-1000.0), m_Lat(-1000.0),
       m_PlaceName("Where everything started"),
-      m_SearchMethod(PlaceNameToLonLat::ALL),
       m_RequestSucceed(false)
 {
   m_Curl = CurlHelper::New();
@@ -108,7 +107,7 @@ void PlaceNameToLonLat::RetrieveXML(const std::ostringstream& urlStream)
     m_RequestSucceed = true;
     m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
     }
-  catch(itk::ExceptionObject)
+  catch( itk::ExceptionObject & )
     {
     m_RequestSucceed = false;
     }

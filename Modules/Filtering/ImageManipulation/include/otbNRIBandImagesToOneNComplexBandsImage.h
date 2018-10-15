@@ -72,24 +72,24 @@ public:
 
 protected:
   NRIBandImagesToOneNComplexBandsImage();
-  ~NRIBandImagesToOneNComplexBandsImage() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~NRIBandImagesToOneNComplexBandsImage() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
+  void BeforeThreadedGenerateData(void) override;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
-  NRIBandImagesToOneNComplexBandsImage(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NRIBandImagesToOneNComplexBandsImage(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNRIBandImagesToOneNComplexBandsImage.txx"
+#include "otbNRIBandImagesToOneNComplexBandsImage.hxx"
 #endif
 
 #endif

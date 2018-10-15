@@ -90,11 +90,11 @@ if( OTBApplicationEngine_ENABLED )
 endif()
 
 #############################################################################
-add_to_qt4_i18n_sources( ${OTBMonteverdiCore_SRCS} )
-add_to_qt4_i18n_headers( "../include" ${OTBMonteverdiCore_SRCS} )
+add_to_qt_i18n_sources( ${OTBMonteverdiCore_SRCS} )
+add_to_qt_i18n_headers( "../include" ${OTBMonteverdiCore_SRCS} )
 
 #############################################################################
-qt4_wrap_cpp( OTBMonteverdiCore_SRC_MOC ${OTBMonteverdiCore_HEADERS_MOC} )
+qt5_wrap_cpp( OTBMonteverdiCore_SRC_MOC ${OTBMonteverdiCore_HEADERS_MOC} OPTIONS -p "." )
 
 add_library( OTBMonteverdiCore ${OTBMonteverdiCore_SRCS} ${OTBMonteverdiCore_SRC_MOC})
 
@@ -111,7 +111,7 @@ target_link_libraries( OTBMonteverdiCore
   ${OTBObjectList_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBProjection_LIBRARIES}
-  ${OTBQt4_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   ${OTBStatistics_LIBRARIES}
   ${OTBTransform_LIBRARIES}
   )

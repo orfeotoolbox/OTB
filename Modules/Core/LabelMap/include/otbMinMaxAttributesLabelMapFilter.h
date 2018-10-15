@@ -89,18 +89,18 @@ public:
   AttributesMapObjectType* GetMaximumOutput();
   const AttributesMapObjectType* GetMaximumOutput() const;
 
-  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 protected:
   MinMaxAttributesLabelMapFilter();
-  ~MinMaxAttributesLabelMapFilter() ITK_OVERRIDE {};
+  ~MinMaxAttributesLabelMapFilter() override {};
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
-  MinMaxAttributesLabelMapFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MinMaxAttributesLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   //typedef typename InputImageType::LabelObjectContainerType   LabelObjectContainerType;
   //typedef typename LabelObjectContainerType::const_iterator   LabelObjectContainerConstIterator;
@@ -111,7 +111,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMinMaxAttributesLabelMapFilter.txx"
+#include "otbMinMaxAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

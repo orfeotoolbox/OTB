@@ -23,7 +23,6 @@
 
 #include <vector>
 #include <utility>
-#include <fstream>
 #include <limits>
 
 #include "otbSpectralResponse.h"
@@ -56,17 +55,17 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macros */
-  itkNewMacro(Self)
-; itkTypeMacro(SatelliteRSR, DataObject)
+  itkNewMacro(Self);
+; itkTypeMacro(SatelliteRSR, DataObject);
 ;
 
   /** Set the number of band of the satellite from an ASCII file
    * Need to parse first all the file to determine the number of columns */
-  itkGetConstMacro(NbBands, unsigned int)
-; itkSetMacro(NbBands, unsigned int)
+  itkGetConstMacro(NbBands, unsigned int);
+; itkSetMacro(NbBands, unsigned int);
 ;
 
-  itkSetMacro(SortBands, bool)
+  itkSetMacro(SortBands, bool);
 ;
 
   /** Template parameters typedef */
@@ -127,7 +126,7 @@ public:
   inline ValuePrecisionType operator()(const PrecisionType & lambda, const unsigned int numBand);
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** get vector of RSR */
   RSRVectorType & GetRSR()
@@ -147,7 +146,7 @@ protected:
   /** Constructor from a ASCII file */
   //SatelliteRSR( const std::string & filename );
   /** Destructor */
-  ~SatelliteRSR() ITK_OVERRIDE
+  ~SatelliteRSR() override
   {
   }
 ;
@@ -155,8 +154,8 @@ protected:
   bool m_SortBands;
 
 private:
-  SatelliteRSR(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SatelliteRSR(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Vector of SpectralResponse */
   RSRVectorType m_RSR;
@@ -171,7 +170,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSatelliteRSR.txx"
+#include "otbSatelliteRSR.hxx"
 #endif
 
 #endif

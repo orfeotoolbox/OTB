@@ -74,7 +74,7 @@ void QtFileSelectionWidget::DoCreateWidget()
   m_HLayout->addWidget(m_Checkbox);
 
   m_Input = new QLineEdit;
-  connect( m_Input, SIGNAL(editingFinished()), this, SLOT(CallFilenameChanged()) );
+  connect( m_Input, &QLineEdit::editingFinished, this, &QtFileSelectionWidget::CallFilenameChanged );
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
@@ -83,7 +83,7 @@ void QtFileSelectionWidget::DoCreateWidget()
   m_Button->setToolTip("Select file...");
   m_Button->setFixedWidth(30);
 
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtFileSelectionWidget::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
@@ -98,14 +98,14 @@ QtFileSelectionWidget
 
   QString filename(
     m_IOMode == IO_MODE_INPUT
-    ? GetOpenFileName(
+    ? otb::GetOpenFilename(
         this,
 	QString(),
 	m_Input->text(),
 	tr( "All files (*)" ),
 	NULL,
 	QFileDialog::ReadOnly )
-    : GetSaveFileName(
+    : otb::GetSaveFilename(
         this,
 	QString(),
 	m_Input->text(),

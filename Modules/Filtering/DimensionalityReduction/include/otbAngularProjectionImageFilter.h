@@ -84,7 +84,7 @@ public:
   itkGetMacro(AngleArray, AngleArrayType);
   itkSetMacro(AngleArray, AngleArrayType);
 
-  void SetInput ( unsigned int i, const InputImageType * ) ITK_OVERRIDE;
+  void SetInput ( unsigned int i, const InputImageType * ) override;
   using Superclass::SetInput;
 
   const InputImageType * GetInput( unsigned int i ) const;
@@ -92,9 +92,9 @@ public:
 
 protected:
   AngularProjectionImageFilter();
-  ~AngularProjectionImageFilter() ITK_OVERRIDE { }
+  ~AngularProjectionImageFilter() override { }
 
-  void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID ) ITK_OVERRIDE;
+  void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID ) override;
   virtual OutputImagePixelType InternalGenerateData ( const ImageRegionConstIteratorVectorType & ) const;
 
 private:
@@ -108,7 +108,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAngularProjectionImageFilter.txx"
+#include "otbAngularProjectionImageFilter.hxx"
 #endif
 
 

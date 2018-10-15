@@ -160,7 +160,7 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** This filter can only produce the amount of data that it is given,
-   * so we must ITK_OVERRIDE ProcessObject::EnlargeOutputRequestedRegion()
+   * so we must override ProcessObject::EnlargeOutputRequestedRegion()
    * (The default implementation of a source produces the amount of
    * data requested.  This source, however, can only produce what it is
    * given.)
@@ -169,8 +169,8 @@ protected:
   virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
 
 private:
-  ImportVectorImageFilter(const ImportVectorImageFilter &); //purposely not implemented
-  void operator =(const ImportVectorImageFilter&); //purposely not implemented
+  ImportVectorImageFilter(const ImportVectorImageFilter &) = delete;
+  void operator =(const ImportVectorImageFilter&) = delete;
 
   RegionType    m_Region;
   double        m_Spacing[OutputImageType::ImageDimension];
@@ -186,7 +186,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImportVectorImageFilter.txx"
+#include "otbImportVectorImageFilter.hxx"
 #endif
 
 #endif

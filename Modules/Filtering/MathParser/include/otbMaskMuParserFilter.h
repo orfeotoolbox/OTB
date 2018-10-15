@@ -25,7 +25,6 @@
 
 
 #include "itkProgressReporter.h"
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -82,11 +81,11 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self)
+  itkNewMacro(Self);
 ;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MaskMuParserFilter, itk::ImageToImageFilter)
+  itkTypeMacro(MaskMuParserFilter, itk::ImageToImageFilter);
 ;
 
   /** Some convenient typedefs. */
@@ -120,16 +119,16 @@ public:
 
 protected:
   MaskMuParserFilter();
-  ~MaskMuParserFilter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~MaskMuParserFilter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
-  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
+  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, itk::ThreadIdType threadId) override;
+  void AfterThreadedGenerateData() override;
 
 private:
-  MaskMuParserFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MaskMuParserFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::vector<FunctorPointer> m_VFunctor;
   std::string m_Expression;
@@ -142,7 +141,7 @@ private:
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaskMuParserFilter.txx"
+#include "otbMaskMuParserFilter.hxx"
 #endif
 
 #endif

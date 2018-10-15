@@ -108,16 +108,16 @@ protected:
   /**  Constructor */
   SinclairReciprocalImageFilter() {}
   /**  Destructor */
-  ~SinclairReciprocalImageFilter() ITK_OVERRIDE {}
+  ~SinclairReciprocalImageFilter() override {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 
-  SinclairReciprocalImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SinclairReciprocalImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
@@ -125,7 +125,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSinclairReciprocalImageFilter.txx"
+#include "otbSinclairReciprocalImageFilter.hxx"
 #endif
 
 #endif

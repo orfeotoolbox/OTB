@@ -146,24 +146,24 @@ public:
   void  SetTrainingArea(const TInputROIImage * trainingImage);
 
 protected:
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+  void BeforeThreadedGenerateData(void) override;
 
   KullbackLeiblerSupervizedDistanceImageFilter()
     {
     this->SetNumberOfRequiredInputs(3);
     }
-  ~KullbackLeiblerSupervizedDistanceImageFilter() ITK_OVERRIDE {}
+  ~KullbackLeiblerSupervizedDistanceImageFilter() override {}
 
 private:
-  KullbackLeiblerSupervizedDistanceImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KullbackLeiblerSupervizedDistanceImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKullbackLeiblerSupervizedDistanceImageFilter.txx"
+#include "otbKullbackLeiblerSupervizedDistanceImageFilter.hxx"
 #endif
 
 #endif

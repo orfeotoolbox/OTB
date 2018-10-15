@@ -93,7 +93,7 @@ public:
 
 protected:
   UnaryFunctorVectorImageFilter();
-  ~UnaryFunctorVectorImageFilter() ITK_OVERRIDE { }
+  ~UnaryFunctorVectorImageFilter() override { }
 
   /** UnaryFunctorVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -106,17 +106,17 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
+                                    itk::ThreadIdType threadId) override;
 
   /**
    * Since the number of components per pixel depends on the radius range, one must reimplement
    * this method to set the proper number of component on the filter output.
    */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
 private:
-  UnaryFunctorVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 }; // end of class
@@ -124,7 +124,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorVectorImageFilter.txx"
+#include "otbUnaryFunctorVectorImageFilter.hxx"
 #endif
 
 #endif

@@ -129,19 +129,19 @@ public:
 
 protected:
   ForwardFourierMellinTransformImageFilter();
-  ~ForwardFourierMellinTransformImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ForwardFourierMellinTransformImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   /** Main Computation Method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
-  ForwardFourierMellinTransformImageFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ForwardFourierMellinTransformImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Sigma for normalization */
   double m_Sigma;
@@ -169,7 +169,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbForwardFourierMellinTransformImageFilter.txx"
+#include "otbForwardFourierMellinTransformImageFilter.hxx"
 #endif
 
 #endif

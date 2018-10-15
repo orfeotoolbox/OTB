@@ -81,10 +81,10 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  FloatType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
+  FloatType EvaluateAtIndex(const IndexType& index) const override;
 
   /** Evaluate the function at non-integer positions */
-  FloatType Evaluate(const PointType& point) const ITK_OVERRIDE
+  FloatType Evaluate(const PointType& point) const override
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
@@ -92,7 +92,7 @@ public:
   }
 
   FloatType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const ITK_OVERRIDE
+    const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -103,12 +103,12 @@ public:
 
 protected:
   GroundSpacingImageFunction();
-  ~GroundSpacingImageFunction() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~GroundSpacingImageFunction() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GroundSpacingImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  GroundSpacingImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ValueType              m_R;
   ValueType              m_Deg2radCoef;
@@ -117,7 +117,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbGroundSpacingImageFunction.txx"
+# include "otbGroundSpacingImageFunction.hxx"
 #endif
 
 #endif

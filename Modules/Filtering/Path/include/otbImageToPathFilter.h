@@ -61,8 +61,8 @@ public:
 
 protected:
   ImageToPathFilter();
-  ~ImageToPathFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageToPathFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ImageToPathFilter(const Self &);
@@ -71,7 +71,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToPathFilter.txx"
+#include "otbImageToPathFilter.hxx"
 #endif
 
 #endif

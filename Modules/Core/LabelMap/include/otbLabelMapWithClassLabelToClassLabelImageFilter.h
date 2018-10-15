@@ -75,22 +75,22 @@ public:
 
 protected:
   LabelMapWithClassLabelToClassLabelImageFilter();
-  ~LabelMapWithClassLabelToClassLabelImageFilter() ITK_OVERRIDE {};
+  ~LabelMapWithClassLabelToClassLabelImageFilter() override {};
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
 
 private:
-  LabelMapWithClassLabelToClassLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapWithClassLabelToClassLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapWithClassLabelToClassLabelImageFilter.txx"
+#include "otbLabelMapWithClassLabelToClassLabelImageFilter.hxx"
 #endif
 
 #endif

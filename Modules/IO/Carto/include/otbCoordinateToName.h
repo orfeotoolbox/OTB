@@ -25,6 +25,7 @@
 #include "itkMultiThreader.h"
 #include "otbCurlHelperInterface.h"
 #include "OTBCartoExport.h"
+#include <string>
 
 namespace otb
 {
@@ -68,7 +69,7 @@ public:
    */
   bool SetLonLat(PointType point)
   {
-    if ((vcl_abs(point[0] - m_Lon) > m_UpdateDistance) || (vcl_abs(point[1] - m_Lat) > m_UpdateDistance))
+    if ((std::abs(point[0] - m_Lon) > m_UpdateDistance) || (std::abs(point[1] - m_Lat) > m_UpdateDistance))
       {
 //      std::cout << "Update lon/lat " << m_Lon << ", " << m_Lat << " -> " << point << std::endl;
       m_Lon = point[0];
@@ -118,8 +119,8 @@ public:
 
 protected:
   CoordinateToName();
-  ~CoordinateToName() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~CoordinateToName() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void ParseXMLGeonames(std::string& placeName, std::string& countryName) const;
 
   virtual void DoEvaluate();
@@ -127,8 +128,8 @@ protected:
   static ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
 
 private:
-  CoordinateToName(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CoordinateToName(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double m_Lon;
   double m_Lat;

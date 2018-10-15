@@ -90,11 +90,11 @@ protected:
   /** Constructor */
   ParallelLinePathListFilter();
   /** Destructor */
-  ~ParallelLinePathListFilter() ITK_OVERRIDE {}
+  ~ParallelLinePathListFilter() override {}
   /** GenerateData method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
   * Verify the angular condition to find parallel lines.
@@ -145,8 +145,8 @@ protected:
   PathPointerType WriteParallelPath(PathPointerType p1);
 
 private:
-  ParallelLinePathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ParallelLinePathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   RealType m_AngularThreshold;
   RealType m_DistanceThreshold;
@@ -155,7 +155,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbParallelLinePathListFilter.txx"
+#include "otbParallelLinePathListFilter.hxx"
 #endif
 
 #endif

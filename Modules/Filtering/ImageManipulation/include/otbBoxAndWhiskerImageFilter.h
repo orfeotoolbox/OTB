@@ -94,12 +94,12 @@ public:
 
 protected:
   BoxAndWhiskerImageFilter ();
-  ~BoxAndWhiskerImageFilter () ITK_OVERRIDE {}
+  ~BoxAndWhiskerImageFilter () override {}
 
   /** Main computation method implemented as a multithreaded filter */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void AllocateOutputs() ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void GenerateOutputInformation() override;
+  void AllocateOutputs() override;
 
   /** Perform the outlier detection */
   PixelType PerformBoxAndWhiskerDetection(const PixelType& pixel);
@@ -117,7 +117,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBoxAndWhiskerImageFilter.txx"
+#include "otbBoxAndWhiskerImageFilter.hxx"
 #endif
 
 #endif

@@ -125,11 +125,11 @@ public:
    * vector should be same as the number of component (or classes).
    * Choose between SetInitialProportions, SetClassLabels or
    * SetNumberOfComponents */
-  void SetInitialProportions(ProportionVectorType& propotion);
-  ProportionVectorType* GetInitialProportions();
+  void SetInitialProportions(ProportionVectorType& proportions);
+  itkGetConstReferenceMacro(InitialProportions,ProportionVectorType);	
 
   /** Gets the result proportion values */
-  ProportionVectorType* GetProportions();
+  itkGetConstReferenceMacro(Proportions,ProportionVectorType);	
 
   /** Set/Gets the initial segmentation. the size of the vector should be
    * the same as the number of samples (length of MeasurementVector) */
@@ -156,7 +156,7 @@ public:
   int AddComponent(int id, ComponentType* component);
 
   /** Runs the optimization process. */
-  void Update() ITK_OVERRIDE;
+  void Update() override;
 
   /** Termination status after running optimization */
   typedef enum { CONVERGED = 0, NOT_CONVERGED = 1 } TerminationCodeType;
@@ -176,12 +176,12 @@ public:
   /* Return the classification result (as an image) */
   TOutputImage * GetOutputImage();
   
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 protected:
   SEMClassifier();
-  ~SEMClassifier() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~SEMClassifier() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Initialize the first segmentation, either randomly or by using
    *  a ClassLabelVectorType given in SetClassLabels. */
@@ -226,7 +226,7 @@ private:
 } // end of namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSEMClassifier.txx"
+#include "otbSEMClassifier.hxx"
 #endif
 
 #endif

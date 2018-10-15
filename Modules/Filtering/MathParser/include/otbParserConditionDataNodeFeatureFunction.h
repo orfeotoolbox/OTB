@@ -24,6 +24,7 @@
 #include "otbDataNodeImageFunction.h"
 #include "otbPolyLineImageConstIterator.h"
 #include "otbMaskMuParserFunctor.h"
+#include <string>
 
 namespace otb
 {
@@ -87,7 +88,7 @@ public:
 
   typedef std::vector<PrecisionType>                  OutputType;
 
-  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
+  OutputType Evaluate( const DataNodeType& node ) const override;
 
   std::string GetExpression() const
   {
@@ -106,12 +107,12 @@ public:
 
 protected:
   ParserConditionDataNodeFeatureFunction();
-  ~ParserConditionDataNodeFeatureFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ParserConditionDataNodeFeatureFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ParserConditionDataNodeFeatureFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ParserConditionDataNodeFeatureFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** ParserCondition Functor */
   ParserConditionFunctorPointer  m_ParserConditionFunctor;
@@ -119,7 +120,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbParserConditionDataNodeFeatureFunction.txx"
+#include "otbParserConditionDataNodeFeatureFunction.hxx"
 #endif
 
 #endif

@@ -35,13 +35,6 @@ typedef otb::Functor::NCCBlockMatching<ImageType,FloatImageType> NCCBlockMatchin
 
 typedef otb::PixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType, NCCBlockMatchingFunctorType> PixelWiseNCCBlockMatchingImageFilterType;
 
-int otbPixelWiseBlockMatchingImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiation
-  PixelWiseBlockMatchingImageFilterType::Pointer bmFilter = PixelWiseBlockMatchingImageFilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
 {

@@ -35,48 +35,6 @@
 #include "otbLocalHistogramImageFunction.h"
 
 
-int otbImageFunctionAdaptorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef double InputPixelType;
-  typedef double PrecisionType;
-  const unsigned int Dimension = 2;
-
-  typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
-
-  typedef otb::FourierMellinDescriptorsImageFunction<InputImageType>    FMDFunctionType;
-  typedef otb::RealMomentsImageFunction<InputImageType>                 RMFunctionType;
-  typedef otb::ComplexMomentsImageFunction<InputImageType>              CMFunctionType;
-  typedef otb::FlusserMomentsImageFunction<InputImageType>              FMFunctionType;
-  typedef otb::HuMomentsImageFunction<InputImageType>                   HMFunctionType;
-  typedef otb::RadiometricMomentsImageFunction<InputImageType>          RaMFunctionType;
-  typedef otb::LocalHistogramImageFunction<InputImageType>              LHFunctionType;
-
-  typedef otb::ImageFunctionAdaptor<FMDFunctionType, PrecisionType>                    FMDImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RMFunctionType, PrecisionType>                     RMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<CMFunctionType, PrecisionType>                     CMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<FMFunctionType, PrecisionType>                     FMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<HMFunctionType, PrecisionType>                     HMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<RaMFunctionType, PrecisionType>                    RaMImageFunctionAdaptorType;
-  typedef otb::ImageFunctionAdaptor<LHFunctionType, PrecisionType>                     LHImageFunctionAdaptorType;
-
-  // Instantiating objects
-  FMDImageFunctionAdaptorType::Pointer FMDadaptedFunction = FMDImageFunctionAdaptorType::New();
-  std::cout << FMDadaptedFunction << std::endl;
-  RMImageFunctionAdaptorType::Pointer RMadaptedFunction = RMImageFunctionAdaptorType::New();
-  std::cout << RMadaptedFunction << std::endl;
-  CMImageFunctionAdaptorType::Pointer CMadaptedFunction = CMImageFunctionAdaptorType::New();
-  std::cout << CMadaptedFunction << std::endl;
-  FMImageFunctionAdaptorType::Pointer FMadaptedFunction = FMImageFunctionAdaptorType::New();
-  std::cout << FMadaptedFunction << std::endl;
-  HMImageFunctionAdaptorType::Pointer HMadaptedFunction = HMImageFunctionAdaptorType::New();
-  std::cout << HMadaptedFunction << std::endl;
-  RaMImageFunctionAdaptorType::Pointer RaMadaptedFunction = RaMImageFunctionAdaptorType::New();
-  std::cout << RaMadaptedFunction << std::endl;
-  LHImageFunctionAdaptorType::Pointer LHadaptedFunction = LHImageFunctionAdaptorType::New();
-  std::cout << LHadaptedFunction << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
 {
@@ -158,7 +116,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
       {
       for (unsigned int j = 0; j <= 5; ++j)
         {
-        error += vcl_pow(vcl_abs(resultAdaptedFMD[rsltIdx] - resultFMD.at(i).at(j)), 2);
+        error += std::pow(std::abs(resultAdaptedFMD[rsltIdx] - resultFMD.at(i).at(j)), 2);
 
         std::cout << "resultAdaptedFMD : " << resultAdaptedFMD[rsltIdx]
             << "\t - resultFMD : " << resultFMD.at(i).at(j) << std::endl;
@@ -194,7 +152,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
       {
       for (unsigned int j = 0; j <= 5; ++j)
         {
-        error += vcl_pow(vcl_abs(resultAdaptedRM[rsltIdx] - resultRM.at(i).at(j)), 2);
+        error += std::pow(std::abs(resultAdaptedRM[rsltIdx] - resultRM.at(i).at(j)), 2);
 
         std::cout << "resultAdaptedRM : " << resultAdaptedRM[rsltIdx] << "\t - resultRM : " << resultRM.at(i).at(j)
             << std::endl;
@@ -229,11 +187,11 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
       {
       for (unsigned int j = 0; j <= 5; ++j)
         {
-        error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).real()), 2);
+        error += std::pow(std::abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).real()), 2);
         std::cout << "resultAdaptedCM : (" << resultAdaptedCM[rsltIdx] << "," << resultAdaptedCM[rsltIdx + 1] << ")"
             << "\t - resultCM : " << resultCM.at(i).at(j) << std::endl;
         rsltIdx++;
-        error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).imag()), 2);
+        error += std::pow(std::abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).imag()), 2);
         rsltIdx++;
         }
       }
@@ -259,7 +217,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     rsltIdx = 0;
     for (unsigned int i = 0; i < 11; ++i)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedFM[rsltIdx] - resultFM[i]), 2);
+      error += std::pow(std::abs(resultAdaptedFM[rsltIdx] - resultFM[i]), 2);
 
       std::cout << "resultAdaptedFM : " << resultAdaptedFM[rsltIdx] << "\t - resultFM : " << resultFM[i] << std::endl;
       rsltIdx++;
@@ -286,7 +244,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     rsltIdx = 0;
     for (unsigned int i = 0; i < 7; ++i)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
+      error += std::pow(std::abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
 
       std::cout << "resultAdaptedHM : " << resultAdaptedHM[rsltIdx] << "\t - resultHM : " << resultHM[i] << std::endl;
       rsltIdx++;
@@ -313,7 +271,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     rsltIdx = 0;
     for (unsigned int i = 0; i < 4; ++i)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedRaM[rsltIdx] - resultRaM[i]), 2);
+      error += std::pow(std::abs(resultAdaptedRaM[rsltIdx] - resultRaM[i]), 2);
 
       std::cout << "resultAdaptedRaM : " << resultAdaptedRaM[rsltIdx] << "\t - resultRaM : " << resultRaM[i]
           << std::endl;
@@ -347,7 +305,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     rsltIdx = 0;
     for (unsigned int i = 0; i < 64; ++i)
       {
-      error += vcl_pow(vcl_abs(resultAdaptedLH[rsltIdx] - resultLH->GetFrequency(i)), 2);
+      error += std::pow(std::abs(resultAdaptedLH[rsltIdx] - resultLH->GetFrequency(i)), 2);
 
       std::cout << "resultAdaptedLH : " << resultAdaptedLH[rsltIdx] << "\t - resultLH : " << resultLH->GetFrequency(i)
           << std::endl;
@@ -362,7 +320,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
     return EXIT_FAILURE;
     }
 
-  error = vcl_sqrt(error);
+  error = std::sqrt(error);
   std::cout << std::endl << "Error : " << error << std::endl
             << std::endl;
 

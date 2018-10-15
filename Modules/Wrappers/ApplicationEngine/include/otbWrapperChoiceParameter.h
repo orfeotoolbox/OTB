@@ -22,6 +22,7 @@
 #define otbWrapperChoiceParameter_h
 
 #include "otbWrapperParameterGroup.h"
+#include <string>
 
 namespace otb
 {
@@ -88,12 +89,12 @@ public:
   /** Return any value */
   virtual unsigned int GetValue();
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return !m_ChoiceList.empty();
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     // Same as constructor init value
     // Note that this may be invalid if HasValue() == false
@@ -105,7 +106,7 @@ protected:
   ChoiceParameter();
 
   /** Destructor */
-  ~ChoiceParameter() ITK_OVERRIDE;
+  ~ChoiceParameter() override;
 
   struct Choice
   {
@@ -122,8 +123,8 @@ protected:
   unsigned int m_CurrentChoice;
 
 private:
-  ChoiceParameter(const ChoiceParameter &); //purposely not implemented
-  void operator =(const ChoiceParameter&); //purposely not implemented
+  ChoiceParameter(const ChoiceParameter &) = delete;
+  void operator =(const ChoiceParameter&) = delete;
 
 }; // End class Parameter
 

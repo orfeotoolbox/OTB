@@ -44,12 +44,6 @@
 namespace otb
 {
 
-RPCSolverAdapter::RPCSolverAdapter()
-{}
-
-RPCSolverAdapter::~RPCSolverAdapter()
-{}
-
 void
 RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
                         double& rmsError,

@@ -25,6 +25,7 @@
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbImage.h"
+#include <string>
 
 namespace otb
 {
@@ -73,10 +74,10 @@ public:
   /** Get the output samples OGR container */
   ogr::DataSource* GetOutputSamples();
 
-  void Synthetize(void) ITK_OVERRIDE{}
+  void Synthetize(void) override{}
 
   /** Reset method called before starting the streaming*/
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
   
   itkSetMacro(SampleFieldPrefix, std::string);
   itkGetMacro(SampleFieldPrefix, std::string);
@@ -91,18 +92,18 @@ protected:
   /** Constructor */
   PersistentImageSampleExtractorFilter();
   /** Destructor */
-  ~PersistentImageSampleExtractorFilter() ITK_OVERRIDE {}
+  ~PersistentImageSampleExtractorFilter() override {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** process only points */
-  void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid) ITK_OVERRIDE;
+  void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid) override;
 
 private:
-  PersistentImageSampleExtractorFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageSampleExtractorFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Initialize fields to store extracted values (Real type) */
   void InitializeFields();
@@ -178,17 +179,17 @@ protected:
   /** Constructor */
   ImageSampleExtractorFilter() {}
   /** Destructor */
-  ~ImageSampleExtractorFilter() ITK_OVERRIDE {}
+  ~ImageSampleExtractorFilter() override {}
 
 private:
-  ImageSampleExtractorFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageSampleExtractorFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageSampleExtractorFilter.txx"
+#include "otbImageSampleExtractorFilter.hxx"
 #endif
 
 #endif

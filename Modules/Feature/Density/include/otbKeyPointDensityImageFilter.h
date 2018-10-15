@@ -99,21 +99,21 @@ protected:
   /**
    * Destructor.
    */
-  ~KeyPointDensityImageFilter() ITK_OVERRIDE;
+  ~KeyPointDensityImageFilter() override;
   /**
    * Standard PrintSelf method.
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Main computation method.
    */
   //virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
 
-  KeyPointDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KeyPointDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DetectorPointerType               m_Detector;
   PointSetToDensityImagePointerType m_PointSetToDensityImageFilter;
@@ -121,7 +121,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKeyPointDensityImageFilter.txx"
+#include "otbKeyPointDensityImageFilter.hxx"
 #endif
 
 #endif

@@ -46,7 +46,7 @@ public:
 
   inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    return static_cast<TOutputPixel>(2 * vcl_sqrt(input[0] * input[0] + input[1] * input[1]));
+    return static_cast<TOutputPixel>(2 * std::sqrt(input[0] * input[0] + input[1] * input[1]));
   }
 };
 
@@ -63,7 +63,7 @@ public:
 
   inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    return static_cast<TOutputPixel>(vcl_atan2(input[0], -input[1]));
+    return static_cast<TOutputPixel>(std::atan2(input[0], -input[1]));
   }
 };
 }  // end namespace Functor
@@ -192,12 +192,12 @@ public:
 
 protected:
   LineSegmentDetector();
-  ~LineSegmentDetector() ITK_OVERRIDE {}
+  ~LineSegmentDetector() override {}
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate Data method*/
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Sort the image and store the coordinates in a histogram
    *  this method is used to determine the seeds where to begin the search segments
@@ -257,11 +257,11 @@ protected:
   virtual void CopyRectangle(RectangleType& rDst, RectangleType& rSrc) const;
 
   /** Printself method*/
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LineSegmentDetector(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  LineSegmentDetector(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   VectorOfIndexVectorType m_RegionList;
   DirectionVectorType     m_DirectionVector;
@@ -286,7 +286,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineSegmentDetector.txx"
+#include "otbLineSegmentDetector.hxx"
 #endif
 
 #endif

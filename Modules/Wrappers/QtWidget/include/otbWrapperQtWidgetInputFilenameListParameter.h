@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetInputFilenameListParameter_h
 #define otbWrapperQtWidgetInputFilenameListParameter_h
 
-#include <QtGui>
+#include <QtWidgets>
 
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #  include "otbWrapperQtWidgetParameterList.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -48,17 +46,14 @@ class OTBQtWidget_EXPORT QtWidgetInputFilenameListParameter :
 //
 // Public methods.
 public:
-  QtWidgetInputFilenameListParameter( InputFilenameListParameter *, QtWidgetModel * );
+  QtWidgetInputFilenameListParameter( InputFilenameListParameter *, QtWidgetModel * , QWidget *);
   ~QtWidgetInputFilenameListParameter() override;
 
 //
 // Private methods.
 private:
-  // purposely not implemented
-  QtWidgetInputFilenameListParameter( const QtWidgetInputFilenameListParameter & );
-
-  //  purposely not implemented
-  void operator = ( const QtWidgetInputFilenameListParameter & );
+  QtWidgetInputFilenameListParameter( const QtWidgetInputFilenameListParameter & ) = delete;
+  void operator = ( const QtWidgetInputFilenameListParameter & ) = delete;
 };
 
 

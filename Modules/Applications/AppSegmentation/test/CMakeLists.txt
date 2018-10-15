@@ -80,7 +80,8 @@ set(mode "Vector")
 
 string(TOLOWER ${filter} lfilter)
 
-# Add a test for ULOVW
+# Add a test for ULOVW./apTvComputePolygonsSpectralFeatures.sqlite
+
 set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulovw")
 
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
@@ -250,6 +251,20 @@ otb_test_application(NAME     apTvLSMS3SmallRegionsMerging
 
 set_property(TEST apTvLSMS3SmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation)
 
+#----------- SmallRegionsMerging TESTS ----------------
+otb_test_application(NAME     apTvSmallRegionsMerging
+                     APP      SmallRegionsMerging
+                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -inseg  ${TEMP}/apTvLSMS2_Segmentation.tif
+                              -out ${TEMP}/apTvSmallMerged.tif uint32
+                              -minsize 10
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvSmallMerged.tif
+                              ${TEMP}/apTvSmallMerged.tif
+                     )
+                     
+set_property(TEST apTvSmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation)
+
 #----------- LSMSVectorization TESTS ----------------
 otb_test_application(NAME     apTvLSMS4Vectorization_SmallMerged
                      APP      LSMSVectorization
@@ -307,4 +322,81 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                      VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
                               ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
+                     )
+                     
+
+#----------- LargeScaleConnectedComponent 
+otb_test_application(NAME     apTvLargeScaleConnectedComponentMinSize
+                     APP      LargeScaleConnectedComponent
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
+                              -out ${TEMP}/apTvLargeScaleConnectedComponentMinSize.shp
+                              -expr "distance<50"
+                              -mask "(b4-b1)/(b4+b1)>0.65"
+                              -filter "perimeter<30"
+                              -fusion 1
+                              -minsize 50
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLargeScaleConnectedComponentMinSize.shp
+                              ${TEMP}/apTvLargeScaleConnectedComponentMinSize.shp                      
+                     )
+                     
+#----------- LargeScaleConnectedComponent 
+otb_test_application(NAME     apTvLargeScaleConnectedComponent
+                     APP      LargeScaleConnectedComponent
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
+                              -out ${TEMP}/apTvLargeScaleConnectedComponent.shp
+                              -expr "distance<50"
+                              -mask "(b4-b1)/(b4+b1)>0.65"
+                              -filter "perimeter<30"
+                              -fusion 1
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLargeScaleConnectedComponent.shp
+                              ${TEMP}/apTvLargeScaleConnectedComponent.shp                      
+                     )
+                     
+                     
+#----------- ImageConnectedComponentSegmentation TESTS ----
+otb_test_application(NAME     apTvImageConnectedComponentSegmentation
+                     APP      ImageConnectedComponentSegmentation
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract.tif
+                              -out ${TEMP}/apTvImageConnectedComponentSegmentation.tif
+                              -expr distance<50
+                              -mask "(b4-b1)/(b4+b1)>0.65"
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvImageConnectedComponentSegmentation.tif
+                              ${TEMP}/apTvImageConnectedComponentSegmentation.tif    
+                     )
+
+#----------- LabelImageVectorization TESTS -----------
+otb_test_application(NAME     apTvLabelImageVectorization
+                     APP      LabelImageVectorization
+                     OPTIONS  -in ${BASELINE}/apTvImageConnectedComponentSegmentation.tif
+                              -out ${TEMP}/apTvLabelImageVectorization.shp
+                              -fusion 1
+                    VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLabelImageVectorization.shp
+                              ${TEMP}/apTvLabelImageVectorization.shp
+                     )
+
+#----------- ComputePolygonsGeometricFeatures TESTS -----------
+otb_test_application(NAME     apTvComputePolygonsGeometricFeatures
+                     APP      ComputePolygonsGeometricFeatures
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
+                              -out ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
+                              -sizefield size
+                              -perimeterfield perimeter
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvComputePolygonsGeometricFeatures.shp
+                              ${TEMP}/apTvComputePolygonsGeometricFeatures.shp
+                     )
+
+#----------- ObjectBasedFiltering TESTS -----------
+otb_test_application(NAME     apTvObjectBasedFiltering
+                     APP      ObjectBasedFiltering
+                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract_easyClassification.shp
+                              -expr class<3
+                              -out ${TEMP}//apTvObjectBasedFiltering.shp
+                              VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvObjectBasedFiltering.shp
+                              ${TEMP}/apTvObjectBasedFiltering.shp
                      )

@@ -31,7 +31,7 @@
 
 #include <string>
 #include <boost/cstdint.hpp>
-
+#include "itkLoggerBase.h"
 #include "OTBCommonExport.h"
 
 namespace otb
@@ -84,11 +84,32 @@ public:
    */
   static RAMValueType GetMaxRAMHint();
 
+  /**
+   * Logger level controls the level of logging that OTB will output.
+   * 
+   * This is used to set-up the otb::Logger class.
+   *
+   * If OTB_LOGGER_LEVEL environment variable is set to one of DEBUG,
+   * INFO, WARNING, CRITICAL or FATAL, the logger level will be
+   * set accordingly.
+   *
+   * Priority is DEBUG < INFO < WARNING < CRITICAL < FATAL.
+   * 
+   * Only messages with a higher priority than the logger level will
+   * be displayed.
+   *
+   * By default (if OTB_LOGGER_LEVEL is not set or can not be
+   * decoded), level is INFO.
+   * 
+   */
+  static itk::LoggerBase::PriorityLevelType GetLoggerLevel();
+ 
+  
 private:
-  ConfigurationManager(); //purposely not implemented
-  ~ConfigurationManager(); //purposely not implemented
-  ConfigurationManager(const ConfigurationManager&); //purposely not implemented
-  void operator =(const ConfigurationManager&); //purposely not implemented
+  ConfigurationManager() = delete;
+  ~ConfigurationManager() = delete;
+  ConfigurationManager(const ConfigurationManager&) = delete;
+  void operator =(const ConfigurationManager&) = delete;
 
 
 };

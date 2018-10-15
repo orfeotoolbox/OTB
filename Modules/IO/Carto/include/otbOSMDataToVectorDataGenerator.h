@@ -25,7 +25,6 @@
 // store the nodes (points) coordinates
 #include <map>
 #include <string>
-#include <fstream>
 
 #include "OTBCartoExport.h"
 #include "otbVectorData.h"
@@ -166,7 +165,7 @@ public:
 
 protected:
   /** Generate Data method : launch the process */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /**
     * Parse the xml file get from OSM to compose the requested vector
@@ -186,11 +185,11 @@ protected:
 
 
   OSMDataToVectorDataGenerator();
-  ~OSMDataToVectorDataGenerator() ITK_OVERRIDE;
+  ~OSMDataToVectorDataGenerator() override;
 
 private:
-  OSMDataToVectorDataGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  OSMDataToVectorDataGenerator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Private method to add the key, type to the map
   void AddKeyTypeToMap(const std::string& key, const std::string& value);

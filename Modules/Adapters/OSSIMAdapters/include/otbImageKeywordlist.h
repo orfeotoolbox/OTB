@@ -21,7 +21,6 @@
 #ifndef otbImageKeywordlist_h
 #define otbImageKeywordlist_h
 
-#include <iostream>
 #include <map>
 
 #include "gdal.h"
@@ -152,7 +151,7 @@ private:
 
 //  char m_Delimiter;
 
-//  void operator=(const Self&); //purposely not implemented
+//  void operator=(const Self&) = delete;
 
 };
 

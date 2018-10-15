@@ -99,6 +99,11 @@ public:
 
   typedef itk::DataObject                        DataObjectType;
 
+  /** Set/Get the AllTouchedMode flag */
+  itkSetMacro(AllTouchedMode,bool);
+  itkGetConstReferenceMacro(AllTouchedMode,bool);
+  itkBooleanMacro(AllTouchedMode);
+
   const InputImageType * GetInput();
   const DataObjectType* GetInput(unsigned int idx);
 
@@ -136,24 +141,24 @@ public:
   }
 
 protected:
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   RasterizeVectorDataFilter();
-  ~RasterizeVectorDataFilter() ITK_OVERRIDE
+  ~RasterizeVectorDataFilter() override
   {
-    if (m_OGRDataSourcePointer != ITK_NULLPTR)
+    if (m_OGRDataSourcePointer != nullptr)
       {
       ogr::version_proxy::Close(m_OGRDataSourcePointer);
       }
   }
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RasterizeVectorDataFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RasterizeVectorDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
 
@@ -163,6 +168,7 @@ private:
   std::vector<double>         m_BurnValues;
   std::vector<double>         m_FullBurnValues;
   std::vector<int>            m_BandsToBurn;
+  bool                        m_AllTouchedMode;
 
 }; // end of class RasterizeVectorDataFilter
 
@@ -170,7 +176,7 @@ private:
 
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbRasterizeVectorDataFilter.txx"
+#include "otbRasterizeVectorDataFilter.hxx"
 #endif
 
 #endif

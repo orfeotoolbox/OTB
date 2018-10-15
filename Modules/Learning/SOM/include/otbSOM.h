@@ -125,13 +125,13 @@ protected:
   /** Constructor */
   SOM();
   /** Destructor */
-  ~SOM() ITK_OVERRIDE;
+  ~SOM() override;
   /** Output information redefinition */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
   /** Output allocation redefinition */
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /**
    * Update the output map with a new sample.
    * \param sample The new sample to learn,
@@ -144,11 +144,11 @@ protected:
    */
   virtual void Step(unsigned int currentIteration);
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOM(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  SOM(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Size of the neurons map */
   SizeType m_MapSize;
   /** Number of iterations */
@@ -178,7 +178,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOM.txx"
+#include "otbSOM.hxx"
 #endif
 
 #endif

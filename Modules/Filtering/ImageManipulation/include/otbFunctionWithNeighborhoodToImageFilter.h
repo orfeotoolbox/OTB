@@ -122,11 +122,11 @@ public:
 
 protected:
   FunctionWithNeighborhoodToImageFilter();
-  ~FunctionWithNeighborhoodToImageFilter() ITK_OVERRIDE{}
+  ~FunctionWithNeighborhoodToImageFilter() override{}
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** SpatialFunctionImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -139,11 +139,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
-  FunctionWithNeighborhoodToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  FunctionWithNeighborhoodToImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   //FunctionPointerType  m_Function;
   FunctionPointerType              m_Function;
@@ -155,7 +155,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFunctionWithNeighborhoodToImageFilter.txx"
+#include "otbFunctionWithNeighborhoodToImageFilter.hxx"
 #endif
 
 #endif

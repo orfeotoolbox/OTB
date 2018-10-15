@@ -24,7 +24,6 @@
 #define otbLabelObjectOpeningMuParserFilter_h
 
 #include "itkProgressReporter.h"
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -111,22 +110,22 @@ public:
   /** return list of Mu Parser functions**/
   Parser::FunctionMapType GetFunList() const;
 
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE {}
+  void EnlargeOutputRequestedRegion(itk::DataObject *) override {}
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 protected:
   LabelObjectOpeningMuParserFilter();
-  ~LabelObjectOpeningMuParserFilter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LabelObjectOpeningMuParserFilter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LabelObjectOpeningMuParserFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelObjectOpeningMuParserFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FunctorType m_Functor;
   std::string m_Expression;
@@ -136,7 +135,7 @@ private:
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelObjectOpeningMuParserFilter.txx"
+#include "otbLabelObjectOpeningMuParserFilter.hxx"
 #endif
 
 #endif

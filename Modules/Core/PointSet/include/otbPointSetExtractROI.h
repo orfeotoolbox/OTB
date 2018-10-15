@@ -78,15 +78,15 @@ public:
 
 protected:
   PointSetExtractROI();
-  ~PointSetExtractROI() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PointSetExtractROI() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Generate Requested Data */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
 private:
-  PointSetExtractROI(const PointSetExtractROI &); //purposely not implemented
-  void operator =(const PointSetExtractROI&); //purposely not implemented
+  PointSetExtractROI(const PointSetExtractROI &) = delete;
+  void operator =(const PointSetExtractROI&) = delete;
 
   /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
@@ -99,7 +99,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetExtractROI.txx"
+#include "otbPointSetExtractROI.hxx"
 #endif
 
 #endif

@@ -26,9 +26,9 @@
 #include "otbObjectList.h"
 #include "otbVectorDataKeywordlist.h"
 
-#include <iostream>
 
 #include "ogrsf_frmts.h"
+#include <string>
 
 namespace otb
 {
@@ -290,15 +290,15 @@ protected:
   /** Constructor */
   DataNode();
   /** Destructor */
-  ~DataNode() ITK_OVERRIDE {}
+  ~DataNode() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   OGRGeometry* ConvertDataNodeToOGRGeometry(const DataNode* dataNode);
 
 private:
-  DataNode(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DataNode(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** typedef of the data associated with the node */
   typedef struct
@@ -325,7 +325,7 @@ private:
 } // end namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDataNode.txx"
+#include "otbDataNode.hxx"
 #endif
 
 #endif

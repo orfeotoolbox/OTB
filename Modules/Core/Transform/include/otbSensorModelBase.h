@@ -21,7 +21,6 @@
 #ifndef otbSensorModelBase_h
 #define otbSensorModelBase_h
 
-#include <iostream>
 
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
@@ -92,10 +91,10 @@ public:
 
 protected:
   SensorModelBase();
-  ~SensorModelBase() ITK_OVERRIDE;
+  ~SensorModelBase() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ImageKeywordlist */
   ImageKeywordlist m_ImageKeywordlist;
@@ -103,15 +102,15 @@ protected:
   SensorModelAdapter::Pointer m_Model;
 
 private:
-  SensorModelBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SensorModelBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSensorModelBase.txx"
+#include "otbSensorModelBase.hxx"
 #endif
 
 #endif

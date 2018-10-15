@@ -81,7 +81,7 @@ public:
      FloatVectorImageType>                                        BasicResamplerType;
   
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Superimpose");
     SetDescription("Using available image metadata, project one image onto another one");
@@ -159,17 +159,17 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if(!HasUserValue("mode") && HasValue("inr") && HasValue("inm") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr"),GetParameterImage("inm")))
       {
       otbAppLogWARNING("Forcing PHR mode with PHR data. You need to add \"-mode default\" to force the default mode with PHR images.");
-      SetParameterString("mode","phr", false);
+      SetParameterString("mode","phr");
       }
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the inputs
     FloatVectorImageType* refImage = GetParameterImage("inr");
@@ -228,7 +228,7 @@ private:
       FloatVectorImageType::SpacingType defSpacing;
       if(IsParameterEnabled("lms"))
         {
-        float defScalarSpacing = vcl_abs(GetParameterFloat("lms"));
+        float defScalarSpacing = std::abs(GetParameterFloat("lms"));
         otbAppLogDEBUG("Generating coarse deformation field (spacing="<<defScalarSpacing<<")");
 
         defSpacing[0] = defScalarSpacing;

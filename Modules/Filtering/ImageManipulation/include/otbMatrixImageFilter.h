@@ -111,13 +111,13 @@ public:
 
 protected:
   MatrixImageFilter();
-  ~MatrixImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~MatrixImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
    * Before threaded generate data method.
    */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** MatrixImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
@@ -128,11 +128,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
-  MatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MatrixImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Matrix declaration */
   MatrixType m_Matrix;
@@ -145,7 +145,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMatrixImageFilter.txx"
+#include "otbMatrixImageFilter.hxx"
 #endif
 
 #endif

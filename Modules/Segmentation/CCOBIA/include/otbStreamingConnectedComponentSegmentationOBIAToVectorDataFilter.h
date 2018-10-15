@@ -34,6 +34,7 @@
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbLabelObjectOpeningMuParserFilter.h"
 #include "otbLabelMapToVectorDataFilter.h"
+#include <string>
 
 namespace otb {
 
@@ -116,6 +117,8 @@ public:
 
   typedef typename RelabelComponentFilterType::ObjectSizeType ObjectSizeType;
 
+  typedef itk::ExtractImageFilter<VectorImageType, VectorImageType> ExtractImageFilterType;
+
 
   /* Set the mathematical expression used for the mask */
   itkSetStringMacro(MaskExpression);
@@ -181,9 +184,9 @@ public:
 protected:
   PersistentConnectedComponentSegmentationOBIAToVectorDataFilter();
 
-  ~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter() ITK_OVERRIDE;
+  ~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 private:
 
   ObjectSizeType m_MinimumObjectSize;
@@ -199,7 +202,7 @@ private:
   bool m_ComputeFeretDiameter;
   bool m_ComputePerimeter;
 
-  VectorDataPointerType ProcessTile() ITK_OVERRIDE;
+  VectorDataPointerType ProcessTile() override;
 };
 
 /** \class StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
@@ -252,7 +255,7 @@ public:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.txx"
+#include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.hxx"
 #endif
 
 #endif

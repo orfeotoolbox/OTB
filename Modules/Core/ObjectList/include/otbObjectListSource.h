@@ -79,7 +79,7 @@ public:
    * SmartPointer to a DataObject. If a subclass of ImageSource has
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   /** Graft the specified DataObject onto this ProcessObject's output.
@@ -173,9 +173,9 @@ protected:
   /** Constructor */
   ObjectListSource();
   /** Destructor */
-  ~ObjectListSource() ITK_OVERRIDE {}
+  ~ObjectListSource() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Ensure that the output lists are cleared before processing */
   virtual void  AllocateOutputs();
@@ -190,18 +190,18 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
 private:
-  ObjectListSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ObjectListSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectListSource.txx"
+#include "otbObjectListSource.hxx"
 #endif
 
 #endif

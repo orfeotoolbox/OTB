@@ -22,74 +22,47 @@ otb_module_test()
 
 set(OTBImageManipulationTests
 otbImageManipulationTestDriver.cxx
-otbBinaryImageDensityFunctionNew.cxx
 otbPrintableImageFilter.cxx
 otbConcatenateScalarValueImageFilterTest.cxx
 otbShiftScaleImageAdaptor.cxx
 otbImageToVectorImageCastFilter.cxx
 otbFunctionWithNeighborhoodToImageFilter.cxx
 otbSqrtSpectralAngleImageFilter.cxx
-otbUnaryFunctorNeighborhoodImageFilterNew.cxx
 otbStreamingShrinkImageFilter.cxx
-otbUnaryFunctorWithIndexImageFilterNew.cxx
-otbUnaryFunctorImageFilterNew.cxx
 otbUnaryImageFunctorWithVectorImageFilter.cxx
-otbImageToVectorImageCastFilterNew.cxx
 otbPrintableImageFilterWithMask.cxx
 otbStreamingResampleImageFilter.cxx
-otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew.cxx
-otbBoxAndWhiskerImageFilterNew.cxx
 otbVectorImageToAmplitudeImageFilter.cxx
 otbUnaryFunctorNeighborhoodWithOffsetImageFilter.cxx
 otbStreamingResampleImageFilterCompareWithITK.cxx
 otbRegionProjectionResampler.cxx
-otbVectorImageTo3DScalarImageFilterNew.cxx
 otbUnaryFunctorWithIndexImageFilter.cxx
 otbMeanFunctorImageTest.cxx
-otbBinaryImageToDensityImageFilterNew.cxx
 otbVectorImageTo3DScalarImageFilter.cxx
 otbTileImageFilter.cxx
 otbMatrixImageFilterTest.cxx
 otbMatrixTransposeMatrixImageFilter.cxx
-otbPerBandVectorImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodImageFilter.cxx
-otbStreamingResampleImageFilterNew.cxx
 otbStreamingInnerProductVectorImageFilter.cxx
 otbPhaseFunctorTest.cxx
-otbShiftScaleVectorImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
-otbClampVectorImageFilter.cxx
-otbPrintableImageFilterNew.cxx
-otbShiftScaleImageAdaptorNew.cxx
-otbStreamingInnerProductVectorImageFilterNew.cxx
 otbBoxAndWhiskerImageFilter.cxx
-otbStreamingShrinkImageFilterNew.cxx
 otbVectorRescaleIntensityImageFilter.cxx
 otbLog10ThresholdedImageFilterTest.cxx
-otbChangeLabelImageFilterNew.cxx
-otbMatrixTransposeMatrixImageFilterNew.cxx
 otbExtractROIResample.cxx
 otbLocalGradientVectorImageFilter.cxx
 otbBinaryImageMinimalBoundingRegionCalculator.cxx
 otbPerBandVectorImageFilterWithSobelFilter.cxx
 otbBinaryImageDensityFunction.cxx
-otbVectorImageToAmplitudeImageFilterNew.cxx
 otbThresholdVectorImageFilter.cxx
 otbPerBandVectorImageFilterWithMeanFilter.cxx
-otbConcatenateVectorImageFilterNew.cxx
 otbAmplitudeFunctorTest.cxx
 otbMultiplyByScalarImageTest.cxx
 otbClampImageFilter.cxx
 otbConcatenateVectorImageFilter.cxx
-otbBinaryImageMinimalBoundingRegionCalculatorNew.cxx
-otbVectorRescaleIntensityImageFilterNew.cxx
-otbSpectralAngleDistanceImageFilterNew.cxx
-otbUnaryImageFunctorWithVectorImageFilterNew.cxx
 otbBinaryImageToDensityImageFilter.cxx
 otbSpectralAngleDistanceImageFilter.cxx
-otbFunctionWithNeighborhoodToImageFilterNew.cxx
 otbEuclideanDistanceMetricWithMissingValue.cxx
-otbEuclideanDistanceMetricWithMissingValueNew.cxx
 otbNRIBandImagesToOneNComplexBandsImage.cxx
 otbOneRIBandImageToOneComplexBandImage.cxx
 otbTwoNRIBandsImageToNComplexBandsImage.cxx
@@ -109,9 +82,6 @@ otb_module_target_label(otbImageManipulationTestDriver)
 
 
 
-otb_add_test(NAME bfTuBinaryImageDensityFunctionNew COMMAND  otbImageManipulationTestDriver
-  otbBinaryImageDensityFunctionNew
-  )
 
 otb_add_test(NAME bfTvPrintableImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
@@ -124,9 +94,6 @@ otb_add_test(NAME bfTvPrintableImageFilter COMMAND otbImageManipulationTestDrive
 
 otb_add_test(NAME bfTvConcatenateScalarValueImageFilterTest COMMAND otbImageManipulationTestDriver
   otbConcatenateScalarValueImageFilterTest )
-
-otb_add_test(NAME bfTuConcatenateScalarValueImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbConcatenateScalarValueImageFilterNew )
 
 
 otb_add_test(NAME coTvImageToVectorImageCastFilter COMMAND otbImageManipulationTestDriver
@@ -157,9 +124,6 @@ otb_add_test(NAME feTvSqrtSpectralAngleImageFilter COMMAND otbImageManipulationT
   185 270 150 619 #reference pixel
   )
 
-otb_add_test(NAME coTuUnaryFunctorNeighborhoodImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbUnaryFunctorNeighborhoodImageFilterNew
-  )
 
 otb_add_test(NAME bfTvStreamingShrinkImageFilterQBPAN COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
@@ -181,13 +145,7 @@ otb_add_test(NAME bfTvStreamingShrinkImageFilterQBMUL COMMAND otbImageManipulati
   20
   )
 
-otb_add_test(NAME coTuUnaryFunctorWithIndexImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbUnaryFunctorWithIndexImageFilterNew
-  )
 
-
-otb_add_test(NAME bfTuUnaryFunctorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbUnaryFunctorImageFilterNew)
 
 
 
@@ -200,9 +158,6 @@ otb_add_test(NAME bfTvUnaryImageFunctorWithVectorImageFilter COMMAND otbImageMan
   ${INPUTDATA}/poupees_sub.png
   ${TEMP}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
   )
-
-otb_add_test(NAME coTuImageToVectorImageCastFilter COMMAND otbImageManipulationTestDriver
-  otbImageToVectorImageCastFilterNew)
 
 otb_add_test(NAME bfTvPrintableImageFilterWithMask COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
@@ -224,12 +179,6 @@ otb_add_test(NAME bfTvStreamingResampleImageFilter COMMAND otbImageManipulationT
   ${TEMP}/bfTvStreamingResamplePoupeesTest.tif
   )
 
-otb_add_test(NAME coTuUnaryFunctorNeighborhoodWithOffsetImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbUnaryFunctorNeighborhoodWithOffsetImageFilterNew
-  )
-
-otb_add_test(NAME bfTuBoxAndWhiskerImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbBoxAndWhiskerImageFilterNew )
 
 otb_add_test(NAME bfTvVectorImageToAmplitudeImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
@@ -291,9 +240,6 @@ otb_add_test(NAME prTvRegionProjectionResamplerCevennes COMMAND otbImageManipula
   -0.00001
   )
 
-otb_add_test(NAME bfTuVectorImageTo3DScalarImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbVectorImageTo3DScalarImageFilterNew)
-
 otb_add_test(NAME coTvUnaryFunctorWithIndexImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
   ${INPUTDATA}/poupees.tif
@@ -313,9 +259,6 @@ otb_add_test(NAME bfTvMeanFunctorImageTest COMMAND otbImageManipulationTestDrive
 
 
 
-otb_add_test(NAME bfTuBinaryImageToImageDensityFilterNew COMMAND  otbImageManipulationTestDriver
-  otbBinaryImageToDensityImageFilterNew
-  )
 
 otb_add_test(NAME bfTvVectorImageTo3DScalarImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
@@ -339,13 +282,7 @@ otb_add_test(NAME bfTvTileImageFilter COMMAND otbImageManipulationTestDriver
   ${INPUTDATA}/ROI_QB_MUL_4.tif
   )
 
-otb_add_test(NAME bfTuTileImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbTileImageFilterNew
-  )
 
-otb_add_test(NAME bfTuMatrixImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbMatrixImageFilterNew
-  )
 
 otb_add_test(NAME bfTvMatrixImageFilterTest_1 COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
@@ -387,9 +324,6 @@ otb_add_test(NAME bfTvMatrixTransposeMatrixImageFilter COMMAND otbImageManipulat
   ${TEMP}/bfTvMatrixTransposeMatrixImageFilterResults.txt
   )
 
-otb_add_test(NAME bfTuPerBandVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbPerBandVectorImageFilterNew)
-
 
 otb_add_test(NAME coTvUnaryFunctorNeighborhoodImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
@@ -400,9 +334,6 @@ otb_add_test(NAME coTvUnaryFunctorNeighborhoodImageFilter COMMAND otbImageManipu
   ${TEMP}/coTvUnaryFunctorNeighborhoodImageFilter.png
   3
   )
-
-otb_add_test(NAME bfTuStreamingResampleImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbStreamingResampleImageFilterNew)
 
 otb_add_test(NAME bfTvStreamingInnerProductVectorImageFilterDisableCenterData COMMAND otbImageManipulationTestDriver
   --compare-ascii 0.000001
@@ -428,9 +359,6 @@ otb_add_test(NAME bfTvPhaseFunctorTest COMMAND otbImageManipulationTestDriver
   otbPhaseFunctorTest
   )
 
-otb_add_test(NAME bfTuShiftScaleVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbShiftScaleVectorImageFilterNew)
-
 otb_add_test(NAME bfTvChangeLabelImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/bfChangeLabelImageFilter.tif
@@ -443,26 +371,6 @@ otb_add_test(NAME bfTvChangeLabelImageFilter COMMAND otbImageManipulationTestDri
   )
 
 
-otb_add_test(NAME bfTvClampVectorImageFilterTest COMMAND otbImageManipulationTestDriver
-  --compare-image 0.0001
-  ${BASELINE}/bfTvClampVectorImageFilterTest_Output.tif
-  ${TEMP}/bfTvClampVectorImageFilterTest_Output.tif
-  otbClampVectorImageFilterTest
-  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
-  ${TEMP}/bfTvClampVectorImageFilterTest_Output.tif
-  )
-
-otb_add_test(NAME bfTuClampVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbClampVectorImageFilterNew
-  )
-
-otb_add_test(NAME bfTuPrintableImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbPrintableImageFilterNew)
-
-otb_add_test(NAME coTuShiftScaleImageAdaptorNew COMMAND otbImageManipulationTestDriver
-  otbShiftScaleImageAdaptorNew
-  )
-
 otb_add_test(NAME coTvShiftScaleImageAdaptor COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_9}
   ${BASELINE}/coTvShiftScaleImageAdaptor.tif    # copie the input image
@@ -472,9 +380,6 @@ otb_add_test(NAME coTvShiftScaleImageAdaptor COMMAND otbImageManipulationTestDri
   ${TEMP}/coTvShiftScaleImageAdaptor.tif
   )
 
-otb_add_test(NAME bfTuStreamingInnerProductVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbStreamingInnerProductVectorImageFilterNew
-  )
 
 
 
@@ -496,9 +401,6 @@ otb_add_test(NAME bfTvBoxAndWhiskerImageFilter COMMAND otbImageManipulationTestD
   ${TEMP}/bfBoxAndWhiskerImageFilter_05_05.tif
   05 05)
 
-otb_add_test(NAME bfTuStreamingShrinkImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbStreamingShrinkImageFilterNew)
-
 otb_add_test(NAME bfTvVectorRescaleIntensityImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvVectorRescaleIntensityOutput.png
@@ -517,15 +419,9 @@ otb_add_test(NAME bfTvotbLog10ThresholdedImageFilterTest COMMAND otbImageManipul
   ${TEMP}/bfTvLog10ThresholdedImageFilterTest.txt
   )
 
-otb_add_test(NAME bfTuChangeLabelImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbChangeLabelImageFilterNew
-  )
 
 
 
-
-otb_add_test(NAME bfTuMatrixTransposeMatrixImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbMatrixTransposeMatrixImageFilterNew)
 
 otb_add_test(NAME bfTvExtractROIResample2 COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
@@ -554,9 +450,6 @@ otb_add_test(NAME bfTvLocalGradientVectorImageFilter COMMAND otbImageManipulatio
   otbLocalGradientVectorImageFilterTest
   -in ${INPUTDATA}/cupriteSubHsi.tif
   -out ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
-
-otb_add_test(NAME bfTuLocalGradientVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbLocalGradientVectorImageFilterNewTest)
 
 otb_add_test(NAME bfTvBoundingRegionCalculator COMMAND otbImageManipulationTestDriver
   --compare-ascii ${NOTOL}
@@ -590,9 +483,6 @@ otb_add_test(NAME bfTvBinaryImageDensityFunction COMMAND otbImageManipulationTes
   ${TEMP}/bfTvBinaryImageDensityFunctionOutputAscii.txt
   )
 
-otb_add_test(NAME bfTuVectorImageToAmplitudeImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbVectorImageToAmplitudeImageFilterNew)
-
 otb_add_test(NAME bfTvThresholdVectorImageFilterTest COMMAND otbImageManipulationTestDriver
   --compare-image 0.0001
   ${BASELINE}/bfTvThresholdVectorImageFilterTest_Output.tif
@@ -602,9 +492,6 @@ otb_add_test(NAME bfTvThresholdVectorImageFilterTest COMMAND otbImageManipulatio
   ${TEMP}/bfTvThresholdVectorImageFilterTest_Output.tif
   )
 
-otb_add_test(NAME bfTuThresholdVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbThresholdVectorImageFilterNew
-  )
 
 otb_add_test(NAME bfTvPerBandVectorImageFilterWithMeanFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
@@ -615,9 +502,6 @@ otb_add_test(NAME bfTvPerBandVectorImageFilterWithMeanFilter COMMAND otbImageMan
   ${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
   )
 
-otb_add_test(NAME coTuConcatenateVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbConcatenateVectorImageFilterNew)
-
 otb_add_test(NAME bfTvAmplitudeFunctorTest COMMAND otbImageManipulationTestDriver
   otbAmplitudeFunctorTest
   )
@@ -625,9 +509,6 @@ otb_add_test(NAME bfTvAmplitudeFunctorTest COMMAND otbImageManipulationTestDrive
 otb_add_test(NAME feTvMultiplyByScalarImage COMMAND otbImageManipulationTestDriver
   otbMultiplyByScalarImageFilterTest)
 
-otb_add_test(NAME bfTuClampImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbClampImageFilterNew
-  )
 
 otb_add_test(NAME bfTvClampImageFilterTest COMMAND otbImageManipulationTestDriver
   --compare-image 0.0001
@@ -636,6 +517,11 @@ otb_add_test(NAME bfTvClampImageFilterTest COMMAND otbImageManipulationTestDrive
   otbClampImageFilterTest
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/bfTvClampImageFilterTest_Output.tif
+  )
+
+otb_add_test(NAME bfTvClampImageFilterConversionTest COMMAND otbImageManipulationTestDriver
+  otbClampImageFilterConversionTest
+  ${INPUTDATA}/veryverySmallFSATSW.tif
   )
 
 otb_add_test(NAME coTvConcatenateVectorImageFilter COMMAND otbImageManipulationTestDriver
@@ -647,18 +533,6 @@ otb_add_test(NAME coTvConcatenateVectorImageFilter COMMAND otbImageManipulationT
   ${INPUTDATA}/poupees.png
   ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
   )
-
-otb_add_test(NAME bfTuBoundingRegionCalculatorNew COMMAND otbImageManipulationTestDriver
-  otbBinaryImageMinimalBoundingRegionCalculatorNew)
-
-otb_add_test(NAME bfTuVectorRescaleIntensityImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbVectorRescaleIntensityImageFilterNew)
-
-otb_add_test(NAME bfTuSpectralAngleDistanceImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbSpectralAngleDistanceImageFilterNew)
-
-otb_add_test(NAME bfTuUnaryImageFunctorWithVectorImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbUnaryImageFunctorWithVectorImageFilterNew)
 
 otb_add_test(NAME bfTvBinaryImageToDensityImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
@@ -689,15 +563,9 @@ otb_add_test(NAME bfTvSpectralAngleDistanceImageFilterOneChannel COMMAND otbImag
   )
 set_property(TEST bfTvSpectralAngleDistanceImageFilterOneChannel PROPERTY WILL_FAIL true)
 
-otb_add_test(NAME bfTvFunctionWithNeighborhoodToImageFilterNew COMMAND otbImageManipulationTestDriver
-  otbFunctionWithNeighborhoodToImageFilterNew
-  )
 
 otb_add_test(NAME bfTvEuclideanDistanceMetricWithMissingValue COMMAND otbImageManipulationTestDriver
   otbEuclideanDistanceMetricWithMissingValue)
-otb_add_test(NAME bfTuEuclideanDistanceMetricWithMissingValueNew COMMAND otbImageManipulationTestDriver
-  otbEuclideanDistanceMetricWithMissingValueNew)
-
 otb_add_test(NAME bfTvTwoNRIBandsImageToNComplexBandsImage COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
@@ -706,19 +574,19 @@ otb_add_test(NAME bfTvTwoNRIBandsImageToNComplexBandsImage COMMAND otbImageManip
   ${INPUTDATA}/RSAT_imagery_HH_HV_VV.tif
   ${TEMP}/bfTvTwoNRIBandsImageToNComplexBandsImage.tif
   )
-  
-  
+
+
 otb_add_test(NAME bfTvNRIBandImagesToOneNComplexBandsImage COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
   ${TEMP}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
-  otbNRIBandImagesToOneNComplexBandsImage 
+  otbNRIBandImagesToOneNComplexBandsImage
   ${INPUTDATA}/RSAT_imagery_HH.tif
   ${INPUTDATA}/RSAT_imagery_HV.tif
   ${INPUTDATA}/RSAT_imagery_VV.tif
   ${TEMP}/bfTvNRIBandImagesToOneNComplexBandsImage.tif
   )
-  
+
 otb_add_test(NAME bfTvOneRIBandImageToOneComplexBandImage COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_3}
   ${INPUTDATA}/RSAT_imageryC_HH.tif
@@ -741,9 +609,6 @@ otb_add_test(NAME bfTvChangeInformationImageFilter COMMAND  otbImageManipulation
 
 otb_add_test(NAME    otbGridResampleImageFilter
              COMMAND otbImageManipulationTestDriver otbGridResampleImageFilter)
-otb_add_test(NAME bfTuMaskedIteratorDecoratorNew COMMAND otbImageManipulationTestDriver
-  otbMaskedIteratorDecoratorNew
-)
 
 otb_add_test(NAME bfTvMaskedIteratorDecoratorNominal COMMAND otbImageManipulationTestDriver
   otbMaskedIteratorDecoratorNominal

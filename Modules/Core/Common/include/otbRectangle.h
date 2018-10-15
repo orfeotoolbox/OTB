@@ -100,10 +100,10 @@ protected:
     };
 
   /** Destructor */
-  ~Rectangle() ITK_OVERRIDE {}
+  ~Rectangle() override {}
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** */
   virtual double ComputeEuclideanDistanceMetricToSegment(VertexType q1, VertexType q2, VertexType p) const;
@@ -111,8 +111,8 @@ protected:
   /** */
 
 private:
-  Rectangle(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  Rectangle(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ValueType m_Orientation;
   ValueType m_Width;
@@ -122,6 +122,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRectangle.txx"
+#include "otbRectangle.hxx"
 #endif
 #endif

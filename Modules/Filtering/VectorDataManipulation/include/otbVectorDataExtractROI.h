@@ -106,8 +106,8 @@ public:
 
 protected:
   VectorDataExtractROI();
-  ~VectorDataExtractROI() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~VectorDataExtractROI() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Method to compare the projection embedded in the cartoRegion And the the InputVectorData*/
   virtual void CompareInputAndRegionProjection();
@@ -122,7 +122,7 @@ protected:
   virtual VertexType  PointToContinuousIndex(ProjPointType point);
 
   /** Prototype of the generate data method*/
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   /** Method to check if the polygon Bounding Box ha ve a non-null intersection with the ROI*/
   virtual bool IsPolygonIntersectionNotNull(PolygonPointerType polygon);
@@ -134,8 +134,8 @@ protected:
   using Superclass::ProcessNode;
 
 private:
-  VectorDataExtractROI(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataExtractROI(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   int CounterClockWise(PointType firstPoint, PointType secondPoint, PointType thirdPoint);
   bool IsSegmentIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD);
@@ -150,7 +150,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataExtractROI.txx"
+#include "otbVectorDataExtractROI.hxx"
 #endif
 
 #endif

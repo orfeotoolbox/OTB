@@ -119,28 +119,28 @@ protected:
   DisparityTranslateFilter();
 
   /** Destructor */
-  ~DisparityTranslateFilter() ITK_OVERRIDE{};
+  ~DisparityTranslateFilter() override{};
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
     * \sa ProcessObject::VerifyInputInformation
     */
- void VerifyInputInformation() ITK_OVERRIDE {}
+ void VerifyInputInformation() override {}
 
 
 private:
-  DisparityTranslateFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DisparityTranslateFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   PixelType              m_NoDataValue;
 };
@@ -148,7 +148,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityTranslateFilter.txx"
+#include "otbDisparityTranslateFilter.hxx"
 #endif
 
 #endif

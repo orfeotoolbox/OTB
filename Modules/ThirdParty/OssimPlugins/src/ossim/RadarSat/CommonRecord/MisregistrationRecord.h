@@ -26,7 +26,6 @@
 #ifndef MisregistrationRecord_h
 #define MisregistrationRecord_h
 
-#include <iostream>
 
 #include <RadarSat/RadarSatRecord.h>
 

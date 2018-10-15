@@ -108,16 +108,16 @@ public:
 
 protected:
   SparseWvltToAngleMapperListFilter();
-  ~SparseWvltToAngleMapperListFilter() ITK_OVERRIDE { }
+  ~SparseWvltToAngleMapperListFilter() override { }
 
   /** Standard itk::ProcessObject subclass method. */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** This method causes the filter to generate its output. */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /* Internal functions */
   virtual bool IsToGenerate ( const ImageConstIteratorVectorType & ) const;
@@ -135,7 +135,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSparseWvltToAngleMapperListFilter.txx"
+#include "otbSparseWvltToAngleMapperListFilter.hxx"
 #endif
 
 #endif

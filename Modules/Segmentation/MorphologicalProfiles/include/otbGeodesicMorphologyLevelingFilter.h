@@ -117,7 +117,7 @@ public:
    * Set the original input image
    */
   using Superclass::SetInput;
-  void SetInput(const TInputImage * input) ITK_OVERRIDE
+  void SetInput(const TInputImage * input) override
   {
     this->SetInput1(input);
   }
@@ -126,16 +126,16 @@ protected:
   /** Constructor */
   GeodesicMorphologyLevelingFilter() {};
   /** Destructor */
-  ~GeodesicMorphologyLevelingFilter() ITK_OVERRIDE {}
+  ~GeodesicMorphologyLevelingFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  GeodesicMorphologyLevelingFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GeodesicMorphologyLevelingFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #endif

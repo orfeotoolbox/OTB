@@ -83,61 +83,61 @@ public:
    * Set the transform parameters through the standard interface.
    * \param parameters The parameters of the transform.
    */
-  void SetParameters(const ParametersType& parameters) ITK_OVERRIDE;
+  void SetParameters(const ParametersType& parameters) override;
   /**
    * Get the transform parameters through the standard interface.
    * \return The parameters of the transform.
    */
-  ParametersType& GetParameters(void) const ITK_OVERRIDE;
+  ParametersType& GetParameters(void) const override;
     /**
    * Set the Fixed Parameters
    * \param param The fixed parameters of the transform.
    */
-  void SetFixedParameters( const ParametersType & param) ITK_OVERRIDE
+  void SetFixedParameters( const ParametersType & param) override
     { this->m_FixedParameters = param; }
   /**
    * Get the Fixed Parameters
    * \return The Fixed parameters of the transform.
    */
-  const ParametersType& GetFixedParameters(void) const ITK_OVERRIDE{return this->m_FixedParameters; }
+  const ParametersType& GetFixedParameters(void) const override{return this->m_FixedParameters; }
   /**
    * Transform a point.
    * \param point The point to transform.
    * \return The transformed point.
    */
    using Superclass::TransformVector;
-   OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
+   OutputPointType TransformPoint(const InputPointType& point) const override;
   /**
    * Transform a vector representing a point.
    * \param vector The point to transform.
    * \return The transformed point.
    */
-  OutputVectorType TransformVector(const InputVectorType& vector) const ITK_OVERRIDE;
+  OutputVectorType TransformVector(const InputVectorType& vector) const override;
   /**
    * Transform a vnl vector representing a point.
    * \param vector The point to transform.
    * \return The transformed point.
    */
-  OutputVnlVectorType TransformVector(const InputVnlVectorType& vector) const ITK_OVERRIDE;
+  OutputVnlVectorType TransformVector(const InputVnlVectorType& vector) const override;
 
 protected:
   /** Constructor */
   InverseLogPolarTransform();
   /** Destructor */
-  ~InverseLogPolarTransform() ITK_OVERRIDE;
+  ~InverseLogPolarTransform() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  InverseLogPolarTransform(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  InverseLogPolarTransform(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputPointType m_Center;
   ScaleType      m_Scale;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbInverseLogPolarTransform.txx"
+#include "otbInverseLogPolarTransform.hxx"
 #endif
 
 #endif

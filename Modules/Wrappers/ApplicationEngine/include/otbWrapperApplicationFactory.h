@@ -23,6 +23,7 @@
 
 #include "otbWrapperApplicationFactoryBase.h"
 #include "itkVersion.h"
+#include <string>
 
 namespace otb
 {
@@ -40,12 +41,12 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  const char* GetITKSourceVersion(void) const ITK_OVERRIDE
+  const char* GetITKSourceVersion(void) const override
     {
     return ITK_SOURCE_VERSION;
     }
 
-  const char* GetDescription(void) const ITK_OVERRIDE
+  const char* GetDescription(void) const override
     {
     return "ApplicationFactory";
     }
@@ -74,7 +75,7 @@ protected:
 
   }
 
-  ~ApplicationFactory() ITK_OVERRIDE
+  ~ApplicationFactory() override
   {
 
   }
@@ -82,7 +83,7 @@ protected:
   /** This method is provided by sub-classes of ObjectFactoryBase.
    * It should create the named itk object or return 0 if that object
    * is not supported by the factory implementation. */
-  LightObject::Pointer CreateObject(const char* itkclassname ) ITK_OVERRIDE
+  LightObject::Pointer CreateObject(const char* itkclassname ) override
   {
     LightObject::Pointer ret;
     if ( m_ClassName == itkclassname)
@@ -95,7 +96,7 @@ protected:
    * itkclass name, which are provide by this object
    */
   std::list<LightObject::Pointer>
-  CreateAllObject(const char* itkclassname) ITK_OVERRIDE
+  CreateAllObject(const char* itkclassname) override
   {
     const std::string applicationClass("otbWrapperApplication");
     std::list<LightObject::Pointer> list;
@@ -107,8 +108,8 @@ protected:
   }
 
 private:
-  ApplicationFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ApplicationFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
   
   std::string m_ClassName;
 };

@@ -78,11 +78,11 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) ITK_OVERRIDE;
+  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
 
 protected:
   RAMDrivenStrippedStreamingManager();
-  ~RAMDrivenStrippedStreamingManager() ITK_OVERRIDE;
+  ~RAMDrivenStrippedStreamingManager() override;
 
   /** The splitter type used to generate the different strips */
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)> SplitterType;
@@ -101,7 +101,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAMDrivenStrippedStreamingManager.txx"
+#include "otbRAMDrivenStrippedStreamingManager.hxx"
 #endif
 
 #endif

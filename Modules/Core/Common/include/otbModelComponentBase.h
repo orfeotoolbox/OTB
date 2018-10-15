@@ -130,8 +130,8 @@ public:
 
 protected:
   ModelComponentBase();
-  ~ModelComponentBase() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ModelComponentBase() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void GenerateData();
 
@@ -147,8 +147,8 @@ protected:
   ParametersType m_Parameters;
 
 private:
-  ModelComponentBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ModelComponentBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** target sample data pointer */
   const TSample* m_Sample;
 
@@ -166,7 +166,7 @@ protected:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbModelComponentBase.txx"
+#include "otbModelComponentBase.hxx"
 #endif
 
 #endif

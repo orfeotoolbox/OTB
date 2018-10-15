@@ -30,8 +30,8 @@ namespace Wrapper
 /*****************************************************************************/
 QtWidgetInputImageListParameter
 ::QtWidgetInputImageListParameter( InputImageListParameter * param,
-				   QtWidgetModel * m ) :
-  QtWidgetParameterList( param, m )
+				   QtWidgetModel * m , QWidget * parent) :
+  QtWidgetParameterList( param, m , parent)
 {
 }
 

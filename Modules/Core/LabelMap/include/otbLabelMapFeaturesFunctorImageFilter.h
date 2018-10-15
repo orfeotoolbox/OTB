@@ -97,25 +97,25 @@ protected:
   LabelMapFeaturesFunctorImageFilter() : m_Functor() {}
 
   /** Destructor */
-  ~LabelMapFeaturesFunctorImageFilter() ITK_OVERRIDE {}
+  ~LabelMapFeaturesFunctorImageFilter() override {}
 
   /** Threaded generate data */
-  void ThreadedProcessLabelObject(LabelObjectType * labelObject) ITK_OVERRIDE
+  void ThreadedProcessLabelObject(LabelObjectType * labelObject) override
   {
     // Call the functor
     m_Functor(labelObject);
   }
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     // Call superclass implementation
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  LabelMapFeaturesFunctorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelMapFeaturesFunctorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The functor */
   FunctorType m_Functor;

@@ -26,7 +26,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 
 namespace otb
@@ -129,7 +129,7 @@ public:
 
   RealType operator()(RealType x) const
   {
-    return vcl_exp(-0.5 * x);
+    return std::exp(-0.5 * x);
   }
 
   RealType GetRadius(RealType bandwidth) const
@@ -159,7 +159,7 @@ public:
   typedef typename TImage::PixelType PixelType;
   typedef typename TImage::InternalPixelType InternalPixelType;
 
-  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator)
+  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator);
 ;
 
   FastImageRegionConstIterator() :
@@ -246,8 +246,8 @@ public:
     while (!inputIt.IsAtEnd())
       {
       const PixelType &p = inputIt.Get();
-      minValue = vcl_min(minValue, p[m_SpectralCoordinate]);
-      maxValue = vcl_max(maxValue, p[m_SpectralCoordinate]);
+      minValue = std::min(minValue, p[m_SpectralCoordinate]);
+      maxValue = std::max(maxValue, p[m_SpectralCoordinate]);
       ++inputIt;
       }
 
@@ -468,8 +468,8 @@ public:
   typedef double RealType;
 
   /** Type macro */
-  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter)
-; itkNewMacro(Self)
+  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter);
+; itkNewMacro(Self);
 ;
 
   /** Template parameters typedefs */
@@ -576,11 +576,11 @@ protected:
    *  Define output pixel size
    *
    **/
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** MeanShiftFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -592,21 +592,21 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
   /** Allocates the outputs (need to be reimplemented since outputs have different type) */
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
   /** Constructor */
   MeanShiftSmoothingImageFilter();
 
   /** Destructor */
-  ~MeanShiftSmoothingImageFilter() ITK_OVERRIDE;
+  ~MeanShiftSmoothingImageFilter() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
                                         const RealVector& jointPixel, const OutputRegionType& outputRegion,
@@ -617,8 +617,8 @@ protected:
 #endif
 
 private:
-  MeanShiftSmoothingImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MeanShiftSmoothingImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Range bandwidth */
   RealType m_RangeBandwidth;
@@ -682,7 +682,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftSmoothingImageFilter.txx"
+#include "otbMeanShiftSmoothingImageFilter.hxx"
 #endif
 
 #endif

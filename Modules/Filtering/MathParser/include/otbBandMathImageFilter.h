@@ -28,6 +28,7 @@
 #include "itkArray.h"
 
 #include "otbParser.h"
+#include <string>
 
 namespace otb
 {
@@ -128,16 +129,16 @@ public:
 
 protected :
   BandMathImageFilter();
-  ~BandMathImageFilter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~BandMathImageFilter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
-  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) ITK_OVERRIDE;
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
+  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) override;
+  void AfterThreadedGenerateData() override;
 
 private :
-  BandMathImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BandMathImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::string                           m_Expression;
   std::vector<ParserType::Pointer>      m_VParser;
@@ -157,7 +158,7 @@ private :
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandMathImageFilter.txx"
+#include "otbBandMathImageFilter.hxx"
 #endif
 
 #endif

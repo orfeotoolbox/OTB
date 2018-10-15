@@ -21,11 +21,10 @@
 #ifndef otbWrapperQtWidgetComplexOutputImageParameter_h
 #define otbWrapperQtWidgetComplexOutputImageParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+#include <string>
 
 
 namespace otb
@@ -42,11 +41,11 @@ class OTBQtWidget_EXPORT QtWidgetComplexOutputImageParameter : public QtWidgetPa
 {
   Q_OBJECT
 public:
-  QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*);
-  ~QtWidgetComplexOutputImageParameter() ITK_OVERRIDE;
+  QtWidgetComplexOutputImageParameter(ComplexOutputImageParameter*, QtWidgetModel*, QWidget*);
+  ~QtWidgetComplexOutputImageParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -59,12 +58,12 @@ protected slots:
   void SetPixelType(int pixelType);
 
 private:
-  QtWidgetComplexOutputImageParameter(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetComplexOutputImageParameter&); //purposely not implemented
+  QtWidgetComplexOutputImageParameter(const QtWidgetComplexOutputImageParameter&) = delete;
+  void operator=(const QtWidgetComplexOutputImageParameter&) = delete;
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   std::string m_FileName;
   ComplexOutputImageParameter::Pointer m_OutputImageParam;
@@ -76,22 +75,6 @@ private:
   int           m_ComplexPixelType;
 
 };
-
-inline
-const QLineEdit*
-QtWidgetComplexOutputImageParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetComplexOutputImageParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

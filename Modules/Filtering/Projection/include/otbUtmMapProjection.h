@@ -63,17 +63,17 @@ public:
 
 protected:
   UtmMapProjection();
-  ~UtmMapProjection() ITK_OVERRIDE {};
+  ~UtmMapProjection() override {};
 
 private:
-  UtmMapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);   //purposely not implemented
+  UtmMapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUtmMapProjection.txx"
+#include "otbUtmMapProjection.hxx"
 #endif
 
 #endif

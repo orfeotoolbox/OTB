@@ -81,17 +81,17 @@ public:
   const ImageType* GetInput() const;
 
 protected:
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   // Method to compute the extent of the image
   void EstimateImageExtent();
 
   ImageToOSMVectorDataGenerator();
-  ~ImageToOSMVectorDataGenerator() ITK_OVERRIDE {}
+  ~ImageToOSMVectorDataGenerator() override {}
 
 private:
-  ImageToOSMVectorDataGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToOSMVectorDataGenerator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ImageExtentType                            m_ImageExtent;
 
@@ -100,7 +100,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToOSMVectorDataGenerator.txx"
+#include "otbImageToOSMVectorDataGenerator.hxx"
 #endif
 
 #endif

@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -40,26 +38,20 @@
 
 //
 // System includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include <string>
-#endif //tag=QT4-boost-compatibility
 
 //
 // ITK includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkFixedArray.h"
 #include "itkExceptionObject.h"
 #include "itkVariableLengthVector.h"
-#endif //tag=QT4-boost-compatibility
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdTypes.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -260,7 +252,7 @@ ToLocalString( const QString & );
 /**
  * \brief Convert and copy a QString to a STL std::string.
  *
- * The Unicode data is converted to 8-bit using the QString::toAscii()
+ * The Unicode data is converted to 8-bit using the QString::toLatin1()
  * method.
  *
  * \param str The Unicode string to convert.
@@ -517,7 +509,7 @@ inline
 std::string
 ToStdString( const QString& str )
 {
-  return std::string( str.toAscii().constData() );
+  return std::string( str.toLatin1().constData() );
 }
 
 /*******************************************************************************/
@@ -525,7 +517,7 @@ inline
 const char*
 ToString( const QString& str )
 {
-  return str.toAscii().constData();
+  return str.toLatin1().constData();
 }
 
 /*******************************************************************************/

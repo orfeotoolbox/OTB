@@ -86,16 +86,16 @@ public:
   // virtual const ParametersType & GetStep1Parameters();
   //virtual const ParametersType & GetStep2Parameters();
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
 protected:
    LabelToProSailParameters();
-   ~LabelToProSailParameters() ITK_OVERRIDE {}
+   ~LabelToProSailParameters() override {}
 
 
 private:
-   LabelToProSailParameters(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
+   LabelToProSailParameters(const Self &) = delete;
+   void operator =(const Self&) = delete;
 
 
 };
@@ -103,7 +103,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelToProSailParameters.txx"
+#include "otbLabelToProSailParameters.hxx"
 #endif
 
 #endif

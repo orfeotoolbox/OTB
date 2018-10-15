@@ -105,7 +105,7 @@ protected:
     {
     m_SubsampleFactor.Fill(1);
     }
-  ~SubsampleImageFilter() ITK_OVERRIDE {}
+  ~SubsampleImageFilter() override {}
 
   /** Internal test function to check if there is any direction to subsample */
   bool IsSubsampleFactorOne() const;
@@ -114,27 +114,27 @@ protected:
    * Region estimation functions has to be reimplemented
    */
   void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) ITK_OVERRIDE;
+    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
   void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) ITK_OVERRIDE;
+    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.
    */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Set output image to 0 before processing */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Allows multithreading */
   void ThreadedGenerateData
-    (const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+    (const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SubsampleImageFilter (const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  SubsampleImageFilter (const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputImageIndexType m_SubsampleFactor;
 }; // end of class
@@ -142,7 +142,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSubsampleImageFilter.txx"
+#include "otbSubsampleImageFilter.hxx"
 #endif
 
 #endif

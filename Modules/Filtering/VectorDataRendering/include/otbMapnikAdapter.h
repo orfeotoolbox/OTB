@@ -61,7 +61,7 @@ typedef Image32 image_32;
 
 namespace otb
 {
-namespace mapnik_otb
+namespace [[deprecated]] mapnik_otb
 {
 // this should be removed once mapnik support for version < 2.0 is dropped.
 // should be around 01/2013.

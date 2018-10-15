@@ -57,3 +57,34 @@ otb_create_application(
   NAME           LargeScaleMeanShift
   SOURCES        otbLargeScaleMeanShift.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ImageConnectedComponentSegmentation
+  SOURCES        otbImageConnectedComponentSegmentation.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+
+otb_create_application(
+  NAME           LabelImageVectorization
+  SOURCES        otbLabelImageVectorization.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+
+otb_create_application(
+  NAME           ComputePolygonsGeometricFeatures
+  SOURCES        otbComputePolygonsGeometricFeatures.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+
+otb_create_application(
+  NAME           ObjectBasedFiltering
+  SOURCES        otbObjectBasedFiltering.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+
+otb_create_application(
+  NAME           LargeScaleConnectedComponent
+  SOURCES        otbLargeScaleConnectedComponent.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+
+otb_create_application(
+  NAME           SmallRegionsMerging
+  SOURCES        otbSmallRegionsMerging.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+

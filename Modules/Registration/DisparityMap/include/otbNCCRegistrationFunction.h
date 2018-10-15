@@ -120,38 +120,38 @@ public:
   }
 
   /** This class uses a constant timestep of 1. */
-  TimeStepType ComputeGlobalTimeStep(void * itkNotUsed(GlobalData)) const ITK_OVERRIDE
+  TimeStepType ComputeGlobalTimeStep(void * itkNotUsed(GlobalData)) const override
   {
     return m_TimeStep;
   }
 
   /** Return a pointer to a global data structure that is passed to
    * this object from the solver at each calculation.  */
-  void *GetGlobalDataPointer() const ITK_OVERRIDE
+  void *GetGlobalDataPointer() const override
   {
     GlobalDataStruct *global = new GlobalDataStruct();
     return global;
   }
 
   /** Release memory for global data structure. */
-  void ReleaseGlobalDataPointer(void *GlobalData) const ITK_OVERRIDE
+  void ReleaseGlobalDataPointer(void *GlobalData) const override
   {
     delete (GlobalDataStruct *) GlobalData;
   }
 
   /** Set the object's state before each iteration. */
-  void InitializeIteration() ITK_OVERRIDE;
+  void InitializeIteration() override;
 
   /** This method is called by a finite difference solver image filter at
    * each pixel that does not lie on a data set boundary */
   PixelType  ComputeUpdate(const NeighborhoodType& neighborhood,
                                    void *globalData,
-                                   const FloatOffsetType& offset = FloatOffsetType(0.0)) ITK_OVERRIDE;
+                                   const FloatOffsetType& offset = FloatOffsetType(0.0)) override;
 
 protected:
   NCCRegistrationFunction();
-  ~NCCRegistrationFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~NCCRegistrationFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** FixedImage image neighborhood iterator type. */
   typedef itk::ConstNeighborhoodIterator<FixedImageType> FixedImageNeighborhoodIteratorType;
@@ -164,8 +164,8 @@ protected:
   };
 
 private:
-  NCCRegistrationFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NCCRegistrationFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Cache fixed image information. */
   SpacingType m_FixedImageSpacing;
@@ -193,7 +193,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNCCRegistrationFunction.txx"
+#include "otbNCCRegistrationFunction.hxx"
 #endif
 
 #endif

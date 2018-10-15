@@ -22,12 +22,13 @@
 #define otbMeanShiftSegmentationFilter_h
 
 #include "itkMacro.h"
-
+#include "otbMacro.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbLabelImageRegionMergingFilter.h"
 #include "otbLabelImageRegionPruningFilter.h"
 #include "itkRelabelComponentImageFilter.h"
 #include "itkConnectedComponentFunctorImageFilter.h"
+#include <string>
 
 
 namespace otb {
@@ -67,8 +68,8 @@ public:
 
 private:
 
-  ConnectedLabelFunctor(const Self &); //purposely not implemented
-  void operator =(const Self &); //purposely not implemented
+  ConnectedLabelFunctor(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
 };
 
@@ -173,11 +174,11 @@ public:
 protected:
   MeanShiftSegmentationFilter();
 
-  ~MeanShiftSegmentationFilter() ITK_OVERRIDE;
+  ~MeanShiftSegmentationFilter() override;
 
 //  virtual void GenerateOutputInformation(void);
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
 
@@ -191,7 +192,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftSegmentationFilter.txx"
+#include "otbMeanShiftSegmentationFilter.hxx"
 #endif
 
 #endif

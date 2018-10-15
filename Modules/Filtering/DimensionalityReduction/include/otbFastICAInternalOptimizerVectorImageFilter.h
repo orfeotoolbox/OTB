@@ -96,12 +96,12 @@ public:
 
 protected:
   FastICAInternalOptimizerVectorImageFilter();
-  ~FastICAInternalOptimizerVectorImageFilter() ITK_OVERRIDE { }
+  ~FastICAInternalOptimizerVectorImageFilter() override { }
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void BeforeThreadedGenerateData () ITK_OVERRIDE;
-  void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType ) ITK_OVERRIDE;
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
+  void BeforeThreadedGenerateData () override;
+  void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType ) override;
+  void AfterThreadedGenerateData() override;
 
   unsigned int m_CurrentBandForLoop;
 
@@ -123,7 +123,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFastICAInternalOptimizerVectorImageFilter.txx"
+#include "otbFastICAInternalOptimizerVectorImageFilter.hxx"
 #endif
 
 

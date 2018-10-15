@@ -23,6 +23,7 @@
 
 #include "otbVectorDataSource.h"
 #include "otbGenericRSTransform.h"
+#include <string>
 
 namespace otb
 {
@@ -96,19 +97,19 @@ public:
 
 protected:
   ImageToEnvelopeVectorDataFilter();
-  ~ImageToEnvelopeVectorDataFilter() ITK_OVERRIDE {}
+  ~ImageToEnvelopeVectorDataFilter() override {}
 
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   void InstantiateTransform();
 
 private:
-  ImageToEnvelopeVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToEnvelopeVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InternalTransformPointerType m_Transform;
   std::string                  m_OutputProjectionRef;
@@ -118,7 +119,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToEnvelopeVectorDataFilter.txx"
+#include "otbImageToEnvelopeVectorDataFilter.hxx"
 #endif
 
 #endif

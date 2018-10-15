@@ -142,7 +142,7 @@ public:
    * region than the output region.
    */
   void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw(itk::InvalidRequestedRegionError) override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -154,18 +154,18 @@ protected:
   /** Constructor */
   OverlapSaveConvolutionImageFilter();
   /** destructor */
-  ~OverlapSaveConvolutionImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~OverlapSaveConvolutionImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /* TODO For the moment this class provide only a GenerateData(),
    * due to limited thread-safety of FFTW plan creation.
    */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
-  OverlapSaveConvolutionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OverlapSaveConvolutionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   InputSizeType m_Radius;
@@ -179,7 +179,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOverlapSaveConvolutionImageFilter.txx"
+#include "otbOverlapSaveConvolutionImageFilter.hxx"
 #endif
 
 #endif

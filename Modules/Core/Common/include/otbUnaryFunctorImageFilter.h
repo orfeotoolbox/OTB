@@ -58,7 +58,7 @@ public:
 
 protected:
   UnaryFunctorImageFilter() {};
-  ~UnaryFunctorImageFilter() ITK_OVERRIDE {}
+  ~UnaryFunctorImageFilter() override {}
 
   /** UnaryFunctorImageFilter can produce an image which has a different number of bands
    * than its input image.  As such, UnaryFunctorImageFilter
@@ -68,7 +68,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
@@ -77,8 +77,8 @@ protected:
   }
 
 private:
-  UnaryFunctorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

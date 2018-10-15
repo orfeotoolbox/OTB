@@ -42,10 +42,12 @@ namespace otb
  *
  * \sa VectorDataToMapFilter
  *
+ * \deprecated
+ *
  * \ingroup OTBVectorDataRendering
  */
 
-class ITK_EXPORT VectorDataStyle : public itk::LightObject
+class [[deprecated]] VectorDataStyle : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
@@ -84,8 +86,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  VectorDataStyle(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  VectorDataStyle(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   //this parameter is used only in the case of sensor geometry
   //to adjust the scale

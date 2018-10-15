@@ -22,6 +22,7 @@
 #define otbExtendedFilenameToReaderOptions_h
 
 #include "otbExtendedFilenameHelper.h"
+#include <string>
 
 namespace otb
 {
@@ -78,8 +79,11 @@ public:
     std::vector<std::string>         optionList;
   };
 
-  /* Set Methods */
-  void SetExtendedFileName(const char * extFname) ITK_OVERRIDE;
+  /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
+  void SetExtendedFileName(const char* extFname) override;
+
+  void SetExtendedFileName(const std::string& extFname) override;
+
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
   bool ExtGEOMFileNameIsSet () const;
@@ -101,11 +105,11 @@ public:
 
 protected:
   ExtendedFilenameToReaderOptions();
-  ~ExtendedFilenameToReaderOptions() ITK_OVERRIDE {}
+  ~ExtendedFilenameToReaderOptions() override {}
 
 private:
-  ExtendedFilenameToReaderOptions(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ExtendedFilenameToReaderOptions(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OptionType               m_Options;
 

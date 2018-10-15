@@ -72,7 +72,7 @@ public:
     this->Modified();
   }
 
-  inline bool Compute(double deltaEnergy) ITK_OVERRIDE
+  inline bool Compute(double deltaEnergy) override
   {
     if (deltaEnergy < 0)
       {
@@ -84,7 +84,7 @@ public:
       }
     else
       {
-      double proba = vcl_exp(-(deltaEnergy) / this->m_Parameters[0]);
+      double proba = std::exp(-(deltaEnergy) / this->m_Parameters[0]);
       if ((m_Generator->GetIntegerVariate() % 10000) < proba * 10000)
         {
         return true;
@@ -112,7 +112,7 @@ protected:
     m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
-  ~MRFOptimizerMetropolis() ITK_OVERRIDE {}
+  ~MRFOptimizerMetropolis() override {}
   RandomGeneratorType::Pointer m_Generator;
 };
 

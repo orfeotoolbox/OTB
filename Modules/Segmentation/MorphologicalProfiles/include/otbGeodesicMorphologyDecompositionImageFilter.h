@@ -149,17 +149,17 @@ public:
 
 protected:
   /** GenerateData */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** Constructor */
   GeodesicMorphologyDecompositionImageFilter();
   /** Destructor */
-  ~GeodesicMorphologyDecompositionImageFilter() ITK_OVERRIDE {}
+  ~GeodesicMorphologyDecompositionImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GeodesicMorphologyDecompositionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GeodesicMorphologyDecompositionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the structuring element */
   RadiusType m_Radius;
@@ -183,7 +183,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeodesicMorphologyDecompositionImageFilter.txx"
+#include "otbGeodesicMorphologyDecompositionImageFilter.hxx"
 #endif
 
 #endif

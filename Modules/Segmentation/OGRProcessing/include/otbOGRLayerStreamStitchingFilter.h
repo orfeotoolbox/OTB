@@ -106,11 +106,11 @@ public:
   itkGetMacro(StreamSize, SizeType);
 
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 protected:
   OGRLayerStreamStitchingFilter();
-  ~OGRLayerStreamStitchingFilter() ITK_OVERRIDE {}
+  ~OGRLayerStreamStitchingFilter() override {}
 
   struct FusionStruct
   {
@@ -143,8 +143,8 @@ protected:
   double GetLengthOGRGeometryCollection(OGRGeometryCollection * intersection);
 
 private:
-  OGRLayerStreamStitchingFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  OGRLayerStreamStitchingFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   SizeType m_StreamSize;
   unsigned int m_Radius;
@@ -157,7 +157,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRLayerStreamStitchingFilter.txx"
+#include "otbOGRLayerStreamStitchingFilter.hxx"
 #endif
 
 #endif

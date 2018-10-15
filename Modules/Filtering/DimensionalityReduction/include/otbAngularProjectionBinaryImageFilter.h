@@ -89,10 +89,10 @@ public:
 
 protected:
   AngularProjectionBinaryImageFilter();
-  ~AngularProjectionBinaryImageFilter() ITK_OVERRIDE { }
+  ~AngularProjectionBinaryImageFilter() override { }
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID ) ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
+  void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID ) override;
 
 private:
   AngularProjectionBinaryImageFilter(const Self&); // not implemented
@@ -105,7 +105,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAngularProjectionBinaryImageFilter.txx"
+#include "otbAngularProjectionBinaryImageFilter.hxx"
 #endif
 
 

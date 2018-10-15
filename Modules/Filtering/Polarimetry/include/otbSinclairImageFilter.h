@@ -109,16 +109,16 @@ protected:
   /**  Constructor */
   SinclairImageFilter() {}
   /**  Destructor */
-  ~SinclairImageFilter() ITK_OVERRIDE {}
+  ~SinclairImageFilter() override {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 
-  SinclairImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SinclairImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
@@ -126,7 +126,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSinclairImageFilter.txx"
+#include "otbSinclairImageFilter.hxx"
 #endif
 
 #endif

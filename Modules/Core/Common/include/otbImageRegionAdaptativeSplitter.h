@@ -123,16 +123,16 @@ public:
    * necessary.
    */
   unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber) ITK_OVERRIDE;
+                                         unsigned int requestedNumber) override;
 
   /** Calling this method will set the image region and the requested
    * number of splits, and call the EstimateSplitMap() method if
    * necessary. */
   RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region) ITK_OVERRIDE;
+                              const RegionType& region) override;
 
   /** Make the Modified() method update the IsUpToDate flag */
-  void Modified() const ITK_OVERRIDE
+  void Modified() const override
   {
     // Call superclass implementation
     Superclass::Modified();
@@ -149,16 +149,16 @@ protected:
                                     m_IsUpToDate(false)
                                       {}
 
-  ~ImageRegionAdaptativeSplitter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageRegionAdaptativeSplitter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** This methods actually estimate the split map and stores it in a
   vector */
   void EstimateSplitMap();
 
-  ImageRegionAdaptativeSplitter(const ImageRegionAdaptativeSplitter &); //purposely not implemented
-  void operator =(const ImageRegionAdaptativeSplitter&); //purposely not implemented
+  ImageRegionAdaptativeSplitter(const ImageRegionAdaptativeSplitter &) = delete;
+  void operator =(const ImageRegionAdaptativeSplitter&) = delete;
 
   // This reflects the input image tiling
   SizeType   m_TileHint;
@@ -182,7 +182,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionAdaptativeSplitter.txx"
+# include "otbImageRegionAdaptativeSplitter.hxx"
 #endif
 
 #endif

@@ -25,6 +25,7 @@
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
 #include "otbImageFileWriter.h"
+#include <string>
 
 namespace otb
 {
@@ -44,8 +45,6 @@ public:
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-
-  typedef itk::ImageBase<2> ImageBaseType;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -78,7 +77,7 @@ public:
   itkGetMacro(RAMValue, unsigned int);
 
   /** Implement the reset method (replace pixel type by default type) */
-  void Reset() ITK_OVERRIDE
+  void Reset() override
   {
     m_PixelType = m_DefaultPixelType;
   }
@@ -91,17 +90,10 @@ public:
   static bool ConvertStringToPixelType(const std::string &value, ImagePixelType &type);
 
   /** Return true if a filename is set */
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
-  void SetFileName (const char* filename)
-  {
-    m_FileName = filename;
-    SetActive(true);
-  }
-  void SetFileName (const std::string& filename)
-  {
-    this->SetFileName(filename.c_str());
-  }
+  void SetFileName (const char* filename);
+  void SetFileName (const std::string& filename);
 
   itkGetStringMacro(FileName);
 
@@ -117,19 +109,10 @@ protected:
   /** Constructor */
   OutputImageParameter();
   /** Destructor */
-  ~OutputImageParameter() ITK_OVERRIDE;
+  ~OutputImageParameter() override;
 
-  template <class TInputImageType>
-    void SwitchImageWrite();
-
-  template <class TInputVectorImageType>
-    void SwitchVectorImageWrite();
-
-  template <class TInputVectorImageType>
-    void SwitchRGBImageWrite();
-
-  template <class TInputVectorImageType>
-    void SwitchRGBAImageWrite();
+  template <class TInput>
+    int SwitchInput(TInput *img);
 
   //FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
@@ -137,51 +120,27 @@ protected:
   ImagePixelType         m_PixelType;
   ImagePixelType         m_DefaultPixelType;
 
-  typedef otb::ImageFileWriter<UInt8ImageType>  UInt8WriterType;
-  typedef otb::ImageFileWriter<Int16ImageType>  Int16WriterType;
-  typedef otb::ImageFileWriter<UInt16ImageType> UInt16WriterType;
-  typedef otb::ImageFileWriter<Int32ImageType>  Int32WriterType;
-  typedef otb::ImageFileWriter<UInt32ImageType> UInt32WriterType;
-  typedef otb::ImageFileWriter<FloatImageType>  FloatWriterType;
-  typedef otb::ImageFileWriter<DoubleImageType> DoubleWriterType;
-
-  typedef otb::ImageFileWriter<UInt8VectorImageType>  VectorUInt8WriterType;
-  typedef otb::ImageFileWriter<Int16VectorImageType>  VectorInt16WriterType;
-  typedef otb::ImageFileWriter<UInt16VectorImageType> VectorUInt16WriterType;
-  typedef otb::ImageFileWriter<Int32VectorImageType>  VectorInt32WriterType;
-  typedef otb::ImageFileWriter<UInt32VectorImageType> VectorUInt32WriterType;
-  typedef otb::ImageFileWriter<FloatVectorImageType>  VectorFloatWriterType;
-  typedef otb::ImageFileWriter<DoubleVectorImageType> VectorDoubleWriterType;
-
-  typedef otb::ImageFileWriter<UInt8RGBAImageType>  RGBAUInt8WriterType;
-  typedef otb::ImageFileWriter<UInt8RGBImageType>   RGBUInt8WriterType;
-
-  UInt8WriterType::Pointer  m_UInt8Writer;
-  Int16WriterType::Pointer  m_Int16Writer;
-  UInt16WriterType::Pointer m_UInt16Writer;
-  Int32WriterType::Pointer  m_Int32Writer;
-  UInt32WriterType::Pointer m_UInt32Writer;
-  FloatWriterType::Pointer  m_FloatWriter;
-  DoubleWriterType::Pointer m_DoubleWriter;
-
-  VectorUInt8WriterType::Pointer  m_VectorUInt8Writer;
-  VectorInt16WriterType::Pointer  m_VectorInt16Writer;
-  VectorUInt16WriterType::Pointer m_VectorUInt16Writer;
-  VectorInt32WriterType::Pointer  m_VectorInt32Writer;
-  VectorUInt32WriterType::Pointer m_VectorUInt32Writer;
-  VectorFloatWriterType::Pointer  m_VectorFloatWriter;
-  VectorDoubleWriterType::Pointer m_VectorDoubleWriter;
-
-  RGBUInt8WriterType::Pointer   m_RGBUInt8Writer;
-  RGBAUInt8WriterType::Pointer  m_RGBAUInt8Writer;
-
 private:
-  OutputImageParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  OutputImageParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
   unsigned int                  m_RAMValue;
 
+  itk::ProcessObject::Pointer m_Caster;
+
+  itk::ProcessObject::Pointer m_Writer;
+
 }; // End class OutputImage Parameter
+
+// Declare specialisation for UInt8RGBAImageType
+template <>
+int
+OutputImageParameter::SwitchInput(UInt8RGBAImageType *img);
+
+// Declare specialisation for UInt8RGBImageType
+template <>
+int
+OutputImageParameter::SwitchInput(UInt8RGBImageType *img);
 
 } // End namespace Wrapper
 } // End namespace otb

@@ -63,11 +63,11 @@ protected:
   /** Constructor */
   PathListToPathListFilter() {};
   /** Destructor */
-  ~PathListToPathListFilter() ITK_OVERRIDE {}
+  ~PathListToPathListFilter() override {}
 
 private:
-  PathListToPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PathListToPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 

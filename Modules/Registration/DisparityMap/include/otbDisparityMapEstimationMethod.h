@@ -184,19 +184,19 @@ protected:
   /**
    * Destructor.
    */
-  ~DisparityMapEstimationMethod() ITK_OVERRIDE;
+  ~DisparityMapEstimationMethod() override;
   /**
    * Standard PrintSelf method.
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Main computation method.
    */
-  void  GenerateData() ITK_OVERRIDE;
+  void  GenerateData() override;
 
 private:
-  DisparityMapEstimationMethod(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DisparityMapEstimationMethod(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /**
    * The metric used for local registration.
    */
@@ -228,7 +228,7 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityMapEstimationMethod.txx"
+#include "otbDisparityMapEstimationMethod.hxx"
 #endif
 
 #endif

@@ -28,6 +28,7 @@
 #include "gdal.h"
 #include "gdal_alg.h"
 #include "otbOGRDataSourceWrapper.h"
+#include <string>
 
 namespace otb {
 
@@ -136,22 +137,27 @@ public:
   itkGetConstReferenceMacro(BurnAttributeMode,bool);
   itkBooleanMacro(BurnAttributeMode);
 
+  /** Set/Get the AllTouchedMode flag */
+  itkSetMacro(AllTouchedMode,bool);
+  itkGetConstReferenceMacro(AllTouchedMode,bool);
+  itkBooleanMacro(AllTouchedMode);
+
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
 protected:
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   OGRDataSourceToLabelImageFilter();
-  ~OGRDataSourceToLabelImageFilter() ITK_OVERRIDE {}
+  ~OGRDataSourceToLabelImageFilter() override {}
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OGRDataSourceToLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  OGRDataSourceToLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::vector< OGRLayerH >    m_SrcDataSetLayers;
   std::vector<int>            m_BandsToBurn;
@@ -168,13 +174,14 @@ private:
   OutputImageInternalPixelType  m_BackgroundValue;
   OutputImageInternalPixelType  m_ForegroundValue;
   bool                          m_BurnAttributeMode;
+  bool                          m_AllTouchedMode;
 }; // end of class VectorDataToLabelImageFilter
 
 } // end of namespace otb
 
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataSourceToLabelImageFilter.txx"
+#include "otbOGRDataSourceToLabelImageFilter.hxx"
 #endif
 
 #endif

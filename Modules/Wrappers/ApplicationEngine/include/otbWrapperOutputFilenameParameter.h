@@ -51,7 +51,7 @@ public:
   itkTypeMacro(OutputFilenameParameter, Parameter);
 
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return m_StringParam->HasValue();
   }
@@ -69,7 +69,7 @@ public:
     }
 
   // Clear Value
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     m_StringParam->ClearValue();
   }
@@ -85,11 +85,11 @@ protected:
   }
 
   /** Destructor */
-  ~OutputFilenameParameter() ITK_OVERRIDE
+  ~OutputFilenameParameter() override
   {}
 
 private:
-  OutputFilenameParameter(const OutputFilenameParameter &); //purposely not implemented
+  OutputFilenameParameter(const OutputFilenameParameter &) = delete;
   void operator =(const OutputFilenameParameter&); //purposely not
                                                   //implemented
 

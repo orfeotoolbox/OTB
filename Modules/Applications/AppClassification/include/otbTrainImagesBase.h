@@ -28,6 +28,7 @@
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbSamplingRateCalculator.h"
 #include "otbOGRDataToSamplePositionFilter.h"
+#include <string>
 
 namespace otb
 {
@@ -53,7 +54,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro( TrainImagesBase, Superclass )
+  itkTypeMacro( TrainImagesBase, Superclass );
 
   /** filters typedefs*/
   typedef otb::OGRDataToSamplePositionFilter<FloatVectorImageType, UInt8ImageType, otb::PeriodicSampler> PeriodicSamplerType;
@@ -233,7 +234,6 @@ protected:
         sampleTrainOutputs.push_back( outModel + "_samplesTrain_" + strIndex + ".shp" );
         sampleValidOutputs.push_back( outModel + "_samplesValid_" + strIndex + ".shp" );
         }
-
     }
 
     void clear()
@@ -272,7 +272,7 @@ protected:
     bool RemoveFile(std::string &filePath)
     {
       bool res = true;
-      if( itksys::SystemTools::FileExists( filePath.c_str() ) )
+      if( itksys::SystemTools::FileExists( filePath ) )
         {
         size_t posExt = filePath.rfind( '.' );
         if( posExt != std::string::npos && filePath.compare( posExt, std::string::npos, ".shp" ) == 0 )
@@ -284,7 +284,7 @@ protected:
           RemoveFile( dbfPath );
           RemoveFile( prjPath );
           }
-        res = itksys::SystemTools::RemoveFile( filePath.c_str() );
+        res = itksys::SystemTools::RemoveFile( filePath );
         if( !res )
           {
           //otbAppLogINFO( <<"Unable to remove file  "<<filePath );
@@ -300,7 +300,7 @@ protected:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTrainImagesBase.txx"
+#include "otbTrainImagesBase.hxx"
 #endif
 
 #endif //otbTrainImagesBase_h

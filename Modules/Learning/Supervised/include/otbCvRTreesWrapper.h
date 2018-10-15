@@ -42,7 +42,7 @@ class OTBSupervised_EXPORT CvRTreesWrapper
 public:
   typedef std::vector<unsigned int> VotesVectorType;
   CvRTreesWrapper();
-  ~CvRTreesWrapper() ITK_OVERRIDE;
+  ~CvRTreesWrapper() override;
 
   /** Compute the number of votes for each class. */
   void get_votes(const cv::Mat& sample,
@@ -69,22 +69,22 @@ public:
 #ifdef OTB_OPENCV_3
 
 #define OTB_CV_WRAP_PROPERTY(type,name) \
-  virtual type get##name() const; \
-  virtual void set##name(type val);
+  virtual type get##name() const override; \
+  virtual void set##name(type val) override;
 
 #define OTB_CV_WRAP_PROPERTY_REF(type,name) \
-  virtual type get##name() const; \
-  virtual void set##name(const type &val);
+  virtual type get##name() const override; \
+  virtual void set##name(const type &val) override;
 
 #define OTB_CV_WRAP_CSTREF_GET(type, name) \
-  virtual const type& get##name() const;
+  virtual const type& get##name() const override;
 
   // TODO : wrap all method used
-  virtual int getVarCount() const;
+  virtual int getVarCount() const override;
 
-  virtual bool isTrained() const;
+  virtual bool isTrained() const override;
 
-  virtual bool isClassifier() const;
+  virtual bool isClassifier() const override;
 
   OTB_CV_WRAP_PROPERTY(int, MaxCategories)
   OTB_CV_WRAP_PROPERTY(int, MaxDepth)
@@ -104,21 +104,21 @@ public:
   OTB_CV_WRAP_CSTREF_GET(std::vector<cv::ml::DTrees::Split>, Splits)
   OTB_CV_WRAP_CSTREF_GET(std::vector<int>, Subsets)
 
-  virtual cv::Mat getVarImportance() const;
+  virtual cv::Mat getVarImportance() const override;
 
-  virtual cv::String 	getDefaultName () const;
+  virtual cv::String 	getDefaultName () const override;
 
-  virtual void 	read (const cv::FileNode &fn);
+  virtual void 	read (const cv::FileNode &fn) override;
 
-  virtual void write (cv::FileStorage &fs) const;
+  virtual void write (cv::FileStorage &fs) const override;
 
-  virtual void 	save (const cv::String &filename) const;
+  virtual void 	save (const cv::String &filename) const override;
 
-  virtual bool train(cv::InputArray samples, int layout, cv::InputArray responses);
+  virtual bool train(cv::InputArray samples, int layout, cv::InputArray responses) override;
 
-  virtual bool train( const cv::Ptr<cv::ml::TrainData>& trainData, int flags=0 );
+  virtual bool train( const cv::Ptr<cv::ml::TrainData>& trainData, int flags=0 ) override;
 
-  virtual float predict (cv::InputArray samples, cv::OutputArray results=cv::noArray(), int flags=0) const;
+  virtual float predict (cv::InputArray samples, cv::OutputArray results=cv::noArray(), int flags=0) const override;
   
   static cv::Ptr<CvRTreesWrapper> create();
 

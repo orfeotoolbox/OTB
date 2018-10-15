@@ -257,9 +257,9 @@ void GlImageActor::UpdateData()
   // corresponding tiles
 
   // First compute needed tiles
-  unsigned int nbTilesX = vcl_ceil(static_cast<double>(requested.GetIndex()[0] + requested.GetSize()[0])/m_TileSize) -vcl_floor(static_cast<double>(requested.GetIndex()[0])/m_TileSize);
-  unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetIndex()[1] + requested.GetSize()[1])/m_TileSize) -vcl_floor(static_cast<double>(requested.GetIndex()[1])/m_TileSize);
-  //unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
+  unsigned int nbTilesX = std::ceil(static_cast<double>(requested.GetIndex()[0] + requested.GetSize()[0])/m_TileSize) -std::floor(static_cast<double>(requested.GetIndex()[0])/m_TileSize);
+  unsigned int nbTilesY = std::ceil(static_cast<double>(requested.GetIndex()[1] + requested.GetSize()[1])/m_TileSize) -std::floor(static_cast<double>(requested.GetIndex()[1])/m_TileSize);
+  //unsigned int nbTilesY = std::ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
   
@@ -976,8 +976,8 @@ void GlImageActor::UpdateResolution()
   pointC[0] = (pointC[0] - m_Origin[0])/m_Spacing[0];
   pointC[1] = (pointC[1] - m_Origin[1])/m_Spacing[1];
 
-  double distAB = vcl_sqrt((pointA[0]-pointB[0])*(pointA[0]-pointB[0])+(pointA[1]-pointB[1])*(pointA[1]-pointB[1]));
-  double distAC = vcl_sqrt((pointA[0]-pointC[0])*(pointA[0]-pointC[0])+(pointA[1]-pointC[1])*(pointA[1]-pointC[1]));
+  double distAB = std::sqrt((pointA[0]-pointB[0])*(pointA[0]-pointB[0])+(pointA[1]-pointB[1])*(pointA[1]-pointB[1]));
+  double distAC = std::sqrt((pointA[0]-pointC[0])*(pointA[0]-pointC[0])+(pointA[1]-pointC[1])*(pointA[1]-pointC[1]));
   
   double resolution = std::min(100/distAB,100/distAC);
 
@@ -1013,11 +1013,11 @@ void GlImageActor::UpdateResolution()
 	    ||
 	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
 	  &&
-	  vcl_abs(diff) < minDist )
+	  std::abs(diff) < minDist )
 	{
 	isFound = true;
 
-	minDist = vcl_abs(diff);
+	minDist = std::abs(diff);
 	newResolution = std::distance(m_AvailableResolutions.begin(),it);
 
 	// std::cout << "found: " << newResolution << std::endl;

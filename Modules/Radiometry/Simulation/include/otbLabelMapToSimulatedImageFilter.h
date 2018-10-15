@@ -28,6 +28,7 @@
 #include "otbReduceSpectralResponse.h"
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include "otbSatelliteRSR.h"
+#include <string>
 
 
 namespace otb
@@ -120,17 +121,17 @@ public:
 
 protected:
    LabelMapToSimulatedImageFilter();
-   ~LabelMapToSimulatedImageFilter() ITK_OVERRIDE {}
-   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+   ~LabelMapToSimulatedImageFilter() override {}
+   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-   void BeforeThreadedGenerateData() ITK_OVERRIDE;
-   void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
-   void GenerateOutputInformation() ITK_OVERRIDE;
+   void BeforeThreadedGenerateData() override;
+   void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
+   void GenerateOutputInformation() override;
 
 
 private:
-   LabelMapToSimulatedImageFilter(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
+   LabelMapToSimulatedImageFilter(const Self &) = delete;
+   void operator =(const Self&) = delete;
 
    unsigned int m_NumberOfComponentsPerPixel;
    std::string m_SatRSRFilename;
@@ -146,7 +147,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapToSimulatedImageFilter.txx"
+#include "otbLabelMapToSimulatedImageFilter.hxx"
 #endif
 
 #endif

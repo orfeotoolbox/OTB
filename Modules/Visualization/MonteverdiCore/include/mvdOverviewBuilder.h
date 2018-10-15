@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -50,10 +48,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractWorker.h"
 #include "mvdProgressInterface.h"
-#endif //tag=QT4-boost-compatibility
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -110,12 +106,12 @@ public:
   /**
    * \brief Destructor.
    */
-  ~OverviewBuilder() ITK_OVERRIDE;
+  ~OverviewBuilder() override;
 
   //
   // ProgressInterface overloads.
 
-  void SetProgress( double ) ITK_OVERRIDE;
+  void SetProgress( double ) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -166,9 +162,9 @@ private:
   //
   // AbstractWorker oveloads.
 
-  QObject * virtual_Do() ITK_OVERRIDE;
+  QObject * virtual_Do() override;
 
-  QString virtual_GetFirstProgressText() const ITK_OVERRIDE;
+  QString virtual_GetFirstProgressText() const override;
 
 
 //

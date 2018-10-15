@@ -27,6 +27,7 @@
 
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
+#include <string>
 
 namespace otb
 {
@@ -81,7 +82,7 @@ public:
   /** ImageRegion typedef needed by the GetImageRegion() method */
   typedef itk::ImageRegion<2> ImageRegionType;
 
-  typename Superclass::RegionType GetRegionType() const ITK_OVERRIDE
+  typename Superclass::RegionType GetRegionType() const override
   {return Superclass::ITK_STRUCTURED_REGION; }
 
   /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
@@ -106,7 +107,7 @@ public:
 
   /** Destructor. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so the destructor is public. */
-  ~RemoteSensingRegion() ITK_OVERRIDE{}
+  ~RemoteSensingRegion() override{}
 
   /** operator=. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so operator= is public. */
@@ -128,10 +129,10 @@ public:
     typename ImageRegionType::IndexType irIndex;
     typename ImageRegionType::SizeType irSize;
 
-    irIndex[0] = static_cast<unsigned long>(vcl_floor(m_Index[0]));
-    irIndex[1] = static_cast<unsigned long>(vcl_floor(m_Index[1]));
-    irSize[0] = static_cast<unsigned long>(vcl_ceil(m_Size[0]));
-    irSize[1] = static_cast<unsigned long>(vcl_ceil(m_Size[1]));
+    irIndex[0] = static_cast<unsigned long>(std::floor(m_Index[0]));
+    irIndex[1] = static_cast<unsigned long>(std::floor(m_Index[1]));
+    irSize[0] = static_cast<unsigned long>(std::ceil(m_Size[0]));
+    irSize[1] = static_cast<unsigned long>(std::ceil(m_Size[1]));
 
     imageRegion.SetIndex(irIndex);
     imageRegion.SetSize(irSize);
@@ -334,7 +335,7 @@ public:
 
 protected:
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     os << std::setprecision(15);
     os << indent << "RemoteSensingRegion" << std::endl;

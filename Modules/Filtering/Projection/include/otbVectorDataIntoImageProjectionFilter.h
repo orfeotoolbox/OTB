@@ -105,9 +105,9 @@ public:
 protected:
   VectorDataIntoImageProjectionFilter();
 
-  ~VectorDataIntoImageProjectionFilter() ITK_OVERRIDE {}
+  ~VectorDataIntoImageProjectionFilter() override {}
 
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   // Projection filter
   typedef VectorDataProjectionFilter<InputVectorDataType, InputVectorDataType>
@@ -116,8 +116,8 @@ protected:
   typedef typename VectorDataExtractROIType::RegionType         RemoteSensingRegionType;
 
 private:
-  VectorDataIntoImageProjectionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataIntoImageProjectionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ImagePointerType m_InputImage;
 
@@ -134,7 +134,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataIntoImageProjectionFilter.txx"
+#include "otbVectorDataIntoImageProjectionFilter.hxx"
 #endif
 
 #endif

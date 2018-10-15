@@ -222,7 +222,7 @@ public:
   itkGetMacro(LabelSeparator, LabelType);
 
   /** Set the functor parameters before calling the ThreadedGenerateData() */
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
+  void BeforeThreadedGenerateData(void) override
   {
     this->GetFunctor().SetLabelSeparator(m_LabelSeparator);
     this->GetFunctor().SetSigma(m_Sigma);
@@ -236,9 +236,9 @@ protected:
     m_Sigma          = 0.0;
     };
   /** Destructor */
-  ~MultiScaleConvexOrConcaveClassificationFilter() ITK_OVERRIDE {}
+  ~MultiScaleConvexOrConcaveClassificationFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "LabelSeparator: " << m_LabelSeparator << std::endl;
@@ -246,8 +246,8 @@ protected:
   }
 
 private:
-  MultiScaleConvexOrConcaveClassificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiScaleConvexOrConcaveClassificationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Label separator between convex and concave labels */
   LabelType m_LabelSeparator;

@@ -21,45 +21,9 @@
 #ifndef otbListEditItemModel_h
 #define otbListEditItemModel_h
 
-//
-// Configuration include.
-//// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbMacro.h"
-#endif //tag=QT4-boost-compatibility
-
 #include "OTBQtWidgetExport.h"
-
-/*****************************************************************************/
-/* INCLUDE SECTION                                                           */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
 #include <QtCore>
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-
-/*****************************************************************************/
-/* PRE-DECLARATION SECTION                                                   */
-
-//
-// External classes pre-declaration.
-namespace
-{
-
-}
 
 namespace otb
 {
@@ -67,13 +31,8 @@ namespace otb
 namespace Wrapper
 {
 
-//
-// Internal classes pre-declaration.
+// Internal classes forward declarations
 class StringListInterface;
-
-
-/*****************************************************************************/
-/* CLASS DEFINITION SECTION                                                  */
 
 /**
  * \class ListEditItemModel
@@ -86,14 +45,9 @@ class OTBQtWidget_EXPORT ListEditItemModel :
     public QAbstractItemModel
 {
 
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
   Q_OBJECT;
 
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public types.
+// Public types
 public:
 
   enum Columns
@@ -113,8 +67,7 @@ public:
     USER_ROLE_FILTER,
   };
 
-//
-// Public methods.
+// Public methods
 public:
 
   /** \brief Constructor. */
@@ -122,39 +75,38 @@ public:
 		     QObject * p = nullptr );
 
   /** \brief Destructor. */
-  ~ListEditItemModel() ITK_OVERRIDE;
+  ~ListEditItemModel() override;
 
-  //
   // QAbstractItemModel overloads.
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
    */
-  int columnCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  int columnCount( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
    */
   QVariant
     data( const QModelIndex & index,
-	  int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+	  int role = Qt::DisplayRole ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
    */
-  Qt::ItemFlags flags( const QModelIndex & index ) const ITK_OVERRIDE;
+  Qt::ItemFlags flags( const QModelIndex & index ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
    */
-  bool hasChildren( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  bool hasChildren( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
    */
   QVariant headerData( int section,
                                Qt::Orientation orientation,
-                               int role = Qt::DisplayRole ) const ITK_OVERRIDE;
+                               int role = Qt::DisplayRole ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
@@ -162,7 +114,7 @@ public:
   QModelIndex
     index( int row,
            int column,
-           const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+           const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#insertRow
@@ -176,12 +128,12 @@ public:
   bool
     insertRows( int row,
                 int count,
-                const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
+                const QModelIndex & p = QModelIndex() ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
-  QModelIndex parent( const QModelIndex & index ) const ITK_OVERRIDE;
+  QModelIndex parent( const QModelIndex & index ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
@@ -189,12 +141,12 @@ public:
   bool
     removeRows( int row,
                 int count,
-                const QModelIndex & p = QModelIndex() ) ITK_OVERRIDE;
+                const QModelIndex & p = QModelIndex() ) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
    */
-  int rowCount( const QModelIndex & p = QModelIndex() ) const ITK_OVERRIDE;
+  int rowCount( const QModelIndex & p = QModelIndex() ) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
@@ -202,87 +154,24 @@ public:
   bool
     setData( const QModelIndex & index,
              const QVariant & value,
-             int role = Qt::EditRole ) ITK_OVERRIDE;
+             int role = Qt::EditRole ) override;
 
-  /** */
   virtual bool Swap( int, int );
 
-  /** */
   virtual bool IsInput() const;
 
-  /** */
   virtual QString GetFilter() const;
 
-  /** */
   virtual bool IsBrowsable() const;
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
-public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
-
-  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
-
-//
-// Protected methods.
-protected:
-
-//
-// Protected attributes.
-protected:
-
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private methods.
+// Private attributes
 private:
-
-
-//
-// Private attributes.
-private:
-  /** */
   StringListInterface * m_StringList;
 
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
 };
 
 } // end namespace 'Wrapper'.
 
 } // end namespace 'otb'.
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-namespace otb
-{
-} // end namespace 'otb'
 
 #endif // otbListEditItemModel_h

@@ -73,8 +73,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~VariableLengthVectorConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << "Attempt to use inexistant implementation of the converter!"
@@ -82,8 +82,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 // VariableLengthVector
@@ -116,8 +116,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~VariableLengthVectorConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << "Attempt to use inexistant implementation of the converter!"
@@ -125,8 +125,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 
@@ -157,8 +157,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~VariableLengthVectorConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << "Converter: std::vector<std::vector<RealType>>  => VariableLengthVector<RealType>"
@@ -166,8 +166,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 
@@ -198,8 +198,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~VariableLengthVectorConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << "Converter: std::vector<std::vector<std::complex<RealType>>>  => VariableLengthVector<RealType>"
@@ -207,8 +207,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 
@@ -239,8 +239,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~VariableLengthVectorConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << "Converter: itk::FixedArray<RealType, VArrayDimension>  => VariableLengthVector<RealType>"
@@ -248,8 +248,8 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 //Histogram
@@ -279,8 +279,8 @@ public:
 
 protected:
   VariableLengthVectorConverter(){}
-  ~VariableLengthVectorConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~VariableLengthVectorConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << "Converter: itk::Statistics::Histogram<RealType, VMeasurementVectorSize, TFrequencyContainer>  => VariableLengthVector<RealType>"
@@ -288,14 +288,14 @@ protected:
   }
 
 private:
-  VariableLengthVectorConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VariableLengthVectorConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 }// namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVariableLengthVectorConverter.txx"
+#include "otbVariableLengthVectorConverter.hxx"
 #endif
 
 #endif

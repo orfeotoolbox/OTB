@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <ostream>
 
 #include "otbVectorDataIOBase.h"
 

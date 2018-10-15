@@ -89,7 +89,7 @@ public:
 
 protected:
   UnaryImageFunctorWithVectorImageFilter();
-  ~UnaryImageFunctorWithVectorImageFilter() ITK_OVERRIDE {}
+  ~UnaryImageFunctorWithVectorImageFilter() override {}
 
   /** UnaryImageFunctorWithVectorImageFilter can produce an image which is a different
    * resolution than its input image.  As such, UnaryImageFunctorWithVectorImageFilter
@@ -99,7 +99,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** UnaryImageFunctorWithVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -111,9 +111,9 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** Ponderation declaration*/
@@ -124,7 +124,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryImageFunctorWithVectorImageFilter.txx"
+#include "otbUnaryImageFunctorWithVectorImageFilter.hxx"
 #endif
 
 #endif

@@ -21,12 +21,12 @@
 #ifndef otbGenericMapProjection_h
 #define otbGenericMapProjection_h
 
-#include <iostream>
 #include <sstream>
 
 #include "otbTransform.h"
 #include "itkMacro.h"
 #include "otbMapProjectionAdapter.h"
+#include <string>
 
 namespace otb
 {
@@ -98,7 +98,7 @@ public:
 
   virtual void PrintMap() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
+  OutputPointType TransformPoint(const InputPointType& point) const override;
 
   virtual bool InstantiateProjection();
 
@@ -111,22 +111,22 @@ public:
 
 protected:
   GenericMapProjection();
-  ~GenericMapProjection() ITK_OVERRIDE;
+  ~GenericMapProjection() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   MapProjectionAdapter::Pointer m_MapProjection;
 
 private:
-  GenericMapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GenericMapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericMapProjection.txx"
+#include "otbGenericMapProjection.hxx"
 #endif
 
 #endif

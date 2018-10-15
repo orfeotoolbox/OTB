@@ -170,21 +170,21 @@ protected:
   /** Constructor */
   GCPsToRPCSensorModelImageFilter();
   /** Destructor */
-  ~GCPsToRPCSensorModelImageFilter() ITK_OVERRIDE;
+  ~GCPsToRPCSensorModelImageFilter() override;
 
   /** The PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Actual estimation of the sensor model takes place in the
    * GenerateOutputInformation() method */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Drive the model up-to-date flag */
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 private:
-  GCPsToRPCSensorModelImageFilter (const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  GCPsToRPCSensorModelImageFilter (const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Transform all GCPs and compute the error and mean error */
   void ComputeErrors();
@@ -225,7 +225,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGCPsToRPCSensorModelImageFilter.txx"
+#include "otbGCPsToRPCSensorModelImageFilter.hxx"
 #endif
 
 #endif

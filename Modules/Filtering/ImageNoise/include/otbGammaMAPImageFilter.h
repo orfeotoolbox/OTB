@@ -91,22 +91,22 @@ public:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw(itk::InvalidRequestedRegionError) override;
 
 protected:
   GammaMAPImageFilter();
-  ~GammaMAPImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~GammaMAPImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** GammaMAPImageFilter can be multithreaded.
    */
   
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
-  GammaMAPImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GammaMAPImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   SizeType m_Radius;
@@ -116,7 +116,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGammaMAPImageFilter.txx"
+#include "otbGammaMAPImageFilter.hxx"
 #endif
 
 #endif

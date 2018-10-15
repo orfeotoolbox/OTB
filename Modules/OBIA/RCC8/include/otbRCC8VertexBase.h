@@ -82,9 +82,9 @@ protected:
   /** Constructor */
   RCC8VertexBase();
   /** Desctructor */
-  ~RCC8VertexBase() ITK_OVERRIDE {}
+  ~RCC8VertexBase() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** The segmentation level */
@@ -96,7 +96,7 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8VertexBase.txx"
+#include "otbRCC8VertexBase.hxx"
 #endif
 
 #endif

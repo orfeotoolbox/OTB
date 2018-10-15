@@ -21,7 +21,6 @@
 #ifndef otbDEMHandler_h
 #define otbDEMHandler_h
 
-#include <iostream>
 #include <cstdio>
 
 #include "itkIndent.h"
@@ -30,6 +29,7 @@
 #include "itkPoint.h"
 
 #include "OTBOSSIMAdaptersExport.h"
+#include <string>
 
 class ossimElevManager;
 
@@ -169,9 +169,9 @@ public:
 
 protected:
   DEMHandler();
-  ~DEMHandler() ITK_OVERRIDE {}
+  ~DEMHandler() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   // Ossim does not allow retrieving the geoid file path
   // We therefore must keep it on our side

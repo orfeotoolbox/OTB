@@ -22,6 +22,7 @@
 #define otbWrapperOutputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
+#include <string>
 
 namespace otb
 {
@@ -66,7 +67,7 @@ public:
     this->Modified();
     }
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     if(m_FileName.empty())
       return false;
@@ -74,7 +75,7 @@ public:
       return true;
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     m_FileName = "";
   }
@@ -94,7 +95,7 @@ protected:
   OutputProcessXMLParameter();
 
   /** Destructor */
-  ~OutputProcessXMLParameter() ITK_OVERRIDE;
+  ~OutputProcessXMLParameter() override;
 
 private:
 
@@ -109,8 +110,8 @@ private:
   /** Temporary pointer to the application to parse (internal) */
   Application::Pointer m_Appli;
 
-  OutputProcessXMLParameter(const OutputProcessXMLParameter &); //purposely not implemented
-  void operator =(const OutputProcessXMLParameter&); //purposely not implemented
+  OutputProcessXMLParameter(const OutputProcessXMLParameter &) = delete;
+  void operator =(const OutputProcessXMLParameter&) = delete;
 
 
 }; // End class Parameter

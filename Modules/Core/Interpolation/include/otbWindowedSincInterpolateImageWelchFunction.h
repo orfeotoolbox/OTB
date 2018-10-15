@@ -60,7 +60,7 @@ public:
     double x = static_cast<double>(A);
     double px = CONST_PI * x;
     double temp = 1.0 - x * m_Factor * x;
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
   // Equal to \f$ \frac{1}{m^2} \f$
@@ -127,15 +127,15 @@ public:
 
 protected:
   WindowedSincInterpolateImageWelchFunction() {};
-  ~WindowedSincInterpolateImageWelchFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~WindowedSincInterpolateImageWelchFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  WindowedSincInterpolateImageWelchFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageWelchFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

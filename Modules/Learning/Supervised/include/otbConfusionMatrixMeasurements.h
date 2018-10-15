@@ -143,13 +143,13 @@ public:
 
 protected:
   ConfusionMatrixMeasurements();
-  ~ConfusionMatrixMeasurements() ITK_OVERRIDE {}
+  ~ConfusionMatrixMeasurements() override {}
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
 private:
-  ConfusionMatrixMeasurements(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConfusionMatrixMeasurements(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double m_KappaIndex;
   double m_OverallAccuracy;
@@ -184,7 +184,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConfusionMatrixMeasurements.txx"
+#include "otbConfusionMatrixMeasurements.hxx"
 #endif
 
 #endif

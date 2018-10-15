@@ -49,7 +49,7 @@ public:
   ~LogFunctor(){};
   TScalar operator() (const TScalar& v) const
   {
-    return vcl_log(v);
+    return std::log(v);
   }
 };
 } // end namespace Functor
@@ -85,7 +85,7 @@ public:
 
 private:
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("Convert");
     SetDescription("Convert an image to a different format, optionally rescaling the data"
@@ -103,7 +103,7 @@ private:
         " * grayscale :  to display mono image as standard color image \n"
         " * rgb : select 3 bands in the input image (multi-bands) \n"
         " * all : keep all bands.");
-    SetDocLimitations("None");
+    SetDocLimitations("The application does not support complex pixel types as output.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale");
 
@@ -120,7 +120,7 @@ private:
     AddChoice("type.none", "None");
     AddChoice("type.linear", "Linear");
     AddChoice("type.log2", "Log2");
-    SetParameterString("type", "none", false);
+    SetParameterString("type", "none");
 
     AddParameter(ParameterType_Float,"type.linear.gamma","Gamma correction factor");
     SetParameterDescription("type.linear.gamma","Gamma correction factor");
@@ -128,8 +128,10 @@ private:
     MandatoryOff("type.linear.gamma");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
-    SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic "
-      "(the mask must have the same dimensions as the input image)");
+    SetParameterDescription("mask",
+      "Optional mask to indicate which pixels are valid for computing the histogram quantiles. "
+      "Only pixels where the mask is less than 0.5 will contribute to the histogram. "
+      "The mask must have the same dimensions as the input image.");
     MandatoryOff("mask");
     DisableParameter("mask");
 
@@ -192,7 +194,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Read information
     if ( HasValue("in") )
@@ -482,7 +484,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {
@@ -508,7 +510,9 @@ private:
         GenericDoExecute<DoubleVectorImageType>();
         break;
       default:
-        itkExceptionMacro("Unknown pixel type "<<this->GetParameterOutputImagePixelType("out")<<".");
+        itkExceptionMacro("Unknown pixel type " << this->GetParameterOutputImagePixelType("out") <<"." << std::endl
+                          << "The Convert application does not support complex pixel type as output." << std::endl
+                          << "You can use instead the ExtractROI application to perform complex image conversion.");
         break;
       }
   }

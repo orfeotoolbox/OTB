@@ -79,11 +79,11 @@ public:
 
 protected:
   ApplicationRegistry();
-  ~ApplicationRegistry() ITK_OVERRIDE;
+  ~ApplicationRegistry() override;
 
 private:
-  ApplicationRegistry(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ApplicationRegistry(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Load an application from a shared library */
   static Application::Pointer LoadApplicationFromPath(std::string path,std::string name);

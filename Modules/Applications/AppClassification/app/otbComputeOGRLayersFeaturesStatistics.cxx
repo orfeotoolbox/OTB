@@ -46,7 +46,7 @@ public:
 ;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ComputeOGRLayersFeaturesStatistics");
     SetDescription("Compute statistics of the features in a set of OGR Layers");
@@ -75,14 +75,14 @@ private:
   SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("inshp") )
       {
       std::string shapefile = GetParameterString("inshp");
 
        otb::ogr::DataSource::Pointer ogrDS;
-       otb::ogr::Layer layer(ITK_NULLPTR, false);
+       otb::ogr::Layer layer(nullptr, false);
 
        OGRSpatialReference oSRS("");
        std::vector<std::string> options;
@@ -117,7 +117,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
       clock_t tic = clock();
 
@@ -146,7 +146,7 @@ private:
            
            featValue.push_back(mv);
            feature = layer.ogr().GetNextFeature();
-           goesOn = feature.addr() != ITK_NULLPTR;
+           goesOn = feature.addr() != nullptr;
          }
   
       MeasurementType mean; mean.SetSize(nbFeatures);

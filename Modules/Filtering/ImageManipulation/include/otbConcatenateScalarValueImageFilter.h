@@ -141,23 +141,23 @@ public:
 protected:
   ConcatenateScalarValueImageFilter();
 
-  ~ConcatenateScalarValueImageFilter() ITK_OVERRIDE {}
+  ~ConcatenateScalarValueImageFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
-  ConcatenateScalarValueImageFilter(const Self &); //purposely not implemented
+  ConcatenateScalarValueImageFilter(const Self &) = delete;
 
-  void operator =(const Self&); //purposely not implemented
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConcatenateScalarValueImageFilter.txx"
+#include "otbConcatenateScalarValueImageFilter.hxx"
 #endif
 
 #endif

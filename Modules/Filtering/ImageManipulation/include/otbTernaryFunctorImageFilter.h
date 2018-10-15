@@ -55,7 +55,7 @@ public:
 
 protected:
   TernaryFunctorImageFilter() {};
-  ~TernaryFunctorImageFilter() ITK_OVERRIDE {}
+  ~TernaryFunctorImageFilter() override {}
 
   /** TernaryFunctorImageFilter can produce an image which has a different number of bands
    * than its input image.  As such, TernaryFunctorImageFilter
@@ -65,7 +65,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
@@ -74,8 +74,8 @@ protected:
   }
 
 private:
-  TernaryFunctorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TernaryFunctorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

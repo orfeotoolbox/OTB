@@ -23,6 +23,7 @@
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"
+#include <string>
 
 namespace otb
 {
@@ -85,21 +86,21 @@ protected:
   /** Constructor */
   LikelihoodPathListFilter();
   /** Destructor */
-  ~LikelihoodPathListFilter() ITK_OVERRIDE {}
+  ~LikelihoodPathListFilter() override {}
   /** GenerateData method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LikelihoodPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LikelihoodPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string m_Key;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLikelihoodPathListFilter.txx"
+#include "otbLikelihoodPathListFilter.hxx"
 #endif
 
 #endif

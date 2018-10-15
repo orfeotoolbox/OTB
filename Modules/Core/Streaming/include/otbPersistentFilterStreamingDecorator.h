@@ -73,17 +73,17 @@ public:
   itkGetConstObjectMacro(Filter, FilterType);
   itkGetObjectMacro(Streamer, StreamerType);
 
-  void Update(void) ITK_OVERRIDE;
+  void Update(void) override;
 
 protected:
   /** Constructor */
   PersistentFilterStreamingDecorator();
   /** Destructor */
-  ~PersistentFilterStreamingDecorator() ITK_OVERRIDE {}
+  ~PersistentFilterStreamingDecorator() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   /// Object responsible for streaming
   StreamerPointerType m_Streamer;
@@ -92,13 +92,13 @@ protected:
   FilterPointerType m_Filter;
 
 private:
-  PersistentFilterStreamingDecorator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentFilterStreamingDecorator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentFilterStreamingDecorator.txx"
+#include "otbPersistentFilterStreamingDecorator.hxx"
 #endif
 
 #endif

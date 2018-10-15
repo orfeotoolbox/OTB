@@ -42,7 +42,7 @@ public:
   itkTypeMacro(TestApplication, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("TestApplication");
     SetDescription("This application helps developers to test parameters types");
@@ -56,7 +56,8 @@ private:
     AddDocTag("Test");
 
     //std::cout << "TestApplication::DoInit" << std::endl;
-    AddParameter(ParameterType_Empty, "boolean", "Boolean");
+    AddParameter(ParameterType_Empty, "empty", "Boolean (old impl.)");
+    AddParameter(ParameterType_Bool, "boolean", "Boolean");
     AddParameter(ParameterType_Int, "int", "Integer");
     MandatoryOff("int");
     AddParameter(ParameterType_Float, "float", "Float");
@@ -112,10 +113,10 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     if( HasValue("il") && IsParameterEnabled("il") )
       {

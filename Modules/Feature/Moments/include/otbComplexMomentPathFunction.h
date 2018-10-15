@@ -92,7 +92,7 @@ public:
   typedef std::complex<PrecisionType> ComplexPrecisionType;
 
   /** Evalulate the function */
-  OutputType Evaluate(const PathType& path) const ITK_OVERRIDE;
+  OutputType Evaluate(const PathType& path) const override;
   virtual OutputType Evaluate() const;
 
   itkSetMacro(P, unsigned int);
@@ -102,12 +102,12 @@ public:
 
 protected:
   ComplexMomentPathFunction();
-  ~ComplexMomentPathFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ComplexMomentPathFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ComplexMomentPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ComplexMomentPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
   ComplexPrecisionType EvaluateComplexMomentAtIndex(VertexType index) const;
 
   unsigned int m_P;
@@ -117,7 +117,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComplexMomentPathFunction.txx"
+#include "otbComplexMomentPathFunction.hxx"
 #endif
 
 #endif

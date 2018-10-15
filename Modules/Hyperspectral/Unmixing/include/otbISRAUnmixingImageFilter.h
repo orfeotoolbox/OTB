@@ -171,20 +171,20 @@ public:
 protected:
   ISRAUnmixingImageFilter();
 
-  ~ISRAUnmixingImageFilter() ITK_OVERRIDE;
+  ~ISRAUnmixingImageFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ISRAUnmixingImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ISRAUnmixingImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbISRAUnmixingImageFilter.txx"
+#include "otbISRAUnmixingImageFilter.hxx"
 #endif
 
 #endif

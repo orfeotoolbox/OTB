@@ -163,7 +163,7 @@ public:
 
   /** Set the input images of this process object.  */
   using Superclass::SetInput;
-  void SetInput(const InputImageType *input) ITK_OVERRIDE;
+  void SetInput(const InputImageType *input) override;
   void SetVectorInput(const VectorInputImageType *input);
 
   /** Get the input images of this process object.  */
@@ -215,16 +215,16 @@ public:
 
 protected:
   ImageAndVectorImageOperationFilter();
-  ~ImageAndVectorImageOperationFilter() ITK_OVERRIDE;
+  ~ImageAndVectorImageOperationFilter() override;
 
   /** This is a source, so it must set the spacing, size, and largest possible
    * region for the output image that it will produce.
    * \sa ProcessObject::GenerateOutputInformation() */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
-  ImageAndVectorImageOperationFilter(const ImageAndVectorImageOperationFilter &); //purposely not implemented
-  void operator =(const ImageAndVectorImageOperationFilter&); //purposely not implemented
+  ImageAndVectorImageOperationFilter(const ImageAndVectorImageOperationFilter &) = delete;
+  void operator =(const ImageAndVectorImageOperationFilter&) = delete;
 
   bool m_UseAddition;
   bool m_UseMultiplication;
@@ -235,7 +235,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageAndVectorImageOperationFilter.txx"
+#include "otbImageAndVectorImageOperationFilter.hxx"
 #endif
 
 #endif

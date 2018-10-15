@@ -23,18 +23,10 @@
 
 typedef otb::ParserX ParserType;
 
-int otbParserXTestNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiating object
-  ParserType::Pointer parser = ParserType::New();
-  std::cout << parser << std::endl;
-  return EXIT_SUCCESS;
-}
-
 void otbParserXTest_ThrowIfNotEqual(double output, double ref, std::string testname, double epsilon = 1.0E-12)
 {
   std::cout << "Running test " << testname << std::endl;
-  if (vcl_abs(output-ref) > epsilon)
+  if (std::abs(output-ref) > epsilon)
   {
     itkGenericExceptionMacro( << "Got " << output << " while waiting for " << ref );
   }
@@ -62,14 +54,14 @@ void otbParserXTest_BuildInFun(void)
 {
   ParserType::Pointer parser = ParserType::New();
   parser->SetExpr("cos(1.55)");
-  otbParserXTest_ThrowIfNotEqual(parser->Eval(), vcl_cos(1.55), "BuildInFun");
+  otbParserXTest_ThrowIfNotEqual(parser->Eval(), std::cos(1.55), "BuildInFun");
 }
 
 void otbParserXTest_UserDefinedCst(void)
 {
   ParserType::Pointer parser = ParserType::New();
   parser->SetExpr("ln10");
-  otbParserXTest_ThrowIfNotEqual(parser->Eval(), vcl_log(10.0), "UserDefinedCst");
+  otbParserXTest_ThrowIfNotEqual(parser->Eval(), std::log(10.0), "UserDefinedCst");
 }
 
 void otbParserXTest_UserDefinedFun(void)
@@ -108,7 +100,7 @@ void otbParserXTest_Mixed(void)
   ParserType::Pointer parser = ParserType::New();
   parser->SetExpr("(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100, 10)");
   otbParserXTest_ThrowIfNotEqual(parser->Eval(),
-                                (7.0+10.0)/2.0+vcl_cos(otb::CONST_PI/4)*10.0-10.0*vcl_log(10.0)+(10.0-100.0)/(10.0+100.0),
+                                (7.0+10.0)/2.0+std::cos(otb::CONST_PI/4)*10.0-10.0*std::log(10.0)+(10.0-100.0)/(10.0+100.0),
                                 "Mixed");
 }
 

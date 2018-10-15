@@ -154,11 +154,11 @@ public:
 protected:
   ProjectiveProjectionImageFilter();
 
-  ~ProjectiveProjectionImageFilter() ITK_OVERRIDE {}
+  ~ProjectiveProjectionImageFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
@@ -168,16 +168,16 @@ protected:
   }
 
 private:
-  ProjectiveProjectionImageFilter(const Self &); //purposely not implemented
+  ProjectiveProjectionImageFilter(const Self &) = delete;
 
-  void operator =(const Self&); //purposely not implemented
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbProjectiveProjectionImageFilter.txx"
+#include "otbProjectiveProjectionImageFilter.hxx"
 #endif
 
 #endif

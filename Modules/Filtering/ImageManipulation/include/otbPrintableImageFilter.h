@@ -161,7 +161,7 @@ public:
                itk::ImageToImageFilter);
 
   /** Display */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void SetChannel(unsigned int channel);
   const ChannelsType GetChannels(void) const;
@@ -232,14 +232,14 @@ public:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 protected:
 
   PrintableImageFilter();
 
   void BeforeGenerateData();
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
 
@@ -266,7 +266,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPrintableImageFilter.txx"
+#include "otbPrintableImageFilter.hxx"
 #endif
 
 #endif

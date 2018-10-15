@@ -68,6 +68,7 @@ public:
   typedef typename Superclass::OutputVectorDataType        OutputVectorDataType;
   typedef typename Superclass::OutputVectorDataPointerType OutputVectorDataPointerType;
 
+  typedef typename Superclass::ExtractImageFilterType      ExtractImageFilterType;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -77,15 +78,15 @@ public:
 protected:
   PersistentStreamingLineSegmentDetector();
 
-  ~PersistentStreamingLineSegmentDetector() ITK_OVERRIDE;
+  ~PersistentStreamingLineSegmentDetector() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
 private:
-  PersistentStreamingLineSegmentDetector(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentStreamingLineSegmentDetector(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
-  OutputVectorDataPointerType ProcessTile() ITK_OVERRIDE;
+  OutputVectorDataPointerType ProcessTile() override;
 };
 
 template <class TImageType>
@@ -111,7 +112,7 @@ public:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingLineSegmentDetector.txx"
+#include "otbStreamingLineSegmentDetector.hxx"
 #endif
 
 #endif

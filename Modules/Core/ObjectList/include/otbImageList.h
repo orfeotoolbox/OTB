@@ -63,30 +63,32 @@ public:
   /**
    * Update images in the list.
    */
-  void UpdateOutputInformation(void) ITK_OVERRIDE;
+  void UpdateOutputInformation(void) override;
   void PropagateRequestedRegion(void)
-    throw (itk::InvalidRequestedRegionError) ITK_OVERRIDE;
-  void UpdateOutputData(void) ITK_OVERRIDE;
+    throw (itk::InvalidRequestedRegionError) override;
+  void UpdateOutputData(void) override;
 
+  void SetRequestedRegion(const itk::DataObject * source) override;
+  
 protected:
   /** Constructor */
   ImageList() {};
   /** Destructor */
-  ~ImageList() ITK_OVERRIDE {}
+  ~ImageList() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  ImageList(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageList(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageList.txx"
+#include "otbImageList.hxx"
 #endif
 
 #endif

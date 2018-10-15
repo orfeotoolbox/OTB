@@ -71,22 +71,22 @@ public:
 protected:
   CloudDetectionFilter();
 
-  ~CloudDetectionFilter() ITK_OVERRIDE {}
+  ~CloudDetectionFilter() override {}
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  CloudDetectionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  CloudDetectionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCloudDetectionFilter.txx"
+#include "otbCloudDetectionFilter.hxx"
 #endif
 
 #endif

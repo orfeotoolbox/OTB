@@ -32,21 +32,6 @@
 #include "otbStreamingResampleImageFilter.h"
 
 
-int otbComplexMomentsImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  const unsigned int Dimension = 2;
-  typedef double     InputPixelType;
-
-  typedef otb::Image<InputPixelType,  Dimension>                    ImageType;
-  typedef otb::ComplexMomentsImageFunction<ImageType>               FunctionType;
-
-  // Instantiating object
-  FunctionType::Pointer function = FunctionType::New();
-
-  std::cout << function << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbComplexMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 {
@@ -165,7 +150,7 @@ int otbComplexMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * ar
     {
     for (unsigned int l=0; l<=q; ++l)
       {
-      error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
+      error += std::pow(std::abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
 
       std::cout << "Original - C" << k << l
                 << " : " << Result1.at(k).at(l)
@@ -174,7 +159,7 @@ int otbComplexMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * ar
       }
     }
 
-  error = vcl_sqrt(error)/(q+p);
+  error = std::sqrt(error)/(q+p);
   std::cout << "Error : " << error << std::endl
             << std::endl;
 

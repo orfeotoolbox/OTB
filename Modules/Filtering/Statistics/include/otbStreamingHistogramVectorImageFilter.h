@@ -169,27 +169,27 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
-  void Reset(void) ITK_OVERRIDE;
+  void AllocateOutputs() override;
+  void GenerateOutputInformation() override;
+  void Synthetize(void) override;
+  void Reset(void) override;
 
 protected:
   PersistentHistogramVectorImageFilter();
-  ~PersistentHistogramVectorImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PersistentHistogramVectorImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentHistogramVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentHistogramVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ArrayHistogramListType   m_ThreadHistogramList;
   CountVectorType          m_Size;
@@ -271,17 +271,17 @@ protected:
   /** Constructor */
   StreamingHistogramVectorImageFilter() {};
   /** Destructor */
-  ~StreamingHistogramVectorImageFilter() ITK_OVERRIDE {}
+  ~StreamingHistogramVectorImageFilter() override {}
 
 private:
-  StreamingHistogramVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingHistogramVectorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingHistogramVectorImageFilter.txx"
+#include "otbStreamingHistogramVectorImageFilter.hxx"
 #endif
 
 #endif

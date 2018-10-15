@@ -21,7 +21,6 @@
 #ifndef otbCommandLineArgumentParser_h
 #define otbCommandLineArgumentParser_h
 
-#include <iostream>
 #include <vector>
 #include <string>
 #include <map>
@@ -140,7 +139,7 @@ public:
 //  const char *GetOptionParameter(const char *option, unsigned int number = 0);
   int GetNumberOfParameters(const std::string& option);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 #define otbGetParameterMacro(name, type)                                                 \
   virtual type GetParameter ## name (const std::string& option, unsigned int number = 0) const     \
@@ -170,7 +169,7 @@ public:
 
 protected:
   CommandLineArgumentParseResult();
-  ~CommandLineArgumentParseResult() ITK_OVERRIDE;
+  ~CommandLineArgumentParseResult() override;
 
 private:
   template<typename TypeValeur>
@@ -240,12 +239,12 @@ public:
   /** Add a new option with fixed number of parameters */
   void AddOption(const std::string& name,
                  const std::string& comment,
-                 const std::string& synonym = ITK_NULLPTR,
+                 const std::string& synonym = nullptr,
                  int nParameters = 1,
                  bool obligatory = true);
 
   /** Add a new option with unknown number of parameters */
-  void AddOptionNParams(const std::string& name, const std::string& comment, const std::string& synonym = ITK_NULLPTR, bool obligatory = true);
+  void AddOptionNParams(const std::string& name, const std::string& comment, const std::string& synonym = nullptr, bool obligatory = true);
 
   /** Interpret options from the command line */
   void ParseCommandLine(int argc, char *argv[],
@@ -254,7 +253,7 @@ public:
 
 protected:
   CommandLineArgumentParser();
-  ~CommandLineArgumentParser() ITK_OVERRIDE;
+  ~CommandLineArgumentParser() override;
 
 private:
 

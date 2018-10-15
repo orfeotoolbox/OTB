@@ -41,8 +41,8 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const;
-  virtual const char* GetDescription(void) const;
+  virtual const char* GetITKSourceVersion(void) const override;
+  virtual const char* GetDescription(void) const override;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -62,15 +62,15 @@ protected:
   virtual ~SharkKMeansMachineLearningModelFactory();
 
 private:
-  SharkKMeansMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SharkKMeansMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSharkKMeansMachineLearningModelFactory.txx"
+#include "otbSharkKMeansMachineLearningModelFactory.hxx"
 #endif
 
 #endif

@@ -95,13 +95,13 @@ protected:
   SimpleRcsPanSharpeningFusionImageFilter();
 
   /** Destructor */
-  ~SimpleRcsPanSharpeningFusionImageFilter() ITK_OVERRIDE {};
+  ~SimpleRcsPanSharpeningFusionImageFilter() override {};
 
   /** Call to generate data, wiring composite internal minipipeline */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   SimpleRcsPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented
@@ -127,7 +127,7 @@ private:
 
       TInternalPrecision scale = 1.;
 
-      if(vcl_abs(smoothPanchroPixel) > 1e-10)
+      if(std::abs(smoothPanchroPixel) > 1e-10)
         {
         scale = sharpPanchroPixel/smoothPanchroPixel;
         }
@@ -174,7 +174,7 @@ private:
 
       TInternalPrecision scale = 1.;
 
-      if(vcl_abs(smoothPanchroPixel) > 1e-10)
+      if(std::abs(smoothPanchroPixel) > 1e-10)
         {
         scale = sharpPanchroPixel/smoothPanchroPixel;
         }
@@ -272,7 +272,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSimpleRcsPanSharpeningFusionImageFilter.txx"
+#include "otbSimpleRcsPanSharpeningFusionImageFilter.hxx"
 #endif
 
 #endif

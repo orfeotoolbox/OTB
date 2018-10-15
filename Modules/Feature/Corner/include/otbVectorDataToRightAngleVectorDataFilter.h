@@ -87,11 +87,11 @@ protected:
   /** Constructor.*/
   VectorDataToRightAngleVectorDataFilter();
   /**Destructor.*/
-  ~VectorDataToRightAngleVectorDataFilter() ITK_OVERRIDE{}
+  ~VectorDataToRightAngleVectorDataFilter() override{}
   /** Standard PrintSelf method.*/
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**Main computation method.*/
-  void  GenerateData() ITK_OVERRIDE;
+  void  GenerateData() override;
   /**Angle computation.*/
   virtual double ComputeAngleFormedBySegments(LineType * lineDst, LineType * lineSrc);
   /** When we find a right angle, one compute the coordinate of the segments intersection.*/
@@ -102,15 +102,15 @@ protected:
   virtual double ComputeDistanceFromPointToSegment(PointType rAngle, LineType * line);
 
 private:
-  VectorDataToRightAngleVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToRightAngleVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double m_DistanceThreshold;
   double m_AngleThreshold;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToRightAngleVectorDataFilter.txx"
+#include "otbVectorDataToRightAngleVectorDataFilter.hxx"
 #endif
 
 #endif

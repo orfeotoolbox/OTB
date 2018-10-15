@@ -170,18 +170,18 @@ public:
 
 protected:
   KullbackLeiblerDistanceImageFilter() {}
-  ~KullbackLeiblerDistanceImageFilter() ITK_OVERRIDE {}
+  ~KullbackLeiblerDistanceImageFilter() override {}
 
 private:
-  KullbackLeiblerDistanceImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KullbackLeiblerDistanceImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKullbackLeiblerDistanceImageFilter.txx"
+#include "otbKullbackLeiblerDistanceImageFilter.hxx"
 #endif
 
 #endif

@@ -49,18 +49,18 @@ namespace internal
   }
 
   template < class InputImage , typename SpacingType >
-  void SetSignedSpacing( InputImage input , SpacingType spacing )
+  void SetSignedSpacing( InputImage *input , SpacingType spacing )
   {
     // TODO check for spacing size ==> error
     typename InputImage::DirectionType direction = input->GetDirection();
-    for ( unsigned int i = 0 ; i < InputImage::VImageDimension ; i++ )
+    for ( unsigned int i = 0 ; i < InputImage::ImageDimension ; i++ )
       {
       // TODO check if spacing[i] = 0 ==> error
       if ( spacing[ i ] < 0 )
         {
         if ( direction[i][i] > 0 )
           {
-          for ( unsigned int j = 0 ; j < InputImage::VImageDimension ; j++ )
+          for ( unsigned int j = 0 ; j < InputImage::ImageDimension ; j++ )
             {
             direction[j][i] = - direction[j][i];
             }
@@ -245,18 +245,18 @@ public:
 
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 /// Copy metadata from a DataObject
-  void CopyInformation(const itk::DataObject *) ITK_OVERRIDE;
+  void CopyInformation(const itk::DataObject *) override;
 
 protected:
   Image();
-  ~Image() ITK_OVERRIDE {}
+  ~Image() override {}
 
 private:
   Image(const Self &) = delete;
-  void operator =(const Self&); //purposely not implemented
+  void operator =(const Self&) = delete;
 
     /** Return the ImageMetadataInterfacePointer associated to the data
    *  and creates it on first call
@@ -271,7 +271,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImage.txx"
+#include "otbImage.hxx"
 #endif
 
 #endif

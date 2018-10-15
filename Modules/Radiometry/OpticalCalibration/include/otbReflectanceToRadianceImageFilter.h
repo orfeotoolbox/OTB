@@ -231,10 +231,10 @@ protected:
     };
 
   /** Destructor */
-  ~ReflectanceToRadianceImageFilter() ITK_OVERRIDE {}
+  ~ReflectanceToRadianceImageFilter() override {}
 
   /** Update the functor list and input parameters */
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE
+  void BeforeThreadedGenerateData(void) override
   {
     OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
       this->GetInput()->GetMetaDataDictionary());
@@ -280,7 +280,7 @@ protected:
         {
         if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
           {
-          coefTemp = vcl_cos(m_ZenithalSolarAngle * CONST_PI_180) * VarSol::GetVarSol(m_Day,m_Month);
+          coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * VarSol::GetVarSol(m_Day,m_Month);
           }
         else
           {
@@ -290,7 +290,7 @@ protected:
       else
         {
         coefTemp =
-          vcl_cos(m_ZenithalSolarAngle *
+          std::cos(m_ZenithalSolarAngle *
                   CONST_PI_180) * m_FluxNormalizationCoefficient * m_FluxNormalizationCoefficient;
         }
       functor.SetIlluminationCorrectionCoefficient(coefTemp);

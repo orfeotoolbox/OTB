@@ -27,17 +27,31 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetInputVectorDataParameter::QtWidgetInputVectorDataParameter(InputVectorDataParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetInputVectorDataParameter::QtWidgetInputVectorDataParameter(InputVectorDataParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_InputVectorDataParam(param),
-  m_HLayout( ITK_NULLPTR ),
-  m_Input( ITK_NULLPTR ),
-  m_Button( ITK_NULLPTR )
+  m_HLayout( nullptr ),
+  m_Input( nullptr ),
+  m_Button( nullptr )
 {
 }
 
 QtWidgetInputVectorDataParameter::~QtWidgetInputVectorDataParameter()
 {
+}
+
+const QLineEdit*
+QtWidgetInputVectorDataParameter
+::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit*
+QtWidgetInputVectorDataParameter
+::GetInput()
+{
+  return m_Input;
 }
 
 void QtWidgetInputVectorDataParameter::DoUpdateGUI()
@@ -60,21 +74,21 @@ void QtWidgetInputVectorDataParameter::DoCreateWidget()
   m_HLayout = new QHBoxLayout;
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
+  m_Input = new QLineEdit(this);
   m_Input->setToolTip(
     QString::fromStdString( m_InputVectorDataParam->GetDescription() )
   );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetInputVectorDataParameter::SetFileName );
+  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
 
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect( m_Button, &QPushButton::clicked, this, &QtWidgetInputVectorDataParameter::SelectFile );
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
@@ -88,7 +102,7 @@ QtWidgetInputVectorDataParameter
   assert( m_Input!=NULL );
 
   QString filename(
-    GetOpenFileName(
+    otb::GetOpenFilename(
       this,
       QString(),
       m_Input->text(),

@@ -54,19 +54,19 @@ protected:
   {
   }
 
-  ~StubApplication() ITK_OVERRIDE
+  ~StubApplication() override
   {
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
   }
 };
@@ -114,10 +114,10 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
   choiceParam->AddChoice("choice2", "Choice 2");
   choiceParam->AddChoice("choice3", "Choice 3");
 
-  QWidget * intWidget   = factory->CreateQtWidget(intParam, model);
-  QWidget * floatWidget = factory->CreateQtWidget(floatParam, model);
-  QWidget * emptyWidget = factory->CreateQtWidget(emptyParam, model);
-  QWidget * choiceWidget = factory->CreateQtWidget(choiceParam, model);
+  QWidget * intWidget   = factory->CreateQtWidget(intParam, model, nullptr);
+  QWidget * floatWidget = factory->CreateQtWidget(floatParam, model, nullptr);
+  QWidget * emptyWidget = factory->CreateQtWidget(emptyParam, model, nullptr);
+  QWidget * choiceWidget = factory->CreateQtWidget(choiceParam, model, nullptr);
 
   if(intWidget)
     {
@@ -238,7 +238,7 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(stringParam2.GetPointer()));
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(list.GetPointer()));
 
-  QWidget * group = new otb::Wrapper::QtWidgetParameterGroup(group2, model);
+  QWidget * group = new otb::Wrapper::QtWidgetParameterGroup(group2, model, nullptr);
 
   if(group)
     {

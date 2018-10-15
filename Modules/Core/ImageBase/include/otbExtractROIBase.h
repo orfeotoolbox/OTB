@@ -108,10 +108,10 @@ public:
 
 protected:
   ExtractROIBase();
-  ~ExtractROIBase() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ExtractROIBase() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** ExtractROIBase can produce an image which is a different
    * resolution than its input image.  As such, ExtractROIBase
@@ -121,7 +121,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** This function calls the actual region copier to do the mapping from
    * output image space to input image space.  It uses a
@@ -134,7 +134,7 @@ protected:
    *
    * \sa ImageToImageFilter::CallCopyRegion() */
   void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion,
-                                                 const OutputImageRegionType& srcRegion) ITK_OVERRIDE;
+                                                 const OutputImageRegionType& srcRegion) override;
 
   /** ExtractROIBase can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -149,7 +149,7 @@ protected:
 //  ATTENTION bizarre
 
   void ThreadedGenerateData(const OutputImageRegionType& /*outputRegionForThread*/,
-                            itk::ThreadIdType /*threadId*/) ITK_OVERRIDE
+                            itk::ThreadIdType /*threadId*/) override
 
   {
 
@@ -166,8 +166,8 @@ protected:
   OutputImageRegionType m_OutputImageRegion;
 
 private:
-  ExtractROIBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ExtractROIBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
@@ -181,7 +181,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbExtractROIBase.txx"
+#include "otbExtractROIBase.hxx"
 #endif
 
 #endif

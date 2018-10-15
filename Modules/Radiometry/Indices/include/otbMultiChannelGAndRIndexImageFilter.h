@@ -98,9 +98,9 @@ protected:
   /// Constructor
   MultiChannelGAndRIndexImageFilter() : m_GreenIndex(1), m_RedIndex(2) {};
   /// Destructor
-  ~MultiChannelGAndRIndexImageFilter() ITK_OVERRIDE {}
+  ~MultiChannelGAndRIndexImageFilter() override {}
   /// Before generating data, set functor parameters
-  void BeforeThreadedGenerateData() ITK_OVERRIDE
+  void BeforeThreadedGenerateData() override
   {
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
     if (m_GreenIndex < 1 || m_RedIndex < 1 ||
@@ -112,15 +112,15 @@ protected:
     this->GetFunctor().SetRedIndex(m_RedIndex);
   }
   /// PrintSelf Method
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     this->Superclass::PrintSelf(os, indent);
     os << indent << "Green index: " << m_GreenIndex << std::endl;
     os << indent << "Red index: " << m_RedIndex << std::endl;
   }
 private:
-  MultiChannelGAndRIndexImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiChannelGAndRIndexImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Green channel index */
   unsigned int m_GreenIndex;
   /** Red channel index */

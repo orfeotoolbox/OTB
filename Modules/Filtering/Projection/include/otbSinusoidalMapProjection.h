@@ -62,18 +62,18 @@ public:
 
 protected:
   SinusoidalMapProjection();
-  ~SinusoidalMapProjection() ITK_OVERRIDE;
+  ~SinusoidalMapProjection() override;
 
 private:
-  SinusoidalMapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);            //purposely not implemented
+  SinusoidalMapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSinusoidalMapProjection.txx"
+#include "otbSinusoidalMapProjection.hxx"
 #endif
 
 #endif

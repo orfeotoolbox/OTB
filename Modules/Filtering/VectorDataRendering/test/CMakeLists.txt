@@ -24,7 +24,6 @@ set(OTBVectorDataRenderingTests
 otbVectorDataRenderingTestDriver.cxx
 otbVectorDataToMapFilterWorld.cxx
 otbVectorDataToMapFilter.cxx
-otbVectorDataToMapFilterNew.cxx
 otbVectorDataToMapFilterNoFonts.cxx
 otbVectorDataToMapFilterSensorModel.cxx
 )
@@ -68,9 +67,6 @@ otb_add_test(NAME coTvVectorDataToMapFilter COMMAND otbVectorDataRenderingTestDr
   ${INPUTDATA}/DejaVuSans.ttf # font
   )
 
-otb_add_test(NAME coTuVectorDataToMapFilterNew COMMAND otbVectorDataRenderingTestDriver
-  otbVectorDataToMapFilterNew
-  )
 
 otb_add_test(NAME coTvVectorDataToMapFilterNoFonts COMMAND otbVectorDataRenderingTestDriver
   --compare-image ${NOTOL}

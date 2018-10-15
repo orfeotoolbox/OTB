@@ -129,19 +129,19 @@ public:
    * SmartPointers to the same VectorData since separate DataObjects are
    * still maintained. This method is similar to
    * VectorDataSource::GraftOutput(). */
-  void Graft(const itk::DataObject *data) ITK_OVERRIDE;
+  void Graft(const itk::DataObject *data) override;
 
 protected:
   /** Constructor */
   VectorData();
   /** Destructor */
-  ~VectorData() ITK_OVERRIDE {}
+  ~VectorData() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorData(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorData(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** Data tree */
   DataTreePointerType m_DataTree;
@@ -152,7 +152,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorData.txx"
+#include "otbVectorData.hxx"
 #endif
 
 #endif

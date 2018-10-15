@@ -105,12 +105,12 @@ public:
 
 protected:
   EigenvalueLikelihoodMaximisation();
-  ~EigenvalueLikelihoodMaximisation() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~EigenvalueLikelihoodMaximisation() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  EigenvalueLikelihoodMaximisation(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EigenvalueLikelihoodMaximisation(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   MatrixType m_Covariance;
   MatrixType m_Correlation;
@@ -124,7 +124,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEigenvalueLikelihoodMaximisation.txx"
+#include "otbEigenvalueLikelihoodMaximisation.hxx"
 #endif
 
 #endif

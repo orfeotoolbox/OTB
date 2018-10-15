@@ -24,6 +24,7 @@
 #include "otbImageFileReader.h"
 #include "itkImageBase.h"
 #include "otbWrapperParameter.h"
+#include <string>
 
 namespace otb
 {
@@ -43,8 +44,6 @@ public:
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-
-  typedef itk::ImageBase<2> ImageBaseType;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -80,6 +79,16 @@ public:
   UInt8RGBImageType* GetUInt8RGBImage();
   UInt8RGBAImageType* GetUInt8RGBAImage();
 
+  // Complex image
+  ComplexInt16ImageType*  GetComplexInt16Image();
+  ComplexInt32ImageType*  GetComplexInt32Image();
+  ComplexFloatImageType*  GetComplexFloatImage();
+  ComplexDoubleImageType* GetComplexDoubleImage();
+
+  ComplexInt16VectorImageType*  GetComplexInt16VectorImage();
+  ComplexInt32VectorImageType*  GetComplexInt32VectorImage();
+  ComplexFloatVectorImageType*  GetComplexFloatVectorImage();
+  ComplexDoubleVectorImageType* GetComplexDoubleVectorImage();
 
   /** Get the input image as templated image type. */
   template <class TImageType>
@@ -97,28 +106,16 @@ public:
   template <class TInputImage, class TOutputImage>
   TOutputImage*  CastImage();
 
-  /** Cast an image to an image of the same type
-  * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
-  template <class TInputImage, class TOutputImage>
-    TOutputImage* SimpleCastImage();
+  bool HasValue() const override;
 
-
-  /** Cast an image to a vector image. */
-  template <class TInputImage, class TOutputImage>
-    TOutputImage* CastVectorImageFromImage();
-
-
-  bool HasValue() const ITK_OVERRIDE;
-
-  void ClearValue() ITK_OVERRIDE;
-
+  void ClearValue() override;
 
 protected:
   /** Constructor */
   InputImageParameter();
 
   /** Destructor */
-  ~InputImageParameter() ITK_OVERRIDE;
+  ~InputImageParameter() override;
 
   ImageBaseType::Pointer m_Image;
   std::string m_FileName;
@@ -145,12 +142,23 @@ protected:
   typedef otb::ImageFileReader<UInt8RGBImageType>  UInt8RGBReaderType;
   typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
 
+  // Complex
+  typedef otb::ImageFileReader<ComplexInt16ImageType> ComplexInt16ReaderType;
+  typedef otb::ImageFileReader<ComplexInt32ImageType> ComplexInt32ReaderType;
+  typedef otb::ImageFileReader<ComplexFloatImageType> ComplexFloatReaderType;
+  typedef otb::ImageFileReader<ComplexDoubleImageType> ComplexDoubleReaderType;
+
+  typedef otb::ImageFileReader<ComplexInt16VectorImageType> ComplexInt16VectorReaderType;
+  typedef otb::ImageFileReader<ComplexInt32VectorImageType> ComplexInt32VectorReaderType;
+  typedef otb::ImageFileReader<ComplexFloatVectorImageType> ComplexFloatVectorReaderType;
+  typedef otb::ImageFileReader<ComplexDoubleVectorImageType> ComplexDoubleVectorReaderType;
+
   itk::ProcessObject::Pointer m_Reader;
   itk::ProcessObject::Pointer m_Caster;
 
 private:
-  InputImageParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  InputImageParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
   /** Store the loaded image filename */
   std::string m_PreviousFileName;
@@ -160,68 +168,11 @@ private:
 
 }; // End class InputImage Parameter
 
-
-// template specializations of CastImage<> should be declared in header
-// so that the linker knows they exist when building OTB Applications
-
-#define otbDeclareCastImageMacro(InputImageType, OutputImageType)   \
-  template<> OTBApplicationEngine_EXPORT OutputImageType *                                          \
-  InputImageParameter::CastImage<InputImageType , OutputImageType>();    \
-
-#define otbGenericDeclareCastImageMacro(InputImageType, prefix)     \
-  otbDeclareCastImageMacro(InputImageType, UInt8##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, UInt16##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, Int16##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, UInt32##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, Int32##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, Float##prefix##ImageType) \
-  otbDeclareCastImageMacro(InputImageType, Double##prefix##ImageType)
-
-
-/*********************************************************************
-********************** Image -> Image
-**********************************************************************/
-otbGenericDeclareCastImageMacro(UInt8ImageType, )
-otbGenericDeclareCastImageMacro(Int16ImageType, )
-otbGenericDeclareCastImageMacro(UInt16ImageType, )
-otbGenericDeclareCastImageMacro(Int32ImageType, )
-otbGenericDeclareCastImageMacro(UInt32ImageType, )
-otbGenericDeclareCastImageMacro(FloatImageType, )
-otbGenericDeclareCastImageMacro(DoubleImageType, )
-
-
-/*********************************************************************
-********************** VectorImage -> VectorImage
-**********************************************************************/
-otbGenericDeclareCastImageMacro(UInt8VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(Int16VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(UInt16VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(Int32VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(UInt32VectorImageType, Vector)
-otbGenericDeclareCastImageMacro(FloatVectorImageType, Vector)
-otbGenericDeclareCastImageMacro(DoubleVectorImageType, Vector)
-
-
-/*********************************************************************
-********************** Image -> VectorImage
-**********************************************************************/
-otbGenericDeclareCastImageMacro(UInt8ImageType, Vector)
-otbGenericDeclareCastImageMacro(Int16ImageType, Vector)
-otbGenericDeclareCastImageMacro(UInt16ImageType, Vector)
-otbGenericDeclareCastImageMacro(Int32ImageType, Vector)
-otbGenericDeclareCastImageMacro(UInt32ImageType, Vector)
-otbGenericDeclareCastImageMacro(FloatImageType, Vector)
-otbGenericDeclareCastImageMacro(DoubleImageType, Vector)
-
-#undef otbDeclareCastImageMacro
-#undef otbGenericDeclareCastImageMacro
-
-
 } // End namespace Wrapper
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWrapperInputImageParameter.txx"
+#include "otbWrapperInputImageParameter.hxx"
 #endif
 
 #endif

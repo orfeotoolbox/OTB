@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+#include <string>
+
 #include "otbCommandLineArgumentParser.h"
 
 #include <assert.h>
@@ -72,7 +74,7 @@ std::string CommandLineArgumentParseResult
     std::ostringstream msg;
     msg << "GetParameterString(): The following '" << option << "' option is unknown !!";
     CommandLineArgumentParserArgumentErrorException e(__FILE__, __LINE__);
-    e.SetDescription(msg.str().c_str());
+    e.SetDescription(msg.str());
     throw e;
     }
   OptionMapType::const_iterator it = m_OptionMap.begin();
@@ -283,7 +285,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
       bool goOnFlag(true);
       while (goOnFlag == true)
         {
-        if (argv[i + 1] != ITK_NULLPTR)
+        if (argv[i + 1] != nullptr)
           {
           std::string strArgv = std::string(argv[i + 1]);
           if (strArgv[0] == '-' )

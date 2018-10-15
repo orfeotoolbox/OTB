@@ -111,10 +111,10 @@ public:
 
 protected:
   ListSampleToVariableDimensionHistogramGenerator();
-  ~ListSampleToVariableDimensionHistogramGenerator() ITK_OVERRIDE {}
-  void GenerateData() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  ~ListSampleToVariableDimensionHistogramGenerator() override {}
+  void GenerateData() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 private:
@@ -129,7 +129,7 @@ private:
 } // end of namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleToVariableDimensionHistogramGenerator.txx"
+#include "otbListSampleToVariableDimensionHistogramGenerator.hxx"
 #endif
 
 #endif

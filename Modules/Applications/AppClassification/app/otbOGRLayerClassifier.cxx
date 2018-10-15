@@ -55,7 +55,7 @@ public:
 ;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("OGRLayerClassifier");
     SetDescription("Classify an OGR layer based on a machine learning model and a list of features to consider.");
@@ -82,7 +82,7 @@ private:
 
     AddParameter(ParameterType_String,"cfield","Field containing the predicted class.");
     SetParameterDescription("cfield","Field containing the predicted class");
-    SetParameterString("cfield","predicted", false);
+    SetParameterString("cfield","predicted");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("inshp", "vectorData.shp");
@@ -94,14 +94,14 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("inshp") )
       {
       std::string shapefile = GetParameterString("inshp");
 
       otb::ogr::DataSource::Pointer ogrDS;
-      otb::ogr::Layer layer(ITK_NULLPTR, false);
+      otb::ogr::Layer layer(nullptr, false);
       
       OGRSpatialReference oSRS("");
       std::vector<std::string> options;
@@ -135,7 +135,7 @@ private:
       }
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
       
     #ifdef OTB_USE_LIBSVM 
@@ -183,7 +183,7 @@ private:
          input->PushBack(mv);
          target->PushBack(feature.ogr().GetFieldAsInteger("class"));
          feature = layer.ogr().GetNextFeature();
-         goesOn = feature.addr() != ITK_NULLPTR;
+         goesOn = feature.addr() != nullptr;
        }
 
     ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
@@ -223,7 +223,7 @@ private:
         feature2.ogr().SetField(GetParameterString("cfield").c_str(),(int)labelListSample->GetMeasurementVector(count)[0]);
          layer2.SetFeature(feature2);
          feature2 = layer2.ogr().GetNextFeature();
-         goesOn2 = feature2.addr() != ITK_NULLPTR;
+         goesOn2 = feature2.addr() != nullptr;
          count++;
        }
     

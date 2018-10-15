@@ -72,11 +72,11 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) ITK_OVERRIDE;
+  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
 
 protected:
   TileDimensionTiledStreamingManager();
-  ~TileDimensionTiledStreamingManager() ITK_OVERRIDE;
+  ~TileDimensionTiledStreamingManager() override;
 
   /** The number of lines per strip desired by the user.
    *  This may be different than the one computed by the Splitter */
@@ -90,7 +90,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTileDimensionTiledStreamingManager.txx"
+#include "otbTileDimensionTiledStreamingManager.hxx"
 #endif
 
 #endif

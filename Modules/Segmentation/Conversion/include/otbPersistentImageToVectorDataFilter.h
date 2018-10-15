@@ -28,6 +28,7 @@
 #include "otbConcatenateVectorDataFilter.h"
 #include "otbOGRVectorDataIO.h"
 #include "itkMacro.h"
+#include <string>
 
 namespace otb
 {
@@ -86,11 +87,11 @@ public:
 
   OutputVectorDataType* GetOutputVectorData() const;
 
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
 
-  void Synthetize(void) ITK_OVERRIDE;
+  void Synthetize(void) override;
 
   /** Specify the name of the output shapefile to write. */
   itkSetStringMacro(FileName);
@@ -98,19 +99,19 @@ public:
 
 protected:
   PersistentImageToVectorDataFilter();
-  ~PersistentImageToVectorDataFilter() ITK_OVERRIDE {}
+  ~PersistentImageToVectorDataFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   ExtractImageFilterPointerType          m_ExtractFilter;
 
   OutputVectorDataPointerType m_OutputVectorData;
 
 private:
-  PersistentImageToVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageToVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   virtual OutputVectorDataPointerType ProcessTile() = 0;
 
@@ -121,7 +122,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentImageToVectorDataFilter.txx"
+#include "otbPersistentImageToVectorDataFilter.hxx"
 #endif
 
 #endif

@@ -22,7 +22,7 @@
 #define otb_GlImageActor_h
 
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 #include "itkCenteredRigid2DTransform.h"
 
@@ -35,6 +35,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
+#include <string>
 
 
 namespace otb
@@ -80,16 +81,16 @@ public:
   void Initialize(const std::string & filename);
 
   // Retrieve the full extent of the actor
-  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const ITK_OVERRIDE;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const override;
 
   // Update internal actor state with respect to ViewSettings
-  void ProcessViewSettings() ITK_OVERRIDE;
+  void ProcessViewSettings() override;
 
   // Heavy load/unload operations of data
-  void UpdateData() ITK_OVERRIDE;
+  void UpdateData() override;
 
   // Gl rendering of current state
-  void Render() ITK_OVERRIDE;
+  void Render() override;
 
   // Automatic color adjustment
   void AutoColorAdjustment( double & minRed, double & maxRed,
@@ -101,15 +102,15 @@ public:
 
   const PointType & GetOrigin() const;
 
-  const GeoInterface::Spacing2 & GetSpacing() const ITK_OVERRIDE;
+  const GeoInterface::Spacing2 & GetSpacing() const override;
 
-  std::string GetWkt() const ITK_OVERRIDE;
+  std::string GetWkt() const override;
 
   ImageKeywordlistType GetKwl() const;
 
-  bool HasKwl() const ITK_OVERRIDE;
+  bool HasKwl() const override;
 
-  bool GetKwl( ImageKeywordlist & ) const ITK_OVERRIDE;
+  bool GetKwl( ImageKeywordlist & ) const override;
 
   MetaDataDictionaryType & GetMetaDataDictionary() const;
 
@@ -144,7 +145,7 @@ public:
   {
   if ( this->m_RedIdx != idx )
    { 
-   this->m_RedIdx = vcl_min(this->GetNumberOfComponents(),idx);
+   this->m_RedIdx = std::min(this->GetNumberOfComponents(),idx);
    this->Modified();
    }
   }
@@ -153,7 +154,7 @@ public:
   {
   if ( this->m_GreenIdx != idx )
     { 
-    this->m_GreenIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    this->m_GreenIdx = std::min(this->GetNumberOfComponents(),idx);
     this->Modified();
     }
   }  
@@ -162,7 +163,7 @@ public:
   {
   if ( this->m_BlueIdx != idx )
     { 
-    this->m_BlueIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    this->m_BlueIdx = std::min(this->GetNumberOfComponents(),idx);
     this->Modified(); 
     }
   }
@@ -191,11 +192,11 @@ public:
 
   bool TransformFromViewport( Point2d & out,
                                       const Point2d & in,
-                                      bool isPhysical = true ) const ITK_OVERRIDE;
+                                      bool isPhysical = true ) const override;
 
   bool TransformToViewport( Point2d & out,
                                     const Point2d & in,
-                                    bool isPhysical = true ) const ITK_OVERRIDE;
+                                    bool isPhysical = true ) const override;
 
 
   void UpdateTransforms();
@@ -203,7 +204,7 @@ public:
 protected:
   GlImageActor();
   
-  ~GlImageActor() ITK_OVERRIDE;
+  ~GlImageActor() override;
 
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
   typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;
@@ -229,7 +230,7 @@ protected:
         m_RedIdx(1),
         m_GreenIdx(2),
         m_BlueIdx(3),
-        m_RescaleFilter(ITK_NULLPTR)
+        m_RescaleFilter(nullptr)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);

@@ -23,6 +23,7 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbWrapperParameter.h"
+#include <string>
 
 namespace otb
 {
@@ -62,16 +63,16 @@ public:
 
   void SetVectorData(VectorDataType* vectorData);
 
-  bool HasValue() const ITK_OVERRIDE;
+  bool HasValue() const override;
 
-  void ClearValue() ITK_OVERRIDE;
+  void ClearValue() override;
 
 protected:
   /** Constructor */
   InputVectorDataParameter();
 
   /** Destructor */
-  ~InputVectorDataParameter() ITK_OVERRIDE;
+  ~InputVectorDataParameter() override;
 
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataType::Pointer m_VectorData;
@@ -82,8 +83,8 @@ protected:
   std::string m_PreviousFileName;
 
 private:
-  InputVectorDataParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  InputVectorDataParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
 
 };
 

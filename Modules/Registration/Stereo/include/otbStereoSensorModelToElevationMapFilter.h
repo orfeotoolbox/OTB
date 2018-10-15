@@ -190,29 +190,29 @@ protected:
   StereoSensorModelToElevationFilter();
 
   /** Destructor */
-  ~StereoSensorModelToElevationFilter() ITK_OVERRIDE;
+  ~StereoSensorModelToElevationFilter() override;
 
   /** Threaded generate data */
   void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
+                                    itk::ThreadIdType threadId) override;
 
   /** Generate the input requested regions  */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   /** Things to do before the threaded generate-data */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Override VerifyInputInformation() since this filter's inputs do
       * not need to occupy the same physical space.
       *
       * \sa ProcessObject::VerifyInputInformation
       */
-  void VerifyInputInformation() ITK_OVERRIDE {}
+  void VerifyInputInformation() override {}
 
 
 private:
-  StereoSensorModelToElevationFilter(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  StereoSensorModelToElevationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   inline double Correlation(const std::vector<double>& master,
                             const std::vector<double>& slave) const;
@@ -251,7 +251,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStereoSensorModelToElevationMapFilter.txx"
+#include "otbStereoSensorModelToElevationMapFilter.hxx"
 #endif
 
 #endif

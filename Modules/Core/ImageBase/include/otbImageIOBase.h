@@ -28,6 +28,8 @@
 #include "vnl/vnl_vector.h"
 
 #include <string>
+#include <typeinfo>
+#include <vector>
 
 #include "OTBImageBaseExport.h"
 
@@ -202,11 +204,11 @@ public:
 
   /** Convenience method returns the IOComponentType as a string. This can be
    * used for writing output files. */
-  std::string GetComponentTypeAsString(IOComponentType) const;
+  static std::string GetComponentTypeAsString(IOComponentType);
 
   /** Convenience method returns the IOPixelType as a string. This can be
    * used for writing output files. */
-  std::string GetPixelTypeAsString(IOPixelType) const;
+  static std::string GetPixelTypeAsString(IOPixelType);
 
   /** Enums used to specify write style: whether binary or ASCII. Some
    * subclasses use this, some ignore it. */
@@ -253,11 +255,11 @@ public:
 
   /** Convenience method returns the FileType as a string. This can be
    * used for writing output files. */
-  std::string GetFileTypeAsString(FileType) const;
+  static std::string GetFileTypeAsString(FileType);
 
   /** Convenience method returns the ByteOrder as a string. This can be
    * used for writing output files. */
-  std::string GetByteOrderAsString(ByteOrder) const;
+  static std::string GetByteOrderAsString(ByteOrder);
 
   /** Type for representing size of bytes, and or positions along a file */
   typedef std::streamoff SizeType;
@@ -427,10 +429,13 @@ public:
    * conversion)*/
   void DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList);
 
+  /** Returns a const ref to the list of attached files*/
+  itkGetConstReferenceMacro(AttachedFileNames, std::vector<std::string> );
+
 protected:
   ImageIOBase();
-  ~ImageIOBase() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageIOBase() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Used internally to keep track of the type of the pixel. */
   IOPixelType m_PixelType;
@@ -548,9 +553,12 @@ protected:
                                                                unsigned int numberOfActualSplits,
                                                                const itk::ImageIORegion &pasteRegion) const;
 
+  /** List of files part of the same dataset as the input filename */
+  std::vector<std::string> m_AttachedFileNames;
+
 private:
-  ImageIOBase(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageIOBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ArrayOfExtensionsType    m_SupportedReadExtensions;
   ArrayOfExtensionsType    m_SupportedWriteExtensions;

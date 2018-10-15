@@ -87,15 +87,15 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
   ShiftScaleSampleListFilter();
-  ~ShiftScaleSampleListFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ShiftScaleSampleListFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ShiftScaleSampleListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ShiftScaleSampleListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The vector of Shifts */
   InputMeasurementVectorType m_Shifts;
@@ -109,7 +109,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShiftScaleSampleListFilter.txx"
+#include "otbShiftScaleSampleListFilter.hxx"
 #endif
 
 #endif

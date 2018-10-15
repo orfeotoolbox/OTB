@@ -47,7 +47,7 @@ public:
   itkTypeMacro(VertexComponentAnalysis, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("VertexComponentAnalysis");
     SetDescription("Given a set of mixed spectral vectors, estimate"
@@ -71,7 +71,6 @@ private:
     "unmix hyperspectral data, in IEEE Transactions on Geoscience and"
     "Remote Sensing, vol. 43, no. 4, pp. 898-910, April 2005.");
 
-    AddDocTag("Miscellaneous");
     AddDocTag(Tags::Hyperspectral);
     AddDocTag(Tags::DimensionReduction);
 
@@ -80,7 +79,7 @@ private:
 
     AddParameter(ParameterType_Int, "ne", "Number of endmembers");
     SetParameterDescription("ne","The number of endmembers to extract from the hyperspectral image.");
-    SetParameterInt("ne",1, false);
+    SetParameterInt("ne",1);
     MandatoryOn("ne");
 
     AddParameter(ParameterType_OutputImage, "outendm", "Output Endmembers");
@@ -99,12 +98,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     DoubleVectorImageType::Pointer inputImage = GetParameterDoubleVectorImage("in");
     DoubleVectorImageType::Pointer endmembersImage;

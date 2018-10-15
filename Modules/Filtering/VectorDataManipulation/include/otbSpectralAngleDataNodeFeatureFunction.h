@@ -101,7 +101,7 @@ public:
   typedef std::pair<IndexType, IndexType>             IndexPairType;
   typedef std::vector<PrecisionType>                  OutputType;
 
-  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
+  OutputType Evaluate( const DataNodeType& node ) const override;
 
   /** Set/Get methods */
   itkGetConstMacro(RefPixel, PixelType);
@@ -112,12 +112,12 @@ public:
 
 protected:
   SpectralAngleDataNodeFeatureFunction();
-  ~SpectralAngleDataNodeFeatureFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~SpectralAngleDataNodeFeatureFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SpectralAngleDataNodeFeatureFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpectralAngleDataNodeFeatureFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** SpectralAngle Functor & ReferencePixel*/
   ReferencePixelType          m_RefPixel;
@@ -129,7 +129,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpectralAngleDataNodeFeatureFunction.txx"
+#include "otbSpectralAngleDataNodeFeatureFunction.hxx"
 #endif
 
 #endif

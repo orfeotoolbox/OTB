@@ -137,23 +137,23 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
   /** Method Compute the Modified Time based on changed to the components. */
-  itk::ModifiedTimeType GetMTime(void) const ITK_OVERRIDE;
+  itk::ModifiedTimeType GetMTime(void) const override;
   
 protected:
   GridResampleImageFilter();
 
   /** Destructor */
-  ~GridResampleImageFilter() ITK_OVERRIDE {};
+  ~GridResampleImageFilter() override {};
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
   
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
   inline void CastPixelWithBoundsChecking( const InterpolatorOutputType& value,
                                                       const InterpolatorComponentType& minComponent,
@@ -186,11 +186,11 @@ protected:
   }
   
   
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GridResampleImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GridResampleImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   IndexType              m_OutputStartIndex;     // output image start index
   SizeType               m_OutputSize;            // output image size
@@ -216,7 +216,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGridResampleImageFilter.txx"
+#include "otbGridResampleImageFilter.hxx"
 #endif
 
 #endif

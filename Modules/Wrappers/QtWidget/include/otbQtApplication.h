@@ -22,11 +22,9 @@
 #ifndef otbQtApplication_h
 #define otbQtApplication_h
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QString>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkMacro.h"
-#endif //tag=QT4-boost-compatibility
 #include "OTBQtWidgetExport.h"
 
 namespace otb
@@ -40,7 +38,7 @@ class OTBQtWidget_EXPORT QtApplication : public QApplication
 public:
   QtApplication(int& argc, char** argv);
 
-  bool notify(QObject *object, QEvent* event) ITK_OVERRIDE;
+  bool notify(QObject *object, QEvent* event) override;
 
 signals:
 

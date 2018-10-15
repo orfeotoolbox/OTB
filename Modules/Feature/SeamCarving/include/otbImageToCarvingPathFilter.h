@@ -93,14 +93,14 @@ public:
 
 protected:
   ImageToCarvingPathFilter();
-  ~ImageToCarvingPathFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE {}  //does nothing
-  void GenerateData() ITK_OVERRIDE;
+  ~ImageToCarvingPathFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void GenerateOutputInformation() override {}  //does nothing
+  void GenerateData() override;
 
 private:
-  ImageToCarvingPathFilter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  ImageToCarvingPathFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   PixelType    m_ForegroundValue;
   unsigned int m_Direction;
@@ -110,7 +110,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToCarvingPathFilter.txx"
+#include "otbImageToCarvingPathFilter.hxx"
 #endif
 
 #endif

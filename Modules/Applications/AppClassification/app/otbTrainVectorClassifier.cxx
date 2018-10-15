@@ -54,7 +54,7 @@ public:
   typedef ContingencyTableType::Pointer    ContingencyTablePointerType;
 
 protected:
-  void DoInit()
+  void DoInit() override
   {
     SetName( "TrainVectorClassifier" );
     SetDescription( "Train a classifier based on labeled geometries and a "
@@ -63,7 +63,10 @@ protected:
     SetDocName( "Train Vector Classifier" );
     SetDocLongDescription( "This application trains a classifier based on "
       "labeled geometries and a list of features to consider for "
-      "classification." );
+      "classification.\nThis application is based on LibSVM, OpenCV Machine "
+      "Learning (2.3.1 and later), and Shark ML The output of this application "
+      "is a text model file, whose format corresponds to the ML model type "
+      "chosen. There is no image nor vector data output.");
     SetDocLimitations( " " );
     SetDocAuthors( "OTB Team" );
     SetDocSeeAlso( " " );
@@ -73,12 +76,12 @@ protected:
     Superclass::DoInit();
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
     Superclass::DoUpdateParameters();
   }
 
-  void DoExecute()
+  void DoExecute() override
   {
     m_FeaturesInfo.SetClassFieldNames( GetChoiceNames( "cfield" ), GetSelectedItems( "cfield" ) );
 
@@ -112,7 +115,7 @@ protected:
     contingencyTableCalculator->Compute(performanceLabeledListSample->Begin(),
                                         performanceLabeledListSample->End(),predictedListSample->Begin(), predictedListSample->End());
 
-    if(IsParameterEnabled("v"))
+    if(GetParameterInt("v"))
     {
       otbAppLogINFO( "Training performances:" );
       otbAppLogINFO(<<"Contingency table: reference labels (rows) vs. produced labels (cols)\n"
@@ -129,7 +132,7 @@ protected:
       {
       // Write contingency table
       std::ofstream outFile;
-      outFile.open( this->GetParameterString( "io.confmatout" ).c_str() );
+      outFile.open( this->GetParameterString( "io.confmatout" ) );
       outFile << table->ToCSV();
       }
   }
@@ -219,7 +222,7 @@ protected:
         }
 
       std::ofstream outFile;
-      outFile.open( this->GetParameterString( "io.confmatout" ).c_str() );
+      outFile.open( this->GetParameterString( "io.confmatout" ) );
       outFile << std::fixed;
       outFile.precision( 10 );
 

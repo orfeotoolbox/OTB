@@ -104,7 +104,7 @@ protected:
    *
    */
 
-  void GenerateOutputInformation() ITK_OVERRIDE{}
+  void GenerateOutputInformation() override{}
 
   /**
    * Constructor.
@@ -113,15 +113,15 @@ protected:
   /**
    * Destructor.
    */
-  ~LineSpatialObjectListToRightAnglePointSetFilter() ITK_OVERRIDE{}
+  ~LineSpatialObjectListToRightAnglePointSetFilter() override{}
   /**
    * Standard PrintSelf method.
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Main computation method.
    */
-  void  GenerateData() ITK_OVERRIDE;
+  void  GenerateData() override;
   /**
    * Angle computation
    */
@@ -145,8 +145,8 @@ protected:
 
 private:
 
-  LineSpatialObjectListToRightAnglePointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LineSpatialObjectListToRightAnglePointSetFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Smart pointer on the output PointSet*/
   OutputPointSetPointerType m_OutputPointSet;
@@ -157,7 +157,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineSpatialObjectListToRightAnglePointSetFilter.txx"
+#include "otbLineSpatialObjectListToRightAnglePointSetFilter.hxx"
 #endif
 
 #endif

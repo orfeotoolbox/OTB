@@ -148,9 +148,9 @@ public:
 
 protected:
   BinaryFunctorNeighborhoodJoinHistogramImageFilter();
-  ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() ITK_OVERRIDE {}
+  ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() override {}
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** BinaryFunctorNeighborhoodJoinHistogramImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -163,20 +163,20 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
+                                    itk::ThreadIdType threadId) override;
 
   /**
    * Pad the inputs requested regions by radius
    */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   RadiusSizeType m_Radius;
 
   HistogramType::Pointer m_Histogram;
 
 private:
-  BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void ComputeHistogram();
 
@@ -197,7 +197,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryFunctorNeighborhoodJoinHistogramImageFilter.txx"
+#include "otbBinaryFunctorNeighborhoodJoinHistogramImageFilter.hxx"
 #endif
 
 #endif

@@ -125,7 +125,7 @@ int otbGreyLevelCooccurrenceIndexedList(int, char* [] )
     unsigned int minRadius = 0;
     for ( unsigned int i = 0; i < offset.GetOffsetDimension(); i++ )
       {
-      unsigned int distance = vcl_abs(offset[i]);
+      unsigned int distance = std::abs(offset[i]);
       if ( distance > minRadius )
         {
         minRadius = distance;

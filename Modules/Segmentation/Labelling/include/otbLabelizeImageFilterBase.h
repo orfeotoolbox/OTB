@@ -96,11 +96,11 @@ public:
 
 protected:
   LabelizeImageFilterBase();
-  ~LabelizeImageFilterBase() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LabelizeImageFilterBase() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Region growing */
   virtual void RegionGrowing(const IndexType itkNotUsed(indexSeed)) {}
@@ -127,15 +127,15 @@ protected:
   unsigned long m_ObjectCount;
 
 private:
-  LabelizeImageFilterBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelizeImageFilterBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 }; // end class LabelizeImageFilterBase
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelizeImageFilterBase.txx"
+#include "otbLabelizeImageFilterBase.hxx"
 #endif
 
 #endif

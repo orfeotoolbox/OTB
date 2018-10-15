@@ -24,8 +24,8 @@ otb_fetch_module(OTBPhenology
   information from time profiles. These time profiles should represent
   vegetation status as for instance NDVI, LAI, etc.
 A more detailed description can be found on the project website:
-http://tully.ups-tlse.fr/jordi/phenotb
+https://gitlab.orfeo-toolbox.org/jinglada/phenotb
 "
-  GIT_REPOSITORY http://tully.ups-tlse.fr/jordi/phenotb.git
-  GIT_TAG c9349eb89a652a18b28a40dfb3fa352b76388527
-)
+  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/phenotb.git
+  GIT_TAG 72ba22feac301ae00869b5604c2eef17d6a3fae5
+  )

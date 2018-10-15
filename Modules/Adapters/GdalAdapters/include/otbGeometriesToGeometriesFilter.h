@@ -91,13 +91,13 @@ protected:
   /** Destructor.
    * Does nothing.
    */
-  ~GeometriesToGeometriesFilter() ITK_OVERRIDE;
+  ~GeometriesToGeometriesFilter() override;
 
   /** Processes the input to fill the output.
    * This is the main processing function. It either works \em in-place or by
    * \em copying the transformed input \c Feature s into the output.
    */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
 private:
   /** \e In-place processing function.
@@ -364,7 +364,7 @@ protected:
   /** Default constructor. */
   DefaultGeometriesToGeometriesFilter();
   /** Destructor. */
-  ~DefaultGeometriesToGeometriesFilter() ITK_OVERRIDE;
+  ~DefaultGeometriesToGeometriesFilter() override;
 
   /**
    * Hook that actually filters an OGR \c Layer.
@@ -376,7 +376,7 @@ protected:
    * \note When <tt>source == destination</tt>, it means this is an \em in-place
    * filter.
    */
-  void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const ITK_OVERRIDE;
+  void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const override;
   /**
    * Hook used to define the fields of the new layer.
    * \param[in] source  source \c Layer -- for reference
@@ -385,7 +385,7 @@ protected:
    * Just forwards the fields definition to the \c FieldTransformationPolicy
    * inherited from the \c TransformationFunctorDispatcherType.
    */
-  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const ITK_OVERRIDE
+  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const override
     {
     this->DefineFields(source, dest);
     }
@@ -394,7 +394,7 @@ protected:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeometriesToGeometriesFilter.txx"
+#include "otbGeometriesToGeometriesFilter.hxx"
 #endif
 
 #endif // otbGeometriesToGeometriesFilter_h

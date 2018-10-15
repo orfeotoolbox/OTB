@@ -82,17 +82,17 @@ public:
   typedef typename ParametricFunctionType::ConstPointer               ParametricFunctionConstPointer;
 
   /** Evalulate the function at specified index */
-  OutputType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
+  OutputType EvaluateAtIndex(const IndexType& index) const override;
 
   /** Evaluate the function at non-integer positions */
-  OutputType Evaluate(const PointType& point) const ITK_OVERRIDE
+  OutputType Evaluate(const PointType& point) const override
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
 
-  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const ITK_OVERRIDE
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -103,7 +103,7 @@ public:
    * \warning this method caches BufferedRegion information.
    * If the BufferedRegion has changed, user must call
    * SetInputImage again to update cached values. */
-  void SetInputImage( const InputImageType * ptr ) ITK_OVERRIDE;
+  void SetInputImage( const InputImageType * ptr ) override;
 
 
   /** Get/Set the Scale value */
@@ -172,16 +172,16 @@ protected:
   SarRadiometricCalibrationFunction();
 
   /** default, empty, virtual dtor */
-  ~SarRadiometricCalibrationFunction() ITK_OVERRIDE{}
+  ~SarRadiometricCalibrationFunction() override{}
 
   /** print method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Flags to indicate if these values needs to be applied in calibration*/
 
 private:
-  SarRadiometricCalibrationFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  SarRadiometricCalibrationFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   RealType             m_Scale;
   bool                        m_EnableNoise;
@@ -204,7 +204,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbSarRadiometricCalibrationFunction.txx"
+# include "otbSarRadiometricCalibrationFunction.hxx"
 #endif
 
 #endif

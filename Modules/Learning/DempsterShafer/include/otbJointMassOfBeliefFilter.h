@@ -71,11 +71,11 @@ public:
 
   /** Remove the last input */
   using Superclass::PopBackInput;
-  void PopBackInput() ITK_OVERRIDE;
+  void PopBackInput() override;
 
   /** Remove the first input */
   using Superclass::PopFrontInput;
-  void PopFrontInput() ITK_OVERRIDE;
+  void PopFrontInput() override;
 
   /** Get the idx th input */
   const MassFunctionType * GetInput(unsigned int idx);
@@ -88,17 +88,17 @@ protected:
   JointMassOfBeliefFilter();
 
   /** Destructor */
-  ~JointMassOfBeliefFilter() ITK_OVERRIDE {}
+  ~JointMassOfBeliefFilter() override {}
 
   /** GenerateData */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  JointMassOfBeliefFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  JointMassOfBeliefFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Combine masses from input and output into output */
   void CombineMasses(const MassFunctionType * input, MassFunctionType * output);
@@ -107,7 +107,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbJointMassOfBeliefFilter.txx"
+#include "otbJointMassOfBeliefFilter.hxx"
 #endif
 
 #endif

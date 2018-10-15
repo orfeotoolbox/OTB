@@ -31,6 +31,7 @@
 
 #include "itkCenteredRigid2DTransform.h"
 #include "itkVector.h"
+#include <string>
 
 
 // Forward declaration of GLUtesselator
@@ -67,19 +68,19 @@ public:
   void SetCurrentLayer(const std::string & layername);
 
   // Retrieve the full extent of the actor
-  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const ITK_OVERRIDE;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const override;
 
   // Return actor extent in its own geometry
   void GetBoundingBox(double & ulx, double & uly, double & lrx, double & lry) const;
 
   // Update internal actor state with respect to ViewSettings
-  void ProcessViewSettings() ITK_OVERRIDE;
+  void ProcessViewSettings() override;
 
   // Heavy load/unload operations of data
-  void UpdateData() ITK_OVERRIDE;
+  void UpdateData() override;
 
   // Gl rendering of current state
-  void Render() ITK_OVERRIDE;
+  void Render() override;
 
   PointType ViewportToVectorTransform(const PointType & point) const;
 
@@ -106,7 +107,7 @@ public:
   itkSetMacro(LineWidth,double);
   itkGetConstReferenceMacro(LineWidth,double);
 
-  std::string GetWkt() const ITK_OVERRIDE;
+  std::string GetWkt() const override;
 
   //
   // otb::GlActor overloads.
@@ -114,13 +115,13 @@ public:
 
   bool TransformFromViewport( Point2d & out,
                                       const Point2d & in,
-                                      bool isPhysical = true ) const ITK_OVERRIDE;
+                                      bool isPhysical = true ) const override;
 
 
 protected:
   GlVectorActor();
   
-  ~GlVectorActor() ITK_OVERRIDE;
+  ~GlVectorActor() override;
 
 
   // Internal class to hold tiles

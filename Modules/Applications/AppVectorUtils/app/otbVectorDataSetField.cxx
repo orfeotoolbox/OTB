@@ -43,7 +43,7 @@ public:
   itkTypeMacro(VectorDataSetField, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("VectorDataSetField");
     SetDescription("Set a field in vector data.");
@@ -76,12 +76,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do (for now)
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     m_InputData = GetParameterVectorData("in");
 

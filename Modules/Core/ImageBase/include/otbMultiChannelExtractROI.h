@@ -115,8 +115,8 @@ public:
 
 protected:
   MultiChannelExtractROI();
-  ~MultiChannelExtractROI() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~MultiChannelExtractROI() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** MultiChannelExtractROI can produce an image which is a different
    * resolution than its input image.  As such, MultiChannelExtractROI
@@ -126,7 +126,7 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Reinitialize channels vector for multiple Update.*/
   void ChannelsReInitialization();
@@ -137,11 +137,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
-  MultiChannelExtractROI(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiChannelExtractROI(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** First/ last channel to process [1...] */
   unsigned int m_FirstChannel;
@@ -157,7 +157,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiChannelExtractROI.txx"
+#include "otbMultiChannelExtractROI.hxx"
 #endif
 
 #endif

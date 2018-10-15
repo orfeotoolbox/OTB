@@ -50,7 +50,7 @@ public:
   typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("OSMDownloader");
     SetDescription("Download vector data from OSM and store it to file");
@@ -72,9 +72,7 @@ private:
     SetDocSeeAlso("[1] TrainImagesClassifier \n"
       "[2] http://www.openstreetmap.fr/");
 
-	AddDocTag("Miscellaneous");
-    AddDocTag(Tags::Meta);
-	AddDocTag(Tags::Vector);
+    AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output vector data");
     SetParameterDescription("out", "Vector data file to store downloaded features");
@@ -98,11 +96,10 @@ private:
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    AddParameter(ParameterType_Empty, "printclasses", "Displays available key/value classes");
+    AddParameter(ParameterType_Bool, "printclasses", "Displays available key/value classes");
     SetParameterDescription("printclasses","Print the key/value classes "
       "available for the selected support image. If enabled, the OSM tag Key "
       "(-key) and the output (-out) become optional" );
-    MandatoryOff("printclasses");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("support", "qb_RoadExtract.tif");
@@ -113,24 +110,24 @@ private:
   }
 
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // CASE:  when the -print option is not required and the User
     // does not set the option OSMKey or the option Output or does not
     // set both of them
-    if ( !this->HasValue("printclasses") )
-      {
-      MandatoryOn("out");
-      MandatoryOn("key");
-      }
-    else
+    if ( GetParameterInt("printclasses") )
       {
       MandatoryOff("out");
       MandatoryOff("key");
       }
+    else
+      {
+      MandatoryOn("out");
+      MandatoryOn("key");
+      }
   }
 
- void DoExecute() ITK_OVERRIDE
+ void DoExecute() override
   {
     typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType>
       EnvelopeFilterType;
@@ -178,7 +175,7 @@ private:
 
   // If the user wants to print the Key/Values present in the XML file
   // downloaded  :
-  if ( this->HasValue("printclasses"))
+  if ( GetParameterInt("printclasses"))
     {
     // Print the classes
     VectorDataProviderType::KeyMapType  keymap = m_VdOSMGenerator->GetKeysMap();
@@ -225,4 +222,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::OSMDownloader)
-

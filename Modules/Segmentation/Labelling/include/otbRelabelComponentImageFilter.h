@@ -146,15 +146,15 @@ protected:
   void EnlargeOutputRequestedRegion(itk::DataObject *){};
 
 private:
-  RelabelComponentImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RelabelComponentImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbRelabelComponentImageFilter.txx"
+#include "otbRelabelComponentImageFilter.hxx"
 #endif
 
 #endif

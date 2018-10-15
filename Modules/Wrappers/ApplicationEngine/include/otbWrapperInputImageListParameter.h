@@ -48,8 +48,6 @@ public:
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer< const Self > ConstPointer;
 
-  typedef itk::ImageBase< 2 > ImageBaseType;
-
   /** Defining ::New() static method */
   itkNewMacro( Self );
 
@@ -109,8 +107,8 @@ protected:
 //
 // Private methods.
 private:
-  InputImageListParameter( const Parameter & ); //purposely not implemented
-  void operator = ( const Parameter & ); //purposely not implemented
+  InputImageListParameter( const Parameter & ) = delete;
+  void operator = ( const Parameter & ) = delete;
 
   InputImageParameter::Pointer
     FromImage( ImageBaseType * );

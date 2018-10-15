@@ -83,7 +83,7 @@ public:
   }
 
   /** Calculates the thresholds and save them */
-  void Compute() ITK_OVERRIDE
+  void Compute() override
   {
     this->GenerateData();
   }
@@ -91,8 +91,8 @@ public:
 protected:
 
   HistogramStatisticsFunction();
-  ~HistogramStatisticsFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~HistogramStatisticsFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Calculates the thresholds and save them */
   void GenerateData();
@@ -123,7 +123,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHistogramStatisticsFunction.txx"
+#include "otbHistogramStatisticsFunction.hxx"
 #endif
 
 #endif

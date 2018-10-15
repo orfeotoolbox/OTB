@@ -16,16 +16,6 @@ A simple example is given below:
     #include "otbBandMathImageFilterX.h"
     #include "otbVectorImage.h"
 
-    int otbBandMathImageFilterXNew( int itkNotUsed(argc), char* itkNotUsed(argv) [])
-    {
-        typedef double                                                      PixelType;
-        typedef otb::VectorImage<PixelType, 2>                      ImageType;
-        typedef otb::BandMathImageFilterX<ImageType>                FilterType;
-
-        FilterType::Pointer         filter       = FilterType::New();
-
-        return EXIT_SUCCESS;
-    }
 
 As we can see, the new band math filter works with the class
 otb::VectorImage.
@@ -35,7 +25,7 @@ Syntax: first elements
 
 The default prefix name for variables related to the ith input is
 *im(i+1)* (note the indexing from 1 to N, for N inputs). The user has
-the possibility to change this default behaviour by setting its own
+the possibility of changing this default behaviour by setting its own
 prefix.
 
 ::
@@ -50,8 +40,8 @@ prefix.
     // All variables related to anotherImage (input 2) will have the prefix im3
     filter->SetNthInput(2, anotherImage);
 
-In this document, we will keep the default convention. Following list
-summaries the available variables for input #0 (and so on for every
+In this document, we will keep the default convention. The following list
+summarises the available variables for input #0 (and so on for every
 input).
 
 Variables and their descriptions:
@@ -80,7 +70,7 @@ Variables and their descriptions:
 
 [variables]
 
-Moreover, we also have the generic variables idxX and idxY that
+In addition, we also have the generic variables idxX and idxY that
 represent the indices of the current pixel (scalars).
 
 Note that the use of a global statistics will automatically make the
@@ -100,7 +90,7 @@ represents a pixel of an image made of only one band:
 .. math:: im1+1
 
 A scalar can’t be added to a vector. The right formula is instead (one
-can notice the way that muParserX allows to define vectors on the fly):
+can notice the way that muParserX allows vectors to be defined on the fly):
 
 .. math:: im1+\{ 1 \}
 
@@ -215,8 +205,8 @@ ones. For instance:
 .. math:: im1 ~  mlt ~ 2.0
 
 Note that the operator ’\*’ could have been used instead of ’pw’ one.
-But ’pw’ is a little bit more permisive, and can tolerate
-one-dimensional vector as right element.
+But ’pw’ is a little bit more permisive, and can tolerate a
+one-dimensional vector as the right operand.
 
 **Operators pow and pw** The first operator allows the definition of an
 element-wise exponentiation of two vectors (and even matrices), provided
@@ -256,22 +246,22 @@ needed; one mean value is computed per input). For instance:
 
 .. math:: mean(im1b1N3x3,im1b2N3x3,im1b3N3x3,im1b4N3x3)
 
-Note: a limitation coming from muparserX itself makes impossible to pass
+Note: a limitation coming from muparserX itself makes it impossible to pass
 all those neighborhoods with a unique variable.
 
-**Function var** This function allows to compute the variance of a given
+**Function var** This function computes the variance of a given
 vector or neighborhood (the function can take as many inputs as needed;
 one var value is computed per input). For instance:
 
 .. math:: var(im1b1N3x3)
 
-**Function median** This function allows to compute the median value of
+**Function median** This function computes the median value of
 a given vector or neighborhood (the function can take as many inputs as
 needed; one median value is computed per input). For instance:
 
 .. math:: median(im1b1N3x3)
 
-**Function corr** This function allows to compute the correlation
+**Function corr** This function computes the correlation
 between two vectors or matrices of the same dimensions (the function
 takes two inputs). For instance:
 

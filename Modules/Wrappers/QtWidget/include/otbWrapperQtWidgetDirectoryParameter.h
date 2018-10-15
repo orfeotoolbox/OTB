@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetDirectoryParameter_h
 #define otbWrapperQtWidgetDirectoryParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,20 +40,20 @@ class OTBQtWidget_EXPORT QtWidgetDirectoryParameter : public QtWidgetParameterBa
 {
   Q_OBJECT
 public:
-  QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*);
-  ~QtWidgetDirectoryParameter() ITK_OVERRIDE;
+  QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*, QWidget*);
+  ~QtWidgetDirectoryParameter() override;
 
 protected slots:
   void SetFileName( const QString& value );
   void SelectFile();
 
 private:
-  QtWidgetDirectoryParameter(const QtWidgetDirectoryParameter&); //purposely not implemented
-  void operator=(const QtWidgetDirectoryParameter&); //purposely not implemented
+  QtWidgetDirectoryParameter(const QtWidgetDirectoryParameter&) = delete;
+  void operator=(const QtWidgetDirectoryParameter&) = delete;
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
 
   DirectoryParameter::Pointer m_DirectoryParam;

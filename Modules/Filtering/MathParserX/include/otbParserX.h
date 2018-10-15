@@ -107,13 +107,13 @@ public:
 
 protected:
   ParserX();
-  ~ParserX() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ParserX() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:
-  ParserX(const Self &);             //purposely not implemented
-  void operator =(const Self &);    //purposely not implemented
+  ParserX(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
   typedef itk::SmartPointer<ParserXImpl> ParserXImplPtr;
   ParserXImplPtr m_InternalParserX;

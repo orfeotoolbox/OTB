@@ -60,11 +60,11 @@ protected:
     this->SetParameter("StandardParallel2", "47.69601389");
   }
 
-  ~Lambert2EtenduProjection() ITK_OVERRIDE {}
+  ~Lambert2EtenduProjection() override {}
 
 private:
-  Lambert2EtenduProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);           //purposely not implemented
+  Lambert2EtenduProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // namespace otb

@@ -75,25 +75,25 @@ public:
 
 protected:
   TransformPointSetFilter();
-  ~TransformPointSetFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~TransformPointSetFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Generate Requested Data */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   /** Transform to apply to all the PointSet points. */
   typename TransformType::Pointer m_Transform;
 
 private:
-  TransformPointSetFilter(const TransformPointSetFilter &); //purposely not implemented
-  void operator =(const TransformPointSetFilter&); //purposely not implemented
+  TransformPointSetFilter(const TransformPointSetFilter &) = delete;
+  void operator =(const TransformPointSetFilter&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTransformPointSetFilter.txx"
+#include "otbTransformPointSetFilter.hxx"
 #endif
 
 #endif

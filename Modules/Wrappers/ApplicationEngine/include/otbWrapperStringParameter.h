@@ -63,12 +63,12 @@ public:
     return m_Value;
   }
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return !m_Value.empty();
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     m_Value = "";
   }
@@ -79,14 +79,14 @@ protected:
   {}
 
   /** Destructor */
-  ~StringParameter() ITK_OVERRIDE
+  ~StringParameter() override
   {}
 
   std::string  m_Value;
 
 private:
-  StringParameter(const StringParameter &); //purposely not implemented
-  void operator =(const StringParameter&); //purposely not implemented
+  StringParameter(const StringParameter &) = delete;
+  void operator =(const StringParameter&) = delete;
 
 }; // End class Parameter
 

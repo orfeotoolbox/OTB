@@ -64,21 +64,21 @@ public:
   itkTypeMacro(SVMMachineLearningModel, MachineLearningModel);
 
   /** Train the machine learning model */
-  void Train() ITK_OVERRIDE;
+  void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string &filename, const std::string & name="") ITK_OVERRIDE;
+  void Save(const std::string &filename, const std::string & name="") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  void Load(const std::string & filename, const std::string & name="") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) ITK_OVERRIDE;
+  bool CanReadFile(const std::string &) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) ITK_OVERRIDE;
+  bool CanWriteFile(const std::string &) override;
   //@}
 
 #define otbSetSVMParameterMacro(name, alias, type) \
@@ -93,7 +93,7 @@ public:
     }
 
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
-  otbSetSVMParameterMacro(SVMType, svm_type, int)
+  otbSetSVMParameterMacro(SVMType, svm_type, int);
 
   /** Get the SVM type (C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR) */
   int GetSVMType(void) const
@@ -106,7 +106,7 @@ public:
   polynomial: (gamma*u'*v + coef0)^degree
   radial basis function: exp(-gamma*|u-v|^2)
   sigmoid: tanh(gamma*u'*v + coef0)*/
-  otbSetSVMParameterMacro(KernelType, kernel_type, int)
+  otbSetSVMParameterMacro(KernelType, kernel_type, int);
 
   /** Get the kernel type */
   int GetKernelType(void) const
@@ -115,7 +115,7 @@ public:
     }
 
   /** Set the degree of the polynomial kernel */
-  otbSetSVMParameterMacro(PolynomialKernelDegree,degree,int)
+  otbSetSVMParameterMacro(PolynomialKernelDegree,degree,int);
 
   /** Get the degree of the polynomial kernel */
   int GetPolynomialKernelDegree(void) const
@@ -124,7 +124,7 @@ public:
     }
 
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
-  otbSetSVMParameterMacro(KernelGamma,gamma,double)
+  otbSetSVMParameterMacro(KernelGamma,gamma,double);
 
   /** Get the gamma parameter for poly/rbf/sigmoid kernels */
   double GetKernelGamma(void) const
@@ -133,7 +133,7 @@ public:
     }
 
   /** Set the coef0 parameter for poly/sigmoid kernels */
-  otbSetSVMParameterMacro(KernelCoef0,coef0,double)
+  otbSetSVMParameterMacro(KernelCoef0,coef0,double);
 
   /** Get the coef0 parameter for poly/sigmoid kernels */
   double GetKernelCoef0(void) const
@@ -142,7 +142,7 @@ public:
   }
 
   /** Set the C parameter for the training for C_SVC, EPSILON_SVR and C_SVR */
-  otbSetSVMParameterMacro(C,C,double)
+  otbSetSVMParameterMacro(C,C,double);
 
   /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   double GetC(void) const
@@ -169,7 +169,7 @@ public:
   bool HasProbabilities(void) const;
 
   /** Set the tolerance for the stopping criterion for the training*/
-  otbSetSVMParameterMacro(Epsilon,eps,double)
+  otbSetSVMParameterMacro(Epsilon,eps,double);
 
   /** Get the tolerance for the stopping criterion for the training*/
   double GetEpsilon(void) const
@@ -178,7 +178,7 @@ public:
   }
 
   /** Set the value of p for EPSILON_SVR */
-  otbSetSVMParameterMacro(P,p,double)
+  otbSetSVMParameterMacro(P,p,double);
 
   /** Get the value of p for EPSILON_SVR */
   double GetP(void) const
@@ -187,7 +187,7 @@ public:
   }
 
   /** Set the Nu parameter for the training */
-  otbSetSVMParameterMacro(Nu,nu,double)
+  otbSetSVMParameterMacro(Nu,nu,double);
 
   /** Set the Nu parameter for the training */
   double GetNu(void) const
@@ -269,17 +269,17 @@ protected:
   LibSVMMachineLearningModel();
 
   /** Destructor */
-  ~LibSVMMachineLearningModel() ITK_OVERRIDE;
+  ~LibSVMMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LibSVMMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LibSVMMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void BuildProblem(void);
 
@@ -328,7 +328,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLibSVMMachineLearningModel.txx"
+#include "otbLibSVMMachineLearningModel.hxx"
 #endif
 
 #endif

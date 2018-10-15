@@ -141,20 +141,20 @@ protected:
   /** Constructor */
   RoadExtractionFilter();
   /** Destructor */
-  ~RoadExtractionFilter() ITK_OVERRIDE {}
+  ~RoadExtractionFilter() override {}
 
   /** Prepare main computation method */
   void BeforeGenerateData(void);
 
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 
-  RoadExtractionFilter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  RoadExtractionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** SpectralAngleDistanceImageFilter use by the composite filter */
   typename SpectralAngleDistanceImageFilterType::Pointer m_SpectralAngleDistanceImageFilter;
@@ -165,7 +165,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRoadExtractionFilter.txx"
+#include "otbRoadExtractionFilter.hxx"
 #endif
 
 #endif

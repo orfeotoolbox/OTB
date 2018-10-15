@@ -93,7 +93,7 @@ public:
     m_StdDev.SetSize( var.Size() );
     for ( unsigned int i = 0; i < m_StdDev.Size(); ++i )
     {
-      m_StdDev[i] = vcl_sqrt( static_cast< RealType >( var[i] ) );
+      m_StdDev[i] = std::sqrt( static_cast< RealType >( var[i] ) );
       if ( m_StdDev[i] == itk::NumericTraits< RealType >::Zero )
       {
         throw itk::ExceptionObject(__FILE__, __LINE__,
@@ -196,9 +196,9 @@ public:
 
 protected:
   NormalizeVectorImageFilter ();
-  ~NormalizeVectorImageFilter() ITK_OVERRIDE { }
+  ~NormalizeVectorImageFilter() override { }
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 
 private:
@@ -218,7 +218,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNormalizeVectorImageFilter.txx"
+#include "otbNormalizeVectorImageFilter.hxx"
 #endif
 
 #endif // otbNormalizeVectorImageFilter_h

@@ -91,7 +91,7 @@ public:
   void SetNthFileName( std::size_t, const std::string & ) override;
 
   /** */
-  std::size_t SetStrings( const StringVector & );
+  std::size_t SetStrings( const StringVector & ) override;
 
   /** */
   std::size_t GetStrings( StringVector & ) const override;
@@ -130,8 +130,8 @@ protected:
 //
 // Private methods.
 private:
-  // ParameterList( const Parameter & ); // purposely not implemented
-  // void operator = ( const Parameter & ); // purposely not implemented
+  // ParameterList( const Parameter & ) = delete;
+  // void operator = ( const Parameter & ) = delete;
 
 //
 // Protected methods.
@@ -199,7 +199,7 @@ protected:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbWrapperParameterList.txx"
+# include "otbWrapperParameterList.hxx"
 #endif
 
 #endif

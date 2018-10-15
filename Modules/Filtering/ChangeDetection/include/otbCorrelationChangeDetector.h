@@ -83,11 +83,11 @@ public:
 
 protected:
   CorrelationChangeDetector() {}
-  ~CorrelationChangeDetector() ITK_OVERRIDE {}
+  ~CorrelationChangeDetector() override {}
 
 private:
-  CorrelationChangeDetector(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  CorrelationChangeDetector(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

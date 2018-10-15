@@ -26,9 +26,9 @@
 #ifndef DataSetSummary_h
 #define DataSetSummary_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecordHeader.h>
 #include <RadarSat/RadarSatRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

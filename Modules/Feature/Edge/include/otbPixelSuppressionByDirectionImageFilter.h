@@ -103,19 +103,19 @@ public:
   const InputImageType * GetInputImageDirection(void);
 
   void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw(itk::InvalidRequestedRegionError) override;
 
 protected:
   PixelSuppressionByDirectionImageFilter();
-  ~PixelSuppressionByDirectionImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PixelSuppressionByDirectionImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
-  PixelSuppressionByDirectionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PixelSuppressionByDirectionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Radius of the region
   SizeType m_Radius;
@@ -126,7 +126,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPixelSuppressionByDirectionImageFilter.txx"
+#include "otbPixelSuppressionByDirectionImageFilter.hxx"
 #endif
 
 #endif

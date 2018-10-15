@@ -22,7 +22,7 @@
 
 #include "otbWaveletGenerator.h"
 
-#include <vcl_cmath.h>
+#include <cmath>
 #include "itkMacro.h"
 #include "otbMath.h"
 
@@ -39,7 +39,7 @@ WaveletGenerator<TMotherWaveletOperator>
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
   msg << " is unknown or has to be implemented...\n";
-  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
 
   return "Unknown";
 }
@@ -52,7 +52,7 @@ WaveletGenerator<TMotherWaveletOperator>
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
   msg << " is unknown or has to be implemented...\n";
-  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator>
@@ -62,8 +62,8 @@ WaveletGenerator<TMotherWaveletOperator>
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
-  msg << " is unknown or has to be implemented (check the txx file)...\n";
-  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+  msg << " is unknown or has to be implemented (check the hxx file)...\n";
+  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
 }
 
 /**

@@ -61,20 +61,20 @@ public:
    * Set the VertexWithCompacity attributes from the attributes vector.
    * \param attributes The vector containing the parsed attributes.
    */
-  void SetAttributesMap(AttributesMapType attributes) ITK_OVERRIDE;
+  void SetAttributesMap(AttributesMapType attributes) override;
   /**
    * Get an attributes vector representing the VertexWithCompacity attributes.
    * \return The attributes vector
    */
-  AttributesMapType GetAttributesMap(void) ITK_OVERRIDE;
+  AttributesMapType GetAttributesMap(void) override;
 
 protected:
   /** Constructor */
   RCC8VertexWithCompacity();
   /** Desctructor */
-  ~RCC8VertexWithCompacity() ITK_OVERRIDE {}
+  ~RCC8VertexWithCompacity() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** The compacity */
@@ -82,7 +82,7 @@ private:
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8VertexWithCompacity.txx"
+#include "otbRCC8VertexWithCompacity.hxx"
 #endif
 
 #endif

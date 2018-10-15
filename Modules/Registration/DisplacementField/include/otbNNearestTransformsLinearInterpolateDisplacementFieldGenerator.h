@@ -74,21 +74,21 @@ protected:
   /** Constructor */
   NNearestTransformsLinearInterpolateDisplacementFieldGenerator() {};
   /** Destructor */
-  ~NNearestTransformsLinearInterpolateDisplacementFieldGenerator() ITK_OVERRIDE {}
+  ~NNearestTransformsLinearInterpolateDisplacementFieldGenerator() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
-  NNearestTransformsLinearInterpolateDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NNearestTransformsLinearInterpolateDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfPoints;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator.txx"
+#include "otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

@@ -66,21 +66,21 @@ public:
   itkTypeMacro(SVMMachineLearningModel, MachineLearningModel);
 
   /** Train the machine learning model */
-  void Train() ITK_OVERRIDE;
+  void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  void Save(const std::string & filename, const std::string & name="") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") ITK_OVERRIDE;
+  void Load(const std::string & filename, const std::string & name="") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) ITK_OVERRIDE;
+  bool CanReadFile(const std::string &) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) ITK_OVERRIDE;
+  bool CanWriteFile(const std::string &) override;
   //@}
 
   //Setters/Getters to SVM model
@@ -138,18 +138,18 @@ protected:
   SVMMachineLearningModel();
 
   /** Destructor */
-  ~SVMMachineLearningModel() ITK_OVERRIDE;
+  ~SVMMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const ITK_OVERRIDE;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
 
   
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SVMMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SVMMachineLearningModel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 #ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::SVM> m_SVMModel;
 #else
@@ -178,7 +178,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVMMachineLearningModel.txx"
+#include "otbSVMMachineLearningModel.hxx"
 #endif
 
 #endif

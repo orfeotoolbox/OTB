@@ -149,7 +149,7 @@ public:
 
 protected:
   MNFImageFilter();
-  ~MNFImageFilter() ITK_OVERRIDE { }
+  ~MNFImageFilter() override { }
 
   /** GenerateOutputInformation
    * Propagate vector length info and modify if needed
@@ -159,14 +159,14 @@ protected:
    * (which may not be square) has to be given,
    * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
    */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** GenerateData
    * Through a filter of filter structure
    */
-  void GenerateData () ITK_OVERRIDE;
+  void GenerateData () override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Internal methods */
   void ForwardGenerateOutputInformation();
@@ -210,7 +210,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMNFImageFilter.txx"
+#include "otbMNFImageFilter.hxx"
 #endif
 
 

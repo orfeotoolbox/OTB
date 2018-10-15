@@ -151,39 +151,38 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
-  void AllocateOutputs() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void Reset(void) ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
+  void AllocateOutputs() override;
+  void GenerateOutputInformation() override;
+  void Reset(void) override;
+  void Synthetize(void) override;
 
-  void AddInput(itk::DataObject * dataObject) ITK_OVERRIDE
+  void AddInput(itk::DataObject * dataObject) override
   {
     Superclass::AddInput(dataObject);
   }
 
 protected:
   PersistentDescriptorsListSampleGenerator();
-  ~PersistentDescriptorsListSampleGenerator() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PersistentDescriptorsListSampleGenerator() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread,
-                             itk::ThreadIdType threadId) ITK_OVERRIDE;
+                             itk::ThreadIdType threadId) override;
 
 private:
-  PersistentDescriptorsListSampleGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentDescriptorsListSampleGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   bool IsInsideWithNeighborhoodRadius(const RegionType& region, const ContinuousIndexType &index) const
     {
-    typedef typename RegionType::IndexType     IndexType;
     typedef typename IndexType::IndexValueType IndexValueType;
     typedef typename ContinuousIndexType::ValueType ContinuousIndexValueType;
 
@@ -303,7 +302,7 @@ public:
       return this->GetFilter()->GetInput();
     }
 
-    void AddInput(itk::DataObject * dataObject) ITK_OVERRIDE
+    void AddInput(itk::DataObject * dataObject) override
       {
         this->GetFilter()->AddInput(dataObject);
       }
@@ -363,17 +362,17 @@ public:
     DescriptorsListSampleGenerator();
 
     /** Destructor */
-    ~DescriptorsListSampleGenerator() ITK_OVERRIDE;
+    ~DescriptorsListSampleGenerator() override;
 
   private:
-    DescriptorsListSampleGenerator(const Self &); //purposely not implemented
-    void operator =(const Self&); //purposely not implemented
+    DescriptorsListSampleGenerator(const Self &) = delete;
+    void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDescriptorsListSampleGenerator.txx"
+#include "otbDescriptorsListSampleGenerator.hxx"
 #endif
 
 #endif

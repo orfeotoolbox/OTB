@@ -79,12 +79,12 @@ public:
 
 
 private:
-  RPCSolverAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-  RPCSolverAdapter(); // purposely not implemented, this class defines
-                      // typedefs and exposes static methods
-  virtual ~RPCSolverAdapter(); // purposely not implemented, this class defines
-                              // typedefs and exposes static methods
+  RPCSolverAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
+
+  // This class defines typedefs and exposes static methods
+  RPCSolverAdapter() = delete;
+  virtual ~RPCSolverAdapter() = delete;
 };
 
 } // namespace otb

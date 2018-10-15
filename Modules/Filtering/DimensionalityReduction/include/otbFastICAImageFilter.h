@@ -149,7 +149,7 @@ public:
 
 protected:
   FastICAImageFilter ();
-  ~FastICAImageFilter() ITK_OVERRIDE { }
+  ~FastICAImageFilter() override { }
 
   /** GenerateOutputInformation
    * Propagate vector length info and modify if needed
@@ -159,12 +159,12 @@ protected:
    * (which may not be square) has to be given,
    * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
    */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** GenerateData
    * Through a filter of filter structure
    */
-  void GenerateData () ITK_OVERRIDE;
+  void GenerateData () override;
 
   /** Internal methods */
   void ForwardGenerateOutputInformation();
@@ -192,14 +192,14 @@ protected:
   TransformFilterPointerType m_TransformFilter;
 
 private:
-  FastICAImageFilter( const Self & ); //purposely not implemented
-  void operator =( const Self & ); //purposely not implemented
+  FastICAImageFilter( const Self & ) = delete;
+  void operator =( const Self & ) = delete;
 }; // end of class
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFastICAImageFilter.txx"
+#include "otbFastICAImageFilter.hxx"
 #endif
 
 

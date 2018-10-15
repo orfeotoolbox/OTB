@@ -30,6 +30,7 @@
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vnl/vnl_least_squares_function.h>
+#include <string>
 
 
 namespace otb
@@ -113,7 +114,7 @@ public:
     m_IntensityP1 = m_IntensityP1 / (static_cast<double> (m_NbOfBands));
     m_IntensityP2 = m_IntensityP2 / (static_cast<double> (m_NbOfBands));
 
-    m_Distance = vcl_sqrt(m_Distance);
+    m_Distance = std::sqrt(m_Distance);
 
     //compute spectralAngle
     double scalarProd = 0.0;
@@ -135,7 +136,7 @@ public:
       }
     else
       {
-      m_SpectralAngle = vcl_acos(scalarProd / vcl_sqrt(normProd));
+      m_SpectralAngle = std::acos(scalarProd / std::sqrt(normProd));
       }
 
     //
@@ -214,8 +215,8 @@ public:
 
 private:
 
-  ConnectedComponentMuParserFunctor(const Self &); //purposely not implemented
-  void operator =(const Self &); //purposely not implemented
+  ConnectedComponentMuParserFunctor(const Self &) = delete;
+  void operator =(const Self &) = delete;
 
   std::string m_Expression;
   ParserType::Pointer m_Parser;

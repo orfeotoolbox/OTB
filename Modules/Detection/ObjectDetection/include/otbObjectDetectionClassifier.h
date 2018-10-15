@@ -22,6 +22,7 @@
 #define otbObjectDetectionClassifier_h
 
 #include <vector>
+#include <string>
 
 #include "itkImageRegion.h"
 #include "itkFixedArray.h"
@@ -123,7 +124,7 @@ public:
 
   typedef itk::Statistics::ListSample<DescriptorType>        ListSampleType;
 
-  void AddInput(itk::DataObject * dataObject) ITK_OVERRIDE
+  void AddInput(itk::DataObject * dataObject) override
   {
     this->Superclass::AddInput(dataObject);
   }
@@ -161,39 +162,38 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  itk::DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
-  void AllocateOutputs() ITK_OVERRIDE;
+  void AllocateOutputs() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void Reset(void) ITK_OVERRIDE;
+  void Reset(void) override;
 
-  void Synthetize(void) ITK_OVERRIDE;
+  void Synthetize(void) override;
 
 protected:
   PersistentObjectDetectionClassifier();
-  ~PersistentObjectDetectionClassifier() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PersistentObjectDetectionClassifier() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread,
-                             itk::ThreadIdType threadId) ITK_OVERRIDE;
+                             itk::ThreadIdType threadId) override;
 
 private:
-  PersistentObjectDetectionClassifier(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentObjectDetectionClassifier(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   template <typename TCoordRepType>
   bool
   IsInsideWithNeighborhoodRadius(const RegionType& region, const ContinuousIndexType &index) const
     {
-    typedef typename RegionType::IndexType     IndexType;
     typedef typename IndexType::IndexValueType IndexValueType;
 
     for(unsigned int i=0; i<ImageDimension; ++i)
@@ -319,7 +319,7 @@ public:
       return this->GetFilter()->GetOutputVectorData();
     }
 
-    void AddInput(itk::DataObject * dataObject) ITK_OVERRIDE
+    void AddInput(itk::DataObject * dataObject) override
     {
       this->GetFilter()->AddInput(dataObject);
     }
@@ -377,17 +377,17 @@ public:
     ObjectDetectionClassifier();
 
     /** Destructor */
-    ~ObjectDetectionClassifier() ITK_OVERRIDE;
+    ~ObjectDetectionClassifier() override;
 
   private:
-    ObjectDetectionClassifier(const Self &); //purposely not implemented
-    void operator =(const Self&); //purposely not implemented
+    ObjectDetectionClassifier(const Self &) = delete;
+    void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectDetectionClassifier.txx"
+#include "otbObjectDetectionClassifier.hxx"
 #endif
 
 #endif

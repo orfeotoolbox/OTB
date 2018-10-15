@@ -65,17 +65,17 @@ public:
   itkGetMacro(Radius, unsigned int);
 
   /** Evaluate Method */
-  OutputType Evaluate(const InputType& input) const ITK_OVERRIDE;
+  OutputType Evaluate(const InputType& input) const override;
 
 protected:
   PointSetDensityGaussianFunction() : m_Radius(1) {};
-  ~PointSetDensityGaussianFunction() ITK_OVERRIDE {}
+  ~PointSetDensityGaussianFunction() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetDensityGaussianFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  PointSetDensityGaussianFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Radius;
 };
@@ -83,7 +83,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetDensityGaussianFunction.txx"
+#include "otbPointSetDensityGaussianFunction.hxx"
 #endif
 
 #endif

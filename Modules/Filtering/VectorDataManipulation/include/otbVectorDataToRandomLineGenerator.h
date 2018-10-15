@@ -25,6 +25,7 @@
 #include "otbVectorData.h"
 #include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
+#include <string>
 
 namespace otb
 {
@@ -97,17 +98,17 @@ public:
 
 protected:
   VectorDataToRandomLineGenerator();
-  ~VectorDataToRandomLineGenerator() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~VectorDataToRandomLineGenerator() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Triggers the Computation of the sample list */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   PointVectorType RandomPointsGenerator(DataNodeType * node);
 
 private:
-  VectorDataToRandomLineGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToRandomLineGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string GetNextID()
     {
@@ -128,7 +129,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToRandomLineGenerator.txx"
+#include "otbVectorDataToRandomLineGenerator.hxx"
 #endif
 
 #endif

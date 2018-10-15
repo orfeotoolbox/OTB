@@ -78,12 +78,12 @@ public :
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   /** Method for creation through the object factory. */
-  itkNewMacro(Self)
+  itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CLHistogramEqualizationFilter, ImageToImageFilter)
+  itkTypeMacro(CLHistogramEqualizationFilter, ImageToImageFilter);
 
-  itkGetMacro(Min , InputPixelType)
-  // itkSetMacro(Min, InputPixelType)
+  itkGetMacro(Min , InputPixelType);
+  // itkSetMacro(Min, InputPixelType);
   void SetMin( InputPixelType min )
     {
     m_HistoFilter->SetMin(min);
@@ -92,8 +92,8 @@ public :
     m_Min = min;
     };
 
-  itkGetMacro(Max , InputPixelType)
-  // itkSetMacro(Max, InputPixelType)
+  itkGetMacro(Max , InputPixelType);
+  // itkSetMacro(Max, InputPixelType);
   void SetMax( InputPixelType max )
     {
     m_HistoFilter->SetMax(max);
@@ -102,16 +102,16 @@ public :
     m_Max = max;
     };
 
-  itkGetMacro(NbBin , unsigned long)
-  // itkSetMacro(NbBin, unsigned long)
+  itkGetMacro(NbBin , unsigned long);
+  // itkSetMacro(NbBin, unsigned long);
   void SetNbBin( unsigned long bin )
     {
     m_HistoFilter->SetNbBin(bin);
     m_NbBin = bin;
     };
 
-  itkGetMacro(ThumbSize , typename InputImageType::SizeType)
-  // itkSetMacro(ThumbSize, typename InputImageType::SizeType)
+  itkGetMacro(ThumbSize , typename InputImageType::SizeType);
+  // itkSetMacro(ThumbSize, typename InputImageType::SizeType);
   void SetThumbSize( typename InputImageType::SizeType size )
     {
     m_HistoFilter->SetThumbSize(size);
@@ -120,16 +120,16 @@ public :
     m_ThumbSize = size;
     };
 
-  itkGetMacro(Threshold , double)
-  // itkSetMacro(Threshold, double)
+  itkGetMacro(Threshold , double);
+  // itkSetMacro(Threshold, double);
   void SetThreshold( double t )
     {
     m_HistoFilter->SetThreshold(t);
     m_Threshold = t;
     };
 
-  itkGetMacro(NoData , InputPixelType)
-  // itkSetMacro(NoData, InputPixelType)
+  itkGetMacro(NoData , InputPixelType);
+  // itkSetMacro(NoData, InputPixelType);
   void SetNoData( InputPixelType n )
     {
     m_HistoFilter->SetNoData(n);
@@ -138,8 +138,8 @@ public :
     }
 
 
-  itkGetMacro(NoDataFlag , bool)
-  // itkSetMacro(NoDataFlag, bool)
+  itkGetMacro(NoDataFlag , bool);
+  // itkSetMacro(NoDataFlag, bool);
   void SetNoDataFlag( bool flag )
     {
     m_HistoFilter->SetNoDataFlag(flag);
@@ -179,7 +179,7 @@ private :
 }  // End namespace otb
   
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCLHistogramEqualizationFilter.txx"
+#include "otbCLHistogramEqualizationFilter.hxx"
 #endif
 
 

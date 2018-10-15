@@ -84,11 +84,11 @@ public:
 
 protected:
   CBAMIChangeDetector() {}
-  ~CBAMIChangeDetector() ITK_OVERRIDE {}
+  ~CBAMIChangeDetector() override {}
 
 private:
-  CBAMIChangeDetector(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  CBAMIChangeDetector(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

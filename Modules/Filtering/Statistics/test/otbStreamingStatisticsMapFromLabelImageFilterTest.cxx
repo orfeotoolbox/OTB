@@ -51,7 +51,7 @@ int generic_StreamingStatisticsMapFromLabelImageFilterTest(int itkNotUsed(argc),
       StreamingStatisticsMapFromLabelImageFilterType;
   typedef typename StreamingStatisticsMapFromLabelImageFilterType::Pointer
       StreamingStatisticsMapFromLabelImageFilterPointerType;
-  typedef typename StreamingStatisticsMapFromLabelImageFilterType::MeanValueMapType MeanValueMapType;
+  typedef typename StreamingStatisticsMapFromLabelImageFilterType::PixelValueMapType MeanValueMapType;
   typedef typename StreamingStatisticsMapFromLabelImageFilterType::LabelPopulationMapType LabelPopulationMapType;
 
   VectorPointerType supportImage = VectorImageType::New();

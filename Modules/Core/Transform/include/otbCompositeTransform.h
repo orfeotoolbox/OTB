@@ -21,7 +21,6 @@
 #ifndef otbCompositeTransform_h
 #define otbCompositeTransform_h
 
-#include <iostream>
 #include <sstream>
 #include <stdio.h>
 #include "otbTransform.h"
@@ -118,7 +117,7 @@ public:
   itkGetConstReferenceMacro(SecondTransform, SecondTransformPointerType);
 
   /**  Method to transform a point. */
-  SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType&) const ITK_OVERRIDE;
+  SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType&) const override;
 
   /**  Method to transform a vector. */
   //  virtual OutputVectorType TransformVector(const InputVectorType &) const;
@@ -131,21 +130,21 @@ public:
 
 protected:
   CompositeTransform();
-  ~CompositeTransform() ITK_OVERRIDE;
+  ~CompositeTransform() override;
 
   FirstTransformPointerType  m_FirstTransform;
   SecondTransformPointerType m_SecondTransform;
 
 private:
-  CompositeTransform(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  CompositeTransform(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCompositeTransform.txx"
+#include "otbCompositeTransform.hxx"
 #endif
 
 #endif

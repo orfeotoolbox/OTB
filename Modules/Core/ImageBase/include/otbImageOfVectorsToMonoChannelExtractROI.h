@@ -86,8 +86,8 @@ public:
 
 protected:
   ImageOfVectorsToMonoChannelExtractROI();
-  ~ImageOfVectorsToMonoChannelExtractROI() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageOfVectorsToMonoChannelExtractROI() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ExtractImageFilter can produce an image which is a different
    * resolution than its input image.  As such, ExtractImageFilter
@@ -97,17 +97,17 @@ protected:
    * below.
    *
    * \sa ProcessObject::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** ExtractImageFilter can be implemented as a multithreaded filter.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 private:
-  ImageOfVectorsToMonoChannelExtractROI(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageOfVectorsToMonoChannelExtractROI(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Channel to process [1...] */
   unsigned int m_Channel;
@@ -116,7 +116,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageOfVectorsToMonoChannelExtractROI.txx"
+#include "otbImageOfVectorsToMonoChannelExtractROI.hxx"
 #endif
 
 #endif

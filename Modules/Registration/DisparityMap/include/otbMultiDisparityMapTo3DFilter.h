@@ -157,23 +157,23 @@ protected:
   MultiDisparityMapTo3DFilter();
 
   /** Destructor */
-  ~MultiDisparityMapTo3DFilter() ITK_OVERRIDE;
+  ~MultiDisparityMapTo3DFilter() override;
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Before threaded generate data */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  MultiDisparityMapTo3DFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiDisparityMapTo3DFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Keywordlist of reference sensor image */
   ImageKeywordListType m_ReferenceKeywordList;
@@ -190,7 +190,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiDisparityMapTo3DFilter.txx"
+#include "otbMultiDisparityMapTo3DFilter.hxx"
 #endif
 
 #endif

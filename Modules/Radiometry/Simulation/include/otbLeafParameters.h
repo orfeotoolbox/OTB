@@ -78,13 +78,13 @@ class OTBSimulation_EXPORT LeafParameters : public itk::DataObject
       /** Constructor */
       LeafParameters();
       /** Destructor */
-      ~LeafParameters() ITK_OVERRIDE;
+      ~LeafParameters() override;
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
    private:
-      LeafParameters(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+      LeafParameters(const Self&) = delete;
+      void operator=(const Self&) = delete;
 
       double m_Cab; //Chlorophyll content
       double m_Car; //Carotenoid content

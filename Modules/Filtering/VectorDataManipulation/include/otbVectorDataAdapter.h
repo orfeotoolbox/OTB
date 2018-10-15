@@ -78,23 +78,23 @@ public:
 
 protected:
   VectorDataAdapter() {};
-  ~VectorDataAdapter() ITK_OVERRIDE {}
+  ~VectorDataAdapter() override {}
 
-  OutputPointType ProcessPoint(InputPointType point) const ITK_OVERRIDE;
-  OutputLinePointerType ProcessLine(InputLinePointerType line) const ITK_OVERRIDE;
-  OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const ITK_OVERRIDE;
-  OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const ITK_OVERRIDE;
+  OutputPointType ProcessPoint(InputPointType point) const override;
+  OutputLinePointerType ProcessLine(InputLinePointerType line) const override;
+  OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const override;
+  OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const override;
 
 private:
-  VectorDataAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataAdapter.txx"
+#include "otbVectorDataAdapter.hxx"
 #endif
 
 #endif

@@ -96,7 +96,7 @@ public:
   itkTypeMacro(CompositeExampleImageFilter, itk::ImageToImageFilter);
 
   /** Display */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 //  Software Guide : BeginLatex
 //
@@ -135,7 +135,7 @@ protected:
   RescalerType;
 //  Software Guide : EndCodeSnippet
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
 
@@ -287,7 +287,7 @@ int main(int argc, char* argv[])
     {
     writer->Update();
     }
-  catch (itk::ExceptionObject e)
+  catch ( itk::ExceptionObject & e )
     {
     std::cerr << "Error: " << e << std::endl;
     }

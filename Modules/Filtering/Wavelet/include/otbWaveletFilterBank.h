@@ -214,13 +214,13 @@ public:
 
 protected:
   WaveletFilterBank();
-  ~WaveletFilterBank() ITK_OVERRIDE {}
+  ~WaveletFilterBank() override {}
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy information from the input image if existing.
     **/
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** The forward transformation needs a larger input requested
    * region than the output requested region (larger by subsampling
@@ -232,12 +232,12 @@ protected:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   void GenerateInputRequestedRegion()
-    throw (itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw (itk::InvalidRequestedRegionError) override;
 
   /** BeforeThreadedGenerateData.
    * It allocates also internal images
    */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Internal Data Allocation
    * If m_SubsampleImageFactor != 1, internal data with progressive region size
@@ -248,7 +248,7 @@ protected:
   /** AfterThreadedGenerateData.
    * It enforce memory destruction of internal images
    */
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
   /** CallCopyOutputRegionToInputRegion
    * Since input and output image may be of different size when a
@@ -256,9 +256,9 @@ protected:
    * functions has to be reimplemented
    */
   void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) ITK_OVERRIDE;
+    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
   void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) ITK_OVERRIDE;
+    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
@@ -272,7 +272,7 @@ protected:
                                                  const InputImageRegionType& srcRegion);
 
   /** Generate data redefinition */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Iterative call to the forward filter bank at each dimension. */
   virtual void ThreadedGenerateDataAtDimensionN(unsigned int idx, unsigned int direction,
@@ -399,9 +399,9 @@ public:
 
 protected:
   WaveletFilterBank();
-  ~WaveletFilterBank() ITK_OVERRIDE {}
+  ~WaveletFilterBank() override {}
 
-  void VerifyInputInformation() ITK_OVERRIDE
+  void VerifyInputInformation() override
   {
 
   }
@@ -410,7 +410,7 @@ protected:
     * Set the size of the output image depending on the decimation factor
     * Copy information from the input image if existing.
     **/
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** The inverse transformation needs larger inputs requested
    * region than the output requested region (larger by subsampling
@@ -422,12 +422,12 @@ protected:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   void GenerateInputRequestedRegion()
-    throw (itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw (itk::InvalidRequestedRegionError) override;
 
   /** BeforeThreadedGenerateData
    * If SubsampleImageFactor neq 1, it is necessary to up sample input images in the Wavelet::INVERSE mode
    */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Internal Data Allocation
    * If m_SubsampleImageFactor != 1, internal data with progressive region size
@@ -438,7 +438,7 @@ protected:
   /** AfterThreadedGenerateData.
    * It enforce memory destruction of internal images
    */
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
   /** CallCopyOutputRegionToInputRegion
    * Since input and output image may be of different size when a
@@ -446,9 +446,9 @@ protected:
    * functions has to be reimplemented
    */
   void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) ITK_OVERRIDE;
+    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
   void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) ITK_OVERRIDE;
+    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
@@ -462,7 +462,7 @@ protected:
                                                  const InputImageRegionType& srcRegion);
 
   /** Generate data redefinition */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
    * Iterative call to the forward filter bank at each dimension.
@@ -492,7 +492,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletFilterBank.txx"
+#include "otbWaveletFilterBank.hxx"
 #endif
 
 #endif

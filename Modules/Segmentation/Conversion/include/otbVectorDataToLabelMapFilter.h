@@ -161,18 +161,18 @@ public:
   const InputVectorDataType * GetInput(void);
   const InputVectorDataType * GetInput(unsigned int idx);
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 protected:
   VectorDataToLabelMapFilter();
-  ~VectorDataToLabelMapFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~VectorDataToLabelMapFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
    * Standard pipeline method.
    */
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** VectorDataToLabelMapFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().
@@ -186,8 +186,8 @@ protected:
 //   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
 
 private:
-  VectorDataToLabelMapFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToLabelMapFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void ProcessNode(InternalTreeNodeType * source);
 
@@ -208,7 +208,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToLabelMapFilter.txx"
+#include "otbVectorDataToLabelMapFilter.hxx"
 #endif
 
 #endif

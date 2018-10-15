@@ -165,12 +165,12 @@ public:
     cov/=size-1;
     sigmaA/=size-1;
     sigmaB/=size-1;
-    sigmaA = vcl_sqrt(sigmaA);
-    sigmaB = vcl_sqrt(sigmaB);
+    sigmaA = std::sqrt(sigmaA);
+    sigmaB = std::sqrt(sigmaB);
 
     if(sigmaA > 1e-20 && sigmaB > 1e-20)
       {
-      ncc = vcl_abs(cov)/(sigmaA*sigmaB);
+      ncc = std::abs(cov)/(sigmaA*sigmaB);
       }
     else
       {
@@ -223,7 +223,7 @@ public:
     // For some reason, iterators do not work on neighborhoods
     for(unsigned int i = 0; i<a.Size(); ++i)
       {
-      score += vcl_pow( vcl_abs(static_cast<double>(a.GetPixel(i)-b.GetPixel(i))) , m_P);
+      score += std::pow( std::abs(static_cast<double>(a.GetPixel(i)-b.GetPixel(i))) , m_P);
       }
 
     return score;
@@ -418,10 +418,10 @@ public:
     return m_Functor;
   }
 
-  /** Set initial horizontal disparity field (optional, ITK_OVERRIDE m_InitHorizontalDisparity) */
+  /** Set initial horizontal disparity field (optional, override m_InitHorizontalDisparity) */
   void SetHorizontalDisparityInput( const TOutputDisparityImage * hfield);
 
-  /** Set initial vertical disparity field (optional, ITK_OVERRIDE m_InitVerticalDisparity) */
+  /** Set initial vertical disparity field (optional, override m_InitVerticalDisparity) */
   void SetVerticalDisparityInput( const TOutputDisparityImage * vfield);
 
   /** Get the initial disparity fields */
@@ -447,22 +447,22 @@ protected:
   PixelWiseBlockMatchingImageFilter();
 
   /** Destructor */
-  ~PixelWiseBlockMatchingImageFilter() ITK_OVERRIDE;
+  ~PixelWiseBlockMatchingImageFilter() override;
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Before threaded generate data */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
+  PixelWiseBlockMatchingImageFilter(const Self&) = delete;
   void operator=(const Self&); //purposely not implemeFnted
 
   /** The radius of the blocks */
@@ -509,7 +509,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPixelWiseBlockMatchingImageFilter.txx"
+#include "otbPixelWiseBlockMatchingImageFilter.hxx"
 #endif
 
 #endif

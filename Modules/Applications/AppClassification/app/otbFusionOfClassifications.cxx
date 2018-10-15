@@ -93,7 +93,7 @@ public:
   itkTypeMacro(FusionOfClassifications, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("FusionOfClassifications");
     SetDescription("Fuses several classifications maps of the same image on the basis of class labels.");
@@ -173,7 +173,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
@@ -182,12 +182,12 @@ private:
   int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &mapOfClassesRefClX, ConfusionMatrixType &confusionMatrixClX)
   {
     std::ifstream inFile;
-    inFile.open(fileName.c_str());
+    inFile.open(fileName);
 
     if (!inFile)
       {
       std::cerr << "Confusion Matrix File opening problem with file:" << std::endl;
-      std::cerr << fileName.c_str() << std::endl;
+      std::cerr << fileName << std::endl;
       return EXIT_FAILURE;
       }
     else
@@ -285,7 +285,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Clear any previous filter
     m_Filters.clear();

@@ -61,134 +61,134 @@ public:
   typedef double                                     RealType;
   typedef PointSetType::PointType                    PointType;
 
-  RealType GetRadiometricCalibrationScale() const ITK_OVERRIDE
+  RealType GetRadiometricCalibrationScale() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationScale() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const ITK_OVERRIDE
+  PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationAntennaPatternNewGain() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const ITK_OVERRIDE
+  PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationAntennaPatternOldGain() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const ITK_OVERRIDE
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationIncidenceAngle() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const ITK_OVERRIDE
+  PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLoss() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationNoise() const ITK_OVERRIDE
+  PointSetPointer GetRadiometricCalibrationNoise() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationNoise() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const ITK_OVERRIDE
+  IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const ITK_OVERRIDE
+  IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const ITK_OVERRIDE
+  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationIncidenceAnglePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const ITK_OVERRIDE
+  IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const ITK_OVERRIDE
+  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationNoisePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition day from the ossim metadata */
-  int GetDay() const ITK_OVERRIDE
+  int GetDay() const override
   {
     itkExceptionMacro("GetDay not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition month from the ossim metadata */
-  int GetMonth() const ITK_OVERRIDE
+  int GetMonth() const override
   {
     itkExceptionMacro("GetMonth not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition year from the ossim metadata */
-  int GetYear() const ITK_OVERRIDE
+  int GetYear() const override
   {
     itkExceptionMacro("GetYear not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition hour from the ossim metadata */
-  int GetHour() const ITK_OVERRIDE
+  int GetHour() const override
   {
     itkExceptionMacro("GetHour not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition minute from the ossim metadata */
-  int GetMinute() const ITK_OVERRIDE
+  int GetMinute() const override
   {
     itkExceptionMacro("GetMinute not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production day from the ossim metadata */
-  int GetProductionDay() const ITK_OVERRIDE
+  int GetProductionDay() const override
   {
     itkExceptionMacro("GetProductionDay not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production month from the ossim metadata */
-  int GetProductionMonth() const ITK_OVERRIDE
+  int GetProductionMonth() const override
   {
     itkExceptionMacro("GetProductionMonth not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production year from the ossim metadata */
-  int GetProductionYear() const ITK_OVERRIDE
+  int GetProductionYear() const override
   {
     itkExceptionMacro("GetProductionYear not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the PRF */
-  double GetPRF() const ITK_OVERRIDE
+  double GetPRF() const override
   {
     itkExceptionMacro("GetPRF not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the RSF */
-  double GetRSF() const ITK_OVERRIDE
+  double GetRSF() const override
   {
     itkExceptionMacro("GetRSF not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the radar frequency */
-  double GetRadarFrequency() const ITK_OVERRIDE
+  double GetRadarFrequency() const override
   {
     itkExceptionMacro("GetRadarFrequency not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the center incidence angle */
-  double GetCenterIncidenceAngle() const ITK_OVERRIDE
+  double GetCenterIncidenceAngle() const override
   {
     itkExceptionMacro("GetCenterIncidenceAngle not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  bool CanRead() const ITK_OVERRIDE
+  bool CanRead() const override
   {
     // This class is the default one, it has to be able to call every metadata
     return false;
@@ -196,7 +196,7 @@ public:
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-    UIntVectorType GetDefaultDisplay() const ITK_OVERRIDE
+    UIntVectorType GetDefaultDisplay() const override
   {
     UIntVectorType rgb(3);
     rgb[0] = 0;
@@ -207,12 +207,12 @@ public:
 
 protected:
   SarDefaultImageMetadataInterface(){};
-  ~SarDefaultImageMetadataInterface() ITK_OVERRIDE {}
+  ~SarDefaultImageMetadataInterface() override {}
 
 private:
 
-  SarDefaultImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarDefaultImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

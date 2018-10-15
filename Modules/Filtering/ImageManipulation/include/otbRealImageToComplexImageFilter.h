@@ -92,11 +92,11 @@ public:
 
 protected:
   RealImageToComplexImageFilter() {}
-  ~RealImageToComplexImageFilter() ITK_OVERRIDE {}
+  ~RealImageToComplexImageFilter() override {}
 
 private:
-  RealImageToComplexImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RealImageToComplexImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 

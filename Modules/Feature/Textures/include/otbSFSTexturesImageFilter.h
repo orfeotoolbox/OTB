@@ -213,22 +213,22 @@ public:
   const OutputImageType * GetSDOutput() const;
   OutputImageType * GetSDOutput();
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
   std::vector<FunctorType> m_FunctorList;
 
 protected:
   SFSTexturesImageFilter();
-  ~SFSTexturesImageFilter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~SFSTexturesImageFilter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   /** Pad the input requested region by radius */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
 private:
-  SFSTexturesImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SFSTexturesImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Radius;
   FunctorType  m_Functor;
@@ -238,7 +238,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSFSTexturesImageFilter.txx"
+#include "otbSFSTexturesImageFilter.hxx"
 #endif
 
 #endif

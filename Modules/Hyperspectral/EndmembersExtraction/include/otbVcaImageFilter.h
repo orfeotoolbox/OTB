@@ -104,12 +104,12 @@ public:
   itkGetMacro( NumberOfEndmembers, unsigned int );
   itkSetMacro( NumberOfEndmembers, unsigned int );
 
-  void Update() ITK_OVERRIDE
+  void Update() override
   {
     this->GenerateData();
   }
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)) ITK_OVERRIDE
+  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)) override
   {
     this->GetOutput()
       ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
@@ -118,23 +118,23 @@ public:
 protected:
   VCAImageFilter();
 
-  ~VCAImageFilter() ITK_OVERRIDE;
+  ~VCAImageFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
-  VCAImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VCAImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfEndmembers;
 };
 
 } // end namesapce otb
 
-#include "otbVcaImageFilter.txx"
+#include "otbVcaImageFilter.hxx"
 
 #endif /* otbVCAImageFilter_h */

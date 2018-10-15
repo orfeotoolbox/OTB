@@ -378,7 +378,7 @@ TreeWidget
 }
 
 /*******************************************************************************/
-void 
+void
 TreeWidget
 ::dragMoveEvent( QDragMoveEvent* e )
 {
@@ -435,15 +435,13 @@ TreeWidget
 }
 
 /*******************************************************************************/
-void 
+void
 TreeWidget
 ::dropEvent( QDropEvent* e )
 {
   assert( e!=NULL );
 
   // qDebug() << this << "::dropEvent(" << e << ")";
-
-  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
 
   QTreeWidgetItemList itemList;
 
@@ -467,7 +465,7 @@ TreeWidget
   while( !item->flags().testFlag( Qt::ItemIsDropEnabled ) )
     {
     item = item->parent();
-    assert( item!=NULL ); 
+    assert( item!=NULL );
 
 #if 1
     qDebug()
@@ -533,7 +531,8 @@ operator << ( QDataStream& out, QTreeWidgetItem const * item )
     "QDataStream& operator << ( QDataStream&, QTreeWidgetItem const * & );";
   */
 
-#if DATA_STREAM_USE_TEMPLATE_OPERATORS
+#if 0 // operator >> is used in QT5 this lead to wrong call, fix: comment or
+// put operator >> def and decl in a specific namespace.
   return operator << < QTreeWidgetItem >( out, item );
 
 #else // DATA_STREAM_USE_TEMPLATE_OPERATORS
@@ -553,7 +552,7 @@ operator >>( QDataStream& in, QTreeWidgetItem * & item )
     "QDataStream& operator >> ( QDataStream&, QTreeWidgetItem * & );";
   */
 
-#if DATA_STREAM_USE_TEMPLATE_OPERATORS
+#if 0
   return operator >> < QTreeWidgetItem >( in, item );
 
 #else // DATA_STREAM_USE_TEMPLATE_OPERATORS

@@ -82,20 +82,20 @@ public:
   typedef otb::ImageToEdgePathFilter<ImageType, PathType> ImageToEdgePathFilterType;
   typedef typename ImageToEdgePathFilterType::Pointer     ImageToEdgePathFilterPointerType;
 
-  void Reset(void) ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
+  void Reset(void) override;
+  void Synthetize(void) override;
 
   itkGetObjectMacro(PathList, PathListType);
 
 protected:
   PersistentVectorizationImageFilter();
-  ~PersistentVectorizationImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  ~PersistentVectorizationImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void GenerateData() override;
 
 private:
-  PersistentVectorizationImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentVectorizationImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Min max filter (the mini-pipeline)
   MinMaxFilterPointerType m_MinMaxFilter;
@@ -107,7 +107,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentVectorizationImageFilter.txx"
+#include "otbPersistentVectorizationImageFilter.hxx"
 #endif
 
 #endif

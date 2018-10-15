@@ -201,7 +201,7 @@ ColorDynamicsWidget
 {
   int gamma =
     itk::Math::Round< int, double >(
-      vcl_log( value ) / (GAMMA_FACTOR * vcl_log( GAMMA_POWER ) )
+      std::log( value ) / (GAMMA_FACTOR * std::log( GAMMA_POWER ) )
     );
 
   int min = GetMinGamma();
@@ -226,13 +226,13 @@ ColorDynamicsWidget
 {
   // qDebug() <<
   //   "::GetGamma(" << GetGammaCursorPosition() << "): " <<
-  //   vcl_pow(
+  //   std::pow(
   //     GAMMA_POWER,
   //     GAMMA_FACTOR * static_cast< double >( GetGammaCursorPosition() )
   //   );
 
   return
-    vcl_pow(
+    std::pow(
       GAMMA_POWER,
       GAMMA_FACTOR * static_cast< double >( GetGammaCursorPosition() )
     );

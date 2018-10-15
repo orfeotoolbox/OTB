@@ -214,15 +214,15 @@ public:
 
 protected:
   ImageMetadataInterfaceBase();
-  ~ImageMetadataInterfaceBase() ITK_OVERRIDE {}
+  ~ImageMetadataInterfaceBase() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   MetaDataDictionaryType m_MetaDataDictionary;
 
 private:
-  ImageMetadataInterfaceBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageMetadataInterfaceBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OTB_GCP            m_GCP;
 };

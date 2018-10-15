@@ -143,21 +143,21 @@ protected:
   /** Constructor */
   TerraSarBrightnessImageFilter(){};
   /** Destructor */
-  ~TerraSarBrightnessImageFilter() ITK_OVERRIDE {}
+  ~TerraSarBrightnessImageFilter() override {}
 
   /** Initialize the functor vector */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
 private:
-  TerraSarBrightnessImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TerraSarBrightnessImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTerraSarBrightnessImageFilter.txx"
+#include "otbTerraSarBrightnessImageFilter.hxx"
 #endif
 
 #endif

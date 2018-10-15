@@ -102,12 +102,12 @@ protected:
   /// Constructor
   KeyPointSetsMatchingFilter();
   /// Destructor
-  ~KeyPointSetsMatchingFilter() ITK_OVERRIDE {}
+  ~KeyPointSetsMatchingFilter() override {}
   /// PrintSelf method
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /// Generate Data
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /**
    * Find the nearest neighbor of data1 in pointset.
@@ -116,8 +116,8 @@ protected:
   NeighborSearchResultType NearestNeighbor(const PointDataType& data1, const PointSetType * pointset);
 
 private:
-  KeyPointSetsMatchingFilter(const Self &); // purposely not implemented
-  void operator =(const Self&);             // purposely not implemented
+  KeyPointSetsMatchingFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Find back matches from 2 to 1 to validate them
   bool m_UseBackMatching;
@@ -132,6 +132,6 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKeyPointSetsMatchingFilter.txx"
+#include "otbKeyPointSetsMatchingFilter.hxx"
 #endif
 #endif

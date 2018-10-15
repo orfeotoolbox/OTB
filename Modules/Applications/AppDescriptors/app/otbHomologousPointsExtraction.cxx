@@ -80,7 +80,7 @@ public:
   itkTypeMacro(HomologousPointsExtraction, otb::Wrapper::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("HomologousPointsExtraction");
     SetDocName("Homologous points extraction");
@@ -135,10 +135,8 @@ private:
     SetMinimumParameterFloatValue("threshold",0.0);
     SetDefaultParameterFloat("threshold",0.6);
 
-    AddParameter(ParameterType_Empty,"backmatching","Use back-matching to filter matches.");
+    AddParameter(ParameterType_Bool,"backmatching","Use back-matching to filter matches.");
     SetParameterDescription("backmatching","If set to true, matches should be consistent in both ways.");
-    MandatoryOff("backmatching");
-    DisableParameter("backmatching");
 
     AddParameter(ParameterType_Choice,"mode","Keypoints search mode");
 
@@ -177,10 +175,10 @@ private:
     SetParameterDescription("precision","Estimated precision of the colocalisation function in pixels");
     SetDefaultParameterFloat("precision",0.);
 
-    AddParameter(ParameterType_Empty,"mfilter","Filter points according to geographical or sensor based colocalisation");
+    AddParameter(ParameterType_Bool,"mfilter","Filter points according to geographical or sensor based colocalisation");
     SetParameterDescription("mfilter","If enabled, this option allows one to filter matches according to colocalisation from sensor or geographical information, using the given tolerancy expressed in pixels");
 
-    AddParameter(ParameterType_Empty,"2wgs84","If enabled, points from second image will be exported in WGS84");
+    AddParameter(ParameterType_Bool,"2wgs84","If enabled, points from second image will be exported in WGS84");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
@@ -202,12 +200,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
 
   }
 
-  void Match(FloatImageType * im1, FloatImageType * im2, RSTransformType * rsTransform, RSTransformType * rsTransform1ToWGS84,RSTransformType * rsTransform2ToWGS84, std::ofstream & file, OGRMultiLineString * mls = ITK_NULLPTR)
+  void Match(FloatImageType * im1, FloatImageType * im2, RSTransformType * rsTransform, RSTransformType * rsTransform1ToWGS84,RSTransformType * rsTransform2ToWGS84, std::ofstream & file, OGRMultiLineString * mls = nullptr)
   {
     MatchingFilterType::Pointer matchingFilter = MatchingFilterType::New();
 
@@ -251,7 +249,7 @@ private:
       matchingFilter->SetInput1(surf1->GetOutput());
       matchingFilter->SetInput2(surf2->GetOutput());
       matchingFilter->SetDistanceThreshold(GetParameterFloat("threshold"));
-      matchingFilter->SetUseBackMatching(IsParameterEnabled("backmatching"));
+      matchingFilter->SetUseBackMatching(GetParameterInt("backmatching"));
       }
 
     try
@@ -276,12 +274,12 @@ private:
 
         bool filtered = false;
 
-        if(IsParameterEnabled("mfilter"))
+        if(GetParameterInt("mfilter"))
           {
           pprime1 = rsTransform->TransformPoint(point1);
-          error = vcl_sqrt((point2[0]-pprime1[0])*(point2[0]-pprime1[0])+(point2[1]-pprime1[1])*(point2[1]-pprime1[1]));
+          error = std::sqrt((point2[0]-pprime1[0])*(point2[0]-pprime1[0])+(point2[1]-pprime1[1])*(point2[1]-pprime1[1]));
 
-          if(error>GetParameterFloat("precision")*vcl_sqrt(vcl_abs(im2->GetSignedSpacing()[0]*im2->GetSignedSpacing()[1])))
+          if(error>GetParameterFloat("precision")*std::sqrt(std::abs(im2->GetSignedSpacing()[0]*im2->GetSignedSpacing()[1])))
             {
             filtered = true;
             }
@@ -289,7 +287,7 @@ private:
 
         if(!filtered)
           {
-          if(IsParameterEnabled("2wgs84"))
+          if(GetParameterInt("2wgs84"))
             {
             pprime2 = rsTransform2ToWGS84->TransformPoint(point2);
 
@@ -326,7 +324,7 @@ private:
   }
 
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     OGRMultiLineString mls;
 
@@ -350,7 +348,7 @@ private:
 
     // Setting up output file
     std::ofstream file;
-    file.open(GetParameterString("out").c_str());
+    file.open(GetParameterString("out"));
     file<<std::fixed;
     file.precision(12);
 
@@ -399,8 +397,8 @@ private:
         bin_step_y = GetParameterInt("mode.geobins.binstepy");
         }
 
-      unsigned int nb_bins_x = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[0]-2*image_border_margin)/(bin_size_x + bin_step_x)));
-      unsigned int nb_bins_y = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[1]-2*image_border_margin)/(bin_size_y + bin_step_y)));
+      unsigned int nb_bins_x = static_cast<unsigned int>(std::ceil(static_cast<float>(size[0]-2*image_border_margin)/(bin_size_x + bin_step_x)));
+      unsigned int nb_bins_y = static_cast<unsigned int>(std::ceil(static_cast<float>(size[1]-2*image_border_margin)/(bin_size_y + bin_step_y)));
 
       for(unsigned int i = 0; i<nb_bins_x; ++i)
         {
@@ -472,11 +470,11 @@ private:
           FloatImageType::IndexType index2;
           FloatImageType::SizeType size2;
 
-          index2[0] = vcl_floor(i_min[0]);
-          index2[1] = vcl_floor(i_min[1]);
+          index2[0] = std::floor(i_min[0]);
+          index2[1] = std::floor(i_min[1]);
 
-          size2[0] = vcl_ceil(i_max[0]-i_min[0]);
-          size2[1] = vcl_ceil(i_max[1]-i_min[1]);
+          size2[0] = std::ceil(i_max[0]-i_min[0]);
+          size2[1] = std::ceil(i_max[1]-i_min[1]);
 
           FloatImageType::RegionType region2;
           region2.SetIndex(index2);
@@ -506,7 +504,7 @@ private:
       if(IsParameterEnabled("outvector"))
         {
         // Create the datasource (for matches export)
-        otb::ogr::Layer layer(ITK_NULLPTR, false);
+        otb::ogr::Layer layer(nullptr, false);
         otb::ogr::DataSource::Pointer ogrDS;
 
         ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);

@@ -55,11 +55,11 @@ public:
   typedef itk::Array<ParametersValueType> ParametersType;
 
   /** Standard Macro*/
-  itkTypeMacro(SimulationStep2Base, ProcessObject)
+  itkTypeMacro(SimulationStep2Base, ProcessObject);
 ;
 
-  itkSetMacro(Parameters, ParametersType)
-  itkGetMacro(Parameters, ParametersType)
+  itkSetMacro(Parameters, ParametersType);
+  itkGetMacro(Parameters, ParametersType);
  //;
 
   virtual void SetReflectance(const SpectralResponseType *) = 0;
@@ -70,13 +70,13 @@ protected:
   {
   }
 ;
-  ~SimulationStep2Base() ITK_OVERRIDE
+  ~SimulationStep2Base() override
   {
   }
 
 private:
-  SimulationStep2Base(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SimulationStep2Base(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ParametersType m_Parameters;
 

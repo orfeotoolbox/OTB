@@ -67,7 +67,7 @@ ProspectModel
    if(this->GetNumberOfInputs() != 1)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<LeafParametersType *>(this->itk::ProcessObject::GetInput(0));
 }
@@ -88,7 +88,7 @@ ProspectModel
    if(this->GetNumberOfOutputs() < 2)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(0));
 }
@@ -101,7 +101,7 @@ ProspectModel
    if(this->GetNumberOfOutputs() < 2)
    {
       //exit
-      return ITK_NULLPTR;
+      return nullptr;
    }
    return static_cast<SpectralResponseType *>(this->itk::ProcessObject::GetOutput(1));
 }
@@ -178,16 +178,16 @@ ProspectModel
 
       delta = (t90*t90-r90*r90-1.)*(t90*t90-r90*r90-1.) - 4.*r90*r90;
       if(delta < 0) delta = EPSILON;
-      else delta=vcl_sqrt(delta);
+      else delta=std::sqrt(delta);
 
       beta = (1.+r90*r90-t90*t90-delta)/(2.*r90);
       va=(1.+r90*r90-t90*t90+delta)/(2.*r90);
       if ((beta-r90)<=0)
-         vb=vcl_sqrt(beta*(va-r90)/(va*EPSILON));
+         vb=std::sqrt(beta*(va-r90)/(va*EPSILON));
       else
-         vb=vcl_sqrt(beta*(va-r90)/(va*(beta-r90)));
+         vb=std::sqrt(beta*(va-r90)/(va*(beta-r90)));
 
-      vbNN = vcl_pow(vb, N-1.);
+      vbNN = std::pow(vb, N-1.);
       vbNNinv = 1./vbNN;
       vainv = 1./va;
       s1=ta*t90*(vbNN-vbNNinv);
@@ -233,16 +233,16 @@ ProspectModel
    else
    {
       if(theta_rad==CONST_PI/2) b1=itk::NumericTraits<double>::ZeroValue();
-      else b1=vcl_sqrt((ds*ds-rp/2)*(ds*ds-rp/2)+k);
+      else b1=std::sqrt((ds*ds-rp/2)*(ds*ds-rp/2)+k);
 
       b2=ds*ds-rp/2;
       b=b1-b2;
-      ts=(k2/(6*vcl_pow(b, 3))+k/b-b/2)-(k2/(6*vcl_pow(a, 3))+k/a-a/2);
+      ts=(k2/(6*std::pow(b, 3))+k/b-b/2)-(k2/(6*std::pow(a, 3))+k/a-a/2);
       tp1=-2*r2*(b-a)/(rp*rp);
       tp2=-2*r2*rp*log(b/a)/rm2;
       tp3=r2*(1./b-1./a)/2;
-      tp4=16*r2*r2*(r2*r2+1)*log((2*rp*b-rm2)/(2*rp*a-rm2))/(vcl_pow(rp, 3)*rm2);
-      tp5=16*vcl_pow(r2, 3)*(1./(2*rp*b-rm2)-1./(2*rp*a-rm2))/vcl_pow(rp, 3);
+      tp4=16*r2*r2*(r2*r2+1)*log((2*rp*b-rm2)/(2*rp*a-rm2))/(std::pow(rp, 3)*rm2);
+      tp5=16*std::pow(r2, 3)*(1./(2*rp*b-rm2)-1./(2*rp*a-rm2))/std::pow(rp, 3);
       tp=tp1+tp2+tp3+tp4+tp5;
       res=(ts+tp)/(2*ds*ds);
    }

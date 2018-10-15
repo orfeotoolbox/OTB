@@ -67,22 +67,22 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
   ConcatenateSampleListFilter();
-  ~ConcatenateSampleListFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ConcatenateSampleListFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ConcatenateSampleListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ConcatenateSampleListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 }; // end of class ImageToListGenerator
 
 } // end of namespace Statistics
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConcatenateSampleListFilter.txx"
+#include "otbConcatenateSampleListFilter.hxx"
 #endif
 
 #endif

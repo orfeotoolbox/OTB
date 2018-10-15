@@ -134,15 +134,15 @@ public:
 
 protected:
   MaximumAutocorrelationFactorImageFilter();
-  ~MaximumAutocorrelationFactorImageFilter() ITK_OVERRIDE {}
+  ~MaximumAutocorrelationFactorImageFilter() override {}
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
-  MaximumAutocorrelationFactorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MaximumAutocorrelationFactorImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The covariance estimator for the image */
   CovarianceEstimatorPointer m_CovarianceEstimator;
@@ -168,7 +168,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaximumAutocorrelationFactorImageFilter.txx"
+#include "otbMaximumAutocorrelationFactorImageFilter.hxx"
 #endif
 
 #endif

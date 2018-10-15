@@ -22,6 +22,7 @@
 #define otbLandsatTMSRBC_h
 
 #include "otbLandsatTMIndices.h"
+#include <string>
 
 namespace otb
 {
@@ -183,13 +184,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM SpectralRuleBasedClassifier";
   }
 
   SpectralRuleBasedClassifier() { }
-  ~SpectralRuleBasedClassifier() ITK_OVERRIDE {}
+  ~SpectralRuleBasedClassifier() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {

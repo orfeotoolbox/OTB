@@ -23,6 +23,7 @@
 #include "otbWrapperApplication.h"
 #include "otb_tinyxml.h"
 #include <sstream>
+#include <string>
 
 namespace otb
 {
@@ -52,7 +53,7 @@ public:
 
   itkGetStringMacro(FileName);
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     if(m_FileName.empty())
       return false;
@@ -86,14 +87,14 @@ protected:
   InputProcessXMLParameter();
 
   /** Destructor */
-  ~InputProcessXMLParameter() ITK_OVERRIDE;
+  ~InputProcessXMLParameter() override;
 
 private:
 
   std::string    m_FileName;
 
-  InputProcessXMLParameter(const InputProcessXMLParameter &); //purposely not implemented
-  void operator =(const InputProcessXMLParameter&); //purposely not implemented
+  InputProcessXMLParameter(const InputProcessXMLParameter &) = delete;
+  void operator =(const InputProcessXMLParameter&) = delete;
 
 
 }; // End class Parameter

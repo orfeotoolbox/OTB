@@ -78,11 +78,11 @@ public:
 
 protected:
   PlatformPositionAdapter();
-  ~PlatformPositionAdapter() ITK_OVERRIDE;
+  ~PlatformPositionAdapter() override;
 
 private:
-  PlatformPositionAdapter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PlatformPositionAdapter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ossimplugins::ossimGeometricSarSensorModel* m_SensorModel;
 

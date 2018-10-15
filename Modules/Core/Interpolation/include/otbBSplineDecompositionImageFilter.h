@@ -77,10 +77,10 @@ public:
 
 protected:
   BSplineDecompositionImageFilter();
-  ~BSplineDecompositionImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~BSplineDecompositionImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** These are needed by the smoothing spline routine. */
   std::vector<double> m_Scratch;             // temp storage for processing of Coefficients
@@ -92,8 +92,8 @@ protected:
   unsigned int m_IteratorDirection;              // Direction for iterator incrementing
 
 private:
-  BSplineDecompositionImageFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  BSplineDecompositionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Determines the poles given the Spline Order. */
   virtual void SetPoles();
@@ -125,7 +125,7 @@ private:
 } // namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBSplineDecompositionImageFilter.txx"
+#include "otbBSplineDecompositionImageFilter.hxx"
 #endif
 
 #endif

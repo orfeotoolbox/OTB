@@ -25,7 +25,6 @@
 #include <itkObjectFactory.h>
 #include <vector>
 #include <utility>
-#include <fstream>
 #include <limits>
 
 #include "otbVectorImage.h"
@@ -104,7 +103,7 @@ public:
   void Load(const std::string & filename, ValuePrecisionType coefNormalization = 1.0);
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** get vector of spectral responses */
   VectorPairType & GetResponse()
@@ -163,7 +162,7 @@ protected:
   /** Constructor from a ASCII file */
   //SpectralResponse( const std::string & filename );
   /** Destructor */
-  ~SpectralResponse() ITK_OVERRIDE
+  ~SpectralResponse() override
   {
   }
 ;
@@ -182,8 +181,8 @@ protected:
   void ComputeInterval();
 
 private:
-  SpectralResponse(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpectralResponse(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 };
 
@@ -191,7 +190,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpectralResponse.txx"
+#include "otbSpectralResponse.hxx"
 #endif
 
 #endif

@@ -47,11 +47,11 @@ private:
   {
   }
 
-  ~ObtainUTMZoneFromGeoPoint() ITK_OVERRIDE
+  ~ObtainUTMZoneFromGeoPoint() override
   {
   }
 
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ObtainUTMZoneFromGeoPoint");
     SetDescription("UTM zone determination from a geographic point.");
@@ -63,8 +63,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-	AddDocTag("Miscellaneous");
-    AddDocTag(Tags::Coordinates);
+    AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_Float,  "lat", "Latitude");
     SetParameterDescription("lat", "Latitude value of desired point.");
@@ -84,16 +83,16 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
                                                   GetParameterFloat("lat"));
-    SetParameterInt("utm",utmZone, false);
+    SetParameterInt("utm",utmZone);
   }
 
 };

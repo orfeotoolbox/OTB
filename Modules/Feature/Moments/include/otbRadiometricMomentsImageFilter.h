@@ -92,14 +92,14 @@ public:
 
 protected:
   RadiometricMomentsImageFilter();
-  ~RadiometricMomentsImageFilter() ITK_OVERRIDE {}
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  ~RadiometricMomentsImageFilter() override {}
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void GenerateInputRequestedRegion(void) override;
+  void GenerateOutputInformation(void) override;
 
 private:
-  RadiometricMomentsImageFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  RadiometricMomentsImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   InputImageSizeType m_Radius;
   FunctorType m_Functor;
@@ -108,7 +108,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRadiometricMomentsImageFilter.txx"
+#include "otbRadiometricMomentsImageFilter.hxx"
 #endif
 
 #endif

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,6 +23,7 @@
 #include "otb_boost_string_header.h"
 #include <itksys/RegularExpression.hxx>
 #include "otb_boost_tokenizer_header.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -37,6 +39,8 @@ ExtendedFilenameToWriterOptions
 
   m_Options.writeRPCTags.first = false;
   m_Options.writeRPCTags.second = false;
+
+  has_noDataValue = false;
   
   m_Options.gdalCreationOptions.first = false;
   m_Options.streamingType.first       = false;
@@ -46,18 +50,30 @@ ExtendedFilenameToWriterOptions
   m_Options.bandRange.first = false;
   m_Options.bandRange.second = "";
 
-  m_Options.optionList.push_back("writegeom");
-  m_Options.optionList.push_back("writerpctags");
-  m_Options.optionList.push_back("streaming:type");
-  m_Options.optionList.push_back("streaming:sizemode");
-  m_Options.optionList.push_back("streaming:sizevalue");
-  m_Options.optionList.push_back("box");
-  m_Options.optionList.push_back("bands");
+  m_Options.optionList = {
+    "writegeom", "writerpctags",
+    "streaming:type", "streaming:sizemode", "streaming:sizevalue",
+    "nodata",
+    "box", "bands"
+  };
+
 }
 
 void
 ExtendedFilenameToWriterOptions
-::SetExtendedFileName(const char *extFname)
+::SetExtendedFileName(const char* extFname)
+{
+  if (extFname == nullptr)
+  {
+    itkGenericExceptionMacro( << "Filename is NULL" );
+  }
+
+  this->SetExtendedFileName(std::string(extFname));
+}
+
+void
+ExtendedFilenameToWriterOptions
+::SetExtendedFileName(const std::string& extFname)
 {
   this->Superclass::SetExtendedFileName(extFname);
   // TODO: Rename map to a less confusing (with std::map) name
@@ -93,6 +109,39 @@ ExtendedFilenameToWriterOptions
        m_Options.writeGEOMFile.second = false;
        }
      }
+  /*
+   check nodata value(s) for each band and make a list of
+   band-nodata pairs
+  */
+  auto iter = map.find("nodata");
+  if (iter != map.end()) {
+    auto const& nodata_values = iter->second;
+    std::vector<std::string> nodata_list;
+    boost::split(nodata_list, nodata_values,
+		 boost::is_any_of(","),
+		 boost::token_compress_on);
+    for (auto const& nodata_pair :nodata_list)
+      {
+	std::vector<std::string> per_band_no_data;
+	boost::split(per_band_no_data,
+		     nodata_pair,
+		     boost::is_any_of(":"),
+		     boost::token_compress_on);
+
+	if (per_band_no_data.size() == 1)
+	  {
+	    double val = Utils::LexicalCast<double>(per_band_no_data[0], "nodata value");
+	    m_NoDataList.push_back({1, val});
+	  }
+	else
+	  {
+	    int band = Utils::LexicalCast<int>(per_band_no_data[0], "nodata value");
+	    double val = Utils::LexicalCast<double>(per_band_no_data[1], "nodata value");
+	    m_NoDataList.push_back({band, val});
+	  }
+      }
+    has_noDataValue = true;
+  }
 
   if (!map["writerpctags"].empty())
      {
@@ -202,6 +251,13 @@ ExtendedFilenameToWriterOptions
         itkWarningMacro("Unknown option detected: " << it->first << ".");
       }
     }
+}
+
+bool
+ExtendedFilenameToWriterOptions
+::NoDataValueIsSet () const
+{
+  return has_noDataValue;
 }
 
 bool

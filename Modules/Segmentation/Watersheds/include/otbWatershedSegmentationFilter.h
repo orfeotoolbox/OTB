@@ -84,9 +84,9 @@ public:
 protected:
   WatershedSegmentationFilter();
 
-  ~WatershedSegmentationFilter() ITK_OVERRIDE;
+  ~WatershedSegmentationFilter() override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   typename CastImageFilterType::Pointer m_CastFilter;
@@ -97,7 +97,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWatershedSegmentationFilter.txx"
+#include "otbWatershedSegmentationFilter.hxx"
 #endif
 
 #endif

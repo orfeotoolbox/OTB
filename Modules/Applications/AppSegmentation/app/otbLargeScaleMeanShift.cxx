@@ -50,7 +50,7 @@ public:
   itkTypeMacro(LargeScaleMeanShift, otb::CompositeApplication);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
     {
     SetName("LargeScaleMeanShift");
     SetDescription("Large-scale segmentation using MeanShift");
@@ -86,7 +86,7 @@ private:
     ClearApplications();
     AddApplication("MeanShiftSmoothing", "smoothing", "Smoothing step");
     AddApplication("LSMSSegmentation", "segmentation", "Segmentation step");
-    AddApplication("LSMSSmallRegionsMerging", "merging", "Small region merging step");
+    AddApplication("SmallRegionsMerging", "merging", "Small region merging step");
     AddApplication("LSMSVectorization", "vectorization", "Vectorization step");
 
     ShareParameter("in","smoothing.in");
@@ -120,19 +120,16 @@ private:
       "The output raster image",
       "It corresponds to the output of the small region merging step.");
 
-    AddParameter( ParameterType_Empty, "cleanup", "Temporary files cleaning" );
-    EnableParameter( "cleanup" );
+    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
     SetParameterDescription( "cleanup",
       "If activated, the application will try to clean all temporary files it created" );
-    MandatoryOff( "cleanup" );
+    SetParameterInt("cleanup",1);
 
     // Setup RAM
     ShareParameter("ram","smoothing.ram");
     Connect("merging.ram","smoothing.ram");
     Connect("vectorization.ram","smoothing.ram");
 
-    Connect("merging.tilesizex","segmentation.tilesizex");
-    Connect("merging.tilesizey","segmentation.tilesizey");
     Connect("vectorization.tilesizex","segmentation.tilesizex");
     Connect("vectorization.tilesizey","segmentation.tilesizey");
 
@@ -153,10 +150,10 @@ private:
     SetOfficialDocLink();
     }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {}
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
     {
     bool isVector(GetParameterString("mode") == "vector");
     std::string outPath(isVector ?
@@ -217,9 +214,9 @@ private:
       otbAppLogINFO( <<"Final clean-up ..." );
       for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)
         {
-        if(itksys::SystemTools::FileExists(tmpFilenames[i].c_str()))
+        if(itksys::SystemTools::FileExists(tmpFilenames[i]))
           {
-          itksys::SystemTools::RemoveFile(tmpFilenames[i].c_str());
+          itksys::SystemTools::RemoveFile(tmpFilenames[i]);
           }
         }
       }

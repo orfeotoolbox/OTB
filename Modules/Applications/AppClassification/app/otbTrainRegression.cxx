@@ -98,7 +98,7 @@ protected:
 
 private:
 
-void DoInit() ITK_OVERRIDE
+void DoInit() override
 {
   SetName("TrainRegression");
   SetDescription(
@@ -183,7 +183,7 @@ void DoInit() ITK_OVERRIDE
   SetParameterDescription( "sample.vtr" ,
     "Ratio between training and validation samples (0.0 = all training, "
     "1.0 = all validation) (default = 0.5).");
-  SetParameterFloat( "sample.vtr" , 0.5 , false );
+  SetParameterFloat( "sample.vtr" , 0.5);
 
   Superclass::DoInit();
 
@@ -198,7 +198,7 @@ void DoInit() ITK_OVERRIDE
   SetOfficialDocLink();
 }
 
-void DoUpdateParameters() ITK_OVERRIDE
+void DoUpdateParameters() override
 {
   if (HasValue("io.csv") && IsParameterEnabled("io.csv"))
     {
@@ -213,7 +213,7 @@ void DoUpdateParameters() ITK_OVERRIDE
 void ParseCSVPredictors(std::string path, ListSampleType* outputList)
 {
   std::ifstream ifs;
-  ifs.open(path.c_str());
+  ifs.open(path);
   unsigned int nbCols = 0;
   char sep = '\t';
   std::istringstream iss;
@@ -235,24 +235,24 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
     // Avoid commented lines or too short ones
     if (!line.empty() && line[0] != '#')
       {
-      std::vector<itksys::String> words = itksys::SystemTools::SplitString(line.c_str(),sep);
+      std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,sep);
       if (nbCols == 0)
         {
         // detect separator and feature size
         if (words.size() < 2)
           {
           sep = ' ';
-          words = itksys::SystemTools::SplitString(line.c_str(),sep);
+          words = itksys::SystemTools::SplitString(line,sep);
           }
         if (words.size() < 2)
           {
           sep = ';';
-          words = itksys::SystemTools::SplitString(line.c_str(),sep);
+          words = itksys::SystemTools::SplitString(line,sep);
           }
         if (words.size() < 2)
           {
           sep = ',';
-          words = itksys::SystemTools::SplitString(line.c_str(),sep);
+          words = itksys::SystemTools::SplitString(line,sep);
           }
         if (words.size() < 2)
           {
@@ -279,7 +279,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
   ifs.close();
 }
 
-void DoExecute() ITK_OVERRIDE
+void DoExecute() override
 {
   GetLogger()->Debug("Entering DoExecute\n");
   //Create training and validation for list samples and label list samples

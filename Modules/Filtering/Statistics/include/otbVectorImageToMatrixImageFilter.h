@@ -101,26 +101,26 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
-  void Reset(void) ITK_OVERRIDE;
+  void AllocateOutputs() override;
+  void GenerateOutputInformation() override;
+  void Synthetize(void) override;
+  void Reset(void) override;
 
 protected:
   PersistentVectorImageToMatrixFilter();
-  ~PersistentVectorImageToMatrixFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  ~PersistentVectorImageToMatrixFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentVectorImageToMatrixFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentVectorImageToMatrixFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 }; // end of class PersistentVectorImageToMatrixFilter
 
 /**===========================================================================*/
@@ -197,17 +197,17 @@ protected:
   /** Constructor */
   VectorImageToMatrixImageFilter() {};
   /** Destructor */
-  ~VectorImageToMatrixImageFilter() ITK_OVERRIDE {}
+  ~VectorImageToMatrixImageFilter() override {}
 
 private:
-  VectorImageToMatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorImageToMatrixImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorImageToMatrixImageFilter.txx"
+#include "otbVectorImageToMatrixImageFilter.hxx"
 #endif
 
 #endif

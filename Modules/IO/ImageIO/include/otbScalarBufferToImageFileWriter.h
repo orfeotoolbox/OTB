@@ -91,22 +91,22 @@ public:
        m_Buffer = pBuff;
   }
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
-   void Update() ITK_OVERRIDE
+   void Update() override
    {
      this->GenerateData();
    }
 
 protected:
   ScalarBufferToImageFileWriter();
-  ~ScalarBufferToImageFileWriter() ITK_OVERRIDE { /* don't call ClearBuffer, user's care */}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ScalarBufferToImageFileWriter() override { /* don't call ClearBuffer, user's care */}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 
-  ScalarBufferToImageFileWriter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ScalarBufferToImageFileWriter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
   /** Writer */
@@ -128,7 +128,7 @@ private:
 } // end namespace otb
 
 #ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbScalarBufferToImageFileWriter.txx"
+#include "otbScalarBufferToImageFileWriter.hxx"
 #endif
 
 #endif

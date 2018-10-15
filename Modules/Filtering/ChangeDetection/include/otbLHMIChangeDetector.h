@@ -84,11 +84,11 @@ public:
 
 protected:
   LHMIChangeDetector() {}
-  ~LHMIChangeDetector() ITK_OVERRIDE {}
+  ~LHMIChangeDetector() override {}
 
 private:
-  LHMIChangeDetector(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LHMIChangeDetector(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

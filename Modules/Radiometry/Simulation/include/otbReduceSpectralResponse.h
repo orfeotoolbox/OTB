@@ -26,7 +26,6 @@
 #include <itkObjectFactory.h>
 #include <vector>
 #include <utility>
-#include <fstream>
 #include <limits>
 
 namespace otb
@@ -90,20 +89,20 @@ public:
   typedef typename InputRSRType::RSRVectorType RSRVectorType;
   typedef typename std::vector<ValuePrecisionType> ReduceSpectralResponseVectorType;
   /** Standard macros */
-  itkNewMacro(Self)
-; itkTypeMacro(ReduceSpectralResponse, DataObject)
+  itkNewMacro(Self);
+; itkTypeMacro(ReduceSpectralResponse, DataObject);
 ;
 
-  itkGetConstObjectMacro(InputSatRSR, InputRSRType)
-; itkSetObjectMacro(InputSatRSR, InputRSRType)
+  itkGetConstObjectMacro(InputSatRSR, InputRSRType);
+; itkSetObjectMacro(InputSatRSR, InputRSRType);
 ;
 
-  itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType)
-; itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType)
+  itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType);
+; itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType);
 ;
 
   /** The GetReduceResponse method gives the output. The first value in the pair is the central wavelength of the band (see SpectralResponse). */
-  itkGetObjectMacro(ReduceResponse, InputSpectralResponseType)
+  itkGetObjectMacro(ReduceResponse, InputSpectralResponseType);
 ;
 
   itkSetMacro(ReflectanceMode, bool);
@@ -113,7 +112,7 @@ public:
   virtual bool Clear();
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
    * \param PrecisionType
@@ -135,7 +134,7 @@ protected:
   /** Constructor from a ASCII file */
   //ReduceSpectralResponse( const std::string & filename );
   /** Destructor */
-  ~ReduceSpectralResponse() ITK_OVERRIDE
+  ~ReduceSpectralResponse() override
   {
   }
 ;
@@ -148,8 +147,8 @@ protected:
   InputSpectralResponsePointerType m_InputSpectralResponse;
 
 private:
-  ReduceSpectralResponse(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ReduceSpectralResponse(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** the computed response */
   InputSpectralResponsePointerType m_ReduceResponse;
@@ -162,7 +161,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbReduceSpectralResponse.txx"
+#include "otbReduceSpectralResponse.hxx"
 #endif
 
 #endif

@@ -33,6 +33,11 @@
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wheader-guard"
+#else
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 #endif
 
 #include "otb_shark.h"
@@ -90,21 +95,21 @@ public:
   itkTypeMacro( SharkKMeansMachineLearningModel, MachineLearningModel );
 
   /** Train the machine learning model */
-  virtual void Train() ITK_OVERRIDE;
+  virtual void Train() override;
 
   /** Save the model to file */
-  virtual void Save(const std::string &filename, const std::string &name = "") ITK_OVERRIDE;
+  virtual void Save(const std::string &filename, const std::string &name = "") override;
 
   /** Load the model from file */
-  virtual void Load(const std::string &filename, const std::string &name = "") ITK_OVERRIDE;
+  virtual void Load(const std::string &filename, const std::string &name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &) ITK_OVERRIDE;
+  virtual bool CanReadFile(const std::string &) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &) ITK_OVERRIDE;
+  virtual bool CanWriteFile(const std::string &) override;
   //@}
 
   /** Get the maximum number of iteration for the kMeans algorithm.*/
@@ -130,21 +135,21 @@ protected:
 
   /** Predict values using the model */
   virtual TargetSampleType
-  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = ITK_NULLPTR) const ITK_OVERRIDE;
+  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = nullptr) const override;
 
 
   virtual void DoPredictBatch(const InputListSampleType *, const unsigned int &startIndex, const unsigned int &size,
-                              TargetListSampleType *, ConfidenceListSampleType * = ITK_NULLPTR) const ITK_OVERRIDE;
+                              TargetListSampleType *, ConfidenceListSampleType * = nullptr) const override;
 
   template<typename DataType>
   DataType NormalizeData(const DataType &data) const;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream &os, itk::Indent indent) const;
+  void PrintSelf(std::ostream &os, itk::Indent indent) const override;
 
 private:
-  SharkKMeansMachineLearningModel(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  SharkKMeansMachineLearningModel(const Self &) = delete;
+  void operator=(const Self &) = delete;
 
   // Parameters set by the user
   bool m_Normalized;
@@ -165,7 +170,7 @@ private:
 
 #ifndef OTB_MANUAL_INSTANTIATION
 
-#include "otbSharkKMeansMachineLearningModel.txx"
+#include "otbSharkKMeansMachineLearningModel.hxx"
 
 #endif
 

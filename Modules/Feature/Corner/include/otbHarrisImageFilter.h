@@ -104,15 +104,15 @@ public:
 
 protected:
   HarrisImageFilter();
-  ~HarrisImageFilter() ITK_OVERRIDE {}
+  ~HarrisImageFilter() override {}
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HarrisImageFilter(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  HarrisImageFilter(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   double m_SigmaD;
   double m_SigmaI;
@@ -127,7 +127,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHarrisImageFilter.txx"
+#include "otbHarrisImageFilter.hxx"
 #endif
 
 #endif

@@ -82,38 +82,38 @@ protected:
   /**
    * Destructor.
    */
-  ~PointSetToDensityImageFilter() ITK_OVERRIDE {}
+  ~PointSetToDensityImageFilter() override {}
   /**
    * Standard PrintSelf method.
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
    * Call the ImageSource::GenerateData which handle multithreading
    */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /**
    * Main computation method.
    */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
   /**
   * Main computation method.
   */
-  void  GenerateOutputInformation() ITK_OVERRIDE;
+  void  GenerateOutputInformation() override;
 
 private:
 
-  PointSetToDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PointSetToDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Radius;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetToDensityImageFilter.txx"
+#include "otbPointSetToDensityImageFilter.hxx"
 #endif
 
 #endif

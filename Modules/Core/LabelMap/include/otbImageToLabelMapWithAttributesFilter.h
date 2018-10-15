@@ -75,26 +75,26 @@ public:
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType>   BandStatisticsLabelMapFilterType;
 
   using Superclass::SetInput;
-  void SetInput( const InputImageType *image) ITK_OVERRIDE;
+  void SetInput( const InputImageType *image) override;
   virtual void SetLabeledImage( const LabeledImageType * image);
   const InputImageType * GetInput(void);
   const LabeledImageType * GetLabeledImage();
   virtual LabelMapType* GetOutput();
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 protected:
   /** Constructor */
   ImageToLabelMapWithAttributesFilter();
   /** Destructor */
-  ~ImageToLabelMapWithAttributesFilter() ITK_OVERRIDE{};
+  ~ImageToLabelMapWithAttributesFilter() override{};
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
 
 private:
-  ImageToLabelMapWithAttributesFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToLabelMapWithAttributesFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   typename LabelMapType::Pointer   m_Output;
 
@@ -102,7 +102,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToLabelMapWithAttributesFilter.txx"
+#include "otbImageToLabelMapWithAttributesFilter.hxx"
 #endif
 #endif
 

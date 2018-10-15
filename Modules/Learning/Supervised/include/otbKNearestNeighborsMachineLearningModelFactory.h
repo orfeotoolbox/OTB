@@ -44,8 +44,8 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  const char* GetITKSourceVersion(void) const ITK_OVERRIDE;
-  const char* GetDescription(void) const ITK_OVERRIDE;
+  const char* GetITKSourceVersion(void) const override;
+  const char* GetDescription(void) const override;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -62,18 +62,18 @@ public:
 
 protected:
   KNearestNeighborsMachineLearningModelFactory();
-  ~KNearestNeighborsMachineLearningModelFactory() ITK_OVERRIDE;
+  ~KNearestNeighborsMachineLearningModelFactory() override;
 
 private:
-  KNearestNeighborsMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KNearestNeighborsMachineLearningModelFactory(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKNearestNeighborsMachineLearningModelFactory.txx"
+#include "otbKNearestNeighborsMachineLearningModelFactory.hxx"
 #endif
 
 #endif

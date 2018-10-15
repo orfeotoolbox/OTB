@@ -82,18 +82,18 @@ public:
 
 protected:
   ConcatenateVectorDataFilter();
-  ~ConcatenateVectorDataFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ConcatenateVectorDataFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Triggers the Computation of the sample list */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   /** Recursive method to visit efficiently the vectordata*/
   void ProcessNode(TreeNodeType * source, DataNodeType * outputDocument);
 
 private:
-  ConcatenateVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConcatenateVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DataNodePointerType       m_Folder;
   DataNodePointerType       m_Document;
@@ -103,7 +103,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConcatenateVectorDataFilter.txx"
+#include "otbConcatenateVectorDataFilter.hxx"
 #endif
 
 #endif

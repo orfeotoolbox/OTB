@@ -86,7 +86,7 @@ public:
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& index) const ITK_OVERRIDE;
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& index) const override;
 
   /** Set/Get the window radius*/
   virtual void SetRadius(unsigned int rad);
@@ -115,12 +115,12 @@ public:
 
 protected:
   GenericInterpolateImageFunction();
-  ~GenericInterpolateImageFunction() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~GenericInterpolateImageFunction() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Call the superclass implementation and set the TablesHaveBeenGenerated
    * flag to false */
-  void Modified(void) const ITK_OVERRIDE;
+  void Modified(void) const override;
 
   /** Delete tables.*/
   virtual void ResetOffsetTable();
@@ -130,8 +130,8 @@ protected:
   virtual void FillWeightOffsetTable();
 
 private:
-  GenericInterpolateImageFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GenericInterpolateImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Store the window radius. */
   //unsigned int m_Radius;
   // Constant to store twice the radius
@@ -161,7 +161,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericInterpolateImageFunction.txx"
+#include "otbGenericInterpolateImageFunction.hxx"
 #endif
 
 #endif

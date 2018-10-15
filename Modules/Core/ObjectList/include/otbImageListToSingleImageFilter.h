@@ -73,18 +73,18 @@ protected:
   /** Constructor */
   ImageListToSingleImageFilter();
   /** Destructor */
-  ~ImageListToSingleImageFilter() ITK_OVERRIDE {}
+  ~ImageListToSingleImageFilter() override {}
 
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:
-  ImageListToSingleImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageListToSingleImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_ExtractedImagePosition;
 
@@ -93,7 +93,7 @@ private:
 } // end of namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListToSingleImageFilter.txx"
+#include "otbImageListToSingleImageFilter.hxx"
 #endif
 
 #endif

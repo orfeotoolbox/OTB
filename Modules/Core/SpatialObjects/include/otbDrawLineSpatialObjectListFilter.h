@@ -92,10 +92,10 @@ public:
 
 protected:
   DrawLineSpatialObjectListFilter();
-  ~DrawLineSpatialObjectListFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~DrawLineSpatialObjectListFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
    * compute the intersection of the segment to draw with the region
@@ -121,8 +121,8 @@ protected:
                                           const OutputImageRegionType *outputRegionForThread) const;
 
 private:
-  DrawLineSpatialObjectListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DrawLineSpatialObjectListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputPixelType m_Value;
   int             m_Length;
@@ -132,7 +132,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDrawLineSpatialObjectListFilter.txx"
+#include "otbDrawLineSpatialObjectListFilter.hxx"
 #endif
 
 #endif

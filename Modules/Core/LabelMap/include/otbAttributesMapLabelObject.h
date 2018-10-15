@@ -32,6 +32,7 @@
 
 #include "otbPolygon.h"
 #include <map>
+#include <string>
 
 namespace otb
 {
@@ -277,7 +278,7 @@ public:
 
     // copy the data of the current type if possible
     const Self * src = dynamic_cast<const Self *>(lo);
-    if (src == ITK_NULLPTR)
+    if (src == nullptr)
       {
       return;
       }
@@ -306,10 +307,10 @@ protected:
   /** Constructor */
   AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New()) {}
   /** Destructor */
-  ~AttributesMapLabelObject() ITK_OVERRIDE {}
+  ~AttributesMapLabelObject() override {}
 
   /** The printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Attributes: " << std::endl;
@@ -320,8 +321,8 @@ protected:
       }
   }
 private:
-  AttributesMapLabelObject(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AttributesMapLabelObject(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The attributes map */
   AttributesMapType m_Attributes;

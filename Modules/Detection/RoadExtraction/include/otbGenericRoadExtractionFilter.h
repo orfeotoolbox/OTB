@@ -189,7 +189,7 @@ protected:
   /** Constructor */
   GenericRoadExtractionFilter();
   /** Destructor */
-  ~GenericRoadExtractionFilter() ITK_OVERRIDE {}
+  ~GenericRoadExtractionFilter() override {}
 
   /** Prepare main computation method
    *  Note : this function isn't called
@@ -197,14 +197,14 @@ protected:
   void BeforeGenerateData(void);
 
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 
-  GenericRoadExtractionFilter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  GenericRoadExtractionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typename SquareRootImageFilterType::Pointer m_SquareRootImageFilter;
   typename GradientFilterType::Pointer m_GradientFilter;
@@ -249,7 +249,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericRoadExtractionFilter.txx"
+#include "otbGenericRoadExtractionFilter.hxx"
 #endif
 
 #endif

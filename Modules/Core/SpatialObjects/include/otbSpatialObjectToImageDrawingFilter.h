@@ -140,10 +140,10 @@ public:
 
 protected:
   SpatialObjectToImageDrawingFilter();
-  ~SpatialObjectToImageDrawingFilter() ITK_OVERRIDE;
+  ~SpatialObjectToImageDrawingFilter() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE; // do nothing
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateOutputInformation() override; // do nothing
+  void GenerateData() override;
 
   SizeType     m_Size;
   double       m_Spacing[OutputImageDimension];
@@ -153,17 +153,17 @@ protected:
   ValueType    m_OutsideValue;
   bool         m_UseObjectValue;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SpatialObjectToImageDrawingFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SpatialObjectToImageDrawingFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpatialObjectToImageDrawingFilter.txx"
+#include "otbSpatialObjectToImageDrawingFilter.hxx"
 #endif
 
 #endif

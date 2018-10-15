@@ -83,18 +83,18 @@ public:
 
 protected:
   HaralickTexturesIFFactory(){}
-  ~HaralickTexturesIFFactory() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~HaralickTexturesIFFactory() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HaralickTexturesIFFactory(const Self& ); //purposely not implemented
-  void operator=(const Self& ); //purposely not implemented
+  HaralickTexturesIFFactory(const Self& ) = delete;
+  void operator=(const Self& ) = delete;
 
 };
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHaralickTexturesIFFactory.txx"
+#include "otbHaralickTexturesIFFactory.hxx"
 #endif
 
 #endif

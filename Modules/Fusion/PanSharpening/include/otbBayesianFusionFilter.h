@@ -298,14 +298,14 @@ public:
 
 protected:
   BayesianFusionFilter();
-  ~BayesianFusionFilter() ITK_OVERRIDE;
+  ~BayesianFusionFilter() override;
   /** Check if internal statistics need to be computed, and do so */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
   /** Compute internal statistics required for fusion */
   void ComputeInternalStatistics(void);
   /** Call the superclass implementation and set the StatisticsHaveBeenGenerated
    * flag to false */
-  void Modified(void) const ITK_OVERRIDE;
+  void Modified(void) const override;
 
 private:
   /** Ponderation declaration*/
@@ -326,7 +326,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBayesianFusionFilter.txx"
+#include "otbBayesianFusionFilter.hxx"
 #endif
 
 #endif

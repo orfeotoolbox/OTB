@@ -26,11 +26,11 @@
 #ifndef PlatformPositionData_h
 #define PlatformPositionData_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 
 #include <RadarSat/Leader/PositionVectorRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

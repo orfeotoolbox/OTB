@@ -189,20 +189,20 @@ protected:
   /** Constructor */
   FineRegistrationImageFilter();
   /** Destructor */
-  ~FineRegistrationImageFilter() ITK_OVERRIDE {};
+  ~FineRegistrationImageFilter() override {};
 
   /** Threaded generate data */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Generate the input requested regions  */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
 private:
-  FineRegistrationImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  FineRegistrationImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
   
   inline double callMetric(double val1,double val2,double &oldRes,bool &flag);
   inline void updateOptParams(double potBestVal,double parx,double pary,                             //inputs
@@ -253,7 +253,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFineRegistrationImageFilter.txx"
+#include "otbFineRegistrationImageFilter.hxx"
 #endif
 
 #endif

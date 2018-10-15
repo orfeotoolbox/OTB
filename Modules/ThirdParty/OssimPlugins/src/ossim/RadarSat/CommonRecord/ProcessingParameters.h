@@ -26,7 +26,6 @@
 #ifndef ProcessingParameters_h
 #define ProcessingParameters_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 
@@ -35,6 +34,7 @@
 #include "BeamPixelCountRecord.h"
 #include "SRGRCoefficientSetRecord.h"
 #include "TemperatureSettingsRecord.h"
+#include <string>
 
 namespace ossimplugins
 {

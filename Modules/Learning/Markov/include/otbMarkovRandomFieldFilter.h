@@ -319,8 +319,8 @@ public:
 
 protected:
   MarkovRandomFieldFilter();
-  ~MarkovRandomFieldFilter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~MarkovRandomFieldFilter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Allocate memory for labelled images. This is automatically called
    * in GenerateData().
@@ -335,13 +335,13 @@ protected:
 
   virtual void ApplyMarkovRandomFieldFilter();
 
-  void GenerateData() ITK_OVERRIDE;
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
-  void EnlargeOutputRequestedRegion(itk::DataObject *) ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateData() override;
+  void GenerateInputRequestedRegion() override;
+  void EnlargeOutputRequestedRegion(itk::DataObject *) override;
+  void GenerateOutputInformation() override;
 
-  MarkovRandomFieldFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MarkovRandomFieldFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typedef typename TInputImage::SizeType InputImageSizeType;
 
@@ -390,7 +390,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMarkovRandomFieldFilter.txx"
+#include "otbMarkovRandomFieldFilter.hxx"
 #endif
 
 #endif

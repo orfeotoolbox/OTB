@@ -34,6 +34,7 @@
 #include "itkCommand.h"
 
 #include <vector>
+#include <string>
 
 namespace otb
 {
@@ -122,7 +123,7 @@ protected:
   CommandLineLauncher();
 
   /** Destructor */
-  ~CommandLineLauncher() ITK_OVERRIDE;
+  ~CommandLineLauncher() override;
 
   /** Load the executable path. It looks for the key --modulePath,
     * extract and interpret as path the following strings.
@@ -168,10 +169,25 @@ protected:
   unsigned int GetMaxKeySize() const;
 
 private:
+  /** \return false if paramKey is a missing mandatory parameter */
+  bool CheckMissingMandatoryParameter(const std::string & paramKey) const;
 
-  CommandLineLauncher(const CommandLineLauncher &); //purposely not implemented
-  void operator =(const CommandLineLauncher&); //purposely not implemented
+  /** Prints a warning to std::cerr if paramKey is an unused parameter */
+  void CheckUnusedParameter(const std::string & paramKey) const;
 
+  /** \return false if paramKey is an OutputFilename parameter
+  pointing to a path that does not exist */
+  bool CheckOutputPathsValidity(const std::string & paramKey) const;
+  
+  CommandLineLauncher(const CommandLineLauncher &) = delete;
+  void operator =(const CommandLineLauncher&) = delete;
+
+  /** 
+   * Actually launch the process and write outputs, without catching exceptions.
+   */
+  bool ExecuteAndWriteOutputNoCatch();
+
+  
   std::string                       m_Path;
 
   Application::Pointer              m_Application;

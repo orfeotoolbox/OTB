@@ -157,8 +157,8 @@ public:
 
 protected:
   ConvolutionImageFilter();
-  ~ConvolutionImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ConvolutionImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ConvolutionImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -171,7 +171,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
   /** ConvolutionImageFilter needs a larger input requested region than
    * the output requested region.  As such, ConvolutionImageFilter needs
@@ -180,11 +180,11 @@ protected:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) ITK_OVERRIDE;
+    throw(itk::InvalidRequestedRegionError) override;
 
 private:
-  ConvolutionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConvolutionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   InputSizeType m_Radius;
@@ -197,7 +197,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConvolutionImageFilter.txx"
+#include "otbConvolutionImageFilter.hxx"
 #endif
 
 #endif

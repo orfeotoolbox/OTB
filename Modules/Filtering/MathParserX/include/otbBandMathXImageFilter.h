@@ -31,6 +31,7 @@
 #include "otbParserX.h"
 
 #include <vector>
+#include <string>
 
 
 namespace otb
@@ -132,15 +133,15 @@ public:
 
 protected :
   BandMathXImageFilter();
-  ~BandMathXImageFilter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~BandMathXImageFilter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
+  void GenerateInputRequestedRegion() override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
-  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) ITK_OVERRIDE;
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
+  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) override;
+  void AfterThreadedGenerateData() override;
 
 private :
 
@@ -157,8 +158,8 @@ private :
   } adhocStruct;
 
 
-  BandMathXImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BandMathXImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void AddVariable(adhocStruct&);
   void CheckImageDimensions();
@@ -195,7 +196,7 @@ private :
 }//end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandMathXImageFilter.txx"
+#include "otbBandMathXImageFilter.hxx"
 #endif
 
 #endif

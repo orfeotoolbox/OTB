@@ -92,15 +92,15 @@ protected:
   WaveletImageFilter();
   virtual ~WaveletImageFilter();
 
-  virtual void GenerateInputRequestedRegion();
+  virtual void GenerateInputRequestedRegion() override;
 
-  virtual void GenerateData();
+  virtual void GenerateData() override;
 
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  WaveletImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WaveletImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   WaveletTransformFilterPointerType m_WaveletTransform;
   WaveletBandsListToWaveletsSynopsisImageFilterPointerType m_WaveletBandsListToWaveletsSynopsis;
@@ -110,7 +110,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletImageFilter.txx"
+#include "otbWaveletImageFilter.hxx"
 #endif
 
 #endif

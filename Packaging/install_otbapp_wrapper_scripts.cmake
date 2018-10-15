@@ -40,8 +40,8 @@ function(install_otbapp_wrapper_scripts otbapp_libfile)
     DESTINATION ${PKG_STAGE_DIR}/bin
     )
 
-  #Do the same for otbgui script but only if HAVE_QT4 is set.
-  if(NOT HAVE_QT4)
+  #Do the same for otbgui script but only if HAVE_QT is set.
+  if(NOT HAVE_QT)
     return()
   endif()
   

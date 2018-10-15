@@ -25,7 +25,6 @@
 
 #include "otbWrapperApplication.h"
 
-#include <iostream>
 
 // ListSample
 #include "itkListSample.h"
@@ -33,6 +32,7 @@
 
 //Estimator
 #include "otbMachineLearningModelFactory.h"
+#include <string>
 
 namespace otb
 {
@@ -82,7 +82,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro(LearningApplicationBase, otb::Application)
+  itkTypeMacro(LearningApplicationBase, otb::Application);
 
   typedef TInputValue                             InputValueType;
   typedef TOutputValue                            OutputValueType;
@@ -121,7 +121,7 @@ public:
 protected:
   LearningApplicationBase();
 
-  ~LearningApplicationBase() ITK_OVERRIDE;
+  ~LearningApplicationBase() override;
 
   /** Generic method to train and save the machine learning model. This method
    * uses specific train methods depending on the chosen model.*/
@@ -135,7 +135,7 @@ protected:
     std::string modelPath);
 
   /** Init method that creates all the parameters for machine learning models */
-  void DoInit() ITK_OVERRIDE;
+  void DoInit() override;
 
   /** Flag to switch between classification and regression mode.
    * False by default, child classes may change it in their constructor */
@@ -214,23 +214,23 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLearningApplicationBase.txx"
+#include "otbLearningApplicationBase.hxx"
 #ifdef OTB_USE_OPENCV
-#include "otbTrainBoost.txx"
-#include "otbTrainDecisionTree.txx"
-#include "otbTrainGradientBoostedTree.txx"
-#include "otbTrainKNN.txx"
-#include "otbTrainNeuralNetwork.txx"
-#include "otbTrainNormalBayes.txx"
-#include "otbTrainRandomForests.txx"
-#include "otbTrainSVM.txx"
+#include "otbTrainBoost.hxx"
+#include "otbTrainDecisionTree.hxx"
+#include "otbTrainGradientBoostedTree.hxx"
+#include "otbTrainKNN.hxx"
+#include "otbTrainNeuralNetwork.hxx"
+#include "otbTrainNormalBayes.hxx"
+#include "otbTrainRandomForests.hxx"
+#include "otbTrainSVM.hxx"
 #endif
 #ifdef OTB_USE_LIBSVM
-#include "otbTrainLibSVM.txx"
+#include "otbTrainLibSVM.hxx"
 #endif
 #ifdef OTB_USE_SHARK
-#include "otbTrainSharkRandomForests.txx"
-#include "otbTrainSharkKMeans.txx"
+#include "otbTrainSharkRandomForests.hxx"
+#include "otbTrainSharkKMeans.hxx"
 #endif
 #endif
 

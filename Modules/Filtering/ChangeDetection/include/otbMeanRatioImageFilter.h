@@ -80,11 +80,11 @@ public:
 
 protected:
   MeanRatioImageFilter() {}
-  ~MeanRatioImageFilter() ITK_OVERRIDE {}
+  ~MeanRatioImageFilter() override {}
 
 private:
-  MeanRatioImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MeanRatioImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

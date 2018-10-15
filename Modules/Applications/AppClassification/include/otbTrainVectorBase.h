@@ -36,6 +36,7 @@
 
 #include <algorithm>
 #include <locale>
+#include <string>
 
 namespace otb
 {
@@ -58,7 +59,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro(Self, Superclass)
+  itkTypeMacro(Self, Superclass);
 
   typedef Superclass::SampleType SampleType;
   typedef Superclass::ListSampleType ListSampleType;
@@ -180,9 +181,9 @@ protected:
   TargetListSampleType::Pointer m_PredictedList;
   FeaturesInfo m_FeaturesInfo;
 
-  void DoInit() ITK_OVERRIDE;
-  void DoUpdateParameters() ITK_OVERRIDE;
-  void DoExecute() ITK_OVERRIDE;
+  void DoInit() override;
+  void DoUpdateParameters() override;
+  void DoExecute() override;
 
 };
 
@@ -190,7 +191,7 @@ protected:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTrainVectorBase.txx"
+#include "otbTrainVectorBase.hxx"
 #endif
 
 #endif

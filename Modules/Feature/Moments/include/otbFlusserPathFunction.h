@@ -93,7 +93,7 @@ public:
   typedef typename Superclass::PrecisionType PrecisionType;
 
   /** Evaluate the function at non-integer positions */
-  RealType Evaluate(const PathType& path) const ITK_OVERRIDE;
+  RealType Evaluate(const PathType& path) const override;
   virtual RealType Evaluate() const;
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
@@ -102,12 +102,12 @@ public:
 
 protected:
   FlusserPathFunction();
-  ~FlusserPathFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~FlusserPathFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  FlusserPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  FlusserPathFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   short m_MomentNumber;
 };
@@ -115,7 +115,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFlusserPathFunction.txx"
+#include "otbFlusserPathFunction.hxx"
 #endif
 
 #endif

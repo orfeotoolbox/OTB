@@ -77,17 +77,17 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  RealType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
+  RealType EvaluateAtIndex(const IndexType& index) const override;
 
   /** Evaluate the function at non-integer positions */
-  RealType Evaluate(const PointType& point) const ITK_OVERRIDE
+  RealType Evaluate(const PointType& point) const override
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
   RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const ITK_OVERRIDE
+    const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -120,12 +120,12 @@ public:
 
 protected:
   TextureImageFunction();
-  ~TextureImageFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~TextureImageFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  TextureImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  TextureImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   SizeType   m_Radius;
   OffsetType m_Offset;
@@ -135,7 +135,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbTextureImageFunction.txx"
+# include "otbTextureImageFunction.hxx"
 #endif
 
 #endif

@@ -139,7 +139,7 @@ class ITK_EXPORT ScalarToRainbowRGBPixelFunctor
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
-  ~ScalarToRainbowRGBPixelFunctor() ITK_OVERRIDE {}
+  ~ScalarToRainbowRGBPixelFunctor() override {}
 
   typedef ScalarToRainbowRGBPixelFunctor                      Self;
   typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
@@ -154,14 +154,14 @@ public:
   typedef TScalar                              ScalarType;
   typedef HSVToRGBFunctor<RGBPixelType>        HSVToRGBFunctorType;
 
-  RGBPixelType operator ()(const TScalar&) const ITK_OVERRIDE;
+  RGBPixelType operator ()(const TScalar&) const override;
 
 protected:
   RGBPixelType HSVToRGB(double h, double s, double v) const;
 
 private:
-  ScalarToRainbowRGBPixelFunctor(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ScalarToRainbowRGBPixelFunctor(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   HSVToRGBFunctorType m_HSVToRGBFunctor;
 };
@@ -171,7 +171,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbScalarToRainbowRGBPixelFunctor.txx"
+#include "otbScalarToRainbowRGBPixelFunctor.hxx"
 #endif
 
 #endif

@@ -20,9 +20,14 @@
 
 #include "otbConfigurationManager.h"
 
+#include "otbMacro.h"
+#include "otbLogger.h"
+
 #include "itksys/SystemTools.hxx"
 
 #include <cstdlib>
+#include <algorithm>
+#include <string>
 
 namespace otb
 {
@@ -50,7 +55,7 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
   if(itksys::SystemTools::GetEnv("OTB_MAX_RAM_HINT",svalue))
     {
 
-    unsigned long int tmp = strtoul(svalue.c_str(),ITK_NULLPTR,10);
+    unsigned long int tmp = strtoul(svalue.c_str(),nullptr,10);
     
     if(tmp)
       {
@@ -59,6 +64,39 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
     }
   
   return value;
-
 }
+
+itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
+{
+  std::string svalue;
+
+  // Default value is INFO
+  itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::INFO;
+  
+  if(itksys::SystemTools::GetEnv("OTB_LOGGER_LEVEL",svalue))
+    {
+    if(svalue.compare("DEBUG") == 0)
+      {
+      level = itk::LoggerBase::DEBUG;
+      }
+    else if(svalue.compare("INFO") == 0)
+      {
+      level = itk::LoggerBase::INFO;
+      }
+    else if(svalue.compare("WARNING") == 0)
+      {
+      level = itk::LoggerBase::WARNING;
+      }
+    else if(svalue.compare("CRITICAL") == 0)
+      {
+      level = itk::LoggerBase::CRITICAL;
+      }
+    else
+      {
+      otbLogMacro(Error,<<"Unknown value for OTB_LOGGER_LEVEL_MACRO. Possible values are DEBUG, INFO, WARNING, CRITICAL.");
+      }
+    }
+  return level;
+}
+
 }

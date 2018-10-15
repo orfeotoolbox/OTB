@@ -55,13 +55,11 @@ public:
 
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName( "BandMathX" );
 
-    SetDescription(
-      "This application performs mathematical operations on several multiband images.\n"
-    );
+    SetDescription("This application performs mathematical operations on several multiband images.");
 
     SetDocName( "Band Math X" );
 
@@ -207,7 +205,7 @@ private:
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso("[1] http://articles.beltoforion.de/article.php?a=muparserx\n"
       "[2] BandMath");
-    AddDocTag( "Miscellaneous" );
+    AddDocTag(Tags::Manip);
 
     AddParameter( ParameterType_InputImageList, "il", "Input image-list" );
     SetParameterDescription( "il", "Image-list to perform computation on." );
@@ -251,7 +249,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // check if input context should be used
     bool useContext = this->ContextCheck();
@@ -269,7 +267,7 @@ private:
       {
       std::string contextPath = GetParameterString("incontext");
       // check that file exists
-      if (itksys::SystemTools::FileExists(contextPath.c_str(),true))
+      if (itksys::SystemTools::FileExists(contextPath,true))
         {
         BandMathImageFilterType::Pointer dummyFilter =
           BandMathImageFilterType::New();
@@ -289,7 +287,7 @@ private:
         if (useContext)
           {
           // only set the first expression, 'ManyExpression' is disabled.
-          this->SetParameterString("exp",dummyFilter->GetExpression(0), false);
+          this->SetParameterString("exp",dummyFilter->GetExpression(0));
           }
         }
       }
@@ -345,7 +343,7 @@ private:
       }
     }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");

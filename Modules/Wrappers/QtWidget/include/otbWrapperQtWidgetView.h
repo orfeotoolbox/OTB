@@ -21,76 +21,122 @@
 #ifndef otbWrapperQtWidgetView_h
 #define otbWrapperQtWidgetView_h
 
-#include <QtGui>
-#include <QObject>
-#include <QShortcut>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
+#include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
-#endif //tag=QT4-boost-compatibility
+#include "OTBQtWidgetExport.h"
+#include <string>
 
 namespace otb
 {
 namespace Wrapper
 {
 
-/** \class QtWidgetView
- * \brief
+/**
+ * \class QtWidgetView
  *
  * \ingroup OTBQtWidget
+ *
+ * \brief WIP.
  */
-class OTBQtWidget_EXPORT QtWidgetView : public QWidget
+class OTBQtWidget_EXPORT QtWidgetView :
+    public QWidget
 {
   Q_OBJECT
-public:
-  QtWidgetView(Application* app);
-  ~QtWidgetView() ITK_OVERRIDE;
 
+  Q_PROPERTY( bool isClosable
+	      READ IsClosable
+	      WRITE SetClosable );
+
+public:
+
+  static char const * const OBJECT_NAME;
+
+  /** \brief Constructor. */
+  QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
+		QWidget* parent,
+		Qt::WindowFlags flags =0 );
+
+  /** \brief Destructor. */
+  ~QtWidgetView() override;
+
+  /** \brief Gui Creation. */
   void CreateGui();
 
-  QtWidgetModel* GetModel()
-  {
-    return m_Model;
-  }
+  /** \brief Model Accessor */
+  QtWidgetModel* GetModel() const;
+
+  bool IsClosable() const;
 
 public slots:
-  void CloseSlot();
-  void UnhandledException(QString message);
-  void OnExceptionRaised(QString message);
 
-private slots:
-  void UpdateMessageAfterExecuteClicked();
-  void UpdateMessageAfterExecution(int status);
-  void UpdateMessageAfterApplicationReady(bool val);
+  void UnhandledException(QString message);
 
 signals:
   void QuitSignal();
+  void ExecuteAndWriteOutput();
+  void Stop();
 
+protected:
 
+  bool IsRunning() const;
+
+  virtual QWidget* CreateInputWidgets();
+
+  // QWidget overloads.
+  void closeEvent( QCloseEvent * event ) override;
+
+protected:
+
+  /** Html section for 'Done' icon */
+  std::string m_IconPathDone;
+
+  /** Html section for 'Failed' icon */
+  std::string m_IconPathFailed;
+
+protected slots:
+
+  void OnExecButtonClicked();
+
+  void OnExceptionRaised( QString what );
+
+// Private methods.
 private:
-  QtWidgetView(const QtWidgetView&); //purposely not implemented
-  void operator=(const QtWidgetView&); //purposely not implemented
+
+  QtWidgetView(const QtWidgetView&) = delete;
+  void operator=(const QtWidgetView&) = delete;
 
   QWidget* CreateFooter();
 
-  QWidget* CreateInputWidgets();
-
   QWidget* CreateDoc();
 
-  Application::Pointer m_Application;
+// Private attributes.
+private:
 
-  QtWidgetModel* m_Model;
-
-  QTextEdit *m_LogText;
-  QTabWidget *m_TabWidget;
+  otb::Wrapper::QtWidgetModel* m_Model;
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
   QShortcut* m_QuitShortcut;
   QLabel* m_Message;
+  QTextEdit *m_LogText;
+  QTabWidget *m_TabWidget;
+
+  bool m_IsClosable : 1;
+  bool m_IsRunning;
+
+private slots:
+  void UpdateMessageAfterExecution(int status);
+  void UpdateMessageAfterApplicationReady(bool val);
+
+  void OnProgressReportBegin();
+  void OnProgressReportEnd( int status );
+  void SetClosable( bool );
+
 };
 
+} // end namespace 'Wrapper'
 
-}
-}
+} // end namespace 'otb'
 
 #endif

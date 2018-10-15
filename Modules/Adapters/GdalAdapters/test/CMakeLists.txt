@@ -35,5 +35,49 @@ endif()
 add_executable(otbOGRTestsIO otbOGRDataSourceWrapperIO.cxx)
 target_link_libraries(otbOGRTestsIO ${OTBGdalAdapters-Test_LIBRARIES})
 
-add_test(NAME coTuOGRDataSourceWrapperIO
+otb_add_test(NAME coTuOGRDataSourceWrapperIO
          COMMAND otbOGRTestsIO ${INPUTDATA}/ToulousePoints-examples.shp )
+
+set(OTBOGRTests
+otbOGRTestDriver.cxx
+otbOGRExtendedFilenameToOptionsTest.cxx
+otbOGRExtendedFilenameToOptionsGDALTest.cxx
+)
+
+add_executable(otbOGRTestDriver ${OTBOGRTests})
+target_link_libraries(otbOGRTestDriver ${OTBGdalAdapters-Test_LIBRARIES})
+otb_module_target_label(otbOGRTestDriver)
+
+otb_add_test(NAME TvOGRExtendedFilename
+         COMMAND otbOGRTestDriver
+         --compare-ascii ${NOTOL}
+         ${BASELINE}/TvOGRExtendedFilename.txt
+         ${TEMP}/TvOGRExtendedFilenameTest.txt
+         otbOGRExtendedFileName
+         test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
+         ${TEMP}/TvOGRExtendedFilenameTest.txt     )
+
+#Problem with error thrown by GDAL : unable to catch it with "CPLGetLastErrorMsg"
+# otb_add_test(NAME TvOGRExtendedFilenameGDALOpen
+#          COMMAND otbOGRTestDriver
+#          otbOGRExtendedFileNameGDALOpen
+#          ${INPUTDATA}/ToulousePoints-examples.shp?&gdal:oo:openOption=OPTION
+#           )
+
+otb_add_test(NAME TvOGRExtendedFilenameGDALCreate
+         COMMAND otbOGRTestDriver
+         otbOGRExtendedFileNameGDALCreate
+         test_OGRExtendedFilenameGDALCreate.shp?gdal:co:creationOption=OPTION
+          )
+
+otb_add_test(NAME TvOGRExtendedFilenameGDALLayer
+         COMMAND otbOGRTestDriver
+         otbOGRExtendedFileNameGDALLayer
+         test_OGRExtendedFilenameGDALLayer.shp?&gdal:lco:layeroption=OPTION
+          )
+
+otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
+         COMMAND otbOGRTestDriver
+         otbOGRExtendedFileNameGDALLayerOption
+         test_OGRExtendedFilenameGDALLayerOption.shp
+          )

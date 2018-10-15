@@ -59,8 +59,8 @@ public:
   {
     double x = static_cast<double>(A);
     double px = CONST_PI * x;
-    double temp = 0.54 + 0.46 * vcl_cos(x * m_Factor);
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    double temp = 0.54 + 0.46 * std::cos(x * m_Factor);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
   // Equal to \f$ \frac{\pi}{m} \f$
@@ -128,15 +128,15 @@ public:
 
 protected:
   WindowedSincInterpolateImageHammingFunction() {};
-  ~WindowedSincInterpolateImageHammingFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~WindowedSincInterpolateImageHammingFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  WindowedSincInterpolateImageHammingFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageHammingFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

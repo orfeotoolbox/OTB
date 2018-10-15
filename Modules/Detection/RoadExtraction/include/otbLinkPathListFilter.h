@@ -84,11 +84,11 @@ protected:
   /** Constructor */
   LinkPathListFilter();
   /** Destructor */
-  ~LinkPathListFilter() ITK_OVERRIDE {}
+  ~LinkPathListFilter() override {}
   /** GenerateData method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
    * Verify the angular condition to link a path.
@@ -111,8 +111,8 @@ protected:
   PathPointerType LinkPath(PathPointerType p1, bool revert1, PathPointerType p2, bool revert2);
 
 private:
-  LinkPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LinkPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   RealType m_AngularThreshold;
   RealType m_DistanceThreshold;
@@ -123,7 +123,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLinkPathListFilter.txx"
+#include "otbLinkPathListFilter.hxx"
 #endif
 
 #endif

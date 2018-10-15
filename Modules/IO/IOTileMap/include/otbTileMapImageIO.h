@@ -92,41 +92,41 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  bool CanReadFile(const char*) ITK_OVERRIDE;
+  bool CanReadFile(const char*) override;
 
   /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
-  bool CanStreamRead() ITK_OVERRIDE
+  bool CanStreamRead() override
   {
     return true;
   }
 
   /** Set the spacing and dimension information for the set filename. */
-  void ReadImageInformation() ITK_OVERRIDE;
+  void ReadImageInformation() override;
 
   /** Reads the data from disk into the memory buffer provided. */
-  void Read(void* buffer) ITK_OVERRIDE;
+  void Read(void* buffer) override;
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  bool CanWriteFile(const char*) ITK_OVERRIDE;
+  bool CanWriteFile(const char*) override;
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  bool CanStreamWrite() ITK_OVERRIDE
+  bool CanStreamWrite() override
   {
     return true;
   }
 
   /** Writes the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
-  void WriteImageInformation() ITK_OVERRIDE;
+  void WriteImageInformation() override;
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
-  void Write(const void* buffer) ITK_OVERRIDE;
+  void Write(const void* buffer) override;
 
   /** Get the number of overviews available into the file specified
    *  This imageIO didn't support overviews */
-  unsigned int GetOverviewsCount() ITK_OVERRIDE
+  unsigned int GetOverviewsCount() override
   {
     // MANTIS-1154: Source image is always considered as the best
     // resolution overview.
@@ -135,7 +135,7 @@ public:
   
   /** Get information about overviews available into the file specified
    * This imageIO didn't support overviews */ 
-  std::vector<std::string> GetOverviewsInfo() ITK_OVERRIDE
+  std::vector<std::string> GetOverviewsInfo() override
   {
     std::vector<std::string> desc;
     return desc;
@@ -144,26 +144,26 @@ public:
   /** Provide hist about the output container to deal with complex pixel
    *  type (Not used here) */ 
   void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
-                                        bool itkNotUsed(isVectorImage)) ITK_OVERRIDE{}
+                                        bool itkNotUsed(isVectorImage)) override{}
 
 protected:
   /** Constructor.*/
   TileMapImageIO();
   /** Destructor.*/
-  ~TileMapImageIO() ITK_OVERRIDE;
+  ~TileMapImageIO() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Read all information on the image*/
   void InternalReadImageInformation();
   /** Write all information on the image*/
   void InternalWriteImageInformation();
 
   unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
-                                                                       const ImageIORegion& pasteRegion) const ITK_OVERRIDE;
+                                                                       const ImageIORegion& pasteRegion) const override;
 
   ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
                                                                unsigned int numberOfActualSplits,
-                                                               const ImageIORegion& pasteRegion) const ITK_OVERRIDE;
+                                                               const ImageIORegion& pasteRegion) const override;
 
   /** Number of bands of the image*/
   int m_NbBands;
@@ -183,8 +183,8 @@ private:
     std::string filename;
   } TileNameAndCoordType;
 
-  TileMapImageIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TileMapImageIO(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void InternalWrite(double x, double y, const void* buffer);
   void BuildFileName(const std::ostringstream& quad, std::ostringstream& filename, bool inCache = true) const;

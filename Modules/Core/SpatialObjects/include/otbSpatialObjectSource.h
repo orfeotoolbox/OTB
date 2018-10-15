@@ -67,19 +67,19 @@ protected:
   /** Constructor */
   SpatialObjectSource();
   /** Destructor */
-  ~SpatialObjectSource() ITK_OVERRIDE {}
+  ~SpatialObjectSource() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SpatialObjectSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SpatialObjectSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpatialObjectSource.txx"
+#include "otbSpatialObjectSource.hxx"
 #endif
 
 #endif

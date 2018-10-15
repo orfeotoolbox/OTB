@@ -137,8 +137,8 @@ public:
 
 protected:
   ContinuousMinimumMaximumImageCalculator();
-  ~ContinuousMinimumMaximumImageCalculator() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ContinuousMinimumMaximumImageCalculator() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   PixelType         m_Minimum;
   PixelType         m_Maximum;
@@ -154,15 +154,15 @@ protected:
   bool       m_RegionSetByUser;
 
 private:
-  ContinuousMinimumMaximumImageCalculator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ContinuousMinimumMaximumImageCalculator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbContinuousMinimumMaximumImageCalculator.txx"
+#include "otbContinuousMinimumMaximumImageCalculator.hxx"
 #endif
 
 #endif

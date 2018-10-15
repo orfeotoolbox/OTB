@@ -98,9 +98,9 @@ protected:
   /// Constructor
   MultiChannelRAndNIRIndexImageFilter() : m_RedIndex(3), m_NIRIndex(4) {};
   /// Destructor
-  ~MultiChannelRAndNIRIndexImageFilter() ITK_OVERRIDE {}
+  ~MultiChannelRAndNIRIndexImageFilter() override {}
   /// Before generating data, set functor parameters
-  void BeforeThreadedGenerateData() ITK_OVERRIDE
+  void BeforeThreadedGenerateData() override
   {
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
     if (m_RedIndex < 1 || m_NIRIndex < 1 ||
@@ -112,15 +112,15 @@ protected:
     this->GetFunctor().SetNIRIndex(m_NIRIndex);
   }
   /// PrintSelf Method
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     this->Superclass::PrintSelf(os, indent);
     os << indent << "Red index: " << m_RedIndex << std::endl;
     os << indent << "NIR index: " << m_NIRIndex << std::endl;
   }
 private:
-  MultiChannelRAndNIRIndexImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultiChannelRAndNIRIndexImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Red channel index */
   unsigned int m_RedIndex;
   /** NIR channel index */

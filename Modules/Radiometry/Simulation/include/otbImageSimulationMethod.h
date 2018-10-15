@@ -36,6 +36,7 @@
 #include "itkResampleImageFilter.h"
 #include "otbProlateInterpolateImageFunction.h"
 #include "itkLabelMapToLabelImageFilter.h"
+#include <string>
 
 namespace otb
 {
@@ -116,44 +117,44 @@ public:
   typedef typename LabelMapToLabelImageFilterType::Pointer LabelMapToLabelImageFilterPointer;
 
   /** Standard Macro*/
-  itkTypeMacro(ImageSimulationMethod, ImageSource)
-; itkNewMacro(Self)
+  itkTypeMacro(ImageSimulationMethod, ImageSource);
+; itkNewMacro(Self);
 ;
 
-  itkSetMacro(NumberOfComponentsPerPixel, unsigned int)
-; itkGetMacro(NumberOfComponentsPerPixel, unsigned int)
+  itkSetMacro(NumberOfComponentsPerPixel, unsigned int);
+; itkGetMacro(NumberOfComponentsPerPixel, unsigned int);
 ;
 
   //prolate radius
-  itkSetMacro(Radius, unsigned int)
-; itkGetMacro(Radius, unsigned int)
+  itkSetMacro(Radius, unsigned int);
+; itkGetMacro(Radius, unsigned int);
 ;
 
-  itkSetMacro(SatRSRFilename, std::string)
-; itkGetMacro(SatRSRFilename, std::string)
+  itkSetMacro(SatRSRFilename, std::string);
+; itkGetMacro(SatRSRFilename, std::string);
 ;
 
-  itkSetMacro(PathRoot, std::string)
-; itkGetMacro(PathRoot, std::string)
+  itkSetMacro(PathRoot, std::string);
+; itkGetMacro(PathRoot, std::string);
 ;
 
-  itkSetMacro(Mean, double)
-; itkGetMacro(Mean, double)
+  itkSetMacro(Mean, double);
+; itkGetMacro(Mean, double);
 ;
 
-  itkSetMacro(Variance, double)
-; itkGetMacro(Variance, double)
+  itkSetMacro(Variance, double);
+; itkGetMacro(Variance, double);
 ;
 
-  itkSetObjectMacro(Spatialisation, SpatialisationType)
+  itkSetObjectMacro(Spatialisation, SpatialisationType);
 ;
   //    itkSetObjectMacro(LabelMapToSimulatedImage, LabelMapToSimulatedImageType);
   //    itkSetObjectMacro(FTM, FTMType);
 
 
   /** Set/Get Input */
-  itkSetObjectMacro(InputVectorData, InputVectorDataType)
-; itkGetConstObjectMacro(InputVectorData, InputVectorDataType)
+  itkSetObjectMacro(InputVectorData, InputVectorDataType);
+; itkGetConstObjectMacro(InputVectorData, InputVectorDataType);
 ;
   //    void SetInput(const InputVectorDataType *object);
   //    InputVectorDataType * GetInput();
@@ -166,17 +167,17 @@ public:
 
 protected:
   ImageSimulationMethod();
-  ~ImageSimulationMethod() ITK_OVERRIDE
+  ~ImageSimulationMethod() override
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   //    virtual void GenerateData();
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
-  ImageSimulationMethod(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageSimulationMethod(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_NumberOfComponentsPerPixel;
   unsigned int m_Radius; //radius of prolate interpolate
@@ -203,7 +204,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageSimulationMethod.txx"
+#include "otbImageSimulationMethod.hxx"
 #endif
 
 #endif

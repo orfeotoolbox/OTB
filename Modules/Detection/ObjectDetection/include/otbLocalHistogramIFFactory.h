@@ -82,18 +82,18 @@ public:
 
 protected:
   LocalHistogramIFFactory(){}
-  ~LocalHistogramIFFactory() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LocalHistogramIFFactory() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LocalHistogramIFFactory(const Self& ); //purposely not implemented
-  void operator=(const Self& ); //purposely not implemented
+  LocalHistogramIFFactory(const Self& ) = delete;
+  void operator=(const Self& ) = delete;
 
 };
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLocalHistogramIFFactory.txx"
+#include "otbLocalHistogramIFFactory.hxx"
 #endif
 
 #endif

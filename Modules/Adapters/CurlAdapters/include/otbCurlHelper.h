@@ -22,6 +22,7 @@
 #define otbCurlHelper_h
 
 #include "otbCurlHelperInterface.h"
+#include <string>
 
 namespace otb
 {
@@ -48,19 +49,19 @@ public:
   itkTypeMacro(CurlHelper, CurlHelperInterface);
   itkNewMacro(Self);
 
-  bool TestUrlAvailability(const std::string& url) const ITK_OVERRIDE;
+  bool TestUrlAvailability(const std::string& url) const override;
 
   bool IsCurlReturnHttpError(const std::string& url) const;
 
-  int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const ITK_OVERRIDE;
+  int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const override;
 
-  int RetrieveFile(const std::string& urlString, std::string filename) const ITK_OVERRIDE;
+  int RetrieveFile(const std::string& urlString, std::string filename) const override;
 
-  int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const ITK_OVERRIDE;
+  int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const override;
 
   int RetrieveFileMulti(const std::vector<std::string>& listURLs,
                         const std::vector<std::string>& listFiles,
-                        int maxConnect) const ITK_OVERRIDE;
+                        int maxConnect) const override;
 
   itkGetMacro(Timeout,long int);
 
@@ -71,11 +72,11 @@ protected:
     m_Browser("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
               "Gecko/20071127 Firefox/2.0.0.11"),
     m_Timeout(10) {}
-  ~CurlHelper() ITK_OVERRIDE {}
+  ~CurlHelper() override {}
 
 private:
-  CurlHelper(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CurlHelper(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Need to use our writing function to handle windows segfaults
   // Need to be static cause the CURL_OPT is expecting a pure C

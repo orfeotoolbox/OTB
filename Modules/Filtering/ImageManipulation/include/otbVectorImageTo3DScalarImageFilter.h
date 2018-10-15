@@ -74,29 +74,29 @@ public:
 protected:
 
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   /** Threaded Generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
   /** Constructor */
   VectorImageTo3DScalarImageFilter();
   /** Destructor */
-  ~VectorImageTo3DScalarImageFilter() ITK_OVERRIDE {}
+  ~VectorImageTo3DScalarImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorImageTo3DScalarImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorImageTo3DScalarImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorImageTo3DScalarImageFilter.txx"
+#include "otbVectorImageTo3DScalarImageFilter.hxx"
 #endif
 
 #endif

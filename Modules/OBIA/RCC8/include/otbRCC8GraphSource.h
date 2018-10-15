@@ -57,17 +57,17 @@ protected:
   /** Constructor */
   RCC8GraphSource();
   /** Destructor */
-  ~RCC8GraphSource() ITK_OVERRIDE {}
+  ~RCC8GraphSource() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RCC8GraphSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RCC8GraphSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8GraphSource.txx"
+#include "otbRCC8GraphSource.hxx"
 #endif
 #endif

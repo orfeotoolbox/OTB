@@ -108,7 +108,7 @@ public:
   typedef std::vector<PrecisionType>                  OutputType;
 
   /* Compute the descriptor value along this DataNode */
- OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE;
+ OutputType Evaluate( const DataNodeType& node ) const override;
 
   /* Get the radius used to define the area around a line segment.
    * A radius of 0 means that the area is reduced to a line joining
@@ -138,12 +138,12 @@ public:
 
 protected:
   RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction();
-  ~RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Center radius */
   unsigned int m_CenterRadius;
@@ -158,7 +158,7 @@ private:
 
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.txx"
+#include "otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.hxx"
 #endif
 
 #endif

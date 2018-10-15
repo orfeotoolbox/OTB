@@ -21,11 +21,10 @@
 #ifndef otbWrapperQtWidgetOutputImageParameter_h
 #define otbWrapperQtWidgetOutputImageParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+#include <string>
 
 
 namespace otb
@@ -42,11 +41,11 @@ class OTBQtWidget_EXPORT QtWidgetOutputImageParameter : public QtWidgetParameter
 {
   Q_OBJECT
 public:
-  QtWidgetOutputImageParameter(OutputImageParameter*, QtWidgetModel*);
-  ~QtWidgetOutputImageParameter() ITK_OVERRIDE;
+  QtWidgetOutputImageParameter(OutputImageParameter*, QtWidgetModel*, QWidget*);
+  ~QtWidgetOutputImageParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit* GetInput();
 
   /** Get the PixelType*/
   //itkGetMacro(PixelType, int);
@@ -59,12 +58,12 @@ protected slots:
   void SetPixelType(int pixelType);
 
 private:
-  QtWidgetOutputImageParameter(const QtWidgetOutputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputImageParameter&); //purposely not implemented
+  QtWidgetOutputImageParameter(const QtWidgetOutputImageParameter&) = delete;
+  void operator=(const QtWidgetOutputImageParameter&) = delete;
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   std::string m_FileName;
   OutputImageParameter::Pointer m_OutputImageParam;
@@ -77,22 +76,6 @@ private:
 
 };
 
-
-inline
-const QLineEdit*
-QtWidgetOutputImageParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputImageParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 }
 }

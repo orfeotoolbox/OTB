@@ -31,6 +31,7 @@ otbGeometricSarSensorModelAdapter.cxx
 otbPlatformPositionAdapter.cxx
 otbDEMHandlerTest.cxx
 otbRPCSolverAdapterTest.cxx
+otbSarSensorModelAdapterTest.cxx
 )
 
 add_executable(otbOSSIMAdaptersTestDriver ${OTBOSSIMAdaptersTests})
@@ -191,12 +192,6 @@ otb_add_test(NAME prTvossimElevManagerTest4 COMMAND otbOSSIMAdaptersTestDriver
 #   otbPlatformPositionComputeBaselineTest
 #   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC//TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
 #   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
-
-otb_add_test(NAME uaTvGeometricSarSensorModelAdapterNew COMMAND otbOSSIMAdaptersTestDriver
-  otbGeometricSarSensorModelAdapterNewTest)
-
-otb_add_test(NAME uaTvPlatformPositionComputeBaselineNew COMMAND otbOSSIMAdaptersTestDriver
-  otbPlatformPositionComputeBaselineNewTest)
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData COMMAND otbOSSIMAdaptersTestDriver
   otbDEMHandlerTest
@@ -499,3 +494,8 @@ otb_add_test(NAME uaTvRPCSolverAdapterValidationTest COMMAND otbOSSIMAdaptersTes
   ${INPUTDATA}/DEM/egm96.grd
   )
 
+
+otb_add_test(NAME uaTvSarSensorModelAdapter COMMAND otbOSSIMAdaptersTestDriver
+  otbSarSensorModelAdapterTest
+  ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.geom
+  )

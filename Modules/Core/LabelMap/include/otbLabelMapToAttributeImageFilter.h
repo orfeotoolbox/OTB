@@ -102,13 +102,13 @@ public:
 
 protected:
   LabelMapToAttributeImageFilter();
-  ~LabelMapToAttributeImageFilter() ITK_OVERRIDE {};
+  ~LabelMapToAttributeImageFilter() override {};
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
 
 private:
   /** Background pixel value */
@@ -121,7 +121,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapToAttributeImageFilter.txx"
+#include "otbLabelMapToAttributeImageFilter.hxx"
 #endif
 
 #endif

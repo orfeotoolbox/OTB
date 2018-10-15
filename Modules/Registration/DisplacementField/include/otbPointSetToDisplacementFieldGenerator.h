@@ -125,11 +125,11 @@ protected:
   /** Constructor */
   PointSetToDisplacementFieldGenerator();
   /** Destructor */
-  ~PointSetToDisplacementFieldGenerator() ITK_OVERRIDE {}
+  ~PointSetToDisplacementFieldGenerator() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
   /**
    * Generate the n nearest valid point in point set, where a valid point has a sufficient metric value.
    *  \param index The index of the pixel to compute.
@@ -142,8 +142,8 @@ protected:
   double EuclideanDistanceMetric(IndexType index, PointType p);
 
 private:
-  PointSetToDisplacementFieldGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PointSetToDisplacementFieldGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /**
    * The threshold of metric value.
@@ -160,7 +160,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetToDisplacementFieldGenerator.txx"
+#include "otbPointSetToDisplacementFieldGenerator.hxx"
 #endif
 
 #endif

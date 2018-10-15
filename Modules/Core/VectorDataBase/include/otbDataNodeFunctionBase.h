@@ -32,7 +32,7 @@ namespace otb
   * the abstract method Evaluate() maps a DataNode from the input space to a element
   * in the output space.
   *
-  * Subclasses must ITK_OVERRIDE Evaluate().
+  * Subclasses must override Evaluate().
   *
   * This class is template over the input DataNode type and
   * the output (range) type.
@@ -66,15 +66,15 @@ public:
   typedef TOutput    OutputType;
 
   /** Evaluate at the specified input position */
-  OutputType Evaluate( const DataNodeType& node ) const ITK_OVERRIDE = 0;
+  OutputType Evaluate( const DataNodeType& node ) const override = 0;
 
 protected:
   DataNodeFunctionBase(){};
-  ~DataNodeFunctionBase() ITK_OVERRIDE{};
+  ~DataNodeFunctionBase() override{};
 
 private:
-  DataNodeFunctionBase(const Self& ); //purposely not implemented
-  void operator=(const Self& ); //purposely not implemented
+  DataNodeFunctionBase(const Self& ) = delete;
+  void operator=(const Self& ) = delete;
 };
 
 } // end namespace otb

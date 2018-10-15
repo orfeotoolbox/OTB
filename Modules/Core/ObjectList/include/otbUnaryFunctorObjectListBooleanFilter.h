@@ -93,15 +93,15 @@ public:
 
 protected:
   UnaryFunctorObjectListBooleanFilter();
-  ~UnaryFunctorObjectListBooleanFilter() ITK_OVERRIDE {}
+  ~UnaryFunctorObjectListBooleanFilter() override {}
 
   /** Multi-threading implementation */
 
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
   /** startIndex and stopIndex represent the indices of the Objects to
   examine in thread threadId */
-  void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId) override;
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct
@@ -112,8 +112,8 @@ protected:
   /** End Multi-threading implementation */
 
 private:
-  UnaryFunctorObjectListBooleanFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorObjectListBooleanFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 };
@@ -121,7 +121,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorObjectListBooleanFilter.txx"
+#include "otbUnaryFunctorObjectListBooleanFilter.hxx"
 #endif
 
 #endif

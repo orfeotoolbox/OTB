@@ -84,22 +84,22 @@ public:
 
 protected:
   SarBrightnessToImageFilter();
-  ~SarBrightnessToImageFilter() ITK_OVERRIDE {}
+  ~SarBrightnessToImageFilter() override {}
 
   /** Update the function list and input parameters*/
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 private:
-  SarBrightnessToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarBrightnessToImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSarBrightnessToImageFilter.txx"
+#include "otbSarBrightnessToImageFilter.hxx"
 #endif
 
 #endif

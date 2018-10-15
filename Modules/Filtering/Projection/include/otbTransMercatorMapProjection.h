@@ -64,18 +64,18 @@ public:
 
 protected:
   TransMercatorMapProjection();
-  ~TransMercatorMapProjection() ITK_OVERRIDE;
+  ~TransMercatorMapProjection() override;
 
 private:
-  TransMercatorMapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);               //purposely not implemented
+  TransMercatorMapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTransMercatorMapProjection.txx"
+#include "otbTransMercatorMapProjection.hxx"
 #endif
 
 #endif

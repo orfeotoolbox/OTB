@@ -81,46 +81,46 @@ protected:
   /** Constructor */
   SOMWithMissingValue ();
   /** Destructor */
-  ~SOMWithMissingValue() ITK_OVERRIDE;
+  ~SOMWithMissingValue() override;
   /** Output information redefinition */
-  void GenerateOutputInformation() ITK_OVERRIDE
+  void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation ();
   }
   /** Output allocation redefinition */
-  void AllocateOutputs() ITK_OVERRIDE
+  void AllocateOutputs() override
   {
     Superclass::AllocateOutputs();
   }
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE
+  void GenerateData(void) override
   {
     Superclass::GenerateData();
   }
   /**
    * Update the output map with a new sample, depending on the availability of the data
    */
-  void UpdateMap(const NeuronType& sample, double beta, SizeType& radius) ITK_OVERRIDE;
+  void UpdateMap(const NeuronType& sample, double beta, SizeType& radius) override;
 
   /** Step one iteration. */
-  void Step(unsigned int currentIteration) ITK_OVERRIDE
+  void Step(unsigned int currentIteration) override
   {
     Superclass::Step(currentIteration);
   }
   /** PrintSelf method */
-void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:
-  SOMWithMissingValue (const Self &);    // purposely not implemented
-  void operator =(const Self&);  // purposely not implemented
+  SOMWithMissingValue (const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 }; // end of class
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMWithMissingValue.txx"
+#include "otbSOMWithMissingValue.hxx"
 #endif
 
 #endif

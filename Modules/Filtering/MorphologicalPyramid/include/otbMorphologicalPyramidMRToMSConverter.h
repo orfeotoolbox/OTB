@@ -71,7 +71,7 @@ public:
    * \param imageList The analysed image at each level of the pyramid.
    */
   using Superclass::SetInput;
-  void SetInput(const InputImageListType * imageList) ITK_OVERRIDE;
+  void SetInput(const InputImageListType * imageList) override;
   /**
    * Set The SupFilter details
    * \param imageList The brighter details extracted from the filtering operation.
@@ -96,7 +96,7 @@ public:
    * Get the input list.
    * \return The list of the analysed image at each pyramid level.
    */
-  InputImageListType* GetInput(void) ITK_OVERRIDE;
+  InputImageListType* GetInput(void) override;
   /**
    * Get The SupFilter details
    * \return The brighter details extracted from the filtering operation.
@@ -122,7 +122,7 @@ public:
    * \return The analysed image at each pyramid level
    * resampled at full resolution.
    */
-  OutputImageListType* GetOutput(void) ITK_OVERRIDE;
+  OutputImageListType* GetOutput(void) override;
   /**
    * Get The SupFilter details at full resolution.
    * \return The brighter details extracted from the filtering operation
@@ -152,22 +152,22 @@ protected:
   /** Constructor */
   MRToMSConverter();
   /** Destructor */
-  ~MRToMSConverter() ITK_OVERRIDE {}
+  ~MRToMSConverter() override {}
 
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  MRToMSConverter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  MRToMSConverter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace MorphologicalPyramid
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidMRToMSConverter.txx"
+#include "otbMorphologicalPyramidMRToMSConverter.hxx"
 #endif
 
 #endif

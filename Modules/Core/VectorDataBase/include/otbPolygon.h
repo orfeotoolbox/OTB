@@ -126,9 +126,9 @@ public:
   * Return the polygon length (perimeter).
   * \return The length.
   */
-  double GetLength() const ITK_OVERRIDE;
+  double GetLength() const override;
 
-  void  AddVertex(const ContinuousIndexType& vertex) ITK_OVERRIDE;
+  void  AddVertex(const ContinuousIndexType& vertex) override;
 
 protected:
   /** Constructor */
@@ -140,17 +140,17 @@ protected:
     };
 
   /** Destructor */
-  ~Polygon() ITK_OVERRIDE {}
+  ~Polygon() override {}
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void ComputeArea() const;
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 private:
-  Polygon(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Polygon(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   double         m_Epsilon;
   mutable double m_Area;
@@ -160,6 +160,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolygon.txx"
+#include "otbPolygon.hxx"
 #endif
 #endif

@@ -69,9 +69,9 @@ public:
     else
       {
       double z = m_Factor * x;
-      temp =  vcl_sin(z) / z;
+      temp =  std::sin(z) / z;
       }
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
   // Equal to \f$ \frac{\pi}{m} \f$
@@ -138,15 +138,15 @@ public:
 
 protected:
   WindowedSincInterpolateImageLanczosFunction() {};
-  ~WindowedSincInterpolateImageLanczosFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~WindowedSincInterpolateImageLanczosFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  WindowedSincInterpolateImageLanczosFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageLanczosFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb

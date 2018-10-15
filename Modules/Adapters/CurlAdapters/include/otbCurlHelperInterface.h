@@ -66,11 +66,11 @@ public:
 
 protected:
   CurlHelperInterface() {}
-  ~CurlHelperInterface() ITK_OVERRIDE {}
+  ~CurlHelperInterface() override {}
 
 private:
-  CurlHelperInterface(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CurlHelperInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 }

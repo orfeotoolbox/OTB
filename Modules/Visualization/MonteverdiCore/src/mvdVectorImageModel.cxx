@@ -298,7 +298,7 @@ VectorImageModel
 
   // Get build-context settings.
   VectorImageSettings * const  settings =
-    static_cast< VectorImageSettings * const >( buildContext->m_Settings );
+    static_cast< VectorImageSettings * >( buildContext->m_Settings );
 
 
   // Fetch the no data flags if any
@@ -489,7 +489,7 @@ VectorImageModel::Closest( double invZoomfactor,
   // Compute the diff and keep the index that minimize the distance
   for (unsigned int idx = 0; idx < lodCount; idx++)
     {
-    double diff = vcl_abs( static_cast< double >( 1 << idx ) - invZoomfactor );
+    double diff = std::abs( static_cast< double >( 1 << idx ) - invZoomfactor );
 
     if( diff < minDist )
       {

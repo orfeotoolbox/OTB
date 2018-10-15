@@ -25,6 +25,8 @@
 #include "itkProcessObject.h"
 #include "otbStreamingManager.h"
 #include "otbExtendedFilenameToWriterOptions.h"
+#include "itkFastMutexLock.h"
+#include <string>
 
 namespace otb
 {
@@ -168,11 +170,13 @@ public:
 
   /** Override Update() from ProcessObject because this filter
    *  has no output. */
-  void Update() ITK_OVERRIDE;
+  void Update() override;
 
-  /** ImageFileWriter Methods */
+  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
   virtual void SetFileName(const char* extendedFileName);
-  virtual void SetFileName(std::string extendedFileName);
+
+  virtual void SetFileName(const std::string& extendedFileName);
+
   virtual const char* GetFileName () const;
 
   /** Specify the region to write. If left NULL, then the whole image
@@ -199,17 +203,25 @@ public:
   itkGetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
 
+  /** This override doesn't return a const ref on the actual boolean */
+  const bool & GetAbortGenerateData() const override;
+
+  void SetAbortGenerateData(const bool val) override;
+
 protected:
   ImageFileWriter();
-  ~ImageFileWriter() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageFileWriter() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Does the real work. */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
+
+  /** Prepare the streaming and write the output information on disk */
+  void GenerateOutputInformation(void) override;
 
 private:
-  ImageFileWriter(const ImageFileWriter &); //purposely not implemented
-  void operator =(const ImageFileWriter&); //purposely not implemented
+  ImageFileWriter(const ImageFileWriter &) = delete;
+  void operator =(const ImageFileWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {
@@ -270,12 +282,15 @@ private:
    *  This variable can be the number of components in m_ImageIO or the
    *  number of components in the m_BandList (if used) */
   unsigned int m_IOComponents;
+
+  /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFileWriter.txx"
+#include "otbImageFileWriter.hxx"
 #endif
 
 #endif

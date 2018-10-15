@@ -26,7 +26,6 @@
 #include "itkObjectFactory.h"
 
 #include <string>
-#include <iostream>
 #include <sstream>
 
 #include "OTBIOTileMapExport.h"
@@ -58,11 +57,11 @@ public:
 
 protected:
   TileMapImageIOHelper() {}
-  ~TileMapImageIOHelper() ITK_OVERRIDE {}
+  ~TileMapImageIOHelper() override {}
 
 private:
-  TileMapImageIOHelper(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  TileMapImageIOHelper(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
 }; // end class TileMapImageIOHelper

@@ -96,26 +96,26 @@ protected:
   /** Constructor */
   StreamingWarpImageFilter();
   /** Destructor */
-  ~StreamingWarpImageFilter() ITK_OVERRIDE {}
+  ~StreamingWarpImageFilter() override {}
   /** PrintSelf */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * This filters requires only a part of the input and of the displacement field to
    * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
    */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /**
    * Re-implement the method ThreadedGenerateData to mask area outside the deformation grid
    */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId ) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId ) override;
 
 private:
-  StreamingWarpImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingWarpImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   //Because of itk positive spacing we need this member to be compliant with otb
   //signed spacing
@@ -128,7 +128,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingWarpImageFilter.txx"
+#include "otbStreamingWarpImageFilter.hxx"
 #endif
 
 #endif

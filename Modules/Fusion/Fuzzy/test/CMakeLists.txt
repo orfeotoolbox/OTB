@@ -24,7 +24,6 @@ set(OTBFuzzyTests
 otbFuzzyTestDriver.cxx
 otbFuzzyVariableSetValue.cxx
 otbFuzzyVariable2Values.cxx
-otbFuzzyVariableNew.cxx
 otbFuzzyVariableDSApplied.cxx
 otbFuzzyVariableGetMaxVar.cxx
 otbFuzzyDescriptorsModelManager.cxx
@@ -42,9 +41,6 @@ otb_add_test(NAME fzTvFuzzyVariableSetValue COMMAND otbFuzzyTestDriver
 otb_add_test(NAME fzTvFuzzyVariable2Values COMMAND otbFuzzyTestDriver
   otbFuzzyVariable2Values)
 
-otb_add_test(NAME fzTuFuzzyVariableNew COMMAND otbFuzzyTestDriver
-  otbFuzzyVariableNew)
-
 otb_add_test(NAME fzTvFuzzyVariableDSApplied COMMAND otbFuzzyTestDriver
   otbFuzzyVariableDSApplied)
 
@@ -55,7 +51,4 @@ otb_add_test(NAME fzTvFuzzyDescriptorsModelManagerTest COMMAND otbFuzzyTestDrive
   otbFuzzyDescriptorsModelManagerTest
   ${TEMP}/fzTvFuzzyDescriptorsModelManager.xml
   )
-
-otb_add_test(NAME fzTuFuzzyDescriptorsModelManagerNew COMMAND otbFuzzyTestDriver
-  otbFuzzyDescriptorsModelManagerNew)
 

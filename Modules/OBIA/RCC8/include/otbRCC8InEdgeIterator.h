@@ -123,7 +123,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8InEdgeIterator.txx"
+#include "otbRCC8InEdgeIterator.hxx"
 #endif
 
 #endif

@@ -49,7 +49,7 @@ public:
   /** RTTI support */
   itkTypeMacro(RadiusParameter, Parameter);
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return true;
   }
@@ -64,12 +64,12 @@ protected:
   }
 
   /** Destructor */
-  ~RadiusParameter() ITK_OVERRIDE
+  ~RadiusParameter() override
   {}
 
 private:
-  RadiusParameter(const RadiusParameter &); //purposely not implemented
-  void operator =(const RadiusParameter&); //purposely not implemented
+  RadiusParameter(const RadiusParameter &) = delete;
+  void operator =(const RadiusParameter&) = delete;
 
 };
 

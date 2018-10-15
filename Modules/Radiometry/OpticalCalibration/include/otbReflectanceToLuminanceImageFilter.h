@@ -23,7 +23,6 @@
 #define otbReflectanceToLuminanceImageFilter_h
 
 #include <otbReflectanceToRadianceImageFilter.h>
-#include <vcl_deprecated_header.h>
 
 namespace otb
 {

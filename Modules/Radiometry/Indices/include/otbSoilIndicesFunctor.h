@@ -24,6 +24,7 @@
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
 #include "otbBandName.h"
+#include <string>
 
 namespace otb
 {
@@ -287,7 +288,7 @@ class IR : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "IR";
   }
@@ -295,14 +296,14 @@ public:
   /// Constructor
   IR() {}
   /// Desctructor
-  ~IR() ITK_OVERRIDE {}
+  ~IR() override {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const override
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if (vcl_abs(dGreen) < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dGreen) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -330,7 +331,7 @@ class IC : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "IC";
   }
@@ -338,14 +339,14 @@ public:
   /// Constructor
   IC() {}
   /// Desctructor
-  ~IC() ITK_OVERRIDE {}
+  ~IC() override {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const override
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if (vcl_abs(dGreen + dRed) < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(dGreen + dRed) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -369,7 +370,7 @@ class IB : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "IB";
   }
@@ -377,15 +378,15 @@ public:
   /// Constructor
   IB() {}
   /// Desctructor
-  ~IB() ITK_OVERRIDE {}
+  ~IB() override {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const override
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
 
-    return (static_cast<TOutput>(vcl_sqrt((dRed * dRed + dGreen * dGreen) / 2.)));
+    return (static_cast<TOutput>(std::sqrt((dRed * dRed + dGreen * dGreen) / 2.)));
   }
 };
 
@@ -404,7 +405,7 @@ class IB2 : public GAndRAndNirIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "IB2";
   }
@@ -412,16 +413,16 @@ public:
   /// Constructor
   IB2() {}
   /// Desctructor
-  ~IB2() ITK_OVERRIDE {}
+  ~IB2() override {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed, const TInput2& pNir) const ITK_OVERRIDE
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed, const TInput2& pNir) const override
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
     double dNir = static_cast<double>(pNir);
 
-    return (static_cast<TOutput>(vcl_sqrt((dRed * dRed + dGreen * dGreen + dNir * dNir) / 3.)));
+    return (static_cast<TOutput>(std::sqrt((dRed * dRed + dGreen * dGreen + dNir * dNir) / 3.)));
   }
 };
 

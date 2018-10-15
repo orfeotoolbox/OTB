@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetRAMParameter_h
 #define otbWrapperQtWidgetRAMParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,19 +40,19 @@ class OTBQtWidget_EXPORT QtWidgetRAMParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*);
-  ~QtWidgetRAMParameter() ITK_OVERRIDE;
+  QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*, QWidget*);
+  ~QtWidgetRAMParameter() override;
 
 protected slots:
   void SetValue( int value );
 
 private:
-  QtWidgetRAMParameter(const QtWidgetRAMParameter&); //purposely not implemented
-  void operator=(const QtWidgetRAMParameter&); //purposely not implemented
+  QtWidgetRAMParameter(const QtWidgetRAMParameter&) = delete;
+  void operator=(const QtWidgetRAMParameter&) = delete;
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   QHBoxLayout *         m_QHBoxLayout;
   QSpinBox *            m_QSpinBox;

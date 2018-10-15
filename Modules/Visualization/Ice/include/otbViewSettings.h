@@ -29,6 +29,7 @@
 
 #include "otbImageKeywordlist.h"
 #include "OTBIceExport.h"
+#include <string>
 
 namespace otb
 {
@@ -148,7 +149,7 @@ public:
 protected:
   ViewSettings();
 
-  ~ViewSettings() ITK_OVERRIDE;
+  ~ViewSettings() override;
 
 private:
   // prevent implementation

@@ -89,16 +89,16 @@ protected:
   /** Constructor */
   HooverMatrixFilter();
 
-  ~HooverMatrixFilter() ITK_OVERRIDE {};
+  ~HooverMatrixFilter() override {};
 
   /** Action :  Resize the matrix
    */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Action : fill the line of the confusion matrix corresponding to
    * the given label object
    */
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
 
 private:
 
@@ -119,7 +119,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHooverMatrixFilter.txx"
+#include "otbHooverMatrixFilter.hxx"
 #endif
 
 #endif

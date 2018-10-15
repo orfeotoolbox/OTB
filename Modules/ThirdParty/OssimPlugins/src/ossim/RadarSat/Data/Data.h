@@ -26,7 +26,6 @@
 #ifndef Data_h
 #define Data_h
 
-#include <iostream>
 #include <map>
 #include <RadarSat/RadarSatRecord.h>
 

@@ -114,27 +114,27 @@ public:
   InputSpectralImageType * GetInputSpectralImage();
 
 protected:
-  void EnlargeOutputRequestedRegion( itk::DataObject *output ) ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion( itk::DataObject *output ) override;
 
-   void GenerateOutputInformation(void) ITK_OVERRIDE;
+   void GenerateOutputInformation(void) override;
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
   /** Constructor */
   LabelImageRegionPruningFilter();
 
   /** Destructor */
-  ~LabelImageRegionPruningFilter() ITK_OVERRIDE;
+  ~LabelImageRegionPruningFilter() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Method to build a map of adjacent regions */
   RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename OutputLabelImageType::Pointer inputLabelImage);
 
 private:
-  LabelImageRegionPruningFilter(const Self &);     //purposely not implemented
-  void operator =(const Self&);             //purposely not implemented
+  LabelImageRegionPruningFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Number of components per pixel in the input image */
   unsigned int                   m_NumberOfComponentsPerPixel;
@@ -151,7 +151,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageRegionPruningFilter.txx"
+#include "otbLabelImageRegionPruningFilter.hxx"
 #endif
 
 #endif

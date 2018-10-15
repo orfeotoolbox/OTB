@@ -59,35 +59,35 @@ public :
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self)
+  itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComputeHistoFilter, ImageToImageFilter)
+  itkTypeMacro(ComputeHistoFilter, ImageToImageFilter);
 
   /** Get/Set macro to get/set the nodata value */
-  itkSetMacro(NoData, InputPixelType)
-  itkGetMacro(NoData, InputPixelType)
+  itkSetMacro(NoData, InputPixelType);
+  itkGetMacro(NoData, InputPixelType);
 
   /** Get/Set macro to get/set the nodata flag value */
-  itkBooleanMacro(NoDataFlag)
-  itkGetMacro(NoDataFlag, bool)
-  itkSetMacro(NoDataFlag, bool)
+  itkBooleanMacro(NoDataFlag);
+  itkGetMacro(NoDataFlag, bool);
+  itkSetMacro(NoDataFlag, bool);
 
   /** Get/Set macro to get/set the ThumbSizeFromSpacing flag value */
-  itkBooleanMacro(ThumbSizeFromSpacing)
-  itkGetMacro(ThumbSizeFromSpacing, bool)
-  itkSetMacro(ThumbSizeFromSpacing, bool)
+  itkBooleanMacro(ThumbSizeFromSpacing);
+  itkGetMacro(ThumbSizeFromSpacing, bool);
+  itkSetMacro(ThumbSizeFromSpacing, bool);
 
   /** Get/Set macro to get/set the thumbnail's size */
-  itkSetMacro(ThumbSize, typename InputImageType::SizeType)
-  itkGetMacro(ThumbSize, typename InputImageType::SizeType)
+  itkSetMacro(ThumbSize, typename InputImageType::SizeType);
+  itkGetMacro(ThumbSize, typename InputImageType::SizeType);
 
   /** Get/Set macro to get/set the minimum value */
-  itkSetMacro(Min, InputPixelType)
-  itkGetMacro(Min, InputPixelType)
+  itkSetMacro(Min, InputPixelType);
+  itkGetMacro(Min, InputPixelType);
 
   /** Get/Set macro to get/set the maximum value */
-  itkSetMacro(Max, InputPixelType)
-  itkGetMacro(Max, InputPixelType)
+  itkSetMacro(Max, InputPixelType);
+  itkGetMacro(Max, InputPixelType);
 
   /** Set the input look up table*/
   void SetInputLut( const LutType * lut) ;
@@ -138,7 +138,7 @@ private :
 }  // End namespace otb
   
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbApplyGainFilter.txx"
+#include "otbApplyGainFilter.hxx"
 #endif
 
 

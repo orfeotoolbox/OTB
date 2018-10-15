@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +24,7 @@
 
 #include "otbExtendedFilenameHelper.h"
 #include "otbGDALImageIO.h"
+#include <string>
 
 namespace otb
 {
@@ -76,12 +78,25 @@ public:
     std::vector<std::string>                     optionList;
   };
 
-  /* Set Methods */
-  void SetExtendedFileName(const char * extFname) ITK_OVERRIDE;
+  typedef std::pair<int, double> NoDataPairType;
+  typedef std::vector<NoDataPairType> NoDataListType;
+  NoDataListType m_NoDataList;
+  bool has_noDataValue;
+
+  /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
+  void SetExtendedFileName(const char* extFname) override;
+
+  void SetExtendedFileName(const std::string& extFname) override;
+
   /* Get Methods */
   bool SimpleFileNameIsSet () const;
+  bool NoDataValueIsSet () const;
   bool WriteGEOMFileIsSet () const;
   bool WriteRPCTagsIsSet() const;
+  NoDataListType GetNoDataList () const {
+    return m_NoDataList;
+  }
+
   bool GetWriteGEOMFile () const;
   bool GetWriteRPCTags() const;
   bool gdalCreationOptionsIsSet () const;
@@ -102,11 +117,11 @@ public:
 
 protected:
   ExtendedFilenameToWriterOptions();
-  ~ExtendedFilenameToWriterOptions() ITK_OVERRIDE {}
+  ~ExtendedFilenameToWriterOptions() override {}
 
 private:
-  ExtendedFilenameToWriterOptions(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ExtendedFilenameToWriterOptions(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OptionType               m_Options;
 

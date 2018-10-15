@@ -58,40 +58,40 @@ public:
 
   /*ImageMetadataInterfaceBase pure virtuals */
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay() const ITK_OVERRIDE;
+  int GetProductionDay() const override;
 
   /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth() const ITK_OVERRIDE;
+  int GetProductionMonth() const override;
 
   /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear() const ITK_OVERRIDE;
+  int GetProductionYear() const override;
 
   /** check sensor ID */
-  bool CanRead() const ITK_OVERRIDE;
+  bool CanRead() const override;
 
-  int GetDay() const ITK_OVERRIDE;
+  int GetDay() const override;
 
-  int GetMonth() const ITK_OVERRIDE;
+  int GetMonth() const override;
 
-  int GetYear() const ITK_OVERRIDE;
+  int GetYear() const override;
 
-  int GetHour() const ITK_OVERRIDE;
+  int GetHour() const override;
 
-  int GetMinute() const ITK_OVERRIDE;
+  int GetMinute() const override;
 
-  UIntVectorType GetDefaultDisplay() const ITK_OVERRIDE;
+  UIntVectorType GetDefaultDisplay() const override;
 
   /*SarImageMetadataInterface pure virutals rituals */
-  double GetPRF() const ITK_OVERRIDE;
+  double GetPRF() const override;
 
-  double GetRSF() const ITK_OVERRIDE;
+  double GetRSF() const override;
 
-  double GetRadarFrequency() const ITK_OVERRIDE;
+  double GetRadarFrequency() const override;
 
-  double GetCenterIncidenceAngle() const ITK_OVERRIDE;
+  double GetCenterIncidenceAngle() const override;
 
   /*get lookup data for calculating backscatter */
-  void CreateCalibrationLookupData(const short type) ITK_OVERRIDE;
+  void CreateCalibrationLookupData(const short type) override;
 
 
 protected:
@@ -99,11 +99,11 @@ protected:
   Radarsat2ImageMetadataInterface();
 
   /* class desctructor */
-  ~Radarsat2ImageMetadataInterface() ITK_OVERRIDE {}
+  ~Radarsat2ImageMetadataInterface() override {}
 
 private:
-  Radarsat2ImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Radarsat2ImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 /* Helper function to parse date and time into a std::vector<std::string>
  * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
@@ -147,7 +147,7 @@ public:
 
   }
 
-  ~Radarsat2CalibrationLookupData() ITK_OVERRIDE
+  ~Radarsat2CalibrationLookupData() override
   {
 
   }
@@ -159,7 +159,7 @@ public:
     m_Gains = gains;
   }
 
-  double GetValue(const IndexValueType x, const IndexValueType itkNotUsed(y)) const ITK_OVERRIDE
+  double GetValue(const IndexValueType x, const IndexValueType itkNotUsed(y)) const override
   {
     double lutVal = 1.0;
 
@@ -175,7 +175,7 @@ public:
     return lutVal;
   }
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream & os, itk::Indent indent) const override
   {
     os << indent << " offset:'" << m_Offset << "'" << std::endl;
     os <<  " referenceNoiseLevel.gain: " << std::endl;
@@ -192,8 +192,8 @@ public:
 
 private:
 
-  Radarsat2CalibrationLookupData(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Radarsat2CalibrationLookupData(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   GainListType m_Gains;
   int m_Offset;

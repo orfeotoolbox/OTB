@@ -115,13 +115,13 @@ public:
 
 protected:
   LabelMapToVectorDataFilter();
-  ~LabelMapToVectorDataFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  ~LabelMapToVectorDataFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void GenerateData() override;
 
 private:
-  LabelMapToVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelMapToVectorDataFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FieldsFunctorType m_FieldsFunctor;
 }; // end of class
@@ -129,7 +129,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapToVectorDataFilter.txx"
+#include "otbLabelMapToVectorDataFilter.hxx"
 #endif
 
 #endif

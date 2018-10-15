@@ -27,18 +27,6 @@
 #include "otbStreamingResampleImageFilter.h"
 
 
-int otbBCOInterpolateImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::Image<double, 2>                                           ImageType;
-  typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
-
-  // Instantiating object
-  InterpolatorType::Pointer interp = InterpolatorType::New();
-
-  std::cout << interp << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbBCOInterpolateImageFunction(int argc, char * argv[])
 {
@@ -173,7 +161,7 @@ int otbBCOInterpolateImageFunction2(int argc, char * argv[])
   for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin(); it != indicesList.end(); ++it)
     {
       std::cout << (*it) << " -> " << filter->EvaluateAtContinuousIndex((*it)) << std::endl;
-      if (vcl_abs(filter->EvaluateAtContinuousIndex((*it))-1.0)>1e-6)
+      if (std::abs(filter->EvaluateAtContinuousIndex((*it))-1.0)>1e-6)
         return EXIT_FAILURE;
     }
 
@@ -183,16 +171,6 @@ int otbBCOInterpolateImageFunction2(int argc, char * argv[])
 
 
 
-int otbBCOInterpolateImageFunctionOverVectorImageNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef otb::VectorImage<double, 2>                                     ImageType;
-  typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
-
-  // Instantiating object
-  InterpolatorType::Pointer filter = InterpolatorType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbBCOInterpolateImageFunctionOverVectorImage(int argc, char * argv[])

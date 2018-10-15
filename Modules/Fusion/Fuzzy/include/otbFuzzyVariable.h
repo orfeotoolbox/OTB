@@ -107,9 +107,9 @@ protected:
   /** Constructor */
   FuzzyVariable();
   /** Destructor */
-  ~FuzzyVariable() ITK_OVERRIDE {}
+  ~FuzzyVariable() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** Map containing the membership functions */
@@ -118,7 +118,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFuzzyVariable.txx"
+#include "otbFuzzyVariable.hxx"
 #endif
 
 #endif

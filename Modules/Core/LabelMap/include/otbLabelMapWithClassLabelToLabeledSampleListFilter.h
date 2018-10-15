@@ -100,19 +100,19 @@ public:
 
 protected:
   LabelMapWithClassLabelToLabeledSampleListFilter();
-  ~LabelMapWithClassLabelToLabeledSampleListFilter() ITK_OVERRIDE;
+  ~LabelMapWithClassLabelToLabeledSampleListFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Make Output */
-  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointerType MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 private:
-  LabelMapWithClassLabelToLabeledSampleListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapWithClassLabelToLabeledSampleListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The functor used to build the measurement vector */
   MeasurementFunctorType              m_MeasurementFunctor;
@@ -121,7 +121,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapWithClassLabelToLabeledSampleListFilter.txx"
+#include "otbLabelMapWithClassLabelToLabeledSampleListFilter.hxx"
 #endif
 
 #endif

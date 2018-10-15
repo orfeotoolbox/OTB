@@ -67,28 +67,28 @@ public:
   typedef double                                RealType;
 
   /** Get the imaging start acquisition day from the ossim metadata */
-  int GetDay() const ITK_OVERRIDE;
+  int GetDay() const override;
 
   /** Get the imaging start acquisition month from the ossim metadata */
-  int GetMonth() const ITK_OVERRIDE;
+  int GetMonth() const override;
 
   /** Get the imaging start acquisition year from the ossim metadata */
-  int GetYear() const ITK_OVERRIDE;
+  int GetYear() const override;
 
   /** Get the imaging start acquisition hour from the ossim metadata */
-  int GetHour() const ITK_OVERRIDE;
+  int GetHour() const override;
 
   /** Get the imaging start acquisition minute from the ossim metadata */
-  int GetMinute() const ITK_OVERRIDE;
+  int GetMinute() const override;
 
   /** Get the imaging production day from the ossim metadata : generationTime variable */
-  int GetProductionDay() const ITK_OVERRIDE;
+  int GetProductionDay() const override;
 
   /** Get the imaging production month from the ossim metadata : generationTime variable */
-  int GetProductionMonth() const ITK_OVERRIDE;
+  int GetProductionMonth() const override;
 
   /** Get the imaging production year from the ossim metadata : generationTime variable */
-  int GetProductionYear() const ITK_OVERRIDE;
+  int GetProductionYear() const override;
 
   /** Get the calibration.calFactor : generationTime variable */
   double GetCalibrationFactor() const;
@@ -115,13 +115,13 @@ public:
   DoubleVectorType GetNoiseReferencePointList() const;
 
   /** Get the radar frequency */
-  double GetRadarFrequency() const ITK_OVERRIDE;
+  double GetRadarFrequency() const override;
 
   /** Get the PRF */
-  double GetPRF() const ITK_OVERRIDE;
+  double GetPRF() const override;
 
   /** Get the RSF */
-  double GetRSF() const ITK_OVERRIDE;
+  double GetRSF() const override;
 
   /** Get the number of corner incidence angles */
   unsigned int GetNumberOfCornerIncidenceAngles() const;
@@ -130,7 +130,7 @@ public:
   double GetMeanIncidenceAngles() const;
 
   /** Get the center incidence angle */
-  double GetCenterIncidenceAngle() const ITK_OVERRIDE;
+  double GetCenterIncidenceAngle() const override;
 
   /** Get the center index */
   IndexType GetCenterIncidenceAngleIndex() const;
@@ -142,26 +142,26 @@ public:
   IndexVectorType GetCornersIncidenceAnglesIndex() const;
 
   /** Get the constant calibration factor */
-  RealType   GetRadiometricCalibrationScale() const ITK_OVERRIDE;
+  RealType   GetRadiometricCalibrationScale() const override;
 
-  PointSetPointer GetRadiometricCalibrationNoise() const ITK_OVERRIDE;
-  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const ITK_OVERRIDE;
+  PointSetPointer GetRadiometricCalibrationNoise() const override;
+  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
   //PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
-  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const ITK_OVERRIDE;
-  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const ITK_OVERRIDE;
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override;
+  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
 
-  bool CanRead() const ITK_OVERRIDE;
+  bool CanRead() const override;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const ITK_OVERRIDE;
+  std::vector<unsigned int> GetDefaultDisplay() const override;
 
 protected:
   TerraSarImageMetadataInterface();
-  ~TerraSarImageMetadataInterface() ITK_OVERRIDE {}
+  ~TerraSarImageMetadataInterface() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Evaluate polynom with Horner scheme*/
 
   inline double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
@@ -188,8 +188,8 @@ protected:
   double GetNoiseReferencePoint(unsigned int noiseRecord) const;
 
 private:
-  TerraSarImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TerraSarImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

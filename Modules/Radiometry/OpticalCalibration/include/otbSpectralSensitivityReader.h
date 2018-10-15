@@ -26,6 +26,7 @@
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
 #include "OTBOpticalCalibrationExport.h"
+#include <string>
 
 namespace otb
 {
@@ -79,16 +80,16 @@ public:
 
 protected:
   SpectralSensitivityReader();
-  ~SpectralSensitivityReader() ITK_OVERRIDE;
+  ~SpectralSensitivityReader() override;
 
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Find the filename using image metadata */
   void FindFileName();
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Struct use to remove multiple spaces in file */
   struct BothAre
@@ -103,8 +104,8 @@ protected:
 
 
 private:
-  SpectralSensitivityReader(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SpectralSensitivityReader(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string      m_FileName;
   std::string      m_DataPath;

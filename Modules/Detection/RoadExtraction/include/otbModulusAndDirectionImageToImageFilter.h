@@ -70,25 +70,25 @@ public:
 
   /** Set/Get the image input of this process object.  */
   using Superclass::SetInput;
-  void SetInput(const InputImageType *input) ITK_OVERRIDE;
+  void SetInput(const InputImageType *input) override;
   virtual void SetInputDirection(const InputImageDirectionType *direction);
   const InputImageType * GetInput(void);
   const InputImageDirectionType * GetInputDirection(void);
 
 protected:
   ModulusAndDirectionImageToImageFilter();
-  ~ModulusAndDirectionImageToImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ModulusAndDirectionImageToImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ModulusAndDirectionImageToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ModulusAndDirectionImageToImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbModulusAndDirectionImageToImageFilter.txx"
+#include "otbModulusAndDirectionImageToImageFilter.hxx"
 #endif
 
 #endif

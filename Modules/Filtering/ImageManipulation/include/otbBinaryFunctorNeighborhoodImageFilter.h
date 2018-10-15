@@ -130,7 +130,7 @@ public:
 
 protected:
   BinaryFunctorNeighborhoodImageFilter();
-  ~BinaryFunctorNeighborhoodImageFilter() ITK_OVERRIDE {}
+  ~BinaryFunctorNeighborhoodImageFilter() override {}
 
   /** BinaryFunctorNeighborhoodImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -143,18 +143,18 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId) ITK_OVERRIDE;
+                                    itk::ThreadIdType threadId) override;
 
   /**
    * Pad the inputs requested regions by radius
    */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
   RadiusSizeType m_Radius;
 
 private:
-  BinaryFunctorNeighborhoodImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryFunctorNeighborhoodImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   FunctorType m_Functor;
 };
@@ -162,7 +162,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryFunctorNeighborhoodImageFilter.txx"
+#include "otbBinaryFunctorNeighborhoodImageFilter.hxx"
 #endif
 
 #endif

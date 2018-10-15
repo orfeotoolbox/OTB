@@ -24,6 +24,7 @@
 #include "itkProcessObject.h"
 #include "itkMacro.h"
 #include "otbRCC8Graph.h"
+#include <string>
 
 namespace otb
 {
@@ -87,12 +88,13 @@ public:
   typedef typename InputGraphType::VertexDescriptorType VertexDescriptorType;
   typedef typename InputGraphType::RCC8ValueType        RCC8ValueType;
   typedef typename VertexType::AttributesMapType        AttributesMapType;
+  typedef typename AttributesMapType::iterator          IteratorType;
 
   /** Set the filename */
   itkSetStringMacro(FileName);
   /** Get the filename */
   itkGetStringMacro(FileName);
-  
+
   using Superclass::SetInput;
   /**
    * Set the input graph.
@@ -107,17 +109,17 @@ public:
   /**
    * Update method.
    */
-  void Update(void) ITK_OVERRIDE;
+  void Update(void) override;
 
 protected:
   /** Constructor */
   RCC8GraphFileWriter();
   /** Destructor */
-  ~RCC8GraphFileWriter() ITK_OVERRIDE;
+  ~RCC8GraphFileWriter() override;
   /**
    * Main computation method.
    */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /**
    * Write Method.
    * Performs checkings and invoke GenerateData().
@@ -143,7 +145,7 @@ protected:
   /**
    * PrintSelf method
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** Filename of the graph file to write */
@@ -152,7 +154,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8GraphFileWriter.txx"
+#include "otbRCC8GraphFileWriter.hxx"
 #endif
 
 #endif

@@ -21,128 +21,111 @@
 #ifndef otbClampImageFilter_h
 #define otbClampImageFilter_h
 
-#include "itkImageToImageFilter.h"
+#include "otbConvertTypeFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 namespace otb
 {
 
 /** \class ClampImageFilter
- * \brief Set image values to a user-specified value if they are below,
- * above, or between simple threshold values.
+ * \brief Clamp image values to be below, over, or between threhold values.
  *
  * ClampImageFilter  clamp image values to be between an upper
  * and lower value. Values lower than m_Lower values are set to lower,
  * and values greater than upper threshold are set to upper threshold
  * value.
+ * This filter can also be used to cast any type of image into any other type
+ * as long as those types are arithmetics or complex.
  *
  * By default lower and upper thresholds are set to the maximum and
- * minimum bounds of the image pixel type.
- *
- * The pixels must support the operators >= and <=.
+ * minimum bounds of the image internal pixel value.
  *
  * \ingroup IntensityImageFilters Multithreaded
  *
  * \ingroup OTBImageManipulation
  */
   template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ClampImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+  class ITK_EXPORT ClampImageFilter 
+  : public itk::UnaryFunctorImageFilter< TInputImage , TOutputImage ,
+      Functor::ConvertTypeFunctor <typename TInputImage::PixelType ,
+                                   typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef ClampImageFilter               Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef ClampImageFilter Self;
+  typedef itk::UnaryFunctorImageFilter< TInputImage , TOutputImage ,
+    Functor::ConvertTypeFunctor <typename TInputImage::PixelType ,
+                                 typename TOutputImage::PixelType> >  Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  itkNewMacro( Self );
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ClampImageFilter, itk::ImageToImageFilter);
+  itkTypeMacro( ClampImageFilter , itk::UnaryFunctorImageFilter );
 
 
   /** Some additional typedefs.  */
   typedef TInputImage                                  InputImageType;
-  typedef typename InputImageType::ConstPointer        InputImagePointer;
   typedef typename InputImageType::RegionType          InputImageRegionType;
   typedef typename InputImageType::PixelType           InputImagePixelType;
 
   /** Some additional typedefs.  */
-  typedef TOutputImage                                 OutputImageType;
-  typedef typename OutputImageType::Pointer            OutputImagePointer;
-  typedef typename OutputImageType::RegionType         OutputImageRegionType;
-  typedef typename OutputImageType::PixelType          OutputImagePixelType;
+  typedef TOutputImage OutputImageType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType OutputImagePixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename itk::NumericTraits< OutputInternalPixelType >::ValueType OutputPixelValueType;
 
 
-  /** The values greater than or equal to the value are set to OutsideValue. */
-  void ClampAbove(const OutputImagePixelType &thresh);
+  /** The values greater than or equal to the value are set to \p thresh. */
+  void ClampAbove(const OutputPixelValueType &thresh);
 
-  /** The values less than or equal to the value are set to OutsideValue. */
-  void ClampBelow(const OutputImagePixelType &thresh);
+  /** The values less than or equal to the value are set to \p thresh. */
+  void ClampBelow(const OutputPixelValueType &thresh);
 
-  /** The values outside the range are set to OutsideValue. */
-  void ClampOutside(const OutputImagePixelType &lower, const OutputImagePixelType &upper);
+  /** The values outside the range are set to \p lower or \p upper. */
+  void ClampOutside(const OutputPixelValueType &lower, const OutputPixelValueType &upper);
 
   /** Set/Get methods to set the lower threshold */
-  void SetLower(OutputImagePixelType val)
-  {
-    m_Lower = val;
-    m_DLower = static_cast<double>(val);
-    this->Modified();
-  }
-  itkGetConstMacro(Lower, OutputImagePixelType);
+  void SetLower(OutputPixelValueType val);
+
+  itkGetConstMacro(Lower, OutputPixelValueType);
 
   /** Set/Get methods to set the upper threshold */
-  void SetUpper(OutputImagePixelType val)
-  {
-    m_Upper = val;
-    m_DUpper = static_cast<double>(val);
-    this->Modified();
-  }
-  itkGetConstMacro(Upper, OutputImagePixelType);
+  void SetUpper(OutputPixelValueType val);
+
+  itkGetConstMacro(Upper, OutputPixelValueType);
 
 
 protected:
   ClampImageFilter();
-  ~ClampImageFilter() ITK_OVERRIDE {};
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ClampImageFilter() override {};
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  /** ClampImageFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData() routine
-   * which is called for each processing thread. The output image data is
-   * allocated automatically by the superclass prior to calling
-   * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-   * portion of the output image specified by the parameter
-   * "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId ) ITK_OVERRIDE;
-
-  void GenerateOutputInformation(void) ITK_OVERRIDE
-  {
+  void GenerateOutputInformation(void) override
+    {
     Superclass::GenerateOutputInformation();
-
-    this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetInput()->GetNumberOfComponentsPerPixel() );
-  }
+    unsigned int sizeIn = this->GetInput()->GetNumberOfComponentsPerPixel();
+    this->GetFunctor().SetInputComponents( sizeIn );
+    this->GetOutput()->SetNumberOfComponentsPerPixel( 
+      this->GetFunctor().GetOutputSize () );
+    }
 
 private:
-  ClampImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ClampImageFilter(const Self&) = delete ;
+  void operator=(const Self&) = delete ;
 
-  double m_DLower;
-  double m_DUpper;
-
-  OutputImagePixelType m_Lower;
-  OutputImagePixelType m_Upper;
+  OutputPixelValueType m_Lower;
+  OutputPixelValueType m_Upper;
 };
 
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbClampImageFilter.txx"
+#include "otbClampImageFilter.hxx"
 #endif
 
 #endif

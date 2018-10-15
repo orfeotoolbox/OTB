@@ -36,6 +36,7 @@
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
+#include <string>
 
 namespace otb
 {
@@ -118,17 +119,17 @@ public:
   typedef ExtendedFilenameToReaderOptions            FNameHelperType;
 
   /** Prepare image allocation at the first call of the pipeline processing */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Does the real work. */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Give the reader a chance to indicate that it will produce more
    * output than it was requested to produce. ImageFileReader cannot
    * currently read a portion of an image (since the ImageIO objects
    * cannot read a portion of an image), so the ImageFileReader must
    * enlarge the RequestedRegion to the size of the image on disk. */
-  void EnlargeOutputRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion(itk::DataObject *output) override;
 
   /** Set/Get the ImageIO helper class. Often this is created via the object
    * factory mechanism that determines whether a particular ImageIO can
@@ -139,13 +140,12 @@ public:
   void  SetImageIO( otb::ImageIOBase * imageIO );
   itkGetObjectMacro(ImageIO,otb::ImageIOBase);
 
+  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
   virtual void SetFileName(const char* extendedFileName);
-  virtual void SetFileName(std::string extendedFileName);
-  virtual const char* GetFileName () const;
 
-  /** Get the resolution information from the file */
-  bool GetResolutionsInfo( std::vector<unsigned int>& res,
-                          std::vector<std::string>& desc);
+  virtual void SetFileName(const std::string& extendedFileName);
+
+  virtual const char* GetFileName () const;
 
   /** Get the number of overviews available into the file specified
    * Returns: overview count, zero if none. */
@@ -158,8 +158,8 @@ public:
 
 protected:
   ImageFileReader();
-  ~ImageFileReader() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageFileReader() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Convert a block of pixels from one type to another. */
   void DoConvertBuffer(void* buffer, size_t numberOfPixels);
@@ -178,8 +178,8 @@ private:
   // Retrieve the real source file name if derived dataset */
   std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
   
-  ImageFileReader(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageFileReader(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   otb::ImageIOBase::Pointer m_ImageIO;
   bool                 m_UserSpecifiedImageIO; // keep track whether the
@@ -212,7 +212,7 @@ private:
 } //namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFileReader.txx"
+#include "otbImageFileReader.hxx"
 #endif
 
 #endif // otbImageFileReader_h

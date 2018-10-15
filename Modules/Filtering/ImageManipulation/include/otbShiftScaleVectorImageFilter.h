@@ -197,20 +197,20 @@ public:
 
 protected:
   ShiftScaleVectorImageFilter() {}
-  ~ShiftScaleVectorImageFilter() ITK_OVERRIDE {}
+  ~ShiftScaleVectorImageFilter() override {}
 
   /** Process to execute before entering the multithreaded section */
-  void BeforeThreadedGenerateData(void) ITK_OVERRIDE;
+  void BeforeThreadedGenerateData(void) override;
 
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
 
 private:
-  ShiftScaleVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ShiftScaleVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputPixelType  m_Scale;
   InputPixelType  m_Shift;
@@ -220,7 +220,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShiftScaleVectorImageFilter.txx"
+#include "otbShiftScaleVectorImageFilter.hxx"
 #endif
 
 #endif

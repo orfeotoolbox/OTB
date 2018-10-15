@@ -113,13 +113,13 @@ public:
    *  a certain dimensions, then some splits will not be possible.
    */
   unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber) ITK_OVERRIDE;
+                                         unsigned int requestedNumber) override;
 
   /** Get a region definition that represents the ith piece a specified region.
    * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
   RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region) ITK_OVERRIDE;
+                              const RegionType& region) override;
 
   itkGetMacro(TileSizeAlignment, unsigned int);
   itkSetMacro(TileSizeAlignment, unsigned int);
@@ -128,12 +128,12 @@ public:
 
 protected:
   ImageRegionSquareTileSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(16) {}
-  ~ImageRegionSquareTileSplitter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageRegionSquareTileSplitter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageRegionSquareTileSplitter(const ImageRegionSquareTileSplitter &); //purposely not implemented
-  void operator =(const ImageRegionSquareTileSplitter&); //purposely not implemented
+  ImageRegionSquareTileSplitter(const ImageRegionSquareTileSplitter &) = delete;
+  void operator =(const ImageRegionSquareTileSplitter&) = delete;
 
   itk::FixedArray<unsigned int, VImageDimension> m_SplitsPerDimension;
   unsigned int m_TileDimension;
@@ -143,7 +143,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionSquareTileSplitter.txx"
+# include "otbImageRegionSquareTileSplitter.hxx"
 #endif
 
 #endif

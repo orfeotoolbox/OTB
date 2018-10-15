@@ -81,28 +81,28 @@ protected:
   /** Constructor */
   ImportGeoInformationImageFilter();
   /** Destructor */
-  ~ImportGeoInformationImageFilter() ITK_OVERRIDE {}
+  ~ImportGeoInformationImageFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Generate input requested region */
-  void GenerateInputRequestedRegion(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion(void) override;
   /** Generate output information */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Override VerifyInputInformation() since this filter's inputs do
    * not need to occupy the same physical space.
    *
    * \sa ProcessObject::VerifyInputInformation
    */
-  void VerifyInputInformation() ITK_OVERRIDE {}
+  void VerifyInputInformation() override {}
 
 private:
-  ImportGeoInformationImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImportGeoInformationImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImportGeoInformationImageFilter.txx"
+#include "otbImportGeoInformationImageFilter.hxx"
 #endif
 
 #endif

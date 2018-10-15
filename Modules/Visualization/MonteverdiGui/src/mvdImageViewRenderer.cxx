@@ -27,7 +27,8 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtOpenGL>
+#include <QGLWidget>
+// #include <QtOpenGL>
 
 //
 // System includes (sorted by alphabetic order)
@@ -711,7 +712,7 @@ ImageViewRenderer
 	//
 	// qDebug()
 	//   << "alpha:" << settings.GetAlpha()
-	//   << "'" << it->first.c_str() << "'";
+	//   << "'" << it->first << "'";
 	imageSettings->SetAlpha( settings.GetAlpha() );
 
 	//

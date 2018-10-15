@@ -79,25 +79,25 @@ protected:
   /** Constructor */
   ClosingOpeningMorphologicalFilter();
   /** Destructor */
-  ~ClosingOpeningMorphologicalFilter() ITK_OVERRIDE {}
+  ~ClosingOpeningMorphologicalFilter() override {}
 
   /* void GenerateInputRequestedRegion(); */
   /*   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)); */
 
   /** Main computation method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ClosingOpeningMorphologicalFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ClosingOpeningMorphologicalFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Morphological operation kernel  */
   KernelType m_Kernel;
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbClosingOpeningMorphologicalFilter.txx"
+#include "otbClosingOpeningMorphologicalFilter.hxx"
 #endif
 #endif

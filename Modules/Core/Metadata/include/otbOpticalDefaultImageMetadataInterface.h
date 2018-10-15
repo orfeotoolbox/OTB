@@ -57,103 +57,103 @@ public:
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias() const ITK_OVERRIDE
+  VariableLengthVectorType GetPhysicalBias() const override
   {
     itkExceptionMacro("GetPhysicalBias not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain() const ITK_OVERRIDE
+  VariableLengthVectorType GetPhysicalGain() const override
   {
     itkExceptionMacro("GetPhysicalGain not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance() const ITK_OVERRIDE
+  VariableLengthVectorType GetSolarIrradiance() const override
   {
     itkExceptionMacro("GetSolarIrradiance not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition day from the ossim metadata */
-  int GetDay() const ITK_OVERRIDE
+  int GetDay() const override
   {
     itkExceptionMacro("GetDay not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition month from the ossim metadata */
-  int GetMonth() const ITK_OVERRIDE
+  int GetMonth() const override
   {
     itkExceptionMacro("GetMonth not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition year from the ossim metadata */
-  int GetYear() const ITK_OVERRIDE
+  int GetYear() const override
   {
     itkExceptionMacro("GetYear not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition hour from the ossim metadata */
-  int GetHour() const ITK_OVERRIDE
+  int GetHour() const override
   {
     itkExceptionMacro("GetHour not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging acquisition minute from the ossim metadata */
-  int GetMinute() const ITK_OVERRIDE
+  int GetMinute() const override
   {
     itkExceptionMacro("GetMinute not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production day from the ossim metadata */
-  int GetProductionDay() const ITK_OVERRIDE
+  int GetProductionDay() const override
   {
     itkExceptionMacro("GetProductionDay not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production month from the ossim metadata */
-  int GetProductionMonth() const ITK_OVERRIDE
+  int GetProductionMonth() const override
   {
     itkExceptionMacro("GetProductionMonth not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the imaging production year from the ossim metadata */
-  int GetProductionYear() const ITK_OVERRIDE
+  int GetProductionYear() const override
   {
     itkExceptionMacro("GetProductionYear not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the sat elevation from the ossim metadata */
-  double GetSatElevation() const ITK_OVERRIDE
+  double GetSatElevation() const override
   {
     itkExceptionMacro("GetSatElevation not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the sat azimuth from the ossim metadata */
-  double GetSatAzimuth() const ITK_OVERRIDE
+  double GetSatAzimuth() const override
   {
     itkExceptionMacro("GetSatElevation not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths() const ITK_OVERRIDE
+  VariableLengthVectorType GetFirstWavelengths() const override
   {
     itkExceptionMacro("GetFirstWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths() const ITK_OVERRIDE
+  VariableLengthVectorType GetLastWavelengths() const override
   {
     itkExceptionMacro("GetLastWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the enhanced band names (here nothing because the sensor is not identify) */
-  std::vector<std::string> GetEnhancedBandNames() const ITK_OVERRIDE
+  std::vector<std::string> GetEnhancedBandNames() const override
   {
     std::vector<std::string> nothing;
     return nothing;
   }
 
-  bool CanRead() const ITK_OVERRIDE
+  bool CanRead() const override
   {
     // This class is the default one, it has to be able to call every metadata
     return false;
@@ -161,7 +161,7 @@ public:
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const ITK_OVERRIDE
+  std::vector<unsigned int> GetDefaultDisplay() const override
       {
     std::vector<unsigned int> rgb(3);
     rgb[0] = 0;
@@ -172,19 +172,19 @@ public:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
    * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const ITK_OVERRIDE
+  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override
   {
     itkExceptionMacro("GetSpectralSensitivity not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
 protected:
   OpticalDefaultImageMetadataInterface(){};
-  ~OpticalDefaultImageMetadataInterface() ITK_OVERRIDE {}
+  ~OpticalDefaultImageMetadataInterface() override {}
 
 private:
 
-  OpticalDefaultImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  OpticalDefaultImageMetadataInterface(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 

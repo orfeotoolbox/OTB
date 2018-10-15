@@ -73,17 +73,17 @@ protected:
   /** Constructor */
   ImageListToRCC8GraphFilter();
   /** Destructor */
-  ~ImageListToRCC8GraphFilter() ITK_OVERRIDE {}
+  ~ImageListToRCC8GraphFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageListToRCC8GraphFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageListToRCC8GraphFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListToRCC8GraphFilter.txx"
+#include "otbImageListToRCC8GraphFilter.hxx"
 #endif
 
 #endif

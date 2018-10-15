@@ -29,6 +29,7 @@
 #include "itkRelabelComponentImageFilter.h"
 
 #include "otbMeanShiftSmoothingImageFilter.h"
+#include <string>
 
 namespace otb {
 
@@ -130,10 +131,10 @@ public:
 protected:
   MeanShiftConnectedComponentSegmentationFilter();
 
-  ~MeanShiftConnectedComponentSegmentationFilter() ITK_OVERRIDE;
+  ~MeanShiftConnectedComponentSegmentationFilter() override;
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
+  void GenerateData() override;
 
 private:
 
@@ -151,7 +152,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftConnectedComponentSegmentationFilter.txx"
+#include "otbMeanShiftConnectedComponentSegmentationFilter.hxx"
 #endif
 
 #endif

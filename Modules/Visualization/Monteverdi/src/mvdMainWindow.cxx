@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2017 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,7 +30,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtWidgets>
 
 //
 // System includes (sorted by alphabetic order)
@@ -43,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
 # include "mvdApplicationLauncher.h"
 # include "mvdApplicationsToolBoxController.h"
 # include "mvdOTBApplicationsModel.h"
@@ -108,7 +109,7 @@ namespace mvd
 
 #define REFERENCE_LAYER_COMBOBOX_NAME "referenceLayerComboBox"
 
-#define FORCE_NO_GLSL ( ( defined( OTB_DEBUG ) && 0 ) || 0 )
+#define FORCE_NO_GLSL 0
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -131,7 +132,7 @@ MainWindow
   m_PixelDescriptionDock(NULL),
 #endif // USE_PIXEL_DESCRIPTION
   m_HistogramDock( NULL ),
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
   m_OtbApplicationsBrowserDock(NULL),
 #endif
   m_ImageView( NULL ),
@@ -1362,7 +1363,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImages( const QStringList & filenames )
+::ImportImages( const QStringList & filenames, bool enableOverviews /*= true*/)
 {
   if( filenames.isEmpty() )
     return;
@@ -1376,7 +1377,8 @@ MainWindow
       )
     );
 
-    if( !( value.isValid() ? value.toBool() : OVERVIEWS_ENABLED_DEFAULT ) ||
+    if( enableOverviews &&
+	( value.isValid() ? value.toBool() : OVERVIEWS_ENABLED_DEFAULT ) &&
 	!BuildGDALOverviews( filenames ) )
       return;
   }
@@ -1431,11 +1433,11 @@ MainWindow
 
       if( !( *it )->IsClosable() )
 	{
-	assert( !( *it )->GetApplication().IsNull() );
+	assert( ( *it )->GetModel()->GetApplication() );
 
 	// qDebug() << "OTB-application:" << ( *it )->GetApplication()->GetDocName();
 
-	names.push_back( ( *it )->GetApplication()->GetDocName() );
+	names.push_back( ( *it )->GetModel()->GetApplication()->GetDocName() );
 	}
       }
 
@@ -1809,7 +1811,8 @@ MainWindow
   // Select filename.
   QString caption(tr("Open file..."));
   ImportImages(
-    otb::GetOpenFileNames( this, caption )
+    otb::GetOpenFilenames( this, caption ) ,
+    true
   );
 }
 
@@ -2209,7 +2212,7 @@ MainWindow
 }
 
 /*****************************************************************************/
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
 
 void
 MainWindow
@@ -2294,7 +2297,7 @@ MainWindow
   );
 }
 
-#endif // defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#endif // defined( OTB_USE_QT ) && USE_OTB_APPS
 
 /*****************************************************************************/
 #if USE_TABBED_VIEW
@@ -2324,7 +2327,7 @@ MainWindow
   QWidget* appWidget = m_CentralTabWidget->widget( index );
   assert( appWidget!=NULL );
 
-#if defined( OTB_USE_QT4 ) && USE_OTB_APPS
+#if defined( OTB_USE_QT ) && USE_OTB_APPS
 
   assert( appWidget==qobject_cast< Wrapper::QtWidgetView* >( appWidget ) );
   Wrapper::QtWidgetView* appWidgetView =
@@ -2367,6 +2370,7 @@ MainWindow
 
   // import the result image into the database
   ImportImage( outfname, false );
+  m_ImageView->updateGL();
 }
 
 /*****************************************************************************/

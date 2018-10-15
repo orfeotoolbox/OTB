@@ -33,14 +33,6 @@ typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatistics
 
 typedef otb::VirtualDimensionality<double> VDType;
 
-int otbVirtualDimensionalityNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  VDType::Pointer vd = VDType::New();
-  std::cout << vd << std::endl;
-  return EXIT_SUCCESS;
-}
-
-
 int otbVirtualDimensionalityTest(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
@@ -65,7 +57,7 @@ int otbVirtualDimensionalityTest(int itkNotUsed(argc), char * argv[])
 
   for (int i = 2; i < 10; ++i)
     {
-    double falseAlarmRate = vcl_pow(static_cast<double>(10), static_cast<double>(-i));
+    double falseAlarmRate = std::pow(static_cast<double>(10), static_cast<double>(-i));
     vd->SetFAR(falseAlarmRate);
     vd->Compute();
 

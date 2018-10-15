@@ -120,7 +120,7 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** In order to respect the fair data principle, the number of samples for
     * each label must be the same. This method computes the label that
@@ -129,16 +129,16 @@ protected:
   void ComputeMaxSampleFrequency();
 
   /** Make Output */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   ListSampleToBalancedListSampleFilter();
-  ~ListSampleToBalancedListSampleFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ListSampleToBalancedListSampleFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ListSampleToBalancedListSampleFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ListSampleToBalancedListSampleFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   GaussianAdditiveNoisePointerType       m_AddGaussianNoiseFilter;
   std::vector<unsigned int>              m_MultiplicativeCoefficient;
@@ -150,7 +150,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleToBalancedListSampleFilter.txx"
+#include "otbListSampleToBalancedListSampleFilter.hxx"
 #endif
 
 #endif

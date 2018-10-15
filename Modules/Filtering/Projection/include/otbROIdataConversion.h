@@ -82,16 +82,16 @@ public:
 
 protected:
   ROIdataConversion();
-  ~ROIdataConversion() ITK_OVERRIDE {}
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~ROIdataConversion() override {}
+  void GenerateOutputInformation() override;
+  void GenerateInputRequestedRegion() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
   /** Performs its job! */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** Count the number for sample in the training area */
   SizeValueType GetNumberOfSample();
@@ -100,7 +100,7 @@ protected:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbROIdataConversion.txx"
+#include "otbROIdataConversion.hxx"
 #endif
 
 #endif

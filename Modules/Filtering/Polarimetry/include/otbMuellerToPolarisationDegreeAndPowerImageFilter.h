@@ -143,7 +143,7 @@ public:
               }
             else
               {
-                deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
+                deg_pol = std::sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
               }
 
             if (P > l_PowerMax)
@@ -230,11 +230,11 @@ public:
 
 protected:
    MuellerToPolarisationDegreeAndPowerImageFilter() {}
-  ~MuellerToPolarisationDegreeAndPowerImageFilter() ITK_OVERRIDE {}
+  ~MuellerToPolarisationDegreeAndPowerImageFilter() override {}
 
 private:
-  MuellerToPolarisationDegreeAndPowerImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);                                 //purposely not implemented
+  MuellerToPolarisationDegreeAndPowerImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

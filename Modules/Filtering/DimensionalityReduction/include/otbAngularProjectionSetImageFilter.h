@@ -126,9 +126,9 @@ public:
 
 protected:
   AngularProjectionSetImageFilter();
-  ~AngularProjectionSetImageFilter() ITK_OVERRIDE { }
+  ~AngularProjectionSetImageFilter() override { }
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
   AngularProjectionSetImageFilter(const Self&); // not implemented
@@ -142,7 +142,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAngularProjectionSetImageFilter.txx"
+#include "otbAngularProjectionSetImageFilter.hxx"
 #endif
 
 

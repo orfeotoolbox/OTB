@@ -27,6 +27,7 @@
 #include "otbFuzzyVariable.h"
 #include <vector>
 #include <algorithm>
+#include <string>
 
 namespace otb
 {
@@ -343,7 +344,7 @@ public:
   virtual std::string GetName() const = 0;
 
   LandsatTMIndex() {}
-  ~LandsatTMIndex() ITK_OVERRIDE {}
+  ~LandsatTMIndex() override {}
 
 
 };
@@ -370,13 +371,13 @@ class Bright : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "Bright";
   }
 
   Bright() {}
-  ~Bright() ITK_OVERRIDE {}
+  ~Bright() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -411,13 +412,13 @@ class Vis : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "Vis";
   }
 
   Vis() {}
-  ~Vis() ITK_OVERRIDE {}
+  ~Vis() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -444,13 +445,13 @@ class NIR : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NIR";
   }
 
   NIR() {}
-  ~NIR() ITK_OVERRIDE {}
+  ~NIR() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -476,13 +477,13 @@ class MIR1 : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "MIR1";
   }
 
   MIR1() {}
-  ~MIR1() ITK_OVERRIDE {}
+  ~MIR1() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -508,13 +509,13 @@ class MIR2 : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "MIR2";
   }
 
   MIR2() {}
-  ~MIR2() ITK_OVERRIDE {}
+  ~MIR2() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -540,13 +541,13 @@ class TIR : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "TIR";
   }
 
   TIR() {}
-  ~TIR() ITK_OVERRIDE {}
+  ~TIR() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -586,13 +587,13 @@ class MIRTIR : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "MIRTIR";
   }
 
   MIRTIR() {}
-  ~MIRTIR() ITK_OVERRIDE {}
+  ~MIRTIR() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -626,13 +627,13 @@ class NDVI : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NDVI";
   }
 
   NDVI() {}
-  ~NDVI() ITK_OVERRIDE {}
+  ~NDVI() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -673,13 +674,13 @@ class NDBSI : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NDBSI";
   }
 
   NDBSI() {}
-  ~NDBSI() ITK_OVERRIDE {}
+  ~NDBSI() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -716,13 +717,13 @@ class BIO : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "BIO";
   }
 
   BIO() {}
-  ~BIO() ITK_OVERRIDE {}
+  ~BIO() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -762,13 +763,13 @@ class NDSI : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NDSI";
   }
 
   NDSI() {}
-  ~NDSI() ITK_OVERRIDE {}
+  ~NDSI() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -819,13 +820,13 @@ class NDSIVis : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NDSIVis";
   }
 
   NDSIVis() {}
-  ~NDSIVis() ITK_OVERRIDE {}
+  ~NDSIVis() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -864,13 +865,13 @@ class NDBBBI : public LandsatTMIndex<TInput, TOutput>
 {
 public:
   /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "NDBBBI";
   }
 
   NDBBBI() {}
-  ~NDBBBI() ITK_OVERRIDE {}
+  ~NDBBBI() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -984,7 +985,7 @@ public:
     m_FvNDBSI->SetMembership(Medium, -0.20, -0.20, 0.0, 0.0);
     m_FvNDBSI->SetMembership(High, 0.0, 0.0, maximumValue, maximumValue);
     }
-  ~LinguisticVariables() ITK_OVERRIDE {}
+  ~LinguisticVariables() override {}
 
   inline itk::FixedArray<unsigned int, 11> operator ()(const TInput& inputPixel)
   {
@@ -1068,7 +1069,7 @@ public:
   }
 
   KernelSpectralRule() : m_TV1(0.7), m_TV2(0.5) { }
-  ~KernelSpectralRule() ITK_OVERRIDE {}
+  ~KernelSpectralRule() override {}
 
   void SetTV1(PrecisionType tv1)
   {
@@ -1163,13 +1164,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM ThickCloudsSpectralRule";
   }
 
   ThickCloudsSpectralRule() { }
-  ~ThickCloudsSpectralRule() ITK_OVERRIDE {}
+  ~ThickCloudsSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1221,13 +1222,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM ThinCloudsSpectralRule";
   }
 
   ThinCloudsSpectralRule() { }
-  ~ThinCloudsSpectralRule() ITK_OVERRIDE {}
+  ~ThinCloudsSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1282,13 +1283,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM SnowOrIceSpectralRule";
   }
 
   SnowOrIceSpectralRule() { }
-  ~SnowOrIceSpectralRule() ITK_OVERRIDE {}
+  ~SnowOrIceSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1341,13 +1342,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM WaterOrShadowSpectralRule";
   }
 
   WaterOrShadowSpectralRule() { }
-  ~WaterOrShadowSpectralRule() ITK_OVERRIDE {}
+  ~WaterOrShadowSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1388,13 +1389,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM PitbogOrGreenhouseSpectralRule";
   }
 
   PitbogOrGreenhouseSpectralRule() { }
-  ~PitbogOrGreenhouseSpectralRule() ITK_OVERRIDE {}
+  ~PitbogOrGreenhouseSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1446,13 +1447,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM DominantBlueSpectralRule";
   }
 
   DominantBlueSpectralRule() { }
-  ~DominantBlueSpectralRule() ITK_OVERRIDE {}
+  ~DominantBlueSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1494,13 +1495,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM VegetationSpectralRule";
   }
 
   VegetationSpectralRule() { }
-  ~VegetationSpectralRule() ITK_OVERRIDE {}
+  ~VegetationSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1554,13 +1555,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM RangelandSpectralRule";
   }
 
   RangelandSpectralRule() { }
-  ~RangelandSpectralRule() ITK_OVERRIDE {}
+  ~RangelandSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1615,13 +1616,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM BarrenLandOrBuiltUpOrCloudsSpectralRule";
   }
 
   BarrenLandOrBuiltUpOrCloudsSpectralRule() { }
-  ~BarrenLandOrBuiltUpOrCloudsSpectralRule() ITK_OVERRIDE {}
+  ~BarrenLandOrBuiltUpOrCloudsSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1673,13 +1674,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM FlatResponseBarrenLandOrBuiltUpSpectralRule";
   }
 
   FlatResponseBarrenLandOrBuiltUpSpectralRule() { }
-  ~FlatResponseBarrenLandOrBuiltUpSpectralRule() ITK_OVERRIDE {}
+  ~FlatResponseBarrenLandOrBuiltUpSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1727,13 +1728,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM ShadowWithBarrenLandSpectralRule";
   }
 
   ShadowWithBarrenLandSpectralRule() { }
-  ~ShadowWithBarrenLandSpectralRule() ITK_OVERRIDE {}
+  ~ShadowWithBarrenLandSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1774,13 +1775,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM ShadowWithVegetationSpectralRule";
   }
 
   ShadowWithVegetationSpectralRule() { }
-  ~ShadowWithVegetationSpectralRule() ITK_OVERRIDE {}
+  ~ShadowWithVegetationSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1822,13 +1823,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM ShadowCloudOrSnowSpectralRule";
   }
 
   ShadowCloudOrSnowSpectralRule() { }
-  ~ShadowCloudOrSnowSpectralRule() ITK_OVERRIDE {}
+  ~ShadowCloudOrSnowSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {
@@ -1877,13 +1878,13 @@ public:
   typedef bool OutputPixelType;
 
     /** Return the index name */
-  std::string GetName() const ITK_OVERRIDE
+  std::string GetName() const override
   {
     return "LandsatTM WetlandSpectralRule";
   }
 
   WetlandSpectralRule() { }
-  ~WetlandSpectralRule() ITK_OVERRIDE {}
+  ~WetlandSpectralRule() override {}
 
   inline TOutput operator ()(const TInput& inputPixel)
   {

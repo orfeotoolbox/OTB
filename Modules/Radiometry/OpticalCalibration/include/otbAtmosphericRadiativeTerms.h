@@ -119,13 +119,13 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTermsSingleChannel();
   /** Destructor */
-  ~AtmosphericRadiativeTermsSingleChannel() ITK_OVERRIDE {}
+  ~AtmosphericRadiativeTermsSingleChannel() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  AtmosphericRadiativeTermsSingleChannel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AtmosphericRadiativeTermsSingleChannel(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The intrinsic atmospheric reflectance. */
   double m_IntrinsicAtmosphericReflectance;
@@ -266,13 +266,13 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTerms();
   /** Destructor */
-  ~AtmosphericRadiativeTerms() ITK_OVERRIDE {}
+  ~AtmosphericRadiativeTerms() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  AtmosphericRadiativeTerms(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AtmosphericRadiativeTerms(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The vector containing each channel information. */
   VectorValueType m_Values;

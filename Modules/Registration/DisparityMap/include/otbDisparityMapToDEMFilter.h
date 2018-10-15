@@ -149,34 +149,34 @@ protected:
   DisparityMapToDEMFilter();
 
   /** Destructor */
-  ~DisparityMapToDEMFilter() ITK_OVERRIDE;
+  ~DisparityMapToDEMFilter() override;
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Before threaded generate data */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** After threaded generate data : sum up temporary DEMs */
-  void AfterThreadedGenerateData() ITK_OVERRIDE;
+  void AfterThreadedGenerateData() override;
 
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
     * \sa ProcessObject::VerifyInputInformation
     */
-  void VerifyInputInformation() ITK_OVERRIDE {}
+  void VerifyInputInformation() override {}
 
 
 private:
-  DisparityMapToDEMFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DisparityMapToDEMFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Minimum elevation of the DEM in meters */
   double m_ElevationMin;
@@ -206,7 +206,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDisparityMapToDEMFilter.txx"
+#include "otbDisparityMapToDEMFilter.hxx"
 #endif
 
 #endif

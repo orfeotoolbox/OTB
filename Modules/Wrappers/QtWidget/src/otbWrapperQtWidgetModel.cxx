@@ -51,12 +51,7 @@ QtWidgetModel
   m_Timer = new QTimer(this);
   m_Timer->setSingleShot(true);
   m_Timer->setInterval(1000);
-  QObject::connect(
-    m_Timer,
-    SIGNAL( timeout() ),
-    this,
-    SLOT( TimerDone() )
-    );
+  QObject::connect( m_Timer, &QTimer::timeout, this, &QtWidgetModel::TimerDone );
 }
 
 QtWidgetModel::~QtWidgetModel()
@@ -130,13 +125,13 @@ QtWidgetModel
   OutputProcessXMLParameter::Pointer outXMLParam = OutputProcessXMLParameter::New();
 
   TiXmlElement* XMLAppElement = outXMLParam->ParseApplication(m_Application);
- 
+
   //Create command line from the XML document
   TiXmlElement * pName, *pParam;
   std::ostringstream cmdLine;
 
   cmdLine << "";
-    
+
   if(XMLAppElement)
     {
     pName = XMLAppElement->FirstChildElement("name");
@@ -149,10 +144,10 @@ QtWidgetModel
 
     //Parse application parameters
     pParam = XMLAppElement->FirstChildElement("parameter");
-    
+
     while(pParam)
       {
-      //Get pareter key
+      //Get parameter key
       cmdLine << "-";
       cmdLine << pParam->FirstChildElement("key")->GetText();
       cmdLine << " ";
@@ -169,8 +164,8 @@ QtWidgetModel
           {
           cmdLine << pValue->GetText();
           cmdLine << " ";
-            
-          pValue = pValue->NextSiblingElement(); // iteration over multiple values 
+
+          pValue = pValue->NextSiblingElement(); // iteration over multiple values
           }
         }
       else
@@ -188,47 +183,38 @@ QtWidgetModel
           cmdLine << " ";
           }
         }
-        
+
       pParam = pParam->NextSiblingElement(); // iteration over parameters
       }
 
     //Insert a new line character at the end of the command line
     cmdLine << std::endl;
-    
+
     //Report the command line string to the application logger
     m_Application->GetLogger()->Write(itk::LoggerBase::INFO, cmdLine.str());
     }
 
   // launch the output image writing
-  AppliThread * taskAppli = new AppliThread( m_Application );
+  AppliThread *taskAppli = new AppliThread( m_Application );
 
-  QObject::connect(
-    taskAppli,
-    SIGNAL( ExceptionRaised( QString ) ),
-    // to:
-    this,
-    SIGNAL( ExceptionRaised( QString ) )
-  );
+  QObject::connect( taskAppli, &AppliThread::ExceptionRaised,
+                    this, &QtWidgetModel::ExceptionRaised );
 
-  QObject::connect(
-    taskAppli,
-    SIGNAL( ApplicationExecutionDone( int ) ),
-    // to:
-    this,
-    SLOT( OnApplicationExecutionDone( int ) )
-  );
+  QObject::connect( taskAppli, &AppliThread::ApplicationExecutionDone,
+                    this, &QtWidgetModel::OnApplicationExecutionDone );
 
-  QObject::connect(
-    taskAppli,
-    SIGNAL( finished() ),
-    taskAppli,
-    SLOT( deleteLater() )
-  );
+  QObject::connect( taskAppli, &AppliThread::finished,
+                    taskAppli, &AppliThread::deleteLater );
+
+  QObject::connect( this, &QtWidgetModel::Stop,
+                    taskAppli, &AppliThread::Stop );
 
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
 
   taskAppli->Execute();
+
+  emit SetApplicationReady(true);
 }
 
 void
@@ -321,6 +307,10 @@ AppliThread
     m_Application->GetLogger()->Debug(string(err.what()) + "\n");
     m_Application->GetLogger()->Fatal(string("Cannot open image ") + err.m_Filename + string(". ") + err.GetDescription() + string("\n"));
     emit ExceptionRaised( err.what() );
+  }
+  catch(itk::ProcessAborted& /*err*/)
+  {
+    m_Application->GetLogger()->Info("Processing aborted\n");
   }
   catch(itk::ExceptionObject& err)
   {

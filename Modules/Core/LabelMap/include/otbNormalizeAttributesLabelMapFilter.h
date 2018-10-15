@@ -143,21 +143,21 @@ protected:
   NormalizeAttributesLabelMapFilter(){}
 
   /** Destructor */
-  ~NormalizeAttributesLabelMapFilter() ITK_OVERRIDE{}
+  ~NormalizeAttributesLabelMapFilter() override{}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  NormalizeAttributesLabelMapFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NormalizeAttributesLabelMapFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 }; // end of class
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNormalizeAttributesLabelMapFilter.txx"
+#include "otbNormalizeAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

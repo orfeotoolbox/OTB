@@ -32,19 +32,6 @@
 #include "otbSinclairReciprocalImageFilter.h"
 #include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 
-int otbReciprocalHuynenDecompImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  const unsigned int Dimension = 2;
-
-  typedef std::complex<double>   PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-
-  typedef otb::ReciprocalHuynenDecompImageFilter<ImageType, ImageType> FilterType;
-
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])

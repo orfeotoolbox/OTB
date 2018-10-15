@@ -24,6 +24,7 @@
 #include "otbPersistentImageFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbImage.h"
+#include <string>
 
 namespace otb
 {
@@ -97,21 +98,21 @@ protected:
   /** Constructor */
   PersistentSamplingFilterBase();
   /** Destructor */
-  ~PersistentSamplingFilterBase() ITK_OVERRIDE {}
+  ~PersistentSamplingFilterBase() override {}
 
   /** Use the same output information as input image, check the field index
    *  and the mask footprint */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Use an empty region to input image (pixel values not needed) and set
    *  the requested region for the mask */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate data should thread over */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
   /** Allocate in-memory layers for input and outputs */
-  void AllocateOutputs(void) ITK_OVERRIDE;
+  void AllocateOutputs(void) override;
 
   /** Start of main processing loop */
   virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid);
@@ -206,8 +207,8 @@ protected:
   ogr::Layer GetInMemoryOutput(unsigned int threadId, unsigned int index=0);
 
 private:
-  PersistentSamplingFilterBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentSamplingFilterBase(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Field name containing the class name*/
   std::string m_FieldName;
@@ -237,7 +238,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentSamplingFilterBase.txx"
+#include "otbPersistentSamplingFilterBase.hxx"
 #endif
 
 #endif

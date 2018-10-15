@@ -100,7 +100,7 @@ public:
     m_WaveletGenerator = WaveletGeneratorType::New();
     }
 
-  ~WaveletOperatorBase() ITK_OVERRIDE {}
+  ~WaveletOperatorBase() override {}
 
   /** Assignment operator */
   Self & operator =(const Self& other)
@@ -138,7 +138,7 @@ protected:
   /**
    * Prints some debugging information
    */
-  void PrintSelf(std::ostream& os, itk::Indent i) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent i) const override;
 
   typedef WaveletGenerator<TMotherWaveletOperator> WaveletGeneratorType;
   typedef typename WaveletGeneratorType::Pointer   WaveletGeneratorPointerType;
@@ -187,7 +187,7 @@ protected:
   void ReduceFilterLength(CoefficientVector& coeff);
 
   /** Arranges coefficients spatially in the memory buffer. */
-  void Fill(const CoefficientVector& coeff) ITK_OVERRIDE
+  void Fill(const CoefficientVector& coeff) override
   {
     this->FillCenteredDirectional(coeff);
   }
@@ -276,7 +276,7 @@ protected:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletOperatorBase.txx"
+#include "otbWaveletOperatorBase.hxx"
 #endif
 
 #endif

@@ -22,11 +22,11 @@
 #define otbContingencyTable_h
 
 #include <vector>
-#include <iostream>
 #include <iomanip>
 #include <itkObject.h>
 #include <itkObjectFactory.h>
 #include <itkVariableSizeMatrix.h>
+#include <string>
 
 namespace otb
 {
@@ -137,15 +137,15 @@ protected:
   {
     SetLabels(LabelList(), LabelList());
   }
-  ~ContingencyTable() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent itkNotUsed(indent)) const ITK_OVERRIDE
+  ~ContingencyTable() override {}
+  void PrintSelf(std::ostream& os, itk::Indent itkNotUsed(indent)) const override
   {
     os << *this;
   }
 
 private:
-  ContingencyTable(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  ContingencyTable(const Self &) = delete;
+  void operator=(const Self &) = delete;
 
   static size_t GetLabelsMaximumLength(const LabelList& labels, size_t maxWidth)
   {

@@ -22,22 +22,6 @@
 #include "itkListSample.h"
 #include "otbConfusionMatrixCalculator.h"
 
-int otbConfusionMatrixCalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-
-  typedef itk::VariableLengthVector<int>          PLabelType;
-  typedef itk::Statistics::ListSample<PLabelType> PListLabelType;
-  typedef itk::FixedArray<int, 1>                 RLabelType;
-  typedef itk::Statistics::ListSample<RLabelType> RListLabelType;
-  typedef otb::ConfusionMatrixCalculator<RListLabelType,
-      PListLabelType> CalculatorType;
-
-  CalculatorType::Pointer calculator = CalculatorType::New();
-
-  std::cout << calculator << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
 {
@@ -140,7 +124,7 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
     {
     calculator->Compute();
     }
-  catch (itk::ExceptionObject)
+  catch ( itk::ExceptionObject & )
     {
     return EXIT_FAILURE;
     }
@@ -270,7 +254,7 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
 
   const double oa = 3 / static_cast<double>(nbSamples);
 
-  if (vcl_abs (calculator->GetOverallAccuracy() - oa) > 0.000001)
+  if (std::abs (calculator->GetOverallAccuracy() - oa) > 0.000001)
     {
     return EXIT_FAILURE;
     }

@@ -80,28 +80,28 @@ public:
                       OutputImageType::ImageDimension);
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
 
 protected:
   ExtractROI();
-  ~ExtractROI() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ExtractROI() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ExtractROI
    *
    * \sa ExtractROIBase::GenerateOutputInformaton()  */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
-  ExtractROI(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ExtractROI(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbExtractROI.txx"
+#include "otbExtractROI.hxx"
 #endif
 
 #endif

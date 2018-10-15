@@ -27,7 +27,7 @@ otb_module( OTBMapla
   DEPENDS
     OTBMonteverdiCore
     OTBMonteverdiGUI
-    OTBQt4
+    OTBQt
 
   OPTIONAL_DEPENDS
 

@@ -31,6 +31,7 @@
 #include "itkImageFileWriter.h"
 
 #include "itkObjectFactoryBase.h"
+#include "itkFastMutexLock.h"
 
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
@@ -58,6 +59,7 @@
 // SPTW
 #include <algorithm>
 #include <vector>
+#include <string>
 
 #if defined(__GNUC__) || defined(__clang__)
 # pragma GCC diagnostic push
@@ -214,11 +216,13 @@ public:
   const InputImageType* GetInput();
 
   /** Does the real work. */
-  virtual void Update();
+  virtual void Update() override;
 
-  /** SimpleParallelTiffWriter Methods */
+  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
   virtual void SetFileName(const char* extendedFileName);
-  virtual void SetFileName(std::string extendedFileName);
+
+  virtual void SetFileName(const std::string& extendedFileName);
+
   virtual const char* GetFileName () const;
 
   /** Specify the region to write. If left NULL, then the whole image
@@ -252,14 +256,19 @@ public:
   itkSetMacro(TiffTiledMode, bool);
   itkGetMacro(TiffTiledMode, bool);
 
+  /** This override doesn't return a const ref on the actual boolean */
+  const bool & GetAbortGenerateData() const override;
+
+  void SetAbortGenerateData(bool val) override;
+
 protected:
   SimpleParallelTiffWriter();
   virtual ~SimpleParallelTiffWriter();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SimpleParallelTiffWriter(const SimpleParallelTiffWriter &); //purposely not implemented
-  void operator =(const SimpleParallelTiffWriter&); //purposely not implemented
+  SimpleParallelTiffWriter(const SimpleParallelTiffWriter &) = delete;
+  void operator =(const SimpleParallelTiffWriter&) = delete;
 
   void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
   {
@@ -325,6 +334,9 @@ private:
   bool m_Verbose;
   bool m_VirtualMode;
   bool m_TiffTiledMode;
+
+  /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 
@@ -333,7 +345,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSimpleParallelTiffWriter.txx"
+#include "otbSimpleParallelTiffWriter.hxx"
 #endif
 
 #endif

@@ -114,20 +114,20 @@ protected:
   BijectionCoherencyFilter();
 
   /** Destructor */
-  ~BijectionCoherencyFilter() ITK_OVERRIDE{};
+  ~BijectionCoherencyFilter() override{};
 
   /** Generate output information */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Generate input requested region */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  BijectionCoherencyFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BijectionCoherencyFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Tolerance radius (in pixels) */
   double m_Tolerance;
@@ -148,7 +148,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBijectionCoherencyFilter.txx"
+#include "otbBijectionCoherencyFilter.hxx"
 #endif
 
 #endif

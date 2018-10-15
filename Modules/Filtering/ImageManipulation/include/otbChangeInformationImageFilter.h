@@ -69,14 +69,14 @@ public:
 
 protected:
   ChangeInformationImageFilter() {}
-  ~ChangeInformationImageFilter() ITK_OVERRIDE {}
+  ~ChangeInformationImageFilter() override {}
 
   /** Apply changes to the output image metadata. */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
-  ChangeInformationImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ChangeInformationImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** List of metadata keys to change */
   std::set<std::string> m_ChangedKeys;
@@ -86,7 +86,7 @@ private:
 } // End of namespace OTB
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbChangeInformationImageFilter.txx"
+#include "otbChangeInformationImageFilter.hxx"
 #endif
 
 #endif

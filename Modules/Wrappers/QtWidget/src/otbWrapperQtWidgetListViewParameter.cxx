@@ -28,8 +28,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetListViewParameter::QtWidgetListViewParameter(ListViewParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
+QtWidgetListViewParameter::QtWidgetListViewParameter(ListViewParameter* param, QtWidgetModel* m, QWidget * parent)
+: QtWidgetParameterBase(param, m, parent),
   m_ListViewParam(param), m_LineHeight(20)
 {
 }
@@ -101,7 +101,7 @@ void QtWidgetListViewParameter::DoUpdateGUI()
 
 void QtWidgetListViewParameter::DoCreateWidget()
 {
-  m_ListView = new QListWidget();
+  m_ListView = new QListWidget(this);
   m_ListView->setToolTip(
     QString::fromStdString( m_ListViewParam->GetDescription() )
   );
@@ -115,7 +115,7 @@ void QtWidgetListViewParameter::DoCreateWidget()
     m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
 
-  connect( m_ListView, SIGNAL(itemSelectionChanged()), this, SLOT(SelectedItems()) );
+  connect( m_ListView, &QListWidget::itemSelectionChanged, this, &QtWidgetListViewParameter::SelectedItems );
 
   m_VLayout = new QHBoxLayout;
   m_VLayout->setContentsMargins(0, 0, 0, 0);

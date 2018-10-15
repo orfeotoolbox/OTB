@@ -57,6 +57,8 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetListEditWidget.cxx
   otbWrapperQtWidgetListEditItemModel.cxx
   otbWrapperQtWidgetParameterList.cxx
+  otbWrapperQtWidgetBoolParameter.cxx
+  otbWrapperQtWidgetSpinBoxes.cxx
   )
 
 set(OTBQtWidget_MOC_HDR
@@ -97,24 +99,32 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetListEditWidget.h
   ../include/otbWrapperQtWidgetListEditItemModel.h
   ../include/otbWrapperQtWidgetParameterList.h
+  ../include/otbWrapperQtWidgetBoolParameter.h
+  ../include/otbWrapperQtWidgetSpinBoxes.h
   )
 
 set( OTBQtWidget_FORMS
   otbWrapperQtWidgetListEditWidget.ui
   )
 
-qt4_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} )
-qt4_wrap_ui( OTBQtWidget_FORMS_HEADERS ${OTBQtWidget_FORMS} )
+set( OTBQtWidget_RESOURCES
+  otbWrapperQtWidgetIcons.qrc
+  )
+
+qt5_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} OPTIONS -p "." )
+qt5_wrap_ui( OTBQtWidget_FORMS_HEADERS ${OTBQtWidget_FORMS} )
+qt5_add_resources( OTBQtWidget_RESOURCES_RCC ${OTBQtWidget_RESOURCES} OPTIONS "-no-compress")
 
 add_library( OTBQtWidget
   ${OTBQtWidget_SRC}
   ${OTBQtWidget_FORMS_HEADERS}
   ${OTBQtWidget_MOC_SRC}
+  ${OTBQtWidget_RESOURCES_RCC}
   )
 
 target_link_libraries( OTBQtWidget
   ${OTBApplicationEngine_LIBRARIES}
-  ${OTBQt4_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   ${OTBQtAdapters_LIBRARIES}
   )
 
@@ -124,7 +134,7 @@ add_executable(otbApplicationLauncherQt otbApplicationLauncherQt.cxx)
 target_link_libraries(otbApplicationLauncherQt
   ${OTBQtWidget_LIBRARIES}
   ${OTBApplicationEngine_LIBRARIES}
-  ${OTBQt4_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   )
 otb_module_target(otbApplicationLauncherQt)
 set_linker_stack_size_flag(otbApplicationLauncherQt 10000000)

@@ -115,27 +115,27 @@ public:
   InputSpectralImageType * GetInputSpectralImage();
 
 protected:
-  void EnlargeOutputRequestedRegion( itk::DataObject *output ) ITK_OVERRIDE;
+  void EnlargeOutputRequestedRegion( itk::DataObject *output ) override;
 
-   void GenerateOutputInformation(void) ITK_OVERRIDE;
+   void GenerateOutputInformation(void) override;
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
 
   /** Constructor */
   LabelImageRegionMergingFilter();
 
   /** Destructor */
-  ~LabelImageRegionMergingFilter() ITK_OVERRIDE;
+  ~LabelImageRegionMergingFilter() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Method to build a map of adjacent regions */
   RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename OutputLabelImageType::Pointer inputLabelImage);
 
 private:
-  LabelImageRegionMergingFilter(const Self &);     //purposely not implemented
-  void operator =(const Self&);             //purposely not implemented
+  LabelImageRegionMergingFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Range bandwidth */
   RealType                       m_RangeBandwidth;
@@ -152,7 +152,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageRegionMergingFilter.txx"
+#include "otbLabelImageRegionMergingFilter.hxx"
 #endif
 
 #endif

@@ -109,15 +109,15 @@ public:
 
 protected:
   LabelizeConfidenceConnectedImageFilter();
-  ~LabelizeConfidenceConnectedImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LabelizeConfidenceConnectedImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Region growing */
-  void RegionGrowing(const IndexType indexSeed) ITK_OVERRIDE;
+  void RegionGrowing(const IndexType indexSeed) override;
 
 private:
-  LabelizeConfidenceConnectedImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelizeConfidenceConnectedImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Initial replace value*/
   OutputPixelType m_ReplaceValue;
@@ -127,7 +127,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelizeConfidenceConnectedImageFilter.txx"
+#include "otbLabelizeConfidenceConnectedImageFilter.hxx"
 #endif
 
 #endif

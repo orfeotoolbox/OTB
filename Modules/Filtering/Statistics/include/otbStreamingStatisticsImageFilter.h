@@ -142,16 +142,16 @@ public:
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
-  void Reset(void) ITK_OVERRIDE;
+  void AllocateOutputs() override;
+  void GenerateOutputInformation() override;
+  void Synthetize(void) override;
+  void Reset(void) override;
 
   itkSetMacro(IgnoreInfiniteValues, bool);
   itkGetMacro(IgnoreInfiniteValues, bool);
@@ -164,17 +164,17 @@ public:
 
 protected:
   PersistentStatisticsImageFilter();
-  ~PersistentStatisticsImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PersistentStatisticsImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType&
                              outputRegionForThread,
-                             itk::ThreadIdType threadId) ITK_OVERRIDE;
+                             itk::ThreadIdType threadId) override;
 
 private:
-  PersistentStatisticsImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentStatisticsImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   itk::Array<RealType>       m_ThreadSum;
   itk::Array<RealType>       m_SumOfSquares;
@@ -358,17 +358,17 @@ protected:
   /** Constructor */
   StreamingStatisticsImageFilter() {};
   /** Destructor */
-  ~StreamingStatisticsImageFilter() ITK_OVERRIDE {}
+  ~StreamingStatisticsImageFilter() override {}
 
 private:
-  StreamingStatisticsImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingStatisticsImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingStatisticsImageFilter.txx"
+#include "otbStreamingStatisticsImageFilter.hxx"
 #endif
 
 #endif

@@ -116,15 +116,15 @@ protected:
   /** Constructor */
   VectorDataToRoadDescriptionFilter();
   /** Destructor */
-  ~VectorDataToRoadDescriptionFilter() ITK_OVERRIDE {}
+  ~VectorDataToRoadDescriptionFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Triggers the Computation of the Descriptors */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
 
 private:
-  VectorDataToRoadDescriptionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToRoadDescriptionFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   typename ParserConditionFeatureFunctionType::Pointer  m_NDVIFeatureFunction;
   typename ParserConditionFeatureFunctionType::Pointer  m_SpectralAngleFeatureFunction;
@@ -136,7 +136,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToRoadDescriptionFilter.txx"
+#include "otbVectorDataToRoadDescriptionFilter.hxx"
 #endif
 
 #endif

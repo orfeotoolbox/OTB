@@ -61,18 +61,18 @@ public:
 
 protected:
   Eckert4MapProjection();
-  ~Eckert4MapProjection() ITK_OVERRIDE;
+  ~Eckert4MapProjection() override;
 
 private:
-  Eckert4MapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Eckert4MapProjection(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEckert4MapProjection.txx"
+#include "otbEckert4MapProjection.hxx"
 #endif
 
 #endif

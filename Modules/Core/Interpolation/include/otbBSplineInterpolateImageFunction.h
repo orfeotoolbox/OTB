@@ -108,7 +108,7 @@ public:
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
   OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& index) const ITK_OVERRIDE;
+    const ContinuousIndexType& index) const override;
 
   /** Derivative typedef support */
   typedef itk::CovariantVector<OutputType,
@@ -131,7 +131,7 @@ public:
   itkGetMacro(SplineOrder, int);
 
   /** Set the input image.  This must be set by the user. */
-  void SetInputImage(const TImageType * inputData) ITK_OVERRIDE;
+  void SetInputImage(const TImageType * inputData) override;
 
   /** Update coefficients filter. Coefficient filter are computed over the buffered
    region of the input image. */
@@ -139,9 +139,9 @@ public:
 
 protected:
   BSplineInterpolateImageFunction();
-  ~BSplineInterpolateImageFunction() ITK_OVERRIDE {}
-  void operator =(const Self&);  //purposely not implemented
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~BSplineInterpolateImageFunction() override {}
+  void operator =(const Self&) = delete;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   // These are needed by the smoothing spline routine.
   std::vector<CoefficientDataType> m_Scratch;           // temp storage for processing of Coefficients
@@ -151,7 +151,7 @@ protected:
   typename CoefficientImageType::ConstPointer m_Coefficients;       // Spline coefficients
 
 private:
-  BSplineInterpolateImageFunction(const Self &);  //purposely not implemented
+  BSplineInterpolateImageFunction(const Self &) = delete;
   /** Determines the weights for interpolation of the value x */
   void SetInterpolationWeights(const ContinuousIndexType& x,
                                const vnl_matrix<long>& EvaluateIndex,
@@ -191,7 +191,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBSplineInterpolateImageFunction.txx"
+#include "otbBSplineInterpolateImageFunction.hxx"
 #endif
 
 #endif

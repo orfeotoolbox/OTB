@@ -115,18 +115,18 @@ public:
   itkSetMacro(Direction, unsigned int);
   itkGetConstMacro(Direction, unsigned int);
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 protected:
   RemoveCarvingPathFilter();
-  ~RemoveCarvingPathFilter() ITK_OVERRIDE {}
+  ~RemoveCarvingPathFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void GenerateData() override;
 
 private:
-  RemoveCarvingPathFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RemoveCarvingPathFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   OutputImagePixelType m_Value;
   unsigned int         m_Direction;
@@ -135,7 +135,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRemoveCarvingPathFilter.txx"
+#include "otbRemoveCarvingPathFilter.hxx"
 #endif
 
 #endif

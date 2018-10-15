@@ -26,8 +26,8 @@ product by skipping either geographic or sensor-model information.")
 
 otb_module(OTBExtendedFilename
   DEPENDS
+    OTBCommon
     OTBIOGDAL
-    OTBBoostAdapters
     OTBITK
 
   TEST_DEPENDS

@@ -24,6 +24,7 @@
 #include "itkSingleValuedCostFunction.h"
 
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
+#include <string>
 
 namespace otb
 {
@@ -95,14 +96,14 @@ public:
 
   /** This method returns the value of the cost function corresponding
     * to the specified parameters.    */
-  MeasureType GetValue( const ParametersType & parameters ) const ITK_OVERRIDE;
+  MeasureType GetValue( const ParametersType & parameters ) const override;
 
   /** This method returns the derivative of the cost function corresponding
     * to the specified parameters.   */
   void GetDerivative( const ParametersType & parameters,
-                               DerivativeType & derivative ) const ITK_OVERRIDE;
+                               DerivativeType & derivative ) const override;
 
-  unsigned int GetNumberOfParameters(void) const ITK_OVERRIDE;
+  unsigned int GetNumberOfParameters(void) const override;
 
   itkSetMacro(Weight, double);
   itkGetConstMacro(Weight, double);
@@ -151,13 +152,13 @@ protected:
   /** Constructor */
   StandardDSCostFunction();
   /** Destructor */
-  ~StandardDSCostFunction() ITK_OVERRIDE {}
+  ~StandardDSCostFunction() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StandardDSCostFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StandardDSCostFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
   typename VectorDataType::Pointer            m_GTVectorData; //Ground Truth
@@ -177,7 +178,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStandardDSCostFunction.txx"
+#include "otbStandardDSCostFunction.hxx"
 #endif
 
 #endif

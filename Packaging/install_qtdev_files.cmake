@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 function(install_qtdev_files)
-  if(NOT HAVE_QT4)
+  if(NOT HAVE_QT)
     return()
   endif()
 set(QT_REQ_DIRS)
@@ -42,5 +42,8 @@ set(QT_REQ_DIRS)
     ${CMAKE_CURRENT_SOURCE_DIR}/Files/qt.conf
     DESTINATION ${PKG_STAGE_DIR}/bin
     )
- 
+
+  if(IS_DIRECTORY "${SUPERBUILD_INSTALL_DIR}/lib/fonts")
+    install_without_message("${SUPERBUILD_INSTALL_DIR}/lib/fonts" "lib")
+  endif()
 endfunction()

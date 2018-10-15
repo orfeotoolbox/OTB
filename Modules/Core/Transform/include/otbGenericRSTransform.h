@@ -22,6 +22,7 @@
 #define otbGenericRSTransform_h
 
 #include "otbCompositeTransform.h"
+#include <string>
 
 namespace otb
 {
@@ -168,35 +169,35 @@ public:
   /** Methods prototypes */
   virtual const TransformType * GetTransform() const;
 
-  OutputPointType TransformPoint(const InputPointType& point) const ITK_OVERRIDE;
+  OutputPointType TransformPoint(const InputPointType& point) const override;
 
   virtual void  InstantiateTransform();
   
   // Get inverse methods
   bool GetInverse(Self * inverseTransform) const;
-  InverseTransformBasePointer GetInverseTransform() const ITK_OVERRIDE;
+  InverseTransformBasePointer GetInverseTransform() const override;
 
   // Dummy set parameter method
-  void SetParameters(const typename Superclass::ParametersType &) ITK_OVERRIDE  {}
+  void SetParameters(const typename Superclass::ParametersType &) override  {}
 
   // Dummy ComputeJacobianWithRespectToParameters method
-  void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const ITK_OVERRIDE {}
+  void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const override {}
 
 protected:
   GenericRSTransform();
-  ~GenericRSTransform() ITK_OVERRIDE {}
+  ~GenericRSTransform() override {}
 
-  void Modified() const ITK_OVERRIDE
+  void Modified() const override
   {
     this->Superclass::Modified();
     m_TransformUpToDate = false;
   }
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GenericRSTransform(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  GenericRSTransform(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ImageKeywordlist m_InputKeywordList;
   ImageKeywordlist m_OutputKeywordList;
@@ -223,7 +224,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericRSTransform.txx"
+#include "otbGenericRSTransform.hxx"
 #endif
 
 #endif

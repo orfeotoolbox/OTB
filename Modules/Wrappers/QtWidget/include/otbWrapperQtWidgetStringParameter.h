@@ -21,11 +21,9 @@
 #ifndef otbWrapperQtWidgetStringParameter_h
 #define otbWrapperQtWidgetStringParameter_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -41,19 +39,19 @@ class OTBQtWidget_EXPORT QtWidgetStringParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetStringParameter(StringParameter*, QtWidgetModel*);
-  ~QtWidgetStringParameter() ITK_OVERRIDE;
+  QtWidgetStringParameter(StringParameter*, QtWidgetModel*, QWidget*);
+  ~QtWidgetStringParameter() override;
 
 protected slots:
   void SetValue( const QString& value );
 
 private:
-  QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented
-  void operator=(const QtWidgetStringParameter&); //purposely not implemented
+  QtWidgetStringParameter(const QtWidgetStringParameter&) = delete;
+  void operator=(const QtWidgetStringParameter&) = delete;
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
   StringParameter::Pointer m_StringParam;
   QHBoxLayout *            m_HLayout;

@@ -70,17 +70,17 @@ public:
   }
 
   /** Destructor */
-  ~AmplitudeFunctor() ITK_OVERRIDE {}
+  ~AmplitudeFunctor() override {}
 
   const char *GetDescription() const
   {return "Amplitude"; }
 
-  unsigned int GetOutputSize() const ITK_OVERRIDE
+  unsigned int GetOutputSize() const override
   {
     return 1;
   }
 
-  OutputPixelType operator ()(const VectorPixelType& inPixel) const ITK_OVERRIDE
+  OutputPixelType operator ()(const VectorPixelType& inPixel) const override
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);
@@ -91,13 +91,13 @@ public:
     return outPixel;
   }
 
-  OutputPixelType operator ()(ScalarType) const ITK_OVERRIDE
+  OutputPixelType operator ()(ScalarType) const override
   {
     //FIXME we don't handle the std::complex<> yet
     itkExceptionMacro(<< "Can't compute amplitude from a scalar value");
   }
 
-  OutputPixelType operator ()(const RGBPixelType& inPixel) const ITK_OVERRIDE
+  OutputPixelType operator ()(const RGBPixelType& inPixel) const override
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);
@@ -110,7 +110,7 @@ public:
     return outPixel;
   }
 
-  OutputPixelType operator ()(const RGBAPixelType& inPixel) const ITK_OVERRIDE
+  OutputPixelType operator ()(const RGBAPixelType& inPixel) const override
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);
@@ -126,7 +126,7 @@ public:
 private:
   inline ScalarType ComputeAmplitude(ScalarType a, ScalarType b) const
   {
-    return vcl_sqrt(a * a + b * b);
+    return std::sqrt(a * a + b * b);
   }
 
 };

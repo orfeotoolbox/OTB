@@ -77,21 +77,21 @@ public:
   }
 
   /** Main computation method */
-  void ThreadedGenerateData(const InputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void ThreadedGenerateData(const InputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void BeforeThreadedGenerateData() override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   /** Constructor */
   BinaryImageToDensityImageFilter();
   /** Destructor */
-  ~BinaryImageToDensityImageFilter() ITK_OVERRIDE;
+  ~BinaryImageToDensityImageFilter() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BinaryImageToDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryImageToDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   CountFunctionPointerType m_CountFunction;
 
@@ -102,7 +102,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryImageToDensityImageFilter.txx"
+#include "otbBinaryImageToDensityImageFilter.hxx"
 #endif
 
 #endif

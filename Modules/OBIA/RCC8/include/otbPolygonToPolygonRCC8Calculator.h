@@ -109,9 +109,9 @@ protected:
   /** Constructor */
   PolygonToPolygonRCC8Calculator();
   /** Destructor */
-  ~PolygonToPolygonRCC8Calculator() ITK_OVERRIDE {}
+  ~PolygonToPolygonRCC8Calculator() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   /** The RCC8 relation value */
@@ -131,7 +131,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolygonToPolygonRCC8Calculator.txx"
+#include "otbPolygonToPolygonRCC8Calculator.hxx"
 #endif
 
 #endif

@@ -31,6 +31,7 @@
 #include "otbLabeledOutputAccessor.h"
 
 #include "otbMeanShiftSmoothingImageFilter.h"
+#include <string>
 
 namespace otb
 {
@@ -144,14 +145,14 @@ public:
 protected:
   PersistentImageToOGRLayerSegmentationFilter();
 
-  ~PersistentImageToOGRLayerSegmentationFilter() ITK_OVERRIDE;
+  ~PersistentImageToOGRLayerSegmentationFilter() override;
 
 
 private:
-  PersistentImageToOGRLayerSegmentationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageToOGRLayerSegmentationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
-  OGRDataSourcePointerType ProcessTile() ITK_OVERRIDE;
+  OGRDataSourcePointerType ProcessTile() override;
 
 
   int m_TileMaxLabel;
@@ -349,18 +350,18 @@ protected:
   /** Constructor */
   StreamingImageToOGRLayerSegmentationFilter() {}
   /** Destructor */
-  ~StreamingImageToOGRLayerSegmentationFilter() ITK_OVERRIDE {}
+  ~StreamingImageToOGRLayerSegmentationFilter() override {}
 
 private:
-  StreamingImageToOGRLayerSegmentationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingImageToOGRLayerSegmentationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingImageToOGRLayerSegmentationFilter.txx"
+#include "otbStreamingImageToOGRLayerSegmentationFilter.hxx"
 #endif
 
 #endif

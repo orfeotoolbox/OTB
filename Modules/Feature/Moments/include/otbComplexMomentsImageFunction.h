@@ -92,17 +92,17 @@ public:
                       InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  OutputType EvaluateAtIndex(const IndexType& index) const ITK_OVERRIDE;
+  OutputType EvaluateAtIndex(const IndexType& index) const override;
 
   /** Evaluate the function at non-integer positions */
-  OutputType Evaluate(const PointType& point) const ITK_OVERRIDE
+  OutputType Evaluate(const PointType& point) const override
   {
     IndexType index;
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
   OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const ITK_OVERRIDE
+    const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -122,12 +122,12 @@ public:
 
 protected:
   ComplexMomentsImageFunction();
-  ~ComplexMomentsImageFunction() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ComplexMomentsImageFunction() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ComplexMomentsImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ComplexMomentsImageFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   unsigned int m_Pmax;
   unsigned int m_Qmax;
@@ -138,7 +138,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComplexMomentsImageFunction.txx"
+#include "otbComplexMomentsImageFunction.hxx"
 #endif
 
 #endif

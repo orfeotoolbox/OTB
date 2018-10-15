@@ -89,16 +89,16 @@ public:
 
 protected:
   LabelMapClassifier();
-  ~LabelMapClassifier() ITK_OVERRIDE {};
+  ~LabelMapClassifier() override {};
 
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) ITK_OVERRIDE;
+  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
 
-  void ReleaseInputs() ITK_OVERRIDE;
+  void ReleaseInputs() override;
 
 
 private:
-  LabelMapClassifier(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapClassifier(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The learning model used for classification */
   ModelPointer m_Model;
@@ -111,7 +111,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapClassifier.txx"
+#include "otbLabelMapClassifier.hxx"
 #endif
 
 #endif

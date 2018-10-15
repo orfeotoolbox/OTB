@@ -23,6 +23,7 @@
 
 #include "itkProcessObject.h"
 #include "otbOGRDataSourceWrapper.h"
+#include <string>
 
 namespace otb
 {
@@ -114,22 +115,22 @@ public:
 
 protected:
   LabelImageToOGRDataSourceFilter();
-  ~LabelImageToOGRDataSourceFilter() ITK_OVERRIDE {}
+  ~LabelImageToOGRDataSourceFilter() override {}
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate Data method*/
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** DataObject pointer */
   typedef itk::DataObject::Pointer DataObjectPointer;
 
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
 private:
-  LabelImageToOGRDataSourceFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);      //purposely not implemented
+  LabelImageToOGRDataSourceFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   std::string m_FieldName;
   bool m_Use8Connected;
@@ -141,7 +142,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelImageToOGRDataSourceFilter.txx"
+#include "otbLabelImageToOGRDataSourceFilter.hxx"
 #endif
 
 #endif

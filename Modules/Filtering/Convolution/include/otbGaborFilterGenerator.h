@@ -112,21 +112,21 @@ protected:
   /** constructor */
   GaborFilterGenerator();
   /** destructor */
-  ~GaborFilterGenerator() ITK_OVERRIDE {}
+  ~GaborFilterGenerator() override {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Generate the filter coefficients */
   void GenerateFilter();
 
   /** Reimplement the Modified() method
    *to set the NeedToGenerateFilter to true */
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 private:
-  GaborFilterGenerator(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GaborFilterGenerator(const Self&) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius of the filter */
   RadiusType m_Radius;
@@ -149,7 +149,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGaborFilterGenerator.txx"
+#include "otbGaborFilterGenerator.hxx"
 #endif
 
 #endif

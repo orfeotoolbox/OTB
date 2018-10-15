@@ -63,7 +63,7 @@ int CurlHelperStub::RetrieveFile(const std::ostringstream& urlStream, std::strin
   if (urlStream.str().compare("http://api.geonames.org/findNearbyPlaceName?lat=1.29&lng=103.78&username=otbteam") == 0)
     {
     std::ofstream file;
-    file.open(filename.c_str());
+    file.open(filename);
     file << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
       "<geonames>\n"
       "<geoname>\n"

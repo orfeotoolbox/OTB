@@ -86,22 +86,22 @@ public:
   /** Return the output image direction */
   OutputImageDirectionType * GetOutputDirection();
 
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   ImageToModulusAndDirectionImageFilter();
-  ~ImageToModulusAndDirectionImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ImageToModulusAndDirectionImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageToModulusAndDirectionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToModulusAndDirectionImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToModulusAndDirectionImageFilter.txx"
+#include "otbImageToModulusAndDirectionImageFilter.hxx"
 #endif
 
 #endif

@@ -82,27 +82,27 @@ public:
   itkGetMacro(DerivativeStep, ParametersValueType);
 
   /** \return The accuracy value corresponding the parameters */
-  MeasureType GetValue(const ParametersType& parameters) const ITK_OVERRIDE;
+  MeasureType GetValue(const ParametersType& parameters) const override;
 
   /** \return The accuracy derivative corresponding to the parameters */
-  void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const ITK_OVERRIDE;
+  void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const override;
 
   /** \return the number of parameters to optimize */
-  unsigned int GetNumberOfParameters(void) const ITK_OVERRIDE;
+  unsigned int GetNumberOfParameters(void) const override;
 
 protected:
   /// Constructor
   SVMCrossValidationCostFunction();
   /// Destructor
-  ~SVMCrossValidationCostFunction() ITK_OVERRIDE;
+  ~SVMCrossValidationCostFunction() override;
 
   /** Update svm parameters struct according to the input parameters
     */
   void UpdateParameters(const ParametersType& parameters) const;
 
 private:
-  SVMCrossValidationCostFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SVMCrossValidationCostFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /**Pointer to the SVM model to optimize */
   SVMModelPointer m_Model;
@@ -115,7 +115,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVMCrossValidationCostFunction.txx"
+#include "otbSVMCrossValidationCostFunction.hxx"
 #endif
 
 #endif

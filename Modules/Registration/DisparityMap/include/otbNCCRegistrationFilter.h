@@ -137,29 +137,29 @@ public:
 
 protected:
   NCCRegistrationFilter();
-  ~NCCRegistrationFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~NCCRegistrationFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Initialize the state of filter and equation before each iteration. */
-  void InitializeIteration() ITK_OVERRIDE;
+  void InitializeIteration() override;
 
   /** Apply update. */
   using Superclass::ApplyUpdate;
   virtual void ApplyUpdate(TimeStepType dt);
 
   /** Update the Input requested region. */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
 private:
-  NCCRegistrationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NCCRegistrationFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNCCRegistrationFilter.txx"
+#include "otbNCCRegistrationFilter.hxx"
 #endif
 
 #endif

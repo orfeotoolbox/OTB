@@ -140,19 +140,19 @@ public:
 protected:
   DotProductImageFilter();
 
-  ~DotProductImageFilter() ITK_OVERRIDE {}
+  ~DotProductImageFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  DotProductImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DotProductImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDotProductImageFilter.txx"
+#include "otbDotProductImageFilter.hxx"
 #endif
 
 #endif

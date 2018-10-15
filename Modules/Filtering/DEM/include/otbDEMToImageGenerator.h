@@ -21,8 +21,8 @@
 #ifndef otbDEMToImageGenerator_h
 #define otbDEMToImageGenerator_h
 
-#include <iostream>
 #include <stdio.h>
+#include <string>
 
 #include "itkImageSource.h"
 #include "otbImage.h"
@@ -176,13 +176,13 @@ public:
 
 protected:
   DEMToImageGenerator();
-  ~DEMToImageGenerator() ITK_OVERRIDE{}
+  ~DEMToImageGenerator() override{}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void BeforeThreadedGenerateData() override;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
+                            itk::ThreadIdType threadId) override;
+  void GenerateOutputInformation() override;
 
   DEMHandlerType::Pointer m_DEMHandler;
   PointType               m_OutputOrigin;
@@ -192,8 +192,8 @@ protected:
   bool                    m_AboveEllipsoid;
 
 private:
-  DEMToImageGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DEMToImageGenerator(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   GenericRSTransformPointerType      m_Transform;
 };
@@ -201,7 +201,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDEMToImageGenerator.txx"
+#include "otbDEMToImageGenerator.hxx"
 #endif
 
 #endif

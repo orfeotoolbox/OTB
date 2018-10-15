@@ -104,20 +104,20 @@ protected:
   /**
    * Destructor.
    */
-  ~EdgeDensityImageFilter() ITK_OVERRIDE;
+  ~EdgeDensityImageFilter() override;
   /**
    * Standard PrintSelf method.
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Main computation method.
    */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
 
-  EdgeDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EdgeDensityImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   DetectorPointerType     m_Detector;
   DensityImagePointerType m_DensityImageFilter;
@@ -125,7 +125,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEdgeDensityImageFilter.txx"
+#include "otbEdgeDensityImageFilter.hxx"
 #endif
 
 #endif

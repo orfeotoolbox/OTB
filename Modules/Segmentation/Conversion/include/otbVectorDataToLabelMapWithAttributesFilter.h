@@ -122,44 +122,44 @@ public:
   /**
    * Run-time type information (and related methods)
    */
-  itkTypeMacro(VectorDataToLabelMapWithAttributesFilter, ImageToImageFilter)
+  itkTypeMacro(VectorDataToLabelMapWithAttributesFilter, ImageToImageFilter);
 ;
 
   /**
    * Method for creation through the object factory.
    */
-  itkNewMacro(Self)
+  itkNewMacro(Self);
 ;
 
   /**
    * Set/Get the value used as "background" in the output image.
    * Defaults to NumericTraits<PixelType>::NonpositiveMin().
    */
-  itkSetMacro(BackgroundValue, OutputLabelMapPixelType)
-; itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType)
+  itkSetMacro(BackgroundValue, OutputLabelMapPixelType);
+; itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType);
 ;
 
   /** Set the size of the output image. */
-  itkSetMacro(Size, SizeType)
+  itkSetMacro(Size, SizeType);
 ;
 
   /** Get the size of the output image. */
-  itkGetConstReferenceMacro(Size, SizeType)
+  itkGetConstReferenceMacro(Size, SizeType);
 ;
 
   /** Set the origin of the vector data.
    * \sa GetOrigin() */
-  itkSetMacro(Origin, OriginType)
+  itkSetMacro(Origin, OriginType);
 ;
   virtual void SetOrigin(const double origin[2]);
   virtual void SetOrigin(const float origin[2]);
 
-  itkGetConstReferenceMacro(Origin, OriginType)
+  itkGetConstReferenceMacro(Origin, OriginType);
 ;
 
   /** Get/Set start index*/
-  itkGetConstReferenceMacro(StartIndex, IndexType)
-; itkSetMacro(StartIndex, IndexType)
+  itkGetConstReferenceMacro(StartIndex, IndexType);
+; itkSetMacro(StartIndex, IndexType);
 ;
   /** Set the spacing (size of a pixel) of the vector data.
    * \sa GetSignedSpacing() */
@@ -167,7 +167,7 @@ public:
   virtual void SetSpacing(const double spacing[2]);
   virtual void SetSpacing(const float spacing[2]);
 
-  itkGetConstReferenceMacro(Spacing, SpacingType)
+  itkGetConstReferenceMacro(Spacing, SpacingType);
 ;
 
   /** Set/Get the Vector data input of this process object.  */
@@ -178,29 +178,29 @@ public:
   const InputVectorDataType * GetInput(unsigned int idx);
 
   /** Set/Get Automatic size computation mode*/
-  itkSetMacro(AutomaticSizeComputation, bool)
-; itkGetMacro(AutomaticSizeComputation, bool)
+  itkSetMacro(AutomaticSizeComputation, bool);
+; itkGetMacro(AutomaticSizeComputation, bool);
 ;
 
   /** Set/Get Initial label value */
-  itkSetMacro(InitialLabel, LabelType)
-; itkGetMacro(InitialLabel, LabelType)
+  itkSetMacro(InitialLabel, LabelType);
+; itkGetMacro(InitialLabel, LabelType);
 ;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 protected:
   VectorDataToLabelMapWithAttributesFilter();
-  ~VectorDataToLabelMapWithAttributesFilter() ITK_OVERRIDE
+  ~VectorDataToLabelMapWithAttributesFilter() override
   {
   }
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
    * Standard pipeline method.
    */
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** VectorDataToLabelMapWithAttributesFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().
@@ -214,8 +214,8 @@ protected:
   //   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
 
 private:
-  VectorDataToLabelMapWithAttributesFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataToLabelMapWithAttributesFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   void ProcessNode(InternalTreeNodeType * source);
 
@@ -242,7 +242,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataToLabelMapWithAttributesFilter.txx"
+#include "otbVectorDataToLabelMapWithAttributesFilter.hxx"
 #endif
 
 #endif

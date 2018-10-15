@@ -41,14 +41,14 @@ public:
   typedef otb::MultiChannelExtractROI<FloatVectorImageType::InternalPixelType,
               FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
 
-  typedef otb::GenericRSTransform<>  RSTransformType;                                    
+  typedef otb::GenericRSTransform<>  RSTransformType;
   /** Standard macro */
   itkNewMacro(Self);
 
   itkTypeMacro(PixelValue, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("PixelValue");
     SetDescription("Get the value of a pixel.");
@@ -64,10 +64,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Miscellaneous");
-    AddDocTag("Utilities");
-    AddDocTag("Coordinates");
-    AddDocTag("Raster");
+    AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Coordinates);
 
     AddParameter(ParameterType_InputImage , "in", "Input Image");
     SetParameterDescription("in" , "Input image");
@@ -81,19 +79,19 @@ private:
           "This will be the Y coordinate interpreted depending on the "
           "chosen mode");
 
-    AddParameter(ParameterType_Choice , "mode" , 
+    AddParameter(ParameterType_Choice , "mode" ,
           "Coordinate system used to designate the pixel");
-    SetParameterDescription( "mode" , 
+    SetParameterDescription( "mode" ,
           "Different modes can be selected, default mode is Index.");
     AddChoice( "mode.index" , "Index");
-    SetParameterDescription( "mode.index" , 
+    SetParameterDescription( "mode.index" ,
           "This mode uses the given coordinates as index to locate the pixel.");
     AddChoice( "mode.physical" , "Image physical space");
-    SetParameterDescription( "mode.physical" , 
+    SetParameterDescription( "mode.physical" ,
           "This mode interprets the given coordinates in the image "
           "physical space.");
     AddChoice( "mode.epsg" , "EPSG coordinates");
-    SetParameterDescription( "mode.epsg" , 
+    SetParameterDescription( "mode.epsg" ,
           "This mode interprets the given coordinates in the specified "
           "geographical coordinate system by the EPSG code.");
 
@@ -120,7 +118,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     if ( HasValue("in") )
       {
@@ -169,7 +167,7 @@ private:
       RSTransformType::Pointer inverse = RSTransformType::New();
       if ( HasUserValue("mode.epsg.code") )
         {
-        std::string wktFromEpsg = 
+        std::string wktFromEpsg =
           otb::GeoInformationConversion::ToWKT(GetParameterInt( "mode.epsg.code" ));
         inverse->SetOutputProjectionRef(wktFromEpsg);
         }
@@ -193,20 +191,20 @@ private:
       if ( coma != std::string::npos )
         {
         std::size_t zero = boundaries[i].find_last_not_of("0");
-        if ( zero != std::string::npos ) 
+        if ( zero != std::string::npos )
           boundaries[i].erase(zero + 1);
         else
           boundaries[i] = "0";
         }
       }
-  
+
     std::string box = "";
     box += "["+boundaries[2]+" , "+boundaries[0]+"] x ";
     box += "["+boundaries[3]+" , "+boundaries[1]+"]";
     return box;
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     std::string mode = GetParameterString( "mode" );
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
@@ -217,7 +215,7 @@ private:
       {
       id[0] = static_cast< int >( GetParameterFloat( "coordx" ) );
       id[1] = static_cast< int >( GetParameterFloat( "coordy" ) );
-      if (static_cast< unsigned int >( id[0] ) >= 
+      if (static_cast< unsigned int >( id[0] ) >=
                     inImage->GetLargestPossibleRegion().GetSize()[0]
        || static_cast< unsigned int >( id[1] ) >=
                     inImage->GetLargestPossibleRegion().GetSize()[1]
@@ -239,16 +237,16 @@ private:
       pixel[ 1 ] = GetParameterFloat( "coordy" );
       isPixelIn = inImage->TransformPhysicalPointToIndex(pixel,id);
       }
-    
+
     else if ( mode == "epsg" )
       {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       if ( HasUserValue("mode.epsg.code") )
         {
-        std::string wktFromEpsg = 
+        std::string wktFromEpsg =
           otb::GeoInformationConversion::ToWKT( GetParameterInt( "mode.epsg.code" ) );
         rsTransform->SetInputProjectionRef(wktFromEpsg);
-        }      
+        }
       rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
       rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
       rsTransform->InstantiateTransform();
@@ -274,7 +272,7 @@ private:
     // Extract the channels if needed
     if ( GetParameterByKey("cl")->GetActive() )
       {
-      for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx) 
+      for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx)
         {
         extractor->SetChannel(GetSelectedItems("cl")[idx] + 1 );
         }
@@ -286,13 +284,13 @@ private:
     region.SetIndex(id);
 
     extractor->SetExtractionRegion(region);
-    extractor->Update();   
+    extractor->Update();
 
     // Display the pixel value
     id.Fill(0);
     std::ostringstream oss;
     oss << extractor->GetOutput()->GetPixel(id);
-    SetParameterString("value", oss.str(), false);
+    SetParameterString("value", oss.str());
     //Display image information in the dedicated logger
     otbAppLogINFO( << oss.str() );
   }

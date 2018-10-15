@@ -110,13 +110,13 @@ protected:
   LmvmPanSharpeningFusionImageFilter();
 
   /** Destructor */
-  ~LmvmPanSharpeningFusionImageFilter() ITK_OVERRIDE {};
+  ~LmvmPanSharpeningFusionImageFilter() override {};
 
   /** Call to generate data, wiring composite internal minipipeline */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   LmvmPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented
@@ -164,7 +164,7 @@ private:
 
       TInternalPrecision scale = 1.;
 
-      if(vcl_abs(stdPanchroPixel) > 1e-10)
+      if(std::abs(stdPanchroPixel) > 1e-10)
       {
         scale = 1.0/stdPanchroPixel;
       }
@@ -265,7 +265,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLmvmPanSharpeningFusionImageFilter.txx"
+#include "otbLmvmPanSharpeningFusionImageFilter.hxx"
 #endif
 
 #endif

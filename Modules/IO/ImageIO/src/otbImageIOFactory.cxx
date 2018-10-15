@@ -77,7 +77,7 @@ ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
       }
     }
   }
-  return ITK_NULLPTR;
+  return nullptr;
 }
 
 void

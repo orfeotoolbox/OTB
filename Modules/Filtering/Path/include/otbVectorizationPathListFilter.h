@@ -117,11 +117,11 @@ protected:
   /** Constructor */
   VectorizationPathListFilter();
   /** Destructor */
-  ~VectorizationPathListFilter() ITK_OVERRIDE {}
+  ~VectorizationPathListFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Main computation method */
-  void GenerateData(void) ITK_OVERRIDE;
+  void GenerateData(void) override;
   /**
    * Compute a vector of the 8  neighbors to explore from the direction and the type of search (forward or backward).
    * \param direction The direction
@@ -137,14 +137,14 @@ protected:
    */
   OffsetVectorType GetThreeNeighborOffsetFromDirection(double direction, unsigned int flagReverse);
 private:
-  VectorizationPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorizationPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
   /** Amplitude threshold to start following a path */
   InputPixelType m_AmplitudeThreshold;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorizationPathListFilter.txx"
+#include "otbVectorizationPathListFilter.hxx"
 #endif
 
 #endif

@@ -21,15 +21,13 @@
 #ifndef otbWrapperQtWidgetParameterGroup_h
 #define otbWrapperQtWidgetParameterGroup_h
 
-#include <QtGui>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
+#include <QtWidgets>
 #include "otbWrapperParameterGroup.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperOutputProcessXMLParameter.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -45,21 +43,21 @@ class OTBQtWidget_EXPORT QtWidgetParameterGroup : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
-  ~QtWidgetParameterGroup() ITK_OVERRIDE;
+  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*, QWidget*);
+  ~QtWidgetParameterGroup() override;
 
 public slots:
-  void SetActivationState( bool value ) ITK_OVERRIDE;
+  void SetActivationState( bool value ) override;
 
 private:
-  QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
-  void operator=(const QtWidgetParameterGroup&); //purposely not implemented
+  QtWidgetParameterGroup(const QtWidgetParameterGroup&) = delete;
+  void operator=(const QtWidgetParameterGroup&) = delete;
 
-  void DoCreateWidget() ITK_OVERRIDE;
+  void DoCreateWidget() override;
 
-  void DoUpdateGUI() ITK_OVERRIDE;
+  void DoUpdateGUI() override;
 
-  virtual void ProcessChild(Parameter * currentNode, bool status);
+  virtual void ProcessChild(QObject* currentNode, bool status);
 
   ParameterGroup::Pointer m_ParamList;
 

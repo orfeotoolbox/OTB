@@ -73,16 +73,16 @@ public:
 
 protected:
   /** Standard itk::ProcessObject subclass method. */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   ListSampleSource();
-  ~ListSampleSource() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~ListSampleSource() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ListSampleSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ListSampleSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class ListSampleSource
 
@@ -90,7 +90,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleSource.txx"
+#include "otbListSampleSource.hxx"
 #endif
 
 #endif

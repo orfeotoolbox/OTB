@@ -93,7 +93,7 @@ bool ONERAImageIO::CanReadFile(const char* FileNameToRead)
     m_Headerfile.close();
     }
 
-  if (itksys::SystemTools::FileIsDirectory(filename.c_str()) == true)
+  if (itksys::SystemTools::FileIsDirectory(filename) == true)
     {
     return false;
     }
@@ -101,13 +101,13 @@ bool ONERAImageIO::CanReadFile(const char* FileNameToRead)
   const std::string HeaderFileName = System::GetRootName(filename) + ".ent";
   const std::string DataFileName = System::GetRootName(filename) + ".dat";
 
-  m_Headerfile.open(HeaderFileName.c_str(),  std::ios::in);
+  m_Headerfile.open(HeaderFileName,  std::ios::in);
   if (m_Headerfile.fail())
     {
     otbMsgDevMacro(<< "ONERAImageIO::CanReadFile() failed header open ! ");
     return false;
     }
-  m_Datafile.open(DataFileName.c_str(),  std::ios::in);
+  m_Datafile.open(DataFileName,  std::ios::in);
   if (m_Datafile.fail())
     {
     otbMsgDevMacro(<< "ONERAImageIO::CanReadFile() failed data open ! ");
@@ -233,7 +233,7 @@ void ONERAImageIO::Read(void* buffer)
     }
 
   delete[] value;
-  value = ITK_NULLPTR;
+  value = nullptr;
 
 }
 
@@ -255,7 +255,7 @@ bool ONERAImageIO::OpenOneraDataFileForReading(const char* filename)
   const std::string DataFileName = System::GetRootName(filename) + ".dat";
 
   // Open the new file for reading
-  m_Datafile.open(DataFileName.c_str(),  std::ios::in | std::ios::binary);
+  m_Datafile.open(DataFileName,  std::ios::in | std::ios::binary);
   if (m_Datafile.fail())
     {
     otbMsgDebugMacro(<< "ONERAImageIO::CanReadFile() failed data open ! ");
@@ -283,7 +283,7 @@ bool ONERAImageIO::OpenOneraHeaderFileForReading(const char* filename)
 
   // Open the new file for reading
   // Actually open the file
-  m_Headerfile.open(HeaderFileName.c_str(),  std::ios::in);
+  m_Headerfile.open(HeaderFileName,  std::ios::in);
   if (m_Headerfile.fail())
     {
     otbMsgDebugMacro(<< "ONERAImageIO::CanReadFile() failed header open ! ");
@@ -384,13 +384,13 @@ void ONERAImageIO::InternalReadImageInformation()
   otbMsgDebugMacro(<< "Driver to read: ONERA");
   otbMsgDebugMacro(<< "         Read  file         : " << m_FileName);
   otbMsgDebugMacro(<< "         Size               : " << m_Dimensions[0] << "," << m_Dimensions[1]);
-  otbMsgDebugMacro(<< "         PixelType          : " << this->GetPixelTypeAsString(this->GetPixelType()));
-  otbMsgDebugMacro(<< "         ComponentType      : " << this->GetComponentTypeAsString(this->GetComponentType()));
+  otbMsgDebugMacro(<< "         PixelType          : " << ImageIOBase::GetPixelTypeAsString(this->GetPixelType()));
+  otbMsgDebugMacro(<< "         ComponentType      : " << ImageIOBase::GetComponentTypeAsString(this->GetComponentType()));
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
   otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
-  otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
-  otbMsgDebugMacro(<< "         File byte order    : " << this->GetByteOrderAsString(m_FileByteOrder));
+  otbMsgDebugMacro(<< "         Host byte order    : " << ImageIOBase::GetByteOrderAsString(m_ByteOrder));
+  otbMsgDebugMacro(<< "         File byte order    : " << ImageIOBase::GetByteOrderAsString(m_FileByteOrder));
 
   delete [] sHeader;
 }
@@ -415,7 +415,7 @@ bool ONERAImageIO::OpenOneraDataFileForWriting(const char* filename)
   // Open the new file for reading
 
   // Actually open the file
-  m_Datafile.open(DataFileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
+  m_Datafile.open(DataFileName,  std::ios::out | std::ios::trunc | std::ios::binary);
   if (m_Datafile.fail())
     {
     otbMsgDebugMacro(<< "ONERAImageIO::OpenOneraDataFileForWriting() failed data open ! ");
@@ -443,7 +443,7 @@ bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)
 
   // Open the new file for reading
   // Actually open the file
-  m_Headerfile.open(HeaderFileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
+  m_Headerfile.open(HeaderFileName,  std::ios::out | std::ios::trunc | std::ios::binary);
   if (m_Headerfile.fail())
     {
     otbMsgDebugMacro(<< "ONERAImageIO::OpenOneraHeaderFileForWriting() failed header open ! ");
@@ -517,7 +517,7 @@ void ONERAImageIO::Write(const void* buffer)
     }
 
   delete[] tempmemory;
-  tempmemory = ITK_NULLPTR;
+  tempmemory = nullptr;
 }
 
 // To be consistent with the behavior of GDALImageIO
@@ -544,7 +544,7 @@ void ONERAImageIO::InternalWriteImageInformation()
     m_Headerfile << "#                    [fichier en-tete produit par les routines de otb (Orfeo ToolBox) ]" <<
     std::endl;
     m_Headerfile << "# Nom du look :" << std::endl;
-    m_Headerfile << "Look.dat= \t" << DataFileName.c_str() <<  std::endl;
+    m_Headerfile << "Look.dat= \t" << DataFileName <<  std::endl;
     m_Headerfile << std::endl;
     m_Headerfile << "# Structure du fichier et codage des pixels :" << std::endl;
     m_Headerfile << "# 4 octets precedent la premiere ligne : ils correspondent a un nombre magique [I4= 33554433] " <<
@@ -595,7 +595,7 @@ void ONERAImageIO::InternalWriteImageInformation()
     otbMsgDebugMacro(<< "         ComponentType      : " << this->GetComponentType());
     otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
     otbMsgDebugMacro(<< "         BytePerPixel       : " << m_BytePerPixel);
-    otbMsgDebugMacro(<< "         Host byte order    : " << this->GetByteOrderAsString(m_ByteOrder));
+    otbMsgDebugMacro(<< "         Host byte order    : " << ImageIOBase::GetByteOrderAsString(m_ByteOrder));
 }
 
 } // end namespace otb

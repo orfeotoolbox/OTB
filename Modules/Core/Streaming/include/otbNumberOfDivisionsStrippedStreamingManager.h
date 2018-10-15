@@ -68,11 +68,11 @@ public:
   itkGetMacro(NumberOfDivisions, unsigned int);
 
   /** Actually computes the stream divisions given a DataObject and its region to write */
-  void PrepareStreaming(itk::DataObject * /*input*/, const RegionType &region) ITK_OVERRIDE;
+  void PrepareStreaming(itk::DataObject * /*input*/, const RegionType &region) override;
 
 protected:
   NumberOfDivisionsStrippedStreamingManager();
-  ~NumberOfDivisionsStrippedStreamingManager() ITK_OVERRIDE;
+  ~NumberOfDivisionsStrippedStreamingManager() override;
 
   /** The splitter type used to generate the different strips */
   typedef itk::ImageRegionSplitterSlowDimension SplitterType;
@@ -88,7 +88,7 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNumberOfDivisionsStrippedStreamingManager.txx"
+#include "otbNumberOfDivisionsStrippedStreamingManager.hxx"
 #endif
 
 #endif

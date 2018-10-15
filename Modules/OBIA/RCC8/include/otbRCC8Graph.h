@@ -127,9 +127,9 @@ protected:
   /** Constructor */
   RCC8Graph();
   /** Destructor */
-  ~RCC8Graph() ITK_OVERRIDE {}
+  ~RCC8Graph() override {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Initialize a range of vertex.
    * \param num The index of the last vertices to initialize.
@@ -146,7 +146,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8Graph.txx"
+#include "otbRCC8Graph.hxx"
 #endif
 
 #endif

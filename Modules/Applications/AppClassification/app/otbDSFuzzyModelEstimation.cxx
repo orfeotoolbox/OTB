@@ -51,12 +51,12 @@ typedef itk::AmoebaOptimizer         OptimizerType;
 typedef   const OptimizerType   *    OptimizerPointer;
 
 
-void Execute(itk::Object *caller, const itk::EventObject & event) ITK_OVERRIDE
+void Execute(itk::Object *caller, const itk::EventObject & event) override
 {
   Execute( (const itk::Object *)caller, event);
 }
 
-void Execute(const itk::Object * object, const itk::EventObject & event) ITK_OVERRIDE
+void Execute(const itk::Object * object, const itk::EventObject & event) override
 {
   OptimizerPointer optimizer =
       dynamic_cast< OptimizerPointer >( object );
@@ -115,7 +115,7 @@ public:
   itkTypeMacro(DSFuzzyModelEstimation, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("DSFuzzyModelEstimation");
     SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
@@ -143,12 +143,12 @@ private:
     AddParameter(ParameterType_String, "cri", "Criterion");
     SetParameterDescription("cri", "Dempster Shafer criterion (by default (belief+plausibility)/2)");
     MandatoryOff("cri");
-    SetParameterString("cri","((Belief + Plausibility)/2.)", false);
+    SetParameterString("cri","((Belief + Plausibility)/2.)");
 
     AddParameter(ParameterType_Float,"wgt","Weighting");
     SetParameterDescription("wgt","Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)");
     MandatoryOff("wgt");
-    SetParameterFloat("wgt",0.5, false);
+    SetParameterFloat("wgt",0.5);
 
     AddParameter(ParameterType_InputFilename,"initmod","initialization model");
     SetParameterDescription("initmod","Initialization model (xml file) to be used. If the xml initialization model is set, the descriptor list is not used (specified using the option -desclist)");
@@ -157,16 +157,15 @@ private:
     AddParameter(ParameterType_StringList, "desclist","Descriptor list");
     SetParameterDescription("desclist","List of the descriptors to be used in the model (must be specified to perform an automatic initialization)");
     MandatoryOff("desclist");
-    SetParameterString("desclist","", false);
+    SetParameterString("desclist","");
 
     AddParameter(ParameterType_Int,"maxnbit","Maximum number of iterations");
     MandatoryOff("maxnbit");
     SetParameterDescription("maxnbit","Maximum number of optimizer iteration (default 200)");
-    SetParameterInt("maxnbit",200, false);
+    SetParameterInt("maxnbit",200);
 
-    AddParameter(ParameterType_Empty,"optobs","Optimizer Observer");
+    AddParameter(ParameterType_Bool,"optobs","Optimizer Observer");
     SetParameterDescription("optobs","Activate the optimizer observer");
-    MandatoryOff("optobs");
 
     AddParameter(ParameterType_OutputFilename,"out","Output filename");
     SetParameterDescription("out","Output model file name (xml file) contains the optimal model to perform information fusion.");
@@ -184,7 +183,7 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
 
@@ -194,7 +193,7 @@ private:
 
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
 
     //Instantiate
@@ -318,7 +317,7 @@ private:
     for (unsigned int i = 0; i < descList.size(); ++i)
       {
       double mean = accFirstOrderPS[i] / accNbElemPS;
-      double stddev = vcl_sqrt(accSecondOrderPS[i] / accNbElemPS - mean * mean);
+      double stddev = std::sqrt(accSecondOrderPS[i] / accNbElemPS - mean * mean);
       otbAppLogINFO( << descList[i] << "  :  " << mean << " +/- " << stddev << "  (min: " << minPS[i] << "  max: " << maxPS[i] << ")"<< std::endl);
       }
 
@@ -326,7 +325,7 @@ private:
     for (unsigned int i = 0; i < descList.size(); ++i)
       {
       double mean = accFirstOrderNS[i] / accNbElemNS;
-      double stddev = vcl_sqrt(accSecondOrderNS[i] / accNbElemNS - mean * mean);
+      double stddev = std::sqrt(accSecondOrderNS[i] / accNbElemNS - mean * mean);
       otbAppLogINFO(<< descList[i] << "  :  " << mean << " +/- " << stddev << "  (min: " << minNS[i] << "  max: " << maxNS[i] << ")"<< std::endl);
       }
 
@@ -405,7 +404,7 @@ private:
 
     // Create the Command observer and register it with the optimizer.
     CommandIterationUpdate::Pointer observer = CommandIterationUpdate::New();
-    if (IsParameterEnabled("optobs"))
+    if (GetParameterInt("optobs"))
       {
       m_Optimizer->AddObserver(itk::IterationEvent(), observer);
       }

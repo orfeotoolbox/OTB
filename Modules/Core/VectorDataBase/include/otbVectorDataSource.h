@@ -83,23 +83,23 @@ public:
 
 protected:
   VectorDataSource();
-  ~VectorDataSource() ITK_OVERRIDE;
+  ~VectorDataSource() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Ensure that the output vector data are cleared before processing */
   virtual void  AllocateOutputs();
 
 private:
-  VectorDataSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataSource(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataSource.txx"
+#include "otbVectorDataSource.hxx"
 #endif
 
 #endif // otbVectorDataSource_h

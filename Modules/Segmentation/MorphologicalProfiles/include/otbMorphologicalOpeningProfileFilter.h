@@ -77,7 +77,7 @@ public:
 
 protected:
   /** Set the profile parameter */
-  void SetProfileParameter(ParameterType param) ITK_OVERRIDE
+  void SetProfileParameter(ParameterType param) override
   {
     StructuringElementType se;
     se.SetRadius(param);
@@ -87,16 +87,16 @@ protected:
   /** Constructor */
   MorphologicalOpeningProfileFilter() {};
   /** Destructor */
-  ~MorphologicalOpeningProfileFilter() ITK_OVERRIDE {}
+  ~MorphologicalOpeningProfileFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  MorphologicalOpeningProfileFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MorphologicalOpeningProfileFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 } // End namespace otb
 #endif

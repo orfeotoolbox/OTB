@@ -22,6 +22,7 @@
 #define otbWrapperListViewParameter_h
 
 #include "otbWrapperParameterGroup.h"
+#include <string>
 
 namespace otb
 {
@@ -84,13 +85,13 @@ public:
   /** Return any value */
   virtual unsigned int GetValue();
 
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     // a choice parameter always has a value
     return true;
   }
 
-  void ClearValue() ITK_OVERRIDE
+  void ClearValue() override
   {
     // nothing to do : a choice parameter always has a value
   }
@@ -155,7 +156,7 @@ protected:
   ListViewParameter();
 
   /** Destructor */
-  ~ListViewParameter() ITK_OVERRIDE;
+  ~ListViewParameter() override;
 
   struct ListViewChoice
   {
@@ -174,8 +175,8 @@ protected:
   bool                                m_SingleSelection;
 
 private:
-  ListViewParameter(const ListViewParameter &); //purposely not implemented
-  void operator =(const ListViewParameter&); //purposely not implemented
+  ListViewParameter(const ListViewParameter &) = delete;
+  void operator =(const ListViewParameter&) = delete;
 
 }; // End class Parameter
 

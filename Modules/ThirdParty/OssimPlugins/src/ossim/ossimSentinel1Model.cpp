@@ -315,7 +315,7 @@ namespace ossimplugins
          return false;
       }
 
-      // Fix sensor and image ID as they may be overriden during SensorModel::loadState()
+      // Fix sensor and image ID as they may be overridden during SensorModel::loadState()
       theSensorID = sensorId;
       theImageID = imageId;
 

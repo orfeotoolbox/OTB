@@ -23,6 +23,7 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorDataIOBase.h"
+#include <string>
 
 namespace otb
 {
@@ -49,6 +50,13 @@ public:
   /** Constructor. */
   VectorDataFileReaderException(const std::string& file, unsigned int line,
                                 const char* message = "Error in IO",
+                                const char* loc = "Unknown") :
+    itk::ExceptionObject(file, line, message, loc)
+  {
+  }
+
+  VectorDataFileReaderException(const std::string& file, unsigned int line,
+                                const std::string& message = "Error in IO",
                                 const char* loc = "Unknown") :
     itk::ExceptionObject(file, line, message, loc)
   {
@@ -120,26 +128,26 @@ public:
 
   /** Prepare the allocation of the output vector data during the first back
    * propagation of the pipeline. */
-  void GenerateOutputInformation(void) ITK_OVERRIDE;
+  void GenerateOutputInformation(void) override;
 
   /** Does the real work. */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 protected:
   VectorDataFileReader();
-  ~VectorDataFileReader() ITK_OVERRIDE;
+  ~VectorDataFileReader() override;
   std::string m_ExceptionMessage;
 
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;
   bool m_UserSpecifiedVectorDataIO;  // keep track whether the
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   std::string m_FileName; // The file to be read
 
 private:
-  VectorDataFileReader(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataFileReader(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Test whether the given filename exist and it is readable.
       If the file doesn't exist or it is not readable, and exception with an
@@ -151,7 +159,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataFileReader.txx"
+#include "otbVectorDataFileReader.hxx"
 #endif
 
 #endif // otbVectorDataFileReader_h

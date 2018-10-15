@@ -105,13 +105,13 @@ public:
     m_HasClassLabel = false;
   }
 
-  void CopyAttributesFrom( const LabelObjectType * lo ) ITK_OVERRIDE
+  void CopyAttributesFrom( const LabelObjectType * lo ) override
     {
     Superclass::CopyAttributesFrom( lo );
 
     // copy the data of the current type if possible
     const Self * src = dynamic_cast<const Self *>( lo );
-    if( src == ITK_NULLPTR )
+    if( src == nullptr )
       {
       return;
       }
@@ -125,10 +125,10 @@ protected:
   AttributesMapLabelObjectWithClassLabel() : m_ClassLabel(itk::NumericTraits<ClassLabelType>::Zero), m_HasClassLabel(false)
     {}
   /** Destructor */
-  ~AttributesMapLabelObjectWithClassLabel() ITK_OVERRIDE {}
+  ~AttributesMapLabelObjectWithClassLabel() override {}
 
   /** The printself method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
     {
       Superclass::PrintSelf( os, indent );
       if(m_HasClassLabel)
@@ -142,8 +142,8 @@ protected:
     }
 
 private:
-  AttributesMapLabelObjectWithClassLabel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AttributesMapLabelObjectWithClassLabel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The class label */
   ClassLabelType m_ClassLabel;

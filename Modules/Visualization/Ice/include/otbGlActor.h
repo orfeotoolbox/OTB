@@ -25,6 +25,7 @@
 
 #include "otbViewSettings.h"
 #include "OTBIceExport.h"
+#include <string>
 
 namespace otb
 {
@@ -72,7 +73,7 @@ public:
 protected:
   GlActor();
 
-  ~GlActor() ITK_OVERRIDE;
+  ~GlActor() override;
 
 private:
   // prevent implementation

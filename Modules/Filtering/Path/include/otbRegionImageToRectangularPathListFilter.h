@@ -102,30 +102,30 @@ public:
 
 protected:
   RegionImageToRectangularPathListFilter();
-  ~RegionImageToRectangularPathListFilter() ITK_OVERRIDE;
+  ~RegionImageToRectangularPathListFilter() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE{}  // do nothing
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateOutputInformation() override{}  // do nothing
+  void GenerateData() override;
 
   double m_MinimumFit;
   double m_MinimumSize;
   int    m_CrossTermFormula;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   //jgc
   typedef Image<unsigned char, itkGetStaticConstMacro(NDimensions)> MarkerImageType;
   typename MarkerImageType::Pointer markerImage;
 
 private:
-  RegionImageToRectangularPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RegionImageToRectangularPathListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRegionImageToRectangularPathListFilter.txx"
+#include "otbRegionImageToRectangularPathListFilter.hxx"
 #endif
 
 #endif

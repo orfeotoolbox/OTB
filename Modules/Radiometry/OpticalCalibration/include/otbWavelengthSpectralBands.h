@@ -63,14 +63,14 @@ protected:
   /** Constructor */
   WavelengthSpectralBands();
   /** Destructor */
-  ~WavelengthSpectralBands() ITK_OVERRIDE {}
+  ~WavelengthSpectralBands() override {}
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  WavelengthSpectralBands(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WavelengthSpectralBands(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** List that contains the filter function value. */
   WavelengthSpectralBandListType m_WavelengthSpectralBandsList;

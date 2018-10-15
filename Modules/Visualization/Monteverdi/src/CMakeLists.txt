@@ -44,14 +44,14 @@ set( OTBMonteverdi_RESOURCES
   )
 
 #############################################################################
-qt4_wrap_cpp( OTBMonteverdi_SRC_MOC ${OTBMonteverdi_HEADERS_MOC} )
-qt4_wrap_ui( OTBMonteverdi_FORMS_HEADERS ${OTBMonteverdi_FORMS}  )
-qt4_add_resources( OTBMonteverdi_RESOURCES_RCC ${OTBMonteverdi_RESOURCES} OPTIONS "-no-compress")
+qt5_wrap_cpp( OTBMonteverdi_SRC_MOC ${OTBMonteverdi_HEADERS_MOC} OPTIONS -p "." )
+qt5_wrap_ui( OTBMonteverdi_FORMS_HEADERS ${OTBMonteverdi_FORMS}  )
+qt5_add_resources( OTBMonteverdi_RESOURCES_RCC ${OTBMonteverdi_RESOURCES} OPTIONS "-no-compress")
 
 #############################################################################
-add_to_qt4_i18n_sources( ${OTBMonteverdi_SRCS} )
-add_to_qt4_i18n_headers( "../include" ${OTBMonteverdi_SRCS} )
-add_to_qt4_i18n_forms( ${OTBMonteverdi_FORMS} )
+add_to_qt_i18n_sources( ${OTBMonteverdi_SRCS} )
+add_to_qt_i18n_headers( "../include" ${OTBMonteverdi_SRCS} )
+add_to_qt_i18n_forms( ${OTBMonteverdi_FORMS} )
 
 #############################################################################
 add_library( OTBMonteverdi
@@ -62,7 +62,7 @@ add_library( OTBMonteverdi
 target_link_libraries( OTBMonteverdi
   ${OTBMonteverdiCore_LIBRARIES}
   ${OTBMonteverdiGUI_LIBRARIES}
-  ${OTBQt4_LIBRARIES}
+  ${OTBQt_LIBRARIES}
   ${OTBQtAdapters_LIBRARIES}
   )
 otb_module_target( OTBMonteverdi )

@@ -57,7 +57,7 @@ public:
 
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("ClassificationMapRegularization");
     SetDescription("Filters the input labeled image using Majority Voting in a ball shaped neighbordhood.");
@@ -92,7 +92,7 @@ private:
     SetParameterDescription("ip.radius", "The radius of the ball shaped structuring element (expressed in pixels). By default, 'ip.radius = 1 pixel'.");
     SetDefaultParameterInt("ip.radius", 1.0);
 
-    AddParameter(ParameterType_Empty, "ip.suvbool", "Multiple majority: Undecided(X)/Original");
+    AddParameter(ParameterType_Bool, "ip.suvbool", "Multiple majority: Undecided(X)/Original");
     SetParameterDescription("ip.suvbool", "Pixels with more than 1 majority class are marked as Undecided if this parameter is checked (true), or keep their Original labels otherwise (false). Please note that the Undecided value must be different from existing labels in the input labeled image. By default, 'ip.suvbool = false'.");
 
     AddParameter(ParameterType_Int, "ip.nodatalabel", "Label for the NoData class");
@@ -103,7 +103,7 @@ private:
     SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class. By default, 'ip.undecidedlabel = 0'.");
     SetDefaultParameterInt("ip.undecidedlabel", 0.0);
 
-    AddParameter(ParameterType_Empty, "ip.onlyisolatedpixels", "Process isolated pixels only");
+    AddParameter(ParameterType_Bool, "ip.onlyisolatedpixels", "Process isolated pixels only");
     SetParameterDescription("ip.onlyisolatedpixels", "Only pixels whose label is unique in the neighbordhood will be processed. By default, 'ip.onlyisolatedpixels = false'.");
 
     AddParameter(ParameterType_Int, "ip.isolatedthreshold", "Threshold for isolated pixels");
@@ -125,12 +125,12 @@ private:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
 
-  void DoExecute() ITK_OVERRIDE
+  void DoExecute() override
   {
     // Majority Voting
     m_NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
@@ -153,7 +153,7 @@ private:
     m_NeighMajVotingFilter->SetLabelForUndecidedPixels(GetParameterInt("ip.undecidedlabel"));
 
     // Set to Undecided label if NOT unique Majority Voting
-    if (IsParameterEnabled("ip.suvbool"))
+    if (GetParameterInt("ip.suvbool"))
       {
       m_NeighMajVotingFilter->SetKeepOriginalLabelBool(false);
       }
@@ -164,7 +164,7 @@ private:
       }
 
     // Process isolated pixels only
-    if (IsParameterEnabled("ip.onlyisolatedpixels"))
+    if (GetParameterInt("ip.onlyisolatedpixels"))
       {
       m_NeighMajVotingFilter->SetOnlyIsolatedPixels(true);
       m_NeighMajVotingFilter->SetIsolatedThreshold(GetParameterInt("ip.isolatedthreshold"));

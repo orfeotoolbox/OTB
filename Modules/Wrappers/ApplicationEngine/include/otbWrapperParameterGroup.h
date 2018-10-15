@@ -24,6 +24,7 @@
 #include "itkObject.h"
 #include "otbWrapperParameter.h"
 #include <vector>
+#include <string>
 
 namespace otb
 {
@@ -95,7 +96,7 @@ public:
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
   // Always has value
-  bool HasValue() const ITK_OVERRIDE
+  bool HasValue() const override
   {
     return true;
   }
@@ -106,14 +107,14 @@ public:
 
 protected:
   ParameterGroup();
-  ~ParameterGroup() ITK_OVERRIDE;
+  ~ParameterGroup() override;
 
   typedef std::vector<Parameter::Pointer> ParameterListType;
   ParameterListType m_ParameterList;
 
 private:
-  ParameterGroup(const ParameterGroup &); //purposely not implemented
-  void operator =(const ParameterGroup&); //purposely not implemented
+  ParameterGroup(const ParameterGroup &) = delete;
+  void operator =(const ParameterGroup&) = delete;
 
 };
 

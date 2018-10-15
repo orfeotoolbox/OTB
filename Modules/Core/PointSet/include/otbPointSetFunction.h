@@ -71,13 +71,13 @@ public:
 
 protected:
   PointSetFunction();
-  ~PointSetFunction() ITK_OVERRIDE {}
+  ~PointSetFunction() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  PointSetFunction(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   PointSetPointerType m_PointSet;
 
@@ -86,7 +86,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetFunction.txx"
+#include "otbPointSetFunction.hxx"
 #endif
 
 #endif

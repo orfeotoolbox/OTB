@@ -71,7 +71,7 @@ public:
       std::string("Integer"),std::string("Integer64")));
   }
 
-  ~TestHelper() ITK_OVERRIDE{}
+  ~TestHelper() override{}
 
   int RegressionTestAllImages(const StringList& baselineFilenamesImage,
                               const StringList& testFilenamesImage);
@@ -163,8 +163,8 @@ private:
                    OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter,
                    int& nbdiff) const;
 
-  static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = ITK_NULLPTR);
-  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = ITK_NULLPTR);
+  static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = nullptr);
+  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = nullptr);
 
   double m_ToleranceDiffValue;
   double m_Epsilon;

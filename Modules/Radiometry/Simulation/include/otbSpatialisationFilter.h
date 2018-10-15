@@ -112,16 +112,16 @@ public:
 
 protected:
    SpatialisationFilter();
-   ~SpatialisationFilter() ITK_OVERRIDE {}
-   void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+   ~SpatialisationFilter() override {}
+   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-   void GenerateData() ITK_OVERRIDE;
+   void GenerateData() override;
    virtual void ProcessObject(unsigned int obj);
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
 private:
-   SpatialisationFilter(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
+   SpatialisationFilter(const Self &) = delete;
+   void operator =(const Self&) = delete;
 
    /** Common size for all objects in number of pixels (number of rows, number of columns).*/
    SizeType m_ObjectSize;
@@ -140,7 +140,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpatialisationFilter.txx"
+#include "otbSpatialisationFilter.hxx"
 #endif
 
 #endif

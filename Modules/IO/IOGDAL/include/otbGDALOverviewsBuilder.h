@@ -30,6 +30,7 @@
 #include "otbConfigure.h"
 
 #include "OTBIOGDALExport.h"
+#include <string>
 
 namespace otb
 {
@@ -160,21 +161,21 @@ public:
   void SetInputFileName( const std::string & str );
 
 
-  void Update() ITK_OVERRIDE;
+  void Update() override;
 
 
 protected:
   GDALOverviewsBuilder();
 
-  ~GDALOverviewsBuilder() ITK_OVERRIDE {};
+  ~GDALOverviewsBuilder() override {};
 
-  void PrintSelf( std::ostream & os, itk::Indent indent ) const ITK_OVERRIDE;
+  void PrintSelf( std::ostream & os, itk::Indent indent ) const override;
 
 
 private:
-  GDALOverviewsBuilder( const Self & ); //purposely not implemented
+  GDALOverviewsBuilder( const Self & ) = delete;
 
-  void operator = ( const Self & ); //purposely not implemented
+  void operator = ( const Self & ) = delete;
 
   // void GetGDALResamplingMethod( std::string & resamplingMethod );
 

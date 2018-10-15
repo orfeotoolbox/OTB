@@ -172,23 +172,23 @@ public:
   }
 
   /** Override itk::ProcessObject method to let the internal filter do the propagation */
-  void PropagateRequestedRegion(itk::DataObject *output) ITK_OVERRIDE;
+  void PropagateRequestedRegion(itk::DataObject *output) override;
 
 protected:
   StreamingResampleImageFilter();
 
   /** Destructor */
-  ~StreamingResampleImageFilter() ITK_OVERRIDE {};
+  ~StreamingResampleImageFilter() override {};
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StreamingResampleImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingResampleImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   //We need this to respect ConstRef macro and to be compliant with itk positive 
   //spacing
@@ -201,7 +201,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingResampleImageFilter.txx"
+#include "otbStreamingResampleImageFilter.hxx"
 #endif
 
 #endif

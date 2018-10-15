@@ -24,6 +24,7 @@
 #include <itkObjectFactory.h>
 #include "otbFragmentShader.h"
 #include "otbImageSettings.h"
+#include <string>
 
 namespace otb
 {
@@ -89,18 +90,18 @@ public:
   itkSetMacro(Center,PointType);
   itkGetConstReferenceMacro(Center,PointType);
 
-  void SetupShader() ITK_OVERRIDE;
+  void SetupShader() override;
 
   itkNewMacro(Self);
 
 protected:
   StandardShader();
 
-  ~StandardShader() ITK_OVERRIDE;
+  ~StandardShader() override;
 
-  std::string GetSource() const ITK_OVERRIDE;
+  std::string GetSource() const override;
 
-  std::string GetName() const ITK_OVERRIDE;
+  std::string GetName() const override;
 
 private:
   // prevent implementation

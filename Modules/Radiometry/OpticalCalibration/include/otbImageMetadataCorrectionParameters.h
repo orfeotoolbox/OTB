@@ -28,7 +28,7 @@
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
 #include <vector>
-#include <iostream>
+#include <string>
 
 namespace otb
 {
@@ -145,16 +145,16 @@ public:
   /** Constructor */
   ImageMetadataCorrectionParameters();
   /** Destructor */
-  ~ImageMetadataCorrectionParameters() ITK_OVERRIDE {}
+  ~ImageMetadataCorrectionParameters() override {}
 
 protected:
 
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageMetadataCorrectionParameters(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageMetadataCorrectionParameters(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** The Solar zenithal angle */
   double m_SolarZenithalAngle;

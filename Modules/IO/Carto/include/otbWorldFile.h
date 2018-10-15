@@ -22,10 +22,11 @@
 #define otbWorldFile_h
 
 #include <iomanip>
-#include <fstream>
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "OTBCartoExport.h"
+#include <string>
 
 namespace otb {
 
@@ -40,7 +41,7 @@ namespace otb {
  * \ingroup OTBCarto
  */
 
-class ITK_EXPORT WorldFile : public itk::Object
+class OTBCarto_EXPORT WorldFile : public itk::Object
 {
 public:
 
@@ -52,55 +53,34 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  itkGetMacro(LonOrigin, double)
-  itkSetMacro(LonOrigin, double)
-  itkGetMacro(LatOrigin, double)
-  itkSetMacro(LatOrigin, double)
-  itkGetMacro(LonSpacing, double)
-  itkSetMacro(LonSpacing, double)
-  itkGetMacro(LatSpacing, double)
-  itkSetMacro(LatSpacing, double)
-  itkGetMacro(LonRotation, double)
-  itkSetMacro(LonRotation, double)
-  itkGetMacro(LatRotation, double)
-  itkSetMacro(LatRotation, double)
+  itkGetMacro(LonOrigin, double);
+  itkSetMacro(LonOrigin, double);
+  itkGetMacro(LatOrigin, double);
+  itkSetMacro(LatOrigin, double);
+  itkGetMacro(LonSpacing, double);
+  itkSetMacro(LonSpacing, double);
+  itkGetMacro(LatSpacing, double);
+  itkSetMacro(LatSpacing, double);
+  itkGetMacro(LonRotation, double);
+  itkSetMacro(LonRotation, double);
+  itkGetMacro(LatRotation, double);
+  itkSetMacro(LatRotation, double);
 
-  itkGetStringMacro(ImageFilename)
-  itkSetStringMacro(ImageFilename)
+  itkGetStringMacro(ImageFilename);
+  itkSetStringMacro(ImageFilename);
 
-  void Update()
-  {
-    if (m_ImageFilename.empty())
-      {
-      itkExceptionMacro(<< "The image filename must be provided");
-      }
-
-    std::string worldFilename;
-    int         i = m_ImageFilename.find_last_of('.');
-    worldFilename = m_ImageFilename.substr(0, i) + ".wld";
-
-    std::ofstream file;
-    file.open(worldFilename.c_str());
-    file << std::setprecision(15);
-    file << m_LonSpacing << std::endl;
-    file << m_LatRotation << std::endl; //yes, in this order
-    file << m_LonRotation << std::endl;
-    file << m_LatSpacing << std::endl;
-    file << m_LonOrigin << std::endl;
-    file << m_LatOrigin << std::endl;
-    file.close();
-  }
-
+  void Update();
+  
 protected:
   WorldFile() : m_LonOrigin(0.0), m_LatOrigin(0.0),
     m_LonSpacing(0.0), m_LatSpacing(0.0),
     m_LonRotation(0.0), m_LatRotation(0.0),
     m_ImageFilename("") {}
-  ~WorldFile() ITK_OVERRIDE {}
+  ~WorldFile() override {}
 
 private:
-  WorldFile(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WorldFile(const Self &) = delete;
+  void operator =(const Self&) = delete;
   double      m_LonOrigin;
   double      m_LatOrigin;
   double      m_LonSpacing;

@@ -47,24 +47,24 @@ public:
   
   itkNewMacro(Self);
 
-  bool TestUrlAvailability(const std::string& url) const ITK_OVERRIDE;
+  bool TestUrlAvailability(const std::string& url) const override;
   
-  int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const ITK_OVERRIDE;
+  int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const override;
   
-  int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const ITK_OVERRIDE;
+  int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const override;
   
-  int RetrieveFile(const std::string& urlString, std::string filename) const ITK_OVERRIDE;
+  int RetrieveFile(const std::string& urlString, std::string filename) const override;
 
   int RetrieveFileMulti(const std::vector<std::string>& listURLs,
                         const std::vector<std::string>& listFiles,
-                        int maxConnect) const ITK_OVERRIDE;
+                        int maxConnect) const override;
 protected:
   CurlHelperStub() {}
-  ~CurlHelperStub() ITK_OVERRIDE {}
+  ~CurlHelperStub() override {}
 
 private:
-  CurlHelperStub(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CurlHelperStub(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 
 };

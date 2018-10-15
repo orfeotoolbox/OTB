@@ -74,20 +74,20 @@ public:
 
 protected:
   RAndBAndNIRIndexImageFilter();
-  ~RAndBAndNIRIndexImageFilter() ITK_OVERRIDE {}
+  ~RAndBAndNIRIndexImageFilter() override {}
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RAndBAndNIRIndexImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RAndBAndNIRIndexImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAndBAndNIRIndexImageFilter.txx"
+#include "otbRAndBAndNIRIndexImageFilter.hxx"
 #endif
 
 #endif

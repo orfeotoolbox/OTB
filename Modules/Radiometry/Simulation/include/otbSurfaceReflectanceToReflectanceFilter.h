@@ -121,7 +121,7 @@ public:
 //     std::cout << "temp1 "<< temp1 << std::endl;
     temp2 += temp1*m_Coefficient*static_cast<double>(inPixel);
 //     std::cout << "1-row*S "<< temp << std::endl;
-//     outPixel = vcl_fabs (static_cast<TOutput>(temp2));
+//     outPixel = std::fabs (static_cast<TOutput>(temp2));
     outPixel = static_cast<TOutput>(temp2);
 
 //     std::cout << "in out "<< static_cast<double>(inPixel) << "; " << static_cast<double>(outPixel)<< std::endl;
@@ -263,18 +263,18 @@ protected:
   /** Constructor */
   SurfaceReflectanceToReflectanceFilter();
   /** Destructor */
-  ~SurfaceReflectanceToReflectanceFilter() ITK_OVERRIDE {};
+  ~SurfaceReflectanceToReflectanceFilter() override {};
 
 
   /** Initialize the functor vector */
-  void BeforeThreadedGenerateData() ITK_OVERRIDE;
+  void BeforeThreadedGenerateData() override;
   /** Fill AtmosphericRadiativeTerms using image metadata*/
   void UpdateAtmosphericRadiativeTerms();
   /** Update Functors parameters */
   void UpdateFunctors();
 
   /** If modified, we need to compute the functor parameters again */
-  void Modified() const ITK_OVERRIDE;
+  void Modified() const override;
 
 private:
 
@@ -296,7 +296,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSurfaceReflectanceToReflectanceFilter.txx"
+#include "otbSurfaceReflectanceToReflectanceFilter.hxx"
 #endif
 
 #endif

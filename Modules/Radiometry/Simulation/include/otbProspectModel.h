@@ -66,29 +66,29 @@ class OTBSimulation_EXPORT ProspectModel : public SimulationStep1Base
       LeafParametersType * GetInput();
 
       /** GenerateData */
-      void GenerateData() ITK_OVERRIDE;
+      void GenerateData() override;
 
       /** Get Output reflectance/transmittance*/
-      SpectralResponseType * GetReflectance() ITK_OVERRIDE;
-      SpectralResponseType * GetTransmittance() ITK_OVERRIDE;
+      SpectralResponseType * GetReflectance() override;
+      SpectralResponseType * GetTransmittance() override;
 
    protected:
       /** Constructor */
       ProspectModel();
       /** Destructor */
-      ~ProspectModel() ITK_OVERRIDE;
+      ~ProspectModel() override;
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) ITK_OVERRIDE;
+      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
       using Superclass::MakeOutput;
 
       /** Compute Transmission of isotropic radiation across an interface between two dielectrics*/
       double Tav(const int theta, double ref);
 
    private:
-      ProspectModel(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+      ProspectModel(const Self&) = delete;
+      void operator=(const Self&) = delete;
 
 };
 

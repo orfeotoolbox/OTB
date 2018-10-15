@@ -93,20 +93,20 @@ public:
   itkGetMacro(ExternalRadius, int);
 
   /** Main computation method */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
+  void GenerateData() override;
 //       virtual void BeforeThreadedGenerateData();
 //       virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 
 protected:
   LocalRxDetectorNonThreadFilter();
-  ~LocalRxDetectorNonThreadFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LocalRxDetectorNonThreadFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LocalRxDetectorNonThreadFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LocalRxDetectorNonThreadFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   int m_InternalRadius;
   int m_ExternalRadius;
@@ -116,7 +116,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLocalRxDetectorNonThreadFilter.txx"
+#include "otbLocalRxDetectorNonThreadFilter.hxx"
 #endif
 
 #endif

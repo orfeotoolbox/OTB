@@ -45,7 +45,7 @@ public:
   itkTypeMacro(KmzExport, otb::Application);
 
 private:
-  void DoInit() ITK_OVERRIDE
+  void DoInit() override
   {
     SetName("KmzExport");
     SetDescription("Export the input image in a KMZ product.");
@@ -56,9 +56,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Conversion");
 
-	AddDocTag("Miscellaneous");
-    AddDocTag("KMZ");
-    AddDocTag("Export");
+    AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
@@ -91,12 +89,12 @@ private:
   }
 
 
-  void DoUpdateParameters() ITK_OVERRIDE
+  void DoUpdateParameters() override
   {
     // Nothing to do here for the parameters : all are independent
   }
 
- void DoExecute() ITK_OVERRIDE
+ void DoExecute() override
   {
     typedef otb::KmzProductWriter<FloatVectorImageType> KmzProductWriterType;
 
@@ -138,4 +136,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::KmzExport)
-

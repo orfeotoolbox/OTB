@@ -133,15 +133,15 @@ protected:
   /**
    * Destructor.
    */
-  ~ImageToHessianDeterminantImageFilter() ITK_OVERRIDE;
+  ~ImageToHessianDeterminantImageFilter() override;
   /**
    * Standard PrintSelf method.
    */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
    * Main computation method.
    */
-  void  GenerateData() ITK_OVERRIDE;
+  void  GenerateData() override;
 
 private:
 
@@ -155,7 +155,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToHessianDeterminantImageFilter.txx"
+#include "otbImageToHessianDeterminantImageFilter.hxx"
 #endif
 
 #endif

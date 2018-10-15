@@ -122,18 +122,18 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
-  void AllocateOutputs() ITK_OVERRIDE;
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void AllocateOutputs() override;
+  void GenerateOutputInformation() override;
   // Override since the filter needs all the data for the algorithm
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
-  void Reset(void) ITK_OVERRIDE;
-  void Synthetize(void) ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
+  void Reset(void) override;
+  void Synthetize(void) override;
 
   /** Input wrapper */
   void SetFirstInput(const TInputImage  *input1)
@@ -149,7 +149,7 @@ public:
   {
     if (this->GetNumberOfInputs() < 1)
       {
-      return ITK_NULLPTR;
+      return nullptr;
       }
     else return (static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0)));
   }
@@ -158,21 +158,21 @@ public:
   {
     if (this->GetNumberOfInputs() < 2)
       {
-      return ITK_NULLPTR;
+      return nullptr;
       }
     else return (static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1)));
   }
 
 protected:
   PersistentMatrixTransposeMatrixImageFilter();
-  ~PersistentMatrixTransposeMatrixImageFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~PersistentMatrixTransposeMatrixImageFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentMatrixTransposeMatrixImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   ArrayMatrixType m_ThreadSum;
   bool            m_UsePadFirstInput;
@@ -274,17 +274,17 @@ protected:
   /** Constructor */
   StreamingMatrixTransposeMatrixImageFilter() {};
   /** Destructor */
-  ~StreamingMatrixTransposeMatrixImageFilter() ITK_OVERRIDE {}
+  ~StreamingMatrixTransposeMatrixImageFilter() override {}
 
 private:
-  StreamingMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingMatrixTransposeMatrixImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingMatrixTransposeMatrixImageFilter.txx"
+#include "otbStreamingMatrixTransposeMatrixImageFilter.hxx"
 #endif
 
 #endif

@@ -94,11 +94,11 @@ protected:
   /** Constructor */
   ImageFittingPolygonListFilter();
   /** Destructor */
-  ~ImageFittingPolygonListFilter() ITK_OVERRIDE {}
+  ~ImageFittingPolygonListFilter() override {}
   /** GenerateData method */
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual double computeValue(ImageConstPointerType image,
                               VertexType middlePoint,
@@ -109,13 +109,13 @@ protected:
   unsigned int m_NumberOfIterations;
 
 private:
-  ImageFittingPolygonListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageFittingPolygonListFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageFittingPolygonListFilter.txx"
+#include "otbImageFittingPolygonListFilter.hxx"
 #endif
 
 #endif

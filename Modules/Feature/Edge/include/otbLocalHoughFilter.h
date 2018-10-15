@@ -130,17 +130,17 @@ public:
 
 protected:
   LocalHoughFilter();
-  ~LocalHoughFilter() ITK_OVERRIDE {}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  ~LocalHoughFilter() override {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Definition of the Hough Filter. */
   typedef itk::HoughTransform2DLinesImageFilter<InputPixelType, AccumulatorPixelType> HoughFilterType;
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 private:
-  LocalHoughFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LocalHoughFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   /** Radius used to define the local region. */
   SizeType m_Radius;
@@ -167,7 +167,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLocalHoughFilter.txx"
+#include "otbLocalHoughFilter.hxx"
 #endif
 
 #endif

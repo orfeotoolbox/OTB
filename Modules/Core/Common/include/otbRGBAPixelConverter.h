@@ -66,15 +66,15 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  ~RGBAPixelConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~RGBAPixelConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  RGBAPixelConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RGBAPixelConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 //RGBA to RGBA
@@ -103,15 +103,15 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  ~RGBAPixelConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~RGBAPixelConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  RGBAPixelConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RGBAPixelConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 //RGBA to RGB
@@ -140,21 +140,21 @@ public:
 
 protected:
   RGBAPixelConverter(){}
-  ~RGBAPixelConverter() ITK_OVERRIDE{}
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  ~RGBAPixelConverter() override{}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  RGBAPixelConverter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RGBAPixelConverter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRGBAPixelConverter.txx"
+#include "otbRGBAPixelConverter.hxx"
 #endif
 
 #endif

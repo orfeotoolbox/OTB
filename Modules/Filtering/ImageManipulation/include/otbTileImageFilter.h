@@ -80,31 +80,31 @@ protected:
   TileImageFilter();
 
   /** Destructor */
-  ~TileImageFilter() ITK_OVERRIDE;
+  ~TileImageFilter() override;
 
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) ITK_OVERRIDE;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Generate input requested region method */
-  void GenerateInputRequestedRegion() ITK_OVERRIDE;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate input requested region method */
-  void GenerateOutputInformation() ITK_OVERRIDE;
+  void GenerateOutputInformation() override;
 
   /** Override VerifyInputInformation() since this filter's inputs do
      * not need to occupy the same physical space.
      *
      * \sa ProcessObject::VerifyInputInformation
      */
-  void VerifyInputInformation() ITK_OVERRIDE {}
+  void VerifyInputInformation() override {}
 
 
 private:
-  TileImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TileImageFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   // Compute the overlapping region between the output requested
   // region and the nth input tile largest region
@@ -125,7 +125,7 @@ RegionType InputRegionToOutputRegion(unsigned int tileIndex, const RegionType & 
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTileImageFilter.txx"
+#include "otbTileImageFilter.hxx"
 #endif
 
 #endif

@@ -106,9 +106,9 @@ itkGetConstReferenceMacro(Sigma,double);
 protected:
 MorphologicalProfilesSegmentationFilter();
 
-~MorphologicalProfilesSegmentationFilter() ITK_OVERRIDE;
+~MorphologicalProfilesSegmentationFilter() override;
 
-void GenerateData() ITK_OVERRIDE;
+void GenerateData() override;
 
 private:
 typename OpeningProfileFilterType::Pointer m_OpeningProfile;
@@ -130,7 +130,7 @@ double       m_Sigma;
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalProfilesSegmentationFilter.txx"
+#include "otbMorphologicalProfilesSegmentationFilter.hxx"
 #endif
 
 #endif

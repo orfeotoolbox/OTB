@@ -71,21 +71,21 @@ public:
 
   AttributeAccessorType & GetAccessor();
 
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData() override;
 
 
 protected:
   /** Constructor */
   AttributesMapOpeningLabelMapFilter();
   /** Destructor */
-  ~AttributesMapOpeningLabelMapFilter() ITK_OVERRIDE;
+  ~AttributesMapOpeningLabelMapFilter() override;
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:
-  AttributesMapOpeningLabelMapFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AttributesMapOpeningLabelMapFilter(const Self &) = delete;
+  void operator =(const Self&) = delete;
 
   AttributeAccessorType  m_Accessor;
 
@@ -94,7 +94,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAttributesMapOpeningLabelMapFilter.txx"
+#include "otbAttributesMapOpeningLabelMapFilter.hxx"
 #endif
 
 #endif // otbAttributesMapOpeningLabelMapFilter_h
