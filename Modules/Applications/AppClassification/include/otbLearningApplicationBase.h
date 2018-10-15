@@ -82,7 +82,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro(LearningApplicationBase, otb::Application)
+  itkTypeMacro(LearningApplicationBase, otb::Application);
 
   typedef TInputValue                             InputValueType;
   typedef TOutputValue                            OutputValueType;

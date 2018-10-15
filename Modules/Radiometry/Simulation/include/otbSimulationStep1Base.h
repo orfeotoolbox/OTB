@@ -59,8 +59,8 @@ public:
    /** Standard Macro*/
    itkTypeMacro(SimulationStep1Base, ProcessObject);
 
-   itkSetMacro(Parameters, ParametersType)
-   itkGetMacro(Parameters, ParametersType)
+   itkSetMacro(Parameters, ParametersType);
+   itkGetMacro(Parameters, ParametersType);
    //virtual  void SetInput(const ParametersType &) = 0;
 
    virtual SpectralResponseType * GetReflectance() = 0;
