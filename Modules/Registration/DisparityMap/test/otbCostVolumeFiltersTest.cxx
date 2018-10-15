@@ -163,9 +163,12 @@ int otbCostVolumeFiltersTest(int argc, char *argv[])
 
   // EXTRACTION OF THE MIN OF THE COST VOLUME
   m_minLeftCost->SetInput(m_LeftCost->GetOutput());
-  m_minLeftCost->SetSide('l');
+  m_minLeftCost->SetSide(MinCostVolume::Side::left);
+
+  // m_minLeftCost->SetSide('l');
   m_minRightCost->SetInput(m_RightCost->GetOutput());  
-  m_minRightCost->SetSide('r');
+  m_minRightCost->SetSide(MinCostVolume::Side::right) ;
+  // m_minRightCost->SetSide('r');
 
   // OUTPUTS 
   IntImageWriterType::Pointer writer_m_minLeftCost = IntImageWriterType::New();

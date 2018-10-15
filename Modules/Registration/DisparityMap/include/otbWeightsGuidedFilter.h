@@ -80,7 +80,7 @@ public:
     TOutput output(m_numberOfComponents); 
     output.Fill(0); 
 
-    //moyenne rr, gg, bb
+    //mean rr, gg, bb
     std::vector<double> v_mean;
     v_mean.resize(m_bandNumberInput1,0);
     //variance rr, gg, bb
@@ -99,7 +99,7 @@ public:
     std::vector<double> v_multb;
     v_multb.resize(m_bandNumberInput2,0) ;
 
-    //moyennes rr gg bb et variances rr gg bb
+    //mean rr gg bb and variance rr gg bb
     for(unsigned int bandI = 0; bandI < m_bandNumberInput1 ; ++bandI)
       {
       double mean(0.);  
@@ -175,7 +175,7 @@ public:
     MatrixType M;
     double epsilon = 6.5025;
 
-    //Calcul ai
+    //ai
     //r
     std::vector<double> elem1;
     elem1.resize(m_bandNumberInput2,0);
@@ -192,7 +192,7 @@ public:
         {
         std::vector<double> ak;
         ak.resize(m_bandNumberInput1,0); 
-        //matrice de covariance fenÃªtre k :
+        // Covariance matrix
         M(0,0) = v_var[0] + epsilon;
         M(0,1) = v_var[3] ;
         M(0,2) = v_var[4] ;
@@ -208,11 +208,11 @@ public:
         elem2[bandC] = v_multg[bandC] - v_mean[1] * v_pmean[bandC] ;
         elem3[bandC] = v_multb[bandC] - v_mean[2] * v_pmean[bandC] ;  
 
-        //calcul ak
+        //ak
         ak[0] = Matrice_cov_inv(0,0)*elem1[bandC] + Matrice_cov_inv(0,1)*elem2[bandC] + Matrice_cov_inv(0,2)*elem3[bandC];
         ak[1] = Matrice_cov_inv(1,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] + Matrice_cov_inv(1,2)*elem3[bandC];
         ak[2] = Matrice_cov_inv(2,0)*elem1[bandC] + Matrice_cov_inv(2,1)*elem2[bandC] + Matrice_cov_inv(2,2)*elem3[bandC]; 
-        //calcul bk
+        //bk
         double bk(0.);
         bk = v_pmean[bandC] - (ak[0]*v_mean[0]  + ak[1]*v_mean[1] + ak[2]*v_mean[2]) ;
         //output
@@ -296,14 +296,6 @@ void GenerateOutputInformation(void) override
     this->GetFunctor().SetNumberOfComponent((this->GetFunctor().m_bandNumberInput1+1)*this->GetFunctor().m_bandNumberInput2 );  
     this->GetFunctor().m_WSize = (this->GetFunctor().GetRadiusMax())*2+1 ;
     } 
-
-// void BeforeThreadedGenerateData(void) override 
-//   {
-//   // std::cout << " BeforeThreadedGenerateData " << std::endl ;
-//   // TOutputImage    * outImagePtr = this->GetOutput();
-//   // outImagePtr->FillBuffer(0.);
-
-//   }
 
 private:
   WeightsGuidedFilter(const Self &) = delete;

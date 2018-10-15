@@ -66,7 +66,6 @@ public:
     }
 
   typedef typename TInput2::PixelType               PixelType;
-
   unsigned int m_bandNumberInput1 ;
   unsigned int m_bandNumberInput2 ;
   unsigned int m_bandNumberOutput ;
@@ -243,12 +242,9 @@ protected:
     this->GetFunctor().m_bandNumberInput2 = this->GetInput(1)->GetNumberOfComponentsPerPixel() ; 
     assert(this->GetFunctor().m_bandNumberInput1  % (this->GetFunctor().m_bandNumberInput2+1) == 0) ;
     this->GetFunctor().m_bandNumberOutput = this->GetFunctor().m_bandNumberInput1/(this->GetFunctor().m_bandNumberInput2+1) ;
-
     this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetFunctor().m_bandNumberOutput );
     this->GetFunctor().SetNumberOfComponent( this->GetFunctor().m_bandNumberOutput );
-
     this->GetFunctor().m_WSize = (this->GetFunctor().GetRadiusMax())*2+1;
-
     } 
 
 private:

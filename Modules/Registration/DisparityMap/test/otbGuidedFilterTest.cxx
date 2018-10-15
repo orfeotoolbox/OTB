@@ -165,7 +165,6 @@ int otbGuidedFilterTest(int argc, char *argv[])
   m_convFilterXRightCast->SetInput(m_convFilterXRight->GetOutput());
 
 
-
   // COST VOLUME 
   m_LeftCost->SetLeftInputImage(inLeft->GetOutput());
   m_LeftCost->SetRightInputImage(inRight->GetOutput());  
@@ -205,8 +204,6 @@ int otbGuidedFilterTest(int argc, char *argv[])
   m_RightCost->UpdateOutputInformation(); 
 
 
-
-
   //WEIGHTS  
      // --- LEFT
   m_meanLeftCost->SetInput1(inLeft->GetOutput());
@@ -232,11 +229,11 @@ int otbGuidedFilterTest(int argc, char *argv[])
   //DISPARITY MAP
     // --- LEFT   
   m_minLeftGF->SetInput(m_meanLeftWeights->GetOutput()); 
-  m_minLeftGF->SetSide('l');
+  m_minLeftGF->SetSide(MinCostVolume::Side::left);
   m_minLeftGF->UpdateOutputInformation(); 
       // --- RIGHT
   m_minRightGF->SetInput(m_meanRightWeights->GetOutput());  
-  m_minRightGF->SetSide('r');
+  m_minRightGF->SetSide(MinCostVolume::Side::right) ;
   m_minRightGF->UpdateOutputInformation(); 
 
   m_LeftDisparity->SetInput(m_minLeftGF->GetOutput());

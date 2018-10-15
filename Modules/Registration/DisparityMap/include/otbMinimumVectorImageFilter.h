@@ -38,42 +38,19 @@ template<class TInput, class TOutput>
 class MinOperator
 {
 public:
-  char GetSide() 
-    {
-     return m_Side;     
-    }
-
-  void SetSide(char side)
-    {
-      m_Side = side;
-    }
 
   unsigned int m_Size ;
+  int m_coef ;
 
   TOutput operator() ( TInput input ) const
     { 
-
     const auto pos = std::min_element(&input[0], &input[m_Size]);
     const auto index = std::distance(pos, &input[0]);
-
-    if(m_Side=='r') //Minimum of the Right cost volume
-      { 
-      return TOutput(-index) ;
-      }
-    else //Minimum of the Left cost volume
-      {        
-      return TOutput(index) ;
-      }  
+    return TOutput(index*m_coef) ;
     }
-
-  private:
-    char m_Side ;
-
-
 }; //end class
 
 } // end Functor
-
 
 
 /** \class MinimumVectorImageFilter
@@ -81,57 +58,69 @@ public:
  *
  * \ingroup OTBDisparityMap
  */
-  template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage>
   class ITK_EXPORT MinimumVectorImageFilter :
     public otb::UnaryFunctorVectorImageFilter<
         TInputImage, TOutputImage,
         Functor::MinOperator<
             typename TInputImage::PixelType,
-            typename TOutputImage::PixelType> >
+            typename TOutputImage::PixelType >>
   {
   public:
   /** Standard class typedefs. */
   typedef MinimumVectorImageFilter Self;
   typedef typename otb::UnaryFunctorVectorImageFilter<
       TInputImage,
-      TOutputImage,
+      TOutputImage,      
       Functor::MinOperator<
           typename TInputImage::PixelType,
           typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  enum class Side {left, right};
+
+  void SetSide(Side s)
+  {
+    m_Side = s;
+  }
+  Side GetSide() const
+  {
+    return m_Side;
+  }
+  
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
 
-  char GetSide()
-    {
-    return this->GetFunctor().GetSide();     
-    }
-
-  void SetSide(char side)
-    {
-    this->GetFunctor().SetSide(side);
-    }
-
-
-  protected:
+  protected:  
+  Side m_Side;
   MinimumVectorImageFilter() =default ;
   ~MinimumVectorImageFilter() override =default ;
-
 
   void GenerateOutputInformation(void) override
     {
     Superclass::GenerateOutputInformation();
     this->GetOutput()->SetNumberOfComponentsPerPixel(1);
-    this->GetFunctor().m_Size = this->GetInput()->GetNumberOfComponentsPerPixel() ;
+    this->GetFunctor().m_Size = this->GetInput()->GetNumberOfComponentsPerPixel() ;    
+    switch(m_Side)
+      {
+      case Side::left:
+        {     
+        this->GetFunctor().m_coef = 1 ;
+        }
+      break;
+      case Side::right:
+        {
+        this->GetFunctor().m_coef = -1 ;
+        }
+      break;
+      }
     }
-  
 
   private:
-  MinimumVectorImageFilter(const Self &) = delete; 
-  void operator =(const Self&) = delete;
+  MinimumVectorImageFilter(const Self &) = delete; //purposely not implemented
+  void operator =(const Self&) = delete; //purposely not implemented
 
 
   }; // end of MinimumVectorImageFilter class
