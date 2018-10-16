@@ -125,7 +125,7 @@ private:
 
     // Load the descriptors model
     std::string descModFile = GetParameterString("descmod");
-    DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read(descModFile.c_str());
+    DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read(descModFile);
 
     LabelSetType Bhyp, Phyp;
     int nbSet;

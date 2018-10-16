@@ -282,7 +282,7 @@ private:
     std::ostringstream sqloss;
     sqloss.str("");
     sqloss<<"SELECT * FROM \""<<layername<<"\" ORDER BY label";
-    otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str().c_str(), nullptr, nullptr);
+    otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str(), nullptr, nullptr);
     otb::ogr::Feature firstFeature = layerTmp.ogr().GetNextFeature();
 
     //Geometry fusion
