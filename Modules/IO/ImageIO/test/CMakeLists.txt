@@ -59,7 +59,6 @@ otbImageFileReaderRADFloat.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbIntImageIOTest.cxx
 otbImageFileReaderONERA.cxx
-otbImageFileReaderServerName.cxx
 otbPNGIndexedNbBandsTest.cxx
 otbImageFileReaderTest.cxx
 otbVectorImageFileWriterTestWithoutInput.cxx
@@ -77,6 +76,10 @@ otbImageFileWriterOptBandTest.cxx
 otbMultiImageFileWriterTest.cxx
 otbWriteGeomFile.cxx
 )
+
+if(OTB_USE_DEPRECATED)
+  set(OTBImageIOTests ${OTBImageIOTests} otbImageFileReaderServerName.cxx)
+endif()
 
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
 target_link_libraries(otbImageIOTestDriver ${OTBImageIO-Test_LIBRARIES})
