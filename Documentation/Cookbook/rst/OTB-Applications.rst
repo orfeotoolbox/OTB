@@ -256,7 +256,8 @@ files in QGIS installation directly.
 Manual installation with QGIS 3
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This section describe the manual installation of OTB plugin for QGIS 3. 
+This section describe the manual installation of OTB plugin for QGIS 3.0.2 or
+later.
 
 Clone qgis-otb-plugin repository and set QGIS_PLUGINPATH. 
 
@@ -272,7 +273,7 @@ For Linux/Unix/MacOSX
 For Windows
 +++++++++++
 
-Clone qgis-otb-plugin repository to ``c:\qgis-plugins\qgis-otb-plugin``
+Clone qgis-otb-plugin repository to ``C:\qgis-plugins\qgis-otb-plugin``
 
 ::
 
@@ -290,7 +291,7 @@ Download and Install OTB
 
 OTB is not distributed with qgis-otb-plugin. It is a seperate project and has its own git repository.
 
-Download OTB: https://www.orfeo-toolbox.org/download/
+Download OTB version 6.6.0 or later : https://www.orfeo-toolbox.org/download/
 
 Git repository: https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb
 
@@ -303,7 +304,7 @@ If you already have QGIS opened, you must restart it.
 
 Then install otb plugin
 
-``Plugins -> Manage and Install Plugins ``
+`Plugins -> Manage and Install Plugins`
 
 Click on `Installed` tab on left and make sure box next to `OrfeoToolBox(OTB)` is checked.
 
