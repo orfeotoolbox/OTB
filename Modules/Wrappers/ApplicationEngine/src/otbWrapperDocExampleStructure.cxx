@@ -148,7 +148,7 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
   // Suppress last added space
   res.erase( res.size()-1, 1);
 
-  return res.c_str();
+  return res;
 }
 
 std::string

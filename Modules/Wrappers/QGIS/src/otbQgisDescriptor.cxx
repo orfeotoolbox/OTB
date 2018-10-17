@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 #endif
 
   ApplicationRegistry::AddApplicationPath(argv[2]);
-  Application::Pointer appli =  ApplicationRegistry::CreateApplicationFaster(module.c_str());
+  Application::Pointer appli =  ApplicationRegistry::CreateApplicationFaster(module);
   
   assert(!appli.IsNull());
 
