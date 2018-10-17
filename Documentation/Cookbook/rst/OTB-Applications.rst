@@ -253,6 +253,72 @@ textfield settings will not be shown. To use a custom OTB instead of the
 existing one, you will need to replace the otbcli, otbgui and library
 files in QGIS installation directly.
 
+Manual installation with QGIS 3
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This section describe the manual installation of OTB plugin for QGIS 3. 
+
+Clone qgis-otb-plugin repository and set QGIS_PLUGINPATH. 
+
+For Linux/Unix/MacOSX
++++++++++++++++++++++
+
+::
+
+    mkdir $HOME/projects; cd $HOME/projects
+    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin
+    export QGIS_PLUGINPATH=$HOME/projects/qgis-otb-plugin
+
+For Windows
++++++++++++
+
+Clone qgis-otb-plugin repository to ``c:\qgis-plugins\qgis-otb-plugin``
+
+::
+
+    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin
+
+Then set the ``QGIS_PLUGINPATH`` variable:
+
+* System properties (``Windows Key + R -> sysdm.cpl`` ) 
+* Select Advanced Tab -> Environment variables. 
+* Under "user variables for " 
+* Add or Edit variable ``QGIS_PLUGINPATH`` and set value to ``C:\qgis-plugins\qgis-otb-plugin``
+
+Download and Install OTB
+++++++++++++++++++++++++
+
+OTB is not distributed with qgis-otb-plugin. It is a seperate project and has its own git repository.
+
+Download OTB: https://www.orfeo-toolbox.org/download/
+
+Git repository: https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb
+
+Configure plugin in QGIS
+++++++++++++++++++++++++
+
+Start QGIS
+
+If you already have QGIS opened, you must restart it.
+
+Then install otb plugin
+
+``Plugins -> Manage and Install Plugins ``
+
+Click on `Installed` tab on left and make sure box next to `OrfeoToolBox(OTB)` is checked.
+
+Open processing settings
+++++++++++++++++++++++++
+
+`Settings -> Options -> Processing (left panel)`
+
+You can see OTB under "Providers":
+
+* Expand OTB tab
+* Tick Activate option
+* Set OTB folder. This is location of your OTB installation.
+* Set OTB application folder. This is location of your OTB applications. ``<OTB_FOLDER>/lib/otb/applications``
+* Click "ok" to save settings and close dialog. If settings are correct, you will have OTB algorithms loaded  in Processing toolbox
 
 Load and save parameters to XML
 -------------------------------
