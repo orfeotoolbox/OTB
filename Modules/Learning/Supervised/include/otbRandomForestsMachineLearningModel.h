@@ -27,12 +27,12 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 #include "itkVariableSizeMatrix.h"
-#include "otbCvRTreesWrapper.h"
-
-class CvRTreesWrapper;
 
 namespace otb
 {
+
+class CvRTreesWrapper;
+
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT RandomForestsMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>
