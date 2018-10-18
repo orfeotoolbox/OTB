@@ -81,23 +81,14 @@ public:
     output.Fill(0); 
 
     //mean rr, gg, bb
-    std::vector<double> v_mean;
-    v_mean.resize(m_bandNumberInput1,0);
-    //variance rr, gg, bb
-    std::vector<double> v_var;
-    v_var.resize(2*m_bandNumberInput1,0);
+    std::vector<double> v_mean(m_bandNumberInput1);
+    // //variance rr, gg, bb     
+    std::vector<double> v_var(2*m_bandNumberInput1);
 
-    std::vector<double> v_pmean;
-    v_pmean.resize(m_bandNumberInput2,0) ;
-
-    std::vector<double> v_multr;
-    v_multr.resize(m_bandNumberInput2,0) ;
-
-    std::vector<double> v_multg;
-    v_multg.resize(m_bandNumberInput2,0) ;
-
-    std::vector<double> v_multb;
-    v_multb.resize(m_bandNumberInput2,0) ;
+    std::vector<double> v_pmean(2*m_bandNumberInput2);
+    std::vector<double> v_multr(2*m_bandNumberInput2);
+    std::vector<double> v_multg(2*m_bandNumberInput2);
+    std::vector<double> v_multb(2*m_bandNumberInput2);
 
     //mean rr gg bb and variance rr gg bb
     for(unsigned int bandI = 0; bandI < m_bandNumberInput1 ; ++bandI)
@@ -159,35 +150,25 @@ public:
         multg += input_I.GetPixel(i)[1] * input_C.GetPixel(i)[bandC];
         multb += input_I.GetPixel(i)[2] * input_C.GetPixel(i)[bandC];
         }
-        mean_p /= m_WSize*m_WSize;
-        multr /= m_WSize*m_WSize;
-        multg /= m_WSize*m_WSize;
-        multb /= m_WSize*m_WSize;
-        v_pmean[bandC] = mean_p;
-        v_multr[bandC] = multr ;
-        v_multg[bandC] = multg ;
-        v_multb[bandC] = multb ;
-        }     
-      }      
+      mean_p /= m_WSize*m_WSize;
+      multr /= m_WSize*m_WSize;
+      multg /= m_WSize*m_WSize;
+      multb /= m_WSize*m_WSize;
+      v_pmean[bandC] = mean_p;
+      v_multr[bandC] = multr ;
+      v_multg[bandC] = multg ;
+      v_multb[bandC] = multb ;
+      }    
+      //covariance matrix
+      typedef itk::Matrix<double, 3, 3> MatrixType;
+      MatrixType M;
+      double epsilon = 6.5025;
+      //ai
+      //r,g,b
+      std::vector<double> elem1(m_bandNumberInput2,0);
+      std::vector<double> elem2(m_bandNumberInput2,0);
+      std::vector<double> elem3(m_bandNumberInput2,0);
 
-    //covariance matrix
-    typedef itk::Matrix<double, 3, 3> MatrixType;
-    MatrixType M;
-    double epsilon = 6.5025;
-
-    //ai
-    //r
-    std::vector<double> elem1;
-    elem1.resize(m_bandNumberInput2,0);
-    //g
-    std::vector<double> elem2;
-    elem2.resize(m_bandNumberInput2,0);
-    //b
-    std::vector<double> elem3;
-    elem3.resize(m_bandNumberInput2,0);
-
-    for(unsigned int bandC = 0 ; bandC < m_bandNumberInput2 ; ++bandC)
-      {
       if(m_bandNumberInput1>1)
         {
         std::vector<double> ak;
@@ -207,7 +188,6 @@ public:
         elem1[bandC] = v_multr[bandC] - v_mean[0] * v_pmean[bandC] ;
         elem2[bandC] = v_multg[bandC] - v_mean[1] * v_pmean[bandC] ;
         elem3[bandC] = v_multb[bandC] - v_mean[2] * v_pmean[bandC] ;  
-
         //ak
         ak[0] = Matrice_cov_inv(0,0)*elem1[bandC] + Matrice_cov_inv(0,1)*elem2[bandC] + Matrice_cov_inv(0,2)*elem3[bandC];
         ak[1] = Matrice_cov_inv(1,0)*elem1[bandC] + Matrice_cov_inv(1,1)*elem2[bandC] + Matrice_cov_inv(1,2)*elem3[bandC];
