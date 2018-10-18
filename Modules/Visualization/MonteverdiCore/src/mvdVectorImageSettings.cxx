@@ -83,6 +83,7 @@ VectorImageSettings
 /***************************************************************************/
 VectorImageSettings
 ::VectorImageSettings( const VectorImageSettings & other ) :
+  ImageSettings(other),
   m_RgbChannels( other.m_RgbChannels ),
   m_RgbDynamicsParams( other.m_RgbDynamicsParams ),
   m_IsGrayscaleActivated( other.m_IsGrayscaleActivated ),

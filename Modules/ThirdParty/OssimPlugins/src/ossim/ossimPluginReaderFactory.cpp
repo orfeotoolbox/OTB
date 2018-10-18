@@ -182,7 +182,10 @@ namespace ossimplugins
 
    ossimPluginReaderFactory::ossimPluginReaderFactory(){}
 
-   ossimPluginReaderFactory::ossimPluginReaderFactory(const ossimPluginReaderFactory&){}
+   ossimPluginReaderFactory::ossimPluginReaderFactory(const ossimPluginReaderFactory& rhs)
+       : ossimImageHandlerFactoryBase(rhs)
+   {
+   }
 
    void ossimPluginReaderFactory::operator=(const ossimPluginReaderFactory&){}
 }
