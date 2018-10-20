@@ -115,13 +115,7 @@ public:
   {
     return m_CreationOptions;
   }
-
-  /** Set NoDataList */	  
-  void SetNoDataList(const NoDataListType& noDataList)
-  {
-    m_NoDataList = noDataList;
-  }
-
+  
   /** Provide hist about the output container to deal with complex pixel
    *  type */ 
   void SetOutputImagePixelType( bool isComplexInternalPixelType, 
