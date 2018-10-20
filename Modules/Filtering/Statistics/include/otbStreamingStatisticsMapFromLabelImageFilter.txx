@@ -52,7 +52,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 template<class TInputVectorImage, class TLabelImage>
 typename itk::DataObject::Pointer
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
-::MakeOutput(DataObjectPointerArraySizeType itkNotUsed(output))
+::MakeOutput(DataObjectPointerArraySizeType output)
 {
   switch (output)
     {
