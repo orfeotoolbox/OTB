@@ -230,8 +230,7 @@ endif()
 
 #-----------------------------------------------------------------------------
 # Option to activate deprecated classes
-option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
-mark_as_advanced(OTB_USE_DEPRECATED)
+option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" ON)
 
 # Although the OpenMP option looks like a 3rd party module, it is NOT. This option
 # is handled with other compilation flags in file OTBSetStandardCompilerFlags.cmake
