@@ -226,34 +226,6 @@ like this small example:
 
 For more information about this Python interface, check the recipe section.
 
-QGIS interface
---------------
-
-The processing toolbox
-^^^^^^^^^^^^^^^^^^^^^^
-
-OTB applications are available from QGIS. Use them from the processing
-toolbox, which is accessible under Processing :math:`\rightarrow`
-ToolBox. Switch to “advanced interface” in the bottom of the application
-widget and OTB applications will be there.
-
-.. figure:: Art/QtImages/qgis-otb.png
-
-Using a custom OTB
-^^^^^^^^^^^^^^^^^^
-
-If QGIS cannot find OTB, the “applications folder” and “binaries folder”
-can be set from the settings found under Processing :math:`\rightarrow`
-Settings :math:`\rightarrow` “service provider”.
-
-.. figure:: Art/QtImages/qgis-otb-settings.png
-
-On some versions of QGIS, if an existing OTB installation is found, the
-textfield settings will not be shown. To use a custom OTB instead of the
-existing one, you will need to replace the otbcli, otbgui and library
-files in QGIS installation directly.
-
-
 Load and save parameters to XML
 -------------------------------
 
