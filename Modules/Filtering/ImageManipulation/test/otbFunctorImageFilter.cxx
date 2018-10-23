@@ -184,8 +184,8 @@ using OImage = typename otb::Image<int>;
 using Neig = typename itk::Neighborhood<int>;
 
 static_assert(otb::IsNeighborhood<Neig>::value, "err");
-static_assert(!otb::IsNeighborhood<OImage>::value, "err");
 static_assert(!otb::IsNeighborhood<double>::value, "err");
+static_assert(!otb::IsNeighborhood<itk::VariableLengthVector<double>>::value, "err");
 
 
 using namespace otb::functor_filter_details;
@@ -256,10 +256,10 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   extract->Update();
   
   // Test FunctorImageFilter With Mean functor
-  // using MeanFunctorType = Mean<double,double>;
-  // auto median = otb::FunctorImageFilter<MeanFunctorType>::New(MeanFunctorType{});
-  // median->SetVInputs(image);
-  // median->Update();
+  using MeanFunctorType = Mean<double,double>;
+  auto median = otb::FunctorImageFilter<MeanFunctorType>::New(MeanFunctorType{},{{2,2}});
+  median->SetVInputs(image);
+  median->Update();
   
  return EXIT_SUCCESS;
 }

@@ -53,7 +53,9 @@ FunctorImageFilter<TFunction>
   auto requestedRegion = outputPtr->GetRequestedRegion();
 
   // Propagate to each variadic inputs, including possible radius
-  functor_filter_details::SetInputRequestedRegions(this->GetVInputs(),requestedRegion, {{0,0}});
+  // TODO: For now all inputs are padded with the radius, even if they
+  // are not neighborhood based
+  functor_filter_details::SetInputRequestedRegions(this->GetVInputs(),requestedRegion, m_Radius);
 }
 
 template <class TFunction>
@@ -85,7 +87,7 @@ FunctorImageFilter<TFunction>
   itk::ImageScanlineIterator<OutputImageType> outIt(this->GetOutput(),outputRegionForThread);
   itk::ProgressReporter p(this,threadId,outputRegionForThread.GetNumberOfPixels());
 
-  auto inputIterators = functor_filter_details::MakeIterators(this->GetVInputs(),outputRegionForThread);
+  auto inputIterators = functor_filter_details::MakeIterators(this->GetVInputs(),outputRegionForThread, m_Radius,InputHasNeighborhood{});
   
   while(!outIt.IsAtEnd())
     {

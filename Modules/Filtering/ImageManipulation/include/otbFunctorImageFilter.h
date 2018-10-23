@@ -91,26 +91,60 @@ template <typename ...T> auto GetNumberOfComponentsPerInput(std::tuple<T...> & t
   return GetNumberOfComponentsPerInputImpl(t, std::make_index_sequence<sizeof...(T)>{});
 }
 
-template <class T> auto MakeIterator(const T * img, const itk::ImageRegion<2> & region)
-{
-  itk::ImageRegionConstIterator<T> it(img,region);
-  return it;
-}
+template <typename N> struct MakeIterator {};
 
-template <class Tuple, size_t...Is> auto MakeIteratorsImpl(const Tuple& t, const itk::ImageRegion<2> & region, std::index_sequence<Is...>)
+template <> struct MakeIterator<std::false_type>
 {
-  return std::make_tuple(MakeIterator(std::get<Is>(t),region)...);
-}
-
-template<typename... T> auto MakeIterators(std::tuple<T...> &&t, const itk::ImageRegion<2> & region)
+  template <class T> static auto Make(const T * img, const itk::ImageRegion<2> & region, const itk::Size<2>&)
   {
-    return MakeIteratorsImpl(t,region,std::make_index_sequence<sizeof...(T)>{});
+    itk::ImageRegionConstIterator<T> it(img,region);
+    return it;
+  }
+};
+
+template <> struct MakeIterator<std::true_type>
+{
+  template <class T> static auto Make(const T * img, const itk::ImageRegion<2> & region, const itk::Size<2>& radius)
+  {
+    itk::ConstNeighborhoodIterator<T> it(radius,img,region);
+    return it;
+  }
+};
+
+
+template <class TNeigh, class Tuple, size_t...Is> auto MakeIteratorsImpl(const Tuple& t, const itk::ImageRegion<2> & region, const itk::Size<2> & radius, std::index_sequence<Is...>, TNeigh)
+{
+  return std::make_tuple(MakeIterator<typename std::tuple_element<Is,TNeigh>::type >::Make(std::get<Is>(t),region,radius)...);
+}
+
+template<class TNeigh, typename... T> auto MakeIterators(std::tuple<T...> &&t,const itk::ImageRegion<2> & region, const itk::Size<2> & radius, TNeigh n)
+  {
+    return MakeIteratorsImpl(t,region,radius,std::make_index_sequence<sizeof...(T)>{},n);
   }
 
 // Variadic call of operator from iterator tuple
+template <typename T> struct GetProxy{};
+
+
+template <typename T> struct GetProxy<itk::ImageRegionConstIterator<T> >
+{
+  static auto Get(const itk::ImageRegionConstIterator<T> & t)
+{
+  return t.Get();
+}
+};
+
+template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
+{
+  static auto Get(const itk::ConstNeighborhoodIterator<T> & t)
+{
+  return t.GetNeighborhood();
+}
+};
+
 template <class Tuple, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, const Oper & oper,std::index_sequence<Is...>)
 {
-  return oper(std::get<Is>(t).Get()...);
+  return oper(GetProxy<typename std::remove_reference<decltype(std::get<Is>(t))>::type>::Get(std::get<Is>(t))...);
 }
 
 template <class Oper, typename ... Args> auto CallOperator(const Oper& oper, std::tuple<Args...> & t)
@@ -153,25 +187,52 @@ template <class F, class T, size_t N> struct NumberOfOutputComponents<F,otb::Vec
 } // end namespace functor_filter_details
 
 
-template <class T> struct IsNeighborhood
+template <class T, class Enable = void> struct IsNeighborhood{};
+
+template <class T> struct IsNeighborhood<T,typename std::enable_if<std::is_scalar<typename std::remove_reference<typename std::remove_cv<T>::type>::type>::value >::type>
 {
   using ValueType = std::false_type;
   static constexpr bool value = false;
   using PixelType = T;
 };
 
-  template <class T> struct IsNeighborhood<itk::Neighborhood<T>>
+template <class T> struct IsNeighborhood<itk::Neighborhood<T>>
 {
   using ValueType = std::true_type;
   static constexpr bool value = true;
   using PixelType = T;
 };
 
+template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
+{
+  using ValueType = std::true_type;
+  static constexpr bool value = true;
+  using PixelType = T;
+};
+
+template <class T> struct IsNeighborhood<itk::VariableLengthVector<T>>
+{
+  using ValueType = std::false_type;
+  static constexpr bool value = false;
+  using PixelType = itk::VariableLengthVector<T>;
+};
+
+
+template <class T> struct IsNeighborhood<const itk::VariableLengthVector<T>&>
+{
+  using ValueType = std::false_type;
+  static constexpr bool value = false;
+  using PixelType = itk::VariableLengthVector<T>;
+};
+
+
+
+
 template<typename T>
 struct TInputImage
 {
   using ArgumentType = T; //ArgType<T,N>;
-  using PixelType = typename IsNeighborhood<typename std::remove_cv<typename std::remove_reference<ArgumentType>::type >::type>::PixelType;
+  using PixelType = typename IsNeighborhood<typename std::remove_cv<typename std::remove_reference< ArgumentType>::type >::type>::PixelType;
   using ScalarType = typename itk::DefaultConvertPixelTraits<PixelType>::ComponentType;
   using ImageType = typename std::conditional<std::is_scalar<PixelType>::value,
                                      otb::Image< ScalarType >,
@@ -198,19 +259,21 @@ template <typename R, typename... T> struct FunctorFilterSuperclassHelper<R(*)(T
 {
   using OutputImageType = typename TOutputImage<R>::ImageType;
   using FilterType = VariadicInputsImageFilter<OutputImageType,typename TInputImage<T>::ImageType...>;
-
+  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
 template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...) const>
 {
   using OutputImageType = typename TOutputImage<R>::ImageType;
   using FilterType = VariadicInputsImageFilter<OutputImageType,typename TInputImage<T>::ImageType...>;
+  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
 template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...)>
 {
   using OutputImageType = typename TOutputImage<R>::ImageType;
   using FilterType = VariadicInputsImageFilter<OutputImageType,typename TInputImage<T>::ImageType...>;
+  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
 // template <class F> class NumberOfOutputDecorator
@@ -258,6 +321,8 @@ public:
   
   using ProcessObjectType = itk::ProcessObject;
 
+  using InputHasNeighborhood = typename FunctorFilterSuperclassHelper<TFunction>::InputHasNeighborhood;
+  
  /** Method for creation by passing the filter type. */
   static Pointer New(const TFunction& f, itk::Size<2> radius = {{0,0}});
 
