@@ -84,6 +84,8 @@ public:
   typedef   long              IndexValueType;
   typedef   unsigned long     SizeValueType;
 
+  typedef std::vector<std::string> CreationOptionsType;
+
   /**
    * \class UnknownType
    * Used to return information when types are unknown.

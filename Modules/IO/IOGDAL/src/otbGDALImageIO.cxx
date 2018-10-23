@@ -1247,7 +1247,7 @@ void GDALImageIO::Write(const void* buffer)
       itkExceptionMacro(<< "Unable to instantiate driver " << gdalDriverShortName << " to write " << m_FileName);
       }
 
-    GDALCreationOptionsType creationOptions = m_CreationOptions;
+    ImageIOBase::CreationOptionsType creationOptions = m_CreationOptions;
     GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
                                                  otb::ogr::StringListConverter(creationOptions).to_ogr(),
                                                  nullptr, nullptr );
@@ -1396,7 +1396,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   if (m_CanStreamWrite)
     {
-    GDALCreationOptionsType creationOptions = m_CreationOptions;
+    ImageIOBase::CreationOptionsType creationOptions = m_CreationOptions;
     m_Dataset = GDALDriverManagerWrapper::GetInstance().Create(
                      driverShortName,
                      GetGdalWriteImageFileName(driverShortName, m_FileName),

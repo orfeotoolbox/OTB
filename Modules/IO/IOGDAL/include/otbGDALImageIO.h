@@ -80,8 +80,6 @@ public:
   typedef otb::ImageIOBase        Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
-  typedef std::vector<std::string> GDALCreationOptionsType;
-
   typedef  std::vector<
     std::pair<int, double>
     > NoDataListType;
@@ -111,12 +109,12 @@ public:
 
   
   /** Set/Get the options */
-  void SetOptions(const GDALCreationOptionsType& opts)
+  void SetOptions(const CreationOptionsType& opts)
   {
     m_CreationOptions = opts;
   }
 
-  GDALCreationOptionsType GetOptions(void)
+  CreationOptionsType GetOptions(void)
   {
     return m_CreationOptions;
   }
@@ -271,7 +269,7 @@ private:
 
   /**
    *  Creation Options */
-  GDALCreationOptionsType m_CreationOptions;
+  CreationOptionsType m_CreationOptions;
 
   /**
    * Number of Overviews in the file */

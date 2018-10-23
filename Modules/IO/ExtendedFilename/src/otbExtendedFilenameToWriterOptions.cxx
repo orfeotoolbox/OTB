@@ -42,7 +42,7 @@ ExtendedFilenameToWriterOptions
 
   has_noDataValue = false;
   
-  m_Options.gdalCreationOptions.first = false;
+  m_Options.creationOptions.first = false;
   m_Options.streamingType.first       = false;
   m_Options.streamingSizeMode.first   = false;
   m_Options.streamingSizeValue.first  = false;
@@ -91,8 +91,8 @@ ExtendedFilenameToWriterOptions
     if (tmp.size()>2)
       if ((tmp[0]=="gdal") && (tmp[1]=="co"))
         {
-        m_Options.gdalCreationOptions.first = true;
-        m_Options.gdalCreationOptions.second.push_back(tmp[2] + "=" +it->second);
+        m_Options.creationOptions.first = true;
+        m_Options.creationOptions.second.push_back(tmp[2] + "=" +it->second);
         }
     }
 
@@ -297,16 +297,16 @@ ExtendedFilenameToWriterOptions
 
 bool
 ExtendedFilenameToWriterOptions
-::gdalCreationOptionsIsSet () const
+::CreationOptionsIsSet () const
 {
-  return m_Options.gdalCreationOptions.first;
+  return m_Options.creationOptions.first;
 }
 ExtendedFilenameToWriterOptions
-::GDALCOType
+::COType
 ExtendedFilenameToWriterOptions
-::GetgdalCreationOptions () const
+::GetCreationOptions () const
 {
-  return m_Options.gdalCreationOptions.second;
+  return m_Options.creationOptions.second;
 }
 
 bool

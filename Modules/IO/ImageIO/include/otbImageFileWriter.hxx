@@ -51,6 +51,8 @@
 #include "otbStringUtils.h"
 #include "otbUtils.h"
 
+#include "otbGDALImageIO.h"
+
 namespace otb
 {
 
@@ -447,7 +449,7 @@ ImageFileWriter<TInputImage>
 
   // Manage extended filename
   if ((strcmp(m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
-      && (m_FilenameHelper->gdalCreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet()  || m_FilenameHelper->NoDataValueIsSet()) )
+      && (m_FilenameHelper->CreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet()  || m_FilenameHelper->NoDataValueIsSet()) )
     {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(m_ImageIO.GetPointer());
 
@@ -460,7 +462,7 @@ ImageFileWriter<TInputImage>
       throw e;
       }
 
-    imageIO->SetOptions(m_FilenameHelper->GetgdalCreationOptions());
+    imageIO->SetOptions(m_FilenameHelper->GetCreationOptions());
     imageIO->SetWriteRPCTags(m_FilenameHelper->GetWriteRPCTags());
     if (m_FilenameHelper->NoDataValueIsSet() )
 	imageIO->SetNoDataList(m_FilenameHelper->GetNoDataList());

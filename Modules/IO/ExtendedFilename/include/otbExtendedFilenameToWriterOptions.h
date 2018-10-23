@@ -23,7 +23,7 @@
 #define otbExtendedFilenameToWriterOptions_h
 
 #include "otbExtendedFilenameHelper.h"
-#include "otbGDALImageIO.h"
+#include "otbImageIOBase.h"
 #include <string>
 
 namespace otb
@@ -61,7 +61,7 @@ public:
   typedef MapType::iterator                         MapIteratorType;
 
   /** The writer option structure. */
-  typedef GDALImageIO::GDALCreationOptionsType      GDALCOType;
+  typedef ImageIOBase::CreationOptionsType      COType;
 
 
   struct OptionType
@@ -69,7 +69,7 @@ public:
     std::pair< bool, std::string  >              simpleFileName;
     std::pair< bool, bool  >                     writeGEOMFile;
     std::pair< bool, bool  >                     writeRPCTags;
-    std::pair< bool, GDALCOType >                gdalCreationOptions;
+    std::pair< bool, COType >                    creationOptions;
     std::pair<bool,  std::string>                streamingType;
     std::pair<bool,  std::string>                streamingSizeMode;
     std::pair<bool,  double>                     streamingSizeValue;
@@ -99,8 +99,8 @@ public:
 
   bool GetWriteGEOMFile () const;
   bool GetWriteRPCTags() const;
-  bool gdalCreationOptionsIsSet () const;
-  GDALCOType GetgdalCreationOptions () const;
+  bool CreationOptionsIsSet () const;
+  COType GetCreationOptions () const;
   bool StreamingTypeIsSet () const;
   std::string GetStreamingType() const;
   bool StreamingSizeModeIsSet() const;

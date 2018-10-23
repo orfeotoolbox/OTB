@@ -27,7 +27,6 @@ product by skipping either geographic or sensor-model information.")
 otb_module(OTBExtendedFilename
   DEPENDS
     OTBCommon
-    OTBIOGDAL
     OTBITK
     OTBBoostAdapters
     OTBImageBase
@@ -35,7 +34,6 @@ otb_module(OTBExtendedFilename
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO
-    OTBImageBase
 
   DESCRIPTION
     "${DOCUMENTATION}"
