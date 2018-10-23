@@ -17,9 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #ifndef otb_VariadicInputsImageFilter_h
 #define otb_VariadicInputsImageFilter_h
+
+#include "itkImageSource.h"
 
 namespace otb {
 

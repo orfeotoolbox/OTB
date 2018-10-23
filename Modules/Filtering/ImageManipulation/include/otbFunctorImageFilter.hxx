@@ -26,7 +26,6 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageScanlineIterator.h"
 #include "itkImageRegionConstIterator.h"
-#include "itkDefaultConvertPixelTraits.h"
 
 namespace otb
 {
@@ -178,12 +177,6 @@ template <class F, class T, size_t N> struct NumberOfOutputComponents<F,otb::Vec
 };
 
 } // end namespace functor_filter_details
-
-
-
-template <class TFunction>
-FunctorImageFilter<TFunction>::FunctorImageFilter()
-{}
 
 template <class TFunction>
 void

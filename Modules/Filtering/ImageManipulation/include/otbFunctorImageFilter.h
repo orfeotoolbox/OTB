@@ -24,9 +24,8 @@
 #include "otbVariadicInputsImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-
+#include "itkDefaultConvertPixelTraits.h"
 #include <type_traits>
-#include <utility>
 
 namespace otb
 {
