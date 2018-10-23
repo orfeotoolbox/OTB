@@ -155,7 +155,7 @@ template<typename O, typename T> struct BandExtraction
 
 // 1 Image with neighborhood -> 1 Image
 // This Functor computes the mean in neighborhood
-template<typename TOut, typename TIn> struct Median
+template<typename TOut, typename TIn> struct Mean
 {  
   auto operator()(const itk::Neighborhood<TIn> & in) const
   {
@@ -255,11 +255,11 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   extract->SetVInputs(vimage);
   extract->Update();
   
-  // Test FunctorImageFilter With Median functor
-  using MedianFunctorType = Median<double,double>;
-  auto median = otb::FunctorImageFilter<MedianFunctorType>::New(MedianFunctorType{});
-  median->SetVInputs(image);
-  median->Update();
+  // Test FunctorImageFilter With Mean functor
+  // using MeanFunctorType = Mean<double,double>;
+  // auto median = otb::FunctorImageFilter<MeanFunctorType>::New(MeanFunctorType{});
+  // median->SetVInputs(image);
+  // median->Update();
   
  return EXIT_SUCCESS;
 }

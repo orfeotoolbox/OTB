@@ -91,18 +91,11 @@ template <typename ...T> auto GetNumberOfComponentsPerInput(std::tuple<T...> & t
   return GetNumberOfComponentsPerInputImpl(t, std::make_index_sequence<sizeof...(T)>{});
 }
 
-template <class T> auto MakeIterator(itk::SmartPointer<T> img, const itk::ImageRegion<2> & region)
+template <class T> auto MakeIterator(const T * img, const itk::ImageRegion<2> & region)
 {
   itk::ImageRegionConstIterator<T> it(img,region);
   return it;
 }
-
-template <class T> auto MakeIterator(itk::SmartPointer<const T> img, const itk::ImageRegion<2> & region)
-{
-  itk::ImageRegionConstIterator<T> it(img,region);
-  return it;
-}
-
 
 template <class Tuple, size_t...Is> auto MakeIteratorsImpl(const Tuple& t, const itk::ImageRegion<2> & region, std::index_sequence<Is...>)
 {
