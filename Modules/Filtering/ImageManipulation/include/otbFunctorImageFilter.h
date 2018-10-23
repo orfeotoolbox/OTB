@@ -39,6 +39,8 @@ namespace otb
 namespace functor_filter_details
 {
 // Variadic SetRequestedRegion
+
+// This function sets the requested region for one image
 template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageRegion<2> & region, const itk::Size<2>& radius)
 {
   auto currentRegion = region;
@@ -46,7 +48,7 @@ template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageReg
 
   // The ugly cast in all ITK filters
   T * nonConstImg = const_cast<T*>(img);
-
+  
   if(currentRegion.Crop(img->GetLargestPossibleRegion()))
     {
     nonConstImg->SetRequestedRegion(currentRegion);
@@ -79,12 +81,14 @@ template <typename... T> auto SetInputRequestedRegions(std::tuple<T...> && t,con
   return SetInputRequestedRegionsImpl(t,region,std::make_index_sequence<sizeof...(T)>{},radius);
 }
 
-
-// Variadic creation of iterator tuple
-template <class T> auto MakeIterator(const T * img, const itk::ImageRegion<2> & region)
+template <class Tuple, size_t...Is> auto GetNumberOfComponentsPerInputImpl(Tuple & t, std::index_sequence<Is...>)
 {
-  itk::ImageRegionConstIterator<T> it(img,region);
-  return it;
+  return std::array<size_t,sizeof...(Is)>{{std::get<Is>(t)->GetNumberOfComponentsPerPixel()...}};
+}
+
+template <typename ...T> auto GetNumberOfComponentsPerInput(std::tuple<T...> & t)
+{
+  return GetNumberOfComponentsPerInputImpl(t, std::make_index_sequence<sizeof...(T)>{});
 }
 
 template <class T> auto MakeIterator(itk::SmartPointer<T> img, const itk::ImageRegion<2> & region)
@@ -131,6 +135,27 @@ template<typename ... Args> void MoveIterators(std::tuple<Args...> & t)
 {
   MoveIteratorsImpl(t,std::make_index_sequence<sizeof...(Args)>{});
 }
+
+
+// Default implementation does nothing
+template <class F, class O, size_t N> struct NumberOfOutputComponents
+{};
+
+template <class F, class T, size_t N> struct NumberOfOutputComponents<F,otb::Image<T>,N>
+  {
+  // We can not be here if output type is VectorImage
+    static void Set(const F&, otb::Image<T> *, std::array<size_t,N>){ std::cout<<"Default set"<<std::endl;}
+};
+
+// Case 1: O is a VectorImage AND F has a fixed OuptutSize static constexrp size_t;
+template <class F, class T, size_t N> struct NumberOfOutputComponents<F,otb::VectorImage<T>,N>
+{
+  static void Set(const F & f, otb::VectorImage<T> * outputImage, std::array<size_t,N> inNbBands)
+  {
+    std::cout<<"Use OutputSize to set number of output components"<<std::endl;
+    outputImage->SetNumberOfComponentsPerPixel(f.OutputSize(inNbBands));
+  }
+};
 
 } // end namespace functor_filter_details
 
@@ -195,24 +220,24 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
   using FilterType = VariadicInputsImageFilter<OutputImageType,typename TInputImage<T>::ImageType...>;
 };
 
-// Default implementation does nothing
-template <class F, class O, class cond = void> struct NumberOfOutputComponents
-{
-  // We can not be here if output type is VectorImage
-  //static_assert(std::is_same<O, otb::VectorImage<typename O::InternalPixelType> >::value,"Return type of Functor is a VariableLenghtVector, add a constexpr size_t OutputSize member");
-  static void Set(const F&, O *){}
-};
-
-// Case 1: O is a VectorImage AND F has a fixed OuptutSize unsigned
-// int constexpr
-template <class F, class T> struct NumberOfOutputComponents<F,T,typename std::enable_if<std::is_same<size_t, decltype(F::OutputSize)>::value>::type >
-{
-static void Set(const F &, otb::VectorImage<T> * outputImage)
-  {
-    std::cout<<"Use OutputSize to set number of output components"<<std::endl;
-    outputImage->SetNumberOfComponentsPerPixel(F::OutputSize);
-  }
-};
+// template <class F> class NumberOfOutputDecorator
+// {
+// public:
+//   NumberOfOutputDecorator(const F & f, size_t n) : m_Functor(f), m_NumberOfOutputs(n) {}
+  
+//   template<typename ...T> auto operator()(T...args)
+//   {
+//     return m_Functor(args...);
+//   }
+  
+//   constexpr size_t OutputSize(...) const
+//   {
+//     return m_NumberOfOutputs;
+//   }
+// private:
+//   F      m_Functor;
+//   size_t m_NumberOfOutputs;
+// };
 
 /** \class FunctorImageFilter
  * \brief Implements 
@@ -241,9 +266,7 @@ public:
   using ProcessObjectType = itk::ProcessObject;
 
  /** Method for creation by passing the filter type. */
-
-
-  static Pointer New(const FunctorType& f) ;
+  static Pointer New(const TFunction& f, itk::Size<2> radius = {{0,0}});
 
 /** Run-time type information (and related methods). */
   itkTypeMacro(FunctorImageFilter, ImageToImageFilter);
@@ -282,7 +305,7 @@ void SetFunctor(const FunctorType& functor)
 
 private:
 FunctorImageFilter();
-FunctorImageFilter(const FunctorType& f) : m_Functor(f) {};
+FunctorImageFilter(const FunctorType& f, itk::Size<2> radius) : m_Functor(f), m_Radius(radius) {};
 FunctorImageFilter(const Self &) ;
 void operator =(const Self&) ;
 ~FunctorImageFilter() {}
@@ -309,6 +332,8 @@ protected:
   virtual void GenerateOutputInformation() override;
   
   FunctorType m_Functor;
+
+  itk::Size<2> m_Radius;
 };
 
 }// namespace otb

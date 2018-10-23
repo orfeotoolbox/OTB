@@ -30,16 +30,13 @@ namespace otb
 
 template <class TFunction>
 FunctorImageFilter<TFunction>::FunctorImageFilter()
-{
-  //  this->SetNumberOfRequiredInputs(m_Functor.GetNumberOfInputs());
-  //  this->InPlaceOff();
-}
+{}
 
 template <class TFunction>
-typename FunctorImageFilter<TFunction>::Pointer 
-FunctorImageFilter<TFunction>::New(const TFunction& f) 
+typename FunctorImageFilter<TFunction>::Pointer
+FunctorImageFilter<TFunction>::New(const TFunction& f, itk::Size<2> radius) 
 {
-  Pointer p = new FunctorImageFilter<TFunction>(f);
+  Pointer p = new FunctorImageFilter<TFunction>(f,radius);
   return p;                                           
 }
 
@@ -63,7 +60,17 @@ template <class TFunction>
 void
 FunctorImageFilter<TFunction>::GenerateOutputInformation()
 {
-  NumberOfOutputComponents<TFunction,OutputImageType>::Set(m_Functor,this->GetOutput());
+  // Call Superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  // Get All variadic inputs
+  auto inputs = this->GetVInputs();
+
+  // Retrieve an array of number of components per input
+  auto inputNbComps = functor_filter_details::GetNumberOfComponentsPerInput(inputs);
+
+  // Call the helper to set the number of components for the output image
+  functor_filter_details::NumberOfOutputComponents<TFunction,OutputImageType,inputNbComps.size()>::Set(m_Functor,this->GetOutput(),inputNbComps);
 }
 
 /**
@@ -74,8 +81,7 @@ void
 FunctorImageFilter<TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
-
-  
+  // Build output iterator
   itk::ImageScanlineIterator<OutputImageType> outIt(this->GetOutput(),outputRegionForThread);
   itk::ProgressReporter p(this,threadId,outputRegionForThread.GetNumberOfPixels());
 
