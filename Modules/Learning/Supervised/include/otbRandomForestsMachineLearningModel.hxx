@@ -25,7 +25,6 @@
 #include "itkMacro.h"
 #include "otbRandomForestsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
-#include "otbCvRTreesWrapper.h"
 
 namespace otb
 {
