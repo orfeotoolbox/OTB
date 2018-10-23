@@ -33,6 +33,13 @@ otb_module(OTBAnomalyDetection
     OTBTestKernel
     OTBImageIO
     OTBImageBase
+    OTBCommon
+    OTBOSSIMAdapters
+    OTBExtendedFilename
+    OTBMetadata
+    OTBStreaming
+    OTBBoostAdapters
+    OTBIOGDAL
 
   DESCRIPTION
     "${DOCUMENTATION}"
