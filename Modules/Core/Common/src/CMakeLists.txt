@@ -31,6 +31,8 @@ set(OTBCommon_SRC
   otbStringToHTML.cxx
   otbExtendedFilenameHelper.cxx
   otbLogger.cxx
+  otbRPC.cxx
+  otbKeywordListInterface.cxx
   )
 
 add_library(OTBCommon ${OTBCommon_SRC})

@@ -21,14 +21,15 @@
 #ifndef otbImageKeywordlist_h
 #define otbImageKeywordlist_h
 
-#include <map>
-
-#include "gdal.h"
+#include "OTBOSSIMAdaptersExport.h"
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
-#include "OTBOSSIMAdaptersExport.h"
+#include "otbKeywordListInterface.h"
+
+
+#include <map>
 
 //forward declaration
 class ossimKeywordlist;
@@ -75,7 +76,7 @@ namespace internal
  *
  * \ingroup OTBOSSIMAdapters
  */
-class OTBOSSIMAdapters_EXPORT ImageKeywordlist
+class OTBOSSIMAdapters_EXPORT ImageKeywordlist : public KeywordListInterface
 {
 public:
   /** Standard class typedefs. */
@@ -123,11 +124,10 @@ public:
 
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
 
-  /** try to convert the image keywordlist into a GDALRpcInfo structure
-   *  return true if successful, false otherwise */
-  virtual bool convertToGDALRPC(GDALRPCInfo &rpc) const;
-
   virtual void Print(std::ostream& os, itk::Indent indent = 0) const;
+
+  /** Return RPC POD. */
+  RPC GetRPC() const override;
 
   ImageKeywordlist();
   virtual ~ImageKeywordlist();

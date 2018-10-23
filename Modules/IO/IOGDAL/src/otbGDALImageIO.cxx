@@ -31,6 +31,7 @@
 #include "otbImage.h"
 #include "otb_tinyxml.h"
 #include "otbImageKeywordlist.h"
+#include "otbGDALRPC.h"
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
@@ -209,7 +210,7 @@ void GDALImageIO::Read(void* buffer)
                                      0,
                                      0);
     chrono.Stop();
-    
+
    if (lCrGdal == CE_Failure)
       {
       itkExceptionMacro(<< "Error while reading image (GDAL format) '"
@@ -217,7 +218,7 @@ void GDALImageIO::Read(void* buffer)
       }
 
     otbLogMacro(Debug,<< "GDAL read took " << chrono.GetElapsedMilliseconds() << " ms")
-      
+
     // Interpret index as color
     std::streamoff cpt(0);
     GDALColorTable* colorTable = dataset->GetRasterBand(1)->GetColorTable();
@@ -511,7 +512,7 @@ void GDALImageIO::InternalReadImageInformation()
   // Consider only the data type given by the first band
   // Maybe be could changed (to check)
   m_PxType->pixType = dataset->GetRasterBand(1)->GetRasterDataType();
-  
+
   if (m_PxType->pixType == GDT_Byte)
     {
     SetComponentType(UCHAR);
@@ -715,8 +716,8 @@ void GDALImageIO::InternalReadImageInformation()
   /*  Get Pixel type                                                      */
   /* -------------------------------------------------------------------- */
 
-  itk::EncapsulateMetaData< IOComponentType >( dict, 
-          MetaDataKey::DataType , 
+  itk::EncapsulateMetaData< IOComponentType >( dict,
+          MetaDataKey::DataType ,
           this->GetComponentType() );
 
   /* -------------------------------------------------------------------- */
@@ -1229,7 +1230,7 @@ void GDALImageIO::Write(const void* buffer)
       }
 
     otbLogMacro(Debug,<< "GDAL write took " << chrono.GetElapsedMilliseconds() << " ms")
-      
+
     // Flush dataset cache
     m_Dataset->GetDataSet()->FlushCache();
     }
@@ -1509,18 +1510,35 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     /* Set the RPC coeffs if no projection available (since GDAL 1.10.0)    */
     /* -------------------------------------------------------------------- */
 #if GDAL_VERSION_NUM >= 1100000
-    ImageKeywordlist otb_kwl;
+    ImageKeywordlist kwl;
+
     itk::ExposeMetaData<ImageKeywordlist>(dict,
                                           MetaDataKey::OSSIMKeywordlistKey,
-                                          otb_kwl);
-    if( m_WriteRPCTags && otb_kwl.GetSize() != 0 )
+                                          kwl);
+
+    if( m_WriteRPCTags && kwl.GetSize() != 0 )
       {
-      GDALRPCInfo gdalRpcStruct;
-      if ( otb_kwl.convertToGDALRPC(gdalRpcStruct) )
+      GDALRPCInfo gdalRpcInfo;
+
+      try
         {
-        char **rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
-        dataset->SetMetadata(rpcMetadata, "RPC");
-        CSLDestroy( rpcMetadata );
+        // Throws exception if fails.
+        otb::gdal::convert( gdalRpcInfo, kwl.GetRPC() );
+
+        std::unique_ptr< char * [],
+          std::function< decltype( CSLDestroy ) > >
+          rpcMetaData(
+            RPCInfoToMD( &gdalRpcInfo ),
+            CSLDestroy
+          );
+
+        assert( rpcMetaData );
+
+        dataset->SetMetadata( rpcMetaData.get(), "RPC" );
+        }
+      catch(...)
+        {
+        // not a RPC model
         }
       }
 #endif
