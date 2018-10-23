@@ -30,6 +30,7 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkProcessObject.h"
 #include <type_traits>
+#include <utility>
 #include "otbFunctionTraits.h"
 #include "itkDefaultConvertPixelTraits.h"
 
@@ -174,7 +175,7 @@ template <class F, class T, size_t N> struct NumberOfOutputComponents<F,otb::Ima
     static void Set(const F&, otb::Image<T> *, std::array<size_t,N>){ std::cout<<"Default set"<<std::endl;}
 };
 
-// Case 1: O is a VectorImage AND F has a fixed OuptutSize static constexrp size_t;
+// O is a VectorImage AND F has a fixed OuptutSize static constexrp size_t;
 template <class F, class T, size_t N> struct NumberOfOutputComponents<F,otb::VectorImage<T>,N>
 {
   static void Set(const F & f, otb::VectorImage<T> * outputImage, std::array<size_t,N> inNbBands)
@@ -276,24 +277,21 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
-// template <class F> class NumberOfOutputDecorator
-// {
-// public:
-//   NumberOfOutputDecorator(const F & f, size_t n) : m_Functor(f), m_NumberOfOutputs(n) {}
-  
-//   template<typename ...T> auto operator()(T...args)
-//   {
-//     return m_Functor(args...);
-//   }
-  
-//   constexpr size_t OutputSize(...) const
-//   {
-//     return m_NumberOfOutputs;
-//   }
-// private:
-//   F      m_Functor;
-//   size_t m_NumberOfOutputs;
-// };
+
+template <typename F> struct NumberOfOutputBandsDecorator : F
+{
+public:
+  NumberOfOutputBandsDecorator(const F t, unsigned int nbComp) : F(t), m_NumberOfOutputComponents(nbComp) {}
+  using F::operator();
+
+  constexpr size_t OutputSize(...) const
+  {
+    return m_NumberOfOutputComponents;
+  }
+
+private:
+  unsigned int m_NumberOfOutputComponents;
+};
 
 /** \class FunctorImageFilter
  * \brief Implements 
@@ -303,7 +301,10 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
  * \ingroup IntensityImageFilters   Multithreaded
  *
  * \ingroup OTBImageManipulation
- */
+*/
+template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius = {{0,0}});
+template <typename Functor> auto NewFunctorFilter(const Functor& f, unsigned int numberOfOuptutBands, itk::Size<2> radius = {{0,0}});
+  
 template <class TFunction>
     class ITK_EXPORT FunctorImageFilter
   : public FunctorFilterSuperclassHelper<TFunction>::FilterType
@@ -324,7 +325,7 @@ public:
   using InputHasNeighborhood = typename FunctorFilterSuperclassHelper<TFunction>::InputHasNeighborhood;
   
  /** Method for creation by passing the filter type. */
-  static Pointer New(const TFunction& f, itk::Size<2> radius = {{0,0}});
+ // static Pointer New(const TFunction& f, itk::Size<2> radius = {{0,0}});
 
 /** Run-time type information (and related methods). */
   itkTypeMacro(FunctorImageFilter, ImageToImageFilter);
@@ -362,13 +363,13 @@ void SetFunctor(const FunctorType& functor)
 }
 
 private:
+friend auto NewFunctorFilter<TFunction>(const TFunction& f, itk::Size<2> radius);
+
 FunctorImageFilter();
 FunctorImageFilter(const FunctorType& f, itk::Size<2> radius) : m_Functor(f), m_Radius(radius) {};
 FunctorImageFilter(const Self &) ;
 void operator =(const Self&) ;
 ~FunctorImageFilter() {}
-
-protected:
 
 /** FunctorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -393,6 +394,23 @@ protected:
 
   itk::Size<2> m_Radius;
 };
+
+template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius)
+{
+  using FilterType = FunctorImageFilter<Functor>;
+  using PointerType = typename FilterType::Pointer;
+
+  PointerType  p = new FilterType(f,radius);
+  return p;
+}
+
+template <typename Functor> auto NewFunctorFilter(const Functor& f, unsigned int numberOfOutputBands, itk::Size<2> radius)
+{
+  using FunctorType = NumberOfOutputBandsDecorator<Functor>;
+  FunctorType decoratedF(f,numberOfOutputBands);
+  return  NewFunctorFilter(decoratedF,radius);
+}
+
 
 }// namespace otb
 

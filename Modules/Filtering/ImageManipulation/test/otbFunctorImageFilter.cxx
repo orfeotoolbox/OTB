@@ -42,26 +42,6 @@ template <typename O, typename ...T> struct VariadicAdd
   }
 };
 
-// Redefinition of AddImageFilter, fully variadic
-template<typename TOutputImage,
-         typename ... TInputImage>
-using AddImageFilter= otb::FunctorImageFilter<
-  VariadicAdd<typename TOutputImage::PixelType,
-              typename TInputImage::PixelType...> >;
-
-
-// Temptative make_add_filter function to make things even simpler
-template<typename O, typename ...T> auto make_add_filter(typename otb::Image<T>::Pointer... imgs)
-{
-  using Filter = AddImageFilter<otb::Image<O>,otb::Image<T>...>;
-
-  auto filter =  Filter::New(typename Filter::FunctorType{});
-
-  filter->SetVInputs(imgs...);
-
-  return filter;
-}
-
 // helper function to implement next functor (convert a scalar value
 // to a VariableLengthVector)
 template <typename T> itk::VariableLengthVector<T> toVector(const T & in)
@@ -170,15 +150,32 @@ template<typename TOut, typename TIn> struct Mean
   }
 };
 
+// 1 Image with neighborhood of VariableLengthVector -> 1 image with
+// VariableLengthVector
+// For each channel, returns the maximum value in neighborhood
+template<typename T> struct MaxInEachChannel
+{
+  auto operator()(const itk::Neighborhood<itk::VariableLengthVector<T>> & in) const
+  {
+    auto out = in.GetCenterValue();
 
+    for(auto it = in.Begin(); it!=in.End(); ++it)
+      {
+      for(auto band = 0u; band < out.Size();++band)
+        {
+        if((*it)[band]>out[band])
+          out[band] = (*it)[band];
+        }
+      }
+    return out;
+  }
 
-// // A lambda
-// auto Lambda2 = [](double p)
-//                {
-//                  itk::VariableLengthVector<double> ret(3);
-//                  ret.Fill(p);
-//                  return ret;
-//                };
+  size_t OutputSize(const std::array<size_t,1> & nbBands) const
+  {
+    return nbBands[0];
+  } 
+};
+
 
 using OImage = typename otb::Image<int>;
 using Neig = typename itk::Neighborhood<int>;
@@ -229,37 +226,60 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
                {
                  return scale*p;
                };
-  auto filterLambda = otb::FunctorImageFilter<decltype(Lambda1)>::New(Lambda1);
+  auto filterLambda = NewFunctorFilter(Lambda1);
   filterLambda->SetVInputs(image);
   filterLambda->Update();
 
+  // test FunctorImageFilter with a lambda that returns a
+  // VariableLengthVector
+  // Converts a neighborhood to a VariableLengthVector
+  auto Lambda2 = [](const itk::Neighborhood<double> & in)
+                 {
+                   itk::VariableLengthVector<double> out(in.Size());
+                   std::size_t idx{0};
+                   for(auto it = in.Begin(); it!=in.End();++it,++idx)
+                     {
+                     out[idx]=*it;
+                     }
+                   return out;
+                 };
+
+  // In this case, we use the helper function which allows to specify
+  // the number of outputs
+  auto filterLambda2  = NewFunctorFilter(Lambda2,vimage->GetNumberOfComponentsPerPixel(),{{3,3}});
+  filterLambda2->SetVInputs(image);
+  filterLambda2->Update();
+  
   // Test FunctorImageFilter with the VariadicConcatenate operator
   using ConcatFunctorType = VariadicConcatenate<double, double, itk::VariableLengthVector<double> >;
-  auto concatenate = otb::FunctorImageFilter<ConcatFunctorType>::New(ConcatFunctorType{});
+  auto concatenate = NewFunctorFilter(ConcatFunctorType{});
   concatenate->SetVInputs(image,vimage);
   concatenate->Update();
   
   // Test FunctorImageFilter With VariadicAdd functor
   using AddFunctorType = VariadicAdd<double, double, double>;
-  auto add = otb::FunctorImageFilter<AddFunctorType>::New(AddFunctorType{});
+  auto add = NewFunctorFilter(AddFunctorType{});
   add->SetVInputs(image,image);
   add->Update();
-
-  // Example of simple helper function to make things easier
-  auto add2 = make_add_filter<double,double,double>(image,image);
 
   // Test FunctorImageFilter with BandExtraction functor
   using ExtractFunctorType = BandExtraction<double,double>;
   ExtractFunctorType extractFunctor{1,2};
-  auto extract = otb::FunctorImageFilter<ExtractFunctorType>::New(extractFunctor);
+  auto extract = NewFunctorFilter(extractFunctor);
   extract->SetVInputs(vimage);
   extract->Update();
   
   // Test FunctorImageFilter With Mean functor
   using MeanFunctorType = Mean<double,double>;
-  auto median = otb::FunctorImageFilter<MeanFunctorType>::New(MeanFunctorType{},{{2,2}});
+  auto median = NewFunctorFilter(MeanFunctorType{},{{2,2}});
   median->SetVInputs(image);
   median->Update();
+
+  // Test FunctorImageFilter with MaxInEachChannel
+  using MaxInEachChannelType = MaxInEachChannel<double>;
+  auto maxInEachChannel = NewFunctorFilter(MaxInEachChannelType{},{{3,3}});
+  maxInEachChannel->SetVInputs(vimage);
+  maxInEachChannel->Update();
   
  return EXIT_SUCCESS;
 }

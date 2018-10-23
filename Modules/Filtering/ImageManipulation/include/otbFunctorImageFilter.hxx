@@ -33,14 +33,6 @@ FunctorImageFilter<TFunction>::FunctorImageFilter()
 {}
 
 template <class TFunction>
-typename FunctorImageFilter<TFunction>::Pointer
-FunctorImageFilter<TFunction>::New(const TFunction& f, itk::Size<2> radius) 
-{
-  Pointer p = new FunctorImageFilter<TFunction>(f,radius);
-  return p;                                           
-}
-
-template <class TFunction>
 void
 FunctorImageFilter<TFunction>
 ::GenerateInputRequestedRegion()
