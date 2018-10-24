@@ -65,7 +65,7 @@ public:
   float predict_margin(const cv::Mat& sample,
                           const cv::Mat& missing =
                           cv::Mat()) const;
-
+  
 #ifdef OTB_OPENCV_3
 
 #define OTB_CV_WRAP_PROPERTY(type,name) \

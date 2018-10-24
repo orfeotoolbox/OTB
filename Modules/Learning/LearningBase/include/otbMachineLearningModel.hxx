@@ -38,6 +38,7 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
   m_RegressionMode(false),
   m_IsRegressionSupported(false),
   m_ConfidenceIndex(false),
+  m_ProbaIndex(false),
   m_IsDoPredictBatchMultiThreaded(false),
   m_Dimension(0)
 {}
@@ -68,10 +69,10 @@ template <class TInputValue, class TOutputValue, class TConfidenceValue>
 typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::TargetSampleType
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::Predict(const InputSampleType& input, ConfidenceValueType *quality) const
+::Predict(const InputSampleType& input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   // Call protected specialization entry point
-  return this->DoPredict(input,quality);
+  return this->DoPredict(input,quality,proba);
 }
 
 
@@ -79,8 +80,9 @@ template <class TInputValue, class TOutputValue, class TConfidenceValue>
 typename MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 ::TargetListSampleType::Pointer
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality) const
+::PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality, ProbaListSampleType *proba) const
 {
+  //std::cout << "Enter batch predict" << std::endl;
   typename TargetListSampleType::Pointer targets = TargetListSampleType::New();
   targets->Resize(input->Size());
   
@@ -89,16 +91,19 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
     quality->Clear();
     quality->Resize(input->Size());
     }
-  
+  if(proba!=ITK_NULLPTR)
+    {
+      proba->Clear();
+      proba->Resize(input->Size());
+    }
   if(m_IsDoPredictBatchMultiThreaded)
     {
     // Simply calls DoPredictBatch
-    this->DoPredictBatch(input,0,input->Size(),targets,quality);
-    return targets;
+      this->DoPredictBatch(input,0,input->Size(),targets,quality,proba);
+      return targets;
     }
   else
     {
-    
 #ifdef _OPENMP
     // OpenMP threading here
     unsigned int nb_threads(0), threadId(0), nb_batches(0);
@@ -120,11 +125,11 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
         batch_size+=input->Size()%nb_batches;
         }
     
-      this->DoPredictBatch(input,batch_start,batch_size,targets,quality);
+      this->DoPredictBatch(input,batch_start,batch_size,targets,quality,proba);
       }
     }
 #else
-    this->DoPredictBatch(input,0,input->Size(),targets,quality);
+    this->DoPredictBatch(input,0,input->Size(),targets,quality,proba);
 #endif
     return targets;
     }
@@ -135,20 +140,33 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void
 MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
-::DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
+  ::DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality, ProbaListSampleType * proba) const
 {
   assert(input != nullptr);
   assert(targets != nullptr);
   
   assert(input->Size()==targets->Size()&&"Input sample list and target label list do not have the same size.");
   assert(((quality==nullptr)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
+  assert((proba==nullptr)||(input->Size()==proba->Size())&&"Proba sample list and target label list do not have the same size.");
 
   if(startIndex+size>input->Size())
     {
     itkExceptionMacro(<<"requested range ["<<startIndex<<", "<<startIndex+size<<"[ partially outside input sample list range.[0,"<<input->Size()<<"[");
     }
 
-  if(quality != nullptr)
+  if (proba != nullptr)
+    {
+    for(unsigned int id = startIndex;id<startIndex+size;++id)
+      {
+      ProbaSampleType prob;
+      ConfidenceValueType confidence = 0;
+      const TargetSampleType target = this->DoPredict(input->GetMeasurementVector(id),&confidence, &prob);
+      quality->SetMeasurementVector(id,confidence);
+      proba->SetMeasurementVector(id,prob);
+      targets->SetMeasurementVector(id,target);
+      }
+    }
+  else if(quality != ITK_NULLPTR)
     {
     for(unsigned int id = startIndex;id<startIndex+size;++id)
       {
@@ -157,7 +175,7 @@ MachineLearningModel<TInputValue,TOutputValue,TConfidenceValue>
       quality->SetMeasurementVector(id,confidence);
       targets->SetMeasurementVector(id,target);
       }
-    }
+    }    
   else
     {
     for(unsigned int id = startIndex;id<startIndex+size;++id)
@@ -176,6 +194,6 @@ void
     // Call superclass implementation
     Superclass::PrintSelf(os,indent);
     }
-    }
+}
 
 #endif

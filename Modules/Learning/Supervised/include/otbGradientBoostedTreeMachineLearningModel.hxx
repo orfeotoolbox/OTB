@@ -83,7 +83,7 @@ template <class TInputValue, class TOutputValue>
 typename GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   //convert listsample to Mat
   cv::Mat sample;
@@ -101,6 +101,13 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
     if (!this->m_ConfidenceIndex)
       {
       itkExceptionMacro("Confidence index not available for this classifier !");
+      }
+    }
+  if (proba != ITK_NULLPTR)
+    {
+    if (!this->m_ProbaIndex)
+      {
+      itkExceptionMacro("Probability per class not available for this classifier !");
       }
     }
 

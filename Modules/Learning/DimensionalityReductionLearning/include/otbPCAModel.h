@@ -77,6 +77,9 @@ public:
   typedef typename Superclass::ConfidenceSampleType      ConfidenceSampleType;
   typedef typename Superclass::ConfidenceListSampleType  ConfidenceListSampleType;
 
+  typedef typename Superclass::ProbaSampleType       ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType   ProbaListSampleType;
+
   itkNewMacro(Self);
   itkTypeMacro(PCAModel, DimensionalityReductionModel);
 
@@ -99,14 +102,16 @@ protected:
  
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = nullptr) const override;
+    ConfidenceValueType * quality = nullptr,
+    ProbaSampleType * proba = nullptr) const override;
 
   virtual void DoPredictBatch(
     const InputListSampleType *,
     const unsigned int & startIndex,
     const unsigned int & size,
     TargetListSampleType *,
-    ConfidenceListSampleType * quality = nullptr) const override;
+    ConfidenceListSampleType * quality = nullptr,
+    ProbaListSampleType* proba = nullptr) const override;
 
 private:
   shark::LinearModel<> m_Encoder;

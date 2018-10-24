@@ -174,7 +174,7 @@ template <class TInputValue, class TOutputValue>
 typename SVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 SVMMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   TargetSampleType target;
   //convert listsample to Mat
@@ -197,6 +197,13 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 #else
     (*quality) = m_SVMModel->predict(sample,true);
 #endif
+    }
+  if (proba != ITK_NULLPTR)
+    {
+    if (!this->m_ProbaIndex)
+      {
+      itkExceptionMacro("Probability per class not available for this classifier !");
+      }
     }
   return target;
 }

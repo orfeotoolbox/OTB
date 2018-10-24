@@ -106,7 +106,7 @@ template <class TInputValue, class TTargetValue>
 typename KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::TargetSampleType
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   TargetSampleType target;
 
@@ -134,6 +134,13 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
         }
       }
     (*quality) = static_cast<ConfidenceValueType>(accuracy);
+    }
+  if (proba != ITK_NULLPTR)
+    {
+    if (!this->m_ProbaIndex)
+      {
+      itkExceptionMacro("Probability per class not available for this classifier !");
+      }
     }
 
   // Decision rule :

@@ -84,7 +84,8 @@ public:
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
   typedef typename Superclass::ConfidenceSampleType       ConfidenceSampleType;
   typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
-  
+  typedef typename Superclass::ProbaSampleType             ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType        ProbaListSampleType;
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(SharkRandomForestsMachineLearningModel, MachineLearningModel);
@@ -153,10 +154,9 @@ protected:
   virtual ~SharkRandomForestsMachineLearningModel();
 
   /** Predict values using the model */
-  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
-
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr, ProbaSampleType *proba=nullptr) const override;
   
-  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = nullptr) const override;
+  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = nullptr, ProbaListSampleType * = nullptr) const override;
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

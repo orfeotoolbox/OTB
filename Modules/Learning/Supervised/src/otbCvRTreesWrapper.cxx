@@ -140,7 +140,7 @@ float CvRTreesWrapper::predict_confidence(const cv::Mat& sample,
   float confidence = static_cast<float>(max_votes)/ntrees;
   return confidence;
 }
-
+  
 #ifdef OTB_OPENCV_3
 #define OTB_CV_WRAP_IMPL(type,name) \
 type CvRTreesWrapper::get##name() const \

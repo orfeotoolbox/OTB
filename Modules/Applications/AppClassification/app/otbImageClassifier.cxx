@@ -64,6 +64,7 @@ public:
   typedef ClassificationFilterType::LabelType                                                  LabelType;
   typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
   typedef ClassificationFilterType::ConfidenceImageType                                        ConfidenceImageType;
+  typedef ClassificationFilterType::ProbaImageType                                             ProbaImageType;
 
 protected:
 
@@ -111,6 +112,7 @@ private:
     SetDefaultParameterInt("nodatalabel", 0);
     MandatoryOff("nodatalabel");
 
+   
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output image containing class labels");
     SetDefaultOutputPixelType( "out", ImagePixelType_uint8);
@@ -130,8 +132,15 @@ private:
     SetDefaultOutputPixelType( "confmap", ImagePixelType_double);
     MandatoryOff("confmap");
 
+    AddParameter(ParameterType_OutputImage,"probamap", "Probability map");
+    SetParameterDescription("probamap","");
+    SetDefaultOutputPixelType("probamap",ImagePixelType_uint16);
+    MandatoryOff("probamap");
     AddRAMParameter();
 
+    AddParameter(ParameterType_Int, "classe", "number of output classes");
+    SetDefaultParameterInt("classe", 20);
+   
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("imstat", "EstimateImageStatisticsQB1.xml");
@@ -174,7 +183,7 @@ private:
     // Classify
     m_ClassificationFilter = ClassificationFilterType::New();
     m_ClassificationFilter->SetModel(m_Model);
-
+    
     m_ClassificationFilter->SetDefaultLabel(GetParameterInt("nodatalabel"));
 
     // Normalize input image if asked
@@ -209,9 +218,9 @@ private:
 
       m_ClassificationFilter->SetInputMask(inMask);
       }
-
     SetParameterOutputImage<OutputImageType>("out", m_ClassificationFilter->GetOutput());
-
+   
+    
     // output confidence map
     if (IsParameterEnabled("confmap") && HasValue("confmap"))
       {
@@ -226,6 +235,21 @@ private:
         this->DisableParameter("confmap");
         }
       }
+    if(IsParameterEnabled("probamap") && HasValue("probamap"))
+      {
+      m_ClassificationFilter->SetUseProbaMap(true);
+      if(m_Model->HasProbaIndex())
+	{
+	  m_ClassificationFilter->SetNumberOfClasses(GetParameterInt("classe"));
+	  SetParameterOutputImage<ProbaImageType>("probamap",m_ClassificationFilter->GetOutputProba());
+	}
+      else
+	{
+	  otbAppLogWARNING("Probability map requested but the classifier doesn't support it!");
+	  this->DisableParameter("probamap");
+	}
+      }
+    
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;

@@ -104,7 +104,7 @@ template <class TInputValue, class TOutputValue>
 typename BoostMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   TargetSampleType target;
 
@@ -131,6 +131,13 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
       m_BoostModel->predict(sample,missing,cv::Range::all(),false,true)
 #endif
       );
+    }
+ if (proba != ITK_NULLPTR)
+    {
+    if (!this->m_ProbaIndex)
+      {
+      itkExceptionMacro("Probability per class not available for this classifier !");
+      }
     }
 
   target[0] = static_cast<TOutputValue>(result);

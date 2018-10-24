@@ -117,7 +117,7 @@ template <class TInputValue, class TOutputValue>
 typename DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   TargetSampleType target;
 
@@ -138,6 +138,13 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
     if (!this->m_ConfidenceIndex)
       {
       itkExceptionMacro("Confidence index not available for this classifier !");
+      }
+    }
+  if (proba != ITK_NULLPTR)
+    {
+    if (!this->m_ProbaIndex)
+      {
+      itkExceptionMacro("Probability per class not available for this classifier !");
       }
     }
 
