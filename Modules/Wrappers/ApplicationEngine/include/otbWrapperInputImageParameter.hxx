@@ -217,8 +217,10 @@ InputImageParameter::GetImage()
 
 /** declare a specialization for ImageBaseType */
 template <>
+OTBApplicationEngine_EXPORT
 ImageBaseType*
-InputImageParameter::GetImage();
+InputImageParameter::GetImage<ImageBaseType>();
+
 
 template <class TInputImage, class TOutputImage>
 TOutputImage*
