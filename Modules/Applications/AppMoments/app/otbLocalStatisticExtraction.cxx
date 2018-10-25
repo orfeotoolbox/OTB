@@ -71,6 +71,9 @@ AddDocTag("Statistics");
 AddParameter(ParameterType_InputImage, "in",  "Input Image");
 SetParameterDescription("in", "The input image to compute the features on.");
 
+AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
+SetParameterDescription("out", "Output image containing the local statistical moments.");
+
 AddParameter(ParameterType_Int,  "channel",  "Selected Channel");
 SetParameterDescription("channel", "The selected channel index");
 SetDefaultParameterInt("channel", 1);
@@ -82,9 +85,6 @@ AddParameter(ParameterType_Int, "radius", "Neighborhood radius");
 SetParameterDescription("radius", "The computational window radius.");
 SetMinimumParameterIntValue("radius",1);
 SetDefaultParameterInt("radius",3);
-
-AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
-SetParameterDescription("out", "Output image containing the local statistical moments.");
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
