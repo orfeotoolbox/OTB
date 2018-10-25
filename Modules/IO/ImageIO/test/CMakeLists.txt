@@ -100,14 +100,14 @@ otb_add_test(NAME ioTvImageFileWriterExtendedFileName_Box COMMAND otbImageIOTest
 
 otb_add_test(NAME ioTvONERAImageFileReaderComplex COMMAND otbImageIOTestDriver
   --compare-n-images ${EPSILON_9} 2
-  ${BASELINE}/ioImageFileReaderONERAComplexReal.hdr
-  ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
-  ${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
-  ${TEMP}/ioImageFileReaderONERAComplexImag.hdr
+  ${BASELINE}/ioImageFileReaderONERAComplexReal.tif
+  ${TEMP}/ioImageFileReaderONERAComplexReal.tif
+  ${BASELINE}/ioImageFileReaderONERAComplexImag.tif
+  ${TEMP}/ioImageFileReaderONERAComplexImag.tif
   otbImageFileReaderONERAComplex
   LARGEINPUT{ONERA/spa3_0215_rad.ent}
-  ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
-  ${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
+  ${TEMP}/ioImageFileReaderONERAComplexReal.tif
+  ${TEMP}/ioImageFileReaderONERAComplexImag.tif )
 
 otb_add_test(NAME ioTvImageFileReaderRADCR42TIF COMMAND otbImageIOTestDriver
   otbImageFileReaderRADComplexFloat
@@ -490,13 +490,13 @@ otb_add_test(NAME ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetAuto
   10
   )
 
-otb_add_test(NAME ioTvImageFileReaderRADCI22ENVI COMMAND otbImageIOTestDriver
+otb_add_test(NAME ioTvImageFileReaderRADCI22TIF COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}
-  ${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
-  ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
+  ${BASELINE}/ioImageFileReaderRADCI22TIF.tif
+  ${TEMP}/ioImageFileReaderRADCI22TIF.tif
   otbImageFileReaderRADComplexFloatExtract
   LARGEINPUT{RAD_CI2/3017_HH.rad}
-  ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
+  ${TEMP}/ioImageFileReaderRADCI22TIF.tif )
 
 otb_add_test(NAME ioTvImageFileReaderTIF2RADCI4 COMMAND otbImageIOTestDriver
   otbImageFileReaderRADComplexInt
@@ -718,7 +718,7 @@ otb_add_test(NAME ioTvVImageFileReader_RESOLUTION_4 COMMAND otbImageIOTestDriver
   ${TEMP}/ioImageFileReader_RESOLUTION_4.tif )
 
 otb_add_test(NAME ioTvVectorImageFileReaderWriterJP22TIF COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
+  --compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
   ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
   otbVectorImageFileReaderWriterTest
   LARGEINPUT{JPEG2000/QB_multicomp_small.jpx}
@@ -742,11 +742,11 @@ set_property(TEST ioTvImageFileReaderIntHDR2BSQ PROPERTY DEPENDS ioTvImageFileRe
 
 otb_add_test(NAME ioTvONERAImageFileReader COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}
-  ${BASELINE}/ioImageFileReaderONERA.hdr
-  ${TEMP}/ioImageFileReaderONERA.hdr
+  ${BASELINE}/ioImageFileReaderONERA.tif
+  ${TEMP}/ioImageFileReaderONERA.tif
   otbImageFileReaderONERATest
   LARGEINPUT{ONERA/spa3_0215_rad.ent}
-  ${TEMP}/ioImageFileReaderONERA.hdr
+  ${TEMP}/ioImageFileReaderONERA.tif
   10 10 100 100 )
 
 otb_add_test(NAME ioTvImageFileReaderFloatHDR2BSQ COMMAND otbImageIOTestDriver
@@ -1294,7 +1294,7 @@ otb_add_test(NAME  ioTvImageFileReaderIntHDR2LUM COMMAND otbImageIOTestDriver
 set_tests_properties(ioTvImageFileReaderIntHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderIntLUM2HDR)
 
 otb_add_test(NAME  ioTvImageFileReaderPNG2ENVI COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${BASELINE}/ioImageFileReaderPNG2ENVI.hdr
+  --compare-image ${EPSILON_9}        ${BASELINE}/ioImageFileReaderPNG2ENVI.tif
                                 ${TEMP}/ioImageFileReaderPNG2ENVI.hdr
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png

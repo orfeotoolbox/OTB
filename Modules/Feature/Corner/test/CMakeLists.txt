@@ -81,7 +81,7 @@ otb_add_test(NAME feTvHarrisPoupee COMMAND otbCornerTestDriver
 otb_add_test(NAME feTvHarrisProduceImageToValidHarrisToPointSet COMMAND otbCornerTestDriver
   otbHarrisImage
   ${INPUTDATA}/small_points.hdr
-  ${TEMP}/small_points_harris.hdr
+  ${TEMP}/small_points_harris.tif
   1.0 1.0 1.0)
 
 otb_add_test(NAME feTvHarrisImageQB COMMAND otbCornerTestDriver
