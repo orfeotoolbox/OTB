@@ -30,7 +30,7 @@ int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename  = argv[1];
   const char *       outputFilename = argv[2];
-  const unsigned int foreground((const unsigned int) ::atoi(argv[3]));
+  const unsigned int foreground = atoi(argv[3]);
 
   const unsigned int Dimension = 2;
   typedef unsigned char                    PixelType;

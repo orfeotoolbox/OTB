@@ -21,10 +21,7 @@
 set(OTBOSSIMAdapters_SRC
   otbDEMHandler.cxx
   otbImageKeywordlist.cxx
-  otbGeometricSarSensorModelAdapter.cxx
   otbSensorModelAdapter.cxx
-  otbPlatformPositionAdapter.cxx
-  otbDEMConvertAdapter.cxx
   otbRPCSolverAdapter.cxx
   otbDateTimeAdapter.cxx
   otbFilterFunctionValues.cxx

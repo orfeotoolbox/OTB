@@ -298,7 +298,7 @@ VectorImageModel
 
   // Get build-context settings.
   VectorImageSettings * const  settings =
-    static_cast< VectorImageSettings * const >( buildContext->m_Settings );
+    static_cast< VectorImageSettings * >( buildContext->m_Settings );
 
 
   // Fetch the no data flags if any

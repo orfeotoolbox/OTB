@@ -25,7 +25,7 @@ Syntax: first elements
 
 The default prefix name for variables related to the ith input is
 *im(i+1)* (note the indexing from 1 to N, for N inputs). The user has
-the possibility to change this default behaviour by setting its own
+the possibility of changing this default behaviour by setting its own
 prefix.
 
 ::
@@ -90,7 +90,7 @@ represents a pixel of an image made of only one band:
 .. math:: im1+1
 
 A scalar can’t be added to a vector. The right formula is instead (one
-can notice the way that muParserX allows to define vectors on the fly):
+can notice the way that muParserX allows vectors to be defined on the fly):
 
 .. math:: im1+\{ 1 \}
 
@@ -205,8 +205,8 @@ ones. For instance:
 .. math:: im1 ~  mlt ~ 2.0
 
 Note that the operator ’\*’ could have been used instead of ’pw’ one.
-But ’pw’ is a little bit more permisive, and can tolerate
-one-dimensional vector as right element.
+But ’pw’ is a little bit more permisive, and can tolerate a
+one-dimensional vector as the right operand.
 
 **Operators pow and pw** The first operator allows the definition of an
 element-wise exponentiation of two vectors (and even matrices), provided
