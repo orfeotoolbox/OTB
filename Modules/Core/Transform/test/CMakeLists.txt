@@ -99,11 +99,11 @@ otb_add_test(NAME prTvTestCreateProjectionWithOSSIM_Toulouse COMMAND otbTransfor
   )
 
 otb_add_test(NAME bfTvLogPolarTransformResample COMMAND otbTransformTestDriver
-  --compare-image ${EPSILON_7}  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
-  ${TEMP}/bfLogPolarTransformResampleOutput.hdr
+  --compare-image ${EPSILON_7}  ${BASELINE}/bfLogPolarTransformResampleOutput.tif
+  ${TEMP}/bfLogPolarTransformResampleOutput.tif
   otbLogPolarTransformResample
   ${INPUTDATA}/circle.hdr
-  ${TEMP}/bfLogPolarTransformResampleOutput.hdr
+  ${TEMP}/bfLogPolarTransformResampleOutput.tif
   )
 
 otb_add_test(NAME dmTuStreamingWarpImageFilterNew COMMAND otbTransformTestDriver
@@ -193,11 +193,11 @@ otb_add_test(NAME bfTvInverseLogPolarTransform COMMAND otbTransformTestDriver
 otb_add_test(NAME bfTuInverseLogPolarTransformNew COMMAND otbTransformTestDriver
   otbInverseLogPolarTransformNew)
 otb_add_test(NAME bfTvInverseLogPolarTransformResample COMMAND otbTransformTestDriver
-  --compare-image ${NOTOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.hdr
-  ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
+  --compare-image ${NOTOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.tif
+  ${TEMP}/bfInverseLogPolarTransformResampleOutput.tif
   otbInverseLogPolarTransformResample
-  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
-  ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
+  ${BASELINE}/bfLogPolarTransformResampleOutput.tif
+  ${TEMP}/bfInverseLogPolarTransformResampleOutput.tif
   )
 otb_add_test(NAME bfTvStreamingResampleImageFilterWithAffineTransform COMMAND otbTransformTestDriver
   otbStreamingResampleImageFilterWithAffineTransform

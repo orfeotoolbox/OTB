@@ -51,30 +51,30 @@ otb_add_test(NAME leTuSOMbasedImageFilterNew COMMAND otbSOMTestDriver
 
 otb_add_test(NAME leTvSOM COMMAND otbSOMTestDriver
   --compare-image ${EPSILON_10}
-  ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
-  ${TEMP}/leSOMPoupeesSubOutputMap1.hdr
+  ${BASELINE}/leSOMPoupeesSubOutputMap1.tif
+  ${TEMP}/leSOMPoupeesSubOutputMap1.tif
   otbSOM
   ${INPUTDATA}/poupees_sub.png
-  ${TEMP}/leSOMPoupeesSubOutputMap1.hdr
+  ${TEMP}/leSOMPoupeesSubOutputMap1.tif
   32 32 10 10 5 1.0 0.1 0)
 
 otb_add_test(NAME leTvSOMImageClassificationFilter COMMAND otbSOMTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/leSOMPoupeesClassified.hdr
-  ${TEMP}/leSOMImageClassificationFilterOutput.hdr
+  ${BASELINE}/leSOMPoupeesClassified.tif
+  ${TEMP}/leSOMImageClassificationFilterOutput.tif
   otbSOMImageClassificationFilter
   ${INPUTDATA}/poupees_sub.png
-  ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
-  ${TEMP}/leSOMImageClassificationFilterOutput.hdr
+  ${BASELINE}/leSOMPoupeesSubOutputMap1.tif
+  ${TEMP}/leSOMImageClassificationFilterOutput.tif
   )
 
 otb_add_test(NAME leTvSOMActivationBuilder COMMAND otbSOMTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/leSOMPoupeesSubActivationMap1.hdr
+  ${BASELINE}/leSOMPoupeesSubActivationMap1.tif
   ${TEMP}/leSOMPoupeesSubActivationMap1.tif
   otbSOMActivationBuilder
   ${INPUTDATA}/poupees_sub.png
-  ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
+  ${BASELINE}/leSOMPoupeesSubOutputMap1.tif
   ${TEMP}/leSOMPoupeesSubActivationMap1.tif
   32 32 10 10 5 1.0 0.1 128)
 
@@ -89,11 +89,11 @@ otb_add_test(NAME leTuSOMImageClassificationFilterNew COMMAND otbSOMTestDriver
 
 otb_add_test(NAME leTvSOMWithMissingValue COMMAND otbSOMTestDriver
   --compare-image ${EPSILON_10}
-  ${BASELINE}/leSOMWithMissingValue.hdr
-  ${TEMP}/leSOMWithMissingValue.hdr
+  ${BASELINE}/leSOMWithMissingValue.tif
+  ${TEMP}/leSOMWithMissingValue.tif
   otbSOMWithMissingValueTest
   ${INPUTDATA}/poupees_sub.png
-  ${TEMP}/leSOMWithMissingValue.hdr
+  ${TEMP}/leSOMWithMissingValue.tif
   32 32 10 10 5 1.0 0.1 0)
 
 otb_add_test(NAME leTuSOMNew COMMAND otbSOMTestDriver
@@ -110,11 +110,11 @@ otb_add_test(NAME leTuSOMMapNew COMMAND otbSOMTestDriver
 
 otb_add_test(NAME leTvPeriodicSOM COMMAND otbSOMTestDriver
   --compare-image ${EPSILON_10}
-  ${BASELINE}/lePeriodicSOMPoupeesSubOutputMap1.hdr
-  ${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
+  ${BASELINE}/lePeriodicSOMPoupeesSubOutputMap1.tif
+  ${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.tif
   otbPeriodicSOMTest
   ${INPUTDATA}/poupees_sub.png
-  ${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
+  ${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.tif
   32 32 10 10 5 1.0 0.1 0)
 
 otb_add_test(NAME leTuPeriodicSOMNew COMMAND otbSOMTestDriver
@@ -122,21 +122,21 @@ otb_add_test(NAME leTuPeriodicSOMNew COMMAND otbSOMTestDriver
 
 otb_add_test(NAME leTvSOMClassifier COMMAND otbSOMTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/leSOMPoupeesClassified.hdr
-  ${TEMP}/leSOMPoupeesClassified.hdr
+  ${BASELINE}/leSOMPoupeesClassified.tif
+  ${TEMP}/leSOMPoupeesClassified.tif
   otbSOMClassifier
   ${INPUTDATA}/poupees_sub.png
-  ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
-  ${TEMP}/leSOMPoupeesClassified.hdr
+  ${BASELINE}/leSOMPoupeesSubOutputMap1.tif
+  ${TEMP}/leSOMPoupeesClassified.tif
   )
 
 otb_add_test(NAME leTvSOMbasedImageFilter COMMAND otbSOMTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/leSOMbasedImageFilterOutput.hdr
-  ${TEMP}/leSOMbasedImageFilterOutput.hdr
+  ${BASELINE}/leSOMbasedImageFilterOutput.tif
+  ${TEMP}/leSOMbasedImageFilterOutput.tif
   otbSOMbasedImageFilterTest
   ${INPUTDATA}/poupees_sub.png
-  ${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
-  ${TEMP}/leSOMbasedImageFilterOutput.hdr
+  ${BASELINE}/leSOMPoupeesSubOutputMap1.tif
+  ${TEMP}/leSOMbasedImageFilterOutput.tif
   )
 
