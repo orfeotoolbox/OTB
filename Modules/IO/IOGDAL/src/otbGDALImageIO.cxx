@@ -1553,7 +1553,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     if(driverShortName == "ENVI" && geoTransform[5] > 0.)
       {
       itkExceptionMacro(
-        << "Can't write to ENVI file format with a positive Y spacing ("
+        << "Can not write to ENVI file format with a positive Y spacing ("
         << m_FileName
         <<")");
       }
