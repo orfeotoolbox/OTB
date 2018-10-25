@@ -141,9 +141,9 @@ private:
     #ifdef OTB_USE_LIBSVM 
     clock_t tic = clock();
 
-    std::string shapefile = GetParameterString("inshp").c_str();
-    std::string XMLfile = GetParameterString("instats").c_str();
-    std::string modelfile = GetParameterString("insvm").c_str();
+    std::string shapefile = GetParameterString("inshp");
+    std::string XMLfile = GetParameterString("instats");
+    std::string modelfile = GetParameterString("insvm");
 
     typedef double ValueType;
     typedef itk::VariableLengthVector<ValueType> MeasurementType;
