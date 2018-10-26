@@ -142,7 +142,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
 
     // Set the hem
     char hem = 'N';
-    if (!app->IsParameterEnabled(hemKey.str()))
+    if (!app->GetParameterInt(hemKey.str()))
       hem = 'S';
     utmProjection->SetHemisphere(hem);
 
