@@ -378,3 +378,30 @@ binaries:
     Copyright (c) 2016, Even Rouault <even.rouault@spatialys.com>
     MIT license
     https://opensource.org/licenses/MIT
+
+
+Some parts of the software may be licensed differently in the following
+cases described below:
+
+
+* Modules/Applications/AppDomainTransform/app/otbDomainTransform.cxx
+    When ITK is built using FFTW, the binary application DomainTransform
+    becomes licensed under GNU GPL v3.
+
+
+* Module/Remote/OTBTemporalGapFilling/*
+  Module/Remote/OTBPhenology/*
+  Module/Remote/OTBBioVars/*
+    These remote modules, when enabled, are licensed under GNU Affero GPL v3
+
+
+* Module/Remote/SertitObject/*
+    This remote module, when enabled, is licensed under CeCILL-B
+
+
+* Module/Remote/otbGRM/*
+    This remote module, when enabled, is licensed under GNU GPL v3
+
+
+* Module/Remote/OTBFFSforGMM/*
+    This remote module, when enabled, is licensed under Apache v2 license
