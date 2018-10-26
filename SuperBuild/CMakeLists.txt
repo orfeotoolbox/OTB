@@ -331,6 +331,9 @@ option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
 option(OTB_USE_QWT "Enable module QWT in OTB" ON)
 option(OTB_USE_GSL "Enable module GSL in OTB" ON)
 
+option(OTB_USE_MPI "Enable MPI in OTB" OFF)
+option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
+
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data
   PATHS
