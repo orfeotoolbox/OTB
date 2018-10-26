@@ -55,7 +55,7 @@ int otbImageToGenericRSOutputParameters (int itkNotUsed(argc), char * argv[])
   // Filter  : Target SRS : WGS84
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
-  filter->SetOutputProjectionRef("4326");  //WGS84
+  filter->SetOutputProjectionRef("EPSG:4326");  //WGS84
   filter->Compute();
 
   // Output file
@@ -68,7 +68,7 @@ int otbImageToGenericRSOutputParameters (int itkNotUsed(argc), char * argv[])
   outfile<< std::endl;
 
   // Target SRS : 32631 UTM 31 N
-  filter->SetOutputProjectionRef("32631");  // UTM 31 N
+  filter->SetOutputProjectionRef("EPSG:32631");  // UTM 31 N
   filter->Compute();
 
   outfile<<"Output Parameters for SRID : 32631 (UTM 31 N)"<<std::endl;

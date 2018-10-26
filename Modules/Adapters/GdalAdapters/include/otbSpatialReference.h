@@ -143,14 +143,14 @@ public:
 
   /**
    * Find which UTM zone a given (lat,lon) point falls in.
-   * \pre -90<=lat<=90
    * \pre -180<=lon<=180
-   * \param lat Point lattitude
+   * \pre -90<=lat<=90
    * \param lon Point longitude
+   * \param lat Point lattitude
    * \param zone Output UTM zone
    * \param hem output hemisphere
    */ 
-  static void UTMFromGeoPoint(double lat, double lon, unsigned int & zone, hemisphere & hem);
+  static void UTMFromGeoPoint(double lon, double lat, unsigned int & zone, hemisphere & hem);
 
 private:
   /// Constructor from wrapped type. ref will be cloned.

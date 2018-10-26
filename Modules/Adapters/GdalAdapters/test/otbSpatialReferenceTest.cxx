@@ -28,7 +28,7 @@ bool CheckUTMZone(double lat, double lon, unsigned int expected_zone, SpatialRef
 {
   unsigned int zone;
   SpatialReference::hemisphere hem;
-  SpatialReference::UTMFromGeoPoint(lat,lon,zone,hem);
+  SpatialReference::UTMFromGeoPoint(lon,lat,zone,hem);
 
   if(expected_zone != zone || expected_hem != hem)
     {

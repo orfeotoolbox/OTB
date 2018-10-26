@@ -207,7 +207,7 @@ bool SpatialReference::NormalizeESRI()
   return true;
 }
 
-void SpatialReference::UTMFromGeoPoint(double lat, double lon, unsigned int & zone, hemisphere & hem)
+void SpatialReference::UTMFromGeoPoint(double lon, double lat, unsigned int & zone, hemisphere & hem)
 {
   // Pre-conditions
   assert(lat>=-90);
