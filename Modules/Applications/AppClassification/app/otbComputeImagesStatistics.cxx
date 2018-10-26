@@ -135,7 +135,7 @@ private:
       StreamingStatisticsVImageFilterType::Pointer statsEstimator = StreamingStatisticsVImageFilterType::New();
       std::ostringstream processName;
       processName << "Processing Image (" << imageId+1 << "/" << imageList->Size() << ")";
-      AddProcess(statsEstimator->GetStreamer(), processName.str().c_str());
+      AddProcess(statsEstimator->GetStreamer(), processName.str());
       statsEstimator->SetInput(image);
       statsEstimator->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 

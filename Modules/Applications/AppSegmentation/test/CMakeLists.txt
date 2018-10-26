@@ -400,3 +400,4 @@ otb_test_application(NAME     apTvObjectBasedFiltering
                               ${BASELINE_FILES}/apTvObjectBasedFiltering.shp
                               ${TEMP}/apTvObjectBasedFiltering.shp
                      )
+                     

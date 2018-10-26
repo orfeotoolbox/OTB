@@ -1678,7 +1678,7 @@ std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFil
 
   std::string myPath = itksys::SystemTools::GetFilenamePath(baselineFilename);
   itksys::Directory myDir;
-  myDir.Load(myPath.c_str());
+  myDir.Load(myPath);
   const unsigned int nbFiles = myDir.GetNumberOfFiles();
 
   const std::string originalBaseline = itksys::SystemTools::GetFilenameWithoutLastExtension(baselineFilename);

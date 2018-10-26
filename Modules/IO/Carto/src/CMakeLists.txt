@@ -21,6 +21,7 @@
 set(OTBCarto_SRC
   otbCoordinateToName.cxx
   otbOSMDataToVectorDataGenerator.cxx
+  otbWorldFile.cxx
   otbPlaceNameToLonLat.cxx
   otbWorldFile.cxx
   )
@@ -37,7 +38,6 @@ target_link_libraries(OTBCarto
   ${OTBCurlAdapters_LIBRARIES}
   ${OTBVectorDataIO_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
-
   )
 
 otb_module_target(OTBCarto)

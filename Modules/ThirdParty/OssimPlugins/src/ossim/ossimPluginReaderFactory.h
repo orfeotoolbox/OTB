@@ -97,21 +97,21 @@ namespace ossimplugins
       virtual void getSupportedExtensions(
          ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const;
 
+      /** @brief deleted copy constructor */
+      ossimPluginReaderFactory(const ossimPluginReaderFactory&) = delete;
+
+      /** @brief deleted copy assignment operator */
+      void operator=(const ossimPluginReaderFactory&) = delete;
+
    protected:
       /** @brief hidden from use default constructor */
-      ossimPluginReaderFactory();
-
-      /** @brief hidden from use copy constructor */
-      ossimPluginReaderFactory(const ossimPluginReaderFactory&);
-
-      /** @brief hidden from use copy constructor */
-      void operator=(const ossimPluginReaderFactory&);
+      ossimPluginReaderFactory() {}
 
       /** static instance of this class */
       static ossimPluginReaderFactory* theInstance;
 
       TYPE_DATA
-         };
+  };
 }
 
 #endif /* end of #ifndef ossimPluginReaderFactory_HEADER */

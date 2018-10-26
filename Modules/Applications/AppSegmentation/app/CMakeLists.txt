@@ -59,9 +59,9 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           ImageConnectedComponentSegmentation
-  SOURCES        otbImageConnectedComponentSegmentation.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES} ${OTBCommon_LIBRARIES} ${OTBITK_LIBRARIES})
+  NAME           SmallRegionsMerging
+  SOURCES        otbSmallRegionsMerging.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           LabelImageVectorization
