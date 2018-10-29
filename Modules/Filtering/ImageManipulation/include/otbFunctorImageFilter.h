@@ -110,46 +110,6 @@ template <class T> struct ImageTypeDeduction<const T &>
   using ImageType = typename ImageTypeDeduction<T>::ImageType;
 };
 
-
-/**
- * \struct InputImageTraits
- * \brief Struct allowing to derive input image types from operator()
- *        arguments
- * 
- * Defines:
- * - PixelType type to the underlying pixel type
- * - ScalarType type to the underlying scalar type
- * - ImageType type to the mocked up image type
- *
- * ImageType = Image<T> for T or itk::Neighborhood<T>
- * ImageType = VectorImage<T> for itk::VariableLengthVector<T> or itk::Neighborhood<itk::VariableLengthVector<T>>
- */
-template<typename T>
-struct InputImageTraits
-{
-  using ArgumentType = T;
-  using PixelType = typename PixelTypeDeduction<T>::PixelType;
-  using ImageType = typename ImageTypeDeduction<PixelType>::ImageType;
-};
-
-/**
- * \struct OutputImageTraits
- * \brief Struct allowing to derive output image type from operator()
- * 
- * Defines:
- * - ScalarType type to the underlying scalar type
- * - ImageType type to the mocked up image type
- * - ImageType = Image<T> for T
- * - ImageType = VectorImage<T> for itk::VariableLengthVector<T>
- */
-template<typename T>
-struct OutputImageTraits
-{
-  using ResultType = T;
-  using ImageType = typename ImageTypeDeduction<T>::ImageType;
-};
-
-
 /**
 * \struct FunctorFilterSuperclassHelper 
 * \brief Struct allowing to derive the superclass prototype for the
@@ -167,24 +127,24 @@ template <typename T> struct FunctorFilterSuperclassHelper : public FunctorFilte
 /// Partial specialisation for R(*)(T...)
 template <typename R, typename... T> struct FunctorFilterSuperclassHelper<R(*)(T...)>
 {
-  using OutputImageType = typename OutputImageTraits<R>::ImageType;
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename InputImageTraits<T>::ImageType...>;
+  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
 // Partial specialisation for R(C::*)(T...) const
 template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...) const>
 {
-  using OutputImageType = typename OutputImageTraits<R>::ImageType;
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename InputImageTraits<T>::ImageType...>;
+  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
 // Partial specialisation for R(C::*)(T...)
 template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...)>
 {
-  using OutputImageType = typename OutputImageTraits<R>::ImageType;
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename InputImageTraits<T>::ImageType...>;
+  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
@@ -217,10 +177,11 @@ template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2>
 
 
 /** \class FunctorImageFilter
- * \brief TODO
- *
+ * \brief A generic functor filter templated by its functor
  * 
- *
+ * \sa VariadicInputsImageFilter
+ * \sa NewFunctorFilter
+ * 
  * \ingroup IntensityImageFilters   Multithreaded Streamed
  *
  * \ingroup OTBImageManipulation
@@ -231,17 +192,21 @@ template <class TFunction>
 {
 
 public:
+  // Standard typedefs
   using Self = FunctorImageFilter;
   using FunctorType = TFunction;
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
+  // Superclass through the helper struct
   using Superclass = typename FunctorFilterSuperclassHelper<TFunction>::FilterType;
   using OutputImageType = typename Superclass::OutputImageType;
   using OutputImageRegionType = typename OutputImageType::RegionType;
   
   using ProcessObjectType = itk::ProcessObject;
 
+  // A tuple of bool of the same size as the number of arguments in
+  // the functor
   using InputHasNeighborhood = typename FunctorFilterSuperclassHelper<TFunction>::InputHasNeighborhood;
  
   /** Run-time type information (and related methods). */
@@ -286,7 +251,7 @@ private:
   void GenerateInputRequestedRegion(void) override;
 
   /**
-   * Will use the OutputSize() method if
+   * Will use the OutputSize() method of the functor if output is VectorImage
    */
   void GenerateOutputInformation() override;
 
@@ -298,6 +263,7 @@ private:
   itk::Size<2> m_Radius;
 };
 
+// Actual implementation of NewFunctorFilter free function
 template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius)
 {
   using FilterType = FunctorImageFilter<Functor>;
@@ -308,22 +274,52 @@ template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2>
   return p;
 }
 
+/** 
+ * \struct NumberOfOutputBandsDecorator
+ * \brief This struct allows to forward the operator of template
+ *        parameter, while adding number of ouptut components service.
+ * 
+ * Its purpose is to enable the use of lambda or functor witht
+ * Outputsize() method with FunctorImageFilter.
+ * 
+ * It is used internally in NewFunctorFilter version with
+ * numberOfOutputBands parameter.
+ */ 
 
 template <typename F> struct NumberOfOutputBandsDecorator : F
 {
 public:
-  constexpr NumberOfOutputBandsDecorator(const F t, unsigned int nbComp) : F(t), m_NumberOfOutputComponents(nbComp) {}
+  constexpr NumberOfOutputBandsDecorator(const F t, unsigned int nbComp) : F(t), m_NumberOfOutputBands(nbComp) {}
   using F::operator();
 
   constexpr size_t OutputSize(...) const
   {
-    return m_NumberOfOutputComponents;
+    return m_NumberOfOutputBands;
   }
 
 private:
-  unsigned int m_NumberOfOutputComponents;
+  unsigned int m_NumberOfOutputBands;
 };
 
+/** 
+ * brief This helper method builds a fully functional
+ * FunctorImageFilter from a functor instance which does not provide
+ * the OutputSize() service, or a lambda, returing a VariableLengthVector
+ * 
+ * \param f the Functor to build the filter from
+ * \param numberOfOutputBands The number of output bands that
+ * this filter will return
+ * \param radius The size of neighborhood to use, if there is any
+ * itk::Neighborhood<T> in the operator() arguments.
+ * \return A ready to use OTB filter, which accepts n input image of
+ * type derived from the operator() arguments, and producing an image
+ * correpsonding to the operator() return type.
+ *
+ * Note that this function also works with a lambda as Functor,
+ * provided it returns a scalar type. If your lambda returns a
+ * VariableLengthVector, see the other NewFunctorFilter implementation.
+
+ */ 
 
 template <typename Functor> auto NewFunctorFilter(const Functor& f, unsigned int numberOfOutputBands, itk::Size<2> radius)
 {
