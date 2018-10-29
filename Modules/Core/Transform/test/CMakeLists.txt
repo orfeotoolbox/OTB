@@ -24,7 +24,6 @@ set(OTBTransformTests
 otbTransformTestDriver.cxx
 otbGenericRSTransformWithSRID.cxx
 otbCreateInverseForwardSensorModel.cxx
-otbGenericRSTransform.cxx
 otbCreateProjectionWithOSSIM.cxx
 otbLogPolarTransformResample.cxx
 otbLogPolarTransform.cxx
@@ -69,16 +68,6 @@ otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Cevennes COMMAND otbTr
 otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Toulouse COMMAND otbTransformTestDriver
   otbCreateInverseForwardSensorModel
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  )
-
-otb_add_test(NAME prTvGenericRSTransform COMMAND otbTransformTestDriver
-  --compare-ascii ${EPSILON_4}
-  ${BASELINE_FILES}/prTvGenericRSTransform.txt
-  ${TEMP}/prTvGenericRSTransform.txt
-  otbGenericRSTransform
-  1.35617289802566
-  43.4876035537
-  ${TEMP}/prTvGenericRSTransform.txt
   )
 
 otb_add_test(NAME prTvTestCreateProjectionWithOSSIM_Cevennes COMMAND otbTransformTestDriver

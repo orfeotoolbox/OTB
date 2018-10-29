@@ -24,7 +24,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbGenericRSTransformWithSRID);
   REGISTER_TEST(otbCreateInverseForwardSensorModel);
-  REGISTER_TEST(otbGenericRSTransform);
   REGISTER_TEST(otbCreateProjectionWithOSSIM);
   REGISTER_TEST(otbLogPolarTransformResample);
   REGISTER_TEST(otbLogPolarTransform);
