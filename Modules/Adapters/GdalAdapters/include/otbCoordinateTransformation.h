@@ -66,6 +66,14 @@ public:
   using std::runtime_error::runtime_error;
 };
 
+// Forward declaration needed for the operators declared bellow.
+class CoordinateTransformation;
+
+/// equal operator
+OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
+
+/// different operator
+OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
 
 
 /**
@@ -134,14 +142,8 @@ private:
   std::unique_ptr<OGRCoordinateTransformation> m_Transform;
 };
 
+/// Stream operator for CoordinateTransformation
 OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i);
-
-  /// equal operator
-OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
-
-  /// different operator
-OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
-
 }
 
 #endif

@@ -45,6 +45,15 @@ public:
   using std::runtime_error::runtime_error;
 };
 
+// Forward declaration needed for the operators declared bellow.
+class SpatialReference;
+
+/// Equal operator (based on OGRSpatialReference::IsSame())
+OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
+  
+/// Different operator (based on OGRSpatialReference::IsSame())
+OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept;
+
 /**
  * \class SpatialReference
  * \brief This class is a wrapper around OGRSpatialReference
@@ -164,15 +173,10 @@ private:
   std::unique_ptr<OGRSpatialReference> m_SR;
 };
 
+/// Stream operator for hemisphere
 OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere & hem);
 
+/// Stream operator for SpatialReference
 OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference & i);
-
-/// Equal operator (based on OGRSpatialReference::IsSame())
-OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
-  
-/// Different operator (based on OGRSpatialReference::IsSame())
-OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept;
 }
-
 #endif
