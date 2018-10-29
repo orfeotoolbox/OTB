@@ -109,7 +109,8 @@ int main(int argc, char* argv[])
   
   MapProjectionType::Pointer utmMapProjection =
     MapProjectionType::New();
-  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[3]),atoi(argv[4])==1? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
+  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[3]),*argv[4]=='N'? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
+  std::cout<<utmMapProjection->GetWkt()<<std::endl;
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 // Software Guide : EndCodeSnippet
 
