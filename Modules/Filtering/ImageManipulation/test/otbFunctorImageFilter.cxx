@@ -26,17 +26,18 @@
 #include <tuple>
 
 #include <numeric>
+#include <complex>
 
 // Example functors
 
 // N scalar images -> image
 // This functor takes N scalar image (variadic N) and returns the sum
 // of all pixels
-template <typename O, typename ...T> struct VariadicAdd
+template <typename TOut, typename ...TIns> struct VariadicAdd
 {
-  auto operator()(T... ins) const
+  auto operator()(TIns... ins) const
   {
-    std::vector<O> outVector{static_cast<O>(ins)...};
+    std::vector<TOut> outVector{static_cast<TOut>(ins)...};
 
     return std::accumulate(outVector.begin(), outVector.end(),0);
   }
@@ -81,18 +82,18 @@ template <typename v1, typename v2, typename ...vn> void concatenateVectors(v1 &
 // N  images (all types) -> vector image
 // This functor concatenates N images (N = variadic) of type
 // VectorImage and or Image, into a single VectorImage
-template<typename O, typename ...T> struct VariadicConcatenate
+template<typename TOut, typename ...TIns> struct VariadicConcatenate
 {
-  auto operator()(const T &...  ins) const
+  auto operator()(const TIns &...  ins) const
   {
-    itk::VariableLengthVector<O> out;
+    itk::VariableLengthVector<TOut> out;
     concatenateVectors(out, toVector(ins)...);
     
     return out;
   }
 
   // Must define OutputSize because output pixel is vector
-  constexpr size_t OutputSize(const std::array<size_t, sizeof...(T)> inputsNbBands) const
+  constexpr size_t OutputSize(const std::array<size_t, sizeof...(TIns)> inputsNbBands) const
   {
     return std::accumulate(inputsNbBands.begin(),inputsNbBands.end(),0);
   }
@@ -102,20 +103,20 @@ template<typename O, typename ...T> struct VariadicConcatenate
 // 1 VectorImage -> 1 VectorImage with a different size depending on a
 // parameter of the functor
 // This Functor 
-template<typename O, typename T> struct BandExtraction
+template<typename TOut, typename TIn> struct BandExtraction
 {
   BandExtraction(unsigned int indices...) : m_Indices({indices})
   {}
   
   // TODO define a constructor to initialize m_Indices  
-  auto operator()(const itk::VariableLengthVector<T> & in) const
+  auto operator()(const itk::VariableLengthVector<TIn> & in) const
   {
-    itk::VariableLengthVector<O> out(m_Indices.size());
+    itk::VariableLengthVector<TOut> out(m_Indices.size());
 
     size_t idx = 0;
     for(auto v: m_Indices)
       {
-      out[idx] = static_cast<O>(in[v]);
+      out[idx] = static_cast<TOut>(in[v]);
       ++idx;
       }
 
@@ -177,6 +178,27 @@ template<typename T> struct MaxInEachChannel
 };
 
 
+template<typename T> struct VectorModulus
+{
+  itk::VariableLengthVector<double> operator()(const itk::VariableLengthVector<std::complex<T>> & in) const
+  {
+    itk::VariableLengthVector<double> out(in.Size());
+    
+    for(auto band = 0u; band < out.Size(); ++band)
+      {
+      out[band] = std::abs(in[band]);
+      }
+    return out;
+  }
+
+  size_t OutputSize(const std::array<size_t,1> & nbBands) const
+  {
+    return nbBands[0];
+  }
+};
+
+
+// Tests of IsNeighborhood struct
 using OImage = typename otb::Image<int>;
 using Neig = typename itk::Neighborhood<int>;
 
@@ -193,11 +215,15 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   // test functions in functor_filter_details namespace
   using VectorImageType = VectorImage<double>;
   using ImageType       = Image<double>;
+  using ComplexVectorImageType = VectorImage<std::complex<double>>;
+  using ComplexImageType = Image<std::complex<double>>;
   using RegionType      = typename ImageType::RegionType;
   using SizeType        = typename RegionType::SizeType;
   
   auto vimage = VectorImageType::New();
   auto image  = ImageType::New();
+  auto cvimage = ComplexVectorImageType::New();
+  auto cimage = ComplexImageType::New();
 
   SizeType size = {{200,200}};
   
@@ -207,10 +233,21 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   itk::VariableLengthVector<double> v(2);
   v.Fill(0);
   vimage->FillBuffer(v);
+
+  cvimage->SetRegions(size);
+  cvimage->SetNumberOfComponentsPerPixel(2);
+  cvimage->Allocate();
+  itk::VariableLengthVector<std::complex<double>> cv(2);
+  cv.Fill(0);
+  cvimage->FillBuffer(cv);
   
   image->SetRegions(size);
   image->Allocate();
   image->FillBuffer(0);
+
+  cimage->SetRegions(size);
+  cimage->Allocate();
+  cimage->FillBuffer(0);
 
   // Test VariadicInputsImageFilter
   auto filter = otb::VariadicInputsImageFilter<VectorImageType,VectorImageType,ImageType>::New();
@@ -280,7 +317,18 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   auto maxInEachChannel = NewFunctorFilter(MaxInEachChannelType{},{{3,3}});
   maxInEachChannel->SetVInputs(vimage);
   maxInEachChannel->Update();
-  
+
+  // Test FunctorImageFilter with Module (complex=
+  using ModulusType = VectorModulus<double>;
+  auto modulus = NewFunctorFilter(ModulusType{});
+  modulus->SetVInputs(cvimage);
+  modulus->Update();
+
+  auto LambdaComplex = [] (const std::complex<double> & in) {return std::arg(in);};
+  auto argFilter = NewFunctorFilter(LambdaComplex);
+  argFilter->SetVInputs(cimage);
+  argFilter->Update();
+
  return EXIT_SUCCESS;
 }
 

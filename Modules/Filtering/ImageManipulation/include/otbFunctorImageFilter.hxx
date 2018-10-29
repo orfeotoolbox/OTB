@@ -36,6 +36,8 @@ namespace functor_filter_details
 // This function sets the requested region for one image
 template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageRegion<2> & region, const itk::Size<2>& radius)
 {
+  assert(img&&"Input image is a nullptr");
+
   auto currentRegion = region;
   currentRegion.PadByRadius(radius);
 
@@ -53,15 +55,11 @@ template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageReg
         
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    std::ostringstream msg;
-    msg << "::SetInputRequestedRegion<>()";
-    e.SetLocation(msg.str());
+    e.SetLocation("::SetInputRequestedRegion<>()");
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(nonConstImg);
     throw e;
     }
-
-  return 0;
 }
 
 template <class Tuple, size_t...Is> auto SetInputRequestedRegionsImpl(Tuple & t, const itk::ImageRegion<2> & region, std::index_sequence<Is...>,const itk::Size<2> & radius)
@@ -121,7 +119,7 @@ template <typename T> struct GetProxy{};
 
 template <typename T> struct GetProxy<itk::ImageRegionConstIterator<T> >
 {
-  static auto Get(const itk::ImageRegionConstIterator<T> & t)
+  static decltype(auto) Get(const itk::ImageRegionConstIterator<T> & t)
 {
   return t.Get();
 }
@@ -129,7 +127,7 @@ template <typename T> struct GetProxy<itk::ImageRegionConstIterator<T> >
 
 template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
 {
-  static auto Get(const itk::ConstNeighborhoodIterator<T> & t)
+  static decltype(auto) Get(const itk::ConstNeighborhoodIterator<T> & t)
 {
   return t.GetNeighborhood();
 }
@@ -183,9 +181,6 @@ void
 FunctorImageFilter<TFunction>
 ::GenerateInputRequestedRegion()
 {
-  // call the superclass' implementation of this method
-  Superclass::GenerateInputRequestedRegion();
-
   // Get requested region for output
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
   auto requestedRegion = outputPtr->GetRequestedRegion();

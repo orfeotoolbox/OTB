@@ -32,20 +32,16 @@ namespace otb
 
 /**  
  * \struct IsNeighborhood 
- * Struct testing if T is a neighborhood
+ * \brief Struct testing if T is a neighborhood
+ * 
  * Provides:
  * - ValueType type set to false_type or true_type
  * - value set to true or false
- * - PixelType type to the underlying pixel type
  */
-template <class T, class Enable = void> struct IsNeighborhood{};
-
-/// Partial specialisation for scalar types
-template <class T> struct IsNeighborhood<T,typename std::enable_if<std::is_scalar<typename std::remove_reference<typename std::remove_cv<T>::type>::type>::value >::type>
+template <class T> struct IsNeighborhood
 {
   using ValueType = std::false_type;
   static constexpr bool value = false;
-  using PixelType = T;
 };
 
 /// Partial specialisation for itk::Neighborhood<T>
@@ -53,37 +49,73 @@ template <class T> struct IsNeighborhood<itk::Neighborhood<T>>
 {
   using ValueType = std::true_type;
   static constexpr bool value = true;
-  using PixelType = T;
 };
+
 
 /// Partial specialisation for const itk::Neighborhood<T> &
 template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
 {
   using ValueType = std::true_type;
   static constexpr bool value = true;
+};
+
+
+/**
+ * \struct PixelTypeDeduction
+ * \brief Helper struct to derive PixelType from template parameter.
+ * 
+ * T                           -> PixelType = T
+ * itk::Neighborhood<T>        -> PixelTyoe = T
+ * const itk::Neighborhood<T>& -> PixelTyoe = T
+*/
+template <class T> struct PixelTypeDeduction
+{
   using PixelType = T;
 };
 
-/// Partial specialisation for itk::VariableLengthVector<T>
-template <class T> struct IsNeighborhood<itk::VariableLengthVector<T>>
+/// Partial specialisation for itk::Neighborhood<T>
+template <class T> struct PixelTypeDeduction<itk::Neighborhood<T>>
 {
-  using ValueType = std::false_type;
-  static constexpr bool value = false;
-  using PixelType = itk::VariableLengthVector<T>;
+  using PixelType = T;
 };
 
-/// Partial specialisation for const itk::VariableLengthVector<T> &
-template <class T> struct IsNeighborhood<const itk::VariableLengthVector<T>&>
+/// Partial specialisation for const itk::Neighborhood<T> &
+template <class T> struct PixelTypeDeduction<const itk::Neighborhood<T>&>
 {
-  using ValueType = std::false_type;
-  static constexpr bool value = false;
-  using PixelType = itk::VariableLengthVector<T>;
+  using PixelType = T;
 };
+
+/** 
+ * \struct ImageTypeDeduction
+ * \brief Helper struct to derive ImageType from template parameter
+ * 
+ * T                            -> ImageType = otb::Image<T>
+ * itk::VariableLengthVector<T> -> ImageType = otb::VectorImage<T>
+ * const T &                    -> ImageType = ImageTypeDeduction<T>::ImageType
+ */
+template <class T> struct ImageTypeDeduction 
+{
+  using ImageType = otb::Image<T>;
+};
+
+/// Partial specialisation for itk::VariableLengthVector<T>
+template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
+{
+  using ImageType = otb::VectorImage<T>;
+};
+
+/// Partial specialisation for const T &
+template <class T> struct ImageTypeDeduction<const T &>
+{
+  using ImageType = typename ImageTypeDeduction<T>::ImageType;
+};
+
 
 /**
  * \struct InputImageTraits
- * Struct allowing to derive input image types from operator()
- * arguments
+ * \brief Struct allowing to derive input image types from operator()
+ *        arguments
+ * 
  * Defines:
  * - PixelType type to the underlying pixel type
  * - ScalarType type to the underlying scalar type
@@ -96,16 +128,14 @@ template<typename T>
 struct InputImageTraits
 {
   using ArgumentType = T;
-  using PixelType = typename IsNeighborhood<typename std::remove_cv<typename std::remove_reference< ArgumentType>::type >::type>::PixelType;
-  using ScalarType = typename itk::DefaultConvertPixelTraits<PixelType>::ComponentType;
-  using ImageType = typename std::conditional<std::is_scalar<PixelType>::value,
-                                     otb::Image< ScalarType >,
-                                     otb::VectorImage< ScalarType > >::type;
+  using PixelType = typename PixelTypeDeduction<T>::PixelType;
+  using ImageType = typename ImageTypeDeduction<PixelType>::ImageType;
 };
 
 /**
  * \struct OutputImageTraits
- * Struct allowing to derive output image type from operator()
+ * \brief Struct allowing to derive output image type from operator()
+ * 
  * Defines:
  * - ScalarType type to the underlying scalar type
  * - ImageType type to the mocked up image type
@@ -116,17 +146,15 @@ template<typename T>
 struct OutputImageTraits
 {
   using ResultType = T;
-  using ScalarType = typename itk::DefaultConvertPixelTraits<ResultType>::ComponentType;
-  using ImageType =  typename std::conditional<std::is_scalar<ResultType>::value,
-                                     typename otb::Image<ScalarType>,
-                                     typename otb::VectorImage<ScalarType> >::type;
+  using ImageType = typename ImageTypeDeduction<T>::ImageType;
 };
 
 
 /**
 * \struct FunctorFilterSuperclassHelper 
-* Struct allowing to derive the superclass prototype for the
-* FunctorImageFilter class
+* \brief Struct allowing to derive the superclass prototype for the
+*        FunctorImageFilter class
+*
 * Provides the following:
 * - OutputImageType : type of the output image
 * - FilterType : correct instanciation of VariadicInputsImageFilter from
@@ -161,7 +189,7 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
 };
 
 /**
- * This helper method builds a fully functional FunctorImageFilter from a functor instance
+ * brief This helper method builds a fully functional FunctorImageFilter from a functor instance
  * 
  * Functor can be any operator() that matches the following:
  * - Accepts any number of arguments of T,
@@ -216,11 +244,11 @@ public:
 
   using InputHasNeighborhood = typename FunctorFilterSuperclassHelper<TFunction>::InputHasNeighborhood;
  
-/** Run-time type information (and related methods). */
+  /** Run-time type information (and related methods). */
   itkTypeMacro(FunctorImageFilter, ImageToImageFilter);
   
   
-/** Get the functor object.  The functor is returned by reference.
+  /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
@@ -230,7 +258,7 @@ public:
     return m_Functor;
   }
 
-/** Get the functor object.  The functor is returned by reference.
+  /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a
    * SmartPointer.) */
@@ -249,18 +277,18 @@ private:
   void operator =(const Self&) = delete;
   ~FunctorImageFilter() = default;
 
-/** Overload of ThreadedGenerateData  */
-virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  /** Overload of ThreadedGenerateData  */
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
    * Pad the input requested region by radius
    */
-  virtual void GenerateInputRequestedRegion(void) override;
+  void GenerateInputRequestedRegion(void) override;
 
   /**
    * Will use the OutputSize() method if
    */
-  virtual void GenerateOutputInformation() override;
+  void GenerateOutputInformation() override;
 
 
   // The functor member
@@ -276,6 +304,7 @@ template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2>
   using PointerType = typename FilterType::Pointer;
 
   PointerType  p = new FilterType(f,radius);
+  p->UnRegister();
   return p;
 }
 
@@ -283,7 +312,7 @@ template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2>
 template <typename F> struct NumberOfOutputBandsDecorator : F
 {
 public:
-  NumberOfOutputBandsDecorator(const F t, unsigned int nbComp) : F(t), m_NumberOfOutputComponents(nbComp) {}
+  constexpr NumberOfOutputBandsDecorator(const F t, unsigned int nbComp) : F(t), m_NumberOfOutputComponents(nbComp) {}
   using F::operator();
 
   constexpr size_t OutputSize(...) const
