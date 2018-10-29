@@ -65,8 +65,8 @@ template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
  * \brief Helper struct to derive PixelType from template parameter.
  * 
  * T                           -> PixelType = T
- * itk::Neighborhood<T>        -> PixelTyoe = T
- * const itk::Neighborhood<T>& -> PixelTyoe = T
+ * itk::Neighborhood<T>        -> PixelType = T
+ * const itk::Neighborhood<T>& -> PixelType = T
 */
 template <class T> struct PixelTypeDeduction
 {
