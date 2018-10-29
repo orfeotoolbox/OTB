@@ -42,7 +42,23 @@ std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere 
 
 bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
-  return sr1.m_SR->IsSame(sr2.m_SR.get());
+  bool rawIsSame = sr1.m_SR->IsSame(sr2.m_SR.get());
+
+  // By default, gdal does not compare datum (and IsSame with
+  // papzOptions is not in public API
+  if(rawIsSame)
+    {    
+    const std::string datum1 = (sr1.m_SR->GetAttrValue("DATUM")?sr1.m_SR->GetAttrValue("DATUM"):"");
+    const std::string datum2 = (sr2.m_SR->GetAttrValue("DATUM")?sr2.m_SR->GetAttrValue("DATUM"):"");
+
+    // Either both are empty or they are equal
+    if((datum1.empty() && datum2.empty()) || !datum1.compare(datum2))
+      {
+      return true;
+      }
+    }
+  
+  return false;
 }
 
 bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
@@ -119,25 +135,29 @@ SpatialReference SpatialReference::FromEPSG(unsigned int epsg)
 }
 
 SpatialReference SpatialReference::FromUTM(unsigned int zone, hemisphere hem)
-{  
-  std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
-  bool north = true;
-
-  switch(hem)
-    {
-    case hemisphere::north:
-      break;
-    case hemisphere::south:
-      north = false;
-      break;
-    }
+{
+  assert(zone>=0&&zone<=60&&"UTM zone should be in range [0,60]");
   
-  OGRErr code = tmpSR->SetUTM(zone,north);
+  std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
+  
+  // Build EPSG code from zone and hem
+  // We prefer this upon the SetFromUTM() of the OGRSpatialReference
+  // class because the latter does not set the datum and other useful fields.
+  int epsg = 32600;
+
+  if(hem == hemisphere::south)
+    {
+    epsg = 32700;
+    }
+
+  epsg+=zone;
+  
+  OGRErr code = tmpSR->importFromEPSGA(epsg);
 
   if(code!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss << "FromUTM(" << zone <<", "<<hem<<")";
+    oss << "FromUTM(" << zone <<", "<<hem<<"), could not use generated EPSG code "<<epsg;
     throw InvalidSRDescriptionException(oss.str());
     }
 

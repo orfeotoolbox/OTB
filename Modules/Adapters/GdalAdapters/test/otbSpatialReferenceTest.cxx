@@ -53,36 +53,38 @@ int otbSpatialReferenceTest(int, char**)
 
     if(sr4 == sr)
       {
-      std::cerr<<"Fail: sr4 != sr";
+      std::cerr<<"Fail: sr4 != sr"<<std::endl;
       success = false;
       }
 
     if(!(sr2 == sr))
       {
-      std::cerr<<"Fail: sr2 == sr";
+      std::cerr<<"Fail: sr2 == sr"<<std::endl;
       success = false;
       }
 
     if(sr3 != sr)
       {
-      std::cerr<<"Fail: sr3 == sr";
+      std::cerr<<"Fail: sr3 == sr"<<std::endl;
       success = false;
       }
 
     if(sr4 != srFromUTM)
       {
-      std::cerr<<"Fail: sr4 == srFromUTM";
+      std::cerr<<"Fail: sr4 == srFromUTM"<<std::endl;
       success = false;
       }
 
     if(sr4 != srFromEPSG)
       {
-      std::cerr<<"Fail: sr4 == srFromEPSG";
+      std::cerr<<"Fail: sr4 == srFromEPSG"<<std::endl;
       success = false;
       }
 
-    std::cout<<sr<<std::endl;
-    std::cout<<sr4<<std::endl;
+    std::cout<<"FromWGS84(): "<<sr<<std::endl<<std::endl;
+    std::cout<<"FromDescription(EPSG::32631): "<<sr4<<std::endl<<std::endl;
+    std::cout<<"FromEPSG(32631): "<<srFromEPSG<<std::endl<<std::endl;
+    std::cout<<"FromUTM(31,SpatialReference::hemisphere::north): "<<srFromUTM<<std::endl<<std::endl;
 
     if(!sr.NormalizeESRI())
       {
