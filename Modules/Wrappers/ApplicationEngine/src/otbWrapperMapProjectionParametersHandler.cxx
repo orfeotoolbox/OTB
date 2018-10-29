@@ -241,15 +241,7 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
                                                genericRSEstimator->GetOutputOrigin()[1]);
     // Update the UTM Gui fields
     app->SetParameterInt(zoneKey.str(), zone);
-    if (genericRSEstimator->GetOutputOrigin()[1] > 0.)
-      {
-      app->EnableParameter(hemKey.str());
-      }
-    else
-      {
-      app->DisableParameter(hemKey.str());
-      }
-
+    app->SetParameterInt(hemKey.str(),genericRSEstimator->GetOutputOrigin()[1] > 0.);
     app->AutomaticValueOn(zoneKey.str());
     app->AutomaticValueOn(hemKey.str());
     }
