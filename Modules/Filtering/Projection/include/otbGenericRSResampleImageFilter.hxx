@@ -275,7 +275,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   GenericRSTransformPointerType invTransform = GenericRSTransformType::New();
   m_Transform->GetInverse(invTransform);
 
-  if(strcmp(map.c_str(),"UTM")== 0)
+  if(map == "UTM")
     {
     // Build the UTM transform : Need the zone & the hemisphere
     // For this we us the geographic coordinate of the input UL corner
@@ -310,7 +310,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     CPLFree(utmRefC);
     OSRRelease(oSRS);
     }
-  else if(strcmp(map.c_str(),"WGS84")==0)
+  else if(map == "WGS84")
     {
     projectionRef = otb::GeoInformationConversion::ToWKT(4326); //WGS84
     }

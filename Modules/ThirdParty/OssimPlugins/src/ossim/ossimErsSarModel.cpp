@@ -116,7 +116,7 @@ namespace ossimplugins
 
       _sensor = new SensorParams();
 
-      if (strcmp(time_dir_pix.c_str(), "INCREASE") == 0)
+      if (time_dir_pix == "INCREASE")
       {
          _sensor->set_col_direction(1);
       }
@@ -125,7 +125,7 @@ namespace ossimplugins
          _sensor->set_col_direction(-1);
       }
 
-      if (strcmp(time_dir_lin.c_str(), "INCREASE") == 0)
+      if (time_dir_lin == "INCREASE")
       {
          _sensor->set_lin_direction(1);
       }

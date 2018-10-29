@@ -34,10 +34,11 @@ target_link_libraries(OTBImageIO
   ${OTBIOGDAL_LIBRARIES}
   ${OTBStreaming_LIBRARIES}
   ${OTBBoost_LIBRARIES}
-  ${OTBIOTileMap_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBExtendedFilename_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
+  #Deprecated modules
+  ${OTBIOTileMap_LIBRARIES}
 
   )
 

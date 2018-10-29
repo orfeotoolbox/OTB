@@ -29,10 +29,9 @@
 #include "itkVariableSizeMatrix.h"
 #include "otbCvRTreesWrapper.h"
 
-class CvRTreesWrapper;
-
 namespace otb
 {
+
 template <class TInputValue, class TTargetValue>
 class ITK_EXPORT RandomForestsMachineLearningModel
   : public MachineLearningModel <TInputValue, TTargetValue>

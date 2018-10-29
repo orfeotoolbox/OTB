@@ -191,13 +191,13 @@ private:
       if (IsParameterEnabled("mode.vector.imfield") &&
           HasValue("mode.vector.imfield"))
         {
-        GetInternalApplication("vectorization")->SetParameterString("in",
-          GetParameterString("mode.vector.imfield"));
+        GetInternalApplication("vectorization")->SetParameterInputImage("in",
+          GetParameterImage<ImageBaseType>("mode.vector.imfield"));
         }
       else
         {
-        GetInternalApplication("vectorization")->SetParameterString("in",
-          GetParameterString("in"));
+        GetInternalApplication("vectorization")->SetParameterInputImage("in",
+          GetParameterImage<ImageBaseType>("in"));
         }
       GetInternalApplication("vectorization")->SetParameterString("inseg",
         tmpFilenames[2]);

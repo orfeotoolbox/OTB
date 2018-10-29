@@ -7,6 +7,7 @@ Table of Contents
    index
    Installation
    OTB-Applications
+   QGIS-interface
    Monteverdi
    AdvancedUse
    Recipes
