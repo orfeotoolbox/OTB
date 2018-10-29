@@ -28,6 +28,68 @@
 #include <numeric>
 #include <complex>
 
+// static tests
+
+// Tests of IsNeighborhood, PixelTypeDeduction and ImageTypeDeduction structs
+using namespace otb;
+template <typename T> struct TypesCheck
+{
+  using ScalarType                    = T;
+  using ImageType                     = otb::Image<T>;
+  using ComplexType                   = std::complex<ScalarType>;
+  using ComplexImageType              = otb::Image<ComplexType>;
+  using VectorType                    = itk::VariableLengthVector<ScalarType>;
+  using VectorImageType               = otb::VectorImage<ScalarType>;
+  using ComplexVectorType             = itk::VariableLengthVector<ComplexType>;
+  using ComplexVectorImageType        = otb::VectorImage<ComplexType>;
+  using NeighborhoodType              = itk::Neighborhood<ScalarType>;
+  using ComplexNeighborhoodType       = itk::Neighborhood<ComplexType>;
+  using VectorNeighborhoodType        = itk::Neighborhood<VectorType>;
+  using ComplexVectorNeighborhoodType = itk::Neighborhood<ComplexVectorType>;
+  
+  static_assert(!otb::IsNeighborhood<ScalarType>::value,"");
+  static_assert(!otb::IsNeighborhood<ComplexType>::value,"");
+  static_assert(!otb::IsNeighborhood<VectorType>::value,"");
+  static_assert(!otb::IsNeighborhood<ComplexVectorType>::value,"");
+
+  static_assert(otb::IsNeighborhood<NeighborhoodType>::value,"");
+  static_assert(otb::IsNeighborhood<ComplexNeighborhoodType>::value,"");
+  static_assert(otb::IsNeighborhood<VectorNeighborhoodType>::value,"");
+  static_assert(otb::IsNeighborhood<ComplexVectorNeighborhoodType>::value,"");
+
+  static_assert(otb::IsNeighborhood<const NeighborhoodType &>::value,"");
+  static_assert(otb::IsNeighborhood<const ComplexNeighborhoodType &>::value,"");
+  static_assert(otb::IsNeighborhood<const VectorNeighborhoodType &>::value,"");
+  static_assert(otb::IsNeighborhood<const ComplexVectorNeighborhoodType &>::value,"");
+
+  static_assert(std::is_same<typename PixelTypeDeduction<ScalarType>::PixelType,ScalarType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<ComplexType>::PixelType,ComplexType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<VectorType>::PixelType,VectorType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<ComplexVectorType>::PixelType,ComplexVectorType>::value,"");
+
+  static_assert(std::is_same<typename PixelTypeDeduction<NeighborhoodType>::PixelType,ScalarType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<ComplexNeighborhoodType>::PixelType,ComplexType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<VectorNeighborhoodType>::PixelType,VectorType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<ComplexVectorNeighborhoodType>::PixelType,ComplexVectorType>::value,"");
+
+  static_assert(std::is_same<typename PixelTypeDeduction<const NeighborhoodType &>::PixelType,ScalarType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<const ComplexNeighborhoodType &>::PixelType,ComplexType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<const VectorNeighborhoodType &>::PixelType,VectorType>::value,"");
+  static_assert(std::is_same<typename PixelTypeDeduction<const ComplexVectorNeighborhoodType &>::PixelType,ComplexVectorType>::value,"");
+
+  static_assert(std::is_same<typename ImageTypeDeduction<ScalarType>::ImageType,ImageType>::value,"");
+  static_assert(std::is_same<typename ImageTypeDeduction<ComplexType>::ImageType,ComplexImageType>::value,"");
+  static_assert(std::is_same<typename ImageTypeDeduction<VectorType>::ImageType,VectorImageType>::value,"");
+  static_assert(std::is_same<typename ImageTypeDeduction<ComplexVectorType>::ImageType,ComplexVectorImageType>::value,"");
+
+  static_assert(std::is_same<typename ImageTypeDeduction<const ScalarType &>::ImageType,ImageType>::value,"");
+  static_assert(std::is_same<typename ImageTypeDeduction<const ComplexType &>::ImageType,ComplexImageType>::value,"");
+  static_assert(std::is_same<typename ImageTypeDeduction<const VectorType &>::ImageType,VectorImageType>::value,"");
+  static_assert(std::is_same<typename ImageTypeDeduction<const ComplexVectorType &>::ImageType,ComplexVectorImageType>::value,"");
+};
+
+auto checksDouble = TypesCheck<double>{};
+
 // Example functors
 
 // N scalar images -> image
@@ -196,19 +258,6 @@ template<typename T> struct VectorModulus
     return nbBands[0];
   }
 };
-
-
-// Tests of IsNeighborhood struct
-using OImage = typename otb::Image<int>;
-using Neig = typename itk::Neighborhood<int>;
-
-static_assert(otb::IsNeighborhood<Neig>::value, "err");
-static_assert(!otb::IsNeighborhood<double>::value, "err");
-static_assert(!otb::IsNeighborhood<itk::VariableLengthVector<double>>::value, "err");
-
-
-using namespace otb::functor_filter_details;
-using namespace otb;
 
 int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
