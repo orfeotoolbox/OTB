@@ -46,8 +46,8 @@ namespace otb
 class OTBGdalAdapters_EXPORT InvalidCoordinateTransfromationException : public std::runtime_error
 {
 public:
-  InvalidCoordinateTransfromationException(const std::string & description);
-  virtual ~InvalidCoordinateTransfromationException() = default;
+  // Import parent constructor
+  using std::runtime_error::runtime_error;
 };
 
 /**
@@ -62,8 +62,8 @@ public:
 class OTBGdalAdapters_EXPORT TransformFailureException : public std::runtime_error
 {
 public:
-  TransformFailureException(const std::string & description);
-  virtual ~TransformFailureException() = default;
+  // Import parent constructor
+  using std::runtime_error::runtime_error;
 };
 
 

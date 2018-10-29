@@ -41,8 +41,8 @@ namespace otb
 class OTBGdalAdapters_EXPORT InvalidSRDescriptionException : public std::runtime_error
 {
 public:
-  InvalidSRDescriptionException(const std::string & description);
-  virtual ~InvalidSRDescriptionException() = default;
+  // Import parent constructor
+  using std::runtime_error::runtime_error;
 };
 
 /**

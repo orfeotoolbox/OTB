@@ -50,8 +50,6 @@ bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcep
   return !(sr1==sr2);
 }
 
-InvalidSRDescriptionException::InvalidSRDescriptionException(const std::string & description) : std::runtime_error(description) {};
-
 SpatialReference::SpatialReference(const SpatialReference & other) noexcept
   : m_SR(other.m_SR->Clone())
 {}

@@ -27,14 +27,6 @@
 
 namespace otb
 {
-InvalidCoordinateTransfromationException::InvalidCoordinateTransfromationException(const std::string & description)
-  : std::runtime_error(description)
-{}
-
-TransformFailureException::TransformFailureException(const std::string & description)
-  : std::runtime_error(description)
-{}
-
 std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i)
 {
   o << "Source: " << i.GetSourceSpatialReference() << ", Target: " << i.GetTargetSpatialReference();
