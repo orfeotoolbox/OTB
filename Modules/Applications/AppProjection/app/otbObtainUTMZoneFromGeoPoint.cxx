@@ -94,8 +94,8 @@ private:
     otb::SpatialReference::hemisphere hem;
 
 
-    otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lat"),
-                                                     GetParameterFloat("lon"),utmZone,hem);
+    otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lon"),
+                                                     GetParameterFloat("lat"),utmZone,hem);
 
     SetParameterInt("utm",utmZone);
   }
