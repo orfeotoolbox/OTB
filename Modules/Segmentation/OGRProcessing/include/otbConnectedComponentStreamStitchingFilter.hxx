@@ -266,14 +266,14 @@ ConnectedComponentStreamStitchingFilter<TInputImage>
       
       std::vector<OGRFeatureType> addedPolygonList;
       std::vector<int> FIDVec;
-      for (std::vector< std::vector<int> >::iterator itList = fusionList.begin(); itList != fusionList.end(); itList++)
+      for (auto & list : fusionList ) //.begin(); itList != fusionList.end(); itList++)
         {
         OGRMultiPolygon geomToMerge;
-        int field = m_OGRLayer.GetFeature(  *(*itList).begin())["field"].template GetValue<int>();
-        for (std::vector<int>::iterator it = (*itList).begin(); it != (*itList).end(); it++)
+        int field = m_OGRLayer.GetFeature(  *list.begin())["field"].template GetValue<int>();
+        for (auto  id : list ) //.begin(); it != (*itList).end(); it++)
           {
-          geomToMerge.addGeometry( m_OGRLayer.GetFeature(*it).GetGeometry());
-          m_OGRLayer.DeleteFeature(*it);
+          geomToMerge.addGeometry( m_OGRLayer.GetFeature(id).GetGeometry());
+          m_OGRLayer.DeleteFeature(id);
           }
         
         otb::ogr::UniqueGeometryPtr fusionPolygon =otb::ogr::UnionCascaded(geomToMerge);

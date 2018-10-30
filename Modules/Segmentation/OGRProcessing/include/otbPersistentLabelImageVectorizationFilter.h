@@ -76,9 +76,6 @@ public:
 
   /** Reset method called before starting the streaming*/
   void Reset(void) override{};
-  
-  /** Get the sample names */
-  const std::vector<std::string> & GetSampleFieldNames();
    
   /** Set the name of the field that will contain the labels in the output image */
   itkSetStringMacro(FieldName);
