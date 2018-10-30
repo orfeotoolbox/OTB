@@ -70,7 +70,7 @@ input image to the default value for DEM (which is -32768):
 
 The third mode “apply” can be useful if you apply a formula to the
 entire image. This will likely change the values of pixels flagged as
-no-data, but the no-data value in the image metadata doesn’t change. If
+no-data, but the no-data value in the image metadata does not change. If
 you want to fix all no-data pixels to their original value, you can
 extract the mask of the original image and apply it on the output image.
 For instance:
@@ -91,8 +91,8 @@ For instance:
                         -mode.apply.mask mask.tif
 
 You can also use this “apply” mode with an additional parameter
-“mode.apply.ndval”. This parameter allow to set the output nodata value
-applying according to your input mask.
+“mode.apply.ndval”. This parameter sets the output nodata value
+of the input mask.
 
 Segmentation
 ------------
@@ -274,7 +274,7 @@ all the previous steps:
 
 Most of the settings from the previous applications are also exposed in this
 composite application. The range and spatial radius used for the segmentation
-step are half the values used for Mean-Shift smooting, which are obtained from
+step are half the values used for Mean-Shift smoothing, which are obtained from
 LargeScaleMeanShift parameters. There are two output modes: vector (default)
 and raster. When the raster output is chosen, last step (vectorization) is
 skipped.
@@ -295,8 +295,8 @@ Dempster Shafer based Classifier Fusion
 
 This framework is dedicated to perform cartographic validation starting
 from the result of a detection (for example a road extraction), enhance
-the results fiability by using a classifier fusion algorithm. Using a
-set of descriptor, the processing chain validates or invalidates the
+the results viability by using a classifier fusion algorithm. Using a
+set of descriptors, the processing chain validates or invalidates the
 input geometrical features.
 
 Fuzzy Model (requisite)
@@ -341,7 +341,7 @@ for each studied polyline, the chosen descriptors. In this context, the
 *ComputePolylineFeatureFromImage* application can be used for a large
 range of descriptors. It has the following inputs:
 
--  ``-in`` an image (of the sudied scene) corresponding to the chosen
+-  ``-in`` an image (of the studied scene) corresponding to the chosen
    descriptor (NDVI, building Mask…)
 
 -  ``-vd`` a vector data containing polyline of interest
@@ -394,7 +394,7 @@ Second Step: Feature Validation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The final application (*VectorDataDSValidation* ) will validate or
-unvalidate the studied samples using `the Dempster-Shafer
+invalidate the studied samples using `the Dempster-Shafer
 theory <http://en.wikipedia.org/wiki/Dempster%E2%80%93Shafer_theory>`_ 
 . Its inputs are:
 

@@ -107,11 +107,11 @@ int main(int argc, char* argv[])
   //
   //  The change detector will give positive and negative values
   //  depending on the sign of the difference. We are usually
-  //  interested only in the asbolute value of the difference. For
+  //  interested only in the absolute value of the difference. For
   //  this purpose, we will use the \doxygen{itk}{AbsImageFilter}. Also, before
   //  saving the image to a file in, for instance, PNG format, we will
-  //  rescale the results of the change detection in order to use all
-  //  the output pixel type range of values.
+  //  rescale the results of the change detection in order to use the full range
+  //  of values of the output pixel type.
   //
   //  Software Guide : EndLatex
 
