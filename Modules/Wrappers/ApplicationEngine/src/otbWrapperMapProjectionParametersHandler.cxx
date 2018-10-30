@@ -108,7 +108,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     {
     case Map_Utm:
     {
-    return SpatialReference::FromUTM(app->GetParameterInt(zoneKey.str()),app->IsParameterEnabled(hemKey.str())?SpatialReference::hemisphere::north:SpatialReference::hemisphere::south).ToWkt();
+    return SpatialReference::FromUTM(app->GetParameterInt(zoneKey.str()),app->GetParameterInt(hemKey.str())?SpatialReference::hemisphere::north:SpatialReference::hemisphere::south).ToWkt();
     }
     break;
     case Map_Lambert2:
@@ -182,15 +182,7 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
     
     // Update the UTM Gui fields
     app->SetParameterInt(zoneKey.str(), zone);
-    if (hem == SpatialReference::hemisphere::north)
-      {
-      app->EnableParameter(hemKey.str());
-      }
-    else
-      {
-      app->DisableParameter(hemKey.str());
-      }
-
+    app->SetParameterInt(hemKey.str(),(hem == SpatialReference::hemisphere::north));
     app->AutomaticValueOn(zoneKey.str());
     app->AutomaticValueOn(hemKey.str());
     }

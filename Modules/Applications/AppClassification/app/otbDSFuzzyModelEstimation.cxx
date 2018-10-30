@@ -212,7 +212,7 @@ private:
     if (IsParameterEnabled("initmod"))
       {
       std::string descModFile = GetParameterString("initmod");
-      descMod = FuzzyDescriptorsModelManager::Read(descModFile.c_str());
+      descMod = FuzzyDescriptorsModelManager::Read(descModFile);
       descList = FuzzyDescriptorsModelManager::GetDescriptorList(descMod);
       }
     else
