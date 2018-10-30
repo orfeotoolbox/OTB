@@ -24,7 +24,7 @@
 
 using namespace otb;
 
-int otbCoordinateTransformationTest(int, char**)
+int otbCoordinateTransformationTest(int, char* [])
 {
   bool success = true;
   

@@ -38,7 +38,7 @@ bool CheckUTMZone(double lat, double lon, unsigned int expected_zone, SpatialRef
   return true;
 }
 
-int otbSpatialReferenceTest(int, char**)
+int otbSpatialReferenceTest(int, char* [])
 {
   bool success = true;
 
