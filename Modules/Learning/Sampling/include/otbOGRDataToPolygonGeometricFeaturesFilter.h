@@ -101,8 +101,6 @@ protected:
     , ogr::DataSource* outputDS);
 
   /** Multi-threading implementation */
-
-  virtual void BeforeThreadedGenerateVectorData();
   
   /** Method to split the input OGRDataSource between several containers
    *  for each thread. Default is to put the same number of features for
@@ -118,8 +116,6 @@ protected:
   
   /** Fill output vectors for a particular output */
   virtual void FillOneOutput( ogr::DataSource* outDS, bool update);
-
-  virtual void AfterThreadedGenerateVectorData();
 
   /** Start of main processing loop */
   virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread,
@@ -164,9 +160,6 @@ protected:
 
   /** Get a reference over the additional fields */
   const std::vector<SimpleFieldDefn>& GetAdditionalFields() const;
-
-  /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   
   /** Give access to in-memory input layers */
   ogr::Layer GetInMemoryInput(unsigned int threadId);

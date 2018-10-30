@@ -258,7 +258,7 @@ OGRDataToPolygonGeometricFeaturesFilter
   // Call a method that can be overridden by a subclass to perform
   // some calculations prior to splitting the main computations into
   // separate threads
-  this->BeforeThreadedGenerateVectorData();
+  // this->BeforeThreadedGenerateVectorData();
 
   // Split the data into in-memory layers
   this->DispatchInputVectors();
@@ -279,7 +279,7 @@ OGRDataToPolygonGeometricFeaturesFilter
 
   // Call a method that can be overridden by a subclass to perform
   // some calculations after all the threads have completed
-  this->AfterThreadedGenerateVectorData();
+  // this->AfterThreadedGenerateVectorData();
 }
 
 void
@@ -417,18 +417,6 @@ OGRDataToPolygonGeometricFeaturesFilter
     
 }
 
-void
-OGRDataToPolygonGeometricFeaturesFilter
-::BeforeThreadedGenerateVectorData()
-{
-}
-
-void
-OGRDataToPolygonGeometricFeaturesFilter
-::AfterThreadedGenerateVectorData()
-{
-}
-
 // Callback routine used by the threading library. This routine just calls
 // the ThreadedGenerateData method after setting the correct region for this
 // thread.
@@ -476,12 +464,5 @@ OGRDataToPolygonGeometricFeaturesFilter
   return m_InMemoryOutputs[threadId]->GetLayerChecked(0);
 }
 
-
-void
-OGRDataToPolygonGeometricFeaturesFilter
-::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-}
 } // end namespace otb
 #endif

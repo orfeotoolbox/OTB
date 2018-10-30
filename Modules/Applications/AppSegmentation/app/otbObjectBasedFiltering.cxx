@@ -115,10 +115,8 @@ private:
     
     // Apply SQL query, we use 'WHERE NOT' to delete element verifying the 
     // filtering expression
-    std::ostringstream sqloss;
-    sqloss.str("");
-    sqloss<<"SELECT * FROM \""<<layerName<<"\" WHERE NOT "<< expr;
-    auto layerTmp=buffer->ExecuteSQL(sqloss.str().c_str(), nullptr, nullptr);
+    std::string sqloss = "SELECT * FROM \""+layerName+"\" WHERE NOT "+ expr;
+    auto layerTmp=buffer->ExecuteSQL(sqloss , nullptr, nullptr);
     
     // Get Ouput path (new File or Update)
     std::string outPath(this->GetParameterString("in"));
