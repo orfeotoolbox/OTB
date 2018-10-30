@@ -211,7 +211,7 @@ private:
       }
     DisableParameter("mode.raster.out");
 
-    if( IsParameterEnabled( "cleanup" ) )
+    if( GetParameterInt( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
       for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)
