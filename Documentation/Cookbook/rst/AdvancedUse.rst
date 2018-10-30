@@ -347,6 +347,14 @@ The available syntax for boolean options are:
 
 -    By default OTB will not alter any existing nodata value.
 
+-    The following examples illustrate the above-mentioned points:
+
+-    Scalar value syntax : "image_filename?&nodata=-999" -> nodata value equal to -999 will be assigned to all bands
+
+-    "Band/Value pair" syntax: "image_filename?&nodata=0:-999,1:255,2:254" -> nodata value corresponds to pixels with values [-999,255,254]
+
+-    It is important to note that the band numbering in the nodata writer option follows the GDAL convention and starts at 1.
+
 OGR DataSource options
 ^^^^^^^^^^^^^^^^^^^^^^^
 
