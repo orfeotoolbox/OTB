@@ -288,6 +288,8 @@ macro(check_compiler_platform_flags)
     set(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
     if(OpenMP_EXE_LINKER_FLAGS)
       set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    else()
+      set(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${OpenMP_CXX_FLAGS}")
     endif()
   endif()
 
