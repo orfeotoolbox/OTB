@@ -41,6 +41,26 @@ public:
     this->SetNthInput(I,inputPtr);
   }
 
+#define DefineLegacySetInputMacro(n)                                                                               \
+  template<typename Tuple = InputTypesTupleType, typename std::enable_if<n<=std::tuple_size<Tuple>::value >::type> \
+  void SetInput ## n(typename std::tuple_element<n-1,Tuple>::type * img)                                           \
+  {                                                                                                                \
+    this->SetVInput<n-1>(img);                                                                                     \
+  }
+
+  // The following defines legacy setters SetInput1()
+  // ... SetInput10(), only if the number of input type is sufficient
+  DefineLegacySetInputMacro(1);
+  DefineLegacySetInputMacro(2);
+  DefineLegacySetInputMacro(3);
+  DefineLegacySetInputMacro(4);
+  DefineLegacySetInputMacro(5);
+  DefineLegacySetInputMacro(6);
+  DefineLegacySetInputMacro(7);
+  DefineLegacySetInputMacro(8);
+  DefineLegacySetInputMacro(9);
+  DefineLegacySetInputMacro(10);
+  
   template <std::size_t I> const typename std::tuple_element<I,InputTypesTupleType>::type * GetVInput()
   {
     using ImageType = typename std::tuple_element<I,InputTypesTupleType>::type;
