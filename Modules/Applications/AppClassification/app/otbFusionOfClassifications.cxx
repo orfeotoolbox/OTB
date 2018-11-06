@@ -119,6 +119,9 @@ private:
     AddParameter(ParameterType_InputImageList, "il", "Input classifications");
     SetParameterDescription( "il", "List of input classification maps to fuse. Labels in each classification image must represent the same class." );
 
+    AddParameter(ParameterType_OutputImage, "out", "The output classification image");
+    SetParameterDescription("out", "The output classification image resulting from the fusion of the input classification images.");
+    SetDefaultOutputPixelType("out", ImagePixelType_uint8);
 
     /** GROUP FUSION METHOD */
     AddParameter(ParameterType_Choice, "method", "Fusion method");
@@ -156,10 +159,6 @@ private:
     SetParameterDescription("undecidedlabel","Label for the Undecided class. Pixels with more than 1 fused class are marked as Undecided. Please note that the Undecided value must be different from existing "
         "labels in the input classifications. By default, 'undecidedlabel = 0'.");
     SetDefaultParameterInt("undecidedlabel",0);
-
-    AddParameter(ParameterType_OutputImage,"out","The output classification image");
-    SetParameterDescription("out","The output classification image resulting from the fusion of the input classification images.");
-    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "classification1.tif classification2.tif classification3.tif");

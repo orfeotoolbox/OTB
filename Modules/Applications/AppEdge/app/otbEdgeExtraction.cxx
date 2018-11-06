@@ -79,6 +79,9 @@ private:
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The input image on which the features are computed.");
 
+    AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
+    SetParameterDescription("out", "Output image containing the edge features.");
+
     AddParameter(ParameterType_Int, "channel", "Selected Channel");
     SetParameterDescription("channel", "The selected channel index");
     SetDefaultParameterInt("channel", 1);
@@ -122,9 +125,6 @@ private:
     AddParameter(ParameterType_Float, "filter.canny.lowerthreshold", "");
     SetDefaultParameterFloat("filter.canny.lowerthreshold", 3.0);
     */
-
-    AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
-    SetParameterDescription("out", "Output image containing the edge features.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
