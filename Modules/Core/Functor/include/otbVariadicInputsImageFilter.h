@@ -24,6 +24,8 @@
 
 namespace otb {
 
+/// TODO: Documentation
+
 template<class TOuptut, class ... TInputs> class VariadicInputsImageFilter : public itk::ImageSource<TOuptut>
 {
 public:

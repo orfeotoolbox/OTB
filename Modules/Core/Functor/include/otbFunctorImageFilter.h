@@ -184,7 +184,7 @@ template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2>
  * 
  * \ingroup IntensityImageFilters   Multithreaded Streamed
  *
- * \ingroup OTBImageManipulation
+ * \ingroup OTBFunctor
 */
 template <class TFunction>
     class ITK_EXPORT FunctorImageFilter
