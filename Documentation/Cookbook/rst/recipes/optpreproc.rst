@@ -158,7 +158,7 @@ application:
 There are also optional parameters that can be useful for this tool:
 
 -  The ``-elev`` option specifies the elevation, either with a
-   DEM formatted for OTB (``-elev.dem`` option, see section :ref:`dem`)
+   DEM formatted for OTB (``-elev.dem`` option, see section :ref:`section2`)
    or with an average elevation (``-elev.default`` option). Since
    registration and zooming of the multi-spectral image is performed
    using sensor-models, it may happen that the registration is not
