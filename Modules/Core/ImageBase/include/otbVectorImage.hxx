@@ -42,10 +42,9 @@ std::string VectorImage<TPixel, VImageDimension>::GetProjectionRef(void) const
 }
 
 template <class TPixel, unsigned int VImageDimension>
-void
-VectorImage<TPixel, VImageDimension>::SetProjectionRef(const std::string& kwl)
-{  
-  itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(),MetaDataKey::ProjectionRefKey,kwl);
+void VectorImage<TPixel, VImageDimension>::SetProjectionRef(const std::string& kwl)
+{
+  itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey, kwl);
 }
 
 
@@ -116,130 +115,111 @@ double VectorImage<TPixel, VImageDimension>::GetGCPZ(unsigned int GCPnum) const
 }
 
 template <class TPixel, unsigned int VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType
-VectorImage<TPixel, VImageDimension>::GetGeoTransform(void) const
+typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetGeoTransform(void) const
 {
   return (this->GetMetaDataInterface()->GetGeoTransform());
 }
 
 template <class TPixel, unsigned int VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType
-VectorImage<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
+typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
 {
   return (this->GetMetaDataInterface()->GetUpperLeftCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType
-VectorImage<TPixel, VImageDimension>::GetUpperRightCorner(void) const
+typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetUpperRightCorner(void) const
 {
   return (this->GetMetaDataInterface()->GetUpperRightCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType
-VectorImage<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
+typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
 {
   return (this->GetMetaDataInterface()->GetLowerLeftCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType
-VectorImage<TPixel, VImageDimension>::GetLowerRightCorner(void) const
+typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetLowerRightCorner(void) const
 {
   return (this->GetMetaDataInterface()->GetLowerRightCorner());
 }
 
 template <class TPixel, unsigned int VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::SpacingType
-VectorImage<TPixel, VImageDimension>::GetSignedSpacing() const
+typename VectorImage<TPixel, VImageDimension>::SpacingType VectorImage<TPixel, VImageDimension>::GetSignedSpacing() const
 {
   auto spacing = this->GetSpacing();
-  for ( unsigned int i = 0; i < VImageDimension; ++i )
-    {
-    if (this->m_Direction[i][i] < 0 )
-      spacing[i] = - spacing[i];
-    }
+  for (unsigned int i = 0; i < VImageDimension; ++i)
+  {
+    if (this->m_Direction[i][i] < 0)
+      spacing[i] = -spacing[i];
+  }
   return spacing;
 }
 
 template <class TPixel, unsigned int VImageDimension>
-void VectorImage<TPixel, VImageDimension>
-::SetSignedSpacing( SpacingType spacing)
+void VectorImage<TPixel, VImageDimension>::SetSignedSpacing(SpacingType spacing)
 {
 
-  for ( unsigned int i = 0; i < VImageDimension; i++ )
+  for (unsigned int i = 0; i < VImageDimension; i++)
+  {
+    if (spacing[i] < 0.0)
     {
-    if ( spacing[i] < 0.0 )
+      if (this->m_Direction[i][i] > 0)
       {
-      if ( this->m_Direction[i][i] > 0 )
+        for (unsigned j = 0; j < VImageDimension; ++j)
         {
-        for ( unsigned j = 0; j < VImageDimension; ++j )
-          {
-          this->m_Direction[j][i] = - this->m_Direction[j][i];
-          }  
+          this->m_Direction[j][i] = -this->m_Direction[j][i];
         }
-      spacing[i] = - spacing[i];
       }
+      spacing[i] = -spacing[i];
     }
+  }
   this->SetSpacing(spacing);
   this->ComputeIndexToPhysicalPointMatrices();
   this->Modified();
 }
 
 template <class TPixel, unsigned int VImageDimension>
-void VectorImage<TPixel, VImageDimension>
-::SetSignedSpacing( double spacing[ VImageDimension ])
+void VectorImage<TPixel, VImageDimension>::SetSignedSpacing(double spacing[VImageDimension])
 {
   SpacingType s(spacing);
   this->SetSignedSpacing(s);
 }
 
 template <class TPixel, unsigned int VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType
-VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void)
+typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void)
 {
   ImageKeywordlist kwl;
 
-  itk::ExposeMetaData<ImageKeywordlist>(this->GetMetaDataDictionary(),
-                                        MetaDataKey::OSSIMKeywordlistKey,
-                                        kwl);
-  return  kwl;
+  itk::ExposeMetaData<ImageKeywordlist>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
+  return kwl;
 }
 
 template <class TPixel, unsigned int VImageDimension>
-const typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType
-VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void) const
+const typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void) const
 {
   ImageKeywordlist kwl;
 
-  itk::ExposeMetaData<ImageKeywordlist>(this->GetMetaDataDictionary(),
-                                        MetaDataKey::OSSIMKeywordlistKey,
-                                        kwl);
-  return  kwl;
+  itk::ExposeMetaData<ImageKeywordlist>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
+  return kwl;
 }
 
 template <class TPixel, unsigned int VImageDimension>
-void
-VectorImage<TPixel,VImageDimension>::SetImageKeywordList(const ImageKeywordlistType& kwl)
+void VectorImage<TPixel, VImageDimension>::SetImageKeywordList(const ImageKeywordlistType& kwl)
 {
-  itk::EncapsulateMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(),MetaDataKey::OSSIMKeywordlistKey,kwl);
+  itk::EncapsulateMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
 }
 
 
 template <class TPixel, unsigned int VImageDimension>
-void
-VectorImage<TPixel, VImageDimension>
-::CopyInformation(const itk::DataObject * data)
+void VectorImage<TPixel, VImageDimension>::CopyInformation(const itk::DataObject* data)
 {
   Superclass::CopyInformation(data);
   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
 }
 
 template <class TPixel, unsigned int VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::ImageMetadataInterfacePointerType
-VectorImage<TPixel, VImageDimension>
-::GetMetaDataInterface() const
+typename VectorImage<TPixel, VImageDimension>::ImageMetadataInterfacePointerType VectorImage<TPixel, VImageDimension>::GetMetaDataInterface() const
 {
   if (m_ImageMetadataInterface.IsNull())
     m_ImageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(this->GetMetaDataDictionary());
@@ -247,8 +227,7 @@ VectorImage<TPixel, VImageDimension>
 }
 
 template <class TPixel, unsigned int VImageDimension>
-void
-VectorImage<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
+void VectorImage<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   this->GetMetaDataInterface()->PrintMetadata(os, indent, this->GetMetaDataDictionary());
