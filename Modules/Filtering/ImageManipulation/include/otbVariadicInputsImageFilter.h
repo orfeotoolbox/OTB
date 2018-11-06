@@ -60,6 +60,8 @@ public:
   DefineLegacySetInputMacro(8);
   DefineLegacySetInputMacro(9);
   DefineLegacySetInputMacro(10);
+
+#undef DefineLegacySetInputMacro
   
   template <std::size_t I> const typename std::tuple_element<I,InputTypesTupleType>::type * GetVInput()
   {
