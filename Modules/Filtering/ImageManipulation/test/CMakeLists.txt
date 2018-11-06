@@ -71,7 +71,6 @@ otbImageToNoDataMaskFilter.cxx
 otbChangeInformationImageFilter.cxx
 otbGridResampleImageFilter.cxx
 otbMaskedIteratorDecorator.cxx
-otbFunctorImageFilter.cxx
 )
 
 add_executable(otbImageManipulationTestDriver ${OTBImageManipulationTests})
@@ -622,7 +621,3 @@ otb_add_test(NAME bfTvMaskedIteratorDecoratorDegenerate COMMAND otbImageManipula
 otb_add_test(NAME bfTvMaskedIteratorDecoratorExtended COMMAND otbImageManipulationTestDriver
   otbMaskedIteratorDecoratorExtended
 )
-
-otb_add_test(NAME bfTvFunctorImageFilter COMMAND otbImageManipulationTestDriver
-  otbFunctorImageFilter
-  )
