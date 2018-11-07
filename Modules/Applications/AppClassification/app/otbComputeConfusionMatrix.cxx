@@ -110,7 +110,7 @@ private:
 
   // Documentation
   SetDocName("Confusion matrix Computation");
-  SetDocLongDescription("This application computes the confusion matrix of a classification map relatively to a ground truth. "
+  SetDocLongDescription("This application computes the confusion matrix of a classification map relative to a ground truth dataset. "
       "This ground truth can be given as a raster or a vector data. Only reference and produced pixels with values different "
       "from NoData are handled in the calculation of the confusion matrix. The confusion matrix is organized the following way: "
       "rows = reference labels, columns = produced labels. In the header of the output file, the reference and produced class labels "
