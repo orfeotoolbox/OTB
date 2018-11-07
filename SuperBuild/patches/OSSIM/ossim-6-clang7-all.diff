@@ -1,0 +1,46 @@
+diff -burN OSSIM-orig/ossim/src/ossim/base/ossimArgumentParser.cpp OSSIM/ossim/src/ossim/base/ossimArgumentParser.cpp
+--- OSSIM-orig/ossim/src/ossim/base/ossimArgumentParser.cpp	2018-11-07 16:07:35.000000000 +0100
++++ OSSIM/ossim/src/ossim/base/ossimArgumentParser.cpp	2018-11-07 16:16:01.000000000 +0100
+@@ -191,7 +191,7 @@
+ 
+ void ossimArgumentParser::initialize(int* argc, const char **argv)
+ {
+-   if(argc > 0) delete (theArgv);
++   if(*argc > 0) delete (theArgv);
+    theArgc = argc;
+    theArgv = new char*[*argc];
+    for(int i=0;i<*argc;i++)
+diff -burN OSSIM-orig/ossim/src/ossim/elevation/ossimElevManager.cpp OSSIM/ossim/src/ossim/elevation/ossimElevManager.cpp
+--- OSSIM-orig/ossim/src/ossim/elevation/ossimElevManager.cpp	2018-11-07 16:07:36.000000000 +0100
++++ OSSIM/ossim/src/ossim/elevation/ossimElevManager.cpp	2018-11-07 16:25:43.000000000 +0100
+@@ -647,9 +647,14 @@
+    {
+       out<<"\nm_dbRoundRobin["<<i<<"].size = "<<m_dbRoundRobin[i].size()<<endl;
+       for (ossim_uint32 j=0; j<m_dbRoundRobin[i].size(); ++j)
+-         out<<"m_dbRoundRobin["<<i<<"]["<<j<<"] = "<<m_dbRoundRobin[i][j]->print(out)<<endl;
++         {
++         out<<"m_dbRoundRobin["<<i<<"]["<<j<<"] = ";
++         m_dbRoundRobin[i][j]->print(out);
++         out<<endl;
++         }
+    }
+-   cout<<"\n"<<ossimElevSource::print(cout);
++   cout<<"\n";
++   ossimElevSource::print(cout);
+    return out;
+ }
+ 
+diff -burN OSSIM-orig/ossim/src/ossim/elevation/ossimElevSource.cpp OSSIM/ossim/src/ossim/elevation/ossimElevSource.cpp
+--- OSSIM-orig/ossim/src/ossim/elevation/ossimElevSource.cpp	2018-11-07 16:07:36.000000000 +0100
++++ OSSIM/ossim/src/ossim/elevation/ossimElevSource.cpp	2018-11-07 16:27:06.000000000 +0100
+@@ -269,8 +269,8 @@
+          << "\ntheMaxHeightAboveMSL = "<<theMaxHeightAboveMSL
+          << "\ntheNullHeightValue = "<<theNullHeightValue
+          << "\ntheSeaLevelValue = "<<theSeaLevelValue
+-         << "\ntheGroundRect = "<<theGroundRect
+-         << ossimSource::print(out);
++         << "\ntheGroundRect = "<<theGroundRect;
++   ossimSource::print(out);
+    return out;
+ }
+ 
