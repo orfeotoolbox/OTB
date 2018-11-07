@@ -30,10 +30,10 @@ What's in OTB?
 
 -  Geospatial analysis.
 
-For a full list of applications see the :ref:`apprefdoc`.
+For a full list of applications see the chapter :ref:`apprefdoc`.
 For an introduction to the C++ API see the
 `Software Guide <https://www.orfeo-toolbox.org/SoftwareGuide/>`_.
-And for exhaustive descrpition of the C++ API see the
+And for an exhaustive description of the C++ API see the
 `Doxygen <https://www.orfeo-toolbox.org/doxygen/>`_.
 
 What is ORFEO?

@@ -38,11 +38,11 @@
 // different set of parameters, mean vectors and covariance matrices. We
 // choose the \subdoxygen{itk}{Statistics}{MeanSampleFilter} (sample mean) and the
 // \subdoxygen{itk}{Statistics}{CovarianceSampleFilter} (sample covariance) for the
-// estimation algorithms of the two parameters. If we want more a robust
-// estimation algorithm, we can replace these estimation algorithms with more
+// estimation algorithms of the two parameters. If we want a more robust
+// estimation algorithm, we can replace these estimation algorithms with additional
 // alternatives without changing other components in the classifier system.
 //
-// It is a bad idea to use the same sample for test and training
+// It is a bad idea to use the same sample for both testing and training
 // (parameter estimation) of the parameters. However, for simplicity, in
 // this example, we use a sample for test and training.
 //
@@ -254,8 +254,8 @@ int main(int,  char *[])
   //   \label{eq:bayes2}
   // \end{equation}
   //
-  // The remainder of the code snippet shows how to use user-specified class
-  // labels. The classification result will be stored in a
+  // The remainder of the code snippet demonstrates how user-specified class
+  // labels are used. The classification result will be stored in a
   // MembershipSample object, and for each measurement vector, its
   // class label will be one of the two class labels, 100 and 200
   // (\code{unsigned int}).
