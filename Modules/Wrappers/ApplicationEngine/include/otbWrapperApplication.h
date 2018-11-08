@@ -115,8 +115,8 @@ public:
 
   /** Run the application.
    *
-   * For pipeline ready application, this only wire
-   * and configure the pipeline, and provides
+   * For pipeline ready application, this only wires
+   * and configures the pipeline, and provides
    * the output image or vector data parameters as pointers.
    *
    * In other cases, the application must handle
@@ -126,7 +126,7 @@ public:
    */
   int Execute();
 
-  /** Run the application, then writes all the output to disk
+  /** Run the application, then write all of the output to disk
    * if they have an associated filename.
    * This is a helper function for wrappers without pipeline support.
    *
@@ -182,7 +182,7 @@ public:
    *  (not automatically computed by the application) */
   bool HasUserValue(std::string paramKey) const;
 
-  /* If a user value was provided clear it and update the other parameters */
+  /* If a user value was provided, clear it and update the other parameters */
   void ClearValue(std::string paramKey);
 
   /* Returns true if the parameter has an associated value.
@@ -271,7 +271,7 @@ public:
   void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
   /** Checks if the application is ready to be executed. It checks that there
-   *  is no parameter missing
+   *  is no missing parameter
    */
   bool IsApplicationReady();
 
@@ -338,7 +338,7 @@ public:
    */
   void SetDefaultOutputComplexPixelType(std::string parameter, ComplexImagePixelType type);
 
- /* Set a minimum int value, must used in the
+  /* Set a minimum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -347,7 +347,7 @@ public:
    */
   void SetMinimumParameterIntValue(std::string parameter, int value);
 
- /* Set a maximum int value, must used in the
+  /* Set a maximum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -356,7 +356,7 @@ public:
    */
   void SetMaximumParameterIntValue(std::string parameter, int value);
 
- /* Set a minimum int value, must used in the
+  /* Set a minimum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -365,7 +365,7 @@ public:
    */
   void SetMinimumParameterFloatValue(std::string parameter, float value);
 
- /* Set a maximum int value, must used in the
+  /* Set a maximum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -376,13 +376,21 @@ public:
 
 
   /**
-   * Enable single selection mode for list view if status in true
+   * Enable single selection mode for list view if status is true
    * (default is false).
    *
    * Can be called for types:
    * \li ParameterType_ListView
    */
   void SetListViewSingleSelectionMode(std::string parameter, bool status);
+
+  /**
+   * True if the parameter is a list view and is in single selection mode
+   *
+   * Can be called for types:
+   * \li ParameterType_ListView
+   */
+  bool GetListViewSingleSelectionMode(const std::string& parameter);
 
   /* Set an output image value
    *

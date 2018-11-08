@@ -259,11 +259,11 @@ protected:
     otbAppLogINFO("output model : " << GetInternalApplication("training")->GetParameterString("io.out"));
   }
 
-  void ComputeImageStatistics(const std::string &imageFileName,
+  void ComputeImageStatistics( ImageBaseType * img,
                                                const std::string &imagesStatsFileName)
   {
-    std::vector<std::string> imageFileNameList = {imageFileName};
-    GetInternalApplication("imgstats")->SetParameterStringList("il", imageFileNameList);
+    // std::vector<std::string> imageFileNameList = {imageFileName};
+    GetInternalApplication("imgstats")->SetParameterImageBase("il", img);
     GetInternalApplication("imgstats")->SetParameterString("out", imagesStatsFileName);
 
     ExecuteInternal( "imgstats" );
@@ -486,7 +486,7 @@ private:
                                         actualNBSamplesForKMeans);
 
     // Compute Images second order statistics
-    Superclass::ComputeImageStatistics(GetParameterString("in"), fileNames.imgStatOutput);
+    Superclass::ComputeImageStatistics(GetParameterImageBase("in"), fileNames.imgStatOutput);
 
     // Compute a train model with TrainVectorClassifier app
     Superclass::TrainKMModel(GetParameterImage("in"), fileNames.sampleOutput,

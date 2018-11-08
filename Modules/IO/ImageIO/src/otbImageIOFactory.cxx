@@ -33,7 +33,9 @@
 #include "otbBSQImageIOFactory.h"
 #include "otbRADImageIOFactory.h"
 
+#if OTB_USE_DEPRECATED
 #include "otbTileMapImageIOFactory.h"
+#endif
 
 namespace otb
 {
@@ -95,11 +97,12 @@ ImageIOFactory::RegisterBuiltInFactories()
       itk::ObjectFactoryBase::RegisterFactory(RADImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(BSQImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(LUMImageIOFactory::New());
-      itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(ONERAImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(MSTARImageIOFactory::New());
-
+#if OTB_USE_DEPRECATED
+      itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
+#endif
       firstTime = false;
       }
     }

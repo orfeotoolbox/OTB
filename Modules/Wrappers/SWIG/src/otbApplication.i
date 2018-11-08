@@ -261,6 +261,8 @@ public:
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
 
+  bool GetListViewSingleSelectionMode(const std::string& paramKey);
+
   ImageBaseType * GetParameterOutputImage(std::string parameter);
   void SetParameterInputImage(std::string parameter, ImageBaseType * inputImage);
   ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
@@ -592,7 +594,7 @@ class ApplicationProxy(object):
 			return s
 
 		def SetParameters(self, dict_params):
-			for param_key, param_value in dict_params.iteritems():
+			for param_key, param_value in dict_params.items():
 				self.SetParameterValue(param_key, param_value)
 
 		def SetParameterValue(self, paramKey, value):

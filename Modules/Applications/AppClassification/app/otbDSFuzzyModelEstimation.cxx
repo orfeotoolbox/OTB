@@ -140,6 +140,9 @@ private:
     AddParameter(ParameterType_StringList, "plasup", "Plausibility Support");
     SetParameterDescription("plasup", "Dempster Shafer study hypothesis to compute plausibility");
 
+    AddParameter(ParameterType_OutputFilename, "out", "Output filename");
+    SetParameterDescription("out", "Output model file name (xml file) contains the optimal model to perform information fusion.");
+
     AddParameter(ParameterType_String, "cri", "Criterion");
     SetParameterDescription("cri", "Dempster Shafer criterion (by default (belief+plausibility)/2)");
     MandatoryOff("cri");
@@ -166,9 +169,6 @@ private:
 
     AddParameter(ParameterType_Bool,"optobs","Optimizer Observer");
     SetParameterDescription("optobs","Activate the optimizer observer");
-
-    AddParameter(ParameterType_OutputFilename,"out","Output filename");
-    SetParameterDescription("out","Output model file name (xml file) contains the optimal model to perform information fusion.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("psin", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");
@@ -212,7 +212,7 @@ private:
     if (IsParameterEnabled("initmod"))
       {
       std::string descModFile = GetParameterString("initmod");
-      descMod = FuzzyDescriptorsModelManager::Read(descModFile.c_str());
+      descMod = FuzzyDescriptorsModelManager::Read(descModFile);
       descList = FuzzyDescriptorsModelManager::GetDescriptorList(descMod);
       }
     else

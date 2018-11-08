@@ -117,44 +117,44 @@ public:
   typedef typename LabelMapToLabelImageFilterType::Pointer LabelMapToLabelImageFilterPointer;
 
   /** Standard Macro*/
-  itkTypeMacro(ImageSimulationMethod, ImageSource)
-; itkNewMacro(Self)
+  itkTypeMacro(ImageSimulationMethod, ImageSource);
+; itkNewMacro(Self);
 ;
 
-  itkSetMacro(NumberOfComponentsPerPixel, unsigned int)
-; itkGetMacro(NumberOfComponentsPerPixel, unsigned int)
+  itkSetMacro(NumberOfComponentsPerPixel, unsigned int);
+; itkGetMacro(NumberOfComponentsPerPixel, unsigned int);
 ;
 
   //prolate radius
-  itkSetMacro(Radius, unsigned int)
-; itkGetMacro(Radius, unsigned int)
+  itkSetMacro(Radius, unsigned int);
+; itkGetMacro(Radius, unsigned int);
 ;
 
-  itkSetMacro(SatRSRFilename, std::string)
-; itkGetMacro(SatRSRFilename, std::string)
+  itkSetMacro(SatRSRFilename, std::string);
+; itkGetMacro(SatRSRFilename, std::string);
 ;
 
-  itkSetMacro(PathRoot, std::string)
-; itkGetMacro(PathRoot, std::string)
+  itkSetMacro(PathRoot, std::string);
+; itkGetMacro(PathRoot, std::string);
 ;
 
-  itkSetMacro(Mean, double)
-; itkGetMacro(Mean, double)
+  itkSetMacro(Mean, double);
+; itkGetMacro(Mean, double);
 ;
 
-  itkSetMacro(Variance, double)
-; itkGetMacro(Variance, double)
+  itkSetMacro(Variance, double);
+; itkGetMacro(Variance, double);
 ;
 
-  itkSetObjectMacro(Spatialisation, SpatialisationType)
+  itkSetObjectMacro(Spatialisation, SpatialisationType);
 ;
   //    itkSetObjectMacro(LabelMapToSimulatedImage, LabelMapToSimulatedImageType);
   //    itkSetObjectMacro(FTM, FTMType);
 
 
   /** Set/Get Input */
-  itkSetObjectMacro(InputVectorData, InputVectorDataType)
-; itkGetConstObjectMacro(InputVectorData, InputVectorDataType)
+  itkSetObjectMacro(InputVectorData, InputVectorDataType);
+; itkGetConstObjectMacro(InputVectorData, InputVectorDataType);
 ;
   //    void SetInput(const InputVectorDataType *object);
   //    InputVectorDataType * GetInput();

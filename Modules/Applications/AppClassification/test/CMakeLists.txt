@@ -46,7 +46,7 @@ otb_test_application(NAME apTvClSOMClassificationFull
   -vm  ${INPUTDATA}/poupees_sub_c1.png
   -tp  0.8
   -ts  13000
-  -som ${TEMP}/apTvClSOMClassificationMap.hdr
+  -som ${TEMP}/apTvClSOMClassificationMap.tif
   -sx  30
   -sy  30
   -nx  9
@@ -59,8 +59,8 @@ otb_test_application(NAME apTvClSOMClassificationFull
   VALID   --compare-n-images ${NOTOL} 2
   ${BASELINE}/apTvClSOMClassificationFull.tif
   ${TEMP}/apTvClSOMClassificationFull.tif
-  ${BASELINE}/apTvClSOMClassificationMap.hdr
-  ${TEMP}/apTvClSOMClassificationMap.hdr)
+  ${BASELINE}/apTvClSOMClassificationMap.tif
+  ${TEMP}/apTvClSOMClassificationMap.tif)
 
 
 #----------- ImageClassifier TESTS ----------------

@@ -109,21 +109,6 @@ ColorSetupWidget
 
   QStringList itemTexts( components );
 
-  // TODO: Move to mvd::core::AbstractImageModel (see ENHANCED_BAND_NAMES[]).
-  for( int i=0;
-       i<itemTexts.size();
-       ++ i )
-    {
-    if( itemTexts[ i ].isEmpty() )
-      {
-      itemTexts[ i ] = tr( "BAND %1" ).arg( i+1 );
-      }
-    else
-      {
-      itemTexts[ i ].prepend( QString( "%1: " ).arg( i+1 ) );
-      }
-    }
-
   m_UI->rComboBox->addItems( itemTexts );
   m_UI->gComboBox->addItems( itemTexts );
   m_UI->bComboBox->addItems( itemTexts );

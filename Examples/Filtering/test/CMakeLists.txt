@@ -132,13 +132,13 @@ otb_add_test(NAME fiTeMathematicalMorphologyGrayscaleFiltersTest COMMAND ${OTB_T
 
 otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter1Test COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 2
-    ${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
-    ${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
+    ${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput5.tif
+    ${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.tif
     ${BASELINE}/LaplacianRecursiveGaussianImageFilterOutput5.png
     ${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png
   Execute $<TARGET_FILE:LaplacianRecursiveGaussianImageFilter1>
     ${INPUTDATA}/ROISpot5.png
-    ${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
+    ${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.tif
     5
     ${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png
 )
@@ -148,13 +148,13 @@ otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter1Test COMMAND ${OTB_T
 
 otb_add_test(NAME fiTeLaplacianRecursiveGaussianImageFilter2Test COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 2
-    ${BASELINE}/LaplacianRecursiveGaussianImageFilter2output5.hdr
-    ${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.hdr
+    ${BASELINE}/LaplacianRecursiveGaussianImageFilter2output5.tif
+    ${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.tif
     ${BASELINE}/LaplacianRecursiveGaussianImageFilter2Output5.png
     ${TEMP}/LaplacianRecursiveGaussianImageFilter2Output5.png
   Execute $<TARGET_FILE:LaplacianRecursiveGaussianImageFilter2>
     ${INPUTDATA}/ROISpot5.png
-    ${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.hdr
+    ${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.tif
     5
     ${TEMP}/LaplacianRecursiveGaussianImageFilter2Output5.png
 )
@@ -210,13 +210,13 @@ otb_add_test(NAME fiTeBinaryThresholdImageFilterTest COMMAND ${OTB_TEST_DRIVER}
 
 otb_add_test(NAME fiTeDerivativeImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 2
-    ${BASELINE}/DerivativeImageFilterFloatOutput.hdr
-    ${TEMP}/DerivativeImageFilterFloatOutput.hdr
+    ${BASELINE}/DerivativeImageFilterFloatOutput.tif
+    ${TEMP}/DerivativeImageFilterFloatOutput.tif
     ${BASELINE}/DerivativeImageFilterOutput.png
     ${TEMP}/DerivativeImageFilterOutput.png
   Execute $<TARGET_FILE:DerivativeImageFilter>
     ${INPUTDATA}/ROISpot5.png
-    ${TEMP}/DerivativeImageFilterFloatOutput.hdr
+    ${TEMP}/DerivativeImageFilterFloatOutput.tif
     ${TEMP}/DerivativeImageFilterOutput.png
     1 0
 )

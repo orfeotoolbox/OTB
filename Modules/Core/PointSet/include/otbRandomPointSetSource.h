@@ -56,10 +56,10 @@ public:
   typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self)
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RandomPointSetSource, PointSetSource)
+  itkTypeMacro(RandomPointSetSource, PointSetSource);
 
   /** Some convenient typedefs. */
   typedef itk::DataObject::Pointer                     DataObjectPointer;
@@ -72,13 +72,13 @@ public:
   typedef GeneratorType::Pointer                                 GeneratorPointerType;
   typedef GeneratorType::IntegerType                             SeedType;
 
-  itkSetMacro(NumberOfPoints, unsigned int)
-  itkGetMacro(NumberOfPoints, unsigned int)
+  itkSetMacro(NumberOfPoints, unsigned int);
+  itkGetMacro(NumberOfPoints, unsigned int);
 
-  itkSetMacro(MinPoint, PointType)
-  itkGetMacro(MinPoint, PointType)
-  itkSetMacro(MaxPoint, PointType)
-  itkGetMacro(MaxPoint, PointType)
+  itkSetMacro(MinPoint, PointType);
+  itkGetMacro(MinPoint, PointType);
+  itkSetMacro(MaxPoint, PointType);
+  itkGetMacro(MaxPoint, PointType);
 
   void SetSeed(SeedType seed)
   {

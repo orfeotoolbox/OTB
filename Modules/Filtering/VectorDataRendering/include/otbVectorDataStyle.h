@@ -42,10 +42,12 @@ namespace otb
  *
  * \sa VectorDataToMapFilter
  *
+ * \deprecated
+ *
  * \ingroup OTBVectorDataRendering
  */
 
-class ITK_EXPORT VectorDataStyle : public itk::LightObject
+class [[deprecated]] VectorDataStyle : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */

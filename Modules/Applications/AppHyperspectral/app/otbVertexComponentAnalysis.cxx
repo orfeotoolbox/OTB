@@ -71,17 +71,11 @@ private:
     "unmix hyperspectral data, in IEEE Transactions on Geoscience and"
     "Remote Sensing, vol. 43, no. 4, pp. 898-910, April 2005.");
 
-    AddDocTag("Miscellaneous");
     AddDocTag(Tags::Hyperspectral);
     AddDocTag(Tags::DimensionReduction);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in","Input hyperspectral data cube");
-
-    AddParameter(ParameterType_Int, "ne", "Number of endmembers");
-    SetParameterDescription("ne","The number of endmembers to extract from the hyperspectral image.");
-    SetParameterInt("ne",1);
-    MandatoryOn("ne");
 
     AddParameter(ParameterType_OutputImage, "outendm", "Output Endmembers");
     SetParameterDescription("outendm","Endmembers, stored in a"
@@ -89,6 +83,11 @@ private:
     "endmembers and each band values corresponds to the spectral"
     "signature of the corresponding endmember.");
     MandatoryOn("outendm");
+
+    AddParameter(ParameterType_Int, "ne", "Number of endmembers");
+    SetParameterDescription("ne", "The number of endmembers to extract from the hyperspectral image.");
+    SetParameterInt("ne", 1);
+    MandatoryOn("ne");
 
     AddRANDParameter();
     // Doc example parameter settings

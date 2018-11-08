@@ -86,7 +86,7 @@ private:
     ClearApplications();
     AddApplication("MeanShiftSmoothing", "smoothing", "Smoothing step");
     AddApplication("LSMSSegmentation", "segmentation", "Segmentation step");
-    AddApplication("LSMSSmallRegionsMerging", "merging", "Small region merging step");
+    AddApplication("SmallRegionsMerging", "merging", "Small region merging step");
     AddApplication("LSMSVectorization", "vectorization", "Vectorization step");
 
     ShareParameter("in","smoothing.in");
@@ -130,8 +130,6 @@ private:
     Connect("merging.ram","smoothing.ram");
     Connect("vectorization.ram","smoothing.ram");
 
-    Connect("merging.tilesizex","segmentation.tilesizex");
-    Connect("merging.tilesizey","segmentation.tilesizey");
     Connect("vectorization.tilesizex","segmentation.tilesizex");
     Connect("vectorization.tilesizey","segmentation.tilesizey");
 
@@ -193,13 +191,13 @@ private:
       if (IsParameterEnabled("mode.vector.imfield") &&
           HasValue("mode.vector.imfield"))
         {
-        GetInternalApplication("vectorization")->SetParameterString("in",
-          GetParameterString("mode.vector.imfield"));
+        GetInternalApplication("vectorization")->SetParameterInputImage("in",
+          GetParameterImage<ImageBaseType>("mode.vector.imfield"));
         }
       else
         {
-        GetInternalApplication("vectorization")->SetParameterString("in",
-          GetParameterString("in"));
+        GetInternalApplication("vectorization")->SetParameterInputImage("in",
+          GetParameterImage<ImageBaseType>("in"));
         }
       GetInternalApplication("vectorization")->SetParameterString("inseg",
         tmpFilenames[2]);
@@ -211,7 +209,7 @@ private:
       }
     DisableParameter("mode.raster.out");
 
-    if( IsParameterEnabled( "cleanup" ) )
+    if( GetParameterInt( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
       for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)

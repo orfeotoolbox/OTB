@@ -1,5 +1,7 @@
+#!/usr/bin/perl
+
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2018 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,17 +20,23 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Adapters for the OpenThreads library (thread interface for
-C++).")
+# Transform script section declared as '<script language="php">' into '<?php'
+$isInPHPSection=0;
 
-otb_module(OTBOpenThreadsAdapters
-  DEPENDS
-    OTBOpenThreads
-
-  TEST_DEPENDS
-    OTBITK
-    OTBTestKernel
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+while(<>)
+{
+    chomp;
+    $line = $_;
+    if($line =~ s/<script language="(php|PHP)">/<\?php/)
+      {
+      $isInPHPSection = 1;
+      }
+    if($isInPHPSection)
+      {
+      if($line =~ s/<\/script>/\?>/)
+        {
+        $isInPHPSection = 0;
+        }
+      }
+    print $line . "\n";
+}

@@ -44,14 +44,14 @@ enum TileMapAddressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
 }
 
 /** \class TileMapImageIO
-   *
+   * \deprecated
    * \brief ImageIO object for reading and writing TileMap images
    *
    *
  *
  * \ingroup OTBIOTileMap
  */
-class OTBIOTileMap_EXPORT TileMapImageIO : public otb::ImageIOBase
+class OTBIOTileMap_DEPRECATED_EXPORT TileMapImageIO : public otb::ImageIOBase
 {
 public:
 

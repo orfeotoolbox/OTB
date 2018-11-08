@@ -55,11 +55,11 @@ public:
   typedef itk::Array<ParametersValueType> ParametersType;
 
   /** Standard Macro*/
-  itkTypeMacro(SimulationStep2Base, ProcessObject)
+  itkTypeMacro(SimulationStep2Base, ProcessObject);
 ;
 
-  itkSetMacro(Parameters, ParametersType)
-  itkGetMacro(Parameters, ParametersType)
+  itkSetMacro(Parameters, ParametersType);
+  itkGetMacro(Parameters, ParametersType);
  //;
 
   virtual void SetReflectance(const SpectralResponseType *) = 0;

@@ -89,20 +89,20 @@ public:
   typedef typename InputRSRType::RSRVectorType RSRVectorType;
   typedef typename std::vector<ValuePrecisionType> ReduceSpectralResponseVectorType;
   /** Standard macros */
-  itkNewMacro(Self)
-; itkTypeMacro(ReduceSpectralResponse, DataObject)
+  itkNewMacro(Self);
+; itkTypeMacro(ReduceSpectralResponse, DataObject);
 ;
 
-  itkGetConstObjectMacro(InputSatRSR, InputRSRType)
-; itkSetObjectMacro(InputSatRSR, InputRSRType)
+  itkGetConstObjectMacro(InputSatRSR, InputRSRType);
+; itkSetObjectMacro(InputSatRSR, InputRSRType);
 ;
 
-  itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType)
-; itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType)
+  itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType);
+; itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType);
 ;
 
   /** The GetReduceResponse method gives the output. The first value in the pair is the central wavelength of the band (see SpectralResponse). */
-  itkGetObjectMacro(ReduceResponse, InputSpectralResponseType)
+  itkGetObjectMacro(ReduceResponse, InputSpectralResponseType);
 ;
 
   itkSetMacro(ReflectanceMode, bool);

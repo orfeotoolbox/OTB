@@ -70,7 +70,7 @@ InputImageParameter::GetImage()
 
 template <>
 ImageBaseType*
-InputImageParameter::GetImage()
+InputImageParameter::GetImage<ImageBaseType>()
 {
   if (m_Image.IsNull())
     return this->GetImage<FloatVectorImageType>();

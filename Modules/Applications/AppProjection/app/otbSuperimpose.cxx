@@ -101,6 +101,9 @@ private:
     AddParameter(ParameterType_InputImage,   "inm",   "The image to reproject");
     SetParameterDescription("inm","The image to reproject into the geometry of the reference input.");
 
+    AddParameter(ParameterType_OutputImage, "out", "Output image");
+    SetParameterDescription("out", "Output reprojected image.");
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
@@ -114,9 +117,6 @@ private:
     SetParameterDescription("fv","Fill value for area outside the reprojected image");
     SetDefaultParameterFloat("fv", 0.);
     MandatoryOff("fv");
-
-    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
-    SetParameterDescription("out","Output reprojected image.");
 
     // Superposition mode
     AddParameter(ParameterType_Choice,"mode", "Mode");

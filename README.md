@@ -30,6 +30,13 @@ not a black box!
 * [Wiki](http://wiki.orfeo-toolbox.org/index.php/Main_Page)
 * [Task tracking](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
 
+### Installation
+
+We provide ready-to-use packages for Windows, Mac and Linux. [Download them here](https://www.orfeo-toolbox.org/download/) on our website, and see instructions for your platform [here in the Cookbook](https://www.orfeo-toolbox.org/CookBook/Installation.html).
+
+If you're interested, you can also [compile from source](https://www.orfeo-toolbox.org/SoftwareGuide/SoftwareGuidech2.html#x16-190002).
+
+
 ### Join the community
 Get help, share your experience and contribute to the Orfeo-Toolbox project by
 joining our community and mailing lists.

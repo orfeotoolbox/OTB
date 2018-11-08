@@ -159,7 +159,7 @@ public:
   typedef typename TImage::PixelType PixelType;
   typedef typename TImage::InternalPixelType InternalPixelType;
 
-  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator)
+  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator);
 ;
 
   FastImageRegionConstIterator() :
@@ -468,8 +468,8 @@ public:
   typedef double RealType;
 
   /** Type macro */
-  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter)
-; itkNewMacro(Self)
+  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter);
+; itkNewMacro(Self);
 ;
 
   /** Template parameters typedefs */
