@@ -23,6 +23,8 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkNeighborhood.h"
+#include "otbVariadicAddFunctor.h"
+#include "otbVariadicConcatenateFunctor.h"
 #include <tuple>
 
 #include <numeric>
@@ -116,74 +118,6 @@ auto checksComplex = TypesCheck<std::complex<double>>{};
 
 // Example functors
 
-// N scalar images -> image
-// This functor takes N scalar image (variadic N) and returns the sum
-// of all pixels
-template <typename TOut, typename ...TIns> struct VariadicAdd
-{
-  auto operator()(TIns... ins) const
-  {
-    std::vector<TOut> outVector{static_cast<TOut>(ins)...};
-
-    return std::accumulate(outVector.begin(), outVector.end(),0);
-  }
-};
-
-// helper function to implement next functor (convert a scalar value
-// to a VariableLengthVector)
-template <typename T> itk::VariableLengthVector<T> toVector(const T & in)
-{
-  itk::VariableLengthVector<T> out;
-  out.SetSize(1);
-  out[0] = in;
-  return out;
-}
-
-// helper function to implement next functor, VariableLengthVectorVersion (returns in)
-template <typename  T> const itk::VariableLengthVector<T> & toVector(const itk::VariableLengthVector<T> & in)
-{
-  return in;
-}
-
-// helper function to implement next functor, Merge two VariableLengthVector in-place
-template <typename v1, typename v2> void concatenateVectors(v1 & a, const v2 & b)
-{
-  const size_t previousSizeOfA = a.GetSize();
-  
-  a.SetSize(previousSizeOfA+b.GetSize());
-  
-  for(size_t it = 0; it<b.Size();++it)
-    {
-    a[previousSizeOfA+it] = static_cast<typename v1::ValueType>(b[it]);
-    }
-}
-
-// helper function to implement next functor, Merge N VariableLengthVector in-place
-template <typename v1, typename v2, typename ...vn> void concatenateVectors(v1 & a, const v2 & b, const vn&... z)
-{
-  concatenateVectors(a,b);
-  concatenateVectors(a,z...);
-}
-
-// N  images (all types) -> vector image
-// This functor concatenates N images (N = variadic) of type
-// VectorImage and or Image, into a single VectorImage
-template<typename TOut, typename ...TIns> struct VariadicConcatenate
-{
-  auto operator()(const TIns &...  ins) const
-  {
-    itk::VariableLengthVector<TOut> out;
-    concatenateVectors(out, toVector(ins)...);
-    
-    return out;
-  }
-
-  // Must define OutputSize because output pixel is vector
-  constexpr size_t OutputSize(const std::array<size_t, sizeof...(TIns)> inputsNbBands) const
-  {
-    return std::accumulate(inputsNbBands.begin(),inputsNbBands.end(),0);
-  }
-};
 
 
 // 1 VectorImage -> 1 VectorImage with a different size depending on a
@@ -361,13 +295,13 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   filterLambda2->Update();
   
   // Test FunctorImageFilter with the VariadicConcatenate operator
-  using ConcatFunctorType = VariadicConcatenate<double, double, itk::VariableLengthVector<double> >;
+  using ConcatFunctorType = Functor::VariadicConcatenate<double, double, itk::VariableLengthVector<double> >;
   auto concatenate = NewFunctorFilter(ConcatFunctorType{});
   concatenate->SetVInputs(image,vimage);
   concatenate->Update();
   
   // Test FunctorImageFilter With VariadicAdd functor
-  using AddFunctorType = VariadicAdd<double, double, double>;
+  using AddFunctorType = Functor::VariadicAdd<double, double, double>;
   auto add = NewFunctorFilter(AddFunctorType{});
   add->SetVInputs(image,image);
   add->Update();
