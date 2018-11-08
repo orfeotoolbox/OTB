@@ -24,7 +24,7 @@
 #include "ogr_core.h"
 
 #include "cpl_conv.h"
-#include "boost/lexical_cast.hpp"
+#include "otb_boost_lexicalcast_header.h"
 #include "itkMacro.h"
 
 namespace otb

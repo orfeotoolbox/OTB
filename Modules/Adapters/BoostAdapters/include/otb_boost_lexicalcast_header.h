@@ -18,20 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef otb_boost_string_header_h
-#define otb_boost_string_header_h
+#ifndef otb_boost_lexicalcast_header_h
+#define otb_boost_lexicalcast_header_h
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/predicate.hpp>
+#include <boost/lexical_cast.hpp>
 #pragma GCC diagnostic pop
 #else
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/predicate.hpp>
+#include <boost/lexical_cast.hpp>
 #endif
-
 
 #endif
