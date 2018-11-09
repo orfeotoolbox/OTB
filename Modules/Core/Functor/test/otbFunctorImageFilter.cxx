@@ -99,7 +99,13 @@ template <typename T> struct TypesCheck
   // Build and run filter
   auto functor = TestOperator<TOut,TIn>{};
   auto filter = NewFunctorFilter(functor);
+
+  using FilterType = typename decltype(filter)::ObjectType;
+  static_assert(std::is_same<typename std::tuple_element<0, typename FilterType::Superclass::InputTypesTupleType>::type, InputImageType>::value, "");
+
   filter->SetVInputs(in);
+  filter->SetInput1(in);
+  filter->template SetVInput<0>(in); // template keyword to avoid C++ parse ambiguity
   filter->Update();
   }
 
@@ -260,6 +266,10 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   auto filter = otb::VariadicInputsImageFilter<VectorImageType,VectorImageType,ImageType>::New();
   filter->SetVInput<0>(vimage);
   filter->SetVInput<1>(image);
+
+  filter->SetInput1(vimage);
+  filter->SetInput2(image);
+
   filter->SetVInputs(vimage,image);
   std::cout<<filter->GetVInput<0>()<< filter->GetVInput<1>()<<std::endl;
 

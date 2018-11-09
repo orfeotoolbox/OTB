@@ -38,16 +38,16 @@ public:
 
   itkNewMacro(Self);
   
-  template <std::size_t I> void SetVInput(typename std::tuple_element<I,InputTypesTupleType>::type * inputPtr)
+  template <std::size_t I> void SetVInput(const typename std::tuple_element<I,InputTypesTupleType>::type * inputPtr)
   {
-    this->SetNthInput(I,inputPtr);
+    this->SetNthInput(I,const_cast<typename std::tuple_element<I,InputTypesTupleType>::type *>(inputPtr));
   }
 
 #define DefineLegacySetInputMacro(n)                                                                               \
-  template<typename Tuple = InputTypesTupleType, typename std::enable_if<n<=std::tuple_size<Tuple>::value >::type> \
-  void SetInput ## n(typename std::tuple_element<n-1,Tuple>::type * img)                                           \
+  template<typename Tuple = InputTypesTupleType, typename Check = typename std::enable_if<n<=std::tuple_size<Tuple>::value >::type> \
+  void SetInput ## n(const typename std::tuple_element<n-1,Tuple>::type * img)                                           \
   {                                                                                                                \
-    this->SetVInput<n-1>(img);                                                                                     \
+    this->template SetVInput<n-1>(img); // template keyword to avoid C++ parsing ambiguity                          \
   }
 
   // The following defines legacy setters SetInput1()

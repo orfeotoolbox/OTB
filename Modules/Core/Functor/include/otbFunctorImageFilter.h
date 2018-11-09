@@ -208,6 +208,7 @@ public:
   // A tuple of bool of the same size as the number of arguments in
   // the functor
   using InputHasNeighborhood = typename FunctorFilterSuperclassHelper<TFunction>::InputHasNeighborhood;
+  using InputTypesTupleType = typename Superclass::InputTypesTupleType;
  
   /** Run-time type information (and related methods). */
   itkTypeMacro(FunctorImageFilter, ImageToImageFilter);
@@ -232,15 +233,16 @@ public:
     return m_Functor;
   }
 
-private:
-  /// Actual creation of the filter is handled by this free function
-  friend auto NewFunctorFilter<TFunction>(const TFunction& f, itk::Size<2> radius);
-
+protected:
   /// Constructor of functor filter, will copy the functor
   FunctorImageFilter(const FunctorType& f, itk::Size<2> radius) : m_Functor(f), m_Radius(radius) {};
   FunctorImageFilter(const Self &) = delete;
   void operator =(const Self&) = delete;
   ~FunctorImageFilter() = default;
+
+private:
+  /// Actual creation of the filter is handled by this free function
+  friend auto NewFunctorFilter<TFunction>(const TFunction& f, itk::Size<2> radius);
 
   /** Overload of ThreadedGenerateData  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
