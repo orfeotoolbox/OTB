@@ -51,7 +51,7 @@ int generic_SinclairImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::VectorImage<TOutputPixel> OutputImageType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::MultiChannelExtractROI<TOutputPixel, TOutputPixel > ExtractROIType;
-  typedef otb::SinclairImageFilter<InputImageType, InputImageType, InputImageType, InputImageType, OutputImageType, TFunction> FilterType;
+  typedef otb::SinclairImageFilter<TFunction> FilterType;
   typename FilterType::Pointer filter = FilterType::New();
   typename ReaderType::Pointer reader1 = ReaderType::New();
   typename ReaderType::Pointer reader2 = ReaderType::New();

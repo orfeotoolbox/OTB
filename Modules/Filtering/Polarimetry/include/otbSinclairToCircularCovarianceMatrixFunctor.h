@@ -80,21 +80,20 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
   typedef SinclairToCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, TOutput> SinclairToCovarianceFunctorType;
   inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+                             const TInput3& Svh, const TInput4& Svv) const
   {
-    TOutput result;
+    TOutput result(10);
 
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vh = static_cast<ComplexType>(Svh);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
-    result.SetSize(m_NumberOfComponentsPerPixel);
     const ComplexType jS_hv = S_hv * ComplexType(0., 1.);
     const ComplexType jS_vh = S_vh * ComplexType(0., 1.);
     const ComplexType jS_hh = S_hh * ComplexType(0., 1.);
     const ComplexType jS_vv = S_vv * ComplexType(0., 1.);
-    
+
     const ComplexType coef(0.5);
 
     const ComplexType Sll = coef*( S_hh+jS_hv+jS_vh-S_vv );
@@ -111,22 +110,16 @@ public:
     return ( funct( Sll, Slr, Srl, Srr ) );
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
+  constexpr size_t OutputSize(...) const
   {
-    return m_NumberOfComponentsPerPixel;
+    return 10;
   }
 
   /** Constructor */
-  SinclairToCircularCovarianceMatrixFunctor() : m_NumberOfComponentsPerPixel(10) {}
+  SinclairToCircularCovarianceMatrixFunctor() {}
 
   /** Destructor */
   virtual ~SinclairToCircularCovarianceMatrixFunctor() {}
-
-protected:
-
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
 };
 
 } // namespace Functor

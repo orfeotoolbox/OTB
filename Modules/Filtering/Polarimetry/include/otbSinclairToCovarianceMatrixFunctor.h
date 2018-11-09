@@ -69,11 +69,9 @@ public:
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
   inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+                             const TInput3& Svh, const TInput4& Svv) const
   {
-    TOutput result;
-
-    result.SetSize(m_NumberOfComponentsPerPixel);
+    TOutput result(10);
 
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
@@ -94,9 +92,9 @@ public:
     return (result);
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
+  constexpr size_t OutputSize(...) const
   {
-    return m_NumberOfComponentsPerPixel;
+    return 10;
   }
 
   /** Constructor */
@@ -104,14 +102,6 @@ public:
 
   /** Destructor */
   virtual ~SinclairToCovarianceMatrixFunctor() {}
-
-protected:
-
-
-private:
-  //itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 10);
-  static const  unsigned int m_NumberOfComponentsPerPixel = 10;
-
 };
 
 } // namespace Functor
