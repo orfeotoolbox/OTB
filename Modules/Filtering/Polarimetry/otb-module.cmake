@@ -29,6 +29,7 @@ otb_module(OTBPolarimetry
   DEPENDS
     OTBCommon
     OTBITK
+    OTBFunctor
 
   TEST_DEPENDS
     OTBImageBase

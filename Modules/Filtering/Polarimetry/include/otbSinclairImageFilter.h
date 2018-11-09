@@ -21,7 +21,7 @@
 #ifndef otbSinclairImageFilter_h
 #define otbSinclairImageFilter_h
 
-#include "otbQuaternaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include "otbSinclairToCovarianceMatrixFunctor.h"
 #include <complex>
 
@@ -57,25 +57,13 @@ namespace otb
  * \ingroup OTBPolarimetry
  */
 
-template <class TInputImageHH, class TInputImageHV,
-          class TInputImageVH, class TInputImageVV, class TOutputImage,
-    class TFunction = Functor::SinclairToCovarianceMatrixFunctor<
-        typename TInputImageHH::PixelType,
-        typename TInputImageHV::PixelType,
-        typename TInputImageVH::PixelType,
-        typename TInputImageVV::PixelType,
-        typename TOutputImage::PixelType> >
-class ITK_EXPORT SinclairImageFilter :  public otb::QuaternaryFunctorImageFilter<TInputImageHH,
-      TInputImageHV, TInputImageVH,
-      TInputImageVV, TOutputImage,
-      TFunction>
+template <class TFunction>
+class ITK_EXPORT SinclairImageFilter :  public FunctorImageFilter<TFunction>
 {
 public:
-
   /** Standard typedefs */
   typedef SinclairImageFilter Self;
-  typedef otb::QuaternaryFunctorImageFilter<TInputImageHH, TInputImageHV,
-      TInputImageVH, TInputImageVV, TOutputImage, TFunction>  Superclass;
+  typedef FunctorImageFilter<TFunction> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -83,37 +71,36 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(SinclairImageFilter, QuaternaryFunctorImageFilter);
+  itkTypeMacro(SinclairImageFilter, FunctorImageFilter);
 
-  /** Template parameters typedefs */
-  typedef typename Superclass::Input1ImageType     HHInputImageType;
-  typedef typename Superclass::Input1ImagePointer  HHInputImagePointer;
-  typedef typename Superclass::Input2ImageType     HVInputImageType;
-  typedef typename Superclass::Input2ImagePointer  HVInputImagePointer;
-  typedef typename Superclass::Input3ImageType     VHInputImageType;
-  typedef typename Superclass::Input3ImagePointer  VHInputImagePointer;
-  typedef typename Superclass::Input4ImageType     VVInputImageType;
-  typedef typename Superclass::Input4ImagePointer  VVInputImagePointer;
-  typedef typename Superclass::OutputImageType     OutputImageType;
-  typedef typename OutputImageType::Pointer        OutputImagePointer;
-  typedef typename OutputImageType::RegionType     OutputImageRegionType;
-  typedef typename Superclass::FunctorType         FunctorType;
+  // TODO uncomment
+  static_assert(Superclass::NumberOfInputs == 4, "");
 
-  void SetInputHH(const TInputImageHH * image);
-  void SetInputHV(const TInputImageHV * image);
-  void SetInputVH(const TInputImageVH * image);
-  void SetInputVV(const TInputImageVV * image);
+  void SetInputHH(const typename Superclass::template InputImageType<0> * image)
+  {
+    this->SetInput1(image);
+  }
 
+  void SetInputHV(const typename Superclass::template InputImageType<1> * image)
+  {
+    this->SetInput2(image);
+  }
+
+  void SetInputVH(const typename Superclass::template InputImageType<2> * image)
+  {
+    this->SetInput3(image);
+  }
+
+  void SetInputVV(const typename Superclass::template InputImageType<3> * image)
+  {
+    this->SetInput4(image);
+  }
 
 protected:
   /**  Constructor */
-  SinclairImageFilter() {}
+  SinclairImageFilter(): Superclass(TFunction{}, {{0,0}}) {}
   /**  Destructor */
   ~SinclairImageFilter() override {}
-
-  void GenerateOutputInformation() override;
-
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
 
@@ -124,9 +111,5 @@ private:
 
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSinclairImageFilter.hxx"
-#endif
 
 #endif
