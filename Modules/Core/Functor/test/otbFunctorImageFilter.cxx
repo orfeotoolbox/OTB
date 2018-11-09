@@ -101,6 +101,7 @@ template <typename T> struct TypesCheck
   auto filter = NewFunctorFilter(functor);
 
   using FilterType = typename decltype(filter)::ObjectType;
+  static_assert(FilterType::NumberOfInputs == 1,"");
   static_assert(std::is_same<typename FilterType::template InputImageType<0>, InputImageType>::value, "");
 
   filter->SetVInputs(in);
