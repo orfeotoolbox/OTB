@@ -33,16 +33,18 @@ public:
   using Pointer =  itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
   using Superclass = itk::ImageSource<TOuptut>;
-
+  
   using InputTypesTupleType = std::tuple<TInputs...>;
-
+  
+  template <size_t I> using InputImageType = typename std::tuple_element<I,InputTypesTupleType>::type;
+  
   itkNewMacro(Self);
   
   template <std::size_t I> void SetVInput(const typename std::tuple_element<I,InputTypesTupleType>::type * inputPtr)
   {
     this->SetNthInput(I,const_cast<typename std::tuple_element<I,InputTypesTupleType>::type *>(inputPtr));
   }
-
+  
 #define DefineLegacySetInputMacro(n)                                                                               \
   template<typename Tuple = InputTypesTupleType, typename Check = typename std::enable_if<n<=std::tuple_size<Tuple>::value >::type> \
   void SetInput ## n(const typename std::tuple_element<n-1,Tuple>::type * img)                                           \
