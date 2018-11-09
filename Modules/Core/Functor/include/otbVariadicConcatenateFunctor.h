@@ -21,8 +21,10 @@
 #ifndef otb_VariadicConcatenateFunctor_h
 #define otb_VariadicConcatenateFunctor_h
 
+#include "itkVariableLengthVector.h"
 #include <vector>
 #include <numeric>
+#include <array>
 
 namespace otb
 {
