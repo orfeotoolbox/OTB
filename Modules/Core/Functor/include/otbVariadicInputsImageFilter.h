@@ -37,6 +37,8 @@ public:
   using InputTypesTupleType = std::tuple<TInputs...>;
   
   template <size_t I> using InputImageType = typename std::tuple_element<I,InputTypesTupleType>::type;
+  static constexpr size_t NumberOfInputs = std::tuple_size<InputTypesTupleType>::value; 
+
   
   itkNewMacro(Self);
   

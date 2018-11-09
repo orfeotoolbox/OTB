@@ -210,7 +210,7 @@ public:
   using InputHasNeighborhood = typename FunctorFilterSuperclassHelper<TFunction>::InputHasNeighborhood;
   using InputTypesTupleType = typename Superclass::InputTypesTupleType;
   template<size_t I> using InputImageType = typename Superclass::template InputImageType<I>;
-
+  using Superclass::NumberOfInputs;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(FunctorImageFilter, ImageToImageFilter);
