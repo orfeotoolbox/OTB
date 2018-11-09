@@ -47,7 +47,7 @@ public:
   template<typename Tuple = InputTypesTupleType, typename Check = typename std::enable_if<n<=std::tuple_size<Tuple>::value >::type> \
   void SetInput ## n(const typename std::tuple_element<n-1,Tuple>::type * img)                                           \
   {                                                                                                                \
-    this->template SetVInput<n-1>(img); // template keyword to avoid C++ parsing ambiguity                          \
+    this->template SetVInput<n-1>(img);                                                                             \
   }
 
   // The following defines legacy setters SetInput1()
