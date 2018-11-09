@@ -166,7 +166,8 @@ public:
   /** Type macro */
   itkNewMacro(Self);
 
-  static_assert(std::tuple_size<typename Superclass::InputTypesTupleType>::value == 4);
+  // Be sure to have the correct number of inputs
+  static_assert(Superclass::NumberOfInputs == 4,"");
 
   /** Creation through object factory macro */
   itkTypeMacro(MultiScaleConvexOrConcaveClassificationFilter, FunctorImageFilter);
