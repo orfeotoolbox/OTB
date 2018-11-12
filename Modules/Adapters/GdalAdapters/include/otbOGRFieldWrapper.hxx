@@ -40,7 +40,7 @@
 #include <boost/static_assert.hpp>
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedef"
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #include <boost/range/size.hpp>
 #pragma GCC diagnostic pop
 #else
