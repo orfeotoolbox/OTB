@@ -185,7 +185,7 @@ public:
     AddChoice("out.vector", "Output vector data");
     AddParameter(ParameterType_OutputVectorData, "out.vector.filename", "Filename for the output vector data");
     AddChoice("out.xml", "Output XML file");
-    AddParameter(ParameterType_String, "out.xml.filename", "");
+    AddParameter(ParameterType_String, "out.xml.filename", "Filename for the output xml file");
    AddChoice("out.raster", "Output raster image");
    AddParameter(ParameterType_OutputImage, "out.raster.filename", "File name for the raster image");    
    AddParameter(ParameterType_Float,      "out.raster.bv", "Background value for the output raster");
