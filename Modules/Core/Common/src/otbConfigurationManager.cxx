@@ -22,7 +22,12 @@
 
 #include "otbMacro.h"
 
+#include "itkMultiThreader.h"
 #include "itksys/SystemTools.hxx"
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
 #include <cstdlib>
 #include <algorithm>
@@ -96,6 +101,16 @@ itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
       }
     }
   return level;
+}
+
+int ConfigurationManager::InitOpenMPThreads()
+{
+  int ret = 1;
+#ifdef _OPENMP
+  ret = itk::MultiThreader::GetGlobalDefaultNumberOfThreads();
+  omp_set_num_threads(ret);
+#endif
+  return ret;
 }
 
 }

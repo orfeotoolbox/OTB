@@ -22,6 +22,7 @@
 #define otbTestMain_h
 
 #include "otbConfigure.h"
+#include "otbConfigurationManager.h"
 
 #include <map>
 #include <string>
@@ -73,6 +74,8 @@ int main(int ac, char* av[])
   #ifdef OTB_USE_MPI
   otb::MPIConfig::Instance()->Init(ac,av);
   #endif
+
+  otb::ConfigurationManager::InitOpenMPThreads();
   
   bool   lFlagRegression(false);
   double lToleranceDiffValue(0);
