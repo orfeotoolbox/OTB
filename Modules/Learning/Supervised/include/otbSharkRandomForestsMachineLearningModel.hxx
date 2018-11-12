@@ -106,7 +106,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     {
     std::nth_element(probas.begin(), probas.begin()+1, 
                      probas.end(), std::greater<double>());
-    conf = static_cast<ConfidenceValueType>((probas[0]-probas[1]));
+    conf = static_cast<ConfidenceValueType>(probas[0]-probas[1]);
     }
   else
     {
@@ -128,24 +128,23 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     {
     samples.push_back(value[i]);
     }
-  if (quality != nullptr)
-    {
+  if (quality != nullptr || proba != nullptr)
+  {
     shark::RealVector probas = m_RFModel.decisionFunction()(samples);
-    (*quality) = ComputeConfidence(probas, m_ComputeMargin);
-    }
-  if (proba != nullptr)
+    if (quality != nullptr)
     {
-      
-      shark::RealVector probas = m_RFModel.decisionFunction()(samples);
-      
-      ProbaSampleType prob{(unsigned int)probas.size()};
-      for(size_t i =0; i< probas.size();i++)
-	{
-	  //probas contain the N class probability indexed between 0 and N-1
-	  prob[i] = static_cast<unsigned int>(probas[i]*1000);
-	}
-      (*proba) = prob;
+      (*quality) = ComputeConfidence(probas, m_ComputeMargin);
     }
+    if (proba != nullptr)
+    {
+      ProbaSampleType prob{static_cast<unsigned int>(probas.size())};
+      for(size_t i =0; i< probas.size();i++)
+      {
+        //probas contain the N class probability indexed between 0 and N-1
+        (*proba)[i] = static_cast<unsigned int>(probas[i]*1000);
+      }
+    }
+  }
   unsigned int res{0};
   m_RFModel.eval(samples, res);
 
@@ -186,24 +185,25 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
 
   #endif
+  if( proba !=nullptr || quality != nullptr)
+  {
+    shark::Data<shark::RealVector> probas = m_RFModel.decisionFunction()(inputSamples);
   if( proba !=nullptr)
+  {
+    unsigned int id = startIndex;
+    for(shark::RealVector && p : probas.elements())
     {
-      unsigned int id = startIndex;
-      shark::Data<shark::RealVector> probas = m_RFModel.decisionFunction()(inputSamples);
-      for(shark::RealVector && p : probas.elements())
+      ProbaSampleType prob{(unsigned int)p.size()};
+      for(size_t i =0; i< p.size();i++)
       {
-	ProbaSampleType prob{(unsigned int)p.size()};
-	for(size_t i =0; i< p.size();i++)
-	{
-	  prob[i] =p[i]*1000;
-	}
-	proba->SetMeasurementVector(id,prob);
-	++id;
+        prob[i] =p[i]*1000;
       }
+      proba->SetMeasurementVector(id,prob);
+      ++id;
     }
+  }
   if(quality != nullptr)
     {
-    shark::Data<shark::RealVector> probas = m_RFModel.decisionFunction()(inputSamples);
     unsigned int id = startIndex;
     for(shark::RealVector && p : probas.elements())
       {
@@ -214,7 +214,8 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
       ++id;
       }
     }
-    
+  }
+
   auto prediction = m_RFModel(inputSamples);
   unsigned int id = startIndex;
   for(const auto& p : prediction.elements())

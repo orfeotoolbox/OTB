@@ -132,13 +132,8 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 #endif
       );
     }
- if (proba != ITK_NULLPTR)
-    {
-    if (!this->m_ProbaIndex)
-      {
-      itkExceptionMacro("Probability per class not available for this classifier !");
-      }
-    }
+ if (proba != nullptr && !this->m_ProbaIndex)
+   itkExceptionMacro("Probability per class not available for this classifier !");
 
   target[0] = static_cast<TOutputValue>(result);
   return target;

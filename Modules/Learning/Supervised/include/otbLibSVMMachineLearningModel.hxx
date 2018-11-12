@@ -129,13 +129,8 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   // terminate node
   x[input.Size()].index = -1;
   x[input.Size()].value = 0;
-  if (proba != ITK_NULLPTR)
-    {
-    if (!this->m_ProbaIndex)
-      {
-      itkExceptionMacro("Probability per class not available for this classifier !");
-      }
-    }
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
 
   if (quality != nullptr)
     {

@@ -88,14 +88,13 @@ typename ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::GetOutputProba()
 {
-  //std::cout << "Getoutprob" << std::endl;
   if (this->GetNumberOfOutputs() < 2)
     {
-    return ITK_NULLPTR;
+    return nullptr;
     }
   return static_cast<ProbaImageType *>(this->itk::ProcessObject::GetOutput(2));
 }
-  
+
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
@@ -117,16 +116,18 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
-::ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+::ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                              itk::ThreadIdType threadId)
 {
-    // Get the input pointers
+  // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
   OutputImagePointerType     outputPtr    = this->GetOutput();
   ConfidenceImagePointerType confidencePtr = this->GetOutputConfidence();
   ProbaImagePointerType      probaPtr      = this->GetOutputProba();
   // Progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  itk::ProgressReporter progress(this, threadId,
+                                 outputRegionForThread.GetNumberOfPixels());
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
@@ -134,7 +135,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
   typedef itk::ImageRegionIterator<ConfidenceImageType> ConfidenceMapIteratorType;
   typedef itk::ImageRegionIterator<ProbaImageType>      ProbaMapIteratorType;
-  
+
   InputIteratorType inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
 
@@ -147,7 +148,8 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     }
 
   // setup iterator for confidence map
-  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() && !m_Model->GetRegressionMode());
+  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() &&
+                            !m_Model->GetRegressionMode());
   ConfidenceMapIteratorType confidenceIt;
   if (computeConfidenceMap)
     {
@@ -156,21 +158,23 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     }
 
   // setup iterator for proba map
-  bool computeProbaMap(m_UseProbaMap &&  m_Model->HasProbaIndex() && !m_Model->GetRegressionMode());
-  
+  bool computeProbaMap(m_UseProbaMap &&  m_Model->HasProbaIndex() &&
+                       !m_Model->GetRegressionMode());
+
   ProbaMapIteratorType probaIt;
-  
+
   if(computeProbaMap)
     {
       probaIt = ProbaMapIteratorType(probaPtr,outputRegionForThread);
       probaIt.GoToBegin();
     }
-  
+
   bool validPoint = true;
   double confidenceIndex = 0.0;
   ProbaSampleType probaVector{m_NumberOfClasses};
   // Walk the part of the image
-  for (inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd() && !outIt.IsAtEnd(); ++inIt, ++outIt)
+  for (inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd() && !outIt.IsAtEnd();
+       ++inIt, ++outIt)
     {
     // Check pixel validity
     if (inputMaskPtr)
@@ -180,22 +184,22 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       }
     // If point is valid
     if (validPoint)
-      {
+    {
       // Classifify
       if (computeProbaMap)
-	{
-	  
-	  outIt.Set(m_Model->Predict(inIt.Get(),&confidenceIndex,&probaVector)[0]);
-	}
-      else if (computeConfidenceMap)
-        {
-        outIt.Set(m_Model->Predict(inIt.Get(),&confidenceIndex)[0]);
-        }
-      else
-        {
-        outIt.Set(m_Model->Predict(inIt.Get())[0]);
-        }
+      {
+        outIt.Set(m_Model->Predict(inIt.Get(),&confidenceIndex,
+                                   &probaVector)[0]);
       }
+      else if (computeConfidenceMap)
+      {
+        outIt.Set(m_Model->Predict(inIt.Get(),&confidenceIndex)[0]);
+      }
+      else
+      {
+        outIt.Set(m_Model->Predict(inIt.Get())[0]);
+      }
+    }
     else
       {
       // else, set default value
@@ -208,17 +212,10 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       ++confidenceIt;
       }
     if (computeProbaMap)
-      {
-	ProbaImageType::PixelType probVect{probaVector.Size()};
-	probVect.Fill(0.0);
-	for (size_t t =0; t < probaVector.Size();t++)
-	  {
-	    probVect[t] = probaVector[t];
-            std::cout << probVect[t] << '\t' << probaVector[t] << '\n';
-	  }
-	probaIt.Set(probVect);
-	++probaIt;
-      }
+    {
+      probaIt.Set(probaVector);
+      ++probaIt;
+    }
     progress.CompletedPixel();
     }
 
@@ -227,23 +224,24 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
-::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                            itk::ThreadIdType threadId)
 {
-  //std::cout << "batch mode" << std::endl;
-  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex() 
+  bool computeConfidenceMap(m_UseConfidenceMap && m_Model->HasConfidenceIndex()
                             && !m_Model->GetRegressionMode());
 
-  bool computeProbaMap(m_UseProbaMap && m_Model->HasProbaIndex() 
-		       && !m_Model->GetRegressionMode());
+  bool computeProbaMap(m_UseProbaMap && m_Model->HasProbaIndex()
+                       && !m_Model->GetRegressionMode());
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
   OutputImagePointerType     outputPtr    = this->GetOutput();
   ConfidenceImagePointerType confidencePtr = this->GetOutputConfidence();
-  ProbaImagePointerType      probaPtr      = this->GetOutputProba();  
+  ProbaImagePointerType      probaPtr      = this->GetOutputProba();
 
   // Progress reporting
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  itk::ProgressReporter progress(this, threadId,
+                                 outputRegionForThread.GetNumberOfPixels());
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
@@ -262,14 +260,10 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
     maskIt.GoToBegin();
     }
 
-  // typedef typename ModelType::InputValueType       InputValueType;
   typedef typename ModelType::InputSampleType      InputSampleType;
   typedef typename ModelType::InputListSampleType  InputListSampleType;
   typedef typename ModelType::TargetValueType      TargetValueType;
-  // typedef typename ModelType::TargetSampleType     TargetSampleType;
   typedef typename ModelType::TargetListSampleType TargetListSampleType;
-  // typedef typename ModelType::ConfidenceValueType      ConfidenceValueType;
-  // typedef typename ModelType::ConfidenceSampleType     ConfidenceSampleType;
   typedef typename ModelType::ConfidenceListSampleType ConfidenceListSampleType;
   typedef typename ModelType::ProbaListSampleType ProbaListSampleType;
   typename InputListSampleType::Pointer samples = InputListSampleType::New();
@@ -340,23 +334,20 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 
        if(computeConfidenceMap)
         {
-        confidenceIndex = confidences->GetMeasurementVector(labIt.GetInstanceIdentifier())[0];
+        confidenceIndex =
+          confidences->GetMeasurementVector(labIt.GetInstanceIdentifier())[0];
         }
        if(computeProbaMap)
-	 {
-	   //std::cout << "imagecfilter before get" << std::endl;
-	   probaValues = probas->GetMeasurementVector(labIt.GetInstanceIdentifier());
-	   //std::cout << "imageclfilt after get" << std::endl;
-	 }
-	 
-       
-      ++labIt;    
+       {
+         probaValues = probas->GetMeasurementVector(labIt.GetInstanceIdentifier());
+       }
+      ++labIt;
       }
     else
       {
       labelValue = m_DefaultLabel;
       }
-    
+
     outIt.Set(labelValue);
 
     if(computeConfidenceMap)
@@ -365,17 +356,19 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
       ++confidenceIt;
       }
     if(computeProbaMap)
-      {
-	probaIt.Set(probaValues);
-	++probaIt;
-      }
+    {
+      probaIt.Set(probaValues);
+      ++probaIt;
+    }
     progress.CompletedPixel();
     }
 }
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
-ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+ImageClassificationFilter<TInputImage, TOutputImage,
+                          TMaskImage>::ThreadedGenerateData(
+                            const OutputImageRegionType& outputRegionForThread,
+                            itk::ThreadIdType threadId)
 {
   if(m_BatchMode)
     {

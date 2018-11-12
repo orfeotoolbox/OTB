@@ -117,7 +117,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
     ( *quality ) = ConfidenceValueType( 1.);
     }
 
-  if (proba != ITK_NULLPTR)
+  if (proba != nullptr)
     {
     if (!this->m_ProbaIndex)
       {
@@ -188,7 +188,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
       quality->SetMeasurementVector( qid, static_cast<ConfidenceValueType>(1.) );
       }
     }
-  if (proba !=ITK_NULLPTR)
+  if (proba !=nullptr && !this->m_ProbaIndex)
     {
       itkExceptionMacro("Probability per class not available for this classifier !");
     }

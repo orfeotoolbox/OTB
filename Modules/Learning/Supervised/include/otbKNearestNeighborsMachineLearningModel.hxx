@@ -135,13 +135,8 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
       }
     (*quality) = static_cast<ConfidenceValueType>(accuracy);
     }
-  if (proba != ITK_NULLPTR)
-    {
-    if (!this->m_ProbaIndex)
-      {
+  if (proba != nullptr && !this->m_ProbaIndex)
       itkExceptionMacro("Probability per class not available for this classifier !");
-      }
-    }
 
   // Decision rule :
   //  VOTING is OpenCV default behaviour for classification

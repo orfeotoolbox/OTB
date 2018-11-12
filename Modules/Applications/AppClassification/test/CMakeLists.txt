@@ -242,7 +242,7 @@ foreach(classifier ${classifierList})
         -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
         -out ${TEMP}/${OUTRASTER} ${raster_output_option}
         -confmap ${TEMP}/${OUTCONFMAP}
-        -classe 4
+        -nbclasses 4
         -probamap ${TEMP}/${OUTPROBAMAP}
 
         VALID    ${raster_comparison_three}

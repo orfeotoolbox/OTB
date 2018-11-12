@@ -198,14 +198,10 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
     (*quality) = m_SVMModel->predict(sample,true);
 #endif
     }
-  if (proba != ITK_NULLPTR)
-    {
-    if (!this->m_ProbaIndex)
-      {
-      itkExceptionMacro("Probability per class not available for this classifier !");
-      }
-    }
-  return target;
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
+
+return target;
 }
 
 template <class TInputValue, class TOutputValue>

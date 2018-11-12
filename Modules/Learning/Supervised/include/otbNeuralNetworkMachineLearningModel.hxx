@@ -282,13 +282,8 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
     {
     (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
-  if (proba != ITK_NULLPTR)
-    {
-    if (!this->m_ProbaIndex)
-      {
-      itkExceptionMacro("Probability per class not available for this classifier !");
-      }
-    }
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
 
   return target;
 }

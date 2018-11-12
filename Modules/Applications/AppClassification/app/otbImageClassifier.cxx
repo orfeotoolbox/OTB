@@ -133,13 +133,14 @@ private:
     MandatoryOff("confmap");
 
     AddParameter(ParameterType_OutputImage,"probamap", "Probability map");
-    SetParameterDescription("probamap","");
+    SetParameterDescription("probamap","Probability of each class for each pixel. This is an image having a number of bands equal to the number of classes in the model. This is only implemented for the Shark Random Forest classifier at this point.");
     SetDefaultOutputPixelType("probamap",ImagePixelType_uint16);
     MandatoryOff("probamap");
     AddRAMParameter();
 
-    AddParameter(ParameterType_Int, "classe", "number of output classes");
-    SetDefaultParameterInt("classe", 20);
+    AddParameter(ParameterType_Int, "nbclasses", "Number of classes in the model");
+    SetDefaultParameterInt("nbclasses", 20);
+    SetParameterDescription("nbclasses","The number of classes is needed for the probamap output in order to set the number of output bands.");
    
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
@@ -240,7 +241,7 @@ private:
       m_ClassificationFilter->SetUseProbaMap(true);
       if(m_Model->HasProbaIndex())
 	{
-	  m_ClassificationFilter->SetNumberOfClasses(GetParameterInt("classe"));
+	  m_ClassificationFilter->SetNumberOfClasses(GetParameterInt("nbclasses"));
 	  SetParameterOutputImage<ProbaImageType>("probamap",m_ClassificationFilter->GetOutputProba());
 	}
       else
