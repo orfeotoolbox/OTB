@@ -176,9 +176,9 @@ template <class F, class T, size_t N> struct NumberOfOutputComponents<F,otb::Vec
 
 } // end namespace functor_filter_details
 
-template <class TFunction>
+template <class TFunction, class TNameMap>
 void
-FunctorImageFilter<TFunction>
+FunctorImageFilter<TFunction, TNameMap>
 ::GenerateInputRequestedRegion()
 {
   // Get requested region for output
@@ -191,9 +191,9 @@ FunctorImageFilter<TFunction>
   functor_filter_details::SetInputRequestedRegions(this->GetVInputs(),requestedRegion, m_Radius);
 }
 
-template <class TFunction>
+template <class TFunction, class TNameMap>
 void
-FunctorImageFilter<TFunction>::GenerateOutputInformation()
+FunctorImageFilter<TFunction, TNameMap>::GenerateOutputInformation()
 {
   // Call Superclass implementation
   Superclass::GenerateOutputInformation();
@@ -211,9 +211,9 @@ FunctorImageFilter<TFunction>::GenerateOutputInformation()
 /**
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
-template <class TFunction>
+template <class TFunction, class TNameMap>
 void
-FunctorImageFilter<TFunction>
+FunctorImageFilter<TFunction, TNameMap>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Build output iterator

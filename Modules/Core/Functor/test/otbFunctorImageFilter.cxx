@@ -25,6 +25,7 @@
 #include "itkNeighborhood.h"
 #include "otbVariadicAddFunctor.h"
 #include "otbVariadicConcatenateFunctor.h"
+#include "otbVariadicNamedInputsImageFilter.h"
 #include <tuple>
 
 #include <numeric>
@@ -99,7 +100,7 @@ template <typename T> struct TypesCheck
   // Build and run filter
   auto functor = TestOperator<TOut,TIn>{};
   auto filter = NewFunctorFilter(functor);
-
+  
   using FilterType = typename decltype(filter)::ObjectType;
   static_assert(FilterType::NumberOfInputs == 1,"");
   static_assert(std::is_same<typename FilterType::template InputImageType<0>, InputImageType>::value, "");
@@ -108,6 +109,13 @@ template <typename T> struct TypesCheck
   filter->SetInput1(in);
   filter->template SetVInput<0>(in); // template keyword to avoid C++ parse ambiguity
   filter->Update();
+
+  // Test named input version
+  struct tag{};
+  using inputNames = std::tuple<tag>;
+  auto filter1 = NewFunctorFilter<decltype(functor),inputNames>(functor);
+  filter1->template SetVNamedInput<tag>(in);
+  filter1->Update();
   }
 
   TypesCheck()
@@ -274,6 +282,17 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   filter->SetVInputs(vimage,image);
   std::cout<<filter->GetVInput<0>()<< filter->GetVInput<1>()<<std::endl;
 
+  // Test VariadicNamedInputsImageFilter
+  struct xs {};
+  struct pan {};
+  using Names = std::tuple<xs,pan>; 
+   auto filterWithNames = otb::VariadicNamedInputsImageFilter<VectorImageType, Names, VectorImageType,ImageType>::New();
+   filterWithNames->SetVNamedInput<xs>(vimage);
+   filterWithNames->SetVNamedInput<pan>(image);
+
+   std::cout<<filterWithNames->GetVNamedInput<xs>()<< filterWithNames->GetVNamedInput<pan>()<<std::endl;
+
+  
   
   // test FunctorImageFilter with a lambda
   double scale = 10.;  
@@ -314,6 +333,8 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   // Test FunctorImageFilter With VariadicAdd functor
   using AddFunctorType = Functor::VariadicAdd<double, double, double>;
   auto add = NewFunctorFilter(AddFunctorType{});
+  add->SetVInput<0>(image);
+  add->SetVInput<1>(image);
   add->SetVInputs(image,image);
   add->Update();
 
@@ -346,7 +367,7 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   auto argFilter = NewFunctorFilter(LambdaComplex);
   argFilter->SetVInputs(cimage);
   argFilter->Update();
-
+  
  return EXIT_SUCCESS;
 }
 
