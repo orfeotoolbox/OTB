@@ -24,8 +24,8 @@
 /**\ingroup GeometriesFilters
  * \file    otbGeometriesToGeometriesFilter.h
  * \since   OTB v 3.14.0
- * Commons definitions for geometries filter definition.
- * This file contains all the main classes required to define new geometries
+ * Common definitions for geometry filter definitions.
+ * This file contains all the main classes required to define new geometry
  * transformations.
  */
 
@@ -46,7 +46,7 @@ namespace otb
 {
 /**\ingroup GeometriesFilters
  * \class GeometriesToGeometriesFilter
- * Root abstract class for all geometries to geometries filters.
+ * Root abstract class for all geometry to geometry filters.
  * \since OTB v 3.14.0
  *
  * \ingroup OTBGdalAdapters
@@ -203,10 +203,10 @@ struct OTBGdalAdapters_EXPORT FieldCopyTransformation
 
   /**
    * Defines the fields in the destination layer.
-   * The default action is to copy all fieds from one layer to another.
+   * The default action is to copy all fields from one layer to another.
    * \param [in] source  source \c Layer
    * \param [in,out] dest  destination \c Layer
-   * \throw itk::ExceptionObject in case the operation can't succeed.
+   * \throw itk::ExceptionObject in case the operation cannot succeed.
    */
   void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const;
 private:
