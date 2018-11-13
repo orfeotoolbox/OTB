@@ -23,7 +23,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
 #include "itkMacro.h"
 
 
