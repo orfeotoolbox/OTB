@@ -136,7 +136,7 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(ZonalStatistics, Application);
 
-  void DoInit()
+  void DoInit() override
   {
 
     SetName("ZonalStatistics");
@@ -201,7 +201,7 @@ public:
     SetOfficialDocLink();
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
     // Nothing to do here : all parameters are independent
   }
@@ -431,7 +431,7 @@ public:
       statWriter->Update();
     }
 
-    void DoExecute()
+    void DoExecute() override
     {
       // Get input image
       m_InputImage = GetParameterImage("in");

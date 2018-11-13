@@ -127,7 +127,11 @@
 #endif
 
 #ifndef LOG_QDEBUG
-#define LOG_QDEBUG      ( !NO_QLOG && !NO_QDEBUG && defined( OTB_DEBUG ) && 0 )
+#if                     !NO_QLOG && !NO_QDEBUG && defined( OTB_DEBUG )
+#define LOG_QDEBUG      0
+#else
+#define LOG_QDEBUG      0
+#endif
 #endif
 
 #ifndef LOG_QWARNING
