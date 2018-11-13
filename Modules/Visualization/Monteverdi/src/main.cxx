@@ -48,6 +48,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbConfigurationManager.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -96,6 +97,8 @@ int
 main( int argc, char * argv[] )
 {
   QApplication qtApp( argc, argv );
+
+  otb::ConfigurationManager::InitOpenMPThreads();
 
   //
   // 0. Splash-screen.

@@ -20,6 +20,7 @@
 
 
 #include "otbWrapperCommandLineLauncher.h"
+#include "otbConfigurationManager.h"
 #include "otb_tinyxml.h"
 #include <vector>
 
@@ -266,6 +267,8 @@ int main(int argc, char* argv[])
   #ifdef OTB_USE_MPI
   otb::MPIConfig::Instance()->Init(argc,argv);
   #endif
+
+  otb::ConfigurationManager::InitOpenMPThreads();
 
   if (argc < 2)
   {
