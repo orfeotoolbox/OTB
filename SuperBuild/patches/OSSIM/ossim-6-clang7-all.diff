@@ -1,0 +1,12 @@
+diff -burN OSSIM-orig/ossim/src/ossim/base/ossimArgumentParser.cpp OSSIM/ossim/src/ossim/base/ossimArgumentParser.cpp
+--- OSSIM-orig/ossim/src/ossim/base/ossimArgumentParser.cpp	2018-11-07 16:07:35.000000000 +0100
++++ OSSIM/ossim/src/ossim/base/ossimArgumentParser.cpp	2018-11-07 16:16:01.000000000 +0100
+@@ -191,7 +191,7 @@
+ 
+ void ossimArgumentParser::initialize(int* argc, const char **argv)
+ {
+-   if(argc > 0) delete (theArgv);
++   if(*argc > 0) delete (theArgv);
+    theArgc = argc;
+    theArgv = new char*[*argc];
+    for(int i=0;i<*argc;i++)

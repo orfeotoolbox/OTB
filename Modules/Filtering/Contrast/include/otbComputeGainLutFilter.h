@@ -61,21 +61,21 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self)
+  itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComputeGainLutFilter, ImageToImageFilter)
+  itkTypeMacro(ComputeGainLutFilter, ImageToImageFilter);
 
   /** Get/Set macro to get/set the number of pixel by histogram */
-  itkSetMacro(NbPixel, unsigned long)
-  itkGetMacro(NbPixel, unsigned long)
+  itkSetMacro(NbPixel, unsigned long);
+  itkGetMacro(NbPixel, unsigned long);
 
   /** Get/Set macro to get/set the minimum value */
-  itkSetMacro(Min, double)
-  itkGetMacro(Min, double)
+  itkSetMacro(Min, double);
+  itkGetMacro(Min, double);
 
   /** Get/Set macro to get/set the maximum value */
-  itkSetMacro(Max, double)
-  itkGetMacro(Max, double)
+  itkSetMacro(Max, double);
+  itkGetMacro(Max, double);
 
 protected:
   ComputeGainLutFilter() ;

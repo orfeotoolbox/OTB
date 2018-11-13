@@ -10,7 +10,7 @@ Optical radiometric calibration
 In remote sensing imagery, pixel values are referred to as Digital
 Numbers (DN) and they cannot be physically interpreted or compared. They are
 influenced by various factors such as the amount of light flowing through
-the sensor, the gain of the detectors and the analogic to numeric
+the sensor, the gain of the detectors and the analogue to digital
 converter.
 
 Depending on the season, the light and atmospheric conditions, the
@@ -63,7 +63,7 @@ sensors are:
 
 -  Formosat
 
-The *OpticalCalibration* application allows to perform optical
+The *OpticalCalibration* application performs optical
 calibration. The mandatory parameters are the input and output images.
 All other parameters are optional. By default the level of calibration
 is set to TOA (Top Of Atmosphere). The output images are expressed in
@@ -128,7 +128,7 @@ Using either **OTB Applications** or modules from **Monteverdi** , it is
 possible to perform both steps in a row, or step-by-step fusion, as
 described in the above sections.
 
-The *BundleToPerfectSensor* application allows to perform both steps in
+The *BundleToPerfectSensor* application performs both steps in
 a row. Seamless sensor modelling is used to perform zooming and
 registration of the multi-spectral image on the panchromatic image. In
 the case of a Pléiades bundle, a different approach is used: an affine
@@ -157,15 +157,15 @@ application:
 
 There are also optional parameters that can be useful for this tool:
 
--  The ``-elev`` option allows to specify the elevation, either with a
-   DEM formatted for OTB (``-elev.dem`` option, see section [ssec:dem])
+-  The ``-elev`` option specifies the elevation, either with a
+   DEM formatted for OTB (``-elev.dem`` option, see section :ref:`section2`)
    or with an average elevation (``-elev.default`` option). Since
    registration and zooming of the multi-spectral image is performed
    using sensor-models, it may happen that the registration is not
-   perfect in case of landscape with high elevation variation. Using a
-   DEM in this case allows to get better registration.
+   perfect in case of a landscape with a large variation in elevation. In this
+   case a DEM will allow for a better registration to be achieved. 
 
--  The ``-lmSpacing`` option allows to specify the step of the
+-  The ``-lmSpacing`` option specifies the step of the
    registration grid between the multi-spectral image and panchromatic
    image. This is expressed in amount of panchromatic pixels. A lower
    value gives a more precise registration but implies more computation
@@ -173,15 +173,15 @@ There are also optional parameters that can be useful for this tool:
    Default value is 10 pixels, which gives sufficient precision in most
    of the cases.
 
--  The ``-mode`` option allows to select the registration mode for the
+-  The ``-mode`` option selects the registration mode for the
    multi-spectral image. The ``default`` mode uses the sensor model of
    each image to create a generic “MS to Pan” transform. The ``phr``
-   mode uses a simple affine transform (which doesn’t need an elevation
+   mode uses a simple affine transform (which does not need an elevation
    source nor a registration grid).
 
-Pan-sharpening is a quite heavy processing requiring a lot of system
-resource. The ``-ram`` option allows you to limit the amount of memory
-available for the computation, and to avoid overloading your computer.
+Pan-sharpening is a process that requires a lot of system
+resources. The ``-ram`` option allows you to limit the amount of memory
+available for the computation, and also avoids overloading your computer.
 Increasing the available amount of RAM may also result in better
 computation time, seems it optimises the use of the system resources.
 Default value is 256 Mb.
@@ -194,7 +194,7 @@ Figure 5: Pan-sharpened image using Orfeo ToolBox.
 Please also note that since registration and zooming of the
 multi-spectral image with the panchromatic image relies on sensor
 modelling, this tool will work only for images whose sensor models is
-available in **Orfeo ToolBox** (see :ref:`section3` for a detailed
+available in **Orfeo ToolBox** (see Section :ref:`section3` for a detailed
 list). It will also work with ortho-ready products in cartographic
 projection.
 
@@ -204,17 +204,17 @@ Digital Elevation Model management
 ----------------------------------
 
 A Digital Elevation Model (DEM) is a georeferenced image (or collection
-of images) where each pixel corresponds to a local elevation. DEM are
+of images) where each pixel corresponds to a local elevation. DEMs are
 useful for tasks involving sensor to ground and ground to sensor
-coordinate transforms, like during ortho-rectification (see :ref:`section3`). These transforms need to find the intersection
+coordinate transformations, for example, ortho-rectification (see Section :ref:`section3`). These transforms need to find the intersection
 between the line of sight of the sensor and the Earth geoid. If a simple
 spheroid is used as the Earth model, potentially high localisation
 errors can be made in areas where elevation is high or perturbed. Of
 course, DEM accuracy and resolution have a great impact on the precision
 of these transformations.
 
-Two main available DEM, free of charges, and with worldwide cover, are
-both delivered as 1 degree by 1 degree tiles:
+The two principal DEMs that are available free of charges, and with worldwide cover, are
+both delivered as 1 degree by 1 degree tiles. They are:
 
 -  `The Shuttle Radar topographic Mission
    (SRTM) <http://www2.jpl.nasa.gov/srtm/>`_  is a DEM with a resolution of 90 metres,
@@ -232,7 +232,7 @@ are supposed to be located within a single directory. General elevation
 support is also supported from GeoTIFF files.
 
 Whenever an application or **Monteverdi** module requires a DEM, the
-option **elev.dem** allows set the DEM directory. This directory must
+option **elev.dem** sets the DEM directory. This directory must
 contain the DEM tiles, either in DTED or SRTM format or as a GeoTIFF.
 Subdirectories are not supported.
 
@@ -244,7 +244,7 @@ the Earth.
 
 We provide one geoid in the `OTB-Data <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/tree/master/Input/DEM>`_ repository.
 
-In all applications, the option **elev.geoid** allows to manage the path
+In all applications, the option **elev.geoid** manages the path
 to the geoid. Finally, it is also possible to use an average elevation
 in case no DEM is available by using the **elev.default** option.
 
@@ -358,7 +358,7 @@ section.
 Ortho-rectification with **OTB Applications**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The *OrthoRectification* application allows to perform
+The *OrthoRectification* application performs 
 ortho-rectification and map re-projection. The simplest way to use it is
 the following command:
 
@@ -378,9 +378,10 @@ parameters:
 -  The region of interest (upper-left corner and size of the image) is
    estimated so as to contain the whole input image extent.
 
-In order to use a Digital Elevation Model (see  :ref:`section2`.) for
-better localisation performances, one can pass the directory containing
-the DEM tiles to the application:
+In order to use a Digital Elevation Model to improve 
+the locational accuracy, one can pass the directory containing
+the DEM tiles to the application as follows. Further information regarding
+the use of DEMs can be found in Section :ref:`section2`.
 
 ::
 
@@ -448,30 +449,30 @@ follows:
                               -outputs.sizex x_size
                               -outputs.sizey y_size
 
-Where the ``-outputs.ulx`` and ``-outputs.uly`` options allow to specify
-the coordinates of the upper-left corner of the output image. The
-``-outputs.sizex`` and ``-outputs.sizey`` options allow to specify the
+Where the ``-outputs.ulx`` and ``-outputs.uly`` options specify
+the coordinates of the upper-left corner of the output image, while the options:
+``-outputs.sizex`` and ``-outputs.sizey`` specify the
 size of the output image.
 
 A few more interesting options are available:
 
--  The ``-opt.rpc`` option allows to use an estimated RPC model instead
+-  The ``-opt.rpc`` option uses an estimated RPC model instead
    of the rigorous SPOT5 model, which speeds-up the processing,
 
--  The ``-opt.gridspacing`` option allows to define the spacing of the
+-  The ``-opt.gridspacing`` option defines the spacing of the
    localisation grid used for ortho-rectification. A coarser grid
    results in speeding-up the processing, but with potential loss of
    accuracy. A standard value would be 10 times the ground spacing of
    the output image.
 
--  The ``-interpolator`` option allows to change the interpolation
+-  The ``-interpolator`` option changes the interpolation
    algorithm between nearest neighbor, linear and bicubic. Default is
    nearest neighbor interpolation, but bicubic should be fine in most
    cases.
 
--  The ``-opt.ram`` option allows to specify the amount of memory
-   available for the processing (in Mb). Default is 256 Mb. Increasing
-   this value to fit the available memory on your computer might
+-  The ``-opt.ram`` option specifies the amount of memory
+   available for the processing (in Mb), with a default value of 256 Mb. Increasing
+   this value to fit the available memory on your computer can
    speed-up the processing.
 
 

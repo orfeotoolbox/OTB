@@ -27,8 +27,6 @@ otbOssimJpegFileResourceLeakTest.cxx
 otbMapProjectionAdapterTest.cxx
 otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
-otbGeometricSarSensorModelAdapter.cxx
-otbPlatformPositionAdapter.cxx
 otbDEMHandlerTest.cxx
 otbRPCSolverAdapterTest.cxx
 otbSarSensorModelAdapterTest.cxx
@@ -168,30 +166,13 @@ otb_add_test(NAME prTvossimElevManagerTest2 COMMAND otbOSSIMAdaptersTestDriver
   )
 
 otb_add_test(NAME prTvossimElevManagerTest4 COMMAND otbOSSIMAdaptersTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest4
-  ${TEMP}/prTvossimElevManagerTest4.hdr
+  --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest4.tif
+  ${TEMP}/prTvossimElevManagerTest4.tif
   otbOssimElevManagerTest4
   ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/prTvossimElevManagerTest4
+  ${TEMP}/prTvossimElevManagerTest4.tif
   -1.8 52   0.02 -0.018 232 422
   )
-
-#commented below test. these are moved to dev_sar_tsx branch for further checks
-# otb_add_test(NAME uaTvGeometricSarSensorModelAdapterTest COMMAND otbOSSIMAdaptersTestDriver
-#   --compare-ascii ${EPSILON_9}
-#   ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
-#   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
-#   otbGeometricSarSensorModelAdapterTest
-#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC//TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
-#   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
-
-# otb_add_test(NAME uaTvPlatformPositionComputeBaselineTest COMMAND otbOSSIMAdaptersTestDriver
-#   --compare-ascii ${EPSILON_9}
-#   ${BASELINE_FILES}/uaTvPlatformPositionComputeBaselineTest.txt
-#   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt
-#   otbPlatformPositionComputeBaselineTest
-#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC//TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
-#   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData COMMAND otbOSSIMAdaptersTestDriver
   otbDEMHandlerTest

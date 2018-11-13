@@ -28,11 +28,12 @@
 namespace otb
 {
 /** \class TileMapImageIOFactory
+ * \deprecated
  * \brief Creation of a TileMapImageIO object using object factory.
  *
  * \ingroup OTBIOTileMap
  */
-class OTBIOTileMap_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
+class OTBIOTileMap_DEPRECATED_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

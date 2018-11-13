@@ -101,7 +101,8 @@ otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIV
 set_property(TEST ioTeImageToKmzAndMapFileProductExample PROPERTY RESOURCE_LOCK web_access)
 endif()
 
-otb_add_test(NAME ioTeTileMapImageIOExampleTest COMMAND ${OTB_TEST_DRIVER}
+if(OTB_USE_DEPRECATED)
+    otb_add_test(NAME ioTeTileMapImageIOExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image 10.0
     ${BASELINE}/openStreetMap.png
     ${TEMP}/openStreetMap.png
@@ -112,4 +113,5 @@ otb_add_test(NAME ioTeTileMapImageIOExampleTest COMMAND ${OTB_TEST_DRIVER}
     1.4835345
     43.55968261
     12
-)
+    )
+endif()

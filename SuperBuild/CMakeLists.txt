@@ -52,6 +52,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
+option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
@@ -317,7 +318,7 @@ option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
 
 #Cannot activate GLUT on OSX. See Mantis issue #1194")
-# do not activate GLFW by default on osx. see failing test 
+# do not activate GLFW by default on osx. see failing test
 # https://dash.orfeo-toolbox.org/testDetails.php?test=59844554&build=287120
 if(APPLE)
   option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
@@ -330,6 +331,9 @@ endif()
 option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
 option(OTB_USE_QWT "Enable module QWT in OTB" ON)
 option(OTB_USE_GSL "Enable module GSL in OTB" ON)
+
+option(OTB_USE_MPI "Enable MPI in OTB" OFF)
+option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data

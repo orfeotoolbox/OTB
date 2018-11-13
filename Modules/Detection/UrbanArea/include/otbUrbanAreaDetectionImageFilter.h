@@ -27,7 +27,7 @@
 #include "itkBinaryErodeImageFilter.h"
 #include "itkBinaryDilateImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
-
+#include "itkMacro.h"
 #include "itkSobelEdgeDetectionImageFilter.h"
 #include "otbEdgeDetectorImageFilter.h"
 #include "otbEdgeDensityImageFilter.h"

@@ -98,7 +98,7 @@ private:
     AddParameter(ParameterType_InputImage,  "in2", "Input Image 2");
     SetParameterDescription("in2","Mutliband image of the scene after perturbations.");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");
-    SetParameterDescription("out","Multiband image containing change maps. Each map will be in range [-1,1], so a floating point output type is advised.");
+    SetParameterDescription("out","Multiband image containing change maps. Each map will be in the range [-1,1], so a floating point output type is advised.");
 
     AddRAMParameter();
 

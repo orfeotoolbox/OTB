@@ -294,11 +294,6 @@ otb_test_application(NAME apTvUtQuicklookSpot5
                              ${TEMP}/apTvUtQuicklookSpot5.img
                      )
 
-
-#----------- DEMConvert TESTS ----------------
-
-
-
 #----------- ConcatenateImages TESTS ----------------
 otb_test_application(NAME apTvUtConcatenateImages
                      APP  ConcatenateImages
