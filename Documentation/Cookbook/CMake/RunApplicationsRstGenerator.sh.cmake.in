@@ -5,4 +5,4 @@
 export PYTHONPATH=@PYTHONPATH_COOKBOOK@:$PYTHONPATH
 export OTB_APPLICATION_PATH=@CMAKE_BINARY_DIR@/lib/otb/applications
 
-python3 @CMAKE_CURRENT_SOURCE_DIR@/Scripts/otbGenerateWrappersRstDoc.py -o "$1"
+python3 @CMAKE_CURRENT_SOURCE_DIR@/Scripts/otbGenerateWrappersRstDoc.py "$1"

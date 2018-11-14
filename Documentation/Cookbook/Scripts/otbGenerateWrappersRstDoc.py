@@ -23,14 +23,14 @@ import otbApplication
 import os
 import sys
 import glob
-from optparse import OptionParser
+import argparse
+import re
 
 ##############################################################################
 # Parameters
 linesep = os.linesep
 pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
 
-import re
 
 #Special/Exceptional cases
 def RstifyDescription(s):
@@ -524,8 +524,6 @@ def GetApplicationTags(appname):
      app = otbApplication.Registry.CreateApplication(appname)
      return app.GetDocTags()
 
-import shutil
-
 def RstPageHeading(text, maxdepth, ref=None):
     output = RstHeading(text, "=", ref=ref) + linesep
     output += ".. toctree::" + linesep
@@ -533,7 +531,7 @@ def RstPageHeading(text, maxdepth, ref=None):
     output += linesep + linesep
     return output
 
-def GenerateRstForApplications():
+def GenerateRstForApplications(rst_dir):
     out = ""
     blackList = ["TestApplication", "Example", "ApplicationExample"]
     allApps = None
@@ -553,7 +551,7 @@ def GenerateRstForApplications():
 
     print("All apps: %s" % (appNames,))
 
-    appIndexFile = open(RST_DIR + '/Applications.rst', 'w')
+    appIndexFile = open(rst_dir + '/Applications.rst', 'w')
     appIndexFile.write(RstPageHeading("Applications Reference Documentation", "2", ref="apprefdoc"))
     for appName in appNames:
         tags = GetApplicationTags(appName)
@@ -575,7 +573,7 @@ def GenerateRstForApplications():
             appIndexFile.write('\tApplications/' + tag_ + '.rst' + linesep)
             writtenTags.append(tag_)
 
-        tagFileName = RST_DIR + '/Applications/'  + tag_ + '.rst'
+        tagFileName = rst_dir + '/Applications/'  + tag_ + '.rst'
         if os.path.isfile(tagFileName):
             tagFile = open(tagFileName, 'a')
             tagFile.write("\tapp_" + appName + linesep)
@@ -587,24 +585,16 @@ def GenerateRstForApplications():
             tagFile.close()
 
         print("Generating " + appName + ".rst" +  " on tag " + tag_)
-        appFile = open(RST_DIR + '/Applications/app_'  + appName + '.rst', 'w')
+        appFile = open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w')
         out = ApplicationToRst(appName)
         appFile.write(out)
         appFile.close()
 
     return out
 
-
 if __name__ == "__main__":
-    parser = OptionParser(usage="Export application(s) to rst file.")
-    parser.add_option("-a",dest="appname",help="Generate rst only for this application (eg: OrthoRectification)")
-    parser.add_option("-m",dest="module",help="Generate rst only for this module (eg: Image Manipulation)")
-    parser.add_option("-o",dest="rstdir",help="directory where rst files are generated")
-    (options, args) = parser.parse_args()
+    parser = argparse.ArgumentParser(usage="Export application(s) to rst file")
+    parser.add_argument("rst_dir", help="Directory where rst files are generated")
+    args = parser.parse_args()
 
-    RST_DIR = options.rstdir
-
-    if not options.appname is None:
-        out = ApplicationToRst(options.appname)
-    else:
-        GenerateRstForApplications()
+    GenerateRstForApplications(args.rst_dir)
