@@ -25,7 +25,7 @@ OpenCV and/or libSVM")
 otb_module(OTBSupervised
 ENABLE_SHARED
   DEPENDS
-    OTBBoost
+    OTBBoostAdapters
     OTBCommon
     OTBITK
     OTBImageBase

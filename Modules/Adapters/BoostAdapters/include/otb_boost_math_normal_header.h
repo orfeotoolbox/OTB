@@ -26,6 +26,7 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #include <boost/math/distributions/normal.hpp>
 #pragma GCC diagnostic pop
 #else
