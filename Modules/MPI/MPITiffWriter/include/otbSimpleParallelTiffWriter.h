@@ -52,9 +52,8 @@
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 
-#include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/algorithm/string.hpp>
+#include "otb_boost_string_header.h"
+#include "otb_boost_tokenizer_header.h"
 
 // SPTW
 #include <algorithm>

@@ -19,7 +19,10 @@
  */
 
 #include "otbExtendedFilenameHelper.h"
-#include "otb_boost_string_header.h"
+#include <cassert>
+#include <ostream>
+#include <stdexcept>
+#include <string>
 #include "otbStringUtils.h"
 
 namespace otb
