@@ -23,6 +23,12 @@ INCLUDE_ONCE_MACRO(QWT)
 SETUP_SUPERBUILD(QWT)
 
 # declare dependencies
+if ( NOT OTB_USE_QT )
+  message( "As Qt is a dependency of Qwt, it will be activate in the "
+    "project that will behave as if OTB_USE_QT is set to ON.\n"
+    "To disable Qt and Qwt use OTB_USE_QWT=OFF and OTB_USE_QT=OFF.")
+endif()
+
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QWT QT5)
 
 set(QWT_SB_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM})
