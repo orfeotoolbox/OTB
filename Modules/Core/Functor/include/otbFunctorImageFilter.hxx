@@ -62,21 +62,25 @@ template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageReg
     }
 }
 
+// Will be easier to write in c++17 with std::apply and fold expressions
 template <class Tuple, size_t...Is> auto SetInputRequestedRegionsImpl(Tuple & t, const itk::ImageRegion<2> & region, std::index_sequence<Is...>,const itk::Size<2> & radius)
 {
   return std::make_tuple(SetInputRequestedRegion(std::get<Is>(t),region,radius)...);
 }
 
+// Will be easier to write in c++17 with std::apply and fold expressions
 template <typename... T> auto SetInputRequestedRegions(std::tuple<T...> && t,const itk::ImageRegion<2> & region, const itk::Size<2> & radius)
 {
   return SetInputRequestedRegionsImpl(t,region,std::make_index_sequence<sizeof...(T)>{},radius);
 }
 
+// Will be easier to write in c++17 with std::apply and fold expressions
 template <class Tuple, size_t...Is> auto GetNumberOfComponentsPerInputImpl(Tuple & t, std::index_sequence<Is...>)
 {
   return std::array<size_t,sizeof...(Is)>{{std::get<Is>(t)->GetNumberOfComponentsPerPixel()...}};
 }
 
+// Will be easier to write in c++17 with std::apply and fold expressions
 template <typename ...T> auto GetNumberOfComponentsPerInput(std::tuple<T...> & t)
 {
   return GetNumberOfComponentsPerInputImpl(t, std::make_index_sequence<sizeof...(T)>{});
@@ -102,12 +106,13 @@ template <> struct MakeIterator<std::true_type>
   }
 };
 
-
+// Will be easier to write in c++17 with std::apply and fold expressions
 template <class TNeigh, class Tuple, size_t...Is> auto MakeIteratorsImpl(const Tuple& t, const itk::ImageRegion<2> & region, const itk::Size<2> & radius, std::index_sequence<Is...>, TNeigh)
 {
   return std::make_tuple(MakeIterator<typename std::tuple_element<Is,TNeigh>::type >::Make(std::get<Is>(t),region,radius)...);
 }
 
+// Will be easier to write in c++17 with std::apply and fold expressions
 template<class TNeigh, typename... T> auto MakeIterators(std::tuple<T...> &&t,const itk::ImageRegion<2> & region, const itk::Size<2> & radius, TNeigh n)
   {
     return MakeIteratorsImpl(t,region,radius,std::make_index_sequence<sizeof...(T)>{},n);
@@ -133,17 +138,20 @@ template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
 }
 };
 
+// Will be easier to write in c++17 with std::apply and fold expressions
 template <class Tuple, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, const Oper & oper,std::index_sequence<Is...>)
 {
   return oper(GetProxy<typename std::remove_reference<decltype(std::get<Is>(t))>::type>::Get(std::get<Is>(t))...);
 }
 
+// Will be easier to write in c++17 with std::apply and fold expressions
 template <class Oper, typename ... Args> auto CallOperator(const Oper& oper, std::tuple<Args...> & t)
 {
   return CallOperatorImpl(t,oper,std::make_index_sequence<sizeof...(Args)>{});
 }
 
 // Variadic move of iterators
+// Will be easier to write in c++17 with std::apply and fold expressions
 template<class Tuple,size_t...Is> auto MoveIteratorsImpl(Tuple & t, std::index_sequence<Is...>)
 {
   return std::make_tuple(++(std::get<Is>(t) )...);
