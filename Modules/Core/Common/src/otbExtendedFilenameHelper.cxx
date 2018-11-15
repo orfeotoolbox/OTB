@@ -25,10 +25,6 @@
 #include <stdexcept>
 #include <string>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-
-#include "otb_boost_string_header.h"
 #include "otbStringUtils.h"
 
 namespace otb

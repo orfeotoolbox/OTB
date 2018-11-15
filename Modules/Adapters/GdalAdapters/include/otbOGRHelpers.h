@@ -27,7 +27,14 @@
 #include <cassert>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #include <boost/range/size.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/range/size.hpp>
+#endif
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 #if ! defined(NDEBUG)

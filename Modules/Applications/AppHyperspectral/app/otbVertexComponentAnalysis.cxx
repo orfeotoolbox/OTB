@@ -77,17 +77,17 @@ private:
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in","Input hyperspectral data cube");
 
-    AddParameter(ParameterType_Int, "ne", "Number of endmembers");
-    SetParameterDescription("ne","The number of endmembers to extract from the hyperspectral image.");
-    SetParameterInt("ne",1);
-    MandatoryOn("ne");
-
     AddParameter(ParameterType_OutputImage, "outendm", "Output Endmembers");
     SetParameterDescription("outendm","Endmembers, stored in a"
     "one-line multi-spectral image.Each pixel corresponds to one"
     "endmembers and each band values corresponds to the spectral"
     "signature of the corresponding endmember.");
     MandatoryOn("outendm");
+
+    AddParameter(ParameterType_Int, "ne", "Number of endmembers");
+    SetParameterDescription("ne", "The number of endmembers to extract from the hyperspectral image.");
+    SetParameterInt("ne", 1);
+    MandatoryOn("ne");
 
     AddRANDParameter();
     // Doc example parameter settings

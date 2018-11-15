@@ -33,8 +33,10 @@
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wheader-guard"
+#pragma clang diagnostic ignored "-Wexpansion-to-defined"
 #else
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif

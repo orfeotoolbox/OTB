@@ -124,6 +124,14 @@ private:
     SetMinimumParameterIntValue("band2",1);
     SetDefaultParameterInt("band2",1);
 
+    AddParameter(ParameterType_OutputFilename, "out", "Output file with tie points");
+    SetParameterDescription("out", "File containing the list of tie points");
+
+    AddParameter(ParameterType_OutputFilename, "outvector", "Output vector file with tie points");
+    SetParameterDescription("outvector", "File containing segments representing matches ");
+    MandatoryOff("outvector");
+    DisableParameter("outvector");
+
     AddParameter(ParameterType_Choice,"algorithm","Keypoints detection algorithm");
     SetParameterDescription("algorithm","Choice of the detection algorithm to use");
 
@@ -182,14 +190,6 @@ private:
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
-
-    AddParameter(ParameterType_OutputFilename,"out","Output file with tie points");
-    SetParameterDescription("out","File containing the list of tie points");
-
-    AddParameter(ParameterType_OutputFilename,"outvector","Output vector file with tie points");
-    SetParameterDescription("outvector","File containing segments representing matches ");
-    MandatoryOff("outvector");
-    DisableParameter("outvector");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in1", "sensor_stereo_left.tif");

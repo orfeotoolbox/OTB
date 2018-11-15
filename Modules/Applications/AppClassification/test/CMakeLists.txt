@@ -1015,3 +1015,55 @@ otb_test_application(NAME apTvClSampleAugmentationSmote
   -strategy smote
   -strategy.smote.neighbors 5
   )
+
+#----------- ZonalStatistics TESTS ----------------
+otb_test_application(NAME apTvClZonalStatisticsVec
+  APP  ZonalStatistics
+  OPTIONS -inzone vector -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp -out.vector.filename ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.vector.reproject 1
+  VALID   --compare-ogr ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_with_stats.sqlite
+  ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite)
+
+otb_test_application(NAME apTvClZonalStatisticsImg
+  APP  ZonalStatistics
+  OPTIONS -inzone labelimage -inzone.labelimage.in ${INPUTDATA}/Classification/VectorData_QB1_ter.tif -out.xml.filename ${TEMP}/apTvClVectorData_QB1_ter_stats.xml -in ${INPUTDATA}/Classification/QB_1_ortho.tif -out xml
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_stats.xml
+  ${TEMP}/apTvClVectorData_QB1_ter_stats.xml)
+
+otb_test_application(NAME apTvClZonalStatisticsImgNoData
+  APP  ZonalStatistics
+  OPTIONS -inzone labelimage -inzone.labelimage.in ${INPUTDATA}/Classification/VectorData_QB1_ter.tif -out.xml.filename ${TEMP}/apTvClVectorData_QB1_ter_stats_nodata.xml -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.labelimage.nodata -1  -out xml
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_stats_nodata.xml
+  ${TEMP}/apTvClVectorData_QB1_ter_stats_nodata.xml)
+
+  
+otb_test_application(NAME apTvClZonalStatisticsInVecOutRaster
+  APP  ZonalStatistics
+  OPTIONS 
+  -in ${INPUTDATA}/Classification/QB_1_ortho.tif 
+  -inzone vector 
+  -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp  
+  -inzone.vector.reproject 1
+  -out raster  
+  -out.raster.filename ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_invec.tif
+  -out.raster.bv -1  
+  VALID    --compare-image 1
+  ${OTBAPP_BASELINE}/apTvClZonalStats_QB1_ter_with_stats_invec.tif
+  ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_invec.tif
+  )
+
+otb_test_application(NAME apTvClZonalStatisticsInRasterOutRaster
+  APP  ZonalStatistics
+  OPTIONS 
+  -in ${INPUTDATA}/Classification/QB_1_ortho.tif 
+  -inzone labelimage 
+  -inzone.labelimage.in ${INPUTDATA}/Classification/VectorData_QB1_ter.tif
+  -inzone.labelimage.nodata -1
+  -out raster  
+  -out.raster.filename ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_inraster.tif  
+  VALID    --compare-image 1
+  ${OTBAPP_BASELINE}/apTvClZonalStats_QB1_ter_with_stats_inraster.tif
+  ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_inraster.tif
+  )

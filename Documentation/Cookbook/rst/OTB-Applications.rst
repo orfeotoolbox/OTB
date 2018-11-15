@@ -20,7 +20,7 @@ entry points. While the framework can be extended, the Orfeo ToolBox ships with 
    ergonomic parameters setting, display of documentation, and progress
    reporting,
 
--  A SWIG interface, which means that any application can be loaded
+-  A SWIG interface, which means that any application can be loaded,
    set-up and executed into a high-level language such as Python or Java
    for instance.
 
@@ -28,20 +28,20 @@ entry points. While the framework can be extended, the Orfeo ToolBox ships with 
    the SWIG/Python interface is available with seamless integration within
    QGIS.
 
-The complete list of applications is described in the :ref:`apprefdoc`.
+The complete list of applications is described in the Chapter :ref:`apprefdoc`.
 
-All standard applications share the same implementation and expose
-automatically generated interfaces.
-Thus, the command-line interface is prefixed by ``otbcli_``, while the Qt interface is prefixed by
-``otbgui_``. For instance, calling ``otbcli_Convert`` will launch the
+All standard applications share the same implementation and automatically expose
+generated interfaces.
+However they are accessed in a slightly different way: the command-line interface is prefixed by ``otbcli_``, while the Qt interface is prefixed by
+``otbgui_``. For cwinstance, calling ``otbcli_Convert`` will launch the
 command-line interface of the Convert application, while
-``otbgui_Convert`` will launch its GUI.
+``otbgui_Convert`` will launch the GUI.
 
 Command-line launcher
 ---------------------
 
 The command-line application launcher loads an application
-plugin, to set its parameters, and execute it using the command line.
+plugin, allows for its parameters to be set, and can then be executed from the command line.
 Launching the ``otbApplicationLauncherCommandLine`` without any arguments provided,
 results in the following help to be displayed:
 
@@ -52,23 +52,23 @@ results in the following help to be displayed:
 
 The ``module_name`` parameter corresponds to the application name. The
 ``[MODULEPATH]`` argument is optional and allows the path to the shared library 
-(or plugin) correpsonding to the ``module_name`` to be passed to the launcher.
+(or plugin) corresponding to the ``module_name`` to be passed to the launcher.
 
 It is also possible to set this path with the environment variable
 ``OTB_APPLICATION_PATH``, making the ``[MODULEPATH]`` optional. This
 variable is checked by default when no ``[MODULEPATH]`` argument is
 given. When using multiple paths in ``OTB_APPLICATION_PATH``, one must
-make sure to use the standard path separator of the target system, which
+ensure that the standard path separator of the target system is used, which
 is ``:`` on Unix and ``;`` on Windows.
 
 An error in the application name (i.e. in parameter ``module_name``)
-will make the ``otbApplicationLauncherCommandLine`` lists the name of
+will make the ``otbApplicationLauncherCommandLine`` list the name of
 all applications found in the available path (either ``[MODULEPATH]``
 and/or ``OTB_APPLICATION_PATH``).
 
-To ease the use of the applications, and try avoiding extensive
-environment customization, ready-to-use scripts are provided by the OTB
-installation to launch each application, and takes care of adding the
+To ease the use of the applications, and to avoid extensive
+environment customizations; ready-to-use scripts are provided by the OTB
+installation to launch each application. They take care of adding the
 standard application installation path to the ``OTB_APPLICATION_PATH``
 environment variable.
 
@@ -79,7 +79,7 @@ application with the script called ``otbcli_Orthorectification``.
 Launching an application without parameters, or with incomplete parameters, will cause the
 launcher to display a summary of the parameters. This summary will display the minimum set
 of parameters that are required to execute the application. Here is an
-example with the OrthoRectification application:
+example based on the OrthoRectification application:
 
 ::
 
@@ -125,11 +125,11 @@ example with the OrthoRectification application:
 
 For a detailed description of the application behaviour and parameters,
 please check the application reference documentation presented
-chapter [chap:apprefdoc], page  or follow the ``DOCUMENTATION``
-hyperlink provided in ``otbApplicationLauncherCommandLine`` output.
+in chapter :ref:`apprefdoc`  or follow the ``DOCUMENTATION``
+hyperlink provided in the output of ``otbApplicationLauncherCommandLine``.
 Parameters are passed to the application using the parameter key (which
 might include one or several ``.`` character), prefixed by a ``-``.
-Command-line examples are provided in chapter [chap:apprefdoc], page.
+Command-line examples are provided in the chapter :ref:`apprefdoc`.
 
 Graphical launcher
 ------------------
@@ -193,7 +193,7 @@ environment variable ``PYTHONPATH`` to include this directory so that the module
 becomes available from Python.
 
 On Windows, you can install the ``otb-python`` package, and the module
-will be available from an OSGeo4W shell automatically.
+will be automatically available from an OSGeo4W shell.
 
 As for the command line and GUI launchers, the path to the application
 modules needs to be properly set with the ``OTB_APPLICATION_PATH``
@@ -327,7 +327,7 @@ Here is an example of MPI call on a cluster::
 
 One can see that the registration and pan-sharpening of the
 panchromatic and multi-spectral bands of a Pleiades image has been split
-among 560 cpus and only took 56 seconds.
+between 560 CPUs and only took 56 seconds to complete.
 
 Note that this MPI parallel invocation of applications is only
 available for command-line calls to OTB applications, and only for

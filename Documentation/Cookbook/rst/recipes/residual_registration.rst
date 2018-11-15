@@ -70,8 +70,8 @@ get a set of point which match in both images.
 The basic idea is to use this set of homologous points and estimate with
 them a residual transformation between the two images.
 
-There is a wide variety of keypoint detector in the literature. They
-allow to detect and describe local features in images. These algorithms
+There is a wide variety of keypoint detectors in the literature, and they 
+allow for the detection and description of local features in images. These algorithms
 provide for each interesting point a “feature description”. This
 descriptor has the property to be invariant to image translation,
 scaling, and rotation, partially invariant to illumination changes and
@@ -90,16 +90,16 @@ The application offers two modes:
    full extent of both images (please note that in this mode large image
    file are not supported).
 
--  The second mode, called *geobins*, allows to set-up spatial binning
+-  The second mode, called *geobins*, allows for the set-up of spatial binning
    so as to get fewer points spread across the entire image. In this
    mode, the corresponding spatial bin in the second image is estimated
    using geographical transform or sensor modeling, and is padded
    according to the user defined precision.
 
 Moreover, in both modes the application can filter matches whose
-co-localization in the first image exceed this precision. Last, the
+co-localization in the first image exceed this precision. Finally, the
 elevation parameters allow to deal more precisely with sensor modelling
-in case of sensor geometry data. The *outvector* option allows to create
+in case of sensor geometry data. The *outvector* option allows for the creation of 
 a vector file with segments corresponding to the localization error
 between the matches.
 
@@ -150,7 +150,7 @@ display in a GIS software.
 
 Please note again that for a proper use of the application, elevation
 must be correctly set (including DEM and geoid file). The map parameters
-allows to choose a map projection in which the accuracy will be
+sets a map projection in which the accuracy will be
 estimated (in meters).
 
 Accuracy values are provided as output of the application (computed
@@ -177,7 +177,7 @@ reference. **Orfeo ToolBox** offers since version 3.16 the possibility
 to use
 hrefhttp://wiki.orfeo-toolbox.org/index.php/ExtendedFileNameextend image
 path to use different metadata file as input. That’s what we are going
-to use there to orthorectify the QuickBird image using the *.geom* file
+to use to orthorectify the QuickBird image using the *.geom* file
 obtained by the **RefineSensorModel** applications. over the first one
 using for the second image estimated sensor model which take into
 account the original sensor model of the slave and which also fit to the
