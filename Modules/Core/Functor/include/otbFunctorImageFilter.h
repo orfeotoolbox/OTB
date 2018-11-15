@@ -24,6 +24,9 @@
 #include "otbVariadicInputsImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
+#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
+#include "itkFixedArray.h"
 #include "itkDefaultConvertPixelTraits.h"
 #include <type_traits>
 
@@ -59,6 +62,32 @@ template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
   static constexpr bool value = true;
 };
 
+/**
+ * \struct IsSuitableType
+ * \brief Helper struct to check if a type can be used as pixel type.
+ *
+ * ::value maps to true if type can be used and false otherwhise.
+ */
+template <class T> struct IsSuitableType
+{
+  static constexpr bool value = std::is_scalar<T>::value;
+};
+
+template <class T> struct IsSuitableType<std::complex<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+template <class T> struct IsSuitableType<itk::VariableLengthVector<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+template <class T> struct IsSuitableType<itk::FixedArray<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+template <class T> struct IsSuitableType<itk::RGBPixel<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+template <class T> struct IsSuitableType<itk::RGBAPixel<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
 
 /**
  * \struct PixelTypeDeduction
@@ -70,18 +99,21 @@ template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
 */
 template <class T> struct PixelTypeDeduction
 {
+  static_assert(IsSuitableType<T>::value,"T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
 };
 
 /// Partial specialisation for itk::Neighborhood<T>
 template <class T> struct PixelTypeDeduction<itk::Neighborhood<T>>
 {
+  static_assert(IsSuitableType<T>::value,"T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
 };
 
 /// Partial specialisation for const itk::Neighborhood<T> &
 template <class T> struct PixelTypeDeduction<const itk::Neighborhood<T>&>
 {
+  static_assert(IsSuitableType<T>::value,"T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
 };
 
@@ -109,6 +141,7 @@ template <class T> struct ImageTypeDeduction<const T &>
 {
   using ImageType = typename ImageTypeDeduction<T>::ImageType;
 };
+
 
 /**
 * \struct FunctorFilterSuperclassHelper 
@@ -142,7 +175,7 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
 
 // Partial specialisation for R(C::*)(T...)
 template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...)>
-{
+{ 
   using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
   using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
