@@ -329,7 +329,8 @@ else()
 endif()
 
 option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
-option(OTB_USE_QWT "Enable module QWT in OTB" ON)
+include (CMakeDependentOption)
+CMAKE_DEPENDENT_OPTION( OTB_USE_QWT "Enable module QWT in OTB" ON "OTB_USE_QT" OFF)
 option(OTB_USE_GSL "Enable module GSL in OTB" ON)
 
 option(OTB_USE_MPI "Enable MPI in OTB" OFF)
