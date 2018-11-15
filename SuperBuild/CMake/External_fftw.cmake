@@ -24,35 +24,33 @@ SETUP_SUPERBUILD(FFTW)
 
 set(FFTWF_SB_SRC ${CMAKE_BINARY_DIR}/FFTW/src/FFTWF)
 set(FFTWD_SB_SRC ${CMAKE_BINARY_DIR}/FFTW/src/FFTWD)
+set(FFTWF_SB_BUILD ${CMAKE_BINARY_DIR}/FFTW/build/FFTWF)
+set(FFTWD_SB_BUILD ${CMAKE_BINARY_DIR}/FFTW/build/FFTWD)
 
-if(MSVC)
-  # TODO : get precompiled binaries as not all MSVC versions can compile FFTW
-  message(STATUS "  FFTW SuperBuild is not available yet...")
-  add_custom_target(FFTW)
-  return()
+if(WIN32)
+  set(FFTW_SB_CONFIG -DWITH_COMBINED_THREADS:BOOL=ON)
+else()
+  set(FFTW_SB_CONFIG -DWITH_COMBINED_THREADS:BOOL=OFF)
 endif()
-
-
 
 # Compile the float version of FFTW
 ExternalProject_Add(FFTWF
   PREFIX FFTW/FFTWF
-  URL "http://www.fftw.org/fftw-3.3.4.tar.gz"
-  URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
+  URL "http://www.fftw.org/fftw-3.3.8.tar.gz"
+  URL_MD5 8aac833c943d8e90d51b697b27d4384d
   SOURCE_DIR ${FFTWF_SB_SRC}
-  BINARY_DIR ${FFTWF_SB_SRC}
+  BINARY_DIR ${FFTWF_SB_BUILD}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-  CONFIGURE_COMMAND
-  ${SB_ENV_CONFIGURE_CMD}
-  ${FFTWF_SB_SRC}/configure
-  --prefix=${SB_INSTALL_PREFIX}
-  --enable-shared
-  --disable-static
-  --enable-float
-  --enable-threads
-  --disable-fortran
-  --disable-dependency-tracking
+  CMAKE_CACHE_ARGS
+  ${SB_CMAKE_CACHE_ARGS}
+    -DCMAKE_INSTALL_LIBDIR:PATH=lib
+    -DBUILD_TESTS:BOOL=OFF
+    -DDISABLE_FORTRAN:BOOL=ON
+    -DENABLE_THREADS:BOOL=ON
+    -DENABLE_SSE2:BOOL=ON
+    -DENABLE_FLOAT:BOOL=ON
+    ${FFTW_SB_CONFIG}
   DEPENDS ${FFTW_DEPENDENCIES}
   LOG_DOWNLOAD 1
   LOG_CONFIGURE 1
@@ -60,36 +58,30 @@ ExternalProject_Add(FFTWF
   LOG_INSTALL 1
   )
 
-SUPERBUILD_PATCH_SOURCE(FFTWF)
-
 # Compile the double version of FFTW
 ExternalProject_Add(FFTWD
   PREFIX FFTW/FFTWD
-  URL "http://www.fftw.org/fftw-3.3.4.tar.gz"
-  URL_MD5 2edab8c06b24feeb3b82bbb3ebf3e7b3
+  URL "http://www.fftw.org/fftw-3.3.8.tar.gz"
+  URL_MD5 8aac833c943d8e90d51b697b27d4384d
   SOURCE_DIR ${FFTWD_SB_SRC}
-  BINARY_DIR ${FFTWD_SB_SRC}
+  BINARY_DIR ${FFTWD_SB_BUILD}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-  CONFIGURE_COMMAND
-  ${SB_ENV_CONFIGURE_CMD}
-  ${FFTWD_SB_SRC}/configure
-  --prefix=${SB_INSTALL_PREFIX}
-  --enable-shared
-  --disable-static
-  --disable-float
-  --enable-threads
-  --disable-fortran
-  --disable-dependency-tracking
+  CMAKE_CACHE_ARGS
+  ${SB_CMAKE_CACHE_ARGS}
+    -DCMAKE_INSTALL_LIBDIR:PATH=lib
+    -DBUILD_TESTS:BOOL=OFF
+    -DDISABLE_FORTRAN:BOOL=ON
+    -DENABLE_THREADS:BOOL=ON
+    -DENABLE_SSE2:BOOL=ON
+    -DENABLE_FLOAT:BOOL=OFF
+    ${FFTW_SB_CONFIG}
   DEPENDS FFTWF
   LOG_DOWNLOAD 1
   LOG_CONFIGURE 1
   LOG_BUILD 1
   LOG_INSTALL 1
   )
-
-
-SUPERBUILD_PATCH_SOURCE(FFTWD)
 
 ExternalProject_Add(FFTW
   PREFIX FFTW
