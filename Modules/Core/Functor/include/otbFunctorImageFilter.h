@@ -32,7 +32,6 @@
 
 namespace otb
 {
-
 /**  
  * \struct IsNeighborhood 
  * \brief Struct testing if T is a neighborhood
@@ -73,21 +72,41 @@ template <class T> struct IsSuitableType
   static constexpr bool value = std::is_scalar<T>::value;
 };
 
+/// Unwrap complex
 template <class T> struct IsSuitableType<std::complex<T>> {
   static constexpr bool value = IsSuitableType<T>::value;
 };
+
+/// Unwrap VariableLengthVector
 template <class T> struct IsSuitableType<itk::VariableLengthVector<T>> {
   static constexpr bool value = IsSuitableType<T>::value;
 };
+
+/// Unwrap FixedArray
 template <class T> struct IsSuitableType<itk::FixedArray<T>> {
   static constexpr bool value = IsSuitableType<T>::value;
 };
+
+/// Unwrap RGBPixel
 template <class T> struct IsSuitableType<itk::RGBPixel<T>> {
   static constexpr bool value = IsSuitableType<T>::value;
 };
+
+/// Unwrap RGBAPixel
 template <class T> struct IsSuitableType<itk::RGBAPixel<T>> {
   static constexpr bool value = IsSuitableType<T>::value;
 };
+
+/// Discard const qualifier
+template <class T> struct IsSuitableType<const T>{
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
+/// Discard reference
+template <class T> struct IsSuitableType<T &>{
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
 
 /**
  * \struct PixelTypeDeduction
@@ -110,12 +129,19 @@ template <class T> struct PixelTypeDeduction<itk::Neighborhood<T>>
   using PixelType = T;
 };
 
-/// Partial specialisation for const itk::Neighborhood<T> &
-template <class T> struct PixelTypeDeduction<const itk::Neighborhood<T>&>
+/// Discard const qualifier
+template <class T> struct PixelTypeDeduction<const  T>
 {
-  static_assert(IsSuitableType<T>::value,"T can not be used as a template parameter for Image or VectorImage classes.");
-  using PixelType = T;
+  using PixelType = typename PixelTypeDeduction<T>::PixelType;
 };
+
+/// Discard reference
+template <class T> struct PixelTypeDeduction<T &>
+{
+  using PixelType = typename PixelTypeDeduction<T>::PixelType;
+};
+
+  
 
 /** 
  * \struct ImageTypeDeduction
@@ -136,11 +162,11 @@ template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
   using ImageType = otb::VectorImage<T>;
 };
 
-/// Partial specialisation for const T &
-template <class T> struct ImageTypeDeduction<const T &>
-{
-  using ImageType = typename ImageTypeDeduction<T>::ImageType;
-};
+// /// Partial specialisation for const T &
+// template <class T> struct ImageTypeDeduction<const T &>
+// {
+//   using ImageType = typename ImageTypeDeduction<T>::ImageType;
+// };
 
 
 /**
@@ -165,7 +191,7 @@ template <typename R, typename... T> struct FunctorFilterSuperclassHelper<R(*)(T
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
-// Partial specialisation for R(C::*)(T...) const
+/// Partial specialisation for R(C::*)(T...) const
 template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...) const>
 {
   using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
@@ -173,7 +199,7 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
-// Partial specialisation for R(C::*)(T...)
+/// Partial specialisation for R(C::*)(T...)
 template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...)>
 { 
   using OutputImageType = typename ImageTypeDeduction<R>::ImageType;

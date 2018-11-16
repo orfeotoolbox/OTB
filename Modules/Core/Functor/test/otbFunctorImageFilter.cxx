@@ -62,8 +62,6 @@ template <typename T> struct TypesCheck
   // Test ImageTypeDeduction struct
   static_assert(std::is_same<typename ImageTypeDeduction<ScalarType>::ImageType,ImageType>::value,"");
   static_assert(std::is_same<typename ImageTypeDeduction<VectorType>::ImageType,VectorImageType>::value,"");
-  static_assert(std::is_same<typename ImageTypeDeduction<const ScalarType &>::ImageType,ImageType>::value,"");
-  static_assert(std::is_same<typename ImageTypeDeduction<const VectorType &>::ImageType,VectorImageType>::value,"");
 
   // Fake test operator
   template <typename TOut,typename TIn> struct TestOperator
@@ -120,7 +118,8 @@ template <typename T> struct TypesCheck
   } 
 };
 
-auto checksDouble = TypesCheck<double>{};
+auto checksInt     = TypesCheck<int>{};
+auto checksDouble  = TypesCheck<double>{};
 auto checksComplex = TypesCheck<std::complex<double>>{};
 
 // Example functors
