@@ -141,6 +141,7 @@ set(APPLE_SYSTEM_DLLS
   OpenGL.framework
   libgcc_s.*dylib
   libcups.*dylib
+  libomp.dylib
   )
 
 if(WIN32)
