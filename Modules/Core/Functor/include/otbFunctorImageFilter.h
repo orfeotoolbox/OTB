@@ -83,7 +83,7 @@ template <class T> struct IsSuitableType<itk::VariableLengthVector<T>> {
 };
 
 /// Unwrap FixedArray
-template <class T> struct IsSuitableType<itk::FixedArray<T>> {
+template <class T, size_t N> struct IsSuitableType<itk::FixedArray<T,N>> {
   static constexpr bool value = IsSuitableType<T>::value;
 };
 
@@ -218,7 +218,7 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
  * - returns T or itk::VariableLengthVector<T>, with T a scalar type
  *
  * The returned filter is ready to use. Inputs can be set through the
- * SetVInputs() method (see VariadicInputsImageFilter class for
+ * SetVariadicInputs() method (see VariadicInputsImageFilter class for
  * details)
  * 
  * \param f the Functor to build the filter from
