@@ -186,8 +186,10 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
                                                                      FFTW_MEASURE);
 
   // left zero padding
-  unsigned int leftskip = static_cast<unsigned int>(std::max(0L, inputIndex[0] - pieceIndex[0]));
-  unsigned int topskip =  pieceSize[0] * static_cast<unsigned int>(std::max(0L, inputIndex[1] - pieceIndex[1]));
+  unsigned int leftskip = static_cast<unsigned int>(std::max(
+   (typename InputImageType::IndexValueType) 0, inputIndex[0] - pieceIndex[0]));
+  unsigned int topskip =  pieceSize[0] * static_cast<unsigned int>(std::max(
+   (typename InputImageType::IndexValueType) 0, inputIndex[1] - pieceIndex[1]));
 
   // zero filling
   memset(inputPiece,0,pieceNbOfPixel * sizeof(InputPixelType));
