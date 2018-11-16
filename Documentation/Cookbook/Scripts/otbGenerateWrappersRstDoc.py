@@ -19,12 +19,11 @@
 # limitations under the License.
 #
 
-import otbApplication
 import os
 import sys
-import glob
 import argparse
-import re
+
+import otbApplication
 
 ##############################################################################
 # Parameters
@@ -165,7 +164,6 @@ def GenerateParameterType(app,param):
         return "XML output parameters file"
 
 def FindLengthOfLargestColumnText(app,paramlist):
-    output= ""
     colLength = [2] * 3
     for param in paramlist:
         if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
@@ -210,7 +208,7 @@ def MakeText(text, size):
 
 def GenerateParametersTable(app,paramlist):
     colLength = FindLengthOfLargestColumnText(app, paramlist)
-    output = linesep + ".. [#] Table: Parameters table for " + ConvertString(app.GetDocName()) + "." + linesep + linesep
+
     headerlist = ["Parameter Key", "Parameter Name", "Parameter Type"]
     for i in range(len(headerlist)):
         colLength[i] = len(headerlist[i]) if colLength[i] < len(headerlist[i]) else colLength[i]
@@ -238,64 +236,17 @@ def unique(seq):
             checked.append(e)
     return checked
 
-def ApplicationParametersToRst(app,paramlist,deep = False,current=""):
-    output = ""
-    # First run
-    if len(current)==0:
-        output += "This section describes in details the parameters available for this application. Table [#]_ presents a summary of these parameters and the parameters keys to be used in command-line and programming languages. Application key is *" + app.GetName() + "* ."  + linesep
-        output += GenerateParametersTable(app,paramlist)
-        firstlevelparams = []
-        for param in paramlist:
-            paramsplit = param.partition(".")
-            firstlevelparams.append(paramsplit[0])
-        firstlevelparams = unique(firstlevelparams)
-
-        if deep:
-            for param in firstlevelparams:
-                output += linesep
-                output += "**" + ConvertString(app.GetParameterName(param)) + "**" + linesep
-                output += RstifyDescription(app.GetParameterDescription(param))
-                if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-                    output += GenerateChoice(app,param,paramlist)
-                    output += linesep
-                else:
-                    output += linesep
-                    output += ApplicationParametersToRst(app,paramlist,deep,param)
-        else:
-            output+= linesep
-            for param in firstlevelparams:
-                output+= "- **"+ ConvertString(app.GetParameterName(param))+ ":** " + RstifyDescription(app.GetParameterDescription(param))
-                if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-                    output += GenerateChoice(app,param,paramlist)
-                output += linesep + linesep
-            output+=  linesep
-    else:
-        currentlevelparams = []
-        for param in paramlist:
-            if param.startswith(current+".") and param.count(".") == current.count(".")+1:
-                currentlevelparams.append(param)
-        if len(currentlevelparams) > 0:
-            output+= linesep
-            for param in currentlevelparams:
-                output+= "- **"+ ConvertString(app.GetParameterName(param))+ ":** " + RstifyDescription(app.GetParameterDescription(param)) + linesep
-                output+= ApplicationParametersToRst(app,paramlist,deep,param) + linesep
-                if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-                    output += GenerateChoice(app,param,paramlist, 1)
-            output+= linesep
-
-    return output
-
 def ApplicationParametersToRstV2(app,paramlist,deep = False,current=""):
     output = ""
     # current level
     level = 0
     # First run
     if len(current)==0:
-        output += "This section describes in details the parameters available for this application. Table [#]_ presents a summary of these parameters and the parameters keys to be used in command-line and programming languages. Application key is *" + app.GetName() + "* ."  + linesep
         output += GenerateParametersTable(app,paramlist)
     else:
         level = len(current.split('.'))
     indentLevel = level
+
     if deep == False:
         indentLevel += 1
     # compute prefix
@@ -463,35 +414,39 @@ def RstHeading(text, delimiter, ref=None):
     heading += linesep
     return heading
 
+def rst_heading(text, delimiter, ref=None):
+    return text + "\n" + delimiter * len(text)
+
 def ApplicationToRst(appname):
-    output = ""
-    app = None
-    try:
-        app = otbApplication.Registry.CreateApplication(appname)
-    except e:
-        print(e)
+    app = otbApplication.Registry.CreateApplication(appname)
+
     # TODO: remove this when bug 440 is fixed
     app.Init()
-    output += RstHeading(app.GetName() + ' - ' + app.GetDocName(), '^')
-    output += app.GetDescription() + linesep * 2
-    output += RstHeading("Detailed description", '-')
-    output += app.GetDocLongDescription() + linesep * 2
-    limitations = app.GetDocLimitations()
-    output += RstHeading("Parameters", '-')
-    depth = GetParametersDepth(app.GetParametersKeys())
-    deep = depth > 0
-    output += ApplicationParametersToRstV2(app,app.GetParametersKeys(),deep) + linesep
+
+
+    deep = GetParametersDepth(app.GetParametersKeys()) > 0
+    parameters = ApplicationParametersToRstV2(app,app.GetParametersKeys(), deep)
+
+    output = open("templates/application.rst").read().format(
+        heading=rst_heading(app.GetName(), '='),
+        description=app.GetDescription(),
+        longdescription=app.GetDocLongDescription(),
+        parameters=parameters,
+        examples="",
+        limitations=""
+    )
+
+    return output
+
     if app.GetNumberOfExamples() > 1:
-        output += RstHeading("Examples", '-') + linesep
-        #output += appdetailslevel + "{Examples}" + "\\label{appexamples:" + appname + "}" + linesep
         for i in range(0,app.GetNumberOfExamples()):
             output += ":Example "+  str(i+1) + ':' + linesep + linesep
-#            output += RstHeading("Example "+  str(i+1) , '-')
             output += app.GetExampleComment(i)
             output+= "To run this example in command-line, use the following: " + linesep
             output += linesep + GetApplicationExampleCommandLine(app,i)
             output+= "To run this example from Python, use the following code snippet: " + linesep
             output += GetApplicationExamplePython(app,i)
+
     elif app.GetNumberOfExamples() == 1:
         output += RstHeading("Example", '-')
         if( len(app.GetExampleComment(0)) > 1):
@@ -501,6 +456,7 @@ def ApplicationToRst(appname):
         output+= "To run this example from Python, use the following code snippet: " + linesep
         output += GetApplicationExamplePython(app,0)
 
+    limitations = app.GetDocLimitations()
     if len(limitations)>=2:
         output += RstHeading("Limitations", '~')
 #        output += ":Limitations:" + linesep + linesep
