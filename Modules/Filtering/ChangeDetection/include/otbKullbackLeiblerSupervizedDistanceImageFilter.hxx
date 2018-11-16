@@ -74,12 +74,6 @@ KullbackLeiblerSupervizedDistance<TInput1, TInput2, TInputROIImage, TOutput>
                                ITK_LOCATION);
     }
 
-  typedef ROIdataConversion<typename TInput2::ImageType, TInputROIImage>
-  ROIConversionType2;
-
-  typedef itk::ConstNeighborhoodIterator<
-      typename ROIConversionType2::OutputImageType> ROIInputType2;
-
   typename ROIConversionType2::Pointer conversion2 = ROIConversionType2::New();
   conversion2->SetInputImage(img2);
   conversion2->SetROIImage(imgROI);

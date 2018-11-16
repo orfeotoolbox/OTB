@@ -94,7 +94,7 @@ QuicklookModel
   if( buildContext->m_Settings!=NULL )
     {
     VectorImageSettings * const settings =
-      static_cast< VectorImageSettings * const >( buildContext->m_Settings );
+      static_cast< VectorImageSettings * >( buildContext->m_Settings );
 
     SetSettings( *settings );
     }
