@@ -138,16 +138,67 @@ template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
 }
 };
 
-// Will be easier to write in c++17 with std::apply and fold expressions
-template <class Tuple, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, const Oper & oper,std::index_sequence<Is...>)
+template <class Oper> struct OperProxy : public OperProxy<decltype(&Oper::operator())> {};
+
+template<class Out, class ... In> struct OperProxy<Out(*)(In...)>
 {
-  return oper(GetProxy<typename std::remove_reference<decltype(std::get<Is>(t))>::type>::Get(std::get<Is>(t))...);
+  template <class Oper> static void Compute(Oper& oper, Out& out, const In& ... in)
+  {
+    out = oper(in...);
+  }
+};
+
+template<class C, class Out, class ... In> struct OperProxy<Out(C::*)(In...)>
+{
+  template<class Oper> static void Compute(Oper& oper, Out& out, const In& ... in)
+  {
+    out = oper(in...);
+  }
+};
+
+template<class C, class Out, class ... In> struct OperProxy<Out(C::*)(In...) const>
+{
+  template<class Oper> static void Compute(Oper& oper, Out& out, const In& ... in)
+  {
+    out = oper(in...);
+  }
+};
+
+template<class Out, class ... In> struct OperProxy<void(*)(Out&, In...)>
+{
+  template<class Oper> static void Compute(Oper& oper, Out& out, const In& ... in)
+  {
+    oper(out,in...);
+  }
+};
+
+template<class C, class Out, class ... In> struct OperProxy<void(C::*)(Out&, In...)>
+{
+  template<class Oper> static void Compute(Oper& oper, Out& out, const In& ... in)
+  {
+    oper(out,in...);
+  }
+};
+
+template<class C, class Out, class ... In> struct OperProxy<void(C::*)(Out&, In...) const>
+{
+  template template<class Oper> static void Compute(Oper& oper, Out& out, const In& ... in)
+  {
+    oper(out,in...);
+  }
+};
+
+
+// Will be easier to write in c++17 with std::apply and fold expressions
+template <class Tuple, class Out, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, Out & out, const Oper & oper,std::index_sequence<Is...>)
+{
+  OperProxy<Oper>::Compute(oper,out,GetProxy<typename std::remove_reference<decltype(std::get<Is>(t))>::type>::Get(std::get<Is>(t))...);
 }
 
 // Will be easier to write in c++17 with std::apply and fold expressions
-template <class Oper, typename ... Args> auto CallOperator(const Oper& oper, std::tuple<Args...> & t)
+template <class Out, class Oper, typename ... Args> auto CallOperator(Out & out, const Oper& oper, std::tuple<Args...> & t)
 {
-  return CallOperatorImpl(t,oper,std::make_index_sequence<sizeof...(Args)>{});
+  CallOperatorImpl(t,out,oper,std::make_index_sequence<sizeof...(Args)>{});
 }
 
 // Variadic move of iterators
@@ -229,12 +280,17 @@ FunctorImageFilter<TFunction>
   itk::ProgressReporter p(this,threadId,outputRegionForThread.GetNumberOfPixels());
 
   auto inputIterators = functor_filter_details::MakeIterators(this->GetVariadicInputs(),outputRegionForThread, m_Radius,InputHasNeighborhood{});
+
+  // Build a default value
+  typename OutputImageType::PixelType outputValueHolder;
+  itk::NumericTraits<typename OutputImageType::PixelType>::SetLength(outputValueHolder,this->GetOutput()->GetNumberOfComponentsPerPixel());
   
   while(!outIt.IsAtEnd())
     {
     for(;!outIt.IsAtEndOfLine();++outIt,functor_filter_details::MoveIterators(inputIterators))
       {
-      outIt.Set(functor_filter_details::CallOperator(m_Functor,inputIterators));
+      functor_filter_details::CallOperator(outputValueHolder,m_Functor,inputIterators);
+      outIt.Set(outputValueHolder);
       // Update progress
       p.CompletedPixel();
       }

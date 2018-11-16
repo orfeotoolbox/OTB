@@ -200,6 +200,32 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
+/// Partial specialisation for void(*)(R &,T...)
+template <typename R, typename... T> struct FunctorFilterSuperclassHelper<void(*)(R&, T...)>
+{
+  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
+  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+};
+
+/// Partial specialisation for void(C::*)(R&,T...) const
+template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<void(C::*)(R&,T...) const>
+{
+  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
+  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+};
+
+/// Partial specialisation for void(C::*)(R&,T...)
+template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<void(C::*)(R&,T...)>
+{ 
+  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
+  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
+  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+};
+
+
+
 /**
  * \brief This helper method builds a fully functional FunctorImageFilter from a functor instance
  * 
