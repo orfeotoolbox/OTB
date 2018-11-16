@@ -162,13 +162,6 @@ template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
   using ImageType = otb::VectorImage<T>;
 };
 
-// /// Partial specialisation for const T &
-// template <class T> struct ImageTypeDeduction<const T &>
-// {
-//   using ImageType = typename ImageTypeDeduction<T>::ImageType;
-// };
-
-
 /**
 * \struct FunctorFilterSuperclassHelper 
 * \brief Struct allowing to derive the superclass prototype for the
@@ -208,7 +201,7 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
 };
 
 /**
- * brief This helper method builds a fully functional FunctorImageFilter from a functor instance
+ * \brief This helper method builds a fully functional FunctorImageFilter from a functor instance
  * 
  * Functor can be any operator() that matches the following:
  * - Accepts any number of arguments of T,
