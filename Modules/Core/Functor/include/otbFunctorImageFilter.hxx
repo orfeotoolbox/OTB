@@ -279,6 +279,7 @@ FunctorImageFilter<TFunction>
   itk::ImageScanlineIterator<OutputImageType> outIt(this->GetOutput(),outputRegionForThread);
   itk::ProgressReporter p(this,threadId,outputRegionForThread.GetNumberOfPixels());
 
+  // This will build a tuple of iterators to be used
   auto inputIterators = functor_filter_details::MakeIterators(this->GetVariadicInputs(),outputRegionForThread, m_Radius,InputHasNeighborhood{});
 
   // Build a default value
@@ -287,8 +288,11 @@ FunctorImageFilter<TFunction>
   
   while(!outIt.IsAtEnd())
     {
+    // MoveIterartors will ++ all iterators in the tuple
     for(;!outIt.IsAtEndOfLine();++outIt,functor_filter_details::MoveIterators(inputIterators))
       {
+      // This will call the operator with inputIterators Get() results
+      // and fill outputValueHolder with the result.
       functor_filter_details::CallOperator(outputValueHolder,m_Functor,inputIterators);
       outIt.Set(outputValueHolder);
       // Update progress

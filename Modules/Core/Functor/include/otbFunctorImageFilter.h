@@ -141,8 +141,6 @@ template <class T> struct PixelTypeDeduction<T &>
   using PixelType = typename PixelTypeDeduction<T>::PixelType;
 };
 
-  
-
 /** 
  * \struct ImageTypeDeduction
  * \brief Helper struct to derive ImageType from template parameter
@@ -179,8 +177,14 @@ template <typename T> struct FunctorFilterSuperclassHelper : public FunctorFilte
 /// Partial specialisation for R(*)(T...)
 template <typename R, typename... T> struct FunctorFilterSuperclassHelper<R(*)(T...)>
 {
+  // OutputImageType is derived from return type R
   using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
+
+  // PixelTypeDeduction<T> discards the itk::Neighborhood if present
+  // ImageTypeDeduction<> knows when to build VectorImage or Image for
+  // valid pixel type.
   using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
+  // InputHasNeighborhood is a tuple expanding IsNeighborhood<T>
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
@@ -229,12 +233,13 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
 /**
  * \brief This helper method builds a fully functional FunctorImageFilter from a functor instance
  * 
- * Functor can be any operator() that matches the following:
+ * Functor can be any operator() (const or non-const) that matches the following:
  * - Accepts any number of arguments of T,
  * (const) itk::VariableLengthVector<T> (&),(const)
  * itk::Neighborhood<T> (&), (const)
  * itk::Neighborhood<itk::VariableLengthVector<T>> (&) with T a scalar type
  * - returns T or itk::VariableLengthVector<T>, with T a scalar type
+ * or returns void and has first parameter as output (i.e. T& or itk::VariableLengthVector<T>&)
  *
  * The returned filter is ready to use. Inputs can be set through the
  * SetVariadicInputs() method (see VariadicInputsImageFilter class for
@@ -257,6 +262,16 @@ template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2>
 /** \class FunctorImageFilter
  * \brief A generic functor filter templated by its functor
  * 
+ * TFunction can be any operator() (const or non-const) that matches the following:
+ * - Accepts any number of arguments of T,
+ * (const) itk::VariableLengthVector<T> (&),(const)
+ * itk::Neighborhood<T> (&), (const)
+ * itk::Neighborhood<itk::VariableLengthVector<T>> (&) with T a scalar type
+ * - returns T or itk::VariableLengthVector<T>, with T a scalar type
+ * or returns void and has first parameter as output (i.e. T& or itk::VariableLengthVector<T>&)
+ *
+ * All image types will be deduced from the TFunction operator().
+ *
  * \sa VariadicInputsImageFilter
  * \sa NewFunctorFilter
  * 
@@ -280,8 +295,6 @@ public:
   using Superclass = typename FunctorFilterSuperclassHelper<TFunction>::FilterType;
   using OutputImageType = typename Superclass::OutputImageType;
   using OutputImageRegionType = typename OutputImageType::RegionType;
-  
-  using ProcessObjectType = itk::ProcessObject;
 
   // A tuple of bool of the same size as the number of arguments in
   // the functor
@@ -291,7 +304,7 @@ public:
   using Superclass::NumberOfInputs;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FunctorImageFilter, ImageToImageFilter);
+  itkTypeMacro(FunctorImageFilter, VariadicInputsImageFilter);
   
   /** Get the functor object.
    * 
