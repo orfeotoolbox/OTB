@@ -28,7 +28,10 @@ namespace otb
 
 namespace Functor
 {
-
+/**
+ * \class VariadicAdd
+ * \brief This functor adds any number of compile time scalar inputs 
+ */
 template <typename TOut, typename ...TIns> struct VariadicAdd
 {
   auto operator()(TIns... ins) const
