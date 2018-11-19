@@ -29,6 +29,7 @@
 
 #include <numeric>
 #include <complex>
+#include <math.h>
 
 // static tests
 
@@ -345,6 +346,12 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   filter->SetVariadicInputs(vimage,image);
   std::cout<<filter->GetVariadicInput<0>()<< filter->GetVariadicInput<1>()<<std::endl;
 
+  // Test FunctorImageFilter with a built-in math function
+  using CosType = double(double);
+  auto filterCos = NewFunctorFilter(static_cast<CosType *>(std::cos));
+  filterCos->SetVariadicInputs(image);
+  filterCos->Update();
+    
   
   // test FunctorImageFilter with a lambda
   double scale = 10.;  
