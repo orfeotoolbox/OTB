@@ -117,14 +117,18 @@ template <typename T> struct TypesCheck
 
   filter->SetVariadicInputs(in);
   filter->SetInput1(in);
-  filter->template SetVariadicInput<0>(in); // template keyword to avoid C++ parse ambiguity
+  filter->template SetVariadicInput<0>(in); // template keyword to
+                                            // avoid C++ parse
+                                            // ambiguity
+  auto res = filter->template GetVariadicInput<0>();
   filter->Update();
 
   // Test named input version
   struct tag{};
   using inputNames = std::tuple<tag>;
   auto filter1 = NewFunctorFilter<decltype(functor),inputNames>(functor);
-  filter1->template SetVNamedInput<tag>(in);
+  filter1->template SetVariadicNamedInput<tag>(in);
+  res = filter1->template GetVariadicNamedInput<tag>();
   filter1->Update();
   
   // Test with simple lambda
@@ -308,10 +312,10 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   struct pan {};
   using Names = std::tuple<xs,pan>; 
    auto filterWithNames = otb::VariadicNamedInputsImageFilter<VectorImageType, Names, VectorImageType,ImageType>::New();
-   filterWithNames->SetVNamedInput<xs>(vimage);
-   filterWithNames->SetVNamedInput<pan>(image);
+   filterWithNames->SetVariadicNamedInput<xs>(vimage);
+   filterWithNames->SetVariadicNamedInput<pan>(image);
 
-   std::cout<<filterWithNames->GetVNamedInput<xs>()<< filterWithNames->GetVNamedInput<pan>()<<std::endl;
+   std::cout<<filterWithNames->GetVariadicNamedInput<xs>()<< filterWithNames->GetVariadicNamedInput<pan>()<<std::endl;
 
   
   
@@ -354,8 +358,8 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   // Test FunctorImageFilter With VariadicAdd functor
   using AddFunctorType = Functor::VariadicAdd<double, double, double>;
   auto add = NewFunctorFilter(AddFunctorType{});
-  add->SetVInput<0>(image);
-  add->SetVInput<1>(image);
+  add->SetVariadicInput<0>(image);
+  add->SetVariadicInput<1>(image);
   add->Update();
 
   // Test FunctorImageFilter with BandExtraction functor

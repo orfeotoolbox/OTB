@@ -57,13 +57,13 @@ public:
   
   itkNewMacro(Self);
   
-  template <typename Tag> void SetVNamedInput(const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value> * inputPtr)
+  template <typename Tag> void SetVariadicNamedInput(const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value> * inputPtr)
   {
     constexpr size_t idx = internal::tuple_index<Tag, TInputNameMap>::value;
     this->SetNthInput(idx,const_cast<InputImageType<idx> *>(inputPtr));
   }
   
-  template <typename Tag> const InputImageType<internal::tuple_index<Tag,TInputNameMap>::value> * GetVNamedInput()
+  template <typename Tag> const InputImageType<internal::tuple_index<Tag,TInputNameMap>::value> * GetVariadicNamedInput()
   {
     constexpr size_t idx = internal::tuple_index<Tag, TInputNameMap>::value;
     return dynamic_cast<const InputImageType<idx> *>(this->GetInput(idx));
