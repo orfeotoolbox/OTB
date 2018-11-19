@@ -103,6 +103,21 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
     }
   };
 
+  // Fake test operator non const
+  template <typename TOut,typename TIn> struct TestOperatorNonConst
+  {
+    auto operator()(const TIn&)
+    {
+      TOut res(OutputSize());
+      return res;
+    }
+    
+    constexpr size_t OutputSize(...) const
+    {
+      return 1;
+    }
+  };
+
   
   template <typename TOut, typename TIn> void TestFilter()
   {
@@ -122,11 +137,10 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   // Build and run filter
   auto functor = TestOperator<TOut,TIn>{};
   auto filter = NewFunctorFilter(functor);
-
+  
   using FilterType = typename decltype(filter)::ObjectType;
   static_assert(FilterType::NumberOfInputs == 1,"");
   static_assert(std::is_same<typename FilterType::template InputImageType<0>, InputImageType>::value, "");
-
   filter->SetVariadicInputs(in);
   filter->SetInput1(in);
   filter->template SetVariadicInput<0>(in); // template keyword to avoid C++ parse ambiguity
@@ -139,6 +153,12 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   using FilterWithVoidReturnType = typename decltype(filter)::ObjectType;
   static_assert(FilterWithVoidReturnType::NumberOfInputs == 1,"");
   static_assert(std::is_same<typename FilterWithVoidReturnType::template InputImageType<0>, InputImageType>::value, "");
+  
+  // Test with non const operator
+  auto functorNonConstOperator = TestOperatorNonConst<TOut,TIn>{};
+  auto filterWithNonConstOperator = NewFunctorFilter(functorNonConstOperator);
+  filterWithNonConstOperator->SetInput1(in);
+  filterWithNonConstOperator->Update();  
 
   filterWithVoidReturn->SetVariadicInputs(in);
   filterWithVoidReturn->SetInput1(in);
@@ -154,6 +174,10 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   auto filterWithLambda = NewFunctorFilter(lambda,1, {{0,0}});
   filterWithLambda->SetVariadicInputs(in);
   filterWithLambda->Update();
+
+  // Test with standard filter use
+  using FullFilterType = otb::FunctorImageFilter<TestOperator<TOut,TIn>>;
+  auto filter2 = FullFilterType::New();
   }
 
   TypesCheck()

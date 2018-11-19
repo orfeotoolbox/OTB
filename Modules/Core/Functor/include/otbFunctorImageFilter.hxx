@@ -190,13 +190,13 @@ template<class C, class Out, class ... In> struct OperProxy<void(C::*)(Out&, In.
 
 
 // Will be easier to write in c++17 with std::apply and fold expressions
-template <class Tuple, class Out, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, Out & out, const Oper & oper,std::index_sequence<Is...>)
+template <class Tuple, class Out, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, Out & out, Oper & oper,std::index_sequence<Is...>)
 {
   OperProxy<Oper>::Compute(oper,out,GetProxy<typename std::remove_reference<decltype(std::get<Is>(t))>::type>::Get(std::get<Is>(t))...);
 }
 
 // Will be easier to write in c++17 with std::apply and fold expressions
-template <class Out, class Oper, typename ... Args> auto CallOperator(Out & out, const Oper& oper, std::tuple<Args...> & t)
+template <class Out, class Oper, typename ... Args> auto CallOperator(Out & out, Oper& oper, std::tuple<Args...> & t)
 {
   CallOperatorImpl(t,out,oper,std::make_index_sequence<sizeof...(Args)>{});
 }
