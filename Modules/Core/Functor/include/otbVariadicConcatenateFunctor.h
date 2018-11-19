@@ -86,7 +86,7 @@ template<typename TOut, typename ...TIns> struct VariadicConcatenate
   auto operator()(const TIns &...  ins) const
   {
     itk::VariableLengthVector<TOut> out;
-    variadic_concatenate_details::concatenateVectors(out, internal::toVector(ins)...);
+    variadic_concatenate_details::concatenateVectors(out, variadic_concatenate_details::toVector(ins)...);
     
     return out;
   }
