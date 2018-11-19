@@ -24,12 +24,14 @@
 #include "otbVariadicNamedInputsImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
+#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
+#include "itkFixedArray.h"
 #include "itkDefaultConvertPixelTraits.h"
 #include <type_traits>
 
 namespace otb
 {
-
 /**  
  * \struct IsNeighborhood 
  * \brief Struct testing if T is a neighborhood
@@ -59,6 +61,52 @@ template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
   static constexpr bool value = true;
 };
 
+/**
+ * \struct IsSuitableType
+ * \brief Helper struct to check if a type can be used as pixel type.
+ *
+ * ::value maps to true if type can be used and false otherwhise.
+ */
+template <class T> struct IsSuitableType
+{
+  static constexpr bool value = std::is_scalar<T>::value;
+};
+
+/// Unwrap complex
+template <class T> struct IsSuitableType<std::complex<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
+/// Unwrap VariableLengthVector
+template <class T> struct IsSuitableType<itk::VariableLengthVector<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
+/// Unwrap FixedArray
+template <class T, size_t N> struct IsSuitableType<itk::FixedArray<T,N>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
+/// Unwrap RGBPixel
+template <class T> struct IsSuitableType<itk::RGBPixel<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
+/// Unwrap RGBAPixel
+template <class T> struct IsSuitableType<itk::RGBAPixel<T>> {
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
+/// Discard const qualifier
+template <class T> struct IsSuitableType<const T>{
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
+/// Discard reference
+template <class T> struct IsSuitableType<T &>{
+  static constexpr bool value = IsSuitableType<T>::value;
+};
+
 
 /**
  * \struct PixelTypeDeduction
@@ -70,20 +118,30 @@ template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
 */
 template <class T> struct PixelTypeDeduction
 {
+  static_assert(IsSuitableType<T>::value,"T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
 };
 
 /// Partial specialisation for itk::Neighborhood<T>
 template <class T> struct PixelTypeDeduction<itk::Neighborhood<T>>
 {
+  static_assert(IsSuitableType<T>::value,"T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
 };
 
-/// Partial specialisation for const itk::Neighborhood<T> &
-template <class T> struct PixelTypeDeduction<const itk::Neighborhood<T>&>
+/// Discard const qualifier
+template <class T> struct PixelTypeDeduction<const  T>
 {
-  using PixelType = T;
+  using PixelType = typename PixelTypeDeduction<T>::PixelType;
 };
+
+/// Discard reference
+template <class T> struct PixelTypeDeduction<T &>
+{
+  using PixelType = typename PixelTypeDeduction<T>::PixelType;
+};
+
+  
 
 /** 
  * \struct ImageTypeDeduction
@@ -102,12 +160,6 @@ template <class T> struct ImageTypeDeduction
 template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
 {
   using ImageType = otb::VectorImage<T>;
-};
-
-/// Partial specialisation for const T &
-template <class T> struct ImageTypeDeduction<const T &>
-{
-  using ImageType = typename ImageTypeDeduction<T>::ImageType;
 };
 
 /**
@@ -139,7 +191,7 @@ template <typename R, typename... T, typename TNameMap> struct FunctorFilterSupe
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
-// Partial specialisation for R(C::*)(T...) const
+/// Partial specialisation for R(C::*)(T...) const
 template <typename C, typename R, typename... T, typename TNameMap> struct FunctorFilterSuperclassHelper<R(C::*)(T...) const, TNameMap>
 {
   using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
@@ -152,9 +204,9 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
 };
 
-// Partial specialisation for R(C::*)(T...)
+/// Partial specialisation for R(C::*)(T...)
 template <typename C, typename R, typename... T, typename TNameMap> struct FunctorFilterSuperclassHelper<R(C::*)(T...), TNameMap>
-{
+{ 
   using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
   template <typename V> using InputImageType = typename ImageTypeDeduction<typename PixelTypeDeduction<V>::PixelType>::ImageType;
   
@@ -166,7 +218,7 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
 };
 
 /**
- * brief This helper method builds a fully functional FunctorImageFilter from a functor instance
+ * \brief This helper method builds a fully functional FunctorImageFilter from a functor instance
  * 
  * Functor can be any operator() that matches the following:
  * - Accepts any number of arguments of T,
@@ -176,7 +228,7 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
  * - returns T or itk::VariableLengthVector<T>, with T a scalar type
  *
  * The returned filter is ready to use. Inputs can be set through the
- * SetVInputs() method (see VariadicInputsImageFilter class for
+ * SetVariadicInputs() method (see VariadicInputsImageFilter class for
  * details)
  * 
  * \param f the Functor to build the filter from

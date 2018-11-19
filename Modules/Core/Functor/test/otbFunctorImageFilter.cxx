@@ -40,31 +40,41 @@ template <typename T> struct TypesCheck
   using ScalarType                    = T;
   using ImageType                     = otb::Image<T>;
   using VectorType                    = itk::VariableLengthVector<ScalarType>;
+  using FixedArrayType                = itk::FixedArray<ScalarType,4>;
+  using RGBPixelType                  = itk::RGBPixel<ScalarType>;
+  using RGBAPixelType                 = itk::RGBAPixel<ScalarType>;
   using VectorImageType               = otb::VectorImage<ScalarType>;
   using NeighborhoodType              = itk::Neighborhood<ScalarType>;
   using VectorNeighborhoodType        = itk::Neighborhood<VectorType>;
-  
+
   // Test IsNeighborhood struct
-  static_assert(!otb::IsNeighborhood<ScalarType>::value,"");
-  static_assert(!otb::IsNeighborhood<VectorType>::value,"");
-  static_assert(otb::IsNeighborhood<NeighborhoodType>::value,"");
-  static_assert(otb::IsNeighborhood<VectorNeighborhoodType>::value,"");
-  static_assert(otb::IsNeighborhood<const NeighborhoodType &>::value,"");
-  static_assert(otb::IsNeighborhood<const VectorNeighborhoodType &>::value,"");
+  template <typename U> struct CheckIsNeighborhood
+  {
+    static constexpr bool value = !otb::IsNeighborhood<U>::value && otb::IsNeighborhood<itk::Neighborhood<U> >::value;
+  };
+    
+  static_assert(CheckIsNeighborhood<T>::value,"");
+  static_assert(CheckIsNeighborhood<itk::VariableLengthVector<T>>::value,"");
+  static_assert(CheckIsNeighborhood<itk::FixedArray<T,4>>::value,"");
+  static_assert(CheckIsNeighborhood<itk::RGBPixel<T>>::value,"");
+  static_assert(CheckIsNeighborhood<itk::RGBAPixel<T>>::value,"");
 
   // Test PixelTypeDeduction struct
-  static_assert(std::is_same<typename PixelTypeDeduction<ScalarType>::PixelType,ScalarType>::value,"");
-  static_assert(std::is_same<typename PixelTypeDeduction<VectorType>::PixelType,VectorType>::value,"");
-  static_assert(std::is_same<typename PixelTypeDeduction<NeighborhoodType>::PixelType,ScalarType>::value,"");
-  static_assert(std::is_same<typename PixelTypeDeduction<VectorNeighborhoodType>::PixelType,VectorType>::value,"");
-  static_assert(std::is_same<typename PixelTypeDeduction<const NeighborhoodType &>::PixelType,ScalarType>::value,"");
-  static_assert(std::is_same<typename PixelTypeDeduction<const VectorNeighborhoodType &>::PixelType,VectorType>::value,"");
+  template<typename U> struct CheckPixelTypeDeduction
+  {
+    static constexpr bool value = std::is_same<typename PixelTypeDeduction<U>::PixelType,U>::value
+      && std::is_same<typename PixelTypeDeduction<itk::Neighborhood<U>>::PixelType,U>::value;
+  };
 
+  static_assert(CheckPixelTypeDeduction<T>::value,"");
+  static_assert(CheckPixelTypeDeduction<itk::VariableLengthVector<T>>::value,"");
+  static_assert(CheckPixelTypeDeduction<itk::FixedArray<T,4>>::value,"");
+  static_assert(CheckPixelTypeDeduction<itk::RGBPixel<T>>::value,"");
+  static_assert(CheckPixelTypeDeduction<itk::RGBAPixel<T>>::value,"");
+  
   // Test ImageTypeDeduction struct
   static_assert(std::is_same<typename ImageTypeDeduction<ScalarType>::ImageType,ImageType>::value,"");
   static_assert(std::is_same<typename ImageTypeDeduction<VectorType>::ImageType,VectorImageType>::value,"");
-  static_assert(std::is_same<typename ImageTypeDeduction<const ScalarType &>::ImageType,ImageType>::value,"");
-  static_assert(std::is_same<typename ImageTypeDeduction<const VectorType &>::ImageType,VectorImageType>::value,"");
 
   // Fake test operator
   template <typename TOut,typename TIn> struct TestOperator
@@ -105,9 +115,9 @@ template <typename T> struct TypesCheck
   static_assert(FilterType::NumberOfInputs == 1,"");
   static_assert(std::is_same<typename FilterType::template InputImageType<0>, InputImageType>::value, "");
 
-  filter->SetVInputs(in);
+  filter->SetVariadicInputs(in);
   filter->SetInput1(in);
-  filter->template SetVInput<0>(in); // template keyword to avoid C++ parse ambiguity
+  filter->template SetVariadicInput<0>(in); // template keyword to avoid C++ parse ambiguity
   filter->Update();
 
   // Test named input version
@@ -116,6 +126,16 @@ template <typename T> struct TypesCheck
   auto filter1 = NewFunctorFilter<decltype(functor),inputNames>(functor);
   filter1->template SetVNamedInput<tag>(in);
   filter1->Update();
+  
+  // Test with simple lambda
+  auto lambda = [] (const TIn &)
+                {
+                  TOut ret(1);
+                  return ret;
+                };
+  auto filterWithLambda = NewFunctorFilter(lambda,1, {{0,0}});
+  filterWithLambda->SetVariadicInputs(in);
+  filterWithLambda->Update();
   }
 
   TypesCheck()
@@ -128,7 +148,8 @@ template <typename T> struct TypesCheck
   } 
 };
 
-auto checksDouble = TypesCheck<double>{};
+auto checksInt     = TypesCheck<int>{};
+auto checksDouble  = TypesCheck<double>{};
 auto checksComplex = TypesCheck<std::complex<double>>{};
 
 // Example functors
@@ -273,14 +294,14 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 
   // Test VariadicInputsImageFilter
   auto filter = otb::VariadicInputsImageFilter<VectorImageType,VectorImageType,ImageType>::New();
-  filter->SetVInput<0>(vimage);
-  filter->SetVInput<1>(image);
+  filter->SetVariadicInput<0>(vimage);
+  filter->SetVariadicInput<1>(image);
 
   filter->SetInput1(vimage);
   filter->SetInput2(image);
 
-  filter->SetVInputs(vimage,image);
-  std::cout<<filter->GetVInput<0>()<< filter->GetVInput<1>()<<std::endl;
+  filter->SetVariadicInputs(vimage,image);
+  std::cout<<filter->GetVariadicInput<0>()<< filter->GetVariadicInput<1>()<<std::endl;
 
   // Test VariadicNamedInputsImageFilter
   struct xs {};
@@ -301,7 +322,7 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
                  return scale*p;
                };
   auto filterLambda = NewFunctorFilter(Lambda1);
-  filterLambda->SetVInputs(image);
+  filterLambda->SetVariadicInputs(image);
   filterLambda->Update();
 
   // test FunctorImageFilter with a lambda that returns a
@@ -321,13 +342,13 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   // In this case, we use the helper function which allows to specify
   // the number of outputs
   auto filterLambda2  = NewFunctorFilter(Lambda2,vimage->GetNumberOfComponentsPerPixel(),{{3,3}});
-  filterLambda2->SetVInputs(image);
+  filterLambda2->SetVariadicInputs(image);
   filterLambda2->Update();
   
   // Test FunctorImageFilter with the VariadicConcatenate operator
   using ConcatFunctorType = Functor::VariadicConcatenate<double, double, itk::VariableLengthVector<double> >;
   auto concatenate = NewFunctorFilter(ConcatFunctorType{});
-  concatenate->SetVInputs(image,vimage);
+  concatenate->SetVariadicInputs(image,vimage);
   concatenate->Update();
   
   // Test FunctorImageFilter With VariadicAdd functor
@@ -335,37 +356,36 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   auto add = NewFunctorFilter(AddFunctorType{});
   add->SetVInput<0>(image);
   add->SetVInput<1>(image);
-  add->SetVInputs(image,image);
   add->Update();
 
   // Test FunctorImageFilter with BandExtraction functor
   using ExtractFunctorType = BandExtraction<double,double>;
   ExtractFunctorType extractFunctor{1,2};
   auto extract = NewFunctorFilter(extractFunctor);
-  extract->SetVInputs(vimage);
+  extract->SetVariadicInputs(vimage);
   extract->Update();
   
   // Test FunctorImageFilter With Mean functor
   using MeanFunctorType = Mean<double,double>;
   auto median = NewFunctorFilter(MeanFunctorType{},{{2,2}});
-  median->SetVInputs(image);
+  median->SetVariadicInputs(image);
   median->Update();
 
   // Test FunctorImageFilter with MaxInEachChannel
   using MaxInEachChannelType = MaxInEachChannel<double>;
   auto maxInEachChannel = NewFunctorFilter(MaxInEachChannelType{},{{3,3}});
-  maxInEachChannel->SetVInputs(vimage);
+  maxInEachChannel->SetVariadicInputs(vimage);
   maxInEachChannel->Update();
 
   // Test FunctorImageFilter with Module (complex=
   using ModulusType = VectorModulus<double>;
   auto modulus = NewFunctorFilter(ModulusType{});
-  modulus->SetVInputs(cvimage);
+  modulus->SetVariadicInputs(cvimage);
   modulus->Update();
 
   auto LambdaComplex = [] (const std::complex<double> & in) {return std::arg(in);};
   auto argFilter = NewFunctorFilter(LambdaComplex);
-  argFilter->SetVInputs(cimage);
+  argFilter->SetVariadicInputs(cimage);
   argFilter->Update();
   
  return EXIT_SUCCESS;
