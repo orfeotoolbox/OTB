@@ -285,21 +285,24 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(FunctorImageFilter, ImageToImageFilter);
   
-  
-  /** Get the functor object.  The functor is returned by reference.
-   * (Functors do not have to derive from itk::LightObject, so they do
-   * not necessarily have a reference count. So we cannot return a
-   * SmartPointer.) */
-  FunctorType& GetFunctor()
+  /** Get the functor object.
+   * 
+   *  \return A non-const reference to the Functor in use. Note that
+   *  this call will call the Modified() function of the filter, which
+   *  will trigger a full output computation upon Update(). For
+   *  inspection only, prefer using GetFunctor()
+   */
+  FunctorType& GetModifiableFunctor()
   {
     this->Modified();
     return m_Functor;
   }
 
-  /** Get the functor object.  The functor is returned by reference.
-   * (Functors do not have to derive from itk::LightObject, so they do
-   * not necessarily have a reference count. So we cannot return a
-   * SmartPointer.) */
+  /** Get the functor object.  
+   * 
+   *  \return A const reference to the Functor in use. For a
+   *  modifiable version of the functor, see GetModifiableFunctor().
+   */
   const FunctorType& GetFunctor() const
   {
     return m_Functor;
