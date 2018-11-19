@@ -157,6 +157,8 @@ public:
       unsigned long startLine;
       TimeType      azimuthStopTime;
       unsigned long endLine;
+      unsigned long startSample;
+      unsigned long endSample;
       friend std::ostream & operator<<(std::ostream & os, const BurstRecordType & v)
       {
          return os << "{ azimuthStartTime: " << v.azimuthStartTime
