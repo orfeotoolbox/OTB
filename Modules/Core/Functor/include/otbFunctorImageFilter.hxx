@@ -139,13 +139,13 @@ template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
 };
 
 // Will be easier to write in c++17 with std::apply and fold expressions
-template <class Tuple, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, const Oper & oper,std::index_sequence<Is...>)
+template <class Tuple, class Oper, size_t...Is> auto CallOperatorImpl(Tuple& t, Oper & oper,std::index_sequence<Is...>)
 {
   return oper(GetProxy<typename std::remove_reference<decltype(std::get<Is>(t))>::type>::Get(std::get<Is>(t))...);
 }
 
 // Will be easier to write in c++17 with std::apply and fold expressions
-template <class Oper, typename ... Args> auto CallOperator(const Oper& oper, std::tuple<Args...> & t)
+template <class Oper, typename ... Args> auto CallOperator(Oper& oper, std::tuple<Args...> & t)
 {
   return CallOperatorImpl(t,oper,std::make_index_sequence<sizeof...(Args)>{});
 }
