@@ -24,8 +24,8 @@
 #include "otbFunctorImageFilter.h"
 #include "itkProgressReporter.h"
 #include "itkConstNeighborhoodIterator.h"
-#include "itkImageScanlineIterator.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkImageScanlineIterator.h"
 
 namespace otb
 {
@@ -34,12 +34,15 @@ namespace functor_filter_details
 // Variadic SetRequestedRegion
 
 // This function sets the requested region for one image
-template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageRegion<2> & region, const itk::Size<2>& radius)
+template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageRegion<2> & region, const itk::Size<2>& radius, bool pad)
 {
   assert(img&&"Input image is a nullptr");
 
   auto currentRegion = region;
-  currentRegion.PadByRadius(radius);
+
+  // Hopefully this will be optimized out by compiler
+  if(pad)
+    currentRegion.PadByRadius(radius);
 
   // The ugly cast in all ITK filters
   T * nonConstImg = const_cast<T*>(img);
@@ -63,15 +66,15 @@ template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageReg
 }
 
 // Will be easier to write in c++17 with std::apply and fold expressions
-template <class Tuple, size_t...Is> auto SetInputRequestedRegionsImpl(Tuple & t, const itk::ImageRegion<2> & region, std::index_sequence<Is...>,const itk::Size<2> & radius)
+template <typename HasNeighborhood, class Tuple, size_t...Is> auto SetInputRequestedRegionsImpl(Tuple & t, const itk::ImageRegion<2> & region, std::index_sequence<Is...>,const itk::Size<2> & radius)
 {
-  return std::make_tuple(SetInputRequestedRegion(std::get<Is>(t),region,radius)...);
+  return std::make_tuple(SetInputRequestedRegion(std::get<Is>(t),region,radius,typename std::tuple_element<Is,HasNeighborhood>::type::value_type())...);
 }
 
 // Will be easier to write in c++17 with std::apply and fold expressions
-template <typename... T> auto SetInputRequestedRegions(std::tuple<T...> && t,const itk::ImageRegion<2> & region, const itk::Size<2> & radius)
+template <typename HasNeighborhood,typename... T> auto SetInputRequestedRegions(std::tuple<T...> && t,const itk::ImageRegion<2> & region, const itk::Size<2> & radius)
 {
-  return SetInputRequestedRegionsImpl(t,region,std::make_index_sequence<sizeof...(T)>{},radius);
+  return SetInputRequestedRegionsImpl<HasNeighborhood>(t,region,std::make_index_sequence<sizeof...(T)>{},radius);
 }
 
 // Will be easier to write in c++17 with std::apply and fold expressions
@@ -247,7 +250,7 @@ FunctorImageFilter<TFunction>
   // Propagate to each variadic inputs, including possible radius
   // TODO: For now all inputs are padded with the radius, even if they
   // are not neighborhood based
-  functor_filter_details::SetInputRequestedRegions(this->GetVariadicInputs(),requestedRegion, m_Radius);
+  functor_filter_details::SetInputRequestedRegions<InputHasNeighborhood>(this->GetVariadicInputs(),requestedRegion, m_Radius);
 }
 
 template <class TFunction>
