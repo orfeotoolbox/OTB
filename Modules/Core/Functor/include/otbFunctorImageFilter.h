@@ -21,7 +21,7 @@
 #ifndef otbFunctorImageFilter_h
 #define otbFunctorImageFilter_h
 
-#include "otbVariadicInputsImageFilter.h"
+#include "otbVariadicNamedInputsImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkRGBPixel.h"
@@ -172,60 +172,82 @@ template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
 * - InputHasNeighborhood a tuple of N false_type or true_type to denote
 * - if Ith arg of operator() expects a neighborhood.
 */
-template <typename T> struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<decltype(&T::operator())> {};
 
-/// Partial specialisation for R(*)(T...)
-template <typename R, typename... T> struct FunctorFilterSuperclassHelper<R(*)(T...)>
+
+template <typename T, typename TNameMap> struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<decltype(&T::operator()),TNameMap> {};
+
+namespace functor_filter_details
+{
+template <typename R, typename TNameMap, typename...T> struct FunctorFilterSuperclassHelperImpl
 {
   // OutputImageType is derived from return type R
   using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
+  // InputImageType is derived using pixel type deduction and image
+  // type deduction
+  template <typename V> using InputImageType = typename ImageTypeDeduction<typename PixelTypeDeduction<V>::PixelType>::ImageType;
 
-  // PixelTypeDeduction<T> discards the itk::Neighborhood if present
-  // ImageTypeDeduction<> knows when to build VectorImage or Image for
-  // valid pixel type.
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
-  // InputHasNeighborhood is a tuple expanding IsNeighborhood<T>
+  // Filter type is either VariadicInputsImageFilter or
+  // VariadicNamedInputsImageFilter depending on if there is a
+  // TNameMap or not
+  using FilterType = typename std::conditional<std::is_void<TNameMap>::value,
+                                               VariadicInputsImageFilter<OutputImageType,InputImageType<T>...>,
+                                               VariadicNamedInputsImageFilter<OutputImageType,TNameMap,InputImageType<T>...>>::type;
+
+  // InputHasNeighborhood is derived from IsNeighborhood
   using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+};
+} // End namespace functor_filter_details
+
+/// Partial specialisation for R(*)(T...)
+template <typename R, typename... T, typename TNameMap> struct FunctorFilterSuperclassHelper<R(*)(T...),TNameMap>
+{
+  using OutputImageType      = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::OutputImageType;
+  using FilterType           = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::FilterType;
+  using InputHasNeighborhood = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::InputHasNeighborhood;
 };
 
 /// Partial specialisation for R(C::*)(T...) const
-template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...) const>
+template <typename C, typename R, typename... T, typename TNameMap> struct FunctorFilterSuperclassHelper<R(C::*)(T...) const, TNameMap>
 {
-  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
-  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+  using OutputImageType      = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::OutputImageType;
+  using FilterType           = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::FilterType;
+  using InputHasNeighborhood = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::InputHasNeighborhood;
+
 };
 
 /// Partial specialisation for R(C::*)(T...)
-template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<R(C::*)(T...)>
-{ 
-  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
-  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+template <typename C, typename R, typename... T, typename TNameMap> struct FunctorFilterSuperclassHelper<R(C::*)(T...), TNameMap>
+{
+  using OutputImageType      = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::OutputImageType;
+  using FilterType           = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::FilterType;
+  using InputHasNeighborhood = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::InputHasNeighborhood;
+
 };
 
 /// Partial specialisation for void(*)(R &,T...)
-template <typename R, typename... T> struct FunctorFilterSuperclassHelper<void(*)(R&, T...)>
+template <typename R, typename... T, typename TNameMap> struct FunctorFilterSuperclassHelper<void(*)(R&, T...), TNameMap>
 {
-  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
-  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+  using OutputImageType      = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::OutputImageType;
+  using FilterType           = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::FilterType;
+  using InputHasNeighborhood = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::InputHasNeighborhood;
+
 };
 
 /// Partial specialisation for void(C::*)(R&,T...) const
-template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<void(C::*)(R&,T...) const>
+template <typename C, typename R, typename... T, typename TNameMap> struct FunctorFilterSuperclassHelper<void(C::*)(R&,T...) const, TNameMap>
 {
-  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
-  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+  using OutputImageType      = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::OutputImageType;
+  using FilterType           = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::FilterType;
+  using InputHasNeighborhood = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::InputHasNeighborhood;
+
 };
 
 /// Partial specialisation for void(C::*)(R&,T...)
-template <typename C, typename R, typename... T> struct FunctorFilterSuperclassHelper<void(C::*)(R&,T...)>
+template <typename C, typename R, typename... T, typename TNameMap> struct FunctorFilterSuperclassHelper<void(C::*)(R&,T...), TNameMap>
 { 
-  using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
-  using FilterType = VariadicInputsImageFilter<OutputImageType,typename ImageTypeDeduction<typename PixelTypeDeduction<T>::PixelType>::ImageType...>;
-  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+  using OutputImageType      = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::OutputImageType;
+  using FilterType           = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::FilterType;
+  using InputHasNeighborhood = typename functor_filter_details::FunctorFilterSuperclassHelperImpl<R,TNameMap,T...>::InputHasNeighborhood;
 };
 
 
@@ -256,7 +278,7 @@ template <typename C, typename R, typename... T> struct FunctorFilterSuperclassH
  * provided it returns a scalar type. If your lambda returns a
  * VariableLengthVector, see the other NewFunctorFilter implementation.
  */
-template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius = {{0,0}});
+template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius = {{0,0}});
 
 
 /** \class FunctorImageFilter
@@ -279,9 +301,9 @@ template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2>
  *
  * \ingroup OTBFunctor
 */
-template <class TFunction>
+template <class TFunction, class TNameMap = void>
     class ITK_EXPORT FunctorImageFilter
-  : public FunctorFilterSuperclassHelper<TFunction>::FilterType
+  : public FunctorFilterSuperclassHelper<TFunction, TNameMap>::FilterType
 {
 
 public:
@@ -292,13 +314,14 @@ public:
   using ConstPointer = itk::SmartPointer<const Self>;
 
   // Superclass through the helper struct
-  using Superclass = typename FunctorFilterSuperclassHelper<TFunction>::FilterType;
+  using SuperclassHelper = FunctorFilterSuperclassHelper<TFunction,TNameMap>;
+  using Superclass = typename SuperclassHelper::FilterType;
   using OutputImageType = typename Superclass::OutputImageType;
   using OutputImageRegionType = typename OutputImageType::RegionType;
 
   // A tuple of bool of the same size as the number of arguments in
   // the functor
-  using InputHasNeighborhood = typename FunctorFilterSuperclassHelper<TFunction>::InputHasNeighborhood;
+  using InputHasNeighborhood = typename SuperclassHelper::InputHasNeighborhood;
   using InputTypesTupleType = typename Superclass::InputTypesTupleType;
   template<size_t I> using InputImageType = typename Superclass::template InputImageType<I>;
   using Superclass::NumberOfInputs;
@@ -338,7 +361,7 @@ protected:
 
 private:
   /// Actual creation of the filter is handled by this free function
-  friend auto NewFunctorFilter<TFunction>(const TFunction& f, itk::Size<2> radius);
+  friend auto NewFunctorFilter<TFunction,TNameMap>(const TFunction& f, itk::Size<2> radius);
 
   /** Overload of ThreadedGenerateData  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
@@ -362,9 +385,9 @@ private:
 };
 
 // Actual implementation of NewFunctorFilter free function
-template <typename Functor> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius)
+template <typename Functor, typename TNameMap> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius)
 {
-  using FilterType = FunctorImageFilter<Functor>;
+  using FilterType = FunctorImageFilter<Functor,TNameMap>;
   using PointerType = typename FilterType::Pointer;
 
   PointerType  p = new FilterType(f,radius);
@@ -419,11 +442,11 @@ private:
 
  */ 
 
-template <typename Functor> auto NewFunctorFilter(const Functor& f, unsigned int numberOfOutputBands, itk::Size<2> radius)
+template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(const Functor& f, unsigned int numberOfOutputBands, itk::Size<2> radius)
 {
   using FunctorType = NumberOfOutputBandsDecorator<Functor>;
   FunctorType decoratedF(f,numberOfOutputBands);
-  return  NewFunctorFilter(decoratedF,radius);
+  return  NewFunctorFilter<FunctorType,TNameMap>(decoratedF,radius);
 }
 
 

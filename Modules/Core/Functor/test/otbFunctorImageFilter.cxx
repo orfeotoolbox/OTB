@@ -25,6 +25,7 @@
 #include "itkNeighborhood.h"
 #include "otbVariadicAddFunctor.h"
 #include "otbVariadicConcatenateFunctor.h"
+#include "otbVariadicNamedInputsImageFilter.h"
 #include <tuple>
 
 #include <numeric>
@@ -144,13 +145,23 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   static_assert(std::is_same<typename FilterType::template InputImageType<0>, InputImageType>::value, "");
   filter->SetVariadicInputs(in);
   filter->SetInput1(in);
-  filter->template SetVariadicInput<0>(in); // template keyword to avoid C++ parse ambiguity
+  filter->template SetVariadicInput<0>(in); // template keyword to
+                                            // avoid C++ parse
+                                            // ambiguity
+  auto res = filter->template GetVariadicInput<0>();
   filter->Update();
 
+  // Test named input version
+  struct tag{};
+  using inputNames = std::tuple<tag>;
+  auto filter1 = NewFunctorFilter<decltype(functor),inputNames>(functor);
+  filter1->template SetVariadicNamedInput<tag>(in);
+  res = filter1->template GetVariadicNamedInput<tag>();
+  filter1->Update();
+  
   // Test with void return
   auto functorWithVoidReturn = TestOperatorVoidReturn<TOut,TIn>{};
   auto filterWithVoidReturn = NewFunctorFilter(functorWithVoidReturn);
-
   using FilterWithVoidReturnType = typename decltype(filter)::ObjectType;
   static_assert(FilterWithVoidReturnType::NumberOfInputs == 1,"");
   static_assert(std::is_same<typename FilterWithVoidReturnType::template InputImageType<0>, InputImageType>::value, "");
@@ -346,12 +357,24 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   filter->SetVariadicInputs(vimage,image);
   std::cout<<filter->GetVariadicInput<0>()<< filter->GetVariadicInput<1>()<<std::endl;
 
+  // Test VariadicNamedInputsImageFilter
+  struct xs {};
+  struct pan {};
+  using Names = std::tuple<xs,pan>; 
+   auto filterWithNames = otb::VariadicNamedInputsImageFilter<VectorImageType, Names, VectorImageType,ImageType>::New();
+   filterWithNames->SetVariadicNamedInput<xs>(vimage);
+  
   // Test FunctorImageFilter with a built-in math function
   using CosType = double(double);
   auto filterCos = NewFunctorFilter(static_cast<CosType *>(std::cos));
   filterCos->SetVariadicInputs(image);
   filterCos->Update();
     
+   filterWithNames->SetVariadicNamedInput<pan>(image);
+
+   std::cout<<filterWithNames->GetVariadicNamedInput<xs>()<< filterWithNames->GetVariadicNamedInput<pan>()<<std::endl;
+
+  
   
   // test FunctorImageFilter with a lambda
   double scale = 10.;  
@@ -392,7 +415,8 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   // Test FunctorImageFilter With VariadicAdd functor
   using AddFunctorType = Functor::VariadicAdd<double, double, double>;
   auto add = NewFunctorFilter(AddFunctorType{});
-  add->SetVariadicInputs(image,image);
+  add->SetVariadicInput<0>(image);
+  add->SetVariadicInput<1>(image);
   add->Update();
 
   // Test FunctorImageFilter with BandExtraction functor
@@ -424,7 +448,7 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   auto argFilter = NewFunctorFilter(LambdaComplex);
   argFilter->SetVariadicInputs(cimage);
   argFilter->Update();
-
+  
  return EXIT_SUCCESS;
 }
 
