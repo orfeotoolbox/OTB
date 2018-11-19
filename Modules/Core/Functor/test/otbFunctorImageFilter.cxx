@@ -91,6 +91,19 @@ template <typename T> struct TypesCheck
     }
   };
 
+template <typename TOut,typename TIn> struct TestOperatorVoidReturn
+  {
+    void operator()(TOut& out,const TIn&) const
+    {
+      out = TOut(OutputSize());
+    }
+    
+    constexpr size_t OutputSize(...) const
+    {
+      return 1;
+    }
+  };
+
   // Fake test operator non const
   template <typename TOut,typename TIn> struct TestOperatorNonConst
   {
@@ -106,7 +119,7 @@ template <typename T> struct TypesCheck
     }
   };
 
-    
+  
   template <typename TOut, typename TIn> void TestFilter()
   {
   // Deduce types
@@ -145,13 +158,23 @@ template <typename T> struct TypesCheck
   res = filter1->template GetVariadicNamedInput<tag>();
   filter1->Update();
   
+  // Test with void return
+  auto functorWithVoidReturn = TestOperatorVoidReturn<TOut,TIn>{};
+  auto filterWithVoidReturn = NewFunctorFilter(functorWithVoidReturn);
+  using FilterWithVoidReturnType = typename decltype(filter)::ObjectType;
+  static_assert(FilterWithVoidReturnType::NumberOfInputs == 1,"");
+  static_assert(std::is_same<typename FilterWithVoidReturnType::template InputImageType<0>, InputImageType>::value, "");
+  
   // Test with non const operator
   auto functorNonConstOperator = TestOperatorNonConst<TOut,TIn>{};
   auto filterWithNonConstOperator = NewFunctorFilter(functorNonConstOperator);
   filterWithNonConstOperator->SetInput1(in);
-  filterWithNonConstOperator->Update();
-  
-  
+  filterWithNonConstOperator->Update();  
+
+  filterWithVoidReturn->SetVariadicInputs(in);
+  filterWithVoidReturn->SetInput1(in);
+  filterWithVoidReturn->template SetVariadicInput<0>(in); // template keyword to avoid C++ parse ambiguity
+  filterWithVoidReturn->Update();
   
   // Test with simple lambda
   auto lambda = [] (const TIn &)

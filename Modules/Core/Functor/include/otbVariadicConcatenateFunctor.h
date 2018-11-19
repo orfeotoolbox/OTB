@@ -33,7 +33,7 @@ namespace Functor
 {
 
 
-namespace internal
+namespace variadic_concatenate_details
 {
 // helper function to implement next functor (convert a scalar value
 // to a VariableLengthVector)
@@ -70,17 +70,23 @@ template <typename v1, typename v2, typename ...vn> void concatenateVectors(v1 &
   concatenateVectors(a,b);
   concatenateVectors(a,z...);
 }
-} // end namespace internal
+} // end namespace variadic_concatenate_details
 
 // N  images (all types) -> vector image
 // This functor concatenates N images (N = variadic) of type
 // VectorImage and or Image, into a single VectorImage
+
+/** 
+ * \class VariadicConcatenate
+ * \brief This functor concatenates any number of input of scalar type
+ * or VariableLengthVector.
+ */
 template<typename TOut, typename ...TIns> struct VariadicConcatenate
 {
   auto operator()(const TIns &...  ins) const
   {
     itk::VariableLengthVector<TOut> out;
-    internal::concatenateVectors(out, internal::toVector(ins)...);
+    variadic_concatenate_details::concatenateVectors(out, internal::toVector(ins)...);
     
     return out;
   }
