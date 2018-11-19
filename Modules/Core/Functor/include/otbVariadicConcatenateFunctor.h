@@ -80,6 +80,7 @@ template <typename v1, typename v2, typename ...vn> void concatenateVectors(v1 &
  * \class VariadicConcatenate
  * \brief This functor concatenates any number of input of scalar type
  * or VariableLengthVector.
+ * \ingroup OTBFunctor
  */
 template<typename TOut, typename ...TIns> struct VariadicConcatenate
 {

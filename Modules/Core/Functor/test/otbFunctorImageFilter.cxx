@@ -30,6 +30,7 @@
 
 #include <numeric>
 #include <complex>
+#include <math.h>
 
 // static tests
 
@@ -362,6 +363,13 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   using Names = std::tuple<xs,pan>; 
    auto filterWithNames = otb::VariadicNamedInputsImageFilter<VectorImageType, Names, VectorImageType,ImageType>::New();
    filterWithNames->SetVariadicNamedInput<xs>(vimage);
+  
+  // Test FunctorImageFilter with a built-in math function
+  using CosType = double(double);
+  auto filterCos = NewFunctorFilter(static_cast<CosType *>(std::cos));
+  filterCos->SetVariadicInputs(image);
+  filterCos->Update();
+    
    filterWithNames->SetVariadicNamedInput<pan>(image);
 
    std::cout<<filterWithNames->GetVariadicNamedInput<xs>()<< filterWithNames->GetVariadicNamedInput<pan>()<<std::endl;

@@ -31,6 +31,7 @@ namespace Functor
 /**
  * \class VariadicAdd
  * \brief This functor adds any number of compile time scalar inputs 
+ * \ingroup OTBFunctor
  */
 template <typename TOut, typename ...TIns> struct VariadicAdd
 {
