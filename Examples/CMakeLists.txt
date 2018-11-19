@@ -20,11 +20,7 @@
 
 ##### check if standalone project ######
 if(NOT PROJECT_NAME)
-  if(WIN32)
-    cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
-  else()
-    cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
-  endif()
+  cmake_minimum_required(VERSION 3.1.0)
   project(OTBExamples)
 endif()
 
