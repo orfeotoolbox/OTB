@@ -40,26 +40,14 @@ namespace otb
  * - ValueType type set to false_type or true_type
  * - value set to true or false
  */
-template <class T> struct IsNeighborhood
-{
-  using ValueType = std::false_type;
-  static constexpr bool value = false;
-};
+template <class T> struct IsNeighborhood : std::false_type {};
 
 /// Partial specialisation for itk::Neighborhood<T>
-template <class T> struct IsNeighborhood<itk::Neighborhood<T>>
-{
-  using ValueType = std::true_type;
-  static constexpr bool value = true;
-};
+template <class T> struct IsNeighborhood<itk::Neighborhood<T>> : std::true_type {};
 
 
 /// Partial specialisation for const itk::Neighborhood<T> &
-template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
-{
-  using ValueType = std::true_type;
-  static constexpr bool value = true;
-};
+template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&> : std::true_type {};
 
 /**
  * \struct IsSuitableType
@@ -67,46 +55,22 @@ template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&>
  *
  * ::value maps to true if type can be used and false otherwhise.
  */
-template <class T> struct IsSuitableType
-{
-  static constexpr bool value = std::is_scalar<T>::value;
-};
+template <class T> struct IsSuitableType : std::is_scalar<T>::type {};
 
 /// Unwrap complex
-template <class T> struct IsSuitableType<std::complex<T>> {
-  static constexpr bool value = IsSuitableType<T>::value;
-};
+template <class T> struct IsSuitableType<std::complex<T>> : IsSuitableType<T>::type {};
 
 /// Unwrap VariableLengthVector
-template <class T> struct IsSuitableType<itk::VariableLengthVector<T>> {
-  static constexpr bool value = IsSuitableType<T>::value;
-};
+template <class T> struct IsSuitableType<itk::VariableLengthVector<T>> : IsSuitableType<T>::type {};
 
 /// Unwrap FixedArray
-template <class T, size_t N> struct IsSuitableType<itk::FixedArray<T,N>> {
-  static constexpr bool value = IsSuitableType<T>::value;
-};
+template <class T, size_t N> struct IsSuitableType<itk::FixedArray<T,N>> : IsSuitableType<T>::type {};
 
 /// Unwrap RGBPixel
-template <class T> struct IsSuitableType<itk::RGBPixel<T>> {
-  static constexpr bool value = IsSuitableType<T>::value;
-};
+template <class T> struct IsSuitableType<itk::RGBPixel<T>> : IsSuitableType<T>::type {};
 
 /// Unwrap RGBAPixel
-template <class T> struct IsSuitableType<itk::RGBAPixel<T>> {
-  static constexpr bool value = IsSuitableType<T>::value;
-};
-
-/// Discard const qualifier
-template <class T> struct IsSuitableType<const T>{
-  static constexpr bool value = IsSuitableType<T>::value;
-};
-
-/// Discard reference
-template <class T> struct IsSuitableType<T &>{
-  static constexpr bool value = IsSuitableType<T>::value;
-};
-
+template <class T> struct IsSuitableType<itk::RGBAPixel<T>> : IsSuitableType<T>::type {};
 
 /**
  * \struct PixelTypeDeduction
@@ -118,27 +82,17 @@ template <class T> struct IsSuitableType<T &>{
 */
 template <class T> struct PixelTypeDeduction
 {
-  static_assert(IsSuitableType<T>::value,"T can not be used as a template parameter for Image or VectorImage classes.");
+  static_assert(IsSuitableType<T>::value,
+                "T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
 };
 
 /// Partial specialisation for itk::Neighborhood<T>
 template <class T> struct PixelTypeDeduction<itk::Neighborhood<T>>
 {
-  static_assert(IsSuitableType<T>::value,"T can not be used as a template parameter for Image or VectorImage classes.");
+  static_assert(IsSuitableType<T>::value,
+                "T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
-};
-
-/// Discard const qualifier
-template <class T> struct PixelTypeDeduction<const  T>
-{
-  using PixelType = typename PixelTypeDeduction<T>::PixelType;
-};
-
-/// Discard reference
-template <class T> struct PixelTypeDeduction<T &>
-{
-  using PixelType = typename PixelTypeDeduction<T>::PixelType;
 };
 
 /** 
@@ -160,6 +114,10 @@ template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
   using ImageType = otb::VectorImage<T>;
 };
 
+// Helper to remove const, volatite and Ref qualifier (until c++20
+/// that has std::remove_cvref)
+template <typename T> using RemoveCVRef = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
+
 /**
 * \struct FunctorFilterSuperclassHelper 
 * \brief Struct allowing to derive the superclass prototype for the
@@ -172,8 +130,6 @@ template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
 * - InputHasNeighborhood a tuple of N false_type or true_type to denote
 * - if Ith arg of operator() expects a neighborhood.
 */
-
-
 template <typename T, typename TNameMap> struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<decltype(&std::remove_reference<T>::type::operator()),TNameMap> {};
 
 namespace functor_filter_details
@@ -184,7 +140,7 @@ template <typename R, typename TNameMap, typename...T> struct FunctorFilterSuper
   using OutputImageType = typename ImageTypeDeduction<R>::ImageType;
   // InputImageType is derived using pixel type deduction and image
   // type deduction
-  template <typename V> using InputImageType = typename ImageTypeDeduction<typename PixelTypeDeduction<V>::PixelType>::ImageType;
+  template <typename V> using InputImageType = typename ImageTypeDeduction<typename PixelTypeDeduction<RemoveCVRef<V>>::PixelType>::ImageType;
 
   // Filter type is either VariadicInputsImageFilter or
   // VariadicNamedInputsImageFilter depending on if there is a
@@ -194,7 +150,7 @@ template <typename R, typename TNameMap, typename...T> struct FunctorFilterSuper
                                                VariadicNamedInputsImageFilter<OutputImageType,TNameMap,InputImageType<T>...>>::type;
 
   // InputHasNeighborhood is derived from IsNeighborhood
-  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::ValueType...>;
+  using InputHasNeighborhood = std::tuple<typename IsNeighborhood<T>::type...>;
 };
 } // End namespace functor_filter_details
 
