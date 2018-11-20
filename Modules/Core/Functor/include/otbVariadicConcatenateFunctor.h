@@ -35,40 +35,44 @@ namespace Functor
 
 namespace variadic_concatenate_details
 {
-// helper function to implement next functor (convert a scalar value
-// to a VariableLengthVector)
-template <typename T> itk::VariableLengthVector<T> toVector(const T & in)
+
+template <typename T> size_t NumberOfElements(const T &)
 {
-  itk::VariableLengthVector<T> out;
-  out.SetSize(1);
-  out[0] = in;
-  return out;
+  static_assert(std::is_scalar<T>::value,"variadic_concatenate_details::NumberOfElements<T> only works for T and itk::VariableLengthVector<T> where T is a scalar type.");
+  return 1;
 }
 
-// helper function to implement next functor, VariableLengthVectorVersion (returns in)
-template <typename  T> const itk::VariableLengthVector<T> & toVector(const itk::VariableLengthVector<T> & in)
+template <typename T> size_t NumberOfElements(const itk::VariableLengthVector<T> & v)
 {
-  return in;
+  static_assert(std::is_scalar<T>::value,"variadic_concatenate_details::NumberOfElements<T> only works for T and itk::VariableLengthVector<T> where T is a scalar type.");
+  return v.GetSize();
 }
 
-// helper function to implement next functor, Merge two VariableLengthVector in-place
-template <typename v1, typename v2> void concatenateVectors(v1 & a, const v2 & b)
+template <typename ...T> size_t NumberOfElements(const T&...t)
 {
-  const size_t previousSizeOfA = a.GetSize();
-  
-  a.SetSize(previousSizeOfA+b.GetSize());
-  
-  for(size_t it = 0; it<b.Size();++it)
-    {
-    a[previousSizeOfA+it] = static_cast<typename v1::ValueType>(b[it]);
-    }
+  std::array<size_t,sizeof...(T)> sizes = {{NumberOfElements(t)...}};
+  return std::accumulate(sizes.begin(),sizes.end(),0);
 }
 
-// helper function to implement next functor, Merge N VariableLengthVector in-place
-template <typename v1, typename v2, typename ...vn> void concatenateVectors(v1 & a, const v2 & b, const vn&... z)
+template <typename Out, typename T> size_t fillVector(itk::VariableLengthVector<Out> & out, size_t idx, const T & t)
 {
-  concatenateVectors(a,b);
-  concatenateVectors(a,z...);
+  assert(idx<out.GetSize());
+  out[idx] = static_cast<Out>(t);
+  return idx+1;
+}
+
+template <typename Out, typename T> size_t fillVector(itk::VariableLengthVector<Out> & out, size_t idx, const itk::VariableLengthVector<T> & t)
+{
+  assert(idx+t.GetSize()<=out.GetSize());
+  for(auto it = 0UL; it<t.GetSize(); ++it)
+    out[idx+it] = static_cast<Out>(t[it]);
+  return idx+t.GetSize();
+}
+
+template <typename Out, typename Current, typename ...T> size_t fillVector(itk::VariableLengthVector<Out> & out, size_t idx, const Current& current, const T&...t)
+{
+  size_t newIdx = fillVector(out,idx,current);
+  return fillVector(out,newIdx,t...);
 }
 } // end namespace variadic_concatenate_details
 
@@ -86,8 +90,10 @@ template<typename TOut, typename ...TIns> struct VariadicConcatenate
 {
   auto operator()(const TIns &...  ins) const
   {
-    itk::VariableLengthVector<TOut> out;
-    variadic_concatenate_details::concatenateVectors(out, variadic_concatenate_details::toVector(ins)...);
+    const size_t numberOfElements = variadic_concatenate_details::NumberOfElements(ins...);
+    itk::VariableLengthVector<TOut> out(numberOfElements);
+
+    variadic_concatenate_details::fillVector(out,0,ins...);
     
     return out;
   }
