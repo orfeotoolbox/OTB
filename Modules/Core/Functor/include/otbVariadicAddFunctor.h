@@ -22,6 +22,7 @@
 #define otb_VariadicAddFunctor_h
 
 #include <numeric>
+#include <array>
 
 namespace otb
 {
@@ -37,9 +38,9 @@ template <typename TOut, typename ...TIns> struct VariadicAdd
 {
   auto operator()(TIns... ins) const
   {
-    std::vector<TOut> outVector{static_cast<TOut>(ins)...};
+    std::array<TOut, sizeof...(TIns)> outArray = {{static_cast<TOut>(ins)...}};
 
-    return std::accumulate(outVector.begin(), outVector.end(),0);
+    return std::accumulate(outArray.begin(), outArray.end(),TOut{});
   }
 };
 
