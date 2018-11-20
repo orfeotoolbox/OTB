@@ -131,13 +131,11 @@ macro( otb_module_headertest _name )
         )
       add_executable( ${_test_name} ${_header_test_src} )
       target_link_libraries( ${_test_name} OTBCommon )
+
       if (${_name}_LIBRARIES)
-        # OTBBoostAdapters depends only on OTBBoost,
-        # and OTBBoost_LIBRARIES can be empty, so check for it
-        add_dependencies(${_test_name} ${${_name}_LIBRARIES})
-        # this target_link should be needed only on WIN32
         target_link_libraries(${_test_name} ${${_name}_LIBRARIES})
       endif()
+
       add_dependencies(${_name}-all ${_test_name})
       math( EXPR _test_num "${_test_num} + 1" )
     endforeach()
