@@ -211,7 +211,7 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
 /**
  * \brief This helper method builds a fully functional FunctorImageFilter from a functor instance
  * 
- * Functor can be any operator() (const or non-const) that matches the following:
+ * \tparam Functor can be any operator() (const or non-const) that matches the following:
  * - Accepts any number of arguments of T,
  * (const) itk::VariableLengthVector<T> (&),(const)
  * itk::Neighborhood<T> (&), (const)
@@ -223,8 +223,8 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
  * SetVariadicInputs() method (see VariadicInputsImageFilter class for
  * details)
  * 
- * \param f the Functor to build the filter from
- * \param radius The size of neighborhood to use, if there is any
+ * \param[in] the Functor to build the filter from
+ * \param[in] radius The size of neighborhood to use, if there is any
  * itk::Neighborhood<T> in the operator() arguments.
  * \return A ready to use OTB filter, which accepts n input image of
  * type derived from the operator() arguments, and producing an image
@@ -234,13 +234,13 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
  * provided it returns a scalar type. If your lambda returns a
  * VariableLengthVector, see the other NewFunctorFilter implementation.
  */
-template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius = {{0,0}});
+template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(Functor f, itk::Size<2> radius = {{0,0}});
 
 
 /** \class FunctorImageFilter
  * \brief A generic functor filter templated by its functor
  * 
- * TFunction can be any operator() (const or non-const) that matches the following:
+ * \tparam TFunction can be any operator() (const or non-const) that matches the following:
  * - Accepts any number of arguments of T,
  * (const) itk::VariableLengthVector<T> (&),(const)
  * itk::Neighborhood<T> (&), (const)
@@ -317,7 +317,7 @@ protected:
 
 private:
   /// Actual creation of the filter is handled by this free function
-  friend auto NewFunctorFilter<TFunction,TNameMap>(const TFunction& f, itk::Size<2> radius);
+  friend auto NewFunctorFilter<TFunction,TNameMap>(TFunction f, itk::Size<2> radius);
 
   /** Overload of ThreadedGenerateData  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
@@ -341,7 +341,7 @@ private:
 };
 
 // Actual implementation of NewFunctorFilter free function
-template <typename Functor, typename TNameMap> auto NewFunctorFilter(const Functor& f, itk::Size<2> radius)
+template <typename Functor, typename TNameMap> auto NewFunctorFilter(Functor f, itk::Size<2> radius)
 {
   using FilterType = FunctorImageFilter<Functor,TNameMap>;
   using PointerType = typename FilterType::Pointer;
@@ -362,11 +362,10 @@ template <typename Functor, typename TNameMap> auto NewFunctorFilter(const Funct
  * It is used internally in NewFunctorFilter version with
  * numberOfOutputBands parameter.
  */ 
-
 template <typename F> struct NumberOfOutputBandsDecorator : F
 {
 public:
-  constexpr NumberOfOutputBandsDecorator(const F t, unsigned int nbComp) : F(t), m_NumberOfOutputBands(nbComp) {}
+  constexpr NumberOfOutputBandsDecorator(F t, unsigned int nbComp) : F(t), m_NumberOfOutputBands(nbComp) {}
   using F::operator();
 
   constexpr size_t OutputSize(...) const
@@ -383,8 +382,8 @@ private:
  * FunctorImageFilter from a functor instance which does not provide
  * the OutputSize() service, or a lambda, returing a VariableLengthVector
  * 
- * \param f the Functor to build the filter from
- * \param numberOfOutputBands The number of output bands that
+ * \param[in] f the Functor to build the filter from
+ * \param[in] numberOfOutputBands The number of output bands that
  * this filter will return
  * \param radius The size of neighborhood to use, if there is any
  * itk::Neighborhood<T> in the operator() arguments.
@@ -398,7 +397,7 @@ private:
 
  */ 
 
-template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(const Functor& f, unsigned int numberOfOutputBands, itk::Size<2> radius)
+template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(Functor f, unsigned int numberOfOutputBands, itk::Size<2> radius)
 {
   using FunctorType = NumberOfOutputBandsDecorator<Functor>;
   FunctorType decoratedF(f,numberOfOutputBands);
