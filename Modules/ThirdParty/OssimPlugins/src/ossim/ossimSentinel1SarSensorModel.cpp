@@ -237,7 +237,16 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 		// Find first valid samples
 		if(*sIt!="-1")
                   {
-		    int Fvs = atoi((*sIt).c_str());
+		    int Fvs = samplesPerBurst;
+		    try
+		      {
+			Fvs = std::stoi(*sIt);
+		      }
+		    catch( ... )
+		      {
+			// Throw an execption
+			throw std::runtime_error("Failed to convert firstValidSample value.");
+		      }
 		    if (Fvs > first_sample_valid && Fvs < samplesPerBurst)
 		      {
 			first_sample_valid = Fvs; 
@@ -255,7 +264,17 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 		// Last first valid samples
 		if(*sIt!="-1")
                   {
-		    int Lvs = atoi((*sIt).c_str());
+		    int Lvs = 0;
+		    try
+		      {
+			Lvs = std::stoi(*sIt);
+		      }
+		    catch( ... )
+		      {
+			// Throw an execption
+			throw std::runtime_error("Failed to convert lastValidSample value.");
+		      }
+
 		    if (Lvs < last_sample_valid && Lvs > 0)
 		      {
 			last_sample_valid = Lvs;
