@@ -141,7 +141,7 @@ template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
 }
 };
 
-template <class Oper> struct OperProxy : public OperProxy<decltype(&Oper::operator())> {};
+template <class Oper> struct OperProxy : public OperProxy<decltype(&std::remove_reference<Oper>::type::operator())> {};
 
 template<class Out, class ... In> struct OperProxy<Out(*)(In...)>
 {

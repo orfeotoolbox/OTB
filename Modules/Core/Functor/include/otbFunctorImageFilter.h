@@ -174,7 +174,7 @@ template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
 */
 
 
-template <typename T, typename TNameMap> struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<decltype(&T::operator()),TNameMap> {};
+template <typename T, typename TNameMap> struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<decltype(&std::remove_reference<T>::type::operator()),TNameMap> {};
 
 namespace functor_filter_details
 {
