@@ -185,7 +185,7 @@ template<class C, class Out, class ... In> struct OperProxy<void(C::*)(Out&, In.
 
 template<class C, class Out, class ... In> struct OperProxy<void(C::*)(Out&, In...) const>
 {
-  template template<class Oper> static void Compute(Oper& oper, Out& out, const In& ... in)
+  template<class Oper> static void Compute(Oper& oper, Out& out, const In& ... in)
   {
     oper(out,in...);
   }
