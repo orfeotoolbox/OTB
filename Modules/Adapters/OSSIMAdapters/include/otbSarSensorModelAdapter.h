@@ -97,7 +97,7 @@ public:
 				     Point3DType & satelliteVelocity) const;
   
   /** Transform line index to satellite position (x,y,z) and satellite velocity */
-  bool LineToSatPositionAndVelocity(const double & line, Point3DType &  satellitePosition,  
+  bool LineToSatPositionAndVelocity(const double line, Point3DType &  satellitePosition,  
 				    Point3DType & satelliteVelocity) const;
 
   /** Transform world point (lat,lon,hgt) to cartesian point (x,y,z) */

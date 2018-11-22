@@ -216,10 +216,10 @@ bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & in
   return true;
 }
 
-bool SarSensorModelAdapter::LineToSatPositionAndVelocity(const double & line, Point3DType & satellitePosition,  
+bool SarSensorModelAdapter::LineToSatPositionAndVelocity(const double line, Point3DType & satellitePosition,  
 							 Point3DType & satelliteVelocity) const
 {
-  if(m_SensorModel.get() == nullptr)
+  if(!m_SensorModel.get())
     {
       return false;
     }
