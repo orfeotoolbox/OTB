@@ -62,11 +62,21 @@ public:
     constexpr size_t idx = internal::tuple_index<Tag, TInputNameMap>::value;
     this->SetNthInput(idx,const_cast<InputImageType<idx> *>(inputPtr));
   }
+
+  template <typename Tag> void SetVariadicNamedInput(Tag,const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value> * inputPtr)
+  {
+    SetVariadicNamedInput<Tag>(inputPtr);
+  }
   
   template <typename Tag> const InputImageType<internal::tuple_index<Tag,TInputNameMap>::value> * GetVariadicNamedInput()
   {
     constexpr size_t idx = internal::tuple_index<Tag, TInputNameMap>::value;
     return dynamic_cast<const InputImageType<idx> *>(this->GetInput(idx));
+  }
+
+  template <typename Tag> const InputImageType<internal::tuple_index<Tag,TInputNameMap>::value> * GetVariadicNamedInput(Tag)
+  {
+    return GetVariadicNamedInput<Tag>();
   }
 
 protected:

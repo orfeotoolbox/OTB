@@ -156,7 +156,9 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   using inputNames = std::tuple<tag>;
   auto filter1 = NewFunctorFilter<decltype(functor),inputNames>(functor);
   filter1->template SetVariadicNamedInput<tag>(in);
+  filter1->SetVariadicNamedInput(tag{},in);
   res = filter1->template GetVariadicNamedInput<tag>();
+  res = filter1->GetVariadicNamedInput(tag{});
   filter1->Update();
   
   // Test with void return
