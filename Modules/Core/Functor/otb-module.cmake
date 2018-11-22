@@ -18,9 +18,10 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains a set of classes that allow parsing
-metadata files from different types of sensor (both optical and radar sensor types
-are supported. for instance: Pleiades, SPOT6, TerraSar, and so on).")
+set(DOCUMENTATION "This module contains a generic functor filter
+implementation, that can deal with functor, std::function or lambdas
+with any number of parameters including VariableLengthVector,
+FixedArray, RGBPixel, and Neighborhood of those.")
 
 otb_module(OTBFunctor
   DEPENDS
