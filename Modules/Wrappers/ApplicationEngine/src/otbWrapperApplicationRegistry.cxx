@@ -20,6 +20,7 @@
 
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperApplicationFactoryBase.h"
+#include "otbWrapperCompositeApplication.h"
 #include "otbMacro.h"
 #include "itksys/SystemTools.hxx"
 #include "itkDynamicLoader.h"
@@ -208,8 +209,10 @@ ApplicationRegistry::CreateApplication(const std::string& name, bool useFactory)
       Application* app = dynamic_cast<Application*> (possibleApp.GetPointer());
       if (app)
         {
+        if (CallInit(app))
+          {
           appli = app;
-          appli->Init();
+          }
         }
       }
     }
@@ -342,9 +345,11 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
       Application* app = dynamic_cast<Application*> (i->GetPointer());
       if (app)
         {
-        app->Init();
-        std::string curName(app->GetName());
-        appSet.insert(curName);
+        if (CallInit(app))
+          {
+          std::string curName(app->GetName());
+          appSet.insert(curName);
+          }
         }
       }
     }
@@ -414,14 +419,20 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
           appli = appFactory->CreateApplication(name.c_str());
           if (appli.IsNotNull())
             {
-            appli->Init();
-            // register library handle
-            m_ApplicationPrivateRegistryGlobal.AddPair(appli.GetPointer(), (void*) lib);
-            // set a callback on DeleteEvent
-            itk::CStyleCommand::Pointer command = itk::CStyleCommand::New();
-            command->SetCallback(&DeleteAppCallback);
-            command->SetConstCallback(&DeleteAppConstCallback);
-            appli->AddObserver(itk::DeleteEvent(),command);
+            if (CallInit(appli))
+              {
+              // register library handle
+              m_ApplicationPrivateRegistryGlobal.AddPair(appli.GetPointer(), (void*) lib);
+              // set a callback on DeleteEvent
+              itk::CStyleCommand::Pointer command = itk::CStyleCommand::New();
+              command->SetCallback(&DeleteAppCallback);
+              command->SetConstCallback(&DeleteAppConstCallback);
+              appli->AddObserver(itk::DeleteEvent(),command);
+              }
+            else
+              {
+              appli = nullptr;
+              }
             return appli;
             }
           }
@@ -436,6 +447,37 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
   return appli;
 }
 
+
+bool
+ApplicationRegistry::CallInit(Application *appli)
+{
+  try
+    {
+    appli->Init();
+    }
+  catch(otb::MissingInternalApplicationException& err)
+    {
+    otbLogMacro(Warning,<< "Can't load composite application " << appli->GetName()
+      << ", missing internal application "<< err.InternalAppName);
+    return false;
+    }
+  catch(otb::ApplicationException& err)
+    {
+    otbLogMacro(Warning,<<std::string(err.what()));
+    return false;
+    }
+  catch(std::exception& err)
+    {
+    otbLogMacro(Warning,<<std::string(err.what()));
+    return false;
+    }
+  catch(...)
+    {
+    otbLogMacro(Warning,<< "Failed to initialize application " << appli->GetName());
+    return false;
+    }
+  return true;
+}
 
 } // end namespace Wrapper
 } //end namespace otb

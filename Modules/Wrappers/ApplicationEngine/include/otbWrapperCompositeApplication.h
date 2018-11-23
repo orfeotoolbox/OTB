@@ -27,6 +27,36 @@
 
 namespace otb
 {
+
+/** \class MissingInternalApplicationException
+ *  \brief Exception for composite applications when internal apps can't be found
+ *
+ *  Usually thrown by CompositeApplication::AddApplication
+ *
+ * \ingroup OTBApplicationEngine
+ */
+class OTBApplicationEngine_EXPORT MissingInternalApplicationException : public ApplicationException
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro( MissingInternalApplicationException, ApplicationException );
+
+  std::string InternalAppName;
+  /** Constructor. */
+  MissingInternalApplicationException(const char *file, unsigned int line,
+                       const char* message = "Application error.",
+                       const char* loc = "Unknown");
+
+  /** Constructor. */
+  MissingInternalApplicationException(const std::string& file, unsigned int line,
+                       const char* message = "Application error.",
+                       const char* loc = "Unknown");
+
+  MissingInternalApplicationException(const std::string& file, unsigned int line,
+                       const std::string& message = "Application error.",
+                       const std::string& loc = "Unknown");
+};
+
 namespace Wrapper
 {
 

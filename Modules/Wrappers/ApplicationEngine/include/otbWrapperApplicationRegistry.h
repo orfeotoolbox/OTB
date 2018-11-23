@@ -88,6 +88,9 @@ private:
   /** Load an application from a shared library */
   static Application::Pointer LoadApplicationFromPath(std::string path,std::string name);
 
+  /** Call Application->Init() with a proper try/catch, return true on success */
+  static bool CallInit(Application* appli);
+
 };
 
 } // end namespace Wrapper

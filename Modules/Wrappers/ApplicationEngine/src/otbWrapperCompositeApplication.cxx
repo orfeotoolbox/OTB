@@ -27,6 +27,29 @@
 
 namespace otb
 {
+
+MissingInternalApplicationException::MissingInternalApplicationException(
+  const char *file, unsigned int line,
+  const char* message, const char* loc) :
+ApplicationException(file, line, message, loc)
+{
+}
+
+/** Constructor. */
+MissingInternalApplicationException::MissingInternalApplicationException(
+  const std::string &file, unsigned int line,
+  const char* message, const char* loc) :
+ApplicationException(file, line, message, loc)
+{
+}
+
+MissingInternalApplicationException::MissingInternalApplicationException(
+  const std::string &file, unsigned int line,
+  const std::string& message, const std::string& loc) :
+ApplicationException(file, line, message, loc)
+{
+}
+
 namespace Wrapper
 {
 
@@ -61,6 +84,15 @@ CompositeApplication
     }
   InternalApplication container;
   container.App = ApplicationRegistry::CreateApplication(appType);
+  if (container.App.IsNull())
+    {
+    otb::MissingInternalApplicationException e_(__FILE__, __LINE__,
+      std::string("Can't load composite application ") + this->GetName() +
+      std::string(", missing internal application ") + appType,
+      ITK_LOCATION);
+    e_.InternalAppName = appType;
+    throw e_;
+    }
   container.Desc = desc;
   // Setup logger
   container.App->SetLogger(this->GetLogger());
