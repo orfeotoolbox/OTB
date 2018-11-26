@@ -64,7 +64,7 @@ template <class T> struct IsSuitableType<std::complex<T>> : IsSuitableType<T>::t
 template <class T> struct IsSuitableType<itk::VariableLengthVector<T>> : IsSuitableType<T>::type {};
 
 /// Unwrap FixedArray
-template <class T, size_t N> struct IsSuitableType<itk::FixedArray<T,N>> : IsSuitableType<T>::type {};
+template <class T, unsigned int N> struct IsSuitableType<itk::FixedArray<T,N>> : IsSuitableType<T>::type {};
 
 /// Unwrap RGBPixel
 template <class T> struct IsSuitableType<itk::RGBPixel<T>> : IsSuitableType<T>::type {};
