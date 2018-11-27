@@ -149,6 +149,7 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
                                             // avoid C++ parse
                                             // ambiguity
   auto res = filter->template GetVariadicInput<0>();
+  
   filter->Update();
 
   // Test named input version
@@ -160,7 +161,10 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   res = filter1->template GetVariadicNamedInput<tag>();
   res = filter1->GetVariadicNamedInput(tag{});
   filter1->Update();
-  
+
+  // Hack to silent -Wunused-but-set-variable
+  std::cout<<res<<std::endl;
+
   // Test with void return
   auto functorWithVoidReturn = TestOperatorVoidReturn<TOut,TIn>{};
   auto filterWithVoidReturn = NewFunctorFilter(functorWithVoidReturn);
