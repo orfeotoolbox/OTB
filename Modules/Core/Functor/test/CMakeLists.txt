@@ -29,5 +29,5 @@ add_executable(otbFunctorTestDriver ${OTBFunctorTests})
 target_link_libraries(otbFunctorTestDriver ${OTBFunctor-Test_LIBRARIES})
 otb_module_target_label(otbFunctorTestDriver)
 
-otb_add_test(NAME bfTvFunctorImageFilter COMMAND otbImageManipulationTestDriver
+otb_add_test(NAME bfTvFunctorImageFilter COMMAND otbFunctorTestDriver
   otbFunctorImageFilter)
