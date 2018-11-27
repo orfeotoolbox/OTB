@@ -119,6 +119,20 @@ template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
 template <typename T> using RemoveCVRef = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
 
 /**
+* \struct RetrieveOperator
+*
+* \brief Struct to retrieve the operator type
+* 
+* \tparam T the type to retrieve operator() from
+*
+*/
+template <typename T> struct RetrieveOperator
+{
+  static_assert(std::is_class<T>::value || std::is_function<T>::value, "T is not a class or function");
+  using Type = decltype(&T::operator());
+};
+
+/**
 * \struct FunctorFilterSuperclassHelper 
 * \brief Struct allowing to derive the superclass prototype for the
 *        FunctorImageFilter class
@@ -130,7 +144,7 @@ template <typename T> using RemoveCVRef = typename std::remove_cv<typename std::
 * - InputHasNeighborhood a tuple of N false_type or true_type to denote
 * - if Ith arg of operator() expects a neighborhood.
 */
-template <typename T, typename TNameMap> struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<decltype(&std::remove_reference<T>::type::operator()),TNameMap> {};
+template <typename T, typename TNameMap> struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<typename RetrieveOperator<T>::Type,TNameMap> {};
 
 namespace functor_filter_details
 {
@@ -362,11 +376,10 @@ template <typename Functor, typename TNameMap> auto NewFunctorFilter(Functor f, 
  * It is used internally in NewFunctorFilter version with
  * numberOfOutputBands parameter.
  */ 
-template <typename F> struct NumberOfOutputBandsDecorator : F
+template <typename F> struct NumberOfOutputBandsDecorator : public F
 {
 public:
   constexpr NumberOfOutputBandsDecorator(F t, unsigned int nbComp) : F(t), m_NumberOfOutputBands(nbComp) {}
-  using F::operator();
 
   constexpr size_t OutputSize(...) const
   {
