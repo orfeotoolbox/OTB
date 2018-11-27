@@ -456,6 +456,7 @@ protected:
    static const double C;
 
    static const unsigned int thePluginVersion; // version of the SarSensorModel plugin
+   static const unsigned int thePluginVersionMin; // minimal version required of the SarSensorModel plugin
 
 private:
    /** Disabled assignment operator.  */
