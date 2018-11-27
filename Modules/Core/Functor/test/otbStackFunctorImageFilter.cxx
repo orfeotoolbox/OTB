@@ -20,11 +20,12 @@
 
 #include "otbStackFunctorImageFilter.h"
 
+
 using namespace otb;
 
 int otbStackFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  auto lambda = [](double a){return a;};
+  auto lambda = [](std::vector<std::reference_wrapper<double>> inputVector){return 10;};
 
   auto filter = NewStackFunctorFilter(lambda);
   

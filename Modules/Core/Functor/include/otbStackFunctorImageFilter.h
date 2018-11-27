@@ -24,7 +24,18 @@
 #include "otbFunctorTraits.h"
 #include "itkImageToImageFilter.h"
 
+#include <functional>
+#include <vector>
+
 namespace otb {
+
+template <typename T> struct RemoveVectorAndReferenceWrapper {};
+
+template <typename T> struct RemoveVectorAndReferenceWrapper<std::vector<std::reference_wrapper<T>>>
+{
+  using Type = T;
+};
+
 
 template <typename T> struct StackFunctorFilterSuperclassHelper : public StackFunctorFilterSuperclassHelper<typename RetrieveOperator<T>::Type> {};
 
@@ -32,7 +43,7 @@ template <typename T> struct StackFunctorFilterSuperclassHelper : public StackFu
 template <typename Out, typename In> struct StackFunctorFilterSuperclassHelper<Out(*)(In)>
 {
   using OutputImageType = typename ImageTypeDeduction<Out>::ImageType;
-  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<RemoveCVRef<In>>::PixelType>::ImageType;
+  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<typename RemoveVectorAndReferenceWrapper<In>::Type>::PixelType>::ImageType;
   using FilterType = itk::ImageToImageFilter<InputImageType,OutputImageType>;
   static constexpr bool InputHasNeighborhood = IsNeighborhood<In>::value;
 };
@@ -40,7 +51,7 @@ template <typename Out, typename In> struct StackFunctorFilterSuperclassHelper<O
 template <typename Out, typename C, typename In> struct StackFunctorFilterSuperclassHelper<Out(C::*)(In)>
 {
   using OutputImageType = typename ImageTypeDeduction<Out>::ImageType;
-  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<RemoveCVRef<In>>::PixelType>::ImageType;
+  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<typename RemoveVectorAndReferenceWrapper<In>::Type>::PixelType>::ImageType;
   using FilterType = itk::ImageToImageFilter<InputImageType,OutputImageType>;
   static constexpr bool InputHasNeighborhood = IsNeighborhood<In>::value;
 };
@@ -48,7 +59,7 @@ template <typename Out, typename C, typename In> struct StackFunctorFilterSuperc
 template <typename Out, typename C, typename In> struct StackFunctorFilterSuperclassHelper<Out(C::*)(In) const>
 {
   using OutputImageType = typename ImageTypeDeduction<Out>::ImageType;
-  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<RemoveCVRef<In>>::PixelType>::ImageType;
+  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<typename RemoveVectorAndReferenceWrapper<In>::Type>::PixelType>::ImageType;
   using FilterType = itk::ImageToImageFilter<InputImageType,OutputImageType>;
   static constexpr bool InputHasNeighborhood = IsNeighborhood<In>::value;
 };
@@ -57,7 +68,7 @@ template <typename Out, typename C, typename In> struct StackFunctorFilterSuperc
 template <typename Out, typename In> struct StackFunctorFilterSuperclassHelper<void(*)(Out&, In)>
 {
   using OutputImageType = typename ImageTypeDeduction<Out>::ImageType;
-  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<RemoveCVRef<In>>::PixelType>::ImageType;
+  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<typename RemoveVectorAndReferenceWrapper<In>::Type>::PixelType>::ImageType;
   using FilterType = itk::ImageToImageFilter<InputImageType,OutputImageType>;
   static constexpr bool InputHasNeighborhood = IsNeighborhood<In>::value;
 };
@@ -65,7 +76,7 @@ template <typename Out, typename In> struct StackFunctorFilterSuperclassHelper<v
 template <typename Out, typename C, typename In> struct StackFunctorFilterSuperclassHelper<void(C::*)(Out&, In)>
 {
   using OutputImageType = typename ImageTypeDeduction<Out>::ImageType;
-  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<RemoveCVRef<In>>::PixelType>::ImageType;
+  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<typename RemoveVectorAndReferenceWrapper<In>::Type>::PixelType>::ImageType;
   using FilterType = itk::ImageToImageFilter<InputImageType,OutputImageType>;
   static constexpr bool InputHasNeighborhood = IsNeighborhood<In>::value;
 };
@@ -73,7 +84,7 @@ template <typename Out, typename C, typename In> struct StackFunctorFilterSuperc
 template <typename Out, typename C, typename In> struct StackFunctorFilterSuperclassHelper<void(C::*)(Out&,In) const>
 {
   using OutputImageType = typename ImageTypeDeduction<Out>::ImageType;
-  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<RemoveCVRef<In>>::PixelType>::ImageType;
+  using InputImageType  = typename ImageTypeDeduction<typename PixelTypeDeduction<typename RemoveVectorAndReferenceWrapper<In>::Type>::PixelType>::ImageType;
   using FilterType = itk::ImageToImageFilter<InputImageType,OutputImageType>;
   static constexpr bool InputHasNeighborhood = IsNeighborhood<In>::value;
 };
