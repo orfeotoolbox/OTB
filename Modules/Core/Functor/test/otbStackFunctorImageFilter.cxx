@@ -18,10 +18,15 @@
  * limitations under the License.
  */
 
-#include "otbTestMain.h"
+#include "otbStackFunctorImageFilter.h"
 
-void RegisterTests()
+using namespace otb;
+
+int otbStackFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
-  REGISTER_TEST(otbFunctorImageFilter);
-  REGISTER_TEST(otbStackFunctorImageFilter);
+  auto lambda = [](double a){return a;};
+
+  auto filter = NewStackFunctorFilter(lambda);
+  
+  return EXIT_SUCCESS;
 }

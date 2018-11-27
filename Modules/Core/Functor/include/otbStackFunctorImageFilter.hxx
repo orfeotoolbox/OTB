@@ -18,10 +18,32 @@
  * limitations under the License.
  */
 
-#include "otbTestMain.h"
+#ifndef otb_StackFunctorImageFilter_h
+#define otb_StackFunctorImageFilter_h
 
-void RegisterTests()
+#include "otbStackFunctorImageFilter.h"
+
+namespace otb
 {
-  REGISTER_TEST(otbFunctorImageFilter);
-  REGISTER_TEST(otbStackFunctorImageFilter);
+template <class TFunction>
+void
+StackFunctorImageFilter<TFunction>
+::GenerateInputRequestedRegion()
+{}
+
+template <class TFunction>
+void
+StackFunctorImageFilter<TFunction>
+::GenerateOutputInformation()
+{}
+
+template <class TFunction>
+void
+StackFunctorImageFilter<TFunction>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+{}
+
 }
+
+
+#endif

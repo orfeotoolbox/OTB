@@ -23,6 +23,7 @@ otb_module_test()
 set(OTBFunctorTests
 otbFunctorTestDriver.cxx
 otbFunctorImageFilter.cxx
+otbStackFunctorImageFilter.cxx
 )
 
 add_executable(otbFunctorTestDriver ${OTBFunctorTests})
@@ -31,3 +32,6 @@ otb_module_target_label(otbFunctorTestDriver)
 
 otb_add_test(NAME bfTvFunctorImageFilter COMMAND otbImageManipulationTestDriver
   otbFunctorImageFilter)
+
+otb_add_test(NAME bfTvStackFunctorImageFilter COMMAND otbImageManipulationTestDriver
+  otbStackFunctorImageFilter)

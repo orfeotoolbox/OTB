@@ -22,116 +22,11 @@
 #define otbFunctorImageFilter_h
 
 #include "otbVariadicNamedInputsImageFilter.h"
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "itkRGBPixel.h"
-#include "itkRGBAPixel.h"
-#include "itkFixedArray.h"
-#include "itkDefaultConvertPixelTraits.h"
+#include "otbFunctorTraits.h"
 #include <type_traits>
 
 namespace otb
 {
-/**  
- * \struct IsNeighborhood 
- * \brief Struct testing if T is a neighborhood
- * 
- * Provides:
- * - ValueType type set to false_type or true_type
- * - value set to true or false
- */
-template <class T> struct IsNeighborhood : std::false_type {};
-
-/// Partial specialisation for itk::Neighborhood<T>
-template <class T> struct IsNeighborhood<itk::Neighborhood<T>> : std::true_type {};
-
-
-/// Partial specialisation for const itk::Neighborhood<T> &
-template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&> : std::true_type {};
-
-/**
- * \struct IsSuitableType
- * \brief Helper struct to check if a type can be used as pixel type.
- *
- * ::value maps to true if type can be used and false otherwhise.
- */
-template <class T> struct IsSuitableType : std::is_scalar<T>::type {};
-
-/// Unwrap complex
-template <class T> struct IsSuitableType<std::complex<T>> : IsSuitableType<T>::type {};
-
-/// Unwrap VariableLengthVector
-template <class T> struct IsSuitableType<itk::VariableLengthVector<T>> : IsSuitableType<T>::type {};
-
-/// Unwrap FixedArray
-template <class T, unsigned int N> struct IsSuitableType<itk::FixedArray<T,N>> : IsSuitableType<T>::type {};
-
-/// Unwrap RGBPixel
-template <class T> struct IsSuitableType<itk::RGBPixel<T>> : IsSuitableType<T>::type {};
-
-/// Unwrap RGBAPixel
-template <class T> struct IsSuitableType<itk::RGBAPixel<T>> : IsSuitableType<T>::type {};
-
-/**
- * \struct PixelTypeDeduction
- * \brief Helper struct to derive PixelType from template parameter.
- * 
- * T                           -> PixelType = T
- * itk::Neighborhood<T>        -> PixelType = T
- * const itk::Neighborhood<T>& -> PixelType = T
-*/
-template <class T> struct PixelTypeDeduction
-{
-  static_assert(IsSuitableType<T>::value,
-                "T can not be used as a template parameter for Image or VectorImage classes.");
-  using PixelType = T;
-};
-
-/// Partial specialisation for itk::Neighborhood<T>
-template <class T> struct PixelTypeDeduction<itk::Neighborhood<T>>
-{
-  static_assert(IsSuitableType<T>::value,
-                "T can not be used as a template parameter for Image or VectorImage classes.");
-  using PixelType = T;
-};
-
-/** 
- * \struct ImageTypeDeduction
- * \brief Helper struct to derive ImageType from template parameter
- * 
- * T                            -> ImageType = otb::Image<T>
- * itk::VariableLengthVector<T> -> ImageType = otb::VectorImage<T>
- * const T &                    -> ImageType = ImageTypeDeduction<T>::ImageType
- */
-template <class T> struct ImageTypeDeduction 
-{
-  using ImageType = otb::Image<T>;
-};
-
-/// Partial specialisation for itk::VariableLengthVector<T>
-template <class T> struct ImageTypeDeduction<itk::VariableLengthVector<T>>
-{
-  using ImageType = otb::VectorImage<T>;
-};
-
-// Helper to remove const, volatite and Ref qualifier (until c++20
-/// that has std::remove_cvref)
-template <typename T> using RemoveCVRef = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
-
-/**
-* \struct RetrieveOperator
-*
-* \brief Struct to retrieve the operator type
-* 
-* \tparam T the type to retrieve operator() from
-*
-*/
-template <typename T> struct RetrieveOperator
-{
-  static_assert(std::is_class<T>::value || std::is_function<T>::value, "T is not a class or function");
-  using Type = decltype(&T::operator());
-};
-
 /**
 * \struct FunctorFilterSuperclassHelper 
 * \brief Struct allowing to derive the superclass prototype for the
