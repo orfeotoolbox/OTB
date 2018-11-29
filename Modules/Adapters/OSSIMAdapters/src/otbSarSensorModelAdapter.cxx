@@ -216,5 +216,34 @@ bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & in
   return true;
 }
 
+bool SarSensorModelAdapter::LineToSatPositionAndVelocity(const double line, Point3DType & satellitePosition,  
+							 Point3DType & satelliteVelocity) const
+{
+  if(!m_SensorModel.get())
+    {
+      return false;
+    }
+
+  ossimplugins::ossimSarSensorModel::TimeType azimuthTime;
+  ossimEcefPoint sensorPos;
+  ossimEcefVector sensorVel;
+
+  m_SensorModel->lineToAzimuthTime(line, azimuthTime);
+  m_SensorModel->interpolateSensorPosVel(azimuthTime, sensorPos, sensorVel);
+
+  if(sensorPos.isNan() || sensorVel.isNan())
+    return false;
+
+  satellitePosition[0] = sensorPos.x();
+  satellitePosition[1] = sensorPos.y();
+  satellitePosition[2] = sensorPos.z();
+
+  satelliteVelocity[0] = sensorVel.x();
+  satelliteVelocity[1] = sensorVel.y();
+  satelliteVelocity[2] = sensorVel.z();    
+
+  return true;
+}
+
 
 } // namespace otb
