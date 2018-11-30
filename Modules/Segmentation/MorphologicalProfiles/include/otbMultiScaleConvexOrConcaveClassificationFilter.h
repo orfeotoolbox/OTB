@@ -27,6 +27,20 @@ namespace otb
 {
 namespace Functor
 {
+namespace MultiScaleConvexOrConcaveDecisionRule_tags
+{
+struct max_opening_profile_derivative  {};
+struct max_closing_profile_derivative  {};
+struct opening_profile_characteristics {};
+struct closing_profile_characteristics {};
+
+using InputTags = std::tuple<max_opening_profile_derivative,
+                             max_closing_profile_derivative,
+                             opening_profile_characteristics,
+                             closing_profile_characteristics>;
+
+} // End namespace MultiScaleConvexOrConcaveDecisionRule_tags
+
 /** \class MultiScaleConvexOrConcaveDecisionRule
  *  \brief This Functor apply a classification rule on two membership value along with two labels.
  *
@@ -150,109 +164,9 @@ private:
  *
  * \ingroup OTBMorphologicalProfiles
  */
-
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
-  : public FunctorImageFilter<Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-  /** Standard typedefs */
-  typedef MultiScaleConvexOrConcaveClassificationFilter Self;
-  typedef FunctorImageFilter<Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-  Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  /** Type macro */
-  itkNewMacro(Self);
-
-  static_assert(std::tuple_size<typename Superclass::InputTypesTupleType>::value == 4);
-
-  /** Creation through object factory macro */
-  itkTypeMacro(MultiScaleConvexOrConcaveClassificationFilter, FunctorImageFilter);
-
-  /** Template class typedef */
-  typedef TInputImage                         InputImageType;
-  typedef TOutputImage                        OutputImageType;
-  typedef typename OutputImageType::PixelType LabelType;
-  typedef Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-      typename TOutputImage::PixelType> DecisionFunctorType;
-  /**
-   * Set the opening profile derivative maxima image
-   * \param derivativeMaxima the opening profile derivative maxima image
-   *
-   */
-  void SetOpeningProfileDerivativeMaxima(const TInputImage * derivativeMaxima)
-  {
-    this->SetInput1(derivativeMaxima);
-  }
-  /**
-   * Set the opening profile characteristics image
-   * \param characteristics the opening profile characteristics image
-   *
-   */
-  void SetOpeningProfileCharacteristics(const TOutputImage * characteristics)
-  {
-    this->SetInput3(characteristics);
-  }
-  /**
-   * Set the closing profile derivative maxima image
-   * \param derivativeMaxima the closing profile derivative maxima image
-   *
-   */
-  void SetClosingProfileDerivativeMaxima(const TInputImage * derivativeMaxima)
-  {
-    this->SetInput2(derivativeMaxima);
-  }
-  /**
-   * Set the closing profile characteristics image
-   * \param characteristics the closing profile characteristics image
-   *
-   */
-  void SetClosingProfileCharacteristics(const TOutputImage * characteristics)
-  {
-    this->SetInput4(characteristics);
-  }
-
-  /** Set/Get the tolerance value */
-  itkSetMacro(Sigma, double);
-  itkGetMacro(Sigma, double);
-  /** Set/Get the label separator */
-  itkSetMacro(LabelSeparator, LabelType);
-  itkGetMacro(LabelSeparator, LabelType);
-
-  /** Set the functor parameters before calling the ThreadedGenerateData() */
-  void BeforeThreadedGenerateData(void) override
-  {
-    this->GetFunctor().SetLabelSeparator(m_LabelSeparator);
-    this->GetFunctor().SetSigma(m_Sigma);
-  }
-
-protected:
-  /** Constructor */
-  MultiScaleConvexOrConcaveClassificationFilter() : Superclass(DecisionFunctorType(), {{0,0}})
-    {
-    m_LabelSeparator = 10;
-    m_Sigma          = 0.0;
-    };
-  /** Destructor */
-  ~MultiScaleConvexOrConcaveClassificationFilter() override {}
-  /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-    os << indent << "LabelSeparator: " << m_LabelSeparator << std::endl;
-    os << indent << "Sigma: " << m_Sigma << std::endl;
-  }
-
-private:
-  MultiScaleConvexOrConcaveClassificationFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-  /** Label separator between convex and concave labels */
-  LabelType m_LabelSeparator;
-  /** Tolerance value */
-  double m_Sigma;
-};
+using MultiScaleConvexOrConcaveClassificationFilter
+= FunctorImageFilter<Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType>
+                     typename MultiScaleConvexOrConcaveDecisionRule_tags::InputTags>;
 } // End namespace otb
 #endif
