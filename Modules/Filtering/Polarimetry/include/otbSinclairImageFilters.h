@@ -27,14 +27,12 @@
 
 namespace otb
 {
-  // This is the entire declaration of SinclairToCovarianceMatrixFilter
+// This is the entire declaration of SinclairToCovarianceMatrixFilter
 template <typename TInputImage, typename TOutputImage>
-using SinclairToCovarianceMatrixFilter = FunctorImageFilter< Functor::SinclairToCovarianceMatrixFunctor <typename TInputImage::PixelType,typename TInputImage::PixelType,typename TInputImage::PixelType,typename TInputImage::PixelType,
-                                                                  typename TOutputImage::PixelType> ,
-                                                                  std::tuple<polarimetry_tags::hh,
-                                                                             polarimetry_tags::hv,
-                                                                             polarimetry_tags::vh,
-                                                                             polarimetry_tags::vv> >;
+using SinclairToCovarianceMatrixFilter = DefaultConstructibleFunctorImageFilter<
+    Functor::SinclairToCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 
 
 } // end namespace otb

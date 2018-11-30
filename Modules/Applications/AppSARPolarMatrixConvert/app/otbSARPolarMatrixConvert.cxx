@@ -47,9 +47,7 @@
 #include "otbMuellerToReciprocalCovarianceImageFilter.h"
 #include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
 
-
-
-
+#include "otbSinclairImageFilters.h"
 
 
 namespace otb
@@ -121,11 +119,6 @@ public:
                                     ComplexDoubleVectorImageType::PixelType>								CoherencyFunctorType;
                                     
                                     
-	typedef otb::Functor::SinclairToCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleVectorImageType::PixelType>								CovarianceFunctorType;
                                     
                                    
 	typedef otb::Functor::SinclairToCircularCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
@@ -150,12 +143,8 @@ public:
 											 CoherencyFunctorType > 									CohSRFilterType;
 											 
 											 
-    typedef SinclairImageFilter<ComplexDoubleImageType, 
-											 ComplexDoubleImageType,
-											 ComplexDoubleImageType, 
-											 ComplexDoubleImageType, 
-											 ComplexDoubleVectorImageType, 
-											 CovarianceFunctorType > 									CovSRFilterType;
+    using CovSRFilterType = SinclairToCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+
 											 
 	typedef SinclairImageFilter<ComplexDoubleImageType, 
 											 ComplexDoubleImageType, 
@@ -625,10 +614,10 @@ private:
 		
 		m_CovSRFilter = CovSRFilterType::New();
 		
-		m_CovSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_CovSRFilter->SetInputHV(GetParameterComplexDoubleImage("inhv"));
-		m_CovSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
-		m_CovSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+		m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::hv>(GetParameterComplexDoubleImage("inhv"));
+		m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
+		m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterOutputImage("outc", m_CovSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
 		
