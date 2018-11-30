@@ -417,7 +417,29 @@ template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(Func
   return  NewFunctorFilter<FunctorType,TNameMap>(decoratedF,radius);
 }
 
+template <class TFunction, class TNameMap = void>
+class ITK_EXPORT DefaultConstructibleFunctorImageFilter : public FunctorImageFilter<TFunction, TNameMap>
+{
+public:
+  // Standard typedefs
+  using Self         = DefaultConstructibleFunctorImageFilter;
+  using FunctorType  = TFunction;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
+  // Superclass through the helper struct
+  using Superclass      = FunctorImageFilter<TFunction, TNameMap>;
+  using OutputImageType = typename Superclass::OutputImageType;
+
+  itkNewMacro(Self);
+  itkTypeMacro(DefaultConstructibleFunctorImageFilter, FunctorImageFilter);
+
+protected:
+  DefaultConstructibleFunctorImageFilter() : Superclass(TFunction{}, {{0, 0}}){};
+  DefaultConstructibleFunctorImageFilter(const Self&) = delete;
+  void operator=(const Self&)               = delete;
+  ~DefaultConstructibleFunctorImageFilter() = default;
+};
 }// namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
