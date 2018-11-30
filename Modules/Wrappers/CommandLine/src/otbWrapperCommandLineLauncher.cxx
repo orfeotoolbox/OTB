@@ -23,7 +23,6 @@
 // Single value parameter
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperDirectoryParameter.h"
-#include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperInputImageParameter.h"
@@ -496,26 +495,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
               }
             }
           }
-        else if (type == ParameterType_Empty)
-          {
-          // Set UserValue flag specific for EmptyParameter, beware that it
-          // should be done before Enable/Disable because SetParameterUserValue()
-          // may enable it by default
-          m_Application->SetParameterUserValue(paramKey,true);
-          if (values[0] == "1" || values[0] == "true")
-            {
-            m_Application->EnableParameter(paramKey);
-            }
-          else if (values[0] == "0" || values[0] == "false")
-            {
-            m_Application->DisableParameter(paramKey);
-            }
-          else
-            {
-            std::cerr << "ERROR: Wrong value for parameter -" << paramKey << "." << std::endl;
-            return WRONGPARAMETERVALUE;
-            }
-          }
         // Call the DoUpdateParameter to update dependent params
         m_Application->UpdateParameters();
         }
@@ -755,7 +734,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<int32>         ";
     }
-  else if (type == ParameterType_Empty || type == ParameterType_Bool)
+  else if (type == ParameterType_Bool)
     {
     oss << "<boolean>       ";
     }

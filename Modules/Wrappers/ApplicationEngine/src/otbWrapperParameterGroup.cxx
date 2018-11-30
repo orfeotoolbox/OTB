@@ -21,7 +21,6 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
-#include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
@@ -249,10 +248,6 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
      {
      return ParameterType_Radius;
      }
-   else if (type == "Empty")
-     {
-     return ParameterType_Empty;
-     }
    else if (type == "Int")
      {
      return ParameterType_Int;
@@ -339,8 +334,8 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
      }
    else
      {
-     std::cerr << "Cannot find parameter type code for type: " << type <<  std::endl;
-     return ParameterType_Empty;
+         otbLogMacro(Error, << "Cannot find parameter type code for type: " << type);
+         throw std::invalid_argument("Cannot find parameter type code for type: " + type);
      }
 }
 
@@ -351,11 +346,6 @@ std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
 
   switch (type)
     {
-    case ParameterType_Empty:
-    {
-    paramType = "Empty";
-    }
-    break;
     case ParameterType_Int:
     {
     paramType = "Int";
@@ -515,11 +505,6 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
     Parameter::Pointer newParam;
     switch (type)
       {
-      case ParameterType_Empty:
-        {
-        newParam = EmptyParameter::New();
-        }
-        break;
       case ParameterType_Int:
         {
         newParam = IntParameter::New();

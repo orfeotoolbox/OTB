@@ -189,10 +189,6 @@ private:
     SetParameterDescription("filter.meanshift.minsize", "Minimum size of a region (in pixel unit) in segmentation. Smaller clusters will be merged to the neighboring cluster with the closest radiometry."
       " If set to 0 no pruning is done.");
 
-    //AddParameter(ParameterType_Empty, "filter.meanshift.useoptim", "use optimization");
-    //SetParameterDescription("filter.meanshift.useoptim", "Use mode optimization.");
-    //MandatoryOff("filter.meanshift.useoptim");
-
     SetDefaultParameterInt("filter.meanshift.spatialr", 5);
     SetDefaultParameterFloat("filter.meanshift.ranger", 15.0);
     SetDefaultParameterFloat("filter.meanshift.thres", 0.1);

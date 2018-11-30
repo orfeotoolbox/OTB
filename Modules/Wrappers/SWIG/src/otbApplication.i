@@ -79,7 +79,6 @@ namespace Wrapper
 
   typedef enum
   {
-    ParameterType_Empty,
     ParameterType_Int,
     ParameterType_Float,
     ParameterType_String,
@@ -247,7 +246,6 @@ public:
   void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag = true);
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
-  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
   void SetParameterOutputImagePixelType(std::string parameter, otb::Wrapper::ImagePixelType pixelType);
   void SetParameterComplexOutputImagePixelType(std::string parameter, otb::Wrapper::ComplexImagePixelType cpixelType);
@@ -581,7 +579,6 @@ class ApplicationProxy(object):
 				ParameterType_Radius : 'ParameterType_Radius',
 				ParameterType_RAM : 'ParameterType_RAM',
 				ParameterType_Float : 'ParameterType_Float',
-				ParameterType_Empty : 'ParameterType_Empty',
 				ParameterType_Choice : 'ParameterType_Choice',
 				ParameterType_Group : 'ParameterType_Group',
 				ParameterType_Bool : 'ParameterType_Bool'
@@ -614,8 +611,6 @@ class ApplicationProxy(object):
 			  return self.SetParameterInt(paramKey, value)
 			elif paramType in [ParameterType_Float]:
 			  return self.SetParameterFloat(paramKey, value)
-			elif paramType in [ParameterType_Empty]:
-			  return self.EnableParameter(paramKey)
 			elif paramType in [ParameterType_Bool]:
 			  return self.SetParameterString(paramKey, str(value) )
 			elif paramType in [ParameterType_Group]:
@@ -650,8 +645,6 @@ class ApplicationProxy(object):
 			  return self.GetParameterInt(paramKey)
 			elif paramType in [ParameterType_Float]:
 			  return self.GetParameterFloat(paramKey)
-			elif paramType in [ParameterType_Empty]:
-			  return self.IsParameterEnabled(paramKey)
 			elif paramType in [ParameterType_Bool]:
 			  return bool(self.GetParameterInt(paramKey))
 			elif paramType in [ParameterType_Group, ParameterType_Choice]:

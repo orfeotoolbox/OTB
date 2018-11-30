@@ -54,7 +54,6 @@ int main(int argc, char* argv[])
   assert(!group.empty());
 
   std::map<ParameterType, std::string> parameterTypeToString;
-  parameterTypeToString[ParameterType_Empty] = "QgsProcessingParameterBoolean";
   parameterTypeToString[ParameterType_Bool] = "QgsProcessingParameterBoolean";
   parameterTypeToString[ParameterType_Int] = "QgsProcessingParameterNumber";
   parameterTypeToString[ParameterType_Float] = "QgsProcessingParameterNumber";
@@ -271,10 +270,6 @@ int main(int argc, char* argv[])
     else if(type == ParameterType_Bool)
       {
       default_value = appli->GetParameterAsString(name);
-      }
-    else if(type == ParameterType_Empty)
-      {
-      default_value = appli->IsParameterEnabled(name)?"true":"false";
       }
     else if(type == ParameterType_Choice)
       {

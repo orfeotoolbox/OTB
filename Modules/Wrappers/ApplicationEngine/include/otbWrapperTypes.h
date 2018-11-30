@@ -35,7 +35,6 @@ namespace Wrapper
 
 typedef enum
 {
-  ParameterType_Empty,
   ParameterType_Int,
   ParameterType_Float,
   ParameterType_String,

@@ -65,7 +65,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
     "regression accuracy parameter, then the node will not be split further.");
 
   //UseSurrogates : don't need to be exposed !
-  //AddParameter(ParameterType_Empty, "classifier.dt.sur", "Surrogate splits will be built");
   //SetParameterDescription("classifier.dt.sur","These splits allow working with missing data and compute variable importance correctly.");
 
   //MaxCategories

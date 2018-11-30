@@ -50,7 +50,6 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetParameterBase.cxx
   otbWrapperQtWidgetInputImageParameter.cxx
   otbWrapperQtWidgetStringListParameter.cxx
-  otbWrapperQtWidgetEmptyParameter.cxx
   otbWrapperQtWidgetOutputVectorDataParameter.cxx
   otbWrapperQtWidgetInputFilenameParameter.cxx
   otbWrapperQtWidgetInputImageListParameter.cxx
@@ -62,7 +61,6 @@ set(OTBQtWidget_SRC
   )
 
 set(OTBQtWidget_MOC_HDR
-  ../include/otbWrapperQtWidgetEmptyParameter.h
   ../include/otbWrapperQtWidgetFloatParameter.h
   ../include/otbWrapperQtWidgetIntParameter.h
   ../include/otbWrapperQtWidgetStringParameter.h
