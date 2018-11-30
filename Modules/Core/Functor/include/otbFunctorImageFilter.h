@@ -417,6 +417,21 @@ template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(Func
   return  NewFunctorFilter<FunctorType,TNameMap>(decoratedF,radius);
 }
 
+/**
+ * \class DefaultConstructibleFunctorImageFilter
+ * \brief Adds New() to FunctorImageFilter
+ *
+ * FunctorImageFilter is not default constructible (to support lambda
+ * as template parameter), and thus does not offer the New() static method.
+ * 
+ * This class provides explicit default construction and New() static
+ * method when it is required to stick with the ITK/OTB workflow of
+ * default construction. It can not be used with lamda as TFunction.
+ * 
+ * \sa FunctorImageFilter
+ * \ingroup OTBFunctor
+ */
+
 template <class TFunction, class TNameMap = void>
 class ITK_EXPORT DefaultConstructibleFunctorImageFilter : public FunctorImageFilter<TFunction, TNameMap>
 {
