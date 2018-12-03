@@ -24,7 +24,7 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbUnaryImageFunctorWithVectorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
@@ -38,22 +38,6 @@ namespace otb
 {
 namespace Wrapper
 {
-
-namespace Functor
-{
-template< class TScalar >
-class ITK_EXPORT LogFunctor
-{
-public:
-  LogFunctor(){};
-  ~LogFunctor(){};
-  TScalar operator() (const TScalar& v) const
-  {
-    return std::log(v);
-  }
-};
-} // end namespace Functor
-
 
 class Convert : public Application
 {
@@ -77,11 +61,6 @@ public:
                                              DFContainerType> HistogramsGeneratorType;
   typedef StreamingShrinkImageFilter<FloatVectorImageType,
                                      FloatVectorImageType> ShrinkFilterType;
-  typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
-  typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
-                                                 FloatVectorImageType,
-                                                 TransferLogFunctor>   TransferLogType;
-
 
 private:
 
@@ -293,22 +272,35 @@ private:
 
       if ( rescaleType == "log2")
         {
-        //define the transfer log
-        m_TransferLog = TransferLogType::New();
-        m_TransferLog->SetInput(tempImage);
-        m_TransferLog->UpdateOutputInformation();
+	  // define lambda function that applies a log to all bands of the input pixel
+	  auto logFunction = [](const FloatVectorImageType::PixelType & vectorIn) {
+	    FloatVectorImageType::PixelType vectorOut(vectorIn.Size());
 
-        shrinkFilter->SetInput(m_TransferLog->GetOutput());
-        rescaler->SetInput(m_TransferLog->GetOutput());
-        shrinkFilter->Update();
+	    for (unsigned int i = 0; i < vectorIn.Size() ; i++) {
+	      vectorOut[i] = std::log(vectorIn[i]);
+	    }
+	    return vectorOut;
+	  };
+	  // creates functor filter
+	  auto transferLogFilter = NewFunctorFilter(logFunction,tempImage->GetNumberOfComponentsPerPixel(),{{0,0}});
+
+	  // save a reference to the functor
+	  m_Filters.push_back(transferLogFilter.GetPointer());
+	  
+	  transferLogFilter->SetVariadicInputs(tempImage);
+	  transferLogFilter->UpdateOutputInformation();
+	
+	  shrinkFilter->SetInput(transferLogFilter->GetOutput());
+	  rescaler->SetInput(transferLogFilter->GetOutput());
+	  shrinkFilter->Update();
         }
       else
         {
-        shrinkFilter->SetInput(tempImage);
-        rescaler->SetInput(tempImage);
-        shrinkFilter->Update();
+	  shrinkFilter->SetInput(tempImage);
+	  rescaler->SetInput(tempImage);
+	  shrinkFilter->Update();
         }
-
+      
       ShrinkFilterType::Pointer maskShrinkFilter = ShrinkFilterType::New();
 
       otbAppLogDEBUG( << "Evaluating input Min/Max..." );
@@ -517,7 +509,6 @@ private:
       }
   }
 
-  TransferLogType::Pointer m_TransferLog;
   std::vector<itk::LightObject::Pointer> m_Filters;
 };
 
