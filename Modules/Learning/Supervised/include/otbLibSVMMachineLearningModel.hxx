@@ -66,7 +66,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   this->m_Problem.l = 0;
   this->m_Problem.y = nullptr;
   this->m_Problem.x = nullptr;
-#ifndef NDEBUG
+#ifdef NDEBUG
   svm_set_print_string_function(&otb::Utils::PrintNothing);
 #endif
 }
