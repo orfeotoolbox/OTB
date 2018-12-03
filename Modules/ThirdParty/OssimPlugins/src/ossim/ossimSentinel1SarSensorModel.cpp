@@ -258,16 +258,15 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 	    ossimString const& sLast = getTextFromFirstNode(**itNode, attLastValidSample);
 	    std::vector<ossimString> sspLast = sLast.split(" ");
 
-            for (std::vector<ossimString>::const_iterator sIt = sspLast.begin(), e = sspLast.end()
-		   ; sIt != e ; ++sIt)
+            for (auto const& token : sspLast) 
 	      {
 		// Last first valid samples
-		if(*sIt!="-1")
+		if(token != "-1")
                   {
 		    int Lvs = 0;
 		    try
 		      {
-			Lvs = std::stoi(*sIt);
+			Lvs = std::stoi(token);
 		      }
 		    catch( ... )
 		      {
