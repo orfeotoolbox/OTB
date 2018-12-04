@@ -6,9 +6,12 @@ Detailed description
 
 {longdescription}
 
-
 Parameters
 ----------
+
+.. |br| raw:: html
+
+   <br />
 
 {parameters}
 

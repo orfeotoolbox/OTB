@@ -417,6 +417,20 @@ def RstHeading(text, delimiter, ref=None):
 def rst_heading(text, delimiter, ref=None):
     return text + "\n" + delimiter * len(text)
 
+def rst_parameters(app):
+    output = ""
+    parameter_template = open("templates/parameter.rst").read()
+
+    for key in app.GetParametersKeys():
+        output += parameter_template.format(
+            name=app.GetParameterName(key),
+            key=key,
+            type="test",
+            description=app.GetParameterDescription(key).replace("\n", "\n| ")
+        )
+
+    return output
+
 def ApplicationToRst(appname):
     app = otbApplication.Registry.CreateApplication(appname)
 
@@ -425,7 +439,8 @@ def ApplicationToRst(appname):
 
 
     deep = GetParametersDepth(app.GetParametersKeys()) > 0
-    parameters = ApplicationParametersToRstV2(app,app.GetParametersKeys(), deep)
+    #parameters = ApplicationParametersToRstV2(app,app.GetParametersKeys(), deep)
+    parameters = rst_parameters(app)
 
     output = open("templates/application.rst").read().format(
         heading=rst_heading(app.GetName(), '='),
