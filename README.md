@@ -1,4 +1,5 @@
-# ![OTB](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/master/Utilities/Doxygen/logoVectoriel.png) Orfeo Toolbox
+# ![OTB](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/master/Utilities/Doxygen/logoVectoriel.png) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Forfeotoolbox%2FOTB.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Forfeotoolbox%2FOTB?ref=badge_shield)
+Orfeo Toolbox
 ## Open Source processing of remote sensing images
 
 Orfeo ToolBox (OTB) is an open-source project for state-of-the-art remote
@@ -48,6 +49,9 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for contributors guidelines.
 
 ### License
 Please see the license and the Copyright directory for legal issues on the use of the software.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Forfeotoolbox%2FOTB.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Forfeotoolbox%2FOTB?ref=badge_large)
 
 ### Issues
 Please report any issue you might encouter to [our bugtracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug).
