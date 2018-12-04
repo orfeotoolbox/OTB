@@ -246,6 +246,7 @@ public:
    * \li ParameterType_InputVectorDataListParameter
    * \li ParameterType_InputFilenameListParameter
    * \li ParameterType_StringList
+   * \li ParameterType_ListView
    */
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
 
@@ -253,6 +254,8 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_String
+   * \li ParameterType_StringList
+   * \li ParameterType_ListView
    * \li ParameterType_InputFilename
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
