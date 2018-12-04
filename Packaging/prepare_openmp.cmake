@@ -32,8 +32,8 @@ file(MAKE_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
 set(OMP_TEMP_DIR ${CMAKE_CURRENT_BINARY_DIR}/omp-lib/)
 
 #use otbAppCommandLineLauncher to check if OpenMP is needed
-set(otbcommon_path "${SUPERBUILD_INSTALL_DIR}/lib/libOTBCommon-${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}${LIB_EXT}")
-message("common path ${otbcommon_path}")
+set(otbcommon_path "${SUPERBUILD_INSTALL_DIR}/lib/libOTBCommon-${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH}${LIB_EXT}")
+
 execute_process(
     COMMAND ${LOADER_PROGRAM} ${LOADER_ARGS} "${otbcommon_path}"
     RESULT_VARIABLE omp_rv
@@ -64,7 +64,16 @@ foreach(candidate ${omp_candidates})
     endif()  
 
     string(STRIP ${raw_item} raw_item)
-
+    
+    set(is_system FALSE)
+    setif_value_in_list(is_system "${raw_item}" SYSTEM_DLLS)
+    if(APPLE AND NOT is_system)
+      if("${raw_item}" MATCHES "@rpath")
+        string(REGEX REPLACE "@rpath." "" raw_item "${raw_item}")
+      else()
+        message(FATAL_ERROR "'${raw_item}' does not have @rpath")
+      endif()
+    endif()
     set(is_omp FALSE)
     setif_value_in_list(is_omp "${raw_item}" OMP_NAME_LIST)
 
