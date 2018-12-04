@@ -186,14 +186,5 @@ set(GTK_LIB_LIST_1
 #   libpng12.so.0
 #   )
 
-#OMP list name
-set(OMP_NAME_LIST
-  libomp.so.[0-9]* #linux clang
-  libgomp.so.[0-9]* #linux gcc
-  vcomp[0-9]*.dll #windows
-  vcompd[0-9]*.dll #windows debug
-  libomp.[0-9]*dylib #mac
-  )
-
 #set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1} ${GTK_LIB_LIST_2})
 set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1}) # ${GTK_LIB_LIST_2})

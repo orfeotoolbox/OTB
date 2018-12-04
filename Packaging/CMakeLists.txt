@@ -207,22 +207,11 @@ clear_cmakecache_variables()
 set(PKG_SEARCHDIRS)
 prepare_search_dirs(PKG_SEARCHDIRS)
 
-#OpenMP workaround
-file(MAKE_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
-set(OMP_TEMP_DIR ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
-foreach(omp_lib_name ${OMP_NAME_LIST})
-  unset(omp_lib_paths)
-  file(GLOB omp_lib_paths "${LIB_OPENMP_PATH}/${omp_lib_name}")
-  foreach(omp_lib_path ${omp_lib_paths})
-    file(COPY ${omp_lib_path}
-        DESTINATION ${OMP_TEMP_DIR})
-  endforeach(omp_lib_path)
-endforeach(omp_lib_name)
-
-list(APPEND PKG_SEARCHDIRS "${OMP_TEMP_DIR}")
-
 set(PKG_PEFILES)
 prepare_file_list(PKG_PEFILES)
+
+include(prepare_openmp)
+
 foreach(pfile ${PKG_PEFILES})
   process_file_recurse(${pfile})
 endforeach()
