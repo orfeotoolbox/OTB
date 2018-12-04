@@ -29,7 +29,7 @@ include(CTest)
 
 #setting this variable prints a lot of debug information
 set(PKG_DEBUG OFF)
-#set( PKG_DEBUG 1)
+# set( PKG_DEBUG 1)
 
 set(CMAKE_BUILD_TYPE    Release)
 
@@ -54,6 +54,10 @@ endif()
 if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
   find_package(PythonInterp REQUIRED)
 endif()
+
+#openMP lib path
+set(LIB_OPENMP_PATH "" CACHE PATH "path to the corresponding openMP library")
+
 
 find_program(FILE_COMMAND NAMES  "file")
 find_program(READLINK NAMES "readlink")
@@ -202,6 +206,20 @@ clear_cmakecache_variables()
 
 set(PKG_SEARCHDIRS)
 prepare_search_dirs(PKG_SEARCHDIRS)
+
+#OpenMP workaround
+file(MAKE_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
+set(OMP_TEMP_DIR ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
+foreach(omp_lib_name ${OMP_NAME_LIST})
+  unset(omp_lib_paths)
+  file(GLOB omp_lib_paths "${LIB_OPENMP_PATH}/${omp_lib_name}")
+  foreach(omp_lib_path ${omp_lib_paths})
+    file(COPY ${omp_lib_path}
+        DESTINATION ${OMP_TEMP_DIR})
+  endforeach(omp_lib_path)
+endforeach(omp_lib_name)
+
+list(APPEND PKG_SEARCHDIRS "${OMP_TEMP_DIR}")
 
 set(PKG_PEFILES)
 prepare_file_list(PKG_PEFILES)
