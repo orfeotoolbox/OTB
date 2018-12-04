@@ -246,6 +246,7 @@ public:
    * \li ParameterType_InputVectorDataListParameter
    * \li ParameterType_InputFilenameListParameter
    * \li ParameterType_StringList
+   * \li ParameterType_ListView
    */
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
 
@@ -260,6 +261,7 @@ public:
    * \li ParameterType_Float
    * \li ParameterType_Int
    * \li ParameterType_Radius
+   * \li ParameterType_ListView
    * \li ParameterType_InputImageParameter
    * \li ParameterType_ComplexInputImageParameter
    * \li ParameterType_InputVectorDataParameter
