@@ -30,6 +30,7 @@
 namespace {// Anonymous namespace
     const ossimString attAzimuthTime      = "azimuthTime";
     const ossimString attFirstValidSample = "firstValidSample";
+    const ossimString attLastValidSample   = "lastValidSample";
     const ossimString attGr0              = "gr0";
     const ossimString attGrsrCoefficients = "grsrCoefficients";
     const ossimString attHeight           = "height";
@@ -175,11 +176,16 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
         burstRecord.azimuthStopTime = getTimeFromFirstNode(xmlRoot,"imageAnnotation/imageInformation/productLastLineUtcTime");
         burstRecord.endLine = getTextFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/numberOfLines").toUInt16()-1;
 
+	burstRecord.startSample = 0;
+	burstRecord.endSample   = getTextFromFirstNode(xmlRoot, "imageAnnotation/imageInformation/numberOfSamples").toUInt16()-1;;
+
         theBurstRecords.push_back(burstRecord);
     }
     else
     {
         const unsigned int linesPerBurst = xmlRoot.findFirstNode("swathTiming/linesPerBurst")->getText().toUInt16();
+	const unsigned int samplesPerBurst = xmlRoot.findFirstNode("swathTiming/samplesPerBurst")->getText().toUInt16();
+
         unsigned int burstId(0);
 
         for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
@@ -188,10 +194,12 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
 
             const ossimSarSensorModel::TimeType azTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
 
+	    // Scan firstValidSample to define the first valid sample and valid lines
             ossimString const& s = getTextFromFirstNode(**itNode, attFirstValidSample);
 
             long first_valid(0), last_valid(0);
             bool begin_found(false), end_found(false);
+	    long first_sample_valid(0), last_sample_valid(samplesPerBurst-1);
 
             std::vector<ossimString> ssp = s.split(" ");
 
@@ -200,6 +208,7 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
                     ; ++sIt
                 )
             {
+	      // Find valid lines
                 if(!begin_found)
                 {
                     if(*sIt!="-1")
@@ -224,13 +233,62 @@ void ossimSentinel1SarSensorModel::readAnnotationFile(const std::string & annota
                         ++last_valid;
                     }
                 }
+
+		// Find first valid samples
+		if(*sIt!="-1")
+                  {
+		    int Fvs = samplesPerBurst;
+		    try
+		      {
+			Fvs = std::stoi(*sIt);
+		      }
+		    catch( ... )
+		      {
+			// Throw an execption
+			throw std::runtime_error("Failed to convert firstValidSample value.");
+		      }
+		    if (Fvs > first_sample_valid && Fvs < samplesPerBurst)
+		      {
+			first_sample_valid = Fvs; 
+		      }
+		  }
             }
+
+	    // Scan lastValidSample to define the last valid sample
+	    ossimString const& sLast = getTextFromFirstNode(**itNode, attLastValidSample);
+	    std::vector<ossimString> sspLast = sLast.split(" ");
+
+            for (auto const& token : sspLast) 
+	      {
+		// Last first valid samples
+		if(token != "-1")
+                  {
+		    int Lvs = 0;
+		    try
+		      {
+			Lvs = std::stoi(token);
+		      }
+		    catch( ... )
+		      {
+			// Throw an execption
+			throw std::runtime_error("Failed to convert lastValidSample value.");
+		      }
+
+		    if (Lvs < last_sample_valid && Lvs > 0)
+		      {
+			last_sample_valid = Lvs;
+		      }
+		  }
+	      }
 
             burstRecord.startLine = burstId*linesPerBurst + first_valid;
             burstRecord.endLine = burstId*linesPerBurst + last_valid;
 
             burstRecord.azimuthStartTime = azTime + (first_valid*theAzimuthTimeInterval);
             burstRecord.azimuthStopTime = azTime  + (last_valid*theAzimuthTimeInterval);
+
+	    burstRecord.startSample = first_sample_valid;
+            burstRecord.endSample   = last_sample_valid;
 
             theBurstRecords.push_back(burstRecord);
         }

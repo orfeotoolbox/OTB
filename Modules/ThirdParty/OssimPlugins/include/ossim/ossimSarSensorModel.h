@@ -157,6 +157,8 @@ public:
       unsigned long startLine;
       TimeType      azimuthStopTime;
       unsigned long endLine;
+      unsigned long startSample;
+      unsigned long endSample;
       friend std::ostream & operator<<(std::ostream & os, const BurstRecordType & v)
       {
          return os << "{ azimuthStartTime: " << v.azimuthStartTime
@@ -454,6 +456,7 @@ protected:
    static const double C;
 
    static const unsigned int thePluginVersion; // version of the SarSensorModel plugin
+   static const unsigned int thePluginVersionMin; // minimal version required of the SarSensorModel plugin
 
 private:
    /** Disabled assignment operator.  */

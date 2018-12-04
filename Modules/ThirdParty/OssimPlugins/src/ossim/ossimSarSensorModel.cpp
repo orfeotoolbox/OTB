@@ -107,7 +107,8 @@ namespace ossimplugins
 
    const double ossimSarSensorModel::C = 299792458;
 
-   const unsigned int ossimSarSensorModel::thePluginVersion = 2;
+   const unsigned int ossimSarSensorModel::thePluginVersion = 3;
+  const unsigned int ossimSarSensorModel::thePluginVersionMin = 2;
 
    ossimSarSensorModel::ProductType::ProductType(string_view const& s)
    {
@@ -1166,7 +1167,22 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
          ossimSarSensorModel::BurstRecordType burstRecord;
          get(kwl, burstPrefix + keyStartLine,        burstRecord.startLine);
          get(kwl, burstPrefix + keyEndLine,          burstRecord.endLine);
-         get(kwl, burstPrefix + keyAzimuthStartTime, burstRecord.azimuthStartTime);
+	 
+	 try {
+            unsigned int version;
+            get(kwl, HEADER_PREFIX, "version", version);
+	    // startSample and endSample since version 3
+            if (version >= 3) 
+	      {
+                get(kwl, burstPrefix + keyStartSample,        burstRecord.startSample);
+		get(kwl, burstPrefix + keyEndSample,          burstRecord.endSample);
+	      }
+         } 
+	 catch (...) {
+            throw std::runtime_error("Geom file generated with previous version of ossim plugins");
+         }
+        
+	 get(kwl, burstPrefix + keyAzimuthStartTime, burstRecord.azimuthStartTime);
          get(kwl, burstPrefix + keyAzimuthStopTime,  burstRecord.azimuthStopTime);
          burstRecords.push_back(burstRecord);
       }
@@ -1185,6 +1201,8 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
 
      add(kwl, burstPrefix + keyStartLine, (ossim_uint32) burstRecords[burstId].startLine);
      add(kwl, burstPrefix + keyEndLine, (ossim_uint32) burstRecords[burstId].endLine);
+     add(kwl, burstPrefix + keyStartSample, (ossim_uint32) burstRecords[burstId].startSample);
+     add(kwl, burstPrefix + keyEndSample, (ossim_uint32) burstRecords[burstId].endSample);
      add(kwl, burstPrefix + keyAzimuthStartTime, burstRecords[burstId].azimuthStartTime);
      add(kwl, burstPrefix + keyAzimuthStopTime,  burstRecords[burstId].azimuthStopTime);
      }
@@ -1389,7 +1407,7 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
          try {
             unsigned int version;
             get(kwl, HEADER_PREFIX, "version", version);
-            if (version < thePluginVersion) {
+            if (version < thePluginVersionMin) {
                throw std::runtime_error("Geom file generated with previous version of ossim plugins");
             }
          } catch (...) {

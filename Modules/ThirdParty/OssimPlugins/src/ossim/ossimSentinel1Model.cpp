@@ -51,6 +51,7 @@ namespace {// Anonymous namespace
    const ossimString attAdsHeader        = "adsHeader";
    const ossimString attAzimuthTime      = "azimuthTime";
    const ossimString attFirstValidSample = "firstValidSample";
+   const ossimString attLastValidSample   = "lastValidSample";
    const ossimString attGr0              = "gr0";
    const ossimString attGrsrCoefficients = "grsrCoefficients";
    const ossimString attHeight           = "height";
@@ -354,10 +355,15 @@ namespace ossimplugins
       const bool ret2 = safePlatform->getChildTextValue(instrumentId, "safe:number");
 
       if (ret1 && ret2) {
-         theManifestKwl.add("support_data.",
+         // theManifestKwl.add("support_data.",
+         //       "instrument",
+         //       "S1" + instrumentId,
+         //       true);
+	theManifestKwl.add("manifest_data.",
                "instrument",
-               "S1" + instrumentId,
-               true);
+                "S1" + instrumentId,
+                true);
+
          return familyName + instrumentId;
       }
       throw std::runtime_error("Cannot obtain Sensor ID");
@@ -401,7 +407,8 @@ namespace ossimplugins
    {
       static const char MODULE[] = "ossimSentinel1ProductDoc::parseSafe";
 
-      const ossimString prefix = "support_data.";
+      //const ossimString prefix = "support_data.";
+      const ossimString prefix = "manifest_data.";
 
       const ossimRefPtr<ossimXmlNode> safeProcessing = manifestDoc.getRoot()->findFirstNode("metadataSection/metadataObject/metadataWrap/xmlData/safe:processing");
       const ossimRefPtr<ossimXmlNode> facility       = safeProcessing->findFirstNode("safe:facility");
@@ -686,6 +693,8 @@ namespace ossimplugins
       add(theProductKwl, HEADER_PREFIX, "version", thePluginVersion);
 
       //RK maybe use this->getManifestPrefix()
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "first_line_time", getTextFromFirstNode(adsHeader, "startTime").string());
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "last_line_time", getTextFromFirstNode(adsHeader, "stopTime").string());
 
       add(theProductKwl, SUPPORT_DATA_PREFIX, "mds1_tx_rx_polar", polarisation);
 
@@ -741,7 +750,10 @@ namespace ossimplugins
       const ossimXmlNode & downlinkInformation =
          getExpectedFirstNode(*productRoot, "generalAnnotation/downlinkInformationList/downlinkInformation");
 
-      addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "pulse_repetition_frequency", downlinkInformation, "prf");
+      //addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "pulse_repetition_frequency", downlinkInformation, "prf");
+      const double azimuthFrequency = getDoubleFromFirstNode(imageInformation, "azimuthFrequency");
+      add(theProductKwl, SUPPORT_DATA_PREFIX, "pulse_repetition_frequency", azimuthFrequency);
+
 
       ossimXmlNode const& swathProcParams =
          getExpectedFirstNode(*productRoot, "imageAnnotation/processingInformation/swathProcParamsList/swathProcParams");
@@ -752,6 +764,12 @@ namespace ossimplugins
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "range_bandwidth",   rangeProcessingNode,   "processingBandwidth");
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "range_looks",       rangeProcessingNode,   "numberOfLooks");
       addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_looks",     azimuthProcessingNode, "numberOfLooks");
+
+      // azimuth steering rate for tops_sar only
+      if (theTOPSAR)
+	{
+	  addOptional(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_steering_rate",  productInformation,   "azimuthSteeringRate");
+	}
 
       if(!theTOPSAR || !theSLC)
       {
@@ -781,6 +799,16 @@ namespace ossimplugins
       } else {
          addDopplerCentroidCoefficients(*dcEstimateList);
       }
+
+      ossimXmlNodePtr const& aziFmRateList = productRoot->findFirstNode("generalAnnotation/azimuthFmRateList");
+      if (!aziFmRateList)
+	{
+	  ossimNotify(ossimNotifyLevel_DEBUG) << "No azimuth fm rate coefficients available in metadata!!\n";
+	}
+      else
+	{
+	  addAzimuthFmRateCoefficients(*aziFmRateList);
+	}
 
       readBurstRecords(*productRoot, imageInformation);
 
@@ -935,6 +963,10 @@ namespace ossimplugins
          burstRecord.azimuthStartTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", getTimeFromFirstNode(imageInformation,  "productFirstLineUtcTime"));
          burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  getTimeFromFirstNode(imageInformation,  "productLastLineUtcTime"));
          burstRecord.endLine          = add(theProductKwl, BURST_PREFIX, "[0].end_line",           getFromFirstNode<unsigned int>(imageInformation, "numberOfLines")-1);
+
+	 burstRecord.startSample = add(theProductKwl, BURST_PREFIX, "[0].start_sample", 0);
+	 burstRecord.endSample   = add(theProductKwl, BURST_PREFIX, "[0].end_sample",  getFromFirstNode<unsigned int>(imageInformation, "numberOfSamples")-1);
+
          theBurstRecords.push_back(burstRecord);
       }
       else
@@ -942,17 +974,22 @@ namespace ossimplugins
          char burstPrefix[1024];
 
          const unsigned int linesPerBurst = getFromFirstNode<unsigned int>(productRoot, "swathTiming/linesPerBurst");
+	 const unsigned int samplesPerBurst = getFromFirstNode<unsigned int>(productRoot, "swathTiming/samplesPerBurst");
+	 
          unsigned int burstId(0);
 
          for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++burstId)
          {
             BurstRecordType burstRecord;
-            const TimeType azTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
-            ossimString const& s = getTextFromFirstNode(**itNode, attFirstValidSample);
 
-            ossim_int64 first_valid(0), last_valid(0);
+	    ossim_int64 first_valid(0), last_valid(0);
             bool begin_found(false), end_found(false);
+	    ossim_int64 first_sample_valid(0), last_sample_valid(samplesPerBurst-1);
 
+            const TimeType azTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
+
+	    // Scan firstValidSample to define the first valid sample and valid lines
+            ossimString const& s = getTextFromFirstNode(**itNode, attFirstValidSample);
             std::vector<ossimString> ssp = s.split(" ");
 
             for (std::vector<ossimString>::const_iterator sIt = ssp.begin(), e = ssp.end()
@@ -960,6 +997,7 @@ namespace ossimplugins
                   ; ++sIt
                 )
             {
+	      // Find valid lines
                if(!begin_found)
                {
                   if(*sIt!="-1")
@@ -983,11 +1021,62 @@ namespace ossimplugins
                      ++last_valid;
                   }
                }
+
+	       // Find first valid samples
+	       if(*sIt!="-1")
+                  {
+		    int Fvs = samplesPerBurst;
+		    try
+		      {
+			Fvs = std::stoi(*sIt);
+		      }
+		    catch( ... )
+		      {
+			// Throw an execption
+			throw std::runtime_error("Failed to convert firstValidSample value.");
+		      }
+
+		    if (Fvs > first_sample_valid && Fvs < samplesPerBurst)
+		      {
+			first_sample_valid = Fvs; 
+		      }
+		  }
             }
+
+	    // Scan lastValidSample to define the last valid sample
+	    ossimString const& sLast = getTextFromFirstNode(**itNode, attLastValidSample);
+	    std::vector<ossimString> sspLast = sLast.split(" ");
+
+            for (std::vector<ossimString>::const_iterator sIt = sspLast.begin(), e = sspLast.end()
+		   ; sIt != e ; ++sIt)
+	      {
+		// Last first valid samples
+		if(*sIt!="-1")
+                  {
+		    int Lvs = 0;
+		    try
+		      {
+			Lvs = std::stoi(*sIt);
+		      }
+		    catch( ... )
+		      {
+			// Throw an execption
+			throw std::runtime_error("Failed to convert lastValidSample value.");
+		      }
+		    if (Lvs < last_sample_valid && Lvs > 0)
+		      {
+			last_sample_valid = Lvs;
+		      }
+		  }
+	      }
 
             s_printf(burstPrefix, "%s[%d].", BURST_PREFIX.c_str(), burstId);
             burstRecord.startLine = add(theProductKwl,burstPrefix + keyStartLine,         burstId*linesPerBurst + first_valid);
             burstRecord.endLine   = add(theProductKwl,burstPrefix + keyEndLine,           burstId*linesPerBurst + last_valid);
+ 
+	    burstRecord.startSample = add(theProductKwl,burstPrefix + keyStartSample, first_sample_valid);
+            burstRecord.endSample   = add(theProductKwl,burstPrefix + keyEndSample,  last_sample_valid);
+	  
             // TODO: check units.
             burstRecord.azimuthStartTime = add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + (first_valid*theAzimuthTimeInterval));
             burstRecord.azimuthStopTime  = add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + (last_valid*theAzimuthTimeInterval));
@@ -995,6 +1084,12 @@ namespace ossimplugins
             theBurstRecords.push_back(burstRecord);
          }
          add(theProductKwl, BURST_NUMBER_KEY, burstId);
+	 
+	 const std::string BURST_NUMBER_LINES_KEY    = "support_data.geom.bursts.number_lines_per_burst";
+	 add(theProductKwl, BURST_NUMBER_LINES_KEY, linesPerBurst);
+
+	 const std::string BURST_NUMBER_SAMPLES_KEY    = "support_data.geom.bursts.number_samples_per_burst";
+	 add(theProductKwl, BURST_NUMBER_SAMPLES_KEY, samplesPerBurst);
       }
    }
 
@@ -1184,6 +1279,11 @@ namespace ossimplugins
       ossimString count_str;
       dcEstimateList.getAttributeValue(count_str, "count");
       const int count  = count_str.toInt();
+
+      char prefix_main[256];
+      s_printf(prefix_main, "dopplerCentroid.dop_coef_nb_list");
+      add(theProductKwl, prefix_main, "", count);
+
       if( count < 1)
       {
          ossimNotify(ossimNotifyLevel_DEBUG) << "No doppler centroid coefficients available in metadata!!\n";
@@ -1206,7 +1306,10 @@ namespace ossimplugins
             assert(dcEstimate.get());
             addOptional(theProductKwl, prefix, "dop_coef_time",  *dcEstimate, "azimuthTime");
             //RK
-            const double ref_time = getOptionalTextFromFirstNode(*dcEstimate, "t0").toFloat64() * 1e9; // s to ns
+            //const double ref_time = getOptionalTextFromFirstNode(*dcEstimate, "t0").toFloat64() * 1e9; // s to ns
+
+	    const double ref_time = getOptionalTextFromFirstNode(*dcEstimate, "t0").toFloat64(); // remain in s
+
             add(theProductKwl, prefix, keySlantRangeTime, ref_time);
 
             ossimString const& ns = getOptionalTextFromFirstNode(*dcEstimate, "ns");
@@ -1228,17 +1331,103 @@ namespace ossimplugins
                for (int count = 1 ; coeff != result.end() ; ++count, ++coeff)
                {
                   char coeff_prefix[256];
-                  s_printf(coeff_prefix, "%s%d.dop_coef", prefix, count);
+                  s_printf(coeff_prefix, "%s%d.geo_dop_coef", prefix, count);
 
                   add(theProductKwl, coeff_prefix, coeff->string());
                }
 
             } //if (!coeffStr.empty())
 
+	    ossimString const& coeffDopStr = getOptionalTextFromFirstNode(*dcEstimate, "dataDcPolynomial");
+
+            if (!coeffDopStr.empty())
+            {
+               const ossimString separatorList = " ";
+               std::vector<ossimString> result;
+
+               coeffDopStr.split(result, separatorList, true);
+
+               std::vector<ossimString>::const_iterator coeff = result.begin();
+
+               for (int count = 1 ; coeff != result.end() ; ++count, ++coeff)
+               {
+                  char coeff_prefix[256];
+                  s_printf(coeff_prefix, "%s%d.dop_coef", prefix, count);
+
+                  add(theProductKwl, coeff_prefix, coeff->string());
+               }
+
+            } //if (!coeffDopStr.empty())
+
          } // for each dcEstimate
 
       } // else count < 1
    }
+
+  void ossimSentinel1Model::addAzimuthFmRateCoefficients(ossimXmlNode const& aziFmRateList)
+  {
+    ossimString count_str;
+    aziFmRateList.getAttributeValue(count_str, "count");
+    const int count  = count_str.toInt();
+
+    char prefix_main[256];
+    s_printf(prefix_main, "azimuthFmRate.azi_fm_rate_coef_nb_list");
+    add(theProductKwl, prefix_main, "", count);
+
+    if( count < 1)
+      {
+	ossimNotify(ossimNotifyLevel_DEBUG) << "No azimuth fm rate coefficients available in metadata!!\n";
+	return;
+      }
+    else
+      {
+	ossimXmlNode::ChildListType azimuthFmRates;
+	aziFmRateList.findChildNodes("azimuthFmRate", azimuthFmRates);
+
+	ossimXmlNode::ChildListType::const_iterator it = azimuthFmRates.begin();
+
+	for (int index = 1 ; it != azimuthFmRates.end() ; ++it, ++index)
+	  {
+	    char prefix[256];
+	    //azimuthFmRate.azi_fm_rate_coef_list;
+            s_printf(prefix, "azimuthFmRate.azi_fm_rate_coef_list%d.", index);
+	    
+	    const ossimXmlNodePtr & azimuthFmRate = *it;
+            assert(azimuthFmRate.get());
+
+	    // AzimuthTime
+            addOptional(theProductKwl, prefix, "azi_fm_rate_coef_time",  *azimuthFmRate, "azimuthTime");
+           
+	    // Slant range time
+	    const double ref_time = getOptionalTextFromFirstNode(*azimuthFmRate, "t0").toFloat64(); // remain in s
+
+            add(theProductKwl, prefix, keySlantRangeTime, ref_time);
+	    
+	    // Coefficients
+	    ossimString const& coeffAziFmRateStr = getOptionalTextFromFirstNode(*azimuthFmRate, "azimuthFmRatePolynomial");
+
+            if (!coeffAziFmRateStr.empty())
+            {
+               const ossimString separatorList = " ";
+               std::vector<ossimString> result;
+
+               coeffAziFmRateStr.split(result, separatorList, true);
+
+               std::vector<ossimString>::const_iterator coeff = result.begin();
+
+               for (int count = 1 ; coeff != result.end() ; ++count, ++coeff)
+               {
+                  char coeff_prefix[256];
+                  s_printf(coeff_prefix, "%s%d.azi_fm_rate_coef", prefix, count);
+
+                  add(theProductKwl, coeff_prefix, coeff->string());
+               }
+
+            } //if (!coeffAziFmRateStr.empty())
+	    
+	  } // for each azimuthFmRate
+      }
+  }
 
    bool ossimSentinel1Model::openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const
    {
