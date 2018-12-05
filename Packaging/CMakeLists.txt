@@ -210,7 +210,7 @@ prepare_search_dirs(PKG_SEARCHDIRS)
 set(PKG_PEFILES)
 prepare_file_list(PKG_PEFILES)
 
-if( APPLE OR UNIX )
+if( UNIX )
   include(prepare_openmp)
 endif()
 
