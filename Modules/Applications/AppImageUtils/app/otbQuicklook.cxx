@@ -100,12 +100,12 @@ private:
     MandatoryOff("sr");
 
     AddParameter(ParameterType_Int, "sx",  "Size X");
-    SetParameterDescription( "sx" , "quicklook size in x-direction (used if no sampling ration is given)" );
+    SetParameterDescription( "sx" , "quicklook size in x-direction (used if no sampling ratio is given)" );
     MandatoryOff("sx");
     DisableParameter("sx");
 
     AddParameter(ParameterType_Int, "sy",  "Size Y");
-    SetParameterDescription( "sy" , "quicklook size in y-direction (used if no sampling ration is given)" );
+    SetParameterDescription( "sy" , "quicklook size in y-direction (used if no sampling ratio is given)" );
     MandatoryOff("sy");
     DisableParameter("sy");
 

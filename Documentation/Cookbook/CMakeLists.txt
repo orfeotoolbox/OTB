@@ -142,7 +142,6 @@ add_custom_target(CookBookHTML
   -b html
   ${RST_BINARY_DIR}
   ${HTML_DIR}
-  -W
   -v
   -c ${SPHINX_CONF_DIR}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -163,7 +162,6 @@ add_custom_target(CookBookArchive
    -b latex
    ${RST_BINARY_DIR}
    ${LATEX_DIR}
-   -W
    -v
    -c ${SPHINX_CONF_DIR}
    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

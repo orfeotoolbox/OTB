@@ -13,6 +13,10 @@ Parameters
 
    <br />
 
+.. |em| raw:: html
+
+   &emsp;
+
 {parameters}
 
 Examples

@@ -22,6 +22,7 @@
 import os
 import sys
 import argparse
+from collections import defaultdict
 
 import otbApplication
 
@@ -417,16 +418,71 @@ def RstHeading(text, delimiter, ref=None):
 def rst_heading(text, delimiter, ref=None):
     return text + "\n" + delimiter * len(text)
 
+def rst_parameter_value(app, key):
+    type = app.GetParameterType(key)
+    if type == otbApplication.ParameterType_Bool:
+        return "bool"
+    elif (type == otbApplication.ParameterType_Int
+       or type == otbApplication.ParameterType_Radius
+       or type == otbApplication.ParameterType_RAM):
+        return "int"
+    elif type == otbApplication.ParameterType_Float:
+        return "float"
+    elif type == otbApplication.ParameterType_String:
+        return "string"
+    elif type == otbApplication.ParameterType_StringList:
+        return "string1 string2..."
+    elif (type == otbApplication.ParameterType_InputFilename
+            or type == otbApplication.ParameterType_OutputFilename):
+        return "filename"
+    elif (type == otbApplication.ParameterType_InputImage
+       or type == otbApplication.ParameterType_ComplexInputImage
+       or type == otbApplication.ParameterType_OutputImage
+       or type == otbApplication.ParameterType_ComplexOutputImage):
+        return "image"
+    elif (type == otbApplication.ParameterType_InputVectorData
+       or type == otbApplication.ParameterType_OutputVectorData):
+        return "vectorfile"
+    elif type == otbApplication.ParameterType_Directory:
+        return "directory"
+    elif type ==  otbApplication.ParameterType_Choice:
+        return "choice"
+    elif type == otbApplication.ParameterType_InputImageList:
+        return "image1 image2..."
+    elif type == otbApplication.ParameterType_InputVectorDataList:
+        return "vectorfile1 vectorfile2..."
+    elif type == otbApplication.ParameterType_InputFilenameList :
+        return "filename1 filename2..."
+    elif type == otbApplication.ParameterType_ListView:
+        if app.GetListViewSingleSelectionMode(key):
+            return "string"
+        else:
+            return "string1 string2..."
+    elif type == otbApplication.ParameterType_Group:
+        return "TODO"
+    elif (type == otbApplication.ParameterType_InputProcessXML
+        or type == otbApplication.ParameterType_OutputProcessXML):
+        return "filename.xml"
+    else:
+        return "value"
+
+def rst_parameter_flags(app, key):
+    if app.IsMandatory(key):
+        return "|em| *(mandatory)* "
+    else:
+        return ""
+
 def rst_parameters(app):
     output = ""
     parameter_template = open("templates/parameter.rst").read()
 
     for key in app.GetParametersKeys():
         output += parameter_template.format(
-            name=app.GetParameterName(key),
+            name=ConvertString(app.GetParameterName(key)),
             key=key,
-            type="test",
-            description=app.GetParameterDescription(key).replace("\n", "\n| ")
+            value=rst_parameter_value(app, key),
+            description=app.GetParameterDescription(key),
+            flags=rst_parameter_flags(app, key),
         )
 
     return output
