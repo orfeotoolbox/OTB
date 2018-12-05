@@ -23,6 +23,7 @@ import os
 import sys
 import argparse
 from collections import defaultdict
+import itertools
 
 import otbApplication
 
@@ -476,19 +477,56 @@ def rst_parameter_flags(app, key):
 
 def rst_parameters(app):
     output = ""
-    parameter_template = open("templates/parameter.rst").read()
+    template_parameter = open("templates/parameter.rst").read()
+    template_parameter_group = open("templates/parameter_group.rst").read()
 
+    keys = app.GetParametersKeys()
+
+    def nthkey(n):
+        """
+        Make the sort function of groupby used to group application keys by prefix, for different depth levels
+        Basically, the key is the N first key for level N
+        For example for 'inzone.labelimage.in' the key is:
+        - inzone for level 1
+        - inzone.labelimage for level 2
+        - inzone.labelimage.in for level 3
+        """
+        def firstkeys(key):
+            splits = key.split(".")
+            return ".".join(splits[:min(len(splits), n)])
+        return firstkeys
+
+    #for k, g in itertools.groupby(keys, nthkey(1)):
+        #groups = list(g)
+        #print(k, groups)
+        #for kk, gg in itertools.groupby(groups, nthkey(2)):
+            #print(kk, list(gg))
+        #print()
+    #print()
+    #print()
+
+    previous_level = 1
     for key in app.GetParametersKeys():
         type = app.GetParameterType(key)
 
+        # If reducing level, render a horizontal line
+        current_level = 1 + key.count(".")
+        print(key, previous_level, current_level)
+        if current_level < previous_level:
+            output += "\n\n------------\n\n"
+        previous_level = current_level
+
         if type == otbApplication.ParameterType_Group:
-            output += "\n\ngroup " + ConvertString(app.GetParameterName(key)) + "\n\n"
+            output += template_parameter_group.format(
+                name=rst_heading(ConvertString(app.GetParameterName(key)), "-^~+$"[current_level]),
+                description=app.GetParameterDescription(key)
+            )
 
         elif type == otbApplication.ParameterType_Choice:
             output += "\n\nchoice " + ConvertString(app.GetParameterName(key)) + "\n\n"
 
         else:
-            output += parameter_template.format(
+            output += template_parameter.format(
                 name=ConvertString(app.GetParameterName(key)),
                 key=key,
                 value=rst_parameter_value(app, key),
