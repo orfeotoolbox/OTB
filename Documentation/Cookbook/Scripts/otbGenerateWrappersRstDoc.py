@@ -467,8 +467,10 @@ def rst_parameter_value(app, key):
         return "value"
 
 def rst_parameter_flags(app, key):
-    if app.IsMandatory(key):
-        return "|em| *(mandatory)* "
+    if app.IsMandatory(key) and not app.HasValue(key):
+        return "|br| *Mandatory* \n"
+    elif app.HasValue(key) and app.GetParameterType(key) != otbApplication.ParameterType_Group:
+        return "|br| *Default value: {}*".format(app.GetParameterValue(key))
     else:
         return ""
 
@@ -477,13 +479,22 @@ def rst_parameters(app):
     parameter_template = open("templates/parameter.rst").read()
 
     for key in app.GetParametersKeys():
-        output += parameter_template.format(
-            name=ConvertString(app.GetParameterName(key)),
-            key=key,
-            value=rst_parameter_value(app, key),
-            description=app.GetParameterDescription(key),
-            flags=rst_parameter_flags(app, key),
-        )
+        type = app.GetParameterType(key)
+
+        if type == otbApplication.ParameterType_Group:
+            output += "\n\ngroup " + ConvertString(app.GetParameterName(key)) + "\n\n"
+
+        elif type == otbApplication.ParameterType_Choice:
+            output += "\n\nchoice " + ConvertString(app.GetParameterName(key)) + "\n\n"
+
+        else:
+            output += parameter_template.format(
+                name=ConvertString(app.GetParameterName(key)),
+                key=key,
+                value=rst_parameter_value(app, key),
+                description=app.GetParameterDescription(key),
+                flags=rst_parameter_flags(app, key),
+            )
 
     return output
 
