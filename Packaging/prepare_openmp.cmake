@@ -17,23 +17,76 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+function(get_symlink_target target symlink)
+  execute_process(COMMAND "${READLINK}" -f "${symlink}"
+    RESULT_VARIABLE readlink_rv
+    OUTPUT_VARIABLE readlink_ov
+    ERROR_VARIABLE readlink_ev
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+  set(${target} "${readlink_ov}" PARENT_SCOPE)
+endfunction(get_symlink_target)
+
+function(strip_candidate refine_candidate raw_candidate)
+    if(NOT raw_candidate)
+      return()
+    endif()
+
+    if(NOT "${raw_candidate}" MATCHES "${LOADER_REGEX}")
+      return()
+    endif()
+
+    string(REGEX REPLACE "${LOADER_REGEX}" "\\1" result "${raw_candidate}")
+
+    if(NOT result)
+      return()
+    endif()  
+
+    string(STRIP ${result} result)
+    
+    set(is_system FALSE)
+
+    #if the lib is sysem we do not process it 
+    setif_value_in_list(is_system "${result}" SYSTEM_DLLS)
+
+    #MacOS workaround
+    if(APPLE AND NOT is_system)
+      if("${result}" MATCHES "@rpath")
+        string(REGEX REPLACE "@rpath." "" result "${result}")
+      else()
+        message(FATAL_ERROR "'${result}' does not have @rpath")
+      endif()
+    endif()
+
+    set(refine_candidate ${result} PARENT_SCOPE)
+endfunction(strip_candidate)
 
 #OMP list name
 set(OMP_NAME_LIST
   libomp.so.[0-9]* #linux clang
   libgomp.so.[0-9]* #linux gcc
-  vcomp[0-9]*.dll #windows
-  vcompd[0-9]*.dll #windows debug
   libomp.[0-9]*dylib #mac
   )
+# vcomp[0-9]*.dll #windows
+# vcompd[0-9]*.dll #windows debug
 
-#OpenMP workaround
+#OpenMP workaround for unix and mac system
+#We create a temporary directory where we are going to copy all omp library 
+#found in ${OMP_LIB_DIR}
 file(MAKE_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
-set(OMP_TEMP_DIR ${CMAKE_CURRENT_BINARY_DIR}/omp-lib/)
+set(OMP_TEMP_DIR ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
 
-#use otbAppCommandLineLauncher to check if OpenMP is needed
-set(otbcommon_path "${SUPERBUILD_INSTALL_DIR}/lib/libOTBCommon-${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH}${LIB_EXT}")
+set(otbcommon_glob_name "${SUPERBUILD_INSTALL_DIR}/lib/${LIB_PREFIX}OTBCommon-*${LIB_EXT}")
 
+file(GLOB otbcommon_paths ${otbcommon_glob_name})
+
+#file(GLOB..) might find several lib matching 
+#We are taking the first one.
+list(GET otbcommon_paths 0 otbcommon_path)
+message( "otbcommon_path ${otbcommon_path}")
+
+#We are getting all the dependancies of the lib. If openMP has been used 
+#for compiling OTB we will find it here.
 execute_process(
     COMMAND ${LOADER_PROGRAM} ${LOADER_ARGS} "${otbcommon_path}"
     RESULT_VARIABLE omp_rv
@@ -48,59 +101,46 @@ endif()
 string(REPLACE ";" "\\;" omp_candidates "${omp_ov}")
 string(REPLACE "\n" "${LOADER_REGEX_EOL};" omp_candidates "${omp_candidates}")
 
-foreach(candidate ${omp_candidates})
-    if(NOT candidate)
-      continue()
-    endif()
+foreach(omp_candidate ${omp_candidates})
+  #stripping the raw result
+  set( omp_lib "" )
 
-    if(NOT "${candidate}" MATCHES "${LOADER_REGEX}")
-      continue()
-    endif()
+  strip_candidate( omp_lib ${omp_candidate})
 
-    string(REGEX REPLACE "${LOADER_REGEX}" "\\1" raw_item "${candidate}")
+  if ( NOT omp_lib  )
+    continue()
+  endif()
 
-    if(NOT raw_item)
-      continue()
-    endif()  
+  #Searching in the list if it matches an omp lib name
+  setif_value_in_list( is_omp "${omp_lib}" OMP_NAME_LIST)
 
-    string(STRIP ${raw_item} raw_item)
-    
-    set(is_system FALSE)
-    setif_value_in_list(is_system "${raw_item}" SYSTEM_DLLS)
-    if(APPLE AND NOT is_system)
-      if("${raw_item}" MATCHES "@rpath")
-        string(REGEX REPLACE "@rpath." "" raw_item "${raw_item}")
-      else()
-        message(FATAL_ERROR "'${raw_item}' does not have @rpath")
-      endif()
-    endif()
-    set(is_omp FALSE)
-    setif_value_in_list(is_omp "${raw_item}" OMP_NAME_LIST)
+  if ( NOT is_omp )
+    continue()
+  endif()
 
-    if ( ${is_omp} )
-      set(omp_full_path ${LIB_OPENMP_PATH}/${raw_item})
+  message("omp_lib ${omp_lib}")
+  #we should find the lib in th OMP_LIB_DIR
+  set(omp_full_path ${OMP_LIB_DIR}/${omp_lib})
+  if( NOT EXISTS ${omp_full_path})
+    message(FATAL_ERROR "Warning openMP not found in : ${OMP_LIB_DIR}")
+  endif()
+
+  #We need to loop over symlink
+  set(is_a_symlink TRUE)
+  while ( is_a_symlink )
+    set(is_a_symlink FALSE)
+    if(IS_SYMLINK ${omp_full_path})
+      get_symlink_target(target ${omp_full_path})
       set(is_a_symlink TRUE)
-      set(finale_target "${LIB_OPENMP_PATH}/${raw_item}")
-      if(EXISTS "${finale_target}")
-        file(COPY ${finale_target}
-          DESTINATION ${OMP_TEMP_DIR})
-      elseif()
-        message(WARNING "Warning openMP not found in : ${LIB_OPENMP_PATH}")
-      endif()
-      #the file might be a symlink. We need to find the real target
-      while( is_a_symlink )
-        isfile_symlink("${finale_target}" is_a_symlink omp_target)
-        if ( is_a_symlink )
-        # everything must be past otherwise we wont be able to follow
-        #the dependance in the process_file_recurse function
-          set(finale_target "${LIB_OPENMP_PATH}/${omp_target}")
-          file(COPY ${finale_target}
-            DESTINATION ${OMP_TEMP_DIR})
-        endif()
-      endwhile(is_a_symlink)    
+      file(COPY ${omp_full_path}
+        DESTINATION ${OMP_TEMP_DIR})
+      set( omp_full_path ${target} )
     endif()
+  endwhile( is_a_symlink )
 
-endforeach(candidate)
+  file(COPY ${omp_full_path} DESTINATION ${OMP_TEMP_DIR})
+
+endforeach(omp_candidate)
 
 #Append the temp dir to the list of PKG_SEARCHDIRS
 list(APPEND PKG_SEARCHDIRS "${OMP_TEMP_DIR}")

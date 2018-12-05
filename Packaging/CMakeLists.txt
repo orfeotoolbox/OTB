@@ -56,7 +56,7 @@ if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
 endif()
 
 #openMP lib path
-set(LIB_OPENMP_PATH "" CACHE PATH "path to the corresponding openMP library")
+set(OMP_LIB_DIR "" CACHE PATH "path to the corresponding openMP library")
 
 
 find_program(FILE_COMMAND NAMES  "file")
