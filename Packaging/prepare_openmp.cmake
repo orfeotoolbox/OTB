@@ -28,6 +28,7 @@ function(get_symlink_target target symlink)
 endfunction(get_symlink_target)
 
 function(strip_candidate refine_candidate raw_candidate)
+    set( ${refine_candidate} "" PARENT_SCOPE )
     if(NOT raw_candidate)
       return()
     endif()
@@ -58,7 +59,7 @@ function(strip_candidate refine_candidate raw_candidate)
       endif()
     endif()
 
-    set(refine_candidate ${result} PARENT_SCOPE)
+    set(${refine_candidate} "${result}" PARENT_SCOPE)
 endfunction(strip_candidate)
 
 #OMP list name
@@ -83,7 +84,6 @@ file(GLOB otbcommon_paths ${otbcommon_glob_name})
 #file(GLOB..) might find several lib matching 
 #We are taking the first one.
 list(GET otbcommon_paths 0 otbcommon_path)
-message( "otbcommon_path ${otbcommon_path}")
 
 #We are getting all the dependancies of the lib. If openMP has been used 
 #for compiling OTB we will find it here.
@@ -103,8 +103,6 @@ string(REPLACE "\n" "${LOADER_REGEX_EOL};" omp_candidates "${omp_candidates}")
 
 foreach(omp_candidate ${omp_candidates})
   #stripping the raw result
-  set( omp_lib "" )
-
   strip_candidate( omp_lib ${omp_candidate})
 
   if ( NOT omp_lib  )
@@ -112,13 +110,12 @@ foreach(omp_candidate ${omp_candidates})
   endif()
 
   #Searching in the list if it matches an omp lib name
-  setif_value_in_list( is_omp "${omp_lib}" OMP_NAME_LIST)
+  setif_value_in_list( is_omp ${omp_lib} OMP_NAME_LIST)
 
   if ( NOT is_omp )
     continue()
   endif()
 
-  message("omp_lib ${omp_lib}")
   #we should find the lib in th OMP_LIB_DIR
   set(omp_full_path ${OMP_LIB_DIR}/${omp_lib})
   if( NOT EXISTS ${omp_full_path})

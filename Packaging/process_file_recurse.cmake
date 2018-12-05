@@ -42,7 +42,7 @@ function(process_file_recurse input_file)
   #if(NOT input_file_full_path)
   if( NOT input_file_full_path )
     message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}"
-      " and in ${LIB_OPENMP_PATH} for openMP. ")
+      " and in ${OMP_LIB_DIR} for openMP. ")
   endif()
 
   get_filename_component(bn_name ${input_file_full_path} NAME)
