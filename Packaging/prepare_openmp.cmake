@@ -17,6 +17,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+#This cmake file is here to allow packaging of openMP.
+#Windows case is not taking care of as we already provide search dir for
+#the omp dll
+
+#function to get symlink target works
 function(get_symlink_target target symlink)
   execute_process(COMMAND "${READLINK}" -f "${symlink}"
     RESULT_VARIABLE readlink_rv
@@ -27,6 +33,7 @@ function(get_symlink_target target symlink)
   set(${target} "${readlink_ov}" PARENT_SCOPE)
 endfunction(get_symlink_target)
 
+#This function strip the result of ${LOADER_PROGRAM} to retrieve proper lib name
 function(strip_candidate refine_candidate raw_candidate)
     set( ${refine_candidate} "" PARENT_SCOPE )
     if(NOT raw_candidate)
@@ -74,8 +81,8 @@ set(OMP_NAME_LIST
 #OpenMP workaround for unix and mac system
 #We create a temporary directory where we are going to copy all omp library 
 #found in ${OMP_LIB_DIR}
-file(MAKE_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
-set(OMP_TEMP_DIR ${CMAKE_CURRENT_BINARY_DIR}/omp-lib)
+file(MAKE_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR}/tmp-omp-lib)
+set(OMP_TEMP_DIR ${CMAKE_CURRENT_BINARY_DIR}/tmp-omp-lib)
 
 set(otbcommon_glob_name "${SUPERBUILD_INSTALL_DIR}/lib/${LIB_PREFIX}OTBCommon-*${LIB_EXT}")
 
@@ -84,7 +91,10 @@ file(GLOB otbcommon_paths ${otbcommon_glob_name})
 #file(GLOB..) might find several lib matching 
 #We are taking the first one.
 list(GET otbcommon_paths 0 otbcommon_path)
-
+if ( NOT EXISTS "${otbcommon_path}" )
+  message(FATAL_ERROR "Error, cannot find ${LIB_PREFIX}OTBCommon-* in :
+    ${SUPERBUILD_INSTALL_DIR}/lib/, result is : ${otbcommon_path}")
+endif()
 #We are getting all the dependancies of the lib. If openMP has been used 
 #for compiling OTB we will find it here.
 execute_process(
@@ -119,7 +129,8 @@ foreach(omp_candidate ${omp_candidates})
   #we should find the lib in th OMP_LIB_DIR
   set(omp_full_path ${OMP_LIB_DIR}/${omp_lib})
   if( NOT EXISTS ${omp_full_path})
-    message(FATAL_ERROR "Warning openMP not found in : ${OMP_LIB_DIR}")
+    message(FATAL_ERROR "Warning openMP lib : ${omp_lib} not found in :
+     ${OMP_LIB_DIR}")
   endif()
 
   #We need to loop over symlink

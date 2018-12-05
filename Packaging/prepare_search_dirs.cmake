@@ -35,6 +35,7 @@ function(prepare_search_dirs search_dirs_result)
     list(APPEND search_dirs "${UCRT_SDK_DIR}/Redist/ucrt/DLLs/${OTB_TARGET_SYSTEM_ARCH}") #ucrt dlls
   
   #additional msvc redist dll from VCINSTALLDIR
+  # openmp for unix and apple is done in a different file : prepare_openmp.cmake
   file(TO_CMAKE_PATH "$ENV{VCINSTALLDIR}" PKG_VCINSTALLDIR)
   list(APPEND search_dirs 
     "${PKG_VCINSTALLDIR}/redist/${OTB_TARGET_SYSTEM_ARCH}/Microsoft.VC140.CRT"

@@ -210,7 +210,9 @@ prepare_search_dirs(PKG_SEARCHDIRS)
 set(PKG_PEFILES)
 prepare_file_list(PKG_PEFILES)
 
-include(prepare_openmp)
+if( APPLE OR UNIX )
+  include(prepare_openmp)
+endif()
 
 foreach(pfile ${PKG_PEFILES})
   process_file_recurse(${pfile})
