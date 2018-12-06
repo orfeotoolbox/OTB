@@ -153,6 +153,11 @@ SarBurstExtractionImageFilter<TImage>::ThreadedGenerateData(const RegionType& ou
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
+  int linesRecordFirst = static_cast<int>(m_LinesRecord.first);
+  int linesRecordSecond = static_cast<int>(m_LinesRecord.second);
+  int samplesRecordFirst = static_cast<int>(m_SamplesRecord.first);
+  int samplesRecordSecond = static_cast<int>(m_SamplesRecord.second);
+
   while(!inputIt.IsAtEnd()&&!outputIt.IsAtEnd())
     {
       typename ImageType::IndexType currentInputIndex = inputIt.GetIndex();
@@ -161,15 +166,15 @@ SarBurstExtractionImageFilter<TImage>::ThreadedGenerateData(const RegionType& ou
       bool sampleToKeep = false;
 
       // Check lines
-      if (currentInputIndex[1] >= static_cast<int>(m_LinesRecord.first) && 
-	  currentInputIndex[1] <= static_cast<int>(m_LinesRecord.second))
+      if (currentInputIndex[1] >= linesRecordFirst && 
+	  currentInputIndex[1] <= linesRecordSecond)
 	{
 	  lineToKeep = true;
 	}
 
       // Check samples
-      if (currentInputIndex[0] >= static_cast<int>(m_SamplesRecord.first) && 
-	  currentInputIndex[0] <= static_cast<int>(m_SamplesRecord.second))
+      if (currentInputIndex[0] >= samplesRecordFirst && 
+	  currentInputIndex[0] <= samplesRecordSecond)
 	{
 	  sampleToKeep = true;
 	} 

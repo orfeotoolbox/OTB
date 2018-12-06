@@ -1694,6 +1694,7 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
   
    // declare lines and samples 
    std::vector<std::pair<unsigned long,unsigned long> > lines;
+   lines.reserve(theBurstRecords.size());
    std::pair<unsigned long,unsigned long> samples;
 
    // First, clear lines record
