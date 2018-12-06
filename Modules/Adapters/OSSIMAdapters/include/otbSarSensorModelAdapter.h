@@ -82,7 +82,9 @@ public:
   bool IsValidSensorModel() const;
 
   /** Deburst metadata if possible and return lines to keep in image file */
-  bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines);
+  bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines,
+	       std::pair<unsigned long,unsigned long> & samples, bool onlyValidSample=false);
+
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) and YZ frame */

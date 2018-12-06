@@ -89,11 +89,13 @@ bool SarSensorModelAdapter::IsValidSensorModel() const
   return m_SensorModel.get() != nullptr;
 }
 
-bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines)
+bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines,
+				      std::pair<unsigned long,unsigned long> & samples, 
+				      bool onlyValidSample)
 {
   if(m_SensorModel.get() != nullptr)
     {
-    return m_SensorModel->deburst(lines);
+      return m_SensorModel->deburst(lines, samples, onlyValidSample);
     }
   
   return false;

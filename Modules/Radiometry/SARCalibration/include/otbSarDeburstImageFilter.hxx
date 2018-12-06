@@ -27,12 +27,14 @@
 #include "otbImageKeywordlist.h"
 #include "itkImageScanlineIterator.h"
 #include "itkImageScanlineConstIterator.h"
+#include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIterator.h"
 
 namespace otb
 {
 // Constructor
 template <class TImage> SarDeburstImageFilter<TImage>::SarDeburstImageFilter()
-  : m_LinesRecord()
+  : m_LinesRecord(), m_SamplesRecord(), m_OnlyValidSample(false)
 {}
 
 // Needs to be re-implemented since size of output is modified
@@ -66,7 +68,7 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
     itkExceptionMacro(<<"Input image does not contain a valid SAR sensor model.");
   
   // Try to call the deburst function
-  bool deburstOk = sarSensorModel->Deburst(m_LinesRecord);
+  bool deburstOk = sarSensorModel->Deburst(m_LinesRecord, m_SamplesRecord, m_OnlyValidSample);
 
   if(!deburstOk || m_LinesRecord.empty())
     itkExceptionMacro(<<"Could not deburst SAR sensor model from input image");
@@ -82,9 +84,6 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
 
   if(!saveOk)
     itkExceptionMacro(<<"Could not export deburst SAR sensor model to keyword list");
-
-  // Set new keyword list to output image
-  outputPtr->SetImageKeywordList(newKwl);
 
   // Now, filter the LinesRecord so as to account for possible
   // extracts on input image
@@ -111,7 +110,7 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
     // If record is inside input image region
     if((long)it->first<=lastInputLine && (long)it->second>=firstInputLine)
       {
-      LinesRecordType filteredRecord = *it;
+      RecordType filteredRecord = *it;
       filteredRecord.first = std::max((long)filteredRecord.first,firstInputLine);
       filteredRecord.second = std::min((long)filteredRecord.second,lastInputLine);
       filteredRecords.push_back(filteredRecord);
@@ -134,10 +133,21 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
     deburstSize[1]+=it->second-it->first+1;
     }
 
+  if (m_OnlyValidSample)
+    {
+      deburstSize[0] = m_SamplesRecord.second - m_SamplesRecord.first + 1;
+    }
+  
   // Set largest possible region
   typename ImageType::RegionType outputLargestPossibleRegion = largestPossibleRegion;
   largestPossibleRegion.SetSize(deburstSize);
   outputPtr->SetLargestPossibleRegion(largestPossibleRegion);
+
+  newKwl.AddKey("support_data_number_samples", std::to_string(deburstSize[0]));
+  newKwl.AddKey("support_data_number_lines", std::to_string(deburstSize[1]));
+  
+  // Set new keyword list to output image
+  outputPtr->SetImageKeywordList(newKwl);
 }
 
 template<class TImage>
@@ -172,6 +182,12 @@ SarDeburstImageFilter<TImage>::OutputRegionToInputRegion(const RegionType& outpu
   typename RegionType::SizeType size = inputRegion.GetSize();
   typename RegionType::IndexType index = inputRegion.GetIndex();
   
+  if (m_OnlyValidSample)
+    {
+      index[0]+= m_SamplesRecord.first;
+      //size[0]+= m_SamplesRecord.first;
+    }
+  
   index[1]=inputUpperLeftLine;
   size[1]=inputLowerLeftLine-inputUpperLeftLine+1;
 
@@ -194,7 +210,26 @@ template <class TImage> void SarDeburstImageFilter<TImage>::GenerateInputRequest
 }
 
 // Actual processing
-template <class TImage> void SarDeburstImageFilter<TImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
+template <class TImage> 
+void 
+SarDeburstImageFilter<TImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, 
+						    itk::ThreadIdType itkNotUsed(threadId))
+{
+  if (m_OnlyValidSample)
+    {
+      this->ThreadedGenerateDataWithOnlyValidSamples(outputRegionForThread, 0);
+    }
+  else
+    {
+      this->ThreadedGenerateDataWithAllSamples(outputRegionForThread, 0);
+    }
+}
+
+// Actual processing with all samples
+template <class TImage> 
+void 
+SarDeburstImageFilter<TImage>::ThreadedGenerateDataWithAllSamples(const RegionType& outputRegionForThread, 
+								  itk::ThreadIdType itkNotUsed(threadId))
 {
   // Compute corresponding input region
   RegionType inputRegionForThread = OutputRegionToInputRegion(outputRegionForThread);
@@ -238,6 +273,59 @@ template <class TImage> void SarDeburstImageFilter<TImage>::ThreadedGenerateData
     inputIt.NextLine();
     }  
 }
+
+// Actual processing with only valid samples
+template <class TImage> 
+void 
+SarDeburstImageFilter<TImage>::ThreadedGenerateDataWithOnlyValidSamples(const RegionType& outputRegionForThread, 
+									itk::ThreadIdType itkNotUsed(threadId))
+{
+  // Compute corresponding input region
+  RegionType inputRegionForThread = OutputRegionToInputRegion(outputRegionForThread);
+  
+  itk::ImageRegionConstIterator<ImageType> inputIt(this->GetInput(),inputRegionForThread);
+  itk::ImageRegionIterator<ImageType> outputIt(this->GetOutput(),outputRegionForThread);
+
+  inputIt.GoToBegin();
+  outputIt.GoToBegin();
+
+  while(!inputIt.IsAtEnd()&&!outputIt.IsAtEnd())
+    {
+      typename ImageType::IndexType currentInputIndex = inputIt.GetIndex();
+      PointType currentInputPoint;
+      this->GetInput()->TransformIndexToPhysicalPoint(currentInputIndex,currentInputPoint);
+
+      bool lineToKeep = false;
+      bool sampleToKeep = false;
+
+      for(LinesRecordVectorType::const_iterator it  = m_LinesRecord.begin();
+	  it!=m_LinesRecord.end();++it)
+	{
+	  if(currentInputPoint[1]-0.5>=it->first && currentInputPoint[1]-0.5<=it->second)
+	    {
+	      lineToKeep = true;
+	      break;
+	    }
+	}
+
+      if (currentInputIndex[0] >= static_cast<int>(m_SamplesRecord.first) && 
+	  currentInputIndex[0] <= static_cast<int>(m_SamplesRecord.second))
+	{
+	  sampleToKeep = true;
+	} 
+
+      if(lineToKeep && sampleToKeep)
+	{
+	  outputIt.Set(inputIt.Get());
+
+	  ++outputIt;
+	}
+    
+
+      ++inputIt;
+    }  
+}
+
 
 } // End namespace otb
 

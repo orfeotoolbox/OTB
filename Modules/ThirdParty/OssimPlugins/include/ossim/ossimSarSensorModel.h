@@ -288,12 +288,19 @@ public:
     * Note that the deburst operation has no effect if theBurstRecords
     * contains a single burst. Otherwise it will merge burst together
     * into a single burst, and update GCPs accordingly.
+    * Two modes are available for the output image : with all samples and
+    * with only valid samples. A pair of samples specifies first and last samples
     * \return true if the deburst operation succeeded. No changes is
     * made to the object if the operation fails.
     * \param lines A container for the lines ranges to keep in the
     * deburst image.
+    * \param samples A container for the samples to keep in the
+    * deburst image.
+    * \param onlyValidSample If true, the selected mode is with only valid sample.
     */
-   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines);
+   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines, 
+		std::pair<unsigned long,unsigned long> & samples, bool onlyValidSample=false);
+   
 
    /**
     * This is a helper function to convert image line to deburst image
@@ -452,6 +459,11 @@ protected:
    DurationType                                theAzimuthTimeOffset; // Offset computed
    double                                      theRangeTimeOffset; // Offset in seconds, computed
    bool                                        theRightLookingFlag;
+   
+   TimeType                                    theFirstLineTime;
+   TimeType                                    theLastLineTime;
+
+   bool redaptMedataAfterDeburst;
    
    static const double C;
 

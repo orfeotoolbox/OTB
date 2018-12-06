@@ -139,7 +139,8 @@ namespace ossimplugins
       theBistaticCorrectionNeeded(false),
       theAzimuthTimeOffset(seconds(0)),
       theRangeTimeOffset(0.),
-      theRightLookingFlag(true)
+      theRightLookingFlag(true),
+      redaptMedataAfterDeburst(false)
       {}
 
    ossimSarSensorModel::GCPRecordType const&
@@ -1359,6 +1360,14 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
 
      add(kwl, HEADER_PREFIX, "version", thePluginVersion);
 
+     if (redaptMedataAfterDeburst)
+       {
+	 add(kwl, SUPPORT_DATA_PREFIX, "first_line_time", theFirstLineTime);
+	 add(kwl, SUPPORT_DATA_PREFIX, "last_line_time", theLastLineTime);
+	 add(kwl, HEADER_PREFIX, "first_line_time", theFirstLineTime);
+	 add(kwl, HEADER_PREFIX, "last_line_time", theLastLineTime);
+       }
+
      return ossimSensorModel::saveState(kwl, prefix);
    }
 
@@ -1425,7 +1434,8 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
       return false;
    }
 
-bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned long> >& lines)
+bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned long> >& lines, 
+				  std::pair<unsigned long,unsigned long> & samples, bool onlyValidSample)
 {
   if(theBurstRecords.empty())
     return false;
@@ -1452,6 +1462,8 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   TimeType deburstAzimuthStartTime = it->azimuthStartTime;
 
   unsigned long deburstEndLine = 0;
+
+  samples = std::make_pair(it->startSample, it->endSample);
   
   for(; next!= itend ;++it,++next)
     {
@@ -1466,17 +1478,44 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
       
     unsigned long currentStop = it->endLine-halfLineOverlapEnd;
 
-    deburstEndLine+=currentStop-currentStart;
+    deburstEndLine+= currentStop - currentStart + 1; // +1 because currentStart/Stop are both valids
+
     
     lines.push_back(std::make_pair(currentStart,currentStop));
 
-    currentStart = next->startLine+halfLineOverlapBegin;    
+    currentStart = next->startLine+halfLineOverlapBegin;
+
+     if (onlyValidSample)
+      {
+	// Find the first and last valid sampleburst
+	if (it->startSample > samples.first)
+	  {
+	    samples.first = it->startSample;
+	  }
+	if (it->endSample < samples.second)
+	  {
+	    samples.second = it->endSample;
+	  }
+      }
     }
 
   TimeType deburstAzimuthStopTime = it->azimuthStopTime;
   deburstEndLine+=it->endLine-currentStart;
 
   lines.push_back(std::make_pair(currentStart,it->endLine));
+
+  if (onlyValidSample)
+    {
+      if (it->startSample > samples.first)
+	{
+	  samples.first = it->startSample;
+	}
+      if (it->endSample < samples.second)
+	{
+	  samples.second = it->endSample;
+	}
+    }
+
   
   // Now, update other metadata accordingly
 
@@ -1489,6 +1528,13 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   deburstBurst.azimuthStartTime = deburstAzimuthStartTime;
   deburstBurst.endLine = deburstEndLine;
   deburstBurst.azimuthStopTime = deburstAzimuthStopTime;
+
+  if (onlyValidSample)
+    {
+      deburstBurst.startSample = 0;
+      deburstBurst.endSample = samples.second - samples.first;
+    }
+
   
   theBurstRecords.push_back(deburstBurst);
 
@@ -1501,20 +1547,49 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
       unsigned long newLine=0;
 
       unsigned long gcpLine = std::floor(currentGCP.imPt.y+0.5);
+      unsigned long gcpSample = std::floor(currentGCP.imPt.x+0.5);
+
 
       // Be careful about fractional part of GCPs
-      double fractional = currentGCP.imPt.y - gcpLine;
-      
-      bool deburstOk = imageLineToDeburstLine(lines,gcpLine,newLine);
+      double fractionalLines = currentGCP.imPt.y - gcpLine;
+      double fractionalSamples = currentGCP.imPt.x - gcpSample;
 
-      if(deburstOk)
+      bool linesOk = imageLineToDeburstLine(lines,gcpLine,newLine);
+
+      // Gcp into valid samples
+      bool samplesOk = true;
+      unsigned long newSample = gcpSample;
+      
+      if (onlyValidSample)
+	{
+	  samplesOk = false;
+	  if (gcpSample >= samples.first && gcpSample <= samples.second)
+	    {
+	      samplesOk = true;
+	      newSample -= samples.first; // Offset with first valid sample
+	    } 
+	}
+
+      if(linesOk && samplesOk)
         {
-        currentGCP.imPt.y = newLine+fractional;
-        deburstGCPs.push_back(currentGCP);
+	  currentGCP.imPt.y = newLine + fractionalLines;
+	  currentGCP.imPt.x = newSample + fractionalSamples;
+	  
+	  deburstGCPs.push_back(currentGCP);
         }        
       }
 
   theGCPRecords.swap(deburstGCPs);
+
+
+  // Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
+  redaptMedataAfterDeburst = false;
+  theFirstLineTime = deburstBurst.azimuthStartTime;
+  theLastLineTime = deburstBurst.azimuthStopTime;
+  
+  if (onlyValidSample)
+    theNearRangeTime += samples.first*(1/theRangeSamplingRate); 
+
 
   return true;
 }
