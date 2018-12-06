@@ -89,6 +89,11 @@ public:
   bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines, 
 		       std::pair<unsigned long,unsigned long> & samples);
 
+  
+  /** Deburst metadata if possible and prepare the burst concatenation */	
+  bool DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long> > & linesBursts,
+			     std::vector<std::pair<unsigned long,unsigned long> > & samplesBursts);
+
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) and YZ frame */

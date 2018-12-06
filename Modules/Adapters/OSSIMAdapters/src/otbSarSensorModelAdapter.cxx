@@ -113,6 +113,17 @@ bool SarSensorModelAdapter::BurstExtraction(const unsigned int burst_index,
    return false;
 }
 
+bool 
+SarSensorModelAdapter::DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long> > & linesBursts,
+					     std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts)
+{
+  if(m_SensorModel.get())
+    {
+      return m_SensorModel->deburstAndConcatenate(linesBursts, samplesBursts);
+    }
+  
+  return false;
+}
 
 bool SarSensorModelAdapter::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {

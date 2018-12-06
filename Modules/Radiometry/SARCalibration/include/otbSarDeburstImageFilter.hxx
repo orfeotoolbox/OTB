@@ -146,6 +146,9 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   newKwl.AddKey("support_data_number_samples", std::to_string(deburstSize[0]));
   newKwl.AddKey("support_data_number_lines", std::to_string(deburstSize[1]));
   
+  newKwl.AddKey("number_samples", std::to_string(deburstSize[0]));
+  newKwl.AddKey("number_lines", std::to_string(deburstSize[1]));
+
   // Set new keyword list to output image
   outputPtr->SetImageKeywordList(newKwl);
 }
