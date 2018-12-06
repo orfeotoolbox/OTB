@@ -321,17 +321,12 @@ def ApplicationParametersToRstV2(app,paramlist,deep = False,current=""):
     return output
 
 def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outputpath=""):
-    appname = app.GetName()
-    printable = []
-    output = linesep + "::" + linesep + linesep
-    output+= "\t#!/usr/bin/python" + linesep
+    appname = "app"
 
-    output+= linesep
-    output+= "\t# Import the otb applications package" + linesep
+    output = ""
+
     output+= "\timport otbApplication" + linesep + linesep
-    output+= "\t# The following line creates an instance of the " + ConvertString(app.GetName()) + " application " + linesep
-    output+= "\t" + ConvertString(app.GetName()) + " = otbApplication.Registry.CreateApplication(\"" + ConvertString(app.GetName()) + "\")" + linesep + linesep
-    output+= "\t# The following lines set all the application parameters:" + linesep
+    output+= "\t" + appname + " = otbApplication.Registry.CreateApplication(\"" + ConvertString(app.GetName()) + "\")" + linesep + linesep
     for i in range(0, app.GetExampleNumberOfParameters(idx)):
         param = app.GetExampleParameterKey(idx,i)
         value = app.GetExampleParameterValue(idx,i)
@@ -343,92 +338,70 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
             break
         if paramtype ==  otbApplication.ParameterType_Choice:
             #app.SetParameterString(param,value)
-            output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")" + linesep
-        if paramtype == otbApplication.ParameterType_Empty:
-            app.EnableParameter(param)
-            output+= "\t" + appname + ".EnableParameter("+EncloseString(param)+")" + linesep
+            output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")"
         if paramtype == otbApplication.ParameterType_Bool:
-            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+","+EncloseString(value)+")" + linesep
+            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+","+EncloseString(value)+")"
         if paramtype == otbApplication.ParameterType_Int \
                 or paramtype == otbApplication.ParameterType_Radius \
                 or paramtype == otbApplication.ParameterType_RAM:
             # app.SetParameterString(param,value)
-            output += "\t" + appname + ".SetParameterInt("+EncloseString(param)+", "+value+")" + linesep
+            output += "\t" + appname + ".SetParameterInt("+EncloseString(param)+", "+value+")"
         if paramtype == otbApplication.ParameterType_Float:
             # app.SetParameterString(param,value)
-            output += "\t" + appname + ".SetParameterFloat("+EncloseString(param)+", "+value + ")" + linesep
+            output += "\t" + appname + ".SetParameterFloat("+EncloseString(param)+", "+value + ")"
         if paramtype == otbApplication.ParameterType_String:
             # app.SetParameterString(param,value)
-            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(value)+")" + linesep
+            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(value)+")"
         if paramtype == otbApplication.ParameterType_StringList:
             values = value.split(" ")
             # app.SetParameterStringList(param,values)
-            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+str(values)+")" + linesep
+            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+str(values)+")"
         if paramtype == otbApplication.ParameterType_InputFilename \
             or paramtype == otbApplication.ParameterType_OutputFilename \
             or paramtype == otbApplication.ParameterType_Directory:
             if paramrole == 0:
                 # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand)) + ")" + linesep
-                printable.append(["in","file",ExpandPath(value,inputpath,expand)])
+                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand)) + ")"
             elif paramrole == 1:
                 # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,outputpath,expand))+")" + linesep
-                printable.append(["out","file",ExpandPath(value,inputpath,expand)])
+                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,outputpath,expand))+")"
         if paramtype == otbApplication.ParameterType_InputImage :
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"+linesep
-            printable.append(["in","img",ExpandPath(value,inputpath,expand)])
+            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
         if paramtype == otbApplication.ParameterType_ComplexInputImage:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")" + linesep
-            printable.append(["in","cimg",ExpandPath(value,inputpath,expand)])
+            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
         if paramtype == otbApplication.ParameterType_InputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")" + linesep
-            printable.append(["in","vdata",ExpandPath(value,inputpath,expand)])
+            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
         if paramtype == otbApplication.ParameterType_OutputImage :
             foundcode,foundname = GetPixelType(value)
             if foundcode != -1:
-                # app.SetParameterString(param,EncloseString(ExpandPath(value[:-len(foundname),outputpath,expand))))
-                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value[:-len(foundname)],outputpath,expand))+")" + linesep
-           #app.SetParameterOutputImagePixelType(param,foundcode)
-                if foundcode == 1:
-                    printable.append(["out","ucimg",ExpandPath(value[:len(foundname)],inputpath,expand)])
-                else:
-                    printable.append(["out","img",ExpandPath(value[:len(foundname)],inputpath,expand)])
-                output += "\t" + appname + ".SetParameterOutputImagePixelType("+EncloseString(param)+", "+str(foundcode)+")" + linesep
+                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value[:-len(foundname)],outputpath,expand))+")"
+                output += "\n"
+                output += "\t" + appname + ".SetParameterOutputImagePixelType("+EncloseString(param)+", "+str(foundcode)+")"
             else:
-                # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-                output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")" + linesep
-                printable.append(["out","img",ExpandPath(value,outputpath,expand)])
+                output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
         if paramtype == otbApplication.ParameterType_ComplexOutputImage :
             # TODO: handle complex type properly
             # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")" + linesep
-            printable.append(["out","cimg",ExpandPath(value,outputpath,expand)])
+            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
         if paramtype == otbApplication.ParameterType_OutputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")" + linesep
-            printable.append(["out","vdata",ExpandPath(value,outputpath,expand)])
+            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
         if paramtype == otbApplication.ParameterType_InputImageList:
             values = value.split(" ")
             values = [ExpandPath(val,inputpath,expand) for val in values]
             # app.SetParameterStringList(param,values)
-            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param) + ", " + str(values) + ")" + linesep
+            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param) + ", " + str(values) + ")"
         if paramtype == otbApplication.ParameterType_InputVectorDataList:
             values = value.split(" ")
             values = [ExpandPath(val,inputpath,expand) for val in values]
             #app.SetParameterStringList(param,values)
-            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+ ", " + str(values) + ")" + linesep
+            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+ ", " + str(values) + ")"
         output+=linesep
-    output += "\t# The following line execute the application" + linesep
+    output += linesep
     output+= "\t" + appname + ".ExecuteAndWriteOutput()"+ linesep
-    return output,printable
-
-def GetApplicationExamplePython(app,idx):
-    output, printable = GetApplicationExamplePythonSnippet(app,idx)
-    output+= linesep
     return output
 
 def RstHeading(text, delimiter, ref=None):
@@ -598,8 +571,10 @@ def render_all_examples_cli(app):
 
 def render_all_examples_python(app):
     "Render all python examples to rst"
-
-    return "    # TODO"
+    output = ""
+    for i in range(app.GetNumberOfExamples()):
+        output += GetApplicationExamplePythonSnippet(app, i)
+    return output
 
 def ApplicationToRst(appname):
     app = otbApplication.Registry.CreateApplication(appname)

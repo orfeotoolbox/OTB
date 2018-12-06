@@ -6,14 +6,6 @@ Detailed description
 
 {longdescription}
 
-.. code-block:: bash
-
-{examples_cli}
-
-.. code-block:: python
-
-{examples_python}
-
 Parameters
 ----------
 
@@ -28,6 +20,22 @@ Parameters
    &emsp;
 
 {parameters}
+
+Examples
+--------
+
+From the command-line:
+
+.. code-block:: bash
+
+{examples_cli}
+
+From Python:
+
+.. code-block:: python
+
+{examples_python}
+
 
 Limitations
 -----------
