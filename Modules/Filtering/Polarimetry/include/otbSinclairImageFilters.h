@@ -24,6 +24,9 @@
 #include "otbPolarimetryTags.h"
 #include "otbFunctorImageFilter.h"
 #include "otbSinclairToCovarianceMatrixFunctor.h"
+#include "otbSinclairToCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToCoherencyMatrixFunctor.h"
+#include "otbSinclairToMuellerMatrixFunctor.h"
 
 namespace otb
 {
@@ -31,6 +34,27 @@ namespace otb
 template <typename TInputImage, typename TOutputImage>
 using SinclairToCovarianceMatrixFilter = DefaultConstructibleFunctorImageFilter<
     Functor::SinclairToCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
+
+// This is the entire declaration of SinclairToCircularCovarianceMatrixFilter
+template <typename TInputImage, typename TOutputImage>
+using SinclairToCircularCovarianceMatrixFilter = DefaultConstructibleFunctorImageFilter<
+    Functor::SinclairToCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
+
+// This is the entire declaration of SinclairToCoherencyMatrixFilter
+template <typename TInputImage, typename TOutputImage>
+using SinclairToCoherencyMatrixFilter = DefaultConstructibleFunctorImageFilter<
+    Functor::SinclairToCoherencyMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
+
+// This is the entire declaration of SinclairToMuellerMatrixFilter
+template <typename TInputImage, typename TOutputImage>
+using SinclairToMuellerMatrixFilter = DefaultConstructibleFunctorImageFilter<
+    Functor::SinclairToMuellerMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
                                                typename TInputImage::PixelType, typename TOutputImage::PixelType>,
     std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 

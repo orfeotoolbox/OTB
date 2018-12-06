@@ -111,54 +111,12 @@ public:
 	typedef otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> RLCRCCFilterType;
 											 
   
-	//Bistatic case
-	typedef otb::Functor::SinclairToCoherencyMatrixFunctor<ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleVectorImageType::PixelType>								CoherencyFunctorType;
-                                    
-                                    
-                                    
-                                   
-	typedef otb::Functor::SinclairToCircularCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleVectorImageType::PixelType>								CircularCovarianceFunctorType;
-                                    
-                                    	
-    typedef otb::Functor::SinclairToMuellerMatrixFunctor<ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    DoubleVectorImageType::PixelType>									MuellerFunctorType;
-                                    
-    
-    typedef SinclairImageFilter<ComplexDoubleImageType, 
-											 ComplexDoubleImageType, 
-											 ComplexDoubleImageType,
-											 ComplexDoubleImageType, 
-											 ComplexDoubleVectorImageType, 
-											 CoherencyFunctorType > 									CohSRFilterType;
-											 
-											 
-    using CovSRFilterType = SinclairToCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+	//Bistatic case                                  			 
+  using CohSRFilterType = SinclairToCoherencyMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+  using CovSRFilterType = SinclairToCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+  using CCSRFilterType  = SinclairToCircularCovarianceMatrixFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
+  using MSRFilterType   = SinclairToMuellerMatrixFilter<ComplexDoubleImageType,DoubleVectorImageType>;
 
-											 
-	typedef SinclairImageFilter<ComplexDoubleImageType, 
-											 ComplexDoubleImageType, 
-											 ComplexDoubleImageType,
-											 ComplexDoubleImageType, 
-											 ComplexDoubleVectorImageType, 
-											 CircularCovarianceFunctorType > 							CCSRFilterType;
-                                    
-	typedef SinclairImageFilter<ComplexDoubleImageType, 
-											 ComplexDoubleImageType, 
-											 ComplexDoubleImageType,
-											 ComplexDoubleImageType, 
-											 DoubleVectorImageType, 
-											 MuellerFunctorType > 										MSRFilterType;
 											 
 											 
 	typedef otb::MuellerToReciprocalCovarianceImageFilter<DoubleVectorImageType, ComplexDoubleVectorImageType>  MRCFilterType;									 
@@ -598,11 +556,10 @@ private:
 	    case 8: // SinclairToCoherency
 			
 	  	m_CohSRFilter = CohSRFilterType::New();
-	  	
-		m_CohSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_CohSRFilter->SetInputHV(GetParameterComplexDoubleImage("inhv"));
-		m_CohSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
-		m_CohSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+      m_CohSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+      m_CohSRFilter->SetVariadicNamedInput<polarimetry_tags::hv>(GetParameterComplexDoubleImage("inhv"));
+      m_CohSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
+      m_CohSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterOutputImage("outc", m_CohSRFilter->GetOutput() ); // input : 4 x 1 complex channel | 10 complex channels
 		
@@ -613,7 +570,6 @@ private:
 		case 9: // SinclairToCovariance	
 		
 		m_CovSRFilter = CovSRFilterType::New();
-		
 		m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
 		m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::hv>(GetParameterComplexDoubleImage("inhv"));
 		m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
@@ -627,11 +583,10 @@ private:
 		case 10: // SinclairToCircularCovariance
 		
 		m_CCSRFilter = CCSRFilterType::New();
-		
-		m_CCSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_CCSRFilter->SetInputHV(GetParameterComplexDoubleImage("inhv"));
-		m_CCSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
-		m_CCSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		m_CCSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+		m_CCSRFilter->SetVariadicNamedInput<polarimetry_tags::hv>(GetParameterComplexDoubleImage("inhv"));
+		m_CCSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
+		m_CCSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterOutputImage("outc", m_CCSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
 		
@@ -646,10 +601,10 @@ private:
 		case 11: // SinclairToMueller
 		m_MSRFilter = MSRFilterType::New();
 		
-		m_MSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_MSRFilter->SetInputHV(GetParameterComplexDoubleImage("inhv"));
-		m_MSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
-		m_MSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		m_MSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+		m_MSRFilter->SetVariadicNamedInput<polarimetry_tags::hv>(GetParameterComplexDoubleImage("inhv"));
+		m_MSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
+		m_MSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 		
 		SetParameterOutputImage("outf", m_MSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 16 real channels
 		

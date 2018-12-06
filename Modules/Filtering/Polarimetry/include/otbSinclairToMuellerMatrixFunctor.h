@@ -92,9 +92,7 @@ public:
   inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
                              const TInput3& Svh, const TInput4& Svv)
   {
-    TOutput result;
-
-    result.SetSize(m_NumberOfComponentsPerPixel);
+    TOutput result(16);
 
     const ComplexType Txx = static_cast<ComplexType>(-Shh);
     const ComplexType Txy = static_cast<ComplexType>(-Shv);
@@ -126,22 +124,22 @@ public:
     return (result);
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
+  constexpr size_t OutputSize(...) const
   {
-    return m_NumberOfComponentsPerPixel;
+    // Size of mueller matrix
+    return 16;
+  }
+
+  constexpr size_t GetNumberOfComponentsPerPixel()
+  {
+    return OutputSize();
   }
 
   /** Constructor */
-  SinclairToMuellerMatrixFunctor() : m_NumberOfComponentsPerPixel(16) {}
+  SinclairToMuellerMatrixFunctor() {}
 
   /** Destructor */
   virtual ~SinclairToMuellerMatrixFunctor() {}
-
-protected:
-
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
 };
 
 } // namespace Functor

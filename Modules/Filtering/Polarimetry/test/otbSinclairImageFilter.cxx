@@ -26,32 +26,30 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToCircularCovarianceMatrixFunctor.h"
-#include "otbSinclairToCoherencyMatrixFunctor.h"
-#include "otbSinclairToMuellerMatrixFunctor.h"
+#include "otbSinclairImageFilters.h"
 #include "otbMultiChannelExtractROI.h"
 
 
+using namespace otb;
 
-
-template<class TInputPixel, class TOutputPixel, class TFunction>
+template<class TFilter>
 int generic_SinclairImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * outputFilename = argv[4];
 
-  typedef otb::VectorImage<TOutputPixel> OutputImageType;
+  using OutputImageType = typename TFilter::OutputImageType;
+  using InputImageType =  typename TFilter::Superclass::template InputImageType<0>;
+  using OutputPixelType = typename OutputImageType::InternalPixelType;
+
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];
   const char * inputFilename3  = argv[3];
 
-  typedef otb::Image<TInputPixel> InputImageType;
-  typedef otb::VectorImage<TOutputPixel> OutputImageType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::MultiChannelExtractROI<TOutputPixel, TOutputPixel > ExtractROIType;
-  typedef otb::SinclairImageFilter<InputImageType, InputImageType, InputImageType, InputImageType, OutputImageType, TFunction> FilterType;
+  typedef otb::MultiChannelExtractROI<OutputPixelType,OutputPixelType > ExtractROIType;
+  using FilterType = TFilter;
   typename FilterType::Pointer filter = FilterType::New();
   typename ReaderType::Pointer reader1 = ReaderType::New();
   typename ReaderType::Pointer reader2 = ReaderType::New();
@@ -60,10 +58,10 @@ int generic_SinclairImageFilter(int itkNotUsed(argc), char * argv[])
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
   reader3->SetFileName(inputFilename3);
-  filter->SetInputHH(reader1->GetOutput());
-  filter->SetInputHV(reader2->GetOutput());
-  filter->SetInputVH(reader2->GetOutput());
-  filter->SetInputVV(reader3->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::hh{},reader1->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::hv{},reader2->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::vh{},reader2->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::vv{},reader3->GetOutput());
 
   filter->UpdateOutputInformation();
 
@@ -94,40 +92,26 @@ int otbSinclairImageFilter(int argc, char * argv[])
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
   typedef otb::VectorImage<OutputRealPixelType, Dimension> OutputRealImageType;
 
+  using CohSRFilterType = SinclairToCoherencyMatrixFilter<InputImageType, OutputImageType>;
+  using CovSRFilterType = SinclairToCovarianceMatrixFilter<InputImageType, OutputImageType>;
+  using CCSRFilterType  = SinclairToCircularCovarianceMatrixFilter<InputImageType,OutputImageType>;
+  using MSRFilterType   = SinclairToMuellerMatrixFilter<InputImageType,OutputRealImageType>;
+
+
   std::string strArgv(argv[1]);
   argc--;
   argv++;
   if (strArgv == "SinclairToCovarianceMatrix")
-    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCovarianceMatrixFunctor<InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    OutputImageType::PixelType> >
+    return (generic_SinclairImageFilter<CovSRFilterType>
                   (argc, argv));
   else  if (strArgv == "SinclairToCircularCovarianceMatrix")
-    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCircularCovarianceMatrixFunctor<InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    OutputImageType::PixelType> >
+    return (generic_SinclairImageFilter<CCSRFilterType>
                   (argc, argv));
   else  if (strArgv == "SinclairToCoherencyMatrix")
-    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
-                otb::Functor::SinclairToCoherencyMatrixFunctor<InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    OutputImageType::PixelType> >
+    return (generic_SinclairImageFilter<CohSRFilterType>
                   (argc, argv));
   else  if (strArgv == "SinclairToMuellerMatrix")
-    return (generic_SinclairImageFilter<InputPixelType, OutputRealPixelType,
-                otb::Functor::SinclairToMuellerMatrixFunctor<InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    InputImageType::PixelType,
-                                    OutputRealImageType::PixelType> >
+    return (generic_SinclairImageFilter<MSRFilterType>
                   (argc, argv));
   else return EXIT_FAILURE;
 
