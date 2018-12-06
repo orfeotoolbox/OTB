@@ -108,13 +108,12 @@ private:
     
 
     // Get the path/fileWithoutextension/extension of the output images filename
-    std::string path, fname, ext;
     std::string ofname = GetParameterString("out");
 
     // Get the extension and the prefix of the filename
-    path  = itksys::SystemTools::GetFilenamePath(ofname);
-    fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
-    ext   = itksys::SystemTools::GetFilenameExtension(ofname);
+    const std::string path  = itksys::SystemTools::GetFilenamePath(ofname);
+    const std::string fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
+    const std::string ext   = itksys::SystemTools::GetFilenameExtension(ofname);
 
     // Set the filer input
     m_BurstExtractionFilter = BurstExtractionFilterType::New();
@@ -129,15 +128,10 @@ private:
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to retrieve bursts.number value from .geom file.");
-      }
-
-    bool extractAll = false;
-    if (burst_index <= -1 || burst_index >= static_cast<int>(nbBursts))
-      {
-	extractAll = true;
+	otbAppLogFATAL(<<"Failed to retrieve bursts.number value from .geom file.");
       }
       
+    const bool extractAll = burst_index <= -1 || burst_index >= static_cast<int>(nbBursts);
     
     // Extract burst index only
     if (! extractAll)

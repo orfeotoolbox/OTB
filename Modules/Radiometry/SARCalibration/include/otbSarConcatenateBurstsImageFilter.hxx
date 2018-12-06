@@ -28,24 +28,10 @@
 namespace otb
 {
 template <class TImage>
-SarConcatenateBurstsImageFilter<TImage>
-::SarConcatenateBurstsImageFilter()
-{
-}
-
-template <class TImage>
-SarConcatenateBurstsImageFilter<TImage>
-::~SarConcatenateBurstsImageFilter()
-{
-}
-
-template <class TImage>
 void
 SarConcatenateBurstsImageFilter<TImage>
 ::SetSLCImageKeyWorList(ImageKeywordlist sarImageKWL)
 {
-  // Check if sarImageKWL not NULL
-  assert(&sarImageKWL && "SAR Image Metadata don't exist.");
   m_SLCImageKWL = sarImageKWL;
 }
 
@@ -75,15 +61,6 @@ SarConcatenateBurstsImageFilter<TImage>
     itkExceptionMacro(<<"Could not export deburst SAR sensor model to keyword list");
 
   return true;
-}
-
-
-template <class TImage>
-void
-SarConcatenateBurstsImageFilter<TImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  Superclass::PrintSelf(os,indent);
 }
 
 template <class TImage>

@@ -251,25 +251,24 @@ SarDeburstImageFilter<TImage>::ThreadedGenerateDataWithAllSamples(const RegionTy
 
     bool lineToKeep = false;
 
-    for(LinesRecordVectorType::const_iterator it  = m_LinesRecord.begin();
-      it!=m_LinesRecord.end();++it)
-      {
-      if(currentInputPoint[1]-0.5>=it->first && currentInputPoint[1]-0.5<=it->second)
-        {
-        lineToKeep = true;
-        break;
-        }
-      }
+    for (auto const& record : m_LinesRecord)
+	{
+	  if (currentInputPoint[1]-0.5>=record.first && currentInputPoint[1]-0.5<=record.second)
+	    {
+	      lineToKeep = true;
+	      break;
+	    }
+	}
     if(lineToKeep)
       {
-      for(inputIt.GoToBeginOfLine(),outputIt.GoToBeginOfLine();
-          !inputIt.IsAtEndOfLine() && !outputIt.IsAtEndOfLine();
-          ++inputIt,++outputIt)
-        {
-        outputIt.Set(inputIt.Get());
+	for(inputIt.GoToBeginOfLine(),outputIt.GoToBeginOfLine();
+	    !inputIt.IsAtEndOfLine() && !outputIt.IsAtEndOfLine();
+	    ++inputIt,++outputIt)
+	  {
+	    outputIt.Set(inputIt.Get());
 
-        }
-      outputIt.NextLine();
+	  }
+	outputIt.NextLine();
       }
     
 
@@ -301,10 +300,9 @@ SarDeburstImageFilter<TImage>::ThreadedGenerateDataWithOnlyValidSamples(const Re
       bool lineToKeep = false;
       bool sampleToKeep = false;
 
-      for(LinesRecordVectorType::const_iterator it  = m_LinesRecord.begin();
-	  it!=m_LinesRecord.end();++it)
+      for (auto const& record : m_LinesRecord)
 	{
-	  if(currentInputPoint[1]-0.5>=it->first && currentInputPoint[1]-0.5<=it->second)
+	  if (currentInputPoint[1]-0.5>=record.first && currentInputPoint[1]-0.5<=record.second)
 	    {
 	      lineToKeep = true;
 	      break;

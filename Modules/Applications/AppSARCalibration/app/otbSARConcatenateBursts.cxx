@@ -134,8 +134,8 @@ private:
 	vectIm->UpdateOutputInformation();
 
 	// Retrieve start and size for each burst
-	std::pair<unsigned long,unsigned long> line = lines.at(i);
-	std::pair<unsigned long,unsigned long> sample = samples.at(i);
+	std::pair<unsigned long,unsigned long> line = lines[i];
+	std::pair<unsigned long,unsigned long> sample = samples[i];
 	unsigned long startL = line.first;
 	unsigned long startS = sample.first;
 	unsigned long sizeL = line.second - line.first + 1;

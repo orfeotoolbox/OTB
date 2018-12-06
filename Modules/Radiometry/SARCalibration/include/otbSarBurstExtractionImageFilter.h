@@ -73,7 +73,7 @@ protected:
   SarBurstExtractionImageFilter();
 
   // Destructor
-  virtual ~SarBurstExtractionImageFilter() override {};
+  ~SarBurstExtractionImageFilter() override = default;
 
   // Needs to be re-implemented since size of output is modified
   virtual void GenerateOutputInformation() override;

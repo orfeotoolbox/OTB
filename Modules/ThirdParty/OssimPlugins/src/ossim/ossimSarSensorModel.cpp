@@ -1611,7 +1611,7 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
      }
 
    // Retrieve into TheBurstRecord, the required index
-   BurstRecordType burstInd_Record = theBurstRecords.at(burst_index);
+   BurstRecordType burstInd_Record = theBurstRecords[burst_index];
    lines = std::make_pair(burstInd_Record.startLine, burstInd_Record.endLine);
    samples = std::make_pair(burstInd_Record.startSample, burstInd_Record.endSample);
    TimeType burstAzimuthStartTime = burstInd_Record.azimuthStartTime;
@@ -1801,22 +1801,15 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
        bool linesOk = imageLineToDeburstLine(lines,gcpLine,newLine);
 
        // Gcp into valid samples
-       bool samplesOk = true;
        unsigned long newSample = gcpSample;
       
-       samplesOk = false;
-       if (gcpSample >= samples.first && gcpSample <= samples.second)
+       if (linesOk && gcpSample >= samples.first && gcpSample <= samples.second)
 	 {
-	   samplesOk = true;
 	   newSample -= samples.first; // Offset with first valid sample
-	 } 
-
-       if(linesOk && samplesOk)
-	 {
 	   currentGCP.imPt.y = newLine + fractionalLines;
 	   currentGCP.imPt.x = newSample + fractionalSamples;
 	   deburstGCPs.push_back(currentGCP);
-	 }        
+	 }
      }
 
    theGCPRecords.swap(deburstGCPs);

@@ -86,13 +86,10 @@ public:
 
 protected:
   /** Constructor */
-  SarConcatenateBurstsImageFilter();
+  SarConcatenateBurstsImageFilter() = default;
 
   /** Destructor */
-  ~SarConcatenateBurstsImageFilter() override;
-
-  /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  ~SarConcatenateBurstsImageFilter() = default;
 
   /** Generate input requested region method */
   void GenerateOutputInformation() override;
