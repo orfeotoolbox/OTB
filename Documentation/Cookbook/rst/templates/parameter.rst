@@ -1,4 +1,3 @@
-**{name}** :code:`-{key} {value}` |br|
+**{name}** :code:`-{key} {value}` {flags}|br|
 {description}
-{flags}
 

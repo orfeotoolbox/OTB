@@ -469,9 +469,9 @@ def rst_parameter_value(app, key):
 
 def rst_parameter_flags(app, key):
     if app.IsMandatory(key) and not app.HasValue(key):
-        return "|br| *Mandatory* \n"
+        return "*Mandatory* "
     elif app.HasValue(key) and app.GetParameterType(key) != otbApplication.ParameterType_Group:
-        return "|br| *Default value: {}*".format(app.GetParameterValue(key))
+        return "*Default value: {}* ".format(app.GetParameterValue(key))
     else:
         return ""
 
@@ -481,29 +481,6 @@ def rst_parameters(app):
     template_parameter_group = open("templates/parameter_group.rst").read()
 
     keys = app.GetParametersKeys()
-
-    def nthkey(n):
-        """
-        Make the sort function of groupby used to group application keys by prefix, for different depth levels
-        Basically, the key is the N first key for level N
-        For example for 'inzone.labelimage.in' the key is:
-        - inzone for level 1
-        - inzone.labelimage for level 2
-        - inzone.labelimage.in for level 3
-        """
-        def firstkeys(key):
-            splits = key.split(".")
-            return ".".join(splits[:min(len(splits), n)])
-        return firstkeys
-
-    #for k, g in itertools.groupby(keys, nthkey(1)):
-        #groups = list(g)
-        #print(k, groups)
-        #for kk, gg in itertools.groupby(groups, nthkey(2)):
-            #print(kk, list(gg))
-        #print()
-    #print()
-    #print()
 
     previous_level = 1
     for key in app.GetParametersKeys():
