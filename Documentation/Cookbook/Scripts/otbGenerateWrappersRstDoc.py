@@ -320,15 +320,6 @@ def ApplicationParametersToRstV2(app,paramlist,deep = False,current=""):
         output+= linesep
     return output
 
-def GetApplicationExampleCommandLine(app,idx):
-
-    output = "%s%s%s\t%s" % ("::", linesep , linesep, "otbcli_")
-    output+= ConvertString(app.GetName())
-    for i in range(0, app.GetExampleNumberOfParameters(idx)):
-        output+=" -" + app.GetExampleParameterKey(idx,i)+ " " + app.GetExampleParameterValue(idx,i)
-    output += linesep + linesep
-    return output
-
 def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outputpath=""):
     appname = app.GetName()
     printable = []
@@ -575,6 +566,41 @@ def rst_parameters(app):
 
     return output
 
+def render_example_cli(app, index):
+    "Render a command line example to rst (includes indentation)"
+
+    output = ""
+
+    # Render comment
+    if len(app.GetExampleComment(index)) > 0:
+        output += "    # " + app.GetExampleComment(index) + "\n"
+
+    output += "    otbcli_" + app.GetName()
+    for i in range(app.GetExampleNumberOfParameters(index)):
+        output += " -" + app.GetExampleParameterKey(index, i) + " " + app.GetExampleParameterValue(index, i)
+    output += "\n"
+    return output
+
+def render_all_examples_cli(app):
+    "Render all command line examples to rst"
+
+    if app.GetNumberOfExamples() == 0:
+        return "    # No example found"
+    if app.GetNumberOfExamples() == 1:
+        return render_example_cli(app, 0)
+    else:
+        output = ""
+        for i in range(app.GetNumberOfExamples()):
+            if i > 0:
+                output += "\n"
+            output += render_example_cli(app, i)
+        return output
+
+def render_all_examples_python(app):
+    "Render all python examples to rst"
+
+    return "    # TODO"
+
 def ApplicationToRst(appname):
     app = otbApplication.Registry.CreateApplication(appname)
 
@@ -591,29 +617,12 @@ def ApplicationToRst(appname):
         description=app.GetDescription(),
         longdescription=app.GetDocLongDescription(),
         parameters=parameters,
-        examples="",
+        examples_cli=render_all_examples_cli(app),
+        examples_python=render_all_examples_python(app),
         limitations=""
     )
 
     return output
-
-    if app.GetNumberOfExamples() > 1:
-        for i in range(0,app.GetNumberOfExamples()):
-            output += ":Example "+  str(i+1) + ':' + linesep + linesep
-            output += app.GetExampleComment(i)
-            output+= "To run this example in command-line, use the following: " + linesep
-            output += linesep + GetApplicationExampleCommandLine(app,i)
-            output+= "To run this example from Python, use the following code snippet: " + linesep
-            output += GetApplicationExamplePython(app,i)
-
-    elif app.GetNumberOfExamples() == 1:
-        output += RstHeading("Example", '-')
-        if( len(app.GetExampleComment(0)) > 1):
-            output += app.GetExampleComment(0)
-        output+= "To run this example in command-line, use the following: " + linesep
-        output += GetApplicationExampleCommandLine(app,0)
-        output+= "To run this example from Python, use the following code snippet: " + linesep
-        output += GetApplicationExamplePython(app,0)
 
     limitations = app.GetDocLimitations()
     if len(limitations)>=2:
