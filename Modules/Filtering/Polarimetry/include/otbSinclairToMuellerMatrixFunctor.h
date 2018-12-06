@@ -89,11 +89,9 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
   typedef double                                   RealType;
 
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
+  inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv,
                              const TInput3& Svh, const TInput4& Svv)
   {
-    TOutput result(16);
-
     const ComplexType Txx = static_cast<ComplexType>(-Shh);
     const ComplexType Txy = static_cast<ComplexType>(-Shv);
     const ComplexType Tyx = static_cast<ComplexType>(Svh);
@@ -128,11 +126,6 @@ public:
   {
     // Size of mueller matrix
     return 16;
-  }
-
-  constexpr size_t GetNumberOfComponentsPerPixel()
-  {
-    return OutputSize();
   }
 
   /** Constructor */

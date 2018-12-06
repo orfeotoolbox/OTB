@@ -68,11 +68,9 @@ public:
   /** Some typedefs. */
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
+  inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv,
                              const TInput3& Svh, const TInput4& Svv)
   {
-    TOutput result(10);
-
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vh = static_cast<ComplexType>(Svh);
@@ -91,10 +89,7 @@ public:
   
     return result;
   }
-  constexpr size_t GetNumberOfComponentsPerPixel()
-  {
-    return OutputSize();
-  }
+
   constexpr size_t OutputSize(...) const
   {
     // Number of components in the covariance matrix
