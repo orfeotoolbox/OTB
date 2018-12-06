@@ -100,16 +100,18 @@ void buildModel(unsigned int num_classes, unsigned int num_samples,
 
 int otbSharkImageClassificationFilter(int argc, char * argv[])
 {
-  if(argc<5 || argc>7)
+  if(argc<6 || argc>8)
     {
-    std::cout << "Usage: input_image output_image output_confidence batchmode [in_model_name] [mask_name]\n";
+    std::cout << "Usage: input_image output_image output_confidence output_proba batchmode [in_model_name] [mask_name]\n";
     }
   std::string imfname = argv[1];
   std::string outfname = argv[2];
   std::string conffname = argv[3]; 
-  bool batch = (std::string(argv[4])=="1");
+  std::string probafname = argv[4]; 
+  bool batch = (std::string(argv[5])=="1");
   std::string modelfname = "/tmp/rf_model.txt";
   std::string maskfname{};
+  int num_classes = 3;
 
   MaskReaderType::Pointer mask_reader = MaskReaderType::New();
   ReaderType::Pointer reader = ReaderType::New();
@@ -120,13 +122,15 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
 
   std::cout << "Image has " << num_features << " bands\n";
     
-  if(argc>5)
+  if(argc>6)
     {
-    modelfname = argv[5];
+    modelfname = argv[6];
+    // We don't know the number of classes, so we set it to a high number
+    num_classes = 10;
     }
   else
     {
-    buildModel(3, 1000, num_features, modelfname);
+    buildModel(num_classes, 1000, num_features, modelfname);
     }
 
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
@@ -135,9 +139,10 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
   model->Load(modelfname);
   filter->SetModel(model);
   filter->SetInput(reader->GetOutput());
-  if(argc==7)
+  filter->SetNumberOfClasses(num_classes);
+  if(argc==8)
     {
-    maskfname = argv[6];
+    maskfname = argv[7];
     mask_reader->SetFileName(maskfname);
     filter->SetInputMask(mask_reader->GetOutput());
     }
@@ -148,6 +153,7 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
   std::cout << "Classification\n";
   filter->SetBatchMode(batch);
   filter->SetUseConfidenceMap(true);
+  filter->SetUseProbaMap(true);
   using TimeT = std::chrono::milliseconds;
   auto start = std::chrono::system_clock::now();
   writer->Update();
@@ -160,6 +166,36 @@ int otbSharkImageClassificationFilter(int argc, char * argv[])
   confWriter->SetInput(filter->GetOutputConfidence());
   confWriter->SetFileName(conffname);
   confWriter->Update();
+
+  auto probaWriter = otb::ImageFileWriter<ClassificationFilterType::ProbaImageType>::New();
+  probaWriter->SetInput(filter->GetOutputProba());
+  probaWriter->SetFileName(probafname);
+  probaWriter->Update();
+
+  // Check that the chosen labels correspond to the max proba
+
+  itk::ImageRegionConstIterator<LabeledImageType> labIt(filter->GetOutput(), 
+                                                        filter->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<ClassificationFilterType::ProbaImageType> probIt(filter->GetOutputProba(), 
+                                                        filter->GetOutputProba()->GetLargestPossibleRegion());
+
+  for (labIt.GoToBegin(), probIt.GoToBegin(); !labIt.IsAtEnd();
+       ++labIt, ++probIt)
+    {
+      if(labIt.Get()>0) //Pixel is not masked
+      {
+      auto first = probIt.Get().GetDataPointer();
+      auto last = probIt.Get().GetDataPointer();
+      std::advance(last, num_classes);
+      auto max_proba = std::distance(first, std::max_element(first, last)) + 1;
+      if(labIt.Get() != max_proba)
+      {
+        std::cout << "Chosen label " << labIt.Get() << " and max proba position "
+                  << max_proba << " from " << probIt.Get() << " don't match\n";
+        return EXIT_FAILURE;
+      }
+      }
+    }
 
   return EXIT_SUCCESS;
 }
