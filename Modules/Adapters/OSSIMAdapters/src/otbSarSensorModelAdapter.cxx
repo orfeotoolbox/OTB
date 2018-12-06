@@ -101,6 +101,19 @@ bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigne
   return false;
 }
 
+bool SarSensorModelAdapter::BurstExtraction(const unsigned int burst_index, 
+					    std::pair<unsigned long,unsigned long> & lines, 
+					    std::pair<unsigned long,unsigned long> & samples)
+{
+   if(m_SensorModel.get())
+    {
+      return m_SensorModel->burstExtraction(burst_index, lines, samples);
+    }
+
+   return false;
+}
+
+
 bool SarSensorModelAdapter::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {
   return ossimplugins::ossimSarSensorModel::imageLineToDeburstLine(lines,imageLine,deburstLine);

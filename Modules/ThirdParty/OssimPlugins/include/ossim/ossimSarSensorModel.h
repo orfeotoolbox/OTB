@@ -322,6 +322,20 @@ public:
    static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
 
    /**
+    * This method will perform an extration of one burst. It wil return the
+    * lines and samples to extract in the image file.
+    * \return true if the extraction operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param burst_index Index of Burst.
+    * \param lines A container for the lines to keep in the
+    * standalone burst.
+    * \param samples A container for the samples to keep in the
+    * standalone burst.
+    */
+   bool burstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines, 
+			std::pair<unsigned long,unsigned long> & samples);
+
+   /**
     * Returns pointer to a new instance, copy of this.
     */
    virtual ossimObject* dup() const override;

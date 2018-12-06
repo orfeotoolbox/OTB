@@ -1583,13 +1583,104 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
 
 
   // Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
-  redaptMedataAfterDeburst = false;
+  redaptMedataAfterDeburst = true;
   theFirstLineTime = deburstBurst.azimuthStartTime;
   theLastLineTime = deburstBurst.azimuthStopTime;
   
   if (onlyValidSample)
     theNearRangeTime += samples.first*(1/theRangeSamplingRate); 
 
+
+  return true;
+}
+
+
+bool 
+ossimSarSensorModel::burstExtraction(const unsigned int burst_index, 
+				     std::pair<unsigned long,unsigned long> & lines, 
+				     std::pair<unsigned long,unsigned long> & samples)
+{
+   if(theBurstRecords.empty())
+    return false;
+
+   // Check the single burst record case
+   if(theBurstRecords.size() == 1)
+     {
+       lines = std::make_pair(theBurstRecords.front().startLine,theBurstRecords.front().endLine);
+       return false;
+     }
+
+   // Retrieve into TheBurstRecord, the required index
+   BurstRecordType burstInd_Record = theBurstRecords.at(burst_index);
+   lines = std::make_pair(burstInd_Record.startLine, burstInd_Record.endLine);
+   samples = std::make_pair(burstInd_Record.startSample, burstInd_Record.endSample);
+   TimeType burstAzimuthStartTime = burstInd_Record.azimuthStartTime;
+   TimeType burstAzimuthStopTime = burstInd_Record.azimuthStopTime;
+
+   // Clear the previous burst records
+   theBurstRecords.clear();
+
+   // Create the single burst
+   BurstRecordType oneBurst;
+   oneBurst.startLine = 0;
+   oneBurst.azimuthStartTime = burstAzimuthStartTime;
+   oneBurst.endLine = lines.second - lines.first;
+   oneBurst.azimuthStopTime = burstAzimuthStopTime;
+   oneBurst.startSample = 0;
+   oneBurst.endSample = samples.second - samples.first;
+   
+   theBurstRecords.push_back(oneBurst);
+
+
+    std::vector<GCPRecordType> oneBurstGCPs;
+  
+    // Now move GCPs
+    for(std::vector<GCPRecordType>::iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+      {
+	GCPRecordType currentGCP = *gcpIt;
+
+	unsigned long gcpLine = std::floor(currentGCP.imPt.y+0.5);
+	unsigned long gcpSample = std::floor(currentGCP.imPt.x+0.5);
+
+	// Be careful about fractional part of GCPs
+	double fractionalLines = currentGCP.imPt.y - gcpLine;
+	double fractionalSamples = currentGCP.imPt.x - gcpSample;
+
+
+	// Gcp into valid samples and valid lines
+	unsigned long newSample = gcpSample;
+	bool samplesOk = false;
+	
+	if (gcpSample >= samples.first && gcpSample <= samples.second)
+	  {
+	    samplesOk = true;
+	    newSample -= samples.first; // Offset with first valid sample
+	  } 
+
+	unsigned long newLine = gcpLine;
+	bool linesOk = false;
+	
+	if (gcpLine >= lines.first && gcpLine <= lines.second)
+	  {
+	    linesOk = true;
+	    newLine -= lines.first; // Offset with first valid line
+	  }
+      
+	if(linesOk && samplesOk)
+	  {
+	    currentGCP.imPt.y = newLine + fractionalLines;
+	    currentGCP.imPt.x = newSample + fractionalSamples;
+	    oneBurstGCPs.push_back(currentGCP);
+	  }        
+      }
+
+  theGCPRecords.swap(oneBurstGCPs);
+
+  // Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
+  redaptMedataAfterDeburst = true;
+  theFirstLineTime = oneBurst.azimuthStartTime;
+  theLastLineTime = oneBurst.azimuthStopTime;
+  theNearRangeTime += samples.first*(1/theRangeSamplingRate); 
 
   return true;
 }

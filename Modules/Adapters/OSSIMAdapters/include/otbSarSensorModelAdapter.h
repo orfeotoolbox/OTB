@@ -85,6 +85,10 @@ public:
   bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines,
 	       std::pair<unsigned long,unsigned long> & samples, bool onlyValidSample=false);
 
+  /** Burst extraction and return lines/samples to keep into image file (the required burst) */
+  bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines, 
+		       std::pair<unsigned long,unsigned long> & samples);
+
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) and YZ frame */
