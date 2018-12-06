@@ -1,6 +1,8 @@
 {heading}
 {description}
 
+.. contents:: :local:
+
 Detailed description
 --------------------
 

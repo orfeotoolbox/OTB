@@ -93,6 +93,31 @@ def GetParametersDepth(paramlist):
         depth = max(param.count("."),depth)
     return depth
 
+def render_choice(app, key):
+    template_parameter_choice = open("templates/parameter_choice.rst").read()
+    template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
+
+    choice_keys = app.GetChoiceKeys(key)
+    choice_names = app.GetChoiceNames(key)
+
+    choice_entries = ""
+    for (choice_key, choice_name) in zip(choice_keys, choice_names):
+        choice_description = app.GetParameterDescription(key + "." + choice_key)
+        choice_entries += template_parameter_choice_entry.format(
+            name=choice_name,
+            #key=choice_key,
+            description=choice_description
+        )
+
+    return template_parameter_choice.format(
+        name=ConvertString(app.GetParameterName(key)),
+        key=key,
+        value="[" + "|".join(choice_keys) + "]",
+        flags=rst_parameter_flags(app, key),
+        description=app.GetParameterDescription(key),
+        choices=choice_entries,
+    )
+
 def GenerateChoice(app,param,paramlist, count = 0):
     output = " Available choices are: " + linesep
     spaces = ' ' * count
@@ -475,6 +500,28 @@ def rst_parameter_flags(app, key):
     else:
         return ""
 
+def detect_abuse(app):
+    fake_groups = {}
+    keys = app.GetParametersKeys()
+
+    # For each choice parameter
+    for key in keys:
+        if app.GetParameterType(key) == otbApplication.ParameterType_Choice:
+
+            # Consider all its possible values
+            for choice_key in app.GetChoiceKeys(key):
+                fullkey = key + "." + choice_key
+
+                # See if that value is also used as a group
+                for k in keys:
+                    if k.startswith(fullkey) and k != fullkey:
+
+                        # In that case, save the first element of that group
+                        if fullkey not in fake_groups.values():
+                            fake_groups[k] = fullkey
+
+    return fake_groups
+
 def rst_parameters(app):
     output = ""
     template_parameter = open("templates/parameter.rst").read()
@@ -482,25 +529,36 @@ def rst_parameters(app):
 
     keys = app.GetParametersKeys()
 
+    fake_groups = detect_abuse(app)
+
+    for k in fake_groups.keys():
+        print(k.count("."), k)
+    print()
+
     previous_level = 1
     for key in app.GetParametersKeys():
         type = app.GetParameterType(key)
 
-        # If reducing level, render a horizontal line
+        # If reducing level not on a group parameter, render a horizontal line
         current_level = 1 + key.count(".")
-        print(key, previous_level, current_level)
-        if current_level < previous_level:
+        if current_level < previous_level and type != otbApplication.ParameterType_Group:
             output += "\n\n------------\n\n"
         previous_level = current_level
 
+        # Choice parameter values can act as groups
+        # Detect that case to add a section title
+        if key in fake_groups:
+            output += rst_heading(key + " options", "^")
+            output += "\n"
+
         if type == otbApplication.ParameterType_Group:
             output += template_parameter_group.format(
-                name=rst_heading(ConvertString(app.GetParameterName(key)), "-^~+$"[current_level]),
+                name=rst_heading(ConvertString(app.GetParameterName(key)), "^"),
                 description=app.GetParameterDescription(key)
             )
 
         elif type == otbApplication.ParameterType_Choice:
-            output += "\n\nchoice " + ConvertString(app.GetParameterName(key)) + "\n\n"
+            output += render_choice(app, key)
 
         else:
             output += template_parameter.format(
