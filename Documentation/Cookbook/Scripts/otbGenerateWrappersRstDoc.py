@@ -93,6 +93,14 @@ def GetParametersDepth(paramlist):
         depth = max(param.count("."),depth)
     return depth
 
+class ChoiceParameter:
+    def __init__(self, app, key):
+        self.name = app.GetParameterName(key)
+        self.description = app.GetParameterDescription(key)
+
+        self.keys = app.GetChoiceKeys(key)
+        self.names = app.GetChoiceNames(key)
+
 def render_choice(app, key):
     template_parameter_choice = open("templates/parameter_choice.rst").read()
     template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
@@ -512,11 +520,11 @@ def detect_abuse(app):
             for choice_key in app.GetChoiceKeys(key):
                 fullkey = key + "." + choice_key
 
-                # See if that value is also used as a group
+                # See if that value is also used as a group anywhere in the application
                 for k in keys:
                     if k.startswith(fullkey) and k != fullkey:
 
-                        # In that case, save the first element of that group
+                        # In that case, mark the first element of that group
                         if fullkey not in fake_groups.values():
                             fake_groups[k] = fullkey
 
@@ -529,11 +537,7 @@ def rst_parameters(app):
 
     keys = app.GetParametersKeys()
 
-    fake_groups = detect_abuse(app)
-
-    for k in fake_groups.keys():
-        print(k.count("."), k)
-    print()
+    fake_markers = detect_abuse(app)
 
     previous_level = 1
     for key in app.GetParametersKeys():
@@ -547,8 +551,8 @@ def rst_parameters(app):
 
         # Choice parameter values can act as groups
         # Detect that case to add a section title
-        if key in fake_groups:
-            output += rst_heading(key + " options", "^")
+        if key in fake_markers:
+            output += rst_heading(app.GetParameterName(fake_markers[key]) + " options", "^")
             output += "\n"
 
         if type == otbApplication.ParameterType_Group:

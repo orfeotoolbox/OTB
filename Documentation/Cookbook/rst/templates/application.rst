@@ -1,8 +1,6 @@
 {heading}
 {description}
 
-.. contents:: :local:
-
 Detailed description
 --------------------
 
@@ -10,6 +8,8 @@ Detailed description
 
 Parameters
 ----------
+
+.. contents:: :local:
 
 .. |br| raw:: html
 
