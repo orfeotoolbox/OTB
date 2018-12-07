@@ -68,25 +68,25 @@ private:
       "This application performs a mathematical operation on several multi-band "
       "images and outputs the result into a monoband image. The given expression"
       " is computed at each pixel position. Evaluation of the "
-      "mathematical formula is done by the muParser libraries.\n\n"
+      "mathematical formula is done by the muParser library.\n\n"
 
       "The formula can be written using:\n\n"
       "  * numerical values ( 2.3, -5, 3.1e4, ...)\n"
-      "  * variables containing pixel values (e.g. : 'im2b3' is the pixel value"
+      "  * variables containing pixel values (e.g. : ``im2b3`` is the pixel value"
       " in 2nd image, 3rd band)\n"
       "  * binary operators:\n\n"
-      "    * '+' addition, '-' subtraction, '*' multiplication, '/' division\n"
-      "    * '^' raise x to the power of y\n"
-      "    * '<' less than, '>' greater than, '<=' less or equal, '>=' greater or equal\n"
-      "    * '==' equal, '!=' not equal\n"
+      "    * ``+`` addition, ``-`` subtraction, ``*`` multiplication, ``/`` division\n"
+      "    * ``^`` raise x to the power of y\n"
+      "    * ``<`` less than, ``>`` greater than, ``<=`` less or equal, ``>=`` greater or equal\n"
+      "    * ``==`` equal, ``!=`` not equal\n"
 #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
-      "    * '||' logical or, '&&' logical and\n"
-      "  * if-then-else operator: '(condition ? value_true : value_false)'\n"
+      "    * ``||`` logical or, ``&&`` logical and\n"
+      "  * if-then-else operator: ``(condition ? value_true : value_false)``\n"
 #else
-      "    * 'or' logical or, 'and' logical and\n"
-      "  * if-then-else operator: 'if(condition;value_true;value_false)'\n"
+      "    * ``or`` logical or, ``and`` logical and\n"
+      "  * if-then-else operator: ``if(condition;value_true;value_false)``\n"
 #endif
-      "  * functions : exp(), log(), sin(), cos(), min(), max(), ...\n\n"
+      "  * functions : ``exp()``, ``log()``, ``sin()``, ``cos()``, ``min()``, ``max()``, ...\n\n"
 
       "The full list of features and operators is available on the muParser website [1]."
       );
@@ -96,17 +96,17 @@ private:
     SetDocSeeAlso("[1] http://beltoforion.de/article.php?a=muparser");
     AddDocTag(Tags::Manip);
 
-    AddParameter( ParameterType_InputImageList, "il", "Input image-list" );
+    AddParameter( ParameterType_InputImageList, "il", "Input image list" );
     SetParameterDescription(
       "il",
-      "Image-list of operands to the mathematical expression."
+      "Image list of operands to the mathematical expression."
     );
 
     AddParameter( ParameterType_OutputImage, "out", "Output Image" );
     SetParameterDescription(
       "out",
       "Output image which is the result of the mathematical expressions on input"
-      " image-list operands.");
+      " image list operands.");
 
     AddRAMParameter();
 
