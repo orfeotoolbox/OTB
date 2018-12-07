@@ -337,7 +337,7 @@ def render_limitations(app):
     if limitations is None or len(limitations) == 0 or limitations == "None":
         return ""
     else:
-        return rst_section("Limitation", "-") + limitations
+        return rst_section("Limitations", "-") + limitations
 
 def render_see_also(app):
     "Render app See Also to rst"
